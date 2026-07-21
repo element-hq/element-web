@@ -7,9 +7,7 @@
 
 import React, { type JSX } from "react";
 import { IconButton, H1 } from "@vector-im/compound-web";
-import ComposeIcon from "@vector-im/compound-design-tokens/assets/web/icons/compose";
-import PlusIcon from "@vector-im/compound-design-tokens/assets/web/icons/plus";
-import { CollapseAllIcon, ExpandAllIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { CollapseAllIcon, ExpandAllIcon, ChatIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { type ViewModel, useViewModel } from "../../core/viewmodel";
 import { Flex } from "../../core/utils/Flex";
@@ -32,11 +30,6 @@ export interface RoomListHeaderViewSnapshot {
      * The title of the room list
      */
     title: string;
-    /**
-     * Whether to display the compose menu
-     * True if the user can create rooms
-     */
-    displayComposeMenu: boolean;
     /**
      * Whether to display the space menu
      * True if there is an active space
@@ -67,13 +60,9 @@ export interface RoomListHeaderViewSnapshot {
      */
     isMessagePreviewEnabled: boolean;
     /**
-     * Whether the user can create sections in the room list.
+     * Whether sections are enabled in the room list.
      */
-    canCreateSection: boolean;
-    /**
-     * Whether to use the compose icon instead of the create icon.
-     */
-    useComposeIcon: boolean;
+    areSectionsEnabled: boolean;
     /**
      * If "collapse", an icon to collapse all sections is shown.
      * If "expand", an icon to expand all sections is shown.
@@ -160,7 +149,9 @@ interface RoomListHeaderViewProps {
  */
 export function RoomListHeaderView({ vm }: Readonly<RoomListHeaderViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
-    const { title, displaySpaceMenu, displayComposeMenu, useComposeIcon, collapseSections } = useViewModel(vm);
+    const { title, displaySpaceMenu, collapseSections, areSectionsEnabled, canCreateRoom, canCreateVideoRoom } =
+        useViewModel(vm);
+    const canOnlyStartChat = !areSectionsEnabled && !canCreateRoom && !canCreateVideoRoom;
 
     return (
         <Flex
@@ -179,7 +170,7 @@ export function RoomListHeaderView({ vm }: Readonly<RoomListHeaderViewProps>): J
                 </Flex>
                 <Flex align="center" gap="var(--cpd-space-2x)">
                     <OptionMenuView vm={vm} />
-                    {collapseSections && (
+                    {areSectionsEnabled && collapseSections && (
                         <IconButton
                             size="28px"
                             style={{ padding: "4px" }}
@@ -197,23 +188,17 @@ export function RoomListHeaderView({ vm }: Readonly<RoomListHeaderViewProps>): J
                             )}
                         </IconButton>
                     )}
-
-                    {/* If we don't display the compose menu, it means that the user can only send DM */}
-                    {displayComposeMenu ? (
-                        <ComposeMenuView vm={vm} />
-                    ) : (
+                    {canOnlyStartChat ? (
                         <IconButton
                             size="28px"
                             style={{ padding: "4px" }}
                             onClick={(e) => vm.createChatRoom(e.nativeEvent)}
-                            tooltip={_t("action|new_conversation")}
+                            tooltip={_t("action|start_chat")}
                         >
-                            {useComposeIcon ? (
-                                <ComposeIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
-                            ) : (
-                                <PlusIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
-                            )}
+                            <ChatIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
                         </IconButton>
+                    ) : (
+                        <ComposeMenuView vm={vm} />
                     )}
                 </Flex>
             </Flex>

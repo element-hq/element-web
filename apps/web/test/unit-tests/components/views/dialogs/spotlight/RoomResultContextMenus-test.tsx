@@ -11,6 +11,7 @@ import React from "react";
 import { render, screen, type RenderResult } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 import { Room, type MatrixClient, PendingEventOrdering } from "matrix-js-sdk/src/matrix";
+import userEvent from "@testing-library/user-event";
 
 import { RoomResultContextMenus } from "../../../../../../src/components/views/dialogs/spotlight/RoomResultContextMenus";
 import { filterConsole, stubClient } from "../../../../../test-utils";
@@ -53,5 +54,17 @@ describe("RoomResultContextMenus", () => {
         renderRoomResultContextMenus();
         expect(shouldShowComponent).toHaveBeenCalledWith(UIComponent.RoomOptionsMenu);
         expect(screen.queryByRole("button", { name: "Room options" })).toBeInTheDocument();
+    });
+
+    it("opens the notification options menu positioned relative to its button", async () => {
+        const user = userEvent.setup();
+        mocked(shouldShowComponent).mockReturnValue(true);
+        renderRoomResultContextMenus();
+
+        const button = screen.getByRole("button", { name: "Notification options" });
+        // Opening the menu runs contextMenuBelow to position it beneath the button.
+        await user.click(button);
+
+        expect(screen.getByRole("menu")).toBeInTheDocument();
     });
 });

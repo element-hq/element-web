@@ -103,6 +103,17 @@
     "room_list": {
         "a11y": {
             "default": "Ouvrir salon %(roomName)s",
+            "drag_cancelled": "Glisser-déposer annulé",
+            "drag_end": "%(source)s a été déposé sur %(target)s",
+            "drag_end_after": "%(source)s a été déposé sur %(target)s",
+            "drag_end_before": "%(source)s a été déposé avant %(target)s",
+            "drag_end_original": "%(source)s est revenu à sa position initiale",
+            "drag_instructions": "Appuyer sur la barre Espace pour commencer ou arrêter le glisser-déposer, touches fléchées pour déplacer et Échap pour annuler.",
+            "drag_over": "%(source)s est au dessus de %(target)s",
+            "drag_over_after": "%(source)s sera déposé après %(target)s",
+            "drag_over_before": "%(source)s sera déposé avant %(target)s",
+            "drag_over_original": "%(source)s reprendra sa position initiale.",
+            "drag_start": "Glissé %(source)s",
             "invitation": "Ouvrir l'invitation du salon %(roomName)s.",
             "mention": {
                 "one": "Ouvrir le salon %(roomName)s avec 1 mention non lue.",
@@ -124,10 +135,7 @@
             "no_chats": "Pas encore de discussions",
             "no_chats_description": "Commencez par envoyer un message à quelqu'un ou en créant un salon",
             "no_chats_description_no_room_rights": "Commencez par envoyer un message à quelqu'un",
-            "no_favourites": "Vous n'avez pas encore de discussion favorite",
-            "no_favourites_description": "Vous pouvez ajouter une conversation à vos favoris dans les paramètres de discussion",
             "no_invites": "Vous n'avez aucune invitation non lue",
-            "no_lowpriority": "Vous n'avez aucun salon avec une priorité basse",
             "no_mentions": "Vous n'avez aucune mention non lue",
             "no_people": "Vous n'avez encore de discussions",
             "no_people_description": "Veuillez désélectionner des filtres pour voir vos discussions",
@@ -172,7 +180,7 @@
             "more_options": "Plus d’options",
             "remove_section": "Supprimer la section",
             "toggle": "Afficher/masquer la section %(section)s",
-            "toggle_unread": "Afficher ou masquer la section « %(section)s s » contenant un ou plusieurs salon non lus"
+            "toggle_unread": "Afficher ou masquer la section %(section)s avec des salons non lues"
         },
         "show_message_previews": "Afficher les aperçus des messages",
         "sort": "Trier",
@@ -184,6 +192,17 @@
         "space_menu": {
             "home": "Accueil de l’espace",
             "space_settings": "Paramètres de l'espace"
+        },
+        "unread_messages": "Messages non lus"
+    },
+    "status": {
+        "set_status": {
+            "away": "Absent",
+            "be_right_back": "Je reviens tout de suite",
+            "focus_time": "Temps de Concentration",
+            "in_a_meeting": "En réunion",
+            "on_the_road": "Sur la route",
+            "set_status_prompt": "Quel est votre statut ?"
         }
     },
     "terms": {
@@ -213,6 +232,28 @@
             "declined": {
                 "call_declined": "Appel refusé",
                 "call_declined_by_us": "Vous avez rejeté un appel"
+            },
+            "ongoing": {
+                "common": {
+                    "call_started_by": "%(startedByDisplayName)s a démarré un appel",
+                    "join_button": "Rejoindre"
+                },
+                "dm": {
+                    "call_started": "Appel démarré",
+                    "title": "Appel en cours"
+                },
+                "room": {
+                    "join_count": {
+                        "one": "%(count)s participant",
+                        "other": "%(count)s participants"
+                    },
+                    "title": "Appel de groupe en cours"
+                }
+            },
+            "tombstone": {
+                "room": {
+                    "title": "L'appel de groupe est terminé"
+                }
             },
             "video_call_title": "Appel vidéo",
             "voice_call_title": "Appel audio"

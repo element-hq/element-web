@@ -12,6 +12,12 @@
             "matchPackageNames": ["*"]
         },
         {
+            "description": "Group all pnpm updates",
+            "groupName": "pnpm",
+            "groupSlug": "pnpm",
+            "matchPackageNames": ["pnpm", "ghcr.io/pnpm/pnpm"]
+        },
+        {
             "description": "Separate updates to overrides from other groups",
             "matchManagers": ["npm"],
             "matchFileNames": ["pnpm-workspace.yaml"],
@@ -45,6 +51,25 @@
             "matchStrings": ["hakDependencies.$each(function($v, $k) { { 'packageName': $k, 'currentValue': $v } })"],
             "datasourceTemplate": "npm",
             "depTypeTemplate": "hak"
+        },
+        {
+            "description": "Update pnpm in devEngines",
+            "customType": "jsonata",
+            "fileFormat": "json",
+            "managerFilePatterns": ["/(^|/)package\\.json$/"],
+            "matchStrings": [
+                "devEngines.packageManager.name = 'pnpm' ? { 'currentValue': devEngines.packageManager.version } : null"
+            ],
+            "depNameTemplate": "pnpm",
+            "datasourceTemplate": "npm",
+            "depTypeTemplate": "devengines"
         }
-    ]
+    ],
+    "toolSettings": {
+        "nodeMaxMemory": 2048
+    },
+    "env": {
+        "PNPM_MAX_WORKERS": "2",
+        "PNPM_WORKERS": "2"
+    }
 }

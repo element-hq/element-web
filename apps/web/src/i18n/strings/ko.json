@@ -9,8 +9,6 @@
         "n_unread_messages_mentions": {
             "other": "읽지 않은 메시지 %(count)s개 (멘션 포함)."
         },
-        "recent_rooms": "최근 방",
-        "room_name": "%(name)s 방",
         "room_status_bar": "방 상태 표시줄",
         "seek_bar_label": "오디오 탐색 바",
         "unread_messages": "읽지 않은 메시지"
@@ -20,7 +18,6 @@
         "accept": "수락",
         "add": "추가",
         "add_existing_room": "기존 방 목록에서 추가하기",
-        "add_people": "사용자 추가",
         "apply": "적용",
         "approve": "승인",
         "ask_to_join": "참여를 요청하세요.",
@@ -55,7 +52,6 @@
         "enter_fullscreen": "전체 화면 표시",
         "exit_fullscreeen": "전체 화면 종료",
         "expand": "펼치기",
-        "explore_public_rooms": "공개 방 목록 살펴보기",
         "explore_rooms": "방 검색",
         "export": "내보내기",
         "forward": "전달",
@@ -67,8 +63,6 @@
         "ignore": "무시",
         "import": "가져오기",
         "invite": "초대",
-        "invite_to_space": "스페이스에 초대하기",
-        "invites_list": "초대",
         "join": "참가",
         "learn_more": "자세히 알아보기",
         "leave": "떠나기",
@@ -114,8 +108,6 @@
         "sign_out": "이 기기 로그아웃",
         "skip": "건너뛰기",
         "start": "시작하기",
-        "start_chat": "대화 시작",
-        "start_new_chat": "새로운 대화 시작하기",
         "stop": "중지",
         "submit": "제출",
         "subscribe": "구독",
@@ -474,7 +466,6 @@
         "encrypted": "암호화됨",
         "error": "오류",
         "faq": "자주 묻는 질문 (FAQ)",
-        "favourites": "즐겨찾기",
         "feedback": "피드백",
         "filter_results": "필터 결과",
         "forward_message": "전달 메세지",
@@ -482,7 +473,6 @@
         "go_to_settings": "설정으로 가기",
         "guest": "손님",
         "help": "도움말",
-        "historical": "기록",
         "home": "홈",
         "homeserver": "홈서버",
         "identity_server": "ID 서버",
@@ -494,7 +484,6 @@
         "light": "라이트",
         "loading": "불러오는 중…",
         "location": "위치",
-        "low_priority": "중요하지 않음",
         "matrix": "매트릭스",
         "message": "메시지",
         "message_layout": "메시지 레이아웃",
@@ -558,7 +547,6 @@
         "success": "성공",
         "suggestions": "추천 목록",
         "support": "지원",
-        "system_alerts": "시스템 알림",
         "theme": "테마",
         "thread": "스레드",
         "threads": "스레드",
@@ -575,7 +563,6 @@
         "username": "사용자 이름",
         "verified": "검증됨",
         "version": "버전",
-        "video": "비디오",
         "video_room": "비디오 room",
         "view_message": "메시지 보기",
         "warning": "경고"
@@ -1514,7 +1501,6 @@
             "required_msc_support": "레거시 동기화 프로필 업데이트를 위해 MSC4429 규격이 필요합니다."
         },
         "feature_wysiwyg_composer_description": "메시지 작성기에서 Markdown 대신 서식 있는 텍스트를 사용하세요",
-        "group_calls": "그룹 통화 새 기능",
         "group_developer": "개발자",
         "group_encryption": "암호화",
         "group_experimental": "실험적 기능",
@@ -1529,7 +1515,6 @@
         "group_voip": "음성 & 영상",
         "group_widgets": "위젯",
         "hidebold": "알림 점 숨기기 (카운터 배지만 표시)",
-        "html_topic": "채팅방 주제의 HTML 표현 표시",
         "join_beta": "베타 참여",
         "join_beta_reload": "베타에 참여하면 %(brand)s 페이지가 다시 로드됩니다.",
         "jump_to_date": "날짜로 이동 ( /jumptodate 명령어 및 날짜 이동 헤더 추가 )",
@@ -1541,19 +1526,16 @@
         "location_share_live_description": "임시 구현. 위치는 채팅방 기록에 유지됩니다.",
         "mjolnir": "새로운 차단/무시 기능",
         "msc3531_hide_messages_pending_moderation": "관리자가 검토 대기 중인 메시지를 숨길 수 있도록 하십시오.",
-        "new_room_list": "새 채팅방 목록 활성화",
         "notification_settings": "새 알림 설정",
         "notification_settings_beta_caption": "더욱 간편해진 알림 설정 방법을 만나보세요. 원하는 대로, 당신의 취향에 맞게 %(brand)s을(를) 설정할 수 있습니다.",
         "notification_settings_beta_title": "알림 설정",
         "notifications": "방 헤더에서 알림 패널 활성화",
         "render_reaction_images": "반응에 사용자 정의 이미지 렌더링",
         "render_reaction_images_description": "때로는 \"사용자 정의 이모지\"라고도 불립니다.",
-        "room_list_sections": "대화방 목록 섹션",
         "sliding_sync": "슬라이딩 동기화 모드",
         "sliding_sync_description": "개발 진행 중인 기능이며 비활성화는 불가능합니다. 현재 Element Call 기능은 지원하지 않습니다.",
         "sliding_sync_disabled_notice": "기능을 해제하려면 다시 로그인하세요",
         "sliding_sync_server_no_support": "서버에서 지원하지 않는 기능입니다.",
-        "under_active_development": "활발한 개발 중입니다.",
         "unrealiable_e2e": "암호화된 방에서는 신뢰할 수 없음",
         "video_rooms": "영상채팅방",
         "video_rooms_a_new_way_to_chat": "%(brand)s에서 음성 및 영상으로 채팅하는 새로운 방법",
@@ -1608,9 +1590,6 @@
         "room_leave_mod_warning": "이 채팅방의 유일한 운영자입니다. 운영자가 방을 떠나면, 아무도 방 설정을 변경하거나 다른 중요한 작업을 수행할 수 없습니다.",
         "room_rejoin_warning": "이 방은 공개되지 않았습니다. 초대 없이는 다시 들어올 수 없습니다.",
         "space_rejoin_warning": "이 스페이스는 공개되지 않습니다. 초대 없이는 다시 참여할 수 없습니다."
-    },
-    "left_panel": {
-        "open_dial_pad": "다이얼 패드 열기"
     },
     "lightbox": {
         "rotate_left": "왼쪽으로 회전",
@@ -1794,7 +1773,6 @@
     },
     "quick_settings": {
         "all_settings": "전체 설정",
-        "metaspace_section": "사이드바 고정",
         "sidebar_settings": "추가 옵션",
         "title": "빠른 설정"
     },
@@ -2086,43 +2064,21 @@
         "waiting_for_join_title": "다른 사용자가 %(brand)s에 참여하기를 기다리는 중입니다."
     },
     "room_list": {
-        "add_room_label": "방 추가",
         "add_space_label": "스페이스 추가하기",
-        "breadcrumbs_empty": "최근에 방문하지 않은 방 목록",
-        "breadcrumbs_label": "최근 방문한 방 목록",
         "failed_add_tag": "방에 %(tagName)s 태그 추가에 실패함",
         "failed_remove_tag": "방에 %(tagName)s 태그 제거에 실패함",
         "failed_set_dm_tag": "다이렉트 메시지 태그 설정에 실패했습니다",
-        "home_menu_label": "홈 옵션",
-        "join_public_room_label": "공개 방 참가하기",
-        "joining_rooms_status": {
-            "other": "현재 %(count)s 방에 참여 중입니다"
-        },
         "list_title": "채팅방 목록",
         "more_options": {
             "leave_room": "채팅방 떠나기"
         },
         "notification_options": "알림 옵션",
-        "redacting_messages_status": {
-            "other": "현재 %(count)s 방에서 메시지를 삭제 중입니다"
-        },
         "section": {
             "chats": "채팅",
             "favourites": "즐겨찾기",
             "low_priority": "낮은 우선순위"
         },
-        "show_less": "간단히 표시",
-        "show_n_more": {
-            "other": "%(count)s개 더 보기"
-        },
-        "show_previews": "메시지 미리 보기 표시",
-        "sort_by": "정렬 기준",
-        "sort_by_activity": "활동내역",
-        "sort_by_alphabet": "A-Z",
-        "sort_unread_first": "읽지 않은 메시지가 있는 방을 먼저 표시",
-        "space_menu_label": "%(spaceName)s 메뉴",
-        "sublist_options": "목록 옵션",
-        "suggested_rooms_heading": "추천 방"
+        "show_less": "간단히 표시"
     },
     "room_settings": {
         "access": {
@@ -2929,13 +2885,11 @@
         "showbold": "채팅방 목록에서 모든 활동 표시 (점 또는 읽지 않은 메시지 수)",
         "sidebar": {
             "dialog_title": "<strong>설정:</strong> 사이드바",
-            "metaspaces_favourites_description": "좋아하는 채팅방과 사람들을 한곳에 모아보세요.",
             "metaspaces_home_all_rooms": "모든 방 목록 보기",
             "metaspaces_home_all_rooms_description": "홈에서 모든 채팅방을 표시합니다. 채팅방이 스페이스에 속해 있어도 표시됩니다.",
             "metaspaces_home_description": "홈은 모든 것을 한눈에 파악하는 데 유용합니다.",
             "metaspaces_orphans": "스페이스 밖의 채팅방",
             "metaspaces_orphans_description": "스페이스에 속하지 않은 모든 채팅방을 한곳에 모으기",
-            "metaspaces_people_description": "모든 사람들을 한곳에 모으세요.",
             "metaspaces_subsection": "표시할 스페이스",
             "metaspaces_video_rooms": "영상 회의실 및 회의",
             "metaspaces_video_rooms_description": "모든 비공개 영상 방 및 회의를 그룹화합니다.",
@@ -2962,7 +2916,6 @@
             "audio_output": "오디오 출력",
             "audio_output_empty": "오디오 출력 감지 없음",
             "auto_gain_control": "자동 이득 제어",
-            "connection_section": "연결",
             "dialog_title": "<strong>설정:</strong> 음성 및 영상",
             "echo_cancellation": "에코 제거",
             "echo_cancellation_description": "통화 중 마이크 입력에서 에코를 제거합니다. 이 설정은 Element Call에도 적용됩니다.",
@@ -3153,12 +3106,6 @@
     },
     "space_settings": {
         "title": "설정 -%(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "이 공간에 방을 추가할 권한이 없습니다.",
-        "error_no_permission_add_space": "이 스페이스에 스페이스를 추가할 권한이 없습니다.",
-        "error_no_permission_create_room": "이 스페이스에서 새 방을 생성할 권한이 없습니다.",
-        "error_no_permission_invite": "이 스페이스에 사람을 초대할 권한이 없습니다."
     },
     "spotlight": {
         "public_rooms": {

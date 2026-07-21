@@ -9,8 +9,12 @@ import React, { type JSX, useEffect } from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import type { Room } from "./RoomListItemView";
-import { RoomListItemView, type RoomListItemViewSnapshot, type RoomListItemViewActions } from "./RoomListItemView";
+import {
+    type Room,
+    RoomListItemView,
+    type RoomListItemViewSnapshot,
+    type RoomListItemViewActions,
+} from "./RoomListItemView";
 import { useMockedViewModel } from "../../../../core/viewmodel";
 import { withViewDocs } from "../../../../../.storybook/withViewDocs";
 import { defaultSnapshot } from "./default-snapshot";
@@ -306,5 +310,20 @@ export const LastItem: Story = {
     args: {
         isLastItem: true,
         isSelected: true,
+    },
+};
+
+export const SectionDisabled: Story = {
+    args: {
+        areSectionsEnabled: false,
+    },
+};
+
+export const WithUserStatus: Story = {
+    args: {
+        userStatus: {
+            emoji: "🌭",
+            text: "Hot",
+        },
     },
 };

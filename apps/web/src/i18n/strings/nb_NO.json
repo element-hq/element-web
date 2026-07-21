@@ -11,8 +11,6 @@
             "one": "1 ulest omtale.",
             "other": "%(count)s uleste meldinger inkludert der du nevnes."
         },
-        "recent_rooms": "Nylige rom",
-        "room_name": "Rom %(name)s",
         "room_status_bar": "Statuslinje for rommet",
         "seek_bar_label": "Søkelinje for lyd",
         "unread_messages": "Uleste meldinger."
@@ -22,7 +20,6 @@
         "accept": "Godta",
         "add": "Legg til",
         "add_existing_room": "Legg til et eksisterende rom",
-        "add_people": "Legg til personer",
         "apply": "Bruk",
         "approve": "Godkjenn",
         "ask_to_join": "Be om å få bli med",
@@ -57,7 +54,6 @@
         "enter_fullscreen": "Gå til fullskjermmodus",
         "exit_fullscreeen": "Avslutt fullskjermmodus",
         "expand": "Utvid",
-        "explore_public_rooms": "Utforsk offentlige rom",
         "explore_rooms": "Se alle rom",
         "export": "Eksporter",
         "forward": "Videresend",
@@ -69,8 +65,6 @@
         "ignore": "Ignorer",
         "import": "Importer",
         "invite": "Inviter",
-        "invite_to_space": "Inviter til område",
-        "invites_list": "Invitasjoner",
         "join": "Bli med",
         "learn_more": "Lær mer",
         "leave": "Forlat",
@@ -116,8 +110,6 @@
         "sign_out": "Fjern denne enheten",
         "skip": "Hopp over",
         "start": "Begynn",
-        "start_chat": "Start chat",
-        "start_new_chat": "Start ny chat",
         "stop": "Stopp",
         "submit": "Send inn",
         "subscribe": "Abonnér",
@@ -475,7 +467,6 @@
         "encrypted": "Kryptert",
         "error": "Feil",
         "faq": "Ofte Stilte Spørsmål",
-        "favourites": "Favoritter",
         "feedback": "Tilbakemelding",
         "filter_results": "Filtrerresultater",
         "forward_message": "Videresend melding",
@@ -483,7 +474,6 @@
         "go_to_settings": "Gå til Innstillinger",
         "guest": "Gjest",
         "help": "Hjelp",
-        "historical": "Historisk",
         "home": "Hjem",
         "homeserver": "Hjemmeserver",
         "identity_server": "Identitetstjener",
@@ -495,7 +485,6 @@
         "light": "Lys",
         "loading": "Laster inn …",
         "location": "Lokasjon",
-        "low_priority": "Lav prioritet",
         "matrix": "Matrix",
         "message": "Melding",
         "message_layout": "Meldingsoppsett",
@@ -561,7 +550,6 @@
         "success": "Vellykket",
         "suggestions": "Forslag",
         "support": "Brukerstøtte",
-        "system_alerts": "Systemvarsler",
         "theme": "Tema",
         "thread": "Tråd",
         "threads": "Tråder",
@@ -578,7 +566,6 @@
         "username": "Brukernavn",
         "verified": "Verifisert",
         "version": "Versjon",
-        "video": "Video",
         "video_room": "Videorom",
         "view_message": "Se melding",
         "warning": "Advarsel"
@@ -1494,7 +1481,6 @@
         "extended_profiles_msc_support": "Krever at serveren din støtter MSC4133",
         "feature_disable_call_per_sender_encryption": "Deaktiver kryptering per avsender for Element Call",
         "feature_wysiwyg_composer_description": "Bruk rik tekst i stedet for Markdown i meldingsskriveren.",
-        "group_calls": "Ny opplevelse for gruppesamtaler",
         "group_developer": "Utvikler",
         "group_encryption": "Kryptering",
         "group_experimental": "Eksperimentelt",
@@ -1509,7 +1495,6 @@
         "group_voip": "Stemme og video",
         "group_widgets": "Komponenter",
         "hidebold": "Skjul varslingspunkt (bare vise tellemerker)",
-        "html_topic": "Vis HTML-visning av romemner",
         "join_beta": "Bli med i betaen",
         "join_beta_reload": "Hvis du blir med i betaen, lastes %(brand)s på nytt.",
         "jump_to_date": "Gå til dato (legger til/jumptodate og hopp til datooverskrifter)",
@@ -1521,7 +1506,6 @@
         "location_share_live_description": "Midlertidig implementering. Plasseringer beholdes i romhistorikken.",
         "mjolnir": "Nye måter å ignorere folk på",
         "msc3531_hide_messages_pending_moderation": "La moderatorer skjule meldinger i påvente av moderering.",
-        "new_room_list": "Aktiver ny romliste",
         "notification_settings": "Nye varslingsinnstillinger",
         "notification_settings_beta_caption": "Vi introduserer en enklere måte å endre varslingsinnstillingene dine på. Tilpass %(brand)s, akkurat slik du vil.",
         "notification_settings_beta_title": "Innstillinger for varsler",
@@ -1532,7 +1516,6 @@
         "sliding_sync_description": "Under aktiv utvikling, kan ikke deaktiveres.",
         "sliding_sync_disabled_notice": "Logg ut og inn igjen for å deaktivere",
         "sliding_sync_server_no_support": "Serveren din mangler støtte",
-        "under_active_development": "Under aktiv utvikling.",
         "unrealiable_e2e": "Upålitelig i krypterte rom",
         "video_rooms": "Videorom",
         "video_rooms_a_new_way_to_chat": "En ny måte å chatte over tale og video i %(brand)s.",
@@ -1587,9 +1570,6 @@
         "room_leave_mod_warning": "Du er den eneste moderatoren i dette rommet. Hvis du forlater rommet, vil ingen kunne endre rominnstillinger eller utføre andre viktige handlinger.",
         "room_rejoin_warning": "Dette rommet er ikke offentlig. Du vil ikke kunne bli med igjen uten en invitasjon.",
         "space_rejoin_warning": "Dette området er ikke offentlig. Du vil ikke kunne bli med igjen uten en invitasjon."
-    },
-    "left_panel": {
-        "open_dial_pad": "Åpne nummerpanelet"
     },
     "lightbox": {
         "rotate_left": "Roter til venstre",
@@ -1787,7 +1767,6 @@
     },
     "quick_settings": {
         "all_settings": "Alle innstillinger",
-        "metaspace_section": "Fest til sidepanel",
         "sidebar_settings": "Flere alternativer",
         "title": "Hurtiginnstillinger"
     },
@@ -2082,40 +2061,16 @@
         "waiting_for_join_title": "Venter på at brukerne skal bli med %(brand)s"
     },
     "room_list": {
-        "add_room_label": "Legg til et rom",
         "add_space_label": "Legg til område",
-        "breadcrumbs_empty": "Ingen nylig besøkte rom",
-        "breadcrumbs_label": "Nylig besøkte rom",
         "failed_add_tag": "Kunne ikke legge til tagg %(tagName)s til rom",
         "failed_remove_tag": "Kunne ikke fjerne tagg %(tagName)s fra rommet",
         "failed_set_dm_tag": "Kan ikke sette kode på direktemeldingen",
-        "home_menu_label": "Hjem alternativer",
-        "join_public_room_label": "Bli med i offentlig rom",
-        "joining_rooms_status": {
-            "one": "Blir for øyeblikket med i %(count)s rom",
-            "other": "Blir for øyeblikket med i %(count)s rom"
-        },
         "list_title": "Romliste",
         "more_options": {
             "leave_room": "Forlat rommet"
         },
         "notification_options": "Varselsinnstillinger",
-        "redacting_messages_status": {
-            "one": "Fjerner for øyeblikket meldinger i %(count)s rom",
-            "other": "Fjerner for øyeblikket meldinger i %(count)s rom"
-        },
-        "show_less": "Vis mindre",
-        "show_n_more": {
-            "Vis %(count)s til": "Vis %(count)s mer"
-        },
-        "show_previews": "Vis forhåndsvisninger av meldinger",
-        "sort_by": "Sorter etter",
-        "sort_by_activity": "Aktivitet",
-        "sort_by_alphabet": "A-Å",
-        "sort_unread_first": "Vis rom med uleste meldinger først",
-        "space_menu_label": "",
-        "sublist_options": "Liste alternativer",
-        "suggested_rooms_heading": "Foreslåtte rom"
+        "show_less": "Vis mindre"
     },
     "room_settings": {
         "access": {
@@ -2935,13 +2890,11 @@
         "showbold": "Vis all aktivitet i romlisten (prikker eller antall uleste meldinger)",
         "sidebar": {
             "dialog_title": "<strong>Innstillinger:</strong> Sidepanel",
-            "metaspaces_favourites_description": "Grupper alle dine favorittrom og -personer på ett sted.",
             "metaspaces_home_all_rooms": "Vis alle rom",
             "metaspaces_home_all_rooms_description": "Vis alle rommene dine i Hjem, selv om de er i et område.",
             "metaspaces_home_description": "Hjem er nyttig for å få oversikt over alt.",
             "metaspaces_orphans": "Rom utenfor et område",
             "metaspaces_orphans_description": "Grupper alle rommene dine som ikke er en del av et område på ett sted.",
-            "metaspaces_people_description": "Grupper alle dine personer på ett sted.",
             "metaspaces_subsection": "Områder å vise",
             "metaspaces_video_rooms": "Videorom og konferanser",
             "metaspaces_video_rooms_description": "Grupper alle private videorom og konferanser.",
@@ -2968,7 +2921,6 @@
             "audio_output": "Lydutdata",
             "audio_output_empty": "Ingen lydutdataer ble oppdaget",
             "auto_gain_control": "Automatisk forsterkningskontroll",
-            "connection_section": "Tilkobling",
             "dialog_title": "<strong>Innstillinger:</strong> Tale og video",
             "echo_cancellation": "Ekko-kansellering",
             "enable_fallback_ice_server": "Tillat reserveserver for anropsassistanse (%(server)s)",
@@ -3150,12 +3102,6 @@
     },
     "space_settings": {
         "title": "Innstillinger - %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "Du har ikke tillatelse til å legge til rom på dette området",
-        "error_no_permission_add_space": "Du har ikke tillatelse til å legge til områder på dette området",
-        "error_no_permission_create_room": "Du har ikke tillatelse til å opprette nye rom på dette området",
-        "error_no_permission_invite": "Du har ikke tillatelse til å invitere folk til dette området"
     },
     "spotlight": {
         "public_rooms": {

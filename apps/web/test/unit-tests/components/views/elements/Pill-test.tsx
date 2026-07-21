@@ -13,7 +13,8 @@ import { mocked, type Mocked } from "jest-mock";
 import { type MatrixClient, type MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 
 import dis from "../../../../../src/dispatcher/dispatcher";
-import { Pill, type PillProps, PillType } from "../../../../../src/components/views/elements/Pill";
+import { Pill, type PillProps } from "../../../../../src/components/views/elements/Pill";
+import { PillType } from "../../../../../src/components/views/elements/PillType";
 import {
     filterConsole,
     flushPromises,
@@ -26,9 +27,10 @@ import {
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { type ButtonEvent } from "../../../../../src/components/views/elements/AccessibleButton";
-import { SDKContext, SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { SDKContext } from "../../../../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg.ts";
-import { TestSdkContext } from "../../../TestSdkContext.ts";
+import { TestSDKContext } from "../../../TestSDKContext.ts";
 
 describe("<Pill>", () => {
     let client: Mocked<MatrixClient>;
@@ -46,11 +48,12 @@ describe("<Pill>", () => {
     const user3Id = "@user3:example.com";
     let renderResult: RenderResult;
     let pillParentClickHandler: (e: ButtonEvent) => void;
+    let sdkContext: TestSDKContext;
 
     const renderPill = (props: PillProps): void => {
         const cli = MatrixClientPeg.safeGet();
-        const mockSdkContext = new TestSdkContext();
-        mockSdkContext.client = cli;
+        const mockSdkContext = new TestSDKContext();
+        mockSdkContext._client = cli;
 
         const withDefault = {
             inMessage: true,
@@ -59,7 +62,6 @@ describe("<Pill>", () => {
         } as PillProps;
         // wrap Pill with a div to allow testing of event bubbling
         renderResult = render(
-            // eslint-disable-next-line jsx-a11y/click-events-have-key-events
             <SDKContext.Provider value={mockSdkContext}>
                 <div onClick={pillParentClickHandler}>
                     <Pill {...withDefault} />
@@ -77,7 +79,10 @@ describe("<Pill>", () => {
 
     beforeEach(() => {
         client = mocked(stubClient());
-        SdkContextClass.instance.client = client;
+        sdkContext = new TestSDKContext();
+        // @ts-ignore Pill uses the SDKContext global
+        SDKContextClass.instance = sdkContext;
+        sdkContext._client = client;
         DMRoomMap.makeShared(client);
         room1 = new Room(room1Id, client, user1Id);
         room1.name = "Room 1";

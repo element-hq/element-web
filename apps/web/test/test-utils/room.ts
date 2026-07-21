@@ -10,11 +10,10 @@ import { type MockedObject } from "jest-mock-vitest-adapter";
 import { type EventTimeline, EventType, type MatrixClient, type MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
-import { MainSplitContentType } from "../../src/components/structures/RoomView";
-import { type RoomContextType, TimelineRenderingType } from "../../src/contexts/RoomContext";
+import { MainSplitContentType, type RoomContextType, TimelineRenderingType } from "../../src/contexts/RoomContext";
 import { Layout } from "../../src/settings/enums/Layout";
 import { mkEvent } from "./test-utils";
-import { SdkContextClass } from "../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../src/contexts/SDKContextClass";
 
 export const makeMembershipEvent = (roomId: string, userId: string, membership = KnownMembership.Join) =>
     mkEvent({
@@ -45,7 +44,7 @@ export const makeRoomWithStateEvents = (
 
 export function getRoomContext(room: Room, override: Partial<RoomContextType>): RoomContextType {
     return {
-        roomViewStore: SdkContextClass.instance.roomViewStore,
+        roomViewStore: SDKContextClass.instance.roomViewStore,
         room,
         roomLoading: true,
         peekLoading: false,

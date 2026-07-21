@@ -4,7 +4,6 @@ exports[`<DeviceDetailHeading /> displays name edit form on rename button click 
 {
   "container": <div>
     <form
-      aria-disabled="false"
       class="mx_DeviceDetailHeading_renameForm"
       method="post"
     >

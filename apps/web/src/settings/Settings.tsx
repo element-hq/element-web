@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactNode } from "react";
 import { STABLE_MSC4133_EXTENDED_PROFILES, UNSTABLE_MSC4133_EXTENDED_PROFILES } from "matrix-js-sdk/src/matrix";
+import { type JsonDocument, type JsonValue } from "shared-types";
 // Import these directly from shared-components to avoid circular deps
 import { _t, _td, type ProxyConfig } from "@element-hq/web-shared-components";
 
@@ -44,7 +45,6 @@ import FallbackIceServerController from "./controllers/FallbackIceServerControll
 import { type IRightPanelForRoomStored } from "../stores/right-panel/RightPanelStoreIPanelState.ts";
 import { type ILayoutSettings } from "../stores/widgets/WidgetLayoutStore.ts";
 import { type ReleaseAnnouncementData } from "../stores/ReleaseAnnouncementStore.ts";
-import { type Json, type JsonValue } from "../@types/json.ts";
 import { type RecentEmojiData } from "../emojipicker/recent.ts";
 import { type Assignable } from "../@types/common.ts";
 import { SortingAlgorithm } from "../stores/room-list-v3/skip-list/sorters/index.ts";
@@ -121,7 +121,7 @@ export const labGroupNames: Record<LabGroup, TranslationKey> = {
     [LabGroup.Ui]: _td("labs|group_ui"),
 };
 
-export type SettingValueType = Json | JsonValue | Record<string, unknown> | Record<string, unknown>[];
+export type SettingValueType = JsonDocument | JsonValue | Record<string, unknown> | Record<string, unknown>[];
 
 export interface IBaseSetting<T extends SettingValueType = SettingValueType> {
     isFeature?: false | undefined;
@@ -214,25 +214,22 @@ export interface Settings {
     "feature_mjolnir": IFeature;
     "feature_custom_themes": IFeature;
     "feature_exclude_insecure_devices": IFeature;
-    "feature_html_topic": IFeature;
     "feature_bridge_state": IFeature;
     "feature_jump_to_date": IFeature;
     "feature_sliding_sync": IBaseSetting<boolean>;
     "feature_simplified_sliding_sync": IFeature;
     "feature_element_call_video_rooms": IFeature;
-    "feature_group_calls": IFeature;
     "feature_disable_call_per_sender_encryption": IFeature;
     "feature_location_share_live": IFeature;
     "feature_dynamic_room_predecessors": IFeature;
     "feature_render_reaction_images": IFeature;
-    "feature_new_room_list": IFeature;
     "feature_retention": IFeature;
-    "feature_room_list_sections": IFeature;
     "feature_ask_to_join": IFeature;
     "feature_notifications": IFeature;
     "feature_msc4362_encrypted_state_events": IFeature;
     "feature_user_status": IFeature;
     "feature_login_with_qr": IFeature;
+    "feature_msc4095_url_preview_bundle": IFeature;
     // These are in the feature namespace but aren't actually features
     "feature_hidebold": IBaseSetting<boolean>;
 
@@ -242,8 +239,6 @@ export interface Settings {
     "mjolnirPersonalRoom": IBaseSetting<string | null>;
     "RoomList.backgroundImage": IBaseSetting<string | null>;
     "sendReadReceipts": IBaseSetting<boolean>;
-    "baseFontSize": IBaseSetting<"" | number>;
-    "baseFontSizeV2": IBaseSetting<"" | number>;
     "fontSizeDelta": IBaseSetting<number>;
     "useCustomFontSize": IBaseSetting<boolean>;
     "MessageComposerInput.suggestEmoji": IBaseSetting<boolean>;
@@ -271,8 +266,6 @@ export interface Settings {
     "scrollToBottomOnMessageSent": IBaseSetting<boolean>;
     "Pill.shouldShowPillAvatar": IBaseSetting<boolean>;
     "TextualBody.enableBigEmoji": IBaseSetting<boolean>;
-    "MessageComposerInput.isRichTextEnabled": IBaseSetting<boolean>;
-    "MessageComposer.showFormatting": IBaseSetting<boolean>;
     "sendTypingNotifications": IBaseSetting<boolean>;
     "showTypingNotifications": IBaseSetting<boolean>;
     "ctrlFForSearch": IBaseSetting<boolean>;
@@ -288,6 +281,7 @@ export interface Settings {
     "useSystemFont": IBaseSetting<boolean>;
     "systemFont": IBaseSetting<string>;
     "webRtcAllowPeerToPeer": IBaseSetting<boolean>;
+    "enableLegacyCallsVoip": IBaseSetting<boolean>;
     "webrtc_audiooutput": IBaseSetting<string>;
     "webrtc_audioinput": IBaseSetting<string>;
     "webrtc_videoinput": IBaseSetting<string>;
@@ -340,7 +334,6 @@ export interface Settings {
     "RightPanel.phases": IBaseSetting<IRightPanelForRoomStored | null>;
     "enableEventIndexing": IBaseSetting<boolean>;
     "crawlerSleepTime": IBaseSetting<number>;
-    "showCallButtonsInComposer": IBaseSetting<boolean>;
     "ircDisplayNameWidth": IBaseSetting<number>;
     "layout": IBaseSetting<Layout>;
     "Images.size": IBaseSetting<ImageSize>;
@@ -356,7 +349,6 @@ export interface Settings {
     "debug_timeline_panel": IBaseSetting<boolean>;
     "debug_registration": IBaseSetting<boolean>;
     "debug_animation": IBaseSetting<boolean>;
-    "debug_legacy_call_handler": IBaseSetting<boolean>;
     "audioInputMuted": IBaseSetting<boolean>;
     "videoInputMuted": IBaseSetting<boolean>;
     "activeCallRoomIds": IBaseSetting<string[]>;
@@ -373,14 +365,22 @@ export interface Settings {
     "Developer.elementCallUrl": IBaseSetting<string>;
     "RoomList.CustomSectionData": IBaseSetting<CustomSectionsData>;
     "RoomList.OrderedCustomSections": IBaseSetting<ReorderableSection[]>;
+    "RoomList.showSections": IBaseSetting<boolean>;
 }
 
 export type SettingKey = keyof Settings;
 export type FeatureSettingKey = Assignable<Settings, IFeature>;
 export type BooleanSettingKey = Assignable<Settings, IBaseSetting<boolean>> | FeatureSettingKey;
+export type NullableBooleanSettingKey = Assignable<Settings, IBaseSetting<boolean | null>> | FeatureSettingKey;
 export type StringSettingKey = Assignable<Settings, IBaseSetting<string>>;
 
 export const SETTINGS: Settings = {
+    // Used in tests only
+    "test_setting": {
+        supportedLevels: [],
+        default: "",
+    },
+
     "feature_video_rooms": {
         isFeature: true,
         labsGroup: LabGroup.VoiceAndVideo,
@@ -459,7 +459,7 @@ export const SETTINGS: Settings = {
         shouldExportToRageshake: false,
     },
     "blockInvites": {
-        controller: new BlockInvitesConfigController("blockInvites"),
+        controller: new BlockInvitesConfigController("blockInvites", defaultWatchManager),
         supportedLevels: [SettingLevel.ACCOUNT],
         default: false,
     },
@@ -526,14 +526,6 @@ export const SETTINGS: Settings = {
         default: null,
         // Contains room ID
         shouldExportToRageshake: false,
-    },
-    "feature_html_topic": {
-        isFeature: true,
-        labsGroup: LabGroup.Rooms,
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        displayName: _td("labs|html_topic"),
-        default: false,
     },
     "feature_bridge_state": {
         isFeature: true,
@@ -602,15 +594,6 @@ export const SETTINGS: Settings = {
         controller: new ReloadOnChangeController(),
         default: false,
     },
-    "feature_group_calls": {
-        isFeature: true,
-        labsGroup: LabGroup.VoiceAndVideo,
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        displayName: _td("labs|group_calls"),
-        controller: new ReloadOnChangeController(),
-        default: false,
-    },
     "feature_disable_call_per_sender_encryption": {
         isFeature: true,
         labsGroup: LabGroup.VoiceAndVideo,
@@ -639,15 +622,6 @@ export const SETTINGS: Settings = {
         shouldWarn: true,
         default: false,
     },
-    /**
-     * @deprecated in favor of {@link fontSizeDelta}
-     */
-    "baseFontSize": {
-        displayName: _td("settings|appearance|font_size"),
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        default: "",
-        controller: new FontSizeController(),
-    },
     "feature_render_reaction_images": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
@@ -657,24 +631,6 @@ export const SETTINGS: Settings = {
         supportedLevelsAreOrdered: true,
         default: false,
     },
-    "feature_new_room_list": {
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        labsGroup: LabGroup.Ui,
-        displayName: _td("labs|new_room_list"),
-        description: _td("labs|under_active_development"),
-        isFeature: true,
-        default: true,
-        controller: new ReloadOnChangeController(),
-    },
-    "feature_room_list_sections": {
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        labsGroup: LabGroup.Ui,
-        displayName: _td("labs|room_list_sections"),
-        description: _td("labs|under_active_development"),
-        isFeature: true,
-        default: false,
-        controller: new ReloadOnChangeController(),
-    },
     "feature_login_with_qr": {
         supportedLevels: [SettingLevel.CONFIG],
         labsGroup: LabGroup.Ui,
@@ -683,21 +639,17 @@ export const SETTINGS: Settings = {
         isFeature: true,
         default: false,
     },
-    /**
-     * With the transition to Compound we are moving to a base font size
-     * of 16px. We're taking the opportunity to move away from the `baseFontSize`
-     * setting that had a 5px offset.
-     * @deprecated in favor {@link fontSizeDelta}
-     */
-    "baseFontSizeV2": {
-        displayName: _td("settings|appearance|font_size"),
-        supportedLevels: [SettingLevel.DEVICE],
-        default: "",
-        controller: new FontSizeController(),
+    "feature_msc4095_url_preview_bundle": {
+        labsGroup: LabGroup.Messaging,
+        displayName: _td("labs|url_preview_bundle"),
+        description: _td("labs|url_preview_bundle_description"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        isFeature: true,
+        default: false,
     },
     /**
      * This delta is added to the browser default font size
-     * Moving from `baseFontSizeV2` to `fontSizeDelta` to replace the default 16px to --cpd-font-size-root (browser default font size) + fontSizeDelta
      */
     "fontSizeDelta": {
         displayName: _td("settings|appearance|font_size"),
@@ -931,14 +883,6 @@ export const SETTINGS: Settings = {
         default: true,
         invertedSettingName: "TextualBody.disableBigEmoji",
     },
-    "MessageComposerInput.isRichTextEnabled": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        default: false,
-    },
-    "MessageComposer.showFormatting": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        default: false,
-    },
     "sendTypingNotifications": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("settings|send_typing_notifications"),
@@ -1020,6 +964,12 @@ export const SETTINGS: Settings = {
         default: "",
         displayName: _td("settings|appearance|custom_font_name"),
         controller: new SystemFontController(),
+    },
+    "enableLegacyCallsVoip": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
+        displayName: _td("settings|voip|enable_legacy_calls"),
+        description: _td("settings|voip|enable_legacy_calls_description"),
+        default: true,
     },
     "webRtcAllowPeerToPeer": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
@@ -1266,6 +1216,11 @@ export const SETTINGS: Settings = {
         default: false,
         displayName: _td("settings|show_message_previews"),
     },
+    "RoomList.showSections": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: true,
+        displayName: _td("settings|show_sections"),
+    },
     "RightPanel.phasesGlobal": {
         supportedLevels: [SettingLevel.DEVICE],
         default: null,
@@ -1283,13 +1238,6 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         displayName: _td("settings|security|message_search_sleep_time"),
         default: 3000,
-    },
-    "showCallButtonsInComposer": {
-        // Dev note: This is no longer "in composer" but is instead "in room header".
-        // TODO: Rename with settings v3
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        default: true,
-        controller: new UIFeatureController(UIFeature.Voip),
     },
     "ircDisplayNameWidth": {
         // We specifically want to have room-device > device so that users may set a device default
@@ -1361,10 +1309,6 @@ export const SETTINGS: Settings = {
         default: false,
     },
     "debug_animation": {
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        default: false,
-    },
-    "debug_legacy_call_handler": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: false,
     },

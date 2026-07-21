@@ -17,7 +17,7 @@ import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
 import MemberAvatar from "../avatars/MemberAvatar";
 import ErrorDialog from "../dialogs/ErrorDialog";
-import { RoomSettingsTab } from "../dialogs/RoomSettingsDialog";
+import { RoomSettingsTab } from "../dialogs/RoomSettingsDialog-tab";
 import AccessibleButton from "../elements/AccessibleButton";
 import Heading from "../typography/Heading";
 import { formatList } from "../../../utils/FormattingUtils";

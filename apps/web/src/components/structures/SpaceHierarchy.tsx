@@ -180,7 +180,6 @@ const Tile: React.FC<ITileProps> = ({
         if (hasPermissions) {
             checkbox = (
                 <StyledCheckbox
-                    role="presentation"
                     aria-labelledby={checkboxLabelId}
                     checked={!!selected}
                     tabIndex={-1}
@@ -198,12 +197,7 @@ const Tile: React.FC<ITileProps> = ({
                         ev.stopPropagation();
                     }}
                 >
-                    <StyledCheckbox
-                        role="presentation"
-                        aria-labelledby={checkboxLabelId}
-                        disabled={true}
-                        tabIndex={-1}
-                    />
+                    <StyledCheckbox aria-labelledby={checkboxLabelId} disabled={true} tabIndex={-1} />
                 </TextWithTooltip>
             );
         }
@@ -287,8 +281,9 @@ const Tile: React.FC<ITileProps> = ({
     let childSection: JSX.Element | undefined;
     let onKeyDown: KeyboardEventHandler | undefined;
     if (children) {
-        // the chevron is purposefully a div rather than a button as it should be ignored for a11y
         childToggle = (
+            // the chevron is purposefully a div rather than a button as it should be ignored for a11y
+            // oxlint-disable-next-line jsx-a11y/click-events-have-key-events
             <div
                 className={classNames("mx_SpaceHierarchy_subspace_toggle", {
                     mx_SpaceHierarchy_subspace_toggle_shown: showChildren,
@@ -798,7 +793,7 @@ const SpaceHierarchy: React.FC<IProps> = ({ space, initialText = "", showRoom, a
 
         // Walk back up the tree to find all parents of the direct matches to show their place in the hierarchy
         const visited = new Set<string>();
-        const queue = [...directMatches.map((r) => r.room_id)];
+        const queue = directMatches.map((r) => r.room_id);
         while (queue.length) {
             const roomId = queue.pop()!;
             visited.add(roomId);

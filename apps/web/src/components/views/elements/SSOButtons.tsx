@@ -15,7 +15,7 @@ import {
     type SSOFlow,
     type SSOAction,
     type IIdentityProvider,
-    DELEGATED_OIDC_COMPATIBILITY,
+    OAUTH_AWARE_PREFERRED_FLOW_FIELD,
 } from "matrix-js-sdk/src/matrix";
 import { type Signup } from "@matrix-org/analytics-events/types/typescript/Signup";
 import { Button, Tooltip } from "@vector-im/compound-web";
@@ -90,7 +90,7 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
     let label: string;
     if (idp) {
         label = _t("auth|continue_with_idp", { provider: idp.name });
-    } else if (DELEGATED_OIDC_COMPATIBILITY.findIn<boolean>(flow)) {
+    } else if (OAUTH_AWARE_PREFERRED_FLOW_FIELD.findIn<boolean>(flow)) {
         label = _t("action|continue");
     } else {
         label = _t("auth|sign_in_with_sso");

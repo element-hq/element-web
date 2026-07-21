@@ -19,8 +19,9 @@ import {
 } from "matrix-js-sdk/src/crypto-api";
 import { VerificationMethod } from "matrix-js-sdk/src/types";
 
-import { stubClient } from "../../../../test-utils";
+import { stubClient, withContexts } from "../../../../test-utils";
 import VerificationRequestDialog from "../../../../../src/components/views/dialogs/VerificationRequestDialog";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
 
 describe("VerificationRequestDialog", () => {
     function renderComponent(phase: VerificationPhase, method?: "emoji" | "qr"): ReturnType<typeof render> {
@@ -29,6 +30,7 @@ describe("VerificationRequestDialog", () => {
 
         return render(
             <VerificationRequestDialog onFinished={jest.fn()} member={member} verificationRequest={request} />,
+            withContexts({ sdkContext: SDKContextClass.instance }),
         );
     }
 
@@ -124,6 +126,7 @@ describe("VerificationRequestDialog", () => {
                 member={member}
                 verificationRequestPromise={requestPromise}
             />,
+            withContexts({ sdkContext: SDKContextClass.instance }),
         );
 
         // And wait for the component to mount, the promise to resolve and the component state to update
@@ -153,6 +156,7 @@ describe("VerificationRequestDialog", () => {
                 verificationRequest={request}
                 verificationRequestPromise={requestPromise}
             />,
+            withContexts({ sdkContext: SDKContextClass.instance }),
         );
 
         // And wait for the component to mount, the promise to resolve and the component state to update
@@ -173,7 +177,10 @@ describe("VerificationRequestDialog", () => {
         const member = User.createUser("@alice:example.org", stubClient());
         const request = createRequest(VerificationPhase.Unsent);
 
-        render(<VerificationRequestDialog onFinished={jest.fn()} member={member} verificationRequest={request} />);
+        render(
+            <VerificationRequestDialog onFinished={jest.fn()} member={member} verificationRequest={request} />,
+            withContexts({ sdkContext: SDKContextClass.instance }),
+        );
 
         // When I cancel the request (which changes phase and emits a Changed event)
         await act(async () => await request.cancel());

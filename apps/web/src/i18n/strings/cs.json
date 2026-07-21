@@ -11,8 +11,6 @@
             "other": "%(count)s nepřečtených zpráv a zmínek.",
             "one": "Nepřečtená zmínka."
         },
-        "recent_rooms": "Nedávné místnosti",
-        "room_name": "Místnost %(name)s",
         "room_status_bar": "Stavový řádek místnosti",
         "seek_bar_label": "Panel posunu zvuku",
         "unread_messages": "Nepřečtené zprávy."
@@ -22,7 +20,6 @@
         "accept": "Přijmout",
         "add": "Přidat",
         "add_existing_room": "Přidat existující místnost",
-        "add_people": "Přidat lidi",
         "apply": "Použít",
         "approve": "Schválit",
         "ask_to_join": "Požádat o vstup",
@@ -57,7 +54,6 @@
         "enter_fullscreen": "Vstup do režimu celé obrazovky",
         "exit_fullscreeen": "Ukončení režimu celé obrazovky",
         "expand": "Rozbalit",
-        "explore_public_rooms": "Prozkoumat veřejné místnosti",
         "explore_rooms": "Procházet místnosti",
         "export": "Exportovat",
         "forward": "Přeposlat",
@@ -69,8 +65,6 @@
         "ignore": "Ignorovat",
         "import": "Importovat",
         "invite": "Pozvat",
-        "invite_to_space": "Pozvat do prostoru",
-        "invites_list": "Pozvánky",
         "join": "Vstoupit",
         "learn_more": "Zjistit více",
         "leave": "Opustit",
@@ -116,8 +110,6 @@
         "sign_out": "Odebrat toto zařízení",
         "skip": "Přeskočit",
         "start": "Začít",
-        "start_chat": "Zahájit konverzaci",
-        "start_new_chat": "Zahájit nový chat",
         "stop": "Zastavit",
         "submit": "Odeslat",
         "subscribe": "Odebírat",
@@ -488,7 +480,6 @@
         "encrypted": "Šifrováno",
         "error": "Chyba",
         "faq": "Často kladené dotazy (FAQ)",
-        "favourites": "Oblíbené",
         "feedback": "Zpětná vazba",
         "filter_results": "Filtrovat výsledky",
         "forward_message": "Přeposlat zprávu",
@@ -496,7 +487,6 @@
         "go_to_settings": "Přejít do nastavení",
         "guest": "Host",
         "help": "Nápověda",
-        "historical": "Historické",
         "home": "Domov",
         "homeserver": "Domovský server",
         "identity_server": "Server identit",
@@ -508,7 +498,6 @@
         "light": "Světlý",
         "loading": "Načítání…",
         "location": "Poloha",
-        "low_priority": "Nízká priorita",
         "matrix": "Matrix",
         "message": "Zpráva",
         "message_layout": "Zobrazení zpráv",
@@ -574,7 +563,6 @@
         "success": "Úspěch",
         "suggestions": "Návrhy",
         "support": "Podpora",
-        "system_alerts": "Systémová varování",
         "theme": "Motiv vzhledu",
         "thread": "Vlákno",
         "threads": "Vlákna",
@@ -591,7 +579,6 @@
         "username": "Uživatelské jméno",
         "verified": "Ověřeno",
         "version": "Verze",
-        "video": "Video",
         "video_room": "Video místnost",
         "view_message": "Zobrazit zprávu",
         "warning": "Upozornění"
@@ -1540,7 +1527,6 @@
             "required_msc_support": "Vyžaduje MSC4429 (aktualizace profilu pro starší synchronizaci)"
         },
         "feature_wysiwyg_composer_description": "V editoru zpráv použít formátovaný text namísto Markdown.",
-        "group_calls": "Nový zážitek ze skupinových hovorů",
         "group_developer": "Pro vývojáře",
         "group_encryption": "Šifrování",
         "group_experimental": "Experimentální",
@@ -1555,7 +1541,6 @@
         "group_voip": "Zvuk a video",
         "group_widgets": "Widgety",
         "hidebold": "Skrýt tečku oznámení (zobrazit pouze odznaky čítačů)",
-        "html_topic": "Zobrazit HTML reprezentaci témat místností",
         "join_beta": "Připojit se k beta verzi",
         "join_beta_reload": "Po připojení k betě se %(brand)s znovu načte.",
         "jump_to_date": "Přejít na datum (přidá /jumptodate a umožní přejít na záhlaví data)",
@@ -1568,19 +1553,16 @@
         "login_with_qr": "Přihlásit se pomocí QR kódu",
         "mjolnir": "Nové způsoby ignorování lidí",
         "msc3531_hide_messages_pending_moderation": "Umožnit moderátorům skrývat zprávy čekající na moderaci.",
-        "new_room_list": "Povolit nový seznam místností",
         "notification_settings": "Nová nastavení oznámení",
         "notification_settings_beta_caption": "Představujeme jednodušší způsob, jak změnit nastavení oznámení. Přizpůsobte svůj %(brand)s přesně tak, jak se vám líbí.",
         "notification_settings_beta_title": "Nastavení oznámení",
         "notifications": "Zapnout panel oznámení v záhlaví místnosti",
         "render_reaction_images": "Vykreslování vlastních obrázků v reakcích",
         "render_reaction_images_description": "Někdy se označují jako \"vlastní emoji\".",
-        "room_list_sections": "Sekce seznamu místností",
         "sliding_sync": "Režim klouzavé synchronizace",
         "sliding_sync_description": "V aktivním vývoji, nelze zakázat.",
         "sliding_sync_disabled_notice": "Pro deaktivaci se znovu přihlaste",
         "sliding_sync_server_no_support": "Váš server nemá podporu",
-        "under_active_development": "V aktivním vývoji.",
         "unrealiable_e2e": "Nespolehlivé v šifrovaných místnostech",
         "video_rooms": "Video místnosti",
         "video_rooms_a_new_way_to_chat": "Nový způsob hlasového a video hovoru v aplikaci %(brand)s.",
@@ -1635,9 +1617,6 @@
         "room_leave_mod_warning": "V této místnosti jste jediný moderátor. Pokud odejdete, nikdo nebude moci měnit nastavení místnosti ani provádět jiné důležité akce.",
         "room_rejoin_warning": "Tato místnost není veřejná. Bez pozvánky nebudete moci znovu vstoupit.",
         "space_rejoin_warning": "Tento prostor není veřejný. Bez pozvánky se nebudete moci znovu připojit."
-    },
-    "left_panel": {
-        "open_dial_pad": "Otevřít číselník"
     },
     "lightbox": {
         "rotate_left": "Otočit doleva",
@@ -1838,7 +1817,6 @@
     },
     "quick_settings": {
         "all_settings": "Všechna nastavení",
-        "metaspace_section": "Připnout na postranní panel",
         "sidebar_settings": "Více možností",
         "title": "Rychlá nastavení"
     },
@@ -2144,46 +2122,21 @@
         "waiting_for_join_title": "Čekání na připojení uživatelů k %(brand)s"
     },
     "room_list": {
-        "add_room_label": "Přidat místnost",
         "add_space_label": "Přidat prostor",
-        "breadcrumbs_empty": "Žádné nedávno navštívené místnosti",
-        "breadcrumbs_label": "Nedávno navštívené místnosti",
         "failed_add_tag": "Nepodařilo se přidat štítek %(tagName)s k místnosti",
         "failed_remove_tag": "Nepodařilo se odstranit štítek %(tagName)s z místnosti",
         "failed_set_dm_tag": "Nepodařilo se nastavit značku přímé zprávy",
-        "home_menu_label": "Možnosti domovské obrazovky",
-        "join_public_room_label": "Připojit se k veřejné místnosti",
-        "joining_rooms_status": {
-            "one": "Momentálně se připojuje %(count)s místnost",
-            "other": "Momentálně se připojuje %(count)s místností"
-        },
         "list_title": "Seznam místností",
         "more_options": {
             "leave_room": "Opustit místnost"
         },
         "notification_options": "Možnosti oznámení",
-        "redacting_messages_status": {
-            "one": "Momentálně se odstraňují zprávy v %(count)s místnosti",
-            "other": "Momentálně se odstraňují zprávy v %(count)s místnostech"
-        },
         "section": {
             "chats": "Chaty",
             "favourites": "Oblíbené",
             "low_priority": "Nízká priorita"
         },
-        "show_less": "Zobrazit méně",
-        "show_n_more": {
-            "other": "Zobrazit %(count)s dalších",
-            "one": "Zobrazit %(count)s další"
-        },
-        "show_previews": "Zobrazovat náhledy zpráv",
-        "sort_by": "Řadit dle",
-        "sort_by_activity": "Aktivity",
-        "sort_by_alphabet": "A–Z",
-        "sort_unread_first": "Zobrazovat místnosti s nepřečtenými zprávami jako první",
-        "space_menu_label": "Nabídka pro %(spaceName)s",
-        "sublist_options": "Možnosti seznamu",
-        "suggested_rooms_heading": "Doporučené místnosti"
+        "show_less": "Zobrazit méně"
     },
     "room_settings": {
         "access": {
@@ -3014,13 +2967,11 @@
         "showbold": "Zobrazit veškerou aktivitu v seznamu místnosti (body nebo počet nepřečtených zpráv).",
         "sidebar": {
             "dialog_title": "<strong>Nastavení:</strong> Postranní panel",
-            "metaspaces_favourites_description": "Seskupte všechny své oblíbené místnosti a osoby na jednom místě.",
             "metaspaces_home_all_rooms": "Zobrazit všechny místnosti",
             "metaspaces_home_all_rooms_description": "Zobrazit všechny místnosti v Domovu, i když jsou v prostoru.",
             "metaspaces_home_description": "Domov je užitečný pro získání přehledu o všem.",
             "metaspaces_orphans": "Místnosti mimo prostor",
             "metaspaces_orphans_description": "Seskupte všechny místnosti, které nejsou součástí prostoru, na jednom místě.",
-            "metaspaces_people_description": "Seskupte všechny své kontakty na jednom místě.",
             "metaspaces_subsection": "Prostory pro zobrazení",
             "metaspaces_video_rooms": "Video místnosti a konference",
             "metaspaces_video_rooms_description": "Seskupte všechny soukromé videomístnosti a konference.",
@@ -3047,7 +2998,6 @@
             "audio_output": "Zvukový výstup",
             "audio_output_empty": "Nebyly rozpoznány žádné zvukové výstupy",
             "auto_gain_control": "Automatická úprava zesílení",
-            "connection_section": "Připojení",
             "dialog_title": "<strong>Nastavení:</strong> Hlas a video",
             "echo_cancellation": "Potlačení ozvěny",
             "echo_cancellation_description": "Odstraňuje ozvěnu z mikrofonu během hovorů. Toto nastavení se vztahuje také na Element Call.",
@@ -3239,12 +3189,6 @@
     },
     "space_settings": {
         "title": "Nastavení - %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "Nemáte oprávnění k přidávání místností do tohoto prostoru",
-        "error_no_permission_add_space": "Nemáte oprávnění přidávat prostory do tohoto prostoru",
-        "error_no_permission_create_room": "Nemáte oprávnění k vytváření nových místností v tomto prostoru",
-        "error_no_permission_invite": "Nemáte oprávnění zvát lidi do tohoto prostoru"
     },
     "spotlight": {
         "public_rooms": {

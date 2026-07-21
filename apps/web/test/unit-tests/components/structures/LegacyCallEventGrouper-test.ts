@@ -6,12 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixClient, type MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { CallState } from "matrix-js-sdk/src/webrtc/call";
 
 import { stubClient } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import LegacyCallEventGrouper from "../../../../src/components/structures/LegacyCallEventGrouper";
+import { SDKContextClass } from "../../../../src/contexts/SDKContextClass.ts";
 
 const MY_USER_ID = "@me:here";
 const THEIR_USER_ID = "@they:here";
@@ -144,5 +145,84 @@ describe("LegacyCallEventGrouper", () => {
         } as unknown as MatrixEvent);
 
         expect(grouper.isVoice).toBe(false);
+    });
+
+    it("should be able to answer call", () => {
+        const grouper = new LegacyCallEventGrouper();
+        grouper.add(
+            new MatrixEvent({
+                content: {
+                    call_id: "callId",
+                },
+                type: EventType.CallInvite,
+                sender: THEIR_USER_ID,
+                room_id: "!room:server",
+            }),
+        );
+
+        jest.spyOn(SDKContextClass.instance.legacyCallHandler, "answerCall");
+        grouper.answerCall();
+        expect(SDKContextClass.instance.legacyCallHandler.answerCall).toHaveBeenCalledWith("!room:server");
+    });
+
+    it("should be able to reject call", () => {
+        const grouper = new LegacyCallEventGrouper();
+        grouper.add(
+            new MatrixEvent({
+                content: {
+                    call_id: "callId",
+                },
+                type: EventType.CallInvite,
+                sender: THEIR_USER_ID,
+                room_id: "!room:server",
+            }),
+        );
+
+        jest.spyOn(SDKContextClass.instance.legacyCallHandler, "hangupOrReject");
+        grouper.rejectCall();
+        expect(SDKContextClass.instance.legacyCallHandler.hangupOrReject).toHaveBeenCalledWith("!room:server", true);
+    });
+
+    it("should be able to callback call", () => {
+        const grouper = new LegacyCallEventGrouper();
+        grouper.add(
+            new MatrixEvent({
+                content: {
+                    call_id: "callId",
+                },
+                type: EventType.CallHangup,
+                sender: THEIR_USER_ID,
+                room_id: "!room:server",
+            }),
+        );
+
+        jest.spyOn(SDKContextClass.instance.legacyCallHandler, "placeCall");
+        grouper.callBack();
+        expect(SDKContextClass.instance.legacyCallHandler.placeCall).toHaveBeenCalledWith("!room:server", "video");
+    });
+
+    it("should be able to toggle call silenced", () => {
+        const grouper = new LegacyCallEventGrouper();
+        grouper.add(
+            new MatrixEvent({
+                content: {
+                    call_id: "callId",
+                },
+                type: EventType.CallHangup,
+                sender: THEIR_USER_ID,
+                room_id: "!room:server",
+            }),
+        );
+
+        jest.spyOn(SDKContextClass.instance.legacyCallHandler, "unSilenceCall");
+        jest.spyOn(SDKContextClass.instance.legacyCallHandler, "silenceCall");
+
+        jest.spyOn(SDKContextClass.instance.legacyCallHandler, "isCallSilenced").mockReturnValue(false);
+        grouper.toggleSilenced();
+        expect(SDKContextClass.instance.legacyCallHandler.silenceCall).toHaveBeenCalledWith("callId");
+
+        jest.spyOn(SDKContextClass.instance.legacyCallHandler, "isCallSilenced").mockReturnValue(true);
+        grouper.toggleSilenced();
+        expect(SDKContextClass.instance.legacyCallHandler.unSilenceCall).toHaveBeenCalledWith("callId");
     });
 });

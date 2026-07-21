@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type AriaRole } from "react";
+import React, { type AriaRole, useContext } from "react";
 import classNames from "classnames";
 import { Resizable, type Size } from "re-resizable";
 import { type Room } from "matrix-js-sdk/src/matrix";
@@ -79,14 +79,14 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
         this.context.resizeNotifier.on("isResizing", this.onIsResizing);
 
         ScalarMessaging.startListening();
-        WidgetLayoutStore.instance.on(WidgetLayoutStore.emissionForRoom(this.props.room), this.updateApps);
+        this.context.widgetLayoutStore.on(WidgetLayoutStore.emissionForRoom(this.props.room), this.updateApps);
         this.dispatcherRef = dis.register(this.onAction);
     }
 
     public componentWillUnmount(): void {
         this.unmounted = true;
         ScalarMessaging.stopListening();
-        WidgetLayoutStore.instance.off(WidgetLayoutStore.emissionForRoom(this.props.room), this.updateApps);
+        this.context.widgetLayoutStore.off(WidgetLayoutStore.emissionForRoom(this.props.room), this.updateApps);
         dis.unregister(this.dispatcherRef);
         if (this.resizeContainer) {
             this.resizer.detach();
@@ -117,7 +117,7 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
             },
             onResizeStop: () => {
                 this.resizeContainer?.classList.remove("mx_AppsDrawer--resizing");
-                WidgetLayoutStore.instance.setResizerDistributions(
+                this.context.widgetLayoutStore.setResizerDistributions(
                     this.props.room,
                     "top",
                     this.topApps()
@@ -166,7 +166,7 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
     };
 
     private loadResizerPreferences = (): void => {
-        const distributions = WidgetLayoutStore.instance.getResizerDistributions(this.props.room, "top");
+        const distributions = this.context.widgetLayoutStore.getResizerDistributions(this.props.room, "top");
         if (this.state.apps && this.topApps().length - 1 === distributions.length) {
             distributions.forEach((size, i) => {
                 const distributor = this.resizer.forHandleAt(i);
@@ -206,8 +206,8 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
     };
 
     private getApps = (): IState["apps"] => ({
-        ["top"]: WidgetLayoutStore.instance.getContainerWidgets(this.props.room, "top"),
-        ["center"]: WidgetLayoutStore.instance.getContainerWidgets(this.props.room, "center"),
+        ["top"]: this.context.widgetLayoutStore.getContainerWidgets(this.props.room, "top"),
+        ["center"]: this.context.widgetLayoutStore.getContainerWidgets(this.props.room, "center"),
     });
     private topApps = (): IWidget[] => this.state.apps["top"];
     private centerApps = (): IWidget[] => this.state.apps["center"];
@@ -321,7 +321,8 @@ const PersistentVResizer: React.FC<IPersistentResizerProps> = ({
     resizeNotifier,
     children,
 }) => {
-    let defaultHeight = WidgetLayoutStore.instance.getContainerHeight(room, "top");
+    const sdkContext = useContext(SDKContext);
+    let defaultHeight = sdkContext.widgetLayoutStore.getContainerHeight(room, "top");
 
     // Arbitrary defaults to avoid NaN problems. 100 px or 3/4 of the visible window.
     if (!minHeight) minHeight = 100;
@@ -352,7 +353,7 @@ const PersistentVResizer: React.FC<IPersistentResizerProps> = ({
                 let newHeight = defaultHeight! + d.height;
                 newHeight = percentageOf(newHeight, minHeight, maxHeight) * 100;
 
-                WidgetLayoutStore.instance.setContainerHeight(room, "top", newHeight);
+                sdkContext.widgetLayoutStore.setContainerHeight(room, "top", newHeight);
 
                 resizeNotifier.stopResizing();
             }}

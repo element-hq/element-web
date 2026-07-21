@@ -1,0 +1,17 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.container {
+    min-height: 70px;
+    padding: var(--cpd-space-3x);
+    border: solid 1px var(--cpd-color-border-interactive-primary);
+    border-radius: var(--cpd-space-2x);
+    box-sizing: border-box;
+    width: 100%;
+    /* All call tiles have a 10px margin at the top and bottom */
+    margin: 10px 0;
+}

@@ -9,7 +9,6 @@
             "one": "未読のメンション1件。",
             "other": "メンションを含む未読メッセージ%(count)s件。"
         },
-        "room_name": "ルーム %(name)s",
         "unread_messages": "未読メッセージ。"
     },
     "a11y_jump_first_unread_room": "未読のある最初のルームにジャンプします。",
@@ -17,7 +16,6 @@
         "accept": "同意",
         "add": "追加",
         "add_existing_room": "既存のルームを追加",
-        "add_people": "連絡先を追加",
         "apply": "適用",
         "approve": "同意",
         "back": "戻る",
@@ -48,7 +46,6 @@
         "enter_fullscreen": "フルスクリーンにする",
         "exit_fullscreeen": "フルスクリーンを解除",
         "expand": "展開",
-        "explore_public_rooms": "公開ルームを探す",
         "explore_rooms": "ルームを探す",
         "export": "エクスポート",
         "forward": "転送",
@@ -60,8 +57,6 @@
         "ignore": "無視",
         "import": "インポート",
         "invite": "招待",
-        "invite_to_space": "スペースに招待",
-        "invites_list": "招待",
         "join": "参加",
         "learn_more": "詳細を表示",
         "leave": "退出",
@@ -102,8 +97,6 @@
         "sign_out": "サインアウト",
         "skip": "スキップ",
         "start": "開始",
-        "start_chat": "チャットを開始",
-        "start_new_chat": "チャットを開始",
         "stop": "停止",
         "submit": "送信",
         "subscribe": "購読",
@@ -408,7 +401,6 @@
         "encrypted": "暗号化",
         "error": "エラー",
         "faq": "よくある質問",
-        "favourites": "お気に入り",
         "feedback": "フィードバック",
         "filter_results": "結果を絞り込む",
         "forward_message": "メッセージを転送",
@@ -416,7 +408,6 @@
         "go_to_settings": "設定を開く",
         "guest": "ゲスト",
         "help": "ヘルプ",
-        "historical": "履歴",
         "home": "ホーム",
         "homeserver": "ホームサーバー",
         "identity_server": "IDサーバー",
@@ -428,7 +419,6 @@
         "light": "ライト",
         "loading": "読み込んでいます…",
         "location": "位置情報",
-        "low_priority": "低優先度",
         "message": "メッセージ",
         "message_layout": "メッセージのレイアウト",
         "microphone": "マイク",
@@ -487,7 +477,6 @@
         "success": "成功",
         "suggestions": "提案",
         "support": "サポート",
-        "system_alerts": "システムアラート",
         "theme": "テーマ",
         "thread": "スレッド",
         "threads": "スレッド",
@@ -501,7 +490,6 @@
         "username": "ユーザー名",
         "verified": "認証済",
         "version": "バージョン",
-        "video": "動画",
         "video_room": "ビデオ通話ルーム",
         "view_message": "メッセージを表示",
         "warning": "警告"
@@ -1180,7 +1168,6 @@
         "experimental_description": "実験に参加したいですか？開発中のアイディアを試してください。これらの機能は完成していません。不安定な可能性や変更される可能性、また、開発が中止される可能性もあります。<a>詳細を確認</a>。",
         "experimental_section": "早期プレビュー",
         "feature_wysiwyg_composer_description": "メッセージ入力欄でマークダウンの代わりにリッチテキストを使用。",
-        "group_calls": "グループ通話の新しい経験",
         "group_developer": "開発者",
         "group_encryption": "暗号化",
         "group_experimental": "実験的",
@@ -1194,7 +1181,6 @@
         "group_voip": "音声とビデオ",
         "group_widgets": "ウィジェット",
         "hidebold": "通知のドットを非表示にする（カウンターのバッジのみを表示）",
-        "html_topic": "ルームのトピックをHTML形式で表示",
         "join_beta": "ベータ版に参加",
         "join_beta_reload": "ベータ版に参加すると%(brand)sをリロードします。",
         "jump_to_date": "日付に移動（/jumptodateを追加すると、日付のヘッダーに移動します）",
@@ -1208,7 +1194,6 @@
         "sliding_sync": "スライド式同期モード",
         "sliding_sync_description": "開発中です。無効にできません。",
         "sliding_sync_server_no_support": "あなたのサーバーはネイティブでサポートしていません",
-        "under_active_development": "開発中。",
         "video_rooms": "ビデオ通話ルーム",
         "video_rooms_a_new_way_to_chat": "%(brand)sで音声と動画により会話する新しい方法です。",
         "video_rooms_always_on_voip_channels": "ビデオ通話ルームは、%(brand)sのルームに埋め込まれている、VoIPが常時有効のチャンネルです。",
@@ -1259,9 +1244,6 @@
         "leave_space_question": "このスペース「%(spaceName)s」から退出してよろしいですか？",
         "room_rejoin_warning": "このルームは公開されていません。再度参加するには、招待が必要です。",
         "space_rejoin_warning": "このスペースは公開されていません。再度参加するには、招待が必要です。"
-    },
-    "left_panel": {
-        "open_dial_pad": "ダイヤルパッドを開く"
     },
     "lightbox": {
         "rotate_left": "左に回転",
@@ -1425,7 +1407,6 @@
     },
     "quick_settings": {
         "all_settings": "全ての設定",
-        "metaspace_section": "サイドバーに固定",
         "sidebar_settings": "他のオプション",
         "title": "クイック設定"
     },
@@ -1618,37 +1599,12 @@
         }
     },
     "room_list": {
-        "add_room_label": "ルームを追加",
         "add_space_label": "スペースを追加",
-        "breadcrumbs_empty": "最近訪れたルームはありません",
-        "breadcrumbs_label": "最近訪れたルーム",
         "failed_add_tag": "ルームにタグ %(tagName)s を追加できませんでした",
         "failed_remove_tag": "ルームからタグ %(tagName)s を削除できませんでした",
         "failed_set_dm_tag": "ダイレクトメッセージのタグの設定に失敗しました",
-        "home_menu_label": "ホームのオプション",
-        "join_public_room_label": "公開ルームに参加",
-        "joining_rooms_status": {
-            "one": "現在%(count)s個のルームに参加しています",
-            "other": "現在%(count)s個のルームに参加しています"
-        },
         "notification_options": "通知設定",
-        "redacting_messages_status": {
-            "one": "現在%(count)s個のルームのメッセージを削除しています",
-            "other": "現在%(count)s個のルームのメッセージを削除しています"
-        },
-        "show_less": "詳細を非表示",
-        "show_n_more": {
-            "other": "さらに%(count)s件を表示",
-            "one": "さらに%(count)s件を表示"
-        },
-        "show_previews": "メッセージのプレビューを表示",
-        "sort_by": "並び替え",
-        "sort_by_activity": "アクティビティー順",
-        "sort_by_alphabet": "アルファベット順",
-        "sort_unread_first": "未読メッセージのあるルームを最初に表示",
-        "space_menu_label": "%(spaceName)sのメニュー",
-        "sublist_options": "オプションの一覧を表示",
-        "suggested_rooms_heading": "おすすめのルーム"
+        "show_less": "詳細を非表示"
     },
     "room_settings": {
         "access": {
@@ -2244,13 +2200,11 @@
         "show_stickers_button": "ステッカーボタンを表示",
         "show_typing_notifications": "入力中通知を表示",
         "sidebar": {
-            "metaspaces_favourites_description": "お気に入りのルームと連絡先をまとめる。",
             "metaspaces_home_all_rooms": "全てのルームを表示",
             "metaspaces_home_all_rooms_description": "他のスペースに存在するルームを含めて、全てのルームをホームに表示。",
             "metaspaces_home_description": "ホームは全体を把握するのに便利です。",
             "metaspaces_orphans": "スペース外のルーム",
             "metaspaces_orphans_description": "スペースに含まれない全てのルームを一箇所にまとめる。",
-            "metaspaces_people_description": "全ての連絡先を一箇所にまとめる。",
             "metaspaces_subsection": "表示するスペース",
             "title": "サイドバー"
         },
@@ -2266,7 +2220,6 @@
             "audio_output": "音声出力",
             "audio_output_empty": "音声出力が検出されません",
             "auto_gain_control": "自動音量調整",
-            "connection_section": "接続",
             "echo_cancellation": "エコーキャンセル",
             "enable_fallback_ice_server_description": "あなたのホームサーバーがアシストサーバーを提供していない場合にのみ適用。IPアドレスが通話中に共有されます。",
             "mirror_local_feed": "ビデオ映像のミラー効果（反転）を有効にする",
@@ -2431,12 +2384,6 @@
     },
     "space_settings": {
         "title": "設定 - %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "このスペースにルームを追加する権限がありません",
-        "error_no_permission_add_space": "このスペースに別のスペースを追加する権限がありません",
-        "error_no_permission_create_room": "このスペースに新しいルームを作成する権限がありません",
-        "error_no_permission_invite": "このスペースにユーザーを招待する権限がありません"
     },
     "spotlight": {
         "public_rooms": {

@@ -7,7 +7,7 @@
 
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { render } from "@testing-library/react";
+import { render } from "@test-utils";
 
 import { HistoryVisibilityBadge } from "./HistoryVisibilityBadge.tsx";
 

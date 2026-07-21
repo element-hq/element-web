@@ -102,6 +102,8 @@ function TabLabel<T extends string>({ tab, isActive, showToolip, onClick }: ITab
 
     const label = _t(tab.label);
     return (
+        // The RovingAccessibleComponent correctly sets the tabIndex based on roving context
+        // oxlint-disable-next-line jsx-a11y/interactive-supports-focus
         <RovingAccessibleButton
             className={classes}
             onClick={onClick}
@@ -111,6 +113,7 @@ function TabLabel<T extends string>({ tab, isActive, showToolip, onClick }: ITab
             aria-controls={id}
             element="li"
             title={showToolip ? label : undefined}
+            aria-labelledby={`${id}_label`}
         >
             {tabIcon}
             <span className="mx_TabbedView_tabLabel_text" id={`${id}_label`}>

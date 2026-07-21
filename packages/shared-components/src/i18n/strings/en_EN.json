@@ -141,10 +141,7 @@
             "no_chats": "No chats yet",
             "no_chats_description": "Get started by messaging someone or by creating a room",
             "no_chats_description_no_room_rights": "Get started by messaging someone",
-            "no_favourites": "You don't have favourite chats yet",
-            "no_favourites_description": "You can add a chat to your favourites in the chat settings",
             "no_invites": "You don't have any unread invites",
-            "no_lowpriority": "You don't have any low priority rooms",
             "no_mentions": "You don't have any unread mentions",
             "no_people": "You don’t have direct chats with anyone yet",
             "no_people_description": "You can deselect filters in order to see your other chats",
@@ -201,6 +198,17 @@
         "space_menu": {
             "home": "Space home",
             "space_settings": "Space settings"
+        },
+        "unread_messages": "Unread messages"
+    },
+    "status": {
+        "set_status": {
+            "away": "Away",
+            "be_right_back": "Be right back",
+            "focus_time": "Focus Time",
+            "in_a_meeting": "In a meeting",
+            "on_the_road": "On the road",
+            "set_status_prompt": "What's your status?"
         }
     },
     "settings": {
@@ -247,6 +255,28 @@
             "declined": {
                 "call_declined": "Call declined",
                 "call_declined_by_us": "You declined a call"
+            },
+            "ongoing": {
+                "common": {
+                    "call_started_by": "%(startedByDisplayName)s started a call",
+                    "join_button": "Join"
+                },
+                "dm": {
+                    "call_started": "Call started",
+                    "title": "Call in progress"
+                },
+                "room": {
+                    "join_count": {
+                        "one": "%(count)s joined",
+                        "other": "%(count)s joined"
+                    },
+                    "title": "Group call in progress"
+                }
+            },
+            "tombstone": {
+                "room": {
+                    "title": "Group call ended"
+                }
             },
             "video_call_title": "Video call",
             "voice_call_title": "Voice call"

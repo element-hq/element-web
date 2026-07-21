@@ -11,8 +11,6 @@
             "one": "1 menção não lida.",
             "other": "%(count)s mensagens não lidas, incluindo menções."
         },
-        "recent_rooms": "Salas recentes",
-        "room_name": "Sala %(name)s",
         "room_status_bar": "Barra de estado da sala",
         "seek_bar_label": "Barra de procura de áudio",
         "unread_messages": "Mensagens não lidas"
@@ -22,7 +20,6 @@
         "accept": "Aceitar",
         "add": "Adicionar",
         "add_existing_room": "Adicionar sala existente",
-        "add_people": "Adicionar pessoas",
         "apply": "Aplicar",
         "approve": "Aprovar",
         "ask_to_join": "Pedir para participar",
@@ -55,7 +52,6 @@
         "enter_fullscreen": "Entra no ecrã completo",
         "exit_fullscreeen": "Sai do ecrã completo",
         "expand": "Expandir",
-        "explore_public_rooms": "Explorar salas públicas",
         "explore_rooms": "Explorar rooms",
         "export": "Exportar",
         "forward": "Encaminhar",
@@ -67,8 +63,6 @@
         "ignore": "Ignorar",
         "import": "Importar",
         "invite": "Convidar",
-        "invite_to_space": "Convida para o espaço",
-        "invites_list": "Convidar",
         "join": "Participar",
         "learn_more": "Saiba mais",
         "leave": "Sair",
@@ -113,8 +107,6 @@
         "sign_out": "Sair",
         "skip": "Saltar",
         "start": "Iniciar",
-        "start_chat": "Iniciar conversa",
-        "start_new_chat": "Inicia um novo chat",
         "stop": "Parar",
         "submit": "Enviar",
         "subscribe": "Subscrever",
@@ -470,7 +462,6 @@
         "encrypted": "Encriptado",
         "error": "Erro",
         "faq": "Perguntas frequentes",
-        "favourites": "Favoritos",
         "feedback": "Comentários",
         "filter_results": "Filtrar resultados",
         "forward_message": "Encaminhar mensagem",
@@ -478,7 +469,6 @@
         "go_to_settings": "Ir para as definições",
         "guest": "Convidado",
         "help": "Ajuda",
-        "historical": "Histórico",
         "home": "Início",
         "homeserver": "Servidor doméstico",
         "identity_server": "Servidor de identidade",
@@ -490,7 +480,6 @@
         "light": "Claro",
         "loading": "A carregar…",
         "location": "Localização",
-        "low_priority": "Baixa prioridade",
         "matrix": "Matrix",
         "message": "Mensagem",
         "message_layout": "Disposição da mensagem",
@@ -554,7 +543,6 @@
         "success": "Sucesso",
         "suggestions": "Sugestões",
         "support": "Suporte",
-        "system_alerts": "Alertas do sistema",
         "theme": "Tema",
         "thread": "Tópico",
         "threads": "Tópicos",
@@ -571,7 +559,6 @@
         "username": "Nome de utilizador",
         "verified": "Verificado",
         "version": "Versão",
-        "video": "Vídeo",
         "video_room": "Sala de vídeo",
         "view_message": "Ver mensagem",
         "warning": "Aviso"
@@ -1390,7 +1377,6 @@
         "extended_profiles_msc_support": "Requer que o teu servidor suporte MSC4133",
         "feature_disable_call_per_sender_encryption": "Desativar a cifragem por remetente na Element Call",
         "feature_wysiwyg_composer_description": "Utiliza texto rico em vez de Markdown no compositor de mensagens.",
-        "group_calls": "Nova experiência de chamada de grupo",
         "group_developer": "Desenvolvedor",
         "group_encryption": "Encriptação",
         "group_experimental": "Experimental",
@@ -1405,7 +1391,6 @@
         "group_voip": "Voz e vídeo",
         "group_widgets": "Widgets",
         "hidebold": "Ocultar o ponto de notificação (mostrar apenas os emblemas dos contadores)",
-        "html_topic": "Mostrar a representação HTML dos tópicos da sala",
         "join_beta": "Junta-te à versão beta",
         "join_beta_reload": "Se entrares na versão beta, recarregas o site %(brand)s.",
         "jump_to_date": "Saltar para a data (adiciona cabeçalhos /jumptodate e saltar para a data)",
@@ -1417,7 +1402,6 @@
         "location_share_live_description": "Implementação temporária. As localizações permanecem no histórico da sala.",
         "mjolnir": "Novas formas de ignorar pessoas",
         "msc3531_hide_messages_pending_moderation": "Permitir que os moderadores ocultem mensagens pendentes de moderação.",
-        "new_room_list": "Ativar nova lista de salas",
         "notification_settings": "Novas Definições de Notificação",
         "notification_settings_beta_caption": "Apresentamos uma forma mais simples de alterar as tuas definições de notificação. Personaliza o teu %(brand)s, tal como gostas.",
         "notification_settings_beta_title": "Definições de Notificação",
@@ -1428,7 +1412,6 @@
         "sliding_sync_description": "Em desenvolvimento ativo, não pode ser desativado.",
         "sliding_sync_disabled_notice": "Termina a sessão e volta a entrar para desativar",
         "sliding_sync_server_no_support": "O teu servidor não tem suporte nativo",
-        "under_active_development": "Em desenvolvimento ativo.",
         "unrealiable_e2e": "Não é fiável em salas encriptadas",
         "video_rooms": "Salas de vídeo",
         "video_rooms_a_new_way_to_chat": "Uma nova forma de conversar por voz e vídeo em %(brand)s.",
@@ -1483,9 +1466,6 @@
         "room_leave_mod_warning": "És o único moderador nesta sala. Se saíres, ninguém poderá alterar as definições da sala ou realizar outras ações importantes.",
         "room_rejoin_warning": "Esta sala não é pública. Não poderás voltar a entrar sem um convite.",
         "space_rejoin_warning": "Este espaço não é público. Não poderás voltar a entrar sem um convite."
-    },
-    "left_panel": {
-        "open_dial_pad": "Abre o teclado de marcação"
     },
     "lightbox": {
         "rotate_left": "Rodar à esquerda",
@@ -1670,7 +1650,6 @@
     },
     "quick_settings": {
         "all_settings": "Todas as definições",
-        "metaspace_section": "Fixar na barra lateral",
         "sidebar_settings": "Mais opções",
         "title": "Definições rápidas"
     },
@@ -1950,41 +1929,16 @@
         "waiting_for_join_title": "Aguarda a adesão dos utilizadores %(brand)s"
     },
     "room_list": {
-        "add_room_label": "Adicionar sala",
         "add_space_label": "Adiciona espaço",
-        "breadcrumbs_empty": "Nenhuma sala visitada recentemente",
-        "breadcrumbs_label": "Salas visitadas recentemente",
         "failed_add_tag": "Falha ao adicionar %(tagName)s à sala",
         "failed_remove_tag": "Não foi possível remover a marcação %(tagName)s desta sala",
         "failed_set_dm_tag": "Falha ao definir a etiqueta de mensagem direta",
-        "home_menu_label": "Opções de casa",
-        "join_public_room_label": "Participa na sala pública",
-        "joining_rooms_status": {
-            "one": "Atualmente ingressando%(count)s sala",
-            "other": "Atualmente ingressando%(count)s salas"
-        },
         "list_title": "Lista de salas",
         "more_options": {
             "leave_room": "Sair da sala"
         },
         "notification_options": "Opções de notificação",
-        "redacting_messages_status": {
-            "one": "Atualmente removendo mensagens na %(count)s sala",
-            "other": "Atualmente removendo mensagens em %(count)s salas"
-        },
-        "show_less": "Mostrar menos",
-        "show_n_more": {
-            "one": "Mostrar %(count)s mais",
-            "other": "Mostrar %(count)s mais"
-        },
-        "show_previews": "Mostra pré-visualizações de mensagens",
-        "sort_by": "Ordenar por",
-        "sort_by_activity": "Atividade",
-        "sort_by_alphabet": "A-Z",
-        "sort_unread_first": "Mostra primeiro as salas com mensagens não lidas",
-        "space_menu_label": "%(spaceName)s menu",
-        "sublist_options": "Lista de opções",
-        "suggested_rooms_heading": "Salas sugeridas"
+        "show_less": "Mostrar menos"
     },
     "room_settings": {
         "access": {
@@ -2766,13 +2720,11 @@
         "showbold": "Mostra toda a atividade na lista de salas (pontos ou número de mensagens não lidas)",
         "sidebar": {
             "dialog_title": "<strong>Configurações:</strong> Barra lateral",
-            "metaspaces_favourites_description": "Agrupa todas as tuas salas e pessoas favoritas num único local.",
             "metaspaces_home_all_rooms": "Mostra todas as salas",
             "metaspaces_home_all_rooms_description": "Mostra todos as tuas salas na Página Inicial, mesmo que estejam num espaço.",
             "metaspaces_home_description": "A página inicial é útil para obter uma visão geral de tudo.",
             "metaspaces_orphans": "Salas fora de um espaço",
             "metaspaces_orphans_description": "Agrupa todas as tuas salas que não fazem parte de um espaço num único local.",
-            "metaspaces_people_description": "Agrupa todas as tuas pessoas num único local.",
             "metaspaces_subsection": "Espaços para mostrar",
             "metaspaces_video_rooms": "Salas de vídeo e conferências",
             "metaspaces_video_rooms_description": "Agrupa todas as salas de vídeo privadas e conferências.",
@@ -2793,7 +2745,6 @@
             "audio_output": "Saída de áudio",
             "audio_output_empty": "Não foram detectadas saídas de áudio",
             "auto_gain_control": "Controlo automático de ganho",
-            "connection_section": "Ligação",
             "dialog_title": "<strong>Definições:</strong> Voz e vídeo",
             "echo_cancellation": "Cancelamento de eco",
             "enable_fallback_ice_server": "Permite o servidor de assistência a chamadas de recurso (%(server)s)",
@@ -2972,12 +2923,6 @@
     },
     "space_settings": {
         "title": "Configurações - %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "Não tens permissões para adicionar salas a este espaço",
-        "error_no_permission_add_space": "Não tens permissões para adicionar espaços a este espaço",
-        "error_no_permission_create_room": "Não tens permissões para criar novas salas neste espaço",
-        "error_no_permission_invite": "Não tens permissões para convidar pessoas para este espaço"
     },
     "spotlight": {
         "public_rooms": {

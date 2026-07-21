@@ -10,7 +10,6 @@
             "other": "包含提及有 %(count)s 則未讀訊息。",
             "one": "1 則未讀的提及。"
         },
-        "room_name": "聊天室 %(name)s",
         "unread_messages": "未讀的訊息。"
     },
     "a11y_jump_first_unread_room": "跳到第一個未讀的聊天室。",
@@ -18,7 +17,6 @@
         "accept": "接受",
         "add": "新增",
         "add_existing_room": "新增既有的聊天室",
-        "add_people": "新增夥伴",
         "apply": "套用",
         "approve": "批准",
         "ask_to_join": "要求加入",
@@ -53,7 +51,6 @@
         "enter_fullscreen": "進入全螢幕",
         "exit_fullscreeen": "離開全螢幕",
         "expand": "展開",
-        "explore_public_rooms": "探索公開聊天室",
         "explore_rooms": "探索聊天室",
         "export": "匯出",
         "forward": "轉寄",
@@ -65,8 +62,6 @@
         "ignore": "忽略",
         "import": "匯入",
         "invite": "邀請",
-        "invite_to_space": "邀請加入聊天空間",
-        "invites_list": "邀請",
         "join": "加入",
         "learn_more": "了解更多",
         "leave": "離開",
@@ -110,8 +105,6 @@
         "sign_out": "登出",
         "skip": "略過",
         "start": "開始",
-        "start_chat": "開始聊天",
-        "start_new_chat": "開始新聊天",
         "stop": "停止",
         "submit": "送出",
         "subscribe": "訂閱",
@@ -425,7 +418,6 @@
         "encrypted": "開啟加密",
         "error": "錯誤",
         "faq": "常見問答集",
-        "favourites": "我的最愛",
         "feedback": "回饋",
         "filter_results": "過濾結果",
         "forward_message": "轉寄訊息",
@@ -433,7 +425,6 @@
         "go_to_settings": "前往設定",
         "guest": "訪客",
         "help": "說明",
-        "historical": "歷史",
         "home": "首頁",
         "homeserver": "家伺服器",
         "identity_server": "身分伺服器",
@@ -445,7 +436,6 @@
         "light": "亮色",
         "loading": "載入中…",
         "location": "位置",
-        "low_priority": "低優先度",
         "matrix": "Matrix",
         "message": "訊息",
         "message_layout": "訊息佈局",
@@ -504,7 +494,6 @@
         "success": "成功",
         "suggestions": "建議",
         "support": "支援",
-        "system_alerts": "系統警告",
         "theme": "主題",
         "thread": "討論串",
         "threads": "討論串",
@@ -520,7 +509,6 @@
         "username": "使用者名稱",
         "verified": "已驗證",
         "version": "版本",
-        "video": "影片",
         "video_room": "視訊聊天室",
         "view_message": "檢視訊息",
         "warning": "警告"
@@ -1252,7 +1240,6 @@
         "experimental_description": "想要做點實驗？歡迎測試我們開發中的最新創意功能。這些功能尚未完成設計；可能不穩定、可能會變動，也可能會被完全捨棄。<a>取得更多資訊</a>。",
         "experimental_section": "提早預覽",
         "feature_wysiwyg_composer_description": "在訊息編輯器中使用格式化文字而非 Markdown。",
-        "group_calls": "全新的群組通話體驗",
         "group_developer": "開發者",
         "group_encryption": "加密",
         "group_experimental": "實驗性",
@@ -1266,7 +1253,6 @@
         "group_voip": "語音與視訊",
         "group_widgets": "小工具",
         "hidebold": "隱藏通知點（僅顯示計數器徽章）",
-        "html_topic": "顯示聊天室主題的 HTML 表現",
         "join_beta": "加入 Beta 測試",
         "join_beta_reload": "加入 Beta 測試版將會重新載入 %(brand)s。",
         "jump_to_date": "跳至日期（使用 /jumptodate 指令即可跳到當天最早的訊息）",
@@ -1285,7 +1271,6 @@
         "sliding_sync_description": "正在積極開發中，無法停用。",
         "sliding_sync_disabled_notice": "登出並重新登入以停用",
         "sliding_sync_server_no_support": "您的伺服器缺乏原生支援",
-        "under_active_development": "正在積極開發中。",
         "video_rooms": "視訊聊天室",
         "video_rooms_a_new_way_to_chat": "在 %(brand)s 中透過語音及視訊聊天的新方式。",
         "video_rooms_always_on_voip_channels": "視訊聊天室是內建在 %(brand)s 聊天室當中，隨時開啟的 VoIP 頻道。",
@@ -1336,9 +1321,6 @@
         "leave_space_question": "您確定您要離開聊天空間「%(spaceName)s」？",
         "room_rejoin_warning": "這個聊天室不是公開聊天。沒有再次收到邀請的情況下將無法重新加入。",
         "space_rejoin_warning": "此聊天空間並非公開。在無邀請的情況下，您將無法重新加入。"
-    },
-    "left_panel": {
-        "open_dial_pad": "開啟撥號鍵盤"
     },
     "lightbox": {
         "rotate_left": "向左旋轉",
@@ -1511,7 +1493,6 @@
     },
     "quick_settings": {
         "all_settings": "所有設定",
-        "metaspace_section": "釘選至側邊欄",
         "sidebar_settings": "更多選項",
         "title": "快速設定"
     },
@@ -1751,36 +1732,12 @@
         "waiting_for_join_title": "等待使用者加入 %(brand)s"
     },
     "room_list": {
-        "add_room_label": "新增聊天室",
         "add_space_label": "新增聊天空間",
-        "breadcrumbs_empty": "沒有最近造訪過的聊天室",
-        "breadcrumbs_label": "最近造訪過的聊天室",
         "failed_add_tag": "無法新增標籤 %(tagName)s 到聊天室",
         "failed_remove_tag": "無法從聊天室移除標籤 %(tagName)s",
         "failed_set_dm_tag": "無法設定私人訊息標籤",
-        "home_menu_label": "家選項",
-        "join_public_room_label": "加入公開聊天室",
-        "joining_rooms_status": {
-            "one": "目前正在加入 %(count)s 個聊天室",
-            "other": "目前正在加入 %(count)s 個聊天室"
-        },
         "notification_options": "通知選項",
-        "redacting_messages_status": {
-            "one": "目前正在移除 %(count)s 個聊天室中的訊息",
-            "other": "目前正在移除 %(count)s 個聊天室中的訊息"
-        },
-        "show_less": "顯示更少",
-        "show_n_more": {
-            "other": "再顯示 %(count)s 個",
-            "one": "再顯示 %(count)s 個"
-        },
-        "show_previews": "顯示訊息預覽",
-        "sort_by": "排序方式",
-        "sort_by_activity": "訊息順序",
-        "sort_unread_first": "先顯示有未讀訊息的聊天室",
-        "space_menu_label": "%(spaceName)s 選單",
-        "sublist_options": "列表選項",
-        "suggested_rooms_heading": "建議的聊天室"
+        "show_less": "顯示更少"
     },
     "room_settings": {
         "access": {
@@ -2480,13 +2437,11 @@
         "show_typing_notifications": "顯示打字通知",
         "sidebar": {
             "dialog_title": "<strong>設定：</strong>側邊欄",
-            "metaspaces_favourites_description": "將所有您最喜愛的聊天室與夥伴集中在同一個地方。",
             "metaspaces_home_all_rooms": "顯示所有聊天室",
             "metaspaces_home_all_rooms_description": "將您所有的聊天室顯示在首頁，即便它們位於同一個聊天空間。",
             "metaspaces_home_description": "首頁對於取得所有內容的概覽很有用。",
             "metaspaces_orphans": "聊天空間外的聊天室",
             "metaspaces_orphans_description": "將所有不屬於某個聊天空間的聊天室集中在同一個地方。",
-            "metaspaces_people_description": "將您所有的夥伴集中在同一個地方。",
             "metaspaces_subsection": "要顯示的聊天空間",
             "spaces_explainer": "空間是將房間和人群分組的方式。除了您所在的空間之外，您也可以使用一些預先構建的空間。",
             "title": "側邊欄"
@@ -2503,7 +2458,6 @@
             "audio_output": "音訊輸出",
             "audio_output_empty": "未偵測到音訊輸出",
             "auto_gain_control": "自動增益控制",
-            "connection_section": "連線",
             "dialog_title": "<strong>設定：</strong>語音與視訊",
             "echo_cancellation": "迴聲消除",
             "enable_fallback_ice_server": "允許使用備用通話輔助伺服器（%(server)s）",
@@ -2676,12 +2630,6 @@
     },
     "space_settings": {
         "title": "設定 - %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "您沒有權限在此聊天空間中新增聊天室",
-        "error_no_permission_add_space": "您沒有權限向此聊天空間新增聊天空間",
-        "error_no_permission_create_room": "您沒有權限在此聊天空間中建立新聊天室",
-        "error_no_permission_invite": "您沒有權限邀請夥伴到此聊天空間"
     },
     "spotlight": {
         "public_rooms": {

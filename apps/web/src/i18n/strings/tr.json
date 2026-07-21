@@ -11,8 +11,6 @@
             "one": "1 okunmamış bahis.",
             "other": "anmalar dahil okunmayan %(count)s mesaj."
         },
-        "recent_rooms": "Son odalar",
-        "room_name": "Oda %(name)s",
         "room_status_bar": "Oda durum çubuğu",
         "seek_bar_label": "Ses arama çubuğu",
         "unread_messages": "Okunmamış mesajlar."
@@ -22,7 +20,6 @@
         "accept": "Kabul Et",
         "add": "Ekle",
         "add_existing_room": "Mevcut odayı ekle",
-        "add_people": "Kişi ekleme",
         "apply": "Uygula",
         "approve": "Onayla",
         "ask_to_join": "Katılmak için sor",
@@ -55,7 +52,6 @@
         "enter_fullscreen": "Tam ekrana geç",
         "exit_fullscreeen": "Tam ekrandan çık",
         "expand": "Genişlet",
-        "explore_public_rooms": "Herkese açık odaları keşfet",
         "explore_rooms": "Odaları keşfet",
         "export": "Dışa Aktar",
         "forward": "İleri",
@@ -67,8 +63,6 @@
         "ignore": "Yoksay",
         "import": "İçe Aktar",
         "invite": "Davet et",
-        "invite_to_space": "Alana davet et\n",
-        "invites_list": "Davetler",
         "join": "Katıl",
         "learn_more": "Daha fazla bilgi edin",
         "leave": "Ayrıl",
@@ -113,8 +107,6 @@
         "sign_out": "Çıkış Yap",
         "skip": "Atla",
         "start": "Başlat",
-        "start_chat": "Sohbete başla",
-        "start_new_chat": "Yeni sohbeti başlat",
         "stop": "Dur",
         "submit": "Gönder",
         "subscribe": "Abone ol",
@@ -469,7 +461,6 @@
         "encrypted": "Şifrelenmiş",
         "error": "Hata",
         "faq": "SSS",
-        "favourites": "Favoriler",
         "feedback": "Geri bildirim",
         "filter_results": "Sonuçları filtrele",
         "forward_message": "Mesajı ilet",
@@ -477,7 +468,6 @@
         "go_to_settings": "Ayarlara Git",
         "guest": "Misafir",
         "help": "Yardım",
-        "historical": "Geçmiş",
         "home": "Ev",
         "homeserver": "Ana sunucu",
         "identity_server": "Kimlik sunucusu",
@@ -489,7 +479,6 @@
         "light": "Aydınlık",
         "loading": "Yükleniyor...",
         "location": "Konum",
-        "low_priority": "Düşük öncelik",
         "matrix": "Matrix",
         "message": "Message",
         "message_layout": "Mesaj düzeni",
@@ -553,7 +542,6 @@
         "success": "Başarılı",
         "suggestions": "Öneriler",
         "support": "Destek",
-        "system_alerts": "Sistem Uyarıları",
         "theme": "Tema",
         "thread": "Konu",
         "threads": "Konular",
@@ -570,7 +558,6 @@
         "username": "Kullanıcı Adı",
         "verified": "Doğrulanmış",
         "version": "Versiyon",
-        "video": "Video",
         "video_room": "Görüntülü sohbet odası",
         "view_message": "Mesajı görüntüle",
         "warning": "Uyarı"
@@ -1389,7 +1376,6 @@
         "extended_profiles_msc_support": "Sunucunuzun MSC4133 desteklemesini gerektirir",
         "feature_disable_call_per_sender_encryption": "Element Call için gönderen başına şifrelemeyi devre dışı bırakın",
         "feature_wysiwyg_composer_description": "Mesaj oluşturucu olarak Markdown yerine zengin metin kullanın.",
-        "group_calls": "Yeni grup görüşmesi deneyimi",
         "group_developer": "Geliştirici",
         "group_encryption": "Şifreleme",
         "group_experimental": "Deneysel",
@@ -1404,7 +1390,6 @@
         "group_voip": "Ses & Video",
         "group_widgets": "Widget'lar",
         "hidebold": "Bildirim noktasını gizle (yalnızca sayaç rozetlerini göster)",
-        "html_topic": "Oda konularının HTML gösterimini göster",
         "join_beta": "Beta’ya katıl",
         "join_beta_reload": "Betaya katılmak, %(brand)s yeniden yükleyecektir.",
         "jump_to_date": "Tarihe atla (/jumptodate ve tarihe atla başlıklarını ekler)",
@@ -1416,7 +1401,6 @@
         "location_share_live_description": "Geçici uygulama. Konumlar oda geçmişinde kalır.",
         "mjolnir": "İnsanları görmezden gelmenin yeni yolları",
         "msc3531_hide_messages_pending_moderation": "Moderatörlerin onay bekleyen mesajları gizlemesine izin verin.",
-        "new_room_list": "Yeni oda listesini etkinleştir",
         "notification_settings": "Yeni Bildirim Ayarları",
         "notification_settings_beta_caption": "Bildirim ayarlarınızı değiştirmenin daha basit bir yolunu sunuyoruz. %(brand)s istediğiniz gibi özelleştirin.",
         "notification_settings_beta_title": "Bildirim Ayarları",
@@ -1427,7 +1411,6 @@
         "sliding_sync_description": "Aktif geliştirme aşamasında, devre dışı bırakılamaz.",
         "sliding_sync_disabled_notice": "Devre dışı bırakmak için oturumu kapatıp tekrar açın",
         "sliding_sync_server_no_support": "Sunucunuz desteklemiyor",
-        "under_active_development": "Aktif geliştirme aşamasında.",
         "unrealiable_e2e": "Şifreli odalarda güvenilir değil",
         "video_rooms": "Video odaları",
         "video_rooms_a_new_way_to_chat": "%(brand)s ile sesli ve görüntülü sohbet etmenin yeni bir yolu.",
@@ -1482,9 +1465,6 @@
         "room_leave_mod_warning": "Bu odadaki tek moderatör sizsiniz. Ayrılırsanız, hiç kimse oda ayarlarını değiştiremez veya diğer önemli işlemleri yapamaz.",
         "room_rejoin_warning": "Bu oda herkese açık değildir. Davetiye olmadan tekrar katılamazsınız.",
         "space_rejoin_warning": "Bu alan herkese açık değildir. Davet olmadan yeniden katılamazsınız."
-    },
-    "left_panel": {
-        "open_dial_pad": "Arama tuşlarını aç"
     },
     "lightbox": {
         "rotate_left": "Sola Döndür",
@@ -1669,7 +1649,6 @@
     },
     "quick_settings": {
         "all_settings": "Tüm ayarlar",
-        "metaspace_section": "Kenar çubuğuna sabitle",
         "sidebar_settings": "Daha fazla seçenek",
         "title": "Hızlı ayarlar"
     },
@@ -1949,38 +1928,13 @@
         "waiting_for_join_title": "Kullanıcıların katılması bekleniyor %(brand)s"
     },
     "room_list": {
-        "add_room_label": "Oda ekle",
         "add_space_label": "Alan ekle",
-        "breadcrumbs_empty": "Yakında ziyaret edilen oda yok",
-        "breadcrumbs_label": "En son ziyaret edilmiş odalar",
         "failed_add_tag": "%(tagName)s etiketi odaya eklenemedi",
         "failed_remove_tag": "Odadan %(tagName)s etiketi kaldırılamadı",
         "failed_set_dm_tag": "Doğrudan mesaj etiketi ayarlanamadı",
-        "home_menu_label": "Ana sayfa seçenekleri",
-        "join_public_room_label": "Herkese açık odaya katıl",
-        "joining_rooms_status": {
-            "one": "Şu anda %(count)s odaya katılıyor",
-            "other": "Şu anda %(count)s odaya katılıyor"
-        },
         "list_title": "Oda listesi",
         "notification_options": "Bildirim ayarları",
-        "redacting_messages_status": {
-            "one": "Şu anda %(count)s odadaki mesajlar kaldırılıyor",
-            "other": "Şu anda %(count)s odadaki mesajlar kaldırılıyor"
-        },
-        "show_less": "Daha az göster",
-        "show_n_more": {
-            "one": "%(count)s adet daha fazla göster",
-            "other": "%(count)s adet daha fazla göster"
-        },
-        "show_previews": "Mesajların ön izlemelerini göster",
-        "sort_by": "Göre sırala",
-        "sort_by_activity": "Aktivite",
-        "sort_by_alphabet": "A-Z",
-        "sort_unread_first": "Önce okunmamış mesajları olan odaları göster",
-        "space_menu_label": "%(spaceName)s menü",
-        "sublist_options": "Liste seçenekleri",
-        "suggested_rooms_heading": "Önerilen Odalar"
+        "show_less": "Daha az göster"
     },
     "room_settings": {
         "access": {
@@ -2757,13 +2711,11 @@
         "showbold": "Oda listesindeki tüm etkinlikleri göster (noktalar veya okunmamış mesaj sayısı)",
         "sidebar": {
             "dialog_title": "<strong>Ayarlar:</strong> Kenar çubuğu",
-            "metaspaces_favourites_description": "Tüm favori odalarınızı ve kişilerinizi tek bir yerde toplayın.",
             "metaspaces_home_all_rooms": "Tüm odaları göster",
             "metaspaces_home_all_rooms_description": "Bir alana dahil olsalar bile tüm odaları Ana sayfada göster.",
             "metaspaces_home_description": "Ana sayfa, genel bir bakış sağlamak için faydalıdır.",
             "metaspaces_orphans": "Bir alana ait olmayan odalar",
             "metaspaces_orphans_description": "Bir alana ait olmayan tüm odalarınızı tek bir yerde toplayın.",
-            "metaspaces_people_description": "Tüm kişilerinizi tek bir yerde toplayın.",
             "metaspaces_subsection": "Gösterilecek alanlar",
             "metaspaces_video_rooms": "Video odaları ve konferanslar",
             "metaspaces_video_rooms_description": "Tüm özel video odalarını ve konferansları gruplandır.",
@@ -2784,7 +2736,6 @@
             "audio_output": "Ses Çıkışı",
             "audio_output_empty": "Ses çıkışları tespit edilemedi",
             "auto_gain_control": "Otomatik kazanç kontrolü",
-            "connection_section": "Bağlantı",
             "dialog_title": "<strong>Ayarlar:</strong> Ses ve Görüntü",
             "echo_cancellation": "Yankı giderme",
             "enable_fallback_ice_server": "Yedek arama destek sunucusuna (%(server)s) izin ver",
@@ -2963,12 +2914,6 @@
     },
     "space_settings": {
         "title": "Ayarlar - %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "Bu alana oda ekleme izniniz yok",
-        "error_no_permission_add_space": "Bu alana alan ekleme izniniz yok",
-        "error_no_permission_create_room": "Bu alanda yeni oda oluşturma izniniz yok",
-        "error_no_permission_invite": "Kullanıcıları bu alana davet etme izniniz yok"
     },
     "spotlight": {
         "public_rooms": {
