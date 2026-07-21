@@ -11,6 +11,10 @@ import { test, expect } from "../../../element-web-test";
 import { getRoomListView } from "./utils";
 
 test.describe("Room list panel", () => {
+    test.use({
+        displayName: "Eve",
+    });
+
     test.beforeEach(async ({ page, app, user }) => {
         // The toasts are displayed above the search section
         await rejectToast(page, "Verify this device");
@@ -36,8 +40,7 @@ test.describe("Room list panel", () => {
         test.use({ lockLeftPanelWidth: false });
         test("should respond to small screen sizes", { tag: "@screenshot" }, async ({ page }) => {
             await page.setViewportSize({ width: 575, height: 600 });
-            const roomListPanel = getRoomListView(page);
-            await expect(roomListPanel).toMatchScreenshot("room-list-panel-smallscreen.png");
+            await expect(page).toMatchScreenshot("room-list-panel-smallscreen.png");
         });
     });
 });

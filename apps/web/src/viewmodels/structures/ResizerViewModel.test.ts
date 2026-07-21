@@ -16,8 +16,6 @@ import { ResizerViewModel } from "./ResizerViewModel";
 import SettingsStore from "../../settings/SettingsStore";
 import { SettingLevel } from "../../settings/SettingLevel";
 
-vi.mock("what-input");
-
 describe("LeftPanelResizerViewModel", () => {
     afterEach(() => {
         localStorage.clear();
@@ -79,6 +77,10 @@ describe("LeftPanelResizerViewModel", () => {
         const mockHandle = {
             resize: vi.fn(),
             isCollapsed: vi.fn().mockReturnValue(true),
+            getSize: vi.fn().mockReturnValue({
+                inPixels: 0,
+            }),
+            collapse: vi.fn(),
         } as unknown as PanelImperativeHandle;
         vm.setPanelHandle(mockHandle);
 
@@ -97,6 +99,7 @@ describe("LeftPanelResizerViewModel", () => {
             const mockHandle = {
                 resize: vi.fn(),
                 isCollapsed: vi.fn().mockReturnValue(true),
+                getSize: vi.fn().mockReturnValue(0),
             } as unknown as PanelImperativeHandle;
             vm.setPanelHandle(mockHandle);
             // Simulate click
@@ -110,6 +113,7 @@ describe("LeftPanelResizerViewModel", () => {
             const mockHandle = {
                 resize: vi.fn(),
                 isCollapsed: vi.fn().mockReturnValue(true),
+                getSize: vi.fn().mockReturnValue(0),
             } as unknown as PanelImperativeHandle;
             vm.setPanelHandle(mockHandle);
             // Simulate click
@@ -131,14 +135,30 @@ describe("LeftPanelResizerViewModel", () => {
         expect(mockHandle.collapse).toHaveBeenCalled();
     });
 
+    it("should ignore first resized event", () => {
+        const vm = new ResizerViewModel();
+        const mockHandle = {
+            resize: vi.fn(),
+            getSize: vi.fn().mockReturnValue(0),
+        } as unknown as PanelImperativeHandle;
+        vm.setPanelHandle(mockHandle);
+
+        vm.onLeftPanelResized(50);
+        expect(mockHandle.resize).not.toHaveBeenCalled();
+    });
+
     it("should resize to nearest whole number", () => {
         const vm = new ResizerViewModel();
         const mockHandle = {
             resize: vi.fn(),
+            getSize: vi.fn().mockReturnValue(0),
         } as unknown as PanelImperativeHandle;
         vm.setPanelHandle(mockHandle);
 
+        // Initial call is ignored
+        vm.onLeftPanelResized(70);
+        // This should be processed
         vm.onLeftPanelResized(25.515);
-        expect(mockHandle.resize).toHaveBeenCalledWith("26%");
+        expect(mockHandle.resize).toHaveBeenLastCalledWith("26%");
     });
 });

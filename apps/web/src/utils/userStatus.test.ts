@@ -14,6 +14,7 @@ import { stubClient } from "test-utils";
 import {
     clearUserStatus,
     fetchUserStatus,
+    setUserOnCall,
     setUserStatus,
     userStatusFromProfile,
     userStatusTextWithinMaxLength,
@@ -153,6 +154,32 @@ describe("userStatus utils", () => {
             clearUserStatus(client);
 
             expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.status", null);
+        });
+    });
+
+    describe("setUserOnCall", () => {
+        let client: MatrixClient;
+
+        beforeEach(() => {
+            client = stubClient();
+        });
+
+        it("sets the call status with the current time if onCall is true", async () => {
+            vi.useFakeTimers().setSystemTime(12345);
+
+            await setUserOnCall(client, true);
+
+            expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.call", {
+                call_joined_ts: 12345,
+            });
+
+            vi.useRealTimers();
+        });
+
+        it("clears the call status if onCall is false", async () => {
+            await setUserOnCall(client, false);
+
+            expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.call", null);
         });
     });
 });

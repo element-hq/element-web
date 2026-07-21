@@ -71,6 +71,8 @@ describe("Lifecycle", () => {
             isInitialSyncComplete: vi.fn(),
             setGuest: vi.fn(),
             setNotifTimelineSet: vi.fn(),
+            getRooms: vi.fn().mockReturnValue([]),
+            matrixRTC: { on: vi.fn(), off: vi.fn() },
         });
         // stub this
         vi.spyOn(MatrixClientPeg, "set").mockImplementation(() => {});
