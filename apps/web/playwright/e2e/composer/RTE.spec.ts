@@ -226,7 +226,7 @@ test.describe("Composer", () => {
                 await page.setViewportSize({ width: 750, height: 1080 });
                 // Shrinking the viewport will collapse the left-panel, so manually expand it.
                 await app.resizeLeftPanel(150);
-                /// Now take the screenshot
+                // Now take the screenshot
                 await expect(page.locator(".mx_MessageComposer_wrapper")).toMatchScreenshot("narrow.png");
             });
         });
