@@ -6,8 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import MatrixToPermalinkConstructor from "../../../../src/utils/permalinks/MatrixToPermalinkConstructor";
-import { PermalinkParts } from "../../../../src/utils/permalinks/PermalinkConstructor";
+import { describe, it, expect } from "vitest";
+
+import MatrixToPermalinkConstructor from "./MatrixToPermalinkConstructor";
+import { PermalinkParts } from "./PermalinkConstructor";
 
 describe("MatrixToPermalinkConstructor", () => {
     const peramlinkConstructor = new MatrixToPermalinkConstructor();
