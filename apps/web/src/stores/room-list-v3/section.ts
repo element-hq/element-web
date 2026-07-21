@@ -135,7 +135,7 @@ export function getCustomSectionData(): CustomSectionsData {
 /**
  * Persisted expanded/collapsed state of the room list sections, stored per space then per section tag.
  */
-export type SectionExpansionState = Record<string, Record<string, boolean>>;
+export type SectionExpansionState = {[spaceId: string]: {[sectionTag: string]: boolean}};
 
 /**
  * Returns whether the section with the given tag is expanded in the given space.
