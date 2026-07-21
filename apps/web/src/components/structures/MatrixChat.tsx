@@ -524,6 +524,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         UIStore.destroy();
         this.stores.resizeNotifier.removeListener("middlePanelResized", this.dispatchTimelineResize);
         window.removeEventListener("resize", this.onWindowResized);
+
+        DecryptionFailureTracker.instance.stop();
     }
 
     private onWindowResized = (): void => {

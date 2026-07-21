@@ -250,11 +250,16 @@ describe("<MatrixChat />", () => {
     }
 
     beforeEach(async () => {
+        vi.resetAllMocks();
+        vi.doMock("../../utils/SessionLock.ts", () => ({
+            getSessionLock: vi.fn().mockResolvedValue(true),
+            checkSessionLockFree: vi.fn().mockReturnValue(true),
+        }));
+
         await clearStorage();
         Lifecycle.setSessionLockNotStolen();
 
         localStorage.clear();
-        vi.restoreAllMocks();
         defaultProps = {
             config: {
                 brand: "Test",
@@ -301,16 +306,6 @@ describe("<MatrixChat />", () => {
         act(() => defaultDispatcher.dispatch({ action: Action.OnLoggedOut }, true));
 
         localStorage.clear();
-
-        // This is a massive hack, but ...
-        //
-        // A lot of these tests end up completing while the login flow is still proceeding. So then, we start the next
-        // test while stuff is still ongoing from the previous test, which messes up the current test (by changing
-        // localStorage or opening modals, or whatever).
-        //
-        // There is no obvious event we could wait for which indicates that everything has completed, since each test
-        // does something different. Instead...
-        await act(() => sleep(200));
     });
 
     resetJsDomAfterEach();
@@ -1773,6 +1768,7 @@ describe("<MatrixChat />", () => {
     describe("Multi-tab lockout", () => {
         beforeEach(() => {
             mockPlatformPeg();
+            vi.doUnmock("../../utils/SessionLock.ts");
         });
 
         afterEach(() => {

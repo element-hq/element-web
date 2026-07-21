@@ -365,7 +365,7 @@ export class DecryptionFailureTracker {
     /**
      * Clear state and stop checking for and tracking failures.
      */
-    private stop(): void {
+    public stop(): void {
         if (this.checkInterval) clearInterval(this.checkInterval);
         if (this.trackInterval) clearInterval(this.trackInterval);
 
