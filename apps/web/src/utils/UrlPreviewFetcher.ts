@@ -256,7 +256,9 @@ export class UrlPreviewFetcher {
                         const blob = await decryptFile(encryptedFile);
                         imageThumb = imageFull = URL.createObjectURL(blob);
                         this.decryptedObjectUrls.set(encryptedFile.url, imageFull);
-                    } catch (e) {}
+                    } catch (e) {
+                        console.error("failed to preview encrypted message in URL previews", e);
+                    }
                 }
             } else {
                 const media = mediaFromMxc(single["og:image"], this.client);

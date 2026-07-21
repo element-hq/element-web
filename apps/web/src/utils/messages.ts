@@ -147,8 +147,9 @@ export async function attachUrlPreviews(
 
     let eventId: string | undefined = undefined;
     let cancelled = false;
+    const abortController = new AbortController();
 
-    if (isRoomEncrypted) {
+    if (isRoomEncrypted && previewsToAttach.some((preview) => preview.image !== undefined)) {
         const txnId = client.makeTxnId();
         const event = new MatrixEvent({
             type: EventType.RoomMessage,
@@ -161,8 +162,10 @@ export async function attachUrlPreviews(
         event.setTxnId(txnId);
         event.setStatus(EventStatus.SENDING);
         event.on(MatrixEventEvent.Status, (_, status) => {
-            console.log("attach status", status);
-            if (status == EventStatus.CANCELLED) cancelled = true;
+            if (status == EventStatus.CANCELLED) {
+                cancelled = true;
+                abortController.abort();
+            }
         });
         room.addPendingEvent(event, txnId);
         room.updatePendingEvent(event, EventStatus.ENCRYPTING);
@@ -186,8 +189,8 @@ export async function attachUrlPreviews(
                     try {
                         // image url from homeserver assumed to not be malformed
                         const httpUrl = mediaFromMxc(preview.image.mxcImageFull).srcHttp as string;
-                        const blob = await (await fetch(httpUrl)).blob();
-                        const { file, url } = await uploadFile(client, room.roomId, blob);
+                        const blob = await (await fetch(httpUrl, { signal: abortController.signal })).blob();
+                        const { file, url } = await uploadFile(client, room.roomId, blob, undefined, abortController);
 
                         if (file) {
                             out["beeper:image:encryption"] = file;
@@ -197,7 +200,9 @@ export async function attachUrlPreviews(
                             );
                         }
                     } catch (e) {
-                        console.error(e);
+                        if (!abortController.signal.aborted) {
+                            console.error(e);
+                        }
                     }
                 } else {
                     out["og:image"] = preview.image?.mxcImageFull;
@@ -213,8 +218,8 @@ export async function attachUrlPreviews(
         content["com.beeper.linkpreviews"] = bundle;
     }
 
-    if (isRoomEncrypted) {
-        room.removePendingEvent(eventId!);
+    if (eventId !== undefined) {
+        room.removePendingEvent(eventId);
     }
 
     return cancelled;
