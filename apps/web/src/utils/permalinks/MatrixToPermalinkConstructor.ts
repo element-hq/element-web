@@ -1,4 +1,5 @@
 /*
+Copyright 2026 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 Copyright 2019 The Matrix.org Foundation C.I.C.
 
@@ -10,34 +11,42 @@ import PermalinkConstructor, { PermalinkParts } from "./PermalinkConstructor";
 
 export const host = "matrix.to";
 export const baseUrl = `https://${host}`;
-export const baseUrlPattern = `^(?:https?://)?${host.replace(".", "\\.")}/#/(.*)`;
+export function patternForHost(host: string): string {
+    return `^(?:https?://)?${host.replace(".", "\\.")}/#/(.*)`;
+}
+export const baseUrlPattern = patternForHost(host);
 
 /**
- * Generates matrix.to permalinks
+ * Generates matrix.to permalinks, or permalinks for a matrix.to-equivalent host
  */
 export default class MatrixToPermalinkConstructor extends PermalinkConstructor {
-    public constructor() {
+    private readonly host: string;
+    private readonly baseUrl: string;
+
+    public constructor(customHost: string = host) {
         super();
+        this.host = customHost;
+        this.baseUrl = `https://${customHost}`;
     }
 
     public forEvent(roomId: string, eventId: string, serverCandidates: string[]): string {
-        return `${baseUrl}/#/${roomId}/${eventId}${this.encodeServerCandidates(serverCandidates)}`;
+        return `${this.baseUrl}/#/${roomId}/${eventId}${this.encodeServerCandidates(serverCandidates)}`;
     }
 
     public forRoom(roomIdOrAlias: string, serverCandidates: string[]): string {
-        return `${baseUrl}/#/${roomIdOrAlias}${this.encodeServerCandidates(serverCandidates)}`;
+        return `${this.baseUrl}/#/${roomIdOrAlias}${this.encodeServerCandidates(serverCandidates)}`;
     }
 
     public forUser(userId: string): string {
-        return `${baseUrl}/#/${userId}`;
+        return `${this.baseUrl}/#/${userId}`;
     }
 
     public forEntity(entityId: string): string {
-        return `${baseUrl}/#/${entityId}`;
+        return `${this.baseUrl}/#/${entityId}`;
     }
 
     public isPermalinkHost(testHost: string): boolean {
-        return testHost === host;
+        return testHost === this.host;
     }
 
     public encodeServerCandidates(candidates: string[]): string {
@@ -52,7 +61,7 @@ export default class MatrixToPermalinkConstructor extends PermalinkConstructor {
             throw new Error("Does not appear to be a permalink");
         }
 
-        const matches = [...fullUrl.matchAll(new RegExp(baseUrlPattern, "gi"))][0];
+        const matches = [...fullUrl.matchAll(new RegExp(patternForHost(this.host), "gi"))][0];
 
         if (!matches || matches.length < 2) {
             throw new Error("Does not appear to be a permalink");

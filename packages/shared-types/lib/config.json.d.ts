@@ -65,6 +65,15 @@ export interface WebConfigJson {
 
     permalink_prefix?: string;
 
+    /**
+     * One or more hostnames (e.g. "matrix.to", or a self-hosted equivalent) that should be treated as
+     * matrix.to-equivalent domains. The first entry is used when generating new permalinks and pills;
+     * all entries, plus the real "matrix.to", are recognised when parsing incoming links. Useful for
+     * deployments that cannot reach the real matrix.to (e.g. airgapped networks) and self-host a
+     * matrix.to-style redirector instead.
+     */
+    matrixto_prefix?: string | string[];
+
     desktop_builds?: {
         available?: boolean;
         logo?: string; // url

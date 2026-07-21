@@ -20,7 +20,7 @@ import { mediaFromMxc } from "../../customisations/Media";
 import { Layout } from "../../settings/enums/Layout";
 import { shouldFormContinuation } from "../../components/structures/MessagePanel";
 import { formatFullDateNoDayNoTime, wantsDateSeparator } from "../../DateUtils";
-import { RoomPermalinkCreator } from "../permalinks/Permalinks";
+import { RoomPermalinkCreator, makeUserPermalink } from "../permalinks/Permalinks";
 import { _t } from "../../languageHandler";
 import * as Avatar from "../../Avatar";
 import EventTile from "../../components/views/rooms/EventTile";
@@ -109,11 +109,7 @@ export default class HTMLExporter extends Exporter {
                     {
                         roomName: () => <strong>{safeRoomName}</strong>,
                         exporterDetails: () => (
-                            <a
-                                href={`https://matrix.to/#/${encodeURIComponent(exporter)}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
+                            <a href={makeUserPermalink(exporter)} target="_blank" rel="noopener noreferrer">
                                 {exporterName ? (
                                     <>
                                         <strong>{escapeHtml(exporterName)}</strong>I {" (" + safeExporter + ")"}

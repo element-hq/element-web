@@ -1,4 +1,5 @@
 /*
+Copyright 2026 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 Copyright 2019-2022 The Matrix.org Foundation C.I.C.
 Copyright 2018 New Vector Ltd
@@ -425,6 +426,44 @@ describe("Permalinks", function () {
         expect(result).toBe("https://element.fs.tld/#/user/@someone:example.org");
     });
 
+    function mockMatrixToPrefix(value: string | string[]): void {
+        const sdkConfigGet = SdkConfig.get;
+        jest.spyOn(SdkConfig, "get").mockImplementation((key: keyof IConfigOptions, altCaseName?: string) => {
+            if (key === "matrixto_prefix") {
+                return value;
+            } else return sdkConfigGet(key, altCaseName);
+        });
+    }
+
+    it("should use matrixto_prefix (string) for permalinks, including pills", function () {
+        mockMatrixToPrefix("matrixto.customer.internal");
+        expect(makeUserPermalink("@someone:example.org")).toBe(
+            "https://matrixto.customer.internal/#/@someone:example.org",
+        );
+        expect(makeUserPermalink("@someone:example.org", true)).toBe(
+            "https://matrixto.customer.internal/#/@someone:example.org",
+        );
+    });
+
+    it("should use the first entry of matrixto_prefix (array) for generating permalinks", function () {
+        mockMatrixToPrefix(["matrixto.customer.internal", "matrixto.legacy.internal"]);
+        expect(makeUserPermalink("@someone:example.org")).toBe(
+            "https://matrixto.customer.internal/#/@someone:example.org",
+        );
+    });
+
+    it("should prefer matrixto_prefix over permalink_prefix when both are configured", function () {
+        const sdkConfigGet = SdkConfig.get;
+        jest.spyOn(SdkConfig, "get").mockImplementation((key: keyof IConfigOptions, altCaseName?: string) => {
+            if (key === "matrixto_prefix") return "matrixto.customer.internal";
+            if (key === "permalink_prefix") return "https://element.fs.tld";
+            return sdkConfigGet(key, altCaseName);
+        });
+        expect(makeUserPermalink("@someone:example.org")).toBe(
+            "https://matrixto.customer.internal/#/@someone:example.org",
+        );
+    });
+
     describe("parsePermalink", () => {
         it("should correctly parse room permalinks with a via argument", () => {
             const result = parsePermalink("https://matrix.to/#/!room_id:server?via=some.org");
@@ -457,6 +496,27 @@ describe("Permalinks", function () {
             expect(parsePermalink("matrix.to/#/@user:example.com")).toEqual(
                 new PermalinkParts(null, null, "@user:example.com", null),
             );
+        });
+
+        describe("with matrixto_prefix configured", () => {
+            beforeEach(() => {
+                mockMatrixToPrefix(["matrixto.customer.internal", "matrixto.legacy.internal"]);
+            });
+
+            it("should parse links from every configured host", () => {
+                expect(parsePermalink("https://matrixto.customer.internal/#/@user:example.com")).toEqual(
+                    new PermalinkParts(null, null, "@user:example.com", null),
+                );
+                expect(parsePermalink("https://matrixto.legacy.internal/#/@user:example.com")).toEqual(
+                    new PermalinkParts(null, null, "@user:example.com", null),
+                );
+            });
+
+            it("should still parse links from the real matrix.to", () => {
+                expect(parsePermalink("https://matrix.to/#/@user:example.com")).toEqual(
+                    new PermalinkParts(null, null, "@user:example.com", null),
+                );
+            });
         });
     });
 });

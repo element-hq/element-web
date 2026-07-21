@@ -1,4 +1,5 @@
 /*
+Copyright 2026 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
@@ -13,8 +14,8 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import MatrixToPermalinkConstructor, {
-    baseUrl as matrixtoBaseUrl,
-    baseUrlPattern as matrixToBaseUrlPattern,
+    host as matrixtoHost,
+    patternForHost as matrixToPatternForHost,
 } from "./MatrixToPermalinkConstructor";
 import { type PermalinkParts } from "./PermalinkConstructor";
 import type PermalinkConstructor from "./PermalinkConstructor";
@@ -316,9 +317,11 @@ export function makeRoomPermalink(matrixClient: MatrixClient, roomId: string, is
 }
 
 export function isPermalinkHost(host: string): boolean {
-    // Always check if the permalink is a spec permalink (callers are likely to call
+    // Always check if the permalink is a matrix.to-equivalent host (callers are likely to call
     // parsePermalink after this function).
-    if (new MatrixToPermalinkConstructor().isPermalinkHost(host)) return true;
+    if (getMatrixToHostsForParsing().some((h) => new MatrixToPermalinkConstructor(h).isPermalinkHost(host))) {
+        return true;
+    }
     return getPermalinkConstructor().isPermalinkHost(host);
 }
 
@@ -340,15 +343,18 @@ export function tryTransformEntityToPermalink(matrixClient: MatrixClient, entity
         try {
             const permalinkParts = parsePermalink(entity);
             if (permalinkParts) {
+                const matrixToConstructor = new MatrixToPermalinkConstructor(getPrimaryMatrixToHost());
                 if (permalinkParts.roomIdOrAlias) {
-                    const eventIdPart = permalinkParts.eventId ? `/${permalinkParts.eventId}` : "";
-                    let pl = matrixtoBaseUrl + `/#/${permalinkParts.roomIdOrAlias}${eventIdPart}`;
-                    if (permalinkParts.viaServers?.length) {
-                        pl += new MatrixToPermalinkConstructor().encodeServerCandidates(permalinkParts.viaServers);
+                    if (permalinkParts.eventId) {
+                        return matrixToConstructor.forEvent(
+                            permalinkParts.roomIdOrAlias,
+                            permalinkParts.eventId,
+                            permalinkParts.viaServers ?? [],
+                        );
                     }
-                    return pl;
+                    return matrixToConstructor.forRoom(permalinkParts.roomIdOrAlias, permalinkParts.viaServers ?? []);
                 } else if (permalinkParts.userId) {
-                    return matrixtoBaseUrl + `/#/${permalinkParts.userId}`;
+                    return matrixToConstructor.forUser(permalinkParts.userId);
                 }
             }
         } catch {}
@@ -430,14 +436,48 @@ export function getPrimaryPermalinkEntity(permalink: string): string | null {
 }
 
 /**
- * Returns the correct PermalinkConstructor based on permalink_prefix
- * and isPill
+ * Reads the configured matrixto_prefix hostname(s), normalising the
+ * string | string[] | undefined config shape into an array.
+ */
+function getConfiguredMatrixToHosts(): string[] {
+    const configured = SdkConfig.get("matrixto_prefix");
+    if (!configured) return [];
+    return Array.isArray(configured) ? configured : [configured];
+}
+
+/**
+ * All hostnames that should be recognised as matrix.to-equivalent when parsing
+ * links: the real matrix.to, plus any configured matrixto_prefix hosts.
+ */
+function getMatrixToHostsForParsing(): string[] {
+    return [matrixtoHost, ...getConfiguredMatrixToHosts()];
+}
+
+/**
+ * The matrix.to-equivalent hostname to use when generating new permalinks.
+ * Defaults to matrix.to when matrixto_prefix isn't configured.
+ */
+function getPrimaryMatrixToHost(): string {
+    return getConfiguredMatrixToHosts()[0] ?? matrixtoHost;
+}
+
+/**
+ * Returns the correct PermalinkConstructor based on matrixto_prefix,
+ * permalink_prefix, and isPill
  * @param {boolean} isPill Should constructed links be pillifyable.
  * @returns {string|null} The transformed permalink or null if unable.
  */
 function getPermalinkConstructor(isPill = false): PermalinkConstructor {
+    const matrixToHost = getPrimaryMatrixToHost();
+    if (matrixToHost !== matrixtoHost) {
+        // A matrixto_prefix has been configured: it replaces matrix.to everywhere,
+        // including pills, since pills are exactly the links shared with parties
+        // who won't otherwise know about the custom host.
+        return new MatrixToPermalinkConstructor(matrixToHost);
+    }
+
     const elementPrefix = SdkConfig.get("permalink_prefix");
-    if (elementPrefix && elementPrefix !== matrixtoBaseUrl && !isPill) {
+    if (elementPrefix && elementPrefix !== `https://${matrixtoHost}` && !isPill) {
         return new ElementPermalinkConstructor(elementPrefix);
     }
 
@@ -446,11 +486,15 @@ function getPermalinkConstructor(isPill = false): PermalinkConstructor {
 
 export function parsePermalink(fullUrl: string): PermalinkParts | null {
     try {
-        const elementPrefix = SdkConfig.get("permalink_prefix");
         const decodedUrl = decodeURIComponent(fullUrl);
-        if (new RegExp(matrixToBaseUrlPattern, "i").test(decodedUrl)) {
-            return new MatrixToPermalinkConstructor().parsePermalink(decodedUrl);
-        } else if (fullUrl.startsWith("matrix:")) {
+        for (const matrixToHost of getMatrixToHostsForParsing()) {
+            if (new RegExp(matrixToPatternForHost(matrixToHost), "i").test(decodedUrl)) {
+                return new MatrixToPermalinkConstructor(matrixToHost).parsePermalink(decodedUrl);
+            }
+        }
+
+        const elementPrefix = SdkConfig.get("permalink_prefix");
+        if (fullUrl.startsWith("matrix:")) {
             return new MatrixSchemePermalinkConstructor().parsePermalink(fullUrl);
         } else if (elementPrefix && fullUrl.startsWith(elementPrefix)) {
             return new ElementPermalinkConstructor(elementPrefix).parsePermalink(fullUrl);

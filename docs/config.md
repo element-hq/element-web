@@ -130,44 +130,52 @@ complete re-branding/private labeling, a more personalised experience can be ach
    templated string. Note that this option does not support templating, currently.
 3. `brand`: Optional name for the app. Defaults to `Element`. This is used throughout the application in various strings/locations.
 4. `permalink_prefix`: An optional URL pointing to an Element Web deployment. For example, `https://app.element.io`. This will
-   change all permalinks (via the "Share" menus) to point at the Element Web deployment rather than `matrix.to`.
-5. `desktop_builds`: Optional. Where the desktop builds for the application are, if available. This is explained in more detail
+   change all permalinks (via the "Share" menus) to point at the Element Web deployment rather than `matrix.to`. Note this
+   does not affect pills (in-message links to rooms/users), which always use a matrix.to-shaped URL — see `matrixto_prefix`
+   below if you need to change that too.
+5. `matrixto_prefix`: An optional hostname, or array of hostnames (e.g. `matrixto.example.org`, no scheme), that should be
+   treated as equivalent to `matrix.to`. Unlike `permalink_prefix`, this preserves matrix.to's own URL shape
+   (`https://<host>/#/<entity>`) and applies to **all** generated permalinks, including pills — the first hostname in the
+   list is used for generation. All listed hostnames, plus the real `matrix.to`, are recognised when parsing incoming
+   links. This is intended for deployments that cannot reach the real `matrix.to` (for example, an airgapped network) and
+   instead self-host a [matrix.to-compatible redirector](https://github.com/matrix-org/matrix.to) on a reachable domain.
+6. `desktop_builds`: Optional. Where the desktop builds for the application are, if available. This is explained in more detail
    down below.
-6. `mobile_builds`: Optional. Like `desktop_builds`, except for the mobile apps. Also described in more detail down below.
-7. `mobile_guide_toast`: When `true` (default), users accessing the Element Web instance from a mobile device will be prompted to
+7. `mobile_builds`: Optional. Like `desktop_builds`, except for the mobile apps. Also described in more detail down below.
+8. `mobile_guide_toast`: When `true` (default), users accessing the Element Web instance from a mobile device will be prompted to
    download the app instead.
-8. `mobile_guide_app_variant`: Optional. The mobile app that the user is prompted to download from the `/mobile_guide` page. When omitted
+9. `mobile_guide_app_variant`: Optional. The mobile app that the user is prompted to download from the `/mobile_guide` page. When omitted
    the mobile guide will be configured for the new Element X apps. Allowed values are as follows:
     1. `element`: Element X Android/iOS.
     2. `element-classic`: Element Classic Android/iOS.
     3. `element-pro`: Element Pro Android/iOS.
-9. `update_base_url`: For the desktop app only, the URL where to acquire update packages. If specified, must be a path to a directory
-   containing `macos` and `win32` directories, with the update packages within. Defaults to `https://packages.element.io/desktop/update/`
-   in production.
-10. `map_style_url`: Map tile server style URL for location sharing. e.g. `https://api.maptiler.com/maps/streets/style.json?key=YOUR_KEY_GOES_HERE`
+10. `update_base_url`: For the desktop app only, the URL where to acquire update packages. If specified, must be a path to a directory
+    containing `macos` and `win32` directories, with the update packages within. Defaults to `https://packages.element.io/desktop/update/`
+    in production.
+11. `map_style_url`: Map tile server style URL for location sharing. e.g. `https://api.maptiler.com/maps/streets/style.json?key=YOUR_KEY_GOES_HERE`
     This setting is ignored if your homeserver provides `/.well-known/matrix/client` in its well-known location, and the JSON file
     at that location has a key `m.tile_server` (or the unstable version `org.matrix.msc3488.tile_server`). In this case, the
     configuration found in the well-known location is used instead.
-11. `welcome_user_id`: **DEPRECATED** An optional user ID to start a DM with after creating an account. Defaults to nothing (no DM created).
-12. `custom_translations_url`: An optional URL to allow overriding of translatable strings. The JSON file must be in a format of
+12. `welcome_user_id`: **DEPRECATED** An optional user ID to start a DM with after creating an account. Defaults to nothing (no DM created).
+13. `custom_translations_url`: An optional URL to allow overriding of translatable strings. The JSON file must be in a format of
     `{"affected|translation|key": {"languageCode": "new string"}}`. See https://github.com/matrix-org/matrix-react-sdk/pull/7886 for details.
-13. `branding`: Options for configuring various assets used within the app. Described in more detail down below.
-14. `embedded_pages`: Further optional URLs for various assets used within the app. Described in more detail down below.
-15. `disable_3pid_login`: When `false` (default), **enables** the options to log in with email address or phone number. Set to
+14. `branding`: Options for configuring various assets used within the app. Described in more detail down below.
+15. `embedded_pages`: Further optional URLs for various assets used within the app. Described in more detail down below.
+16. `disable_3pid_login`: When `false` (default), **enables** the options to log in with email address or phone number. Set to
     `true` to hide these options.
-16. `disable_login_language_selector`: When `false` (default), **enables** the language selector on the login pages. Set to `true`
+17. `disable_login_language_selector`: When `false` (default), **enables** the language selector on the login pages. Set to `true`
     to hide this dropdown.
-17. `disable_guests`: When `false` (default), **enable** guest-related functionality (peeking/previewing rooms, etc) for unregistered
+18. `disable_guests`: When `false` (default), **enable** guest-related functionality (peeking/previewing rooms, etc) for unregistered
     users. Set to `true` to disable this functionality.
-18. `user_notice`: Optional notice to show to the user, e.g. for sunsetting a deployment and pushing users to move in their own time.
+19. `user_notice`: Optional notice to show to the user, e.g. for sunsetting a deployment and pushing users to move in their own time.
     Takes a configuration object as below:
     1. `title`: Required. Title to show at the top of the notice.
     2. `description`: Required. The description to use for the notice.
     3. `show_once`: Optional. If true then the notice will only be shown once per device.
-19. `help_url`: The URL to point users to for help with the app, defaults to `https://element.io/help`.
-20. `help_encryption_url`: The URL to point users to for help with encryption, defaults to `https://element.io/help#encryption`.
-21. `help_key_storage_url`: The URL to point users to for help with key storage, defaults to `https://element.io/help#encryption5`.
-22. `force_verification`: If true, users must verify new logins (eg. with another device / their recovery key)
+20. `help_url`: The URL to point users to for help with the app, defaults to `https://element.io/help`.
+21. `help_encryption_url`: The URL to point users to for help with encryption, defaults to `https://element.io/help#encryption`.
+22. `help_key_storage_url`: The URL to point users to for help with key storage, defaults to `https://element.io/help#encryption5`.
+23. `force_verification`: If true, users must verify new logins (eg. with another device / their recovery key)
 
 ### `desktop_builds` and `mobile_builds`
 
