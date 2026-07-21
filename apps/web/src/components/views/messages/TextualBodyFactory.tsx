@@ -31,7 +31,10 @@ import PosthogTrackers from "../../../PosthogTrackers";
 import ImageView from "../elements/ImageView";
 import EditMessageComposer from "../rooms/EditMessageComposer";
 import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
-import { UrlPreviewGroupViewModel, UrlPreviewKind } from "../../../viewmodels/message-body/UrlPreviewGroupViewModel";
+import {
+    UrlPreviewGroupViewModel,
+    type UrlPreviewKind,
+} from "../../../viewmodels/message-body/UrlPreviewGroupViewModel";
 import PlatformPeg from "../../../PlatformPeg";
 import { useSettingValue } from "../../../hooks/useSettings";
 

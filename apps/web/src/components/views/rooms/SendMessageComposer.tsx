@@ -16,13 +16,11 @@ import React, {
 import {
     type IEventRelation,
     type Room,
-    MatrixEvent,
+    type MatrixEvent,
     EventType,
     MsgType,
     RelationType,
     THREAD_RELATION_TYPE,
-    EventStatus,
-    MatrixClient,
 } from "matrix-js-sdk/src/matrix";
 import { type DebouncedFunc, throttle } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";

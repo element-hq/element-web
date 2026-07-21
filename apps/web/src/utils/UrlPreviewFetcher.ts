@@ -14,7 +14,7 @@ import { mediaFromMxc } from "../customisations/Media";
 import { thumbHeight } from "../ImageUtils";
 import { type UnstableBundledUrlPreviewSingle } from "../../@types/url-preview";
 import { decryptFile } from "./DecryptFile";
-import { EncryptedFile } from "matrix-js-sdk/src/types";
+import { type EncryptedFile } from "matrix-js-sdk/src/types";
 
 const logger = rootLogger.getChild("UrlPreviewFetcher");
 
@@ -45,7 +45,7 @@ export class UrlPreviewFetcher {
     }
 
     public revokeObjectUrls(): void {
-        this.decryptedObjectUrls.forEach(URL.revokeObjectURL);
+        this.decryptedObjectUrls.forEach((url) => URL.revokeObjectURL(url));
         this.decryptedObjectUrls.clear();
     }
 

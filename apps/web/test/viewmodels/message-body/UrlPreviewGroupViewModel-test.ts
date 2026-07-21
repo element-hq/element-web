@@ -13,7 +13,7 @@ import {
     BUNDLED_LINK_PREVIEWS,
     MAX_PREVIEWS_WHEN_LIMITED,
     UrlPreviewGroupViewModel,
-    UrlPreviewKind,
+    type UrlPreviewKind,
 } from "../../../src/viewmodels/message-body/UrlPreviewGroupViewModel";
 import type { UrlPreview } from "@element-hq/web-shared-components";
 import { getMockClientWithEventEmitter, mkEvent } from "../../test-utils";

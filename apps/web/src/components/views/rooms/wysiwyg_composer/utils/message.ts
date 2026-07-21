@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type Composer as ComposerEvent } from "@matrix-org/analytics-events/types/typescript/Composer";
 import {
-    MatrixEvent,
+    type MatrixEvent,
     type IEventRelation,
     type ISendEventResponse,
     type MatrixClient,

@@ -10,8 +10,8 @@ import {
     type IContent,
     type IMentions,
     type IEventRelation,
-    MatrixClient,
-    Room,
+    type MatrixClient,
+    type Room,
     EventType,
     EventStatus,
     MatrixEventEvent,
@@ -23,7 +23,7 @@ import {
 
 import type EditorModel from "../editor/model";
 import { Type } from "../editor/parts";
-import { UnstableBundledUrlPreviewSingle, type RoomMessageEventContent } from "../../@types/url-preview";
+import { type UnstableBundledUrlPreviewSingle, type RoomMessageEventContent } from "../../@types/url-preview";
 import SettingsStore from "../settings/SettingsStore";
 import { uploadFile } from "../ContentMessages";
 import { mediaFromMxc } from "../customisations/Media";
@@ -174,7 +174,7 @@ export async function attachUrlPreviews(
 
     const bundle = await Promise.all(
         previewsToAttach.map(async (preview) => {
-            let out: UnstableBundledUrlPreviewSingle = {
+            const out: UnstableBundledUrlPreviewSingle = {
                 "matched_url": preview.link,
                 "og:url": preview.ogUrl,
                 "og:title": preview.title,

@@ -11,12 +11,15 @@ import { type UrlPreview, type MessageComposerUrlPreviewSnapshot } from "@elemen
 
 import { attachMentions, attachUrlPreviews } from "../../../src/utils/messages";
 import EditorModel from "../../../src/editor/model";
-import { mkEvent } from "../../test-utils";
+import { createTestClient, mkEvent, mkRoom } from "../../test-utils";
 import { createPartCreator } from "../editor/mock";
 import { type RoomMessageEventContent } from "../../../@types/url-preview";
 import SettingsStore from "../../../src/settings/SettingsStore";
 
 describe("attachUrlPreviews", () => {
+    const mxClient = createTestClient();
+    const mxRoom = mkRoom(mxClient, "test-room");
+
     beforeEach(() => {
         const original = SettingsStore.getValue;
         jest.spyOn(SettingsStore, "getValue").mockImplementation(
@@ -50,15 +53,15 @@ describe("attachUrlPreviews", () => {
         content: "https://example.com",
     });
 
-    it("does nothing when there are no previews", () => {
+    it("does nothing when there are no previews", async () => {
         const content = makeContent();
-        attachUrlPreviews({ entries: [], content: "" }, content);
+        await attachUrlPreviews(mxClient, mxRoom, { entries: [], content: "" }, content);
         expect(content["com.beeper.linkpreviews"]).toBeUndefined();
     });
 
-    it("attaches a preview with no image", () => {
+    it("attaches a preview with no image", async () => {
         const content = makeContent();
-        attachUrlPreviews(snapshot(), content);
+        await attachUrlPreviews(mxClient, mxRoom, snapshot(), content);
         expect(content["com.beeper.linkpreviews"]).toEqual([
             expect.objectContaining({ "og:title": "Example", "og:image": undefined }),
         ]);
@@ -67,6 +70,8 @@ describe("attachUrlPreviews", () => {
     it("embeds the mxc url from the preview image", () => {
         const content = makeContent();
         attachUrlPreviews(
+            mxClient,
+            mxRoom,
             snapshot({
                 imageThumb: "",
                 imageFull: "https://example.com/full.png",
