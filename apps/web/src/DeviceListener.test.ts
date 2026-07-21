@@ -6,7 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Mocked, mocked } from "jest-mock-vitest-adapter";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach, type Mocked } from "vitest";
 import {
     MatrixEvent,
     type Room,
@@ -24,38 +26,40 @@ import {
     type SecretStorageStatus,
 } from "matrix-js-sdk/src/crypto-api";
 import { type CryptoSessionStateChange } from "@matrix-org/analytics-events/types/typescript/CryptoSessionStateChange";
+import { getMockClientWithEventEmitter, mockPlatformPeg } from "test-utils";
 
 import {
     DeviceListener,
     ACCOUNT_DATA_KEY_M_KEY_BACKUP,
     ACCOUNT_DATA_KEY_M_KEY_BACKUP_DISABLED_UNSTABLE,
     RECOVERY_ACCOUNT_DATA_KEY,
-} from "../../src/device-listener";
-import { MatrixClientPeg } from "../../src/MatrixClientPeg";
-import * as SetupEncryptionToast from "../../src/toasts/SetupEncryptionToast";
-import * as UnverifiedSessionToast from "../../src/toasts/UnverifiedSessionToast";
-import * as BulkUnverifiedSessionsToast from "../../src/toasts/BulkUnverifiedSessionsToast";
-import { isSecretStorageBeingAccessed } from "../../src/SecurityManager";
-import { Action } from "../../src/dispatcher/actions";
-import SettingsStore from "../../src/settings/SettingsStore";
-import { SettingLevel } from "../../src/settings/SettingLevel";
-import { getMockClientWithEventEmitter, mockPlatformPeg } from "../test-utils";
-import { isBulkUnverifiedDeviceReminderSnoozed } from "../../src/utils/device/snoozeBulkUnverifiedDeviceReminder";
-import { PosthogAnalytics } from "../../src/PosthogAnalytics";
+} from "./device-listener";
+import { MatrixClientPeg } from "./MatrixClientPeg";
+import * as SetupEncryptionToast from "./toasts/SetupEncryptionToast";
+import * as UnverifiedSessionToast from "./toasts/UnverifiedSessionToast";
+import * as BulkUnverifiedSessionsToast from "./toasts/BulkUnverifiedSessionsToast";
+import { isSecretStorageBeingAccessed } from "./SecurityManager";
+import { Action } from "./dispatcher/actions";
+import SettingsStore from "./settings/SettingsStore";
+import { SettingLevel } from "./settings/SettingLevel";
+import { isBulkUnverifiedDeviceReminderSnoozed } from "./utils/device/snoozeBulkUnverifiedDeviceReminder";
+import { PosthogAnalytics } from "./PosthogAnalytics";
 
-jest.mock("../../src/dispatcher/dispatcher", () => ({
-    dispatch: jest.fn(),
-    register: jest.fn(),
-    unregister: jest.fn(),
+vi.mock("./dispatcher/dispatcher", () => ({
+    default: {
+        dispatch: vi.fn(),
+        register: vi.fn(),
+        unregister: vi.fn(),
+    },
 }));
 
-jest.mock("../../src/SecurityManager", () => ({
-    isSecretStorageBeingAccessed: jest.fn(),
-    accessSecretStorage: jest.fn(),
+vi.mock("./SecurityManager", () => ({
+    isSecretStorageBeingAccessed: vi.fn(),
+    accessSecretStorage: vi.fn(),
 }));
 
-jest.mock("../../src/utils/device/snoozeBulkUnverifiedDeviceReminder", () => ({
-    isBulkUnverifiedDeviceReminderSnoozed: jest.fn(),
+vi.mock("./utils/device/snoozeBulkUnverifiedDeviceReminder", () => ({
+    isBulkUnverifiedDeviceReminderSnoozed: vi.fn(),
 }));
 
 const userId = "@user:server";
@@ -79,36 +83,36 @@ describe("DeviceListener", () => {
     let mockCrypto: Mocked<CryptoApi>;
 
     beforeEach(() => {
-        jest.resetAllMocks();
+        vi.resetAllMocks();
 
         // don't litter the console with logs
-        jest.spyOn(console, "debug").mockImplementation(() => {});
-        jest.spyOn(console, "info").mockImplementation(() => {});
-        jest.spyOn(console, "warn").mockImplementation(() => {});
-        jest.spyOn(console, "error").mockImplementation(() => {});
+        vi.spyOn(console, "debug").mockImplementation(() => {});
+        vi.spyOn(console, "info").mockImplementation(() => {});
+        vi.spyOn(console, "warn").mockImplementation(() => {});
+        vi.spyOn(console, "error").mockImplementation(() => {});
 
         // spy on various toasts' hide and show functions
         // easier than mocking
-        jest.spyOn(SetupEncryptionToast, "showToast").mockReturnValue(undefined);
-        jest.spyOn(SetupEncryptionToast, "hideToast").mockReturnValue(undefined);
-        jest.spyOn(BulkUnverifiedSessionsToast, "showToast").mockReturnValue(undefined);
-        jest.spyOn(BulkUnverifiedSessionsToast, "hideToast").mockReturnValue(undefined);
-        jest.spyOn(UnverifiedSessionToast, "showToast").mockResolvedValue(undefined);
-        jest.spyOn(UnverifiedSessionToast, "hideToast").mockReturnValue(undefined);
+        vi.spyOn(SetupEncryptionToast, "showToast").mockReturnValue(undefined);
+        vi.spyOn(SetupEncryptionToast, "hideToast").mockReturnValue(undefined);
+        vi.spyOn(BulkUnverifiedSessionsToast, "showToast").mockReturnValue(undefined);
+        vi.spyOn(BulkUnverifiedSessionsToast, "hideToast").mockReturnValue(undefined);
+        vi.spyOn(UnverifiedSessionToast, "showToast").mockResolvedValue(undefined);
+        vi.spyOn(UnverifiedSessionToast, "hideToast").mockReturnValue(undefined);
 
         mockPlatformPeg({
-            getAppVersion: jest.fn().mockResolvedValue("1.2.3"),
+            getAppVersion: vi.fn().mockResolvedValue("1.2.3"),
         });
         mockCrypto = {
-            getDeviceVerificationStatus: jest.fn().mockResolvedValue({
+            getDeviceVerificationStatus: vi.fn().mockResolvedValue({
                 crossSigningVerified: false,
             }),
-            getUserDeviceInfo: jest.fn().mockResolvedValue(new Map()),
-            isCrossSigningReady: jest.fn().mockResolvedValue(true),
-            getSecretStorageStatus: jest.fn().mockResolvedValue(readySecretStorageStatus),
-            userHasCrossSigningKeys: jest.fn(),
-            getActiveSessionBackupVersion: jest.fn(),
-            getCrossSigningStatus: jest.fn().mockReturnValue({
+            getUserDeviceInfo: vi.fn().mockResolvedValue(new Map()),
+            isCrossSigningReady: vi.fn().mockResolvedValue(true),
+            getSecretStorageStatus: vi.fn().mockResolvedValue(readySecretStorageStatus),
+            userHasCrossSigningKeys: vi.fn(),
+            getActiveSessionBackupVersion: vi.fn(),
+            getCrossSigningStatus: vi.fn().mockReturnValue({
                 publicKeysOnDevice: true,
                 privateKeysInSecretStorage: true,
                 privateKeysCachedLocally: {
@@ -117,33 +121,33 @@ describe("DeviceListener", () => {
                     userSigningKey: true,
                 },
             }),
-            getSessionBackupPrivateKey: jest.fn(),
-            isEncryptionEnabledInRoom: jest.fn(),
-            getKeyBackupInfo: jest.fn().mockResolvedValue(null),
+            getSessionBackupPrivateKey: vi.fn(),
+            isEncryptionEnabledInRoom: vi.fn(),
+            getKeyBackupInfo: vi.fn().mockResolvedValue(null),
         } as unknown as Mocked<CryptoApi>;
         mockClient = getMockClientWithEventEmitter({
-            isGuest: jest.fn(),
-            getUserId: jest.fn().mockReturnValue(userId),
-            getSafeUserId: jest.fn().mockReturnValue(userId),
-            getRooms: jest.fn().mockReturnValue([]),
-            isVersionSupported: jest.fn().mockResolvedValue(true),
-            isInitialSyncComplete: jest.fn().mockReturnValue(true),
-            isKeyBackupKeyStored: jest.fn(),
-            waitForClientWellKnown: jest.fn(),
-            getClientWellKnown: jest.fn(),
-            getDeviceId: jest.fn().mockReturnValue(deviceId),
-            setAccountData: jest.fn(),
-            getAccountData: jest.fn(),
-            getAccountDataFromServer: jest.fn(),
-            deleteAccountData: jest.fn(),
-            getCrypto: jest.fn().mockReturnValue(mockCrypto),
+            isGuest: vi.fn(),
+            getUserId: vi.fn().mockReturnValue(userId),
+            getSafeUserId: vi.fn().mockReturnValue(userId),
+            getRooms: vi.fn().mockReturnValue([]),
+            isVersionSupported: vi.fn().mockResolvedValue(true),
+            isInitialSyncComplete: vi.fn().mockReturnValue(true),
+            isKeyBackupKeyStored: vi.fn(),
+            waitForClientWellKnown: vi.fn(),
+            getClientWellKnown: vi.fn(),
+            getDeviceId: vi.fn().mockReturnValue(deviceId),
+            setAccountData: vi.fn(),
+            getAccountData: vi.fn(),
+            getAccountDataFromServer: vi.fn(),
+            deleteAccountData: vi.fn(),
+            getCrypto: vi.fn().mockReturnValue(mockCrypto),
             secretStorage: {
-                isStored: jest.fn().mockReturnValue(null),
+                isStored: vi.fn().mockReturnValue(null),
             },
         });
-        jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
-        jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-        mocked(isBulkUnverifiedDeviceReminderSnoozed).mockClear().mockReturnValue(false);
+        vi.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
+        vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+        vi.mocked(isBulkUnverifiedDeviceReminderSnoozed).mockClear().mockReturnValue(false);
     });
 
     const createAndStart = async (): Promise<DeviceListener> => {
@@ -155,8 +159,8 @@ describe("DeviceListener", () => {
 
     describe("client information", () => {
         it("watches device client information setting", async () => {
-            const watchSettingSpy = jest.spyOn(SettingsStore, "watchSetting");
-            const unwatchSettingSpy = jest.spyOn(SettingsStore, "unwatchSetting");
+            const watchSettingSpy = vi.spyOn(SettingsStore, "watchSetting");
+            const unwatchSettingSpy = vi.spyOn(SettingsStore, "unwatchSetting");
             const deviceListener = await createAndStart();
 
             expect(watchSettingSpy).toHaveBeenCalledWith("deviceClientInformationOptIn", null, expect.any(Function));
@@ -168,7 +172,7 @@ describe("DeviceListener", () => {
 
         it("responds to KeyBackupDecryptionKeyCached events", async () => {
             // Given a Device Listener
-            const recheck = jest.fn();
+            const recheck = vi.fn();
             const deviceListener = await createAndStart();
             deviceListener.recheck = recheck;
 
@@ -179,7 +183,7 @@ describe("DeviceListener", () => {
             expect(recheck).toHaveBeenCalled();
 
             // And when we stop our device listener
-            const removeListener = jest.fn(() => {});
+            const removeListener = vi.fn(() => {});
             // @ts-ignore overwriting with a mock
             mockClient.removeListener = removeListener;
             deviceListener.stop();
@@ -190,7 +194,7 @@ describe("DeviceListener", () => {
 
         describe("when device client information feature is enabled", () => {
             beforeEach(() => {
-                jest.spyOn(SettingsStore, "getValue").mockImplementation(
+                vi.spyOn(SettingsStore, "getValue").mockImplementation(
                     (settingName) => settingName === "deviceClientInformationOptIn",
                 );
             });
@@ -241,7 +245,7 @@ describe("DeviceListener", () => {
             });
             const emptyClientInfoEvent = new MatrixEvent({ type: `io.element.matrix_client_information.${deviceId}` });
             beforeEach(() => {
-                jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+                vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
 
                 mockClient!.getAccountData.mockReturnValue(undefined);
             });
@@ -280,7 +284,7 @@ describe("DeviceListener", () => {
             });
 
             it("saves client information after setting is enabled", async () => {
-                const watchSettingSpy = jest.spyOn(SettingsStore, "watchSetting");
+                const watchSettingSpy = vi.spyOn(SettingsStore, "watchSetting");
                 await createAndStart();
 
                 const [settingName, roomId, callback] = watchSettingSpy.mock.calls[0];
@@ -376,7 +380,7 @@ describe("DeviceListener", () => {
                 mockCrypto!.isCrossSigningReady.mockResolvedValue(false);
                 mockCrypto!.getSecretStorageStatus.mockResolvedValue(unreadySecretStorageStatus);
                 mockClient!.getRooms.mockReturnValue(rooms);
-                jest.spyOn(mockClient.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
+                vi.spyOn(mockClient.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
             });
 
             it("hides setup encryption toast when it is dismissed", async () => {
@@ -392,27 +396,27 @@ describe("DeviceListener", () => {
                 const instance = await createAndStart();
                 expect(SetupEncryptionToast.showToast).toHaveBeenCalledTimes(1);
 
-                jest.useFakeTimers({ advanceTimers: true });
+                vi.useFakeTimers();
                 instance.dismissEncryptionSetup();
                 await flushPromises();
                 expect(SetupEncryptionToast.hideToast).toHaveBeenCalled();
 
                 // 1.5 days after the toast was dismissed, we don't re-show the
                 // toast yet.
-                jest.advanceTimersByTime(1.5 * 24 * 60 * 60 * 1000);
+                vi.advanceTimersByTime(1.5 * 24 * 60 * 60 * 1000);
                 expect(SetupEncryptionToast.showToast).toHaveBeenCalledTimes(1);
 
                 // 2 days after the toast was dismissed, we re-show the toast.
-                jest.advanceTimersByTime(0.5 * 24 * 60 * 60 * 1000);
+                vi.advanceTimersByTime(0.5 * 24 * 60 * 60 * 1000);
                 expect(SetupEncryptionToast.showToast).toHaveBeenCalledTimes(2);
-                jest.useRealTimers();
+                vi.useRealTimers();
             });
 
             it("doesn't re-show toast if the device is now verified", async () => {
                 const instance = await createAndStart();
                 expect(SetupEncryptionToast.showToast).toHaveBeenCalledTimes(1);
 
-                jest.useFakeTimers({ advanceTimers: true });
+                vi.useFakeTimers();
                 instance.dismissEncryptionSetup();
                 await flushPromises();
                 expect(SetupEncryptionToast.hideToast).toHaveBeenCalled();
@@ -427,20 +431,20 @@ describe("DeviceListener", () => {
                 );
                 instance.recheck();
                 await flushPromises();
-                jest.advanceTimersByTime(2 * 24 * 60 * 60 * 1000);
+                vi.advanceTimersByTime(2 * 24 * 60 * 60 * 1000);
                 expect(SetupEncryptionToast.showToast).toHaveBeenCalledTimes(1);
-                jest.useRealTimers();
+                vi.useRealTimers();
             });
 
             it("does not show any toasts when secret storage is being accessed", async () => {
-                mocked(isSecretStorageBeingAccessed).mockReturnValue(true);
+                vi.mocked(isSecretStorageBeingAccessed).mockReturnValue(true);
                 await createAndStart();
 
                 expect(SetupEncryptionToast.showToast).not.toHaveBeenCalled();
             });
 
             it("shows toasts even when no rooms are encrypted", async () => {
-                jest.spyOn(mockClient.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(false);
+                vi.spyOn(mockClient.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(false);
                 await createAndStart();
 
                 expect(SetupEncryptionToast.showToast).toHaveBeenCalled();
@@ -609,7 +613,7 @@ describe("DeviceListener", () => {
                 // And we have run the checks once (and we were told to verify)
                 const instance = await createAndStart();
                 expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith("verify_this_session");
-                mocked(SetupEncryptionToast.showToast).mockClear();
+                vi.mocked(SetupEncryptionToast.showToast).mockClear();
                 mockCrypto.getDeviceVerificationStatus.mockClear();
 
                 // When we dismiss the dialog telling us to set up encryption
@@ -672,7 +676,7 @@ describe("DeviceListener", () => {
             beforeEach(() => {
                 // Encryption is in use
                 mockClient.getRooms.mockReturnValue([{ roomId: "!room1" }, { roomId: "!room2" }] as unknown as Room[]);
-                jest.spyOn(mockClient.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
+                vi.spyOn(mockClient.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
 
                 // The device is verified
                 mockCrypto.getDeviceVerificationStatus.mockResolvedValue(
@@ -839,7 +843,7 @@ describe("DeviceListener", () => {
                 });
 
                 it("hides toast when reminder is snoozed", async () => {
-                    mocked(isBulkUnverifiedDeviceReminderSnoozed).mockReturnValue(true);
+                    vi.mocked(isBulkUnverifiedDeviceReminderSnoozed).mockReturnValue(true);
                     // currentDevice, device2 are verified, device3 is unverified
                     mockCrypto!.getDeviceVerificationStatus.mockImplementation(async (_userId, deviceId) => {
                         switch (deviceId) {
@@ -931,12 +935,12 @@ describe("DeviceListener", () => {
         });
 
         describe("Report verification and recovery state to Analytics", () => {
-            let setPropertySpy: jest.SpyInstance;
-            let trackEventSpy: jest.SpyInstance;
+            let setPropertySpy: Mocked<PosthogAnalytics["setProperty"]>;
+            let trackEventSpy: Mocked<PosthogAnalytics["trackEvent"]>;
 
             beforeEach(() => {
-                setPropertySpy = jest.spyOn(PosthogAnalytics.instance, "setProperty");
-                trackEventSpy = jest.spyOn(PosthogAnalytics.instance, "trackEvent");
+                setPropertySpy = vi.spyOn(PosthogAnalytics.instance, "setProperty");
+                trackEventSpy = vi.spyOn(PosthogAnalytics.instance, "trackEvent");
             });
 
             describe("Report crypto verification state to analytics", () => {
@@ -1301,7 +1305,7 @@ describe("DeviceListener", () => {
                 mockCrypto!.isCrossSigningReady.mockResolvedValue(true);
                 mockCrypto!.getSecretStorageStatus.mockResolvedValue(unreadySecretStorageStatus);
                 mockClient!.getRooms.mockReturnValue(rooms);
-                jest.spyOn(mockClient.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
+                vi.spyOn(mockClient.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
             });
 
             it("shows the 'set up recovery' toast if user has not set up 4S", async () => {
@@ -1320,7 +1324,7 @@ describe("DeviceListener", () => {
             });
 
             it("does not show the 'set up recovery' toast if user has no encrypted rooms", async () => {
-                jest.spyOn(mockClient.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(false);
+                vi.spyOn(mockClient.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(false);
                 await createAndStart();
 
                 expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith("set_up_recovery");

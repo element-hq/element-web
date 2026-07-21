@@ -5,12 +5,16 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach } from "vitest";
+
 import { type ChangeEvent, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { waitFor } from "@testing-library/dom";
 
-import { type Playback, PlaybackState } from "../../../src/audio/Playback";
-import { AudioPlayerViewModel } from "../../../src/viewmodels/room/timeline/event-tile/body/AudioPlayerViewModel";
-import { MockedPlayback } from "../../unit-tests/audio/MockedPlayback";
+import { type Playback, PlaybackState } from "../../../../../audio/Playback";
+import { AudioPlayerViewModel } from "./AudioPlayerViewModel";
+import { MockedPlayback } from "../../../../../../test/unit-tests/audio/MockedPlayback";
 
 describe("AudioPlayerViewModel", () => {
     let playback: Playback;
@@ -45,7 +49,7 @@ describe("AudioPlayerViewModel", () => {
     });
 
     it("should has error=true when playback.prepare fails", async () => {
-        jest.spyOn(playback, "prepare").mockRejectedValue(new Error("Failed to prepare playback"));
+        vi.spyOn(playback, "prepare").mockRejectedValue(new Error("Failed to prepare playback"));
         const vm = new AudioPlayerViewModel({ playback, mediaName: "mediaName" });
         await waitFor(() => expect(vm.getSnapshot().error).toBe(true));
     });
@@ -68,7 +72,7 @@ describe("AudioPlayerViewModel", () => {
     it("does not stop propagation for unhandled key down events", () => {
         const vm = new AudioPlayerViewModel({ playback, mediaName: "mediaName" });
         const event = new KeyboardEvent("keydown", { key: "a" });
-        const stopPropagationSpy = jest.spyOn(event, "stopPropagation");
+        const stopPropagationSpy = vi.spyOn(event, "stopPropagation");
 
         vm.onKeyDown(event as unknown as ReactKeyboardEvent<HTMLDivElement>);
 
