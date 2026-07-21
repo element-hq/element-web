@@ -165,7 +165,7 @@ describe("userStatus utils", () => {
         });
 
         it("sets the call status with the current time if onCall is true", () => {
-            jest.useFakeTimers().setSystemTime(12345);
+            vi.useFakeTimers().setSystemTime(12345);
 
             setUserOnCall(client, true);
 
@@ -173,7 +173,7 @@ describe("userStatus utils", () => {
                 call_joined_ts: 12345,
             });
 
-            jest.useRealTimers();
+            vi.useRealTimers();
         });
 
         it("clears the call status if onCall is false", () => {
