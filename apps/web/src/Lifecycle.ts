@@ -1189,6 +1189,7 @@ export function stopMatrixClient(unsetClient = true): void {
     IntegrationManagers.sharedInstance().stopWatching();
     Mjolnir.sharedInstance().stop();
     DeviceListener.sharedInstance().stop();
+    CallStatusListener.sharedInstance().stop();
     DMRoomMap.shared()?.stop();
     EventIndexPeg.stop();
     const cli = MatrixClientPeg.get();
