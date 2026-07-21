@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`createVoiceMessageContent should create a voice message content 1`] = `
+exports[`createVoiceMessageContent > should create a voice message content 1`] = `
 {
   "body": "Voice message",
   "file": {},

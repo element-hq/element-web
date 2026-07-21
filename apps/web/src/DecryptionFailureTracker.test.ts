@@ -5,7 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked, type Mocked, type MockedObject } from "jest-mock";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, afterEach, type Mocked, type MockedObject } from "vitest";
 import { HttpApiEvent, type MatrixClient, type MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
 import { decryptExistingEvent, mkDecryptionFailureMatrixEvent } from "matrix-js-sdk/src/testing";
 import {
@@ -15,10 +17,10 @@ import {
     CryptoEvent,
 } from "matrix-js-sdk/src/crypto-api";
 import { sleep } from "matrix-js-sdk/src/utils";
+import { stubClient } from "test-utils";
 
-import { DecryptionFailureTracker, type ErrorProperties } from "../../src/DecryptionFailureTracker";
-import { stubClient } from "../test-utils";
-import * as Lifecycle from "../../src/Lifecycle";
+import { DecryptionFailureTracker, type ErrorProperties } from "./DecryptionFailureTracker";
+import * as Lifecycle from "./Lifecycle";
 
 async function createFailedDecryptionEvent(opts: { sender?: string; code?: DecryptionFailureCode } = {}) {
     return await mkDecryptionFailureMatrixEvent({
@@ -592,7 +594,7 @@ describe("DecryptionFailureTracker", function () {
         // Calling .start will start some intervals.  This test shouldn't run
         // long enough for the timers to fire, but we'll use fake timers just
         // to be safe.
-        jest.useFakeTimers();
+        vi.useFakeTimers();
         await tracker.start(client);
 
         // If the client fails to decrypt, it should get tracked
@@ -616,7 +618,7 @@ describe("DecryptionFailureTracker", function () {
 
         expect(errorCount).toEqual(1);
 
-        jest.useRealTimers();
+        vi.useRealTimers();
     });
 
     it("tracks client information", async () => {
@@ -657,7 +659,7 @@ describe("DecryptionFailureTracker", function () {
         const now = Date.now();
         eventDecrypted(tracker, federatedDecryption, now);
 
-        mocked(client.getCrypto()!.getUserVerificationStatus).mockResolvedValue(
+        vi.mocked(client.getCrypto()!.getUserVerificationStatus).mockResolvedValue(
             new UserVerificationStatus(true, true, false),
         );
         client.emit(CryptoEvent.KeysChanged, {});
@@ -677,7 +679,7 @@ describe("DecryptionFailureTracker", function () {
 
         // change client params, and make sure the reports the right values
         client.getDomain.mockReturnValue("example.com");
-        mocked(client.getCrypto()!.getVersion).mockReturnValue("Olm 0.0.0");
+        vi.mocked(client.getCrypto()!.getVersion).mockReturnValue("Olm 0.0.0");
         // @ts-ignore access to private method
         await tracker.calculateClientProperties(client);
 
@@ -725,19 +727,19 @@ describe("DecryptionFailureTracker", function () {
 });
 
 function mockClient(): MockedObject<MatrixClient> {
-    const client = mocked(stubClient());
+    const client = vi.mocked(stubClient());
     const mockCrypto = {
-        getVersion: jest.fn().mockReturnValue("Rust SDK 0.7.0 (61b175b), Vodozemac 0.5.1"),
-        getUserVerificationStatus: jest.fn().mockResolvedValue(new UserVerificationStatus(false, false, false)),
+        getVersion: vi.fn().mockReturnValue("Rust SDK 0.7.0 (61b175b), Vodozemac 0.5.1"),
+        getUserVerificationStatus: vi.fn().mockResolvedValue(new UserVerificationStatus(false, false, false)),
     } as unknown as Mocked<CryptoApi>;
     client.getCrypto.mockReturnValue(mockCrypto);
 
     // @ts-ignore
-    client.stopClient = jest.fn(() => {});
+    client.stopClient = vi.fn(() => {});
     // @ts-ignore
-    client.removeAllListeners = jest.fn(() => {});
+    client.removeAllListeners = vi.fn(() => {});
 
-    client.store = { destroy: jest.fn(() => {}) } as any;
+    client.store = { destroy: vi.fn(() => {}) } as any;
 
     return client;
 }

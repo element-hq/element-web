@@ -5,15 +5,20 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { waitFor } from "jest-matrix-react";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, afterEach } from "vitest";
+
+import { waitFor } from "test-utils-rtl";
 import { type PanelImperativeHandle } from "@element-hq/web-shared-components";
 
-import { ResizerViewModel } from "../../../src/viewmodels/structures/ResizerViewModel";
-import SettingsStore from "../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../src/settings/SettingLevel";
+import { ResizerViewModel } from "./ResizerViewModel";
+import SettingsStore from "../../settings/SettingsStore";
+import { SettingLevel } from "../../settings/SettingLevel";
 
 describe("LeftPanelResizerViewModel", () => {
     afterEach(() => {
+        localStorage.clear();
         SettingsStore.reset();
     });
 
@@ -70,12 +75,12 @@ describe("LeftPanelResizerViewModel", () => {
         const vm = new ResizerViewModel();
         SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
         const mockHandle = {
-            resize: jest.fn(),
-            isCollapsed: jest.fn().mockReturnValue(true),
-            getSize: jest.fn().mockReturnValue({
+            resize: vi.fn(),
+            isCollapsed: vi.fn().mockReturnValue(true),
+            getSize: vi.fn().mockReturnValue({
                 inPixels: 0,
             }),
-            collapse: jest.fn(),
+            collapse: vi.fn(),
         } as unknown as PanelImperativeHandle;
         vm.setPanelHandle(mockHandle);
 
@@ -92,9 +97,9 @@ describe("LeftPanelResizerViewModel", () => {
             const vm = new ResizerViewModel();
             SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
             const mockHandle = {
-                resize: jest.fn(),
-                isCollapsed: jest.fn().mockReturnValue(true),
-                getSize: jest.fn().mockReturnValue(0),
+                resize: vi.fn(),
+                isCollapsed: vi.fn().mockReturnValue(true),
+                getSize: vi.fn().mockReturnValue(0),
             } as unknown as PanelImperativeHandle;
             vm.setPanelHandle(mockHandle);
             // Simulate click
@@ -106,9 +111,9 @@ describe("LeftPanelResizerViewModel", () => {
         it("to maximum size of the panel", () => {
             const vm = new ResizerViewModel();
             const mockHandle = {
-                resize: jest.fn(),
-                isCollapsed: jest.fn().mockReturnValue(true),
-                getSize: jest.fn().mockReturnValue(0),
+                resize: vi.fn(),
+                isCollapsed: vi.fn().mockReturnValue(true),
+                getSize: vi.fn().mockReturnValue(0),
             } as unknown as PanelImperativeHandle;
             vm.setPanelHandle(mockHandle);
             // Simulate click
@@ -121,8 +126,8 @@ describe("LeftPanelResizerViewModel", () => {
     it("should collapse panel on click when panel is expanded", () => {
         const vm = new ResizerViewModel();
         const mockHandle = {
-            collapse: jest.fn(),
-            isCollapsed: jest.fn().mockReturnValue(false),
+            collapse: vi.fn(),
+            isCollapsed: vi.fn().mockReturnValue(false),
         } as unknown as PanelImperativeHandle;
         vm.setPanelHandle(mockHandle);
 
@@ -133,8 +138,8 @@ describe("LeftPanelResizerViewModel", () => {
     it("should ignore first resized event", () => {
         const vm = new ResizerViewModel();
         const mockHandle = {
-            resize: jest.fn(),
-            getSize: jest.fn().mockReturnValue(0),
+            resize: vi.fn(),
+            getSize: vi.fn().mockReturnValue(0),
         } as unknown as PanelImperativeHandle;
         vm.setPanelHandle(mockHandle);
 
@@ -145,8 +150,8 @@ describe("LeftPanelResizerViewModel", () => {
     it("should resize to nearest whole number", () => {
         const vm = new ResizerViewModel();
         const mockHandle = {
-            resize: jest.fn(),
-            getSize: jest.fn().mockReturnValue(0),
+            resize: vi.fn(),
+            getSize: vi.fn().mockReturnValue(0),
         } as unknown as PanelImperativeHandle;
         vm.setPanelHandle(mockHandle);
 
