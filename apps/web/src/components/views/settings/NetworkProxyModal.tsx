@@ -44,6 +44,7 @@ export const NetworkProxyModal: React.FC<Props> = ({ onFinished }) => {
             title={_t("settings|network_proxy|title")}
             onFinished={onFinished}
             fixedWidth={false}
+            className="mx_NetworkProxyModal_dialog"
         >
             <div className="mx_NetworkProxyModal">
                 <NetworkProxyView vm={vm} />

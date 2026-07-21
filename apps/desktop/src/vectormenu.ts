@@ -88,6 +88,7 @@ export function buildMenuTemplate(): Menu {
                     label: _t("action|zoom_out"),
                 },
                 { type: "separator" },
+                // in macOS the Preferences & Proxy menu items go in the app menu
                 ...(!isMac
                     ? [
                           {

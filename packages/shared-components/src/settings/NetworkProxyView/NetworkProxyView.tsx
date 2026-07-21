@@ -5,18 +5,29 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, useState } from "react";
-import { Button, RadioInput, TextInput, PasswordInput, Separator, Text } from "@vector-im/compound-web";
+import React, { type JSX } from "react";
+import { Button, RadioInput, Separator, Text, Dropdown, Heading, Form } from "@vector-im/compound-web";
 
 import { type ViewModel, useViewModel } from "../../core/viewmodel";
-import { _t, _td } from "../../core/i18n/i18n";
+import { _t } from "../../core/i18n/i18n";
 import styles from "./NetworkProxyView.module.css";
 
-// Mark these keys for static translation extraction
-_td("settings|network_proxy|protocol_http");
-_td("settings|network_proxy|protocol_https");
-_td("settings|network_proxy|protocol_socks5");
-_td("settings|network_proxy|requires_auth");
+/**
+ * Maps a proxy protocol to its translated display label.
+ */
+function protocolLabel(protocol: string): string {
+    switch (protocol) {
+        case "http":
+            return _t("settings|network_proxy|protocol_http");
+        case "https":
+            return _t("settings|network_proxy|protocol_https");
+        case "socks5":
+            return _t("settings|network_proxy|protocol_socks5");
+        default:
+            return protocol;
+    }
+}
+
 
 /**
  * The snapshot representing the current state of the NetworkProxy configuration.
@@ -94,203 +105,144 @@ export function NetworkProxyView({ vm }: Readonly<NetworkProxyViewProps>): JSX.E
     const { mode, scheme, host, port, username, password, bypass, hasChanges, isValid, loading, error } =
         useViewModel(vm);
 
-    const [showAuth, setShowAuth] = useState(!!username || !!password);
-
     return (
-        <div className={styles.networkProxyView}>
+        <Form.Root
+            className={styles.networkProxyView}
+            onSubmit={(e) => {
+                e.preventDefault();
+                if (hasChanges && isValid && !loading) {
+                    vm.save();
+                }
+            }}
+        >
             <div className={styles.modeSection}>
-                <Text weight="semibold">{_t("settings|network_proxy|connection_mode")}</Text>
+                <Heading as="h2" size="sm" weight="semibold">
+                    {_t("settings|network_proxy|connection_mode")}
+                </Heading>
 
-                <div className={styles.segmentedControl}>
-                    <label className={`${styles.segment} ${mode === "system" ? styles.selectedSegment : ""}`}>
+                <div className={styles.radioGroup}>
+                    <label className={styles.radioLabel}>
                         <RadioInput
                             name="proxyMode"
                             value="system"
                             checked={mode === "system"}
                             onChange={() => vm.updateMode("system")}
-                            className={styles.hiddenRadio}
                         />
                         <Text as="span">{_t("settings|network_proxy|use_system_proxy")}</Text>
                     </label>
-                    <label className={`${styles.segment} ${mode === "direct" ? styles.selectedSegment : ""}`}>
+                    <label className={styles.radioLabel}>
                         <RadioInput
                             name="proxyMode"
                             value="direct"
                             checked={mode === "direct"}
                             onChange={() => vm.updateMode("direct")}
-                            className={styles.hiddenRadio}
                         />
                         <Text as="span">{_t("settings|network_proxy|no_proxy_direct")}</Text>
                     </label>
-                    <label className={`${styles.segment} ${mode === "custom" ? styles.selectedSegment : ""}`}>
+                    <label className={styles.radioLabel}>
                         <RadioInput
                             name="proxyMode"
                             value="custom"
                             checked={mode === "custom"}
                             onChange={() => vm.updateMode("custom")}
-                            className={styles.hiddenRadio}
                         />
                         <Text as="span">{_t("settings|network_proxy|manual_configuration")}</Text>
                     </label>
                 </div>
-
-                {mode === "custom" && (
-                    <div className={styles.configSection}>
-                        <Separator />
-                        <Text weight="semibold">{_t("common|configuration")}</Text>
-
-                        <div className={styles.field}>
-                            <Text as="label" weight="medium" size="sm">
-                                {_t("common|protocol")}
-                            </Text>
-                            <div className={styles.segmentedControl}>
-                                {["http", "https", "socks5"].map((p) => (
-                                    <label
-                                        key={p}
-                                        className={`${styles.segment} ${scheme === p ? styles.selectedSegment : ""}`}
-                                    >
-                                        <RadioInput
-                                            name="proxyScheme"
-                                            value={p}
-                                            checked={scheme === p}
-                                            onChange={() => vm.updateScheme(p)}
-                                            className={styles.hiddenRadio}
-                                        />
-                                        <Text as="span">{_t(`settings|network_proxy|protocol_${p}` as any)}</Text>
-                                    </label>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div className={styles.fieldRow}>
-                            <div className={styles.field}>
-                                <Text as="label" weight="medium" size="sm" htmlFor="mx_NetworkProxyView_host">
-                                    {_t("settings|network_proxy|proxy_host")}
-                                </Text>
-                                <TextInput
-                                    id="mx_NetworkProxyView_host"
-                                    value={host}
-                                    onChange={(e) => vm.updateHost(e.target.value)}
-                                    className={styles.input}
-                                />
-                            </div>
-                            <div className={styles.portField}>
-                                <Text as="label" weight="medium" size="sm" htmlFor="mx_NetworkProxyView_port">
-                                    {_t("settings|network_proxy|port")}
-                                </Text>
-                                <TextInput
-                                    id="mx_NetworkProxyView_port"
-                                    type="number"
-                                    value={port}
-                                    onChange={(e) => vm.updatePort(e.target.value)}
-                                    min={1}
-                                    max={65535}
-                                    step={1}
-                                    className={styles.input}
-                                />
-                            </div>
-                        </div>
-
-                        <label className={styles.authToggle}>
-                            <input
-                                type="checkbox"
-                                checked={showAuth}
-                                onChange={(e) => {
-                                    setShowAuth(e.target.checked);
-                                    if (!e.target.checked) {
-                                        vm.updateUsername("");
-                                        vm.updatePassword("");
-                                    }
-                                }}
-                                className={styles.checkbox}
-                            />
-                            <Text as="span" size="sm" weight="medium">
-                                {_t("settings|network_proxy|requires_auth")}
-                            </Text>
-                        </label>
-
-                        {showAuth && (
-                            <div className={styles.authContainer}>
-                                <div className={styles.fieldRow}>
-                                    <div className={styles.field}>
-                                        <Text
-                                            as="label"
-                                            weight="medium"
-                                            size="sm"
-                                            htmlFor="mx_NetworkProxyView_username"
-                                        >
-                                            {_t("common|username")}
-                                        </Text>
-                                        <TextInput
-                                            id="mx_NetworkProxyView_username"
-                                            value={username}
-                                            onChange={(e) => vm.updateUsername(e.target.value)}
-                                            className={styles.input}
-                                        />
-                                    </div>
-                                    <div className={styles.field}>
-                                        <Text
-                                            as="label"
-                                            weight="medium"
-                                            size="sm"
-                                            htmlFor="mx_NetworkProxyView_password"
-                                        >
-                                            {_t("common|password")}
-                                        </Text>
-                                        <PasswordInput
-                                            id="mx_NetworkProxyView_password"
-                                            value={password}
-                                            onChange={(e) => vm.updatePassword(e.target.value)}
-                                            className={styles.passwordInput}
-                                        />
-                                    </div>
-                                </div>
-                                <Text size="sm" className={styles.helperText}>
-                                    {_t("settings|network_proxy|proxy_config_encrypted_system_storage")}
-                                </Text>
-                            </div>
-                        )}
-
-                        <div className={styles.field}>
-                            <Text as="label" weight="medium" size="sm" htmlFor="mx_NetworkProxyView_bypass">
-                                {_t(
-                                    "settings|network_proxy|no_proxy_for_comma_separated",
-                                    {},
-                                    {
-                                        Input: () => (
-                                            <TextInput
-                                                id="mx_NetworkProxyView_bypass"
-                                                value={bypass}
-                                                onChange={(e) => vm.updateBypass(e.target.value)}
-                                                className={styles.input}
-                                            />
-                                        ),
-                                    },
-                                )}
-                            </Text>
-                        </div>
-
-                        <Text size="sm" className={styles.helperText}>
-                            {_t("settings|network_proxy|proxy_settings_updates_warning")}
-                        </Text>
-                    </div>
-                )}
-
-                {error && (
-                    <Text size="sm" className={styles.errorText}>
-                        {error}
-                    </Text>
-                )}
             </div>
 
+            {mode === "custom" && (
+                <div className={styles.configSection}>
+                    <Separator />
+                    <Heading as="h2" size="sm" weight="semibold">
+                        {_t("common|configuration")}
+                    </Heading>
+
+                    <Dropdown
+                        label={_t("common|protocol")}
+                        placeholder={_t("common|protocol")}
+                        value={scheme}
+                        onValueChange={(val) => vm.updateScheme(val)}
+                        values={[
+                            ["http", protocolLabel("http")],
+                            ["https", protocolLabel("https")],
+                            ["socks5", protocolLabel("socks5")],
+                        ] as [string, string][]}
+                        className={styles.input}
+                    />
+
+                    <div className={styles.fieldRow}>
+                        <Form.Field name="host" className={styles.hostField}>
+                            <Form.Label>{_t("settings|network_proxy|proxy_host")}</Form.Label>
+                            <Form.TextControl
+                                id="mx_NetworkProxyView_host"
+                                value={host}
+                                onChange={(e) => vm.updateHost(e.target.value)}
+                            />
+                        </Form.Field>
+                        <Form.Field name="port" className={styles.portField}>
+                            <Form.Label>{_t("settings|network_proxy|port")}</Form.Label>
+                            <Form.TextControl
+                                id="mx_NetworkProxyView_port"
+                                type="number"
+                                value={port}
+                                onChange={(e) => vm.updatePort(e.target.value)}
+                                min={1}
+                                max={65535}
+                                step={1}
+                            />
+                        </Form.Field>
+                    </div>
+
+                    <Form.Field name="username">
+                        <Form.Label>{_t("common|username")}</Form.Label>
+                        <Form.TextControl
+                            id="mx_NetworkProxyView_username"
+                            value={username}
+                            onChange={(e) => vm.updateUsername(e.target.value)}
+                        />
+                    </Form.Field>
+
+                    <Form.Field name="password">
+                        <Form.Label>{_t("common|password")}</Form.Label>
+                        <Form.PasswordControl
+                            id="mx_NetworkProxyView_password"
+                            value={password}
+                            onChange={(e) => vm.updatePassword(e.target.value)}
+                        />
+                        <Form.HelpMessage>
+                            {_t("settings|network_proxy|proxy_config_encrypted_system_storage")}
+                        </Form.HelpMessage>
+                    </Form.Field>
+
+                    <Form.Field name="bypass">
+                        <Form.Label>{_t("settings|network_proxy|no_proxy_for")}</Form.Label>
+                        <Form.TextControl
+                            id="mx_NetworkProxyView_bypass"
+                            value={bypass}
+                            onChange={(e) => vm.updateBypass(e.target.value)}
+                        />
+                        <Form.HelpMessage>
+                            {_t("settings|network_proxy|proxy_settings_updates_warning")}
+                        </Form.HelpMessage>
+                    </Form.Field>
+
+                    {error && (
+                        <Form.ErrorMessage>
+                            {error}
+                        </Form.ErrorMessage>
+                    )}
+                </div>
+            )}
+
             <div className={styles.footer}>
-                <Button kind="secondary" onClick={vm.cancel}>
+                <Button kind="secondary" type="button" onClick={vm.cancel}>
                     {_t("action|cancel")}
                 </Button>
-                <Button kind="primary" onClick={vm.save} disabled={!hasChanges || !isValid || loading}>
+                <Button kind="primary" type="submit" disabled={!hasChanges || !isValid || loading}>
                     {_t("action|save")}
                 </Button>
             </div>
-        </div>
+        </Form.Root>
     );
 }

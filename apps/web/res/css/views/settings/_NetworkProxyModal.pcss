@@ -5,15 +5,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-.mx_NetworkProxyModal {
-    /* Override fixed dimensions from BaseDialog if needed, but usually we want it flexible */
-    min-width: 400px;
-    max-width: 600px;
-    padding: var(--cpd-space-2x);
+.mx_NetworkProxyModal_dialog {
+    width: 520px !important;
+    max-width: 520px !important;
+    box-sizing: border-box;
+    padding: var(--cpd-space-10x) !important; /* 40px padding */
 }
 
-.mx_NetworkProxyModal select:focus {
-    outline: 2px solid var(--cpd-color-border-focused) !important;
-    outline-offset: 2px !important;
-    border-radius: 4px !important;
+.mx_NetworkProxyModal {
+    padding: 0;
 }

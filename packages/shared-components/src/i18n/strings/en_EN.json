@@ -209,7 +209,7 @@
             "error_saving_config": "Failed to save proxy configuration: %(err)s",
             "manual_configuration": "Manual configuration",
             "no_proxy_direct": "No proxy (direct connection)",
-            "no_proxy_for_comma_separated": "No proxy for <Input />",
+            "no_proxy_for": "No proxy for",
             "port": "Port",
             "protocol_http": "HTTP",
             "protocol_https": "HTTPS",
@@ -217,7 +217,6 @@
             "proxy_config_encrypted_system_storage": "Proxy password is stored in the system credential store when available.",
             "proxy_host": "Proxy host",
             "proxy_settings_updates_warning": "Changes apply to new network requests after saving.",
-            "requires_auth": "Proxy requires authentication",
             "use_system_proxy": "Use system proxy"
         }
     },

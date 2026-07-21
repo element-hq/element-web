@@ -19,8 +19,12 @@
         "start_chat": "Neuer Chat"
     },
     "common": {
+        "configuration": "Konfiguration",
         "encryption_enabled": "Verschlüsselung aktiviert",
-        "preferences": "Einstellungen"
+        "password": "Passwort",
+        "preferences": "Einstellungen",
+        "protocol": "Protokoll",
+        "username": "Benutzername"
     },
     "left_panel": {
         "open_dial_pad": "Wähltastatur öffnen"
@@ -121,6 +125,23 @@
         "space_menu": {
             "home": "Space Home",
             "space_settings": "Space Einstellungen"
+        }
+    },
+    "settings": {
+        "network_proxy": {
+            "connection_mode": "Verbindungsmodus",
+            "error_saving_config": "Fehler beim Speichern der Proxy-Konfiguration: %(err)s",
+            "manual_configuration": "Manuelle Konfiguration",
+            "no_proxy_direct": "Kein Proxy (direkte Verbindung)",
+            "no_proxy_for": "Kein Proxy für",
+            "port": "Port",
+            "protocol_http": "HTTP",
+            "protocol_https": "HTTPS",
+            "protocol_socks5": "SOCKS5",
+            "proxy_config_encrypted_system_storage": "Das Proxy-Passwort wird nach Möglichkeit im Anmeldeinformationsspeicher des Systems gespeichert.",
+            "proxy_host": "Proxy-Host",
+            "proxy_settings_updates_warning": "Änderungen werden nach dem Speichern für neue Netzwerkanfragen wirksam.",
+            "use_system_proxy": "System-Proxy verwenden"
         }
     },
     "terms": {

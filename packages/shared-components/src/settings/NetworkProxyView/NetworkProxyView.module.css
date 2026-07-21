@@ -8,46 +8,47 @@
 .networkProxyView {
     display: flex;
     flex-direction: column;
-    gap: var(--cpd-space-4x);
+    gap: var(--cpd-space-8x); /* 32px gap between modeSection and configSection */
 }
 
 .modeSection {
     display: flex;
     flex-direction: column;
-    gap: var(--cpd-space-3x);
+    gap: var(--cpd-space-6x); /* 24px gap between heading and options */
 }
 
 .radioGroup {
     display: flex;
     flex-direction: column;
-    gap: var(--cpd-space-2x);
+    gap: var(--cpd-space-4x); /* 16px gap between radio options */
 }
 
 .radioLabel {
     display: flex;
     align-items: center;
-    gap: var(--cpd-space-2x);
+    gap: var(--cpd-space-3x); /* 12px gap between radio circle and text */
     cursor: pointer;
+    user-select: none;
 }
 
 .configSection {
     display: flex;
     flex-direction: column;
-    gap: var(--cpd-space-4x);
+    gap: var(--cpd-space-4x); /* 16px gap between fields */
 }
 
-.field {
-    display: flex;
-    flex-direction: column;
-    gap: var(--cpd-space-1x);
+/* Add extra spacing around configuration heading to match 24px gaps */
+.configSection h2 {
+    margin-top: var(--cpd-space-2x);
+    margin-bottom: var(--cpd-space-2x);
 }
 
 .fieldRow {
     display: flex;
-    gap: var(--cpd-space-4x);
+    gap: var(--cpd-space-4x); /* 16px gap between host and port */
 }
 
-.fieldRow > .field {
+.hostField {
     flex: 1;
 }
 
@@ -59,148 +60,9 @@
     width: 100%;
 }
 
-.segmentedControl {
-    display: flex;
-    border-radius: 8px;
-    background: var(--cpd-color-bg-subtle-secondary);
-    padding: var(--cpd-space-0-5x);
-    gap: var(--cpd-space-0-5x);
-}
-
-.segment {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: var(--cpd-space-2x) var(--cpd-space-3x);
-    border-radius: 6px;
-    cursor: pointer;
-    text-align: center;
-    transition:
-        background-color 0.15s ease,
-        opacity 0.15s ease;
-    color: var(--cpd-color-text-primary) !important;
-    opacity: 0.6;
-}
-
-.segment * {
-    color: inherit !important;
-}
-
-.segment:hover {
-    background: var(--cpd-color-bg-action-hover);
-    opacity: 0.85;
-}
-
-.selectedSegment {
-    background: var(--cpd-color-bg-canvas-default);
-    opacity: 1 !important;
-    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.15);
-}
-
-.hiddenRadio {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    border: 0;
-}
-
-.authToggle {
-    display: flex;
-    align-items: center;
-    gap: var(--cpd-space-2x);
-    cursor: pointer;
-    user-select: none;
-    margin: var(--cpd-space-1x) 0;
-}
-
-.checkbox {
-    width: 16px;
-    height: 16px;
-    cursor: pointer;
-}
-
-.authContainer {
-    display: flex;
-    flex-direction: column;
-    gap: var(--cpd-space-3x);
-    padding: var(--cpd-space-3x);
-    background: var(--cpd-color-bg-subtle-secondary);
-    border-radius: 8px;
-}
-
-.helperText {
-    color: var(--cpd-color-text-secondary);
-}
-
-.errorText {
-    color: var(--cpd-color-text-critical-primary);
-}
-
 .footer {
     display: flex;
     justify-content: flex-end;
-    gap: var(--cpd-space-3x);
-    margin-top: var(--cpd-space-2x);
-}
-
-/* Reset .mx_Dialog button styles on the password visibility toggle button */
-.networkProxyView button:not([data-kind]) {
-    border: none !important;
-    background: transparent !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    height: auto !important;
-    width: auto !important;
-    border-radius: initial !important;
-    box-shadow: none !important;
-}
-
-.passwordInput {
-    display: inline-flex !important;
-    position: relative !important;
-    width: 100% !important;
-    border: 1px solid var(--cpd-color-border-interactive-primary) !important;
-    border-radius: 8px !important;
-    background: var(--cpd-color-bg-canvas-default) !important;
-    box-sizing: border-box !important;
-    align-items: center !important;
-}
-
-.passwordInput input {
-    margin: 0 !important;
-    border: none !important;
-    background: transparent !important;
-    padding: var(--cpd-space-3x) var(--cpd-space-12x) var(--cpd-space-3x) var(--cpd-space-4x) !important;
-    width: 100% !important;
-    color: var(--cpd-color-text-primary) !important;
-    box-sizing: border-box !important;
-    font: inherit !important;
-}
-
-.passwordInput button {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    position: absolute !important;
-    right: var(--cpd-space-2x) !important;
-    top: 0 !important;
-    bottom: 0 !important;
-    height: 100% !important;
-    width: var(--cpd-space-8x) !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    background: transparent !important;
-    border: none !important;
-    cursor: pointer !important;
-    box-shadow: none !important;
-}
-
-.passwordInput:focus-within {
-    outline: 2px solid var(--cpd-color-border-focused) !important;
-    border-color: transparent !important;
+    gap: var(--cpd-space-4x); /* 16px gap between buttons */
+    margin-top: var(--cpd-space-6x); /* 24px margin-top (combined with parent gaps to make 40px) */
 }

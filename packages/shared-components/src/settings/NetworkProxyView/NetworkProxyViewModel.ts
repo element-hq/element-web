@@ -153,8 +153,9 @@ export class NetworkProxyViewModel
             });
             this.snapshot.merge({ hasChanges: false, loading: false });
         } catch (e) {
+            const errorMessage = e instanceof Error ? e.message : String(e);
             this.snapshot.merge({
-                error: _t("settings|network_proxy|error_saving_config", { err: String(e) }),
+                error: _t("settings|network_proxy|error_saving_config", { err: errorMessage }),
                 loading: false,
             });
         }

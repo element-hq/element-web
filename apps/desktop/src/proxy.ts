@@ -81,21 +81,9 @@ export async function applyProxyConfig(config?: Partial<DesktopProxyConfig>): Pr
         console.log("[proxy] Applying new proxy config to session:", JSON.stringify(electronCfg));
         await session.defaultSession.setProxy(electronCfg);
         lastApplied = normalized;
-        console.log("[proxy] Successfully applied config.");
-
-        // Verification check for different protocols
-        const [resHttps, resHttp, resMatrix] = await Promise.all([
-            session.defaultSession.resolveProxy("https://google.com"),
-            session.defaultSession.resolveProxy("http://example.com"),
-            session.defaultSession.resolveProxy("https://matrix.org"),
-        ]);
-        console.log("[proxy] Verification Google (HTTPS):", resHttps);
-        console.log("[proxy] Verification Example (HTTP):", resHttp);
-        console.log("[proxy] Verification Matrix (HTTPS):", resMatrix);
-
         // Log certificate errors which often happen with intercepting proxies like ZAP
         if (!session.defaultSession.listenerCount("certificate-error")) {
-            (session.defaultSession as any).on("certificate-error", (event: any, webContents: any, url: any, error: any, certificate: any, callback: any) => {
+            session.defaultSession.on("certificate-error", (event, _webContents, url, error, certificate, _callback) => {
                 console.warn(`[proxy] Certificate error for ${url}: ${error} (Issuer: ${certificate.issuerName})`);
                 // We keep security strict by default, but this log confirms why traffic is failing.
             });
@@ -225,9 +213,13 @@ function parseProxyResult(res: string): string | undefined {
 }
 
 function shallowEqual(a: DesktopProxyConfig, b: DesktopProxyConfig): boolean {
-    const keys = new Set([...Object.keys(a), ...Object.keys(b)]);
-    for (const k of keys) {
-        if ((a as any)[k] !== (b as any)[k]) return false;
-    }
-    return true;
+    return (
+        a.mode === b.mode &&
+        a.scheme === b.scheme &&
+        a.host === b.host &&
+        a.port === b.port &&
+        a.username === b.username &&
+        a.password === b.password &&
+        a.bypass === b.bypass
+    );
 }

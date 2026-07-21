@@ -45,6 +45,7 @@ import { IPCManager } from "./IPCManager";
 import { _t } from "../../languageHandler";
 import { BadgeOverlayRenderer } from "../../favicon";
 import GenericToast from "../../components/views/toasts/GenericToast.tsx";
+import { NetworkProxyModal } from "../../components/views/settings/NetworkProxyModal";
 
 interface SquirrelUpdate {
     releaseNotes: string;
@@ -148,6 +149,10 @@ export default class ElectronPlatform extends BasePlatform {
 
         this.electron.on("preferences", () => {
             dis.fire(Action.ViewUserSettings);
+        });
+
+        this.electron.on("openProxySettings", () => {
+            Modal.createDialog(NetworkProxyModal, {});
         });
 
         this.electron.on("userDownloadCompleted", (ev, { id, name }) => {
