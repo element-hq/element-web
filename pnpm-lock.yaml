@@ -640,8 +640,8 @@ importers:
         specifier: ^1.0.3
         version: 1.0.3
       matrix-js-sdk:
-        specifier: 42.0.0-rc.0
-        version: 42.0.0-rc.0
+        specifier: 42.0.0
+        version: 42.0.0
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -8591,7 +8591,7 @@ packages:
     engines: {node: '>=12'}
 
   eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/1d088911e1e9698b0b8c9811e2544c16010bd6a4#path:/eslint:
-    resolution: {gitHosted: true, path: /eslint, integrity: sha512-M6bTOZ/RVEqL38838KgBJ76Sdo85mifKqyJ+mR3KXhegsf3D9WOW6psJgvn1kxhaLtwHwg0AIvbUu/N7MiDfDQ==, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/1d088911e1e9698b0b8c9811e2544c16010bd6a4}
+    resolution: {gitHosted: true, integrity: sha512-M6bTOZ/RVEqL38838KgBJ76Sdo85mifKqyJ+mR3KXhegsf3D9WOW6psJgvn1kxhaLtwHwg0AIvbUu/N7MiDfDQ==, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/1d088911e1e9698b0b8c9811e2544c16010bd6a4}
     version: 0.0.0
 
   eslint-plugin-storybook@10.4.6:
@@ -10178,8 +10178,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@42.0.0-rc.0:
-    resolution: {integrity: sha512-M8Osn45Yf3aru2Do82LhJUJT3O/NrL4OQUFcU+55zC+StjCHGnt7Pkd7E/L40jz42hQJf97bgcIQmERw7zNU9w==}
+  matrix-js-sdk@42.0.0:
+    resolution: {integrity: sha512-i3SnhdkgnKA7O0iVlaZCo96GGaIZ0FGD93LQ34N2+Hj/kaC7Ffbch7OEkwYA//mYGCKRAMxduBacoy8WscfqVw==}
     engines: {node: '>=22.0.0'}
 
   matrix-web-i18n@3.6.0:
@@ -23084,7 +23084,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@42.0.0-rc.0:
+  matrix-js-sdk@42.0.0:
     dependencies:
       '@babel/runtime': 8.0.0
       '@matrix-org/matrix-sdk-crypto-wasm': 18.3.1
