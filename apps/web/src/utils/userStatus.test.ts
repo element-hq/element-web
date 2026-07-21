@@ -164,10 +164,10 @@ describe("userStatus utils", () => {
             client = stubClient();
         });
 
-        it("sets the call status with the current time if onCall is true", () => {
+        it("sets the call status with the current time if onCall is true", async () => {
             vi.useFakeTimers().setSystemTime(12345);
 
-            setUserOnCall(client, true);
+            await setUserOnCall(client, true);
 
             expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.call", {
                 call_joined_ts: 12345,
@@ -176,8 +176,8 @@ describe("userStatus utils", () => {
             vi.useRealTimers();
         });
 
-        it("clears the call status if onCall is false", () => {
-            setUserOnCall(client, false);
+        it("clears the call status if onCall is false", async () => {
+            await setUserOnCall(client, false);
 
             expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.call", null);
         });
