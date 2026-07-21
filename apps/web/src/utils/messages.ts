@@ -5,7 +5,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixEvent, type IContent, type IMentions, type IEventRelation, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import {
+    MatrixEvent,
+    type IContent,
+    type IMentions,
+    type IEventRelation,
+    MatrixClient,
+    Room,
+    EventType,
+    EventStatus,
+    MatrixEventEvent,
+} from "matrix-js-sdk/src/matrix";
 import {
     type MessageComposerUrlPreviewSnapshotEntryLoaded,
     type MessageComposerUrlPreviewSnapshot,
@@ -116,19 +126,51 @@ export function attachRelation(content: IContent, relation?: IEventRelation): vo
     }
 }
 
-// Attaches URL preview bundle to message event (MSC4095)
+/*
+ * Attaches URL preview bundle to message event (MSC4095)
+ *
+ * Returns TRUE if event has been cancelled while uploading files
+ * FALSE if event is not cancelled
+ */
 export async function attachUrlPreviews(
     client: MatrixClient,
     room: Room,
     urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot,
     content: RoomMessageEventContent,
-): Promise<void> {
-    if (!SettingsStore.getValue("feature_msc4095_url_preview_bundle")) return;
+): Promise<boolean> {
+    if (!SettingsStore.getValue("feature_msc4095_url_preview_bundle")) return false;
 
-    const bundle = await Promise.all(urlPreviewSnapshot.entries
+    const isRoomEncrypted = room.hasEncryptionStateEvent();
+    const previewsToAttach = urlPreviewSnapshot.entries
         .filter((entry) => entry.include && entry.status === "loaded")
-        .map((entry) => (entry as MessageComposerUrlPreviewSnapshotEntryLoaded).preview)
-        .map(async (preview) => {
+        .map((entry) => (entry as MessageComposerUrlPreviewSnapshotEntryLoaded).preview);
+
+    let eventId: string | undefined = undefined;
+    let cancelled = false;
+
+    if (isRoomEncrypted) {
+        const txnId = client.makeTxnId();
+        const event = new MatrixEvent({
+            type: EventType.RoomMessage,
+            content,
+            event_id: "~" + room.roomId + ":" + txnId,
+            sender: client.getSafeUserId(),
+            room_id: room.roomId,
+            origin_server_ts: Date.now(),
+        });
+        event.setTxnId(txnId);
+        event.setStatus(EventStatus.SENDING);
+        event.on(MatrixEventEvent.Status, (_, status) => {
+            console.log("attach status", status);
+            if (status == EventStatus.CANCELLED) cancelled = true;
+        });
+        room.addPendingEvent(event, txnId);
+        room.updatePendingEvent(event, EventStatus.ENCRYPTING);
+        eventId = event.getId();
+    }
+
+    const bundle = await Promise.all(
+        previewsToAttach.map(async (preview) => {
             let out: UnstableBundledUrlPreviewSingle = {
                 "matched_url": preview.link,
                 "og:url": preview.ogUrl,
@@ -140,7 +182,7 @@ export async function attachUrlPreviews(
             };
 
             if (preview.image?.mxcImageFull !== undefined) {
-                if (room.hasEncryptionStateEvent()) {
+                if (isRoomEncrypted) {
                     try {
                         // image url from homeserver assumed to not be malformed
                         const httpUrl = mediaFromMxc(preview.image.mxcImageFull).srcHttp as string;
@@ -150,7 +192,9 @@ export async function attachUrlPreviews(
                         if (file) {
                             out["beeper:image:encryption"] = file;
                         } else if (url) {
-                            console.error(`uploading file to room_id=${room.roomId}, expected EncryptedFile, got (unencrypted) URL instead`);
+                            console.error(
+                                `uploading file to room_id=${room.roomId}, expected EncryptedFile, got (unencrypted) URL instead`,
+                            );
                         }
                     } catch (e) {
                         console.error(e);
@@ -162,9 +206,16 @@ export async function attachUrlPreviews(
             }
 
             return out;
-        }));
+        }),
+    );
 
     if (urlPreviewSnapshot.entries.length !== 0) {
         content["com.beeper.linkpreviews"] = bundle;
     }
+
+    if (isRoomEncrypted) {
+        room.removePendingEvent(eventId!);
+    }
+
+    return cancelled;
 }

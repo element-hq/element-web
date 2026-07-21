@@ -37,7 +37,7 @@ export class UrlPreviewFetcher {
         private readonly client: MatrixClient,
         private readonly previewRequestTs: number,
         private readonly showTooltips: boolean,
-    ) { }
+    ) {}
 
     public clearCache(): void {
         this.cache.clear();
@@ -256,7 +256,7 @@ export class UrlPreviewFetcher {
                         const blob = await decryptFile(encryptedFile);
                         imageThumb = imageFull = URL.createObjectURL(blob);
                         this.decryptedObjectUrls.set(encryptedFile.url, imageFull);
-                    } catch (e) { }
+                    } catch (e) {}
                 }
             } else {
                 const media = mediaFromMxc(single["og:image"], this.client);

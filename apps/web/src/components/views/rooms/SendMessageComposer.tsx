@@ -14,13 +14,15 @@ import React, {
     type ReactElement,
 } from "react";
 import {
-    type MatrixEvent,
     type IEventRelation,
     type Room,
+    MatrixEvent,
     EventType,
     MsgType,
     RelationType,
     THREAD_RELATION_TYPE,
+    EventStatus,
+    MatrixClient,
 } from "matrix-js-sdk/src/matrix";
 import { type DebouncedFunc, throttle } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -453,7 +455,9 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
 
             // clear composer first so the user doesn't actually see the delay of attach URL preview image files
             clearComposerAndPushHistory();
-            await attachUrlPreviews(this.props.mxClient, this.props.room, urlPreviewSnapshot, content);
+            if (await attachUrlPreviews(this.props.mxClient, this.props.room, urlPreviewSnapshot, content)) {
+                return;
+            }
 
             if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
                 decorateStartSendingTime(content);
