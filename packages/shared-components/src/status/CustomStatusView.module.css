@@ -1,0 +1,51 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.customStatus {
+    display: flex;
+    width: 100%;
+    flex-direction: row !important;
+    align-items: center;
+    gap: var(--cpd-space-2x);
+    /* Match the 28px tall box the trigger/pill float in so nothing shifts vertically */
+    min-height: 28px;
+}
+
+.emojiButton {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: none;
+    border-radius: var(--cpd-radius-pill-effect);
+    background: var(--cpd-color-bg-subtle-secondary);
+    font-size: var(--cpd-font-size-body-lg);
+    line-height: 1;
+    cursor: pointer;
+
+    &:hover {
+        background: var(--cpd-color-bg-subtle-primary);
+    }
+}
+
+.textField {
+    min-width: 0;
+    flex-grow: 1;
+}
+
+.action {
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+/* The picker sizes itself (340x450); drop the menu's default padding so it fills the popover */
+.pickerMenu {
+    padding: 0;
+}
