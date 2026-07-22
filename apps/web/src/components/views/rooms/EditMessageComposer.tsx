@@ -46,12 +46,15 @@ import type DocumentOffset from "../../../editor/offset";
 import { attachMentions, attachRelation } from "../../../utils/messages";
 import { filterBoolean } from "../../../utils/arrays";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { type CustomEmote, decorateCustomEmotesInContent, getCustomEmotesForRoom } from "../../../custom-emotes";
+import { maybeShowCustomEmoteE2EEWarning } from "../../../toasts/CustomEmoteWarningToast";
 
 // exported for tests
 export function createEditContent(
     model: EditorModel,
     editedEvent: MatrixEvent,
     replyToEvent?: MatrixEvent,
+    customEmotes: CustomEmote[] = [],
 ): RoomMessageEventContent {
     const isEmote = containsEmote(model);
     if (isEmote) {
@@ -78,6 +81,8 @@ export function createEditContent(
         contentBody.format = newContent.format;
         contentBody.formatted_body = `* ${formattedBody}`;
     }
+
+    decorateCustomEmotesInContent(contentBody as RoomMessageEventContent, customEmotes);
 
     // Build the mentions properties for both the content and new_content.
     attachMentions(editedEvent.sender!.userId, contentBody, model, replyToEvent, editedEvent.getContent());
@@ -292,7 +297,9 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
             const position = this.model.positionForOffset(caret.offset, caret.atNodeEnd);
             this.editorRef.current.replaceEmoticon(position, REGEX_EMOTICON);
         }
-        const editContent = createEditContent(this.model, editedEvent, this.replyToEvent);
+        const room = this.props.mxClient.getRoom(editedEvent.getRoomId());
+        const customEmotes = room ? getCustomEmotesForRoom(this.props.mxClient, room) : [];
+        const editContent = createEditContent(this.model, editedEvent, this.replyToEvent, customEmotes);
         const newContent = editContent["m.new_content"]!;
 
         let shouldSend = true;
@@ -343,6 +350,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
                 }
             }
             if (shouldSend) {
+                if (room) maybeShowCustomEmoteE2EEWarning(room, editContent);
                 this.cancelPreviousPendingEdit();
 
                 const event = this.props.editState.getEvent();

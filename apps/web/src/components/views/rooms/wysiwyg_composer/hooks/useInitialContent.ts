@@ -15,14 +15,15 @@ import { CommandPartCreator, type Part } from "../../../../../editor/parts";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import type EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
 import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.tsx";
+import { prepareCustomEmotesForEditing } from "../../../../../custom-emotes";
 
 function getFormattedContent(editorStateTransfer: EditorStateTransfer): string {
-    return (
+    const formattedBody =
         editorStateTransfer
             .getEvent()
             .getContent()
-            .formatted_body?.replace(/<mx-reply>.*<\/mx-reply>/, "") || ""
-    );
+            .formatted_body?.replace(/<mx-reply>.*<\/mx-reply>/, "") || "";
+    return prepareCustomEmotesForEditing(formattedBody).html;
 }
 
 export function parseEditorStateTransfer(

@@ -69,6 +69,8 @@ import { type RoomUploadViewModel, useRoomUploadViewModel } from "../../../viewm
 import { type MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
 import { linksIn } from "../../../utils/UrlUtils";
 import { type MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
+import { type CustomEmote, decorateCustomEmotesInContent, getCustomEmotesForRoom } from "../../../custom-emotes";
+import { maybeShowCustomEmoteE2EEWarning } from "../../../toasts/CustomEmoteWarningToast";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const EDITOR_STATE_STORAGE_PREFIX = "mx_cider_state_";
@@ -79,6 +81,7 @@ export function createMessageContent(
     model: EditorModel,
     replyToEvent: MatrixEvent | undefined,
     relation: IEventRelation | undefined,
+    customEmotes: CustomEmote[] = [],
 ): RoomMessageEventContent {
     const isEmote = containsEmote(model);
     if (isEmote) {
@@ -102,6 +105,8 @@ export function createMessageContent(
         content.format = "org.matrix.custom.html";
         content.formatted_body = formattedBody;
     }
+
+    decorateCustomEmotesInContent(content, customEmotes);
 
     // Build the mentions property and add it to the event content.
     attachMentions(sender, content, model, replyToEvent);
@@ -190,7 +195,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         if (threadChanged) {
             const partCreator = new CommandPartCreator(this.props.room, this.props.mxClient);
             const parts = this.restoreStoredEditorState(partCreator) || [];
-            this.model.reset(parts);
+            this.model.reset(parts.map((part) => part.serialize()));
             this.editorRef.current?.focus();
         }
     }
@@ -446,13 +451,15 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                     model,
                     replyToEvent,
                     this.props.relation,
+                    getCustomEmotesForRoom(this.props.mxClient, this.props.room),
                 );
             }
 
             // don't bother sending an empty message
             if (!content.body.trim()) return;
 
-            attachUrlPreviews(urlPreviewSnapshot, content, linksIn(this.model.contentPlainText).size !== 0);
++            attachUrlPreviews(urlPreviewSnapshot, content, linksIn(this.model.contentPlainText).size !== 0);
++            maybeShowCustomEmoteE2EEWarning(this.props.room, content);
 
             // clear composer first so the user doesn't actually see the delay of attach URL preview image files
             clearComposerAndPushHistory();

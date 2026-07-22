@@ -18,6 +18,7 @@ import { timeout } from "../utils/promise";
 import { type ICommand } from "./AutocompleteProvider";
 import type AutocompleteProvider from "./AutocompleteProvider";
 import SpaceProvider from "./SpaceProvider";
+import CustomEmoteProvider from "./CustomEmoteProvider";
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import { filterBoolean } from "../utils/arrays";
 
@@ -28,7 +29,7 @@ export interface ISelectionRange {
 }
 
 export interface ICompletion {
-    type?: "at-room" | "command" | "community" | "room" | "user";
+    type?: "at-room" | "command" | "community" | "custom-emote" | "room" | "user";
     completion: string;
     completionId?: string;
     component: ReactElement<RefAttributes<HTMLElement> & HTMLAttributes<HTMLElement>>;
@@ -38,9 +39,22 @@ export interface ICompletion {
     // If provided, apply a LINK entity to the completion with the
     // data = { url: href }.
     href?: string;
+    customEmote?: {
+        shortcode: string;
+        url: string;
+        body?: string;
+    };
 }
 
-const PROVIDERS = [UserProvider, RoomProvider, EmojiProvider, NotifProvider, CommandProvider, SpaceProvider];
+const PROVIDERS = [
+    UserProvider,
+    RoomProvider,
+    CustomEmoteProvider,
+    EmojiProvider,
+    NotifProvider,
+    CommandProvider,
+    SpaceProvider,
+];
 
 // Providers will get rejected if they take longer than this.
 const PROVIDER_COMPLETION_TIMEOUT = 3000;

@@ -15,7 +15,24 @@ import { makeGenericPermalink } from "../utils/permalinks/Permalinks";
 import type EditorModel from "./model";
 import SettingsStore from "../settings/SettingsStore";
 import SdkConfig from "../SdkConfig";
-import { Type } from "./parts";
+import { type CustomEmotePart, Type } from "./parts";
+
+function serializeCustomEmote(part: CustomEmotePart): string {
+    const url = escapeHtml(part.url);
+    const shortcode = escapeHtml(part.shortcode);
+    const alt = escapeHtml(part.body || part.shortcode);
+    return `<img data-mx-emoticon src="${url}" alt="${alt}" title="${shortcode}" height="32" />`;
+}
+
+function restoreCustomEmoteHtml(html: string, model: EditorModel): string {
+    return model.parts.reduce((result, part) => {
+        if (part.type !== Type.CustomEmote) return result;
+        const serialized = serializeCustomEmote(part as CustomEmotePart);
+        const container = document.createElement("div");
+        container.textContent = serialized;
+        return result.replaceAll(container.innerHTML, serialized);
+    }, html);
+}
 
 export function mdSerialize(model: EditorModel): string {
     return model.parts.reduce((html, part) => {
@@ -28,6 +45,9 @@ export function mdSerialize(model: EditorModel): string {
             case Type.PillCandidate:
             case Type.AtRoomPill:
                 return html + part.text;
+            case Type.CustomEmote: {
+                return html + serializeCustomEmote(part as CustomEmotePart);
+            }
             case Type.RoomPill: {
                 const url = makeGenericPermalink(part.resourceId, true);
                 // Escape square brackets and backslashes
@@ -55,12 +75,23 @@ export function htmlSerializeIfNeeded(
     model: EditorModel,
     { forceHTML = false, useMarkdown = true }: ISerializeOpts = {},
 ): string | undefined {
+    const hasCustomEmotes = model.parts.some((part) => part.type === Type.CustomEmote);
     if (!useMarkdown) {
+        if (hasCustomEmotes) {
+            return model.parts
+                .map((part) => {
+                    if (part.type === Type.CustomEmote) return serializeCustomEmote(part as CustomEmotePart);
+                    if (part.type === Type.Newline) return "<br/>";
+                    return escapeHtml(part.text);
+                })
+                .join("");
+        }
         return escapeHtml(textSerialize(model)).replace(/\n/g, "<br/>");
     }
 
     const md = mdSerialize(model);
-    return htmlSerializeFromMdIfNeeded(md, { forceHTML });
+    const html = htmlSerializeFromMdIfNeeded(md, { forceHTML: forceHTML || hasCustomEmotes });
+    return html && hasCustomEmotes ? restoreCustomEmoteHtml(html, model) : html;
 }
 
 export function htmlSerializeFromMdIfNeeded(md: string, { forceHTML = false } = {}): string | undefined {
@@ -174,6 +205,8 @@ export function textSerialize(model: EditorModel): string {
             case Type.PillCandidate:
             case Type.AtRoomPill:
                 return text + part.text;
+            case Type.CustomEmote:
+                return text + `:${(part as CustomEmotePart).shortcode}:`;
             case Type.RoomPill:
                 // Here we use the resourceId for compatibility with non-rich text clients
                 // See https://github.com/vector-im/element-web/issues/16660

@@ -470,6 +470,7 @@
         "capabilities": "Capabilities",
         "copied": "Copied!",
         "credits": "Credits",
+        "custom_emotes": "Custom emotes",
         "dark": "Dark",
         "description": "Description",
         "deselect_all": "Deselect all",
@@ -599,6 +600,8 @@
             "user_description": "Users"
         },
         "close_sticker_picker": "Hide stickers",
+        "custom_emote_e2ee_warning_description": "Image files used by custom emotes are not end-to-end encrypted.",
+        "custom_emote_e2ee_warning_title": "Custom emotes are not encrypted",
         "edit_composer_label": "Edit message",
         "format_bold": "Bold",
         "format_code_block": "Code block",

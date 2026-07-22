@@ -18,6 +18,11 @@ import SettingsStore from "../../../../../settings/SettingsStore";
 import { parsePermalink } from "../../../../../utils/permalinks/Permalinks";
 import { addReplyToMessageContent } from "../../../../../utils/Reply";
 import { isNotNull } from "../../../../../Typeguards";
+import {
+    type CustomEmote,
+    decorateCustomEmotesInContent,
+    prepareCustomEmotesForEditing,
+} from "../../../../../custom-emotes";
 
 export const EMOTE_PREFIX = "/me ";
 
@@ -35,6 +40,7 @@ interface CreateMessageContentParams {
     relation?: IEventRelation;
     replyToEvent?: MatrixEvent;
     editedEvent?: MatrixEvent;
+    customEmotes?: CustomEmote[];
 }
 
 const isMatrixEvent = (e: MatrixEvent | undefined): e is MatrixEvent => e instanceof MatrixEvent;
@@ -42,7 +48,7 @@ const isMatrixEvent = (e: MatrixEvent | undefined): e is MatrixEvent => e instan
 export async function createMessageContent(
     message: string,
     isHTML: boolean,
-    { relation, replyToEvent, editedEvent }: CreateMessageContentParams,
+    { relation, replyToEvent, editedEvent, customEmotes = [] }: CreateMessageContentParams,
 ): Promise<RoomMessageEventContent> {
     const isEditing = isMatrixEvent(editedEvent);
 
@@ -89,6 +95,11 @@ export async function createMessageContent(
             content["m.new_content"]["formatted_body"] = formattedBody;
         }
     }
+
+    const editedEmotes = isEditing
+        ? prepareCustomEmotesForEditing(editedEvent.getContent().formatted_body ?? "").emotes
+        : [];
+    decorateCustomEmotesInContent(content, [...editedEmotes, ...customEmotes]);
 
     const newRelation = isEditing ? { ...relation, rel_type: "m.replace", event_id: editedEvent.getId() } : relation;
 

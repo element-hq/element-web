@@ -31,6 +31,23 @@ describe("editor/serialize", function () {
             const html = htmlSerializeIfNeeded(model, {});
             expect(html).toBe('<a href="https://matrix.to/#/#room:hs.tld">#room:hs.tld</a>');
         });
+        it("custom emotes retain their Matrix content and plaintext fallback", function () {
+            const pc = createPartCreator();
+            const model = new EditorModel([pc.customEmote("wave", "mxc://example.org/wave", "A friendly wave")], pc);
+            const html = htmlSerializeIfNeeded(model, {});
+            expect(html).toBe(
+                '<img data-mx-emoticon src="mxc://example.org/wave" alt="A friendly wave" title="wave" height="32" />',
+            );
+            expect(model.serializeParts()).toEqual([
+                {
+                    type: "custom-emote",
+                    text: ":wave:",
+                    shortcode: "wave",
+                    resourceId: "mxc://example.org/wave",
+                    body: "A friendly wave",
+                },
+            ]);
+        });
         it("@room pill turns message into html", function () {
             const pc = createPartCreator();
             const model = new EditorModel([pc.atRoomPill("@room")], pc);

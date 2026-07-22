@@ -19,6 +19,7 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
 import SettingsStore from "../settings/SettingsStore";
 import { getFirstGrapheme, graphemeSegmenter } from "../utils/strings";
+import { mediaFromMxc } from "../customisations/Media";
 
 const REGIONAL_EMOJI_SEPARATOR = String.fromCodePoint(0x200b);
 
@@ -33,12 +34,21 @@ interface ISerializedPillPart {
     resourceId?: string;
 }
 
-export type SerializedPart = ISerializedPart | ISerializedPillPart;
+interface ISerializedCustomEmotePart {
+    type: Type.CustomEmote;
+    text: string;
+    shortcode: string;
+    resourceId: string;
+    body?: string;
+}
+
+export type SerializedPart = ISerializedPart | ISerializedPillPart | ISerializedCustomEmotePart;
 
 export enum Type {
     Plain = "plain",
     Newline = "newline",
     Emoji = "emoji",
+    CustomEmote = "custom-emote",
     Command = "command",
     UserPill = "user-pill",
     RoomPill = "room-pill",
@@ -48,7 +58,7 @@ export enum Type {
 
 interface IBasePart {
     text: string;
-    type: Type.Plain | Type.Newline | Type.Emoji;
+    type: Type.Plain | Type.Newline | Type.Emoji | Type.CustomEmote;
     canEdit: boolean;
     acceptsCaret: boolean;
 
@@ -417,6 +427,67 @@ export class EmojiPart extends BasePart implements IBasePart {
     }
 }
 
+export class CustomEmotePart extends BasePart implements IBasePart {
+    public constructor(
+        public readonly shortcode: string,
+        public readonly url: string,
+        public readonly body?: string,
+        sendToken = `:${shortcode}:`,
+    ) {
+        super(sendToken);
+    }
+
+    protected acceptsInsertion(): boolean {
+        return false;
+    }
+
+    protected acceptsRemoval(): boolean {
+        return false;
+    }
+
+    public toDOMNode(): Node {
+        const image = document.createElement("img");
+        this.updateDOMNode(image);
+        return image;
+    }
+
+    public updateDOMNode(node: HTMLImageElement): void {
+        node.className = "mx_CustomEmote";
+        node.src = mediaFromMxc(this.url).getSquareThumbnailHttp(32) ?? "";
+        node.alt = this.body || this.shortcode;
+        node.title = this.shortcode;
+        node.height = 32;
+        node.setAttribute("data-mx-emoticon", "");
+        node.setAttribute("contenteditable", "false");
+    }
+
+    public canUpdateDOMNode(node: HTMLElement): boolean {
+        return node.nodeName === "IMG" && node.getAttribute("data-mx-emoticon") !== null;
+    }
+
+    public get type(): IBasePart["type"] {
+        return Type.CustomEmote;
+    }
+
+    public get canEdit(): boolean {
+        return false;
+    }
+
+    public get acceptsCaret(): boolean {
+        return true;
+    }
+
+    public serialize(): ISerializedCustomEmotePart {
+        return {
+            type: Type.CustomEmote,
+            text: this.text,
+            shortcode: this.shortcode,
+            resourceId: this.url,
+            body: this.body,
+        };
+    }
+}
+
 class RoomPillPart extends PillPart {
     public constructor(
         resourceId: string,
@@ -598,6 +669,8 @@ export class PartCreator {
                 return this.newline();
             case Type.Emoji:
                 return this.emoji(part.text);
+            case Type.CustomEmote:
+                return this.customEmote(part.shortcode, part.resourceId, part.body, part.text);
             case Type.AtRoomPill:
                 return this.atRoomPill(part.text);
             case Type.PillCandidate:
@@ -619,6 +692,10 @@ export class PartCreator {
 
     public emoji(text: string): EmojiPart {
         return new EmojiPart(text);
+    }
+
+    public customEmote(shortcode: string, url: string, body?: string, sendToken?: string): CustomEmotePart {
+        return new CustomEmotePart(shortcode, url, body, sendToken);
     }
 
     public pillCandidate(text: string): PillCandidatePart {
