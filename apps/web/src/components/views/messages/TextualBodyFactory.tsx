@@ -200,6 +200,10 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
     }, [mediaVisible, urlPreviewVm]);
 
     useEffect(() => {
+        void urlPreviewVm.recompute();
+    }, [content["com.beeper.linkpreviews"], urlPreviewVm]);
+
+    useEffect(() => {
         if (previews.length === 0) {
             return;
         }

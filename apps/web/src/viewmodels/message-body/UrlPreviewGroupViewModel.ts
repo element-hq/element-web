@@ -47,8 +47,7 @@ export interface UrlPreviewGroupViewModelProps {
 
 export class UrlPreviewGroupViewModel
     extends BaseViewModel<UrlPreviewGroupViewSnapshot, UrlPreviewGroupViewModelProps>
-    implements UrlPreviewGroupViewActions
-{
+    implements UrlPreviewGroupViewActions {
     /**
      * Determine if an anchor element can be rendered into a preview.
      * If it can, return the value of `href`
@@ -176,6 +175,8 @@ export class UrlPreviewGroupViewModel
         }
 
         const content = this.props.mxEvent.getContent();
+        let totalPreviewCount: number;
+
         if (content.msgtype === MsgType.Text && this.props.urlPreviewBundleEnabled) {
             const messageContent = content as RoomMessageEventContent;
 
@@ -183,6 +184,7 @@ export class UrlPreviewGroupViewModel
                 previews = messageContent[BUNDLED_LINK_PREVIEWS]
                     .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
                     .map((preview) => this.fetcher.previewFromBundle(preview));
+                totalPreviewCount = messageContent[BUNDLED_LINK_PREVIEWS].length;
             }
         }
 
@@ -191,13 +193,21 @@ export class UrlPreviewGroupViewModel
                 .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
                 .map((link) => this.fetcher.fetchPreview(link, loadMedia)),
         );
+        totalPreviewCount ??= this.links.length;
 
         this.snapshot.merge({
             previews: previews.filter((p) => !!p),
-            totalPreviewCount: this.links.length,
+            totalPreviewCount,
             previewsLimited: this.limitPreviews,
-            overPreviewLimit: this.links.length > MAX_PREVIEWS_WHEN_LIMITED,
+            overPreviewLimit: totalPreviewCount > MAX_PREVIEWS_WHEN_LIMITED,
         });
+    }
+
+    /*
+     * Triggers a recalculation of snapshot, e.g. after the message is updated
+     */
+    public recompute(): Promise<void> {
+        return this.computeSnapshot();
     }
 
     /**
