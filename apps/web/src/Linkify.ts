@@ -89,7 +89,10 @@ export const transformTags: NonNullable<IOptions["transformTags"]> = {
         if (requestedHeight) {
             attribs.style += "height: 100%;";
         }
-        attribs.src = mediaFromMxc(src).getThumbnailOfSourceHttp(width, height)!;
+        const media = mediaFromMxc(src);
+        attribs.src = Object.hasOwn(attribs, "data-mx-emoticon")
+            ? media.srcHttp!
+            : media.getThumbnailOfSourceHttp(width, height)!;
         return { tagName, attribs };
     },
     "code": function (tagName: string, attribs: sanitizeHtml.Attributes) {

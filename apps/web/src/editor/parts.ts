@@ -453,7 +453,7 @@ export class CustomEmotePart extends BasePart implements IBasePart {
 
     public updateDOMNode(node: HTMLImageElement): void {
         node.className = "mx_CustomEmote";
-        node.src = mediaFromMxc(this.url).getSquareThumbnailHttp(32) ?? "";
+        node.src = mediaFromMxc(this.url).srcHttp ?? "";
         node.alt = this.body || this.shortcode;
         node.title = this.shortcode;
         node.height = 32;

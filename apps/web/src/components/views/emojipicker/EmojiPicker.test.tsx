@@ -16,7 +16,7 @@ import { type CustomEmote, type ResolvedImagePack } from "../../../custom-emotes
 import EmojiPicker from "./EmojiPicker";
 
 vi.mock("../../../customisations/Media", () => ({
-    mediaFromMxc: (url: string) => ({ getSquareThumbnailHttp: () => `https://example.org/${url.slice(6)}` }),
+    mediaFromMxc: (url: string) => ({ srcHttp: `https://example.org/${url.slice(6)}` }),
 }));
 
 vi.mock("../../../emojipicker/recent", () => ({

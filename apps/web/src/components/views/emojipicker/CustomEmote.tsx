@@ -34,7 +34,7 @@ export default class CustomEmote extends React.PureComponent<IProps> {
             >
                 <img
                     className="mx_EmojiPicker_item mx_EmojiPicker_customEmote"
-                    src={mediaFromMxc(emote.url).getSquareThumbnailHttp(48) ?? undefined}
+                    src={mediaFromMxc(emote.url).srcHttp ?? undefined}
                     alt={emote.body || emote.shortcode}
                     loading="lazy"
                 />

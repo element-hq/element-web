@@ -21,7 +21,7 @@ export default class CustomEmotePreview extends React.PureComponent<IProps> {
             <div className="mx_EmojiPicker_footer mx_EmojiPicker_preview">
                 <img
                     className="mx_EmojiPicker_preview_emoji mx_EmojiPicker_preview_customEmote"
-                    src={mediaFromMxc(emote.url).getSquareThumbnailHttp(64) ?? undefined}
+                    src={mediaFromMxc(emote.url).srcHttp ?? undefined}
                     alt={emote.body || emote.shortcode}
                 />
                 <div className="mx_EmojiPicker_preview_text">

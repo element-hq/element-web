@@ -69,7 +69,7 @@ export default class CustomEmoteProvider extends AutocompleteProvider {
                 <PillCompletion title={`:${emote.shortcode}:`} subtitle={emote.pack.displayName}>
                     <img
                         className="mx_Autocomplete_Completion_customEmote"
-                        src={mediaFromMxc(emote.url).getSquareThumbnailHttp(32) ?? undefined}
+                        src={mediaFromMxc(emote.url).srcHttp ?? undefined}
                         alt={emote.body || emote.shortcode}
                     />
                 </PillCompletion>

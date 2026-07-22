@@ -15,7 +15,7 @@ import { CARET_NODE_CHAR, renderModel } from "./render";
 import { createPartCreator } from "./__mocks__";
 
 vi.mock("../customisations/Media", () => ({
-    mediaFromMxc: () => ({ getSquareThumbnailHttp: () => "https://example.org/wave" }),
+    mediaFromMxc: () => ({ srcHttp: "https://example.org/wave" }),
 }));
 
 describe("editor/dom", () => {

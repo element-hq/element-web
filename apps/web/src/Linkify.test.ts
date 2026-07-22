@@ -8,24 +8,32 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import sanitizeHtml from "sanitize-html";
-import { beforeAll, describe, expect, it } from "vitest";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { beforeAll, describe, expect, it, vi } from "vitest";
 import { stubClient } from "test-utils";
 
 import { sanitizeHtmlParams } from "./Linkify";
 
 describe("message HTML image sanitization", () => {
-    beforeAll(() => stubClient());
+    let client: MatrixClient;
 
-    it("preserves the custom-emote marker for MXC images", () => {
+    beforeAll(() => {
+        client = stubClient();
+    });
+
+    it("uses original media for marked emotes so animated images keep playing", () => {
+        const mxc = "mxc://chat.blahaj.zone/laCwNVWurgvCaOTQUpxtwyrf";
         const html = sanitizeHtml(
-            '<img data-mx-emoticon src="mxc://example.org/wave" alt="A wave" title="wave" height="32">',
+            `<img data-mx-emoticon src="${mxc}" alt="kissercat-lick" title="kissercat-lick" height="32">`,
             sanitizeHtmlParams,
         );
         expect(html).toContain("data-mx-emoticon");
-        expect(html).toContain('alt="A wave"');
-        expect(html).toContain('title="wave"');
-        expect(html).toContain("http://this.is.a.url/example.org/wave");
+        expect(html).toContain('alt="kissercat-lick"');
+        expect(html).toContain('title="kissercat-lick"');
+        expect(html).toContain("http://this.is.a.url/chat.blahaj.zone/laCwNVWurgvCaOTQUpxtwyrf");
         expect(html).toContain("max-height:32px");
+        // eslint-disable-next-line no-restricted-properties
+        expect(client.mxcUrlToHttp).toHaveBeenLastCalledWith(mxc, undefined, undefined, undefined, false, true);
     });
 
     it("does not make an unsafe image source renderable", () => {
@@ -38,8 +46,12 @@ describe("message HTML image sanitization", () => {
     });
 
     it("does not mark ordinary inline images as emotes", () => {
+        // eslint-disable-next-line no-restricted-properties
+        vi.mocked(client.mxcUrlToHttp).mockClear();
         const html = sanitizeHtml('<img src="mxc://example.org/image" alt="An image">', sanitizeHtmlParams);
         expect(html).not.toContain("data-mx-emoticon");
         expect(html).toContain('alt="An image"');
+        // eslint-disable-next-line no-restricted-properties
+        expect(client.mxcUrlToHttp).toHaveBeenLastCalledWith("mxc://example.org/image", 800, 600, "scale", false, true);
     });
 });
