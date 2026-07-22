@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`FormattingUtils formatList should return expected sentence in ReactNode when given 2 React children 1`] = `
+exports[`FormattingUtils > formatList > should return expected sentence in ReactNode when given 2 React children 1`] = `
 <React.Fragment>
   <React.Fragment>
     <span>
@@ -18,7 +18,7 @@ exports[`FormattingUtils formatList should return expected sentence in ReactNode
 </React.Fragment>
 `;
 
-exports[`FormattingUtils formatList should return expected sentence in ReactNode when given more React children 1`] = `
+exports[`FormattingUtils > formatList > should return expected sentence in ReactNode when given more React children 1`] = `
 <React.Fragment>
   <React.Fragment>
     <span>
@@ -52,7 +52,7 @@ exports[`FormattingUtils formatList should return expected sentence in ReactNode
 </React.Fragment>
 `;
 
-exports[`FormattingUtils formatList should return expected sentence in ReactNode when using itemLimit 1`] = `
+exports[`FormattingUtils > formatList > should return expected sentence in ReactNode when using itemLimit 1`] = `
 <span>
   <React.Fragment>
     <React.Fragment>

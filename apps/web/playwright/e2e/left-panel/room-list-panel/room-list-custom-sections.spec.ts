@@ -211,7 +211,7 @@ test.describe("Room list custom sections", () => {
 
             // Change the name and confirm
             await dialog.getByRole("textbox", { name: "Section name" }).fill("Personal");
-            await dialog.getByRole("button", { name: "Edit section" }).click();
+            await dialog.getByRole("button", { name: "Save" }).click();
 
             // Dialog should close
             await expect(dialog).not.toBeVisible();

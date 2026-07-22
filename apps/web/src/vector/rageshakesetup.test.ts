@@ -5,13 +5,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import fetchMock from "@fetch-mock/jest";
+// @vitest-environment happy-dom
 
-import type { Mocked } from "jest-mock";
-import type { ConsoleLogger } from "../../../src/rageshake/rageshake";
-import SdkConfig from "../../../src/SdkConfig";
-import "../../../src/vector/rageshakesetup";
-import { BugReportEndpointURLLocal } from "../../../src/IConfigOptions";
+import { vi, describe, it, expect, beforeEach, afterEach, type Mocked } from "vitest";
+import fetchMock from "@fetch-mock/vitest";
+
+import type { ConsoleLogger } from "../rageshake/rageshake";
+import SdkConfig from "../SdkConfig";
+import "./rageshakesetup";
+import { BugReportEndpointURLLocal } from "../IConfigOptions";
 
 const RAGESHAKE_URL = "https://logs.example.org/logtome";
 
@@ -23,9 +25,9 @@ describe("mxSendRageshake", () => {
         fetchMock.postOnce(RAGESHAKE_URL, { status: 200, body: {} });
 
         const mockConsoleLogger = {
-            flush: jest.fn(),
-            consume: jest.fn(),
-            warn: jest.fn(),
+            flush: vi.fn(),
+            consume: vi.fn(),
+            warn: vi.fn(),
         } as unknown as Mocked<ConsoleLogger>;
         prevLogger = global.mx_rage_logger;
         mockConsoleLogger.flush.mockReturnValue("line 1\nline 2\n");
@@ -34,7 +36,7 @@ describe("mxSendRageshake", () => {
 
     afterEach(() => {
         global.mx_rage_logger = prevLogger;
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
         fetchMock.unmockGlobal();
         SdkConfig.reset();
     });
@@ -57,7 +59,7 @@ describe("mxSendRageshake", () => {
 
     it("Provides a rageshake locally", async () => {
         SdkConfig.put({ bug_report_endpoint_url: BugReportEndpointURLLocal });
-        const urlSpy = jest.spyOn(URL, "createObjectURL");
+        const urlSpy = vi.spyOn(URL, "createObjectURL");
         await window.mxSendRageshake("Hello world");
         expect(fetchMock).not.toHaveFetched(RAGESHAKE_URL);
         expect(urlSpy).toHaveBeenCalledTimes(1);

@@ -682,7 +682,6 @@
     "create_section_dialog": {
         "create_section": "Utwórz sekcję",
         "description": "Sekcje są tylko dla Ciebie",
-        "edit_section": "Edytuj sekcję",
         "label": "Nazwa sekcji",
         "title": "Utwórz sekcję",
         "title_edition": "Edytuj sekcję"
@@ -1586,6 +1585,8 @@
         "sliding_sync_disabled_notice": "Zaloguj się ponownie, aby wyłączyć",
         "sliding_sync_server_no_support": "Twój serwer nie ma wsparcia",
         "unrealiable_e2e": "Problematyczny w pokojach szyfrowanych",
+        "url_preview_bundle": "Pakiet podglądu adresów URL (MSC4095)",
+        "url_preview_bundle_description": "Wysyłaj podglądy adresów URL wraz z treścią w wiadomościach",
         "video_rooms": "Pokoje wideo",
         "video_rooms_a_new_way_to_chat": "Nowy sposób prowadzenia rozmów audio-wideo w %(brand)s.",
         "video_rooms_always_on_voip_channels": "Pokoje wideo są stale dostępnymi kanałami VoIP osadzonymi w pokoju w %(brand)s.",
@@ -2466,7 +2467,8 @@
         "warning_kind_files": "Ta wersja %(brand)s nie wspiera wyświetlania niektórych plików szyfrowanych",
         "warning_kind_files_app": "Użyj <a>aplikacji desktopowej</a>, aby zobaczyć wszystkie szyfrowane pliki",
         "warning_kind_search": "Ta wersja %(brand)s nie obsługuje wyszukiwania zabezpieczonych wiadomości",
-        "warning_kind_search_app": "Używaj <a>Aplikacji desktopowej</a>, aby wyszukiwać zaszyfrowane wiadomości"
+        "warning_kind_search_app": "Używaj <a>Aplikacji desktopowej</a>, aby wyszukiwać zaszyfrowane wiadomości",
+        "warning_kind_search_partial": "Wyniki wyszukiwania mogą być niekompletne, ponieważ budowa indeksu nie została ukończona."
     },
     "setting": {
         "help_about": {
@@ -3601,7 +3603,7 @@
         },
         "redaction": "Wiadomość usunięta przez %(name)s",
         "reply": {
-            "error_loading": "Nie zdołano wczytać zdarzenia, na które odpowiedziano, może ono nie istnieć lub nie masz uprawnienia, by je zobaczyć.",
+            "error_loading": "Nie można wczytać wydarzenia, na które udzielono odpowiedzi. Wydarzenie nie istnieje lub nie masz uprawnień do jego przeglądania.",
             "in_reply_to": "<a>W odpowiedzi do</a> <pill>",
             "in_reply_to_for_export": "W odpowiedzi do <a>tej wiadomości</a>"
         },
@@ -3912,6 +3914,9 @@
         "verification_unavailable": "Weryfikacja użytkownika jest niedostępna",
         "verify_button": "Zweryfikuj użytkownika",
         "verify_explainer": "Dla dodatkowego bezpieczeństwa, zweryfikuj tego użytkownika za pomocą jednorazowego kodu na obu waszych urządzeniach."
+    },
+    "user_status": {
+        "on_a_call": "W trakcie rozmowy"
     },
     "voip": {
         "already_in_call": "Już dzwoni",

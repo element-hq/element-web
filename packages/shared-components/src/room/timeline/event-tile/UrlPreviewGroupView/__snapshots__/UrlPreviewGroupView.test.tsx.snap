@@ -40,7 +40,7 @@ exports[`UrlPreviewGroupView > renders a single preview 1`] = `
       class="UrlPreviewGroupView-module_previewGroup"
     >
       <div
-        class="LinkPreview-module_container"
+        class="LinkPreview-module_containerExpanded"
       >
         <button
           aria-label="View image"
@@ -120,7 +120,7 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
       class="UrlPreviewGroupView-module_previewGroup"
     >
       <div
-        class="LinkPreview-module_container"
+        class="LinkPreview-module_containerExpanded"
       >
         <button
           aria-label="View image"
@@ -156,7 +156,7 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
         </div>
       </div>
       <div
-        class="LinkPreview-module_container"
+        class="LinkPreview-module_containerCollapsed"
       >
         <button
           aria-label="View image"
@@ -175,11 +175,6 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
           >
             Two
           </a>
-          <p
-            class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkedText-module_container LinkPreview-module_description"
-          >
-            This one has a taller image which should crop nicely.
-          </p>
           <div
             class="LinkPreview-module_siteName"
           >
@@ -192,7 +187,7 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
         </div>
       </div>
       <div
-        class="LinkPreview-module_container"
+        class="LinkPreview-module_containerCollapsed"
       >
         <button
           aria-label="View image"
@@ -211,11 +206,6 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
           >
             Three
           </a>
-          <p
-            class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkedText-module_container LinkPreview-module_description"
-          >
-            One more description
-          </p>
           <div
             class="LinkPreview-module_siteName"
           >
@@ -281,7 +271,7 @@ exports[`UrlPreviewGroupView > renders multiple previews which are hidden 1`] = 
       class="UrlPreviewGroupView-module_previewGroup"
     >
       <div
-        class="LinkPreview-module_container"
+        class="LinkPreview-module_containerExpanded"
       >
         <button
           aria-label="View image"
@@ -370,7 +360,7 @@ exports[`UrlPreviewGroupView > renders with compact density 1`] = `
       class="UrlPreviewGroupView-module_previewGroup"
     >
       <div
-        class="LinkPreview-module_container"
+        class="LinkPreview-module_containerExpanded"
       >
         <button
           aria-label="View image"
@@ -406,7 +396,7 @@ exports[`UrlPreviewGroupView > renders with compact density 1`] = `
         </div>
       </div>
       <div
-        class="LinkPreview-module_container"
+        class="LinkPreview-module_containerCollapsed"
       >
         <button
           aria-label="View image"
@@ -425,11 +415,6 @@ exports[`UrlPreviewGroupView > renders with compact density 1`] = `
           >
             Two
           </a>
-          <p
-            class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkedText-module_container LinkPreview-module_description"
-          >
-            This one has a taller image which should crop nicely.
-          </p>
           <div
             class="LinkPreview-module_siteName"
           >
@@ -442,7 +427,7 @@ exports[`UrlPreviewGroupView > renders with compact density 1`] = `
         </div>
       </div>
       <div
-        class="LinkPreview-module_container"
+        class="LinkPreview-module_containerCollapsed"
       >
         <button
           aria-label="View image"
@@ -461,11 +446,6 @@ exports[`UrlPreviewGroupView > renders with compact density 1`] = `
           >
             Three
           </a>
-          <p
-            class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkedText-module_container LinkPreview-module_description"
-          >
-            One more description
-          </p>
           <div
             class="LinkPreview-module_siteName"
           >

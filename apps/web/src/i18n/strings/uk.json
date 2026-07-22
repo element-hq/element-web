@@ -677,7 +677,6 @@
     "create_section_dialog": {
         "create_section": "Створити розділ",
         "description": "Розділи призначені лише для вас",
-        "edit_section": "Змінити розділ",
         "label": "Назва розділу",
         "title": "Створити розділ",
         "title_edition": "Змінити розділ"

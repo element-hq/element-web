@@ -5,17 +5,20 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach } from "vitest";
 import { type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
-import { mocked } from "jest-mock";
+import { stubClient } from "test-utils";
 
 import {
     clearUserStatus,
     fetchUserStatus,
+    setUserOnCall,
     setUserStatus,
     userStatusFromProfile,
     userStatusTextWithinMaxLength,
-} from "../../../src/utils/userStatus";
-import { stubClient } from "../../test-utils";
+} from "./userStatus";
 
 describe("userStatus utils", () => {
     describe("userStatusFromProfile", () => {
@@ -88,19 +91,22 @@ describe("userStatus utils", () => {
 
         beforeEach(() => {
             client = stubClient();
-            client.doesServerSupportExtendedProfiles = jest.fn();
+            client.doesServerSupportExtendedProfiles = vi.fn();
         });
 
         it("returns undefined if the server does not support extended profiles", async () => {
-            mocked(client.doesServerSupportExtendedProfiles).mockResolvedValue(false);
+            vi.mocked(client.doesServerSupportExtendedProfiles).mockResolvedValue(false);
 
             await expect(fetchUserStatus(client, "@alice:example.com")).resolves.toBeUndefined();
             expect(client.getExtendedProfileProperty).not.toHaveBeenCalled();
         });
 
         it("returns the validated status if the server supports extended profiles and has a status set", async () => {
-            mocked(client.doesServerSupportExtendedProfiles).mockResolvedValue(true);
-            mocked(client.getExtendedProfileProperty).mockResolvedValue({ emoji: "🐳", text: "Feeling a little blue" });
+            vi.mocked(client.doesServerSupportExtendedProfiles).mockResolvedValue(true);
+            vi.mocked(client.getExtendedProfileProperty).mockResolvedValue({
+                emoji: "🐳",
+                text: "Feeling a little blue",
+            });
 
             await expect(fetchUserStatus(client, "@alice:example.com")).resolves.toEqual({
                 emoji: "🐳",
@@ -113,15 +119,15 @@ describe("userStatus utils", () => {
         });
 
         it("returns undefined if the status is invalid", async () => {
-            mocked(client.doesServerSupportExtendedProfiles).mockResolvedValue(true);
-            mocked(client.getExtendedProfileProperty).mockResolvedValue({ text: "Feeling a little blue" });
+            vi.mocked(client.doesServerSupportExtendedProfiles).mockResolvedValue(true);
+            vi.mocked(client.getExtendedProfileProperty).mockResolvedValue({ text: "Feeling a little blue" });
 
             await expect(fetchUserStatus(client, "@alice:example.com")).resolves.toBeUndefined();
         });
 
         it("returns undefined if the user has no status set", async () => {
-            mocked(client.doesServerSupportExtendedProfiles).mockResolvedValue(true);
-            mocked(client.getExtendedProfileProperty).mockRejectedValue(
+            vi.mocked(client.doesServerSupportExtendedProfiles).mockResolvedValue(true);
+            vi.mocked(client.getExtendedProfileProperty).mockRejectedValue(
                 new MatrixError({ errcode: "M_NOT_FOUND" }, 404),
             );
 
@@ -129,9 +135,9 @@ describe("userStatus utils", () => {
         });
 
         it("returns undefined and logs a warning if fetching the status fails unexpectedly", async () => {
-            mocked(client.doesServerSupportExtendedProfiles).mockResolvedValue(true);
+            vi.mocked(client.doesServerSupportExtendedProfiles).mockResolvedValue(true);
             const error = new Error("network error");
-            mocked(client.getExtendedProfileProperty).mockRejectedValue(error);
+            vi.mocked(client.getExtendedProfileProperty).mockRejectedValue(error);
 
             await expect(fetchUserStatus(client, "@alice:example.com")).resolves.toBeUndefined();
         });
@@ -148,6 +154,32 @@ describe("userStatus utils", () => {
             clearUserStatus(client);
 
             expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.status", null);
+        });
+    });
+
+    describe("setUserOnCall", () => {
+        let client: MatrixClient;
+
+        beforeEach(() => {
+            client = stubClient();
+        });
+
+        it("sets the call status with the current time if onCall is true", async () => {
+            vi.useFakeTimers().setSystemTime(12345);
+
+            await setUserOnCall(client, true);
+
+            expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.call", {
+                call_joined_ts: 12345,
+            });
+
+            vi.useRealTimers();
+        });
+
+        it("clears the call status if onCall is false", async () => {
+            await setUserOnCall(client, false);
+
+            expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.call", null);
         });
     });
 });

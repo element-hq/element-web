@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 .mx_CopyableText {
-    align-items: flex-start;
+    align-items: center;
     display: flex;
     justify-content: space-between;
     width: max-content;
@@ -20,27 +20,17 @@ Please see LICENSE files in the repository root for full details.
         border: solid 1px $light-fg-color;
         margin-bottom: 10px;
         margin-top: 10px;
-        padding: 10px 0 10px 10px;
+        padding: 10px;
     }
 
     .mx_CopyableText_copyButton {
         flex-shrink: 0;
-        /* using em here to adapt to the local font size */
-        width: 1em;
-        height: 1em;
-        padding-left: 12px;
-        padding-right: 10px;
         display: block;
         /* If the copy button is used within a scrollable div, make it stick to the right while scrolling */
         position: sticky;
-        right: 0;
-        /* center to first line */
-        top: 0.15em;
-        background-color: $background;
+        margin-left: var(--cpd-space-1x);
 
         svg {
-            width: 1em;
-            height: 1em;
             color: $message-action-bar-fg-color;
             display: block;
         }
