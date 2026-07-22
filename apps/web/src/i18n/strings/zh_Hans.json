@@ -677,7 +677,6 @@
     "create_section_dialog": {
         "create_section": "创建区域",
         "description": "区域仅对你可见",
-        "edit_section": "编辑区域",
         "label": "区域名称",
         "title": "创建区域",
         "title_edition": "编辑区域"
