@@ -617,7 +617,7 @@ importers:
         version: 2.6.0
       html-react-parser:
         specifier: ^6.0.0
-        version: 6.1.4(@types/react@19.2.17)(react@19.2.7)
+        version: 6.1.5(@types/react@19.2.17)(react@19.2.7)
       is-ip:
         specifier: ^5.0.0
         version: 5.0.1
@@ -641,7 +641,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/188a70b55911ea1e4cd808f260cf19c6ed18481e
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/f455e4b1f03455e045ab4caba2c7bd8dc164f040
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -1380,7 +1380,7 @@ importers:
         version: 3.3.0
       html-react-parser:
         specifier: ^6.0.0
-        version: 6.1.4(@types/react@19.2.17)(react@19.2.7)
+        version: 6.1.5(@types/react@19.2.17)(react@19.2.7)
       linkify-html:
         specifier: 4.3.3
         version: 4.3.3(patch_hash=1761c1eabe25d9fae83f74f27a20b3d24515840a4a8747bb04828df46bcfdea2)(linkifyjs@4.3.3)
@@ -1416,7 +1416,7 @@ importers:
         version: 4.12.2(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       react-virtuoso:
         specifier: ^4.14.0
-        version: 4.18.10(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+        version: 4.18.11(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       temporal-polyfill:
         specifier: ^1.0.0
         version: 1.0.1
@@ -9317,8 +9317,8 @@ packages:
     engines: {node: '>=12'}
     hasBin: true
 
-  html-react-parser@6.1.4:
-    resolution: {integrity: sha512-oNZVIuYir7XOFuQZ7mtvcIC5cTYBVqCDOhJ1rSH4V1nVDs71bHZXFlKdpSuOm5TZT7V2uxCxA7HqTkCNHW32KQ==}
+  html-react-parser@6.1.5:
+    resolution: {integrity: sha512-jhdRR0fSkdkVlAmDIk5lS+IMSjCgFSfe+nI69DUwaxkWOgid2mk7RhoYxsQ7B6hzCghAI5YPz2B1jbskHhbaLg==}
     peerDependencies:
       '@types/react': ^19.2.10
       react: 0.14 || 15 || 16 || 17 || 18 || 19
@@ -9498,8 +9498,8 @@ packages:
     resolution: {integrity: sha512-ifK0CgjALofS5bkrcTy4RaQ9Vx2Knf/eLeIO+NaswQEpH1UblrtTSCIvN71qQDMq0PeQ/SSPojvEJp9vvvfr+w==}
     engines: {node: ^22.22.2 || ^24.15.0 || >=26.0.0}
 
-  inline-style-parser@0.2.7:
-    resolution: {integrity: sha512-Nb2ctOyNR8DqQoR0OwRG95uNWIC0C1lCgf5Naz5H6Ji72KZ8OcFZLz2P5sNgwlyoJ8Yif11oMuYs5pBQa86csA==}
+  inline-style-parser@0.2.9:
+    resolution: {integrity: sha512-IttN8BqKLxzUrnTqHI+/hwAJQItBAUjdoHERCDv+oOuX48VP6bzW8+QjOXSfoevzq3YrYAwX1uLHp8TqO9yIeg==}
 
   internmap@1.0.1:
     resolution: {integrity: sha512-lDB5YccMydFBtasVtxnZ3MRBHuaoE8GKsppq+EchKL2U4nK/DmEpPHNH8MZe5HkMtpSiTSOZwfN0tzYjO/lJEw==}
@@ -10323,8 +10323,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/188a70b55911ea1e4cd808f260cf19c6ed18481e:
-    resolution: {gitHosted: true, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/188a70b55911ea1e4cd808f260cf19c6ed18481e}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/f455e4b1f03455e045ab4caba2c7bd8dc164f040:
+    resolution: {gitHosted: true, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/f455e4b1f03455e045ab4caba2c7bd8dc164f040}
     version: 42.0.0
     engines: {node: '>=22.0.0'}
 
@@ -11888,8 +11888,8 @@ packages:
       react: '>=16.6.0'
       react-dom: '>=16.6.0'
 
-  react-virtuoso@4.18.10:
-    resolution: {integrity: sha512-P6GIZ7kWAPOYB2H16yRQNgy+VF9pJOuTFw1EUc1EAtCj5WxVSAF1Sql3x3fbLwaLeBFsiPnu+3U9o6sIOyTdFw==}
+  react-virtuoso@4.18.11:
+    resolution: {integrity: sha512-Qeeq9vqa5seCxACvzbQTUeq3s2/Bu+VlwOMF0jfy3E/ZKHLiXWwJpXBhv2rckqYkvm1XRVFLCBMCmqCU8JNEJg==}
     peerDependencies:
       react: '>=16 || >=17 || >= 18 || >= 19'
       react-dom: '>=16 || >=17 || >= 18 || >=19'
@@ -12543,11 +12543,11 @@ packages:
   stubborn-utils@1.0.2:
     resolution: {integrity: sha512-zOh9jPYI+xrNOyisSelgym4tolKTJCQd5GBhK0+0xJvcYDcwlOoxF/rnFKQ2KRZknXSG9jWAp66fwP6AxN9STg==}
 
-  style-to-js@2.0.1:
-    resolution: {integrity: sha512-j5whjFV29FyWf+/gWc/Fax7DQqojc5CzZ2kxOCuSMoZDGdciF+Ki1HyZ/GPOxdbfIw0suKUBmG1I3qa7JZKRTA==}
+  style-to-js@2.0.2:
+    resolution: {integrity: sha512-ctgbFvvi406Jvhi/s6TJtX6XYYCCTg6POgsL+SLmrl2RHFgwulepqtYPrtKuEmT8kmyk/+fxfNzuhRLO4zsASg==}
 
-  style-to-object@2.0.0:
-    resolution: {integrity: sha512-3zaRtBpwCy9AnYQYfgZ8tIMPn/PlQpW3wtRMB+w0xVtBzo8/m7KKGi7cR56yQ6udLz5MPzwRqfKOZ3O+Oc6VpA==}
+  style-to-object@2.0.2:
+    resolution: {integrity: sha512-QmbXPUylqU80HAgTOJeEOdbA40W9KtxmjMhQy+tq+b8F2aoh3aQLuy82hh2jm2qsC9hR9eI0+eQidTMydKcqRA==}
 
   styled-components@6.4.3:
     resolution: {integrity: sha512-wYXrhu+JmDjZ1Tv7O0OopGTfztbzun43Pjjhh2H+xc0h5A09dwpZ5FJbrifJDcL8g5TA9btpWOX2+iSRuJTExw==}
@@ -22046,13 +22046,13 @@ snapshots:
       relateurl: 0.2.7
       terser: 5.48.0
 
-  html-react-parser@6.1.4(@types/react@19.2.17)(react@19.2.7):
+  html-react-parser@6.1.5(@types/react@19.2.17)(react@19.2.7):
     dependencies:
       domhandler: 6.0.1
       html-dom-parser: 8.0.0
       react: 19.2.7
       react-property: 2.0.2
-      style-to-js: 2.0.1
+      style-to-js: 2.0.2
     optionalDependencies:
       '@types/react': 19.2.17
 
@@ -22240,7 +22240,7 @@ snapshots:
 
   ini@7.0.0: {}
 
-  inline-style-parser@0.2.7: {}
+  inline-style-parser@0.2.9: {}
 
   internmap@1.0.1: {}
 
@@ -23224,7 +23224,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/188a70b55911ea1e4cd808f260cf19c6ed18481e:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/f455e4b1f03455e045ab4caba2c7bd8dc164f040:
     dependencies:
       '@babel/runtime': 8.0.0
       '@matrix-org/matrix-sdk-crypto-wasm': 18.3.1
@@ -25183,7 +25183,7 @@ snapshots:
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
 
-  react-virtuoso@4.18.10(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
+  react-virtuoso@4.18.11(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
     dependencies:
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
@@ -25977,13 +25977,13 @@ snapshots:
 
   stubborn-utils@1.0.2: {}
 
-  style-to-js@2.0.1:
+  style-to-js@2.0.2:
     dependencies:
-      style-to-object: 2.0.0
+      style-to-object: 2.0.2
 
-  style-to-object@2.0.0:
+  style-to-object@2.0.2:
     dependencies:
-      inline-style-parser: 0.2.7
+      inline-style-parser: 0.2.9
 
   styled-components@6.4.3(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
     dependencies:
