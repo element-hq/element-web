@@ -276,9 +276,11 @@ export class AutoLaunch {
             return;
         }
 
-        // Linux: the old package hard-coded `~/.config/autostart`. If an entry is there, rewrite it
-        // cleanly at the current XDG path (fixing any stale/`Hidden=true` legacy entry) preserving
-        // the minimised preference, then remove the old file if it lived at a different location.
+        // Linux: the old package hard-coded `~/.config/autostart` and wrote an unquoted `Exec` path,
+        // which breaks for an executable path containing spaces. It only ever removed the file to
+        // disable, so an entry being there means start-at-login was on: rewrite it cleanly at the
+        // current XDG path preserving the minimised preference, then remove the old file if it
+        // lived at a different location.
         const legacyPath = legacyLinuxAutostartPath();
         if (!fs.existsSync(legacyPath)) return;
         await this.setState(minimised ? "minimised" : "enabled");

@@ -1,5 +1,5 @@
 /*
-Copyright 2026 New Vector Ltd.
+Copyright 2026 hayaksi1
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
@@ -298,6 +298,16 @@ describe("AutoLaunch", () => {
             );
         });
 
+        it("disables by clearing the login item", async () => {
+            await autoLaunch.setState("disabled");
+
+            expect(storeSet).toHaveBeenCalledWith("openAtLoginMinimised", false);
+            // Electron keys the `Run` value by AppUserModelId — the same name it wrote when enabling —
+            // so clearing `openAtLogin` removes it; the path/args are not needed to remove it.
+            expect(setLoginItemSettings).toHaveBeenCalledWith({ openAtLogin: false });
+            expect(rmSync).not.toHaveBeenCalled();
+        });
+
         it("does not touch the filesystem on Windows", async () => {
             await autoLaunch.setState("enabled");
             expect(writeFileSync).not.toHaveBeenCalled();
@@ -422,7 +432,7 @@ describe("AutoLaunch", () => {
 
             await autoLaunch.migrate();
 
-            // rewritten via setState (fixing any stale/Hidden legacy entry); same path => no removal
+            // rewritten via setState (fixing the legacy unquoted Exec path); same path => no removal
             expect(writeFileSync).toHaveBeenCalledWith(
                 autostartPath,
                 expect.stringContaining("[Desktop Entry]"),
