@@ -255,6 +255,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
     public componentWillUnmount(): void {
         this.unmounted = true;
+        this.updateFilter.cancel();
     }
 
     private onConsultFirstChange = (ev: React.ChangeEvent<HTMLInputElement>): void => {

@@ -538,12 +538,6 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                          */
                         ref: true,
                         esModule: false,
-                        name: "[name].[hash:7].[ext]",
-                        outputPath: getAssetOutputPath,
-                        publicPath: function (url: string, resourcePath: string) {
-                            const outputPath = getAssetOutputPath(url, resourcePath);
-                            return toPublicPath(outputPath);
-                        },
                     },
                 },
                 {
