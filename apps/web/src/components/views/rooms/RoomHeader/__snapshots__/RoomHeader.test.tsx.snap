@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
+exports[`RoomHeader > dm > does not show the face pile for DMs 1`] = `
 <DocumentFragment>
   <header
     class="_flex_4dswl_9 mx_RoomHeader light-panel"

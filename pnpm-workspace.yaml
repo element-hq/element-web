@@ -29,7 +29,7 @@ catalog:
     # i18n
     matrix-web-i18n: 3.6.0
     # fonts
-    "@fontsource/inter": 5.2.8
+    "@fontsource/inter": 5.3.0
     # vite
     vite: 8.1.5
     vite-plugin-node-polyfills: 0.28.0
