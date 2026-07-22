@@ -5,24 +5,27 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+// @vitest-environment happy-dom
+
 import EventEmitter from "events";
 
-import { CallStore, CallStoreEvent } from "../../../../../src/stores/CallStore";
-import { CollapseOnCallResizeBehaviour } from "../../../../../src/viewmodels/structures/auto-collapse/behaviours/CollapseOnCallResizeBehaviour";
-import { CollapseHandler } from "../../../../../src/viewmodels/structures/auto-collapse/CollapseHandler";
+import { CallStore, CallStoreEvent } from "../../../../stores/CallStore";
+import { CollapseOnCallResizeBehaviour } from "./CollapseOnCallResizeBehaviour";
+import { CollapseHandler } from "../CollapseHandler";
+import { describe, it, expect, vi } from "vitest";
 
-jest.useFakeTimers();
+vi.useFakeTimers();
 
 // CallStore has a circular dependency, CallStore -> Call -> ... -> Algorithm -> CallStore
-jest.mock("../../../../../src/models/Call");
+vi.mock("../../../../../src/models/Call");
 
 describe("CollapseOnCallResizeBehaviour", () => {
     it("Should collapse/expand the panel on call", () => {
         const MockCallStore = new EventEmitter();
-        jest.spyOn(CallStore, "instance", "get").mockReturnValue(MockCallStore as CallStore);
+        vi.spyOn(CallStore, "instance", "get").mockReturnValue(MockCallStore as CallStore);
 
-        const expandPanel = jest.fn();
-        const collapsePanel = jest.fn();
+        const expandPanel = vi.fn();
+        const collapsePanel = vi.fn();
         const collapseHandler = new CollapseHandler(expandPanel, collapsePanel, 0);
         // @ts-ignore
         // eslint-disable-next-line
@@ -43,10 +46,10 @@ describe("CollapseOnCallResizeBehaviour", () => {
 
     it("should set shouldIgnoreResize to true on call", () => {
         const MockCallStore = new EventEmitter();
-        jest.spyOn(CallStore, "instance", "get").mockReturnValue(MockCallStore as CallStore);
+        vi.spyOn(CallStore, "instance", "get").mockReturnValue(MockCallStore as CallStore);
 
-        const expandPanel = jest.fn();
-        const collapsePanel = jest.fn();
+        const expandPanel = vi.fn();
+        const collapsePanel = vi.fn();
         const collapseHandler = new CollapseHandler(expandPanel, collapsePanel, 0);
         const behaviour = new CollapseOnCallResizeBehaviour(collapseHandler);
 
@@ -57,7 +60,7 @@ describe("CollapseOnCallResizeBehaviour", () => {
         // shouldIgnoreResize becomes true
         expect(behaviour.shouldIgnoreResize).toBe(true);
         // shouldIgnoreResize becomes false after some time
-        jest.runAllTimers();
+        vi.runAllTimers();
         expect(behaviour.shouldIgnoreResize).toBe(false);
     });
 });
