@@ -255,7 +255,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
     public componentWillUnmount(): void {
         this.unmounted = true;
-        this.updateFilter.cancel();
+        this.updateSuggestions.cancel();
     }
 
     private onConsultFirstChange = (ev: React.ChangeEvent<HTMLInputElement>): void => {
@@ -530,121 +530,125 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         this.props.onFinished(false);
     };
 
-    private updateSuggestions = async (term: string): Promise<void> => {
-        MatrixClientPeg.safeGet()
-            .searchUserDirectory({ term })
-            .then(async (r): Promise<void> => {
-                if (term !== this.state.filterText) {
-                    // Discard the results - we were probably too slow on the server-side to make
-                    // these results useful. This is a race we want to avoid because we could overwrite
-                    // more accurate results.
-                    return;
-                }
-
-                if (!r.results) r.results = [];
-
-                // While we're here, try and autocomplete a search result for the mxid itself
-                // if there's no matches (and the input looks like a mxid).
-                if (term[0] === "@" && term.indexOf(":") > 1) {
-                    try {
-                        const profile = await this.profilesStore.getOrFetchProfile(term, { shouldThrow: true });
-
-                        if (profile) {
-                            // If we have a profile, we have enough information to assume that
-                            // the mxid can be invited - add it to the list. We stick it at the
-                            // top so it is most obviously presented to the user.
-                            r.results.splice(0, 0, {
-                                user_id: term,
-                                display_name: profile["displayname"],
-                                avatar_url: profile["avatar_url"],
-                            });
-                        }
-                    } catch (e) {
-                        logger.warn("Non-fatal error trying to make an invite for a user ID", e);
+    private updateSuggestions = throttle(
+        async (term: string): Promise<void> => {
+            MatrixClientPeg.safeGet()
+                .searchUserDirectory({ term })
+                .then(async (r): Promise<void> => {
+                    if (term !== this.state.filterText) {
+                        // Discard the results - we were probably too slow on the server-side to make
+                        // these results useful. This is a race we want to avoid because we could overwrite
+                        // more accurate results.
+                        return;
                     }
-                }
 
-                this.setState({
-                    serverResultsMixin: r.results.map((u) => ({
-                        userId: u.user_id,
-                        user: new DirectoryMember(u),
-                    })),
+                    if (!r.results) r.results = [];
+
+                    // While we're here, try and autocomplete a search result for the mxid itself
+                    // if there's no matches (and the input looks like a mxid).
+                    if (term[0] === "@" && term.indexOf(":") > 1) {
+                        try {
+                            const profile = await this.profilesStore.getOrFetchProfile(term, { shouldThrow: true });
+
+                            if (profile) {
+                                // If we have a profile, we have enough information to assume that
+                                // the mxid can be invited - add it to the list. We stick it at the
+                                // top so it is most obviously presented to the user.
+                                r.results.splice(0, 0, {
+                                    user_id: term,
+                                    display_name: profile["displayname"],
+                                    avatar_url: profile["avatar_url"],
+                                });
+                            }
+                        } catch (e) {
+                            logger.warn("Non-fatal error trying to make an invite for a user ID", e);
+                        }
+                    }
+
+                    this.setState({
+                        serverResultsMixin: r.results.map((u) => ({
+                            userId: u.user_id,
+                            user: new DirectoryMember(u),
+                        })),
+                    });
+                })
+                .catch((e) => {
+                    logger.error("Error searching user directory:");
+                    logger.error(e);
+                    this.setState({ serverResultsMixin: [] }); // clear results because it's moderately fatal
                 });
-            })
-            .catch((e) => {
-                logger.error("Error searching user directory:");
-                logger.error(e);
-                this.setState({ serverResultsMixin: [] }); // clear results because it's moderately fatal
-            });
 
-        // Whenever we search the directory, also try to search the identity server. It's
-        // all debounced the same anyways.
-        if (!this.state.canUseIdentityServer) {
-            // The user doesn't have an identity server set - warn them of that.
-            this.setState({ tryingIdentityServer: true });
-            return;
-        }
-        if (Email.looksValid(term) && this.canInviteThirdParty() && SettingsStore.getValue(UIFeature.IdentityServer)) {
-            // Start off by suggesting the plain email while we try and resolve it
-            // to a real account.
-            this.setState({
-                // per above: the userId is a lie here - it's just a regular identifier
-                threepidResultsMixin: [{ user: new ThreepidMember(term), userId: term }],
-            });
-            try {
-                const authClient = new IdentityAuthClient();
-                const token = await authClient.getAccessToken();
-                // No token → unable to try a lookup
-                if (!token) return;
-
-                if (term !== this.state.filterText) return; // abandon hope
-
-                const lookup = await MatrixClientPeg.safeGet().lookupThreePid("email", term, token);
-                if (term !== this.state.filterText) return; // abandon hope
-
-                if (!lookup || !("mxid" in lookup)) {
-                    // We weren't able to find anyone - we're already suggesting the plain email
-                    // as an alternative, so do nothing.
-                    return;
-                }
-
-                // We append the user suggestion to give the user an option to click
-                // the email anyways, and so we don't cause things to jump around. In
-                // theory, the user would see the user pop up and think "ah yes, that
-                // person!"
-                const profile = await this.profilesStore.getOrFetchProfile(lookup.mxid);
-                if (term !== this.state.filterText || !profile) return; // abandon hope
-                this.setState({
-                    threepidResultsMixin: [
-                        ...this.state.threepidResultsMixin,
-                        {
-                            user: new DirectoryMember({
-                                user_id: lookup.mxid,
-                                display_name: profile.displayname,
-                                avatar_url: profile.avatar_url,
-                            }),
-                            // Use the search term as identifier, so that it shows up in suggestions.
-                            userId: term,
-                        },
-                    ],
-                });
-            } catch (e) {
-                logger.error("Error searching identity server:");
-                logger.error(e);
-                this.setState({ threepidResultsMixin: [] }); // clear results because it's moderately fatal
+            // Whenever we search the directory, also try to search the identity server. It's
+            // all debounced the same anyways.
+            if (!this.state.canUseIdentityServer) {
+                // The user doesn't have an identity server set - warn them of that.
+                this.setState({ tryingIdentityServer: true });
+                return;
             }
-        }
-    };
+            if (
+                Email.looksValid(term) &&
+                this.canInviteThirdParty() &&
+                SettingsStore.getValue(UIFeature.IdentityServer)
+            ) {
+                // Start off by suggesting the plain email while we try and resolve it
+                // to a real account.
+                this.setState({
+                    // per above: the userId is a lie here - it's just a regular identifier
+                    threepidResultsMixin: [{ user: new ThreepidMember(term), userId: term }],
+                });
+                try {
+                    const authClient = new IdentityAuthClient();
+                    const token = await authClient.getAccessToken();
+                    // No token → unable to try a lookup
+                    if (!token) return;
 
-    private updateFilter = throttle(
-        (e: React.ChangeEvent<HTMLInputElement>): void => {
-            const term = e.target.value;
-            this.setState({ filterText: term });
-            this.updateSuggestions(term);
+                    if (term !== this.state.filterText) return; // abandon hope
+
+                    const lookup = await MatrixClientPeg.safeGet().lookupThreePid("email", term, token);
+                    if (term !== this.state.filterText) return; // abandon hope
+
+                    if (!lookup || !("mxid" in lookup)) {
+                        // We weren't able to find anyone - we're already suggesting the plain email
+                        // as an alternative, so do nothing.
+                        return;
+                    }
+
+                    // We append the user suggestion to give the user an option to click
+                    // the email anyways, and so we don't cause things to jump around. In
+                    // theory, the user would see the user pop up and think "ah yes, that
+                    // person!"
+                    const profile = await this.profilesStore.getOrFetchProfile(lookup.mxid);
+                    if (term !== this.state.filterText || !profile) return; // abandon hope
+                    this.setState({
+                        threepidResultsMixin: [
+                            ...this.state.threepidResultsMixin,
+                            {
+                                user: new DirectoryMember({
+                                    user_id: lookup.mxid,
+                                    display_name: profile.displayname,
+                                    avatar_url: profile.avatar_url,
+                                }),
+                                // Use the search term as identifier, so that it shows up in suggestions.
+                                userId: term,
+                            },
+                        ],
+                    });
+                } catch (e) {
+                    logger.error("Error searching identity server:");
+                    logger.error(e);
+                    this.setState({ threepidResultsMixin: [] }); // clear results because it's moderately fatal
+                }
+            }
         },
         150, // 150ms throttle (human reaction time + some)
         { leading: true, trailing: true },
     );
+
+    private updateFilter = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        const term = e.target.value;
+        this.setState({ filterText: term });
+        this.updateSuggestions(term);
+    };
 
     private showMoreRecents = (): void => {
         this.setState({ numRecentsShown: this.state.numRecentsShown + INCREMENT_ROOMS_SHOWN });
