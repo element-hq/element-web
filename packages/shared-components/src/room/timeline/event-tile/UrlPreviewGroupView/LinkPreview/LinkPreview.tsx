@@ -14,12 +14,13 @@ import { useI18n } from "../../../../../core/i18n/i18nContext";
 import type { UrlPreview } from "../types";
 import { LinkedText } from "../../../../../core/utils/LinkedText";
 import styles from "./LinkPreview.module.css";
+import { CloseIcon } from "@storybook/icons";
 
 export interface LinkPreviewActions {
     onImageClick: () => void;
 }
 
-export type LinkPreviewProps = UrlPreview & LinkPreviewActions & { collapsed: boolean };
+export type LinkPreviewProps = UrlPreview & LinkPreviewActions & { collapsed: boolean, onRemoveClick?: () => void };
 
 export function LinkTitle({
     title,
@@ -129,6 +130,7 @@ export function LinkPreviewCollapsed(preview: LinkPreviewProps): JSX.Element {
                 <LinkTitle title={preview.title} showTooltipOnLink={preview.showTooltipOnLink} link={preview.link} />
                 {preview.siteName && <LinkSiteName siteName={preview.siteName} />}
             </div>
+            <button onClick={preview.onRemoveClick}><CloseIcon /></button>
         </div>
     );
 }

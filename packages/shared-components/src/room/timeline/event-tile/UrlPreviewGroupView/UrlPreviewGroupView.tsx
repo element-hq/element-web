@@ -39,6 +39,12 @@ export interface UrlPreviewGroupViewProps {
      * Extra CSS classes to apply to the component.
      */
     className?: string;
+    /**
+     * Function to call to remove a URL from the message's bundled previews
+     *
+     * Do not inclucde this field if editing the bundled previews is not possible
+     */
+    removeUrlPreview?: ((url: string) => void),
 }
 
 /** User actions emitted by the URL preview group view. */
@@ -76,7 +82,7 @@ function HideButton({ onHideClick }: { onHideClick: UrlPreviewGroupViewActions["
  * The view lays out one or more link previews, can collapse or expand
  * overflowed previews, and exposes a control to hide the group.
  */
-export function UrlPreviewGroupView({ vm, className }: UrlPreviewGroupViewProps): JSX.Element | null {
+export function UrlPreviewGroupView({ vm, className, removeUrlPreview }: UrlPreviewGroupViewProps): JSX.Element | null {
     const { translate: _t } = useI18n();
     const eventPresentationAttributes = useEventPresentationAttributes();
     const { previews, totalPreviewCount, previewsLimited, overPreviewLimit } = useViewModel(vm);
@@ -106,6 +112,7 @@ export function UrlPreviewGroupView({ vm, className }: UrlPreviewGroupViewProps)
                         {...preview}
                         image={preview.image}
                         collapsed={i !== 0}
+                        onRemoveClick={removeUrlPreview === undefined ? undefined : () => removeUrlPreview(preview.link)}
                     />
                 ))}
                 {toggleButton}

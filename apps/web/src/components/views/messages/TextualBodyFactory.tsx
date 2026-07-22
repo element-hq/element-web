@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, useContext, useEffect, useRef } from "react";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
-import { MsgType } from "matrix-js-sdk/src/matrix";
+import { MsgType, RelationType } from "matrix-js-sdk/src/matrix";
 import {
     EventContentBodyView,
     TextualBodyView,
@@ -34,6 +34,7 @@ import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
 import { UrlPreviewGroupViewModel } from "../../../viewmodels/message-body/UrlPreviewGroupViewModel";
 import PlatformPeg from "../../../PlatformPeg";
 import { useSettingValue } from "../../../hooks/useSettings";
+import { RoomMessageEventContent } from "../../../../@types/url-preview";
 
 const logger = rootLogger.getChild("TextualBodyFactory");
 
@@ -221,7 +222,30 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
             vm={textualBodyVm}
             body={<EventContentBodyView vm={eventContentBodyVm} as={willHaveWrapper ? "span" : "div"} />}
             bodyRef={contentRef}
-            urlPreviews={<UrlPreviewGroupView vm={urlPreviewVm} className="mx_TextualBody_urlPreviews" />}
+            urlPreviews={<UrlPreviewGroupView vm={urlPreviewVm} className="mx_TextualBody_urlPreviews"
+                removeUrlPreview={async (url) => {
+                    let oldContent = props.mxEvent.getContent() as RoomMessageEventContent;
+                    let newContent: RoomMessageEventContent = {
+                        ...oldContent,
+                        "com.beeper.linkpreviews": oldContent["com.beeper.linkpreviews"]?.filter(entry => entry.matched_url !== url)
+                    }
+                    let editContent: RoomMessageEventContent = {
+                        ...oldContent,
+                        body: `* ${oldContent.body}`,
+                        "m.new_content": newContent,
+                        "m.relates_to": {
+                            rel_type: RelationType.Replace,
+                            event_id: props.mxEvent.getId()!
+                        }
+                    };
+
+                    if (props.mxEvent.threadRootId) {
+                        await client.sendMessage(props.mxEvent.getRoomId()!, props.mxEvent.threadRootId, editContent);
+                    } else {
+                        await client.sendMessage(props.mxEvent.getRoomId()!, editContent);
+                    }
+                }}
+            />}
             className={getTextualBodyClassName(content.msgtype as MsgType | undefined)}
         />
     );
