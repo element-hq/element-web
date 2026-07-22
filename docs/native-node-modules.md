@@ -24,11 +24,11 @@ INDOCKER_SQLCIPHER_BUNDLED=1 pnpm docker:build:native
 ```
 
 The above will build `matrix-seshat` in
-`docker/node_modules/matrix-seshat`. You can then either run `pnpm docker:build`
+`docker/.hak/hakModules/matrix-seshat`. You can then either run `pnpm docker:build`
 to build the app inside docker, or:
 
 ```
-pnpm link docker/node_modules/matrix-seshat
+pnpm link ./docker/.hak/hakModules/matrix-seshat
 ```
 
 ... and build the app with `pnpm build` or run it with `pnpm start`.
