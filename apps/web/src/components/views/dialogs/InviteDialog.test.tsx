@@ -6,17 +6,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, afterAll, beforeEach, afterEach, type Mocked } from "vitest";
+
 import React from "react";
-import { findByText, fireEvent, render, screen } from "jest-matrix-react";
+import { findByText, fireEvent, render, screen } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
 import { type MatrixClient, MatrixError, Room, RoomType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { sleep } from "matrix-js-sdk/src/utils";
-import { mocked, type Mocked } from "jest-mock-vitest-adapter";
 import { UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
-
-import InviteDialog from "../../../../../src/components/views/dialogs/InviteDialog";
-import { InviteKind } from "../../../../../src/components/views/dialogs/InviteDialogTypes";
 import {
     clearAllModals,
     filterConsole,
@@ -25,27 +25,43 @@ import {
     mkMembership,
     mkMessage,
     mkRoomCreateEvent,
-} from "../../../../test-utils";
-import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import SdkConfig from "../../../../../src/SdkConfig";
-import { type ValidatedServerConfig } from "../../../../../src/utils/ValidatedServerConfig";
-import { type IConfigOptions } from "../../../../../src/IConfigOptions";
-import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
-import { type IProfileInfo } from "../../../../../src/hooks/useProfileInfo";
-import { DirectoryMember, startDmOnFirstMessage } from "../../../../../src/utils/direct-messages";
-import { TestSDKContext } from "../../../TestSDKContext.ts";
+    TestSDKContext,
+} from "test-utils";
 
-const mockGetAccessToken = jest.fn().mockResolvedValue("getAccessToken");
-jest.mock("../../../../../src/IdentityAuthClient", () =>
-    jest.fn().mockImplementation(() => ({
-        getAccessToken: mockGetAccessToken,
-    })),
-);
+import InviteDialog from "./InviteDialog";
+import { InviteKind } from "./InviteDialogTypes";
+import DMRoomMap from "../../../utils/DMRoomMap";
+import SdkConfig from "../../../SdkConfig";
+import { type ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
+import { type IConfigOptions } from "../../../IConfigOptions";
+import { SDKContextClass } from "../../../contexts/SDKContextClass";
+import { type IProfileInfo } from "../../../hooks/useProfileInfo";
+import { DirectoryMember, startDmOnFirstMessage } from "../../../utils/direct-messages";
+import { MatrixClientPeg } from "../../../MatrixClientPeg.ts";
 
-jest.mock("../../../../../src/utils/direct-messages", () => ({
-    ...jest.requireActual("../../../../../src/utils/direct-messages"),
-    __esModule: true,
-    startDmOnFirstMessage: jest.fn(),
+const mockGetAccessToken = vi.fn().mockResolvedValue("getAccessToken");
+vi.mock("../../../IdentityAuthClient", () => ({
+    default: vi.fn().mockImplementation(function () {
+        return {
+            getAccessToken: mockGetAccessToken,
+        };
+    }),
+}));
+
+vi.mock("../../../utils/direct-messages", async () => ({
+    ...(await vi.importActual("../../../utils/direct-messages")),
+    startDmOnFirstMessage: vi.fn(),
+}));
+
+vi.mock("../../../dispatcher/dispatcher");
+
+vi.mock("lodash", async () => ({
+    ...(await vi.importActual("lodash")),
+    // Stub out the debounce to prevent async leaks
+    debounce: vi.fn((fn) => {
+        fn.cancel = vi.fn();
+        return fn;
+    }),
 }));
 
 const getSearchField = () => screen.getByTestId("invite-dialog-input");
@@ -106,23 +122,23 @@ describe("InviteDialog", () => {
 
     beforeEach(() => {
         mockClient = getMockClientWithEventEmitter({
-            getCrypto: jest.fn().mockReturnValue({
-                getUserVerificationStatus: jest
+            getCrypto: vi.fn().mockReturnValue({
+                getUserVerificationStatus: vi
                     .fn()
                     .mockResolvedValue(new UserVerificationStatus(false, false, true, false)),
             }),
-            getDomain: jest.fn().mockReturnValue(serverDomain),
-            getUserId: jest.fn().mockReturnValue(bobId),
-            getSafeUserId: jest.fn().mockReturnValue(bobId),
-            isGuest: jest.fn().mockReturnValue(false),
-            getVisibleRooms: jest.fn().mockReturnValue([]),
-            getRoom: jest.fn(),
-            getRooms: jest.fn(),
-            getAccountData: jest.fn(),
-            getPushActionsForEvent: jest.fn(),
-            mxcUrlToHttp: jest.fn().mockReturnValue(""),
-            isRoomEncrypted: jest.fn().mockReturnValue(false),
-            getProfileInfo: jest.fn().mockImplementation(async (userId: string) => {
+            getDomain: vi.fn().mockReturnValue(serverDomain),
+            getUserId: vi.fn().mockReturnValue(bobId),
+            getSafeUserId: vi.fn().mockReturnValue(bobId),
+            isGuest: vi.fn().mockReturnValue(false),
+            getVisibleRooms: vi.fn().mockReturnValue([]),
+            getRoom: vi.fn(),
+            getRooms: vi.fn(),
+            getAccountData: vi.fn(),
+            getPushActionsForEvent: vi.fn(),
+            mxcUrlToHttp: vi.fn().mockReturnValue(""),
+            isRoomEncrypted: vi.fn().mockReturnValue(false),
+            getProfileInfo: vi.fn().mockImplementation(async (userId: string) => {
                 if (userId === aliceId) return aliceProfileInfo;
                 if (userId === bobId) return bobProfileInfo;
 
@@ -131,24 +147,25 @@ describe("InviteDialog", () => {
                     error: "Profile not found",
                 });
             }),
-            getIdentityServerUrl: jest.fn(),
-            searchUserDirectory: jest.fn().mockResolvedValue({}),
-            lookupThreePid: jest.fn(),
-            registerWithIdentityServer: jest.fn().mockResolvedValue({
+            getIdentityServerUrl: vi.fn(),
+            searchUserDirectory: vi.fn().mockResolvedValue({}),
+            lookupThreePid: vi.fn(),
+            registerWithIdentityServer: vi.fn().mockResolvedValue({
                 access_token: "access_token",
                 token: "token",
             }),
-            getOpenIdToken: jest.fn().mockResolvedValue({}),
-            getIdentityAccount: jest.fn().mockResolvedValue({}),
-            getTerms: jest.fn().mockResolvedValue({ policies: [] }),
-            supportsThreads: jest.fn().mockReturnValue(false),
-            isInitialSyncComplete: jest.fn().mockReturnValue(true),
-            getClientWellKnown: jest.fn().mockResolvedValue({}),
-            invite: jest.fn(),
+            getOpenIdToken: vi.fn().mockResolvedValue({}),
+            getIdentityAccount: vi.fn().mockResolvedValue({}),
+            getTerms: vi.fn().mockResolvedValue({ policies: [] }),
+            supportsThreads: vi.fn().mockReturnValue(false),
+            isInitialSyncComplete: vi.fn().mockReturnValue(true),
+            getClientWellKnown: vi.fn().mockResolvedValue({}),
+            invite: vi.fn(),
         });
         SdkConfig.put({ validated_server_config: {} as ValidatedServerConfig } as IConfigOptions);
         DMRoomMap.makeShared(mockClient);
-        jest.clearAllMocks();
+        vi.clearAllMocks();
+        vi.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
 
         room = new Room(roomId, mockClient, mockClient.getSafeUserId());
         room.addLiveEvents(
@@ -174,7 +191,7 @@ describe("InviteDialog", () => {
                 skey: aliceId,
             }),
         ]);
-        jest.spyOn(DMRoomMap.shared(), "getUniqueRoomsWithIndividuals").mockReturnValue({
+        vi.spyOn(DMRoomMap.shared(), "getUniqueRoomsWithIndividuals").mockReturnValue({
             [aliceId]: room,
         });
         mockClient.getRooms.mockReturnValue([room]);
@@ -192,20 +209,20 @@ describe("InviteDialog", () => {
     });
 
     afterAll(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     it("should label with space name", () => {
-        room.isSpaceRoom = jest.fn().mockReturnValue(true);
-        room.getType = jest.fn().mockReturnValue(RoomType.Space);
+        room.isSpaceRoom = vi.fn().mockReturnValue(true);
+        room.getType = vi.fn().mockReturnValue(RoomType.Space);
         room.name = "Space";
-        render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={jest.fn()} />);
+        render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={vi.fn()} />);
 
         expect(screen.queryByText("Invite to Space")).toBeTruthy();
     });
 
     it("should label with room name", () => {
-        render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={jest.fn()} />);
+        render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={vi.fn()} />);
         expect(screen.getByText(`Invite to ${roomId}`)).toBeInTheDocument();
     });
 
@@ -214,7 +231,7 @@ describe("InviteDialog", () => {
             <InviteDialog
                 kind={InviteKind.Invite}
                 roomId={roomId}
-                onFinished={jest.fn()}
+                onFinished={vi.fn()}
                 initialText="@localpart:server.tld"
             />,
         );
@@ -227,7 +244,7 @@ describe("InviteDialog", () => {
             <InviteDialog
                 kind={InviteKind.Invite}
                 roomId={roomId}
-                onFinished={jest.fn()}
+                onFinished={vi.fn()}
                 initialText="@localpart:server:tld"
             />,
         );
@@ -253,7 +270,7 @@ describe("InviteDialog", () => {
                 <InviteDialog
                     kind={kind}
                     roomId={kind === InviteKind.Invite ? roomId : ""}
-                    onFinished={jest.fn()}
+                    onFinished={vi.fn()}
                     initialText={aliceEmail}
                 />,
             );
@@ -275,20 +292,20 @@ describe("InviteDialog", () => {
             <InviteDialog
                 kind={InviteKind.Invite}
                 roomId={roomId}
-                onFinished={jest.fn()}
+                onFinished={vi.fn()}
                 initialText="foobar@email.com"
             />,
         );
 
-        await screen.findByText("foobar@email.com");
-        await screen.findByText("Invite by email");
+        await expect(screen.findByText("foobar@email.com")).resolves.toBeVisible();
+        await expect(screen.findByText("Invite by email")).resolves.toBeVisible();
     });
 
     it("should add pasted values", async () => {
         mockClient.getIdentityServerUrl.mockReturnValue("https://identity-server");
         mockClient.lookupThreePid.mockResolvedValue({});
 
-        render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={jest.fn()} />);
+        render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={vi.fn()} />);
 
         const input = screen.getByTestId("invite-dialog-input");
         input.focus();
@@ -302,7 +319,7 @@ describe("InviteDialog", () => {
         mockClient.getIdentityServerUrl.mockReturnValue("https://identity-server");
         mockClient.lookupThreePid.mockResolvedValue({});
 
-        render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={jest.fn()} />);
+        render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={vi.fn()} />);
 
         const input = screen.getByTestId("invite-dialog-input");
         input.focus();
@@ -313,7 +330,7 @@ describe("InviteDialog", () => {
     });
 
     it("should allow to invite multiple emails to a room", async () => {
-        render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={jest.fn()} />);
+        render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={vi.fn()} />);
 
         await enterIntoSearchField(aliceEmail);
         expectPill(aliceEmail);
@@ -332,7 +349,7 @@ describe("InviteDialog", () => {
         });
 
         it("should allow to invite more than one email to a DM", async () => {
-            render(<InviteDialog kind={InviteKind.Dm} onFinished={jest.fn()} />);
+            render(<InviteDialog kind={InviteKind.Dm} onFinished={vi.fn()} />);
 
             await enterIntoSearchField(aliceEmail);
             expectPill(aliceEmail);
@@ -343,7 +360,7 @@ describe("InviteDialog", () => {
     });
 
     it("should not allow to invite more than one email to a DM", async () => {
-        render(<InviteDialog kind={InviteKind.Dm} onFinished={jest.fn()} />);
+        render(<InviteDialog kind={InviteKind.Dm} onFinished={vi.fn()} />);
 
         // Start with an email → should convert to a pill
         await enterIntoSearchField(aliceEmail);
@@ -363,7 +380,7 @@ describe("InviteDialog", () => {
     });
 
     it("should not allow to invite a MXID and an email to a DM", async () => {
-        render(<InviteDialog kind={InviteKind.Dm} onFinished={jest.fn()} />);
+        render(<InviteDialog kind={InviteKind.Dm} onFinished={vi.fn()} />);
 
         // Start with a MXID → should convert to a pill
         await enterIntoSearchField(carolId);
@@ -377,7 +394,7 @@ describe("InviteDialog", () => {
     });
 
     it("should start a DM if the profile is available", async () => {
-        render(<InviteDialog kind={InviteKind.Dm} onFinished={jest.fn()} />);
+        render(<InviteDialog kind={InviteKind.Dm} onFinished={vi.fn()} />);
         await enterIntoSearchField(aliceId);
         await userEvent.click(screen.getByRole("button", { name: "Go" }));
         expect(startDmOnFirstMessage).toHaveBeenCalledWith(mockClient, [
@@ -388,7 +405,7 @@ describe("InviteDialog", () => {
     });
 
     it("should not allow pasting the same user multiple times", async () => {
-        render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={jest.fn()} />);
+        render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={vi.fn()} />);
 
         const input = screen.getByTestId("invite-dialog-input");
         input.focus();
@@ -401,7 +418,7 @@ describe("InviteDialog", () => {
     });
 
     it("should add to selection on click of user tile", async () => {
-        render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={jest.fn()} />);
+        render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={vi.fn()} />);
 
         const input = screen.getByTestId("invite-dialog-input");
         input.focus();
@@ -418,18 +435,18 @@ describe("InviteDialog", () => {
         it("should show a spinner", async () => {
             mockClient.invite.mockReturnValue(new Promise(() => {}));
 
-            render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={jest.fn()} />);
+            render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={vi.fn()} />);
             await enterIntoSearchField(bobId);
             await userEvent.click(screen.getByRole("button", { name: "Invite" }));
 
-            await screen.findByText("Preparing invitations...");
+            await expect(screen.findByText("Preparing invitations...")).resolves.toBeVisible();
         });
     });
 
     describe("when inviting a user with an unknown profile", () => {
         beforeEach(async () => {
-            mocked(startDmOnFirstMessage).mockClear();
-            render(<InviteDialog kind={InviteKind.Dm} onFinished={jest.fn()} />);
+            vi.mocked(startDmOnFirstMessage).mockClear();
+            render(<InviteDialog kind={InviteKind.Dm} onFinished={vi.fn()} />);
             await enterIntoSearchField(carolId);
             await userEvent.click(screen.getByRole("button", { name: "Go" }));
             // modal rendering has some weird sleeps - fake timers will mess up the entire test
@@ -452,7 +469,7 @@ describe("InviteDialog", () => {
             <InviteDialog
                 kind={InviteKind.Invite}
                 roomId={roomId}
-                onFinished={jest.fn()}
+                onFinished={vi.fn()}
                 initialText="@localpart:server.tld"
             />,
         );
@@ -462,7 +479,7 @@ describe("InviteDialog", () => {
 
     describe("when inviting a user whose cryptographic identity we do not know", () => {
         beforeEach(() => {
-            mocked(mockClient.getCrypto()!.getUserVerificationStatus).mockImplementation(async (u) => {
+            vi.mocked(mockClient.getCrypto()!.getUserVerificationStatus).mockImplementation(async (u) => {
                 return new UserVerificationStatus(false, false, false, false);
             });
         });
@@ -475,7 +492,7 @@ describe("InviteDialog", () => {
                     <InviteDialog
                         kind={kind as InviteKind.Invite | InviteKind.Dm}
                         roomId={roomId}
-                        onFinished={jest.fn()}
+                        onFinished={vi.fn()}
                     />,
                 );
             });
@@ -485,8 +502,8 @@ describe("InviteDialog", () => {
                 await userEvent.click(screen.getByRole("button", { name: goButtonName }));
                 await screen.findByText("Confirm inviting them", { exact: false });
 
-                expect(mocked(mockClient.getCrypto()!.getUserVerificationStatus)).toHaveBeenCalledTimes(1);
-                expect(mocked(mockClient.getCrypto()!.getUserVerificationStatus)).toHaveBeenCalledWith(aliceId);
+                expect(vi.mocked(mockClient.getCrypto()!.getUserVerificationStatus)).toHaveBeenCalledTimes(1);
+                expect(vi.mocked(mockClient.getCrypto()!.getUserVerificationStatus)).toHaveBeenCalledWith(aliceId);
             });
 
             it("should show a warning when inviting by email address", async () => {
@@ -495,7 +512,7 @@ describe("InviteDialog", () => {
                 await screen.findByText("Confirm inviting them", { exact: false });
 
                 // We shouldn't call getUserVerificationStatus on an email address
-                expect(mocked(mockClient.getCrypto()!.getUserVerificationStatus)).not.toHaveBeenCalled();
+                expect(vi.mocked(mockClient.getCrypto()!.getUserVerificationStatus)).not.toHaveBeenCalled();
             });
         });
     });
