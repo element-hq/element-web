@@ -1523,6 +1523,7 @@
         "experimental_section": "Early previews",
         "extended_profiles_msc_support": "Requires your server to support MSC4133",
         "feature_disable_call_per_sender_encryption": "Disable per-sender encryption for Element Call",
+        "feature_matrixrtc_slots": "Require open MatrixRTC slots for Element Call calls",
         "feature_retention": {
             "description": "Automatically remove messages from a room when they reach a configured retention period. Currently only supports reading settings.",
             "disabled_sliding_sync": "Retention cannot be enabled when Sliding Sync is enabled.",
@@ -3861,6 +3862,7 @@
         "camera_enabled": "Your camera is still enabled",
         "cannot_call_yourself_description": "You cannot place a call with yourself.",
         "close_lobby": "Close lobby",
+        "close_slot_failed_title": "Couldn't disable calls for this room",
         "connecting": "Connecting",
         "connection_lost": "Connectivity to the server has been lost",
         "connection_lost_description": "You cannot place calls without a connection to the server.",
@@ -3910,6 +3912,7 @@
         "no_permission_conference": "Permission Required",
         "no_permission_conference_description": "You do not have permission to start a conference call in this room",
         "on_hold": "%(name)s on hold",
+        "open_slot_failed_title": "Couldn't enable calls for this room",
         "output_devices": "Output devices",
         "screenshare_monitor": "Share entire screen",
         "screenshare_title": "Share content",

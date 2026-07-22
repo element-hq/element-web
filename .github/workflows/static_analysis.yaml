@@ -103,6 +103,7 @@ jobs:
                           console_dev_note
                           labs|element_call_video_rooms
                           labs|feature_disable_call_per_sender_encryption
+                          labs|feature_matrixrtc_slots
                           voip|element_call
                           error|invalid_json
                           error|misconfigured
