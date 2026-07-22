@@ -468,7 +468,6 @@
         "encrypted": "Зашифровано",
         "error": "Ошибка",
         "faq": "Часто задаваемые вопросы",
-        "favourites": "Избранные",
         "feedback": "Отзыв",
         "filter_results": "Фильтрация результатов",
         "forward_message": "Переслать сообщение",
@@ -664,7 +663,6 @@
     },
     "create_section_dialog": {
         "create_section": "Новый раздел",
-        "edit_section": "Редактировать раздел",
         "label": "Название раздела",
         "title": "Новый раздел",
         "title_edition": "Редактировать раздел"

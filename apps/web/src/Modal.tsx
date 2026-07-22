@@ -446,6 +446,8 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
                                     <Glass className="mx_Dialog_border">
                                         <div className="mx_Dialog">{this.staticModal.elem}</div>
                                     </Glass>
+                                    {/* We break the rule here as this is a mouse-only interaction */}
+                                    {/* oxlint-disable-next-line jsx-a11y/click-events-have-key-events */}
                                     <div
                                         data-testid="dialog-background"
                                         className="mx_Dialog_background mx_Dialog_staticBackground"
@@ -480,6 +482,8 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
                                     <Glass className="mx_Dialog_border">
                                         <div className="mx_Dialog">{modal.elem}</div>
                                     </Glass>
+                                    {/* We break the rule here as this is a mouse-only interaction */}
+                                    {/* oxlint-disable-next-line jsx-a11y/click-events-have-key-events */}
                                     <div
                                         data-testid="dialog-background"
                                         className="mx_Dialog_background"

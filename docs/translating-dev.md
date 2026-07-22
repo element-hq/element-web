@@ -8,7 +8,7 @@
 
 ## Translating strings vs. marking strings for translation
 
-Translating strings are done with the `_t()` function found in `languageHandler.tsx`.
+Translating strings are done with the `_t()` function found in `languageHandler`.
 It is recommended to call this function wherever you introduce a string constant which should be translated.
 However, translating can not be performed until after the translation system has been initialized.
 Thus, sometimes translation must be performed at a different location in the source code than where the string is introduced.

@@ -34,6 +34,7 @@ import { WidgetLifecycleApi } from "./WidgetLifecycleApi.ts";
 import { WidgetApi } from "./WidgetApi.ts";
 import { CustomisationsApi } from "./customisationsApi.ts";
 import { ComposerApi } from "./ComposerApi.ts";
+import { SettingsApi } from "./SettingsApi.ts";
 import defaultDispatcher from "../dispatcher/dispatcher.ts";
 import { SDKContextClass } from "../contexts/SDKContextClass.ts";
 
@@ -60,7 +61,6 @@ export class ModuleApi implements Api {
         return ModuleApi._instance;
     }
 
-    /* eslint-disable @typescript-eslint/naming-convention */
     public async _registerLegacyModule(LegacyModule: RuntimeModuleConstructor): Promise<void> {
         ModuleRunner.instance.registerModule((api) => new LegacyModule(api));
     }
@@ -80,7 +80,6 @@ export class ModuleApi implements Api {
     ) => void = legacyCustomisationsFactory(WidgetPermissionCustomisations);
     public readonly _registerLegacyWidgetVariablesCustomisations =
         legacyCustomisationsFactory(WidgetVariableCustomisations);
-    /* eslint-enable @typescript-eslint/naming-convention */
 
     public readonly navigation = new NavigationApi();
     public readonly openDialog = openDialog;
@@ -99,6 +98,7 @@ export class ModuleApi implements Api {
     public readonly client = new ClientApi();
     public readonly stores = new StoresApi(SDKContextClass.instance);
     public readonly composer = new ComposerApi(defaultDispatcher);
+    public readonly settings = new SettingsApi();
 
     public createRoot(element: Element): Root {
         return createRoot(element);

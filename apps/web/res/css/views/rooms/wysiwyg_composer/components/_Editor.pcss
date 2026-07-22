@@ -34,8 +34,8 @@ Please see LICENSE files in the repository root for full details.
             user-select: all;
         }
 
-        // we always have a <br/> tag at the end of the html, we need it to be present at first then hide it as soon as
-        // we have any other elements
+        /* we always have a <br/> tag at the end of the html, we need it to be present at first then hide it as soon as
+        we have any other elements */
         br:not(:only-child) {
             display: none;
         }
@@ -52,7 +52,7 @@ Please see LICENSE files in the repository root for full details.
         ol {
             margin-top: 0;
             margin-bottom: 0;
-            padding-inline-start: $spacing-28;
+            padding-inline-start: var(--cpd-space-7x);
         }
 
         /* Make list type disc to match rich text editor */
@@ -78,7 +78,7 @@ Please see LICENSE files in the repository root for full details.
 
             margin-top: 0;
             margin-bottom: 0;
-            padding: $spacing-8 $spacing-12;
+            padding: var(--cpd-space-2x) var(--cpd-space-3x);
 
             background-color: $inlinecode-background-color;
             border: 1px solid $inlinecode-border-color;
@@ -90,7 +90,7 @@ Please see LICENSE files in the repository root for full details.
             background-color: $inlinecode-background-color;
             border: 1px solid $inlinecode-border-color;
             border-radius: 4px;
-            padding: $spacing-2;
+            padding: var(--cpd-space-0-5x);
 
             &:empty {
                 border: unset;

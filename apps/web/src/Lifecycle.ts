@@ -67,6 +67,8 @@ import { checkBrowserSupport } from "./SupportedBrowser";
 import { type URLParams } from "./vector/url_utils.ts";
 import { type OnLoggedInPayload } from "./dispatcher/payloads/OnLoggedInPayload.ts";
 import { filterBoolean } from "./utils/arrays.ts";
+import { CallStatusListener } from "./CallStatusListener.ts";
+import { CallStore } from "./stores/CallStore.ts";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -1072,6 +1074,9 @@ async function startMatrixClient(
 
     // This needs to be started after crypto is set up
     DeviceListener.sharedInstance().start(client);
+
+    CallStatusListener.sharedInstance().start(CallStore.instance, client);
+
     // Similarly, don't start sending presence updates until we've started
     // the client
     if (!SettingsStore.getValue("lowBandwidth")) {
@@ -1184,6 +1189,7 @@ export function stopMatrixClient(unsetClient = true): void {
     IntegrationManagers.sharedInstance().stopWatching();
     Mjolnir.sharedInstance().stop();
     DeviceListener.sharedInstance().stop();
+    CallStatusListener.sharedInstance().stop();
     DMRoomMap.shared()?.stop();
     EventIndexPeg.stop();
     const cli = MatrixClientPeg.get();

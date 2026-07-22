@@ -480,7 +480,6 @@
         "encrypted": "Šifrováno",
         "error": "Chyba",
         "faq": "Často kladené dotazy (FAQ)",
-        "favourites": "Oblíbené",
         "feedback": "Zpětná vazba",
         "filter_results": "Filtrovat výsledky",
         "forward_message": "Přeposlat zprávu",
@@ -677,7 +676,6 @@
     "create_section_dialog": {
         "create_section": "Vytvořit sekci",
         "description": "Sekce určeny pouze pro vás",
-        "edit_section": "Upravit sekci",
         "label": "Název sekce",
         "title": "Vytvořte sekci",
         "title_edition": "Upravit sekci"

@@ -94,7 +94,6 @@ export async function waitForMember(
     }
 
     return new Promise<boolean>((resolve) => {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         handler = function (_, __, member: RoomMember) {
             if (member.userId !== userId) return;
             if (member.roomId !== roomId) return;

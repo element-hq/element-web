@@ -392,7 +392,6 @@ async function joinConference(audioInput?: string | null, videoInput?: string | 
         logger.log("Got OpenID Connect token");
 
         if (!openIdToken?.access_token) {
-            // eslint-disable-line camelcase
             // We've failing to get a token, don't try to init conference
             logger.warn("Expected to have an OpenID credential, cannot initialize widget.");
             document.getElementById("widgetActionContainer")!.innerText = "Failed to load Jitsi widget";

@@ -63,7 +63,6 @@ const iconClasses: Record<E2ePadlockIcon, string> = {
 export function E2ePadlock({ icon, title, className }: Readonly<E2ePadlockProps>): JSX.Element {
     // We specify isTriggerInteractive=true and make the div interactive manually as a workaround for
     // https://github.com/element-hq/compound/issues/294
-    /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
     return (
         <Tooltip label={title} isTriggerInteractive={true}>
             <div
@@ -77,5 +76,4 @@ export function E2ePadlock({ icon, title, className }: Readonly<E2ePadlockProps>
             </div>
         </Tooltip>
     );
-    /* eslint-enable jsx-a11y/no-noninteractive-tabindex */
 }
