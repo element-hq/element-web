@@ -23,9 +23,7 @@ describe("CollapseOnCallResizeBehaviour", () => {
         const expandPanel = vi.fn();
         const collapsePanel = vi.fn();
         const collapseHandler = new CollapseHandler(expandPanel, collapsePanel, 0);
-        // @ts-ignore
-        // eslint-disable-next-line
-        const behaviour = new CollapseOnCallResizeBehaviour(collapseHandler, mockCallStore);
+        new CollapseOnCallResizeBehaviour(collapseHandler, mockCallStore);
 
         // No calls yet
         expect(expandPanel).not.toHaveBeenCalled();
