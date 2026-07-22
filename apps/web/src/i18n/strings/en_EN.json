@@ -677,7 +677,6 @@
     "create_section_dialog": {
         "create_section": "Create section",
         "description": "Sections are only for you",
-        "edit_section": "Edit section",
         "label": "Section name",
         "title": "Create a section",
         "title_edition": "Edit a section"

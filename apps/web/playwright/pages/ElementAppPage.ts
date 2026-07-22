@@ -96,6 +96,13 @@ export class ElementAppPage {
      * @param name The exact room name to find and click on/open.
      */
     public async viewRoomByName(name: string): Promise<void> {
+        // Expand the left panel if necessary
+        const separator = this.page.getByRole("separator", { name: "Click or drag to expand" });
+        const type = await separator.getAttribute("data-separator-type");
+        if (type === "bar") {
+            await separator.click();
+        }
+
         // Make sure the room list is actually present before we try closing toasts,
         // otherwise we may race with page loading
         await this.page.getByTestId("room-list").waitFor();
@@ -386,5 +393,23 @@ export class ElementAppPage {
         do {
             await this.page.mouse.wheel(0, 1000);
         } while (await needsScroll());
+    }
+
+    /**
+     * Resize the left panel by a given number of pixels.
+     * @param delta The number of pixels to resize by. Negative value makes the panel smaller.
+     */
+    public async resizeLeftPanel(delta: number): Promise<void> {
+        const separator = this.page.getByRole("separator", { name: "Click or drag to expand" });
+        const boundingRectangle = await separator.boundingBox();
+
+        // Place the cursor in the center of the separator
+        const centerX = boundingRectangle.x + boundingRectangle.width / 2;
+        await this.page.mouse.move(centerX, boundingRectangle.y);
+
+        // Drag the cursor by delta pixels
+        await this.page.mouse.down();
+        await this.page.mouse.move(centerX + delta, boundingRectangle.y);
+        await this.page.mouse.up();
     }
 }
