@@ -9,54 +9,49 @@
 
 import EventEmitter from "events";
 
-import { CallStore, CallStoreEvent } from "../../../../stores/CallStore";
+import { type CallStore, CallStoreEvent } from "../../../../stores/CallStore";
 import { CollapseOnCallResizeBehaviour } from "./CollapseOnCallResizeBehaviour";
 import { CollapseHandler } from "../CollapseHandler";
 import { describe, it, expect, vi } from "vitest";
 
 vi.useFakeTimers();
 
-// CallStore has a circular dependency, CallStore -> Call -> ... -> Algorithm -> CallStore
-vi.mock("../../../../../src/models/Call");
-
 describe("CollapseOnCallResizeBehaviour", () => {
     it("Should collapse/expand the panel on call", () => {
-        const MockCallStore = new EventEmitter();
-        vi.spyOn(CallStore, "instance", "get").mockReturnValue(MockCallStore as CallStore);
+        const mockCallStore = new EventEmitter() as unknown as CallStore;
 
         const expandPanel = vi.fn();
         const collapsePanel = vi.fn();
         const collapseHandler = new CollapseHandler(expandPanel, collapsePanel, 0);
         // @ts-ignore
         // eslint-disable-next-line
-        const behaviour = new CollapseOnCallResizeBehaviour(collapseHandler);
+        const behaviour = new CollapseOnCallResizeBehaviour(collapseHandler, mockCallStore);
 
         // No calls yet
         expect(expandPanel).not.toHaveBeenCalled();
         expect(collapsePanel).not.toHaveBeenCalled();
 
         // Let's say we get a call
-        MockCallStore.emit(CallStoreEvent.ConnectedCalls, new Set([1]));
+        mockCallStore.emit(CallStoreEvent.ConnectedCalls, new Set([1]));
         expect(collapsePanel).toHaveBeenCalledTimes(1);
 
         // When the call is over
-        MockCallStore.emit(CallStoreEvent.ConnectedCalls, new Set([]));
+        mockCallStore.emit(CallStoreEvent.ConnectedCalls, new Set([]));
         expect(expandPanel).toHaveBeenCalledTimes(1);
     });
 
     it("should set shouldIgnoreResize to true on call", () => {
-        const MockCallStore = new EventEmitter();
-        vi.spyOn(CallStore, "instance", "get").mockReturnValue(MockCallStore as CallStore);
+        const mockCallStore = new EventEmitter() as unknown as CallStore;
 
         const expandPanel = vi.fn();
         const collapsePanel = vi.fn();
         const collapseHandler = new CollapseHandler(expandPanel, collapsePanel, 0);
-        const behaviour = new CollapseOnCallResizeBehaviour(collapseHandler);
+        const behaviour = new CollapseOnCallResizeBehaviour(collapseHandler, mockCallStore);
 
         // Initially shouldIgnoreResize should be false
         expect(behaviour.shouldIgnoreResize).toBe(false);
         // Let's say we get a call
-        MockCallStore.emit(CallStoreEvent.ConnectedCalls, new Set([1]));
+        mockCallStore.emit(CallStoreEvent.ConnectedCalls, new Set([1]));
         // shouldIgnoreResize becomes true
         expect(behaviour.shouldIgnoreResize).toBe(true);
         // shouldIgnoreResize becomes false after some time

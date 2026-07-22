@@ -7,7 +7,7 @@
 
 import { BaseCollapseBehaviour } from "./BaseCollapseBehaviour";
 import type { Call } from "../../../../models/Call";
-import { CallStore, CallStoreEvent } from "../../../../stores/CallStore";
+import { type CallStore, CallStoreEvent } from "../../../../stores/CallStore";
 import type { CollapseHandler } from "../CollapseHandler";
 
 /**
@@ -19,9 +19,12 @@ export class CollapseOnCallResizeBehaviour extends BaseCollapseBehaviour {
     private callJustStarted: boolean = false;
     private callStartedTimeout: number = 0;
 
-    public constructor(collapseHandler: CollapseHandler) {
+    public constructor(
+        collapseHandler: CollapseHandler,
+        private readonly callStore: CallStore,
+    ) {
         super(collapseHandler);
-        CallStore.instance.on(CallStoreEvent.ConnectedCalls, this.onCallConnected);
+        this.callStore.on(CallStoreEvent.ConnectedCalls, this.onCallConnected);
     }
 
     private onCallConnected = (calls: Set<Call>): void => {
@@ -51,6 +54,6 @@ export class CollapseOnCallResizeBehaviour extends BaseCollapseBehaviour {
     }
 
     public dispose = (): void => {
-        CallStore.instance.off(CallStoreEvent.ConnectedCalls, this.onCallConnected);
+        this.callStore.off(CallStoreEvent.ConnectedCalls, this.onCallConnected);
     };
 }
