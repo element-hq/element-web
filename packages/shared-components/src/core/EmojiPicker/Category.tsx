@@ -15,7 +15,7 @@ import { EMOJI_HEIGHT, EMOJIS_PER_ROW } from "./config";
 import Emoji from "./Emoji";
 import { type ButtonEvent } from "./RovingButton";
 import styles from "./EmojiPicker.module.css";
-import { Heading } from "@storybook/addon-docs/blocks";
+import { Heading } from "@vector-im/compound-web";
 
 // Number of rows rendered beyond the visible viewport so that keyboard
 // navigation always has adjacent rows mounted to move focus into.
