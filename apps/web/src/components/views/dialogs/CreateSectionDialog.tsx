@@ -5,14 +5,14 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { useState, type JSX } from "react";
-import { Flex } from "@element-hq/web-shared-components";
-import { Form, Text } from "@vector-im/compound-web";
+import React, { type JSX } from "react";
+import { SectionCreationView, useCreateAutoDisposedViewModel, useViewModel } from "@element-hq/web-shared-components";
 import classNames from "classnames";
 
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import { _t } from "../../../languageHandler";
+import { SectionCreationViewModel } from "../../../viewmodels/room-list/SectionCreationViewModel";
 
 interface CreateSectionDialogProps {
     /**
@@ -33,8 +33,8 @@ interface CreateSectionDialogProps {
  */
 export function CreateSectionDialog({ onFinished, sectionToEdit }: CreateSectionDialogProps): JSX.Element {
     const isEdition = Boolean(sectionToEdit);
-    const [value, setValue] = useState(sectionToEdit ?? "");
-    const isInvalid = Boolean(value.trim().length === 0);
+    const vm = useCreateAutoDisposedViewModel(() => new SectionCreationViewModel({ onFinished, sectionToEdit }));
+    const { value, isSectionValid } = useViewModel(vm);
 
     return (
         <BaseDialog
@@ -45,35 +45,13 @@ export function CreateSectionDialog({ onFinished, sectionToEdit }: CreateSection
             title={isEdition ? _t("create_section_dialog|title_edition") : _t("create_section_dialog|title")}
             hasCancel={true}
         >
-            <Flex gap="var(--cpd-space-6x)" direction="column" className="mx_CreateSectionDialog_content">
-                {!isEdition && (
-                    <Text as="span" weight="medium">
-                        {_t("create_section_dialog|description")}
-                    </Text>
-                )}
-                <Form.Root
-                    className="mx_CreateSectionDialog_form"
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        if (!isInvalid) onFinished(true, value);
-                    }}
-                >
-                    <Form.Field name="sectionName">
-                        <Form.Label> {_t("create_section_dialog|label")}</Form.Label>
-                        <Form.TextControl
-                            value={value}
-                            onChange={(evt) => setValue(evt.target.value)}
-                            required={true}
-                        />
-                    </Form.Field>
-                </Form.Root>
-            </Flex>
+            <SectionCreationView vm={vm} />
             <DialogButtons
                 primaryButton={isEdition ? _t("common|save") : _t("create_section_dialog|create_section")}
-                primaryDisabled={isInvalid}
+                primaryDisabled={!isSectionValid}
                 hasCancel={true}
                 onCancel={() => onFinished(false, "")}
-                onPrimaryButtonClick={() => onFinished(true, value)}
+                onPrimaryButtonClick={() => vm.createOrEditSection()}
             />
         </BaseDialog>
     );
