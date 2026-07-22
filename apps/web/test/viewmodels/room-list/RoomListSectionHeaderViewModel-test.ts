@@ -250,9 +250,14 @@ describe("RoomListSectionHeaderViewModel", () => {
         let notificationState: RoomNotificationState;
 
         beforeEach(() => {
+            jest.useFakeTimers();
             room = mkRoom(matrixClient, "!room:server");
             notificationState = new RoomNotificationState(room, false);
             jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockReturnValue(notificationState);
+        });
+
+        afterEach(() => {
+            jest.useRealTimers();
         });
 
         it("should set isUnread to false when no rooms have notifications", () => {
@@ -327,6 +332,7 @@ describe("RoomListSectionHeaderViewModel", () => {
             jest.spyOn(notificationState, "hasAnyNotificationOrActivity", "get").mockReturnValue(true);
             notificationState.emit(NotificationStateEvents.Update);
 
+            jest.advanceTimersByTime(200);
             expect(vm.getSnapshot().isUnread).toBe(true);
         });
 
@@ -549,6 +555,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                 jest.spyOn(notificationState, "isMention", "get").mockReturnValue(true);
                 notificationState.emit(NotificationStateEvents.Update);
 
+                jest.advanceTimersByTime(200);
                 expect(vm.getSnapshot().notification?.isMention).toBe(true);
             });
         });
