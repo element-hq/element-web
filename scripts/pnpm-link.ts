@@ -28,7 +28,7 @@ try {
     const configFile = await fs.readFile(configPath, "utf-8");
     for (const line of configFile.trim().split("\n")) {
         if (!line || line.startsWith("#")) continue;
-        const [dependency, path, dir] = line.split("=");
+        const [dependency, targetPath, dir] = line.split("=");
         const nodeModules = dir ? path.join(dir, "node_modules") : nodeModulesPath;
         const dependencyPath = path.join(nodeModules, dependency);
 
@@ -38,7 +38,7 @@ try {
                 console.log(`Existing is ${stat.isSymbolicLink() ? "symlink" : "directory"}`);
                 if (stat.isSymbolicLink()) {
                     const linkPath = await fs.readlink(dependencyPath);
-                    if (linkPath === path) {
+                    if (linkPath === targetPath) {
                         // already done
                         continue;
                     } else {
@@ -56,10 +56,10 @@ try {
                 }
             }
 
-            console.log(`Linking ${dependency} to ${path}`);
-            await fs.symlink(path, dependencyPath, "junction"); // use a junction type to avoid EPERM errors on Windows
+            console.log(`Linking ${dependency} to ${targetPath}`);
+            await fs.symlink(targetPath, dependencyPath, "junction"); // use a junction type to avoid EPERM errors on Windows
 
-            const pkgJson = JSON.parse(await fs.readFile(path.join(path, "package.json"), "utf-8"));
+            const pkgJson = JSON.parse(await fs.readFile(path.join(targetPath, "package.json"), "utf-8"));
             const pkgManager =
                 pkgJson.devEngines?.packageManager?.name ?? pkgJson.packageManager?.split("@").at(0) ?? "yarn";
             // pnpm install may have wiped out the `node_modules` dir so we have to restore it

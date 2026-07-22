@@ -9,7 +9,7 @@
 
 import { describe, it, expect, vi } from "vitest";
 import { type EventTimeline, EventType, RoomEvent } from "matrix-js-sdk/src/matrix";
-import { EventEmitter } from "node:stream";
+import { EventEmitter } from "node:events";
 
 import { mkEvent, mkRoom, mkRoomMember, stubClient } from "../../test/test-utils";
 import { CallStoreEvent, type CallStore } from "./CallStore";
