@@ -237,7 +237,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         SettingsStore.unwatchSetting(this.compactLayoutWatcherRef);
         SettingsStore.unwatchSetting(this.backgroundImageWatcherRef);
         this.timezoneProfileUpdateRef?.forEach((s) => SettingsStore.unwatchSetting(s));
-        this.resizerViewModel?.dispose();
+        this.disposeResizerViewModel();
     }
 
     private onCallState = (): void => {
