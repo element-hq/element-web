@@ -677,7 +677,6 @@
     "create_section_dialog": {
         "create_section": "Lisa jaotis",
         "description": "Jaotised on vaid sinu jaoks",
-        "edit_section": "Muuda jaotist",
         "label": "Jaotise nimi",
         "title": "Lisa jaotis",
         "title_edition": "Muuda jaotist"
