@@ -7,8 +7,9 @@ Please see LICENSE in the repository root for full details.
 
 import * as os from "node:os";
 import * as fs from "node:fs";
+import * as fsp from "node:fs/promises";
 import * as path from "node:path";
-import { type Configuration as BaseConfiguration } from "electron-builder";
+import { type Configuration as BaseConfiguration, type BeforeBuildContext } from "electron-builder";
 
 /**
  * This script has different outputs depending on your os platform.
@@ -194,6 +195,17 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
     nativeRebuilder: "sequential",
     nodeGypRebuild: false,
     npmRebuild: true,
+    beforeBuild: async (context: BeforeBuildContext) => {
+        // Assert that the webapp.asar file exists
+        try {
+            await fsp.access(path.join(context.appDir, "webapp.asar"), fs.constants.F_OK);
+        } catch (err) {
+            console.error(err);
+            console.error("The webapp.asar archive is missing. Building without a webapp is fruitless.");
+            console.log("Use the fetch or asar-webapp script to fetch or assemble one respectively.");
+            process.exit(1);
+        }
+    },
 };
 
 /**
