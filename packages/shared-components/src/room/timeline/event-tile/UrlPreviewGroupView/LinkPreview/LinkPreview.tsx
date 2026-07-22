@@ -6,15 +6,15 @@
  */
 
 import React, { type JSX } from "react";
-import { Tooltip, Text, Avatar, Button } from "@vector-im/compound-web";
+import { Tooltip, Text, Avatar, Button, IconButton } from "@vector-im/compound-web";
 import PlaySolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/play-solid";
+import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 import classNames from "classnames";
 
 import { useI18n } from "../../../../../core/i18n/i18nContext";
 import type { UrlPreview } from "../types";
 import { LinkedText } from "../../../../../core/utils/LinkedText";
 import styles from "./LinkPreview.module.css";
-import { CloseIcon } from "@storybook/icons";
 
 export interface LinkPreviewActions {
     onImageClick: () => void;
@@ -130,7 +130,12 @@ export function LinkPreviewCollapsed(preview: LinkPreviewProps): JSX.Element {
                 <LinkTitle title={preview.title} showTooltipOnLink={preview.showTooltipOnLink} link={preview.link} />
                 {preview.siteName && <LinkSiteName siteName={preview.siteName} />}
             </div>
-            {preview.onRemoveClick && <button className={styles.removePreview} onClick={preview.onRemoveClick}><CloseIcon /></button>}
+            {preview.onRemoveClick && <IconButton
+                kind="secondary"
+                size="28px"
+                className={styles.removePreview}
+                aria-label={_t("timeline|url_preview|close")}
+                onClick={preview.onRemoveClick}><CloseIcon /></IconButton>}
         </div>
     );
 }
@@ -199,7 +204,12 @@ export function LinkPreviewExpanded(preview: LinkPreviewProps): JSX.Element {
                 </LinkedText>
                 {preview.siteName && <LinkSiteName siteName={preview.siteName} siteIcon={preview.siteIcon} />}
             </div>
-            {preview.onRemoveClick && <button className={styles.removePreview} onClick={preview.onRemoveClick}><CloseIcon /></button>}
+            {preview.onRemoveClick && <IconButton
+                kind="secondary"
+                className={styles.removePreview}
+                size="28px"
+                aria-label={_t("timeline|url_preview|close")}
+                onClick={preview.onRemoveClick}><CloseIcon /></IconButton>}
         </div>
     );
 }
