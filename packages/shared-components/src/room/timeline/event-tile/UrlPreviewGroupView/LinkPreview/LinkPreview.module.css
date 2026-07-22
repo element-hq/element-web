@@ -53,7 +53,7 @@ button.preview {
     }
 
     .title,
-    .siteName>span {
+    .siteName > span {
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 1;
@@ -139,7 +139,7 @@ button.preview {
             margin: auto;
             background: var(--cpd-color-text-on-solid-primary);
 
-            >svg {
+            > svg {
                 margin: auto;
                 border-radius: 50px;
                 color: var(--cpd-color-icon-primary);
@@ -178,10 +178,9 @@ button.preview {
         overflow: hidden;
         display: -webkit-box;
         -webkit-box-orient: vertical;
-
     }
 
-    >* {
+    > * {
         /* Center everything */
         margin: auto 0;
     }

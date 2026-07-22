@@ -20,7 +20,7 @@ export interface LinkPreviewActions {
     onImageClick: () => void;
 }
 
-export type LinkPreviewProps = UrlPreview & LinkPreviewActions & { collapsed: boolean, onRemoveClick?: () => void };
+export type LinkPreviewProps = UrlPreview & LinkPreviewActions & { collapsed: boolean; onRemoveClick?: () => void };
 
 export function LinkTitle({
     title,
@@ -130,12 +130,17 @@ export function LinkPreviewCollapsed(preview: LinkPreviewProps): JSX.Element {
                 <LinkTitle title={preview.title} showTooltipOnLink={preview.showTooltipOnLink} link={preview.link} />
                 {preview.siteName && <LinkSiteName siteName={preview.siteName} />}
             </div>
-            {preview.onRemoveClick && <IconButton
-                kind="secondary"
-                size="28px"
-                className={styles.removePreview}
-                aria-label={_t("timeline|url_preview|close")}
-                onClick={preview.onRemoveClick}><CloseIcon /></IconButton>}
+            {preview.onRemoveClick && (
+                <IconButton
+                    kind="secondary"
+                    size="28px"
+                    className={styles.removePreview}
+                    aria-label={_t("timeline|url_preview|close")}
+                    onClick={preview.onRemoveClick}
+                >
+                    <CloseIcon />
+                </IconButton>
+            )}
         </div>
     );
 }
@@ -204,12 +209,17 @@ export function LinkPreviewExpanded(preview: LinkPreviewProps): JSX.Element {
                 </LinkedText>
                 {preview.siteName && <LinkSiteName siteName={preview.siteName} siteIcon={preview.siteIcon} />}
             </div>
-            {preview.onRemoveClick && <IconButton
-                kind="secondary"
-                className={styles.removePreview}
-                size="28px"
-                aria-label={_t("timeline|url_preview|close")}
-                onClick={preview.onRemoveClick}><CloseIcon /></IconButton>}
+            {preview.onRemoveClick && (
+                <IconButton
+                    kind="secondary"
+                    className={styles.removePreview}
+                    size="28px"
+                    aria-label={_t("timeline|url_preview|close")}
+                    onClick={preview.onRemoveClick}
+                >
+                    <CloseIcon />
+                </IconButton>
+            )}
         </div>
     );
 }

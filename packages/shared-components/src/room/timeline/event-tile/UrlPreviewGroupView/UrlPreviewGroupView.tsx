@@ -44,7 +44,7 @@ export interface UrlPreviewGroupViewProps {
      *
      * Do not inclucde this field if editing the bundled previews is not possible
      */
-    removeUrlPreview?: ((url: string) => void),
+    removeUrlPreview?: (url: string) => void;
 }
 
 /** User actions emitted by the URL preview group view. */
@@ -112,7 +112,9 @@ export function UrlPreviewGroupView({ vm, className, removeUrlPreview }: UrlPrev
                         {...preview}
                         image={preview.image}
                         collapsed={i !== 0}
-                        onRemoveClick={removeUrlPreview === undefined ? undefined : () => removeUrlPreview(preview.link)}
+                        onRemoveClick={
+                            removeUrlPreview === undefined ? undefined : () => removeUrlPreview(preview.link)
+                        }
                     />
                 ))}
                 {toggleButton}
