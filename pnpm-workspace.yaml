@@ -31,7 +31,7 @@ catalog:
     # fonts
     "@fontsource/inter": 5.2.8
     # vite
-    vite: 8.1.4
+    vite: 8.1.5
     vite-plugin-node-polyfills: 0.28.0
     vite-plugin-svgr: 5.2.0
     vitest: 4.1.10
