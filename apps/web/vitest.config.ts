@@ -54,7 +54,15 @@ export default defineProject({
                 url: "http://localhost/",
             },
         },
-        snapshotSerializers: ["src/test/react-use-id-serializer.ts"],
+        snapshotSerializers: [resolve(__dirname, "./src/test/react-use-id-serializer.ts")],
     },
-    plugins: [svgr()],
+    plugins: [
+        svgr({
+            svgrOptions: {
+                ref: true,
+                svgProps: { "role": "presentation", "aria-hidden": "true" },
+                expandProps: "end",
+            },
+        }),
+    ],
 });

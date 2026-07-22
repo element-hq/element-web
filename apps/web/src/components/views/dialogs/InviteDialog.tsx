@@ -11,7 +11,7 @@ import { EventType, type Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
-import { throttle, uniqBy } from "lodash";
+import { debounce, uniqBy } from "lodash";
 import { Pill, PillInput, RichList } from "@element-hq/web-shared-components";
 import { DialPadIcon, UserProfileSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
@@ -530,7 +530,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         this.props.onFinished(false);
     };
 
-    private updateSuggestions = throttle(
+    private updateSuggestions = debounce(
         async (term: string): Promise<void> => {
             MatrixClientPeg.safeGet()
                 .searchUserDirectory({ term })
@@ -640,8 +640,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 }
             }
         },
-        150, // 150ms throttle (human reaction time + some)
-        { leading: true, trailing: true },
+        150, // 150ms debounce (human reaction time + some)
     );
 
     private updateFilter = (e: React.ChangeEvent<HTMLInputElement>): void => {
