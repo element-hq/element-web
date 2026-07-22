@@ -24,7 +24,7 @@ Please see LICENSE files in the repository root for full details.
 
         #mx_SpotlightDialog_keyboardPrompt {
             position: absolute;
-            padding: $spacing-8;
+            padding: var(--cpd-space-2x);
             border-radius: 8px;
             background-color: $background;
             top: -60px; /* relative to the top of the modal */
@@ -36,8 +36,8 @@ Please see LICENSE files in the repository root for full details.
 
             kbd {
                 display: inline-block;
-                padding: 2px $spacing-4;
-                margin: 0 $spacing-4;
+                padding: 2px var(--cpd-space-1x);
+                margin: 0 var(--cpd-space-1x);
                 border-radius: 6px;
                 background-color: $quinary-content;
                 vertical-align: middle;
@@ -64,7 +64,7 @@ Please see LICENSE files in the repository root for full details.
         margin: 0;
         border: none;
         border-radius: 8px 8px 0 0;
-        padding: $spacing-12 $spacing-16;
+        padding: var(--cpd-space-3x) var(--cpd-space-4x);
         border-bottom: 1px solid $system;
 
         > .mx_SpotlightDialog_filter {
@@ -72,19 +72,19 @@ Please see LICENSE files in the repository root for full details.
             align-content: center;
             align-items: center;
             border-radius: 8px;
-            margin-right: $spacing-8;
+            margin-right: var(--cpd-space-2x);
             background-color: $quinary-content;
             vertical-align: middle;
             color: $primary-content;
             position: relative;
-            padding: $spacing-4 $spacing-8 $spacing-4 37px;
+            padding: var(--cpd-space-1x) var(--cpd-space-2x) var(--cpd-space-1x) 37px;
 
             > svg {
                 color: $secondary-content;
                 width: 18px;
                 height: 18px;
                 position: absolute;
-                left: $spacing-8;
+                left: var(--cpd-space-2x);
                 top: 50%;
                 transform: translateY(-50%);
             }
@@ -96,7 +96,7 @@ Please see LICENSE files in the repository root for full details.
                 padding: 1px;
                 background: $system;
                 border-radius: 8px;
-                margin-left: $spacing-8;
+                margin-left: var(--cpd-space-2x);
                 text-align: center;
                 line-height: 16px;
                 color: $secondary-content;
@@ -126,7 +126,7 @@ Please see LICENSE files in the repository root for full details.
             flex-grow: 0;
             width: unset;
             height: unset;
-            margin-left: $spacing-16;
+            margin-left: var(--cpd-space-4x);
         }
 
         &:not(:focus-within) + #mx_SpotlightDialog_content {
@@ -143,7 +143,7 @@ Please see LICENSE files in the repository root for full details.
     #mx_SpotlightDialog_content {
         height: 100%;
         overflow-y: auto;
-        padding: $spacing-16;
+        padding: var(--cpd-space-4x);
 
         ul {
             padding: 0;
@@ -161,23 +161,23 @@ Please see LICENSE files in the repository root for full details.
             }
 
             > h4 {
-                margin-bottom: $spacing-8;
+                margin-bottom: var(--cpd-space-2x);
             }
 
             .mx_SpotlightDialog_sectionHeader {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                margin-bottom: $spacing-8;
+                margin-bottom: var(--cpd-space-2x);
 
                 .mx_SpotlightDialog_options {
                     display: flex;
-                    gap: $spacing-4;
+                    gap: var(--cpd-space-1x);
                 }
             }
 
             & + .mx_SpotlightDialog_section {
-                margin-top: $spacing-24;
+                margin-top: var(--cpd-space-6x);
             }
         }
 
@@ -201,7 +201,7 @@ Please see LICENSE files in the repository root for full details.
             }
 
             .mx_SpotlightDialog_option {
-                padding: $spacing-4;
+                padding: var(--cpd-space-1x);
                 color: $primary-content;
                 font-size: $font-12px;
                 line-height: $font-15px;
@@ -213,11 +213,11 @@ Please see LICENSE files in the repository root for full details.
                 text-align: center;
 
                 .mx_DecoratedRoomAvatar {
-                    margin: 0 9px $spacing-4; /* maintain centering */
+                    margin: 0 9px var(--cpd-space-1x); /* maintain centering */
                 }
 
                 & + .mx_SpotlightDialog_option {
-                    margin-left: $spacing-16;
+                    margin-left: var(--cpd-space-4x);
                 }
             }
         }
@@ -229,7 +229,7 @@ Please see LICENSE files in the repository root for full details.
             .mx_SpotlightDialog_option {
                 --mx_SpotlightDialog_option_selectedBgColor: $system;
 
-                padding: 6px $spacing-4;
+                padding: 6px var(--cpd-space-1x);
                 font-size: $font-15px;
                 line-height: $font-24px;
                 color: $primary-content;
@@ -249,20 +249,20 @@ Please see LICENSE files in the repository root for full details.
                     align-items: flex-start;
 
                     .mx_AccessibleButton {
-                        padding: $spacing-4 $spacing-20;
-                        margin: 2px $spacing-4;
+                        padding: var(--cpd-space-1x) var(--cpd-space-5x);
+                        margin: 2px var(--cpd-space-1x);
                     }
 
                     .mx_SpotlightDialog_enterPrompt {
                         margin-top: 9px;
-                        margin-right: $spacing-8;
+                        margin-right: var(--cpd-space-2x);
                     }
                 }
 
                 > .mx_SpotlightDialog_metaspaceResult,
                 > .mx_DecoratedRoomAvatar,
                 > .mx_BaseAvatar {
-                    margin-right: $spacing-8;
+                    margin-right: var(--cpd-space-2x);
                     width: 24px;
                     height: 24px;
                     flex-shrink: 0;
@@ -283,7 +283,7 @@ Please see LICENSE files in the repository root for full details.
                         display: flex;
                         flex-direction: row;
                         line-height: $font-24px;
-                        margin-right: $spacing-8;
+                        margin-right: var(--cpd-space-2x);
 
                         .mx_SpotlightDialog_result_publicRoomName {
                             color: $primary-content;
@@ -294,7 +294,7 @@ Please see LICENSE files in the repository root for full details.
                         .mx_SpotlightDialog_result_publicRoomAlias {
                             color: $tertiary-content;
                             font-size: $font-12px;
-                            margin-left: $spacing-8;
+                            margin-left: var(--cpd-space-2x);
                             overflow: hidden;
                             text-overflow: ellipsis;
                         }
@@ -313,7 +313,7 @@ Please see LICENSE files in the repository root for full details.
                 }
 
                 .mx_NotificationBadge {
-                    margin-left: $spacing-8;
+                    margin-left: var(--cpd-space-2x);
                 }
 
                 .mx_SpotlightDialog_option--menu,
@@ -356,17 +356,17 @@ Please see LICENSE files in the repository root for full details.
 
         .mx_SpotlightDialog_inviteLink,
         .mx_SpotlightDialog_createRoom {
-            margin-top: $spacing-8;
+            margin-top: var(--cpd-space-2x);
 
             .mx_AccessibleButton {
                 position: relative;
                 margin: 0;
-                padding: 3px $spacing-8 3px $spacing-28;
+                padding: 3px var(--cpd-space-2x) 3px var(--cpd-space-7x);
 
                 svg {
                     display: block;
                     position: absolute;
-                    left: $spacing-8;
+                    left: var(--cpd-space-2x);
                     width: 16px;
                     height: 16px;
                     color: var(--cpd-color-icon-primary);
@@ -376,7 +376,7 @@ Please see LICENSE files in the repository root for full details.
 
         .mx_SpotlightDialog_otherSearches {
             .mx_SpotlightDialog_option {
-                padding-left: $spacing-32;
+                padding-left: var(--cpd-space-8x);
                 position: relative;
 
                 svg {
@@ -384,7 +384,7 @@ Please see LICENSE files in the repository root for full details.
                     width: 24px;
                     height: 24px;
                     position: absolute;
-                    left: $spacing-4;
+                    left: var(--cpd-space-1x);
                     top: 50%;
                     transform: translateY(-50%);
                 }
@@ -397,8 +397,8 @@ Please see LICENSE files in the repository root for full details.
         }
 
         .mx_SpotlightDialog_result_details {
-            margin-left: $spacing-8;
-            margin-right: $spacing-8;
+            margin-left: var(--cpd-space-2x);
+            margin-right: var(--cpd-space-2x);
             color: $tertiary-content;
             font-size: $font-12px;
             line-height: $font-15px;
@@ -415,7 +415,7 @@ Please see LICENSE files in the repository root for full details.
         }
 
         .mx_SpotlightDialog_enterPrompt {
-            padding: 2px $spacing-4;
+            padding: 2px var(--cpd-space-1x);
             /* To avoid any styling inherent with <kbd> elements */
             font-family: inherit;
             font-weight: inherit;
@@ -424,7 +424,7 @@ Please see LICENSE files in the repository root for full details.
             color: $tertiary-content;
             border-radius: 6px;
             background-color: $quinary-content;
-            margin-right: $spacing-4;
+            margin-right: var(--cpd-space-1x);
             display: none;
         }
 
