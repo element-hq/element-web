@@ -43,6 +43,7 @@ import { ALTERNATE_KEY_NAME, KeyBindingAction } from "../../../accessibility/Key
 import { _t } from "../../../languageHandler";
 import { Landmark, LandmarkNavigation } from "../../../accessibility/LandmarkNavigation";
 import { SDKContext } from "../../../contexts/SDKContext.ts";
+import { type CustomEmote } from "../../../custom-emotes";
 
 // matches emoticons which follow the start of a line or whitespace
 const REGEX_EMOTICON_WHITESPACE = new RegExp("(?:^|\\s)(" + EMOTICON_REGEX.source + ")\\s|:^$");
@@ -933,5 +934,20 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             const addedLen = model.insert(partCreator.plainWithEmoji(text), position);
             return model.positionForOffset(caret.offset + addedLen, true);
         });
+    }
+
+    public insertCustomEmote(emote: CustomEmote): void {
+        this.modifiedFlag = true;
+        const { model } = this.props;
+        const caret = this.getCaret();
+        const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
+        model.transform(() => {
+            const addedLen = model.insert(
+                [model.partCreator.customEmote(emote.shortcode, emote.url, emote.body, emote.sendToken)],
+                position,
+            );
+            return model.positionForOffset(caret.offset + addedLen, true);
+        });
+        this.focus();
     }
 }

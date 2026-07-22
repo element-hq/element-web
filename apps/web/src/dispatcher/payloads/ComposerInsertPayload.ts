@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { type ActionPayload } from "../payloads";
 import { type Action } from "../actions";
 import { type TimelineRenderingType } from "../../contexts/RoomContext";
+import { type CustomEmote } from "../../custom-emotes";
 
 export enum ComposerType {
     Send = "send",
@@ -29,4 +30,11 @@ interface IComposerInsertPlaintextPayload extends IBaseComposerInsertPayload {
     text: string;
 }
 
-export type ComposerInsertPayload = IComposerInsertMentionPayload | IComposerInsertPlaintextPayload;
+interface IComposerInsertCustomEmotePayload extends IBaseComposerInsertPayload {
+    customEmote: CustomEmote;
+}
+
+export type ComposerInsertPayload =
+    | IComposerInsertMentionPayload
+    | IComposerInsertPlaintextPayload
+    | IComposerInsertCustomEmotePayload;

@@ -45,10 +45,14 @@ export function useWysiwygEditActionHandler(
                     if (payload.timelineRenderingType !== roomContext.timelineRenderingType) break;
                     if (payload.composerType !== ComposerType.Edit) break;
 
-                    if (payload.text) {
-                        void setSelection(composerContext.selection).then(() =>
-                            composerFunctions.insertText(payload.text),
-                        );
++                    if (payload.customEmote) {
++                        void setSelection(composerContext.selection).then(() =>
++                            composerFunctions.insertText(payload.customEmote.sendToken),
++                        );
++                    } else if (payload.text) {
++                        void setSelection(composerContext.selection).then(() =>
++                            composerFunctions.insertText(payload.text),
++                        );
                     }
                     break;
             }

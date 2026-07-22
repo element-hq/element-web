@@ -445,6 +445,8 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
                 this.editorRef.current?.insertMention(payload.userId);
             } else if (payload.event) {
                 this.editorRef.current?.insertQuotedMessage(payload.event);
+            } else if (payload.customEmote) {
+                this.editorRef.current?.insertCustomEmote(payload.customEmote);
             } else if (payload.text) {
                 this.editorRef.current?.insertPlaintext(payload.text);
             }

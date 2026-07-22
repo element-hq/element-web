@@ -192,8 +192,10 @@ function addPack(packs: ResolvedImagePack[], seen: Set<string>, pack: ResolvedIm
 export function getImagePacksForRoom(
     client: MatrixClient,
     room: Room,
-    getCanonicalParent = (roomId: string): Room | null =>
-        SDKContextClass.instance.spaceStore.getCanonicalParent(roomId),
+    getCanonicalParent = (roomId: string): Room | null => {
+        if (typeof client.getVisibleRooms !== "function") return null;
+        return SDKContextClass.instance.spaceStore.getCanonicalParent(roomId);
+    },
 ): ResolvedImagePack[] {
     const packs: ResolvedImagePack[] = [];
     const seen = new Set<string>();

@@ -44,9 +44,11 @@ import { useSettingValue } from "../../../hooks/useSettings";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 import { useRoomUploadViewModel } from "../../../viewmodels/room/RoomUploadViewModel.tsx";
+import { type CustomEmote, getCustomEmotesForRoom } from "../../../custom-emotes";
 
 interface IProps {
     addEmoji: (emoji: string) => boolean;
+    addCustomEmote: (emote: CustomEmote) => boolean;
     haveRecording: boolean;
     isMenuOpen: boolean;
     isStickerPickerOpen: boolean;
@@ -73,6 +75,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
     if (!matrixClient || !room || props.haveRecording) {
         return null;
     }
+    const customEmotes = getCustomEmotesForRoom(matrixClient, room);
 
     let mainButtons: ReactNode[];
     let moreButtons: ReactNode[];
@@ -85,7 +88,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
                     onClick={props.onComposerModeClick}
                 />
             ) : (
-                emojiButton(props)
+                emojiButton(props, customEmotes)
             ),
         ];
         moreButtons = [
@@ -112,7 +115,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
                     onClick={props.onComposerModeClick}
                 />
             ) : (
-                emojiButton(props)
+                emojiButton(props, customEmotes)
             ),
             <UploadButton key="upload" vm={roomUploadVM} />,
         ];
@@ -161,11 +164,13 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
     );
 };
 
-function emojiButton(props: IProps): ReactElement {
+function emojiButton(props: IProps, customEmotes: CustomEmote[]): ReactElement {
     return (
         <EmojiButton
             key="emoji_button"
             addEmoji={props.addEmoji}
+            addCustomEmote={props.addCustomEmote}
+            customEmotes={customEmotes}
             menuPosition={props.menuPosition}
             className="mx_MessageComposer_button"
         />

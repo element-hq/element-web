@@ -64,6 +64,7 @@ import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
 import PlatformPeg from "../../../PlatformPeg";
 import { useSettingValue } from "../../../hooks/useSettings";
+import { type CustomEmote } from "../../../custom-emotes";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const WYSIWYG_EDITOR_STATE_STORAGE_PREFIX = "mx_wysiwyg_state_";
@@ -400,6 +401,15 @@ export class MessageComposer extends React.Component<IProps, IState> {
         return true;
     };
 
+    private addCustomEmote = (customEmote: CustomEmote): boolean => {
+        dis.dispatch<ComposerInsertPayload>({
+            action: Action.ComposerInsert,
+            customEmote,
+            timelineRenderingType: this.context.timelineRenderingType,
+        });
+        return true;
+    };
+
     private sendMessage = async (): Promise<void> => {
         // snapshot need to be captured before the composer is cleared
         // otherwise the send message function will think there are no URLs in
@@ -711,6 +721,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                             {canSendMessages && (
                                 <MessageComposerButtons
                                     addEmoji={this.addEmoji}
+                                    addCustomEmote={this.addCustomEmote}
                                     haveRecording={this.state.haveRecording}
                                     isMenuOpen={this.state.isMenuOpen}
                                     isStickerPickerOpen={this.state.isStickerPickerOpen}

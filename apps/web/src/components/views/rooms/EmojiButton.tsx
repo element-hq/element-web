@@ -13,15 +13,24 @@ import { ReactionIcon } from "@vector-im/compound-design-tokens/assets/web/icons
 import { _t } from "../../../languageHandler";
 import ContextMenu, { aboveLeftOf, type MenuProps, useContextMenu } from "../../structures/ContextMenu";
 import { CollapsibleButton, OverflowMenuContext } from "./CollapsibleButton";
-import { EmojiPickerWithRecents } from "../../../emojipicker/EmojiPickerWithRecents";
++import { EmojiPickerWithRecents } from "../../../emojipicker/EmojiPickerWithRecents";
++import { type CustomEmote } from "../../../custom-emotes";
 
 interface IEmojiButtonProps {
     addEmoji: (unicode: string) => boolean;
+    addCustomEmote?: (emote: CustomEmote) => boolean;
+    customEmotes?: CustomEmote[];
     menuPosition?: MenuProps;
     className?: string;
 }
 
-export function EmojiButton({ addEmoji, menuPosition, className }: IEmojiButtonProps): JSX.Element {
+export function EmojiButton({
+    addEmoji,
+    addCustomEmote,
+    customEmotes,
+    menuPosition,
+    className,
+}: IEmojiButtonProps): JSX.Element {
     const overflowMenuCloser = useContext(OverflowMenuContext);
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
 
@@ -35,7 +44,12 @@ export function EmojiButton({ addEmoji, menuPosition, className }: IEmojiButtonP
 
         contextMenu = (
             <ContextMenu {...position} onFinished={onFinished} managed={false} focusLock>
-                <EmojiPickerWithRecents onChoose={addEmoji} onFinished={onFinished} />
++                <EmojiPickerWithRecents
++                    onChoose={addEmoji}
++                    customEmotes={customEmotes}
++                    onChooseCustomEmote={addCustomEmote}
++                    onFinished={onFinished}
++                />
             </ContextMenu>
         );
     }

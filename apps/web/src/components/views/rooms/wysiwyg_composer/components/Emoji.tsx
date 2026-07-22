@@ -14,13 +14,17 @@ import dis from "../../../../../dispatcher/dispatcher";
 import { type ComposerInsertPayload } from "../../../../../dispatcher/payloads/ComposerInsertPayload";
 import { Action } from "../../../../../dispatcher/actions";
 import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.tsx";
+import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
+import { getCustomEmotesForRoom } from "../../../../../custom-emotes";
 
 interface EmojiProps {
     menuPosition: MenuProps;
 }
 
 export function Emoji({ menuPosition }: EmojiProps): JSX.Element {
-    const roomContext = useScopedRoomContext("timelineRenderingType");
+    const roomContext = useScopedRoomContext("room", "timelineRenderingType");
+    const client = useMatrixClientContext();
+    const customEmotes = roomContext.room ? getCustomEmotesForRoom(client, roomContext.room) : [];
 
     return (
         <EmojiButton
@@ -29,6 +33,15 @@ export function Emoji({ menuPosition }: EmojiProps): JSX.Element {
                 dis.dispatch<ComposerInsertPayload>({
                     action: Action.ComposerInsert,
                     text: emoji,
+                    timelineRenderingType: roomContext.timelineRenderingType,
+                });
+                return true;
+            }}
+            customEmotes={customEmotes}
+            addCustomEmote={(customEmote) => {
+                dis.dispatch<ComposerInsertPayload>({
+                    action: Action.ComposerInsert,
+                    customEmote,
                     timelineRenderingType: roomContext.timelineRenderingType,
                 });
                 return true;
