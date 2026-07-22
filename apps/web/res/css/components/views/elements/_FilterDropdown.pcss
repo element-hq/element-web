@@ -8,11 +8,11 @@ Please see LICENSE files in the repository root for full details.
 
 .mx_FilterDropdown {
     .mx_Dropdown_menu {
-        margin-top: $spacing-4;
+        margin-top: var(--cpd-space-1x);
         left: unset;
-        right: -$spacing-12;
+        right: -var(--cpd-space-3x);
         width: 232px;
-        padding: $spacing-12;
+        padding: var(--cpd-space-3x);
 
         border: 1px solid $quinary-content;
         border-radius: 8px;
@@ -48,7 +48,7 @@ Please see LICENSE files in the repository root for full details.
     position: relative;
     width: 100%;
     box-sizing: border-box;
-    padding: $spacing-8 0 $spacing-8 $spacing-20;
+    padding: var(--cpd-space-2x) 0 var(--cpd-space-2x) var(--cpd-space-5x);
 
     font-size: $font-12px;
     line-height: $font-15px;
@@ -59,7 +59,7 @@ Please see LICENSE files in the repository root for full details.
     height: 14px;
     width: 14px;
     position: absolute;
-    top: $spacing-8;
+    top: var(--cpd-space-2x);
     left: 0;
 }
 
@@ -70,5 +70,5 @@ Please see LICENSE files in the repository root for full details.
 
 .mx_FilterDropdown_optionDescription {
     color: $secondary-content;
-    margin-top: $spacing-4;
+    margin-top: var(--cpd-space-1x);
 }
