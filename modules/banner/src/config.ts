@@ -11,14 +11,27 @@ import { Theme } from "./theme.ts";
 
 z.config(z.locales.en());
 
-const StaticConfig = z.object({
-    type: z.literal("static"),
-
+const MenuConfig = z.object({
     /**
      * Alternative logo URL to display in the popover menu.
      * Will use the main logo url if omitted.
      */
     logo_url: z.optional(z.url()),
+
+    /**
+     * Height in pixels to use when rendering the logo in the menu, defaults to 32px.
+     * The width will be set automatically to maintain the original aspect ratio.
+     */
+    logo_height: z.optional(z.number()),
+
+    /**
+     * Optional link href to for the logo in the menu.
+     */
+    logo_href: z.optional(z.url()),
+});
+
+const StaticConfig = z.extend(MenuConfig, {
+    type: z.literal("static"),
 
     /**
      * Categories of links to display in the menu.
@@ -58,14 +71,8 @@ const StaticConfig = z.object({
 
 export type StaticConfig = z.infer<typeof StaticConfig>;
 
-const UniventionConfig = z.object({
+const UniventionConfig = z.extend(MenuConfig, {
     type: z.literal("univention"),
-
-    /**
-     * Alternative logo URL to display in the popover menu.
-     * Will use the main logo url if omitted.
-     */
-    logo_url: z.optional(z.url()),
 
     /**
      * Base URL to an Intercom Service
