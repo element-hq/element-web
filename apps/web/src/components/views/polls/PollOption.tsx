@@ -12,7 +12,7 @@ import { type PollAnswerSubevent } from "matrix-js-sdk/src/extensible_events_v1/
 import { CheckIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
-import { Icon as TrophyIcon } from "../../../../res/img/element-icons/trophy.svg";
+import TrophyIcon from "../../../../res/img/element-icons/trophy.svg?react";
 import StyledRadioButton from "../elements/StyledRadioButton";
 
 type PollOptionContentProps = {

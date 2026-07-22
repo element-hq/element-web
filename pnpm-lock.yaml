@@ -1018,6 +1018,9 @@ importers:
       util:
         specifier: ^0.12.5
         version: 0.12.5
+      vite-plugin-svgr:
+        specifier: 'catalog:'
+        version: 5.2.0(@typescript/typescript6@6.0.2)(rollup@4.60.1)(vite@8.1.5(@types/node@25.9.3)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.19))(terser@5.48.0)(yaml@2.9.0))
       vitest:
         specifier: 'catalog:'
         version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@4.1.10)(@vitest/coverage-v8@4.1.10)(happy-dom@20.11.0)(jsdom@26.1.0(patch_hash=040623e87b1c8b676c2a705513c0276c0704dd1b23fc3a1bb77cde8128b64b5f))(vite@8.1.5(@types/node@25.9.3)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.19))(terser@5.48.0)(yaml@2.9.0))
@@ -26612,6 +26615,17 @@ snapshots:
       vite: 8.1.5(@types/node@25.9.3)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.19))(terser@5.48.0)(yaml@2.9.0)
     transitivePeerDependencies:
       - rollup
+
+  vite-plugin-svgr@5.2.0(@typescript/typescript6@6.0.2)(rollup@4.60.1)(vite@8.1.5(@types/node@25.9.3)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.19))(terser@5.48.0)(yaml@2.9.0)):
+    dependencies:
+      '@rollup/pluginutils': 5.4.0(rollup@4.60.1)
+      '@svgr/core': 8.1.0(@typescript/typescript6@6.0.2)
+      '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0(@typescript/typescript6@6.0.2))
+      vite: 8.1.5(@types/node@25.9.3)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.19))(terser@5.48.0)(yaml@2.9.0)
+    transitivePeerDependencies:
+      - rollup
+      - supports-color
+      - typescript
 
   vite-plugin-svgr@5.2.0(rollup@4.60.1)(typescript@7.0.2)(vite@8.1.5(@types/node@25.9.3)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.19))(terser@5.48.0)(yaml@2.9.0)):
     dependencies:
