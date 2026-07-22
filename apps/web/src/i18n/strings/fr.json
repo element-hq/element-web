@@ -677,7 +677,6 @@
     "create_section_dialog": {
         "create_section": "Créer une section",
         "description": "Ces sections sont réservées à vous.",
-        "edit_section": "Modifier la section",
         "label": "Nom de la section",
         "title": "Créer une section",
         "title_edition": "Modifier une section"
@@ -2433,7 +2432,8 @@
         "warning_kind_files": "Cette version de %(brand)s ne prend pas en charge l’affichage de certains fichiers chiffrés",
         "warning_kind_files_app": "Utilisez une <a>Application de bureau</a> pour voir tous les fichiers chiffrés",
         "warning_kind_search": "Cette version de %(brand)s ne prend pas en charge la recherche dans les messages chiffrés",
-        "warning_kind_search_app": "Utilisez une <a>Application de bureau</a> pour rechercher dans tous les messages chiffrés"
+        "warning_kind_search_app": "Utilisez une <a>Application de bureau</a> pour rechercher dans tous les messages chiffrés",
+        "warning_kind_search_partial": "Les résultats peuvent être incomplets car votre index de recherche est encore en cours de construction."
     },
     "setting": {
         "help_about": {
@@ -3826,6 +3826,9 @@
         "verification_unavailable": "Vérification de l’utilisateur indisponible",
         "verify_button": "Vérifier l’utilisateur",
         "verify_explainer": "Pour une sécurité supplémentaire, vérifiez cet utilisateur en comparant un code à usage unique sur vos deux appareils."
+    },
+    "user_status": {
+        "on_a_call": "En appel"
     },
     "voip": {
         "already_in_call": "Déjà en cours d’appel",
