@@ -26,6 +26,7 @@ import {
     type IWidgetApiErrorResponseDataDetails,
     type ISearchUserDirectoryResult,
     type IGetMediaConfigResult,
+    type IRtcTransportsResult,
 } from "matrix-widget-api";
 import {
     ClientEvent,
@@ -123,6 +124,7 @@ export class ElementWidgetDriver extends WidgetDriver {
             // This is a trusted Element Call widget that we control
             this.allowedCapabilities.add(MatrixCapabilities.AlwaysOnScreen);
             this.allowedCapabilities.add(MatrixCapabilities.MSC3846TurnServers);
+            this.allowedCapabilities.add(MatrixCapabilities.MSC4515RtcTransports);
             this.allowedCapabilities.add(`org.matrix.msc2762.timeline:${inRoomId}`);
             this.allowedCapabilities.add(MatrixCapabilities.MSC4157SendDelayedEvent);
             this.allowedCapabilities.add(MatrixCapabilities.MSC4157UpdateDelayedEvent);
@@ -763,6 +765,16 @@ export class ElementWidgetDriver extends WidgetDriver {
             client.off(ClientEvent.TurnServers, onTurnServers);
             client.off(ClientEvent.TurnServersError, onTurnServersError);
         }
+    }
+
+    public async getRtcTransports(): Promise<IRtcTransportsResult> {
+        const client = MatrixClientPeg.safeGet();
+        // Delegate to the authenticated CS endpoint (MSC4143). Any error (e.g. the
+        // homeserver not supporting it) propagates and is turned into a widget error
+        // response by ClientWidgetApi. The js-sdk Transport and widget-api IRtcTransport
+        // types are structurally identical.
+        const transports = await client._unstable_getRTCTransports();
+        return { rtc_transports: transports };
     }
 
     public async readEventRelations(

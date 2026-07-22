@@ -14,6 +14,7 @@ import {
     type ITurnServer as IClientTurnServer,
     Direction,
     EventType,
+    MatrixError,
     MatrixEvent,
     MsgType,
     RelationType,
@@ -89,6 +90,7 @@ describe("ElementWidgetDriver", () => {
         const requestedCapabilities = new Set([
             "m.always_on_screen",
             "town.robin.msc3846.turn_servers",
+            "org.matrix.msc4515.rtc_transports",
             "org.matrix.msc2762.timeline:!1:example.org",
             "org.matrix.msc2762.send.event:org.matrix.msc4075.call.notify",
             "org.matrix.msc2762.send.event:org.matrix.msc4075.rtc.notification",
@@ -417,6 +419,34 @@ describe("ElementWidgetDriver", () => {
             expect(await nextServer).toEqual({ value: server2, done: false });
 
             await servers.return(undefined);
+        });
+    });
+
+    describe("getRtcTransports", () => {
+        let driver: WidgetDriver;
+
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
+
+        it("gets the RTC transports from the homeserver", async () => {
+            const transports = [{ type: "livekit", livekit_service_url: "https://livekit-jwt.example.com" }];
+            client._unstable_getRTCTransports.mockResolvedValue(transports);
+
+            await expect(driver.getRtcTransports()).resolves.toEqual({ rtc_transports: transports });
+
+            expect(client._unstable_getRTCTransports).toHaveBeenCalledWith();
+        });
+
+        it("propagates errors from the homeserver", async () => {
+            const error = new MatrixError(
+                { errcode: "M_NOT_FOUND", error: "Not found" },
+                404,
+            );
+
+            client._unstable_getRTCTransports.mockRejectedValue(error);
+
+            await expect(driver.getRtcTransports()).rejects.toBe(error);
         });
     });
 
