@@ -458,6 +458,7 @@ export class CustomEmotePart extends BasePart implements IBasePart {
         node.title = this.shortcode;
         node.height = 32;
         node.setAttribute("data-mx-emoticon", "");
+        node.setAttribute("data-mx-emoticon-token", this.text);
         node.setAttribute("contenteditable", "false");
     }
 
@@ -474,7 +475,7 @@ export class CustomEmotePart extends BasePart implements IBasePart {
     }
 
     public get acceptsCaret(): boolean {
-        return true;
+        return false;
     }
 
     public serialize(): ISerializedCustomEmotePart {

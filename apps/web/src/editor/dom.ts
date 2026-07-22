@@ -161,6 +161,16 @@ function getTextAndOffsetToNode(
             }
             text += nodeText;
         }
+        const customEmoteToken =
+            node instanceof HTMLImageElement && node.hasAttribute("data-mx-emoticon")
+                ? node.getAttribute("data-mx-emoticon-token")
+                : null;
+        if (customEmoteToken) {
+            if (!foundNode) {
+                offsetToNode += customEmoteToken.length;
+            }
+            text += customEmoteToken;
+        }
         return true;
     }
 
