@@ -674,7 +674,6 @@
     "create_section_dialog": {
         "create_section": "Szakasz létrehozása",
         "description": "A szakaszok csak Önnek szólnak",
-        "edit_section": "Szakasz szerkesztése",
         "label": "Szakasz neve",
         "title": "Szakasz létrehozása",
         "title_edition": "Szakasz szerkesztése"
