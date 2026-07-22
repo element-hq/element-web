@@ -8728,7 +8728,7 @@ packages:
     engines: {node: '>=12'}
 
   eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/e20abb19fbdb2b6fd729e02ab66b53c70fec48d0#path:/eslint:
-    resolution: {gitHosted: true, integrity: sha512-/CIcur0QDkX0WhQ8S+hKdv26TRSZb40wCJl/rl3sHNCxdM1Isg13Aw7uohyqdf08VovKUSxdgxMs3G+X9MREQA==, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/e20abb19fbdb2b6fd729e02ab66b53c70fec48d0}
+    resolution: {gitHosted: true, path: /eslint, integrity: sha512-/CIcur0QDkX0WhQ8S+hKdv26TRSZb40wCJl/rl3sHNCxdM1Isg13Aw7uohyqdf08VovKUSxdgxMs3G+X9MREQA==, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/e20abb19fbdb2b6fd729e02ab66b53c70fec48d0}
     version: 0.0.0
 
   eslint-plugin-storybook@10.5.2:
