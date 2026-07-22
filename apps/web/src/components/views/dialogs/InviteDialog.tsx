@@ -900,20 +900,18 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             );
         }
 
-        const tiles = toRender.map((r) => (
-            <DMRoomTile
-                member={r.user}
-                lastActiveTs={lastActive(r)}
-                key={r.user.userId}
-                onToggle={this.toggleMember}
-                isSelected={this.state.targets.some((t) => t.userId === r.userId)}
-            />
-        ));
-
         return (
             <div className="mx_InviteDialog_section">
                 <RichList title={sectionName} titleAttributes={{ "role": "heading", "aria-level": 3 }}>
-                    {tiles}
+                    {toRender.map((r) => (
+                        <DMRoomTile
+                            member={r.user}
+                            lastActiveTs={lastActive(r)}
+                            key={r.user.userId}
+                            onToggle={this.toggleMember}
+                            isSelected={this.state.targets.some((t) => t.userId === r.userId)}
+                        />
+                    ))}
                 </RichList>
                 {showMore}
             </div>
@@ -921,10 +919,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     }
 
     private renderEditor(): JSX.Element {
-        const targets = this.state.targets.map((t) => (
-            <DMUserTile member={t} onRemove={this.state.busy ? undefined : this.removeMember} key={t.userId} />
-        ));
-
         return (
             <PillInput
                 data-testid="invite-dialog-input-wrapper"
@@ -946,7 +940,9 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                     !this.state.busy && this.removeMember(this.state.targets[this.state.targets.length - 1])
                 }
             >
-                {targets}
+                {this.state.targets.map((t) => (
+                    <DMUserTile member={t} onRemove={this.state.busy ? undefined : this.removeMember} key={t.userId} />
+                ))}
             </PillInput>
         );
     }
