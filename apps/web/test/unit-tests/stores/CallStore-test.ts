@@ -22,6 +22,7 @@ import {
 describe("CallStore", () => {
     let client: MockedObject<MatrixClient>;
     let room: Room;
+
     beforeEach(() => {
         enableCalls();
         const res = setUpClientRoomAndStores();
