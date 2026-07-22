@@ -25,7 +25,7 @@ const MenuConfig = z.object({
     logo_height: z.optional(z.number()),
 
     /**
-     * Optional link href to for the logo in the menu.
+     * Optional link href for the logo in the menu.
      */
     logo_href: z.optional(z.url()),
 });

@@ -196,7 +196,7 @@ const Menu: FC<Props> = ({ api, config, fallbackLogoUrl }) => {
         if (config.logo_url) {
             logoProps.src = config.logo_url;
         }
-        logoProps.height = config.logo_height ? `${config.logo_height}px` : undefined;
+        logoProps.height = config.logo_height !== undefined ? `${config.logo_height}px` : undefined;
         logoProps.href = config.logo_href;
     } else {
         content = (
