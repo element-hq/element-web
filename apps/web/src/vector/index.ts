@@ -18,9 +18,7 @@ import { parseAppUrl } from "./url_utils";
 import "./modernizr.cjs";
 import { polyfillTouchEvent } from "../@types/polyfill";
 
-// Import shared components CSS
-import "@element-hq/web-shared-components/dist/element-web-shared-components.css";
-
+import "../../res/css/_index.pcss";
 // Require common CSS here; this will make webpack process it into bundle.css.
 // Our own CSS (which is themed) is imported via separate webpack entry points
 // in webpack.config.js

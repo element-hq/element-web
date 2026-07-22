@@ -682,7 +682,6 @@
     "create_section_dialog": {
         "create_section": "Utwórz sekcję",
         "description": "Sekcje są tylko dla Ciebie",
-        "edit_section": "Edytuj sekcję",
         "label": "Nazwa sekcji",
         "title": "Utwórz sekcję",
         "title_edition": "Edytuj sekcję"
