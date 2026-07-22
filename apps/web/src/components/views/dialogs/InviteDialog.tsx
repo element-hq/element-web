@@ -565,6 +565,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                         }
                     }
 
+                    if (this.unmounted) return;
                     this.setState({
                         serverResultsMixin: r.results.map((u) => ({
                             userId: u.user_id,
@@ -575,6 +576,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 .catch((e) => {
                     logger.error("Error searching user directory:");
                     logger.error(e);
+                    if (this.unmounted) return;
                     this.setState({ serverResultsMixin: [] }); // clear results because it's moderately fatal
                 });
 
@@ -619,6 +621,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                     // person!"
                     const profile = await this.profilesStore.getOrFetchProfile(lookup.mxid);
                     if (term !== this.state.filterText || !profile) return; // abandon hope
+                    if (this.unmounted) return;
                     this.setState({
                         threepidResultsMixin: [
                             ...this.state.threepidResultsMixin,
@@ -636,6 +639,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 } catch (e) {
                     logger.error("Error searching identity server:");
                     logger.error(e);
+                    if (this.unmounted) return;
                     this.setState({ threepidResultsMixin: [] }); // clear results because it's moderately fatal
                 }
             }
