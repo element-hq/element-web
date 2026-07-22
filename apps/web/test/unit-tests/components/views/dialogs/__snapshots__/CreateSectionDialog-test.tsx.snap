@@ -25,7 +25,7 @@ exports[`CreateSectionDialog renders the dialog 1`] = `
       </h1>
     </div>
     <div
-      class="_flex_4dswl_9 mx_CreateSectionDialog_content"
+      class="_flex_4dswl_9 _container_s0bx2_8"
       style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-6x); --mx-flex-wrap: nowrap;"
     >
       <span
@@ -34,7 +34,7 @@ exports[`CreateSectionDialog renders the dialog 1`] = `
         Sections are only for you
       </span>
       <form
-        class="_root_1o4d9_17 mx_CreateSectionDialog_form"
+        class="_root_1o4d9_17 _form_s0bx2_12"
       >
         <div
           class="_field_1o4d9_27"
