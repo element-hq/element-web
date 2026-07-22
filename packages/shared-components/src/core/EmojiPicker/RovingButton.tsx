@@ -18,7 +18,7 @@ interface RovingButtonProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "
     /**
      * Event handler for button activation. Invoked on click, Enter keydown and Space keyup.
      */
-    onClick(ev: ButtonEvent): void;
+    onClick(this: void, ev: ButtonEvent): void;
     /**
      * Whether the button should be disabled. A disabled button keeps its role and
      * remains discoverable by keyboard, but is marked `aria-disabled` and does not
