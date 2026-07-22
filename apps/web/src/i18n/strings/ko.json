@@ -660,7 +660,6 @@
     "create_section_dialog": {
         "create_section": "섹션 생성",
         "description": "이 섹션은 당신만을 위한 공간입니다.",
-        "edit_section": "섹션 편집",
         "label": "섹션 이름",
         "title": "섹션 만들기",
         "title_edition": "섹션을 편집하세요"
