@@ -13,8 +13,8 @@ import type { ButtonEvent } from "../../elements/AccessibleButton.tsx";
 import BaseAvatar from "../../avatars/BaseAvatar.tsx";
 import { mediaFromMxc } from "../../../../customisations/Media.ts";
 import UserIdentifierCustomisations from "../../../../customisations/UserIdentifier.ts";
-import { _t } from "../../../../languageHandler.tsx";
-import { Icon as EmailPillAvatarIcon } from "../../../../../res/img/icon-email-pill-avatar.svg";
+import { _t } from "../../../../languageHandler";
+import EmailPillAvatarIcon from "../../../../../res/img/icon-email-pill-avatar.svg?react";
 
 interface IDMRoomTileProps {
     member: Member;

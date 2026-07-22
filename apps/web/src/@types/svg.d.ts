@@ -9,6 +9,10 @@ Please see LICENSE files in the repository root for full details.
 
 declare module "*.svg" {
     const path: string;
-    export const Icon: React.FC<React.SVGProps<SVGSVGElement>>;
     export default path;
+}
+
+declare module "*.svg?react" {
+    const Icon: React.FC<React.SVGProps<SVGSVGElement>>;
+    export default Icon;
 }

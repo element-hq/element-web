@@ -66,9 +66,7 @@ const cssThemes = {
 };
 
 // See docs/customisations.md
-let fileOverrides = {
-    /* {[file: string]: string} */
-};
+let fileOverrides = {/* {[file: string]: string} */};
 try {
     const customisationsFile = fs.readFileSync("./customisations.json", "utf-8");
     fileOverrides = JSON.parse(customisationsFile);
@@ -508,62 +506,54 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 {
                     test: /\.svg$/,
                     issuer: /\.(js|ts|jsx|tsx|html)$/,
-                    resourceQuery: { not: [/raw/] },
-                    use: [
-                        {
-                            loader: "@svgr/webpack",
-                            options: {
-                                namedExport: "Icon",
-                                svgProps: {
-                                    "role": "presentation",
-                                    "aria-hidden": true,
-                                },
-                                // props set on the svg will override defaults
-                                expandProps: "end",
-                                svgoConfig: {
-                                    plugins: [
-                                        {
-                                            name: "preset-default",
-                                            params: {
-                                                overrides: {
-                                                    removeViewBox: false,
-                                                },
-                                            },
+                    resourceQuery: /react/,
+                    loader: "@svgr/webpack",
+                    options: {
+                        svgProps: {
+                            "role": "presentation",
+                            "aria-hidden": true,
+                        },
+                        // props set on the svg will override defaults
+                        expandProps: "end",
+                        svgoConfig: {
+                            plugins: [
+                                {
+                                    name: "preset-default",
+                                    params: {
+                                        overrides: {
+                                            removeViewBox: false,
                                         },
-                                        // generates a viewbox if missing
-                                        { name: "removeDimensions" },
-                                        // https://github.com/facebook/docusaurus/issues/8297
-                                        { name: "prefixIds" },
-                                    ],
+                                    },
                                 },
-                                /**
-                                 * Forwards the React ref to the root SVG element
-                                 * Useful when using things like `asChild` in
-                                 * radix-ui
-                                 */
-                                ref: true,
-                                esModule: false,
-                                name: "[name].[hash:7].[ext]",
-                                outputPath: getAssetOutputPath,
-                                publicPath: function (url: string, resourcePath: string) {
-                                    const outputPath = getAssetOutputPath(url, resourcePath);
-                                    return toPublicPath(outputPath);
-                                },
-                            },
+                                // generates a viewbox if missing
+                                { name: "removeDimensions" },
+                                // https://github.com/facebook/docusaurus/issues/8297
+                                { name: "prefixIds" },
+                            ],
                         },
-                        {
-                            loader: "file-loader",
-                            options: {
-                                esModule: false,
-                                name: "[name].[hash:7].[ext]",
-                                outputPath: getAssetOutputPath,
-                                publicPath: function (url: string, resourcePath: string) {
-                                    const outputPath = getAssetOutputPath(url, resourcePath);
-                                    return toPublicPath(outputPath);
-                                },
-                            },
+                        /**
+                         * Forwards the React ref to the root SVG element
+                         * Useful when using things like `asChild` in
+                         * radix-ui
+                         */
+                        ref: true,
+                        esModule: false,
+                    },
+                },
+                {
+                    test: /\.svg$/,
+                    issuer: /\.(js|ts|jsx|tsx|html)$/,
+                    resourceQuery: { not: [/raw/, /react/] },
+                    loader: "file-loader",
+                    options: {
+                        esModule: false,
+                        name: "[name].[hash:7].[ext]",
+                        outputPath: getAssetOutputPath,
+                        publicPath: function (url: string, resourcePath: string) {
+                            const outputPath = getAssetOutputPath(url, resourcePath);
+                            return toPublicPath(outputPath);
                         },
-                    ],
+                    },
                 },
                 {
                     test: /\.svg$/,

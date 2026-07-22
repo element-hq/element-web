@@ -117,6 +117,7 @@ export default defineConfig({
         "no-inner-declarations": "error",
         "no-var": "error",
         "typescript/no-unnecessary-type-constraint": "error",
+        "jsx-filename-extension": ["error", { allow: "as-needed", extensions: ["tsx"] }],
 
         "unicorn/no-instanceof-array": "error",
         "no-restricted-globals": ["error", ...defaultRestrictedGlobals],
@@ -511,6 +512,7 @@ export default defineConfig({
                 "storybook/use-storybook-expect": "error",
                 "storybook/use-storybook-testing-library": "error",
                 "storybook/no-uninstalled-addons": "error",
+                "jsx-filename-extension": ["error", { allow: "always", extensions: ["tsx"] }],
             },
         },
         {

@@ -567,7 +567,11 @@ export default async function main(dirs: string[], on?: string[], print = false,
                     subgraph.addNode(job);
                     if (job.needs) {
                         toArray(job.needs).forEach((req) => {
-                            subgraph.addEdge(node.jobs.find((job) => job.jobId === req)!, job, "needs");
+                            subgraph.addEdge(
+                                node.jobs.find((job) => job.jobId === req)!,
+                                job,
+                                "needs",
+                            );
                         });
                     }
                 }

@@ -89,7 +89,7 @@ export * from "./core/utils/humanize";
 export * from "./core/utils/DateUtils";
 export * from "./core/utils/numbers";
 export * from "./core/utils/FormattingUtils";
-export * from "./core/utils/ToastContext.tsx";
+export * from "./core/utils/ToastContext";
 export * from "./core/i18n/I18nApi";
 export * from "./core/utils/linkify";
 export type * from "./core/userStatus.ts";

@@ -677,7 +677,6 @@
     "create_section_dialog": {
         "create_section": "Create section",
         "description": "Sections are only for you",
-        "edit_section": "Edit section",
         "label": "Section name",
         "title": "Create a section",
         "title_edition": "Edit a section"
@@ -2434,7 +2433,8 @@
         "warning_kind_files": "This version of %(brand)s does not support viewing some encrypted files",
         "warning_kind_files_app": "Use the <a>Desktop app</a> to see all encrypted files",
         "warning_kind_search": "This version of %(brand)s does not support searching encrypted messages",
-        "warning_kind_search_app": "Use the <a>Desktop app</a> to search encrypted messages"
+        "warning_kind_search_app": "Use the <a>Desktop app</a> to search encrypted messages",
+        "warning_kind_search_partial": "Results may be incomplete because your search index is still being built."
     },
     "setting": {
         "help_about": {
@@ -3827,6 +3827,9 @@
         "verification_unavailable": "User verification unavailable",
         "verify_button": "Verify User",
         "verify_explainer": "For extra security, verify this user by checking a one-time code on both of your devices."
+    },
+    "user_status": {
+        "on_a_call": "On a call"
     },
     "voip": {
         "already_in_call": "Already in call",
