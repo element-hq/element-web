@@ -204,6 +204,10 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
     }, [content["com.beeper.linkpreviews"], urlPreviewVm]);
 
     useEffect(() => {
+        urlPreviewVm.setUrlBundlesEnabled(urlPreviewBundleEnabled);
+    }, [urlPreviewBundleEnabled]);
+
+    useEffect(() => {
         if (previews.length === 0) {
             return;
         }
@@ -221,21 +225,26 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
         );
     }
 
+    const messageContent = props.mxEvent.getContent() as RoomMessageEventContent;
+    const allowRemoveUrlPreview =
+        props.mxEvent.getSender() === client.getUserId() &&
+        urlPreviewBundleEnabled &&
+        messageContent["com.beeper.linkpreviews"] !== undefined;
+
     return (
         <TextualBodyView
             vm={textualBodyVm}
             body={<EventContentBodyView vm={eventContentBodyVm} as={willHaveWrapper ? "span" : "div"} />}
             bodyRef={contentRef}
             urlPreviews={<UrlPreviewGroupView vm={urlPreviewVm} className="mx_TextualBody_urlPreviews"
-                removeUrlPreview={async (url) => {
-                    let oldContent = props.mxEvent.getContent() as RoomMessageEventContent;
+                removeUrlPreview={allowRemoveUrlPreview ? (async (url) => {
                     let newContent: RoomMessageEventContent = {
-                        ...oldContent,
-                        "com.beeper.linkpreviews": oldContent["com.beeper.linkpreviews"]?.filter(entry => entry.matched_url !== url)
+                        ...messageContent,
+                        "com.beeper.linkpreviews": messageContent["com.beeper.linkpreviews"]?.filter(entry => entry.matched_url !== url)
                     }
                     let editContent: RoomMessageEventContent = {
-                        ...oldContent,
-                        body: `* ${oldContent.body}`,
+                        ...messageContent,
+                        body: `* ${messageContent.body}`,
                         "m.new_content": newContent,
                         "m.relates_to": {
                             rel_type: RelationType.Replace,
@@ -248,7 +257,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
                     } else {
                         await client.sendMessage(props.mxEvent.getRoomId()!, editContent);
                     }
-                }}
+                }) : undefined}
             />}
             className={getTextualBodyClassName(content.msgtype as MsgType | undefined)}
         />

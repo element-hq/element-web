@@ -103,7 +103,7 @@ export function UrlPreviewGroupView({ vm, className, removeUrlPreview }: UrlPrev
 
     return (
         <div className={classNames(className, styles.wrapper)} {...eventPresentationAttributes}>
-            <HideButton onHideClick={vm.onHideClick} />
+            {removeUrlPreview === undefined && <HideButton onHideClick={vm.onHideClick} />}
             <div className={styles.previewGroup}>
                 {previews.map((preview, i) => (
                     <LinkPreview

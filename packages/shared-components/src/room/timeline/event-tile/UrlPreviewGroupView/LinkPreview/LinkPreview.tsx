@@ -130,7 +130,7 @@ export function LinkPreviewCollapsed(preview: LinkPreviewProps): JSX.Element {
                 <LinkTitle title={preview.title} showTooltipOnLink={preview.showTooltipOnLink} link={preview.link} />
                 {preview.siteName && <LinkSiteName siteName={preview.siteName} />}
             </div>
-            <button onClick={preview.onRemoveClick}><CloseIcon /></button>
+            {preview.onRemoveClick && <button className={styles.removePreview} onClick={preview.onRemoveClick}><CloseIcon /></button>}
         </div>
     );
 }
@@ -199,6 +199,7 @@ export function LinkPreviewExpanded(preview: LinkPreviewProps): JSX.Element {
                 </LinkedText>
                 {preview.siteName && <LinkSiteName siteName={preview.siteName} siteIcon={preview.siteIcon} />}
             </div>
+            {preview.onRemoveClick && <button className={styles.removePreview} onClick={preview.onRemoveClick}><CloseIcon /></button>}
         </div>
     );
 }

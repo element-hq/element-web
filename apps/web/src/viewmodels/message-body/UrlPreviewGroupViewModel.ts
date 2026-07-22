@@ -204,6 +204,14 @@ export class UrlPreviewGroupViewModel
     }
 
     /*
+     * Change whether URL bundles are used exclusively for previews
+     */
+    public setUrlBundlesEnabled(value: boolean): void {
+        this.props.urlPreviewBundleEnabled = value;
+        this.recompute();
+    }
+
+    /*
      * Triggers a recalculation of snapshot, e.g. after the message is updated
      */
     public recompute(): Promise<void> {
