@@ -17,10 +17,6 @@ import { type ButtonEvent } from "./RovingButton";
 import styles from "./EmojiPicker.module.css";
 import { Heading } from "@vector-im/compound-web";
 
-// Number of rows rendered beyond the visible viewport so that keyboard
-// navigation always has adjacent rows mounted to move focus into.
-const OVERFLOW_ROWS = 3;
-
 export type CategoryKey = keyof typeof DATA_BY_CATEGORY | "recent";
 
 export interface ICategory {
@@ -125,13 +121,12 @@ class Category extends React.PureComponent<IProps> {
                 {/* An out-of-view Virtuoso windowing against a shared scroll parent renders
                     nothing and reserves no space, so fix the height of the rows block
                     ourselves — it is deterministic thanks to fixedItemHeight. */}
-                <div style={{ height: rows.length * EMOJI_HEIGHT }}>
+                <div style={{ height: (rows.length + 1) * EMOJI_HEIGHT }}>
                     {scrollParent && (
                         <Virtuoso
                             customScrollParent={scrollParent}
                             data={rows}
                             fixedItemHeight={EMOJI_HEIGHT}
-                            increaseViewportBy={EMOJI_HEIGHT * OVERFLOW_ROWS}
                             components={gridComponents}
                             itemContent={this.renderEmojiRow}
                         />
