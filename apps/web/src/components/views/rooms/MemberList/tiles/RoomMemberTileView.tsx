@@ -84,8 +84,8 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
                 {props.isCallParticipant && (
                     <VideoCallSolidIcon
                         className="mx_RoomMemberTileView_callIcon"
-                        width="20px"
-                        height="20px"
+                        width="16px"
+                        height="16px"
                         fill="var(--cpd-color-icon-accent-primary)"
                     />
                 )}

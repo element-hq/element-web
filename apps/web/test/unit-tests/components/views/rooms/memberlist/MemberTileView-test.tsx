@@ -129,7 +129,8 @@ describe("MemberTileView", () => {
             );
 
             expect(container).toHaveTextContent("Admin");
-            expect(container.querySelector(".mx_RoomMemberTileView_callIcon")).toHaveAttribute("width", "20px");
+            expect(container.querySelector(".mx_RoomMemberTileView_callIcon")).toHaveAttribute("width", "16px");
+            expect(container.querySelector(".mx_RoomMemberTileView_callIcon")).toHaveAttribute("height", "16px");
             expect(container.querySelector(".mx_RoomMemberTileView_callIcon")).toHaveAttribute(
                 "fill",
                 "var(--cpd-color-icon-accent-primary)",
