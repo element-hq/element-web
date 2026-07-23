@@ -29,7 +29,7 @@ test.describe("Threads", () => {
 
     test("should be usable for a conversation", { tag: "@screenshot" }, async ({ page, app, bot }) => {
         const roomId = await app.client.createRoom({});
-        await app.client.inviteUser(roomId, bot.credentials.userId);
+        await app.client.inviteUser(roomId, bot.credentials!.userId);
         await bot.joinRoom(roomId);
         await page.goto("/#/room/" + roomId);
 
@@ -436,7 +436,7 @@ test.describe("Threads", () => {
         { tag: ["@screenshot", "@no-firefox"] },
         async ({ page, app, bot }) => {
             const roomId = await app.client.createRoom({});
-            await app.client.inviteUser(roomId, bot.credentials.userId);
+            await app.client.inviteUser(roomId, bot.credentials!.userId);
             await bot.joinRoom(roomId);
             await page.goto("/#/room/" + roomId);
 

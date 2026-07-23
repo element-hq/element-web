@@ -12,7 +12,7 @@ import { type Credentials } from "../../plugins/homeserver";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 const test = base.extend<{
-    user2?: Credentials;
+    user2: Credentials;
 }>({});
 
 test.describe("1:1 chat room", () => {
@@ -38,12 +38,12 @@ test.describe("1:1 chat room", () => {
 
         // wait till the room was left
         await expect(
-            page.getByRole("group", { name: "Rooms" }).locator(".mx_RoomTile").getByText(user2.displayName),
+            page.getByRole("group", { name: "Rooms" }).locator(".mx_RoomTile").getByText(user2.displayName!),
         ).not.toBeVisible();
         await page.waitForTimeout(500); // avoid race condition with routing
 
         // open new 1:1 chat room
         await page.goto(`/#/user/${user2.userId}?action=chat`);
-        await expect(page.locator(".mx_RoomHeader_heading").getByText(user2.displayName)).toBeVisible();
+        await expect(page.locator(".mx_RoomHeader_heading").getByText(user2.displayName!)).toBeVisible();
     });
 });

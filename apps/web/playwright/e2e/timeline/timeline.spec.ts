@@ -48,7 +48,7 @@ const expectAvatar = async (cli: Client, e: Locator, avatarUrl: string): Promise
         },
         { avatarUrl, size, resizeMethod: AVATAR_RESIZE_METHOD },
     );
-    await expect(e.locator(".mx_BaseAvatar img")).toHaveAttribute("src", url);
+    await expect(e.locator(".mx_BaseAvatar img")).toHaveAttribute("src", url!);
 };
 
 const sendEvent = async (client: Client, roomId: string, html = false): Promise<ISendEventResponse> => {
@@ -917,7 +917,7 @@ test.describe("Timeline", () => {
 
                 const bot = new Bot(page, homeserver, {});
                 await bot.prepareClient();
-                await app.client.inviteUser(room.roomId, bot.credentials.userId);
+                await app.client.inviteUser(room.roomId, bot.credentials!.userId);
 
                 await sendImage(bot, room.roomId, NEW_AVATAR);
                 await app.timeline.scrollToBottom();
@@ -936,7 +936,7 @@ test.describe("Timeline", () => {
 
             const bot = new Bot(page, homeserver, {});
             await bot.prepareClient();
-            await app.client.inviteUser(room.roomId, bot.credentials.userId);
+            await app.client.inviteUser(room.roomId, bot.credentials!.userId);
 
             const upload = await bot.uploadContent(VIDEO_FILE, { name: "bbb.webm", type: "video/webm" });
             await bot.sendEvent(room.roomId, null, "m.room.message" as EventType, {
@@ -970,7 +970,7 @@ test.describe("Timeline", () => {
                 autoAcceptInvites: false,
             });
             await bot.prepareClient();
-            await app.client.inviteUser(room.roomId, bot.credentials.userId);
+            await app.client.inviteUser(room.roomId, bot.credentials!.userId);
             await bot.joinRoom(room.roomId);
             await bot.sendMessage(room.roomId, messageFromSender);
 
@@ -1100,7 +1100,7 @@ test.describe("Timeline", () => {
                 autoAcceptInvites: false,
             });
             await bot.prepareClient();
-            await app.client.inviteUser(room.roomId, bot.credentials.userId);
+            await app.client.inviteUser(room.roomId, bot.credentials!.userId);
             await bot.joinRoom(room.roomId);
 
             // Make sure the bot joined the room
@@ -1228,7 +1228,7 @@ test.describe("Timeline", () => {
 
                 // Create another room with a long name, invite the bot, and open the room
                 const testRoomId = await app.client.createRoom({ name: LONG_STRING });
-                await app.client.inviteUser(testRoomId, bot.credentials.userId);
+                await app.client.inviteUser(testRoomId, bot.credentials!.userId);
                 await bot.joinRoom(testRoomId);
                 await page.goto(`/#/room/${testRoomId}`);
 

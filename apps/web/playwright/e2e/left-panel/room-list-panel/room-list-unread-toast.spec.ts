@@ -62,7 +62,7 @@ test.describe("Room list unread activity toast", () => {
 
             // A room with a real notification count, named so it sorts to the very bottom under A-Z.
             const targetId = await app.client.createRoom({ name: "zzz unread room" });
-            await app.client.inviteUser(targetId, bot.credentials.userId);
+            await app.client.inviteUser(targetId, bot.credentials!.userId);
             await bot.joinRoom(targetId);
 
             // Enough filler rooms to push the target well below the visible area.
@@ -100,7 +100,7 @@ test.describe("Room list unread activity toast", () => {
             // The target's unread state will only ever be an activity dot, never a notification count: set it
             // to "@mentions & keywords" so a plain (non-mention) message produces activity rather than a count.
             const targetId = await app.client.createRoom({ name: "zzz activity room" });
-            await app.client.inviteUser(targetId, bot.credentials.userId);
+            await app.client.inviteUser(targetId, bot.credentials!.userId);
             await bot.joinRoom(targetId);
 
             await app.viewRoomById(targetId);
@@ -148,7 +148,7 @@ test.describe("Room list unread activity toast", () => {
 
             // A regular (Chats) room with a notification count.
             const notifyId = await app.client.createRoom({ name: "chats notify room" });
-            await app.client.inviteUser(notifyId, bot.credentials.userId);
+            await app.client.inviteUser(notifyId, bot.credentials!.userId);
             await bot.joinRoom(notifyId);
 
             // A favourite room so the list renders in section mode from the start.

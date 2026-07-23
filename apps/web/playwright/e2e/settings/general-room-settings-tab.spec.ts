@@ -54,6 +54,6 @@ test.describe("General room settings tab", () => {
         const dialogBoundingBox = await page.locator(".mx_Dialog").boundingBox();
         const inputBoundingBox = await settings.locator("#canonicalAlias").boundingBox();
         // Assert that the width of the select element is less than that of .mx_Dialog div.
-        expect(inputBoundingBox.width).toBeLessThan(dialogBoundingBox.width);
+        expect(inputBoundingBox!.width).toBeLessThan(dialogBoundingBox!.width);
     });
 });

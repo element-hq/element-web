@@ -25,8 +25,8 @@ const checkDMRoom = async (page: Page) => {
 const startDMWithBob = async (page: Page, bob: Bot) => {
     await page.getByRole("navigation", { name: "Room list" }).getByRole("button", { name: "New conversation" }).click();
     await page.getByRole("menuitem", { name: "Start chat" }).click();
-    await page.getByTestId("invite-dialog-input").fill(bob.credentials.userId);
-    await page.getByRole("option", { name: bob.credentials.displayName }).click();
+    await page.getByTestId("invite-dialog-input").fill(bob.credentials!.userId);
+    await page.getByRole("option", { name: bob.credentials!.displayName! }).click();
     await expect(page.getByTestId("invite-dialog-input-wrapper").getByText("Bob")).toBeVisible();
     await page.getByRole("button", { name: "Go" }).click();
 
@@ -82,14 +82,14 @@ test.describe("Cryptography", function () {
      * @param keyType
      */
     async function verifyKey(app: ElementAppPage, keyType: "master" | "self_signing" | "user_signing") {
-        const accountData: { encrypted: Record<string, Record<string, string>> } = await app.client.evaluate(
+        const accountData = await app.client.evaluate(
             (cli, keyType) => cli.getAccountDataFromServer(`m.cross_signing.${keyType}`),
             keyType,
         );
 
-        expect(accountData.encrypted).toBeDefined();
-        const keys = Object.keys(accountData.encrypted);
-        const key = accountData.encrypted[keys[0]];
+        expect(accountData?.encrypted).toBeDefined();
+        const keys = Object.keys(accountData!.encrypted);
+        const key = accountData!.encrypted[keys[0]];
         expect(key.ciphertext).toBeDefined();
         expect(key.iv).toBeDefined();
         expect(key.mac).toBeDefined();
@@ -119,9 +119,9 @@ test.describe("Cryptography", function () {
         async function fetchMasterKey() {
             return await test.step("Fetch master key from server", async () => {
                 const k = await app.client.evaluate(async (cli) => {
-                    const userId = cli.getUserId();
+                    const userId = cli.getSafeUserId();
                     const keys = await cli.downloadKeysForUsers([userId]);
-                    return Object.values(keys.master_keys[userId].keys)[0];
+                    return Object.values(keys.master_keys![userId].keys)[0];
                 });
                 console.log(`fetchMasterKey: ${k}`);
                 return k;
@@ -138,7 +138,7 @@ test.describe("Cryptography", function () {
         await encryptionTab.getByRole("button", { name: "Continue" }).click();
 
         // Enter the password
-        await page.getByPlaceholder("Password").fill(aliceCredentials.password);
+        await page.getByPlaceholder("Password").fill(aliceCredentials.password!);
         await page.getByRole("button", { name: "Continue" }).click();
 
         await expect(async () => {
@@ -163,7 +163,7 @@ test.describe("Cryptography", function () {
         await encryptionTab.getByRole("button", { name: "Continue" }).click();
 
         // Enter the password
-        await page.getByPlaceholder("Password").fill(aliceCredentials.password);
+        await page.getByPlaceholder("Password").fill(aliceCredentials.password!);
         await page.getByRole("button", { name: "Continue" }).click();
 
         // Key storage should now be enabled
@@ -209,7 +209,7 @@ test.describe("Cryptography", function () {
         await autoJoin(bob);
 
         // we need to have a room with the other user present, so we can open the verification panel
-        await createSharedRoomWithUser(app, bob.credentials.userId);
+        await createSharedRoomWithUser(app, bob.credentials!.userId);
         await verify(app, bob);
     });
 });

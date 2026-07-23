@@ -15,10 +15,12 @@ test.describe("UserView", () => {
     });
 
     test("should render the user view as expected", { tag: "@screenshot" }, async ({ page, homeserver, user, bot }) => {
-        await page.goto(`/#/user/${bot.credentials.userId}`);
+        await page.goto(`/#/user/${bot.credentials!.userId}`);
 
         const rightPanel = page.locator("#mx_RightPanel");
-        await expect(rightPanel.getByRole("heading", { name: bot.credentials.displayName, exact: true })).toBeVisible();
+        await expect(
+            rightPanel.getByRole("heading", { name: bot.credentials!.displayName, exact: true }),
+        ).toBeVisible();
         await expect(rightPanel).toMatchScreenshot("user-info.png", {
             mask: [page.locator(".mx_UserInfo_profile_mxid")],
             css: `

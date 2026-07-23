@@ -75,7 +75,7 @@ test.describe("Widget Events", () => {
     }) => {
         const roomId = await app.client.createRoom({
             name: ROOM_NAME,
-            invite: [bot.credentials.userId],
+            invite: [bot.credentials!.userId],
         });
 
         // setup widget via state event

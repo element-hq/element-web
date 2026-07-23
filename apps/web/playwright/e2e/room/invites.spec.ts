@@ -68,7 +68,7 @@ test.describe("Invites", () => {
             await app.settings.openUserSettings("Security & Privacy");
             const ignoredUsersList = page.getByRole("list", { name: "Ignored users" });
             await ignoredUsersList.scrollIntoViewIfNeeded();
-            await expect(ignoredUsersList.getByRole("listitem", { name: bot.credentials.userId })).toBeVisible();
+            await expect(ignoredUsersList.getByRole("listitem", { name: bot.credentials!.userId })).toBeVisible();
         },
     );
 });

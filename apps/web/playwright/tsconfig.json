@@ -8,8 +8,8 @@
         "moduleResolution": "bundler",
         "module": "ESNext",
         "allowImportingTsExtensions": true,
-        "strictNullChecks": false,
-        "noImplicitAny": false,
+        "strict": true,
+        "noUnusedLocals": true,
         "types": ["node"],
         "noEmit": true
     },

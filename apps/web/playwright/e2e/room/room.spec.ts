@@ -34,8 +34,8 @@ test.describe("Room Directory", () => {
                 });
             },
             {
-                bob: bob.credentials.userId,
-                charlie: charlie.credentials.userId,
+                bob: bob.credentials!.userId,
+                charlie: charlie.credentials!.userId,
             },
         );
 

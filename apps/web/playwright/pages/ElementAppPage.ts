@@ -210,7 +210,7 @@ export class ElementAppPage {
         const dataTransfer = await this.page.evaluateHandle(
             async ([buffer, name, type]) => {
                 const dt = new DataTransfer();
-                const file = new File([Uint8Array.fromBase64(buffer)], name, {
+                const file = new File([Uint8Array.fromBase64!(buffer)], name, {
                     type,
                 });
                 dt.items.add(file);
@@ -241,7 +241,7 @@ export class ElementAppPage {
         await composer.evaluate(
             async (element, [buffer, name, type]) => {
                 const clipboardData = new DataTransfer();
-                const file = new File([Uint8Array.fromBase64(buffer)], name, {
+                const file = new File([Uint8Array.fromBase64!(buffer)], name, {
                     type,
                 });
                 clipboardData.items.add(file);
@@ -404,12 +404,12 @@ export class ElementAppPage {
         const boundingRectangle = await separator.boundingBox();
 
         // Place the cursor in the center of the separator
-        const centerX = boundingRectangle.x + boundingRectangle.width / 2;
-        await this.page.mouse.move(centerX, boundingRectangle.y);
+        const centerX = boundingRectangle!.x + boundingRectangle!.width / 2;
+        await this.page.mouse.move(centerX, boundingRectangle!.y);
 
         // Drag the cursor by delta pixels
         await this.page.mouse.down();
-        await this.page.mouse.move(centerX + delta, boundingRectangle.y);
+        await this.page.mouse.move(centerX + delta, boundingRectangle!.y);
         await this.page.mouse.up();
     }
 }

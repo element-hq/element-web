@@ -98,7 +98,7 @@ test.describe("Polls", () => {
 
     test("should be creatable and votable", { tag: "@screenshot" }, async ({ page, app, bot, user }) => {
         const roomId: string = await app.client.createRoom({});
-        await app.client.inviteUser(roomId, bot.credentials.userId);
+        await app.client.inviteUser(roomId, bot.credentials!.userId);
         await page.goto("/#/room/" + roomId);
         // wait until Bob joined
         await expect(page.getByText("BotBob joined the room")).toBeAttached();
@@ -116,10 +116,10 @@ test.describe("Polls", () => {
         await createPoll(page, pollParams);
 
         // Wait for message to send, get its ID and save as @pollId
-        const pollId = await page
+        const pollId = (await page
             .locator(".mx_RoomView_body .mx_EventTile[data-scroll-tokens]")
             .filter({ hasText: pollParams.title })
-            .getAttribute("data-scroll-tokens");
+            .getAttribute("data-scroll-tokens"))!;
         await expect(getPollTile(page, pollId)).toMatchScreenshot("Polls_Timeline_tile_no_votes.png", {
             css: `
                 .mx_MessageTimestamp {
@@ -162,7 +162,7 @@ test.describe("Polls", () => {
 
     test("should be editable from context menu if no votes have been cast", async ({ page, app, user, bot }) => {
         const roomId: string = await app.client.createRoom({});
-        await app.client.inviteUser(roomId, bot.credentials.userId);
+        await app.client.inviteUser(roomId, bot.credentials!.userId);
         await page.goto("/#/room/" + roomId);
 
         const locator = await app.openMessageComposerOptions();
@@ -175,10 +175,10 @@ test.describe("Polls", () => {
         await createPoll(page, pollParams);
 
         // Wait for message to send, get its ID and save as @pollId
-        const pollId = await page
+        const pollId = (await page
             .locator(".mx_RoomView_body .mx_EventTile[data-scroll-tokens]")
             .filter({ hasText: pollParams.title })
-            .getAttribute("data-scroll-tokens");
+            .getAttribute("data-scroll-tokens"))!;
 
         // Open context menu
         await getPollTile(page, pollId).click({ button: "right" });
@@ -192,7 +192,7 @@ test.describe("Polls", () => {
 
     test("should not be editable from context menu if votes have been cast", async ({ page, app, user, bot }) => {
         const roomId: string = await app.client.createRoom({});
-        await app.client.inviteUser(roomId, bot.credentials.userId);
+        await app.client.inviteUser(roomId, bot.credentials!.userId);
         await page.goto("/#/room/" + roomId);
 
         const locator = await app.openMessageComposerOptions();
@@ -205,10 +205,10 @@ test.describe("Polls", () => {
         await createPoll(page, pollParams);
 
         // Wait for message to send, get its ID and save as @pollId
-        const pollId = await page
+        const pollId = (await page
             .locator(".mx_RoomView_body .mx_EventTile[data-scroll-tokens]")
             .filter({ hasText: pollParams.title })
-            .getAttribute("data-scroll-tokens");
+            .getAttribute("data-scroll-tokens"))!;
 
         // Bot votes 'Maybe' in the poll
         await botVoteForOption(page, bot, roomId, pollId, pollParams.options[2]);
@@ -234,8 +234,8 @@ test.describe("Polls", () => {
             await botCharlie.prepareClient();
 
             const roomId: string = await app.client.createRoom({});
-            await app.client.inviteUser(roomId, bot.credentials.userId);
-            await app.client.inviteUser(roomId, botCharlie.credentials.userId);
+            await app.client.inviteUser(roomId, bot.credentials!.userId);
+            await app.client.inviteUser(roomId, botCharlie.credentials!.userId);
             await page.goto("/#/room/" + roomId);
 
             // wait until the bots joined
@@ -253,10 +253,10 @@ test.describe("Polls", () => {
             await createPoll(page, pollParams);
 
             // Wait for message to send, get its ID and save as @pollId
-            const pollId = await page
+            const pollId = (await page
                 .locator(".mx_RoomView_body .mx_EventTile[data-scroll-tokens]")
                 .filter({ hasText: pollParams.title })
-                .getAttribute("data-scroll-tokens");
+                .getAttribute("data-scroll-tokens"))!;
 
             // Bob starts thread on the poll
             await bot.sendMessage(

@@ -307,7 +307,7 @@ test.describe("Room list sections", () => {
             const roomList = getRoomList(page);
 
             // Invite the bot and have it send a message to generate an unread
-            await app.client.inviteUser(favouriteId, bot.credentials.userId);
+            await app.client.inviteUser(favouriteId, bot.credentials!.userId);
             await bot.joinRoom(favouriteId);
             await bot.sendMessage(favouriteId, "Hello from bot!");
 
@@ -334,7 +334,7 @@ test.describe("Room list sections", () => {
 
                 // A room with a mention, landing in the Chats section
                 const mentionId = await app.client.createRoom({ name: "mention room" });
-                await app.client.inviteUser(mentionId, bot.credentials.userId);
+                await app.client.inviteUser(mentionId, bot.credentials!.userId);
                 await bot.joinRoom(mentionId);
                 const clientBot = await bot.prepareClient();
                 await clientBot.evaluate(
@@ -407,13 +407,13 @@ test.describe("Room list sections", () => {
             await app.client.evaluate(async (client, roomId) => {
                 await client.setRoomTag(roomId, "m.favourite");
             }, favouriteId);
-            await app.client.inviteUser(favouriteId, bot.credentials.userId);
+            await app.client.inviteUser(favouriteId, bot.credentials!.userId);
             await bot.joinRoom(favouriteId);
             await bot.sendMessage(favouriteId, "Hello from favourite!");
 
             // Create a regular room with unread messages
             const regularId = await app.client.createRoom({ name: "regular with unread" });
-            await app.client.inviteUser(regularId, bot.credentials.userId);
+            await app.client.inviteUser(regularId, bot.credentials!.userId);
             await bot.joinRoom(regularId);
             await bot.sendMessage(regularId, "Hello from regular!");
 

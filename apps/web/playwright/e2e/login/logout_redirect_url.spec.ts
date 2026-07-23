@@ -24,7 +24,7 @@ test.use({
 test.describe("logout with logout_redirect_url", () => {
     test("should respect logout_redirect_url", async ({ page, user }) => {
         await page.getByRole("button", { name: "User menu" }).click();
-        await expect(page.getByText(user.displayName, { exact: true })).toBeVisible();
+        await expect(page.getByText(user.displayName!, { exact: true })).toBeVisible();
 
         // give a change for the outstanding requests queue to settle before logging out
         await page.waitForTimeout(2000);

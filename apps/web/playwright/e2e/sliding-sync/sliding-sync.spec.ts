@@ -25,7 +25,7 @@ const test = base.extend<{
     joinedBot: async ({ app, bot, testRoom }, use) => {
         const roomId = testRoom.roomId;
         await bot.prepareClient();
-        const bobUserId = await bot.evaluate((client) => client.getUserId());
+        const bobUserId = await bot.evaluate((client) => client.getSafeUserId());
         await app.client.evaluate(
             async (client, { bobUserId, roomId }) => {
                 await client.invite(roomId, bobUserId);
@@ -230,7 +230,7 @@ test.describe("Sliding Sync", () => {
         joinedBot: bot,
         testRoom,
     }) => {
-        const clientUserId = await app.client.evaluate((client) => client.getUserId());
+        const clientUserId = await app.client.evaluate((client) => client.getSafeUserId());
 
         // invite bot into 3 rooms:
         // - roomJoin: will join this room

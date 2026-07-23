@@ -39,7 +39,7 @@ test.describe("User verification", () => {
         user: aliceCredentials,
         room: { roomId: dmRoomId },
     }) => {
-        await waitForDevices(app, bob.credentials.userId, 1);
+        await waitForDevices(app, bob.credentials!.userId, 1);
         await expect(page.getByRole("button", { name: "Avatar" })).toBeVisible();
         const avatar = page.getByRole("button", { name: "Avatar" });
         await avatar.click();
@@ -47,14 +47,14 @@ test.describe("User verification", () => {
         // once Alice has joined, Bob starts the verification
         const bobVerificationRequest = await bob.evaluateHandle(
             async (client, { dmRoomId, aliceCredentials }) => {
-                const room = client.getRoom(dmRoomId);
+                const room = client.getRoom(dmRoomId)!;
                 while (room.getMember(aliceCredentials.userId)?.membership !== "join") {
                     await new Promise((resolve) => {
                         room.once(window.matrixcs.RoomStateEvent.Members, resolve);
                     });
                 }
 
-                return client.getCrypto().requestVerificationDM(aliceCredentials.userId, dmRoomId);
+                return client.getCrypto()!.requestVerificationDM(aliceCredentials.userId, dmRoomId);
             },
             { dmRoomId, aliceCredentials },
         );
@@ -62,7 +62,7 @@ test.describe("User verification", () => {
         // there should also be a toast
         const toast = await getToast(page, "Verification requested");
         // it should contain the details of the requesting user
-        await expect(toast.getByText(`Bob (${bob.credentials.userId})`)).toBeVisible();
+        await expect(toast.getByText(`Bob (${bob.credentials!.userId})`)).toBeVisible();
         // Accept
         await toast.getByRole("button", { name: "Verify User" }).click();
 
@@ -93,7 +93,7 @@ test.describe("User verification", () => {
         user: aliceCredentials,
         room: { roomId: dmRoomId },
     }) => {
-        await waitForDevices(app, bob.credentials.userId, 1);
+        await waitForDevices(app, bob.credentials!.userId, 1);
         await expect(page.getByRole("button", { name: "Avatar" })).toBeVisible();
         const avatar = page.getByRole("button", { name: "Avatar" });
         await avatar.click();
@@ -101,14 +101,14 @@ test.describe("User verification", () => {
         // once Alice has joined, Bob starts the verification
         const bobVerificationRequest = await bob.evaluateHandle(
             async (client, { dmRoomId, aliceCredentials }) => {
-                const room = client.getRoom(dmRoomId);
+                const room = client.getRoom(dmRoomId)!;
                 while (room.getMember(aliceCredentials.userId)?.membership !== "join") {
                     await new Promise((resolve) => {
                         room.once(window.matrixcs.RoomStateEvent.Members, resolve);
                     });
                 }
 
-                return client.getCrypto().requestVerificationDM(aliceCredentials.userId, dmRoomId);
+                return client.getCrypto()!.requestVerificationDM(aliceCredentials.userId, dmRoomId);
             },
             { dmRoomId, aliceCredentials },
         );

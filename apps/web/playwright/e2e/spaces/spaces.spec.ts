@@ -48,7 +48,7 @@ function spaceChildInitialState(
     serverName: string,
     roomId: string,
     order?: string,
-): ICreateRoomOpts["initial_state"]["0"] {
+): NonNullable<ICreateRoomOpts["initial_state"]>[number] {
     return {
         type: "m.space.child",
         state_key: roomId,
@@ -240,7 +240,7 @@ test.describe("Spaces", () => {
         await shareDialog.getByRole("button", { name: "Invite people" }).click();
 
         const otherSection = page.locator(".mx_InviteDialog_other");
-        await otherSection.getByRole("textbox").fill(bot.credentials.userId);
+        await otherSection.getByRole("textbox").fill(bot.credentials!.userId);
         await otherSection.getByRole("button", { name: "Invite" }).click();
 
         await expect(page.locator(".mx_InviteDialog_other")).not.toBeVisible();

@@ -23,9 +23,9 @@ type RoomRef = { name: string; roomId: string };
  * - Invite the bot to both rooms and ensure that it has joined
  */
 export const test = base.extend<{
-    roomAlphaName?: string;
+    roomAlphaName: string;
     roomAlpha: RoomRef;
-    roomBetaName?: string;
+    roomBetaName: string;
     roomBeta: RoomRef;
     msg: MessageBuilder;
     util: Helpers;
@@ -35,13 +35,13 @@ export const test = base.extend<{
 
     roomAlphaName: "Room Alpha",
     roomAlpha: async ({ roomAlphaName: name, app, user, bot }, use) => {
-        const roomId = await app.client.createRoom({ name, invite: [bot.credentials.userId] });
+        const roomId = await app.client.createRoom({ name, invite: [bot.credentials!.userId] });
         await bot.awaitRoomMembership(roomId);
         await use({ name, roomId });
     },
     roomBetaName: "Room Beta",
     roomBeta: async ({ roomBetaName: name, app, user, bot }, use) => {
-        const roomId = await app.client.createRoom({ name, invite: [bot.credentials.userId] });
+        const roomId = await app.client.createRoom({ name, invite: [bot.credentials!.userId] });
         await bot.awaitRoomMembership(roomId);
         await use({ name, roomId });
     },
@@ -159,7 +159,7 @@ export class MessageBuilder {
                         ev.getRelation()?.rel_type === "m.thread"
                             ? {
                                   rel_type: "m.thread",
-                                  event_id: ev.getRelation().event_id,
+                                  event_id: ev.getRelation()!.event_id,
                               }
                             : {};
 
@@ -222,11 +222,11 @@ export class MessageBuilder {
             public async performAction(bot: Bot, room: JSHandle<Room>): Promise<void> {
                 const ev = await this.messageFinder.getMessage(room, targetMessage, true);
                 const { id, threadId } = await ev.evaluate((ev) => ({
-                    id: ev.getId(),
+                    id: ev.getId()!,
                     threadId: !ev.isThreadRoot ? ev.threadRootId : undefined,
                 }));
                 const roomId = await room.evaluate((room) => room.roomId);
-                await bot.reactToMessage(roomId, threadId, id, reaction);
+                await bot.reactToMessage(roomId, threadId ?? null, id, reaction);
             }
         })(this);
     }
@@ -240,11 +240,11 @@ export class MessageBuilder {
             public async performAction(bot: Bot, room: JSHandle<Room>): Promise<void> {
                 const ev = await this.messageFinder.getMessage(room, targetMessage, true);
                 const { id, threadId } = await ev.evaluate((ev) => ({
-                    id: ev.getId(),
+                    id: ev.getId()!,
                     threadId: !ev.isThreadRoot ? ev.threadRootId : undefined,
                 }));
                 const roomId = await room.evaluate((room) => room.roomId);
-                await bot.redactEvent(roomId, threadId, id);
+                await bot.redactEvent(roomId, threadId!, id);
             }
         })(this);
     }
@@ -286,6 +286,20 @@ export class MessageBuilder {
             { event },
         );
     }
+
+    /**
+     * BotActionSpec to send a custom event
+     * @param eventType - the type of the event to send
+     * @param content - the event content to send
+     */
+    customEvent(eventType: string, content: Record<string, any>): BotActionSpec {
+        return new (class extends BotActionSpec {
+            public async performAction(cli: Client, room: JSHandle<Room>): Promise<void> {
+                const roomId = await room.evaluate((room) => room.roomId);
+                await cli.sendEvent(roomId, null, eventType, content);
+            }
+        })(this);
+    }
 }
 
 /**
@@ -295,11 +309,7 @@ export class MessageBuilder {
  * MessageBuilder.replyTo} which creates a reply based on a previous message.
  */
 export abstract class MessageContentSpec {
-    messageFinder: MessageBuilder | null;
-
-    constructor(messageFinder: MessageBuilder = null) {
-        this.messageFinder = messageFinder;
-    }
+    constructor(public readonly messageFinder: MessageBuilder) {}
 
     public abstract getContent(room: JSHandle<Room>): Promise<Record<string, unknown>>;
 }
@@ -312,11 +322,7 @@ export abstract class MessageContentSpec {
  * MessageBuilder.redactionOf} which redacts the message we are referring to.
  */
 export abstract class BotActionSpec {
-    messageFinder: MessageBuilder | null;
-
-    constructor(messageFinder: MessageBuilder = null) {
-        this.messageFinder = messageFinder;
-    }
+    constructor(public readonly messageFinder: MessageBuilder) {}
 
     public abstract performAction(client: Client, room: JSHandle<Room>): Promise<void>;
 }
@@ -542,7 +548,7 @@ class Helpers {
 
     async findRoomById(roomId: string): Promise<JSHandle<Room>> {
         return this.app.client.evaluateHandle((cli, roomId) => {
-            return cli.getRooms().find((r) => r.roomId === roomId);
+            return cli.getRooms().find((r) => r.roomId === roomId)!;
         }, roomId);
     }
 
@@ -612,20 +618,6 @@ class Helpers {
             await expect(roomTiles.nth(i)).toHaveAccessibleName(new RegExp(`${room.name}`));
         }
     }
-}
-
-/**
- * BotActionSpec to send a custom event
- * @param eventType - the type of the event to send
- * @param content - the event content to send
- */
-export function customEvent(eventType: string, content: Record<string, any>): BotActionSpec {
-    return new (class extends BotActionSpec {
-        public async performAction(cli: Client, room: JSHandle<Room>): Promise<void> {
-            const roomId = await room.evaluate((room) => room.roomId);
-            await cli.sendEvent(roomId, null, eventType, content);
-        }
-    })();
 }
 
 /**

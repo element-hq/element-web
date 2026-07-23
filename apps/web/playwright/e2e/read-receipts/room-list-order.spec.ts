@@ -22,7 +22,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
             bot,
         }) => {
             // Create a third room to navigate to
-            const room3Id = await app.client.createRoom({ name: "Room Gamma", invite: [bot.credentials.userId] });
+            const room3Id = await app.client.createRoom({ name: "Room Gamma", invite: [bot.credentials!.userId] });
             await bot.awaitRoomMembership(room3Id);
             const room3 = { name: "Room Gamma", roomId: room3Id };
 
@@ -51,7 +51,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
             bot,
         }) => {
             // Create a third room to navigate to
-            const room3Id = await app.client.createRoom({ name: "Room Gamma", invite: [bot.credentials.userId] });
+            const room3Id = await app.client.createRoom({ name: "Room Gamma", invite: [bot.credentials!.userId] });
             await bot.awaitRoomMembership(room3Id);
             const room3 = { name: "Room Gamma", roomId: room3Id };
 

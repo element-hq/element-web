@@ -65,7 +65,7 @@ test.describe("Landmark navigation tests", () => {
                 await cli.invite(bobRoom.room_id, bob);
             },
             {
-                bob: bob.credentials.userId,
+                bob: bob.credentials!.userId,
             },
         );
 
@@ -118,7 +118,7 @@ test.describe("Landmark navigation tests", () => {
                 await cli.invite(bobRoom.room_id, bob);
             },
             {
-                bob: bob.credentials.userId,
+                bob: bob.credentials!.userId,
             },
         );
 

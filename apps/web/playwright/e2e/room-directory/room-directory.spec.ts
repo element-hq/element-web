@@ -51,7 +51,7 @@ test.describe("Room Directory", () => {
 
             const resp = await bot.publicRooms({});
             expect(resp.total_room_count_estimate).toBeGreaterThanOrEqual(1);
-            expect(resp.chunk).toHaveLength(resp.total_room_count_estimate);
+            expect(resp.chunk).toHaveLength(resp.total_room_count_estimate!);
             expect(resp.chunk.find((r) => r.room_id === roomId)).toBeTruthy();
         },
     );

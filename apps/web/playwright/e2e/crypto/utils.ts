@@ -51,7 +51,7 @@ export async function createBot(
     botClient.setCredentials(credentials);
     // Backup is prepared in the background. Poll until it is ready.
     const botClientHandle = await botClient.prepareClient();
-    let expectedBackupVersion: string;
+    let expectedBackupVersion: string | null;
     await expect
         .poll(async () => {
             expectedBackupVersion = await botClientHandle.evaluate((cli) =>
@@ -63,7 +63,7 @@ export async function createBot(
 
     const recoveryKey = await botClient.getRecoveryKey();
 
-    return { botClient, recoveryKey, expectedBackupVersion };
+    return { botClient, recoveryKey, expectedBackupVersion: expectedBackupVersion! };
 }
 
 /**
@@ -98,13 +98,17 @@ export async function waitForVerificationRequest(client: Client): Promise<JSHand
 export function handleSasVerification(verifier: JSHandle<Verifier>): Promise<EmojiMapping[]> {
     return verifier.evaluate((verifier) => {
         const event = verifier.getShowSasCallbacks();
-        if (event) return event.sas.emoji;
+        if (event) {
+            expect(event.sas.emoji).toBeDefined();
+            return event.sas.emoji!;
+        }
 
         return new Promise<EmojiMapping[]>((resolve) => {
             const onShowSas = (event: ShowSasCallbacks) => {
                 verifier.off("show_sas" as VerifierEvent, onShowSas);
                 void event.confirm();
-                resolve(event.sas.emoji);
+                expect(event.sas.emoji).toBeDefined();
+                resolve(event.sas.emoji!);
             };
 
             verifier.on("show_sas" as VerifierEvent, onShowSas);
@@ -117,24 +121,24 @@ export function handleSasVerification(verifier: JSHandle<Verifier>): Promise<Emo
  */
 export async function checkDeviceIsCrossSigned(app: ElementAppPage): Promise<void> {
     const { userId, deviceId, keys } = await app.client.evaluate(async (cli: MatrixClient) => {
-        const deviceId = cli.getDeviceId();
-        const userId = cli.getUserId();
+        const deviceId = cli.getDeviceId()!;
+        const userId = cli.getSafeUserId();
         const keys = await cli.downloadKeysForUsers([userId]);
 
         return { userId, deviceId, keys };
     });
 
     // there should be three cross-signing keys
-    expect(keys.master_keys[userId]).toHaveProperty("keys");
-    expect(keys.self_signing_keys[userId]).toHaveProperty("keys");
-    expect(keys.user_signing_keys[userId]).toHaveProperty("keys");
+    expect(keys.master_keys![userId]).toHaveProperty("keys");
+    expect(keys.self_signing_keys![userId]).toHaveProperty("keys");
+    expect(keys.user_signing_keys![userId]).toHaveProperty("keys");
 
     // and the device should be signed by the self-signing key
-    const selfSigningKeyId = Object.keys(keys.self_signing_keys[userId].keys)[0];
+    const selfSigningKeyId = Object.keys(keys.self_signing_keys![userId].keys)[0];
 
     expect(keys.device_keys[userId][deviceId]).toBeDefined();
 
-    const myDeviceSignatures = keys.device_keys[userId][deviceId].signatures[userId];
+    const myDeviceSignatures = keys.device_keys[userId][deviceId].signatures![userId];
     expect(myDeviceSignatures[selfSigningKeyId]).toBeDefined();
 }
 
@@ -190,7 +194,7 @@ export async function checkDeviceIsConnectedKeyBackup(
     // We have a key backup
     expect(backupInfo).toBeDefined();
     // The key backup version is as expected
-    expect(backupInfo.version).toBe(expectedBackupVersion);
+    expect(backupInfo!.version).toBe(expectedBackupVersion);
     // The active backup version is as expected
     expect(activeBackupVersion).toBe(expectedBackupVersion);
     // The backup key is stored in 4S
@@ -211,7 +215,7 @@ export async function logIntoElement(page: Page, credentials: Credentials) {
     await page.goto("/#/login");
 
     await page.getByRole("textbox", { name: "Username" }).fill(credentials.userId);
-    await page.getByPlaceholder("Password").fill(credentials.password);
+    await page.getByPlaceholder("Password").fill(credentials.password!);
     await page.getByRole("button", { name: "Sign in" }).click();
 }
 
@@ -379,7 +383,7 @@ export async function completeCreateSecretStorageDialog(
     // the step is quite quick, and playwright can miss it, so we can't test for it.
     if (opts && Object.hasOwn(opts, "accountPassword")) {
         await expect(currentDialogLocator.getByRole("heading", { name: "Setting up keys" })).toBeVisible();
-        await page.getByPlaceholder("Password").fill(opts!.accountPassword);
+        await page.getByPlaceholder("Password").fill(opts!.accountPassword!);
         await currentDialogLocator.getByRole("button", { name: "Continue" }).click();
     }
 
@@ -595,7 +599,7 @@ export async function createSecondBotDevice(page: Page, homeserver: HomeserverIn
         bootstrapSecretStorage: false,
         bootstrapCrossSigning: false,
     });
-    bobSecondDevice.setCredentials(await homeserver.loginUser(bob.credentials.userId, bob.credentials.password));
+    bobSecondDevice.setCredentials(await homeserver.loginUser(bob.credentials!.userId, bob.credentials!.password!));
     await bobSecondDevice.prepareClient();
     return bobSecondDevice;
 }
@@ -638,7 +642,7 @@ export async function waitForDevices(
             for (let i = 0; i < 10; ++i) {
                 const userDeviceMap = await cli.getCrypto()?.getUserDeviceInfo([userId], true);
                 const deviceMap = userDeviceMap?.get(userId);
-                if (deviceMap.size === expectedNumberOfDevices) return true;
+                if (deviceMap?.size === expectedNumberOfDevices) return true;
                 await new Promise((r) => setTimeout(r, 500));
             }
             return false;

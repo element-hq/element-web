@@ -80,8 +80,12 @@ test.describe("Lazy Loading", () => {
     async function checkPaginatedDisplayNames(app: ElementAppPage, charlies: Bot[]) {
         await app.timeline.scrollToTop();
         for (const charly of charlies) {
-            await expect(await app.timeline.findEventTile(charly.credentials.displayName, charlyMsg1)).toBeAttached();
-            await expect(await app.timeline.findEventTile(charly.credentials.displayName, charlyMsg2)).toBeAttached();
+            await expect(
+                (await app.timeline.findEventTile(charly.credentials!.displayName!, charlyMsg1))!,
+            ).toBeAttached();
+            await expect(
+                (await app.timeline.findEventTile(charly.credentials!.displayName!, charlyMsg2))!,
+            ).toBeAttached();
         }
     }
 
@@ -99,13 +103,13 @@ test.describe("Lazy Loading", () => {
         await expect(getMemberInMemberlist(page, "Alice")).toBeAttached();
         await expect(getMemberInMemberlist(page, "Bob")).toBeAttached();
         for (const charly of charlies) {
-            await expect(getMemberInMemberlist(page, charly.credentials.displayName)).toBeAttached();
+            await expect(getMemberInMemberlist(page, charly.credentials!.displayName!)).toBeAttached();
         }
     }
 
     async function checkMemberListLacksCharlies(page: Page, charlies: Bot[]) {
         for (const charly of charlies) {
-            await expect(getMemberInMemberlist(page, charly.credentials.displayName)).not.toBeAttached();
+            await expect(getMemberInMemberlist(page, charly.credentials!.displayName!)).not.toBeAttached();
         }
     }
 
