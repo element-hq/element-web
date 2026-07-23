@@ -275,11 +275,18 @@ export class Helpers {
     }
 
     /**
-     * Click on a room in the Threads Activity Centre
-     * @param name - room name
+     * Click on a thread row in the Threads Activity Centre
+     * @param name - room or thread name
      */
-    clickRoomInTac(name: string) {
+    clickThreadInTac(name: string) {
         return this.getTacPanel().getByRole("menuitem", { name }).click();
+    }
+
+    /**
+     * Switch to the "Other threads" tab in the TAC
+     */
+    switchToOtherThreadsTab() {
+        return this.getTacPanel().getByRole("tab", { name: "Other threads" }).click();
     }
 
     /**
@@ -308,10 +315,10 @@ export class Helpers {
     }
 
     /**
-     * Assert that the threads activity centre panel has the expected rooms
+     * Assert that the threads activity centre panel has the expected thread rows
      * @param content - the expected rooms and their notification levels
      */
-    async assertRoomsInTac(content: Array<{ room: string; notificationLevel: "highlight" | "notification" }>) {
+    async assertThreadsInTac(content: Array<{ room: string; notificationLevel: "highlight" | "notification" }>) {
         const getBadgeClass = (notificationLevel: "highlight" | "notification") =>
             notificationLevel === "highlight"
                 ? "mx_NotificationBadge_level_highlight"

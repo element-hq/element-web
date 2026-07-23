@@ -6,9 +6,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, useContext, useState } from "react";
-import { Menu, MenuItem } from "@vector-im/compound-web";
-import { type Room } from "matrix-js-sdk/src/matrix";
+import React, { type JSX, useState } from "react";
+import { Menu, MenuItem, NavBar, NavItem, Text } from "@vector-im/compound-web";
 
 import { ThreadsActivityCentreButton } from "./ThreadsActivityCentreButton";
 import { _t } from "../../../../languageHandler";
@@ -16,15 +15,15 @@ import DecoratedRoomAvatar from "../../avatars/DecoratedRoomAvatar";
 import { Action } from "../../../../dispatcher/actions";
 import defaultDispatcher from "../../../../dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../../../../dispatcher/payloads/ViewRoomPayload";
+import RightPanelStore from "../../../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../stores/right-panel/RightPanelStorePhases";
-import { useUnreadThreadRooms } from "./useUnreadThreadRooms";
+import { type ThreadData, useUnreadThreadRooms } from "./useUnreadThreadRooms";
 import { StatelessNotificationBadge } from "../../rooms/NotificationBadge/StatelessNotificationBadge";
-import { type NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
+import { MessagePreviewStore } from "../../../../stores/message-preview/MessagePreviewStore";
+import { getSenderName } from "../../../../stores/message-preview/previews/utils";
 import PosthogTrackers from "../../../../PosthogTrackers";
 import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
-import { useSettingValue } from "../../../../hooks/useSettings";
-import { SDKContext } from "../../../../contexts/SDKContext.ts";
 
 interface ThreadsActivityCentreProps {
     /**
@@ -34,17 +33,30 @@ interface ThreadsActivityCentreProps {
 }
 
 /**
+ * The two views available in the Threads Activity Centre popup.
+ */
+enum TACView {
+    MyThreads = "my_threads",
+    OtherThreads = "other_threads",
+}
+
+/**
  * Display in a popup the list of rooms with unread threads.
  * The popup is displayed when the user clicks on the `Threads` button.
  */
 export function ThreadsActivityCentre({ displayButtonLabel }: ThreadsActivityCentreProps): JSX.Element {
     const [open, setOpen] = useState(false);
+    const [view, setView] = useState<TACView>(TACView.MyThreads);
     const roomsAndNotifications = useUnreadThreadRooms(open);
-    const settingTACOnlyNotifs = useSettingValue("Notifications.tac_only_notifications");
 
-    const emptyCaption = settingTACOnlyNotifs
-        ? _t("threads_activity_centre|no_rooms_with_threads_notifs")
-        : _t("threads_activity_centre|no_rooms_with_unread_threads");
+    // The active tab selects which thread list and empty-state caption to render.
+    const [activeThreads, activeEmptyCaption] =
+        view === TACView.MyThreads
+            ? [
+                  roomsAndNotifications.participatingThreads,
+                  _t("threads_activity_centre|no_participating_threads_unread"),
+              ]
+            : [roomsAndNotifications.otherThreads, _t("threads_activity_centre|no_other_unread_threads")];
 
     return (
         <div
@@ -62,6 +74,7 @@ export function ThreadsActivityCentre({ displayButtonLabel }: ThreadsActivityCen
             }}
         >
             <Menu
+                className="mx_ThreadsActivityCentre_menu"
                 align="start"
                 side="top"
                 open={open}
@@ -72,6 +85,7 @@ export function ThreadsActivityCentre({ displayButtonLabel }: ThreadsActivityCen
                     setOpen(newOpen);
                 }}
                 title={_t("threads_activity_centre|header")}
+                showTitle={false}
                 trigger={
                     <ThreadsActivityCentreButton
                         displayLabel={displayButtonLabel}
@@ -79,18 +93,38 @@ export function ThreadsActivityCentre({ displayButtonLabel }: ThreadsActivityCen
                     />
                 }
             >
+                {/* Tab toggle: My threads | Other threads */}
+                <NavBar
+                    className="mx_ThreadsActivityCentre_tabs"
+                    role="tablist"
+                    aria-label={_t("threads_activity_centre|header")}
+                >
+                    <NavItem
+                        aria-controls="mx_ThreadsActivityCentre_panel"
+                        active={view === TACView.MyThreads}
+                        onClick={() => setView(TACView.MyThreads)}
+                    >
+                        {_t("threads_activity_centre|my_threads_tab")}
+                    </NavItem>
+                    <NavItem
+                        aria-controls="mx_ThreadsActivityCentre_panel"
+                        active={view === TACView.OtherThreads}
+                        onClick={() => setView(TACView.OtherThreads)}
+                    >
+                        {_t("threads_activity_centre|other_threads_tab")}
+                    </NavItem>
+                </NavBar>
                 {/* Make the content of the pop-up scrollable */}
-                <div className="mx_ThreadsActivityCentre_rows">
-                    {roomsAndNotifications.rooms.map(({ room, notificationLevel }) => (
-                        <ThreadsActivityCentreRow
-                            key={room.roomId}
-                            room={room}
-                            notificationLevel={notificationLevel}
+                <div id="mx_ThreadsActivityCentre_panel" role="tabpanel" className="mx_ThreadsActivityCentre_rows">
+                    {activeThreads.map((threadData) => (
+                        <ThreadsActivityCentreThreadRow
+                            key={`${threadData.room.roomId}:${threadData.thread.id}`}
+                            threadData={threadData}
                             onClick={() => setOpen(false)}
                         />
                     ))}
-                    {roomsAndNotifications.rooms.length === 0 && (
-                        <div className="mx_ThreadsActivityCentre_emptyCaption">{emptyCaption}</div>
+                    {activeThreads.length === 0 && (
+                        <div className="mx_ThreadsActivityCentre_emptyCaption">{activeEmptyCaption}</div>
                     )}
                 </div>
             </Menu>
@@ -98,15 +132,11 @@ export function ThreadsActivityCentre({ displayButtonLabel }: ThreadsActivityCen
     );
 }
 
-interface ThreadsActivityRow {
+interface ThreadsActivityThreadRow {
     /**
-     * The room with unread threads.
+     * The thread data including the thread, room, and notification level.
      */
-    room: Room;
-    /**
-     * The notification level.
-     */
-    notificationLevel: NotificationLevel;
+    threadData: ThreadData;
     /**
      * Callback when the user clicks on the row.
      */
@@ -114,36 +144,79 @@ interface ThreadsActivityRow {
 }
 
 /**
- * Display a room with unread threads.
+ * Display an unread thread the user has participated in.
  */
-function ThreadsActivityCentreRow({ room, onClick, notificationLevel }: ThreadsActivityRow): JSX.Element {
-    const sdkContext = useContext(SDKContext);
+function ThreadsActivityCentreThreadRow({ threadData, onClick }: ThreadsActivityThreadRow): JSX.Element {
+    const { thread, room, notificationLevel } = threadData;
+
+    const rootEvent = thread.rootEvent;
+    // getSenderName resolves the disambiguated member name, falling back to the raw user ID.
+    const senderName = rootEvent ? getSenderName(rootEvent) : "";
+    // Let the shared preview store render the message text — it handles edits, replies,
+    // emotes, HTML and non-message event types consistently with the room list.
+    const previewText = rootEvent ? MessagePreviewStore.instance.generatePreviewForEvent(rootEvent) : "";
 
     return (
         <MenuItem
-            className="mx_ThreadsActivityCentreRow"
+            className="mx_ThreadsActivityCentreRow mx_ThreadsActivityCentreThreadRow"
+            // label={null} renders no label span; aria-label provides the accessible name.
+            label={null}
+            aria-label={senderName ? `${room.name}: ${senderName}: ${previewText}` : room.name}
+            Icon={<DecoratedRoomAvatar room={room} size="40px" />}
             onSelect={(event: Event) => {
                 onClick();
 
-                // Set the right panel card for that room so the threads panel is open before we dispatch,
-                // so it will open once the room appears.
-                sdkContext.rightPanelStore.setCard({ phase: RightPanelPhases.ThreadPanel }, true, room.roomId);
+                // Open the specific thread in that room's right panel. Set a two-card
+                // stack (thread list beneath the thread view) so the thread view gets a
+                // working back button, mirroring the canonical Action.ShowThread path.
+                if (thread.rootEvent) {
+                    RightPanelStore.instance.setCards(
+                        [
+                            { phase: RightPanelPhases.ThreadPanel },
+                            {
+                                phase: RightPanelPhases.ThreadView,
+                                state: { threadHeadEvent: thread.rootEvent },
+                            },
+                        ],
+                        true,
+                        room.roomId,
+                    );
+                }
 
-                // Track the click on the room
+                // Track the click
                 PosthogTrackers.trackInteraction("WebThreadsActivityCentreRoomItem", event);
 
-                // Display the selected room in the timeline
+                // Navigate to the room
                 defaultDispatcher.dispatch<ViewRoomPayload>({
                     action: Action.ViewRoom,
-                    show_room_tile: true, // make sure the room is visible in the list
+                    show_room_tile: true,
                     room_id: room.roomId,
                     metricsTrigger: "WebThreadsActivityCentre",
-                    focusNext: "threadsPanel",
                 });
             }}
-            label={room.name}
-            Icon={<DecoratedRoomAvatar room={room} size="32px" />}
         >
+            <div className="mx_ThreadsActivityCentreThreadRow_content">
+                <div className="mx_ThreadsActivityCentreThreadRow_header">
+                    <Text as="span" size="md" weight="semibold" className="mx_ThreadsActivityCentreThreadRow_roomName">
+                        {room.name}
+                    </Text>
+                </div>
+                {(senderName || previewText) && (
+                    <Text as="span" size="sm" weight="regular" className="mx_ThreadsActivityCentreThreadRow_preview">
+                        {senderName && (
+                            <Text
+                                as="span"
+                                size="sm"
+                                weight="medium"
+                                className="mx_ThreadsActivityCentreThreadRow_sender"
+                            >
+                                {`${senderName}: `}
+                            </Text>
+                        )}
+                        {previewText}
+                    </Text>
+                )}
+            </div>
             <StatelessNotificationBadge level={notificationLevel} count={0} symbol={null} forceDot={true} />
         </MenuItem>
     );
