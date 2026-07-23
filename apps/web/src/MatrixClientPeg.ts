@@ -270,7 +270,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         }
         opts.threadSupport = true;
         if (SettingsStore.getValue("feature_user_status")) {
-            opts.unstableMSC4429SyncUserProfileFields = ["org.matrix.msc4426.status"];
+            opts.unstableMSC4429SyncUserProfileFields = ["org.matrix.msc4426.status", "org.matrix.msc4426.call"];
         }
 
         if (SettingsStore.getValue("feature_sliding_sync")) {

@@ -28,6 +28,7 @@ import {
 import PosthogTrackers from "../../PosthogTrackers";
 import { CallStore, CallStoreEvent } from "../../stores/CallStore";
 import { type Call, CallEvent } from "../../models/Call";
+import throttle from "lodash/throttle";
 
 interface RoomListSectionHeaderViewModelProps {
     tag: string;
@@ -182,7 +183,17 @@ export class RoomListSectionHeaderViewModel
      * Computes both the unread (bold) state and a merged notification decoration that aggregates
      * the rooms' notifications. The activity "dot" is intentionally excluded from the decoration.
      */
-    private updateNotificationState = (): void => {
+    private updateNotificationState = throttle(
+        (): void => {
+            this.doUpdateNotificationState();
+        },
+        200,
+        // Throttled because it iterates every room in the section and fires once per tracked room
+        // notification update, which during sync catch-up means once per incoming timeline event
+        { leading: true, trailing: true },
+    );
+
+    private doUpdateNotificationState = (): void => {
         let isUnread = false;
         let isMention = false;
         let isNotification = false;
@@ -230,6 +241,7 @@ export class RoomListSectionHeaderViewModel
     };
 
     public dispose(): void {
+        this.updateNotificationState.cancel();
         for (const state of this.roomNotificationStates) {
             state.off(NotificationStateEvents.Update, this.updateNotificationState);
         }
