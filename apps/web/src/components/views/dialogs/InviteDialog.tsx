@@ -53,6 +53,7 @@ import {
 import { InviteKind } from "./InviteDialogTypes";
 import { type IPublicRoomDirectoryConfig, NetworkDropdown, useServers } from "../directory/NetworkDropdown";
 import { findProtocolForInstance, useThirdPartyProtocols } from "../../../hooks/useThirdPartyProtocols";
+import { useUnstableFeatureSupport } from "../../../hooks/useUnstableFeatureSupport";
 import { type Protocols } from "../../../utils/DirectoryUtils";
 import Modal from "../../../Modal";
 import dis from "../../../dispatcher/dispatcher";
@@ -165,8 +166,12 @@ interface IDirectoryPickerProps {
  * which bridged network (if any) typed addresses should be resolved through.
  */
 const InviteDirectoryPicker: React.FC<IDirectoryPickerProps> = ({ config, onChange }) => {
-    const { allServers } = useServers();
-    const protocolsByServer = useThirdPartyProtocols(allServers);
+    const { allServers, homeServer } = useServers();
+    // Searching a remote server's user directory needs MSC4258 support on our
+    // homeserver; without it the picker only offers the local server (and any
+    // bridged networks it knows about).
+    const supportsRemoteDirectory = useUnstableFeatureSupport("org.matrix.msc4258");
+    const protocolsByServer = useThirdPartyProtocols(supportsRemoteDirectory ? allServers : [homeServer]);
     return (
         <div className="mx_InviteDialog_directoryPicker">
             <NetworkDropdown
@@ -178,6 +183,7 @@ const InviteDirectoryPicker: React.FC<IDirectoryPickerProps> = ({ config, onChan
                         findProtocolForInstance(protocolsByServer[newConfig?.roomServer ?? ""], newConfig?.instanceId),
                     )
                 }
+                remoteServersAllowed={supportsRemoteDirectory}
             />
         </div>
     );

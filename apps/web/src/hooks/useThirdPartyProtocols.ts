@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { type Protocols } from "../utils/DirectoryUtils";
+import { useUnstableFeatureSupport } from "./useUnstableFeatureSupport";
 
 // Third-party protocol metadata changes rarely: cache per server for the session.
 const protocolsCache = new Map<string, Protocols>();
@@ -23,6 +24,9 @@ const protocolsCache = new Map<string, Protocols>();
 export function useThirdPartyProtocols(servers: string[]): Record<string, Protocols> {
     const [protocolsByServer, setProtocolsByServer] = useState<Record<string, Protocols>>({});
     const serversKey = servers.join("\n");
+    // Remote lookups go via the MSC4517 `?server=` extension, so only attempt
+    // them when our homeserver advertises support.
+    const supportsRemoteLookup = useUnstableFeatureSupport("org.matrix.msc4517.thirdparty");
 
     useEffect(() => {
         let cancelled = false;
@@ -36,6 +40,12 @@ export function useThirdPartyProtocols(servers: string[]): Record<string, Protoc
         };
 
         for (const server of serversKey.split("\n").filter(Boolean)) {
+            if (server !== homeServer && !supportsRemoteLookup) {
+                // Don't cache the miss: support may still be resolving, and
+                // the effect re-runs if it lands as true.
+                merge(server, {});
+                continue;
+            }
             const cached = protocolsCache.get(server);
             if (cached) {
                 merge(server, cached);
@@ -58,7 +68,7 @@ export function useThirdPartyProtocols(servers: string[]): Record<string, Protoc
         return () => {
             cancelled = true;
         };
-    }, [serversKey]);
+    }, [serversKey, supportsRemoteLookup]);
 
     return protocolsByServer;
 }

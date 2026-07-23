@@ -166,12 +166,25 @@ interface IProps {
     protocolsByServer: Record<string, Protocols>;
     config: IPublicRoomDirectoryConfig | null;
     setConfig: (value: IPublicRoomDirectoryConfig | null) => void;
+    /**
+     * Whether to offer servers other than our own (and the option to add
+     * more). Callers whose lookups need server-side support for remote
+     * targets (e.g. MSC4258 user directory search) set this false when the
+     * homeserver doesn't advertise it. Defaults to true.
+     */
+    remoteServersAllowed?: boolean;
 }
 
-export const NetworkDropdown: React.FC<IProps> = ({ protocolsByServer, config, setConfig }) => {
+export const NetworkDropdown: React.FC<IProps> = ({
+    protocolsByServer,
+    config,
+    setConfig,
+    remoteServersAllowed = true,
+}) => {
     const { allServers, homeServer, userDefinedServers, setUserDefinedServers } = useServers();
+    const servers = remoteServersAllowed ? allServers : [homeServer];
 
-    const options: GenericDropdownMenuItem<IPublicRoomDirectoryConfig | null>[] = allServers.map((roomServer) => ({
+    const options: GenericDropdownMenuItem<IPublicRoomDirectoryConfig | null>[] = servers.map((roomServer) => ({
         key: { roomServer, instanceId: undefined },
         label: roomServer,
         description:
@@ -260,7 +273,7 @@ export const NetworkDropdown: React.FC<IProps> = ({ protocolsByServer, config, s
                       })
                     : _t("spotlight|public_rooms|network_dropdown_selected_label")
             }
-            AdditionalOptions={addNewServer}
+            AdditionalOptions={remoteServersAllowed ? addNewServer : undefined}
         />
     );
 };
