@@ -14,6 +14,7 @@ import { type ExtendedDevice } from "./types";
 import { DeviceTypeIcon } from "./DeviceTypeIcon";
 import { preventDefaultWrapper } from "../../../../utils/NativeEventUtils";
 import { DeviceMetaData } from "./DeviceMetaData";
+import { DeviceType } from "../../../../utils/device/parseUserAgent.ts";
 export interface DeviceTileProps {
     device: ExtendedDevice;
     isSelected?: boolean;
@@ -38,7 +39,7 @@ const DeviceTile: React.FC<DeviceTileProps> = ({ device, children, isSelected, o
             data-testid={`device-tile-${device.device_id}`}
             onClick={onClick}
         >
-            <DeviceTypeIcon isVerified={device.isVerified} isSelected={isSelected} deviceType={device.deviceType} />
+            <DeviceTypeIcon isVerified={device.isVerified} isSelected={isSelected} deviceType={DeviceType.Unknown} />
             <div className="mx_DeviceTile_info">
                 <DeviceTileName device={device} />
                 <div className="mx_DeviceTile_metadata">
