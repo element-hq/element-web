@@ -591,7 +591,7 @@ describe("RoomListItemViewModel", () => {
             viewModel.onCreateSection();
             expect(createSectionSpy).toHaveBeenCalled();
 
-            await waitFor(() => expect(tagRoomSpy).toHaveBeenCalledWith(room, "element.io.section.work"));
+            await waitFor(() => expect(tagRoomSpy).toHaveBeenCalledWith(room, "element.io.section.work", true));
         });
 
         it("should call tagRoom when onToggleSection is called", () => {
@@ -600,7 +600,7 @@ describe("RoomListItemViewModel", () => {
 
             viewModel.onToggleSection(DefaultTagID.Favourite);
 
-            expect(tagRoomSpy).toHaveBeenCalledWith(room, DefaultTagID.Favourite);
+            expect(tagRoomSpy).toHaveBeenCalledWith(room, DefaultTagID.Favourite, true);
         });
     });
 

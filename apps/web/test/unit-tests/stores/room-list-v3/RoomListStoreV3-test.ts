@@ -347,17 +347,32 @@ describe("RoomListStoreV3", () => {
             expect(fn).toHaveBeenCalled();
         });
 
-        it("emits ROOM_TAGGED_EVENT on a local user tag action", async () => {
+        it("emits ROOM_TAGGED_EVENT on a local user tag action when showToast is true", async () => {
             const { store, dispatcher } = await getRoomListStore();
             const fn = jest.fn();
             store.on(ROOM_TAGGED_EVENT, fn);
             dispatcher.dispatch(
                 {
                     action: "RoomListActions.tagRoom.success",
+                    result: { showToast: true },
                 },
                 true,
             );
             expect(fn).toHaveBeenCalled();
+        });
+
+        it("does not emit ROOM_TAGGED_EVENT when showToast is false", async () => {
+            const { store, dispatcher } = await getRoomListStore();
+            const fn = jest.fn();
+            store.on(ROOM_TAGGED_EVENT, fn);
+            dispatcher.dispatch(
+                {
+                    action: "RoomListActions.tagRoom.success",
+                    result: { showToast: false },
+                },
+                true,
+            );
+            expect(fn).not.toHaveBeenCalled();
         });
 
         it("Room is re-inserted on decryption", async () => {
