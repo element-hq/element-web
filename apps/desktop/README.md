@@ -1,9 +1,4 @@
-![Build](https://github.com/vector-im/element-desktop/actions/workflows/build_desktop_and_deploy.yaml/badge.svg)
-![Static Analysis](https://github.com/vector-im/element-desktop/actions/workflows/static_analysis.yaml/badge.svg)
-[![Localazy](https://img.shields.io/endpoint?url=https%3A%2F%2Fconnect.localazy.com%2Fstatus%2Felement-web%2Fdata%3Fcontent%3Dall%26title%3Dlocalazy%26logo%3Dtrue)](https://localazy.com/p/element-web)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=element-desktop&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=element-desktop)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=element-desktop&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=element-desktop)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=element-desktop&metric=bugs)](https://sonarcloud.io/summary/new_code?id=element-desktop)
+![Build](https://github.com/element-hq/element-web/actions/workflows/build_desktop_and_deploy.yaml/badge.svg)
 
 # Element Desktop
 
@@ -63,7 +58,7 @@ ln -s ../web/webapp ./
 
 TODO: List native pre-requisites
 
-Optionally, [build the native modules](https://github.com/vector-im/element-desktop/blob/develop/docs/native-node-modules.md),
+Optionally, [build the native modules](https://github.com/element-hq/element-web/blob/develop/docs/native-node-modules.md),
 which include support for searching in encrypted rooms and secure storage. Skipping this step is fine, you just won't have those features.
 
 Then, run
