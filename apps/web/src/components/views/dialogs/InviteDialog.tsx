@@ -184,6 +184,7 @@ const InviteDirectoryPicker: React.FC<IDirectoryPickerProps> = ({ config, onChan
                     )
                 }
                 remoteServersAllowed={supportsRemoteDirectory}
+                entity="users"
             />
         </div>
     );

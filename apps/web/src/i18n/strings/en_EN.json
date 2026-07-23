@@ -3203,6 +3203,8 @@
             "network_dropdown_required_invalid": "Enter a server name",
             "network_dropdown_selected_label": "Show: Matrix rooms",
             "network_dropdown_selected_label_instance": "Show: %(instance)s rooms (%(server)s)",
+            "network_dropdown_selected_label_instance_users": "Show: %(instance)s users (%(server)s)",
+            "network_dropdown_selected_label_users": "Show: Matrix users",
             "network_dropdown_your_server_description": "Your server"
         }
     },

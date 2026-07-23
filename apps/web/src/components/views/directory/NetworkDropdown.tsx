@@ -173,6 +173,12 @@ interface IProps {
      * homeserver doesn't advertise it. Defaults to true.
      */
     remoteServersAllowed?: boolean;
+    /**
+     * What the picker is choosing between: room directories (the default) or
+     * user directories, so the selected label reads "... rooms" or "... users"
+     * to match.
+     */
+    entity?: "rooms" | "users";
 }
 
 export const NetworkDropdown: React.FC<IProps> = ({
@@ -180,6 +186,7 @@ export const NetworkDropdown: React.FC<IProps> = ({
     config,
     setConfig,
     remoteServersAllowed = true,
+    entity = "rooms",
 }) => {
     const { allServers, homeServer, userDefinedServers, setUserDefinedServers } = useServers();
     const servers = remoteServersAllowed ? allServers : [homeServer];
@@ -265,14 +272,22 @@ export const NetworkDropdown: React.FC<IProps> = ({
             }
             options={options}
             onChange={(option) => setConfig(option)}
-            selectedLabel={(option) =>
-                option?.key
-                    ? _t("spotlight|public_rooms|network_dropdown_selected_label_instance", {
-                          server: option.key.roomServer,
-                          instance: option.key.instanceId ? option.label : "Matrix",
-                      })
-                    : _t("spotlight|public_rooms|network_dropdown_selected_label")
-            }
+            selectedLabel={(option) => {
+                if (option?.key) {
+                    return entity === "users"
+                        ? _t("spotlight|public_rooms|network_dropdown_selected_label_instance_users", {
+                              server: option.key.roomServer,
+                              instance: option.key.instanceId ? option.label : "Matrix",
+                          })
+                        : _t("spotlight|public_rooms|network_dropdown_selected_label_instance", {
+                              server: option.key.roomServer,
+                              instance: option.key.instanceId ? option.label : "Matrix",
+                          });
+                }
+                return entity === "users"
+                    ? _t("spotlight|public_rooms|network_dropdown_selected_label_users")
+                    : _t("spotlight|public_rooms|network_dropdown_selected_label");
+            }}
             AdditionalOptions={remoteServersAllowed ? addNewServer : undefined}
         />
     );
