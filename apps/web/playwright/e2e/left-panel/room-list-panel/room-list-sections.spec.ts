@@ -243,28 +243,37 @@ test.describe("Room list sections", () => {
         test("persists the collapsed/expanded state across reloads", async ({ page }) => {
             const roomList = getRoomList(page);
             const favouritesHeader = getSectionHeader(page, "Favourites");
+            const chatsHeader = getSectionHeader(page, "Chats");
             const favRoom = roomList.getByRole("row", { name: "Open room favourite room" });
+            const regularRoom = roomList.getByRole("row", { name: "Open room regular room" });
 
-            // Collapse the Favourites section
+            // Collapse both the Favourites and Chats sections
             await expect(favouritesHeader).toHaveAttribute("aria-expanded", "true");
             await favouritesHeader.click();
             await expect(favouritesHeader).toHaveAttribute("aria-expanded", "false");
             await expect(favRoom).not.toBeVisible();
+
+            await expect(chatsHeader).toHaveAttribute("aria-expanded", "true");
+            await chatsHeader.click();
+            await expect(chatsHeader).toHaveAttribute("aria-expanded", "false");
+            await expect(regularRoom).not.toBeVisible();
 
             // Reload the page: the collapsed state is persisted at the device level and should survive
             await page.reload();
             await rejectToastIfExists(page, "Verify this device");
             await rejectToastIfExists(page, "Notifications");
 
-            // Favourites is still collapsed and its room stays hidden, while Chats remains expanded
+            // Both sections are still collapsed and their rooms stay hidden
             await expect(getSectionHeader(page, "Favourites")).toHaveAttribute("aria-expanded", "false");
             await expect(getRoomList(page).getByRole("row", { name: "Open room favourite room" })).not.toBeVisible();
-            await expect(getSectionHeader(page, "Chats")).toHaveAttribute("aria-expanded", "true");
-            await expect(getRoomList(page).getByRole("row", { name: "Open room regular room" })).toBeVisible();
+            await expect(getSectionHeader(page, "Chats")).toHaveAttribute("aria-expanded", "false");
+            await expect(getRoomList(page).getByRole("row", { name: "Open room regular room" })).not.toBeVisible();
 
-            // Expand it again and reload: the expanded state is likewise persisted
+            // Expand them again and reload: the expanded state is likewise persisted
             await getSectionHeader(page, "Favourites").click();
             await expect(getSectionHeader(page, "Favourites")).toHaveAttribute("aria-expanded", "true");
+            await getSectionHeader(page, "Chats").click();
+            await expect(getSectionHeader(page, "Chats")).toHaveAttribute("aria-expanded", "true");
 
             await page.reload();
             await rejectToastIfExists(page, "Verify this device");
@@ -272,6 +281,8 @@ test.describe("Room list sections", () => {
 
             await expect(getSectionHeader(page, "Favourites")).toHaveAttribute("aria-expanded", "true");
             await expect(getRoomList(page).getByRole("row", { name: "Open room favourite room" })).toBeVisible();
+            await expect(getSectionHeader(page, "Chats")).toHaveAttribute("aria-expanded", "true");
+            await expect(getRoomList(page).getByRole("row", { name: "Open room regular room" })).toBeVisible();
         });
     });
 
