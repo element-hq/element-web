@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { createRef, type JSX, type ReactNode, type SyntheticEvent } from "react";
 import { EventType, type Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { type QueryDict } from "matrix-js-sdk/src/utils";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -50,6 +51,9 @@ import {
     ThreepidMember,
 } from "../../../utils/direct-messages";
 import { InviteKind } from "./InviteDialogTypes";
+import { type IPublicRoomDirectoryConfig, NetworkDropdown, useServers } from "../directory/NetworkDropdown";
+import { findProtocolForInstance, useThirdPartyProtocols } from "../../../hooks/useThirdPartyProtocols";
+import { type Protocols } from "../../../utils/DirectoryUtils";
 import Modal from "../../../Modal";
 import dis from "../../../dispatcher/dispatcher";
 import { privateShouldBeEncrypted } from "../../../utils/rooms";
@@ -147,6 +151,38 @@ interface InviteCallProps extends BaseProps {
 
 type Props = InviteDMProps | InviteRoomProps | InviteCallProps;
 
+interface IDirectoryPickerProps {
+    config: IPublicRoomDirectoryConfig | null;
+    onChange(
+        config: IPublicRoomDirectoryConfig | null,
+        instanceProtocol?: { protocolKey: string; protocol: Protocols[string] },
+    ): void;
+}
+
+/**
+ * The room directory's server/network picker, repurposed for choosing which
+ * server's user directory a "start chat" search runs against, and which
+ * bridged network (if any) typed addresses should be resolved through.
+ */
+const InviteDirectoryPicker: React.FC<IDirectoryPickerProps> = ({ config, onChange }) => {
+    const { allServers } = useServers();
+    const protocolsByServer = useThirdPartyProtocols(allServers);
+    return (
+        <div className="mx_InviteDialog_directoryPicker">
+            <NetworkDropdown
+                protocolsByServer={protocolsByServer}
+                config={config}
+                setConfig={(newConfig) =>
+                    onChange(
+                        newConfig,
+                        findProtocolForInstance(protocolsByServer[newConfig?.roomServer ?? ""], newConfig?.instanceId),
+                    )
+                }
+            />
+        </div>
+    );
+};
+
 interface IInviteDialogState {
     targets: Member[]; // array of Member objects (see interface above)
     filterText: string;
@@ -156,6 +192,7 @@ interface IInviteDialogState {
     numSuggestionsShown: number;
     serverResultsMixin: Result[];
     threepidResultsMixin: Result[];
+    dirConfig: IPublicRoomDirectoryConfig | null;
     canUseIdentityServer: boolean;
     tryingIdentityServer: boolean;
     consultFirst: boolean;
@@ -232,6 +269,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             numSuggestionsShown: INITIAL_ROOMS_SHOWN,
             serverResultsMixin: [],
             threepidResultsMixin: [],
+            dirConfig: null,
             canUseIdentityServer: !!cli.getIdentityServerUrl(),
             tryingIdentityServer: false,
             consultFirst: false,
@@ -530,10 +568,54 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         this.props.onFinished(false);
     };
 
+    // Protocol metadata for the bridged-network instance selected in the
+    // directory picker, used to resolve typed third-party addresses via 3PU.
+    private dirInstanceProtocol?: { protocolKey: string; protocol: Protocols[string] };
+
+    private onDirectoryConfigChange = (
+        config: IPublicRoomDirectoryConfig | null,
+        instanceProtocol?: { protocolKey: string; protocol: Protocols[string] },
+    ): void => {
+        this.dirInstanceProtocol = instanceProtocol;
+        this.setState({ dirConfig: config, serverResultsMixin: [] });
+        if (this.state.filterText) {
+            this.updateSuggestions(this.state.filterText);
+        }
+    };
+
+    /** The remote server the directory picker targets, if it isn't ours. */
+    private get dirServer(): string | undefined {
+        const server = this.state.dirConfig?.roomServer;
+        if (!server || server === MatrixClientPeg.safeGet().getDomain()) return undefined;
+        return server;
+    }
+
+    /**
+     * Resolve the typed term through the selected bridged network's
+     * third-party user lookup, returning directory-style results for any
+     * mxids the bridge maps the address to.
+     */
+    private async lookupThirdPartyUser(term: string): Promise<{ user_id: string; display_name?: string }[]> {
+        if (!this.dirInstanceProtocol || !term || term.startsWith("@")) return [];
+        const userField = this.dirInstanceProtocol.protocol.user_fields?.[0] ?? "username";
+        const params: QueryDict = { [userField]: term };
+        if (this.dirServer) params.server = this.dirServer;
+        try {
+            const results = await MatrixClientPeg.safeGet().getThirdpartyUser(
+                this.dirInstanceProtocol.protocolKey,
+                params,
+            );
+            return results.filter((r) => r.userid).map((r) => ({ user_id: r.userid, display_name: term }));
+        } catch (e) {
+            logger.warn("Non-fatal error in third-party user lookup", e);
+            return [];
+        }
+    }
+
     private updateSuggestions = debounce(
         async (term: string): Promise<void> => {
             MatrixClientPeg.safeGet()
-                .searchUserDirectory({ term })
+                .searchUserDirectory({ term, server: this.dirServer })
                 .then(async (r): Promise<void> => {
                     if (term !== this.state.filterText) {
                         // Discard the results - we were probably too slow on the server-side to make
@@ -543,6 +625,15 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                     }
 
                     if (!r.results) r.results = [];
+
+                    // If a bridged network is selected in the picker, try to
+                    // resolve the term as a third-party address (e.g. an XMPP
+                    // JID) and offer the mapped mxid(s) at the top.
+                    for (const tpUser of (await this.lookupThirdPartyUser(term)).reverse()) {
+                        if (term !== this.state.filterText) break;
+                        if (r.results.some((u) => u.user_id === tpUser.user_id)) continue;
+                        r.results.splice(0, 0, tpUser);
+                    }
 
                     // While we're here, try and autocomplete a search result for the mxid itself
                     // if there's no matches (and the input looks like a mxid).
@@ -1282,6 +1373,9 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         return (
             <React.Fragment>
                 <p className="mx_InviteDialog_helpText">{helpText}</p>
+                {this.props.kind === InviteKind.Dm && (
+                    <InviteDirectoryPicker config={this.state.dirConfig} onChange={this.onDirectoryConfigChange} />
+                )}
                 <div className="mx_InviteDialog_addressBar">
                     {this.renderEditor()}
                     <AccessibleButton

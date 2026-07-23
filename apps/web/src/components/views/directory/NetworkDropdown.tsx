@@ -132,7 +132,7 @@ function removeAll<T>(target: Set<T>, ...toRemove: T[]): void {
     }
 }
 
-function useServers(): ServerList {
+export function useServers(): ServerList {
     const [userDefinedServers, setUserDefinedServers] = useSettingsValueWithSetter(SETTING_NAME, SettingLevel.ACCOUNT);
 
     const homeServer = MatrixClientPeg.safeGet().getDomain()!;
@@ -157,12 +157,18 @@ function useServers(): ServerList {
 }
 
 interface IProps {
-    protocols: Protocols | null;
+    /**
+     * Third-party protocol metadata per server, so bridged-network instances
+     * can be offered under any server we know them for (the local server's
+     * always; remote servers' when the homeserver supports federated
+     * third-party lookups).
+     */
+    protocolsByServer: Record<string, Protocols>;
     config: IPublicRoomDirectoryConfig | null;
     setConfig: (value: IPublicRoomDirectoryConfig | null) => void;
 }
 
-export const NetworkDropdown: React.FC<IProps> = ({ protocols, config, setConfig }) => {
+export const NetworkDropdown: React.FC<IProps> = ({ protocolsByServer, config, setConfig }) => {
     const { allServers, homeServer, userDefinedServers, setUserDefinedServers } = useServers();
 
     const options: GenericDropdownMenuItem<IPublicRoomDirectoryConfig | null>[] = allServers.map((roomServer) => ({
@@ -175,14 +181,12 @@ export const NetworkDropdown: React.FC<IProps> = ({ protocols, config, setConfig
                 key: { roomServer, instanceId: undefined },
                 label: _t("common|matrix"),
             },
-            ...(roomServer === homeServer && protocols
-                ? Object.values(protocols)
-                      .flatMap((protocol) => protocol.instances)
-                      .map((instance) => ({
-                          key: { roomServer, instanceId: instance.instance_id },
-                          label: instance.desc,
-                      }))
-                : []),
+            ...Object.values(protocolsByServer[roomServer] ?? {})
+                .flatMap((protocol) => protocol.instances)
+                .map((instance) => ({
+                    key: { roomServer, instanceId: instance.instance_id },
+                    label: instance.desc,
+                })),
         ],
         ...(userDefinedServers.includes(roomServer)
             ? {
