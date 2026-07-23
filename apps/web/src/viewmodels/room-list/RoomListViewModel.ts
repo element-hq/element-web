@@ -753,6 +753,9 @@ export class RoomListViewModel
         roomIdOverride: string | null = null,
         scrollToSectionTag: string | undefined = undefined,
     ): Promise<void> {
+        // Store is still loading rooms - don't update the list yet, we'll get another update when loading finishes
+        if (RoomListStoreV3.instance.isLoadingRooms) return;
+
         // Determine the room ID to use for calculations
         // Use override if provided (e.g., during space changes), otherwise fall back to RoomViewStore
         const roomId = roomIdOverride ?? this.props.roomViewStore.getRoomId();
@@ -782,12 +785,6 @@ export class RoomListViewModel
             this.roomsResult,
             (tag) => this.roomSectionHeaderViewModels.get(tag)?.isExpanded ?? true,
         );
-        // If it's a flat list, we need to make sure the single section is expanded and has all rooms, otherwise the room list will be empty
-        if (isFlatList) {
-            const chatSections = this.roomSectionHeaderViewModels.get(CHATS_TAG);
-            if (chatSections) chatSections.isExpanded = true;
-            chatSections?.setRooms(this.roomsResult.sections.flatMap((section) => section.rooms));
-        }
         this.sections = sections;
 
         // Calculate the active room index from the computed sections (which exclude collapsed sections' rooms)
@@ -970,19 +967,21 @@ function computeSections(
 ): { sections: Section[]; isFlatList: boolean } {
     const customSections = getCustomSectionData();
 
-    const sections = roomsResult.sections
+    const filtered = roomsResult.sections
         // Only include sections that have rooms, or custom sections that were created in the current space.
         .filter(
             (section) =>
                 section.rooms.length > 0 ||
                 (isCustomSectionTag(section.tag) && customSections[section.tag]?.spaceId === roomsResult.spaceId),
-        )
-        // Remove roomIds for sections that are currently collapsed according to their section header view model
-        .map((section) => ({
-            ...section,
-            rooms: isSectionExpanded(section.tag) ? section.rooms : [],
-        }));
-    const isFlatList = sections.length === 0 || (sections.length === 1 && sections[0].tag === CHATS_TAG);
+        );
+    const isFlatList = filtered.length === 0 || (filtered.length === 1 && filtered[0].tag === CHATS_TAG);
+
+    const sections = filtered.map((section) => ({
+        ...section,
+        // A flat list has no section header to toggle, so always render its rooms.
+        // Otherwise, remove roomIds for sections that are currently collapsed.
+        rooms: isFlatList || isSectionExpanded(section.tag) ? section.rooms : [],
+    }));
 
     return { sections, isFlatList };
 }
