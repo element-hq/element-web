@@ -66,6 +66,7 @@ export function LeftResizablePanelView({
             defaultSize={defaultSize}
             onResize={vm.onLeftPanelResize}
             panelRef={setPanelRef}
+            groupResizeBehavior="preserve-pixel-size"
         >
             {children}
         </Panel>

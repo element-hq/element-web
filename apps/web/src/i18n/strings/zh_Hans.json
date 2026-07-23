@@ -677,7 +677,6 @@
     "create_section_dialog": {
         "create_section": "创建区域",
         "description": "区域仅对你可见",
-        "edit_section": "编辑区域",
         "label": "区域名称",
         "title": "创建区域",
         "title_edition": "编辑区域"
@@ -2433,7 +2432,8 @@
         "warning_kind_files": "此版本的 %(brand)s 不支持查看某些加密文件",
         "warning_kind_files_app": "使用<a>桌面 App</a> 查看所有加密文件",
         "warning_kind_search": "此版本的 %(brand)s 不支持搜索加密消息",
-        "warning_kind_search_app": "使用<a>桌面 App</a> 搜索加密消息"
+        "warning_kind_search_app": "使用<a>桌面 App</a> 搜索加密消息",
+        "warning_kind_search_partial": "搜索结果可能不完整，因为索引仍在建立中。"
     },
     "setting": {
         "help_about": {
@@ -3822,6 +3822,9 @@
         "verification_unavailable": "用户验证不可用",
         "verify_button": "验证用户",
         "verify_explainer": "为了提高安全性，请通过检查两台设备上的一次性代码来验证此用户。"
+    },
+    "user_status": {
+        "on_a_call": "通话中"
     },
     "voip": {
         "already_in_call": "已在通话中",

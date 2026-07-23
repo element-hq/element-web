@@ -664,7 +664,9 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         {...ariaProperties}
                     >
                         <DecoratedRoomAvatar room={result.room} size={AVATAR_SIZE} tooltipProps={{ tabIndex: -1 }} />
-                        {result.room.name}
+                        <span className="mx_SpotlightDialog_result_name" title={result.room.name}>
+                            {result.room.name}
+                        </span>
                         <NotificationBadge notification={notification} />
                         <RoomContextDetails
                             id={`mx_SpotlightDialog_button_result_${result.room.roomId}_details`}
@@ -689,7 +691,14 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         aria-describedby={`mx_SpotlightDialog_button_result_${result.member.userId}_details`}
                     >
                         <SearchResultAvatar user={result.member} size={AVATAR_SIZE} />
-                        {result.member instanceof RoomMember ? result.member.rawDisplayName : result.member.name}
+                        <span
+                            className="mx_SpotlightDialog_result_name"
+                            title={
+                                result.member instanceof RoomMember ? result.member.rawDisplayName : result.member.name
+                            }
+                        >
+                            {result.member instanceof RoomMember ? result.member.rawDisplayName : result.member.name}
+                        </span>
                         <div
                             id={`mx_SpotlightDialog_button_result_${result.member.userId}_details`}
                             className="mx_SpotlightDialog_result_details"

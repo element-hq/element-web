@@ -8,11 +8,16 @@ Please see LICENSE in the repository root for full details.
 
 import * as fs from "node:fs";
 import { exec } from "node:child_process";
+import { fileURLToPath } from "node:url";
 
 const includeJSSDK = process.argv.includes("--include-js-sdk");
 const ignore: string[] = [];
 
-ignore.push(...Object.values<string>(JSON.parse(fs.readFileSync(import.meta.resolve("../components.json"), "utf-8"))));
+ignore.push(
+    ...Object.values<string>(
+        JSON.parse(fs.readFileSync(fileURLToPath(import.meta.resolve("../components.json")), "utf-8")),
+    ),
+);
 ignore.push("/index.ts");
 ignore.push("/jest-matrix-react.tsx");
 ignore.push("/customisations/");
