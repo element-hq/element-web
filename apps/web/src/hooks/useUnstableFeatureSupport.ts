@@ -16,7 +16,14 @@ import { useAsyncMemo } from "./useAsyncMemo";
 export function useUnstableFeatureSupport(feature: string): boolean {
     const cli = MatrixClientPeg.get();
     return useAsyncMemo(
-        async () => (cli ? await cli.doesServerSupportUnstableFeature(feature) : false),
+        async () => {
+            try {
+                return (await cli?.doesServerSupportUnstableFeature(feature)) ?? false;
+            } catch {
+                // Treat an unreachable /versions as unsupported.
+                return false;
+            }
+        },
         [cli, feature],
         false,
     );

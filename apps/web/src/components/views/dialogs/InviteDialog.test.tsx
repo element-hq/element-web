@@ -149,6 +149,8 @@ describe("InviteDialog", () => {
             }),
             getIdentityServerUrl: vi.fn(),
             searchUserDirectory: vi.fn().mockResolvedValue({}),
+            doesServerSupportUnstableFeature: vi.fn().mockResolvedValue(false),
+            getThirdpartyProtocols: vi.fn().mockResolvedValue({}),
             lookupThreePid: vi.fn(),
             registerWithIdentityServer: vi.fn().mockResolvedValue({
                 access_token: "access_token",
