@@ -498,19 +498,19 @@ export class RoomListItemViewModel
 
         // Add the room to the section
         if (newTag) {
-            tagRoom(this.props.room, newTag);
+            tagRoom(this.props.room, newTag, true);
         }
     };
 
     public onToggleSection = (tag: string): void => {
-        tagRoom(this.props.room, tag);
+        tagRoom(this.props.room, tag, true);
     };
 
     public onRemoveFromSection = (): void => {
         const roomTags = this.props.room.tags;
         const sectionTag = RoomListStoreV3.instance.orderedSectionTags.find((tag) => Boolean(roomTags[tag]));
         if (sectionTag) {
-            tagRoom(this.props.room, sectionTag);
+            tagRoom(this.props.room, sectionTag, true);
         }
     };
 

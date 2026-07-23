@@ -282,7 +282,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
 
             case "RoomListActions.tagRoom.success": {
                 // Tag change initiated by the local user, so surface the "chat moved" toast.
-                this.emit(ROOM_TAGGED_EVENT);
+                if (payload.result?.showToast) this.emit(ROOM_TAGGED_EVENT);
                 break;
             }
 
