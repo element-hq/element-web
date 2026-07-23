@@ -6,12 +6,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { createRef } from "react";
+import React from "react";
+import { DATA_BY_CATEGORY } from "@matrix-org/emojibase-bindings";
 import userEvent from "@testing-library/user-event";
-import { act, render, waitFor } from "@test-utils";
+import { render, waitFor } from "@test-utils";
 import { describe, expect, it, vi } from "vitest";
 
-import { EmojiPicker } from "./EmojiPicker";
+import { createEmojiPickerData, EmojiPicker, filterEmojis } from "./EmojiPicker";
 
 describe("EmojiPicker", function () {
     // Recent emojis as they would be provided by the app, most used first
@@ -22,11 +23,7 @@ describe("EmojiPicker", function () {
         container.querySelector('.mx_EmojiPicker_body .mx_EmojiPicker_item_wrapper [tabindex="0"]')?.textContent || "";
 
     it("should initialize categories with correct state when no recent emojis", () => {
-        const ref = createRef<EmojiPicker>();
-        render(<EmojiPicker ref={ref} onChoose={(str: string) => false} onFinished={vi.fn()} />);
-
-        //@ts-ignore private access
-        const categories = ref.current!.categories;
+        const { categories } = createEmojiPickerData(undefined);
 
         // Verify we have all expected categories
         expect(categories).toHaveLength(9);
@@ -85,18 +82,7 @@ describe("EmojiPicker", function () {
     });
 
     it("should initialize categories with recent as firstVisible when recent emojis exist", () => {
-        const ref = createRef<EmojiPicker>();
-        render(
-            <EmojiPicker
-                ref={ref}
-                recentEmojis={RECENT_EMOJIS}
-                onChoose={(str: string) => false}
-                onFinished={vi.fn()}
-            />,
-        );
-
-        //@ts-ignore private access
-        const categories = ref.current!.categories;
+        const { categories } = createEmojiPickerData(RECENT_EMOJIS);
 
         // Recent category should be enabled and firstVisible
         const recentCategory = categories.find((c) => c.id === "recent");
@@ -148,8 +134,7 @@ describe("EmojiPicker", function () {
     });
 
     it("should not mangle default order after filtering", async () => {
-        const ref = createRef<EmojiPicker>();
-        const { container } = render(<EmojiPicker ref={ref} onChoose={(str: string) => false} onFinished={vi.fn()} />);
+        const { container } = render(<EmojiPicker onChoose={() => false} onFinished={vi.fn()} />);
 
         await waitFor(() => {
             expect(container.querySelector('[role="gridcell"]')).toBeInTheDocument();
@@ -166,27 +151,22 @@ describe("EmojiPicker", function () {
             }
         });
 
+        const input = container.querySelector("input")!;
+
         // Apply a filter and assert that the HTML has changed
-        //@ts-ignore private access
-        act(() => ref.current!.onChangeFilter("test"));
+        await userEvent.type(input, "test");
         await waitFor(() => expect(beforeHtml).not.toEqual(container.innerHTML));
 
         // Clear the filter and assert that the HTML matches what it was before filtering
-        //@ts-ignore private access
-        act(() => ref.current!.onChangeFilter(""));
+        await userEvent.clear(input);
         await waitFor(() => expect(beforeHtml).toEqual(container.innerHTML));
     });
 
     it("sort emojis by shortcode and size", function () {
-        const ep = new EmojiPicker({ onChoose: (str: string) => false, onFinished: vi.fn() });
+        const sorted = filterEmojis(DATA_BY_CATEGORY.people, "heart");
 
-        //@ts-ignore private access
-        act(() => ep.onChangeFilter("heart"));
-
-        //@ts-ignore private access
-        expect(ep.memoizedDataByCategory["people"][0].shortcodes[0]).toEqual("heart");
-        //@ts-ignore private access
-        expect(ep.memoizedDataByCategory["people"][1].shortcodes[0]).toEqual("heartbeat");
+        expect(sorted[0].shortcodes[0]).toEqual("heart");
+        expect(sorted[1].shortcodes[0]).toEqual("heartbeat");
     });
 
     it("should allow keyboard navigation using arrow keys", async () => {

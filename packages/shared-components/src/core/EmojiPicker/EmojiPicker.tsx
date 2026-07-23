@@ -7,7 +7,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type Dispatch } from "react";
+import React, { type Dispatch, useCallback, useRef, useState } from "react";
 import { DATA_BY_CATEGORY, getEmojiFromUnicode, type Emoji as IEmoji } from "@matrix-org/emojibase-bindings";
 import classNames from "classnames";
 
@@ -44,11 +44,11 @@ export interface EmojiPickerProps {
      *
      * Return `false` to prevent the emoji being recorded as recently used.
      */
-    onChoose(unicode: string): boolean;
+    onChoose: (unicode: string) => boolean;
     /**
      * Called when the picker is done, e.g. an emoji was chosen with Enter.
      */
-    onFinished(): void;
+    onFinished: () => void;
     /**
      * Returns whether the emoji with the given unicode should be disabled.
      */
@@ -72,146 +72,151 @@ export interface EmojiPickerProps {
     getAction?: RovingTabIndexProviderProps["getAction"];
 }
 
-interface IState {
-    filter: string;
-    previewEmoji?: IEmoji;
-    // Track if user has interacted with arrow keys or search
-    showHighlight: boolean;
-    // The scroll container of the picker body, once mounted. Shared with each
-    // category so their virtualized rows can window against it.
-    scrollElement: HTMLDivElement | null;
+/**
+ * The emoji data derived from the initial props. These objects are mutated in
+ * place (e.g. category visibility/enabled state, memoized filtered emoji) to
+ * avoid re-rendering on scroll and while filtering, so they are created once
+ * and kept stable across renders.
+ */
+interface EmojiPickerData {
+    recentlyUsed: IEmoji[];
+    memoizedDataByCategory: Record<CategoryKey, IEmoji[]>;
+    categories: ICategory[];
+}
+
+export function createEmojiPickerData(recentEmojis: string[] | undefined): EmojiPickerData {
+    // Convert recent emoji characters to emoji data, removing unknowns and duplicates
+    const recentlyUsed = Array.from(
+        new Set((recentEmojis ?? []).map(getEmojiFromUnicode).filter((emoji): emoji is IEmoji => !!emoji)),
+    );
+    const memoizedDataByCategory: Record<CategoryKey, IEmoji[]> = {
+        recent: recentlyUsed,
+        ...DATA_BY_CATEGORY,
+    };
+
+    const hasRecentlyUsed = recentlyUsed.length > 0;
+
+    const categoryConfig: Pick<ICategory, "id" | "name" | "emoji">[] = [
+        { id: "recent", name: _t("emoji|category_frequently_used"), emoji: "🕒" },
+        { id: "people", name: _t("emoji|category_smileys_people"), emoji: "😀" },
+        { id: "nature", name: _t("emoji|category_animals_nature"), emoji: "🐕" },
+        { id: "foods", name: _t("emoji|category_food_drink"), emoji: "🍎" },
+        { id: "activity", name: _t("emoji|category_activities"), emoji: "⚽️" },
+        { id: "places", name: _t("emoji|category_travel_places"), emoji: "🚗" },
+        { id: "objects", name: _t("emoji|category_objects"), emoji: "💡" },
+        { id: "symbols", name: _t("emoji|category_symbols"), emoji: "⁉️" },
+        { id: "flags", name: _t("emoji|category_flags"), emoji: "🏁" },
+    ];
+
+    const categories = categoryConfig.map((config) => {
+        let isEnabled = true;
+        let isVisible = false;
+        let firstVisible = false;
+        if (config.id === "recent") {
+            isEnabled = hasRecentlyUsed;
+            isVisible = hasRecentlyUsed;
+            firstVisible = hasRecentlyUsed;
+        } else if (config.id === "people") {
+            isVisible = true;
+            firstVisible = !hasRecentlyUsed;
+        }
+        return {
+            ...config,
+            enabled: isEnabled,
+            visible: isVisible,
+            firstVisible: firstVisible,
+            ref: React.createRef(),
+        } satisfies ICategory;
+    });
+
+    return { recentlyUsed, memoizedDataByCategory, categories };
+}
+
+function emojiMatchesFilter(emoji: IEmoji, filter: string): boolean {
+    // If the query is an emoji containing a variation then strip it to provide more useful matches
+    if (filter.includes(ZERO_WIDTH_JOINER)) {
+        filter = filter.split(ZERO_WIDTH_JOINER, 2)[0];
+    }
+    return (
+        emoji.label.toLowerCase().includes(filter) ||
+        (Array.isArray(emoji.emoticon)
+            ? emoji.emoticon.some((x) => x.includes(filter))
+            : emoji.emoticon?.includes(filter)) ||
+        emoji.shortcodes.some((x) => x.toLowerCase().includes(filter)) ||
+        emoji.unicode.split(ZERO_WIDTH_JOINER).includes(filter)
+    );
+}
+
+/**
+ * Filter the given emoji by the (already lower-cased and trimmed) query and
+ * sort matches so the most relevant shortcodes come first. Returns the input
+ * unchanged when the filter is empty. Never mutates the input array.
+ */
+export function filterEmojis(emojis: IEmoji[], lcFilter: string): IEmoji[] {
+    if (lcFilter === "") return emojis;
+
+    return emojis
+        .filter((emoji) => emojiMatchesFilter(emoji, lcFilter))
+        .sort((a, b) => {
+            const indexA = a.shortcodes[0].indexOf(lcFilter);
+            const indexB = b.shortcodes[0].indexOf(lcFilter);
+
+            // Prioritize emojis containing the filter in its shortcode
+            if (indexA == -1 || indexB == -1) {
+                return indexB - indexA;
+            }
+
+            // If both emojis start with the filter
+            // put the shorter emoji first
+            if (indexA == 0 && indexB == 0) {
+                return a.shortcodes[0].length - b.shortcodes[0].length;
+            }
+
+            // Prioritize emojis starting with the filter
+            return indexA - indexB;
+        });
 }
 
 /**
  * A searchable emoji picker with categories, quick reactions and keyboard
  * (roving grid) navigation.
  */
-export class EmojiPicker extends React.Component<EmojiPickerProps, IState> {
-    private readonly recentlyUsed: IEmoji[];
-    private readonly memoizedDataByCategory: Record<CategoryKey, IEmoji[]>;
-    private readonly categories: ICategory[];
+export function EmojiPicker({
+    selectedEmojis,
+    onChoose,
+    onFinished,
+    isEmojiDisabled,
+    recentEmojis,
+    onRecordRecent,
+    getAction,
+}: EmojiPickerProps): React.ReactNode {
+    const [filter, setFilter] = useState("");
+    const [previewEmoji, setPreviewEmoji] = useState<IEmoji | undefined>(undefined);
+    // Track if user has interacted with arrow keys or search
+    const [showHighlight, setShowHighlight] = useState(false);
+    // The scroll container of the picker body, once mounted. Shared with each
+    // category so their virtualized rows can window against it.
+    const [scrollElement, setScrollElement] = useState<HTMLDivElement | null>(null);
 
-    private readonly searchRef = React.createRef<HTMLInputElement>();
+    const searchRef = useRef<HTMLInputElement>(null);
 
-    public constructor(props: EmojiPickerProps) {
-        super(props);
-
-        this.state = {
-            filter: "",
-            showHighlight: false,
-            scrollElement: null,
-        };
-
-        // Convert recent emoji characters to emoji data, removing unknowns and duplicates
-        this.recentlyUsed = Array.from(
-            new Set((props.recentEmojis ?? []).map(getEmojiFromUnicode).filter((emoji): emoji is IEmoji => !!emoji)),
-        );
-        this.memoizedDataByCategory = {
-            recent: this.recentlyUsed,
-            ...DATA_BY_CATEGORY,
-        };
-
-        const hasRecentlyUsed = this.recentlyUsed.length > 0;
-
-        const categoryConfig: Pick<ICategory, "id" | "name" | "emoji">[] = [
-            { id: "recent", name: _t("emoji|category_frequently_used"), emoji: "🕒" },
-            { id: "people", name: _t("emoji|category_smileys_people"), emoji: "😀" },
-            { id: "nature", name: _t("emoji|category_animals_nature"), emoji: "🐕" },
-            { id: "foods", name: _t("emoji|category_food_drink"), emoji: "🍎" },
-            { id: "activity", name: _t("emoji|category_activities"), emoji: "⚽️" },
-            { id: "places", name: _t("emoji|category_travel_places"), emoji: "🚗" },
-            { id: "objects", name: _t("emoji|category_objects"), emoji: "💡" },
-            { id: "symbols", name: _t("emoji|category_symbols"), emoji: "⁉️" },
-            { id: "flags", name: _t("emoji|category_flags"), emoji: "🏁" },
-        ];
-
-        this.categories = categoryConfig.map((config) => {
-            let isEnabled = true;
-            let isVisible = false;
-            let firstVisible = false;
-            if (config.id === "recent") {
-                isEnabled = hasRecentlyUsed;
-                isVisible = hasRecentlyUsed;
-                firstVisible = hasRecentlyUsed;
-            } else if (config.id === "people") {
-                isVisible = true;
-                firstVisible = !hasRecentlyUsed;
-            }
-            return {
-                ...config,
-                enabled: isEnabled,
-                visible: isVisible,
-                firstVisible: firstVisible,
-                ref: React.createRef(),
-            };
-        });
+    // Created once from the initial props and mutated in place thereafter.
+    const dataRef = useRef<EmojiPickerData | null>(null);
+    if (dataRef.current === null) {
+        dataRef.current = createEmojiPickerData(recentEmojis);
     }
+    const { recentlyUsed, memoizedDataByCategory, categories } = dataRef.current;
 
-    private collectScrollElement = (ref: HTMLDivElement | null): void => {
-        if (this.state.scrollElement !== ref) {
-            this.setState({ scrollElement: ref });
-        }
-    };
+    const collectScrollElement = useCallback((ref: HTMLDivElement | null): void => {
+        setScrollElement(ref);
+    }, []);
 
-    private onScroll = (): void => {
-        this.updateVisibility();
-    };
-
-    // Given a roving emoji button returns the role=row element containing it
-    private readonly getRow = (rovingNode?: Element): Element | undefined => {
-        return this.getGridcell(rovingNode)?.parentElement ?? undefined;
-    };
-
-    // Given a roving emoji button returns the role=gridcell element containing it
-    private readonly getGridcell = (rovingNode?: Element): Element | undefined => {
-        return rovingNode?.parentElement ?? undefined;
-    };
-
-    // Given a role=gridcell node returns the roving emoji button contained within
-    private readonly getRovingNode = (gridcellNode: Element): HTMLElement | undefined => {
-        const node = gridcellNode.children[0];
-        return node instanceof HTMLElement ? node : undefined;
-    };
-
-    private onKeyDown = (ev: React.KeyboardEvent, state: RovingState, dispatch: Dispatch<RovingAction>): void => {
-        if (state.activeNode && ["ArrowDown", "ArrowRight", "ArrowLeft", "ArrowUp"].includes(ev.key)) {
-            // If highlight is not shown yet, show it and reset to first emoji
-            if (!this.state.showHighlight) {
-                this.setState({ showHighlight: true });
-                // Reset to first emoji when showing highlight for the first time (or after it was hidden)
-                if (state.nodes.length > 0) {
-                    dispatch({
-                        type: RovingStateActionType.SetFocus,
-                        payload: { node: state.nodes[0] },
-                    });
-                }
-                ev.preventDefault();
-                ev.stopPropagation();
-                return;
-            }
-        }
-    };
-
-    private readonly shouldMoveFocus = (): boolean => {
-        return document.activeElement !== this.searchRef.current;
-    };
-
-    private readonly onGridNavigation = (ev: React.KeyboardEvent, focusNode: HTMLElement, state: RovingState): void => {
-        if (this.getRow(state.activeNode) !== this.getRow(focusNode)) {
-            focusNode.scrollIntoView({
-                behavior: "auto",
-                block: "center",
-                inline: "center",
-            });
-        }
-    };
-
-    private updateVisibility = (): void => {
-        const body = this.state.scrollElement;
+    const updateVisibility = useCallback((): void => {
+        const body = scrollElement;
         if (!body) return;
         const rect = body.getBoundingClientRect();
         let firstVisibleFound = false;
-        for (const cat of this.categories) {
+        for (const cat of categories) {
             const elem = body.querySelector(`[data-category-id="${cat.id}"]`);
             if (!elem) {
                 cat.visible = false;
@@ -243,181 +248,202 @@ export class EmojiPicker extends React.Component<EmojiPickerProps, IState> {
                 cat.ref.current.setAttribute("tabindex", "-1");
             }
         }
-    };
+    }, [scrollElement, categories]);
 
-    private scrollToCategory = (category: string): void => {
-        this.state.scrollElement?.querySelector(`[data-category-id="${category}"]`)?.scrollIntoView();
-    };
+    const onScroll = useCallback((): void => {
+        updateVisibility();
+    }, [updateVisibility]);
 
-    private onChangeFilter = (filter: string): void => {
-        const lcFilter = filter.toLowerCase().trim(); // filter is case insensitive
+    // Given a roving emoji button returns the role=gridcell element containing it
+    const getGridcell = useCallback((rovingNode?: Element): Element | undefined => {
+        return rovingNode?.parentElement ?? undefined;
+    }, []);
 
-        // User has typed a query, show highlight
-        // If filter is cleared, hide highlight again
-        if (lcFilter && !this.state.showHighlight) {
-            this.setState({ showHighlight: true });
-        } else if (!lcFilter && this.state.showHighlight) {
-            this.setState({ showHighlight: false });
-        }
+    // Given a roving emoji button returns the role=row element containing it
+    const getRow = useCallback(
+        (rovingNode?: Element): Element | undefined => {
+            return getGridcell(rovingNode)?.parentElement ?? undefined;
+        },
+        [getGridcell],
+    );
 
-        for (const cat of this.categories) {
-            let emojis: IEmoji[];
-            // If the new filter string includes the old filter string, we don't have to re-filter the whole dataset.
-            if (lcFilter.includes(this.state.filter)) {
-                emojis = this.memoizedDataByCategory[cat.id];
-            } else {
-                emojis = cat.id === "recent" ? this.recentlyUsed : DATA_BY_CATEGORY[cat.id];
+    // Given a role=gridcell node returns the roving emoji button contained within
+    const getRovingNode = useCallback((gridcellNode: Element): HTMLElement | undefined => {
+        const node = gridcellNode.children[0];
+        return node instanceof HTMLElement ? node : undefined;
+    }, []);
+
+    const onKeyDown = useCallback(
+        (ev: React.KeyboardEvent, state: RovingState, dispatch: Dispatch<RovingAction>): void => {
+            if (state.activeNode && ["ArrowDown", "ArrowRight", "ArrowLeft", "ArrowUp"].includes(ev.key)) {
+                // If highlight is not shown yet, show it and reset to first emoji
+                if (!showHighlight) {
+                    setShowHighlight(true);
+                    // Reset to first emoji when showing highlight for the first time (or after it was hidden)
+                    if (state.nodes.length > 0) {
+                        dispatch({
+                            type: RovingStateActionType.SetFocus,
+                            payload: { node: state.nodes[0] },
+                        });
+                    }
+                    ev.preventDefault();
+                    ev.stopPropagation();
+                    return;
+                }
             }
+        },
+        [showHighlight],
+    );
 
-            if (lcFilter !== "") {
-                emojis = emojis.filter((emoji) => this.emojiMatchesFilter(emoji, lcFilter));
-                // Copy the array to not clobber the original unfiltered sorting
-                emojis = [...emojis].sort((a, b) => {
-                    const indexA = a.shortcodes[0].indexOf(lcFilter);
-                    const indexB = b.shortcodes[0].indexOf(lcFilter);
+    const shouldMoveFocus = useCallback((): boolean => {
+        return document.activeElement !== searchRef.current;
+    }, []);
 
-                    // Prioritize emojis containing the filter in its shortcode
-                    if (indexA == -1 || indexB == -1) {
-                        return indexB - indexA;
-                    }
-
-                    // If both emojis start with the filter
-                    // put the shorter emoji first
-                    if (indexA == 0 && indexB == 0) {
-                        return a.shortcodes[0].length - b.shortcodes[0].length;
-                    }
-
-                    // Prioritize emojis starting with the filter
-                    return indexA - indexB;
+    const onGridNavigation = useCallback(
+        (_ev: React.KeyboardEvent, focusNode: HTMLElement, state: RovingState): void => {
+            if (getRow(state.activeNode) !== getRow(focusNode)) {
+                focusNode.scrollIntoView({
+                    behavior: "auto",
+                    block: "center",
+                    inline: "center",
                 });
             }
+        },
+        [getRow],
+    );
 
-            this.memoizedDataByCategory[cat.id] = emojis;
-            cat.enabled = emojis.length > 0;
-            // The setState below doesn't re-render the header and we already have the refs for updateVisibility, so...
-            if (cat.ref.current) {
-                cat.ref.current.disabled = !cat.enabled;
+    const scrollToCategory = useCallback(
+        (category: string): void => {
+            scrollElement?.querySelector(`[data-category-id="${category}"]`)?.scrollIntoView();
+        },
+        [scrollElement],
+    );
+
+    const onChangeFilter = useCallback(
+        (newFilter: string): void => {
+            const lcFilter = newFilter.toLowerCase().trim(); // filter is case insensitive
+
+            // User has typed a query, show highlight
+            // If filter is cleared, hide highlight again
+            if (lcFilter && !showHighlight) {
+                setShowHighlight(true);
+            } else if (!lcFilter && showHighlight) {
+                setShowHighlight(false);
             }
-        }
-        this.setState({ filter });
-        // Header underlines need to be updated, but updating requires knowing
-        // where the categories are, so we wait for a tick.
-        window.setTimeout(this.updateVisibility, 0);
-    };
 
-    private emojiMatchesFilter = (emoji: IEmoji, filter: string): boolean => {
-        // If the query is an emoji containing a variation then strip it to provide more useful matches
-        if (filter.includes(ZERO_WIDTH_JOINER)) {
-            filter = filter.split(ZERO_WIDTH_JOINER, 2)[0];
-        }
-        return (
-            emoji.label.toLowerCase().includes(filter) ||
-            (Array.isArray(emoji.emoticon)
-                ? emoji.emoticon.some((x) => x.includes(filter))
-                : emoji.emoticon?.includes(filter)) ||
-            emoji.shortcodes.some((x) => x.toLowerCase().includes(filter)) ||
-            emoji.unicode.split(ZERO_WIDTH_JOINER).includes(filter)
-        );
-    };
+            for (const cat of categories) {
+                let emojis: IEmoji[];
+                // If the new filter string includes the old filter string, we don't have to re-filter the whole dataset.
+                if (lcFilter.includes(filter)) {
+                    emojis = memoizedDataByCategory[cat.id];
+                } else {
+                    emojis = cat.id === "recent" ? recentlyUsed : DATA_BY_CATEGORY[cat.id];
+                }
 
-    private onEnterFilter = (): void => {
+                emojis = filterEmojis(emojis, lcFilter);
+
+                memoizedDataByCategory[cat.id] = emojis;
+                cat.enabled = emojis.length > 0;
+                // The setState below doesn't re-render the header and we already have the refs for updateVisibility, so...
+                if (cat.ref.current) {
+                    cat.ref.current.disabled = !cat.enabled;
+                }
+            }
+            setFilter(newFilter);
+            // Header underlines need to be updated, but updating requires knowing
+            // where the categories are, so we wait for a tick.
+            window.setTimeout(updateVisibility, 0);
+        },
+        [filter, showHighlight, categories, memoizedDataByCategory, recentlyUsed, updateVisibility],
+    );
+
+    const onEnterFilter = useCallback((): void => {
         // Only select emoji if highlight is shown
-        if (!this.state.showHighlight) return;
+        if (!showHighlight) return;
 
-        const btn = this.state.scrollElement?.querySelector<HTMLElement>('[role="gridcell"] [tabindex="0"]');
+        const btn = scrollElement?.querySelector<HTMLElement>('[role="gridcell"] [tabindex="0"]');
         btn?.click();
-        this.props.onFinished();
-    };
+        onFinished();
+    }, [showHighlight, scrollElement, onFinished]);
 
-    private onHoverEmoji = (emoji: IEmoji): void => {
-        this.setState({
-            previewEmoji: emoji,
-        });
-    };
+    const onHoverEmoji = useCallback((emoji: IEmoji): void => {
+        setPreviewEmoji(emoji);
+    }, []);
 
-    private onHoverEmojiEnd = (): void => {
-        this.setState({
-            previewEmoji: undefined,
-        });
-    };
+    const onHoverEmojiEnd = useCallback((): void => {
+        setPreviewEmoji(undefined);
+    }, []);
 
-    private onClickEmoji = (ev: ButtonEvent, emoji: IEmoji): void => {
-        if (this.props.onChoose(emoji.unicode) !== false) {
-            this.props.onRecordRecent?.(emoji.unicode);
-        }
-        if ((ev as React.KeyboardEvent).key === "Enter") {
-            this.props.onFinished();
-        }
-    };
+    const onClickEmoji = useCallback(
+        (ev: ButtonEvent, emoji: IEmoji): void => {
+            if (onChoose(emoji.unicode) !== false) {
+                onRecordRecent?.(emoji.unicode);
+            }
+            if ((ev as React.KeyboardEvent).key === "Enter") {
+                onFinished();
+            }
+        },
+        [onChoose, onRecordRecent, onFinished],
+    );
 
-    public render(): React.ReactNode {
-        return (
-            <RovingGridIndexProvider
-                getGridCell={this.getGridcell}
-                getRow={this.getRow}
-                getRovingNode={this.getRovingNode}
-                handleInputFields
-                moveFocus={this.shouldMoveFocus}
-                onGridNavigation={this.onGridNavigation}
-                onKeyDown={this.onKeyDown}
-                getAction={this.props.getAction}
-            >
-                {({ onKeyDownHandler }) => (
-                    <section
-                        className={classNames("mx_EmojiPicker", styles.picker)}
-                        data-testid="mx_EmojiPicker"
+    return (
+        <RovingGridIndexProvider
+            getGridCell={getGridcell}
+            getRow={getRow}
+            getRovingNode={getRovingNode}
+            handleInputFields
+            moveFocus={shouldMoveFocus}
+            onGridNavigation={onGridNavigation}
+            onKeyDown={onKeyDown}
+            getAction={getAction}
+        >
+            {({ onKeyDownHandler }) => (
+                <section
+                    className={classNames("mx_EmojiPicker", styles.picker)}
+                    data-testid="mx_EmojiPicker"
+                    onKeyDown={onKeyDownHandler}
+                    aria-label={_t("a11y|emoji_picker")}
+                >
+                    <Header categories={categories} onAnchorClick={scrollToCategory} getAction={getAction} />
+                    <Search
+                        query={filter}
+                        onChange={onChangeFilter}
+                        onEnter={onEnterFilter}
                         onKeyDown={onKeyDownHandler}
-                        aria-label={_t("a11y|emoji_picker")}
+                        inputRef={searchRef}
+                    />
+                    <AutoHideScrollbar
+                        id="mx_EmojiPicker_body"
+                        className={classNames("mx_EmojiPicker_body", styles.body, {
+                            [styles.bodyShowHighlight]: showHighlight,
+                        })}
+                        wrappedRef={collectScrollElement}
+                        onScroll={onScroll}
                     >
-                        <Header
-                            categories={this.categories}
-                            onAnchorClick={this.scrollToCategory}
-                            getAction={this.props.getAction}
-                        />
-                        <Search
-                            query={this.state.filter}
-                            onChange={this.onChangeFilter}
-                            onEnter={this.onEnterFilter}
-                            onKeyDown={onKeyDownHandler}
-                            inputRef={this.searchRef}
-                        />
-                        <AutoHideScrollbar
-                            id="mx_EmojiPicker_body"
-                            className={classNames("mx_EmojiPicker_body", styles.body, {
-                                [styles.bodyShowHighlight]: this.state.showHighlight,
-                            })}
-                            wrappedRef={this.collectScrollElement}
-                            onScroll={this.onScroll}
-                        >
-                            {this.categories.map((category) => (
-                                <Category
-                                    key={category.id}
-                                    id={category.id}
-                                    name={category.name}
-                                    emojis={this.memoizedDataByCategory[category.id]}
-                                    scrollParent={this.state.scrollElement ?? undefined}
-                                    onClick={this.onClickEmoji}
-                                    onMouseEnter={this.onHoverEmoji}
-                                    onMouseLeave={this.onHoverEmojiEnd}
-                                    isEmojiDisabled={this.props.isEmojiDisabled}
-                                    selectedEmojis={this.props.selectedEmojis}
-                                />
-                            ))}
-                        </AutoHideScrollbar>
-                        {this.state.previewEmoji ? (
-                            <Preview emoji={this.state.previewEmoji} />
-                        ) : (
-                            <QuickReactions
-                                onClick={this.onClickEmoji}
-                                selectedEmojis={this.props.selectedEmojis}
-                                getAction={this.props.getAction}
+                        {categories.map((category) => (
+                            <Category
+                                key={category.id}
+                                id={category.id}
+                                name={category.name}
+                                emojis={memoizedDataByCategory[category.id]}
+                                scrollParent={scrollElement ?? undefined}
+                                onClick={onClickEmoji}
+                                onMouseEnter={onHoverEmoji}
+                                onMouseLeave={onHoverEmojiEnd}
+                                isEmojiDisabled={isEmojiDisabled}
+                                selectedEmojis={selectedEmojis}
                             />
-                        )}
-                    </section>
-                )}
-            </RovingGridIndexProvider>
-        );
-    }
+                        ))}
+                    </AutoHideScrollbar>
+                    {previewEmoji ? (
+                        <Preview emoji={previewEmoji} />
+                    ) : (
+                        <QuickReactions onClick={onClickEmoji} selectedEmojis={selectedEmojis} getAction={getAction} />
+                    )}
+                </section>
+            )}
+        </RovingGridIndexProvider>
+    );
 }
 
 export default EmojiPicker;
