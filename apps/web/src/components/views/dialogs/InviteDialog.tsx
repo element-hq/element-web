@@ -161,8 +161,8 @@ interface IDirectoryPickerProps {
 
 /**
  * The room directory's server/network picker, repurposed for choosing which
- * server's user directory a "start chat" search runs against, and which
- * bridged network (if any) typed addresses should be resolved through.
+ * server's user directory a "start chat" or invite search runs against, and
+ * which bridged network (if any) typed addresses should be resolved through.
  */
 const InviteDirectoryPicker: React.FC<IDirectoryPickerProps> = ({ config, onChange }) => {
     const { allServers } = useServers();
@@ -1373,7 +1373,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         return (
             <React.Fragment>
                 <p className="mx_InviteDialog_helpText">{helpText}</p>
-                {this.props.kind === InviteKind.Dm && (
+                {(this.props.kind === InviteKind.Dm || this.props.kind === InviteKind.Invite) && (
                     <InviteDirectoryPicker config={this.state.dirConfig} onChange={this.onDirectoryConfigChange} />
                 )}
                 <div className="mx_InviteDialog_addressBar">
