@@ -387,10 +387,13 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
     // third-party location (e.g. an XMPP room@server address) so the portal
     // room can be offered as a join option above the directory results.
     const [thirdPartyLocations, setThirdPartyLocations] = useState<IThirdPartyLocation[]>([]);
-    const selectedInstance =
-        filter === Filter.PublicRooms && config?.instanceId
-            ? findProtocolForInstance(protocolsByServer[config.roomServer], config.instanceId)
-            : undefined;
+    const selectedInstance = useMemo(
+        () =>
+            filter === Filter.PublicRooms && config?.instanceId
+                ? findProtocolForInstance(protocolsByServer[config.roomServer], config.instanceId)
+                : undefined,
+        [filter, config, protocolsByServer],
+    );
     const searchThirdPartyLocations = useCallback(
         async ({ query }: IDirectoryOpts): Promise<void> => {
             const locationField = selectedInstance?.protocol.location_fields?.[0];
@@ -890,18 +893,9 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         let publicRoomsSection: JSX.Element | undefined;
         if (filter === Filter.PublicRooms || filter === Filter.PublicSpaces) {
             let content: JSX.Element | JSX.Element[];
-            if (publicRoomsError) {
-                content = (
-                    <div className="mx_SpotlightDialog_otherSearches_messageSearchText">
-                        {filter === Filter.PublicRooms
-                            ? _t("spotlight_dialog|failed_querying_public_rooms")
-                            : _t("spotlight_dialog|failed_querying_public_spaces")}
-                    </div>
-                );
-            } else {
-                const locationOptions =
-                    selectedInstance && thirdPartyLocations.length
-                        ? thirdPartyLocations.map(
+            const locationOptions =
+                selectedInstance && thirdPartyLocations.length
+                    ? thirdPartyLocations.map(
                               (location): JSX.Element => (
                                   <Option
                                       id={`mx_SpotlightDialog_button_result_${location.alias}`}
@@ -923,9 +917,24 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                                           roomAddress: location.alias,
                                       })}
                                   </Option>
-                              ),
-                          )
-                        : [];
+                          ),
+                      )
+                    : [];
+            if (publicRoomsError) {
+                // A third-party location hit is independent of the room list; keep
+                // offering it even when the directory query failed.
+                content = [
+                    ...locationOptions,
+                    <div
+                        key="mx_SpotlightDialog_publicRoomsError"
+                        className="mx_SpotlightDialog_otherSearches_messageSearchText"
+                    >
+                        {filter === Filter.PublicRooms
+                            ? _t("spotlight_dialog|failed_querying_public_rooms")
+                            : _t("spotlight_dialog|failed_querying_public_spaces")}
+                    </div>,
+                ];
+            } else {
                 content = [
                     ...locationOptions,
                     ...results[Section.PublicRoomsAndSpaces].slice(0, SECTION_LIMIT).map(resultMapper),
