@@ -107,6 +107,7 @@ exports[`dialogTermsInteractionCallback should render a dialog with the expected
       class="mx_Dialog_buttons_row"
     >
       <button
+        class="cancel"
         data-testid="dialog-cancel-button"
         type="button"
       >
