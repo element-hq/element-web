@@ -394,8 +394,20 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                 : undefined,
         [filter, config, protocolsByServer],
     );
+    // Bumped whenever a lookup starts or the selection changes, so a response
+    // from a superseded request (or the previous server/network) is discarded
+    // instead of clobbering fresher results.
+    const thirdPartyLookupGeneration = useRef(0);
+    useEffect(() => {
+        // The server/network selection changed: any displayed or in-flight
+        // results are for the old selection, so drop them immediately (the
+        // debounced re-query below repopulates for the new selection).
+        thirdPartyLookupGeneration.current += 1;
+        setThirdPartyLocations([]);
+    }, [selectedInstance]);
     const searchThirdPartyLocations = useCallback(
         async ({ query }: IDirectoryOpts): Promise<void> => {
+            const generation = ++thirdPartyLookupGeneration.current;
             const locationField = selectedInstance?.protocol.location_fields?.[0];
             if (!locationField || !query) {
                 setThirdPartyLocations([]);
@@ -406,8 +418,11 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                 params.server = config.roomServer;
             }
             try {
-                setThirdPartyLocations(await cli.getThirdpartyLocation(selectedInstance.protocolKey, params));
+                const locations = await cli.getThirdpartyLocation(selectedInstance.protocolKey, params);
+                if (generation !== thirdPartyLookupGeneration.current) return;
+                setThirdPartyLocations(locations);
             } catch {
+                if (generation !== thirdPartyLookupGeneration.current) return;
                 setThirdPartyLocations([]);
             }
         },
@@ -896,27 +911,27 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             const locationOptions =
                 selectedInstance && thirdPartyLocations.length
                     ? thirdPartyLocations.map(
-                              (location): JSX.Element => (
-                                  <Option
-                                      id={`mx_SpotlightDialog_button_result_${location.alias}`}
-                                      key={location.alias}
-                                      onClick={(ev) => {
-                                          defaultDispatcher.dispatch<ViewRoomPayload>({
-                                              action: Action.ViewRoom,
-                                              room_alias: location.alias,
-                                              auto_join: true,
-                                              via_servers: config ? [config.roomServer] : undefined,
-                                              metricsTrigger: "WebUnifiedSearch",
-                                              metricsViaKeyboard: ev?.type !== "click",
-                                          });
-                                          onFinished();
-                                      }}
-                                  >
-                                      <RoomIcon />
-                                      {_t("spotlight_dialog|join_button_text", {
-                                          roomAddress: location.alias,
-                                      })}
-                                  </Option>
+                          (location): JSX.Element => (
+                              <Option
+                                  id={`mx_SpotlightDialog_button_result_${location.alias}`}
+                                  key={location.alias}
+                                  onClick={(ev) => {
+                                      defaultDispatcher.dispatch<ViewRoomPayload>({
+                                          action: Action.ViewRoom,
+                                          room_alias: location.alias,
+                                          auto_join: true,
+                                          via_servers: config ? [config.roomServer] : undefined,
+                                          metricsTrigger: "WebUnifiedSearch",
+                                          metricsViaKeyboard: ev?.type !== "click",
+                                      });
+                                      onFinished();
+                                  }}
+                              >
+                                  <RoomIcon />
+                                  {_t("spotlight_dialog|join_button_text", {
+                                      roomAddress: location.alias,
+                                  })}
+                              </Option>
                           ),
                       )
                     : [];

@@ -572,15 +572,26 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     // directory picker, used to resolve typed third-party addresses via 3PU.
     private dirInstanceProtocol?: { protocolKey: string; protocol: Protocols[string] };
 
+    // Bumped on every directory picker change so responses from searches
+    // started against the previous server/network selection are discarded
+    // (the search term alone can't tell them apart).
+    private dirConfigGeneration = 0;
+
     private onDirectoryConfigChange = (
         config: IPublicRoomDirectoryConfig | null,
         instanceProtocol?: { protocolKey: string; protocol: Protocols[string] },
     ): void => {
         this.dirInstanceProtocol = instanceProtocol;
-        this.setState({ dirConfig: config, serverResultsMixin: [] });
-        if (this.state.filterText) {
-            this.updateSuggestions(this.state.filterText);
-        }
+        this.dirConfigGeneration++;
+        // Clear any results from the old selection and re-run the search for
+        // the typed term against the new one straight away (flushing past the
+        // debounce, once the new config has been committed to state).
+        this.setState({ dirConfig: config, serverResultsMixin: [] }, () => {
+            if (this.state.filterText) {
+                this.updateSuggestions(this.state.filterText);
+                this.updateSuggestions.flush();
+            }
+        });
     };
 
     /** The remote server the directory picker targets, if it isn't ours. */
@@ -614,13 +625,15 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
     private updateSuggestions = debounce(
         async (term: string): Promise<void> => {
+            const generation = this.dirConfigGeneration;
+            const isStale = (): boolean => term !== this.state.filterText || generation !== this.dirConfigGeneration;
             MatrixClientPeg.safeGet()
                 .searchUserDirectory({ term, server: this.dirServer })
                 .then(async (r): Promise<void> => {
-                    if (term !== this.state.filterText) {
-                        // Discard the results - we were probably too slow on the server-side to make
-                        // these results useful. This is a race we want to avoid because we could overwrite
-                        // more accurate results.
+                    if (isStale()) {
+                        // Discard the results - either the user has typed something else since, or
+                        // the directory picker now targets a different server/network. This is a
+                        // race we want to avoid because we could overwrite more accurate results.
                         return;
                     }
 
@@ -630,7 +643,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                     // resolve the term as a third-party address (e.g. an XMPP
                     // JID) and offer the mapped mxid(s) at the top.
                     for (const tpUser of (await this.lookupThirdPartyUser(term)).reverse()) {
-                        if (term !== this.state.filterText) break;
+                        if (isStale()) break;
                         if (r.results.some((u) => u.user_id === tpUser.user_id)) continue;
                         r.results.splice(0, 0, tpUser);
                     }
@@ -656,7 +669,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                         }
                     }
 
-                    if (this.unmounted) return;
+                    if (this.unmounted || isStale()) return;
                     this.setState({
                         serverResultsMixin: r.results.map((u) => ({
                             userId: u.user_id,
@@ -667,7 +680,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 .catch((e) => {
                     logger.error("Error searching user directory:");
                     logger.error(e);
-                    if (this.unmounted) return;
+                    if (this.unmounted || isStale()) return;
                     this.setState({ serverResultsMixin: [] }); // clear results because it's moderately fatal
                 });
 
