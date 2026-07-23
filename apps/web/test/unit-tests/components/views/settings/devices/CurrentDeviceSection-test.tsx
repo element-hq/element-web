@@ -10,20 +10,18 @@ import React from "react";
 import { act, fireEvent, render } from "jest-matrix-react";
 
 import CurrentDeviceSection from "../../../../../../src/components/views/settings/devices/CurrentDeviceSection";
-import { DeviceType } from "../../../../../../src/utils/device/parseUserAgent";
+import type { ExtendedDevice } from "../../../../../../src/components/views/settings/devices/types.ts";
 
 describe("<CurrentDeviceSection />", () => {
     const deviceId = "alices_device";
 
-    const alicesVerifiedDevice = {
+    const alicesVerifiedDevice: ExtendedDevice = {
         device_id: deviceId,
         isVerified: false,
-        deviceType: DeviceType.Unknown,
     };
-    const alicesUnverifiedDevice = {
+    const alicesUnverifiedDevice: ExtendedDevice = {
         device_id: deviceId,
         isVerified: false,
-        deviceType: DeviceType.Unknown,
     };
 
     const defaultProps = {
