@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import fetchMock from "@fetch-mock/vitest";
 import { merge } from "lodash";
-import { setMissingEntryGenerator, setLanguage } from "@element-hq/web-shared-components";
-import { ModuleLoader } from "@element-hq/element-web-module-api";
+import { setMissingEntryGenerator, setLanguage, I18nApi } from "@element-hq/web-shared-components";
+import type { ModuleApiType } from "../modules/Api.ts";
 
 import enElementWeb from "../i18n/strings/en_EN.json";
 import deElementWeb from "../i18n/strings/de_DE.json";
@@ -18,7 +18,6 @@ import deElementWeb from "../i18n/strings/de_DE.json";
 import enSharedComponents from "../../../../packages/shared-components/src/i18n/strings/en_EN.json";
 // eslint-disable-next-line no-restricted-imports
 import deSharedComponents from "../../../../packages/shared-components/src/i18n/strings/de_DE.json";
-import { ModuleApi } from "../modules/Api.ts";
 
 const lv = {
     Save: "Saglabāt",
@@ -67,6 +66,5 @@ setupLanguageMock();
 setLanguage("en");
 setMissingEntryGenerator((key) => key.split("|", 2)[1]);
 
-// Set up the module API (so the i18n API exists)
-const moduleLoader = new ModuleLoader(ModuleApi.instance);
-window.mxModuleLoader = moduleLoader;
+// Set up a stub module API (so the i18n API exists)
+window.mxModuleApi = { i18n: new I18nApi() } as ModuleApiType;

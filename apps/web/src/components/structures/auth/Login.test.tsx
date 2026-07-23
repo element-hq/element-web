@@ -322,8 +322,7 @@ describe("Login", function () {
 
         for (const idp of idpsWithIcons) {
             const ssoButton = getByTestId(`idp-${idp.id}`);
-            expect(ssoButton).toBeTruthy();
-            expect(ssoButton.childNodes[0]).toHaveAccessibleName(idp.brand);
+            expect(ssoButton).toHaveAccessibleName(`Continue with Provider ${idp.brand}`);
         }
 
         const ssoButtons = container.querySelectorAll(".mx_SSOButton");
