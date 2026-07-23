@@ -124,6 +124,8 @@ function createMockCrypto(): CryptoApi {
     } as any;
 }
 
+let promisesToAwait: Promise<unknown>[] = [];
+
 describe("<MatrixChat />", () => {
     const userId = "@alice:server.org";
     const deviceId = "qwertyui";
@@ -144,7 +146,9 @@ describe("<MatrixChat />", () => {
             //
             // In practice it takes a little time for the client to start up (it has to read a load of stuff from
             // indexedDB, so in some ways this is just a more realistic simulation of the real world 😇
-            await sleep(1);
+            const prom = sleep(1);
+            promisesToAwait.push(prom);
+            await prom;
 
             // @ts-ignore
             this.emit(ClientEvent.Sync, SyncState.Prepared, null);
@@ -259,7 +263,6 @@ describe("<MatrixChat />", () => {
         await clearStorage();
         Lifecycle.setSessionLockNotStolen();
 
-        localStorage.clear();
         defaultProps = {
             config: {
                 brand: "Test",
@@ -298,6 +301,9 @@ describe("<MatrixChat />", () => {
     });
 
     afterEach(async () => {
+        await Promise.all(promisesToAwait);
+        promisesToAwait = [];
+
         // @ts-ignore
         DMRoomMap.setShared(null);
 
@@ -306,6 +312,7 @@ describe("<MatrixChat />", () => {
         act(() => defaultDispatcher.dispatch({ action: Action.OnLoggedOut }, true));
 
         localStorage.clear();
+        vi.clearAllTimers();
     });
 
     resetJsDomAfterEach();
