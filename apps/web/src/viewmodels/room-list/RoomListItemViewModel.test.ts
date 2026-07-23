@@ -605,7 +605,7 @@ describe("RoomListItemViewModel", () => {
 
             viewModel.onToggleSection(DefaultTagID.Favourite);
 
-            expect(tagRoomSpy).toHaveBeenCalledWith(room, DefaultTagID.Favourite);
+            expect(tagRoomSpy).toHaveBeenCalledWith(room, DefaultTagID.Favourite, true);
         });
     });
 

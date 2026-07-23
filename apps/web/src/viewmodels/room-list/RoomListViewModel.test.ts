@@ -1807,7 +1807,7 @@ describe("RoomListViewModel", () => {
 
             viewModel.changeRoomSection(room1.roomId, DefaultTagID.Favourite);
 
-            expect(tagRoom).toHaveBeenCalledWith(room1, DefaultTagID.Favourite);
+            expect(tagRoom).toHaveBeenCalledWith(room1, DefaultTagID.Favourite, true);
         });
 
         it("should do nothing when the room is not found", () => {
