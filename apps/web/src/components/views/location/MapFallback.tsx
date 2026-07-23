@@ -10,7 +10,7 @@ import React from "react";
 import classNames from "classnames";
 import LocationMarkerIcon from "@vector-im/compound-design-tokens/assets/web/icons/location-pin-solid";
 
-import { Icon as MapFallbackImage } from "../../../../res/img/location/map.svg";
+import MapFallbackImage from "../../../../res/img/location/map.svg?react";
 import Spinner from "../elements/Spinner";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
