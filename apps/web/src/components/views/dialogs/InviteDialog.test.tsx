@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
 import { vi, describe, it, expect, afterAll, beforeEach, afterEach, type Mocked } from "vitest";
 
 import React from "react";
-import { findByText, fireEvent, render, screen } from "test-utils-rtl";
+import { findByText, fireEvent, render, screen, waitFor } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
 import { type MatrixClient, MatrixError, Room, RoomType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
@@ -60,6 +60,7 @@ vi.mock("lodash", async () => ({
     // Stub out the debounce to prevent async leaks
     debounce: vi.fn((fn) => {
         fn.cancel = vi.fn();
+        fn.flush = vi.fn();
         return fn;
     }),
 }));
@@ -212,6 +213,72 @@ describe("InviteDialog", () => {
 
     afterAll(() => {
         vi.restoreAllMocks();
+    });
+
+    describe("directory picker", () => {
+        const remoteServer = "remote.example.com";
+        const julietJid = "juliet@capulet.example";
+        const julietMxid = "@_xmpp_juliet=40capulet.example:remote.example.com";
+
+        beforeEach(() => {
+            SdkConfig.put({
+                validated_server_config: {} as ValidatedServerConfig,
+                room_directory: { servers: [remoteServer] },
+            } as IConfigOptions);
+            mockClient.doesServerSupportUnstableFeature = vi.fn().mockResolvedValue(true);
+            mockClient.getThirdpartyProtocols = vi.fn().mockImplementation(async (server?: string) =>
+                server === remoteServer
+                    ? {
+                          xmpp: {
+                              user_fields: ["user"],
+                              location_fields: ["muc"],
+                              icon: "",
+                              field_types: {},
+                              instances: [
+                                  { desc: "XMPP", instance_id: "xmpp-instance", fields: {}, network_id: "xmpp" },
+                              ],
+                          },
+                      }
+                    : {},
+            );
+            mockClient.getThirdpartyUser = vi
+                .fn()
+                .mockResolvedValue([{ userid: julietMxid, protocol: "xmpp", fields: {} }]);
+            mockClient.searchUserDirectory.mockResolvedValue({ results: [], limited: false });
+        });
+
+        it("searches the picked server and resolves typed third-party addresses via 3PU", async () => {
+            render(<InviteDialog kind={InviteKind.Dm} onFinished={vi.fn()} />);
+
+            // Pick the remote server's XMPP network from the dropdown
+            await userEvent.click(screen.getByRole("button", { name: /Show: Matrix users/ }));
+            await userEvent.click(await screen.findByText("XMPP"));
+            await expect(screen.findByText(`Show: XMPP users (${remoteServer})`)).resolves.toBeInTheDocument();
+
+            // Typing a JID searches the remote directory and offers the mapped mxid
+            await userEvent.type(getSearchField(), julietJid);
+            await waitFor(() =>
+                expect(mockClient.searchUserDirectory).toHaveBeenCalledWith(
+                    expect.objectContaining({ term: julietJid, server: remoteServer }),
+                ),
+            );
+            await waitFor(() =>
+                expect(mockClient.getThirdpartyUser).toHaveBeenCalledWith("xmpp", {
+                    user: julietJid,
+                    server: remoteServer,
+                }),
+            );
+            await expect(screen.findByText(julietMxid)).resolves.toBeInTheDocument();
+        });
+
+        it("keeps the picker local-only when MSC4258 is not advertised", async () => {
+            mockClient.doesServerSupportUnstableFeature = vi.fn().mockResolvedValue(false);
+            render(<InviteDialog kind={InviteKind.Dm} onFinished={vi.fn()} />);
+            await flushPromises();
+
+            await userEvent.click(screen.getByRole("button", { name: /Show: Matrix users/ }));
+            expect(screen.queryByText(remoteServer)).not.toBeInTheDocument();
+        });
     });
 
     it("should label with space name", () => {

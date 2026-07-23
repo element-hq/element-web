@@ -702,6 +702,52 @@ describe("Spotlight Dialog", () => {
         });
     });
 
+    describe("third-party location lookup", () => {
+        const xmppProtocols = {
+            xmpp: {
+                user_fields: ["user"],
+                location_fields: ["muc"],
+                icon: "",
+                field_types: {},
+                instances: [{ desc: "XMPP", instance_id: "xmpp-instance", fields: {}, network_id: "xmpp" }],
+            },
+        };
+
+        it("resolves the query via 3PL and offers the portal room as a join option", async () => {
+            // A distinct homeserver name, as useThirdPartyProtocols caches per server for the session
+            mockedClient = mockClient({
+                homeserver: "bridges.example.tld",
+                rooms: [],
+                thirdPartyProtocols: xmppProtocols,
+            });
+            mockedClient.getThirdpartyLocation = jest
+                .fn()
+                .mockResolvedValue([{ alias: "#_xmpp_room:example.tld", protocol: "xmpp", fields: {} }]);
+
+            render(
+                <SpotlightDialog
+                    initialFilter={Filter.PublicRooms}
+                    initialText="room@muc.example.com"
+                    onFinished={() => null}
+                />,
+            );
+            jest.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
+
+            // Pick the XMPP network from the directory dropdown
+            fireEvent.click(screen.getByText(/^Show: Matrix rooms/));
+            await flushPromisesWithFakeTimers();
+            fireEvent.click(screen.getByText("XMPP"));
+            jest.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
+
+            expect(mockedClient.getThirdpartyLocation).toHaveBeenCalledWith("xmpp", {
+                muc: "room@muc.example.com",
+            });
+            await waitFor(() => expect(screen.getByText("Join #_xmpp_room:example.tld")).toBeInTheDocument());
+        });
+    });
+
     describe("metaspaces", () => {
         beforeEach(() => {
             jest.spyOn(SDKContextClass.instance.spaceStore, "enabledMetaSpaces", "get").mockReturnValue([
