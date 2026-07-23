@@ -154,10 +154,10 @@ type Props = InviteDMProps | InviteRoomProps | InviteCallProps;
 
 interface IDirectoryPickerProps {
     config: IPublicRoomDirectoryConfig | null;
-    onChange(
+    onChange: (
         config: IPublicRoomDirectoryConfig | null,
         instanceProtocol?: { protocolKey: string; protocol: Protocols[string] },
-    ): void;
+    ) => void;
 }
 
 /**
