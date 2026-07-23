@@ -987,7 +987,7 @@ export class RoomListViewModel
         // Room is already in the section
         if (currentTag === tag) return;
 
-        tagRoom(room, tag);
+        tagRoom(room, tag, true);
     };
 }
 
