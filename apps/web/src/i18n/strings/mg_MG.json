@@ -438,7 +438,6 @@
         "message": "Hafatra",
         "message_layout": "Fandaharana",
         "microphone": "Fanamafisampeo ara taribia",
-        "model": "Modely",
         "modern": "Ankehitriny",
         "mute": "Moana",
         "n_members": {
@@ -2308,7 +2307,6 @@
         "send_typing_notifications": "Alefaso fampandrenesana fanoratana",
         "sessions": {
             "best_security_note": "Ho fiarovana tsara indrindra, hamarino ny fotoam-pivorianao ary midira amin'ny fivoriana izay tsy fantatrao na tsy ampiasainao intsony.",
-            "browser": "Mpitety",
             "confirm_sign_out": {
                 "one": "Hamafiso ny fivoahana ity fitaovana ity",
                 "other": "Hamafiso ny fisoratana anarana ireto fitaovana ireto"
@@ -2357,7 +2355,6 @@
             "no_sessions": "Tsy misy fivoriana hita.",
             "no_unverified_sessions": "Tsy misy fivoriana tsy voamarina hita.",
             "no_verified_sessions": "Tsy misy fivoriana voamarina hita.",
-            "os": "Rafitra fikirakirana",
             "other_sessions_heading": "Fivoriana hafa",
             "push_heading": "Fampandrenesana manosika",
             "push_subheading": "Mandraisa fampandrenesana fanosehana amin'ity fivoriana ity.",
