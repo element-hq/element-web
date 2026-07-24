@@ -641,7 +641,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/fb95ae8f34a3aad30f129feb189aa0cf18ef5733
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/08ea484e3b24ab82d0158e1c86aa67ca20d0862b
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -788,8 +788,8 @@ importers:
         specifier: ^10.4.0
         version: 10.4.1
       '@testing-library/jest-dom':
-        specifier: ^6.4.8
-        version: 6.9.1
+        specifier: ^7.0.0
+        version: 7.0.0(@testing-library/dom@10.4.1)
       '@testing-library/react':
         specifier: ^16.0.0
         version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -6000,6 +6000,12 @@ packages:
     resolution: {integrity: sha512-zIcONa+hVtVSSep9UT3jZ5rizo2BsxgyDYU7WFD5eICBE7no3881HGeb/QkGfsJs6JTkY1aQhT7rIPC7e+0nnA==}
     engines: {node: '>=14', npm: '>=6', yarn: '>=1'}
 
+  '@testing-library/jest-dom@7.0.0':
+    resolution: {integrity: sha512-HKAH9C6mBo5yBG6yRO5i43L2iisencAo5z+o5P/saHUoY+miC5ivXRxHBJcFyB5ypPNxHJdK3BoF/3O4DIptMg==}
+    engines: {node: '>=22', npm: '>=6', yarn: '>=1'}
+    peerDependencies:
+      '@testing-library/dom': '>=10 <11'
+
   '@testing-library/react@16.3.2':
     resolution: {integrity: sha512-XU5/SytQM+ykqMnAnvB2umaJNIOsLF3PVv//1Ew4CTcpz0/BRyy/af40qqrt7SjKpDdT1saBMc42CUok5gaw+g==}
     engines: {node: '>=18'}
@@ -10300,8 +10306,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/fb95ae8f34a3aad30f129feb189aa0cf18ef5733:
-    resolution: {gitHosted: true, integrity: sha512-ii8KzCRxCjQtuKMlPqLiNLdUInUh1FieeIUkO++QcmNJ+eIM/bKbPyHPfm+8bobkaE2zopJH/e+BEGsQODZVGQ==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/fb95ae8f34a3aad30f129feb189aa0cf18ef5733}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/08ea484e3b24ab82d0158e1c86aa67ca20d0862b:
+    resolution: {gitHosted: true, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/08ea484e3b24ab82d0158e1c86aa67ca20d0862b}
     version: 42.0.0
     engines: {node: '>=22.0.0'}
 
@@ -18303,6 +18309,16 @@ snapshots:
       picocolors: 1.1.1
       redent: 3.0.0
 
+  '@testing-library/jest-dom@7.0.0(@testing-library/dom@10.4.1)':
+    dependencies:
+      '@adobe/css-tools': 4.4.4
+      '@testing-library/dom': 10.4.1
+      aria-query: 5.3.2
+      css.escape: 1.5.1
+      dom-accessibility-api: 0.6.3
+      picocolors: 1.1.1
+      redent: 3.0.0
+
   '@testing-library/react@16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
     dependencies:
       '@babel/runtime': 7.29.7
@@ -23135,7 +23151,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/fb95ae8f34a3aad30f129feb189aa0cf18ef5733:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/08ea484e3b24ab82d0158e1c86aa67ca20d0862b:
     dependencies:
       '@babel/runtime': 8.0.0
       '@matrix-org/matrix-sdk-crypto-wasm': 18.3.1
