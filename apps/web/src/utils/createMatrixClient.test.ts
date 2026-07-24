@@ -5,10 +5,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { vi, describe, beforeEach, it, expect } from "vitest";
-import { type MatrixClient, RoomNameType } from "matrix-js-sdk/src/matrix";
+import { vi, describe, beforeEach, afterEach, it, expect } from "vitest";
+import { createClient, type MatrixClient, RoomNameType } from "matrix-js-sdk/src/matrix";
 
 import { createClientWithCreds } from "./createMatrixClient";
+import SettingsStore from "../settings/SettingsStore";
+
+vi.mock(import("matrix-js-sdk/src/matrix"), async (importOriginal) => {
+    const actual = await importOriginal();
+    return { ...actual, createClient: vi.fn(actual.createClient) };
+});
 
 describe("createMatrixClient", () => {
     let client: MatrixClient;
@@ -148,6 +154,32 @@ describe("createMatrixClient", () => {
                     expect(roomName).toBe("Inviting Alice and 3 others");
                 });
             });
+        });
+    });
+
+    describe("MSC4509 key bundle claims", () => {
+        afterEach(() => {
+            vi.restoreAllMocks();
+        });
+
+        it("are not enabled in the js-sdk by default", () => {
+            expect(vi.mocked(createClient)).toHaveBeenLastCalledWith(
+                expect.objectContaining({ unstableMSC4509KeyBundleClaim: false }),
+            );
+        });
+
+        it("are enabled in the js-sdk when the share_history_on_autojoin labs flag is set", () => {
+            vi.spyOn(SettingsStore, "getValue").mockImplementation(
+                (settingName) => settingName === "feature_share_history_on_autojoin",
+            );
+            createClientWithCreds({
+                homeserverUrl: "https://test.dummy",
+                userId: "@user:test.dummy",
+                accessToken: "access_token",
+            });
+            expect(vi.mocked(createClient)).toHaveBeenLastCalledWith(
+                expect.objectContaining({ unstableMSC4509KeyBundleClaim: true }),
+            );
         });
     });
 });

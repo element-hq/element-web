@@ -227,6 +227,7 @@ export interface Settings {
     "feature_ask_to_join": IFeature;
     "feature_notifications": IFeature;
     "feature_msc4362_encrypted_state_events": IFeature;
+    "feature_share_history_on_autojoin": IFeature;
     "feature_user_status": IFeature;
     "feature_login_with_qr": IFeature;
     "feature_msc4095_url_preview_bundle": IFeature;
@@ -732,6 +733,17 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         shouldWarn: true,
+        default: false,
+    },
+    "feature_share_history_on_autojoin": {
+        isFeature: true,
+        labsGroup: LabGroup.Encryption,
+        displayName: _td("labs|share_history_on_autojoin"),
+        description: _td("labs|share_history_on_autojoin_description"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        // The flag is handed to the js-sdk at client creation
+        controller: new ReloadOnChangeController(),
         default: false,
     },
     "feature_user_status": {
