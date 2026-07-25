@@ -97,7 +97,7 @@ $left-gutter: 64px;
         display: flex;
         flex-flow: wrap;
         align-items: center;
-        gap: $spacing-4;
+        gap: var(--cpd-space-1x);
     }
 
     .mx_ReplyChain--expanded {
@@ -236,7 +236,7 @@ $left-gutter: 64px;
         }
 
         .mx_ReplyChain {
-            margin-bottom: $spacing-8;
+            margin-bottom: var(--cpd-space-2x);
         }
     }
 
@@ -315,7 +315,7 @@ $left-gutter: 64px;
                     display: inline;
                     background-color: $event-selected-color;
                     border-radius: 8px 0 0 8px;
-                    padding-right: $spacing-8;
+                    padding-right: var(--cpd-space-2x);
                 }
 
                 > .mx_DisambiguatedProfile_mxid {
@@ -440,7 +440,7 @@ $left-gutter: 64px;
     &[data-layout="group"] {
         .mx_EventTile_avatar {
             top: 14px;
-            left: $spacing-8;
+            left: var(--cpd-space-2x);
         }
 
         .mx_EventTile_line,
@@ -657,11 +657,11 @@ $left-gutter: 64px;
             border: 1px solid $inlinecode-border-color;
             border-radius: 4px;
             /* The horizontal padding is added by github-markdown-css .markdown-body */
-            padding: $spacing-2 0;
+            padding: var(--cpd-space-0-5x) 0;
             /* Avoid inline code blocks to be sticked when on multiple lines */
             line-height: $font-22px;
             /* Avoid the border to be glued to the other words */
-            margin-right: $spacing-2;
+            margin-right: var(--cpd-space-0-5x);
         }
 
         code {
@@ -860,17 +860,15 @@ $left-gutter: 64px;
 
         .mx_EventTile_collapsedCodeBlock {
             max-height: 30vh;
-            padding-top: $spacing-12;
-            padding-bottom: $spacing-12;
+            padding-top: var(--cpd-space-3x);
+            padding-bottom: var(--cpd-space-3x);
         }
 
         /* Inserted adjacent to <pre> blocks, (See TextualBody) */
         .mx_EventTile_button {
             position: absolute;
-            top: $spacing-8;
-            right: $spacing-8;
-            width: 16px;
-            height: 16px;
+            top: var(--cpd-space-2x);
+            right: var(--cpd-space-2x);
             visibility: hidden;
 
             &.mx_EventTile_buttonBottom {
@@ -916,7 +914,7 @@ $left-gutter: 64px;
         margin-right: 0;
 
         span {
-            padding: $spacing-4 $spacing-8;
+            padding: var(--cpd-space-1x) var(--cpd-space-2x);
         }
     }
 
@@ -934,10 +932,10 @@ $left-gutter: 64px;
 
 .mx_EventTile[data-shape="ThreadsList"],
 .mx_EventTile[data-shape="Notification"] {
-    --topOffset: $spacing-12;
+    --topOffset: var(--cpd-space-3x);
     --leftOffset: 48px;
     $borderRadius: 8px;
-    $padding: $spacing-8;
+    $padding: var(--cpd-space-2x);
     $hrHeight: 1px;
     $notification-dot-size: 8px; /* notification dot next to the timestamp */
 
@@ -1053,7 +1051,7 @@ $left-gutter: 64px;
 
 .mx_EventTile[data-shape="ThreadsList"] {
     .mx_ThreadPanel_replies {
-        margin-top: $spacing-8;
+        margin-top: var(--cpd-space-2x);
         display: flex;
         align-items: center;
         position: relative;
@@ -1066,12 +1064,23 @@ $left-gutter: 64px;
         .mx_ThreadPanel_replies_amount {
             @mixin ThreadRepliesAmount;
         }
+    }
+}
 
-        .mx_ThreadSummary_content {
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-        }
+.mx_ThreadSummary_icon {
+    display: inline-block;
+    margin-top: var(--cpd-space-2x);
+    margin-bottom: var(--cpd-space-2x);
+
+    > svg {
+        @mixin ThreadSummaryIcon;
+        vertical-align: middle;
+        margin-inline-end: var(--cpd-space-2x);
+        margin-top: -2px;
+    }
+
+    a& {
+        color: $secondary-content;
     }
 }
 
@@ -1154,7 +1163,7 @@ $left-gutter: 64px;
 
         &[data-layout="irc"],
         &[data-layout="group"] {
-            padding-block-start: $spacing-16;
+            padding-block-start: var(--cpd-space-4x);
 
             .mx_EventTile_line,
             .mx_EventTile_footer {
@@ -1191,8 +1200,8 @@ $left-gutter: 64px;
             .mx_EventTile_senderDetails {
                 display: flex;
                 align-items: center;
-                gap: $spacing-16; /* gap between the avatar and the sender ID */
-                padding-inline-start: $spacing-8;
+                gap: var(--cpd-space-4x); /* gap between the avatar and the sender ID */
+                padding-inline-start: var(--cpd-space-2x);
 
                 a {
                     flex: 1;
@@ -1256,7 +1265,7 @@ $left-gutter: 64px;
 /* Cascading - compact modern layout on the main timeline and the right panel */
 .mx_MatrixChat_useCompactLayout {
     .mx_EventTile[data-layout="group"] {
-        --MatrixChat_useCompactLayout_group-padding-top: $spacing-4;
+        --MatrixChat_useCompactLayout_group-padding-top: var(--cpd-space-1x);
         --MatrixChat_useCompactLayout-top-avatar: 2px;
         --MatrixChat_useCompactLayout_line-spacing-block: 0px;
 
@@ -1268,7 +1277,7 @@ $left-gutter: 64px;
         }
 
         .mx_ReplyChain {
-            margin-bottom: $spacing-4;
+            margin-bottom: var(--cpd-space-1x);
         }
 
         &.mx_EventTile_info {
@@ -1288,7 +1297,7 @@ $left-gutter: 64px;
         }
 
         &.mx_EventTile_emote {
-            padding-top: $spacing-8; /* add a bit more space for emotes so that avatars don't collide */
+            padding-top: var(--cpd-space-2x); /* add a bit more space for emotes so that avatars don't collide */
 
             .mx_EventTile_avatar {
                 top: var(--MatrixChat_useCompactLayout-top-avatar);
@@ -1340,7 +1349,7 @@ $left-gutter: 64px;
             blockquote,
             pre,
             table {
-                margin-bottom: $spacing-4; /* 1/4 of the non-compact margin-bottom */
+                margin-bottom: var(--cpd-space-1x); /* 1/4 of the non-compact margin-bottom */
             }
         }
     }
@@ -1351,7 +1360,7 @@ $left-gutter: 64px;
     width: stretch;
     align-items: center;
     justify-content: space-between;
-    gap: $spacing-8;
+    gap: var(--cpd-space-2x);
     margin-left: var(--leftOffset);
     .mx_EventTile_truncated {
         flex: 1;

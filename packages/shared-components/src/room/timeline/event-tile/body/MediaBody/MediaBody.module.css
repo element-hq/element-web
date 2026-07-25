@@ -6,12 +6,13 @@
  */
 
 .mediaBody {
+    color: var(--cpd-color-text-secondary);
     background-color: var(--cpd-color-bg-subtle-secondary);
-    border-radius: 12px;
+    border-radius: 8px;
     max-width: 243px; /* use max-width instead of width so it fits within right panels */
 
-    font: var(--cpd-font-body-md-regular);
-    color: var(--cpd-color-text-secondary);
-
     padding: var(--cpd-space-1-5x) var(--cpd-space-3x);
+
+    font: var(--cpd-font-body-md-regular);
+    line-height: var(--cpd-font-size-heading-md);
 }

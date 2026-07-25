@@ -6,6 +6,7 @@ exports[`<ChangeRecoveryKey /> flow to change the recovery key should display th
     class="_breadcrumb_t96w3_8"
   >
     <button
+      aria-disabled="false"
       aria-label="Back"
       class="_icon-button_1215g_8"
       data-kind="secondary"
@@ -35,7 +36,7 @@ exports[`<ChangeRecoveryKey /> flow to change the recovery key should display th
     >
       <li>
         <a
-          class="_link_k9ljz_8"
+          class="_link_13esb_8"
           data-kind="primary"
           data-size="sm"
           rel="noreferrer noopener"
@@ -169,6 +170,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
     class="_breadcrumb_t96w3_8"
   >
     <button
+      aria-disabled="false"
       aria-label="Back"
       class="_icon-button_1215g_8"
       data-kind="secondary"
@@ -198,7 +200,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
     >
       <li>
         <a
-          class="_link_k9ljz_8"
+          class="_link_13esb_8"
           data-kind="primary"
           data-size="sm"
           rel="noreferrer noopener"
@@ -251,32 +253,32 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
       </span>
     </div>
     <form
-      class="_root_19upo_16 mx_KeyForm"
+      class="_root_1o4d9_17 mx_KeyForm"
     >
       <div
-        class="_field_19upo_26"
+        class="_field_1o4d9_27"
       >
         <label
-          class="_label_19upo_59"
-          for="radix-_r_0_"
+          class="_label_1o4d9_60"
+          for="radix-react-use-id-1"
         >
           Enter recovery key
         </label>
         <div
           class="_container_1s836_8 mx_KeyForm_password mx_no_textinput"
-          id="_r_1_"
+          id="react-use-id-2"
         >
           <input
             class="_control_d83jn_10 _control_1s836_13"
-            id="radix-_r_0_"
+            id="radix-react-use-id-1"
             name="recoveryKey"
             required=""
             title="Enter recovery key"
             type="password"
           />
           <button
-            aria-controls="_r_1_"
-            aria-labelledby="_r_2_"
+            aria-controls="react-use-id-2"
+            aria-labelledby="react-use-id-3"
             class="_action_1s836_24"
             type="button"
           >
@@ -329,6 +331,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
     class="_breadcrumb_t96w3_8"
   >
     <button
+      aria-disabled="false"
       aria-label="Back"
       class="_icon-button_1215g_8"
       data-kind="secondary"
@@ -358,7 +361,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
     >
       <li>
         <a
-          class="_link_k9ljz_8"
+          class="_link_13esb_8"
           data-kind="primary"
           data-size="sm"
           rel="noreferrer noopener"
@@ -411,37 +414,37 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
       </span>
     </div>
     <form
-      class="_root_19upo_16 mx_KeyForm"
+      class="_root_1o4d9_17 mx_KeyForm"
     >
       <div
-        class="_field_19upo_26"
+        class="_field_1o4d9_27"
         data-invalid="true"
       >
         <label
-          class="_label_19upo_59"
+          class="_label_1o4d9_60"
           data-invalid="true"
-          for="radix-_r_0_"
+          for="radix-react-use-id-1"
         >
           Enter recovery key
         </label>
         <div
           class="_container_1s836_8 mx_KeyForm_password mx_no_textinput"
-          id="_r_1_"
+          id="react-use-id-2"
         >
           <input
-            aria-describedby="radix-_r_8_"
+            aria-describedby="radix-react-use-id-3"
             aria-invalid="true"
             class="_control_d83jn_10 _control_1s836_13"
             data-invalid="true"
-            id="radix-_r_0_"
+            id="radix-react-use-id-1"
             name="recoveryKey"
             required=""
             title="Enter recovery key"
             type="password"
           />
           <button
-            aria-controls="_r_1_"
-            aria-labelledby="_r_2_"
+            aria-controls="react-use-id-2"
+            aria-labelledby="react-use-id-4"
             class="_action_1s836_24"
             type="button"
           >
@@ -460,8 +463,8 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
           </button>
         </div>
         <span
-          class="_message_19upo_85 _error-message_19upo_95"
-          id="radix-_r_8_"
+          class="_message_1o4d9_86 _error-message_1o4d9_96"
+          id="radix-react-use-id-3"
         >
           <svg
             fill="currentColor"
@@ -511,6 +514,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display info
     class="_breadcrumb_t96w3_8"
   >
     <button
+      aria-disabled="false"
       aria-label="Back"
       class="_icon-button_1215g_8"
       data-kind="secondary"
@@ -540,7 +544,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display info
     >
       <li>
         <a
-          class="_link_k9ljz_8"
+          class="_link_13esb_8"
           data-kind="primary"
           data-size="sm"
           rel="noreferrer noopener"
@@ -629,6 +633,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display the 
     class="_breadcrumb_t96w3_8"
   >
     <button
+      aria-disabled="false"
       aria-label="Back"
       class="_icon-button_1215g_8"
       data-kind="secondary"
@@ -658,7 +663,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display the 
     >
       <li>
         <a
-          class="_link_k9ljz_8"
+          class="_link_13esb_8"
           data-kind="primary"
           data-size="sm"
           rel="noreferrer noopener"

@@ -25,10 +25,10 @@ jobs:
                     - name: Typescript Syntax Check
                       install: layered
                       command: "lint:types"
-                    - name: Prettier
+                    - name: Oxfmt
                       install: normal
-                      command: "lint:prettier"
-                    - name: ESLint
+                      command: "lint:fmt"
+                    - name: Oxlint
                       install: normal
                       command: "lint:js"
                     - name: Style Lint
@@ -46,15 +46,18 @@ jobs:
                     - name: Docs
                       install: layered
                       command: "docs:build"
+                    - name: Unused settings
+                      install: normal
+                      command: "lint:unused-settings"
         name: ${{ matrix.name }}
         runs-on: ubuntu-24.04
         steps:
-            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   persist-credentials: false
 
-            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
-            - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+            - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
               if: matrix.install != ''
               with:
                   cache: "pnpm"
@@ -68,7 +71,7 @@ jobs:
               run: "pnpm install --frozen-lockfile"
 
             - name: Run ${{ matrix.command }}
-              run: pnpm --if-present run "$CMD" && pnpm -r --if-present run "$CMD"
+              run: pnpm nx run-many -t "$CMD" -p
               env:
                   CMD: ${{ matrix.command }}
 
@@ -82,12 +85,12 @@ jobs:
         permissions:
             security-events: write
         steps:
-            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   persist-credentials: false
 
             - name: Run zizmor
-              uses: zizmorcore/zizmor-action@b1d7e1fb5de872772f31590499237e7cce841e8e # v0.5.3
+              uses: zizmorcore/zizmor-action@6fc4b006235f201fdab3722e17240ab420d580e5 # v0.6.1
 
     i18n:
         strategy:

@@ -28,7 +28,9 @@ describe("UrlPreviewGroupView", () => {
         expect(container).toMatchSnapshot();
     });
     it("renders with compact density", () => {
-        const { container } = render(<WithCompactView />);
+        const { container } = render(<WithCompactView />, {
+            presentation: { density: "compact" },
+        });
         expect(container).toMatchSnapshot();
     });
 });

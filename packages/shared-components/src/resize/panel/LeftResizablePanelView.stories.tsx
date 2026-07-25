@@ -41,14 +41,9 @@ const meta = {
     component: LeftResizablePanelViewWrapper,
     // This is a structural component, so nothing to visually test.
     tags: ["autodocs", "!snapshot"],
-    argTypes: {
-        // This snapshot state is not relevant for this View.
-        isFocusedViaKeyboard: { table: { disable: true } },
-    },
     args: {
         initialSize: 20,
         isCollapsed: false,
-        isFocusedViaKeyboard: false,
         onLeftPanelResize: fn(),
         setPanelHandle: fn(),
     },

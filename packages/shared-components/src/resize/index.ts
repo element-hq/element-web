@@ -27,11 +27,6 @@ export interface ResizerViewSnapshot {
      * This is the initial size of the panel if available; should be interpreted as percentage.
      */
     initialSize?: number;
-    /**
-     * Whether the separator is currently focused by navigating
-     * to it using keyboard input.
-     */
-    isFocusedViaKeyboard: boolean;
 }
 
 /**

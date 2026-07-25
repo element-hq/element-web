@@ -15,7 +15,7 @@ import {
     type Room,
     type SSOAction,
     encodeUnpaddedBase64,
-    type OidcRegistrationClientMetadata,
+    type OAuthRegistrationRequest,
     MatrixEventEvent,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -279,7 +279,7 @@ export default abstract class BasePlatform {
     /**
      * Get our platform specific EventIndexManager.
      *
-     * @return {BaseEventIndexManager} The EventIndex manager for our platform,
+     * @returns {BaseEventIndexManager} The EventIndex manager for our platform,
      * can be null if the platform doesn't support event indexing.
      */
     public getEventIndexingManager(): BaseEventIndexManager | null {
@@ -431,42 +431,41 @@ export default abstract class BasePlatform {
     }
 
     /**
-     * Fallback Client URI to use for OIDC client registration for if one is not specified in config.json
+     * Fallback Client URI to use for OAuth2 client registration for if one is not specified in config.json
      */
-    public get defaultOidcClientUri(): string {
+    public get defaultOAuthClientUri(): string {
         return window.location.origin;
     }
 
     /**
-     * Metadata to use for dynamic OIDC client registrations
+     * Metadata to use for dynamic OAuth2 client registrations
      */
-    public async getOidcClientMetadata(): Promise<OidcRegistrationClientMetadata> {
+    public async getOAuthClientMetadata(): Promise<OAuthRegistrationRequest> {
         const config = SdkConfig.get();
         return {
-            clientName: config.brand,
-            clientUri: config.oidc_metadata?.client_uri ?? this.defaultOidcClientUri,
-            redirectUris: [this.getOidcCallbackUrl().href],
-            logoUri: config.oidc_metadata?.logo_uri ?? new URL("vector-icons/1024.png", this.baseUrl).href,
-            applicationType: "web",
-            contacts: config.oidc_metadata?.contacts,
-            tosUri: config.oidc_metadata?.tos_uri ?? config.terms_and_conditions_links?.[0]?.url,
-            policyUri: config.oidc_metadata?.policy_uri ?? config.privacy_policy_url,
+            client_name: config.brand,
+            client_uri: config.oidc_metadata?.client_uri ?? this.defaultOAuthClientUri,
+            redirect_uris: [this.getOAuthCallbackUrl().href],
+            logo_uri: config.oidc_metadata?.logo_uri ?? new URL("vector-icons/1024.png", this.baseUrl).href,
+            application_type: "web",
+            tos_uri: config.oidc_metadata?.tos_uri ?? config.terms_and_conditions_links?.[0]?.url,
+            policy_uri: config.oidc_metadata?.policy_uri ?? config.privacy_policy_url,
         };
     }
 
     /**
-     * Suffix to append to the `state` parameter of OIDC /auth calls. Will be round-tripped to the callback URI.
+     * Suffix to append to the `state` parameter of OAuth2 /auth calls. Will be round-tripped to the callback URI.
      * Currently only required for ElectronPlatform for passing element-desktop-ssoid.
      */
-    public getOidcClientState(): string {
+    public getOAuthClientState(): string {
         return "";
     }
 
     /**
-     * The URL to return to after a successful OIDC authentication
+     * The URL to return to after a successful OAuth2 authentication
      */
-    public getOidcCallbackUrl(): URL {
-        // The redirect URL has to exactly match that registered at the OIDC server, so
+    public getOAuthCallbackUrl(): URL {
+        // The redirect URL has to exactly match that registered at the OAuth2 server, so
         // build it from scratch to avoid leaking ephemeral query params (e.g. `updated`).
         const url = new URL(window.location.origin + window.location.pathname);
         // Set no_universal_links=true to prevent the callback being handled by Element X installed on macOS Apple Silicon

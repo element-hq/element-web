@@ -5,6 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { type Room } from "matrix-js-sdk/src/matrix";
+
 import Modal from "../../../../src/Modal";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import {
@@ -17,10 +19,13 @@ import {
     CHATS_TAG,
     CUSTOM_SECTION_TAG_PREFIX,
     isSectionTag,
+    reorderSection,
 } from "../../../../src/stores/room-list-v3/section";
 import { CreateSectionDialog } from "../../../../src/components/views/dialogs/CreateSectionDialog";
 import { RemoveSectionDialog } from "../../../../src/components/views/dialogs/RemoveSectionDialog";
 import { DefaultTagID } from "../../../../src/stores/room-list-v3/skip-list/tag";
+import { MetaSpace } from "../../../../src/stores/spaces";
+import { SDKContextClass } from "../../../../src/contexts/SDKContextClass.ts";
 
 describe("section", () => {
     afterEach(() => {
@@ -33,7 +38,9 @@ describe("section", () => {
         const validEntry = { tag: validTag, name: "Valid" };
 
         beforeEach(() => {
-            jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+            // Default: no known spaces
+            jest.spyOn(SDKContextClass.instance.spaceStore, "enabledMetaSpaces", "get").mockReturnValue([]);
+            jest.spyOn(SDKContextClass.instance.spaceStore, "spacePanelSpaces", "get").mockReturnValue([]);
         });
 
         it.each([null, false, 42, "string", []] as const)("returns an empty object when the raw value is %p", (raw) => {
@@ -41,12 +48,12 @@ describe("section", () => {
             expect(getCustomSectionData()).toEqual({});
         });
 
-        it("returns valid entries and drops invalid ones", () => {
+        it("returns valid entries and drops invalid ones, defaulting spaceId to MetaSpace.Home", () => {
             jest.spyOn(SettingsStore, "getValue").mockReturnValue({
                 [validTag]: validEntry,
                 [invalidTag]: { tag: "element.io.section.mismatch", name: "Bad" },
             });
-            expect(getCustomSectionData()).toEqual({ [validTag]: validEntry });
+            expect(getCustomSectionData()).toEqual({ [validTag]: { ...validEntry, spaceId: MetaSpace.Home } });
         });
 
         it("drops entries that fail the isValidCustomSection check", () => {
@@ -58,13 +65,48 @@ describe("section", () => {
             });
             expect(getCustomSectionData()).toEqual({});
         });
+
+        it("defaults spaceId to MetaSpace.Home when spaceId is missing", () => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue({ [validTag]: validEntry });
+            expect(getCustomSectionData()[validTag].spaceId).toBe(MetaSpace.Home);
+        });
+
+        it("defaults spaceId to MetaSpace.Home when the stored space does not exist", () => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue({
+                [validTag]: { ...validEntry, spaceId: "!gone:server" },
+            });
+            // spacePanelSpaces is empty (default mock), so !gone:server is unknown
+            expect(getCustomSectionData()[validTag].spaceId).toBe(MetaSpace.Home);
+        });
+
+        it("keeps spaceId when the meta-space is enabled", () => {
+            jest.spyOn(SDKContextClass.instance.spaceStore, "enabledMetaSpaces", "get").mockReturnValue([
+                MetaSpace.Home,
+            ]);
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue({
+                [validTag]: { ...validEntry, spaceId: MetaSpace.Home },
+            });
+            expect(getCustomSectionData()[validTag].spaceId).toBe(MetaSpace.Home);
+        });
+
+        it("keeps spaceId when the real space room exists", () => {
+            const spaceId = "!space:server";
+            jest.spyOn(SDKContextClass.instance.spaceStore, "spacePanelSpaces", "get").mockReturnValue([
+                { roomId: spaceId } as Room,
+            ]);
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue({
+                [validTag]: { ...validEntry, spaceId },
+            });
+            expect(getCustomSectionData()[validTag].spaceId).toBe(spaceId);
+        });
     });
 
     describe("getOrderedCustomSections", () => {
         const tag = "element.io.section.abc";
 
         beforeEach(() => {
-            jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+            jest.spyOn(SDKContextClass.instance.spaceStore, "enabledMetaSpaces", "get").mockReturnValue([]);
+            jest.spyOn(SDKContextClass.instance.spaceStore, "spacePanelSpaces", "get").mockReturnValue([]);
         });
 
         it("returns an empty array when the raw value is not an array", () => {
@@ -93,6 +135,8 @@ describe("section", () => {
         beforeEach(() => {
             jest.spyOn(SettingsStore, "getValue").mockReturnValue(null);
             jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+            jest.spyOn(SDKContextClass.instance.spaceStore, "enabledMetaSpaces", "get").mockReturnValue([]);
+            jest.spyOn(SDKContextClass.instance.spaceStore, "spacePanelSpaces", "get").mockReturnValue([]);
         });
 
         it.each([
@@ -105,7 +149,7 @@ describe("section", () => {
                 close: jest.fn(),
             } as any);
 
-            const result = await createSection();
+            const result = await createSection(MetaSpace.Home);
             expect(result).toEqual(expected);
         });
 
@@ -115,7 +159,7 @@ describe("section", () => {
                 close: jest.fn(),
             } as any);
 
-            const result = await createSection();
+            const result = await createSection(MetaSpace.Home);
             expect(result).toMatch(/^element\.io\.section\./);
         });
 
@@ -125,7 +169,7 @@ describe("section", () => {
                 close: jest.fn(),
             } as any);
 
-            await createSection();
+            await createSection(MetaSpace.Home);
             expect(createDialogSpy).toHaveBeenCalledWith(CreateSectionDialog);
         });
 
@@ -143,7 +187,7 @@ describe("section", () => {
             } as any);
             const setValueSpy = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
 
-            await createSection();
+            await createSection(MetaSpace.Home);
 
             const orderedCall = setValueSpy.mock.calls.find(([name]) => name === "RoomList.OrderedCustomSections");
             const savedOrder = orderedCall![3] as string[];
@@ -152,9 +196,12 @@ describe("section", () => {
 
             const newTag = savedOrder[1];
             const customDataCall = setValueSpy.mock.calls.find(([name]) => name === "RoomList.CustomSectionData");
-            const savedSection = (customDataCall![3] as Record<string, { tag: string; name: string }>)[newTag];
+            const savedSection = (customDataCall![3] as Record<string, { tag: string; name: string; spaceId: string }>)[
+                newTag
+            ];
             expect(savedSection.name).toBe("My Section");
             expect(savedSection.tag).toBe(newTag);
+            expect(savedSection.spaceId).toBe(MetaSpace.Home);
         });
     });
 
@@ -219,7 +266,7 @@ describe("section", () => {
                 "RoomList.CustomSectionData",
                 null,
                 expect.anything(),
-                expect.objectContaining({ [tag]: { tag, name: "New Name" } }),
+                expect.objectContaining({ [tag]: expect.objectContaining({ tag, name: "New Name" }) }),
             );
         });
     });
@@ -286,10 +333,126 @@ describe("section", () => {
             await deleteSection(tag, false);
 
             const orderedCall = setValueSpy.mock.calls.find(([name]) => name === "RoomList.OrderedCustomSections");
-            expect(orderedCall![3]).toEqual([otherTag]);
+            // CHATS_TAG is appended because the stored order didn't include it (legacy default position).
+            expect(orderedCall![3]).toEqual([otherTag, CHATS_TAG]);
 
             const customDataCall = setValueSpy.mock.calls.find(([name]) => name === "RoomList.CustomSectionData");
             expect(customDataCall![3]).not.toHaveProperty(tag);
+        });
+    });
+
+    describe("reorderSection", () => {
+        const customTag = `${CUSTOM_SECTION_TAG_PREFIX}abc`;
+        const customTag2 = `${CUSTOM_SECTION_TAG_PREFIX}def`;
+
+        function mockSettings(
+            orderedTags: string[],
+            customData: Record<string, { tag: string; name: string }> = {},
+        ): void {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+                if (setting === "RoomList.OrderedCustomSections") return orderedTags;
+                if (setting === "RoomList.CustomSectionData") return customData;
+                return null;
+            });
+        }
+
+        it.each<{
+            description: string;
+            initial: string[];
+            customData: Record<string, { tag: string; name: string }>;
+            source: string;
+            target: string;
+            expected: string[];
+        }>([
+            {
+                description: "a custom section after another custom section",
+                initial: [customTag, customTag2],
+                customData: {
+                    [customTag]: { tag: customTag, name: "A" },
+                    [customTag2]: { tag: customTag2, name: "B" },
+                },
+                source: customTag,
+                target: customTag2,
+                expected: [customTag2, customTag, CHATS_TAG],
+            },
+            {
+                description: "a custom section before another when dragging up",
+                initial: [customTag2, customTag],
+                customData: {
+                    [customTag]: { tag: customTag, name: "A" },
+                    [customTag2]: { tag: customTag2, name: "B" },
+                },
+                source: customTag,
+                target: customTag2,
+                expected: [customTag, customTag2, CHATS_TAG],
+            },
+            {
+                description: "a custom section past the Chats tag",
+                initial: [customTag, customTag2, CHATS_TAG],
+                customData: {
+                    [customTag]: { tag: customTag, name: "A" },
+                    [customTag2]: { tag: customTag2, name: "B" },
+                },
+                source: customTag,
+                target: CHATS_TAG,
+                expected: [customTag2, CHATS_TAG, customTag],
+            },
+            {
+                description: "the Chats tag above a custom section",
+                initial: [customTag, customTag2, CHATS_TAG],
+                customData: {
+                    [customTag]: { tag: customTag, name: "A" },
+                    [customTag2]: { tag: customTag2, name: "B" },
+                },
+                source: CHATS_TAG,
+                target: customTag,
+                expected: [CHATS_TAG, customTag, customTag2],
+            },
+        ])(
+            "moves $description and saves the new order at ACCOUNT level",
+            async ({ initial, customData, source, target, expected }) => {
+                mockSettings(initial, customData);
+                const setValueSpy = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+
+                await reorderSection(source, target);
+
+                expect(setValueSpy).toHaveBeenCalledWith(
+                    "RoomList.OrderedCustomSections",
+                    null,
+                    expect.anything(),
+                    expected,
+                );
+            },
+        );
+
+        it.each([
+            {
+                description: "source and target are the same",
+                source: customTag,
+                target: customTag,
+            },
+            {
+                description: "source custom section is not in the ordered list",
+                source: `${CUSTOM_SECTION_TAG_PREFIX}unknown`,
+                target: customTag,
+            },
+            {
+                description: "target custom section is not in the ordered list",
+                source: customTag,
+                target: `${CUSTOM_SECTION_TAG_PREFIX}unknown`,
+            },
+            {
+                description: "source is a default section",
+                source: DefaultTagID.Favourite,
+                target: customTag,
+            },
+        ])("does nothing when $description", async ({ source, target }) => {
+            mockSettings([customTag], { [customTag]: { tag: customTag, name: "A" } });
+            const setValueSpy = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+
+            await reorderSection(source, target);
+
+            expect(setValueSpy).not.toHaveBeenCalled();
         });
     });
 

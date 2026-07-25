@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ReactNode } from "react";
+import { MediaBody } from "@element-hq/web-shared-components";
 
 import PlayPauseButton from "./PlayPauseButton";
 import PlaybackClock from "./PlaybackClock";
@@ -74,8 +75,8 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps> {
         }
 
         return (
-            <div
-                className="mx_MediaBody mx_VoiceMessagePrimaryContainer"
+            <MediaBody
+                className="mx_VoiceMessagePrimaryContainer"
                 onKeyDown={this.onKeyDown}
                 data-testid="recording-playback"
             >
@@ -85,7 +86,7 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps> {
                     ref={this.playPauseRef}
                 />
                 {body}
-            </div>
+            </MediaBody>
         );
     }
 }

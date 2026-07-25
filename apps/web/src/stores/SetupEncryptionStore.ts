@@ -15,12 +15,12 @@ import {
     CryptoEvent,
 } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
-import { type Device, type SecretStorage } from "matrix-js-sdk/src/matrix";
+import { type SecretStorage } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { AccessCancelledError, accessSecretStorage } from "../SecurityManager";
-import { asyncSome } from "../utils/arrays";
 import { initialiseDehydrationIfEnabled } from "../utils/device/dehydration";
+import { hasOtherVerifiedDevices } from "../hooks/useHasOtherVerifiedDevices";
 
 export enum Phase {
     Loading = 0,
@@ -102,21 +102,10 @@ export class SetupEncryptionStore extends EventEmitter {
         }
 
         const ownUserId = cli.getUserId()!;
+        const ownDeviceId = cli.getDeviceId()!;
         const crypto = cli.getCrypto()!;
         // do we have any other verified devices which are E2EE which we can verify against?
-        const userDevices: Iterable<Device> =
-            (await crypto.getUserDeviceInfo([ownUserId])).get(ownUserId)?.values() ?? [];
-        this.hasDevicesToVerifyAgainst = await asyncSome(userDevices, async (device) => {
-            // Ignore dehydrated devices. MSC3814 proposes that devices
-            // should set a `dehydrated` flag in the device key.
-            if (device.dehydrated) return false;
-
-            // ignore devices without an identity key
-            if (!device.getIdentityKey()) return false;
-
-            const verificationStatus = await crypto.getDeviceVerificationStatus(ownUserId, device.deviceId);
-            return !!verificationStatus?.signedByOwner;
-        });
+        this.hasDevicesToVerifyAgainst = (await hasOtherVerifiedDevices(ownUserId, ownDeviceId, crypto)) === true;
 
         this.phase = Phase.Intro;
         this.emit("update");

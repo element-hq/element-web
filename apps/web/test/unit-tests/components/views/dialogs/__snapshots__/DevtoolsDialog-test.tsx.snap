@@ -34,26 +34,32 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
     >
       Room ID: !id
       <button
-        aria-describedby="_r_2_"
-        aria-label="Copy"
-        class="mx_AccessibleButton mx_CopyableText_copyButton"
+        aria-labelledby="react-use-id-1"
+        class="_icon-button_1215g_8 mx_CopyableText_copyButton"
+        data-kind="primary"
         role="button"
+        style="--cpd-icon-button-size: 28px; padding: 4px;"
         tabindex="0"
       >
-        <svg
-          fill="currentColor"
-          height="1em"
-          viewBox="0 0 24 24"
-          width="1em"
-          xmlns="http://www.w3.org/2000/svg"
+        <div
+          class="_indicator-icon_147l5_17"
+          style="--cpd-icon-button-size: 100%;"
         >
-          <path
-            d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
-          />
-          <path
-            d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
-          />
-        </svg>
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
+            />
+            <path
+              d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
+            />
+          </svg>
+        </div>
       </button>
     </span>
     <div
@@ -137,7 +143,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
         </button>
       </div>
       <form
-        class="_root_19upo_16 mx_DevTools_toggleForm"
+        class="_root_1o4d9_17 mx_DevTools_toggleForm"
       >
         <h2
           class="mx_DevTools_toolHeading"
@@ -145,10 +151,10 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
           Options
         </h2>
         <div
-          class="_inline-field_19upo_32"
+          class="_inline-field_1o4d9_33"
         >
           <div
-            class="_inline-field-control_19upo_44"
+            class="_inline-field-control_1o4d9_45"
           >
             <div
               class="_container_udcm8_10"
@@ -165,10 +171,10 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
             </div>
           </div>
           <div
-            class="_inline-field-body_19upo_38"
+            class="_inline-field-body_1o4d9_39"
           >
             <label
-              class="_label_19upo_59"
+              class="_label_1o4d9_60"
               for="mx_SettingsFlag_vY7Q4uEh9K38"
             >
               Developer mode
@@ -176,10 +182,10 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
           </div>
         </div>
         <div
-          class="_inline-field_19upo_32"
+          class="_inline-field_1o4d9_33"
         >
           <div
-            class="_inline-field-control_19upo_44"
+            class="_inline-field-control_1o4d9_45"
           >
             <div
               class="_container_udcm8_10"
@@ -196,10 +202,10 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
             </div>
           </div>
           <div
-            class="_inline-field-body_19upo_38"
+            class="_inline-field-body_1o4d9_39"
           >
             <label
-              class="_label_19upo_59"
+              class="_label_1o4d9_60"
               for="mx_SettingsFlag_QgU2PomxwKpa"
             >
               Show hidden events in timeline
@@ -207,10 +213,10 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
           </div>
         </div>
         <div
-          class="_inline-field_19upo_32"
+          class="_inline-field_1o4d9_33"
         >
           <div
-            class="_inline-field-control_19upo_44"
+            class="_inline-field-control_1o4d9_45"
           >
             <div
               class="_container_udcm8_10"
@@ -227,10 +233,10 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
             </div>
           </div>
           <div
-            class="_inline-field-body_19upo_38"
+            class="_inline-field-body_1o4d9_39"
           >
             <label
-              class="_label_19upo_59"
+              class="_label_1o4d9_60"
               for="mx_SettingsFlag_6hpi3YEetmBG"
             >
               Enable widget screenshots on supported widgets
@@ -238,10 +244,10 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
           </div>
         </div>
         <div
-          class="_inline-field_19upo_32"
+          class="_inline-field_1o4d9_33"
         >
           <div
-            class="_inline-field-control_19upo_44"
+            class="_inline-field-control_1o4d9_45"
           >
             <div
               class="_container_udcm8_10"
@@ -258,17 +264,17 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
             </div>
           </div>
           <div
-            class="_inline-field-body_19upo_38"
+            class="_inline-field-body_1o4d9_39"
           >
             <label
-              class="_label_19upo_59"
+              class="_label_1o4d9_60"
               for="mx_SettingsFlag_4yVCeEefiPqp"
             >
               Disable bandwidth-heavy features
             </label>
             <span
-              class="_message_19upo_85 _help-message_19upo_91"
-              id="radix-_r_c_"
+              class="_message_1o4d9_86 _help-message_1o4d9_92"
+              id="radix-react-use-id-2"
             >
               <span>
                 <span
@@ -283,14 +289,14 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
         </div>
       </form>
       <form
-        class="_root_19upo_16"
+        class="_root_1o4d9_17"
       >
         <div
-          class="_field_19upo_26"
+          class="_field_1o4d9_27"
         >
           <label
-            class="_label_19upo_59"
-            for="radix-_r_d_"
+            class="_label_1o4d9_60"
+            for="radix-react-use-id-3"
           >
             Element Call URL
           </label>
@@ -299,7 +305,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
           >
             <input
               class="_control_d83jn_10"
-              id="radix-_r_d_"
+              id="radix-react-use-id-3"
               name="input"
               title=""
               value=""

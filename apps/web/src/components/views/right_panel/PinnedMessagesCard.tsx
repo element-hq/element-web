@@ -21,7 +21,6 @@ import { useRoomState } from "../../../hooks/useRoomState";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { ReadPinsEventId } from "./types";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import { filterBoolean } from "../../../utils/arrays";
 import Modal from "../../../Modal";
 import { UnpinAllDialog } from "../dialogs/UnpinAllDialog";
 import EmptyState from "./EmptyState";
@@ -77,9 +76,7 @@ export function PinnedMessagesCard({ room, onClose, permalinkCreator }: PinnedMe
             />
         );
     } else if (pinnedEvents?.length) {
-        content = (
-            <PinnedMessages events={filterBoolean(pinnedEvents)} room={room} permalinkCreator={permalinkCreator} />
-        );
+        content = <PinnedMessages events={pinnedEvents} room={room} permalinkCreator={permalinkCreator} />;
     } else {
         content = <Spinner />;
     }

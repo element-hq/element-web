@@ -15,17 +15,17 @@ import { logger } from "matrix-js-sdk/src/logger";
 import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";
 import { type SettingLevel } from "../../../settings/SettingLevel";
-import { type BooleanSettingKey, defaultWatchManager } from "../../../settings/Settings";
+import { type NullableBooleanSettingKey, defaultWatchManager } from "../../../settings/Settings";
 
 interface IProps {
     // The setting must be a boolean
-    name: BooleanSettingKey;
+    name: NullableBooleanSettingKey;
     level: SettingLevel;
     roomId?: string; // for per-room settings
     label?: string;
     isExplicit?: boolean;
     hideIfCannotSet?: boolean;
-    requires?: BooleanSettingKey[];
+    requires?: NullableBooleanSettingKey[];
     onChange?(checked: boolean): void;
 }
 
@@ -59,9 +59,10 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
     }
 
     private getSettingValue(): boolean {
-        // If a level defined in props is overridden by a level at a high presedence, it gets disabled
-        // and we should show the overridding value.
+        // If a level defined in props is overridden by a level at a high precedence,
+        // or the setting lacks support for the desired level, it gets disabled and we should show the overriding value.
         if (
+            !SettingsStore.doesSettingSupportLevel(this.props.name, this.props.level) ||
             SettingsStore.settingIsOveriddenAtConfigLevel(this.props.name, this.props.roomId ?? null, this.props.level)
         ) {
             return !!SettingsStore.getValue(this.props.name);

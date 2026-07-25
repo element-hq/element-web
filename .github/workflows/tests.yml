@@ -35,17 +35,17 @@ jobs:
             fail-fast: false
             matrix:
                 # Run multiple instances in parallel to speed up the tests
-                runner: [1, 2]
+                runner: [1, 2, 3]
         steps:
             - name: Checkout code
-              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   repository: ${{ inputs.matrix-js-sdk-sha && 'element-hq/element-web' || github.repository }}
                   persist-credentials: false
 
-            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
+            - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
             - name: pnpm cache
-              uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+              uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
               with:
                   node-version: "lts/*"
                   cache: "pnpm"
@@ -56,14 +56,10 @@ jobs:
                   JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
 
             - name: Jest Cache
-              uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+              uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
               with:
                   path: /tmp/jest_cache
                   key: ${{ hashFiles('**/pnpm-lock.yaml') }}
-
-            - name: Get number of CPU cores
-              id: cpu-cores
-              uses: SimenB/github-actions-cpu-cores@97330871fe1b7d3529392ea000e3d2c4b357e403 # v3
 
             - name: Run tests
               working-directory: apps/web
@@ -71,16 +67,14 @@ jobs:
                   pnpm test \
                       --coverage=$ENABLE_COVERAGE \
                       --ci \
-                      --max-workers $MAX_WORKERS \
+                      --maxWorkers="50%" \
                       --shard "$SHARD" \
                       --cacheDirectory /tmp/jest_cache
               env:
-                  JEST_SONAR_UNIQUE_OUTPUT_NAME: true
-
                   # tell jest to use coloured output
                   FORCE_COLOR: true
-                  MAX_WORKERS: ${{ steps.cpu-cores.outputs.count }}
                   SHARD: ${{ format('{0}/{1}', matrix.runner, strategy.job-total) }}
+                  NODE_OPTIONS: "--max_old_space_size=8192"
 
             - name: Move coverage files into place
               if: env.ENABLE_COVERAGE == 'true'
@@ -98,56 +92,45 @@ jobs:
                       apps/web/coverage
                       !apps/web/coverage/lcov-report
 
-    complete:
-        name: jest-tests
-        needs: [jest_ew, vitest]
-        if: always()
-        runs-on: ubuntu-24.04
-        permissions:
-            statuses: write
-        steps:
-            - if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
-              run: exit 1
-
-            - name: Skip SonarCloud in merge queue
-              if: github.event_name == 'merge_group' || inputs.disable_coverage == 'true'
-              uses: guibranco/github-status-action-v2@9bfa8773cdbdc6c185747fd43cd7faa9d7c32f09
-              with:
-                  authToken: ${{ secrets.GITHUB_TOKEN }}
-                  state: success
-                  description: SonarCloud skipped
-                  context: SonarCloud Code Analysis
-                  sha: ${{ github.sha }}
-                  target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-
     vitest:
-        name: Vitest
+        name: Vitest${{ case(matrix.path == '.', '', format(' {0}', matrix.path)) }}
         strategy:
             matrix:
                 path:
-                    - apps/desktop
                     - packages/shared-components
-                    - packages/module-api
+                    - "."
         runs-on: ubuntu-24.04
         steps:
+            # Dump the disk usage before we start: this job frequently flakes with "No space left on device"
+            # so, with the one at the end too, this will let us work out how much disk has been used.
+            - name: dfbefore
+              run: df -h && df -i
+
             - name: Checkout code
-              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   repository: ${{ inputs.matrix-js-sdk-sha && 'element-hq/element-web' || github.repository }}
                   persist-credentials: false
 
-            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
+            - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
             - name: pnpm cache
-              uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+              uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
               with:
                   node-version: "lts/*"
                   cache: "pnpm"
 
-            - name: Install Deps
+            - name: Install Deps (layered)
+              run: "./scripts/layered.sh"
+              if: matrix.path != 'packages/shared-components'
+              env:
+                  JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
+
+            - name: Install Deps (normal)
               run: "pnpm install"
+              if: matrix.path == 'packages/shared-components'
 
             - name: Cache storybook & vitest
-              uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+              uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
               with:
                   path: |
                       ${{ matrix.path }}/node_modules/.cache
@@ -156,7 +139,6 @@ jobs:
 
             - name: Setup playwright
               uses: ./.github/actions/setup-playwright
-              if: matrix.path == 'packages/shared-components'
               with:
                   write-cache: ${{ github.event_name != 'merge_group' }}
 
@@ -176,7 +158,7 @@ jobs:
                   NAME=$(basename "$MATRIX_PATH")
                   echo "name=$NAME" >> $GITHUB_OUTPUT
               env:
-                  MATRIX_PATH: ${{ matrix.path }}
+                  MATRIX_PATH: ${{ case(matrix.path == '.', 'vite', format(' {0}', matrix.path)) }}
 
             - name: Upload Artifact
               if: env.ENABLE_COVERAGE == 'true'
@@ -186,3 +168,61 @@ jobs:
                   path: |
                       ${{ matrix.path }}/coverage
                       !${{ matrix.path }}/coverage/lcov-report
+
+    complete:
+        name: Tests
+        needs:
+            - jest_ew
+            - vitest
+        if: always()
+        runs-on: ubuntu-24.04
+        permissions:
+            contents: read
+            pull-requests: read
+            checks: write
+            statuses: write
+        steps:
+            - name: Skip SonarCloud in merge queue
+              if: github.event_name == 'merge_group' || inputs.disable_coverage == 'true'
+              uses: guibranco/github-status-action-v2@9bfa8773cdbdc6c185747fd43cd7faa9d7c32f09
+              with:
+                  authToken: ${{ secrets.GITHUB_TOKEN }}
+                  state: success
+                  description: SonarCloud skipped
+                  context: SonarCloud Code Analysis
+                  sha: ${{ github.sha }}
+                  target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            - name: Checkout code
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+              if: needs.jest_ew.result == 'success' && needs.vitest.result == 'success' && env.ENABLE_COVERAGE == 'true'
+              with:
+                  persist-credentials: false
+                  fetch-depth: 0 # Full history, fastest for diff-cover
+
+            - name: Download coverage artifacts
+              uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+              if: needs.jest_ew.result == 'success' && needs.vitest.result == 'success' && env.ENABLE_COVERAGE == 'true'
+              with:
+                  pattern: coverage-*
+                  path: coverage
+
+            - name: Diff Coverage
+              id: coverage
+              if: needs.jest_ew.result == 'success' && needs.vitest.result == 'success' && env.ENABLE_COVERAGE == 'true'
+              uses: Affanmir/diff-cover-action@a35ea05c1c458490473f6fc2233737e809678273 # v2.1.1
+              with:
+                  compare-branch: origin/${{ github.base_ref || 'develop' }}
+                  mode: coverage
+                  coverage-files: coverage/*/*lcov.info
+                  ignore-whitespace: true
+                  show-uncovered: true
+                  post-comment: false
+                  create-annotations: true
+                  annotation-type: warning
+                  fail-on-threshold: ${{ contains(github.event.pull_request.labels.*.name, 'Z-Skip-Coverage') && 'false' || 'true' }}
+                  fail-under: 80
+
+            - name: Check status of tests
+              if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+              run: exit 1

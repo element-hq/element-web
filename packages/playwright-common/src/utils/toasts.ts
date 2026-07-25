@@ -63,7 +63,7 @@ export async function getToastIfExists(page: Page, title: string, timeout = 2000
  * @param title - Expected title of the toast.
  */
 export async function acceptToast(page: Page, title: string): Promise<void> {
-    return await clickToastButton(page, title, "primary");
+    await clickToastButton(page, title, "primary");
 }
 
 /**
@@ -75,8 +75,10 @@ export async function acceptToast(page: Page, title: string): Promise<void> {
  * @public
  * @param page - Playwright page we are working with.
  * @param title - Expected title of the toast.
+ *
+ * @returns true if the toast was found and the button was clicked, or false if the toast was not found (always returns true if `required` is true).
  */
-export async function acceptToastIfExists(page: Page, title: string): Promise<void> {
+export async function acceptToastIfExists(page: Page, title: string): Promise<boolean> {
     return await clickToastButton(page, title, "primary", 2000, false);
 }
 
@@ -90,7 +92,7 @@ export async function acceptToastIfExists(page: Page, title: string): Promise<vo
  * @param title - Expected title of the toast.
  */
 export async function rejectToast(page: Page, title: string): Promise<void> {
-    return await clickToastButton(page, title, "secondary");
+    await clickToastButton(page, title, "secondary");
 }
 
 /**
@@ -102,9 +104,17 @@ export async function rejectToast(page: Page, title: string): Promise<void> {
  * @public
  * @param page - Playwright page we are working with.
  * @param title - Expected title of the toast.
+ * @param options.timeout - Time in ms before we give up and decide the toast does not exist.
+ *
+ * @returns true if the toast was found and the button was clicked, or false if the toast was not found (always returns true if `required` is true).
  */
-export async function rejectToastIfExists(page: Page, title: string): Promise<void> {
-    return await clickToastButton(page, title, "secondary", 2000, false);
+export async function rejectToastIfExists(
+    page: Page,
+    title: string,
+    options: { timeout?: number } = {},
+): Promise<boolean> {
+    const { timeout = 2000 } = options;
+    return await clickToastButton(page, title, "secondary", timeout, false);
 }
 
 /**
@@ -127,6 +137,7 @@ export async function rejectToastIfExists(page: Page, title: string): Promise<vo
  * @param required - If true, fail the test (throw an exception) if the
  *                   toast is not visible. Otherwise, just return after
  *                   `timeout` if the toast is not visible.
+ * @returns true if the toast was found and the button was clicked, or false if the toast was not found (always returns true if `required` is true).
  */
 async function clickToastButton(
     page: Page,
@@ -134,7 +145,7 @@ async function clickToastButton(
     button: "primary" | "secondary",
     timeout?: number,
     required = true,
-): Promise<void> {
+): Promise<boolean> {
     let toast: Locator | null;
     if (required) {
         toast = await getToast(page, title, timeout);
@@ -144,5 +155,7 @@ async function clickToastButton(
 
     if (toast) {
         await toast.locator(`.mx_Toast_buttons button[data-kind="${button}"]`).click();
+        return true;
     }
+    return false;
 }

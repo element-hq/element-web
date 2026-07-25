@@ -46,7 +46,9 @@
     background: none;
     border: none;
     height: max-content;
-    padding: 0;
+    /* Keep the inward focus ring off the text while preserving the legacy 9px text gap. */
+    margin-inline-start: calc(9px - var(--cpd-space-0-5x));
+    padding: 0 var(--cpd-space-0-5x);
     cursor: pointer;
     font-family: inherit;
     font-weight: inherit;
@@ -85,8 +87,10 @@
     text-align: inherit;
 }
 
-.editedMarker:focus-visible,
-.bodyAction:focus-visible,
+.editedMarker:focus-visible {
+    border-radius: var(--cpd-space-0-5x);
+}
+
 .emoteSender:focus-visible {
     outline: 2px solid var(--cpd-color-border-focused);
     outline-offset: 2px;

@@ -6,6 +6,7 @@
  */
 
 import { type Page } from "@playwright/test";
+import { closeReleaseAnnouncement, rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { expect, test } from "../../../element-web-test";
 import { type Bot } from "../../../pages/bot";
@@ -15,7 +16,6 @@ import { getRoomList } from "./utils";
 test.describe("Room list", () => {
     test.use({
         displayName: "Alice",
-        labsFlags: ["feature_new_room_list"],
         botCreateOpts: {
             displayName: "BotBob",
         },
@@ -23,8 +23,11 @@ test.describe("Room list", () => {
 
     test.beforeEach(async ({ page, app, user }) => {
         // The toasts are displayed above the search section
-        await app.closeVerifyToast();
-        await app.closeNotificationToast();
+        await rejectToast(page, "Verify this device");
+        await rejectToast(page, "Notifications");
+
+        // Close the release announcement about the new room list sections
+        await closeReleaseAnnouncement(page, "Introducing Sections");
 
         // focus the user menu to avoid to have hover decoration
         await page.getByRole("button", { name: "User menu" }).focus();
@@ -70,11 +73,11 @@ test.describe("Room list", () => {
 
         test("should open the more options menu", { tag: "@screenshot" }, async ({ page, app, user }) => {
             const roomListView = getRoomList(page);
-            const roomItem = roomListView.getByRole("option", { name: "Open room room29" });
+            let roomItem = roomListView.getByRole("option", { name: "Open room room29" });
             await roomItem.hover();
 
             await expect(roomItem).toMatchScreenshot("room-list-item-hover.png");
-            const roomItemMenu = roomItem.getByRole("button", { name: "More Options" });
+            let roomItemMenu = roomItem.getByRole("button", { name: "More Options" });
             await roomItemMenu.click();
             await expect(page).toMatchScreenshot("room-list-item-open-more-options.png");
 
@@ -82,7 +85,9 @@ test.describe("Room list", () => {
             await page.getByRole("menuitemcheckbox", { name: "Favourited" }).click();
 
             // Check that the room is favourited
+            roomItem = roomListView.getByRole("gridcell", { name: "Open room room29" });
             await roomItem.hover();
+            roomItemMenu = roomItem.getByRole("button", { name: "More Options" });
             await roomItemMenu.click();
             await expect(page.getByRole("menuitemcheckbox", { name: "Favourited" })).toBeChecked();
             // It should show the invite dialog
@@ -252,6 +257,40 @@ test.describe("Room list", () => {
                 await expect(notificationButton).toBeFocused();
             });
 
+            test("should reveal the options menu when a room is focused with the keyboard", async ({
+                page,
+                app,
+                user,
+            }) => {
+                // Regression test: navigating the room list with the keyboard must reveal a room's hover
+                // menu so the "More options" button is reachable by Tab, rather than focus escaping to
+                // <body>. The reveal must depend on keyboard focus alone, so we move focus with the
+                // keyboard to an adjacent room the pointer is NOT over — otherwise :hover would reveal
+                // the menu and mask the behaviour (which is why the other keyboard tests don't catch it).
+                const roomListView = getRoomList(page);
+                const room29 = roomListView.getByRole("option", { name: "Open room room29" });
+                const room28 = roomListView.getByRole("option", { name: "Open room room28" });
+                const moreButton = room28.getByRole("button", { name: "More options" });
+
+                // Open the room, then put focus back on the room list item.
+                await room29.click();
+                await room29.click();
+                await expect(room29).toBeFocused();
+
+                // Keyboard-focus the adjacent room (the pointer is still over room29, not room28), so the
+                // menu's visibility depends purely on keyboard focus and not on :hover.
+                await page.keyboard.press("ArrowDown");
+                await expect(room28).toBeFocused();
+
+                // The "More options" button must be revealed and reachable by Tab.
+                await page.keyboard.press("Tab");
+                await expect(moreButton).toBeFocused();
+
+                // TODO: once menu-close focus restoration is fixed, extend this to open the menu
+                // (Enter) and assert that Escape returns focus to a room list item rather than <body>.
+                // Today that focus restoration is broken, so it isn't asserted here.
+            });
+
             test("should navigate to the top and then bottom of the room list", async ({ page, app, user }) => {
                 const roomListView = getRoomList(page);
 
@@ -275,7 +314,7 @@ test.describe("Room list", () => {
     });
 
     test.describe("Avatar decoration", () => {
-        test.use({ labsFlags: ["feature_video_rooms", "feature_new_room_list"] });
+        test.use({ labsFlags: ["feature_video_rooms"] });
 
         test("should be a public room", { tag: "@screenshot" }, async ({ page, app, user }) => {
             // @ts-ignore Visibility enum is not accessible
@@ -295,13 +334,14 @@ test.describe("Room list", () => {
             // @ts-ignore Visibility enum is not accessible
             await app.client.createRoom({ name: "low priority room", visibility: "public" });
             const roomListView = getRoomList(page);
-            const publicRoom = roomListView.getByRole("option", { name: "low priority room" });
+            let publicRoom = roomListView.getByRole("option", { name: "low priority room" });
 
             // Make room low priority
             await publicRoom.click({ button: "right" });
             await page.getByRole("menuitemcheckbox", { name: "Low priority" }).click();
 
             // Should have low priority decoration
+            publicRoom = roomListView.getByRole("gridcell", { name: "low priority room" });
             await expect(publicRoom.locator(".mx_RoomAvatarView_icon")).toHaveAccessibleName(
                 "This is a low priority room",
             );
@@ -448,7 +488,7 @@ test.describe("Room list", () => {
 
             await app.viewRoomById(roomId);
             await app.settings.openRoomSettings("Notifications");
-            await page.getByText("@mentions & keywords").click();
+            await page.getByText("@mentions and replies only").click();
             await app.settings.closeDialog();
 
             await app.settings.openUserSettings("Notifications");
@@ -492,7 +532,7 @@ test.describe("Room list", () => {
 
             await app.viewRoomById(roomId);
             await app.settings.openRoomSettings("Notifications");
-            await page.getByText("Off").click();
+            await page.getByText("Mute").click();
             await app.settings.closeDialog();
 
             const room = roomListView.getByRole("option", { name: "silent" });

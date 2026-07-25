@@ -6,8 +6,9 @@
  */
 
 import { BaseViewModel, type UserMenuSnapshot, type UserMenuViewActions } from "@element-hq/web-shared-components";
+import { logger } from "matrix-js-sdk/src/logger";
 
-import { OwnProfileStore } from "../../stores/OwnProfileStore";
+import { type OwnProfileStore } from "../../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import type { MatrixDispatcher } from "../../dispatcher/dispatcher";
 import Modal from "../../Modal";
@@ -18,21 +19,37 @@ import { shouldShowFeedback } from "../../utils/Feedback";
 import { getHomePageUrl } from "../../utils/pages";
 import SdkConfig from "../../SdkConfig";
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { clearUserStatus } from "../../utils/userStatus";
+import { type SetStatusViewModel, UserMenuSetStatusViewModel } from "../status/SetStatusViewModel";
+import SettingsStore from "../../settings/SettingsStore";
 
 // Matches maximum size of an avatar in the UserMenu
 const AVATAR_PX = 88;
 
-export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined> implements UserMenuViewActions {
+interface UserMenuViewModelProps {
+    ownProfileStore: OwnProfileStore;
+}
+
+export class UserMenuViewModel
+    extends BaseViewModel<UserMenuSnapshot, UserMenuViewModelProps>
+    implements UserMenuViewActions
+{
+    public readonly setStatusVm: SetStatusViewModel;
     private static computeSnapshot(
         client: MatrixClient,
+        ownProfileStore: OwnProfileStore,
         isPanelCollapsed: boolean,
-        accountManagementEndpoint?: string,
     ): UserMenuSnapshot {
         const hasHomePage = !!getHomePageUrl(SdkConfig.get(), client);
         const isAuthenticated = !client.isGuest();
         const userId = client.getSafeUserId();
-        const displayName = OwnProfileStore.instance.displayName || userId;
-        const avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(AVATAR_PX) ?? undefined;
+        const displayName = ownProfileStore.displayName || userId;
+        const avatarUrl = ownProfileStore.getHttpAvatarUrl(AVATAR_PX) ?? undefined;
+
+        const setStatusViewModel = new UserMenuSetStatusViewModel({
+            client,
+            ownProfileStore,
+        });
 
         return {
             open: false,
@@ -40,8 +57,11 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
             displayName,
             avatarUrl,
             expanded: !isPanelCollapsed,
-            manageAccountHref: accountManagementEndpoint,
+            manageAccountHref: undefined, // loaded async
             showAvatar: isAuthenticated,
+            userStatus: ownProfileStore.userStatus,
+            showUserStatus: SettingsStore.getValue("feature_user_status") && isAuthenticated,
+            setStatusViewModel,
             actions: {
                 createAccount: !isAuthenticated,
                 signIn: !isAuthenticated,
@@ -55,24 +75,28 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
     }
 
     public constructor(
+        props: UserMenuViewModelProps,
         private readonly dispatcher: MatrixDispatcher,
-        client: MatrixClient,
+        private readonly client: MatrixClient,
         isPanelCollapsed: boolean,
-        accountManagementEndpoint?: string,
     ) {
-        super(undefined, UserMenuViewModel.computeSnapshot(client, isPanelCollapsed, accountManagementEndpoint));
-        OwnProfileStore.instance.on(UPDATE_EVENT, this.recalculateProfile);
+        super(props, UserMenuViewModel.computeSnapshot(client, props.ownProfileStore, isPanelCollapsed));
+        this.setStatusVm = new UserMenuSetStatusViewModel({ client, ownProfileStore: props.ownProfileStore });
+        props.ownProfileStore.on(UPDATE_EVENT, this.recalculateProfile);
+        this.loadAuthMetadata();
     }
 
     public dispose(): void {
-        OwnProfileStore.instance.off(UPDATE_EVENT, this.recalculateProfile);
+        this.props.ownProfileStore.off(UPDATE_EVENT, this.recalculateProfile);
+        this.setStatusVm.dispose();
         super.dispose();
     }
 
     public readonly recalculateProfile = (): void => {
-        const displayName = OwnProfileStore.instance.displayName || this.snapshot.current.userId;
-        const avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(AVATAR_PX) ?? undefined;
-        this.snapshot.merge({ displayName, avatarUrl });
+        const displayName = this.props.ownProfileStore.displayName || this.snapshot.current.userId;
+        const avatarUrl = this.props.ownProfileStore.getHttpAvatarUrl(AVATAR_PX) ?? undefined;
+        const userStatus = this.props.ownProfileStore.userStatus;
+        this.snapshot.merge({ displayName, avatarUrl, userStatus });
     };
 
     public readonly setOpen = (isOpen: boolean): void => {
@@ -126,4 +150,16 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
             action: Action.ViewUserSettings,
         });
     };
+
+    public readonly clearStatus = (): void => {
+        this.setOpen(false);
+        clearUserStatus(this.client).catch((err) => {
+            logger.warn("Failed to clear user status", err);
+        });
+    };
+
+    private async loadAuthMetadata(): Promise<void> {
+        const authMetadata = await this.client.getAuthMetadata().catch(() => {});
+        this.snapshot.merge({ manageAccountHref: authMetadata?.account_management_uri });
+    }
 }

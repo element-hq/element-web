@@ -35,7 +35,10 @@ test.describe("Event List Summary", () => {
             ).toBeVisible();
 
             await replaceBotIds(page, bot);
-            await expect(page.locator(".mx_MainSplit")).toMatchScreenshot("bot_joined_the_room.png", ignoreTimestamps);
+            await expect(page.locator(".mx_RoomView_timeline")).toMatchScreenshot(
+                "bot_joined_the_room.png",
+                ignoreTimestamps,
+            );
         },
     );
 
@@ -67,7 +70,10 @@ test.describe("Event List Summary", () => {
             ).toBeVisible();
 
             await replaceBotIds(page, bot);
-            await expect(page.locator(".mx_MainSplit")).toMatchScreenshot("bot_was_banned.png", ignoreTimestamps);
+            await expect(page.locator(".mx_RoomView_timeline")).toMatchScreenshot(
+                "bot_was_banned.png",
+                ignoreTimestamps,
+            );
         },
     );
 
@@ -98,7 +104,7 @@ test.describe("Event List Summary", () => {
             ).toBeVisible();
 
             await replaceBotIds(page, bot);
-            await expect(page.locator(".mx_MainSplit")).toMatchScreenshot(
+            await expect(page.locator(".mx_RoomView_timeline")).toMatchScreenshot(
                 "multiple_join_leave_messages.png",
                 ignoreTimestamps,
             );
@@ -133,7 +139,7 @@ test.describe("Event List Summary", () => {
             ).toBeVisible();
 
             await replaceBotIds(page, bot);
-            await expect(page.locator(".mx_MainSplit")).toMatchScreenshot(
+            await expect(page.locator(".mx_RoomView_timeline")).toMatchScreenshot(
                 "multiple_join_ban_messages.png",
                 ignoreTimestamps,
             );
@@ -180,7 +186,7 @@ test.describe("Event List Summary", () => {
             await expect(page.locator('div[aria-label="3 members"]')).toBeVisible();
 
             await replaceBotIds(page, bot, bot2);
-            await expect(page.locator(".mx_MainSplit")).toMatchScreenshot(
+            await expect(page.locator(".mx_RoomView_timeline")).toMatchScreenshot(
                 "multiple_people_join_leave_messages.png",
                 ignoreTimestampsRightColumnAndHeader,
             );
@@ -202,7 +208,7 @@ test.describe("Event List Summary", () => {
             ).toBeVisible();
 
             await replaceBotIds(page, bot, bot2);
-            await expect(page.locator(".mx_MainSplit")).toMatchScreenshot(
+            await expect(page.locator(".mx_RoomView_timeline")).toMatchScreenshot(
                 "multiple_people_join_leave_messages_expanded.png",
                 ignoreTimestampsRightColumnAndHeader,
             );
@@ -250,7 +256,7 @@ test.describe("Event List Summary", () => {
             await expect(page.locator('div[aria-label="3 members"]')).toBeVisible();
 
             await replaceBotIds(page, bot, bot2);
-            await expect(page.locator(".mx_MainSplit")).toMatchScreenshot(
+            await expect(page.locator(".mx_RoomView_timeline")).toMatchScreenshot(
                 "multiple_people_ban_messages.png",
                 ignoreTimestampsRightColumnAndHeader,
             );
@@ -272,7 +278,7 @@ test.describe("Event List Summary", () => {
             ).toBeVisible();
 
             await replaceBotIds(page, bot, bot2);
-            await expect(page.locator(".mx_MainSplit")).toMatchScreenshot(
+            await expect(page.locator(".mx_RoomView_timeline")).toMatchScreenshot(
                 "multiple_people_ban_messages_expanded.png",
                 ignoreTimestampsRightColumnAndHeader,
             );

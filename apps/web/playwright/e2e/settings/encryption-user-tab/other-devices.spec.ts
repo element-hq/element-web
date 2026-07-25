@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { createNewInstance } from "@element-hq/element-web-playwright-common";
+import { createNewInstance, rejectToast } from "@element-hq/element-web-playwright-common";
 import { type StartedHomeserverContainer } from "@element-hq/element-web-playwright-common/lib/testcontainers";
 import { type Page, type Browser, type TestInfo } from "@playwright/test";
 
@@ -99,7 +99,7 @@ test.describe("Other people's devices section in Encryption tab", () => {
 
         // Create the room and invite bob
         await inviteBobToNewRoom(alicePage, aliceElementApp, bobCredentials, bobPage);
-        await bobElementApp.closeNotificationToast();
+        await rejectToast(alicePage, "Notifications");
 
         // Perform verification.
         await verifyApp("alice", aliceElementApp, "bob", bobElementApp);

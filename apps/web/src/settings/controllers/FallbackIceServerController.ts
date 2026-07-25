@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 import { ClientEvent, type IClientWellKnown, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { type SettingLevel } from "../SettingLevel";
-import SettingsStore from "../SettingsStore.ts";
 import MatrixClientBackedController from "./MatrixClientBackedController.ts";
 
 /**
@@ -47,6 +46,6 @@ export default class FallbackIceServerController extends MatrixClientBackedContr
     }
 
     public onChange(_level: SettingLevel, _roomId: string | null, _newValue: any): void {
-        this.client?.setFallbackICEServerAllowed(!!SettingsStore.getValue("fallbackICEServerAllowed"));
+        this.client?.setFallbackICEServerAllowed(!!this.settingsStore.getValue("fallbackICEServerAllowed"));
     }
 }

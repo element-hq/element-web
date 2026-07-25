@@ -9,12 +9,11 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type Dispatch } from "react";
 import { DATA_BY_CATEGORY, getEmojiFromUnicode, type Emoji as IEmoji } from "@matrix-org/emojibase-bindings";
-import { clamp } from "@element-hq/web-shared-components";
 import classNames from "classnames";
+import { AutoHideScrollbar } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import * as recent from "../../../emojipicker/recent";
-import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import Header from "./Header";
 import Search from "./Search";
 import Preview from "./Preview";
@@ -24,15 +23,12 @@ import { filterBoolean } from "../../../utils/arrays";
 import {
     type IAction as RovingAction,
     type IState as RovingState,
-    RovingTabIndexProvider,
+    RovingGridIndexProvider,
     RovingStateActionType,
 } from "../../../accessibility/RovingTabIndex";
 import { Key } from "../../../Keyboard";
 import { type ButtonEvent } from "../elements/AccessibleButton";
-
-export const CATEGORY_HEADER_HEIGHT = 20;
-export const EMOJI_HEIGHT = 35;
-export const EMOJIS_PER_ROW = 8;
+import { CATEGORY_HEADER_HEIGHT, EMOJI_HEIGHT, EMOJIS_PER_ROW } from "./config";
 
 const ZERO_WIDTH_JOINER = "\u200D";
 
@@ -60,7 +56,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
     private readonly memoizedDataByCategory: Record<CategoryKey, IEmoji[]>;
     private readonly categories: ICategory[];
 
-    private scrollRef = React.createRef<AutoHideScrollbar<"div">>();
+    private scrollElement: HTMLDivElement | null = null;
 
     public constructor(props: IProps) {
         super(props);
@@ -116,7 +112,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
     }
 
     private onScroll = (): void => {
-        const body = this.scrollRef.current?.containerRef.current;
+        const body = this.scrollElement;
         if (!body) return;
         this.setState({
             scrollTop: body.scrollTop,
@@ -126,83 +122,20 @@ class EmojiPicker extends React.Component<IProps, IState> {
     };
 
     // Given a roving emoji button returns the role=row element containing it
-    private getRow(rovingNode?: Element): Element | undefined {
+    private readonly getRow = (rovingNode?: Element): Element | undefined => {
         return this.getGridcell(rovingNode)?.parentElement ?? undefined;
-    }
+    };
 
     // Given a roving emoji button returns the role=gridcell element containing it
-    private getGridcell(rovingNode?: Element): Element | undefined {
+    private readonly getGridcell = (rovingNode?: Element): Element | undefined => {
         return rovingNode?.parentElement ?? undefined;
-    }
+    };
 
     // Given a role=gridcell node returns the roving emoji button contained within
-    private getRovingNode(gridcellNode?: Element): Element | undefined {
-        return gridcellNode?.children[0];
-    }
-
-    private keyboardNavigation(ev: React.KeyboardEvent, state: RovingState, dispatch: Dispatch<RovingAction>): void {
-        const rowElement = this.getRow(state.activeNode);
-        const gridcellNode = this.getGridcell(state.activeNode);
-        if (!rowElement || !gridcellNode || !state.activeNode) return;
-
-        // Index of element within row container
-        const columnIndex = Array.from(rowElement.children).indexOf(gridcellNode);
-        // Index of element within the list of roving nodes
-        const refIndex = state.nodes.indexOf(state.activeNode);
-
-        let focusNode: HTMLElement | undefined;
-        let newRowElement: Element | undefined;
-        switch (ev.key) {
-            case Key.ARROW_LEFT:
-                focusNode = state.nodes[refIndex - 1];
-                newRowElement = this.getRow(focusNode);
-                break;
-
-            case Key.ARROW_RIGHT:
-                focusNode = state.nodes[refIndex + 1];
-                newRowElement = this.getRow(focusNode);
-                break;
-
-            case Key.ARROW_UP:
-            case Key.ARROW_DOWN: {
-                // For up/down we find the prev/next parent by inspecting the refs either side of our row
-                const node =
-                    ev.key === Key.ARROW_UP
-                        ? state.nodes[refIndex - columnIndex - 1]
-                        : state.nodes[refIndex - columnIndex + EMOJIS_PER_ROW];
-                newRowElement = this.getRow(node);
-                if (newRowElement) {
-                    const newColumnIndex = clamp(columnIndex, 0, newRowElement.children.length - 1);
-                    const newTarget = this.getRovingNode(newRowElement?.children[newColumnIndex]);
-                    focusNode = state.nodes.find((r) => r === newTarget);
-                }
-                break;
-            }
-        }
-
-        if (focusNode) {
-            // Only move actual DOM focus if an emoji already has focus
-            // If the input has focus, keep using aria-activedescendant for virtual focus
-            if (document.activeElement !== document.querySelector(".mx_EmojiPicker_search input")) {
-                focusNode?.focus();
-            }
-            dispatch({
-                type: RovingStateActionType.SetFocus,
-                payload: { node: focusNode },
-            });
-
-            if (rowElement !== newRowElement) {
-                focusNode?.scrollIntoView({
-                    behavior: "auto",
-                    block: "center",
-                    inline: "center",
-                });
-            }
-        }
-
-        ev.preventDefault();
-        ev.stopPropagation();
-    }
+    private readonly getRovingNode = (gridcellNode: Element): HTMLElement | undefined => {
+        const node = gridcellNode.children[0];
+        return node instanceof HTMLElement ? node : undefined;
+    };
 
     private onKeyDown = (ev: React.KeyboardEvent, state: RovingState, dispatch: Dispatch<RovingAction>): void => {
         if (state.activeNode && [Key.ARROW_DOWN, Key.ARROW_RIGHT, Key.ARROW_LEFT, Key.ARROW_UP].includes(ev.key)) {
@@ -220,12 +153,25 @@ class EmojiPicker extends React.Component<IProps, IState> {
                 ev.stopPropagation();
                 return;
             }
-            this.keyboardNavigation(ev, state, dispatch);
+        }
+    };
+
+    private readonly shouldMoveFocus = (): boolean => {
+        return document.activeElement !== document.querySelector(".mx_EmojiPicker_search input");
+    };
+
+    private readonly onGridNavigation = (ev: React.KeyboardEvent, focusNode: HTMLElement, state: RovingState): void => {
+        if (this.getRow(state.activeNode) !== this.getRow(focusNode)) {
+            focusNode.scrollIntoView({
+                behavior: "auto",
+                block: "center",
+                inline: "center",
+            });
         }
     };
 
     private updateVisibility = (): void => {
-        const body = this.scrollRef.current?.containerRef.current;
+        const body = this.scrollElement;
         if (!body) return;
         const rect = body.getBoundingClientRect();
         let firstVisibleFound = false;
@@ -264,9 +210,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
     };
 
     private scrollToCategory = (category: string): void => {
-        this.scrollRef.current?.containerRef.current
-            ?.querySelector(`[data-category-id="${category}"]`)
-            ?.scrollIntoView();
+        this.scrollElement?.querySelector(`[data-category-id="${category}"]`)?.scrollIntoView();
     };
 
     private onChangeFilter = (filter: string): void => {
@@ -344,9 +288,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
         // Only select emoji if highlight is shown
         if (!this.state.showHighlight) return;
 
-        const btn = this.scrollRef.current?.containerRef.current?.querySelector<HTMLButtonElement>(
-            '.mx_EmojiPicker_item_wrapper [tabindex="0"]',
-        );
+        const btn = this.scrollElement?.querySelector<HTMLButtonElement>('.mx_EmojiPicker_item_wrapper [tabindex="0"]');
         btn?.click();
         this.props.onFinished();
     };
@@ -381,7 +323,15 @@ class EmojiPicker extends React.Component<IProps, IState> {
 
     public render(): React.ReactNode {
         return (
-            <RovingTabIndexProvider onKeyDown={this.onKeyDown}>
+            <RovingGridIndexProvider
+                getGridCell={this.getGridcell}
+                getRow={this.getRow}
+                getRovingNode={this.getRovingNode}
+                handleInputFields
+                moveFocus={this.shouldMoveFocus}
+                onGridNavigation={this.onGridNavigation}
+                onKeyDown={this.onKeyDown}
+            >
                 {({ onKeyDownHandler }) => {
                     let heightBefore = 0;
                     return (
@@ -400,10 +350,12 @@ class EmojiPicker extends React.Component<IProps, IState> {
                             />
                             <AutoHideScrollbar
                                 id="mx_EmojiPicker_body"
-                                className={classNames("mx_EmojiPicker_body", {
+                                className={classNames("mx_AutoHideScrollbar mx_EmojiPicker_body", {
                                     mx_EmojiPicker_body_showHighlight: this.state.showHighlight,
                                 })}
-                                ref={this.scrollRef}
+                                wrappedRef={(ref) => {
+                                    this.scrollElement = ref;
+                                }}
                                 onScroll={this.onScroll}
                             >
                                 {this.categories.map((category) => {
@@ -440,7 +392,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
                         </section>
                     );
                 }}
-            </RovingTabIndexProvider>
+            </RovingGridIndexProvider>
         );
     }
 }

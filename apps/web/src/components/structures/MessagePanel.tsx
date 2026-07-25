@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, createRef, type ReactNode, type TransitionEventHandler } from "react";
+import React, { type JSX, createRef, type ReactNode, type TransitionEventHandler, useContext } from "react";
 import classNames from "classnames";
 import {
     type Room,
@@ -34,7 +34,6 @@ import { Layout } from "../../settings/enums/Layout";
 import EventTile, {
     type GetRelationsForEvent,
     type IReadReceiptProps,
-    isEligibleForSpecialReceipt,
     type UnwrappedEventTile,
 } from "../views/rooms/EventTile";
 import IRCTimelineProfileResizer from "../views/elements/IRCTimelineProfileResizer";
@@ -58,6 +57,8 @@ import { CreationGrouper } from "./grouper/CreationGrouper";
 import { _t } from "../../languageHandler";
 import { getLateEventInfo } from "./grouper/LateEventGrouper";
 import { DateSeparatorViewModel } from "../../viewmodels/room/timeline/DateSeparatorViewModel";
+import { isEligibleForSpecialReceipt } from "../../viewmodels/room/timeline/event-tile/EventTileReceiptState";
+import { SDKContext } from "../../contexts/SDKContext.ts";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = [EventType.Sticker, EventType.RoomMessage];
@@ -66,7 +67,10 @@ const continuedTypes = [EventType.Sticker, EventType.RoomMessage];
  * Creates and auto-disposes the DateSeparatorViewModel for message panel rendering.
  */
 function DateSeparatorWrapper({ roomId, ts }: { roomId: string; ts: number }): JSX.Element {
-    const vm = useCreateAutoDisposedViewModel(() => new DateSeparatorViewModel({ roomId, ts }));
+    const sdkContext = useContext(SDKContext);
+    const vm = useCreateAutoDisposedViewModel(
+        () => new DateSeparatorViewModel({ roomId, ts, roomViewStore: sdkContext.roomViewStore }),
+    );
     return <DateSeparatorView vm={vm} className="mx_TimelineSeparator" />;
 }
 

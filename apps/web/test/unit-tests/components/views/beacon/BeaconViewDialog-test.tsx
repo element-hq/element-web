@@ -101,9 +101,12 @@ describe("<BeaconViewDialog />", () => {
             lat: 51,
         });
         // marker added
-        await waitFor(() => {
-            expect(mockMarker.addTo).toHaveBeenCalledWith(mockMap);
-        });
+        await waitFor(
+            () => {
+                expect(mockMarker.addTo).toHaveBeenCalledWith(mockMap);
+            },
+            { timeout: 5000 },
+        );
     });
 
     it("does not render any own beacon status when user is not live sharing", () => {

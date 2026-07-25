@@ -9,7 +9,6 @@
             "other": "%(count)s mesazhe të palexuar, përfshi përmendje.",
             "one": "1 përmendje e palexuar."
         },
-        "room_name": "Dhoma %(name)s",
         "unread_messages": "Mesazhe të palexuar."
     },
     "a11y_jump_first_unread_room": "Hidhu te dhoma e parë e palexuar.",
@@ -17,7 +16,6 @@
         "accept": "Pranoje",
         "add": "Shtojeni",
         "add_existing_room": "Shtoni dhomë ekzistuese",
-        "add_people": "Shtoni njerëz",
         "apply": "Aplikoje",
         "approve": "Miratojeni",
         "back": "Mbrapsht",
@@ -48,7 +46,6 @@
         "enter_fullscreen": "Kalo në mënyrën “Sa krejt ekrani”",
         "exit_fullscreeen": "Dil nga mënyra “Sa krejt ekrani”",
         "expand": "Zgjeroje",
-        "explore_public_rooms": "Eksploroni dhoma publike",
         "explore_rooms": "Eksploroni dhoma",
         "export": "Eksporto",
         "forward": "Përcille",
@@ -60,8 +57,6 @@
         "ignore": "Shpërfille",
         "import": "Importo",
         "invite": "Ftoje",
-        "invite_to_space": "Ftoni në hapësirë",
-        "invites_list": "Ftesa",
         "join": "Hyni",
         "learn_more": "Mësoni më tepër",
         "leave": "Dilni",
@@ -86,7 +81,6 @@
         "rename": "Riemërtojeni",
         "reply": "Përgjigje",
         "reply_in_thread": "Përgjigjuni te rrjedha",
-        "report_content": "Raportoni Lëndë",
         "resend": "Ridërgoje",
         "reset": "Rikthe te parazgjedhjet",
         "resume": "Rimerre",
@@ -104,8 +98,6 @@
         "sign_out": "Dilni",
         "skip": "Anashkaloje",
         "start": "Nise",
-        "start_chat": "Filloni fjalosje",
-        "start_new_chat": "Filloni fjalosje të re",
         "stop": "Ndale",
         "submit": "Parashtroje",
         "subscribe": "Pajtohuni",
@@ -201,10 +193,7 @@
         "log_in_new_account": "<a>Bëni hyrjen</a> te llogaria juaj e re.",
         "logout_dialog": {
             "description": "Jeni i sigurt se doni të dilni?",
-            "megolm_export": "Eksporto dorazi kyçet",
             "setup_key_backup_title": "Do të humbni hyrje te mesazhet tuaj të fshehtëzuar",
-            "setup_secure_backup_description_1": "Mesazhet e fshehtëzuar sigurohen me fshehtëzim skaj-më-skaj. Vetëm ju dhe marrësi(t) kanë kyçet për të lexuar këto mesazhe.",
-            "setup_secure_backup_description_2": "Kur dilni nga llogaria, këto kyçe do të fshihen te kjo pajisje, që do të thotë se s’do të jeni në gjendje të lexoni mesazhe të fshehtëzuar, veç në paçi kyçet për ta në pajisjet tuaja të tjera, ose të kopjeruajtur te shërbyesi.",
             "skip_key_backup": "Nuk i dua mesazhet e mia të fshehtëzuar"
         },
         "misconfigured_body": "Kërkojini përgjegjësit të %(brand)s-it tuaj të kontrollojë <a>formësimin tuaj</a> për zëra të pasaktë ose të përsëdytur.",
@@ -412,7 +401,6 @@
         "email_address": "Adresë email",
         "encrypted": "I fshehtëzuar",
         "error": "Gabim",
-        "favourites": "Të parapëlqyer",
         "feedback": "Mendime",
         "filter_results": "Filtroni përfundimet",
         "forward_message": "Përcille mesazhin",
@@ -420,7 +408,6 @@
         "go_to_settings": "Kalo te Rregullimet",
         "guest": "Mysafir",
         "help": "Ndihmë",
-        "historical": "Të dikurshme",
         "home": "Kreu",
         "homeserver": "Shërbyes Home",
         "identity_server": "Shërbyes identitetesh",
@@ -431,7 +418,6 @@
         "light": "E çelët",
         "loading": "Po ngarkohet…",
         "location": "Vendndodhje",
-        "low_priority": "Me përparësi të ulët",
         "message": "Mesazh",
         "message_layout": "Skemë mesazhesh",
         "microphone": "Mikrofon",
@@ -485,7 +471,6 @@
         "success": "Sukses",
         "suggestions": "Sugjerime",
         "support": "Asistencë",
-        "system_alerts": "Sinjalizime Sistemi",
         "theme": "Temë",
         "thread": "Rrjedhë",
         "threads": "Rrjedha",
@@ -787,17 +772,6 @@
             "warning": "Nëse metodën e re të rimarrjeve s’e keni hequr ju, dikush mund të jetë duke u rrekur të hyjë në llogarinë tuaj. Ndryshoni menjëherë fjalëkalimin e llogarisë tuaj, te Rregullimet, dhe caktoni një metodë të re rimarrjesh."
         },
         "set_up_toast_title": "Ujdisni Kopjeruajtje të Sigurt",
-        "setup_secure_backup": {
-            "explainer": "Kopjeruajini kyçet tuaj, përpara se të dilni, që të shmangni humbjen e tyre."
-        },
-        "udd": {
-            "interactive_verification_button": "Verifikojeni në mënyrë ndërvepruese përmes emoji-sh",
-            "other_ask_verify_text": "Kërkojini këtij përdoruesi të verifikojë sesionin e vet, ose ta verifikojë më poshtë dorazi.",
-            "other_new_session_text": "%(name)s (%(userId)s) bëri hyrjen në një sesion të ri pa e verifikuar:",
-            "own_ask_verify_text": "Verifikoni sesionit tuaj tjetër duke përdorur një nga mundësitë më poshtë.",
-            "own_new_session_text": "Bëtë hyrjen në një sesion të ri pa e verifikuar:",
-            "title": "Jo e Besuar"
-        },
         "unable_to_setup_keys_error": "S’arrihet të ujdisen kyçe",
         "verification": {
             "accepting": "Po pranohet…",
@@ -1201,7 +1175,6 @@
         "experimental_description": "Ndiheni eksperimentues? Provoni idetë tona më të reja në zhvillim. Këto veçori s’janë të përfunduara; mund të jenë të paqëndrueshme, mund të ndryshojnë, ose mund të braktisen faqe. <a>Mësoni më tepër</a>.",
         "experimental_section": "Paraparje të hershme",
         "feature_wysiwyg_composer_description": "Përdor tekst të pasur, në vend se Markdown, te hartuesi i mesazheve.",
-        "group_calls": "Punim i ri i thirrjeev në grup",
         "group_developer": "Zhvillues",
         "group_encryption": "Fshehtëzim",
         "group_experimental": "Eksperimentale",
@@ -1215,7 +1188,6 @@
         "group_voip": "Zë & Video",
         "group_widgets": "Widget-e",
         "hidebold": "Fshihe pikën e njoftimeve (shfaq vetëm stema numëratorësh)",
-        "html_topic": "Shfaq paraqitje HTML të temave të dhomave",
         "join_beta": "Merrni pjesë te beta",
         "join_beta_reload": "Pjesëmarrja në beta do të sjellë ringarkim të %(brand)s.",
         "jump_to_date": "Kalo te datë (shton /jumptodate dhe kalon te krye date)",
@@ -1227,12 +1199,9 @@
         "location_share_live_description": "Sendërtim i përkohshëm. Vendndodhjet mbeten te historiku i dhomës.",
         "mjolnir": "Rrugë të reja për të shpërfillur njerëz",
         "msc3531_hide_messages_pending_moderation": "Lejoni moderatorët të fshehin mesazhe në pritje të moderimit.",
-        "report_to_moderators": "Raportojeni te moderatorët",
-        "report_to_moderators_description": "Në dhoma që mbulojnë moderimin, butoni “Raportojeni” do t’ju lejojë t’u raportoni abuzim moderatorëve të dhomës.",
         "sliding_sync_description": "Nën zhvillim aktiv, s’mund të çaktivizohet.",
         "sliding_sync_disabled_notice": "Që të çaktivizohet, dilni dhe rihyni në llogari",
         "sliding_sync_server_no_support": "Shërbyesit tuaj i mungon mbulim i brendshëm për këtë",
-        "under_active_development": "Nën zhvillim aktiv.",
         "video_rooms": "Dhoma me video",
         "video_rooms_a_new_way_to_chat": "Një rrugë e re për të biseduar me zë dhe video në %(brand)s.",
         "video_rooms_always_on_voip_channels": "Në %(brand)s, dhomat video janë kanale VoIP përherë-hapur, trupëzuar brenda një dhome.",
@@ -1283,9 +1252,6 @@
         "leave_space_question": "Jeni i sigurt se doni të dilni nga hapësira '%(spaceName)s'?",
         "room_rejoin_warning": "Kjo dhomë s’është publike. S’do të jeni në gjendje të rihyni në të pa një ftesë.",
         "space_rejoin_warning": "Kjo hapësirë s’është publike. S’do të jeni në gjendje të rihyni në të pa një ftesë."
-    },
-    "left_panel": {
-        "open_dial_pad": "Hap butona numrash"
     },
     "lightbox": {
         "rotate_left": "Rrotulloje Majtas",
@@ -1453,7 +1419,6 @@
     },
     "quick_settings": {
         "all_settings": "Krejt rregullimet",
-        "metaspace_section": "Fiksoje në anështyllë",
         "sidebar_settings": "Më tepër mundësi",
         "title": "Rregullime të shpejta"
     },
@@ -1469,22 +1434,10 @@
     },
     "report_content": {
         "description": "Raportimi i këtij mesazhi do të shkaktojë dërgimin e 'ID-së së aktit' unike te përgjegjësi i shërbyesit tuaj Home. Nëse mesazhet në këtë dhomë fshehtëzohen, përgjegjësi i shërbyesit tuaj Home s’do të jetë në gjendje të lexojë tekstin e mesazhit apo të shohë çfarëdo kartelë apo figurë.",
-        "disagree": "S’pajtohem",
         "hide_messages_from_user": "I vini shenjë, nëse doni të fshihen krejt mesazhet e tanishme dhe të ardhshme nga ky përdorues.",
         "ignore_user": "Shpërfille përdoruesin",
-        "illegal_content": "Lëndë e Paligjshme",
         "missing_reason": "Ju lutemi, plotësoni arsyen pse po raportoni.",
-        "nature": "Ju lutemi, zgjidhni një karakterizim dhe përshkruani se ç’e bën këtë mesazh abuziv.",
-        "nature_disagreement": "Ajo ç’shkruan ky përdorues është gabim.\nKjo do t’u njoftohet përgjegjësve të dhomës.",
-        "nature_illegal": "Ky përdorues shfaq sjellje të paligjshme, bie fjala, duke zbuluar identitet personash ose duke kërcënuar me dhunë.\nKjo do t’u njoftohet përgjegjësve të dhomës, të cilët mund ta përshkallëzojnë punën drejt autoriteteve ligjore.",
-        "nature_other": "Çfarëdo arsye tjetër. Ju lutemi, përshkruani problemin.\nKjo do t’u raportohet moderatorëve të dhomës.",
-        "nature_spam": "Ky përdorues dërgon në dhomë reklama të padëshiruara, lidhje për te reklama të tilla ose te propagandë e padëshiruar.\nKjo do t’u njoftohet përgjegjësve të dhomës.",
-        "nature_toxic": "Ky përdorues po tregon sjellje toksike, bie fjala, duke fyer përdorues të tjerë ose duke dhënë lëndë vetëm për të rritur në një dhomë të menduar për familje, ose duke shkelur në mënyra të tjera rregullat e kësaj dhome.\nKjo do t’u njoftohet moderatorëve të dhomës.",
-        "other_label": "Tjetër",
-        "report_content_to_homeserver": "Raportoni Lëndë te Përgjegjësi i Shërbyesit Tuaj Home",
-        "report_entire_room": "Raporto krejt dhomën",
-        "spam_or_propaganda": "Mesazh i padëshiruar ose propagandë",
-        "toxic_behaviour": "Sjellje Toksike"
+        "report_content_to_homeserver": "Raportoni Lëndë te Përgjegjësi i Shërbyesit Tuaj Home"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "S’u arrit të shfshehtëzohet sesioni %(failedCount)s!",
@@ -1693,36 +1646,12 @@
         "waiting_for_join_title": "Po pritet që përdorues të vijnë në %(brand)s"
     },
     "room_list": {
-        "add_room_label": "Shtoni dhomë",
         "add_space_label": "Shtoni hapësirë",
-        "breadcrumbs_empty": "S’ka dhoma të vizituara së fundi",
-        "breadcrumbs_label": "Dhoma të vizituara së fundi",
         "failed_add_tag": "S’u arrit të shtohej në dhomë etiketa %(tagName)s",
         "failed_remove_tag": "S’u arrit të hiqej etiketa %(tagName)s nga dhoma",
         "failed_set_dm_tag": "S’u arrit të caktohej etiketa e fjalosjes së drejtpërdrejtë",
-        "home_menu_label": "Mundësi kreu",
-        "join_public_room_label": "Hyni në dhomë publike",
-        "joining_rooms_status": {
-            "one": "Aktualisht duke hyrë në %(count)s dhomë",
-            "other": "Aktualisht duke hyrë në %(count)s dhoma"
-        },
         "notification_options": "Mundësi njoftimesh",
-        "redacting_messages_status": {
-            "one": "Aktualisht po hiqen mesazhe në %(count)s dhomë",
-            "other": "Aktualisht po hiqen mesazhe në %(count)s dhoma"
-        },
-        "show_less": "Shfaq më pak",
-        "show_n_more": {
-            "other": "Shfaq %(count)s të tjera",
-            "one": "Shfaq %(count)s tjetër"
-        },
-        "show_previews": "Shfaq paraparje mesazhesh",
-        "sort_by": "Renditi sipas",
-        "sort_by_activity": "Veprimtari",
-        "sort_unread_first": "Së pari shfaq dhoma me mesazhe të palexuar",
-        "space_menu_label": "Menu %(spaceName)s",
-        "sublist_options": "Mundësi liste",
-        "suggested_rooms_heading": "Roma të Këshilluara"
+        "show_less": "Shfaq më pak"
     },
     "room_settings": {
         "access": {
@@ -2231,7 +2160,6 @@
         "send_read_receipts_unsupported": "Shërbyesi juaj nuk mbulon çaktivizimin e dërgimit të dëftesave të leximit.",
         "send_typing_notifications": "Dërgo njoftime shtypjesh",
         "sessions": {
-            "browser": "Shfletues",
             "confirm_sign_out": {
                 "one": "Ripohoni daljen nga kjo pajisje",
                 "other": "Ripohoni daljen nga këto pajisje"
@@ -2279,7 +2207,6 @@
             "no_sessions": "S’u gjetën sesione.",
             "no_unverified_sessions": "S’u gjetën sesione të paverifikuar.",
             "no_verified_sessions": "S’u gjetën sesione të verifikuar.",
-            "os": "Sistem operativ",
             "other_sessions_heading": "Sesione të tjerë",
             "push_heading": "Njoftime Push",
             "push_subheading": "Merrni njoftime push për këtë sesion.",
@@ -2334,13 +2261,11 @@
         "show_stickers_button": "Shfaq buton ngjitësish",
         "show_typing_notifications": "Shfaq njoftime shtypjeje",
         "sidebar": {
-            "metaspaces_favourites_description": "Gruponi në një vend krejt dhomat tuaja të parapëlqyera dhe personat e parapëlqyer.",
             "metaspaces_home_all_rooms": "Shfaq krejt dhomat",
             "metaspaces_home_all_rooms_description": "Shfaqni krejt dhomat tuaja te Kreu, edhe nëse gjenden në një hapësirë.",
             "metaspaces_home_description": "Kreu është i dobishëm për të pasur një përmbledhje të gjithçkaje.",
             "metaspaces_orphans": "Dhoma jashtë një hapësire",
             "metaspaces_orphans_description": "Gruponi në një vend krejt dhomat tuaja që s’janë pjesë e një hapësire.",
-            "metaspaces_people_description": "Gruponi krejt personat tuaj në një vend.",
             "metaspaces_subsection": "Hapësira për shfaqje",
             "title": "Anështyllë"
         },
@@ -2356,7 +2281,6 @@
             "audio_output": "Sinjal Audio",
             "audio_output_empty": "S’u pikasën Sinjale Audio Në Dalje",
             "auto_gain_control": "Kontroll i automatizuar gain-i",
-            "connection_section": "Lidhje",
             "echo_cancellation": "Anulim jehonash",
             "enable_fallback_ice_server_description": "Vlen vetëm nëse shërbyes juaj Home nuk ofron një të tillë. Adresa juaj IP mund t’u zbulohet të tjerëve gjatë thirrjes.",
             "mirror_local_feed": "Pasqyro prurje vendore videoje",
@@ -2524,12 +2448,6 @@
     },
     "space_settings": {
         "title": "Rregullime - %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "S’keni leje të shtoni dhoma në këtë hapësirë",
-        "error_no_permission_add_space": "S’keni leje të shtoni hapësira te kjo hapësirë",
-        "error_no_permission_create_room": "S’keni leje të krijoni dhoma të reja në këtë hapësirë",
-        "error_no_permission_invite": "S’keni leje të ftoni njerëz në këtë hapësirë"
     },
     "spotlight": {
         "public_rooms": {
@@ -3265,13 +3183,7 @@
         "close_to_view_right_panel": "Mbylleni këtë widget, që ta shihni te ky panel",
         "context_menu": {
             "delete": "Fshije widget-in",
-            "delete_warning": "Fshirja e një widget-i e heq atë për krejt përdoruesit në këtë dhomë. Jeni i sigurt se doni të fshihet ky widget?",
-            "move_left": "Lëvize majtas",
-            "move_right": "Lëvize djathtas",
-            "remove": "Hiqe për këdo",
-            "revoke": "Shfuqizoji lejet",
-            "screenshot": "Bëni një foto",
-            "start_audio_stream": "Nisni transmetim audio"
+            "delete_warning": "Fshirja e një widget-i e heq atë për krejt përdoruesit në këtë dhomë. Jeni i sigurt se doni të fshihet ky widget?"
         },
         "cookie_warning": "Ky <em>widget</em> mund të përdorë <em>cookies</em>.",
         "error_hangup_description": "U shkëputët nga thirrja. (Gabim: %(message)s)",

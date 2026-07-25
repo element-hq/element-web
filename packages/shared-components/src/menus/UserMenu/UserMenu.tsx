@@ -20,6 +20,8 @@ import classNames from "classnames";
 import styles from "./UserMenu.module.css";
 import { useViewModel, type ViewModel } from "../../core/viewmodel";
 import { useI18n } from "../../core/i18n/i18nContext";
+import { type UserStatus } from "../../core/userStatus";
+import { SetStatusView, type SetStatusViewModel } from "../../status/SetStatusView";
 
 export interface UserMenuViewSnapshot {
     /**
@@ -50,6 +52,20 @@ export interface UserMenuViewSnapshot {
      * Account management URL if the user is using OIDC.
      */
     manageAccountHref?: string;
+    /**
+     * The user status to display, or undefined for no icon / status.
+     */
+    userStatus?: UserStatus;
+    /**
+     * Whether to show UI for user status.
+     * Temporary while user status is in labs.
+     * Default: true
+     */
+    showUserStatus?: boolean;
+    /**
+     * ViewModel for the set status view.
+     */
+    setStatusViewModel: SetStatusViewModel;
     /**
      * A set of actions that the user can perform from the menu.
      */
@@ -97,91 +113,134 @@ export declare interface UserMenuViewActions {
      * Called to open the settings dialog.
      */
     openSettings: () => void;
+    /**
+     * Called when the user clicks the button to clear their status.
+     */
+    clearStatus: () => void;
 }
 
 export type UserMenuViewProps = {
     vm: ViewModel<UserMenuViewSnapshot, UserMenuViewActions>;
     /**
-     * Class name for the container
+     * Class name for the wrapper
      */
     className?: string;
 };
 
 export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element {
-    const { userId, displayName, avatarUrl, expanded, open, manageAccountHref, actions, showAvatar } = useViewModel(vm);
+    const {
+        userId,
+        displayName,
+        avatarUrl,
+        expanded,
+        open,
+        manageAccountHref,
+        actions,
+        showAvatar,
+        userStatus,
+        setStatusViewModel,
+        showUserStatus = true,
+    } = useViewModel(vm);
     const { translate: _t } = useI18n();
     const trigger = (
-        <button className={classNames(styles.triggerButton, className)} aria-label={_t("menus|user_menu|title")}>
-            <Avatar id={userId} name={displayName} type="round" size="36px" src={avatarUrl} />
+        <button className={styles.triggerButton} aria-label={_t("menus|user_menu|title")}>
+            <div className={styles.avatarWrapper}>
+                <Avatar id={userId} name={displayName} type="round" size="36px" src={avatarUrl} />
+                {userStatus && (
+                    <Text as="div" className={styles.iconStatusEmoji}>
+                        {userStatus.emoji}
+                    </Text>
+                )}
+            </div>
+        </button>
+    );
+
+    // The menu should appear to the right of the avatar, over the displayname if the menu is expanded,
+    // so the display name goes outside the menu block in a wrapper.
+    return (
+        <div className={classNames(styles.wrapper, className)}>
+            <Menu
+                open={open}
+                showTitle={false}
+                title={_t("menus|user_menu|title")}
+                trigger={trigger}
+                onOpenChange={vm.setOpen}
+                align="start"
+                side="right"
+                className={styles.container}
+            >
+                <section className={classNames(styles.profile, styles.profilePrimary)}>
+                    {showAvatar && <Avatar id={userId} name={displayName} type="round" size="64px" src={avatarUrl} />}
+                    <Text className={styles.displayname} type="body" size="lg" weight="semibold" as="span">
+                        {displayName}
+                    </Text>
+                    {showUserStatus && <SetStatusView vm={setStatusViewModel} />}
+                </section>
+                <section className={classNames(styles.profile, styles.profileSecondary)}>
+                    <Text data-testid="userId" size="md" as="span" type="body" className={styles.userId}>
+                        {userId}
+                    </Text>
+                    {manageAccountHref && (
+                        <Button as="a" size="md" kind="tertiary" href={manageAccountHref} Icon={PopOutIcon}>
+                            {_t("menus|user_menu|manage_account")}
+                        </Button>
+                    )}
+                    {actions.createAccount && (
+                        <Button
+                            className={styles.createAccount}
+                            size="md"
+                            as="button"
+                            kind="primary"
+                            onClick={vm.createAccount}
+                        >
+                            {_t("menus|user_menu|create_an_account")}
+                        </Button>
+                    )}
+                    {actions.signIn && (
+                        <Text as="span" weight="medium">
+                            {_t("menus|user_menu|got_an_account")}
+                            <Link as="button" onClick={vm.signIn}>
+                                {_t("menus|user_menu|sign_in")}
+                            </Link>
+                        </Text>
+                    )}
+                </section>
+                <Separator />
+                <section className={styles.actions}>
+                    {actions.openHomePage && (
+                        <MenuItem Icon={HomeIcon} label={_t("user_menu|open_home")} onSelect={vm.openHomePage} />
+                    )}
+                    {actions.linkNewDevice && (
+                        <MenuItem
+                            Icon={DevicesIcon}
+                            label={_t("user_menu|link_new_device")}
+                            onSelect={vm.linkNewDevice}
+                        />
+                    )}
+                    {actions.openSecurity && (
+                        <MenuItem Icon={LockIcon} label={_t("user_menu|open_security")} onSelect={vm.openSecurity} />
+                    )}
+                    {actions.openFeedback && (
+                        <MenuItem
+                            Icon={ChatProblemIcon}
+                            label={_t("user_menu|open_feedback")}
+                            onSelect={vm.openFeedback}
+                        />
+                    )}
+                    {actions.openSettings && (
+                        <MenuItem
+                            Icon={SettingsIcon}
+                            label={_t("user_menu|open_settings")}
+                            onSelect={vm.openSettings}
+                        />
+                    )}
+                </section>
+            </Menu>
             {expanded && (
-                <Text type="heading" size="sm" as="span" weight="semibold">
+                <Text type="heading" size="sm" as="span" weight="semibold" className={styles.displayName}>
                     {displayName}
                 </Text>
             )}
-        </button>
-    );
-    return (
-        <Menu
-            open={open}
-            showTitle={false}
-            title={_t("menus|user_menu|title")}
-            trigger={trigger}
-            onOpenChange={vm.setOpen}
-            align="start"
-            side="bottom"
-            className={styles.container}
-        >
-            <section className={styles.profile}>
-                {showAvatar && <Avatar id={userId} name={displayName} type="round" size="88px" src={avatarUrl} />}
-                <Text className={styles.displayname} type="heading" size="md" weight="semibold" as="span">
-                    {displayName}
-                </Text>
-                <Text data-testid="userId" size="md" as="span" type="body">
-                    {userId}
-                </Text>
-                {manageAccountHref && (
-                    <Button as="a" size="md" kind="tertiary" href={manageAccountHref} Icon={PopOutIcon}>
-                        {_t("menus|user_menu|manage_account")}
-                    </Button>
-                )}
-                {actions.createAccount && (
-                    <Button
-                        className={styles.createAccount}
-                        size="md"
-                        as="button"
-                        kind="primary"
-                        onClick={vm.createAccount}
-                    >
-                        {_t("menus|user_menu|create_an_account")}
-                    </Button>
-                )}
-                {actions.signIn && (
-                    <Text as="span" weight="medium">
-                        {_t("menus|user_menu|got_an_account")}
-                        <Link as="button" onClick={vm.signIn}>
-                            {_t("menus|user_menu|sign_in")}
-                        </Link>
-                    </Text>
-                )}
-            </section>
-            <Separator />
-            <section className={styles.actions}>
-                {actions.openHomePage && (
-                    <MenuItem Icon={HomeIcon} label={_t("user_menu|open_home")} onSelect={vm.openHomePage} />
-                )}
-                {actions.linkNewDevice && (
-                    <MenuItem Icon={DevicesIcon} label={_t("user_menu|link_new_device")} onSelect={vm.linkNewDevice} />
-                )}
-                {actions.openSecurity && (
-                    <MenuItem Icon={LockIcon} label={_t("user_menu|open_security")} onSelect={vm.openSecurity} />
-                )}
-                {actions.openFeedback && (
-                    <MenuItem Icon={ChatProblemIcon} label={_t("user_menu|open_feedback")} onSelect={vm.openFeedback} />
-                )}
-                {actions.openSettings && (
-                    <MenuItem Icon={SettingsIcon} label={_t("user_menu|open_settings")} onSelect={vm.openSettings} />
-                )}
-            </section>
-        </Menu>
+        </div>
     );
 }

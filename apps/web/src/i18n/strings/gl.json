@@ -9,7 +9,6 @@
             "other": "%(count)s mensaxes non lidas incluíndo mencións.",
             "one": "1 mención non lida."
         },
-        "room_name": "Sala %(name)s",
         "unread_messages": "Mensaxes non lidas."
     },
     "a11y_jump_first_unread_room": "Vaite a primeira sala non lida.",
@@ -17,7 +16,6 @@
         "accept": "Aceptar",
         "add": "Engadir",
         "add_existing_room": "Engadir sala existente",
-        "add_people": "Engadir persoas",
         "approve": "Aprobar",
         "back": "Atrás",
         "call": "Chamar",
@@ -47,7 +45,6 @@
         "enter_fullscreen": "Ir a pantalla completa",
         "exit_fullscreeen": "Saír de pantalla completa",
         "expand": "Despregar",
-        "explore_public_rooms": "Explorar salas públicas",
         "explore_rooms": "Explorar salas",
         "export": "Exportar",
         "forward": "Reenviar",
@@ -59,8 +56,6 @@
         "ignore": "Ignorar",
         "import": "Importar",
         "invite": "Convidar",
-        "invite_to_space": "Convidar ao espazo",
-        "invites_list": "Convites",
         "join": "Únete",
         "learn_more": "Saber máis",
         "leave": "Saír",
@@ -83,7 +78,6 @@
         "rename": "Cambiar nome",
         "reply": "Resposta",
         "reply_in_thread": "Responder nun fío",
-        "report_content": "Denunciar contido",
         "resend": "Volver a enviar",
         "reset": "Restablecer",
         "resume": "Retomar",
@@ -101,8 +95,6 @@
         "sign_out": "Saír",
         "skip": "Saltar",
         "start": "Comezar",
-        "start_chat": "Iniciar conversa",
-        "start_new_chat": "Iniciar un novo chat",
         "stop": "Deter",
         "submit": "Enviar",
         "subscribe": "Subscribir",
@@ -189,10 +181,7 @@
         "log_in_new_account": "<a>Accede</a> usando a conta nova.",
         "logout_dialog": {
             "description": "Tes a certeza de querer saír?",
-            "megolm_export": "Exportar manualmente as chaves",
             "setup_key_backup_title": "Perderás o acceso as túas mensaxes cifradas",
-            "setup_secure_backup_description_1": "As mensaxes cifradas están seguras con cifrado de extremo-a-extremo. Só ti e o correpondente(s) tedes as chaves para ler as mensaxes.",
-            "setup_secure_backup_description_2": "Ao saír, estas chaves serán eliminadas deste dispositivo, o que significa que non poderás ler as mensaxes cifradas a menos que teñas as chaves noutro dos teus dispositivos, ou unha copia de apoio no servidor.",
             "skip_key_backup": "Non quero as miñas mensaxes cifradas"
         },
         "misconfigured_body": "Pídelle a administración do teu %(brand)s que comprobe a <a>configuración</a> para entradas duplicadas ou incorrectas.",
@@ -372,7 +361,6 @@
         "encrypted": "Cifrado",
         "error": "Fallo",
         "faq": "PMF",
-        "favourites": "Favoritas",
         "feedback": "Comenta",
         "filter_results": "Filtrar resultados",
         "forward_message": "Reenviar mensaxe",
@@ -380,7 +368,6 @@
         "go_to_settings": "Ir a Axustes",
         "guest": "Convidada",
         "help": "Axuda",
-        "historical": "Historial",
         "home": "Inicio",
         "homeserver": "Servidor de inicio",
         "identity_server": "Servidor de identidade",
@@ -389,7 +376,6 @@
         "joined": "Unícheste",
         "light": "Claro",
         "location": "Localización",
-        "low_priority": "Baixa prioridade",
         "message": "Mensaxe",
         "message_layout": "Disposición da mensaxe",
         "microphone": "Micrófono",
@@ -444,7 +430,6 @@
         "success": "Parabéns",
         "suggestions": "Suxestións",
         "support": "Axuda",
-        "system_alerts": "Alertas do Sistema",
         "theme": "Decorado",
         "thread": "Tema",
         "threads": "Conversas",
@@ -457,7 +442,6 @@
         "user_avatar": "Imaxe de perfil",
         "username": "Nome de usuaria",
         "verified": "Verificada",
-        "video": "Vídeo",
         "video_room": "Sala de vídeo",
         "view_message": "Ver mensaxe",
         "warning": "Aviso"
@@ -701,17 +685,6 @@
             "warning": "Se non eliminaches o método de recuperación, un atacante podería estar a intentar acceder á túa conta. Cambia inmediatamente o contrasinal da conta e establece un novo método de recuperación nos Axustes."
         },
         "set_up_toast_title": "Configurar Copia de apoio Segura",
-        "setup_secure_backup": {
-            "explainer": "Fai unha copia de apoio das chaves antes de saír para evitar perdelas."
-        },
-        "udd": {
-            "interactive_verification_button": "Verificar interactivamente usando emoji",
-            "other_ask_verify_text": "Pídelle a usuaria que verifique a súa sesión, ou verificaa manualmente aquí.",
-            "other_new_session_text": "%(name)s (%(userId)s) conectouse a unha nova sesión sen verificala:",
-            "own_ask_verify_text": "Verifica a túa outra sesión usando unha das opcións inferiores.",
-            "own_new_session_text": "Conectácheste nunha nova sesión sen verificala:",
-            "title": "Non confiable"
-        },
         "unable_to_setup_keys_error": "Non se puideron configurar as chaves",
         "verification": {
             "accepting": "Aceptando…",
@@ -1105,7 +1078,6 @@
         "group_themes": "Decorados",
         "group_threads": "Conversas",
         "group_voip": "Voz e Vídeo",
-        "html_topic": "Mostrar representación HTML dos temas da sala",
         "join_beta": "Unirse á beta",
         "join_beta_reload": "Ao unirte á beta recargaremos %(brand)s.",
         "jump_to_date": "Ir á data (engade cabeceiras /vaiadata e vai á data)",
@@ -1162,9 +1134,6 @@
         "leave_space_question": "Tes a certeza de querer deixar o espazo '%(spaceName)s'?",
         "room_rejoin_warning": "Esta sala non é pública. Non poderá volver a ela sen un convite.",
         "space_rejoin_warning": "Este espazo non é público. Non poderás volver a unirte sen un convite."
-    },
-    "left_panel": {
-        "open_dial_pad": "Abrir marcador"
     },
     "lightbox": {
         "rotate_left": "Rotar á esquerda",
@@ -1325,7 +1294,6 @@
     },
     "quick_settings": {
         "all_settings": "Todos os axustes",
-        "metaspace_section": "Fixar no lateral",
         "sidebar_settings": "Máis opcións",
         "title": "Axustes rápidos"
     },
@@ -1341,21 +1309,10 @@
     },
     "report_content": {
         "description": "Ao denunciar esta mensaxe vasnos enviar o seu 'event ID' único á administración do servidor. Se as mensaxes da sala están cifradas, a administración do servidor non poderá ler o texto da mensaxe ou ver imaxes ou ficheiros.",
-        "disagree": "En desacordo",
         "hide_messages_from_user": "Marcar para agochar as mensaxes actuais e futuras desta usuaria.",
         "ignore_user": "Ignorar usuaria",
-        "illegal_content": "Contido ilegal",
         "missing_reason": "Escribe a razón do informe.",
-        "nature": "Escolle unha opción e describe a razón pola que esta é unha mensaxe abusiva.",
-        "nature_disagreement": "O que escribe esta usuaria non é correcto.\nSerá denunciado á moderación da sala.",
-        "nature_illegal": "Esta usuaria está a comportarse dun xeito ilegal, por exemplo ameazando a persoas ou exhibindo violencia.\nEsto vaise denunciar ante a moderación da sala que podería presentar o caso ante as autoridades legais.",
-        "nature_other": "Outra razón. Por favor, describe o problema.\nInformaremos disto á moderación da sala.",
-        "nature_spam": "Esta usuaria está facendo spam na sala con anuncios, ligazóns a anuncios ou propaganda.\nEsto vai ser denunciado ante a moderación da sala.",
-        "other_label": "Outro",
-        "report_content_to_homeserver": "Denuncia sobre contido á Administración do teu servidor",
-        "report_entire_room": "Denunciar a toda a sala",
-        "spam_or_propaganda": "Spam ou propaganda",
-        "toxic_behaviour": "Comportamento tóxico"
+        "report_content_to_homeserver": "Denuncia sobre contido á Administración do teu servidor"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Fallo ao descifrar %(failedCount)s sesións!",
@@ -1516,36 +1473,12 @@
         }
     },
     "room_list": {
-        "add_room_label": "Engadir sala",
         "add_space_label": "Engadir espazo",
-        "breadcrumbs_empty": "Sen salas recentes visitadas",
-        "breadcrumbs_label": "Salas visitadas recentemente",
         "failed_add_tag": "Fallo ao engadir a etiqueta %(tagName)s a sala",
         "failed_remove_tag": "Fallo ao eliminar a etiqueta %(tagName)s da sala",
         "failed_set_dm_tag": "Non se estableceu a etiqueta de mensaxe directa",
-        "home_menu_label": "Opcións de Incio",
-        "join_public_room_label": "Unirse a sala pública",
-        "joining_rooms_status": {
-            "one": "Neste intre estás en %(count)s sala",
-            "other": "Neste intre estás en %(count)s salas"
-        },
         "notification_options": "Opcións de notificación",
-        "redacting_messages_status": {
-            "one": "Eliminando agora mensaxes de %(count)s sala",
-            "other": "Eliminando agora mensaxes de %(count)s salas"
-        },
-        "show_less": "Mostrar menos",
-        "show_n_more": {
-            "other": "Mostrar %(count)s máis",
-            "one": "Mostrar %(count)s máis"
-        },
-        "show_previews": "Mostrar vista previa das mensaxes",
-        "sort_by": "Orde por",
-        "sort_by_activity": "Actividade",
-        "sort_unread_first": "Mostrar primeiro as salas con mensaxes sen ler",
-        "space_menu_label": "Menú de %(spaceName)s",
-        "sublist_options": "Opcións da listaxe",
-        "suggested_rooms_heading": "Salas suxeridas"
+        "show_less": "Mostrar menos"
     },
     "room_settings": {
         "access": {
@@ -2077,13 +2010,11 @@
         "show_stickers_button": "Mostrar botón dos adhesivos",
         "show_typing_notifications": "Mostrar notificacións de escritura",
         "sidebar": {
-            "metaspaces_favourites_description": "Agrupa tódalas túas salas favoritas e persoas nun só lugar.",
             "metaspaces_home_all_rooms": "Mostar tódalas salas",
             "metaspaces_home_all_rooms_description": "Mostra tódalas túas salas en Inicio, incluso se están nun espazo.",
             "metaspaces_home_description": "O Inicio é útil para ter unha visión xeral do que acontece.",
             "metaspaces_orphans": "Salas fóra dun espazo",
             "metaspaces_orphans_description": "Agrupa nun só lugar tódalas túas salas que non forman parte dun espazo.",
-            "metaspaces_people_description": "Agrupa tódalas persoas nun só lugar.",
             "metaspaces_subsection": "Espazos a mostrar",
             "title": "Barra lateral"
         },
@@ -2252,12 +2183,6 @@
     },
     "space_settings": {
         "title": "Axustes - %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "Non tes permiso para engadir salas a este espazo",
-        "error_no_permission_add_space": "Non tes permiso para engadir espazos a este espazo",
-        "error_no_permission_create_room": "Non tes permiso para crear novas salas neste espazo",
-        "error_no_permission_invite": "Non tes permiso para poder convidar a persoas a este espazo"
     },
     "spotlight": {
         "public_rooms": {
@@ -2972,13 +2897,7 @@
         "close_to_view_right_panel": "Pecha este widget para velo neste panel",
         "context_menu": {
             "delete": "Eliminar widget",
-            "delete_warning": "Quitando un trebello elimínalo para todas as usuarias desta sala. ¿tes certeza de querer eliminar este widget?",
-            "move_left": "Mover á esquerda",
-            "move_right": "Mover á dereita",
-            "remove": "Eliminar para todas",
-            "revoke": "Revogar permisos",
-            "screenshot": "Tomar unha foto",
-            "start_audio_stream": "Iniciar fluxo de audio"
+            "delete_warning": "Quitando un trebello elimínalo para todas as usuarias desta sala. ¿tes certeza de querer eliminar este widget?"
         },
         "cookie_warning": "Este widget podería usar cookies.",
         "error_hangup_description": "Desconectouse a chamada. (Erro: %(message)s)",

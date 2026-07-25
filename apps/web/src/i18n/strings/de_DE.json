@@ -11,8 +11,6 @@
             "other": "%(count)s ungelesene Nachrichten einschließlich Erwähnungen.",
             "one": "1 ungelesene Erwähnung."
         },
-        "recent_rooms": "Zuletzt besuchte Chats",
-        "room_name": "Chat %(name)s",
         "room_status_bar": "Chat-Statusleiste",
         "seek_bar_label": "Audio-Suchleiste",
         "unread_messages": "Ungelesene Nachrichten."
@@ -22,7 +20,6 @@
         "accept": "Akzeptieren",
         "add": "Hinzufügen",
         "add_existing_room": "Vorhandenen Chat hinzufügen",
-        "add_people": "Personen hinzufügen",
         "apply": "Anwenden",
         "approve": "Genehmigen",
         "ask_to_join": "Um Beitritt bitten",
@@ -57,7 +54,6 @@
         "enter_fullscreen": "Vollbild",
         "exit_fullscreeen": "Vollbild verlassen",
         "expand": "Ausklappen",
-        "explore_public_rooms": "Öffentliche Chats erkunden",
         "explore_rooms": "Chats erkunden",
         "export": "Exportieren",
         "forward": "Weiterleiten",
@@ -69,8 +65,6 @@
         "ignore": "Ignorieren",
         "import": "Importieren",
         "invite": "Einladen",
-        "invite_to_space": "In Space einladen",
-        "invites_list": "Einladungen",
         "join": "Betreten",
         "learn_more": "Mehr erfahren",
         "leave": "Verlassen",
@@ -97,7 +91,6 @@
         "rename": "Umbenennen",
         "reply": "Antworten",
         "reply_in_thread": "In Thread antworten",
-        "report_content": "Inhalt melden",
         "report_room": "Chat melden",
         "resend": "Erneut senden",
         "reset": "Zurücksetzen",
@@ -117,8 +110,6 @@
         "sign_out": "Abmelden",
         "skip": "Überspringen",
         "start": "Starte",
-        "start_chat": "Neuer Chat",
-        "start_new_chat": "Neue Direktnachricht",
         "stop": "Beenden",
         "submit": "Absenden",
         "subscribe": "Abonnieren",
@@ -219,10 +210,7 @@
         "log_in_new_account": "Mit deinem neuen Konto <a>anmelden</a>.",
         "logout_dialog": {
             "description": "Bist du sicher, dass du dich abmelden möchtest?",
-            "megolm_export": "Schlüssel manuell exportieren",
             "setup_key_backup_title": "Du wirst den Zugang zu deinen verschlüsselten Nachrichten verlieren",
-            "setup_secure_backup_description_1": "Verschlüsselte Nachrichten sind mit Ende-zu-Ende-Verschlüsselung gesichert. Nur du und der/die Empfänger haben die Schlüssel um diese Nachrichten zu lesen.",
-            "setup_secure_backup_description_2": "Wenn du dich abmeldest, werden die Schlüssel auf diesem Gerät gelöscht. Das bedeutet, dass du keine verschlüsselten Nachrichten mehr lesen kannst, wenn du die Schlüssel nicht auf einem anderen Gerät oder eine Sicherung auf dem Server hast.",
             "skip_key_backup": "Ich möchte meine verschlüsselten Nachrichten nicht"
         },
         "misconfigured_body": "Wende dich an deinen %(brand)s-Admin um <a>deine Konfiguration</a> auf ungültige oder doppelte Einträge zu überprüfen.",
@@ -274,7 +262,6 @@
             "point_the_camera": "Scanne den hier angezeigten QR-Code",
             "scan_code_instruction": "Scanne den QR-Code mit einem weiteren Gerät.",
             "scan_qr_code": "Anmeldung mit QR-Code",
-            "security_code": "Sicherheitscode",
             "security_code_prompt": "Wenn du dazu aufgefordert wirst, gib den folgenden Code auf deinem anderen Gerät ein.",
             "select_qr_code": "Wähle \"%(scanQRCode)s\"",
             "unsupported_explainer": "Dein Kontoanbieter unterstützt keine Anmeldung bei einem neuen Gerät per QR-Code.",
@@ -480,7 +467,6 @@
         "encrypted": "Verschlüsselt",
         "error": "Fehler",
         "faq": "Häufige Fragen",
-        "favourites": "Favoriten",
         "feedback": "Rückmeldung",
         "filter_results": "Ergebnisse filtern",
         "forward_message": "Nachricht weiterleiten",
@@ -488,7 +474,6 @@
         "go_to_settings": "Gehe zu Einstellungen",
         "guest": "Gast",
         "help": "Hilfe",
-        "historical": "Archiv",
         "home": "Startseite",
         "homeserver": "Heim-Server",
         "identity_server": "Identitäts-Server",
@@ -500,13 +485,11 @@
         "light": "Hell",
         "loading": "Lade …",
         "location": "Standort",
-        "low_priority": "Niedrige Priorität",
         "matrix": "Matrix",
         "message": "Nachricht",
         "message_layout": "Nachrichtenlayout",
         "message_timestamp_invalid": "Ungültiger Zeitstempel",
         "microphone": "Mikrofon",
-        "model": "Modell",
         "moderation_and_safety": "Moderation und Sicherheit",
         "modern": "Modern",
         "mute": "Stummschalten",
@@ -566,7 +549,6 @@
         "success": "Erfolg",
         "suggestions": "Vorschläge",
         "support": "Unterstützung",
-        "system_alerts": "Systembenachrichtigung",
         "theme": "Design",
         "thread": "Thema",
         "threads": "Threads",
@@ -583,7 +565,6 @@
         "username": "Benutzername",
         "verified": "Verifiziert",
         "version": "Version",
-        "video": "Video",
         "video_room": "Videochat",
         "view_message": "Nachricht anzeigen",
         "warning": "Warnung"
@@ -959,7 +940,6 @@
         "import_invalid_passphrase": "Authentifizierung fehlgeschlagen: Falsches Passwort?",
         "key_storage_out_of_sync": "Ihr Schlüsselspeicher ist nicht synchronisiert.",
         "key_storage_out_of_sync_description": "Bestätige deinen Wiederherstellungsschlüssel, um weiterhin Zugriff auf den Schlüsselspeicher und den Nachrichtenverlauf zu haben.",
-        "message_shared_by": "Diese Nachricht wurde von %(displayName)s(%(userId)s ) weitergeleitet, da du zum Zeitpunkt des Versands kein Mitglied der Gruppe warst.",
         "messages_not_secure": {
             "cause_1": "Dein Heim-Server",
             "cause_2": "Der Heim-Server der Person, die du verifizierst",
@@ -985,19 +965,8 @@
         "set_up_recovery": "Wiederherstellung einrichten",
         "set_up_recovery_toast_description": "Erzeuge einen Wiederherstellungsschlüssel. Er wird verwendet, um den verschlüsselten Nachrichtenverlauf wiederherzustellen, falls du den Zugriff auf deine Geräte verlierst.",
         "set_up_toast_title": "Schlüsselsicherung einrichten",
-        "setup_secure_backup": {
-            "explainer": "Um deine Schlüssel nicht zu verlieren, musst du sie vor der Abmeldung sichern."
-        },
         "turn_on_key_storage": "Schlüsselspeicher einschalten",
         "turn_on_key_storage_description": "Die kryptografische Identität und die Schlüssel deiner Nachrichten sicher auf dem Server speichern. So kann der Nachrichtenverlauf auf allen neuen Geräten angezeigt werden.",
-        "udd": {
-            "interactive_verification_button": "Interaktiv per Emoji verifizieren",
-            "other_ask_verify_text": "Bitte diesen Nutzer, seine Sitzung zu verifizieren, oder verifiziere diese unten manuell.",
-            "other_new_session_text": "%(name)s (%(userId)s) hat sich zu einer neuen Sitzung angemeldet, ohne sie zu verifizieren:",
-            "own_ask_verify_text": "Verifiziere deine andere Sitzung mit einer der folgenden Optionen.",
-            "own_new_session_text": "Du hast dich in einer neuen Sitzung angemeldet ohne sie zu verifizieren:",
-            "title": "Nicht vertraut"
-        },
         "unable_to_setup_keys_error": "Schlüssel können nicht eingerichtet werden",
         "verification": {
             "accepting": "Annehmen…",
@@ -1511,7 +1480,6 @@
         "extended_profiles_msc_support": "Erfordert die Unterstützung von MSC4133 durch den Server",
         "feature_disable_call_per_sender_encryption": "Verschlüsselung per-sender für Element Anruf abschalten",
         "feature_wysiwyg_composer_description": "Verwende Textverarbeitung (Rich-Text) statt Markdown im Eingabefeld.",
-        "group_calls": "Neue Gruppenanruf-Erfahrung",
         "group_developer": "Entwickler",
         "group_encryption": "Verschlüsselung",
         "group_experimental": "Experimentell",
@@ -1526,7 +1494,6 @@
         "group_voip": "Anrufe",
         "group_widgets": "Widgets",
         "hidebold": "Benachrichtigungspunkt ausblenden (nur Zähler zeigen)",
-        "html_topic": "Zeige die HTML-Darstellung von Chat Themen",
         "join_beta": "Beta beitreten",
         "join_beta_reload": "Die Teilnahme an der Beta wird %(brand)s neustarten.",
         "jump_to_date": "Zu Datum springen ( /jumptodate bzw. Zu Datum springen im Header)",
@@ -1538,20 +1505,16 @@
         "location_share_live_description": "Vorläufige Implementierung: Standorte verbleiben im Nachrichtenverlauf.",
         "mjolnir": "Neue Methoden, Personen zu ignorieren",
         "msc3531_hide_messages_pending_moderation": "Erlaube Moderatoren, noch nicht moderierte Nachrichten auszublenden.",
-        "new_room_list": "Neue Chatroomliste aktivieren",
         "notification_settings": "Neue Benachrichtigungseinstellungen",
         "notification_settings_beta_caption": "Einen einfacheren Weg um die Einstellungen für Benachrichtigungen zu ändern vorstellen. Passe Deine %(brand)s so an wie Du willst.",
         "notification_settings_beta_title": "Benachrichtigungseinstellungen",
         "notifications": "Benachrichtigungen in der Chat-Kopfzeile einschalten",
         "render_reaction_images": "Benutzerdefinierte Bilder in Reaktionen anzeigen",
         "render_reaction_images_description": "Werden manchmal auch als „benutzerdefinierte Emojis“ bezeichnet.",
-        "report_to_moderators": "An Moderatoren melden",
-        "report_to_moderators_description": "In Chats, die Moderation unterstützen, kannst du mit der Schaltfläche „Melden“ missbräuchliche Verwendung an die Moderatoren melden.",
         "sliding_sync": "Sliding-Sync-Modus",
         "sliding_sync_description": "In aktiver Entwicklung, kann nicht deaktiviert werden. Derzeit nicht mit Element Call kompatibel.",
         "sliding_sync_disabled_notice": "Zum Deaktivieren, melde dich ab und erneut an",
         "sliding_sync_server_no_support": "Dein Server wird hier nicht unterstützt.",
-        "under_active_development": "In aktiver Entwicklung.",
         "unrealiable_e2e": "Nicht zuverlässig in verschlüsselten Chats",
         "video_rooms": "Videochats",
         "video_rooms_a_new_way_to_chat": "Eine neue Möglichkeit in %(brand)s über Audio und Video zu kommunizieren.",
@@ -1606,9 +1569,6 @@
         "room_leave_mod_warning": "Du bist der einzige Moderator in diesem Chat. Wenn du den Chat verlässt, kann niemand mehr die Chat-Einstellungen ändern oder andere wichtige Aktionen durchführen.",
         "room_rejoin_warning": "Dieser Chat ist nicht öffentlich und du kannst ihm ohne Einladung nicht erneut beitreten.",
         "space_rejoin_warning": "Du wirst diesen privaten Space nur mit einer Einladung wieder betreten können."
-    },
-    "left_panel": {
-        "open_dial_pad": "Wähltastatur öffnen"
     },
     "lightbox": {
         "rotate_left": "Nach links drehen",
@@ -1806,7 +1766,6 @@
     },
     "quick_settings": {
         "all_settings": "Alle Einstellungen",
-        "metaspace_section": "An Seitenleiste heften",
         "sidebar_settings": "Weitere Optionen",
         "title": "Schnelleinstellungen"
     },
@@ -1824,25 +1783,10 @@
     },
     "report_content": {
         "description": "Wenn du diese Nachricht meldest, wird die eindeutige Ereignis-ID an den Administrator deines Homeserver übermittelt. Wenn die Nachrichten verschlüsselt sind, kann dein Administrator sie nicht lesen und auch keine Dateien oder Bilder einsehen.",
-        "disagree": "Ablehnen",
-        "error_create_room_moderation_bot": "Erstellen des Chats mit Moderations-Bot nicht möglich",
         "hide_messages_from_user": "Prüfe, ob du alle aktuellen und zukünftigen Nachrichten dieses Nutzers verstecken willst.",
         "ignore_user": "Nutzer ignorieren",
-        "illegal_content": "Illegale Inhalte",
         "missing_reason": "Bitte gib an, weshalb du einen Fehler meldest.",
-        "nature": "Bitte wähle eine Kategorie aus und beschreibe, was die Nachricht missbräuchlich macht.",
-        "nature_disagreement": "Dieser Nutzer verbreitet Falschinformation.\nDies wird an die Moderatoren des Chats gemeldet.",
-        "nature_illegal": "Dieser Nutzer verhält sich illegal, beispielsweise durch das Veröffentlichen persönlicher Daten oder Gewaltdrohungen.\nDies wird an die Moderatoren des Chats gemeldet, welche dies an die Behörden weitergeben können.",
-        "nature_nonstandard_admin": "Dieser Chat wurde wegen illegalem oder toxischem Inhalt oder fehlender Moderation an den Administrator von %(homeserver)s gemeldet.",
-        "nature_nonstandard_admin_encrypted": "Dieser Chat wurde wegen illegalem oder toxischem Inhalt oder fehlender Moderation an den Administrator von %(homeserver)s gemeldet. Der Administrator wird KEINE verschlüsselten Inhalte in diesem Chat lesen können.",
-        "nature_other": "Anderer Grund. Bitte beschreibe das Problem.\nDies wird an die Moderatoren des Chats gemeldet.",
-        "nature_spam": "Dieser Nutzer spammt den Chat mit Werbung, Links zu Werbung oder Propaganda.\nDies wird an die Moderatoren des Chats gemeldet.",
-        "nature_toxic": "Dieser Benutzer zeigt toxisches Verhalten, etwa durch Beleidigen anderer Personen, Teilen von Erwachseneninhalten in familienfreundlichen Chat oder anderweitiges Missachten von Regeln.\nDies wird an die Moderatoren des Chats gemeldet.",
-        "other_label": "Sonstiges",
-        "report_content_to_homeserver": "Inhalte an die Administration deines Heim-Servers melden",
-        "report_entire_room": "Den ganzen Chat melden",
-        "spam_or_propaganda": "Spam oder Propaganda",
-        "toxic_behaviour": "Toxisches Verhalten"
+        "report_content_to_homeserver": "Inhalte an die Administration deines Heim-Servers melden"
     },
     "report_room": {
         "description": "Melde diesen Chat deinem Konto-Anbieter. Wenn die Nachrichten verschlüsselt sind, kann dein Administrator sie nicht lesen.",
@@ -2116,41 +2060,16 @@
         "waiting_for_join_title": "Warte darauf, dass Benutzer %(brand)s beitreten"
     },
     "room_list": {
-        "add_room_label": "Chat hinzufügen",
         "add_space_label": "Space hinzufügen",
-        "breadcrumbs_empty": "Keine kürzlich besuchten Chats",
-        "breadcrumbs_label": "Kürzlich besuchte Chats",
         "failed_add_tag": "Fehler beim Hinzufügen des \"%(tagName)s\"-Tags an den Chat",
         "failed_remove_tag": "Entfernen des Chat-Tags %(tagName)s fehlgeschlagen",
         "failed_set_dm_tag": "Fehler beim Setzen der Nachrichtenmarkierung",
-        "home_menu_label": "Startseiteneinstellungen",
-        "join_public_room_label": "Öffentlichem Chat beitreten",
-        "joining_rooms_status": {
-            "one": "Trete %(count)s Chat bei",
-            "other": "Trete %(count)s Chats bei"
-        },
         "list_title": "Chatliste",
         "more_options": {
             "leave_room": "Chat verlassen"
         },
         "notification_options": "Benachrichtigungsoptionen",
-        "redacting_messages_status": {
-            "one": "Entferne Nachrichten in %(count)s Chat",
-            "other": "Entferne Nachrichten in %(count)s Chats"
-        },
-        "show_less": "Weniger anzeigen",
-        "show_n_more": {
-            "other": "%(count)s weitere anzeigen",
-            "one": "%(count)s weitere anzeigen"
-        },
-        "show_previews": "Nachrichtenvorschau anzeigen",
-        "sort_by": "Sortieren nach",
-        "sort_by_activity": "Aktivität",
-        "sort_by_alphabet": "A–Z",
-        "sort_unread_first": "Zeige Chats mit ungelesenen Nachrichten zuerst",
-        "space_menu_label": "%(spaceName)s-Menü",
-        "sublist_options": "Optionen anzeigen",
-        "suggested_rooms_heading": "Vorgeschlagene Chats"
+        "show_less": "Weniger anzeigen"
     },
     "room_settings": {
         "access": {
@@ -2858,7 +2777,6 @@
         "send_typing_notifications": "Tippbenachrichtigungen senden",
         "sessions": {
             "best_security_note": "Für beste Sicherheit verifiziere deine Sitzungen und melde dich von allen Sitzungen ab, die du nicht erkennst oder nicht mehr verwendest.",
-            "browser": "Internet Browser",
             "confirm_sign_out": {
                 "one": "Abmelden des Geräts bestätigen",
                 "other": "Abmelden dieser Geräte bestätigen"
@@ -2909,7 +2827,6 @@
             "no_sessions": "Keine Sitzungen gefunden.",
             "no_unverified_sessions": "Keine unverifizierten Sitzungen gefunden.",
             "no_verified_sessions": "Keine verifizierten Sitzungen gefunden.",
-            "os": "Betriebssystem",
             "other_sessions_heading": "Andere Sitzungen",
             "push_heading": "Push-Benachrichtigungen",
             "push_subheading": "Erhalte Push-Benachrichtigungen in dieser Sitzung.",
@@ -2970,13 +2887,11 @@
         "showbold": "Alle Aktivitäten in der Chatroommliste anzeigen (Ausführungspunkte oder Anzahl ungelesener Nachrichten)",
         "sidebar": {
             "dialog_title": "<strong>Einstellungen:</strong> Seitenleiste",
-            "metaspaces_favourites_description": "Sammle alle deinen favorisierten Chats an einem Ort.",
             "metaspaces_home_all_rooms": "Alle Chats anzeigen",
             "metaspaces_home_all_rooms_description": "Alle Chats auf der Startseite anzeigen, auch wenn sie Teil eines Space sind.",
             "metaspaces_home_description": "Die Startseite bietet dir einen Überblick über deine Unterhaltungen.",
             "metaspaces_orphans": "Chats außerhalb von Spaces",
             "metaspaces_orphans_description": "Gruppiere all deine Chats, die nicht Teil eines Spaces sind, an einem Ort.",
-            "metaspaces_people_description": "Gruppiere all deine Direktnachrichten an einem Ort.",
             "metaspaces_subsection": "Anzuzeigende Spaces",
             "metaspaces_video_rooms": "Videochats und -konferenzen",
             "metaspaces_video_rooms_description": "Gruppiere alle privaten Videochats und -konferenzen.",
@@ -3003,7 +2918,6 @@
             "audio_output": "Audioausgabe",
             "audio_output_empty": "Keine Audioausgabe erkannt",
             "auto_gain_control": "Automatische Lautstärkeregelung",
-            "connection_section": "Verbindung",
             "dialog_title": "<strong>Einstellungen:</strong> Sprache und Video",
             "echo_cancellation": "Echounterdrückung",
             "echo_cancellation_description": "Entfernt das Echo aus deinem Mikrofon während Anrufen. Diese Einstellung gilt auch für Element Call.",
@@ -3188,12 +3102,6 @@
     "space_settings": {
         "title": "Einstellungen - %(spaceName)s"
     },
-    "spaces": {
-        "error_no_permission_add_room": "Du hast keine Berechtigung, Chats zu diesem Space hinzuzufügen",
-        "error_no_permission_add_space": "Du hast keine Berechtigung, Spaces zu diesem Space hinzuzufügen",
-        "error_no_permission_create_room": "Du hast keine Berechtigung, neue Chats in diesem Space zu erstellen",
-        "error_no_permission_invite": "Du hast keine Berechtigung, Personen in diesen Space einzuladen"
-    },
     "spotlight": {
         "public_rooms": {
             "network_dropdown_add_dialog_description": "Gib den Namen des Servers an, den du erkunden möchtest.",
@@ -3320,7 +3228,6 @@
         "download_action_downloading": "Herunterladen",
         "download_failed": "Herunterladen fehlgeschlagen",
         "download_failed_description": "Beim Herunterladen dieser Datei ist ein Fehler aufgetreten",
-        "e2e_state": "Status der Ende zu Ende Verschlüssellung",
         "edits": {
             "tooltip_label": "Am %(date)s geändert. Klicke, um Änderungen anzuzeigen.",
             "tooltip_sub": "Klicke, um Änderungen anzuzeigen",
@@ -4006,13 +3913,7 @@
         "close_to_view_right_panel": "Widget schließen und in diesem Panel anzeigen",
         "context_menu": {
             "delete": "Widget entfernen",
-            "delete_warning": "Das Löschen des Widgets entfernt es für alle in diesem Chat. Wirklich löschen?",
-            "move_left": "Nach links schieben",
-            "move_right": "Nach rechts schieben",
-            "remove": "Für alle entfernen",
-            "revoke": "Berechtigungen widerrufen",
-            "screenshot": "Bildschirmfoto",
-            "start_audio_stream": "Audiostream starten"
+            "delete_warning": "Das Löschen des Widgets entfernt es für alle in diesem Chat. Wirklich löschen?"
         },
         "cookie_warning": "Dieses Widget kann Cookies verwenden.",
         "error_hangup_description": "Du wurdest vom Anruf getrennt. (Error: %(message)s)",

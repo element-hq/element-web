@@ -72,7 +72,7 @@ import AccessibleButton, { type ButtonEvent } from "../views/elements/Accessible
 import { TimelineRenderingType, MainSplitContentType } from "../../contexts/RoomContext";
 import { E2EStatus, shieldStatusForRoom } from "../../utils/ShieldUtils";
 import { Action } from "../../dispatcher/actions";
-import { type IMatrixClientCreds } from "../../MatrixClientPeg";
+import { type IMatrixClientCreds } from "../../utils/createMatrixClient";
 import { useMatrixClientContext } from "../../contexts/MatrixClientContext";
 import ScrollPanel from "./ScrollPanel";
 import TimelinePanel from "./TimelinePanel";
@@ -88,7 +88,6 @@ import { containsEmoji } from "../../effects/utils";
 import { CHAT_EFFECTS } from "../../effects";
 import { CallView } from "../views/voip/CallView";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
-import Notifier from "../../Notifier";
 import { showToast as showNotificationsToast } from "../../toasts/DesktopNotificationsToast";
 import { WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
@@ -130,7 +129,6 @@ import { WaitingForThirdPartyRoomView } from "./WaitingForThirdPartyRoomView";
 import { isNotUndefined } from "../../Typeguards";
 import { type CancelAskToJoinPayload } from "../../dispatcher/payloads/CancelAskToJoinPayload";
 import { type SubmitAskToJoinPayload } from "../../dispatcher/payloads/SubmitAskToJoinPayload";
-import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { onView3pidInvite } from "../../stores/right-panel/action-handlers";
 import RoomSearchAuxPanel from "../views/rooms/RoomSearchAuxPanel";
 import { PinnedMessageBanner } from "../views/rooms/PinnedMessageBanner";
@@ -206,8 +204,6 @@ interface IRoomProps extends RoomViewProps {
      */
     enableReadReceiptsAndMarkersOnActivity?: boolean;
 }
-
-export { MainSplitContentType };
 
 export interface IRoomState {
     room?: Room;
@@ -303,7 +299,6 @@ interface LocalRoomViewProps {
     resizeNotifier: ResizeNotifier;
     permalinkCreator: RoomPermalinkCreator;
     roomView: RefObject<HTMLElement | null>;
-    mainSplitContentType: MainSplitContentType;
     e2eStatus?: E2EStatus;
 }
 
@@ -364,14 +359,13 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
 interface ILocalRoomCreateLoaderProps {
     localRoom: LocalRoom;
     names: string;
-    mainSplitContentType: MainSplitContentType;
 }
 
 /**
  * Room create loader view displaying a message and a spinner.
  *
  * @param {ILocalRoomCreateLoaderProps} props Room view props
- * @return {ReactElement}
+ * @returns {ReactElement}
  */
 function LocalRoomCreateLoader(props: ILocalRoomCreateLoaderProps): ReactElement {
     const text = _t("room|creating_room_text", { names: props.names });
@@ -1299,7 +1293,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 const composerInsertPayload = payload as ComposerInsertPayload;
                 if (composerInsertPayload.composerType) break;
 
-                let timelineRenderingType: TimelineRenderingType | undefined;
+                let timelineRenderingType = composerInsertPayload.timelineRenderingType;
                 // ThreadView handles Action.ComposerInsert itself due to it having its own editState
                 if (composerInsertPayload.timelineRenderingType === TimelineRenderingType.Thread) break;
                 if (
@@ -1310,12 +1304,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     await this.onCancelSearchClick();
                     timelineRenderingType = TimelineRenderingType.Room;
                 }
-
-                // If the dispatchee didn't request a timeline rendering type, use the current one.
-                timelineRenderingType =
-                    timelineRenderingType ??
-                    composerInsertPayload.timelineRenderingType ??
-                    this.state.timelineRenderingType;
 
                 // re-dispatch to the correct composer
                 defaultDispatcher.dispatch<ComposerInsertPayload>({
@@ -1343,23 +1331,23 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             case Action.ViewUser:
                 if (payload.member) {
                     if (payload.push) {
-                        RightPanelStore.instance.pushCard({
+                        this.context.rightPanelStore.pushCard({
                             phase: RightPanelPhases.MemberInfo,
                             state: { member: payload.member },
                         });
                     } else {
-                        RightPanelStore.instance.setCards([
+                        this.context.rightPanelStore.setCards([
                             { phase: RightPanelPhases.RoomSummary },
                             { phase: RightPanelPhases.MemberList },
                             { phase: RightPanelPhases.MemberInfo, state: { member: payload.member } },
                         ]);
                     }
                 } else {
-                    RightPanelStore.instance.showOrHidePhase(RightPanelPhases.MemberList);
+                    this.context.rightPanelStore.showOrHidePhase(RightPanelPhases.MemberList);
                 }
                 break;
             case Action.View3pidInvite:
-                onView3pidInvite(payload, RightPanelStore.instance);
+                onView3pidInvite(payload, this.context.rightPanelStore);
                 break;
             case Action.FocusMessageSearch:
                 if ((payload as FocusMessageSearchPayload).initialText) {
@@ -1699,8 +1687,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         if (!this.state.room) return;
         const memberCount = this.state.room.getJoinedMemberCount() + this.state.room.getInvitedMemberCount();
         // if they are not alone prompt the user about notifications so they don't miss replies
-        if (memberCount > 1 && Notifier.shouldShowPrompt()) {
-            showNotificationsToast(true);
+        if (memberCount > 1 && this.context.notifier.shouldShowPrompt()) {
+            showNotificationsToast(this.context.notifier, true);
         }
     }
 
@@ -2140,11 +2128,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         const names = this.state.room.getDefaultRoomName(this.context.client.getSafeUserId());
         return (
             <ScopedRoomContextProvider {...this.state} roomViewStore={this.roomViewStore}>
-                <LocalRoomCreateLoader
-                    localRoom={localRoom}
-                    names={names}
-                    mainSplitContentType={this.state.mainSplitContentType}
-                />
+                <LocalRoomCreateLoader localRoom={localRoom} names={names} />
             </ScopedRoomContextProvider>
         );
     }
@@ -2158,7 +2142,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     resizeNotifier={this.context.resizeNotifier}
                     permalinkCreator={this.permalinkCreator}
                     roomView={this.roomView}
-                    mainSplitContentType={this.state.mainSplitContentType}
                 />
             </ScopedRoomContextProvider>
         );
@@ -2352,7 +2335,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                                 onForgetClick={this.onForgetClick}
                                 onDeclineClick={this.onDeclineButtonClicked}
                                 onDeclineAndBlockClick={this.onDeclineAndBlockButtonClicked}
-                                promptRejectionOptions={true}
                                 inviterName={inviterName}
                                 canPreview={false}
                                 joining={this.state.joining}
@@ -2466,7 +2448,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     onJoinClick={this.onJoinButtonClicked}
                     onForgetClick={this.onForgetClick}
                     onDeclineClick={this.onRejectThreepidInviteButtonClicked}
-                    promptRejectionOptions={true}
                     joining={this.state.joining}
                     inviterName={inviterName}
                     invitedEmail={invitedEmail}

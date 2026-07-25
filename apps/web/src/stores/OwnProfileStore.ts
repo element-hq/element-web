@@ -13,8 +13,10 @@ import {
     type User,
     UserEvent,
     EventType,
+    ClientEvent,
 } from "matrix-js-sdk/src/matrix";
 import { throttle } from "lodash";
+import { type UserStatus } from "@element-hq/web-shared-components";
 
 import { type ActionPayload } from "../dispatcher/payloads";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
@@ -22,11 +24,14 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { _t } from "../languageHandler";
 import { mediaFromMxc } from "../customisations/Media";
+import SettingsStore from "../settings/SettingsStore";
+import { userStatusFromProfile } from "../utils/userStatus";
 
 interface IState {
     displayName?: string;
     avatarUrl?: string;
     fetchedAt?: number;
+    userStatus?: UserStatus;
 }
 
 const KEY_DISPLAY_NAME = "mx_profile_displayname";
@@ -81,6 +86,10 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
         return this.state.avatarUrl || null;
     }
 
+    public get userStatus(): UserStatus | undefined {
+        return this.state.userStatus;
+    }
+
     /**
      * Gets the user's avatar as an HTTP URL of the given size. If the user's
      * avatar is not present, this returns null.
@@ -105,6 +114,9 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
             this.monitoredUser.removeListener(UserEvent.AvatarUrl, this.onProfileUpdate);
         }
         this.matrixClient?.removeListener(RoomStateEvent.Events, this.onStateEvents);
+        if (SettingsStore.getValue("feature_user_status")) {
+            this.matrixClient?.removeListener(ClientEvent.UserProfileUpdate, this.onExtendedProfileUpdate);
+        }
         await this.reset({});
     }
 
@@ -117,11 +129,16 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
             this.monitoredUser.on(UserEvent.AvatarUrl, this.onProfileUpdate);
         }
 
+        if (SettingsStore.getValue("feature_user_status")) {
+            this.matrixClient.on(ClientEvent.UserProfileUpdate, this.onExtendedProfileUpdate);
+        }
+
         // We also have to listen for membership events for ourselves as the above User events
         // are fired only with presence, which matrix.org (and many others) has disabled.
         this.matrixClient.on(RoomStateEvent.Events, this.onStateEvents);
 
         await this.onProfileUpdate(); // trigger an initial update
+        await this.refreshUserStatus(); // trigger an update for the user status
     }
 
     protected async onAction(payload: ActionPayload): Promise<void> {
@@ -174,6 +191,24 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
         200,
         { trailing: true, leading: true },
     );
+
+    private onExtendedProfileUpdate = async (syncedUserId: string): Promise<void> => {
+        if (syncedUserId === this.matrixClient?.getSafeUserId()) {
+            await this.refreshUserStatus();
+        }
+    };
+
+    private refreshUserStatus = async (): Promise<void> => {
+        if (!this.matrixClient) return;
+        if (!SettingsStore.getValue("feature_user_status")) return;
+
+        const rawUserStatus = await this.matrixClient.getExtendedProfileProperty(
+            this.matrixClient.getSafeUserId(),
+            "org.matrix.msc4426.status",
+        );
+        // We don't show our own "on a call" status so we pass undefined for the call status.
+        await this.updateState({ userStatus: userStatusFromProfile(rawUserStatus, undefined) });
+    };
 
     private onStateEvents = async (ev: MatrixEvent): Promise<void> => {
         const myUserId = MatrixClientPeg.safeGet().getUserId();

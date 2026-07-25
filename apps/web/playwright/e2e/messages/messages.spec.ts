@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 /* See readme.md for tips on writing these tests. */
 
 import { type Locator, type Page } from "@playwright/test";
+import { rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { test, expect } from "../../element-web-test";
 import { readSampleFileSync } from "../../sample-files";
@@ -85,10 +86,10 @@ test.describe("Message rendering", () => {
         test.describe(`with ${direction} display name`, { tag: "@screenshot" }, () => {
             test.use({
                 displayName,
-                room: async ({ user, app }, use) => {
+                room: async ({ user, app, page }, use) => {
                     const roomId = await app.client.createRoom({ name: "Test room" });
                     await use({ roomId });
-                    await app.closeVerifyToast();
+                    await rejectToast(page, "Verify this device");
                 },
             });
 
@@ -216,10 +217,10 @@ test.describe("Message rendering", () => {
 test.describe("Message url previews", () => {
     test.use({
         displayName: "Alice",
-        room: async ({ user, app }, use) => {
+        room: async ({ user, app, page }, use) => {
             const roomId = await app.client.createRoom({ name: "Test room" });
             await use({ roomId });
-            await app.closeVerifyToast();
+            await rejectToast(page, "Verify this device");
         },
     });
     test("should render a basic preview", { tag: "@screenshot" }, async ({ page, user, app, room, axe }) => {

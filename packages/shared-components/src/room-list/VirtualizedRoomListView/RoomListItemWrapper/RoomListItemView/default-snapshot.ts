@@ -36,7 +36,6 @@ export const defaultSnapshot: RoomListItemViewSnapshot = {
     canMarkAsRead: false,
     canMarkAsUnread: true,
     roomNotifState: RoomNotifState.AllMessages,
-    canMoveToSection: true,
     sections: [
         {
             tag: "m.favourite",
@@ -45,7 +44,7 @@ export const defaultSnapshot: RoomListItemViewSnapshot = {
         },
         {
             tag: "element.io.section.work",
-            name: "Work",
+            name: "Work with a very long name that should be truncated",
             isSelected: true,
         },
         {
@@ -54,4 +53,5 @@ export const defaultSnapshot: RoomListItemViewSnapshot = {
             isSelected: false,
         },
     ],
+    areSectionsEnabled: true,
 };

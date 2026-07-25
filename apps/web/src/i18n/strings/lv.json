@@ -12,8 +12,6 @@
             "one": "1 neslasīta ziņa ar pieminēšanu.",
             "other": "%(count)s nelasītas ziņas ar pieminēšanu."
         },
-        "recent_rooms": "Nesenās istabas",
-        "room_name": "Istaba %(name)s",
         "room_status_bar": "Istabas statusa josla",
         "seek_bar_label": "Audio meklēšanas josla",
         "unread_messages": "Nelasītās ziņas."
@@ -23,7 +21,6 @@
         "accept": "Apstiprināt",
         "add": "Pievienot",
         "add_existing_room": "Pievienot esošu istabu",
-        "add_people": "Pievienot cilvēkus",
         "apply": "Pielietot",
         "approve": "Apstiprināt",
         "ask_to_join": "Aicināt pievienoties",
@@ -56,7 +53,6 @@
         "enter_fullscreen": "Atvērt pilnekrāna režīmā",
         "exit_fullscreeen": "Iziet no pilnekrāna režīma",
         "expand": "Izvērst",
-        "explore_public_rooms": "Pārlūkot publiskas istabas",
         "explore_rooms": "Pārlūkot istabas",
         "export": "Eksportēt",
         "forward": "Pārsūtīt",
@@ -68,8 +64,6 @@
         "ignore": "Neņemt vērā",
         "import": "Importēt",
         "invite": "Uzaicināt",
-        "invite_to_space": "Uzaicināt uz telpu",
-        "invites_list": "Uzaicinājumi",
         "join": "Pievienoties",
         "learn_more": "Uzzināt vairāk",
         "leave": "Pamest",
@@ -96,7 +90,6 @@
         "rename": "Pārdēvēt",
         "reply": "Atbildēt",
         "reply_in_thread": "Atbildēt pavedienā",
-        "report_content": "Ziņot par saturu",
         "resend": "Nosūtīt atkārtoti",
         "reset": "Atiestatīt",
         "resume": "Turpināt",
@@ -115,8 +108,6 @@
         "sign_out": "Izrakstīties",
         "skip": "Izlaist",
         "start": "Sākt",
-        "start_chat": "Uzsākt tērzēšanu",
-        "start_new_chat": "Uzsākt jaunu tērzēšanu",
         "stop": "Apturēt",
         "submit": "Iesniegt",
         "subscribe": "Abonēt",
@@ -216,10 +207,7 @@
         "log_in_new_account": "<a>Pieteikties</a> jaunajā kontā.",
         "logout_dialog": {
             "description": "Vai tiešām izrakstīties?",
-            "megolm_export": "Pašrocīgi izgūt atslēgas",
             "setup_key_backup_title": "Tu zaudēsi piekļuvi savām šifrētajām ziņām",
-            "setup_secure_backup_description_1": "Šifrētas ziņas tiek nodrošinātas ar pilnīgu šifrēšanu. Tikai Tev un saņēmējam(iem) ir atslēgas šo ziņojumu lasīšanai.",
-            "setup_secure_backup_description_2": "Kad Tu atteiksies, šīs atslēgas tiks izdzēstas no šīs ierīces, kas nozīmē, ka Tu nevarēsi lasīt šifrētas ziņas, līdz Tev būs to atslēgas citās ierīcēs vai serverī izveidosi to rezerves kopiju.",
             "skip_key_backup": "Es nevēlos savas šifrētās ziņas"
         },
         "misconfigured_body": "Jāvaicā savam %(brand)s pārvaldniekam pārbaudīt, vai <a>konfigurācijā</a> ir nepareizu vai atkārtojošos ierakstu",
@@ -271,7 +259,6 @@
             "point_the_camera": "Jāvērš kamera uz šeit parādīto kvadrātkodu",
             "scan_code_instruction": "Zemāk esošais kvadrātkods ir jānolasa ar ierīci, kurā ir notikusi atteikšanās.",
             "scan_qr_code": "Nolasīt kvadrātkodu",
-            "security_code": "Drošības kods",
             "security_code_prompt": "Ja tiek prasīts, otrā ierīcē jāievada zemāk esošais kods",
             "select_qr_code": "Jāatlasa '%(scanQRCode)s'",
             "unsupported_explainer": "Konta nodrošinātājs neatbalsta pieteikšanos jaunā ierīcē ar kvadrātkodu.",
@@ -464,7 +451,6 @@
         "encrypted": "Šifrēts",
         "error": "Kļūda",
         "faq": "BUJ",
-        "favourites": "Izlase",
         "feedback": "Atsauksmes",
         "filter_results": "Filtrēt rezultātus",
         "forward_message": "Pārsūtīt ziņu",
@@ -472,7 +458,6 @@
         "go_to_settings": "Pāriet uz iestatījumiem",
         "guest": "Viesis",
         "help": "Palīdzība",
-        "historical": "Bijušie",
         "home": "Mājup",
         "homeserver": "Mājasserveris",
         "identity_server": "Identitāšu serveris",
@@ -484,13 +469,11 @@
         "light": "Gaiša",
         "loading": "Notiek ielāde…",
         "location": "Atrašanās vieta",
-        "low_priority": "Zems svarīgums",
         "matrix": "Matrix",
         "message": "Ziņa",
         "message_layout": "Ziņas izkārtojums",
         "message_timestamp_invalid": "Nederīgs laikspiedols",
         "microphone": "Mikrofons",
-        "model": "Modelis",
         "modern": "Mūsdienīgs",
         "mute": "Apklusināt",
         "n_members": {
@@ -547,7 +530,6 @@
         "success": "Izdevās",
         "suggestions": "Ieteikumi",
         "support": "Atbalsts",
-        "system_alerts": "Sistēmas brīdinājumi",
         "theme": "Tēma",
         "thread": "Pavediens",
         "threads": "Pavedieni",
@@ -564,7 +546,6 @@
         "username": "Lietotājvārds",
         "verified": "Verificēts",
         "version": "Versija",
-        "video": "Video",
         "video_room": "Video istaba",
         "view_message": "Skatīt ziņu",
         "warning": "Brīdinājums"
@@ -868,17 +849,6 @@
             "warning": "Ja nenoņēmi atkopšanas veidu, var būt, ka uzbrucējs mēģina piekļūt Tavam kontam. Nekavējoties jānomaina sava konta parole un jāiestata jauns atkopšanas veids."
         },
         "set_up_toast_title": "Iestatīt drošu rezerves dublēšanu",
-        "setup_secure_backup": {
-            "explainer": "Pirms izrakstīšanās iestatiet atslēgu dublēšanu, lai izvairītos no tās pazaudēšanas."
-        },
-        "udd": {
-            "interactive_verification_button": "Mijiedarbīga apliecināšana ar emocijzīmēm",
-            "other_ask_verify_text": "Vaicāt šim lietotājam apliecināt savu sesiju vai zemāk apliecināt to pašrocīgi.",
-            "other_new_session_text": "%(name)s (%(userId)s) pieteicās jaunā sesijā bez tās apliecināšanas:",
-            "own_ask_verify_text": "Cita sesija ir jāapliecina ar vienu no zemāk esošajām iespējām.",
-            "own_new_session_text": "Tu pierakstījies jaunā sesijā bez tās apliecināšanas:",
-            "title": "Neuzticama"
-        },
         "unable_to_setup_keys_error": "Nevar iestatīt atslēgas",
         "verification": {
             "accepting": "Apstiprina…",
@@ -1237,7 +1207,6 @@
         "experimental_description": "Vai jūtaties gatavs eksperimentiem? Izmēģiniet mūsu jaunākās idejas izstrādes stadijā. Šīs funkcijas nav pabeigtas un var būt nestabilas, var mainīties vai vispār var tikt atmestas. <a> Uzzināt vairāk</a> .",
         "experimental_section": "Agrīnie priekšskatījumi",
         "feature_wysiwyg_composer_description": "Ziņu sastādītājā Markdown vietā izmantot bagātinātu tekstu.",
-        "group_calls": "Jauna grupas zvanu pieredze",
         "group_developer": "Izstrādātājs",
         "group_encryption": "Šifrēšana",
         "group_experimental": "Eksperimentāls",
@@ -1250,7 +1219,6 @@
         "group_voip": "Balss un video",
         "group_widgets": "Logrīki",
         "hidebold": "Slēpt paziņojumu punktu (rādīt tikai skaitītāju emblēmas)",
-        "html_topic": "Rādīt istabas tēmu HTML attēlojumu",
         "join_beta": "Pievienoties beta versijai",
         "join_beta_reload": "Pievienošanās beta izraisīs %(brand)s pārlādēšanu",
         "jump_to_date": "Pāriet uz datumu (pievieno /jumptodate un pāriet uz datuma galvenēm)",
@@ -1268,13 +1236,10 @@
         "notifications": "Iespējot paziņojumu paneli istabas galvenē",
         "render_reaction_images": "Atveidot pielāgotus attēlus reakcijās",
         "render_reaction_images_description": "Dažkārt tās dēvē par \"pielāgotām emocijzīmēm\".",
-        "report_to_moderators": "Ziņot moderatoriem",
-        "report_to_moderators_description": "Istabās, kurās tiek nodrošināta moderēšana, poga \"Ziņot\" ļauj paziņot istabas moderatoriem par pārkāpumiem.",
         "sliding_sync": "Sliding Sync režīms",
         "sliding_sync_description": "Aktīvā izstrādes stadijā, to nevar atspējot.",
         "sliding_sync_disabled_notice": "Lai atspējotu, izrakstieties un pierakstieties atkārtoti",
         "sliding_sync_server_no_support": "Jūsu serverim trūkst atbalsta",
-        "under_active_development": "Aktīvas izstrādes stadijā.",
         "unrealiable_e2e": "Neuzticams šifrētās istabās",
         "video_rooms": "Video istabas",
         "video_rooms_a_new_way_to_chat": "Jauns veids, kā tērzēt %(brand)s, izmantojot balsi un video.",
@@ -1487,7 +1452,6 @@
     },
     "quick_settings": {
         "all_settings": "Visi iestatījumi",
-        "metaspace_section": "Piespraust sānjoslai",
         "sidebar_settings": "Papildus iespējas",
         "title": "Ātrie iestatījumi"
     },
@@ -1505,25 +1469,10 @@
     },
     "report_content": {
         "description": "Ziņojuma par šo ziņu iesniegšana nosūtīs tās neatkārtojamo notikuma identifikatoru mājasservera pārvaldniekam. Ja ziņas šajā istabā ir šifrētas, mājasservera pārvaldnieks nevarēs lasīt ziņas saturu vai skatīt jebkādas datnes vai attēlus.",
-        "disagree": "Nepiekrist",
-        "error_create_room_moderation_bot": "Nevar izveidot istabu ar moderēšanas botu",
         "hide_messages_from_user": "Atzīmējiet, vai vēlaties slēpt visas šī lietotāja pašreizējās un turpmākās ziņas.",
         "ignore_user": "Neņemt vērā lietotāju",
-        "illegal_content": "Nelikumīgs saturs",
         "missing_reason": "Lūdzu, norādiet ziņošanas iemeslu.",
-        "nature": "Lūdzu, izvēlieties pārkāpuma raksturu un aprakstiet, kāpēc šī ziņa ir uzskatāma par aizskarošu.",
-        "nature_disagreement": "Tas, ko šis lietotājs raksta, ir nepareizi.\nPar to tiks ziņots istabas moderatoriem.",
-        "nature_illegal": "Šis lietotājs veic nelikumīgas darbības, piemēram, publiskojot cilvēku dzīvesvietu vai draudot ar vardarbību.\nPar to tiks ziņots istabas moderatoriem, kuri to var nodot tiesībsargājošajām iestādēm.",
-        "nature_nonstandard_admin": "Šī istaba ir veltīta nelikumīgam vai kaitīgam saturam vai moderatori nespēj pārskatīt nelikumīgu vai kaitīgu saturu.\nPar šo tiks ziņots %(homeserver)s pārvaldītājiem.",
-        "nature_nonstandard_admin_encrypted": "Šī istaba ir veltīta nelikumīgam vai kaitīgam saturam vai moderatori nespēj pārskatīt nelikumīgu vai kaitīgu saturu.\nPar šo tiks ziņots %(homeserver)s pārvaldītājiem. Tie nevarēs lasīt šīs istabas šifrēto saturu.",
-        "nature_other": "Jebkāds cits iemesls. Lūdzu, aprakstiet problēmu.\nPar to tiks ziņots istabas moderatoriem.",
-        "nature_spam": "Šis lietotājs pārpludina istabu ar reklāmām, saitēm uz reklāmām vai propagandu.\nPar to tiks ziņots istabas moderatoriem.",
-        "nature_toxic": "Šis lietotājs demonstrē toksisku uzvedību, piemēram, apvainojot citus lietotājus vai kopīgojot tikai pieaugušajiem paredzēto saturu ģimenei draudzīgā istabā vai citādi pārkāpjot šīs istabas noteikumus.\nPar to tiks ziņots istabas moderatoriem.",
-        "other_label": "Citi",
-        "report_content_to_homeserver": "Ziņot par saturu mājasservera pārvaldniekam",
-        "report_entire_room": "Ziņot par visu istabu",
-        "spam_or_propaganda": "Surogātpasts vai propaganda",
-        "toxic_behaviour": "Toksiska uzvedība"
+        "report_content_to_homeserver": "Ziņot par saturu mājasservera pārvaldniekam"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Neizdevās atšifrēt %(failedCount)s sesijas.",
@@ -1745,39 +1694,12 @@
         "waiting_for_join_title": "Gaida lietotāju pievienošanos %(brand)s"
     },
     "room_list": {
-        "add_room_label": "Pievienot istabu",
         "add_space_label": "Pievienot telpu",
-        "breadcrumbs_empty": "Nav nesen apmeklētu istabu",
-        "breadcrumbs_label": "Nesen apmeklētās istabas",
         "failed_add_tag": "Neizdevās istabai pievienot birku %(tagName)s",
         "failed_remove_tag": "Neizdevās istabai noņemt birku %(tagName)s",
         "failed_set_dm_tag": "Neizdevās iestatīt tiešās ziņas atzīmi",
-        "home_menu_label": "Sākumlapas opcijas",
-        "join_public_room_label": "Pievienoties publiskai istabai",
-        "joining_rooms_status": {
-            "zero": "Pašlaik pievienojas %(count)s istabām",
-            "one": "Pašlaik pievienojas %(count)s istabai",
-            "other": "Pašlaik pievienojas %(count)s istabām"
-        },
         "notification_options": "Paziņojumu iespējas",
-        "redacting_messages_status": {
-            "zero": "",
-            "one": "Pašlaik tiek dzēstas ziņas %(count)s istabā",
-            "other": "Pašlaik tiek dzēstas ziņas %(count)s istabās"
-        },
-        "show_less": "Rādīt mazāk",
-        "show_n_more": {
-            "one": "Rādīt vēl %(count)s",
-            "other": "Rādīt vēl %(count)s"
-        },
-        "show_previews": "Rādīt ziņu priekšskatījumus",
-        "sort_by": "Kārtot pēc",
-        "sort_by_activity": "Aktivitātes",
-        "sort_by_alphabet": "A-Ž",
-        "sort_unread_first": "Rādīt istabas ar nelasītām ziņām augšpusē",
-        "space_menu_label": "%(spaceName)s izvēlne",
-        "sublist_options": "Saraksta iespējas",
-        "suggested_rooms_heading": "Ieteicamās istabas"
+        "show_less": "Rādīt mazāk"
     },
     "room_settings": {
         "access": {
@@ -2319,7 +2241,6 @@
         "send_typing_notifications": "Sūtīt paziņojumus par rakstīšanu",
         "sessions": {
             "best_security_note": "Visdrošāk ir apliecināt savas sesijas un atteikties no jebkuras sesijas, kas nav atpazīstama vai netiek vairs izmantota.",
-            "browser": "Pārlūks",
             "confirm_sign_out": {
                 "zero": "Jāapstiprina atteikšanās no šīm ierīcēm.",
                 "one": "Jāapstiprina atteikšanās no šīs ierīces.",
@@ -2373,7 +2294,6 @@
             "no_sessions": "Netika atrasta neviena sesija.",
             "no_unverified_sessions": "Netika atrasta neviena neapliecināta sesija.",
             "no_verified_sessions": "Netika atrasta neviena apliecināta sesija.",
-            "os": "Operētājsistēma",
             "other_sessions_heading": "Citas sesijas",
             "push_heading": "Pašpiegādes paziņojumi",
             "push_subheading": "Saņemt pašpiegādes paziņojumus šajā sesijā.",
@@ -2432,13 +2352,11 @@
         "show_stickers_button": "Rādīt uzlīmju pogu",
         "show_typing_notifications": "Rādīt paziņojumus par rakstīšanu",
         "sidebar": {
-            "metaspaces_favourites_description": "Grupējiet savas iecienītākās istabas un personas vienuviet.",
             "metaspaces_home_all_rooms": "Rādīt visas istabas",
             "metaspaces_home_all_rooms_description": "Rādīt visas savas istabas sākumlapā, pat ja tās pievienotas kādai telpai.",
             "metaspaces_home_description": "Sākums ir noderīgs, lai iegūtu pārskatu par visu.",
             "metaspaces_orphans": "Istabas ārpus telpām",
             "metaspaces_orphans_description": "Grupējiet visas telpām nepiesaistītās istabas vienuviet.",
-            "metaspaces_people_description": "Grupējiet visus savus cilvēkus vienuviet.",
             "metaspaces_subsection": "Telpas, ko rādīt",
             "metaspaces_video_rooms": "Video istabas un konferences",
             "metaspaces_video_rooms_description": "Grupējiet visas privātās video istabas un konferences.",
@@ -2458,7 +2376,6 @@
             "audio_output": "Audio izeja",
             "audio_output_empty": "Nav konstatētas audio izejas",
             "auto_gain_control": "Automātiska pastiprinājuma kontrole",
-            "connection_section": "Savienojums",
             "echo_cancellation": "Atbalss slāpēšana",
             "enable_fallback_ice_server": "Atļaut rezerves zvanu palīgserveri (%(server)s)",
             "enable_fallback_ice_server_description": "Attiecināms tikai tad, ja Tavs mājasserveris to nenodrošina. Tava IP adrese zvana laikā tiks kopīgota.",
@@ -2636,12 +2553,6 @@
     },
     "space_settings": {
         "title": "Iestatījumi - %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "Jums nav atļauju pievienot istabas šai telpai",
-        "error_no_permission_add_space": "Jums nav atļauju pievienot telpas šai telpai",
-        "error_no_permission_create_room": "Nav atļauju veidot jaunas istabas šajā vietā",
-        "error_no_permission_invite": "Jums nav atļauju uzaicināt cilvēkus uz šo telpu"
     },
     "spotlight": {
         "public_rooms": {
@@ -3420,13 +3331,7 @@
         "close_to_view_right_panel": "Aizvērt šo logrīku, lai skatītu to šajā panelī",
         "context_menu": {
             "delete": "Izdzēst ekrānvadīklu",
-            "delete_warning": "Ekrānvadīklas izdzēšana noņems to visiem šīs istabas lietotājiem. Vai tiešām izdzēst šo ekrānvadīklu?",
-            "move_left": "Pārvietot pa kreisi",
-            "move_right": "Pārvietot pa labi",
-            "remove": "Dzēst visiem",
-            "revoke": "Atsaukt atļaujas",
-            "screenshot": "Uzņemt attēlu",
-            "start_audio_stream": "Sākt audio straumēšanu"
+            "delete_warning": "Ekrānvadīklas izdzēšana noņems to visiem šīs istabas lietotājiem. Vai tiešām izdzēst šo ekrānvadīklu?"
         },
         "cookie_warning": "Šis logrīks var izmantot sīkfailus.",
         "error_hangup_description": "Jūs tikāt atvienots no zvana. (Kļūda: %(message)s)",

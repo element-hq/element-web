@@ -13,7 +13,7 @@ import userEvent from "@testing-library/user-event";
 
 import * as stories from "./UserMenu.stories.tsx";
 
-const { Default, LongerName, Condensed, Guest } = composeStories(stories);
+const { Default, LongerName, Condensed, Guest, Open, NoAvatar, WithStatus, WithStatusOpen } = composeStories(stories);
 
 describe("UserMenu", () => {
     it("renders a button", async () => {
@@ -28,6 +28,10 @@ describe("UserMenu", () => {
         const { container } = render(<Condensed />);
         expect(container).toMatchSnapshot();
     });
+    it("renders the status emoji when set", async () => {
+        const { container } = render(<WithStatus />);
+        expect(container).toMatchSnapshot();
+    });
     it("renders a menu", async () => {
         const { baseElement, getByRole } = render(<Default />);
         await userEvent.click(getByRole("button"));
@@ -37,5 +41,17 @@ describe("UserMenu", () => {
         const { baseElement, getByRole } = render(<Guest />);
         await userEvent.click(getByRole("button"));
         expect(baseElement).toMatchSnapshot();
+    });
+    it("renders an open menu", async () => {
+        const { baseElement } = render(<Open />);
+        expect(baseElement).toMatchSnapshot();
+    });
+    it("renders a menu without an avatar", async () => {
+        const { baseElement } = render(<NoAvatar />);
+        expect(baseElement).toMatchSnapshot();
+    });
+    it("renders an open menu with user status", async () => {
+        const { container } = render(<WithStatusOpen />);
+        expect(container).toMatchSnapshot();
     });
 });

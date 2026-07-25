@@ -19,6 +19,8 @@ import {
     MsgType,
     NotificationCountType,
     PendingEventOrdering,
+    RelationType,
+    type Relations,
     Room,
     TweakName,
 } from "matrix-js-sdk/src/matrix";
@@ -49,6 +51,8 @@ import SettingsStore from "../../../../../src/settings/SettingsStore";
 import EditorStateTransfer from "../../../../../src/utils/EditorStateTransfer";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import PlatformPeg from "../../../../../src/PlatformPeg";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
+import { SDKContext } from "../../../../../src/contexts/SDKContext.ts";
 
 function getTile(container: HTMLElement): HTMLElement {
     const tile = container.querySelector(".mx_EventTile");
@@ -99,6 +103,41 @@ function makeThreadReplyEvent(roomId: string): MatrixEvent {
             event_id: "$thread-root",
         },
     });
+}
+
+function makeReactionEvent(roomId: string, targetEventId: string, sender: string, key: string): MatrixEvent {
+    return mkEvent({
+        event: true,
+        type: EventType.Reaction,
+        room: roomId,
+        user: sender,
+        content: {
+            "m.relates_to": {
+                rel_type: RelationType.Annotation,
+                event_id: targetEventId,
+                key,
+            },
+        },
+    });
+}
+
+function makeRelations(
+    reactionsByKey: Map<string, MatrixEvent[]>,
+    reactionsBySender: Record<string, MatrixEvent[]> = {},
+): Relations {
+    return {
+        getSortedAnnotationsByKey: () =>
+            [...reactionsByKey.entries()].map(([key, events]) => [key, new Set(events)] as [string, Set<MatrixEvent>]),
+        getAnnotationsBySender: () =>
+            Object.fromEntries(
+                Object.entries(reactionsBySender).map(([sender, events]) => [
+                    sender,
+                    new Map(events.map((ev) => [ev.getId(), ev])),
+                ]),
+            ),
+        on: jest.fn(),
+        off: jest.fn(),
+    } as unknown as Relations;
 }
 
 describe("EventTile", () => {
@@ -258,6 +297,18 @@ describe("EventTile", () => {
             const { container } = getComponent({ mxEvent: localEcho, eventSendStatus: EventStatus.SENDING });
 
             expect(getTile(container)).not.toHaveAttribute("data-scroll-tokens");
+        });
+
+        it("sets aria-live to off when the send status is undefined", () => {
+            const { container } = getComponent();
+
+            expect(getTile(container)).toHaveAttribute("aria-live", "off");
+        });
+
+        it("does not set aria-live when the send status is explicitly null", () => {
+            const { container } = getComponent({ eventSendStatus: null as unknown as EventStatus });
+
+            expect(getTile(container)).not.toHaveAttribute("aria-live");
         });
     });
 
@@ -507,6 +558,68 @@ describe("EventTile", () => {
             expect(senderDetails).toContainElement(container.querySelector(".mx_DisambiguatedProfile"));
             expect(senderDetails).toContainElement(container.querySelector(".mx_EventTile_avatar"));
         });
+
+        it("keeps sender and avatar when only the layout prop is set to bubble", () => {
+            const { container } = getComponent({ layout: Layout.Bubble });
+
+            expect(container.querySelector(".mx_DisambiguatedProfile")).not.toBeNull();
+            expect(container.querySelector(".mx_EventTile_avatar")).not.toBeNull();
+        });
+
+        it("hides the sender but keeps the info-message avatar for room create events", () => {
+            const createEvent = mkEvent({
+                event: true,
+                type: EventType.RoomCreate,
+                room: room.roomId,
+                user: "@alice:example.org",
+                content: { creator: "@alice:example.org", room_version: "1" },
+            });
+            const { container } = getComponent({ mxEvent: createEvent }, TimelineRenderingType.Room, {
+                showHiddenEvents: true,
+            });
+
+            expect(container.querySelector(".mx_DisambiguatedProfile")).toBeNull();
+            expect(container.querySelector(".mx_EventTile_avatar")).not.toBeNull();
+        });
+
+        it("renders the notification avatar independently from the sender details", () => {
+            const { container } = getComponent({}, TimelineRenderingType.Notification);
+            const details = container.querySelector<HTMLElement>(".mx_EventTile_details");
+            const avatar = container.querySelector<HTMLElement>(".mx_EventTile_avatar");
+
+            expect(details).not.toBeNull();
+            expect(avatar).not.toBeNull();
+            expect(details).not.toContainElement(avatar);
+        });
+    });
+
+    describe("continuation rendering", () => {
+        it.each([TimelineRenderingType.Room, TimelineRenderingType.Search, TimelineRenderingType.Thread])(
+            "keeps continuation styling in %s timelines",
+            (renderingType) => {
+                const { container } = getComponent({ continuation: true }, renderingType);
+
+                expect(getTile(container)).toHaveClass("mx_EventTile_continuation");
+            },
+        );
+
+        it.each([TimelineRenderingType.File, TimelineRenderingType.Notification, TimelineRenderingType.ThreadsList])(
+            "drops continuation styling in %s timelines when not using bubble layout",
+            (renderingType) => {
+                const { container } = getComponent({ continuation: true }, renderingType);
+
+                expect(getTile(container)).not.toHaveClass("mx_EventTile_continuation");
+            },
+        );
+
+        it.each([TimelineRenderingType.File, TimelineRenderingType.Notification, TimelineRenderingType.ThreadsList])(
+            "keeps continuation styling in %s timelines when using bubble layout",
+            (renderingType) => {
+                const { container } = getComponent({ continuation: true, layout: Layout.Bubble }, renderingType);
+
+                expect(getTile(container)).toHaveClass("mx_EventTile_continuation");
+            },
+        );
     });
 
     describe("read receipt option", () => {
@@ -613,6 +726,55 @@ describe("EventTile", () => {
 
             expect(container.querySelector(".mx_EventTile_footer")).not.toBeNull();
             expect(screen.getByText("Pinned message")).toBeInTheDocument();
+        });
+
+        it("renders the IRC footer inside the event line", () => {
+            jest.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
+            const { container } = getComponent({ layout: Layout.IRC });
+
+            expect(getLine(container).querySelector(".mx_EventTile_footer")).not.toBeNull();
+            expect(getTile(container).querySelector(":scope > .mx_EventTile_footer")).toBeNull();
+        });
+
+        it("renders a bubble footer for an own pinned message", () => {
+            jest.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
+            const ownEvent = makeOwnMessage();
+            const { container } = getComponent({ mxEvent: ownEvent, layout: Layout.Bubble });
+            const footer = container.querySelector(".mx_EventTile_footer");
+
+            expect(footer).not.toBeNull();
+            expect(footer).toHaveTextContent("Pinned message");
+        });
+
+        it("renders relation groups and deduplicates reactions from the same sender", () => {
+            const bobReaction1 = makeReactionEvent(room.roomId, mxEvent.getId()!, "@bob:example.org", "👍");
+            const bobReaction2 = makeReactionEvent(room.roomId, mxEvent.getId()!, "@bob:example.org", "👍");
+            const getRelationsForEvent = jest
+                .fn()
+                .mockReturnValue(makeRelations(new Map([["👍", [bobReaction1, bobReaction2]]])));
+
+            getComponent({ showReactions: true, getRelationsForEvent }, TimelineRenderingType.Room, {
+                canReact: true,
+            });
+
+            const reactionButton = screen.getByRole("button", { name: /@bob:example\.org reacted with 👍/ });
+            expect(reactionButton).toHaveTextContent("👍1");
+        });
+
+        it("detects the current user's reaction when rendering relation groups", () => {
+            const ownReaction = makeReactionEvent(room.roomId, mxEvent.getId()!, client.getSafeUserId(), "👍");
+            const getRelationsForEvent = jest.fn().mockReturnValue(
+                makeRelations(new Map([["👍", [ownReaction]]]), {
+                    [client.getSafeUserId()]: [ownReaction],
+                }),
+            );
+
+            getComponent({ showReactions: true, getRelationsForEvent }, TimelineRenderingType.Room, {
+                canReact: true,
+                canSelfRedact: false,
+            });
+
+            expect(screen.getByRole("button", { name: /reacted with 👍/ })).toHaveAttribute("aria-disabled", "true");
         });
     });
 
@@ -847,21 +1009,25 @@ describe("EventTile", () => {
             const { container } = getComponent({}, TimelineRenderingType.ThreadsList);
 
             // By default, the thread will assume it is read.
-            expect(container.getElementsByClassName("mx_NotificationBadge")).toHaveLength(0);
+            expect(container.querySelectorAll('[data-testid="notification-badge"]')).toHaveLength(0);
 
             act(() => {
                 room.setThreadUnreadNotificationCount(mxEvent.getId()!, NotificationCountType.Total, 3);
             });
 
-            expect(container.getElementsByClassName("mx_NotificationBadge")).toHaveLength(1);
-            expect(container.getElementsByClassName("mx_NotificationBadge_level_highlight")).toHaveLength(0);
+            let badges = container.querySelectorAll('[data-testid="notification-badge"]');
+            expect(badges).toHaveLength(1);
+            expect(badges[0]).toHaveAttribute("data-badge-type", "dot");
+            expect(badges[0]).toHaveAttribute("data-notification-level", "notification");
 
             act(() => {
                 room.setThreadUnreadNotificationCount(mxEvent.getId()!, NotificationCountType.Highlight, 1);
             });
 
-            expect(container.getElementsByClassName("mx_NotificationBadge")).toHaveLength(1);
-            expect(container.getElementsByClassName("mx_NotificationBadge_level_highlight")).toHaveLength(1);
+            badges = container.querySelectorAll('[data-testid="notification-badge"]');
+            expect(badges).toHaveLength(1);
+            expect(badges[0]).toHaveAttribute("data-badge-type", "dot");
+            expect(badges[0]).toHaveAttribute("data-notification-level", "highlight");
         });
     });
 
@@ -905,6 +1071,20 @@ describe("EventTile", () => {
             await waitFor(() => {
                 expect(screen.getByText("Can't load this message (m.room.message)")).toBeInTheDocument();
             });
+        });
+
+        it("renders a notice when the event has no renderer", () => {
+            const unsupportedEvent = mkEvent({
+                event: true,
+                type: "org.example.unsupported",
+                room: room.roomId,
+                user: "@alice:example.org",
+                content: {},
+            });
+
+            getComponent({ mxEvent: unsupportedEvent });
+
+            expect(screen.getByText("This event could not be displayed")).toBeInTheDocument();
         });
 
         it("updates msgtype-derived tile classes when an edit changes msgtype to m.emote", async () => {
@@ -1251,6 +1431,57 @@ describe("EventTile", () => {
             expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(1);
             expect(container.getElementsByClassName("mx_EventTile_e2eIcon")[0]).toHaveAccessibleName("Not encrypted");
         });
+
+        it.each([EventStatus.ENCRYPTING, EventStatus.NOT_SENT])(
+            "does not show the unencrypted warning for %s events in encrypted rooms",
+            (status) => {
+                const event = makeOwnMessage();
+                event.setStatus(status);
+                const { container } = getComponent(
+                    { mxEvent: event, eventSendStatus: status },
+                    TimelineRenderingType.Room,
+                    {
+                        isRoomEncrypted: true,
+                    },
+                );
+
+                expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(0);
+            },
+        );
+
+        it("does not show the unencrypted warning for state events in encrypted rooms", () => {
+            const stateEvent = mkEvent({
+                event: true,
+                type: EventType.RoomTopic,
+                room: room.roomId,
+                user: "@alice:example.org",
+                skey: "",
+                content: { topic: "Topic" },
+            });
+            const { container } = getComponent({ mxEvent: stateEvent }, TimelineRenderingType.Room, {
+                isRoomEncrypted: true,
+            });
+
+            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(0);
+        });
+
+        it("does not show the unencrypted warning for redacted events in encrypted rooms", () => {
+            jest.spyOn(mxEvent, "isRedacted").mockReturnValue(true);
+            const { container } = getComponent({}, TimelineRenderingType.Room, {
+                isRoomEncrypted: true,
+            });
+
+            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(0);
+        });
+
+        it("does not show the unencrypted warning for local-room events in encrypted rooms", () => {
+            const localEvent = makeTimestampedMessage({ room: "local+room" });
+            const { container } = getComponent({ mxEvent: localEvent }, TimelineRenderingType.Room, {
+                isRoomEncrypted: true,
+            });
+
+            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(0);
+        });
     });
 
     describe("event highlighting", () => {
@@ -1423,7 +1654,11 @@ describe("EventTile", () => {
             return Element.prototype.matches.call(this, selector);
         });
 
-        const { container, rerender } = render(<WrappedEventTiles events={events} editEvent={firstEvent} />);
+        const { container, rerender } = render(<WrappedEventTiles events={events} editEvent={firstEvent} />, {
+            wrapper: ({ children }) => (
+                <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+            ),
+        });
         const editingTile = container.querySelector(".mx_EventTile_isEditing");
 
         expect(editingTile).not.toBeNull();

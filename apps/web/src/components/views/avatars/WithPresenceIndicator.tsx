@@ -15,43 +15,28 @@ import {
     type User,
     UserEvent,
 } from "matrix-js-sdk/src/matrix";
-import { Tooltip } from "@vector-im/compound-web";
 
 import { isPresenceEnabled } from "../../../utils/presence";
-import { _t } from "../../../languageHandler";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { getJoinedNonFunctionalMembers } from "../../../utils/room/getJoinedNonFunctionalMembers";
 import { useEventEmitter } from "../../../hooks/useEventEmitter";
 import { BUSY_PRESENCE_NAME } from "../rooms/PresenceLabel";
+import AvatarPresenceIconView from "../rooms/MemberList/tiles/common/PresenceIconView";
 
 interface Props {
     room: Room;
-    size: string; // CSS size
-    tooltipProps?: {
-        tabIndex?: number;
-    };
     children: ReactNode;
 }
 
 export enum Presence {
-    // Note: the names here are used in CSS class names
-    Online = "ONLINE",
-    Away = "AWAY",
-    Offline = "OFFLINE",
-    Busy = "BUSY",
-}
-
-function tooltipText(variant: Presence): string {
-    switch (variant) {
-        case Presence.Online:
-            return _t("presence|online");
-        case Presence.Away:
-            return _t("presence|away");
-        case Presence.Offline:
-            return _t("presence|offline");
-        case Presence.Busy:
-            return _t("presence|busy");
-    }
+    // This class used to have its own presence indicator and has been
+    // updated to use the new one so presence colours / icons match across the app.
+    // These values are the ones from the wire that PresenceIconView expects,
+    // but really some of the logic here could be deduplicated.
+    Online = "online",
+    Away = "unavailable",
+    Offline = "offline",
+    Busy = "busy",
 }
 
 function getDmMember(room: Room): RoomMember | null {
@@ -117,22 +102,13 @@ export const usePresence = (room: Room, member: RoomMember | null): Presence | n
     return presence;
 };
 
-const WithPresenceIndicator: React.FC<Props> = ({ room, size, tooltipProps, children }) => {
+const WithPresenceIndicator: React.FC<Props> = ({ room, children }) => {
     const dmMember = useDmMember(room);
     const presence = usePresence(room, dmMember);
 
     let icon: JSX.Element | undefined;
     if (presence) {
-        icon = (
-            <div
-                tabIndex={tooltipProps?.tabIndex ?? 0}
-                className={`mx_WithPresenceIndicator_icon mx_WithPresenceIndicator_icon_${presence.toLowerCase()}`}
-                style={{
-                    width: size,
-                    height: size,
-                }}
-            />
-        );
+        icon = <AvatarPresenceIconView presenceState={presence} />;
     }
 
     if (!presence) return <>{children}</>;
@@ -140,9 +116,7 @@ const WithPresenceIndicator: React.FC<Props> = ({ room, size, tooltipProps, chil
     return (
         <div className="mx_WithPresenceIndicator">
             {children}
-            <Tooltip label={tooltipText(presence)} placement="bottom">
-                {icon}
-            </Tooltip>
+            <div className="mx_WithPresenceIndicator_icon">{icon}</div>
         </div>
     );
 };

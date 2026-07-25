@@ -6,6 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { rejectToast } from "@element-hq/element-web-playwright-common";
+
 import { test, expect } from "../../element-web-test";
 import { Bot } from "../../pages/bot";
 
@@ -15,7 +17,7 @@ test.describe("Landmark navigation tests", () => {
     });
 
     test("without any rooms", async ({ page, homeserver, app, user }) => {
-        await app.closeVerifyToast();
+        await rejectToast(page, "Verify this device");
 
         // sometimes the space button doesn't appear right away
         await expect(page.locator(".mx_SpaceButton_active")).toBeVisible();
@@ -120,7 +122,7 @@ test.describe("Landmark navigation tests", () => {
             },
         );
 
-        await app.closeVerifyToast();
+        await rejectToast(page, "Verify this device");
         await app.viewRoomByName("Bob");
         // confirm the room was loaded
         await expect(page.getByText("Bob joined the room")).toBeVisible();

@@ -11,8 +11,6 @@
             "other": "%(count)s mensajes sin leer incluyendo menciones.",
             "one": "1 mención sin leer."
         },
-        "recent_rooms": "Salas recientes",
-        "room_name": "Sala %(name)s",
         "room_status_bar": "Barra de estado de la sala",
         "seek_bar_label": "Barra de búsqueda de audio",
         "unread_messages": "Mensajes sin leer."
@@ -22,7 +20,6 @@
         "accept": "Aceptar",
         "add": "Añadir",
         "add_existing_room": "Añadir sala ya existente",
-        "add_people": "Añadir gente",
         "apply": "Aplicar",
         "approve": "Aprobar",
         "ask_to_join": "Pedir acceso",
@@ -57,7 +54,6 @@
         "enter_fullscreen": "Pantalla completa",
         "exit_fullscreeen": "Salir de pantalla completa",
         "expand": "Expandir",
-        "explore_public_rooms": "Buscar salas públicas",
         "explore_rooms": "Explorar salas",
         "export": "Exportar",
         "forward": "Reenviar",
@@ -69,8 +65,6 @@
         "ignore": "Ignorar",
         "import": "Importar",
         "invite": "Invitar",
-        "invite_to_space": "Invitar al espacio",
-        "invites_list": "Invitaciones",
         "join": "Unirse",
         "learn_more": "Más información",
         "leave": "Salir",
@@ -97,7 +91,6 @@
         "rename": "Cambiar nombre",
         "reply": "Responder",
         "reply_in_thread": "Responder en hilo",
-        "report_content": "Denunciar contenido",
         "report_room": "Reportar sala",
         "resend": "Reenviar",
         "reset": "Restablecer",
@@ -117,8 +110,6 @@
         "sign_out": "Cerrar sesión",
         "skip": "Omitir",
         "start": "Empezar",
-        "start_chat": "Empezar una conversación",
-        "start_new_chat": "Crear conversación",
         "stop": "Parar",
         "submit": "Enviar",
         "subscribe": "Suscribir",
@@ -219,10 +210,7 @@
         "log_in_new_account": "<a>Inicie sesión</a> en su nueva cuenta.",
         "logout_dialog": {
             "description": "¿Estás seguro de que quieres salir?",
-            "megolm_export": "Exportar claves manualmente",
             "setup_key_backup_title": "Perderás acceso a tus mensajes cifrados",
-            "setup_secure_backup_description_1": "Los mensajes cifrados son seguros con el cifrado punto a punto. Solo tú y el/los destinatario/s tiene/n las claves para leer estos mensajes.",
-            "setup_secure_backup_description_2": "Al cerrar sesión, estas claves serán eliminadas del dispositivo. Esto significa que no podrás leer mensajes cifrados salvo que tengas sus claves en otros dispositivos, o hayas hecho una copia de seguridad usando el servidor.",
             "skip_key_backup": "No quiero mis mensajes cifrados"
         },
         "misconfigured_body": "Solicita al administrador de %(brand)s que compruebe si hay entradas duplicadas o erróneas en <a>tu configuración</a>.",
@@ -274,7 +262,6 @@
             "point_the_camera": "Escanee el código QR mostrado aquí",
             "scan_code_instruction": "Escanee el código QR con otro dispositivo",
             "scan_qr_code": "Iniciar sesión con código QR",
-            "security_code": "Código de seguridad",
             "security_code_prompt": "Si se le solicita, ingrese el código de abajo en su otro dispositivo.",
             "select_qr_code": "Seleccione \"%(scanQRCode)s\"",
             "unsupported_explainer": "Su proveedor de cuenta no admite iniciar sesión en un nuevo dispositivo con un código QR.",
@@ -480,7 +467,6 @@
         "encrypted": "Cifrado",
         "error": "Error",
         "faq": "Preguntas frecuentes",
-        "favourites": "Favoritos",
         "feedback": "Danos tu opinión",
         "filter_results": "Filtrar resultados",
         "forward_message": "Reenviar mensaje",
@@ -488,7 +474,6 @@
         "go_to_settings": "Ir a la configuración",
         "guest": "Invitado",
         "help": "Ayuda",
-        "historical": "Historial",
         "home": "Inicio",
         "homeserver": "Servidor base",
         "identity_server": "Servidor de identidad",
@@ -500,13 +485,11 @@
         "light": "Claro",
         "loading": "Cargando…",
         "location": "Ubicación",
-        "low_priority": "Prioridad baja",
         "matrix": "Matrix",
         "message": "Mensaje",
         "message_layout": "Diseño del mensaje",
         "message_timestamp_invalid": "Marca de tiempo inválida",
         "microphone": "Micrófono",
-        "model": "Modelo",
         "moderation_and_safety": "Moderación y seguridad",
         "modern": "Moderno",
         "mute": "Silenciar",
@@ -565,7 +548,6 @@
         "success": "Éxito",
         "suggestions": "Sugerencias",
         "support": "Ayuda",
-        "system_alerts": "Alertas del sistema",
         "theme": "Tema",
         "thread": "Hilo",
         "threads": "Hilos",
@@ -582,7 +564,6 @@
         "username": "Nombre de usuario",
         "verified": "Verificada",
         "version": "Versión",
-        "video": "Vídeo",
         "video_room": "Sala de vídeo",
         "view_message": "Ver mensaje",
         "warning": "Advertencia"
@@ -857,17 +838,6 @@
         },
         "set_up_recovery_toast_description": "Genera una clave de recuperación que puede usarse para restaurar el histórico de mensajes encriptados en caso de que pierdas el acceso a tus dispositivos.",
         "set_up_toast_title": "Configurar copia de seguridad segura",
-        "setup_secure_backup": {
-            "explainer": "Haz copia de seguridad de tus claves antes de cerrar sesión para evitar perderlas."
-        },
-        "udd": {
-            "interactive_verification_button": "Verificar interactivamente usando emojis",
-            "other_ask_verify_text": "Pídele al usuario que verifique su sesión, o verifícala manualmente a continuación.",
-            "other_new_session_text": "%(name)s (%(userId)s) inició una nueva sesión sin verificarla:",
-            "own_ask_verify_text": "Verifica la otra sesión utilizando una de las siguientes opciones.",
-            "own_new_session_text": "Iniciaste una nueva sesión sin verificarla:",
-            "title": "No es de confianza"
-        },
         "unable_to_setup_keys_error": "No se han podido configurar las claves",
         "verification": {
             "accepting": "Aceptando…",
@@ -1281,7 +1251,6 @@
         "element_call_video_rooms": "Salas de vídeo Element Call",
         "experimental_description": "¿Te apetece probar cosas experimentales? Aquí encontrarás nuestras ideas en desarrollo. No están terminadas, pueden ser inestables, cambiar o dejar de estar disponibles. <a>Más información</a>.",
         "feature_wysiwyg_composer_description": "Usar texto con formato en lugar de Markdown en el editor de mensajes.",
-        "group_calls": "Nueva experiencia de llamadas grupales",
         "group_developer": "Desarrollo",
         "group_encryption": "Cifrado",
         "group_experimental": "Experimentos",
@@ -1295,7 +1264,6 @@
         "group_voip": "Voz y vídeo",
         "group_widgets": "Accesorios",
         "hidebold": "Ocultar el punto indicador de notificaciones (solo mostrar un indicador con número)",
-        "html_topic": "Ver representación HTML de los asuntos de las salas",
         "join_beta": "Unirme a la beta",
         "join_beta_reload": "Al unirte a la beta, %(brand)s volverá a cargarse.",
         "jump_to_date": "Saltar a una fecha (añade el comando /jumptodate y enlaces para saltar en los encabezados de fecha)",
@@ -1307,13 +1275,10 @@
         "location_share_live_description": "Implementación temporal. Las ubicaciones persisten en el historial de la sala.",
         "mjolnir": "Nuevas maneras de ignorar a otras personas",
         "msc3531_hide_messages_pending_moderation": "Permitir a los moderadores ocultar mensajes a la espera de revisión.",
-        "report_to_moderators": "Denunciar ante los moderadores",
-        "report_to_moderators_description": "En las salas que sean compatible con la moderación, el botón de «Denunciar» avisará a los moderadores de la sala.",
         "sliding_sync": "Modo de sincronización progresiva",
         "sliding_sync_description": "En desarrollo, no se puede desactivar.",
         "sliding_sync_disabled_notice": "Cierra sesión y vuélvela a abrir para desactivar",
         "sliding_sync_server_no_support": "Tu servidor no es compatible",
-        "under_active_development": "Funcionalidad en desarrollo.",
         "video_rooms": "Salas de vídeo",
         "video_rooms_a_new_way_to_chat": "Una nueva forma de hablar por voz y vídeo en %(brand)s.",
         "video_rooms_always_on_voip_channels": "Las salas de vídeo son canales de VoIP siempre abiertos, disponibles dentro de una sala en %(brand)s.",
@@ -1363,9 +1328,6 @@
         "leave_space_question": "¿Salir del espacio «%(spaceName)s»?",
         "room_rejoin_warning": "Esta sala no es pública. No podrás volver a unirte sin una invitación.",
         "space_rejoin_warning": "Este espacio es privado. No podrás volverte a unir sin una invitación."
-    },
-    "left_panel": {
-        "open_dial_pad": "Abrir teclado numérico"
     },
     "lightbox": {
         "rotate_left": "Girar a la izquierda",
@@ -1535,7 +1497,6 @@
     },
     "quick_settings": {
         "all_settings": "Ajustes",
-        "metaspace_section": "Fijar a la barra lateral",
         "sidebar_settings": "Mas opciones",
         "title": "Ajustes rápidos"
     },
@@ -1551,21 +1512,10 @@
     },
     "report_content": {
         "description": "Denunciar este mensaje enviará su único «event ID al administrador de tu servidor base. Si los mensajes en esta sala están cifrados, el administrador de tu servidor no podrá leer el texto del mensaje ni ver ningún archivo o imagen.",
-        "disagree": "No estoy de acuerdo",
         "hide_messages_from_user": "Comprueba que realmente quieres ocultar todos los mensajes actuales y futuros de este usuario.",
         "ignore_user": "Ignorar usuario",
-        "illegal_content": "Contenido ilegal",
         "missing_reason": "Por favor, explica por qué estás denunciando.",
-        "nature": "Por favor, escoge una categoría y explica por qué el mensaje es abusivo.",
-        "nature_disagreement": "Lo que esta persona está escribiendo no está bien.\nSe avisará a los moderadores de la sala.",
-        "nature_illegal": "Esta persona está comportándose de manera posiblemente ilegal. Por ejemplo, amenazando con violencia física o con revelar datos personales.\nSe avisará a los moderadores de la sala, que podrían denunciar los hechos.",
-        "nature_other": "Otro motivo. Por favor, describe el problema.\nSe avisará a los moderadores de la sala.",
-        "nature_spam": "Esta persona está mandando publicidad no deseada o propaganda.\nSe avisará a los moderadores de la sala.",
-        "other_label": "Otros",
-        "report_content_to_homeserver": "Denunciar contenido al administrador de tu servidor base",
-        "report_entire_room": "Denunciar la sala entera",
-        "spam_or_propaganda": "Publicidad no deseada o propaganda",
-        "toxic_behaviour": "Comportamiento tóxico"
+        "report_content_to_homeserver": "Denunciar contenido al administrador de tu servidor base"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "¡Error al descifrar %(failedCount)s sesiones!",
@@ -1755,36 +1705,12 @@
         }
     },
     "room_list": {
-        "add_room_label": "Añadir una sala",
         "add_space_label": "Añadir un espacio",
-        "breadcrumbs_empty": "No hay salas visitadas recientemente",
-        "breadcrumbs_label": "Salas visitadas recientemente",
         "failed_add_tag": "Error al añadir la etiqueta %(tagName)s a la sala",
         "failed_remove_tag": "Error al eliminar la etiqueta %(tagName)s de la sala",
         "failed_set_dm_tag": "Fallo al poner la etiqueta al mensaje directo",
-        "home_menu_label": "Opciones de la pantalla de inicio",
-        "join_public_room_label": "Unirse a la sala pública",
-        "joining_rooms_status": {
-            "one": "Entrando en %(count)s sala",
-            "other": "Entrando en %(count)s salas"
-        },
         "notification_options": "Ajustes de notificaciones",
-        "redacting_messages_status": {
-            "one": "Borrando mensajes en %(count)s sala",
-            "other": "Borrando mensajes en %(count)s salas"
-        },
-        "show_less": "Ver menos",
-        "show_n_more": {
-            "other": "Ver %(count)s más",
-            "one": "Ver %(count)s más"
-        },
-        "show_previews": "Incluir una vista previa del último mensaje",
-        "sort_by": "Ordenar por",
-        "sort_by_activity": "Actividad",
-        "sort_unread_first": "Colocar al principio las salas con mensajes sin leer",
-        "space_menu_label": "Menú de %(spaceName)s",
-        "sublist_options": "Opciones de la lista",
-        "suggested_rooms_heading": "Salas sugeridas"
+        "show_less": "Ver menos"
     },
     "room_settings": {
         "access": {
@@ -2291,7 +2217,6 @@
         "send_read_receipts_unsupported": "Tu servidor no permite desactivar los acuses de recibo.",
         "send_typing_notifications": "Enviar notificaciones de tecleo",
         "sessions": {
-            "browser": "Navegador",
             "confirm_sign_out": {
                 "other": "Confirma el cierre de sesión en estos dispositivos",
                 "one": "Confirmar cerrar sesión de este dispositivo"
@@ -2335,7 +2260,6 @@
             "no_sessions": "No se ha encontrado ninguna sesión.",
             "no_unverified_sessions": "No se ha encontrado ninguna sesión sin verificar.",
             "no_verified_sessions": "No se ha encontrado ninguna sesión verificada.",
-            "os": "Sistema operativo",
             "other_sessions_heading": "Otras sesiones",
             "push_heading": "Notificaciones push",
             "push_subheading": "Recibir notificaciones push en esta sesión.",
@@ -2383,13 +2307,11 @@
         "show_stickers_button": "Incluir el botón de pegatinas",
         "show_typing_notifications": "Mostrar un indicador cuando alguien más esté escribiendo en la sala",
         "sidebar": {
-            "metaspaces_favourites_description": "Agrupa en un mismo sitio todas tus salas y personas favoritas.",
             "metaspaces_home_all_rooms": "Ver todas las salas",
             "metaspaces_home_all_rooms_description": "Incluir todas tus salas en inicio, aunque estén dentro de un espacio.",
             "metaspaces_home_description": "La pantalla de Inicio es útil para tener una vista general de todas tus conversaciones.",
             "metaspaces_orphans": "Salas fuera de un espacio",
             "metaspaces_orphans_description": "Agrupa en un mismo sitio todas tus salas que no formen parte de un espacio.",
-            "metaspaces_people_description": "Agrupa a toda tu gente en un mismo sitio.",
             "metaspaces_subsection": "Qué espacios mostrar",
             "title": "Barra lateral"
         },
@@ -2405,7 +2327,6 @@
             "audio_output": "Salida de sonido",
             "audio_output_empty": "No se han detectado salidas de sonido",
             "auto_gain_control": "Control automático de volumen",
-            "connection_section": "Conexión",
             "echo_cancellation": "Cancelación de eco",
             "enable_fallback_ice_server_description": "Solo se activará si tu servidor base no ofrece uno. Tu dirección IP se compartirá durante la llamada.",
             "mirror_local_feed": "Invertir el vídeo local horizontalmente (espejo)",
@@ -2571,12 +2492,6 @@
     },
     "space_settings": {
         "title": "Ajustes - %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "No tienes permisos para añadir salas a este espacio",
-        "error_no_permission_add_space": "No tienes permisos para añadir espacios a este espacio",
-        "error_no_permission_create_room": "No tienes permisos para crear nuevas salas en este espacio",
-        "error_no_permission_invite": "No tienes permiso para invitar a este espacio"
     },
     "spotlight": {
         "public_rooms": {
@@ -3318,13 +3233,7 @@
         "close_to_view_right_panel": "Cierra este accesorio para verlo en este panel",
         "context_menu": {
             "delete": "Eliminar accesorio",
-            "delete_warning": "Al borrar un accesorio, este se elimina para todos usuarios de la sala. ¿Estás seguro?",
-            "move_left": "Mover a la izquierda",
-            "move_right": "Mover a la derecha",
-            "remove": "Eliminar para todos",
-            "revoke": "Quitar permisos",
-            "screenshot": "Toma una foto",
-            "start_audio_stream": "Empezar retransmisión de audio"
+            "delete_warning": "Al borrar un accesorio, este se elimina para todos usuarios de la sala. ¿Estás seguro?"
         },
         "cookie_warning": "Puede que el accesorio use cookies.",
         "error_hangup_description": "Te has desconectado de la llamada. (Error: %(message)s)",

@@ -21,6 +21,7 @@ import {
     RoomMember,
     RoomStateEvent,
     SearchResult,
+    User,
 } from "matrix-js-sdk/src/matrix";
 import { type CryptoApi, CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 import { KnownMembership } from "matrix-js-sdk/src/types";
@@ -55,7 +56,8 @@ import { type LocalRoom, LocalRoomState } from "../../../../src/models/LocalRoom
 import { DirectoryMember } from "../../../../src/utils/direct-messages";
 import { createDmLocalRoom } from "../../../../src/utils/dm/createDmLocalRoom";
 import { UPDATE_EVENT } from "../../../../src/stores/AsyncStore";
-import { SDKContext, SdkContextClass } from "../../../../src/contexts/SDKContext";
+import { SDKContext } from "../../../../src/contexts/SDKContext";
+import { TestSDKContext } from "../../TestSDKContext.ts";
 import WidgetUtils from "../../../../src/utils/WidgetUtils";
 import { WidgetType } from "../../../../src/widgets/WidgetType";
 import WidgetStore from "../../../../src/stores/WidgetStore";
@@ -85,7 +87,7 @@ describe("RoomView", () => {
     let cli: MockedObject<MatrixClient>;
     let room: Room;
     let rooms: Map<string, Room>;
-    let stores: SdkContextClass;
+    let stores: TestSDKContext;
     let crypto: CryptoApi;
 
     // mute some noise
@@ -110,8 +112,8 @@ describe("RoomView", () => {
         room.on(RoomEvent.TimelineReset, (...args) => cli.emit(RoomEvent.TimelineReset, ...args));
 
         DMRoomMap.makeShared(cli);
-        stores = new SdkContextClass();
-        stores.client = cli;
+        stores = new TestSDKContext();
+        stores._client = cli;
         stores.rightPanelStore.useUnitTestClient(cli);
 
         crypto = cli.getCrypto()!;
@@ -1079,27 +1081,6 @@ describe("RoomView", () => {
     });
 
     describe("handles Action.ComposerInsert", () => {
-        it("redispatches an empty composerType, timelineRenderingType with the current state", async () => {
-            await mountRoomView();
-            const promise = untilDispatch((payload) => {
-                try {
-                    expect(payload).toEqual({
-                        action: Action.ComposerInsert,
-                        text: "Hello world",
-                        timelineRenderingType: TimelineRenderingType.Room,
-                        composerType: ComposerType.Send,
-                    });
-                } catch {
-                    return false;
-                }
-                return true;
-            }, defaultDispatcher);
-            defaultDispatcher.dispatch({
-                action: Action.ComposerInsert,
-                text: "Hello world",
-            } satisfies ComposerInsertPayload);
-            await promise;
-        });
         it("redispatches an empty composerType with the current state", async () => {
             await mountRoomView();
             const promise = untilDispatch((payload) => {
@@ -1150,6 +1131,54 @@ describe("RoomView", () => {
             } satisfies ComposerInsertPayload);
             await expect(promise).rejects.toThrow();
         });
+    });
+
+    it("should handle Action.ViewUser", async () => {
+        await mountRoomView();
+        jest.spyOn(stores.rightPanelStore, "setCards");
+        const member = new User("@user:server");
+        defaultDispatcher.dispatch(
+            {
+                action: Action.ViewUser,
+                member,
+            },
+            true,
+        );
+        expect(stores.rightPanelStore.setCards).toHaveBeenCalledWith([
+            { phase: RightPanelPhases.RoomSummary },
+            { phase: RightPanelPhases.MemberList },
+            { phase: RightPanelPhases.MemberInfo, state: { member } },
+        ]);
+    });
+
+    it("should handle Action.ViewUser with push", async () => {
+        await mountRoomView();
+        jest.spyOn(stores.rightPanelStore, "pushCard");
+        const member = new User("@user:server");
+        defaultDispatcher.dispatch(
+            {
+                action: Action.ViewUser,
+                member,
+                push: true,
+            },
+            true,
+        );
+        expect(stores.rightPanelStore.pushCard).toHaveBeenCalledWith({
+            phase: RightPanelPhases.MemberInfo,
+            state: { member },
+        });
+    });
+
+    it("should handle Action.View3pidInvite", async () => {
+        await mountRoomView();
+        jest.spyOn(stores.rightPanelStore, "showOrHidePhase");
+        defaultDispatcher.dispatch(
+            {
+                action: Action.View3pidInvite,
+            },
+            true,
+        );
+        expect(stores.rightPanelStore.showOrHidePhase).toHaveBeenCalledWith("MemberList");
     });
 
     describe("when there is a RoomView", () => {

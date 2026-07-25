@@ -42,7 +42,7 @@ cd element-web
 Set up your local development link by creating a `.link-config` file with contents like:
 
 ```
-matrix-js-sdk=/path/to/matrix-js-sdk
+matrix-js-sdk=/path/to/matrix-js-sdk=apps/web
 ```
 
 **Note for Windows users**: Your link config path might need escaping. For example, `matrix-js-sdk=C:\\path\\to\\matrix-js-sdk`.

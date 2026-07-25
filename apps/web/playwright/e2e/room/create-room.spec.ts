@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Page } from "@playwright/test";
+import { rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { UIFeature } from "../../../src/settings/UIFeature";
@@ -22,7 +23,7 @@ test.describe("Create Room", () => {
         "should create a public room with name, topic & address set",
         { tag: "@screenshot" },
         async ({ page, user, app, axe }) => {
-            await app.closeVerifyToast();
+            await rejectToast(page, "Verify this device");
             const dialog = await app.openCreateRoomDialog();
             // Fill name & topic
             await dialog.getByRole("textbox", { name: "Name" }).fill(name);
@@ -51,7 +52,7 @@ test.describe("Create Room", () => {
     );
 
     test("should allow us to start a chat and show encryption state", async ({ page, user, app }) => {
-        await app.closeVerifyToast();
+        await rejectToast(page, "Verify this device");
 
         await page.getByRole("button", { name: "New conversation", exact: true }).click();
         await page.getByRole("menuitem", { name: "Start chat" }).click();
@@ -72,7 +73,7 @@ test.describe("Create Room", () => {
 
     test("should create a video room", { tag: "@screenshot" }, async ({ page, user, app }) => {
         await app.settings.setValue("feature_video_rooms", null, SettingLevel.DEVICE, true);
-        await app.closeVerifyToast();
+        await rejectToast(page, "Verify this device");
 
         const dialog = await app.openCreateRoomDialog("New video room");
         // Fill name & topic
@@ -107,7 +108,7 @@ test.describe("Create Room", () => {
         });
 
         test("should disallow creating public rooms", { tag: "@screenshot" }, async ({ page, user, app, axe }) => {
-            await app.closeVerifyToast();
+            await rejectToast(page, "Verify this device");
             const dialog = await app.openCreateRoomDialog();
             // Fill name & topic
             await dialog.getByRole("textbox", { name: "Name" }).fill(name);
@@ -134,7 +135,7 @@ test.describe("Create Room", () => {
         test.use({ labsFlags: [] });
 
         test("creates a room without encrypted state", { tag: "@screenshot" }, async ({ page, user: _user, app }) => {
-            await app.closeVerifyToast();
+            await rejectToast(page, "Verify this device");
 
             // When we start to create a room
             await page.getByRole("button", { name: "New conversation", exact: true }).click();
@@ -165,7 +166,7 @@ test.describe("Create Room", () => {
             "creates a room with encrypted state if we check the box",
             { tag: "@screenshot" },
             async ({ page, user: _user, app }) => {
-                await app.closeVerifyToast();
+                await rejectToast(page, "Verify this device");
 
                 // Given we check the Encrypted State checkbox
                 await page.getByRole("button", { name: "New conversation", exact: true }).click();
@@ -194,7 +195,7 @@ test.describe("Create Room", () => {
             "creates a room without encrypted state if we don't check the box",
             { tag: "@screenshot" },
             async ({ page, user: _user, app }) => {
-                await app.closeVerifyToast();
+                await rejectToast(page, "Verify this device");
 
                 // Given we did not check the Encrypted State checkbox
                 await page.getByRole("button", { name: "New conversation", exact: true }).click();

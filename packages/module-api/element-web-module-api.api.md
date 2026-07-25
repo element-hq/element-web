@@ -11,6 +11,7 @@ import { ModuleApi } from '@matrix-org/react-sdk-module-api';
 import { ReactNode } from 'react';
 import { Root } from 'react-dom/client';
 import { RuntimeModule } from '@matrix-org/react-sdk-module-api';
+import { SVGAttributes } from 'react';
 
 // @public
 export interface AccountAuthApiExtension {
@@ -60,6 +61,8 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
     readonly i18n: I18nApi;
     readonly navigation: NavigationApi;
     readonly rootNode: HTMLElement;
+    // @alpha
+    readonly settings: SettingsApi;
     readonly stores: StoresApi;
     // @alpha
     readonly widget: WidgetApi;
@@ -101,11 +104,33 @@ export interface ComponentVisibilityCustomisations {
 
 // @alpha
 export interface ComposerApi {
-    insertPlaintextIntoComposer(plaintext: string): void;
+    addFileUploadOption(option: ComposerApiFileUploadOption): void;
+    insertPlaintextIntoComposer(plaintext: string, view: ComposerApiTarget): void;
+    openFileUploadConfirmation(files: File[], view: ComposerApiTarget): void;
 }
 
+// @alpha
+export type ComposerApiFileUploadOption = {
+    type: string;
+    label: string;
+    icon?: ComponentType<SVGAttributes<SVGElement>>;
+    onSelected: (roomId?: string, view?: ComposerApiTarget, relation?: {
+        inReplyToEventId?: string;
+        relType?: string;
+    }) => Promise<void> | void;
+};
+
+// @alpha
+export type ComposerApiTarget = {
+    view: "room";
+} | {
+    view: "thread";
+};
+
+// Warning: (ae-forgotten-export) The symbol "WebConfigJson" needs to be exported by the entry point index.d.ts
+//
 // @public
-export interface Config {
+export interface Config extends WebConfigJson {
     // (undocumented)
     brand: string;
 }
@@ -125,10 +150,25 @@ export type Container = "top" | "right" | "center";
 
 // @alpha
 export interface CustomComponentsApi {
+    registerComposerPreview(filterFn: (composerText: string, roomId: string) => boolean, renderer: CustomComposerPreviewRenderFunction): void;
     registerLoginComponent(renderer: CustomLoginRenderFunction): void;
     registerMessageRenderer(eventTypeOrFilter: string | ((mxEvent: MatrixEvent) => boolean), renderer: CustomMessageRenderFunction, hints?: CustomMessageRenderHints): void;
     registerRoomPreviewBar(renderer: CustomRoomPreviewBarRenderFunction): void;
 }
+
+// @alpha
+export type CustomComposerPreviewComponentProps = {
+    text: string;
+    roomId: string;
+    target?: ComposerApiTarget;
+    relation?: {
+        inReplyToEventId?: string;
+        relType?: string;
+    };
+};
+
+// @alpha
+export type CustomComposerPreviewRenderFunction = ExtendablePropsRenderFunction<CustomComposerPreviewComponentProps>;
 
 // @alpha
 export interface CustomisationsApi {
@@ -439,6 +479,11 @@ export interface RoomViewProps {
 
 // @alpha @deprecated (undocumented)
 export type RuntimeModuleConstructor = new (api: ModuleApi) => RuntimeModule;
+
+// @alpha
+export interface SettingsApi {
+    getValue<T = any>(settingName: string, roomId?: string | null, excludeDefault?: boolean): T | undefined;
+}
 
 // @alpha
 export interface SpacePanelItemProps {

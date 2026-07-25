@@ -58,6 +58,7 @@ exports[`<RestoreKeyBackupDialog /> should display an error when recovery key is
               class="mx_Dialog_buttons_row"
             >
               <button
+                class="cancel"
                 data-testid="dialog-cancel-button"
                 type="button"
               >
@@ -171,6 +172,7 @@ exports[`<RestoreKeyBackupDialog /> should not raise an error when recovery is v
               class="mx_Dialog_buttons_row"
             >
               <button
+                class="cancel"
                 data-testid="dialog-cancel-button"
                 type="button"
               >
@@ -281,6 +283,7 @@ exports[`<RestoreKeyBackupDialog /> should render 1`] = `
               class="mx_Dialog_buttons_row"
             >
               <button
+                class="cancel"
                 data-testid="dialog-cancel-button"
                 type="button"
               >
@@ -310,7 +313,7 @@ exports[`<RestoreKeyBackupDialog /> should render 1`] = `
       </div>
     </div>
     <div
-      aria-describedby="_r_2_"
+      aria-describedby="react-use-id-1"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"
@@ -545,7 +548,7 @@ exports[`<RestoreKeyBackupDialog /> should restore key backup when the key is ca
       </div>
     </div>
     <div
-      aria-describedby="_r_k_"
+      aria-describedby="react-use-id-1"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"
@@ -624,7 +627,7 @@ exports[`<RestoreKeyBackupDialog /> should restore key backup when the key is in
       </div>
     </div>
     <div
-      aria-describedby="_r_q_"
+      aria-describedby="react-use-id-1"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"

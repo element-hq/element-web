@@ -61,7 +61,7 @@ export function MJitsiWidgetEventView({
 
     return (
         <EventTileBubble
-            icon={<VideoCallSolidIcon color="var(--cpd-color-text-primary)" />}
+            icon={<VideoCallSolidIcon color="var(--cpd-color-icon-primary)" />}
             className={className}
             title={title}
             subtitle={subtitle || undefined}

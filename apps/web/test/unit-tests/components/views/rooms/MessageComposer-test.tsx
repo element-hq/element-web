@@ -35,11 +35,10 @@ import { addTextToComposerRTL } from "../../../../test-utils/composer";
 import UIStore, { UI_EVENTS } from "../../../../../src/stores/UIStore";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
-import type { RoomContextType } from "../../../../../src/contexts/RoomContext.ts";
-import {
-    RoomUploadContext,
-    type RoomUploadViewModel,
-} from "../../../../../src/viewmodels/room/RoomUploadViewModel.tsx";
+import { TimelineRenderingType, type RoomContextType } from "../../../../../src/contexts/RoomContext.ts";
+import { RoomUploadContextProvider } from "../../../../../src/viewmodels/room/RoomUploadViewModel.tsx";
+import { SDKContext } from "../../../../../src/contexts/SDKContext.ts";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
 
 const openStickerPicker = async (): Promise<void> => {
     await userEvent.click(screen.getByLabelText("More options"));
@@ -215,10 +214,8 @@ describe("MessageComposer", () => {
 
                     it(`should${value ? "" : " not"} display the button`, () => {
                         if (value) {
-                            // eslint-disable-next-line jest/no-conditional-expect
                             expect(screen.getByLabelText(buttonLabel)).toBeInTheDocument();
                         } else {
-                            // eslint-disable-next-line jest/no-conditional-expect
                             expect(screen.queryByLabelText(buttonLabel)).not.toBeInTheDocument();
                         }
                     });
@@ -241,10 +238,8 @@ describe("MessageComposer", () => {
 
                         it(`should${!value || "not"} display the button`, () => {
                             if (!value) {
-                                // eslint-disable-next-line jest/no-conditional-expect
                                 expect(screen.getByLabelText(buttonLabel)).toBeInTheDocument();
                             } else {
-                                // eslint-disable-next-line jest/no-conditional-expect
                                 expect(screen.queryByLabelText(buttonLabel)).not.toBeInTheDocument();
                             }
                         });
@@ -462,7 +457,8 @@ function wrapAndRender(
         canSendMessages,
         tombstone,
         narrow,
-    } as unknown as RoomContextType;
+        timelineRenderingType: TimelineRenderingType.Room,
+    } satisfies Partial<RoomContextType> as RoomContextType;
 
     const defaultProps = {
         room,
@@ -471,13 +467,15 @@ function wrapAndRender(
     };
 
     const getRawComponent = (props = {}, context = roomContext, client = mockClient) => (
-        <MatrixClientContext.Provider value={client}>
-            <ScopedRoomContextProvider {...context}>
-                <RoomUploadContext.Provider value={{} as RoomUploadViewModel}>
-                    <MessageComposer {...defaultProps} {...props} />
-                </RoomUploadContext.Provider>
-            </ScopedRoomContextProvider>
-        </MatrixClientContext.Provider>
+        <SDKContext.Provider value={SDKContextClass.instance}>
+            <MatrixClientContext.Provider value={client}>
+                <ScopedRoomContextProvider {...context}>
+                    <RoomUploadContextProvider>
+                        <MessageComposer {...defaultProps} {...props} />
+                    </RoomUploadContextProvider>
+                </ScopedRoomContextProvider>
+            </MatrixClientContext.Provider>
+        </SDKContext.Provider>
     );
     return {
         rawComponent: getRawComponent(props, roomContext, mockClient),

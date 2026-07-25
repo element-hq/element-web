@@ -6,6 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { rejectToastIfExists } from "@element-hq/element-web-playwright-common";
+
 import { test, expect } from "../../element-web-test";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { getSampleFilePath } from "../../sample-files";
@@ -18,6 +20,7 @@ test.describe("Composer", () => {
         botCreateOpts: {
             displayName: "Bob",
         },
+        lockLeftPanelWidth: false,
     });
 
     test.use({
@@ -28,7 +31,9 @@ test.describe("Composer", () => {
         },
     });
 
-    test.beforeEach(async ({ room }) => {}); // trigger room fixture
+    test.beforeEach(async ({ app, room /* trigger room fixture */ }) => {
+        await rejectToastIfExists(app.page, "Notifications");
+    });
 
     test.describe("CIDER", () => {
         test("sends a message when you click send or press Enter", async ({ page }) => {
@@ -80,6 +85,9 @@ test.describe("Composer", () => {
         test("renders in narrow viewports", { tag: "@screenshot" }, async ({ page, bot, app }) => {
             // Shrink the viewport
             await page.setViewportSize({ width: 500, height: 1080 });
+            // Shrinking the viewport will collapse the left-panel, so manually expand it.
+            await app.resizeLeftPanel(150);
+            // Now take the screenshot
             await expect(app.getComposer()).toMatchScreenshot("narrow.png");
         });
 
@@ -181,6 +189,7 @@ test.describe("Composer", () => {
             await app.viewRoomByName("Bob");
 
             const composer = page.getByRole("textbox", { name: "Send an unencrypted message…" });
+            await composer.click();
             await composer.pressSequentially("@bob");
 
             // Note that we include the user ID here as the room tile is also an 'option' role

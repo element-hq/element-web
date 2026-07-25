@@ -34,9 +34,15 @@ jobs:
         env:
             SITE: ${{ inputs.site || 'staging.element.io' }}
         steps:
-            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   persist-credentials: false
+
+            - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+              with:
+                  cache: "pnpm"
+                  node-version-file: package.json
 
             - name: Load GPG key
               run: |
@@ -91,11 +97,9 @@ jobs:
                   check-regexp: ^((?!SonarCloud|SonarQube|issue|board|label|Release|prepare|GitHub Pages).)*$
 
             - name: Deploy to Cloudflare Pages
-              uses: cloudflare/pages-action@f0a1cd58cd66095dee69bfa18fa5efd1dde93bca # v1
+              uses: cloudflare/wrangler-action@ebbaa1584979971c8614a24965b4405ff95890e0 # v4.0.0
               with:
                   apiToken: ${{ secrets.CF_PAGES_TOKEN }}
                   accountId: ${{ secrets.CF_PAGES_ACCOUNT_ID }}
-                  projectName: ${{ env.SITE == 'staging.element.io' && 'element-web-staging' || 'element-web' }}
-                  directory: _deploy
+                  command: pages deploy _deploy --project-name ${{ env.SITE == 'staging.element.io' && 'element-web-staging' || 'element-web' }} --branch main
                   gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-                  branch: main

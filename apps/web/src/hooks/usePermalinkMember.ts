@@ -9,8 +9,9 @@ Please see LICENSE files in the repository root for full details.
 import { type IMatrixProfile, type MatrixEvent, type Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { useContext, useEffect, useState } from "react";
 
-import { PillType } from "../components/views/elements/Pill";
-import { SDKContext, type SdkContextClass } from "../contexts/SDKContext";
+import { PillType } from "../components/views/elements/PillType";
+import { SDKContext } from "../contexts/SDKContext";
+import { type SDKContextClass } from "../contexts/SDKContextClass";
 import { type PermalinkParts } from "../utils/permalinks/PermalinkConstructor";
 
 const createMemberFromProfile = (userId: string, profile: IMatrixProfile): RoomMember => {
@@ -22,7 +23,6 @@ const createMemberFromProfile = (userId: string, profile: IMatrixProfile): RoomM
             return { avatar_url: profile.avatar_url };
         },
         getDirectionalContent: function () {
-            // eslint-disable-next-line
             return this.getContent();
         },
     } as MatrixEvent;
@@ -65,7 +65,7 @@ const determineUserId = (
  *          If sharing at least one room with the user, then the result will be the profile fetched via API.
  *          null in all other cases.
  */
-const determineMember = (userId: string, targetRoom: Room, context: SdkContextClass): RoomMember | null => {
+const determineMember = (userId: string, targetRoom: Room, context: SDKContextClass): RoomMember | null => {
     const targetRoomMember = targetRoom.getMember(userId);
 
     if (targetRoomMember) return targetRoomMember;

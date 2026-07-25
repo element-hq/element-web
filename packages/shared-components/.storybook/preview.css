@@ -8,3 +8,8 @@ Please see LICENSE files in the repository root for full details.
 .docs-story {
     background: var(--cpd-color-bg-canvas-default);
 }
+
+[class*="blurhash"] > canvas {
+    animation: none !important;
+    opacity: 1 !important;
+}

@@ -11,6 +11,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig, esmExternalRequirePlugin, type Plugin } from "vite";
 import dts from "unplugin-dts/vite";
+import react from "@vitejs/plugin-react";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const cssLayerOrder = "@layer compound-tokens, compound-web, shared-components, app-web;";
@@ -92,9 +93,15 @@ export default defineConfig({
         },
     },
     plugins: [
+        react(),
         layerCssAssets(),
         dts({
-            bundleTypes: true,
+            bundleTypes: {
+                invokeOptions: {
+                    localBuild: !!process.env.CI,
+                    typescriptCompilerFolder: resolve(require.resolve("@typescript/old"), "../.."),
+                },
+            },
             include: ["src/**/*.{ts,tsx}"],
             exclude: ["src/**/*.test.{ts,tsx}", "src/**/*.stories.{ts,tsx}"],
             copyDtsFiles: false,

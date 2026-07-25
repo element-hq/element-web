@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Preset, type Visibility } from "matrix-js-sdk/src/matrix";
+import { getToast } from "@element-hq/element-web-playwright-common";
 
 import { test, expect } from "../../element-web-test";
 import { doTwoWaySasVerification, awaitVerifier, waitForDevices } from "./utils";
@@ -36,7 +37,6 @@ test.describe("User verification", () => {
         page,
         bot: bob,
         user: aliceCredentials,
-        toasts,
         room: { roomId: dmRoomId },
     }) => {
         await waitForDevices(app, bob.credentials.userId, 1);
@@ -60,7 +60,7 @@ test.describe("User verification", () => {
         );
 
         // there should also be a toast
-        const toast = await toasts.getToast("Verification requested");
+        const toast = await getToast(page, "Verification requested");
         // it should contain the details of the requesting user
         await expect(toast.getByText(`Bob (${bob.credentials.userId})`)).toBeVisible();
         // Accept
@@ -91,7 +91,6 @@ test.describe("User verification", () => {
         page,
         bot: bob,
         user: aliceCredentials,
-        toasts,
         room: { roomId: dmRoomId },
     }) => {
         await waitForDevices(app, bob.credentials.userId, 1);
@@ -115,7 +114,7 @@ test.describe("User verification", () => {
         );
 
         // Accept verification via toast
-        const toast = await toasts.getToast("Verification requested");
+        const toast = await getToast(page, "Verification requested");
         await toast.getByRole("button", { name: "Verify User" }).click();
 
         // Wait for the QR code to be rendered. If we don't do this, then the QR code can be rendered just as

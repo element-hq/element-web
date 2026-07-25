@@ -15,7 +15,7 @@ exports[`AudioPlayerView > renders the audio player in default state 1`] = `
       <button
         aria-disabled="false"
         aria-label="Play"
-        aria-labelledby="_r_0_"
+        aria-labelledby="react-use-id-1"
         class="_icon-button_1215g_8 PlayPauseButton-module_button"
         data-kind="primary"
         role="button"
@@ -106,7 +106,7 @@ exports[`AudioPlayerView > renders the audio player in error state 1`] = `
       <button
         aria-disabled="false"
         aria-label="Play"
-        aria-labelledby="_r_i_"
+        aria-labelledby="react-use-id-1"
         class="_icon-button_1215g_8 PlayPauseButton-module_button"
         data-kind="primary"
         role="button"
@@ -202,7 +202,7 @@ exports[`AudioPlayerView > renders the audio player without media name 1`] = `
       <button
         aria-disabled="false"
         aria-label="Play"
-        aria-labelledby="_r_6_"
+        aria-labelledby="react-use-id-1"
         class="_icon-button_1215g_8 PlayPauseButton-module_button"
         data-kind="primary"
         role="button"
@@ -293,7 +293,7 @@ exports[`AudioPlayerView > renders the audio player without size 1`] = `
       <button
         aria-disabled="false"
         aria-label="Play"
-        aria-labelledby="_r_c_"
+        aria-labelledby="react-use-id-1"
         class="_icon-button_1215g_8 PlayPauseButton-module_button"
         data-kind="primary"
         role="button"

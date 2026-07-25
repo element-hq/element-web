@@ -22,24 +22,27 @@ import dispatcher from "../../dispatcher/dispatcher";
 import { type ViewRoomDeltaPayload } from "../../dispatcher/payloads/ViewRoomDeltaPayload";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { type RoomListSectionsCollapseStateChangedPayload } from "../../dispatcher/payloads/RoomListSectionsCollapseStateChangedPayload";
-import SpaceStore from "../../stores/spaces/SpaceStore";
+import type SpaceStore from "../../stores/spaces/SpaceStore";
 import RoomListStoreV3, {
     RoomListStoreV3Event,
     type RoomsResult,
     type Section,
 } from "../../stores/room-list-v3/RoomListStoreV3";
 import { FilterEnum } from "../../stores/room-list-v3/skip-list/filters";
-import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
+import {
+    RoomNotificationStateStore,
+    UPDATE_STATUS_INDICATOR,
+} from "../../stores/notifications/RoomNotificationStateStore";
 import { RoomListItemViewModel } from "./RoomListItemViewModel";
-import { SdkContextClass } from "../../contexts/SDKContext";
 import { hasCreateRoomRights } from "./utils";
 import { keepIfSame } from "../../utils/keepIfSame";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import { RoomListSectionHeaderViewModel } from "./RoomListSectionHeaderViewModel";
 import { getCustomSectionData, isCustomSectionTag, CHATS_TAG } from "../../stores/room-list-v3/section";
-import SettingsStore from "../../settings/SettingsStore";
 import { tagRoom } from "../../utils/room/tagRoom";
 import { getSectionTagForRoom } from "../../utils/room/getSectionTagForRoom";
+import SettingsStore from "../../settings/SettingsStore";
+import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 
 /**
  * Tracks the position of the active room within a specific section.
@@ -55,6 +58,8 @@ interface StickyRoomPosition {
 
 interface RoomListViewModelProps {
     client: MatrixClient;
+    roomViewStore: RoomViewStore;
+    spaceStore: SpaceStore;
 }
 
 const filterKeyToIdMap: Map<FilterEnum, FilterId> = new Map([
@@ -66,6 +71,24 @@ const filterKeyToIdMap: Map<FilterEnum, FilterId> = new Map([
     [FilterEnum.InvitesFilter, "invites"],
     [FilterEnum.LowPriorityFilter, "low_priority"],
 ]);
+
+/**
+ * Filters that are redundant when sections are enabled: Favourites and Low Priority rooms
+ * already have their own sections, so these filters are only shown as chips when sectioning
+ * is disabled (see {@link getVisibleFilterIds}).
+ */
+const SECTION_ONLY_FILTER_IDS: ReadonlySet<FilterId> = new Set<FilterId>(["favourite", "low_priority"]);
+
+/**
+ * Compute the filter ids to display as primary filter chips.
+ * When sections are enabled, the Favourites and Low Priority filters are hidden because those
+ * rooms are surfaced as dedicated sections instead.
+ */
+function getVisibleFilterIds(): FilterId[] {
+    const areSectionsEnabled = SettingsStore.getValue("RoomList.showSections");
+    const filterIds = [...filterKeyToIdMap.values()];
+    return areSectionsEnabled ? filterIds.filter((id) => !SECTION_ONLY_FILTER_IDS.has(id)) : filterIds;
+}
 
 const TAG_TO_TITLE_MAP: Record<string, string> = {
     [DefaultTagID.Favourite]: _t("room_list|section|favourites"),
@@ -94,24 +117,56 @@ export class RoomListViewModel
     private roomsMap = new Map<string, Room>();
     // Don't clear section vm because we want to keep the expand/collapse state even during space changes.
     private readonly roomSectionHeaderViewModels = new Map<string, RoomListSectionHeaderViewModel>();
+    /**
+     * When dragging sections, we want to temporarily expand all sections to make it easier to move rooms between sections.
+     * This map stores the original expansion state of each section before the drag starts, so we can restore it after the drag ends.
+     */
+    private readonly savedExpansionStates = new Map<string, boolean>();
 
     /**
-     * Reference to the currently displayed toast, used to automatically close the toast after a timeout.
+     * Reference to the currently displayed event toast's auto-close timer, used to dismiss it
+     * after a timeout (see {@link showToast}).
      */
     private toastRef?: number;
 
+    /**
+     * The currently active transient event toast ("section_created" / "chat_moved"), if any.
+     * Distinct from the derived "unread_activity" toast: this is set imperatively by an event
+     * and auto-dismisses, whereas unread activity is recomputed from list/notification state.
+     * {@link recomputeToast} reconciles the two into the single {@link RoomListViewSnapshot.toast}.
+     */
+    private eventToast?: ToastType;
+
+    /**
+     * Whether there is currently unread activity (a notification count) in a room scrolled below
+     * the visible area of the list. Recomputed by {@link updateUnreadActivityBelow}; surfaced as
+     * the "unread_activity" toast by {@link recomputeToast} when no event toast takes precedence.
+     */
+    private hasUnreadActivityBelow = false;
+
+    /**
+     * The last genuinely-visible index reported by the virtualized list (excluding the
+     * rendered overscan buffer), in the list's own entry space (room indices for a flat
+     * list; including a slot per section header for a grouped list). Initialised to -1 so
+     * that nothing is considered "below the fold" until the view reports the fold.
+     */
+    private foldIndex = -1;
+
+    /**
+     * Imperative scroll handle registered by the view (see {@link setScrollToIndex}). The view
+     * owns the virtualized list's scroll handle, so it provides this; we call it to scroll a
+     * given item index into view in response to user actions.
+     */
+    private scrollToIndex?: (index: number) => void;
+
     public constructor(props: RoomListViewModelProps) {
-        const activeSpace = SpaceStore.instance.activeSpaceRoom;
+        const activeSpace = props.spaceStore.activeSpaceRoom;
 
         // Get initial rooms
         const roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(undefined);
         const canCreateRoom = hasCreateRoomRights(props.client, activeSpace);
 
-        // Remove favourite and low priority filters if sections are enabled, as they are redundant with the sections
-        const areSectionsEnabled = SettingsStore.getValue("feature_room_list_sections");
-        const filterIds = [...filterKeyToIdMap.values()].filter(
-            (id) => !areSectionsEnabled || (id !== "favourite" && id !== "low_priority"),
-        );
+        const filterIds = getVisibleFilterIds();
 
         // By default, all sections are expanded
         const { sections, isFlatList } = computeSections(roomsResult, (tag) => true);
@@ -167,11 +222,23 @@ export class RoomListViewModel
             this.onRoomTagged,
         );
 
+        // Recompute the "unread activity below" toast when room notification state
+        // changes (e.g. a room below the fold becomes unread, or is marked read).
+        this.disposables.trackListener(
+            RoomNotificationStateStore.instance,
+            UPDATE_STATUS_INDICATOR as any,
+            this.updateUnreadActivityBelow,
+        );
+
         // Subscribe to active room changes to update selected room
         const dispatcherRef = dispatcher.register(this.onDispatch);
         this.disposables.track(() => {
             dispatcher.unregister(dispatcherRef);
         });
+
+        // Recompute the lis when setting changes
+        const showSectionsRef = SettingsStore.watchSetting("RoomList.showSections", null, this.onShowSectionsChange);
+        this.disposables.track(() => SettingsStore.unwatchSetting(showSectionsRef));
 
         // Track cleanup of all child view models
         this.disposables.track(() => {
@@ -205,16 +272,20 @@ export class RoomListViewModel
         // Update roomsMap immediately before clearing VMs
         this.updateRoomsMap(this.roomsResult);
 
-        // When a filter is toggled on, expand sections that have results so they're visible
-        if (newFilter) {
-            for (const section of this.roomsResult.sections) {
-                if (section.rooms.length > 0) {
-                    const sectionHeaderVM = this.roomSectionHeaderViewModels.get(section.tag);
-                    if (sectionHeaderVM) sectionHeaderVM.isExpanded = true;
-                }
-            }
-        }
+        this.updateRoomListData();
+    };
 
+    /**
+     * Handle changes to the {@link RoomList.showSections} setting.
+     * Toggling sections is a rare action, so we simply reset the filters and rebuild
+     * the list from scratch rather than trying to reconcile the previous state.
+     */
+    private readonly onShowSectionsChange = (): void => {
+        this.activeFilter = undefined;
+        this.clearViewModels();
+        this.roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace();
+        this.updateRoomsMap(this.roomsResult);
+        this.snapshot.merge({ filterIds: getVisibleFilterIds() });
         this.updateRoomListData();
     };
 
@@ -302,10 +373,13 @@ export class RoomListViewModel
      * Update which rooms are currently visible.
      * Called by the view when scroll position changes.
      * Disposes of view models for rooms no longer visible.
+     *
+     * Indices are in room-index space (section header entries excluded):
+     * startIndex is inclusive, endIndex is exclusive.
      */
     public updateVisibleRooms(startIndex: number, endIndex: number): void {
         const allRoomIds = this.roomIds;
-        const newVisibleIds = allRoomIds.slice(startIndex, Math.min(endIndex, allRoomIds.length));
+        const newVisibleIds = allRoomIds.slice(startIndex, endIndex);
 
         const newVisibleSet = new Set(newVisibleIds);
 
@@ -316,9 +390,159 @@ export class RoomListViewModel
                 this.roomItemViewModels.delete(roomId);
             }
         }
+
+        // The rendered range changed, so re-evaluate whether unread activity is below the fold.
+        this.updateUnreadActivityBelow();
     }
 
-    private onDispatch = (payload: any): void => {
+    /**
+     * Update the last genuinely-visible item index (excluding the rendered overscan
+     * buffer), reported by the view from the scroller geometry. This is what the
+     * "unread activity" toast uses to decide what is below the fold, so that the toast
+     * appears as soon as an unread room scrolls just out of view rather than only once
+     * it leaves the overscan buffer.
+     */
+    public updateVisibleFold = (visibleEndIndex: number): void => {
+        if (this.foldIndex === visibleEndIndex) return;
+        this.foldIndex = visibleEndIndex;
+        this.updateUnreadActivityBelow();
+    };
+
+    /**
+     * Find the first room with an unread-message notification (a count badge — the green or
+     * red decoration, not just the unread-activity dot) positioned below the visible area.
+     *
+     * "Below the fold" is determined from the last visible index reported by the
+     * virtualized list (see {@link updateVisibleRooms}). For a grouped list the
+     * virtualized list interleaves a section-header entry before each section's
+     * rooms, so we walk the rooms in the same entry order the view renders and
+     * compare against that index space.
+     *
+     * Collapsed sections render only their header (their rooms are removed from the
+     * displayed sections), so their notifying rooms are not directly reachable. When a
+     * collapsed section's header is itself below the fold and the section contains a
+     * notifying room, we surface the header as the target so clicking the toast scrolls
+     * it into view (revealing the header's aggregated notification badge).
+     *
+     * @returns The next notifying room below the fold, or undefined if there is none
+     *          (or the view has not yet reported a visible range).
+     */
+    private firstUnreadRoomBelowFold(): { room: Room; index: number } | undefined {
+        if (this.foldIndex < 0) return undefined;
+
+        // Only surface rooms showing a notification badge (a count/symbol — the green or red
+        // decoration), not rooms with just the unread-activity dot.
+        const hasNotification = (room: Room): boolean =>
+            RoomNotificationStateStore.instance.getRoomState(room).hasUnreadCount;
+
+        if (this.snapshot.current.isFlatList) {
+            // Flat list: virtualized indices map 1:1 to rooms.
+            const rooms = this.sections.flatMap((section) => section.rooms);
+            for (let i = this.foldIndex + 1; i < rooms.length; i++) {
+                if (hasNotification(rooms[i])) return { room: rooms[i], index: i };
+            }
+            return undefined;
+        }
+
+        // Full (pre-collapse) rooms per section tag, so we can detect unreads hidden inside
+        // collapsed sections whose displayed rooms have been emptied.
+        const fullRoomsByTag = new Map(this.roomsResult.sections.map((section) => [section.tag, section.rooms]));
+
+        // Grouped list: each section contributes a header entry followed by its rooms, so the
+        // index we return is in the virtualized list's entry space (matching scrollIntoView).
+        let entryIndex = -1;
+        for (const section of this.sections) {
+            entryIndex++; // section header entry
+
+            const isExpanded = this.roomSectionHeaderViewModels.get(section.tag)?.isExpanded ?? true;
+            if (!isExpanded) {
+                // Collapsed: rooms aren't rendered, so the header is the only entry. If it is
+                // below the fold and hides an unread room, target the header itself.
+                if (entryIndex > this.foldIndex) {
+                    const notifyingRoom = (fullRoomsByTag.get(section.tag) ?? []).find(hasNotification);
+                    if (notifyingRoom) return { room: notifyingRoom, index: entryIndex };
+                }
+                continue;
+            }
+
+            for (const room of section.rooms) {
+                entryIndex++; // this room's entry
+                if (entryIndex > this.foldIndex && hasNotification(room)) return { room, index: entryIndex };
+            }
+        }
+        return undefined;
+    }
+
+    /**
+     * Recompute whether there is unread activity below the visible area, reconciling the
+     * displayed toast if it changed.
+     */
+    private updateUnreadActivityBelow = (): void => {
+        const hasUnreadActivityBelow = this.firstUnreadRoomBelowFold() !== undefined;
+        if (this.hasUnreadActivityBelow === hasUnreadActivityBelow) return;
+        this.hasUnreadActivityBelow = hasUnreadActivityBelow;
+        this.recomputeToast();
+    };
+
+    /**
+     * Register (or clear) the view's imperative scroll handler. Called by the view on mount
+     * since it owns the virtualized list's scroll handle.
+     */
+    public setScrollToIndex = (scrollToIndex: ((index: number) => void) | undefined): void => {
+        this.scrollToIndex = scrollToIndex;
+    };
+
+    /**
+     * Scroll the next unread room below the visible area of the list into view (without opening
+     * it). Invoked when the user clicks the "unread activity" toast.
+     */
+    public scrollToUnreadActivity = (): void => {
+        const target = this.firstUnreadRoomBelowFold();
+        if (target) this.scrollToIndex?.(target.index);
+    };
+
+    /**
+     * Scroll a room into view, expanding its section first if it is collapsed so the tile can
+     * actually be shown.
+     */
+    private async scrollRoomIntoView(roomId: string): Promise<void> {
+        // Look in the full (pre-collapse) sections so we can find rooms hidden in collapsed sections.
+        const section = this.roomsResult.sections.find((s) => s.rooms.some((room) => room.roomId === roomId));
+        // Room not found
+        if (!section) return;
+
+        const headerViewModel = this.roomSectionHeaderViewModels.get(section.tag);
+        // Expand and rebuild the section
+        if (headerViewModel && !headerViewModel.isExpanded) {
+            headerViewModel.isExpanded = true;
+            await this.updateRoomListData();
+        }
+
+        // Scroll to the room
+        const index = this.getRoomEntryIndex(roomId);
+        if (index !== undefined) this.scrollToIndex?.(index);
+    }
+
+    /**
+     * Compute a room's index in the list's entry space, or undefined if it is not in the displayed
+     * sections (e.g. collapsed or filtered out). Flat list: the room index; grouped list: includes
+     * one slot per section header (matching {@link firstUnreadRoomBelowFold}).
+     */
+    private getRoomEntryIndex(roomId: string): number | undefined {
+        // A grouped list renders a header entry before each section's rooms; a flat list does not.
+        const hasSectionHeaders = !this.snapshot.current.isFlatList;
+
+        let entryIndex = 0;
+        for (const section of this.sections) {
+            if (hasSectionHeaders) entryIndex++; // section header entry
+            const indexInSection = section.rooms.findIndex((room) => room.roomId === roomId);
+            if (indexInSection !== -1) return entryIndex + indexInSection;
+            entryIndex += section.rooms.length;
+        }
+        return undefined;
+    }
+
+    private onDispatch = async (payload: any): Promise<void> => {
         if (payload.action === Action.ActiveRoomChanged) {
             // When the active room changes, update the room list data to reflect the new selected room
             // Pass isRoomChange=true so sticky logic doesn't prevent the index from updating
@@ -327,6 +551,8 @@ export class RoomListViewModel
             // Handle keyboard navigation shortcuts (Alt+ArrowUp/Down)
             // This was previously handled by useRoomListNavigation hook
             this.handleViewRoomDelta(payload as ViewRoomDeltaPayload);
+        } else if (payload.action === Action.ViewRoom && payload.show_room_tile && payload.room_id) {
+            await this.scrollRoomIntoView(payload.room_id);
         } else if (payload.action === Action.RoomListCollapseAllSections) {
             this.onCollapseAllSections(false);
         } else if (payload.action === Action.RoomListExpandAllSections) {
@@ -351,7 +577,7 @@ export class RoomListViewModel
      * Migrated from useRoomListNavigation hook.
      */
     private handleViewRoomDelta(payload: ViewRoomDeltaPayload): void {
-        const currentRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
+        const currentRoomId = this.props.roomViewStore.getRoomId();
         if (!currentRoomId) return;
 
         const { delta, unread } = payload;
@@ -422,7 +648,7 @@ export class RoomListViewModel
             }
 
             // Space changed - get the last selected room for the new space to prevent flicker
-            const lastSelectedRoom = SpaceStore.instance.getLastSelectedRoomIdForSpace(newSpaceId);
+            const lastSelectedRoom = this.props.spaceStore.getLastSelectedRoomIdForSpace(newSpaceId);
 
             this.updateRoomListData(true, lastSelectedRoom);
             return;
@@ -529,7 +755,7 @@ export class RoomListViewModel
     ): Promise<void> {
         // Determine the room ID to use for calculations
         // Use override if provided (e.g., during space changes), otherwise fall back to RoomViewStore
-        const roomId = roomIdOverride ?? SdkContextClass.instance.roomViewStore.getRoomId();
+        const roomId = roomIdOverride ?? this.props.roomViewStore.getRoomId();
 
         // Apply sticky room logic to keep selected room at same position within its section
         const stickySections = this.applyStickyRoom(isRoomChange, roomId);
@@ -600,6 +826,9 @@ export class RoomListViewModel
         });
 
         this.notifyCollapseState(isFlatList);
+
+        // Room list / sections changed: re-evaluate the unread-activity toast.
+        this.updateUnreadActivityBelow();
     }
 
     /**
@@ -607,8 +836,8 @@ export class RoomListViewModel
      * @param isFlatList - Whether the room list is currently displayed as a flat list
      */
     private notifyCollapseState(isFlatList: boolean): void {
-        // Hide collapse/expand all button if sections are disabled or if it's a flat list
-        if (!SettingsStore.getValue("feature_room_list_sections") || isFlatList) {
+        // Hide collapse/expand all button if it's a flat list
+        if (isFlatList) {
             dispatcher.dispatch<RoomListSectionsCollapseStateChangedPayload>({
                 action: Action.RoomListSectionsCollapseStateChanged,
                 collapseSections: undefined,
@@ -631,7 +860,7 @@ export class RoomListViewModel
     };
 
     public createRoom = (): void => {
-        const activeSpace = SpaceStore.instance.activeSpaceRoom;
+        const activeSpace = this.props.spaceStore.activeSpaceRoom;
         if (activeSpace) {
             dispatcher.dispatch({
                 action: Action.CreateRoom,
@@ -645,29 +874,77 @@ export class RoomListViewModel
     };
 
     public onSectionCreated = (tag: string): void => {
+        // Refresh roomsResult so the new section lands in the same snapshot as the scroll-to.
+        const filterKeys = this.activeFilter !== undefined ? [this.activeFilter] : undefined;
+        this.roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filterKeys);
+        this.updateRoomsMap(this.roomsResult);
         this.updateRoomListData(false, null, tag);
         this.showToast("section_created");
     };
 
     public onRoomTagged = (): void => {
+        const areSectionsEnabled = SettingsStore.getValue("RoomList.showSections");
+        // Only show the "chat moved" toast if sections are enabled
+        if (!areSectionsEnabled) return;
+
         this.showToast("chat_moved");
     };
 
     public closeToast: () => void = () => {
         clearTimeout(this.toastRef);
-        this.snapshot.merge({
-            toast: undefined,
-        });
+        this.eventToast = undefined;
+        this.recomputeToast();
     };
 
     private showToast(toast: ToastType): void {
         clearTimeout(this.toastRef);
-        this.snapshot.merge({ toast });
+        this.eventToast = toast;
+        this.recomputeToast();
         // Automatically close the toast after 15 seconds
         this.toastRef = setTimeout(() => {
             this.closeToast();
         }, 15 * 1000);
     }
+
+    /**
+     * Reconcile the single toast shown by the view from the two independent sources: the
+     * transient event toast (which takes precedence and auto-dismisses) and the derived
+     * unread-activity state. The snapshot is only updated when the effective toast changes,
+     * to avoid unnecessary re-renders.
+     */
+    private recomputeToast(): void {
+        const toast = this.eventToast ?? (this.hasUnreadActivityBelow ? "unread_activity" : undefined);
+        if (this.snapshot.current.toast !== toast) {
+            this.snapshot.merge({ toast });
+        }
+    }
+
+    public changeSectionOrder = async (sourceTag: string, targetTag: string): Promise<void> => {
+        await RoomListStoreV3.instance.reorderSection(sourceTag, targetTag);
+        // Scroll to the section after it moved
+        const filterKeys = this.activeFilter !== undefined ? [this.activeFilter] : undefined;
+        this.roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filterKeys);
+        this.updateRoomsMap(this.roomsResult);
+        this.updateRoomListData(false, null, sourceTag);
+    };
+
+    public onSectionDragStart = (): void => {
+        this.savedExpansionStates.clear();
+        for (const [tag, sectionVM] of this.roomSectionHeaderViewModels) {
+            this.savedExpansionStates.set(tag, sectionVM.isExpanded);
+            sectionVM.isExpanded = false;
+        }
+        this.updateRoomListData();
+    };
+
+    public onSectionDragEnd = (): void => {
+        for (const [tag, expanded] of this.savedExpansionStates) {
+            const sectionVM = this.roomSectionHeaderViewModels.get(tag);
+            if (sectionVM) sectionVM.isExpanded = expanded;
+        }
+        this.savedExpansionStates.clear();
+        this.updateRoomListData();
+    };
 
     public changeRoomSection = (roomId: string, tag: string): void => {
         const room = this.props.client.getRoom(roomId);
@@ -694,16 +971,18 @@ function computeSections(
     const customSections = getCustomSectionData();
 
     const sections = roomsResult.sections
-        // Only include sections that have rooms or are custom sections (which may be empty but should still be shown)
+        // Only include sections that have rooms, or custom sections that were created in the current space.
         .filter(
-            (section) => section.rooms.length > 0 || (isCustomSectionTag(section.tag) && customSections[section.tag]),
+            (section) =>
+                section.rooms.length > 0 ||
+                (isCustomSectionTag(section.tag) && customSections[section.tag]?.spaceId === roomsResult.spaceId),
         )
         // Remove roomIds for sections that are currently collapsed according to their section header view model
         .map((section) => ({
             ...section,
             rooms: isSectionExpanded(section.tag) ? section.rooms : [],
         }));
-    const isFlatList = sections.length === 1 && sections[0].tag === CHATS_TAG;
+    const isFlatList = sections.length === 0 || (sections.length === 1 && sections[0].tag === CHATS_TAG);
 
     return { sections, isFlatList };
 }

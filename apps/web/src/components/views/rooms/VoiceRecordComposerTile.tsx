@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ReactNode } from "react";
+import { MediaBody } from "@element-hq/web-shared-components";
 import { type Room, type IEventRelation, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { DeleteIcon, StopSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
@@ -168,11 +169,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         const accessError = (): void => {
             Modal.createDialog(ErrorDialog, {
                 title: _t("voip|unable_to_access_audio_input_title"),
-                description: (
-                    <>
-                        <p>{_t("voip|unable_to_access_audio_input_description")}</p>
-                    </>
-                ),
+                description: <p>{_t("voip|unable_to_access_audio_input_description")}</p>,
             });
         };
 
@@ -183,11 +180,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             if (!devices?.[MediaDeviceKindEnum.AudioInput]?.length) {
                 Modal.createDialog(ErrorDialog, {
                     title: _t("voip|no_audio_input_title"),
-                    description: (
-                        <>
-                            <p>{_t("voip|no_audio_input_description")}</p>
-                        </>
-                    ),
+                    description: <p>{_t("voip|no_audio_input_description")}</p>,
                 });
                 return;
             }
@@ -239,10 +232,10 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
 
         // only other UI is the recording-in-progress UI
         return (
-            <div className="mx_MediaBody mx_VoiceMessagePrimaryContainer mx_VoiceRecordComposerTile_recording">
+            <MediaBody className="mx_VoiceMessagePrimaryContainer mx_VoiceRecordComposerTile_recording">
                 <LiveRecordingClock recorder={this.state.recorder} />
                 <LiveRecordingWaveform recorder={this.state.recorder} />
-            </div>
+            </MediaBody>
         );
     }
 
@@ -287,7 +280,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         if (this.state.recordingPhase === RecordingState.Uploading) {
             uploadIndicator = (
                 <span className="mx_VoiceRecordComposerTile_uploadingState">
-                    <InlineSpinner w={16} h={16} />
+                    <InlineSpinner size={16} />
                 </span>
             );
         } else if (this.state.didUploadFail && this.state.recordingPhase === RecordingState.Ended) {

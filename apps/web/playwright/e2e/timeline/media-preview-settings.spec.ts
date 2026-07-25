@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type EventType, type MsgType, type RoomJoinRulesEventContent } from "matrix-js-sdk/src/types";
+import { rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { test, expect } from "../../element-web-test";
 import { readSampleFileSync } from "../../sample-files";
@@ -36,7 +37,7 @@ test.describe("Media preview settings", () => {
     });
 
     test("should be able to hide avatars of inviters", { tag: "@screenshot" }, async ({ page, app, room, user }) => {
-        await app.closeVerifyToast();
+        await rejectToast(page, "Verify this device");
 
         let settings = await app.settings.openUserSettings("Preferences");
         await settings.getByLabel("Hide avatars of room and inviter").click();

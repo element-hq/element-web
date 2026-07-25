@@ -30,7 +30,7 @@ test.describe("Logout tests", () => {
         const currentDialogLocator = page.locator(".mx_Dialog");
 
         await expect(
-            currentDialogLocator.getByRole("heading", { name: "You'll lose access to your encrypted messages" }),
+            currentDialogLocator.getByRole("heading", { name: "You're about to lose access to your encrypted chats" }),
         ).toBeVisible();
     });
 
@@ -51,7 +51,7 @@ test.describe("Logout tests", () => {
         await expect(currentDialogLocator.getByText("Are you sure you want to Remove this device?")).toBeVisible();
     });
 
-    test("Logout directly if the user has no room keys", async ({ page, app }) => {
+    test("Ask to set up recovery on logout even if not in encrypted room", async ({ page, app }) => {
         await createRoom(page, "Clear room", false);
 
         await sendMessageInCurrentRoom(page, "Hello public world!");
@@ -60,7 +60,10 @@ test.describe("Logout tests", () => {
         await locator.getByRole("menuitem", { name: "All settings", exact: true }).click();
         await page.getByRole("button", { name: "Remove this device", exact: true }).click();
 
-        // Should have logged out directly
-        await expect(page.getByRole("heading", { name: "Be in your element" })).toBeVisible();
+        const currentDialogLocator = page.locator(".mx_Dialog");
+
+        await expect(
+            currentDialogLocator.getByRole("heading", { name: "You're about to lose access to your encrypted chats" }),
+        ).toBeVisible();
     });
 });

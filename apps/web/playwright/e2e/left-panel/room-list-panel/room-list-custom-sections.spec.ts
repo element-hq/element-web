@@ -6,14 +6,22 @@
  */
 
 import { type Page } from "@playwright/test";
+import { closeReleaseAnnouncement, rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { expect, test } from "../../../element-web-test";
-import { assertRoomInSection, getRoomList, getRoomListHeader, getSectionHeader } from "./utils";
+import {
+    assertRoomInSection,
+    assertSectionsOrder,
+    dragRoomToSection,
+    dragSectionToSection,
+    getRoomList,
+    getRoomListHeader,
+    getSectionHeader,
+} from "./utils";
 
 test.describe("Room list custom sections", () => {
     test.use({
         displayName: "Alice",
-        labsFlags: ["feature_new_room_list", "feature_room_list_sections"],
         botCreateOpts: {
             displayName: "BotBob",
             autoAcceptInvites: true,
@@ -41,9 +49,12 @@ test.describe("Room list custom sections", () => {
     }
 
     test.beforeEach(async ({ page, app, user }) => {
-        // The notification toast is displayed above the search section
-        await app.closeNotificationToast();
-        await app.closeVerifyToast();
+        // The toasts are displayed above the search section
+        await rejectToast(page, "Verify this device");
+        await rejectToast(page, "Notifications");
+
+        // Close the release announcement about the new room list sections
+        await closeReleaseAnnouncement(page, "Introducing Sections");
 
         // Focus the user menu to avoid hover decoration
         await page.getByRole("button", { name: "User menu" }).focus();
@@ -200,7 +211,7 @@ test.describe("Room list custom sections", () => {
 
             // Change the name and confirm
             await dialog.getByRole("textbox", { name: "Section name" }).fill("Personal");
-            await dialog.getByRole("button", { name: "Edit section" }).click();
+            await dialog.getByRole("button", { name: "Save" }).click();
 
             // Dialog should close
             await expect(dialog).not.toBeVisible();
@@ -283,6 +294,33 @@ test.describe("Room list custom sections", () => {
         });
     });
 
+    test.describe("Section reordering via dnd", () => {
+        test("should reorder custom sections via dnd", async ({ page, app }) => {
+            await app.client.createRoom({ name: "my room" });
+            await createCustomSection(page, "Work");
+            await createCustomSection(page, "Personal");
+
+            // Default placement: custom sections sit at the top of Chats
+            await assertSectionsOrder(page, ["Work", "Personal", "Chats"]);
+
+            // Moves Work after Chats
+            await dragSectionToSection(page, "Work", "Chats");
+            await assertSectionsOrder(page, ["Personal", "Chats", "Work"]);
+        });
+
+        test("should insert a section before the target when dragging up", async ({ page, app }) => {
+            await app.client.createRoom({ name: "my room" });
+            await createCustomSection(page, "Work");
+            await createCustomSection(page, "Personal");
+
+            await assertSectionsOrder(page, ["Work", "Personal", "Chats"]);
+
+            // Personal sits below Work, so dragging it onto Work inserts it before Work.
+            await dragSectionToSection(page, "Personal", "Work");
+            await assertSectionsOrder(page, ["Personal", "Work", "Chats"]);
+        });
+    });
+
     test.describe("Adding a room to a custom section", () => {
         test("should add a room to a custom section via the More Options menu", async ({ page, app }) => {
             await app.client.createRoom({ name: "my room" });
@@ -329,6 +367,22 @@ test.describe("Room list custom sections", () => {
             },
         );
 
+        test("should accept drag and drop into a section created after another section exists", async ({
+            page,
+            app,
+        }) => {
+            await app.client.createRoom({ name: "room A" });
+            await app.client.createRoom({ name: "room B" });
+            await createCustomSection(page, "Work");
+            await createCustomSection(page, "Personal");
+
+            await dragRoomToSection(page, "room A", "Personal");
+            await assertRoomInSection(page, "Personal", "room A");
+
+            await dragRoomToSection(page, "room B", "Work");
+            await assertRoomInSection(page, "Work", "room B");
+        });
+
         test("should remove a room from a custom section when toggling the same section", async ({ page, app }) => {
             await app.client.createRoom({ name: "my room" });
             await createCustomSection(page, "Work");
@@ -350,6 +404,34 @@ test.describe("Room list custom sections", () => {
             await roomItem.getByRole("button", { name: "More Options" }).click();
             await page.getByRole("menuitem", { name: "Move to" }).hover();
             await page.getByRole("menuitem", { name: "Work" }).click();
+
+            // Room is back in the Chats section
+            await assertRoomInSection(page, "Chats", "my room");
+        });
+
+        test("should remove a room from a custom section via the 'Remove from section' menu entry", async ({
+            page,
+            app,
+        }) => {
+            await app.client.createRoom({ name: "my room" });
+            await createCustomSection(page, "Work");
+
+            const roomList = getRoomList(page);
+
+            // Move the room to the Work section
+            let roomItem = roomList.getByRole("row", { name: "Open room my room" });
+            await roomItem.hover();
+            await roomItem.getByRole("button", { name: "More Options" }).click();
+            await page.getByRole("menuitem", { name: "Move to" }).hover();
+            await page.getByRole("menuitem", { name: "Work" }).click();
+
+            await assertRoomInSection(page, "Work", "my room");
+
+            // Open the More Options menu and click "Remove from section"
+            roomItem = roomList.getByRole("row", { name: "Open room my room" });
+            await roomItem.hover();
+            await roomItem.getByRole("button", { name: "More Options" }).click();
+            await page.getByRole("menuitem", { name: "Remove from section" }).click();
 
             // Room is back in the Chats section
             await assertRoomInSection(page, "Chats", "my room");

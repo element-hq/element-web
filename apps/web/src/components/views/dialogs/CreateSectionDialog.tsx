@@ -8,6 +8,7 @@
 import React, { useState, type JSX } from "react";
 import { Flex } from "@element-hq/web-shared-components";
 import { Form, Text } from "@vector-im/compound-web";
+import classNames from "classnames";
 
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
@@ -37,15 +38,19 @@ export function CreateSectionDialog({ onFinished, sectionToEdit }: CreateSection
 
     return (
         <BaseDialog
-            className="mx_CreateSectionDialog"
+            className={classNames("mx_CreateSectionDialog", {
+                mx_CreateSectionDialog_edition: isEdition,
+            })}
             onFinished={() => onFinished(false, value)}
             title={isEdition ? _t("create_section_dialog|title_edition") : _t("create_section_dialog|title")}
             hasCancel={true}
         >
             <Flex gap="var(--cpd-space-6x)" direction="column" className="mx_CreateSectionDialog_content">
-                <Text as="span" weight="medium">
-                    {_t("create_section_dialog|description")}
-                </Text>
+                {!isEdition && (
+                    <Text as="span" weight="medium">
+                        {_t("create_section_dialog|description")}
+                    </Text>
+                )}
                 <Form.Root
                     className="mx_CreateSectionDialog_form"
                     onSubmit={(e) => {
@@ -64,9 +69,7 @@ export function CreateSectionDialog({ onFinished, sectionToEdit }: CreateSection
                 </Form.Root>
             </Flex>
             <DialogButtons
-                primaryButton={
-                    isEdition ? _t("create_section_dialog|edit_section") : _t("create_section_dialog|create_section")
-                }
+                primaryButton={isEdition ? _t("common|save") : _t("create_section_dialog|create_section")}
                 primaryDisabled={isInvalid}
                 hasCancel={true}
                 onCancel={() => onFinished(false, "")}

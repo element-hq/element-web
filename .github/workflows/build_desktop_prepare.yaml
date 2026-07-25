@@ -53,13 +53,13 @@ jobs:
         outputs:
             nightly-version: ${{ steps.versions.outputs.nightly }}
         steps:
-            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   persist-credentials: false
                   repository: element-hq/element-web
 
-            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
-            - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+            - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
               with:
                   node-version-file: apps/desktop/.node-version
                   cache: "pnpm"
@@ -143,7 +143,7 @@ jobs:
             - name: "[Release] Fetch release"
               id: release
               if: ${{ !inputs.nightly && inputs.version != 'develop' }}
-              uses: cardinalby/git-get-release-action@5172c3a026600b1d459b117738c605fabc9e4e44 # 1.2.5
+              uses: cardinalby/git-get-release-action@2ab178299eecb253f820dcf2cce11f62be1178f7 # 1.2.6
               env:
                   GITHUB_TOKEN: ${{ github.token }}
               with:
@@ -170,7 +170,7 @@ jobs:
               run: |
                   set -e
 
-                  BUNDLE_HASH=$(npx asar l webapp.asar | grep /bundles/ | head -n 1 | sed 's|.*/||')
+                  BUNDLE_HASH=$(pnpm exec asar l webapp.asar | grep /bundles/ | head -n 1 | sed 's|.*/||')
                   WEBAPP_VERSION=$(./scripts/get-version.ts)
                   WEB_VERSION=${WEBAPP_VERSION:0:12}
                   JS_VERSION=${WEBAPP_VERSION:16:12}

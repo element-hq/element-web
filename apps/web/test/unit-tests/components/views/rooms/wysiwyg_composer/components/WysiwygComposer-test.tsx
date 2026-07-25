@@ -74,7 +74,10 @@ describe("WysiwygComposer", () => {
         beforeEach(async () => {
             mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
             customRender(onChange, onSend);
-            await waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true"));
+            await waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true"), {
+                // The standard timeout sometimes isn't enough for the async wasm init
+                timeout: 5000,
+            });
         });
 
         afterEach(() => {
@@ -533,7 +536,6 @@ describe("WysiwygComposer", () => {
             await waitFor(() => {
                 const selection = document.getSelection();
                 if (selection) {
-                    // eslint-disable-next-line jest/no-conditional-expect
                     expect(selection.focusNode?.textContent).toEqual("other");
                 }
             });
