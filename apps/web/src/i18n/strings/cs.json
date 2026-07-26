@@ -503,7 +503,6 @@
         "message_layout": "Zobrazení zpráv",
         "message_timestamp_invalid": "Neplatné časové razítko",
         "microphone": "Mikrofon",
-        "model": "Model",
         "moderation_and_safety": "Moderování a bezpečnost",
         "modern": "Moderní",
         "mute": "Ztlumit",
@@ -676,7 +675,6 @@
     "create_section_dialog": {
         "create_section": "Vytvořit sekci",
         "description": "Sekce určeny pouze pro vás",
-        "edit_section": "Upravit sekci",
         "label": "Název sekce",
         "title": "Vytvořte sekci",
         "title_edition": "Upravit sekci"
@@ -2849,7 +2847,6 @@
         "send_typing_notifications": "Posílat oznámení, když píšete",
         "sessions": {
             "best_security_note": "V zájmu co nejlepšího zabezpečení ověřujte své relace a odstraňte relace, které již nepoznáváte nebo nepoužíváte.",
-            "browser": "Prohlížeč",
             "confirm_sign_out": {
                 "one": "Potvrďte odstranění tohoto zařízení",
                 "few": "",
@@ -2904,7 +2901,6 @@
             "no_sessions": "Nebyly nalezeny žádné relace.",
             "no_unverified_sessions": "Nebyly nalezeny žádné neověřené relace.",
             "no_verified_sessions": "Nebyly nalezeny žádné ověřené relace.",
-            "os": "Operační systém",
             "other_sessions_heading": "Ostatní relace",
             "push_heading": "Push oznámení",
             "push_subheading": "Přijímat push oznámení v této relaci.",

@@ -504,7 +504,6 @@
         "message_layout": "Message layout",
         "message_timestamp_invalid": "Invalid timestamp",
         "microphone": "Microphone",
-        "model": "Model",
         "moderation_and_safety": "Moderation and safety",
         "modern": "Modern",
         "mute": "Mute",
@@ -677,7 +676,6 @@
     "create_section_dialog": {
         "create_section": "Create section",
         "description": "Sections are only for you",
-        "edit_section": "Edit section",
         "label": "Section name",
         "title": "Create a section",
         "title_edition": "Edit a section"
@@ -2860,7 +2858,6 @@
         "send_typing_notifications": "Send typing notifications",
         "sessions": {
             "best_security_note": "For best security, verify your sessions and remove any session that you don't recognize or use anymore.",
-            "browser": "Browser",
             "confirm_sign_out": {
                 "one": "Confirm removing this device",
                 "other": "Confirm removing these devices"
@@ -2911,7 +2908,6 @@
             "no_sessions": "No sessions found.",
             "no_unverified_sessions": "No unverified sessions found.",
             "no_verified_sessions": "No verified sessions found.",
-            "os": "Operating system",
             "other_sessions_heading": "Other sessions",
             "push_heading": "Push notifications",
             "push_subheading": "Receive push notifications on this session.",

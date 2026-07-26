@@ -490,7 +490,6 @@
         "message_layout": "Aparência da mensagem",
         "message_timestamp_invalid": "Data/hora inválido",
         "microphone": "Microfone",
-        "model": "Modelo",
         "moderation_and_safety": "Moderação e segurança",
         "modern": "Moderno",
         "mute": "Mudo",
@@ -2750,7 +2749,6 @@
         "send_typing_notifications": "Permitir que saibam quando eu estiver digitando",
         "sessions": {
             "best_security_note": "Para maior segurança, verifique suas sessões e saia de qualquer sessão que você não reconhece ou não usa mais.",
-            "browser": "Navegador",
             "confirm_sign_out": {
                 "other": "Confirme a saída destes dispositivos",
                 "one": "Confirme a saída deste dispositivo"
@@ -2801,7 +2799,6 @@
             "no_sessions": "Nenhuma sessão encontrada.",
             "no_unverified_sessions": "Nenhuma sessão não verificada foi encontrada.",
             "no_verified_sessions": "Nenhuma sessão verificada foi encontrada.",
-            "os": "Sistema operacional",
             "other_sessions_heading": "Outras sessões",
             "push_heading": "Notificações push",
             "push_subheading": "Receber notificações push nesta sessão.",

@@ -504,7 +504,6 @@
         "message_layout": "Sõnumite paigutus",
         "message_timestamp_invalid": "Vigane ajatempel",
         "microphone": "Mikrofon",
-        "model": "Mudel",
         "moderation_and_safety": "Modereerimine ja turvalisus",
         "modern": "Moodne",
         "mute": "Summuta",
@@ -677,7 +676,6 @@
     "create_section_dialog": {
         "create_section": "Lisa jaotis",
         "description": "Jaotised on vaid sinu jaoks",
-        "edit_section": "Muuda jaotist",
         "label": "Jaotise nimi",
         "title": "Lisa jaotis",
         "title_edition": "Muuda jaotist"
@@ -2852,7 +2850,6 @@
         "send_typing_notifications": "Anna märku teisele osapoolele, kui mina sõnumit kirjutan",
         "sessions": {
             "best_security_note": "Parima turvalisuse nimel verifitseeri kõik oma sessioonid ning eemalda need, mida sa enam ei kasuta või ei tunne ära.",
-            "browser": "Brauser",
             "confirm_sign_out": {
                 "one": "Kinnita selle seadme eemaldamine",
                 "other": "Kinnita nende seadmete eemaldamine"
@@ -2903,7 +2900,6 @@
             "no_sessions": "Sessioone ei leidu.",
             "no_unverified_sessions": "Verifitseerimata sessioone ei leidu.",
             "no_verified_sessions": "Verifitseeritud sessioone ei leidu.",
-            "os": "Operatsioonisüsteem",
             "other_sessions_heading": "Muud sessioonid",
             "push_heading": "Tõuketeavitused",
             "push_subheading": "Võta tõuketeavitused selles sessioonis kasutusele.",

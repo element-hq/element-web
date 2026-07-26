@@ -36,6 +36,7 @@ exports[`RemoveSectionDialog renders the dialog when section is empty 1`] = `
         class="mx_Dialog_buttons_row"
       >
         <button
+          class="cancel"
           data-testid="dialog-cancel-button"
           type="button"
         >
@@ -119,6 +120,7 @@ exports[`RemoveSectionDialog renders the dialog when section is not empty 1`] = 
         class="mx_Dialog_buttons_row"
       >
         <button
+          class="cancel"
           data-testid="dialog-cancel-button"
           type="button"
         >

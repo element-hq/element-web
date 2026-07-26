@@ -476,7 +476,6 @@
         "message_layout": "Viestien asettelu",
         "message_timestamp_invalid": "Virheellinen aikaleima",
         "microphone": "Mikrofoni",
-        "model": "Malli",
         "modern": "Moderni",
         "mute": "Mykistä",
         "n_members": {
@@ -2313,7 +2312,6 @@
         "send_typing_notifications": "Lähetä kirjoitusilmoituksia",
         "sessions": {
             "best_security_note": "Parhaan turvallisuuden takaamiseksi vahvista istuntosi ja poista istunnot, joita et tunnista tai et enää käytä.",
-            "browser": "Selain",
             "confirm_sign_out": {
                 "one": "Vahvista tämän laitteen poistaminen",
                 "other": "Vahvista näiden laitteiden poistaminen"
@@ -2360,7 +2358,6 @@
             "no_sessions": "Istuntoja ei löytynyt.",
             "no_unverified_sessions": "Vahvistamattomia istuntoja ei löytynyt.",
             "no_verified_sessions": "Vahvistettuja istuntoja ei löytynyt.",
-            "os": "Käyttöjärjestelmä",
             "other_sessions_heading": "Muut istunnot",
             "push_heading": "Push-ilmoitukset",
             "push_subheading": "Vastaanota push-ilmoituksia tässä istunnossa.",

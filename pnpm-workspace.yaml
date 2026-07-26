@@ -25,13 +25,13 @@ catalog:
     "playwright-core": 1.61.1
     # Compound
     "@vector-im/compound-design-tokens": 10.2.1
-    "@vector-im/compound-web": 9.8.0
+    "@vector-im/compound-web": 9.9.0
     # i18n
     matrix-web-i18n: 3.6.0
     # fonts
-    "@fontsource/inter": 5.2.8
+    "@fontsource/inter": 5.3.0
     # vite
-    vite: 8.1.4
+    vite: 8.1.5
     vite-plugin-node-polyfills: 0.28.0
     vite-plugin-svgr: 5.2.0
     vitest: 4.1.10

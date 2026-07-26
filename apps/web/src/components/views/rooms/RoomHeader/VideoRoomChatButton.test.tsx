@@ -6,20 +6,21 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
-import { type MockedObject } from "jest-mock";
-import { Room } from "matrix-js-sdk/src/matrix";
-import { fireEvent, render, screen, waitFor } from "jest-matrix-react";
+// @vitest-environment happy-dom
 
-import { VideoRoomChatButton } from "../../../../../../src/components/views/rooms/RoomHeader/VideoRoomChatButton";
-import { SDKContext } from "../../../../../../src/contexts/SDKContext";
-import { TestSDKContext } from "../../../../TestSDKContext.ts";
-import type RightPanelStore from "../../../../../../src/stores/right-panel/RightPanelStore";
-import { getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../../../test-utils";
-import { RoomNotificationState } from "../../../../../../src/stores/notifications/RoomNotificationState";
-import { NotificationLevel } from "../../../../../../src/stores/notifications/NotificationLevel";
-import { NotificationStateEvents } from "../../../../../../src/stores/notifications/NotificationState";
-import { RightPanelPhases } from "../../../../../../src/stores/right-panel/RightPanelStorePhases";
+import { vi, describe, it, expect, beforeEach, afterEach, type MockedObject } from "vitest";
+import React from "react";
+import { Room } from "matrix-js-sdk/src/matrix";
+import { fireEvent, render, screen, waitFor } from "test-utils-rtl";
+import { getMockClientWithEventEmitter, mockClientMethodsUser, TestSDKContext } from "test-utils";
+
+import { VideoRoomChatButton } from "./VideoRoomChatButton";
+import { SDKContext } from "../../../../contexts/SDKContext";
+import type RightPanelStore from "../../../../stores/right-panel/RightPanelStore";
+import { RoomNotificationState } from "../../../../stores/notifications/RoomNotificationState";
+import { NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
+import { NotificationStateEvents } from "../../../../stores/notifications/NotificationState";
+import { RightPanelPhases } from "../../../../stores/right-panel/RightPanelStorePhases";
 
 describe("<VideoRoomChatButton />", () => {
     const roomId = "!room:server.org";
@@ -32,9 +33,9 @@ describe("<VideoRoomChatButton />", () => {
      */
     const makeRoom = (isVideoRoom = true): Room => {
         const room = new Room(roomId, sdkContext.client!, sdkContext.client!.getSafeUserId());
-        jest.spyOn(room, "isElementVideoRoom").mockReturnValue(isVideoRoom);
+        vi.spyOn(room, "isElementVideoRoom").mockReturnValue(isVideoRoom);
         // stub
-        jest.spyOn(room, "getPendingEvents").mockReturnValue([]);
+        vi.spyOn(room, "getPendingEvents").mockReturnValue([]);
         return room;
     };
 
@@ -43,7 +44,7 @@ describe("<VideoRoomChatButton />", () => {
 
         // @ts-ignore ugly mocking
         roomNotificationState._level = level;
-        jest.spyOn(sdkContext.roomNotificationStateStore, "getRoomState").mockReturnValue(roomNotificationState);
+        vi.spyOn(sdkContext.roomNotificationStateStore, "getRoomState").mockReturnValue(roomNotificationState);
         return roomNotificationState;
     };
 
@@ -57,15 +58,15 @@ describe("<VideoRoomChatButton />", () => {
             ...mockClientMethodsUser(),
         });
         rightPanelStore = {
-            showOrHidePhase: jest.fn(),
+            showOrHidePhase: vi.fn(),
         } as unknown as MockedObject<RightPanelStore>;
         sdkContext = new TestSDKContext();
         sdkContext._client = client;
-        jest.spyOn(sdkContext, "rightPanelStore", "get").mockReturnValue(rightPanelStore);
+        vi.spyOn(sdkContext, "rightPanelStore", "get").mockReturnValue(rightPanelStore);
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     it("toggles timeline in right panel on click", () => {

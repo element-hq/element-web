@@ -504,7 +504,6 @@
         "message_layout": "消息布局",
         "message_timestamp_invalid": "无效时间戳",
         "microphone": "麦克风",
-        "model": "模型",
         "moderation_and_safety": "尺度与安全",
         "modern": "现代",
         "mute": "静默",
@@ -677,7 +676,6 @@
     "create_section_dialog": {
         "create_section": "创建区域",
         "description": "区域仅对你可见",
-        "edit_section": "编辑区域",
         "label": "区域名称",
         "title": "创建区域",
         "title_edition": "编辑区域"
@@ -2852,7 +2850,6 @@
         "send_typing_notifications": "发送键入通知",
         "sessions": {
             "best_security_note": "为了最佳的安全性请验证此会话，并移除任何你不认识或不再使用的会话。",
-            "browser": "浏览器",
             "confirm_sign_out": {
                 "one": "确认移除此设备",
                 "other": "确认移除这些设备"
@@ -2902,7 +2899,6 @@
             "no_sessions": "未找到会话。",
             "no_unverified_sessions": "未找到未验证的会话。",
             "no_verified_sessions": "未找到已验证的会话。",
-            "os": "操作系统",
             "other_sessions_heading": "其它会话",
             "push_heading": "推送通知",
             "push_subheading": "允许此会话接收通知推送",
@@ -3742,7 +3738,7 @@
     "upload_file": {
         "cancel_all_button": "全部取消",
         "error_file_too_large": "此文件<b>太大</b>，无法上传。文件大小限制为 %(limit)s，但此文件为 %(sizeOfThisFile)s。",
-        "error_files_too_large": "这些文件<b>过大</b>而无法上传。文件大小限制为 %(limit)s。",
+        "error_files_too_large": "这些文件由于<b>过大</b>而无法上传。文件大小限制为 %(limit)s。",
         "error_some_files_too_large": "某些文件<b>过大</b>而未能上传。文件大小限制为 %(limit)s。",
         "error_title": "上传出错",
         "not_image": "你选择的文件不是有效的图像文件。",
