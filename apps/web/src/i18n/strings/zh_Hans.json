@@ -3737,7 +3737,7 @@
     "upload_failed_title": "上传失败",
     "upload_file": {
         "cancel_all_button": "全部取消",
-        "error_file_too_large": "此文件<b>太大</b>，无法上传。文件大小限制为 %(limit)s，但此文件为 %(sizeOfThisFile)s。",
+        "error_file_too_large": "此文件由于<b>过大</b>而无法上传。文件大小限制为 %(limit)s，但此文件为 %(sizeOfThisFile)s。",
         "error_files_too_large": "这些文件由于<b>过大</b>而无法上传。文件大小限制为 %(limit)s。",
         "error_some_files_too_large": "某些文件<b>过大</b>而未能上传。文件大小限制为 %(limit)s。",
         "error_title": "上传出错",
