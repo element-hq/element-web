@@ -30,8 +30,8 @@ export function getRoomListHeader(page: Page): Locator {
  * @param isUnread Whether to look for the unread version of the section header
  */
 export function getSectionHeader(page: Page, sectionName: string, isUnread = false): Locator {
-    return getRoomList(page).getByRole("gridcell", {
-        name: isUnread ? `Toggle ${sectionName} section with unread room(s)` : `Toggle ${sectionName} section`,
+    return getRoomList(page).getByRole("button", {
+        name: isUnread ? `Toggle ${sectionName} section with unread rooms` : `Toggle ${sectionName} section`,
     });
 }
 
@@ -104,6 +104,60 @@ async function getBoundingBox(
     }
 
     return box;
+}
+
+/**
+ * Drag and drop a section header onto another section header. The dragged section is moved
+ * relative to the target: dropped before the target when dragging up, after the target when
+ * dragging down. Because the dnd start handler collapses every section, the layout changes
+ * once the drag activates — so the target position is recomputed after activation rather
+ * than cached up-front.
+ */
+export async function dragSectionToSection(
+    page: Page,
+    sourceSectionName: string,
+    targetSectionName: string,
+): Promise<void> {
+    const source = getSectionHeader(page, sourceSectionName);
+    const sourceBox = await source.boundingBox();
+    if (!sourceBox) throw new Error(`Source section ${sourceSectionName} has no bounding box`);
+
+    const sourceX = sourceBox.x + sourceBox.width / 2;
+    const sourceY = sourceBox.y + sourceBox.height / 2;
+
+    // Grab the section header
+    await page.mouse.move(sourceX, sourceY);
+    await page.mouse.down();
+    // Move past the 5px PointerSensor activation threshold so the drag actually starts.
+    // This triggers onSectionDragStart, which collapses all sections.
+    await page.mouse.move(sourceX, sourceY + 10, { steps: 5 });
+
+    // Re-query the target now that the layout has reflowed.
+    const target = getSectionHeader(page, targetSectionName);
+    const targetBox = await target.boundingBox();
+    if (!targetBox) throw new Error(`Target section ${targetSectionName} has no bounding box`);
+    const targetY = targetBox.y + targetBox.height / 2;
+
+    // Move onto the (possibly relocated) target section header and drop.
+    await page.mouse.move(sourceX, targetY, { steps: 10 });
+    await page.mouse.up();
+}
+
+/**
+ * Assert the displayed section headers appear in the given top-to-bottom order.
+ */
+export async function assertSectionsOrder(page: Page, expectedOrder: string[]): Promise<void> {
+    const positions: Array<{ name: string; y: number }> = [];
+    for (const name of expectedOrder) {
+        const header = getSectionHeader(page, name);
+        await expect(header).toBeVisible();
+        const box = await header.boundingBox();
+        if (!box) throw new Error(`Section ${name} has no bounding box`);
+        positions.push({ name, y: box.y });
+    }
+    for (let i = 1; i < positions.length; i++) {
+        expect(positions[i].y).toBeGreaterThan(positions[i - 1].y);
+    }
 }
 
 /**

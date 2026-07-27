@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactElement } from "react";
 import { render, screen, waitFor } from "jest-matrix-react";
-import { mocked, type MockedObject } from "jest-mock";
+import { mocked, type MockedObject } from "jest-mock-vitest-adapter";
 import { ClientEvent, MatrixEvent, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import SettingsStore, { type CallbackFn } from "../../../../../src/settings/SettingsStore";
@@ -26,9 +26,9 @@ import {
 } from "../../../../test-utils";
 import { UIFeature } from "../../../../../src/settings/UIFeature";
 import { SettingLevel } from "../../../../../src/settings/SettingLevel";
-import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { TestSDKContext } from "../../../TestSDKContext.ts";
 import { type FeatureSettingKey } from "../../../../../src/settings/Settings.tsx";
-import { mockOpenIdConfiguration } from "../../../../test-utils/oidc.ts";
+import { makeDelegatedAuthMetadata } from "../../../../test-utils/auth.ts";
 
 mockPlatformPeg({
     supportsSpellCheckSettings: jest.fn().mockReturnValue(false),
@@ -57,7 +57,7 @@ describe("<UserSettingsDialog />", () => {
     const mockSettingsStore = mocked(SettingsStore);
     let mockClient!: MockedObject<MatrixClient>;
 
-    let sdkContext: SdkContextClass;
+    let sdkContext: TestSDKContext;
     const defaultProps = { onFinished: jest.fn() };
     const getComponent = (
         props: Partial<typeof defaultProps & { initialTabId?: UserTab; props: Record<string, any> }> = {},
@@ -74,10 +74,10 @@ describe("<UserSettingsDialog />", () => {
             getPushers: jest.fn().mockResolvedValue([]),
             getProfileInfo: jest.fn().mockResolvedValue({}),
             getMediaConfig: jest.fn(),
-            getAuthMetadata: jest.fn().mockResolvedValue(mockOpenIdConfiguration()),
+            getAuthMetadata: jest.fn().mockResolvedValue(makeDelegatedAuthMetadata()),
         });
-        sdkContext = new SdkContextClass();
-        sdkContext.client = mockClient;
+        sdkContext = new TestSDKContext();
+        sdkContext._client = mockClient;
         mockSettingsStore.getValue.mockReturnValue(false);
         mockSettingsStore.getValueAt.mockReturnValue(false);
         mockSettingsStore.getFeatureSettingNames.mockReturnValue([]);
@@ -258,7 +258,7 @@ describe("<UserSettingsDialog />", () => {
     it("displays an indicator when user needs to set up recovery", async () => {
         // Initially, the user doesn't have secret storage, so it should display
         // an indicator.
-        mockClient.secretStorage.getDefaultKeyId.mockResolvedValue(null);
+        mocked(mockClient.secretStorage.getDefaultKeyId).mockResolvedValue(null);
 
         const { container } = render(getComponent());
 
@@ -271,7 +271,7 @@ describe("<UserSettingsDialog />", () => {
 
         // The user now has secret storage.  Trigger an update and check that
         // the indicator disappears.
-        mockClient.secretStorage.getDefaultKeyId.mockResolvedValue("foo");
+        mocked(mockClient.secretStorage.getDefaultKeyId).mockResolvedValue("foo");
         mockClient.emit(ClientEvent.AccountData, new MatrixEvent({ type: "m.secret_storage.default_key" }));
 
         await waitFor(() => {

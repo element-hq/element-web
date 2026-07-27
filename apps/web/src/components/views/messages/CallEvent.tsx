@@ -18,7 +18,7 @@ import type { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPaylo
 import { Action } from "../../../dispatcher/actions";
 import AccessibleButton, { type AccessibleButtonKind, type ButtonEvent } from "../elements/AccessibleButton";
 import MemberAvatar from "../avatars/MemberAvatar";
-import { LiveContentSummary, LiveContentType } from "../rooms/LiveContentSummary";
+import { LiveContentSummary } from "../rooms/LiveContentSummary";
 import FacePile from "../elements/FacePile";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { CallDuration, SessionDuration } from "../voip/CallDuration";
@@ -66,7 +66,6 @@ const ActiveCallEvent = ({
                             {_t("timeline|m.call|video_call_started_text", { name: senderName })}
                         </span>
                         <LiveContentSummary
-                            type={LiveContentType.Video}
                             text={_t("voip|video_call")}
                             active={false}
                             participantCount={participatingMembers.length}

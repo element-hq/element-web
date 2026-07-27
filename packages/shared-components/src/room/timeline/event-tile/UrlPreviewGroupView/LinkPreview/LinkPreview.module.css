@@ -6,43 +6,63 @@
  */
 
 button.preview {
-    background: #fff;
+    background-color: #fff;
 }
 
-.preview {
+.containerCollapsed {
+    max-width: 100%;
     display: flex;
-    position: relative;
-    width: 100%;
-    height: 200px;
-    background-size: cover;
-    background-position: center;
-    border: none;
-    padding: 0;
-    > img {
-        width: 100%;
-        object-fit: cover;
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+    border-radius: 12px;
+    /* Get radius from cpd */
+    flex-direction: row;
+    color: var(--cpd-color-text-secondary);
+    overflow: clip;
+    gap: 8px;
+    padding: var(--cpd-space-3x) var(--cpd-space-4x);
+
+    background: var(--cpd-color-bg-subtle-secondary);
+
+    .textContent {
+        display: flex;
+        flex-direction: column;
     }
-    .playButton[data-kind="primary"] {
-        padding: 0;
-        width: 50px;
-        height: 50px;
-        margin: auto;
-        background: var(--cpd-color-text-on-solid-primary);
-        > svg {
-            margin: auto;
-            border-radius: 50px;
-            color: var(--cpd-color-icon-primary);
-        }
+
+    .preview {
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        border-radius: 8px;
+        border: none;
+        flex-shrink: 0;
+        aspect-ratio: 1;
+    }
+
+    .siteName span {
+        line-height: 135%;
+    }
+
+    .title,
+    .siteName > span {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+        overflow: hidden;
+        min-width: 0;
     }
 }
 
-.container {
-    max-width: 478px;
+.containerExpanded {
+    box-sizing: border-box;
+    max-width: 100%;
+    width: 478px;
     display: flex;
-    border: 1px solid var(--cpd-color-bg-subtle-secondary);
-    border-radius: 12px; /* Get radius from cpd */
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+    border-radius: 12px;
+    /* Get radius from cpd */
     flex-direction: column;
-    color: var(--cpd-color-gray-900);
+    color: var(--cpd-color-text-secondary);
     overflow: clip;
 
     background: var(--cpd-color-bg-subtle-secondary);
@@ -67,9 +87,11 @@ button.preview {
 
     .textContent {
         padding: var(--cpd-space-3x) var(--cpd-space-4x);
+
         &.inline {
             padding: 0;
         }
+
         display: flex;
         flex-direction: column;
         gap: var(--cpd-space-1x);
@@ -78,46 +100,74 @@ button.preview {
     .caption {
         display: inline-flex;
         flex-direction: column;
-        min-width: 0; /* Prevent blowout */
+        min-width: 0;
+        /* Prevent blowout */
     }
+
     .caption {
         flex: 1;
-        overflow: hidden; /* cause it to wrap rather than clip */
-    }
-
-    .title,
-    .description {
-        display: inline-block;
-        -webkit-box-orient: vertical;
         overflow: hidden;
-        white-space: normal;
+        /* cause it to wrap rather than clip */
     }
 
-    .title {
-        display: inline-block;
-        line-clamp: 2;
-        -webkit-line-clamp: 2;
-        color: var(--cpd-color-text-primary);
-        text-decoration-line: none;
-    }
+    .preview {
+        display: flex;
+        position: relative;
+        max-width: 100%;
+        width: 478px;
+        height: 200px;
+        background-size: cover;
+        background-position: center;
+        border: none;
+        padding: 0;
 
-    .description {
-        margin: 0;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-        line-clamp: 2;
-        overflow: hidden;
+        .playButton[data-kind="primary"] {
+            padding: 0;
+            width: 50px;
+            height: 50px;
+            margin: auto;
+            background: var(--cpd-color-text-on-solid-primary);
+
+            > svg {
+                margin: auto;
+                border-radius: 50px;
+                color: var(--cpd-color-icon-primary);
+            }
+        }
     }
 
     .siteName {
         margin-top: var(--cpd-space-1x);
-        vertical-align: middle;
-        display: flex;
-        gap: var(--cpd-space-1-5x);
-        > * {
-            /* Center everything */
-            margin: auto 0;
-        }
     }
+
+    .title,
+    .description {
+        line-clamp: 2;
+        -webkit-line-clamp: 2;
+    }
+}
+
+.siteName {
+    vertical-align: middle;
+    display: flex;
+    gap: var(--cpd-space-1-5x);
+
+    > * {
+        /* Center everything */
+        margin: auto 0;
+    }
+}
+
+.title,
+.description {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    white-space: normal;
+    margin: 0;
+}
+
+.title {
+    color: var(--cpd-color-text-primary);
+    text-decoration-line: none;
 }

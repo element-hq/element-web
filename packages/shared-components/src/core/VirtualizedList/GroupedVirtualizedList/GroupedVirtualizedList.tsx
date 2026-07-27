@@ -5,10 +5,41 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, useCallback, useMemo } from "react";
-import { Virtuoso, type VirtuosoHandle } from "react-virtuoso";
+import React, {
+    type JSX,
+    type ReactNode,
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
+import { type Components, type ListItem, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 
 import { useVirtualizedList, type VirtualizedListContext, type VirtualizedListProps } from "../virtualized-list";
+import styles from "./GroupedVirtualizedList.module.css";
+
+/**
+ * Virtuoso row wrapper that makes section-header rows `position: sticky`, so a header pins to the
+ * top and the next one slides up to cover it (and reveals the previous on the way back) — native,
+ * compositor-driven cover/reveal. Room rows render in normal flow. Because Virtuoso unmounts rows
+ * scrolled out of its render window, a tall section's header eventually unmounts and stops sticking;
+ * the pinned overlay (rendered outside the list) backstops that gap.
+ */
+const StickyRowItem: Components["Item"] = React.forwardRef(function StickyRowItem(
+    // `item` and `context` are Virtuoso-injected props, not DOM attributes — pull them out so they
+    // aren't spread onto the div (`context` would otherwise render as `context="[object Object]"`).
+    { item, context, children, ...props },
+    ref,
+) {
+    const isHeader = item != null && typeof item === "object" && "header" in item;
+    return (
+        <div {...props} ref={ref as React.Ref<HTMLDivElement>} className={isHeader ? styles.stickyRow : undefined}>
+            {children}
+        </div>
+    );
+});
 
 /**
  * A group of items for the grouped virtualized list.
@@ -31,7 +62,9 @@ type NavigationEntry<Header, Item> = { header: Header } | { item: Item };
 
 export interface GroupedVirtualizedListProps<Header, Item, Context> extends Omit<
     VirtualizedListProps<Item, Context>,
-    "items" | "isItemFocusable" | "getItemKey"
+    // `itemsRendered`, `onScroll` and `scrollPaddingTop` are owned internally to drive the pinned
+    // header (see renderStickyHeader) and keep keyboard focus clear of it.
+    "items" | "isItemFocusable" | "getItemKey" | "itemsRendered" | "onScroll" | "scrollPaddingTop"
 > {
     /**
      * Optional ref to the underlying Virtuoso handle, for imperative scrolling.
@@ -104,6 +137,25 @@ export interface GroupedVirtualizedListProps<Header, Item, Context> extends Omit
         onFocus: (item: Item, e: React.FocusEvent) => void,
         groupIndex: number,
     ) => JSX.Element;
+
+    /**
+     * Optional renderer for a "pinned" header that stays fixed at the top of the scroll
+     * viewport, reflecting the group the user is currently scrolled within.
+     *
+     * List rows — including real group headers — are virtualized and unmount once scrolled out
+     * of the render window, so a CSS `position: sticky` header would disappear partway through a
+     * tall group. This header is rendered OUTSIDE the virtualized stream, so it never unmounts.
+     *
+     * The real header rows remain the focusable, accessible elements driving keyboard navigation
+     * and screen-reader output; this overlay must therefore be purely presentational and is
+     * hidden from assistive technology by the caller.
+     *
+     * @param groupIndex - The index of the group currently pinned at the top
+     * @param header - The header data for that group
+     * @param context - The list context, including any additional context data
+     * @returns The presentational pinned header, or `null`/`undefined` to render nothing
+     */
+    renderStickyHeader?: (groupIndex: number, header: Header, context: VirtualizedListContext<Context>) => ReactNode;
 }
 
 /**
@@ -132,8 +184,13 @@ export function GroupedVirtualizedList<Header, Item, Context>(
         getItemKey,
         getHeaderKey,
         scrollHandleRef,
+        renderStickyHeader,
         ...restProps
     } = props;
+
+    // Measured height of the pinned overlay header. Drives both the push animation and the keyboard
+    // scroll padding (so focused items land below the overlay rather than behind it). 0 = no overlay.
+    const [headerHeight, setHeaderHeight] = useState(0);
 
     // Build a flat array interleaving group headers with items.
     // Each entry is either { header } or { item }.
@@ -141,7 +198,9 @@ export function GroupedVirtualizedList<Header, Item, Context>(
         () =>
             groups.flatMap<NavigationEntry<Header, Item>>((group) => [
                 { header: group.header },
-                ...group.items.map<NavigationEntry<Header, Item>>((item) => ({ item })),
+                ...group.items.map<NavigationEntry<Header, Item>>((item) => ({
+                    item,
+                })),
             ]),
         [groups],
     );
@@ -151,6 +210,17 @@ export function GroupedVirtualizedList<Header, Item, Context>(
     const flatIndexToGroupIndex = useMemo(
         () => groups.flatMap((group, groupIdx) => new Array(1 + group.items.length).fill(groupIdx)),
         [groups],
+    );
+
+    // Per-item top padding for keyboard scrolling: reserve the overlay height for room items (so
+    // they land below the pinned header), but 0 for header items — a focused header should land at
+    // the exact top, where the overlay yields to the real (focusable) header.
+    const getScrollPaddingTop = useCallback(
+        (index: number): number => {
+            const entry = flatEntries[index];
+            return entry && "header" in entry ? 0 : headerHeight;
+        },
+        [flatEntries, headerHeight],
     );
 
     // Wrap getItemKey: dispatch to getHeaderKey or getItemKey based on entry type
@@ -167,7 +237,11 @@ export function GroupedVirtualizedList<Header, Item, Context>(
         [isGroupHeaderFocusable, isItemFocusable],
     );
 
-    const { onFocusForGetItemComponent, ...virtuosoProps } = useVirtualizedList<NavigationEntry<Header, Item>, Context>(
+    const {
+        onFocusForGetItemComponent,
+        scrollerRef: hookScrollerRef,
+        ...virtuosoProps
+    } = useVirtualizedList<NavigationEntry<Header, Item>, Context>(
         {
             ...(restProps as Omit<
                 VirtualizedListProps<NavigationEntry<Header, Item>, Context>,
@@ -176,6 +250,8 @@ export function GroupedVirtualizedList<Header, Item, Context>(
             items: flatEntries,
             isItemFocusable: wrappedIsEntryFocusable,
             getItemKey: wrappedGetEntryKey,
+            // Keep keyboard-focused rooms clear of the pinned overlay header (headers get 0; see above).
+            scrollPaddingTop: getScrollPaddingTop,
         },
         scrollHandleRef,
     );
@@ -226,15 +302,119 @@ export function GroupedVirtualizedList<Header, Item, Context>(
         ],
     );
 
+    // --- Pinned ("sticky") header tracking -------------------------------------------------
+    // Work out which section is at the top of the viewport so the overlay can mirror it: find the
+    // top-most rendered item by comparing each item's measured `offset` (from `itemsRendered`)
+    // against the live `scrollTop`, then take that item's group.
+    //
+    // We can't use Virtuoso's reported range for this. It also counts the rows rendered off-screen
+    // above the viewport (`increaseViewportBy`), so its start index sits ~a screenful too high.
+    // Right after you scroll into a new section that start index is still back in the previous
+    // section — so the overlay would keep showing the previous section's header until you'd
+    // scrolled well into the new one.
+    const renderedItemsRef = useRef<{ index: number; offset: number }[]>([]);
+    const overlayRef = useRef<HTMLDivElement>(null);
+    // The scroller element, held as a ref for imperative reads (`scrollTop`, while computing the
+    // pinned header) and writes (wheel forwarding). A ref rather than state because mutating a
+    // *state* value's `scrollTop` trips react-compiler's immutability check, and scroll updates are
+    // driven by Virtuoso's `onScroll` prop — so no effect needs to re-subscribe when it mounts.
+    const scrollerElRef = useRef<HTMLElement | null>(null);
+    const [currentGroupIndex, setCurrentGroupIndex] = useState(0);
+
+    // Recompute which section the overlay backstop should mirror. Runs on every scroll frame, but
+    // it's cheap — it only reads scrollTop + the cached item offsets and updates a single state value.
+    const updateSticky = useCallback((): void => {
+        const scroller = scrollerElRef.current;
+        if (!scroller || flatIndexToGroupIndex.length === 0) return;
+        const scrollTop = scroller.scrollTop;
+        const rendered = renderedItemsRef.current;
+
+        // Find the top-most rendered item: the greatest measured offset that's still at or above the
+        // fold (+1px rounding tolerance). Its group is the section currently at the top.
+        let topIndex = rendered.length ? rendered[0].index : 0;
+        let bestOffset = rendered.length ? rendered[0].offset : 0;
+        for (const item of rendered) {
+            if (item.offset <= scrollTop + 1 && item.offset > bestOffset) {
+                bestOffset = item.offset;
+                topIndex = item.index;
+            }
+        }
+
+        const groupIndex = flatIndexToGroupIndex[topIndex] ?? 0;
+        setCurrentGroupIndex((prev) => (prev === groupIndex ? prev : groupIndex));
+    }, [flatIndexToGroupIndex]);
+
+    // Capture the latest item offsets, then refresh the pinned header.
+    const handleItemsRendered = useCallback(
+        (items: ListItem<NavigationEntry<Header, Item>>[]): void => {
+            renderedItemsRef.current = items.map((item) => ({ index: item.index, offset: item.offset }));
+            updateSticky();
+        },
+        [updateSticky],
+    );
+
+    // Compose the hook's scroller ref so we can also capture the element for imperative use
+    // (reading scrollTop while computing the pinned header, and forwarding wheel events).
+    const handleScrollerRef = useCallback(
+        (element: HTMLElement | Window | null): void => {
+            hookScrollerRef?.(element);
+            scrollerElRef.current = element instanceof HTMLElement ? element : null;
+        },
+        [hookScrollerRef],
+    );
+
+    // The overlay is interactive (so it can be clicked/hovered), which means it would otherwise
+    // swallow wheel scrolling over the header strip. Forward those wheel deltas to the scroller.
+    const handleOverlayWheel = useCallback((e: React.WheelEvent): void => {
+        const el = scrollerElRef.current;
+        if (el) el.scrollTop += e.deltaY * (e.deltaMode === 1 ? 16 : 1);
+    }, []);
+
+    // Measure the pinned header's height (used by the keyboard scroll padding, so a focused room
+    // lands clear of it) whenever it could have changed. setState bails out when unchanged.
+    useLayoutEffect(() => {
+        if (overlayRef.current) setHeaderHeight(overlayRef.current.offsetHeight);
+    }, [currentGroupIndex, groups]);
+
+    // Groups can change (sections added/removed/reordered); re-evaluate against the new layout.
+    useEffect(() => {
+        updateSticky();
+    }, [groups, updateSticky]);
+
+    const stickyGroupIndex = Math.min(currentGroupIndex, groups.length - 1);
+    const stickyHeader =
+        renderStickyHeader && stickyGroupIndex >= 0
+            ? renderStickyHeader(stickyGroupIndex, groups[stickyGroupIndex].header, virtuosoProps.context)
+            : null;
+
     return (
-        <Virtuoso
-            // note that either the container of direct children must be focusable to be axe
-            // compliant, so we leave tabIndex as the default so the container can be focused
-            // (virtuoso wraps the children inside another couple of elements so setting it
-            // on those doesn't seem to work, unfortunately)
-            itemContent={itemContent}
-            data={flatEntries}
-            {...virtuosoProps}
-        />
+        <div className={styles.stickyRoot}>
+            {stickyHeader != null && (
+                <div className={styles.stickyHeader} ref={overlayRef} onWheel={handleOverlayWheel}>
+                    {stickyHeader}
+                </div>
+            )}
+            <Virtuoso
+                // note that either the container of direct children must be focusable to be axe
+                // compliant, so we leave tabIndex as the default so the container can be focused
+                // (virtuoso wraps the children inside another couple of elements so setting it
+                // on those doesn't seem to work, unfortunately)
+                itemContent={itemContent}
+                data={flatEntries}
+                {...virtuosoProps}
+                components={
+                    { Item: StickyRowItem } as Components<
+                        NavigationEntry<Header, Item>,
+                        VirtualizedListContext<Context>
+                    >
+                }
+                scrollerRef={handleScrollerRef}
+                itemsRendered={handleItemsRendered}
+                // Keep the overlay backstop's section current as you scroll. The cover/reveal
+                // animation is native `position: sticky` (.stickyRow), so this only tracks which
+                // section the backstop should mirror.
+                onScroll={updateSticky}
+            />
+        </div>
     );
 }

@@ -36,7 +36,6 @@ export const defaultSnapshot: RoomListItemViewSnapshot = {
     canMarkAsRead: false,
     canMarkAsUnread: true,
     roomNotifState: RoomNotifState.AllMessages,
-    canMoveToSection: true,
     sections: [
         {
             tag: "m.favourite",
@@ -54,4 +53,5 @@ export const defaultSnapshot: RoomListItemViewSnapshot = {
             isSelected: false,
         },
     ],
+    areSectionsEnabled: true,
 };

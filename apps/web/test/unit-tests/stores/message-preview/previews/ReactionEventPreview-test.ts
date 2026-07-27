@@ -10,12 +10,12 @@ import { RelationType, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 
 import { mkEvent, stubClient } from "../../../../test-utils";
-// Import directly from the file to avoid circular dependencies with MessagePreviewStore
 import { ReactionEventPreview } from "../../../../../src/stores/message-preview/previews/ReactionEventPreview";
+import { MessagePreviewStore } from "../../../../../src/stores/message-preview";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 
 describe("ReactionEventPreview", () => {
-    const preview = new ReactionEventPreview();
+    const preview = new ReactionEventPreview(MessagePreviewStore.instance);
     const userId = "@user:example.com";
     const roomId = "!room:example.com";
 

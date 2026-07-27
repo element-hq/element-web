@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactNode, type KeyboardEvent, type Ref, type MouseEvent } from "react";
+import React, { type ReactNode, type KeyboardEvent, type Ref, type MouseEvent, useMemo, useContext } from "react";
 import classNames from "classnames";
 import { IconButton, Text } from "@vector-im/compound-web";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
@@ -14,9 +14,9 @@ import ChevronLeftIcon from "@vector-im/compound-design-tokens/assets/web/icons/
 import { AutoHideScrollbar } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
-import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { backLabelForPhase } from "../../../stores/right-panel/RightPanelStorePhases";
 import { CardContext } from "./context";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 interface IProps {
     header?: ReactNode | null;
@@ -31,17 +31,10 @@ interface IProps {
     onClose?(this: void, ev: MouseEvent<HTMLButtonElement>): void;
     onBack?(this: void, ev: MouseEvent<HTMLButtonElement>): void;
     onKeyDown?(this: void, ev: KeyboardEvent): void;
-    cardState?: any;
     ref?: Ref<HTMLDivElement>;
     // Ref for the 'close' button the card
     closeButtonRef?: Ref<HTMLButtonElement>;
     children: ReactNode;
-}
-
-function closeRightPanel(ev: MouseEvent<HTMLButtonElement>): void {
-    ev.preventDefault();
-    ev.stopPropagation();
-    RightPanelStore.instance.popCard();
 }
 
 const BaseCard: React.FC<IProps> = ({
@@ -61,13 +54,15 @@ const BaseCard: React.FC<IProps> = ({
     closeButtonRef,
     ref,
 }: IProps) => {
+    const sdkContext = useContext(SDKContext);
+
     let backButton;
-    const cardHistory = RightPanelStore.instance.roomPhaseHistory;
+    const cardHistory = sdkContext.rightPanelStore.roomPhaseHistory;
     if (cardHistory.length > 1 && !hideHeaderButtons) {
         const prevCard = cardHistory[cardHistory.length - 2];
         const onBackClick = (ev: MouseEvent<HTMLButtonElement>): void => {
             onBack?.(ev);
-            RightPanelStore.instance.popCard();
+            sdkContext.rightPanelStore.popCard();
         };
         const label = backLabelForPhase(prevCard.phase) ?? _t("action|back");
         backButton = (
@@ -85,6 +80,13 @@ const BaseCard: React.FC<IProps> = ({
 
     let closeButton;
     if (!hideHeaderButtons) {
+        // eslint-disable-next-line no-inner-declarations
+        function closeRightPanel(ev: MouseEvent<HTMLButtonElement>): void {
+            ev.preventDefault();
+            ev.stopPropagation();
+            sdkContext.rightPanelStore.popCard();
+        }
+
         closeButton = (
             <IconButton
                 size="28px"
@@ -104,9 +106,10 @@ const BaseCard: React.FC<IProps> = ({
     }
 
     const shouldRenderHeader = header || !hideHeaderButtons;
+    const context = useMemo(() => ({ isCard: true }), []);
 
     return (
-        <CardContext.Provider value={{ isCard: true }}>
+        <CardContext.Provider value={context}>
             <div
                 id={id}
                 aria-labelledby={ariaLabelledBy}
@@ -125,6 +128,7 @@ const BaseCard: React.FC<IProps> = ({
                                     weight="medium"
                                     className="mx_BaseCard_header_title_heading"
                                     role="heading"
+                                    aria-level={1}
                                 >
                                     {header}
                                 </Text>

@@ -7,13 +7,11 @@ Please see LICENSE files in the repository root for full details.
 
 import {
     clipboard,
-    nativeImage,
     Menu,
     MenuItem,
     shell,
     dialog,
     ipcMain,
-    type NativeImage,
     type WebContents,
     type ContextMenuParams,
     type DownloadItem,
@@ -22,11 +20,11 @@ import {
     type Event,
 } from "electron";
 import url from "node:url";
-import fs from "node:fs";
-import { pipeline } from "node:stream/promises";
 import path from "node:path";
 
 import { _t } from "./language-helper.js";
+import { saveImageToFile } from "./save-image.js";
+import { getConfig } from "./config.js";
 
 const MAILTO_PREFIX = "mailto:";
 
@@ -56,26 +54,13 @@ function onWindowOrNavigate(ev: Event, target: string): void {
     safeOpenURL(target);
 }
 
-function writeNativeImage(filePath: string, img: NativeImage): Promise<void> {
-    switch (filePath.split(".").pop()?.toLowerCase()) {
-        case "jpg":
-        case "jpeg":
-            return fs.promises.writeFile(filePath, img.toJPEG(100));
-        case "bmp":
-            return fs.promises.writeFile(filePath, img.toBitmap());
-        case "png":
-        default:
-            return fs.promises.writeFile(filePath, img.toPNG());
-    }
-}
-
 function onLinkContextMenu(ev: Event, params: ContextMenuParams, webContents: WebContents): void {
     let url = params.linkURL || params.srcURL;
 
     if (url.startsWith("vector://vector/webapp")) {
         // Avoid showing a context menu for app icons
         if (params.hasImageContents) return;
-        const baseUrl = vectorConfig.web_base_url ?? "https://app.element.io/";
+        const baseUrl = getConfig().web_base_url;
         // Rewrite URL so that it can be used outside the app
         url = baseUrl + url.substring(23);
     }
@@ -149,14 +134,7 @@ function onLinkContextMenu(ev: Event, params: ContextMenuParams, webContents: We
                     if (!filePath) return; // user cancelled dialog
 
                     try {
-                        if (url.startsWith("data:")) {
-                            await writeNativeImage(filePath, nativeImage.createFromDataURL(url));
-                        } else {
-                            const resp = await fetch(url);
-                            if (!resp.ok) throw new Error(`unexpected response ${resp.statusText}`);
-                            if (!resp.body) throw new Error(`unexpected response has no body ${resp.statusText}`);
-                            await pipeline(resp.body, fs.createWriteStream(filePath));
-                        }
+                        await saveImageToFile(url, filePath, webContents.session);
                     } catch (err) {
                         console.error(err);
                         void dialog.showMessageBox({

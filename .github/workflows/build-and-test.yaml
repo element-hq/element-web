@@ -26,7 +26,13 @@ on:
                 type: boolean
                 required: false
                 default: false
-                description: "A boolean to skip the playwright check itself while still creating the passing check. Useful when only running in Merge Queues."
+                description: "A boolean to skip everything while still creating the passing check. Useful when only running in Merge Queues."
+
+            skip-desktop:
+                type: boolean
+                required: false
+                default: false
+                description: "A boolean to skip building & testing Element Desktop."
 
             matrix-js-sdk-sha:
                 type: string
@@ -62,13 +68,13 @@ jobs:
             run-modules: ${{ github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'A-Modules') }}
         steps:
             - name: Checkout code
-              uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   repository: element-hq/element-web
                   persist-credentials: false
 
             - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
-            - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
               with:
                   cache: "pnpm"
                   node-version: "lts/*"
@@ -138,7 +144,7 @@ jobs:
                     - runAllTests: false
                       project: Pinecone
         steps:
-            - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   persist-credentials: false
                   repository: element-hq/element-web
@@ -150,7 +156,7 @@ jobs:
                   path: apps/web/webapp
 
             - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
-            - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
               with:
                   cache: "pnpm"
                   cache-dependency-path: pnpm-lock.yaml
@@ -191,7 +197,7 @@ jobs:
         if: needs.prepare.outputs.skip == 'false' && needs.prepare.outputs.run-modules == 'true'
         runs-on: ubuntu-24.04-arm
         steps:
-            - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   persist-credentials: false
                   repository: element-hq/element-web
@@ -203,7 +209,7 @@ jobs:
                   path: apps/web/webapp
 
             - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
-            - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
               with:
                   cache: "pnpm"
                   cache-dependency-path: pnpm-lock.yaml
@@ -237,7 +243,7 @@ jobs:
         name: "Prepare Element Desktop"
         uses: ./.github/workflows/build_desktop_prepare.yaml
         needs: prepare
-        if: needs.prepare.outputs.skip == 'false'
+        if: needs.prepare.outputs.skip == 'false' && inputs.skip-desktop != true
         permissions:
             contents: read
         with:
@@ -303,7 +309,7 @@ jobs:
         if: always()
         runs-on: ubuntu-24.04
         steps:
-            - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               if: needs.prepare.outputs.skip == 'false'
               with:
                   persist-credentials: false
@@ -311,7 +317,7 @@ jobs:
 
             - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
               if: needs.prepare.outputs.skip == 'false'
-            - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
               if: needs.prepare.outputs.skip == 'false'
               with:
                   cache: "pnpm"

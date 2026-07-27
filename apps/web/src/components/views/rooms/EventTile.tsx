@@ -1099,7 +1099,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                     ref={this.replyChain}
                     forExport={this.props.forExport}
                     permalinkCreator={this.props.permalinkCreator}
-                    layout={this.props.layout}
                     alwaysShowTimestamps={eventTileSnapshot.replyChain.alwaysShowTimestamps}
                     isQuoteExpanded={isQuoteExpanded}
                     setQuoteExpanded={this.setQuoteExpanded}

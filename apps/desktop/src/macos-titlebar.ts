@@ -7,13 +7,20 @@ Please see LICENSE files in the repository root for full details.
 
 import type { BrowserWindow } from "electron";
 
-export function setupMacosTitleBar(window: BrowserWindow): void {
-    if (process.platform !== "darwin") return;
-
-    let cssKey: string | undefined;
-
-    async function applyStyling(): Promise<void> {
-        cssKey = await window.webContents.insertCSS(`
+/**
+ * Build the CSS injected into the renderer to make the (native-title-bar-less) macOS window draggable.
+ *
+ * Because `electron-main.ts` uses `titleBarStyle: "hidden"` there is no native title bar, so the only way
+ * to drag the window is via `-webkit-app-region: drag` strips. The `::before` strips above the room and
+ * left-panel headers were previously ~13px tall and too small to reliably grab (#32018); they are raised
+ * to match the 32px traffic-light offset used elsewhere in this file. Interactive controls keep
+ * `-webkit-app-region: no-drag` so they remain clickable (an element must never be both clickable and a
+ * drag handle).
+ *
+ * Extracted as a pure helper so the string contract can be unit-tested (see macos-titlebar.test.ts).
+ */
+export function buildTitleBarCss(): string {
+    return `
             /* Create margin of space for the traffic light buttons */
             .mx_UserMenu {
                 /* We zero the margin and use padding as we want to use it as a drag handle */ 
@@ -31,6 +38,15 @@ export function setupMacosTitleBar(window: BrowserWindow): void {
             .mx_SpacePanel_toggleCollapse {
                 /* 19px original top value, 32px margin-top above, 12px original margin-top value */
                 top: calc(19px + 32px - 12px) !important;
+            }
+            /* Widen the collapsed space panel so its right-hand separator clears the
+               traffic light buttons. The buttons are inset 9px (see trafficLightPosition
+               in electron-main) and the three-button cluster is ~52px wide, ending ~61px
+               from the window edge; against the default 68px rail the separator crowds the
+               green button. 76px restores ~15px of clearance, matching the compound 4x
+               spacing step. */
+            .mx_SpacePanel.collapsed {
+                width: 76px !important;
             }
             /* Prevent the media lightbox sender info from clipping into the traffic light buttons */
             .mx_ImageView_info_wrapper {
@@ -115,14 +131,10 @@ export function setupMacosTitleBar(window: BrowserWindow): void {
 
             .mx_LeftPanel::before {
                 content: "";
-                height: 20px;
-                -webkit-app-region: drag;
-            }
-            
-            .mx_LeftPanel_newRoomList::before {
-                /* Aligned with the room header */
-                height: 13px;
+                /* Aligned with the 32px traffic-light offset so the empty top band is grabbable (#32018) */
+                height: 32px;
                 border-right: 1px solid var(--cpd-color-bg-subtle-primary);
+                -webkit-app-region: drag;
             }
 
             .mx_RoomView::before,
@@ -130,16 +142,27 @@ export function setupMacosTitleBar(window: BrowserWindow): void {
                 content: "";
                 -webkit-app-region: drag;
             }
-            
+
             .mx_SpaceRoomView::before {
                 display: block;
-                height: 24px;            
+                /* Enlarged to match the traffic-light offset for a comfortable drag zone (#32018) */
+                height: 32px;
             }
 
             .mx_RoomView::before {
-                height: 13px;
+                /* Enlarged from 13px to cover the empty band above the 64px room header (#32018) */
+                height: 32px;
             }
-        `);
+        `;
+}
+
+export function setupMacosTitleBar(window: BrowserWindow): void {
+    if (process.platform !== "darwin") return;
+
+    let cssKey: string | undefined;
+
+    async function applyStyling(): Promise<void> {
+        cssKey = await window.webContents.insertCSS(buildTitleBarCss());
     }
 
     window.on("enter-full-screen", () => {

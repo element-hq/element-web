@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Mocked, mocked } from "jest-mock";
+import { type Mocked, mocked } from "jest-mock-vitest-adapter";
 import {
     type HttpApiEvent,
     type HttpApiEventHandlerMap,
@@ -15,6 +15,7 @@ import {
     TypedEventEmitter,
     MatrixHttpApi,
 } from "matrix-js-sdk/src/matrix";
+import { CrossSigningKey } from "matrix-js-sdk/src/crypto-api";
 import fetchMock from "@fetch-mock/jest";
 
 import { getMockClientWithEventEmitter, mockClientMethodsCrypto, mockPlatformPeg } from "../test-utils";
@@ -25,8 +26,8 @@ import { type FeatureSettingKey, type SettingKey } from "../../src/settings/Sett
 import { SettingLevel } from "../../src/settings/SettingLevel.ts";
 import SdkConfig from "../../src/SdkConfig.ts";
 import { BugReportEndpointURLLocal } from "../../src/IConfigOptions.ts";
-import { Notifier } from "../../src/Notifier.ts";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg.ts";
+import { SDKContextClass } from "../../src/contexts/SDKContextClass.ts";
 
 describe("Rageshakes", () => {
     let mockClient: Mocked<MatrixClient>;
@@ -193,7 +194,7 @@ describe("Rageshakes", () => {
                 const crossSigningPubKey = "crossSigningPubKey";
                 mocked(mockClient.getCrypto()!.getCrossSigningKeyId).mockImplementation(
                     async (type): Promise<string | null> => {
-                        if (!type || type === "master") {
+                        if (!type || type === CrossSigningKey.Master) {
                             return crossSigningPubKey;
                         }
                         return null;
@@ -359,7 +360,7 @@ describe("Rageshakes", () => {
 
     describe("Settings Store", () => {
         beforeEach(() => {
-            jest.spyOn(Notifier, "isPossible").mockReturnValue(true);
+            jest.spyOn(SDKContextClass.instance.notifier, "isPossible").mockReturnValue(true);
         });
 
         afterEach(() => {
@@ -405,7 +406,7 @@ describe("Rageshakes", () => {
         it("should handle settings throwing when logged out", async () => {
             jest.mocked(MatrixClientPeg.get).mockRestore();
             jest.mocked(MatrixClientPeg.safeGet).mockRestore();
-            jest.spyOn(Notifier, "isPossible").mockImplementation(() => {
+            jest.spyOn(SDKContextClass.instance.notifier, "isPossible").mockImplementation(() => {
                 throw new Error("Test");
             });
 
@@ -418,7 +419,7 @@ describe("Rageshakes", () => {
         it("should handle reading notification settings when logged out", async () => {
             jest.mocked(MatrixClientPeg.get).mockRestore();
             jest.mocked(MatrixClientPeg.safeGet).mockRestore();
-            jest.spyOn(Notifier, "isPossible").mockReturnValue(true);
+            jest.spyOn(SDKContextClass.instance.notifier, "isPossible").mockReturnValue(true);
 
             const formData = await collectBugReport();
             expect(JSON.parse(formData.get("mx_local_settings") as string)["notificationsEnabled"]).toBe(false);

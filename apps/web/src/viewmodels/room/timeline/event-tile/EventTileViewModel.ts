@@ -36,7 +36,7 @@ import {
     type ThreadMessagePreviewViewModelProps,
     ThreadSummaryViewModel,
     type ThreadSummaryViewModelProps,
-} from "./ThreadSummaryViewModel.tsx";
+} from "./ThreadSummaryViewModel";
 import {
     E2eMessageSharedIconViewModel,
     type E2eMessageSharedIconViewModelProps,

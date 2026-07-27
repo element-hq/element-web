@@ -19,7 +19,7 @@ Please see LICENSE files in the repository root for full details.
 
 .mx_DeviceDetailHeading_renameForm {
     display: grid;
-    gap: $spacing-16;
+    gap: var(--cpd-space-4x);
     justify-content: left;
     grid-template-columns: 100%;
 }
@@ -27,7 +27,7 @@ Please see LICENSE files in the repository root for full details.
 .mx_DeviceDetailHeading_renameFormButtons {
     display: flex;
     flex-direction: row;
-    gap: $spacing-8;
+    gap: var(--cpd-space-2x);
 
     .mx_Spinner {
         width: auto;
@@ -37,7 +37,7 @@ Please see LICENSE files in the repository root for full details.
 
 .mx_DeviceDetailHeading_renameFormInput {
     /* override field styles */
-    margin: 0 0 $spacing-4 0 !important;
+    margin: 0 0 var(--cpd-space-1x) 0 !important;
 }
 
 .mx_DeviceDetailHeading_renameFormHeading {
@@ -46,6 +46,6 @@ Please see LICENSE files in the repository root for full details.
 
 .mx_DeviceDetailHeading_renameFormError {
     color: $alert;
-    padding-right: $spacing-4;
+    padding-right: var(--cpd-space-1x);
     display: block;
 }

@@ -96,6 +96,13 @@ export class ElementAppPage {
      * @param name The exact room name to find and click on/open.
      */
     public async viewRoomByName(name: string): Promise<void> {
+        // Expand the left panel if necessary
+        const separator = this.page.getByRole("separator", { name: "Click or drag to expand" });
+        const type = await separator.getAttribute("data-separator-type");
+        if (type === "bar") {
+            await separator.click();
+        }
+
         // Make sure the room list is actually present before we try closing toasts,
         // otherwise we may race with page loading
         await this.page.getByTestId("room-list").waitFor();
@@ -125,34 +132,6 @@ export class ElementAppPage {
                 await dismissToasts();
             }
         }
-    }
-
-    /**
-     * Opens the given room on the old room list by name. The room must be visible in the
-     * room list, but the room list may be folded horizontally, and the
-     * room may contain unread messages.
-     *
-     * @param name The exact room name to find and click on/open.
-     */
-    public async viewRoomByNameOnOldRoomList(name: string): Promise<void> {
-        // We look for the room inside the room list, which is a tree called Rooms.
-        //
-        // There are 3 cases:
-        // - the room list is folded:
-        //     then the aria-label on the room tile is the name (with nothing extra)
-        // - the room list is unfolder and the room has messages:
-        //     then the aria-label contains the unread count, but the title of the
-        //     div inside the titleContainer equals the room name
-        // - the room list is unfolded and the room has no messages:
-        //     then the aria-label is the name and so is the title of a div
-        //
-        // So by matching EITHER title=name OR aria-label=name we find this exact
-        // room in all three cases.
-        return this.page
-            .getByRole("tree", { name: "Rooms" })
-            .locator(`[title="${name}"],[aria-label="${name}"]`)
-            .first()
-            .click();
     }
 
     public async viewRoomById(roomId: string): Promise<void> {
@@ -414,5 +393,23 @@ export class ElementAppPage {
         do {
             await this.page.mouse.wheel(0, 1000);
         } while (await needsScroll());
+    }
+
+    /**
+     * Resize the left panel by a given number of pixels.
+     * @param delta The number of pixels to resize by. Negative value makes the panel smaller.
+     */
+    public async resizeLeftPanel(delta: number): Promise<void> {
+        const separator = this.page.getByRole("separator", { name: "Click or drag to expand" });
+        const boundingRectangle = await separator.boundingBox();
+
+        // Place the cursor in the center of the separator
+        const centerX = boundingRectangle.x + boundingRectangle.width / 2;
+        await this.page.mouse.move(centerX, boundingRectangle.y);
+
+        // Drag the cursor by delta pixels
+        await this.page.mouse.down();
+        await this.page.mouse.move(centerX + delta, boundingRectangle.y);
+        await this.page.mouse.up();
     }
 }

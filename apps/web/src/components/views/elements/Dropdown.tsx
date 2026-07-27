@@ -37,10 +37,6 @@ interface IMenuOptionProps {
 }
 
 class MenuOption extends React.Component<IMenuOptionProps> {
-    public static defaultProps = {
-        disabled: false,
-    };
-
     private onMouseEnter = (): void => {
         this.props.onMouseEnter(this.props.dropdownKey);
     };
@@ -58,6 +54,9 @@ class MenuOption extends React.Component<IMenuOptionProps> {
         });
 
         return (
+            // We break the rule here as this is a mouse-only interaction,
+            // the keyboard interaction is handled by the Dropdown parent component
+            // oxlint-disable-next-line jsx-a11y/click-events-have-key-events
             <li
                 id={this.props.id}
                 className={optClasses}

@@ -10,37 +10,44 @@ Please see LICENSE files in the repository root for full details.
 import { type ReactElement, type ReactNode } from "react";
 import { useIdColorHash } from "@vector-im/compound-web";
 
-import { _t, getCurrentLanguage, getUserLanguage } from "../languageHandler";
+import { _t, getCurrentLanguage } from "../languageHandler";
+import { getUserLanguage } from "../i18n/settings";
 import { jsxJoin } from "./ReactUtils";
 
 export { formatBytes } from "@element-hq/web-shared-components";
 
-const locale = getCurrentLanguage();
+let cachedFormatter: Intl.NumberFormat | undefined;
+let cachedCompactFormatter: Intl.NumberFormat | undefined;
 
 // It's quite costly to instanciate `Intl.NumberFormat`, hence why we do not do
 // it in every function call
-const compactFormatter = new Intl.NumberFormat(locale, {
-    notation: "compact",
-});
+const getCachedCompactFormatter = (): Intl.NumberFormat => {
+    if (!cachedCompactFormatter)
+        cachedCompactFormatter = new Intl.NumberFormat(getCurrentLanguage(), { notation: "compact" });
+    return cachedCompactFormatter;
+};
 
 /**
  * formats and rounds numbers to fit into ~3 characters, suitable for badge counts
  * e.g: 999, 10K, 99K, 1M, 10M, 99M, 1B, 10B, ...
  */
 export function formatCount(count: number): string {
-    return compactFormatter.format(count);
+    return getCachedCompactFormatter().format(count);
 }
 
 // It's quite costly to instanciate `Intl.NumberFormat`, hence why we do not do
 // it in every function call
-const formatter = new Intl.NumberFormat(locale);
+const getCachedFormatter = (): Intl.NumberFormat => {
+    if (!cachedFormatter) cachedFormatter = new Intl.NumberFormat(getCurrentLanguage());
+    return cachedFormatter;
+};
 
 /**
  * Format a count showing the whole number but making it a bit more readable.
  * e.g: 1000 => 1,000
  */
 export function formatCountLong(count: number): string {
-    return formatter.format(count);
+    return getCachedFormatter().format(count);
 }
 
 export function getUserNameColorClass(userId: string): string {

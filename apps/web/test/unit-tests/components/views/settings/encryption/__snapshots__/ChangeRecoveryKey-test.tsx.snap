@@ -6,6 +6,7 @@ exports[`<ChangeRecoveryKey /> flow to change the recovery key should display th
     class="_breadcrumb_t96w3_8"
   >
     <button
+      aria-disabled="false"
       aria-label="Back"
       class="_icon-button_1215g_8"
       data-kind="secondary"
@@ -35,7 +36,7 @@ exports[`<ChangeRecoveryKey /> flow to change the recovery key should display th
     >
       <li>
         <a
-          class="_link_k9ljz_8"
+          class="_link_13esb_8"
           data-kind="primary"
           data-size="sm"
           rel="noreferrer noopener"
@@ -169,6 +170,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
     class="_breadcrumb_t96w3_8"
   >
     <button
+      aria-disabled="false"
       aria-label="Back"
       class="_icon-button_1215g_8"
       data-kind="secondary"
@@ -198,7 +200,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
     >
       <li>
         <a
-          class="_link_k9ljz_8"
+          class="_link_13esb_8"
           data-kind="primary"
           data-size="sm"
           rel="noreferrer noopener"
@@ -329,6 +331,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
     class="_breadcrumb_t96w3_8"
   >
     <button
+      aria-disabled="false"
       aria-label="Back"
       class="_icon-button_1215g_8"
       data-kind="secondary"
@@ -358,7 +361,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
     >
       <li>
         <a
-          class="_link_k9ljz_8"
+          class="_link_13esb_8"
           data-kind="primary"
           data-size="sm"
           rel="noreferrer noopener"
@@ -511,6 +514,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display info
     class="_breadcrumb_t96w3_8"
   >
     <button
+      aria-disabled="false"
       aria-label="Back"
       class="_icon-button_1215g_8"
       data-kind="secondary"
@@ -540,7 +544,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display info
     >
       <li>
         <a
-          class="_link_k9ljz_8"
+          class="_link_13esb_8"
           data-kind="primary"
           data-size="sm"
           rel="noreferrer noopener"
@@ -629,6 +633,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display the 
     class="_breadcrumb_t96w3_8"
   >
     <button
+      aria-disabled="false"
       aria-label="Back"
       class="_icon-button_1215g_8"
       data-kind="secondary"
@@ -658,7 +663,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display the 
     >
       <li>
         <a
-          class="_link_k9ljz_8"
+          class="_link_13esb_8"
           data-kind="primary"
           data-size="sm"
           rel="noreferrer noopener"

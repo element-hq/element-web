@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type FC, type JSX, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "motion/react";
 import * as Dialog from "@radix-ui/react-dialog";
 import styled, { useTheme } from "styled-components";
 import { InlineSpinner } from "@vector-im/compound-web";

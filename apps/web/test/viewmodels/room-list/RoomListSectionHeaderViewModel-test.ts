@@ -117,6 +117,23 @@ describe("RoomListSectionHeaderViewModel", () => {
         });
     });
 
+    describe("canBeReordered", () => {
+        it.each([
+            [DefaultTagID.Favourite, false],
+            [DefaultTagID.LowPriority, false],
+            [CHATS_TAG, true],
+            ["element.io.section.custom", true],
+        ])("should be %s for tag %s", (tag, expected) => {
+            const vm = new RoomListSectionHeaderViewModel({
+                tag,
+                title: "Section",
+                spaceId: "!space:server",
+                onToggleExpanded,
+            });
+            expect(vm.getSnapshot().canBeReordered).toBe(expected);
+        });
+    });
+
     describe("onCustomSectionDataChange", () => {
         let watchCallback: () => void;
 
@@ -233,9 +250,14 @@ describe("RoomListSectionHeaderViewModel", () => {
         let notificationState: RoomNotificationState;
 
         beforeEach(() => {
+            jest.useFakeTimers();
             room = mkRoom(matrixClient, "!room:server");
             notificationState = new RoomNotificationState(room, false);
             jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockReturnValue(notificationState);
+        });
+
+        afterEach(() => {
+            jest.useRealTimers();
         });
 
         it("should set isUnread to false when no rooms have notifications", () => {
@@ -310,6 +332,7 @@ describe("RoomListSectionHeaderViewModel", () => {
             jest.spyOn(notificationState, "hasAnyNotificationOrActivity", "get").mockReturnValue(true);
             notificationState.emit(NotificationStateEvents.Update);
 
+            jest.advanceTimersByTime(200);
             expect(vm.getSnapshot().isUnread).toBe(true);
         });
 
@@ -532,6 +555,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                 jest.spyOn(notificationState, "isMention", "get").mockReturnValue(true);
                 notificationState.emit(NotificationStateEvents.Update);
 
+                jest.advanceTimersByTime(200);
                 expect(vm.getSnapshot().notification?.isMention).toBe(true);
             });
         });

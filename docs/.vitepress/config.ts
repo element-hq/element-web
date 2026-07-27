@@ -1,6 +1,13 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE in the repository root for full details.
+*/
+
 import { withMermaid } from "vitepress-plugin-mermaid";
 
-function customPathResolver(href: string, currentPath: string) {
+function customPathResolver(href: string, currentPath: string): string {
     const [link, fragment] = href.split("#", 2);
     if (currentPath === "index.md") {
         if (link.startsWith("./docs/")) {
@@ -137,7 +144,7 @@ export default withMermaid({
                     { text: "Memory profiling", link: "/memory-profiles-and-leaks.md" },
                     { text: "Jitsi", link: "/jitsi-dev.md" },
                     { text: "Feature flags", link: "/feature-flags.md" },
-                    { text: "OIDC and delegated authentication", link: "/oidc.md" },
+                    { text: "OAuth and delegated authentication", link: "/oauth.md" },
                     { text: "Release Process", link: "/release.md" },
                     { text: "MVVM", link: "/MVVM.md" },
                     { text: "Settings", link: "/settings.md" },

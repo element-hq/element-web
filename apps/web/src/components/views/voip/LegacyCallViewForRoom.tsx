@@ -10,7 +10,7 @@ import { CallState, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import React from "react";
 import { Resizable } from "re-resizable";
 
-import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../../LegacyCallHandler";
+import { LegacyCallHandlerEvent } from "../../../LegacyCallHandler";
 import LegacyCallView from "./LegacyCallView";
 import { SDKContext } from "../../../contexts/SDKContext";
 
@@ -39,20 +39,20 @@ export default class LegacyCallViewForRoom extends React.Component<IProps, IStat
         const call = this.getCall();
         this.state = {
             call,
-            sidebarShown: !!call && LegacyCallHandler.instance.isCallSidebarShown(call.callId),
+            sidebarShown: !!call && context.legacyCallHandler.isCallSidebarShown(call.callId),
         };
     }
 
     public componentDidMount(): void {
-        LegacyCallHandler.instance.addListener(LegacyCallHandlerEvent.CallState, this.updateCall);
-        LegacyCallHandler.instance.addListener(LegacyCallHandlerEvent.CallChangeRoom, this.updateCall);
-        LegacyCallHandler.instance.addListener(LegacyCallHandlerEvent.ShownSidebarsChanged, this.updateCall);
+        this.context.legacyCallHandler.addListener(LegacyCallHandlerEvent.CallState, this.updateCall);
+        this.context.legacyCallHandler.addListener(LegacyCallHandlerEvent.CallChangeRoom, this.updateCall);
+        this.context.legacyCallHandler.addListener(LegacyCallHandlerEvent.ShownSidebarsChanged, this.updateCall);
     }
 
     public componentWillUnmount(): void {
-        LegacyCallHandler.instance.removeListener(LegacyCallHandlerEvent.CallState, this.updateCall);
-        LegacyCallHandler.instance.removeListener(LegacyCallHandlerEvent.CallChangeRoom, this.updateCall);
-        LegacyCallHandler.instance.removeListener(LegacyCallHandlerEvent.ShownSidebarsChanged, this.updateCall);
+        this.context.legacyCallHandler.removeListener(LegacyCallHandlerEvent.CallState, this.updateCall);
+        this.context.legacyCallHandler.removeListener(LegacyCallHandlerEvent.CallChangeRoom, this.updateCall);
+        this.context.legacyCallHandler.removeListener(LegacyCallHandlerEvent.ShownSidebarsChanged, this.updateCall);
     }
 
     private updateCall = (): void => {
@@ -60,14 +60,14 @@ export default class LegacyCallViewForRoom extends React.Component<IProps, IStat
         if (newCall !== this.state.call) {
             this.setState({ call: newCall });
         }
-        const newSidebarShown = !!newCall && LegacyCallHandler.instance.isCallSidebarShown(newCall.callId);
+        const newSidebarShown = !!newCall && this.context.legacyCallHandler.isCallSidebarShown(newCall.callId);
         if (newSidebarShown !== this.state.sidebarShown) {
             this.setState({ sidebarShown: newSidebarShown });
         }
     };
 
     private getCall(): MatrixCall | null {
-        const call = LegacyCallHandler.instance.getCallForRoom(this.props.roomId);
+        const call = this.context.legacyCallHandler.getCallForRoom(this.props.roomId);
 
         if (call && [CallState.Ended, CallState.Ringing].includes(call.state)) return null;
         return call;
@@ -87,7 +87,7 @@ export default class LegacyCallViewForRoom extends React.Component<IProps, IStat
 
     private setSidebarShown = (sidebarShown: boolean): void => {
         if (!this.state.call) return;
-        LegacyCallHandler.instance.setCallSidebarShown(this.state.call.callId, sidebarShown);
+        this.context.legacyCallHandler.setCallSidebarShown(this.state.call.callId, sidebarShown);
     };
 
     public render(): React.ReactNode {

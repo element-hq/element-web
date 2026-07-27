@@ -8,12 +8,12 @@
 import { rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { expect, test } from "../../../element-web-test";
+import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import { assertRoomInSection, dragRoomToSection, getPrimaryFilters, getRoomList, getSectionHeader } from "./utils";
 
 test.describe("Room list sections", () => {
     test.use({
         displayName: "Alice",
-        labsFlags: ["feature_new_room_list", "feature_room_list_sections"],
         botCreateOpts: {
             displayName: "BotBob",
             autoAcceptInvites: true,
@@ -87,6 +87,85 @@ test.describe("Room list sections", () => {
             // It should be a flat list (using listbox a11y role)
             await expect(page.getByRole("listbox", { name: "Room list", exact: true })).toBeVisible();
             await expect(getRoomList(page).getByRole("option", { name: "Open room room0" })).toBeVisible();
+        });
+    });
+
+    test.describe("Show sections setting", () => {
+        test.beforeEach(async ({ app }) => {
+            // A favourite room and a regular room so that, when sections are enabled, we get
+            // two meaningful sections (Favourites + Chats).
+            const favouriteId = await app.client.createRoom({ name: "favourite room" });
+            await app.client.evaluate(async (client, roomId) => {
+                await client.setRoomTag(roomId, "m.favourite");
+            }, favouriteId);
+            await app.client.createRoom({ name: "regular room" });
+        });
+
+        test("toggling RoomList.showSections switches between a sectioned and a flat list", async ({ page, app }) => {
+            const roomList = getRoomList(page);
+
+            // Sections are enabled by default: section headers are visible and rooms render as treegrid rows.
+            await expect(getSectionHeader(page, "Favourites")).toBeVisible();
+            await expect(getSectionHeader(page, "Chats")).toBeVisible();
+            await expect(roomList.getByRole("row", { name: "Open room favourite room" })).toBeVisible();
+
+            // Disable sections
+            await app.settings.setValue("RoomList.showSections", null, SettingLevel.ACCOUNT, false);
+
+            // The list becomes flat: no section headers, rooms render as listbox options.
+            await expect(getSectionHeader(page, "Favourites")).not.toBeVisible();
+            await expect(getSectionHeader(page, "Chats")).not.toBeVisible();
+            await expect(page.getByRole("listbox", { name: "Room list", exact: true })).toBeVisible();
+            await expect(roomList.getByRole("option", { name: "Open room favourite room" })).toBeVisible();
+            await expect(roomList.getByRole("option", { name: "Open room regular room" })).toBeVisible();
+
+            // Re-enable sections
+            await app.settings.setValue("RoomList.showSections", null, SettingLevel.ACCOUNT, true);
+
+            // The sections reappear.
+            await expect(getSectionHeader(page, "Favourites")).toBeVisible();
+            await expect(getSectionHeader(page, "Chats")).toBeVisible();
+            await expect(roomList.getByRole("row", { name: "Open room favourite room" })).toBeVisible();
+        });
+    });
+
+    test.describe("Filters when sections are disabled", () => {
+        test.beforeEach(async ({ app }) => {
+            await app.settings.setValue("RoomList.showSections", null, SettingLevel.ACCOUNT, false);
+
+            // A favourite room, a low priority room, and a regular room.
+            const favouriteId = await app.client.createRoom({ name: "favourite room" });
+            await app.client.evaluate(async (client, roomId) => {
+                await client.setRoomTag(roomId, "m.favourite");
+            }, favouriteId);
+            const lowPrioId = await app.client.createRoom({ name: "low prio room" });
+            await app.client.evaluate(async (client, roomId) => {
+                await client.setRoomTag(roomId, "m.lowpriority");
+            }, lowPrioId);
+            await app.client.createRoom({ name: "regular room" });
+        });
+
+        test("shows the Favourites and Low Priority filters and filters the flat list", async ({ page }) => {
+            const roomList = getRoomList(page);
+            const primaryFilters = getPrimaryFilters(page);
+
+            // Expand the filter list to reveal all filters
+            await primaryFilters.getByRole("button", { name: "Expand filter list" }).click();
+
+            // The Favourites and Low Priority filters are available again when sections are disabled
+            await expect(primaryFilters.getByRole("option", { name: "Favourites" })).toBeVisible();
+            await expect(primaryFilters.getByRole("option", { name: "Low priority" })).toBeVisible();
+
+            // Filtering by Favourites shows only the favourite room
+            await primaryFilters.getByRole("option", { name: "Favourites" }).click();
+            await expect(roomList.getByRole("option", { name: "Open room favourite room" })).toBeVisible();
+            await expect(roomList.getByRole("option", { name: "Open room regular room" })).not.toBeVisible();
+            await expect(roomList.getByRole("option", { name: "Open room low prio room" })).not.toBeVisible();
+
+            // Switching to the Low Priority filter shows only the low priority room
+            await primaryFilters.getByRole("option", { name: "Low priority" }).click();
+            await expect(roomList.getByRole("option", { name: "Open room low prio room" })).toBeVisible();
+            await expect(roomList.getByRole("option", { name: "Open room favourite room" })).not.toBeVisible();
         });
     });
 

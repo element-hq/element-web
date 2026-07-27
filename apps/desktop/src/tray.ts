@@ -15,8 +15,8 @@ import path from "node:path";
 
 import { _t } from "./language-helper.js";
 import { getBuildConfig } from "./build-config.js";
-import { getBrand } from "./config.js";
 import { getIconPath } from "./icon.js";
+import { getConfig } from "./config.js";
 
 // This hardcoded uuid is an arbitrary v4 uuid generated on https://www.uuidgenerator.net/version4
 const UUID_NAMESPACE = "9fc9c6a0-9ffe-45c9-9cd7-5639ae38b232";
@@ -62,7 +62,7 @@ export async function create(): Promise<void> {
         trayIcon = new Tray(defaultIcon);
     }
 
-    trayIcon.setToolTip(getBrand());
+    trayIcon.setToolTip(getConfig().brand);
     initApplicationMenu();
     trayIcon.on("click", toggleWin);
 

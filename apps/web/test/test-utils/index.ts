@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type RenderResult, screen, waitFor } from "jest-matrix-react";
+import { type RenderResult, screen, waitFor } from "test-utils-rtl";
 
 export * from "./beacon";
 export * from "./client";
@@ -21,6 +21,7 @@ export * from "./utilities";
 export * from "./date";
 export * from "./relations";
 export * from "./console";
+export * from "../unit-tests/TestSDKContext.ts";
 
 // wait for loading page
 export async function waitForLoadingSpinner(): Promise<void> {

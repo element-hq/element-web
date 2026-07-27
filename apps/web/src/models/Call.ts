@@ -707,7 +707,11 @@ export class ElementCall extends Call {
      */
     private static appendAnalyticsParams(params: URLSearchParams, client: MatrixClient): void {
         const posthogConfig = SdkConfig.get("posthog");
-        if (!posthogConfig || PosthogAnalytics.instance.getAnonymity() === Anonymity.Disabled) {
+        if (
+            !posthogConfig?.project_api_key ||
+            !posthogConfig?.api_host ||
+            PosthogAnalytics.instance.getAnonymity() === Anonymity.Disabled
+        ) {
             return;
         }
 
@@ -725,7 +729,7 @@ export class ElementCall extends Call {
         // We gate passing sentry behind analytics consent as EC shares data automatically without user-consent,
         // unlike EW where data is shared upon an intentional user action (rageshake).
         const sentryConfig = SdkConfig.get("sentry");
-        if (sentryConfig) {
+        if (sentryConfig?.dsn) {
             params.append("sentryDsn", sentryConfig.dsn);
             params.append("sentryEnvironment", sentryConfig.environment ?? "");
         }
@@ -759,6 +763,8 @@ export class ElementCall extends Call {
             lang: getCurrentLanguage().replace("_", "-"),
             fontScale: (FontWatcher.getRootFontSize() / FontWatcher.getBrowserDefaultFontSize()).toString(),
             theme: "$org.matrix.msc2873.client_theme",
+            // on EW we do not want the gradient EC background.
+            background: "solid",
         });
 
         if (typeof opts.skipLobby === "boolean") {

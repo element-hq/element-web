@@ -23,11 +23,10 @@ import EncryptionPanel from "./EncryptionPanel";
 import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
 import BaseCard from "./BaseCard";
 import QuestionDialog from "../dialogs/QuestionDialog";
-import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
-import { type IRightPanelCardState } from "../../../stores/right-panel/RightPanelStoreIPanelState";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { UserInfoHeaderView } from "./user_info/UserInfoHeaderView";
 import { UserInfoBasicView } from "./user_info/UserInfoBasicView";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 export interface IDevice extends Device {
     ambiguous?: boolean;
@@ -77,32 +76,13 @@ export const Container: React.FC<{
 
 export interface IPowerLevelsContent {
     events?: Record<string, number>;
-    // eslint-disable-next-line camelcase
     users_default?: number;
-    // eslint-disable-next-line camelcase
     events_default?: number;
-    // eslint-disable-next-line camelcase
     state_default?: number;
     ban?: number;
     kick?: number;
     redact?: number;
 }
-
-export const isMuted = (member: RoomMember, powerLevelContent: IPowerLevelsContent): boolean => {
-    if (!powerLevelContent || !member) return false;
-
-    const levelToSend =
-        (powerLevelContent.events ? powerLevelContent.events["m.room.message"] : null) ||
-        powerLevelContent.events_default;
-
-    // levelToSend could be undefined as .events_default is optional. Coercing in this case using
-    // Number() would always return false, so this preserves behaviour
-    // FIXME: per the spec, if `events_default` is unset, it defaults to zero. If
-    //   the member has a negative powerlevel, this will give an incorrect result.
-    if (levelToSend === undefined) return false;
-
-    return member.powerLevel < levelToSend;
-};
 
 export interface IRoomPermissions {
     modifyLevelMax: number;
@@ -198,24 +178,18 @@ interface IProps {
 }
 
 const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPhases.MemberInfo, ...props }) => {
-    const cli = useContext(MatrixClientContext);
+    const sdkContext = useContext(SDKContext);
 
     // fetch latest room member if we have a room, so we don't show historical information, falling back to user
     const member = useMemo(() => (room ? room.getMember(user.userId) || user : user), [room, user]);
 
-    const isRoomEncrypted = useIsEncrypted(cli, room);
+    const isRoomEncrypted = useIsEncrypted(sdkContext.client!, room);
     const devices = useDevices(user.userId) ?? [];
 
     const classes = ["mx_UserInfo"];
 
-    let cardState: IRightPanelCardState = {};
-    // We have no previousPhase for when viewing a UserInfo without a Room at this time
-    if (room && phase === RightPanelPhases.EncryptionPanel) {
-        cardState = { member };
-    }
-
     const onEncryptionPanelClose = (): void => {
-        RightPanelStore.instance.popCard();
+        sdkContext.rightPanelStore.popCard();
     };
 
     let content: JSX.Element | undefined;
@@ -245,14 +219,12 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
     }
 
     const header = (
-        <>
-            <UserInfoHeaderView
-                hideVerificationSection={phase === RightPanelPhases.EncryptionPanel}
-                member={member}
-                devices={devices}
-                roomId={room?.roomId}
-            />
-        </>
+        <UserInfoHeaderView
+            hideVerificationSection={phase === RightPanelPhases.EncryptionPanel}
+            member={member}
+            devices={devices}
+            roomId={room?.roomId}
+        />
     );
 
     return (
@@ -261,9 +233,8 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
             header={_t("common|profile")}
             onClose={onClose}
             closeLabel={closeLabel}
-            cardState={cardState}
             onBack={(ev: ButtonEvent) => {
-                if (RightPanelStore.instance.previousCard.phase === RightPanelPhases.MemberList) {
+                if (sdkContext.rightPanelStore.previousCard.phase === RightPanelPhases.MemberList) {
                     PosthogTrackers.trackInteraction("WebRightPanelRoomUserInfoBackButton", ev);
                 }
             }}
