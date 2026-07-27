@@ -255,7 +255,7 @@ app.on("ready", async () => {
         backgroundColor: "#fff",
 
         titleBarStyle: process.platform === "darwin" ? "hidden" : "default",
-        trafficLightPosition: { x: 9, y: 8 },
+        trafficLightPosition: { x: 12, y: 8 },
 
         icon: await getIconPath(),
         show: false,
