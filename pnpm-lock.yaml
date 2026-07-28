@@ -921,7 +921,7 @@ importers:
         version: 30.4.2(@types/node@25.9.3)(babel-plugin-macros@3.1.0)
       jest-canvas-mock:
         specifier: ^2.5.2
-        version: 2.5.2
+        version: 2.5.8
       jest-environment-jsdom:
         specifier: ^30.2.0
         version: 30.4.1
@@ -9695,8 +9695,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
-  jest-canvas-mock@2.5.2:
-    resolution: {integrity: sha512-vgnpPupjOL6+L5oJXzxTxFrlGEIbHdZqFU+LFNdtLxZ3lRDCl17FlTMM7IatoRQkrcyOTMlDinjUguqmQ6bR2A==}
+  jest-canvas-mock@2.5.8:
+    resolution: {integrity: sha512-RUZRaFHCnLjg0/UAodCai5PTsa7kQI1rUXE5wsQu9f2315dh2YSN7/i3fObTycs7PO09DLSiGXiJTALYIw2yuw==}
 
   jest-changed-files@30.4.1:
     resolution: {integrity: sha512-IuctmYrxi21iOSOaIXpJWalHyPAsVv0GeBHKDn8C1CA4W5htHn7INL+wdnL4Bo0+olEndvAFkmb++tIQJG+vvg==}
@@ -22308,7 +22308,7 @@ snapshots:
       filelist: 1.0.4
       picocolors: 1.1.1
 
-  jest-canvas-mock@2.5.2:
+  jest-canvas-mock@2.5.8:
     dependencies:
       cssfontparser: 1.2.1
       moo-color: 1.0.3
