@@ -487,7 +487,6 @@ describe("RoomViewStore", function () {
     });
 
     it("should display an error message when the room is unreachable via the roomId", async () => {
-        // When
         // View and wait for the room
         dis.dispatch({ action: Action.ViewRoom, room_id: roomId });
         await untilDispatch(Action.ActiveRoomChanged, dis);
@@ -498,7 +497,6 @@ describe("RoomViewStore", function () {
         // Check the modal props
         expect(mocked(Modal).createDialog.mock.calls[0][1]).toMatchSnapshot();
     });
-
     // The server bob is on will affect the message we send.
     it.each(["server", "another-server"])(
         "should display an invite-specific error message when the room is unreachable",
@@ -523,6 +521,12 @@ describe("RoomViewStore", function () {
             expect(mocked(Modal).createDialog.mock.calls[0][1]).toMatchSnapshot();
         },
     );
+
+    it("should display an error message when the provided room is invalid", async () => {
+        dis.dispatch({ action: Action.JoinRoom, room_id: "" });
+        const result = await untilDispatch(Action.JoinRoomError, dis);
+        expect(result.err.cause.message).toEqual("Cannot join room: no room ID or alias to join");
+    });
 
     it("should display the generic error message when the roomId doesnt match", async () => {
         // When
