@@ -61,3 +61,11 @@ export function Buttons({ buttons }: { buttons: Array<MediaPreviewEntryButton> }
 export function LeftGroup({ children }: { children: React.ReactNode }): JSX.Element {
     return <div className={styles.leftGroup}>{children}</div>;
 }
+
+export function LargeImage({ largeImage, largeImageOnClick }: { largeImage: string, largeImageOnClick?: () => {} }): JSX.Element {
+    if (largeImageOnClick) {
+        return <div className={styles.largeImage}><button onClick={largeImageOnClick}><img src={largeImage} /></button></div>
+    } else {
+        return <div className={styles.largeImage}><img src={largeImage} /></div>
+    }
+}
