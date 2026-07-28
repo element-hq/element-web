@@ -49,7 +49,7 @@
         "nx": "23.1.0",
         "oxfmt": "0.59.0",
         "oxlint": "^1.70.0",
-        "oxlint-tsgolint": "^0.25.0",
+        "oxlint-tsgolint": "^7.0.0",
         "typescript": "catalog:ts6",
         "vitepress": "^1.6.4",
         "vitepress-plugin-mermaid": "^2.0.17",

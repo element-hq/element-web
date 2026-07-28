@@ -501,6 +501,7 @@ test.describe("Element Call", () => {
                 });
                 await use({ roomId });
             },
+            lockLeftPanelWidth: false,
         });
 
         async function openAndJoinCall(page: Page, existing = false) {

@@ -185,6 +185,28 @@
                 "call_declined": "Виклик відхилено",
                 "call_declined_by_us": "Ви відхилили виклик"
             },
+            "ongoing": {
+                "common": {
+                    "call_started_by": "%(startedByDisplayName)s розпочинає виклик"
+                },
+                "dm": {
+                    "call_started": "Виклик розпочато",
+                    "title": "Виклик триває"
+                },
+                "room": {
+                    "join_count": {
+                        "one": "%(count)s приєднується",
+                        "few": "%(count)s приєдналися",
+                        "many": "%(count)s приєдналися"
+                    },
+                    "title": "Триває груповий виклик"
+                }
+            },
+            "tombstone": {
+                "room": {
+                    "title": "Груповий виклик завершено"
+                }
+            },
             "video_call_title": "Відеовиклик",
             "voice_call_title": "Голосовий виклик"
         },
