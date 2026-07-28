@@ -202,7 +202,9 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
         } catch (err) {
             console.error(err);
             console.error("The webapp.asar archive is missing. Building without a webapp is fruitless.");
-            console.log("RTFM https://github.com/element-hq/element-web/blob/develop/apps/desktop/README.md#fetching-element.");
+            console.log(
+                "RTFM https://github.com/element-hq/element-web/blob/develop/apps/desktop/README.md#fetching-element.",
+            );
             process.exit(1);
         }
     },
