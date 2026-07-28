@@ -1,0 +1,12 @@
+.bottom {
+    display: flex;
+    margin: var(--cpd-space-3x);
+}
+
+.tile {
+    border: 1px solid #E1E6EC;
+    border-radius: 14px;
+
+    width: 392px;
+    overflow: clip;
+}

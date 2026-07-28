@@ -11,6 +11,7 @@ export type MediaPreviewGroupEntryExpandedContent = {
     style: "expanded";
     footer?: string;
     largeImage: string;
+    largeImageOnClick?: () => {}
 };
 
 export type MediaPreviewGroupEntryContent =

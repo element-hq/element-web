@@ -64,3 +64,12 @@
         width: 19px;
     }
 }
+
+.largeImage {
+    img {
+        width: 100%;
+        object-fit: cover;
+        max-height: 150px;
+        display: block;
+    }
+}
