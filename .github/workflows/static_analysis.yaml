@@ -45,6 +45,8 @@ jobs:
                       assert-diff: true
                     - name: Module API Docs Check
                       command: "build"
+                      install: normal
+                      project: "@element-hq/element-web-module-api"
                       assert-diff: true
                     - name: Docs
                       install: layered
