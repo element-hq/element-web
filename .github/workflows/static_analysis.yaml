@@ -43,6 +43,11 @@ jobs:
                     - name: Rethemendex Check
                       command: "rethemendex"
                       assert-diff: true
+                    - name: Module API Docs Check
+                      command: "build"
+                      install: normal
+                      project: "@element-hq/element-web-module-api"
+                      assert-diff: true
                     - name: Docs
                       install: layered
                       command: "docs:build"
@@ -74,6 +79,15 @@ jobs:
               run: pnpm nx run-many -t "$CMD" -p
               env:
                   CMD: ${{ matrix.command }}
+              if: matrix.project == ''
+
+            - name: Run ${{ matrix.command }} on ${{ matrix.project }}
+              run: pnpm nx run -t "$CMD" -p "$PROJECT"
+              env:
+                  CMD: ${{ matrix.command }}
+                  PROJECT: ${{ matrix.project }}
+
+              if: matrix.project
 
             - name: Assert no changes
               run: git diff --exit-code
