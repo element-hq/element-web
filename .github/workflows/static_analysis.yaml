@@ -43,6 +43,9 @@ jobs:
                     - name: Rethemendex Check
                       command: "rethemendex"
                       assert-diff: true
+                    - name: Module API Docs Check
+                      command: "build"
+                      assert-diff: true
                     - name: Docs
                       install: layered
                       command: "docs:build"
@@ -74,8 +77,17 @@ jobs:
               run: pnpm nx run-many -t "$CMD" -p
               env:
                   CMD: ${{ matrix.command }}
+              if: matrix.project == ''
 
-            - name: Check if the module API documentation has changed
+            - name: Run ${{ matrix.command }} on ${{ matrix.project }}
+              run: pnpm nx run -t "$CMD" -p "$PROJECT"
+              env:
+                  CMD: ${{ matrix.command }}
+                  PROJECT: ${{ matrix.project }}
+
+              if: matrix.project
+
+            - name: Assert no changes
               run: git diff --exit-code
               if: matrix.assert-diff
 
@@ -125,33 +137,10 @@ jobs:
             path: ${{ matrix.path }}
             allowed-hardcoded-keys: ${{ matrix.allowed-hardcoded-keys }}
 
-    module-api-report:
-        name: Module API Report
-        runs-on: ubuntu-24.04
-        steps:
-            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-              with:
-                  persist-credentials: false
-
-            - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
-            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
-              with:
-                  cache: "pnpm"
-                  node-version: "lts/*"
-
-            - name: Install Dependencies
-              run: "pnpm install --frozen-lockfile"
-
-            - name: Build module-api
-              run: pnpm nx build @element-hq/element-web-module-api
-
-            - name: Assert API report is up to date
-              run: git diff --exit-code
-
     # Dummy job to simplify branch protections
     ci:
         name: Static Analysis
-        needs: [lint, i18n, zizmor, module-api-report]
+        needs: [lint, i18n, zizmor]
         if: always()
         runs-on: ubuntu-24.04
         steps:
