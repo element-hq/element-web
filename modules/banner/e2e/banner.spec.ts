@@ -270,7 +270,10 @@ test.describe("Banner", () => {
             await trigger.click();
 
             const sidebar = page.getByRole("dialog");
-            await expect(sidebar.getByRole("link")).toHaveAttribute("href", "https://domain/menu-link");
+            await expect(sidebar.getByRole("link", { name: "Show portal" })).toHaveAttribute(
+                "href",
+                "https://domain/menu-link",
+            );
         });
     });
 });
