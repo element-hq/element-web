@@ -46,6 +46,15 @@ export interface MatrixClientPegAssignOpts {
      * directly where possible.
      */
     rustCryptoStorePassword?: string;
+
+    /**
+     * If we are using Rust crypto, the CA certificates to use for X.509 identity verification.
+     *
+     * Optional PEM-formatted string that provides CA certificates. These will be used to check X.509 signatures on user
+     * identities. Any user identity that has a valid signature according to the supplied CAs will be considered
+     * verified, without any manual verification taking place.
+     */
+    rustCryptoCaCertsPem?: string;
 }
 
 /**
@@ -256,7 +265,11 @@ class MatrixClientPegClass implements IMatrixClientPeg {
 
         // try to initialise e2e on the new client
         if (!SettingsStore.getValue("lowBandwidth")) {
-            await this.initClientCrypto(assignOpts.rustCryptoStoreKey, assignOpts.rustCryptoStorePassword);
+            await this.initClientCrypto(
+                assignOpts.rustCryptoStoreKey,
+                assignOpts.rustCryptoStorePassword,
+                assignOpts.rustCryptoCaCertsPem
+            );
         }
 
         const opts = utils.deepCopy(this.opts);
@@ -303,8 +316,16 @@ class MatrixClientPegClass implements IMatrixClientPeg {
      * @param rustCryptoStorePassword - An alternative to `rustCryptoStoreKey`. Ignored if `rustCryptoStoreKey` is set.
      *    A password which will be used to derive a key to encrypt the store with. Deriving a key from a password is
      *    (deliberately) a slow operation, so prefer to pass a `rustCryptoStoreKey` directly where possible.
+     *
+     * @param rustCryptoCaCertsPem - Optional PEM-formatted string that provides CA certificates. These will be used to
+     *    check X.509 signatures on user identities. Any user identity that has a valid signature according to the
+     *    supplied CAs will be considered verified, without any manual verification taking place.
      */
-    private async initClientCrypto(rustCryptoStoreKey?: Uint8Array, rustCryptoStorePassword?: string): Promise<void> {
+    private async initClientCrypto(
+        rustCryptoStoreKey?: Uint8Array,
+        rustCryptoStorePassword?: string,
+        rustCryptoCaCertsPem?: string
+    ): Promise<void> {
         if (!this.matrixClient) {
             throw new Error("createClient must be called first");
         }
@@ -313,9 +334,12 @@ class MatrixClientPegClass implements IMatrixClientPeg {
             logger.error("Warning! Not using an encryption key for rust crypto store.");
         }
 
+        console.log("AJB", rustCryptoCaCertsPem);
+
         await this.matrixClient.initRustCrypto({
             storageKey: rustCryptoStoreKey,
             storagePassword: rustCryptoStorePassword,
+            caCertsPem: rustCryptoCaCertsPem,
         });
 
         StorageManager.setCryptoInitialised(true);

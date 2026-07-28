@@ -55,6 +55,14 @@ export interface WebConfigJson {
 
     force_verification?: boolean; // if true, users must verify new logins
 
+    /**
+     * A PEM-formatted string that provides CA certificates. These will
+     * be used to check X.509 signatures on user identities. Any user identity
+     * that has a valid signature according to the supplied CAs will be
+     * considered verified, without any manual verification taking place.
+     */
+    x509_ca_pem?: string;
+
     map_style_url?: string; // for location-shared maps
 
     embedded_pages?: {

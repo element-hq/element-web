@@ -854,6 +854,8 @@ async function doSetLoggedIn(
         }
     }
 
+    clientPegOpts.rustCryptoCaCertsPem = SdkConfig.get().x509_ca_pem;
+
     try {
         await startMatrixClient(client, /*startSyncing=*/ !softLogout, clientPegOpts);
     } finally {
