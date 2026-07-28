@@ -25,20 +25,20 @@ catalog:
     "playwright-core": 1.61.1
     # Compound
     "@vector-im/compound-design-tokens": 10.2.1
-    "@vector-im/compound-web": 9.8.0
+    "@vector-im/compound-web": 9.9.0
     # i18n
     matrix-web-i18n: 3.6.0
     # fonts
-    "@fontsource/inter": 5.2.8
+    "@fontsource/inter": 5.3.0
     # vite
-    vite: 8.1.4
+    vite: 8.1.5
     vite-plugin-node-polyfills: 0.28.0
     vite-plugin-svgr: 5.2.0
     vitest: 4.1.10
     "@vitest/spy": 4.1.10
     "@vitest/coverage-v8": 4.1.10
     "@vitest/browser-playwright": 4.1.10
-    "@vitejs/plugin-react": 6.0.2
+    "@vitejs/plugin-react": 6.0.3
     unplugin-dts: 1.0.1
 
 catalogs:
@@ -118,10 +118,10 @@ allowedDeprecatedVersions:
     react-beautiful-dnd: "13"
 
 overrides:
-    pretty-format@30>react-is: 19.2.6
+    pretty-format@30>react-is: 19.2.7
     "@types/react": "catalog:"
     "@types/react-dom": "catalog:"
-    caniuse-lite: 1.0.30001799
+    caniuse-lite: 1.0.30001803
     matrix-widget-api: "^1.17.0"
     "@types/node": 25.9.3
     config-file-ts: 0.2.8-rc1

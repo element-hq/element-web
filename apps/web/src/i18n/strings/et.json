@@ -504,7 +504,6 @@
         "message_layout": "Sõnumite paigutus",
         "message_timestamp_invalid": "Vigane ajatempel",
         "microphone": "Mikrofon",
-        "model": "Mudel",
         "moderation_and_safety": "Modereerimine ja turvalisus",
         "modern": "Moodne",
         "mute": "Summuta",
@@ -677,7 +676,6 @@
     "create_section_dialog": {
         "create_section": "Lisa jaotis",
         "description": "Jaotised on vaid sinu jaoks",
-        "edit_section": "Muuda jaotist",
         "label": "Jaotise nimi",
         "title": "Lisa jaotis",
         "title_edition": "Muuda jaotist"
@@ -1572,6 +1570,8 @@
         "sliding_sync_disabled_notice": "Väljalülitamiseks logi uuesti sisse",
         "sliding_sync_server_no_support": "Selle funktsionaalsuse tugi on sinu koduserveris puudu!",
         "unrealiable_e2e": "Krüptitud jututubades pole see töökindel",
+        "url_preview_bundle": "Võrguaadresside lõimitud eelvaated (MSC4095)",
+        "url_preview_bundle_description": "Võid saata võrguaadresside eelvaateid osana sõnumist",
         "video_rooms": "Videotoad",
         "video_rooms_a_new_way_to_chat": "Uus võimalus videovestlusteks rakenduses %(brand)s.",
         "video_rooms_always_on_voip_channels": "Videotoad on kogu aeg saadaval VoIP kanalid, mis on lõimitud jututubadega ja kasutatavad rakenduses %(brand)s.",
@@ -2431,7 +2431,8 @@
         "warning_kind_files": "See %(brand)s versioon ei toeta mõnede krüptitud failide vaatatamist",
         "warning_kind_files_app": "Kõikide krüptitud failide vaatamiseks kasuta <a>Element Desktop</a> rakendust",
         "warning_kind_search": "See %(brand)s versioon ei toeta otsingut krüptitud sõnumite seast",
-        "warning_kind_search_app": "Otsinguks krüptitud sõnumite hulgast kasuta <a>Element Desktop</a> rakendust"
+        "warning_kind_search_app": "Otsinguks krüptitud sõnumite hulgast kasuta <a>Element Desktop</a> rakendust",
+        "warning_kind_search_partial": "Kuna sinu otsinguindeks on alles loomisel, siis tulemused võivad olla veel poolikud."
     },
     "setting": {
         "help_about": {
@@ -2849,7 +2850,6 @@
         "send_typing_notifications": "Anna märku teisele osapoolele, kui mina sõnumit kirjutan",
         "sessions": {
             "best_security_note": "Parima turvalisuse nimel verifitseeri kõik oma sessioonid ning eemalda need, mida sa enam ei kasuta või ei tunne ära.",
-            "browser": "Brauser",
             "confirm_sign_out": {
                 "one": "Kinnita selle seadme eemaldamine",
                 "other": "Kinnita nende seadmete eemaldamine"
@@ -2900,7 +2900,6 @@
             "no_sessions": "Sessioone ei leidu.",
             "no_unverified_sessions": "Verifitseerimata sessioone ei leidu.",
             "no_verified_sessions": "Verifitseeritud sessioone ei leidu.",
-            "os": "Operatsioonisüsteem",
             "other_sessions_heading": "Muud sessioonid",
             "push_heading": "Tõuketeavitused",
             "push_subheading": "Võta tõuketeavitused selles sessioonis kasutusele.",
@@ -3824,6 +3823,9 @@
         "verification_unavailable": "Kasutaja verifitseerimine pole saadaval",
         "verify_button": "Verifitseeri kasutaja",
         "verify_explainer": "Lisaturvalisus mõttes verifitseeri see kasutaja võrreldes selleks üheks korraks loodud koodi mõlemas seadmes."
+    },
+    "user_status": {
+        "on_a_call": "Kõne on pooleli"
     },
     "voip": {
         "already_in_call": "Kõne on juba pooleli",

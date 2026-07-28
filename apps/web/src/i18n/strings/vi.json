@@ -405,7 +405,6 @@
         "message": "Tin nhắn",
         "message_layout": "Bố cục tin nhắn",
         "microphone": "Micrô",
-        "model": "Mẫu mã",
         "modern": "Hiện đại",
         "mute": "Im lặng",
         "n_members": {
@@ -2113,7 +2112,6 @@
         "send_read_receipts_unsupported": "Máy chủ của bạn không hỗ trợ tắt gửi thông báo đã học.",
         "send_typing_notifications": "Gửi thông báo đang gõ tin nhắn",
         "sessions": {
-            "browser": "Trình duyệt",
             "confirm_sign_out": {
                 "one": "Xác nhận đăng xuất khỏi thiết bị này",
                 "other": "Xác nhận đăng xuất khỏi các thiết bị này"
@@ -2160,7 +2158,6 @@
             "no_sessions": "Không thấy phiên nào.",
             "no_unverified_sessions": "Không thấy phiên chưa xác thực nào.",
             "no_verified_sessions": "Không thấy phiên được xác thực nào.",
-            "os": "Hệ điều hành",
             "other_sessions_heading": "Các phiên khác",
             "push_heading": "Thông báo đẩy",
             "push_subheading": "Nhận thông báo đẩy trong phiên này.",

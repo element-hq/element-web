@@ -78,7 +78,6 @@ export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {
     const hasSections = snapshot.sections.length > 0;
     const isInSection = useMemo(() => snapshot.sections.some((section) => section.isSelected), [snapshot.sections]);
     return (
-        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
         <div onKeyDown={(e) => e.stopPropagation()}>
             {snapshot.canMarkAsRead && (
                 <MenuItem

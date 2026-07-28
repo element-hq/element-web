@@ -26,7 +26,7 @@ import { ElementWidgetCapabilities } from "../stores/widgets/ElementWidgetCapabi
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import TextWithTooltip from "../components/views/elements/TextWithTooltip";
 
-type GENERIC_WIDGET_KIND = "generic"; // eslint-disable-line @typescript-eslint/naming-convention
+type GENERIC_WIDGET_KIND = "generic";
 const GENERIC_WIDGET_KIND: GENERIC_WIDGET_KIND = "generic";
 
 type SendRecvStaticCapText = Partial<

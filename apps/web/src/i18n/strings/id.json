@@ -490,7 +490,6 @@
         "message_layout": "Tata letak pesan",
         "message_timestamp_invalid": "Stempel waktu tidak valid",
         "microphone": "Mikrofon",
-        "model": "Model",
         "moderation_and_safety": "Moderasi dan keamanan",
         "modern": "Modern",
         "mute": "Bisukan",
@@ -2767,7 +2766,6 @@
         "send_typing_notifications": "Kirim notifikasi pengetikan",
         "sessions": {
             "best_security_note": "Untuk keamanan yang terbaik, verifikasi sesi Anda dan keluarkan sesi yang Anda tidak kenal atau tidak digunakan lagi.",
-            "browser": "Peramban",
             "confirm_sign_out": {
                 "one": "Konfirmasi mengeluarkan perangkat ini",
                 "other": "Konfirmasi mengeluarkan perangkat ini"
@@ -2818,7 +2816,6 @@
             "no_sessions": "Tidak ditemukan sesi apa pun.",
             "no_unverified_sessions": "Tidak ditemukan sesi yang belum diverifikasi.",
             "no_verified_sessions": "Tidak ditemukan sesi yang terverifikasi.",
-            "os": "Sistem operasi",
             "other_sessions_heading": "Sesi lainnya",
             "push_heading": "Notifikasi dorongan",
             "push_subheading": "Terima notifikasi dorongan di sesi ini.",

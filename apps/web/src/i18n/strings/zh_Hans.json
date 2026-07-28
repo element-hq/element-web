@@ -504,7 +504,6 @@
         "message_layout": "消息布局",
         "message_timestamp_invalid": "无效时间戳",
         "microphone": "麦克风",
-        "model": "模型",
         "moderation_and_safety": "尺度与安全",
         "modern": "现代",
         "mute": "静默",
@@ -677,7 +676,6 @@
     "create_section_dialog": {
         "create_section": "创建区域",
         "description": "区域仅对你可见",
-        "edit_section": "编辑区域",
         "label": "区域名称",
         "title": "创建区域",
         "title_edition": "编辑区域"
@@ -1171,14 +1169,14 @@
             "you": "你已加入通话"
         },
         "m.call.hangup": {
-            "user": "%(senderName)s 结束了通话",
-            "you": "你结束了通话"
+            "user": "%(senderName)s 已结束通话",
+            "you": "你已结束通话"
         },
         "m.call.invite": {
             "dm_receive": "%(senderName)s 正在通话",
             "dm_send": "等待接听",
-            "user": "%(senderName)s 开始了通话",
-            "you": "你开始了通话"
+            "user": "%(senderName)s 已开始通话",
+            "you": "你已开始通话"
         },
         "m.emote": "* %(senderName)s %(emote)s",
         "m.reaction": {
@@ -1571,6 +1569,8 @@
         "sliding_sync_disabled_notice": "重新登录以禁用",
         "sliding_sync_server_no_support": "服务器缺少支持",
         "unrealiable_e2e": "在加密房间中不可靠",
+        "url_preview_bundle": "URL 预览组件（MSC4095）",
+        "url_preview_bundle_description": "在消息的一侧随消息内容一并发送 URL 预览",
         "video_rooms": "视频房间",
         "video_rooms_a_new_way_to_chat": "在 %(brand)s 中语音与视频聊天的新方式。",
         "video_rooms_always_on_voip_channels": "视频房间是嵌入到 %(brand)s 并始终在线的 VoIP 渠道。",
@@ -2431,7 +2431,8 @@
         "warning_kind_files": "此版本的 %(brand)s 不支持查看某些加密文件",
         "warning_kind_files_app": "使用<a>桌面 App</a> 查看所有加密文件",
         "warning_kind_search": "此版本的 %(brand)s 不支持搜索加密消息",
-        "warning_kind_search_app": "使用<a>桌面 App</a> 搜索加密消息"
+        "warning_kind_search_app": "使用<a>桌面 App</a> 搜索加密消息",
+        "warning_kind_search_partial": "搜索结果可能不完整，因为索引仍在建立中。"
     },
     "setting": {
         "help_about": {
@@ -2849,7 +2850,6 @@
         "send_typing_notifications": "发送键入通知",
         "sessions": {
             "best_security_note": "为了最佳的安全性请验证此会话，并移除任何你不认识或不再使用的会话。",
-            "browser": "浏览器",
             "confirm_sign_out": {
                 "one": "确认移除此设备",
                 "other": "确认移除这些设备"
@@ -2899,7 +2899,6 @@
             "no_sessions": "未找到会话。",
             "no_unverified_sessions": "未找到未验证的会话。",
             "no_verified_sessions": "未找到已验证的会话。",
-            "os": "操作系统",
             "other_sessions_heading": "其它会话",
             "push_heading": "推送通知",
             "push_subheading": "允许此会话接收通知推送",
@@ -3351,7 +3350,7 @@
         "m.call.invite": {
             "answered_elsewhere": "已在别处接听",
             "call_back_prompt": "回拨",
-            "declined": "来电被拒接",
+            "declined": "通话已被拒接",
             "failed_connect_media": "无法连接媒体",
             "failed_connection": "连接失败",
             "failed_opponent_media": "其设备无法开启摄像头或麦克风",
@@ -3391,7 +3390,7 @@
             }
         },
         "m.poll.end": {
-            "sender_ended": "%(senderName)s 结束了投票"
+            "sender_ended": "%(senderName)s 已结束投票"
         },
         "m.poll.start": "%(senderName)s 发起投票： %(pollQuestion)s",
         "m.room.avatar": {
@@ -3499,7 +3498,7 @@
         },
         "m.widget": {
             "added": "%(senderName)s 添加了小部件：%(widgetName)s",
-            "jitsi_ended": "%(senderName)s 结束了视频会议",
+            "jitsi_ended": "%(senderName)s 已结束视频会议",
             "jitsi_join_right_prompt": "从右侧的房间信息卡片加入会议",
             "jitsi_join_top_prompt": "在此房间加入会议的前排",
             "jitsi_started": "%(senderName)s 已开始视频会议",
@@ -3550,7 +3549,7 @@
         },
         "redaction": "消息已被 %(name)s 删除",
         "reply": {
-            "error_loading": "无法加载已回复的事件，该事件可能不存在或你无权查看。",
+            "error_loading": "无法加载曾回复过的事件；该事件可能不存在或你无权查看。",
             "in_reply_to": "<a>回复给</a> <pill>",
             "in_reply_to_for_export": "回复<a>此消息</a>"
         },
@@ -3738,8 +3737,8 @@
     "upload_failed_title": "上传失败",
     "upload_file": {
         "cancel_all_button": "全部取消",
-        "error_file_too_large": "此文件<b>太大</b>，无法上传。文件大小限制为 %(limit)s，但此文件为 %(sizeOfThisFile)s。",
-        "error_files_too_large": "这些文件<b>过大</b>而无法上传。文件大小限制为 %(limit)s。",
+        "error_file_too_large": "此文件由于<b>过大</b>而无法上传。文件大小限制为 %(limit)s，但此文件为 %(sizeOfThisFile)s。",
+        "error_files_too_large": "这些文件由于<b>过大</b>而无法上传。文件大小限制为 %(limit)s。",
         "error_some_files_too_large": "某些文件<b>过大</b>而未能上传。文件大小限制为 %(limit)s。",
         "error_title": "上传出错",
         "not_image": "你选择的文件不是有效的图像文件。",
@@ -3820,6 +3819,9 @@
         "verification_unavailable": "用户验证不可用",
         "verify_button": "验证用户",
         "verify_explainer": "为了提高安全性，请通过检查两台设备上的一次性代码来验证此用户。"
+    },
+    "user_status": {
+        "on_a_call": "通话中"
     },
     "voip": {
         "already_in_call": "已在通话中",

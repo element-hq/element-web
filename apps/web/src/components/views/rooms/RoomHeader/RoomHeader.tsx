@@ -27,8 +27,8 @@ import { HistoryIcon, UserProfileSolidIcon } from "@vector-im/compound-design-to
 import { useRoomName } from "../../../../hooks/useRoomName.ts";
 import { RightPanelPhases } from "../../../../stores/right-panel/RightPanelStorePhases.ts";
 import { useRoomMemberCount, useRoomMembers } from "../../../../hooks/useRoomMembers.ts";
-import { _t } from "../../../../languageHandler.tsx";
-import { getPlatformCallTypeProps, useRoomCall } from "../../../../hooks/room/useRoomCall.tsx";
+import { _t } from "../../../../languageHandler";
+import { getPlatformCallTypeProps, useRoomCall } from "../../../../hooks/room/useRoomCall";
 import { useRoomThreadNotifications } from "../../../../hooks/room/useRoomThreadNotifications.ts";
 import { useGlobalNotificationState } from "../../../../hooks/useGlobalNotificationState.ts";
 import { useFeatureEnabled } from "../../../../hooks/useSettings.ts";
@@ -112,7 +112,7 @@ function RoomHeaderButtons({
 
     const joinCallButton = (
         <Tooltip
-            label={
+            description={
                 videoCallDisabledReason ??
                 (activeCallSessionType === CallType.Voice ? _t("voip|voice_call") : _t("voip|video_call"))
             }

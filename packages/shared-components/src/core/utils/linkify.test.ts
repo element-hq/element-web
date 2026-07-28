@@ -104,7 +104,6 @@ describe("linkify-matrix", () => {
                     },
                 ]);
             });
-            // eslint-disable-next-line max-len
             it("should properly parse IPs v6 while ignoring dangling comma when without port name as the domain name", () => {
                 const test = char + "username:[1234:5678::abcd]:";
                 expect(isLinkable(test)).toEqual(true);

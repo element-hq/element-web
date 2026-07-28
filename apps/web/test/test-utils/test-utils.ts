@@ -366,6 +366,7 @@ export function createTestClient(): MatrixClient {
         setRoomTag: vi.fn().mockResolvedValue({}),
         getExtendedProfileProperty: vi.fn(),
         setExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
+        doesServerSupportExtendedProfiles: vi.fn(),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);
@@ -417,7 +418,6 @@ type MakeEventProps = MakeEventPassThruProps & {
     redacts?: string;
     content: IContent;
     room?: Room["roomId"]; // to-device messages are roomless
-    // eslint-disable-next-line camelcase
     prev_content?: IContent;
     unsigned?: IUnsigned;
     status?: EventStatus;

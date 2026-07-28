@@ -10,7 +10,7 @@ import classNames from "classnames";
 import React from "react";
 import { ShieldIcon, ErrorSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { Icon as InactiveIcon } from "../../../../../res/img/element-icons/settings/inactive.svg";
+import InactiveIcon from "../../../../../res/img/element-icons/settings/inactive.svg?react";
 import { DeviceSecurityVariation } from "./types";
 
 interface Props {

@@ -62,7 +62,6 @@ describe("<Pill>", () => {
         } as PillProps;
         // wrap Pill with a div to allow testing of event bubbling
         renderResult = render(
-            // eslint-disable-next-line jsx-a11y/click-events-have-key-events
             <SDKContext.Provider value={mockSdkContext}>
                 <div onClick={pillParentClickHandler}>
                     <Pill {...withDefault} />

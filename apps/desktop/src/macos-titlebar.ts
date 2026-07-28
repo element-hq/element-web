@@ -7,45 +7,62 @@ Please see LICENSE files in the repository root for full details.
 
 import type { BrowserWindow } from "electron";
 
-export function setupMacosTitleBar(window: BrowserWindow): void {
-    if (process.platform !== "darwin") return;
+/**
+ * Height of the styled title bar band, matching the design spec
+ * (https://www.figma.com/design/MAUsalKv7bRRNKlAAigtNd/Community-contributions?node-id=76-12996).
+ * The `trafficLightPosition` in `electron-main.ts` vertically centres the native window controls
+ * within this band — keep the two in sync.
+ */
+export const TITLE_BAR_HEIGHT_PX = 32;
 
-    let cssKey: string | undefined;
+/**
+ * Build the CSS injected into the renderer to draw the macOS title bar band.
+ *
+ * `electron-main.ts` uses `titleBarStyle: "hidden"`, which keeps the native window frame, rounded
+ * corners and traffic lights but removes the native bar surface. This CSS paints that surface: a
+ * full-width strip at the top of the window in the canvas background colour with a hairline
+ * separator underneath, and pushes the app content below it. The strip is the window's drag
+ * handle.
+ *
+ * The drag region is built from `-webkit-app-region` rects only: elements keep the default value
+ * (`none`) and are ignored unless they explicitly set `drag`/`no-drag`. So the band stays draggable
+ * underneath any overlay whose surface is transparent to the calc (a dialog's backdrop, a menu's
+ * container), and an overlay panel that a user clicks (dialog panels, context menus, the lightbox
+ * chrome) sets `no-drag` so its rect is subtracted and it stays interactive. An element must never
+ * be both clickable and a drag handle.
+ *
+ * Extracted as a pure helper so the string contract can be unit-tested (see macos-titlebar.test.ts).
+ */
+export function buildTitleBarCss(): string {
+    return `
+            /* Reserve a band at the top of the window for the title bar */
+            body {
+                box-sizing: border-box;
+                height: 100%;
+                padding-top: ${TITLE_BAR_HEIGHT_PX}px !important;
+            }
 
-    async function applyStyling(): Promise<void> {
-        cssKey = await window.webContents.insertCSS(`
-            /* Create margin of space for the traffic light buttons */
-            .mx_UserMenu {
-                /* We zero the margin and use padding as we want to use it as a drag handle */ 
-                margin-top: 0 !important;
-                margin-left: 0 !important;
-                padding-top: 32px !important;
+            /* The title bar itself: canvas background with a hairline separator below */
+            body::before {
+                content: "";
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: ${TITLE_BAR_HEIGHT_PX}px;
+                box-sizing: border-box;
+                /* Fallback colours for pages loaded without the app themes (e.g. the error view) */
+                background: var(--cpd-color-bg-canvas-default, #ffffff);
+                border-bottom: 1px solid var(--cpd-color-separator-primary, #e1e6ec);
                 -webkit-app-region: drag;
                 -webkit-user-select: none;
             }
-            /* Exclude the button from being a drag handle and not working */
-            .mx_UserMenu > * {
-                -webkit-app-region: no-drag;            
+
+            /* Exclude floating menus and tooltips, which render in body-level portals */
+            [data-radix-popper-content-wrapper] {
+                -webkit-app-region: no-drag;
             }
-            /* Maintain alignment of the toggle space panel button */
-            .mx_SpacePanel_toggleCollapse {
-                /* 19px original top value, 32px margin-top above, 12px original margin-top value */
-                top: calc(19px + 32px - 12px) !important;
-            }
-            /* Widen the collapsed space panel so its right-hand separator clears the
-               traffic light buttons. The buttons are inset 9px (see trafficLightPosition
-               in electron-main) and the three-button cluster is ~52px wide, ending ~61px
-               from the window edge; against the default 68px rail the separator crowds the
-               green button. 76px restores ~15px of clearance, matching the compound 4x
-               spacing step. */
-            .mx_SpacePanel.collapsed {
-                width: 76px !important;
-            }
-            /* Prevent the media lightbox sender info from clipping into the traffic light buttons */
-            .mx_ImageView_info_wrapper {
-                margin-top: 32px;
-            }
-            
+
             /* Mark the splash screen as a drag handle */
             .mx_MatrixChat_splash {
                 -webkit-app-region: drag;
@@ -54,7 +71,7 @@ export function setupMacosTitleBar(window: BrowserWindow): void {
             .mx_MatrixChat_splashButtons {
                 -webkit-app-region: no-drag;
             }
-            
+
             /* Mark the background as a drag handle */
             .mx_AuthPage {
                 -webkit-app-region: drag;
@@ -66,18 +83,12 @@ export function setupMacosTitleBar(window: BrowserWindow): void {
             .mx_AuthPage .mx_Dropdown_menu {
                 -webkit-app-region: no-drag;
             }
-        
-            /* Mark the home page background as a drag handle */
-            .mx_HomePage {
-                -webkit-app-region: drag;
+
+            /* The image lightbox covers the whole window, including the title bar band; keep its
+               sender info clear of the traffic lights, and let its header double as a drag handle */
+            .mx_ImageView_info_wrapper {
+                margin-top: ${TITLE_BAR_HEIGHT_PX}px;
             }
-            /* Exclude interactive elements from being drag handles */
-            .mx_HomePage .mx_HomePage_body,
-            .mx_HomePage .mx_HomePage_default_wrapper > * {
-                -webkit-app-region: no-drag;
-            }
-            
-            /* Mark the header as a drag handle */
             .mx_ImageView_panel {
                 -webkit-app-region: drag;
             }
@@ -87,27 +98,8 @@ export function setupMacosTitleBar(window: BrowserWindow): void {
             .mx_ImageView_panel > .mx_ImageView_toolbar > * {
                 -webkit-app-region: no-drag;
             }
-            
-            /* Mark the background as a drag handle only if no modal is open */
-            .mx_MatrixChat_wrapper[aria-hidden="false"] .mx_RoomView_wrapper,
-            .mx_MatrixChat_wrapper[aria-hidden="false"] .mx_HomePage {
-                -webkit-app-region: drag;
-            }
-            /* Exclude content elements from being drag handles */
-            .mx_SpaceRoomView_landing > *,
-            .mx_RoomPreviewBar,
-            .mx_RoomView_body,
-            .mx_AutoHideScrollbar,
-            .mx_RightPanel_ResizeWrapper,
-            .mx_RoomPreviewCard,
-            .mx_LeftPanel,
-            .mx_RoomView,
-            .mx_SpaceRoomView,
-            .mx_AccessibleButton,
-            .mx_Dialog {
-                -webkit-app-region: no-drag;
-            }
-            /* Exclude context menus and their backgrounds */
+
+            /* Exclude context menus and their backgrounds, which may open within the band */
             .mx_ContextualMenu, .mx_ContextualMenu_background {
                 -webkit-app-region: no-drag;
             }
@@ -115,35 +107,16 @@ export function setupMacosTitleBar(window: BrowserWindow): void {
             iframe {
                 -webkit-app-region: no-drag;
             }
+        `;
+}
 
-            /* Add a bar above room header + left panel */
-            
-            .mx_LeftPanel {
-                flex-direction: column;
-            }
+export function setupMacosTitleBar(window: BrowserWindow): void {
+    if (process.platform !== "darwin") return;
 
-            .mx_LeftPanel::before {
-                content: "";
-                height: 13px;
-                border-right: 1px solid var(--cpd-color-bg-subtle-primary);
-                -webkit-app-region: drag;
-            }
+    let cssKey: string | undefined;
 
-            .mx_RoomView::before,
-            .mx_SpaceRoomView::before {
-                content: "";
-                -webkit-app-region: drag;
-            }
-            
-            .mx_SpaceRoomView::before {
-                display: block;
-                height: 24px;            
-            }
-
-            .mx_RoomView::before {
-                height: 13px;
-            }
-        `);
+    async function applyStyling(): Promise<void> {
+        cssKey = await window.webContents.insertCSS(buildTitleBarCss());
     }
 
     window.on("enter-full-screen", () => {

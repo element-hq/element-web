@@ -484,7 +484,6 @@
         "message_layout": "Mesaj düzeni",
         "message_timestamp_invalid": "Geçersiz zaman damgası",
         "microphone": "Mikrofon",
-        "model": "Model",
         "modern": "Modern",
         "mute": "Sessiz",
         "n_members": {
@@ -2599,7 +2598,6 @@
         "send_typing_notifications": "Yazma bildirimlerini gönder",
         "sessions": {
             "best_security_note": "Güvenlik için oturumlarınızı doğrulayın ve tanımadığınız veya artık kullanmadığınız oturumlardan çıkış yapın.",
-            "browser": "Tarayıcı",
             "confirm_sign_out": {
                 "one": "Bu cihazın oturumunu kapatmayı onayla",
                 "other": "Şu cihazlardan oturumu kapatmayı onayla"
@@ -2650,7 +2648,6 @@
             "no_sessions": "Oturum bulunamadı.",
             "no_unverified_sessions": "Doğrulanmamış oturum bulunamadı.",
             "no_verified_sessions": "Doğrulanmış oturum bulunamadı.",
-            "os": "İşletim Sistemi",
             "other_sessions_heading": "Diğer oturumlar",
             "push_heading": "Anlık bildirimler",
             "push_subheading": "Bu oturumda anlık bildirimler alın.",

@@ -504,7 +504,6 @@
         "message_layout": "Message layout",
         "message_timestamp_invalid": "Invalid timestamp",
         "microphone": "Microphone",
-        "model": "Model",
         "moderation_and_safety": "Moderation and safety",
         "modern": "Modern",
         "mute": "Mute",
@@ -677,7 +676,6 @@
     "create_section_dialog": {
         "create_section": "Create section",
         "description": "Sections are only for you",
-        "edit_section": "Edit section",
         "label": "Section name",
         "title": "Create a section",
         "title_edition": "Edit a section"
@@ -2434,7 +2432,8 @@
         "warning_kind_files": "This version of %(brand)s does not support viewing some encrypted files",
         "warning_kind_files_app": "Use the <a>Desktop app</a> to see all encrypted files",
         "warning_kind_search": "This version of %(brand)s does not support searching encrypted messages",
-        "warning_kind_search_app": "Use the <a>Desktop app</a> to search encrypted messages"
+        "warning_kind_search_app": "Use the <a>Desktop app</a> to search encrypted messages",
+        "warning_kind_search_partial": "Results may be incomplete because your search index is still being built."
     },
     "setting": {
         "help_about": {
@@ -2852,7 +2851,6 @@
         "send_typing_notifications": "Send typing notifications",
         "sessions": {
             "best_security_note": "For best security, verify your sessions and remove any session that you don't recognize or use anymore.",
-            "browser": "Browser",
             "confirm_sign_out": {
                 "one": "Confirm removing this device",
                 "other": "Confirm removing these devices"
@@ -2903,7 +2901,6 @@
             "no_sessions": "No sessions found.",
             "no_unverified_sessions": "No unverified sessions found.",
             "no_verified_sessions": "No verified sessions found.",
-            "os": "Operating system",
             "other_sessions_heading": "Other sessions",
             "push_heading": "Push notifications",
             "push_subheading": "Receive push notifications on this session.",
@@ -3554,7 +3551,7 @@
         },
         "redaction": "Message deleted by %(name)s",
         "reply": {
-            "error_loading": "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.",
+            "error_loading": "Unable to load event that was replied to; either it does not exist or you do not have permission to view it.",
             "in_reply_to": "<a>In reply to</a> <pill>",
             "in_reply_to_for_export": "In reply to <a>this message</a>"
         },
@@ -3827,6 +3824,9 @@
         "verification_unavailable": "User verification unavailable",
         "verify_button": "Verify User",
         "verify_explainer": "For extra security, verify this user by checking a one-time code on both of your devices."
+    },
+    "user_status": {
+        "on_a_call": "On a call"
     },
     "voip": {
         "already_in_call": "Already in call",

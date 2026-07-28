@@ -24,11 +24,11 @@ INDOCKER_SQLCIPHER_BUNDLED=1 pnpm docker:build:native
 ```
 
 The above will build `matrix-seshat` in
-`docker/node_modules/matrix-seshat`. You can then either run `pnpm docker:build`
+`docker/.hak/hakModules/matrix-seshat`. You can then either run `pnpm docker:build`
 to build the app inside docker, or:
 
 ```
-pnpm link docker/node_modules/matrix-seshat
+pnpm link ./docker/.hak/hakModules/matrix-seshat
 ```
 
 ... and build the app with `pnpm build` or run it with `pnpm start`.
@@ -53,7 +53,7 @@ pnpm run build:native
 
 If you need to build for a specific architecture, see [here](#compiling-for-specific-architectures).
 
-## Adding Seshat for search in E2E encrypted rooms
+### Adding Seshat for search in E2E encrypted rooms
 
 Seshat is a native Node module that adds support for local event indexing and
 full text search in E2E encrypted rooms.
@@ -90,7 +90,7 @@ as usual using:
 
     pnpm start
 
-### Statically linking libsqlcipher
+#### Statically linking libsqlcipher
 
 On Windows & macOS we always statically link libsqlcipher for it is not generally available.
 On Linux by default we will use a system package, on debian & ubuntu this is `libsqlcipher0`,
@@ -101,9 +101,9 @@ link sqlcipher, including a static build of OpenSSL.
 More info can be found at https://github.com/matrix-org/seshat/issues/102
 and https://github.com/vector-im/element-web/issues/20926.
 
-## Compiling for specific architectures
+### Compiling for specific architectures
 
-### macOS
+#### macOS
 
 On macOS, you can build universal native modules too:
 
@@ -130,7 +130,7 @@ To bundle a universal build for macOS, run:
 pnpm run build:universal
 ```
 
-### Windows
+#### Windows
 
 If you're on Windows, you can choose to build specifically for 32 or 64 bit:
 
@@ -144,14 +144,14 @@ or
 pnpm run build:64
 ```
 
-### Cross compiling
+#### Cross compiling
 
 Compiling a module for a particular operating system (Linux/macOS/Windows) needs
 to be done on that operating system. Cross-compiling from a host OS for a different
 target OS may be possible, but we don't support this flow with Element dependencies
 at this time.
 
-### Switching between architectures
+#### Switching between architectures
 
 The native module build system keeps the different architectures
 separate, so you can keep native modules for several architectures at the same

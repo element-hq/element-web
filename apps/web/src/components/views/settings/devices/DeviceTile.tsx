@@ -14,6 +14,7 @@ import { type ExtendedDevice } from "./types";
 import { DeviceTypeIcon } from "./DeviceTypeIcon";
 import { preventDefaultWrapper } from "../../../../utils/NativeEventUtils";
 import { DeviceMetaData } from "./DeviceMetaData";
+import { DeviceType } from "../../../../utils/device/parseUserAgent.ts";
 export interface DeviceTileProps {
     device: ExtendedDevice;
     isSelected?: boolean;
@@ -31,18 +32,22 @@ const DeviceTileName: React.FC<{ device: ExtendedDevice }> = ({ device }) => {
 
 const DeviceTile: React.FC<DeviceTileProps> = ({ device, children, isSelected, onClick }) => {
     return (
+        // We break the rule here as this is a mouse-only shortcut
+        // oxlint-disable-next-line jsx-a11y/click-events-have-key-events
         <div
             className={classNames("mx_DeviceTile", { mx_DeviceTile_interactive: !!onClick })}
             data-testid={`device-tile-${device.device_id}`}
             onClick={onClick}
         >
-            <DeviceTypeIcon isVerified={device.isVerified} isSelected={isSelected} deviceType={device.deviceType} />
+            <DeviceTypeIcon isVerified={device.isVerified} isSelected={isSelected} deviceType={DeviceType.Unknown} />
             <div className="mx_DeviceTile_info">
                 <DeviceTileName device={device} />
                 <div className="mx_DeviceTile_metadata">
                     <DeviceMetaData device={device} />
                 </div>
             </div>
+            {/* We break the rule here as this is a mouse-only interaction */}
+            {/* oxlint-disable-next-line jsx-a11y/click-events-have-key-events */}
             <div className="mx_DeviceTile_actions" onClick={preventDefaultWrapper(() => {})}>
                 {children}
             </div>

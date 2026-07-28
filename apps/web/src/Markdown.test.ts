@@ -35,7 +35,6 @@ describe("Markdown parser test", () => {
         ].join("\n");
 
         it("tests that links with markdown empasis in them are getting properly HTML formatted", () => {
-            /* eslint-disable max-len */
             const expectedResult = [
                 "<p>Test1:<br />#_foonetic_xkcd:matrix.org<br />http://google.com/_thing_<br />https://matrix.org/_matrix/client/foo/123_<br />#_foonetic_xkcd:matrix.org</p>",
                 "<p>Test1A:<br />#_foonetic_xkcd:matrix.org<br />http://google.com/_thing_<br />https://matrix.org/_matrix/client/foo/123_<br />#_foonetic_xkcd:matrix.org</p>",
@@ -43,7 +42,6 @@ describe("Markdown parser test", () => {
                 "<p>Test3:<br />https://riot.im/app/#/room/#_foonetic_xkcd:matrix.org<br />https://riot.im/app/#/room/#_foonetic_xkcd:matrix.org</p>",
                 "",
             ].join("\n");
-            /* eslint-enable max-len */
             const md = new Markdown(testString);
             expect(md.toHTML()).toEqual(expectedResult);
         });
@@ -69,7 +67,6 @@ describe("Markdown parser test", () => {
                 "<https://riot.im/app/#/room/#_foonetic_xkcd:matrix.org>",
                 "<https://riot.im/app/#/room/#_foonetic_xkcd:matrix.org>",
             ].join("\n");
-            /* eslint-disable max-len */
             /**
              * NOTE: I'm not entirely sure if those "<"" and ">" should be visible in here for #_foonetic_xkcd:matrix.org
              * but it seems to be actually working properly
@@ -81,7 +78,6 @@ describe("Markdown parser test", () => {
                 '<p>Test3:<br /><a href="https://riot.im/app/#/room/#_foonetic_xkcd:matrix.org">https://riot.im/app/#/room/#_foonetic_xkcd:matrix.org</a><br /><a href="https://riot.im/app/#/room/#_foonetic_xkcd:matrix.org">https://riot.im/app/#/room/#_foonetic_xkcd:matrix.org</a></p>',
                 "",
             ].join("\n");
-            /* eslint-enable max-len */
             const md = new Markdown(test);
             expect(md.toHTML()).toEqual(expectedResult);
         });
@@ -114,7 +110,6 @@ describe("Markdown parser test", () => {
         });
 
         it('expects that links with emphasis are "escaped" correctly', () => {
-            /* eslint-disable max-len */
             const testString = [
                 "http://domain.xyz/foo/bar-_stuff-like-this_-in-it.jpg" +
                     " " +
@@ -139,22 +134,18 @@ describe("Markdown parser test", () => {
                 "https://example.com/_test__test2_test3__",
                 "https://example.com/_test__test2",
             ].join("<br />");
-            /* eslint-enable max-len */
             const md = new Markdown(testString);
             expect(md.toHTML()).toEqual(expectedResult);
         });
 
         it("expects that the link part will not be accidentally added to <strong>", () => {
-            /* eslint-disable max-len */
             const testString = `https://github.com/matrix-org/synapse/blob/develop/synapse/module_api/__init__.py`;
             const expectedResult = "https://github.com/matrix-org/synapse/blob/develop/synapse/module_api/__init__.py";
-            /* eslint-enable max-len */
             const md = new Markdown(testString);
             expect(md.toHTML()).toEqual(expectedResult);
         });
 
         it("expects that the link part will not be accidentally added to <strong> for multiline links", () => {
-            /* eslint-disable max-len */
             const testString = [
                 "https://github.com/matrix-org/synapse/blob/develop/synapse/module_api/__init__.py" +
                     " " +
@@ -171,7 +162,6 @@ describe("Markdown parser test", () => {
                     " " +
                     "https://github.com/matrix-org/synapse/blob/develop/synapse/module_api/__init__.py",
             ].join("<br />");
-            /* eslint-enable max-len */
             const md = new Markdown(testString);
             expect(md.toHTML()).toEqual(expectedResult);
         });
