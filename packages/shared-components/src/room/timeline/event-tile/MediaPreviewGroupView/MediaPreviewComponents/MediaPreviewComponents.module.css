@@ -1,0 +1,66 @@
+.leftGroup {
+    display: flex;
+    gap: 12px;
+    flex-grow: 1;
+}
+
+.header {
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.body {
+    font-size: 13px;
+    color: #656D77;
+}
+
+.textContent {
+    display: inline-block;
+}
+
+.icon {
+    button {
+        border: none;
+        background: none;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    display: flex;
+    height: calc(28px * 1.5);
+    width: calc(28px * 1.5);
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 6px;
+
+    svg {
+        display: block;
+        height: 24px;
+        width: 24px;
+    }
+}
+
+.buttonGroup {
+    height: calc(28px * 1.5);
+    display: flex;
+    gap: 12px;
+}
+
+.button {
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    svg {
+        color: #656D77;
+        display: block;
+        height: 19px;
+        width: 19px;
+    }
+}
