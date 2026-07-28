@@ -12,7 +12,7 @@ import classNames from "classnames";
 
 import { _t } from "../i18n/i18n";
 import { RovingAction, type RovingTabIndexProviderProps } from "../roving";
-import { type CategoryKey, type ICategory } from "./Category";
+import { type CategoryKey, type ICategory } from "./EmojiPicker";
 import styles from "./EmojiPicker.module.css";
 
 interface IProps {
@@ -42,7 +42,10 @@ const getDefaultAction = (ev: React.KeyboardEvent): RovingAction | undefined => 
     }
 };
 
-class Header extends React.PureComponent<IProps> {
+/**
+ * The tab bar at the top of the emoji picker with a tavb for each category.
+ */
+class Tabs extends React.PureComponent<IProps> {
     private findNearestEnabled(index: number, delta: number): number | undefined {
         index += this.props.categories.length;
         const cats = [...this.props.categories, ...this.props.categories, ...this.props.categories];
@@ -132,4 +135,4 @@ class Header extends React.PureComponent<IProps> {
     }
 }
 
-export default Header;
+export default Tabs;

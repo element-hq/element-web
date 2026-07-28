@@ -7,8 +7,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type Dispatch, useCallback, useRef, useState } from "react";
+import React, { type Dispatch, type RefObject, useCallback, useMemo, useRef, useState } from "react";
 import { DATA_BY_CATEGORY, getEmojiFromUnicode, type Emoji as IEmoji } from "@matrix-org/emojibase-bindings";
+import { Virtuoso, type Components, type VirtuosoHandle } from "react-virtuoso";
+import { Heading } from "@vector-im/compound-web";
 import classNames from "classnames";
 
 import { _t } from "../i18n/i18n";
@@ -20,15 +22,57 @@ import {
     RovingStateActionType,
     type RovingTabIndexProviderProps,
 } from "../roving";
-import Header from "./Header";
+import Tabs from "./Tabs";
 import Search from "./Search";
 import Preview from "./Preview";
 import QuickReactions from "./QuickReactions";
-import Category, { type CategoryKey, type ICategory } from "./Category";
+import Emoji from "./Emoji";
+import { EMOJI_HEIGHT, EMOJIS_PER_ROW } from "./config";
 import { type ButtonEvent } from "./RovingButton";
 import styles from "./EmojiPicker.module.css";
 
 const ZERO_WIDTH_JOINER = "\u200D";
+
+export type CategoryKey = keyof typeof DATA_BY_CATEGORY | "recent";
+
+export interface ICategory {
+    id: CategoryKey;
+    name: string;
+    // Emoji to show in the header for this category
+    emoji: string;
+    enabled: boolean;
+    // Whether the category is currently visible
+    visible: boolean;
+    // Whether the category is the first visible category
+    firstVisible: boolean;
+    ref: RefObject<HTMLButtonElement | null>;
+}
+
+/**
+ * A single entry in the flat virtual list: either a category header or a row of
+ * emoji. Headers are interleaved with the rows so that they scroll inline with
+ * the content rather than staying pinned to the top.
+ */
+type ListItem = { type: "header"; category: ICategory } | { type: "row"; emojis: IEmoji[]; categoryId: CategoryKey };
+
+// Stable component identities so Virtuoso does not remount its internals on re-render.
+// The single Virtuoso renders a flat list that mixes category headers and emoji rows.
+// The Item wrapper picks its semantics per entry: a plain block for headers, a grid
+// row for emoji rows.
+const GridList: Components<ListItem>["List"] = React.forwardRef(function GridList(props, ref) {
+    return <div {...props} ref={ref} className={styles.list} role="grid" aria-multiselectable />;
+});
+
+const GridItem: Components<ListItem>["Item"] = ({ item, ...props }) => {
+    if (item.type === "header") {
+        return <div {...props} />;
+    }
+    // Tag rows with their category so updateVisibility can tell which category is in
+    // view even when the header itself has scrolled out of the viewport.
+    return <div {...props} role="row" className={styles.row} data-category-id={item.categoryId} />;
+};
+
+const gridComponents = { List: GridList, Item: GridItem };
 
 /**
  * Props for {@link EmojiPicker}.
@@ -194,11 +238,12 @@ export function EmojiPicker({
     const [previewEmoji, setPreviewEmoji] = useState<IEmoji | undefined>(undefined);
     // Track if user has interacted with arrow keys or search
     const [showHighlight, setShowHighlight] = useState(false);
-    // The scroll container of the picker body, once mounted. Shared with each
-    // category so their virtualized rows can window against it.
+    // The scroll container of the picker body, once mounted. The Virtuoso windows
+    // its rows against this shared scroll parent.
     const [scrollElement, setScrollElement] = useState<HTMLDivElement | null>(null);
 
     const searchRef = useRef<HTMLInputElement>(null);
+    const virtuosoRef = useRef<VirtuosoHandle>(null);
 
     // Created once from the initial props and mutated in place thereafter.
     const dataRef = useRef<EmojiPickerData | null>(null);
@@ -217,16 +262,21 @@ export function EmojiPicker({
         const rect = body.getBoundingClientRect();
         let firstVisibleFound = false;
         for (const cat of categories) {
-            const elem = body.querySelector(`[data-category-id="${cat.id}"]`);
-            if (!elem) {
+            // A category is tagged on both its (inline) header and every one of its
+            // emoji rows, so it counts as visible if the header or any row intersects
+            // the viewport - including when the header has scrolled out of view.
+            const elems = body.querySelectorAll(`[data-category-id="${cat.id}"]`);
+            if (elems.length === 0) {
                 cat.visible = false;
                 cat.ref.current?.classList.remove(styles.anchorVisible);
                 continue;
             }
-            const elemRect = elem.getBoundingClientRect();
-            const y = elemRect.y - rect.y;
-            const yEnd = elemRect.y + elemRect.height - rect.y;
-            cat.visible = y < rect.height && yEnd > 0;
+            cat.visible = Array.from(elems).some((elem) => {
+                const elemRect = elem.getBoundingClientRect();
+                const y = elemRect.y - rect.y;
+                const yEnd = elemRect.y + elemRect.height - rect.y;
+                return y < rect.height && yEnd > 0;
+            });
             if (cat.visible && !firstVisibleFound) {
                 firstVisibleFound = true;
                 cat.firstVisible = true;
@@ -312,11 +362,34 @@ export function EmojiPicker({
         [getRow],
     );
 
+    // Flatten the (filtered) categories into a single list of headers and emoji rows
+    // that drive the Virtuoso. Only categories that currently have matching emoji are
+    // shown, and each category contributes one header followed by its rows. Recomputed
+    // only when the filter changes (the data is mutated in place under a stable object
+    // identity), so scrolling and hovering do not churn the list.
+    const items = useMemo<ListItem[]>(() => {
+        const flat: ListItem[] = [];
+        for (const cat of categories) {
+            const emojis = memoizedDataByCategory[cat.id];
+            if (emojis.length === 0) continue;
+            flat.push({ type: "header", category: cat });
+            for (let i = 0; i < emojis.length; i += EMOJIS_PER_ROW) {
+                flat.push({ type: "row", emojis: emojis.slice(i, i + EMOJIS_PER_ROW), categoryId: cat.id });
+            }
+        }
+        return flat;
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- memoizedDataByCategory is mutated in place; `filter` is the real trigger
+    }, [filter, categories, memoizedDataByCategory]);
+
     const scrollToCategory = useCallback(
         (category: string): void => {
-            scrollElement?.querySelector(`[data-category-id="${category}"]`)?.scrollIntoView();
+            // Find the flat index of the category's header and scroll it to the top.
+            const index = items.findIndex((item) => item.type === "header" && item.category.id === category);
+            if (index >= 0) {
+                virtuosoRef.current?.scrollToIndex({ index, align: "start" });
+            }
         },
-        [scrollElement],
+        [items],
     );
 
     const onChangeFilter = useCallback(
@@ -386,6 +459,44 @@ export function EmojiPicker({
         [onChoose, onRecordRecent, onFinished],
     );
 
+    const renderItem = useCallback(
+        (_index: number, item: ListItem): React.ReactNode => {
+            if (item.type === "header") {
+                const category = item.category;
+                return (
+                    <div
+                        className={styles.category}
+                        data-category-id={category.id}
+                        id={`mx_EmojiPicker_category_${category.id}`}
+                        role="tabpanel"
+                        aria-label={category.name}
+                    >
+                        <Heading as="h2" className={styles.categoryLabel}>
+                            {category.name}
+                        </Heading>
+                    </div>
+                );
+            }
+            return item.emojis.map((emoji) => (
+                <div
+                    role="gridcell"
+                    className={`mx_EmojiPicker_item_wrapper ${styles.itemWrapper}`}
+                    key={emoji.hexcode}
+                >
+                    <Emoji
+                        emoji={emoji}
+                        selectedEmojis={selectedEmojis}
+                        onClick={onClickEmoji}
+                        onMouseEnter={onHoverEmoji}
+                        onMouseLeave={onHoverEmojiEnd}
+                        disabled={isEmojiDisabled?.(emoji.unicode)}
+                    />
+                </div>
+            ));
+        },
+        [selectedEmojis, onClickEmoji, onHoverEmoji, onHoverEmojiEnd, isEmojiDisabled],
+    );
+
     return (
         <RovingGridIndexProvider
             getGridCell={getGridcell}
@@ -404,7 +515,7 @@ export function EmojiPicker({
                     onKeyDown={onKeyDownHandler}
                     aria-label={_t("a11y|emoji_picker")}
                 >
-                    <Header categories={categories} onAnchorClick={scrollToCategory} getAction={getAction} />
+                    <Tabs categories={categories} onAnchorClick={scrollToCategory} getAction={getAction} />
                     <Search
                         query={filter}
                         onChange={onChangeFilter}
@@ -420,20 +531,16 @@ export function EmojiPicker({
                         wrappedRef={collectScrollElement}
                         onScroll={onScroll}
                     >
-                        {categories.map((category) => (
-                            <Category
-                                key={category.id}
-                                id={category.id}
-                                name={category.name}
-                                emojis={memoizedDataByCategory[category.id]}
-                                scrollParent={scrollElement ?? undefined}
-                                onClick={onClickEmoji}
-                                onMouseEnter={onHoverEmoji}
-                                onMouseLeave={onHoverEmojiEnd}
-                                isEmojiDisabled={isEmojiDisabled}
-                                selectedEmojis={selectedEmojis}
+                        {scrollElement && (
+                            <Virtuoso
+                                ref={virtuosoRef}
+                                customScrollParent={scrollElement}
+                                data={items}
+                                defaultItemHeight={EMOJI_HEIGHT}
+                                components={gridComponents}
+                                itemContent={renderItem}
                             />
-                        ))}
+                        )}
                     </AutoHideScrollbar>
                     {previewEmoji ? (
                         <Preview emoji={previewEmoji} />

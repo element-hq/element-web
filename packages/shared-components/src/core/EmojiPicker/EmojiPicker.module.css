@@ -110,9 +110,7 @@
 
 .category {
     padding: 0 12px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    background-color: var(--cpd-color-bg-canvas-default);
 }
 
 .categoryLabel {
@@ -121,9 +119,15 @@
 }
 
 .list {
-    width: 304px;
     padding: 0;
     margin: 0;
+}
+
+/* A single row of emoji within the grid. Fixed to the width of EMOJIS_PER_ROW
+   cells so the row never wraps, offset to align with the category headers. */
+.row {
+    width: 304px;
+    margin: 0 12px;
 }
 
 .itemWrapper {
