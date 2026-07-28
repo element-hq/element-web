@@ -60,11 +60,11 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
     readonly extras: ExtrasApi;
     readonly i18n: I18nApi;
     readonly navigation: NavigationApi;
-    // @alpha
-    readonly platform: PlatformApi;
     readonly rootNode: HTMLElement;
     // @alpha
     readonly settings: SettingsApi;
+    // @alpha
+    readonly storageHelper: StorageHelperApi;
     readonly stores: StoresApi;
     // @alpha
     readonly widget: WidgetApi;
@@ -129,7 +129,7 @@ export type ComposerApiTarget = {
     view: "thread";
 };
 
-// Warning: (ae-forgotten-export) The symbol "WebConfigJson" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "WebConfigJson" needs to be exported by the entry point element-web-module-api.d.ts
 //
 // @public
 export interface Config extends WebConfigJson {
@@ -182,8 +182,8 @@ export type CustomLoginComponentProps = {
     serverConfig: CustomLoginComponentPropsServerConfig;
     fragmentAfterLogin?: string;
     children?: ReactNode;
-    onLoggedIn(data: AccountAuthInfo): void;
-    onServerConfigChange(config: CustomLoginComponentPropsServerConfig): void;
+    onLoggedIn(this: void, data: AccountAuthInfo): void;
+    onServerConfigChange(this: void, config: CustomLoginComponentPropsServerConfig): void;
 };
 
 // @alpha
@@ -233,7 +233,7 @@ export type DialogHandle<M> = {
         ok: boolean;
         model: M | null;
     }>;
-    close(): void;
+    close(this: void): void;
 };
 
 // @public
@@ -243,8 +243,8 @@ export interface DialogOptions {
 
 // @public
 export type DialogProps<M> = {
-    onSubmit(model: M): void;
-    onCancel(): void;
+    onSubmit(this: void, model: M): void;
+    onCancel(this: void): void;
 };
 
 // @alpha @deprecated (undocumented)
@@ -398,7 +398,7 @@ export class ModuleIncompatibleError extends Error {
 // @public
 export class ModuleLoader {
     constructor(api: Api);
-    // Warning: (ae-forgotten-export) The symbol "ModuleExport" needs to be exported by the entry point index.d.ts
+    // Warning: (ae-forgotten-export) The symbol "ModuleExport" needs to be exported by the entry point element-web-module-api.d.ts
     //
     // (undocumented)
     load(moduleExport: ModuleExport): Promise<void>;
@@ -424,11 +424,6 @@ export interface OpenRoomOptions {
 export type OriginalMessageComponentProps = {
     showUrlPreview?: boolean;
 };
-
-// @alpha
-export interface PlatformApi {
-    getPickleKey(userId: string, deviceId: string): Promise<string | null>;
-}
 
 // @alpha
 export type PreloadApprover = (widget: WidgetDescriptor) => MaybePromise<boolean | undefined>;
@@ -502,6 +497,11 @@ export interface SpacePanelItemProps {
     tooltip?: string;
 }
 
+// @alpha
+export interface StorageHelperApi {
+    getPickleKey(userId: string, deviceId: string): Promise<string | null>;
+}
+
 // @public
 export interface StoresApi {
     roomListStore: RoomListStoreApi;
@@ -554,7 +554,7 @@ export type Variables = StringVariables | RichVariables;
 // @public
 export class Watchable<T> {
     constructor(currentValue: T);
-    // Warning: (ae-forgotten-export) The symbol "WatchFn" needs to be exported by the entry point index.d.ts
+    // Warning: (ae-forgotten-export) The symbol "WatchFn" needs to be exported by the entry point element-web-module-api.d.ts
     //
     // (undocumented)
     protected readonly listeners: Set<WatchFn<T>>;
