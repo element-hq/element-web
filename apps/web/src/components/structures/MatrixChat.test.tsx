@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { vi, describe, it, expect, beforeEach, afterEach, type Mocked } from "vitest";
 import React, { type ComponentProps, createRef, type RefObject } from "react";
-import { fireEvent, render, type RenderResult, screen, waitFor, within, act } from "test-utils-rtl";
+import { cleanup, fireEvent, render, type RenderResult, screen, waitFor, within, act } from "test-utils-rtl";
 import {
     ClientEvent,
     type MatrixClient,
@@ -60,6 +60,7 @@ import { type Call } from "../../models/Call";
 import { PosthogAnalytics } from "../../PosthogAnalytics";
 import PlatformPeg from "../../PlatformPeg";
 import EventIndexPeg from "../../indexing/EventIndexPeg";
+import MediaDeviceHandler from "../../MediaDeviceHandler";
 import * as Lifecycle from "../../Lifecycle";
 import { SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY } from "../../BasePlatform";
 import SettingsStore from "../../settings/SettingsStore";
@@ -124,14 +125,14 @@ function createMockCrypto(): CryptoApi {
     } as any;
 }
 
-let promisesToAwait: Promise<unknown>[] = [];
-
 describe("<MatrixChat />", () => {
     const userId = "@alice:server.org";
     const deviceId = "qwertyui";
     const accessToken = "abc123";
     const refreshToken = "def456";
     let bootstrapDeferred: PromiseWithResolvers<void>;
+    let oauthLoginDeferred: PromiseWithResolvers<BearerTokenResponse>;
+    let qrSignInDeferred: PromiseWithResolvers<Awaited<ReturnType<typeof qrLogin.signInByGeneratingQR>>> | undefined;
     // reused in createClient mock below
     const getMockClientMethods = () => ({
         ...mockClientMethodsUser(userId),
@@ -146,10 +147,10 @@ describe("<MatrixChat />", () => {
             //
             // In practice it takes a little time for the client to start up (it has to read a load of stuff from
             // indexedDB, so in some ways this is just a more realistic simulation of the real world 😇
-            const prom = sleep(1);
-            promisesToAwait.push(prom);
-            await prom;
+            await sleep(1);
 
+            // @ts-ignore
+            this.getSyncState.mockReturnValue(SyncState.Prepared);
             // @ts-ignore
             this.emit(ClientEvent.Sync, SyncState.Prepared, null);
         },
@@ -161,6 +162,8 @@ describe("<MatrixChat />", () => {
         getSyncStateData: vi.fn().mockReturnValue(null),
         getThirdpartyProtocols: vi.fn().mockResolvedValue({}),
         getClientWellKnown: vi.fn().mockReturnValue({}),
+        _unstable_getRTCTransports: vi.fn().mockResolvedValue([]),
+        waitForClientWellKnown: vi.fn().mockResolvedValue({}),
         isVersionSupported: vi.fn().mockResolvedValue(false),
         initRustCrypto: vi.fn(),
         getRoom: vi.fn(),
@@ -254,7 +257,8 @@ describe("<MatrixChat />", () => {
     }
 
     beforeEach(async () => {
-        vi.resetAllMocks();
+        vi.restoreAllMocks();
+        vi.spyOn(MediaDeviceHandler, "loadDevices").mockResolvedValue(undefined);
         vi.doMock("../../utils/SessionLock.ts", () => ({
             getSessionLock: vi.fn().mockResolvedValue(true),
             checkSessionLockFree: vi.fn().mockReturnValue(true),
@@ -295,14 +299,25 @@ describe("<MatrixChat />", () => {
 
         await clearAllModals();
 
+        oauthLoginDeferred = Promise.withResolvers<BearerTokenResponse>();
+        // Guard against an unhandled rejection if we settle this in `afterEach` without a consumer having awaited it.
+        oauthLoginDeferred.promise.catch(() => {});
         vi.spyOn(OAuth2.prototype, "completeAuthorizationCodeGrant").mockImplementation(
-            (code) => new Promise<BearerTokenResponse>(() => {}),
+            () => oauthLoginDeferred.promise,
         );
     });
 
     afterEach(async () => {
-        await Promise.all(promisesToAwait);
-        promisesToAwait = [];
+        try {
+            cleanup();
+        } catch {
+            // Allow it to fail without throwing this hook
+        }
+
+        bootstrapDeferred.resolve();
+        oauthLoginDeferred.reject(new Error("Test teardown"));
+        qrSignInDeferred?.reject(new Error("Test teardown"));
+        qrSignInDeferred = undefined;
 
         // @ts-ignore
         DMRoomMap.setShared(null);
@@ -313,6 +328,12 @@ describe("<MatrixChat />", () => {
 
         localStorage.clear();
         vi.clearAllTimers();
+
+        // This is a massive hack, but a lot of these tests end up completing while the login flow is still proceeding.
+        // So then, we start the next test while stuff is still ongoing from the previous test, which messes up the current test.
+        // There is no obvious event we could wait for which indicates that everything has completed,
+        // since each test does something different. Instead, we just let real timers and microtasks drain.
+        await sleep(200);
     });
 
     resetJsDomAfterEach();
@@ -377,7 +398,10 @@ describe("<MatrixChat />", () => {
                     application_type: "web",
                 }),
             });
-            vi.spyOn(qrLogin, "signInByGeneratingQR").mockReturnValue(new Promise(() => {}));
+            qrSignInDeferred = Promise.withResolvers();
+            // Guard against an unhandled rejection if we settle this in `afterEach` without a consumer having awaited it.
+            qrSignInDeferred.promise.catch(() => {});
+            vi.spyOn(qrLogin, "signInByGeneratingQR").mockReturnValue(qrSignInDeferred.promise);
         });
 
         it("should open QrLoginDialog on ViewQrLogin action", async () => {
@@ -689,7 +713,7 @@ describe("<MatrixChat />", () => {
                 );
 
                 // set up keys screen is rendered
-                expect(screen.getByText("Setting up keys")).toBeInTheDocument();
+                await expect(screen.findByText("Setting up keys")).resolves.toBeInTheDocument();
             });
 
             it("should persist device language when available", async () => {
@@ -1409,7 +1433,7 @@ describe("<MatrixChat />", () => {
                 }),
             );
 
-            await flushPromises();
+            await screen.findByLabelText("Username");
 
             return renderResult;
         };
