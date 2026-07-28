@@ -75,7 +75,7 @@ jobs:
               env:
                   CMD: ${{ matrix.command }}
 
-            - name: Assert no changes
+            - name: Check if the module API documentation has changed
               run: git diff --exit-code
               if: matrix.assert-diff
 
