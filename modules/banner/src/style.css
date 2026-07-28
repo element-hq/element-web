@@ -5,6 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
+@import "@vector-im/compound-web/dist/style.css" layer(compound-layer);
+
 /* Styles to ensure the banner does not push the app out of the viewport */
 body {
     display: flex;

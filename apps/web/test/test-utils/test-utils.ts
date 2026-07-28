@@ -366,6 +366,7 @@ export function createTestClient(): MatrixClient {
         setRoomTag: vi.fn().mockResolvedValue({}),
         getExtendedProfileProperty: vi.fn(),
         setExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
+        doesServerSupportExtendedProfiles: vi.fn(),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);

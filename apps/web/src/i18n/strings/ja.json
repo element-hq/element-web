@@ -422,7 +422,6 @@
         "message": "メッセージ",
         "message_layout": "メッセージのレイアウト",
         "microphone": "マイク",
-        "model": "形式",
         "modern": "モダン",
         "mute": "ミュート",
         "n_members": {
@@ -2098,7 +2097,6 @@
         "send_read_receipts_unsupported": "あなたのサーバーは開封確認メッセージの送信防止をサポートしていません。",
         "send_typing_notifications": "入力中通知を送信",
         "sessions": {
-            "browser": "ブラウザー",
             "confirm_sign_out": {
                 "other": "端末からのサインアウトを承認",
                 "one": "端末からのサインアウトを承認"
@@ -2146,7 +2144,6 @@
             "no_sessions": "セッションが見つかりません。",
             "no_unverified_sessions": "未認証のセッションはありません。",
             "no_verified_sessions": "認証済のセッションはありません。",
-            "os": "オペレーティングシステム",
             "other_sessions_heading": "その他のセッション",
             "push_heading": "プッシュ通知",
             "push_subheading": "このセッションでプッシュ通知を受信。",

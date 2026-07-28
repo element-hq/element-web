@@ -507,7 +507,6 @@
         "message_layout": "Wygląd wiadomości",
         "message_timestamp_invalid": "Nieprawidłowy znacznik czasu",
         "microphone": "Mikrofon",
-        "model": "Model",
         "moderation_and_safety": "Moderacja i bezpieczeństwo",
         "modern": "Współczesny",
         "mute": "Wycisz",
@@ -2887,7 +2886,6 @@
         "send_typing_notifications": "Wyślij powiadomienia o pisaniu",
         "sessions": {
             "best_security_note": "Dla najlepszego bezpieczeństwa zweryfikuj swoje sesje i usuń każdą, której nie rozpoznajesz lub z której już nie korzystasz.",
-            "browser": "Przeglądarka",
             "confirm_sign_out": {
                 "one": "Potwierdź usunięcie tego urządzenia",
                 "few": "Potwierdź usunięcie tych urządzeń",
@@ -2943,7 +2941,6 @@
             "no_sessions": "Nie znaleziono sesji.",
             "no_unverified_sessions": "Nie znaleziono niezweryfikowanych sesji.",
             "no_verified_sessions": "Nie znaleziono zweryfikowanych sesji.",
-            "os": "System operacyjny",
             "other_sessions_heading": "Inne sesje",
             "push_heading": "Powiadomienia push",
             "push_subheading": "Otrzymuj powiadomienia push na tej sesji.",

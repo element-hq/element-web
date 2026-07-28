@@ -493,7 +493,6 @@
         "message_layout": "Rozloženie správy",
         "message_timestamp_invalid": "Neplatná časová značka",
         "microphone": "Mikrofón",
-        "model": "Model",
         "moderation_and_safety": "Moderovanie a bezpečnosť",
         "modern": "Moderný",
         "mute": "Umlčať",
@@ -2810,7 +2809,6 @@
         "send_typing_notifications": "Posielať oznámenia, keď píšete",
         "sessions": {
             "best_security_note": "V záujme čo najlepšieho zabezpečenia overte svoje relácie a odhláste sa z každej relácie, ktorú už nepoznáte alebo nepoužívate.",
-            "browser": "Prehliadač",
             "confirm_sign_out": {
                 "one": "Potvrďte odhlásenie z tohto zariadenia",
                 "other": "Potvrdiť odhlásenie týchto zariadení"
@@ -2862,7 +2860,6 @@
             "no_sessions": "Nenašli sa žiadne relácie.",
             "no_unverified_sessions": "Nenašli sa žiadne neoverené relácie.",
             "no_verified_sessions": "Nenašli sa žiadne overené relácie.",
-            "os": "Operačný systém",
             "other_sessions_heading": "Iné relácie",
             "push_heading": "Push oznámenia",
             "push_subheading": "Prijímať push oznámenia v tejto relácii.",
