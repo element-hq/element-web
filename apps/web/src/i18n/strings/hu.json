@@ -480,7 +480,6 @@
         "encrypted": "Titkosítva",
         "error": "Hiba",
         "faq": "GYIK",
-        "favourites": "Kedvencek",
         "feedback": "Visszajelzés",
         "filter_results": "Találatok szűrése",
         "forward_message": "Üzenet továbbítása",
@@ -504,7 +503,6 @@
         "message_layout": "Üzenet elrendezése",
         "message_timestamp_invalid": "Érvénytelen időbélyeg",
         "microphone": "Mikrofon",
-        "model": "Modell",
         "moderation_and_safety": "Moderálás és biztonság",
         "modern": "Modern",
         "mute": "Némítás",
@@ -675,7 +673,6 @@
     "create_section_dialog": {
         "create_section": "Szakasz létrehozása",
         "description": "A szakaszok csak Önnek szólnak",
-        "edit_section": "Szakasz szerkesztése",
         "label": "Szakasz neve",
         "title": "Szakasz létrehozása",
         "title_edition": "Szakasz szerkesztése"
@@ -2832,7 +2829,6 @@
         "send_typing_notifications": "Gépelési visszajelzés küldése",
         "sessions": {
             "best_security_note": "A nagyobb biztonság érdekében ellenőrizze a munkameneteit, és távolítson el minden olyan munkamenetet, amelyet nem ismer fel vagy már nem használ.",
-            "browser": "Böngésző",
             "confirm_sign_out": {
                 "one": "Erősítse meg az eszköz eltávolítását",
                 "other": "Erősítse meg az eszközök eltávolítását"
@@ -2882,7 +2878,6 @@
             "no_sessions": "Nincs munkamenet.",
             "no_unverified_sessions": "Nincs ellenőrizetlen munkamenet.",
             "no_verified_sessions": "Nincs ellenőrzött munkamenet.",
-            "os": "Operációs rendszer",
             "other_sessions_heading": "Más munkamenetek",
             "push_heading": "Leküldéses értesítések",
             "push_subheading": "Leküldéses értesítések fogadása ebben a munkamenetben.",

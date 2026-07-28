@@ -401,7 +401,6 @@
         "email_address": "Adresë email",
         "encrypted": "I fshehtëzuar",
         "error": "Gabim",
-        "favourites": "Të parapëlqyer",
         "feedback": "Mendime",
         "filter_results": "Filtroni përfundimet",
         "forward_message": "Përcille mesazhin",
@@ -2161,7 +2160,6 @@
         "send_read_receipts_unsupported": "Shërbyesi juaj nuk mbulon çaktivizimin e dërgimit të dëftesave të leximit.",
         "send_typing_notifications": "Dërgo njoftime shtypjesh",
         "sessions": {
-            "browser": "Shfletues",
             "confirm_sign_out": {
                 "one": "Ripohoni daljen nga kjo pajisje",
                 "other": "Ripohoni daljen nga këto pajisje"
@@ -2209,7 +2207,6 @@
             "no_sessions": "S’u gjetën sesione.",
             "no_unverified_sessions": "S’u gjetën sesione të paverifikuar.",
             "no_verified_sessions": "S’u gjetën sesione të verifikuar.",
-            "os": "Sistem operativ",
             "other_sessions_heading": "Sesione të tjerë",
             "push_heading": "Njoftime Push",
             "push_subheading": "Merrni njoftime push për këtë sesion.",

@@ -483,7 +483,6 @@
         "encrypted": "Szyfrowany",
         "error": "Błąd",
         "faq": "Najczęściej zadawane pytania",
-        "favourites": "Ulubione",
         "feedback": "Opinia użytkownika",
         "filter_results": "Filtruj wyniki",
         "forward_message": "Przekaż wiadomość",
@@ -498,6 +497,7 @@
         "integration_manager": "Menedżer integracji",
         "joined": "Dołączono",
         "labs": "Laboratoria",
+        "legacy_voice_and_video_settings": "Połączenia Matrix 1:1 (starsza wersja)",
         "legal": "Zasoby prawne",
         "light": "Jasny",
         "loading": "Wczytywanie…",
@@ -507,7 +507,6 @@
         "message_layout": "Wygląd wiadomości",
         "message_timestamp_invalid": "Nieprawidłowy znacznik czasu",
         "microphone": "Mikrofon",
-        "model": "Model",
         "moderation_and_safety": "Moderacja i bezpieczeństwo",
         "modern": "Współczesny",
         "mute": "Wycisz",
@@ -682,7 +681,6 @@
     "create_section_dialog": {
         "create_section": "Utwórz sekcję",
         "description": "Sekcje są tylko dla Ciebie",
-        "edit_section": "Edytuj sekcję",
         "label": "Nazwa sekcji",
         "title": "Utwórz sekcję",
         "title_edition": "Edytuj sekcję"
@@ -899,6 +897,8 @@
         "user_avatar": "Awatar: %(avatar)s",
         "user_displayname": "Wyświetlana nazwa: %(displayname)s",
         "user_id": "ID użytkownika: %(userId)s",
+        "user_identity": "Tożsamość kryptograficzna",
+        "user_identity_unknown": "Nieznany",
         "user_no_avatar": "Awatar: <i>Brak</i>",
         "user_no_displayname": "Wyświetlana nazwa: <i>Brak</i>",
         "user_read_up_to": "Użytkownik czyta do: ",
@@ -1584,6 +1584,8 @@
         "sliding_sync_disabled_notice": "Zaloguj się ponownie, aby wyłączyć",
         "sliding_sync_server_no_support": "Twój serwer nie ma wsparcia",
         "unrealiable_e2e": "Problematyczny w pokojach szyfrowanych",
+        "url_preview_bundle": "Pakiet podglądu adresów URL (MSC4095)",
+        "url_preview_bundle_description": "Wysyłaj podglądy adresów URL wraz z treścią w wiadomościach",
         "video_rooms": "Pokoje wideo",
         "video_rooms_a_new_way_to_chat": "Nowy sposób prowadzenia rozmów audio-wideo w %(brand)s.",
         "video_rooms_always_on_voip_channels": "Pokoje wideo są stale dostępnymi kanałami VoIP osadzonymi w pokoju w %(brand)s.",
@@ -1734,8 +1736,8 @@
         "level_notification": "Powiadomienie",
         "level_unsent": "Niewysłane",
         "mark_all_read": "Oznacz wszystkie jako przeczytane",
-        "mentions_and_keywords": "@wzmianki & słowa kluczowe",
-        "mentions_and_keywords_description": "Otrzymuj powiadomienia tylko z wzmiankami i słowami kluczowymi zgodnie z Twoimi <a>ustawieniami</a>",
+        "mentions_and_keywords": "Tylko @wzmianki i odpowiedzi",
+        "mentions_and_keywords_description": "Otrzymuj powiadomienia tylko od wzmianek i słów kluczowych zgodnie z Twoimi <a>ustawieniami</a>",
         "mentions_keywords": "Wzmianki i słowa kluczowe",
         "message_didnt_send": "Nie wysłano wiadomości. Kliknij po więcej informacji.",
         "mute_description": "Nie otrzymasz żadnych powiadomień"
@@ -2464,7 +2466,8 @@
         "warning_kind_files": "Ta wersja %(brand)s nie wspiera wyświetlania niektórych plików szyfrowanych",
         "warning_kind_files_app": "Użyj <a>aplikacji desktopowej</a>, aby zobaczyć wszystkie szyfrowane pliki",
         "warning_kind_search": "Ta wersja %(brand)s nie obsługuje wyszukiwania zabezpieczonych wiadomości",
-        "warning_kind_search_app": "Używaj <a>Aplikacji desktopowej</a>, aby wyszukiwać zaszyfrowane wiadomości"
+        "warning_kind_search_app": "Używaj <a>Aplikacji desktopowej</a>, aby wyszukiwać zaszyfrowane wiadomości",
+        "warning_kind_search_partial": "Wyniki wyszukiwania mogą być niekompletne, ponieważ budowa indeksu nie została ukończona."
     },
     "setting": {
         "help_about": {
@@ -2795,13 +2798,13 @@
             "room_activity": "Pojawiła się nowa aktywność pokoju, aktualizacje i status wiadomości",
             "rule_call": "Zaproszenie do rozmowy",
             "rule_contains_display_name": "Wiadomości zawierające moją wyświetlaną nazwę",
-            "rule_contains_user_name": "Wiadomości zawierające moją nazwę użytkownika",
+            "rule_contains_user_name": "@wzmianki i odpowiedzi",
             "rule_encrypted": "Wiadomości szyfrowane w czatach grupowych",
             "rule_encrypted_room_one_to_one": "Wiadomości szyfrowane w czatach jeden-na-jeden",
             "rule_invite_for_me": "Kiedy zostanę zaproszony do pokoju",
             "rule_message": "Wiadomości w czatach grupowych",
             "rule_room_one_to_one": "Wiadomości w czatach jeden-na-jeden",
-            "rule_roomnotif": "Wiadomości zawierające @room",
+            "rule_roomnotif": "Wzmianki @room",
             "rule_suppress_notices": "Wiadomości wysłane przez bota",
             "rule_tombstone": "Kiedy pokoje są uaktualniane",
             "show_message_desktop_notification": "Pokaż wiadomość w powiadomieniu na pulpicie",
@@ -2883,7 +2886,6 @@
         "send_typing_notifications": "Wyślij powiadomienia o pisaniu",
         "sessions": {
             "best_security_note": "Dla najlepszego bezpieczeństwa zweryfikuj swoje sesje i usuń każdą, której nie rozpoznajesz lub z której już nie korzystasz.",
-            "browser": "Przeglądarka",
             "confirm_sign_out": {
                 "one": "Potwierdź usunięcie tego urządzenia",
                 "few": "Potwierdź usunięcie tych urządzeń",
@@ -2939,7 +2941,6 @@
             "no_sessions": "Nie znaleziono sesji.",
             "no_unverified_sessions": "Nie znaleziono niezweryfikowanych sesji.",
             "no_verified_sessions": "Nie znaleziono zweryfikowanych sesji.",
-            "os": "System operacyjny",
             "other_sessions_heading": "Inne sesje",
             "push_heading": "Powiadomienia push",
             "push_subheading": "Otrzymuj powiadomienia push na tej sesji.",
@@ -2997,6 +2998,7 @@
         "show_nsfw_content": "Pokaż zawartość NSFW",
         "show_read_receipts": "Pokaż potwierdzenia odczytania wysyłane przez innych użytkowników",
         "show_redaction_placeholder": "Pokaż symbol zastępczy dla usuniętych wiadomości",
+        "show_sections": "Pokaż sekcje",
         "show_stickers_button": "Pokaż przycisk naklejek",
         "show_typing_notifications": "Pokazuj powiadomienia o pisaniu",
         "showbold": "Pokaż całą aktywność na liście pomieszczeń (kropki lub liczbę nieprzeczytanych wiadomości)",
@@ -3038,15 +3040,20 @@
             "echo_cancellation_description": "Usuwa echo z mikrofonu podczas połączeń. To ustawienie dotyczy również połączenia Element Call.",
             "enable_fallback_ice_server": "Zezwól na alternatywny serwer wspierający (%(server)s)",
             "enable_fallback_ice_server_description": "Stosuje się go tylko wtedy, kiedy Twój serwer domowy go nie oferuje. Twój adres IP zostanie współdzielony w trakcie połączenia.",
+            "enable_legacy_calls": "Włącz starszą wersję połączeń głosowych/wideo",
+            "enable_legacy_calls_description": "Dotyczy połączeń Jitsi i 1:1 WebRTC",
             "mirror_local_feed": "Lustrzane odbicie wideo",
-            "missing_permissions_prompt": "Brakuje uprawnień do mediów, kliknij przycisk poniżej, aby o nie zapytać.",
+            "missing_permissions_prompt": "Aby dołączyć do połączenia, przyznaj %(brand)s dostęp do Twoich urządzeń audio i wideo.",
             "noise_suppression": "Redukcja szumów",
             "noise_suppression_description": "Redukuje szum tła w mikrofonie podczas połączeń. To ustawienie dotyczy również Element Call.",
-            "request_permissions": "Zapytaj o uprawnienia",
+            "permissions": "Zezwól na dostęp do mikrofonu i kamery",
+            "request_permissions": "Prośba",
             "title": "Głos i wideo",
             "video_input_empty": "Nie wykryto żadnej kamerki internetowej",
             "video_section": "Ustawienia wideo",
             "voice_agc": "Automatycznie dostosuj głośność mikrofonu",
+            "voice_input_description": "Skonfigurowane tutaj wejście audio jest używane do obsługi wiadomości głosowych i połączeń (starsza wersja/1:1).",
+            "voice_input_section": "Wejście audio",
             "voice_processing": "Procesowanie głosu",
             "voice_section": "Ustawienia głosu"
         },
@@ -3593,7 +3600,7 @@
         },
         "redaction": "Wiadomość usunięta przez %(name)s",
         "reply": {
-            "error_loading": "Nie zdołano wczytać zdarzenia, na które odpowiedziano, może ono nie istnieć lub nie masz uprawnienia, by je zobaczyć.",
+            "error_loading": "Nie można wczytać wydarzenia, na które udzielono odpowiedzi. Wydarzenie nie istnieje lub nie masz uprawnień do jego przeglądania.",
             "in_reply_to": "<a>W odpowiedzi do</a> <pill>",
             "in_reply_to_for_export": "W odpowiedzi do <a>tej wiadomości</a>"
         },
@@ -3904,6 +3911,9 @@
         "verification_unavailable": "Weryfikacja użytkownika jest niedostępna",
         "verify_button": "Zweryfikuj użytkownika",
         "verify_explainer": "Dla dodatkowego bezpieczeństwa, zweryfikuj tego użytkownika za pomocą jednorazowego kodu na obu waszych urządzeniach."
+    },
+    "user_status": {
+        "on_a_call": "W trakcie rozmowy"
     },
     "voip": {
         "already_in_call": "Już dzwoni",

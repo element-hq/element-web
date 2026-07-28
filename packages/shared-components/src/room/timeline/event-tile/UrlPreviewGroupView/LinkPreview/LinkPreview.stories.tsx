@@ -11,6 +11,7 @@ import { fn } from "storybook/test";
 import type { Meta, StoryFn } from "@storybook/react-vite";
 import { LinkPreview } from "./LinkPreview";
 import { LinkedTextContext } from "../../../../../core/utils/LinkedText";
+import { waitForBackgroundImages } from "../../../../../../.storybook/waitForImages";
 import imageFile from "../../../../../../static/element.png";
 import imageFileWide from "../../../../../../static/wideImage.png";
 import imageFileTall from "../../../../../../static/tallImage.png";
@@ -21,6 +22,9 @@ export default {
     tags: ["autodocs"],
     args: {
         onImageClick: fn(),
+    },
+    play: async ({ canvasElement }) => {
+        await waitForBackgroundImages(canvasElement);
     },
     argTypes: {
         siteName: {
@@ -57,6 +61,7 @@ Default.args = {
         imageFull: imageFile,
         alt: "Element logo",
         playable: false,
+        mxcImageFull: "mxc://server/file",
     },
 };
 
@@ -112,6 +117,7 @@ Article.args = {
         imageFull: imageFileWide,
         alt: "A dog",
         playable: false,
+        mxcImageFull: "mxc://server/file",
     },
 };
 
@@ -127,6 +133,7 @@ Video.args = {
         imageFull: imageFileWide,
         alt: "A dog",
         playable: true,
+        mxcImageFull: "mxc://server/file",
     },
 };
 
@@ -151,6 +158,7 @@ SocialWithImage.args = {
         imageFull: imageFileWide,
         alt: "A dog",
         playable: false,
+        mxcImageFull: "mxc://server/file",
     },
 };
 
@@ -166,6 +174,7 @@ WithVeryLongText.args = {
         imageFull: imageFile,
         alt: "Element logo",
         playable: false,
+        mxcImageFull: "mxc://server/file",
     },
 };
 
@@ -180,5 +189,6 @@ WithTallImage.args = {
         imageFull: imageFileTall,
         alt: "Element logo",
         playable: false,
+        mxcImageFull: "mxc://server/file",
     },
 };

@@ -61,6 +61,8 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
     readonly i18n: I18nApi;
     readonly navigation: NavigationApi;
     readonly rootNode: HTMLElement;
+    // @alpha
+    readonly settings: SettingsApi;
     readonly stores: StoresApi;
     // @alpha
     readonly widget: WidgetApi;
@@ -477,6 +479,11 @@ export interface RoomViewProps {
 
 // @alpha @deprecated (undocumented)
 export type RuntimeModuleConstructor = new (api: ModuleApi) => RuntimeModule;
+
+// @alpha
+export interface SettingsApi {
+    getValue<T = any>(settingName: string, roomId?: string | null, excludeDefault?: boolean): T | undefined;
+}
 
 // @alpha
 export interface SpacePanelItemProps {

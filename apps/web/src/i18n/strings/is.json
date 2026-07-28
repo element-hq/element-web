@@ -362,7 +362,6 @@
         "encrypted": "Dulritað",
         "error": "Villa",
         "faq": "Algengar spurningar",
-        "favourites": "Eftirlæti",
         "feedback": "Umsagnir",
         "filter_results": "Sía niðurstöður",
         "forward_message": "Áframsenda skilaboð",
@@ -383,7 +382,6 @@
         "message": "Skilaboð",
         "message_layout": "Framsetning skilaboða",
         "microphone": "Hljóðnemi",
-        "model": "Gerð",
         "modern": "Nútímalegt",
         "mute": "Þagga niður",
         "n_members": {
@@ -1853,7 +1851,6 @@
         "send_read_receipts_unsupported": "Netþjónninn þinn styður ekki að sending leskvittana sé gerð óvirk.",
         "send_typing_notifications": "Senda skriftilkynningar",
         "sessions": {
-            "browser": "Vafri",
             "confirm_sign_out": {
                 "one": "Staðfestu útskráningu þessa tækis",
                 "other": "Staðfestu útskráningu þessara tækja"
@@ -1893,7 +1890,6 @@
             "no_sessions": "Engar setur fundust.",
             "no_unverified_sessions": "Engar óstaðfestar setur fundust.",
             "no_verified_sessions": "Engar staðfestar setur fundust.",
-            "os": "Stýrikerfi",
             "other_sessions_heading": "Aðrar setur",
             "push_heading": "Ýti-tilkynningar",
             "push_subheading": "Taka á móti ýti-tilkynningum á þessu tæki.",

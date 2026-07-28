@@ -12,6 +12,7 @@ import { decode } from "html-entities";
 import type { UrlPreview } from "@element-hq/web-shared-components";
 import { mediaFromMxc } from "../customisations/Media";
 import { thumbHeight } from "../ImageUtils";
+import { type UnstableBundledUrlPreviewSingle } from "../../@types/url-preview";
 
 const logger = rootLogger.getChild("UrlPreviewFetcher");
 
@@ -160,11 +161,13 @@ export class UrlPreviewFetcher {
         let siteIcon: string | undefined;
 
         if (typeof response["og:image"] === "string" && loadMedia) {
+            const mxcImageFull = response["og:image"];
             const media = mediaFromMxc(response["og:image"], this.client);
             const declaredHeight = UrlPreviewFetcher.getNumberFromOpenGraph(response["og:image:height"]);
             const declaredWidth = UrlPreviewFetcher.getNumberFromOpenGraph(response["og:image:width"]);
             const imageSize = UrlPreviewFetcher.getNumberFromOpenGraph(response["matrix:image:size"]);
             const alt = typeof response["og:image:alt"] === "string" ? response["og:image:alt"] : undefined;
+            const imageType = typeof response["og:image:type"] === "string" ? response["og:image:type"] : undefined;
 
             if (UrlPreviewFetcher.isImagePreview(declaredWidth, declaredHeight, imageSize)) {
                 const width = Math.min(declaredWidth ?? PREVIEW_WIDTH_PX, PREVIEW_WIDTH_PX);
@@ -176,6 +179,8 @@ export class UrlPreviewFetcher {
                     image = {
                         imageThumb: thumb,
                         imageFull: media.srcHttp ?? thumb,
+                        mxcImageFull,
+                        imageType,
                         width,
                         height,
                         fileSize: UrlPreviewFetcher.getNumberFromOpenGraph(response["matrix:image:size"]),
@@ -195,10 +200,59 @@ export class UrlPreviewFetcher {
             description,
             siteName,
             siteIcon,
+            ogUrl: response["og:url"],
             showTooltipOnLink: !!(link !== title && this.showTooltips),
             image,
         } satisfies UrlPreview;
         this.cache.set(link, result);
         return result;
+    }
+
+    /*
+     * Convert an MSC4095 URL preview bundle item to a UrlPreview
+     */
+    public previewFromBundle(single: UnstableBundledUrlPreviewSingle): UrlPreview {
+        // missing fields from the bundle because backend does provide it:
+        // - siteName (can be computed)
+        // - favicon
+        // - media is a video or audio?
+        // TODO in next PR: URL previews in encrypted chat?
+        const hasImage =
+            typeof single["og:image"] === "string" &&
+            typeof single["og:image:type"] === "string" &&
+            typeof single["og:image:width"] === "number" &&
+            typeof single["og:image:height"] === "number";
+
+        const preview: UrlPreview = {
+            link: single.matched_url,
+            title: single["og:title"] ?? single.matched_url,
+            siteName: new URL(single.matched_url).hostname,
+            showTooltipOnLink: !!(single.matched_url !== single["og:title"] && this.showTooltips),
+            description: single["og:description"],
+            ogUrl: single["og:url"],
+        };
+
+        if (hasImage) {
+            const media = mediaFromMxc(single["og:image"], this.client);
+            const thumb = media.getThumbnailOfSourceHttp(PREVIEW_WIDTH_PX, PREVIEW_HEIGHT_PX, "scale");
+
+            // cannot rule out the mxc:// url is malformed because
+            // the sender can specify anything
+            if (media.srcHttp === null || thumb === null) {
+                return preview;
+            }
+
+            preview.image = {
+                imageThumb: thumb,
+                imageFull: media.srcHttp,
+                imageType: single["og:image:type"] as string,
+                mxcImageFull: single["og:image"] as string,
+                width: single["og:image:width"] as number,
+                height: single["og:image:height"] as number,
+                playable: false, // TODO: do we know?
+            };
+        }
+
+        return preview;
     }
 }

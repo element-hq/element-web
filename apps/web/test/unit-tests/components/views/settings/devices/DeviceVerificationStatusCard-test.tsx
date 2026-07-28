@@ -14,14 +14,12 @@ import {
     type DeviceVerificationStatusCardProps,
 } from "../../../../../../src/components/views/settings/devices/DeviceVerificationStatusCard";
 import { type ExtendedDevice } from "../../../../../../src/components/views/settings/devices/types";
-import { DeviceType } from "../../../../../../src/utils/device/parseUserAgent";
 
 describe("<DeviceVerificationStatusCard />", () => {
     const deviceId = "test-device";
     const unverifiedDevice: ExtendedDevice = {
         device_id: deviceId,
         isVerified: false,
-        deviceType: DeviceType.Unknown,
     };
     const verifiedDevice: ExtendedDevice = {
         ...unverifiedDevice,

@@ -19,7 +19,6 @@ import { _t, _td } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
 import Dropdown from "../elements/Dropdown";
 import SearchBox from "../../structures/SearchBox";
-import SpaceStore from "../../../stores/spaces/SpaceStore";
 import RoomAvatar from "../avatars/RoomAvatar";
 import { getDisplayAliasForRoom } from "../../../Rooms";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
@@ -35,6 +34,7 @@ import LazyRenderList from "../elements/LazyRenderList";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { filterBoolean } from "../../../utils/arrays";
 import { type NonEmptyArray } from "../../../@types/common";
+import { SDKContextClass } from "../../../contexts/SDKContextClass.ts";
 
 // These values match CSS
 const ROW_HEIGHT = 32 + 12;
@@ -155,8 +155,14 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     const [query, setQuery] = useState("");
     const lcQuery = query.toLowerCase().trim();
 
-    const existingSubspacesSet = useMemo(() => new Set(SpaceStore.instance.getChildSpaces(space.roomId)), [space]);
-    const existingRoomsSet = useMemo(() => new Set(SpaceStore.instance.getChildRooms(space.roomId)), [space]);
+    const existingSubspacesSet = useMemo(
+        () => new Set(SDKContextClass.instance.spaceStore.getChildSpaces(space.roomId)),
+        [space],
+    );
+    const existingRoomsSet = useMemo(
+        () => new Set(SDKContextClass.instance.spaceStore.getChildRooms(space.roomId)),
+        [space],
+    );
 
     const [spaces, rooms, dms] = useMemo(() => {
         let rooms = visibleRooms;
@@ -201,15 +207,17 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
         for (const room of selectedToAdd) {
             const via = calculateRoomVia(room);
             try {
-                await SpaceStore.instance.addRoomToSpace(space, room.roomId, via).catch(async (e): Promise<void> => {
-                    if (e.errcode === "M_LIMIT_EXCEEDED") {
-                        await sleep(e.data.retry_after_ms);
-                        await SpaceStore.instance.addRoomToSpace(space, room.roomId, via); // retry
-                        return;
-                    }
+                await SDKContextClass.instance.spaceStore
+                    .addRoomToSpace(space, room.roomId, via)
+                    .catch(async (e): Promise<void> => {
+                        if (e.errcode === "M_LIMIT_EXCEEDED") {
+                            await sleep(e.data.retry_after_ms);
+                            await SDKContextClass.instance.spaceStore.addRoomToSpace(space, room.roomId, via); // retry
+                            return;
+                        }
 
-                    throw e;
-                });
+                        throw e;
+                    });
                 setProgress((i) => (i ?? 0) + 1);
             } catch (e) {
                 logger.error("Failed to add rooms to space", e);
@@ -398,7 +406,7 @@ export const SubspaceSelector: React.FC<ISubspaceSelectorProps> = ({ title, spac
     const options = useMemo(() => {
         return [
             space,
-            ...SpaceStore.instance.getChildSpaces(space.roomId).filter((space) => {
+            ...SDKContextClass.instance.spaceStore.getChildSpaces(space.roomId).filter((space) => {
                 return space.currentState.maySendStateEvent(EventType.SpaceChild, space.client.getSafeUserId());
             }),
         ];

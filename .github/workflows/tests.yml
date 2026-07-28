@@ -38,14 +38,14 @@ jobs:
                 runner: [1, 2, 3]
         steps:
             - name: Checkout code
-              uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   repository: ${{ inputs.matrix-js-sdk-sha && 'element-hq/element-web' || github.repository }}
                   persist-credentials: false
 
             - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
             - name: pnpm cache
-              uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+              uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
               with:
                   node-version: "lts/*"
                   cache: "pnpm"
@@ -107,14 +107,14 @@ jobs:
               run: df -h && df -i
 
             - name: Checkout code
-              uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   repository: ${{ inputs.matrix-js-sdk-sha && 'element-hq/element-web' || github.repository }}
                   persist-credentials: false
 
             - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
             - name: pnpm cache
-              uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+              uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
               with:
                   node-version: "lts/*"
                   cache: "pnpm"
@@ -194,7 +194,7 @@ jobs:
                   target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
             - name: Checkout code
-              uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               if: needs.jest_ew.result == 'success' && needs.vitest.result == 'success' && env.ENABLE_COVERAGE == 'true'
               with:
                   persist-credentials: false

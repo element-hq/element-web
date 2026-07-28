@@ -29,6 +29,7 @@ import { type SetupEncryptionStore } from "../stores/SetupEncryptionStore";
 import { type RoomScrollStateStore } from "../stores/RoomScrollStateStore";
 import { type ConsoleLogger, type IndexedDBLogStore } from "../rageshake/rageshake";
 import type ActiveWidgetStore from "../stores/ActiveWidgetStore";
+import type { CallStatusListener } from "../CallStatusListener";
 import { type IConfigOptions } from "../IConfigOptions";
 import { type MatrixDispatcher } from "../dispatcher/dispatcher";
 import { type DeepReadonly } from "./common";
@@ -37,8 +38,6 @@ import { type InitialCryptoSetupStore } from "../stores/InitialCryptoSetupStore"
 import { type ModuleApiType } from "../modules/Api.ts";
 import type { RoomListStoreV3Class } from "../stores/room-list-v3/RoomListStoreV3.ts";
 import { type SDKContextClass } from "../contexts/SDKContextClass.ts";
-
-/* eslint-disable @typescript-eslint/naming-convention */
 
 type ElectronChannel =
     | "app_onAction"
@@ -86,6 +85,7 @@ declare global {
         mxContentMessages: ContentMessages;
         mxToastStore: ToastStore;
         mxDeviceListener: DeviceListener;
+        mxCallStatusListener: CallStatusListener;
         getRoomListStoreV3: () => RoomListStoreV3Class;
         mxPlatformPeg: PlatformPeg;
         mxIntegrationManagers: typeof IntegrationManagers;
@@ -177,7 +177,6 @@ declare global {
         },
     ): void;
 
-    // eslint-disable-next-line no-var
     var grecaptcha:
         | undefined
         | {
@@ -192,14 +191,8 @@ declare global {
               isReady: () => boolean;
           };
 
-    // eslint-disable-next-line no-var, camelcase
     var mx_rage_logger: ConsoleLogger;
-    // eslint-disable-next-line no-var, camelcase
     var mx_rage_initPromise: Promise<void>;
-    // eslint-disable-next-line no-var, camelcase
     var mx_rage_initStoragePromise: Promise<void>;
-    // eslint-disable-next-line no-var, camelcase
     var mx_rage_store: IndexedDBLogStore;
 }
-
-/* eslint-enable @typescript-eslint/naming-convention */

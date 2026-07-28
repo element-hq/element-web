@@ -467,7 +467,6 @@
         "encrypted": "Cifrado",
         "error": "Error",
         "faq": "Preguntas frecuentes",
-        "favourites": "Favoritos",
         "feedback": "Danos tu opinión",
         "filter_results": "Filtrar resultados",
         "forward_message": "Reenviar mensaje",
@@ -491,7 +490,6 @@
         "message_layout": "Diseño del mensaje",
         "message_timestamp_invalid": "Marca de tiempo inválida",
         "microphone": "Micrófono",
-        "model": "Modelo",
         "moderation_and_safety": "Moderación y seguridad",
         "modern": "Moderno",
         "mute": "Silenciar",
@@ -2219,7 +2217,6 @@
         "send_read_receipts_unsupported": "Tu servidor no permite desactivar los acuses de recibo.",
         "send_typing_notifications": "Enviar notificaciones de tecleo",
         "sessions": {
-            "browser": "Navegador",
             "confirm_sign_out": {
                 "other": "Confirma el cierre de sesión en estos dispositivos",
                 "one": "Confirmar cerrar sesión de este dispositivo"
@@ -2263,7 +2260,6 @@
             "no_sessions": "No se ha encontrado ninguna sesión.",
             "no_unverified_sessions": "No se ha encontrado ninguna sesión sin verificar.",
             "no_verified_sessions": "No se ha encontrado ninguna sesión verificada.",
-            "os": "Sistema operativo",
             "other_sessions_heading": "Otras sesiones",
             "push_heading": "Notificaciones push",
             "push_subheading": "Recibir notificaciones push en esta sesión.",

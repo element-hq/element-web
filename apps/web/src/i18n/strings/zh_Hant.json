@@ -418,7 +418,6 @@
         "encrypted": "開啟加密",
         "error": "錯誤",
         "faq": "常見問答集",
-        "favourites": "我的最愛",
         "feedback": "回饋",
         "filter_results": "過濾結果",
         "forward_message": "轉寄訊息",
@@ -441,7 +440,6 @@
         "message": "訊息",
         "message_layout": "訊息佈局",
         "microphone": "麥克風",
-        "model": "模型",
         "modern": "現代",
         "mute": "靜音",
         "n_members": {
@@ -2330,7 +2328,6 @@
         "send_read_receipts_unsupported": "您的伺服器不支援停用傳送讀取回條。",
         "send_typing_notifications": "傳送「輸入中」的通知",
         "sessions": {
-            "browser": "瀏覽器",
             "confirm_sign_out": {
                 "one": "確認登出此裝置",
                 "other": "確認登出這些裝置"
@@ -2379,7 +2376,6 @@
             "no_sessions": "找不到工作階段。",
             "no_unverified_sessions": "找不到未驗證的工作階段。",
             "no_verified_sessions": "找不到已驗證的工作階段。",
-            "os": "作業系統",
             "other_sessions_heading": "其他工作階段",
             "push_heading": "推送通知",
             "push_subheading": "在此工作階段接收推送通知。",

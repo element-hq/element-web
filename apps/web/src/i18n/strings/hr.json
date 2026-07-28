@@ -470,7 +470,6 @@
         "encrypted": "Šifrirano",
         "error": "Geška",
         "faq": "Česta pitanja",
-        "favourites": "Favoriti",
         "feedback": "Povratne informacije",
         "filter_results": "Filtriraj rezultate",
         "forward_message": "Proslijedi poruku",
@@ -494,7 +493,6 @@
         "message_layout": "Izgled poruke",
         "message_timestamp_invalid": "Vremenska oznaka nije valjana",
         "microphone": "Mikrofon",
-        "model": "Model",
         "moderation_and_safety": "Moderiranje i sigurnost",
         "modern": "Suvremeni",
         "mute": "Isključi zvuk",
@@ -2813,7 +2811,6 @@
         "send_typing_notifications": "Pošalji obavijesti o tipkanju",
         "sessions": {
             "best_security_note": "Za najveću sigurnost provjerite svoje sesije i odjavite se iz bilo koje sesije koju više ne prepoznajete ili je ne upotrebljavate.",
-            "browser": "Preglednik",
             "confirm_sign_out": {
                 "one": "Potvrdite odjavu s ovog uređaja",
                 "few": "Potvrdite odjavu s ovih uređaja",
@@ -2869,7 +2866,6 @@
             "no_sessions": "Nije pronađena nijedna sesija.",
             "no_unverified_sessions": "Nema nepotvrđenih sesija.",
             "no_verified_sessions": "Nema potvrđenih sesija.",
-            "os": "Operativni sustav",
             "other_sessions_heading": "Ostale sesije",
             "push_heading": "Push obavijesti",
             "push_subheading": "Primajte push obavijesti za ovu sesiju",

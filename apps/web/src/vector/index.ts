@@ -18,9 +18,7 @@ import { parseAppUrl } from "./url_utils";
 import "./modernizr.cjs";
 import { polyfillTouchEvent } from "../@types/polyfill";
 
-// Import shared components CSS
-import "@element-hq/web-shared-components/dist/element-web-shared-components.css";
-
+import "../../res/css/_index.pcss";
 // Require common CSS here; this will make webpack process it into bundle.css.
 // Our own CSS (which is themed) is imported via separate webpack entry points
 // in webpack.config.js
@@ -257,7 +255,6 @@ start().catch((err) => {
     // with some basic styling to make the iframe full page
     document.body.style.removeProperty("height");
     const iframe = document.createElement("iframe");
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore - typescript seems to only like the IE syntax for iframe sandboxing
     iframe["sandbox"] = "";
     iframe.src = supportedBrowser ? "static/unable-to-load.html" : "static/incompatible-browser.html";

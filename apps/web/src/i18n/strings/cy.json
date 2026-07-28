@@ -470,7 +470,6 @@
         "encrypted": "Wedi'i amgryptio",
         "error": "Gwall",
         "faq": "Cwestiynau Cyffredin",
-        "favourites": "Ffefrynnau",
         "feedback": "Adborth",
         "filter_results": "Hidlo canlyniadau",
         "forward_message": "Anfonwyd neges ymlaen",
@@ -494,7 +493,6 @@
         "message_layout": "Cynllun y neges",
         "message_timestamp_invalid": "Stamp amser annilys",
         "microphone": "Meicroffôn",
-        "model": "Model",
         "moderation_and_safety": "Cymedroli a diogelwch",
         "modern": "Modern",
         "mute": "Tewi",
@@ -2788,7 +2786,6 @@
         "send_typing_notifications": "Anfon hysbysiadau teipio",
         "sessions": {
             "best_security_note": "Er mwyn sicrhau'r diogelwch gorau, gwiriwch eich sesiynau ac allgofnodwch o unrhyw sesiwn nad ydych yn ei hadnabod nac yn ei defnyddio mwyach.",
-            "browser": "Porwr",
             "confirm_sign_out": {
                 "Cadarnhau allgofnodi o'r ddyfeisiau hyn": "other",
                 "Cadarnhau allgofnodi o'r ddyfais hon": "one"
@@ -2839,7 +2836,6 @@
             "no_sessions": "Heb ganfod sesiynau.",
             "no_unverified_sessions": "Heb ganfod unrhyw sesiynau heb eu gwirio.",
             "no_verified_sessions": "Heb ganfod unrhyw sesiynau wedi'u dilysu.",
-            "os": "System weithredu",
             "other_sessions_heading": "Sesiynau eraill",
             "push_heading": "Hysbysiadau gwthiadwy",
             "push_subheading": "Derbyn hysbysiadau gwthio ar y sesiwn hon.",

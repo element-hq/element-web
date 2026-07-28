@@ -11,16 +11,15 @@ import { fireEvent, render, type RenderResult } from "jest-matrix-react";
 
 import { DeviceDetailHeading } from "../../../../../../src/components/views/settings/devices/DeviceDetailHeading";
 import { flushPromisesWithFakeTimers } from "../../../../../test-utils";
-import { DeviceType } from "../../../../../../src/utils/device/parseUserAgent";
+import type { ExtendedDevice } from "../../../../../../src/components/views/settings/devices/types.ts";
 
 jest.useFakeTimers();
 
 describe("<DeviceDetailHeading />", () => {
-    const device = {
+    const device: ExtendedDevice = {
         device_id: "123",
         display_name: "My device",
         isVerified: true,
-        deviceType: DeviceType.Unknown,
     };
     const defaultProps = {
         device,

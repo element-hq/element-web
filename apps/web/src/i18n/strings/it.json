@@ -419,7 +419,6 @@
         "encrypted": "Crittografato",
         "error": "Errore",
         "faq": "Domande frequenti",
-        "favourites": "Preferiti",
         "feedback": "Commenti",
         "filter_results": "Filtra risultati",
         "forward_message": "Inoltra messaggio",
@@ -442,7 +441,6 @@
         "message": "Messaggio",
         "message_layout": "Disposizione del messaggio",
         "microphone": "Microfono",
-        "model": "Modello",
         "modern": "Moderno",
         "mute": "Silenzia",
         "n_members": {
@@ -2324,7 +2322,6 @@
         "send_typing_notifications": "Invia notifiche di scrittura",
         "sessions": {
             "best_security_note": "Per una maggiore sicurezza, verifica le tue sessioni ed esci da quelle che non riconosci o non usi più.",
-            "browser": "Browser",
             "confirm_sign_out": {
                 "one": "Conferma la disconnessione da questo dispositivo",
                 "other": "Conferma la disconnessione da questi dispositivi"
@@ -2373,7 +2370,6 @@
             "no_sessions": "Nessuna sessione trovata.",
             "no_unverified_sessions": "Nessuna sessione non verificata trovata.",
             "no_verified_sessions": "Nessuna sessione verificata trovata.",
-            "os": "Sistema operativo",
             "other_sessions_heading": "Altre sessioni",
             "push_heading": "Notifiche push",
             "push_subheading": "Ricevi notifiche push in questa sessione.",

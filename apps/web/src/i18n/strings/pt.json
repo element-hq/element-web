@@ -462,7 +462,6 @@
         "encrypted": "Encriptado",
         "error": "Erro",
         "faq": "Perguntas frequentes",
-        "favourites": "Favoritos",
         "feedback": "Comentários",
         "filter_results": "Filtrar resultados",
         "forward_message": "Encaminhar mensagem",
@@ -486,7 +485,6 @@
         "message_layout": "Disposição da mensagem",
         "message_timestamp_invalid": "Carimbo de data/hora inválido",
         "microphone": "Microfone",
-        "model": "Modelo",
         "modern": "Moderno",
         "mute": "Silenciar",
         "n_members": {
@@ -2610,7 +2608,6 @@
         "send_typing_notifications": "Enviar notificações de digitação",
         "sessions": {
             "best_security_note": "Para maior segurança, verifica as tuas sessões e termina a sessão de qualquer sessão que já não reconheças ou utilizes.",
-            "browser": "Navegador",
             "confirm_sign_out": {
                 "one": "Confirma a saída deste dispositivo",
                 "other": "Confirma a saída destes dispositivos"
@@ -2661,7 +2658,6 @@
             "no_sessions": "Nenhuma sessão encontrada",
             "no_unverified_sessions": "Nenhuma sessão não verificada foi encontrada.",
             "no_verified_sessions": "Nenhuma sessão verificada foi encontrada.",
-            "os": "Sistema operativo",
             "other_sessions_heading": "Outras sessões",
             "push_heading": "Notificações push",
             "push_subheading": "Recebe notificações push sobre esta sessão.",

@@ -56,6 +56,6 @@ export interface IHangupCallApiRequest extends IWidgetApiRequest {
  */
 export interface IViewRoomApiRequest extends IWidgetApiRequest {
     data: {
-        room_id: string; // eslint-disable-line camelcase
+        room_id: string;
     };
 }

@@ -3,7 +3,7 @@
     "productName": "Element",
     "main": "lib/electron-main.js",
     "exports": "./lib/electron-main.js",
-    "version": "1.12.23",
+    "version": "1.12.24",
     "description": "Element: the future of secure communication",
     "author": {
         "name": "Element",
@@ -78,10 +78,11 @@
         "@types/minimist": "^1.2.1",
         "@types/node": "catalog:",
         "@types/pacote": "^11.1.1",
+        "@typescript/native": "catalog:",
         "app-builder-lib": "26.15.3",
         "chokidar": "^5.0.0",
         "detect-libc": "^2.0.0",
-        "electron": "43.1.0",
+        "electron": "43.1.1",
         "electron-builder": "26.15.3",
         "electron-builder-squirrel-windows": "26.15.3",
         "electron-devtools-installer": "^4.0.0",
@@ -93,11 +94,11 @@
         "rimraf": "^6.0.0",
         "shared-types": "workspace:*",
         "tar": "^7.5.8",
-        "typescript": "catalog:",
+        "typescript": "catalog:ts6",
         "vitest": "catalog:"
     },
     "hakDependencies": {
-        "matrix-seshat": "4.3.0"
+        "matrix-seshat": "5.0.0"
     },
     "nx": {
         "includedScripts": [

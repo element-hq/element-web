@@ -441,7 +441,6 @@
         "encrypted": "Krypteret",
         "error": "Fejl",
         "faq": "Ofte stillede spørgsmål",
-        "favourites": "Favoritter",
         "feedback": "Feedback",
         "filter_results": "Filtrér resultater",
         "forward_message": "Videresend besked",
@@ -464,7 +463,6 @@
         "message": "Besked",
         "message_layout": "Besked-layout",
         "microphone": "Mikrofon",
-        "model": "Model",
         "modern": "Moderne",
         "mute": "Sæt på lydløs",
         "n_members": {
@@ -2376,7 +2374,6 @@
         "send_typing_notifications": "Send indtastningsmeddelelser",
         "sessions": {
             "best_security_note": "For at opnå den bedste sikkerhed skal du bekræfte dine sessioner og logge ud fra enhver session, som du ikke genkender eller bruger længere.",
-            "browser": "Browser",
             "confirm_sign_out": {
                 "one": "Bekræft fjernelse af denne enhed",
                 "other": "Bekræft fjernelse af disse enheder"
@@ -2425,7 +2422,6 @@
             "no_sessions": "Der blev ikke fundet nogen sessioner",
             "no_unverified_sessions": "Ingen ikke-verificerede sessioner fundet.",
             "no_verified_sessions": "Ingen verificerede sessioner fundet.",
-            "os": "Operativsystem",
             "other_sessions_heading": "Andre sessioner",
             "push_heading": "Push-meddelelser",
             "push_subheading": "Modtag push-meddelelser for denne session.",

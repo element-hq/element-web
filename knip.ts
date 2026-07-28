@@ -90,7 +90,6 @@ export default {
                 "matrix-seshat",
             ],
             ignoreBinaries: [
-                "scripts/in-docker.sh",
                 // Used to build seshat (optional)
                 "rustc",
                 // Used by the fetch-package script (optional)
@@ -113,6 +112,8 @@ export default {
     ignoreDependencies: [
         // Used by multiple packages, raises a false positive for some reason
         "events",
+        // Used as a workaround for api-extractor not supporting typescript 7.0
+        "@typescript/old",
     ],
     ignoreExportsUsedInFile: true,
     ignoreBinaries: [

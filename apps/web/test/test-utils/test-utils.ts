@@ -49,6 +49,7 @@ import { EnhancedMap } from "../../src/utils/maps";
 import { type AsyncStoreWithClient } from "../../src/stores/AsyncStoreWithClient";
 import MatrixClientBackedSettingsHandler from "../../src/settings/handlers/MatrixClientBackedSettingsHandler";
 import { vi } from "../setup/adapter.ts";
+import { SDKContextClass } from "../../src/contexts/SDKContextClass.ts";
 
 /**
  * Stub out the MatrixClient, and configure the MatrixClientPeg object to
@@ -76,6 +77,8 @@ export function stubClient(): MatrixClient {
     peg.get = () => client;
     peg.safeGet = () => client;
     MatrixClientBackedSettingsHandler.matrixClient = client;
+    // @ts-ignore
+    SDKContextClass.instance._client = client;
     return client;
 }
 
@@ -363,6 +366,7 @@ export function createTestClient(): MatrixClient {
         setRoomTag: vi.fn().mockResolvedValue({}),
         getExtendedProfileProperty: vi.fn(),
         setExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
+        doesServerSupportExtendedProfiles: vi.fn(),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);
@@ -414,7 +418,6 @@ type MakeEventProps = MakeEventPassThruProps & {
     redacts?: string;
     content: IContent;
     room?: Room["roomId"]; // to-device messages are roomless
-    // eslint-disable-next-line camelcase
     prev_content?: IContent;
     unsigned?: IUnsigned;
     status?: EventStatus;

@@ -451,7 +451,6 @@
         "encrypted": "Šifrēts",
         "error": "Kļūda",
         "faq": "BUJ",
-        "favourites": "Izlase",
         "feedback": "Atsauksmes",
         "filter_results": "Filtrēt rezultātus",
         "forward_message": "Pārsūtīt ziņu",
@@ -475,7 +474,6 @@
         "message_layout": "Ziņas izkārtojums",
         "message_timestamp_invalid": "Nederīgs laikspiedols",
         "microphone": "Mikrofons",
-        "model": "Modelis",
         "modern": "Mūsdienīgs",
         "mute": "Apklusināt",
         "n_members": {
@@ -2243,7 +2241,6 @@
         "send_typing_notifications": "Sūtīt paziņojumus par rakstīšanu",
         "sessions": {
             "best_security_note": "Visdrošāk ir apliecināt savas sesijas un atteikties no jebkuras sesijas, kas nav atpazīstama vai netiek vairs izmantota.",
-            "browser": "Pārlūks",
             "confirm_sign_out": {
                 "zero": "Jāapstiprina atteikšanās no šīm ierīcēm.",
                 "one": "Jāapstiprina atteikšanās no šīs ierīces.",
@@ -2297,7 +2294,6 @@
             "no_sessions": "Netika atrasta neviena sesija.",
             "no_unverified_sessions": "Netika atrasta neviena neapliecināta sesija.",
             "no_verified_sessions": "Netika atrasta neviena apliecināta sesija.",
-            "os": "Operētājsistēma",
             "other_sessions_heading": "Citas sesijas",
             "push_heading": "Pašpiegādes paziņojumi",
             "push_subheading": "Saņemt pašpiegādes paziņojumus šajā sesijā.",

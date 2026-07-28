@@ -45,7 +45,9 @@ describe("NotificationSettingsTab", () => {
         const tab = renderTab();
 
         // settings link of mentions_only volume
-        const settingsLink = within(tab.getByText("@mentions & keywords")).getByRole("button", { name: "settings" });
+        const settingsLink = within(tab.getByText("@mentions and replies only")).getByRole("button", {
+            name: "settings",
+        });
         if (!settingsLink) throw new Error("settings link does not exist.");
 
         await userEvent.click(settingsLink);

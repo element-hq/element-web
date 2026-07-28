@@ -15,12 +15,12 @@ import { AutoHideScrollbar } from "@element-hq/web-shared-components";
 import { _t } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
 import SearchBox from "../../structures/SearchBox";
-import SpaceStore from "../../../stores/spaces/SpaceStore";
 import RoomAvatar from "../avatars/RoomAvatar";
 import AccessibleButton from "../elements/AccessibleButton";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { filterBoolean } from "../../../utils/arrays";
+import { SDKContextClass } from "../../../contexts/SDKContextClass.ts";
 
 interface IProps {
     room: Room;
@@ -38,7 +38,7 @@ const Entry: React.FC<{
     let description;
     if (localRoom) {
         description = _t("common|n_members", { count: room.getJoinedMemberCount() });
-        const numChildRooms = SpaceStore.instance.getChildRooms(room.roomId).length;
+        const numChildRooms = SDKContextClass.instance.spaceStore.getChildRooms(room.roomId).length;
         if (numChildRooms > 0) {
             description += " · " + _t("common|n_rooms", { count: numChildRooms });
         }
@@ -67,7 +67,7 @@ const Entry: React.FC<{
 
 const addAllParents = (set: Set<Room>, room: Room): void => {
     const cli = room.client;
-    const parents = Array.from(SpaceStore.instance.getKnownParents(room.roomId)).map((parentId) =>
+    const parents = Array.from(SDKContextClass.instance.spaceStore.getKnownParents(room.roomId)).map((parentId) =>
         cli.getRoom(parentId),
     );
 
@@ -90,7 +90,7 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected, onFi
 
         return [
             Array.from(parents),
-            SpaceStore.instance.spacePanelSpaces.filter((s) => !parents.has(s)),
+            SDKContextClass.instance.spaceStore.spacePanelSpaces.filter((s) => !parents.has(s)),
             filterBoolean(
                 selected?.map((roomId) => {
                     const room = cli.getRoom(roomId);
