@@ -99,7 +99,6 @@ export function handleSasVerification(verifier: JSHandle<Verifier>): Promise<Emo
     return verifier.evaluate((verifier) => {
         const event = verifier.getShowSasCallbacks();
         if (event) {
-            expect(event.sas.emoji).toBeDefined();
             return event.sas.emoji!;
         }
 
@@ -107,7 +106,6 @@ export function handleSasVerification(verifier: JSHandle<Verifier>): Promise<Emo
             const onShowSas = (event: ShowSasCallbacks) => {
                 verifier.off("show_sas" as VerifierEvent, onShowSas);
                 void event.confirm();
-                expect(event.sas.emoji).toBeDefined();
                 resolve(event.sas.emoji!);
             };
 
