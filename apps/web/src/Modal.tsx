@@ -456,7 +456,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
                                             onClick={this.onBackgroundClick}
                                         />
                                     </div>
-                                </TooltipProvider>  
+                                </TooltipProvider>
                             </LinkedTextContext.Provider>
                         </I18nContext.Provider>
                     </SDKContext.Provider>
