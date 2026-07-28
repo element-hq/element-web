@@ -93,7 +93,6 @@ export const test = base.extend<TestFixtures>({
         await bot.onTestFinished(testInfo);
     },
 
-    // eslint-disable-next-line no-empty-pattern
     webserver: async ({}, use) => {
         const webserver = new Webserver();
         await use(webserver);

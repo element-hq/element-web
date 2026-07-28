@@ -154,7 +154,7 @@ describe("BaseOngoingCallViewModel", () => {
         const vm = new BaseOngoingCallViewModel({ mxEvent, cli, callStore, roomId, legacyCallHandler });
 
         vm.join();
-        const [_, room, callType, platformCallType] = vi.mocked(placeCall).mock.calls[0];
+        const [, room, callType, platformCallType] = vi.mocked(placeCall).mock.calls[0];
         expect(room.roomId).toStrictEqual(roomId);
         expect(callType).toStrictEqual(CallType.Video);
         expect(platformCallType).toStrictEqual(PlatformCallType.ElementCall);

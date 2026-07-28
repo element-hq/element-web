@@ -59,7 +59,6 @@ export function RoomListItemNotificationMenu({ vm }: RoomListItemNotificationMen
                 </IconButton>
             }
         >
-            {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
             <div
                 // We don't want keyboard navigation events to bubble up to the ListView changing the focused item
                 onKeyDown={(e) => e.stopPropagation()}

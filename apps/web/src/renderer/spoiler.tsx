@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { domToReact, type DOMNode } from "html-react-parser";
 
-import { type RendererMap } from "./utils.tsx";
+import { type RendererMap } from "./utils.ts";
 import Spoiler from "../components/views/elements/Spoiler.tsx";
 
 /**

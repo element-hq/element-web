@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 import React, { useEffect, useState } from "react";
 import { type PollAnswerSubevent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 import { type MatrixEvent, type Poll, PollEvent, type Relations } from "matrix-js-sdk/src/matrix";
-import { Tooltip } from "@vector-im/compound-web";
 import { PollsEndIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../../languageHandler";
@@ -17,6 +16,7 @@ import { formatLocalDateShort } from "../../../../DateUtils";
 import { allVotes, collectUserVotes, countVotes } from "../../messages/MPollBody";
 import { PollOption } from "../../polls/PollOption";
 import { Caption } from "../../typography/Caption";
+import AccessibleButton from "../../elements/AccessibleButton.tsx";
 
 interface Props {
     event: MatrixEvent;
@@ -93,36 +93,39 @@ export const PollListItemEnded: React.FC<Props> = ({ event, poll, onClick }) => 
     const formattedDate = formatLocalDateShort(event.getTs());
 
     return (
-        <li data-testid={`pollListItem-${event.getId()!}`} className="mx_PollListItemEnded" onClick={onClick}>
-            <Tooltip label={_t("right_panel|poll|view_poll")} placement="top" isTriggerInteractive={false}>
-                <div className="mx_PollListItemEnded_content">
-                    <div className="mx_PollListItemEnded_title">
-                        <PollsEndIcon className="mx_PollListItemEnded_icon" />
-                        <span className="mx_PollListItemEnded_question">{pollEvent.question.text}</span>
-                        <Caption>{formattedDate}</Caption>
-                    </div>
-                    {!!winningAnswers?.length && (
-                        <div className="mx_PollListItemEnded_answers">
-                            {winningAnswers?.map(({ answer, voteCount, optionNumber }) => (
-                                <PollOption
-                                    key={answer.id}
-                                    answer={answer}
-                                    voteCount={voteCount}
-                                    totalVoteCount={totalVoteCount!}
-                                    pollId={poll.pollId}
-                                    optionNumber={optionNumber}
-                                    displayVoteCount
-                                    isChecked
-                                    isEnded
-                                />
-                            ))}
-                        </div>
-                    )}
-                    <div className="mx_PollListItemEnded_voteCount">
-                        <Caption>{_t("right_panel|poll|final_result", { count: totalVoteCount })}</Caption>
-                    </div>
+        <li data-testid={`pollListItem-${event.getId()!}`} className="mx_PollListItemEnded">
+            <AccessibleButton
+                className="mx_PollListItemEnded_content"
+                title={_t("right_panel|poll|view_poll")}
+                placement="top"
+                onClick={onClick}
+            >
+                <div className="mx_PollListItemEnded_title">
+                    <PollsEndIcon className="mx_PollListItemEnded_icon" />
+                    <span className="mx_PollListItemEnded_question">{pollEvent.question.text}</span>
+                    <Caption>{formattedDate}</Caption>
                 </div>
-            </Tooltip>
+                {!!winningAnswers?.length && (
+                    <div className="mx_PollListItemEnded_answers">
+                        {winningAnswers?.map(({ answer, voteCount, optionNumber }) => (
+                            <PollOption
+                                key={answer.id}
+                                answer={answer}
+                                voteCount={voteCount}
+                                totalVoteCount={totalVoteCount!}
+                                pollId={poll.pollId}
+                                optionNumber={optionNumber}
+                                displayVoteCount
+                                isChecked
+                                isEnded
+                            />
+                        ))}
+                    </div>
+                )}
+                <div className="mx_PollListItemEnded_voteCount">
+                    <Caption>{_t("right_panel|poll|final_result", { count: totalVoteCount })}</Caption>
+                </div>
+            </AccessibleButton>
         </li>
     );
 };

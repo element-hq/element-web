@@ -20,7 +20,7 @@ import UserIdentifier from "../../../../customisations/UserIdentifier";
 /**
  * Information about a member for disambiguation purposes.
  */
-interface MemberInfo {
+export interface MemberInfo {
     /**
      * The user's Matrix ID.
      */

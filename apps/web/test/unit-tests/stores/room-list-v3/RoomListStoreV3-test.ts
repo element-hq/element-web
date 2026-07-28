@@ -13,6 +13,7 @@ import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import type { RoomNotificationState } from "../../../../src/stores/notifications/RoomNotificationState";
 import {
     LISTS_UPDATE_EVENT,
+    ROOM_TAGGED_EVENT,
     SECTION_CREATED_EVENT,
     RoomListStoreV3Class,
     type Section,
@@ -340,6 +341,19 @@ describe("RoomListStoreV3", () => {
                 {
                     action: "MatrixActions.Room.tags",
                     room: rooms[10],
+                },
+                true,
+            );
+            expect(fn).toHaveBeenCalled();
+        });
+
+        it("emits ROOM_TAGGED_EVENT on a local user tag action", async () => {
+            const { store, dispatcher } = await getRoomListStore();
+            const fn = jest.fn();
+            store.on(ROOM_TAGGED_EVENT, fn);
+            dispatcher.dispatch(
+                {
+                    action: "RoomListActions.tagRoom.success",
                 },
                 true,
             );

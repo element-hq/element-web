@@ -27,6 +27,7 @@ import { type GetRelationsForEvent } from "../rooms/EventTile";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { type IBodyProps } from "../messages/IBodyProps";
 import { FileBodyFactory, VideoBodyFactory, renderMBody } from "../messages/MBodyFactory";
+import { roomMemberToMemberInfo } from "../../../hooks/room/useRoomMemberProfile";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -125,7 +126,11 @@ export default class ReplyTile extends React.PureComponent<IProps> {
             sender = (
                 <div className="mx_ReplyTile_sender">
                     <MemberAvatar member={mxEvent.sender} fallbackUserId={mxEvent.getSender()} size="16px" />
-                    <SenderProfile mxEvent={mxEvent} />
+                    <SenderProfile
+                        senderId={mxEvent.getSender() ?? undefined}
+                        member={roomMemberToMemberInfo(mxEvent.sender)}
+                        isEmote={msgType === MsgType.Emote}
+                    />
                 </div>
             );
         }

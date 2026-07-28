@@ -21,12 +21,12 @@ Please see LICENSE files in the repository root for full details.
     flex: 1 1 0;
     align-content: flex-start;
     display: grid;
-    gap: $spacing-20;
-    padding-right: $spacing-64;
-    margin: $spacing-32 0;
+    gap: var(--cpd-space-5x);
+    padding-right: var(--cpd-space-16x);
+    margin: var(--cpd-space-8x) 0;
 
     &.mx_PollHistoryList_list_ENDED {
-        gap: $spacing-32;
+        gap: var(--cpd-space-8x);
     }
 }
 
@@ -34,7 +34,7 @@ Please see LICENSE files in the repository root for full details.
     height: 100%;
     width: 100%;
     box-sizing: border-box;
-    padding: 0 $spacing-64;
+    padding: 0 var(--cpd-space-16x);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -45,7 +45,7 @@ Please see LICENSE files in the repository root for full details.
     color: $secondary-content;
 
     .mx_PollHistoryList_loadMorePolls {
-        margin-top: $spacing-16;
+        margin-top: var(--cpd-space-4x);
     }
 }
 

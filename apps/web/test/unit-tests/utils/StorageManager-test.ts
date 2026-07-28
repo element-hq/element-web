@@ -65,7 +65,6 @@ describe("StorageManager", () => {
 
         beforeEach(async () => {
             await populateHealthySession();
-            // eslint-disable-next-line no-global-assign
             indexedDB = new IDBFactory();
         });
 
@@ -109,13 +108,11 @@ describe("StorageManager", () => {
             });
 
             it("should not be healthy if no indexeddb", async () => {
-                // eslint-disable-next-line no-global-assign
                 indexedDB = {} as IDBFactory;
 
                 const result = await StorageManager.checkConsistency();
                 expect(result.healthy).toBe(false);
 
-                // eslint-disable-next-line no-global-assign
                 indexedDB = new IDBFactory();
             });
         });

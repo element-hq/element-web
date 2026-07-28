@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { type MatrixClient, ClientEvent } from "matrix-js-sdk/src/matrix";
 import { BaseViewModel, type UserStatusIconViewSnapshot } from "@element-hq/web-shared-components";
 
-import { fetchUserStatus, validateUserStatus } from "../../utils/userStatus";
+import { fetchUserStatus, userStatusFromProfile } from "../../utils/userStatus";
 import SettingsStore from "../../settings/SettingsStore";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -49,6 +49,11 @@ export class UserStatusIconViewModel extends BaseViewModel<UserStatusIconViewSna
 
     private onUserProfileUpdate = (syncedUserId: string, syncProfile: Record<string, unknown> | null): void => {
         if (syncedUserId !== this.props.userId) return;
-        this.snapshot.merge({ status: validateUserStatus(syncProfile?.["org.matrix.msc4426.status"]) });
+        this.snapshot.merge({
+            status: userStatusFromProfile(
+                syncProfile?.["org.matrix.msc4426.status"],
+                syncProfile?.["org.matrix.msc4426.call"],
+            ),
+        });
     };
 }
