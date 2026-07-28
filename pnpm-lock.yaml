@@ -343,7 +343,7 @@ importers:
         version: https://codeload.github.com/element-hq/element-call/tar.gz/62eeb10d382a7386953e02f12e3bf87031148ab1#path:/eslint
       eslint-plugin-storybook:
         specifier: ^10.4.6
-        version: 10.5.3(@typescript/typescript6@6.0.2)(eslint@8.57.1)(storybook@10.5.2(@types/react@19.2.17)(prettier@2.8.8)(react@19.2.7))
+        version: 10.5.4(@typescript/typescript6@6.0.2)(eslint@8.57.1)(storybook@10.5.2(@types/react@19.2.17)(prettier@2.8.8)(react@19.2.7))
       husky:
         specifier: ^9.0.0
         version: 9.1.7
@@ -8705,11 +8705,11 @@ packages:
     resolution: {gitHosted: true, integrity: sha512-IFSuCAiIua6NGcaPUuRwl7f+NlBCgRbjqU2IZO/nNuwc+T75GDgH3QwdMPQWkr9R4SYXTz06H/Ihq5btMMKXVw==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/62eeb10d382a7386953e02f12e3bf87031148ab1}
     version: 0.0.0
 
-  eslint-plugin-storybook@10.5.3:
-    resolution: {integrity: sha512-dreVGgQvTTOvPTrnn71uogs3E7skbODW3Ya1cHxupznzuIofLCzy+7zWJ4ObsEZ1MsOcofQlSaQuV9oJBszLoA==}
+  eslint-plugin-storybook@10.5.4:
+    resolution: {integrity: sha512-IEG6GK9iMKH45WxiBUoDu3AajUyz+AcRXsLRkwnsNz9TwzZI6tbyHgdZ1Tkvs2RXOovYUYYksNpbtnmY746LAw==}
     peerDependencies:
       eslint: '>=8'
-      storybook: ^10.5.3
+      storybook: ^10.5.4
 
   eslint-scope@5.1.1:
     resolution: {integrity: sha512-2NxwbF/hZ0KpepYN0cNbo+FN6XoK7GaHlQhgx/hIZl6Va0bF45RQOOwhLIy8lQDbuCiadSLCBnH2CFYquit5bw==}
@@ -21242,7 +21242,7 @@ snapshots:
 
   eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/62eeb10d382a7386953e02f12e3bf87031148ab1#path:/eslint: {}
 
-  eslint-plugin-storybook@10.5.3(@typescript/typescript6@6.0.2)(eslint@8.57.1)(storybook@10.5.2(@types/react@19.2.17)(prettier@2.8.8)(react@19.2.7)):
+  eslint-plugin-storybook@10.5.4(@typescript/typescript6@6.0.2)(eslint@8.57.1)(storybook@10.5.2(@types/react@19.2.17)(prettier@2.8.8)(react@19.2.7)):
     dependencies:
       '@typescript-eslint/types': 8.65.0
       '@typescript-eslint/utils': 8.65.0(@typescript/typescript6@6.0.2)(eslint@8.57.1)
