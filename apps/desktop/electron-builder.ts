@@ -43,6 +43,7 @@ interface Metadata {
  * Extra metadata fields that are injected into the build to pass to the app at runtime.
  */
 interface ExtraMetadata extends Metadata {
+    desktopName: string;
     electron_appId: string;
     electron_protocol: string;
     electron_windows_cert_sn?: string;
@@ -132,6 +133,10 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
         name: variant.name,
         productName: variant.productName,
         description: variant.description,
+        // Read by Electron to set the Wayland app_id / X11 WM_CLASS, so compositors
+        // can associate our windows with the desktop file of the same name.
+        // https://www.electron.build/linux#window-association-desktopname--syncdesktopname
+        desktopName: `${variant.name}.desktop`,
         electron_appId: variant.appId,
         electron_protocol: variant.protocols[0],
     },
@@ -140,6 +145,8 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
         category: "Network;InstantMessaging;Chat",
         icon: "icon.png",
         executableName: variant.name, // element-desktop or element-desktop-nightly
+        // Name the desktop file after desktopName and set its StartupWMClass to match
+        syncDesktopName: true,
     },
     deb: {
         packageCategory: "net",
