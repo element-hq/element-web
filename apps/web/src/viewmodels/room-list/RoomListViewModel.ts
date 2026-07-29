@@ -193,38 +193,26 @@ export class RoomListViewModel
         this.updateRoomsMap(roomsResult);
 
         // Subscribe to room list updates
-        this.disposables.trackListener(
-            this.props.roomListStore,
-            RoomListStoreV3Event.ListsUpdate as any,
-            this.onListsUpdate,
-        );
+        this.disposables.trackListener(this.props.roomListStore, RoomListStoreV3Event.ListsUpdate, this.onListsUpdate);
 
         // Subscribe to room list loaded
-        this.disposables.trackListener(
-            this.props.roomListStore,
-            RoomListStoreV3Event.ListsLoaded as any,
-            this.onListsLoaded,
-        );
+        this.disposables.trackListener(this.props.roomListStore, RoomListStoreV3Event.ListsLoaded, this.onListsLoaded);
 
         // Subscribe to section creation
         this.disposables.trackListener(
             this.props.roomListStore,
-            RoomListStoreV3Event.SectionCreated as any,
+            RoomListStoreV3Event.SectionCreated,
             this.onSectionCreated as (...args: unknown[]) => void,
         );
 
         // Subscribe to room tagging
-        this.disposables.trackListener(
-            this.props.roomListStore,
-            RoomListStoreV3Event.RoomTagged as any,
-            this.onRoomTagged,
-        );
+        this.disposables.trackListener(this.props.roomListStore, RoomListStoreV3Event.RoomTagged, this.onRoomTagged);
 
         // Recompute the "unread activity below" toast when room notification state
         // changes (e.g. a room below the fold becomes unread, or is marked read).
         this.disposables.trackListener(
             RoomNotificationStateStore.instance,
-            UPDATE_STATUS_INDICATOR as any,
+            UPDATE_STATUS_INDICATOR,
             this.updateUnreadActivityBelow,
         );
 

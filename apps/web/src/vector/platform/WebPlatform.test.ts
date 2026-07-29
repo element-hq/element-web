@@ -206,23 +206,20 @@ describe("WebPlatform", () => {
                 expect(showNoUpdate).toHaveBeenCalled();
             });
 
-            it(
-                "should return ready and call showUpdate when current version " + "differs from most recent version",
-                async () => {
-                    // @ts-ignore
-                    WebPlatform.VERSION = "0.0.0"; // old version
-                    fetchMock.getOnce("end:/version", prodVersion);
-                    const platform = new WebPlatform();
+            it("should return ready and call showUpdate when current version differs from most recent version", async () => {
+                // @ts-ignore
+                WebPlatform.VERSION = "0.0.0"; // old version
+                fetchMock.getOnce("end:/version", prodVersion);
+                const platform = new WebPlatform();
 
-                    const showUpdate = vi.fn();
-                    const showNoUpdate = vi.fn();
-                    const result = await platform.pollForUpdate(showUpdate, showNoUpdate);
+                const showUpdate = vi.fn();
+                const showNoUpdate = vi.fn();
+                const result = await platform.pollForUpdate(showUpdate, showNoUpdate);
 
-                    expect(result).toEqual({ status: UpdateCheckStatus.Ready });
-                    expect(showUpdate).toHaveBeenCalledWith("0.0.0", prodVersion);
-                    expect(showNoUpdate).not.toHaveBeenCalled();
-                },
-            );
+                expect(result).toEqual({ status: UpdateCheckStatus.Ready });
+                expect(showUpdate).toHaveBeenCalledWith("0.0.0", prodVersion);
+                expect(showNoUpdate).not.toHaveBeenCalled();
+            });
 
             it("should return ready without showing update when user registered in last 24", async () => {
                 // @ts-ignore

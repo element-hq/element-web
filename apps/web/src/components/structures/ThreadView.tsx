@@ -272,7 +272,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
         this.timelinePanel.current?.refreshTimeline(this.props.initialEvent?.getId());
     }
 
-    private setupThreadListeners(thread?: Thread | undefined, oldThread?: Thread | undefined): void {
+    private setupThreadListeners(thread?: Thread, oldThread?: Thread): void {
         if (oldThread) {
             this.state.thread?.off(ThreadEvent.NewReply, this.updateThreadRelation);
             this.props.room.off(RoomEvent.LocalEchoUpdated, this.updateThreadRelation);

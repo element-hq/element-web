@@ -129,7 +129,7 @@ export function getCustomSectionData(): CustomSectionsData {
                     spaceId: value.spaceId && doesSpaceExist(value.spaceId) ? value.spaceId : MetaSpace.Home,
                 },
             ]),
-    ) as CustomSectionsData;
+    ) satisfies CustomSectionsData;
 }
 
 /**

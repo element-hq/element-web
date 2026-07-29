@@ -421,7 +421,7 @@ export class IndexedDBLogStore {
                 resolve();
             };
             txn.onerror = () => {
-                reject(new Error("Failed to delete logs for " + `'${id}' : ${query.error?.message}`));
+                reject(new Error(`Failed to delete logs for '${id}' : ${query.error?.message}`));
             };
             // delete last modified entries
             const lastModStore = txn.objectStore("logslastmod");

@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`<VideoRoomChatButton /> renders button with an unread marker when room is unread 1`] = `
+exports[`<VideoRoomChatButton /> > renders button with an unread marker when room is unread 1`] = `
 <button
   aria-label="Chat"
   aria-labelledby="react-use-id-1"

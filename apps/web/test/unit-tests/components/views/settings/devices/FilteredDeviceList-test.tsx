@@ -10,9 +10,11 @@ import React, { type ComponentProps } from "react";
 import { act, fireEvent, render } from "jest-matrix-react";
 
 import { FilteredDeviceList } from "../../../../../../src/components/views/settings/devices/FilteredDeviceList";
-import { DeviceSecurityVariation } from "../../../../../../src/components/views/settings/devices/types";
+import {
+    DeviceSecurityVariation,
+    type ExtendedDevice,
+} from "../../../../../../src/components/views/settings/devices/types";
 import { flushPromises, mockPlatformPeg } from "../../../../../test-utils";
-import { DeviceType } from "../../../../../../src/utils/device/parseUserAgent";
 
 mockPlatformPeg();
 
@@ -21,35 +23,30 @@ describe("<FilteredDeviceList />", () => {
     // 14.03.2022 16:15
     const now = 1647270879403;
     jest.spyOn(global.Date, "now").mockReturnValue(now);
-    const newDevice = {
+    const newDevice: ExtendedDevice = {
         device_id: "new",
         last_seen_ts: Date.now() - 500,
         last_seen_ip: "123.456.789",
         display_name: "My Device",
         isVerified: true,
-        deviceType: DeviceType.Unknown,
     };
-    const unverifiedNoMetadata = {
+    const unverifiedNoMetadata: ExtendedDevice = {
         device_id: "unverified-no-metadata",
         isVerified: false,
-        deviceType: DeviceType.Unknown,
     };
-    const verifiedNoMetadata = {
+    const verifiedNoMetadata: ExtendedDevice = {
         device_id: "verified-no-metadata",
         isVerified: true,
-        deviceType: DeviceType.Unknown,
     };
-    const hundredDaysOld = {
+    const hundredDaysOld: ExtendedDevice = {
         device_id: "100-days-old",
         isVerified: true,
         last_seen_ts: Date.now() - MS_DAY * 100,
-        deviceType: DeviceType.Unknown,
     };
-    const hundredDaysOldUnverified = {
+    const hundredDaysOldUnverified: ExtendedDevice = {
         device_id: "unverified-100-days-old",
         isVerified: false,
         last_seen_ts: Date.now() - MS_DAY * 100,
-        deviceType: DeviceType.Unknown,
     };
     const defaultProps: ComponentProps<typeof FilteredDeviceList> = {
         onFilterChange: jest.fn(),

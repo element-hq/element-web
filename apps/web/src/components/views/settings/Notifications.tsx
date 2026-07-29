@@ -289,7 +289,7 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
     }
 
     private async refreshRules(): Promise<Partial<IState>> {
-        const ruleSets = await MatrixClientPeg.safeGet().getPushRules()!;
+        const ruleSets = await MatrixClientPeg.safeGet().getPushRules();
         const categories: Record<string, RuleClass> = {
             [RuleId.Master]: RuleClass.Master,
 
@@ -353,7 +353,7 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
             for (const rule of defaultRules[category]) {
                 const definition: VectorPushRuleDefinition = VectorPushRulesDefinitions[rule.rule_id];
                 const vectorState = definition.ruleToVectorState(rule)!;
-                preparedNewState.vectorPushRules[category]!.push({
+                preparedNewState.vectorPushRules[category].push({
                     ruleId: rule.rule_id,
                     rule,
                     vectorState,
@@ -363,7 +363,7 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
             }
 
             // Quickly sort the rules for display purposes
-            preparedNewState.vectorPushRules[category]!.sort((a, b) => {
+            preparedNewState.vectorPushRules[category].sort((a, b) => {
                 let idxA = RULE_DISPLAY_ORDER.indexOf(a.ruleId);
                 let idxB = RULE_DISPLAY_ORDER.indexOf(b.ruleId);
 
@@ -375,7 +375,7 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
             });
 
             if (category === KEYWORD_RULE_CATEGORY) {
-                preparedNewState.vectorPushRules[category]!.push({
+                preparedNewState.vectorPushRules[category].push({
                     ruleId: KEYWORD_RULE_ID,
                     description: _t("settings|notifications|messages_containing_keywords"),
                     vectorState: preparedNewState.vectorKeywordRuleInfo.vectorState,

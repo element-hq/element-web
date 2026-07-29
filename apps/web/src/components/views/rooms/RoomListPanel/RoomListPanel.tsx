@@ -38,7 +38,7 @@ export const RoomListPanel: React.FC<RoomListPanelProps> = ({ activeSpace }) => 
     const [focusedElement, setFocusedElement] = useState<Element | null>(null);
 
     const onFocus = useCallback((ev: React.FocusEvent): void => {
-        setFocusedElement(ev.target as Element);
+        setFocusedElement(ev.target);
     }, []);
 
     const onBlur = useCallback((): void => {

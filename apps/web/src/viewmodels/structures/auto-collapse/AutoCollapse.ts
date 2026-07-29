@@ -5,6 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { type CallStore } from "../../../stores/CallStore";
 import { CollapseHandler } from "./CollapseHandler";
 import type { BaseCollapseBehaviour } from "./behaviours/BaseCollapseBehaviour";
 import { Behaviours } from "./behaviours/behaviours";
@@ -19,8 +20,9 @@ export class AutoCollapse {
     /**
      * @param expandPanel Callback that should expand the left panel
      * @param collapsePanel Callback that should collapse the left panel
+     * @param callStore Instance of the call store.
      */
-    public constructor(expandPanel: () => void, collapsePanel: () => void) {
+    public constructor(expandPanel: () => void, collapsePanel: () => void, callStore: CallStore) {
         // Calculate the initial value for autoCollapsedCount
         const initialAutoCollapsedCount = Behaviours.reduce(
             (count, B) => (B.shouldStartCollapsed() ? count + 1 : count),
@@ -29,7 +31,7 @@ export class AutoCollapse {
         this.collapseHandler = new CollapseHandler(expandPanel, collapsePanel, initialAutoCollapsedCount);
 
         for (const Behaviour of Behaviours) {
-            this.behaviours.push(new Behaviour(this.collapseHandler));
+            this.behaviours.push(new Behaviour(this.collapseHandler, callStore));
         }
     }
 

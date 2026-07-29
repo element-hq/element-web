@@ -1532,6 +1532,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 description,
             });
             if (onFinished) {
+                // oxlint-disable-next-line promise/no-promise-in-callback
                 finished.then(onFinished);
             }
         };
