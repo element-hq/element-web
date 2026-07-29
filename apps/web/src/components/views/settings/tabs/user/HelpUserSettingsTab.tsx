@@ -168,10 +168,10 @@ export default class HelpUserSettingsTab extends React.Component<EmptyObject, IS
                                 {},
                                 {
                                     twemoji: (sub) => (
-                                        <ExternalLink href="https://github.com/twitter/twemoji">{sub}</ExternalLink>
+                                        <ExternalLink href="https://github.com/jdecked/twemoji">{sub}</ExternalLink>
                                     ),
                                     author: (sub) => (
-                                        <ExternalLink href="https://github.com/twitter/twemoji/graphs/contributors">
+                                        <ExternalLink href="https://github.com/jdecked/twemoji/graphs/contributors">
                                             {sub}
                                         </ExternalLink>
                                     ),
