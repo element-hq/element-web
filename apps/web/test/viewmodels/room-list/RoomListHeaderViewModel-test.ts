@@ -14,7 +14,6 @@ import defaultDispatcher from "../../../src/dispatcher/dispatcher";
 import { Action } from "../../../src/dispatcher/actions";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { SortingAlgorithm } from "../../../src/stores/room-list-v3/skip-list/sorters";
-import RoomListStoreV3 from "../../../src/stores/room-list-v3/RoomListStoreV3";
 import {
     shouldShowSpaceSettings,
     showCreateNewRoom,
@@ -85,7 +84,11 @@ describe("RoomListHeaderViewModel", () => {
             jest.spyOn(sdkContext.spaceStore, "activeSpace", "get").mockReturnValue(MetaSpace.Home);
             jest.spyOn(sdkContext.spaceStore, "activeSpaceRoom", "get").mockReturnValue(null);
 
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+            vm = new RoomListHeaderViewModel({
+                matrixClient,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            });
 
             const snapshot = vm.getSnapshot();
             expect(snapshot.title).toBe("Home");
@@ -99,7 +102,11 @@ describe("RoomListHeaderViewModel", () => {
             jest.spyOn(sdkContext.spaceStore, "activeSpace", "get").mockReturnValue(mockSpace.roomId);
             jest.spyOn(sdkContext.spaceStore, "activeSpaceRoom", "get").mockReturnValue(mockSpace);
 
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+            vm = new RoomListHeaderViewModel({
+                matrixClient,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            });
 
             const snapshot = vm.getSnapshot();
             expect(snapshot.title).toBe(mockSpace.roomId);
@@ -111,7 +118,11 @@ describe("RoomListHeaderViewModel", () => {
                 return false;
             });
 
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+            vm = new RoomListHeaderViewModel({
+                matrixClient,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            });
             expect(vm.getSnapshot().canCreateVideoRoom).toBe(false);
         });
 
@@ -121,7 +132,11 @@ describe("RoomListHeaderViewModel", () => {
                 return false;
             });
 
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+            vm = new RoomListHeaderViewModel({
+                matrixClient,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            });
             expect(vm.getSnapshot().activeSortOption).toBe("alphabetical");
         });
 
@@ -130,14 +145,22 @@ describe("RoomListHeaderViewModel", () => {
             jest.spyOn(sdkContext.spaceStore, "activeSpaceRoom", "get").mockReturnValue(mockSpace);
             jest.spyOn(mockSpace, "getJoinRule").mockReturnValue(JoinRule.Public);
 
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+            vm = new RoomListHeaderViewModel({
+                matrixClient,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            });
             expect(vm.getSnapshot().canInviteInSpace).toBe(true);
         });
 
         it("should hide invite option when user cannot invite", () => {
             mocked(mockSpace.canInvite).mockReturnValue(false);
 
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+            vm = new RoomListHeaderViewModel({
+                matrixClient,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            });
             expect(vm.getSnapshot().canInviteInSpace).toBe(false);
         });
 
@@ -145,7 +168,11 @@ describe("RoomListHeaderViewModel", () => {
             jest.spyOn(sdkContext.spaceStore, "activeSpace", "get").mockReturnValue(mockSpace.roomId);
             mocked(shouldShowSpaceSettings).mockReturnValue(false);
 
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+            vm = new RoomListHeaderViewModel({
+                matrixClient,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            });
             expect(vm.getSnapshot().canAccessSpaceSettings).toBe(false);
         });
 
@@ -155,7 +182,11 @@ describe("RoomListHeaderViewModel", () => {
                 return false;
             });
 
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+            vm = new RoomListHeaderViewModel({
+                matrixClient,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            });
             expect(vm.getSnapshot().isMessagePreviewEnabled).toBe(true);
         });
 
@@ -165,7 +196,11 @@ describe("RoomListHeaderViewModel", () => {
                 return false;
             });
 
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+            vm = new RoomListHeaderViewModel({
+                matrixClient,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            });
             expect(vm.getSnapshot().areSectionsEnabled).toBe(true);
         });
 
@@ -176,7 +211,11 @@ describe("RoomListHeaderViewModel", () => {
                 return "watcher-id";
             });
 
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+            vm = new RoomListHeaderViewModel({
+                matrixClient,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            });
             expect(vm.getSnapshot().areSectionsEnabled).toBe(false);
 
             // Enable sections
@@ -194,7 +233,11 @@ describe("RoomListHeaderViewModel", () => {
                 "room_list_section",
             );
 
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+            vm = new RoomListHeaderViewModel({
+                matrixClient,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            });
             expect(vm.getSnapshot().displaySectionReleaseAnnouncement).toBe(true);
         });
     });
@@ -206,7 +249,11 @@ describe("RoomListHeaderViewModel", () => {
                 jest.spyOn(sdkContext.spaceStore, "activeSpace", "get").mockReturnValue(MetaSpace.Home);
                 jest.spyOn(sdkContext.spaceStore, "activeSpaceRoom", "get").mockReturnValue(null);
 
-                vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+                vm = new RoomListHeaderViewModel({
+                    matrixClient,
+                    spaceStore: sdkContext.spaceStore,
+                    roomListStore: sdkContext.roomListStore,
+                });
 
                 jest.spyOn(sdkContext.spaceStore, "activeSpace", "get").mockReturnValue(mockSpace.roomId);
                 jest.spyOn(sdkContext.spaceStore, "activeSpaceRoom", "get").mockReturnValue(mockSpace);
@@ -220,7 +267,11 @@ describe("RoomListHeaderViewModel", () => {
             jest.spyOn(sdkContext.spaceStore, "activeSpace", "get").mockReturnValue(mockSpace.roomId);
             jest.spyOn(sdkContext.spaceStore, "activeSpaceRoom", "get").mockReturnValue(mockSpace);
 
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+            vm = new RoomListHeaderViewModel({
+                matrixClient,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            });
 
             mockSpace.name = "new name";
             mockSpace.emit(RoomEvent.Name, mockSpace);
@@ -237,14 +288,22 @@ describe("RoomListHeaderViewModel", () => {
 
         it("should fire CreateChat action when createChatRoom is called", () => {
             const fireSpy = jest.spyOn(defaultDispatcher, "fire");
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+            vm = new RoomListHeaderViewModel({
+                matrixClient,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            });
 
             vm.createChatRoom(new Event("click"));
             expect(fireSpy).toHaveBeenCalledWith(Action.CreateChat);
         });
 
         it("should call createRoom with active space when in a space", () => {
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+            vm = new RoomListHeaderViewModel({
+                matrixClient,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            });
             vm.createRoom(new Event("click"));
 
             expect(createRoom).toHaveBeenCalledWith(mockSpace);
@@ -256,7 +315,11 @@ describe("RoomListHeaderViewModel", () => {
                 return false;
             });
 
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+            vm = new RoomListHeaderViewModel({
+                matrixClient,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            });
             vm.createVideoRoom();
             expect(showCreateNewRoom).toHaveBeenCalledWith(mockSpace, RoomType.ElementVideo);
         });
@@ -265,7 +328,11 @@ describe("RoomListHeaderViewModel", () => {
             jest.spyOn(sdkContext.spaceStore, "activeSpaceRoom", "get").mockReturnValue(null);
 
             const dispatchSpy = jest.spyOn(defaultDispatcher, "dispatch");
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+            vm = new RoomListHeaderViewModel({
+                matrixClient,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            });
             vm.createVideoRoom();
 
             expect(dispatchSpy).toHaveBeenCalledWith({
@@ -276,7 +343,11 @@ describe("RoomListHeaderViewModel", () => {
 
         it("should dispatch ViewRoom action when openSpaceHome is called", () => {
             const dispatchSpy = jest.spyOn(defaultDispatcher, "dispatch");
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+            vm = new RoomListHeaderViewModel({
+                matrixClient,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            });
             vm.openSpaceHome();
 
             expect(dispatchSpy).toHaveBeenCalledWith({
@@ -287,21 +358,33 @@ describe("RoomListHeaderViewModel", () => {
         });
 
         it("should show space invite dialog when inviteInSpace is called", () => {
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+            vm = new RoomListHeaderViewModel({
+                matrixClient,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            });
             vm.inviteInSpace();
 
             expect(showSpaceInvite).toHaveBeenCalledWith(mockSpace);
         });
 
         it("should show space preferences dialog when openSpacePreferences is called", () => {
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+            vm = new RoomListHeaderViewModel({
+                matrixClient,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            });
             vm.openSpacePreferences();
 
             expect(showSpacePreferences).toHaveBeenCalledWith(mockSpace);
         });
 
         it("should show space settings dialog when openSpaceSettings is called", () => {
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+            vm = new RoomListHeaderViewModel({
+                matrixClient,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            });
             vm.openSpaceSettings();
 
             expect(showSpaceSettings).toHaveBeenCalledWith(mockSpace);
@@ -312,20 +395,28 @@ describe("RoomListHeaderViewModel", () => {
             ["alphabetical" as const, SortingAlgorithm.Alphabetic],
             ["unread-first" as const, SortingAlgorithm.Unread],
         ])("should resort when sort is called with '%s'", (option, expectedAlgorithm) => {
-            const resortSpy = jest.spyOn(RoomListStoreV3.instance, "resort").mockImplementation(jest.fn());
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+            const resortSpy = jest.spyOn(sdkContext.roomListStore, "resort").mockImplementation(jest.fn());
+            vm = new RoomListHeaderViewModel({
+                matrixClient,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            });
             vm.sort(option);
             expect(resortSpy).toHaveBeenCalledWith(expectedAlgorithm);
         });
 
         it("should track analytics on resort", () => {
-            jest.spyOn(RoomListStoreV3.instance, "activeSortAlgorithm", "get").mockReturnValue(
+            jest.spyOn(sdkContext.roomListStore, "activeSortAlgorithm", "get").mockReturnValue(
                 SortingAlgorithm.Alphabetic,
             );
             PosthogTrackers.trackRoomListSortingAlgorithmChange = jest.fn();
 
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
-            jest.spyOn(RoomListStoreV3.instance, "resort").mockImplementation(jest.fn());
+            vm = new RoomListHeaderViewModel({
+                matrixClient,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            });
+            jest.spyOn(sdkContext.roomListStore, "resort").mockImplementation(jest.fn());
             vm.sort("unread-first");
 
             expect(PosthogTrackers.trackRoomListSortingAlgorithmChange).toHaveBeenCalledWith(
@@ -336,9 +427,13 @@ describe("RoomListHeaderViewModel", () => {
 
         it("should call createSection on RoomListStoreV3 when createSection is called", () => {
             const createSectionSpy = jest
-                .spyOn(RoomListStoreV3.instance, "createSection")
+                .spyOn(sdkContext.roomListStore, "createSection")
                 .mockResolvedValue("element.io.section.work");
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+            vm = new RoomListHeaderViewModel({
+                matrixClient,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            });
             vm.createSection();
             expect(createSectionSpy).toHaveBeenCalled();
         });
@@ -346,7 +441,11 @@ describe("RoomListHeaderViewModel", () => {
         describe("collapseOrExpandSections", () => {
             it("should dispatch RoomListCollapseAllSections when collapseSections is not 'expand'", () => {
                 const fireSpy = jest.spyOn(defaultDispatcher, "fire");
-                vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+                vm = new RoomListHeaderViewModel({
+                    matrixClient,
+                    spaceStore: sdkContext.spaceStore,
+                    roomListStore: sdkContext.roomListStore,
+                });
 
                 vm.collapseOrExpandSections();
 
@@ -355,7 +454,11 @@ describe("RoomListHeaderViewModel", () => {
 
             it("should dispatch RoomListExpandAllSections when collapseSections is 'expand'", () => {
                 const fireSpy = jest.spyOn(defaultDispatcher, "fire");
-                vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+                vm = new RoomListHeaderViewModel({
+                    matrixClient,
+                    spaceStore: sdkContext.spaceStore,
+                    roomListStore: sdkContext.roomListStore,
+                });
 
                 // Drive the VM into the "expand" state by simulating all sections collapsed
                 defaultDispatcher.dispatch(
@@ -374,7 +477,11 @@ describe("RoomListHeaderViewModel", () => {
 
         describe("RoomListSectionsCollapseStateChanged handling", () => {
             it("should set collapseSections to 'expand' when collapseSections is collapse", () => {
-                vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+                vm = new RoomListHeaderViewModel({
+                    matrixClient,
+                    spaceStore: sdkContext.spaceStore,
+                    roomListStore: sdkContext.roomListStore,
+                });
 
                 defaultDispatcher.dispatch(
                     {
@@ -388,7 +495,11 @@ describe("RoomListHeaderViewModel", () => {
             });
 
             it("should set collapseSections to 'collapse' when collapseSections is expand", () => {
-                vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+                vm = new RoomListHeaderViewModel({
+                    matrixClient,
+                    spaceStore: sdkContext.spaceStore,
+                    roomListStore: sdkContext.roomListStore,
+                });
 
                 defaultDispatcher.dispatch(
                     {
@@ -402,7 +513,11 @@ describe("RoomListHeaderViewModel", () => {
             });
 
             it("should set collapseSections to undefined when collapseSections is undefined", () => {
-                vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+                vm = new RoomListHeaderViewModel({
+                    matrixClient,
+                    spaceStore: sdkContext.spaceStore,
+                    roomListStore: sdkContext.roomListStore,
+                });
 
                 // First drive it into a non-undefined state
                 defaultDispatcher.dispatch(
@@ -433,7 +548,11 @@ describe("RoomListHeaderViewModel", () => {
             });
             const setValueSpy = jest.spyOn(SettingsStore, "setValue").mockImplementation(jest.fn());
 
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+            vm = new RoomListHeaderViewModel({
+                matrixClient,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            });
             expect(vm.getSnapshot().isMessagePreviewEnabled).toBe(true);
 
             vm.toggleMessagePreview();
@@ -443,7 +562,11 @@ describe("RoomListHeaderViewModel", () => {
         });
 
         it("should call nextReleaseAnnouncement and set displaySectionReleaseAnnouncement to false when closeSectionReleaseAnnouncement is called", () => {
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+            vm = new RoomListHeaderViewModel({
+                matrixClient,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            });
 
             vm.closeSectionReleaseAnnouncement();
 

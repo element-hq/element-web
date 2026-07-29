@@ -11,11 +11,10 @@ import { mocked } from "jest-mock";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import type { RoomNotificationState } from "../../../../src/stores/notifications/RoomNotificationState";
-import {
+import RoomListStoreV3, {
     LISTS_UPDATE_EVENT,
     ROOM_TAGGED_EVENT,
     SECTION_CREATED_EVENT,
-    RoomListStoreV3Class,
     type Section,
 } from "../../../../src/stores/room-list-v3/RoomListStoreV3";
 import * as sectionModule from "../../../../src/stores/room-list-v3/section";
@@ -38,6 +37,7 @@ import { Action } from "../../../../src/dispatcher/actions";
 import { SettingLevel } from "../../../../src/settings/SettingLevel.ts";
 import { CHATS_TAG } from "../../../../src/stores/room-list-v3/section";
 import { SDKContextClass } from "../../../../src/contexts/SDKContextClass.ts";
+import { TestSDKContext } from "../../TestSDKContext.ts";
 
 describe("RoomListStoreV3", () => {
     async function getRoomListStore() {
@@ -45,7 +45,7 @@ describe("RoomListStoreV3", () => {
         const rooms = getMockedRooms(client);
         client.getVisibleRooms = jest.fn().mockReturnValue(rooms);
         jest.spyOn(AsyncStoreWithClient.prototype, "matrixClient", "get").mockReturnValue(client);
-        const store = new RoomListStoreV3Class(dispatcher);
+        const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
         await store.start();
         return { client, rooms, store, dispatcher };
     }
@@ -489,7 +489,7 @@ describe("RoomListStoreV3", () => {
                 const { client, rooms } = getClientAndRooms();
                 const infoSpy = jest.spyOn(logger, "info");
 
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
                 await store.start();
 
                 // Create a space and let the store know about it
@@ -523,7 +523,7 @@ describe("RoomListStoreV3", () => {
                     return false;
                 });
 
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
                 await store.start();
                 const fn = jest.fn();
                 store.on(LISTS_UPDATE_EVENT, fn);
@@ -565,7 +565,7 @@ describe("RoomListStoreV3", () => {
                 });
 
                 setupMocks(spaceRoom, roomIds);
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
                 await store.start();
 
                 // Sorted, filtered rooms should be 8, 27 and 75
@@ -589,7 +589,7 @@ describe("RoomListStoreV3", () => {
                 });
 
                 setupMocks(spaceRoom, roomIds);
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
                 await store.start();
 
                 // Let's say 27 got unfavourited
@@ -629,7 +629,7 @@ describe("RoomListStoreV3", () => {
                 });
 
                 setupMocks(spaceRoom, roomIds);
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
                 await store.start();
 
                 // Should only give us rooms at index 8 and 27
@@ -648,7 +648,7 @@ describe("RoomListStoreV3", () => {
                 const { spaceRoom, roomIds } = createSpace(rooms, [6, 8, 13, 27, 75], client);
 
                 setupMocks(spaceRoom, roomIds);
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
                 await store.start();
 
                 // Since there's no unread yet, we expect zero results
@@ -688,7 +688,7 @@ describe("RoomListStoreV3", () => {
                 }) as () => DMRoomMap);
 
                 setupMocks(spaceRoom, roomIds);
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
                 await store.start();
 
                 // Should only give us rooms at index 8 and 27
@@ -724,7 +724,7 @@ describe("RoomListStoreV3", () => {
                 // Let's choose 5 rooms to put in space
                 const { spaceRoom, roomIds } = createSpace(rooms, [6, 8, 100, 101, 102, 103, 104], client);
                 setupMocks(spaceRoom, roomIds);
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
                 await store.start();
 
                 const result = store
@@ -750,7 +750,7 @@ describe("RoomListStoreV3", () => {
                 });
 
                 setupMocks(spaceRoom, roomIds);
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
                 await store.start();
 
                 // Should only give us rooms at index 8 and 27
@@ -774,7 +774,7 @@ describe("RoomListStoreV3", () => {
                 });
 
                 setupMocks(spaceRoom, roomIds);
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
                 await store.start();
 
                 // Sorted, filtered rooms should be 8, 27 and 75
@@ -804,7 +804,7 @@ describe("RoomListStoreV3", () => {
                 });
 
                 setupMocks(spaceRoom, roomIds);
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
                 await store.start();
 
                 // Should give us only room at 8 since that's the only room which matches both filters
@@ -856,7 +856,7 @@ describe("RoomListStoreV3", () => {
                 // Tag rooms 8 and 27 as server notice rooms
                 [8, 27].forEach((i) => (rooms[i].tags[DefaultTagID.ServerNotice] = {}));
 
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
                 await store.start();
 
                 const result = store.getServerNoticeRooms();
@@ -868,7 +868,7 @@ describe("RoomListStoreV3", () => {
 
             it("returns an empty array when there are no server notice rooms", async () => {
                 getClientAndRooms();
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
                 await store.start();
                 expect(store.getServerNoticeRooms()).toEqual([]);
             });
@@ -884,7 +884,7 @@ describe("RoomListStoreV3", () => {
 
                 // Activate the space
                 setupMocks(spaceRoom, roomIds);
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
                 await store.start();
 
                 // Only the server notice room within the active space is returned
@@ -905,7 +905,7 @@ describe("RoomListStoreV3", () => {
                     };
                 }) as () => DMRoomMap);
 
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
                 await store.start();
 
                 const result = store.getDmRooms();
@@ -918,7 +918,7 @@ describe("RoomListStoreV3", () => {
             it("returns an empty array when there are no DM rooms", async () => {
                 // The top-level beforeEach mocks the DM map to match no rooms.
                 getClientAndRooms();
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
                 await store.start();
                 expect(store.getDmRooms()).toEqual([]);
             });
@@ -938,7 +938,7 @@ describe("RoomListStoreV3", () => {
 
                 // Activate the space
                 setupMocks(spaceRoom, roomIds);
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
                 await store.start();
 
                 // Only the DM room within the active space is returned
@@ -974,7 +974,7 @@ describe("RoomListStoreV3", () => {
             enableSections();
             getClientAndRooms();
 
-            const store = new RoomListStoreV3Class(dispatcher);
+            const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
             await store.start();
 
             const result = store.getSortedRoomsInActiveSpace();
@@ -1001,7 +1001,7 @@ describe("RoomListStoreV3", () => {
                 rooms[3].tags[DefaultTagID.Favourite] = {};
                 rooms[7].tags[DefaultTagID.LowPriority] = {};
 
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
                 await store.start();
 
                 const { sections } = store.getSortedRoomsInActiveSpace();
@@ -1022,7 +1022,7 @@ describe("RoomListStoreV3", () => {
                 return "watcher-id";
             });
 
-            const store = new RoomListStoreV3Class(dispatcher);
+            const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
             await store.start();
 
             const listsUpdateListener = jest.fn();
@@ -1045,7 +1045,7 @@ describe("RoomListStoreV3", () => {
                 rooms[i].tags[tag] = {};
             });
 
-            const store = new RoomListStoreV3Class(dispatcher);
+            const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
             await store.start();
 
             const { sections } = store.getSortedRoomsInActiveSpace();
@@ -1066,7 +1066,7 @@ describe("RoomListStoreV3", () => {
             rooms[0].tags[DefaultTagID.Favourite] = {};
             rooms[1].tags[DefaultTagID.LowPriority] = {};
 
-            const store = new RoomListStoreV3Class(dispatcher);
+            const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
             await store.start();
 
             const { sections } = store.getSortedRoomsInActiveSpace();
@@ -1091,7 +1091,7 @@ describe("RoomListStoreV3", () => {
                 rooms[i].tags[DefaultTagID.LowPriority] = {};
             });
 
-            const store = new RoomListStoreV3Class(dispatcher);
+            const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
             await store.start();
 
             const { sections } = store.getSortedRoomsInActiveSpace();
@@ -1115,7 +1115,7 @@ describe("RoomListStoreV3", () => {
                 return state;
             });
 
-            const store = new RoomListStoreV3Class(dispatcher);
+            const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
             await store.start();
 
             const { sections } = store.getSortedRoomsInActiveSpace([FilterEnum.UnreadFilter]);
@@ -1139,7 +1139,7 @@ describe("RoomListStoreV3", () => {
                 return state;
             });
 
-            const store = new RoomListStoreV3Class(dispatcher);
+            const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
             await store.start();
 
             // With the unread filter, only the Favourite section has matching rooms.
@@ -1155,7 +1155,7 @@ describe("RoomListStoreV3", () => {
             getClientAndRooms();
 
             // No rooms are tagged, so Favourite and LowPriority sections will be empty
-            const store = new RoomListStoreV3Class(dispatcher);
+            const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
             await store.start();
 
             const { sections } = store.getSortedRoomsInActiveSpace();
@@ -1180,7 +1180,7 @@ describe("RoomListStoreV3", () => {
             });
             jest.spyOn(SDKContextClass.instance.spaceStore, "activeSpace", "get").mockImplementation(() => spaceRoomId);
 
-            const store = new RoomListStoreV3Class(dispatcher);
+            const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
             await store.start();
 
             const { sections, spaceId } = store.getSortedRoomsInActiveSpace();
@@ -1207,7 +1207,7 @@ describe("RoomListStoreV3", () => {
                 getClientAndRooms();
                 jest.spyOn(sectionModule, "createSection").mockResolvedValue("element.io.section.test-tag");
 
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
                 await store.start();
 
                 const sectionCreatedListener = jest.fn();
@@ -1224,7 +1224,7 @@ describe("RoomListStoreV3", () => {
                 getClientAndRooms();
                 jest.spyOn(sectionModule, "createSection").mockResolvedValue(undefined);
 
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
                 await store.start();
 
                 const sectionCreatedListener = jest.fn();
@@ -1242,7 +1242,7 @@ describe("RoomListStoreV3", () => {
                 getClientAndRooms();
                 const editSectionSpy = jest.spyOn(sectionModule, "editSection").mockResolvedValue(undefined);
 
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
                 await store.start();
 
                 await store.editSection("element.io.section.test-tag");
@@ -1256,7 +1256,7 @@ describe("RoomListStoreV3", () => {
                 getClientAndRooms();
                 jest.spyOn(sectionModule, "deleteSection").mockResolvedValue(undefined);
 
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
                 await store.start();
 
                 const listsUpdateListener = jest.fn();
@@ -1287,7 +1287,7 @@ describe("RoomListStoreV3", () => {
                 return false;
             });
 
-            const store = new RoomListStoreV3Class(dispatcher);
+            const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
             await store.start();
 
             // Initial state: 3 sections (Favourite, Chats, LowPriority)
@@ -1330,7 +1330,7 @@ describe("RoomListStoreV3", () => {
 
             client.getVisibleRooms = jest.fn().mockReturnValue(rooms);
             jest.spyOn(AsyncStoreWithClient.prototype, "matrixClient", "get").mockReturnValue(client);
-            const store = new RoomListStoreV3Class(dispatcher);
+            const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
             await store.start();
             return { client, rooms, mutedIndices, mutedRooms, store, dispatcher };
         }
@@ -1416,7 +1416,7 @@ describe("RoomListStoreV3", () => {
 
             client.getVisibleRooms = jest.fn().mockReturnValue(rooms);
             jest.spyOn(AsyncStoreWithClient.prototype, "matrixClient", "get").mockReturnValue(client);
-            const store = new RoomListStoreV3Class(dispatcher);
+            const store = new RoomListStoreV3(dispatcher, new TestSDKContext());
             await store.start();
 
             // We expect the following order: Low Priority -> Low Priority & Muted -> Muted

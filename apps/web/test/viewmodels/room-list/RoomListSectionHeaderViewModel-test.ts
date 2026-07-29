@@ -16,9 +16,9 @@ import { CallStore } from "../../../src/stores/CallStore";
 import { type Call } from "../../../src/models/Call";
 import { createTestClient, mkRoom } from "../../test-utils";
 import SettingsStore from "../../../src/settings/SettingsStore";
-import RoomListStoreV3 from "../../../src/stores/room-list-v3/RoomListStoreV3";
 import { DefaultTagID } from "../../../src/stores/room-list-v3/skip-list/tag";
 import { CHATS_TAG } from "../../../src/stores/room-list-v3/section";
+import { SDKContextClass } from "../../../src/contexts/SDKContextClass.ts";
 
 describe("RoomListSectionHeaderViewModel", () => {
     let onToggleExpanded: jest.Mock;
@@ -45,6 +45,7 @@ describe("RoomListSectionHeaderViewModel", () => {
             title: "Favourites",
             spaceId: "!space:server",
             onToggleExpanded,
+            roomListStore: SDKContextClass.instance.roomListStore,
         });
 
         const snapshot = vm.getSnapshot();
@@ -59,6 +60,7 @@ describe("RoomListSectionHeaderViewModel", () => {
             title: "Favourites",
             spaceId: "!space:server",
             onToggleExpanded,
+            roomListStore: SDKContextClass.instance.roomListStore,
         });
         expect(vm.isExpanded).toBe(true);
 
@@ -79,6 +81,7 @@ describe("RoomListSectionHeaderViewModel", () => {
             title: "Favourites",
             spaceId: "!space:server",
             onToggleExpanded,
+            roomListStore: SDKContextClass.instance.roomListStore,
         });
 
         // Default space: collapse
@@ -112,6 +115,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                 title: "Section",
                 spaceId: "!space:server",
                 onToggleExpanded,
+                roomListStore: SDKContextClass.instance.roomListStore,
             });
             expect(vm.getSnapshot().displaySectionMenu).toBe(expected);
         });
@@ -129,6 +133,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                 title: "Section",
                 spaceId: "!space:server",
                 onToggleExpanded,
+                roomListStore: SDKContextClass.instance.roomListStore,
             });
             expect(vm.getSnapshot().canBeReordered).toBe(expected);
         });
@@ -151,6 +156,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                 title: "Old Title",
                 spaceId: "!space:server",
                 onToggleExpanded,
+                roomListStore: SDKContextClass.instance.roomListStore,
             });
             expect(vm.getSnapshot().title).toBe("Old Title");
 
@@ -167,6 +173,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                 title: "My Section",
                 spaceId: "!space:server",
                 onToggleExpanded,
+                roomListStore: SDKContextClass.instance.roomListStore,
             });
 
             jest.spyOn(SettingsStore, "getValue").mockReturnValue({});
@@ -181,6 +188,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                 title: "Favourites",
                 spaceId: "!space:server",
                 onToggleExpanded,
+                roomListStore: SDKContextClass.instance.roomListStore,
             });
 
             watchCallback();
@@ -191,13 +199,16 @@ describe("RoomListSectionHeaderViewModel", () => {
 
     describe("editSection", () => {
         it("should delegate to RoomListStoreV3.instance.editSection", async () => {
-            const editSectionSpy = jest.spyOn(RoomListStoreV3.instance, "editSection").mockResolvedValue(undefined);
+            const editSectionSpy = jest
+                .spyOn(SDKContextClass.instance.roomListStore, "editSection")
+                .mockResolvedValue(undefined);
             const tag = "element.io.section.custom";
             const vm = new RoomListSectionHeaderViewModel({
                 tag,
                 title: "Section",
                 spaceId: "!space:server",
                 onToggleExpanded,
+                roomListStore: SDKContextClass.instance.roomListStore,
             });
 
             await vm.editSection();
@@ -216,13 +227,16 @@ describe("RoomListSectionHeaderViewModel", () => {
         });
 
         it("should delegate to RoomListStoreV3.instance.removeSection with isEmpty=true when no rooms", async () => {
-            const removeSectionSpy = jest.spyOn(RoomListStoreV3.instance, "removeSection").mockResolvedValue(undefined);
+            const removeSectionSpy = jest
+                .spyOn(SDKContextClass.instance.roomListStore, "removeSection")
+                .mockResolvedValue(undefined);
             const tag = "element.io.section.custom";
             const vm = new RoomListSectionHeaderViewModel({
                 tag,
                 title: "Section",
                 spaceId: "!space:server",
                 onToggleExpanded,
+                roomListStore: SDKContextClass.instance.roomListStore,
             });
 
             await vm.removeSection();
@@ -230,13 +244,16 @@ describe("RoomListSectionHeaderViewModel", () => {
         });
 
         it("should delegate to RoomListStoreV3.instance.removeSection with isEmpty=false when rooms exist", async () => {
-            const removeSectionSpy = jest.spyOn(RoomListStoreV3.instance, "removeSection").mockResolvedValue(undefined);
+            const removeSectionSpy = jest
+                .spyOn(SDKContextClass.instance.roomListStore, "removeSection")
+                .mockResolvedValue(undefined);
             const tag = "element.io.section.custom";
             const vm = new RoomListSectionHeaderViewModel({
                 tag,
                 title: "Section",
                 spaceId: "!space:server",
                 onToggleExpanded,
+                roomListStore: SDKContextClass.instance.roomListStore,
             });
             vm.setRooms([mkRoom(matrixClient, "!room:server")]);
 
@@ -266,6 +283,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                 title: "Favourites",
                 spaceId: "!space:server",
                 onToggleExpanded,
+                roomListStore: SDKContextClass.instance.roomListStore,
             });
             vm.setRooms([room]);
 
@@ -280,6 +298,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                 title: "Favourites",
                 spaceId: "!space:server",
                 onToggleExpanded,
+                roomListStore: SDKContextClass.instance.roomListStore,
             });
             vm.setRooms([room]);
 
@@ -303,6 +322,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                 title: "Favourites",
                 spaceId: "!space:server",
                 onToggleExpanded,
+                roomListStore: SDKContextClass.instance.roomListStore,
             });
             vm.setRooms([room]);
 
@@ -324,6 +344,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                 title: "Favourites",
                 spaceId: "!space:server",
                 onToggleExpanded,
+                roomListStore: SDKContextClass.instance.roomListStore,
             });
             vm.setRooms([room]);
 
@@ -343,6 +364,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                     title: "Favourites",
                     spaceId: "!space:server",
                     onToggleExpanded,
+                    roomListStore: SDKContextClass.instance.roomListStore,
                 });
                 vm.setRooms([room]);
 
@@ -367,6 +389,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                     title: "Favourites",
                     spaceId: "!space:server",
                     onToggleExpanded,
+                    roomListStore: SDKContextClass.instance.roomListStore,
                 });
                 vm.setRooms([room]);
 
@@ -401,6 +424,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                     title: "Favourites",
                     spaceId: "!space:server",
                     onToggleExpanded,
+                    roomListStore: SDKContextClass.instance.roomListStore,
                 });
                 vm.setRooms([room, room2]);
 
@@ -424,6 +448,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                     title: "Favourites",
                     spaceId: "!space:server",
                     onToggleExpanded,
+                    roomListStore: SDKContextClass.instance.roomListStore,
                 });
                 vm.setRooms([room]);
 
@@ -443,6 +468,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                     title: "Favourites",
                     spaceId: "!space:server",
                     onToggleExpanded,
+                    roomListStore: SDKContextClass.instance.roomListStore,
                 });
                 vm.setRooms([room]);
 
@@ -483,6 +509,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                     title: "Favourites",
                     spaceId: "!space:server",
                     onToggleExpanded,
+                    roomListStore: SDKContextClass.instance.roomListStore,
                 });
                 vm.setRooms([room, room2]);
 
@@ -508,6 +535,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                     title: "Favourites",
                     spaceId: "!space:server",
                     onToggleExpanded,
+                    roomListStore: SDKContextClass.instance.roomListStore,
                 });
                 vm.setRooms([room]);
 
@@ -526,6 +554,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                     title: "Favourites",
                     spaceId: "!space:server",
                     onToggleExpanded,
+                    roomListStore: SDKContextClass.instance.roomListStore,
                 });
                 vm.setRooms([room]);
 
@@ -547,6 +576,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                     title: "Favourites",
                     spaceId: "!space:server",
                     onToggleExpanded,
+                    roomListStore: SDKContextClass.instance.roomListStore,
                 });
                 vm.setRooms([room]);
 
@@ -568,6 +598,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                 title: "Favourites",
                 spaceId: "!space:server",
                 onToggleExpanded,
+                roomListStore: SDKContextClass.instance.roomListStore,
             });
             vm.setRooms([room]);
 

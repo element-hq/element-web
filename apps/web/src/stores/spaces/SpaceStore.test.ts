@@ -39,7 +39,6 @@ import SettingsStore from "../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../settings/SettingLevel";
 import { Action } from "../../dispatcher/actions";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import RoomListStoreV3 from "../room-list-v3/RoomListStoreV3";
 import { DefaultTagID } from "../room-list-v3/skip-list/tag";
 import { RoomNotificationStateStore } from "../notifications/RoomNotificationStateStore";
 import { NotificationLevel } from "../notifications/NotificationLevel";
@@ -1459,7 +1458,7 @@ describe("SpaceStore", () => {
             const state = RoomNotificationStateStore.instance.getRoomState(room);
             // @ts-ignore
             state._level = NotificationLevel.Notification;
-            vi.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+            vi.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                 spaceId: MetaSpace.Home,
                 sections: [{ tag: DefaultTagID.Untagged, rooms: [room] }],
             });

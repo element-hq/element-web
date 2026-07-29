@@ -14,7 +14,6 @@ import type { ActionPayload } from "../../dispatcher/payloads";
 import type { Filter, FilterKey } from "./skip-list/filters";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import SettingsStore from "../../settings/SettingsStore";
-import defaultDispatcher from "../../dispatcher/dispatcher";
 import { RecencySorter } from "./skip-list/sorters/RecencySorter";
 import { AlphabeticSorter } from "./skip-list/sorters/AlphabeticSorter";
 import { readReceiptChangeIsFor } from "../../utils/read-receipts";
@@ -48,7 +47,7 @@ import {
     reorderSection,
 } from "./section";
 import { DefaultTagID, type TagID } from "./skip-list/tag";
-import { SDKContextClass } from "../../contexts/SDKContextClass.ts";
+import { type SDKContextClass } from "../../contexts/SDKContextClass.ts";
 
 /**
  * These are the filters passed to the room skip list.
@@ -104,7 +103,7 @@ export const ROOM_TAGGED_EVENT = RoomListStoreV3Event.RoomTagged;
  * This is the third such implementation hence the "V3".
  * This store is being actively developed so expect the methods to change in future.
  */
-export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
+export default class RoomListStoreV3 extends AsyncStoreWithClient<EmptyObject> {
     /**
      * Contains all the rooms in the active space
      */
@@ -128,13 +127,16 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      */
     private pendingEmit = false;
 
-    public constructor(dispatcher: MatrixDispatcher) {
+    public constructor(
+        dispatcher: MatrixDispatcher,
+        private readonly sdkContext: SDKContextClass,
+    ) {
         super(dispatcher);
         this.msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
-        SDKContextClass.instance.spaceStore.on(UPDATE_SELECTED_SPACE, () => {
+        this.sdkContext.spaceStore.on(UPDATE_SELECTED_SPACE, () => {
             this.onActiveSpaceChanged();
         });
-        SDKContextClass.instance.spaceStore.on(UPDATE_HOME_BEHAVIOUR, () => this.onActiveSpaceChanged());
+        this.sdkContext.spaceStore.on(UPDATE_HOME_BEHAVIOUR, () => this.onActiveSpaceChanged());
         SettingsStore.watchSetting("RoomList.OrderedCustomSections", null, () => this.onOrderedCustomSectionsChange());
         this.loadCustomSections();
 
@@ -173,7 +175,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      * @param filterKeys Optional array of filters that the rooms must match against.
      */
     public getSortedRoomsInActiveSpace(filterKeys?: FilterKey[]): RoomsResult {
-        const spaceId = SDKContextClass.instance.spaceStore.activeSpace;
+        const spaceId = this.sdkContext.spaceStore.activeSpace;
         const areSectionsEnabled = SettingsStore.getValue("RoomList.showSections");
 
         const sections = areSectionsEnabled
@@ -238,7 +240,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
 
         this.roomSkipList = new RoomSkipList(sorter, this.getSkipListFilters());
 
-        await SDKContextClass.instance.spaceStore.storeReadyPromise;
+        await this.sdkContext.spaceStore.storeReadyPromise;
         const rooms = this.getRooms();
         this.roomSkipList.seed(rooms);
         this.emit(LISTS_LOADED_EVENT);
@@ -530,7 +532,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      * Emits {@link SECTION_CREATED_EVENT} if the section was successfully created.
      */
     public async createSection(): Promise<string | undefined> {
-        const tag = await createSection(SDKContextClass.instance.spaceStore.activeSpace);
+        const tag = await createSection(this.sdkContext.spaceStore.activeSpace);
         if (!tag) return;
         this.emit(SECTION_CREATED_EVENT, tag);
         return tag;
@@ -581,20 +583,3 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         this.sortedTags = [DefaultTagID.Favourite, ...reorderable, DefaultTagID.LowPriority];
     }
 }
-
-// oxlint-disable-next-line typescript/no-extraneous-class
-export default class RoomListStoreV3 {
-    private static internalInstance: RoomListStoreV3Class;
-
-    public static get instance(): RoomListStoreV3Class {
-        if (!RoomListStoreV3.internalInstance) {
-            const instance = new RoomListStoreV3Class(defaultDispatcher);
-            instance.start();
-            RoomListStoreV3.internalInstance = instance;
-        }
-
-        return this.internalInstance;
-    }
-}
-
-window.getRoomListStoreV3 = () => RoomListStoreV3.instance;

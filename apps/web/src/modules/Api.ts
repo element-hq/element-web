@@ -36,6 +36,7 @@ import { CustomisationsApi } from "./customisationsApi.ts";
 import { ComposerApi } from "./ComposerApi.ts";
 import { SettingsApi } from "./SettingsApi.ts";
 import defaultDispatcher from "../dispatcher/dispatcher.ts";
+import { SDKContextClass } from "../contexts/SDKContextClass.ts";
 
 const legacyCustomisationsFactory = <T extends object>(baseCustomisations: T) => {
     let used = false;
@@ -95,7 +96,7 @@ export class ModuleApi implements Api {
     public readonly widget = new WidgetApi();
     public readonly rootNode = document.getElementById("matrixchat")!;
     public readonly client = new ClientApi();
-    public readonly stores = new StoresApi();
+    public readonly stores = new StoresApi(SDKContextClass.instance);
     public readonly composer = new ComposerApi(defaultDispatcher);
     public readonly settings = new SettingsApi();
 

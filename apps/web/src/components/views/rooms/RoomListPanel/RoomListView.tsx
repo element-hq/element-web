@@ -33,6 +33,7 @@ export function RoomListView(): JSX.Element {
                 client: sdkContext.client!,
                 roomViewStore: sdkContext.roomViewStore,
                 spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
             }),
     );
 

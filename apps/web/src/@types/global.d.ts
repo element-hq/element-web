@@ -36,7 +36,6 @@ import { type DeepReadonly } from "./common";
 import type MatrixChat from "../components/structures/MatrixChat";
 import { type InitialCryptoSetupStore } from "../stores/InitialCryptoSetupStore";
 import { type ModuleApiType } from "../modules/Api.ts";
-import type { RoomListStoreV3Class } from "../stores/room-list-v3/RoomListStoreV3.ts";
 import { type SDKContextClass } from "../contexts/SDKContextClass.ts";
 
 type ElectronChannel =
@@ -86,7 +85,6 @@ declare global {
         mxToastStore: ToastStore;
         mxDeviceListener: DeviceListener;
         mxCallStatusListener: CallStatusListener;
-        getRoomListStoreV3: () => RoomListStoreV3Class;
         mxPlatformPeg: PlatformPeg;
         mxIntegrationManagers: typeof IntegrationManagers;
         singletonModalManager: ModalManager;

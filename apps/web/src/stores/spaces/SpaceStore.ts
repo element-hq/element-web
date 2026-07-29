@@ -24,7 +24,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import { type MatrixDispatcher } from "../../dispatcher/dispatcher.ts";
-import RoomListStoreV3 from "../room-list-v3/RoomListStoreV3";
 import SettingsStore from "../../settings/SettingsStore";
 import DMRoomMap from "../../utils/DMRoomMap";
 import { SpaceNotificationState } from "../notifications/SpaceNotificationState";
@@ -198,7 +197,7 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
         let roomId: string | undefined;
         if (space === MetaSpace.Home && this.allRoomsInHome) {
             const hasMentions = RoomNotificationStateStore.instance.globalState.hasMentions;
-            const rooms = RoomListStoreV3.instance.getSortedRoomsInActiveSpace().sections.flatMap((s) => s.rooms);
+            const rooms = this.sdkContext.roomListStore.getSortedRoomsInActiveSpace().sections.flatMap((s) => s.rooms);
             for (const room of rooms) {
                 const state = RoomNotificationStateStore.instance.getRoomState(room);
                 if (hasMentions ? state.hasMentions : state.isUnread) {
