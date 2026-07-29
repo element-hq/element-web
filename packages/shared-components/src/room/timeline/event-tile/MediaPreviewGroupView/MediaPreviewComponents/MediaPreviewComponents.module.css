@@ -79,10 +79,20 @@
 }
 
 .largeImage {
+    button {
+        background: none;
+        border: none;
+        width: 100%;
+        padding: 0;
+    }
+
     img {
         width: 100%;
         object-fit: cover;
-        max-height: 150px;
         display: block;
     }
+}
+
+.largeImage.bannerImage img {
+    max-height: 100px;
 }
