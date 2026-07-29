@@ -12,11 +12,13 @@ import classNames from "classnames";
 
 import { _t } from "../i18n/i18n";
 import { RovingAction, type RovingTabIndexProviderProps } from "../roving";
-import { type CategoryKey, type ICategory } from "./EmojiPicker";
+import { type CategoryKey, type Category } from "./EmojiPicker";
 import styles from "./EmojiPicker.module.css";
 
 interface IProps {
-    categories: ICategory[];
+    categories: Category[];
+    enabledCategories: CategoryKey[];
+    selectedCategory: CategoryKey;
     onAnchorClick(id: CategoryKey): void;
     /**
      * Optional action resolver used to map keyboard events to
@@ -51,14 +53,14 @@ class Tabs extends React.PureComponent<IProps> {
         const cats = [...this.props.categories, ...this.props.categories, ...this.props.categories];
 
         while (index < cats.length && index >= 0) {
-            if (cats[index].enabled) return index % this.props.categories.length;
+            if (this.props.enabledCategories.includes(cats[index].id)) return index % this.props.categories.length;
             index += delta > 0 ? 1 : -1;
         }
     }
 
     private changeCategoryRelative(delta: number): void {
-        // Move to the next/previous category using the first visible as the current.
-        const current = this.props.categories.findIndex((c) => c.visible);
+        // Move to the next/previous category using the selected as the current.
+        const current = this.props.categories.findIndex((c) => c.id === this.props.selectedCategory);
         this.changeCategoryAbsolute(current + delta, delta);
     }
 
@@ -66,7 +68,7 @@ class Tabs extends React.PureComponent<IProps> {
         const category = this.props.categories[this.findNearestEnabled(index, delta)!];
         if (category) {
             this.props.onAnchorClick(category.id);
-            category.ref.current?.focus();
+            //category.ref.current?.focus();
         }
     }
 
@@ -110,20 +112,20 @@ class Tabs extends React.PureComponent<IProps> {
             >
                 {this.props.categories.map((category) => {
                     const classes = classNames(styles.anchor, {
-                        [styles.anchorVisible]: category.visible,
+                        [styles.anchorSelected]: category.id === this.props.selectedCategory,
                     });
                     // Properties of this button are also modified by EmojiPicker's updateVisibility in DOM.
                     return (
                         <button
-                            disabled={!category.enabled}
+                            disabled={!this.props.enabledCategories.includes(category.id)}
                             key={category.id}
-                            ref={category.ref}
+                            //ref={category.ref}
                             className={classes}
                             onClick={() => this.props.onAnchorClick(category.id)}
-                            title={category.name}
+                            title={_t(category.untranslatedName)}
                             role="tab"
-                            tabIndex={category.firstVisible ? 0 : -1} // roving
-                            aria-selected={category.visible}
+                            tabIndex={category.id === this.props.selectedCategory ? 0 : -1} // roving
+                            aria-selected={category.id === this.props.selectedCategory}
                             aria-controls={`mx_EmojiPicker_category_${category.id}`}
                         >
                             {category.emoji}

@@ -7,13 +7,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type Dispatch, type RefObject, useCallback, useMemo, useRef, useState } from "react";
+import React, { type Dispatch, useCallback, useMemo, useRef, useState } from "react";
 import { DATA_BY_CATEGORY, getEmojiFromUnicode, type Emoji as IEmoji } from "@matrix-org/emojibase-bindings";
-import { Virtuoso, type Components, type VirtuosoHandle } from "react-virtuoso";
+import { type ListRange, Virtuoso, type Components, type VirtuosoHandle } from "react-virtuoso";
 import { Heading } from "@vector-im/compound-web";
 import classNames from "classnames";
 
-import { _t } from "../i18n/i18n";
+import { _t, _td } from "../i18n/i18n";
 import { AutoHideScrollbar } from "../utils/Scrollbar";
 import {
     type IAction as RovingAction,
@@ -33,19 +33,25 @@ import styles from "./EmojiPicker.module.css";
 
 const ZERO_WIDTH_JOINER = "\u200D";
 
+const CATEGORY_CONFIG: Category[] = [
+    { id: "recent", untranslatedName: _td("emoji|category_frequently_used"), emoji: "🕒" },
+    { id: "people", untranslatedName: _td("emoji|category_smileys_people"), emoji: "😀" },
+    { id: "nature", untranslatedName: _td("emoji|category_animals_nature"), emoji: "🐕" },
+    { id: "foods", untranslatedName: _td("emoji|category_food_drink"), emoji: "🍎" },
+    { id: "activity", untranslatedName: _td("emoji|category_activities"), emoji: "⚽️" },
+    { id: "places", untranslatedName: _td("emoji|category_travel_places"), emoji: "🚗" },
+    { id: "objects", untranslatedName: _td("emoji|category_objects"), emoji: "💡" },
+    { id: "symbols", untranslatedName: _td("emoji|category_symbols"), emoji: "⁉️" },
+    { id: "flags", untranslatedName: _td("emoji|category_flags"), emoji: "🏁" },
+];
+
 export type CategoryKey = keyof typeof DATA_BY_CATEGORY | "recent";
 
-export interface ICategory {
+export interface Category {
     id: CategoryKey;
-    name: string;
+    untranslatedName: TranslationKey;
     // Emoji to show in the header for this category
     emoji: string;
-    enabled: boolean;
-    // Whether the category is currently visible
-    visible: boolean;
-    // Whether the category is the first visible category
-    firstVisible: boolean;
-    ref: RefObject<HTMLButtonElement | null>;
 }
 
 /**
@@ -53,7 +59,7 @@ export interface ICategory {
  * emoji. Headers are interleaved with the rows so that they scroll inline with
  * the content rather than staying pinned to the top.
  */
-type ListItem = { type: "header"; category: ICategory } | { type: "row"; emojis: IEmoji[]; categoryId: CategoryKey };
+type ListItem = { type: "header"; category: Category } | { type: "row"; emojis: IEmoji[]; categoryId: CategoryKey };
 
 // Stable component identities so Virtuoso does not remount its internals on re-render.
 // The single Virtuoso renders a flat list that mixes category headers and emoji rows.
@@ -67,9 +73,7 @@ const GridItem: Components<ListItem>["Item"] = ({ item, ...props }) => {
     if (item.type === "header") {
         return <div {...props} />;
     }
-    // Tag rows with their category so updateVisibility can tell which category is in
-    // view even when the header itself has scrolled out of the viewport.
-    return <div {...props} role="row" className={styles.row} data-category-id={item.categoryId} />;
+    return <div {...props} role="row" className={styles.row} />;
 };
 
 const gridComponents = { List: GridList, Item: GridItem };
@@ -123,9 +127,9 @@ export interface EmojiPickerProps {
  * and kept stable across renders.
  */
 interface EmojiPickerData {
+    // A list of recently used emoji, shown as the first category
     recentlyUsed: IEmoji[];
     memoizedDataByCategory: Record<CategoryKey, IEmoji[]>;
-    categories: ICategory[];
 }
 
 export function createEmojiPickerData(recentEmojis: string[] | undefined): EmojiPickerData {
@@ -138,42 +142,7 @@ export function createEmojiPickerData(recentEmojis: string[] | undefined): Emoji
         ...DATA_BY_CATEGORY,
     };
 
-    const hasRecentlyUsed = recentlyUsed.length > 0;
-
-    const categoryConfig: Pick<ICategory, "id" | "name" | "emoji">[] = [
-        { id: "recent", name: _t("emoji|category_frequently_used"), emoji: "🕒" },
-        { id: "people", name: _t("emoji|category_smileys_people"), emoji: "😀" },
-        { id: "nature", name: _t("emoji|category_animals_nature"), emoji: "🐕" },
-        { id: "foods", name: _t("emoji|category_food_drink"), emoji: "🍎" },
-        { id: "activity", name: _t("emoji|category_activities"), emoji: "⚽️" },
-        { id: "places", name: _t("emoji|category_travel_places"), emoji: "🚗" },
-        { id: "objects", name: _t("emoji|category_objects"), emoji: "💡" },
-        { id: "symbols", name: _t("emoji|category_symbols"), emoji: "⁉️" },
-        { id: "flags", name: _t("emoji|category_flags"), emoji: "🏁" },
-    ];
-
-    const categories = categoryConfig.map((config) => {
-        let isEnabled = true;
-        let isVisible = false;
-        let firstVisible = false;
-        if (config.id === "recent") {
-            isEnabled = hasRecentlyUsed;
-            isVisible = hasRecentlyUsed;
-            firstVisible = hasRecentlyUsed;
-        } else if (config.id === "people") {
-            isVisible = true;
-            firstVisible = !hasRecentlyUsed;
-        }
-        return {
-            ...config,
-            enabled: isEnabled,
-            visible: isVisible,
-            firstVisible: firstVisible,
-            ref: React.createRef(),
-        } satisfies ICategory;
-    });
-
-    return { recentlyUsed, memoizedDataByCategory, categories };
+    return { recentlyUsed, memoizedDataByCategory };
 }
 
 function emojiMatchesFilter(emoji: IEmoji, filter: string): boolean {
@@ -250,59 +219,56 @@ export function EmojiPicker({
     if (dataRef.current === null) {
         dataRef.current = createEmojiPickerData(recentEmojis);
     }
-    const { recentlyUsed, memoizedDataByCategory, categories } = dataRef.current;
+    const { recentlyUsed, memoizedDataByCategory } = dataRef.current;
+
+    const [enabledCategories, setEnabledCategories] = useState(() => {
+        return CATEGORY_CONFIG.filter((c) => (recentlyUsed.length === 0 ? c.id !== "recent" : true)).map((c) => c.id);
+    });
+
+    const [selectedCategory, setSelectedCategory] = useState<CategoryKey>(
+        recentlyUsed.length > 0 ? "recent" : "people",
+    );
 
     const collectScrollElement = useCallback((ref: HTMLDivElement | null): void => {
         setScrollElement(ref);
     }, []);
 
-    const updateVisibility = useCallback((): void => {
-        const body = scrollElement;
-        if (!body) return;
-        const rect = body.getBoundingClientRect();
-        let firstVisibleFound = false;
-        for (const cat of categories) {
-            // A category is tagged on both its (inline) header and every one of its
-            // emoji rows, so it counts as visible if the header or any row intersects
-            // the viewport - including when the header has scrolled out of view.
-            const elems = body.querySelectorAll(`[data-category-id="${cat.id}"]`);
-            if (elems.length === 0) {
-                cat.visible = false;
-                cat.ref.current?.classList.remove(styles.anchorVisible);
-                continue;
-            }
-            cat.visible = Array.from(elems).some((elem) => {
-                const elemRect = elem.getBoundingClientRect();
-                const y = elemRect.y - rect.y;
-                const yEnd = elemRect.y + elemRect.height - rect.y;
-                return y < rect.height && yEnd > 0;
-            });
-            if (cat.visible && !firstVisibleFound) {
-                firstVisibleFound = true;
-                cat.firstVisible = true;
-            } else {
-                cat.firstVisible = false;
-            }
-            // We update this here instead of through React to avoid re-render on scroll.
-            if (!cat.ref.current) continue;
-            if (cat.visible) {
-                cat.ref.current.classList.add(styles.anchorVisible);
-                cat.ref.current.setAttribute("aria-selected", "true");
-            } else {
-                cat.ref.current.classList.remove(styles.anchorVisible);
-                cat.ref.current.setAttribute("aria-selected", "false");
-            }
-            if (cat.firstVisible) {
-                cat.ref.current.setAttribute("tabindex", "0");
-            } else {
-                cat.ref.current.setAttribute("tabindex", "-1");
+    // Flatten the (filtered) categories into a single list of headers and emoji rows
+    // that drive the Virtuoso. Only categories that currently have matching emoji are
+    // shown, and each category contributes one header followed by its rows. Recomputed
+    // only when the filter changes (the data is mutated in place under a stable object
+    // identity), so scrolling and hovering do not churn the list.
+    const items = useMemo<ListItem[]>(() => {
+        const flat: ListItem[] = [];
+        for (const cat of CATEGORY_CONFIG) {
+            const emojis = memoizedDataByCategory[cat.id];
+            if (emojis.length === 0) continue;
+            flat.push({ type: "header", category: cat });
+            for (let i = 0; i < emojis.length; i += EMOJIS_PER_ROW) {
+                flat.push({ type: "row", emojis: emojis.slice(i, i + EMOJIS_PER_ROW), categoryId: cat.id });
             }
         }
-    }, [scrollElement, categories]);
+        return flat;
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- memoizedDataByCategory is mutated in place; `filter` is the real trigger
+    }, [filter, memoizedDataByCategory]);
 
-    const onScroll = useCallback((): void => {
-        updateVisibility();
-    }, [updateVisibility]);
+    const onRangeChanged = useCallback(
+        (range: ListRange): void => {
+            // Collect the categories that own any item within the rendered range. Each
+            // flat-list entry knows its category (headers directly, rows via categoryId),
+            // so a category is visible whenever one of its entries is in range - including
+            // when its header itself has scrolled out of view.
+            const visibleCategoryIds = new Set<CategoryKey>();
+            for (let i = range.startIndex; i <= range.endIndex; i++) {
+                const item = items[i];
+                if (!item) continue;
+                visibleCategoryIds.add(item.type === "header" ? item.category.id : item.categoryId);
+            }
+
+            setSelectedCategory(CATEGORY_CONFIG.find((cat) => visibleCategoryIds.has(cat.id))?.id ?? "people");
+        },
+        [items],
+    );
 
     // Given a roving emoji button returns the role=gridcell element containing it
     const getGridcell = useCallback((rovingNode?: Element): Element | undefined => {
@@ -362,25 +328,6 @@ export function EmojiPicker({
         [getRow],
     );
 
-    // Flatten the (filtered) categories into a single list of headers and emoji rows
-    // that drive the Virtuoso. Only categories that currently have matching emoji are
-    // shown, and each category contributes one header followed by its rows. Recomputed
-    // only when the filter changes (the data is mutated in place under a stable object
-    // identity), so scrolling and hovering do not churn the list.
-    const items = useMemo<ListItem[]>(() => {
-        const flat: ListItem[] = [];
-        for (const cat of categories) {
-            const emojis = memoizedDataByCategory[cat.id];
-            if (emojis.length === 0) continue;
-            flat.push({ type: "header", category: cat });
-            for (let i = 0; i < emojis.length; i += EMOJIS_PER_ROW) {
-                flat.push({ type: "row", emojis: emojis.slice(i, i + EMOJIS_PER_ROW), categoryId: cat.id });
-            }
-        }
-        return flat;
-        // eslint-disable-next-line react-hooks/exhaustive-deps -- memoizedDataByCategory is mutated in place; `filter` is the real trigger
-    }, [filter, categories, memoizedDataByCategory]);
-
     const scrollToCategory = useCallback(
         (category: string): void => {
             // Find the flat index of the category's header and scroll it to the top.
@@ -404,7 +351,9 @@ export function EmojiPicker({
                 setShowHighlight(false);
             }
 
-            for (const cat of categories) {
+            const enabledCategories: CategoryKey[] = [];
+
+            for (const cat of CATEGORY_CONFIG) {
                 let emojis: IEmoji[];
                 // If the new filter string includes the old filter string, we don't have to re-filter the whole dataset.
                 if (lcFilter.includes(filter)) {
@@ -416,18 +365,17 @@ export function EmojiPicker({
                 emojis = filterEmojis(emojis, lcFilter);
 
                 memoizedDataByCategory[cat.id] = emojis;
-                cat.enabled = emojis.length > 0;
-                // The setState below doesn't re-render the header and we already have the refs for updateVisibility, so...
-                if (cat.ref.current) {
-                    cat.ref.current.disabled = !cat.enabled;
+
+                if (emojis.length > 0) {
+                    enabledCategories.push(cat.id);
                 }
             }
             setFilter(newFilter);
-            // Header underlines need to be updated, but updating requires knowing
-            // where the categories are, so we wait for a tick.
-            window.setTimeout(updateVisibility, 0);
+            setEnabledCategories(enabledCategories);
+            // Header underlines are refreshed by the effect that recomputes visibility
+            // whenever the (filtered) item list changes.
         },
-        [filter, showHighlight, categories, memoizedDataByCategory, recentlyUsed, updateVisibility],
+        [filter, showHighlight, memoizedDataByCategory, recentlyUsed],
     );
 
     const onEnterFilter = useCallback((): void => {
@@ -469,10 +417,10 @@ export function EmojiPicker({
                         data-category-id={category.id}
                         id={`mx_EmojiPicker_category_${category.id}`}
                         role="tabpanel"
-                        aria-label={category.name}
+                        aria-label={_t(category.untranslatedName)}
                     >
                         <Heading as="h2" className={styles.categoryLabel}>
-                            {category.name}
+                            {_t(category.untranslatedName)}
                         </Heading>
                     </div>
                 );
@@ -515,7 +463,13 @@ export function EmojiPicker({
                     onKeyDown={onKeyDownHandler}
                     aria-label={_t("a11y|emoji_picker")}
                 >
-                    <Tabs categories={categories} onAnchorClick={scrollToCategory} getAction={getAction} />
+                    <Tabs
+                        categories={CATEGORY_CONFIG}
+                        enabledCategories={enabledCategories}
+                        selectedCategory={selectedCategory}
+                        onAnchorClick={scrollToCategory}
+                        getAction={getAction}
+                    />
                     <Search
                         query={filter}
                         onChange={onChangeFilter}
@@ -529,7 +483,6 @@ export function EmojiPicker({
                             [styles.bodyShowHighlight]: showHighlight,
                         })}
                         wrappedRef={collectScrollElement}
-                        onScroll={onScroll}
                     >
                         {scrollElement && (
                             <Virtuoso
@@ -539,6 +492,7 @@ export function EmojiPicker({
                                 defaultItemHeight={EMOJI_HEIGHT}
                                 components={gridComponents}
                                 itemContent={renderItem}
+                                rangeChanged={onRangeChanged}
                             />
                         )}
                     </AutoHideScrollbar>

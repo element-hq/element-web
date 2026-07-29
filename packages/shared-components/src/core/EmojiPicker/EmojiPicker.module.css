@@ -44,6 +44,12 @@
     color: var(--cpd-color-text-primary);
     display: inline-block;
 
+    /*
+     * These have 'text' in them because they're emoji, but it doesn't make sense for the user
+     * to be able to select it
+     */
+    user-select: none;
+
     &:not(:disabled) {
         cursor: pointer;
     }
@@ -58,7 +64,7 @@
     }
 }
 
-.anchorVisible {
+.anchorSelected {
     border-bottom: 2px solid var(--cpd-color-text-action-accent);
 }
 
