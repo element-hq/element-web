@@ -3,7 +3,7 @@ import { MediaPreviewGroupTextEntry } from "../MediaPreviewGroupView";
 import { Buttons, Icon, LeftGroup, TextContent } from "../MediaPreviewComponents/MediaPreviewComponents";
 import styles from "./TextPreviewTile.module.css";
 
-export function TextPreviewTile(props: MediaPreviewGroupTextEntry): JSX.Element {
+export function TextPreviewTile(props: MediaPreviewGroupTextEntry & { style: "text" }): JSX.Element {
     // todo: check collapsed
     return (
         <div className={styles.tile}>
