@@ -64,13 +64,13 @@ export function LeftGroup({ children }: { children: React.ReactNode }): JSX.Elem
 }
 
 export function LargeImage({
-    largeImage,
-    largeImageOnClick,
+    image,
+    imageOnClick,
     imageSize,
 }: {
-    largeImage: string;
-    largeImageOnClick?: () => void;
-    imageSize: ImageSize
+    image: string;
+    imageOnClick?: () => void;
+    imageSize: ImageSize;
 }): JSX.Element {
     let classes = [styles.largeImage];
     switch (imageSize) {
@@ -78,22 +78,58 @@ export function LargeImage({
             classes.push(styles.fullImage);
             break;
         case "banner":
-            classes.push(styles.bannerImage)
+            classes.push(styles.bannerImage);
             break;
     }
 
-    if (largeImageOnClick) {
+    if (imageOnClick) {
         return (
             <div className={classNames(classes)}>
-                <button onClick={largeImageOnClick}>
-                    <img src={largeImage} />
+                <button onClick={imageOnClick}>
+                    <img src={image} />
                 </button>
             </div>
         );
     } else {
         return (
             <div className={classNames(classes)}>
-                <img src={largeImage} />
+                <img src={image} />
+            </div>
+        );
+    }
+}
+
+export function LargeVideo({
+    video,
+    videoOnClick,
+    videoSize,
+}: {
+    video: string;
+    videoOnClick?: () => void;
+    videoSize: ImageSize;
+}): JSX.Element {
+    let classes = [styles.largeVideo];
+    switch (videoSize) {
+        case "full":
+            classes.push(styles.fullVideo);
+            break;
+        case "banner":
+            classes.push(styles.bannerVideo);
+            break;
+    }
+
+    if (videoOnClick) {
+        return (
+            <div className={classNames(classes)}>
+                <button onClick={videoOnClick}>
+                    <video src={video} controls />
+                </button>
+            </div>
+        );
+    } else {
+        return (
+            <div className={classNames(classes)}>
+                <video src={video} controls />
             </div>
         );
     }
