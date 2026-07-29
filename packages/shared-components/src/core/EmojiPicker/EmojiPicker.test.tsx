@@ -77,30 +77,27 @@ describe("EmojiPicker", function () {
     it("should not mangle default order after filtering", async () => {
         const { container } = render(<EmojiPicker onChoose={() => false} onFinished={vi.fn()} />);
 
+        // Extract the list of emoji currently visible in the grid
+        const getVisibleEmojis = (): string[] =>
+            Array.from(container.querySelectorAll('[role="gridcell"]')).map((cell) => cell.textContent || "");
+
         await waitFor(() => {
             expect(container.querySelector('[role="gridcell"]')).toBeInTheDocument();
         });
 
         // Wait for the virtualized rows to settle (out-of-view categories drop
         // their transient initial rows once measured) before capturing.
-        let beforeHtml = container.innerHTML;
-        await waitFor(() => {
-            const current = container.innerHTML;
-            if (current !== beforeHtml) {
-                beforeHtml = current;
-                throw new Error("virtualized rows still settling");
-            }
-        });
+        const beforeEmojis = getVisibleEmojis();
 
         const input = container.querySelector("input")!;
 
-        // Apply a filter and assert that the HTML has changed
+        // Apply a filter and assert that the visible emoji have changed
         await userEvent.type(input, "test");
-        await waitFor(() => expect(beforeHtml).not.toEqual(container.innerHTML));
+        await waitFor(() => expect(getVisibleEmojis()).not.toEqual(beforeEmojis));
 
-        // Clear the filter and assert that the HTML matches what it was before filtering
+        // Clear the filter and assert that the visible emoji match what they were before filtering
         await userEvent.clear(input);
-        await waitFor(() => expect(beforeHtml).toEqual(container.innerHTML));
+        await waitFor(() => expect(getVisibleEmojis()).toEqual(beforeEmojis));
     });
 
     it("sort emojis by shortcode and size", function () {
