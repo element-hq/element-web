@@ -7,7 +7,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, useCallback, useContext, useEffect } from "react";
+import React, { type JSX, useCallback, useContext } from "react";
 import { CloseIcon, SearchIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../i18n/i18n";
@@ -28,11 +28,6 @@ interface IProps {
  */
 export const Search: React.FC<IProps> = ({ query, onChange, onEnter, onKeyDown, inputRef }) => {
     const context = useContext(RovingTabIndexContext);
-
-    useEffect(() => {
-        // For some reason, neither the autoFocus nor just calling focus() here worked, so here's a window.setTimeout
-        window.setTimeout(() => inputRef.current?.focus(), 0);
-    }, [inputRef]);
 
     const onInputKeyDown = useCallback(
         (ev: React.KeyboardEvent): void => {
@@ -72,7 +67,6 @@ export const Search: React.FC<IProps> = ({ query, onChange, onEnter, onKeyDown, 
                 value={query}
                 onChange={(ev) => onChange(ev.target.value)}
                 onKeyDown={onInputKeyDown}
-                ref={inputRef}
                 // Setting aria-activedescendant on the input allows screen readers to identify the active emoji.
                 // Setting it when there is not a query causes screen readers to read out the first emoji when focusing the input, and it continually tells you you are in the table vs the input.
                 aria-activedescendant={query ? context.state.activeNode?.id : undefined}
