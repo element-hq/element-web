@@ -7,7 +7,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React from "react";
+import React, { useCallback, useRef } from "react";
 import classNames from "classnames";
 
 import { _t } from "../i18n/i18n";
@@ -19,7 +19,7 @@ interface IProps {
     categories: Category[];
     enabledCategories: CategoryKey[];
     selectedCategory: CategoryKey;
-    onAnchorClick(id: CategoryKey): void;
+    onAnchorClick: (id: CategoryKey) => void;
     /**
      * Optional action resolver used to map keyboard events to
      * {@link RovingAction} values, e.g. to apply app-level custom keybindings.
@@ -45,96 +45,108 @@ const getDefaultAction = (ev: React.KeyboardEvent): RovingAction | undefined => 
 };
 
 /**
- * The tab bar at the top of the emoji picker with a tavb for each category.
+ * The tab bar at the top of the emoji picker with a tab for each category.
  */
-class Tabs extends React.PureComponent<IProps> {
-    private findNearestEnabled(index: number, delta: number): number | undefined {
-        index += this.props.categories.length;
-        const cats = [...this.props.categories, ...this.props.categories, ...this.props.categories];
+const Tabs: React.FC<IProps> = ({ categories, enabledCategories, selectedCategory, onAnchorClick, getAction }) => {
+    const findNearestEnabled = useCallback(
+        (index: number, delta: number): number | undefined => {
+            index += categories.length;
+            const cats = [...categories, ...categories, ...categories];
 
-        while (index < cats.length && index >= 0) {
-            if (this.props.enabledCategories.includes(cats[index].id)) return index % this.props.categories.length;
-            index += delta > 0 ? 1 : -1;
-        }
-    }
+            while (index < cats.length && index >= 0) {
+                if (enabledCategories.includes(cats[index].id)) return index % categories.length;
+                index += delta > 0 ? 1 : -1;
+            }
+        },
+        [categories, enabledCategories],
+    );
 
-    private changeCategoryRelative(delta: number): void {
-        // Move to the next/previous category using the selected as the current.
-        const current = this.props.categories.findIndex((c) => c.id === this.props.selectedCategory);
-        this.changeCategoryAbsolute(current + delta, delta);
-    }
+    const changeCategoryAbsolute = useCallback(
+        (index: number, delta = 1): void => {
+            const category = categories[findNearestEnabled(index, delta)!];
+            if (category) {
+                onAnchorClick(category.id);
+                tabRefs.current[category.id]?.current?.focus();
+            }
+        },
+        [categories, findNearestEnabled, onAnchorClick],
+    );
 
-    private changeCategoryAbsolute(index: number, delta = 1): void {
-        const category = this.props.categories[this.findNearestEnabled(index, delta)!];
-        if (category) {
-            this.props.onAnchorClick(category.id);
-            //category.ref.current?.focus();
-        }
-    }
+    const changeCategoryRelative = useCallback(
+        (delta: number): void => {
+            // Move to the next/previous category using the selected as the current.
+            const current = categories.findIndex((c) => c.id === selectedCategory);
+            changeCategoryAbsolute(current + delta, delta);
+        },
+        [categories, selectedCategory, changeCategoryAbsolute],
+    );
 
     // Implements ARIA Tabs with Automatic Activation pattern
     // https://www.w3.org/TR/wai-aria-practices/examples/tabs/tabs-1/tabs.html
-    private onKeyDown = (ev: React.KeyboardEvent): void => {
-        let handled = true;
+    const onKeyDown = useCallback(
+        (ev: React.KeyboardEvent): void => {
+            let handled = true;
 
-        const action = this.props.getAction?.(ev) ?? getDefaultAction(ev);
-        switch (action) {
-            case RovingAction.ArrowLeft:
-                this.changeCategoryRelative(-1);
-                break;
-            case RovingAction.ArrowRight:
-                this.changeCategoryRelative(1);
-                break;
+            const action = getAction?.(ev) ?? getDefaultAction(ev);
+            switch (action) {
+                case RovingAction.ArrowLeft:
+                    changeCategoryRelative(-1);
+                    break;
+                case RovingAction.ArrowRight:
+                    changeCategoryRelative(1);
+                    break;
 
-            case RovingAction.Home:
-                this.changeCategoryAbsolute(0);
-                break;
-            case RovingAction.End:
-                this.changeCategoryAbsolute(this.props.categories.length - 1, -1);
-                break;
-            default:
-                handled = false;
+                case RovingAction.Home:
+                    changeCategoryAbsolute(0);
+                    break;
+                case RovingAction.End:
+                    changeCategoryAbsolute(categories.length - 1, -1);
+                    break;
+                default:
+                    handled = false;
+            }
+
+            if (handled) {
+                ev.preventDefault();
+                ev.stopPropagation();
+            }
+        },
+        [getAction, changeCategoryRelative, changeCategoryAbsolute, categories.length],
+    );
+
+    const tabRefs = useRef({} as Record<CategoryKey, React.RefObject<HTMLButtonElement | null>>);
+    if (!tabRefs.current.recent) {
+        for (const category of categories) {
+            tabRefs.current[category.id] = React.createRef<HTMLButtonElement>();
         }
-
-        if (handled) {
-            ev.preventDefault();
-            ev.stopPropagation();
-        }
-    };
-
-    public render(): React.ReactNode {
-        return (
-            <nav
-                className={styles.header}
-                role="tablist"
-                aria-label={_t("emoji|categories")}
-                onKeyDown={this.onKeyDown}
-            >
-                {this.props.categories.map((category) => {
-                    const classes = classNames(styles.anchor, {
-                        [styles.anchorSelected]: category.id === this.props.selectedCategory,
-                    });
-                    // Properties of this button are also modified by EmojiPicker's updateVisibility in DOM.
-                    return (
-                        <button
-                            disabled={!this.props.enabledCategories.includes(category.id)}
-                            key={category.id}
-                            //ref={category.ref}
-                            className={classes}
-                            onClick={() => this.props.onAnchorClick(category.id)}
-                            title={_t(category.untranslatedName)}
-                            role="tab"
-                            tabIndex={category.id === this.props.selectedCategory ? 0 : -1} // roving
-                            aria-selected={category.id === this.props.selectedCategory}
-                            aria-controls={`mx_EmojiPicker_category_${category.id}`}
-                        >
-                            {category.emoji}
-                        </button>
-                    );
-                })}
-            </nav>
-        );
     }
-}
+
+    return (
+        <nav className={styles.header} role="tablist" aria-label={_t("emoji|categories")} onKeyDown={onKeyDown}>
+            {categories.map((category) => {
+                const classes = classNames(styles.anchor, {
+                    [styles.anchorSelected]: category.id === selectedCategory,
+                });
+                // Properties of this button are also modified by EmojiPicker's updateVisibility in DOM.
+                return (
+                    <button
+                        disabled={!enabledCategories.includes(category.id)}
+                        key={category.id}
+                        ref={tabRefs.current[category.id]}
+                        className={classes}
+                        onClick={() => onAnchorClick(category.id)}
+                        title={_t(category.untranslatedName)}
+                        role="tab"
+                        tabIndex={category.id === selectedCategory ? 0 : -1} // roving
+                        aria-selected={category.id === selectedCategory}
+                        aria-controls={`mx_EmojiPicker_category_${category.id}`}
+                    >
+                        {category.emoji}
+                    </button>
+                );
+            })}
+        </nav>
+    );
+};
 
 export default Tabs;
