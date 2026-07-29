@@ -508,5 +508,3 @@ export function EmojiPicker({
         </RovingGridIndexProvider>
     );
 }
-
-export default EmojiPicker;
