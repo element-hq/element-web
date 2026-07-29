@@ -60,7 +60,7 @@ export function FileBodyFactory({
             new MediaPreviewGroupViewModel({
                 entries: [
                     {
-                        style: "collapsed",
+                        style: "textonly",
                         header: mediaEventHelper?.fileName!,
                         body: size === undefined ? "Size unknown" : fileSize(size, { base: 2, standard: "jedec" }),
                         buttons: mediaEventHelper === undefined ? undefined : [{

@@ -1,7 +1,7 @@
 import React, { JSX } from "react";
 import styles from "./MediaPreviewComponents.module.css";
 import classNames from "classnames";
-import { MediaPreviewEntryButton } from "../MediaPreviewGroupView";
+import { ImageSize, MediaPreviewEntryButton } from "../MediaPreviewGroupView";
 
 export function Header({ header, headerUrl }: { header: string; headerUrl?: string }): JSX.Element {
     if (headerUrl === undefined) return <div className={classNames(styles.textHeader, styles.header)}>{header}</div>;
@@ -66,13 +66,25 @@ export function LeftGroup({ children }: { children: React.ReactNode }): JSX.Elem
 export function LargeImage({
     largeImage,
     largeImageOnClick,
+    imageSize,
 }: {
     largeImage: string;
     largeImageOnClick?: () => void;
+    imageSize: ImageSize
 }): JSX.Element {
+    let classes = [styles.largeImage];
+    switch (imageSize) {
+        case "full":
+            classes.push(styles.fullImage);
+            break;
+        case "banner":
+            classes.push(styles.bannerImage)
+            break;
+    }
+
     if (largeImageOnClick) {
         return (
-            <div className={styles.largeImage}>
+            <div className={classNames(classes)}>
                 <button onClick={largeImageOnClick}>
                     <img src={largeImage} />
                 </button>
@@ -80,7 +92,7 @@ export function LargeImage({
         );
     } else {
         return (
-            <div className={styles.largeImage}>
+            <div className={classNames(classes)}>
                 <img src={largeImage} />
             </div>
         );
