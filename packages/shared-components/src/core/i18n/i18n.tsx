@@ -325,6 +325,7 @@ export function replaceByRegexes(text: string, mapping: IVariables | Tags): stri
 
                 let replaced: SubstitutionValue;
                 // If substitution is a function, call it
+                // oxlint-disable-next-line unicorn/no-instanceof-builtins
                 if (mapping[regexpString] instanceof Function) {
                     replaced = ((mapping as Tags)[regexpString] as (...subs: string[]) => string)(...capturedGroups);
                 } else {

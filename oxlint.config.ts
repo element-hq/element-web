@@ -7,10 +7,23 @@ Please see LICENSE in the repository root for full details.
 
 import { defineConfig } from "oxlint";
 
+function buildRestrictedPropertiesOptions(
+    properties: string[],
+    message: string,
+): { object?: string; property: string; message: string }[] {
+    return properties.map((prop) => {
+        const [object, property] = prop.split(".");
+        return {
+            object: object === "*" ? undefined : object,
+            property,
+            message,
+        };
+    });
+}
+
 const defaultRestrictedProperties = [
     { object: "window", property: "setImmediate", message: "Use setTimeout instead" },
-    // TODO we will enable this in a follow up PR
-    // ...buildRestrictedPropertiesOptions(["React.forwardRef", "*.forwardRef", "forwardRef"], "Use ref props instead."),
+    ...buildRestrictedPropertiesOptions(["React.forwardRef", "*.forwardRef", "forwardRef"], "Use ref props instead."),
 ] as const;
 const defaultRestrictedGlobals = [
     {
@@ -38,6 +51,7 @@ export default defineConfig({
     categories: {
         correctness: "error",
         perf: "error",
+        suspicious: "error",
     },
     options: {
         typeAware: true,
@@ -177,13 +191,34 @@ export default defineConfig({
         "react/no-did-update-set-state": "off",
         "react/no-did-mount-set-state": "off",
         "jsx-a11y/no-static-element-interactions": "off",
-        "vitest/no-conditional-tests": "off",
         "jsx-a11y/no-noninteractive-element-interactions": "off",
         "react/no-array-index-key": "off",
         "jsx-a11y/control-has-associated-label": "off",
         "jsx-a11y/media-has-caption": "off",
         "jsx-a11y/no-noninteractive-element-to-interactive-role": "off",
         "jsx-a11y/aria-activedescendant-has-tabindex": "off",
+
+        // Rules within `suspicious` we do not yet comply with but probably should
+        "typescript/no-unsafe-type-assertion": "off",
+        "no-shadow": "off",
+        "unicorn/consistent-function-scoping": "off",
+        "typescript/consistent-return": "off",
+        "typescript/no-unsafe-enum-comparison": "off",
+        "typescript/no-unnecessary-type-conversion": "off",
+        "typescript/no-unnecessary-type-parameters": "off",
+        "typescript/no-unnecessary-boolean-literal-compare": "off",
+        "react/no-unstable-nested-components": "off",
+        "unicorn/no-array-sort": "off",
+        "unicorn/no-array-reverse": "off",
+        "unicorn/prefer-add-event-listener": "off",
+        "no-underscore-dangle": "off",
+        "import/no-named-as-default": "off",
+        "import/no-unassigned-import": "off",
+        "import/no-named-as-default-member": "off",
+        "promise/always-return": "off",
+        "preserve-caught-error": "off",
+        "react/react-in-jsx-scope": "off",
+        "unicorn/require-post-message-target-origin": "off",
     },
     overrides: [
         {
@@ -404,6 +439,7 @@ export default defineConfig({
                 "{packages,apps,modules}/*/{test,playwright,e2e}/**/*",
                 "{packages,apps,modules}/*/playwright.config.ts",
                 "{packages,apps,modules}/*/.storybook/**/*",
+                "{packages,apps,modules}/*/__mocks__/**/*",
                 "packages/playwright-common/src/**/*",
             ],
             rules: {
@@ -449,9 +485,17 @@ export default defineConfig({
                 "react/jsx-no-constructed-context-values": "off",
                 "react/no-array-index-key": "off",
                 "react/forbid-elements": "off",
+                "typescript/no-extraneous-class": "off",
+                "no-new": "off",
+                "react/iframe-missing-sandbox": "off",
+                "promise/no-promise-in-callback": "off",
                 // This would be good to enable in the future
                 "typescript/await-thenable": "off",
                 "promise/no-callback-in-promise": "off",
+
+                // This rule requires strictNullChecks enabled
+                "typescript/no-unnecessary-boolean-literal-compare": "off",
+                "typescript/no-unnecessary-type-assertion": "off",
             },
         },
         {
@@ -477,19 +521,11 @@ export default defineConfig({
                 "typescript/no-require-imports": "off",
             },
         },
+        {
+            files: ["**/*.d.ts"],
+            rules: {
+                "unicorn/require-module-specifiers": "off",
+            },
+        },
     ],
 });
-
-function buildRestrictedPropertiesOptions(
-    properties: string[],
-    message: string,
-): { object?: string; property: string; message: string }[] {
-    return properties.map((prop) => {
-        const [object, property] = prop.split(".");
-        return {
-            object: object === "*" ? undefined : object,
-            property,
-            message,
-        };
-    });
-}

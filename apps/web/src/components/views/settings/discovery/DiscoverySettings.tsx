@@ -73,7 +73,7 @@ export const DiscoverySettings: React.FC = () => {
                 if (payload.action === "id_server_changed") {
                     setIdServerName(abbreviateUrl(client.getIdentityServerUrl()));
 
-                    getThreepidState().then();
+                    getThreepidState();
                 }
             },
             [client, getThreepidState],
@@ -113,9 +113,7 @@ export const DiscoverySettings: React.FC = () => {
                     // User accepted all terms
                     setMustAgreeToTerms(false);
                 } catch (e) {
-                    logger.warn(
-                        `Unable to reach identity server at ${idServerUrl} to check ` + `for terms in Settings`,
-                    );
+                    logger.warn(`Unable to reach identity server at ${idServerUrl} to check for terms in Settings`);
                     logger.warn(e);
                 }
             } catch {}

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type AriaRole, useContext } from "react";
 import classNames from "classnames";
-import { Resizable, type Size } from "re-resizable";
+import { Resizable } from "re-resizable";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { type IWidget } from "matrix-widget-api";
 import { clamp, percentageOf, percentageWithin } from "@element-hq/web-shared-components";
@@ -340,7 +340,7 @@ const PersistentVResizer: React.FC<IPersistentResizerProps> = ({
         <Resizable
             // types do not support undefined height/width
             // but resizable code checks specifically for undefined on Size prop
-            size={{ height: Math.min(defaultHeight, maxHeight), width: undefined } as unknown as Size}
+            size={{ height: Math.min(defaultHeight, maxHeight), width: undefined }}
             minHeight={minHeight}
             maxHeight={maxHeight}
             onResizeStart={() => {
@@ -350,7 +350,7 @@ const PersistentVResizer: React.FC<IPersistentResizerProps> = ({
                 resizeNotifier.notifyTimelineHeightChanged();
             }}
             onResizeStop={(e, dir, ref, d) => {
-                let newHeight = defaultHeight! + d.height;
+                let newHeight = defaultHeight + d.height;
                 newHeight = percentageOf(newHeight, minHeight, maxHeight) * 100;
 
                 sdkContext.widgetLayoutStore.setContainerHeight(room, "top", newHeight);

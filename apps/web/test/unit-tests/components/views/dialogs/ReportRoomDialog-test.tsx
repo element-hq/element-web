@@ -17,8 +17,8 @@ const ROOM_ID = "!foo:bar";
 const REASON = "This room is bad!";
 
 describe("ReportRoomDialog", () => {
-    const onFinished: jest.Mock<any, any> = jest.fn();
-    const reportRoom: jest.Mock<any, any> = jest.fn();
+    const onFinished: jest.Mock = jest.fn();
+    const reportRoom: jest.Mock = jest.fn();
     beforeEach(() => {
         jest.resetAllMocks();
         const client = stubClient();
