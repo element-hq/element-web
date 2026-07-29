@@ -45,7 +45,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
         } else if (item.member) {
             return `member-${item.member.userId}`;
         } else {
-            return `threePidInvite-${item.threePidInvite.event.getStateKey() || item.threePidInvite.event.getId()}`;
+            return `threePidInvite-${item.threePidInvite.event.getStateKey()}`;
         }
     }, []);
 

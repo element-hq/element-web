@@ -167,7 +167,7 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
 
                     // Finally add the third party invites
                     for (const invited of threePidInvited) {
-                        const key = `threePidInvite-${invited.threePidInvite!.event.getStateKey() || invited.threePidInvite!.event.getId()}`;
+                        const key = `threePidInvite-${invited.threePidInvite!.event.getStateKey()}`;
                         newMemberMap.set(key, invited);
                     }
 

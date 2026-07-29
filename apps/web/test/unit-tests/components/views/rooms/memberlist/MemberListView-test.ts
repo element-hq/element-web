@@ -9,9 +9,9 @@ Please see LICENSE files in the repository root for full details.
 
 import { act } from "react";
 import { waitFor, fireEvent } from "jest-matrix-react";
-import { type Room, type RoomMember, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type Room, type RoomMember, type RoomState, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import { filterConsole } from "../../../../../test-utils";
+import { filterConsole, mkThirdPartyInviteEvent } from "../../../../../test-utils";
 import { type Rendered, renderMemberList } from "./common";
 
 jest.mock("../../../../../../src/customisations/helpers/UIComponents", () => ({
@@ -259,6 +259,34 @@ describe("MemberListView and MemberlistHeaderView", () => {
                     const tiles = root.container.querySelectorAll(".mx_EntityTile");
                     expectOrderedByPresenceAndPowerLevel(memberListRoom, tiles, enablePresence);
                 });
+            });
+        });
+    });
+
+    describe("3PID invites", () => {
+        it("does not collapse invites with duplicate display names", async () => {
+            const { memberListRoom, root, reRender } = await renderMemberList(true);
+
+            const threePidEvents = [
+                mkThirdPartyInviteEvent("@alice:localhost", "user@example.com", memberListRoom.roomId),
+                mkThirdPartyInviteEvent("@alice:localhost", "user@example.com", memberListRoom.roomId),
+            ];
+            memberListRoom.currentState.getStateEvents = ((eventType: string, stateKey?: string) => {
+                if (eventType === "m.room.third_party_invite") {
+                    return stateKey === undefined
+                        ? threePidEvents
+                        : threePidEvents.find((e) => e.getStateKey() === stateKey) ?? null;
+                }
+                return stateKey === undefined ? [] : null;
+            }) as RoomState["getStateEvents"];
+            (memberListRoom.currentState as any).getInviteForThreePidToken = jest.fn().mockReturnValue(null);
+
+            await reRender();
+
+            await waitFor(() => {
+                const tiles = root.container.querySelectorAll(".mx_MemberTileView");
+                // 6 joined + 2 invites
+                expect(tiles).toHaveLength(8);
             });
         });
     });
