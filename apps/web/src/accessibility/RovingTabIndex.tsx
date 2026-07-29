@@ -70,5 +70,4 @@ export const RovingGridIndexProvider: React.FC<IRovingGridIndexProps> = (props) 
 };
 
 // re-export the semantic helper components for simplicity
-export { RovingTabIndexWrapper } from "./roving/RovingTabIndexWrapper";
 export { RovingAccessibleButton } from "./roving/RovingAccessibleButton";

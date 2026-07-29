@@ -5,4 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-export { type MessagePreview, MessagePreviewStore } from "./MessagePreviewStore";
+export {
+    /** @knipignore - exported for tests */
+    type MessagePreview,
+    MessagePreviewStore,
+} from "./MessagePreviewStore";

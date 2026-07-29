@@ -6,4 +6,3 @@
  */
 
 export { RoomListSectionHeaderDragOverlayView } from "./RoomListSectionHeaderDragOverlayView";
-export type { RoomListSectionHeaderDragOverlayViewProps } from "./RoomListSectionHeaderDragOverlayView";

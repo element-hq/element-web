@@ -36,7 +36,7 @@ import { type IWidgetEvent, type UserWidget } from "./WidgetUtils-types";
 // before waitFor[Room/User]Widget rejects its promise
 const WIDGET_WAIT_TIME = 20000;
 
-export type { IWidgetEvent, UserWidget };
+export type { UserWidget };
 
 export default class WidgetUtils {
     /**

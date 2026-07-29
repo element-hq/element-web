@@ -335,6 +335,7 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
     };
 }
 
+/** @knipignore - exported for tests */
 export type { JitsiCallMemberContent };
 
 /**
