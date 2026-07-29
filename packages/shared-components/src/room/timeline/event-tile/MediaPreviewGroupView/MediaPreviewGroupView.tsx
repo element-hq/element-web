@@ -1,22 +1,25 @@
 import React, { JSX } from "react";
 import { useViewModel, ViewModel } from "../../../../core/viewmodel";
 import styles from "./MediaPreviewGroupView.module.css";
-import { CollapsedPreviewTile } from "./CollapsedPreviewTile/CollapsedPreviewTile";
+import { TextPreviewTile } from "./TextPreviewTile/TextPreviewTile";
 
-export type MediaPreviewGroupEntryCollapsedContent = {
-    style: "collapsed";
+export type MediaPreviewGroupEntryTextContent = {
+    style: "textonly";
 };
 
-export type MediaPreviewGroupEntryExpandedContent = {
-    style: "expanded";
+export type ImageSize = "full" | "banner";
+
+export type MediaPreviewGroupEntryImageContent = {
+    style: "image";
     // footer?: string;
     largeImage: string;
     largeImageOnClick?: () => void;
+    imageSize: ImageSize;
 };
 
 export type MediaPreviewGroupEntryContent =
-    | MediaPreviewGroupEntryExpandedContent
-    | MediaPreviewGroupEntryCollapsedContent;
+    | MediaPreviewGroupEntryImageContent
+    | MediaPreviewGroupEntryTextContent;
 
 export interface MediaPreviewEntryButton {
     icon: JSX.Element;
@@ -29,14 +32,18 @@ export interface MediaPreviewIcon {
     iconOnClick?: () => void;
 }
 
-export type MediaPreviewGroupEntry = {
+export type MediaPreviewGroupEntryBase = {
     header: string;
     headerUrl?: string;
     body: string;
 
     buttons?: Array<MediaPreviewEntryButton>;
-} & MediaPreviewGroupEntryContent &
-    MediaPreviewIcon;
+} & MediaPreviewIcon;
+
+export type MediaPreviewGroupTextEntry = MediaPreviewGroupEntryBase & MediaPreviewGroupEntryTextContent;
+export type MediaPreviewGroupImageEntry = MediaPreviewGroupEntryBase & MediaPreviewGroupEntryImageContent;
+
+export type MediaPreviewGroupEntry = MediaPreviewGroupImageEntry | MediaPreviewGroupTextEntry;
 
 export interface MediaPreviewGroupSnapshot {
     entries: Array<MediaPreviewGroupEntry>;
@@ -57,8 +64,8 @@ export function MediaPreviewGroupPreview({ vm }: MediaPreviewGroupPreviewProps):
         <div className={styles.container}>
             {entries.map((entry) => {
                 switch (entry.style) {
-                    case "collapsed":
-                        return <CollapsedPreviewTile {...entry} />;
+                    case "textonly":
+                        return <TextPreviewTile {...entry} />;
                 }
             })}
         </div>
