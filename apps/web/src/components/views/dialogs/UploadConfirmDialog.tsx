@@ -95,7 +95,7 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
                     className="mx_UploadConfirmDialog_imagePreview"
                     src={this.state.objectUrl}
                     playsInline
-                    controls={false}
+                    controls={true}
                 />
             );
         } else {
