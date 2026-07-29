@@ -19,6 +19,8 @@ interface IProps {
     onChange: (value: string) => void;
     onEnter: () => void;
     onKeyDown: (event: React.KeyboardEvent) => void;
+    // The id of the element that this search box controls, for aria-controls.
+    controlsId: string;
     /** Ref to the search input, owned by the picker so it can inspect focus. */
     inputRef: React.RefObject<HTMLInputElement | null>;
 }
@@ -26,7 +28,7 @@ interface IProps {
 /**
  * The search input at the top of the emoji picker.
  */
-export const Search: React.FC<IProps> = ({ query, onChange, onEnter, onKeyDown, inputRef }) => {
+export const Search: React.FC<IProps> = ({ query, onChange, onEnter, onKeyDown, inputRef, controlsId }) => {
     const context = useContext(RovingTabIndexContext);
 
     const onInputKeyDown = useCallback(
@@ -71,7 +73,7 @@ export const Search: React.FC<IProps> = ({ query, onChange, onEnter, onKeyDown, 
                 // Setting aria-activedescendant on the input allows screen readers to identify the active emoji.
                 // Setting it when there is not a query causes screen readers to read out the first emoji when focusing the input, and it continually tells you you are in the table vs the input.
                 aria-activedescendant={query ? context.state.activeNode?.id : undefined}
-                aria-controls="mx_EmojiPicker_body"
+                aria-controls={controlsId}
                 aria-haspopup="grid"
                 aria-autocomplete="list"
             />

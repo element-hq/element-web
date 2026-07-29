@@ -7,7 +7,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type Dispatch, useCallback, useMemo, useRef, useState } from "react";
+import React, { type Dispatch, useCallback, useId, useMemo, useRef, useState } from "react";
 import { DATA_BY_CATEGORY, getEmojiFromUnicode, type Emoji as IEmoji } from "@matrix-org/emojibase-bindings";
 import { type ListRange, Virtuoso, type Components, type VirtuosoHandle } from "react-virtuoso";
 import { Heading } from "@vector-im/compound-web";
@@ -413,6 +413,10 @@ export function EmojiPicker({
         [onChoose, onRecordRecent, onFinished],
     );
 
+    // Get a unique ID for categories and append to it to create unique IDs for each category's tabpanel.
+    // (because we can't call hooks in a loop).
+    const categoryIdBase = useId();
+
     const renderItem = useCallback(
         (_index: number, item: ListItem): React.ReactNode => {
             if (item.type === "header") {
@@ -421,7 +425,7 @@ export function EmojiPicker({
                     <div
                         className={styles.category}
                         data-category-id={category.id}
-                        id={`mx_EmojiPicker_category_${category.id}`}
+                        id={`${categoryIdBase}-${category.id}`}
                         role="tabpanel"
                         aria-label={_t(category.untranslatedName)}
                     >
@@ -444,8 +448,10 @@ export function EmojiPicker({
                 </div>
             ));
         },
-        [selectedEmojis, onClickEmoji, onHoverEmoji, onHoverEmojiEnd, isEmojiDisabled],
+        [selectedEmojis, onClickEmoji, onHoverEmoji, onHoverEmojiEnd, isEmojiDisabled, categoryIdBase],
     );
+
+    const pickerBodyId = useId();
 
     return (
         <RovingGridIndexProvider
@@ -459,17 +465,13 @@ export function EmojiPicker({
             getAction={getAction}
         >
             {({ onKeyDownHandler }) => (
-                <section
-                    className={classNames("mx_EmojiPicker", styles.picker)}
-                    data-testid="mx_EmojiPicker"
-                    onKeyDown={onKeyDownHandler}
-                    aria-label={_t("a11y|emoji_picker")}
-                >
+                <section className={styles.picker} onKeyDown={onKeyDownHandler} aria-label={_t("a11y|emoji_picker")}>
                     <Tabs
                         categories={CATEGORY_CONFIG}
                         enabledCategories={enabledCategories}
                         selectedCategory={selectedCategory}
                         onAnchorClick={scrollToCategory}
+                        categoryIdBase={categoryIdBase}
                         getAction={getAction}
                     />
                     <Search
@@ -478,10 +480,11 @@ export function EmojiPicker({
                         onEnter={onEnterFilter}
                         onKeyDown={onKeyDownHandler}
                         inputRef={searchRef}
+                        controlsId={pickerBodyId}
                     />
                     <AutoHideScrollbar
-                        id="mx_EmojiPicker_body"
-                        className={classNames("mx_EmojiPicker_body", styles.body, {
+                        id={pickerBodyId}
+                        className={classNames(styles.body, {
                             [styles.bodyShowHighlight]: showHighlight,
                         })}
                         wrappedRef={collectScrollElement}
