@@ -2,23 +2,32 @@ import React, { JSX } from "react";
 import { useViewModel, ViewModel } from "../../../../core/viewmodel";
 import styles from "./MediaPreviewGroupView.module.css";
 import { TextPreviewTile } from "./TextPreviewTile/TextPreviewTile";
+import { ImagePreviewTile } from "./ImagePreviewTile/ImagePreviewTile";
+import { VideoPreviewTile } from "./VideoPreviewTile/VideoPreviewTile";
 
 export type MediaPreviewGroupEntryTextContent = {
-    style: "textonly";
+    style: "text";
 };
 
 export type ImageSize = "full" | "banner";
 
 export type MediaPreviewGroupEntryImageContent = {
     style: "image";
-    // footer?: string;
-    largeImage: string;
-    largeImageOnClick?: () => void;
+    image: string;
+    imageOnClick?: () => void;
     imageSize: ImageSize;
+};
+
+export type MediaPreviewGroupEntryVideoContent = {
+    style: "video";
+    video: string;
+    videoOnClick?: () => void;
+    videoSize: ImageSize;
 };
 
 export type MediaPreviewGroupEntryContent =
     | MediaPreviewGroupEntryImageContent
+    | MediaPreviewGroupEntryVideoContent
     | MediaPreviewGroupEntryTextContent;
 
 export interface MediaPreviewEntryButton {
@@ -42,8 +51,12 @@ export type MediaPreviewGroupEntryBase = {
 
 export type MediaPreviewGroupTextEntry = MediaPreviewGroupEntryBase & MediaPreviewGroupEntryTextContent;
 export type MediaPreviewGroupImageEntry = MediaPreviewGroupEntryBase & MediaPreviewGroupEntryImageContent;
+export type MediaPreviewGroupVideoEntry = MediaPreviewGroupEntryBase & MediaPreviewGroupEntryVideoContent;
 
-export type MediaPreviewGroupEntry = MediaPreviewGroupImageEntry | MediaPreviewGroupTextEntry;
+export type MediaPreviewGroupEntry =
+    | MediaPreviewGroupImageEntry
+    | MediaPreviewGroupVideoEntry
+    | MediaPreviewGroupTextEntry;
 
 export interface MediaPreviewGroupSnapshot {
     entries: Array<MediaPreviewGroupEntry>;
@@ -64,8 +77,12 @@ export function MediaPreviewGroupPreview({ vm }: MediaPreviewGroupPreviewProps):
         <div className={styles.container}>
             {entries.map((entry) => {
                 switch (entry.style) {
-                    case "textonly":
+                    case "text":
                         return <TextPreviewTile {...entry} />;
+                    case "image":
+                        return <ImagePreviewTile {...entry} />;
+                    case "video":
+                        return <VideoPreviewTile {...entry} />;
                 }
             })}
         </div>

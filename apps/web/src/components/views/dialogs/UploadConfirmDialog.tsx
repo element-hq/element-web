@@ -14,6 +14,14 @@ import { _t } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import { fileSize } from "../../../utils/FileUtils";
+import {
+    attachmentIcon,
+    attachmentIconOfType,
+    MediaPreviewGroupEntry,
+    MediaPreviewGroupPreview,
+    useCreateAutoDisposedViewModel,
+} from "@element-hq/web-shared-components";
+import { MediaPreviewGroupViewModel } from "../../../viewmodels/message-body/MediaPreviewGroupViewModel";
 
 interface IProps {
     file: File;
@@ -76,12 +84,23 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
             title = _t("upload_file|title");
         }
 
-        const fileId = `mx-uploadconfirmdialog-${this.props.file.name}`;
+        // const fileId = `mx-uploadconfirmdialog-${this.props.file.name}`;
         const mimeType = this.props.file.type;
 
-        let preview: JSX.Element | undefined;
-        let placeholder: JSX.Element | undefined;
+        // let preview: JSX.Element | undefined;
+        // let placeholder: JSX.Element | undefined;
+
+        let preview: MediaPreviewGroupEntry;
         if (mimeType.startsWith("image/")) {
+            preview = {
+                style: "image",
+                imageSize: "full",
+                image: this.state.objectUrl!,
+                header: this.props.file.name,
+                body: fileSize(this.props.file.size),
+                ...attachmentIconOfType("light", mimeType),
+            };
+            /*
             preview = (
                 <img
                     className="mx_UploadConfirmDialog_imagePreview"
@@ -89,7 +108,17 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
                     aria-labelledby={fileId}
                 />
             );
+            */
         } else if (mimeType.startsWith("video/")) {
+            preview = {
+                style: "video",
+                videoSize: "full",
+                video: this.state.objectUrl!,
+                header: this.props.file.name,
+                body: fileSize(this.props.file.size),
+                ...attachmentIconOfType("light", mimeType),
+            };
+            /*
             preview = (
                 <video
                     className="mx_UploadConfirmDialog_imagePreview"
@@ -98,14 +127,25 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
                     controls={true}
                 />
             );
+            */
         } else {
+            preview = {
+                style: "text",
+                header: this.props.file.name,
+                body: fileSize(this.props.file.size),
+                ...attachmentIconOfType("light", mimeType),
+            };
+            /*
             placeholder = <FilesIcon className="mx_UploadConfirmDialog_fileIcon" height="18px" width="18px" />;
+            */
         }
 
         let uploadAllButton: JSX.Element | undefined;
         if (this.props.currentIndex + 1 < this.props.totalFiles) {
             uploadAllButton = <button onClick={this.onUploadAllClick}>{_t("upload_file|upload_all_button")}</button>;
         }
+
+        let vm = new MediaPreviewGroupViewModel({ entries: [preview] });
 
         return (
             <BaseDialog
@@ -118,10 +158,8 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
                 <div id="mx_Dialog_content">
                     <div className="mx_UploadConfirmDialog_previewOuter">
                         <div className="mx_UploadConfirmDialog_previewInner">
-                            {preview && <div>{preview}</div>}
-                            <div id={fileId}>
-                                {placeholder}
-                                {this.props.file.name} ({fileSize(this.props.file.size)})
+                            <div>
+                                <MediaPreviewGroupPreview vm={vm} />
                             </div>
                         </div>
                     </div>

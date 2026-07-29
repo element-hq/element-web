@@ -51,7 +51,7 @@ export function FileBodyFactory({
     */
 
     const content = mxEvent.getContent<MediaEventContent>();
-    const size = content.info?.size
+    const size = content.info?.size;
 
     const downloader = new FileDownloader();
 
@@ -60,22 +60,27 @@ export function FileBodyFactory({
             new MediaPreviewGroupViewModel({
                 entries: [
                     {
-                        style: "textonly",
+                        style: "text",
                         header: mediaEventHelper?.fileName!,
                         body: size === undefined ? "Size unknown" : fileSize(size, { base: 2, standard: "jedec" }),
-                        buttons: mediaEventHelper === undefined ? undefined : [{
-                            icon: <DownloadIcon />,
-                            onClick: async () => {
-                                downloader.download({
-                                    blob: await mediaEventHelper.sourceBlob.value,   // decrypts transparently if E2EE
-                                    name: mediaEventHelper.fileName || _t("common|attachment"),
-                                });
-                            }
-                        }],
+                        buttons:
+                            mediaEventHelper === undefined
+                                ? undefined
+                                : [
+                                      {
+                                          icon: <DownloadIcon />,
+                                          onClick: async () => {
+                                              downloader.download({
+                                                  blob: await mediaEventHelper.sourceBlob.value, // decrypts transparently if E2EE
+                                                  name: mediaEventHelper.fileName || _t("common|attachment"),
+                                              });
+                                          },
+                                      },
+                                  ],
                         ...attachmentIconOfType("light", content.info?.mimetype),
-                    }
-                ]
-            })
+                    },
+                ],
+            }),
     );
 
     /*
@@ -103,7 +108,7 @@ export function FileBodyFactory({
     }, [mxEvent, mediaEventHelper, forExport, showFileInfo, timelineRenderingType, vm]);
     */
 
-    return <MediaPreviewGroupPreview vm={vm2} />
+    return <MediaPreviewGroupPreview vm={vm2} />;
 
     // return <FileBodyView vm={vm} refIFrame={refIFrame} refLink={refLink} className="mx_MFileBody" />;
 }
