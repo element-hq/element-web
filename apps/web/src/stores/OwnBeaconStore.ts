@@ -512,6 +512,7 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
 
         this.stopPollingLocation();
         // kill live beacons when location permissions are revoked
+        // oxlint-disable-next-line promise/no-promise-in-callback
         await Promise.all(this.liveBeaconIds.map(this.stopBeacon));
     };
 

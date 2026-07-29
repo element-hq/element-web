@@ -16,11 +16,14 @@ import {
     getCustomSectionData,
     getOrderedCustomSections,
     isDefaultSectionTag,
+    isSectionExpanded,
+    setSectionExpanded,
     CHATS_TAG,
     CUSTOM_SECTION_TAG_PREFIX,
     isSectionTag,
     reorderSection,
 } from "../../../../src/stores/room-list-v3/section";
+import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import { CreateSectionDialog } from "../../../../src/components/views/dialogs/CreateSectionDialog";
 import { RemoveSectionDialog } from "../../../../src/components/views/dialogs/RemoveSectionDialog";
 import { DefaultTagID } from "../../../../src/stores/room-list-v3/skip-list/tag";
@@ -128,6 +131,63 @@ describe("section", () => {
             });
 
             expect(getOrderedCustomSections()).toEqual([knownTag]);
+        });
+    });
+
+    describe("isSectionExpanded", () => {
+        const spaceId = "!space:server";
+        const tag = "element.io.section.abc";
+
+        it.each([
+            { value: {}, result: true },
+            { value: { "!other:server": { [tag]: false } }, result: true },
+            { value: { [spaceId]: { "other.tag": false } }, result: true },
+            { value: { [spaceId]: { [tag]: false } }, result: false },
+        ])("returns the persisted state=$result when value=$value", ({ value, result }) => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue(value);
+            expect(isSectionExpanded(spaceId, tag)).toBe(result);
+        });
+    });
+
+    describe("setSectionExpanded", () => {
+        const spaceId = "!space:server";
+        const tag = "element.io.section.abc";
+
+        it("persists the state at the device level", async () => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue({});
+            const setValueSpy = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+
+            await setSectionExpanded(spaceId, tag, false);
+
+            expect(setValueSpy).toHaveBeenCalledWith("RoomList.SectionExpansionState", null, SettingLevel.DEVICE, {
+                [spaceId]: { [tag]: false },
+            });
+        });
+
+        it("merges with existing state for other spaces and tags", async () => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue({
+                "!other:server": { "other.tag": false },
+                [spaceId]: { "existing.tag": true },
+            });
+            const setValueSpy = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+
+            await setSectionExpanded(spaceId, tag, false);
+
+            expect(setValueSpy).toHaveBeenCalledWith("RoomList.SectionExpansionState", null, SettingLevel.DEVICE, {
+                "!other:server": { "other.tag": false },
+                [spaceId]: { "existing.tag": true, [tag]: false },
+            });
+        });
+
+        it("overwrites the previous state for the same space and tag", async () => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue({ [spaceId]: { [tag]: false } });
+            const setValueSpy = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+
+            await setSectionExpanded(spaceId, tag, true);
+
+            expect(setValueSpy).toHaveBeenCalledWith("RoomList.SectionExpansionState", null, SettingLevel.DEVICE, {
+                [spaceId]: { [tag]: true },
+            });
         });
     });
 

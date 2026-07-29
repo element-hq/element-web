@@ -191,6 +191,6 @@ export class BaseOngoingCallViewModel<
         const members = Array.from(participants.keys());
         const callHasOtherParticipants = doesCallHaveOtherParticipants(this.props.mxEvent, members);
         (this.getSnapshot().facePileViewModel as FacePileViewModel).updateMembers(members);
-        this.snapshot.merge({ isJoined, callHasOtherParticipants, ...extraSnapshot } as Partial<T>);
+        this.snapshot.merge({ isJoined, callHasOtherParticipants, ...extraSnapshot });
     }
 }

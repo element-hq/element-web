@@ -38,7 +38,7 @@ catalog:
     "@vitest/spy": 4.1.10
     "@vitest/coverage-v8": 4.1.10
     "@vitest/browser-playwright": 4.1.10
-    "@vitejs/plugin-react": 6.0.3
+    "@vitejs/plugin-react": 6.0.4
     unplugin-dts: 1.0.1
 
 catalogs:
@@ -118,10 +118,10 @@ allowedDeprecatedVersions:
     react-beautiful-dnd: "13"
 
 overrides:
-    pretty-format@30>react-is: 19.2.7
+    pretty-format@30>react-is: 19.2.8
     "@types/react": "catalog:"
     "@types/react-dom": "catalog:"
-    caniuse-lite: 1.0.30001803
+    caniuse-lite: 1.0.30001806
     matrix-widget-api: "^1.17.0"
     "@types/node": 25.9.3
     config-file-ts: 0.2.8-rc1

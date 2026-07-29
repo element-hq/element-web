@@ -96,12 +96,7 @@ const DeviceDetails: React.FC<Props> = ({
         {
             id: "device",
             heading: _t("common|device"),
-            values: [
-                { label: _t("common|model"), value: device.deviceModel },
-                { label: _t("settings|sessions|os"), value: device.deviceOperatingSystem },
-                { label: _t("settings|sessions|browser"), value: device.client },
-                { label: _t("settings|sessions|ip"), value: device.last_seen_ip },
-            ],
+            values: [{ label: _t("settings|sessions|ip"), value: device.last_seen_ip }],
         },
     ]
         .map((section) =>

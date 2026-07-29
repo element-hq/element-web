@@ -24,6 +24,8 @@ import {
     getCustomSectionData,
     isCustomSectionTag,
     isDefaultSectionTag,
+    isSectionExpanded,
+    setSectionExpanded,
 } from "../../stores/room-list-v3/section";
 import PosthogTrackers from "../../PosthogTrackers";
 import { CallStore, CallStoreEvent } from "../../stores/CallStore";
@@ -50,12 +52,6 @@ export class RoomListSectionHeaderViewModel
     private roomNotificationStates = new Set<RoomNotificationState>();
 
     /**
-     * Tracks the expanded/collapsed state per space.
-     * Key is spaceId. Defaults to expanded if not set.
-     */
-    private readonly expandedBySpace = new Map<string, boolean>();
-
-    /**
      * The calls of the rooms currently in this section that we are listening to, used to aggregate the call decoration.
      */
     private currentCalls = new Set<Call>();
@@ -65,7 +61,7 @@ export class RoomListSectionHeaderViewModel
         super(props, {
             id: props.tag,
             title: props.title,
-            isExpanded: true,
+            isExpanded: isSectionExpanded(props.spaceId, props.tag),
             isUnread: false,
             displaySectionMenu: !isDefaultSection,
             canBeReordered: !isDefaultSection || props.tag === CHATS_TAG,
@@ -79,9 +75,10 @@ export class RoomListSectionHeaderViewModel
         this.disposables.trackListener(CallStore.instance, CallStoreEvent.Call, this.onCallChanged);
     }
 
-    public onClick = (): void => {
+    public onClick = async (): Promise<void> => {
         const isExpanded = !this.snapshot.current.isExpanded;
-        this.expandedBySpace.set(this.props.spaceId, isExpanded);
+        // We don't wait to persist the expanded state to storage, as it is not critical and we want the UI to update immediately
+        void setSectionExpanded(this.props.spaceId, this.props.tag, isExpanded);
         this.snapshot.merge({ isExpanded });
         this.props.onToggleExpanded(isExpanded);
     };
@@ -98,7 +95,8 @@ export class RoomListSectionHeaderViewModel
      * This will not trigger the onToggleExpanded callback.
      */
     public set isExpanded(value: boolean) {
-        this.expandedBySpace.set(this.props.spaceId, value);
+        // We don't wait to persist the expanded state to storage, as it is not critical and we want the UI to update immediately
+        void setSectionExpanded(this.props.spaceId, this.props.tag, value);
         this.snapshot.merge({ isExpanded: value });
 
         const kind = value ? "Expand" : "Collapse";
@@ -111,7 +109,7 @@ export class RoomListSectionHeaderViewModel
      */
     public setSpace(spaceId: string): void {
         this.props.spaceId = spaceId;
-        const isExpanded = this.expandedBySpace.get(this.props.spaceId) ?? true;
+        const isExpanded = isSectionExpanded(this.props.spaceId, this.props.tag);
         this.snapshot.merge({ isExpanded });
     }
 
