@@ -15,12 +15,12 @@ import { type RedactedBodyViewSnapshot } from "@element-hq/web-shared-components
 /** Converts a redacted event into the data required by the redacted body view. */
 export function getRedactedBodyViewModelProps(mxEvent: MatrixEvent, showTwelveHour: boolean): RedactedBodyViewSnapshot {
     const redactedBecause = mxEvent.getUnsigned().redacted_because;
-    
+
     const redactingUserId = redactedBecause?.sender;
     const redactingRoomId = mxEvent.getRoomId();
     const redactingRoom = redactingRoomId ? MatrixClientPeg.get()?.getRoom(redactingRoomId) : null;
     const redactingMember = redactingUserId ? redactingRoom?.getMember(redactingUserId) : undefined;
-    
+
     const text =
         !redactingUserId || redactingUserId === mxEvent.getSender()
             ? _t("timeline|self_redaction")
