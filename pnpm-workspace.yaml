@@ -4,8 +4,6 @@ ignorePatchFailures: false
 ignoreWorkspaceRootCheck: true
 minimumReleaseAgeStrict: true
 dedupePeerDependents: true
-dedupeDirectDeps: true
-dedupeInjectedDeps: true
 dedupePeers: true
 
 packages:
