@@ -10,12 +10,15 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { type MatrixEvent, EventType, RelationType, type Relations, RelationsEvent } from "matrix-js-sdk/src/matrix";
 
-import EmojiPicker from "./EmojiPicker";
+import { EmojiPicker } from "@element-hq/web-shared-components";
+
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import RoomContext from "../../../contexts/RoomContext";
 import { type FocusComposerPayload } from "../../../dispatcher/payloads/FocusComposerPayload";
+import * as recent from "../../../emojipicker/recent";
+import { getWebRovingAction } from "../../../accessibility/RovingTabIndex";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -130,6 +133,9 @@ class ReactionPicker extends React.Component<IProps, IState> {
                 isEmojiDisabled={this.isEmojiDisabled}
                 onFinished={this.props.onFinished}
                 selectedEmojis={this.state.selectedEmojis}
+                recentEmojis={recent.get()}
+                onRecordRecent={recent.add}
+                getAction={getWebRovingAction}
             />
         );
     }

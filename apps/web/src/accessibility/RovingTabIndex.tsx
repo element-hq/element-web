@@ -37,7 +37,7 @@ export type { IAction, IState } from "@element-hq/web-shared-components";
  * https://developer.mozilla.org/en-US/docs/Web/Accessibility/Keyboard-navigable_JavaScript_widgets#Technique_1_Roving_tabindex
  */
 
-const getWebRovingAction = (ev: React.KeyboardEvent): RovingAction | undefined => {
+export const getWebRovingAction = (ev: React.KeyboardEvent): RovingAction | undefined => {
     switch (getKeyBindingsManager().getAccessibilityAction(ev)) {
         case KeyBindingAction.Home:
             return RovingAction.Home;
