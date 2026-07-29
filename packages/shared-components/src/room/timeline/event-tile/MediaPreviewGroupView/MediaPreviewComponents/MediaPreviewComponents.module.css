@@ -96,3 +96,22 @@
 .largeImage.bannerImage img {
     max-height: 100px;
 }
+
+.largeVideo {
+    button {
+        background: none;
+        border: none;
+        width: 100%;
+        padding: 0;
+    }
+
+    video {
+        width: 100%;
+        object-fit: cover;
+        display: block;
+    }
+}
+
+.largeVideo.bannerVideo video {
+    max-height: 100px;
+}
