@@ -3,6 +3,8 @@ cleanupUnusedCatalogs: true
 ignorePatchFailures: false
 ignoreWorkspaceRootCheck: true
 minimumReleaseAgeStrict: true
+dedupePeerDependents: true
+dedupePeers: true
 
 packages:
     - "apps/*"
@@ -112,6 +114,7 @@ peerDependencyRules:
         react: "19"
         react-dom: "19"
         eslint: "8"
+        vite: "8"
 
 allowedDeprecatedVersions:
     eslint: "8"
