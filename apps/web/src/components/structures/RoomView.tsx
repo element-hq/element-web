@@ -1523,8 +1523,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         this.setState({ membersLoaded: true });
                     }
                 } catch (err) {
-                    const errorMessage =
-                        `Fetching room members for ${room.roomId} failed.` + " Room members will appear incomplete.";
+                    const errorMessage = `Fetching room members for ${room.roomId} failed. Room members will appear incomplete.`;
                     logger.error(errorMessage);
                     logger.error(err);
                 }

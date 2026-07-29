@@ -339,7 +339,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
                 homeserver={this.props.serverConfig.hsName}
                 loading={this.state.phase === Phase.SendingEmail}
                 onInputChanged={this.onInputChanged}
-                onLoginClick={this.props.onLoginClick!} // set by default props
+                onLoginClick={this.props.onLoginClick} // set by default props
                 onSubmitForm={this.onSubmitForm}
             />
         );
