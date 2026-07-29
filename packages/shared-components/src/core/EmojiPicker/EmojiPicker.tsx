@@ -83,7 +83,7 @@ const gridComponents = { List: GridList, Item: GridItem };
 /**
  * Props for {@link EmojiPicker}.
  */
-export interface EmojiPickerProps {
+interface EmojiPickerProps {
     /**
      * Set of which emojis are already selected and should be decorated as such.
      * If specified, emoji will use a checkbox role with aria-checked set appropriately.
@@ -123,10 +123,7 @@ export interface EmojiPickerProps {
 }
 
 /**
- * The emoji data derived from the initial props. These objects are mutated in
- * place (e.g. category visibility/enabled state, memoized filtered emoji) to
- * avoid re-rendering on scroll and while filtering, so they are created once
- * and kept stable across renders.
+ * Data about the set of emoji the control is rendering
  */
 interface EmojiPickerData {
     // A list of recently used emoji, shown as the first category
@@ -135,7 +132,7 @@ interface EmojiPickerData {
     memoizedDataByCategory: Record<CategoryKey, IEmoji[]>;
 }
 
-export function createEmojiPickerData(recentEmojis: string[] | undefined): EmojiPickerData {
+function createEmojiPickerData(recentEmojis: string[] | undefined): EmojiPickerData {
     // Convert recent emoji characters to emoji data, removing unknowns and duplicates
     const recentlyUsed = Array.from(
         new Set((recentEmojis ?? []).map(getEmojiFromUnicode).filter((emoji): emoji is IEmoji => !!emoji)),
