@@ -131,6 +131,7 @@ export interface EmojiPickerProps {
 interface EmojiPickerData {
     // A list of recently used emoji, shown as the first category
     recentlyUsed: IEmoji[];
+    // The emoji listed by category from emojibase with the addition of the 'recent' section
     memoizedDataByCategory: Record<CategoryKey, IEmoji[]>;
 }
 
@@ -216,12 +217,7 @@ export function EmojiPicker({
     const searchRef = useRef<HTMLInputElement>(null);
     const virtuosoRef = useRef<VirtuosoHandle>(null);
 
-    // Created once from the initial props and mutated in place thereafter.
-    const dataRef = useRef<EmojiPickerData | null>(null);
-    if (dataRef.current === null) {
-        dataRef.current = createEmojiPickerData(recentEmojis);
-    }
-    const { recentlyUsed, memoizedDataByCategory } = dataRef.current;
+    const { recentlyUsed, memoizedDataByCategory } = useMemo(() => createEmojiPickerData(recentEmojis), [recentEmojis]);
 
     const [enabledCategories, setEnabledCategories] = useState(() => {
         return CATEGORY_CONFIG.filter((c) => (recentlyUsed.length === 0 ? c.id !== "recent" : true)).map((c) => c.id);
