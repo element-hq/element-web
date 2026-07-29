@@ -1,0 +1,6 @@
+.container {
+    margin-right: var(--EventTile_content-margin-inline-end);
+
+    /* to match URL preview width */
+    width: 478px;
+}

@@ -21,9 +21,7 @@ const meta = {
         style: "collapsed",
         icon: <FileIcon />,
         iconOnClick: () => {},
-        iconBorder: "var(--Light-color-icon-quaternary-alpha, rgba(1, 21, 50, 0.35))",
-        iconBg: "var(--Light-color-bg-decorative-4, #F1EFFF)",
-        iconFg: "#4200A6",
+        color: "#4200A6",
         header: "annual-report.pdf",
         body: "2.3 MB",
         buttons: [

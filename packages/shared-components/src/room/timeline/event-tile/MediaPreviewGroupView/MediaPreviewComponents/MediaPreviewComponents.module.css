@@ -1,3 +1,13 @@
+.header,
+.body {
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+    min-width: 0;
+    display: -webkit-box;
+    overflow: clip;
+}
+
 .leftGroup {
     display: flex;
     gap: 12px;
@@ -11,7 +21,7 @@
 
 .body {
     font-size: 13px;
-    color: #656D77;
+    color: #656d77;
 }
 
 .textContent {
@@ -36,8 +46,11 @@
     width: calc(28px * 1.5);
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 
     border-radius: 6px;
+    border: 1px solid rgba(1, 21, 50, 0.35);
+    background-color: #f1efff;
 
     svg {
         display: block;
@@ -58,7 +71,7 @@
     cursor: pointer;
 
     svg {
-        color: #656D77;
+        color: #656d77;
         display: block;
         height: 19px;
         width: 19px;

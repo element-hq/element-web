@@ -9,9 +9,9 @@ export type MediaPreviewGroupEntryCollapsedContent = {
 
 export type MediaPreviewGroupEntryExpandedContent = {
     style: "expanded";
-    footer?: string;
+    // footer?: string;
     largeImage: string;
-    largeImageOnClick?: () => {}
+    largeImageOnClick?: () => void;
 };
 
 export type MediaPreviewGroupEntryContent =
@@ -19,22 +19,24 @@ export type MediaPreviewGroupEntryContent =
     | MediaPreviewGroupEntryCollapsedContent;
 
 export interface MediaPreviewEntryButton {
-    icon: JSX.Element,
-    onClick: () => {}
+    icon: JSX.Element;
+    onClick: () => void;
+}
+
+export interface MediaPreviewIcon {
+    icon: JSX.Element;
+    color: string;
+    iconOnClick?: () => void;
 }
 
 export type MediaPreviewGroupEntry = {
-    icon: JSX.Element;
-    iconBorder: string;
-    iconBg: string;
-    iconFg: string;
-    iconOnClick?: () => void;
     header: string;
     headerUrl?: string;
     body: string;
 
-    buttons: Array<MediaPreviewEntryButton>
-} & MediaPreviewGroupEntryContent;
+    buttons?: Array<MediaPreviewEntryButton>;
+} & MediaPreviewGroupEntryContent &
+    MediaPreviewIcon;
 
 export interface MediaPreviewGroupSnapshot {
     entries: Array<MediaPreviewGroupEntry>;
@@ -49,15 +51,16 @@ export interface MediaPreviewGroupPreviewProps {
 export function MediaPreviewGroupPreview({ vm }: MediaPreviewGroupPreviewProps): JSX.Element | null {
     let { entries } = useViewModel(vm);
 
-    if (entries.length === 0)
-        return null;
+    if (entries.length === 0) return null;
 
-    return <div className={styles.container}>
-        {entries.map(entry => {
-            switch (entry.style) {
-                case "collapsed":
-                    return <CollapsedPreviewTile {...entry} />
-            }
-        })}
-    </div>;
+    return (
+        <div className={styles.container}>
+            {entries.map((entry) => {
+                switch (entry.style) {
+                    case "collapsed":
+                        return <CollapsedPreviewTile {...entry} />;
+                }
+            })}
+        </div>
+    );
 }
