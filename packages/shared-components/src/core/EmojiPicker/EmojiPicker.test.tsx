@@ -95,9 +95,15 @@ describe("EmojiPicker", function () {
         await userEvent.type(input, "test");
         await waitFor(() => expect(getVisibleEmojis()).not.toEqual(beforeEmojis));
 
-        // Clear the filter and assert that the visible emoji match what they were before filtering
+        // There may be different numbers of emoji before after since virtuoso may
+        // end up rendering more or fewer off screen. Chop any excess off so that it's
+        // just the *order* we're comparing.
         await userEvent.clear(input);
-        await waitFor(() => expect(getVisibleEmojis()).toEqual(beforeEmojis));
+        await waitFor(() => {
+            const afterEmojis = getVisibleEmojis();
+            const length = Math.min(beforeEmojis.length, afterEmojis.length);
+            expect(afterEmojis.slice(0, length)).toEqual(beforeEmojis.slice(0, length));
+        });
     });
 
     it("sort emojis by shortcode and size", function () {
