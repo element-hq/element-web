@@ -7,7 +7,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX } from "react";
+import React, { type JSX, useCallback, useContext, useEffect } from "react";
 import { CloseIcon, SearchIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../i18n/i18n";
@@ -16,70 +16,71 @@ import styles from "./EmojiPicker.module.css";
 
 interface IProps {
     query: string;
-    onChange(value: string): void;
-    onEnter(): void;
-    onKeyDown(event: React.KeyboardEvent): void;
+    onChange: (value: string) => void;
+    onEnter: () => void;
+    onKeyDown: (event: React.KeyboardEvent) => void;
     /** Ref to the search input, owned by the picker so it can inspect focus. */
     inputRef: React.RefObject<HTMLInputElement | null>;
 }
 
-class Search extends React.PureComponent<IProps> {
-    public static contextType = RovingTabIndexContext;
-    declare public context: React.ContextType<typeof RovingTabIndexContext>;
+/**
+ * The search input at the top of the emoji picker.
+ */
+export const Search: React.FC<IProps> = ({ query, onChange, onEnter, onKeyDown, inputRef }) => {
+    const context = useContext(RovingTabIndexContext);
 
-    public componentDidMount(): void {
+    useEffect(() => {
         // For some reason, neither the autoFocus nor just calling focus() here worked, so here's a window.setTimeout
-        window.setTimeout(() => this.props.inputRef.current?.focus(), 0);
-    }
+        window.setTimeout(() => inputRef.current?.focus(), 0);
+    }, [inputRef]);
 
-    private onKeyDown = (ev: React.KeyboardEvent): void => {
-        if (ev.key === "Enter") {
-            this.props.onEnter();
-            ev.stopPropagation();
-            ev.preventDefault();
-        } else {
-            this.props.onKeyDown(ev);
-        }
-    };
+    const onInputKeyDown = useCallback(
+        (ev: React.KeyboardEvent): void => {
+            if (ev.key === "Enter") {
+                onEnter();
+                ev.stopPropagation();
+                ev.preventDefault();
+            } else {
+                onKeyDown(ev);
+            }
+        },
+        [onEnter, onKeyDown],
+    );
 
-    public render(): React.ReactNode {
-        let rightButton: JSX.Element;
-        if (this.props.query) {
-            rightButton = (
-                <button onClick={() => this.props.onChange("")} title={_t("emoji_picker|cancel_search_label")}>
-                    <CloseIcon />
-                </button>
-            );
-        } else {
-            rightButton = (
-                <span className={styles.searchIcon}>
-                    <SearchIcon />
-                </span>
-            );
-        }
-
-        return (
-            <div className={styles.search}>
-                <input
-                    autoFocus
-                    type="text"
-                    placeholder={_t("action|search")}
-                    aria-label={_t("action|search")}
-                    value={this.props.query}
-                    onChange={(ev) => this.props.onChange(ev.target.value)}
-                    onKeyDown={this.onKeyDown}
-                    ref={this.props.inputRef}
-                    // Setting aria-activedescendant on the input allows screen readers to identify the active emoji.
-                    // Setting it when there is not a query causes screen readers to read out the first emoji when focusing the input, and it continually tells you you are in the table vs the input.
-                    aria-activedescendant={this.props.query ? this.context.state.activeNode?.id : undefined}
-                    aria-controls="mx_EmojiPicker_body"
-                    aria-haspopup="grid"
-                    aria-autocomplete="list"
-                />
-                {rightButton}
-            </div>
+    let rightButton: JSX.Element;
+    if (query) {
+        rightButton = (
+            <button onClick={() => onChange("")} title={_t("emoji_picker|cancel_search_label")}>
+                <CloseIcon />
+            </button>
+        );
+    } else {
+        rightButton = (
+            <span className={styles.searchIcon}>
+                <SearchIcon />
+            </span>
         );
     }
-}
 
-export default Search;
+    return (
+        <div className={styles.search}>
+            <input
+                autoFocus
+                type="text"
+                placeholder={_t("action|search")}
+                aria-label={_t("action|search")}
+                value={query}
+                onChange={(ev) => onChange(ev.target.value)}
+                onKeyDown={onInputKeyDown}
+                ref={inputRef}
+                // Setting aria-activedescendant on the input allows screen readers to identify the active emoji.
+                // Setting it when there is not a query causes screen readers to read out the first emoji when focusing the input, and it continually tells you you are in the table vs the input.
+                aria-activedescendant={query ? context.state.activeNode?.id : undefined}
+                aria-controls="mx_EmojiPicker_body"
+                aria-haspopup="grid"
+                aria-autocomplete="list"
+            />
+            {rightButton}
+        </div>
+    );
+};
