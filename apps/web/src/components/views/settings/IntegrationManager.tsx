@@ -96,6 +96,7 @@ export default class IntegrationManager extends React.Component<IProps, IState> 
             );
         }
 
+        // oxlint-disable-next-line react/iframe-missing-sandbox
         return <iframe title={_t("common|integration_manager")} src={this.props.url} onError={this.onError} />;
     }
 }

@@ -75,7 +75,7 @@ export function updateMobilePage(metadata: MobileAppMetadata, deepLinkUrl: strin
     }
 
     const step1Heading = document.getElementById("step1_heading")!;
-    step1Heading.innerHTML = step1Heading!.innerHTML.replace("Element", metadata.name);
+    step1Heading.innerHTML = step1Heading.innerHTML.replace("Element", metadata.name);
 
     // Step 2 is only shown on the mobile guide, not on mobile.element.io
     if (document.getElementById("step2_container")) {

@@ -110,15 +110,16 @@ export function LinkPreviewCollapsed(preview: LinkPreviewProps): JSX.Element {
 
     if (preview.image && !preview.image.playable) {
         img = (
-            <button
-                type="button"
-                style={{
-                    backgroundImage: `url('${preview.image.imageThumb}')`,
-                }}
-                className={styles.preview}
-                onClick={createImageClickHandler(preview)}
-                aria-label={_t("timeline|url_preview|view_image")}
-            />
+            <div className={styles.preview}>
+                <button
+                    type="button"
+                    style={{
+                        backgroundImage: `url('${preview.image.imageThumb}')`,
+                    }}
+                    onClick={createImageClickHandler(preview)}
+                    aria-label={_t("timeline|url_preview|view_image")}
+                />
+            </div>
         );
     }
 

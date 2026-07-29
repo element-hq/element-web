@@ -647,9 +647,9 @@ describe("HTMLExport", () => {
         await exporter.export();
         const html = await getMessageFile(exporter).text();
 
-        expect(html).not.toContain(`${name}`);
-        expect(html).toContain(`${escapeHtml(name)}`);
-        expect(html).not.toContain(`${topic}`);
+        expect(html).not.toContain(name);
+        expect(html).toContain(escapeHtml(name));
+        expect(html).not.toContain(topic);
         expect(html).toContain(`Topic: ${escapeHtml(topic)}`);
     });
 

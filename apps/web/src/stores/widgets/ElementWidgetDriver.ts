@@ -334,7 +334,7 @@ export class ElementWidgetDriver extends WidgetDriver {
             r = await client.sendStateEvent(
                 roomId,
                 eventType as keyof StateEvents,
-                content as StateEvents[keyof StateEvents],
+                content satisfies StateEvents[keyof StateEvents],
                 stateKey,
             );
         } else if (eventType === EventType.RoomRedaction) {
@@ -457,7 +457,7 @@ export class ElementWidgetDriver extends WidgetDriver {
                 roomId,
                 delayOpts,
                 eventType as keyof StateEvents,
-                content as StateEvents[keyof StateEvents],
+                content satisfies StateEvents[keyof StateEvents],
                 stateKey,
             );
         } else {

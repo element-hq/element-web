@@ -123,7 +123,7 @@ export function GenericDropdownMenu<T>({
     className,
     AdditionalOptions,
 }: IProps<T>): JSX.Element {
-    const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu<HTMLElement>();
+    const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
 
     const valueKey = calculateKey(value, toKey);
     const selected: GenericDropdownMenuItem<T> | undefined = options

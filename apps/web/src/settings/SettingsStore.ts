@@ -125,6 +125,7 @@ type HandlerMap = Partial<{
  * feature may be reported as disabled even though a user has specifically requested it
  * be enabled).
  */
+// oxlint-disable-next-line typescript/no-extraneous-class
 export default class SettingsStore {
     // We support watching settings for changes, and do this by tracking which callbacks have
     // been given to us. We end up returning the callbackRef to the caller so they can unsubscribe
@@ -263,7 +264,7 @@ export default class SettingsStore {
             if (roomId === null) {
                 // Unregister all existing watchers and register the new one
                 rooms.forEach((roomId) => {
-                    SettingsStore.unwatchSetting(this.monitors.get(settingName)!.get(roomId)!);
+                    SettingsStore.unwatchSetting(this.monitors.get(settingName)!.get(roomId));
                 });
                 this.monitors.get(settingName)!.clear();
                 registerWatcher();
@@ -334,10 +335,10 @@ export default class SettingsStore {
             SettingsStore.isFeature(settingName) &&
             SettingsStore.getValueAt(SettingLevel.CONFIG, settingName, null, true, true) !== false
         ) {
-            const betaInfo = SETTINGS[settingName]!.betaInfo;
+            const betaInfo = SETTINGS[settingName].betaInfo;
             if (betaInfo) {
                 betaInfo.requiresRefresh =
-                    betaInfo.requiresRefresh ?? SETTINGS[settingName]!.controller instanceof ReloadOnChangeController;
+                    betaInfo.requiresRefresh ?? SETTINGS[settingName].controller instanceof ReloadOnChangeController;
             }
             return betaInfo;
         }
@@ -868,8 +869,7 @@ export default class SettingsStore {
 
     private static getHandler(settingName: SettingKey, level: SettingLevel): SettingsHandler | null {
         const handlers = SettingsStore.getHandlers(settingName);
-        if (!handlers[level]) return null;
-        return handlers[level]!;
+        return handlers[level] ?? null;
     }
 
     private static getHandlers(settingName: SettingKey): HandlerMap {
