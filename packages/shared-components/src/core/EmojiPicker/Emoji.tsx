@@ -7,7 +7,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React from "react";
+import React, { useCallback } from "react";
 import { type Emoji as IEmoji } from "@matrix-org/emojibase-bindings";
 import classNames from "classnames";
 
@@ -21,36 +21,46 @@ interface IProps {
      * If specified, emoji will use a checkbox role with aria-checked set appropriately.
      */
     selectedEmojis?: Set<string>;
-    onClick(ev: ButtonEvent, emoji: IEmoji): void;
-    onMouseEnter(emoji: IEmoji): void;
-    onMouseLeave(emoji: IEmoji): void;
+    onClick: (ev: ButtonEvent, emoji: IEmoji) => void;
+    onMouseEnter: (emoji: IEmoji) => void;
+    onMouseLeave: (emoji: IEmoji) => void;
     disabled?: boolean;
     id?: string;
     className?: string;
 }
 
-class Emoji extends React.PureComponent<IProps> {
-    public render(): React.ReactNode {
-        const { onClick, onMouseEnter, onMouseLeave, emoji, selectedEmojis } = this.props;
-        const isSelected = selectedEmojis?.has(emoji.unicode);
-        return (
-            <RovingButton
-                id={this.props.id}
-                onClick={(ev) => onClick(ev, emoji)}
-                onMouseEnter={() => onMouseEnter(emoji)}
-                onMouseLeave={() => onMouseLeave(emoji)}
-                className={this.props.className}
-                disabled={this.props.disabled || undefined}
-                role={selectedEmojis ? "checkbox" : undefined}
-                aria-checked={this.props.disabled ? undefined : isSelected}
-                focusOnMouseOver
-            >
-                <div className={classNames("mx_EmojiPicker_item", styles.item, { [styles.itemSelected]: isSelected })}>
-                    {emoji.unicode}
-                </div>
-            </RovingButton>
-        );
-    }
-}
+const Emoji = React.memo(function Emoji({
+    onClick,
+    onMouseEnter,
+    onMouseLeave,
+    emoji,
+    selectedEmojis,
+    disabled,
+    id,
+    className,
+}: IProps): React.ReactNode {
+    const isSelected = selectedEmojis?.has(emoji.unicode);
+
+    const onMouseEnterWrapped = useCallback(() => onMouseEnter(emoji), [onMouseEnter, emoji]);
+    const onMouseLeaveWrapped = useCallback(() => onMouseLeave(emoji), [onMouseLeave, emoji]);
+
+    return (
+        <RovingButton
+            id={id}
+            onClick={(ev) => onClick(ev, emoji)}
+            onMouseEnter={onMouseEnterWrapped}
+            onMouseLeave={onMouseLeaveWrapped}
+            className={className}
+            disabled={disabled || undefined}
+            role={selectedEmojis ? "checkbox" : undefined}
+            aria-checked={isSelected}
+            focusOnMouseOver
+        >
+            <div className={classNames("mx_EmojiPicker_item", styles.item, { [styles.itemSelected]: isSelected })}>
+                {emoji.unicode}
+            </div>
+        </RovingButton>
+    );
+});
 
 export default Emoji;
