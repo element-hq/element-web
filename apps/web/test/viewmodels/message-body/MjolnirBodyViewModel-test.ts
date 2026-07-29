@@ -5,79 +5,44 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type MouseEvent } from "react";
-import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
-
 import { MjolnirBodyViewModel } from "../../../src/viewmodels/room/timeline/event-tile/body/MjolnirBodyViewModel";
 
 describe("MjolnirBodyViewModel", () => {
-    const createEvent = (roomId = "!room:example.com", eventId = "$event:example.com"): MatrixEvent =>
-        ({
-            getRoomId: jest.fn().mockReturnValue(roomId),
-            getId: jest.fn().mockReturnValue(eventId),
-        }) as unknown as MatrixEvent;
-
-    const createClickEvent = (): MouseEvent<HTMLButtonElement> =>
-        ({
-            preventDefault: jest.fn(),
-            stopPropagation: jest.fn(),
-        }) as unknown as MouseEvent<HTMLButtonElement>;
-
-    afterEach(() => {
-        localStorage.clear();
-        jest.restoreAllMocks();
-    });
-
     it("has an empty snapshot", () => {
-        const vm = new MjolnirBodyViewModel({ mxEvent: createEvent() });
+        const vm = new MjolnirBodyViewModel({ onAllow: jest.fn() });
 
         expect(vm.getSnapshot()).toEqual({});
     });
 
-    it("allows rendering the hidden event and notifies the parent", () => {
-        const onMessageAllowed = jest.fn();
-        const vm = new MjolnirBodyViewModel({
-            mxEvent: createEvent("!room:example.com", "$hidden:example.com"),
-            onMessageAllowed,
-        });
-        const event = createClickEvent();
+    it("forwards the allow action", () => {
+        const onAllow = jest.fn();
+        const vm = new MjolnirBodyViewModel({ onAllow });
 
-        vm.onAllowClick(event);
+        vm.onAllow();
 
-        expect(event.preventDefault).toHaveBeenCalled();
-        expect(event.stopPropagation).toHaveBeenCalled();
-        expect(localStorage.getItem("mx_mjolnir_render_!room:example.com__$hidden:example.com")).toBe("true");
-        expect(onMessageAllowed).toHaveBeenCalledTimes(1);
+        expect(onAllow).toHaveBeenCalledTimes(1);
     });
 
-    it("uses the updated event and callback", () => {
-        const oldCallback = jest.fn();
-        const newCallback = jest.fn();
-        const vm = new MjolnirBodyViewModel({
-            mxEvent: createEvent("!old:example.com", "$old:example.com"),
-            onMessageAllowed: oldCallback,
-        });
+    it("uses the updated action", () => {
+        const oldAction = jest.fn();
+        const newAction = jest.fn();
+        const vm = new MjolnirBodyViewModel({ onAllow: oldAction });
 
-        vm.setEvent(createEvent("!new:example.com", "$new:example.com"));
-        vm.setOnMessageAllowed(newCallback);
-        vm.onAllowClick(createClickEvent());
+        vm.setProps({ onAllow: newAction });
+        vm.onAllow();
 
-        expect(localStorage.getItem("mx_mjolnir_render_!old:example.com__$old:example.com")).toBeNull();
-        expect(localStorage.getItem("mx_mjolnir_render_!new:example.com__$new:example.com")).toBe("true");
-        expect(oldCallback).not.toHaveBeenCalled();
-        expect(newCallback).toHaveBeenCalledTimes(1);
+        expect(oldAction).not.toHaveBeenCalled();
+        expect(newAction).toHaveBeenCalledTimes(1);
     });
 
     it("does not emit snapshot updates for unchanged action inputs", () => {
-        const mxEvent = createEvent();
-        const onMessageAllowed = jest.fn();
+        const props = { onAllow: jest.fn() };
         const listener = jest.fn();
-        const vm = new MjolnirBodyViewModel({ mxEvent, onMessageAllowed });
+        const vm = new MjolnirBodyViewModel(props);
 
         vm.subscribe(listener);
 
-        vm.setEvent(mxEvent);
-        vm.setOnMessageAllowed(onMessageAllowed);
+        vm.setProps(props);
 
         expect(listener).not.toHaveBeenCalled();
     });

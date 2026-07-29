@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import mime from "mime";
-import React, { createRef, type JSX, useEffect } from "react";
+import React, { createRef, type JSX, useCallback, useEffect } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
     EventType,
@@ -32,6 +32,7 @@ import MLocationBody from "./MLocationBody";
 import MBeaconBody from "./MBeaconBody";
 import { type GetRelationsForEvent, type IEventTileOps } from "../rooms/EventTile";
 import { MjolnirBodyViewModel } from "../../../viewmodels/room/timeline/event-tile/body/MjolnirBodyViewModel";
+import { allowMjolnirBody } from "../../../viewmodels/room/timeline/event-tile/EventTileMjolnirBodyState";
 import {
     DecryptionFailureBodyFactory,
     FileBodyFactory,
@@ -81,15 +82,14 @@ const baseEvTypes = new Map<string, React.ComponentType<IBodyProps>>([
 ]);
 
 function MjolnirBodyWrappedView({ mxEvent, onMessageAllowed, ref }: IBodyProps): JSX.Element {
-    const vm = useCreateAutoDisposedViewModel(() => new MjolnirBodyViewModel({ mxEvent, onMessageAllowed }));
+    const onAllow = useCallback(() => {
+        allowMjolnirBody(mxEvent, onMessageAllowed);
+    }, [mxEvent, onMessageAllowed]);
+    const vm = useCreateAutoDisposedViewModel(() => new MjolnirBodyViewModel({ onAllow }));
 
     useEffect(() => {
-        vm.setEvent(mxEvent);
-    }, [mxEvent, vm]);
-
-    useEffect(() => {
-        vm.setOnMessageAllowed(onMessageAllowed);
-    }, [onMessageAllowed, vm]);
+        vm.setProps({ onAllow });
+    }, [onAllow, vm]);
 
     return <MjolnirBodyView vm={vm} ref={ref} />;
 }
