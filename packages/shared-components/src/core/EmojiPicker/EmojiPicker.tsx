@@ -27,11 +27,13 @@ import Search from "./Search";
 import Preview from "./Preview";
 import QuickReactions from "./QuickReactions";
 import Emoji from "./Emoji";
-import { EMOJI_HEIGHT, EMOJIS_PER_ROW } from "./config";
 import { type ButtonEvent } from "./RovingButton";
 import styles from "./EmojiPicker.module.css";
 
 const ZERO_WIDTH_JOINER = "\u200D";
+
+export const EMOJI_HEIGHT = 35;
+export const EMOJIS_PER_ROW = 8;
 
 const CATEGORY_CONFIG: Category[] = [
     { id: "recent", untranslatedName: _td("emoji|category_frequently_used"), emoji: "🕒" },
