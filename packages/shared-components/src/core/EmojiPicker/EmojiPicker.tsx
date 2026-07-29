@@ -72,8 +72,10 @@ const GridList: Components<ListItem>["List"] = ({ ref, ...props }) => {
 };
 
 const GridItem: Components<ListItem>["Item"] = ({ item, ...props }) => {
+    // Headers are interleaved with emoji rows as direct children of the role="grid"
+    // list, so they must also be grid rows: a grid may only own rows/rowgroups.
     if (item.type === "header") {
-        return <div {...props} />;
+        return <div {...props} role="row" />;
     }
     return <div {...props} role="row" className={styles.row} />;
 };
@@ -411,22 +413,12 @@ export function EmojiPicker({
         [onChoose, onRecordRecent, onFinished],
     );
 
-    // Get a unique ID for categories and append to it to create unique IDs for each category's tabpanel.
-    // (because we can't call hooks in a loop).
-    const categoryIdBase = useId();
-
     const renderItem = useCallback(
         (_index: number, item: ListItem): React.ReactNode => {
             if (item.type === "header") {
                 const category = item.category;
                 return (
-                    <div
-                        className={styles.category}
-                        data-category-id={category.id}
-                        id={`${categoryIdBase}-${category.id}`}
-                        role="tabpanel"
-                        aria-label={_t(category.untranslatedName)}
-                    >
+                    <div className={styles.category} data-category-id={category.id} role="gridcell">
                         <Heading as="h2" className={styles.categoryLabel}>
                             {_t(category.untranslatedName)}
                         </Heading>
@@ -446,7 +438,7 @@ export function EmojiPicker({
                 </div>
             ));
         },
-        [selectedEmojis, onClickEmoji, onHoverEmoji, onHoverEmojiEnd, isEmojiDisabled, categoryIdBase],
+        [selectedEmojis, onClickEmoji, onHoverEmoji, onHoverEmojiEnd, isEmojiDisabled],
     );
 
     const pickerBodyId = useId();
@@ -469,7 +461,7 @@ export function EmojiPicker({
                         enabledCategories={enabledCategories}
                         selectedCategory={selectedCategory}
                         onAnchorClick={scrollToCategory}
-                        categoryIdBase={categoryIdBase}
+                        pickerBodyId={pickerBodyId}
                         getAction={getAction}
                     />
                     <Search

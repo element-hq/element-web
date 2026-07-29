@@ -21,10 +21,9 @@ interface Props {
     selectedCategory: CategoryKey;
     onAnchorClick: (id: CategoryKey) => void;
     /**
-     * Base id for the category tabpanels. The actual ID of each tabpanel must be
-     * this string and the category with a hyphen between, i.e. `${categoryIdBase}-${category.id}`.
+     * Id of the scrollable picker body that the tabs control (for aria-controls).
      */
-    categoryIdBase: string;
+    pickerBodyId: string;
     /**
      * Optional action resolver used to map keyboard events to
      * {@link RovingAction} values, e.g. to apply app-level custom keybindings.
@@ -57,7 +56,7 @@ export const Tabs: React.FC<Props> = ({
     enabledCategories,
     selectedCategory,
     onAnchorClick,
-    categoryIdBase,
+    pickerBodyId,
     getAction,
 }) => {
     const findNearestEnabled = useCallback(
@@ -150,7 +149,11 @@ export const Tabs: React.FC<Props> = ({
                         role="tab"
                         tabIndex={category.id === selectedCategory ? 0 : -1} // roving
                         aria-selected={category.id === selectedCategory}
-                        aria-controls={`${categoryIdBase}-${category.id}`}
+                        // Normally with tabs, this would be the ID of a tabpanel role but this isn't a real
+                        // tab control, it controls a scroller and virtuoso doesn't render sections that are
+                        // off screen so they may not be in the DOM anyway. We point it at the whole scrollable
+                        // region instead.
+                        aria-controls={pickerBodyId}
                     >
                         {category.emoji}
                     </button>
