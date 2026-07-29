@@ -29,7 +29,10 @@ interface IProps {
     className?: string;
 }
 
-const Emoji = React.memo(function Emoji({
+/**
+ * A single emoji cell rendered in the emoji picker.
+ */
+export const Emoji = React.memo(function Emoji({
     onClick,
     onMouseEnter,
     onMouseLeave,
@@ -62,5 +65,3 @@ const Emoji = React.memo(function Emoji({
         </RovingButton>
     );
 });
-
-export default Emoji;

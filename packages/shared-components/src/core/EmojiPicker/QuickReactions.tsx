@@ -13,7 +13,7 @@ import classNames from "classnames";
 
 import { _t } from "../i18n/i18n";
 import { Toolbar, type RovingTabIndexProviderProps } from "../roving";
-import Emoji from "./Emoji";
+import { Emoji } from "./Emoji";
 import { type ButtonEvent } from "./RovingButton";
 import styles from "./EmojiPicker.module.css";
 import { Heading } from "@vector-im/compound-web";
@@ -33,7 +33,10 @@ interface IProps {
     getAction?: RovingTabIndexProviderProps["getAction"];
 }
 
-const QuickReactions: React.FC<IProps> = ({ selectedEmojis, onClick, getAction }) => {
+/**
+ * A row of quick reaction emojis at the bottom of the emoji picker.
+ */
+export const QuickReactions: React.FC<IProps> = ({ selectedEmojis, onClick, getAction }) => {
     const [hover, setHover] = useState<IEmoji | undefined>(undefined);
 
     const onMouseEnter = useCallback((emoji: IEmoji): void => {
@@ -72,5 +75,3 @@ const QuickReactions: React.FC<IProps> = ({ selectedEmojis, onClick, getAction }
         </section>
     );
 };
-
-export default QuickReactions;

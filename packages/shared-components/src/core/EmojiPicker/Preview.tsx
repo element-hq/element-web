@@ -17,24 +17,20 @@ interface IProps {
     emoji: Emoji;
 }
 
-class Preview extends React.PureComponent<IProps> {
-    public render(): React.ReactNode {
-        const {
-            unicode,
-            label,
-            shortcodes: [shortcode],
-        } = this.props.emoji;
+export const Preview: React.FC<IProps> = ({ emoji }) => {
+    const {
+        unicode,
+        label,
+        shortcodes: [shortcode],
+    } = emoji;
 
-        return (
-            <div className={styles.footer}>
-                <div className={styles.previewEmoji}>{unicode}</div>
-                <div className={styles.previewText}>
-                    <div className={classNames(styles.name, styles.previewName)}>{label}</div>
-                    <div className={styles.shortcode}>{shortcode}</div>
-                </div>
+    return (
+        <div className={styles.footer}>
+            <div className={styles.previewEmoji}>{unicode}</div>
+            <div className={styles.previewText}>
+                <div className={classNames(styles.name, styles.previewName)}>{label}</div>
+                <div className={styles.shortcode}>{shortcode}</div>
             </div>
-        );
-    }
-}
-
-export default Preview;
+        </div>
+    );
+};

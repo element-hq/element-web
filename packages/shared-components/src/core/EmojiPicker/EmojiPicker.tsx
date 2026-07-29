@@ -22,11 +22,11 @@ import {
     RovingStateActionType,
     type RovingTabIndexProviderProps,
 } from "../roving";
-import Tabs from "./Tabs";
+import { Tabs } from "./Tabs";
 import Search from "./Search";
-import Preview from "./Preview";
-import QuickReactions from "./QuickReactions";
-import Emoji from "./Emoji";
+import { Preview } from "./Preview";
+import { QuickReactions } from "./QuickReactions";
+import { Emoji } from "./Emoji";
 import { type ButtonEvent } from "./RovingButton";
 import styles from "./EmojiPicker.module.css";
 

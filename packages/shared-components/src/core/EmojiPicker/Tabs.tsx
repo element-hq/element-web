@@ -15,7 +15,7 @@ import { RovingAction, type RovingTabIndexProviderProps } from "../roving";
 import { type CategoryKey, type Category } from "./EmojiPicker";
 import styles from "./EmojiPicker.module.css";
 
-interface IProps {
+interface Props {
     categories: Category[];
     enabledCategories: CategoryKey[];
     selectedCategory: CategoryKey;
@@ -47,7 +47,13 @@ const getDefaultAction = (ev: React.KeyboardEvent): RovingAction | undefined => 
 /**
  * The tab bar at the top of the emoji picker with a tab for each category.
  */
-const Tabs: React.FC<IProps> = ({ categories, enabledCategories, selectedCategory, onAnchorClick, getAction }) => {
+export const Tabs: React.FC<Props> = ({
+    categories,
+    enabledCategories,
+    selectedCategory,
+    onAnchorClick,
+    getAction,
+}) => {
     const findNearestEnabled = useCallback(
         (index: number, delta: number): number | undefined => {
             index += categories.length;
@@ -148,5 +154,3 @@ const Tabs: React.FC<IProps> = ({ categories, enabledCategories, selectedCategor
         </nav>
     );
 };
-
-export default Tabs;
