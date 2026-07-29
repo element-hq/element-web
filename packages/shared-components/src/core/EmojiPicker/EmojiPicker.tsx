@@ -164,6 +164,11 @@ function emojiMatchesFilter(emoji: IEmoji, filter: string): boolean {
  * Filter the given emoji by the (already lower-cased and trimmed) query and
  * sort matches so the most relevant shortcodes come first. Returns the input
  * unchanged when the filter is empty. Never mutates the input array.
+ *
+ * @param emojis - The emoji to filter
+ * @param lcFilter - The lower-cased and trimmed filter string
+ *
+ * @returns The filtered and sorted emoji
  */
 export function filterEmojis(emojis: IEmoji[], lcFilter: string): IEmoji[] {
     if (lcFilter === "") return emojis;

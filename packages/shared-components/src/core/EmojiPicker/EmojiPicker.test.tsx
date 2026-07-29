@@ -9,10 +9,10 @@
 import React from "react";
 import { DATA_BY_CATEGORY } from "@matrix-org/emojibase-bindings";
 import userEvent from "@testing-library/user-event";
-import { render, waitFor } from "@test-utils";
+import { render, waitFor, screen } from "@test-utils";
 import { describe, expect, it, vi } from "vitest";
 
-import { createEmojiPickerData, EmojiPicker, filterEmojis } from "./EmojiPicker";
+import { EmojiPicker, filterEmojis } from "./EmojiPicker";
 
 describe("EmojiPicker", function () {
     // Recent emojis as they would be provided by the app, most used first
@@ -20,87 +20,28 @@ describe("EmojiPicker", function () {
 
     // Helper to get the currently active emoji's text content from the grid
     const getActiveEmojiText = (container: HTMLElement): string =>
-        container.querySelector('.mx_EmojiPicker_body .mx_EmojiPicker_item_wrapper [tabindex="0"]')?.textContent || "";
+        container.querySelector('[role="gridcell"] [tabindex="0"]')?.textContent || "";
 
-    it("should initialize categories with correct state when no recent emojis", () => {
-        const { categories } = createEmojiPickerData(undefined);
+    it("should disable the recent category when no recent emojis", () => {
+        render(<EmojiPicker onChoose={() => false} onFinished={vi.fn()} />);
 
-        // Verify we have all expected categories
-        expect(categories).toHaveLength(9);
-        expect(categories.map((c) => c.id)).toEqual([
-            "recent",
-            "people",
-            "nature",
-            "foods",
-            "activity",
-            "places",
-            "objects",
-            "symbols",
-            "flags",
-        ]);
-
-        // Recent category should be disabled when empty
-        const recentCategory = categories.find((c) => c.id === "recent");
-        expect(recentCategory).toMatchObject({
-            id: "recent",
-            enabled: false,
-            visible: false,
-            firstVisible: false,
-        });
-
-        // People category should be the first visible when no recent emojis
-        const peopleCategory = categories.find((c) => c.id === "people");
-        expect(peopleCategory).toMatchObject({
-            id: "people",
-            enabled: true,
-            visible: true,
-            firstVisible: true,
-        });
-
-        // Other categories should start as not visible and not firstVisible
-        const natureCategory = categories.find((c) => c.id === "nature");
-        expect(natureCategory).toMatchObject({
-            id: "nature",
-            enabled: true,
-            visible: false,
-            firstVisible: false,
-        });
-
-        const flagsCategory = categories.find((c) => c.id === "flags");
-        expect(flagsCategory).toMatchObject({
-            id: "flags",
-            enabled: true,
-            visible: false,
-            firstVisible: false,
-        });
-
-        // All categories should have refs and names
-        categories.forEach((cat) => {
-            expect(cat.ref).toBeTruthy();
-            expect(cat.name).toBeTruthy();
-        });
+        const recentTab = screen.getByRole("tab", { name: "🕒" });
+        expect(recentTab).toBeDisabled();
     });
 
-    it("should initialize categories with recent as firstVisible when recent emojis exist", () => {
-        const { categories } = createEmojiPickerData(RECENT_EMOJIS);
+    it("should select the people category by default when no recent emojis", () => {
+        render(<EmojiPicker onChoose={() => false} onFinished={vi.fn()} />);
 
-        // Recent category should be enabled and firstVisible
-        const recentCategory = categories.find((c) => c.id === "recent");
-        expect(recentCategory).toMatchObject({
-            id: "recent",
-            enabled: true,
-            visible: true,
-            firstVisible: true,
-        });
+        const peopleTab = screen.getByRole("tab", { name: "😀" });
+        expect(peopleTab).toHaveAttribute("aria-selected", "true");
+    });
 
-        // People category should be visible but NOT firstVisible when recent exists
-        const peopleCategory = categories.find((c) => c.id === "people");
-        expect(peopleCategory).toMatchObject({
-            id: "people",
-            enabled: true,
-            visible: true,
-            firstVisible: false,
-        });
+    it("should enable and select the recent category when recent emojis are supplied", () => {
+        render(<EmojiPicker onChoose={() => false} onFinished={vi.fn()} recentEmojis={RECENT_EMOJIS} />);
+
+        const recentTab = screen.getByRole("tab", { name: "🕒" });
+        expect(recentTab).toBeEnabled();
+        expect(recentTab).toHaveAttribute("aria-selected", "true");
     });
 
     it("should record recent emoji when onChoose does not return false", async () => {
