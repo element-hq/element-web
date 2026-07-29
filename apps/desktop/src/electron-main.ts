@@ -324,7 +324,7 @@ app.on("ready", async () => {
         event.preventDefault();
 
         // Let's ask the user if they really want to exit the app
-        const shouldWarnBeforeExit = store.get("warnBeforeExit", true);
+        const shouldWarnBeforeExit = store.shouldWarnBeforeExit();
         if (shouldWarnBeforeExit) {
             const shouldCancelCloseRequest =
                 dialog.showMessageBoxSync(global.mainWindow, {

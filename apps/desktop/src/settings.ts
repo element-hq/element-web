@@ -28,7 +28,7 @@ const Settings: Record<string, Setting> = {
     },
     "Electron.warnBeforeExit": {
         async read(): Promise<any> {
-            return Store.instance?.get("warnBeforeExit");
+            return Store.instance?.shouldWarnBeforeExit();
         },
         async write(value: any): Promise<void> {
             Store.instance?.set("warnBeforeExit", value);

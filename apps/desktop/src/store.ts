@@ -64,7 +64,8 @@ export async function clearDataAndRelaunch(electronSession: Session): Promise<vo
 }
 
 interface StoreData {
-    warnBeforeExit: boolean;
+    /** whether to warn before quitting; unset until the user chooses, see Store.shouldWarnBeforeExit */
+    warnBeforeExit?: boolean;
     minimizeToTray: boolean;
     spellCheckerEnabled: boolean;
     autoHideMenuBar: boolean;
@@ -185,8 +186,11 @@ class Store extends ElectronStore<StoreData> {
             clearInvalidConfig: false,
             schema: {
                 warnBeforeExit: {
+                    // Deliberately no `default` here: conf writes schema defaults straight to
+                    // electron-config.json on first run, which would make the platform default
+                    // indistinguishable from a value the user chose. The default is resolved on read
+                    // instead, by shouldWarnBeforeExit().
                     type: "boolean",
-                    default: true,
                 },
                 minimizeToTray: {
                     type: "boolean",
@@ -229,6 +233,18 @@ class Store extends ElectronStore<StoreData> {
                 },
             },
         });
+    }
+
+    /**
+     * Whether to warn the user before quitting the app via the quit keyboard shortcut
+     * (⌘Q on macOS, Ctrl+Q / Alt+F4 elsewhere).
+     *
+     * Defaults to off on macOS, where the platform convention is that ⌘Q quits immediately, and on
+     * elsewhere. A value the user has explicitly set always takes precedence over that default.
+     * See https://github.com/element-hq/element-web/issues/32287.
+     */
+    public shouldWarnBeforeExit(): boolean {
+        return this.get("warnBeforeExit", process.platform !== "darwin");
     }
 
     private safeStorageReadyPromise?: Promise<boolean>;
