@@ -1,10 +1,11 @@
 .tile {
-    border: 1px solid #E1E6EC;
+    border: 1px solid #e1e6ec;
     padding: var(--cpd-space-3x);
     border-radius: 14px;
 
     display: flex;
     gap: 12px;
 
-    width: 392px;
+    max-width: 100%;
+    margin-bottom: 0.5em;
 }

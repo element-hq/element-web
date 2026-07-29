@@ -4,9 +4,9 @@
 }
 
 .tile {
-    border: 1px solid #E1E6EC;
+    border: 1px solid #e1e6ec;
     border-radius: 14px;
 
-    width: 392px;
+    max-width: 100%;
     overflow: clip;
 }
