@@ -12,7 +12,7 @@ import { useRovingTabIndex } from "../roving";
 /**
  * An event which can trigger a button activation.
  */
-export type ButtonEvent = React.MouseEvent<Element> | React.KeyboardEvent<Element> | React.FormEvent<Element>;
+export type ButtonEvent = React.MouseEvent | React.KeyboardEvent | React.FormEvent;
 
 interface RovingButtonProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onClick"> {
     /**
