@@ -11,25 +11,27 @@ import FileIcon from "@vector-im/compound-design-tokens/assets/web/icons/documen
 import ExpandIcon from "@vector-im/compound-design-tokens/assets/web/icons/expand";
 import DownloadIcon from "@vector-im/compound-design-tokens/assets/web/icons/download";
 
-import { TextPreviewTile } from "./TextPreviewTile";
+import { VideoPreviewTile } from "./VideoPreviewTile";
 
 const meta = {
-    title: "Room/Timeline/MediaPreviewGroupView/TextPreviewTile",
-    component: TextPreviewTile,
+    title: "Room/Timeline/MediaPreviewGroupView/VideoPreviewTile",
+    component: VideoPreviewTile,
     tags: ["autodocs"],
     args: {
-        style: "text",
+        style: "video",
+        largeVideo: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+        videoSize: "banner",
         icon: <FileIcon />,
         iconOnClick: () => {},
         color: "#4200A6",
-        header: "annual-report.pdf",
-        body: "2.3 MB",
+        header: "holiday-clip.mp4",
+        body: "12.4 MB",
         buttons: [
             { icon: <ExpandIcon />, onClick: () => ({}) },
             { icon: <DownloadIcon />, onClick: () => ({}) },
         ],
     },
-} satisfies Meta<typeof TextPreviewTile>;
+} satisfies Meta<typeof VideoPreviewTile>;
 
 export default meta;
 
@@ -37,20 +39,39 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
+export const Uncollapsed: Story = {
+    args: {
+        videoSize: "full",
+    },
+};
+
+export const ClickableUncollapsedVideo: Story = {
+    args: {
+        videoSize: "full",
+        largeVideoOnClick: () => {
+            window.alert("Video clicked");
+            return {};
+        },
+    },
+};
+
 export const WithHeaderUrl: Story = {
     args: {
-        headerUrl: "https://example.com/annual-report.pdf",
+        headerUrl: "https://example.com/holiday-clip.mp4",
+    },
+};
+
+export const ClickableVideo: Story = {
+    args: {
+        largeVideoOnClick: () => {
+            window.alert("Video clicked");
+            return {};
+        },
     },
 };
 
 export const NoButtons: Story = {
     args: {
         buttons: [],
-    },
-};
-
-export const ClickableIcon: Story = {
-    args: {
-        iconOnClick: () => window.alert("Icon clicked"),
     },
 };
