@@ -67,9 +67,9 @@ type ListItem = { type: "header"; category: Category } | { type: "row"; emojis: 
 // The single Virtuoso renders a flat list that mixes category headers and emoji rows.
 // The Item wrapper picks its semantics per entry: a plain block for headers, a grid
 // row for emoji rows.
-const GridList: Components<ListItem>["List"] = React.forwardRef(function GridList(props, ref) {
+const GridList: Components<ListItem>["List"] = ({ ref, ...props }) => {
     return <div {...props} ref={ref} className={styles.list} role="grid" aria-multiselectable />;
-});
+};
 
 const GridItem: Components<ListItem>["Item"] = ({ item, ...props }) => {
     if (item.type === "header") {
