@@ -306,8 +306,8 @@ export default class EventListSummary extends React.Component<Props, State> {
 
             let transition = t;
 
-            if (i < transitions.length - 1 && modMap[t] && modMap[t]!.after === t2) {
-                transition = modMap[t]!.newTransition;
+            if (i < transitions.length - 1 && modMap[t] && modMap[t].after === t2) {
+                transition = modMap[t].newTransition;
                 i++;
             }
 

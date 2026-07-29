@@ -75,7 +75,7 @@ export class MediaEventHelper implements IDestroyable {
     private fetchSource = (): Promise<Blob> => {
         const content = this.event.getContent<MediaEventContent>();
         if (this.media.isEncrypted) {
-            return decryptFile(content.file!, content.info);
+            return decryptFile(content.file, content.info);
         }
 
         return (

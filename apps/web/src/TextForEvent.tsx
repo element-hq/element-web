@@ -49,7 +49,7 @@ function getRoomMemberDisplayname(client: MatrixClient, event: MatrixEvent, user
 }
 
 function textForCallEvent(event: MatrixEvent, client: MatrixClient): () => string {
-    const roomName = client.getRoom(event.getRoomId()!)?.name;
+    const roomName = client.getRoom(event.getRoomId())?.name;
     const isSupported = client.supportsVoip();
 
     return isSupported

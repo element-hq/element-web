@@ -70,7 +70,7 @@ export const ThreadPanelHeader: React.FC<{
 }> = ({ filterOption, setFilterOption }) => {
     const mxClient = useMatrixClientContext();
     const roomContext = useScopedRoomContext("room");
-    const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu<HTMLElement>();
+    const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
     const options: readonly ThreadPanelHeaderOption[] = [
         {
             label: _t("threads|all_threads"),

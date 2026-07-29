@@ -206,7 +206,7 @@ function makeMockSasCallbacks(): ShowSasCallbacks {
     const unicorn: EmojiMapping = ["🦄", "unicorn"];
     return {
         sas: {
-            emoji: new Array<EmojiMapping>(7).fill(unicorn),
+            emoji: Array.from<EmojiMapping>({ length: 7 }).map(() => unicorn),
         },
         cancel: jest.fn(),
         confirm: jest.fn(),
