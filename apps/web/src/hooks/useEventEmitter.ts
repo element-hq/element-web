@@ -190,4 +190,5 @@ export function useEventEmitterAsyncState<T, Events extends string, Arguments ex
 /**
  * Indicates that the callback for `useEventEmitterAsyncState` is not changing the value of the state.
  */
+// oxlint-disable-next-line typescript/no-extraneous-class
 export class NoChange {}

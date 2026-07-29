@@ -123,4 +123,4 @@ let singletonLifecycleStore: LifecycleStore | null = null;
 if (!singletonLifecycleStore) {
     singletonLifecycleStore = new LifecycleStore();
 }
-export default singletonLifecycleStore!;
+export default singletonLifecycleStore;

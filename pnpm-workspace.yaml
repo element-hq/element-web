@@ -25,7 +25,7 @@ catalog:
     "playwright-core": 1.61.1
     # Compound
     "@vector-im/compound-design-tokens": 10.2.1
-    "@vector-im/compound-web": 9.8.0
+    "@vector-im/compound-web": 9.9.0
     # i18n
     matrix-web-i18n: 3.6.0
     # fonts
@@ -121,7 +121,7 @@ overrides:
     pretty-format@30>react-is: 19.2.7
     "@types/react": "catalog:"
     "@types/react-dom": "catalog:"
-    caniuse-lite: 1.0.30001803
+    caniuse-lite: 1.0.30001806
     matrix-widget-api: "^1.17.0"
     "@types/node": 25.9.3
     config-file-ts: 0.2.8-rc1

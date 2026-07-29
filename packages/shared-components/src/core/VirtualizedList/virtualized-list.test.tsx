@@ -52,7 +52,7 @@ function renderItemElement(
     const isFocused = context.tabIndexKey === itemKey;
     return (
         <div className="mx_item" data-testid={`row-${index}`} tabIndex={isFocused ? 0 : -1} role="gridcell">
-            {item === SEPARATOR_ITEM ? "---" : (item as TestItem).name}
+            {item === SEPARATOR_ITEM ? "---" : item.name}
         </div>
     );
 }
@@ -81,7 +81,7 @@ function renderClickableItemElement(
             }}
             onFocus={(e) => onFocus(item, e)}
         >
-            {item === SEPARATOR_ITEM ? "---" : (item as TestItem).name}
+            {item === SEPARATOR_ITEM ? "---" : item.name}
         </div>
     );
 }
@@ -448,7 +448,7 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
 
             mockIsItemFocusable.mockImplementation((item: TestItemWithSeparator) => {
                 if (item === SEPARATOR_ITEM) return false;
-                return (item as TestItem).isFocusable !== false;
+                return item.isFocusable !== false;
             });
 
             renderListWithHeight({ items: mixedItems });
@@ -476,7 +476,7 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
 
             mockIsItemFocusable.mockImplementation((item: TestItemWithSeparator) => {
                 if (item === SEPARATOR_ITEM) return false;
-                return (item as TestItem).isFocusable !== false;
+                return item.isFocusable !== false;
             });
 
             renderListWithHeight({ items: mixedItems });
@@ -709,7 +709,7 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
                             style={{ height: `${ITEM_HEIGHT}px`, display: "block", width: "100%" }}
                             onFocus={(e) => onFocus(item, e)}
                         >
-                            {item === SEPARATOR_ITEM ? "---" : (item as TestItem).name}
+                            {item === SEPARATOR_ITEM ? "---" : item.name}
                         </button>
                     );
                 },

@@ -209,6 +209,7 @@ exports[`<SecurityRoomSettingsTab /> join rule warns when trying to make an encr
       class="mx_Dialog_buttons_row"
     >
       <button
+        class="cancel"
         data-testid="dialog-cancel-button"
         type="button"
       >

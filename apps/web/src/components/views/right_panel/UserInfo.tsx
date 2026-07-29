@@ -195,14 +195,14 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
     let content: JSX.Element | undefined;
     switch (phase) {
         case RightPanelPhases.MemberInfo:
-            content = <UserInfoBasicView room={room!} member={member as User} />;
+            content = <UserInfoBasicView room={room!} member={member} />;
             break;
         case RightPanelPhases.EncryptionPanel:
             classes.push("mx_UserInfo_smallAvatar");
             content = (
                 <EncryptionPanel
                     {...(props as React.ComponentProps<typeof EncryptionPanel>)}
-                    member={member as User | RoomMember}
+                    member={member}
                     onClose={onEncryptionPanelClose}
                     isRoomEncrypted={Boolean(isRoomEncrypted)}
                 />

@@ -43,6 +43,11 @@ jobs:
                     - name: Rethemendex Check
                       command: "rethemendex"
                       assert-diff: true
+                    - name: Module API Docs Check
+                      command: "build"
+                      install: normal
+                      project: "@element-hq/element-web-module-api"
+                      assert-diff: true
                     - name: Docs
                       install: layered
                       command: "docs:build"
@@ -52,7 +57,7 @@ jobs:
         name: ${{ matrix.name }}
         runs-on: ubuntu-24.04
         steps:
-            - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   persist-credentials: false
 
@@ -74,6 +79,15 @@ jobs:
               run: pnpm nx run-many -t "$CMD" -p
               env:
                   CMD: ${{ matrix.command }}
+              if: matrix.project == ''
+
+            - name: Run ${{ matrix.command }} on ${{ matrix.project }}
+              run: pnpm nx run -t "$CMD" -p "$PROJECT"
+              env:
+                  CMD: ${{ matrix.command }}
+                  PROJECT: ${{ matrix.project }}
+
+              if: matrix.project
 
             - name: Assert no changes
               run: git diff --exit-code
@@ -85,12 +99,12 @@ jobs:
         permissions:
             security-events: write
         steps:
-            - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   persist-credentials: false
 
             - name: Run zizmor
-              uses: zizmorcore/zizmor-action@6599ee8b7a49aef6a770f63d261d214911a7ce02 # v0.6.0
+              uses: zizmorcore/zizmor-action@6fc4b006235f201fdab3722e17240ab420d580e5 # v0.6.1
 
     i18n:
         strategy:

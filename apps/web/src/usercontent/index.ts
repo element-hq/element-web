@@ -43,7 +43,7 @@ function remoteRender(event: MessageEvent): void {
         img.style.webkitMaskRepeat = "no-repeat";
         img.style.display = "inline-block";
         img.style.webkitMaskImage = `url('${data.imgSrc}')`;
-        img.style.backgroundColor = `${a.style.color}`;
+        img.style.backgroundColor = a.style.color;
     }
 
     const body = document.body;

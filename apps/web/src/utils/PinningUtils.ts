@@ -19,6 +19,7 @@ import {
 import { isContentActionable } from "./EventUtils";
 import { ReadPinsEventId } from "../components/views/right_panel/types";
 
+// oxlint-disable-next-line typescript/no-extraneous-class
 export default class PinningUtils {
     /**
      * Event types that may be pinned.

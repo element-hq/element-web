@@ -504,7 +504,6 @@
         "message_layout": "Mise en page des messages",
         "message_timestamp_invalid": "Horodatage non valide",
         "microphone": "Micro",
-        "model": "Modèle",
         "moderation_and_safety": "Modération et sécurité",
         "modern": "Moderne",
         "mute": "Mettre en sourdine",
@@ -2851,7 +2850,6 @@
         "send_typing_notifications": "Envoyer des notifications de saisie",
         "sessions": {
             "best_security_note": "Pour une sécurité optimale, vérifiez vos sessions et supprimez toutes sessions que vous ne reconnaissez pas ou que vous n’utilisez plus.",
-            "browser": "Navigateur",
             "confirm_sign_out": {
                 "one": "Confirmer la suppression de cet appareil",
                 "other": "Confirmer la suppression de ces appareils"
@@ -2902,7 +2900,6 @@
             "no_sessions": "Aucune session n’a été trouvée.",
             "no_unverified_sessions": "Aucune session non vérifiée n’a été trouvée.",
             "no_verified_sessions": "Aucune session vérifiée n’a été trouvée.",
-            "os": "Système d’exploitation",
             "other_sessions_heading": "Autres sessions",
             "push_heading": "Notifications push",
             "push_subheading": "Recevoir les notifications push sur cette session.",

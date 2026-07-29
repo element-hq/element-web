@@ -143,7 +143,7 @@ export class ProxiedModuleApi implements ModuleApi {
 
         return {
             homeserverUrl: hsUrl,
-            userId: creds.user_id!,
+            userId: creds.user_id,
             deviceId: creds.device_id!,
             accessToken: creds.access_token!,
         };

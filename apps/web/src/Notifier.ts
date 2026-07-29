@@ -262,7 +262,7 @@ export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, Emi
             avatarUrl = Avatar.avatarUrlForMember(ev.sender, 40, 40, "crop");
         }
 
-        const notif = plaf.displayNotification(title, msg!, avatarUrl, room, ev);
+        const notif = plaf.displayNotification(title, msg, avatarUrl, room, ev);
 
         // if displayNotification returns non-null,  the platform supports
         // clearing notifications later, so keep track of this.

@@ -29,7 +29,8 @@ export default defineConfig({
             bundleTypes: {
                 configPath: "./api-extractor.json",
                 invokeOptions: {
-                    localBuild: !!process.env.CI,
+                    // Always overwrite element-web-module-api.api.md
+                    localBuild: true,
                     // oxlint-disable-next-line unicorn/prefer-module
                     typescriptCompilerFolder: path.resolve(require.resolve("@typescript/old"), "../.."),
                 },

@@ -35,7 +35,7 @@ export interface Props {
     /**
      * A callback which is called when a mouse event (most likely mouse down) occurs at the start of moving the PiP around.
      */
-    onStartMoving: (ev: React.MouseEvent<Element, MouseEvent>) => void;
+    onStartMoving: (ev: React.MouseEvent) => void;
     /**
      * This callback ref will be used by the ViewModel once the view is moving.
      * Widgets might be implemented with a top-layer DOM tree path containing the widget iframe.
@@ -69,7 +69,7 @@ export class WidgetPipViewModel
         this.disposables.trackListener(CallStore.instance, CallStoreEvent.Call, this.onCallChange);
     }
 
-    public onStartMoving: (ev: React.MouseEvent<Element, MouseEvent>) => void;
+    public onStartMoving: (ev: React.MouseEvent) => void;
 
     /**
      * The view model needs to know if the room is currently being viewed.
@@ -79,7 +79,7 @@ export class WidgetPipViewModel
         this.viewingRoom = viewing;
     }
 
-    public onBackClick(ev: React.MouseEvent<Element, MouseEvent>): void {
+    public onBackClick(ev: React.MouseEvent): void {
         ev.preventDefault();
         ev.stopPropagation();
 
