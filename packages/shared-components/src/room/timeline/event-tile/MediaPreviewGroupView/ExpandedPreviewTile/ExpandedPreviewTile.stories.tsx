@@ -22,9 +22,7 @@ const meta = {
         largeImage: "https://picsum.photos/seed/element/480/270",
         icon: <FileIcon />,
         iconOnClick: () => {},
-        iconBorder: "var(--Light-color-icon-quaternary-alpha, rgba(1, 21, 50, 0.35))",
-        iconBg: "var(--Light-color-bg-decorative-4, #F1EFFF)",
-        iconFg: "#4200A6",
+        color: "#4200A6",
         header: "annual-report.pdf",
         body: "2.3 MB",
         buttons: [
@@ -40,11 +38,13 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
+/*
 export const WithFooter: Story = {
     args: {
         footer: "Shared by Alice · 12:45",
     },
 };
+*/
 
 export const WithHeaderUrl: Story = {
     args: {
