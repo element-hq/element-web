@@ -7,13 +7,16 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type RefObject, useContext, useEffect, useRef } from "react";
 import { MsgType } from "matrix-js-sdk/src/matrix";
-import { type ImageContent } from "matrix-js-sdk/src/types";
+import { MediaEventContent, type ImageContent } from "matrix-js-sdk/src/types";
 import {
     DecryptionFailureBodyView,
     FileBodyView,
     ImageBodyView,
+    MediaPreviewGroupPreview,
     RedactedBodyView,
     VideoBodyView,
+    _t,
+    attachmentIconOfType,
     useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
 
@@ -29,6 +32,11 @@ import { RedactedBodyViewModel } from "../../../viewmodels/message-body/Redacted
 import { getRedactedBodyViewModelProps } from "../../../viewmodels/room/timeline/event-tile/EventTileRedactedBodyState";
 import { VideoBodyViewModel } from "../../../viewmodels/message-body/VideoBodyViewModel";
 import { isMimeTypeAllowed } from "../../../utils/blobs";
+import { MediaPreviewGroupViewModel } from "../../../viewmodels/message-body/MediaPreviewGroupViewModel";
+import { fileSize } from "../../../utils/FileUtils";
+import DownloadIcon from "@vector-im/compound-design-tokens/assets/web/icons/download";
+import { FileDownloader } from "../../../utils/FileDownloader";
+import path from "path";
 
 type MBodyComponent = React.ComponentType<IBodyProps>;
 
@@ -38,10 +46,41 @@ export function FileBodyFactory({
     forExport,
     showFileInfo,
 }: Pick<IBodyProps, "mxEvent" | "mediaEventHelper" | "forExport" | "showFileInfo">): JSX.Element {
+    /*
     const { timelineRenderingType } = useContext(RoomContext);
     const refIFrame = useRef<HTMLIFrameElement>(null) as RefObject<HTMLIFrameElement>;
     const refLink = useRef<HTMLAnchorElement>(null) as RefObject<HTMLAnchorElement>;
+    */
 
+    const content = mxEvent.getContent<MediaEventContent>();
+    const size = content.info?.size
+
+    const downloader = new FileDownloader();
+
+    const vm2 = useCreateAutoDisposedViewModel(
+        () =>
+            new MediaPreviewGroupViewModel({
+                entries: [
+                    {
+                        style: "collapsed",
+                        header: mediaEventHelper?.fileName!,
+                        body: size === undefined ? "Size unknown" : fileSize(size, { base: 2, standard: "jedec" }),
+                        buttons: mediaEventHelper === undefined ? undefined : [{
+                            icon: <DownloadIcon />,
+                            onClick: async () => {
+                                downloader.download({
+                                    blob: await mediaEventHelper.sourceBlob.value,   // decrypts transparently if E2EE
+                                    name: mediaEventHelper.fileName || _t("common|attachment"),
+                                });
+                            }
+                        }],
+                        ...attachmentIconOfType("light", content.info?.mimetype),
+                    }
+                ]
+            })
+    );
+
+    /*
     const vm = useCreateAutoDisposedViewModel(
         () =>
             new FileBodyViewModel({
@@ -64,8 +103,11 @@ export function FileBodyFactory({
             timelineRenderingType,
         });
     }, [mxEvent, mediaEventHelper, forExport, showFileInfo, timelineRenderingType, vm]);
+    */
 
-    return <FileBodyView vm={vm} refIFrame={refIFrame} refLink={refLink} className="mx_MFileBody" />;
+    return <MediaPreviewGroupPreview vm={vm2} />
+
+    // return <FileBodyView vm={vm} refIFrame={refIFrame} refLink={refLink} className="mx_MFileBody" />;
 }
 
 export function VideoBodyFactory({
