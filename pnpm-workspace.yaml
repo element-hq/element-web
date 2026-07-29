@@ -108,6 +108,8 @@ patchedDependencies:
     plist: patches/plist.patch
     # Workaround for type fails
     "@arcmantle/vite-plugin-import-css-sheet": patches/@arcmantle__vite-plugin-import-css-sheet.patch
+    # Workaround for scroll anchoring landing on transient placeholder rows (pending upstream)
+    "@tanstack/virtual-core@3.17.6": patches/@tanstack__virtual-core@3.17.6.patch
 
 peerDependencyRules:
     allowedVersions:
@@ -171,3 +173,7 @@ minimumReleaseAgeExclude:
     # Temporary for testing purposes
     - "@typescript/*"
     - typescript@7.0.2
+    # New timeline: 3.14.8/3.17.6 carry the upstream end-anchored-prepend fix
+    # (#1237); they were freshly published so are still inside the release-age
+    # window. Revisit once the release has aged past the cutoff.
+    - "@tanstack/*"
