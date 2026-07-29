@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ReactNode, useContext, useEffect, useState } from "react";
 import classNames from "classnames";
 import * as maplibregl from "maplibre-gl";
+import { type GeolocateErrorEvent } from "maplibre-gl";
 import { ClientEvent, type IClientWellKnown } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -123,7 +124,7 @@ const useMapWithStyle = ({
     };
 };
 
-const onGeolocateError = (e: GeolocationPositionError): void => {
+const onGeolocateError = (e: GeolocateErrorEvent): void => {
     logger.error("Could not fetch location", e);
     Modal.createDialog(ErrorDialog, {
         title: _t("location_sharing|error_fetch_location"),
