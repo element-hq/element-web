@@ -11,15 +11,16 @@ import FileIcon from "@vector-im/compound-design-tokens/assets/web/icons/documen
 import ExpandIcon from "@vector-im/compound-design-tokens/assets/web/icons/expand";
 import DownloadIcon from "@vector-im/compound-design-tokens/assets/web/icons/download";
 
-import { ExpandedPreviewTile } from "./ExpandedPreviewTile";
+import { ImagePreviewTile } from "./ImagePreviewTile";
 
 const meta = {
-    title: "Room/Timeline/MediaPreviewGroupView/ExpandedPreviewTile",
-    component: ExpandedPreviewTile,
+    title: "Room/Timeline/MediaPreviewGroupView/ImagePreviewTile",
+    component: ImagePreviewTile,
     tags: ["autodocs"],
     args: {
-        style: "expanded",
+        style: "image",
         largeImage: "https://picsum.photos/seed/element/480/270",
+        imageSize: "banner",
         icon: <FileIcon />,
         iconOnClick: () => {},
         color: "#4200A6",
@@ -30,13 +31,29 @@ const meta = {
             { icon: <DownloadIcon />, onClick: () => ({}) },
         ],
     },
-} satisfies Meta<typeof ExpandedPreviewTile>;
+} satisfies Meta<typeof ImagePreviewTile>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const Uncollapsed: Story = {
+    args: {
+        imageSize: "full",
+    },
+};
+
+export const ClickableUncollapsedImage: Story = {
+    args: {
+        imageSize: "full",
+        largeImageOnClick: () => {
+            window.alert("Image clicked");
+            return {};
+        },
+    },
+};
 
 /*
 export const WithFooter: Story = {

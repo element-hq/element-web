@@ -11,14 +11,14 @@ import FileIcon from "@vector-im/compound-design-tokens/assets/web/icons/documen
 import ExpandIcon from "@vector-im/compound-design-tokens/assets/web/icons/expand";
 import DownloadIcon from "@vector-im/compound-design-tokens/assets/web/icons/download";
 
-import { CollapsedPreviewTile } from "./CollapsedPreviewTile";
+import { TextPreviewTile } from "./TextPreviewTile";
 
 const meta = {
-    title: "Room/Timeline/MediaPreviewGroupView/CollapsedPreviewTile",
-    component: CollapsedPreviewTile,
+    title: "Room/Timeline/MediaPreviewGroupView/TextPreviewTile",
+    component: TextPreviewTile,
     tags: ["autodocs"],
     args: {
-        style: "collapsed",
+        style: "textonly",
         icon: <FileIcon />,
         iconOnClick: () => {},
         color: "#4200A6",
@@ -29,7 +29,7 @@ const meta = {
             { icon: <DownloadIcon />, onClick: () => ({}) },
         ],
     },
-} satisfies Meta<typeof CollapsedPreviewTile>;
+} satisfies Meta<typeof TextPreviewTile>;
 
 export default meta;
 
