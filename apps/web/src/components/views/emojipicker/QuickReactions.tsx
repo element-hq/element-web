@@ -53,18 +53,18 @@ class QuickReactions extends React.Component<IProps, IState> {
 
     public render(): React.ReactNode {
         return (
-            <section className="mx_EmojiPicker_footer mx_EmojiPicker_quick mx_EmojiPicker_category">
-                <h2 className="mx_EmojiPicker_quick_header mx_EmojiPicker_category_label">
+            <section>
+                <h2>
                     {!this.state.hover ? (
                         _t("emoji|quick_reactions")
                     ) : (
                         <React.Fragment>
-                            <span className="mx_EmojiPicker_name">{this.state.hover.label}</span>
-                            <span className="mx_EmojiPicker_shortcode">{this.state.hover.shortcodes[0]}</span>
+                            <span>{this.state.hover.label}</span>
+                            <span>{this.state.hover.shortcodes[0]}</span>
                         </React.Fragment>
                     )}
                 </h2>
-                <Toolbar className="mx_EmojiPicker_list" aria-label={_t("emoji|quick_reactions")}>
+                <Toolbar aria-label={_t("emoji|quick_reactions")}>
                     {QUICK_REACTIONS.map((emoji) => (
                         <Emoji
                             key={emoji.hexcode}

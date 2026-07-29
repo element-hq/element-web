@@ -59,9 +59,7 @@ export const Emoji = React.memo(function Emoji({
             aria-checked={isSelected}
             focusOnMouseOver
         >
-            <div className={classNames("mx_EmojiPicker_item", styles.item, { [styles.itemSelected]: isSelected })}>
-                {emoji.unicode}
-            </div>
+            <div className={classNames(styles.item, { [styles.itemSelected]: isSelected })}>{emoji.unicode}</div>
         </RovingButton>
     );
 });

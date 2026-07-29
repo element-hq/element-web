@@ -67,6 +67,7 @@ export const Search: React.FC<IProps> = ({ query, onChange, onEnter, onKeyDown, 
                 value={query}
                 onChange={(ev) => onChange(ev.target.value)}
                 onKeyDown={onInputKeyDown}
+                ref={inputRef}
                 // Setting aria-activedescendant on the input allows screen readers to identify the active emoji.
                 // Setting it when there is not a query causes screen readers to read out the first emoji when focusing the input, and it continually tells you you are in the table vs the input.
                 aria-activedescendant={query ? context.state.activeNode?.id : undefined}

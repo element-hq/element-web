@@ -314,6 +314,10 @@ export function EmojiPicker({
     );
 
     const shouldMoveFocus = useCallback((): boolean => {
+        // If the search field is active, the grid will still move the selected element but we don't
+        // want it to change the focus because the user trying to type in the field.
+        // NB. This does still break the ability to navaigate the text field with left/right arrows
+        // as they change the selected emoji in the grid. This seems… bad, but I'm keeping it how it was.
         return document.activeElement !== searchRef.current;
     }, []);
 
@@ -428,11 +432,7 @@ export function EmojiPicker({
                 );
             }
             return item.emojis.map((emoji) => (
-                <div
-                    role="gridcell"
-                    className={`mx_EmojiPicker_item_wrapper ${styles.itemWrapper}`}
-                    key={emoji.hexcode}
-                >
+                <div role="gridcell" className={styles.itemWrapper} key={emoji.hexcode}>
                     <Emoji
                         emoji={emoji}
                         selectedEmojis={selectedEmojis}

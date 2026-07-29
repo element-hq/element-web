@@ -133,7 +133,6 @@ export const Tabs: React.FC<Props> = ({
                 const classes = classNames(styles.anchor, {
                     [styles.anchorSelected]: category.id === selectedCategory,
                 });
-                // Properties of this button are also modified by EmojiPicker's updateVisibility in DOM.
                 return (
                     <button
                         disabled={!enabledCategories.includes(category.id)}

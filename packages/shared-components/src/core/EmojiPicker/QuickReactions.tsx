@@ -68,7 +68,7 @@ export const QuickReactions: React.FC<IProps> = ({ selectedEmojis, onClick, getA
                         onMouseEnter={onMouseEnter}
                         onMouseLeave={onMouseLeave}
                         selectedEmojis={selectedEmojis}
-                        className={`mx_EmojiPicker_item_wrapper ${styles.itemWrapper}`}
+                        className={styles.itemWrapper}
                     />
                 ))}
             </Toolbar>
