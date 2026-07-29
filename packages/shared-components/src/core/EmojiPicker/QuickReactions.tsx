@@ -7,7 +7,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { getEmojiFromUnicode, type Emoji as IEmoji } from "@matrix-org/emojibase-bindings";
 import classNames from "classnames";
 
@@ -29,65 +29,48 @@ const QUICK_REACTIONS = ["👍", "👎", "😄", "🎉", "😕", "❤️", "🚀
 
 interface IProps {
     selectedEmojis?: Set<string>;
-    onClick(ev: ButtonEvent, emoji: IEmoji): void;
+    onClick: (ev: ButtonEvent, emoji: IEmoji) => void;
     getAction?: RovingTabIndexProviderProps["getAction"];
 }
 
-interface IState {
-    hover?: IEmoji;
-}
+const QuickReactions: React.FC<IProps> = ({ selectedEmojis, onClick, getAction }) => {
+    const [hover, setHover] = useState<IEmoji | undefined>(undefined);
 
-class QuickReactions extends React.Component<IProps, IState> {
-    public constructor(props: IProps) {
-        super(props);
-        this.state = {};
-    }
+    const onMouseEnter = useCallback((emoji: IEmoji): void => {
+        setHover(emoji);
+    }, []);
 
-    private onMouseEnter = (emoji: IEmoji): void => {
-        this.setState({
-            hover: emoji,
-        });
-    };
+    const onMouseLeave = useCallback((): void => {
+        setHover(undefined);
+    }, []);
 
-    private onMouseLeave = (): void => {
-        this.setState({
-            hover: undefined,
-        });
-    };
-
-    public render(): React.ReactNode {
-        return (
-            <section className={classNames(styles.footer, styles.quick, styles.category)}>
-                <Heading as="h2" className={classNames(styles.quickHeader, styles.categoryLabel)}>
-                    {!this.state.hover ? (
-                        _t("emoji|quick_reactions")
-                    ) : (
-                        <React.Fragment>
-                            <span className={styles.name}>{this.state.hover.label}</span>
-                            <span className={styles.shortcode}>{this.state.hover.shortcodes[0]}</span>
-                        </React.Fragment>
-                    )}
-                </Heading>
-                <Toolbar
-                    className={styles.list}
-                    aria-label={_t("emoji|quick_reactions")}
-                    getAction={this.props.getAction}
-                >
-                    {QUICK_REACTIONS.map((emoji) => (
-                        <Emoji
-                            key={emoji.hexcode}
-                            emoji={emoji}
-                            onClick={this.props.onClick}
-                            onMouseEnter={this.onMouseEnter}
-                            onMouseLeave={this.onMouseLeave}
-                            selectedEmojis={this.props.selectedEmojis}
-                            className={`mx_EmojiPicker_item_wrapper ${styles.itemWrapper}`}
-                        />
-                    ))}
-                </Toolbar>
-            </section>
-        );
-    }
-}
+    return (
+        <section className={classNames(styles.footer, styles.quick, styles.category)}>
+            <Heading as="h2" className={classNames(styles.quickHeader, styles.categoryLabel)}>
+                {!hover ? (
+                    _t("emoji|quick_reactions")
+                ) : (
+                    <React.Fragment>
+                        <span className={styles.name}>{hover.label}</span>
+                        <span className={styles.shortcode}>{hover.shortcodes[0]}</span>
+                    </React.Fragment>
+                )}
+            </Heading>
+            <Toolbar className={styles.list} aria-label={_t("emoji|quick_reactions")} getAction={getAction}>
+                {QUICK_REACTIONS.map((emoji) => (
+                    <Emoji
+                        key={emoji.hexcode}
+                        emoji={emoji}
+                        onClick={onClick}
+                        onMouseEnter={onMouseEnter}
+                        onMouseLeave={onMouseLeave}
+                        selectedEmojis={selectedEmojis}
+                        className={`mx_EmojiPicker_item_wrapper ${styles.itemWrapper}`}
+                    />
+                ))}
+            </Toolbar>
+        </section>
+    );
+};
 
 export default QuickReactions;
