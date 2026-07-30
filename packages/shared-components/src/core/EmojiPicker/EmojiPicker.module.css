@@ -18,6 +18,7 @@
 }
 
 .body {
+    margin-left: var(--cpd-space-1-5x);
     flex: 1;
     overflow-y: scroll;
 }
@@ -116,7 +117,6 @@
 
 .category {
     padding: 0 12px;
-    background-color: var(--cpd-color-bg-canvas-default);
 }
 
 .categoryLabel {

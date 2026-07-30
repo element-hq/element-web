@@ -140,7 +140,7 @@ test.describe("Threads", () => {
         await locator.hover();
         await locator.getByRole("toolbar", { name: "Message Actions" }).getByRole("button", { name: "React" }).click();
 
-        locator = page.locator(".mx_EmojiPicker");
+        locator = page.getByLabel("Emoji picker");
         await locator.getByRole("textbox").fill("wave");
         await page.getByRole("gridcell", { name: "👋" }).click();
 

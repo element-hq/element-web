@@ -7,7 +7,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, useCallback, useContext } from "react";
+import React, { type JSX, useCallback, useContext, useEffect } from "react";
 import { CloseIcon, SearchIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../i18n/i18n";
@@ -30,6 +30,12 @@ interface IProps {
  */
 export const Search: React.FC<IProps> = ({ query, onChange, onEnter, onKeyDown, inputRef, controlsId }) => {
     const context = useContext(RovingTabIndexContext);
+
+    // This component gets mounted in a number of different places where the autoFocus attribute doesn't
+    // work, so focus the search box manually.
+    useEffect(() => {
+        inputRef.current?.focus();
+    }, [inputRef]);
 
     const onInputKeyDown = useCallback(
         (ev: React.KeyboardEvent): void => {
