@@ -129,7 +129,7 @@ export type ComposerApiTarget = {
     view: "thread";
 };
 
-// Warning: (ae-forgotten-export) The symbol "WebConfigJson" needs to be exported by the entry point element-web-module-api.d.ts
+// Warning: (ae-forgotten-export) The symbol "WebConfigJson" needs to be exported by the entry point index.d.ts
 //
 // @public
 export interface Config extends WebConfigJson {
@@ -398,7 +398,7 @@ export class ModuleIncompatibleError extends Error {
 // @public
 export class ModuleLoader {
     constructor(api: Api);
-    // Warning: (ae-forgotten-export) The symbol "ModuleExport" needs to be exported by the entry point element-web-module-api.d.ts
+    // Warning: (ae-forgotten-export) The symbol "ModuleExport" needs to be exported by the entry point index.d.ts
     //
     // (undocumented)
     load(moduleExport: ModuleExport): Promise<void>;
@@ -554,7 +554,7 @@ export type Variables = StringVariables | RichVariables;
 // @public
 export class Watchable<T> {
     constructor(currentValue: T);
-    // Warning: (ae-forgotten-export) The symbol "WatchFn" needs to be exported by the entry point element-web-module-api.d.ts
+    // Warning: (ae-forgotten-export) The symbol "WatchFn" needs to be exported by the entry point index.d.ts
     //
     // (undocumented)
     protected readonly listeners: Set<WatchFn<T>>;
