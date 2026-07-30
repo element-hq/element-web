@@ -625,10 +625,10 @@ describe("EventTileViewModel", () => {
             type: "m.room.message",
             user: "@alice:example.org",
             content: {
-                msgtype: "m.text",
+                "msgtype": "m.text",
                 "m.relates_to": {
-                    rel_type: "m.replace",
-                    event_id: "$original-event",
+                    "rel_type": "m.replace",
+                    "event_id": "$original-event",
                     "m.in_reply_to": {
                         event_id: "$parent-event",
                     },

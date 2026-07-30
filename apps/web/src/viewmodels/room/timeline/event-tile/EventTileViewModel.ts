@@ -408,7 +408,6 @@ export interface EventTileRenderState {
  * SDK objects are converted to plain render data here before the existing render tree consumes it.
  */
 export class EventTileViewModel extends BaseViewModel<EventTileRenderState, EventTileViewModelProps> {
-    private dependencies: EventTileViewModelDependencies;
     private messageTimestampViewModel?: MessageTimestampViewModel;
     private linkedMessageTimestampViewModel?: MessageTimestampViewModel;
     private threadMessagePreviewViewModel?: ThreadMessagePreviewViewModel;
@@ -424,12 +423,10 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
         const initialRenderState = EventTileViewModel.createRenderState(normalizedProps);
 
         super(normalizedProps, initialRenderState);
-        this.dependencies = dependencies;
     }
 
     /** Updates dependencies and root inputs together, emitting one consistent render state. */
     public setInputs(dependencies: EventTileViewModelDependencies, props: EventTileViewModelProps): void {
-        this.dependencies = dependencies;
         const normalizedProps = EventTileViewModel.normalizeDependencies(dependencies, props);
         this.props = normalizedProps;
         this.snapshot.set(EventTileViewModel.createRenderState(normalizedProps));
