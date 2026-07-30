@@ -423,22 +423,14 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
         const normalizedProps = EventTileViewModel.normalizeDependencies(dependencies, props);
         const initialRenderState = EventTileViewModel.createRenderState(normalizedProps);
 
-        super(props, initialRenderState);
+        super(normalizedProps, initialRenderState);
         this.dependencies = dependencies;
     }
 
-    /** Updates application dependencies and refreshes the derived render state. */
-    public setDependencies(dependencies: EventTileViewModelDependencies): void {
+    /** Updates dependencies and root inputs together, emitting one consistent render state. */
+    public setInputs(dependencies: EventTileViewModelDependencies, props: EventTileViewModelProps): void {
         this.dependencies = dependencies;
-
-        const normalizedProps = EventTileViewModel.normalizeDependencies(this.dependencies, this.props);
-        this.props = normalizedProps;
-        this.snapshot.set(EventTileViewModel.createRenderState(normalizedProps));
-    }
-
-    /** Updates root EventTile inputs and refreshes the derived render state. */
-    public setProps(props: EventTileViewModelProps): void {
-        const normalizedProps = EventTileViewModel.normalizeDependencies(this.dependencies, props);
+        const normalizedProps = EventTileViewModel.normalizeDependencies(dependencies, props);
         this.props = normalizedProps;
         this.snapshot.set(EventTileViewModel.createRenderState(normalizedProps));
     }

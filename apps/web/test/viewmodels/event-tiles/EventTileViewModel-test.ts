@@ -513,10 +513,23 @@ describe("EventTileViewModel", () => {
 
         expect(vm.getSnapshot().snapshot.timestamp.show).toBe(false);
 
-        vm.setProps(makeProps({ interaction: { hover: true } }));
+        vm.setInputs(makeDependencies(), makeProps({ interaction: { hover: true } }));
 
         expect(vm.getSnapshot().snapshot.timestamp.show).toBe(true);
         expect(listener).toHaveBeenCalled();
+
+        unsubscribe();
+        vm.dispose();
+    });
+
+    it("emits once when dependencies and inputs are updated together", () => {
+        const vm = new EventTileViewModel(makeDependencies(), makeProps());
+        const listener = jest.fn();
+        const unsubscribe = vm.subscribe(listener);
+
+        vm.setInputs(makeDependencies(), makeProps({ interaction: { hover: true } }));
+
+        expect(listener).toHaveBeenCalledTimes(1);
 
         unsubscribe();
         vm.dispose();
@@ -559,7 +572,7 @@ describe("EventTileViewModel", () => {
             isEmote: false,
         });
 
-        vm.setDependencies(
+        vm.setInputs(
             makeDependencies(
                 mkEvent({
                     event: true,
@@ -571,6 +584,7 @@ describe("EventTileViewModel", () => {
                     content: { msgtype: "m.call.invite" },
                 }),
             ),
+            makeProps(),
         );
 
         expect(vm.getSnapshot().snapshot.event).toMatchObject({
@@ -655,7 +669,7 @@ describe("EventTileViewModel", () => {
 
         expect(vm.getSnapshot().snapshot.event.hasRenderer).toBe(false);
 
-        vm.setDependencies(makeDependencies(makeEvent()));
+        vm.setInputs(makeDependencies(makeEvent()), makeProps());
 
         expect(vm.getSnapshot().snapshot.event.hasRenderer).toBe(true);
 
