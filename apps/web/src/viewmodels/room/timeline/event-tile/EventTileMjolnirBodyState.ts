@@ -12,6 +12,11 @@ export function getMjolnirBodyStorageKey(mxEvent: MatrixEvent): string {
     return `mx_mjolnir_render_${mxEvent.getRoomId()}__${mxEvent.getId()}`;
 }
 
+/** Gets whether a Mjolnir-hidden event has been allowed to render. */
+export function isMjolnirBodyAllowed(mxEvent: MatrixEvent): boolean {
+    return localStorage.getItem(getMjolnirBodyStorageKey(mxEvent)) === "true";
+}
+
 /** Allows a Mjolnir-hidden event to be shown and notifies the owning tile. */
 export function allowMjolnirBody(mxEvent: MatrixEvent, onMessageAllowed?: () => void): void {
     localStorage.setItem(getMjolnirBodyStorageKey(mxEvent), "true");

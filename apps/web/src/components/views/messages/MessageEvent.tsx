@@ -32,7 +32,10 @@ import MLocationBody from "./MLocationBody";
 import MBeaconBody from "./MBeaconBody";
 import { type GetRelationsForEvent, type IEventTileOps } from "../rooms/EventTile";
 import { MjolnirBodyViewModel } from "../../../viewmodels/room/timeline/event-tile/body/MjolnirBodyViewModel";
-import { allowMjolnirBody } from "../../../viewmodels/room/timeline/event-tile/EventTileMjolnirBodyState";
+import {
+    allowMjolnirBody,
+    isMjolnirBodyAllowed,
+} from "../../../viewmodels/room/timeline/event-tile/EventTileMjolnirBodyState";
 import {
     DecryptionFailureBodyFactory,
     FileBodyFactory,
@@ -297,10 +300,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
         }
 
         if (SettingsStore.getValue("feature_mjolnir")) {
-            const key = `mx_mjolnir_render_${this.props.mxEvent.getRoomId()}__${this.props.mxEvent.getId()}`;
-            const allowRender = localStorage.getItem(key) === "true";
-
-            if (!allowRender) {
+            if (!isMjolnirBodyAllowed(this.props.mxEvent)) {
                 const userDomain = this.props.mxEvent.getSender()?.split(":").slice(1).join(":");
                 const userBanned = Mjolnir.sharedInstance().isUserBanned(this.props.mxEvent.getSender()!);
                 const serverBanned = userDomain && Mjolnir.sharedInstance().isServerBanned(userDomain);

@@ -10,6 +10,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import {
     allowMjolnirBody,
     getMjolnirBodyStorageKey,
+    isMjolnirBodyAllowed,
 } from "../../../src/viewmodels/room/timeline/event-tile/EventTileMjolnirBodyState";
 
 describe("EventTile Mjolnir body state", () => {
@@ -25,6 +26,17 @@ describe("EventTile Mjolnir body state", () => {
         });
 
         expect(getMjolnirBodyStorageKey(event)).toBe("mx_mjolnir_render_!room:example.org__$event:example.org");
+    });
+
+    it("reads whether an event has been allowed", () => {
+        const event = new MatrixEvent({
+            room_id: "!room:example.org",
+            event_id: "$event:example.org",
+        });
+
+        expect(isMjolnirBodyAllowed(event)).toBe(false);
+        allowMjolnirBody(event);
+        expect(isMjolnirBodyAllowed(event)).toBe(true);
     });
 
     it("stores the allow decision and notifies the owning tile", () => {
