@@ -180,7 +180,9 @@ class RoomPreviewBar extends React.Component<IProps, IState> {
 
         if (myMember) {
             const previousMembership = myMember.events.member?.getPrevContent().membership;
-            if (myMember.isKicked()) {
+            // Let the joining case win while a rejoin is in flight, otherwise the bar keeps showing
+            // the kicked message and the user gets no feedback that their click did anything.
+            if (myMember.isKicked() && !this.props.joining) {
                 if (previousMembership === KnownMembership.Knock) {
                     return MessageCase.RequestDenied;
                 } else if (this.props.promptAskToJoin) {
