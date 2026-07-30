@@ -7,5 +7,7 @@
     gap: 12px;
 
     max-width: 100%;
-    margin-top: 0.5em;
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
+    background: var(--cpd-color-bg-subtle-secondary);
 }

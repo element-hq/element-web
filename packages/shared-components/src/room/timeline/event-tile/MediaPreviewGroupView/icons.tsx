@@ -1,5 +1,6 @@
 import { MediaPreviewIcon } from "./MediaPreviewGroupView";
 import FileIcon from "@vector-im/compound-design-tokens/assets/web/icons/document";
+import LinkIcon from "@vector-im/compound-design-tokens/assets/web/icons/link";
 import React from "react";
 
 export type ThemeType = "light" | "dark";
@@ -37,6 +38,20 @@ export function pdfIcon(theme: ThemeType): MediaPreviewIcon {
         return {
             icon: <FileIcon />,
             color: "#D51928",
+        };
+    }
+}
+
+export function linkIcon(theme: ThemeType): MediaPreviewIcon {
+    if (theme === "light") {
+        return {
+            icon: <LinkIcon />,
+            color: "#4200A6",
+        };
+    } else {
+        return {
+            icon: <LinkIcon />,
+            color: "#4200A6",
         };
     }
 }

@@ -135,13 +135,7 @@ export function Video({
     }
 }
 
-export function Audio({
-    audio,
-    audioOnClick,
-}: {
-    audio: string;
-    audioOnClick?: () => void;
-}): JSX.Element {
+export function Audio({ audio, audioOnClick }: { audio: string; audioOnClick?: () => void }): JSX.Element {
     if (audioOnClick) {
         return (
             <div className={styles.audio}>
