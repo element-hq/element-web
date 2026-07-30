@@ -61,7 +61,7 @@ import { useDispatcher } from "../../hooks/useDispatcher";
 import { Action } from "../../dispatcher/actions";
 import { type IState, RovingTabIndexProvider, useRovingTabIndex } from "../../accessibility/RovingTabIndex";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
-import { useTypedEventEmitterState } from "../../hooks/useEventEmitter";
+import { useTypedEventEmitter, useTypedEventEmitterState } from "../../hooks/useEventEmitter";
 import { awaitRoomDownSync } from "../../utils/RoomUpgrade";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { type JoinRoomReadyPayload } from "../../dispatcher/payloads/JoinRoomReadyPayload";
@@ -105,10 +105,17 @@ const Tile: React.FC<ITileProps> = ({
     children,
 }) => {
     const cli = useContext(MatrixClientContext);
-    const joinedRoom = useTypedEventEmitterState(cli, ClientEvent.Room, () => {
+    const getJoinedRoom = useCallback((): Room | undefined => {
         const cliRoom = cli?.getRoom(room.room_id);
         return cliRoom?.getMyMembership() === KnownMembership.Join ? cliRoom : undefined;
-    });
+    }, [cli, room.room_id]);
+    // ClientEvent.Room fires when a room is added to the store, which covers joining. Leaving
+    // leaves the room in the store and only emits RoomEvent.MyMembership, so both are needed.
+    const [joinedRoom, setJoinedRoom] = useState<Room | undefined>(getJoinedRoom);
+    const refreshJoinedRoom = useCallback(() => setJoinedRoom(() => getJoinedRoom()), [getJoinedRoom]);
+    useEffect(refreshJoinedRoom, [refreshJoinedRoom]);
+    useTypedEventEmitter(cli, ClientEvent.Room, refreshJoinedRoom);
+    useTypedEventEmitter(cli, RoomEvent.MyMembership, refreshJoinedRoom);
     const joinedRoomName = useTypedEventEmitterState(joinedRoom, RoomEvent.Name, (room) => room?.name);
     const name =
         joinedRoomName ||

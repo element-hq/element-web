@@ -8,8 +8,15 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { mocked } from "jest-mock";
-import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "jest-matrix-react";
-import { type HierarchyRoom, JoinRule, MatrixError, type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { act, fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "jest-matrix-react";
+import {
+    type HierarchyRoom,
+    JoinRule,
+    MatrixError,
+    type MatrixClient,
+    Room,
+    RoomEvent,
+} from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
 
@@ -380,6 +387,29 @@ describe("SpaceHierarchy", () => {
                 hierarchyKnockRoom1.room_id,
                 undefined,
             );
+        });
+
+        it("should offer to join again once the room is left", async () => {
+            mocked(client.getRooms).mockReturnValue([root, room1]);
+            mocked(room1.getMyMembership).mockReturnValue(KnownMembership.Join);
+
+            try {
+                render(getComponent());
+                await waitForElementToBeRemoved(screen.getAllByRole("progressbar"));
+
+                // Room 1 is joined, so it offers a preview. The knockable room offers one too.
+                expect(screen.getAllByRole("button", { name: "View" })).toHaveLength(2);
+
+                mocked(room1.getMyMembership).mockReturnValue(KnownMembership.Leave);
+                act(() => {
+                    client.emit(RoomEvent.MyMembership, room1, KnownMembership.Leave, KnownMembership.Join);
+                });
+
+                await waitFor(() => expect(screen.getAllByRole("button", { name: "View" })).toHaveLength(1));
+            } finally {
+                mocked(client.getRooms).mockReturnValue([root]);
+                mocked(room1.getMyMembership).mockReturnValue(KnownMembership.Leave);
+            }
         });
 
         it("should not render cycles", async () => {
