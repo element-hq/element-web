@@ -583,6 +583,59 @@ describe("EventTileViewModel", () => {
         vm.dispose();
     });
 
+    it("normalizes event identity, replacement, renderer, and decryption state", () => {
+        const event = makeEvent();
+        jest.spyOn(event, "replacingEventId").mockReturnValue("$replaced-event");
+        jest.spyOn(event, "isDecryptionFailure").mockReturnValue(true);
+
+        const vm = new EventTileViewModel(makeDependencies(event), makeProps());
+        const snapshot = vm.getSnapshot().snapshot;
+
+        expect(snapshot.event).toMatchObject({
+            eventType: "m.room.message",
+            eventId: "$event",
+            replacingEventId: "$replaced-event",
+            isEncryptionFailure: true,
+            hasRenderer: true,
+        });
+
+        vm.dispose();
+    });
+
+    it("derives an unavailable renderer for unsupported events", () => {
+        const event = mkEvent({
+            event: true,
+            room: "!room:example.org",
+            type: "org.example.unsupported",
+            user: "@alice:example.org",
+            content: {},
+        });
+        const vm = new EventTileViewModel(makeDependencies(event), makeProps());
+
+        expect(vm.getSnapshot().snapshot.event.hasRenderer).toBe(false);
+
+        vm.dispose();
+    });
+
+    it("recalculates renderer state when dependencies change", () => {
+        const event = mkEvent({
+            event: true,
+            room: "!room:example.org",
+            type: "org.example.unsupported",
+            user: "@alice:example.org",
+            content: {},
+        });
+        const vm = new EventTileViewModel(makeDependencies(event), makeProps());
+
+        expect(vm.getSnapshot().snapshot.event.hasRenderer).toBe(false);
+
+        vm.setDependencies(makeDependencies(makeEvent()));
+
+        expect(vm.getSnapshot().snapshot.event.hasRenderer).toBe(true);
+
+        vm.dispose();
+    });
+
     it("lazily owns timestamp child view models", () => {
         const vm = new EventTileViewModel(makeDependencies(), makeProps());
         const messageTimestampViewModel = vm.getMessageTimestampViewModel({ ts: 123 });
