@@ -51,7 +51,7 @@ export class BackgroundAudio {
 
         await this.audioContext.resume();
         source.onended = () => {
-            this.audioContext.suspend();
+            void this.audioContext.suspend();
         };
 
         source.start();

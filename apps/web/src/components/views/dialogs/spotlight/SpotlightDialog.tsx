@@ -343,7 +343,8 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
 
     const [supportsSpaceFiltering, setSupportsSpaceFiltering] = useState(true); // assume it does until we find out it doesn't
     useEffect(() => {
-        cli.isVersionSupported("v1.4")
+        void cli
+            .isVersionSupported("v1.4")
             .then((supported) => {
                 return supported || cli.doesServerSupportUnstableFeature("org.matrix.msc3827.stable");
             })
@@ -559,7 +560,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             recents.delete(room.roomId);
             recents.add(room.roomId);
 
-            SettingsStore.setValue(
+            void SettingsStore.setValue(
                 "SpotlightSearch.recentSearches",
                 null,
                 SettingLevel.ACCOUNT,
@@ -682,7 +683,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         id={`mx_SpotlightDialog_button_result_${result.member.userId}`}
                         key={`${Section[result.section]}-${result.member.userId}`}
                         onClick={() => {
-                            startDmOnFirstMessage(cli, [result.member]);
+                            void startDmOnFirstMessage(cli, [result.member]);
                             onFinished();
                         }}
                         aria-label={
@@ -977,7 +978,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         className="mx_SpotlightDialog_inviteLink"
                         onClick={() => {
                             setInviteLinkCopied(true);
-                            copyPlaintext(ownInviteLink);
+                            void copyPlaintext(ownInviteLink);
                         }}
                         onTooltipOpenChange={(open) => {
                             if (!open) setInviteLinkCopied(false);

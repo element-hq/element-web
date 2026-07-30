@@ -71,6 +71,6 @@ export const deleteDevicesWithInteractiveAuth = async (
                 [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
             },
         });
-        finished.then(([success]) => onFinished(success));
+        await finished.then(([success]) => onFinished(success));
     }
 };

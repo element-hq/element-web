@@ -102,13 +102,13 @@ export class ResizerViewModel
         const isCollapsed = newSize === 0;
         // Store the size if the panel isn't collapsed.
         if (!isCollapsed) {
-            SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, newSize);
+            void SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, newSize);
         }
         // Store whether the panel was collapsed.
         // This is stored separately instead of being inferred from the stored panel size so that
         // the panel can be restored to its last known non-zero width even after app reload, which
         // we wouldn't be able to do if we stored panelSize as zero.
-        SettingsStore.setValue("RoomList.isPanelCollapsed", null, SettingLevel.DEVICE, isCollapsed);
+        void SettingsStore.setValue("RoomList.isPanelCollapsed", null, SettingLevel.DEVICE, isCollapsed);
     };
 
     public setPanelHandle = (handle: PanelImperativeHandle): void => {

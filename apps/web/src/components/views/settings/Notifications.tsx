@@ -236,9 +236,8 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
             }),
         ];
 
-        // noinspection JSIgnoredPromiseFromCall
-        this.refreshFromServer();
-        this.refreshFromAccountData();
+        void this.refreshFromServer();
+        void this.refreshFromAccountData();
     }
 
     public componentWillUnmount(): void {
@@ -247,7 +246,7 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
 
     public componentDidUpdate(prevProps: Readonly<EmptyObject>, prevState: Readonly<IState>): void {
         if (this.state.deviceNotificationsEnabled !== prevState.deviceNotificationsEnabled) {
-            this.persistLocalNotificationSettings(this.state.deviceNotificationsEnabled);
+            void this.persistLocalNotificationSettings(this.state.deviceNotificationsEnabled);
         }
     }
 

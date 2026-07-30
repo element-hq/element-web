@@ -79,16 +79,16 @@ export default class SoftLogout extends React.Component<IProps, IState> {
             return;
         }
 
-        this.initLogin();
+        void this.initLogin();
     }
 
     private onClearAll = (): void => {
         const { finished } = Modal.createDialog(ConfirmWipeDeviceDialog);
-        finished.then(([wipeData]) => {
+        void finished.then(([wipeData]) => {
             if (!wipeData) return;
 
             logger.log("Clearing data from soft-logged-out session");
-            Lifecycle.logout();
+            return Lifecycle.logout();
         });
     };
 

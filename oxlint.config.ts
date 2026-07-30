@@ -198,6 +198,15 @@ export default defineConfig({
                 allowExpressions: true,
             },
         ],
+        // Require explicit handling of promises
+        "typescript/no-floating-promises": [
+            "error",
+            {
+                checkThenables: true,
+                ignoreIIFE: true,
+                ignoreVoid: true,
+            },
+        ],
 
         // Prevent invalid non-type re-exports of types, these can cause downstream build failures
         "typescript/consistent-type-exports": ["error"],
@@ -228,7 +237,6 @@ export default defineConfig({
         "typescript/no-redundant-type-constituents": "off",
         "typescript/no-useless-default-assignment": "off",
         "typescript/no-duplicate-type-constituents": "off",
-        "typescript/no-floating-promises": "off",
         "typescript/no-implied-eval": "off",
         "typescript/no-misused-spread": "off",
         "promise/valid-params": "off",

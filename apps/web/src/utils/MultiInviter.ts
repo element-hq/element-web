@@ -356,7 +356,7 @@ export default class MultiInviter {
         return new Promise<void>((resolve) => {
             const inviteUnknowns = (): void => {
                 const promises = unknownProfileUsers.map((u) => this.doInvite(u, true));
-                Promise.all(promises).then(() => resolve());
+                void Promise.all(promises).then(() => resolve());
             };
 
             if (!SettingsStore.getValue("promptBeforeInviteUnknownUsers", this.roomId)) {

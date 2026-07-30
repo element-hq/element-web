@@ -50,7 +50,7 @@ class EditableAliasesList extends EditableItemList<IEditableAliasesListProps> {
         }
 
         this.aliasField.current.focus();
-        this.aliasField.current.validate({ allowEmpty: false, focused: true });
+        void this.aliasField.current.validate({ allowEmpty: false, focused: true });
     };
 
     protected renderNewItemField(): JSX.Element {
@@ -136,7 +136,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
         if (this.props.canSetCanonicalAlias) {
             // load local aliases for providing recommendations
             // for the canonical alias and alt_aliases
-            this.loadLocalAliases();
+            void this.loadLocalAliases();
         }
     }
 
@@ -290,7 +290,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
         if (event.currentTarget.open) {
             // if local aliases haven't been preloaded yet at component mount
             if (!this.props.canSetCanonicalAlias && this.state.localAliases.length === 0) {
-                this.loadLocalAliases();
+                void this.loadLocalAliases();
             }
         }
         this.setState({ detailsOpen: event.currentTarget.open });
