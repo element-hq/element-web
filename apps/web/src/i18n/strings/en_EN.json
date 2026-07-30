@@ -1375,6 +1375,7 @@
         "error_permissions_room": "You do not have permission to invite people to this room.",
         "error_permissions_space": "You do not have permission to invite people to this space.",
         "error_profile_undisclosed": "User may or may not exist",
+        "error_rate_limited": "Too many invites were sent. Please try again later.",
         "error_transfer_multiple_target": "A call can only be transferred to a single user.",
         "error_unfederated_room": "This room is unfederated. You cannot invite people from external servers.",
         "error_unfederated_space": "This space is unfederated. You cannot invite people from external servers.",
