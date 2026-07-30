@@ -4,6 +4,7 @@ import styles from "./MediaPreviewGroupView.module.css";
 import { TextPreviewTile } from "./TextPreviewTile/TextPreviewTile";
 import { ImagePreviewTile } from "./ImagePreviewTile/ImagePreviewTile";
 import { VideoPreviewTile } from "./VideoPreviewTile/VideoPreviewTile";
+import { AudioPreviewTile } from "./AudioPreviewTile/AudioPreviewTile";
 
 export type MediaPreviewGroupEntryTextContent = {
     style: "text";
@@ -25,9 +26,16 @@ export type MediaPreviewGroupEntryVideoContent = {
     videoSize: ImageSize;
 };
 
+export type MediaPreviewGroupEntryAudioContent = {
+    style: "audio";
+    audio: string;
+    audioOnClick?: () => void;
+};
+
 export type MediaPreviewGroupEntryContent =
     | MediaPreviewGroupEntryImageContent
     | MediaPreviewGroupEntryVideoContent
+    | MediaPreviewGroupEntryAudioContent
     | MediaPreviewGroupEntryTextContent;
 
 export interface MediaPreviewEntryButton {
@@ -52,10 +60,12 @@ export type MediaPreviewGroupEntryBase = {
 export type MediaPreviewGroupTextEntry = MediaPreviewGroupEntryBase & MediaPreviewGroupEntryTextContent;
 export type MediaPreviewGroupImageEntry = MediaPreviewGroupEntryBase & MediaPreviewGroupEntryImageContent;
 export type MediaPreviewGroupVideoEntry = MediaPreviewGroupEntryBase & MediaPreviewGroupEntryVideoContent;
+export type MediaPreviewGroupAudioEntry = MediaPreviewGroupEntryBase & MediaPreviewGroupEntryAudioContent;
 
 export type MediaPreviewGroupEntry =
     | MediaPreviewGroupImageEntry
     | MediaPreviewGroupVideoEntry
+    | MediaPreviewGroupAudioEntry
     | MediaPreviewGroupTextEntry;
 
 export interface MediaPreviewGroupSnapshot {
@@ -83,6 +93,8 @@ export function MediaPreviewGroupPreview({ vm }: MediaPreviewGroupPreviewProps):
                         return <ImagePreviewTile {...entry} />;
                     case "video":
                         return <VideoPreviewTile {...entry} />;
+                    case "audio":
+                        return <AudioPreviewTile {...entry} />;
                 }
             })}
         </div>
