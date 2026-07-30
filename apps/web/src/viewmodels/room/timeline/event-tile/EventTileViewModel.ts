@@ -401,7 +401,11 @@ export interface EventTileRenderState {
     };
 }
 
-/** Derives the current EventTile snapshot from component-owned inputs. */
+/**
+ * Aggregate application-side render-state boundary for EventTile.
+ *
+ * SDK objects are converted to plain render data here before the existing render tree consumes it.
+ */
 export class EventTileViewModel extends BaseViewModel<EventTileRenderState, EventTileViewModelProps> {
     private dependencies: EventTileViewModelDependencies;
     private messageTimestampViewModel?: MessageTimestampViewModel;

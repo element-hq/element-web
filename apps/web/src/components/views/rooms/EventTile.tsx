@@ -72,6 +72,7 @@ import { EventTileThreadInfo, EventTileThreadPanelSummary } from "./EventTile/Ev
 import { EventTileTimestampSlot } from "./EventTile/EventTileTimestampSlot";
 import {
     EventTileViewModel,
+    type EventTileRenderState,
     type EventTileViewModelProps,
     type EventTileViewModelDependencies,
 } from "../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
@@ -275,12 +276,6 @@ interface EventTileRenderInputs {
     hasReactionsRow: boolean;
     threadState: EventTileThreadState;
     isOwnEvent: boolean;
-}
-
-interface EventTileRootRenderState {
-    tileClasses: string;
-    tileAriaLive?: "off";
-    scrollToken?: string;
 }
 
 /** EventTile implementation rendered inside a RoomContext with `timelineRenderingType` set. */
@@ -786,19 +781,19 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     }
 
     private createRootAttributes({
-        tileClasses,
-        tileAriaLive,
+        className,
+        ariaLive,
         scrollToken,
-    }: EventTileRootRenderState): Record<string, unknown> {
+    }: EventTileRenderState["root"]): Record<string, unknown> {
         return {
-            "className": tileClasses,
-            "aria-live": tileAriaLive,
+            "className": className,
+            "aria-live": ariaLive,
             "aria-atomic": true,
             "data-scroll-tokens": scrollToken,
         };
     }
 
-    private createInteractiveRootAttributes(rootRenderState: EventTileRootRenderState): Record<string, unknown> {
+    private createInteractiveRootAttributes(rootRenderState: EventTileRenderState["root"]): Record<string, unknown> {
         return {
             ...this.createRootAttributes(rootRenderState),
             ref: this.ref,
@@ -973,16 +968,12 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         }
 
         const lineClasses = eventTileRenderState.line.className;
-        const tileClasses = eventTileRenderState.root.className;
-        const tileAriaLive = eventTileRenderState.root.ariaLive;
         const isRenderingNotification = eventTileSnapshot.event.isRenderingNotification;
         const isSeeingThroughMessageHiddenForModeration =
             eventTileSnapshot.event.isSeeingThroughMessageHiddenForModeration;
 
         const permalink = this.getPermalink();
-
-        const scrollToken = eventTileRenderState.root.scrollToken;
-        const rootRenderState = { tileClasses, tileAriaLive, scrollToken };
+        const rootRenderState = eventTileRenderState.root;
 
         const avatarMember = this.getAvatarMember();
         const avatar = <EventTileAvatarAdapter avatarMember={avatarMember} senderSnapshot={eventTileSnapshot.sender} />;
