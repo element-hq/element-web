@@ -128,6 +128,14 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
                 />
             );
             */
+        } else if (mimeType.startsWith("audio/")) {
+            preview = {
+                style: "audio",
+                audio: this.state.objectUrl!,
+                header: this.props.file.name,
+                body: fileSize(this.props.file.size),
+                ...attachmentIconOfType("light", mimeType),
+            };
         } else {
             preview = {
                 style: "text",
