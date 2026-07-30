@@ -91,8 +91,20 @@ describe("EventTileViewModel", () => {
         );
 
         expect(snapshot.event.isSending).toBe(true);
+        expect(snapshot.event).toMatchObject({
+            eventId: "$event",
+            eventTs: 123,
+            isLocalEcho: true,
+            isEncryptionFailure: false,
+        });
         expect(snapshot.root.ariaLive).toBe("off");
         expect(snapshot.root.scrollToken).toBeUndefined();
+        expect(snapshot.root.data).toEqual({
+            eventId: "$event",
+            layout: Layout.Group,
+            shape: TimelineRenderingType.Room,
+            isOwnEvent: false,
+        });
         expect(snapshot.root.classState.mx_EventTile_sending).toBe(true);
     });
 

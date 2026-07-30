@@ -185,6 +185,12 @@ export interface EventTileEventSnapshot {
     eventType: string;
     /** The Matrix message type. */
     msgtype?: string;
+    /** The stable event identifier, when available. */
+    eventId?: string;
+    /** The event origin timestamp. */
+    eventTs: number;
+    /** Whether the event is a local echo. */
+    isLocalEcho: boolean;
     /** Whether the event is in a pending send state. */
     isSending: boolean;
     /** Whether the event is currently being edited. */
@@ -193,6 +199,20 @@ export interface EventTileEventSnapshot {
     isContinuation?: boolean;
     /** Whether the tile is rendering as a notification. */
     isRenderingNotification: boolean;
+    /** Whether the event failed decryption. */
+    isEncryptionFailure: boolean;
+}
+
+/** Plain data attributes rendered on the EventTile root element. */
+export interface EventTileRootData {
+    /** The event identifier exposed through `data-event-id`. */
+    eventId?: string;
+    /** The configured tile layout exposed through `data-layout`. */
+    layout?: Layout;
+    /** The timeline rendering mode exposed through `data-shape`. */
+    shape: TimelineRenderingType;
+    /** Whether the event belongs to the current user, exposed through `data-self`. */
+    isOwnEvent: boolean;
 }
 
 /** Root state derived for the EventTile snapshot. */
@@ -201,6 +221,8 @@ export interface EventTileRootSnapshot {
     ariaLive?: "off";
     /** The stable scroll token for the event. */
     scrollToken?: string;
+    /** Plain data attributes used by the EventTile root element. */
+    data: EventTileRootData;
     /** EventTile root CSS class flags. */
     classState: ReturnType<typeof getEventTileClassState>;
 }
@@ -288,6 +310,8 @@ export interface EventTileRenderState {
         scrollToken?: string;
         /** Whether the tile is rendering as a notification. */
         isRenderingNotification: boolean;
+        /** Plain data attributes used by the EventTile root element. */
+        data: EventTileRootData;
     };
     /** EventTile line render state. */
     line: {
@@ -459,6 +483,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
                 ariaLive: snapshot.root.ariaLive,
                 scrollToken: snapshot.root.scrollToken,
                 isRenderingNotification: snapshot.event.isRenderingNotification,
+                data: snapshot.root.data,
             },
             line: {
                 className: classNames("mx_EventTile_line", snapshot.line.classState),
@@ -489,10 +514,14 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
         const eventSnapshot: EventTileEventSnapshot = {
             eventType: event.eventType,
             msgtype: event.msgtype,
+            eventId: event.eventId,
+            eventTs: event.eventTs,
+            isLocalEcho: event.isLocalEcho,
             isSending: event.isSending,
             isEditing: event.isEditing,
             isContinuation,
             isRenderingNotification,
+            isEncryptionFailure: event.isEncryptionFailure,
         };
         const senderProfileState = getEventTileSenderProfileState({
             isRenderingNotification,
@@ -531,6 +560,12 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
                     eventId: event.eventId,
                     isLocalEcho: event.isLocalEcho,
                 }),
+                data: {
+                    eventId: event.eventId,
+                    layout: display.layout,
+                    shape: display.timelineRenderingType,
+                    isOwnEvent: footer.isOwnEvent,
+                },
                 classState: EventTileViewModel.getClassState({
                     event,
                     display,
