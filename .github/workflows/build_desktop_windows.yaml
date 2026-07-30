@@ -214,8 +214,11 @@ jobs:
                   Get-ChildItem -Path * -Filter "*_build_*.exe" -Recurse | Move-Item -Destination "./eSigner_CKA.exe"
 
                   # Install
+                  # Use Start-Process rather than piping to Out-Null: the installer spawns a background
+                  # agent that inherits the pipe's stdout handle, so `| Out-Null` hangs.
                   New-Item -ItemType Directory -Force -Path "$env:INSTALL_DIR"
-                  ./eSigner_CKA.exe /CURRENTUSER /VERYSILENT /SUPPRESSMSGBOXES /DIR="${{ env.INSTALL_DIR }}" | Out-Null
+                  Start-Process -Wait -NoNewWindow -FilePath ./eSigner_CKA.exe `
+                      -ArgumentList "/CURRENTUSER", "/VERYSILENT", "/SUPPRESSMSGBOXES", "/DIR=`"${{ env.INSTALL_DIR }}`""
 
                   # Disable logger
                   $LogConfig = Get-Content -Path ${{ env.INSTALL_DIR }}/log4net.config
