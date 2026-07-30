@@ -5,15 +5,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventType, MsgType, type MatrixClient, type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import { formatFullDate } from "../../../src/DateUtils";
-import { _t } from "../../../src/languageHandler";
-import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
-import { getRedactedBodyViewModelProps } from "../../../src/viewmodels/room/timeline/event-tile/EventTileRedactedBodyState";
-import { mkEvent, mkRoom, stubClient } from "../../test-utils";
+import { EventType, MatrixEvent, MsgType, type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
+import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
 
-describe("EventTile redacted body state", () => {
+import { formatFullDate } from "../../../../DateUtils";
+import { _t } from "../../../../languageHandler";
+import { MatrixClientPeg } from "../../../../MatrixClientPeg";
+import { getRedactedBodyViewModelProps } from "./EventTileRedactedBodyState";
+
+describe("EventTileRedactedBodyState", () => {
     let client: MatrixClient;
     let room: Room;
 
@@ -26,11 +28,11 @@ describe("EventTile redacted body state", () => {
         redactedBecauseSender?: string;
         originServerTs?: number;
     } = {}): MatrixEvent =>
-        mkEvent({
-            event: true,
+        new MatrixEvent({
+            event_id: "$message:example.com",
             type: EventType.RoomMessage,
-            user: sender,
-            room: room.roomId,
+            sender,
+            room_id: room.roomId,
             content: {
                 msgtype: MsgType.Text,
                 body: "Message",
@@ -50,13 +52,13 @@ describe("EventTile redacted body state", () => {
         });
 
     beforeEach(() => {
-        client = stubClient();
-        room = mkRoom(client, "!room:example.com");
-        jest.spyOn(MatrixClientPeg, "get").mockReturnValue(client);
-        jest.spyOn(client, "getRoom").mockReturnValue(room);
+        client = { getRoom: vi.fn() } as unknown as MatrixClient;
+        room = { roomId: "!room:example.com", getMember: vi.fn() } as unknown as Room;
+        vi.spyOn(MatrixClientPeg, "get").mockReturnValue(client);
+        vi.spyOn(client, "getRoom").mockReturnValue(room);
     });
 
-    afterEach(() => jest.restoreAllMocks());
+    afterEach(() => vi.restoreAllMocks());
 
     it("builds self-redaction text and tooltip from the event", () => {
         const event = makeRedactedEvent();
@@ -70,7 +72,7 @@ describe("EventTile redacted body state", () => {
     });
 
     it("uses the redacting member name when another user removed the message", () => {
-        jest.spyOn(room, "getMember").mockReturnValue({ name: "Alice" } as any);
+        vi.spyOn(room, "getMember").mockReturnValue({ name: "Alice" } as any);
 
         expect(
             getRedactedBodyViewModelProps(
