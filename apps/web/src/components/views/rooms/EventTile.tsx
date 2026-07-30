@@ -55,12 +55,7 @@ import { copyPlaintext } from "../../../utils/strings";
 import { DecryptionFailureTracker } from "../../../DecryptionFailureTracker";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import PosthogTrackers from "../../../PosthogTrackers";
-import {
-    haveRendererForEvent,
-    isMessageEvent,
-    renderTile,
-    type EventTileTypeProps,
-} from "../../../events/EventTileFactory";
+import { isMessageEvent, renderTile, type EventTileTypeProps } from "../../../events/EventTileFactory";
 import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationBadge";
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
@@ -89,7 +84,6 @@ import {
     getEventTileThreadState,
     type EventTileThreadState,
 } from "../../../viewmodels/room/timeline/event-tile/EventTileThreadState";
-import { getEventTileReplyChainState } from "../../../viewmodels/room/timeline/event-tile/EventTileReplyChainState";
 import {
     eventTileActionBarFocusChange,
     eventTileBlurWithin,
@@ -882,6 +876,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 layout: this.props.layout,
                 continuation: this.props.continuation,
                 isProbablyMedia,
+                hasRenderer: displayInfo.hasRenderer,
                 isBubbleMessage: displayInfo.isBubbleMessage,
                 isLeftAlignedBubbleMessage: displayInfo.isLeftAlignedBubbleMessage,
                 isAlignedBetweenBubbles: displayInfo.isAlignedBetweenBubbles,
@@ -1066,16 +1061,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             />
         );
 
-        const replyChainState = getEventTileReplyChainState({
-            mxEvent: this.props.mxEvent,
-            hasRenderer: haveRendererForEvent(
-                this.props.mxEvent,
-                MatrixClientPeg.safeGet(),
-                this.context.showHiddenEvents,
-            ),
-        });
         let replyChain: JSX.Element | undefined;
-        if (replyChainState.shouldShowReplyChain) {
+        if (eventTileSnapshot.root.data.hasReply) {
             replyChain = (
                 <ReplyChain
                     parentEv={this.props.mxEvent}
@@ -1098,7 +1085,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                     this.props.as || "li",
                     {
                         ...this.createInteractiveRootAttributes(rootRenderState),
-                        "data-has-reply": !!replyChain,
+                        "data-has-reply": eventTileSnapshot.root.data.hasReply,
                         "data-layout": eventTileSnapshot.root.data.layout,
                         "data-self": eventTileSnapshot.root.data.isOwnEvent,
                         "data-event-id": eventTileSnapshot.root.data.eventId,
@@ -1155,7 +1142,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         "data-layout": eventTileSnapshot.root.data.layout,
                         "data-shape": eventTileSnapshot.root.data.shape,
                         "data-self": eventTileSnapshot.root.data.isOwnEvent,
-                        "data-has-reply": !!replyChain,
+                        "data-has-reply": eventTileSnapshot.root.data.hasReply,
                         "onClick": (ev: MouseEvent) => {
                             const target = ev.currentTarget as HTMLElement;
                             let index = -1;
@@ -1193,7 +1180,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             {timestamp}
                             <UnreadNotificationBadge
                                 room={room || undefined}
-                                threadId={this.props.mxEvent.getId()}
+                                threadId={eventTileSnapshot.root.data.eventId}
                                 forceDot={true}
                             />
                         </div>
@@ -1260,7 +1247,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         "data-layout": eventTileSnapshot.root.data.layout,
                         "data-self": eventTileSnapshot.root.data.isOwnEvent,
                         "data-event-id": eventTileSnapshot.root.data.eventId,
-                        "data-has-reply": !!replyChain,
+                        "data-has-reply": eventTileSnapshot.root.data.hasReply,
                     },
                     <>
                         {ircTimestamp}
@@ -1278,7 +1265,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             {groupPadlock}
                             {replyChain}
                             {renderTile(
-                                this.context.timelineRenderingType,
+                                eventTileSnapshot.root.data.shape,
                                 this.createRenderTileProps({
                                     isSeeingThroughMessageHiddenForModeration,
                                 }),

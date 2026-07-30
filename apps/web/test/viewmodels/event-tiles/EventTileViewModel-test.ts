@@ -43,6 +43,7 @@ describe("EventTileViewModel", () => {
                 eventTs: 123,
                 eventId: "$event",
                 isState: false,
+                hasReplyChain: false,
                 isLocalEcho: false,
                 isSending: false,
                 ariaLive: "off",
@@ -58,6 +59,7 @@ describe("EventTileViewModel", () => {
                 timelineRenderingType: TimelineRenderingType.Room,
                 layout: Layout.Group,
                 isProbablyMedia: false,
+                hasRenderer: true,
                 isBubbleMessage: false,
                 isLeftAlignedBubbleMessage: false,
                 isAlignedBetweenBubbles: false,
@@ -118,6 +120,7 @@ describe("EventTileViewModel", () => {
             layout: Layout.Group,
             shape: TimelineRenderingType.Room,
             isOwnEvent: false,
+            hasReply: false,
         });
         expect(snapshot.root.classState.mx_EventTile_sending).toBe(true);
     });

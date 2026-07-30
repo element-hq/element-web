@@ -43,6 +43,7 @@ import {
     type E2eMessageSharedIconViewModelProps,
 } from "./E2eMessageSharedIconViewModel";
 import { EventPreviewViewModel, type EventPreviewViewModelProps } from "./EventPreviewViewModel";
+import { getEventTileReplyChainState } from "./EventTileReplyChainState";
 import {
     ThreadListActionBarViewModel,
     type ThreadListActionBarViewModelProps,
@@ -86,6 +87,8 @@ export interface EventTileDerivedEventInput extends EventTileEventInput {
     isRtcNotification: boolean;
     /** Whether the event failed decryption. */
     isEncryptionFailure: boolean;
+    /** Whether EventTile should render the reply chain. */
+    hasReplyChain: boolean;
 }
 
 /** Display inputs for deriving the EventTile snapshot. */
@@ -98,6 +101,8 @@ export interface EventTileDisplayInput {
     continuation?: boolean;
     /** Whether the event body is likely to render media content. */
     isProbablyMedia: boolean;
+    /** Whether the current event renderer is available. */
+    hasRenderer: boolean;
     /** Whether the tile should use bubble container styling. */
     isBubbleMessage: boolean;
     /** Whether the bubble tile is left-aligned. */
@@ -242,6 +247,8 @@ export interface EventTileRootData {
     shape: TimelineRenderingType;
     /** Whether the event belongs to the current user, exposed through `data-self`. */
     isOwnEvent: boolean;
+    /** Whether EventTile renders a reply chain, exposed through `data-has-reply`. */
+    hasReply: boolean;
 }
 
 /** Root state derived for the EventTile snapshot. */
@@ -560,6 +567,10 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
     ): NormalizedEventTileViewModelProps {
         const { mxEvent } = dependencies;
         const eventType = mxEvent.getType();
+        const replyChainState = getEventTileReplyChainState({
+            mxEvent,
+            hasRenderer: props.display.hasRenderer,
+        });
 
         return {
             ...props,
@@ -576,6 +587,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
                 isCallInvite: eventType === EventType.CallInvite,
                 isRtcNotification: eventType === EventType.RTCNotification,
                 isEncryptionFailure: mxEvent.isDecryptionFailure(),
+                hasReplyChain: replyChainState.shouldShowReplyChain,
             },
             sender: {
                 ...props.sender,
@@ -646,6 +658,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
                     layout: display.layout,
                     shape: display.timelineRenderingType,
                     isOwnEvent: footer.isOwnEvent,
+                    hasReply: event.hasReplyChain,
                 },
                 classState: EventTileViewModel.getClassState({
                     event,
