@@ -26,7 +26,7 @@ test.describe("Soft logout with password user", () => {
     test("shows the soft-logout page when a request fails, and allows a re-login", async ({ page, user }) => {
         await interceptRequestsWithSoftLogout(page, user);
         await expect(page.getByText("You're signed out")).toBeVisible();
-        await page.getByPlaceholder("Password").fill(user.password);
+        await page.getByPlaceholder("Password").fill(user.password!);
         await page.getByPlaceholder("Password").press("Enter");
 
         // back to the welcome page
