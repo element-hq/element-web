@@ -3,6 +3,8 @@ cleanupUnusedCatalogs: true
 ignorePatchFailures: false
 ignoreWorkspaceRootCheck: true
 minimumReleaseAgeStrict: true
+dedupePeerDependents: true
+dedupePeers: true
 
 packages:
     - "apps/*"
@@ -38,7 +40,7 @@ catalog:
     "@vitest/spy": 4.1.10
     "@vitest/coverage-v8": 4.1.10
     "@vitest/browser-playwright": 4.1.10
-    "@vitejs/plugin-react": 6.0.3
+    "@vitejs/plugin-react": 6.0.4
     unplugin-dts: 1.0.1
 
 catalogs:
@@ -112,13 +114,14 @@ peerDependencyRules:
         react: "19"
         react-dom: "19"
         eslint: "8"
+        vite: "8"
 
 allowedDeprecatedVersions:
     eslint: "8"
     react-beautiful-dnd: "13"
 
 overrides:
-    pretty-format@30>react-is: 19.2.7
+    pretty-format@30>react-is: 19.2.8
     "@types/react": "catalog:"
     "@types/react-dom": "catalog:"
     caniuse-lite: 1.0.30001806

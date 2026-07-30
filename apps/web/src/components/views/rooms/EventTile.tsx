@@ -18,8 +18,6 @@ import React, {
 } from "react";
 import {
     EventStatus,
-    EventType,
-    MsgType,
     type MatrixEvent,
     MatrixEventEvent,
     type Relations,
@@ -50,19 +48,13 @@ import { type ComposerInsertPayload } from "../../../dispatcher/payloads/Compose
 import { Action } from "../../../dispatcher/actions";
 import PlatformPeg from "../../../PlatformPeg";
 import { type IReadReceiptPosition } from "./ReadReceiptMarker";
-import { getEventDisplayInfo } from "../../../utils/EventRenderingUtils";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { copyPlaintext } from "../../../utils/strings";
 import { DecryptionFailureTracker } from "../../../DecryptionFailureTracker";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import PosthogTrackers from "../../../PosthogTrackers";
-import {
-    haveRendererForEvent,
-    isMessageEvent,
-    renderTile,
-    type EventTileTypeProps,
-} from "../../../events/EventTileFactory";
+import { isMessageEvent, renderTile, type EventTileTypeProps } from "../../../events/EventTileFactory";
 import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationBadge";
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
@@ -80,7 +72,9 @@ import { EventTileThreadInfo, EventTileThreadPanelSummary } from "./EventTile/Ev
 import { EventTileTimestampSlot } from "./EventTile/EventTileTimestampSlot";
 import {
     EventTileViewModel,
+    type EventTileRenderState,
     type EventTileViewModelProps,
+    type EventTileViewModelDependencies,
 } from "../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
 import {
     getEventTileReceiptState,
@@ -91,7 +85,6 @@ import {
     getEventTileThreadState,
     type EventTileThreadState,
 } from "../../../viewmodels/room/timeline/event-tile/EventTileThreadState";
-import { getEventTileReplyChainState } from "../../../viewmodels/room/timeline/event-tile/EventTileReplyChainState";
 import {
     eventTileActionBarFocusChange,
     eventTileBlurWithin,
@@ -279,17 +272,10 @@ interface IState {
 }
 
 interface EventTileRenderInputs {
-    displayInfo: ReturnType<typeof getEventDisplayInfo>;
     hasPinnedMessageBadge: boolean;
     hasReactionsRow: boolean;
     threadState: EventTileThreadState;
     isOwnEvent: boolean;
-}
-
-interface EventTileRootRenderState {
-    tileClasses: string;
-    tileAriaLive?: "off";
-    scrollToken?: string;
 }
 
 /** EventTile implementation rendered inside a RoomContext with `timelineRenderingType` set. */
@@ -332,7 +318,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             thread,
         };
 
-        this.viewModel = new EventTileViewModel(this.createViewModelProps());
+        this.viewModel = new EventTileViewModel(this.createViewModelDependencies(), this.createViewModelProps());
 
         this.e2eViewModel = new EventTileE2eViewModel({
             cli: MatrixClientPeg.safeGet(),
@@ -795,19 +781,19 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     }
 
     private createRootAttributes({
-        tileClasses,
-        tileAriaLive,
+        className,
+        ariaLive,
         scrollToken,
-    }: EventTileRootRenderState): Record<string, unknown> {
+    }: EventTileRenderState["root"]): Record<string, unknown> {
         return {
-            "className": tileClasses,
-            "aria-live": tileAriaLive,
+            "className": className,
+            "aria-live": ariaLive,
             "aria-atomic": true,
             "data-scroll-tokens": scrollToken,
         };
     }
 
-    private createInteractiveRootAttributes(rootRenderState: EventTileRootRenderState): Record<string, unknown> {
+    private createInteractiveRootAttributes(rootRenderState: EventTileRenderState["root"]): Record<string, unknown> {
         return {
             ...this.createRootAttributes(rootRenderState),
             ref: this.ref,
@@ -839,14 +825,16 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         };
     }
 
-    private createRenderInputs(
-        displayInfo = getEventDisplayInfo(
-            MatrixClientPeg.safeGet(),
-            this.props.mxEvent,
-            this.context.showHiddenEvents,
-            shouldHideEventTile({ callEventGrouper: this.props.callEventGrouper }),
-        ),
-    ): EventTileRenderInputs {
+    private createViewModelDependencies(): EventTileViewModelDependencies {
+        return {
+            mxEvent: this.props.mxEvent,
+            matrixClient: MatrixClientPeg.safeGet(),
+            showHiddenEvents: this.context.showHiddenEvents,
+            hideEvent: shouldHideEventTile({ callEventGrouper: this.props.callEventGrouper }),
+        };
+    }
+
+    private createRenderInputs(): EventTileRenderInputs {
         const isRedacted = isMessageEvent(this.props.mxEvent) && this.props.isRedacted;
         const hasPinnedMessageBadge = PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent);
         const hasReactionsRow = !isRedacted;
@@ -855,7 +843,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const isOwnEvent = this.props.mxEvent?.getSender() === MatrixClientPeg.safeGet().getUserId();
 
         return {
-            displayInfo,
             hasPinnedMessageBadge,
             hasReactionsRow,
             threadState,
@@ -864,12 +851,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     }
 
     private createViewModelProps(inputs: EventTileRenderInputs = this.createRenderInputs()): EventTileViewModelProps {
-        const { displayInfo, hasPinnedMessageBadge, hasReactionsRow, threadState, isOwnEvent } = inputs;
+        const { hasPinnedMessageBadge, hasReactionsRow, threadState, isOwnEvent } = inputs;
         const isProbablyMedia = MediaEventHelper.isEligible(this.props.mxEvent);
-        const isEncryptionFailure = this.props.mxEvent.isDecryptionFailure();
         const isEditing = !!this.props.editState;
-        const eventType = this.props.mxEvent.getType();
-        const msgtype = this.props.mxEvent.getContent().msgtype;
         const isSending =
             this.props.eventSendStatus === EventStatus.SENDING ||
             this.props.eventSendStatus === EventStatus.QUEUED ||
@@ -877,18 +861,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         return {
             event: {
-                eventType,
-                msgtype,
-                eventTs: this.props.mxEvent.getTs(),
-                eventId: this.props.mxEvent.getId() ?? undefined,
-                isLocalEcho: !!this.props.mxEvent.status,
                 isSending,
                 ariaLive: this.props.eventSendStatus === null ? undefined : "off",
-                isRoomCreate: eventType === EventType.RoomCreate,
-                isCallInvite: eventType === EventType.CallInvite,
-                isRtcNotification: eventType === EventType.RTCNotification,
                 isEditing,
-                isEncryptionFailure,
                 forExport: this.props.forExport,
             },
             display: {
@@ -896,11 +871,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 layout: this.props.layout,
                 continuation: this.props.continuation,
                 isProbablyMedia,
-                isBubbleMessage: displayInfo.isBubbleMessage,
-                isLeftAlignedBubbleMessage: displayInfo.isLeftAlignedBubbleMessage,
-                isAlignedBetweenBubbles: displayInfo.isAlignedBetweenBubbles,
-                isInfoMessage: displayInfo.isInfoMessage,
-                noBubbleEvent: displayInfo.noBubbleEvent,
                 isTwelveHour: this.props.isTwelveHour,
                 isHighlighted: shouldHighlightEventTile({
                     cli: MatrixClientPeg.safeGet(),
@@ -923,7 +893,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 inhibitInteraction: this.props.inhibitInteraction,
             },
             sender: {
-                senderId: this.props.mxEvent.getSender() ?? undefined,
                 member: roomMemberToMemberInfo(
                     this.props.useEventSenderSnapshot
                         ? this.getAvatarMember()
@@ -936,7 +905,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                           }),
                 ),
                 hideSender: this.props.hideSender,
-                isEmote: this.props.mxEvent.getContent().msgtype === MsgType.Emote,
             },
             timestamp: {
                 alwaysShowTimestamps: this.props.alwaysShowTimestamps,
@@ -977,22 +945,20 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     }
 
     public render(): ReactNode {
-        const eventType = this.props.mxEvent.getType();
-        const replacingEventId = this.props.mxEvent.replacingEventId();
-
-        const displayInfo = getEventDisplayInfo(
-            MatrixClientPeg.safeGet(),
-            this.props.mxEvent,
-            this.context.showHiddenEvents,
-            shouldHideEventTile({ callEventGrouper: this.props.callEventGrouper }),
-        );
-        const { hasRenderer, isSeeingThroughMessageHiddenForModeration } = displayInfo;
         const { isQuoteExpanded } = this.state;
+        const renderInputs = this.createRenderInputs();
+        const { hasPinnedMessageBadge, hasReactionsRow, threadState } = renderInputs;
+
+        this.viewModel.setInputs(this.createViewModelDependencies(), this.createViewModelProps(renderInputs));
+        const eventTileRenderState = this.viewModel.getSnapshot();
+        const eventTileSnapshot = eventTileRenderState.snapshot;
+
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
-        if (!hasRenderer) {
-            const { mxEvent } = this.props;
-            logger.warn(`Event type not supported: type:${eventType} isState:${mxEvent.isState()}`);
+        if (!eventTileSnapshot.event.hasRenderer) {
+            logger.warn(
+                `Event type not supported: type:${eventTileSnapshot.event.eventType} isState:${eventTileSnapshot.event.isState}`,
+            );
             return (
                 <div className="mx_EventTile mx_EventTile_info mx_MNoticeBody">
                     <div className="mx_EventTile_line">{_t("timeline|error_no_renderer")}</div>
@@ -1000,22 +966,13 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             );
         }
 
-        const renderInputs = this.createRenderInputs(displayInfo);
-        const { hasPinnedMessageBadge, hasReactionsRow, threadState, isOwnEvent } = renderInputs;
-
-        this.viewModel.setProps(this.createViewModelProps(renderInputs));
-        const eventTileRenderState = this.viewModel.getSnapshot();
-        const eventTileSnapshot = eventTileRenderState.snapshot;
-
         const lineClasses = eventTileRenderState.line.className;
-        const tileClasses = eventTileRenderState.root.className;
-        const tileAriaLive = eventTileRenderState.root.ariaLive;
-        const isRenderingNotification = eventTileRenderState.root.isRenderingNotification;
+        const isRenderingNotification = eventTileSnapshot.event.isRenderingNotification;
+        const isSeeingThroughMessageHiddenForModeration =
+            eventTileSnapshot.event.isSeeingThroughMessageHiddenForModeration;
 
         const permalink = this.getPermalink();
-
-        const scrollToken = eventTileRenderState.root.scrollToken;
-        const rootRenderState = { tileClasses, tileAriaLive, scrollToken };
+        const rootRenderState = eventTileRenderState.root;
 
         const avatarMember = this.getAvatarMember();
         const avatar = <EventTileAvatarAdapter avatarMember={avatarMember} senderSnapshot={eventTileSnapshot.sender} />;
@@ -1083,16 +1040,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             />
         );
 
-        const replyChainState = getEventTileReplyChainState({
-            mxEvent: this.props.mxEvent,
-            hasRenderer: haveRendererForEvent(
-                this.props.mxEvent,
-                MatrixClientPeg.safeGet(),
-                this.context.showHiddenEvents,
-            ),
-        });
         let replyChain: JSX.Element | undefined;
-        if (replyChainState.shouldShowReplyChain) {
+        if (eventTileSnapshot.root.data.hasReply) {
             replyChain = (
                 <ReplyChain
                     parentEv={this.props.mxEvent}
@@ -1115,10 +1064,10 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                     this.props.as || "li",
                     {
                         ...this.createInteractiveRootAttributes(rootRenderState),
-                        "data-has-reply": !!replyChain,
-                        "data-layout": this.props.layout,
-                        "data-self": isOwnEvent,
-                        "data-event-id": this.props.mxEvent.getId(),
+                        "data-has-reply": eventTileSnapshot.root.data.hasReply,
+                        "data-layout": eventTileSnapshot.root.data.layout,
+                        "data-self": eventTileSnapshot.root.data.isOwnEvent,
+                        "data-event-id": eventTileSnapshot.root.data.eventId,
                     },
                     [
                         <div className="mx_EventTile_senderDetails" key="mx_EventTile_senderDetails">
@@ -1136,7 +1085,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             {renderTile(
                                 TimelineRenderingType.Thread,
                                 this.createRenderTileProps({
-                                    replacingEventId,
+                                    replacingEventId: eventTileSnapshot.event.replacingEventId,
                                     isSeeingThroughMessageHiddenForModeration,
                                     permalinkCreator: this.props.permalinkCreator!,
                                 }),
@@ -1169,10 +1118,10 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                     {
                         ...this.createInteractiveRootAttributes(rootRenderState),
                         "tabIndex": -1,
-                        "data-layout": this.props.layout,
-                        "data-shape": this.context.timelineRenderingType,
-                        "data-self": isOwnEvent,
-                        "data-has-reply": !!replyChain,
+                        "data-layout": eventTileSnapshot.root.data.layout,
+                        "data-shape": eventTileSnapshot.root.data.shape,
+                        "data-self": eventTileSnapshot.root.data.isOwnEvent,
+                        "data-has-reply": eventTileSnapshot.root.data.hasReply,
                         "onClick": (ev: MouseEvent) => {
                             const target = ev.currentTarget as HTMLElement;
                             let index = -1;
@@ -1210,7 +1159,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             {timestamp}
                             <UnreadNotificationBadge
                                 room={room || undefined}
-                                threadId={this.props.mxEvent.getId()}
+                                threadId={eventTileSnapshot.root.data.eventId}
                                 forceDot={true}
                             />
                         </div>
@@ -1274,10 +1223,10 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                     {
                         ...this.createInteractiveRootAttributes(rootRenderState),
                         "tabIndex": -1,
-                        "data-layout": this.props.layout,
-                        "data-self": isOwnEvent,
-                        "data-event-id": this.props.mxEvent.getId(),
-                        "data-has-reply": !!replyChain,
+                        "data-layout": eventTileSnapshot.root.data.layout,
+                        "data-self": eventTileSnapshot.root.data.isOwnEvent,
+                        "data-event-id": eventTileSnapshot.root.data.eventId,
+                        "data-has-reply": eventTileSnapshot.root.data.hasReply,
                     },
                     <>
                         {ircTimestamp}
@@ -1295,7 +1244,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             {groupPadlock}
                             {replyChain}
                             {renderTile(
-                                this.context.timelineRenderingType,
+                                eventTileSnapshot.root.data.shape,
                                 this.createRenderTileProps({
                                     isSeeingThroughMessageHiddenForModeration,
                                 }),

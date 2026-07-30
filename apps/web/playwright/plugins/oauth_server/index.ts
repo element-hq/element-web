@@ -69,8 +69,8 @@ export class OAuthServer {
 
     public stop(): void {
         console.log("Stopping OAuth server");
-        const address = this.server.address() as AddressInfo;
-        this.server.close();
+        const address = this.server!.address() as AddressInfo;
+        this.server!.close();
         console.log(`Stopped OAuth server at ${address.address}:${address.port}`);
     }
 }

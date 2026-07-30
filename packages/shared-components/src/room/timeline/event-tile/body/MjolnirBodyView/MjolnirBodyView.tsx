@@ -6,7 +6,7 @@
  */
 
 import classNames from "classnames";
-import React, { type JSX, type MouseEventHandler, type Ref } from "react";
+import React, { type JSX, type Ref } from "react";
 
 import { type ViewModel, useViewModel } from "../../../../../core/viewmodel";
 import { useI18n } from "../../../../../core/i18n/i18nContext";
@@ -18,7 +18,7 @@ export interface MjolnirBodyViewActions {
     /**
      * Invoked when the user chooses to show the hidden message.
      */
-    onAllowClick: MouseEventHandler<HTMLButtonElement>;
+    onAllow: () => void;
 }
 
 export type MjolnirBodyViewModel = ViewModel<MjolnirBodyViewSnapshot, MjolnirBodyViewActions>;
@@ -53,7 +53,15 @@ export function MjolnirBodyView({ vm, className, ref }: Readonly<MjolnirBodyView
                     {},
                     {
                         a: (sub) => (
-                            <button type="button" className={styles.allowButton} onClick={vm.onAllowClick}>
+                            <button
+                                type="button"
+                                className={styles.allowButton}
+                                onClick={(event) => {
+                                    event.preventDefault();
+                                    event.stopPropagation();
+                                    vm.onAllow();
+                                }}
+                            >
                                 {sub}
                             </button>
                         ),
