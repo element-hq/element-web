@@ -18,8 +18,8 @@ type MjolnirBodyViewProps = MjolnirBodyViewSnapshot &
         className?: string;
     };
 
-const MjolnirBodyViewWrapperImpl = ({ onAllowClick, className, ...snapshot }: MjolnirBodyViewProps): JSX.Element => {
-    const vm = useMockedViewModel(snapshot, { onAllowClick });
+const MjolnirBodyViewWrapperImpl = ({ onAllow, className, ...snapshot }: MjolnirBodyViewProps): JSX.Element => {
+    const vm = useMockedViewModel(snapshot, { onAllow });
 
     return <MjolnirBodyView vm={vm} className={className} />;
 };
@@ -31,7 +31,7 @@ const meta = {
     component: MjolnirBodyViewWrapper,
     tags: ["autodocs"],
     args: {
-        onAllowClick: fn(),
+        onAllow: fn(),
         className: "",
     },
 } satisfies Meta<typeof MjolnirBodyViewWrapper>;
