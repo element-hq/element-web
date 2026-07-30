@@ -63,7 +63,7 @@ export function LeftGroup({ children }: { children: React.ReactNode }): JSX.Elem
     return <div className={styles.leftGroup}>{children}</div>;
 }
 
-export function LargeImage({
+export function Image({
     image,
     imageOnClick,
     imageSize,
@@ -72,7 +72,7 @@ export function LargeImage({
     imageOnClick?: () => void;
     imageSize: ImageSize;
 }): JSX.Element {
-    let classes = [styles.largeImage];
+    let classes = [styles.image];
     switch (imageSize) {
         case "full":
             classes.push(styles.fullImage);
@@ -99,7 +99,7 @@ export function LargeImage({
     }
 }
 
-export function LargeVideo({
+export function Video({
     video,
     videoOnClick,
     videoSize,
@@ -108,7 +108,7 @@ export function LargeVideo({
     videoOnClick?: () => void;
     videoSize: ImageSize;
 }): JSX.Element {
-    let classes = [styles.largeVideo];
+    let classes = [styles.video];
     switch (videoSize) {
         case "full":
             classes.push(styles.fullVideo);
@@ -130,6 +130,30 @@ export function LargeVideo({
         return (
             <div className={classNames(classes)}>
                 <video src={video} controls />
+            </div>
+        );
+    }
+}
+
+export function Audio({
+    audio,
+    audioOnClick,
+}: {
+    audio: string;
+    audioOnClick?: () => void;
+}): JSX.Element {
+    if (audioOnClick) {
+        return (
+            <div className={styles.audio}>
+                <button onClick={audioOnClick}>
+                    <audio src={audio} controls />
+                </button>
+            </div>
+        );
+    } else {
+        return (
+            <div className={styles.audio}>
+                <audio src={audio} controls />
             </div>
         );
     }

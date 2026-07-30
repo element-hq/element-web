@@ -19,7 +19,7 @@ const meta = {
     tags: ["autodocs"],
     args: {
         style: "video",
-        largeVideo: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+        video: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
         videoSize: "banner",
         icon: <FileIcon />,
         iconOnClick: () => {},
@@ -48,7 +48,7 @@ export const Uncollapsed: Story = {
 export const ClickableUncollapsedVideo: Story = {
     args: {
         videoSize: "full",
-        largeVideoOnClick: () => {
+        videoOnClick: () => {
             window.alert("Video clicked");
             return {};
         },
@@ -63,7 +63,7 @@ export const WithHeaderUrl: Story = {
 
 export const ClickableVideo: Story = {
     args: {
-        largeVideoOnClick: () => {
+        videoOnClick: () => {
             window.alert("Video clicked");
             return {};
         },
