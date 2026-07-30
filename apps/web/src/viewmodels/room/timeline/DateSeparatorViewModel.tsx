@@ -281,7 +281,11 @@ export class DateSeparatorViewModel
     };
 
     public onDatePicked = (dateString: string): Promise<void> => {
-        void this.pickDate(dateString);
+        // The date input hands us a bare YYYY-MM-DD, which `new Date(string)` parses as UTC midnight.
+        // That value was produced from the user's local date by formatDateForInput(), so parse it back
+        // to local midnight to keep the round trip symmetrical and jump to the right day.
+        const [year, month, day] = dateString.split("-").map(Number);
+        void this.pickDate(new Date(year, month - 1, day));
         return Promise.resolve();
     };
 }
