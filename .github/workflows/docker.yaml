@@ -20,7 +20,7 @@ jobs:
         env:
             TEST_TAG: vectorim/element-web:test
         steps:
-            - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   fetch-depth: 0 # needed for docker-package to be able to calculate the version
                   persist-credentials: false
@@ -97,14 +97,14 @@ jobs:
                       latest=${{ contains(github.ref_name, '-rc.') && 'false' || 'auto' }}
 
             - name: Login to Docker Hub
-              uses: docker/login-action@af1e73f918a031802d376d3c8bbc3fe56130a9b0 # v4
+              uses: docker/login-action@371161bbe7024a29a25c5e19bfcbc0804fe9ad2c # v4
               if: github.event_name != 'pull_request'
               with:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
 
             - name: Login to GitHub Container Registry
-              uses: docker/login-action@af1e73f918a031802d376d3c8bbc3fe56130a9b0 # v4
+              uses: docker/login-action@371161bbe7024a29a25c5e19bfcbc0804fe9ad2c # v4
               if: github.event_name != 'pull_request'
               with:
                   registry: ghcr.io
@@ -140,7 +140,7 @@ jobs:
                       services/web-repositories/secret/data/oci.element.io password | OCI_PASSWORD ;
 
             - name: Login to oci.element.io Registry
-              uses: docker/login-action@af1e73f918a031802d376d3c8bbc3fe56130a9b0 # v4
+              uses: docker/login-action@371161bbe7024a29a25c5e19bfcbc0804fe9ad2c # v4
               if: github.event_name != 'pull_request'
               with:
                   registry: oci-push.vpn.infra.element.io

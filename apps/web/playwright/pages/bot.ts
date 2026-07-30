@@ -63,7 +63,7 @@ type ExtendedMatrixClient = MatrixClient & { __playwright_recovery_key: Generate
 
 export class Bot extends Client {
     public credentials?: CredentialsOptionalAccessToken;
-    private handlePromise: Promise<JSHandle<ExtendedMatrixClient>>;
+    private handlePromise?: Promise<JSHandle<ExtendedMatrixClient>>;
 
     constructor(
         page: Page,
@@ -192,7 +192,7 @@ export class Bot extends Client {
                             type: "m.id.user",
                             user: credentials.userId,
                         },
-                        password: credentials.password,
+                        password: credentials.password ?? undefined,
                     });
 
                     credentials.accessToken = loginResponse.access_token;
@@ -252,7 +252,7 @@ export class Bot extends Client {
         if (this.opts.bootstrapSecretStorage) {
             await clientHandle.evaluate(async (cli, usePassphrase) => {
                 const passphrase = usePassphrase ? "new passphrase" : undefined;
-                const recoveryKey = await cli.getCrypto().createRecoveryKeyFromPassphrase(passphrase);
+                const recoveryKey = await cli.getCrypto()!.createRecoveryKeyFromPassphrase(passphrase);
                 Object.assign(cli, { __playwright_recovery_key: recoveryKey });
 
                 await cli.getCrypto()!.bootstrapSecretStorage({

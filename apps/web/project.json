@@ -46,6 +46,10 @@
             },
             "dependsOn": ["^build", "^build:playwright"]
         },
+        "lint:prepare": {
+            "executor": "nx:noop",
+            "dependsOn": ["^build"]
+        },
         "test:unit:prepare": {
             "executor": "nx:noop",
             "dependsOn": ["^build"]

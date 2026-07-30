@@ -62,6 +62,9 @@ describe("EventTileViewModel", () => {
                 ...overrides.interaction,
             },
             sender: {
+                senderId: "@alice:example.org",
+                member: null,
+                isEmote: false,
                 ...overrides.sender,
             },
             timestamp: {
@@ -305,6 +308,20 @@ describe("EventTileViewModel", () => {
         });
         expect(snapshot.sender.profileMode).toBe("clickable");
         expect(snapshot.sender.viewUserOnClick).toBe(true);
+    });
+
+    it("carries pure sender render inputs", () => {
+        const snapshot = EventTileViewModel.createSnapshot(
+            makeProps({
+                sender: {
+                    senderId: "@moderator:example.org",
+                    isEmote: true,
+                },
+            }),
+        );
+
+        expect(snapshot.sender.senderId).toBe("@moderator:example.org");
+        expect(snapshot.sender.isEmote).toBe(true);
     });
 
     it("marks room member avatars as historical", () => {

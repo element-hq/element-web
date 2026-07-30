@@ -68,15 +68,7 @@ export const UserPersonalInfoSettings: React.FC<UserPersonalInfoSettingsProps> =
     }, [client]);
 
     useEffect(() => {
-        updateThreepids().then();
-    }, [updateThreepids]);
-
-    const onEmailsChange = useCallback(() => {
-        updateThreepids().then();
-    }, [updateThreepids]);
-
-    const onMsisdnsChange = useCallback(() => {
-        updateThreepids().then();
+        updateThreepids();
     }, [updateThreepids]);
 
     if (!SettingsStore.getValue(UIFeature.ThirdPartyID)) return null;
@@ -96,7 +88,7 @@ export const UserPersonalInfoSettings: React.FC<UserPersonalInfoSettingsProps> =
                         mode="hs"
                         medium={ThreepidMedium.Email}
                         threepids={emails!}
-                        onChange={onEmailsChange}
+                        onChange={updateThreepids}
                         disabled={!canMake3pidChanges}
                         isLoading={loadingState === "loading"}
                     />
@@ -116,7 +108,7 @@ export const UserPersonalInfoSettings: React.FC<UserPersonalInfoSettingsProps> =
                         mode="hs"
                         medium={ThreepidMedium.Phone}
                         threepids={phoneNumbers!}
-                        onChange={onMsisdnsChange}
+                        onChange={updateThreepids}
                         disabled={!canMake3pidChanges}
                         isLoading={loadingState === "loading"}
                     />

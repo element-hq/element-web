@@ -129,7 +129,7 @@ export class VideoBodyViewModel
             error: null,
             posterLoading: false,
             blurhashUrl: null,
-            imageSize: SettingsStore.getValue("Images.size") as ImageSize,
+            imageSize: SettingsStore.getValue("Images.size"),
         };
     }
 
@@ -137,7 +137,7 @@ export class VideoBodyViewModel
      * Derive the aspect ratio for the video frame from the event metadata, when available.
      */
     private static getAspectRatio(mxEvent: MatrixEvent): string | undefined {
-        const { w, h } = (mxEvent.getContent<MediaEventContent>().info as VideoInfoWithBlurhash | undefined) ?? {};
+        const { w, h } = mxEvent.getContent<MediaEventContent & { info: VideoInfoWithBlurhash }>().info ?? {};
         if (!w || !h) {
             return undefined;
         }
@@ -149,7 +149,7 @@ export class VideoBodyViewModel
      * Compute the rendered video dimensions from the event metadata and current image-size setting.
      */
     private static getDimensions(mxEvent: MatrixEvent, imageSize: ImageSize): Required<{ w?: number; h?: number }> {
-        const { w, h } = (mxEvent.getContent<MediaEventContent>().info as VideoInfoWithBlurhash | undefined) ?? {};
+        const { w, h } = mxEvent.getContent<MediaEventContent & { info: VideoInfoWithBlurhash }>().info ?? {};
         return suggestedVideoSize(imageSize, { w, h });
     }
 
@@ -196,7 +196,7 @@ export class VideoBodyViewModel
 
     private static computeSnapshot(props: VideoBodyViewModelProps, state: InternalState): VideoBodyViewSnapshot {
         const content = props.mxEvent.getContent<MediaEventContent>();
-        const autoplay = !props.inhibitInteraction && (SettingsStore.getValue("autoplayVideo") as boolean);
+        const autoplay = !props.inhibitInteraction && SettingsStore.getValue("autoplayVideo");
         const aspectRatio = VideoBodyViewModel.getAspectRatio(props.mxEvent);
         const { w: maxWidth, h: maxHeight } = VideoBodyViewModel.getDimensions(props.mxEvent, state.imageSize);
 
@@ -288,7 +288,7 @@ export class VideoBodyViewModel
     }
 
     private loadBlurhash(): void {
-        const info = this.props.mxEvent.getContent<MediaEventContent>().info as VideoInfoWithBlurhash | undefined;
+        const info = this.props.mxEvent.getContent<MediaEventContent & { info: VideoInfoWithBlurhash }>().info;
         const blurhash = info?.[BLURHASH_FIELD];
         if (!blurhash) {
             return;
@@ -352,7 +352,7 @@ export class VideoBodyViewModel
         const currentEvent = this.props.mxEvent;
         const currentHelper = this.props.mediaEventHelper;
         try {
-            const autoplay = !this.props.inhibitInteraction && (SettingsStore.getValue("autoplayVideo") as boolean);
+            const autoplay = !this.props.inhibitInteraction && SettingsStore.getValue("autoplayVideo");
             const thumbnailUrl = await currentHelper.thumbnailUrl.value;
 
             if (

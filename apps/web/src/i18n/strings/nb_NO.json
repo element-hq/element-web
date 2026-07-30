@@ -490,7 +490,6 @@
         "message_layout": "Meldingsoppsett",
         "message_timestamp_invalid": "Ugyldig tidsstempel",
         "microphone": "Mikrofon",
-        "model": "Modell",
         "moderation_and_safety": "Moderasjon og sikkerhet",
         "modern": "Moderne",
         "mute": "Demp",
@@ -2778,7 +2777,6 @@
         "send_typing_notifications": "Send varsler om at du skriver",
         "sessions": {
             "best_security_note": "For best mulig sikkerhet bør du verifisere sesjonene dine og logge ut av alle sesjoner du ikke kjenner igjen eller ikke bruker lenger.",
-            "browser": "Nettleser",
             "confirm_sign_out": {
                 "one": "Bekreft at du logger av denne enheten",
                 "other": "Bekreft at du logger av disse enhetene"
@@ -2829,7 +2827,6 @@
             "no_sessions": "Ingen sesjoner funnet.",
             "no_unverified_sessions": "Ingen ubekreftede sesjoner funnet.",
             "no_verified_sessions": "Ingen verifiserte sesjoner funnet.",
-            "os": "Operativsystem",
             "other_sessions_heading": "Andre sesjoner",
             "push_heading": "Push-varsler",
             "push_subheading": "Motta push-varsler på denne sesjonen.",

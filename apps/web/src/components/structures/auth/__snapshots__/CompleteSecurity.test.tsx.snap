@@ -1,13 +1,14 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`CompleteSecurity Allows verifying with another device if one is available 1`] = `
+exports[`CompleteSecurity > Allows verifying with another device if one is available 1`] = `
 <DocumentFragment>
   <div
     class="mx_AuthPage"
+    style="background: url("themes/element/img/backgrounds/lake.jpg") center center / cover fixed;"
   >
     <div
       class="mx_AuthPage_modal"
-      style="position: relative;"
+      style="position: relative; background: ;"
     >
       <main
         aria-live="polite"
@@ -193,14 +194,15 @@ exports[`CompleteSecurity Allows verifying with another device if one is availab
 </DocumentFragment>
 `;
 
-exports[`CompleteSecurity Allows verifying with recovery key if one is available 1`] = `
+exports[`CompleteSecurity > Allows verifying with recovery key if one is available 1`] = `
 <DocumentFragment>
   <div
     class="mx_AuthPage"
+    style="background: url("themes/element/img/backgrounds/lake.jpg") center center / cover fixed;"
   >
     <div
       class="mx_AuthPage_modal"
-      style="position: relative;"
+      style="position: relative; background: ;"
     >
       <main
         aria-live="polite"

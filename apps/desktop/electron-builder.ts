@@ -75,7 +75,7 @@ if (process.env.VARIANT_PATH) {
     console.log(`Using variant configuration from '${process.env.VARIANT_PATH}':`);
     variant = {
         ...variant,
-        ...JSON.parse(fs.readFileSync(`${process.env.VARIANT_PATH}`, "utf8")),
+        ...JSON.parse(fs.readFileSync(process.env.VARIANT_PATH, "utf8")),
     };
 } else {
     console.warn(`No VARIANT_PATH specified, using default variant configuration '${DEFAULT_VARIANT}':`);
