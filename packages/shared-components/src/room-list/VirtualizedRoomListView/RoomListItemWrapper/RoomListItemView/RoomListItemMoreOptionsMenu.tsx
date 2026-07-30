@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { useMemo, useState, type JSX } from "react";
+import React, { useEffect, useId, useMemo, useRef, useState, type JSX } from "react";
 import { IconButton, Menu, MenuItem, Separator, SubMenu, ToggleMenuItem } from "@vector-im/compound-web";
 import {
     MarkAsReadIcon,
@@ -37,6 +37,62 @@ export type RoomListItemViewModel = ViewModel<RoomListItemViewSnapshot, RoomList
 export interface RoomListItemMoreOptionsMenuProps {
     /** The room item view model */
     vm: RoomListItemViewModel;
+}
+
+/**
+ * Delay, in milliseconds, before a submenu is closed after the pointer has
+ * left both its trigger and its own content without re-entering either.
+ */
+const HOVER_OUT_CLOSE_DELAY_MS = 300;
+
+/**
+ * Keeps a submenu's open state tied to hovering its trigger or its own
+ * content, closing it shortly after the pointer leaves both without
+ * dismissing the parent menu.
+ *
+ * This works around Radix's dropdown menu only closing a submenu on
+ * click-outside, Escape, selecting an item, or hovering a sibling trigger:
+ * moving the pointer away from just the "Move to" item (while staying inside
+ * the parent menu) does not otherwise dismiss the open submenu.
+ */
+function useSubMenuHoverState(
+    triggerId: string,
+    contentRef: React.RefObject<HTMLElement | null>,
+): [boolean, (open: boolean) => void] {
+    const [open, setOpen] = useState(false);
+    const closeTimeoutRef = useRef<number | undefined>(undefined);
+
+    useEffect(() => {
+        if (!open) return undefined;
+
+        const isInsideSubMenu = (target: EventTarget | null): boolean => {
+            if (!(target instanceof Node)) return false;
+            const trigger = document.getElementById(triggerId);
+            return Boolean(trigger?.contains(target) || contentRef.current?.contains(target));
+        };
+
+        const onPointerMove = (event: PointerEvent): void => {
+            if (isInsideSubMenu(event.target)) {
+                window.clearTimeout(closeTimeoutRef.current);
+                closeTimeoutRef.current = undefined;
+                return;
+            }
+            if (closeTimeoutRef.current !== undefined) return;
+            closeTimeoutRef.current = window.setTimeout(() => {
+                closeTimeoutRef.current = undefined;
+                setOpen(false);
+            }, HOVER_OUT_CLOSE_DELAY_MS);
+        };
+
+        document.addEventListener("pointermove", onPointerMove);
+        return () => {
+            document.removeEventListener("pointermove", onPointerMove);
+            window.clearTimeout(closeTimeoutRef.current);
+            closeTimeoutRef.current = undefined;
+        };
+    }, [open, triggerId, contentRef]);
+
+    return [open, setOpen];
 }
 
 /**
@@ -77,6 +133,11 @@ export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {
     const snapshot = useViewModel(vm);
     const hasSections = snapshot.sections.length > 0;
     const isInSection = useMemo(() => snapshot.sections.some((section) => section.isSelected), [snapshot.sections]);
+
+    const moveToTriggerId = useId();
+    const moveToContentRef = useRef<HTMLDivElement>(null);
+    const [moveToOpen, setMoveToOpen] = useSubMenuHoverState(moveToTriggerId, moveToContentRef);
+
     return (
         <div onKeyDown={(e) => e.stopPropagation()}>
             {snapshot.canMarkAsRead && (
@@ -133,31 +194,43 @@ export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {
             {snapshot.areSectionsEnabled && (
                 <>
                     <SubMenu
+                        open={moveToOpen}
+                        onOpenChange={setMoveToOpen}
                         trigger={
                             <MenuItem
+                                id={moveToTriggerId}
                                 Icon={ArrowRightIcon}
                                 label={_t("room_list|more_options|move_to_section")}
                                 onSelect={null}
+                                onPointerEnter={() => setMoveToOpen(true)}
                             />
                         }
                     >
-                        {snapshot.sections.map((section) => (
+                        <div ref={moveToContentRef} style={{ display: "contents" }}>
+                            {snapshot.sections.map((section) => (
+                                <MenuItem
+                                    key={section.tag}
+                                    label={section.name}
+                                    labelProps={{
+                                        className: styles.sectionLabel,
+                                    }}
+                                    onSelect={() => vm.onToggleSection(section.tag)}
+                                    onClick={(evt) => evt.stopPropagation()}
+                                    hideChevron={true}
+                                    aria-checked={section.isSelected}
+                                >
+                                    {section.isSelected && (
+                                        <CheckIcon color="var(--cpd-color-icon-tertiary)" width="24px" height="24px" />
+                                    )}
+                                </MenuItem>
+                            ))}
+                            {hasSections && <Separator />}
                             <MenuItem
-                                key={section.tag}
-                                label={section.name}
-                                labelProps={{ className: styles.sectionLabel }}
-                                onSelect={() => vm.onToggleSection(section.tag)}
-                                onClick={(evt) => evt.stopPropagation()}
+                                label={_t("action|new_section")}
+                                onSelect={vm.onCreateSection}
                                 hideChevron={true}
-                                aria-checked={section.isSelected}
-                            >
-                                {section.isSelected && (
-                                    <CheckIcon color="var(--cpd-color-icon-tertiary)" width="24px" height="24px" />
-                                )}
-                            </MenuItem>
-                        ))}
-                        {hasSections && <Separator />}
-                        <MenuItem label={_t("action|new_section")} onSelect={vm.onCreateSection} hideChevron={true} />
+                            />
+                        </div>
                     </SubMenu>
                     {isInSection && (
                         <MenuItem

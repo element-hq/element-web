@@ -6,7 +6,7 @@
  */
 
 import React, { type JSX } from "react";
-import { render, screen } from "@test-utils";
+import { fireEvent, render, screen, waitFor } from "@test-utils";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect } from "vitest";
 
@@ -296,5 +296,50 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         render(<TestComponent />);
 
         expect(screen.getByRole("menuitem", { name: "New section" })).toBeInTheDocument();
+    });
+
+    it("should close only the submenu, keeping the parent menu open, when the pointer leaves 'Move to' without entering the submenu", async () => {
+        const user = userEvent.setup();
+        renderMenu({ sections: [{ tag: "m.favourite", name: "Favourites", isSelected: false }] });
+
+        const button = screen.getByRole("button", { name: "More Options" });
+        await user.click(button);
+        const menusWhileOpen = screen.getAllByRole("menu");
+        expect(menusWhileOpen.length).toBeGreaterThan(0);
+
+        const moveToSection = screen.getByRole("menuitem", { name: "Move to" });
+        await user.hover(moveToSection);
+        await screen.findByRole("menuitem", { name: "Favourites" });
+
+        // Move the pointer back onto a sibling item in the parent menu — away from
+        // "Move to" and away from the submenu content — without moving to the submenu.
+        const leaveRoomOption = screen.getByRole("menuitem", { name: "Leave room" });
+        fireEvent.pointerMove(leaveRoomOption);
+
+        // The submenu should close...
+        await waitFor(() => expect(screen.queryByRole("menuitem", { name: "Favourites" })).not.toBeInTheDocument(), {
+            timeout: 1000,
+        });
+        // ...but the parent menu should remain open.
+        expect(screen.getByRole("menuitem", { name: "Move to" })).toBeInTheDocument();
+        expect(screen.getByRole("menuitem", { name: "Leave room" })).toBeInTheDocument();
+    });
+
+    it("should keep the submenu open while the pointer is inside its content", async () => {
+        const user = userEvent.setup();
+        renderMenu({ sections: [{ tag: "m.favourite", name: "Favourites", isSelected: false }] });
+
+        const button = screen.getByRole("button", { name: "More Options" });
+        await user.click(button);
+
+        const moveToSection = screen.getByRole("menuitem", { name: "Move to" });
+        await user.hover(moveToSection);
+
+        const favouritesItem = await screen.findByRole("menuitem", { name: "Favourites" });
+        fireEvent.pointerMove(favouritesItem);
+
+        // Give the close timer a chance to fire, then confirm the submenu is still open.
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        expect(screen.getByRole("menuitem", { name: "Favourites" })).toBeInTheDocument();
     });
 });
