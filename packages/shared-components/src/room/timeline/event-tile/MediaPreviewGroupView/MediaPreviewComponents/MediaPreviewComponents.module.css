@@ -78,8 +78,9 @@
     }
 }
 
-.largeImage {
+.image {
     button {
+        cursor: pointer;
         background: none;
         border: none;
         width: 100%;
@@ -93,12 +94,18 @@
     }
 }
 
-.largeImage.bannerImage img {
+.image.bannerImage img {
     max-height: 100px;
 }
 
-.largeVideo {
+.image.fullImage img {
+    max-height: 300px;
+    object-fit: contain;
+}
+
+.video {
     button {
+        cursor: pointer;
         background: none;
         border: none;
         width: 100%;
@@ -112,6 +119,26 @@
     }
 }
 
-.largeVideo.bannerVideo video {
+.video.bannerVideo video {
     max-height: 100px;
+}
+
+.video.fullVideo video {
+    max-height: 300px;
+    object-fit: contain;
+}
+
+.audio {
+    button {
+        cursor: pointer;
+        background: none;
+        border: none;
+        width: 100%;
+        padding: 0;
+    }
+
+    audio {
+        width: 100%;
+        display: block;
+    }
 }

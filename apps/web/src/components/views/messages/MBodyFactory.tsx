@@ -34,6 +34,8 @@ import { MediaPreviewGroupViewModel } from "../../../viewmodels/message-body/Med
 import { fileSize } from "../../../utils/FileUtils";
 import DownloadIcon from "@vector-im/compound-design-tokens/assets/web/icons/download";
 import { FileDownloader } from "../../../utils/FileDownloader";
+import Modal from "../../../Modal";
+import ImageView from "../elements/ImageView";
 import path from "path";
 
 type MBodyComponent = React.ComponentType<IBodyProps>;
@@ -62,21 +64,21 @@ export function FileBodyFactory({
                     {
                         style: "text",
                         header: mediaEventHelper?.fileName!,
-                        body: size === undefined ? "Size unknown" : fileSize(size, { base: 2, standard: "jedec" }),
+                        body: size === undefined ? "Size unknown" : fileSize(size),
                         buttons:
                             mediaEventHelper === undefined
                                 ? undefined
                                 : [
-                                      {
-                                          icon: <DownloadIcon />,
-                                          onClick: async () => {
-                                              downloader.download({
-                                                  blob: await mediaEventHelper.sourceBlob.value, // decrypts transparently if E2EE
-                                                  name: mediaEventHelper.fileName || _t("common|attachment"),
-                                              });
-                                          },
-                                      },
-                                  ],
+                                    {
+                                        icon: <DownloadIcon />,
+                                        onClick: async () => {
+                                            downloader.download({
+                                                blob: await mediaEventHelper.sourceBlob.value, // decrypts transparently if E2EE
+                                                name: mediaEventHelper.fileName || _t("common|attachment"),
+                                            });
+                                        },
+                                    },
+                                ],
                         ...attachmentIconOfType("light", content.info?.mimetype),
                     },
                 ],
@@ -119,6 +121,7 @@ export function VideoBodyFactory({
     forExport,
     inhibitInteraction,
 }: Readonly<Pick<IBodyProps, "mxEvent" | "mediaEventHelper" | "forExport" | "inhibitInteraction">>): JSX.Element {
+    /*
     const { timelineRenderingType } = useContext(RoomContext);
     const [mediaVisible, setMediaVisible] = useMediaVisible(mxEvent);
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -183,6 +186,44 @@ export function VideoBodyFactory({
             ) : null}
         </VideoBodyView>
     );
+    */
+
+    const content = mxEvent.getContent<MediaEventContent>();
+    const size = content.info?.size;
+
+    const downloader = new FileDownloader();
+
+    const vm2 = useCreateAutoDisposedViewModel(
+        () =>
+            new MediaPreviewGroupViewModel({
+                entries: [
+                    {
+                        style: "video",
+                        header: mediaEventHelper?.fileName!,
+                        video: mediaEventHelper?.media.srcHttp!,
+                        videoSize: "full",
+                        body: size === undefined ? "Size unknown" : fileSize(size),
+                        buttons:
+                            mediaEventHelper === undefined
+                                ? undefined
+                                : [
+                                    {
+                                        icon: <DownloadIcon />,
+                                        onClick: async () => {
+                                            downloader.download({
+                                                blob: await mediaEventHelper.sourceBlob.value, // decrypts transparently if E2EE
+                                                name: mediaEventHelper.fileName || _t("common|attachment"),
+                                            });
+                                        },
+                                    },
+                                ],
+                        ...attachmentIconOfType("light", content.info?.mimetype),
+                    },
+                ],
+            }),
+    );
+
+    return <MediaPreviewGroupPreview vm={vm2} />;
 }
 
 export function ImageBodyFactory({
@@ -198,6 +239,7 @@ export function ImageBodyFactory({
         "mxEvent" | "mediaEventHelper" | "forExport" | "maxImageHeight" | "permalinkCreator" | "showFileInfo"
     >
 >): JSX.Element {
+    /*
     const { timelineRenderingType } = useContext(RoomContext);
     const [mediaVisible, setMediaVisible] = useMediaVisible(mxEvent);
     const imageRef = useRef<HTMLImageElement>(null);
@@ -299,6 +341,112 @@ export function ImageBodyFactory({
             ) : null}
         </ImageBodyView>
     );
+    */
+
+    const content = mxEvent.getContent<MediaEventContent>();
+    const size = content.info?.size;
+
+    const downloader = new FileDownloader();
+
+    const vm2 = useCreateAutoDisposedViewModel(
+        () =>
+            new MediaPreviewGroupViewModel({
+                entries: [
+                    {
+                        style: "image",
+                        image: mediaEventHelper?.media.srcHttp!,
+                        imageSize: "full",
+                        imageOnClick: () => {
+                            const info = mxEvent.getContent<ImageContent>().info;
+                            Modal.createDialog(
+                                ImageView,
+                                {
+                                    src: mediaEventHelper?.media.srcHttp!, // full-res URL
+                                    name: mediaEventHelper?.fileName || _t("common|attachment"),
+                                    mxEvent, // enables download/permalink/context actions
+                                    permalinkCreator,
+                                    width: info?.w,
+                                    height: info?.h,
+                                    fileSize: info?.size,
+                                },
+                                "mx_Dialog_lightbox",
+                                undefined,
+                                true,
+                            );
+                        },
+                        header: mediaEventHelper?.fileName!,
+                        body: size === undefined ? "Size unknown" : fileSize(size),
+                        buttons:
+                            mediaEventHelper === undefined
+                                ? undefined
+                                : [
+                                    {
+                                        icon: <DownloadIcon />,
+                                        onClick: async () => {
+                                            downloader.download({
+                                                blob: await mediaEventHelper.sourceBlob.value, // decrypts transparently if E2EE
+                                                name: mediaEventHelper.fileName || _t("common|attachment"),
+                                            });
+                                        },
+                                    },
+                                ],
+                        ...attachmentIconOfType("light", content.info?.mimetype),
+                    },
+                ],
+            }),
+
+    );
+    return <MediaPreviewGroupPreview vm={vm2} />;
+}
+
+export function AudioBodyFactory({
+    mxEvent,
+    mediaEventHelper,
+    forExport,
+    maxImageHeight,
+    permalinkCreator,
+    showFileInfo,
+}: Readonly<
+    Pick<
+        IBodyProps,
+        "mxEvent" | "mediaEventHelper" | "forExport" | "maxImageHeight" | "permalinkCreator" | "showFileInfo"
+    >
+>): JSX.Element {
+    const content = mxEvent.getContent<MediaEventContent>();
+    const size = content.info?.size;
+
+    const downloader = new FileDownloader();
+
+    const vm2 = useCreateAutoDisposedViewModel(
+        () =>
+            new MediaPreviewGroupViewModel({
+                entries: [
+                    {
+                        style: "audio",
+                        audio: mediaEventHelper?.media.srcHttp!,
+                        header: mediaEventHelper?.fileName!,
+                        body: size === undefined ? "Size unknown" : fileSize(size),
+                        buttons:
+                            mediaEventHelper === undefined
+                                ? undefined
+                                : [
+                                    {
+                                        icon: <DownloadIcon />,
+                                        onClick: async () => {
+                                            downloader.download({
+                                                blob: await mediaEventHelper.sourceBlob.value, // decrypts transparently if E2EE
+                                                name: mediaEventHelper.fileName || _t("common|attachment"),
+                                            });
+                                        },
+                                    },
+                                ],
+                        ...attachmentIconOfType("light", content.info?.mimetype),
+                    },
+                ],
+            }),
+
+    );
+    return <MediaPreviewGroupPreview vm={vm2} />;
 }
 
 export function RedactedBodyFactory({ mxEvent, ref }: Pick<IBodyProps, "mxEvent" | "ref">): JSX.Element {
@@ -334,6 +482,7 @@ const MESSAGE_BODY_TYPES = new Map<string, MBodyComponent>([
     [MsgType.Image, ImageBodyFactory],
     [MsgType.File, FileBodyFactory],
     [MsgType.Video, VideoBodyFactory],
+    [MsgType.Audio, AudioBodyFactory],
 ]);
 
 // Render a body using the picked factory.

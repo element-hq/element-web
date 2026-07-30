@@ -1,12 +1,12 @@
 import React, { JSX } from "react";
-import { MediaPreviewGroupVideoEntry } from "../MediaPreviewGroupView";
-import styles from "./VideoPreviewTile.module.css";
-import { Buttons, Icon, Video, LeftGroup, TextContent } from "../MediaPreviewComponents/MediaPreviewComponents";
+import { MediaPreviewGroupAudioEntry } from "../MediaPreviewGroupView";
+import styles from "./AudioPreviewTile.module.css";
+import { Audio, Buttons, Icon, LeftGroup, TextContent } from "../MediaPreviewComponents/MediaPreviewComponents";
 
-export function VideoPreviewTile(props: MediaPreviewGroupVideoEntry): JSX.Element {
+export function AudioPreviewTile(props: MediaPreviewGroupAudioEntry): JSX.Element {
     return (
         <div className={styles.tile}>
-            <Video {...props} />
+            <Audio {...props} />
             <div className={styles.bottom}>
                 <LeftGroup>
                     <Icon {...props} />
