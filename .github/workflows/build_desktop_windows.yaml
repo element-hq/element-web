@@ -214,11 +214,26 @@ jobs:
                   Get-ChildItem -Path * -Filter "*_build_*.exe" -Recurse | Move-Item -Destination "./eSigner_CKA.exe"
 
                   # Install
-                  # Use Start-Process rather than piping to Out-Null: the installer spawns a background
-                  # agent that inherits the pipe's stdout handle, so `| Out-Null` hangs.
+                  # The v1.1.2 Inno Setup installer launches a background agent as its final post-install
+                  # step without `nowait`, so Setup.exe never exits and any wait on it hangs forever.
+                  # In Inno Setup, [Run] entries execute only after all files are copied and the CSP is registered,
+                  # so the install is complete by then: start it without waiting, poll for the installed tool to appear,
+                  # let it settle, then terminate the stuck installer.
                   New-Item -ItemType Directory -Force -Path "$env:INSTALL_DIR"
-                  Start-Process -Wait -NoNewWindow -FilePath ./eSigner_CKA.exe `
-                      -ArgumentList "/CURRENTUSER", "/VERYSILENT", "/SUPPRESSMSGBOXES", "/DIR=`"${{ env.INSTALL_DIR }}`""
+                  $Installer = Start-Process -NoNewWindow -PassThru -FilePath ./eSigner_CKA.exe `
+                      -ArgumentList "/CURRENTUSER", "/VERYSILENT", "/SUPPRESSMSGBOXES", "/DIR=`"$env:INSTALL_DIR`""
+                  $Tool = Join-Path "$env:INSTALL_DIR" "eSignerCKATool.exe"
+                  $Deadline = (Get-Date).AddMinutes(3)
+                  while (-not $Installer.HasExited -and -not (Test-Path $Tool) -and (Get-Date) -lt $Deadline) {
+                      Start-Sleep -Seconds 2
+                  }
+                  if (-not (Test-Path $Tool)) {
+                      throw "eSigner CKA installation failed: $Tool not found"
+                  }
+                  Start-Sleep -Seconds 10
+                  if (-not $Installer.HasExited) {
+                      Stop-Process -Id $Installer.Id -Force
+                  }
 
                   # Disable logger
                   $LogConfig = Get-Content -Path ${{ env.INSTALL_DIR }}/log4net.config
