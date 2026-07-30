@@ -173,4 +173,21 @@ describe("Markdown parser test", () => {
             expect(md.toHTML()).toEqual(expectedResult);
         });
     });
+
+    describe("lists", () => {
+        it("keeps the paragraphs of a loose list item separate", () => {
+            const md = new Markdown(["1. a", "2. b", "", "    c"].join("\n"));
+            expect(md.toHTML()).toEqual("<ol>\n<li>\n<p>a</p>\n</li>\n<li>\n<p>b</p>\n<p>c</p>\n</li>\n</ol>\n");
+        });
+
+        it("does not wrap the items of a tight list in paragraphs", () => {
+            const md = new Markdown(["- a", "- b"].join("\n"));
+            expect(md.toHTML()).toEqual("<ul>\n<li>a</li>\n<li>b</li>\n</ul>\n");
+        });
+
+        it("still renders a single paragraph message inline", () => {
+            const md = new Markdown("hello");
+            expect(md.toHTML()).toEqual("hello");
+        });
+    });
 });
