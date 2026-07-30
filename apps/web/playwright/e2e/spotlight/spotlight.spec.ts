@@ -97,8 +97,8 @@ test.describe("Spotlight", () => {
 
     test.beforeEach(async ({ page, user, bot1, bot2, room1, room2, room3 }) => {
         await bot1.joinRoom(room1.roomId);
-        await bot2.inviteUser(room2.roomId, bot1.credentials.userId);
-        await bot2.inviteUser(room3.roomId, bot1.credentials.userId);
+        await bot2.inviteUser(room2.roomId, bot1.credentials!.userId);
+        await bot2.inviteUser(room3.roomId, bot1.credentials!.userId);
 
         await page.goto(`/#/room/${room1.roomId}`);
         await expect(page.locator(".mx_RoomSublist_skeletonUI")).not.toBeAttached();
@@ -215,12 +215,12 @@ test.describe("Spotlight", () => {
         const spotlight = await app.openSpotlight();
         await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.filter(Filter.People);
-        await spotlight.search(bot1.credentials.displayName);
+        await spotlight.search(bot1.credentials!.displayName!);
         const resultLocator = spotlight.results;
         await expect(resultLocator).toHaveCount(1);
-        await expect(resultLocator.first()).toContainText(bot1.credentials.displayName);
+        await expect(resultLocator.first()).toContainText(bot1.credentials!.displayName!);
         await resultLocator.first().click();
-        await expect(roomHeaderName(page)).toHaveText(bot1.credentials.displayName);
+        await expect(roomHeaderName(page)).toHaveText(bot1.credentials!.displayName!);
     });
 
     /**
@@ -234,30 +234,30 @@ test.describe("Spotlight", () => {
         const spotlight = await app.openSpotlight();
         await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.filter(Filter.People);
-        await spotlight.search(bot2.credentials.displayName);
+        await spotlight.search(bot2.credentials!.displayName!);
         const resultLocator = spotlight.results;
         await expect(resultLocator).toHaveCount(1);
-        await expect(resultLocator.first()).toContainText(bot2.credentials.displayName);
+        await expect(resultLocator.first()).toContainText(bot2.credentials!.displayName!);
         await resultLocator.first().click();
-        await expect(roomHeaderName(page)).toHaveText(bot2.credentials.displayName);
+        await expect(roomHeaderName(page)).toHaveText(bot2.credentials!.displayName!);
     });
 
     test("should find group DMs by usernames or user ids", async ({ page, app, bot1, bot2, room1 }) => {
         // First we want to share a room with both bots to ensure we’ve got their usernames cached
-        await app.client.inviteUser(room1.roomId, bot2.credentials.userId);
+        await app.client.inviteUser(room1.roomId, bot2.credentials!.userId);
 
         // Starting a DM with ByteBot (will be turned into a group dm later)
         let spotlight = await app.openSpotlight();
         await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.filter(Filter.People);
-        await spotlight.search(bot2.credentials.displayName);
+        await spotlight.search(bot2.credentials!.displayName!);
         let resultLocator = spotlight.results;
         await expect(resultLocator).toHaveCount(1);
-        await expect(resultLocator.first()).toContainText(bot2.credentials.displayName);
+        await expect(resultLocator.first()).toContainText(bot2.credentials!.displayName!);
         await resultLocator.first().click();
 
         // Send first message to actually start DM
-        await expect(roomHeaderName(page)).toHaveText(bot2.credentials.displayName);
+        await expect(roomHeaderName(page)).toHaveText(bot2.credentials!.displayName!);
         const locator = page.getByRole("textbox", { name: "Send a message…" });
         await locator.fill("Hey!");
         await locator.press("Enter");
@@ -265,7 +265,7 @@ test.describe("Spotlight", () => {
         // Assert DM exists by checking for the first message and the room being in the room list
         await expect(page.locator(".mx_EventTile_body").filter({ hasText: "Hey!" })).toBeAttached({ timeout: 3000 });
         await expect(
-            page.getByTestId("room-list").getByRole("option", { name: `Open room ${bot2.credentials.displayName}` }),
+            page.getByTestId("room-list").getByRole("option", { name: `Open room ${bot2.credentials!.displayName}` }),
         ).toBeVisible();
 
         // Invite BotBob into existing DM with ByteBot
@@ -273,11 +273,11 @@ test.describe("Spotlight", () => {
             const map = client
                 .getAccountData("m.direct" as keyof AccountDataEvents)
                 ?.getContent<Record<string, string[]>>();
-            return map[userId] ?? [];
-        }, bot2.credentials.userId);
+            return map?.[userId] ?? [];
+        }, bot2.credentials!.userId);
         expect(dmRooms).toHaveLength(1);
-        const groupDmName = await app.client.evaluate((client, id) => client.getRoom(id).name, dmRooms[0]);
-        await app.client.inviteUser(dmRooms[0], bot1.credentials.userId);
+        const groupDmName = await app.client.evaluate((client, id) => client.getRoom(id)!.name, dmRooms[0]);
+        await app.client.inviteUser(dmRooms[0], bot1.credentials!.userId);
         await expect(roomHeaderName(page).first()).toContainText(groupDmName);
         await expect(
             page.getByTestId("room-list").getByRole("option", { name: `Open room ${groupDmName}` }),
@@ -286,7 +286,7 @@ test.describe("Spotlight", () => {
         // Search for BotBob by id, should return group DM and user
         spotlight = await app.openSpotlight();
         await spotlight.filter(Filter.People);
-        await spotlight.search(bot1.credentials.userId);
+        await spotlight.search(bot1.credentials!.userId);
         await page.waitForTimeout(1000); // wait for the dialog to settle
         resultLocator = spotlight.results;
         await expect(resultLocator).toHaveCount(2);
@@ -299,7 +299,7 @@ test.describe("Spotlight", () => {
         // Search for ByteBot by id, should return group DM and user
         spotlight = await app.openSpotlight();
         await spotlight.filter(Filter.People);
-        await spotlight.search(bot2.credentials.userId);
+        await spotlight.search(bot2.credentials!.userId);
         await page.waitForTimeout(1000); // wait for the dialog to settle
         resultLocator = spotlight.results;
         await expect(resultLocator).toHaveCount(2);
@@ -324,11 +324,11 @@ test.describe("Spotlight", () => {
         // We search for user ID to trigger the profile lookup within the dialog.
         for (let i = 0; i < 2; i++) {
             console.log("Iteration: " + i);
-            await spotlight.search(bot1.credentials.userId);
+            await spotlight.search(bot1.credentials!.userId);
             await page.waitForTimeout(1000); // wait for the dialog to settle
             const resultLocator = spotlight.results;
             await expect(resultLocator).toHaveCount(1);
-            await expect(resultLocator.first()).toContainText(bot1.credentials.userId);
+            await expect(resultLocator.first()).toContainText(bot1.credentials!.userId);
         }
     });
 
@@ -336,12 +336,12 @@ test.describe("Spotlight", () => {
         const spotlight = await app.openSpotlight();
         await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.filter(Filter.People);
-        await spotlight.search(bot2.credentials.displayName);
+        await spotlight.search(bot2.credentials!.displayName!);
         await page.waitForTimeout(3000); // wait for the dialog to settle
 
         const resultLocator = spotlight.results;
         await expect(resultLocator).toHaveCount(1);
-        await expect(resultLocator.first()).toContainText(bot2.credentials.displayName);
+        await expect(resultLocator.first()).toContainText(bot2.credentials!.displayName!);
 
         await expect(spotlight.dialog.locator("#mx_SpotlightDialog_button_startGroupChat")).toContainText(
             "Start a group chat",
@@ -351,17 +351,17 @@ test.describe("Spotlight", () => {
     });
 
     test("should close spotlight after starting a DM", async ({ page, app, bot1 }) => {
-        await startDM(app, page, bot1.credentials.displayName);
+        await startDM(app, page, bot1.credentials!.displayName!);
         await expect(page.locator(".mx_SpotlightDialog")).toHaveCount(0);
     });
 
     test("should show the same user only once", async ({ page, app, bot1 }) => {
-        await startDM(app, page, bot1.credentials.displayName);
+        await startDM(app, page, bot1.credentials!.displayName!);
         await page.goto("/#/home");
         const spotlight = await app.openSpotlight();
         await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.filter(Filter.People);
-        await spotlight.search(bot1.credentials.displayName);
+        await spotlight.search(bot1.credentials!.displayName!);
         await page.waitForTimeout(3000); // wait for the dialog to settle
         await expect(spotlight.dialog.locator(".mx_Spinner")).not.toBeAttached();
         const resultLocator = spotlight.results;

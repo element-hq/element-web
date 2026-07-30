@@ -184,7 +184,7 @@ test.describe("Composer", () => {
             // Set up a private room so we have another user to mention
             await app.client.createRoom({
                 is_direct: true,
-                invite: [bot.credentials.userId],
+                invite: [bot.credentials!.userId],
             });
             await app.viewRoomByName("Bob");
 
@@ -194,7 +194,7 @@ test.describe("Composer", () => {
 
             // Note that we include the user ID here as the room tile is also an 'option' role
             // with text 'Bob'
-            await page.getByRole("option", { name: `Bob ${bot.credentials.userId}` }).click();
+            await page.getByRole("option", { name: `Bob ${bot.credentials!.userId}` }).click();
             await expect(composer.getByText("Bob")).toBeVisible();
             await expect(composer).toMatchScreenshot("mention.png");
             await composer.press("Enter");

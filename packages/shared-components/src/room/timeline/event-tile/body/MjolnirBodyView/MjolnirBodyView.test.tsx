@@ -25,7 +25,7 @@ const { Default } = composeStories(stories);
 class TestMjolnirBodyViewModel extends MockViewModel<MjolnirBodyViewSnapshot> implements MjolnirBodyViewActions {
     public constructor(
         snapshot: MjolnirBodyViewSnapshot,
-        public onAllowClick: MjolnirBodyViewActions["onAllowClick"],
+        public onAllow: MjolnirBodyViewActions["onAllow"],
     ) {
         super(snapshot);
     }
@@ -42,14 +42,15 @@ describe("MjolnirBodyView", () => {
 
     it("invokes the allow action", async () => {
         const user = userEvent.setup();
-        const onAllowClick = vi.fn();
-        const vm = new TestMjolnirBodyViewModel({}, onAllowClick) as MjolnirBodyViewModel;
+        const onAllow = vi.fn();
+        const vm = new TestMjolnirBodyViewModel({}, onAllow) as MjolnirBodyViewModel;
 
         render(<MjolnirBodyView vm={vm} />);
 
         await user.click(screen.getByRole("button", { name: "Show anyways." }));
 
-        expect(onAllowClick).toHaveBeenCalledTimes(1);
+        expect(onAllow).toHaveBeenCalledTimes(1);
+        expect(onAllow).toHaveBeenCalledWith();
     });
 
     it("applies a custom className to the root element", () => {
