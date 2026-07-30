@@ -42,6 +42,7 @@ describe("EventTileViewModel", () => {
                 msgtype: "m.text",
                 eventTs: 123,
                 eventId: "$event",
+                isState: false,
                 isLocalEcho: false,
                 isSending: false,
                 ariaLive: "off",
@@ -537,6 +538,7 @@ describe("EventTileViewModel", () => {
             eventType: "m.room.member",
             eventId: "$member-event",
             eventTs: 456,
+            isState: true,
         });
         expect(vm.getSnapshot().snapshot.sender).toMatchObject({
             senderId: "@bob:example.org",

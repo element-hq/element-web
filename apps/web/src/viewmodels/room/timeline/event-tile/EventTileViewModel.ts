@@ -72,6 +72,10 @@ export interface EventTileDerivedEventInput extends EventTileEventInput {
     eventTs: number;
     /** The stable event identifier, when available. */
     eventId?: string;
+    /** The event identifier replaced by this event, when available. */
+    replacingEventId?: string;
+    /** Whether the event is a state event. */
+    isState: boolean;
     /** Whether the event is a local echo. */
     isLocalEcho: boolean;
     /** Whether the event is a room create event. */
@@ -208,6 +212,10 @@ export interface EventTileEventSnapshot {
     msgtype?: string;
     /** The stable event identifier, when available. */
     eventId?: string;
+    /** The event identifier replaced by this event, when available. */
+    replacingEventId?: string;
+    /** Whether the event is a state event. */
+    isState: boolean;
     /** The event origin timestamp. */
     eventTs: number;
     /** Whether the event is a local echo. */
@@ -561,6 +569,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
                 msgtype: mxEvent.getContent().msgtype,
                 eventTs: mxEvent.getTs(),
                 eventId: mxEvent.getId() ?? undefined,
+                replacingEventId: mxEvent.replacingEventId() ?? undefined,
+                isState: mxEvent.isState(),
                 isLocalEcho: !!mxEvent.status,
                 isRoomCreate: eventType === EventType.RoomCreate,
                 isCallInvite: eventType === EventType.CallInvite,
@@ -584,6 +594,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
             eventType: event.eventType,
             msgtype: event.msgtype,
             eventId: event.eventId,
+            replacingEventId: event.replacingEventId,
+            isState: event.isState,
             eventTs: event.eventTs,
             isLocalEcho: event.isLocalEcho,
             isSending: event.isSending,
