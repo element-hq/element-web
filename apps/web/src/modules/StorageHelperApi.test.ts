@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import { describe, it, expect, vi } from "vitest";
 import { mockPlatformPeg } from "test-utils";
 
-import { StorageHelperApi } from "./StorageHeleprApi";
+import { StorageHelperApi } from "./StorageHelperApi";
 
 describe("StorageHelperApi", () => {
     it("should return the pickle key from the platform", async () => {
