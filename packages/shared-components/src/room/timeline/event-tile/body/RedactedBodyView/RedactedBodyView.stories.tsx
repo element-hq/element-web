@@ -63,12 +63,12 @@ export const RedactedByAnotherUser: Story = {
 
 export const WithReason: Story = {
     args: {
-        reason: "A reasonable reason"
+        reason: "A reasonable reason",
     },
 };
 
 export const WithReasonLong: Story = {
     args: {
-        reason: "A very unreasonable reason that just goes on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on"
+        reason: "A very unreasonable reason that just goes on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on",
     },
 };
