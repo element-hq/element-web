@@ -20,3 +20,12 @@
     color: var(--cpd-color-icon-secondary);
     flex: 0 0 14px;
 }
+
+.reason {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    vertical-align: top;
+    max-width: 30em;
+}

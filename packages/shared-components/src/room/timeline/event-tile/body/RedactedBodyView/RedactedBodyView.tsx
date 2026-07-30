@@ -59,7 +59,7 @@ export function RedactedBodyView({ vm, className, ref }: Readonly<RedactedBodyVi
         <span className={classNames(styles.content, className)} ref={ref}>
             <DeleteIcon className={styles.icon} aria-hidden="true" />
             <span>{text}</span>
-            {reason && <span>("{reason}")</span>}
+            {reason && <span>("<span className={styles.reason}>{reason}</span>")</span>}
         </span>
     );
 
