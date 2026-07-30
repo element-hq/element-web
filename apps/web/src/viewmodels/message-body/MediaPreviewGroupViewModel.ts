@@ -13,4 +13,9 @@ export class MediaPreviewGroupViewModel
     public constructor(props: MediaPreviewGroupProps) {
         super(props, props);
     }
+
+    public replace(props: MediaPreviewGroupProps) {
+        this.props = props;
+        this.snapshot.set(props);
+    }
 }
