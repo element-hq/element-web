@@ -899,6 +899,43 @@ describe("RoomView", () => {
     });
 
     describe("message search", () => {
+        it("should clear the search results when the search box is emptied", async () => {
+            room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+
+            const roomViewRef = createRef<RoomView>();
+            const { container } = await mountRoomView(roomViewRef);
+            await waitFor(() => expect(roomViewRef.current).toBeTruthy());
+            // @ts-ignore - triggering a search organically is a lot of work
+            act(() =>
+                roomViewRef.current!.setState({
+                    timelineRenderingType: TimelineRenderingType.Search,
+                    search: {
+                        searchId: 1,
+                        roomId: room.roomId,
+                        term: "search term",
+                        scope: SearchScope.Room,
+                        promise: Promise.resolve({ results: [], highlights: [], count: 0 }),
+                        inProgress: false,
+                        count: 0,
+                    },
+                }),
+            );
+
+            await waitFor(() => {
+                expect(container.querySelector(".mx_RoomView_searchResultsPanel")).toBeVisible();
+            });
+
+            // Deleting the last character of the term hands us an empty string.
+            // @ts-ignore - onSearchChange is private and debounced
+            act(() => roomViewRef.current!.onSearchChange(""));
+
+            await waitFor(() => {
+                expect(roomViewRef.current!.state.search).toBeUndefined();
+            });
+            expect(roomViewRef.current!.state.timelineRenderingType).toBe(TimelineRenderingType.Room);
+            expect(container.querySelector(".mx_RoomView_searchResultsPanel")).not.toBeInTheDocument();
+        });
+
         it("should close search results when edit is clicked", async () => {
             room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
 

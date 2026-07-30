@@ -1944,6 +1944,11 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     private onSearchChange = debounce((term: string): void => {
+        if (!term.trim()) {
+            // Clearing the box should put the timeline back rather than search for nothing.
+            void this.onCancelSearchClick();
+            return;
+        }
         this.onSearch(term);
     }, 300);
 
