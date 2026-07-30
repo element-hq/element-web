@@ -5,18 +5,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
-import {
-    allowMjolnirBody,
-    getMjolnirBodyStorageKey,
-    isMjolnirBodyAllowed,
-} from "../../../src/viewmodels/room/timeline/event-tile/EventTileMjolnirBodyState";
+import { allowMjolnirBody, getMjolnirBodyStorageKey, isMjolnirBodyAllowed } from "./EventTileMjolnirBodyState";
 
-describe("EventTile Mjolnir body state", () => {
+describe("EventTileMjolnirBodyState", () => {
     afterEach(() => {
         localStorage.clear();
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     it("derives the application storage key from an event", () => {
@@ -44,7 +43,7 @@ describe("EventTile Mjolnir body state", () => {
             room_id: "!room:example.org",
             event_id: "$event:example.org",
         });
-        const onMessageAllowed = jest.fn();
+        const onMessageAllowed = vi.fn();
 
         allowMjolnirBody(event, onMessageAllowed);
 
