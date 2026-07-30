@@ -609,7 +609,7 @@ class Helpers {
         const roomListContainer = this.page.getByTestId("room-list");
         const roomTiles = roomListContainer.getByRole("option");
         for (const [i, room] of rooms.entries()) {
-            await expect(roomTiles.nth(i)).toHaveAccessibleName(new RegExp(`${room.name}`));
+            await expect(roomTiles.nth(i)).toHaveAccessibleName(new RegExp(room.name));
         }
     }
 }

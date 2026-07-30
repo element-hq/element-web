@@ -25,7 +25,7 @@ import { type Media, mediaFromContent } from "../../../customisations/Media";
 import { BLURHASH_FIELD, createThumbnail } from "../../../utils/image-media";
 import ImageView from "../elements/ImageView";
 import { type IBodyProps } from "./IBodyProps";
-import { type ImageSize, suggestedSize as suggestedImageSize } from "../../../settings/enums/ImageSize";
+import { suggestedSize as suggestedImageSize } from "../../../settings/enums/ImageSize";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { blobIsAnimated, mayBeAnimated } from "../../../utils/Image";
@@ -409,7 +409,7 @@ export class ImageBodyBaseInner extends React.Component<ImageBodyBaseProps, ISta
         }
 
         const { w: maxWidth, h: maxHeight } = suggestedImageSize(
-            SettingsStore.getValue("Images.size") as ImageSize,
+            SettingsStore.getValue("Images.size"),
             { w: infoWidth, h: infoHeight },
             forcedHeight ?? this.props.maxImageHeight,
         );

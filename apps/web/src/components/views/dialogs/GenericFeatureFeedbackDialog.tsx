@@ -78,10 +78,7 @@ const GenericFeatureFeedbackDialog: React.FC<IProps> = ({
                         }}
                         autoFocus={true}
                     />
-                    <StyledCheckbox
-                        checked={canContact}
-                        onChange={(e) => setCanContact((e.target as HTMLInputElement).checked)}
-                    >
+                    <StyledCheckbox checked={canContact} onChange={(e) => setCanContact(e.target.checked)}>
                         {_t("feedback|can_contact_label")}
                     </StyledCheckbox>
                 </React.Fragment>

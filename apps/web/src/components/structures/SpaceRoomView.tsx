@@ -617,7 +617,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
 
         if (showSetup) {
             phase =
-                this.props.justCreatedOpts!.createOpts?.preset === Preset.PublicChat
+                this.props.justCreatedOpts.createOpts?.preset === Preset.PublicChat
                     ? Phase.PublicCreateRooms
                     : Phase.PrivateScope;
         }

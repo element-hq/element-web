@@ -13,7 +13,7 @@ import SdkConfig from "../../../../../src/SdkConfig";
 import { DeclineAndBlockInviteDialog } from "../../../../../src/components/views/dialogs/DeclineAndBlockInviteDialog";
 
 describe("ConfirmRejectInviteDialog", () => {
-    const onFinished: jest.Mock<any, any> = jest.fn();
+    const onFinished = jest.fn();
 
     const MY_ROOM_NAME = "foo";
 
