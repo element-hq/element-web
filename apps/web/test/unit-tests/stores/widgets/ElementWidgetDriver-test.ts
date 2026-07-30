@@ -439,10 +439,7 @@ describe("ElementWidgetDriver", () => {
         });
 
         it("propagates errors from the homeserver", async () => {
-            const error = new MatrixError(
-                { errcode: "M_NOT_FOUND", error: "Not found" },
-                404,
-            );
+            const error = new MatrixError({ errcode: "M_NOT_FOUND", error: "Not found" }, 404);
 
             client._unstable_getRTCTransports.mockRejectedValue(error);
 
