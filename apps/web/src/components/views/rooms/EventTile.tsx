@@ -48,7 +48,6 @@ import { type ComposerInsertPayload } from "../../../dispatcher/payloads/Compose
 import { Action } from "../../../dispatcher/actions";
 import PlatformPeg from "../../../PlatformPeg";
 import { type IReadReceiptPosition } from "./ReadReceiptMarker";
-import { getEventDisplayInfo } from "../../../utils/EventRenderingUtils";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { copyPlaintext } from "../../../utils/strings";
@@ -74,6 +73,7 @@ import { EventTileTimestampSlot } from "./EventTile/EventTileTimestampSlot";
 import {
     EventTileViewModel,
     type EventTileViewModelProps,
+    type EventTileViewModelDependencies,
 } from "../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
 import {
     getEventTileReceiptState,
@@ -271,7 +271,6 @@ interface IState {
 }
 
 interface EventTileRenderInputs {
-    displayInfo: ReturnType<typeof getEventDisplayInfo>;
     hasPinnedMessageBadge: boolean;
     hasReactionsRow: boolean;
     threadState: EventTileThreadState;
@@ -324,7 +323,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             thread,
         };
 
-        this.viewModel = new EventTileViewModel({ mxEvent: this.props.mxEvent }, this.createViewModelProps());
+        this.viewModel = new EventTileViewModel(this.createViewModelDependencies(), this.createViewModelProps());
 
         this.e2eViewModel = new EventTileE2eViewModel({
             cli: MatrixClientPeg.safeGet(),
@@ -831,14 +830,16 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         };
     }
 
-    private createRenderInputs(
-        displayInfo = getEventDisplayInfo(
-            MatrixClientPeg.safeGet(),
-            this.props.mxEvent,
-            this.context.showHiddenEvents,
-            shouldHideEventTile({ callEventGrouper: this.props.callEventGrouper }),
-        ),
-    ): EventTileRenderInputs {
+    private createViewModelDependencies(): EventTileViewModelDependencies {
+        return {
+            mxEvent: this.props.mxEvent,
+            matrixClient: MatrixClientPeg.safeGet(),
+            showHiddenEvents: this.context.showHiddenEvents,
+            hideEvent: shouldHideEventTile({ callEventGrouper: this.props.callEventGrouper }),
+        };
+    }
+
+    private createRenderInputs(): EventTileRenderInputs {
         const isRedacted = isMessageEvent(this.props.mxEvent) && this.props.isRedacted;
         const hasPinnedMessageBadge = PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent);
         const hasReactionsRow = !isRedacted;
@@ -847,7 +848,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const isOwnEvent = this.props.mxEvent?.getSender() === MatrixClientPeg.safeGet().getUserId();
 
         return {
-            displayInfo,
             hasPinnedMessageBadge,
             hasReactionsRow,
             threadState,
@@ -856,7 +856,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     }
 
     private createViewModelProps(inputs: EventTileRenderInputs = this.createRenderInputs()): EventTileViewModelProps {
-        const { displayInfo, hasPinnedMessageBadge, hasReactionsRow, threadState, isOwnEvent } = inputs;
+        const { hasPinnedMessageBadge, hasReactionsRow, threadState, isOwnEvent } = inputs;
         const isProbablyMedia = MediaEventHelper.isEligible(this.props.mxEvent);
         const isEditing = !!this.props.editState;
         const isSending =
@@ -876,12 +876,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 layout: this.props.layout,
                 continuation: this.props.continuation,
                 isProbablyMedia,
-                hasRenderer: displayInfo.hasRenderer,
-                isBubbleMessage: displayInfo.isBubbleMessage,
-                isLeftAlignedBubbleMessage: displayInfo.isLeftAlignedBubbleMessage,
-                isAlignedBetweenBubbles: displayInfo.isAlignedBetweenBubbles,
-                isInfoMessage: displayInfo.isInfoMessage,
-                noBubbleEvent: displayInfo.noBubbleEvent,
                 isTwelveHour: this.props.isTwelveHour,
                 isHighlighted: shouldHighlightEventTile({
                     cli: MatrixClientPeg.safeGet(),
@@ -956,25 +950,18 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     }
 
     public render(): ReactNode {
-        const displayInfo = getEventDisplayInfo(
-            MatrixClientPeg.safeGet(),
-            this.props.mxEvent,
-            this.context.showHiddenEvents,
-            shouldHideEventTile({ callEventGrouper: this.props.callEventGrouper }),
-        );
-        const { hasRenderer, isSeeingThroughMessageHiddenForModeration } = displayInfo;
         const { isQuoteExpanded } = this.state;
-        const renderInputs = this.createRenderInputs(displayInfo);
+        const renderInputs = this.createRenderInputs();
         const { hasPinnedMessageBadge, hasReactionsRow, threadState } = renderInputs;
 
-        this.viewModel.setEvent(this.props.mxEvent);
+        this.viewModel.setDependencies(this.createViewModelDependencies());
         this.viewModel.setProps(this.createViewModelProps(renderInputs));
         const eventTileRenderState = this.viewModel.getSnapshot();
         const eventTileSnapshot = eventTileRenderState.snapshot;
 
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
-        if (!hasRenderer) {
+        if (!eventTileSnapshot.event.hasRenderer) {
             logger.warn(
                 `Event type not supported: type:${eventTileSnapshot.event.eventType} isState:${eventTileSnapshot.event.isState}`,
             );
@@ -989,6 +976,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const tileClasses = eventTileRenderState.root.className;
         const tileAriaLive = eventTileRenderState.root.ariaLive;
         const isRenderingNotification = eventTileSnapshot.event.isRenderingNotification;
+        const isSeeingThroughMessageHiddenForModeration =
+            eventTileSnapshot.event.isSeeingThroughMessageHiddenForModeration;
 
         const permalink = this.getPermalink();
 

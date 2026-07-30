@@ -7,14 +7,17 @@
 
 import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
 import { Layout } from "../../../src/settings/enums/Layout";
-import { mkEvent } from "../../test-utils";
+import { mkEvent, stubClient } from "../../test-utils";
 import {
     EventTileViewModel,
+    type EventTileViewModelDependencies,
     type NormalizedEventTileViewModelProps,
     type EventTileViewModelProps,
 } from "../../../src/viewmodels/room/timeline/event-tile/EventTileViewModel";
 
 describe("EventTileViewModel", () => {
+    const matrixClient = stubClient();
+
     const makeEvent = () =>
         mkEvent({
             event: true,
@@ -25,6 +28,12 @@ describe("EventTileViewModel", () => {
             user: "@alice:example.org",
             content: { msgtype: "m.text" },
         });
+
+    const makeDependencies = (mxEvent = makeEvent()): EventTileViewModelDependencies => ({
+        mxEvent,
+        matrixClient,
+        showHiddenEvents: false,
+    });
 
     type EventTileViewModelPropsOverrides = {
         event?: Partial<NormalizedEventTileViewModelProps["event"]>;
@@ -52,6 +61,8 @@ describe("EventTileViewModel", () => {
                 isRtcNotification: false,
                 isEditing: false,
                 isEncryptionFailure: false,
+                hasRenderer: true,
+                isSeeingThroughMessageHiddenForModeration: false,
                 forExport: false,
                 ...overrides.event,
             },
@@ -59,7 +70,6 @@ describe("EventTileViewModel", () => {
                 timelineRenderingType: TimelineRenderingType.Room,
                 layout: Layout.Group,
                 isProbablyMedia: false,
-                hasRenderer: true,
                 isBubbleMessage: false,
                 isLeftAlignedBubbleMessage: false,
                 isAlignedBetweenBubbles: false,
@@ -497,7 +507,7 @@ describe("EventTileViewModel", () => {
     });
 
     it("updates an instance snapshot when inputs change", () => {
-        const vm = new EventTileViewModel({ mxEvent: makeEvent() }, makeProps());
+        const vm = new EventTileViewModel(makeDependencies(), makeProps());
         const listener = jest.fn();
         const unsubscribe = vm.subscribe(listener);
 
@@ -523,7 +533,7 @@ describe("EventTileViewModel", () => {
             content: { membership: "join" },
         });
         const vm = new EventTileViewModel(
-            { mxEvent: event },
+            makeDependencies(event),
             makeProps({
                 event: {
                     eventType: "m.room.message",
@@ -549,16 +559,18 @@ describe("EventTileViewModel", () => {
             isEmote: false,
         });
 
-        vm.setEvent(
-            mkEvent({
-                event: true,
-                id: "$updated-event",
-                room: "!room:example.org",
-                ts: 789,
-                type: "m.call.invite",
-                user: "@carol:example.org",
-                content: { msgtype: "m.call.invite" },
-            }),
+        vm.setDependencies(
+            makeDependencies(
+                mkEvent({
+                    event: true,
+                    id: "$updated-event",
+                    room: "!room:example.org",
+                    ts: 789,
+                    type: "m.call.invite",
+                    user: "@carol:example.org",
+                    content: { msgtype: "m.call.invite" },
+                }),
+            ),
         );
 
         expect(vm.getSnapshot().snapshot.event).toMatchObject({
@@ -572,7 +584,7 @@ describe("EventTileViewModel", () => {
     });
 
     it("lazily owns timestamp child view models", () => {
-        const vm = new EventTileViewModel({ mxEvent: makeEvent() }, makeProps());
+        const vm = new EventTileViewModel(makeDependencies(), makeProps());
         const messageTimestampViewModel = vm.getMessageTimestampViewModel({ ts: 123 });
         const linkedMessageTimestampViewModel = vm.getLinkedMessageTimestampViewModel({ ts: 456 });
 
@@ -584,7 +596,7 @@ describe("EventTileViewModel", () => {
 
     it("does not initialize timestamp child view models for events without an origin timestamp", () => {
         const vm = new EventTileViewModel(
-            { mxEvent: makeEvent() },
+            makeDependencies(),
             makeProps({
                 event: {
                     eventTs: 0,
@@ -601,7 +613,7 @@ describe("EventTileViewModel", () => {
     });
 
     it("owns and updates the thread-list action bar child view model", () => {
-        const vm = new EventTileViewModel({ mxEvent: makeEvent() }, makeProps());
+        const vm = new EventTileViewModel(makeDependencies(), makeProps());
         const onViewInRoomClick = jest.fn();
         const onCopyLinkClick = jest.fn();
 
