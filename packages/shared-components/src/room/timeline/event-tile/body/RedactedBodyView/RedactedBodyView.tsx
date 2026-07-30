@@ -23,6 +23,10 @@ export interface RedactedBodyViewSnapshot {
      * Optional localized tooltip shown with the redaction timestamp.
      */
     tooltip?: string;
+    /**
+     * Optional reason for redaction.
+     */
+    reason?: string;
 }
 
 export type RedactedBodyViewModel = ViewModel<RedactedBodyViewSnapshot>;
@@ -49,12 +53,17 @@ interface RedactedBodyViewProps {
  * optionally wrap the content in a tooltip for extra context.
  */
 export function RedactedBodyView({ vm, className, ref }: Readonly<RedactedBodyViewProps>): JSX.Element {
-    const { text, tooltip } = useViewModel(vm);
+    const { text, tooltip, reason } = useViewModel(vm);
 
     const content = (
         <span className={classNames(styles.content, className)} ref={ref}>
             <DeleteIcon className={styles.icon} aria-hidden="true" />
             <span>{text}</span>
+            {reason && (
+                <span>
+                    ("<span className={styles.reason}>{reason}</span>")
+                </span>
+            )}
         </span>
     );
 

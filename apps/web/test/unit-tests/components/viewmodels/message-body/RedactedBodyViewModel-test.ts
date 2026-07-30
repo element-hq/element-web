@@ -19,8 +19,18 @@ describe("RedactedBodyViewModel", () => {
     let room: Room;
     let showTwelveHourSettingWatcher: ((...args: any[]) => void) | undefined;
 
-    const makeRedactedBecauseEvent = ({ sender, originServerTs }: { sender: string; originServerTs: number }) => ({
-        content: {},
+    const makeRedactedBecauseEvent = ({
+        sender,
+        originServerTs,
+        reason,
+    }: {
+        sender: string;
+        originServerTs: number;
+        reason?: string;
+    }) => ({
+        content: {
+            reason,
+        },
         event_id: "$redaction:example.com",
         origin_server_ts: originServerTs,
         redacts: "$message:example.com",
@@ -34,9 +44,11 @@ describe("RedactedBodyViewModel", () => {
         sender = "@alice:example.com",
         redactedBecauseSender = sender,
         originServerTs = Date.UTC(2022, 10, 17, 15, 58, 32),
+        reason,
     }: {
         sender?: string;
         redactedBecauseSender?: string;
+        reason?: string;
         originServerTs?: number;
     } = {}): MatrixEvent =>
         mkEvent({
@@ -52,6 +64,7 @@ describe("RedactedBodyViewModel", () => {
                 redacted_because: makeRedactedBecauseEvent({
                     sender: redactedBecauseSender,
                     originServerTs,
+                    reason,
                 }),
             },
         });
@@ -135,6 +148,19 @@ describe("RedactedBodyViewModel", () => {
 
         expect(listener).toHaveBeenCalledTimes(1);
         expect(vm.getSnapshot().text).toBe("Message deleted by Moderator");
+    });
+
+    it("handles redacted events with reasons", () => {
+        const event = makeRedactedEvent({ reason: "Not interested" });
+        const vm = new RedactedBodyViewModel({ mxEvent: event });
+
+        expect(vm.getSnapshot()).toEqual({
+            text: "Message deleted",
+            reason: "Not interested",
+            tooltip: _t("timeline|redacted|tooltip", {
+                date: formatFullDate(new Date(Date.UTC(2022, 10, 17, 15, 58, 32)), true),
+            }),
+        });
     });
 
     it("unwatches the timestamp setting when disposed", () => {

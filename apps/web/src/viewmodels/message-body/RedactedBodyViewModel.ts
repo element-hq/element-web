@@ -60,6 +60,7 @@ export class RedactedBodyViewModel
     ): RedactedBodyViewSnapshot => ({
         text: RedactedBodyViewModel.computeText(props),
         tooltip: RedactedBodyViewModel.computeTooltip(props.mxEvent, showTwelveHour),
+        reason: props.mxEvent.getUnsigned().redacted_because?.content.reason,
     });
 
     public constructor(props: RedactedBodyViewModelProps) {
@@ -86,8 +87,9 @@ export class RedactedBodyViewModel
         this.props = { ...this.props, mxEvent };
 
         const text = RedactedBodyViewModel.computeText(this.props);
+        const reason = mxEvent.getUnsigned().redacted_because?.content.reason;
         const tooltip = RedactedBodyViewModel.computeTooltip(this.props.mxEvent, this.showTwelveHour);
-        this.snapshot.merge({ text, tooltip });
+        this.snapshot.merge({ text, tooltip, reason });
     }
 
     private updateTooltip(): void {

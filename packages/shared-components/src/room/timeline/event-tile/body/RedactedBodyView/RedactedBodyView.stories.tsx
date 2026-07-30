@@ -60,3 +60,15 @@ export const RedactedByAnotherUser: Story = {
         text: "Message deleted by Alice",
     },
 };
+
+export const WithReason: Story = {
+    args: {
+        reason: "A reasonable reason",
+    },
+};
+
+export const WithReasonLong: Story = {
+    args: {
+        reason: "A very unreasonable reason that just goes on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on",
+    },
+};
