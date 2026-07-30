@@ -8,7 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import fetchMock from "@fetch-mock/vitest";
 import { merge } from "lodash";
-import { setMissingEntryGenerator, setLanguage } from "@element-hq/web-shared-components";
+import { setMissingEntryGenerator, setLanguage, I18nApi } from "@element-hq/web-shared-components";
+import type { ModuleApiType } from "../modules/Api.ts";
 
 import enElementWeb from "../i18n/strings/en_EN.json";
 import deElementWeb from "../i18n/strings/de_DE.json";
@@ -64,3 +65,6 @@ setupLanguageMock();
 
 setLanguage("en");
 setMissingEntryGenerator((key) => key.split("|", 2)[1]);
+
+// Set up a stub module API (so the i18n API exists)
+window.mxModuleApi = { i18n: new I18nApi() } as ModuleApiType;

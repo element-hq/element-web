@@ -147,7 +147,7 @@ test.describe("RightPanel", () => {
             async ({ page, homeserver, app }) => {
                 const bobLongName = new Bot(page, homeserver, { displayName: LONG_NAME });
                 await bobLongName.prepareClient();
-                await app.client.inviteUser(testRoomId, bobLongName.credentials.userId);
+                await app.client.inviteUser(testRoomId, bobLongName.credentials!.userId);
                 await bobLongName.joinRoom(testRoomId);
 
                 await viewRoomSummaryByName(page, app, ROOM_NAME);

@@ -40,7 +40,7 @@ test.describe("Cryptography", function () {
             await autoJoin(bob);
 
             // create an encrypted room, and wait for Bob to join it.
-            testRoomId = await createSharedEncryptedRoomWithUser(app, bob.credentials.userId);
+            testRoomId = await createSharedEncryptedRoomWithUser(app, bob.credentials!.userId);
 
             // Even though Alice has seen Bob's join event, Bob may not have done so yet. Wait for the sync to arrive.
             await bob.awaitRoomMembership(testRoomId);
@@ -128,7 +128,7 @@ test.describe("Cryptography", function () {
                 await bobSecondDevice.evaluate((cli) => cli.logout(true));
 
                 // wait for the logout to propagate.
-                await waitForDevices(app, bob.credentials.userId, 1);
+                await waitForDevices(app, bob.credentials!.userId, 1);
 
                 // close and reopen the room, to get the shield to update.
                 await app.viewRoomByName("Bob");
@@ -245,7 +245,7 @@ test.describe("Cryptography", function () {
                 // Workaround for https://github.com/element-hq/element-web/issues/28640:
                 // make sure that Alice has seen Bob's identity before she goes offline. We do this by opening
                 // his user info.
-                await waitForDevices(app, bob.credentials.userId, 1);
+                await waitForDevices(app, bob.credentials!.userId, 1);
 
                 // Our app is blocked from syncing while Bob sends his messages.
                 await app.client.network.goOffline();
@@ -286,7 +286,7 @@ test.describe("Cryptography", function () {
 
                 // Bob logs in a new device and resets cross-signing
                 const bobSecondDevice = await createSecondBotDevice(page, homeserver, bob);
-                await bootstrapCrossSigningForClient(await bobSecondDevice.prepareClient(), bob.credentials, true);
+                await bootstrapCrossSigningForClient(await bobSecondDevice.prepareClient(), bob.credentials!, true);
 
                 /* should show an error for a message from a previously verified device */
                 await bobSecondDevice.sendMessage(testRoomId, "test encrypted from user that was previously verified");
