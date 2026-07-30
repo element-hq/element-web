@@ -22,7 +22,8 @@
     border-top: solid 1px var(--cpd-color-icon-accent-tertiary);
     border-bottom: solid 1px var(--cpd-color-icon-accent-tertiary);
     will-change: width, opacity;
+    /* Spelled out rather than named: this file is built by vite, which has no postcss-easings. */
     transition:
-        width 400ms easeinsine 1s,
-        opacity 400ms easeinsine 1s;
+        width 400ms cubic-bezier(0.12, 0, 0.39, 0) 1s,
+        opacity 400ms cubic-bezier(0.12, 0, 0.39, 0) 1s;
 }
