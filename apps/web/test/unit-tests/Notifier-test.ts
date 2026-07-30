@@ -26,6 +26,7 @@ import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 import type BasePlatform from "../../src/BasePlatform";
 import Notifier, { NOTIFICATION_SOUND_THROTTLE_MS } from "../../src/Notifier";
 import SettingsStore from "../../src/settings/SettingsStore";
+import { SettingLevel } from "../../src/settings/SettingLevel";
 import ToastStore from "../../src/stores/ToastStore";
 import {
     createLocalNotificationSettingsIfNeeded,
@@ -889,6 +890,20 @@ describe("Notifier", () => {
                 action: "notifier_enabled",
                 value: true,
             });
+        });
+
+        it("should not turn audible notifications off when the browser withholds permission", async () => {
+            // The browser will not let us show desktop notifications...
+            mocked(MockPlatform.maySendNotifications).mockReturnValue(false);
+            mocked(MockPlatform.requestNotificationPermission).mockResolvedValue("denied");
+            jest.spyOn(Modal, "createDialog").mockReturnValue({} as ReturnType<typeof Modal.createDialog>);
+            const setValueSpy = jest.spyOn(SettingsStore, "setValue");
+            const notifier = new Notifier(dis, context);
+
+            notifier.setEnabled(true);
+
+            // ...which must not silently disable the separate audible notifications setting.
+            expect(setValueSpy).not.toHaveBeenCalledWith("audioNotificationsEnabled", null, SettingLevel.DEVICE, false);
         });
 
         it("should call fire notifier_enabled value=false when disabling", async () => {
