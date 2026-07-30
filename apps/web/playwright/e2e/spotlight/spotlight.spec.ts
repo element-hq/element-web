@@ -13,6 +13,7 @@ import { Bot } from "../../pages/bot";
 import type { Locator, Page } from "@playwright/test";
 import type { ElementAppPage } from "../../pages/ElementAppPage";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
+import { SettingLevel } from "../../../src/settings/SettingLevel";
 
 function roomHeaderName(page: Page): Locator {
     return page.locator(".mx_RoomHeader_heading");
@@ -398,5 +399,104 @@ test.describe("Spotlight", () => {
         resultLocator = spotlight.results;
         await expect(resultLocator.first()).toHaveAttribute("aria-selected", "true");
         await expect(resultLocator.last()).toHaveAttribute("aria-selected", "false");
+    });
+
+    /**
+     * Computes the WCAG contrast ratio between a locator's computed text color
+     * and background color. A ratio below 4.5:1 fails WCAG AA for normal text.
+     */
+    async function getContrastRatio(locator: Locator): Promise<number> {
+        return locator.evaluate((el: HTMLElement) => {
+            const style = window.getComputedStyle(el);
+
+            const parseRgb = (value: string): [number, number, number] => {
+                const match = value.match(/\d+(\.\d+)?/g);
+                if (!match) throw new Error(`Could not parse color: ${value}`);
+                const [r, g, b] = match.map(Number);
+                return [r, g, b];
+            };
+
+            // Relative luminance per WCAG 2.x: https://www.w3.org/TR/WCAG21/#dfn-relative-luminance
+            const relativeLuminance = ([r, g, b]: [number, number, number]): number => {
+                const channel = (c: number) => {
+                    const s = c / 255;
+                    return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+                };
+                return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+            };
+
+            const l1 = relativeLuminance(parseRgb(style.color));
+            const l2 = relativeLuminance(parseRgb(style.backgroundColor));
+            const lighter = Math.max(l1, l2);
+            const darker = Math.min(l1, l2);
+            return (lighter + 0.05) / (darker + 0.05);
+        });
+    }
+
+    test.describe("high contrast theme legibility", () => {
+        // Regression tests for https://github.com/element-hq/element-web/issues/34213
+        // In high contrast mode, hovered/selected Spotlight results must not render
+        // light text on a light background.
+
+        test.beforeEach(async ({ app }) => {
+            await app.settings.setValue("use_system_theme", null, SettingLevel.DEVICE, false);
+            await app.settings.setValue("theme", null, SettingLevel.ACCOUNT, "light-high-contrast");
+        });
+
+        test("should have legible text for a hovered public room result", async ({ page, app, room1 }) => {
+            const spotlight = await app.openSpotlight();
+            await page.waitForTimeout(500); // wait for the dialog to settle
+            await spotlight.filter(Filter.PublicRooms);
+            await spotlight.search(room1.name);
+
+            const resultLocator = spotlight.results;
+            await expect(resultLocator).toHaveCount(1);
+            const result = resultLocator.first();
+            await result.hover();
+
+            expect(await getContrastRatio(result)).toBeGreaterThanOrEqual(4.5);
+        });
+
+        test("should have legible text for a hovered recently viewed result", async ({ page, app }) => {
+            // room1 is already open (see beforeEach); navigate away from it so it
+            // shows up in the "recently viewed" section (the current room is excluded from it).
+            await page.goto("/#/home");
+            await expect(page.locator(".mx_RoomSublist_skeletonUI")).not.toBeAttached();
+
+            const spotlight = await app.openSpotlight();
+            await page.waitForTimeout(500); // wait for the dialog to settle
+
+            const recentlyViewed = spotlight.dialog.locator(
+                ".mx_SpotlightDialog_recentlyViewed .mx_SpotlightDialog_option",
+            );
+            await expect(recentlyViewed.first()).toBeAttached();
+            const result = recentlyViewed.first();
+            await result.hover();
+
+            expect(await getContrastRatio(result)).toBeGreaterThanOrEqual(4.5);
+        });
+
+        test("should have legible text for the keyboard shortcut hint", async ({ page, app }) => {
+            await app.openSpotlight();
+            await page.waitForTimeout(500); // wait for the dialog to settle
+
+            // #mx_SpotlightDialog_keyboardPrompt is a sibling of the [role=dialog] element,
+            // not a descendant, so it must be located from the page rather than spotlight.dialog.
+            const kbdHint = page.locator("#mx_SpotlightDialog_keyboardPrompt kbd").first();
+            await expect(kbdHint).toBeAttached();
+
+            expect(await getContrastRatio(kbdHint)).toBeGreaterThanOrEqual(4.5);
+        });
+
+        test("should have legible text for the active filter chip", async ({ page, app }) => {
+            const spotlight = await app.openSpotlight();
+            await page.waitForTimeout(500); // wait for the dialog to settle
+            await spotlight.filter(Filter.PublicRooms);
+
+            const filterChip = spotlight.dialog.locator(".mx_SpotlightDialog_filter");
+            await expect(filterChip).toHaveText("Public rooms");
+
+            expect(await getContrastRatio(filterChip)).toBeGreaterThanOrEqual(4.5);
+        });
     });
 });
