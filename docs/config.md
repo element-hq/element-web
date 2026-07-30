@@ -64,7 +64,7 @@ information.
    is unaffected. Defaults to `true`.
    This option covers those runtime requests only; login-time `.well-known` autodiscovery is separate. Setting
    `default_server_config` with `disable_custom_urls: true` fixes the homeserver and removes the server picker, covering
-   the startup lookup and server selection. It also doesn't cover the legacy password login form(not shown for delegated authentication/OIDC) which performs its own `.well-known` lookup when a full Matrix ID is entered.
+   the startup lookup and server selection. It also doesn't cover the legacy password login form (not shown for delegated authentication/OIDC) which performs its own `.well-known` lookup when a full Matrix ID is entered.
 
 ## Labs flags
 
