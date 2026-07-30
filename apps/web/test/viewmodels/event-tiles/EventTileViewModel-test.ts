@@ -602,6 +602,32 @@ describe("EventTileViewModel", () => {
         vm.dispose();
     });
 
+    it("does not show a reply chain for replacement events", () => {
+        const event = mkEvent({
+            event: true,
+            id: "$replacement-event",
+            room: "!room:example.org",
+            ts: 123,
+            type: "m.room.message",
+            user: "@alice:example.org",
+            content: {
+                msgtype: "m.text",
+                "m.relates_to": {
+                    rel_type: "m.replace",
+                    event_id: "$original-event",
+                    "m.in_reply_to": {
+                        event_id: "$parent-event",
+                    },
+                },
+            },
+        });
+        const vm = new EventTileViewModel(makeDependencies(event), makeProps());
+
+        expect(vm.getSnapshot().snapshot.root.data.hasReply).toBe(false);
+
+        vm.dispose();
+    });
+
     it("derives an unavailable renderer for unsupported events", () => {
         const event = mkEvent({
             event: true,
