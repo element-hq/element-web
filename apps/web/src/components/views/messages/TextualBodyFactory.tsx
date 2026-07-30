@@ -15,7 +15,11 @@ import {
     type UrlPreview,
     UrlPreviewGroupView,
     useCreateAutoDisposedViewModel,
+    MediaPreviewGroupPreview,
     useViewModel,
+    attachmentIconOfType,
+    linkIcon,
+    MediaPreviewGroupEntry,
 } from "@element-hq/web-shared-components";
 
 import { type IBodyProps } from "./IBodyProps";
@@ -34,6 +38,8 @@ import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
 import { UrlPreviewGroupViewModel } from "../../../viewmodels/message-body/UrlPreviewGroupViewModel";
 import PlatformPeg from "../../../PlatformPeg";
 import { useSettingValue } from "../../../hooks/useSettings";
+import { MediaPreviewGroupViewModel } from "../../../viewmodels/message-body/MediaPreviewGroupViewModel";
+import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 
 const logger = rootLogger.getChild("TextualBodyFactory");
 
@@ -129,6 +135,90 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
 
     const { previews } = useViewModel(urlPreviewVm);
 
+    const previewToEntry = (preview: UrlPreview): MediaPreviewGroupEntry => {
+        if (preview.image === undefined) {
+            return {
+                style: "text",
+                header: preview.title,
+                headerUrl: preview.link,
+                body: preview.description!,
+                buttons: [
+                    {
+                        icon: <PopOutIcon />,
+                        onClick: async () => {
+                            window.open(preview.link, "_blank", "noreferrer");
+                        },
+                    },
+                ],
+                ...linkIcon("light"),
+            };
+        } else {
+            return {
+                style: "image",
+                header: preview.title,
+                headerUrl: preview.link,
+                image: preview.image.imageFull,
+                imageSize: "banner",
+                imageOnClick: () => {
+                    Modal.createDialog(
+                        ImageView,
+                        {
+                            src: preview.image?.imageFull!, // full-res URL
+                            name: `Thumbnail of ${preview.title}`,
+                            width: preview.image?.width,
+                            height: preview.image?.height,
+                            fileSize: preview.image?.fileSize,
+                        },
+                        "mx_Dialog_lightbox",
+                        undefined,
+                        true,
+                    );
+                },
+                body: preview.description!,
+                buttons: [
+                    {
+                        icon: <PopOutIcon />,
+                        onClick: async () => {
+                            window.open(preview.link, "_blank", "noreferrer");
+                        },
+                    },
+                ],
+                ...linkIcon("light"),
+            };
+        }
+    };
+
+    const newUrlVm = useCreateAutoDisposedViewModel(
+        () =>
+            new MediaPreviewGroupViewModel({
+                entries: previews.map(previewToEntry),
+                /*
+                    entries: [
+                        {
+                            style: "text",
+                            header: mediaEventHelper?.fileName!,
+                            body: size === undefined ? "Size unknown" : fileSize(size),
+                            buttons:
+                                mediaEventHelper === undefined
+                                    ? undefined
+                                    : [
+                                        {
+                                            icon: <DownloadIcon />,
+                                            onClick: async () => {
+                                                downloader.download({
+                                                    blob: await mediaEventHelper.sourceBlob.value, // decrypts transparently if E2EE
+                                                    name: mediaEventHelper.fileName || _t("common|attachment"),
+                                                });
+                                            },
+                                        },
+                                    ],
+                            ...attachmentIconOfType("light", content.info?.mimetype),
+                        },
+                    ],
+                    */
+            }),
+    );
+
     useEffect(() => {
         textualBodyVm.setId(props.id);
     }, [props.id, textualBodyVm]);
@@ -199,6 +289,12 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
     }, [mediaVisible, urlPreviewVm]);
 
     useEffect(() => {
+        newUrlVm.replace({
+            entries: previews.map(previewToEntry),
+        });
+    }, [previews, newUrlVm]);
+
+    useEffect(() => {
         if (previews.length === 0) {
             return;
         }
@@ -221,7 +317,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
             vm={textualBodyVm}
             body={<EventContentBodyView vm={eventContentBodyVm} as={willHaveWrapper ? "span" : "div"} />}
             bodyRef={contentRef}
-            urlPreviews={<UrlPreviewGroupView vm={urlPreviewVm} className="mx_TextualBody_urlPreviews" />}
+            urlPreviews={<MediaPreviewGroupPreview vm={newUrlVm} />}
             className={getTextualBodyClassName(content.msgtype as MsgType | undefined)}
         />
     );

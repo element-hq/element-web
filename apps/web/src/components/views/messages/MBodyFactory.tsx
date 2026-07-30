@@ -69,16 +69,16 @@ export function FileBodyFactory({
                             mediaEventHelper === undefined
                                 ? undefined
                                 : [
-                                    {
-                                        icon: <DownloadIcon />,
-                                        onClick: async () => {
-                                            downloader.download({
-                                                blob: await mediaEventHelper.sourceBlob.value, // decrypts transparently if E2EE
-                                                name: mediaEventHelper.fileName || _t("common|attachment"),
-                                            });
-                                        },
-                                    },
-                                ],
+                                      {
+                                          icon: <DownloadIcon />,
+                                          onClick: async () => {
+                                              downloader.download({
+                                                  blob: await mediaEventHelper.sourceBlob.value, // decrypts transparently if E2EE
+                                                  name: mediaEventHelper.fileName || _t("common|attachment"),
+                                              });
+                                          },
+                                      },
+                                  ],
                         ...attachmentIconOfType("light", content.info?.mimetype),
                     },
                 ],
@@ -207,16 +207,16 @@ export function VideoBodyFactory({
                             mediaEventHelper === undefined
                                 ? undefined
                                 : [
-                                    {
-                                        icon: <DownloadIcon />,
-                                        onClick: async () => {
-                                            downloader.download({
-                                                blob: await mediaEventHelper.sourceBlob.value, // decrypts transparently if E2EE
-                                                name: mediaEventHelper.fileName || _t("common|attachment"),
-                                            });
-                                        },
-                                    },
-                                ],
+                                      {
+                                          icon: <DownloadIcon />,
+                                          onClick: async () => {
+                                              downloader.download({
+                                                  blob: await mediaEventHelper.sourceBlob.value, // decrypts transparently if E2EE
+                                                  name: mediaEventHelper.fileName || _t("common|attachment"),
+                                              });
+                                          },
+                                      },
+                                  ],
                         ...attachmentIconOfType("light", content.info?.mimetype),
                     },
                 ],
@@ -380,21 +380,20 @@ export function ImageBodyFactory({
                             mediaEventHelper === undefined
                                 ? undefined
                                 : [
-                                    {
-                                        icon: <DownloadIcon />,
-                                        onClick: async () => {
-                                            downloader.download({
-                                                blob: await mediaEventHelper.sourceBlob.value, // decrypts transparently if E2EE
-                                                name: mediaEventHelper.fileName || _t("common|attachment"),
-                                            });
-                                        },
-                                    },
-                                ],
+                                      {
+                                          icon: <DownloadIcon />,
+                                          onClick: async () => {
+                                              downloader.download({
+                                                  blob: await mediaEventHelper.sourceBlob.value, // decrypts transparently if E2EE
+                                                  name: mediaEventHelper.fileName || _t("common|attachment"),
+                                              });
+                                          },
+                                      },
+                                  ],
                         ...attachmentIconOfType("light", content.info?.mimetype),
                     },
                 ],
             }),
-
     );
     return <MediaPreviewGroupPreview vm={vm2} />;
 }
@@ -430,21 +429,20 @@ export function AudioBodyFactory({
                             mediaEventHelper === undefined
                                 ? undefined
                                 : [
-                                    {
-                                        icon: <DownloadIcon />,
-                                        onClick: async () => {
-                                            downloader.download({
-                                                blob: await mediaEventHelper.sourceBlob.value, // decrypts transparently if E2EE
-                                                name: mediaEventHelper.fileName || _t("common|attachment"),
-                                            });
-                                        },
-                                    },
-                                ],
+                                      {
+                                          icon: <DownloadIcon />,
+                                          onClick: async () => {
+                                              downloader.download({
+                                                  blob: await mediaEventHelper.sourceBlob.value, // decrypts transparently if E2EE
+                                                  name: mediaEventHelper.fileName || _t("common|attachment"),
+                                              });
+                                          },
+                                      },
+                                  ],
                         ...attachmentIconOfType("light", content.info?.mimetype),
                     },
                 ],
             }),
-
     );
     return <MediaPreviewGroupPreview vm={vm2} />;
 }
