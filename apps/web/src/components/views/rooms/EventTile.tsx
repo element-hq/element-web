@@ -18,8 +18,6 @@ import React, {
 } from "react";
 import {
     EventStatus,
-    EventType,
-    MsgType,
     type MatrixEvent,
     MatrixEventEvent,
     type Relations,
@@ -332,7 +330,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             thread,
         };
 
-        this.viewModel = new EventTileViewModel(this.createViewModelProps());
+        this.viewModel = new EventTileViewModel({ mxEvent: this.props.mxEvent }, this.createViewModelProps());
 
         this.e2eViewModel = new EventTileE2eViewModel({
             cli: MatrixClientPeg.safeGet(),
@@ -866,10 +864,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     private createViewModelProps(inputs: EventTileRenderInputs = this.createRenderInputs()): EventTileViewModelProps {
         const { displayInfo, hasPinnedMessageBadge, hasReactionsRow, threadState, isOwnEvent } = inputs;
         const isProbablyMedia = MediaEventHelper.isEligible(this.props.mxEvent);
-        const isEncryptionFailure = this.props.mxEvent.isDecryptionFailure();
         const isEditing = !!this.props.editState;
-        const eventType = this.props.mxEvent.getType();
-        const msgtype = this.props.mxEvent.getContent().msgtype;
         const isSending =
             this.props.eventSendStatus === EventStatus.SENDING ||
             this.props.eventSendStatus === EventStatus.QUEUED ||
@@ -877,18 +872,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         return {
             event: {
-                eventType,
-                msgtype,
-                eventTs: this.props.mxEvent.getTs(),
-                eventId: this.props.mxEvent.getId() ?? undefined,
-                isLocalEcho: !!this.props.mxEvent.status,
                 isSending,
                 ariaLive: this.props.eventSendStatus === null ? undefined : "off",
-                isRoomCreate: eventType === EventType.RoomCreate,
-                isCallInvite: eventType === EventType.CallInvite,
-                isRtcNotification: eventType === EventType.RTCNotification,
                 isEditing,
-                isEncryptionFailure,
                 forExport: this.props.forExport,
             },
             display: {
@@ -923,7 +909,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 inhibitInteraction: this.props.inhibitInteraction,
             },
             sender: {
-                senderId: this.props.mxEvent.getSender() ?? undefined,
                 member: roomMemberToMemberInfo(
                     this.props.useEventSenderSnapshot
                         ? this.getAvatarMember()
@@ -936,7 +921,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                           }),
                 ),
                 hideSender: this.props.hideSender,
-                isEmote: this.props.mxEvent.getContent().msgtype === MsgType.Emote,
             },
             timestamp: {
                 alwaysShowTimestamps: this.props.alwaysShowTimestamps,
@@ -1003,6 +987,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const renderInputs = this.createRenderInputs(displayInfo);
         const { hasPinnedMessageBadge, hasReactionsRow, threadState, isOwnEvent } = renderInputs;
 
+        this.viewModel.setEvent(this.props.mxEvent);
         this.viewModel.setProps(this.createViewModelProps(renderInputs));
         const eventTileRenderState = this.viewModel.getSnapshot();
         const eventTileSnapshot = eventTileRenderState.snapshot;

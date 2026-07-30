@@ -7,14 +7,27 @@
 
 import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
 import { Layout } from "../../../src/settings/enums/Layout";
+import { mkEvent } from "../../test-utils";
 import {
     EventTileViewModel,
+    type NormalizedEventTileViewModelProps,
     type EventTileViewModelProps,
 } from "../../../src/viewmodels/room/timeline/event-tile/EventTileViewModel";
 
 describe("EventTileViewModel", () => {
+    const makeEvent = () =>
+        mkEvent({
+            event: true,
+            id: "$event",
+            room: "!room:example.org",
+            ts: 123,
+            type: "m.room.message",
+            user: "@alice:example.org",
+            content: { msgtype: "m.text" },
+        });
+
     type EventTileViewModelPropsOverrides = {
-        event?: Partial<EventTileViewModelProps["event"]>;
+        event?: Partial<NormalizedEventTileViewModelProps["event"]>;
         display?: Partial<EventTileViewModelProps["display"]>;
         interaction?: Partial<EventTileViewModelProps["interaction"]>;
         sender?: Partial<EventTileViewModelProps["sender"]>;
@@ -22,7 +35,7 @@ describe("EventTileViewModel", () => {
         footer?: Partial<EventTileViewModelProps["footer"]>;
     };
 
-    function makeProps(overrides: EventTileViewModelPropsOverrides = {}): EventTileViewModelProps {
+    function makeProps(overrides: EventTileViewModelPropsOverrides = {}): NormalizedEventTileViewModelProps {
         return {
             event: {
                 eventType: "m.room.message",
@@ -480,7 +493,7 @@ describe("EventTileViewModel", () => {
     });
 
     it("updates an instance snapshot when inputs change", () => {
-        const vm = new EventTileViewModel(makeProps());
+        const vm = new EventTileViewModel({ mxEvent: makeEvent() }, makeProps());
         const listener = jest.fn();
         const unsubscribe = vm.subscribe(listener);
 
@@ -495,8 +508,66 @@ describe("EventTileViewModel", () => {
         vm.dispose();
     });
 
+    it("normalizes event and sender state from its SDK dependency", () => {
+        const event = mkEvent({
+            event: true,
+            id: "$member-event",
+            room: "!room:example.org",
+            ts: 456,
+            type: "m.room.member",
+            user: "@bob:example.org",
+            content: { membership: "join" },
+        });
+        const vm = new EventTileViewModel(
+            { mxEvent: event },
+            makeProps({
+                event: {
+                    eventType: "m.room.message",
+                    eventId: "$wrong-event",
+                    eventTs: 123,
+                },
+                sender: {
+                    senderId: "@wrong:example.org",
+                    isEmote: false,
+                },
+            }),
+        );
+
+        expect(vm.getSnapshot().snapshot.event).toMatchObject({
+            eventType: "m.room.member",
+            eventId: "$member-event",
+            eventTs: 456,
+        });
+        expect(vm.getSnapshot().snapshot.sender).toMatchObject({
+            senderId: "@bob:example.org",
+            forceHistoricalAvatar: true,
+            isEmote: false,
+        });
+
+        vm.setEvent(
+            mkEvent({
+                event: true,
+                id: "$updated-event",
+                room: "!room:example.org",
+                ts: 789,
+                type: "m.call.invite",
+                user: "@carol:example.org",
+                content: { msgtype: "m.call.invite" },
+            }),
+        );
+
+        expect(vm.getSnapshot().snapshot.event).toMatchObject({
+            eventType: "m.call.invite",
+            eventId: "$updated-event",
+            eventTs: 789,
+        });
+        expect(vm.getSnapshot().snapshot.sender.senderId).toBe("@carol:example.org");
+
+        vm.dispose();
+    });
+
     it("lazily owns timestamp child view models", () => {
-        const vm = new EventTileViewModel(makeProps());
+        const vm = new EventTileViewModel({ mxEvent: makeEvent() }, makeProps());
         const messageTimestampViewModel = vm.getMessageTimestampViewModel({ ts: 123 });
         const linkedMessageTimestampViewModel = vm.getLinkedMessageTimestampViewModel({ ts: 456 });
 
@@ -508,6 +579,7 @@ describe("EventTileViewModel", () => {
 
     it("does not initialize timestamp child view models for events without an origin timestamp", () => {
         const vm = new EventTileViewModel(
+            { mxEvent: makeEvent() },
             makeProps({
                 event: {
                     eventTs: 0,
@@ -524,7 +596,7 @@ describe("EventTileViewModel", () => {
     });
 
     it("owns and updates the thread-list action bar child view model", () => {
-        const vm = new EventTileViewModel(makeProps());
+        const vm = new EventTileViewModel({ mxEvent: makeEvent() }, makeProps());
         const onViewInRoomClick = jest.fn();
         const onCopyLinkClick = jest.fn();
 
