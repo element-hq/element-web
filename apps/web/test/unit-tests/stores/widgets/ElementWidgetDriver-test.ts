@@ -567,18 +567,12 @@ describe("ElementWidgetDriver", () => {
             driver = mkDefaultDriver();
         });
 
-        it("cannot send delayed events with missing arguments", async () => {
-            await expect(driver.sendDelayedEvent(null, null, EventType.RoomMessage, {})).rejects.toThrow(
-                "Must provide at least one of",
-            );
-        });
-
         it("sends delayed message events", async () => {
             client._unstable_sendDelayedEvent.mockResolvedValue({
                 delay_id: "id",
             });
 
-            await expect(driver.sendDelayedEvent(2000, null, EventType.RoomMessage, {})).resolves.toEqual({
+            await expect(driver.sendDelayedEvent(2000, EventType.RoomMessage, {})).resolves.toEqual({
                 roomId,
                 delayId: "id",
             });
@@ -586,25 +580,6 @@ describe("ElementWidgetDriver", () => {
             expect(client._unstable_sendDelayedEvent).toHaveBeenCalledWith(
                 roomId,
                 { delay: 2000 },
-                null,
-                EventType.RoomMessage,
-                {},
-            );
-        });
-
-        it("sends child action delayed message events", async () => {
-            client._unstable_sendDelayedEvent.mockResolvedValue({
-                delay_id: "id-child",
-            });
-
-            await expect(driver.sendDelayedEvent(null, "id-parent", EventType.RoomMessage, {})).resolves.toEqual({
-                roomId,
-                delayId: "id-child",
-            });
-
-            expect(client._unstable_sendDelayedEvent).toHaveBeenCalledWith(
-                roomId,
-                { parent_delay_id: "id-parent" },
                 null,
                 EventType.RoomMessage,
                 {},
@@ -616,7 +591,7 @@ describe("ElementWidgetDriver", () => {
                 delay_id: "id",
             });
 
-            await expect(driver.sendDelayedEvent(2000, null, EventType.RoomTopic, {}, "")).resolves.toEqual({
+            await expect(driver.sendDelayedEvent(2000, EventType.RoomTopic, {}, "")).resolves.toEqual({
                 roomId,
                 delayId: "id",
             });
@@ -624,25 +599,6 @@ describe("ElementWidgetDriver", () => {
             expect(client._unstable_sendDelayedStateEvent).toHaveBeenCalledWith(
                 roomId,
                 { delay: 2000 },
-                EventType.RoomTopic,
-                {},
-                "",
-            );
-        });
-
-        it("sends child action delayed state events", async () => {
-            client._unstable_sendDelayedStateEvent.mockResolvedValue({
-                delay_id: "id-child",
-            });
-
-            await expect(driver.sendDelayedEvent(null, "id-parent", EventType.RoomTopic, {}, "")).resolves.toEqual({
-                roomId,
-                delayId: "id-child",
-            });
-
-            expect(client._unstable_sendDelayedStateEvent).toHaveBeenCalledWith(
-                roomId,
-                { parent_delay_id: "id-parent" },
                 EventType.RoomTopic,
                 {},
                 "",
@@ -770,7 +726,7 @@ describe("ElementWidgetDriver", () => {
                 delay_id: "id",
             });
 
-            await expect(driver.sendDelayedStickyEvent(1000, null, 2000, EventType.RoomMessage, {})).resolves.toEqual({
+            await expect(driver.sendDelayedStickyEvent(1000, 2000, EventType.RoomMessage, {})).resolves.toEqual({
                 roomId,
                 delayId: "id",
             });
@@ -779,27 +735,6 @@ describe("ElementWidgetDriver", () => {
                 roomId,
                 2000,
                 { delay: 1000 },
-                null,
-                EventType.RoomMessage,
-                {},
-            );
-        });
-        it("sends child action delayed sticky message events", async () => {
-            client._unstable_sendStickyDelayedEvent.mockResolvedValue({
-                delay_id: "id-child",
-            });
-
-            await expect(
-                driver.sendDelayedStickyEvent(null, "id-parent", 2000, EventType.RoomMessage, {}),
-            ).resolves.toEqual({
-                roomId,
-                delayId: "id-child",
-            });
-
-            expect(client._unstable_sendStickyDelayedEvent).toHaveBeenCalledWith(
-                roomId,
-                2000,
-                { parent_delay_id: "id-parent" },
                 null,
                 EventType.RoomMessage,
                 {},

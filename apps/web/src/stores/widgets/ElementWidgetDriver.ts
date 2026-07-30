@@ -40,7 +40,6 @@ import {
     type StateEvents,
     type TimelineEvents,
     type Room,
-    type SendDelayedEventRequestOpts,
     type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -407,27 +406,12 @@ export class ElementWidgetDriver extends WidgetDriver {
         return stickyEvents;
     }
 
-    private getSendDelayedEventOpts(delay: number | null, parentDelayId: string | null): SendDelayedEventRequestOpts {
-        if (delay !== null) {
-            return {
-                delay,
-                ...(parentDelayId !== null && { parent_delay_id: parentDelayId }),
-            };
-        } else if (parentDelayId !== null) {
-            return {
-                parent_delay_id: parentDelayId,
-            };
-        }
-        throw new Error("Must provide at least one of delay or parentDelayId");
-    }
-
     /**
      * @experimental Part of MSC4140 & MSC4157
      * @see {@link WidgetDriver#sendDelayedEvent}
      */
     public async sendDelayedEvent<K extends keyof StateEvents>(
-        delay: number | null,
-        parentDelayId: string | null,
+        delay: number,
         eventType: K,
         content: StateEvents[K],
         stateKey: string | null,
@@ -437,23 +421,21 @@ export class ElementWidgetDriver extends WidgetDriver {
      * @experimental Part of MSC4140 & MSC4157
      */
     public async sendDelayedEvent<K extends keyof TimelineEvents>(
-        delay: number | null,
-        parentDelayId: string | null,
+        delay: number,
         eventType: K,
         content: TimelineEvents[K],
         stateKey: null,
         targetRoomId: string | null,
     ): Promise<ISendDelayedEventDetails>;
     public async sendDelayedEvent(
-        delay: number | null,
-        parentDelayId: string | null,
+        delay: number,
         eventType: string,
         content: IContent,
         stateKey: string | null = null,
         targetRoomId: string | null = null,
     ): Promise<ISendDelayedEventDetails> {
         const { client, roomId } = this.getSendEventTarget(targetRoomId);
-        const delayOpts = this.getSendDelayedEventOpts(delay, parentDelayId);
+        const delayOpts = { delay };
 
         let r: SendDelayedEventResponse | null;
         if (stateKey !== null) {
@@ -487,20 +469,17 @@ export class ElementWidgetDriver extends WidgetDriver {
      * @see {@link WidgetDriver#sendStickyEvent}
      */
     public async sendDelayedStickyEvent(
-        delay: number | null,
-        parentDelayId: string | null,
+        delay: number,
         stickyDurationMs: number,
         eventType: string,
         content: unknown,
         targetRoomId?: string | null,
     ): Promise<ISendDelayedEventDetails> {
         const { client, roomId } = this.getSendEventTarget(targetRoomId);
-        const delayOpts = this.getSendDelayedEventOpts(delay, parentDelayId);
-
         const r = await client._unstable_sendStickyDelayedEvent(
             roomId,
             stickyDurationMs,
-            delayOpts,
+            { delay },
             null,
             eventType as keyof TimelineEvents,
             content as TimelineEvents[keyof TimelineEvents] & { msc4354_sticky_key: string },
