@@ -106,6 +106,26 @@ describe("EmojiPicker", function () {
         });
     });
 
+    it("should keep the filter applied when recentEmojis prop is changed", async () => {
+        const { container, rerender } = render(
+            <EmojiPicker onChoose={() => false} onFinished={vi.fn()} recentEmojis={[...RECENT_EMOJIS]} />,
+        );
+
+        const getVisibleEmojis = (): string[] =>
+            Array.from(container.querySelectorAll('[role="gridcell"]')).map((cell) => cell.textContent || "");
+
+        const input = container.querySelector("input")!;
+        await userEvent.type(input, "wave");
+        await waitFor(() => expect(getVisibleEmojis()).toContain("👋"));
+        const filtered = getVisibleEmojis();
+
+        // add another recently used emoji but it doesn't match the filter, so it should not change what's visible.
+        rerender(<EmojiPicker onChoose={() => false} onFinished={vi.fn()} recentEmojis={["🦡", ...RECENT_EMOJIS]} />);
+
+        expect(input).toHaveValue("wave");
+        expect(getVisibleEmojis()).toEqual(filtered);
+    });
+
     it("sort emojis by shortcode and size", function () {
         const sorted = filterEmojis(DATA_BY_CATEGORY.people, "heart");
 

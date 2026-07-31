@@ -124,27 +124,11 @@ interface EmojiPickerProps {
     getAction?: RovingTabIndexProviderProps["getAction"];
 }
 
-/**
- * Data about the set of emoji the control is rendering
- */
-interface EmojiPickerData {
-    // A list of recently used emoji, shown as the first category
-    recentlyUsed: IEmoji[];
-    // The emoji listed by category from emojibase with the addition of the 'recent' section
-    memoizedDataByCategory: Record<CategoryKey, IEmoji[]>;
-}
-
-function createEmojiPickerData(recentEmojis: string[] | undefined): EmojiPickerData {
-    // Convert recent emoji characters to emoji data, removing unknowns and duplicates
-    const recentlyUsed = Array.from(
+/** Convert recent emoji characters to emoji data, removing unknowns and duplicates */
+function resolveRecentEmojis(recentEmojis: string[] | undefined): IEmoji[] {
+    return Array.from(
         new Set((recentEmojis ?? []).map(getEmojiFromUnicode).filter((emoji): emoji is IEmoji => !!emoji)),
     );
-    const memoizedDataByCategory: Record<CategoryKey, IEmoji[]> = {
-        recent: recentlyUsed,
-        ...DATA_BY_CATEGORY,
-    };
-
-    return { recentlyUsed, memoizedDataByCategory };
 }
 
 function emojiMatchesFilter(emoji: IEmoji, filter: string): boolean {
@@ -221,11 +205,26 @@ export function EmojiPicker({
     const searchRef = useRef<HTMLInputElement>(null);
     const virtuosoRef = useRef<VirtuosoHandle>(null);
 
-    const { recentlyUsed, memoizedDataByCategory } = useMemo(() => createEmojiPickerData(recentEmojis), [recentEmojis]);
+    const recentlyUsed = useMemo(() => resolveRecentEmojis(recentEmojis), [recentEmojis]);
 
-    const [enabledCategories, setEnabledCategories] = useState(() => {
-        return CATEGORY_CONFIG.filter((c) => (recentlyUsed.length === 0 ? c.id !== "recent" : true)).map((c) => c.id);
-    });
+    const lcFilter = filter.toLowerCase().trim(); // filter is case insensitive
+
+    // Compute empji to show in each category and which categories are enabled
+    // (ie. non-empty) from the recently used list and the filter.
+    const { dataByCategory, enabledCategories } = useMemo(() => {
+        const dataByCategory = {} as Record<CategoryKey, IEmoji[]>;
+        const enabledCategories: CategoryKey[] = [];
+
+        for (const cat of CATEGORY_CONFIG) {
+            const emojis = filterEmojis(cat.id === "recent" ? recentlyUsed : DATA_BY_CATEGORY[cat.id], lcFilter);
+            dataByCategory[cat.id] = emojis;
+            if (emojis.length > 0) {
+                enabledCategories.push(cat.id);
+            }
+        }
+
+        return { dataByCategory, enabledCategories };
+    }, [lcFilter, recentlyUsed]);
 
     const [selectedCategory, setSelectedCategory] = useState<CategoryKey>(
         recentlyUsed.length > 0 ? "recent" : "people",
@@ -235,15 +234,11 @@ export function EmojiPicker({
         setScrollElement(ref);
     }, []);
 
-    // Flatten the (filtered) categories into a single list of headers and emoji rows
-    // that drive the Virtuoso. Only categories that currently have matching emoji are
-    // shown, and each category contributes one header followed by its rows. Recomputed
-    // only when the filter changes (the data is mutated in place under a stable object
-    // identity), so scrolling and hovering do not churn the list.
+    // Flatten into a list for virtuoso.
     const items = useMemo<ListItem[]>(() => {
         const flat: ListItem[] = [];
         for (const cat of CATEGORY_CONFIG) {
-            const emojis = memoizedDataByCategory[cat.id];
+            const emojis = dataByCategory[cat.id];
             if (emojis.length === 0) continue;
             flat.push({ type: "header", category: cat });
             for (let i = 0; i < emojis.length; i += EMOJIS_PER_ROW) {
@@ -251,8 +246,7 @@ export function EmojiPicker({
             }
         }
         return flat;
-        // eslint-disable-next-line react-hooks/exhaustive-deps -- memoizedDataByCategory is mutated in place; `filter` is the real trigger
-    }, [filter, memoizedDataByCategory]);
+    }, [dataByCategory]);
 
     const onRangeChanged = useCallback(
         (range: ListRange): void => {
@@ -345,44 +339,12 @@ export function EmojiPicker({
         [items],
     );
 
-    const onChangeFilter = useCallback(
-        (newFilter: string): void => {
-            const lcFilter = newFilter.toLowerCase().trim(); // filter is case insensitive
-
-            // User has typed a query, show highlight
-            // If filter is cleared, hide highlight again
-            if (lcFilter && !showHighlight) {
-                setShowHighlight(true);
-            } else if (!lcFilter && showHighlight) {
-                setShowHighlight(false);
-            }
-
-            const enabledCategories: CategoryKey[] = [];
-
-            for (const cat of CATEGORY_CONFIG) {
-                let emojis: IEmoji[];
-                // If the new filter string includes the old filter string, we don't have to re-filter the whole dataset.
-                if (lcFilter.includes(filter)) {
-                    emojis = memoizedDataByCategory[cat.id];
-                } else {
-                    emojis = cat.id === "recent" ? recentlyUsed : DATA_BY_CATEGORY[cat.id];
-                }
-
-                emojis = filterEmojis(emojis, lcFilter);
-
-                memoizedDataByCategory[cat.id] = emojis;
-
-                if (emojis.length > 0) {
-                    enabledCategories.push(cat.id);
-                }
-            }
-            setFilter(newFilter);
-            setEnabledCategories(enabledCategories);
-            // Header underlines are refreshed by the effect that recomputes visibility
-            // whenever the (filtered) item list changes.
-        },
-        [filter, showHighlight, memoizedDataByCategory, recentlyUsed],
-    );
+    const onChangeFilter = useCallback((newFilter: string): void => {
+        setFilter(newFilter);
+        // User has typed a query, show highlight.
+        // If the filter is cleared, hide the highlight again.
+        setShowHighlight(newFilter.trim() !== "");
+    }, []);
 
     const onEnterFilter = useCallback((): void => {
         // Only select emoji if highlight is shown
