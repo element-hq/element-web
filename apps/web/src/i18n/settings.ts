@@ -6,22 +6,23 @@
  */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { normalizeLanguageKey, getLangsJson, registerTranslations, setLocale } from "@element-hq/web-shared-components";
+import { getLangsJson, registerTranslations, setLocale } from "@element-hq/web-shared-components";
 
 import SettingsStore from "../settings/SettingsStore";
 import PlatformPeg from "../PlatformPeg";
 import { SettingLevel } from "../settings/SettingLevel";
 import { getLanguageRetry } from "./languages";
-import { getLanguageFromBrowser } from "./browser";
 import { registerCustomTranslations } from "./custom";
+
+export const DEFAULT_LANGUAGE = "zh_Hans";
 
 export function getUserLanguage(): string {
     const language = SettingsStore.getValue("language", null, /*excludeDefault:*/ true);
     if (typeof language === "string" && language !== "") {
         return language;
-    } else {
-        return normalizeLanguageKey(getLanguageFromBrowser());
     }
+
+    return DEFAULT_LANGUAGE;
 }
 
 export async function setLanguage(...preferredLangs: string[]): Promise<void> {

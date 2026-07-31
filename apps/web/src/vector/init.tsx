@@ -12,10 +12,7 @@ import { createRoot } from "react-dom/client";
 import React, { StrictMode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ModuleLoader } from "@element-hq/element-web-module-api";
-import { getNormalizedLanguageKeys } from "@element-hq/web-shared-components";
-
-import { getLanguagesFromBrowser } from "../i18n/browser";
-import { setLanguage } from "../i18n/settings";
+import { DEFAULT_LANGUAGE, setLanguage } from "../i18n/settings";
 import { getCurrentLanguage } from "../i18n";
 import SettingsStore from "../settings/SettingsStore";
 import PlatformPeg from "../PlatformPeg";
@@ -71,7 +68,7 @@ export async function loadLanguage(): Promise<void> {
     let langs: string[] = [];
 
     if (!prefLang) {
-        langs = getLanguagesFromBrowser().flatMap(getNormalizedLanguageKeys);
+        langs = [DEFAULT_LANGUAGE];
     } else {
         langs = [prefLang];
     }
