@@ -89,6 +89,8 @@ export function createEditContent(
 interface IEditMessageComposerProps extends MatrixClientProps {
     editState: EditorStateTransfer;
     onChange?: (model: EditorModel) => void;
+    /** Attaches URL preview bundles (MSC4095) to the new content before it is sent. */
+    attachBundles?: (content: RoomMessageEventContent) => void;
     className?: string;
 }
 interface IState {
@@ -349,6 +351,10 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
                 const event = this.props.editState.getEvent();
                 const threadId = event.threadRootId || null;
 
+                // Attach URL preview bundles to the new content (MSC4095), not the
+                // top-level fallback body, so edit-aware clients render the previews.
+                this.props.attachBundles?.(editContent["m.new_content"]!);
+
                 this.props.mxClient.sendMessage(roomId, threadId, editContent);
                 dis.dispatch({ action: "message_sent" });
             }
@@ -418,9 +424,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
     }
 
     private onChange = (): void => {
-        if (this.props.onChange) {
-            this.props.onChange(this.model);
-        }
+        this.props.onChange?.(this.model);
 
         if (!this.state.saveDisabled || !this.editorRef.current?.isModified()) {
             return;

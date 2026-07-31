@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type ISendEventResponse } from "matrix-js-sdk/src/matrix";
+import { type RoomMessageEventContent } from "matrix-js-sdk/src/types";
 import { useCallback, useState } from "react";
 
 import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
@@ -18,6 +19,7 @@ import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.
 export function useEditing(
     editorStateTransfer: EditorStateTransfer,
     initialContent?: string,
+    attachBundles?: (content: RoomMessageEventContent) => void,
 ): {
     isSaveDisabled: boolean;
     onChange(this: void, content: string): void;
@@ -41,8 +43,8 @@ export function useEditing(
         if (mxClient === undefined || content === undefined) {
             return;
         }
-        return editMessage(content, { roomContext, mxClient, editorStateTransfer });
-    }, [content, roomContext, mxClient, editorStateTransfer]);
+        return editMessage(content, { roomContext, mxClient, editorStateTransfer, attachBundles });
+    }, [content, roomContext, mxClient, editorStateTransfer, attachBundles]);
 
     const endEditingMemoized = useCallback(() => endEditing(roomContext), [roomContext]);
     return { onChange, editMessage: editMessageMemoized, endEditing: endEditingMemoized, isSaveDisabled };

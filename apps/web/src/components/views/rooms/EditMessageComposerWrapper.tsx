@@ -10,6 +10,8 @@ import PlatformPeg from "../../../PlatformPeg";
 import { MessageComposerUrlPreviewWrapper } from "./MessageComposerUrlPreview";
 import EditMessageComposer from "./EditMessageComposer";
 import EditorModel from "../../../editor/model";
+import { RoomMessageEventContent } from "../../../../@types/url-preview";
+import { attachUrlPreviews } from "../../../utils/messages";
 
 interface IEditMessageComposerProps extends MatrixClientProps {
     showUrlPreview: boolean;
@@ -38,13 +40,27 @@ export function EditMessageComposerWrapper(props: IEditMessageComposerProps) {
         vm.updateWithText({ content: model.contentPlainText, debounced: true });
     }
 
+    const attachBundles = (newContent: RoomMessageEventContent) => {
+        attachUrlPreviews(vm.getSnapshot(), newContent);
+    }
+
     // function attachBundles(event: MatrixEv)
 
     const isWysiwygComposerEnabled = useSettingValue("feature_wysiwyg_composer");
     const editor = isWysiwygComposerEnabled ? (
-        <EditWysiwygComposer onChange={onWysiwygChange} editorStateTransfer={props.editState} className={props.className} />
+        <EditWysiwygComposer
+            onChange={onWysiwygChange}
+            attachBundles={attachBundles}
+            editorStateTransfer={props.editState}
+            className={props.className}
+        />
     ) : (
-        <EditMessageComposer onChange={onChange} editState={props.editState} className={props.className}/>
+        <EditMessageComposer
+            onChange={onChange}
+            attachBundles={attachBundles}
+            editState={props.editState}
+            className={props.className}
+        />
     );
 
     return <>

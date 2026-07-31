@@ -182,11 +182,12 @@ interface EditMessageParams {
     mxClient: MatrixClient;
     roomContext: Pick<IRoomState, "timelineRenderingType">;
     editorStateTransfer: EditorStateTransfer;
+    attachBundles?: (content: RoomMessageEventContent) => void;
 }
 
 export async function editMessage(
     html: string,
-    { roomContext, mxClient, editorStateTransfer }: EditMessageParams,
+    { roomContext, mxClient, editorStateTransfer, attachBundles }: EditMessageParams,
 ): Promise<ISendEventResponse | undefined> {
     const editedEvent = editorStateTransfer.getEvent();
 
@@ -234,6 +235,10 @@ export async function editMessage(
 
             const event = editorStateTransfer.getEvent();
             const threadId = event.threadRootId || null;
+
+            // Attach URL preview bundles to the new content (MSC4095), not the
+            // top-level fallback body, so edit-aware clients render the previews.
+            attachBundles?.(newContent);
 
             response = mxClient.sendMessage(roomId, threadId, editContent);
             dis.dispatch({ action: "message_sent" });
