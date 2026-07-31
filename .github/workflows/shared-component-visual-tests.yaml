@@ -3,8 +3,6 @@ on:
     pull_request: {}
     merge_group:
         types: [checks_requested]
-    push:
-        branches: [develop, master]
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
