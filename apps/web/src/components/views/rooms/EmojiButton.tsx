@@ -3,7 +3,6 @@ Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
-Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
@@ -25,6 +24,7 @@ import ContextMenu, {
 import EmojiPicker from "../emojipicker/EmojiPicker";
 import { CollapsibleButton, OverflowMenuContext } from "./CollapsibleButton";
 import RemoteStickerTab from "./RemoteStickerTab";
+import PersonalStickerTab from "./PersonalStickerTab";
 import { getRemoteStickerIndexUrl } from "../../../features/remote-stickers/RemoteStickerIndex";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
@@ -42,10 +42,8 @@ interface IEmojiButtonProps {
 }
 
 /**
- * The standard Element emoji data and keyboard behaviour stays untouched, but
- * it is presented in the same three-tab board used by Spark: stickers,
- * Unicode/custom emoji, and cloud packs. The cloud sticker tab is intentionally
- * part of the same popover instead of opening a second, unrelated picker.
+ * Element's native picker remains the normal emoji tab. The adjacent personal
+ * sticker and cloud tabs follow Spark's compact three-tab board.
  */
 export function EmojiButton({
     addEmoji,
@@ -65,12 +63,12 @@ export function EmojiButton({
 
     const rememberComposerFocus = (): void => {
         const activeElement = document.activeElement;
-        const focusedEditor =
+        setPreferInlineEmoticon(
             activeElement instanceof HTMLElement &&
-            activeElement.matches(
-                ".mx_BasicMessageComposer_input[contenteditable='true'], .mx_WysiwygComposer_Editor_content[contenteditable='true']"
-            );
-        setPreferInlineEmoticon(focusedEditor);
+                activeElement.matches(
+                    ".mx_BasicMessageComposer_input[contenteditable='true'], .mx_WysiwygComposer_Editor_content[contenteditable='true']"
+                )
+        );
     };
 
     let contextMenu: React.ReactElement | null = null;
@@ -82,34 +80,37 @@ export function EmojiButton({
             overflowMenuCloser?.();
         };
         const cloudBoardEnabled = Boolean(room && getRemoteStickerIndexUrl());
+        const threadId =
+            relation?.rel_type === THREAD_RELATION_TYPE.name
+                ? relation.event_id
+                : null;
 
-        const cloudBoard = (stickerOnly: boolean): JSX.Element => (
-            <RemoteStickerTab
-                key={stickerOnly ? "stickers" : "cloud"}
-                room={room!}
-                threadId={
-                    relation?.rel_type === THREAD_RELATION_TYPE.name
-                        ? relation.event_id
-                        : null
-                }
-                replyToEvent={replyToEvent}
-                preferInlineEmoticon={
-                    stickerOnly ? false : preferInlineEmoticon
-                }
-                defaultSendMode={stickerOnly ? "sticker" : undefined}
-                hideSendMode={stickerOnly}
-                onInsertEmoticon={(emoticon) => {
-                    dis.dispatch<ComposerInsertPayload>({
-                        action: Action.ComposerInsert,
-                        text: emoticon.text,
-                        customEmoticon: emoticon,
-                        timelineRenderingType: timelineRenderingType!,
-                    });
-                    onFinished();
-                }}
-                onSent={onFinished}
-            />
-        );
+        const cloudBoard = (personalStickerTab: boolean): JSX.Element =>
+            personalStickerTab ? (
+                <PersonalStickerTab
+                    room={room!}
+                    threadId={threadId}
+                    replyToEvent={replyToEvent}
+                    onSent={onFinished}
+                />
+            ) : (
+                <RemoteStickerTab
+                    room={room!}
+                    threadId={threadId}
+                    replyToEvent={replyToEvent}
+                    preferInlineEmoticon={preferInlineEmoticon}
+                    onInsertEmoticon={(emoticon) => {
+                        dis.dispatch<ComposerInsertPayload>({
+                            action: Action.ComposerInsert,
+                            text: emoticon.text,
+                            customEmoticon: emoticon,
+                            timelineRenderingType: timelineRenderingType!,
+                        });
+                        onFinished();
+                    }}
+                    onSent={onFinished}
+                />
+            );
 
         contextMenu = (
             <ContextMenu
@@ -119,7 +120,7 @@ export function EmojiButton({
                 focusLock
             >
                 <div className="mx_RemoteStickerTab_emojiPanel mx_EmojiBoardShell">
-                    {cloudBoardEnabled ? (
+                    {cloudBoardEnabled && (
                         <div
                             className="mx_RemoteStickerTab_tabs mx_EmojiBoardShell_tabs"
                             role="tablist"
@@ -164,7 +165,7 @@ export function EmojiButton({
                                 云端
                             </CollapsibleButton>
                         </div>
-                    ) : null}
+                    )}
                     <div className="mx_EmojiBoardShell_body">
                         {!cloudBoardEnabled || activeTab === "emoji" ? (
                             <EmojiPicker
@@ -180,14 +181,12 @@ export function EmojiButton({
         );
     }
 
-    const computedClassName = classNames("mx_EmojiButton", className, {
-        mx_EmojiButton_highlight: menuDisplayed,
-    });
-
     return (
         <>
             <CollapsibleButton
-                className={computedClassName}
+                className={classNames("mx_EmojiButton", className, {
+                    mx_EmojiButton_highlight: menuDisplayed,
+                })}
                 onMouseDown={rememberComposerFocus}
                 onClick={openMenu}
                 title={_t("common|emoji")}
@@ -195,7 +194,6 @@ export function EmojiButton({
             >
                 <ReactionIcon />
             </CollapsibleButton>
-
             {contextMenu}
         </>
     );

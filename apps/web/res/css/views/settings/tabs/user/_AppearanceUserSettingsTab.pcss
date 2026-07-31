@@ -11,3 +11,202 @@ Please see LICENSE files in the repository root for full details.
     /* Line up with Settings field toggle button */
     margin-inline-start: 0;
 }
+
+.mx_SparkAppearanceCustomizer {
+    width: min(100%, 860px);
+    display: flex;
+    flex-direction: column;
+    gap: var(--cpd-space-4x);
+    padding: var(--cpd-space-4x);
+    box-sizing: border-box;
+    border: 1px solid $input-border-color;
+    border-radius: 12px;
+    background: $spacePanel-bg-color;
+}
+
+.mx_SparkAppearanceCustomizer_heading,
+.mx_SparkAppearanceCustomizer_background {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--cpd-space-4x);
+
+    h2,
+    p {
+        margin: 0;
+    }
+
+    p {
+        margin-top: var(--cpd-space-1x);
+        color: $secondary-content;
+        font: var(--cpd-font-body-sm-regular);
+    }
+}
+
+.mx_SparkAppearanceCustomizer_styleChoices {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--cpd-space-3x);
+
+    > .mx_AccessibleButton {
+        min-height: 52px;
+        display: flex;
+        align-items: center;
+        padding: 0 var(--cpd-space-3x);
+        border: 1px solid $input-border-color;
+        border-radius: 8px;
+        background: $background;
+        font: var(--cpd-font-heading-sm-semibold);
+    }
+
+    > .mx_SparkAppearanceCustomizer_selected {
+        border: 2px solid var(--spark-accent, $accent);
+        background: color-mix(
+            in srgb,
+            var(--spark-accent, $accent) 10%,
+            $background
+        );
+    }
+}
+
+.mx_SparkAppearanceCustomizer_preview {
+    min-height: 245px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--cpd-space-3x);
+    padding: var(--cpd-space-3x);
+    border-radius: 12px;
+    background-color: color-mix(in srgb, $background 72%, $system);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow: hidden;
+}
+
+.mx_SparkAppearanceCustomizer_previewHeader {
+    margin: calc(-1 * var(--cpd-space-3x));
+    margin-bottom: 0;
+    padding: var(--cpd-space-3x);
+    background: rgb(255 255 255 / 42%);
+    backdrop-filter: blur(12px);
+    font: var(--cpd-font-heading-sm-semibold);
+}
+
+.mx_SparkAppearanceCustomizer_previewBubble {
+    width: min(82%, 500px);
+    padding: var(--cpd-space-3x);
+    box-sizing: border-box;
+    border: 1px solid rgb(15 23 42 / 12%);
+    border-radius: 14px;
+    box-shadow: 0 1px 3px rgb(15 23 42 / 12%);
+    color: #111827;
+    line-height: 1.45;
+}
+
+.mx_SparkAppearanceCustomizer_previewBubble_self {
+    align-self: flex-end;
+}
+
+.mx_SparkAppearanceCustomizer_colourGrid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--cpd-space-3x);
+}
+
+.mx_SparkAppearanceCustomizer_colourSetting {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cpd-space-1x);
+    font: var(--cpd-font-body-sm-medium);
+}
+
+.mx_SparkAppearanceCustomizer_colourControl {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    gap: var(--cpd-space-2x);
+    padding: 0 var(--cpd-space-2x);
+    border: 1px solid $input-border-color;
+    border-radius: 6px;
+    background: $background;
+
+    input[type="color"] {
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        border: 0;
+        border-radius: 5px;
+        background: transparent;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        min-width: 0;
+        border: 0;
+        background: transparent;
+        color: $primary-content;
+        font: var(--cpd-font-body-sm-medium);
+    }
+}
+
+.mx_SparkAppearanceCustomizer_opacityControl {
+    display: flex;
+    align-items: center;
+    gap: var(--cpd-space-2x);
+
+    input {
+        min-width: 0;
+        flex: 1;
+    }
+
+    output {
+        min-width: 36px;
+        color: $secondary-content;
+        text-align: end;
+    }
+}
+
+.mx_SparkAppearanceCustomizer_background {
+    padding-top: var(--cpd-space-3x);
+    border-top: 1px solid $input-border-color;
+
+    > div:last-of-type {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--cpd-space-2x);
+    }
+}
+
+.mx_SparkAppearanceCustomizer_fileInput {
+    display: none;
+}
+
+.mx_SparkAppearanceCustomizer_error {
+    color: $alert;
+    font: var(--cpd-font-body-sm-regular);
+}
+
+html[data-spark-appearance="true"] {
+    .mx_RoomView_body {
+        background-image: var(--spark-chat-background-image);
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    &[data-spark-interface-style="frosted"] {
+        .mx_RoomView_body,
+        .mx_RoomView_messagePanel,
+        .mx_RoomHeader,
+        .mx_MessageComposer_wrapper {
+            background-color: rgb(255 255 255 / 60%);
+            backdrop-filter: blur(16px) saturate(1.12);
+        }
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    .mx_SparkAppearanceCustomizer_colourGrid {
+        grid-template-columns: 1fr;
+    }
+}

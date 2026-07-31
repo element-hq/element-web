@@ -4,7 +4,13 @@ Copyright 2026 Element contributors
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 */
 
-import { EventType, type IContent, type MatrixClient, type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
+import {
+    EventType,
+    type IContent,
+    type MatrixClient,
+    type MatrixEvent,
+    type Room,
+} from "matrix-js-sdk/src/matrix";
 import { type ImageInfo } from "matrix-js-sdk/src/types";
 
 import SdkConfig from "../../SdkConfig";
@@ -50,13 +56,23 @@ export interface RemoteStickerIndex {
     items?: RemoteSticker[];
 }
 
-const isMxc = (url?: string): url is string => Boolean(url?.startsWith("mxc://"));
-const isHttp = (url?: string): url is string => Boolean(url && /^https?:\/\//i.test(url));
-const findUrl = (urls: Array<string | undefined>): string | undefined => urls.find((url) => isMxc(url) || isHttp(url));
+const isMxc = (url?: string): url is string =>
+    Boolean(url?.startsWith("mxc://"));
+const isHttp = (url?: string): url is string =>
+    Boolean(url && /^https?:\/\//i.test(url));
+const findUrl = (urls: Array<string | undefined>): string | undefined =>
+    urls.find((url) => isMxc(url) || isHttp(url));
 
-const toStickerFile = async (client: MatrixClient, sourceUrl: string, sticker: RemoteSticker): Promise<File> => {
-    const response = isMxc(sourceUrl) ? await mediaFromMxc(sourceUrl, client).downloadSource() : await fetch(sourceUrl);
-    if (!response.ok) throw new Error(`下载云端表情失败（${response.status}）`);
+const toStickerFile = async (
+    client: MatrixClient,
+    sourceUrl: string,
+    sticker: RemoteSticker
+): Promise<File> => {
+    const response = isMxc(sourceUrl)
+        ? await mediaFromMxc(sourceUrl, client).downloadSource()
+        : await fetch(sourceUrl);
+    if (!response.ok)
+        throw new Error(`下载云端表情失败（${response.status}）。`);
     const blob = await response.blob();
     return new File([blob], sticker.fileName || stickerName(sticker), {
         type: sticker.mimeType || blob.type || "application/octet-stream",
@@ -64,14 +80,19 @@ const toStickerFile = async (client: MatrixClient, sourceUrl: string, sticker: R
 };
 
 export const getRemoteStickerIndexUrl = (): string | undefined =>
-    SdkConfig.get("remote_sticker_index_url")?.trim() || DEFAULT_REMOTE_STICKER_INDEX_URL;
+    SdkConfig.get("remote_sticker_index_url")?.trim() ||
+    DEFAULT_REMOTE_STICKER_INDEX_URL;
 
 export const getRemoteStickerPackOrder = (): string[] => {
     const url = getRemoteStickerIndexUrl();
     if (!url) return [];
     try {
-        const value = JSON.parse(localStorage.getItem(`${PACK_ORDER_PREFIX}${url}`) ?? "[]");
-        return Array.isArray(value) ? value.filter((id): id is string => typeof id === "string") : [];
+        const value = JSON.parse(
+            localStorage.getItem(`${PACK_ORDER_PREFIX}${url}`) ?? "[]"
+        );
+        return Array.isArray(value)
+            ? value.filter((id): id is string => typeof id === "string")
+            : [];
     } catch {
         return [];
     }
@@ -80,22 +101,42 @@ export const getRemoteStickerPackOrder = (): string[] => {
 export const setRemoteStickerPackOrder = (order: string[]): void => {
     const url = getRemoteStickerIndexUrl();
     if (!url) return;
-    localStorage.setItem(`${PACK_ORDER_PREFIX}${url}`, JSON.stringify([...new Set(order)]));
+    localStorage.setItem(
+        `${PACK_ORDER_PREFIX}${url}`,
+        JSON.stringify([...new Set(order)])
+    );
 };
 
 export const stickerName = (sticker: RemoteSticker): string =>
-    sticker.name?.trim() || sticker.fileName?.replace(/\.[^.]+$/, "") || "sticker";
+    sticker.name?.trim() ||
+    sticker.fileName?.replace(/\.[^.]+$/, "") ||
+    "sticker";
 
 export const stickerSearchText = (sticker: RemoteSticker): string =>
-    [stickerName(sticker), sticker.fileName, sticker.packName, ...(sticker.keywords ?? [])]
+    [
+        stickerName(sticker),
+        sticker.fileName,
+        sticker.packName,
+        ...(sticker.keywords ?? []),
+    ]
         .filter((value): value is string => Boolean(value))
         .join(" ")
         .toLocaleLowerCase();
 
 export const stickerMediaUrl = (sticker: RemoteSticker): string | undefined =>
-    findUrl([sticker.mxc, sticker.mxcUrl, sticker.matrixUrl, sticker.url, sticker.httpUrl, sticker.sourceUrl]);
+    findUrl([
+        sticker.mxc,
+        sticker.mxcUrl,
+        sticker.matrixUrl,
+        sticker.url,
+        sticker.httpUrl,
+        sticker.sourceUrl,
+    ]);
 
-export const stickerPreviewUrl = (sticker: RemoteSticker, client: MatrixClient): string | undefined => {
+export const stickerPreviewUrl = (
+    sticker: RemoteSticker,
+    client: MatrixClient
+): string | undefined => {
     const url = findUrl([
         sticker.thumbUrl,
         sticker.thumbnailUrl,
@@ -106,17 +147,27 @@ export const stickerPreviewUrl = (sticker: RemoteSticker, client: MatrixClient):
         sticker.mxc,
         sticker.mxcUrl,
     ]);
-    return isMxc(url) ? (mediaFromMxc(url, client).getThumbnailOfSourceHttp(96, 96, "scale") ?? undefined) : url;
+    return isMxc(url)
+        ? mediaFromMxc(url, client).getThumbnailOfSourceHttp(96, 96, "scale") ??
+              undefined
+        : url;
 };
 
 const getCachedIndex = (url: string): RemoteStickerIndex | undefined => {
     try {
         const raw = localStorage.getItem(`${CACHE_PREFIX}${url}`);
         if (!raw) return undefined;
-        const cache = JSON.parse(raw) as { cachedAt?: unknown; index?: unknown };
-        if (typeof cache.cachedAt !== "number" || Date.now() - cache.cachedAt > CACHE_TTL_MS) return undefined;
+        const cache = JSON.parse(raw) as {
+            cachedAt?: unknown;
+            index?: unknown;
+        };
+        if (
+            typeof cache.cachedAt !== "number" ||
+            Date.now() - cache.cachedAt > CACHE_TTL_MS
+        )
+            return undefined;
         if (!cache.index || typeof cache.index !== "object") return undefined;
-        return cache.index;
+        return cache.index as RemoteStickerIndex;
     } catch {
         return undefined;
     }
@@ -124,35 +175,41 @@ const getCachedIndex = (url: string): RemoteStickerIndex | undefined => {
 
 const setCachedIndex = (url: string, index: RemoteStickerIndex): void => {
     try {
-        localStorage.setItem(`${CACHE_PREFIX}${url}`, JSON.stringify({ cachedAt: Date.now(), index }));
+        localStorage.setItem(
+            `${CACHE_PREFIX}${url}`,
+            JSON.stringify({ cachedAt: Date.now(), index })
+        );
     } catch {
-        // Cache failures (for example private browsing) do not prevent sticker use.
+        // Private browsing or a full quota should not block sticker use.
     }
 };
 
-export const loadRemoteStickerIndex = async (url = getRemoteStickerIndexUrl()): Promise<RemoteStickerIndex> => {
-    if (!url) throw new Error("尚未配置云端表情索引地址");
+export const loadRemoteStickerIndex = async (
+    url = getRemoteStickerIndexUrl()
+): Promise<RemoteStickerIndex> => {
+    if (!url) throw new Error("尚未配置云端表情索引地址。");
     const cached = getCachedIndex(url);
     if (cached) return cached;
     const response = await fetch(url);
-    if (!response.ok) throw new Error(`云端表情索引加载失败（${response.status}）`);
+    if (!response.ok)
+        throw new Error(`云端表情索引加载失败（${response.status}）。`);
     const index = (await response.json()) as RemoteStickerIndex;
     setCachedIndex(url, index);
     return index;
 };
 
 /**
- * Sends with Element's uploadFile helper. HTTP images are always copied to Matrix first;
- * destination-room encryption is therefore retained. MXC-native index entries keep their MXC.
+ * HTTP images are always copied to Matrix. For encrypted destinations the
+ * normal Element upload helper supplies encrypted attachment metadata.
  */
 export const sendRemoteSticker = async (
     room: Room,
     threadId: string | null | undefined,
     sticker: RemoteSticker,
-    replyToEvent?: MatrixEvent,
+    replyToEvent?: MatrixEvent
 ): Promise<void> => {
     const sourceUrl = stickerMediaUrl(sticker);
-    if (!sourceUrl) throw new Error("此云端表情没有可发送的媒体地址");
+    if (!sourceUrl) throw new Error("此云端表情没有可发送的媒体地址。");
     const info: ImageInfo = {
         mimetype: sticker.mimeType || "image/*",
         size: sticker.size,
@@ -161,46 +218,57 @@ export const sendRemoteSticker = async (
     };
     const content: IContent = { body: stickerName(sticker), info };
 
-    const targetEncrypted = Boolean(await room.client.getCrypto()?.isEncryptionEnabledInRoom(room.roomId));
+    const targetEncrypted = Boolean(
+        await room.client.getCrypto()?.isEncryptionEnabledInRoom(room.roomId)
+    );
     if (isMxc(sourceUrl) && !targetEncrypted) {
         content.url = sourceUrl;
     } else {
         Object.assign(
             content,
-            await uploadFile(room.client, room.roomId, await toStickerFile(room.client, sourceUrl, sticker)),
+            await uploadFile(
+                room.client,
+                room.roomId,
+                await toStickerFile(room.client, sourceUrl, sticker)
+            )
         );
     }
-
-    // Stickers are their own event type, so the composer cannot add this relation
-    // for us. Keep their reply behaviour identical to text, files and polls.
     if (replyToEvent) addReplyToMessageContent(content, replyToEvent);
 
     await doMaybeLocalRoomAction(
         room.roomId,
-        // The SDK's public StickerEventContent type predates encrypted `file` attachments.
-        // uploadFile returns the standards-compliant encrypted shape when it is needed.
-        (actualRoomId) => room.client.sendEvent(actualRoomId, threadId ?? null, EventType.Sticker, content as never),
-        room.client,
+        (actualRoomId) =>
+            room.client.sendEvent(
+                actualRoomId,
+                threadId ?? null,
+                EventType.Sticker,
+                content as never
+            ),
+        room.client
     );
 };
 
 /**
- * Resolve a cloud item to an mxc URI for Matrix's `data-mx-emoticon` markup.
- * Encrypted media attachments cannot be referenced by HTML alone because the
- * attachment decryption metadata lives in `file`; callers must use a sticker
- * event in that case rather than leaking an unusable encrypted mxc URI.
+ * Resolve a cloud item to an MXC URI for Matrix custom-emoji markup. Spark
+ * deliberately uses an ordinary media upload here, including in encrypted
+ * rooms, because inline emoji has no encrypted-attachment metadata field.
  */
 export const prepareRemoteEmoticon = async (
     room: Room,
-    sticker: RemoteSticker,
+    sticker: RemoteSticker
 ): Promise<{ src: string; text: string }> => {
     const sourceUrl = stickerMediaUrl(sticker);
-    if (!sourceUrl) throw new Error("此云端表情没有可发送的媒体地址");
-    if (isMxc(sourceUrl)) return { src: sourceUrl, text: `:${stickerName(sticker)}:` };
+    if (!sourceUrl) throw new Error("此云端表情没有可发送的媒体地址。");
+    if (isMxc(sourceUrl))
+        return { src: sourceUrl, text: `:${stickerName(sticker)}:` };
 
-    const uploaded = await uploadFile(room.client, room.roomId, await toStickerFile(room.client, sourceUrl, sticker));
-    if (!uploaded.url?.startsWith("mxc://")) {
-        throw new Error("加密房间中的云端表情会作为贴纸发送，以保持媒体加密");
-    }
-    return { src: uploaded.url, text: `:${stickerName(sticker)}:` };
+    const file = await toStickerFile(room.client, sourceUrl, sticker);
+    const uploaded = await room.client.uploadContent(file, {
+        includeFilename: true,
+        name: file.name,
+        type: file.type || "application/octet-stream",
+    });
+    if (!uploaded.content_uri?.startsWith("mxc://"))
+        throw new Error("上传云端表情后未获得 Matrix 媒体地址。");
+    return { src: uploaded.content_uri, text: `:${stickerName(sticker)}:` };
 };

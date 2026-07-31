@@ -27,9 +27,9 @@ interface Props {
     replyToEvent?: MatrixEvent;
     /** Whether the picker was opened while the message editor had a caret. */
     preferInlineEmoticon?: boolean;
-    /** Initial mode used by the unified Spark-style sticker tab. */
+    /** Initial mode used by the legacy sticker-picker integration. */
     defaultSendMode?: CloudSendMode;
-    /** The dedicated sticker tab always sends stickers, so its mode control is redundant. */
+    /** Hide the mode switch when embedded as a sticker-only view. */
     hideSendMode?: boolean;
     onInsertEmoticon: (emoticon: { src: string; text: string }) => void;
     onSent: () => void;
@@ -37,6 +37,7 @@ interface Props {
 
 type CloudSendMode = "auto" | "emoticon" | "sticker";
 
+/** A compact cloud board with Spark-compatible category rail and send mode. */
 const RemoteStickerTab: React.FC<Props> = ({
     room,
     threadId,
@@ -60,16 +61,17 @@ const RemoteStickerTab: React.FC<Props> = ({
     useEffect(() => {
         let cancelled = false;
         loadRemoteStickerIndex()
-            .then((nextIndex) => !cancelled && setIndex(nextIndex))
-            .catch(
-                (cause: unknown) =>
-                    !cancelled &&
+            .then((nextIndex) => {
+                if (!cancelled) setIndex(nextIndex);
+            })
+            .catch((cause: unknown) => {
+                if (!cancelled)
                     setError(
                         cause instanceof Error
                             ? cause.message
-                            : "云端表情加载失败"
-                    )
-            );
+                            : "云端表情加载失败。"
+                    );
+            });
         return () => {
             cancelled = true;
         };
@@ -139,8 +141,8 @@ const RemoteStickerTab: React.FC<Props> = ({
                         onClick={() => setSendMode("auto")}
                         title={
                             preferInlineEmoticon
-                                ? "自动：输入框有光标，作为表情插入"
-                                : "自动：输入框未聚焦，作为贴纸发送"
+                                ? "自动：作为表情插入输入框"
+                                : "自动：作为贴纸发送"
                         }
                     >
                         {effectiveSendMode === "emoticon"
@@ -167,7 +169,7 @@ const RemoteStickerTab: React.FC<Props> = ({
                 <input
                     className="mx_RemoteStickerTab_search"
                     type="search"
-                    placeholder="搜索表情"
+                    placeholder="搜索云端表情"
                     value={query}
                     onChange={(event) => setQuery(event.target.value)}
                 />
@@ -182,7 +184,7 @@ const RemoteStickerTab: React.FC<Props> = ({
                     <div className="mx_RemoteStickerTab_groupLabel">
                         {activePackName}
                     </div>
-                    {stickers.map((sticker: RemoteSticker, offset) => {
+                    {stickers.map((sticker, offset) => {
                         const id =
                             sticker.id ||
                             `${sticker.packId || "remote"}-${stickerName(
@@ -198,46 +200,22 @@ const RemoteStickerTab: React.FC<Props> = ({
                                 onMouseEnter={() => setPreview(sticker)}
                                 onFocus={() => setPreview(sticker)}
                                 onKeyDown={(event: React.KeyboardEvent) => {
-                                    switch (event.key) {
-                                        case "ArrowLeft":
-                                            event.preventDefault();
-                                            moveItemFocus(offset, -1);
-                                            break;
-                                        case "ArrowRight":
-                                            event.preventDefault();
-                                            moveItemFocus(offset, 1);
-                                            break;
-                                        case "ArrowUp":
-                                            event.preventDefault();
-                                            moveItemFocus(
-                                                offset,
-                                                -keyboardGridColumns
-                                            );
-                                            break;
-                                        case "ArrowDown":
-                                            event.preventDefault();
-                                            moveItemFocus(
-                                                offset,
-                                                keyboardGridColumns
-                                            );
-                                            break;
-                                    }
+                                    const movement: Record<string, number> = {
+                                        ArrowLeft: -1,
+                                        ArrowRight: 1,
+                                        ArrowUp: -keyboardGridColumns,
+                                        ArrowDown: keyboardGridColumns,
+                                    };
+                                    if (movement[event.key] === undefined)
+                                        return;
+                                    event.preventDefault();
+                                    moveItemFocus(offset, movement[event.key]);
                                 }}
                                 onClick={async () => {
                                     setSending(id);
                                     setError(undefined);
                                     try {
-                                        const targetEncrypted = Boolean(
-                                            await room.client
-                                                .getCrypto()
-                                                ?.isEncryptionEnabledInRoom(
-                                                    room.roomId
-                                                )
-                                        );
-                                        if (
-                                            effectiveSendMode === "emoticon" &&
-                                            !targetEncrypted
-                                        ) {
+                                        if (effectiveSendMode === "emoticon") {
                                             onInsertEmoticon(
                                                 await prepareRemoteEmoticon(
                                                     room,
@@ -257,7 +235,7 @@ const RemoteStickerTab: React.FC<Props> = ({
                                         setError(
                                             cause instanceof Error
                                                 ? cause.message
-                                                : "发送云端表情失败"
+                                                : "发送云端表情失败。"
                                         );
                                     } finally {
                                         setSending(undefined);
@@ -290,7 +268,7 @@ const RemoteStickerTab: React.FC<Props> = ({
                         全部
                     </AccessibleButton>
                     {packs.map((item) => {
-                        const preview = index.items?.find(
+                        const packPreview = index.items?.find(
                             (sticker) => sticker.packId === item.id
                         );
                         return (
@@ -301,10 +279,10 @@ const RemoteStickerTab: React.FC<Props> = ({
                                 onClick={() => setPack(item.id)}
                                 title={item.name || item.id}
                             >
-                                {preview ? (
+                                {packPreview ? (
                                     <img
                                         src={stickerPreviewUrl(
-                                            preview,
+                                            packPreview,
                                             room.client
                                         )}
                                         alt={item.name || item.id}
@@ -320,18 +298,16 @@ const RemoteStickerTab: React.FC<Props> = ({
                     })}
                 </div>
             </div>
-            <div className="mx_RemoteStickerTab_preview" aria-live="polite">
-                {preview && (
-                    <>
-                        <img
-                            src={stickerPreviewUrl(preview, room.client)}
-                            alt=""
-                            referrerPolicy="no-referrer"
-                        />
-                        <span>:{stickerName(preview)}:</span>
-                    </>
-                )}
-            </div>
+            {preview && (
+                <div className="mx_RemoteStickerTab_preview" aria-live="polite">
+                    <img
+                        src={stickerPreviewUrl(preview, room.client)}
+                        alt=""
+                        referrerPolicy="no-referrer"
+                    />
+                    <span>:{stickerName(preview)}:</span>
+                </div>
+            )}
         </div>
     );
 };

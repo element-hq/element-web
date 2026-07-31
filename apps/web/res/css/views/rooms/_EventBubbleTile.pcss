@@ -18,11 +18,12 @@ Please see LICENSE files in the repository root for full details.
 
 .mx_EventTile[data-layout="bubble"],
 .mx_GenericEventListSummary[data-layout="bubble"] {
-    --avatarSize: 26px;
+    --avatarSize: 39px;
     --gutterSize: 8px;
     /* Keep the Bubble layout aligned with Spark's desktop message rhythm. */
     --cornerRadius: 16px;
     --maxWidth: min(600px, 78%);
+    --SparkBubble-tail-length: 6.5px;
 
     /* For both event tile and event list summary */
     --EventTile_bubble-margin-inline-start: 48px;
@@ -149,7 +150,7 @@ Please see LICENSE files in the repository root for full details.
         font-size: $font-15px;
 
         .mx_DisambiguatedProfile_displayName {
-            color: $accent;
+            color: var(--spark-accent, $accent);
             font-weight: var(--cpd-font-weight-semibold);
         }
     }
@@ -201,7 +202,7 @@ Please see LICENSE files in the repository root for full details.
         }
 
         .mx_EventTile_avatar {
-            left: -34px;
+            left: -47px;
         }
 
         &:not(.mx_EventTile_continuation)
@@ -249,7 +250,7 @@ Please see LICENSE files in the repository root for full details.
             justify-content: flex-start;
         }
 
-        --backgroundColor: $eventbubble-others-bg;
+        --backgroundColor: var(--spark-bubble-other-bg, $eventbubble-others-bg);
     }
 
     &[data-self="true"] {
@@ -300,7 +301,7 @@ Please see LICENSE files in the repository root for full details.
 
         .mx_EventTile_avatar {
             top: -9px;
-            right: -34px;
+            right: -47px;
         }
 
         &:not(.mx_EventTile_continuation)
@@ -332,14 +333,14 @@ Please see LICENSE files in the repository root for full details.
         }
 
         .mx_MediaBody {
-            background: $eventbubble-self-bg;
+            background: var(--spark-bubble-self-bg, $eventbubble-self-bg);
         }
 
         .mx_MessageActionBar {
             inset-inline-end: 0;
         }
 
-        --backgroundColor: $eventbubble-self-bg;
+        --backgroundColor: var(--spark-bubble-self-bg, $eventbubble-self-bg);
     }
 
     .mx_EventTile_line {
@@ -453,6 +454,114 @@ Please see LICENSE files in the repository root for full details.
     &:hover:not(.mx_EventTile_noBubble)
         .mx_EventTile_line:not(.mx_EventTile_mediaLine) {
         box-shadow: 0 6px 16px rgb(15 23 42 / 0.1);
+    }
+
+    /* Spark draws the tail as part of one backing surface, rather than a
+       standalone triangle. This keeps the tail, border and rounded corners
+       continuous at every zoom level. */
+    &:not(.mx_EventTile_noBubble):not(.mx_EventTile_alignedBetweenBubbles)
+        .mx_EventTile_line:not(.mx_EventTile_mediaLine) {
+        isolation: isolate;
+        z-index: 0;
+        background: transparent;
+        border-color: transparent;
+        box-shadow: none;
+
+        &::before {
+            position: absolute;
+            z-index: -1;
+            inset: -1px;
+            content: "";
+            border: 1px solid
+                color-mix(in srgb, var(--backgroundColor) 88%, currentColor);
+            border-radius: inherit;
+            background: var(--backgroundColor);
+            box-shadow: 0 1px 2px rgb(15 23 42 / 0.08);
+            pointer-events: none;
+        }
+    }
+
+    &:hover:not(.mx_EventTile_noBubble)
+        .mx_EventTile_line:not(.mx_EventTile_mediaLine)::before {
+        box-shadow: 0 6px 16px rgb(15 23 42 / 0.1);
+    }
+
+    &[data-self="false"]:not(.mx_EventTile_continuation)
+        .mx_EventTile_line:not(.mx_EventTile_mediaLine) {
+        &::after {
+            display: none;
+        }
+
+        &::before {
+            left: calc(-1 * var(--SparkBubble-tail-length));
+            clip-path: polygon(
+                20px 0,
+                100% 0,
+                100% 100%,
+                18px 100%,
+                14px calc(100% - 1px),
+                11px calc(100% - 3px),
+                8.8px calc(100% - 6px),
+                7.2px calc(100% - 10px),
+                6.6px calc(100% - 14px),
+                6.5px 24px,
+                5.8px 21.7px,
+                4.4px 19.8px,
+                2.6px 18.2px,
+                1.1px 16.7px,
+                0 15.2px,
+                0.5px 13.8px,
+                1.9px 12.5px,
+                3.7px 11px,
+                5.1px 9.1px,
+                6.1px 7px,
+                6.6px 4.8px,
+                7.8px 2.8px,
+                9.8px 1.3px,
+                12.3px 0.4px,
+                15.2px 0.08px
+            );
+        }
+    }
+
+    &[data-self="true"]:not(.mx_EventTile_continuation)
+        .mx_EventTile_line:not(.mx_EventTile_mediaLine) {
+        &::after {
+            display: none;
+        }
+
+        &::before {
+            right: calc(-1 * var(--SparkBubble-tail-length));
+            transform: scaleX(-1);
+            transform-origin: center;
+            clip-path: polygon(
+                20px 0,
+                100% 0,
+                100% 100%,
+                18px 100%,
+                14px calc(100% - 1px),
+                11px calc(100% - 3px),
+                8.8px calc(100% - 6px),
+                7.2px calc(100% - 10px),
+                6.6px calc(100% - 14px),
+                6.5px 24px,
+                5.8px 21.7px,
+                4.4px 19.8px,
+                2.6px 18.2px,
+                1.1px 16.7px,
+                0 15.2px,
+                0.5px 13.8px,
+                1.9px 12.5px,
+                3.7px 11px,
+                5.1px 9.1px,
+                6.1px 7px,
+                6.6px 4.8px,
+                7.8px 2.8px,
+                9.8px 1.3px,
+                12.3px 0.4px,
+                15.2px 0.08px
+            );
+        }
     }
 
     &.mx_EventTile_continuation[data-self="false"] .mx_EventTile_line {

@@ -12,7 +12,11 @@ import { createRoot } from "react-dom/client";
 import React, { StrictMode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ModuleLoader } from "@element-hq/element-web-module-api";
-import { getUserLanguage, markDefaultLanguageMigrated, setLanguage } from "../i18n/settings";
+import {
+    getUserLanguage,
+    markDefaultLanguageMigrated,
+    setLanguage,
+} from "../i18n/settings";
 import { getCurrentLanguage } from "../i18n";
 import PlatformPeg from "../PlatformPeg";
 import SdkConfig from "../SdkConfig";
@@ -25,6 +29,8 @@ import WebPlatform from "./platform/WebPlatform";
 import { initRageshake, initRageshakeStore } from "./rageshakesetup";
 import { ModuleApi } from "../modules/Api.ts";
 import { type URLParams } from "./url_utils.ts";
+// Apply the locally stored Spark appearance before the app view mounts.
+import "../features/appearance/SparkAppearance";
 
 export const rageshakePromise = initRageshake();
 
@@ -91,7 +97,10 @@ export async function loadApp(urlParams: URLParams): Promise<void> {
     root.render(app);
 }
 
-export async function showError(title: string, messages?: string[]): Promise<void> {
+export async function showError(
+    title: string,
+    messages?: string[]
+): Promise<void> {
     const { ErrorView } = await import(
         /* webpackChunkName: "error-view" */
         "../async-components/structures/ErrorView"
@@ -100,11 +109,13 @@ export async function showError(title: string, messages?: string[]): Promise<voi
     root.render(
         <StrictMode>
             <ErrorView title={title} messages={messages} />
-        </StrictMode>,
+        </StrictMode>
     );
 }
 
-export async function showIncompatibleBrowser(onAccept: () => void): Promise<void> {
+export async function showIncompatibleBrowser(
+    onAccept: () => void
+): Promise<void> {
     const { UnsupportedBrowserView } = await import(
         /* webpackChunkName: "error-view" */
         "../async-components/structures/ErrorView"
@@ -113,7 +124,7 @@ export async function showIncompatibleBrowser(onAccept: () => void): Promise<voi
     root.render(
         <StrictMode>
             <UnsupportedBrowserView onAccept={onAccept} />
-        </StrictMode>,
+        </StrictMode>
     );
 }
 

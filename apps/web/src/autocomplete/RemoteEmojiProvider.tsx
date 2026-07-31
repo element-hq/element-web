@@ -12,7 +12,6 @@ import { PillCompletion } from "./Components";
 import { type ICompletion, type ISelectionRange } from "./Autocompleter";
 import SettingsStore from "../settings/SettingsStore";
 import {
-    getRemoteStickerIndexUrl,
     loadRemoteStickerIndex,
     stickerName,
     stickerPreviewUrl,
@@ -21,6 +20,7 @@ import {
     type RemoteStickerIndex,
 } from "../features/remote-stickers/RemoteStickerIndex";
 import { type TimelineRenderingType } from "../contexts/RoomContext";
+import { getPersonalEmojiPacks } from "../features/personal-emoji/PersonalEmojiPacks";
 
 // Cloud suggestions follow Spark's trigger rules: Chinese keywords can be
 // entered directly, while Latin keywords need two characters unless the user
@@ -28,7 +28,9 @@ import { type TimelineRenderingType } from "../contexts/RoomContext";
 const REMOTE_EMOJI_REGEX = /(?:^|\s)(?::)?[\p{L}\p{N}_+-]+:?$/gu;
 const MAX_RESULTS = 20;
 
-export function getRemoteEmojiSearchTerm(command: string | undefined): string | undefined {
+export function getRemoteEmojiSearchTerm(
+    command: string | undefined
+): string | undefined {
     const source = command?.trim() ?? "";
     const explicitShortcode = source.startsWith(":");
     const term = source.replace(/^:/, "").replace(/:$/, "").trim();
@@ -45,7 +47,7 @@ export default class RemoteEmojiProvider extends AutocompleteProvider {
 
     public constructor(
         private readonly room: Room,
-        renderingType?: TimelineRenderingType,
+        renderingType?: TimelineRenderingType
     ) {
         super({ commandRegex: REMOTE_EMOJI_REGEX, renderingType });
         // Start warming as the composer opens, so the first meaningful query
@@ -69,32 +71,51 @@ export default class RemoteEmojiProvider extends AutocompleteProvider {
         query: string,
         selection: ISelectionRange,
         force?: boolean,
-        limit = -1,
+        limit = -1
     ): Promise<ICompletion[]> {
-        if (!SettingsStore.getValue("MessageComposerInput.suggestEmoji") || !getRemoteStickerIndexUrl()) {
+        if (!SettingsStore.getValue("MessageComposerInput.suggestEmoji")) {
             return [];
         }
 
-        const { command, range } = this.getCurrentCommand(query, selection, force);
+        const { command, range } = this.getCurrentCommand(
+            query,
+            selection,
+            force
+        );
         const term = getRemoteEmojiSearchTerm(command?.[0]);
         if (!term || !range) return [];
-
-        // Inline custom emoji is HTML pointing at a Matrix MXC URI. An
-        // encrypted room cannot safely use that representation, so the cloud
-        // panel sends a proper encrypted sticker there instead.
-        if (await this.room.client.getCrypto()?.isEncryptionEnabledInRoom(this.room.roomId)) {
-            return [];
-        }
 
         // Autocompleter waits for every provider before displaying anything.
         // Prime the remote index without delaying mention, command and normal
         // emoji completion; the following input event uses the warm index.
         this.ensureIndexLoaded();
-        const items: RemoteSticker[] = this.index?.items ?? [];
+        const personalItems: RemoteSticker[] = getPersonalEmojiPacks(
+            this.room.client
+        )
+            .flatMap((pack) => pack.items)
+            .filter((item) => item.usage.includes("emoticon"))
+            .map((item) => ({
+                id: item.id,
+                packId: item.packId,
+                name: item.shortcode,
+                fileName: item.shortcode,
+                keywords: item.keywords,
+                mxc: item.url.startsWith("mxc://") ? item.url : undefined,
+                url: item.url.startsWith("mxc://") ? undefined : item.url,
+                mimeType:
+                    typeof item.info?.mimetype === "string"
+                        ? item.info.mimetype
+                        : undefined,
+            }));
+        const items: RemoteSticker[] = [
+            ...personalItems,
+            ...(this.index?.items ?? []),
+        ];
         if (items.length === 0) return [];
 
         const normalizedTerm = term.toLocaleLowerCase();
-        const resultLimit = limit < 0 ? MAX_RESULTS : Math.min(limit, MAX_RESULTS);
+        const resultLimit =
+            limit < 0 ? MAX_RESULTS : Math.min(limit, MAX_RESULTS);
         return items
             .filter((item) => stickerPreviewUrl(item, this.room.client))
             .filter((item) => stickerSearchText(item).includes(normalizedTerm))
@@ -108,7 +129,10 @@ export default class RemoteEmojiProvider extends AutocompleteProvider {
                     remoteSticker: item,
                     range,
                     component: (
-                        <PillCompletion title={`:${name}:`} aria-label={`云端表情 ${name}`}>
+                        <PillCompletion
+                            title={`:${name}:`}
+                            aria-label={`云端表情 ${name}`}
+                        >
                             <img
                                 src={previewUrl}
                                 alt=""
@@ -129,6 +153,10 @@ export default class RemoteEmojiProvider extends AutocompleteProvider {
     }
 
     public renderCompletions(completions: React.ReactNode[]): React.ReactNode {
-        return <div className="mx_Autocomplete_Completion_container_pill">{completions}</div>;
+        return (
+            <div className="mx_Autocomplete_Completion_container_pill">
+                {completions}
+            </div>
+        );
     }
 }

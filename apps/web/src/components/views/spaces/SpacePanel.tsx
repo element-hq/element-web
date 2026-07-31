@@ -21,7 +21,12 @@ import React, {
     useState,
     useContext,
 } from "react";
-import { DragDropContext, Draggable, Droppable, type DroppableProvidedProps } from "react-beautiful-dnd";
+import {
+    DragDropContext,
+    Draggable,
+    Droppable,
+    type DroppableProvidedProps,
+} from "react-beautiful-dnd";
 import classNames from "classnames";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import {
@@ -31,13 +36,20 @@ import {
     PlusIcon,
     ChevronRightIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { useCreateAutoDisposedViewModel, UserMenu } from "@element-hq/web-shared-components";
+import UserProfileIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-profile";
+import {
+    useCreateAutoDisposedViewModel,
+    UserMenu,
+} from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import { useContextMenu } from "../../structures/ContextMenu";
 import SpaceCreateMenu from "./SpaceCreateMenu";
 import { SpaceButton, SpaceItem } from "./SpaceTreeLevel";
-import { useEventEmitter, useEventEmitterState } from "../../../hooks/useEventEmitter";
+import {
+    useEventEmitter,
+    useEventEmitterState,
+} from "../../../hooks/useEventEmitter";
 import {
     getMetaSpaceName,
     MetaSpace,
@@ -71,7 +83,10 @@ import { shouldShowComponent } from "../../../customisations/helpers/UIComponent
 import { UIComponent } from "../../../settings/UIFeature";
 import { ThreadsActivityCentre } from "./threads-activity-centre/";
 import AccessibleButton from "../elements/AccessibleButton";
-import { Landmark, LandmarkNavigation } from "../../../accessibility/LandmarkNavigation";
+import {
+    Landmark,
+    LandmarkNavigation,
+} from "../../../accessibility/LandmarkNavigation";
 import { KeyboardShortcut } from "../settings/KeyboardShortcut";
 import { ModuleApi } from "../../../modules/Api.ts";
 import { useModuleSpacePanelItems } from "../../../modules/ExtrasApi.ts";
@@ -82,37 +97,58 @@ import { type SDKContextClass } from "../../../contexts/SDKContextClass.ts";
 
 const useSpaces = (): [Room[], MetaSpace[], Room[], SpaceKey] => {
     const sdkContext = useContext(SDKContext);
-    const invites = useEventEmitterState<Room[]>(sdkContext.spaceStore, UPDATE_INVITED_SPACES, () => {
-        return sdkContext.spaceStore.invitedSpaces;
-    });
-    const [metaSpaces, actualSpaces] = useEventEmitterState<[MetaSpace[], Room[]]>(
+    const invites = useEventEmitterState<Room[]>(
         sdkContext.spaceStore,
-        UPDATE_TOP_LEVEL_SPACES,
-        () => [sdkContext.spaceStore.enabledMetaSpaces, sdkContext.spaceStore.spacePanelSpaces],
+        UPDATE_INVITED_SPACES,
+        () => {
+            return sdkContext.spaceStore.invitedSpaces;
+        }
     );
-    const activeSpace = useEventEmitterState<SpaceKey>(sdkContext.spaceStore, UPDATE_SELECTED_SPACE, () => {
-        return sdkContext.spaceStore.activeSpace;
-    });
+    const [metaSpaces, actualSpaces] = useEventEmitterState<
+        [MetaSpace[], Room[]]
+    >(sdkContext.spaceStore, UPDATE_TOP_LEVEL_SPACES, () => [
+        sdkContext.spaceStore.enabledMetaSpaces,
+        sdkContext.spaceStore.spacePanelSpaces,
+    ]);
+    const activeSpace = useEventEmitterState<SpaceKey>(
+        sdkContext.spaceStore,
+        UPDATE_SELECTED_SPACE,
+        () => {
+            return sdkContext.spaceStore.activeSpace;
+        }
+    );
     return [invites, metaSpaces, actualSpaces, activeSpace];
 };
 
-export const HomeButtonContextMenu: React.FC<ComponentProps<typeof SpaceContextMenu>> = ({
-    onFinished,
-    hideHeader,
-    ...props
-}) => {
+export const HomeButtonContextMenu: React.FC<
+    ComponentProps<typeof SpaceContextMenu>
+> = ({ onFinished, hideHeader, ...props }) => {
     const allRoomsInHome = useSettingValue("Spaces.allRoomsInHome");
 
     return (
-        <IconizedContextMenu {...props} onFinished={onFinished} className="mx_SpacePanel_contextMenu" compact>
-            {!hideHeader && <div className="mx_SpacePanel_contextMenu_header">{_t("common|home")}</div>}
+        <IconizedContextMenu
+            {...props}
+            onFinished={onFinished}
+            className="mx_SpacePanel_contextMenu"
+            compact
+        >
+            {!hideHeader && (
+                <div className="mx_SpacePanel_contextMenu_header">
+                    {_t("common|home")}
+                </div>
+            )}
             <IconizedContextMenuOptionList first>
                 <IconizedContextMenuCheckbox
                     label={_t("settings|sidebar|metaspaces_home_all_rooms")}
                     active={allRoomsInHome}
                     onClick={() => {
                         onFinished();
-                        SettingsStore.setValue("Spaces.allRoomsInHome", null, SettingLevel.ACCOUNT, !allRoomsInHome);
+                        SettingsStore.setValue(
+                            "Spaces.allRoomsInHome",
+                            null,
+                            SettingLevel.ACCOUNT,
+                            !allRoomsInHome
+                        );
                     }}
                 />
             </IconizedContextMenuOptionList>
@@ -126,9 +162,17 @@ interface IMetaSpaceButtonProps extends ComponentProps<typeof SpaceButton> {
     icon: JSX.Element;
 }
 
-type MetaSpaceButtonProps = Pick<IMetaSpaceButtonProps, "selected" | "isPanelCollapsed">;
+type MetaSpaceButtonProps = Pick<
+    IMetaSpaceButtonProps,
+    "selected" | "isPanelCollapsed"
+>;
 
-const MetaSpaceButton: React.FC<IMetaSpaceButtonProps> = ({ selected, isPanelCollapsed, size = "32px", ...props }) => {
+const MetaSpaceButton: React.FC<IMetaSpaceButtonProps> = ({
+    selected,
+    isPanelCollapsed,
+    size = "32px",
+    ...props
+}) => {
     return (
         <li
             className={classNames("mx_SpaceItem", {
@@ -137,28 +181,51 @@ const MetaSpaceButton: React.FC<IMetaSpaceButtonProps> = ({ selected, isPanelCol
             role="treeitem"
             aria-selected={selected}
         >
-            <SpaceButton {...props} selected={selected} isNarrow={isPanelCollapsed} size={size} />
+            <SpaceButton
+                {...props}
+                selected={selected}
+                isNarrow={isPanelCollapsed}
+                size={size}
+            />
         </li>
     );
 };
 
-const getHomeNotificationState = (sdkContext: SDKContextClass): NotificationState => {
+const getHomeNotificationState = (
+    sdkContext: SDKContextClass
+): NotificationState => {
     return sdkContext.spaceStore.allRoomsInHome
         ? sdkContext.roomNotificationStateStore.globalState
         : sdkContext.spaceStore.getNotificationState(MetaSpace.Home);
 };
 
-const HomeButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCollapsed }) => {
+const HomeButton: React.FC<MetaSpaceButtonProps> = ({
+    selected,
+    isPanelCollapsed,
+}) => {
     const sdkContext = useContext(SDKContext);
-    const allRoomsInHome = useEventEmitterState(sdkContext.spaceStore, UPDATE_HOME_BEHAVIOUR, () => {
-        return sdkContext.spaceStore.allRoomsInHome;
-    });
-    const [notificationState, setNotificationState] = useState(getHomeNotificationState(sdkContext));
+    const allRoomsInHome = useEventEmitterState(
+        sdkContext.spaceStore,
+        UPDATE_HOME_BEHAVIOUR,
+        () => {
+            return sdkContext.spaceStore.allRoomsInHome;
+        }
+    );
+    const [notificationState, setNotificationState] = useState(
+        getHomeNotificationState(sdkContext)
+    );
     const updateNotificationState = useCallback(() => {
         setNotificationState(getHomeNotificationState(sdkContext));
     }, [sdkContext]);
-    useEffect(updateNotificationState, [updateNotificationState, allRoomsInHome]);
-    useEventEmitter(sdkContext.roomNotificationStateStore, UPDATE_STATUS_INDICATOR, updateNotificationState);
+    useEffect(updateNotificationState, [
+        updateNotificationState,
+        allRoomsInHome,
+    ]);
+    useEventEmitter(
+        sdkContext.roomNotificationStateStore,
+        UPDATE_STATUS_INDICATOR,
+        updateNotificationState
+    );
 
     return (
         <MetaSpaceButton
@@ -175,7 +242,10 @@ const HomeButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCollapsed
     );
 };
 
-const OrphansButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCollapsed }) => {
+const OrphansButton: React.FC<MetaSpaceButtonProps> = ({
+    selected,
+    isPanelCollapsed,
+}) => {
     const sdkContext = useContext(SDKContext);
     return (
         <MetaSpaceButton
@@ -183,14 +253,40 @@ const OrphansButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCollap
             selected={selected}
             isPanelCollapsed={isPanelCollapsed}
             label={getMetaSpaceName(MetaSpace.Orphans)}
-            notificationState={sdkContext.spaceStore.getNotificationState(MetaSpace.Orphans)}
+            notificationState={sdkContext.spaceStore.getNotificationState(
+                MetaSpace.Orphans
+            )}
             size="32px"
             icon={<RoomIcon />}
         />
     );
 };
 
-const VideoRoomsButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCollapsed }) => {
+/** A dedicated rail entry for direct-message rooms, matching Spark's people area. */
+const PeopleButton: React.FC<MetaSpaceButtonProps> = ({
+    selected,
+    isPanelCollapsed,
+}) => {
+    const sdkContext = useContext(SDKContext);
+    return (
+        <MetaSpaceButton
+            spaceKey={MetaSpace.People}
+            selected={selected}
+            isPanelCollapsed={isPanelCollapsed}
+            label={getMetaSpaceName(MetaSpace.People)}
+            notificationState={sdkContext.spaceStore.getNotificationState(
+                MetaSpace.People
+            )}
+            size="32px"
+            icon={<UserProfileIcon />}
+        />
+    );
+};
+
+const VideoRoomsButton: React.FC<MetaSpaceButtonProps> = ({
+    selected,
+    isPanelCollapsed,
+}) => {
     const sdkContext = useContext(SDKContext);
     return (
         <MetaSpaceButton
@@ -198,18 +294,20 @@ const VideoRoomsButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCol
             selected={selected}
             isPanelCollapsed={isPanelCollapsed}
             label={getMetaSpaceName(MetaSpace.VideoRooms)}
-            notificationState={sdkContext.spaceStore.getNotificationState(MetaSpace.VideoRooms)}
+            notificationState={sdkContext.spaceStore.getNotificationState(
+                MetaSpace.VideoRooms
+            )}
             size="32px"
             icon={<VideoCallSolidIcon />}
         />
     );
 };
 
-const CreateSpaceButton: React.FC<Pick<IInnerSpacePanelProps, "isPanelCollapsed" | "setPanelCollapsed">> = ({
-    isPanelCollapsed,
-    setPanelCollapsed,
-}) => {
-    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
+const CreateSpaceButton: React.FC<
+    Pick<IInnerSpacePanelProps, "isPanelCollapsed" | "setPanelCollapsed">
+> = ({ isPanelCollapsed, setPanelCollapsed }) => {
+    const [menuDisplayed, handle, openMenu, closeMenu] =
+        useContextMenu<HTMLDivElement>();
 
     useEffect(() => {
         if (!isPanelCollapsed && menuDisplayed) {
@@ -242,7 +340,11 @@ const CreateSpaceButton: React.FC<Pick<IInnerSpacePanelProps, "isPanelCollapsed"
                 className={classNames("mx_SpaceButton_new", {
                     mx_SpaceButton_newCancel: menuDisplayed,
                 })}
-                label={menuDisplayed ? _t("action|cancel") : _t("create_space|label")}
+                label={
+                    menuDisplayed
+                        ? _t("action|cancel")
+                        : _t("create_space|label")
+                }
                 onClick={onNewClick}
                 isNarrow={isPanelCollapsed}
                 innerRef={handle}
@@ -257,6 +359,7 @@ const CreateSpaceButton: React.FC<Pick<IInnerSpacePanelProps, "isPanelCollapsed"
 
 const metaSpaceComponentMap: Record<MetaSpace, typeof HomeButton> = {
     [MetaSpace.Home]: HomeButton,
+    [MetaSpace.People]: PeopleButton,
     [MetaSpace.Orphans]: OrphansButton,
     [MetaSpace.VideoRooms]: VideoRoomsButton,
 };
@@ -271,18 +374,39 @@ interface IInnerSpacePanelProps extends DroppableProvidedProps {
 
 // Optimisation based on https://github.com/atlassian/react-beautiful-dnd/blob/master/docs/api/droppable.md#recommended-droppable--performance-optimisation
 const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(
-    ({ children, isPanelCollapsed, setPanelCollapsed, isDraggingOver, innerRef, ...props }) => {
+    ({
+        children,
+        isPanelCollapsed,
+        setPanelCollapsed,
+        isDraggingOver,
+        innerRef,
+        ...props
+    }) => {
         const sdkContext = useContext(SDKContext);
         const [invites, metaSpaces, actualSpaces, activeSpace] = useSpaces();
         const activeSpaces = activeSpace ? [activeSpace] : [];
 
-        const moduleSpaceItems = useModuleSpacePanelItems(ModuleApi.instance.extras);
+        const moduleSpaceItems = useModuleSpacePanelItems(
+            ModuleApi.instance.extras
+        );
 
         const metaSpacesSection = metaSpaces
-            .filter((key) => !(key === MetaSpace.VideoRooms && !SettingsStore.getValue("feature_video_rooms")))
+            .filter(
+                (key) =>
+                    !(
+                        key === MetaSpace.VideoRooms &&
+                        !SettingsStore.getValue("feature_video_rooms")
+                    )
+            )
             .map((key) => {
                 const Component = metaSpaceComponentMap[key];
-                return <Component key={key} selected={activeSpace === key} isPanelCollapsed={isPanelCollapsed} />;
+                return (
+                    <Component
+                        key={key}
+                        selected={activeSpace === key}
+                        isPanelCollapsed={isPanelCollapsed}
+                    />
+                );
             });
 
         return (
@@ -319,7 +443,11 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(
                                 dragHandleProps={provided.dragHandleProps}
                                 key={s.roomId}
                                 innerRef={provided.innerRef}
-                                className={snapshot.isDragging ? "mx_SpaceItem_dragging" : undefined}
+                                className={
+                                    snapshot.isDragging
+                                        ? "mx_SpaceItem_dragging"
+                                        : undefined
+                                }
                                 space={s}
                                 activeSpaces={activeSpaces}
                                 isPanelCollapsed={isPanelCollapsed}
@@ -344,18 +472,23 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(
                             size="32px"
                             selected={activeSpace === item.spaceKey}
                             onClick={() => {
-                                sdkContext.spaceStore.setActiveSpace(item.spaceKey);
+                                sdkContext.spaceStore.setActiveSpace(
+                                    item.spaceKey
+                                );
                                 item.onSelected?.();
                             }}
                         />
                     </li>
                 ))}
                 {shouldShowComponent(UIComponent.CreateSpaces) && (
-                    <CreateSpaceButton isPanelCollapsed={isPanelCollapsed} setPanelCollapsed={setPanelCollapsed} />
+                    <CreateSpaceButton
+                        isPanelCollapsed={isPanelCollapsed}
+                        setPanelCollapsed={setPanelCollapsed}
+                    />
                 )}
             </IndicatorScrollbar>
         );
-    },
+    }
 );
 
 const SpacePanel: React.FC = () => {
@@ -365,8 +498,10 @@ const SpacePanel: React.FC = () => {
     const [isPanelCollapsed, setPanelCollapsed] = useState(true);
     const ref = useRef<HTMLDivElement>(null);
     useLayoutEffect(() => {
-        if (ref.current) UIStore.instance.trackElementDimensions("SpacePanel", ref.current);
-        return () => UIStore.instance.stopTrackingElementDimensions("SpacePanel");
+        if (ref.current)
+            UIStore.instance.trackElementDimensions("SpacePanel", ref.current);
+        return () =>
+            UIStore.instance.stopTrackingElementDimensions("SpacePanel");
     }, []);
 
     useDispatcher(defaultDispatcher, (payload: ActionPayload) => {
@@ -381,8 +516,8 @@ const SpacePanel: React.FC = () => {
                 { ownProfileStore: OwnProfileStore.instance },
                 defaultDispatcher,
                 client,
-                isPanelCollapsed,
-            ),
+                isPanelCollapsed
+            )
     );
 
     useDispatcher(defaultDispatcher, (payload) => {
@@ -405,7 +540,10 @@ const SpacePanel: React.FC = () => {
                     onDragEnd={(result) => {
                         setDragging(false);
                         if (!result.destination) return; // dropped outside the list
-                        sdkContext.spaceStore.moveRootSpace(result.source.index, result.destination.index);
+                        sdkContext.spaceStore.moveRootSpace(
+                            result.source.index,
+                            result.destination.index
+                        );
                         onDragEndHandler();
                     }}
                 >
@@ -414,14 +552,16 @@ const SpacePanel: React.FC = () => {
                             collapsed: isPanelCollapsed,
                         })}
                         onKeyDown={(ev) => {
-                            const navAction = getKeyBindingsManager().getNavigationAction(ev);
+                            const navAction =
+                                getKeyBindingsManager().getNavigationAction(ev);
                             if (
                                 navAction === KeyBindingAction.NextLandmark ||
                                 navAction === KeyBindingAction.PreviousLandmark
                             ) {
                                 LandmarkNavigation.findAndFocusNextLandmark(
                                     Landmark.ACTIVE_SPACE_BUTTON,
-                                    navAction === KeyBindingAction.PreviousLandmark,
+                                    navAction ===
+                                        KeyBindingAction.PreviousLandmark
                                 );
                                 ev.stopPropagation();
                                 ev.preventDefault();
@@ -434,14 +574,25 @@ const SpacePanel: React.FC = () => {
                     >
                         <UserMenu vm={userMenuVm} className="mx_UserMenu" />
                         <AccessibleButton
-                            className={classNames("mx_SpacePanel_toggleCollapse", {
-                                expanded: !isPanelCollapsed,
-                            })}
+                            className={classNames(
+                                "mx_SpacePanel_toggleCollapse",
+                                {
+                                    expanded: !isPanelCollapsed,
+                                }
+                            )}
                             onClick={() => setPanelCollapsed(!isPanelCollapsed)}
-                            title={isPanelCollapsed ? _t("action|expand") : _t("action|collapse")}
+                            title={
+                                isPanelCollapsed
+                                    ? _t("action|expand")
+                                    : _t("action|collapse")
+                            }
                             caption={
                                 <KeyboardShortcut
-                                    value={{ ctrlOrCmdKey: true, shiftKey: true, key: "d" }}
+                                    value={{
+                                        ctrlOrCmdKey: true,
+                                        shiftKey: true,
+                                        key: "d",
+                                    }}
                                     className="mx_SpacePanel_Tooltip_KeyboardShortcut"
                                 />
                             }
@@ -462,9 +613,13 @@ const SpacePanel: React.FC = () => {
                             )}
                         </Droppable>
 
-                        <ThreadsActivityCentre displayButtonLabel={!isPanelCollapsed} />
+                        <ThreadsActivityCentre
+                            displayButtonLabel={!isPanelCollapsed}
+                        />
 
-                        <QuickSettingsButton isPanelCollapsed={isPanelCollapsed} />
+                        <QuickSettingsButton
+                            isPanelCollapsed={isPanelCollapsed}
+                        />
                     </nav>
                 </DragDropContext>
             )}

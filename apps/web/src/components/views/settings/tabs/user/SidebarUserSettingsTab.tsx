@@ -7,7 +7,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ChangeEvent, useMemo } from "react";
-import { VideoCallSolidIcon, HomeSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import {
+    VideoCallSolidIcon,
+    HomeSolidIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
+import UserProfileIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-profile";
 
 import { _t } from "../../../../../languageHandler";
 import SettingsStore from "../../../../../settings/SettingsStore";
@@ -21,26 +25,40 @@ import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubsection } from "../../shared/SettingsSubsection";
 import SdkConfig from "../../../../../SdkConfig";
 
-type InteractionName = "WebSettingsSidebarTabSpacesCheckbox" | "WebQuickSettingsPinToSidebarCheckbox";
+type InteractionName =
+    | "WebSettingsSidebarTabSpacesCheckbox"
+    | "WebQuickSettingsPinToSidebarCheckbox";
 
 export const onMetaSpaceChangeFactory =
-    (metaSpace: MetaSpace, interactionName: InteractionName) => async (e: ChangeEvent<HTMLInputElement>) => {
+    (metaSpace: MetaSpace, interactionName: InteractionName) =>
+    async (e: ChangeEvent<HTMLInputElement>) => {
         const currentValue = SettingsStore.getValue("Spaces.enabledMetaSpaces");
-        await SettingsStore.setValue("Spaces.enabledMetaSpaces", null, SettingLevel.ACCOUNT, {
-            ...currentValue,
-            [metaSpace]: e.target.checked,
-        });
+        await SettingsStore.setValue(
+            "Spaces.enabledMetaSpaces",
+            null,
+            SettingLevel.ACCOUNT,
+            {
+                ...currentValue,
+                [metaSpace]: e.target.checked,
+            }
+        );
 
         PosthogTrackers.trackInteraction(
             interactionName,
             e,
-            [MetaSpace.Home, null, MetaSpace.Orphans, MetaSpace.VideoRooms].indexOf(metaSpace),
+            [
+                MetaSpace.Home,
+                MetaSpace.People,
+                MetaSpace.Orphans,
+                MetaSpace.VideoRooms,
+            ].indexOf(metaSpace)
         );
     };
 
 const SidebarUserSettingsTab: React.FC = () => {
     const {
         [MetaSpace.Home]: homeEnabled,
+        [MetaSpace.People]: peopleEnabled,
         [MetaSpace.Orphans]: orphansEnabled,
         [MetaSpace.VideoRooms]: videoRoomsEnabled,
     } = useSettingValue("Spaces.enabledMetaSpaces");
@@ -50,11 +68,27 @@ const SidebarUserSettingsTab: React.FC = () => {
     }, []);
     const conferenceSubsectionText =
         _t("settings|sidebar|metaspaces_video_rooms_description") +
-        (guestSpaUrl ? " " + _t("settings|sidebar|metaspaces_video_rooms_description_invite_extension") : "");
+        (guestSpaUrl
+            ? " " +
+              _t(
+                  "settings|sidebar|metaspaces_video_rooms_description_invite_extension"
+              )
+            : "");
 
-    const onAllRoomsInHomeToggle = async (event: ChangeEvent<HTMLInputElement>): Promise<void> => {
-        await SettingsStore.setValue("Spaces.allRoomsInHome", null, SettingLevel.ACCOUNT, event.target.checked);
-        PosthogTrackers.trackInteraction("WebSettingsSidebarTabSpacesCheckbox", event, 1);
+    const onAllRoomsInHomeToggle = async (
+        event: ChangeEvent<HTMLInputElement>
+    ): Promise<void> => {
+        await SettingsStore.setValue(
+            "Spaces.allRoomsInHome",
+            null,
+            SettingLevel.ACCOUNT,
+            event.target.checked
+        );
+        PosthogTrackers.trackInteraction(
+            "WebSettingsSidebarTabSpacesCheckbox",
+            event,
+            1
+        );
     };
 
     return (
@@ -66,13 +100,31 @@ const SidebarUserSettingsTab: React.FC = () => {
                 >
                     <StyledCheckbox
                         checked={!!homeEnabled}
-                        onChange={onMetaSpaceChangeFactory(MetaSpace.Home, "WebSettingsSidebarTabSpacesCheckbox")}
+                        onChange={onMetaSpaceChangeFactory(
+                            MetaSpace.Home,
+                            "WebSettingsSidebarTabSpacesCheckbox"
+                        )}
                         className="mx_SidebarUserSettingsTab_checkbox"
                         disabled={homeEnabled}
-                        description={_t("settings|sidebar|metaspaces_home_description")}
+                        description={_t(
+                            "settings|sidebar|metaspaces_home_description"
+                        )}
                     >
                         <HomeSolidIcon className="mx_SidebarUserSettingsTab_icon" />
                         {_t("common|home")}
+                    </StyledCheckbox>
+
+                    <StyledCheckbox
+                        checked={!!peopleEnabled}
+                        onChange={onMetaSpaceChangeFactory(
+                            MetaSpace.People,
+                            "WebSettingsSidebarTabSpacesCheckbox"
+                        )}
+                        className="mx_SidebarUserSettingsTab_checkbox"
+                        description="将私聊房间单独显示在联系人分区。"
+                    >
+                        <UserProfileIcon className="mx_SidebarUserSettingsTab_icon" />
+                        {_t("common|people")}
                     </StyledCheckbox>
 
                     <StyledCheckbox
@@ -81,16 +133,23 @@ const SidebarUserSettingsTab: React.FC = () => {
                         onChange={onAllRoomsInHomeToggle}
                         className="mx_SidebarUserSettingsTab_checkbox mx_SidebarUserSettingsTab_homeAllRoomsCheckbox"
                         data-testid="mx_SidebarUserSettingsTab_homeAllRoomsCheckbox"
-                        description={_t("settings|sidebar|metaspaces_home_all_rooms_description")}
+                        description={_t(
+                            "settings|sidebar|metaspaces_home_all_rooms_description"
+                        )}
                     >
                         {_t("settings|sidebar|metaspaces_home_all_rooms")}
                     </StyledCheckbox>
 
                     <StyledCheckbox
                         checked={!!orphansEnabled}
-                        onChange={onMetaSpaceChangeFactory(MetaSpace.Orphans, "WebSettingsSidebarTabSpacesCheckbox")}
+                        onChange={onMetaSpaceChangeFactory(
+                            MetaSpace.Orphans,
+                            "WebSettingsSidebarTabSpacesCheckbox"
+                        )}
                         className="mx_SidebarUserSettingsTab_checkbox"
-                        description={_t("settings|sidebar|metaspaces_orphans_description")}
+                        description={_t(
+                            "settings|sidebar|metaspaces_orphans_description"
+                        )}
                     >
                         {_t("settings|sidebar|metaspaces_orphans")}
                     </StyledCheckbox>
@@ -99,7 +158,7 @@ const SidebarUserSettingsTab: React.FC = () => {
                             checked={!!videoRoomsEnabled}
                             onChange={onMetaSpaceChangeFactory(
                                 MetaSpace.VideoRooms,
-                                "WebSettingsSidebarTabSpacesCheckbox",
+                                "WebSettingsSidebarTabSpacesCheckbox"
                             )}
                             className="mx_SidebarUserSettingsTab_checkbox"
                             description={conferenceSubsectionText}

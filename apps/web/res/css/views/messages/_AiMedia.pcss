@@ -15,22 +15,28 @@
 .mx_MAudioBody_transcriptionPanel {
     display: flex;
     flex-direction: column;
-    gap: var(--cpd-space-1x);
-    margin-top: var(--cpd-space-2x);
+    gap: 6px;
+    margin: 6px 0 0;
 }
 
 .mx_MAudioBody_transcriptionButton {
     width: fit-content;
-    min-height: 28px;
+    min-height: 22px;
     display: inline-flex;
     align-items: center;
-    gap: var(--cpd-space-1x);
-    padding: 0 var(--cpd-space-2x);
-    border: 1px solid color-mix(in srgb, $accent 32%, transparent);
-    border-radius: 999px;
-    background: color-mix(in srgb, $accent 10%, transparent);
-    color: $accent;
+    gap: 5px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: $primary-content;
     font: var(--cpd-font-body-sm-medium);
+
+    &:hover,
+    &:focus-visible {
+        color: $accent;
+        text-decoration: underline;
+    }
 
     &[data-loading="true"] {
         cursor: progress;
@@ -39,13 +45,10 @@
 }
 
 .mx_MAudioBody_transcriptionGlyph {
-    display: inline-grid;
-    width: 16px;
-    height: 16px;
-    place-items: center;
-    border-radius: 4px;
-    background: color-mix(in srgb, $accent 18%, transparent);
-    font-size: 10px;
+    display: inline-block;
+    min-width: 20px;
+    color: $primary-content;
+    font-size: 15px;
     font-weight: var(--cpd-font-weight-semibold);
     line-height: 1;
 }
@@ -54,9 +57,10 @@
     display: flex;
     flex-direction: column;
     gap: var(--cpd-space-1x);
-    padding: var(--cpd-space-2x);
-    border-radius: 8px;
-    background: color-mix(in srgb, $spacePanel-bg-color 78%, transparent);
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid color-mix(in srgb, $input-border-color 68%, transparent);
+    background: rgb(255 255 255 / 36%);
     color: $primary-content;
     white-space: pre-wrap;
     word-break: break-word;

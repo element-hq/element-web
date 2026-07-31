@@ -7,7 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { EMOTICON_TO_EMOJI } from "@matrix-org/emojibase-bindings";
-import { type AllowedMentionAttributes, type MappedSuggestion } from "@vector-im/matrix-wysiwyg";
+import {
+    type AllowedMentionAttributes,
+    type MappedSuggestion,
+} from "@vector-im/matrix-wysiwyg";
 import { type SyntheticEvent, useState } from "react";
 
 import { isNotNull } from "../../../../../Typeguards";
@@ -46,9 +49,13 @@ type SuggestionState = Suggestion | null;
 export function useSuggestion(
     editorRef: React.RefObject<HTMLDivElement | null>,
     setText: (text?: string) => void,
-    isAutoReplaceEmojiEnabled?: boolean,
+    isAutoReplaceEmojiEnabled?: boolean
 ): {
-    handleMention: (href: string, displayName: string, attributes: AllowedMentionAttributes) => void;
+    handleMention: (
+        href: string,
+        displayName: string,
+        attributes: AllowedMentionAttributes
+    ) => void;
     handleAtRoomMention: (attributes: AllowedMentionAttributes) => void;
     handleCommand: (text: string) => void;
     handleEmojiSuggestion: (text: string) => void;
@@ -60,21 +67,55 @@ export function useSuggestion(
 
     // We create a `selectionchange` handler here because we need to know when the user has moved the cursor,
     // we can not depend on input events only
-    const onSelect = (): void => processSelectionChange(editorRef, setSuggestionData, isAutoReplaceEmojiEnabled);
+    const onSelect = (): void =>
+        processSelectionChange(
+            editorRef,
+            setSuggestionData,
+            isAutoReplaceEmojiEnabled
+        );
 
-    const handleMention = (href: string, displayName: string, attributes: AllowedMentionAttributes): void =>
-        processMention(href, displayName, attributes, suggestionData, setSuggestionData, setText);
+    const handleMention = (
+        href: string,
+        displayName: string,
+        attributes: AllowedMentionAttributes
+    ): void =>
+        processMention(
+            href,
+            displayName,
+            attributes,
+            suggestionData,
+            setSuggestionData,
+            setText
+        );
 
     const handleAtRoomMention = (attributes: AllowedMentionAttributes): void =>
-        processMention("#", "@room", attributes, suggestionData, setSuggestionData, setText);
+        processMention(
+            "#",
+            "@room",
+            attributes,
+            suggestionData,
+            setSuggestionData,
+            setText
+        );
 
     const handleCommand = (replacementText: string): void =>
-        processCommand(replacementText, suggestionData, setSuggestionData, setText);
+        processCommand(
+            replacementText,
+            suggestionData,
+            setSuggestionData,
+            setText
+        );
 
-    const handleEmojiReplacement = (): void => processEmojiReplacement(suggestionData, setSuggestionData, setText);
+    const handleEmojiReplacement = (): void =>
+        processEmojiReplacement(suggestionData, setSuggestionData, setText);
 
     const handleEmojiSuggestion = (emoji: string): void =>
-        processTextReplacement(emoji, suggestionData, setSuggestionData, setText);
+        processTextReplacement(
+            emoji,
+            suggestionData,
+            setSuggestionData,
+            setText
+        );
 
     return {
         suggestion: suggestionData?.mappedSuggestion ?? null,
@@ -98,7 +139,7 @@ export function useSuggestion(
 export function processSelectionChange(
     editorRef: React.RefObject<HTMLDivElement | null>,
     setSuggestionData: React.Dispatch<React.SetStateAction<SuggestionState>>,
-    isAutoReplaceEmojiEnabled?: boolean,
+    isAutoReplaceEmojiEnabled?: boolean
 ): void {
     const selection = document.getSelection();
 
@@ -122,13 +163,15 @@ export function processSelectionChange(
         return;
     }
 
-    const firstTextNode = document.createNodeIterator(editorRef.current, NodeFilter.SHOW_TEXT).nextNode();
+    const firstTextNode = document
+        .createNodeIterator(editorRef.current, NodeFilter.SHOW_TEXT)
+        .nextNode();
     const isFirstTextNode = currentNode === firstTextNode;
     const foundSuggestion = findSuggestionInText(
         currentNode.textContent,
         currentOffset,
         isFirstTextNode,
-        isAutoReplaceEmojiEnabled,
+        isAutoReplaceEmojiEnabled
     );
 
     // if we have not found a suggestion, return, clearing the suggestion state
@@ -162,7 +205,7 @@ export function processMention(
     attributes: AllowedMentionAttributes, // these will be used when formatting the link as a pill
     suggestionData: SuggestionState,
     setSuggestionData: React.Dispatch<React.SetStateAction<SuggestionState>>,
-    setText: (text?: string) => void,
+    setText: (text?: string) => void
 ): void {
     // if we do not have a suggestion, return early
     if (suggestionData === null) {
@@ -184,8 +227,12 @@ export function processMention(
     linkElement.appendChild(linkTextNode);
 
     // create text nodes to go before and after the link
-    const leadingTextNode = document.createTextNode(node.textContent?.slice(0, suggestionData.startOffset) || "\u200b");
-    const trailingTextNode = document.createTextNode(` ${node.textContent?.slice(suggestionData.endOffset) ?? ""}`);
+    const leadingTextNode = document.createTextNode(
+        node.textContent?.slice(0, suggestionData.startOffset) || "\u200b"
+    );
+    const trailingTextNode = document.createTextNode(
+        ` ${node.textContent?.slice(suggestionData.endOffset) ?? ""}`
+    );
 
     // now add the leading text node, link element and trailing text node before removing the node we are replacing
     const parentNode = node.parentNode;
@@ -197,7 +244,9 @@ export function processMention(
     }
 
     // move the selection to the trailing text node
-    document.getSelection()?.setBaseAndExtent(trailingTextNode, 1, trailingTextNode, 1);
+    document
+        .getSelection()
+        ?.setBaseAndExtent(trailingTextNode, 1, trailingTextNode, 1);
 
     // set the text content to be the innerHTML of the current editor ref and clear the suggestion state
     setText();
@@ -217,7 +266,7 @@ export function processCommand(
     replacementText: string,
     suggestionData: SuggestionState,
     setSuggestionData: React.Dispatch<React.SetStateAction<SuggestionState>>,
-    setText: (text?: string) => void,
+    setText: (text?: string) => void
 ): void {
     // if we do not have a suggestion, return early
     if (suggestionData === null) {
@@ -233,7 +282,9 @@ export function processCommand(
 
     // then set the cursor to the end of the node, update the `content` state in the usePlainTextListeners
     // hook and clear the suggestion from state
-    document.getSelection()?.setBaseAndExtent(node, newContent.length, node, newContent.length);
+    document
+        .getSelection()
+        ?.setBaseAndExtent(node, newContent.length, node, newContent.length);
     setText(newContent);
     setSuggestionData(null);
 }
@@ -248,14 +299,19 @@ export function processCommand(
 export function processEmojiReplacement(
     suggestionData: SuggestionState,
     setSuggestionData: React.Dispatch<React.SetStateAction<SuggestionState>>,
-    setText: (text?: string) => void,
+    setText: (text?: string) => void
 ): void {
     // if we do not have a suggestion of the correct type, return early
     if (suggestionData?.mappedSuggestion?.type !== `custom`) {
         return;
     }
 
-    processTextReplacement(suggestionData.mappedSuggestion.text, suggestionData, setSuggestionData, setText);
+    processTextReplacement(
+        suggestionData.mappedSuggestion.text,
+        suggestionData,
+        setSuggestionData,
+        setText
+    );
 }
 
 /**
@@ -269,7 +325,7 @@ export function processTextReplacement(
     replacementText: string,
     suggestionData: SuggestionState,
     setSuggestionData: React.Dispatch<React.SetStateAction<SuggestionState>>,
-    setText: (text?: string) => void,
+    setText: (text?: string) => void
 ): void {
     // if we do not have suggestion data return early
     if (suggestionData === null) {
@@ -290,7 +346,9 @@ export function processTextReplacement(
 
     node.textContent = newContent;
 
-    document.getSelection()?.setBaseAndExtent(node, newContent.length, node, newContent.length);
+    document
+        .getSelection()
+        ?.setBaseAndExtent(node, newContent.length, node, newContent.length);
     setText(newContent);
     setSuggestionData(null);
 }
@@ -311,8 +369,12 @@ export function findSuggestionInText(
     text: string,
     offset: number,
     isFirstTextNode: boolean,
-    isAutoReplaceEmojiEnabled?: boolean,
-): { mappedSuggestion: MappedSuggestion; startOffset: number; endOffset: number } | null {
+    isAutoReplaceEmojiEnabled?: boolean
+): {
+    mappedSuggestion: MappedSuggestion;
+    startOffset: number;
+    endOffset: number;
+} | null {
     // Return null early if the offset is outside the content
     if (offset < 0 || offset > text.length) {
         return null;
@@ -337,7 +399,10 @@ export function findSuggestionInText(
 
     // Get the word at the cursor then check if it contains a suggestion or not
     const wordAtCursor = text.slice(startSliceIndex, endSliceIndex);
-    const mappedSuggestion = getMappedSuggestion(wordAtCursor, isAutoReplaceEmojiEnabled);
+    const mappedSuggestion = getMappedSuggestion(
+        wordAtCursor,
+        isAutoReplaceEmojiEnabled
+    );
 
     /**
      * If we have a word that could be a command, it is not a valid command if:
@@ -350,12 +415,18 @@ export function findSuggestionInText(
     if (
         mappedSuggestion === null ||
         (mappedSuggestion.type === "command" &&
-            (!isFirstTextNode || startSliceIndex !== 0 || endSliceIndex !== text.length))
+            (!isFirstTextNode ||
+                startSliceIndex !== 0 ||
+                endSliceIndex !== text.length))
     ) {
         return null;
     }
 
-    return { mappedSuggestion, startOffset: startSliceIndex, endOffset: startSliceIndex + wordAtCursor.length };
+    return {
+        mappedSuggestion,
+        startOffset: startSliceIndex,
+        endOffset: startSliceIndex + wordAtCursor.length,
+    };
 }
 
 /**
@@ -398,7 +469,10 @@ function shouldIncrementEndIndex(text: string, index: number): boolean {
  * @param isAutoReplaceEmojiEnabled - whether plain text emoticons should be auto replaced with emojis
  * @returns a `MappedSuggestion` if a suggestion is present, null otherwise
  */
-export function getMappedSuggestion(text: string, isAutoReplaceEmojiEnabled?: boolean): MappedSuggestion | null {
+export function getMappedSuggestion(
+    text: string,
+    isAutoReplaceEmojiEnabled?: boolean
+): MappedSuggestion | null {
     if (isAutoReplaceEmojiEnabled) {
         // variations of plaintext emoitcons(E.g. :P vs :p vs :-P) are handled upstream by the emojibase-bindings/emojibase libraries.
         // See rules for variations here https://github.com/milesj/emojibase/blob/master/packages/core/src/generateEmoticonPermutations.ts#L3-L32
@@ -420,6 +494,13 @@ export function getMappedSuggestion(text: string, isAutoReplaceEmojiEnabled?: bo
         case ":":
             return { keyChar: firstChar, text: restOfString, type: "emoji" };
         default:
+            // Spark also opens the cloud/custom-emoji picker for Chinese
+            // keywords directly, or after two Latin characters. Preserve the
+            // normal message text; the completion replaces it only after an
+            // item is explicitly chosen.
+            if (/\p{Script=Han}/u.test(text) || /^[A-Za-z]{2,}$/.test(text)) {
+                return { keyChar: "", text, type: "emoji" };
+            }
             return null;
     }
 }

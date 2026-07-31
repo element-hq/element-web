@@ -22,6 +22,7 @@ import { LayoutSwitcher } from "../../LayoutSwitcher";
 import FontScalingPanel from "../../FontScalingPanel";
 import { ThemeChoicePanel } from "../../ThemeChoicePanel";
 import ImageSizePanel from "../../ImageSizePanel";
+import { SparkAppearanceCustomizer } from "../../SparkAppearanceCustomizer";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubsection } from "../../shared/SettingsSubsection";
@@ -33,7 +34,10 @@ interface IState {
     showAdvanced: boolean;
 }
 
-export default class AppearanceUserSettingsTab extends React.Component<EmptyObject, IState> {
+export default class AppearanceUserSettingsTab extends React.Component<
+    EmptyObject,
+    IState
+> {
     public constructor(props: EmptyObject) {
         super(props);
 
@@ -51,10 +55,14 @@ export default class AppearanceUserSettingsTab extends React.Component<EmptyObje
         const toggle = (
             <AccessibleButton
                 kind="link"
-                onClick={() => this.setState({ showAdvanced: !this.state.showAdvanced })}
+                onClick={() =>
+                    this.setState({ showAdvanced: !this.state.showAdvanced })
+                }
                 aria-expanded={this.state.showAdvanced}
             >
-                {this.state.showAdvanced ? _t("action|hide_advanced") : _t("action|show_advanced")}
+                {this.state.showAdvanced
+                    ? _t("action|hide_advanced")
+                    : _t("action|show_advanced")}
             </AccessibleButton>
         );
 
@@ -71,12 +79,16 @@ export default class AppearanceUserSettingsTab extends React.Component<EmptyObje
                     <SettingsFlag
                         name="useBundledEmojiFont"
                         level={SettingLevel.DEVICE}
-                        onChange={(checked) => this.setState({ useBundledEmojiFont: checked })}
+                        onChange={(checked) =>
+                            this.setState({ useBundledEmojiFont: checked })
+                        }
                     />
                     <SettingsFlag
                         name="useSystemFont"
                         level={SettingLevel.DEVICE}
-                        onChange={(checked) => this.setState({ useSystemFont: checked })}
+                        onChange={(checked) =>
+                            this.setState({ useSystemFont: checked })
+                        }
                     />
                     <Field
                         className="mx_AppearanceUserSettingsTab_checkboxControlledField"
@@ -86,7 +98,12 @@ export default class AppearanceUserSettingsTab extends React.Component<EmptyObje
                                 systemFont: value.target.value,
                             });
 
-                            SettingsStore.setValue("systemFont", null, SettingLevel.DEVICE, value.target.value);
+                            SettingsStore.setValue(
+                                "systemFont",
+                                null,
+                                SettingLevel.DEVICE,
+                                value.target.value
+                            );
                         }}
                         disabled={!this.state.useSystemFont}
                         value={this.state.systemFont}
@@ -106,6 +123,7 @@ export default class AppearanceUserSettingsTab extends React.Component<EmptyObje
         return (
             <SettingsTab data-testid="mx_AppearanceUserSettingsTab">
                 <SettingsSection>
+                    <SparkAppearanceCustomizer />
                     <ThemeChoicePanel />
                     <LayoutSwitcher />
                     <FontScalingPanel />

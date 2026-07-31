@@ -23,7 +23,10 @@ export interface ScrollTokenInput {
 }
 
 /** The stable scroll token for a non-local-echo event. */
-export function getScrollToken({ eventId, isLocalEcho }: ScrollTokenInput): string | undefined {
+export function getScrollToken({
+    eventId,
+    isLocalEcho,
+}: ScrollTokenInput): string | undefined {
     return isLocalEcho ? undefined : eventId;
 }
 
@@ -31,7 +34,7 @@ export function getScrollToken({ eventId, isLocalEcho }: ScrollTokenInput): stri
 export function getIsContinuation(
     continuation: boolean | undefined,
     timelineRenderingType: TimelineRenderingType,
-    layout: Layout | undefined,
+    layout: Layout | undefined
 ): boolean | undefined {
     if (
         timelineRenderingType !== TimelineRenderingType.Room &&
@@ -68,9 +71,11 @@ export function getEventTileLineClassState({
 
     return {
         mx_EventTile_mediaLine: isProbablyMedia,
-        mx_EventTile_image: eventType === roomMessageEventType && msgtype === imageMsgtype,
+        mx_EventTile_image:
+            eventType === roomMessageEventType && msgtype === imageMsgtype,
         mx_EventTile_sticker: eventType === stickerEventType,
-        mx_EventTile_emote: eventType === roomMessageEventType && msgtype === emoteMsgtype,
+        mx_EventTile_emote:
+            eventType === roomMessageEventType && msgtype === emoteMsgtype,
     };
 }
 
@@ -127,15 +132,17 @@ export function getEventTileSenderProfileState({
         return { avatarSize: "14px", needsSenderProfile: false };
     }
 
-    // Match Spark's compact bubble sender avatar while leaving enough room for
-    // the bubble tail and the read-receipt stack.
+    // Spark's bubble avatar is visually prominent and slightly overlaps the
+    // first bubble. Keep a dedicated Bubble size instead of inheriting the
+    // compact timeline avatar.
     if (layout === Layout.Bubble) {
-        return { avatarSize: "26px", needsSenderProfile: true };
+        return { avatarSize: "39px", needsSenderProfile: true };
     }
 
     if (
         timelineRenderingType === TimelineRenderingType.ThreadsList ||
-        (timelineRenderingType === TimelineRenderingType.Thread && !continuation)
+        (timelineRenderingType === TimelineRenderingType.Thread &&
+            !continuation)
     ) {
         return { avatarSize: "32px", needsSenderProfile: true };
     }
@@ -149,7 +156,8 @@ export function getEventTileSenderProfileState({
     }
 
     if (
-        (continuation && timelineRenderingType !== TimelineRenderingType.File) ||
+        (continuation &&
+            timelineRenderingType !== TimelineRenderingType.File) ||
         isCallInvite ||
         ElementCallEventType.matches(eventType) ||
         isRtcNotification
@@ -167,11 +175,14 @@ export function getEventTileSenderProfileState({
 /** Whether clicking the avatar should open the user profile. */
 export function getShouldViewUserOnClick(
     inhibitInteraction: boolean | undefined,
-    timelineRenderingType: TimelineRenderingType,
+    timelineRenderingType: TimelineRenderingType
 ): boolean {
     return (
         !inhibitInteraction &&
-        ![TimelineRenderingType.ThreadsList, TimelineRenderingType.Notification].includes(timelineRenderingType)
+        ![
+            TimelineRenderingType.ThreadsList,
+            TimelineRenderingType.Notification,
+        ].includes(timelineRenderingType)
     );
 }
 
@@ -239,7 +250,13 @@ export function getShouldShowMessageActionBar({
     actionBarFocused,
     hasContextMenu,
 }: ShouldShowMessageActionBarInput): boolean {
-    return !isEditing && !forExport && (hover || showActionBarFromFocus || (actionBarFocused && !hasContextMenu));
+    return (
+        !isEditing &&
+        !forExport &&
+        (hover ||
+            showActionBarFromFocus ||
+            (actionBarFocused && !hasContextMenu))
+    );
 }
 
 /** Inputs for EventTile timestamp visibility derivation. */
@@ -280,7 +297,12 @@ export function getShouldShowTimestamp({
         !!eventTs &&
         !isRtcNotification &&
         !hideTimestamp &&
-        (alwaysShowTimestamps || last || hover || focusWithin || actionBarFocused || hasContextMenu)
+        (alwaysShowTimestamps ||
+            last ||
+            hover ||
+            focusWithin ||
+            actionBarFocused ||
+            hasContextMenu)
     );
 }
 
@@ -300,7 +322,10 @@ export function getEventTileTimestamp({
     eventTs,
     threadReplyEventTs,
 }: EventTileTimestampInput): number {
-    if (timelineRenderingType === TimelineRenderingType.ThreadsList && typeof threadReplyEventTs === "number") {
+    if (
+        timelineRenderingType === TimelineRenderingType.ThreadsList &&
+        typeof threadReplyEventTs === "number"
+    ) {
         return threadReplyEventTs;
     }
 
@@ -398,8 +423,10 @@ export function getFooterDisplayState({
 }: FooterDisplayStateInput): FooterDisplayState {
     return {
         hasFooter: (hasReactionsRow && hasReactions) || hasPinnedMessageBadge,
-        showMainPinnedMessageBadge: hasPinnedMessageBadge && (layout === Layout.Group || !isOwnEvent),
-        showBubblePinnedMessageBadge: hasPinnedMessageBadge && layout === Layout.Bubble && isOwnEvent,
+        showMainPinnedMessageBadge:
+            hasPinnedMessageBadge && (layout === Layout.Group || !isOwnEvent),
+        showBubblePinnedMessageBadge:
+            hasPinnedMessageBadge && layout === Layout.Bubble && isOwnEvent,
     };
 }
 
@@ -488,7 +515,10 @@ export function getEventTileClassState({
         mx_EventTile_sending: !isEditing && isSending,
         mx_EventTile_highlight: isHighlighted,
         mx_EventTile_selected: isSelected,
-        mx_EventTile_continuation: isContinuation || isCallInvite || ElementCallEventType.matches(eventType),
+        mx_EventTile_continuation:
+            isContinuation ||
+            isCallInvite ||
+            ElementCallEventType.matches(eventType),
         mx_EventTile_last: isLast,
         mx_EventTile_lastInSection: isLastInSection,
         mx_EventTile_contextual: isContextual,
@@ -496,7 +526,9 @@ export function getEventTileClassState({
         mx_EventTile_bad: isEncryptionFailure,
         mx_EventTile_emote: msgtype === "m.emote",
         mx_EventTile_noSender: hideSender,
-        mx_EventTile_clamp: timelineRenderingType === TimelineRenderingType.ThreadsList || isRenderingNotification,
+        mx_EventTile_clamp:
+            timelineRenderingType === TimelineRenderingType.ThreadsList ||
+            isRenderingNotification,
         mx_EventTile_noBubble: noBubbleEvent,
     };
 }
