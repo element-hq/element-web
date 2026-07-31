@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactNode, type SyntheticEvent, useContext } from "react";
 import classNames from "classnames";
-import { type RoomMember, type IEventRelation } from "matrix-js-sdk/src/matrix";
+import { type RoomMember, type IEventRelation, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { LocationPinIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
@@ -21,9 +21,10 @@ export interface IProps {
     sender: RoomMember;
     menuPosition?: MenuProps;
     relation?: IEventRelation;
+    replyToEvent?: MatrixEvent;
 }
 
-const LocationButton: React.FC<IProps> = ({ roomId, sender, menuPosition, relation }) => {
+const LocationButton: React.FC<IProps> = ({ roomId, sender, menuPosition, relation, replyToEvent }) => {
     const overflowMenuCloser = useContext(OverflowMenuContext);
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
 
@@ -44,6 +45,7 @@ const LocationButton: React.FC<IProps> = ({ roomId, sender, menuPosition, relati
                 roomId={roomId}
                 openMenu={openMenu}
                 relation={relation}
+                replyToEvent={replyToEvent}
             />
         );
     }

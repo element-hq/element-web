@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type SyntheticEvent, useContext, useState } from "react";
-import { type Room, type IEventRelation } from "matrix-js-sdk/src/matrix";
+import { type Room, type IEventRelation, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import ContextMenu, { type MenuProps } from "../../structures/ContextMenu";
@@ -20,6 +20,7 @@ import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import { EnableLiveShare } from "./EnableLiveShare";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
 import { SettingLevel } from "../../../settings/SettingLevel";
+import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
 
 type Props = Omit<ILocationPickerProps, "onChoose" | "shareType"> & {
     onFinished: (ev?: SyntheticEvent) => void;
@@ -27,6 +28,7 @@ type Props = Omit<ILocationPickerProps, "onChoose" | "shareType"> & {
     openMenu: () => void;
     roomId: Room["roomId"];
     relation?: IEventRelation;
+    replyToEvent?: MatrixEvent;
 };
 
 const getEnabledShareTypes = (relation?: IEventRelation): LocationShareType[] => {
@@ -43,8 +45,17 @@ const getEnabledShareTypes = (relation?: IEventRelation): LocationShareType[] =>
     return enabledShareTypes;
 };
 
-const LocationShareMenu: React.FC<Props> = ({ menuPosition, onFinished, sender, roomId, openMenu, relation }) => {
+const LocationShareMenu: React.FC<Props> = ({
+    menuPosition,
+    onFinished,
+    sender,
+    roomId,
+    openMenu,
+    relation,
+    replyToEvent,
+}) => {
     const matrixClient = useContext(MatrixClientContext);
+    const { timelineRenderingType } = useScopedRoomContext("timelineRenderingType");
     const enabledShareTypes = getEnabledShareTypes(relation);
     const isLiveShareEnabled = useFeatureEnabled("feature_location_share_live");
 
@@ -60,7 +71,15 @@ const LocationShareMenu: React.FC<Props> = ({ menuPosition, onFinished, sender, 
     const onLocationSubmit =
         shareType === LocationShareType.Live
             ? shareLiveLocation(matrixClient, roomId, displayName || userId, openMenu)
-            : shareLocation(matrixClient, roomId, shareType ?? LocationShareType.Own, relation, openMenu);
+            : shareLocation(
+                  matrixClient,
+                  roomId,
+                  shareType ?? LocationShareType.Own,
+                  relation,
+                  openMenu,
+                  replyToEvent,
+                  timelineRenderingType,
+              );
 
     const onLiveShareEnableSubmit = (): void => {
         SettingsStore.setValue("feature_location_share_live", null, SettingLevel.DEVICE, true);

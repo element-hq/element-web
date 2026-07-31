@@ -22,6 +22,7 @@ import { LocationShareType } from "../../../../../src/components/views/location/
 import {
     flushPromisesWithFakeTimers,
     getMockClientWithEventEmitter,
+    mkEvent,
     mockClientMethodsUser,
     setupAsyncStoreWithClient,
 } from "../../../../test-utils";
@@ -279,6 +280,28 @@ describe("<LocationShareMenu />", () => {
                     [M_ASSET.name]: {
                         type: LocationAssetType.Pin,
                     },
+                }),
+            );
+        });
+
+        it("sends the location as a reply when the composer is replying", () => {
+            const replyToEvent = mkEvent({
+                event: true,
+                type: "m.room.message",
+                room: defaultProps.roomId,
+                user: "@bob:server.org",
+                content: { msgtype: "m.text", body: "where are you?" },
+            });
+            const { getByText } = getComponent({ replyToEvent });
+
+            setShareType(getByText, LocationShareType.Pin);
+            setLocationClick();
+            fireEvent.click(getByText("Share location"));
+
+            const [, , messageBody] = mockClient.sendMessage.mock.calls[0];
+            expect(messageBody).toEqual(
+                expect.objectContaining({
+                    "m.relates_to": { "m.in_reply_to": { event_id: replyToEvent.getId() } },
                 }),
             );
         });
