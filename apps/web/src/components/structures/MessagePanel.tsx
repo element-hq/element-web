@@ -24,6 +24,7 @@ import {
     TimelineSeparator,
     useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
+import { CloseIcon, ForwardIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import shouldHideEvent from "../../shouldHideEvent";
 import { formatDate, wantsDateSeparator } from "../../DateUtils";
@@ -1152,6 +1153,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                                 type="button"
                                 onClick={this.openForwardTargets}
                             >
+                                <ForwardIcon aria-hidden="true" />
                                 选择转发目标
                             </button>
                             <button
@@ -1159,6 +1161,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                                 type="button"
                                 onClick={this.clearForwardSelection}
                             >
+                                <CloseIcon aria-hidden="true" />
                                 清空选择
                             </button>
                         </div>

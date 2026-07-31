@@ -1411,7 +1411,15 @@ $left-gutter: 64px;
     }
 
     button {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--cpd-space-1x);
         cursor: pointer;
+
+        svg {
+            width: 16px;
+            height: 16px;
+        }
     }
 
     .mx_MessagePanel_forwardSelectionTarget {
