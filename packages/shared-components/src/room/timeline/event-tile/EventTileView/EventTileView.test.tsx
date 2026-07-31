@@ -144,14 +144,94 @@ describe("EventTileView", () => {
             expect(avatar).toHaveClass("legacy-avatar");
             expect(queryByTestId("action-bar")).not.toBeInTheDocument();
         } else {
-            const avatar = getByTestId("avatar").parentElement!;
+            const avatar = getByTestId("avatar");
             const actionBar = getByTestId("action-bar").parentElement!;
             expect(avatar.parentElement).toBe(root);
-            expect(avatar).toHaveClass("legacy-avatar");
             expect(actionBar.parentElement).toBe(root);
             expect(actionBar).toHaveClass("legacy-thread-action-bar");
             expect(queryByTestId("room-avatar")).not.toBeInTheDocument();
         }
+    });
+
+    it("renders the file layout with permalink interactions", () => {
+        const onPermalinkClick = vi.fn();
+        const onPermalinkContextMenu = vi.fn();
+        const { container, getByTestId } = render(
+            <EventTileView
+                {...createProps({
+                    root: { ...renderState, data: { ...renderState.data, shape: "File" } },
+                    classNames: {
+                        senderDetails: "legacy-sender-details",
+                        senderDetailsLink: "legacy-sender-details-link",
+                    },
+                    onPermalinkClick,
+                    onPermalinkContextMenu,
+                    slots: {
+                        avatar: <span data-testid="avatar">Avatar</span>,
+                        sender: <span data-testid="sender">Sender</span>,
+                        timestamp: <span data-testid="timestamp">Timestamp</span>,
+                        body: <span data-testid="body">Body</span>,
+                    },
+                })}
+            />,
+        );
+        const root = container.firstElementChild!;
+        const link = getByTestId("sender").parentElement!.parentElement!;
+        const senderDetails = getByTestId("sender").parentElement!;
+
+        expect(link).toHaveAttribute("href", renderState.permalink);
+        expect(link).toHaveClass("legacy-sender-details-link");
+        expect(senderDetails).toHaveClass("legacy-sender-details");
+        expect(senderDetails).toContainElement(getByTestId("timestamp"));
+        expect(getByTestId("body").parentElement).toBe(root.lastElementChild);
+
+        fireEvent.click(link);
+        fireEvent.contextMenu(senderDetails);
+        expect(onPermalinkClick).toHaveBeenCalledOnce();
+        expect(onPermalinkContextMenu).toHaveBeenCalledOnce();
+    });
+
+    it.each(["group", "irc"] as const)("renders the %s timeline layout", (layout) => {
+        const { container, getByTestId } = render(
+            <EventTileView
+                {...createProps({
+                    root: { ...renderState, data: { ...renderState.data, layout } },
+                    slots: {
+                        sender: <span data-testid="sender">Sender</span>,
+                        avatar: <span data-testid="avatar">Avatar</span>,
+                        timestamp: <span data-testid="timestamp">Timestamp</span>,
+                        padlock: <span data-testid="padlock">Padlock</span>,
+                        replyChain: <span data-testid="reply-chain">Reply chain</span>,
+                        body: <span data-testid="body">Body</span>,
+                        actionBar: <span data-testid="action-bar">Action bar</span>,
+                        footer: <span data-testid="footer">Footer</span>,
+                        threadInfo: <span data-testid="thread-info">Thread info</span>,
+                        receipt: <span data-testid="receipt">Receipt</span>,
+                        contextMenu: <span data-testid="context-menu">Context menu</span>,
+                    },
+                })}
+            />,
+        );
+        const root = container.firstElementChild!;
+        const line = getByTestId("body").parentElement!;
+
+        expect(root).toHaveAttribute("tabindex", "-1");
+        expect(line).toContainElement(getByTestId("reply-chain"));
+        expect(line).toContainElement(getByTestId("action-bar"));
+
+        if (layout === "irc") {
+            expect(root.firstElementChild).toBe(getByTestId("timestamp"));
+            expect(getByTestId("padlock").parentElement).toBe(root);
+            expect(getByTestId("footer").parentElement).toBe(line);
+            expect(getByTestId("thread-info").parentElement).toBe(line);
+        } else {
+            expect(getByTestId("timestamp").parentElement).toBe(line);
+            expect(getByTestId("padlock").parentElement).toBe(line);
+            expect(getByTestId("footer").parentElement).toBe(root);
+            expect(getByTestId("thread-info").parentElement).toBe(root);
+        }
+
+        expect(getByTestId("receipt").parentElement).toBe(root);
     });
 
     it("forwards root and line interactions", () => {
@@ -162,8 +242,19 @@ describe("EventTileView", () => {
         fireEvent.click(container.firstElementChild!);
         fireEvent.contextMenu(getByTestId("body").parentElement!);
 
-        expect(onClick).toHaveBeenCalledOnce();
+        expect(onClick).not.toHaveBeenCalled();
         expect(onContextMenu).toHaveBeenCalledOnce();
+
+        const { container: previewContainer } = render(
+            <EventTileView
+                {...createProps({
+                    root: { ...renderState, data: { ...renderState.data, shape: "Notification" } },
+                    onClick,
+                })}
+            />,
+        );
+        fireEvent.click(previewContainer.firstElementChild!);
+        expect(onClick).toHaveBeenCalledOnce();
     });
 
     it("forwards the root ref and supports a custom root element", () => {

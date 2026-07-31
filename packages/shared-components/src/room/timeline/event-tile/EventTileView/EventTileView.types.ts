@@ -36,7 +36,7 @@ export interface EventTileViewRootState {
     ariaLive?: "off";
     /** Stable event scroll token. */
     scrollToken?: string;
-    /** Permalink used by file-layout sender details. */
+    /** Optional permalink used by sender details. */
     permalink?: string;
     /** Plain root data attributes. */
     data: EventTileViewRootData;

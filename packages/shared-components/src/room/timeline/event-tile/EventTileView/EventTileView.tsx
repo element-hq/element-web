@@ -29,10 +29,16 @@ export function EventTileView({
     onBlur,
     onClick,
     onContextMenu,
+    onPermalinkClick,
+    onPermalinkContextMenu,
 }: Readonly<EventTileViewProps>): JSX.Element {
     const Root = root.as ?? "li";
 
-    const renderRoot = (children: React.ReactNode, rootClickHandler = onClick, rootTabIndex?: number): JSX.Element => (
+    const renderRoot = (
+        children: React.ReactNode,
+        rootClickHandler: React.MouseEventHandler<HTMLElement> | undefined,
+        rootTabIndex?: number,
+    ): JSX.Element => (
         <Root
             ref={refs?.root}
             className={classNames(styles.root, classNameOverrides?.root)}
@@ -55,6 +61,7 @@ export function EventTileView({
         </Root>
     );
 
+    // Thread view: sender details, line content, then footer.
     if (root.data.shape === "Thread") {
         return renderRoot(
             <>
@@ -80,6 +87,7 @@ export function EventTileView({
         );
     }
 
+    // Preview views: metadata, avatar, preview content, and optional actions.
     if (root.data.shape === "Notification" || root.data.shape === "ThreadsList") {
         return renderRoot(
             <>
@@ -89,14 +97,12 @@ export function EventTileView({
                     {slots.timestamp}
                     {slots.notificationBadge}
                 </div>
-                <div className={classNames(styles.avatar, classNameOverrides?.avatar)}>
-                    {root.data.shape === "Notification" && slots.roomAvatar ? slots.roomAvatar : slots.avatar}
-                </div>
-                <div
-                    className={classNames(styles.line, classNameOverrides?.line)}
-                    id={root.id}
-                    onContextMenu={onContextMenu}
-                >
+                {root.data.shape === "Notification" && slots.roomAvatar ? (
+                    <div className={classNames(styles.avatar, classNameOverrides?.avatar)}>{slots.roomAvatar}</div>
+                ) : (
+                    slots.avatar
+                )}
+                <div className={classNames(styles.line, classNameOverrides?.line)} id={root.id}>
                     {slots.body}
                     {slots.threadInfo}
                 </div>
@@ -112,10 +118,86 @@ export function EventTileView({
         );
     }
 
+    // File view: permalink-wrapped sender details followed by the file body.
+    if (root.data.shape === "File") {
+        return renderRoot(
+            <>
+                <a
+                    className={classNames(styles.senderDetailsLink, classNameOverrides?.senderDetailsLink)}
+                    href={root.permalink ?? "#"}
+                    onClick={onPermalinkClick}
+                >
+                    <div
+                        className={classNames(styles.senderDetails, classNameOverrides?.senderDetails)}
+                        onContextMenu={onPermalinkContextMenu}
+                    >
+                        {slots.avatar}
+                        {slots.sender}
+                        {slots.timestamp}
+                    </div>
+                </a>
+                <div
+                    id={root.id}
+                    className={classNames(styles.line, classNameOverrides?.line)}
+                    onContextMenu={onContextMenu}
+                >
+                    {slots.contextMenu}
+                    {slots.body}
+                </div>
+            </>,
+            undefined,
+        );
+    }
+
+    // IRC layout: timestamp and sender details precede the line content.
+    if (root.data.layout === "irc") {
+        return renderRoot(
+            <>
+                {slots.timestamp}
+                {slots.sender}
+                {slots.padlock}
+                {slots.avatar}
+                <div
+                    id={root.id}
+                    className={classNames(styles.line, classNameOverrides?.line)}
+                    onContextMenu={onContextMenu}
+                >
+                    {slots.contextMenu}
+                    {slots.replyChain}
+                    {slots.body}
+                    {slots.actionBar}
+                    {slots.footer}
+                    {slots.threadInfo}
+                </div>
+                {slots.receipt}
+            </>,
+            undefined,
+            -1,
+        );
+    }
+
+    // Group and bubble layouts: sender details precede the line content.
     return renderRoot(
-        <div id={root.id} className={classNames(styles.line, classNameOverrides?.line)} onContextMenu={onContextMenu}>
-            {slots.contextMenu}
-            {slots.body}
-        </div>,
+        <>
+            {slots.sender}
+            {slots.avatar}
+            <div
+                id={root.id}
+                className={classNames(styles.line, classNameOverrides?.line)}
+                onContextMenu={onContextMenu}
+            >
+                {slots.contextMenu}
+                {slots.timestamp}
+                {slots.padlock}
+                {slots.replyChain}
+                {slots.body}
+                {slots.actionBar}
+            </div>
+            {slots.footer}
+            {slots.threadInfo}
+            {slots.receipt}
+        </>,
+        undefined,
+        -1,
     );
 }
