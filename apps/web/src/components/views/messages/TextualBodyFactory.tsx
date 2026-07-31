@@ -26,7 +26,6 @@ import { TextualBodyViewModel } from "../../../viewmodels/room/timeline/event-ti
 import { EventContentBodyViewModel } from "../../../viewmodels/message-body/EventContentBodyViewModel";
 import { getParentEventId } from "../../../utils/Reply";
 import Modal from "../../../Modal";
-import SettingsStore from "../../../settings/SettingsStore";
 import PosthogTrackers from "../../../PosthogTrackers";
 import ImageView from "../elements/ImageView";
 import EditMessageComposer from "../rooms/EditMessageComposer";
@@ -34,6 +33,7 @@ import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
 import { UrlPreviewGroupViewModel } from "../../../viewmodels/message-body/UrlPreviewGroupViewModel";
 import PlatformPeg from "../../../PlatformPeg";
 import { useSettingValue } from "../../../hooks/useSettings";
+import { EditMessageComposerWrapper } from "../rooms/EditMessageComposerWrapper";
 
 const logger = rootLogger.getChild("TextualBodyFactory");
 
@@ -207,13 +207,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
     }, [props.mxEvent, previews]);
 
     if (props.editState) {
-        const isWysiwygComposerEnabled = SettingsStore.getValue("feature_wysiwyg_composer");
-
-        return isWysiwygComposerEnabled ? (
-            <EditWysiwygComposer editorStateTransfer={props.editState} className="mx_EventTile_content" />
-        ) : (
-            <EditMessageComposer editState={props.editState} className="mx_EventTile_content" />
-        );
+        return <EditMessageComposerWrapper editState={props.editState} className="mx_EventTile_content" mxClient={client} showUrlPreview={props.showUrlPreview ?? false} />
     }
 
     return (

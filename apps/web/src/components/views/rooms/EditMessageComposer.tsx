@@ -88,6 +88,7 @@ export function createEditContent(
 
 interface IEditMessageComposerProps extends MatrixClientProps {
     editState: EditorStateTransfer;
+    onChange?: (model: EditorModel) => void;
     className?: string;
 }
 interface IState {
@@ -264,9 +265,9 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
             oldContent["msgtype"] === newContent["msgtype"] &&
             oldContent["body"] === newContent["body"] &&
             (oldContent as RoomMessageTextEventContent)["format"] ===
-                (newContent as RoomMessageTextEventContent)["format"] &&
+            (newContent as RoomMessageTextEventContent)["format"] &&
             (oldContent as RoomMessageTextEventContent)["formatted_body"] ===
-                (newContent as RoomMessageTextEventContent)["formatted_body"]
+            (newContent as RoomMessageTextEventContent)["formatted_body"]
         ) {
             return false;
         }
@@ -417,6 +418,10 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
     }
 
     private onChange = (): void => {
+        if (this.props.onChange) {
+            this.props.onChange(this.model);
+        }
+
         if (!this.state.saveDisabled || !this.editorRef.current?.isModified()) {
             return;
         }
