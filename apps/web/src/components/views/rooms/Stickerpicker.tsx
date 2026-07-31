@@ -43,6 +43,7 @@ interface IProps {
     isStickerPickerOpen: boolean;
     menuPosition?: any;
     setStickerPickerOpen: (isStickerPickerOpen: boolean) => void;
+    onInsertEmoticon: (emoticon: { src: string; text: string }) => void;
     onStickerSent?: () => void;
 }
 
@@ -334,6 +335,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
                         room={this.props.room}
                         threadId={this.props.threadId}
                         replyToEvent={this.props.replyToEvent}
+                        onInsertEmoticon={this.props.onInsertEmoticon}
                         onSent={() => {
                             this.props.setStickerPickerOpen(false);
                             this.props.onStickerSent?.();

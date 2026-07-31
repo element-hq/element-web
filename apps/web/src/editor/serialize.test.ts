@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 
 import EditorModel from "./model";
-import { htmlSerializeFromMdIfNeeded, htmlSerializeIfNeeded } from "./serialize";
+import { htmlSerializeFromMdIfNeeded, htmlSerializeIfNeeded, textSerialize } from "./serialize";
 import { createPartCreator } from "./__mocks__";
 import { type IConfigOptions } from "../IConfigOptions";
 import SettingsStore from "../settings/SettingsStore";
@@ -36,6 +36,18 @@ describe("editor/serialize", function () {
             const model = new EditorModel([pc.atRoomPill("@room")], pc);
             const html = htmlSerializeIfNeeded(model, {});
             expect(html).toBeFalsy();
+        });
+        it("serializes a Matrix inline custom emoji with a plaintext fallback", function () {
+            const pc = createPartCreator();
+            const model = new EditorModel([pc.customEmoticon("mxc://hs.tld/wave", ":wave:")], pc);
+
+            expect(textSerialize(model)).toBe(":wave:");
+            expect(htmlSerializeIfNeeded(model, {})).toBe(
+                '<img data-mx-emoticon src="mxc://hs.tld/wave" alt=":wave:" title=":wave:" width="32" height="32">',
+            );
+            expect(htmlSerializeIfNeeded(model, { useMarkdown: false })).toBe(
+                '<img data-mx-emoticon src="mxc://hs.tld/wave" alt=":wave:" title=":wave:" width="32" height="32">',
+            );
         });
         it("any markdown turns message into html", function () {
             const pc = createPartCreator();

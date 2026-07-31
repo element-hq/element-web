@@ -920,4 +920,16 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             return model.positionForOffset(caret.offset + addedLen, true);
         });
     }
+
+    public insertCustomEmoticon(src: string, text: string): void {
+        this.modifiedFlag = true;
+        const { model } = this.props;
+        const caret = this.getCaret();
+        const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
+        model.transform(() => {
+            const addedLen = model.insert([model.partCreator.customEmoticon(src, text)], position);
+            return model.positionForOffset(caret.offset + addedLen, true);
+        });
+        this.focus();
+    }
 }

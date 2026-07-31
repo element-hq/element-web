@@ -17,6 +17,16 @@ import SettingsStore from "../settings/SettingsStore";
 import SdkConfig from "../SdkConfig";
 import { Type } from "./parts";
 
+const CUSTOM_EMOTICON_PREFIX = "\uE000mx-emoticon:";
+const CUSTOM_EMOTICON_SUFFIX = "\uE001";
+
+const customEmoticonMarker = (src: string, text: string): string =>
+    `${CUSTOM_EMOTICON_PREFIX}${encodeURIComponent(src)}:${encodeURIComponent(text)}${CUSTOM_EMOTICON_SUFFIX}`;
+
+const customEmoticonHtml = (src: string, text: string): string =>
+    `<img data-mx-emoticon src="${escapeHtml(src)}" alt="${escapeHtml(text)}" title="${escapeHtml(text)}" ` +
+    'width="32" height="32">';
+
 export function mdSerialize(model: EditorModel): string {
     return model.parts.reduce((html, part) => {
         switch (part.type) {
@@ -42,6 +52,8 @@ export function mdSerialize(model: EditorModel): string {
                 const title = part.text.replace(/[[\\\]]/g, (c) => "\\" + c).replace(/\n/g, "<br>");
                 return html + `[${title}](${url})`;
             }
+            case Type.CustomEmoticon:
+                return html + customEmoticonMarker(part.src, part.text);
         }
     }, "");
 }
@@ -55,12 +67,39 @@ export function htmlSerializeIfNeeded(
     model: EditorModel,
     { forceHTML = false, useMarkdown = true }: ISerializeOpts = {},
 ): string | undefined {
-    if (!useMarkdown) {
+    const hasCustomEmoticon = model.parts.some((part) => part.type === Type.CustomEmoticon);
+    if (!useMarkdown && !hasCustomEmoticon) {
         return escapeHtml(textSerialize(model)).replace(/\n/g, "<br/>");
     }
 
+    if (!useMarkdown) {
+        const html = model.parts
+            .map((part) =>
+                part.type === Type.CustomEmoticon
+                    ? customEmoticonMarker(part.src, part.text)
+                    : escapeHtml(part.text).replace(/\n/g, "<br/>"),
+            )
+            .join("");
+        const markerPattern = new RegExp(
+            `${CUSTOM_EMOTICON_PREFIX}([^:]+):([^${CUSTOM_EMOTICON_SUFFIX}]+)${CUSTOM_EMOTICON_SUFFIX}`,
+            "g",
+        );
+        return html.replace(markerPattern, (_marker, src: string, text: string) =>
+            customEmoticonHtml(decodeURIComponent(src), decodeURIComponent(text)),
+        );
+    }
+
     const md = mdSerialize(model);
-    return htmlSerializeFromMdIfNeeded(md, { forceHTML });
+    const html = htmlSerializeFromMdIfNeeded(md, { forceHTML: forceHTML || hasCustomEmoticon });
+    if (!html || !hasCustomEmoticon) return html;
+
+    const markerPattern = new RegExp(
+        `${CUSTOM_EMOTICON_PREFIX}([^:]+):([^${CUSTOM_EMOTICON_SUFFIX}]+)${CUSTOM_EMOTICON_SUFFIX}`,
+        "g",
+    );
+    return html.replace(markerPattern, (_marker, src: string, text: string) =>
+        customEmoticonHtml(decodeURIComponent(src), decodeURIComponent(text)),
+    );
 }
 
 export function htmlSerializeFromMdIfNeeded(md: string, { forceHTML = false } = {}): string | undefined {
@@ -179,6 +218,8 @@ export function textSerialize(model: EditorModel): string {
                 // See https://github.com/vector-im/element-web/issues/16660
                 return text + part.resourceId;
             case Type.UserPill:
+                return text + part.text;
+            case Type.CustomEmoticon:
                 return text + part.text;
         }
     }, "");

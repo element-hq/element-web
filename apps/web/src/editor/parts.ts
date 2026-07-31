@@ -19,6 +19,7 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
 import SettingsStore from "../settings/SettingsStore";
 import { getFirstGrapheme, graphemeSegmenter } from "../utils/strings";
+import { mediaFromMxc } from "../customisations/Media";
 
 const REGIONAL_EMOJI_SEPARATOR = String.fromCodePoint(0x200b);
 
@@ -33,7 +34,15 @@ interface ISerializedPillPart {
     resourceId?: string;
 }
 
-export type SerializedPart = ISerializedPart | ISerializedPillPart;
+interface ISerializedCustomEmoticonPart {
+    type: Type.CustomEmoticon;
+    /** Plain-text fallback, normally a Matrix shortcode such as `:wave:`. */
+    text: string;
+    /** The Matrix media URI included in `data-mx-emoticon` HTML. */
+    src: string;
+}
+
+export type SerializedPart = ISerializedPart | ISerializedPillPart | ISerializedCustomEmoticonPart;
 
 export enum Type {
     Plain = "plain",
@@ -44,6 +53,7 @@ export enum Type {
     RoomPill = "room-pill",
     AtRoomPill = "at-room-pill",
     PillCandidate = "pill-candidate",
+    CustomEmoticon = "custom-emoticon",
 }
 
 interface IBasePart {
@@ -76,7 +86,13 @@ interface IPillPart extends Omit<IBasePart, "type" | "resourceId"> {
     resourceId: string;
 }
 
-export type Part = IBasePart | IPillCandidatePart | IPillPart;
+interface ICustomEmoticonPart extends Omit<IBasePart, "type" | "serialize"> {
+    type: Type.CustomEmoticon;
+    src: string;
+    serialize(): ISerializedCustomEmoticonPart;
+}
+
+export type Part = IBasePart | IPillCandidatePart | IPillPart | ICustomEmoticonPart;
 
 abstract class BasePart {
     protected _text: string;
@@ -417,6 +433,67 @@ export class EmojiPart extends BasePart implements IBasePart {
     }
 }
 
+/**
+ * A Matrix inline custom emoji. It is deliberately an atomic editor node: the
+ * visible shortcode remains the plaintext fallback while the formatted body
+ * carries the mxc URI in `data-mx-emoticon`.
+ */
+export class CustomEmoticonPart extends BasePart implements ICustomEmoticonPart {
+    public constructor(
+        public readonly src: string,
+        text: string,
+        private readonly client: MatrixClient,
+    ) {
+        super(text);
+    }
+
+    protected acceptsInsertion(): boolean {
+        return false;
+    }
+
+    protected acceptsRemoval(): boolean {
+        return false;
+    }
+
+    public toDOMNode(): Node {
+        const image = document.createElement("img");
+        image.className = "mx_CustomEmoticon";
+        image.setAttribute("data-mx-emoticon", "");
+        image.setAttribute("contenteditable", "false");
+        image.src = mediaFromMxc(this.src, this.client).getThumbnailOfSourceHttp(32, 32, "scale") ?? this.src;
+        image.alt = this.text;
+        image.title = this.text;
+        return image;
+    }
+
+    public updateDOMNode(node: HTMLImageElement): void {
+        const httpSrc = mediaFromMxc(this.src, this.client).getThumbnailOfSourceHttp(32, 32, "scale") ?? this.src;
+        if (node.src !== httpSrc) node.src = httpSrc;
+        if (node.alt !== this.text) node.alt = this.text;
+        if (node.title !== this.text) node.title = this.text;
+    }
+
+    public canUpdateDOMNode(node: HTMLImageElement): boolean {
+        return node.nodeType === Node.ELEMENT_NODE && node.nodeName === "IMG" && node.hasAttribute("data-mx-emoticon");
+    }
+
+    public serialize(): ISerializedCustomEmoticonPart {
+        return { type: Type.CustomEmoticon, text: this.text, src: this.src };
+    }
+
+    public get type(): Type.CustomEmoticon {
+        return Type.CustomEmoticon;
+    }
+
+    public get canEdit(): boolean {
+        return false;
+    }
+
+    public get acceptsCaret(): boolean {
+        return false;
+    }
+}
+
 class RoomPillPart extends PillPart {
     public constructor(
         resourceId: string,
@@ -606,6 +683,8 @@ export class PartCreator {
                 return part.resourceId ? this.roomPill(part.resourceId) : undefined;
             case Type.UserPill:
                 return part.resourceId ? this.userPill(part.text, part.resourceId) : undefined;
+            case Type.CustomEmoticon:
+                return part.src.startsWith("mxc://") ? this.customEmoticon(part.src, part.text) : undefined;
         }
     }
 
@@ -619,6 +698,10 @@ export class PartCreator {
 
     public emoji(text: string): EmojiPart {
         return new EmojiPart(text);
+    }
+
+    public customEmoticon(src: string, text: string): CustomEmoticonPart {
+        return new CustomEmoticonPart(src, text, this.client);
     }
 
     public pillCandidate(text: string): PillCandidatePart {

@@ -57,6 +57,7 @@ export const transformTags: NonNullable<IOptions["transformTags"]> = {
         return { tagName, attribs };
     },
     "img": function (tagName: string, attribs: sanitizeHtml.Attributes) {
+        const isEmoticon = Object.hasOwn(attribs, "data-mx-emoticon");
         let src = attribs.src;
         // Strip out imgs that aren't `mxc` here instead of using allowedSchemesByTag
         // because transformTags is used _before_ we filter by allowedSchemesByTag and
@@ -76,13 +77,16 @@ export const transformTags: NonNullable<IOptions["transformTags"]> = {
             return { tagName, attribs: {} };
         }
 
-        const requestedWidth = Number(attribs.width);
-        const requestedHeight = Number(attribs.height);
+        const requestedWidth = isEmoticon ? 32 : Number(attribs.width);
+        const requestedHeight = isEmoticon ? 32 : Number(attribs.height);
         const width = Math.min(requestedWidth || 800, 800);
         const height = Math.min(requestedHeight || 600, 600);
         // specify width/height as max values instead of absolute ones to allow object-fit to do its thing
         // we only allow our own styles for this tag so overwrite the attribute
         attribs.style = `max-width: ${width}px; max-height: ${height}px;`;
+        if (isEmoticon) {
+            attribs.style += "width: 1.25em; height: 1.25em; vertical-align: -0.25em; object-fit: contain;";
+        }
         if (requestedWidth) {
             attribs.style += "width: 100%;";
         }
@@ -193,7 +197,7 @@ export const sanitizeHtmlParams: IOptions = {
         div: ["data-mx-maths"],
         a: ["href", "name", "target", "rel"], // remote target: custom to matrix
         // img tags also accept width/height, we just map those to max-width & max-height during transformation
-        img: ["src", "alt", "title", "style"],
+        img: ["src", "alt", "title", "style", "data-mx-emoticon"],
         ol: ["start"],
         code: ["class"], // We don't actually allow all classes, we filter them in transformTags
     },

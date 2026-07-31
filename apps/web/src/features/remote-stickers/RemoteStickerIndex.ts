@@ -53,6 +53,15 @@ const isMxc = (url?: string): url is string => Boolean(url?.startsWith("mxc://")
 const isHttp = (url?: string): url is string => Boolean(url && /^https?:\/\//i.test(url));
 const findUrl = (urls: Array<string | undefined>): string | undefined => urls.find((url) => isMxc(url) || isHttp(url));
 
+const toStickerFile = async (client: MatrixClient, sourceUrl: string, sticker: RemoteSticker): Promise<File> => {
+    const response = isMxc(sourceUrl) ? await mediaFromMxc(sourceUrl, client).downloadSource() : await fetch(sourceUrl);
+    if (!response.ok) throw new Error(`下载云端表情失败（${response.status}）`);
+    const blob = await response.blob();
+    return new File([blob], sticker.fileName || stickerName(sticker), {
+        type: sticker.mimeType || blob.type || "application/octet-stream",
+    });
+};
+
 export const getRemoteStickerIndexUrl = (): string | undefined =>
     SdkConfig.get("remote_sticker_index_url")?.trim() || undefined;
 
@@ -151,16 +160,14 @@ export const sendRemoteSticker = async (
     };
     const content: IContent = { body: stickerName(sticker), info };
 
-    if (isMxc(sourceUrl)) {
+    const targetEncrypted = Boolean(await room.client.getCrypto()?.isEncryptionEnabledInRoom(room.roomId));
+    if (isMxc(sourceUrl) && !targetEncrypted) {
         content.url = sourceUrl;
     } else {
-        const response = await fetch(sourceUrl);
-        if (!response.ok) throw new Error(`下载云端表情失败（${response.status}）`);
-        const blob = await response.blob();
-        const file = new File([blob], sticker.fileName || stickerName(sticker), {
-            type: sticker.mimeType || blob.type || "application/octet-stream",
-        });
-        Object.assign(content, await uploadFile(room.client, room.roomId, file));
+        Object.assign(
+            content,
+            await uploadFile(room.client, room.roomId, await toStickerFile(room.client, sourceUrl, sticker)),
+        );
     }
 
     // Stickers are their own event type, so the composer cannot add this relation
@@ -174,4 +181,25 @@ export const sendRemoteSticker = async (
         (actualRoomId) => room.client.sendEvent(actualRoomId, threadId ?? null, EventType.Sticker, content as never),
         room.client,
     );
+};
+
+/**
+ * Resolve a cloud item to an mxc URI for Matrix's `data-mx-emoticon` markup.
+ * Encrypted media attachments cannot be referenced by HTML alone because the
+ * attachment decryption metadata lives in `file`; callers must use a sticker
+ * event in that case rather than leaking an unusable encrypted mxc URI.
+ */
+export const prepareRemoteEmoticon = async (
+    room: Room,
+    sticker: RemoteSticker,
+): Promise<{ src: string; text: string }> => {
+    const sourceUrl = stickerMediaUrl(sticker);
+    if (!sourceUrl) throw new Error("此云端表情没有可发送的媒体地址");
+    if (isMxc(sourceUrl)) return { src: sourceUrl, text: `:${stickerName(sticker)}:` };
+
+    const uploaded = await uploadFile(room.client, room.roomId, await toStickerFile(room.client, sourceUrl, sticker));
+    if (!uploaded.url?.startsWith("mxc://")) {
+        throw new Error("加密房间中的云端表情会作为贴纸发送，以保持媒体加密");
+    }
+    return { src: uploaded.url, text: `:${stickerName(sticker)}:` };
 };

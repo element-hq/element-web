@@ -4,7 +4,7 @@ Copyright 2026 Element contributors
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 */
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 
 import AccessibleButton from "../elements/AccessibleButton";
@@ -12,6 +12,7 @@ import {
     getRemoteStickerIndexUrl,
     getRemoteStickerPackOrder,
     loadRemoteStickerIndex,
+    prepareRemoteEmoticon,
     sendRemoteSticker,
     setRemoteStickerPackOrder,
     stickerMediaUrl,
@@ -22,20 +23,25 @@ import {
     type RemoteStickerIndex,
 } from "../../../features/remote-stickers/RemoteStickerIndex";
 
+export type RemoteStickerAction = "auto" | "emoticon" | "sticker";
+
 interface Props {
     room: Room;
     threadId?: string | null;
     replyToEvent?: MatrixEvent;
+    onInsertEmoticon: (emoticon: { src: string; text: string }) => void;
     onSent: () => void;
 }
 
-const RemoteStickerTab: React.FC<Props> = ({ room, threadId, replyToEvent, onSent }) => {
+const RemoteStickerTab: React.FC<Props> = ({ room, threadId, replyToEvent, onInsertEmoticon, onSent }) => {
     const [index, setIndex] = useState<RemoteStickerIndex>();
     const [query, setQuery] = useState("");
     const [pack, setPack] = useState("all");
     const [error, setError] = useState<string>();
     const [sending, setSending] = useState<string>();
     const [packOrder, setPackOrder] = useState(getRemoteStickerPackOrder);
+    const [action, setAction] = useState<RemoteStickerAction>("auto");
+    const composerWasFocused = useRef(false);
 
     useEffect(() => {
         let cancelled = false;
@@ -95,6 +101,16 @@ const RemoteStickerTab: React.FC<Props> = ({ room, threadId, replyToEvent, onSen
                     </option>
                 ))}
             </select>
+            <select
+                className="mx_RemoteStickerTab_pack"
+                value={action}
+                aria-label="云端表情发送方式"
+                onChange={(event) => setAction(event.target.value as RemoteStickerAction)}
+            >
+                <option value="auto">自动</option>
+                <option value="emoticon">插入表情</option>
+                <option value="sticker">发送贴纸</option>
+            </select>
             {pack !== "all" && (
                 <span>
                     <AccessibleButton onClick={() => movePack(-1)} title="上移表情包">
@@ -114,12 +130,25 @@ const RemoteStickerTab: React.FC<Props> = ({ room, threadId, replyToEvent, onSen
                             className="mx_RemoteStickerTab_item"
                             title={stickerName(sticker)}
                             disabled={sending === id}
+                            onMouseDown={() => {
+                                composerWasFocused.current = Boolean(
+                                    document.activeElement?.closest(
+                                        ".mx_BasicMessageComposer_input, .mx_WysiwygComposer, [data-testid='basicmessagecomposer']",
+                                    ),
+                                );
+                            }}
                             onClick={async () => {
                                 setSending(id);
                                 setError(undefined);
                                 try {
-                                    await sendRemoteSticker(room, threadId, sticker, replyToEvent);
-                                    onSent();
+                                    const shouldInsert =
+                                        action === "emoticon" || (action === "auto" && composerWasFocused.current);
+                                    if (shouldInsert) {
+                                        onInsertEmoticon(await prepareRemoteEmoticon(room, sticker));
+                                    } else {
+                                        await sendRemoteSticker(room, threadId, sticker, replyToEvent);
+                                        onSent();
+                                    }
                                 } catch (cause) {
                                     setError(cause instanceof Error ? cause.message : "发送云端表情失败");
                                 } finally {

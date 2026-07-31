@@ -556,6 +556,15 @@ export class MessageComposer extends React.Component<IProps, IState> {
         });
     };
 
+    private onInsertEmoticon = (emoticon: { src: string; text: string }): void => {
+        dis.dispatch<ComposerInsertPayload>({
+            action: Action.ComposerInsert,
+            text: emoticon.text,
+            customEmoticon: emoticon,
+            timelineRenderingType: this.context.timelineRenderingType,
+        });
+    };
+
     public render(): React.ReactNode {
         let leftIcon: false | JSX.Element = false;
         if (!this.state.isWysiwygLabEnabled) {
@@ -690,6 +699,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                 replyToEvent={this.props.replyToEvent}
                 isStickerPickerOpen={this.state.isStickerPickerOpen}
                 setStickerPickerOpen={this.setStickerPickerOpen}
+                onInsertEmoticon={this.onInsertEmoticon}
                 onStickerSent={this.onStickerSent}
                 menuPosition={menuPosition}
                 key="stickers"
