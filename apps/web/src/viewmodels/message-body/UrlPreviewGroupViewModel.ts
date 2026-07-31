@@ -18,7 +18,6 @@ import { PosthogAnalytics } from "../../PosthogAnalytics";
 import { isPermalinkHost } from "../../utils/permalinks/Permalinks";
 import { UrlPreviewFetcher } from "../../utils/UrlPreviewFetcher";
 import { type RoomMessageEventContent } from "../../../@types/url-preview";
-import { useSettingValue } from "../../hooks/useSettings";
 import SettingsStore from "../../settings/SettingsStore";
 
 // From https://github.com/matrix-org/matrix-spec-proposals/pull/4095
@@ -49,7 +48,8 @@ export interface UrlPreviewGroupViewModelProps {
 
 export class UrlPreviewGroupViewModel
     extends BaseViewModel<UrlPreviewGroupViewSnapshot, UrlPreviewGroupViewModelProps>
-    implements UrlPreviewGroupViewActions {
+    implements UrlPreviewGroupViewActions
+{
     /**
      * Determine if an anchor element can be rendered into a preview.
      * If it can, return the value of `href`
@@ -157,18 +157,6 @@ export class UrlPreviewGroupViewModel
      * for the previously-calculated links.
      */
     private async computeSnapshot(): Promise<void> {
-        // MSC4095: an empty bundled previews array means the sender opted out of previews.
-        const bundledLinkPreviews = this.props.mxEvent.getContent()[BUNDLED_LINK_PREVIEWS];
-        if (Array.isArray(bundledLinkPreviews) && bundledLinkPreviews.length === 0) {
-            this.snapshot.merge({
-                previews: [],
-                totalPreviewCount: 0,
-                previewsLimited: false,
-                overPreviewLimit: false,
-            });
-            return;
-        }
-
         const loadMedia = this.visibility === PreviewVisibility.Visible;
         let previews: (UrlPreview | null)[] | undefined;
 
@@ -210,7 +198,7 @@ export class UrlPreviewGroupViewModel
         const previewBundle = this.props.mxEvent.getContent<RoomMessageEventContent>()["com.beeper.linkpreviews"];
 
         if (urlPreviewBundleEnabled && previewBundle !== undefined) {
-            this.links = previewBundle.map(entry => entry.matched_url);
+            this.links = previewBundle.map((entry) => entry.matched_url);
             return this.computeSnapshot();
         }
 

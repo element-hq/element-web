@@ -23,6 +23,7 @@ export interface MessageComposerUrlPreviewViewModelProps {
     showTooltips: boolean;
     urlPreviewBundle: boolean;
     content?: string;
+    cachedEntries?: Map<string, MessageComposerUrlPreviewSnapshotEntry>;
 }
 
 export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
@@ -49,13 +50,14 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
      */
     private content: string;
 
-    private readonly previewCache: Map<string, MessageComposerUrlPreviewSnapshotEntry> = new Map();
+    private readonly previewCache: Map<string, MessageComposerUrlPreviewSnapshotEntry>;
 
     public constructor(props: MessageComposerUrlPreviewViewModelProps) {
         super(props, { entries: [], content: props.content ?? "" });
         this.urlPreviewVisible = props.visible;
         this.fetcher = new UrlPreviewFetcher(props.client, Date.now(), props.showTooltips);
         this.content = this.snapshot.current.content;
+        this.previewCache = props.cachedEntries ?? new Map();
     }
 
     public static linksIn(content: string): Set<string> {

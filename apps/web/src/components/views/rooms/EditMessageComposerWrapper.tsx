@@ -4,14 +4,22 @@ import { MatrixClientProps } from "../../../contexts/MatrixClientContext";
 import { useSettingValue } from "../../../hooks/useSettings";
 import EditorStateTransfer from "../../../utils/EditorStateTransfer";
 import { EditWysiwygComposer } from "./wysiwyg_composer";
-import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
-import { useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
+import {
+    MessageComposerUrlPreviewViewModel,
+    MessageComposerUrlPreviewViewModelProps,
+} from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
+import {
+    MessageComposerUrlPreviewSnapshotEntry,
+    MessageComposerUrlPreviewSnapshotEntryState,
+    useCreateAutoDisposedViewModel,
+} from "@element-hq/web-shared-components";
 import PlatformPeg from "../../../PlatformPeg";
 import { MessageComposerUrlPreviewWrapper } from "./MessageComposerUrlPreview";
 import EditMessageComposer from "./EditMessageComposer";
 import EditorModel from "../../../editor/model";
 import { RoomMessageEventContent } from "../../../../@types/url-preview";
 import { attachUrlPreviews } from "../../../utils/messages";
+import { UrlPreviewFetcher } from "../../../utils/UrlPreviewFetcher";
 
 interface IEditMessageComposerProps extends MatrixClientProps {
     showUrlPreview: boolean;
@@ -20,17 +28,45 @@ interface IEditMessageComposerProps extends MatrixClientProps {
 }
 
 export function EditMessageComposerWrapper(props: IEditMessageComposerProps) {
-    const urlPreviewBundle = useSettingValue("feature_msc4095_url_preview_bundle");
+    const urlPreviewBundleEnabled = useSettingValue("feature_msc4095_url_preview_bundle");
+    const content = props.editState.getEvent().getContent<RoomMessageEventContent>();
+    const bundleContent = content["com.beeper.linkpreviews"];
+    const linksInMessage = MessageComposerUrlPreviewViewModel.linksIn(content.body);
+    const linksInBundle = new Set(bundleContent?.map((entry) => entry.matched_url)) ?? new Set();
 
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new MessageComposerUrlPreviewViewModel({
-                client: props.mxClient,
-                visible: props.showUrlPreview,
-                showTooltips: PlatformPeg.get()?.needsUrlTooltips() ?? true,
-                urlPreviewBundle,
-            }),
-    );
+    const vm = useCreateAutoDisposedViewModel(() => {
+        const urlPreviewFetcher = new UrlPreviewFetcher(props.mxClient, props.editState.getEvent().getTs(), true);
+        let urlVmProps: MessageComposerUrlPreviewViewModelProps = {
+            client: props.mxClient,
+            visible: props.showUrlPreview,
+            showTooltips: PlatformPeg.get()?.needsUrlTooltips() ?? true,
+            urlPreviewBundle: urlPreviewBundleEnabled,
+        };
+
+        if (urlPreviewBundleEnabled && bundleContent !== undefined) {
+            urlVmProps.cachedEntries = new Map(
+                bundleContent
+                    .map((entry): [string, MessageComposerUrlPreviewSnapshotEntry] => [
+                        entry.matched_url,
+                        {
+                            status: "loaded",
+                            preview: urlPreviewFetcher.previewFromBundle(entry),
+                            include: true,
+                            matched_url: entry.matched_url,
+                        },
+                    ])
+                    .concat(
+                        Array.from(linksInMessage)
+                            .filter((link) => !linksInBundle.has(link))
+                            .map((link): [string, MessageComposerUrlPreviewSnapshotEntry] => [
+                                link,
+                                { status: "failed", include: false, matched_url: link },
+                            ]),
+                    ),
+            );
+        }
+        return new MessageComposerUrlPreviewViewModel(urlVmProps);
+    });
 
     const onWysiwygChange = (content: string): void => {
         vm.updateWithText({ content, debounced: true });
