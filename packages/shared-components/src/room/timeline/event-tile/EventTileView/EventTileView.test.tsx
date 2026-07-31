@@ -31,6 +31,7 @@ function createProps(overrides: Partial<EventTileViewProps> = {}): EventTileView
         classNames: {
             root: "custom-root",
             line: "custom-line",
+            contextMenu: "custom-context-menu",
         },
         slots: {
             body: <span data-testid="body">Body</span>,
@@ -58,6 +59,7 @@ describe("EventTileView", () => {
         expect(line).toHaveClass("custom-line");
         expect(line).toHaveAttribute("id", "event-line-1");
         expect(getByTestId("context-menu")).toBeInTheDocument();
+        expect(getByTestId("context-menu")).toHaveClass("custom-context-menu");
     });
 
     it("renders the thread layout in the original slot order", () => {
@@ -105,7 +107,7 @@ describe("EventTileView", () => {
                     classNames: {
                         details: "legacy-details",
                         avatar: "legacy-avatar",
-                        threadListActionBar: "legacy-thread-action-bar",
+                        actionBar: "legacy-thread-action-bar",
                     },
                     root: {
                         ...renderState,
@@ -139,13 +141,13 @@ describe("EventTileView", () => {
         expect(getByTestId("receipt").parentElement).toBe(root);
 
         if (shape === "Notification") {
-            const avatar = getByTestId("room-avatar").parentElement!;
+            const avatar = getByTestId("room-avatar");
             expect(avatar.parentElement).toBe(root);
             expect(avatar).toHaveClass("legacy-avatar");
             expect(queryByTestId("action-bar")).not.toBeInTheDocument();
         } else {
             const avatar = getByTestId("avatar");
-            const actionBar = getByTestId("action-bar").parentElement!;
+            const actionBar = getByTestId("action-bar");
             expect(avatar.parentElement).toBe(root);
             expect(actionBar.parentElement).toBe(root);
             expect(actionBar).toHaveClass("legacy-thread-action-bar");
@@ -176,7 +178,7 @@ describe("EventTileView", () => {
             />,
         );
         const root = container.firstElementChild!;
-        const link = getByTestId("sender").parentElement!.parentElement!;
+        const link = getByTestId("sender").parentElement?.parentElement!;
         const senderDetails = getByTestId("sender").parentElement!;
 
         expect(link).toHaveAttribute("href", renderState.permalink);
@@ -189,6 +191,18 @@ describe("EventTileView", () => {
         fireEvent.contextMenu(senderDetails);
         expect(onPermalinkClick).toHaveBeenCalledOnce();
         expect(onPermalinkContextMenu).toHaveBeenCalledOnce();
+    });
+
+    it("falls back to a safe file permalink", () => {
+        const { getByTestId } = render(
+            <EventTileView
+                {...createProps({
+                    root: { ...renderState, permalink: undefined, data: { ...renderState.data, shape: "File" } },
+                })}
+            />,
+        );
+
+        expect(getByTestId("body").parentElement?.previousElementSibling).toHaveAttribute("href", "#");
     });
 
     it.each(["group", "irc"] as const)("renders the %s timeline layout", (layout) => {
@@ -220,7 +234,12 @@ describe("EventTileView", () => {
         expect(line).toContainElement(getByTestId("action-bar"));
 
         if (layout === "irc") {
-            expect(root.firstElementChild).toBe(getByTestId("timestamp"));
+            expect(root.children[0]).toContainElement(getByTestId("timestamp"));
+            expect(root.children[1]).toContainElement(getByTestId("padlock"));
+            expect(root.children[2]).toContainElement(getByTestId("avatar"));
+            expect(root.children[3]).toContainElement(getByTestId("sender"));
+            expect(root.children[4]).toBe(line);
+            expect(root.children[5]).toContainElement(getByTestId("receipt"));
             expect(getByTestId("padlock").parentElement).toBe(root);
             expect(getByTestId("footer").parentElement).toBe(line);
             expect(getByTestId("thread-info").parentElement).toBe(line);
@@ -255,6 +274,21 @@ describe("EventTileView", () => {
         );
         fireEvent.click(previewContainer.firstElementChild!);
         expect(onClick).toHaveBeenCalledOnce();
+    });
+
+    it("does not attach a context menu handler to preview lines", () => {
+        const onContextMenu = vi.fn();
+        const { getByTestId } = render(
+            <EventTileView
+                {...createProps({
+                    root: { ...renderState, data: { ...renderState.data, shape: "Notification" } },
+                    onContextMenu,
+                })}
+            />,
+        );
+
+        fireEvent.contextMenu(getByTestId("body").parentElement!);
+        expect(onContextMenu).not.toHaveBeenCalled();
     });
 
     it("forwards the root ref and supports a custom root element", () => {

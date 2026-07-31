@@ -50,7 +50,18 @@ export interface EventTileViewClassNames {
     avatar?: string;
     senderDetails?: string;
     senderDetailsLink?: string;
-    threadListActionBar?: string;
+    body?: string;
+    contextMenu?: string;
+    notificationRoomLabel?: string;
+    notificationBadge?: string;
+    sender?: string;
+    timestamp?: string;
+    padlock?: string;
+    replyChain?: string;
+    actionBar?: string;
+    footer?: string;
+    threadInfo?: string;
+    receipt?: string;
 }
 
 /** Render-ready children supplied by the application integration layer. */

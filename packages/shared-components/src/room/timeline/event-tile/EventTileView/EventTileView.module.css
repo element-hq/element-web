@@ -5,8 +5,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-/* Structural baseline for shared rendering and Storybook. */
+/* Shared root and slot-boundary baseline. */
 .root {
+    --event-tile-group-gutter: 64px;
+    --event-tile-preview-offset: 48px;
+
     position: relative;
     flex-shrink: 0;
     max-width: 100%;
@@ -14,10 +17,27 @@
     padding-top: 18px;
 }
 
-.line {
+.line,
+.sender,
+.body,
+.contextMenu,
+.notificationRoomLabel,
+.notificationBadge,
+.timestamp,
+.padlock,
+.replyChain,
+.actionBar,
+.footer,
+.threadInfo,
+.receipt {
     min-width: 0;
 }
 
+.contextMenu {
+    z-index: 1;
+}
+
+/* Shared structural containers. */
 .senderDetails {
     display: flex;
     align-items: flex-start;
@@ -25,13 +45,202 @@
 
 .details {
     display: flex;
+    width: 100%;
     align-items: center;
+    justify-content: space-between;
+    gap: var(--cpd-space-2x, 8px);
 }
 
 .avatar {
     user-select: none;
 }
 
-.threadListActionBar {
+/* Group layout. */
+.root[data-layout="group"] .line {
+    position: relative;
+    padding-block: 1px 3px;
+    padding-inline-start: var(--event-tile-group-gutter);
+    line-height: 22px;
+}
+
+.root[data-layout="group"] .sender {
+    max-width: calc(100% - var(--event-tile-group-gutter));
+    margin-inline-start: var(--event-tile-group-gutter);
+    line-height: 20px;
+}
+
+.root[data-layout="group"] .avatar {
+    position: absolute;
+    z-index: 9;
+    inset-block-start: 14px;
+    inset-inline-start: var(--cpd-space-2x, 8px);
+}
+
+.root[data-layout="group"] .timestamp {
+    position: absolute;
+    inset-inline-start: 0;
+    text-align: center;
+}
+
+.root[data-layout="group"] .replyChain,
+.root[data-layout="group"] .threadInfo {
+    margin-inline-start: var(--event-tile-group-gutter);
+}
+
+.root[data-layout="group"] .footer {
+    margin: var(--cpd-space-1x, 4px) 0 var(--cpd-space-1x, 4px) var(--event-tile-group-gutter);
+}
+
+.root[data-layout="group"] .receipt {
+    margin-inline-end: 10px;
+}
+
+/* IRC layout. */
+.root[data-layout="irc"] {
     display: flex;
+    align-items: flex-start;
+    padding-top: 0;
+}
+
+.root[data-layout="irc"] > * {
+    margin-inline-end: var(--cpd-space-2x, 8px);
+}
+
+.root[data-layout="irc"] .timestamp {
+    min-width: var(--MessageTimestamp-width, 48px);
+    flex-shrink: 0;
+    text-align: end;
+}
+
+.root[data-layout="irc"] .avatar {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    position: relative;
+    height: var(--irc-line-height, 22px);
+}
+
+.root[data-layout="irc"] .sender {
+    flex-shrink: 0;
+}
+
+.root[data-layout="irc"] .padlock,
+.root[data-layout="irc"] .footer,
+.root[data-layout="irc"] .threadInfo {
+    flex-shrink: 0;
+}
+
+.root[data-layout="irc"] .receipt {
+    flex-shrink: 0;
+}
+
+.root[data-layout="irc"] .line {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
+    padding-block: 1px;
+}
+
+.root[data-layout="irc"] .footer {
+    margin-block: var(--cpd-space-1-5x, 6px);
+}
+
+/* Bubble layout. */
+.root[data-layout="bubble"] {
+    max-width: unset;
+    margin-inline: var(--EventTile_bubble-margin-inline-start, 49px) var(--EventTile_bubble-margin-inline-end, 60px);
+    padding-top: 0;
+}
+
+.root[data-layout="bubble"] .line {
+    position: relative;
+    width: fit-content;
+    max-width: 70%;
+    line-height: 18px;
+}
+
+.root[data-layout="bubble"][data-self="true"] .line {
+    margin-inline-start: auto;
+}
+
+.root[data-layout="bubble"] .replyChain,
+.root[data-layout="bubble"] .threadInfo {
+    clear: both;
+}
+
+.root[data-layout="bubble"] .footer {
+    margin-block: var(--cpd-space-1-5x, 6px);
+    margin-inline: -9px -12px;
+}
+
+/* Notification and ThreadsList layouts. */
+.root[data-shape="Notification"],
+.root[data-shape="ThreadsList"] {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    margin-block: 13px;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+.root[data-shape="Notification"]::after,
+.root[data-shape="ThreadsList"]::after {
+    content: "";
+    position: absolute;
+    inset: auto -8px -13px 56px;
+    height: 1px;
+    background: var(--cpd-color-border-subtle, #c9ced4);
+    pointer-events: none;
+}
+
+.root[data-shape="Notification"]:last-child::after,
+.root[data-shape="ThreadsList"]:last-child::after {
+    content: unset;
+}
+
+.root[data-shape="Notification"] .details,
+.root[data-shape="ThreadsList"] .details {
+    width: calc(100% - var(--event-tile-preview-offset));
+    margin-inline-start: var(--event-tile-preview-offset);
+    overflow: hidden;
+}
+
+.root[data-shape="Notification"] .avatar,
+.root[data-shape="ThreadsList"] .avatar {
+    position: absolute;
+    inset: 8px auto auto 8px;
+}
+
+.root[data-shape="Notification"] .line,
+.root[data-shape="ThreadsList"] .line {
+    width: 100%;
+    box-sizing: border-box;
+    padding-inline-start: var(--event-tile-preview-offset);
+    padding-bottom: 0;
+}
+
+.root[data-shape="Notification"] .timestamp,
+.root[data-shape="ThreadsList"] .timestamp {
+    overflow: hidden;
+    margin-inline-start: auto;
+    text-overflow: ellipsis;
+}
+
+.root[data-shape="Notification"]:hover,
+.root[data-shape="ThreadsList"]:hover {
+    background-color: var(--cpd-color-bg-subtle-primary, #f0f1f2);
+}
+
+/* ThreadsList action-bar interaction. */
+.root[data-shape="ThreadsList"] .actionBar {
+    visibility: hidden;
+}
+
+.root[data-shape="ThreadsList"]:hover .actionBar,
+.root[data-shape="ThreadsList"]:focus-within .actionBar {
+    visibility: visible;
 }
