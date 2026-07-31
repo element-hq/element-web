@@ -17,6 +17,11 @@ import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
 interface IProps {
     avatarUrl?: string;
     avatarDisabled?: boolean;
+    /**
+     * Changing this value discards an avatar the user has picked but not saved, returning the
+     * preview to `avatarUrl`.
+     */
+    avatarResetKey?: number;
     name: string;
     nameDisabled?: boolean;
     topic?: string;
@@ -113,6 +118,7 @@ export const SpaceAvatar: React.FC<Pick<IProps, "avatarUrl" | "avatarDisabled" |
 const SpaceBasicSettings: React.FC<IProps> = ({
     avatarUrl,
     avatarDisabled = false,
+    avatarResetKey,
     setAvatar,
     name = "",
     nameDisabled = false,
@@ -123,7 +129,12 @@ const SpaceBasicSettings: React.FC<IProps> = ({
 }) => {
     return (
         <div className="mx_SpaceBasicSettings">
-            <SpaceAvatar avatarUrl={avatarUrl} avatarDisabled={avatarDisabled} setAvatar={setAvatar} />
+            <SpaceAvatar
+                key={avatarResetKey}
+                avatarUrl={avatarUrl}
+                avatarDisabled={avatarDisabled}
+                setAvatar={setAvatar}
+            />
 
             <Field
                 name="spaceName"
