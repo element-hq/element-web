@@ -188,6 +188,11 @@ export interface EventTileProps {
     /** Whether this is the currently selected event. */
     isSelectedEvent?: boolean;
 
+    /** Timeline multi-select mode used by the forward workflow. */
+    forwardSelectionMode?: boolean;
+    forwardSelected?: boolean;
+    onToggleForwardSelection?: (event: MatrixEvent) => void;
+
     /** Resize observer used by the parent timeline, if any. */
     resizeObserver?: ResizeObserver;
 
@@ -801,8 +806,23 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             onMouseLeave: this.onMouseLeave,
             onFocus: this.onFocusWithin,
             onBlur: this.onBlurWithin,
+            ...(this.props.forwardSelectionMode
+                ? {
+                      "onClick": this.onForwardSelectionClick,
+                      "data-forward-selected": this.props.forwardSelected || undefined,
+                  }
+                : {}),
         };
     }
+
+    private onForwardSelectionClick = (ev: MouseEvent): void => {
+        if (!this.props.forwardSelectionMode || !this.props.onToggleForwardSelection) return;
+        const target = ev.target as HTMLElement;
+        if (target.closest("button, a, input, textarea, [role='button']")) return;
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.props.onToggleForwardSelection(this.props.mxEvent);
+    };
 
     private createRenderTileProps({
         replacingEventId,
@@ -879,7 +899,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                     forExport: this.props.forExport,
                     isRedacted: this.props.isRedacted,
                 }),
-                isSelected: this.props.isSelectedEvent || !!this.state.interaction.contextMenu,
+                isSelected:
+                    this.props.isSelectedEvent || this.props.forwardSelected || !!this.state.interaction.contextMenu,
                 isLast: this.props.last,
                 isLastInSection: this.props.lastInSection,
                 isContextual: this.props.contextual,

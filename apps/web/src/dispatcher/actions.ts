@@ -268,6 +268,9 @@ export enum Action {
      */
     OpenForwardDialog = "open_forward_dialog",
 
+    /** Enter timeline mode for selecting several messages to forward. */
+    StartForwardSelection = "start_forward_selection",
+
     /**
      * Fired when the "report event" dialog needs to be opened.
      * Payload: OpenReportEventDialogPayload.

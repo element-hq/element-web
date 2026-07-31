@@ -97,6 +97,10 @@ Please see LICENSE files in the repository root for full details.
                     background-color: var(--mx_ForwardList_entry_selectedBgColor, $spacePanel-bg-color);
                 }
 
+                &.mx_ForwardList_entry_selected {
+                    background-color: color-mix(in srgb, $accent 14%, transparent);
+                }
+
                 .mx_ForwardList_roomButton {
                     display: flex;
                     margin-right: 12px;
@@ -148,5 +152,15 @@ Please see LICENSE files in the repository root for full details.
                 }
             }
         }
+    }
+
+    > .mx_ForwardDialog_selectionFooter {
+        padding-top: var(--cpd-space-3x);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--cpd-space-3x);
+        border-top: 1px solid $input-border-color;
+        color: $secondary-content;
     }
 }

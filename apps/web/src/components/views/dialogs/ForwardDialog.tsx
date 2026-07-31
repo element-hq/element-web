@@ -26,7 +26,6 @@ import { CheckCircleIcon, CircleIcon } from "@vector-im/compound-design-tokens/a
 import { AutoHideScrollbar } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
-import dis from "../../../dispatcher/dispatcher";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { Layout } from "../../../settings/enums/Layout";
 import BaseDialog from "./BaseDialog";
@@ -34,14 +33,10 @@ import { avatarUrlForUser } from "../../../Avatar";
 import EventTile from "../rooms/EventTile";
 import SearchBox from "../../structures/SearchBox";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
-import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
-import NotificationBadge from "../rooms/NotificationBadge";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { sortRoomsByRecency } from "../../../utils/room/sortRoomsByRecency";
 import QueryMatcher from "../../../autocomplete/QueryMatcher";
 import TruncatedList from "../elements/TruncatedList";
-import { Action } from "../../../dispatcher/actions";
-import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import { isLocationEvent } from "../../../utils/EventUtils";
 import { isSelfLocation, locationEventGeoUri } from "../../../utils/location";
@@ -87,80 +82,23 @@ interface ForwardItem {
 
 interface IEntryProps {
     room: Room;
-    items: ForwardItem[];
-    matrixClient: MatrixClient;
-    onFinished(this: void, success: boolean): void;
+    selected: boolean;
+    onToggle(this: void, roomId: string): void;
 }
 
-enum SendState {
-    CanSend,
-    Sending,
-    Sent,
-    Failed,
-}
-
-const Entry: React.FC<IEntryProps> = ({ room, items, matrixClient: cli, onFinished }) => {
-    const [sendState, setSendState] = useState<SendState>(SendState.CanSend);
+const Entry: React.FC<IEntryProps> = ({ room, selected, onToggle }) => {
     const [onFocus, isActive, ref] = useRovingTabIndex<HTMLDivElement>();
 
     const jumpToRoom = (ev: ButtonEvent): void => {
-        dis.dispatch<ViewRoomPayload>({
-            action: Action.ViewRoom,
-            room_id: room.roomId,
-            metricsTrigger: "WebForwardShortcut",
-            metricsViaKeyboard: ev.type !== "click",
-        });
-        onFinished(true);
+        ev.preventDefault();
+        onToggle(room.roomId);
     };
-    const send = async (): Promise<void> => {
-        setSendState(SendState.Sending);
-        try {
-            for (const { type, content } of items) {
-                if (getForwardedMediaUrl(content)) {
-                    const targetContent = await copyForwardedMedia(cli, room, content);
-                    await cli.sendEvent(room.roomId, type, targetContent);
-                } else {
-                    // Keep Element's immediate send path for non-media events.
-                    await cli.sendEvent(room.roomId, type, content);
-                }
-            }
-            setSendState(SendState.Sent);
-        } catch {
-            setSendState(SendState.Failed);
-        }
-    };
-
-    let className;
-    let disabled = false;
-    let title;
-    let icon;
-    if (sendState === SendState.CanSend) {
-        className = "mx_ForwardList_canSend";
-        if (!room.maySendMessage()) {
-            disabled = true;
-            title = _t("forward|no_perms_title");
-        }
-    } else if (sendState === SendState.Sending) {
-        className = "mx_ForwardList_sending";
-        disabled = true;
-        title = _t("forward|sending");
-        icon = <CircleIcon aria-label={title} />;
-    } else if (sendState === SendState.Sent) {
-        className = "mx_ForwardList_sent";
-        disabled = true;
-        title = _t("forward|sent");
-        icon = <CheckCircleIcon aria-label={title} />;
-    } else {
-        className = "mx_ForwardList_sendFailed";
-        title = _t("timeline|send_state_failed");
-        icon = <NotificationBadge notification={StaticNotificationState.RED_EXCLAMATION} />;
-    }
-
     const id = `mx_ForwardDialog_entry_${room.roomId}`;
     return (
         <div
             className={classnames("mx_ForwardList_entry", {
                 mx_ForwardList_entry_active: isActive,
+                mx_ForwardList_entry_selected: selected,
             })}
             aria-labelledby={`${id}_name`}
             aria-describedby={`${id}_send`}
@@ -181,19 +119,7 @@ const Entry: React.FC<IEntryProps> = ({ room, items, matrixClient: cli, onFinish
                     {room.name}
                 </span>
                 <RoomContextDetails component="span" className="mx_ForwardList_entry_detail" room={room} />
-            </AccessibleButton>
-            <AccessibleButton
-                kind={sendState === SendState.Failed ? "danger_outline" : "primary_outline"}
-                className={`mx_ForwardList_sendButton ${className}`}
-                onClick={send}
-                disabled={disabled}
-                title={title}
-                placement="top"
-                tabIndex={isActive ? 0 : -1}
-                id={`${id}_send`}
-            >
-                <div className="mx_ForwardList_sendLabel">{_t("forward|send_label")}</div>
-                {icon}
+                {selected ? <CheckCircleIcon aria-label="已选中" /> : <CircleIcon aria-label="未选中" />}
             </AccessibleButton>
         </div>
     );
@@ -304,7 +230,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, events, per
     const previewLayout = useSettingValue("layout");
     const msc3946DynamicRoomPredecessors = useSettingValue("feature_dynamic_room_predecessors");
 
-    let rooms = useMemo(
+    const allRooms = useMemo(
         () =>
             sortRoomsByRecency(
                 cli
@@ -315,15 +241,46 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, events, per
         [cli, msc3946DynamicRoomPredecessors],
     );
 
-    if (lcQuery) {
-        rooms = new QueryMatcher<Room>(rooms, {
-            keys: ["name"],
-            funcs: [(r) => filterBoolean([r.getCanonicalAlias(), ...r.getAltAliases()])],
-            shouldMatchWordsOnly: false,
-        }).match(lcQuery);
-    }
+    const rooms = lcQuery
+        ? new QueryMatcher<Room>(allRooms, {
+              keys: ["name"],
+              funcs: [(r) => filterBoolean([r.getCanonicalAlias(), ...r.getAltAliases()])],
+              shouldMatchWordsOnly: false,
+          }).match(lcQuery)
+        : allRooms;
 
     const [truncateAt, setTruncateAt] = useState(20);
+    const [selectedRoomIds, setSelectedRoomIds] = useState<string[]>([]);
+    const [sendingSelected, setSendingSelected] = useState(false);
+
+    const toggleRoom = (roomId: string): void => {
+        setSelectedRoomIds((current) =>
+            current.includes(roomId)
+                ? current.filter((selectedRoomId) => selectedRoomId !== roomId)
+                : [...current, roomId],
+        );
+    };
+
+    const sendSelected = async (): Promise<void> => {
+        // Keep previously selected rooms even when the user uses the search box
+        // before pressing Send.
+        const targetRooms = allRooms.filter((room) => selectedRoomIds.includes(room.roomId));
+        if (!targetRooms.length || sendingSelected) return;
+        setSendingSelected(true);
+        try {
+            for (const room of targetRooms) {
+                for (const { type, content } of items) {
+                    const targetContent = getForwardedMediaUrl(content)
+                        ? await copyForwardedMedia(cli, room, content)
+                        : content;
+                    await cli.sendEvent(room.roomId, type, targetContent);
+                }
+            }
+            onFinished();
+        } finally {
+            setSendingSelected(false);
+        }
+    };
 
     function overflowTile(overflowCount: number, totalCount: number): JSX.Element {
         return <OverflowTileView remaining={overflowCount} onClick={() => setTruncateAt(totalCount)} />;
@@ -335,7 +292,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, events, per
         const action = getKeyBindingsManager().getAccessibilityAction(ev);
         switch (action) {
             case KeyBindingAction.Enter: {
-                state.activeNode?.querySelector<HTMLButtonElement>(".mx_ForwardList_sendButton")?.click();
+                state.activeNode?.querySelector<HTMLButtonElement>(".mx_ForwardList_roomButton")?.click();
                 break;
             }
 
@@ -425,9 +382,8 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, events, per
                                                     <Entry
                                                         key={room.roomId}
                                                         room={room}
-                                                        items={items}
-                                                        matrixClient={cli}
-                                                        onFinished={onFinished}
+                                                        selected={selectedRoomIds.includes(room.roomId)}
+                                                        onToggle={toggleRoom}
                                                     />
                                                 ))
                                         }
@@ -441,6 +397,16 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, events, per
                     </div>
                 )}
             </RovingTabIndexProvider>
+            <div className="mx_ForwardDialog_selectionFooter">
+                <span>{selectedRoomIds.length ? `已选择 ${selectedRoomIds.length} 个目标会话` : "请选择转发目标"}</span>
+                <AccessibleButton
+                    kind="primary"
+                    onClick={sendSelected}
+                    disabled={!selectedRoomIds.length || sendingSelected}
+                >
+                    {sendingSelected ? "正在转发…" : "转发到已选会话"}
+                </AccessibleButton>
+            </div>
         </BaseDialog>
     );
 };

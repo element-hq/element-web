@@ -16,6 +16,7 @@ import { addReplyToMessageContent } from "../../utils/Reply";
 const CACHE_TTL_MS = 12 * 60 * 60 * 1000;
 const CACHE_PREFIX = "element.remote-sticker-index.v1:";
 const PACK_ORDER_PREFIX = "element.remote-sticker-pack-order.v1:";
+const DEFAULT_REMOTE_STICKER_INDEX_URL = "https://image.527012.xyz/index.json";
 
 export interface RemoteSticker {
     id?: string;
@@ -63,7 +64,7 @@ const toStickerFile = async (client: MatrixClient, sourceUrl: string, sticker: R
 };
 
 export const getRemoteStickerIndexUrl = (): string | undefined =>
-    SdkConfig.get("remote_sticker_index_url")?.trim() || undefined;
+    SdkConfig.get("remote_sticker_index_url")?.trim() || DEFAULT_REMOTE_STICKER_INDEX_URL;
 
 export const getRemoteStickerPackOrder = (): string[] => {
     const url = getRemoteStickerIndexUrl();

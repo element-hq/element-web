@@ -112,9 +112,7 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
         return (
             <span className="mx_MAudioBody">
                 <AudioPlayer playback={this.state.playback} mediaName={this.props.mxEvent.getContent().body} />
-                {this.props.mediaEventHelper && (
-                    <AudioTranscription mxEvent={this.props.mxEvent} mediaEventHelper={this.props.mediaEventHelper} />
-                )}
+                <AudioTranscription mxEvent={this.props.mxEvent} mediaEventHelper={this.props.mediaEventHelper} />
                 {this.showFileBody && renderMBody({ ...this.props, showFileInfo: false }, FileBodyFactory)}
             </span>
         );

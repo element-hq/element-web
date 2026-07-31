@@ -21,8 +21,8 @@ import {
     MicOnIcon,
     OverflowHorizontalIcon,
     PollsIcon,
-    StickerIcon,
     TextFormattingIcon,
+    AttachmentIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { UploadButton, useViewModel } from "@element-hq/web-shared-components";
 
@@ -44,6 +44,7 @@ import { filterBoolean } from "../../../utils/arrays";
 import { useSettingValue } from "../../../hooks/useSettings";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
+import { type TimelineRenderingType } from "../../../contexts/RoomContext.tsx";
 import { useRoomUploadViewModel } from "../../../viewmodels/room/RoomUploadViewModel.tsx";
 import MessageNotebookDialog from "../dialogs/MessageNotebookDialog";
 
@@ -68,7 +69,12 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
     const matrixClient = useContext(MatrixClientContext);
     const roomUploadVM = useRoomUploadViewModel();
     const roomUploadSnapshot = useViewModel(roomUploadVM);
-    const { room, narrow, replyToEvent } = useScopedRoomContext("room", "narrow", "replyToEvent");
+    const { room, narrow, replyToEvent, timelineRenderingType } = useScopedRoomContext(
+        "room",
+        "narrow",
+        "replyToEvent",
+        "timelineRenderingType",
+    );
 
     const isWysiwygLabEnabled = useSettingValue("feature_wysiwyg_composer");
 
@@ -87,7 +93,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
                     onClick={props.onComposerModeClick}
                 />
             ) : (
-                emojiButton(props)
+                emojiButton(props, room, replyToEvent, timelineRenderingType)
             ),
         ];
         moreButtons = [
@@ -100,7 +106,6 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
                     key={type}
                 />
             )),
-            showStickersButton(props),
             voiceRecordingButton(props, narrow),
             props.showPollsButton ? pollButton(room, props.relation, replyToEvent) : null,
             notebookButton(roomUploadVM, props.toggleButtonMenu),
@@ -115,12 +120,11 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
                     onClick={props.onComposerModeClick}
                 />
             ) : (
-                emojiButton(props)
+                emojiButton(props, room, replyToEvent, timelineRenderingType)
             ),
             <UploadButton key="upload" vm={roomUploadVM} />,
         ];
         moreButtons = [
-            showStickersButton(props),
             voiceRecordingButton(props, narrow),
             props.showPollsButton ? pollButton(room, props.relation) : null,
             notebookButton(roomUploadVM),
@@ -165,13 +169,22 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
     );
 };
 
-function emojiButton(props: IProps): ReactElement {
+function emojiButton(
+    props: IProps,
+    room: Room,
+    replyToEvent: MatrixEvent | undefined,
+    timelineRenderingType: TimelineRenderingType,
+): ReactElement {
     return (
         <EmojiButton
             key="emoji_button"
             addEmoji={props.addEmoji}
             menuPosition={props.menuPosition}
             className="mx_MessageComposer_button"
+            room={room}
+            relation={props.relation}
+            replyToEvent={replyToEvent}
+            timelineRenderingType={timelineRenderingType}
         />
     );
 }
@@ -181,28 +194,15 @@ function notebookButton(roomUploadVM: ReturnType<typeof useRoomUploadViewModel>,
         <IconizedContextMenuOption
             key="message_notebook"
             label="聊天记事本"
+            icon={<AttachmentIcon />}
             onClick={() => {
                 closeMenu?.();
                 Modal.createDialog(MessageNotebookDialog, {
-                    onSend: (file: File) => roomUploadVM.initiateViaInputFiles([file]),
+                    onSend: (file: File) => roomUploadVM.initiateViaInputFiles([file], true),
                 });
             }}
         />
     );
-}
-
-function showStickersButton(props: IProps): ReactElement | null {
-    return props.showStickersButton ? (
-        <CollapsibleButton
-            id="stickersButton"
-            key="controls_stickers"
-            className="mx_MessageComposer_button"
-            onClick={() => props.setStickerPickerOpen(!props.isStickerPickerOpen)}
-            title={props.isStickerPickerOpen ? _t("composer|close_sticker_picker") : _t("common|sticker")}
-        >
-            <StickerIcon />
-        </CollapsibleButton>
-    ) : null;
 }
 
 function voiceRecordingButton(props: IProps, narrow: boolean): ReactElement | null {

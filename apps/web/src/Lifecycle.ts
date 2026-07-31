@@ -73,7 +73,9 @@ import { CallStore } from "./stores/CallStore.ts";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
-const BUBBLE_LAYOUT_MIGRATION_KEY = "element_custom_bubble_layout_v1";
+// v2 retries the one-off migration for accounts that visited before the
+// deployment config carried the Bubble default.
+const BUBBLE_LAYOUT_MIGRATION_KEY = "element_custom_bubble_layout_v2";
 const E2EE_URL_PREVIEWS_MIGRATION_KEY = "element_custom_e2ee_url_previews_v1";
 
 /**

@@ -19,14 +19,18 @@ const MessageNotebookDialog: React.FC<Props> = ({ onFinished, onSend }) => {
     const [name, setName] = useState("聊天记事本.txt");
     const [body, setBody] = useState("");
     const [sending, setSending] = useState(false);
+    const [error, setError] = useState<string>();
     const submit = async (event: React.FormEvent): Promise<void> => {
         event.preventDefault();
         if (!body.trim() || sending) return;
         setSending(true);
+        setError(undefined);
         try {
             const filename = name.trim().endsWith(".txt") ? name.trim() : `${name.trim() || "聊天记事本"}.txt`;
-            await onSend(new File([body], filename, { type: "text/plain;charset=utf-8" }));
+            await onSend(new File([body], filename, { type: "text/plain" }));
             onFinished();
+        } catch (cause) {
+            setError(cause instanceof Error ? cause.message : "记事本文件发送失败，请重试。");
         } finally {
             setSending(false);
         }
@@ -42,6 +46,11 @@ const MessageNotebookDialog: React.FC<Props> = ({ onFinished, onSend }) => {
                     rows={12}
                     autoFocus
                 />
+                {error && (
+                    <p className="mx_MessageNotebookDialog_error" role="alert">
+                        {error}
+                    </p>
+                )}
                 <AccessibleButton
                     element="button"
                     kind="primary"

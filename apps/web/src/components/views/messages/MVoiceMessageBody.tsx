@@ -18,6 +18,7 @@ import { PlaybackQueue } from "../../../audio/PlaybackQueue";
 import { type Playback } from "../../../audio/Playback";
 import RoomContext from "../../../contexts/RoomContext";
 import { FileBodyFactory, renderMBody } from "./MBodyFactory";
+import AudioTranscription from "./AudioTranscription";
 
 export default class MVoiceMessageBody extends MAudioBody {
     public static contextType = RoomContext;
@@ -54,6 +55,7 @@ export default class MVoiceMessageBody extends MAudioBody {
         return (
             <span className="mx_MVoiceMessageBody">
                 <RecordingPlayback playback={this.state.playback} />
+                <AudioTranscription mxEvent={this.props.mxEvent} mediaEventHelper={this.props.mediaEventHelper} />
                 {this.showFileBody && renderMBody({ ...this.props, showFileInfo: false }, FileBodyFactory)}
             </span>
         );

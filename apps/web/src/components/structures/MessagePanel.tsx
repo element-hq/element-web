@@ -46,6 +46,8 @@ import Spinner from "../views/elements/Spinner";
 import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import type EditorStateTransfer from "../../utils/EditorStateTransfer";
 import { Action } from "../../dispatcher/actions";
+import { type ActionPayload } from "../../dispatcher/payloads";
+import { type OpenForwardDialogPayload } from "../../dispatcher/payloads/OpenForwardDialogPayload";
 import { getEventDisplayInfo } from "../../utils/EventRenderingUtils";
 import { type IReadReceiptPosition } from "../views/rooms/ReadReceiptMarker";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
@@ -219,6 +221,8 @@ interface IState {
     ghostReadMarkers: string[];
     showTypingNotifications: boolean;
     hideSender: boolean;
+    forwardSelectionMode: boolean;
+    forwardSelectedEventIds: string[];
 }
 
 interface IReadReceiptForUser {
@@ -281,6 +285,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     public scrollPanel = createRef<ScrollPanel>();
 
     private showTypingNotificationsWatcherRef?: string;
+    private dispatcherRef?: string;
     private eventTiles: Record<string, UnwrappedEventTile> = {};
 
     // A map to allow groupers to maintain consistent keys even if their first event is uprooted due to back-pagination.
@@ -295,6 +300,8 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             ghostReadMarkers: [],
             showTypingNotifications: SettingsStore.getValue("showTypingNotifications"),
             hideSender: this.shouldHideSender(),
+            forwardSelectionMode: false,
+            forwardSelectedEventIds: [],
         };
 
         // Cache these settings on mount since Settings is expensive to query,
@@ -305,6 +312,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
     public componentDidMount(): void {
         this.unmounted = false;
+        this.dispatcherRef = defaultDispatcher.register(this.onAction);
         this.showTypingNotificationsWatcherRef = SettingsStore.watchSetting(
             "showTypingNotifications",
             null,
@@ -320,6 +328,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         SettingsStore.unwatchSetting(this.showTypingNotificationsWatcherRef);
         this.readReceiptMap = {};
         this.resizeObserver.disconnect();
+        defaultDispatcher.unregister(this.dispatcherRef);
     }
 
     public componentDidUpdate(prevProps: IProps, prevState: IState): void {
@@ -349,6 +358,45 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             });
         }
     }
+
+    private onAction = (payload: ActionPayload): void => {
+        if (payload.action !== Action.StartForwardSelection) return;
+        const event = (payload as ActionPayload & { event?: MatrixEvent }).event;
+        if (!event || !this.props.room || event.getRoomId() !== this.props.room.roomId) return;
+        const eventId = event.getId();
+        if (!eventId) return;
+        this.setState({ forwardSelectionMode: true, forwardSelectedEventIds: [eventId] });
+    };
+
+    private onToggleForwardSelection = (event: MatrixEvent): void => {
+        const eventId = event.getId();
+        if (!eventId) return;
+        this.setState((state) => {
+            const selected = new Set(state.forwardSelectedEventIds);
+            if (selected.has(eventId)) selected.delete(eventId);
+            else selected.add(eventId);
+            const ids = [...selected];
+            return { forwardSelectedEventIds: ids, forwardSelectionMode: ids.length > 0 };
+        });
+    };
+
+    private clearForwardSelection = (): void => {
+        this.setState({ forwardSelectionMode: false, forwardSelectedEventIds: [] });
+    };
+
+    private openForwardTargets = (): void => {
+        const events = this.props.events
+            .filter((event) => this.state.forwardSelectedEventIds.includes(event.getId() ?? ""))
+            .sort((a, b) => a.getTs() - b.getTs());
+        if (!events.length) return;
+        defaultDispatcher.dispatch<OpenForwardDialogPayload>({
+            action: Action.OpenForwardDialog,
+            event: events[0],
+            events,
+            permalinkCreator: this.props.permalinkCreator ?? null,
+        });
+        this.clearForwardSelection();
+    };
 
     private shouldHideSender(): boolean {
         return (
@@ -703,7 +751,11 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             }
 
             for (const Grouper of groupers) {
-                if (Grouper.canStartGroup(this, wrappedEvent) && !this.props.disableGrouping) {
+                if (
+                    Grouper.canStartGroup(this, wrappedEvent) &&
+                    !this.props.disableGrouping &&
+                    !this.state.forwardSelectionMode
+                ) {
                     grouper = new Grouper(
                         this,
                         wrappedEvent,
@@ -832,6 +884,9 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                 lastInSection={lastInSection}
                 lastSuccessful={wrappedEvent.lastSuccessfulWeSent}
                 isSelectedEvent={highlight}
+                forwardSelectionMode={this.state.forwardSelectionMode}
+                forwardSelected={this.state.forwardSelectedEventIds.includes(eventId)}
+                onToggleForwardSelection={this.onToggleForwardSelection}
                 getRelationsForEvent={this.props.getRelationsForEvent}
                 showReactions={this.props.showReactions}
                 layout={this.props.layout}
@@ -1087,6 +1142,17 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                 >
                     {topSpinner}
                     {this.getEventTiles()}
+                    {this.state.forwardSelectionMode && (
+                        <div className="mx_MessagePanel_forwardSelectionBar" role="toolbar">
+                            <span>{`已选择 ${this.state.forwardSelectedEventIds.length} 条消息`}</span>
+                            <button type="button" onClick={this.openForwardTargets}>
+                                选择转发目标
+                            </button>
+                            <button type="button" onClick={this.clearForwardSelection}>
+                                取消
+                            </button>
+                        </div>
+                    )}
                     {whoIsTyping}
                     {bottomSpinner}
                 </ScrollPanel>

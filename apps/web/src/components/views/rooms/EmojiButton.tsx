@@ -7,23 +7,43 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { type JSX, useContext } from "react";
+import React, { type JSX, useContext, useState } from "react";
+import { type IEventRelation, type MatrixEvent, type Room, THREAD_RELATION_TYPE } from "matrix-js-sdk/src/matrix";
 import { ReactionIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import ContextMenu, { aboveLeftOf, type MenuProps, useContextMenu } from "../../structures/ContextMenu";
 import EmojiPicker from "../emojipicker/EmojiPicker";
 import { CollapsibleButton, OverflowMenuContext } from "./CollapsibleButton";
+import RemoteStickerTab from "./RemoteStickerTab";
+import { getRemoteStickerIndexUrl } from "../../../features/remote-stickers/RemoteStickerIndex";
+import dis from "../../../dispatcher/dispatcher";
+import { Action } from "../../../dispatcher/actions";
+import { type ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
+import { type TimelineRenderingType } from "../../../contexts/RoomContext";
 
 interface IEmojiButtonProps {
     addEmoji: (unicode: string) => boolean;
     menuPosition?: MenuProps;
     className?: string;
+    room?: Room;
+    relation?: IEventRelation;
+    replyToEvent?: MatrixEvent;
+    timelineRenderingType?: TimelineRenderingType;
 }
 
-export function EmojiButton({ addEmoji, menuPosition, className }: IEmojiButtonProps): JSX.Element {
+export function EmojiButton({
+    addEmoji,
+    menuPosition,
+    className,
+    room,
+    relation,
+    replyToEvent,
+    timelineRenderingType,
+}: IEmojiButtonProps): JSX.Element {
     const overflowMenuCloser = useContext(OverflowMenuContext);
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
+    const [cloudTab, setCloudTab] = useState(false);
 
     let contextMenu: React.ReactElement | null = null;
     if (menuDisplayed && button.current) {
@@ -33,9 +53,50 @@ export function EmojiButton({ addEmoji, menuPosition, className }: IEmojiButtonP
             overflowMenuCloser?.();
         };
 
+        const cloudEnabled = Boolean(room && getRemoteStickerIndexUrl());
         contextMenu = (
             <ContextMenu {...position} onFinished={onFinished} managed={false} focusLock>
-                <EmojiPicker onChoose={addEmoji} onFinished={onFinished} />
+                {cloudEnabled && room ? (
+                    <div className="mx_RemoteStickerTab_emojiPanel">
+                        <div className="mx_RemoteStickerTab_tabs">
+                            <CollapsibleButton
+                                className="mx_RemoteStickerTab_tab"
+                                title="Emoji"
+                                onClick={() => setCloudTab(false)}
+                            >
+                                Emoji
+                            </CollapsibleButton>
+                            <CollapsibleButton
+                                className="mx_RemoteStickerTab_tab"
+                                title="云端表情"
+                                onClick={() => setCloudTab(true)}
+                            >
+                                云端表情
+                            </CollapsibleButton>
+                        </div>
+                        {cloudTab ? (
+                            <RemoteStickerTab
+                                room={room}
+                                threadId={relation?.rel_type === THREAD_RELATION_TYPE.name ? relation.event_id : null}
+                                replyToEvent={replyToEvent}
+                                onInsertEmoticon={(emoticon) => {
+                                    dis.dispatch<ComposerInsertPayload>({
+                                        action: Action.ComposerInsert,
+                                        text: emoticon.text,
+                                        customEmoticon: emoticon,
+                                        timelineRenderingType: timelineRenderingType!,
+                                    });
+                                    onFinished();
+                                }}
+                                onSent={onFinished}
+                            />
+                        ) : (
+                            <EmojiPicker onChoose={addEmoji} onFinished={onFinished} />
+                        )}
+                    </div>
+                ) : (
+                    <EmojiPicker onChoose={addEmoji} onFinished={onFinished} />
+                )}
             </ContextMenu>
         );
     }

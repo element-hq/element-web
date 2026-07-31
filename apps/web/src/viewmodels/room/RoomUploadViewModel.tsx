@@ -136,7 +136,7 @@ export class RoomUploadViewModel
         this.threadRelation = threadRelation;
     };
 
-    public initiateViaInputFiles = async (files: FileList | File[] | null): Promise<void> => {
+    public initiateViaInputFiles = async (files: FileList | File[] | null, throwOnError = false): Promise<void> => {
         if (!this.checkCanUpload()) {
             return;
         }
@@ -155,6 +155,10 @@ export class RoomUploadViewModel
             );
         } catch (ex) {
             logger.warn("Failed to handle file upload transfer", ex);
+            // The normal file-picker flow reports errors through the timeline. Dialogs such as
+            // Chat Notebook need the rejection as well, otherwise they close and misleadingly
+            // look as if the .txt attachment was sent.
+            if (throwOnError) throw ex;
         }
     };
 
