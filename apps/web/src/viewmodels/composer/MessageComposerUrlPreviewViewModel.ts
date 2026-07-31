@@ -58,17 +58,22 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
         this.content = this.snapshot.current.content;
     }
 
+    public static linksIn(content: string): Set<string> {
+        return new Set(
+            content
+                .split(" ")
+                .map((w) => w.trim())
+                .filter((word) => URL.canParse(word)),
+        );
+    }
+
     private computeSnapshot(content: string): void {
         if (!this.urlPreviewVisible) {
             this.snapshot.set({ entries: [], content });
             return;
         }
 
-        const newLinksOrdered = content
-            .split(" ")
-            .map((w) => w.trim())
-            .filter((word) => URL.canParse(word));
-        const newLinks = new Set(newLinksOrdered);
+        const newLinks = MessageComposerUrlPreviewViewModel.linksIn(content);
         if (this.links.symmetricDifference(newLinks).size === 0) {
             // Skip if the URL set hasn't changed
             return;

@@ -52,13 +52,13 @@ describe("attachUrlPreviews", () => {
 
     it("does nothing when there are no previews", () => {
         const content = makeContent();
-        attachUrlPreviews({ entries: [], content: "" }, content);
+        attachUrlPreviews({ entries: [], content: "" }, content, false);
         expect(content["com.beeper.linkpreviews"]).toBeUndefined();
     });
 
     it("attaches a preview with no image", () => {
         const content = makeContent();
-        attachUrlPreviews(snapshot(), content);
+        attachUrlPreviews(snapshot(), content, true);
         expect(content["com.beeper.linkpreviews"]).toEqual([
             expect.objectContaining({ "og:title": "Example", "og:image": undefined }),
         ]);
@@ -78,6 +78,7 @@ describe("attachUrlPreviews", () => {
                 playable: false,
             }),
             content,
+            true,
         );
 
         expect(content["com.beeper.linkpreviews"]![0]).toEqual(
