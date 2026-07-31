@@ -48,7 +48,7 @@ describe("EventTileView", () => {
         const root = container.firstElementChild;
         const line = getByTestId("body").parentElement;
 
-        expect(root).toHaveClass("mx_EventTile", "custom-root");
+        expect(root).toHaveClass("custom-root");
         expect(root).toHaveAttribute("aria-live", "off");
         expect(root).toHaveAttribute("aria-atomic", "true");
         expect(root).toHaveAttribute("data-scroll-tokens", "event-1");
@@ -57,9 +57,43 @@ describe("EventTileView", () => {
         expect(root).toHaveAttribute("data-shape", "Room");
         expect(root).toHaveAttribute("data-self", "true");
         expect(root).toHaveAttribute("data-has-reply", "true");
-        expect(line).toHaveClass("mx_EventTile_line", "custom-line");
+        expect(line).toHaveClass("custom-line");
         expect(line).toHaveAttribute("id", "event-line-1");
         expect(getByTestId("context-menu")).toBeInTheDocument();
+    });
+
+    it("renders the thread layout in the original slot order", () => {
+        const { container, getByTestId } = render(
+            <EventTileView
+                {...createProps({
+                    root: {
+                        ...renderState,
+                        data: { ...renderState.data, shape: "Thread" },
+                    },
+                    slots: {
+                        avatar: <span data-testid="avatar">Avatar</span>,
+                        sender: <span data-testid="sender">Sender</span>,
+                        replyChain: <span data-testid="reply-chain">Reply chain</span>,
+                        body: <span data-testid="body">Body</span>,
+                        actionBar: <span data-testid="action-bar">Action bar</span>,
+                        timestamp: <span data-testid="timestamp">Timestamp</span>,
+                        receipt: <span data-testid="receipt">Receipt</span>,
+                        footer: <span data-testid="footer">Footer</span>,
+                    },
+                })}
+            />,
+        );
+        const root = container.firstElementChild!;
+        const senderDetails = getByTestId("avatar").parentElement!;
+        const line = getByTestId("body").parentElement!;
+
+        expect(senderDetails).toContainElement(getByTestId("sender"));
+        expect(senderDetails).toBe(root.firstElementChild);
+        expect(line).toContainElement(getByTestId("reply-chain"));
+        expect(line).toContainElement(getByTestId("action-bar"));
+        expect(line).toContainElement(getByTestId("timestamp"));
+        expect(line).toContainElement(getByTestId("receipt"));
+        expect(getByTestId("footer").parentElement).toBe(root);
     });
 
     it("forwards root and line interactions", () => {

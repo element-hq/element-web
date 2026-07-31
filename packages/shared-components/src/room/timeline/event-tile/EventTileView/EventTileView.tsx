@@ -31,7 +31,7 @@ export function EventTileView({
     onClick,
     onContextMenu,
 }: Readonly<EventTileViewProps>): JSX.Element {
-    return (
+    const renderRoot = (children: React.ReactNode, rootClickHandler = onClick): JSX.Element => (
         <Root
             ref={refs?.root}
             className={classNames(styles.root, root.className)}
@@ -47,12 +47,37 @@ export function EventTileView({
             onMouseLeave={onMouseLeave}
             onFocus={onFocus}
             onBlur={onBlur}
-            onClick={onClick}
+            onClick={rootClickHandler}
         >
-            <div id={line.id} className={classNames(styles.line, line.className)} onContextMenu={onContextMenu}>
-                {slots.contextMenu}
-                {slots.body}
-            </div>
+            {children}
         </Root>
+    );
+
+    if (root.data.shape === "Thread") {
+        return renderRoot(
+            <>
+                <div className={styles.senderDetails}>
+                    {slots.avatar}
+                    {slots.sender}
+                </div>
+                <div id={line.id} className={classNames(styles.line, line.className)} onContextMenu={onContextMenu}>
+                    {slots.contextMenu}
+                    {slots.replyChain}
+                    {slots.body}
+                    {slots.actionBar}
+                    {slots.timestamp}
+                    {slots.receipt}
+                </div>
+                {slots.footer}
+            </>,
+            undefined,
+        );
+    }
+
+    return renderRoot(
+        <div id={line.id} className={classNames(styles.line, line.className)} onContextMenu={onContextMenu}>
+            {slots.contextMenu}
+            {slots.body}
+        </div>,
     );
 }

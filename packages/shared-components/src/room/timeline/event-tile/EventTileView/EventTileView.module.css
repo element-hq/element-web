@@ -17,3 +17,8 @@
 .line {
     min-width: 0;
 }
+
+.senderDetails {
+    display: flex;
+    align-items: flex-start;
+}
