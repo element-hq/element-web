@@ -49,6 +49,7 @@ describe("MBodyFactory", () => {
         ...mockClientMethodsDevice(deviceId),
         ...mockClientMethodsCrypto(),
         getRooms: jest.fn().mockReturnValue([]),
+        getRoom: jest.fn(),
         getIgnoredUsers: jest.fn(),
         getVersions: jest.fn().mockResolvedValue({
             unstable_features: {
