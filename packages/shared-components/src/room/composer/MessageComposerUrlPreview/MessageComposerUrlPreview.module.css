@@ -50,8 +50,7 @@
 .summary {
     justify-content: space-between;
     display: flex;
-    padding: 7px 4px 4px 4px;
-    width: 100%;
+    padding: var(--cpd-space-2x) 0px var(--cpd-space-1x) var(--cpd-space-2x);
 
     * {
         vertical-align: center;
@@ -140,7 +139,7 @@
     align-items: center;
     justify-content: space-between;
     gap: var(--cpd-space-4x);
-    padding: var(--cpd-space-2x) var(--cpd-space-4x);
+    padding: var(--cpd-space-2x) var(--cpd-space-2x);
     border-top: 1px solid var(--cpd-color-gray-400);
 
     > div {
