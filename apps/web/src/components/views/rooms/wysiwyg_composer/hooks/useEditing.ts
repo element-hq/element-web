@@ -21,6 +21,7 @@ export function useEditing(
     initialContent?: string,
     attachBundles?: (content: RoomMessageEventContent, messageHasLinks: boolean) => void,
     updateUrlPreviews?: (content: string) => void,
+    isUrlPreviewsModified?: boolean,
 ): {
     isSaveDisabled: boolean;
     onChange(this: void, content: string): void;
@@ -45,9 +46,20 @@ export function useEditing(
         if (mxClient === undefined || content === undefined) {
             return;
         }
-        return editMessage(content, { roomContext, mxClient, editorStateTransfer, attachBundles });
-    }, [content, roomContext, mxClient, editorStateTransfer, attachBundles]);
+        return editMessage(content, {
+            roomContext,
+            mxClient,
+            editorStateTransfer,
+            attachBundles,
+            isUrlPreviewsModified,
+        });
+    }, [content, roomContext, mxClient, editorStateTransfer, attachBundles, isUrlPreviewsModified]);
 
     const endEditingMemoized = useCallback(() => endEditing(roomContext), [roomContext]);
-    return { onChange, editMessage: editMessageMemoized, endEditing: endEditingMemoized, isSaveDisabled };
+    return {
+        onChange,
+        editMessage: editMessageMemoized,
+        endEditing: endEditingMemoized,
+        isSaveDisabled: isSaveDisabled && !isUrlPreviewsModified,
+    };
 }

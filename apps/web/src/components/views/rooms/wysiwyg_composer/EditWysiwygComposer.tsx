@@ -35,6 +35,11 @@ interface EditWysiwygComposerProps {
     updateUrlPreviews?: (content: string) => void;
     /** Attaches URL preview bundles (MSC4095) to the new content before it is sent. */
     attachBundles?: (content: RoomMessageEventContent, messageHasLinks: boolean) => void;
+    /**
+     * Whether the user has modified the preview list (e.g. removed a preview). When true the edit is
+     * treated as modified even if the text is unchanged: the Save button is enabled and the edit is sent.
+     */
+    isUrlPreviewsModified?: boolean;
     editorStateTransfer: EditorStateTransfer;
     className?: string;
 }
@@ -45,6 +50,7 @@ export default function EditWysiwygComposer({
     className,
     attachBundles,
     updateUrlPreviews,
+    isUrlPreviewsModified,
     ...props
 }: EditWysiwygComposerProps): JSX.Element {
     const defaultContextValue = useMemo(() => getDefaultContextValue({ editorStateTransfer }), [editorStateTransfer]);
@@ -56,6 +62,7 @@ export default function EditWysiwygComposer({
         initialContent,
         attachBundles,
         updateUrlPreviews,
+        isUrlPreviewsModified,
     );
 
     if (!isReady) {

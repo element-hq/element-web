@@ -12,6 +12,7 @@ import {
     MessageComposerUrlPreviewSnapshotEntry,
     MessageComposerUrlPreviewSnapshotEntryState,
     useCreateAutoDisposedViewModel,
+    useViewModel,
 } from "@element-hq/web-shared-components";
 import PlatformPeg from "../../../PlatformPeg";
 import { MessageComposerUrlPreviewWrapper } from "./MessageComposerUrlPreview";
@@ -41,6 +42,7 @@ export function EditMessageComposerWrapper(props: IEditMessageComposerProps) {
             visible: props.showUrlPreview,
             showTooltips: PlatformPeg.get()?.needsUrlTooltips() ?? true,
             urlPreviewBundle: urlPreviewBundleEnabled,
+            content: content.body,
         };
 
         if (urlPreviewBundleEnabled && bundleContent !== undefined) {
@@ -68,6 +70,8 @@ export function EditMessageComposerWrapper(props: IEditMessageComposerProps) {
         return new MessageComposerUrlPreviewViewModel(urlVmProps);
     });
 
+    const { isModified: isUrlPreviewsModified } = useViewModel(vm);
+
     const onWysiwygChange = (content: string): void => {
         vm.updateWithText({ content, debounced: true });
     };
@@ -87,6 +91,7 @@ export function EditMessageComposerWrapper(props: IEditMessageComposerProps) {
         <EditWysiwygComposer
             updateUrlPreviews={onWysiwygChange}
             attachBundles={attachBundles}
+            isUrlPreviewsModified={isUrlPreviewsModified}
             editorStateTransfer={props.editState}
             className={props.className}
         />
@@ -94,6 +99,7 @@ export function EditMessageComposerWrapper(props: IEditMessageComposerProps) {
         <EditMessageComposer
             updateUrlPreviews={onChange}
             attachBundles={attachBundles}
+            isUrlPreviewsModified={isUrlPreviewsModified}
             editState={props.editState}
             className={props.className}
         />

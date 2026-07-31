@@ -92,6 +92,11 @@ interface IEditMessageComposerProps extends MatrixClientProps {
     updateUrlPreviews?: (model: EditorModel) => void;
     /** Attaches URL preview bundles (MSC4095) to the new content before it is sent. */
     attachBundles?: (content: RoomMessageEventContent, messageHasLinks: boolean) => void;
+    /**
+     * Whether the user has modified the preview list (e.g. removed a preview). When true the edit is
+     * treated as modified even if the text is unchanged: the Save button is enabled and the edit is sent.
+     */
+    isUrlPreviewsModified?: boolean;
     className?: string;
 }
 interface IState {
@@ -278,7 +283,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
     }
 
     private sendEdit = async (): Promise<void> => {
-        if (this.state.saveDisabled) return;
+        if (this.state.saveDisabled && !this.props.isUrlPreviewsModified) return;
 
         const editedEvent = this.props.editState.getEvent();
 
@@ -312,8 +317,9 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
             return;
         }
 
-        // If content is modified then send an updated event into the room
-        if (this.isContentModified(newContent)) {
+        // If content is modified then send an updated event into the room. Also send when only the
+        // preview list changed (isUrlPreviewsModified) so preview removals aren't silently dropped.
+        if (this.isContentModified(newContent) || this.props.isUrlPreviewsModified) {
             const roomId = editedEvent.getRoomId()!;
             if (!containsEmote(this.model) && isSlashCommand(this.model)) {
                 const [cmd, args, commandText] = getSlashCommand(roomId, this.model);
@@ -477,7 +483,11 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
                     <AccessibleButton kind="secondary" onClick={this.cancelEdit}>
                         {_t("action|cancel")}
                     </AccessibleButton>
-                    <AccessibleButton kind="primary" onClick={this.sendEdit} disabled={this.state.saveDisabled}>
+                    <AccessibleButton
+                        kind="primary"
+                        onClick={this.sendEdit}
+                        disabled={this.state.saveDisabled && !this.props.isUrlPreviewsModified}
+                    >
                         {_t("action|save")}
                     </AccessibleButton>
                 </div>

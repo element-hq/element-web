@@ -184,11 +184,13 @@ interface EditMessageParams {
     roomContext: Pick<IRoomState, "timelineRenderingType">;
     editorStateTransfer: EditorStateTransfer;
     attachBundles?: (content: RoomMessageEventContent, messageHasLinks: boolean) => void;
+    /** Whether the user modified the preview list; forces the edit to send even if the text is unchanged. */
+    isUrlPreviewsModified?: boolean;
 }
 
 export async function editMessage(
     html: string,
-    { roomContext, mxClient, editorStateTransfer, attachBundles }: EditMessageParams,
+    { roomContext, mxClient, editorStateTransfer, attachBundles, isUrlPreviewsModified }: EditMessageParams,
 ): Promise<ISendEventResponse | undefined> {
     const editedEvent = editorStateTransfer.getEvent();
 
@@ -227,8 +229,9 @@ export async function editMessage(
 
     const roomId = editedEvent.getRoomId();
 
-    // If content is modified then send an updated event into the room
-    if (isContentModified(newContent, editorStateTransfer) && roomId) {
+    // If content is modified then send an updated event into the room. Also send when only the
+    // preview list changed (isUrlPreviewsModified) so preview removals aren't silently dropped.
+    if ((isContentModified(newContent, editorStateTransfer) || isUrlPreviewsModified) && roomId) {
         // TODO Slash Commands
 
         if (shouldSend) {
