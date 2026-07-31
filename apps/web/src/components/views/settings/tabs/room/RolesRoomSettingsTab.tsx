@@ -400,6 +400,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
                             label={descriptor.desc}
                             value={value}
                             usersDefault={defaultUserLevel}
+                            maxValue={currentUserLevel}
                             disabled={!canChangeLevels || currentUserLevel < value}
                             powerLevelKey={key} // Will be sent as the second parameter to `onChange`
                             onChange={this.onPowerLevelsChanged}
@@ -436,6 +437,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
                             label={label}
                             value={eventsLevels[eventType]}
                             usersDefault={defaultUserLevel}
+                            maxValue={currentUserLevel}
                             disabled={!canChangeLevels || currentUserLevel < eventsLevels[eventType]}
                             powerLevelKey={EVENTS_LEVEL_PREFIX + eventType}
                             onChange={this.onPowerLevelsChanged}
