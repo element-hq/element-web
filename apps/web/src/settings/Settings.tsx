@@ -1128,7 +1128,7 @@ export const SETTINGS: Settings = {
         supportedLevels: [SettingLevel.DEVICE],
         supportedLevelsAreOrdered: true,
         displayName: _td("settings|inline_url_previews_encrypted"),
-        default: false,
+        default: true,
         controller: new RequiresSettingsController([UIFeature.URLPreviews, "urlPreviewsEnabled"]),
     },
     "notificationsEnabled": {

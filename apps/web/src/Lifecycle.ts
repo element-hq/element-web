@@ -74,6 +74,7 @@ import { CallStore } from "./stores/CallStore.ts";
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
 const BUBBLE_LAYOUT_MIGRATION_KEY = "element_custom_bubble_layout_v1";
+const E2EE_URL_PREVIEWS_MIGRATION_KEY = "element_custom_e2ee_url_previews_v1";
 
 /**
  * `setting_defaults` does not replace an account-level value saved by earlier
@@ -86,6 +87,14 @@ async function migrateConfiguredBubbleLayout(): Promise<void> {
 
     await SettingsStore.setValue("layout", null, SettingLevel.ACCOUNT, Layout.Bubble);
     localStorage.setItem(BUBBLE_LAYOUT_MIGRATION_KEY, "true");
+}
+
+/** E2EE URL previews are intentionally device-local; migrate old false values once per device. */
+async function migrateEncryptedUrlPreviews(): Promise<void> {
+    if (localStorage.getItem(E2EE_URL_PREVIEWS_MIGRATION_KEY)) return;
+
+    await SettingsStore.setValue("urlPreviewsEnabled_e2ee", null, SettingLevel.DEVICE, true);
+    localStorage.setItem(E2EE_URL_PREVIEWS_MIGRATION_KEY, "true");
 }
 
 dis.register((payload) => {
@@ -878,6 +887,7 @@ async function doSetLoggedIn(
     // Run the migrations after the MatrixClientPeg has been assigned
     SettingsStore.runMigrations(isFreshLogin);
     await migrateConfiguredBubbleLayout();
+    await migrateEncryptedUrlPreviews();
 
     if (isFreshLogin && !credentials.guest) {
         // For newly registered users, set a flag so that we force them to verify,
