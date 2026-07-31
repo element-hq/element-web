@@ -75,7 +75,9 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
         return (
             this.context.timelineRenderingType !== TimelineRenderingType.Room &&
             this.context.timelineRenderingType !== TimelineRenderingType.Pinned &&
-            this.context.timelineRenderingType !== TimelineRenderingType.Search
+            this.context.timelineRenderingType !== TimelineRenderingType.Search &&
+            // The shared-media panel shows the audio player alone, with no download row beneath it.
+            this.context.timelineRenderingType !== TimelineRenderingType.File
         );
     }
 

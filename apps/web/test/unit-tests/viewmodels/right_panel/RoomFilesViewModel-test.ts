@@ -9,20 +9,38 @@ import { RoomFilesViewModel } from "../../../../src/viewmodels/right_panel/RoomF
 import { FileCategory } from "../../../../src/utils/FileCategory";
 
 describe("RoomFilesViewModel", () => {
-    it("starts on the All tab with an empty search term", () => {
+    it("starts with no category filter and an empty search term", () => {
         const vm = new RoomFilesViewModel();
-        expect(vm.getSnapshot()).toEqual({ activeCategory: FileCategory.All, searchTerm: "" });
+        expect(vm.getSnapshot()).toEqual({ activeCategory: null, searchTerm: "" });
     });
 
-    it("setCategory updates the active category and notifies subscribers", () => {
+    it("toggleCategory selects the category and notifies subscribers", () => {
         const vm = new RoomFilesViewModel();
         const listener = jest.fn();
         vm.subscribe(listener);
 
-        vm.setCategory(FileCategory.Voice);
+        vm.toggleCategory(FileCategory.Audio);
 
-        expect(vm.getSnapshot().activeCategory).toBe(FileCategory.Voice);
+        expect(vm.getSnapshot().activeCategory).toBe(FileCategory.Audio);
         expect(listener).toHaveBeenCalledTimes(1);
+    });
+
+    it("toggleCategory on the selected category clears the filter", () => {
+        const vm = new RoomFilesViewModel();
+        vm.toggleCategory(FileCategory.Documents);
+
+        vm.toggleCategory(FileCategory.Documents);
+
+        expect(vm.getSnapshot().activeCategory).toBeNull();
+    });
+
+    it("toggleCategory on a different category switches the selection", () => {
+        const vm = new RoomFilesViewModel();
+        vm.toggleCategory(FileCategory.Documents);
+
+        vm.toggleCategory(FileCategory.Videos);
+
+        expect(vm.getSnapshot().activeCategory).toBe(FileCategory.Videos);
     });
 
     it("setSearchTerm updates the term and notifies subscribers", () => {
@@ -36,13 +54,12 @@ describe("RoomFilesViewModel", () => {
         expect(listener).toHaveBeenCalledTimes(1);
     });
 
-    it("does not notify when the category is unchanged", () => {
+    it("keeps the search term when the category filter is toggled", () => {
         const vm = new RoomFilesViewModel();
-        const listener = jest.fn();
-        vm.subscribe(listener);
+        vm.setSearchTerm("report");
 
-        vm.setCategory(FileCategory.All);
+        vm.toggleCategory(FileCategory.Documents);
 
-        expect(listener).not.toHaveBeenCalled();
+        expect(vm.getSnapshot()).toEqual({ activeCategory: FileCategory.Documents, searchTerm: "report" });
     });
 });

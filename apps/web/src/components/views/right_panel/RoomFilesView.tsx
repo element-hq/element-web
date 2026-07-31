@@ -13,9 +13,12 @@ import { Flex, useCreateAutoDisposedViewModel, useViewModel } from "@element-hq/
 import { _t } from "../../../languageHandler";
 import { Layout } from "../../../settings/enums/Layout";
 import TimelinePanel from "../../structures/TimelinePanel";
+import BaseCard from "./BaseCard";
+import Measured from "../elements/Measured";
+import SearchWarning, { WarningKind } from "../elements/SearchWarning";
 import { EventPresentationContextProvider } from "../../../utils/EventPresentationContextProvider";
 import { RoomFilesViewModel } from "../../../viewmodels/right_panel/RoomFilesViewModel";
-import { buildFileEventFilter, FILE_CATEGORY_TABS, FileCategory } from "../../../utils/FileCategory";
+import { buildFileEventFilter, FILE_CATEGORY_FILTERS, FileCategory } from "../../../utils/FileCategory";
 
 interface Props {
     /** The filtered (files/media) timeline set built by {@link FilePanel}. */
@@ -28,37 +31,54 @@ interface Props {
     onPaginationRequest(this: void, timelineWindow: TimelineWindow, direction: string, size: number): Promise<boolean>;
     /** Empty-state node rendered when the (filtered) timeline has nothing to show. */
     empty: ReactNode;
+    /** Closes the right panel. */
+    onClose(this: void): void;
+    /** Whether the room is encrypted, so the card can warn that server-side file search is unavailable. */
+    isRoomEncrypted: boolean;
+    /** Called when the card is measured, so {@link FilePanel} can put the room context into narrow mode. */
+    onMeasurement(this: void, narrow: boolean): void;
 }
 
-const TAB_LABELS: Record<FileCategory, TranslationKey> = {
-    [FileCategory.All]: "file_panel|tab_all",
-    [FileCategory.Media]: "file_panel|tab_media",
-    [FileCategory.Files]: "file_panel|tab_files",
-    [FileCategory.Music]: "file_panel|tab_music",
-    [FileCategory.Voice]: "file_panel|tab_voice",
+const FILTER_LABELS: Record<FileCategory, TranslationKey> = {
+    [FileCategory.Documents]: "file_panel|filter_documents",
+    [FileCategory.Images]: "file_panel|filter_images",
+    [FileCategory.Videos]: "file_panel|filter_videos",
+    [FileCategory.Audio]: "file_panel|filter_audio",
 };
 
 /**
- * The body of the FilePanel: a Telegram-style row of typed media tabs (All / Media / Files / Music / Voice) plus an
- * in-tab filename/caption search, driving a {@link TimelinePanel} over the room's shared-media timeline (search
- * Phase 4).
+ * The shared-media card: a filename/caption search in the card header, a row of media category filter chips
+ * (Documents / Images / Videos / Audio), and a {@link TimelinePanel} over the room's shared-media timeline
+ * (search Phase 4).
  *
- * MVVM v2: tab selection + search term live in {@link RoomFilesViewModel}; the timeline display predicate is derived
- * from the snapshot via the pure {@link buildFileEventFilter} and handed to TimelinePanel's `eventFilter`. No
- * indexing change is involved — media filenames are already indexed; this only filters the *displayed* list.
+ * The chips are a *toggle*, not a tab strip: with no chip selected every media type shows, which is why there is
+ * no "All" chip. This mirrors the room list's primary filters (`RoomListPrimaryFilters`).
+ *
+ * MVVM v2: the category selection + search term live in {@link RoomFilesViewModel}; the timeline display predicate
+ * is derived from the snapshot via the pure {@link buildFileEventFilter} and handed to TimelinePanel's
+ * `eventFilter`. No indexing change is involved — media filenames are already indexed; this only filters the
+ * *displayed* list.
  */
-export function RoomFilesView({ timelineSet, onPaginationRequest, empty }: Props): JSX.Element {
+export function RoomFilesView({
+    timelineSet,
+    onPaginationRequest,
+    empty,
+    onClose,
+    isRoomEncrypted,
+    onMeasurement,
+}: Props): JSX.Element {
     const vm = useCreateAutoDisposedViewModel(() => new RoomFilesViewModel());
     const { activeCategory, searchTerm } = useViewModel(vm);
+    const card = useRef<HTMLDivElement>(null);
 
     const eventFilter = useMemo(() => buildFileEventFilter(activeCategory, searchTerm), [activeCategory, searchTerm]);
 
     // Compound's ChatFilter forces tabIndex=0 on every chip, so we can't do a single-tab-stop roving index; instead
     // we keep the listbox keyboard-navigable by moving focus across the chips with the arrow / Home / End keys.
-    const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
-    const onTabsKeyDown = (e: KeyboardEvent<HTMLDivElement>): void => {
-        const count = FILE_CATEGORY_TABS.length;
-        const current = tabRefs.current.findIndex((el) => el === document.activeElement);
+    const filterRefs = useRef<Array<HTMLButtonElement | null>>([]);
+    const onFiltersKeyDown = (e: KeyboardEvent<HTMLDivElement>): void => {
+        const count = FILE_CATEGORY_FILTERS.length;
+        const current = filterRefs.current.findIndex((el) => el === document.activeElement);
         if (current === -1) return;
 
         let target: number;
@@ -81,45 +101,54 @@ export function RoomFilesView({ timelineSet, onPaginationRequest, empty }: Props
                 return;
         }
         e.preventDefault();
-        tabRefs.current[target]?.focus();
+        filterRefs.current[target]?.focus();
     };
 
+    // The search sits in the card header, in place of the card title and alongside the close button.
+    const header = (
+        <Form.Root className="mx_RoomFilesView_search" onSubmit={(e) => e.preventDefault()}>
+            <Search
+                placeholder={_t("file_panel|search_placeholder")}
+                name="file_search"
+                value={searchTerm}
+                onChange={(e) => vm.setSearchTerm(e.currentTarget.value)}
+                className="mx_no_textinput"
+            />
+        </Form.Root>
+    );
+
     return (
-        <>
-            <div className="mx_RoomFilesView_header">
-                <Flex
-                    as="div"
-                    role="listbox"
-                    aria-label={_t("file_panel|tabs_label")}
-                    align="center"
-                    gap="var(--cpd-space-2x)"
-                    className="mx_RoomFilesView_tabs"
-                    onKeyDown={onTabsKeyDown}
-                >
-                    {FILE_CATEGORY_TABS.map((category, index) => (
-                        <ChatFilter
-                            key={category}
-                            ref={(el) => {
-                                tabRefs.current[index] = el;
-                            }}
-                            role="option"
-                            selected={category === activeCategory}
-                            onClick={() => vm.setCategory(category)}
-                        >
-                            {_t(TAB_LABELS[category])}
-                        </ChatFilter>
-                    ))}
-                </Flex>
-                <Form.Root className="mx_RoomFilesView_search" onSubmit={(e) => e.preventDefault()}>
-                    <Search
-                        placeholder={_t("file_panel|search_placeholder")}
-                        name="file_search"
-                        value={searchTerm}
-                        onChange={(e) => vm.setSearchTerm(e.currentTarget.value)}
-                    />
-                </Form.Root>
-            </div>
-            <EventPresentationContextProvider layout={Layout.Group}>
+        <BaseCard className="mx_FilePanel" onClose={onClose} withoutScrollContainer ref={card} header={header}>
+            <Measured sensor={card} onMeasurement={onMeasurement} />
+            <SearchWarning isRoomEncrypted={isRoomEncrypted} kind={WarningKind.Files} />
+            <Flex
+                as="div"
+                role="listbox"
+                aria-label={_t("file_panel|filters_label")}
+                align="center"
+                gap="var(--cpd-space-2x)"
+                className="mx_RoomFilesView_filters"
+                onKeyDown={onFiltersKeyDown}
+            >
+                {FILE_CATEGORY_FILTERS.map((category, index) => (
+                    <ChatFilter
+                        key={category}
+                        ref={(el) => {
+                            filterRefs.current[index] = el;
+                        }}
+                        role="option"
+                        selected={category === activeCategory}
+                        onClick={() => vm.toggleCategory(category)}
+                    >
+                        {_t(FILTER_LABELS[category])}
+                    </ChatFilter>
+                ))}
+            </Flex>
+            {/*
+             * The shared-media list is always rendered in bubble layout, independently of the user's timeline
+             * layout setting — the main timeline keeps whatever the user picked (modern by default).
+             */}
+            <EventPresentationContextProvider layout={Layout.Bubble}>
                 <TimelinePanel
                     manageReadReceipts={false}
                     manageReadMarkers={false}
@@ -127,10 +156,10 @@ export function RoomFilesView({ timelineSet, onPaginationRequest, empty }: Props
                     showUrlPreview={false}
                     onPaginationRequest={onPaginationRequest}
                     empty={empty}
-                    layout={Layout.Group}
+                    layout={Layout.Bubble}
                     eventFilter={eventFilter}
                 />
             </EventPresentationContextProvider>
-        </>
+        </BaseCard>
     );
 }

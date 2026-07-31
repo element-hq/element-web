@@ -33,6 +33,14 @@ export function getIsContinuation(
     timelineRenderingType: TimelineRenderingType,
     layout: Layout | undefined,
 ): boolean | undefined {
+    // The shared-media panel is a filtered list rather than a conversation, so consecutive files from the
+    // same person must not collapse into a continuation — each row keeps its own avatar and sender. This
+    // is checked before the layout test below, which would otherwise let continuations through in bubble
+    // layout only.
+    if (timelineRenderingType === TimelineRenderingType.File) {
+        return false;
+    }
+
     if (
         timelineRenderingType !== TimelineRenderingType.Room &&
         timelineRenderingType !== TimelineRenderingType.Search &&
@@ -152,7 +160,8 @@ export function getEventTileSenderProfileState({
     }
 
     if (timelineRenderingType === TimelineRenderingType.File) {
-        return { avatarSize: "20px", needsSenderProfile: true };
+        // Keep in sync with --FilePanel-avatar-size in _FilePanel.pcss, which reserves the avatar's column.
+        return { avatarSize: "32px", needsSenderProfile: true };
     }
 
     return { avatarSize: "30px", needsSenderProfile: true };

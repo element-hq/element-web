@@ -9,7 +9,7 @@ import { type MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 
 import {
     FileCategory,
-    FILE_CATEGORY_TABS,
+    FILE_CATEGORY_FILTERS,
     getFileCategory,
     eventMatchesCategory,
     eventMatchesFileSearch,
@@ -32,27 +32,27 @@ function mkMedia(msgtype: string, content: Record<string, unknown> = {}): Matrix
 
 describe("FileCategory", () => {
     describe("getFileCategory", () => {
-        it("classifies m.image and m.video as Media", () => {
-            expect(getFileCategory(mkMedia(MsgType.Image))).toBe(FileCategory.Media);
-            expect(getFileCategory(mkMedia(MsgType.Video))).toBe(FileCategory.Media);
+        it("classifies m.image as Images and m.video as Videos", () => {
+            expect(getFileCategory(mkMedia(MsgType.Image))).toBe(FileCategory.Images);
+            expect(getFileCategory(mkMedia(MsgType.Video))).toBe(FileCategory.Videos);
         });
 
-        it("classifies m.file as Files", () => {
-            expect(getFileCategory(mkMedia(MsgType.File))).toBe(FileCategory.Files);
+        it("classifies m.file as Documents", () => {
+            expect(getFileCategory(mkMedia(MsgType.File))).toBe(FileCategory.Documents);
         });
 
-        it("classifies a plain m.audio as Music", () => {
-            expect(getFileCategory(mkMedia(MsgType.Audio))).toBe(FileCategory.Music);
+        it("classifies a plain m.audio as Audio", () => {
+            expect(getFileCategory(mkMedia(MsgType.Audio))).toBe(FileCategory.Audio);
         });
 
-        it("classifies a voice-flagged m.audio as Voice, not Music", () => {
+        it("classifies a voice-flagged m.audio as Audio too", () => {
             const voice = mkMedia(MsgType.Audio, { "org.matrix.msc3245.voice": {} });
-            expect(getFileCategory(voice)).toBe(FileCategory.Voice);
+            expect(getFileCategory(voice)).toBe(FileCategory.Audio);
         });
 
-        it("classifies a legacy msc2516 voice m.audio as Voice", () => {
+        it("classifies a legacy msc2516 voice m.audio as Audio", () => {
             const voice = mkMedia(MsgType.Audio, { "org.matrix.msc2516.voice": {} });
-            expect(getFileCategory(voice)).toBe(FileCategory.Voice);
+            expect(getFileCategory(voice)).toBe(FileCategory.Audio);
         });
 
         it("returns null for a non-media text message", () => {
@@ -66,21 +66,21 @@ describe("FileCategory", () => {
     });
 
     describe("eventMatchesCategory", () => {
-        it("matches any media event under the All tab", () => {
-            expect(eventMatchesCategory(mkMedia(MsgType.Image), FileCategory.All)).toBe(true);
-            expect(eventMatchesCategory(mkMedia(MsgType.File), FileCategory.All)).toBe(true);
-            expect(eventMatchesCategory(mkMedia(MsgType.Audio), FileCategory.All)).toBe(true);
+        it("matches any media event when no category is selected", () => {
+            expect(eventMatchesCategory(mkMedia(MsgType.Image), null)).toBe(true);
+            expect(eventMatchesCategory(mkMedia(MsgType.File), null)).toBe(true);
+            expect(eventMatchesCategory(mkMedia(MsgType.Audio), null)).toBe(true);
         });
 
-        it("excludes non-media events even under the All tab", () => {
-            expect(eventMatchesCategory(mkMedia(MsgType.Text), FileCategory.All)).toBe(false);
+        it("excludes non-media events even when no category is selected", () => {
+            expect(eventMatchesCategory(mkMedia(MsgType.Text), null)).toBe(false);
         });
 
-        it("matches only the exact category for typed tabs", () => {
+        it("matches only the exact category when one is selected", () => {
             const image = mkMedia(MsgType.Image);
-            expect(eventMatchesCategory(image, FileCategory.Media)).toBe(true);
-            expect(eventMatchesCategory(image, FileCategory.Files)).toBe(false);
-            expect(eventMatchesCategory(image, FileCategory.Voice)).toBe(false);
+            expect(eventMatchesCategory(image, FileCategory.Images)).toBe(true);
+            expect(eventMatchesCategory(image, FileCategory.Documents)).toBe(false);
+            expect(eventMatchesCategory(image, FileCategory.Videos)).toBe(false);
         });
     });
 
@@ -109,7 +109,7 @@ describe("FileCategory", () => {
 
     describe("buildFileEventFilter", () => {
         it("combines category and search with AND", () => {
-            const filter = buildFileEventFilter(FileCategory.Media, "cat");
+            const filter = buildFileEventFilter(FileCategory.Images, "cat");
             expect(filter(mkMedia(MsgType.Image, { body: "cat.png" }))).toBe(true);
             // right category, wrong name
             expect(filter(mkMedia(MsgType.Image, { body: "dog.png" }))).toBe(false);
@@ -117,21 +117,26 @@ describe("FileCategory", () => {
             expect(filter(mkMedia(MsgType.File, { body: "cat.png" }))).toBe(false);
         });
 
-        it("with All + empty term passes every media event and rejects non-media", () => {
-            const filter = buildFileEventFilter(FileCategory.All, "");
+        it("with no category + empty term passes every media event and rejects non-media", () => {
+            const filter = buildFileEventFilter(null, "");
             expect(filter(mkMedia(MsgType.Video))).toBe(true);
             expect(filter(mkMedia(MsgType.Text))).toBe(false);
         });
+
+        it("still applies the search term when no category is selected", () => {
+            const filter = buildFileEventFilter(null, "cat");
+            expect(filter(mkMedia(MsgType.File, { body: "cat.pdf" }))).toBe(true);
+            expect(filter(mkMedia(MsgType.Audio, { body: "dog.mp3" }))).toBe(false);
+        });
     });
 
-    describe("FILE_CATEGORY_TABS", () => {
-        it("lists All first then the typed categories in display order", () => {
-            expect(FILE_CATEGORY_TABS).toEqual([
-                FileCategory.All,
-                FileCategory.Media,
-                FileCategory.Files,
-                FileCategory.Music,
-                FileCategory.Voice,
+    describe("FILE_CATEGORY_FILTERS", () => {
+        it("lists the categories in display order, with no 'all' entry", () => {
+            expect(FILE_CATEGORY_FILTERS).toEqual([
+                FileCategory.Documents,
+                FileCategory.Images,
+                FileCategory.Videos,
+                FileCategory.Audio,
             ]);
         });
     });

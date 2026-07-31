@@ -7,36 +7,39 @@
 
 import { BaseViewModel } from "@element-hq/web-shared-components";
 
-import { FileCategory } from "../../utils/FileCategory";
+import type { FileCategory } from "../../utils/FileCategory";
 
 /**
- * Reactive state for the FilePanel's typed media tabs (search Phase 4): which tab is active and the in-tab search
- * term. Both are pure view state — the actual event classification/filtering lives in pure helpers
+ * Reactive state for the FilePanel's shared-media filters (search Phase 4): which media category is selected and
+ * the search term. Both are pure view state — the actual event classification/filtering lives in pure helpers
  * ({@link buildFileEventFilter}) so the View stays dumb.
  */
 export interface RoomFilesSnapshot {
-    /** The currently-selected media tab. */
-    activeCategory: FileCategory;
-    /** The in-tab filename/caption search term (raw, untrimmed). */
+    /** The selected media category, or `null` when no filter is applied and every media event shows. */
+    activeCategory: FileCategory | null;
+    /** The filename/caption search term (raw, untrimmed). */
     searchTerm: string;
 }
 
 /**
- * MVVM-v2 view model backing the FilePanel's media tab bar + in-tab search (search Phase 4 — "typed, searchable
- * shared-media tabs"). Holds only the tab selection and search term; the {@link RoomFilesView} derives the timeline
- * display predicate from this snapshot.
+ * MVVM-v2 view model backing the FilePanel's media filter chips + search (search Phase 4 — "typed, searchable
+ * shared-media tabs"). Holds only the category selection and search term; the {@link RoomFilesView} derives the
+ * timeline display predicate from this snapshot.
  */
 export class RoomFilesViewModel extends BaseViewModel<RoomFilesSnapshot, void> {
     public constructor() {
-        super(undefined, { activeCategory: FileCategory.All, searchTerm: "" });
+        super(undefined, { activeCategory: null, searchTerm: "" });
     }
 
-    /** Switch the active media tab. */
-    public setCategory = (activeCategory: FileCategory): void => {
-        this.snapshot.merge({ activeCategory });
+    /**
+     * Toggle a media category filter. Selecting the already-selected category clears the filter, so the panel
+     * falls back to showing every media type.
+     */
+    public toggleCategory = (category: FileCategory): void => {
+        this.snapshot.merge({ activeCategory: this.getSnapshot().activeCategory === category ? null : category });
     };
 
-    /** Update the in-tab search term. */
+    /** Update the search term. */
     public setSearchTerm = (searchTerm: string): void => {
         this.snapshot.merge({ searchTerm });
     };

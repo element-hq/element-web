@@ -290,7 +290,9 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             // display 'ghost' read markers that are animating away
             ghostReadMarkers: [],
             showTypingNotifications: SettingsStore.getValue("showTypingNotifications"),
-            hideSender: this.shouldHideSender(),
+            // Resolved in componentDidMount instead: shouldHideSender() reads the room context, which React
+            // has not populated on `this` yet while the constructor runs.
+            hideSender: false,
         };
 
         // Cache these settings on mount since Settings is expensive to query,
@@ -301,6 +303,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
     public componentDidMount(): void {
         this.unmounted = false;
+        this.setState({ hideSender: this.shouldHideSender() });
         this.showTypingNotificationsWatcherRef = SettingsStore.watchSetting(
             "showTypingNotifications",
             null,
@@ -350,7 +353,11 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         return (
             !!this.props.room &&
             this.props.room.getInvitedAndJoinedMemberCount() <= 2 &&
-            this.props.layout === Layout.Bubble
+            this.props.layout === Layout.Bubble &&
+            // Dropping the sender in a two-person bubble timeline is a conversation affordance. The
+            // shared-media panel is a filtered file list rather than a conversation, so who shared each
+            // file still matters there — even in a DM.
+            this.context.timelineRenderingType !== TimelineRenderingType.File
         );
     }
 
@@ -841,7 +848,12 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     }
 
     public wantsSeparator(prevEvent: MatrixEvent | null, mxEvent: MatrixEvent): SeparatorKind {
-        if (this.context.timelineRenderingType === TimelineRenderingType.ThreadsList) {
+        // Neither the threads list nor the shared-media panel is a chronological conversation — both are
+        // filtered lists — so date separators would only add noise between their rows.
+        if (
+            this.context.timelineRenderingType === TimelineRenderingType.ThreadsList ||
+            this.context.timelineRenderingType === TimelineRenderingType.File
+        ) {
             return SeparatorKind.None;
         }
 
