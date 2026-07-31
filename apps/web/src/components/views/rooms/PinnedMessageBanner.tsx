@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, useContext, useEffect, useId, useRef, useState } from "react";
+import React, { type JSX, useCallback, useContext, useEffect, useId, useRef, useState } from "react";
 import PinIcon from "@vector-im/compound-design-tokens/assets/web/icons/pin-solid";
 import { Button } from "@vector-im/compound-web";
 import { type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
@@ -15,7 +15,6 @@ import { EventPreviewView, useCreateAutoDisposedViewModel } from "@element-hq/we
 
 import { usePinnedEvents, useSortedFetchedPinnedEvents } from "../../../hooks/usePinnedEvents";
 import { _t } from "../../../languageHandler";
-import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import { useEventEmitter } from "../../../hooks/useEventEmitter";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
@@ -254,11 +253,6 @@ function Indicator({ active, hidden }: IndicatorProps): JSX.Element {
     );
 }
 
-function getRightPanelPhase(roomId: string): RightPanelPhases | null {
-    if (!RightPanelStore.instance.isOpenForRoom(roomId)) return null;
-    return RightPanelStore.instance.currentCard.phase;
-}
-
 /**
  * The props for the {@link BannerButton} component.
  */
@@ -273,8 +267,18 @@ interface BannerButtonProps {
  * A button that allows the user to view or close the list of pinned messages.
  */
 function BannerButton({ room }: BannerButtonProps): JSX.Element {
+    const sdkContext = useContext(SDKContext);
+
+    const getRightPanelPhase = useCallback(
+        (roomId: string): RightPanelPhases | null => {
+            if (!sdkContext.rightPanelStore.isOpenForRoom(roomId)) return null;
+            return sdkContext.rightPanelStore.currentCard.phase;
+        },
+        [sdkContext.rightPanelStore],
+    );
+
     const [currentPhase, setCurrentPhase] = useState<RightPanelPhases | null>(getRightPanelPhase(room.roomId));
-    useEventEmitter(RightPanelStore.instance, UPDATE_EVENT, () => setCurrentPhase(getRightPanelPhase(room.roomId)));
+    useEventEmitter(sdkContext.rightPanelStore, UPDATE_EVENT, () => setCurrentPhase(getRightPanelPhase(room.roomId)));
     const isPinnedMessagesPhase = currentPhase === RightPanelPhases.PinnedMessages;
 
     return (
@@ -285,7 +289,7 @@ function BannerButton({ room }: BannerButtonProps): JSX.Element {
                 if (isPinnedMessagesPhase) PosthogTrackers.trackInteraction("PinnedMessageBannerCloseListButton");
                 else PosthogTrackers.trackInteraction("PinnedMessageBannerViewAllButton");
 
-                RightPanelStore.instance.showOrHidePhase(RightPanelPhases.PinnedMessages);
+                sdkContext.rightPanelStore.showOrHidePhase(RightPanelPhases.PinnedMessages);
             }}
         >
             {isPinnedMessagesPhase

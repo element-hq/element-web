@@ -1,3 +1,10 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE in the repository root for full details.
+*/
+
 import * as os from "node:os";
 import * as fs from "node:fs";
 import * as path from "node:path";
@@ -68,7 +75,7 @@ if (process.env.VARIANT_PATH) {
     console.log(`Using variant configuration from '${process.env.VARIANT_PATH}':`);
     variant = {
         ...variant,
-        ...JSON.parse(fs.readFileSync(`${process.env.VARIANT_PATH}`, "utf8")),
+        ...JSON.parse(fs.readFileSync(process.env.VARIANT_PATH, "utf8")),
     };
 } else {
     console.warn(`No VARIANT_PATH specified, using default variant configuration '${DEFAULT_VARIANT}':`);

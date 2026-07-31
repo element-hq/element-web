@@ -16,6 +16,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 
 import { mkMessage, type MessageEventProps } from "./test-utils";
+import { expect } from "../setup/adapter.ts";
 
 export const makeThreadEvent = ({
     rootEventId,

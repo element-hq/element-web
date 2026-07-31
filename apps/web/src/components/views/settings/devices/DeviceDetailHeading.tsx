@@ -50,7 +50,7 @@ const DeviceNameEditor: React.FC<Props & { stopEditing: () => void }> = ({ devic
     const descriptionId = `device-rename-description-${device.device_id}`;
 
     return (
-        <form aria-disabled={isLoading} className="mx_DeviceDetailHeading_renameForm" onSubmit={onSubmit} method="post">
+        <form className="mx_DeviceDetailHeading_renameForm" onSubmit={onSubmit} method="post">
             <p id={headingId} className="mx_DeviceDetailHeading_renameFormHeading">
                 {_t("settings|sessions|rename_form_heading")}
             </p>

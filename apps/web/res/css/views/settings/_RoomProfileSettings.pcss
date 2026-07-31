@@ -17,11 +17,11 @@ Please see LICENSE files in the repository root for full details.
             margin-inline-end: 54px;
 
             .mx_Field {
-                margin-top: $spacing-8;
+                margin-top: var(--cpd-space-2x);
             }
 
             .mx_RoomProfileSettings_profile_controls_topic {
-                margin-top: $spacing-8;
+                margin-top: var(--cpd-space-2x);
 
                 & > textarea {
                     font-family: inherit;
@@ -34,7 +34,7 @@ Please see LICENSE files in the repository root for full details.
             }
 
             .mx_RoomProfileSettings_profile_controls_userId {
-                margin-inline-end: $spacing-20;
+                margin-inline-end: var(--cpd-space-5x);
             }
         }
     }
@@ -43,6 +43,6 @@ Please see LICENSE files in the repository root for full details.
         display: flex;
         gap: var(--cpd-space-4x);
         margin-top: 10px; /* 18px is already accounted for by the <p> above the buttons */
-        margin-bottom: $spacing-28;
+        margin-bottom: var(--cpd-space-7x);
     }
 }

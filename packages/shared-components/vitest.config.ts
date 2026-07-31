@@ -10,7 +10,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 import { storybookVis } from "storybook-addon-vis/vitest-plugin";
-import { playwright, PlaywrightProviderOptions } from "@vitest/browser-playwright";
+import { playwright, type PlaywrightProviderOptions } from "@vitest/browser-playwright";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 import rootConfig from "../../vitest.config";
@@ -40,6 +40,11 @@ export default defineConfig({
             reporter: [["lcov", { projectRoot: "../../" }]],
         },
         reporters: rootConfig.test?.reporters,
+        onConsoleLog(log: string): boolean | void {
+            // Suppress the i18n language-loading log; it fires on every
+            // setLanguage() call in setup and adds noise to test output.
+            if (log.startsWith("Loading language from")) return false;
+        },
         environment: "node",
         pool: "threads",
         globals: false,
@@ -117,7 +122,15 @@ export default defineConfig({
             "vite-plugin-node-polyfills/shims/process",
             "@vector-im/compound-design-tokens/assets/web/icons",
             "storybook/preview-api",
+            // The room-list view pulls in a heavy dnd-kit + react-virtuoso graph. If these are left to
+            // runtime discovery, the browser-mode dep optimizer can re-bundle mid-run and reload the page,
+            // which fails the in-flight setupTests.ts import for the room-list unit suites. Pre-bundle the
+            // whole graph up front so the optimizer never needs to re-run while tests are loading.
             "@dnd-kit/abstract",
+            "@dnd-kit/abstract/modifiers",
+            "@dnd-kit/dom",
+            "@dnd-kit/react",
+            "react-virtuoso",
         ],
     },
     resolve: {

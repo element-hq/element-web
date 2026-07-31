@@ -38,7 +38,6 @@ export const SAFE_LOCALPART_REGEX = /^[a-z0-9=_\-./]+$/;
  *     If present the screen to redirect to after a successful login or register.
  */
 export async function startAnyRegistrationFlow(
-    // eslint-disable-next-line camelcase
     options: { go_home_on_cancel?: boolean; go_welcome_on_cancel?: boolean; screen_after?: boolean } = {},
 ): Promise<void> {
     const modal = Modal.createDialog(QuestionDialog, {

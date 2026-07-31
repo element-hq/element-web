@@ -24,7 +24,7 @@ import { clientAndSDKContextRenderOptions, stubClient } from "../../../test-util
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { searchPagination, SearchScope } from "../../../../src/Searching";
-import { SdkContextClass } from "../../../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../../../src/contexts/SDKContextClass";
 import SettingsStore from "../../../../src/settings/SettingsStore.ts";
 import { SettingLevel } from "../../../../src/settings/SettingLevel.ts";
 
@@ -36,13 +36,13 @@ jest.mock("../../../../src/Searching", () => ({
 describe("<RoomSearchView/>", () => {
     const eventMapper = (obj: Partial<IEvent>) => new MatrixEvent(obj);
     let client: MatrixClient;
-    let sdkContext: SdkContextClass;
+    let sdkContext: SDKContextClass;
     let room: Room;
 
     beforeEach(async () => {
         stubClient();
         client = MatrixClientPeg.safeGet();
-        sdkContext = new SdkContextClass();
+        sdkContext = new SDKContextClass();
         client.supportsThreads = jest.fn().mockReturnValue(true);
         room = new Room("!room:server", client, client.getSafeUserId());
         mocked(client.getRoom).mockReturnValue(room);

@@ -14,7 +14,7 @@ import {
     type MatrixClient,
     type Room,
     type MatrixEvent,
-    type OidcRegistrationClientMetadata,
+    type OAuthRegistrationRequest,
 } from "matrix-js-sdk/src/matrix";
 import React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -531,28 +531,28 @@ export default class ElectronPlatform extends BasePlatform {
         return (SdkConfig.get() as unknown as Record<string, string>)["web_base_url"] ?? "https://app.element.io";
     }
 
-    public get defaultOidcClientUri(): string {
+    public get defaultOAuthClientUri(): string {
         // Default to element.io as our scheme `io.element.desktop` is within its scope on default MAS policies
         return "https://element.io";
     }
 
-    public async getOidcClientMetadata(): Promise<OidcRegistrationClientMetadata> {
-        const baseMetadata = await super.getOidcClientMetadata();
+    public async getOAuthClientMetadata(): Promise<OAuthRegistrationRequest> {
+        const baseMetadata = await super.getOAuthClientMetadata();
         return {
             ...baseMetadata,
-            applicationType: "native",
+            application_type: "native",
         };
     }
 
-    public getOidcClientState(): string {
+    public getOAuthClientState(): string {
         return `:${SSO_ID_KEY}:${this.sessionId}`;
     }
 
     /**
      * The URL to return to after a successful OIDC authentication
      */
-    public getOidcCallbackUrl(): URL {
-        const url = super.getOidcCallbackUrl();
+    public getOAuthCallbackUrl(): URL {
+        const url = super.getOAuthCallbackUrl();
         url.protocol = this.protocol;
         // Trim the double slash into a single slash to comply with https://datatracker.ietf.org/doc/html/rfc8252#section-7.1
         if (url.href.startsWith(`${url.protocol}//`)) {

@@ -25,13 +25,14 @@ import {
     makeBeaconInfoEvent,
     mockClientMethodsCrypto,
     mockClientMethodsEvents,
+    mockClientMethodsServer,
     mockClientMethodsUser,
     mockClientPushProcessor,
 } from "../../../test-utils";
 import type ResizeNotifier from "../../../../src/utils/ResizeNotifier";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { ScopedRoomContextProvider } from "../../../../src/contexts/ScopedRoomContext.tsx";
-import { SdkContextClass } from "../../../../src/contexts/SDKContext.ts";
+import { TestSDKContext } from "../../TestSDKContext.ts";
 
 jest.mock("../../../../src/utils/beacon", () => ({
     useBeacon: jest.fn(),
@@ -47,14 +48,15 @@ describe("MessagePanel", function () {
         ...mockClientMethodsEvents(),
         ...mockClientMethodsCrypto(),
         ...mockClientPushProcessor(),
+        ...mockClientMethodsServer(),
         getAccountData: jest.fn(),
         isUserIgnored: jest.fn().mockReturnValue(false),
         isRoomEncrypted: jest.fn().mockReturnValue(false),
         getRoom: jest.fn(),
-        getClientWellKnown: jest.fn().mockReturnValue({}),
         supportsThreads: jest.fn().mockReturnValue(true),
+        getVisibleRooms: jest.fn().mockReturnValue([]),
     });
-    let sdkContext: SdkContextClass;
+    let sdkContext: TestSDKContext;
     jest.spyOn(MatrixClientPeg, "get").mockReturnValue(client);
 
     const room = new Room(roomId, client, userId);
@@ -106,7 +108,8 @@ describe("MessagePanel", function () {
             return arg === "showDisplaynameChanges";
         });
 
-        sdkContext = new SdkContextClass();
+        sdkContext = new TestSDKContext();
+        sdkContext._client = client;
 
         DMRoomMap.makeShared(client);
     });

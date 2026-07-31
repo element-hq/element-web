@@ -25,7 +25,7 @@ import { MatrixClientPeg } from "../MatrixClientPeg";
 import { _t } from "../languageHandler";
 import { mediaFromMxc } from "../customisations/Media";
 import SettingsStore from "../settings/SettingsStore";
-import { validateUserStatus } from "../utils/userStatus";
+import { userStatusFromProfile } from "../utils/userStatus";
 
 interface IState {
     displayName?: string;
@@ -206,7 +206,8 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
             this.matrixClient.getSafeUserId(),
             "org.matrix.msc4426.status",
         );
-        await this.updateState({ userStatus: validateUserStatus(rawUserStatus) });
+        // We don't show our own "on a call" status so we pass undefined for the call status.
+        await this.updateState({ userStatus: userStatusFromProfile(rawUserStatus, undefined) });
     };
 
     private onStateEvents = async (ev: MatrixEvent): Promise<void> => {

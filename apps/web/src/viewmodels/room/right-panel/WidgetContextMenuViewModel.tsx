@@ -132,7 +132,7 @@ export class WidgetContextMenuViewModel
     };
 
     public get onFinished(): () => void {
-        return () => this.props.onFinished!();
+        return () => this.props.onFinished();
     }
 
     public get onRevokeClick(): () => void {
@@ -147,7 +147,7 @@ export class WidgetContextMenuViewModel
                 logger.error(err);
                 // We don't really need to do anything about this - the user will just hit the button again.
             });
-            this.props.onFinished!();
+            this.props.onFinished();
         };
     }
 
@@ -169,7 +169,7 @@ export class WidgetContextMenuViewModel
                 });
             }
 
-            this.props.onFinished!();
+            this.props.onFinished();
         };
     }
 
@@ -186,7 +186,7 @@ export class WidgetContextMenuViewModel
                 .catch((err) => {
                     logger.error("Failed to take screenshot: ", err);
                 });
-            this.props.onFinished!();
+            this.props.onFinished();
         };
     }
 
@@ -194,7 +194,7 @@ export class WidgetContextMenuViewModel
         return async () => {
             try {
                 if (this._roomId) {
-                    await startJitsiAudioLivestream(this._cli, this._widgetMessaging!.widgetApi!, this._roomId!);
+                    await startJitsiAudioLivestream(this._cli, this._widgetMessaging!.widgetApi!, this._roomId);
                 }
             } catch (err: any) {
                 logger.error("Failed to start livestream", err);
@@ -206,7 +206,7 @@ export class WidgetContextMenuViewModel
                     description: message,
                 });
             }
-            this.props.onFinished!();
+            this.props.onFinished();
         };
     }
 
@@ -217,7 +217,7 @@ export class WidgetContextMenuViewModel
             } else if (this._room) {
                 WidgetUtils.editWidget(this._room, this._app);
             }
-            this.props.onFinished!();
+            this.props.onFinished();
         };
     }
 
@@ -225,7 +225,7 @@ export class WidgetContextMenuViewModel
         return (direction: number) => {
             if (!this._room) throw new Error("room must be defined");
             WidgetLayoutStore.instance.moveWithinContainer(this._room, "top", this._app, direction);
-            this.props.onFinished!();
+            this.props.onFinished();
         };
     }
 }

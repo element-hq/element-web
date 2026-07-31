@@ -12,8 +12,9 @@ import { screen, render, waitFor } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 
 import FilePanel from "../../../../src/components/structures/FilePanel";
-import { mkEvent, stubClient } from "../../../test-utils";
+import { clientAndSDKContextRenderOptions, mkEvent, stubClient } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
+import { SDKContextClass } from "../../../../src/contexts/SDKContextClass.ts";
 
 jest.mock("matrix-js-sdk/src/matrix", () => ({
     ...jest.requireActual("matrix-js-sdk/src/matrix"),
@@ -38,7 +39,10 @@ describe("FilePanel", () => {
         room.getOrCreateFilteredTimelineSet = jest.fn().mockReturnValue(timelineSet);
         mocked(cli.getRoom).mockReturnValue(room);
 
-        const { asFragment } = render(<FilePanel roomId={room.roomId} onClose={jest.fn()} />);
+        const { asFragment } = render(
+            <FilePanel roomId={room.roomId} onClose={jest.fn()} />,
+            clientAndSDKContextRenderOptions(cli, SDKContextClass.instance),
+        );
         await waitFor(() => {
             expect(screen.getByText("No files visible in this room")).toBeInTheDocument();
         });
@@ -65,6 +69,7 @@ describe("FilePanel", () => {
                         filePanel = ref;
                     }}
                 />,
+                clientAndSDKContextRenderOptions(cli, SDKContextClass.instance),
             );
             await screen.findByText("No files visible in this room");
 

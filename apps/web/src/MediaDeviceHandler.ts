@@ -54,7 +54,7 @@ export default class MediaDeviceHandler extends EventEmitter {
      * (https://developer.mozilla.org/en-US/docs/Web/API/Permissions_API)
      * is ready for primetime, it might help make this simpler.
      *
-     * @return Promise<IMediaDevices> The available media devices
+     * @returns Promise<IMediaDevices> The available media devices
      */
     public static async getDevices(): Promise<IMediaDevices | undefined> {
         try {

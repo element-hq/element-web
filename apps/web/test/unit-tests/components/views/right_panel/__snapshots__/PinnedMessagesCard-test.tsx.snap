@@ -12,6 +12,7 @@ exports[`<PinnedMessagesCard /> should show the empty state when there are no pi
         class="mx_BaseCard_header_title"
       >
         <p
+          aria-level="1"
           class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 mx_BaseCard_header_title_heading"
           role="heading"
         >
@@ -94,6 +95,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
         class="mx_BaseCard_header_title"
       >
         <p
+          aria-level="1"
           class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 mx_BaseCard_header_title_heading"
           role="heading"
         >
@@ -322,6 +324,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
         class="mx_BaseCard_header_title"
       >
         <p
+          aria-level="1"
           class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 mx_BaseCard_header_title_heading"
           role="heading"
         >

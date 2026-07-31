@@ -32,14 +32,14 @@ exports[`DisambiguatedProfileView > renders the full example 1`] = `
       Eve
     </span>
     <span
+      class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 mx_DisambiguatedProfile_userStatus DisambiguatedProfile-module_userStatus"
+    >
+      🏝️
+    </span>
+    <span
       class="mx_DisambiguatedProfile_mxid DisambiguatedProfile-module_disambiguatedProfile_mxid"
     >
       @eve:matrix.org
-    </span>
-    <span
-      class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 DisambiguatedProfile-module_userStatus"
-    >
-      🏝️
     </span>
   </div>
 </div>

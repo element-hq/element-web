@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import type { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import { mkMessage, mkStubRoom } from "../../../../test-utils";
+import { vi } from "../../../../setup/adapter.ts";
 
 export function getMockedRooms(client: MatrixClient, roomCount: number = 100): Room[] {
     const rooms: Room[] = [];
@@ -14,7 +15,7 @@ export function getMockedRooms(client: MatrixClient, roomCount: number = 100): R
         const roomId = `!foo${i}:matrix.org`;
         const room = mkStubRoom(roomId, `Foo Room ${i}`, client);
         const event = mkMessage({ room: roomId, user: `@foo${i}:matrix.org`, ts: i + 1, event: true });
-        jest.spyOn(room.getLiveTimeline(), "getEvents").mockReturnValue([event]);
+        vi.spyOn(room.getLiveTimeline(), "getEvents").mockReturnValue([event]);
         rooms.push(room);
     }
     return rooms;

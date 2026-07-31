@@ -458,6 +458,7 @@ export default class EventIndex extends EventEmitter {
 
         let idle = false;
 
+        // oxlint-disable-next-line no-unmodified-loop-condition
         while (!cancelled) {
             let sleepTime = SettingsStore.getValueAt(SettingLevel.DEVICE, "crawlerSleepTime");
 
@@ -711,7 +712,7 @@ export default class EventIndex extends EventEmitter {
      * @param {ISearchArgs} searchArgs The search configuration for the search,
      * sets the search term and determines the search result contents.
      *
-     * @return {Promise<IResultRoomEvents[]>} A promise that will resolve to an array
+     * @returns {Promise<IResultRoomEvents[]>} A promise that will resolve to an array
      * of search results once the search is done.
      */
     public async search(searchArgs: ISearchArgs): Promise<IResultRoomEvents | undefined> {
@@ -949,7 +950,7 @@ export default class EventIndex extends EventEmitter {
     /**
      * Get statistical information of the index.
      *
-     * @return {Promise<IIndexStats>} A promise that will resolve to the index
+     * @returns {Promise<IIndexStats>} A promise that will resolve to the index
      * statistics.
      */
     public async getStats(): Promise<IIndexStats | undefined> {
@@ -963,7 +964,7 @@ export default class EventIndex extends EventEmitter {
      * @param {string} roomId The ID of the room which we want to check if it
      * has been already indexed.
      *
-     * @return {Promise<boolean>} Returns true if the index contains events for
+     * @returns {Promise<boolean>} Returns true if the index contains events for
      * the given room, false otherwise.
      */
     public async isRoomIndexed(roomId: string): Promise<boolean | undefined> {
@@ -992,7 +993,10 @@ export default class EventIndex extends EventEmitter {
     }
 
     public crawlingRooms(): {
-        /** The rooms that we are currently crawling. */
+        /**
+         * The rooms with an outstanding crawler checkpoint: the one being crawled right now, and
+         * those still queued behind it.
+         */
         crawlingRooms: Set<string>;
 
         /** All the encrypted rooms known by the MatrixClient. */

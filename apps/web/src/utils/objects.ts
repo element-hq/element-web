@@ -31,23 +31,6 @@ export function objectExcluding<O extends object, P extends Array<keyof O>>(a: O
 }
 
 /**
- * Gets a new object which represents the provided object, with only some properties
- * included.
- * @param a The object to clone properties of. Must be defined.
- * @param props The property names to keep.
- * @returns The new object with only the provided properties.
- */
-export function objectWithOnly<O extends object, P extends Array<keyof O>>(a: O, props: P): { [k in P[number]]: O[k] } {
-    const existingProps = Object.keys(a) as (keyof O)[];
-    const diff = arrayDiff(existingProps, props);
-    if (diff.removed.length === 0) {
-        return objectShallowClone(a);
-    } else {
-        return objectExcluding(a, diff.removed) as { [k in P[number]]: O[k] };
-    }
-}
-
-/**
  * Clones an object to a caller-controlled depth. When a propertyCloner is supplied, the
  * object's properties will be passed through it with the return value used as the new
  * object's type. This is intended to be used to deep clone a reference, but without

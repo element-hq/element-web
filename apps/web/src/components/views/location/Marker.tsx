@@ -39,13 +39,15 @@ const OptionalTooltip: React.FC<{
 
     const show = (): void => setIsVisible(true);
     const hide = (): void => setIsVisible(false);
-    const toggleVisibility = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
+    const toggleVisibility = (e: React.MouseEvent<HTMLDivElement>): void => {
         // stop map from zooming in on click
         e.stopPropagation();
         setIsVisible(!isVisible);
     };
 
     return (
+        // We break the rule here as this is a mouse-only interaction
+        // oxlint-disable-next-line jsx-a11y/click-events-have-key-events
         <div onMouseEnter={show} onClick={toggleVisibility} onMouseLeave={hide}>
             {children}
             {isVisible && tooltip}

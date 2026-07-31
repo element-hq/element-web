@@ -9,16 +9,21 @@
  * Formats a number of seconds into a human-readable string.
  * @param inSeconds
  */
-export function formatSeconds(inSeconds: number): string {
+export function formatSeconds(
+    inSeconds: number,
+    opts?: { hoursMaxLength?: number; minutesMaxLength?: number },
+): string {
     const isNegative = inSeconds < 0;
     inSeconds = Math.abs(inSeconds);
 
     const hours = Math.floor(inSeconds / (60 * 60))
         .toFixed(0)
-        .padStart(2, "0");
+        .padStart(opts?.hoursMaxLength ?? 2, "0");
+
     const minutes = Math.floor((inSeconds % (60 * 60)) / 60)
         .toFixed(0)
-        .padStart(2, "0");
+        .padStart(opts?.minutesMaxLength ?? 2, "0");
+
     const seconds = Math.floor((inSeconds % (60 * 60)) % 60)
         .toFixed(0)
         .padStart(2, "0");

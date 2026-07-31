@@ -6,11 +6,16 @@
  */
 
 import React, { type JSX, useCallback } from "react";
-import { Virtuoso } from "react-virtuoso";
+import { Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 
 import { useVirtualizedList, type VirtualizedListContext, type VirtualizedListProps } from "../virtualized-list";
 
 export interface FlatVirtualizedListProps<Item, Context> extends VirtualizedListProps<Item, Context> {
+    /**
+     * Optional ref to the underlying Virtuoso handle, for imperative scrolling.
+     */
+    scrollHandleRef?: React.RefCallback<VirtuosoHandle>;
+
     /**
      * Function that renders each list item as a JSX element.
      * @param index - The index of the item in the list
@@ -35,8 +40,11 @@ export interface FlatVirtualizedListProps<Item, Context> extends VirtualizedList
  * @template Context - The type of additional context data passed to items
  */
 export function FlatVirtualizedList<Item, Context>(props: FlatVirtualizedListProps<Item, Context>): React.ReactElement {
-    const { getItemComponent, ...restProps } = props;
-    const { onFocusForGetItemComponent, ...virtuosoProps } = useVirtualizedList<Item, Context>(restProps);
+    const { getItemComponent, scrollHandleRef, ...restProps } = props;
+    const { onFocusForGetItemComponent, ...virtuosoProps } = useVirtualizedList<Item, Context>(
+        restProps,
+        scrollHandleRef,
+    );
 
     const getItemComponentInternal = useCallback(
         (index: number, item: Item, context: VirtualizedListContext<Context>): JSX.Element =>

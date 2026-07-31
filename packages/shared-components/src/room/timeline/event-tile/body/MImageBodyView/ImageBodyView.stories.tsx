@@ -19,7 +19,6 @@ import {
     type ImageBodyViewSnapshot,
 } from "./ImageBodyView";
 import imageSrc from "../../../../../../static/image-body/install-spinner.png";
-import thumbnailSrc from "../../../../../../static/image-body/install-spinner.png";
 import animatedGifSrc from "../../../../../../static/image-body/install-spinner.gif";
 const demoBlurhash = "LEHV6nWB2yk8pyo0adR*.7kCMdnj";
 const imageBodyViewStateOptions = [ImageBodyViewState.ERROR, ImageBodyViewState.HIDDEN, ImageBodyViewState.READY];
@@ -28,6 +27,8 @@ const imageBodyViewPlaceholderOptions = [
     ImageBodyViewPlaceholder.SPINNER,
     ImageBodyViewPlaceholder.BLURHASH,
 ];
+
+const thumbnailSrc = imageSrc;
 
 type ImageBodyViewProps = ImageBodyViewSnapshot &
     ImageBodyViewActions & {

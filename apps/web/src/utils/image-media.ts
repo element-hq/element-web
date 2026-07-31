@@ -38,7 +38,7 @@ const MAX_HEIGHT = 600;
  * @param {number} inputHeight the width of the image in the input element.
  * @param {string} mimeType The mimeType to save the blob as.
  * @param {boolean} calculateBlurhash Whether to calculate a blurhash of the given image too.
- * @return {Promise} A promise that resolves with an object with an info key
+ * @returns {Promise} A promise that resolves with an object with an info key
  *  and a thumbnail key.
  */
 export async function createThumbnail(

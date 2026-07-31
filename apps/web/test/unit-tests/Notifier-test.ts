@@ -21,9 +21,10 @@ import {
 import { waitFor } from "jest-matrix-react";
 import { CallMembership, type SessionMembershipData, type MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 import { randomUUID } from "node:crypto";
+import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 
 import type BasePlatform from "../../src/BasePlatform";
-import Notifier from "../../src/Notifier";
+import Notifier, { NOTIFICATION_SOUND_THROTTLE_MS } from "../../src/Notifier";
 import SettingsStore from "../../src/settings/SettingsStore";
 import ToastStore from "../../src/stores/ToastStore";
 import {
@@ -38,7 +39,6 @@ import {
     mockPlatformPeg,
 } from "../test-utils";
 import { getIncomingCallToastKey, IncomingCallToast } from "../../src/toasts/IncomingCallToast";
-import { SdkContextClass } from "../../src/contexts/SDKContext";
 import UserActivity from "../../src/UserActivity";
 import Modal from "../../src/Modal";
 import { mkThread } from "../test-utils/threads";
@@ -46,6 +46,7 @@ import dis from "../../src/dispatcher/dispatcher";
 import { type ThreadPayload } from "../../src/dispatcher/payloads/ThreadPayload";
 import { Action } from "../../src/dispatcher/actions";
 import { addReplyToMessageContent } from "../../src/utils/Reply";
+import { TestSDKContext } from "./TestSDKContext.ts";
 
 jest.mock("../../src/utils/notifications", () => ({
     // @ts-ignore
@@ -61,6 +62,9 @@ jest.mock("../../src/audio/compat", () => ({
 const settingsStoreGetValue = SettingsStore.getValue;
 
 describe("Notifier", () => {
+    const context = new TestSDKContext();
+    let notifier: Notifier;
+
     const roomId = "!room1:server";
     const testEvent = mkEvent({
         event: true,
@@ -145,6 +149,8 @@ describe("Notifier", () => {
         mockClient.pushRules = {
             global: {},
         };
+        // @ts-ignore
+        mockClient.pushProcessor = new PushProcessor(mockClient);
         accountDataEventKey = getLocalNotificationAccountDataEventType(mockClient.deviceId!);
 
         testRoom = new Room(roomId, mockClient, mockClient.getSafeUserId());
@@ -154,9 +160,11 @@ describe("Notifier", () => {
             maySendNotifications: jest.fn().mockReturnValue(true),
             displayNotification: jest.fn().mockReturnValue({ close: jest.fn() }),
             loudNotification: jest.fn(),
+            requestNotificationPermission: jest.fn(),
         });
 
-        Notifier.isBodyEnabled = jest.fn().mockReturnValue(true);
+        notifier = new Notifier(dis, context);
+        notifier.isBodyEnabled = jest.fn().mockReturnValue(true);
 
         mockClient.getRoom.mockImplementation((id: string | undefined): Room | null => {
             if (id === roomId) return testRoom;
@@ -165,7 +173,8 @@ describe("Notifier", () => {
         });
 
         // @ts-ignore
-        Notifier.backgroundAudio.audioContext = mockAudioContext;
+        notifier.backgroundAudio.audioContext = mockAudioContext;
+        context._client = mockClient;
     });
 
     describe("triggering notification from events", () => {
@@ -185,9 +194,9 @@ describe("Notifier", () => {
             // and references them in stop
             // so blows up if stopped before it was started
             if (hasStartedNotiferBefore) {
-                Notifier.stop();
+                notifier.stop();
             }
-            Notifier.start();
+            notifier.start();
             hasStartedNotiferBefore = true;
             mockClient.getRoom.mockReturnValue(testRoom);
             mockClient.getPushActionsForEvent.mockReturnValue({
@@ -209,7 +218,7 @@ describe("Notifier", () => {
         });
 
         afterAll(() => {
-            Notifier.stop();
+            notifier.stop();
         });
 
         it("does not create notifications before syncing has started", () => {
@@ -322,13 +331,13 @@ describe("Notifier", () => {
         ];
         it.each(testCases)("does not dispatch when notifications are silenced", ({ event, count }) => {
             mockClient.setAccountData(accountDataEventKey, event!);
-            Notifier.displayPopupNotification(testEvent, testRoom);
+            notifier.displayPopupNotification(testEvent, testRoom);
             expect(MockPlatform.displayNotification).toHaveBeenCalledTimes(count);
         });
 
         it("should display a notification for a voice message", () => {
             const audioEvent = mkAudioEvent();
-            Notifier.displayPopupNotification(audioEvent, testRoom);
+            notifier.displayPopupNotification(audioEvent, testRoom);
             expect(MockPlatform.displayNotification).toHaveBeenCalledWith(
                 "@user:example.com (!room1:server)",
                 "@user:example.com: test audio message",
@@ -352,7 +361,7 @@ describe("Notifier", () => {
                 room: testRoom.roomId,
             });
             addReplyToMessageContent(reply.getContent(), event);
-            Notifier.displayPopupNotification(reply, testRoom);
+            notifier.displayPopupNotification(reply, testRoom);
             expect(MockPlatform.displayNotification).toHaveBeenCalledWith(
                 "@bob:example.org (!room1:server)",
                 "This was a triumph",
@@ -392,7 +401,7 @@ describe("Notifier", () => {
                     formatted_body: formattedBody,
                 },
             });
-            Notifier.displayPopupNotification(spoilerEvent, testRoom);
+            notifier.displayPopupNotification(spoilerEvent, testRoom);
             expect(MockPlatform.displayNotification).toHaveBeenCalledWith(
                 "@bob:example.org (!room1:server)",
                 expected,
@@ -408,7 +417,7 @@ describe("Notifier", () => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string): any => {
                 return { url: { content_uri: "foobar" } };
             });
-            expect(Notifier.getSoundForRoom("!roomId:server")).toBeNull();
+            expect(notifier.getSoundForRoom("!roomId:server")).toBeNull();
         });
     });
 
@@ -421,11 +430,114 @@ describe("Notifier", () => {
         it.each(testCases)("does not dispatch when notifications are silenced", ({ event, count }) => {
             // It's not ideal to only look at whether this function has been called
             // but avoids starting to look into DOM stuff
-            Notifier.getSoundForRoom = jest.fn();
+            notifier.getSoundForRoom = jest.fn();
 
             mockClient.setAccountData(accountDataEventKey, event!);
-            Notifier.playAudioNotification(testEvent, testRoom);
-            expect(Notifier.getSoundForRoom).toHaveBeenCalledTimes(count);
+            notifier.playAudioNotification(testEvent, testRoom);
+            expect(notifier.getSoundForRoom).toHaveBeenCalledTimes(count);
+        });
+    });
+
+    // Regression test for https://github.com/element-hq/element-web/issues/31996
+    // On macOS Sequoia, waking from sleep delivers the whole sync backlog in one
+    // batch, firing playAudioNotification for every backlogged notifying event
+    // near-simultaneously. Without throttling, the identical sound buffers
+    // superimpose into one loud "stacked" sound. We coalesce a burst into at
+    // most one audible play within NOTIFICATION_SOUND_THROTTLE_MS.
+    describe("playAudioNotification throttle (macOS wake-from-sleep stacking)", () => {
+        let playSpy: jest.SpyInstance;
+
+        beforeEach(() => {
+            jest.useFakeTimers();
+            jest.setSystemTime(0);
+
+            // Ensure notifications are not silenced so we exercise the throttle,
+            // not the silencing gate.
+            accountDataStore = {};
+            mockClient.setAccountData(accountDataEventKey, { is_silenced: false });
+
+            // Default sound path (no custom room sound).
+            jest.spyOn(notifier, "getSoundForRoom").mockReturnValue(null);
+
+            // @ts-ignore - backgroundAudio is private
+            playSpy = jest.spyOn(notifier.backgroundAudio, "pickFormatAndPlay").mockResolvedValue({} as any);
+        });
+
+        afterEach(() => {
+            playSpy.mockRestore();
+            jest.useRealTimers();
+        });
+
+        it("plays at most one sound for a burst of notifications within the throttle window", async () => {
+            // Simulate a backlog of notifications arriving back-to-back on wake.
+            await notifier.playAudioNotification(testEvent, testRoom);
+            await notifier.playAudioNotification(testEvent, testRoom);
+            await notifier.playAudioNotification(testEvent, testRoom);
+
+            expect(playSpy).toHaveBeenCalledTimes(1);
+        });
+
+        it("plays again once the throttle window has elapsed", async () => {
+            await notifier.playAudioNotification(testEvent, testRoom);
+            expect(playSpy).toHaveBeenCalledTimes(1);
+
+            // Advance the clock just past the throttle window.
+            jest.setSystemTime(NOTIFICATION_SOUND_THROTTLE_MS + 1);
+
+            await notifier.playAudioNotification(testEvent, testRoom);
+            expect(playSpy).toHaveBeenCalledTimes(2);
+        });
+
+        it("throttles right up to the window boundary, then plays again (strict `<`)", async () => {
+            await notifier.playAudioNotification(testEvent, testRoom);
+            expect(playSpy).toHaveBeenCalledTimes(1);
+
+            // One ms before the window elapses: still throttled.
+            jest.setSystemTime(NOTIFICATION_SOUND_THROTTLE_MS - 1);
+            await notifier.playAudioNotification(testEvent, testRoom);
+            expect(playSpy).toHaveBeenCalledTimes(1);
+
+            // Exactly at the window boundary: plays again (the comparison is a strict `<`).
+            jest.setSystemTime(NOTIFICATION_SOUND_THROTTLE_MS);
+            await notifier.playAudioNotification(testEvent, testRoom);
+            expect(playSpy).toHaveBeenCalledTimes(2);
+        });
+
+        it("does not coalesce two genuinely different sounds within the window (#31996 per-sound keying)", async () => {
+            const soundA = { url: "sound-a.mp3", name: "A", type: "audio/mpeg", size: 1 };
+            const soundB = { url: "sound-b.mp3", name: "B", type: "audio/mpeg", size: 1 };
+            const otherRoom = new Room("!other:server", mockClient, mockClient.getSafeUserId());
+            jest.mocked(notifier.getSoundForRoom).mockImplementation((roomId: string) =>
+                roomId === testRoom.roomId ? soundA : soundB,
+            );
+            // @ts-ignore - backgroundAudio is private
+            const customPlaySpy = jest.spyOn(notifier.backgroundAudio, "play").mockResolvedValue({} as any);
+
+            // Two different sounds back-to-back within the window: BOTH must play (only identical
+            // backlogged sounds are coalesced).
+            await notifier.playAudioNotification(testEvent, testRoom);
+            await notifier.playAudioNotification(testEvent, otherRoom);
+
+            expect(customPlaySpy).toHaveBeenCalledTimes(2);
+            expect(customPlaySpy).toHaveBeenNthCalledWith(1, soundA.url);
+            expect(customPlaySpy).toHaveBeenNthCalledWith(2, soundB.url);
+            customPlaySpy.mockRestore();
+        });
+
+        it("does not play, and does not arm the throttle, when notifications are silenced", async () => {
+            mockClient.setAccountData(accountDataEventKey, { is_silenced: true });
+
+            await notifier.playAudioNotification(testEvent, testRoom);
+            await notifier.playAudioNotification(testEvent, testRoom);
+
+            // Silencing gate short-circuits before the sound is played.
+            expect(playSpy).not.toHaveBeenCalled();
+
+            // ...and the silenced calls did NOT arm the throttle: once un-silenced, the next event plays
+            // immediately (a regression arming the throttle on silenced events would suppress this).
+            mockClient.setAccountData(accountDataEventKey, { is_silenced: false });
+            await notifier.playAudioNotification(testEvent, testRoom);
+            expect(playSpy).toHaveBeenCalledTimes(1);
         });
     });
 
@@ -458,8 +570,8 @@ describe("Notifier", () => {
                 }
                 return undefined;
             });
-            Notifier.start();
-            Notifier.onSyncStateChange(SyncState.Syncing, null);
+            notifier.start();
+            notifier.onSyncStateChange(SyncState.Syncing, null);
         });
 
         afterEach(() => {
@@ -629,15 +741,15 @@ describe("Notifier", () => {
             // and references them in stop
             // so blows up if stopped before it was started
             if (hasStartedNotiferBefore) {
-                Notifier.stop();
+                notifier.stop();
             }
-            Notifier.start();
+            notifier.start();
             hasStartedNotiferBefore = true;
             createLocalNotificationSettingsIfNeededMock.mockClear();
         });
 
         afterAll(() => {
-            Notifier.stop();
+            notifier.stop();
         });
 
         it("does not create local notifications event after a sync error", () => {
@@ -665,14 +777,14 @@ describe("Notifier", () => {
 
     describe("evaluateEvent", () => {
         beforeEach(() => {
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(testRoom.roomId);
+            jest.spyOn(context.roomViewStore, "getRoomId").mockReturnValue(testRoom.roomId);
 
             jest.spyOn(UserActivity.sharedInstance(), "userActiveRecently").mockReturnValue(true);
 
             jest.spyOn(Modal, "hasDialogs").mockReturnValue(false);
 
-            jest.spyOn(Notifier, "displayPopupNotification").mockReset();
-            jest.spyOn(Notifier, "isEnabled").mockReturnValue(true);
+            jest.spyOn(notifier, "displayPopupNotification").mockReset();
+            jest.spyOn(notifier, "isEnabled").mockReturnValue(true);
 
             mockClient.getPushActionsForEvent.mockReturnValue({
                 notify: true,
@@ -683,9 +795,9 @@ describe("Notifier", () => {
         });
 
         it("should show a pop-up", () => {
-            expect(Notifier.displayPopupNotification).toHaveBeenCalledTimes(0);
-            Notifier.evaluateEvent(testEvent);
-            expect(Notifier.displayPopupNotification).toHaveBeenCalledTimes(0);
+            expect(notifier.displayPopupNotification).toHaveBeenCalledTimes(0);
+            notifier.evaluateEvent(testEvent);
+            expect(notifier.displayPopupNotification).toHaveBeenCalledTimes(0);
 
             const eventFromOtherRoom = mkEvent({
                 event: true,
@@ -695,8 +807,8 @@ describe("Notifier", () => {
                 content: {},
             });
 
-            Notifier.evaluateEvent(eventFromOtherRoom);
-            expect(Notifier.displayPopupNotification).toHaveBeenCalledTimes(1);
+            notifier.evaluateEvent(eventFromOtherRoom);
+            expect(notifier.displayPopupNotification).toHaveBeenCalledTimes(1);
         });
 
         it("should a pop-up for thread event", async () => {
@@ -707,34 +819,34 @@ describe("Notifier", () => {
                 participantUserIds: ["@bob:example.org"],
             });
 
-            expect(Notifier.displayPopupNotification).toHaveBeenCalledTimes(0);
+            expect(notifier.displayPopupNotification).toHaveBeenCalledTimes(0);
 
-            Notifier.evaluateEvent(rootEvent);
-            expect(Notifier.displayPopupNotification).toHaveBeenCalledTimes(0);
+            notifier.evaluateEvent(rootEvent);
+            expect(notifier.displayPopupNotification).toHaveBeenCalledTimes(0);
 
-            Notifier.evaluateEvent(events[1]);
-            expect(Notifier.displayPopupNotification).toHaveBeenCalledTimes(1);
+            notifier.evaluateEvent(events[1]);
+            expect(notifier.displayPopupNotification).toHaveBeenCalledTimes(1);
 
             dis.dispatch<ThreadPayload>({
                 action: Action.ViewThread,
                 thread_id: rootEvent.getId()!,
             });
 
-            await waitFor(() => expect(SdkContextClass.instance.roomViewStore.getThreadId()).toBe(rootEvent.getId()));
+            await waitFor(() => expect(context.roomViewStore.getThreadId()).toBe(rootEvent.getId()));
 
-            Notifier.evaluateEvent(events[1]);
-            expect(Notifier.displayPopupNotification).toHaveBeenCalledTimes(1);
+            notifier.evaluateEvent(events[1]);
+            expect(notifier.displayPopupNotification).toHaveBeenCalledTimes(1);
         });
 
         it("should show a pop-up for an audio message", () => {
-            Notifier.evaluateEvent(mkAudioEvent());
-            expect(Notifier.displayPopupNotification).toHaveBeenCalledTimes(1);
+            notifier.evaluateEvent(mkAudioEvent());
+            expect(notifier.displayPopupNotification).toHaveBeenCalledTimes(1);
         });
     });
 
     describe("setPromptHidden", () => {
         it("should persist by default", () => {
-            Notifier.setPromptHidden(true);
+            notifier.setPromptHidden(true);
             expect(localStorage.getItem("notifications_hidden")).toBeTruthy();
         });
     });
@@ -743,7 +855,7 @@ describe("Notifier", () => {
         it("should not evaluate events from the thread list fake timeline sets", async () => {
             mockClient.supportsThreads.mockReturnValue(true);
 
-            const fn = jest.spyOn(Notifier, "evaluateEvent");
+            const fn = jest.spyOn(notifier, "evaluateEvent");
 
             await testRoom.createThreadsTimelineSets();
             testRoom.threadsTimelineSets[0]!.addEventToTimeline(
@@ -759,6 +871,36 @@ describe("Notifier", () => {
             );
 
             expect(fn).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("setEnabled", () => {
+        it("should call fire notifier_enabled value=true when permission is granted", async () => {
+            const dispatchSpy = jest.spyOn(dis, "dispatch");
+            const notifier = new Notifier(dis, context);
+
+            jest.mocked(MockPlatform.requestNotificationPermission).mockResolvedValue("granted");
+
+            const resolvers = Promise.withResolvers<void>();
+            notifier.setEnabled(true, resolvers.resolve);
+            await resolvers.promise;
+
+            expect(dispatchSpy).toHaveBeenCalledWith({
+                action: "notifier_enabled",
+                value: true,
+            });
+        });
+
+        it("should call fire notifier_enabled value=false when disabling", async () => {
+            const dispatchSpy = jest.spyOn(dis, "dispatch");
+            const notifier = new Notifier(dis, context);
+
+            notifier.setEnabled(false);
+
+            expect(dispatchSpy).toHaveBeenCalledWith({
+                action: "notifier_enabled",
+                value: false,
+            });
         });
     });
 });

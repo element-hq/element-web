@@ -11,7 +11,7 @@ import { EventType, type Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
-import { uniqBy } from "lodash";
+import { debounce, uniqBy } from "lodash";
 import { Pill, PillInput, RichList } from "@element-hq/web-shared-components";
 import { DialPadIcon, UserProfileSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
@@ -26,8 +26,7 @@ import { abbreviateUrl } from "../../../utils/UrlUtils";
 import IdentityAuthClient from "../../../IdentityAuthClient";
 import { showAnyInviteErrors } from "../../../RoomInvite";
 import { Action } from "../../../dispatcher/actions";
-import { DefaultTagID } from "../../../stores/room-list-v3/skip-list/tag";
-import RoomListStore from "../../../stores/room-list/RoomListStore";
+import RoomListStoreV3 from "../../../stores/room-list-v3/RoomListStoreV3";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import { SearchResultAvatar } from "../avatars/SearchResultAvatar";
@@ -39,7 +38,6 @@ import Dialpad from "../voip/DialPad";
 import QuestionDialog from "./QuestionDialog";
 import BaseDialog from "./BaseDialog";
 import DialPadBackspaceButton from "../elements/DialPadBackspaceButton";
-import LegacyCallHandler from "../../../LegacyCallHandler";
 import CopyableText from "../elements/CopyableText";
 import { type ScreenName } from "../../../PosthogTrackers";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
@@ -56,7 +54,7 @@ import Modal from "../../../Modal";
 import dis from "../../../dispatcher/dispatcher";
 import { privateShouldBeEncrypted } from "../../../utils/rooms";
 import { type NonEmptyArray } from "../../../@types/common";
-import { SdkContextClass } from "../../../contexts/SDKContext";
+import { SDKContextClass } from "../../../contexts/SDKContextClass";
 import { type UserProfilesStore } from "../../../stores/UserProfilesStore";
 import InviteProgressBody from "./InviteProgressBody.tsx";
 import MultiInviter, { type CompletionStates as MultiInviterCompletionStates } from "../../../utils/MultiInviter.ts";
@@ -189,7 +187,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         initialText: "",
     };
 
-    private debounceTimer: number | null = null; // actually number because we're in the browser
     private editorRef = createRef<HTMLInputElement>();
     private numberEntryFieldRef = createRef<Field>();
     private unmounted = false;
@@ -205,7 +202,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             throw new Error("When using InviteKind.CallTransfer a call is required for an InviteDialog");
         }
 
-        this.profilesStore = SdkContextClass.instance.userProfilesStore;
+        this.profilesStore = SDKContextClass.instance.userProfilesStore;
         const cli = MatrixClientPeg.safeGet();
 
         const excludedIds = new Set([cli.getSafeUserId()]);
@@ -258,6 +255,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
     public componentWillUnmount(): void {
         this.unmounted = true;
+        this.updateSuggestions.cancel();
     }
 
     private onConsultFirstChange = (ev: React.ChangeEvent<HTMLInputElement>): void => {
@@ -279,9 +277,9 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     public static buildRecents(excludedTargetIds: Set<string>): Result[] {
         const rooms = DMRoomMap.shared().getUniqueRoomsWithIndividuals(); // map of userId => js-sdk Room
 
-        // Also pull in all the rooms tagged as DefaultTagID.DM so we don't miss anything. Sometimes the
-        // room list doesn't tag the room for the DMRoomMap, but does for the room list.
-        const dmTaggedRooms = RoomListStore.instance.orderedLists[DefaultTagID.DM] || [];
+        // Also pull in all the rooms that the room list tags as DMs so we don't miss anything: sometimes
+        // a room is absent from getUniqueRoomsWithIndividuals() above but is still tagged as a DM.
+        const dmTaggedRooms = RoomListStoreV3.instance.getDmRooms();
         const myUserId = MatrixClientPeg.safeGet().getUserId();
         for (const dmRoom of dmTaggedRooms) {
             const otherMembers = dmRoom.getJoinedMembers().filter((u) => u.userId !== myUserId);
@@ -484,9 +482,13 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 return;
             }
 
-            LegacyCallHandler.instance.startTransferToMatrixID(this.props.call, targetIds[0], this.state.consultFirst);
+            SDKContextClass.instance.legacyCallHandler.startTransferToMatrixID(
+                this.props.call,
+                targetIds[0],
+                this.state.consultFirst,
+            );
         } else {
-            LegacyCallHandler.instance.startTransferToPhoneNumber(
+            SDKContextClass.instance.legacyCallHandler.startTransferToPhoneNumber(
                 this.props.call,
                 this.state.dialPadValue,
                 this.state.consultFirst,
@@ -528,125 +530,127 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         this.props.onFinished(false);
     };
 
-    private updateSuggestions = async (term: string): Promise<void> => {
-        MatrixClientPeg.safeGet()
-            .searchUserDirectory({ term })
-            .then(async (r): Promise<void> => {
-                if (term !== this.state.filterText) {
-                    // Discard the results - we were probably too slow on the server-side to make
-                    // these results useful. This is a race we want to avoid because we could overwrite
-                    // more accurate results.
-                    return;
-                }
-
-                if (!r.results) r.results = [];
-
-                // While we're here, try and autocomplete a search result for the mxid itself
-                // if there's no matches (and the input looks like a mxid).
-                if (term[0] === "@" && term.indexOf(":") > 1) {
-                    try {
-                        const profile = await this.profilesStore.getOrFetchProfile(term, { shouldThrow: true });
-
-                        if (profile) {
-                            // If we have a profile, we have enough information to assume that
-                            // the mxid can be invited - add it to the list. We stick it at the
-                            // top so it is most obviously presented to the user.
-                            r.results.splice(0, 0, {
-                                user_id: term,
-                                display_name: profile["displayname"],
-                                avatar_url: profile["avatar_url"],
-                            });
-                        }
-                    } catch (e) {
-                        logger.warn("Non-fatal error trying to make an invite for a user ID", e);
+    private updateSuggestions = debounce(
+        async (term: string): Promise<void> => {
+            MatrixClientPeg.safeGet()
+                .searchUserDirectory({ term })
+                .then(async (r): Promise<void> => {
+                    if (term !== this.state.filterText) {
+                        // Discard the results - we were probably too slow on the server-side to make
+                        // these results useful. This is a race we want to avoid because we could overwrite
+                        // more accurate results.
+                        return;
                     }
-                }
 
-                this.setState({
-                    serverResultsMixin: r.results.map((u) => ({
-                        userId: u.user_id,
-                        user: new DirectoryMember(u),
-                    })),
+                    if (!r.results) r.results = [];
+
+                    // While we're here, try and autocomplete a search result for the mxid itself
+                    // if there's no matches (and the input looks like a mxid).
+                    if (term[0] === "@" && term.indexOf(":") > 1) {
+                        try {
+                            const profile = await this.profilesStore.getOrFetchProfile(term, { shouldThrow: true });
+
+                            if (profile) {
+                                // If we have a profile, we have enough information to assume that
+                                // the mxid can be invited - add it to the list. We stick it at the
+                                // top so it is most obviously presented to the user.
+                                r.results.splice(0, 0, {
+                                    user_id: term,
+                                    display_name: profile["displayname"],
+                                    avatar_url: profile["avatar_url"],
+                                });
+                            }
+                        } catch (e) {
+                            logger.warn("Non-fatal error trying to make an invite for a user ID", e);
+                        }
+                    }
+
+                    if (this.unmounted) return;
+                    this.setState({
+                        serverResultsMixin: r.results.map((u) => ({
+                            userId: u.user_id,
+                            user: new DirectoryMember(u),
+                        })),
+                    });
+                })
+                .catch((e) => {
+                    logger.error("Error searching user directory:");
+                    logger.error(e);
+                    if (this.unmounted) return;
+                    this.setState({ serverResultsMixin: [] }); // clear results because it's moderately fatal
                 });
-            })
-            .catch((e) => {
-                logger.error("Error searching user directory:");
-                logger.error(e);
-                this.setState({ serverResultsMixin: [] }); // clear results because it's moderately fatal
-            });
 
-        // Whenever we search the directory, also try to search the identity server. It's
-        // all debounced the same anyways.
-        if (!this.state.canUseIdentityServer) {
-            // The user doesn't have an identity server set - warn them of that.
-            this.setState({ tryingIdentityServer: true });
-            return;
-        }
-        if (Email.looksValid(term) && this.canInviteThirdParty() && SettingsStore.getValue(UIFeature.IdentityServer)) {
-            // Start off by suggesting the plain email while we try and resolve it
-            // to a real account.
-            this.setState({
-                // per above: the userId is a lie here - it's just a regular identifier
-                threepidResultsMixin: [{ user: new ThreepidMember(term), userId: term }],
-            });
-            try {
-                const authClient = new IdentityAuthClient();
-                const token = await authClient.getAccessToken();
-                // No token → unable to try a lookup
-                if (!token) return;
-
-                if (term !== this.state.filterText) return; // abandon hope
-
-                const lookup = await MatrixClientPeg.safeGet().lookupThreePid("email", term, token);
-                if (term !== this.state.filterText) return; // abandon hope
-
-                if (!lookup || !("mxid" in lookup)) {
-                    // We weren't able to find anyone - we're already suggesting the plain email
-                    // as an alternative, so do nothing.
-                    return;
-                }
-
-                // We append the user suggestion to give the user an option to click
-                // the email anyways, and so we don't cause things to jump around. In
-                // theory, the user would see the user pop up and think "ah yes, that
-                // person!"
-                const profile = await this.profilesStore.getOrFetchProfile(lookup.mxid);
-                if (term !== this.state.filterText || !profile) return; // abandon hope
-                this.setState({
-                    threepidResultsMixin: [
-                        ...this.state.threepidResultsMixin,
-                        {
-                            user: new DirectoryMember({
-                                user_id: lookup.mxid,
-                                display_name: profile.displayname,
-                                avatar_url: profile.avatar_url,
-                            }),
-                            // Use the search term as identifier, so that it shows up in suggestions.
-                            userId: term,
-                        },
-                    ],
-                });
-            } catch (e) {
-                logger.error("Error searching identity server:");
-                logger.error(e);
-                this.setState({ threepidResultsMixin: [] }); // clear results because it's moderately fatal
+            // Whenever we search the directory, also try to search the identity server. It's
+            // all debounced the same anyways.
+            if (!this.state.canUseIdentityServer) {
+                // The user doesn't have an identity server set - warn them of that.
+                this.setState({ tryingIdentityServer: true });
+                return;
             }
-        }
-    };
+            if (
+                Email.looksValid(term) &&
+                this.canInviteThirdParty() &&
+                SettingsStore.getValue(UIFeature.IdentityServer)
+            ) {
+                // Start off by suggesting the plain email while we try and resolve it
+                // to a real account.
+                this.setState({
+                    // per above: the userId is a lie here - it's just a regular identifier
+                    threepidResultsMixin: [{ user: new ThreepidMember(term), userId: term }],
+                });
+                try {
+                    const authClient = new IdentityAuthClient();
+                    const token = await authClient.getAccessToken();
+                    // No token → unable to try a lookup
+                    if (!token) return;
+
+                    if (term !== this.state.filterText) return; // abandon hope
+
+                    const lookup = await MatrixClientPeg.safeGet().lookupThreePid("email", term, token);
+                    if (term !== this.state.filterText) return; // abandon hope
+
+                    if (!lookup || !("mxid" in lookup)) {
+                        // We weren't able to find anyone - we're already suggesting the plain email
+                        // as an alternative, so do nothing.
+                        return;
+                    }
+
+                    // We append the user suggestion to give the user an option to click
+                    // the email anyways, and so we don't cause things to jump around. In
+                    // theory, the user would see the user pop up and think "ah yes, that
+                    // person!"
+                    const profile = await this.profilesStore.getOrFetchProfile(lookup.mxid);
+                    if (term !== this.state.filterText || !profile) return; // abandon hope
+                    if (this.unmounted) return;
+                    this.setState({
+                        threepidResultsMixin: [
+                            ...this.state.threepidResultsMixin,
+                            {
+                                user: new DirectoryMember({
+                                    user_id: lookup.mxid,
+                                    display_name: profile.displayname,
+                                    avatar_url: profile.avatar_url,
+                                }),
+                                // Use the search term as identifier, so that it shows up in suggestions.
+                                userId: term,
+                            },
+                        ],
+                    });
+                } catch (e) {
+                    logger.error("Error searching identity server:");
+                    logger.error(e);
+                    if (this.unmounted) return;
+                    this.setState({ threepidResultsMixin: [] }); // clear results because it's moderately fatal
+                }
+            }
+        },
+        150, // 150ms debounce (human reaction time + some)
+    );
 
     private updateFilter = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const term = e.target.value;
         this.setState({ filterText: term });
-
-        // Debounce server lookups to reduce spam. We don't clear the existing server
-        // results because they might still be vaguely accurate, likewise for races which
-        // could happen here.
-        if (this.debounceTimer) {
-            clearTimeout(this.debounceTimer);
-        }
-        this.debounceTimer = window.setTimeout(() => {
-            this.updateSuggestions(term);
-        }, 150); // 150ms debounce (human reaction time + some)
+        this.updateSuggestions(term);
     };
 
     private showMoreRecents = (): void => {
@@ -799,7 +803,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         e.preventDefault();
 
         // Update the IS in account data. Actually using it may trigger terms.
-        // eslint-disable-next-line react-hooks/rules-of-hooks
         setToDefaultIdentityServer(MatrixClientPeg.safeGet());
         this.setState({ canUseIdentityServer: true, tryingIdentityServer: false });
     };
@@ -897,20 +900,18 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             );
         }
 
-        const tiles = toRender.map((r) => (
-            <DMRoomTile
-                member={r.user}
-                lastActiveTs={lastActive(r)}
-                key={r.user.userId}
-                onToggle={this.toggleMember}
-                isSelected={this.state.targets.some((t) => t.userId === r.userId)}
-            />
-        ));
-
         return (
             <div className="mx_InviteDialog_section">
                 <RichList title={sectionName} titleAttributes={{ "role": "heading", "aria-level": 3 }}>
-                    {tiles}
+                    {toRender.map((r) => (
+                        <DMRoomTile
+                            member={r.user}
+                            lastActiveTs={lastActive(r)}
+                            key={r.user.userId}
+                            onToggle={this.toggleMember}
+                            isSelected={this.state.targets.some((t) => t.userId === r.userId)}
+                        />
+                    ))}
                 </RichList>
                 {showMore}
             </div>
@@ -918,10 +919,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     }
 
     private renderEditor(): JSX.Element {
-        const targets = this.state.targets.map((t) => (
-            <DMUserTile member={t} onRemove={this.state.busy ? undefined : this.removeMember} key={t.userId} />
-        ));
-
         return (
             <PillInput
                 data-testid="invite-dialog-input-wrapper"
@@ -943,7 +940,9 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                     !this.state.busy && this.removeMember(this.state.targets[this.state.targets.length - 1])
                 }
             >
-                {targets}
+                {this.state.targets.map((t) => (
+                    <DMUserTile member={t} onRemove={this.state.busy ? undefined : this.removeMember} key={t.userId} />
+                ))}
             </PillInput>
         );
     }
@@ -1388,7 +1387,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             new Tab(
                 TabId.UserDirectory,
                 _td("invite|transfer_user_directory_tab"),
-                <UserProfileSolidIcon />,
+                <UserProfileSolidIcon key={TabId.UserDirectory} />,
                 usersSection,
             ),
         ];

@@ -7,9 +7,16 @@
 
 import React from "react";
 import { mocked } from "jest-mock";
-import { Device, DeviceVerification, type MatrixClient, MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
+import {
+    Device,
+    DeviceVerification,
+    type MatrixClient,
+    MatrixEvent,
+    RoomMember,
+    Room,
+    PendingEventOrdering,
+} from "matrix-js-sdk/src/matrix";
 import { render, screen, waitFor } from "jest-matrix-react";
-import { Room, PendingEventOrdering } from "matrix-js-sdk/src/matrix";
 import { type DeviceVerificationStatus, type UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
 import { createTestClient } from "../../../../../test-utils";

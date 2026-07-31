@@ -19,7 +19,7 @@ export interface WidgetPipViewActions {
      * The view model will handle navigating back to the associated room.
      * @param ev The mouse event that triggered the back click.
      */
-    onBackClick: (ev: React.MouseEvent<Element, MouseEvent>) => void;
+    onBackClick: (ev: React.MouseEvent) => void;
     /**
      * The view model exposes the `<PersistentApp />` component via this action.
      * `PersistentApp` is not available in shared components.
@@ -34,7 +34,7 @@ export interface WidgetPipViewActions {
      * Action that needs to be called when the pip view starts to get dragged.
      * @param ev The mouse event that triggered the drag start.
      */
-    onStartMoving: (ev: React.MouseEvent<Element, MouseEvent>) => void;
+    onStartMoving: (ev: React.MouseEvent) => void;
 }
 
 export interface WidgetPipViewSnapshot {
@@ -86,7 +86,6 @@ export const WidgetPipView: FC<WidgetPipViewProps> = ({ vm, RoomAvatar }) => {
         // if the user interacts with a mouse. Hence there is no use in providing an accessible alternative.
         // In the future we might consider introducing alternative shortcuts for moving the PiP around
         // with the keyboard.
-        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
         <div data-testid="widget-pip-container" className={styles.container} onMouseDown={vm.onStartMoving}>
             <div className={styles.header}>
                 <IconButton

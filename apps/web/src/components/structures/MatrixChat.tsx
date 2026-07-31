@@ -32,11 +32,11 @@ import { LockSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icon
 
 import PosthogTrackers from "../../PosthogTrackers";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
-import { type IMatrixClientCreds, MatrixClientPeg } from "../../MatrixClientPeg";
+import { type IMatrixClientCreds } from "../../utils/createMatrixClient";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
 import PlatformPeg from "../../PlatformPeg";
 import SdkConfig, { type ConfigOptions } from "../../SdkConfig";
 import dis from "../../dispatcher/dispatcher";
-import Notifier from "../../Notifier";
 import Modal from "../../Modal";
 import { showRoomInviteDialog, showStartChatInviteDialog } from "../../RoomInvite";
 import * as Rooms from "../../Rooms";
@@ -75,8 +75,6 @@ import { UIFeature } from "../../settings/UIFeature";
 import DialPadModal from "../views/voip/DialPadModal";
 import { showToast as showMobileGuideToast } from "../../toasts/MobileGuideToast";
 import { shouldUseLoginForWelcome } from "../../utils/pages";
-import RoomListStore from "../../stores/room-list/RoomListStore";
-import { RoomUpdateCause } from "../../stores/room-list/models";
 import { ModuleRunner } from "../../modules/ModuleRunner";
 import Spinner from "../views/elements/Spinner";
 import QuestionDialog from "../views/dialogs/QuestionDialog";
@@ -95,9 +93,7 @@ import PerformanceMonitor, { PerformanceEntryNames } from "../../performance";
 import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 import SoftLogout from "./auth/SoftLogout";
 import { copyPlaintext } from "../../utils/strings";
-import { PosthogAnalytics } from "../../PosthogAnalytics";
 import { initSentry } from "../../sentry";
-import LegacyCallHandler from "../../LegacyCallHandler";
 import { showSpaceInvite } from "../../utils/space";
 import { type ButtonEvent } from "../views/elements/AccessibleButton";
 import { type ActionPayload } from "../../dispatcher/payloads";
@@ -118,7 +114,8 @@ import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
 import { type ValidatedServerConfig } from "../../utils/ValidatedServerConfig";
 import { isLocalRoom } from "../../utils/localRoom/isLocalRoom";
-import { SDKContext, SdkContextClass } from "../../contexts/SDKContext";
+import { SDKContext } from "../../contexts/SDKContext";
+import { SDKContextClass } from "../../contexts/SDKContextClass.ts";
 import { viewUserDeviceSettings } from "../../actions/handlers/viewUserDeviceSettings";
 import GenericToast from "../views/toasts/GenericToast";
 import RovingSpotlightDialog from "../views/dialogs/spotlight/SpotlightDialog";
@@ -182,7 +179,6 @@ interface IState {
     // What the LoggedInView would be showing if visible.
     // A member of the enum for standard pages or a string for those provided by
     // a module.
-    // eslint-disable-next-line camelcase
     page_type?: PageType | string;
     // The ID of the room we're viewing. This is either populated directly
     // in the case where we view a room by ID or by RoomView when it resolves
@@ -190,14 +186,9 @@ interface IState {
     currentRoomId: string | null;
     // If we're trying to just view a user ID (i.e. /user URL), this is it
     currentUserId: string | null;
-    // this is persisted as mx_lhs_size, loaded in LoggedInView
-    collapseLhs: boolean;
     // Parameters used in the registration dance with the IS
-    // eslint-disable-next-line camelcase
     register_client_secret?: string;
-    // eslint-disable-next-line camelcase
     register_session_id?: string;
-    // eslint-disable-next-line camelcase
     register_id_sid?: string;
     isMobileRegistration?: boolean;
     // When showing Modal dialogs we need to set aria-hidden on the root app element
@@ -240,19 +231,19 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private dispatcherRef?: string;
     private themeWatcher?: ThemeWatcher;
     private fontWatcher?: FontWatcher;
-    private readonly stores: SdkContextClass;
+    private readonly stores: SDKContextClass;
     private loadSessionAbortController = new AbortController();
 
     private sessionLoadStarted = false;
 
     public constructor(props: IProps) {
         super(props);
-        this.stores = SdkContextClass.instance;
+        this.stores = SDKContextClass.instance;
         this.stores.constructEagerStores();
+        window.mxSdkContext = this.stores;
 
         this.state = {
             view: Views.LOADING,
-            collapseLhs: false,
             currentRoomId: null,
             currentUserId: null,
 
@@ -345,11 +336,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         );
 
         // remove the loginToken or auth code from the URL regardless
-        if (
-            !!this.props.urlParams.legacy_sso ||
-            !!this.props.urlParams.oidc_fragment ||
-            !!this.props.urlParams.oidc_query
-        ) {
+        if (!!this.props.urlParams.legacy_sso || !!this.props.urlParams.oauth2) {
             this.props.onTokenLoginCompleted(this.props.urlParams, this.getFragmentAfterLogin());
         }
 
@@ -537,6 +524,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         UIStore.destroy();
         this.stores.resizeNotifier.removeListener("middlePanelResized", this.dispatchTimelineResize);
         window.removeEventListener("resize", this.onWindowResized);
+
+        DecryptionFailureTracker.instance.stop();
     }
 
     private onWindowResized = (): void => {
@@ -652,11 +641,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             return;
         }
 
-        // Exclude some rather spammy actions from being logged.
-        if (payload.action != Action.UserActivity) {
-            logger.debug(`MatrixChat: handling action ${payload.action}`);
-        }
-
         // Start the onboarding process for certain actions
         if (
             MatrixClientPeg.get()?.isGuest() &&
@@ -699,9 +683,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 }
                 break;
             case "logout":
-                LegacyCallHandler.instance.hangupAllCalls();
-                Promise.all([...[...CallStore.instance.connectedCalls].map((call) => call.disconnect())]).finally(() =>
-                    Lifecycle.logout(this.stores.oidcClientStore),
+                this.stores.legacyCallHandler.hangupAllCalls();
+                Promise.all([...CallStore.instance.connectedCalls].map((call) => call.disconnect())).finally(() =>
+                    Lifecycle.logout(),
                 );
                 break;
             case "require_registration":
@@ -872,24 +856,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             }
             case "hide_left_panel":
-                this.setState(
-                    {
-                        collapseLhs: true,
-                    },
-                    () => {
-                        this.stores.resizeNotifier.notifyLeftHandleResized();
-                    },
-                );
-                break;
             case "show_left_panel":
-                this.setState(
-                    {
-                        collapseLhs: false,
-                    },
-                    () => {
-                        this.stores.resizeNotifier.notifyLeftHandleResized();
-                    },
-                );
+                this.stores.resizeNotifier.notifyLeftHandleResized();
                 break;
             case Action.OpenDialPad:
                 Modal.createDialog(DialPadModal, {}, "mx_Dialog_dialPadWrapper");
@@ -1298,7 +1266,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             if (isOnlyAdmin(roomToLeave)) {
                 const userLevelValues = roomToLeave.getJoinedMembers().map((m) => m.powerLevel);
 
-                const maxUserLevel = Math.max(...(userLevelValues as number[]));
+                const maxUserLevel = Math.max(...userLevelValues);
 
                 const warning =
                     maxUserLevel >= 100
@@ -1363,9 +1331,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 }
 
                 if (room) {
-                    // Legacy room list store needs to be told to manually remove this room
-                    RoomListStore.instance.manualRoomUpdate(room, RoomUpdateCause.RoomRemoved);
-                    // New room list store will remove the room on the following dispatch
+                    // The room list store will remove the room on the following dispatch
                     dis.dispatch<AfterForgetRoomPayload>({ action: Action.AfterForgetRoom, room });
                 }
             })
@@ -1542,7 +1508,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * Handle an {@link Action.OnLoggedIn} action (i.e, we now have a client with working credentials).
      */
     private onLoggedIn(): void {
-        this.stores.client = MatrixClientPeg.safeGet();
         StorageManager.tryPersistStorage();
 
         // If we're loading the app for the first time, we can now transition to a splash screen while we wait for the
@@ -1575,7 +1540,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private onLoggedOut(): void {
         this.viewWelcome({
             ready: false,
-            collapseLhs: false,
             currentRoomId: null,
         });
         this.subTitleStatus = "";
@@ -1591,7 +1555,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.setStateForNewView({
             view: Views.SOFT_LOGOUT,
             ready: false,
-            collapseLhs: false,
             currentRoomId: null,
         });
         this.subTitleStatus = "";
@@ -1615,6 +1578,15 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
         this.firstSyncComplete = false;
         const cli = MatrixClientPeg.safeGet();
+
+        // If the client has already completed its initial sync — e.g. this is a repeat WillStartClient for a client
+        // that is already running — it won't emit another `Prepared`, so resolve firstSyncPromise straight away
+        // rather than waiting for an event that will never come.
+        // This is mostly an issue under test.
+        if (cli.getSyncState() === SyncState.Prepared) {
+            this.firstSyncComplete = true;
+            this.firstSyncPromise.resolve();
+        }
 
         // Allow the JS SDK to reap timeline events. This reduces the amount of
         // memory consumed as the JS SDK stores multiple distinct copies of room
@@ -1662,8 +1634,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             this.firstSyncComplete = true;
             this.firstSyncPromise.resolve();
 
-            if (Notifier.shouldShowPrompt() && !MatrixClientPeg.userRegisteredWithinLastHours(24)) {
-                showNotificationsToast(false);
+            if (this.stores.notifier.shouldShowPrompt() && !MatrixClientPeg.userRegisteredWithinLastHours(24)) {
+                showNotificationsToast(this.stores.notifier, false);
             }
 
             dis.fire(Action.FocusSendMessageComposer);
@@ -1822,7 +1794,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         // Cannot be done in OnLoggedIn as at that point the AccountSettingsHandler doesn't yet have a client
         // Will be moved to a pre-login flow as well
-        if (PosthogAnalytics.instance.isEnabled() && SettingsStore.isLevelSupported(SettingLevel.ACCOUNT)) {
+        if (this.stores.posthogAnalytics.isEnabled() && SettingsStore.isLevelSupported(SettingLevel.ACCOUNT)) {
             this.initPosthogAnalyticsToast();
         }
 

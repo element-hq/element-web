@@ -161,9 +161,9 @@ test.describe("Room Status Bar", () => {
                 });
 
                 const other = page.locator(".mx_InviteDialog_other");
-                await other.getByTestId("invite-dialog-input").fill(bot.credentials.userId);
+                await other.getByTestId("invite-dialog-input").fill(bot.credentials!.userId);
                 await expect(
-                    other.getByRole("option", { name: "Alice" }).getByText(bot.credentials.userId),
+                    other.getByRole("option", { name: "Alice" }).getByText(bot.credentials!.userId),
                 ).toBeVisible();
                 await other.getByRole("option", { name: "Alice" }).click();
                 await other.getByRole("button", { name: "Go" }).click();
