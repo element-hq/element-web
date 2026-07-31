@@ -14,6 +14,7 @@ import { mediaFromMxc } from "../../customisations/Media";
 
 const CACHE_TTL_MS = 12 * 60 * 60 * 1000;
 const CACHE_PREFIX = "element.remote-sticker-index.v1:";
+const PACK_ORDER_PREFIX = "element.remote-sticker-pack-order.v1:";
 
 export interface RemoteSticker {
     id?: string;
@@ -53,6 +54,23 @@ const findUrl = (urls: Array<string | undefined>): string | undefined => urls.fi
 
 export const getRemoteStickerIndexUrl = (): string | undefined =>
     SdkConfig.get("remote_sticker_index_url")?.trim() || undefined;
+
+export const getRemoteStickerPackOrder = (): string[] => {
+    const url = getRemoteStickerIndexUrl();
+    if (!url) return [];
+    try {
+        const value = JSON.parse(localStorage.getItem(`${PACK_ORDER_PREFIX}${url}`) ?? "[]");
+        return Array.isArray(value) ? value.filter((id): id is string => typeof id === "string") : [];
+    } catch {
+        return [];
+    }
+};
+
+export const setRemoteStickerPackOrder = (order: string[]): void => {
+    const url = getRemoteStickerIndexUrl();
+    if (!url) return;
+    localStorage.setItem(`${PACK_ORDER_PREFIX}${url}`, JSON.stringify([...new Set(order)]));
+};
 
 export const stickerName = (sticker: RemoteSticker): string =>
     sticker.name?.trim() || sticker.fileName?.replace(/\.[^.]+$/, "") || "sticker";

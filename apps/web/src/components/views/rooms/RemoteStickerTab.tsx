@@ -10,8 +10,10 @@ import { type Room } from "matrix-js-sdk/src/matrix";
 import AccessibleButton from "../elements/AccessibleButton";
 import {
     getRemoteStickerIndexUrl,
+    getRemoteStickerPackOrder,
     loadRemoteStickerIndex,
     sendRemoteSticker,
+    setRemoteStickerPackOrder,
     stickerMediaUrl,
     stickerName,
     stickerPreviewUrl,
@@ -32,6 +34,7 @@ const RemoteStickerTab: React.FC<Props> = ({ room, threadId, onSent }) => {
     const [pack, setPack] = useState("all");
     const [error, setError] = useState<string>();
     const [sending, setSending] = useState<string>();
+    const [packOrder, setPackOrder] = useState(getRemoteStickerPackOrder);
 
     useEffect(() => {
         let cancelled = false;
@@ -58,7 +61,22 @@ const RemoteStickerTab: React.FC<Props> = ({ room, threadId, onSent }) => {
     if (error) return <div className="mx_RemoteStickerTab_empty">{error}</div>;
     if (!index) return <div className="mx_RemoteStickerTab_empty">正在加载云端表情…</div>;
 
-    const packs = index.packs?.filter((item): item is { id: string; name?: string } => Boolean(item.id)) ?? [];
+    const packs = (index.packs?.filter((item): item is { id: string; name?: string } => Boolean(item.id)) ?? []).sort(
+        (a, b) => {
+            const aIndex = packOrder.indexOf(a.id);
+            const bIndex = packOrder.indexOf(b.id);
+            return (aIndex < 0 ? Number.MAX_SAFE_INTEGER : aIndex) - (bIndex < 0 ? Number.MAX_SAFE_INTEGER : bIndex);
+        },
+    );
+    const movePack = (direction: -1 | 1): void => {
+        const position = packs.findIndex((item) => item.id === pack);
+        const target = position + direction;
+        if (position < 0 || target < 0 || target >= packs.length) return;
+        const next = packs.map((item) => item.id);
+        [next[position], next[target]] = [next[target], next[position]];
+        setRemoteStickerPackOrder(next);
+        setPackOrder(next);
+    };
     return (
         <div className="mx_RemoteStickerTab">
             <input
@@ -76,6 +94,16 @@ const RemoteStickerTab: React.FC<Props> = ({ room, threadId, onSent }) => {
                     </option>
                 ))}
             </select>
+            {pack !== "all" && (
+                <span>
+                    <AccessibleButton onClick={() => movePack(-1)} title="上移表情包">
+                        ↑
+                    </AccessibleButton>
+                    <AccessibleButton onClick={() => movePack(1)} title="下移表情包">
+                        ↓
+                    </AccessibleButton>
+                </span>
+            )}
             <div className="mx_RemoteStickerTab_grid" role="grid" aria-label="云端表情">
                 {stickers.map((sticker: RemoteSticker, offset) => {
                     const id = sticker.id || `${sticker.packId || "remote"}-${stickerName(sticker)}-${offset}`;

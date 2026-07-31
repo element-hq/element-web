@@ -290,7 +290,9 @@ export default class ImageView extends React.Component<IProps, IState> {
 
     private zoom(zoomLevel: number, anchorX?: number, anchorY?: number): void {
         const oldZoom = this.state.zoom;
-        const maxZoom = this.state.maxZoom === this.state.minZoom ? 2 * this.state.maxZoom : this.state.maxZoom;
+        // Spark's viewer allows inspecting small images beyond their natural
+        // size too; keep a stable ceiling rather than locking them at 100%.
+        const maxZoom = Math.max(4, this.state.maxZoom);
         const newZoom = Math.min(zoomLevel, maxZoom);
         if (newZoom <= this.state.minZoom) {
             // Zoom out fully
