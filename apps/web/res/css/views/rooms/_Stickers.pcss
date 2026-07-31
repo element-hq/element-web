@@ -47,15 +47,19 @@
 
 .mx_RemoteStickerTab_tabs {
     display: flex;
-    gap: var(--cpd-space-1x);
-    padding: var(--cpd-space-2x);
-    border-bottom: 1px solid $system;
+    align-items: center;
+    gap: var(--cpd-space-2x);
+    min-height: 50px;
+    padding: 0 var(--cpd-space-3x);
+    box-sizing: border-box;
+    border-bottom: 1px solid $message-action-bar-border-color;
 }
 
 .mx_RemoteStickerTab_tab {
-    min-height: 30px;
+    min-height: 32px;
     padding: 0 var(--cpd-space-2x);
-    border-radius: 6px;
+    border-radius: 7px;
+    font: var(--cpd-font-body-md-semibold);
 }
 
 .mx_RemoteStickerTab_tab_active {
@@ -65,18 +69,38 @@
 
 .mx_RemoteStickerTab_emojiPanel {
     width: min(432px, calc(100vw - 24px));
+    height: min(450px, calc(100dvh - 32px));
     overflow: hidden;
-    border-radius: 8px;
+    border: 1px solid $message-action-bar-border-color;
+    border-radius: 12px;
     background: $background;
+    box-shadow: 0 12px 32px rgb(15 23 42 / 18%);
+}
+
+.mx_EmojiBoardShell {
+    display: flex;
+    flex-direction: column;
+}
+
+.mx_EmojiBoardShell_body {
+    display: flex;
+    min-height: 0;
+    flex: 1;
+}
+
+.mx_EmojiBoardShell_body > .mx_EmojiPicker,
+.mx_EmojiBoardShell_body > .mx_RemoteStickerTab {
+    width: 100%;
+    height: 100%;
 }
 
 .mx_RemoteStickerTab {
-    height: 390px;
-    padding: var(--cpd-space-2x);
+    height: 100%;
+    padding: var(--cpd-space-3x);
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: var(--cpd-space-2x);
+    gap: var(--cpd-space-3x);
 }
 
 .mx_RemoteStickerTab_toolbar {
@@ -90,7 +114,7 @@
     gap: var(--cpd-space-1x);
     overflow-x: auto;
     color: $secondary-content;
-    font: var(--cpd-font-body-sm-regular);
+    font: var(--cpd-font-body-sm-medium);
     scrollbar-width: none;
 
     &::-webkit-scrollbar {
@@ -103,24 +127,24 @@
     min-height: 24px;
     padding: 0 var(--cpd-space-2x);
     border: 1px solid transparent;
-    border-radius: 999px;
+    border-radius: 7px;
     color: $secondary-content;
     font: var(--cpd-font-body-sm-medium);
 
     &[data-active="true"] {
-        border-color: color-mix(in srgb, $accent 40%, transparent);
-        background: color-mix(in srgb, $accent 14%, transparent);
-        color: $accent;
+        border-color: transparent;
+        background: $primary-content;
+        color: $background;
     }
 }
 
 .mx_RemoteStickerTab_search {
     min-width: 0;
-    height: 36px;
+    height: 42px;
     box-sizing: border-box;
-    border: 1px solid $input-border-color;
-    border-radius: 6px;
-    background: $background;
+    border: 3px solid color-mix(in srgb, $input-border-color 75%, $system);
+    border-radius: 10px;
+    background: $spacePanel-bg-color;
     color: $primary-content;
     font: var(--cpd-font-body-md-regular);
     flex: 1;
@@ -131,7 +155,7 @@
     display: flex;
     flex: 1;
     min-height: 0;
-    gap: var(--cpd-space-2x);
+    gap: var(--cpd-space-3x);
 }
 
 .mx_RemoteStickerTab_grid {
@@ -165,7 +189,9 @@
 }
 
 .mx_RemoteStickerTab_packRail {
-    width: 42px;
+    width: 54px;
+    padding-inline-start: 8px;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     gap: var(--cpd-space-1x);
@@ -181,7 +207,7 @@
     place-items: center;
     overflow: hidden;
     border: 2px solid transparent;
-    border-radius: 6px;
+    border-radius: 8px;
     background: transparent;
     color: $secondary-content;
     font: var(--cpd-font-body-xs-medium);
@@ -204,7 +230,7 @@
     display: grid;
     place-items: center;
     overflow: hidden;
-    border-radius: 6px;
+    border-radius: 9px;
     background: transparent;
 
     &:hover {
@@ -229,12 +255,12 @@
 }
 
 .mx_RemoteStickerTab_preview {
-    min-height: 72px;
+    min-height: 74px;
     display: flex;
     align-items: center;
     gap: var(--cpd-space-2x);
     padding: 0 var(--cpd-space-2x);
-    border-radius: 8px;
+    border-radius: 10px;
     background: $spacePanel-bg-color;
     color: $primary-content;
     font: var(--cpd-font-body-md-medium);
@@ -248,7 +274,7 @@
 
 .mx_RemoteStickerTab_empty {
     width: min(432px, calc(100vw - 24px));
-    height: 390px;
+    height: min(450px, calc(100dvh - 32px));
     padding: 24px;
     text-align: center;
     box-sizing: border-box;

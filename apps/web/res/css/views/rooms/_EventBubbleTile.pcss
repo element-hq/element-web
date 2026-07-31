@@ -19,11 +19,10 @@ Please see LICENSE files in the repository root for full details.
 .mx_EventTile[data-layout="bubble"],
 .mx_GenericEventListSummary[data-layout="bubble"] {
     --avatarSize: 26px;
-    --gutterSize: 10px;
-    /* Spark-style compact cards: a deliberate readable line length instead
-       of letting text balloons take most of a wide desktop timeline. */
-    --cornerRadius: 14px;
-    --maxWidth: min(600px, 72%);
+    --gutterSize: 8px;
+    /* Keep the Bubble layout aligned with Spark's desktop message rhythm. */
+    --cornerRadius: 16px;
+    --maxWidth: min(600px, 78%);
 
     /* For both event tile and event list summary */
     --EventTile_bubble-margin-inline-start: 48px;
@@ -111,10 +110,12 @@ Please see LICENSE files in the repository root for full details.
 
     .mx_DisambiguatedProfile,
     .mx_EventTile_line {
-        --EventBubbleTile_line-max-width: 70%;
+        --EventBubbleTile_line-max-width: var(--maxWidth);
 
         width: fit-content;
-        max-width: var(--EventBubbleTile_line-max-width); /* Align message bubble and displayName */
+        max-width: var(
+            --EventBubbleTile_line-max-width
+        ); /* Align message bubble and displayName */
         line-height: $font-18px; /* fixed line height to prevent emoji from being taller than text */
     }
 
@@ -181,7 +182,8 @@ Please see LICENSE files in the repository root for full details.
 
     .mx_EventTile_footer {
         margin: var(--cpd-space-1-5x) 0;
-        margin-inline: var(--EventTile_bubble_line-margin-inline-start) var(--EventTile_bubble_line-margin-inline-end);
+        margin-inline: var(--EventTile_bubble_line-margin-inline-start)
+            var(--EventTile_bubble_line-margin-inline-end);
     }
 
     &[data-self="false"] {
@@ -202,21 +204,37 @@ Please see LICENSE files in the repository root for full details.
             left: -34px;
         }
 
-        &:not(.mx_EventTile_continuation) .mx_EventTile_line:not(.mx_EventTile_mediaLine)::after {
+        &:not(.mx_EventTile_continuation)
+            .mx_EventTile_line:not(.mx_EventTile_mediaLine)::after {
             position: absolute;
-            top: 14px;
-            left: -7px;
-            width: 10px;
-            height: 14px;
+            top: 10px;
+            left: -8px;
+            width: 11px;
+            height: 22px;
             content: "";
             background: var(--backgroundColor);
-            clip-path: polygon(100% 0, 100% 100%, 0 50%);
-            filter: drop-shadow(-1px 0 color-mix(in srgb, var(--backgroundColor) 88%, currentColor));
+            clip-path: polygon(
+                100% 0,
+                100% 100%,
+                58% 100%,
+                35% 91%,
+                15% 75%,
+                0 56%,
+                8% 42%,
+                22% 27%,
+                40% 12%,
+                58% 0
+            );
+            filter: drop-shadow(
+                -1px 0 color-mix(in srgb, var(--backgroundColor) 82%, currentColor)
+            );
+            pointer-events: none;
         }
 
         .mx_MessageActionBar {
             inset-inline-start: calc(
-                100% - var(--MessageActionBar-size-button) - 2 * var(--MessageActionBar-size-margin)
+                100% - var(--MessageActionBar-size-button) - 2 *
+                    var(--MessageActionBar-size-margin)
             );
             right: initial; /* Reset the default value */
         }
@@ -285,16 +303,32 @@ Please see LICENSE files in the repository root for full details.
             right: -34px;
         }
 
-        &:not(.mx_EventTile_continuation) .mx_EventTile_line:not(.mx_EventTile_mediaLine)::after {
+        &:not(.mx_EventTile_continuation)
+            .mx_EventTile_line:not(.mx_EventTile_mediaLine)::after {
             position: absolute;
-            top: 14px;
-            right: -7px;
-            width: 10px;
-            height: 14px;
+            top: 10px;
+            right: -8px;
+            width: 11px;
+            height: 22px;
             content: "";
             background: var(--backgroundColor);
-            clip-path: polygon(0 0, 100% 50%, 0 100%);
-            filter: drop-shadow(1px 0 color-mix(in srgb, var(--backgroundColor) 88%, currentColor));
+            clip-path: polygon(
+                0 0,
+                42% 0,
+                65% 9%,
+                85% 25%,
+                100% 44%,
+                92% 58%,
+                78% 73%,
+                60% 88%,
+                42% 100%,
+                0 100%
+            );
+            filter: drop-shadow(
+                1px 0
+                    color-mix(in srgb, var(--backgroundColor) 82%, currentColor)
+            );
+            pointer-events: none;
         }
 
         .mx_MediaBody {
@@ -313,7 +347,8 @@ Please see LICENSE files in the repository root for full details.
         display: flex;
         gap: 5px var(--EventTile_bubble_gap-inline);
         margin-block: 0;
-        margin-inline: var(--EventTile_bubble_line-margin-inline-start) var(--EventTile_bubble_line-margin-inline-end);
+        margin-inline: var(--EventTile_bubble_line-margin-inline-start)
+            var(--EventTile_bubble_line-margin-inline-end);
         border-top-left-radius: var(--cornerRadius);
         border-top-right-radius: var(--cornerRadius);
 
@@ -384,6 +419,16 @@ Please see LICENSE files in the repository root for full details.
             /* Keep height equal to text for shield alignment, additional 2px because of 1px padding on text */
             height: calc($font-18px + 2px);
         }
+
+        /* Spark keeps media cards in the same visual bubble as text. */
+        &.mx_EventTile_mediaLine:not(.mx_EventTile_sticker) {
+            overflow: visible;
+            border-radius: var(--cornerRadius);
+            background: var(--backgroundColor);
+            border: 1px solid
+                color-mix(in srgb, var(--backgroundColor) 88%, currentColor);
+            box-shadow: 0 1px 2px rgb(15 23 42 / 0.08);
+        }
     }
 
     &:not(.mx_EventTile_noBubble):not(.mx_EventTile_alignedBetweenBubbles)
@@ -394,11 +439,10 @@ Please see LICENSE files in the repository root for full details.
         padding: calc(var(--gutterSize) - 1px);
         padding-right: 60px; /* space for the timestamp */
         background: var(--backgroundColor);
-        border: 1px solid color-mix(in srgb, var(--backgroundColor) 88%, currentColor);
+        border: 1px solid
+            color-mix(in srgb, var(--backgroundColor) 88%, currentColor);
         box-shadow: 0 1px 2px rgb(15 23 42 / 0.08);
-        transition:
-            box-shadow 140ms ease,
-            border-color 140ms ease,
+        transition: box-shadow 140ms ease, border-color 140ms ease,
             transform 140ms ease;
 
         .mx_EventTile_content {
@@ -406,7 +450,8 @@ Please see LICENSE files in the repository root for full details.
         }
     }
 
-    &:hover:not(.mx_EventTile_noBubble) .mx_EventTile_line:not(.mx_EventTile_mediaLine) {
+    &:hover:not(.mx_EventTile_noBubble)
+        .mx_EventTile_line:not(.mx_EventTile_mediaLine) {
         box-shadow: 0 6px 16px rgb(15 23 42 / 0.1);
     }
 
@@ -472,6 +517,18 @@ Please see LICENSE files in the repository root for full details.
         }
 
         .mx_ReplyChain {
+            width: 100%;
+            padding: 6px 8px;
+            box-sizing: border-box;
+            border-inline-start: 3px solid
+                color-mix(in srgb, currentColor 35%, transparent);
+            border-radius: 6px;
+            background: color-mix(
+                in srgb,
+                var(--backgroundColor) 72%,
+                transparent
+            );
+
             .mx_EventTile_reply {
                 max-width: 90%;
                 padding: 0;
@@ -568,10 +625,12 @@ Please see LICENSE files in the repository root for full details.
 
     &.mx_EventTile_alignedBetweenBubbles {
         margin-inline-start: calc(
-            var(--EventTile_bubble-margin-inline-start) + var(--EventTile_bubble_line-margin-inline-start)
+            var(--EventTile_bubble-margin-inline-start) +
+                var(--EventTile_bubble_line-margin-inline-start)
         );
         margin-inline-end: calc(
-            var(--EventTile_bubble-margin-inline-end) + var(--EventTile_bubble_line-margin-inline-end)
+            var(--EventTile_bubble-margin-inline-end) +
+                var(--EventTile_bubble_line-margin-inline-end)
         );
 
         .mx_EventTile_line {
@@ -637,7 +696,9 @@ Please see LICENSE files in the repository root for full details.
     .mx_EventTile_avatar {
         position: static;
         order: -1;
-        margin-inline-end: var(--EventTile_bubble_gap-inline); /* Same spacing between E2E icon and a hidden event */
+        margin-inline-end: var(
+            --EventTile_bubble_gap-inline
+        ); /* Same spacing between E2E icon and a hidden event */
         display: inline-flex;
     }
 
@@ -671,7 +732,8 @@ Please see LICENSE files in the repository root for full details.
     }
 
     /* increase margin between ELS and the next Event to not have our user avatar overlap the expand/collapse button */
-    &[data-expanded="false"] + .mx_EventTile[data-layout="bubble"][data-self="true"] {
+    &[data-expanded="false"]
+        + .mx_EventTile[data-layout="bubble"][data-self="true"] {
         margin-top: 20px;
     }
 
@@ -687,7 +749,9 @@ Please see LICENSE files in the repository root for full details.
 
         .mx_ReadReceiptGroup {
             /* match alignment to RRs of chat bubbles */
-            inset-inline-end: calc(-1 * var(--ReadReceiptGroup_EventBubbleTile-spacing-end) + 60px);
+            inset-inline-end: calc(
+                -1 * var(--ReadReceiptGroup_EventBubbleTile-spacing-end) + 60px
+            );
         }
 
         &::before {
