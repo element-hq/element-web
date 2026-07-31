@@ -49,14 +49,14 @@ export function EditMessageComposerWrapper(props: IEditMessageComposerProps) {
     const isWysiwygComposerEnabled = useSettingValue("feature_wysiwyg_composer");
     const editor = isWysiwygComposerEnabled ? (
         <EditWysiwygComposer
-            onChange={onWysiwygChange}
+            updateUrlPreviews={onWysiwygChange}
             attachBundles={attachBundles}
             editorStateTransfer={props.editState}
             className={props.className}
         />
     ) : (
         <EditMessageComposer
-            onChange={onChange}
+            updateUrlPreviews={onChange}
             attachBundles={attachBundles}
             editState={props.editState}
             className={props.className}

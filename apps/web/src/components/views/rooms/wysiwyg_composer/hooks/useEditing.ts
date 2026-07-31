@@ -20,6 +20,7 @@ export function useEditing(
     editorStateTransfer: EditorStateTransfer,
     initialContent?: string,
     attachBundles?: (content: RoomMessageEventContent, messageHasLinks: boolean) => void,
+    updateUrlPreviews?: (content: string) => void,
 ): {
     isSaveDisabled: boolean;
     onChange(this: void, content: string): void;
@@ -35,8 +36,9 @@ export function useEditing(
         (_content: string) => {
             setContent(_content);
             setIsSaveDisabled((_isSaveDisabled) => _isSaveDisabled && _content === initialContent);
+            updateUrlPreviews?.(_content);
         },
-        [initialContent],
+        [initialContent, updateUrlPreviews],
     );
 
     const editMessageMemoized = useCallback(async () => {

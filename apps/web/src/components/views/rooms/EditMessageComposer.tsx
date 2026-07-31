@@ -89,7 +89,7 @@ export function createEditContent(
 
 interface IEditMessageComposerProps extends MatrixClientProps {
     editState: EditorStateTransfer;
-    onChange?: (model: EditorModel) => void;
+    updateUrlPreviews?: (model: EditorModel) => void;
     /** Attaches URL preview bundles (MSC4095) to the new content before it is sent. */
     attachBundles?: (content: RoomMessageEventContent, messageHasLinks: boolean) => void;
     className?: string;
@@ -428,7 +428,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
     }
 
     private onChange = (): void => {
-        this.props.onChange?.(this.model);
+        this.props.updateUrlPreviews?.(this.model);
 
         if (!this.state.saveDisabled || !this.editorRef.current?.isModified()) {
             return;

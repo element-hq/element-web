@@ -32,7 +32,7 @@ const Content = function Content({ disabled = false, composerFunctions, ref }: C
 
 interface EditWysiwygComposerProps {
     disabled?: boolean;
-    onChange?: (content: string) => void;
+    updateUrlPreviews?: (content: string) => void;
     /** Attaches URL preview bundles (MSC4095) to the new content before it is sent. */
     attachBundles?: (content: RoomMessageEventContent, messageHasLinks: boolean) => void;
     editorStateTransfer: EditorStateTransfer;
@@ -44,6 +44,7 @@ export default function EditWysiwygComposer({
     editorStateTransfer,
     className,
     attachBundles,
+    updateUrlPreviews,
     ...props
 }: EditWysiwygComposerProps): JSX.Element {
     const defaultContextValue = useMemo(() => getDefaultContextValue({ editorStateTransfer }), [editorStateTransfer]);
@@ -54,6 +55,7 @@ export default function EditWysiwygComposer({
         editorStateTransfer,
         initialContent,
         attachBundles,
+        updateUrlPreviews,
     );
 
     if (!isReady) {

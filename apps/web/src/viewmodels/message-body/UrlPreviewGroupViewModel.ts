@@ -18,6 +18,8 @@ import { PosthogAnalytics } from "../../PosthogAnalytics";
 import { isPermalinkHost } from "../../utils/permalinks/Permalinks";
 import { UrlPreviewFetcher } from "../../utils/UrlPreviewFetcher";
 import { type RoomMessageEventContent } from "../../../@types/url-preview";
+import { useSettingValue } from "../../hooks/useSettings";
+import SettingsStore from "../../settings/SettingsStore";
 
 // From https://github.com/matrix-org/matrix-spec-proposals/pull/4095
 export const BUNDLED_LINK_PREVIEWS = "com.beeper.linkpreviews";
@@ -47,8 +49,7 @@ export interface UrlPreviewGroupViewModelProps {
 
 export class UrlPreviewGroupViewModel
     extends BaseViewModel<UrlPreviewGroupViewSnapshot, UrlPreviewGroupViewModelProps>
-    implements UrlPreviewGroupViewActions
-{
+    implements UrlPreviewGroupViewActions {
     /**
      * Determine if an anchor element can be rendered into a preview.
      * If it can, return the value of `href`
@@ -205,6 +206,14 @@ export class UrlPreviewGroupViewModel
      * @param eventElement
      */
     public async updateEventElement(eventElement: HTMLDivElement | HTMLSpanElement): Promise<void> {
+        const urlPreviewBundleEnabled = SettingsStore.getValue("feature_msc4095_url_preview_bundle");
+        const previewBundle = this.props.mxEvent.getContent<RoomMessageEventContent>()["com.beeper.linkpreviews"];
+
+        if (urlPreviewBundleEnabled && previewBundle !== undefined) {
+            this.links = previewBundle.map(entry => entry.matched_url);
+            return this.computeSnapshot();
+        }
+
         const newLinks = UrlPreviewGroupViewModel.findLinks([eventElement]);
         if (newLinks.some((x) => !this.links.includes(x)) || this.links.some((x) => !newLinks.includes(x))) {
             this.links = newLinks;
