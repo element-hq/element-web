@@ -756,7 +756,8 @@ export default class ImageView extends React.Component<IProps, IState> {
                                 onClick={this.onToggleOcrPanel}
                                 disabled={this.state.ocrLoading}
                             >
-                                OCR
+                                <span className="mx_ImageView_ocrGlyph" aria-hidden="true" />
+                                <span>文字识别</span>
                             </AccessibleButton>
                         )}
                         <DownloadButton
