@@ -62,6 +62,32 @@ describe("EventTileView", () => {
         expect(getByTestId("context-menu")).toHaveClass("custom-context-menu");
     });
 
+    it("exposes shell state through application-neutral data attributes", () => {
+        const { container } = render(
+            <EventTileView
+                {...createProps({
+                    root: {
+                        ...renderState,
+                        state: {
+                            highlighted: true,
+                            selected: true,
+                            editing: true,
+                            continuation: true,
+                            lastInSection: true,
+                        },
+                    },
+                })}
+            />,
+        );
+        const root = container.firstElementChild!;
+
+        expect(root).toHaveAttribute("data-highlighted", "true");
+        expect(root).toHaveAttribute("data-selected", "true");
+        expect(root).toHaveAttribute("data-editing", "true");
+        expect(root).toHaveAttribute("data-continuation", "true");
+        expect(root).toHaveAttribute("data-last-in-section", "true");
+    });
+
     it("renders the thread layout in the original slot order", () => {
         const { container, getByTestId } = render(
             <EventTileView

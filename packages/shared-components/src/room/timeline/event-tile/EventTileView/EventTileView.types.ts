@@ -26,6 +26,20 @@ export interface EventTileViewRootData {
     hasReply: boolean;
 }
 
+/** Shell states consumed by EventTileView without application-specific class names. */
+export interface EventTileViewRootStateFlags {
+    /** Whether the event is highlighted by search or navigation. */
+    highlighted?: boolean;
+    /** Whether the event is selected. */
+    selected?: boolean;
+    /** Whether the event is currently being edited. */
+    editing?: boolean;
+    /** Whether the event continues the previous event block. */
+    continuation?: boolean;
+    /** Whether this is the last event in a section. */
+    lastInSection?: boolean;
+}
+
 /** Root data consumed by the shared EventTile shell. */
 export interface EventTileViewRootState {
     /** Stable unique id for the component instance. */
@@ -40,6 +54,8 @@ export interface EventTileViewRootState {
     permalink?: string;
     /** Plain root data attributes. */
     data: EventTileViewRootData;
+    /** Shared shell states, independent of application class naming. */
+    state?: EventTileViewRootStateFlags;
 }
 
 /** Optional application CSS class overrides for shell-owned structural elements. */

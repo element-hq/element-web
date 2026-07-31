@@ -14,6 +14,32 @@
     margin-block-start: 24px;
 }
 
+.canvas [data-shape="Notification"],
+.canvas [data-shape="ThreadsList"] {
+    border-radius: 8px;
+}
+
+.canvas [data-shape="Notification"]::after,
+.canvas [data-shape="ThreadsList"]::after {
+    background: var(--cpd-color-border-subtle, #c9ced4);
+    pointer-events: none;
+}
+
+.canvas [data-shape="Notification"]:hover,
+.canvas [data-shape="ThreadsList"]:hover {
+    background: var(--cpd-color-bg-subtle-primary, #f0f1f2);
+}
+
+.canvas [data-highlighted="true"] .line {
+    background: var(--cpd-color-bg-subtle-secondary, #e9edf2);
+}
+
+.canvas [data-selected="true"] .line,
+.canvas [data-editing="true"] .line {
+    background: var(--cpd-color-bg-subtle-primary, #f0f1f2);
+    box-shadow: inset 54px 0 0 -50px var(--cpd-color-bg-action-primary-rest, #0dbd8b);
+}
+
 .slot {
     position: relative;
 }
@@ -21,6 +47,10 @@
 /* Let the story-only slot labels escape the notification metadata row. */
 .detailsContainer {
     overflow: visible !important;
+}
+
+.line {
+    /* Marker class used by state stories to style the shared line slot. */
 }
 
 .slot::after {
@@ -78,6 +108,12 @@
 
 .roomAvatar {
     background: #7e5c96;
+}
+
+.avatar,
+.roomAvatar {
+    cursor: pointer;
+    user-select: none;
 }
 
 .sender {

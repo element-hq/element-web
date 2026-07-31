@@ -51,8 +51,8 @@
     gap: var(--cpd-space-2x, 8px);
 }
 
-.avatar {
-    user-select: none;
+.root[data-continuation="true"] {
+    padding-top: 0;
 }
 
 /* Group layout. */
@@ -85,6 +85,10 @@
 .root[data-layout="group"] .replyChain,
 .root[data-layout="group"] .threadInfo {
     margin-inline-start: var(--event-tile-group-gutter);
+}
+
+.root[data-layout="group"] .replyChain {
+    margin-bottom: var(--cpd-space-2x, 8px);
 }
 
 .root[data-layout="group"] .footer {
@@ -144,6 +148,10 @@
     padding-block: 1px;
 }
 
+.root[data-layout="irc"] .replyChain {
+    margin: 0;
+}
+
 .root[data-layout="irc"] .footer {
     margin-block: var(--cpd-space-1-5x, 6px);
 }
@@ -162,6 +170,30 @@
     line-height: 18px;
 }
 
+.root[data-layout="bubble"] .avatar {
+    position: absolute;
+    z-index: 9;
+    inset-block-start: 6px;
+}
+
+.root[data-layout="bubble"] .sender,
+.root[data-layout="bubble"] .line {
+    line-height: 18px;
+}
+
+.root[data-layout="bubble"] .footer {
+    margin-block: var(--cpd-space-1-5x, 6px);
+    margin-inline: -9px -12px;
+}
+
+.root[data-layout="bubble"][data-continuation="true"] {
+    margin-top: 2px;
+}
+
+.root[data-layout="bubble"][data-last-in-section="true"] {
+    margin-bottom: 24px;
+}
+
 .root[data-layout="bubble"][data-self="true"] .line {
     margin-inline-start: auto;
 }
@@ -169,11 +201,6 @@
 .root[data-layout="bubble"] .replyChain,
 .root[data-layout="bubble"] .threadInfo {
     clear: both;
-}
-
-.root[data-layout="bubble"] .footer {
-    margin-block: var(--cpd-space-1-5x, 6px);
-    margin-inline: -9px -12px;
 }
 
 /* Notification and ThreadsList layouts. */
@@ -184,7 +211,6 @@
     align-items: center;
     margin-block: 13px;
     padding: 8px;
-    border-radius: 8px;
 }
 
 .root[data-shape="Notification"]::after,
@@ -193,13 +219,21 @@
     position: absolute;
     inset: auto -8px -13px 56px;
     height: 1px;
-    background: var(--cpd-color-border-subtle, #c9ced4);
-    pointer-events: none;
 }
 
 .root[data-shape="Notification"]:last-child::after,
 .root[data-shape="ThreadsList"]:last-child::after {
     content: unset;
+}
+
+.root[data-shape="Notification"]:first-child,
+.root[data-shape="ThreadsList"]:first-child {
+    margin-top: 0;
+}
+
+.root[data-shape="Notification"]:last-child,
+.root[data-shape="ThreadsList"]:last-child {
+    margin-bottom: 0;
 }
 
 .root[data-shape="Notification"] .details,
@@ -228,19 +262,4 @@
     overflow: hidden;
     margin-inline-start: auto;
     text-overflow: ellipsis;
-}
-
-.root[data-shape="Notification"]:hover,
-.root[data-shape="ThreadsList"]:hover {
-    background-color: var(--cpd-color-bg-subtle-primary, #f0f1f2);
-}
-
-/* ThreadsList action-bar interaction. */
-.root[data-shape="ThreadsList"] .actionBar {
-    visibility: hidden;
-}
-
-.root[data-shape="ThreadsList"]:hover .actionBar,
-.root[data-shape="ThreadsList"]:focus-within .actionBar {
-    visibility: visible;
 }

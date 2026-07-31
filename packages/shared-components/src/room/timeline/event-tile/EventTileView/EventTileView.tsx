@@ -62,6 +62,11 @@ export function EventTileView({
             data-shape={root.data.shape}
             data-self={root.data.isOwnEvent}
             data-has-reply={root.data.hasReply}
+            data-highlighted={root.state?.highlighted || undefined}
+            data-selected={root.state?.selected || undefined}
+            data-editing={root.state?.editing || undefined}
+            data-continuation={root.state?.continuation || undefined}
+            data-last-in-section={root.state?.lastInSection || undefined}
             tabIndex={rootTabIndex}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}

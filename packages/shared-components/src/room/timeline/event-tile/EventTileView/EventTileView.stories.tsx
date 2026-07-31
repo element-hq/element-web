@@ -11,6 +11,7 @@ import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { useEventPresentation } from "../../EventPresentation";
+import { withViewDocs } from "../../../../../.storybook/withViewDocs";
 import { EventTileView, type EventTileViewProps } from "./index";
 import styles from "./EventTileView.stories.module.css";
 
@@ -160,10 +161,12 @@ const roomSlots: EventTileViewProps["slots"] = {
 
 type EventTileStoryProps = Omit<EventTileViewProps, "root"> & {
     shape: EventTileViewProps["root"]["data"]["shape"];
+    state?: EventTileViewProps["root"]["state"];
 };
 
 function EventTileViewStoryContent({
     shape,
+    state,
     ...props
 }: Omit<EventTileStoryProps, "eventLayout" | "density">): React.ReactElement {
     const { layout, density } = useEventPresentation();
@@ -203,6 +206,7 @@ function EventTileViewStoryContent({
                     shape,
                     isOwnEvent,
                 },
+                state,
             }}
         />
     );
@@ -220,10 +224,26 @@ function EventTileViewStoryContent({
     );
 }
 
-const EventTileViewStory = (props: EventTileStoryProps): React.ReactElement => <EventTileViewStoryContent {...props} />;
+const EventTileViewStoryImpl = (props: EventTileStoryProps): React.ReactElement => (
+    <EventTileViewStoryContent {...props} />
+);
+
+const EventTileViewStory = withViewDocs(EventTileViewStoryImpl, EventTileView);
+
+const eventTileStoryDefaults = {
+    classNames: {
+        details: styles.detailsContainer,
+        line: styles.line,
+    },
+    slots: roomSlots,
+    onClick: fn(),
+    onContextMenu: fn(),
+    onPermalinkClick: fn(),
+    onPermalinkContextMenu: fn(),
+};
 
 const meta = {
-    title: "Timeline/EventTileView",
+    title: "Timeline/EventTileView/Layouts",
     component: EventTileViewStory,
     tags: ["autodocs"],
     render: (args) => <EventTileViewStory {...args} />,
@@ -232,17 +252,25 @@ const meta = {
             control: "select",
             options: ["Room", "Thread", "ThreadsList", "File", "Notification", "Search", "Pinned"],
         },
+        classNames: { table: { disable: true } },
+        state: {
+            control: "object",
+        },
+        onMouseEnter: { table: { disable: true } },
+        onMouseLeave: { table: { disable: true } },
+        onFocus: { table: { disable: true } },
+        onBlur: { table: { disable: true } },
+        onClick: { table: { disable: true } },
+        onContextMenu: { table: { disable: true } },
+        onPermalinkClick: { table: { disable: true } },
+        onPermalinkContextMenu: { table: { disable: true } },
+        refs: { table: { disable: true } },
+        slots: { table: { category: "Slots" } },
     },
     args: {
         shape: "Room",
-        classNames: {
-            details: styles.detailsContainer,
-        },
-        slots: roomSlots,
-        onClick: fn(),
-        onContextMenu: fn(),
-        onPermalinkClick: fn(),
-        onPermalinkContextMenu: fn(),
+        state: {},
+        ...eventTileStoryDefaults,
     },
 } satisfies Meta<typeof EventTileViewStory>;
 
