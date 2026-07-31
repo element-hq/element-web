@@ -375,6 +375,14 @@ export function EmojiPicker({
         [onChoose, onRecordRecent, onFinished],
     );
 
+    // Base for the IDs of the individual emoji cells: the search box points at the
+    // active cell with aria-activedescendant, which requires the cells to have IDs.
+    // It doesn't actually matter what the ID is, provided each is unique, because
+    // the search box queries the roving context for the active element and gets its ID.
+    // (generate a single unique ID and then suffix because hooks can't be called in
+    // a loop).
+    const emojiIdBase = useId();
+
     const renderItem = useCallback(
         (_index: number, item: ListItem): React.ReactNode => {
             if (item.type === "header") {
@@ -390,6 +398,9 @@ export function EmojiPicker({
             return item.emojis.map((emoji) => (
                 <div role="gridcell" className={styles.itemWrapper} key={emoji.hexcode}>
                     <Emoji
+                        // The category is part of the ID because the same emoji can appear both in
+                        // its own category and in the recently used one.
+                        id={`${emojiIdBase}-${item.categoryId}-${emoji.hexcode}`}
                         emoji={emoji}
                         selectedEmojis={selectedEmojis}
                         onClick={onClickEmoji}
@@ -400,7 +411,7 @@ export function EmojiPicker({
                 </div>
             ));
         },
-        [selectedEmojis, onClickEmoji, onHoverEmoji, onHoverEmojiEnd, isEmojiDisabled],
+        [selectedEmojis, onClickEmoji, onHoverEmoji, onHoverEmojiEnd, isEmojiDisabled, emojiIdBase],
     );
 
     const pickerBodyId = useId();
