@@ -716,4 +716,65 @@ describe("EventListSummary", function () {
         expect(summary).toHaveTextContent("n...@d... was invited 2 times, d...@w... was invited");
         expect(summary).toMatchSnapshot();
     });
+
+    describe("redacted events", () => {
+        const redact = (event: MatrixEvent, redactedBy = "@moderator:some.domain"): MatrixEvent => {
+            event.event.unsigned = {
+                ...event.event.unsigned,
+                redacted_because: {
+                    sender: redactedBy,
+                    type: "m.room.redaction",
+                    content: {},
+                    event_id: "$redaction",
+                    origin_server_ts: 0,
+                    unsigned: {},
+                },
+            };
+            return event;
+        };
+
+        const summaryFor = (events: MatrixEvent[]): string => {
+            const { container } = renderComponent({
+                events,
+                children: generateTiles(events),
+                summaryLength: 1,
+                avatarsMaxLength: 5,
+                threshold: 1,
+            });
+            return container.querySelector(".mx_GenericEventListSummary_summary")!.textContent!;
+        };
+
+        it("summarises a redacted membership event by its membership change", () => {
+            const [join, ban] = generateEvents([
+                {
+                    userId: "@user_1:some.domain",
+                    prevMembership: KnownMembership.Leave,
+                    membership: KnownMembership.Join,
+                },
+                {
+                    senderId: "@moderator:some.domain",
+                    userId: "@user_1:some.domain",
+                    prevMembership: KnownMembership.Join,
+                    membership: KnownMembership.Ban,
+                },
+            ]);
+            const summary = summaryFor([redact(join), ban]);
+            expect(summary).toContain("joined and was banned");
+            expect(summary).not.toContain("removed a message");
+        });
+
+        it("still summarises a redacted message as removed", () => {
+            const message = redact(
+                mkEvent({
+                    event: true,
+                    type: "m.room.message",
+                    room: roomId,
+                    user: "@user_1:some.domain",
+                    content: {},
+                }),
+            );
+            // The redactor, not the original sender, is credited with removing the message
+            expect(summaryFor([message])).toBe("@moderator:some.domain removed a message");
+        });
+    });
 });

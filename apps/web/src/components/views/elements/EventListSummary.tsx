@@ -509,11 +509,17 @@ export default class EventListSummary extends React.Component<Props, State> {
      * if a transition is not recognised.
      */
     private static getTransition(e: IUserEvents): TransitionType | null {
-        if (e.mxEvent.isRedacted()) {
+        const type = e.mxEvent.getType();
+
+        // Redaction preserves `membership` on a membership event, and the expanded events still
+        // read as the join or leave they are, so keep summarising them that way. Without this a
+        // user whose join is redacted right after they are banned — what a moderation bot does —
+        // is summarised as having removed a message.
+        if (e.mxEvent.isRedacted() && type !== EventType.RoomMember) {
             return TransitionType.MessageRemoved;
         }
 
-        switch (e.mxEvent.getType()) {
+        switch (type) {
             case EventType.RoomThirdPartyInvite:
                 // Handle 3pid invites the same as invites so they get bundled together
                 if (!isValid3pidInvite(e.mxEvent)) {
