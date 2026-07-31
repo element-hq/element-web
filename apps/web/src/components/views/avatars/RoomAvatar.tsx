@@ -11,7 +11,7 @@ import { type Room, RoomType, KnownMembership, EventType, RoomEvent } from "matr
 import { type RoomAvatarEventContent } from "matrix-js-sdk/src/types";
 
 import BaseAvatar from "./BaseAvatar";
-import ImageView from "../elements/ImageView";
+import ImageView, { getImageViewerDialogClass } from "../elements/ImageView";
 import Modal from "../../../Modal";
 import * as Avatar from "../../../Avatar";
 import { mediaFromMxc } from "../../../customisations/Media";
@@ -54,7 +54,7 @@ const RoomAvatar: React.FC<IProps> = ({ room, viewAvatarOnClick, onClick, oobDat
             name: room?.name,
         };
 
-        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", undefined, true);
+        Modal.createDialog(ImageView, params, getImageViewerDialogClass(), undefined, true);
     }, [room]);
 
     const urls = useMemo(() => {

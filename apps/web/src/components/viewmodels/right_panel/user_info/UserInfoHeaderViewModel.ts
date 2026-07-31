@@ -9,7 +9,7 @@ import { useCallback, useContext } from "react";
 
 import { mediaFromMxc } from "../../../../customisations/Media";
 import Modal from "../../../../Modal";
-import ImageView from "../../../views/elements/ImageView";
+import ImageView, { getImageViewerDialogClass } from "../../../views/elements/ImageView";
 import SdkConfig from "../../../../SdkConfig";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { type Member } from "../../../views/right_panel/UserInfo";
@@ -92,7 +92,7 @@ export function useUserfoHeaderViewModel({ member, roomId }: UserInfoHeaderViewM
             name: (member as RoomMember).name || (member as User).displayName,
         };
 
-        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", undefined, true);
+        Modal.createDialog(ImageView, params, getImageViewerDialogClass(), undefined, true);
     }, [member]);
 
     if (member instanceof RoomMember && member.user) {

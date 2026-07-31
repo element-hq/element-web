@@ -98,6 +98,22 @@ interface IState {
     contextMenuDisplayed: boolean;
     imageSrc: string;
     originalLoadFailed: boolean;
+    windowOffsetX: number;
+    windowOffsetY: number;
+    movingWindow: boolean;
+}
+
+/**
+ * Keep the image viewer as a desktop-sized window, matching the Cinny/Spark
+ * preview instead of turning every image into a full-screen lightbox.
+ */
+export function getImageViewerDialogClass(width?: number, height?: number): string {
+    if (!width || !height) return "mx_Dialog_imageViewerWindow";
+
+    const ratio = width / height;
+    if (ratio < 0.85) return "mx_Dialog_imageViewerWindow mx_Dialog_imageViewerWindow_portrait";
+    if (ratio <= 1.15) return "mx_Dialog_imageViewerWindow mx_Dialog_imageViewerWindow_square";
+    return "mx_Dialog_imageViewerWindow mx_Dialog_imageViewerWindow_landscape";
 }
 
 export default class ImageView extends React.Component<IProps, IState> {
@@ -128,6 +144,9 @@ export default class ImageView extends React.Component<IProps, IState> {
             contextMenuDisplayed: false,
             imageSrc: props.thumbnailSrc || props.src,
             originalLoadFailed: false,
+            windowOffsetX: 0,
+            windowOffsetY: 0,
+            movingWindow: false,
         };
     }
 
@@ -147,6 +166,10 @@ export default class ImageView extends React.Component<IProps, IState> {
     private animatingLoading = false;
     private imageIsLoaded = false;
     private disposed = false;
+    private windowDragStartX = 0;
+    private windowDragStartY = 0;
+    private windowDragInitialX = 0;
+    private windowDragInitialY = 0;
 
     public componentDidMount(): void {
         // We have to use addEventListener() because the listener
@@ -164,6 +187,8 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.focusLock.current.removeEventListener("wheel", this.onWheel);
         window.removeEventListener("resize", this.recalculateZoom);
         this.image.current?.removeEventListener("load", this.imageLoaded);
+        document.removeEventListener("mousemove", this.onWindowMoving);
+        document.removeEventListener("mouseup", this.onWindowDragEnd);
     }
 
     private preloadOriginal = (): void => {
@@ -439,6 +464,34 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.setState({ moving: false });
     };
 
+    private onWindowDragStart = (ev: React.MouseEvent<HTMLDivElement>): void => {
+        if (ev.button !== 0) return;
+        const target = ev.target as HTMLElement;
+        // Controls in the title bar must remain clickable and must not start a drag.
+        if (target.closest("button, a, .mx_Dialog_nonDialogButton")) return;
+
+        this.windowDragStartX = ev.clientX;
+        this.windowDragStartY = ev.clientY;
+        this.windowDragInitialX = this.state.windowOffsetX;
+        this.windowDragInitialY = this.state.windowOffsetY;
+        this.setState({ movingWindow: true });
+        document.addEventListener("mousemove", this.onWindowMoving);
+        document.addEventListener("mouseup", this.onWindowDragEnd);
+    };
+
+    private onWindowMoving = (ev: MouseEvent): void => {
+        this.setState({
+            windowOffsetX: this.windowDragInitialX + ev.clientX - this.windowDragStartX,
+            windowOffsetY: this.windowDragInitialY + ev.clientY - this.windowDragStartY,
+        });
+    };
+
+    private onWindowDragEnd = (): void => {
+        document.removeEventListener("mousemove", this.onWindowMoving);
+        document.removeEventListener("mouseup", this.onWindowDragEnd);
+        this.setState({ movingWindow: false });
+    };
+
     private renderContextMenu(): JSX.Element {
         let contextMenu: JSX.Element | undefined;
         if (this.state.contextMenuDisplayed && this.props.mxEvent) {
@@ -555,6 +608,11 @@ export default class ImageView extends React.Component<IProps, IState> {
             );
         }
 
+        const windowTransform =
+            this.state.windowOffsetX || this.state.windowOffsetY
+                ? `translate3d(${this.state.windowOffsetX}px, ${this.state.windowOffsetY}px, 0)`
+                : undefined;
+
         return (
             <FocusLock
                 returnFocus={true}
@@ -562,11 +620,16 @@ export default class ImageView extends React.Component<IProps, IState> {
                     "onKeyDown": this.onKeyDown,
                     "role": "dialog",
                     "aria-label": _t("lightbox|title"),
+                    "style": { transform: windowTransform },
                 }}
                 className="mx_ImageView"
                 ref={this.focusLock}
             >
-                <div className="mx_ImageView_panel">
+                <div
+                    className="mx_ImageView_panel"
+                    onMouseDown={this.onWindowDragStart}
+                    data-dragging={this.state.movingWindow || undefined}
+                >
                     {info}
                     {title}
                     <div className="mx_ImageView_toolbar">

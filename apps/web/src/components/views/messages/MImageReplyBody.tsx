@@ -23,7 +23,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import Spinner from "../elements/Spinner";
 import { type Media, mediaFromContent } from "../../../customisations/Media";
 import { BLURHASH_FIELD, createThumbnail } from "../../../utils/image-media";
-import ImageView from "../elements/ImageView";
+import ImageView, { getImageViewerDialogClass } from "../elements/ImageView";
 import { type IBodyProps } from "./IBodyProps";
 import { suggestedSize as suggestedImageSize } from "../../../settings/enums/ImageSize";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -127,7 +127,13 @@ export class ImageBodyBaseInner extends React.Component<ImageBodyBaseProps, ISta
                 };
             }
 
-            Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", undefined, true);
+            Modal.createDialog(
+                ImageView,
+                params,
+                getImageViewerDialogClass(params.width, params.height),
+                undefined,
+                true,
+            );
         }
     };
 

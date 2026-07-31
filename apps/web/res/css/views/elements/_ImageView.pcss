@@ -18,6 +18,9 @@ $button-gap: var(--cpd-space-3x);
     width: 100%;
     height: 100%;
     flex-direction: column;
+
+    /* The preview window itself moves when its header is dragged. */
+    will-change: transform;
 }
 
 .mx_ImageView_image_wrapper {
@@ -49,6 +52,13 @@ $button-gap: var(--cpd-space-3x);
     align-items: center;
     animation-name: mx_ImageView_panel_keyframes;
     animation-duration: 300ms;
+
+    cursor: grab;
+    user-select: none;
+
+    &[data-dragging] {
+        cursor: grabbing;
+    }
 }
 
 .mx_ImageView_info_wrapper {
@@ -114,6 +124,78 @@ $button-gap: var(--cpd-space-3x);
 .mx_ImageView_button_close {
     border-radius: 100%;
     background: #21262c; /* same on all themes */
+}
+
+/*
+ * Spark/Cinny uses a floating image window on desktop.  Do not use the
+ * full-screen lightbox rules here: the Matrix media URL, E2EE decryption and
+ * ImageView controls remain Element's own implementation.
+ */
+.mx_Dialog_imageViewerWindow {
+    padding: 28px;
+
+    .mx_Dialog_border {
+        width: min(88vw, 1240px);
+        height: min(86vh, 860px);
+        min-width: min(88vw, 1240px);
+        min-height: min(86vh, 860px);
+        max-width: calc(100vw - 40px);
+        max-height: calc(100vh - 40px);
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.74);
+        border-radius: var(--cpd-radius-12, 12px);
+        background: rgba(248, 250, 252, 0.78);
+        box-shadow: 0 28px 80px rgba(15, 23, 42, 0.22);
+        backdrop-filter: blur(22px) saturate(150%);
+    }
+
+    .mx_Dialog {
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        max-height: none;
+        padding: 0;
+        overflow: hidden;
+        background: transparent;
+    }
+
+    .mx_Dialog_background {
+        background: rgba(248, 250, 252, 0.36);
+        opacity: 1;
+    }
+
+    &.mx_Dialog_imageViewerWindow_portrait .mx_Dialog_border {
+        width: min(86vw, 1040px);
+        height: min(92vh, 920px);
+        min-width: min(86vw, 1040px);
+        min-height: min(92vh, 920px);
+    }
+
+    &.mx_Dialog_imageViewerWindow_square .mx_Dialog_border {
+        width: min(82vw, 980px);
+        height: min(86vh, 860px);
+        min-width: min(82vw, 980px);
+        min-height: min(86vh, 860px);
+    }
+}
+
+@media (max-width: 750px) {
+    .mx_Dialog_imageViewerWindow {
+        padding: 0;
+
+        .mx_Dialog_border,
+        &.mx_Dialog_imageViewerWindow_portrait .mx_Dialog_border,
+        &.mx_Dialog_imageViewerWindow_square .mx_Dialog_border {
+            width: 100vw;
+            height: 100vh;
+            min-width: 100vw;
+            min-height: 100vh;
+            max-width: 100vw;
+            max-height: 100vh;
+            border: 0;
+            border-radius: 0;
+        }
+    }
 }
 
 @media (prefers-reduced-motion) {

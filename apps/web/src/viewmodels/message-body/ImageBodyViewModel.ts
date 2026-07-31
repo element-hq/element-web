@@ -32,7 +32,7 @@ import { createReconnectedListener } from "../../utils/connection";
 import { DecryptError, DownloadError } from "../../utils/DecryptFile";
 import { BLURHASH_FIELD, createThumbnail } from "../../utils/image-media";
 import { isMimeTypeAllowed } from "../../utils/blobs";
-import ImageView from "../../components/views/elements/ImageView";
+import ImageView, { getImageViewerDialogClass } from "../../components/views/elements/ImageView";
 
 export interface ImageBodyViewModelProps {
     /**
@@ -500,7 +500,7 @@ export class ImageBodyViewModel
             };
         }
 
-        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", undefined, true);
+        Modal.createDialog(ImageView, params, getImageViewerDialogClass(params.width, params.height), undefined, true);
     }
 
     public onLinkClick = (event: MouseEvent<HTMLAnchorElement>): void => {
