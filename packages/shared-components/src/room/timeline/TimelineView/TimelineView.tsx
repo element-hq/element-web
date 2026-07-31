@@ -41,9 +41,16 @@ const OVERSCAN = 16;
 /** px from the list bottom still counted as "at the bottom". */
 const AT_BOTTOM_THRESHOLD_PX = 4;
 /** Cold-load reveal cap: reveal anyway after this many frames if the anchor row
- * never lands (unreachable target), so we never strand behind the cover. */
+ * never lands (unreachable target), so we never strand behind the cover.
+ * 60 frames is roughly 1 second on a 60Hz screen (~0.5s at 120Hz). */
 const COLD_CAP_FRAMES = 60;
 
+/**
+ * How far the view has got through its first load:
+ *  - "init"    — nothing rendered yet; waiting for the first batch of items.
+ *  - "placing" — items are laid out but hidden while we scroll to the right spot.
+ *  - "live"    — the timeline is visible and the user is in control of scrolling.
+ */
 type Phase = "init" | "placing" | "live";
 
 export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element {

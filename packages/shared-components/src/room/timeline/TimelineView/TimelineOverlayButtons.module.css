@@ -6,8 +6,8 @@
  */
 
 /**
- * Overlay layer — absolutely fills the Virtuoso wrapper so buttons can be
- * positioned at the top or bottom without affecting list layout.
+ * Overlay layer — absolutely fills the timeline so buttons can be positioned at
+ * the top or bottom without affecting list layout.
  * Children use their own absolute positioning to match the legacy components.
  */
 .overlay {
@@ -21,8 +21,8 @@
 
 .topUnreadBar {
     position: absolute;
-    top: 24px;
-    right: 24px;
+    top: var(--cpd-space-6x);
+    right: var(--cpd-space-6x);
     width: 38px;
     pointer-events: all;
 }
@@ -84,8 +84,8 @@
 
 .belowUnreadBar {
     position: absolute;
-    top: 24px;
-    right: 24px;
+    top: var(--cpd-space-6x);
+    right: var(--cpd-space-6x);
     width: 38px;
     pointer-events: all;
 }
@@ -134,7 +134,7 @@
     border: 1.3px solid var(--cpd-color-icon-tertiary);
     border-radius: 10px;
     /* dot centre is at top: 38px, radius 8px → extends to 46px; add 4px visual gap → 50px - 38px = 12px margin */
-    margin: 12px auto 0;
+    margin: var(--cpd-space-3x) auto 0;
     cursor: pointer;
 }
 
@@ -150,8 +150,8 @@
 .jumpToBottom {
     position: absolute;
     /* 12 because height is 50 but button is only 38 = 12+(50-38) = 24 */
-    bottom: 12px;
-    right: 24px;
+    bottom: var(--cpd-space-3x);
+    right: var(--cpd-space-6x);
     width: 38px;
     /* give it a fixed height so the badge doesn't make */
     /* it taller and pop upwards when visible */
@@ -169,7 +169,7 @@
     line-height: 14px;
     text-align: center;
     display: inline-block;
-    padding: 0 4px;
+    padding: 0 var(--cpd-space-1x);
     color: var(--cpd-color-text-on-solid-primary);
     background-color: var(--cpd-color-icon-secondary);
 }
