@@ -134,6 +134,7 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
         this.clock.destroy();
         this.waveformObservable.close();
         if (this.element) {
+            this.element.removeEventListener("ended", this.onPlaybackEnd);
             URL.revokeObjectURL(this.element.src);
             this.element.remove();
         }
@@ -235,12 +236,16 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
 
         if (this.element) {
             this.source = this.context.createMediaElementSource(this.element);
+            // A MediaElementAudioSourceNode is not a scheduled source node and never emits "ended",
+            // so the media element has to be listened to instead. Without this, playback of a large
+            // file never returns to Stopped and the clock keeps running past the end of the clip.
+            this.element.addEventListener("ended", this.onPlaybackEnd);
         } else {
             this.source = this.context.createBufferSource();
             this.source.buffer = this.audioBuf ?? null;
+            this.source.addEventListener("ended", this.onPlaybackEnd);
         }
 
-        this.source.addEventListener("ended", this.onPlaybackEnd);
         this.source.connect(this.context.destination);
     }
 
