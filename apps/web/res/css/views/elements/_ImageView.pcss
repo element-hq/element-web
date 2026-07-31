@@ -26,10 +26,15 @@ $button-gap: var(--cpd-space-3x);
 .mx_ImageView_image_wrapper {
     pointer-events: initial;
     display: flex;
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
     justify-content: center;
     align-items: center;
-    height: 100%;
     overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.48);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.36);
 }
 
 .mx_ImageView_image {
@@ -52,6 +57,7 @@ $button-gap: var(--cpd-space-3x);
     align-items: center;
     animation-name: mx_ImageView_panel_keyframes;
     animation-duration: 300ms;
+    min-height: var(--image-view-panel-height);
 
     cursor: grab;
     user-select: none;
@@ -103,6 +109,71 @@ $button-gap: var(--cpd-space-3x);
     gap: $button-gap;
 }
 
+.mx_ImageView_content {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    gap: var(--cpd-space-2x);
+    padding: var(--cpd-space-3x);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.42), rgba(241, 245, 249, 0.38));
+}
+
+.mx_ImageView_ocrPanel {
+    width: 252px;
+    min-width: 252px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--cpd-space-2x);
+    padding: var(--cpd-space-3x);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.72);
+    color: #111827;
+    overflow: hidden;
+}
+
+.mx_ImageView_ocrPanelHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--cpd-space-2x);
+
+    > div {
+        display: flex;
+        gap: var(--cpd-space-1x);
+    }
+}
+
+.mx_ImageView_ocrAction,
+.mx_ImageView_ocrRetry {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 28px;
+    padding: 0 var(--cpd-space-2x);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.78);
+    color: inherit;
+
+    svg {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+.mx_ImageView_ocrText {
+    flex: 1;
+    min-height: 0;
+    margin: 0;
+    overflow: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font: var(--cpd-font-body-sm-regular);
+}
+
 .mx_ImageView_button {
     padding: calc(($button-size - var(--icon-size)) / 2);
     width: var(--icon-size);
@@ -119,6 +190,13 @@ $button-gap: var(--cpd-space-3x);
 
 .mx_ImageView_button_more {
     --icon-size: 28px;
+}
+
+.mx_ImageView_button_ocr {
+    width: auto;
+    min-width: var(--icon-size);
+    font: var(--cpd-font-body-sm-medium);
+    color: $icon-button-color;
 }
 
 .mx_ImageView_button_close {
@@ -195,6 +273,20 @@ $button-gap: var(--cpd-space-3x);
             border: 0;
             border-radius: 0;
         }
+    }
+
+    .mx_ImageView_content {
+        padding: var(--cpd-space-1x);
+    }
+
+    .mx_ImageView_ocrPanel {
+        position: absolute;
+        inset: auto var(--cpd-space-2x) var(--cpd-space-2x);
+        width: auto;
+        min-width: 0;
+        max-height: 40%;
+        z-index: 4;
+        box-shadow: 0 12px 32px rgba(15, 23, 42, 0.2);
     }
 }
 

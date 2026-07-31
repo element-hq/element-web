@@ -43,7 +43,8 @@ import {
     MessageTimestampViewModel,
     type MessageTimestampViewModelProps,
 } from "../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel.ts";
-import ImageOcrPanel from "./ImageOcrPanel";
+import { MediaEventHelper } from "../../../utils/MediaEventHelper";
+import { recogniseImage } from "../../../features/ai/InferenceClient";
 
 // Max scale to keep gaps around the image
 const MAX_SCALE = 0.95;
@@ -101,6 +102,10 @@ interface IState {
     windowOffsetX: number;
     windowOffsetY: number;
     movingWindow: boolean;
+    ocrPanelOpen: boolean;
+    ocrLoading: boolean;
+    ocrText?: string;
+    ocrError?: string;
 }
 
 /**
@@ -147,6 +152,8 @@ export default class ImageView extends React.Component<IProps, IState> {
             windowOffsetX: 0,
             windowOffsetY: 0,
             movingWindow: false,
+            ocrPanelOpen: false,
+            ocrLoading: false,
         };
     }
 
@@ -492,6 +499,37 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.setState({ movingWindow: false });
     };
 
+    private onToggleOcrPanel = (): void => {
+        if (!this.props.mxEvent) return;
+        const open = !this.state.ocrPanelOpen;
+        this.setState({ ocrPanelOpen: open });
+        if (open && !this.state.ocrText && !this.state.ocrLoading) {
+            void this.runOcr();
+        }
+    };
+
+    private runOcr = async (): Promise<void> => {
+        if (!this.props.mxEvent || this.state.ocrLoading) return;
+        this.setState({ ocrPanelOpen: true, ocrLoading: true, ocrError: undefined });
+        const helper = new MediaEventHelper(this.props.mxEvent);
+        try {
+            const ocrText = await recogniseImage(await helper.sourceBlob.value);
+            if (!this.disposed) this.setState({ ocrText, ocrError: undefined });
+        } catch (error) {
+            if (!this.disposed) {
+                this.setState({ ocrError: error instanceof Error ? error.message : "图片文字识别失败" });
+            }
+        } finally {
+            helper.destroy();
+            if (!this.disposed) this.setState({ ocrLoading: false });
+        }
+    };
+
+    private onCopyOcrText = async (): Promise<void> => {
+        if (!this.state.ocrText) return;
+        await navigator.clipboard?.writeText(this.state.ocrText).catch(() => undefined);
+    };
+
     private renderContextMenu(): JSX.Element {
         let contextMenu: JSX.Element | undefined;
         if (this.state.contextMenuDisplayed && this.props.mxEvent) {
@@ -670,7 +708,16 @@ export default class ImageView extends React.Component<IProps, IState> {
                                 ↻
                             </AccessibleButton>
                         )}
-                        {this.props.mxEvent && <ImageOcrPanel mxEvent={this.props.mxEvent} />}
+                        {this.props.mxEvent && (
+                            <AccessibleButton
+                                className="mx_ImageView_button mx_ImageView_button_ocr"
+                                title="识别文字"
+                                onClick={this.onToggleOcrPanel}
+                                disabled={this.state.ocrLoading}
+                            >
+                                OCR
+                            </AccessibleButton>
+                        )}
                         <DownloadButton
                             url={this.props.src}
                             fileName={this.props.name}
@@ -688,23 +735,62 @@ export default class ImageView extends React.Component<IProps, IState> {
                         {this.renderContextMenu()}
                     </div>
                 </div>
-                <div
-                    className="mx_ImageView_image_wrapper"
-                    ref={this.imageWrapper}
-                    onMouseDown={this.props.onFinished}
-                    onMouseMove={this.onMoving}
-                    onMouseUp={this.onEndMoving}
-                    onMouseLeave={this.onEndMoving}
-                >
-                    <img
-                        src={this.state.imageSrc}
-                        style={style}
-                        alt={this.props.name}
-                        ref={this.image}
-                        className={`mx_ImageView_image ${transitionClassName}`}
-                        draggable={true}
-                        onMouseDown={this.onStartMoving}
-                    />
+                <div className="mx_ImageView_content" data-ocr-open={this.state.ocrPanelOpen || undefined}>
+                    <div
+                        className="mx_ImageView_image_wrapper"
+                        ref={this.imageWrapper}
+                        onMouseDown={(event) => {
+                            if (event.target === event.currentTarget) this.props.onFinished();
+                        }}
+                        onMouseMove={this.onMoving}
+                        onMouseUp={this.onEndMoving}
+                        onMouseLeave={this.onEndMoving}
+                    >
+                        <img
+                            src={this.state.imageSrc}
+                            style={style}
+                            alt={this.props.name}
+                            ref={this.image}
+                            className={`mx_ImageView_image ${transitionClassName}`}
+                            draggable={false}
+                            onMouseDown={this.onStartMoving}
+                            onDoubleClick={() => this.zoom(this.state.minZoom)}
+                        />
+                    </div>
+                    {this.state.ocrPanelOpen && (
+                        <aside className="mx_ImageView_ocrPanel" aria-live="polite">
+                            <div className="mx_ImageView_ocrPanelHeader">
+                                <strong>文字识别</strong>
+                                <div>
+                                    {this.state.ocrText && (
+                                        <AccessibleButton
+                                            className="mx_ImageView_ocrAction"
+                                            onClick={this.onCopyOcrText}
+                                        >
+                                            复制
+                                        </AccessibleButton>
+                                    )}
+                                    <AccessibleButton
+                                        className="mx_ImageView_ocrAction"
+                                        onClick={() => this.setState({ ocrPanelOpen: false })}
+                                        title="关闭文字识别"
+                                    >
+                                        <CloseIcon />
+                                    </AccessibleButton>
+                                </div>
+                            </div>
+                            {this.state.ocrLoading && <p>正在识别图片中的文字…</p>}
+                            {this.state.ocrError && (
+                                <>
+                                    <p>{this.state.ocrError}</p>
+                                    <AccessibleButton className="mx_ImageView_ocrRetry" onClick={this.runOcr}>
+                                        重新识别
+                                    </AccessibleButton>
+                                </>
+                            )}
+                            {this.state.ocrText && <pre className="mx_ImageView_ocrText">{this.state.ocrText}</pre>}
+                        </aside>
+                    )}
                 </div>
             </FocusLock>
         );

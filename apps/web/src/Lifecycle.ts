@@ -30,6 +30,7 @@ import * as StorageManager from "./utils/StorageManager";
 import * as StorageAccess from "./utils/StorageAccess";
 import SettingsStore from "./settings/SettingsStore";
 import { SettingLevel } from "./settings/SettingLevel";
+import { Layout } from "./settings/enums/Layout";
 import ToastStore from "./stores/ToastStore";
 import { IntegrationManagers } from "./integrations/IntegrationManagers";
 import { Mjolnir } from "./mjolnir/Mjolnir";
@@ -72,6 +73,20 @@ import { CallStore } from "./stores/CallStore.ts";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
+const BUBBLE_LAYOUT_MIGRATION_KEY = "element_custom_bubble_layout_v1";
+
+/**
+ * `setting_defaults` does not replace an account-level value saved by earlier
+ * Element sessions. Move existing accounts to the configured Bubble default
+ * once, while leaving every later user choice untouched.
+ */
+async function migrateConfiguredBubbleLayout(): Promise<void> {
+    if (SdkConfig.get("setting_defaults")?.layout !== "bubble") return;
+    if (localStorage.getItem(BUBBLE_LAYOUT_MIGRATION_KEY)) return;
+
+    await SettingsStore.setValue("layout", null, SettingLevel.ACCOUNT, Layout.Bubble);
+    localStorage.setItem(BUBBLE_LAYOUT_MIGRATION_KEY, "true");
+}
 
 dis.register((payload) => {
     if (payload.action === Action.TriggerLogout) {
@@ -862,6 +877,7 @@ async function doSetLoggedIn(
 
     // Run the migrations after the MatrixClientPeg has been assigned
     SettingsStore.runMigrations(isFreshLogin);
+    await migrateConfiguredBubbleLayout();
 
     if (isFreshLogin && !credentials.guest) {
         // For newly registered users, set a flag so that we force them to verify,
