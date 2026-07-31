@@ -70,6 +70,11 @@ import { type OpenForwardDialogPayload } from "../../../dispatcher/payloads/Open
 import { type OpenReportEventDialogPayload } from "../../../dispatcher/payloads/OpenReportEventDialogPayload";
 import { createMapSiteLinkFromEvent } from "../../../utils/location";
 import { getForwardableEvent } from "../../../events/forward/getForwardableEvent";
+import {
+    addForwardSelection,
+    consumeForwardSelection,
+    getForwardSelectionSize,
+} from "../../../features/forward/ForwardSelection";
 import { getShareableLocationEvent } from "../../../events/location/getShareableLocationEvent";
 import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import { CardContext } from "../right_panel/context";
@@ -276,6 +281,23 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         this.closeMenu();
     };
 
+    private onAddForwardSelection = (forwardableEvent: MatrixEvent) => (): void => {
+        addForwardSelection(forwardableEvent);
+        this.closeMenu();
+    };
+
+    private onForwardSelection = (): void => {
+        const events = consumeForwardSelection();
+        if (!events.length) return;
+        dis.dispatch<OpenForwardDialogPayload>({
+            action: Action.OpenForwardDialog,
+            event: events[0],
+            events,
+            permalinkCreator: this.props.permalinkCreator ?? null,
+        });
+        this.closeMenu();
+    };
+
     private onPinClick = (isPinned: boolean): void => {
         // Pin or unpin in background
         PinningUtils.pinOrUnpinEvent(MatrixClientPeg.safeGet(), this.props.mxEvent);
@@ -466,6 +488,8 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         }
 
         let forwardButton: JSX.Element | undefined;
+        let addToForwardSelectionButton: JSX.Element | undefined;
+        let forwardSelectionButton: JSX.Element | undefined;
         const forwardableEvent = getForwardableEvent(mxEvent, cli);
         if (contentActionable && forwardableEvent) {
             forwardButton = (
@@ -473,6 +497,23 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
                     icon={<ForwardIcon />}
                     label={_t("action|forward")}
                     onClick={this.onForwardClick(forwardableEvent)}
+                />
+            );
+            addToForwardSelectionButton = (
+                <IconizedContextMenuOption
+                    icon={<ForwardIcon />}
+                    label="加入转发清单"
+                    onClick={this.onAddForwardSelection(forwardableEvent)}
+                />
+            );
+        }
+        const forwardSelectionSize = getForwardSelectionSize();
+        if (forwardSelectionSize > 0) {
+            forwardSelectionButton = (
+                <IconizedContextMenuOption
+                    icon={<ForwardIcon />}
+                    label={`转发已选消息（${forwardSelectionSize}）`}
+                    onClick={this.onForwardSelection}
                 />
             );
         }
@@ -726,6 +767,8 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
                 {openInMapSiteButton}
                 {endPollButton}
                 {forwardButton}
+                {addToForwardSelectionButton}
+                {forwardSelectionButton}
                 {permalinkButton}
                 {reportEventButton}
                 {externalURLButton}

@@ -16,5 +16,7 @@ export interface OpenForwardDialogPayload extends ActionPayload {
     action: Action.OpenForwardDialog;
 
     event: MatrixEvent;
+    /** Optional batch; when present, the dialog sends every event in chronological order. */
+    events?: MatrixEvent[];
     permalinkCreator: RoomPermalinkCreator | null;
 }

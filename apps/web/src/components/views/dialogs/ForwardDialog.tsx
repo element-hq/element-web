@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, useEffect, useMemo, useState } from "react";
 import classnames from "classnames";
 import {
-    type IContent,
     MatrixEvent,
     type Room,
     type RoomMember,
@@ -21,7 +20,6 @@ import {
     M_TIMESTAMP,
     M_BEACON,
     M_POLL_START,
-    type TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { CheckCircleIcon, CircleIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
@@ -72,16 +70,24 @@ interface IProps {
     matrixClient: MatrixClient;
     // The event to forward
     event: MatrixEvent;
+    /** Events selected through the multi-message forwarding list. */
+    events?: MatrixEvent[];
     // We need a permalink creator for the source room to pass through to EventTile
     // in case the event is a reply (even though the user can't get at the link)
     permalinkCreator: RoomPermalinkCreator;
     onFinished(this: void): void;
 }
 
-interface IEntryProps<K extends keyof TimelineEvents> {
+interface ForwardItem {
+    // Matrix event content is a discriminated union; the event type is only
+    // known at runtime while forwarding arbitrary timeline events.
+    type: any;
+    content: any;
+}
+
+interface IEntryProps {
     room: Room;
-    type: K;
-    content: TimelineEvents[K];
+    items: ForwardItem[];
     matrixClient: MatrixClient;
     onFinished(this: void, success: boolean): void;
 }
@@ -93,7 +99,7 @@ enum SendState {
     Failed,
 }
 
-const Entry: React.FC<IEntryProps<any>> = ({ room, type, content, matrixClient: cli, onFinished }) => {
+const Entry: React.FC<IEntryProps> = ({ room, items, matrixClient: cli, onFinished }) => {
     const [sendState, setSendState] = useState<SendState>(SendState.CanSend);
     const [onFocus, isActive, ref] = useRovingTabIndex<HTMLDivElement>();
 
@@ -109,12 +115,14 @@ const Entry: React.FC<IEntryProps<any>> = ({ room, type, content, matrixClient: 
     const send = async (): Promise<void> => {
         setSendState(SendState.Sending);
         try {
-            if (getForwardedMediaUrl(content)) {
-                const targetContent = await copyForwardedMedia(cli, room, content);
-                await cli.sendEvent(room.roomId, type, targetContent);
-            } else {
-                // Keep Element's original, immediate send path for non-media events.
-                await cli.sendEvent(room.roomId, type, content);
+            for (const { type, content } of items) {
+                if (getForwardedMediaUrl(content)) {
+                    const targetContent = await copyForwardedMedia(cli, room, content);
+                    await cli.sendEvent(room.roomId, type, targetContent);
+                } else {
+                    // Keep Element's immediate send path for non-media events.
+                    await cli.sendEvent(room.roomId, type, content);
+                }
             }
             setSendState(SendState.Sent);
         } catch {
@@ -203,7 +211,7 @@ const Entry: React.FC<IEntryProps<any>> = ({ room, type, content, matrixClient: 
  * @param cli - The MatrixClient (used for recalculation of mentions).
  * @returns The transformed event type and content.
  */
-const transformEvent = (event: MatrixEvent, cli: MatrixClient): { type: string; content: IContent } => {
+const transformEvent = (event: MatrixEvent, cli: MatrixClient): ForwardItem => {
     const {
         "m.relates_to": _, // strip relations - in future we will attach a relation pointing at the original event
         // We're taking a shallow copy here to avoid https://github.com/vector-im/element-web/issues/10924
@@ -258,36 +266,38 @@ const transformEvent = (event: MatrixEvent, cli: MatrixClient): { type: string; 
     return { type, content };
 };
 
-const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCreator, onFinished }) => {
+const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, events, permalinkCreator, onFinished }) => {
     const userId = cli.getSafeUserId();
     const [profileInfo, setProfileInfo] = useState<any>({});
     useEffect(() => {
         cli.getProfileInfo(userId).then((info) => setProfileInfo(info));
     }, [cli, userId]);
 
-    const { type, content } = transformEvent(event, cli);
+    const sourceEvents = events?.length ? events : [event];
+    const items = sourceEvents.map((sourceEvent) => transformEvent(sourceEvent, cli));
 
-    // For the message preview we fake the sender as ourselves
-    const mockEvent = new MatrixEvent({
-        type: "m.room.message",
-        sender: userId,
-        content,
-        unsigned: {
-            age: 97,
-        },
-        event_id: "$9999999999999999999999999999999999999999999",
-        room_id: event.getRoomId(),
-        origin_server_ts: event.getTs(),
+    // For the message preview we fake each sender as ourselves.
+    const mockEvents = items.map(({ type, content }, index) => {
+        const sourceEvent = sourceEvents[index];
+        const mockEvent = new MatrixEvent({
+            type,
+            sender: userId,
+            content,
+            unsigned: { age: 97 },
+            event_id: `$9999999999999999999999999999999999999999999-${index}`,
+            room_id: sourceEvent.getRoomId(),
+            origin_server_ts: sourceEvent.getTs(),
+        });
+        mockEvent.sender = {
+            name: profileInfo.displayname || userId,
+            rawDisplayName: profileInfo.displayname,
+            userId,
+            getAvatarUrl: (..._) =>
+                avatarUrlForUser({ avatarUrl: profileInfo.avatar_url }, AVATAR_SIZE, AVATAR_SIZE, "crop"),
+            getMxcAvatarUrl: () => profileInfo.avatar_url,
+        } as RoomMember;
+        return mockEvent;
     });
-    mockEvent.sender = {
-        name: profileInfo.displayname || userId,
-        rawDisplayName: profileInfo.displayname,
-        userId,
-        getAvatarUrl: (..._) => {
-            return avatarUrlForUser({ avatarUrl: profileInfo.avatar_url }, AVATAR_SIZE, AVATAR_SIZE, "crop");
-        },
-        getMxcAvatarUrl: () => profileInfo.avatar_url,
-    } as RoomMember;
 
     const [query, setQuery] = useState("");
     const lcQuery = query.toLowerCase();
@@ -348,19 +358,22 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
             onFinished={onFinished}
             fixedWidth={false}
         >
-            <h3>{_t("forward|message_preview_heading")}</h3>
+            <h3>{items.length === 1 ? _t("forward|message_preview_heading") : `将转发 ${items.length} 条消息`}</h3>
             <div
                 className={classnames("mx_ForwardDialog_preview", {
                     mx_IRCLayout: previewLayout == Layout.IRC,
                 })}
             >
-                <EventTile
-                    mxEvent={mockEvent}
-                    layout={previewLayout}
-                    permalinkCreator={permalinkCreator}
-                    as="div"
-                    inhibitInteraction
-                />
+                {mockEvents.map((mockEvent) => (
+                    <EventTile
+                        key={mockEvent.getId()}
+                        mxEvent={mockEvent}
+                        layout={previewLayout}
+                        permalinkCreator={permalinkCreator}
+                        as="div"
+                        inhibitInteraction
+                    />
+                ))}
             </div>
             <hr />
             <RovingTabIndexProvider
@@ -413,8 +426,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
                                                     <Entry
                                                         key={room.roomId}
                                                         room={room}
-                                                        type={type}
-                                                        content={content}
+                                                        items={items}
                                                         matrixClient={cli}
                                                         onFinished={onFinished}
                                                     />
