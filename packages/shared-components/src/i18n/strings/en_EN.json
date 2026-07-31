@@ -58,8 +58,8 @@
         "quick_reactions": "Quick Reactions"
     },
     "emoji_picker": {
-        "emoji_picker": "Emoji picker",
-        "cancel_search_label": "Cancel search"
+        "cancel_search_label": "Cancel search",
+        "emoji_picker": "Emoji picker"
     },
     "keyboard": {
         "shift": "Shift"
