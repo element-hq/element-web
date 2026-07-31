@@ -4,13 +4,14 @@ Copyright 2026 Element contributors
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 */
 
-import { EventType, type IContent, type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
+import { EventType, type IContent, type MatrixClient, type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 import { type ImageInfo } from "matrix-js-sdk/src/types";
 
 import SdkConfig from "../../SdkConfig";
 import { uploadFile } from "../../ContentMessages";
 import { doMaybeLocalRoomAction } from "../../utils/local-room";
 import { mediaFromMxc } from "../../customisations/Media";
+import { addReplyToMessageContent } from "../../utils/Reply";
 
 const CACHE_TTL_MS = 12 * 60 * 60 * 1000;
 const CACHE_PREFIX = "element.remote-sticker-index.v1:";
@@ -138,6 +139,7 @@ export const sendRemoteSticker = async (
     room: Room,
     threadId: string | null | undefined,
     sticker: RemoteSticker,
+    replyToEvent?: MatrixEvent,
 ): Promise<void> => {
     const sourceUrl = stickerMediaUrl(sticker);
     if (!sourceUrl) throw new Error("此云端表情没有可发送的媒体地址");
@@ -160,6 +162,10 @@ export const sendRemoteSticker = async (
         });
         Object.assign(content, await uploadFile(room.client, room.roomId, file));
     }
+
+    // Stickers are their own event type, so the composer cannot add this relation
+    // for us. Keep their reply behaviour identical to text, files and polls.
+    if (replyToEvent) addReplyToMessageContent(content, replyToEvent);
 
     await doMaybeLocalRoomAction(
         room.roomId,

@@ -54,6 +54,7 @@ const ZOOM_STEP = 0.1;
 const ZOOM_COEFFICIENT = 0.0025;
 // If we have moved only this much we can zoom
 const ZOOM_DISTANCE = 10;
+const ORIGINAL_LOAD_TIMEOUT_MS = 12_000;
 
 // Height of mx_ImageView_panel
 const getPanelHeight = (): number => {
@@ -173,6 +174,7 @@ export default class ImageView extends React.Component<IProps, IState> {
     private animatingLoading = false;
     private imageIsLoaded = false;
     private disposed = false;
+    private originalLoadTimer?: ReturnType<typeof setTimeout>;
     private windowDragStartX = 0;
     private windowDragStartY = 0;
     private windowDragInitialX = 0;
@@ -189,6 +191,10 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.preloadOriginal();
     }
 
+    public componentDidUpdate(): void {
+        this.applyWindowOffset();
+    }
+
     public componentWillUnmount(): void {
         this.disposed = true;
         this.focusLock.current.removeEventListener("wheel", this.onWheel);
@@ -196,18 +202,52 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.image.current?.removeEventListener("load", this.imageLoaded);
         document.removeEventListener("mousemove", this.onWindowMoving);
         document.removeEventListener("mouseup", this.onWindowDragEnd);
+        this.clearOriginalLoadTimer();
+        this.clearWindowOffset();
     }
+
+    /**
+     * Modal.createDialog owns the outer dialog frame. Moving this component used
+     * to leave that frame behind, so the user appeared to drag only the contents.
+     * Apply the offset to the frame itself to make the whole preview window move.
+     */
+    private getDialogBorder = (): HTMLElement | null => this.focusLock.current?.closest?.(".mx_Dialog_border") ?? null;
+
+    private applyWindowOffset = (): void => {
+        const border = this.getDialogBorder();
+        if (!border) return;
+        const { windowOffsetX, windowOffsetY } = this.state;
+        border.style.transform =
+            windowOffsetX || windowOffsetY ? `translate3d(${windowOffsetX}px, ${windowOffsetY}px, 0)` : "";
+    };
+
+    private clearWindowOffset = (): void => {
+        const border = this.getDialogBorder();
+        if (border) border.style.transform = "";
+    };
 
     private preloadOriginal = (): void => {
         if (this.props.src === this.state.imageSrc) return;
+        this.clearOriginalLoadTimer();
         const original = new Image();
         original.onload = () => {
+            this.clearOriginalLoadTimer();
             if (!this.disposed) this.setState({ imageSrc: this.props.src, originalLoadFailed: false });
         };
         original.onerror = () => {
+            this.clearOriginalLoadTimer();
             if (!this.disposed) this.setState({ originalLoadFailed: true });
         };
         original.src = this.props.src;
+        this.originalLoadTimer = setTimeout(() => {
+            if (!this.disposed) this.setState({ originalLoadFailed: true });
+        }, ORIGINAL_LOAD_TIMEOUT_MS);
+    };
+
+    private clearOriginalLoadTimer = (): void => {
+        if (this.originalLoadTimer === undefined) return;
+        clearTimeout(this.originalLoadTimer);
+        this.originalLoadTimer = undefined;
     };
 
     private retryOriginal = (): void => {
@@ -489,9 +529,14 @@ export default class ImageView extends React.Component<IProps, IState> {
     };
 
     private onWindowMoving = (ev: MouseEvent): void => {
+        const border = this.getDialogBorder();
+        const maxX = border ? Math.max(0, (UIStore.instance.windowWidth - border.offsetWidth) / 2 - 16) : 0;
+        const maxY = border ? Math.max(0, (UIStore.instance.windowHeight - border.offsetHeight) / 2 - 16) : 0;
+        const offsetX = this.windowDragInitialX + ev.clientX - this.windowDragStartX;
+        const offsetY = this.windowDragInitialY + ev.clientY - this.windowDragStartY;
         this.setState({
-            windowOffsetX: this.windowDragInitialX + ev.clientX - this.windowDragStartX,
-            windowOffsetY: this.windowDragInitialY + ev.clientY - this.windowDragStartY,
+            windowOffsetX: Math.max(-maxX, Math.min(maxX, offsetX)),
+            windowOffsetY: Math.max(-maxY, Math.min(maxY, offsetY)),
         });
     };
 
@@ -648,11 +693,6 @@ export default class ImageView extends React.Component<IProps, IState> {
             );
         }
 
-        const windowTransform =
-            this.state.windowOffsetX || this.state.windowOffsetY
-                ? `translate3d(${this.state.windowOffsetX}px, ${this.state.windowOffsetY}px, 0)`
-                : undefined;
-
         return (
             <FocusLock
                 returnFocus={true}
@@ -660,7 +700,6 @@ export default class ImageView extends React.Component<IProps, IState> {
                     "onKeyDown": this.onKeyDown,
                     "role": "dialog",
                     "aria-label": _t("lightbox|title"),
-                    "style": { transform: windowTransform },
                 }}
                 className="mx_ImageView"
                 ref={this.focusLock}

@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 */
 
 import React, { useEffect, useMemo, useState } from "react";
-import { type Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 
 import AccessibleButton from "../elements/AccessibleButton";
 import {
@@ -25,10 +25,11 @@ import {
 interface Props {
     room: Room;
     threadId?: string | null;
+    replyToEvent?: MatrixEvent;
     onSent: () => void;
 }
 
-const RemoteStickerTab: React.FC<Props> = ({ room, threadId, onSent }) => {
+const RemoteStickerTab: React.FC<Props> = ({ room, threadId, replyToEvent, onSent }) => {
     const [index, setIndex] = useState<RemoteStickerIndex>();
     const [query, setQuery] = useState("");
     const [pack, setPack] = useState("all");
@@ -117,7 +118,7 @@ const RemoteStickerTab: React.FC<Props> = ({ room, threadId, onSent }) => {
                                 setSending(id);
                                 setError(undefined);
                                 try {
-                                    await sendRemoteSticker(room, threadId, sticker);
+                                    await sendRemoteSticker(room, threadId, sticker, replyToEvent);
                                     onSent();
                                 } catch (cause) {
                                     setError(cause instanceof Error ? cause.message : "发送云端表情失败");

@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
-import { type Room, ClientEvent } from "matrix-js-sdk/src/matrix";
+import { type Room, ClientEvent, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type IWidget } from "matrix-widget-api";
 
@@ -39,9 +39,11 @@ const PERSISTED_ELEMENT_KEY = "stickerPicker";
 interface IProps {
     room: Room;
     threadId?: string | null;
+    replyToEvent?: MatrixEvent;
     isStickerPickerOpen: boolean;
     menuPosition?: any;
     setStickerPickerOpen: (isStickerPickerOpen: boolean) => void;
+    onStickerSent?: () => void;
 }
 
 interface IState {
@@ -331,7 +333,11 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
                     <RemoteStickerTab
                         room={this.props.room}
                         threadId={this.props.threadId}
-                        onSent={() => this.props.setStickerPickerOpen(false)}
+                        replyToEvent={this.props.replyToEvent}
+                        onSent={() => {
+                            this.props.setStickerPickerOpen(false);
+                            this.props.onStickerSent?.();
+                        }}
                     />
                 ) : (
                     stickersContent

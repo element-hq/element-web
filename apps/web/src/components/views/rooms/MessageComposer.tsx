@@ -547,6 +547,15 @@ export class MessageComposer extends React.Component<IProps, IState> {
         }
     };
 
+    private onStickerSent = (): void => {
+        if (!this.props.replyToEvent) return;
+        dis.dispatch({
+            action: "reply_to_event",
+            event: null,
+            context: this.context.timelineRenderingType,
+        });
+    };
+
     public render(): React.ReactNode {
         let leftIcon: false | JSX.Element = false;
         if (!this.state.isWysiwygLabEnabled) {
@@ -678,8 +687,10 @@ export class MessageComposer extends React.Component<IProps, IState> {
             <Stickerpicker
                 room={this.props.room}
                 threadId={threadId}
+                replyToEvent={this.props.replyToEvent}
                 isStickerPickerOpen={this.state.isStickerPickerOpen}
                 setStickerPickerOpen={this.setStickerPickerOpen}
+                onStickerSent={this.onStickerSent}
                 menuPosition={menuPosition}
                 key="stickers"
             />,
