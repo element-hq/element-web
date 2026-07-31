@@ -22,8 +22,8 @@ Please see LICENSE files in the repository root for full details.
     --gutterSize: 11px;
     /* Spark-style compact cards: a deliberate readable line length instead
        of letting text balloons take most of a wide desktop timeline. */
-    --cornerRadius: 16px;
-    --maxWidth: min(600px, 70%);
+    --cornerRadius: 14px;
+    --maxWidth: min(600px, 72%);
 
     /* For both event tile and event list summary */
     --EventTile_bubble-margin-inline-start: 68px;
@@ -146,6 +146,11 @@ Please see LICENSE files in the repository root for full details.
         top: -2px;
         left: 2px;
         font-size: $font-15px;
+
+        .mx_DisambiguatedProfile_displayName {
+            color: $accent;
+            font-weight: var(--cpd-font-weight-semibold);
+        }
     }
 
     .mx_MessageActionBar {
@@ -195,6 +200,18 @@ Please see LICENSE files in the repository root for full details.
 
         .mx_EventTile_avatar {
             left: -53px;
+        }
+
+        &:not(.mx_EventTile_continuation) .mx_EventTile_line:not(.mx_EventTile_mediaLine)::after {
+            position: absolute;
+            top: 14px;
+            left: -7px;
+            width: 10px;
+            height: 14px;
+            content: "";
+            background: var(--backgroundColor);
+            clip-path: polygon(100% 0, 100% 100%, 0 50%);
+            filter: drop-shadow(-1px 0 color-mix(in srgb, var(--backgroundColor) 88%, currentColor));
         }
 
         .mx_MessageActionBar {
@@ -266,6 +283,18 @@ Please see LICENSE files in the repository root for full details.
         .mx_EventTile_avatar {
             top: -19px; /* height of the sender block */
             right: -53px;
+        }
+
+        &:not(.mx_EventTile_continuation) .mx_EventTile_line:not(.mx_EventTile_mediaLine)::after {
+            position: absolute;
+            top: 14px;
+            right: -7px;
+            width: 10px;
+            height: 14px;
+            content: "";
+            background: var(--backgroundColor);
+            clip-path: polygon(0 0, 100% 50%, 0 100%);
+            filter: drop-shadow(1px 0 color-mix(in srgb, var(--backgroundColor) 88%, currentColor));
         }
 
         .mx_MediaBody {
