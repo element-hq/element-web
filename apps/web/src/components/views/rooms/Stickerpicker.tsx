@@ -335,6 +335,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
                         room={this.props.room}
                         threadId={this.props.threadId}
                         replyToEvent={this.props.replyToEvent}
+                        preferInlineEmoticon={false}
                         onInsertEmoticon={this.props.onInsertEmoticon}
                         onSent={() => {
                             this.props.setStickerPickerOpen(false);

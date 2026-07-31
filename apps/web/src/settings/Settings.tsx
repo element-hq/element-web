@@ -848,7 +848,9 @@ export const SETTINGS: Settings = {
     "autoplayGifs": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("settings|autoplay_gifs"),
-        default: false,
+        // Spark starts animated media immediately. Users can still turn this
+        // setting off in Preferences if they need to reduce motion or data use.
+        default: true,
     },
     "autoplayVideo": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -1252,7 +1254,10 @@ export const SETTINGS: Settings = {
     },
     "layout": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        default: Layout.Group,
+        // This client uses the Spark-style bubble timeline as its out-of-box
+        // appearance. The existing layout picker still lets a user switch to
+        // grouped or IRC rendering explicitly.
+        default: Layout.Bubble,
     },
     "Images.size": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,

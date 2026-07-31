@@ -81,17 +81,27 @@ export const transformTags: NonNullable<IOptions["transformTags"]> = {
         const requestedHeight = isEmoticon ? 32 : Number(attribs.height);
         const width = Math.min(requestedWidth || 800, 800);
         const height = Math.min(requestedHeight || 600, 600);
-        // specify width/height as max values instead of absolute ones to allow object-fit to do its thing
-        // we only allow our own styles for this tag so overwrite the attribute
-        attribs.style = `max-width: ${width}px; max-height: ${height}px;`;
+
         if (isEmoticon) {
-            attribs.style += "width: 1.25em; height: 1.25em; vertical-align: -0.25em; object-fit: contain;";
-        }
-        if (requestedWidth) {
-            attribs.style += "width: 100%;";
-        }
-        if (requestedHeight) {
-            attribs.style += "height: 100%;";
+            // Match Spark's inline emoticon renderer: the media itself is
+            // text-height, while its small padding belongs to the inline box.
+            // Do not fall through to the normal image rules below: doing so
+            // appended width/height: 100% and turned a custom emoji into a
+            // message-sized image.
+            attribs.style =
+                "display: inline-block; box-sizing: content-box; width: auto; height: 1em; max-width: none; " +
+                "max-height: 1em; padding: 0.05rem; vertical-align: middle; object-fit: contain;";
+        } else {
+            // Specify width/height as max values instead of absolute ones to
+            // allow object-fit to do its thing. We only allow our own styles
+            // for this tag, so overwrite the attribute.
+            attribs.style = `max-width: ${width}px; max-height: ${height}px;`;
+            if (requestedWidth) {
+                attribs.style += "width: 100%;";
+            }
+            if (requestedHeight) {
+                attribs.style += "height: 100%;";
+            }
         }
         attribs.src = mediaFromMxc(src).getThumbnailOfSourceHttp(width, height)!;
         return { tagName, attribs };

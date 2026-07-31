@@ -18,16 +18,16 @@ Please see LICENSE files in the repository root for full details.
 
 .mx_EventTile[data-layout="bubble"],
 .mx_GenericEventListSummary[data-layout="bubble"] {
-    --avatarSize: 45px;
-    --gutterSize: 11px;
+    --avatarSize: 26px;
+    --gutterSize: 10px;
     /* Spark-style compact cards: a deliberate readable line length instead
        of letting text balloons take most of a wide desktop timeline. */
     --cornerRadius: 14px;
     --maxWidth: min(600px, 72%);
 
     /* For both event tile and event list summary */
-    --EventTile_bubble-margin-inline-start: 68px;
-    --EventTile_bubble-margin-inline-end: 76px;
+    --EventTile_bubble-margin-inline-start: 48px;
+    --EventTile_bubble-margin-inline-end: 56px;
 
     margin-inline-start: var(--EventTile_bubble-margin-inline-start);
     margin-inline-end: var(--EventTile_bubble-margin-inline-end);
@@ -199,7 +199,7 @@ Please see LICENSE files in the repository root for full details.
         }
 
         .mx_EventTile_avatar {
-            left: -53px;
+            left: -34px;
         }
 
         &:not(.mx_EventTile_continuation) .mx_EventTile_line:not(.mx_EventTile_mediaLine)::after {
@@ -281,8 +281,8 @@ Please see LICENSE files in the repository root for full details.
         }
 
         .mx_EventTile_avatar {
-            top: -19px; /* height of the sender block */
-            right: -53px;
+            top: -9px;
+            right: -34px;
         }
 
         &:not(.mx_EventTile_continuation) .mx_EventTile_line:not(.mx_EventTile_mediaLine)::after {
@@ -462,7 +462,7 @@ Please see LICENSE files in the repository root for full details.
 
     &.mx_EventTile_noSender {
         .mx_EventTile_avatar {
-            top: -19px;
+            top: -14px;
         }
     }
 

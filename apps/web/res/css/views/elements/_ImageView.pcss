@@ -19,8 +19,6 @@ $button-gap: var(--cpd-space-3x);
     height: 100%;
     flex-direction: column;
 
-    /* The preview window itself moves when its header is dragged. */
-    will-change: transform;
 }
 
 .mx_ImageView_image_wrapper {
@@ -66,12 +64,6 @@ $button-gap: var(--cpd-space-3x);
     position: relative;
     z-index: 4;
 
-    cursor: grab;
-    user-select: none;
-
-    &[data-dragging] {
-        cursor: grabbing;
-    }
 }
 
 .mx_ImageView_info_wrapper {

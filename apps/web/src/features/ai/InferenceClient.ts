@@ -6,6 +6,25 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 
 const MAX_AUDIO_SIZE = 25 * 1024 * 1024;
 
+/**
+ * Vision providers occasionally ignore the plain-text instruction and wrap an
+ * otherwise useful OCR result in layout metadata. Keep the result readable in
+ * the image viewer, matching Spark's OCR cleanup path.
+ */
+export const cleanOcrText = (value: string): string =>
+    value
+        .replace(/```[\w-]*\s*/g, "")
+        .replace(/```/g, "")
+        .replace(/^\s*!\[[^\]\n]*\]\([^)]*\bbbox\s*=\s*\[[^\]\n]+\][^)]*\)\r?\n?/gim, "")
+        .replace(/^[ \t]*(?:page\s*=\s*\d+\s*,\s*)?bbox\s*=\s*\[[^\]\n]+\][ \t]*\r?\n?/gim, "")
+        .replace(/<br\s*\/?>/gi, "\n")
+        .replace(/<\/(?:p|div)\s*>\r?\n?/gi, "\n")
+        .replace(/<\/?[a-z][^>]*>/gi, "")
+        .replace(/^\s{0,3}#{1,6}\s+/gm, "")
+        .replace(/[ \t]+\n/g, "\n")
+        .replace(/\n{3,}/g, "\n\n")
+        .trim();
+
 const responseText = async (response: Response): Promise<string> => {
     const payload = (await response.json().catch(() => ({}))) as { text?: unknown; error?: unknown };
     if (!response.ok)
@@ -30,7 +49,9 @@ export const recogniseImage = async (image: Blob): Promise<string> => {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ image: await toDataUrl(image) }),
     });
-    return responseText(response);
+    const text = cleanOcrText(await responseText(response));
+    if (!text) throw new Error("图片中未识别到可用文字");
+    return text;
 };
 
 export const transcribeAudio = async (audio: Blob, filename: string): Promise<string> => {

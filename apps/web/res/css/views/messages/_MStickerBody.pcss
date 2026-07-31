@@ -6,7 +6,19 @@ Please see LICENSE files in the repository root for full details.
 */
 
 .mx_MStickerBody_wrapper {
-    padding: 12px 0px;
+    /* Spark renders stickers in a compact 114px-wide media box, with no
+       additional Element wrapper padding.  The image keeps its source aspect
+       ratio; very wide assets still retain Spark's 36px minimum height. */
+    width: fit-content;
+    max-width: min(100%, 45vw);
+    padding: 0;
+
+    .mx_MImageBody_thumbnail_container {
+        width: min(100%, 114px) !important;
+        max-width: 114px !important;
+        max-height: none !important;
+        min-height: 36px;
+    }
 }
 
 .mx_MStickerBody_hidden {

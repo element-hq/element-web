@@ -7,7 +7,7 @@
 
 import { type ComponentProps, type MouseEvent, type RefObject } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { ClientEvent, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, EventType, MsgType, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { type ImageContent } from "matrix-js-sdk/src/types";
 import {
     BaseViewModel,
@@ -487,6 +487,16 @@ export class ImageBodyViewModel
             mxEvent: this.props.mxEvent,
             permalinkCreator: this.props.permalinkCreator,
         };
+
+        const roomId = this.props.mxEvent.getRoomId();
+        const room = roomId ? MatrixClientPeg.safeGet().getRoom(roomId) : undefined;
+        const viewerEvents = room
+            ?.getLiveTimeline()
+            .getEvents()
+            .filter(
+                (event) => event.getType() === EventType.RoomMessage && event.getContent().msgtype === MsgType.Image,
+            );
+        if (viewerEvents?.length) params.viewerEvents = viewerEvents;
 
         if (content.info) {
             params.width = content.info.w;

@@ -17,10 +17,11 @@ const MISSING_AUDIO = "\u7f3a\u5c11\u97f3\u9891\u6587\u4ef6";
 const TOO_LARGE = "\u97f3\u9891\u8f6c\u5199\u4ec5\u652f\u6301\u4e0d\u8d85\u8fc7 25 MB \u7684\u6587\u4ef6";
 const UPSTREAM_UNAVAILABLE = "\u4e0a\u6e38\u8f6c\u5199\u670d\u52a1\u6682\u65f6\u4e0d\u53ef\u7528";
 const EMPTY_RESPONSE = "\u8f6c\u5199\u670d\u52a1\u672a\u8fd4\u56de\u6587\u672c";
-const ASR_MODEL_FALLBACKS = ["whisper-large-v3-turbo", "gpt-4o-transcribe-diarize"];
+const DEFAULT_ASR_MODEL = "whisper-large-v3-turbo";
+const ASR_MODEL_FALLBACKS = ["gpt-4o-transcribe-diarize"];
 
 export const onRequestPost = async ({ request, env }: Context): Promise<Response> => {
-    if (!env.SPARK_API_KEY || !env.SPARK_BASE_URL || !env.SPARK_ASR_MODEL) {
+    if (!env.SPARK_API_KEY || !env.SPARK_BASE_URL) {
         return jsonError(NOT_CONFIGURED, 503);
     }
 
@@ -32,7 +33,7 @@ export const onRequestPost = async ({ request, env }: Context): Promise<Response
     let lastStatus: number | undefined;
     let receivedSuccessfulResponse = false;
 
-    for (const model of new Set([env.SPARK_ASR_MODEL, ...ASR_MODEL_FALLBACKS])) {
+    for (const model of new Set([env.SPARK_ASR_MODEL || DEFAULT_ASR_MODEL, ...ASR_MODEL_FALLBACKS])) {
         const form = new FormData();
         form.append("model", model);
         form.append("file", audio, audio.name || "voice-message.ogg");

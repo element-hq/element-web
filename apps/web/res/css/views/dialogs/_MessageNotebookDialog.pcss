@@ -1,13 +1,56 @@
 #mx_MessageNotebookDialog {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: var(--cpd-space-3x);
 }
 
 #mx_MessageNotebookDialog input,
 #mx_MessageNotebookDialog textarea {
     width: 100%;
     box-sizing: border-box;
+}
+
+.mx_MessageNotebookDialog_intro {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--cpd-space-2x);
+    color: $secondary-content;
+    font: var(--cpd-font-body-sm-regular);
+
+    p {
+        margin: 2px 0 0;
+    }
+}
+
+.mx_MessageNotebookDialog_icon {
+    width: 32px;
+    height: 32px;
+    display: grid;
+    flex: 0 0 32px;
+    place-items: center;
+    border-radius: 8px;
+    background: color-mix(in srgb, $accent 14%, transparent);
+    color: $accent;
+
+    svg {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+.mx_MessageNotebookDialog_field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cpd-space-1x);
+    color: $primary-content;
+    font: var(--cpd-font-body-sm-medium);
+}
+
+.mx_MessageNotebookDialog_actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--cpd-space-2x);
+    margin-top: var(--cpd-space-1x);
 }
 
 .mx_MessageNotebookDialog_error {

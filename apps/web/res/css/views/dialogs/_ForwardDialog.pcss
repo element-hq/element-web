@@ -162,5 +162,27 @@ Please see LICENSE files in the repository root for full details.
         gap: var(--cpd-space-3x);
         border-top: 1px solid $input-border-color;
         color: $secondary-content;
+
+        .mx_ForwardDialog_selectionStatus {
+            min-width: 0;
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            gap: var(--cpd-space-1x);
+            font: var(--cpd-font-body-sm-regular);
+        }
+
+        .mx_ForwardDialog_selectionError {
+            color: $alert;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .mx_ForwardDialog_selectionActions {
+            display: flex;
+            flex: 0 0 auto;
+            gap: var(--cpd-space-2x);
+        }
     }
 }

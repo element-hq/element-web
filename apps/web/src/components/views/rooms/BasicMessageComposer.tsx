@@ -43,6 +43,7 @@ import { ALTERNATE_KEY_NAME, KeyBindingAction } from "../../../accessibility/Key
 import { _t } from "../../../languageHandler";
 import { Landmark, LandmarkNavigation } from "../../../accessibility/LandmarkNavigation";
 import { SDKContext } from "../../../contexts/SDKContext.ts";
+import { prepareRemoteEmoticon } from "../../../features/remote-stickers/RemoteStickerIndex";
 
 // matches emoticons which follow the start of a line or whitespace
 const REGEX_EMOTICON_WHITESPACE = new RegExp("(?:^|\\s)(" + EMOTICON_REGEX.source + ")\\s|:^$");
@@ -674,7 +675,26 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
     private onAutoCompleteConfirm = (completion: ICompletion): void => {
         this.modifiedFlag = true;
+        if (completion.type === "remote-emoticon" && completion.remoteSticker) {
+            void this.completeRemoteEmoticon(completion);
+            return;
+        }
         this.props.model.autoComplete?.onComponentConfirm(completion);
+    };
+
+    private completeRemoteEmoticon = async (completion: ICompletion): Promise<void> => {
+        if (!completion.remoteSticker) return;
+        try {
+            const customEmoticon = await prepareRemoteEmoticon(this.props.room, completion.remoteSticker);
+            this.props.model.autoComplete?.onComponentConfirm({
+                ...completion,
+                type: "custom-emoticon",
+                customEmoticon,
+            });
+        } catch (error) {
+            logger.warn("Unable to prepare remote custom emoji", error);
+            this.setState({ showVisualBell: true });
+        }
     };
 
     private onAutoCompleteSelectionChange = (completionIndex: number): void => {

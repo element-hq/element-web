@@ -9,10 +9,11 @@ Please see LICENSE files in the repository root for full details.
 // For Large the image gets drawn as big as possible.
 // constraint by: timeline width, manual height overrides, SIZE_LARGE.h
 const SIZE_LARGE = { w: 800, h: 600 };
-// For Normal the image gets drawn to never exceed SIZE_NORMAL.w, SIZE_NORMAL.h
-// constraint by: timeline width, manual height overrides
-const SIZE_NORMAL_LANDSCAPE = { w: 324, h: 324 }; // for w > h
-const SIZE_NORMAL_PORTRAIT = { w: Math.ceil(324 * (9 / 16)), h: 324 }; // for h > w
+// Spark's normal timeline media frame is 230px wide, with a 460px vertical
+// cap. Keeping the same bound for animated GIF/WebP and static image events
+// prevents graphics from jumping to Element's much larger 324px default.
+// Timeline width and any explicit height override still take precedence.
+const SIZE_NORMAL = { w: 230, h: 460 };
 
 type Dimensions = { w?: number; h?: number };
 
@@ -29,9 +30,7 @@ export enum ImageSize {
  */
 export function suggestedSize(size: ImageSize, contentSize: Dimensions, maxHeight?: number): Required<Dimensions> {
     const aspectRatio = contentSize.w! / contentSize.h!;
-    const portrait = aspectRatio < 1;
-
-    const maxSize = size === ImageSize.Large ? SIZE_LARGE : portrait ? SIZE_NORMAL_PORTRAIT : SIZE_NORMAL_LANDSCAPE;
+    const maxSize = size === ImageSize.Large ? SIZE_LARGE : SIZE_NORMAL;
     if (!contentSize.w || !contentSize.h) {
         return maxSize;
     }

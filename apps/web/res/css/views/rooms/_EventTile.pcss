@@ -839,6 +839,22 @@ $left-gutter: 64px;
         background-color: inherit !important;
     }
 
+    /* Spark renders Matrix inline custom emoji as a text-height media item,
+       rather than as regular message media. The 0.05rem spacing is the same
+       inline box padding used by Spark's EmoticonBase component. */
+    &.markdown-body img[data-mx-emoticon] {
+        display: inline-block;
+        box-sizing: content-box;
+        width: auto !important;
+        height: 1em !important;
+        max-width: none !important;
+        max-height: 1em !important;
+        padding: 0.05rem;
+        margin: 0;
+        vertical-align: middle;
+        object-fit: contain;
+    }
+
     .mx_EventTile_clamp & {
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;

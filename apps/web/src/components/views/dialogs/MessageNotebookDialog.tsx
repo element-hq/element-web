@@ -5,6 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 */
 
 import React, { useState } from "react";
+import { AttachmentIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import BaseDialog from "./BaseDialog";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -38,28 +39,51 @@ const MessageNotebookDialog: React.FC<Props> = ({ onFinished, onSend }) => {
     return (
         <BaseDialog title="聊天记事本" onFinished={onFinished} contentId="mx_MessageNotebookDialog">
             <form id="mx_MessageNotebookDialog" onSubmit={submit}>
-                <input value={name} onChange={(event) => setName(event.target.value)} aria-label="文件名" />
-                <textarea
-                    value={body}
-                    onChange={(event) => setBody(event.target.value)}
-                    aria-label="记事本内容"
-                    rows={12}
-                    autoFocus
-                />
+                <div className="mx_MessageNotebookDialog_intro">
+                    <span className="mx_MessageNotebookDialog_icon" aria-hidden="true">
+                        <AttachmentIcon />
+                    </span>
+                    <p>将长内容作为可命名的 .txt 附件发送；回复和线程关系会随附件一起发送。</p>
+                </div>
+                <label className="mx_MessageNotebookDialog_field">
+                    <span>文件名</span>
+                    <input value={name} onChange={(event) => setName(event.target.value)} aria-label="文件名" />
+                </label>
+                <label className="mx_MessageNotebookDialog_field">
+                    <span>内容</span>
+                    <textarea
+                        value={body}
+                        onChange={(event) => setBody(event.target.value)}
+                        aria-label="记事本内容"
+                        rows={12}
+                        autoFocus
+                    />
+                </label>
                 {error && (
                     <p className="mx_MessageNotebookDialog_error" role="alert">
                         {error}
                     </p>
                 )}
-                <AccessibleButton
-                    element="button"
-                    kind="primary"
-                    type="submit"
-                    onClick={() => undefined}
-                    disabled={!body.trim() || sending}
-                >
-                    {sending ? "正在发送…" : "发送 .txt 文件"}
-                </AccessibleButton>
+                <div className="mx_MessageNotebookDialog_actions">
+                    <AccessibleButton
+                        element="button"
+                        kind="secondary"
+                        type="button"
+                        onClick={onFinished}
+                        disabled={sending}
+                    >
+                        取消
+                    </AccessibleButton>
+                    <AccessibleButton
+                        element="button"
+                        kind="primary"
+                        type="submit"
+                        onClick={() => undefined}
+                        disabled={!body.trim() || sending}
+                    >
+                        {sending ? "正在发送…" : "发送 .txt 文件"}
+                    </AccessibleButton>
+                </div>
             </form>
         </BaseDialog>
     );

@@ -10,8 +10,10 @@ export interface Env {
     SPARK_BASE_URL: string;
     /** Optional backup OpenAI-compatible endpoint for transient regional failures. */
     SPARK_FALLBACK_BASE_URL?: string;
-    SPARK_OCR_MODEL: string;
-    SPARK_ASR_MODEL: string;
+    /** Optional override. The Pages functions provide a Spark-compatible default. */
+    SPARK_OCR_MODEL?: string;
+    /** Optional override. The Pages functions provide a Spark-compatible default. */
+    SPARK_ASR_MODEL?: string;
 }
 
 export const jsonError = (error: string, status = 400): Response =>

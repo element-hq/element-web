@@ -44,6 +44,17 @@ export function EmojiButton({
     const overflowMenuCloser = useContext(OverflowMenuContext);
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
     const [cloudTab, setCloudTab] = useState(false);
+    const [preferInlineEmoticon, setPreferInlineEmoticon] = useState(false);
+
+    const rememberComposerFocus = (): void => {
+        const activeElement = document.activeElement;
+        const focusedEditor =
+            activeElement instanceof HTMLElement &&
+            activeElement.matches(
+                ".mx_BasicMessageComposer_input[contenteditable='true'], .mx_WysiwygComposer_Editor_content[contenteditable='true']",
+            );
+        setPreferInlineEmoticon(focusedEditor);
+    };
 
     let contextMenu: React.ReactElement | null = null;
     if (menuDisplayed && button.current) {
@@ -83,6 +94,7 @@ export function EmojiButton({
                                 room={room}
                                 threadId={relation?.rel_type === THREAD_RELATION_TYPE.name ? relation.event_id : null}
                                 replyToEvent={replyToEvent}
+                                preferInlineEmoticon={preferInlineEmoticon}
                                 onInsertEmoticon={(emoticon) => {
                                     dis.dispatch<ComposerInsertPayload>({
                                         action: Action.ComposerInsert,
@@ -115,6 +127,7 @@ export function EmojiButton({
         <>
             <CollapsibleButton
                 className={computedClassName}
+                onMouseDown={rememberComposerFocus}
                 onClick={openMenu}
                 title={_t("common|emoji")}
                 inputRef={button}

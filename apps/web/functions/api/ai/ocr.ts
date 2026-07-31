@@ -15,10 +15,11 @@ const NOT_CONFIGURED = "\u0041\u0049 \u670d\u52a1\u5c1a\u672a\u5b8c\u6210\u90e8\
 const INVALID_IMAGE = "\u7f3a\u5c11\u53ef\u8bc6\u522b\u7684\u56fe\u7247\u6570\u636e";
 const UPSTREAM_UNAVAILABLE = "\u4e0a\u6e38 OCR \u670d\u52a1\u6682\u65f6\u4e0d\u53ef\u7528";
 const EMPTY_RESPONSE = "OCR \u670d\u52a1\u672a\u8fd4\u56de\u6587\u672c";
-const OCR_MODEL_FALLBACKS = ["glm-4.6v", "DeepSeek-OCR"];
+const DEFAULT_OCR_MODEL = "glm-4.6v";
+const OCR_MODEL_FALLBACKS = ["glm-ocr", "DeepSeek-OCR"];
 
 export const onRequestPost = async ({ request, env }: Context): Promise<Response> => {
-    if (!env.SPARK_API_KEY || !env.SPARK_BASE_URL || !env.SPARK_OCR_MODEL) {
+    if (!env.SPARK_API_KEY || !env.SPARK_BASE_URL) {
         return jsonError(NOT_CONFIGURED, 503);
     }
 
@@ -29,7 +30,7 @@ export const onRequestPost = async ({ request, env }: Context): Promise<Response
 
     let lastStatus: number | undefined;
     let receivedSuccessfulResponse = false;
-    for (const model of new Set([env.SPARK_OCR_MODEL, ...OCR_MODEL_FALLBACKS])) {
+    for (const model of new Set([env.SPARK_OCR_MODEL || DEFAULT_OCR_MODEL, ...OCR_MODEL_FALLBACKS])) {
         try {
             const upstream = await fetchWithProviderFallback(env, "/chat/completions", {
                 method: "POST",
@@ -39,11 +40,16 @@ export const onRequestPost = async ({ request, env }: Context): Promise<Response
                     temperature: 0,
                     messages: [
                         {
+                            role: "system",
+                            content:
+                                "You are a strict OCR plain-text extractor. Read every visible character in top-to-bottom, left-to-right order. Return only the text that appears in the image: no Markdown, HTML, XML, JSON, code fences, page labels, bounding boxes, coordinates, or explanations.",
+                        },
+                        {
                             role: "user",
                             content: [
                                 {
                                     type: "text",
-                                    text: "Extract every visible character in reading order. Return plain text only; do not include Markdown, HTML, coordinates, or explanations.",
+                                    text: "请逐行提取图片中真实存在的全部文字，按从上到下、从左到右的阅读顺序输出。不要解释、补充或生成 Markdown、HTML、XML、JSON、代码块、页面标记、bbox 坐标或版面标记。",
                                 },
                                 { type: "image_url", image_url: { url: body.image } },
                             ],

@@ -13,6 +13,7 @@ import CommandProvider from "./CommandProvider";
 import RoomProvider from "./RoomProvider";
 import UserProvider from "./UserProvider";
 import EmojiProvider from "./EmojiProvider";
+import RemoteEmojiProvider from "./RemoteEmojiProvider";
 import NotifProvider from "./NotifProvider";
 import { timeout } from "../utils/promise";
 import { type ICommand } from "./AutocompleteProvider";
@@ -20,6 +21,7 @@ import type AutocompleteProvider from "./AutocompleteProvider";
 import SpaceProvider from "./SpaceProvider";
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import { filterBoolean } from "../utils/arrays";
+import type { RemoteSticker } from "../features/remote-stickers/RemoteStickerIndex";
 
 export interface ISelectionRange {
     beginning?: boolean; // whether the selection is in the first block of the editor or not
@@ -28,7 +30,7 @@ export interface ISelectionRange {
 }
 
 export interface ICompletion {
-    type?: "at-room" | "command" | "community" | "room" | "user";
+    type?: "at-room" | "command" | "community" | "room" | "user" | "custom-emoticon" | "remote-emoticon";
     completion: string;
     completionId?: string;
     component: ReactElement<RefAttributes<HTMLElement> & HTMLAttributes<HTMLElement>>;
@@ -38,9 +40,24 @@ export interface ICompletion {
     // If provided, apply a LINK entity to the completion with the
     // data = { url: href }.
     href?: string;
+    /** Matrix custom emoji data once a provider has resolved an MXC URI. */
+    customEmoticon?: {
+        src: string;
+        text: string;
+    };
+    /** A cloud item that must be copied to Matrix before it can be inserted. */
+    remoteSticker?: RemoteSticker;
 }
 
-const PROVIDERS = [UserProvider, RoomProvider, EmojiProvider, NotifProvider, CommandProvider, SpaceProvider];
+const PROVIDERS = [
+    UserProvider,
+    RoomProvider,
+    EmojiProvider,
+    RemoteEmojiProvider,
+    NotifProvider,
+    CommandProvider,
+    SpaceProvider,
+];
 
 // Providers will get rejected if they take longer than this.
 const PROVIDER_COMPLETION_TIMEOUT = 3000;

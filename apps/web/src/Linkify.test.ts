@@ -31,6 +31,10 @@ describe("custom emoticon sanitising", () => {
 
         expect(safe).toContain("data-mx-emoticon");
         expect(safe).toContain('alt=":wave:"');
+        expect(safe).toContain("height:1em");
+        expect(safe).toContain("width:auto");
+        expect(safe).not.toContain("width:100%");
+        expect(safe).not.toContain("height:100%");
         expect(unsafe).not.toContain("data-mx-emoticon");
         expect(unsafe).not.toContain("example.org/wave.png");
     });

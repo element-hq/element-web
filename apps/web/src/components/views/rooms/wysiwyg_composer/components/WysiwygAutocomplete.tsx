@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type Ref, type FunctionComponent } from "react";
+import React, { useContext, type JSX, type Ref, type FunctionComponent } from "react";
 import { type FormattingFunctions, type MappedSuggestion } from "@vector-im/matrix-wysiwyg";
 
 import Autocomplete from "../../Autocomplete";
@@ -14,6 +14,11 @@ import { type ICompletion } from "../../../../../autocomplete/Autocompleter";
 import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
 import { getMentionDisplayText, getMentionAttributes, buildQuery } from "../utils/autocomplete";
 import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.tsx";
+import RoomContext from "../../../../../contexts/RoomContext";
+import dispatcher from "../../../../../dispatcher/dispatcher";
+import { Action } from "../../../../../dispatcher/actions";
+import { type ComposerInsertPayload } from "../../../../../dispatcher/payloads/ComposerInsertPayload";
+import { prepareRemoteEmoticon } from "../../../../../features/remote-stickers/RemoteStickerIndex";
 
 interface WysiwygAutocompleteProps {
     /**
@@ -65,6 +70,7 @@ const WysiwygAutocomplete = ({
 }: WysiwygAutocompleteProps): JSX.Element | null => {
     const { room } = useScopedRoomContext("room");
     const client = useMatrixClientContext();
+    const roomContext = useContext(RoomContext);
 
     function handleConfirm(completion: ICompletion): void {
         if (client === undefined || room === undefined) {
@@ -97,6 +103,24 @@ const WysiwygAutocomplete = ({
             // TODO - handle "community" type
             case "community": {
                 return; // no-op until we decide how to handle community in the wysiwyg composer
+            }
+            case "remote-emoticon": {
+                if (!completion.remoteSticker) return;
+                void prepareRemoteEmoticon(room, completion.remoteSticker)
+                    .then((customEmoticon) => {
+                        // The Rust composer has already tracked the shortcode
+                        // range as an emoji suggestion. Remove that source
+                        // text before inserting the resolved Matrix emoticon.
+                        handleEmoji("");
+                        dispatcher.dispatch<ComposerInsertPayload>({
+                            action: Action.ComposerInsert,
+                            text: customEmoticon.text,
+                            customEmoticon,
+                            timelineRenderingType: roomContext.timelineRenderingType,
+                        });
+                    })
+                    .catch(() => undefined);
+                return;
             }
             default:
                 {

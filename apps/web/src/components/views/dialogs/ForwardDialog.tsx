@@ -252,8 +252,10 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, events, per
     const [truncateAt, setTruncateAt] = useState(20);
     const [selectedRoomIds, setSelectedRoomIds] = useState<string[]>([]);
     const [sendingSelected, setSendingSelected] = useState(false);
+    const [sendError, setSendError] = useState<string>();
 
     const toggleRoom = (roomId: string): void => {
+        setSendError(undefined);
         setSelectedRoomIds((current) =>
             current.includes(roomId)
                 ? current.filter((selectedRoomId) => selectedRoomId !== roomId)
@@ -267,6 +269,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, events, per
         const targetRooms = allRooms.filter((room) => selectedRoomIds.includes(room.roomId));
         if (!targetRooms.length || sendingSelected) return;
         setSendingSelected(true);
+        setSendError(undefined);
         try {
             for (const room of targetRooms) {
                 for (const { type, content } of items) {
@@ -277,6 +280,8 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, events, per
                 }
             }
             onFinished();
+        } catch (cause) {
+            setSendError(cause instanceof Error ? cause.message : "转发失败，请检查网络后重试");
         } finally {
             setSendingSelected(false);
         }
@@ -398,14 +403,28 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, events, per
                 )}
             </RovingTabIndexProvider>
             <div className="mx_ForwardDialog_selectionFooter">
-                <span>{selectedRoomIds.length ? `已选择 ${selectedRoomIds.length} 个目标会话` : "请选择转发目标"}</span>
-                <AccessibleButton
-                    kind="primary"
-                    onClick={sendSelected}
-                    disabled={!selectedRoomIds.length || sendingSelected}
-                >
-                    {sendingSelected ? "正在转发…" : "转发到已选会话"}
-                </AccessibleButton>
+                <div className="mx_ForwardDialog_selectionStatus">
+                    <span>
+                        {selectedRoomIds.length ? `将转发到 ${selectedRoomIds.length} 个会话` : "请选择转发目标"}
+                    </span>
+                    {sendError && <span className="mx_ForwardDialog_selectionError">{sendError}</span>}
+                </div>
+                <div className="mx_ForwardDialog_selectionActions">
+                    <AccessibleButton
+                        kind="secondary"
+                        onClick={() => setSelectedRoomIds([])}
+                        disabled={!selectedRoomIds.length || sendingSelected}
+                    >
+                        取消选择
+                    </AccessibleButton>
+                    <AccessibleButton
+                        kind="primary"
+                        onClick={sendSelected}
+                        disabled={!selectedRoomIds.length || sendingSelected}
+                    >
+                        {sendingSelected ? "正在转发…" : "开始转发"}
+                    </AccessibleButton>
+                </div>
             </div>
         </BaseDialog>
     );

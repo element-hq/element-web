@@ -12,6 +12,8 @@ import React, { type JSX, createRef, type CSSProperties, useEffect } from "react
 import FocusLock from "react-focus-lock";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import {
+    ChevronLeftIcon,
+    ChevronRightIcon,
     CloseIcon,
     DownloadIcon,
     OverflowHorizontalIcon,
@@ -86,6 +88,8 @@ interface IProps {
         width: number;
         height: number;
     };
+    /** Loaded image events from this room's timeline, ordered oldest to newest. */
+    viewerEvents?: MatrixEvent[];
     onFinished(): void;
 }
 
@@ -100,13 +104,11 @@ interface IState {
     contextMenuDisplayed: boolean;
     imageSrc: string;
     originalLoadFailed: boolean;
-    windowOffsetX: number;
-    windowOffsetY: number;
-    movingWindow: boolean;
     ocrPanelOpen: boolean;
     ocrLoading: boolean;
     ocrText?: string;
     ocrError?: string;
+    viewerIndex?: number;
 }
 
 /**
@@ -150,11 +152,9 @@ export default class ImageView extends React.Component<IProps, IState> {
             contextMenuDisplayed: false,
             imageSrc: props.thumbnailSrc || props.src,
             originalLoadFailed: false,
-            windowOffsetX: 0,
-            windowOffsetY: 0,
-            movingWindow: false,
             ocrPanelOpen: false,
             ocrLoading: false,
+            viewerIndex: props.viewerEvents?.findIndex((event) => event.getId() === props.mxEvent?.getId()),
         };
     }
 
@@ -175,10 +175,8 @@ export default class ImageView extends React.Component<IProps, IState> {
     private imageIsLoaded = false;
     private disposed = false;
     private originalLoadTimer?: ReturnType<typeof setTimeout>;
-    private windowDragStartX = 0;
-    private windowDragStartY = 0;
-    private windowDragInitialX = 0;
-    private windowDragInitialY = 0;
+    private readonly viewerSourceUrls = new Map<string, string>();
+    private readonly viewerSourceLoads = new Map<string, Promise<string>>();
 
     public componentDidMount(): void {
         // We have to use addEventListener() because the listener
@@ -189,10 +187,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         // After the image loads for the first time we want to calculate the zoom
         this.image.current?.addEventListener("load", this.imageLoaded);
         this.preloadOriginal();
-    }
-
-    public componentDidUpdate(): void {
-        this.applyWindowOffset();
+        this.preloadNeighbouringImages();
     }
 
     public componentWillUnmount(): void {
@@ -200,30 +195,85 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.focusLock.current.removeEventListener("wheel", this.onWheel);
         window.removeEventListener("resize", this.recalculateZoom);
         this.image.current?.removeEventListener("load", this.imageLoaded);
-        document.removeEventListener("mousemove", this.onWindowMoving);
-        document.removeEventListener("mouseup", this.onWindowDragEnd);
         this.clearOriginalLoadTimer();
-        this.clearWindowOffset();
+        this.viewerSourceUrls.forEach((url) => URL.revokeObjectURL(url));
     }
 
-    /**
-     * Modal.createDialog owns the outer dialog frame. Moving this component used
-     * to leave that frame behind, so the user appeared to drag only the contents.
-     * Apply the offset to the frame itself to make the whole preview window move.
-     */
-    private getDialogBorder = (): HTMLElement | null => this.focusLock.current?.closest?.(".mx_Dialog_border") ?? null;
-
-    private applyWindowOffset = (): void => {
-        const border = this.getDialogBorder();
-        if (!border) return;
-        const { windowOffsetX, windowOffsetY } = this.state;
-        border.style.transform =
-            windowOffsetX || windowOffsetY ? `translate3d(${windowOffsetX}px, ${windowOffsetY}px, 0)` : "";
+    private getActiveEvent = (): MatrixEvent | undefined => {
+        const { viewerEvents, mxEvent } = this.props;
+        const { viewerIndex } = this.state;
+        if (!viewerEvents || viewerIndex === undefined || viewerIndex < 0) return mxEvent;
+        return viewerEvents[viewerIndex] ?? mxEvent;
     };
 
-    private clearWindowOffset = (): void => {
-        const border = this.getDialogBorder();
-        if (border) border.style.transform = "";
+    private getActiveName = (): string | undefined => this.getActiveEvent()?.getContent().body || this.props.name;
+
+    private resolveViewerEventSource = (event: MatrixEvent): Promise<string> => {
+        const eventId = event.getId();
+        if (!eventId) return Promise.reject(new Error("图片事件缺少事件 ID"));
+        const cachedUrl = this.viewerSourceUrls.get(eventId);
+        if (cachedUrl) return Promise.resolve(cachedUrl);
+        const pending = this.viewerSourceLoads.get(eventId);
+        if (pending) return pending;
+
+        const load = (async (): Promise<string> => {
+            const helper = new MediaEventHelper(event);
+            try {
+                const url = URL.createObjectURL(await helper.sourceBlob.value);
+                this.viewerSourceUrls.set(eventId, url);
+                return url;
+            } finally {
+                helper.destroy();
+            }
+        })();
+        this.viewerSourceLoads.set(eventId, load);
+        void load.finally(() => this.viewerSourceLoads.delete(eventId));
+        return load;
+    };
+
+    private preloadNeighbouringImages = (): void => {
+        const { viewerEvents } = this.props;
+        const { viewerIndex } = this.state;
+        if (!viewerEvents || viewerIndex === undefined || viewerIndex < 0) return;
+
+        [viewerEvents[viewerIndex - 1], viewerEvents[viewerIndex + 1]]
+            .filter((event): event is MatrixEvent => Boolean(event))
+            .forEach((event) => void this.resolveViewerEventSource(event).catch(() => undefined));
+    };
+
+    private changeViewerImage = (offset: -1 | 1): void => {
+        const { viewerEvents } = this.props;
+        const { viewerIndex } = this.state;
+        if (!viewerEvents || viewerIndex === undefined) return;
+        const nextIndex = viewerIndex + offset;
+        const nextEvent = viewerEvents[nextIndex];
+        if (!nextEvent) return;
+
+        this.imageIsLoaded = false;
+        this.setState({
+            viewerIndex: nextIndex,
+            originalLoadFailed: false,
+            ocrPanelOpen: false,
+            ocrLoading: false,
+            ocrText: undefined,
+            ocrError: undefined,
+            rotation: 0,
+            translationX: 0,
+            translationY: 0,
+            zoom: this.state.minZoom,
+        });
+        void this.resolveViewerEventSource(nextEvent)
+            .then((url) => {
+                if (!this.disposed && this.getActiveEvent()?.getId() === nextEvent.getId()) {
+                    this.setState({ imageSrc: url, originalLoadFailed: false });
+                }
+                this.preloadNeighbouringImages();
+            })
+            .catch(() => {
+                if (!this.disposed && this.getActiveEvent()?.getId() === nextEvent.getId()) {
+                    this.setState({ originalLoadFailed: true });
+                }
+            });
     };
 
     private preloadOriginal = (): void => {
@@ -251,6 +301,19 @@ export default class ImageView extends React.Component<IProps, IState> {
     };
 
     private retryOriginal = (): void => {
+        const activeEvent = this.getActiveEvent();
+        const isAlternateViewerImage = activeEvent?.getId() !== this.props.mxEvent?.getId();
+        if (activeEvent && isAlternateViewerImage) {
+            this.setState({ originalLoadFailed: false });
+            void this.resolveViewerEventSource(activeEvent)
+                .then((url) => {
+                    if (!this.disposed) this.setState({ imageSrc: url, originalLoadFailed: false });
+                })
+                .catch(() => {
+                    if (!this.disposed) this.setState({ originalLoadFailed: true });
+                });
+            return;
+        }
         this.setState({ originalLoadFailed: false }, this.preloadOriginal);
     };
 
@@ -404,6 +467,18 @@ export default class ImageView extends React.Component<IProps, IState> {
     };
 
     private onKeyDown = (ev: KeyboardEvent): void => {
+        if (ev.key === "ArrowLeft") {
+            this.changeViewerImage(-1);
+            ev.stopPropagation();
+            ev.preventDefault();
+            return;
+        }
+        if (ev.key === "ArrowRight") {
+            this.changeViewerImage(1);
+            ev.stopPropagation();
+            ev.preventDefault();
+            return;
+        }
         const action = getKeyBindingsManager().getAccessibilityAction(ev);
         switch (action) {
             case KeyBindingAction.Escape:
@@ -451,11 +526,12 @@ export default class ImageView extends React.Component<IProps, IState> {
         // This allows the permalink to be opened in a new tab/window or copied as
         // matrix.to, but also for it to enable routing within Element when clicked.
         ev.preventDefault();
+        const activeEvent = this.getActiveEvent();
         dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
-            event_id: this.props.mxEvent?.getId(),
+            event_id: activeEvent?.getId(),
             highlighted: true,
-            room_id: this.props.mxEvent?.getRoomId(),
+            room_id: activeEvent?.getRoomId(),
             metricsTrigger: undefined, // room doesn't change
         });
         this.props.onFinished();
@@ -513,41 +589,9 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.setState({ moving: false });
     };
 
-    private onWindowDragStart = (ev: React.MouseEvent<HTMLDivElement>): void => {
-        if (ev.button !== 0) return;
-        const target = ev.target as HTMLElement;
-        // Controls in the title bar must remain clickable and must not start a drag.
-        if (target.closest("button, a, .mx_Dialog_nonDialogButton")) return;
-
-        this.windowDragStartX = ev.clientX;
-        this.windowDragStartY = ev.clientY;
-        this.windowDragInitialX = this.state.windowOffsetX;
-        this.windowDragInitialY = this.state.windowOffsetY;
-        this.setState({ movingWindow: true });
-        document.addEventListener("mousemove", this.onWindowMoving);
-        document.addEventListener("mouseup", this.onWindowDragEnd);
-    };
-
-    private onWindowMoving = (ev: MouseEvent): void => {
-        const border = this.getDialogBorder();
-        const maxX = border ? Math.max(0, (UIStore.instance.windowWidth - border.offsetWidth) / 2 - 16) : 0;
-        const maxY = border ? Math.max(0, (UIStore.instance.windowHeight - border.offsetHeight) / 2 - 16) : 0;
-        const offsetX = this.windowDragInitialX + ev.clientX - this.windowDragStartX;
-        const offsetY = this.windowDragInitialY + ev.clientY - this.windowDragStartY;
-        this.setState({
-            windowOffsetX: Math.max(-maxX, Math.min(maxX, offsetX)),
-            windowOffsetY: Math.max(-maxY, Math.min(maxY, offsetY)),
-        });
-    };
-
-    private onWindowDragEnd = (): void => {
-        document.removeEventListener("mousemove", this.onWindowMoving);
-        document.removeEventListener("mouseup", this.onWindowDragEnd);
-        this.setState({ movingWindow: false });
-    };
-
     private onToggleOcrPanel = (): void => {
-        if (!this.props.mxEvent) return;
+        const activeEvent = this.getActiveEvent();
+        if (!activeEvent) return;
         const open = !this.state.ocrPanelOpen;
         this.setState({ ocrPanelOpen: open });
         if (open && !this.state.ocrText && !this.state.ocrLoading) {
@@ -556,9 +600,10 @@ export default class ImageView extends React.Component<IProps, IState> {
     };
 
     private runOcr = async (): Promise<void> => {
-        if (!this.props.mxEvent || this.state.ocrLoading) return;
+        const activeEvent = this.getActiveEvent();
+        if (!activeEvent || this.state.ocrLoading) return;
         this.setState({ ocrPanelOpen: true, ocrLoading: true, ocrError: undefined });
-        const helper = new MediaEventHelper(this.props.mxEvent);
+        const helper = new MediaEventHelper(activeEvent);
         try {
             const ocrText = await recogniseImage(await helper.sourceBlob.value);
             if (!this.disposed) this.setState({ ocrText, ocrError: undefined });
@@ -579,11 +624,12 @@ export default class ImageView extends React.Component<IProps, IState> {
 
     private renderContextMenu(): JSX.Element {
         let contextMenu: JSX.Element | undefined;
-        if (this.state.contextMenuDisplayed && this.props.mxEvent) {
+        const activeEvent = this.getActiveEvent();
+        if (this.state.contextMenuDisplayed && activeEvent) {
             contextMenu = (
                 <MessageContextMenu
                     {...aboveLeftOf(this.contextMenuButton.current.getBoundingClientRect())}
-                    mxEvent={this.props.mxEvent}
+                    mxEvent={activeEvent}
                     permalinkCreator={this.props.permalinkCreator}
                     onFinished={this.onCloseContextMenu}
                     onCloseDialog={this.props.onFinished}
@@ -595,7 +641,16 @@ export default class ImageView extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactNode {
-        const showEventMeta = !!this.props.mxEvent;
+        const activeEvent = this.getActiveEvent();
+        const activeName = this.getActiveName();
+        const viewerEvents = this.props.viewerEvents;
+        const canViewPrevious =
+            this.state.viewerIndex !== undefined && this.state.viewerIndex > 0 && Boolean(viewerEvents?.length);
+        const canViewNext =
+            this.state.viewerIndex !== undefined &&
+            Boolean(viewerEvents?.length) &&
+            this.state.viewerIndex < (viewerEvents?.length ?? 0) - 1;
+        const showEventMeta = !!activeEvent;
 
         let transitionClassName;
         if (this.animatingLoading) transitionClassName = "mx_ImageView_image_animatingLoading";
@@ -623,7 +678,7 @@ export default class ImageView extends React.Component<IProps, IState> {
 
         let info: JSX.Element | undefined;
         if (showEventMeta) {
-            const mxEvent = this.props.mxEvent;
+            const mxEvent = activeEvent;
             const showTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
             let permalink = "#";
             if (this.props.permalinkCreator) {
@@ -670,7 +725,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         }
 
         let contextMenuButton: JSX.Element | undefined;
-        if (this.props.mxEvent) {
+        if (activeEvent) {
             contextMenuButton = (
                 <ContextMenuTooltipButton
                     className="mx_ImageView_button mx_ImageView_button_more"
@@ -685,10 +740,10 @@ export default class ImageView extends React.Component<IProps, IState> {
         }
 
         let title: JSX.Element | undefined;
-        if (this.props.mxEvent?.getContent()) {
+        if (activeEvent?.getContent()) {
             title = (
                 <div className="mx_ImageView_title">
-                    {presentableTextForFile(this.props.mxEvent?.getContent(), _t("common|image"), true)}
+                    {presentableTextForFile(activeEvent.getContent(), _t("common|image"), true)}
                 </div>
             );
         }
@@ -704,14 +759,28 @@ export default class ImageView extends React.Component<IProps, IState> {
                 className="mx_ImageView"
                 ref={this.focusLock}
             >
-                <div
-                    className="mx_ImageView_panel"
-                    onMouseDown={this.onWindowDragStart}
-                    data-dragging={this.state.movingWindow || undefined}
-                >
+                <div className="mx_ImageView_panel">
                     {info}
                     {title}
                     <div className="mx_ImageView_toolbar">
+                        {canViewPrevious && (
+                            <AccessibleButton
+                                className="mx_ImageView_button"
+                                title="上一张图片"
+                                onClick={() => this.changeViewerImage(-1)}
+                            >
+                                <ChevronLeftIcon />
+                            </AccessibleButton>
+                        )}
+                        {canViewNext && (
+                            <AccessibleButton
+                                className="mx_ImageView_button"
+                                title="下一张图片"
+                                onClick={() => this.changeViewerImage(1)}
+                            >
+                                <ChevronRightIcon />
+                            </AccessibleButton>
+                        )}
                         <AccessibleButton
                             className="mx_ImageView_button"
                             title={_t("action|zoom_out")}
@@ -749,7 +818,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                                 ↻
                             </AccessibleButton>
                         )}
-                        {this.props.mxEvent && (
+                        {activeEvent && (
                             <AccessibleButton
                                 className="mx_ImageView_button mx_ImageView_button_ocr"
                                 title="识别文字"
@@ -761,9 +830,10 @@ export default class ImageView extends React.Component<IProps, IState> {
                             </AccessibleButton>
                         )}
                         <DownloadButton
-                            url={this.props.src}
-                            fileName={this.props.name}
-                            mxEvent={this.props.mxEvent}
+                            key={activeEvent?.getId() ?? "image"}
+                            url={this.state.imageSrc}
+                            fileName={activeName}
+                            mxEvent={activeEvent}
                             onDownloadReady={this.onDownloadFunctionReady}
                         />
                         {contextMenuButton}
@@ -791,7 +861,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                         <img
                             src={this.state.imageSrc}
                             style={style}
-                            alt={this.props.name}
+                            alt={activeName}
                             ref={this.image}
                             className={`mx_ImageView_image ${transitionClassName}`}
                             draggable={false}
