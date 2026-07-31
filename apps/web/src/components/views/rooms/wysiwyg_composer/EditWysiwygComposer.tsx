@@ -34,7 +34,7 @@ interface EditWysiwygComposerProps {
     disabled?: boolean;
     onChange?: (content: string) => void;
     /** Attaches URL preview bundles (MSC4095) to the new content before it is sent. */
-    attachBundles?: (content: RoomMessageEventContent) => void;
+    attachBundles?: (content: RoomMessageEventContent, messageHasLinks: boolean) => void;
     editorStateTransfer: EditorStateTransfer;
     className?: string;
 }

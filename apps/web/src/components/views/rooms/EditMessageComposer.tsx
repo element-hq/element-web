@@ -44,6 +44,7 @@ import { PosthogAnalytics } from "../../../PosthogAnalytics";
 import { editorRoomKey, editorStateKey } from "../../../Editing";
 import type DocumentOffset from "../../../editor/offset";
 import { attachMentions, attachRelation } from "../../../utils/messages";
+import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
 import { filterBoolean } from "../../../utils/arrays";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
@@ -90,7 +91,7 @@ interface IEditMessageComposerProps extends MatrixClientProps {
     editState: EditorStateTransfer;
     onChange?: (model: EditorModel) => void;
     /** Attaches URL preview bundles (MSC4095) to the new content before it is sent. */
-    attachBundles?: (content: RoomMessageEventContent) => void;
+    attachBundles?: (content: RoomMessageEventContent, messageHasLinks: boolean) => void;
     className?: string;
 }
 interface IState {
@@ -267,9 +268,9 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
             oldContent["msgtype"] === newContent["msgtype"] &&
             oldContent["body"] === newContent["body"] &&
             (oldContent as RoomMessageTextEventContent)["format"] ===
-            (newContent as RoomMessageTextEventContent)["format"] &&
+                (newContent as RoomMessageTextEventContent)["format"] &&
             (oldContent as RoomMessageTextEventContent)["formatted_body"] ===
-            (newContent as RoomMessageTextEventContent)["formatted_body"]
+                (newContent as RoomMessageTextEventContent)["formatted_body"]
         ) {
             return false;
         }
@@ -353,7 +354,10 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
 
                 // Attach URL preview bundles to the new content (MSC4095), not the
                 // top-level fallback body, so edit-aware clients render the previews.
-                this.props.attachBundles?.(editContent["m.new_content"]!);
+                this.props.attachBundles?.(
+                    editContent["m.new_content"]!,
+                    MessageComposerUrlPreviewViewModel.linksIn(this.model.contentPlainText).size !== 0,
+                );
 
                 this.props.mxClient.sendMessage(roomId, threadId, editContent);
                 dis.dispatch({ action: "message_sent" });

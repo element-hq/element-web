@@ -19,7 +19,7 @@ import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.
 export function useEditing(
     editorStateTransfer: EditorStateTransfer,
     initialContent?: string,
-    attachBundles?: (content: RoomMessageEventContent) => void,
+    attachBundles?: (content: RoomMessageEventContent, messageHasLinks: boolean) => void,
 ): {
     isSaveDisabled: boolean;
     onChange(this: void, content: string): void;

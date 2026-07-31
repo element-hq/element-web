@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 
 import { MatrixClientProps } from "../../../contexts/MatrixClientContext";
 import { useSettingValue } from "../../../hooks/useSettings";
@@ -34,15 +34,15 @@ export function EditMessageComposerWrapper(props: IEditMessageComposerProps) {
 
     const onWysiwygChange = (content: string): void => {
         vm.updateWithText({ content, debounced: true });
-    }
+    };
 
     const onChange = (model: EditorModel): void => {
         vm.updateWithText({ content: model.contentPlainText, debounced: true });
-    }
+    };
 
-    const attachBundles = (newContent: RoomMessageEventContent) => {
-        attachUrlPreviews(vm.getSnapshot(), newContent);
-    }
+    const attachBundles = (newContent: RoomMessageEventContent, messageHasLinks: boolean) => {
+        attachUrlPreviews(vm.getSnapshot(), newContent, messageHasLinks);
+    };
 
     // function attachBundles(event: MatrixEv)
 
@@ -63,8 +63,10 @@ export function EditMessageComposerWrapper(props: IEditMessageComposerProps) {
         />
     );
 
-    return <>
-        <MessageComposerUrlPreviewWrapper urlPreviewVm={vm} />
-        {editor}
-    </>;
+    return (
+        <>
+            <MessageComposerUrlPreviewWrapper urlPreviewVm={vm} />
+            {editor}
+        </>
+    );
 }

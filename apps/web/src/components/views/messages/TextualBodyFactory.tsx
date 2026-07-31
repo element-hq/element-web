@@ -205,7 +205,14 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
     }, [props.mxEvent, previews]);
 
     if (props.editState) {
-        return <EditMessageComposerWrapper editState={props.editState} className="mx_EventTile_content" mxClient={client} showUrlPreview={props.showUrlPreview ?? false} />
+        return (
+            <EditMessageComposerWrapper
+                editState={props.editState}
+                className="mx_EventTile_content"
+                mxClient={client}
+                showUrlPreview={props.showUrlPreview ?? false}
+            />
+        );
     }
 
     return (
