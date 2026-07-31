@@ -1040,6 +1040,58 @@ test.describe("Timeline", () => {
             await expect(roomViewBody.locator(".mx_MVoiceMessageBody")).toMatchScreenshot("voice-message.png");
         });
 
+        test("shows the whole voice message duration with a wide font", async ({ page, app, room, context }) => {
+            await app.viewRoomById(room.roomId);
+
+            const composerOptions = await app.openMessageComposerOptions();
+            await composerOptions.getByRole("menuitem", { name: "Voice Message" }).click();
+
+            // Record an empty message
+            await page.waitForTimeout(3000);
+
+            const roomViewBody = page.locator(".mx_RoomView_body");
+            await roomViewBody
+                .locator(".mx_MessageComposer")
+                .getByRole("button", { name: "Send voice message" })
+                .click();
+
+            const clock = roomViewBody.locator(".mx_MVoiceMessageBody .mx_Clock");
+            await expect(clock).toBeVisible();
+
+            // How many lines the digits occupy, how wide the widest of them is, and how much room
+            // the clock gives them. `scrollWidth` is no use here: the clock does not scroll, so it
+            // never reports more than its own padding box however far the text spills out of it.
+            const measure = (): Promise<{ lines: number; text: number; box: number; letterSpacing: string }> =>
+                clock.evaluate((el) => {
+                    const range = document.createRange();
+                    range.selectNodeContents(el);
+                    const rects = Array.from(range.getClientRects());
+                    const style = getComputedStyle(el);
+                    return {
+                        lines: rects.length,
+                        text: Math.max(...rects.map((r) => r.width)),
+                        box: el.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight),
+                        letterSpacing: style.letterSpacing,
+                    };
+                });
+
+            // Guard: the duration is on one line to begin with.
+            expect(await measure()).toMatchObject({ lines: 1 });
+
+            // Stand in for a custom font whose digits are wider than the clock's fixed width.
+            await page.addStyleTag({
+                content: ".mx_VoiceMessagePrimaryContainer .mx_Clock { letter-spacing: 4px; }",
+            });
+            const after = await measure();
+
+            // Guard: the simulated font really did apply.
+            expect(after.letterSpacing).toBe("4px");
+
+            // The clock grew with the digits, so the duration still reads as one line that fits.
+            expect(after.lines).toBe(1);
+            expect(after.box).toBeGreaterThanOrEqual(after.text);
+        });
+
         test("can reply with a voice message", async ({ page, app, room, context }) => {
             await viewRoomSendMessageAndSetupReply(page, app, room.roomId);
 
