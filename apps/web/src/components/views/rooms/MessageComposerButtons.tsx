@@ -44,6 +44,7 @@ import { useSettingValue } from "../../../hooks/useSettings";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 import { useRoomUploadViewModel } from "../../../viewmodels/room/RoomUploadViewModel.tsx";
+import MessageNotebookDialog from "../dialogs/MessageNotebookDialog";
 
 interface IProps {
     addEmoji: (emoji: string) => boolean;
@@ -101,6 +102,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             showStickersButton(props),
             voiceRecordingButton(props, narrow),
             props.showPollsButton ? pollButton(room, props.relation) : null,
+            notebookButton(roomUploadVM, props.toggleButtonMenu),
             showLocationButton(props, room, matrixClient),
         ];
     } else {
@@ -120,6 +122,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             showStickersButton(props),
             voiceRecordingButton(props, narrow),
             props.showPollsButton ? pollButton(room, props.relation) : null,
+            notebookButton(roomUploadVM),
             showLocationButton(props, room, matrixClient),
         ];
     }
@@ -168,6 +171,21 @@ function emojiButton(props: IProps): ReactElement {
             addEmoji={props.addEmoji}
             menuPosition={props.menuPosition}
             className="mx_MessageComposer_button"
+        />
+    );
+}
+
+function notebookButton(roomUploadVM: ReturnType<typeof useRoomUploadViewModel>, closeMenu?: () => void): ReactElement {
+    return (
+        <IconizedContextMenuOption
+            key="message_notebook"
+            label="聊天记事本"
+            onClick={() => {
+                closeMenu?.();
+                Modal.createDialog(MessageNotebookDialog, {
+                    onSend: (file: File) => roomUploadVM.initiateViaInputFiles([file]),
+                });
+            }}
         />
     );
 }

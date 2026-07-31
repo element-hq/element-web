@@ -44,3 +44,62 @@
     cursor: pointer;
     color: $accent;
 }
+
+.mx_RemoteStickerTab_tabs {
+    display: flex;
+    gap: 4px;
+    padding: 8px;
+    border-bottom: 1px solid $system;
+}
+
+.mx_RemoteStickerTab_tab {
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.mx_RemoteStickerTab_tab[aria-pressed="true"] {
+    color: $accent-fg-color;
+    background: $accent;
+}
+
+.mx_RemoteStickerTab {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    height: 255px;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.mx_RemoteStickerTab_search,
+.mx_RemoteStickerTab_pack {
+    min-width: 0;
+}
+
+.mx_RemoteStickerTab_grid {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
+    overflow-y: auto;
+    align-content: start;
+}
+
+.mx_RemoteStickerTab_item {
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+.mx_RemoteStickerTab_item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.mx_RemoteStickerTab_empty {
+    height: 255px;
+    padding: 24px;
+    text-align: center;
+    box-sizing: border-box;
+}

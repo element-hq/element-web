@@ -26,6 +26,7 @@
     "default_country_code": "GB",
     "show_labs_settings": false,
     "features": {},
+    "remote_sticker_index_url": "",
     "default_federate": true,
     "default_theme": "light",
     "room_directory": {

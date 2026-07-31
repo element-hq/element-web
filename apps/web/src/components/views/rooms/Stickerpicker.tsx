@@ -26,6 +26,8 @@ import GenericElementContextMenu from "../context_menus/GenericElementContextMen
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import StickerpackPlaceholder from "../../../../res/img/stickerpack-placeholder.png";
 import { SDKContext } from "../../../contexts/SDKContext.ts";
+import { getRemoteStickerIndexUrl } from "../../../features/remote-stickers/RemoteStickerIndex";
+import RemoteStickerTab from "./RemoteStickerTab";
 
 // This should be below the dialog level (4000), but above the rest of the UI (1000-2000).
 // We sit in a context menu, so this should be given to the context menu.
@@ -46,6 +48,7 @@ interface IState {
     imError: string | null;
     stickerpickerWidget: UserWidget | null;
     widgetId: string | null;
+    activeTab: "cloud" | "packs";
 }
 
 export default class Stickerpicker extends React.PureComponent<IProps, IState> {
@@ -73,6 +76,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
             imError: null,
             stickerpickerWidget: null,
             widgetId: null,
+            activeTab: getRemoteStickerIndexUrl() ? "cloud" : "packs",
         };
     }
 
@@ -303,7 +307,35 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
             // Default content to show if stickerpicker widget not added
             stickersContent = this.defaultStickerpickerContent();
         }
-        return stickersContent;
+        if (!getRemoteStickerIndexUrl()) return stickersContent;
+
+        return (
+            <div className="mx_Stickers_content_container">
+                <div className="mx_RemoteStickerTab_tabs">
+                    <AccessibleButton
+                        className="mx_RemoteStickerTab_tab"
+                        aria-pressed={this.state.activeTab === "cloud"}
+                        onClick={() => this.setState({ activeTab: "cloud" })}
+                    >
+                        云端
+                    </AccessibleButton>
+                    <AccessibleButton
+                        className="mx_RemoteStickerTab_tab"
+                        aria-pressed={this.state.activeTab === "packs"}
+                        onClick={() => this.setState({ activeTab: "packs" })}
+                    >
+                        表情包
+                    </AccessibleButton>
+                </div>
+                {this.state.activeTab === "cloud" ? (
+                    <RemoteStickerTab
+                        room={this.props.room}
+                        threadId={this.props.threadId}
+                        onSent={() => this.props.setStickerPickerOpen(false)}
+                    />
+                ) : stickersContent}
+            </div>
+        );
     }
 
     /**

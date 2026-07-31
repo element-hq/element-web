@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { M_POLL_END, M_POLL_START, M_BEACON_INFO, type MatrixEvent, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { M_POLL_END, M_BEACON_INFO, type MatrixEvent, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { getShareableLocationEventForBeacon } from "../../utils/beacon/getShareableLocation";
 
@@ -15,7 +15,7 @@ import { getShareableLocationEventForBeacon } from "../../utils/beacon/getSharea
  * If an event is not forwardable return null
  */
 export const getForwardableEvent = (event: MatrixEvent, cli: MatrixClient): MatrixEvent | null => {
-    if (M_POLL_START.matches(event.getType()) || M_POLL_END.matches(event.getType())) {
+    if (M_POLL_END.matches(event.getType())) {
         return null;
     }
 

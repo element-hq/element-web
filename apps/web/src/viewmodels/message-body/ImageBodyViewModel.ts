@@ -478,6 +478,7 @@ export class ImageBodyViewModel
 
         const params: Omit<ComponentProps<typeof ImageView>, "onFinished"> = {
             src: httpUrl,
+            thumbnailSrc: this.state.thumbUrl || undefined,
             name: content.body && content.body.length > 0 ? content.body : _t("common|attachment"),
             mxEvent: this.props.mxEvent,
             permalinkCreator: this.props.permalinkCreator,

@@ -19,6 +19,9 @@ import { type DEFAULTS } from "./SdkConfig.ts";
 export const BugReportEndpointURLLocal = "local";
 
 export interface ConfigOptions extends WebConfigJson {
+    /** Optional CORS-enabled index.json used by the cloud sticker tab. */
+    remote_sticker_index_url?: string;
+
     /**
      * This is not a real config field, we're just abusing the config structure to pass around a validated server config
      */

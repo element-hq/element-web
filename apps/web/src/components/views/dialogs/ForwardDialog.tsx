@@ -20,6 +20,7 @@ import {
     LocationAssetType,
     M_TIMESTAMP,
     M_BEACON,
+    M_POLL_START,
     type TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
@@ -63,6 +64,8 @@ import { CommandPartCreator } from "../../../editor/parts";
 import SettingsStore from "../../../settings/SettingsStore";
 import { parseEvent } from "../../../editor/deserialize";
 import EditorModel from "../../../editor/model";
+import { copyForwardedMedia } from "../../../features/forward/ForwardedMedia";
+import { doMaybeLocalRoomAction } from "../../../utils/local-room";
 
 const AVATAR_SIZE = 30;
 
@@ -107,7 +110,12 @@ const Entry: React.FC<IEntryProps<any>> = ({ room, type, content, matrixClient: 
     const send = async (): Promise<void> => {
         setSendState(SendState.Sending);
         try {
-            await cli.sendEvent(room.roomId, type, content);
+            const targetContent = await copyForwardedMedia(cli, room, content);
+            await doMaybeLocalRoomAction(
+                room.roomId,
+                (actualRoomId) => cli.sendEvent(actualRoomId, type, targetContent),
+                cli,
+            );
             setSendState(SendState.Sent);
         } catch {
             setSendState(SendState.Failed);
@@ -204,6 +212,12 @@ const transformEvent = (event: MatrixEvent, cli: MatrixClient): { type: string; 
 
     // beacon pulses get transformed into static locations on forward
     const type = M_BEACON.matches(event.getType()) ? EventType.RoomMessage : event.getType();
+
+    // These event types are not WYSIWYG messages. Retain the cleaned stable poll/sticker
+    // content rather than parsing it through the composer and corrupting its event shape.
+    if (M_POLL_START.matches(event.getType()) || event.getType() === EventType.Sticker) {
+        return { type, content };
+    }
 
     // self location shares should have their description removed
     // and become 'pin' share type

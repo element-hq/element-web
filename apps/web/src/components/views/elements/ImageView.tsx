@@ -43,6 +43,7 @@ import {
     MessageTimestampViewModel,
     type MessageTimestampViewModelProps,
 } from "../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel.ts";
+import ImageOcrPanel from "./ImageOcrPanel";
 
 // Max scale to keep gaps around the image
 const MAX_SCALE = 0.95;
@@ -67,6 +68,8 @@ interface IProps {
     width?: number; // width of the image src in pixels
     height?: number; // height of the image src in pixels
     fileSize?: number; // size of the image src in bytes
+    /** A thumbnail already resolved by ImageBodyViewModel while the original preloads. */
+    thumbnailSrc?: string;
 
     // the event (if any) that the Image is displaying. Used for event-specific stuff like
     // redactions, senders, timestamps etc.  Other descriptors are taken from the explicit
@@ -93,6 +96,8 @@ interface IState {
     translationY: number;
     moving: boolean;
     contextMenuDisplayed: boolean;
+    imageSrc: string;
+    originalLoadFailed: boolean;
 }
 
 export default class ImageView extends React.Component<IProps, IState> {
@@ -121,6 +126,8 @@ export default class ImageView extends React.Component<IProps, IState> {
             translationY,
             moving: false,
             contextMenuDisplayed: false,
+            imageSrc: props.thumbnailSrc || props.src,
+            originalLoadFailed: false,
         };
     }
 
@@ -139,6 +146,7 @@ export default class ImageView extends React.Component<IProps, IState> {
 
     private animatingLoading = false;
     private imageIsLoaded = false;
+    private disposed = false;
 
     public componentDidMount(): void {
         // We have to use addEventListener() because the listener
@@ -148,13 +156,31 @@ export default class ImageView extends React.Component<IProps, IState> {
         window.addEventListener("resize", this.recalculateZoom);
         // After the image loads for the first time we want to calculate the zoom
         this.image.current?.addEventListener("load", this.imageLoaded);
+        this.preloadOriginal();
     }
 
     public componentWillUnmount(): void {
+        this.disposed = true;
         this.focusLock.current.removeEventListener("wheel", this.onWheel);
         window.removeEventListener("resize", this.recalculateZoom);
         this.image.current?.removeEventListener("load", this.imageLoaded);
     }
+
+    private preloadOriginal = (): void => {
+        if (this.props.src === this.state.imageSrc) return;
+        const original = new Image();
+        original.onload = () => {
+            if (!this.disposed) this.setState({ imageSrc: this.props.src, originalLoadFailed: false });
+        };
+        original.onerror = () => {
+            if (!this.disposed) this.setState({ originalLoadFailed: true });
+        };
+        original.src = this.props.src;
+    };
+
+    private retryOriginal = (): void => {
+        this.setState({ originalLoadFailed: false }, this.preloadOriginal);
+    };
 
     private imageLoaded = (): void => {
         if (!this.image.current) return;
@@ -572,6 +598,16 @@ export default class ImageView extends React.Component<IProps, IState> {
                         >
                             <RotateRightIcon />
                         </AccessibleButton>
+                        {this.state.originalLoadFailed && (
+                            <AccessibleButton
+                                className="mx_ImageView_button"
+                                title={_t("action|try_again")}
+                                onClick={this.retryOriginal}
+                            >
+                                ↻
+                            </AccessibleButton>
+                        )}
+                        {this.props.mxEvent && <ImageOcrPanel mxEvent={this.props.mxEvent} />}
                         <DownloadButton
                             url={this.props.src}
                             fileName={this.props.name}
@@ -598,7 +634,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                     onMouseLeave={this.onEndMoving}
                 >
                     <img
-                        src={this.props.src}
+                        src={this.state.imageSrc}
                         style={style}
                         alt={this.props.name}
                         ref={this.image}
