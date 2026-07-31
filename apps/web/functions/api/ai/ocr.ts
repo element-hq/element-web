@@ -66,6 +66,6 @@ export const onRequestPost = async ({ request, env }: Context): Promise<Response
     return receivedSuccessfulResponse
         ? jsonError(EMPTY_RESPONSE, 502)
         : lastStatus
-        ? jsonError(`${UPSTREAM_UNAVAILABLE} (HTTP ${lastStatus})`, 502)
-        : jsonError(UPSTREAM_UNAVAILABLE, 502);
+          ? jsonError(`${UPSTREAM_UNAVAILABLE} (HTTP ${lastStatus})`, 502)
+          : jsonError(UPSTREAM_UNAVAILABLE, 502);
 };
