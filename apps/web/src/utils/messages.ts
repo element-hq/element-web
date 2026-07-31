@@ -118,6 +118,7 @@ export function attachRelation(content: IContent, relation?: IEventRelation): vo
 export function attachUrlPreviews(
     urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot,
     content: RoomMessageEventContent,
+    messageHasLinks: boolean,
 ): void {
     if (!SettingsStore.getValue("feature_msc4095_url_preview_bundle")) return;
 
@@ -138,7 +139,7 @@ export function attachUrlPreviews(
             };
         });
 
-    if (urlPreviewSnapshot.entries.length !== 0) {
+    if (messageHasLinks) {
         content["com.beeper.linkpreviews"] = bundle;
     }
 }
