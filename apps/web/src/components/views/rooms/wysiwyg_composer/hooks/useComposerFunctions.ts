@@ -16,6 +16,7 @@ export function useComposerFunctions(
 ): {
     clear(): void;
     insertText(text: string): void;
+    insertCustomEmoticon(src: string, text: string): void;
 } {
     return useMemo(
         () => ({
@@ -40,6 +41,32 @@ export function useComposerFunctions(
                     });
                     setContent(ref.current.innerHTML);
                 }
+            },
+            insertCustomEmoticon: (src: string, text: string) => {
+                if (!ref.current) return;
+
+                const selection = document.getSelection();
+                const image = document.createElement("img");
+                image.setAttribute("data-mx-emoticon", "");
+                image.setAttribute("contenteditable", "false");
+                image.src = src;
+                image.alt = text;
+                image.title = text;
+                image.width = 32;
+                image.height = 32;
+
+                const range = selection?.rangeCount ? selection.getRangeAt(0) : undefined;
+                if (range && ref.current.contains(range.commonAncestorContainer)) {
+                    range.deleteContents();
+                    range.insertNode(image);
+                    range.setStartAfter(image);
+                    range.collapse(true);
+                    selection?.removeAllRanges();
+                    selection?.addRange(range);
+                } else {
+                    ref.current.appendChild(image);
+                }
+                setContent(ref.current.innerHTML);
             },
         }),
         [ref, setContent],

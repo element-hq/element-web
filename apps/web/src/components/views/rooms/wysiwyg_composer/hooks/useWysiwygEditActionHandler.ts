@@ -45,7 +45,18 @@ export function useWysiwygEditActionHandler(
                     if (payload.timelineRenderingType !== roomContext.timelineRenderingType) break;
                     if (payload.composerType !== ComposerType.Edit) break;
 
-                    if (payload.text) {
+                    if (payload.customEmoticon) {
+                        setSelection(composerContext.selection).then(() => {
+                            if (composerFunctions.insertCustomEmoticon) {
+                                composerFunctions.insertCustomEmoticon(
+                                    payload.customEmoticon.src,
+                                    payload.customEmoticon.text,
+                                );
+                            } else {
+                                composerFunctions.insertText(payload.customEmoticon.text);
+                            }
+                        });
+                    } else if (payload.text) {
                         setSelection(composerContext.selection).then(() => composerFunctions.insertText(payload.text));
                     }
                     break;
