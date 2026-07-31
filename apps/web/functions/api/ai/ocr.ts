@@ -53,7 +53,7 @@ export const onRequestPost = async ({ request, env }: Context): Promise<Response
     }
 
     const payload = await upstream.json().catch(() => ({}));
-    if (!upstream.ok) return jsonError(UPSTREAM_UNAVAILABLE, 502);
+    if (!upstream.ok) return jsonError(`${UPSTREAM_UNAVAILABLE} (HTTP ${upstream.status})`, 502);
 
     const text = chatText(payload);
     return text ? Response.json({ text }) : jsonError(EMPTY_RESPONSE, 502);

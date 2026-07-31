@@ -44,7 +44,7 @@ export const onRequestPost = async ({ request, env }: Context): Promise<Response
     }
 
     const payload = (await upstream.json().catch(() => ({}))) as { text?: unknown };
-    if (!upstream.ok) return jsonError(UPSTREAM_UNAVAILABLE, 502);
+    if (!upstream.ok) return jsonError(`${UPSTREAM_UNAVAILABLE} (HTTP ${upstream.status})`, 502);
     return typeof payload.text === "string" && payload.text.trim()
         ? Response.json({ text: payload.text.trim() })
         : jsonError(EMPTY_RESPONSE, 502);
