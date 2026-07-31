@@ -5,6 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+export { EventTileView } from "./EventTileView";
 export type {
     EventTileRenderingMode,
     EventTileViewHandlers,

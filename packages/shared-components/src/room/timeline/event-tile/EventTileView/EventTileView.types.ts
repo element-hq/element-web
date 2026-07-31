@@ -84,8 +84,6 @@ export interface EventTileViewSlots {
 export interface EventTileViewRefs {
     /** Ref attached to the root element. */
     root?: React.Ref<HTMLElement>;
-    /** Ref attached to the event line where imperative tile operations need it. */
-    line?: React.Ref<HTMLElement>;
 }
 
 /** DOM handlers supplied by the application integration layer. */
