@@ -70,6 +70,8 @@ const clientMxcUrlToHttpMocks = new WeakMap<MatrixClient, jest.Mock>();
 class TestRoom extends EventEmitter {
     public roomId = roomId;
     public getMember = jest.fn();
+    // The view model listens for decryptions on the client
+    public client = new EventEmitter() as unknown as MatrixClient;
 }
 
 class TestThread extends EventEmitter {
@@ -332,6 +334,28 @@ describe("ThreadSummaryViewModel", () => {
         expect(vm.getSnapshot().notificationIndicator).toBeUndefined();
 
         room.emit(RoomEvent.Receipt);
+
+        expect(determineUnreadState).toHaveBeenCalledWith(room, "$root", false);
+        expect(vm.getSnapshot().notificationIndicator).toBe("success");
+    });
+
+    it("refreshes the notification indicator when an event of the room is decrypted", () => {
+        const { vm, room } = makeSummaryVm();
+        jest.mocked(determineUnreadState).mockClear();
+        jest.mocked(determineUnreadState).mockReturnValue({
+            symbol: null,
+            count: 1,
+            level: NotificationLevel.Notification,
+            invited: false,
+        });
+
+        // A decryption in another room must not disturb this one
+        room.client.emit(MatrixEventEvent.Decrypted, { getRoomId: () => "!other:example.org" } as MatrixEvent);
+
+        expect(determineUnreadState).not.toHaveBeenCalled();
+        expect(vm.getSnapshot().notificationIndicator).toBeUndefined();
+
+        room.client.emit(MatrixEventEvent.Decrypted, { getRoomId: () => roomId } as MatrixEvent);
 
         expect(determineUnreadState).toHaveBeenCalledWith(room, "$root", false);
         expect(vm.getSnapshot().notificationIndicator).toBe("success");
