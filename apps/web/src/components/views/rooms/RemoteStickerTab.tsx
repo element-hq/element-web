@@ -143,7 +143,10 @@ const RemoteStickerTab: React.FC<Props> = ({ room, threadId, replyToEvent, onIns
                                 try {
                                     const shouldInsert =
                                         action === "emoticon" || (action === "auto" && composerWasFocused.current);
-                                    if (shouldInsert) {
+                                    const targetEncrypted = Boolean(
+                                        await room.client.getCrypto()?.isEncryptionEnabledInRoom(room.roomId),
+                                    );
+                                    if (shouldInsert && !targetEncrypted) {
                                         onInsertEmoticon(await prepareRemoteEmoticon(room, sticker));
                                     } else {
                                         await sendRemoteSticker(room, threadId, sticker, replyToEvent);
