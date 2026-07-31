@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render } from "jest-matrix-react";
-import { EventType, type MatrixClient, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { act, render } from "jest-matrix-react";
+import { EventType, type MatrixClient, MatrixEvent, Room, RoomMember, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 
 import RoomAvatar from "../../../../../src/components/views/avatars/RoomAvatar";
@@ -65,6 +65,32 @@ describe("RoomAvatar", () => {
         room.name = "DM room";
         mocked(DMRoomMap.shared().getUserIdForRoomId).mockReturnValue(userId);
         expect(render(<RoomAvatar room={room} />).container).toMatchSnapshot();
+    });
+
+    it("should show the other member's avatar for a DM once their profile arrives", () => {
+        const userId = "@dm_user:example.com";
+        const room = new Room("!room:example.com", client, client.getSafeUserId());
+        room.name = "DM room";
+        mocked(DMRoomMap.shared().getUserIdForRoomId).mockReturnValue(userId);
+
+        let memberAvatarUrl: string | null = null;
+        jest.spyOn(room, "getAvatarFallbackMember").mockImplementation(
+            () => ({ getMxcAvatarUrl: () => memberAvatarUrl }) as unknown as RoomMember,
+        );
+
+        const { container } = render(<RoomAvatar room={room} />);
+
+        // Guard: the member has no avatar yet, so there is nothing to show.
+        expect(container.querySelector("img")).toBeNull();
+
+        memberAvatarUrl = "mxc://example.com/dm-avatar";
+        act(() => {
+            room.currentState.emit(RoomStateEvent.Update, room.currentState);
+        });
+
+        const avatarImage = container.querySelector("img");
+        expect(avatarImage).not.toBeNull();
+        expect(avatarImage!.getAttribute("src")).toContain("dm-avatar");
     });
 
     it("should render as expected for a LocalRoom", () => {

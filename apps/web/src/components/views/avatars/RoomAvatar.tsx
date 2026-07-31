@@ -41,6 +41,10 @@ const RoomAvatar: React.FC<IProps> = ({ room, viewAvatarOnClick, onClick, oobDat
     const name = useTypedEventEmitterState(room, RoomEvent.Name, () => room?.name);
     const roomName = name ?? oobData?.name ?? "?";
     const avatarEvent = useRoomState(room, (state) => state.getStateEvents(EventType.RoomAvatar, ""));
+    // A DM without an avatar of its own falls back to the other member's avatar, and that member's
+    // profile usually arrives after the first render. Watch it so the memo below keeps up. The
+    // mapper yields the mxc string rather than the member, so an unchanged avatar costs no render.
+    const fallbackMemberAvatarMxc = useRoomState(room, () => room?.getAvatarFallbackMember?.()?.getMxcAvatarUrl());
     const roomIdName = useRoomIdName(room, oobData);
 
     const showAvatarsOnInvites =
@@ -81,7 +85,10 @@ const RoomAvatar: React.FC<IProps> = ({ room, viewAvatarOnClick, onClick, oobDat
                 avatarEvent?.getContent<RoomAvatarEventContent>().url,
             ),
         ]);
-    }, [showAvatarsOnInvites, room, size, avatarEvent, oobData]);
+        // fallbackMemberAvatarMxc is not read directly here; avatarUrlForRoom reads it for us, so
+        // it is the dependency that tells us the DM fallback avatar has changed.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [showAvatarsOnInvites, room, size, avatarEvent, fallbackMemberAvatarMxc, oobData]);
 
     return (
         <BaseAvatar
