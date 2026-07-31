@@ -49,6 +49,7 @@ export * from "./room/timeline/event-tile/EventTileView/E2eMessageSharedIcon";
 export * from "./room/timeline/event-tile/EventTileView/E2ePadlock";
 export * from "./room/timeline/event-tile/EventTileView/EncryptionEventView";
 export * from "./room/timeline/event-tile/EventTileView/EventPreviewView";
+export * from "./room/timeline/event-tile/EventTileView";
 export * from "./room/timeline/event-tile/call";
 export * from "./room/timeline/event-tile/EventTileView/EventTileBubble";
 export * from "./room/timeline/event-tile/EventTileView/MJitsiWidgetEventView";
