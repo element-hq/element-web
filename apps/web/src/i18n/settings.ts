@@ -14,8 +14,8 @@ import { SettingLevel } from "../settings/SettingLevel";
 import { getLanguageRetry } from "./languages";
 import { registerCustomTranslations } from "./custom";
 
-export const DEFAULT_LANGUAGE = "zh_Hans";
-const DEFAULT_LANGUAGE_MIGRATION_KEY = "mx_default_language_zh_hans_v1";
+export const DEFAULT_LANGUAGE = "zh-hans";
+const DEFAULT_LANGUAGE_MIGRATION_KEY = "mx_default_language_zh_hans_v2";
 const LEGACY_DEFAULT_LANGUAGES = new Set(["en", "en_EN"]);
 
 const shouldMigrateLegacyDefaultLanguage = (language: string): boolean => {
