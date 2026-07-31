@@ -7,12 +7,12 @@
 
 .wrapper {
     background-color: var(--cpd-color-bg-subtle-secondary);
-    padding: 2px 8px 12px 8px;
+    padding: calc(var(--cpd-space-1x) * 0.5) var(--cpd-space-2x) var(--cpd-space-3x) var(--cpd-space-2x);
     border-radius: 10px;
 }
 
 .wrapper.collapsed {
-    padding-bottom: 4px;
+    padding-bottom: var(--cpd-space-1x);
 }
 
 :global(.cpd-theme-light) {
@@ -34,7 +34,7 @@
 }
 
 .right {
-    margin-right: 6px;
+    margin-right: calc(var(--cpd-space-1x) * 1.5);
 }
 
 .spanLike {
@@ -54,18 +54,18 @@
 
     * {
         vertical-align: center;
-        line-height: 18px;
+        line-height: 100%;
     }
 
     .summaryIcon:not(:first-child) {
-        margin-left: -8px;
+        margin-left: calc(-var(--cpd-space-2x));
     }
 
     .summaryIcon {
         overflow: hidden;
         display: inline-block;
         position: relative;
-        left: 2px;
+        left: calc(var(--cpd-space-1x) * 0.5);
 
         width: 18px;
         height: 18px;
@@ -98,14 +98,14 @@
     }
 
     .linkCount {
-        margin-left: 13px;
+        margin-left: var(--cpd-space-3x);
         font-weight: 500;
-        font-size: 13.5px;
+        font-size: 85%;
     }
 
     .clearAll {
-        font-size: 11.5px;
-        margin-right: 10px;
+        font-size: 75%;
+        margin-right: calc(var(--cpd-space-1x) * 2.5);
         color: var(--cpd-color-gray-900);
         cursor: pointer;
     }
@@ -115,7 +115,7 @@
         width: 18px;
         height: 18px;
         text-align: center;
-        line-height: 18px;
+        line-height: 100%;
         transition: rotate 300ms ease;
         color: var(--cpd-color-gray-900);
 
@@ -155,7 +155,7 @@
         > a {
             color: var(--cpd-color-text-action-accent);
             font-weight: 400;
-            font-size: 13px;
+            font-size: 85%;
         }
     }
 
