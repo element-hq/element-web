@@ -26,6 +26,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { Button } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
+import { formatSeconds } from "../../../DateUtils";
 import { adminContactStrings, messageForResourceLimitError, resourceLimitStrings } from "../../../utils/ErrorUtils";
 import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
 import * as Lifecycle from "../../../Lifecycle";
@@ -289,6 +290,18 @@ export default class Registration extends React.Component<IProps, IState> {
                         flows: [],
                     });
                 }
+            } else if (e instanceof MatrixError && e.httpStatus === 429) {
+                // The server is rate limiting us, which the generic error below does not convey.
+                const retryAfterMs = parseInt(e.data?.retry_after_ms, 10);
+                this.setState({
+                    errorText: isNaN(retryAfterMs)
+                        ? _t("auth|registration_rate_limited")
+                        : _t("auth|registration_rate_limited_with_time", {
+                              timeout: formatSeconds(retryAfterMs / 1000),
+                          }),
+                    // add empty flows array to get rid of spinner
+                    flows: [],
+                });
             } else {
                 logger.log("Unable to query for supported registration methods.", e);
                 this.setState({

@@ -130,6 +130,28 @@ describe("Registration", function () {
         expect(ssoButton).toBeTruthy();
     });
 
+    it("should show a rate limit message when the server is rate limiting registration", async () => {
+        mockClient.registerRequest
+            .mockReset()
+            .mockRejectedValue(new MatrixError({ errcode: "M_LIMIT_EXCEEDED", retry_after_ms: 90_000 }, 429));
+
+        getComponent();
+
+        await expect(
+            screen.findAllByText("Too many attempts in a short time. Retry after 01:30."),
+        ).resolves.not.toHaveLength(0);
+    });
+
+    it("should show a rate limit message without a time when the server does not give one", async () => {
+        mockClient.registerRequest.mockReset().mockRejectedValue(new MatrixError({ errcode: "M_LIMIT_EXCEEDED" }, 429));
+
+        getComponent();
+
+        await expect(
+            screen.findAllByText("Too many attempts in a short time. Wait some time before trying again."),
+        ).resolves.not.toHaveLength(0);
+    });
+
     it("should handle serverConfig updates correctly", async () => {
         mockClient.loginFlows.mockResolvedValue({
             flows: [
