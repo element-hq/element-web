@@ -15,7 +15,9 @@ import NodeAnimator from "../../../NodeAnimator";
 import { toPx } from "../../../utils/units";
 import MemberAvatar from "../avatars/MemberAvatar";
 
-export const READ_AVATAR_SIZE = 16;
+// Twice the previous receipt size: readable without competing with the
+// enlarged sender avatar in Bubble layout.
+export const READ_AVATAR_SIZE = 28;
 
 // The top & right from the bounding client rect of each read receipt
 export interface IReadReceiptPosition {
@@ -177,7 +179,7 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
                     fallbackUserId={this.props.fallbackUserId}
                     aria-hidden="true"
                     aria-live="off"
-                    size="14px"
+                    size="28px"
                     style={style}
                     hideTitle
                     tabIndex={-1}

@@ -28,7 +28,7 @@ const MAX_READ_AVATARS_PLUS_N = 3;
 // #21935 If we’ve got just 4, don’t show +1, just show all of them
 const MAX_READ_AVATARS = MAX_READ_AVATARS_PLUS_N + 1;
 
-const READ_AVATAR_OFFSET = 10;
+const READ_AVATAR_OFFSET = 18;
 
 interface Props {
     readReceipts: IReadReceiptProps[];

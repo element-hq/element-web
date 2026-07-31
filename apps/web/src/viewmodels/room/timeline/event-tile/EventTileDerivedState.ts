@@ -127,6 +127,13 @@ export function getEventTileSenderProfileState({
         return { avatarSize: "14px", needsSenderProfile: false };
     }
 
+    // Bubble is the default Spark-style conversation layout in this client.
+    // Give its sender avatars enough visual weight to remain recognisable in
+    // a long conversation rather than using Element's compact 30px default.
+    if (layout === Layout.Bubble) {
+        return { avatarSize: "90px", needsSenderProfile: true };
+    }
+
     if (
         timelineRenderingType === TimelineRenderingType.ThreadsList ||
         (timelineRenderingType === TimelineRenderingType.Thread && !continuation)
