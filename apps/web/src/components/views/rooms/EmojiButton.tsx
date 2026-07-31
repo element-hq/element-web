@@ -60,14 +60,18 @@ export function EmojiButton({
                     <div className="mx_RemoteStickerTab_emojiPanel">
                         <div className="mx_RemoteStickerTab_tabs">
                             <CollapsibleButton
-                                className="mx_RemoteStickerTab_tab"
+                                className={classNames("mx_RemoteStickerTab_tab", {
+                                    mx_RemoteStickerTab_tab_active: !cloudTab,
+                                })}
                                 title="Emoji"
                                 onClick={() => setCloudTab(false)}
                             >
                                 Emoji
                             </CollapsibleButton>
                             <CollapsibleButton
-                                className="mx_RemoteStickerTab_tab"
+                                className={classNames("mx_RemoteStickerTab_tab", {
+                                    mx_RemoteStickerTab_tab_active: cloudTab,
+                                })}
                                 title="云端表情"
                                 onClick={() => setCloudTab(true)}
                             >

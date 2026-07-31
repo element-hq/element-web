@@ -41,7 +41,7 @@ const AudioTranscription: React.FC<Props> = ({ mxEvent, mediaEventHelper }) => {
     return (
         <>
             <AccessibleButton className="mx_MAudioBody_transcriptionButton" onClick={transcribe} disabled={busy}>
-                {busy ? "正在转写…" : "转文字"}
+                {busy ? "Aa 正在转写…" : "Aa 转写"}
             </AccessibleButton>
             {(text || error) && <span className="mx_MAudioBody_transcription">{error || text}</span>}
         </>

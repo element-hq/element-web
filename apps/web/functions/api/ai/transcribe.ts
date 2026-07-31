@@ -17,6 +17,7 @@ const MISSING_AUDIO = "\u7f3a\u5c11\u97f3\u9891\u6587\u4ef6";
 const TOO_LARGE = "\u97f3\u9891\u8f6c\u5199\u4ec5\u652f\u6301\u4e0d\u8d85\u8fc7 25 MB \u7684\u6587\u4ef6";
 const UPSTREAM_UNAVAILABLE = "\u4e0a\u6e38\u8f6c\u5199\u670d\u52a1\u6682\u65f6\u4e0d\u53ef\u7528";
 const EMPTY_RESPONSE = "\u8f6c\u5199\u670d\u52a1\u672a\u8fd4\u56de\u6587\u672c";
+const ASR_MODEL_FALLBACKS = ["whisper-large-v3-turbo", "gpt-4o-transcribe-diarize"];
 
 export const onRequestPost = async ({ request, env }: Context): Promise<Response> => {
     if (!env.SPARK_API_KEY || !env.SPARK_BASE_URL || !env.SPARK_ASR_MODEL) {
@@ -28,24 +29,38 @@ export const onRequestPost = async ({ request, env }: Context): Promise<Response
     if (!(audio instanceof File)) return jsonError(MISSING_AUDIO);
     if (audio.size > MAX_AUDIO_SIZE) return jsonError(TOO_LARGE, 413);
 
-    const form = new FormData();
-    form.append("model", env.SPARK_ASR_MODEL);
-    form.append("file", audio, audio.name || "audio");
+    let lastStatus: number | undefined;
+    let receivedSuccessfulResponse = false;
 
-    let upstream: Response;
-    try {
-        upstream = await fetchWithProviderFallback(env, "/audio/transcriptions", {
-            method: "POST",
-            headers: providerHeaders(env),
-            body: form,
-        });
-    } catch {
-        return jsonError(UPSTREAM_UNAVAILABLE, 502);
+    for (const model of new Set([env.SPARK_ASR_MODEL, ...ASR_MODEL_FALLBACKS])) {
+        const form = new FormData();
+        form.append("model", model);
+        form.append("file", audio, audio.name || "voice-message.ogg");
+        form.append("language", "zh");
+        form.append("temperature", "0.2");
+
+        try {
+            const upstream = await fetchWithProviderFallback(env, "/audio/transcriptions", {
+                method: "POST",
+                headers: providerHeaders(env),
+                body: form,
+            });
+            lastStatus = upstream.status;
+            const payload = (await upstream.json().catch(() => ({}))) as { text?: unknown };
+            if (!upstream.ok) continue;
+
+            receivedSuccessfulResponse = true;
+            if (typeof payload.text === "string" && payload.text.trim()) {
+                return Response.json({ text: payload.text.trim() });
+            }
+        } catch {
+            // Try a compatible model before declaring the provider unavailable.
+        }
     }
 
-    const payload = (await upstream.json().catch(() => ({}))) as { text?: unknown };
-    if (!upstream.ok) return jsonError(`${UPSTREAM_UNAVAILABLE} (HTTP ${upstream.status})`, 502);
-    return typeof payload.text === "string" && payload.text.trim()
-        ? Response.json({ text: payload.text.trim() })
-        : jsonError(EMPTY_RESPONSE, 502);
+    return receivedSuccessfulResponse
+        ? jsonError(EMPTY_RESPONSE, 502)
+        : lastStatus
+          ? jsonError(`${UPSTREAM_UNAVAILABLE} (HTTP ${lastStatus})`, 502)
+          : jsonError(UPSTREAM_UNAVAILABLE, 502);
 };

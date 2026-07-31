@@ -155,7 +155,8 @@ $button-gap: var(--cpd-space-3x);
 
 .mx_ImageView_ocrAction,
 .mx_ImageView_ocrRetry {
-    display: inline-flex;
+    display: grid;
+    place-items: center;
     align-items: center;
     justify-content: center;
     min-height: 28px;
@@ -236,11 +237,14 @@ $button-gap: var(--cpd-space-3x);
     }
 
     &::after {
-        position: relative;
+        position: absolute;
+        inset: 0;
         content: "文";
+        display: grid;
+        place-items: center;
         font-size: 10px;
         font-weight: 700;
-        line-height: 18px;
+        line-height: 1;
     }
 }
 

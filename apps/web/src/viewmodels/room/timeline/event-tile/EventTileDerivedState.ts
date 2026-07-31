@@ -131,7 +131,7 @@ export function getEventTileSenderProfileState({
     // Give its sender avatars enough visual weight to remain recognisable in
     // a long conversation rather than using Element's compact 30px default.
     if (layout === Layout.Bubble) {
-        return { avatarSize: "90px", needsSenderProfile: true };
+        return { avatarSize: "45px", needsSenderProfile: true };
     }
 
     if (

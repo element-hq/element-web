@@ -1389,7 +1389,7 @@ $left-gutter: 64px;
     width: max-content;
     max-width: calc(100% - var(--cpd-space-6x));
     margin: var(--cpd-space-3x) auto;
-    padding: var(--cpd-space-2x) var(--cpd-space-3x);
+    padding: var(--cpd-space-1x);
     display: flex;
     align-items: center;
     gap: var(--cpd-space-2x);
@@ -1399,6 +1399,7 @@ $left-gutter: 64px;
     box-shadow: 0 12px 32px rgba(15, 23, 42, 0.16);
     backdrop-filter: blur(14px);
 
+    .mx_MessagePanel_forwardSelectionCount,
     button {
         min-height: 30px;
         padding: 0 var(--cpd-space-2x);
@@ -1407,17 +1408,23 @@ $left-gutter: 64px;
         background: transparent;
         color: inherit;
         font: var(--cpd-font-body-sm-medium);
-        cursor: pointer;
+    }
 
-        &:first-of-type {
-            background: var(--cpd-color-bg-action-primary);
-            color: var(--cpd-color-text-on-solid-primary);
-        }
+    button {
+        cursor: pointer;
+    }
+
+    .mx_MessagePanel_forwardSelectionTarget {
+        background: var(--cpd-color-bg-action-primary);
+        color: var(--cpd-color-text-on-solid-primary);
+    }
+
+    .mx_MessagePanel_forwardSelectionCancel {
+        background: var(--cpd-color-bg-subtle-secondary);
     }
 }
 
 .mx_EventTile[data-forward-selected="true"] {
-    outline: 2px solid var(--cpd-color-border-focused);
-    outline-offset: -2px;
     border-radius: var(--cpd-radius-8);
+    background: color-mix(in srgb, var(--cpd-color-bg-action-primary) 8%, transparent);
 }

@@ -47,40 +47,71 @@
 
 .mx_RemoteStickerTab_tabs {
     display: flex;
-    gap: 4px;
-    padding: 8px;
+    gap: var(--cpd-space-1x);
+    padding: var(--cpd-space-2x);
     border-bottom: 1px solid $system;
 }
 
 .mx_RemoteStickerTab_tab {
-    padding: 4px 8px;
-    border-radius: 4px;
+    min-height: 30px;
+    padding: 0 var(--cpd-space-2x);
+    border-radius: var(--cpd-radius-6);
 }
 
-.mx_RemoteStickerTab_tab[aria-pressed="true"] {
+.mx_RemoteStickerTab_tab_active {
     color: $accent-fg-color;
     background: $accent;
 }
 
+.mx_RemoteStickerTab_emojiPanel {
+    width: min(432px, calc(100vw - 24px));
+    overflow: hidden;
+    border-radius: var(--cpd-radius-8);
+    background: var(--cpd-color-bg-canvas-default);
+}
+
 .mx_RemoteStickerTab {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 8px;
-    height: 255px;
-    padding: 8px;
+    height: 390px;
+    padding: var(--cpd-space-2x);
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: var(--cpd-space-2x);
+}
+
+.mx_RemoteStickerTab_toolbar {
+    display: flex;
+    gap: var(--cpd-space-2x);
 }
 
 .mx_RemoteStickerTab_search,
 .mx_RemoteStickerTab_pack {
     min-width: 0;
+    height: 36px;
+    box-sizing: border-box;
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+    border-radius: var(--cpd-radius-6);
+    background: var(--cpd-color-bg-subtle-secondary);
+    color: var(--cpd-color-text-primary);
+    font: var(--cpd-font-body-md-regular);
+}
+
+.mx_RemoteStickerTab_search {
+    flex: 1;
+    padding: 0 var(--cpd-space-2x);
+}
+
+.mx_RemoteStickerTab_pack {
+    width: 112px;
+    padding: 0 var(--cpd-space-1x);
 }
 
 .mx_RemoteStickerTab_grid {
     display: grid;
-    grid-column: 1 / -1;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 6px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--cpd-space-1x);
+    flex: 1;
+    min-height: 0;
     overflow-y: auto;
     align-content: start;
 }
@@ -88,7 +119,12 @@
 .mx_RemoteStickerTab_item {
     aspect-ratio: 1;
     overflow: hidden;
-    border-radius: 4px;
+    border-radius: var(--cpd-radius-6);
+    background: transparent;
+
+    &:hover {
+        background: var(--cpd-color-bg-subtle-secondary);
+    }
 }
 
 .mx_RemoteStickerTab_item img {
@@ -98,7 +134,8 @@
 }
 
 .mx_RemoteStickerTab_empty {
-    height: 255px;
+    width: min(432px, calc(100vw - 24px));
+    height: 390px;
     padding: 24px;
     text-align: center;
     box-sizing: border-box;

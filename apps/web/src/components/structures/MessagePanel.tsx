@@ -1144,11 +1144,21 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                     {this.getEventTiles()}
                     {this.state.forwardSelectionMode && (
                         <div className="mx_MessagePanel_forwardSelectionBar" role="toolbar">
-                            <span>{`已选择 ${this.state.forwardSelectedEventIds.length} 条消息`}</span>
-                            <button type="button" onClick={this.openForwardTargets}>
+                            <span className="mx_MessagePanel_forwardSelectionCount">
+                                {`已选择 ${this.state.forwardSelectedEventIds.length} 条消息`}
+                            </span>
+                            <button
+                                className="mx_MessagePanel_forwardSelectionTarget"
+                                type="button"
+                                onClick={this.openForwardTargets}
+                            >
                                 选择转发目标
                             </button>
-                            <button type="button" onClick={this.clearForwardSelection}>
+                            <button
+                                className="mx_MessagePanel_forwardSelectionCancel"
+                                type="button"
+                                onClick={this.clearForwardSelection}
+                            >
                                 取消
                             </button>
                         </div>
