@@ -40,7 +40,9 @@ export const copyForwardedMedia = async (
     const mimeType = typeof content.info?.mimetype === "string" ? content.info.mimetype : blob.type;
     const filename = typeof content.filename === "string" ? content.filename : content.body || "attachment";
     const uploaded = await uploadFile(client, targetRoom.roomId, new File([blob], filename, { type: mimeType }));
-    const copied = { ...content };
+    // `info` is nested in the event content. Do not mutate it in place: the
+    // original timeline event may still be rendered while this forward runs.
+    const copied = { ...content, info: content.info ? { ...content.info } : undefined };
     delete copied.url;
     delete copied.file;
     // A thumbnail from the source room might disappear or be encrypted with a different key.

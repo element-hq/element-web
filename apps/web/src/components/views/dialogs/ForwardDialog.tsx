@@ -152,7 +152,6 @@ const Entry: React.FC<IEntryProps> = ({ room, items, matrixClient: cli, onFinish
         icon = <CheckCircleIcon aria-label={title} />;
     } else {
         className = "mx_ForwardList_sendFailed";
-        disabled = true;
         title = _t("timeline|send_state_failed");
         icon = <NotificationBadge notification={StaticNotificationState.RED_EXCLAMATION} />;
     }
