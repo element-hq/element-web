@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Emoji picker",
         "seek_bar_label": "Audio seek bar"
     },
     "action": {
@@ -59,6 +58,7 @@
         "quick_reactions": "Quick Reactions"
     },
     "emoji_picker": {
+        "emoji_picker": "Emoji picker",
         "cancel_search_label": "Cancel search"
     },
     "keyboard": {

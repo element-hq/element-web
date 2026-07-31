@@ -417,7 +417,11 @@ export function EmojiPicker({
             getAction={getAction}
         >
             {({ onKeyDownHandler }) => (
-                <section className={styles.picker} onKeyDown={onKeyDownHandler} aria-label={_t("a11y|emoji_picker")}>
+                <section
+                    className={styles.picker}
+                    onKeyDown={onKeyDownHandler}
+                    aria-label={_t("emoji_picker|emoji_picker")}
+                >
                     <Tabs
                         categories={CATEGORY_CONFIG}
                         enabledCategories={enabledCategories}
