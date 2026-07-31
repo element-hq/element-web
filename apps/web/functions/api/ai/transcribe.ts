@@ -1,3 +1,9 @@
+/*
+Copyright 2026 Element contributors
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+*/
+
 import { apiUrl, jsonError, providerHeaders, type Env } from "./_shared";
 
 interface Context {
@@ -8,7 +14,8 @@ interface Context {
 const MAX_AUDIO_SIZE = 25 * 1024 * 1024;
 
 export const onRequestPost = async ({ request, env }: Context): Promise<Response> => {
-    if (!env.SPARK_API_KEY || !env.SPARK_BASE_URL || !env.SPARK_ASR_MODEL) return jsonError("AI 服务尚未完成部署配置", 503);
+    if (!env.SPARK_API_KEY || !env.SPARK_BASE_URL || !env.SPARK_ASR_MODEL)
+        return jsonError("AI 服务尚未完成部署配置", 503);
     const requestForm = await request.formData().catch(() => undefined);
     const audio = requestForm?.get("file");
     if (!(audio instanceof File)) return jsonError("缺少音频文件");

@@ -333,7 +333,9 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
                         threadId={this.props.threadId}
                         onSent={() => this.props.setStickerPickerOpen(false)}
                     />
-                ) : stickersContent}
+                ) : (
+                    stickersContent
+                )}
             </div>
         );
     }

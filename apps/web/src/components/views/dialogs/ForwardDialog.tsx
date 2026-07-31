@@ -64,8 +64,7 @@ import { CommandPartCreator } from "../../../editor/parts";
 import SettingsStore from "../../../settings/SettingsStore";
 import { parseEvent } from "../../../editor/deserialize";
 import EditorModel from "../../../editor/model";
-import { copyForwardedMedia } from "../../../features/forward/ForwardedMedia";
-import { doMaybeLocalRoomAction } from "../../../utils/local-room";
+import { copyForwardedMedia, getForwardedMediaUrl } from "../../../features/forward/ForwardedMedia";
 
 const AVATAR_SIZE = 30;
 
@@ -110,12 +109,13 @@ const Entry: React.FC<IEntryProps<any>> = ({ room, type, content, matrixClient: 
     const send = async (): Promise<void> => {
         setSendState(SendState.Sending);
         try {
-            const targetContent = await copyForwardedMedia(cli, room, content);
-            await doMaybeLocalRoomAction(
-                room.roomId,
-                (actualRoomId) => cli.sendEvent(actualRoomId, type, targetContent),
-                cli,
-            );
+            if (getForwardedMediaUrl(content)) {
+                const targetContent = await copyForwardedMedia(cli, room, content);
+                await cli.sendEvent(room.roomId, type, targetContent);
+            } else {
+                // Keep Element's original, immediate send path for non-media events.
+                await cli.sendEvent(room.roomId, type, content);
+            }
             setSendState(SendState.Sent);
         } catch {
             setSendState(SendState.Failed);

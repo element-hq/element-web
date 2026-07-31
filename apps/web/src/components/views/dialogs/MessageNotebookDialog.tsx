@@ -10,8 +10,8 @@ import BaseDialog from "./BaseDialog";
 import AccessibleButton from "../elements/AccessibleButton";
 
 interface Props {
-    onFinished(): void;
-    onSend(file: File): Promise<void>;
+    onFinished: () => void;
+    onSend: (file: File) => Promise<void>;
 }
 
 /** Send long-form notes as .txt attachments, preserving Element's reply/thread upload path. */

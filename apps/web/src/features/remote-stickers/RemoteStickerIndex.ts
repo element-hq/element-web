@@ -6,11 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 
 import { EventType, type IContent, type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { type ImageInfo } from "matrix-js-sdk/src/types";
-import { type StickerEventContent } from "matrix-js-sdk/src/@types/events";
 
 import SdkConfig from "../../SdkConfig";
 import { uploadFile } from "../../ContentMessages";
 import { doMaybeLocalRoomAction } from "../../utils/local-room";
+import { mediaFromMxc } from "../../customisations/Media";
 
 const CACHE_TTL_MS = 12 * 60 * 60 * 1000;
 const CACHE_PREFIX = "element.remote-sticker-index.v1:";
@@ -77,7 +77,7 @@ export const stickerPreviewUrl = (sticker: RemoteSticker, client: MatrixClient):
         sticker.mxc,
         sticker.mxcUrl,
     ]);
-    return isMxc(url) ? (client.mxcUrlToHttp(url, 96, 96, "scale", false, true) ?? undefined) : url;
+    return isMxc(url) ? (mediaFromMxc(url, client).getThumbnailOfSourceHttp(96, 96, "scale") ?? undefined) : url;
 };
 
 const getCachedIndex = (url: string): RemoteStickerIndex | undefined => {
@@ -87,7 +87,7 @@ const getCachedIndex = (url: string): RemoteStickerIndex | undefined => {
         const cache = JSON.parse(raw) as { cachedAt?: unknown; index?: unknown };
         if (typeof cache.cachedAt !== "number" || Date.now() - cache.cachedAt > CACHE_TTL_MS) return undefined;
         if (!cache.index || typeof cache.index !== "object") return undefined;
-        return cache.index as RemoteStickerIndex;
+        return cache.index;
     } catch {
         return undefined;
     }
@@ -145,10 +145,9 @@ export const sendRemoteSticker = async (
 
     await doMaybeLocalRoomAction(
         room.roomId,
-        // StickerEventContent's SDK declaration predates encrypted `file` attachments and
-        // incorrectly requires `url`; uploadFile returns the standards-compliant `file` shape.
-        (actualRoomId) =>
-            room.client.sendEvent(actualRoomId, threadId ?? null, EventType.Sticker, content as StickerEventContent),
+        // The SDK's public StickerEventContent type predates encrypted `file` attachments.
+        // uploadFile returns the standards-compliant encrypted shape when it is needed.
+        (actualRoomId) => room.client.sendEvent(actualRoomId, threadId ?? null, EventType.Sticker, content as never),
         room.client,
     );
 };

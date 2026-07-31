@@ -8,9 +8,10 @@ import { type IContent, type MatrixClient, type Room } from "matrix-js-sdk/src/m
 import { type EncryptedFile } from "matrix-js-sdk/src/types";
 
 import { uploadFile } from "../../ContentMessages";
+import { mediaFromMxc } from "../../customisations/Media";
 import { decryptFile } from "../../utils/DecryptFile";
 
-const sourceMediaUrl = (content: IContent): string | undefined => {
+export const getForwardedMediaUrl = (content: IContent): string | undefined => {
     const encrypted = content.file as EncryptedFile | undefined;
     return encrypted?.url ?? (typeof content.url === "string" ? content.url : undefined);
 };
@@ -24,18 +25,18 @@ export const copyForwardedMedia = async (
     targetRoom: Room,
     content: IContent,
 ): Promise<IContent> => {
-    const mediaUrl = sourceMediaUrl(content);
+    const mediaUrl = getForwardedMediaUrl(content);
     if (!mediaUrl) return content;
 
     const encrypted = content.file as EncryptedFile | undefined;
     const blob = encrypted
         ? await decryptFile(encrypted, content.info)
-        : await fetch(client.mxcUrlToHttp(mediaUrl, undefined, undefined, undefined, false, true) ?? mediaUrl).then(
-              async (response) => {
-                  if (!response.ok) throw new Error(`无法下载待转发媒体（${response.status}）`);
-                  return response.blob();
-              },
-          );
+        : await (
+              mediaUrl.startsWith("mxc://") ? mediaFromMxc(mediaUrl, client).downloadSource() : fetch(mediaUrl)
+          ).then(async (response) => {
+              if (!response.ok) throw new Error(`无法下载待转发媒体（${response.status}）`);
+              return response.blob();
+          });
     const mimeType = typeof content.info?.mimetype === "string" ? content.info.mimetype : blob.type;
     const filename = typeof content.filename === "string" ? content.filename : content.body || "attachment";
     const uploaded = await uploadFile(client, targetRoom.roomId, new File([blob], filename, { type: mimeType }));

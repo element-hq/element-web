@@ -8,7 +8,8 @@ const MAX_AUDIO_SIZE = 25 * 1024 * 1024;
 
 const responseText = async (response: Response): Promise<string> => {
     const payload = (await response.json().catch(() => ({}))) as { text?: unknown; error?: unknown };
-    if (!response.ok) throw new Error(typeof payload.error === "string" ? payload.error : `AI 服务请求失败（${response.status}）`);
+    if (!response.ok)
+        throw new Error(typeof payload.error === "string" ? payload.error : `AI 服务请求失败（${response.status}）`);
     if (typeof payload.text !== "string" || !payload.text.trim()) throw new Error("AI 服务未返回可用文本");
     return payload.text.trim();
 };

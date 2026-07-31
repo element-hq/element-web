@@ -40,6 +40,8 @@ export default {
             entry: [
                 "src/serviceworker/index.ts!",
                 "src/workers/*.worker.ts!",
+                // Cloudflare Pages Functions are discovered and invoked by the platform.
+                "functions/**/*.ts!",
                 "src/utils/exportUtils/exportJS.js!",
                 "src/vector/localstorage-fix.ts!",
                 "scripts/**",

@@ -96,7 +96,7 @@ describe("MessageComposerButtons", () => {
                 "Emoji",
                 "Attachment",
                 "More options",
-                ["Sticker", "Voice Message", "Poll", "Location"],
+                ["Sticker", "Voice Message", "Poll", "聊天记事本", "Location"],
             ]);
         });
     });
@@ -128,7 +128,11 @@ describe("MessageComposerButtons", () => {
             true,
         );
 
-        expect(getButtonLabels()).toEqual(["Emoji", "More options", ["Attachment", "Sticker", "Poll", "Location"]]);
+        expect(getButtonLabels()).toEqual([
+            "Emoji",
+            "More options",
+            ["Attachment", "Sticker", "Poll", "聊天记事本", "Location"],
+        ]);
     });
 
     describe("polls button", () => {
@@ -144,7 +148,11 @@ describe("MessageComposerButtons", () => {
                 true,
             );
 
-            expect(getButtonLabels()).toEqual(["Emoji", "More options", ["Attachment", "Sticker", "Poll", "Location"]]);
+            expect(getButtonLabels()).toEqual([
+                "Emoji",
+                "More options",
+                ["Attachment", "Sticker", "Poll", "聊天记事本", "Location"],
+            ]);
         });
 
         it("should not render when asked not to", () => {
@@ -166,6 +174,7 @@ describe("MessageComposerButtons", () => {
                     "Attachment",
                     "Sticker",
                     // "Poll", // should be hidden
+                    "聊天记事本",
                     "Location",
                 ],
             ]);

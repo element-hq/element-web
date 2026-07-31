@@ -41,10 +41,10 @@ describe("getForwardableEvent()", () => {
         expect(getForwardableEvent(alicesMessageEvent, client)).toBe(alicesMessageEvent);
     });
 
-    it("returns null for a poll start event", () => {
+    it("returns the event for a poll start event", () => {
         const pollStartEvent = makePollStartEvent("test?", userId);
 
-        expect(getForwardableEvent(pollStartEvent, client)).toBe(null);
+        expect(getForwardableEvent(pollStartEvent, client)).toBe(pollStartEvent);
     });
 
     describe("beacons", () => {

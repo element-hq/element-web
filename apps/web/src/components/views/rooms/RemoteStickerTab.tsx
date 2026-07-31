@@ -23,7 +23,7 @@ import {
 interface Props {
     room: Room;
     threadId?: string | null;
-    onSent(): void;
+    onSent: () => void;
 }
 
 const RemoteStickerTab: React.FC<Props> = ({ room, threadId, onSent }) => {
