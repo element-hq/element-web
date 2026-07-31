@@ -15,10 +15,30 @@ import { getLanguageRetry } from "./languages";
 import { registerCustomTranslations } from "./custom";
 
 export const DEFAULT_LANGUAGE = "zh_Hans";
+const DEFAULT_LANGUAGE_MIGRATION_KEY = "mx_default_language_zh_hans_v1";
+const LEGACY_DEFAULT_LANGUAGES = new Set(["en", "en_EN"]);
+
+const shouldMigrateLegacyDefaultLanguage = (language: string): boolean => {
+    try {
+        return (
+            LEGACY_DEFAULT_LANGUAGES.has(language) && localStorage.getItem(DEFAULT_LANGUAGE_MIGRATION_KEY) !== "true"
+        );
+    } catch {
+        return false;
+    }
+};
+
+export const markDefaultLanguageMigrated = (): void => {
+    try {
+        localStorage.setItem(DEFAULT_LANGUAGE_MIGRATION_KEY, "true");
+    } catch {
+        // The selected language remains usable when persistent storage is unavailable.
+    }
+};
 
 export function getUserLanguage(): string {
     const language = SettingsStore.getValue("language", null, /*excludeDefault:*/ true);
-    if (typeof language === "string" && language !== "") {
+    if (typeof language === "string" && language !== "" && !shouldMigrateLegacyDefaultLanguage(language)) {
         return language;
     }
 

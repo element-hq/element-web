@@ -12,9 +12,8 @@ import { createRoot } from "react-dom/client";
 import React, { StrictMode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ModuleLoader } from "@element-hq/element-web-module-api";
-import { DEFAULT_LANGUAGE, setLanguage } from "../i18n/settings";
+import { getUserLanguage, markDefaultLanguageMigrated, setLanguage } from "../i18n/settings";
 import { getCurrentLanguage } from "../i18n";
-import SettingsStore from "../settings/SettingsStore";
 import PlatformPeg from "../PlatformPeg";
 import SdkConfig from "../SdkConfig";
 import { setTheme } from "../theme";
@@ -64,16 +63,9 @@ export async function loadConfig(): Promise<void> {
 }
 
 export async function loadLanguage(): Promise<void> {
-    const prefLang = SettingsStore.getValue("language", null, /*excludeDefault=*/ true);
-    let langs: string[] = [];
-
-    if (!prefLang) {
-        langs = [DEFAULT_LANGUAGE];
-    } else {
-        langs = [prefLang];
-    }
     try {
-        await setLanguage(...langs);
+        await setLanguage(getUserLanguage());
+        markDefaultLanguageMigrated();
         document.documentElement.setAttribute("lang", getCurrentLanguage());
     } catch (e) {
         logger.error("Unable to set language", e);
