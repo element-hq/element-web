@@ -20,10 +20,9 @@ import styles from "./EventTileView.module.css";
  */
 export function EventTileView({
     root,
-    line,
     slots,
+    classNames: classNameOverrides,
     refs,
-    as: Root = "li",
     onMouseEnter,
     onMouseLeave,
     onFocus,
@@ -31,10 +30,12 @@ export function EventTileView({
     onClick,
     onContextMenu,
 }: Readonly<EventTileViewProps>): JSX.Element {
-    const renderRoot = (children: React.ReactNode, rootClickHandler = onClick): JSX.Element => (
+    const Root = root.as ?? "li";
+
+    const renderRoot = (children: React.ReactNode, rootClickHandler = onClick, rootTabIndex?: number): JSX.Element => (
         <Root
             ref={refs?.root}
-            className={classNames(styles.root, root.className)}
+            className={classNames(styles.root, classNameOverrides?.root)}
             aria-live={root.ariaLive}
             aria-atomic={true}
             data-scroll-tokens={root.scrollToken}
@@ -43,6 +44,7 @@ export function EventTileView({
             data-shape={root.data.shape}
             data-self={root.data.isOwnEvent}
             data-has-reply={root.data.hasReply}
+            tabIndex={rootTabIndex}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
             onFocus={onFocus}
@@ -56,11 +58,15 @@ export function EventTileView({
     if (root.data.shape === "Thread") {
         return renderRoot(
             <>
-                <div className={styles.senderDetails}>
+                <div className={classNames(styles.senderDetails, classNameOverrides?.senderDetails)}>
                     {slots.avatar}
                     {slots.sender}
                 </div>
-                <div id={line.id} className={classNames(styles.line, line.className)} onContextMenu={onContextMenu}>
+                <div
+                    id={root.id}
+                    className={classNames(styles.line, classNameOverrides?.line)}
+                    onContextMenu={onContextMenu}
+                >
                     {slots.contextMenu}
                     {slots.replyChain}
                     {slots.body}
@@ -74,8 +80,40 @@ export function EventTileView({
         );
     }
 
+    if (root.data.shape === "Notification" || root.data.shape === "ThreadsList") {
+        return renderRoot(
+            <>
+                <div className={classNames(styles.details, classNameOverrides?.details)}>
+                    {slots.sender}
+                    {slots.notificationRoomLabel}
+                    {slots.timestamp}
+                    {slots.notificationBadge}
+                </div>
+                <div className={classNames(styles.avatar, classNameOverrides?.avatar)}>
+                    {root.data.shape === "Notification" && slots.roomAvatar ? slots.roomAvatar : slots.avatar}
+                </div>
+                <div
+                    className={classNames(styles.line, classNameOverrides?.line)}
+                    id={root.id}
+                    onContextMenu={onContextMenu}
+                >
+                    {slots.body}
+                    {slots.threadInfo}
+                </div>
+                {root.data.shape === "ThreadsList" && (
+                    <div className={classNames(styles.threadListActionBar, classNameOverrides?.threadListActionBar)}>
+                        {slots.actionBar}
+                    </div>
+                )}
+                {slots.receipt}
+            </>,
+            onClick,
+            -1,
+        );
+    }
+
     return renderRoot(
-        <div id={line.id} className={classNames(styles.line, line.className)} onContextMenu={onContextMenu}>
+        <div id={root.id} className={classNames(styles.line, classNameOverrides?.line)} onContextMenu={onContextMenu}>
             {slots.contextMenu}
             {slots.body}
         </div>,

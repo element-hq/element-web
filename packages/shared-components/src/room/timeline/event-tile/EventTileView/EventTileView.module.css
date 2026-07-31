@@ -22,3 +22,16 @@
     display: flex;
     align-items: flex-start;
 }
+
+.details {
+    display: flex;
+    align-items: center;
+}
+
+.avatar {
+    user-select: none;
+}
+
+.threadListActionBar {
+    display: flex;
+}

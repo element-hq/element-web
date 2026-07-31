@@ -12,7 +12,7 @@ import { fireEvent, render } from "@test-utils";
 import { EventTileView, type EventTileViewProps } from "./index";
 
 const renderState: EventTileViewProps["root"] = {
-    className: "custom-root",
+    id: "event-line-1",
     ariaLive: "off",
     scrollToken: "event-1",
     permalink: "https://example.org/event-1",
@@ -25,15 +25,13 @@ const renderState: EventTileViewProps["root"] = {
     },
 };
 
-const lineState: EventTileViewProps["line"] = {
-    className: "custom-line",
-    id: "event-line-1",
-};
-
 function createProps(overrides: Partial<EventTileViewProps> = {}): EventTileViewProps {
     return {
         root: renderState,
-        line: lineState,
+        classNames: {
+            root: "custom-root",
+            line: "custom-line",
+        },
         slots: {
             body: <span data-testid="body">Body</span>,
             contextMenu: <span data-testid="context-menu">Context menu</span>,
@@ -66,6 +64,9 @@ describe("EventTileView", () => {
         const { container, getByTestId } = render(
             <EventTileView
                 {...createProps({
+                    classNames: {
+                        senderDetails: "legacy-sender-details",
+                    },
                     root: {
                         ...renderState,
                         data: { ...renderState.data, shape: "Thread" },
@@ -88,12 +89,69 @@ describe("EventTileView", () => {
         const line = getByTestId("body").parentElement!;
 
         expect(senderDetails).toContainElement(getByTestId("sender"));
+        expect(senderDetails).toHaveClass("legacy-sender-details");
         expect(senderDetails).toBe(root.firstElementChild);
         expect(line).toContainElement(getByTestId("reply-chain"));
         expect(line).toContainElement(getByTestId("action-bar"));
         expect(line).toContainElement(getByTestId("timestamp"));
         expect(line).toContainElement(getByTestId("receipt"));
         expect(getByTestId("footer").parentElement).toBe(root);
+    });
+
+    it.each(["Notification", "ThreadsList"] as const)("renders the %s preview layout", (shape) => {
+        const { container, getByTestId, queryByTestId } = render(
+            <EventTileView
+                {...createProps({
+                    classNames: {
+                        details: "legacy-details",
+                        avatar: "legacy-avatar",
+                        threadListActionBar: "legacy-thread-action-bar",
+                    },
+                    root: {
+                        ...renderState,
+                        data: { ...renderState.data, shape },
+                    },
+                    slots: {
+                        sender: <span data-testid="sender">Sender</span>,
+                        notificationRoomLabel:
+                            shape === "Notification" ? <span data-testid="room-label">Room</span> : undefined,
+                        timestamp: <span data-testid="timestamp">Timestamp</span>,
+                        notificationBadge: <span data-testid="badge">Badge</span>,
+                        roomAvatar: <span data-testid="room-avatar">Room avatar</span>,
+                        avatar: <span data-testid="avatar">Avatar</span>,
+                        body: <span data-testid="body">Body</span>,
+                        threadInfo: <span data-testid="thread-info">Thread info</span>,
+                        actionBar: <span data-testid="action-bar">Action bar</span>,
+                        receipt: <span data-testid="receipt">Receipt</span>,
+                    },
+                })}
+            />,
+        );
+        const root = container.firstElementChild!;
+        const details = getByTestId("sender").parentElement!;
+        const line = getByTestId("body").parentElement!;
+
+        expect(root).toHaveAttribute("tabindex", "-1");
+        expect(details).toContainElement(getByTestId("timestamp"));
+        expect(details).toHaveClass("legacy-details");
+        expect(details).toContainElement(getByTestId("badge"));
+        expect(line).toContainElement(getByTestId("thread-info"));
+        expect(getByTestId("receipt").parentElement).toBe(root);
+
+        if (shape === "Notification") {
+            const avatar = getByTestId("room-avatar").parentElement!;
+            expect(avatar.parentElement).toBe(root);
+            expect(avatar).toHaveClass("legacy-avatar");
+            expect(queryByTestId("action-bar")).not.toBeInTheDocument();
+        } else {
+            const avatar = getByTestId("avatar").parentElement!;
+            const actionBar = getByTestId("action-bar").parentElement!;
+            expect(avatar.parentElement).toBe(root);
+            expect(avatar).toHaveClass("legacy-avatar");
+            expect(actionBar.parentElement).toBe(root);
+            expect(actionBar).toHaveClass("legacy-thread-action-bar");
+            expect(queryByTestId("room-avatar")).not.toBeInTheDocument();
+        }
     });
 
     it("forwards root and line interactions", () => {
@@ -110,7 +168,9 @@ describe("EventTileView", () => {
 
     it("forwards the root ref and supports a custom root element", () => {
         const rootRef = createRef<HTMLElement>();
-        const { container } = render(<EventTileView {...createProps({ as: "article", refs: { root: rootRef } })} />);
+        const { container } = render(
+            <EventTileView {...createProps({ root: { ...renderState, as: "article" }, refs: { root: rootRef } })} />,
+        );
 
         expect(container.firstElementChild?.tagName).toBe("ARTICLE");
         expect(rootRef.current).toBe(container.firstElementChild);

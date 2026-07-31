@@ -28,8 +28,10 @@ export interface EventTileViewRootData {
 
 /** Root data consumed by the shared EventTile shell. */
 export interface EventTileViewRootState {
-    /** Optional application CSS class overrides for the root element. */
-    className?: string;
+    /** Stable unique id for the component instance. */
+    id: string;
+    /** Element used for the EventTile root. Defaults to `li`. */
+    as?: React.ElementType;
     /** Optional aria-live value for the root element. */
     ariaLive?: "off";
     /** Stable event scroll token. */
@@ -40,12 +42,15 @@ export interface EventTileViewRootState {
     data: EventTileViewRootData;
 }
 
-/** Pure event-line render state consumed by the shared EventTile shell. */
-export interface EventTileViewLineState {
-    /** Optional application CSS class overrides for the event line. */
-    className?: string;
-    /** Optional stable ID for the event line. */
-    id?: string;
+/** Optional application CSS class overrides for shell-owned structural elements. */
+export interface EventTileViewClassNames {
+    root?: string;
+    line?: string;
+    details?: string;
+    avatar?: string;
+    senderDetails?: string;
+    senderDetailsLink?: string;
+    threadListActionBar?: string;
 }
 
 /** Render-ready children supplied by the application integration layer. */
@@ -110,12 +115,10 @@ export interface EventTileViewHandlers {
 export interface EventTileViewProps extends EventTileViewHandlers {
     /** Pure root render state. */
     root: EventTileViewRootState;
-    /** Pure event-line render state. */
-    line: EventTileViewLineState;
+    /** Optional application CSS class overrides for shell-owned elements. */
+    classNames?: EventTileViewClassNames;
     /** Render-ready children supplied by the application layer. */
     slots: EventTileViewSlots;
     /** DOM refs supplied by the application layer. */
     refs?: EventTileViewRefs;
-    /** Element used for the EventTile root. Defaults to `li`. */
-    as?: React.ElementType;
 }

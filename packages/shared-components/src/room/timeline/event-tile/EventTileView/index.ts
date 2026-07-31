@@ -7,9 +7,9 @@
 
 export { EventTileView } from "./EventTileView";
 export type {
+    EventTileViewClassNames,
     EventTileRenderingMode,
     EventTileViewHandlers,
-    EventTileViewLineState,
     EventTileViewProps,
     EventTileViewRefs,
     EventTileViewRootData,
