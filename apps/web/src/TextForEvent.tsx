@@ -626,6 +626,9 @@ function textForPinnedEvent(event: MatrixEvent, client: MatrixClient, allowJSX: 
         return () => _t("timeline|m.room.pinned_events|pinned", { senderName });
     }
 
+    // Nothing is pinned any more, so the copy must not send the reader off to an empty pinned list.
+    const noPinsRemain = pinned.length === 0;
+
     if (newlyUnpinned.length === 1 && newlyPinned.length === 0) {
         // A single message was unpinned, include a link to that message.
         if (allowJSX) {
@@ -634,7 +637,9 @@ function textForPinnedEvent(event: MatrixEvent, client: MatrixClient, allowJSX: 
             return () => (
                 <span>
                     {_t(
-                        "timeline|m.room.pinned_events|unpinned_link",
+                        noPinsRemain
+                            ? "timeline|m.room.pinned_events|unpinned_last_link"
+                            : "timeline|m.room.pinned_events|unpinned_link",
                         { senderName },
                         {
                             a: (sub) => (
@@ -659,7 +664,16 @@ function textForPinnedEvent(event: MatrixEvent, client: MatrixClient, allowJSX: 
             );
         }
 
-        return () => _t("timeline|m.room.pinned_events|unpinned", { senderName });
+        return () =>
+            _t(
+                noPinsRemain ? "timeline|m.room.pinned_events|unpinned_last" : "timeline|m.room.pinned_events|unpinned",
+                { senderName },
+            );
+    }
+
+    if (noPinsRemain) {
+        // Several messages were unpinned at once and none are left, so there is nothing to link to.
+        return () => _t("timeline|m.room.pinned_events|unpinned_all", { senderName });
     }
 
     if (allowJSX) {
