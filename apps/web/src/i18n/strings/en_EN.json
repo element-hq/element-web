@@ -3496,6 +3496,7 @@
         "m.sticker": "%(senderDisplayName)s sent a sticker.",
         "m.video": {
             "error_decrypting": "Error decrypting video",
+            "error_downloading": "Error downloading video",
             "show_video": "Show video"
         },
         "m.widget": {

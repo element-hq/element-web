@@ -23,6 +23,7 @@ import { mediaFromContent } from "../../customisations/Media";
 import { BLURHASH_FIELD } from "../../utils/image-media";
 import { type ImageSize, suggestedSize as suggestedVideoSize } from "../../settings/enums/ImageSize";
 import { type MediaEventHelper } from "../../utils/MediaEventHelper";
+import { DownloadError } from "../../utils/DecryptFile";
 
 export interface VideoBodyViewModelProps {
     /**
@@ -194,6 +195,20 @@ export class VideoBodyViewModel
         return null;
     }
 
+    /**
+     * The label shown in place of a video that could not be displayed.
+     *
+     * A failed fetch is reported as a download failure rather than a decryption failure, which is
+     * what the user actually hit when the media is unreachable.
+     *
+     * @param error - the error that stopped the media loading
+     * @returns the label to show in place of the video
+     */
+    private static computeErrorLabel(error: unknown): string {
+        if (error instanceof DownloadError) return _t("timeline|m.video|error_downloading");
+        return _t("timeline|m.video|error_decrypting");
+    }
+
     private static computeSnapshot(props: VideoBodyViewModelProps, state: InternalState): VideoBodyViewSnapshot {
         const content = props.mxEvent.getContent<MediaEventContent>();
         const autoplay = !props.inhibitInteraction && SettingsStore.getValue("autoplayVideo");
@@ -203,7 +218,7 @@ export class VideoBodyViewModel
         if (state.error !== null) {
             return {
                 state: VideoBodyViewState.ERROR,
-                errorLabel: _t("timeline|m.video|error_decrypting"),
+                errorLabel: VideoBodyViewModel.computeErrorLabel(state.error),
                 maxWidth,
                 maxHeight,
                 aspectRatio,
