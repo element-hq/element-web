@@ -84,12 +84,16 @@ export function CustomStatusView({ onSave, onCancel }: CustomStatusViewProps): J
             <Menu
                 open={pickerOpen}
                 onOpenChange={setPickerOpen}
-                title={_t("a11y|emoji_picker")}
+                title={_t("status|set_status|choose_emoji")}
                 showTitle={false}
                 align="start"
                 className={styles.pickerMenu}
                 trigger={
-                    <button type="button" className={styles.emojiButton} aria-label={_t("a11y|emoji_picker")}>
+                    <button
+                        type="button"
+                        className={styles.emojiButton}
+                        aria-label={_t("status|set_status|choose_emoji")}
+                    >
                         {emoji}
                     </button>
                 }

@@ -218,6 +218,7 @@
         "set_status": {
             "away": "Away",
             "be_right_back": "Be right back",
+            "choose_emoji": "Choose Emoji",
             "custom": "Custom…",
             "focus_time": "Focus Time",
             "in_a_meeting": "In a meeting",

@@ -59,15 +59,15 @@ describe("CustomStatusView", () => {
         const onSave = vi.fn();
         render(<CustomStatusView onSave={onSave} onCancel={vi.fn()} />);
 
-        await userEvent.click(screen.getByRole("button", { name: "Emoji picker" }));
-        await waitFor(() => expect(screen.getByTestId("mx_EmojiPicker")).toBeInTheDocument());
+        await userEvent.click(screen.getByRole("button", { name: "Choose Emoji" }));
+        await waitFor(() => expect(screen.getByLabelText("Emoji picker")).toBeInTheDocument());
 
         // Choose an emoji from the always-rendered quick reactions row
         await userEvent.click(await screen.findByText("🎉"));
 
         // Picker closes and the trigger now shows the chosen emoji
         await waitFor(() => expect(screen.queryByTestId("mx_EmojiPicker")).not.toBeInTheDocument());
-        expect(screen.getByRole("button", { name: "Emoji picker" })).toHaveTextContent("🎉");
+        expect(screen.getByRole("button", { name: "Choose Emoji" })).toHaveTextContent("🎉");
 
         await userEvent.type(screen.getByRole("textbox", { name: "What's your status?" }), "Hello");
         await userEvent.click(await screen.findByRole("button", { name: "Save" }));
