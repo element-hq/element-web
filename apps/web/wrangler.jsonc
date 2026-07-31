@@ -6,7 +6,7 @@
     "vars": {
         "SPARK_BASE_URL": "https://api.inferera.com/v1",
         "SPARK_FALLBACK_BASE_URL": "https://aihubmix.com/v1",
-        "SPARK_OCR_MODEL": "DeepSeek-OCR",
+        "SPARK_OCR_MODEL": "glm-4.6v",
         "SPARK_ASR_MODEL": "gpt-4o-transcribe-diarize",
     },
 }
