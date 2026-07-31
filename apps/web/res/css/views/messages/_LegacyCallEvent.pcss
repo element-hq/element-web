@@ -16,11 +16,11 @@ Please see LICENSE files in the repository root for full details.
         flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
-        gap: $spacing-4 0;
+        gap: var(--cpd-space-1x) 0;
 
         position: relative;
-        margin: $spacing-4 0;
-        padding: $spacing-12 $spacing-24;
+        margin: var(--cpd-space-1x) 0;
+        padding: var(--cpd-space-3x) var(--cpd-space-6x);
         box-sizing: border-box;
         background-color: $dark-panel-bg-color;
         border-radius: 8px;
@@ -47,14 +47,14 @@ Please see LICENSE files in the repository root for full details.
             .mx_LegacyCallEvent_info_basic {
                 display: flex;
                 flex-direction: column;
-                gap: $spacing-4;
+                gap: var(--cpd-space-1x);
                 margin-left: 10px; /* To match mx_LegacyCallEvent */
                 margin-right: 10px;
                 min-width: 0;
 
                 .mx_LegacyCallEvent_sender {
                     font-weight: var(--cpd-font-weight-semibold);
-                    margin-bottom: $spacing-4;
+                    margin-bottom: var(--cpd-space-1x);
 
                     overflow: hidden;
                     white-space: nowrap;
@@ -74,14 +74,14 @@ Please see LICENSE files in the repository root for full details.
             align-items: center;
             color: $secondary-content;
             font-size: $font-12px;
-            gap: $spacing-12; /* See mx_IncomingLegacyCallToast_buttons */
+            gap: var(--cpd-space-3x); /* See mx_IncomingLegacyCallToast_buttons */
             margin-inline-start: 42px; /* avatar (32px) + mx_LegacyCallEvent_info_basic margin (10px) */
             word-break: break-word;
             max-width: fit-content;
 
             .mx_LegacyCallEvent_content_button {
                 @mixin LegacyCallButton;
-                padding: 0 $spacing-12;
+                padding: 0 var(--cpd-space-3x);
                 font-size: inherit;
             }
 
@@ -93,7 +93,7 @@ Please see LICENSE files in the repository root for full details.
         &.mx_LegacyCallEvent_narrow {
             flex-direction: column;
             align-items: unset;
-            gap: $spacing-4 $spacing-16;
+            gap: var(--cpd-space-1x) var(--cpd-space-4x);
             height: unset;
             min-width: 290px;
 
@@ -144,7 +144,7 @@ Please see LICENSE files in the repository root for full details.
     .mx_LegacyCallEvent_wrapper {
         .mx_LegacyCallEvent {
             &.mx_LegacyCallEvent_narrow {
-                gap: $spacing-8 $spacing-4;
+                gap: var(--cpd-space-2x) var(--cpd-space-1x);
             }
         }
     }
@@ -153,7 +153,7 @@ Please see LICENSE files in the repository root for full details.
 .mx_IRCLayout {
     .mx_LegacyCallEvent_wrapper {
         .mx_LegacyCallEvent {
-            margin-inline-start: $spacing-4; /* display green line */
+            margin-inline-start: var(--cpd-space-1x); /* display green line */
         }
     }
 }

@@ -9,7 +9,6 @@
             "one": "1 אזכור שלא נקרא.",
             "other": "%(count)s הודעות שלא נקראו כולל אזכורים."
         },
-        "room_name": "חדר %(name)s",
         "unread_messages": "הודעות שלא נקראו."
     },
     "a11y_jump_first_unread_room": "קפצו לחדר הראשון שלא נקרא.",
@@ -41,7 +40,6 @@
         "enter_fullscreen": "עברו למסך מלא",
         "exit_fullscreeen": "יציאה ממסך מלא",
         "expand": "להרחיב",
-        "explore_public_rooms": "שוטט בחדרים ציבוריים",
         "explore_rooms": "גלה חדרים",
         "export": "ייצוא",
         "forward": "קדימה",
@@ -53,8 +51,6 @@
         "ignore": "התעלם",
         "import": "יבא",
         "invite": "הזמן",
-        "invite_to_space": "הזמינו אל מרחב העבודה",
-        "invites_list": "הזמנות",
         "join": "הצטרפות",
         "learn_more": "לימדו עוד",
         "leave": "לעזוב",
@@ -93,7 +89,6 @@
         "sign_out": "יציאה",
         "skip": "דלג",
         "start": "התחל",
-        "start_chat": "התחל שיחה",
         "stop": "עצור",
         "submit": "הגש",
         "subscribe": "הרשמה",
@@ -340,7 +335,6 @@
         "encrypted": "מוצפן",
         "error": "שגיאה",
         "faq": "שאלות נפוצות",
-        "favourites": "מועדפים",
         "feedback": "משוב",
         "filter_results": "סנן התוצאות",
         "forward_message": "העבירו את ההודעה",
@@ -348,7 +342,6 @@
         "go_to_settings": "עבור להגדרות",
         "guest": "אורח",
         "help": "עזרה",
-        "historical": "היסטוריה",
         "home": "הבית",
         "homeserver": "שרת הבית",
         "identity_server": "שרת הזדהות",
@@ -357,7 +350,6 @@
         "legal": "חוקי",
         "light": "בהיר",
         "location": "מיקום",
-        "low_priority": "עדיפות נמוכה",
         "matrix": "מטריקס",
         "message_layout": "תבנית הודעה",
         "microphone": "מיקרופון",
@@ -406,7 +398,6 @@
         "success": "הצלחה",
         "suggestions": "הצעות",
         "support": "תמיכה",
-        "system_alerts": "התרעות מערכת",
         "theme": "ערכת נושא",
         "thread": "שרשורים",
         "threads": "שרשורים",
@@ -416,7 +407,6 @@
         "unnamed_room": "חדר ללא שם",
         "user_avatar": "תמונת פרופיל",
         "username": "שם משתמש",
-        "video": "וידאו",
         "warning": "התראה"
     },
     "composer": {
@@ -987,9 +977,6 @@
         "leave_room_question": "האם אתה בטוח שברצונך לעזוב את החדר '%(roomName)s'?",
         "room_rejoin_warning": "חדר זה אינו ציבורי. לא תוכל להצטרף שוב ללא הזמנה."
     },
-    "left_panel": {
-        "open_dial_pad": "פתח לוח חיוג"
-    },
     "lightbox": {
         "rotate_left": "סובב שמאלה",
         "rotate_right": "סובב ימינה"
@@ -1106,7 +1093,6 @@
     },
     "quick_settings": {
         "all_settings": "כל ההגדרות",
-        "metaspace_section": "הצמד לסרגל הצד",
         "sidebar_settings": "אפשרויות נוספות",
         "title": "הגדרות מהירות"
     },
@@ -1243,24 +1229,11 @@
         }
     },
     "room_list": {
-        "add_room_label": "הוסף חדר",
         "add_space_label": "הוסיפו מרחב עבודה",
-        "breadcrumbs_empty": "אין חדרים שבקרתם בהם לאחרונה",
         "failed_add_tag": "נכשל בעת הוספת תג %(tagName)s לחדר",
         "failed_remove_tag": "נכשל בעת נסיון הסרת תג %(tagName)s מהחדר",
         "notification_options": "אפשרויות התרעות",
-        "show_less": "הצג פחות",
-        "show_n_more": {
-            "one": "הצג עוד %(count)s",
-            "other": "הצג עוד %(count)s"
-        },
-        "show_previews": "הצג תצוגה מקדימה של הודעות",
-        "sort_by": "סדר לפי",
-        "sort_by_activity": "פעילות",
-        "sort_by_alphabet": "א-ת",
-        "sort_unread_first": "הצג תחילה חדרים עם הודעות שלא נקראו",
-        "space_menu_label": "תפריט %(spaceName)s",
-        "sublist_options": "רשימת אפשרויות"
+        "show_less": "הצג פחות"
     },
     "room_settings": {
         "access": {
@@ -1699,13 +1672,11 @@
         "show_stickers_button": "הצג את לחצן המדבקות",
         "show_typing_notifications": "הצג התרעות כתיבה",
         "sidebar": {
-            "metaspaces_favourites_description": "קבצו את כל החדרים ואנשי הקשר האהובים עליכם במקום אחד.",
             "metaspaces_home_all_rooms": "הצג את כל החדרים",
             "metaspaces_home_all_rooms_description": "הצג את כל החדרים שלכם במסך הבית, אפילו אם הם משויכים למרחב עבודה.",
             "metaspaces_home_description": "מסך הבית עוזר לסקירה כללית.",
             "metaspaces_orphans": "חדרים שמחוץ למרחב העבודה",
             "metaspaces_orphans_description": "קבצו את כל החדרים שלכם שאינם משויכים למרחב עבודה במקום אחד.",
-            "metaspaces_people_description": "קבצו את כל אנשי הקשר שלכם במקום אחד.",
             "metaspaces_subsection": "מרחבי עבודה להצגה",
             "title": "סרגל צד"
         },
@@ -1843,12 +1814,6 @@
         "share_public": "שתף את מרחב העבודה הציבורי שלך",
         "title_when_query_available": "תוצאות",
         "title_when_query_unavailable": "חדרים וחללי עבודה"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "אין לכם השאה להוסיף חדשרים למרחב העבודה הנוכחי",
-        "error_no_permission_add_space": "אין לכם הרשאה להוסיף מרחב עבודה אל מרחב העבודה הנוכחי",
-        "error_no_permission_create_room": "אין לכם הרשאה ליצור חדרים חדשים במרחב העבודה הנוכחי",
-        "error_no_permission_invite": "אין לכם הרשאה להזמין משתתפים אל מרחב עבודה זה"
     },
     "spotlight": {
         "public_rooms": {

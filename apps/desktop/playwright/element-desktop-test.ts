@@ -50,16 +50,13 @@ export const test = base.extend<Fixtures>({
     extraEnv: {},
     extraArgs: [],
 
-    // eslint-disable-next-line no-empty-pattern
     stdout: async ({}, use) => {
         await use(new CapturedPassThrough());
     },
-    // eslint-disable-next-line no-empty-pattern
     stderr: async ({}, use) => {
         await use(new CapturedPassThrough());
     },
 
-    // eslint-disable-next-line no-empty-pattern
     tmpDir: async ({}, use) => {
         const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "element-desktop-tests-"));
         await use(tmpDir);

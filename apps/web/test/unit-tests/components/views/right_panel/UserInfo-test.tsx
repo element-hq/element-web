@@ -32,12 +32,12 @@ import UserInfo, { disambiguateDevices } from "../../../../../src/components/vie
 import { getPowerLevels } from "../../../../../src/components/viewmodels/right_panel/user_info/UserInfoBasicViewModel";
 import { RightPanelPhases } from "../../../../../src/stores/right-panel/RightPanelStorePhases";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import Modal from "../../../../../src/Modal";
-import { clearAllModals, flushPromises } from "../../../../test-utils";
+import { clearAllModals, clientAndSDKContextRenderOptions, flushPromises } from "../../../../test-utils";
 import ErrorDialog from "../../../../../src/components/views/dialogs/ErrorDialog";
 import { shouldShowComponent } from "../../../../../src/customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../../src/settings/UIFeature";
+import { TestSDKContext } from "../../../TestSDKContext.ts";
 
 jest.mock("../../../../../src/utils/direct-messages", () => ({
     ...jest.requireActual("../../../../../src/utils/direct-messages"),
@@ -78,6 +78,7 @@ const defaultUser = new User(defaultUserId);
 let mockRoom: Mocked<Room>;
 let mockClient: Mocked<MatrixClient>;
 let mockCrypto: Mocked<CryptoApi>;
+let sdkContext: TestSDKContext;
 const origDate = global.Date.prototype.toLocaleString;
 
 beforeEach(() => {
@@ -131,6 +132,8 @@ beforeEach(() => {
         setPowerLevel: jest.fn(),
         getCrypto: jest.fn().mockReturnValue(mockCrypto),
     } as unknown as MatrixClient);
+    sdkContext = new TestSDKContext();
+    sdkContext._client = mockClient;
 
     jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
     jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
@@ -162,13 +165,10 @@ describe("<UserInfo />", () => {
     };
 
     const renderComponent = (props = {}) => {
-        const Wrapper = (wrapperProps = {}) => {
-            return <MatrixClientContext.Provider value={mockClient} {...wrapperProps} />;
-        };
-
-        return render(<UserInfo {...defaultProps} {...props} />, {
-            wrapper: Wrapper,
-        });
+        return render(
+            <UserInfo {...defaultProps} {...props} />,
+            clientAndSDKContextRenderOptions(mockClient, sdkContext),
+        );
     };
 
     beforeEach(() => {
@@ -307,11 +307,7 @@ describe("<UserInfo />", () => {
         });
 
         it("renders the message button", () => {
-            render(
-                <MatrixClientContext.Provider value={mockClient}>
-                    <UserInfo {...defaultProps} />
-                </MatrixClientContext.Provider>,
-            );
+            render(<UserInfo {...defaultProps} />, clientAndSDKContextRenderOptions(mockClient, sdkContext));
 
             screen.getByRole("button", { name: "Send message" });
         });
@@ -322,11 +318,7 @@ describe("<UserInfo />", () => {
                     return component !== UIComponent.CreateRooms;
                 },
                 () => {
-                    render(
-                        <MatrixClientContext.Provider value={mockClient}>
-                            <UserInfo {...defaultProps} />
-                        </MatrixClientContext.Provider>,
-                    );
+                    render(<UserInfo {...defaultProps} />, clientAndSDKContextRenderOptions(mockClient, sdkContext));
 
                     expect(screen.queryByRole("button", { name: "Message" })).toBeNull();
                 },

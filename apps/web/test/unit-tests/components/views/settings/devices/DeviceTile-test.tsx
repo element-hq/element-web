@@ -11,14 +11,12 @@ import { render } from "jest-matrix-react";
 import { type IMyDevice } from "matrix-js-sdk/src/matrix";
 
 import DeviceTile from "../../../../../../src/components/views/settings/devices/DeviceTile";
-import { DeviceType } from "../../../../../../src/utils/device/parseUserAgent";
 
 describe("<DeviceTile />", () => {
     const defaultProps = {
         device: {
             device_id: "123",
             isVerified: false,
-            deviceType: DeviceType.Unknown,
         },
     };
     const getComponent = (props = {}) => <DeviceTile {...defaultProps} {...props} />;

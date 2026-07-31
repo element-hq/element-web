@@ -67,6 +67,27 @@ describe("<VirtualizedRoomListView />", () => {
         expect(Default.args.updateVisibleRooms).toHaveBeenCalled();
     });
 
+    describe("updateVisibleRooms range reporting", () => {
+        beforeEach(() => {
+            (Default.args.updateVisibleRooms as any).mockClear?.();
+            (Sections.args.updateVisibleRooms as any).mockClear?.();
+        });
+
+        it("reports an exclusive end bound in flat mode", () => {
+            renderWithMockContext(<Default />);
+            // 10 rooms, all rendered by the mock viewport: Virtuoso reports the inclusive
+            // range [0, 9], which must reach the view model as the exclusive window [0, 10).
+            expect(Default.args.updateVisibleRooms).toHaveBeenLastCalledWith(0, 10);
+        });
+
+        it("maps entry-space indices to room indices in grouped mode", () => {
+            renderWithMockContext(<Sections />);
+            // 13 entries (3 section headers + 10 rooms) are all rendered: Virtuoso reports the
+            // inclusive entry range [0, 12], which must map back to the room window [0, 10).
+            expect(Sections.args.updateVisibleRooms).toHaveBeenLastCalledWith(0, 10);
+        });
+    });
+
     describe("drag and drop", () => {
         beforeEach(() => {
             // Storybook fn() spies are shared across tests; vi.clearAllMocks() may not
@@ -173,6 +194,54 @@ describe("<VirtualizedRoomListView />", () => {
             });
             expect(Sections.args.onSectionDragStart).toHaveBeenCalled();
             expect(Sections.args.onSectionDragEnd).toHaveBeenCalled();
+        });
+    });
+
+    describe("pointer drag activation", () => {
+        beforeEach(() => {
+            (Sections.args.changeRoomSection as any).mockClear?.();
+        });
+
+        it("does not start a drag when a finger moves (touch scrolling the list)", async () => {
+            // For touch, dragging only activates after a 250ms hold; moving the finger first aborts
+            // it so the list scrolls instead of dragging a room. Simulate a finger press that moves
+            // immediately (as when scrolling) and assert no drag ever starts.
+            const user = userEvent.setup();
+            renderWithMockContext(<Sections />);
+
+            const status = screen.getByRole("status");
+            const roomButton = await screen.findByRole("button", { name: "Open room General" });
+
+            await user.pointer([
+                { keys: "[TouchA>]", target: roomButton, coords: { x: 20, y: 20 } },
+                { pointerName: "TouchA", coords: { x: 20, y: 140 } },
+                { keys: "[/TouchA]" },
+            ]);
+
+            expect(status).toHaveTextContent("");
+            expect(Sections.args.changeRoomSection).not.toHaveBeenCalled();
+        });
+
+        it("starts a drag when the mouse moves past the activation distance", async () => {
+            // For mouse, dragging activates as soon as the pointer moves past 5px, so the same
+            // press-and-move gesture that scrolls on touch drags the room into another section.
+            const user = userEvent.setup();
+            renderWithMockContext(<Sections />);
+
+            const status = screen.getByRole("status");
+            const roomButton = await screen.findByRole("button", { name: "Open room General" });
+
+            await user.pointer([
+                { keys: "[MouseLeft>]", target: roomButton, coords: { x: 20, y: 20 } },
+                { coords: { x: 20, y: 140 } },
+            ]);
+
+            // The drag has activated: the live region reflects the ongoing drag.
+            await waitFor(() => expect(status).toHaveTextContent("General"));
+
+            await user.pointer({ keys: "[/MouseLeft]" }); // release to drop
+
+            await waitFor(() => expect(Sections.args.changeRoomSection).toHaveBeenCalled());
         });
     });
 

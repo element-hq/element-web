@@ -13,8 +13,7 @@ import { ReactionIcon } from "@vector-im/compound-design-tokens/assets/web/icons
 import { _t } from "../../../languageHandler";
 import ContextMenu, { aboveLeftOf, type MenuProps, useContextMenu } from "../../structures/ContextMenu";
 import EmojiPicker from "../emojipicker/EmojiPicker";
-import { CollapsibleButton } from "./CollapsibleButton";
-import { OverflowMenuContext } from "./MessageComposerButtons";
+import { CollapsibleButton, OverflowMenuContext } from "./CollapsibleButton";
 
 interface IEmojiButtonProps {
     addEmoji: (unicode: string) => boolean;

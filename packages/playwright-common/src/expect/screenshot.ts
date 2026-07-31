@@ -22,6 +22,7 @@ import { ANNOTATION } from "../stale-screenshot-reporter.js";
 
 // Taken from playwright utils, but it's not importable
 function sanitizeForFilePath(s: string): string {
+    // oxlint-disable-next-line no-control-regex
     return s.replace(/[\x00-\x2C\x2E-\x2F\x3A-\x40\x5B-\x60\x7B-\x7F]+/g, "-");
 }
 

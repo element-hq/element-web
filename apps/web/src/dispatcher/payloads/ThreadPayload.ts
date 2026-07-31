@@ -9,10 +9,8 @@ Please see LICENSE files in the repository root for full details.
 import { type ActionPayload } from "../payloads";
 import { type Action } from "../actions";
 
-/* eslint-disable camelcase */
 export interface ThreadPayload extends Pick<ActionPayload, "action"> {
     action: Action.ViewThread;
 
     thread_id: string | null;
 }
-/* eslint-enable camelcase */

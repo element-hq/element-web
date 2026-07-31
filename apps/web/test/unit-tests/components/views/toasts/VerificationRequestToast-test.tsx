@@ -14,26 +14,32 @@ import { type VerificationRequest, VerificationRequestEvent } from "matrix-js-sd
 
 import VerificationRequestToast from "../../../../../src/components/views/toasts/VerificationRequestToast";
 import {
+    clientAndSDKContextRenderOptions,
     flushPromises,
     getMockClientWithEventEmitter,
     mockClientMethodsCrypto,
     mockClientMethodsUser,
 } from "../../../../test-utils";
 import ToastStore from "../../../../../src/stores/ToastStore";
-
-function renderComponent(
-    props: Partial<ComponentProps<typeof VerificationRequestToast>> & { request: VerificationRequest },
-): RenderResult {
-    const propsWithDefaults = {
-        toastKey: "test",
-        ...props,
-    };
-
-    return render(<VerificationRequestToast {...propsWithDefaults} />);
-}
+import { TestSDKContext } from "../../../TestSDKContext.ts";
 
 describe("VerificationRequestToast", () => {
     let client: Mocked<MatrixClient>;
+    let sdkContext: TestSDKContext;
+
+    function renderComponent(
+        props: Partial<ComponentProps<typeof VerificationRequestToast>> & { request: VerificationRequest },
+    ): RenderResult {
+        const propsWithDefaults = {
+            toastKey: "test",
+            ...props,
+        };
+
+        return render(
+            <VerificationRequestToast {...propsWithDefaults} />,
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
+    }
 
     beforeEach(() => {
         client = getMockClientWithEventEmitter({
@@ -41,6 +47,8 @@ describe("VerificationRequestToast", () => {
             ...mockClientMethodsCrypto(),
             getDevice: jest.fn(),
         });
+        sdkContext = new TestSDKContext();
+        sdkContext._client = client;
     });
 
     it("should render a self-verification", async () => {

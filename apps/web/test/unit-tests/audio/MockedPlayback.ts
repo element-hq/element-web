@@ -9,6 +9,7 @@ import EventEmitter from "events";
 import { SimpleObservable } from "matrix-widget-api";
 
 import { PlaybackState } from "../../../src/audio/Playback";
+import { vi } from "../../setup/adapter.ts";
 
 /**
  * A mocked playback implementation for testing purposes.
@@ -51,8 +52,8 @@ export class MockedPlayback extends EventEmitter {
         return this.waveformObservable;
     }
 
-    public prepare = jest.fn().mockResolvedValue(undefined);
-    public skipTo = jest.fn();
-    public toggle = jest.fn();
-    public destroy = jest.fn().mockResolvedValue(undefined);
+    public prepare = vi.fn().mockResolvedValue(undefined);
+    public skipTo = vi.fn();
+    public toggle = vi.fn();
+    public destroy = vi.fn().mockResolvedValue(undefined);
 }

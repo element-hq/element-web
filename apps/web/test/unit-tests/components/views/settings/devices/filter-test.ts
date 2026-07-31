@@ -7,38 +7,35 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { filterDevicesBySecurityRecommendation } from "../../../../../../src/components/views/settings/devices/filter";
-import { DeviceSecurityVariation } from "../../../../../../src/components/views/settings/devices/types";
-import { DeviceType } from "../../../../../../src/utils/device/parseUserAgent";
+import {
+    DeviceSecurityVariation,
+    type ExtendedDevice,
+} from "../../../../../../src/components/views/settings/devices/types";
 
 const MS_DAY = 86400000;
 describe("filterDevicesBySecurityRecommendation()", () => {
-    const unverifiedNoMetadata = {
+    const unverifiedNoMetadata: ExtendedDevice = {
         device_id: "unverified-no-metadata",
         isVerified: false,
-        deviceType: DeviceType.Unknown,
     };
-    const verifiedNoMetadata = {
+    const verifiedNoMetadata: ExtendedDevice = {
         device_id: "verified-no-metadata",
         isVerified: true,
-        deviceType: DeviceType.Unknown,
     };
-    const hundredDaysOld = {
+    const hundredDaysOld: ExtendedDevice = {
         device_id: "100-days-old",
         isVerified: true,
         last_seen_ts: Date.now() - MS_DAY * 100,
-        deviceType: DeviceType.Unknown,
     };
-    const hundredDaysOldUnverified = {
+    const hundredDaysOldUnverified: ExtendedDevice = {
         device_id: "unverified-100-days-old",
         isVerified: false,
         last_seen_ts: Date.now() - MS_DAY * 100,
-        deviceType: DeviceType.Unknown,
     };
-    const fiftyDaysOld = {
+    const fiftyDaysOld: ExtendedDevice = {
         device_id: "50-days-old",
         isVerified: true,
         last_seen_ts: Date.now() - MS_DAY * 50,
-        deviceType: DeviceType.Unknown,
     };
 
     const devices = [unverifiedNoMetadata, verifiedNoMetadata, hundredDaysOld, hundredDaysOldUnverified, fiftyDaysOld];

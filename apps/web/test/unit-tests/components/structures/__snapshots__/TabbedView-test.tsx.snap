@@ -12,6 +12,7 @@ exports[`<TabbedView /> renders tabs 1`] = `
     >
       <li
         aria-controls="mx_tabpanel_GENERAL"
+        aria-labelledby="mx_tabpanel_GENERAL_label"
         aria-selected="true"
         class="mx_AccessibleButton mx_TabbedView_tabLabel mx_TabbedView_tabLabel_active"
         data-testid="settings-tab-GENERAL"
@@ -38,6 +39,7 @@ exports[`<TabbedView /> renders tabs 1`] = `
       </li>
       <li
         aria-controls="mx_tabpanel_LABS"
+        aria-labelledby="mx_tabpanel_LABS_label"
         aria-selected="false"
         class="mx_AccessibleButton mx_TabbedView_tabLabel"
         data-testid="settings-tab-LABS"
@@ -72,6 +74,7 @@ exports[`<TabbedView /> renders tabs 1`] = `
       </li>
       <li
         aria-controls="mx_tabpanel_APPEARANCE"
+        aria-labelledby="mx_tabpanel_APPEARANCE_label"
         aria-selected="false"
         class="mx_AccessibleButton mx_TabbedView_tabLabel"
         data-testid="settings-tab-APPEARANCE"

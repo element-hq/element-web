@@ -10,16 +10,15 @@ import React from "react";
 import { fireEvent, getByTestId, render } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 
-import { mkRoom, stubClient } from "../../../../test-utils";
-import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
+import { clientAndSDKContextRenderOptions, mkRoom, stubClient } from "../../../../test-utils";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { SpaceItem, SpaceButton } from "../../../../../src/components/views/spaces/SpaceTreeLevel";
 import { MetaSpace, type SpaceKey } from "../../../../../src/stores/spaces";
-import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import { StaticNotificationState } from "../../../../../src/stores/notifications/StaticNotificationState";
 import { NotificationLevel } from "../../../../../src/stores/notifications/NotificationLevel";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
 
 jest.mock("../../../../../src/stores/spaces/SpaceStore", () => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -29,15 +28,16 @@ jest.mock("../../../../../src/stores/spaces/SpaceStore", () => {
         setActiveSpace = jest.fn();
         getChildSpaces = jest.fn();
         getNotificationState = jest.fn();
+        start = jest.fn();
     }
 
-    return { instance: new MockSpaceStore() };
+    return MockSpaceStore;
 });
 
 describe("SpaceButton", () => {
-    stubClient();
-    const space = mkRoom(MatrixClientPeg.safeGet(), "!1:example.org");
-    DMRoomMap.makeShared(MatrixClientPeg.safeGet());
+    const cli = stubClient();
+    const space = mkRoom(cli, "!1:example.org");
+    DMRoomMap.makeShared(cli);
 
     const dispatchSpy = jest.spyOn(defaultDispatcher, "dispatch");
 
@@ -53,11 +53,12 @@ describe("SpaceButton", () => {
                     data-testid="create-space-button"
                     size="32px"
                 />,
+                clientAndSDKContextRenderOptions(cli, SDKContextClass.instance),
             );
 
-            expect(SpaceStore.instance.setActiveSpace).not.toHaveBeenCalled();
+            expect(SDKContextClass.instance.spaceStore.setActiveSpace).not.toHaveBeenCalled();
             fireEvent.click(getByTestId(container, "create-space-button"));
-            expect(SpaceStore.instance.setActiveSpace).toHaveBeenCalledWith("!1:example.org");
+            expect(SDKContextClass.instance.spaceStore.setActiveSpace).toHaveBeenCalledWith("!1:example.org");
         });
 
         it("navigates to the space home on click if already active", () => {
@@ -81,34 +82,36 @@ describe("SpaceButton", () => {
         it("activates the metaspace on click", () => {
             const { container } = render(
                 <SpaceButton
-                    spaceKey={MetaSpace.People}
+                    spaceKey={MetaSpace.Home}
                     selected={false}
-                    label="People"
+                    label="Home"
                     data-testid="create-space-button"
                     size="32px"
                 />,
+                clientAndSDKContextRenderOptions(cli, SDKContextClass.instance),
             );
 
-            expect(SpaceStore.instance.setActiveSpace).not.toHaveBeenCalled();
+            expect(SDKContextClass.instance.spaceStore.setActiveSpace).not.toHaveBeenCalled();
             fireEvent.click(getByTestId(container, "create-space-button"));
-            expect(SpaceStore.instance.setActiveSpace).toHaveBeenCalledWith(MetaSpace.People);
+            expect(SDKContextClass.instance.spaceStore.setActiveSpace).toHaveBeenCalledWith(MetaSpace.Home);
         });
 
         it("does nothing on click if already active", () => {
             const { container } = render(
                 <SpaceButton
-                    spaceKey={MetaSpace.People}
+                    spaceKey={MetaSpace.Home}
                     selected={true}
-                    label="People"
+                    label="Home"
                     data-testid="create-space-button"
                     size="32px"
                 />,
+                clientAndSDKContextRenderOptions(cli, SDKContextClass.instance),
             );
 
             fireEvent.click(getByTestId(container, "create-space-button"));
             expect(dispatchSpy).not.toHaveBeenCalled();
             // Re-activating the metaspace is a no-op
-            expect(SpaceStore.instance.setActiveSpace).toHaveBeenCalledWith(MetaSpace.People);
+            expect(SDKContextClass.instance.spaceStore.setActiveSpace).toHaveBeenCalledWith(MetaSpace.Home);
         });
 
         it("should render notificationState if one is provided", () => {
@@ -116,9 +119,9 @@ describe("SpaceButton", () => {
 
             const { container, asFragment } = render(
                 <SpaceButton
-                    spaceKey={MetaSpace.People}
+                    spaceKey={MetaSpace.Home}
                     selected={true}
-                    label="People"
+                    label="Home"
                     data-testid="create-space-button"
                     notificationState={notificationState}
                     size="32px"
@@ -139,11 +142,14 @@ describe("SpaceItem", () => {
     subspace.name = "Subspace";
 
     it("should render a space with subspaces", () => {
-        mocked(SpaceStore.instance.getChildSpaces).mockImplementation((spaceId) =>
+        mocked(SDKContextClass.instance.spaceStore.getChildSpaces).mockImplementation((spaceId) =>
             spaceId === space.roomId ? [subspace] : [],
         );
 
-        const { asFragment, queryByText, getByLabelText } = render(<SpaceItem space={space} activeSpaces={[]} />);
+        const { asFragment, queryByText, getByLabelText } = render(
+            <SpaceItem space={space} activeSpaces={[]} />,
+            clientAndSDKContextRenderOptions(cli, SDKContextClass.instance),
+        );
 
         expect(queryByText("Root Space")).toBeVisible();
         expect(queryByText("Subspace")).toBeNull();

@@ -10,7 +10,8 @@ import { type MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import { render, screen, fireEvent } from "jest-matrix-react";
 
 import { RoomFilesView } from "../../../../../src/components/views/right_panel/RoomFilesView";
-import { mkEvent, stubClient } from "../../../../test-utils";
+import { clientAndSDKContextRenderOptions, mkEvent, stubClient } from "../../../../test-utils";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
 
 // Stub TimelinePanel so we can capture the `eventFilter` predicate it is handed without rendering a real timeline.
 let mockLastTimelineProps: { eventFilter?: (ev: MatrixEvent) => boolean } = {};
@@ -41,6 +42,8 @@ const renderView = (): void => {
             isRoomEncrypted={false}
             onMeasurement={jest.fn()}
         />,
+        // The card reads the right panel store off the SDK context.
+        clientAndSDKContextRenderOptions(SDKContextClass.instance.client!, SDKContextClass.instance),
     );
 };
 

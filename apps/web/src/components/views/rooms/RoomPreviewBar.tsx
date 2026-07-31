@@ -218,7 +218,7 @@ class RoomPreviewBar extends React.Component<IProps, IState> {
             }
             return MessageCase.Invite;
         } else if (this.props.error) {
-            if ((this.props.error as MatrixError).errcode == "M_NOT_FOUND") {
+            if (this.props.error.errcode === "M_NOT_FOUND") {
                 return MessageCase.RoomNotFound;
             } else {
                 return MessageCase.OtherError;

@@ -70,7 +70,7 @@ describe("MLocationBody", () => {
         });
 
         describe("with error", () => {
-            let sdkConfigSpy: jest.SpyInstance<any>;
+            let sdkConfigSpy: jest.SpyInstance;
 
             beforeEach(() => {
                 // eat expected errors to keep console clean

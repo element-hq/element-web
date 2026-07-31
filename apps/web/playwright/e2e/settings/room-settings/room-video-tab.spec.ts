@@ -8,8 +8,6 @@
 import { type Locator } from "@playwright/test";
 
 import { test, expect } from "../../../element-web-test";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
-
 test.describe("Voice & Video room settings tab", () => {
     const roomName = "Test room";
 
@@ -22,7 +20,6 @@ test.describe("Voice & Video room settings tab", () => {
     test.beforeEach(async ({ user, app, page }) => {
         // Execute client actions before setting, as the setting will force a reload.
         await app.client.createRoom({ name: roomName });
-        await app.settings.setValue("feature_group_calls", null, SettingLevel.DEVICE, true);
         await app.viewRoomByName(roomName);
         settings = await app.settings.openRoomSettings("Voice & Video");
     });

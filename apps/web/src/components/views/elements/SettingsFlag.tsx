@@ -15,17 +15,17 @@ import { logger } from "matrix-js-sdk/src/logger";
 import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";
 import { type SettingLevel } from "../../../settings/SettingLevel";
-import { type BooleanSettingKey, defaultWatchManager } from "../../../settings/Settings";
+import { type NullableBooleanSettingKey, defaultWatchManager } from "../../../settings/Settings";
 
 interface IProps {
     // The setting must be a boolean
-    name: BooleanSettingKey;
+    name: NullableBooleanSettingKey;
     level: SettingLevel;
     roomId?: string; // for per-room settings
     label?: string;
     isExplicit?: boolean;
     hideIfCannotSet?: boolean;
-    requires?: BooleanSettingKey[];
+    requires?: NullableBooleanSettingKey[];
     onChange?(checked: boolean): void;
 }
 

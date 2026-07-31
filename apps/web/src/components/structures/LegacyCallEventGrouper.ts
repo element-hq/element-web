@@ -10,8 +10,9 @@ import { EventType, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { CallEvent, CallState, CallType, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { EventEmitter } from "events";
 
-import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
+import { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
+import { SDKContextClass } from "../../contexts/SDKContextClass.ts";
 
 export enum LegacyCallEventGrouperEvent {
     StateChanged = "state_changed",
@@ -65,8 +66,8 @@ export default class LegacyCallEventGrouper extends EventEmitter {
     public constructor() {
         super();
 
-        LegacyCallHandler.instance.addListener(LegacyCallHandlerEvent.CallsChanged, this.setCall);
-        LegacyCallHandler.instance.addListener(
+        SDKContextClass.instance.legacyCallHandler.addListener(LegacyCallHandlerEvent.CallsChanged, this.setCall);
+        SDKContextClass.instance.legacyCallHandler.addListener(
             LegacyCallHandlerEvent.SilencedCallsChanged,
             this.onSilencedCallsChanged,
         );
@@ -133,7 +134,7 @@ export default class LegacyCallEventGrouper extends EventEmitter {
     }
 
     private onSilencedCallsChanged = (): void => {
-        const newState = LegacyCallHandler.instance.isCallSilenced(this.callId);
+        const newState = SDKContextClass.instance.legacyCallHandler.isCallSilenced(this.callId);
         this.emit(LegacyCallEventGrouperEvent.SilencedChanged, newState);
     };
 
@@ -144,27 +145,27 @@ export default class LegacyCallEventGrouper extends EventEmitter {
     public answerCall = (): void => {
         const roomId = this.roomId;
         if (!roomId) return;
-        LegacyCallHandler.instance.answerCall(roomId);
+        SDKContextClass.instance.legacyCallHandler.answerCall(roomId);
     };
 
     public rejectCall = (): void => {
         const roomId = this.roomId;
         if (!roomId) return;
-        LegacyCallHandler.instance.hangupOrReject(roomId, true);
+        SDKContextClass.instance.legacyCallHandler.hangupOrReject(roomId, true);
     };
 
     public callBack = (): void => {
         const roomId = this.roomId;
         if (!roomId) return;
-        LegacyCallHandler.instance.placeCall(roomId, this.isVoice ? CallType.Voice : CallType.Video);
+        SDKContextClass.instance.legacyCallHandler.placeCall(roomId, this.isVoice ? CallType.Voice : CallType.Video);
     };
 
     public toggleSilenced = (): void => {
-        const silenced = LegacyCallHandler.instance.isCallSilenced(this.callId);
+        const silenced = SDKContextClass.instance.legacyCallHandler.isCallSilenced(this.callId);
         if (silenced) {
-            LegacyCallHandler.instance.unSilenceCall(this.callId);
+            SDKContextClass.instance.legacyCallHandler.unSilenceCall(this.callId);
         } else {
-            LegacyCallHandler.instance.silenceCall(this.callId);
+            SDKContextClass.instance.legacyCallHandler.silenceCall(this.callId);
         }
     };
 
@@ -195,7 +196,7 @@ export default class LegacyCallEventGrouper extends EventEmitter {
         const callId = this.callId;
         if (!callId || this.call) return;
 
-        this.call = LegacyCallHandler.instance.getCallById(callId);
+        this.call = SDKContextClass.instance.legacyCallHandler.getCallById(callId);
         this.setCallListeners();
         this.setState();
     };

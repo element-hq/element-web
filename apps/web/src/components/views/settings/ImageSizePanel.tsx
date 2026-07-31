@@ -15,8 +15,8 @@ import { _t } from "../../../languageHandler";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import { ImageSize } from "../../../settings/enums/ImageSize";
 import { SettingsSubsection } from "./shared/SettingsSubsection";
-import { Icon as ImgSizeNormalIcon } from "../../../../res/img/element-icons/settings/img-size-normal.svg";
-import { Icon as ImgSizeLargeIcon } from "../../../../res/img/element-icons/settings/img-size-large.svg";
+import ImgSizeNormalIcon from "../../../../res/img/element-icons/settings/img-size-normal.svg?react";
+import ImgSizeLargeIcon from "../../../../res/img/element-icons/settings/img-size-large.svg?react";
 
 interface IState {
     size: ImageSize;

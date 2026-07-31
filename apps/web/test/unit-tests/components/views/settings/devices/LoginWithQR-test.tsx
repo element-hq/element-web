@@ -16,7 +16,7 @@ import {
     RendezvousError,
     RendezvousIntent,
 } from "matrix-js-sdk/src/rendezvous";
-import { mockOpenIdConfiguration } from "matrix-js-sdk/src/testing";
+import { makeDelegatedAuthMetadata } from "matrix-js-sdk/src/testing";
 import {
     AutoDiscovery,
     AutoDiscoveryAction,
@@ -61,7 +61,7 @@ function makeClient() {
         getClientWellKnown: jest.fn().mockReturnValue({}),
         getCrypto: jest.fn().mockReturnValue({}),
         getDomain: jest.fn(),
-        getAuthMetadata: jest.fn().mockReturnValue(mockOpenIdConfiguration()),
+        getAuthMetadata: jest.fn().mockReturnValue(makeDelegatedAuthMetadata()),
     } as unknown as MatrixClient);
 
     cli.http = new MatrixHttpApi(cli, {
@@ -330,24 +330,23 @@ describe("<LoginWithQR />", () => {
             test("should handle qr login", async () => {
                 fetchMock.get("https://hs/_matrix/client/versions", {
                     unstable_features: {},
-                    versions: ["v1.1", "v1.5", "v1.6", "v1.8", "v1.9"],
+                    versions: ["v1.1", "v1.5", "v1.6", "v1.8", "v1.9", "v1.15"],
                 });
-                const authMetadata = {
-                    ...mockOpenIdConfiguration("https://auth.org/", [OAuthGrantType.DeviceAuthorization]),
-                    jwks_uri: undefined,
-                };
-                fetchMock.get("https://hs/_matrix/client/unstable/org.matrix.msc2965/auth_metadata", authMetadata);
+                const authMetadata = makeDelegatedAuthMetadata("https://auth.org/", [
+                    OAuthGrantType.DeviceAuthorization,
+                ]);
+                fetchMock.get("https://hs/_matrix/client/v1/auth_metadata", authMetadata);
                 fetchMock.post(authMetadata.registration_endpoint!, {
                     client_id: "!client_id!",
                 });
 
                 mockPlatformPeg({
-                    getOidcClientMetadata: jest.fn().mockReturnValue({
-                        clientName: "App name",
-                        clientUri: "https://company",
-                        redirectUris: ["https://app"],
-                        logoUri: "https://company/logo.png",
-                        applicationType: "web",
+                    getOAuthClientMetadata: jest.fn().mockReturnValue({
+                        client_name: "App name",
+                        client_uri: "https://company",
+                        redirect_uris: ["https://app"],
+                        logo_uri: "https://company/logo.png",
+                        application_type: "web",
                     }),
                 });
 

@@ -5,16 +5,24 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { beforeEach, afterEach } from "vitest";
+import { vi, beforeEach, afterEach } from "vitest";
 import fetchMock, { manageFetchMockGlobally } from "@fetch-mock/vitest";
 
 import SdkConfig, { DEFAULTS } from "../SdkConfig";
 import "./setupGlobals.ts";
 import { setupLanguageMock } from "./setupLanguage.ts";
 
+declare global {
+    var IS_REACT_ACT_ENVIRONMENT: boolean;
+}
+
+globalThis.IS_REACT_ACT_ENVIRONMENT = true;
+
 manageFetchMockGlobally();
 
 beforeEach(() => {
+    vi.stubEnv("TZ", "UTC");
+
     // set up fetch API mock
     fetchMock.hardReset();
     fetchMock.catch(404);

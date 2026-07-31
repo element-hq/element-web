@@ -26,7 +26,7 @@ export interface UploadButtonViewSnapshot {
 }
 
 export interface UploadButtonViewActions {
-    onUploadOptionSelected(type: string): void;
+    onUploadOptionSelected(this: void, type: string): void;
 }
 
 /**

@@ -237,7 +237,7 @@ function isRuleRoomMuteRuleForRoomId(roomId: string, rule: IPushRule): boolean {
         return false;
     }
     // isRuleMaybeRoomMuteRule checks this condition exists
-    const cond = rule.conditions![0]!;
+    const cond = rule.conditions![0];
     return cond.pattern === roomId;
 }
 

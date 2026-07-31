@@ -27,7 +27,16 @@ export default defineConfig({
         sourcemap: true,
     },
     plugins: [
-        dts(),
+        dts({
+            bundleTypes: {
+                configPath: "./api-extractor.json",
+                invokeOptions: {
+                    // Always overwrite element-web-module-api.api.md
+                    localBuild: true,
+                    typescriptCompilerFolder: resolve(require.resolve("@typescript/old"), "../.."),
+                },
+            },
+        }),
         externalGlobals({
             // Reuse React from the host app
             react: "window.React",

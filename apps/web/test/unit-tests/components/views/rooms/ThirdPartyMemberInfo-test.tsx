@@ -11,7 +11,12 @@ import { render, screen } from "jest-matrix-react";
 import { EventType, type IEvent, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 
 import ThirdPartyMemberInfo from "../../../../../src/components/views/rooms/ThirdPartyMemberInfo";
-import { getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../../test-utils";
+import {
+    clientAndSDKContextRenderOptions,
+    getMockClientWithEventEmitter,
+    mockClientMethodsUser,
+} from "../../../../test-utils";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
 
 describe("<ThirdPartyMemberInfo />", () => {
     const userId = "@alice:server.org";
@@ -37,7 +42,11 @@ describe("<ThirdPartyMemberInfo />", () => {
         });
     const defaultEvent = makeInviteEvent();
 
-    const getComponent = (event: MatrixEvent = defaultEvent) => render(<ThirdPartyMemberInfo event={event} />);
+    const getComponent = (event: MatrixEvent = defaultEvent) =>
+        render(
+            <ThirdPartyMemberInfo event={event} />,
+            clientAndSDKContextRenderOptions(mockClient, SDKContextClass.instance),
+        );
     const room = new Room(roomId, mockClient, userId);
     const aliceMember = new RoomMember(roomId, userId);
     aliceMember.name = "Alice DisplayName";

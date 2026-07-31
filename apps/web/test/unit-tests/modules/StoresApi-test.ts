@@ -14,7 +14,6 @@ import RoomListStoreV3, {
 } from "../../../src/stores/room-list-v3/RoomListStoreV3";
 import { mkRoom, stubClient } from "../../test-utils/test-utils";
 import { Room } from "../../../src/modules/models/Room";
-import {} from "../../../src/stores/room-list/algorithms/Algorithm";
 
 describe("StoresApi", () => {
     describe("RoomListStoreApi", () => {

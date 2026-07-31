@@ -40,7 +40,7 @@ export default class BridgeSettingsTab extends React.Component<IProps> {
         const roomState = client.getRoom(roomId)?.currentState;
         if (!roomState) return [];
 
-        return BRIDGE_EVENT_TYPES.map((typeName) => roomState.getStateEvents(typeName)).flat(1);
+        return BRIDGE_EVENT_TYPES.flatMap((typeName) => roomState.getStateEvents(typeName));
     }
 
     public render(): React.ReactNode {

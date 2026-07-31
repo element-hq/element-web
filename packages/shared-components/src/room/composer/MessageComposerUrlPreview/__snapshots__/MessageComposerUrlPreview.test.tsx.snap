@@ -1,0 +1,80 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`MessageComposerUrlPreview > renders a preview 1`] = `
+<div>
+  <div
+    class="MessageComposerUrlPreview-module_container"
+  >
+    <div>
+      <div
+        class="MessageComposerUrlPreview-module_text"
+      >
+        <div
+          class="LinkPreview-module_siteName"
+        >
+          <span
+            class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+          >
+            matrix.org
+          </span>
+        </div>
+        <a
+          class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 LinkPreview-module_title"
+          href="https://matrix.org"
+          rel="noreferrer noopener"
+          target="_blank"
+        >
+          A simple title
+        </a>
+        <p
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 MessageComposerUrlPreview-module_description"
+        >
+          A simple description
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`MessageComposerUrlPreview > renders a preview with an image 1`] = `
+<div>
+  <div
+    class="MessageComposerUrlPreview-module_container"
+  >
+    <div>
+      <img
+        alt="The element logo"
+        class="MessageComposerUrlPreview-module_image"
+        src="/static/wideImage.png"
+      />
+      <div
+        class="MessageComposerUrlPreview-module_text"
+      >
+        <div
+          class="LinkPreview-module_siteName"
+        >
+          <span
+            class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+          >
+            matrix.org
+          </span>
+        </div>
+        <a
+          class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 LinkPreview-module_title"
+          href="https://matrix.org"
+          rel="noreferrer noopener"
+          target="_blank"
+        >
+          A simple title
+        </a>
+        <p
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 MessageComposerUrlPreview-module_description"
+        >
+          A simple description
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
