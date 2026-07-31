@@ -1642,32 +1642,26 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
 
         cli.on(HttpApiEvent.SessionLoggedOut, (errObj) => {
-            this.loadSessionAbortController.abort(errObj);
-            this.loadSessionAbortController = new AbortController();
-
             if (Lifecycle.isLoggingOut()) return;
 
-            // A modal might have been open when we were logged out by the server
-            Modal.forceCloseAllModals();
-
-            if (errObj.httpStatus === 401) {
-                logger.warn("Session invalidated by server - preserving local data with a soft logout");
-                Lifecycle.softLogout();
-                return;
-            }
-
-            dis.dispatch(
-                {
-                    action: "logout",
-                },
-                true,
-            );
-
-            // The above dispatch closes all modals, so open the modal after calling it synchronously
-            Modal.createDialog(ErrorDialog, {
-                title: _t("auth|session_logged_out_title"),
-                description: _t("auth|session_logged_out_description"),
-            });
+            /*
+             * The SDK emits this event for every authenticated HTTP 401, including
+             * a failed background/media request.  That is not proof that the
+             * homeserver revoked the account token.  Treating it as a global logout
+             * made Element discard a usable session and display "session removed".
+             *
+             * Keep the client and its stores alive, just as the Spark client does.
+             * A user-initiated logout still follows Lifecycle.logout() above.  Store
+             * only non-sensitive diagnostics locally so a real server issue can be
+             * identified without sacrificing the active session.
+             */
+            const diagnostic = {
+                at: new Date().toISOString(),
+                httpStatus: errObj.httpStatus,
+                errcode: errObj.errcode,
+            };
+            localStorage.setItem("mx_last_auth_error", JSON.stringify(diagnostic));
+            logger.warn("Authenticated Matrix request returned an error; keeping the active session", diagnostic);
         });
         cli.on(HttpApiEvent.NoConsent, function (message, consentUri) {
             const { finished } = Modal.createDialog(

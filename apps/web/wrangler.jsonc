@@ -5,6 +5,7 @@
     "compatibility_date": "2026-07-31",
     "vars": {
         "SPARK_BASE_URL": "https://api.inferera.com/v1",
+        "SPARK_FALLBACK_BASE_URL": "https://aihubmix.com/v1",
         "SPARK_OCR_MODEL": "glm-ocr",
         "SPARK_ASR_MODEL": "whisper-large-v3-turbo",
     },

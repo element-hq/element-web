@@ -87,7 +87,7 @@ export async function blobIsAnimated(blob: Blob): Promise<boolean | undefined> {
 
             // Graphics Control Extension section is where GIF animation data is stored
             // First 2 bytes must be 0x21 and 0xF9
-            if (extensionIntroducer & 0x21 && graphicsControlLabel & 0xf9) {
+            if (extensionIntroducer === 0x21 && graphicsControlLabel === 0xf9) {
                 // skip to the 2 bytes with the delay time
                 delayTime = dv.getUint16(offset + 4);
             }

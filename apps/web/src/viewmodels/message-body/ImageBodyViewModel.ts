@@ -382,6 +382,20 @@ export class ImageBodyViewModel
         }
 
         const autoplayGifs = SettingsStore.getValue("autoplayGifs");
+        if (isAnimated) {
+            try {
+                // The event MIME type is only a candidate.  Use the decoded media
+                // to distinguish a real animation from a static PNG/WebP/AVIF.
+                const sourceBlob = this.props.mediaEventHelper
+                    ? await this.props.mediaEventHelper.sourceBlob.value
+                    : await fetch(contentUrl ?? "").then((response) => response.blob());
+                isAnimated = (await blobIsAnimated(sourceBlob)) === true;
+            } catch (error) {
+                logger.warn("Unable to determine whether image is animated: ", error);
+                isAnimated = false;
+            }
+        }
+
         if (isAnimated && !autoplayGifs) {
             if (!thumbUrl || !content.info?.thumbnail_info || mayBeAnimated(content.info.thumbnail_info.mimetype)) {
                 const image = document.createElement("img");
@@ -406,25 +420,15 @@ export class ImageBodyViewModel
                 }
 
                 try {
-                    if (
-                        content.info?.["org.matrix.msc4230.is_animated"] === false ||
-                        (this.props.mediaEventHelper &&
-                            (await blobIsAnimated(await this.props.mediaEventHelper.sourceBlob.value)) === false)
-                    ) {
-                        isAnimated = false;
-                    }
-
-                    if (isAnimated) {
-                        const thumbnail = await createThumbnail(
-                            image,
-                            image.width,
-                            image.height,
-                            content.info?.mimetype ?? "image/jpeg",
-                            false,
-                        );
-                        generatedThumbnailUrl = URL.createObjectURL(thumbnail.thumbnail);
-                        thumbUrl = generatedThumbnailUrl;
-                    }
+                    const thumbnail = await createThumbnail(
+                        image,
+                        image.width,
+                        image.height,
+                        content.info?.mimetype ?? "image/jpeg",
+                        false,
+                    );
+                    generatedThumbnailUrl = URL.createObjectURL(thumbnail.thumbnail);
+                    thumbUrl = generatedThumbnailUrl;
                 } catch (error) {
                     logger.warn("Unable to generate thumbnail for animated image: ", error);
                 }

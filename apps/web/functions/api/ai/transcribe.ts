@@ -4,7 +4,7 @@ Copyright 2026 Element contributors
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 */
 
-import { apiUrl, jsonError, providerHeaders, type Env } from "./_shared";
+import { fetchWithProviderFallback, jsonError, providerHeaders, type Env } from "./_shared";
 
 interface Context {
     request: Request;
@@ -12,26 +12,40 @@ interface Context {
 }
 
 const MAX_AUDIO_SIZE = 25 * 1024 * 1024;
+const NOT_CONFIGURED = "\u0041\u0049 \u670d\u52a1\u5c1a\u672a\u5b8c\u6210\u90e8\u7f72\u914d\u7f6e";
+const MISSING_AUDIO = "\u7f3a\u5c11\u97f3\u9891\u6587\u4ef6";
+const TOO_LARGE = "\u97f3\u9891\u8f6c\u5199\u4ec5\u652f\u6301\u4e0d\u8d85\u8fc7 25 MB \u7684\u6587\u4ef6";
+const UPSTREAM_UNAVAILABLE = "\u4e0a\u6e38\u8f6c\u5199\u670d\u52a1\u6682\u65f6\u4e0d\u53ef\u7528";
+const EMPTY_RESPONSE = "\u8f6c\u5199\u670d\u52a1\u672a\u8fd4\u56de\u6587\u672c";
 
 export const onRequestPost = async ({ request, env }: Context): Promise<Response> => {
-    if (!env.SPARK_API_KEY || !env.SPARK_BASE_URL || !env.SPARK_ASR_MODEL)
-        return jsonError("AI 服务尚未完成部署配置", 503);
+    if (!env.SPARK_API_KEY || !env.SPARK_BASE_URL || !env.SPARK_ASR_MODEL) {
+        return jsonError(NOT_CONFIGURED, 503);
+    }
+
     const requestForm = await request.formData().catch(() => undefined);
     const audio = requestForm?.get("file");
-    if (!(audio instanceof File)) return jsonError("缺少音频文件");
-    if (audio.size > MAX_AUDIO_SIZE) return jsonError("音频转写仅支持不超过 25 MB 的文件", 413);
+    if (!(audio instanceof File)) return jsonError(MISSING_AUDIO);
+    if (audio.size > MAX_AUDIO_SIZE) return jsonError(TOO_LARGE, 413);
 
     const form = new FormData();
     form.append("model", env.SPARK_ASR_MODEL);
     form.append("file", audio, audio.name || "audio");
-    const upstream = await fetch(apiUrl(env, "/audio/transcriptions"), {
-        method: "POST",
-        headers: providerHeaders(env),
-        body: form,
-    });
+
+    let upstream: Response;
+    try {
+        upstream = await fetchWithProviderFallback(env, "/audio/transcriptions", {
+            method: "POST",
+            headers: providerHeaders(env),
+            body: form,
+        });
+    } catch {
+        return jsonError(UPSTREAM_UNAVAILABLE, 502);
+    }
+
     const payload = (await upstream.json().catch(() => ({}))) as { text?: unknown };
-    if (!upstream.ok) return jsonError("上游转写服务暂时不可用", 502);
+    if (!upstream.ok) return jsonError(UPSTREAM_UNAVAILABLE, 502);
     return typeof payload.text === "string" && payload.text.trim()
         ? Response.json({ text: payload.text.trim() })
-        : jsonError("转写服务未返回文本", 502);
+        : jsonError(EMPTY_RESPONSE, 502);
 };

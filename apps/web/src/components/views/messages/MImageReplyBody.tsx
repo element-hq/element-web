@@ -261,8 +261,24 @@ export class ImageBodyBaseInner extends React.Component<ImageBodyBaseProps, ISta
 
         const content = this.props.mxEvent.getContent<ImageContent>();
         let isAnimated = content.info?.["org.matrix.msc4230.is_animated"] ?? mayBeAnimated(content.info?.mimetype);
+        const autoplayGifs = SettingsStore.getValue("autoplayGifs");
 
-        if (isAnimated && !SettingsStore.getValue("autoplayGifs")) {
+        if (isAnimated) {
+            try {
+                // MIME types only identify formats that *can* be animated. Verify
+                // the actual media before showing a GIF badge or changing it on hover.
+                const sourceBlob = this.props.mediaEventHelper
+                    ? await this.props.mediaEventHelper.sourceBlob.value
+                    : await fetch(contentUrl ?? "").then((response) => response.blob());
+                isAnimated = (await blobIsAnimated(sourceBlob)) === true;
+            } catch (error) {
+                logger.warn("Unable to determine whether image is animated: ", error);
+                // Avoid mislabelling a static image when the file cannot be inspected.
+                isAnimated = false;
+            }
+        }
+
+        if (isAnimated && !autoplayGifs) {
             if (!thumbUrl || !content?.info?.thumbnail_info || mayBeAnimated(content.info.thumbnail_info.mimetype)) {
                 const img = document.createElement("img");
                 const loadPromise = new Promise((resolve, reject) => {
@@ -281,23 +297,14 @@ export class ImageBodyBaseInner extends React.Component<ImageBodyBaseProps, ISta
                 }
 
                 try {
-                    if (
-                        content.info?.["org.matrix.msc4230.is_animated"] === false ||
-                        (await blobIsAnimated(await this.props.mediaEventHelper!.sourceBlob.value)) === false
-                    ) {
-                        isAnimated = false;
-                    }
-
-                    if (isAnimated) {
-                        const thumb = await createThumbnail(
-                            img,
-                            img.width,
-                            img.height,
-                            content.info?.mimetype ?? "image/jpeg",
-                            false,
-                        );
-                        thumbUrl = URL.createObjectURL(thumb.thumbnail);
-                    }
+                    const thumb = await createThumbnail(
+                        img,
+                        img.width,
+                        img.height,
+                        content.info?.mimetype ?? "image/jpeg",
+                        false,
+                    );
+                    thumbUrl = URL.createObjectURL(thumb.thumbnail);
                 } catch (error) {
                     logger.warn("Unable to generate thumbnail for animated image: ", error);
                 }
