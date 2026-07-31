@@ -274,6 +274,46 @@ describe("ImageBodyViewModel", () => {
         });
     });
 
+    it("corrects the aspect ratio when event info disagrees with the loaded image", () => {
+        const imageRefWithDimensions = {
+            current: {
+                naturalWidth: 480,
+                naturalHeight: 640,
+            },
+        } as RefObject<HTMLImageElement>;
+        const vm = createVm({
+            imageRef: imageRefWithDimensions,
+            mediaVisible: true,
+            // The sender claimed landscape, but the picture is portrait.
+            mxEvent: createEvent({ content: { info: { w: 640, h: 480 } } }),
+        });
+
+        // Guard: before the image loads we have nothing but the event info to go on.
+        expect(vm.getSnapshot().aspectRatio).toBe("640/480");
+
+        vm.onImageLoad();
+
+        expect(vm.getSnapshot().aspectRatio).toBe("480/640");
+    });
+
+    it("keeps the event info aspect ratio when the loaded image reports no dimensions", () => {
+        const imageRefWithoutDimensions = {
+            current: {
+                naturalWidth: 0,
+                naturalHeight: 0,
+            },
+        } as RefObject<HTMLImageElement>;
+        const vm = createVm({
+            imageRef: imageRefWithoutDimensions,
+            mediaVisible: true,
+            mxEvent: createEvent({ content: { info: { w: 640, h: 480 } } }),
+        });
+
+        vm.onImageLoad();
+
+        expect(vm.getSnapshot().aspectRatio).toBe("640/480");
+    });
+
     it("switches from blurhash placeholder after the delay", () => {
         jest.useFakeTimers();
         const vm = createVm({
