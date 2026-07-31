@@ -1650,8 +1650,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // A modal might have been open when we were logged out by the server
             Modal.forceCloseAllModals();
 
-            if (errObj.httpStatus === 401 && errObj.data?.["soft_logout"]) {
-                logger.warn("Soft logout issued by server - avoiding data deletion");
+            if (errObj.httpStatus === 401) {
+                logger.warn("Session invalidated by server - preserving local data with a soft logout");
                 Lifecycle.softLogout();
                 return;
             }
