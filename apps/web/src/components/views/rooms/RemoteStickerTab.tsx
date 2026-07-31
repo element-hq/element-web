@@ -72,56 +72,74 @@ const RemoteStickerTab: React.FC<Props> = ({ room, threadId, replyToEvent, onIns
                     value={query}
                     onChange={(event) => setQuery(event.target.value)}
                 />
-                <select
-                    className="mx_RemoteStickerTab_pack"
-                    value={pack}
-                    onChange={(event) => setPack(event.target.value)}
-                >
-                    <option value="all">全部</option>
-                    {packs.map((item) => (
-                        <option key={item.id} value={item.id}>
-                            {item.name || item.id}
-                        </option>
-                    ))}
-                </select>
             </div>
-            <div className="mx_RemoteStickerTab_grid" role="grid" aria-label="云端表情">
-                {stickers.map((sticker: RemoteSticker, offset) => {
-                    const id = sticker.id || `${sticker.packId || "remote"}-${stickerName(sticker)}-${offset}`;
-                    return (
-                        <AccessibleButton
-                            key={id}
-                            className="mx_RemoteStickerTab_item"
-                            title={stickerName(sticker)}
-                            disabled={sending === id}
-                            onClick={async () => {
-                                setSending(id);
-                                setError(undefined);
-                                try {
-                                    const targetEncrypted = Boolean(
-                                        await room.client.getCrypto()?.isEncryptionEnabledInRoom(room.roomId),
-                                    );
-                                    if (!targetEncrypted) {
-                                        onInsertEmoticon(await prepareRemoteEmoticon(room, sticker));
-                                    } else {
-                                        await sendRemoteSticker(room, threadId, sticker, replyToEvent);
-                                        onSent();
+            <div className="mx_RemoteStickerTab_content">
+                <div className="mx_RemoteStickerTab_grid" role="grid" aria-label="云端表情">
+                    {stickers.map((sticker: RemoteSticker, offset) => {
+                        const id = sticker.id || `${sticker.packId || "remote"}-${stickerName(sticker)}-${offset}`;
+                        return (
+                            <AccessibleButton
+                                key={id}
+                                className="mx_RemoteStickerTab_item"
+                                title={stickerName(sticker)}
+                                disabled={sending === id}
+                                onClick={async () => {
+                                    setSending(id);
+                                    setError(undefined);
+                                    try {
+                                        const targetEncrypted = Boolean(
+                                            await room.client.getCrypto()?.isEncryptionEnabledInRoom(room.roomId),
+                                        );
+                                        if (!targetEncrypted) {
+                                            onInsertEmoticon(await prepareRemoteEmoticon(room, sticker));
+                                        } else {
+                                            await sendRemoteSticker(room, threadId, sticker, replyToEvent);
+                                            onSent();
+                                        }
+                                    } catch (cause) {
+                                        setError(cause instanceof Error ? cause.message : "发送云端表情失败");
+                                    } finally {
+                                        setSending(undefined);
                                     }
-                                } catch (cause) {
-                                    setError(cause instanceof Error ? cause.message : "发送云端表情失败");
-                                } finally {
-                                    setSending(undefined);
-                                }
-                            }}
-                        >
-                            <img
-                                loading="lazy"
-                                src={stickerPreviewUrl(sticker, room.client)}
-                                alt={stickerName(sticker)}
-                            />
-                        </AccessibleButton>
-                    );
-                })}
+                                }}
+                            >
+                                <img
+                                    loading="lazy"
+                                    src={stickerPreviewUrl(sticker, room.client)}
+                                    alt={stickerName(sticker)}
+                                />
+                            </AccessibleButton>
+                        );
+                    })}
+                </div>
+                <div className="mx_RemoteStickerTab_packRail" aria-label="表情分类">
+                    <AccessibleButton
+                        className="mx_RemoteStickerTab_packButton"
+                        data-active={pack === "all" || undefined}
+                        onClick={() => setPack("all")}
+                        title="全部表情"
+                    >
+                        全部
+                    </AccessibleButton>
+                    {packs.map((item) => {
+                        const preview = index.items?.find((sticker) => sticker.packId === item.id);
+                        return (
+                            <AccessibleButton
+                                key={item.id}
+                                className="mx_RemoteStickerTab_packButton"
+                                data-active={pack === item.id || undefined}
+                                onClick={() => setPack(item.id)}
+                                title={item.name || item.id}
+                            >
+                                {preview ? (
+                                    <img src={stickerPreviewUrl(preview, room.client)} alt={item.name || item.id} />
+                                ) : (
+                                    <span>{(item.name || item.id).slice(0, 1)}</span>
+                                )}
+                            </AccessibleButton>
+                        );
+                    })}
+                </div>
             </div>
         </div>
     );

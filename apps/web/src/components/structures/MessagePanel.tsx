@@ -1159,7 +1159,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                                 type="button"
                                 onClick={this.clearForwardSelection}
                             >
-                                取消
+                                清空选择
                             </button>
                         </div>
                     )}
