@@ -1288,6 +1288,29 @@ describe("<MatrixChat />", () => {
                 ).resolves.toBeVisible();
             });
 
+            it("should ignore a screen requested from the URL if unskippable verification is on", async () => {
+                // See https://github.com/element-hq/element-web/issues/31264
+                // Given we have force verification on, and an existing logged-in session
+                // that is not verified (see beforeEach())
+                const ref = createRef<MatrixChat>();
+                getComponent({}, ref);
+
+                // And we are being asked to verify our device
+                await screen.findByRole("heading", { name: "Confirm your digital identity", level: 2 });
+                vi.mocked(defaultDispatcher.dispatch).mockClear();
+
+                // When someone pokes a room into the URL hash
+                ref.current!.showScreen("room/!room:server");
+
+                // Then the request is dropped, and we are still being asked to verify
+                expect(defaultDispatcher.dispatch).not.toHaveBeenCalledWith(
+                    expect.objectContaining({ action: Action.ViewRoom }),
+                );
+                await expect(
+                    screen.findByRole("heading", { name: "Confirm your digital identity", level: 2 }),
+                ).resolves.toBeVisible();
+            });
+
             it("should not open app after cancelling device verify if unskippable verification is on", async () => {
                 // See https://github.com/element-hq/element-web/issues/29230
                 // We used to allow bypassing force verification by choosing "Verify with
