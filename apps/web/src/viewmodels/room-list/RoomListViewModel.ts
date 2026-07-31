@@ -566,7 +566,6 @@ export class RoomListViewModel
      */
     private handleViewRoomDelta(payload: ViewRoomDeltaPayload): void {
         const currentRoomId = this.props.roomViewStore.getRoomId();
-        if (!currentRoomId) return;
 
         const { delta, unread } = payload;
         const rooms = this.sections.flatMap((section) => section.rooms);
@@ -579,14 +578,22 @@ export class RoomListViewModel
               })
             : rooms;
 
-        const currentIndex = filteredRooms.findIndex((room) => room.roomId === currentRoomId);
-        if (currentIndex === -1) return;
-
         // Get the next/previous new room according to the delta
         // Use slice to loop on the list
         // If delta is -1 at the start of the list, it will go to the end
         // If delta is 1 at the end of the list, it will go to the start
-        const [newRoom] = filteredRooms.slice((currentIndex + delta) % filteredRooms.length);
+        let start: number;
+        if (currentRoomId) {
+            const currentIndex = filteredRooms.findIndex((room) => room.roomId === currentRoomId);
+            if (currentIndex === -1) return;
+            start = (currentIndex + delta) % filteredRooms.length;
+        } else {
+            // No room is open, which is the case right after the app loads. There is nothing to
+            // move relative to, so start from whichever end of the list the delta points at.
+            start = delta > 0 ? 0 : -1;
+        }
+
+        const [newRoom] = filteredRooms.slice(start);
         if (!newRoom) return;
 
         dispatcher.dispatch<ViewRoomPayload>({
