@@ -33,6 +33,7 @@ import { doMaybeLocalRoomAction } from "../../../utils/local-room";
 interface IProps {
     room: Room;
     threadId?: string;
+    replyToEvent?: MatrixEvent;
     editingMxEvent?: MatrixEvent; // Truthy if we are editing an existing poll
     onFinished(pollCreated?: boolean): void;
 }
@@ -136,6 +137,15 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
         ).serialize();
 
         if (!this.props.editingMxEvent) {
+            if (this.props.replyToEvent?.getId()) {
+                return {
+                    ...pollStart,
+                    content: {
+                        ...pollStart.content,
+                        "m.relates_to": { "m.in_reply_to": { event_id: this.props.replyToEvent.getId() } },
+                    },
+                };
+            }
             return pollStart;
         } else {
             return {

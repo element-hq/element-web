@@ -12,6 +12,7 @@ import {
     type IEventRelation,
     type Room,
     type MatrixClient,
+    type MatrixEvent,
     THREAD_RELATION_TYPE,
     M_POLL_START,
 } from "matrix-js-sdk/src/matrix";
@@ -67,7 +68,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
     const matrixClient = useContext(MatrixClientContext);
     const roomUploadVM = useRoomUploadViewModel();
     const roomUploadSnapshot = useViewModel(roomUploadVM);
-    const { room, narrow } = useScopedRoomContext("room", "narrow");
+    const { room, narrow, replyToEvent } = useScopedRoomContext("room", "narrow", "replyToEvent");
 
     const isWysiwygLabEnabled = useSettingValue("feature_wysiwyg_composer");
 
@@ -101,7 +102,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             )),
             showStickersButton(props),
             voiceRecordingButton(props, narrow),
-            props.showPollsButton ? pollButton(room, props.relation) : null,
+            props.showPollsButton ? pollButton(room, props.relation, replyToEvent) : null,
             notebookButton(roomUploadVM, props.toggleButtonMenu),
             showLocationButton(props, room, matrixClient),
         ];
@@ -218,13 +219,14 @@ function voiceRecordingButton(props: IProps, narrow: boolean): ReactElement | nu
     );
 }
 
-function pollButton(room: Room, relation?: IEventRelation): ReactElement {
-    return <PollButton key="polls" room={room} relation={relation} />;
+function pollButton(room: Room, relation?: IEventRelation, replyToEvent?: MatrixEvent): ReactElement {
+    return <PollButton key="polls" room={room} relation={relation} replyToEvent={replyToEvent} />;
 }
 
 interface IPollButtonProps {
     room: Room;
     relation?: IEventRelation;
+    replyToEvent?: MatrixEvent;
 }
 
 class PollButton extends React.PureComponent<IPollButtonProps> {
@@ -251,6 +253,7 @@ class PollButton extends React.PureComponent<IPollButtonProps> {
                 {
                     room: this.props.room,
                     threadId,
+                    replyToEvent: this.props.replyToEvent,
                 },
                 "mx_CompoundDialog",
                 false, // isPriorityModal
