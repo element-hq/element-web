@@ -47,7 +47,7 @@ async function idbInit(): Promise<void> {
 async function idbTransaction(
     table: string,
     mode: IDBTransactionMode,
-    fn: (objectStore: IDBObjectStore) => IDBRequest<any>,
+    fn: (objectStore: IDBObjectStore) => IDBRequest,
 ): Promise<any> {
     if (!idb) {
         await idbInit();

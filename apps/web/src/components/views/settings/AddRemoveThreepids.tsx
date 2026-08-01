@@ -127,7 +127,7 @@ const ExistingThreepid: React.FC<ExistingThreepidProps> = ({ mode, threepid, onC
                     threepid.medium === "email"
                         ? _t("settings|general|error_revoke_email_discovery")
                         : _t("settings|general|error_revoke_msisdn_discovery"),
-            }).then();
+            });
         },
         [changeBinding, threepid.medium],
     );
@@ -143,7 +143,7 @@ const ExistingThreepid: React.FC<ExistingThreepidProps> = ({ mode, threepid, onC
                     threepid.medium === "email"
                         ? _t("settings|general|error_share_email_discovery")
                         : _t("settings|general|error_share_msisdn_discovery"),
-            }).then();
+            });
         },
         [changeBinding, threepid.medium],
     );

@@ -316,14 +316,14 @@ enum Action {
     ReadEvents = "read_events",
 }
 
-function sendResponse(event: MessageEvent<any>, res: any): void {
+function sendResponse(event: MessageEvent, res: any): void {
     const data = objectClone(event.data);
     data.response = res;
     // @ts-ignore
     event.source.postMessage(data, event.origin);
 }
 
-function sendError(event: MessageEvent<any>, msg: string, nestedError?: Error): void {
+function sendError(event: MessageEvent, msg: string, nestedError?: Error): void {
     logger.error("Action:" + event.data.action + " failed with message: " + msg);
     const data = objectClone(event.data);
     data.response = {
@@ -338,7 +338,7 @@ function sendError(event: MessageEvent<any>, msg: string, nestedError?: Error): 
     event.source.postMessage(data, event.origin);
 }
 
-function inviteUser(event: MessageEvent<any>, roomId: string, userId: string): void {
+function inviteUser(event: MessageEvent, roomId: string, userId: string): void {
     logger.log(`Received request to invite ${userId} into room ${roomId}`);
     const client = MatrixClientPeg.get();
     if (!client) {
@@ -372,7 +372,7 @@ function inviteUser(event: MessageEvent<any>, roomId: string, userId: string): v
     );
 }
 
-function kickUser(event: MessageEvent<any>, roomId: string, userId: string): void {
+function kickUser(event: MessageEvent, roomId: string, userId: string): void {
     logger.log(`Received request to kick ${userId} from room ${roomId}`);
     const client = MatrixClientPeg.get();
     if (!client) {
@@ -404,7 +404,7 @@ function kickUser(event: MessageEvent<any>, roomId: string, userId: string): voi
         });
 }
 
-function setWidget(event: MessageEvent<any>, roomId: string | null): void {
+function setWidget(event: MessageEvent, roomId: string | null): void {
     const client = MatrixClientPeg.safeGet();
     const widgetId = event.data.widget_id;
     let widgetType = event.data.type;
@@ -488,7 +488,7 @@ function setWidget(event: MessageEvent<any>, roomId: string | null): void {
     }
 }
 
-function getWidgets(event: MessageEvent<any>, roomId: string | null): void {
+function getWidgets(event: MessageEvent, roomId: string | null): void {
     const client = MatrixClientPeg.get();
     if (!client) {
         sendError(event, _t("widget|error_need_to_be_logged_in"));
@@ -514,7 +514,7 @@ function getWidgets(event: MessageEvent<any>, roomId: string | null): void {
     sendResponse(event, widgetStateEvents);
 }
 
-async function getRoomEncState(event: MessageEvent<any>, roomId: string): Promise<void> {
+async function getRoomEncState(event: MessageEvent, roomId: string): Promise<void> {
     const client = MatrixClientPeg.get();
     if (!client) {
         sendError(event, _t("widget|error_need_to_be_logged_in"));
@@ -530,7 +530,7 @@ async function getRoomEncState(event: MessageEvent<any>, roomId: string): Promis
     sendResponse(event, roomIsEncrypted);
 }
 
-function setPlumbingState(event: MessageEvent<any>, roomId: string, status: string): void {
+function setPlumbingState(event: MessageEvent, roomId: string, status: string): void {
     if (typeof status !== "string") {
         throw new Error("Plumbing state status should be a string");
     }
@@ -552,7 +552,7 @@ function setPlumbingState(event: MessageEvent<any>, roomId: string, status: stri
     );
 }
 
-function setBotOptions(event: MessageEvent<any>, roomId: string, userId: string): void {
+function setBotOptions(event: MessageEvent, roomId: string, userId: string): void {
     logger.log(`Received request to set options for bot ${userId} in room ${roomId}`);
     const client = MatrixClientPeg.get();
     if (!client) {
@@ -572,7 +572,7 @@ function setBotOptions(event: MessageEvent<any>, roomId: string, userId: string)
 }
 
 async function setBotPower(
-    event: MessageEvent<any>,
+    event: MessageEvent,
     roomId: string,
     userId: string,
     level: number,
@@ -613,22 +613,22 @@ async function setBotPower(
     }
 }
 
-function getMembershipState(event: MessageEvent<any>, roomId: string, userId: string): void {
+function getMembershipState(event: MessageEvent, roomId: string, userId: string): void {
     logger.log(`membership_state of ${userId} in room ${roomId} requested.`);
     returnStateEvent(event, roomId, "m.room.member", userId);
 }
 
-function getJoinRules(event: MessageEvent<any>, roomId: string): void {
+function getJoinRules(event: MessageEvent, roomId: string): void {
     logger.log(`join_rules of ${roomId} requested.`);
     returnStateEvent(event, roomId, "m.room.join_rules", "");
 }
 
-function botOptions(event: MessageEvent<any>, roomId: string, userId: string): void {
+function botOptions(event: MessageEvent, roomId: string, userId: string): void {
     logger.log(`bot_options of ${userId} in room ${roomId} requested.`);
     returnStateEvent(event, roomId, "m.room.bot.options", "_" + userId);
 }
 
-function getMembershipCount(event: MessageEvent<any>, roomId: string): void {
+function getMembershipCount(event: MessageEvent, roomId: string): void {
     const client = MatrixClientPeg.get();
     if (!client) {
         sendError(event, _t("widget|error_need_to_be_logged_in"));
@@ -643,7 +643,7 @@ function getMembershipCount(event: MessageEvent<any>, roomId: string): void {
     sendResponse(event, count);
 }
 
-function canSendEvent(event: MessageEvent<any>, roomId: string): void {
+function canSendEvent(event: MessageEvent, roomId: string): void {
     const evType = "" + event.data.event_type; // force stringify
     const isState = Boolean(event.data.is_state);
     const client = MatrixClientPeg.get();
@@ -677,7 +677,7 @@ function canSendEvent(event: MessageEvent<any>, roomId: string): void {
     sendResponse(event, true);
 }
 
-function returnStateEvent(event: MessageEvent<any>, roomId: string, eventType: string, stateKey: string): void {
+function returnStateEvent(event: MessageEvent, roomId: string, eventType: string, stateKey: string): void {
     const client = MatrixClientPeg.get();
     if (!client) {
         sendError(event, _t("widget|error_need_to_be_logged_in"));
@@ -696,7 +696,7 @@ function returnStateEvent(event: MessageEvent<any>, roomId: string, eventType: s
     sendResponse(event, stateEvent.getContent());
 }
 
-async function getOpenIdToken(event: MessageEvent<any>): Promise<void> {
+async function getOpenIdToken(event: MessageEvent): Promise<void> {
     try {
         const tokenObject = await MatrixClientPeg.safeGet().getOpenIdToken();
         sendResponse(event, tokenObject);
@@ -841,7 +841,7 @@ async function readEvents(
     }
 }
 
-const onMessage = function (event: MessageEvent<any>): void {
+const onMessage = function (event: MessageEvent): void {
     if (!event.origin) {
         // @ts-ignore - stupid chrome
         event.origin = event.originalEvent.origin;
@@ -987,7 +987,7 @@ export function stopListening(): void {
     }
     if (listenerCount < 0) {
         // Make an error so we get a stack trace
-        const e = new Error("ScalarMessaging: mismatched startListening / stopListening detected." + " Negative count");
+        const e = new Error("ScalarMessaging: mismatched startListening / stopListening detected. Negative count");
         logger.error(e);
     }
 }

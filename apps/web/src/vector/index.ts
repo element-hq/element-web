@@ -84,7 +84,7 @@ function checkBrowserFeatures(): boolean {
     for (const feature of featureList) {
         if (window.Modernizr[feature] === undefined) {
             logger.error(
-                "Looked for feature '%s' but Modernizr has no results for this. " + "Has it been configured correctly?",
+                "Looked for feature '%s' but Modernizr has no results for this. Has it been configured correctly?",
                 feature,
             );
             return false;
@@ -150,7 +150,7 @@ async function start(): Promise<void> {
             const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
             const isAndroid = /Android/.test(navigator.userAgent);
             if (isIos || isAndroid) {
-                if (document.cookie.indexOf("element_mobile_redirect_to_guide=false") === -1) {
+                if (sessionStorage.getItem("skip_mobile_redirect") !== "true") {
                     window.location.href = "mobile_guide/";
                     return;
                 }

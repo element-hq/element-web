@@ -5,15 +5,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
-import { act, render, screen } from "jest-matrix-react";
-import { mocked } from "jest-mock";
-import EventEmitter from "events";
+// @vitest-environment happy-dom
 
-import CompleteSecurity from "../../../../../src/components/structures/auth/CompleteSecurity";
-import { stubClient } from "../../../../test-utils";
-import { Phase, SetupEncryptionStore } from "../../../../../src/stores/SetupEncryptionStore";
-import SdkConfig from "../../../../../src/SdkConfig";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+import React from "react";
+import { act, render, screen } from "test-utils-rtl";
+import EventEmitter from "events";
+import { stubClient } from "test-utils";
+
+import CompleteSecurity from "./CompleteSecurity";
+import { Phase, SetupEncryptionStore } from "../../../stores/SetupEncryptionStore";
+import SdkConfig from "../../../SdkConfig";
 
 class MockSetupEncryptionStore extends EventEmitter {
     public phase: Phase = Phase.Intro;
@@ -21,8 +23,8 @@ class MockSetupEncryptionStore extends EventEmitter {
         return false;
     }
 
-    public start: () => void = jest.fn();
-    public stop: () => void = jest.fn();
+    public start: () => void = vi.fn();
+    public stop: () => void = vi.fn();
 }
 
 describe("CompleteSecurity", () => {
@@ -35,16 +37,16 @@ describe("CompleteSecurity", () => {
         });
         const userIdToDevices = new Map();
         userIdToDevices.set("USER_ID", deviceIdToDevice);
-        mocked(client.getCrypto()!.getUserDeviceInfo).mockResolvedValue(userIdToDevices);
+        vi.mocked(client.getCrypto()!.getUserDeviceInfo).mockResolvedValue(userIdToDevices);
 
         const mockSetupEncryptionStore = new MockSetupEncryptionStore();
-        jest.spyOn(SetupEncryptionStore, "sharedInstance").mockReturnValue(
+        vi.spyOn(SetupEncryptionStore, "sharedInstance").mockReturnValue(
             mockSetupEncryptionStore as SetupEncryptionStore,
         );
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     it("Renders with a cancel button by default", () => {
@@ -54,7 +56,7 @@ describe("CompleteSecurity", () => {
     });
 
     it("Renders with a cancel button if forceVerification false", () => {
-        jest.spyOn(SdkConfig, "get").mockImplementation((key: string) => {
+        vi.spyOn(SdkConfig, "get").mockImplementation((key: string) => {
             if (key === "forceVerification") {
                 return false;
             }
@@ -66,7 +68,7 @@ describe("CompleteSecurity", () => {
     });
 
     it("Renders without a cancel button if forceVerification true", () => {
-        jest.spyOn(SdkConfig, "get").mockImplementation((key: string) => {
+        vi.spyOn(SdkConfig, "get").mockImplementation((key: string) => {
             if (key === "force_verification") {
                 return true;
             }
@@ -80,7 +82,7 @@ describe("CompleteSecurity", () => {
     it("Renders a warning if user hits Reset", async () => {
         // Given a store and a dialog based on it
         const store = new SetupEncryptionStore();
-        jest.spyOn(SetupEncryptionStore, "sharedInstance").mockReturnValue(store);
+        vi.spyOn(SetupEncryptionStore, "sharedInstance").mockReturnValue(store);
         const panel = await act(() => render(<CompleteSecurity onFinished={() => {}} />));
 
         // No recovery methods are available, so only the "Can't confirm?" button should be visible
@@ -99,12 +101,12 @@ describe("CompleteSecurity", () => {
     it("Allows verifying with another device if one is available", async () => {
         // Given a store and a dialog based on it
         const store = new SetupEncryptionStore();
-        jest.spyOn(store, "fetchKeyInfo").mockImplementation(async () => {
+        vi.spyOn(store, "fetchKeyInfo").mockImplementation(async () => {
             store.hasDevicesToVerifyAgainst = true;
             store.phase = Phase.Intro;
             store.emit("update");
         });
-        jest.spyOn(SetupEncryptionStore, "sharedInstance").mockReturnValue(store);
+        vi.spyOn(SetupEncryptionStore, "sharedInstance").mockReturnValue(store);
         const panel = await act(() => render(<CompleteSecurity onFinished={() => {}} />));
 
         // The snapshot should have "Use another device" and "Can't confirm?"
@@ -124,12 +126,12 @@ describe("CompleteSecurity", () => {
     it("Allows verifying with recovery key if one is available", async () => {
         // Given a store and a dialog based on it
         const store = new SetupEncryptionStore();
-        jest.spyOn(store, "fetchKeyInfo").mockImplementation(async () => {
+        vi.spyOn(store, "fetchKeyInfo").mockImplementation(async () => {
             store.keyInfo = {} as any;
             store.phase = Phase.Intro;
             store.emit("update");
         });
-        jest.spyOn(SetupEncryptionStore, "sharedInstance").mockReturnValue(store);
+        vi.spyOn(SetupEncryptionStore, "sharedInstance").mockReturnValue(store);
         const panel = await act(() => render(<CompleteSecurity onFinished={() => {}} />));
 
         // The snapshot should have "Use recovery key" and "Can't confirm?"

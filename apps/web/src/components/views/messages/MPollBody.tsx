@@ -409,8 +409,8 @@ export function allVotes(voteRelations: Relations): Array<UserVote> {
  */
 export function collectUserVotes(
     userResponses: Array<UserVote>,
-    userId?: string | null | undefined,
-    selected?: string | null | undefined,
+    userId?: string | null,
+    selected?: string | null,
 ): Map<string, UserVote> {
     const userVotes: Map<string, UserVote> = new Map();
 

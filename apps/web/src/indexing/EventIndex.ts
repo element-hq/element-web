@@ -458,6 +458,7 @@ export default class EventIndex extends EventEmitter {
 
         let idle = false;
 
+        // oxlint-disable-next-line no-unmodified-loop-condition
         while (!cancelled) {
             let sleepTime = SettingsStore.getValueAt(SettingLevel.DEVICE, "crawlerSleepTime");
 
