@@ -490,7 +490,6 @@
         "message_layout": "Meddelandearrangemang",
         "message_timestamp_invalid": "Ogiltig tidsstämpel",
         "microphone": "Mikrofon",
-        "model": "Modell",
         "moderation_and_safety": "Moderering och säkerhet",
         "modern": "Modernt",
         "mute": "Tysta",
@@ -2689,7 +2688,6 @@
         "send_typing_notifications": "Skicka \"skriver\"-statusar",
         "sessions": {
             "best_security_note": "För bästa säkerhet, verifiera dina sessioner och logga ut från sessioner som du inte känner igen eller använder längre.",
-            "browser": "Webbläsare",
             "confirm_sign_out": {
                 "one": "Bekräfta utloggning av denna enhet",
                 "other": "Bekräfta utloggning av dessa enheter"
@@ -2740,7 +2738,6 @@
             "no_sessions": "Inga sessioner hittades.",
             "no_unverified_sessions": "Inga overifierade sessioner hittades.",
             "no_verified_sessions": "Inga verifierade sessioner hittades.",
-            "os": "Operativsystem",
             "other_sessions_heading": "Andra sessioner",
             "push_heading": "Pushnotiser",
             "push_subheading": "Få pushnotiser på den här sessionen.",

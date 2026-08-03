@@ -524,6 +524,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         UIStore.destroy();
         this.stores.resizeNotifier.removeListener("middlePanelResized", this.dispatchTimelineResize);
         window.removeEventListener("resize", this.onWindowResized);
+
+        DecryptionFailureTracker.instance.stop();
     }
 
     private onWindowResized = (): void => {
@@ -1264,7 +1266,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             if (isOnlyAdmin(roomToLeave)) {
                 const userLevelValues = roomToLeave.getJoinedMembers().map((m) => m.powerLevel);
 
-                const maxUserLevel = Math.max(...(userLevelValues as number[]));
+                const maxUserLevel = Math.max(...userLevelValues);
 
                 const warning =
                     maxUserLevel >= 100
@@ -1576,6 +1578,15 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
         this.firstSyncComplete = false;
         const cli = MatrixClientPeg.safeGet();
+
+        // If the client has already completed its initial sync — e.g. this is a repeat WillStartClient for a client
+        // that is already running — it won't emit another `Prepared`, so resolve firstSyncPromise straight away
+        // rather than waiting for an event that will never come.
+        // This is mostly an issue under test.
+        if (cli.getSyncState() === SyncState.Prepared) {
+            this.firstSyncComplete = true;
+            this.firstSyncPromise.resolve();
+        }
 
         // Allow the JS SDK to reap timeline events. This reduces the amount of
         // memory consumed as the JS SDK stores multiple distinct copies of room

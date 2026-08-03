@@ -5,7 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { vi, expect as viExpect, beforeAll as viBeforeAll, afterAll as viAfterAll } from "vitest";
+import { vi } from "vitest";
+import * as vitest from "vitest";
 import { mocked as jestMocked } from "jest-mock";
 
 export const isJest = typeof jest !== "undefined";
@@ -25,9 +26,17 @@ const adapter = {
 const mocked = adapter.mocked;
 export { adapter as vi, mocked };
 
-const _expect = isJest ? (expect as unknown as typeof viExpect) : viExpect;
-const _beforeAll = isJest ? (beforeAll as unknown as typeof viBeforeAll) : viBeforeAll;
-const _afterAll = isJest ? (afterAll as unknown as typeof viAfterAll) : viAfterAll;
-export { _expect as expect, _beforeAll as beforeAll, _afterAll as afterAll };
+const _expect = isJest ? (expect as unknown as typeof vitest.expect) : vitest.expect;
+const _beforeAll = isJest ? (beforeAll as unknown as typeof vitest.beforeAll) : vitest.beforeAll;
+const _afterAll = isJest ? (afterAll as unknown as typeof vitest.afterAll) : vitest.afterAll;
+const _beforeEach = isJest ? (beforeEach as unknown as typeof vitest.beforeEach) : vitest.beforeEach;
+const _afterEach = isJest ? (afterEach as unknown as typeof vitest.afterEach) : vitest.afterEach;
+export {
+    _expect as expect,
+    _beforeAll as beforeAll,
+    _afterAll as afterAll,
+    _beforeEach as beforeEach,
+    _afterEach as afterEach,
+};
 
 export { type Mocked, type MockedObject } from "vitest";

@@ -131,6 +131,7 @@ exports[`ConfirmRejectInviteDialog can reject with options selected 1`] = `
           class="mx_Dialog_buttons_row"
         >
           <button
+            class="cancel"
             data-testid="dialog-cancel-button"
             type="button"
           >

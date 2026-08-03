@@ -483,7 +483,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         for (const [container, containerValue] of containers) {
             const widgets = containerValue.ordered;
             for (const widget of widgets) {
-                ret.push([widget, container as Container]);
+                ret.push([widget, container]);
             }
         }
         return ret;

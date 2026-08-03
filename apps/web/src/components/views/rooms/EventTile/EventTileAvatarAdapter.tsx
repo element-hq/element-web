@@ -6,10 +6,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
-import { type MatrixEvent, type RoomMember } from "matrix-js-sdk/src/matrix";
+import { type RoomMember } from "matrix-js-sdk/src/matrix";
 
 import MemberAvatar from "../../avatars/MemberAvatar";
-import SenderProfile from "../../messages/SenderProfile";
 import { type EventTileSenderSnapshot } from "../../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
 
 /**
@@ -45,36 +44,4 @@ export function EventTileAvatarAdapter({
             />
         </div>
     );
-}
-
-/**
- * Props for the {@link EventTileSenderAdapter} component.
- */
-interface EventTileSenderAdapterProps {
-    /** Matrix event whose sender identity is being rendered. */
-    mxEvent: MatrixEvent;
-    /** Snapshot of the sender identity state for this tile. */
-    senderSnapshot: EventTileSenderSnapshot;
-    /** Invoked when the sender profile is clicked. */
-    onSenderProfileClick: () => void;
-}
-
-/**
- * Renders the sender identity display for an event tile.
- */
-export function EventTileSenderAdapter({
-    mxEvent,
-    senderSnapshot,
-    onSenderProfileClick,
-}: Readonly<EventTileSenderAdapterProps>): JSX.Element | null {
-    switch (senderSnapshot.profileMode) {
-        case "clickable":
-            return <SenderProfile onClick={onSenderProfileClick} mxEvent={mxEvent} />;
-        case "tooltip":
-            return <SenderProfile mxEvent={mxEvent} withTooltip />;
-        case "default":
-            return <SenderProfile mxEvent={mxEvent} />;
-        default:
-            return null;
-    }
 }
