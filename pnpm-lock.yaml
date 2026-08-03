@@ -405,9 +405,6 @@ importers:
       electron-store:
         specifier: ^11.0.0
         version: 11.0.2
-      electron-window-state:
-        specifier: ^5.0.3
-        version: 5.0.3
       minimist:
         specifier: ^1.2.6
         version: 1.2.8
@@ -8536,10 +8533,6 @@ packages:
 
   electron-to-chromium@1.5.396:
     resolution: {integrity: sha512-yHiw2Y3C3H9U6TMbOfoWK/BPreiOPXRfTWPBwQBoZG6/8TB6eOPnsy5oaRYuatR7Fw2SJ4kKforgufeo7fq0EQ==}
-
-  electron-window-state@5.0.3:
-    resolution: {integrity: sha512-1mNTwCfkolXl3kMf50yW3vE2lZj0y92P/HYWFBrb+v2S/pCka5mdwN3cagKm458A7NjndSwijynXgcLWRodsVg==}
-    engines: {node: '>=8.0.0'}
 
   electron-winstaller@5.4.0:
     resolution: {integrity: sha512-bO3y10YikuUwUuDUQRM4KfwNkKhnpVO7IPdbsrejwN9/AABJzzTQ4GeHwyzNSrVO+tEH3/Np255a3sVZpZDjvg==}
@@ -21061,11 +21054,6 @@ snapshots:
       type-fest: 5.5.0
 
   electron-to-chromium@1.5.396: {}
-
-  electron-window-state@5.0.3:
-    dependencies:
-      jsonfile: 4.0.0
-      mkdirp: 0.5.6
 
   electron-winstaller@5.4.0:
     dependencies:
