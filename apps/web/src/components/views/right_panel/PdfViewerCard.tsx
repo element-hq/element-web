@@ -61,7 +61,7 @@ export function PdfViewerCard({ eventId, onClose, room }: Props): JSX.Element | 
                     <Spinner />
                 </div>
             );
-        else card = <iframe src={url}></iframe>;
+        else card = <iframe src={url} sandbox=""></iframe>;
     } else {
         card = (
             <div className="mx_PdfViewerCard_Error">
