@@ -203,9 +203,9 @@ export function EventTileView({
         return renderRoot(
             <>
                 {renderSlot(slots.timestamp, styles.timestamp, classNameOverrides?.timestamp)}
+                {renderSlot(slots.sender, styles.sender, classNameOverrides?.sender)}
                 {renderSlot(slots.padlock, styles.padlock, classNameOverrides?.padlock)}
                 {renderSlot(slots.avatar, styles.avatar, classNameOverrides?.avatar)}
-                {renderSlot(slots.sender, styles.sender, classNameOverrides?.sender)}
                 <div
                     id={root.id}
                     className={classNames(styles.line, classNameOverrides?.line)}

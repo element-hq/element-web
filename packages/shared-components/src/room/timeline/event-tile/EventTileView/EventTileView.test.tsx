@@ -261,9 +261,9 @@ describe("EventTileView", () => {
 
         if (layout === "irc") {
             expect(root.children[0]).toContainElement(getByTestId("timestamp"));
-            expect(root.children[1]).toContainElement(getByTestId("padlock"));
-            expect(root.children[2]).toContainElement(getByTestId("avatar"));
-            expect(root.children[3]).toContainElement(getByTestId("sender"));
+            expect(root.children[1]).toContainElement(getByTestId("sender"));
+            expect(root.children[2]).toContainElement(getByTestId("padlock"));
+            expect(root.children[3]).toContainElement(getByTestId("avatar"));
             expect(root.children[4]).toBe(line);
             expect(root.children[5]).toContainElement(getByTestId("receipt"));
             expect(getByTestId("padlock").parentElement).toBe(root);
