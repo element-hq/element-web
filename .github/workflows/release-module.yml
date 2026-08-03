@@ -1,0 +1,57 @@
+name: Release module
+run-name: Release modules
+
+on:
+    push:
+        tags:
+            - "module/*/v*.*.*"
+
+permissions: {}
+
+jobs:
+    release:
+        name: Build and release module
+        runs-on: ubuntu-24.04
+        permissions:
+            contents: write
+        steps:
+            - name: Parse tag
+              env:
+                  TAG: ${{ github.ref_name }}
+              run: |
+                  MODULE=$(echo "$TAG" | cut -d'/' -f2)
+                  VERSION=$(echo "$TAG" | cut -d'/' -f3)
+                  echo "MODULE=$MODULE" >> "$GITHUB_ENV"
+                  echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+                  echo "TAG=$TAG" >> "$GITHUB_ENV"
+                  echo "ARCHIVE=${MODULE}-${VERSION}.zip" >> "$GITHUB_ENV"
+
+            - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+              with:
+                  persist-credentials: false
+
+            - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6
+
+            - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+              with:
+                  cache: "pnpm"
+                  node-version: "lts/*"
+
+            - name: Install deps
+              run: pnpm install --frozen-lockfile
+
+            - name: Build
+              run: pnpm --filter "./modules/$MODULE" run prepare
+
+            - name: Create archive
+              run: zip -r "$ARCHIVE" -j "modules/$MODULE/lib"
+
+            - name: Create GitHub release
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: |
+                  gh release create "$TAG" \
+                    --title "$VERSION $MODULE" \
+                    --draft \
+                    --latest=false \
+                    "$ARCHIVE"
