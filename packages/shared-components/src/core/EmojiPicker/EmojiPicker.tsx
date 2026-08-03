@@ -85,7 +85,7 @@ const gridComponents = { List: GridList, Item: GridItem };
 /**
  * Props for {@link EmojiPicker}.
  */
-interface EmojiPickerProps {
+export interface EmojiPickerProps {
     /**
      * Set of which emojis are already selected and should be decorated as such.
      * If specified, emoji will use a checkbox role with aria-checked set appropriately.
