@@ -1945,7 +1945,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private onSearchChange = debounce((term: string): void => {
         if (!term.trim()) {
-            // Clearing the box should put the timeline back rather than search for nothing.
+            // Clearing the box should put the timeline back rather than search for nothing. The
+            // composer comes back with the timeline but leaves the caret alone, so the user stays
+            // in the search box while they think about what to type next.
             void this.onCancelSearchClick();
             return;
         }

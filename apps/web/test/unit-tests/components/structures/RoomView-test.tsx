@@ -936,6 +936,47 @@ describe("RoomView", () => {
             expect(container.querySelector(".mx_RoomView_searchResultsPanel")).not.toBeInTheDocument();
         });
 
+        it("should leave the caret in the search box when it is emptied", async () => {
+            room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+
+            const roomViewRef = createRef<RoomView>();
+            await mountRoomView(roomViewRef);
+            await waitFor(() => expect(roomViewRef.current).toBeTruthy());
+            // @ts-ignore - triggering a search organically is a lot of work
+            act(() =>
+                roomViewRef.current!.setState({
+                    timelineRenderingType: TimelineRenderingType.Search,
+                    search: {
+                        searchId: 1,
+                        roomId: room.roomId,
+                        term: "search term",
+                        scope: SearchScope.Room,
+                        promise: Promise.resolve({ results: [], highlights: [], count: 0 }),
+                        inProgress: false,
+                        count: 0,
+                    },
+                }),
+            );
+
+            // Stands in for the room search box, which lives over in the right panel.
+            const searchBox = document.createElement("input");
+            document.body.appendChild(searchBox);
+            searchBox.focus();
+            expect(document.activeElement).toBe(searchBox);
+
+            try {
+                // @ts-ignore - onSearchChange is private and debounced
+                act(() => roomViewRef.current!.onSearchChange(""));
+                await waitFor(() => expect(roomViewRef.current!.state.search).toBeUndefined());
+
+                // The composer comes back with the timeline, and must not take the caret with it:
+                // the user has only emptied the box, not left it.
+                expect(document.activeElement).toBe(searchBox);
+            } finally {
+                searchBox.remove();
+            }
+        });
+
         it("should close search results when edit is clicked", async () => {
             room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
 
