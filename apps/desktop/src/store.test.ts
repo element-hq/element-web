@@ -14,8 +14,9 @@ import Store, { SafeStorageDecryptionError } from "./store.js";
 // In-memory ElectronStore replacement so the tests don't touch the filesystem or real config.
 const backing = new Map<string, unknown>();
 vi.mock("electron-store", () => {
+    // No constructor: the options ElectronStore is handed are irrelevant to this fake, so an empty
+    // one would exist only to swallow them — which oxlint's no-useless-constructor rejects.
     class MockElectronStore {
-        public constructor(_opts: unknown) {}
         public get(key: string, defaultValue?: unknown): unknown {
             return backing.has(key) ? backing.get(key) : defaultValue;
         }
@@ -37,6 +38,12 @@ vi.mock("electron-store", () => {
 
 vi.mock("./language-helper.js", () => ({
     _t: (key: string): string => key,
+}));
+
+// store.ts reads getConfig().brand for the degraded-mode dialogs. The real config module only
+// populates itself in loadConfig(), which these tests never run, so stub it out.
+vi.mock("./config.js", () => ({
+    getConfig: (): { brand: string } => ({ brand: "Element" }),
 }));
 
 // A reversible "encryption" so we control exactly when decryption fails.
@@ -72,7 +79,8 @@ describe("Store secret encryption (safeStorage)", () => {
 
     beforeAll(async () => {
         store = Store.initialize(undefined);
-        // process.platform is darwin in CI/dev on this repo, exercising the "system" backend path.
+        // getSelectedStorageBackend is mocked to "basic_text", so this walks the degraded-mode
+        // path and takes the mocked dialog's "use basic_text" answer.
         await store.prepareSafeStorage({} as unknown as Electron.Session);
     });
 
