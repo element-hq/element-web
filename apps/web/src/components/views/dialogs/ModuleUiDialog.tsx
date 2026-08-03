@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, type RefObject } from "react";
+import React, { createRef } from "react";
 import { type DialogContent, type DialogProps } from "@matrix-org/react-sdk-module-api/lib/components/DialogContent";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type ModuleApi } from "@matrix-org/react-sdk-module-api/lib/ModuleApi";
@@ -75,10 +75,6 @@ export class ModuleUiDialog<
         } as unknown as P;
 
         // XXX: we have to fudge the types here a little as the react-sdk-module-api lacks React 19 support
-        return (
-            <div className="mx_ModuleUiDialog">
-                {this.props.contentFactory(contentProps, this.contentRef as RefObject<C>)}
-            </div>
-        );
+        return <div className="mx_ModuleUiDialog">{this.props.contentFactory(contentProps, this.contentRef)}</div>;
     }
 }

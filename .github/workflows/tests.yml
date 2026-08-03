@@ -129,12 +129,13 @@ jobs:
               run: "pnpm install"
               if: matrix.path == 'packages/shared-components'
 
-            - name: Cache storybook & vitest
+            - name: Cache storybook
               uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
               with:
+                  # NB: node_modules/.vite/vitest is intentionally not cached; a lockfile-keyed stale bundle
+                  # triggers a mid-run re-optimise + page reload that flakes browser-mode tests.
                   path: |
                       ${{ matrix.path }}/node_modules/.cache
-                      ${{ matrix.path }}/node_modules/.vite/vitest
                   key: ${{ matrix.path }}-${{ hashFiles('pnpm-lock.yaml') }}
 
             - name: Setup playwright

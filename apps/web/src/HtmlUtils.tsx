@@ -459,7 +459,7 @@ export function bodyToNode(content: IContent, highlights?: string[], opts: Event
             // This has to be done after the emojiBody check as to not break big emoji on replies
             formattedBody = formatEmojis(eventInfo.safeBody, true).join("");
         } else {
-            emojiBodyElements = formatEmojis(eventInfo.strippedBody, false) as JSX.Element[];
+            emojiBodyElements = formatEmojis(eventInfo.strippedBody, false);
         }
     }
 

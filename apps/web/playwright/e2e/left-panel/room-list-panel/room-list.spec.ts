@@ -192,7 +192,7 @@ test.describe("Room list", () => {
                 const roomListView = getRoomList(page);
 
                 const roomId = await app.client.createRoom({ name: "1 notification" });
-                await app.client.inviteUser(roomId, bot.credentials.userId);
+                await app.client.inviteUser(roomId, bot.credentials!.userId);
                 await bot.joinRoom(roomId);
                 await bot.sendMessage(roomId, "I am a robot. Beep.");
 
@@ -396,7 +396,7 @@ test.describe("Room list", () => {
             const roomListView = getRoomList(page);
 
             const roomId = await app.client.createRoom({ name: "2 notifications" });
-            await app.client.inviteUser(roomId, bot.credentials.userId);
+            await app.client.inviteUser(roomId, bot.credentials!.userId);
             await bot.joinRoom(roomId);
 
             await bot.sendMessage(roomId, "I am a robot. Beep.");
@@ -412,7 +412,7 @@ test.describe("Room list", () => {
             const roomListView = getRoomList(page);
 
             const roomId = await app.client.createRoom({ name: "mention" });
-            await app.client.inviteUser(roomId, bot.credentials.userId);
+            await app.client.inviteUser(roomId, bot.credentials!.userId);
             await bot.joinRoom(roomId);
 
             const clientBot = await bot.prepareClient();
@@ -445,7 +445,7 @@ test.describe("Room list", () => {
             // focus the user menu to avoid to have hover decoration
             await page.getByRole("button", { name: "User menu" }).focus();
 
-            await app.client.inviteUser(roomId, bot.credentials.userId);
+            await app.client.inviteUser(roomId, bot.credentials!.userId);
             await bot.joinRoom(roomId);
             await bot.sendMessage(roomId, "I am a robot. Beep.");
 
@@ -483,7 +483,7 @@ test.describe("Room list", () => {
             const otherRoomId = await app.client.createRoom({ name: "other room" });
 
             const roomId = await app.client.createRoom({ name: "activity" });
-            await app.client.inviteUser(roomId, bot.credentials.userId);
+            await app.client.inviteUser(roomId, bot.credentials!.userId);
             await bot.joinRoom(roomId);
 
             await app.viewRoomById(roomId);
@@ -510,7 +510,7 @@ test.describe("Room list", () => {
             const roomListView = getRoomList(page);
 
             const roomId = await app.client.createRoom({ name: "mark as unread" });
-            await app.client.inviteUser(roomId, bot.credentials.userId);
+            await app.client.inviteUser(roomId, bot.credentials!.userId);
             await bot.joinRoom(roomId);
 
             const room = roomListView.getByRole("option", { name: "mark as unread" });
@@ -527,7 +527,7 @@ test.describe("Room list", () => {
             const roomListView = getRoomList(page);
 
             const roomId = await app.client.createRoom({ name: "silent" });
-            await app.client.inviteUser(roomId, bot.credentials.userId);
+            await app.client.inviteUser(roomId, bot.credentials!.userId);
             await bot.joinRoom(roomId);
 
             await app.viewRoomById(roomId);

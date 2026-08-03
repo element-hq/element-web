@@ -22,7 +22,7 @@ import { BugReportEndpointURLLocal } from "../../../../../src/IConfigOptions";
 const BUG_REPORT_URL = "https://example.org/submit";
 
 describe("BugReportDialog", () => {
-    const onFinished: jest.Mock<any, any> = jest.fn();
+    const onFinished = jest.fn();
 
     function renderComponent(props: Partial<BugReportDialogProps> = {}): RenderResult {
         return render(<BugReportDialog onFinished={onFinished} />);

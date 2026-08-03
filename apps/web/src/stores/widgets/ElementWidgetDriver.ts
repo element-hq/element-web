@@ -140,6 +140,9 @@ export class ElementWidgetDriver extends WidgetDriver {
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, "org.matrix.msc3401.call").raw,
             );
             this.allowedCapabilities.add(
+                WidgetEventCapability.forStateEvent(EventDirection.Receive, "org.matrix.msc4143.rtc.slot").raw,
+            );
+            this.allowedCapabilities.add(
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, EventType.RoomEncryption).raw,
             );
             const clientUserId = MatrixClientPeg.safeGet().getSafeUserId();
@@ -334,7 +337,7 @@ export class ElementWidgetDriver extends WidgetDriver {
             r = await client.sendStateEvent(
                 roomId,
                 eventType as keyof StateEvents,
-                content as StateEvents[keyof StateEvents],
+                content satisfies StateEvents[keyof StateEvents],
                 stateKey,
             );
         } else if (eventType === EventType.RoomRedaction) {
@@ -457,7 +460,7 @@ export class ElementWidgetDriver extends WidgetDriver {
                 roomId,
                 delayOpts,
                 eventType as keyof StateEvents,
-                content as StateEvents[keyof StateEvents],
+                content satisfies StateEvents[keyof StateEvents],
                 stateKey,
             );
         } else {

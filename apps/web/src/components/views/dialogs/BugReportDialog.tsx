@@ -205,7 +205,7 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
                 this.setState({
                     downloadBusy: false,
                     downloadProgress:
-                        _t("bug_reporting|failed_download_logs") + `${err instanceof Error ? err.message : ""}`,
+                        _t("bug_reporting|failed_download_logs") + (err instanceof Error ? err.message : ""),
                 });
             }
         }

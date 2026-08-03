@@ -163,7 +163,7 @@ const MapComponent: React.FC<MapProps> = ({
 }) => {
     const { map, bodyId } = useMapWithStyle({ centerGeoUri, onError, id, interactive, bounds, allowGeolocate });
 
-    const onMapClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
+    const onMapClick = (event: React.MouseEvent<HTMLDivElement>): void => {
         // Eat click events when clicking the attribution button
         const target = event.target as Element;
         if (target.classList.contains("maplibregl-ctrl-attrib-button")) {

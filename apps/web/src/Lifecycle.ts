@@ -955,8 +955,8 @@ export async function logout(): Promise<void> {
             homeserverUrl: client.getHomeserverUrl(),
             deviceId: client.getDeviceId()!,
         });
-    } catch (e) {
-        console.error("@@", e);
+    } catch {
+        // This is fine
     }
 
     PosthogAnalytics.instance.logout();

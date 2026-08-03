@@ -6,20 +6,22 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import React from "react";
-import { mocked } from "jest-mock";
-import { render, type RenderResult, screen, waitFor, cleanup } from "jest-matrix-react";
+import { render, type RenderResult, screen, waitFor, cleanup } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
 import { type MatrixClient, createClient } from "matrix-js-sdk/src/matrix";
+import { clearAllModals, filterConsole, stubClient, waitEnoughCyclesForModal } from "test-utils";
 
-import ForgotPassword from "../../../../../src/components/structures/auth/ForgotPassword";
-import { type ValidatedServerConfig } from "../../../../../src/utils/ValidatedServerConfig";
-import { clearAllModals, filterConsole, stubClient, waitEnoughCyclesForModal } from "../../../../test-utils";
-import AutoDiscoveryUtils from "../../../../../src/utils/AutoDiscoveryUtils";
+import ForgotPassword from "./ForgotPassword";
+import { type ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
+import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
 
-jest.mock("matrix-js-sdk/src/matrix", () => ({
-    ...jest.requireActual("matrix-js-sdk/src/matrix"),
-    createClient: jest.fn(),
+vi.mock("matrix-js-sdk/src/matrix", async () => ({
+    ...(await vi.importActual("matrix-js-sdk/src/matrix")),
+    createClient: vi.fn(),
 }));
 
 describe("<ForgotPassword>", () => {
@@ -54,15 +56,15 @@ describe("<ForgotPassword>", () => {
 
     beforeEach(() => {
         client = stubClient();
-        mocked(createClient).mockReturnValue(client);
+        vi.mocked(createClient).mockReturnValue(client);
 
         serverConfig = { hsName: "example.com" } as ValidatedServerConfig;
 
-        onComplete = jest.fn();
-        onLoginClick = jest.fn();
+        onComplete = vi.fn();
+        onLoginClick = vi.fn();
 
-        jest.spyOn(AutoDiscoveryUtils, "validateServerConfigWithStaticUrls").mockResolvedValue(serverConfig);
-        jest.spyOn(AutoDiscoveryUtils, "authComponentStateForError");
+        vi.spyOn(AutoDiscoveryUtils, "validateServerConfigWithStaticUrls").mockResolvedValue(serverConfig);
+        vi.spyOn(AutoDiscoveryUtils, "authComponentStateForError");
     });
 
     afterEach(async () => {
@@ -120,9 +122,9 @@ describe("<ForgotPassword>", () => {
 
         describe("and submitting an unknown email", () => {
             beforeEach(async () => {
-                mocked(AutoDiscoveryUtils.validateServerConfigWithStaticUrls).mockResolvedValue(serverConfig);
+                vi.mocked(AutoDiscoveryUtils.validateServerConfigWithStaticUrls).mockResolvedValue(serverConfig);
                 await typeIntoField("Email address", testEmail);
-                mocked(client).requestPasswordEmailToken.mockRejectedValue({
+                vi.mocked(client).requestPasswordEmailToken.mockRejectedValue({
                     errcode: "M_THREEPID_NOT_FOUND",
                 });
                 await click(screen.getByText("Send email"));
@@ -136,7 +138,7 @@ describe("<ForgotPassword>", () => {
         describe("and a connection error occurs", () => {
             beforeEach(async () => {
                 await typeIntoField("Email address", testEmail);
-                mocked(client).requestPasswordEmailToken.mockRejectedValue({
+                vi.mocked(client).requestPasswordEmailToken.mockRejectedValue({
                     name: "ConnectionError",
                 });
                 await click(screen.getByText("Send email"));
@@ -154,8 +156,8 @@ describe("<ForgotPassword>", () => {
         describe("and the server liveness check fails", () => {
             beforeEach(async () => {
                 await typeIntoField("Email address", testEmail);
-                mocked(AutoDiscoveryUtils.validateServerConfigWithStaticUrls).mockRejectedValue({});
-                mocked(AutoDiscoveryUtils.authComponentStateForError).mockReturnValue({
+                vi.mocked(AutoDiscoveryUtils.validateServerConfigWithStaticUrls).mockRejectedValue({});
+                vi.mocked(AutoDiscoveryUtils.authComponentStateForError).mockReturnValue({
                     serverErrorIsFatal: true,
                     serverIsAlive: false,
                     serverDeadError: "server down",
@@ -171,7 +173,7 @@ describe("<ForgotPassword>", () => {
         describe("and submitting an known email", () => {
             beforeEach(async () => {
                 await typeIntoField("Email address", testEmail);
-                mocked(client).requestPasswordEmailToken.mockResolvedValue({
+                vi.mocked(client).requestPasswordEmailToken.mockResolvedValue({
                     sid: testSid,
                 });
                 await click(screen.getByText("Send email"));
@@ -238,14 +240,14 @@ describe("<ForgotPassword>", () => {
 
                 describe("and entering a new password", () => {
                     beforeEach(async () => {
-                        mocked(client.setPassword).mockRejectedValue({ httpStatus: 401 });
+                        vi.mocked(client.setPassword).mockRejectedValue({ httpStatus: 401 });
                         await typeIntoField("New Password", testPassword);
                         await typeIntoField("Confirm new password", testPassword);
                     });
 
                     describe("and submitting it running into rate limiting", () => {
                         beforeEach(async () => {
-                            mocked(client.setPassword).mockRejectedValue({
+                            vi.mocked(client.setPassword).mockRejectedValue({
                                 message: "rate limit reached",
                                 httpStatus: 429,
                                 data: {
@@ -265,7 +267,7 @@ describe("<ForgotPassword>", () => {
                     describe("and confirm the email link and submitting the new password", () => {
                         beforeEach(async () => {
                             // fake link confirmed by resolving client.setPassword instead of raising an error
-                            mocked(client.setPassword).mockResolvedValue({});
+                            vi.mocked(client.setPassword).mockResolvedValue({});
                             await click(screen.getByText("Reset password"));
                         });
 
@@ -314,9 +316,7 @@ describe("<ForgotPassword>", () => {
                         describe("and dismissing the dialog by clicking the background", () => {
                             beforeEach(async () => {
                                 await userEvent.click(await screen.findByTestId("dialog-background"), { delay: null });
-                                await waitEnoughCyclesForModal({
-                                    useFakeTimers: true,
-                                });
+                                await waitEnoughCyclesForModal();
                             });
 
                             itShouldCloseTheDialogAndShowThePasswordInput();
@@ -325,9 +325,7 @@ describe("<ForgotPassword>", () => {
                         describe("and dismissing the dialog", () => {
                             beforeEach(async () => {
                                 await click(await screen.findByLabelText("Close dialog"));
-                                await waitEnoughCyclesForModal({
-                                    useFakeTimers: true,
-                                });
+                                await waitEnoughCyclesForModal();
                             });
 
                             itShouldCloseTheDialogAndShowThePasswordInput();
@@ -336,9 +334,7 @@ describe("<ForgotPassword>", () => {
                         describe("and clicking »Re-enter email address«", () => {
                             beforeEach(async () => {
                                 await click(await screen.findByText("Re-enter email address"));
-                                await waitEnoughCyclesForModal({
-                                    useFakeTimers: true,
-                                });
+                                await waitEnoughCyclesForModal();
                             });
 
                             it("should close the dialog and go back to the email input", async () => {
@@ -352,7 +348,7 @@ describe("<ForgotPassword>", () => {
 
                     describe("and validating the link from the mail", () => {
                         beforeEach(async () => {
-                            mocked(client.setPassword).mockResolvedValue({});
+                            vi.mocked(client.setPassword).mockResolvedValue({});
                             await click(screen.getByText("Reset password"));
                             // flush promises for the modal to disappear
                             await waitEnoughCyclesForModal();

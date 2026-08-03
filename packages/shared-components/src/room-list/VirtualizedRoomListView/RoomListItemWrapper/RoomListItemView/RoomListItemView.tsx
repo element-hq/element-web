@@ -190,14 +190,14 @@ export const RoomListItemView = memo(function RoomListItemView({
 
     useEffect(() => {
         if (isFocused) {
-            internalRef.current?.focus({ preventScroll: true } as FocusOptions);
+            internalRef.current?.focus({ preventScroll: true });
         }
     }, [isFocused]);
 
     const onItemFocus = (e: React.FocusEvent<HTMLButtonElement>): void => {
         onFocus(item.id, e);
         // Only when focus enters the row from outside via the keyboard.
-        if (!e.currentTarget.contains(e.relatedTarget as Node | null) && e.currentTarget.matches(":focus-visible")) {
+        if (!e.currentTarget.contains(e.relatedTarget) && e.currentTarget.matches(":focus-visible")) {
             setKeyboardActive(true);
         }
     };
@@ -207,10 +207,7 @@ export const RoomListItemView = memo(function RoomListItemView({
         // (focus is then in the portaled popover, outside the row). The latter means that when the
         // menu closes with Escape, the trigger is still revealed, so the popover's own focus
         // restoration lands on it instead of dropping to <body>. Clear once focus leaves for good.
-        if (
-            !e.currentTarget.contains(e.relatedTarget as Node | null) &&
-            !e.currentTarget.querySelector('[data-state="open"]')
-        ) {
+        if (!e.currentTarget.contains(e.relatedTarget) && !e.currentTarget.querySelector('[data-state="open"]')) {
             setKeyboardActive(false);
         }
     };
