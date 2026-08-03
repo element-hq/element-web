@@ -69,8 +69,16 @@ describe("avatarUrlForRoom", () => {
 
     it("should return null if the room is not a DM", () => {
         vi.mocked(dmRoomMap).getUserIdForRoomId.mockReturnValue(undefined);
+        vi.mocked(room.getAvatarFallbackMember).mockReturnValue(roomMember);
+        vi.mocked(roomMember.getMxcAvatarUrl).mockReturnValue(avatarUrl2);
         expect(avatarUrlForRoom(room, 128, 128)).toBeNull();
         expect(dmRoomMap.getUserIdForRoomId).toHaveBeenCalledWith(roomId);
+    });
+
+    it("should not consult the DM map when there is nothing to fall back to", () => {
+        vi.mocked(room.getAvatarFallbackMember).mockReturnValue(undefined);
+        expect(avatarUrlForRoom(room, 128, 128)).toBeNull();
+        expect(dmRoomMap.getUserIdForRoomId).not.toHaveBeenCalled();
     });
 
     it("should return null if there is no other member in the room", () => {

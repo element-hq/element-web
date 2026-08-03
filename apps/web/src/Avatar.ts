@@ -157,6 +157,36 @@ export function getInitialLetter(name: string): string | undefined {
     return getFirstGrapheme(name).toUpperCase();
 }
 
+/**
+ * Resolve which mxc URI a room's avatar should be rendered from, falling back to the other member's
+ * avatar for a DM which has no avatar of its own.
+ *
+ * @param room - The room to resolve an avatar for. May be null.
+ * @param avatarMxcOverride - Use this mxc URI as the room's own avatar instead of its `m.room.avatar`.
+ * @returns The mxc URI to render, or null if the room has no avatar to show.
+ */
+export function avatarMxcForRoom(room: Room | null, avatarMxcOverride?: string): string | null {
+    if (!room) return null; // null-guard
+    const mxc = avatarMxcOverride ?? room.getMxcAvatarUrl();
+    if (mxc) return mxc;
+
+    // space rooms cannot be DMs so skip the rest
+    if (room.isSpaceRoom()) return null;
+
+    // If there are only two members in the DM use the avatar of the other member. This is checked
+    // before the DM lookup below so that a room with nothing to fall back to — the common case —
+    // does not have to reach for the DMRoomMap singleton at all.
+    const fallbackMxc = room.getAvatarFallbackMember()?.getMxcAvatarUrl();
+    if (!fallbackMxc) return null;
+
+    // If the room is not a DM don't fallback to a member avatar
+    if (!DMRoomMap.shared().getUserIdForRoomId(room.roomId) && !isLocalRoom(room)) {
+        return null;
+    }
+
+    return fallbackMxc;
+}
+
 export function avatarUrlForRoom(
     room: Room | null,
     width?: number,
@@ -164,32 +194,12 @@ export function avatarUrlForRoom(
     resizeMethod?: ResizeMethod,
     avatarMxcOverride?: string,
 ): string | null {
-    if (!room) return null; // null-guard
-    const mxc = avatarMxcOverride ?? room.getMxcAvatarUrl();
-    if (mxc) {
-        const media = mediaFromMxc(mxc);
-        if (width !== undefined && height !== undefined) {
-            return media.getThumbnailOfSourceHttp(width, height, resizeMethod);
-        }
-        return media.srcHttp;
-    }
+    const mxc = avatarMxcForRoom(room, avatarMxcOverride);
+    if (!mxc) return null;
 
-    // space rooms cannot be DMs so skip the rest
-    if (room.isSpaceRoom()) return null;
-
-    // If the room is not a DM don't fallback to a member avatar
-    if (!DMRoomMap.shared().getUserIdForRoomId(room.roomId) && !isLocalRoom(room)) {
-        return null;
+    const media = mediaFromMxc(mxc);
+    if (width !== undefined && height !== undefined) {
+        return media.getThumbnailOfSourceHttp(width, height, resizeMethod);
     }
-
-    // If there are only two members in the DM use the avatar of the other member
-    const otherMember = room.getAvatarFallbackMember();
-    if (otherMember?.getMxcAvatarUrl()) {
-        const media = mediaFromMxc(otherMember.getMxcAvatarUrl());
-        if (width !== undefined && height !== undefined) {
-            return media.getThumbnailOfSourceHttp(width, height, resizeMethod);
-        }
-        return media.srcHttp;
-    }
-    return null;
+    return media.srcHttp;
 }
