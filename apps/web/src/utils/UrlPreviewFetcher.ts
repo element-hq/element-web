@@ -13,6 +13,8 @@ import type { UrlPreview } from "@element-hq/web-shared-components";
 import { mediaFromMxc } from "../customisations/Media";
 import { thumbHeight } from "../ImageUtils";
 import { type UnstableBundledUrlPreviewSingle } from "../../@types/url-preview";
+import { decryptFile } from "./DecryptFile";
+import { type EncryptedFile } from "matrix-js-sdk/src/types";
 
 const logger = rootLogger.getChild("UrlPreviewFetcher");
 
@@ -28,6 +30,8 @@ export const MIN_IMAGE_SIZE_BYTES = 8192;
  */
 export class UrlPreviewFetcher {
     private readonly cache = new Map<string, UrlPreview>();
+    // Map<the mxc:// url, the object url>
+    private readonly decryptedObjectUrls = new Map<string, string>();
 
     public constructor(
         private readonly client: MatrixClient,
@@ -37,6 +41,16 @@ export class UrlPreviewFetcher {
 
     public clearCache(): void {
         this.cache.clear();
+        this.dispose();
+    }
+
+    public revokeObjectUrls(): void {
+        this.decryptedObjectUrls.forEach((url) => URL.revokeObjectURL(url));
+        this.decryptedObjectUrls.clear();
+    }
+
+    public dispose(): void {
+        this.revokeObjectUrls();
     }
 
     /**
@@ -211,17 +225,13 @@ export class UrlPreviewFetcher {
     /*
      * Convert an MSC4095 URL preview bundle item to a UrlPreview
      */
-    public previewFromBundle(single: UnstableBundledUrlPreviewSingle): UrlPreview {
+    public async previewFromBundle(single: UnstableBundledUrlPreviewSingle): Promise<UrlPreview> {
         // missing fields from the bundle because backend does provide it:
         // - siteName (can be computed)
         // - favicon
         // - media is a video or audio?
-        // TODO in next PR: URL previews in encrypted chat?
-        const hasImage =
-            typeof single["og:image"] === "string" &&
-            typeof single["og:image:type"] === "string" &&
-            typeof single["og:image:width"] === "number" &&
-            typeof single["og:image:height"] === "number";
+        const hasEncryptedImage = typeof single["beeper:image:encryption"] === "object";
+        const hasImage = hasEncryptedImage || typeof single["og:image"] === "string";
 
         const preview: UrlPreview = {
             link: single.matched_url,
@@ -233,22 +243,42 @@ export class UrlPreviewFetcher {
         };
 
         if (hasImage) {
-            const media = mediaFromMxc(single["og:image"], this.client);
-            const thumb = media.getThumbnailOfSourceHttp(PREVIEW_WIDTH_PX, PREVIEW_HEIGHT_PX, "scale");
+            let imageThumb: string | null = null,
+                imageFull: string | null = null;
 
-            // cannot rule out the mxc:// url is malformed because
-            // the sender can specify anything
-            if (media.srcHttp === null || thumb === null) {
+            if (hasEncryptedImage) {
+                const encryptedFile = single["beeper:image:encryption"] as EncryptedFile;
+                const cachedObjectUrl = this.decryptedObjectUrls.get(encryptedFile.url);
+                if (cachedObjectUrl) {
+                    imageThumb = imageFull = cachedObjectUrl;
+                } else {
+                    try {
+                        const blob = await decryptFile(encryptedFile);
+                        imageThumb = imageFull = URL.createObjectURL(blob);
+                        this.decryptedObjectUrls.set(encryptedFile.url, imageFull);
+                    } catch (e) {
+                        console.error("failed to preview encrypted message in URL previews", e);
+                    }
+                }
+            } else {
+                const media = mediaFromMxc(single["og:image"], this.client);
+                // cannot rule out the mxc:// url is malformed because
+                // the sender can specify anything
+                imageFull = media.srcHttp;
+                imageThumb = media.getThumbnailOfSourceHttp(PREVIEW_WIDTH_PX, PREVIEW_HEIGHT_PX, "scale") ?? imageFull;
+            }
+
+            if (imageFull === null || imageThumb === null) {
                 return preview;
             }
 
             preview.image = {
-                imageThumb: thumb,
-                imageFull: media.srcHttp,
-                imageType: single["og:image:type"] as string,
+                imageThumb,
+                imageFull,
+                imageType: single["og:image:type"] as string | undefined,
                 mxcImageFull: single["og:image"] as string,
-                width: single["og:image:width"] as number,
-                height: single["og:image:height"] as number,
+                width: single["og:image:width"] as number | undefined,
+                height: single["og:image:height"] as number | undefined,
                 playable: false, // TODO: do we know?
             };
         }

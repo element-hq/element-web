@@ -346,6 +346,13 @@ export default class PreferencesUserSettingsTab extends React.Component<EmptyObj
                             level={SettingLevel.DEVICE}
                             requires={["urlPreviewsEnabled"]}
                         />
+                        {SettingsStore.getValue("feature_msc4095_url_preview_bundle") && (
+                            <SettingsFlag
+                                name="urlPreviewsEnabled_e2ee_bundled_only"
+                                level={SettingLevel.DEVICE}
+                                requires={["urlPreviewsEnabled_e2ee"]}
+                            />
+                        )}
                     </SettingsSubsection>
 
                     <SettingsSubsection heading={_t("settings|preferences|media_heading")} formWrap>

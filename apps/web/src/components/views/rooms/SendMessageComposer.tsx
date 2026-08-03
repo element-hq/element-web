@@ -14,9 +14,9 @@ import React, {
     type ReactElement,
 } from "react";
 import {
-    type MatrixEvent,
     type IEventRelation,
     type Room,
+    type MatrixEvent,
     EventType,
     MsgType,
     RelationType,
@@ -453,7 +453,9 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
 
             // clear composer first so the user doesn't actually see the delay of attach URL preview image files
             clearComposerAndPushHistory();
-            attachUrlPreviews(urlPreviewSnapshot, content);
+            if (await attachUrlPreviews(this.props.mxClient, this.props.room, urlPreviewSnapshot, content)) {
+                return;
+            }
 
             if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
                 decorateStartSendingTime(content);

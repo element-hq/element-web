@@ -5,13 +5,28 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixEvent, type IContent, type IMentions, type IEventRelation } from "matrix-js-sdk/src/matrix";
-import { type MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
+import {
+    MatrixEvent,
+    type IContent,
+    type IMentions,
+    type IEventRelation,
+    type MatrixClient,
+    type Room,
+    EventType,
+    EventStatus,
+    MatrixEventEvent,
+} from "matrix-js-sdk/src/matrix";
+import {
+    type MessageComposerUrlPreviewSnapshotEntryLoaded,
+    type MessageComposerUrlPreviewSnapshot,
+} from "@element-hq/web-shared-components";
 
 import type EditorModel from "../editor/model";
 import { Type } from "../editor/parts";
-import { type RoomMessageEventContent } from "../../@types/url-preview";
+import { type UnstableBundledUrlPreviewSingle, type RoomMessageEventContent } from "../../@types/url-preview";
 import SettingsStore from "../settings/SettingsStore";
+import { uploadFile } from "../ContentMessages";
+import { mediaFromMxc } from "../customisations/Media";
 
 /**
  * Build the mentions information based on the editor model (and any related events):
@@ -110,25 +125,102 @@ export function attachRelation(content: IContent, relation?: IEventRelation): vo
         };
     }
 }
-export function attachUrlPreviews(
+
+/*
+ * Attaches URL preview bundle to message event (MSC4095)
+ *
+ * Returns TRUE if event has been cancelled while uploading files
+ * FALSE if event is not cancelled
+ */
+export async function attachUrlPreviews(
+    client: MatrixClient,
+    room: Room,
     urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot,
     content: RoomMessageEventContent,
-): void {
-    if (!SettingsStore.getValue("feature_msc4095_url_preview_bundle")) return;
+): Promise<boolean> {
+    if (!SettingsStore.getValue("feature_msc4095_url_preview_bundle")) return false;
 
-    if (urlPreviewSnapshot.previews.length) {
-        content["com.beeper.linkpreviews"] = urlPreviewSnapshot.previews.map((preview) => {
-            return {
+    const isRoomEncrypted = room.hasEncryptionStateEvent();
+    const previewsToAttach = urlPreviewSnapshot.entries
+        .filter((entry) => entry.include && entry.status === "loaded")
+        .map((entry) => (entry as MessageComposerUrlPreviewSnapshotEntryLoaded).preview);
+
+    let eventId: string | undefined = undefined;
+    let cancelled = false;
+    const abortController = new AbortController();
+
+    if (isRoomEncrypted && previewsToAttach.some((preview) => preview.image !== undefined)) {
+        const txnId = client.makeTxnId();
+        const event = new MatrixEvent({
+            type: EventType.RoomMessage,
+            content,
+            event_id: "~" + room.roomId + ":" + txnId,
+            sender: client.getSafeUserId(),
+            room_id: room.roomId,
+            origin_server_ts: Date.now(),
+        });
+        event.setTxnId(txnId);
+        event.setStatus(EventStatus.SENDING);
+        event.on(MatrixEventEvent.Status, (_, status) => {
+            if (status == EventStatus.CANCELLED) {
+                cancelled = true;
+                abortController.abort();
+            }
+        });
+        room.addPendingEvent(event, txnId);
+        room.updatePendingEvent(event, EventStatus.ENCRYPTING);
+        eventId = event.getId();
+    }
+
+    const bundle = await Promise.all(
+        previewsToAttach.map(async (preview) => {
+            const out: UnstableBundledUrlPreviewSingle = {
                 "matched_url": preview.link,
                 "og:url": preview.ogUrl,
                 "og:title": preview.title,
                 "og:description": preview.description,
-                "og:image": preview.image?.mxcImageFull,
                 "og:image:width": preview.image?.width,
                 "og:image:height": preview.image?.height,
                 "og:image:type": preview.image?.imageType,
-                "matrix:image:size": preview.image?.fileSize,
             };
-        });
+
+            if (preview.image?.mxcImageFull !== undefined) {
+                if (isRoomEncrypted) {
+                    try {
+                        // image url from homeserver assumed to not be malformed
+                        const httpUrl = mediaFromMxc(preview.image.mxcImageFull).srcHttp as string;
+                        const blob = await (await fetch(httpUrl, { signal: abortController.signal })).blob();
+                        const { file, url } = await uploadFile(client, room.roomId, blob, undefined, abortController);
+
+                        if (file) {
+                            out["beeper:image:encryption"] = file;
+                        } else if (url) {
+                            console.error(
+                                `uploading file to room_id=${room.roomId}, expected EncryptedFile, got (unencrypted) URL instead`,
+                            );
+                        }
+                    } catch (e) {
+                        if (!abortController.signal.aborted) {
+                            console.error(e);
+                        }
+                    }
+                } else {
+                    out["og:image"] = preview.image?.mxcImageFull;
+                    out["matrix:image:size"] = preview.image?.fileSize;
+                }
+            }
+
+            return out;
+        }),
+    );
+
+    if (urlPreviewSnapshot.entries.length !== 0) {
+        content["com.beeper.linkpreviews"] = bundle;
     }
+
+    if (eventId !== undefined) {
+        room.removePendingEvent(eventId);
+    }
+
+    return cancelled;
 }

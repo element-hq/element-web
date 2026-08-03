@@ -5,6 +5,134 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+.wrapper {
+    background-color: var(--cpd-color-bg-subtle-secondary);
+    padding: 2px 8px 12px 8px;
+    border-radius: 10px;
+}
+
+.wrapper.collapsed {
+    padding-bottom: 4px;
+}
+
+:global(.cpd-theme-light) {
+    .summaryIcon,
+    .entryIcon {
+        --icon-lightness: 40%;
+    }
+}
+
+:global(.cpd-theme-dark) .summaryIcon {
+    .summaryIcon,
+    .entryIcon {
+        --icon-lightness: 60%;
+    }
+}
+
+.left {
+    flex-grow: 1;
+}
+
+.right {
+    margin-right: 6px;
+}
+
+.spanLike {
+    background: none;
+    border: none;
+    margin: 0;
+    padding: 0;
+    font: inherit;
+    text-align: inherit;
+    line-height: 100%;
+}
+
+.summary {
+    justify-content: space-between;
+    display: flex;
+    padding: 7px 4px 4px 4px;
+    width: 100%;
+
+    * {
+        vertical-align: center;
+        line-height: 18px;
+    }
+
+    .summaryIcon:not(:first-child) {
+        margin-left: -8px;
+    }
+
+    .summaryIcon {
+        overflow: hidden;
+        display: inline-block;
+        position: relative;
+        left: 2px;
+
+        width: 18px;
+        height: 18px;
+        border-radius: 4px;
+
+        box-shadow: 0px 0px 0px 2px var(--cpd-color-bg-subtle-secondary);
+        background-color: var(--cpd-color-bg-subtle-secondary);
+
+        text-align: center;
+        line-height: 18px;
+
+        font-weight: 700;
+        color: var(--cpd-color-text-on-solid-primary);
+
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        svg {
+            width: 50% !important;
+            height: 50% !important;
+        }
+    }
+
+    .linkCount {
+        margin-left: 13px;
+        font-weight: 500;
+        font-size: 13.5px;
+    }
+
+    .clearAll {
+        font-size: 11.5px;
+        margin-right: 10px;
+        color: var(--cpd-color-gray-900);
+        cursor: pointer;
+    }
+
+    .collapse {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        text-align: center;
+        line-height: 18px;
+        transition: rotate 300ms ease;
+        color: var(--cpd-color-gray-900);
+
+        cursor: pointer;
+
+        svg {
+            width: 18px;
+            height: 18px;
+        }
+    }
+}
+
+.wrapper.collapsed .collapse {
+    rotate: 180deg;
+}
+
 .container {
     container-type: inline-size;
     container-name: banner;
@@ -12,7 +140,7 @@
     align-items: center;
     justify-content: space-between;
     gap: var(--cpd-space-4x);
-    padding: var(--cpd-space-3x) var(--cpd-space-4x);
+    padding: var(--cpd-space-2x) var(--cpd-space-4x);
     border-top: 1px solid var(--cpd-color-gray-400);
 
     > div {
@@ -24,27 +152,71 @@
     .text {
         display: flex;
         flex-direction: column;
+
         > a {
             color: var(--cpd-color-text-action-accent);
             font-weight: 400;
             font-size: 13px;
         }
-        > .description {
-            margin: 0;
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 1;
-            line-clamp: 1;
-            overflow: hidden;
-            /* Cap the max width of a line so it doesn't go on forever. */
-            max-width: 40em;
-        }
+    }
+
+    .linkSiteName {
+        margin-top: 0;
+    }
+
+    .linkTitle {
+        line-clamp: 1;
+        -webkit-line-clamp: 1;
     }
 }
 
-.image {
+.container:last-of-type {
+    padding-bottom: 0;
+}
+
+.removePreview {
+    color: var(--cpd-color-gray-900);
+    cursor: pointer;
+    width: 15px;
+    height: 15px;
+
+    svg {
+        width: 15px;
+        height: 15px;
+    }
+}
+
+.entryIcon,
+.loadingSpinner,
+.failedIcon {
+    flex-shrink: 0;
     width: 40px;
     height: 40px;
     border-radius: 6px;
-    object-fit: scale-down;
+    overflow: hidden;
+
+    align-items: center;
+    vertical-align: middle;
+
+    text-align: center;
+    line-height: 40px;
+    font-weight: 700;
+    font-size: 20px;
+
+    color: var(--cpd-color-text-on-solid-primary);
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    svg {
+        vertical-align: middle;
+    }
+}
+
+.failedIcon {
+    color: var(--cpd-color-icon-critical-primary);
 }

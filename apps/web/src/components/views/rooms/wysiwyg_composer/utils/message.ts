@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import { type Composer as ComposerEvent } from "@matrix-org/analytics-events/types/typescript/Composer";
 import {
-    type IEventRelation,
     type MatrixEvent,
+    type IEventRelation,
     type ISendEventResponse,
     type MatrixClient,
     THREAD_RELATION_TYPE,
@@ -114,7 +114,9 @@ export async function sendMessage(
 
     // if content is null, we haven't done any slash command processing, so generate some content
     content ??= await createMessageContent(message, isHTML, params);
-    attachUrlPreviews(urlPreviewSnapshot, content);
+    if (await attachUrlPreviews(mxClient, room, urlPreviewSnapshot, content)) {
+        return;
+    }
 
     // TODO replace emotion end of message ?
 

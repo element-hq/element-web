@@ -5,14 +5,15 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { BaseViewModel, type MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
+import {
+    BaseViewModel,
+    type MessageComposerUrlPreviewSnapshotEntry,
+    type MessageComposerUrlPreviewSnapshot,
+} from "@element-hq/web-shared-components";
 import { debounce } from "lodash";
 
 import { UrlPreviewFetcher } from "../../utils/UrlPreviewFetcher";
-
-const logger = rootLogger.getChild("MessageComposerUrlPreviewViewModel");
 
 export const DEBOUNCE_REQUEST_TIMEOUT_MS = 500;
 
@@ -20,7 +21,6 @@ export interface MessageComposerUrlPreviewViewModelProps {
     client: MatrixClient;
     visible: boolean;
     showTooltips: boolean;
-    urlPreviewBundle: boolean;
     content?: string;
 }
 
@@ -43,29 +43,31 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
      */
     private urlPreviewVisible: boolean;
 
+    /**
+     * Composer content when updateWithText is most recently called
+     */
     private content: string;
 
+    private readonly previewCache: Map<string, MessageComposerUrlPreviewSnapshotEntry> = new Map();
+
     public constructor(props: MessageComposerUrlPreviewViewModelProps) {
-        super(props, { previews: [], content: props.content ?? "" });
+        super(props, { entries: [], content: props.content ?? "" });
         this.urlPreviewVisible = props.visible;
         this.fetcher = new UrlPreviewFetcher(props.client, Date.now(), props.showTooltips);
         this.content = this.snapshot.current.content;
     }
 
-    private async computeSnapshot(content: string): Promise<void> {
+    private computeSnapshot(content: string): void {
+        if (!this.urlPreviewVisible) {
+            this.snapshot.set({ entries: [], content });
+            return;
+        }
+
         const newLinksOrdered = content
             .split(" ")
             .map((w) => w.trim())
             .filter((word) => URL.canParse(word));
         const newLinks = new Set(newLinksOrdered);
-
-        if (!this.urlPreviewVisible) {
-            // Clear any existing previews whenever previews are hidden, regardless of
-            // whether the URL set has changed (e.g. when toggled invisible).
-            this.snapshot.set({ previews: [], content });
-            return;
-        }
-
         if (this.links.symmetricDifference(newLinks).size === 0) {
             // Skip if the URL set hasn't changed
             return;
@@ -73,47 +75,68 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
 
         this.links = newLinks;
 
-        let previews;
-        if (this.props.urlPreviewBundle) {
-            const previewRequests = Array.from(this.links).map(async (link) => {
-                try {
-                    return await this.fetcher.fetchPreview(link, true);
-                } catch (ex) {
-                    logger.warn("Fetching preview failed", ex);
-                    return null;
-                }
-            });
+        const entries = Array.from(this.links).map((link) => {
+            // if not in cache, add to VM now, fetch later
+            if (!this.previewCache.has(link)) {
+                this.previewCache.set(link, {
+                    status: "loading",
+                    include: true,
+                    matched_url: link,
+                });
 
-            // Fetch previews for all links in the message text,
-            // And remove the ones with erroneous responses
-            const previewResponses = await Promise.all(previewRequests);
-            previews = previewResponses.filter((res) => res !== null);
+                const insertToSnapshot = (): void => {
+                    const updatedEntry = this.previewCache.get(link);
+                    if (updatedEntry === undefined) return;
 
-            this.snapshot.set({ previews, content });
-        } else {
-            for (const link of this.links) {
-                try {
-                    const preview = await this.fetcher.fetchPreview(link, true);
-                    if (preview) {
-                        this.snapshot.set({ previews: [preview], content });
-                        return;
+                    const snapshot = this.snapshot.current;
+
+                    this.snapshot.set({
+                        content: snapshot.content,
+                        entries: snapshot.entries.map((entry) =>
+                            entry.matched_url === updatedEntry.matched_url ? updatedEntry : entry,
+                        ),
+                    });
+                };
+
+                this.fetcher.fetchPreview(link, true).then((fetched) => {
+                    const currentEntry = this.previewCache.get(link);
+                    if (fetched === null) {
+                        this.previewCache.set(link, {
+                            status: "failed",
+                            include: currentEntry?.include ?? true,
+                            matched_url: link,
+                        });
+                    } else {
+                        this.previewCache.set(link, {
+                            status: "loaded",
+                            include: currentEntry?.include ?? true,
+                            matched_url: link,
+                            preview: fetched,
+                        });
                     }
-                } catch (ex) {
-                    logger.warn("Fetching preview failed", ex);
-                }
+
+                    insertToSnapshot();
+                });
             }
 
-            this.snapshot.set({ previews: [], content });
-        }
+            return this.previewCache.get(link) as MessageComposerUrlPreviewSnapshotEntry;
+        });
+
+        this.snapshot.set({ entries, content });
     }
 
     /**
      * Trigger a recalculation of the links in the provided text.
      * @param content Plaintext from the message composer.
      */
-    public async updateWithText({ content, debounced }: { content?: string; debounced: boolean }): Promise<void> {
+    public updateWithText({ content, debounced }: { content?: string; debounced: boolean }): void {
         if (content !== undefined) {
             this.content = content;
+        }
+
+        if (content === "") {
+            this.previewCache.clear();
+            return this.computeSnapshot("");
         }
 
         if (debounced) {
@@ -134,9 +157,22 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
      *
      * @returns A promise that completes when the snapshot has been recomputed.
      */
-    public readonly updateUrlPreviewVisible = (urlPreviewVisible: boolean): Promise<void> => {
+    public readonly updateUrlPreviewVisible = (urlPreviewVisible: boolean): void => {
         this.urlPreviewVisible = urlPreviewVisible;
         this.fetcher.clearCache();
         return this.computeSnapshot(this.content);
+    };
+
+    public readonly removePreview = (url: string): void => {
+        const entry = this.previewCache.get(url);
+        if (entry === undefined) return;
+        entry.include = false;
+
+        const snapshot = this.snapshot.current;
+
+        this.snapshot.set({
+            content: snapshot.content,
+            entries: snapshot.entries.filter((entry) => entry.include),
+        });
     };
 }
