@@ -24,7 +24,7 @@
 }
 
 .header {
-    padding: 4px 8px 0;
+    padding: var(--cpd-space-1x) var(--cpd-space-2x) 0;
     border-bottom: 1px solid var(--cpd-color-gray-400);
 }
 
@@ -79,7 +79,7 @@
     input {
         flex: 1;
         border: none;
-        padding: 8px 12px;
+        padding: var(--cpd-space-1x) var(--cpd-space-3x);
         border-radius: 4px 0;
 
         &::placeholder {
@@ -91,7 +91,7 @@
         border: none;
         background-color: inherit;
         margin: 0;
-        padding: 8px;
+        padding: var(--cpd-space-2x);
         align-self: center;
         width: 32px;
         height: 32px;
@@ -106,7 +106,7 @@
 
 .searchIcon {
     width: 18px;
-    margin: 8px;
+    margin: var(--cpd-space-2x);
 
     svg {
         width: 100%;
@@ -116,7 +116,7 @@
 }
 
 .category {
-    padding: 0 12px;
+    padding: 0 var(--cpd-space-3x);
 }
 
 .categoryLabel {
@@ -133,7 +133,7 @@
    cells so the row never wraps, offset to align with the category headers. */
 .row {
     width: 304px;
-    margin: 0 12px;
+    margin: 0 var(--cpd-space-3x);
 }
 
 .itemWrapper {
@@ -169,7 +169,7 @@
 .itemSelected {
     color: rgb(0, 0, 0, 0.5);
     border: 1px solid var(--cpd-color-text-action-accent);
-    padding: 4px;
+    padding: var(--cpd-space-1x);
 }
 
 .categoryLabel,
@@ -190,7 +190,7 @@
 
 .previewEmoji {
     font-size: var(--cpd-font-size-heading-xl);
-    padding: 8px 16px;
+    padding: var(--cpd-space-2x) var(--cpd-space-4x);
 }
 
 .previewText {
@@ -223,5 +223,5 @@
 }
 
 .quickHeader .name {
-    margin-right: 4px;
+    margin-right: var(--cpd-space-1x);
 }

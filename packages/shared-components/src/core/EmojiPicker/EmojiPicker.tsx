@@ -85,7 +85,7 @@ const gridComponents = { List: GridList, Item: GridItem };
 /**
  * Props for {@link EmojiPicker}.
  */
-interface EmojiPickerProps {
+export interface EmojiPickerProps {
     /**
      * Set of which emojis are already selected and should be decorated as such.
      * If specified, emoji will use a checkbox role with aria-checked set appropriately.
@@ -209,7 +209,7 @@ export function EmojiPicker({
 
     const lcFilter = filter.toLowerCase().trim(); // filter is case insensitive
 
-    // Compute empji to show in each category and which categories are enabled
+    // Compute emoji to show in each category and which categories are enabled
     // (ie. non-empty) from the recently used list and the filter.
     const { dataByCategory, enabledCategories } = useMemo(() => {
         const dataByCategory = {} as Record<CategoryKey, IEmoji[]>;
@@ -310,7 +310,7 @@ export function EmojiPicker({
     const shouldMoveFocus = useCallback((): boolean => {
         // If the search field is active, the grid will still move the selected element but we don't
         // want it to change the focus because the user trying to type in the field.
-        // NB. This does still break the ability to navaigate the text field with left/right arrows
+        // NB. This does still break the ability to navigate the text field with left/right arrows
         // as they change the selected emoji in the grid. This seems… bad, but I'm keeping it how it was.
         return document.activeElement !== searchRef.current;
     }, []);
@@ -375,6 +375,14 @@ export function EmojiPicker({
         [onChoose, onRecordRecent, onFinished],
     );
 
+    // Base for the IDs of the individual emoji cells: the search box points at the
+    // active cell with aria-activedescendant, which requires the cells to have IDs.
+    // It doesn't actually matter what the ID is, provided each is unique, because
+    // the search box queries the roving context for the active element and gets its ID.
+    // (generate a single unique ID and then suffix because hooks can't be called in
+    // a loop).
+    const emojiIdBase = useId();
+
     const renderItem = useCallback(
         (_index: number, item: ListItem): React.ReactNode => {
             if (item.type === "header") {
@@ -390,6 +398,9 @@ export function EmojiPicker({
             return item.emojis.map((emoji) => (
                 <div role="gridcell" className={styles.itemWrapper} key={emoji.hexcode}>
                     <Emoji
+                        // The category is part of the ID because the same emoji can appear both in
+                        // its own category and in the recently used one.
+                        id={`${emojiIdBase}-${item.categoryId}-${emoji.hexcode}`}
                         emoji={emoji}
                         selectedEmojis={selectedEmojis}
                         onClick={onClickEmoji}
@@ -400,7 +411,7 @@ export function EmojiPicker({
                 </div>
             ));
         },
-        [selectedEmojis, onClickEmoji, onHoverEmoji, onHoverEmojiEnd, isEmojiDisabled],
+        [selectedEmojis, onClickEmoji, onHoverEmoji, onHoverEmojiEnd, isEmojiDisabled, emojiIdBase],
     );
 
     const pickerBodyId = useId();
@@ -417,7 +428,11 @@ export function EmojiPicker({
             getAction={getAction}
         >
             {({ onKeyDownHandler }) => (
-                <section className={styles.picker} onKeyDown={onKeyDownHandler} aria-label={_t("a11y|emoji_picker")}>
+                <section
+                    className={styles.picker}
+                    onKeyDown={onKeyDownHandler}
+                    aria-label={_t("emoji_picker|emoji_picker")}
+                >
                     <Tabs
                         categories={CATEGORY_CONFIG}
                         enabledCategories={enabledCategories}

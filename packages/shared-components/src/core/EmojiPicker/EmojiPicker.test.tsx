@@ -311,6 +311,38 @@ describe("EmojiPicker", function () {
         expect(getEmoji()).toEqual("🙂");
     });
 
+    it("should point aria-activedescendant at the active emoji while searching", async () => {
+        const { container } = render(<EmojiPicker onChoose={vi.fn()} onFinished={vi.fn()} />);
+
+        const input = container.querySelector("input")!;
+        await waitFor(() => expect(input).toHaveFocus());
+
+        function getActiveEmoji(): HTMLElement {
+            return container.querySelector<HTMLElement>('[role="gridcell"] [tabindex="0"]')!;
+        }
+
+        // With no query, the input must not claim an active descendant: doing so makes
+        // screen readers read out the first emoji merely on focusing the input.
+        await waitFor(() => expect(getActiveEmoji()).toBeInTheDocument());
+        expect(input).not.toHaveAttribute("aria-activedescendant");
+
+        // Once there's a query, the active emoji must be identified to screen readers,
+        // which requires the emoji cells to have IDs for aria-activedescendant to target.
+        await userEvent.type(input, "te");
+        await waitFor(() => expect(getActiveEmoji().textContent).toEqual("🧑‍🏫"));
+
+        const activeId = getActiveEmoji().id;
+        expect(activeId).not.toEqual("");
+        expect(input).toHaveAttribute("aria-activedescendant", activeId);
+        expect(container.querySelectorAll(`[id="${activeId}"]`)).toHaveLength(1);
+
+        // ...and it must follow the selection as the query changes
+        await userEvent.type(input, "s");
+        await waitFor(() => expect(getActiveEmoji().textContent).toEqual("🧪"));
+        expect(input).toHaveAttribute("aria-activedescendant", getActiveEmoji().id);
+        expect(getActiveEmoji().id).not.toEqual(activeId);
+    });
+
     describe("Category keyboard selection", () => {
         it("check tabindex for the first category when no recent emojis", async () => {
             const { container } = render(<EmojiPicker onChoose={vi.fn()} onFinished={vi.fn()} />);
