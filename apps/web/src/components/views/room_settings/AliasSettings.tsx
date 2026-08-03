@@ -240,11 +240,11 @@ export default class AliasSettings extends React.Component<IProps, IState> {
             .createAlias(alias, this.props.roomId)
             .then(() => {
                 this.setState({
-                    localAliases: this.state.localAliases.concat(alias!),
+                    localAliases: this.state.localAliases.concat(alias),
                     newAlias: undefined,
                 });
                 if (!this.state.canonicalAlias) {
-                    this.changeCanonicalAlias(alias!);
+                    this.changeCanonicalAlias(alias);
                 }
             })
             .catch((err) => {

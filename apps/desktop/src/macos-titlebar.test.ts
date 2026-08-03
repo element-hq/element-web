@@ -9,29 +9,16 @@ Please see LICENSE files in the repository root for full details.
 import { afterEach, describe, expect, it, vi, type Mock } from "vitest";
 import type { BrowserWindow } from "electron";
 
-import { buildTitleBarCss, setupMacosTitleBar } from "./macos-titlebar.js";
+import { buildTitleBarCss, setupMacosTitleBar, TITLE_BAR_HEIGHT_PX } from "./macos-titlebar.js";
 
 /**
- * Extract the `height` (in px) declared for the given selector.
- *
- * A selector may appear in more than one rule block (e.g. `.mx_SpaceRoomView::before` is both grouped with
- * `.mx_RoomView::before` for the drag declaration and given its own block for the height). We scan every
- * block whose selector list contains the target and return the height from the first block that declares one.
+ * Extract the declaration block for the first rule whose selector list contains the given selector.
  */
-function dragStripHeightPx(css: string, selector: string): number {
+function ruleBlock(css: string, selector: string): string {
     const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const blockRegex = new RegExp(`([^{}]*${escaped}[^{}]*)\\{([^}]*)\\}`, "g");
-    let match: RegExpExecArray | null;
-    let foundBlock = false;
-    while ((match = blockRegex.exec(css)) !== null) {
-        foundBlock = true;
-        const heightMatch = /height:\s*(\d+(?:\.\d+)?)px/.exec(match[2]);
-        if (heightMatch) {
-            return Number.parseFloat(heightMatch[1]);
-        }
-    }
-    expect(foundBlock, `expected a rule block for "${selector}"`).toBe(true);
-    throw new Error(`expected a px height declared for "${selector}"`);
+    const blockMatch = new RegExp(`[^{}]*${escaped}[^{}]*\\{([^}]*)\\}`).exec(css);
+    expect(blockMatch, `expected a rule block for "${selector}"`).not.toBeNull();
+    return blockMatch![1];
 }
 
 describe("buildTitleBarCss", () => {
@@ -42,55 +29,75 @@ describe("buildTitleBarCss", () => {
         expect(css.length).toBeGreaterThan(0);
     });
 
-    it.each([".mx_RoomView::before", ".mx_LeftPanel::before", ".mx_SpaceRoomView::before"])(
-        "marks %s as a drag handle",
-        (selector) => {
-            const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-            const blockMatch = new RegExp(`${escaped}[^}]*\\{([^}]*)\\}`).exec(css);
-            expect(blockMatch, `expected a rule block for "${selector}"`).not.toBeNull();
-            expect(blockMatch![1]).toMatch(/-webkit-app-region:\s*drag/);
-        },
-    );
-
-    // Regression guard for #32018: the drag strips above the headers were ~13px and too small to grab.
-    it("gives .mx_RoomView::before a drag strip at least 28px tall (regression #32018)", () => {
-        expect(dragStripHeightPx(css, ".mx_RoomView::before")).toBeGreaterThanOrEqual(28);
+    it("draws the title bar band at the designed height", () => {
+        const bar = ruleBlock(css, "body::before");
+        expect(bar).toMatch(new RegExp(`height:\\s*${TITLE_BAR_HEIGHT_PX}px`));
+        expect(bar).toMatch(/position:\s*fixed/);
     });
 
-    it("gives .mx_LeftPanel::before a drag strip at least 28px tall (regression #32018)", () => {
-        expect(dragStripHeightPx(css, ".mx_LeftPanel::before")).toBeGreaterThanOrEqual(28);
+    it("styles the title bar with the canvas background and separator tokens", () => {
+        // Matches the design spec: bg/canvas/default fill with a 1px separator/primary hairline below.
+        const bar = ruleBlock(css, "body::before");
+        expect(bar).toMatch(/background:\s*var\(--cpd-color-bg-canvas-default\b/);
+        expect(bar).toMatch(/border-bottom:\s*1px\s+solid\s+var\(--cpd-color-separator-primary\b/);
     });
 
-    it("gives .mx_SpaceRoomView::before a drag strip at least 28px tall (regression #32018)", () => {
-        expect(dragStripHeightPx(css, ".mx_SpaceRoomView::before")).toBeGreaterThanOrEqual(28);
+    it("makes the title bar a drag handle", () => {
+        expect(ruleBlock(css, "body::before")).toMatch(/-webkit-app-region:\s*drag/);
     });
 
-    it("keeps the left panel's separator on its drag strip", () => {
-        // The strip carries the panel's right-hand border up through the title bar band; widening it must not drop it.
-        expect(css).toMatch(
-            /\.mx_LeftPanel::before\s*\{[^}]*border-right:\s*1px\s+solid\s+var\(--cpd-color-bg-subtle-primary\)/,
+    it("pushes the app content below the title bar band", () => {
+        const body = ruleBlock(css, "body");
+        expect(body).toMatch(new RegExp(`padding-top:\\s*${TITLE_BAR_HEIGHT_PX}px`));
+        expect(body).toMatch(/box-sizing:\s*border-box/);
+    });
+
+    it("keeps the window draggable through an overlapping dialog panel", () => {
+        // Regression guard: a blanket `.mx_Dialog`/`.mx_Dialog_border` no-drag carves the panel
+        // (incl. the Glass border) out of the band, killing the drag where a centred dialog overlaps
+        // it. The panel must stay transparent to the drag calc so body::before shows through.
+        expect(css).not.toMatch(/(^|[^_-])\.mx_Dialog\s*\{[^}]*no-drag/);
+        expect(css).not.toMatch(/\.mx_Dialog_border\b[^{]*\{[^}]*no-drag/);
+    });
+
+    it("does not gate the drag region on a modal being open", () => {
+        // Regression guard: an earlier draft no-dragged the whole bar via the aria-hidden modal
+        // signal, making the window undraggable with e.g. the settings dialog open.
+        expect(css).not.toContain("aria-hidden");
+    });
+
+    it("keeps floating portal overlays clickable within the band", () => {
+        // Compound menus/tooltips render in body-level portals and can open anywhere, incl. the band.
+        expect(css).toMatch(/\[data-radix-popper-content-wrapper\][^{]*\{[^}]*-webkit-app-region:\s*no-drag/);
+    });
+
+    it("no longer carves per-surface drag strips into the app chrome", () => {
+        // The dedicated bar replaces the old hacks; their reappearance would double up the offset.
+        expect(css).not.toContain(".mx_LeftPanel::before");
+        expect(css).not.toContain(".mx_RoomView::before");
+        expect(css).not.toContain(".mx_SpaceRoomView::before");
+        expect(css).not.toContain(".mx_UserMenu");
+        expect(css).not.toContain(".mx_SpacePanel");
+    });
+
+    it("keeps the lightbox sender info clear of the traffic lights", () => {
+        expect(ruleBlock(css, ".mx_ImageView_info_wrapper")).toMatch(
+            new RegExp(`margin-top:\\s*${TITLE_BAR_HEIGHT_PX}px`),
         );
     });
 
-    // Regression guard for #34243: against the default 68px rail the collapsed space panel's right-hand
-    // separator crowds the green traffic light, so the panel is widened to clear it.
-    it("widens the collapsed space panel so the separator clears the traffic lights", () => {
-        expect(css).toMatch(/\.mx_SpacePanel\.collapsed\s*\{[^}]*width:\s*76px\s*!important/);
+    it("keeps the lightbox header a drag handle with interactive elements excluded", () => {
+        expect(ruleBlock(css, ".mx_ImageView_panel")).toMatch(/-webkit-app-region:\s*drag/);
+        expect(css).toMatch(/\.mx_ImageView_panel\s*>\s*\.mx_ImageView_toolbar\s*>\s*\*\s*\{[^}]*no-drag/);
     });
 
-    it("keeps interactive elements excluded from the drag region (no-drag)", () => {
-        // The UserMenu buttons must remain clickable, not act as a drag handle.
-        expect(css).toMatch(/\.mx_UserMenu\s*>\s*\*\s*\{[^}]*-webkit-app-region:\s*no-drag/);
+    it("keeps context menus excluded from the drag region (no-drag)", () => {
+        expect(ruleBlock(css, ".mx_ContextualMenu")).toMatch(/-webkit-app-region:\s*no-drag/);
     });
 
     it("keeps iframes excluded from the drag region (no-drag)", () => {
         // iframes (e.g. recaptcha, widgets) must remain interactive.
         expect(css).toMatch(/iframe\s*\{[^}]*-webkit-app-region:\s*no-drag/);
-    });
-
-    it("does not turn the traffic-light offset into a no-drag handle on .mx_UserMenu itself", () => {
-        // The UserMenu container itself stays a drag handle (only its children are no-drag).
-        expect(css).toMatch(/\.mx_UserMenu\s*\{[^}]*-webkit-app-region:\s*drag/);
     });
 });
 

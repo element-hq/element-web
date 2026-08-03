@@ -403,7 +403,6 @@
         "message": "Bericht",
         "message_layout": "Berichtlayout",
         "microphone": "Microfoon",
-        "model": "Model",
         "modern": "Modern",
         "mute": "Dempen",
         "n_members": {
@@ -2012,7 +2011,6 @@
             "no_sessions": "Geen sessies gevonden.",
             "no_unverified_sessions": "Geen niet-geverifieerde sessies gevonden.",
             "no_verified_sessions": "Geen geverifieerde sessies gevonden.",
-            "os": "Besturingssysteem",
             "other_sessions_heading": "Andere sessies",
             "push_heading": "Pushmeldingen",
             "push_subheading": "Ontvang pushmeldingen voor deze sessie.",

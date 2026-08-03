@@ -381,7 +381,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                             className="mx_ExportDialog_attachments-checkbox"
                             id="include-attachments"
                             checked={includeAttachments}
-                            onChange={(e) => setAttachments((e.target as HTMLInputElement).checked)}
+                            onChange={(e) => setAttachments(e.target.checked)}
                         >
                             {_t("export_chat|include_attachments")}
                         </StyledCheckbox>
