@@ -956,9 +956,6 @@ importers:
       postcss:
         specifier: 8.5.23
         version: 8.5.23
-      postcss-easings:
-        specifier: 4.0.0
-        version: 4.0.0(postcss@8.5.23)
       postcss-hexrgba:
         specifier: 2.1.0
         version: 2.1.0(postcss@8.5.23)
@@ -11197,12 +11194,6 @@ packages:
     engines: {node: '>=20.19.0'}
     peerDependencies:
       postcss: ^8.4
-
-  postcss-easings@4.0.0:
-    resolution: {integrity: sha512-KNpwHA3mTnf0UWcdwahQDaz7DDJ6QteVwdlLff98se854p6pyQW9iofwrD05vtlp33AAAxuUGCOhYwERRJGy6Q==}
-    engines: {node: '>=16.0'}
-    peerDependencies:
-      postcss: ^8.1.0
 
   postcss-focus-visible@11.0.0:
     resolution: {integrity: sha512-VG1a9kBKizUBWS66t5xyB4uLONBnvZLCmZXxT40FALu8EF0QgVZBYy5ApC0KhmpHsv+pvHMJHB3agKHwmocWjw==}
@@ -24334,11 +24325,6 @@ snapshots:
     dependencies:
       '@csstools/postcss-progressive-custom-properties': 5.1.1(postcss@8.5.23)
       '@csstools/utilities': 3.0.0(postcss@8.5.23)
-      postcss: 8.5.23
-      postcss-value-parser: 4.2.0
-
-  postcss-easings@4.0.0(postcss@8.5.23):
-    dependencies:
       postcss: 8.5.23
       postcss-value-parser: 4.2.0
 
