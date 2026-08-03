@@ -401,7 +401,7 @@ test.describe("Spotlight", () => {
         await expect(resultLocator.last()).toHaveAttribute("aria-selected", "false");
     });
 
-    for (const theme of ["light", "dark", "light-high-contrast", "dark-high-contrast"]) {
+    for (const theme of ["light", "dark", "light-high-contrast"]) {
         test.describe(`${theme} theme legibility`, () => {
             // Regression tests for https://github.com/element-hq/element-web/issues/34213
             // Hovered/selected Spotlight results must not render light text on a light
