@@ -140,6 +140,7 @@ describe("Registration", function () {
         await expect(
             screen.findAllByText("Too many attempts in a short time. Retry after 01:30."),
         ).resolves.not.toHaveLength(0);
+        expect(await screen.findByRole("button", { name: "Continue" })).toHaveAttribute("aria-disabled", "true");
     });
 
     it("should show a rate limit message without a time when the server does not give one", async () => {
@@ -150,6 +151,34 @@ describe("Registration", function () {
         await expect(
             screen.findAllByText("Too many attempts in a short time. Wait some time before trying again."),
         ).resolves.not.toHaveLength(0);
+        expect(await screen.findByRole("button", { name: "Continue" })).toHaveAttribute("aria-disabled", "true");
+    });
+
+    it("should re-enable registration once the rate limit has expired", async () => {
+        vi.useFakeTimers({ shouldAdvanceTime: true });
+        try {
+            mockClient.registerRequest
+                .mockReset()
+                .mockRejectedValueOnce(new MatrixError({ errcode: "M_LIMIT_EXCEEDED", retry_after_ms: 90_000 }, 429))
+                .mockRejectedValue(new MatrixError({ flows: [{ stages: [] }] }, 401));
+
+            getComponent();
+
+            expect(await screen.findByRole("button", { name: "Continue" })).toHaveAttribute("aria-disabled", "true");
+
+            await vi.advanceTimersByTimeAsync(90_000);
+
+            // The retry succeeds, so the warning and the disabled button give way to the real form.
+            await waitFor(() =>
+                expect(screen.queryByText("Too many attempts in a short time. Retry after 01:30.")).toBeNull(),
+            );
+            expect(await screen.findByRole("button", { name: "Register" })).not.toHaveAttribute(
+                "aria-disabled",
+                "true",
+            );
+        } finally {
+            vi.useRealTimers();
+        }
     });
 
     it("should handle serverConfig updates correctly", async () => {
