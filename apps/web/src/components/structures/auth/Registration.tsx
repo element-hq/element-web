@@ -576,7 +576,7 @@ export default class Registration extends React.Component<IProps, IState> {
             // replaceClient runs again after the wait.
             return (
                 <Fragment>
-                    <div className="mx_Login_error">{this.state.rateLimitError}</div>
+                    <div className="mx_Login_error mx_Registration_rateLimitError">{this.state.rateLimitError}</div>
                     <Button className="mx_Login_fullWidthButton" kind="primary" size="md" disabled={true}>
                         {_t("action|continue")}
                     </Button>
