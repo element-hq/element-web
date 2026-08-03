@@ -7,9 +7,10 @@ Please see LICENSE files in the repository root for full details.
 
 import { _td } from "@element-hq/web-shared-components";
 
-import { Command, CommandCategories, splitAtFirstSpace } from "./SlashCommands";
+import { Command } from "./command";
+import { CommandCategories } from "./interface";
 import SettingsStore from "../settings/SettingsStore";
-import { reject, success } from "./utils";
+import { reject, success, splitAtFirstSpace } from "./utils";
 import { UserFriendlyError } from "../languageHandler";
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import { setUserStatus, userStatusTextWithinMaxLength } from "../utils/userStatus";

@@ -23,7 +23,7 @@ import userEvent from "@testing-library/user-event";
 import RolesRoomSettingsTab from "../../../../../../../src/components/views/settings/tabs/room/RolesRoomSettingsTab";
 import { mkStubRoom, withClientContextRenderOptions, stubClient } from "../../../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../../../src/MatrixClientPeg";
-import SettingsStore from "../../../../../../../src/settings/SettingsStore";
+import SdkConfig from "../../../../../../../src/SdkConfig";
 import { ElementCallEventType, ElementCallMemberEventType } from "../../../../../../../src/call-types";
 
 describe("RolesRoomSettingsTab", () => {
@@ -75,10 +75,12 @@ describe("RolesRoomSettingsTab", () => {
 
     describe("Element Call", () => {
         const setGroupCallsEnabled = (val: boolean): void => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string): any => {
-                if (name === "feature_group_calls") return val;
-            });
+            SdkConfig.put({ element_call: { disable: !val } });
         };
+
+        afterEach(() => {
+            SdkConfig.reset();
+        });
 
         const getStartCallSelect = (tab: RenderResult): HTMLElement => {
             return tab.container.querySelector("select[label='Start Element Call calls']")!;

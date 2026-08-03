@@ -10,7 +10,8 @@
         "moduleResolution": "bundler",
         "module": "ESNext",
         "allowImportingTsExtensions": true,
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "noEmit": true
     },
     "include": ["playwright.config.ts", "playwright"]
 }

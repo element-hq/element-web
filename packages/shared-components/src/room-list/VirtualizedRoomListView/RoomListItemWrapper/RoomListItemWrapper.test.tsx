@@ -20,7 +20,6 @@ describe("<RoomListItemWrapper /> keyboard re-dispatch", () => {
         const user = userEvent.setup();
         const onKeyDown = vi.fn();
         render(
-            // eslint-disable-next-line jsx-a11y/no-static-element-interactions
             <div onKeyDown={onKeyDown}>
                 <Sections roomIndexInSection={0} isFocused={true} />
             </div>,
@@ -40,7 +39,6 @@ describe("<RoomListItemWrapper /> keyboard re-dispatch", () => {
         const user = userEvent.setup();
         const onKeyDown = vi.fn();
         render(
-            // eslint-disable-next-line jsx-a11y/no-static-element-interactions
             <div onKeyDown={onKeyDown}>
                 <Sections roomIndexInSection={2} isFocused={true} />
             </div>,

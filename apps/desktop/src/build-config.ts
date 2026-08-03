@@ -7,8 +7,9 @@ Please see LICENSE files in the repository root for full details.
 
 import path, { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { type JsonObject } from "shared-types";
 
-import { type JsonObject, loadJsonFile } from "./utils.js";
+import { loadJsonFile } from "./utils.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 

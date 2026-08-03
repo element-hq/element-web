@@ -9,7 +9,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { RoomViewStore } from "./RoomViewStore";
 import { type MatrixDispatcher } from "../dispatcher/dispatcher";
-import { type SdkContextClass } from "../contexts/SDKContext";
+import { type SDKContextClass } from "../contexts/SDKContextClass";
 import { Action } from "../dispatcher/actions";
 
 /**
@@ -24,7 +24,7 @@ export class MultiRoomViewStore {
 
     public constructor(
         private dispatcher: MatrixDispatcher,
-        private sdkContextClass: SdkContextClass,
+        private sdkContextClass: SDKContextClass,
     ) {}
 
     /**

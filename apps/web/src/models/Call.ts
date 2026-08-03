@@ -226,6 +226,7 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
         // The widget might still be initializing, so wait for it in an async
         // event loop. We need the messaging to be both present and started
         // (have a connected widget API), so register listeners for both cases.
+        // oxlint-disable-next-line no-unmodified-loop-condition
         while (!messaging?.widgetApi) {
             if (messaging) logger.debug(`Messaging present but not yet started for ${this.widgetUid}`);
             else logger.debug(`No messaging yet for ${this.widgetUid}`);
@@ -430,7 +431,7 @@ export class JitsiCall extends Call {
         const event = this.room.currentState.getStateEvents(JitsiCall.MEMBER_EVENT_TYPE, this.client.getUserId()!);
         const content = event?.getContent<JitsiCallMemberContent>();
         const expiresAt = typeof content?.expires_ts === "number" ? content.expires_ts : -Infinity;
-        const devices = expiresAt > Date.now() && Array.isArray(content?.devices) ? content!.devices : [];
+        const devices = expiresAt > Date.now() && Array.isArray(content?.devices) ? content.devices : [];
         const newDevices = fn(devices);
 
         if (newDevices !== null) {
@@ -707,7 +708,11 @@ export class ElementCall extends Call {
      */
     private static appendAnalyticsParams(params: URLSearchParams, client: MatrixClient): void {
         const posthogConfig = SdkConfig.get("posthog");
-        if (!posthogConfig || PosthogAnalytics.instance.getAnonymity() === Anonymity.Disabled) {
+        if (
+            !posthogConfig?.project_api_key ||
+            !posthogConfig?.api_host ||
+            PosthogAnalytics.instance.getAnonymity() === Anonymity.Disabled
+        ) {
             return;
         }
 
@@ -725,7 +730,7 @@ export class ElementCall extends Call {
         // We gate passing sentry behind analytics consent as EC shares data automatically without user-consent,
         // unlike EW where data is shared upon an intentional user action (rageshake).
         const sentryConfig = SdkConfig.get("sentry");
-        if (sentryConfig) {
+        if (sentryConfig?.dsn) {
             params.append("sentryDsn", sentryConfig.dsn);
             params.append("sentryEnvironment", sentryConfig.environment ?? "");
         }
@@ -759,6 +764,8 @@ export class ElementCall extends Call {
             lang: getCurrentLanguage().replace("_", "-"),
             fontScale: (FontWatcher.getRootFontSize() / FontWatcher.getBrowserDefaultFontSize()).toString(),
             theme: "$org.matrix.msc2873.client_theme",
+            // on EW we do not want the gradient EC background.
+            background: "solid",
         });
 
         if (typeof opts.skipLobby === "boolean") {

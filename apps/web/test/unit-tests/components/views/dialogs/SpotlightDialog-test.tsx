@@ -34,7 +34,7 @@ import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import SdkConfig from "../../../../../src/SdkConfig";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { MetaSpace } from "../../../../../src/stores/spaces";
-import SpaceStore from "../../../../../src/stores/spaces/SpaceStore.ts";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
 
 jest.useFakeTimers();
 
@@ -704,26 +704,21 @@ describe("Spotlight Dialog", () => {
 
     describe("metaspaces", () => {
         beforeEach(() => {
-            jest.spyOn(SpaceStore.instance, "enabledMetaSpaces", "get").mockReturnValue([
+            jest.spyOn(SDKContextClass.instance.spaceStore, "enabledMetaSpaces", "get").mockReturnValue([
                 MetaSpace.Home,
-                MetaSpace.Favourites,
-                MetaSpace.People,
                 MetaSpace.Orphans,
             ]);
         });
 
-        it.each([MetaSpace.Home, MetaSpace.Favourites, MetaSpace.People])(
-            "should show metaspace %s",
-            async (metaSpace) => {
-                const onFinished = jest.fn();
-                const { asFragment, container } = render(
-                    <SpotlightDialog initialText={metaSpace.split("-")[0]} onFinished={onFinished} />,
-                );
-                await waitFor(() =>
-                    expect(container.querySelector(".mx_SpotlightDialog_metaspaceResult")).toBeInTheDocument(),
-                );
-                expect(asFragment()).toMatchSnapshot();
-            },
-        );
+        it("should show Home metaspace", async () => {
+            const onFinished = jest.fn();
+            const { asFragment, container } = render(
+                <SpotlightDialog initialText={MetaSpace.Home.split("-")[0]} onFinished={onFinished} />,
+            );
+            await waitFor(() =>
+                expect(container.querySelector(".mx_SpotlightDialog_metaspaceResult")).toBeInTheDocument(),
+            );
+            expect(asFragment()).toMatchSnapshot();
+        });
     });
 });

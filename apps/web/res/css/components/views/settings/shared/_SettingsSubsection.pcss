@@ -28,7 +28,7 @@ Please see LICENSE files in the repository root for full details.
 }
 
 .mx_SettingsSubsection_description {
-    margin-top: $spacing-8;
+    margin-top: var(--cpd-space-2x);
 }
 
 .mx_SettingsSubsection_text {
@@ -44,14 +44,14 @@ Please see LICENSE files in the repository root for full details.
     /* setting minwidth 0 makes columns definitely sized fixing horizontal overflow */
     grid-template-columns: minmax(0, 1fr);
     justify-items: flex-start;
-    margin-top: $spacing-24;
+    margin-top: var(--cpd-space-6x);
 
     summary {
         color: $accent;
     }
     details[open] {
         summary {
-            margin-bottom: $spacing-8;
+            margin-bottom: var(--cpd-space-2x);
         }
     }
 

@@ -41,7 +41,7 @@ export class Settings {
      * null.
      * @param {SettingLevel} level The level to change the value at.
      * @param {*} value The new value of the setting, may be null.
-     * @return {Promise} Resolves when the setting has been changed.
+     * @returns {Promise} Resolves when the setting has been changed.
      */
     public async setValue(settingName: string, roomId: string | null, level: SettingLevel, value: any): Promise<void> {
         return this.page.evaluate<

@@ -11,7 +11,8 @@ import { render, fireEvent } from "jest-matrix-react";
 
 import MainSplit from "../../../../src/components/structures/MainSplit";
 import { PosthogAnalytics } from "../../../../src/PosthogAnalytics.ts";
-import { SDKContext, SdkContextClass } from "../../../../src/contexts/SDKContext.ts";
+import { SDKContext } from "../../../../src/contexts/SDKContext.ts";
+import { SDKContextClass } from "../../../../src/contexts/SDKContextClass";
 
 describe("<MainSplit/>", () => {
     const children = (
@@ -20,11 +21,11 @@ describe("<MainSplit/>", () => {
         </div>
     );
     const panel = <div>Right panel</div>;
-    let sdkContext: SdkContextClass;
+    let sdkContext: SDKContextClass;
 
     beforeEach(() => {
         localStorage.clear();
-        sdkContext = new SdkContextClass();
+        sdkContext = new SDKContextClass();
     });
 
     it("renders", () => {

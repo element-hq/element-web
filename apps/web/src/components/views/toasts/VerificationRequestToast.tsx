@@ -16,7 +16,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { type Device } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import { userLabelForEventRoom } from "../../../utils/KeyVerificationStateObserver";
 import dis from "../../../dispatcher/dispatcher";
@@ -25,9 +24,9 @@ import Modal from "../../../Modal";
 import GenericToast from "./GenericToast";
 import { Action } from "../../../dispatcher/actions";
 import VerificationRequestDialog from "../dialogs/VerificationRequestDialog";
-import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { getDeviceCryptoInfo } from "../../../utils/crypto/deviceInfo";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 interface IProps {
     toastKey: string;
@@ -42,6 +41,9 @@ interface IState {
 }
 
 export default class VerificationRequestToast extends React.PureComponent<IProps, IState> {
+    public static contextType = SDKContext;
+    declare public context: React.ContextType<typeof SDKContext>;
+
     private intervalHandle?: number;
 
     public constructor(props: IProps) {
@@ -69,7 +71,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
 
         const otherDeviceId = request.otherDeviceId;
         if (request.isSelfVerification && !!otherDeviceId) {
-            const cli = MatrixClientPeg.safeGet();
+            const cli = this.context.client!;
             const device = await cli.getDevice(otherDeviceId);
             this.setState({
                 ip: device.last_seen_ip,
@@ -104,7 +106,6 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
         ToastStore.sharedInstance().dismissToast(this.props.toastKey);
         const { request } = this.props;
         // no room id for to_device requests
-        const cli = MatrixClientPeg.safeGet();
         try {
             if (request.roomId) {
                 dis.dispatch<ViewRoomPayload>({
@@ -113,8 +114,8 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
                     should_peek: false,
                     metricsTrigger: "VerificationRequest",
                 });
-                const member = cli.getUser(request.otherUserId) ?? undefined;
-                RightPanelStore.instance.setCards(
+                const member = this.context.client?.getUser(request.otherUserId) ?? undefined;
+                this.context.rightPanelStore.setCards(
                     [
                         { phase: RightPanelPhases.RoomSummary },
                         { phase: RightPanelPhases.MemberInfo, state: { member } },
@@ -154,7 +155,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
                 });
             }
         } else {
-            const client = MatrixClientPeg.safeGet();
+            const client = this.context.client!;
             const userId = request.otherUserId;
             const roomId = request.roomId;
             description = roomId ? userLabelForEventRoom(client, userId, roomId) : userId;

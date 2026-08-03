@@ -23,7 +23,7 @@ import React, { useState } from "react";
 
 import ThreadView from "../../../../src/components/structures/ThreadView";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
-import { SdkContextClass } from "../../../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../../../src/contexts/SDKContextClass";
 import { Action } from "../../../../src/dispatcher/actions";
 import dispatcher from "../../../../src/dispatcher/dispatcher";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
@@ -37,6 +37,7 @@ import { ScopedRoomContextProvider } from "../../../../src/contexts/ScopedRoomCo
 import { untilDispatch } from "../../../test-utils/utilities.ts";
 import { TimelineRenderingType } from "../../../../src/contexts/RoomContext.ts";
 import { type ComposerInsertPayload, ComposerType } from "../../../../src/dispatcher/payloads/ComposerInsertPayload.ts";
+import { SDKContext } from "../../../../src/contexts/SDKContext.ts";
 
 describe("ThreadView", () => {
     const ROOM_ID = "!roomId:example.org";
@@ -73,7 +74,11 @@ describe("ThreadView", () => {
     }
 
     async function getComponent(initialEvent?: MatrixEvent): Promise<RenderResult> {
-        const renderResult = render(<TestThreadView initialEvent={initialEvent} />);
+        const renderResult = render(<TestThreadView initialEvent={initialEvent} />, {
+            wrapper: ({ children }) => (
+                <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+            ),
+        });
 
         await waitFor(() => {
             expect(() => getByTestId(renderResult.container, "spinner")).toThrow();
@@ -190,18 +195,18 @@ describe("ThreadView", () => {
     });
 
     it("sets the correct thread in the room view store", async () => {
-        // expect(SdkContextClass.instance.roomViewStore.getThreadId()).toBeNull();
+        // expect(SDKContextClass.instance.roomViewStore.getThreadId()).toBeNull();
         const { unmount } = await getComponent();
         waitFor(() => {
-            expect(SdkContextClass.instance.roomViewStore.getThreadId()).toBe(rootEvent.getId());
+            expect(SDKContextClass.instance.roomViewStore.getThreadId()).toBe(rootEvent.getId());
         });
 
         unmount();
-        await waitFor(() => expect(SdkContextClass.instance.roomViewStore.getThreadId()).toBeNull());
+        await waitFor(() => expect(SDKContextClass.instance.roomViewStore.getThreadId()).toBeNull());
     });
 
     it("clears highlight message in the room view store", async () => {
-        jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(room.roomId);
+        jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(room.roomId);
         const mock = jest.spyOn(dispatcher, "dispatch");
         const { unmount } = await getComponent(rootEvent);
         mock.mockClear();

@@ -38,7 +38,6 @@ async function main(): Promise<void> {
     // Can be specified multiple times for the copy command to bundle
     // multiple arches into a single universal output module)
     for (;;) {
-        // eslint-disable-line no-constant-condition
         const targetIndex = process.argv.indexOf("--target");
         if (targetIndex === -1) break;
 
@@ -132,7 +131,7 @@ async function main(): Promise<void> {
         for (const mod of modules) {
             const depInfo = deps[mod];
             if (depInfo === undefined) {
-                console.log("Module " + mod + " not found - is it in hakDependencies " + "in your package.json?");
+                console.log(`Module ${mod} not found - is it in hakDependencies in your package.json?`);
                 process.exit(1);
             }
             console.log("hak " + cmd + ": " + mod);

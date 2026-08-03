@@ -11,7 +11,7 @@ import type { BLURHASH_FIELD } from "../utils/image-media";
 import type { JitsiCallMemberEventType, JitsiCallMemberContent } from "../call-types";
 import type { ILayoutStateEvent, WIDGET_LAYOUT_EVENT_TYPE } from "../stores/widgets/types";
 import type { EncryptedFile } from "matrix-js-sdk/src/types";
-import type { EmptyObject } from "matrix-js-sdk/src/matrix";
+import type { EmptyObject, IContent } from "matrix-js-sdk/src/matrix";
 import type { DeviceClientInformation } from "../utils/device/types.ts";
 import type { UserWidget } from "../utils/WidgetUtils-types.ts";
 import { type MediaPreviewConfig } from "./media_preview.ts";
@@ -49,7 +49,7 @@ declare module "matrix-js-sdk/src/types" {
         "m.room.plumbing": {
             status: string;
         };
-        "m.room.bot.options": unknown;
+        "m.room.bot.options": IContent;
     }
 
     export interface TimelineEvents {

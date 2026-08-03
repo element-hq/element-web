@@ -34,7 +34,7 @@ import {
     WidgetLifecycle,
 } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 
-import { SdkContextClass } from "../../../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../../../src/contexts/SDKContextClass";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { ElementWidgetDriver } from "../../../../src/stores/widgets/ElementWidgetDriver";
 import { mkEvent, stubClient } from "../../../test-utils";
@@ -428,7 +428,7 @@ describe("ElementWidgetDriver", () => {
         });
 
         it("reads related events from the current room", async () => {
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!this-room-id");
+            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!this-room-id");
 
             client.relations.mockResolvedValue({
                 originalEvent: new MatrixEvent(),

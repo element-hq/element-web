@@ -18,11 +18,12 @@ const meta = {
     args: {
         type: "section_created",
         onClose: fn(),
+        onClick: fn(),
     },
     argTypes: {
         type: {
             control: "select",
-            options: ["section_created"],
+            options: ["section_created", "chat_moved", "unread_activity"],
         },
     },
     decorators: [
@@ -48,5 +49,11 @@ export const SectionCreated: Story = {};
 export const ChatMoved: Story = {
     args: {
         type: "chat_moved",
+    },
+};
+
+export const UnreadActivity: Story = {
+    args: {
+        type: "unread_activity",
     },
 };

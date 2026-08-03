@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { rejectToast } from "@element-hq/element-web-playwright-common";
+import { assertNoToasts, rejectToast } from "@element-hq/element-web-playwright-common";
 
 import type { Locator, Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
@@ -48,7 +48,7 @@ function spaceChildInitialState(
     serverName: string,
     roomId: string,
     order?: string,
-): ICreateRoomOpts["initial_state"]["0"] {
+): NonNullable<ICreateRoomOpts["initial_state"]>[number] {
     return {
         type: "m.space.child",
         state_key: roomId,
@@ -240,7 +240,7 @@ test.describe("Spaces", () => {
         await shareDialog.getByRole("button", { name: "Invite people" }).click();
 
         const otherSection = page.locator(".mx_InviteDialog_other");
-        await otherSection.getByRole("textbox").fill(bot.credentials.userId);
+        await otherSection.getByRole("textbox").fill(bot.credentials!.userId);
         await otherSection.getByRole("button", { name: "Invite" }).click();
 
         await expect(page.locator(".mx_InviteDialog_other")).not.toBeVisible();
@@ -403,6 +403,26 @@ test.describe("Spaces", () => {
         await expect(page.locator("#mx_tabpanel_SPACE_VISIBILITY_TAB")).toMatchScreenshot(
             "space-visibility-settings.png",
         );
+    });
+
+    test("should render render tooltip on focus of metaspace", { tag: "@screenshot" }, async ({ page, user }) => {
+        await rejectToast(page, "Verify this device");
+        await rejectToast(page, "Notifications");
+        // Wait for toasts to clear otherwise they will mess with our screenshot
+        await assertNoToasts(page);
+
+        await page.getByRole("tree", { name: "Spaces" }).getByRole("button", { name: "Home" }).hover();
+        await expect(page.getByRole("tooltip", { name: "Home" })).toBeVisible();
+
+        await expect(page).toMatchScreenshot("space-panel-home-tooltip.png", {
+            showTooltips: true,
+            clip: {
+                x: 0,
+                y: 60,
+                width: 140,
+                height: 60,
+            },
+        });
     });
 
     test.describe("Should hide public spaces option if not allowed", () => {

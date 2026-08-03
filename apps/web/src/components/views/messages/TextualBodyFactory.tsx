@@ -24,7 +24,6 @@ import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useMediaVisible } from "../../../hooks/useMediaVisible";
 import { TextualBodyViewModel } from "../../../viewmodels/room/timeline/event-tile/body/TextualBodyViewModel";
 import { EventContentBodyViewModel } from "../../../viewmodels/message-body/EventContentBodyViewModel";
-import { UrlPreviewGroupViewModel } from "../../../viewmodels/message-body/UrlPreviewGroupViewModel";
 import { getParentEventId } from "../../../utils/Reply";
 import Modal from "../../../Modal";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -32,6 +31,9 @@ import PosthogTrackers from "../../../PosthogTrackers";
 import ImageView from "../elements/ImageView";
 import EditMessageComposer from "../rooms/EditMessageComposer";
 import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
+import { UrlPreviewGroupViewModel } from "../../../viewmodels/message-body/UrlPreviewGroupViewModel";
+import PlatformPeg from "../../../PlatformPeg";
+import { useSettingValue } from "../../../hooks/useSettings";
 
 const logger = rootLogger.getChild("TextualBodyFactory");
 
@@ -60,6 +62,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
     const willHaveWrapper = !!props.replacingEventId || !!props.isSeeingThroughMessageHiddenForModeration || isEmote;
     const stripReply = !props.mxEvent.replacingEvent() && !!getParentEventId(props.mxEvent);
     const contentRef = useRef<TextualBodyContentElement>(null);
+    const urlPreviewBundleEnabled = useSettingValue("feature_msc4095_url_preview_bundle");
 
     const textualBodyVm = useCreateAutoDisposedViewModel(
         () =>
@@ -119,6 +122,8 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
                     );
                 },
                 visible: props.showUrlPreview ?? false,
+                showTooltips: PlatformPeg.get()?.needsUrlTooltips() ?? true,
+                urlPreviewBundleEnabled,
             }),
     );
 
@@ -182,10 +187,16 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
     ]);
 
     useEffect(() => {
-        void urlPreviewVm.updateHidden(props.showUrlPreview ?? false, mediaVisible).catch((error) => {
-            logger.warn("UrlPreviewViewModel failed to updateHidden", error);
+        void urlPreviewVm.updateUrlPreviewVisible(props.showUrlPreview ?? false).catch((error) => {
+            logger.warn("UrlPreviewViewModel failed to updateUrlPreviewVisible", error);
         });
-    }, [props.showUrlPreview, mediaVisible, urlPreviewVm]);
+    }, [props.showUrlPreview, urlPreviewVm]);
+
+    useEffect(() => {
+        void urlPreviewVm.updateMediaVisible(mediaVisible).catch((error) => {
+            logger.warn("UrlPreviewViewModel failed to updateMediaVisible", error);
+        });
+    }, [mediaVisible, urlPreviewVm]);
 
     useEffect(() => {
         if (previews.length === 0) {

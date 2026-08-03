@@ -21,8 +21,8 @@
     /* Override menu defaults */
     padding-block: 0 !important;
     section.profile {
-        margin: var(--cpd-space-8x) var(--cpd-space-6x);
-        margin-bottom: var(--cpd-space-3x);
+        margin-left: var(--cpd-space-6x);
+        margin-right: var(--cpd-space-6x);
         display: flex;
         flex-direction: column;
         gap: var(--cpd-space-2x);
@@ -39,10 +39,22 @@
             text-align: center;
         }
 
+        .userId {
+            color: var(--cpd-color-text-secondary);
+            text-align: center;
+        }
+
         .createAccount {
             margin-top: var(--cpd-space-1x);
             margin-bottom: var(--cpd-space-2x);
         }
+    }
+    .profilePrimary {
+        margin-top: var(--cpd-space-8x);
+        margin-bottom: var(--cpd-space-3x);
+    }
+    .profileSecondary {
+        margin-bottom: var(--cpd-space-4x);
     }
     section.actions {
         margin: var(--cpd-space-2x) 0;
@@ -79,33 +91,6 @@
     /* center of circle on the right edge of the avatar */
     right: -10px;
     background-color: var(--cpd-color-bg-canvas-default);
-}
-
-.statusButton {
-    border-radius: 30px;
-    background: var(--cpd-color-bg-subtle-secondary);
-    display: flex;
-    align-items: center;
-    padding-inline-start: var(--cpd-space-2x);
-    gap: 6px;
-    white-space: nowrap;
-    overflow: hidden;
-    max-width: 100%;
-
-    .menuStatusEmoji {
-        flex-shrink: 0;
-    }
-
-    .menuStatusText {
-        overflow: hidden;
-        min-width: 0;
-        text-overflow: ellipsis;
-    }
-
-    span {
-        font: var(--cpd-font-body-md-medium);
-        color: var(--cpd-color-text-secondary);
-    }
 }
 
 .triggerButton {

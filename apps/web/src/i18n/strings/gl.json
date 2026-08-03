@@ -9,7 +9,6 @@
             "other": "%(count)s mensaxes non lidas incluíndo mencións.",
             "one": "1 mención non lida."
         },
-        "room_name": "Sala %(name)s",
         "unread_messages": "Mensaxes non lidas."
     },
     "a11y_jump_first_unread_room": "Vaite a primeira sala non lida.",
@@ -17,7 +16,6 @@
         "accept": "Aceptar",
         "add": "Engadir",
         "add_existing_room": "Engadir sala existente",
-        "add_people": "Engadir persoas",
         "approve": "Aprobar",
         "back": "Atrás",
         "call": "Chamar",
@@ -47,7 +45,6 @@
         "enter_fullscreen": "Ir a pantalla completa",
         "exit_fullscreeen": "Saír de pantalla completa",
         "expand": "Despregar",
-        "explore_public_rooms": "Explorar salas públicas",
         "explore_rooms": "Explorar salas",
         "export": "Exportar",
         "forward": "Reenviar",
@@ -59,8 +56,6 @@
         "ignore": "Ignorar",
         "import": "Importar",
         "invite": "Convidar",
-        "invite_to_space": "Convidar ao espazo",
-        "invites_list": "Convites",
         "join": "Únete",
         "learn_more": "Saber máis",
         "leave": "Saír",
@@ -100,8 +95,6 @@
         "sign_out": "Saír",
         "skip": "Saltar",
         "start": "Comezar",
-        "start_chat": "Iniciar conversa",
-        "start_new_chat": "Iniciar un novo chat",
         "stop": "Deter",
         "submit": "Enviar",
         "subscribe": "Subscribir",
@@ -368,7 +361,6 @@
         "encrypted": "Cifrado",
         "error": "Fallo",
         "faq": "PMF",
-        "favourites": "Favoritas",
         "feedback": "Comenta",
         "filter_results": "Filtrar resultados",
         "forward_message": "Reenviar mensaxe",
@@ -376,7 +368,6 @@
         "go_to_settings": "Ir a Axustes",
         "guest": "Convidada",
         "help": "Axuda",
-        "historical": "Historial",
         "home": "Inicio",
         "homeserver": "Servidor de inicio",
         "identity_server": "Servidor de identidade",
@@ -385,7 +376,6 @@
         "joined": "Unícheste",
         "light": "Claro",
         "location": "Localización",
-        "low_priority": "Baixa prioridade",
         "message": "Mensaxe",
         "message_layout": "Disposición da mensaxe",
         "microphone": "Micrófono",
@@ -440,7 +430,6 @@
         "success": "Parabéns",
         "suggestions": "Suxestións",
         "support": "Axuda",
-        "system_alerts": "Alertas do Sistema",
         "theme": "Decorado",
         "thread": "Tema",
         "threads": "Conversas",
@@ -453,7 +442,6 @@
         "user_avatar": "Imaxe de perfil",
         "username": "Nome de usuaria",
         "verified": "Verificada",
-        "video": "Vídeo",
         "video_room": "Sala de vídeo",
         "view_message": "Ver mensaxe",
         "warning": "Aviso"
@@ -1090,7 +1078,6 @@
         "group_themes": "Decorados",
         "group_threads": "Conversas",
         "group_voip": "Voz e Vídeo",
-        "html_topic": "Mostrar representación HTML dos temas da sala",
         "join_beta": "Unirse á beta",
         "join_beta_reload": "Ao unirte á beta recargaremos %(brand)s.",
         "jump_to_date": "Ir á data (engade cabeceiras /vaiadata e vai á data)",
@@ -1147,9 +1134,6 @@
         "leave_space_question": "Tes a certeza de querer deixar o espazo '%(spaceName)s'?",
         "room_rejoin_warning": "Esta sala non é pública. Non poderá volver a ela sen un convite.",
         "space_rejoin_warning": "Este espazo non é público. Non poderás volver a unirte sen un convite."
-    },
-    "left_panel": {
-        "open_dial_pad": "Abrir marcador"
     },
     "lightbox": {
         "rotate_left": "Rotar á esquerda",
@@ -1310,7 +1294,6 @@
     },
     "quick_settings": {
         "all_settings": "Todos os axustes",
-        "metaspace_section": "Fixar no lateral",
         "sidebar_settings": "Máis opcións",
         "title": "Axustes rápidos"
     },
@@ -1490,36 +1473,12 @@
         }
     },
     "room_list": {
-        "add_room_label": "Engadir sala",
         "add_space_label": "Engadir espazo",
-        "breadcrumbs_empty": "Sen salas recentes visitadas",
-        "breadcrumbs_label": "Salas visitadas recentemente",
         "failed_add_tag": "Fallo ao engadir a etiqueta %(tagName)s a sala",
         "failed_remove_tag": "Fallo ao eliminar a etiqueta %(tagName)s da sala",
         "failed_set_dm_tag": "Non se estableceu a etiqueta de mensaxe directa",
-        "home_menu_label": "Opcións de Incio",
-        "join_public_room_label": "Unirse a sala pública",
-        "joining_rooms_status": {
-            "one": "Neste intre estás en %(count)s sala",
-            "other": "Neste intre estás en %(count)s salas"
-        },
         "notification_options": "Opcións de notificación",
-        "redacting_messages_status": {
-            "one": "Eliminando agora mensaxes de %(count)s sala",
-            "other": "Eliminando agora mensaxes de %(count)s salas"
-        },
-        "show_less": "Mostrar menos",
-        "show_n_more": {
-            "other": "Mostrar %(count)s máis",
-            "one": "Mostrar %(count)s máis"
-        },
-        "show_previews": "Mostrar vista previa das mensaxes",
-        "sort_by": "Orde por",
-        "sort_by_activity": "Actividade",
-        "sort_unread_first": "Mostrar primeiro as salas con mensaxes sen ler",
-        "space_menu_label": "Menú de %(spaceName)s",
-        "sublist_options": "Opcións da listaxe",
-        "suggested_rooms_heading": "Salas suxeridas"
+        "show_less": "Mostrar menos"
     },
     "room_settings": {
         "access": {
@@ -2051,13 +2010,11 @@
         "show_stickers_button": "Mostrar botón dos adhesivos",
         "show_typing_notifications": "Mostrar notificacións de escritura",
         "sidebar": {
-            "metaspaces_favourites_description": "Agrupa tódalas túas salas favoritas e persoas nun só lugar.",
             "metaspaces_home_all_rooms": "Mostar tódalas salas",
             "metaspaces_home_all_rooms_description": "Mostra tódalas túas salas en Inicio, incluso se están nun espazo.",
             "metaspaces_home_description": "O Inicio é útil para ter unha visión xeral do que acontece.",
             "metaspaces_orphans": "Salas fóra dun espazo",
             "metaspaces_orphans_description": "Agrupa nun só lugar tódalas túas salas que non forman parte dun espazo.",
-            "metaspaces_people_description": "Agrupa tódalas persoas nun só lugar.",
             "metaspaces_subsection": "Espazos a mostrar",
             "title": "Barra lateral"
         },
@@ -2226,12 +2183,6 @@
     },
     "space_settings": {
         "title": "Axustes - %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "Non tes permiso para engadir salas a este espazo",
-        "error_no_permission_add_space": "Non tes permiso para engadir espazos a este espazo",
-        "error_no_permission_create_room": "Non tes permiso para crear novas salas neste espazo",
-        "error_no_permission_invite": "Non tes permiso para poder convidar a persoas a este espazo"
     },
     "spotlight": {
         "public_rooms": {

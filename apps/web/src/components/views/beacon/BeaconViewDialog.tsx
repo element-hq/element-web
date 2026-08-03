@@ -10,7 +10,7 @@ import React, { useState, useEffect } from "react";
 import { type MatrixClient, type Beacon, type Room } from "matrix-js-sdk/src/matrix";
 
 import type * as maplibregl from "maplibre-gl";
-import { Icon as LiveLocationIcon } from "../../../../res/img/location/live-location.svg";
+import LiveLocationIcon from "../../../../res/img/location/live-location.svg?react";
 import { useLiveBeacons } from "../../../utils/beacon/useLiveBeacons";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import BaseDialog from "../dialogs/BaseDialog";

@@ -9,7 +9,6 @@
             "one": "۱ اشاره خوانده نشده.",
             "other": "%(count)s پیام‌های خوانده نشده از جمله اشاره‌ها."
         },
-        "room_name": "اتاق %(name)s",
         "unread_messages": "پیام های خوانده نشده."
     },
     "a11y_jump_first_unread_room": "به اولین اتاق خوانده نشده بروید.",
@@ -42,7 +41,6 @@
         "enable": "فعال کن",
         "enter_fullscreen": "نمایش تمام صفحه",
         "exit_fullscreeen": "خروج از نمایش تمام صفحه",
-        "explore_public_rooms": "کاوش در اتاق‌های عمومی",
         "explore_rooms": "جستجو در اتاق ها",
         "export": "استخراج (Export)",
         "go": "برو",
@@ -53,7 +51,6 @@
         "ignore": "نادیده‌گرفتن",
         "import": "واردکردن (Import)",
         "invite": "دعوت",
-        "invites_list": "دعوت‌ها",
         "join": "پیوستن",
         "learn_more": "بیشتر بدانید",
         "leave": "خروج",
@@ -90,7 +87,6 @@
         "sign_out": "خروج از حساب کاربری",
         "skip": "بیخیال",
         "start": "شروع",
-        "start_chat": "شروع چت",
         "stop": "توقف",
         "submit": "ارسال",
         "subscribe": "اضافه‌شدن",
@@ -333,14 +329,12 @@
         "encrypted": "رمزشده",
         "error": "خطا",
         "faq": "سوالات پرتکرار",
-        "favourites": "موردعلاقه‌ها",
         "feedback": "بازخورد",
         "filter_results": "پالایش نتایج",
         "general": "عمومی",
         "go_to_settings": "برو به تنظیمات",
         "guest": "مهمان",
         "help": "راهنما",
-        "historical": "تاریخی",
         "home": "خانه",
         "homeserver": "سرور",
         "identity_server": "کارساز هویت",
@@ -348,7 +342,6 @@
         "labs": "قابلیت‌های بتا",
         "legal": "قانونی",
         "light": "روشن",
-        "low_priority": "اولویت کم",
         "matrix": "ماتریکس",
         "microphone": "میکروفون",
         "mute": "سکوت",
@@ -398,7 +391,6 @@
         "success": "موفقیت",
         "suggestions": "پیشنهادات",
         "support": "پشتیبانی",
-        "system_alerts": "هشدارهای سیستم",
         "theme": "پوسته",
         "threads": "موضوعات",
         "timeline": "سیر زمان گفتگو‌ها",
@@ -409,7 +401,6 @@
         "user": "کاربر",
         "user_avatar": "تصویر پروفایل",
         "username": "نام کاربری",
-        "video": "ویدئو",
         "view_message": "مشاهده پیام",
         "warning": "هشدار"
     },
@@ -951,9 +942,6 @@
         "room_rejoin_warning": "این اتاق عمومی نیست. پیوستن مجدد بدون دعوتنامه امکان‌پذیر نخواهد بود.",
         "space_rejoin_warning": "این فضا عمومی نیست. امکان پیوستن مجدد بدون دعوتنامه امکان‌پذیر نخواهد بود."
     },
-    "left_panel": {
-        "open_dial_pad": "باز کردن صفحه شماره‌گیری"
-    },
     "lightbox": {
         "rotate_left": "چرخش به چپ",
         "rotate_right": "چرخش به راست"
@@ -1176,24 +1164,10 @@
         }
     },
     "room_list": {
-        "add_room_label": "افزودن اتاق",
-        "breadcrumbs_empty": "اخیراً از اتاقی بازدید نشده است",
-        "breadcrumbs_label": "اتاق‌هایی که به تازگی بازدید کرده‌اید",
         "failed_add_tag": "در افزودن تگ %(tagName)s موفقیت‌آمیز نبود",
         "failed_remove_tag": "خطا در حذف کلیدواژه‌ی %(tagName)s از گپ",
         "notification_options": "تنظیمات اعلان",
-        "show_less": "نمایش کمتر",
-        "show_n_more": {
-            "other": "نمایش %(count)s مورد بیشتر",
-            "one": "نمایش %(count)s مورد بیشتر"
-        },
-        "show_previews": "مشاهده پیش‌نمایش پیام‌ها",
-        "sort_by": "مرتب سازی بر اساس",
-        "sort_by_activity": "فعالیت",
-        "sort_by_alphabet": "حروف الفبا",
-        "sort_unread_first": "ابتدا اتاق های با پیام خوانده نشده را نمایش بده",
-        "sublist_options": "لیست گزینه‌ها",
-        "suggested_rooms_heading": "اتاق‌های پیشنهادی"
+        "show_less": "نمایش کمتر"
     },
     "room_settings": {
         "advanced": {
@@ -1688,10 +1662,6 @@
         "suggested_tooltip": "این اتاق به عنوان یک گزینه‌ی خوب برای عضویت پیشنهاد می شود",
         "unmark_suggested": "علامت‌گذاری به عنوان پیشنهاد‌نشده",
         "user_lacks_permission": "شما دسترسی ندارید"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "شما اجازه افزودن اتاق به این فضای کاری را ندارید",
-        "error_no_permission_create_room": "شما اجازه ایجاد اتاق جدید در این فضای کاری را ندارید"
     },
     "spotlight": {
         "public_rooms": {

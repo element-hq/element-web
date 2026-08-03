@@ -542,7 +542,7 @@ function combineEventSources(
  * index.
  * @param {object} serverEvents An unprocessed search result from the server.
  *
- * @return {object} A response object that combines the events from the
+ * @returns {object} A response object that combines the events from the
  * different event sources.
  *
  */
@@ -606,7 +606,7 @@ function combineEvents(
  * index.
  * @param {object} serverEvents An unprocessed search result from the server.
  *
- * @return {object} A response object that combines the events from the
+ * @returns {object} A response object that combines the events from the
  * different event sources.
  */
 function combineResponses(

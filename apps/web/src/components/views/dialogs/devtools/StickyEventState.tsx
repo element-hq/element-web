@@ -11,7 +11,7 @@ import { MatrixEvent, type IContent, RoomStickyEventsEvent } from "matrix-js-sdk
 import { Alert, Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./BaseTool.tsx";
-import { _t, _td, UserFriendlyError } from "../../../../languageHandler.tsx";
+import { _t, _td, UserFriendlyError } from "../../../../languageHandler";
 import {
     EventEditor,
     eventTypeField,

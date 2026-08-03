@@ -299,7 +299,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
 
             // Finally do our post-processing and clean up
             this.recording = false;
-            await this.recorder!.close();
+            this.recorder!.close();
             this.emit(RecordingState.Ended);
         });
     }

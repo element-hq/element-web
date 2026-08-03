@@ -9,7 +9,6 @@
             "one": "1 neperskaitytas paminėjimas.",
             "other": "%(count)s neperskaitytos žinutės, įskaitant paminėjimus."
         },
-        "room_name": "Kambarys %(name)s",
         "unread_messages": "Neperskaitytos žinutės."
     },
     "a11y_jump_first_unread_room": "Peršokti į pirmą neperskaitytą kambarį.",
@@ -17,7 +16,6 @@
         "accept": "Priimti",
         "add": "Pridėti",
         "add_existing_room": "Pridėti esamą kambarį",
-        "add_people": "Pridėti žmonių",
         "approve": "Patvirtinti",
         "back": "Atgal",
         "call": "Skambinti",
@@ -42,7 +40,6 @@
         "edit": "Koreguoti",
         "enable": "Įjungti",
         "expand": "Išplėsti",
-        "explore_public_rooms": "Tyrinėti viešuosius kambarius",
         "explore_rooms": "Žvalgyti kambarius",
         "export": "Eksportuoti",
         "forward": "Persiųsti",
@@ -54,8 +51,6 @@
         "ignore": "Ignoruoti",
         "import": "Importuoti",
         "invite": "Pakviesti",
-        "invite_to_space": "Pakviesti į erdvę",
-        "invites_list": "Pakvietimai",
         "join": "Prisijungti",
         "learn_more": "Sužinokite daugiau",
         "leave": "Palikti",
@@ -96,8 +91,6 @@
         "sign_out": "Šalinti šį įrenginį",
         "skip": "Praleisti",
         "start": "Pradėti",
-        "start_chat": "Pradėti pokalbį",
-        "start_new_chat": "Pradėti naują pokalbį",
         "stop": "Sustabdyti",
         "submit": "Pateikti",
         "subscribe": "Prenumeruoti",
@@ -306,7 +299,6 @@
         "encrypted": "Užšifruota",
         "error": "Klaida",
         "faq": "DUK",
-        "favourites": "Mėgstami",
         "feedback": "Atsiliepimai",
         "filter_results": "Išfiltruoti rezultatus",
         "forward_message": "Persiųsti žinutę",
@@ -314,7 +306,6 @@
         "go_to_settings": "Eiti į Nustatymus",
         "guest": "Svečias",
         "help": "Pagalba",
-        "historical": "Istoriniai",
         "home": "Pradžia",
         "homeserver": "Serveris",
         "identity_server": "Tapatybės serveris",
@@ -323,7 +314,6 @@
         "labs": "Laboratorijos",
         "legal": "Teisiniai",
         "light": "Šviesi",
-        "low_priority": "Žemo prioriteto",
         "message": "Žinutė",
         "message_layout": "Žinutės išdėstymas",
         "microphone": "Mikrofonas",
@@ -368,7 +358,6 @@
         "stickerpack": "Lipdukų paketas",
         "success": "Pavyko",
         "suggestions": "Pasiūlymai",
-        "system_alerts": "Sistemos įspėjimai",
         "theme": "Tema",
         "threads": "Temos",
         "timeline": "Laiko juosta",
@@ -379,7 +368,6 @@
         "user_avatar": "Profilio paveikslėlis",
         "username": "Vartotojo vardas",
         "verified": "Patvirtinta",
-        "video": "Vaizdo įrašas",
         "video_room": "Vaizdo kambarys",
         "view_message": "Žiūrėti žinutę",
         "warning": "Įspėjimas"
@@ -859,7 +847,6 @@
         "dynamic_room_predecessors": "Dinaminiai kambario pirmtakai",
         "element_call_video_rooms": "Element skambučio vaizdo kambariai",
         "feature_wysiwyg_composer_description": "Naudoti raiškųjį tekstą vietoj ženklinimo žinučių rengyklėje.",
-        "group_calls": "Nauja grupinio skambučio patirtis",
         "group_developer": "Kūrėjas",
         "group_encryption": "Šifravimas",
         "group_experimental": "Eksperimentinis",
@@ -872,7 +859,6 @@
         "group_voip": "Garsas ir Vaizdas",
         "group_widgets": "Valdikliai",
         "hidebold": "Slėpti pranešimų tašką (rodyti tik skaičių žymes)",
-        "html_topic": "Rodyti kambarių temų HTML atvaizdavimą",
         "jump_to_date": "Pereiti prie datos (prideda /jumptodate ir perėjimo prie datos antraštes)",
         "jump_to_date_msc_support": "Privaloma, kad jūsų serveris palaikytų MSC3030.",
         "latex_maths": "Atvaizduoti LaTeX matematikas žinutėse",
@@ -884,7 +870,6 @@
         "notification_settings": "Nauji pranešimų nustatymai",
         "sliding_sync": "Slankiojo sinchronizavimo režimas",
         "sliding_sync_description": "Aktyviai kuriama, negalima išjungti. Šiuo metu nesuderinama su „Element“ skambučiais.",
-        "under_active_development": "Šiuo metu aktyviai kuriama.",
         "video_rooms": "Vaizdo kambariai",
         "video_rooms_a_new_way_to_chat": "Naujas būdas kalbėtis balsu ir vaizdu per %(brand)s.",
         "video_rooms_always_on_voip_channels": "Vaizdo kambariai - tai visada veikiantys VoIP kanalai, įterpti į %(brand)s kambarį.",
@@ -999,7 +984,6 @@
     },
     "quick_settings": {
         "all_settings": "Visi nustatymai",
-        "metaspace_section": "Prisegti prie šoninės juostos",
         "sidebar_settings": "Daugiau parinkčių",
         "title": "Greiti nustatymai"
     },
@@ -1155,35 +1139,10 @@
         }
     },
     "room_list": {
-        "add_room_label": "Sukurti kambarį",
         "add_space_label": "Pridėti erdvę",
-        "breadcrumbs_empty": "Nėra neseniai lankytų kambarių",
-        "breadcrumbs_label": "Neseniai lankyti kambariai",
         "failed_remove_tag": "Nepavyko pašalinti žymos %(tagName)s iš kambario",
-        "home_menu_label": "Pradžios parinktys",
-        "join_public_room_label": "Prisijungti prie viešo kambario",
-        "joining_rooms_status": {
-            "one": "Šiuo metu prisijungiama prie %(count)s kambario",
-            "other": "Šiuo metu prisijungiama prie %(count)s kambarių"
-        },
         "notification_options": "Pranešimų parinktys",
-        "redacting_messages_status": {
-            "one": "Šiuo metu šalinamos žinutės iš %(count)s kambario",
-            "other": "Šiuo metu šalinamos žinutės iš %(count)s kambarių"
-        },
-        "show_less": "Rodyti mažiau",
-        "show_n_more": {
-            "one": "Rodyti dar %(count)s",
-            "other": "Rodyti dar %(count)s"
-        },
-        "show_previews": "Rodyti žinučių peržiūras",
-        "sort_by": "Rūšiuoti pagal",
-        "sort_by_activity": "Aktyvumą",
-        "sort_by_alphabet": "A-Ž",
-        "sort_unread_first": "Pirmiausia rodyti kambarius su neperskaitytomis žinutėmis",
-        "space_menu_label": "%(spaceName)s meniu",
-        "sublist_options": "Sąrašo parinktys",
-        "suggested_rooms_heading": "Siūlomi kambariai"
+        "show_less": "Rodyti mažiau"
     },
     "room_settings": {
         "access": {
@@ -1672,13 +1631,11 @@
         "show_stickers_button": "Rodyti lipdukų mygtuką",
         "show_typing_notifications": "Rodyti spausdinimo pranešimus",
         "sidebar": {
-            "metaspaces_favourites_description": "Sugrupuokite visus mėgstamus kambarius ir žmones vienoje vietoje.",
             "metaspaces_home_all_rooms": "Rodyti visus kambarius",
             "metaspaces_home_all_rooms_description": "Rodyti visus savo kambarius pradžioje, net jei jie yra erdvėje.",
             "metaspaces_home_description": "Pradžia yra naudinga norint apžvelgti viską.",
             "metaspaces_orphans": "Kambariai nepriklausantys erdvei",
             "metaspaces_orphans_description": "Sugrupuokite visus kambarius, kurie nėra erdvės dalis, į vieną vietą.",
-            "metaspaces_people_description": "Sugrupuokite visus savo žmones vienoje vietoje.",
             "metaspaces_subsection": "Kurias erdves rodyti",
             "title": "Šoninė juosta"
         },
@@ -1779,12 +1736,6 @@
         "invite_description": "Pakviesti su el. paštu arba naudotojo vardu",
         "invite_link": "Bendrinti pakvietimo nuorodą",
         "search_children": "Ieškoti %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "Neturite leidimų pridėti kambarių į šią erdvę",
-        "error_no_permission_add_space": "Neturite leidimų į šią erdvę pridėti erdvių",
-        "error_no_permission_create_room": "Neturite leidimų kurti naujus kambarius šioje erdvėje",
-        "error_no_permission_invite": "Neturite leidimų kviesti žmones į šią erdvę"
     },
     "spotlight": {
         "public_rooms": {

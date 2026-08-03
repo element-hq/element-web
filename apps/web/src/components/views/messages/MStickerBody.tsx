@@ -14,10 +14,11 @@ import { BLURHASH_FIELD } from "../../../utils/image-media";
 import IconsShowStickersSvg from "../../../../res/img/icons-show-stickers.svg";
 import { type IBodyProps } from "./IBodyProps";
 import { useMediaVisible } from "../../../hooks/useMediaVisible";
+import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton.tsx";
 
 class MStickerBodyInner extends ImageBodyBaseInner {
     // Mostly empty to prevent default behaviour of MImageBody
-    protected onClick = (ev: React.MouseEvent): void => {
+    protected onClick = (ev: ButtonEvent): void => {
         ev.preventDefault();
         if (!this.props.mediaVisible) {
             this.props.setMediaVisible(true);
@@ -27,16 +28,15 @@ class MStickerBodyInner extends ImageBodyBaseInner {
     // MStickerBody doesn't need a wrapping `<a href=...>`, but it does need extra padding
     // which is added by mx_MStickerBody_wrapper
     protected wrapImage(contentUrl: string, children: React.ReactNode): JSX.Element {
-        let onClick: React.MouseEventHandler | undefined;
-        if (!this.props.mediaVisible) {
-            onClick = this.onClick;
+        const content = <> {children} </>;
+        if (this.props.mediaVisible) {
+            return (
+                <AccessibleButton className="mx_MStickerBody_wrapper" onClick={this.onClick}>
+                    {content}
+                </AccessibleButton>
+            );
         }
-        return (
-            <div className="mx_MStickerBody_wrapper" onClick={onClick}>
-                {" "}
-                {children}{" "}
-            </div>
-        );
+        return <div className="mx_MStickerBody_wrapper">{content}</div>;
     }
 
     // Placeholder to show in place of the sticker image if img onLoad hasn't fired yet.

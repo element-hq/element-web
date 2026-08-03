@@ -27,41 +27,6 @@ describe("BreadcrumbsStore", () => {
         jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
     });
 
-    it("does not meet room requirements if there are not enough rooms", () => {
-        // We don't have enough rooms, so we don't meet requirements
-        mocked(client.getVisibleRooms).mockReturnValue(fakeRooms(2));
-        expect(store.meetsRoomRequirement).toBe(false);
-    });
-
-    it("meets room requirements if there are enough rooms", () => {
-        // We do have enough rooms to show breadcrumbs
-        mocked(client.getVisibleRooms).mockReturnValue(fakeRooms(25));
-        expect(store.meetsRoomRequirement).toBe(true);
-    });
-
-    describe("And the feature_dynamic_room_predecessors is enabled", () => {
-        beforeEach(() => {
-            // Turn on feature_dynamic_room_predecessors setting
-            jest.spyOn(SettingsStore, "getValue").mockImplementation(
-                (settingName) => settingName === "feature_dynamic_room_predecessors",
-            );
-        });
-
-        it("passes through the dynamic room precessors flag", () => {
-            mocked(client.getVisibleRooms).mockReturnValue(fakeRooms(25));
-            expect(store.meetsRoomRequirement).toBeTruthy();
-            expect(client.getVisibleRooms).toHaveBeenCalledWith(true);
-        });
-    });
-
-    describe("And the feature_dynamic_room_predecessors is not enabled", () => {
-        it("passes through the dynamic room precessors flag", () => {
-            mocked(client.getVisibleRooms).mockReturnValue(fakeRooms(25));
-            expect(store.meetsRoomRequirement).toBeTruthy();
-            expect(client.getVisibleRooms).toHaveBeenCalledWith(false);
-        });
-    });
-
     describe("If the feature_dynamic_room_predecessors is not enabled", () => {
         beforeEach(() => {
             jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
@@ -153,17 +118,6 @@ describe("BreadcrumbsStore", () => {
 
         // Wait for event dispatch to happen
         await flushPromises();
-    }
-
-    /**
-     * Create as many fake rooms in an array as you ask for.
-     */
-    function fakeRooms(howMany: number): Room[] {
-        const ret: Room[] = [];
-        for (let i = 0; i < howMany; i++) {
-            ret.push(fakeRoom());
-        }
-        return ret;
     }
 
     let roomIdx = 0;

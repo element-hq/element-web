@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import classNames from "classnames";
 
-import { Icon as LiveLocationIcon } from "../../../../res/img/location/live-location.svg";
+import LiveLocationIcon from "../../../../res/img/location/live-location.svg?react";
 
 interface Props extends React.SVGProps<SVGSVGElement> {
     // use error styling when true

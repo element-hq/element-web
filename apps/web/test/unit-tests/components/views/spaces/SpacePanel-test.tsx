@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, screen, fireEvent, act, cleanup, waitFor } from "jest-matrix-react";
+import { render, screen, fireEvent, act, cleanup, waitFor, within } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 
@@ -17,8 +17,7 @@ import { MetaSpace, type SpaceKey } from "../../../../../src/stores/spaces";
 import { shouldShowComponent } from "../../../../../src/customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../../src/settings/UIFeature";
 import { mkStubRoom, wrapInMatrixClientContext, wrapInSdkContext } from "../../../../test-utils";
-import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
-import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
+import { TestSDKContext } from "../../../TestSDKContext.ts";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { type SpaceNotificationState } from "../../../../../src/stores/notifications/SpaceNotificationState";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
@@ -54,7 +53,6 @@ const createTransitionEndEvent = (): Event => {
     // TransitionEvent constructor does not exist.
     // This is needed because of the following check
     //   https://github.com/atlassian/react-beautiful-dnd/blob/master/src/view/draggable/draggable.jsx#L130
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (event as any).propertyName = "transform";
 
     return event;
@@ -99,10 +97,9 @@ jest.mock("../../../../../src/stores/spaces/SpaceStore", () => {
         getNotificationState = () => null as SpaceNotificationState | null;
         setActiveSpace = jest.fn();
         moveRootSpace = jest.fn();
+        start = jest.fn();
     }
-    return {
-        instance: new MockSpaceStore(),
-    };
+    return MockSpaceStore;
 });
 
 jest.mock("../../../../../src/customisations/helpers/UIComponents", () => ({
@@ -123,23 +120,19 @@ describe("<SpacePanel />", () => {
         removeListener: jest.fn(),
         isVersionSupported: jest.fn().mockResolvedValue(true),
         doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(false),
+        getAuthMetadata: jest.fn().mockRejectedValue(new Error("Legacy auth")),
     } as unknown as MatrixClient;
-    const SpacePanel = wrapInSdkContext(wrapInMatrixClientContext(UnwrappedSpacePanel), SdkContextClass.instance);
+    const sdkContext = new TestSDKContext();
+    const SpacePanel = wrapInSdkContext(wrapInMatrixClientContext(UnwrappedSpacePanel), sdkContext);
 
     beforeAll(() => {
         jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
         jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
-        SdkContextClass.instance.client = mockClient;
+        sdkContext._client = mockClient;
     });
 
     beforeEach(() => {
-        SpaceStore.instance.enabledMetaSpaces.push(
-            MetaSpace.Home,
-            MetaSpace.Favourites,
-            MetaSpace.People,
-            MetaSpace.Orphans,
-            MetaSpace.VideoRooms,
-        );
+        sdkContext.spaceStore.enabledMetaSpaces.push(MetaSpace.Home, MetaSpace.Orphans, MetaSpace.VideoRooms);
         mocked(shouldShowComponent).mockClear().mockReturnValue(true);
     });
     afterEach(() => {
@@ -151,8 +144,21 @@ describe("<SpacePanel />", () => {
         const spySettingsStore = jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
             return setting === "feature_video_rooms" ? true : originalGetValue(setting);
         });
-        const renderResult = render(<SpacePanel />);
-        expect(renderResult.asFragment()).toMatchSnapshot();
+        render(<SpacePanel />);
+
+        // Inspect the order of the rendered MetaSpaces, excluding the "Create a space" button.
+        const tree = screen.getByRole("tree", { name: "Spaces" });
+        const spaceButtons = within(tree)
+            .getAllByRole("treeitem")
+            .filter((el) => within(el).queryByRole("button", { name: "Create a space" }) === null);
+
+        const metaSpaceLabels = Array.from(spaceButtons).map((li) =>
+            within(li)
+                .getByRole("button", { name: /^(?!Options$).*/ }) // filter out the 'options' buttons within the buttons
+                .getAttribute("aria-label"),
+        );
+        expect(metaSpaceLabels).toEqual(["Home", "Other rooms", "Conferences"]);
+
         spySettingsStore.mockRestore();
     });
 
@@ -177,7 +183,7 @@ describe("<SpacePanel />", () => {
     });
 
     it("should allow rearranging via drag and drop", async () => {
-        (SpaceStore.instance.spacePanelSpaces as any) = [
+        (sdkContext.spaceStore.spacePanelSpaces as any) = [
             mkStubRoom("!room1:server", "Room 1", mockClient),
             mkStubRoom("!room2:server", "Room 2", mockClient),
             mkStubRoom("!room3:server", "Room 3", mockClient),
@@ -192,7 +198,7 @@ describe("<SpacePanel />", () => {
         await move(room1, DragDirection.DOWN);
         await drop(room1);
 
-        expect(SpaceStore.instance.moveRootSpace).toHaveBeenCalledWith(0, 1);
+        expect(sdkContext.spaceStore.moveRootSpace).toHaveBeenCalledWith(0, 1);
     });
 
     it("should be able to open the user menu via dispatcher", async () => {

@@ -76,19 +76,19 @@ test.describe("Widget Layout", () => {
 
     test("manually resize the height of the top container layout", async ({ page }) => {
         const iframe = page.locator('iframe[title="widget"]');
-        expect((await iframe.boundingBox()).height).toBeLessThan(250);
+        expect((await iframe.boundingBox())!.height).toBeLessThan(250);
 
         await page.locator(".mx_AppsDrawer_resizer_container_handle").hover();
         await page.mouse.down();
         await page.mouse.move(0, 550);
         await page.mouse.up();
 
-        expect((await iframe.boundingBox()).height).toBeGreaterThan(400);
+        expect((await iframe.boundingBox())!.height).toBeGreaterThan(400);
     });
 
     test("programmatically resize the height of the top container layout", async ({ page, app }) => {
         const iframe = page.locator('iframe[title="widget"]');
-        expect((await iframe.boundingBox()).height).toBeLessThan(250);
+        expect((await iframe.boundingBox())!.height).toBeLessThan(250);
 
         await app.client.sendStateEvent(
             roomId,
@@ -106,6 +106,6 @@ test.describe("Widget Layout", () => {
             "",
         );
 
-        await expect.poll(async () => (await iframe.boundingBox()).height).toBeGreaterThan(400);
+        await expect.poll(async () => (await iframe.boundingBox())!.height).toBeGreaterThan(400);
     });
 });

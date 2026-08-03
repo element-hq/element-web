@@ -62,7 +62,7 @@ export class I18nWebpackPlugin {
                     }
 
                     const primaryPath = paths[0];
-                    const includeLangs = [...new Set([...(await fs.readdir(primaryPath))])]
+                    const includeLangs = [...new Set(await fs.readdir(primaryPath))]
                         .filter((fn) => fn.endsWith(".json"))
                         .map((f) => f.slice(0, -5));
 

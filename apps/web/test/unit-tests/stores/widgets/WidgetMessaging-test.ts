@@ -38,7 +38,7 @@ import ActiveWidgetStore from "../../../../src/stores/ActiveWidgetStore";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../src/dispatcher/actions";
-import { SdkContextClass } from "../../../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../../../src/contexts/SDKContextClass";
 import { UPDATE_EVENT } from "../../../../src/stores/AsyncStore";
 import { type IApp } from "../../../../src/utils/WidgetUtils-types";
 import { ModalWidgetStore } from "../../../../src/stores/ModalWidgetStore";
@@ -397,7 +397,7 @@ describe("WidgetMessaging as an account widget", () => {
     beforeEach(() => {
         stubClient();
         // I give up, getting the return type of spyOn right is hopeless
-        getRoomId = jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId") as unknown as MockedFunction<
+        getRoomId = jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId") as unknown as MockedFunction<
             () => string | null
         >;
         getRoomId.mockReturnValue("!1:example.org");
@@ -430,7 +430,7 @@ describe("WidgetMessaging as an account widget", () => {
         expect(messaging.setViewedRoomId).toHaveBeenCalledTimes(1);
         expect(messaging.setViewedRoomId).toHaveBeenLastCalledWith("!1:example.org");
         getRoomId.mockReturnValue("!2:example.org");
-        SdkContextClass.instance.roomViewStore.emit(UPDATE_EVENT);
+        SDKContextClass.instance.roomViewStore.emit(UPDATE_EVENT);
         expect(messaging.setViewedRoomId).toHaveBeenCalledTimes(2);
         expect(messaging.setViewedRoomId).toHaveBeenLastCalledWith("!2:example.org");
     });
@@ -630,7 +630,7 @@ describe("WidgetMessaging action handling for stickerpicker", () => {
         const client = mocked(stubClient());
         room = mkRoom(client, "!1:example.org");
         client.getRoom.mockImplementation((roomId) => (roomId === room.roomId ? room : null));
-        const getRoomId = jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId") as unknown as MockedFunction<
+        const getRoomId = jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId") as unknown as MockedFunction<
             () => string | null
         >;
         getRoomId.mockReturnValue(room.roomId);

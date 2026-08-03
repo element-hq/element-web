@@ -13,13 +13,18 @@ import { mocked } from "jest-mock";
 
 import QuickSettingsButton from "../../../../../src/components/views/spaces/QuickSettingsButton";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
+import { SDKContext } from "../../../../../src/contexts/SDKContext.ts";
 
 describe("QuickSettingsButton", () => {
     const roomId = "!room:example.com";
 
     const renderQuickSettingsButton = () => {
-        render(<QuickSettingsButton isPanelCollapsed={true} />);
+        render(<QuickSettingsButton isPanelCollapsed={true} />, {
+            wrapper: ({ children }) => (
+                <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+            ),
+        });
     };
 
     const getQuickSettingsButton = () => {
@@ -37,7 +42,11 @@ describe("QuickSettingsButton", () => {
     });
 
     it("should render the quick settings button in expanded mode", () => {
-        const { asFragment } = render(<QuickSettingsButton isPanelCollapsed={false} />);
+        const { asFragment } = render(<QuickSettingsButton isPanelCollapsed={false} />, {
+            wrapper: ({ children }) => (
+                <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+            ),
+        });
         expect(asFragment()).toMatchSnapshot();
     });
 
@@ -72,11 +81,11 @@ describe("QuickSettingsButton", () => {
 
         describe("and a room is viewed", () => {
             beforeEach(() => {
-                jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(roomId);
+                jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(roomId);
             });
 
             afterEach(() => {
-                mocked(SdkContextClass.instance.roomViewStore.getRoomId).mockRestore();
+                mocked(SDKContextClass.instance.roomViewStore.getRoomId).mockRestore();
             });
 
             describe("and the quick settings are open", () => {

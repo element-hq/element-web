@@ -217,7 +217,6 @@ export async function getSessionLock(onNewInstance: () => Promise<void>): Promis
     window.localStorage.setItem(SESSION_LOCK_CONSTANTS.STORAGE_ITEM_CLAIMANT, sessionIdentifier);
 
     // now, wait for the lock to be free.
-    // eslint-disable-next-line no-constant-condition
     while (true) {
         const remaining = checkLock();
 

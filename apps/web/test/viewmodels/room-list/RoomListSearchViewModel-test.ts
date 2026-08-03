@@ -13,6 +13,7 @@ import { shouldShowComponent } from "../../../src/customisations/helpers/UICompo
 import defaultDispatcher from "../../../src/dispatcher/dispatcher";
 import { Action } from "../../../src/dispatcher/actions";
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../../src/LegacyCallHandler";
+import { TestSDKContext } from "../../unit-tests/TestSDKContext.ts";
 
 jest.mock("../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
@@ -23,9 +24,12 @@ jest.mock("../../../src/PosthogTrackers", () => ({
 }));
 
 describe("RoomListSearchViewModel", () => {
+    const context = new TestSDKContext();
+
     beforeEach(() => {
         mocked(shouldShowComponent).mockReturnValue(true);
-        jest.spyOn(LegacyCallHandler.instance, "getSupportsPstnProtocol").mockReturnValue(false);
+        context._LegacyCallHandler = new LegacyCallHandler(context);
+        jest.spyOn(context._LegacyCallHandler, "getSupportsPstnProtocol").mockReturnValue(false);
     });
 
     afterEach(() => {
@@ -35,35 +39,50 @@ describe("RoomListSearchViewModel", () => {
     describe("snapshot", () => {
         it("should show explore button in Home space when UIComponent.ExploreRooms is enabled", () => {
             mocked(shouldShowComponent).mockReturnValue(true);
-            const vm = new RoomListSearchViewModel({ activeSpace: MetaSpace.Home });
+            const vm = new RoomListSearchViewModel({
+                activeSpace: MetaSpace.Home,
+                legacyCallHandler: context.legacyCallHandler,
+            });
 
             expect(vm.getSnapshot().displayExploreButton).toBe(true);
         });
 
         it("should hide explore button when not in Home space", () => {
             mocked(shouldShowComponent).mockReturnValue(true);
-            const vm = new RoomListSearchViewModel({ activeSpace: MetaSpace.VideoRooms });
+            const vm = new RoomListSearchViewModel({
+                activeSpace: MetaSpace.VideoRooms,
+                legacyCallHandler: context.legacyCallHandler,
+            });
 
             expect(vm.getSnapshot().displayExploreButton).toBe(false);
         });
 
         it("should hide explore button when UIComponent.ExploreRooms is disabled", () => {
             mocked(shouldShowComponent).mockReturnValue(false);
-            const vm = new RoomListSearchViewModel({ activeSpace: MetaSpace.Home });
+            const vm = new RoomListSearchViewModel({
+                activeSpace: MetaSpace.Home,
+                legacyCallHandler: context.legacyCallHandler,
+            });
 
             expect(vm.getSnapshot().displayExploreButton).toBe(false);
         });
 
         it("should show dial button when PSTN protocol is supported", () => {
-            jest.spyOn(LegacyCallHandler.instance, "getSupportsPstnProtocol").mockReturnValue(true);
-            const vm = new RoomListSearchViewModel({ activeSpace: MetaSpace.Home });
+            jest.spyOn(context.legacyCallHandler, "getSupportsPstnProtocol").mockReturnValue(true);
+            const vm = new RoomListSearchViewModel({
+                activeSpace: MetaSpace.Home,
+                legacyCallHandler: context.legacyCallHandler,
+            });
 
             expect(vm.getSnapshot().displayDialButton).toBe(true);
         });
 
         it("should hide dial button when PSTN protocol is not supported", () => {
-            jest.spyOn(LegacyCallHandler.instance, "getSupportsPstnProtocol").mockReturnValue(false);
-            const vm = new RoomListSearchViewModel({ activeSpace: MetaSpace.Home });
+            jest.spyOn(context.legacyCallHandler, "getSupportsPstnProtocol").mockReturnValue(false);
+            const vm = new RoomListSearchViewModel({
+                activeSpace: MetaSpace.Home,
+                legacyCallHandler: context.legacyCallHandler,
+            });
 
             expect(vm.getSnapshot().displayDialButton).toBe(false);
         });
@@ -72,7 +91,10 @@ describe("RoomListSearchViewModel", () => {
     describe("actions", () => {
         it("should fire OpenSpotlight action when onSearchClick is called", () => {
             const fireSpy = jest.spyOn(defaultDispatcher, "fire");
-            const vm = new RoomListSearchViewModel({ activeSpace: MetaSpace.Home });
+            const vm = new RoomListSearchViewModel({
+                activeSpace: MetaSpace.Home,
+                legacyCallHandler: context.legacyCallHandler,
+            });
 
             vm.onSearchClick();
             expect(fireSpy).toHaveBeenCalledWith(Action.OpenSpotlight);
@@ -80,7 +102,10 @@ describe("RoomListSearchViewModel", () => {
 
         it("should fire OpenDialPad action when onDialPadClick is called", () => {
             const fireSpy = jest.spyOn(defaultDispatcher, "fire");
-            const vm = new RoomListSearchViewModel({ activeSpace: MetaSpace.Home });
+            const vm = new RoomListSearchViewModel({
+                activeSpace: MetaSpace.Home,
+                legacyCallHandler: context.legacyCallHandler,
+            });
 
             vm.onDialPadClick();
             expect(fireSpy).toHaveBeenCalledWith(Action.OpenDialPad);
@@ -88,7 +113,10 @@ describe("RoomListSearchViewModel", () => {
 
         it("should fire ViewRoomDirectory action and track interaction when onExploreClick is called", () => {
             const fireSpy = jest.spyOn(defaultDispatcher, "fire");
-            const vm = new RoomListSearchViewModel({ activeSpace: MetaSpace.Home });
+            const vm = new RoomListSearchViewModel({
+                activeSpace: MetaSpace.Home,
+                legacyCallHandler: context.legacyCallHandler,
+            });
 
             const mockEvent = {} as React.MouseEvent<HTMLButtonElement>;
             vm.onExploreClick(mockEvent);
@@ -98,14 +126,17 @@ describe("RoomListSearchViewModel", () => {
     });
 
     it("should update snapshot when PSTN protocol support changes", () => {
-        jest.spyOn(LegacyCallHandler.instance, "getSupportsPstnProtocol").mockReturnValue(false);
-        const vm = new RoomListSearchViewModel({ activeSpace: MetaSpace.Home });
+        jest.spyOn(context.legacyCallHandler, "getSupportsPstnProtocol").mockReturnValue(false);
+        const vm = new RoomListSearchViewModel({
+            activeSpace: MetaSpace.Home,
+            legacyCallHandler: context.legacyCallHandler,
+        });
 
         expect(vm.getSnapshot().displayDialButton).toBe(false);
 
         // Simulate PSTN protocol support change
-        jest.spyOn(LegacyCallHandler.instance, "getSupportsPstnProtocol").mockReturnValue(true);
-        LegacyCallHandler.instance.emit(LegacyCallHandlerEvent.ProtocolSupport);
+        jest.spyOn(context.legacyCallHandler, "getSupportsPstnProtocol").mockReturnValue(true);
+        context.legacyCallHandler.emit(LegacyCallHandlerEvent.ProtocolSupport);
 
         expect(vm.getSnapshot().displayDialButton).toBe(true);
 

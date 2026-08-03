@@ -316,7 +316,7 @@ describe("editor/deserialize", function () {
         });
         it("escapes backticks in code blocks", () => {
             const html =
-                "<p><code>this → ` is a backtick</code></p>" + "<pre><code>and here are 3 of them:\n```</code></pre>";
+                "<p><code>this → ` is a backtick</code></p><pre><code>and here are 3 of them:\n```</code></pre>";
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
             expect(parts).toMatchSnapshot();
         });

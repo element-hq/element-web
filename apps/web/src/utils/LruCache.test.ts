@@ -40,7 +40,7 @@ describe("LruCache", () => {
         });
 
         it("delete() should not raise an error", () => {
-            cache.delete("a");
+            expect(() => cache.delete("a")).not.toThrow();
         });
 
         describe("when the cache contains 2 items", () => {
@@ -87,8 +87,8 @@ describe("LruCache", () => {
                     cache.set("c", "c value");
                 });
 
-                it("deleting an unkonwn item should not raise an error", () => {
-                    cache.delete("unknown");
+                it("deleting an unknown item should not raise an error", () => {
+                    expect(() => cache.delete("unknown")).not.toThrow();
                 });
 
                 it("deleting the first item should work", () => {

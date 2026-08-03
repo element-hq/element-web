@@ -12,4 +12,6 @@
     right: var(--cpd-space-3x);
     width: fit-content;
     margin: 0 auto;
+    /* Put the toast over the sticky headers  */
+    z-index: 3;
 }

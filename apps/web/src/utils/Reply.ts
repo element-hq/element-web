@@ -85,7 +85,7 @@ export function shouldDisplayReply(event: MatrixEvent): boolean {
 
 export function addReplyToMessageContent(content: IContent, replyToEvent: MatrixEvent): void {
     content["m.relates_to"] = {
-        ...(content["m.relates_to"] || {}),
+        ...content["m.relates_to"],
         ...makeReplyMixIn(replyToEvent),
     };
 }

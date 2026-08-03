@@ -105,7 +105,7 @@ export async function blobIsAnimated(blob: Blob): Promise<boolean | undefined> {
                 return false;
             }
 
-            for (let i = 8; i < blob.size; ) {
+            for (let i = 8; i < blob.size;) {
                 const length = arrayBufferReadInt(arr, i);
                 i += 4;
                 const type = arrayBufferReadStr(arr, i, 4);

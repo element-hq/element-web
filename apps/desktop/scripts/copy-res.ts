@@ -1,5 +1,12 @@
 #!/usr/bin/env node
 
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE in the repository root for full details.
+*/
+
 // copies resources into the lib directory.
 
 import parseArgs from "minimist";

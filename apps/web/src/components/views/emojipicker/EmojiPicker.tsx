@@ -28,10 +28,7 @@ import {
 } from "../../../accessibility/RovingTabIndex";
 import { Key } from "../../../Keyboard";
 import { type ButtonEvent } from "../elements/AccessibleButton";
-
-export const CATEGORY_HEADER_HEIGHT = 20;
-export const EMOJI_HEIGHT = 35;
-export const EMOJIS_PER_ROW = 8;
+import { CATEGORY_HEADER_HEIGHT, EMOJI_HEIGHT, EMOJIS_PER_ROW } from "./config";
 
 const ZERO_WIDTH_JOINER = "\u200D";
 

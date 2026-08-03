@@ -53,6 +53,11 @@
         "services": "Services",
         "unhide": "Unhide"
     },
+    "renderer_crash": {
+        "detail": "Quit and reopen the app to continue. If this keeps happening, restarting your computer or clearing the app's cache may help.",
+        "message": "%(brand)s recovered from a problem several times but it keeps happening, so it has stopped trying.",
+        "title": "%(brand)s keeps crashing"
+    },
     "right_click_menu": {
         "add_to_dictionary": "Add to dictionary",
         "copy_email": "Copy email address",

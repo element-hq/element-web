@@ -55,7 +55,7 @@ test.describe("Email Registration", async () => {
             expect(messages.messages).toHaveLength(1);
             expect(messages.messages[0].To[0].Address).toEqual("alice@email.com");
             const text = await mailpitClient.renderMessageText(messages.messages[0].ID);
-            const [emailLink] = text.match(/http.+/);
+            const [emailLink] = text.match(/http.+/)!;
             await request.get(emailLink); // "Click" the link in the email
 
             await expect(page.getByText("Welcome alice")).toBeVisible();

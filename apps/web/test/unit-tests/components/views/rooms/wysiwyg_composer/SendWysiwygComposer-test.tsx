@@ -347,10 +347,8 @@ describe("SendWysiwygComposer", () => {
                 expect(leftIcon).toBeInTheDocument();
                 expect(leftIcon).toHaveClass("mx_E2EIcon");
                 if (expectedLabel) {
-                    // eslint-disable-next-line jest/no-conditional-expect
                     expect(leftIcon).toHaveAccessibleName(expectedLabel);
                 } else {
-                    // eslint-disable-next-line jest/no-conditional-expect
                     expect(leftIcon.querySelector("svg")).not.toBeInTheDocument();
                 }
             });

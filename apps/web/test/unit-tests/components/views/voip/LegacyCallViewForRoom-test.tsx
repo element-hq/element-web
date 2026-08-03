@@ -12,28 +12,28 @@ import { CallEventHandlerEvent } from "matrix-js-sdk/src/webrtc/callEventHandler
 
 import LegacyCallView from "../../../../../src/components/views/voip/LegacyCallView";
 import LegacyCallViewForRoom from "../../../../../src/components/views/voip/LegacyCallViewForRoom";
-import { mkStubRoom, stubClient } from "../../../../test-utils";
+import { clientAndSDKContextRenderOptions, mkStubRoom, stubClient } from "../../../../test-utils";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import LegacyCallHandler from "../../../../../src/LegacyCallHandler";
-import { SDKContext, SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { TestSDKContext } from "../../../TestSDKContext.ts";
 
 jest.mock("../../../../../src/components/views/voip/LegacyCallView", () => jest.fn(() => "LegacyCallView"));
 
 describe("LegacyCallViewForRoom", () => {
     const LegacyCallViewMock = LegacyCallView as unknown as jest.Mock;
-    let sdkContext: SdkContextClass;
+    let sdkContext: TestSDKContext;
 
     beforeEach(() => {
-        stubClient();
-        sdkContext = new SdkContextClass();
+        sdkContext = new TestSDKContext();
+        sdkContext._client = stubClient();
         LegacyCallViewMock.mockClear();
     });
 
     it("should remember sidebar state, defaulting to shown", async () => {
-        const callHandler = new LegacyCallHandler();
+        const callHandler = new LegacyCallHandler(sdkContext);
         callHandler.start();
-        jest.spyOn(LegacyCallHandler, "instance", "get").mockImplementation(() => callHandler);
+        sdkContext._LegacyCallHandler = callHandler;
 
         const call = new MatrixCall({
             client: MatrixClientPeg.safeGet(),
@@ -48,7 +48,10 @@ describe("LegacyCallViewForRoom", () => {
         const cli = MatrixClientPeg.safeGet();
         cli.emit(CallEventHandlerEvent.Incoming, call);
 
-        const { rerender } = render(<LegacyCallViewForRoom roomId={call.roomId} />);
+        const { rerender } = render(
+            <LegacyCallViewForRoom roomId={call.roomId} />,
+            clientAndSDKContextRenderOptions(cli, sdkContext),
+        );
 
         let props = LegacyCallViewMock.mock.lastCall![0];
         expect(props.sidebarShown).toBeTruthy(); // Sidebar defaults to shown
@@ -83,17 +86,16 @@ describe("LegacyCallViewForRoom", () => {
             addListener: jest.fn(),
             removeListener: jest.fn(),
         };
-        jest.spyOn(LegacyCallHandler, "instance", "get").mockImplementation(
-            () => callHandler as unknown as LegacyCallHandler,
-        );
+        sdkContext._LegacyCallHandler = callHandler as unknown as LegacyCallHandler;
 
         jest.spyOn(sdkContext.resizeNotifier, "startResizing");
         jest.spyOn(sdkContext.resizeNotifier, "stopResizing");
         jest.spyOn(sdkContext.resizeNotifier, "notifyTimelineHeightChanged");
 
-        const { container } = render(<LegacyCallViewForRoom roomId={call.roomId} />, {
-            wrapper: ({ children }) => <SDKContext.Provider value={sdkContext}>{children}</SDKContext.Provider>,
-        });
+        const { container } = render(
+            <LegacyCallViewForRoom roomId={call.roomId} />,
+            clientAndSDKContextRenderOptions(sdkContext.client!, sdkContext),
+        );
 
         const resizer = container.querySelector(".mx_LegacyCallViewForRoom_ResizeHandle");
         await waitFor(() => {
