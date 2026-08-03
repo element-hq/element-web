@@ -9,6 +9,12 @@
 .root {
     --event-tile-group-gutter: 64px;
     --event-tile-preview-offset: 48px;
+    --event-tile-action-bar-size: 28px;
+    --event-tile-action-bar-margin: 3px;
+    --event-tile-action-bar-offset: 8px;
+    --event-tile-state-hover-background: var(--cpd-color-bg-subtle-primary, rgb(240 241 242));
+    --event-tile-state-highlight-background: var(--cpd-color-bg-subtle-secondary, rgb(233 237 242));
+    --event-tile-state-selected-background: var(--cpd-color-bg-subtle-primary, rgb(240 241 242));
 
     position: relative;
     flex-shrink: 0;
@@ -33,6 +39,10 @@
     min-width: 0;
 }
 
+.line {
+    position: relative;
+}
+
 .contextMenu {
     z-index: 1;
 }
@@ -51,8 +61,47 @@
     gap: var(--cpd-space-2x, 8px);
 }
 
+/* The shell owns the action-bar boundary. The action-bar contents own their controls.
+   Presence of the slot is the render/show signal supplied by the host. */
+.actionBar {
+    position: absolute;
+    z-index: 10;
+    inset-block-start: calc(
+        -1 *
+            (var(--event-tile-action-bar-size) +
+                2 * (var(--event-tile-action-bar-margin) + var(--cpd-border-width-1, 1px)))
+    );
+    inset-inline-end: var(--event-tile-action-bar-offset);
+    user-select: none;
+}
+
 .root[data-continuation="true"] {
     padding-top: 0;
+}
+
+/* Shared interaction states for layouts whose message content is rendered in a line. */
+.root[data-layout="group"] .line,
+.root[data-layout="irc"] .line {
+    transition: background-color 120ms ease;
+}
+
+.root[data-layout="group"]:hover .line,
+.root[data-layout="irc"]:hover .line,
+.root[data-layout="group"]:focus-within .line,
+.root[data-layout="irc"]:focus-within .line {
+    background-color: var(--event-tile-state-hover-background);
+}
+
+.root[data-layout="group"][data-highlighted="true"] .line,
+.root[data-layout="irc"][data-highlighted="true"] .line {
+    background-color: var(--event-tile-state-highlight-background);
+}
+
+.root[data-layout="group"][data-selected="true"] .line,
+.root[data-layout="irc"][data-selected="true"] .line,
+.root[data-layout="group"][data-editing="true"] .line,
+.root[data-layout="irc"][data-editing="true"] .line {
+    background-color: var(--event-tile-state-selected-background);
 }
 
 /* Group layout. */

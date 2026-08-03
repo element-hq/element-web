@@ -1,6 +1,6 @@
-/* Story-only fixtures for approximating the visual weight of real event-tile slots. */
+/* Story-only timeline context. The hierarchy mirrors RoomView/ScrollPanel. */
 
-.canvas {
+.storySurface {
     width: min(100%, 680px);
     min-height: 220px;
     margin: 0;
@@ -10,57 +10,22 @@
     color: var(--cpd-color-text-primary, #17191c);
 }
 
-.canvas > li + li {
-    margin-block-start: 24px;
-}
-
-.canvas [data-shape="Notification"],
-.canvas [data-shape="ThreadsList"] {
-    border-radius: 8px;
-}
-
-.canvas [data-shape="Notification"]::after,
-.canvas [data-shape="ThreadsList"]::after {
-    background: var(--cpd-color-border-subtle, #c9ced4);
-    pointer-events: none;
-}
-
-.canvas [data-shape="Notification"]:hover,
-.canvas [data-shape="ThreadsList"]:hover {
-    background: var(--cpd-color-bg-subtle-primary, #f0f1f2);
-}
-
-.canvas [data-highlighted="true"] .line {
-    background: var(--cpd-color-bg-subtle-secondary, #e9edf2);
-}
-
-.canvas [data-selected="true"] .line,
-.canvas [data-editing="true"] .line {
-    background: var(--cpd-color-bg-subtle-primary, #f0f1f2);
-    box-shadow: inset 54px 0 0 -50px var(--cpd-color-bg-action-primary-rest, #0dbd8b);
-}
-
-.slot {
+.debugFrame {
     position: relative;
 }
 
-/* Let the story-only slot labels escape the notification metadata row. */
-.detailsContainer {
-    overflow: visible !important;
+[data-story-hovered="true"] {
+    outline: 1px dashed var(--cpd-color-border-focused, #5e7cff);
+    outline-offset: 2px;
 }
 
-.line {
-    /* Marker class used by state stories to style the shared line slot. */
-}
-
-.slot::after {
-    content: attr(data-slot);
-    position: absolute;
-    z-index: 20;
-    inset-block-start: calc(100% + 6px);
-    inset-inline-start: 0;
-    max-width: 220px;
-    padding: 3px 6px;
+.debugTooltip {
+    position: fixed;
+    z-index: 1000;
+    inset-block-end: 12px;
+    inset-inline-start: 12px;
+    max-width: min(80vw, 360px);
+    padding: 4px 8px;
     border: 1px solid var(--cpd-color-border-subtle, #c9ced4);
     border-radius: 4px;
     color: var(--cpd-color-text-primary, #17191c);
@@ -71,24 +36,46 @@
         SFMono-Regular,
         Consolas,
         monospace;
-    opacity: 0;
     pointer-events: none;
-    transform: translateY(-2px);
-    transition:
-        opacity 120ms ease,
-        transform 120ms ease;
-    white-space: nowrap;
 }
 
-.slot:hover {
-    z-index: 30;
-    outline: 1px dashed var(--cpd-color-border-focused, #5e7cff);
-    outline-offset: 2px;
+.timeline,
+.scrollPanel,
+.messageListWrapper {
+    display: flex;
+    min-width: 0;
+    width: 100%;
+    flex-direction: column;
 }
 
-.slot:hover::after {
-    opacity: 1;
-    transform: translateY(0);
+.messageListWrapper {
+    position: relative;
+    justify-content: flex-end;
+}
+
+.messageList {
+    display: flex;
+    min-width: 0;
+    width: 100%;
+    flex-direction: column;
+    justify-content: flex-end;
+    box-sizing: border-box;
+    margin: 0;
+    padding: var(--RoomView_MessageList-padding, 18px);
+    list-style: none;
+}
+
+.messageList > li {
+    clear: both;
+}
+
+/* Let the story-only slot labels escape the notification metadata row. */
+.detailsContainer {
+    overflow: visible !important;
+}
+
+.line {
+    /* Marker class used by state stories to style the shared line slot. */
 }
 
 .avatar,
@@ -157,26 +144,13 @@
     font-weight: 600;
 }
 
-.actionBar {
+.actionBarContent {
     display: flex;
     gap: 4px;
     margin-block-start: 6px;
 }
 
-.actionBarSlot {
-    position: absolute;
-    z-index: 10;
-    top: calc(-1 * (28px + 2 * (3px + var(--cpd-border-width-1))));
-    inset-inline-end: 8px;
-    user-select: none;
-}
-
-.canvas[data-event-layout="bubble"] .actionBarSlot {
-    top: -28px;
-    z-index: 9;
-}
-
-.actionBar button {
+.actionBarContent button {
     padding: 3px 8px;
     border: 1px solid var(--cpd-color-border-subtle, #c9ced4);
     border-radius: 4px;
@@ -220,11 +194,11 @@
     display: none;
 }
 
-.canvas[data-event-density="compact"] {
+.messageList[data-event-density="compact"] {
     padding-block: 8px;
 }
 
-.canvas[data-event-density="compact"] .body {
+.messageList[data-event-density="compact"] .body {
     padding-block: 2px;
     line-height: 1.3;
 }

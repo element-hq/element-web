@@ -16,20 +16,96 @@ import styles from "./EventTileView.stories.module.css";
 
 export const Slot = ({
     name,
-    as = "span",
     className,
     children,
 }: React.PropsWithChildren<{ name: string; as?: "div" | "span"; className?: string }>): React.ReactElement => {
-    const Element = as;
+    if (!React.isValidElement(children)) {
+        return <span data-story-boundary={`EventTileView.slots.${name}`}>{children}</span>;
+    }
+
+    const child = children as React.ReactElement<StorySlotProps>;
+
+    return React.cloneElement(child, {
+        className: classNames(styles.slot, child.props.className, className),
+        storyBoundary: `EventTileView.slots.${name}`,
+        "data-story-boundary": `EventTileView.slots.${name}`,
+    });
+};
+
+type StoryBoundary = HTMLElement;
+type StorySlotProps = { className?: string; storyBoundary?: string; "data-story-boundary"?: string };
+
+const getBoundary = (target: EventTarget | null, root: HTMLElement): StoryBoundary | null => {
+    if (!(target instanceof HTMLElement)) return null;
+
+    const boundary = target.closest<StoryBoundary>("[data-story-boundary], .storyEventTile, .storyEventLine");
+    return boundary && root.contains(boundary) ? boundary : null;
+};
+
+export const StoryDebugFrame = ({ children }: React.PropsWithChildren): React.ReactElement => {
+    const frameRef = React.useRef<HTMLDivElement>(null);
+    const activeBoundaryRef = React.useRef<StoryBoundary | null>(null);
+    const [activeBoundary, setActiveBoundary] = React.useState<StoryBoundary | null>(null);
+
+    const clearActiveBoundary = (): void => {
+        activeBoundaryRef.current?.removeAttribute("data-story-hovered");
+        activeBoundaryRef.current = null;
+        setActiveBoundary(null);
+    };
+
+    const updateActiveBoundary = (event: React.PointerEvent<HTMLDivElement>): void => {
+        const frame = frameRef.current;
+        if (!frame) return;
+
+        const boundary = getBoundary(event.target, frame);
+        if (boundary === activeBoundaryRef.current) return;
+
+        activeBoundaryRef.current?.removeAttribute("data-story-hovered");
+        boundary?.setAttribute("data-story-hovered", "true");
+        activeBoundaryRef.current = boundary;
+        setActiveBoundary(boundary);
+    };
+
+    React.useEffect(() => {
+        return () => activeBoundaryRef.current?.removeAttribute("data-story-hovered");
+    }, []);
+
     return (
-        <Element className={classNames(styles.slot, className)} data-slot={name}>
+        <div
+            ref={frameRef}
+            className={styles.debugFrame}
+            onPointerMove={updateActiveBoundary}
+            onPointerLeave={clearActiveBoundary}
+        >
             {children}
-        </Element>
+            {activeBoundary && (
+                <div className={styles.debugTooltip} role="status">
+                    {activeBoundary.dataset.storyBoundary ??
+                        (activeBoundary.classList.contains("storyEventTile")
+                            ? "EventTileView"
+                            : "EventTileView.line")}
+                </div>
+            )}
+        </div>
     );
 };
 
-export const StoryAvatar = ({ room = false, label = "A" }: { room?: boolean; label?: string }): React.ReactElement => (
-    <span className={room ? styles.roomAvatar : styles.avatar} aria-hidden="true">
+export const StoryAvatar = ({
+    room = false,
+    label = "A",
+    className,
+    storyBoundary,
+}: {
+    room?: boolean;
+    label?: string;
+    className?: string;
+    storyBoundary?: string;
+}): React.ReactElement => (
+    <span
+        className={classNames(room ? styles.roomAvatar : styles.avatar, className)}
+        data-story-boundary={storyBoundary}
+        aria-hidden="true"
+    >
         {room ? "R" : label}
     </span>
 );
@@ -37,46 +113,99 @@ export const StoryAvatar = ({ room = false, label = "A" }: { room?: boolean; lab
 export const StorySender = ({
     name = "Alex Example",
     id = "@alex:example.org",
+    className,
+    storyBoundary,
 }: {
     name?: string;
     id?: string;
+    className?: string;
+    storyBoundary?: string;
 }): React.ReactElement => (
-    <div className={styles.sender}>
+    <div className={classNames(styles.sender, className)} data-story-boundary={storyBoundary}>
         <span className={styles.senderName}>{name}</span>
         <span className={styles.senderId}>{id}</span>
     </div>
 );
 
-export const StoryTimestamp = (): React.ReactElement => <time className={styles.timestamp}>12:34</time>;
-export const StoryBody = (): React.ReactElement => (
-    <div className={styles.body}>
+export const StoryTimestamp = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => (
+    <time className={classNames(styles.timestamp, className)} data-story-boundary={storyBoundary}>
+        12:34
+    </time>
+);
+export const StoryBody = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => (
+    <div className={classNames(styles.body, className)} data-story-boundary={storyBoundary}>
         <div>Here is a realistic event tile body with enough text to show the available width.</div>
         <div>This second line makes wrapping and vertical rhythm visible in Storybook.</div>
     </div>
 );
-export const StoryReplyChain = (): React.ReactElement => (
-    <div className={styles.replyChain}>
+export const StoryReplyChain = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => (
+    <div className={classNames(styles.replyChain, className)} data-story-boundary={storyBoundary}>
         <span className={styles.replyAuthor}>Taylor Example</span>
         <span>Earlier message quoted in this reply.</span>
     </div>
 );
-export const StoryActionBar = (): React.ReactElement => (
-    <div className={styles.actionBar} role="toolbar" aria-label="Message actions">
+export const StoryActionBar = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => (
+    <div
+        className={classNames(styles.actionBarContent, className)}
+        data-story-boundary={storyBoundary}
+        role="toolbar"
+        aria-label="Message actions"
+    >
         <button type="button">Reply</button>
         <button type="button">React</button>
         <button type="button">More</button>
     </div>
 );
-export const StoryFooter = (): React.ReactElement => (
-    <div className={styles.footer}>
+export const StoryFooter = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => (
+    <div className={classNames(styles.footer, className)} data-story-boundary={storyBoundary}>
         <span>👍 2</span>
         <span>❤️ 1</span>
     </div>
 );
-export const StoryThreadInfo = (): React.ReactElement => <div className={styles.threadInfo}>3 replies</div>;
-export const StoryReceipt = (): React.ReactElement => <span className={styles.receipt}>Read</span>;
-export const StoryPadlock = (): React.ReactElement => <span className={styles.padlock}>🔒</span>;
-export const StoryContextMenu = (): React.ReactElement => <span className={styles.contextMenu}>⋯</span>;
+export const StoryThreadInfo = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => (
+    <div className={classNames(styles.threadInfo, className)} data-story-boundary={storyBoundary}>
+        3 replies
+    </div>
+);
+export const StoryReceipt = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => (
+    <span className={classNames(styles.receipt, className)} data-story-boundary={storyBoundary}>
+        Read
+    </span>
+);
+export const StoryPadlock = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => (
+    <span className={classNames(styles.padlock, className)} data-story-boundary={storyBoundary}>
+        🔒
+    </span>
+);
+export const StoryContextMenu = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => (
+    <span className={classNames(styles.contextMenu, className)} data-story-boundary={storyBoundary}>
+        ⋯
+    </span>
+);
+
+export const TimelineStoryFrame = ({
+    density,
+    layout,
+    children,
+}: React.PropsWithChildren<{ density: string; layout: string }>): React.ReactElement => (
+    <StoryDebugFrame>
+        <div className={styles.storySurface} data-story-boundary="Timeline">
+            <div className={styles.timeline} data-story-boundary="RoomView.timeline" data-event-layout={layout}>
+                <div className={styles.scrollPanel} data-story-boundary="ScrollPanel">
+                    <div className={styles.messageListWrapper} data-story-boundary="messageListWrapper">
+                        <ol
+                            className={styles.messageList}
+                            data-story-boundary="RoomView.MessageList"
+                            data-event-density={density}
+                        >
+                            {children}
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </StoryDebugFrame>
+);
 
 const baseRoot: EventTileViewProps["root"] = {
     id: "event-tile-story-line",
@@ -93,7 +222,7 @@ export const roomSlots: EventTileViewProps["slots"] = {
     timestamp: <Slot name="timestamp"><StoryTimestamp /></Slot>,
     padlock: <Slot name="padlock"><StoryPadlock /></Slot>,
     replyChain: <Slot name="replyChain" as="div"><StoryReplyChain /></Slot>,
-    actionBar: <Slot name="actionBar" as="div" className={styles.actionBarSlot}><StoryActionBar /></Slot>,
+    actionBar: <Slot name="actionBar" as="div"><StoryActionBar /></Slot>,
     footer: <Slot name="footer" as="div"><StoryFooter /></Slot>,
     threadInfo: <Slot name="threadInfo" as="div"><StoryThreadInfo /></Slot>,
     receipt: <Slot name="receipt"><StoryReceipt /></Slot>,
@@ -111,6 +240,11 @@ function EventTileViewStoryContent({ shape, state, ...props }: EventTileStoryPro
         <EventTileView
             key={suffix}
             {...props}
+            classNames={{
+                ...props.classNames,
+                root: classNames(props.classNames?.root, "storyEventTile"),
+                line: classNames(props.classNames?.line, "storyEventLine"),
+            }}
             slots={
                 shape === "Room"
                     ? {
@@ -129,9 +263,18 @@ function EventTileViewStoryContent({ shape, state, ...props }: EventTileStoryPro
             }}
         />
     );
-    return <ul className={styles.canvas} data-event-density={density} data-event-layout={layout}>
-        {shape === "Room" ? <>{renderTile(false, "received")} {renderTile(true, "sent")}</> : renderTile(false, "event")}
-    </ul>;
+    return (
+        <TimelineStoryFrame density={density} layout={layout}>
+            {shape === "Room" ? (
+                <>
+                    {renderTile(false, "received")}
+                    {renderTile(true, "sent")}
+                </>
+            ) : (
+                renderTile(false, "event")
+            )}
+        </TimelineStoryFrame>
+    );
 }
 
 const EventTileViewStoryImpl = (props: EventTileStoryProps): React.ReactElement => (
