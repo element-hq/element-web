@@ -47,12 +47,18 @@ export function hardenSeshatSearchTerm(term: string): string {
         term.length >= 2 && term.startsWith('"') && term.endsWith('"') && !term.slice(1, -1).includes('"');
     if (isClosedPhrase || !term.includes(":")) return term;
     // Escape any embedded double quotes so the phrase stays well-formed, then phrase-wrap.
-    return `"${term.replace(/"/g, '\\"')}"`;
+    return `"${term.replaceAll('"', String.raw`\"`)}"`;
 }
 
 interface IReplaceRelation {
     rel_type?: string;
     event_id?: string;
+}
+
+/** The fields a matched edit hands back to be applied to the search result. */
+interface IPromotedReplacement {
+    content: Record<string, unknown>;
+    event_id: string;
 }
 
 /**
@@ -74,13 +80,17 @@ interface IReplaceRelation {
  * from the promoted `m.new_content` we leave behind. Either way the edited text
  * renders and the permalink targets the original message.
  *
- * We touch `content` and `event_id` only; the encryption sidecar fields
+ * We replace `content` and `event_id` only; the encryption sidecar fields
  * (curve25519Key/ed25519Key/algorithm/forwardingCurve25519KeyChain) that
  * `restoreEncryptionInfo` re-reads live at the event top level are preserved.
+ *
+ * @param event - The raw matched event to inspect. Left untouched.
+ * @returns The fields the result should adopt, or undefined if the event is not a
+ *          well-formed edit and should be left as it is.
  */
-function promoteReplacementContent(event: Record<string, unknown> | undefined): void {
+function promoteReplacementContent(event: Record<string, unknown> | undefined): IPromotedReplacement | undefined {
     const content = event?.content as Record<string, unknown> | undefined;
-    if (!content) return;
+    if (!content) return undefined;
     const relatesTo = content["m.relates_to"] as IReplaceRelation | undefined;
     const newContent = content["m.new_content"] as Record<string, unknown> | undefined;
     // Only act on a well-formed edit: a Replace relation with a target event id and a
@@ -90,10 +100,9 @@ function promoteReplacementContent(event: Record<string, unknown> | undefined): 
         typeof relatesTo.event_id !== "string" ||
         typeof newContent?.body !== "string"
     ) {
-        return;
+        return undefined;
     }
-    event!.content = { ...newContent };
-    event!.event_id = relatesTo.event_id;
+    return { content: { ...newContent }, event_id: relatesTo.event_id };
 }
 
 /**
@@ -115,7 +124,7 @@ function sanitizeSeshatResults(localResult: IResultRoomEvents): void {
         // Promote only the MATCHED event: re-keying a context event would risk colliding
         // its id with another result/context event, and an edit appearing only as context
         // is harmlessly skipped by the renderer as before.
-        promoteReplacementContent(matched);
+        Object.assign(matched, promoteReplacementContent(matched));
         if (searchResult.context) {
             for (const ctxEvent of searchResult.context.events_before || []) {
                 stripStateKey(ctxEvent as unknown as Record<string, unknown>);
@@ -215,7 +224,9 @@ async function combinedSearch(
 
     if (serverSettled.status === "rejected" && localSettled.status === "rejected") {
         logger.error("Both server-side and local search failed", serverSettled.reason, localSettled.reason);
-        throw serverSettled.reason;
+        throw new Error("Both the server-side and the local search failed", {
+            cause: { serverSide: serverSettled.reason, local: localSettled.reason },
+        });
     }
 
     // Degradation is intentionally sticky for the session: a leg that fails here leaves its

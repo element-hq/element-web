@@ -549,13 +549,20 @@ describe("Searching", () => {
             expect(warnSpy).toHaveBeenCalled();
         });
 
-        it("rejects only when BOTH legs fail", async () => {
+        it("rejects only when BOTH legs fail, reporting both reasons", async () => {
             jest.spyOn(logger, "error").mockImplementation(() => {});
-            const mockEventIndex = { search: jest.fn().mockRejectedValue(new Error("Seshat down")) };
+            const localReason = new Error("Seshat down");
+            const serverReason = new Error("Server down");
+            const mockEventIndex = { search: jest.fn().mockRejectedValue(localReason) };
             jest.spyOn(EventIndexPeg, "get").mockReturnValue(mockEventIndex as any);
-            jest.spyOn(mockClient, "search").mockRejectedValue(new Error("Server down"));
+            jest.spyOn(mockClient, "search").mockRejectedValue(serverReason);
 
-            await expect(eventSearch(mockClient, "anything")).rejects.toThrow();
+            await expect(eventSearch(mockClient, "anything")).rejects.toThrow(
+                "Both the server-side and the local search failed",
+            );
+            await expect(eventSearch(mockClient, "anything")).rejects.toMatchObject({
+                cause: { serverSide: serverReason, local: localReason },
+            });
         });
     });
 });
