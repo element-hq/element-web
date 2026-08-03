@@ -27,6 +27,8 @@ import { FileDownloader } from "../../utils/FileDownloader";
 import { type MediaEventHelper } from "../../utils/MediaEventHelper";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
+import RightPanelStore from "../../stores/right-panel/RightPanelStore";
+import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
 
 export interface FileBodyViewModelProps {
     mxEvent: MatrixEvent;
@@ -254,6 +256,17 @@ export class FileBodyViewModel
     };
 
     public onInfoClick = async (): Promise<void> => {
+        if (this.content.info?.mimetype === "application/pdf") {
+            RightPanelStore.instance.pushCard(
+                {
+                    phase: RightPanelPhases.PdfViewer,
+                    state: { pdfEventId: this.props.mxEvent.getId() },
+                },
+                false,
+            );
+            return;
+        }
+
         if (this.props.forExport || !(this.props.showFileInfo ?? true) || !this.props.mediaEventHelper) {
             return;
         }
