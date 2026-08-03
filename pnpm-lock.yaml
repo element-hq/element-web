@@ -7,52 +7,52 @@ importers:
     configDependencies: {}
     packageManagerDependencies:
       '@pnpm/exe':
-        specifier: 11.5.2
-        version: 11.5.2
+        specifier: 11.8.0
+        version: 11.8.0
       pnpm:
-        specifier: 11.5.2
-        version: 11.5.2
+        specifier: 11.8.0
+        version: 11.8.0
 
 packages:
 
-  '@pnpm/exe@11.5.2':
-    resolution: {integrity: sha512-4UFnP2rhNu1xjAQ+I1GdIUUEtCJuTYJlbpiWSFA4POAID3Lpt+2vrjImWO7eOJ7iCY3vpc4TFe2IW3sAolW4Kg==}
+  '@pnpm/exe@11.8.0':
+    resolution: {integrity: sha512-Z4yxxE+Q2bi36Ol/hNN/420TLk6MG1LxB80sIFvwFq2cr8zRkO446c8Ho+jFaBOxdFiGE7RPT5a3tvu9JQarsg==}
     hasBin: true
 
-  '@pnpm/linux-arm64@11.5.2':
-    resolution: {integrity: sha512-MbJySnu2y9cCBqlODLjUlZ87JnRC3Inq40rvGHWJSrSQ0PnuHeSw2NDMnLI8Hf9hCY+ooussRc5iiR4IAkjUvg==}
+  '@pnpm/linux-arm64@11.8.0':
+    resolution: {integrity: sha512-GynFy14/J4CBFnAl0yIAZofHFjVT9O630/6SQizF+g/tmtgA/LD8LNydlaqp0IqJHLpAYgP6NCz1GpNjAXDSFw==}
     cpu: [arm64]
     os: [linux]
 
-  '@pnpm/linux-x64@11.5.2':
-    resolution: {integrity: sha512-g6g2BGpQA47wUACy6B1MdeSHPtnl6x4AeCg0IOWQ7xXorEtC+VRiSHhLpA5kByFGeSwyYh/nLc7mLul5DAaELw==}
+  '@pnpm/linux-x64@11.8.0':
+    resolution: {integrity: sha512-t8xZUgi1+3zUDKD7vVv+njzEE22KKVsEx8mDOnHhcrvdk0VQjlXw1gsBRr5qgHm1mSLBHM59p8HYskbIvKs2Bg==}
     cpu: [x64]
     os: [linux]
 
-  '@pnpm/linuxstatic-arm64@11.5.2':
-    resolution: {integrity: sha512-xTxs9BLxYW39BPNGnmvYCUBnMPWm4mzmzujmdYbpRxDnBXrx55qPR5K/3LSohX7VrmsdDrYxuH6AmG1AaOlIfA==}
+  '@pnpm/linuxstatic-arm64@11.8.0':
+    resolution: {integrity: sha512-sImQtnqan8mkTE4PPil9Kz3pPtQ+pBvhYEMUFBgOzhHAWloxVRDKK0pJvUXJmx+NqQNng5SiEvhjoAUdm5p34g==}
     cpu: [arm64]
     os: [linux]
     libc: [musl]
 
-  '@pnpm/linuxstatic-x64@11.5.2':
-    resolution: {integrity: sha512-RGmmc/SoGLD90gmOHcU85UEKNoNRstLvizli4wzDASmETz/VeqJOqU5nD1YBgjzcP72sUMS352dh4bmzTfKyvQ==}
+  '@pnpm/linuxstatic-x64@11.8.0':
+    resolution: {integrity: sha512-/amFWeX2wOmsuCpEHs+65RBgniuncIE0eCqWdOI7nBk3rcu8SniVeZ8Lq5rABjqNBYUU65zKwHJ5NyWwc+BrKg==}
     cpu: [x64]
     os: [linux]
     libc: [musl]
 
-  '@pnpm/macos-arm64@11.5.2':
-    resolution: {integrity: sha512-gW3A2jRlC3SJRw8qX2SAzjMIu9o98daTSqCKzeeYcjF/uEbtbz3dn4HqYrYffBnenKbc4hsgZQmNOHAvUKIlSg==}
+  '@pnpm/macos-arm64@11.8.0':
+    resolution: {integrity: sha512-r7OWbYzpvO3CPCozezysoAfpYvUNX0w/2DpqA+lX4HcuBQi7GAR4xx6Gdhbg52uPA7Qux+7kHUj3gL/Mn8DEAA==}
     cpu: [arm64]
     os: [darwin]
 
-  '@pnpm/win-arm64@11.5.2':
-    resolution: {integrity: sha512-+VJCDoH/pRzLXBikwjvxgAnGfQufT8EALBX8cfSmrwD40JABUZvgPtjBjde7OwEoK/XwtlH8w+ZceFV0K3/YHQ==}
+  '@pnpm/win-arm64@11.8.0':
+    resolution: {integrity: sha512-BGXgcCdDX1QHv7D3QbQnP4aY/jr9DkSV/fqiiCTaYsgDF4/bOqcjlCr+Md6Az7HL/PJ8bxyjPIqHhdBzZh2TSg==}
     cpu: [arm64]
     os: [win32]
 
-  '@pnpm/win-x64@11.5.2':
-    resolution: {integrity: sha512-zgglREh75RbFgV/E0tNRS03ElX+hJOV43KRSSeaboxtj3ei1rrguxOgOCXUs/GsizoHVsuD+qXGABE4Kc4GMCg==}
+  '@pnpm/win-x64@11.8.0':
+    resolution: {integrity: sha512-J6inRM26+P1hL3DLWLBLI/imW2VlxjSFJsnSlaVvPC6PiGJbC96JhGZ+7l9Oag8loWjb9Z1DbcOf3ibDA9XRJA==}
     cpu: [x64]
     os: [win32]
 
@@ -116,45 +116,45 @@ packages:
     resolution: {integrity: sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==}
     engines: {node: '>=8'}
 
-  pnpm@11.5.2:
-    resolution: {integrity: sha512-ccYx44IGbvwlYl1c8CkHXeB7YbN/bic1D72Esb2lhkyMGWetwoB3a0XDCnFcA1mjvgj+9C1bsJ4rmQKZeWkpFg==}
+  pnpm@11.8.0:
+    resolution: {integrity: sha512-wfXnxMskHI8XS3Q4UdgvQrgCMkr8iw8Ra5atsVqgZmSUjd42lgo7oQebpbSyndAUATW5S1tfUmNZIknWjlVfJg==}
     engines: {node: '>=22.13'}
     hasBin: true
 
 snapshots:
 
-  '@pnpm/exe@11.5.2':
+  '@pnpm/exe@11.8.0':
     dependencies:
       '@reflink/reflink': 0.1.19
       detect-libc: 2.1.2
     optionalDependencies:
-      '@pnpm/linux-arm64': 11.5.2
-      '@pnpm/linux-x64': 11.5.2
-      '@pnpm/linuxstatic-arm64': 11.5.2
-      '@pnpm/linuxstatic-x64': 11.5.2
-      '@pnpm/macos-arm64': 11.5.2
-      '@pnpm/win-arm64': 11.5.2
-      '@pnpm/win-x64': 11.5.2
+      '@pnpm/linux-arm64': 11.8.0
+      '@pnpm/linux-x64': 11.8.0
+      '@pnpm/linuxstatic-arm64': 11.8.0
+      '@pnpm/linuxstatic-x64': 11.8.0
+      '@pnpm/macos-arm64': 11.8.0
+      '@pnpm/win-arm64': 11.8.0
+      '@pnpm/win-x64': 11.8.0
 
-  '@pnpm/linux-arm64@11.5.2':
+  '@pnpm/linux-arm64@11.8.0':
     optional: true
 
-  '@pnpm/linux-x64@11.5.2':
+  '@pnpm/linux-x64@11.8.0':
     optional: true
 
-  '@pnpm/linuxstatic-arm64@11.5.2':
+  '@pnpm/linuxstatic-arm64@11.8.0':
     optional: true
 
-  '@pnpm/linuxstatic-x64@11.5.2':
+  '@pnpm/linuxstatic-x64@11.8.0':
     optional: true
 
-  '@pnpm/macos-arm64@11.5.2':
+  '@pnpm/macos-arm64@11.8.0':
     optional: true
 
-  '@pnpm/win-arm64@11.5.2':
+  '@pnpm/win-arm64@11.8.0':
     optional: true
 
-  '@pnpm/win-x64@11.5.2':
+  '@pnpm/win-x64@11.8.0':
     optional: true
 
   '@reflink/reflink-darwin-arm64@0.1.19':
@@ -194,7 +194,7 @@ snapshots:
 
   detect-libc@2.1.2: {}
 
-  pnpm@11.5.2: {}
+  pnpm@11.8.0: {}
 
 ---
 lockfileVersion: '9.0'
@@ -341,7 +341,7 @@ importers:
         version: 3.24.0
       eslint-plugin-element-call:
         specifier: github:element-hq/element-call#livekit&path:/eslint
-        version: https://codeload.github.com/element-hq/element-call/tar.gz/74102ac6c2140597e069768e5db45120c806e230#path:/eslint
+        version: https://codeload.github.com/element-hq/element-call/tar.gz/4fbcbb4849a67c5f7343316eb9136daf9f281178#path:/eslint
       eslint-plugin-storybook:
         specifier: ^10.4.6
         version: 10.5.4(@typescript/typescript6@6.0.2)(eslint@8.57.1)(storybook@10.5.2)
@@ -642,7 +642,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/e3b899ceee6fbc18325da18adc3e8618227a1222
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d8cefc4693a749b2cd244c273a38f58b42f4078f
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -8696,8 +8696,8 @@ packages:
     resolution: {integrity: sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==}
     engines: {node: '>=12'}
 
-  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/74102ac6c2140597e069768e5db45120c806e230#path:/eslint:
-    resolution: {gitHosted: true, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/74102ac6c2140597e069768e5db45120c806e230}
+  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/4fbcbb4849a67c5f7343316eb9136daf9f281178#path:/eslint:
+    resolution: {gitHosted: true, integrity: sha512-/6tu+jAHUXe7U15Dl7qtGsAsEYS1onyrICN/ue0m9AgYyFKfXJgqwpA4w+Z1R+1Jfa0Ah712qjbVF5P5p96bOQ==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/4fbcbb4849a67c5f7343316eb9136daf9f281178}
     version: 0.0.0
 
   eslint-plugin-storybook@10.5.4:
@@ -10265,8 +10265,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/e3b899ceee6fbc18325da18adc3e8618227a1222:
-    resolution: {gitHosted: true, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/e3b899ceee6fbc18325da18adc3e8618227a1222}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d8cefc4693a749b2cd244c273a38f58b42f4078f:
+    resolution: {gitHosted: true, integrity: sha512-7A3t4S8D5UFM399u9vIL2HnE05GZ3Vz0g0M2tM8vQu4oAXvVx8nM/OajNWFed5y6E9j4RZAUTUftYzkg8ITkhA==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d8cefc4693a749b2cd244c273a38f58b42f4078f}
     version: 42.0.0
     engines: {node: '>=22.0.0'}
 
@@ -21219,7 +21219,7 @@ snapshots:
 
   escape-string-regexp@5.0.0: {}
 
-  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/74102ac6c2140597e069768e5db45120c806e230#path:/eslint: {}
+  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/4fbcbb4849a67c5f7343316eb9136daf9f281178#path:/eslint: {}
 
   eslint-plugin-storybook@10.5.4(@typescript/typescript6@6.0.2)(eslint@8.57.1)(storybook@10.5.2):
     dependencies:
@@ -23061,7 +23061,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/e3b899ceee6fbc18325da18adc3e8618227a1222:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d8cefc4693a749b2cd244c273a38f58b42f4078f:
     dependencies:
       '@babel/runtime': 8.0.0
       '@matrix-org/matrix-sdk-crypto-wasm': 18.4.0
