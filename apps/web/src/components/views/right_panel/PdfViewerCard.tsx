@@ -6,6 +6,7 @@ import { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
 import Spinner from "../elements/Spinner";
+import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
 
 interface Props {
     eventId: string;
@@ -51,20 +52,33 @@ export function PdfViewerCard({ eventId, onClose, room }: Props): JSX.Element | 
         };
     }, [helper]);
 
+    let card: JSX.Element;
+
+    if (navigator.pdfViewerEnabled) {
+        if (url === null)
+            card = (
+                <div className="mx_PdfViewerCard_Spinner">
+                    <Spinner />
+                </div>
+            );
+        else card = <iframe src={url}></iframe>;
+    } else {
+        card = (
+            <div className="mx_PdfViewerCard_Error">
+                <ErrorIcon className="mx_PdfViewerCard_Error_Icon" />
+                <div>{_t("right_panel|pdf_viewer|browser_not_supported")}</div>
+            </div>
+        );
+    }
+
     return (
         <BaseCard
-            header={_t("right_panel|pdf_viewer_title")}
+            header={_t("right_panel|pdf_viewer|title")}
             className="mx_PdfViewerCard"
             onClose={onClose}
             withoutScrollContainer
         >
-            {url === null ? (
-                <div className="mx_PdfViewerCard_Spinner">
-                    <Spinner />
-                </div>
-            ) : (
-                <iframe src={url}></iframe>
-            )}
+            {card}
         </BaseCard>
     );
 }
