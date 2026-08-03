@@ -209,7 +209,7 @@ export function EmojiPicker({
 
     const lcFilter = filter.toLowerCase().trim(); // filter is case insensitive
 
-    // Compute empji to show in each category and which categories are enabled
+    // Compute emoji to show in each category and which categories are enabled
     // (ie. non-empty) from the recently used list and the filter.
     const { dataByCategory, enabledCategories } = useMemo(() => {
         const dataByCategory = {} as Record<CategoryKey, IEmoji[]>;
@@ -310,7 +310,7 @@ export function EmojiPicker({
     const shouldMoveFocus = useCallback((): boolean => {
         // If the search field is active, the grid will still move the selected element but we don't
         // want it to change the focus because the user trying to type in the field.
-        // NB. This does still break the ability to navaigate the text field with left/right arrows
+        // NB. This does still break the ability to navigate the text field with left/right arrows
         // as they change the selected emoji in the grid. This seems… bad, but I'm keeping it how it was.
         return document.activeElement !== searchRef.current;
     }, []);
