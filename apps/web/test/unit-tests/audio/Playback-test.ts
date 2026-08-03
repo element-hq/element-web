@@ -184,7 +184,7 @@ describe("Playback", () => {
                 .mockResolvedValueOnce(mockAudioBuffer);
             // Constructing a view over a detached buffer throws, which is what decodeOgg does first.
             mocked(decodeOgg).mockImplementationOnce(async (audioBuffer: ArrayBuffer) => {
-                new Uint8Array(audioBuffer);
+                expect(() => new Uint8Array(audioBuffer)).not.toThrow();
                 return new ArrayBuffer(1);
             });
 
