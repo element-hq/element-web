@@ -15,6 +15,9 @@ import { randomUUID } from "node:crypto";
 import { type Args, getArgsForProtocolRegistration } from "./args.js";
 
 const LEGACY_PROTOCOL = "element";
+
+const MATRIX_PROTOCOL = "matrix";
+
 const SEARCH_PARAM = "element-desktop-ssoid";
 const STORE_FILE_NAME = "sso-sessions.json";
 
@@ -49,7 +52,7 @@ export default class ProtocolHandler {
     }
 
     private checkArgIsUrl = (arg: string): boolean => {
-        return arg.startsWith(`${this.protocol}:/`) || arg.startsWith(`${LEGACY_PROTOCOL}://`);
+        return arg.startsWith(`${MATRIX_PROTOCOL}:`) || arg.startsWith(`${this.protocol}:/`) || arg.startsWith(`${LEGACY_PROTOCOL}://`);
     };
 
     private setAsDefaultProtocolClient(parsedArgs: Args): void {
@@ -57,11 +60,13 @@ export default class ProtocolHandler {
         if (app.isPackaged) {
             app.setAsDefaultProtocolClient(this.protocol, process.execPath, args);
             app.setAsDefaultProtocolClient(LEGACY_PROTOCOL, process.execPath, args);
+            app.setAsDefaultProtocolClient(MATRIX_PROTOCOL, process.execPath, args);
         } else if (process.platform === "win32") {
             // on Mac/Linux this would just cause the electron binary to open
             // special handler for running without being packaged, e.g `electron .` by passing our app path to electron
             app.setAsDefaultProtocolClient(this.protocol, process.execPath, [app.getAppPath(), ...args]);
             app.setAsDefaultProtocolClient(LEGACY_PROTOCOL, process.execPath, [app.getAppPath(), ...args]);
+            app.setAsDefaultProtocolClient(MATRIX_PROTOCOL, process.execPath, [app.getAppPath(), ...args]);
         }
     }
 
@@ -76,23 +81,31 @@ export default class ProtocolHandler {
         if (!global.mainWindow) return false;
 
         const parsed = new URL(url);
-        // sanity check: we only register for the one protocol, so we shouldn't
-        // be getting anything else unless the user is forcing a URL to open
-        // with the Element app.
-        if (parsed.protocol !== `${this.protocol}:` && parsed.protocol !== `${LEGACY_PROTOCOL}:`) {
+        const urlToLoad = new URL("vector://vector/webapp/");
+
+        if (parsed.protocol === `${MATRIX_PROTOCOL}:`) {
+            // matrix: URIs are opaque-path URLs - everything lives in the path/query and
+            // `.hash` is always empty. Forward the URI to the web app verbatim as the hash
+            // rather than parsing it here; the web app already knows how to recognise and
+            // translate matrix:/matrix.to/vector: permalinks found in its hash
+            // (see apps/web/src/vector/routing.ts).
+            urlToLoad.hash = url;
+        } else if (parsed.protocol === `${this.protocol}:` || parsed.protocol === `${LEGACY_PROTOCOL}:`) {
+            // ignore anything other than the search (used for SSO login redirect)
+            // and the hash (for general element deep links)
+            // There's no reason to allow anything else, particularly other paths,
+            // since this would allow things like the internal jitsi wrapper to
+            // be loaded, which would get the app stuck on that page and generally
+            // be a bit strange and confusing.
+            urlToLoad.search = parsed.search;
+            urlToLoad.hash = parsed.hash;
+        } else {
+            // sanity check: we only register for these protocols, so we shouldn't
+            // be getting anything else unless the user is forcing a URL to open
+            // with the Element app.
             console.log("Ignoring unexpected protocol: ", parsed.protocol);
             return false;
         }
-
-        const urlToLoad = new URL("vector://vector/webapp/");
-        // ignore anything other than the search (used for SSO login redirect)
-        // and the hash (for general element deep links)
-        // There's no reason to allow anything else, particularly other paths,
-        // since this would allow things like the internal jitsi wrapper to
-        // be loaded, which would get the app stuck on that page and generally
-        // be a bit strange and confusing.
-        urlToLoad.search = parsed.search;
-        urlToLoad.hash = parsed.hash;
 
         console.log("Opening URL: ", urlToLoad.href);
         void global.mainWindow.loadURL(urlToLoad.href);

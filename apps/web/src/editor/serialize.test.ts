@@ -134,6 +134,56 @@ describe("editor/serialize", function () {
                 vi.mocked(SdkConfig.get).mockRestore();
             });
         });
+
+        describe("with feature_matrix_uri_permalinks enabled", function () {
+            beforeEach(() => {
+                vi.spyOn(SettingsStore, "getValue").mockImplementation(
+                    (name) => name === "feature_matrix_uri_permalinks",
+                );
+            });
+
+            afterEach(() => {
+                vi.mocked(SettingsStore.getValue).mockRestore();
+            });
+
+            it("user pill uses matrix:", function () {
+                const pc = createPartCreator();
+                const model = new EditorModel([pc.userPill("Alice", "@alice:hs.tld")], pc);
+                const html = htmlSerializeIfNeeded(model, {});
+                expect(html).toBe('<a href="matrix:u/alice:hs.tld">Alice</a>');
+            });
+
+            it("room pill uses matrix:", function () {
+                const pc = createPartCreator();
+                const model = new EditorModel([pc.roomPill("#room:hs.tld")], pc);
+                const html = htmlSerializeIfNeeded(model, {});
+                expect(html).toBe('<a href="matrix:r/room:hs.tld">#room:hs.tld</a>');
+            });
+
+            describe("and permalink_prefix also set", function () {
+                const sdkConfigGet = SdkConfig.get;
+                beforeEach(() => {
+                    vi.spyOn(SdkConfig, "get").mockImplementation(
+                        (key: keyof IConfigOptions, altCaseName?: string) => {
+                            if (key === "permalink_prefix") {
+                                return "https://element.fs.tld";
+                            } else return sdkConfigGet(key, altCaseName);
+                        },
+                    );
+                });
+
+                afterEach(() => {
+                    vi.mocked(SdkConfig.get).mockRestore();
+                });
+
+                it("user pill still uses matrix: (pills never respect permalink_prefix)", function () {
+                    const pc = createPartCreator();
+                    const model = new EditorModel([pc.userPill("Alice", "@alice:hs.tld")], pc);
+                    const html = htmlSerializeIfNeeded(model, {});
+                    expect(html).toBe('<a href="matrix:u/alice:hs.tld">Alice</a>');
+                });
+            });
+        });
     });
 
     describe("with plaintext", function () {

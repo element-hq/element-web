@@ -119,6 +119,27 @@ describe("ProtocolHandler", () => {
         expect(global.mainWindow!.loadURL).toHaveBeenCalledWith(expectedUri);
     });
 
+    it.each(["darwin", "linux", "win32"] as const)("should forward a matrix: deeplink verbatim on %s", (platform) => {
+        vi.spyOn(process, "platform", "get").mockReturnValue(platform);
+        vi.stubGlobal("mainWindow", {
+            loadURL: vi.fn(),
+        });
+
+        const handler = new ProtocolHandler(TEST_PROTOCOL);
+        expect(handler).toBeTruthy();
+
+        const incomingUri = "matrix:u/hookshot:beefy?action=chat";
+        const expectedUri = "vector://vector/webapp/#matrix:u/hookshot:beefy?action=chat";
+
+        if (platform === "darwin") {
+            app.emit("open-url", new Event("test"), incomingUri);
+        } else {
+            app.emit("second-instance", new Event("test"), ["/path/to/app", incomingUri]);
+        }
+
+        expect(global.mainWindow!.loadURL).toHaveBeenCalledWith(expectedUri);
+    });
+
     it("should safely deal with wrong protocol deeplinks", () => {
         vi.spyOn(process, "platform", "get").mockReturnValue("darwin");
         vi.stubGlobal("mainWindow", {
@@ -151,6 +172,35 @@ describe("ProtocolHandler", () => {
             const args = ["--no-update"];
             expect(app.setAsDefaultProtocolClient).toHaveBeenCalledWith(TEST_PROTOCOL, "/bin/element-desktop", args);
             expect(app.setAsDefaultProtocolClient).toHaveBeenCalledWith("element", "/bin/element-desktop", args);
+            expect(app.setAsDefaultProtocolClient).toHaveBeenCalledWith("matrix", "/bin/element-desktop", args);
+        });
+
+        it("should set as default protocol client on win32 when unpackaged", () => {
+            vi.spyOn(process, "platform", "get").mockReturnValue("win32");
+            app.isPackaged = false;
+
+            const handler = new ProtocolHandler(TEST_PROTOCOL);
+            handler.initialise({
+                userDataPath: USER_DATA_DIR,
+                devtools: false,
+                update: false,
+                hidden: false,
+                positional: ["/bin/element-desktop"],
+            });
+
+            // Filter to just this test's calls (this args value is unique to the win32-unpackaged
+            // branch), since the mock's call history accumulates across tests in this file.
+            const args = ["/bin/element-desktop", "--no-update"];
+            const win32Calls = vi
+                .mocked(app.setAsDefaultProtocolClient)
+                .mock.calls.filter(([, , callArgs]) => JSON.stringify(callArgs) === JSON.stringify(args));
+            expect(win32Calls).toEqual([
+                [TEST_PROTOCOL, "/bin/element-desktop", args],
+                ["element", "/bin/element-desktop", args],
+                ["matrix", "/bin/element-desktop", args],
+            ]);
+
+            app.isPackaged = true;
         });
 
         it("should handle deeplink", () => {
@@ -168,6 +218,24 @@ describe("ProtocolHandler", () => {
             });
 
             expect(global.mainWindow!.loadURL).toHaveBeenCalledWith("vector://vector/webapp/#/room/#matrix:matrix.org");
+        });
+
+        it("should recognise a matrix: URI among the launch args and forward it", () => {
+            vi.stubGlobal("mainWindow", {
+                loadURL: vi.fn(),
+            });
+
+            const handler = new ProtocolHandler(TEST_PROTOCOL);
+            const hasDeeplink = handler.initialise({
+                userDataPath: "/data",
+                devtools: false,
+                update: false,
+                hidden: false,
+                positional: ["/bin/element-desktop", "matrix:u/hookshot:beefy"],
+            });
+
+            expect(hasDeeplink).toBe(true);
+            expect(global.mainWindow!.loadURL).toHaveBeenCalledWith("vector://vector/webapp/#matrix:u/hookshot:beefy");
         });
     });
 });

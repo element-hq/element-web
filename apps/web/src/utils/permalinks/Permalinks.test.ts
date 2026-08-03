@@ -7,7 +7,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { vi, describe, it, expect, afterAll, beforeEach } from "vitest";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, afterAll, afterEach, beforeEach } from "vitest";
 import { getMockClientWithEventEmitter } from "test-utils/client";
 
 import { type EventEmitter } from "node:events";
@@ -19,6 +21,7 @@ import { PermalinkParts } from "./PermalinkConstructor";
 import { makeRoomPermalink, makeUserPermalink, parsePermalink, RoomPermalinkCreator } from "./Permalinks";
 import { type IConfigOptions } from "../../IConfigOptions";
 import SdkConfig from "../../SdkConfig";
+import SettingsStore from "../../settings/SettingsStore";
 
 describe("Permalinks", function () {
     const userId = "@test:example.com";
@@ -420,6 +423,69 @@ describe("Permalinks", function () {
         });
         const result = makeUserPermalink("@someone:example.org");
         expect(result).toBe("https://element.fs.tld/#/user/@someone:example.org");
+        vi.mocked(SdkConfig.get).mockRestore();
+    });
+
+    describe("with feature_matrix_uri_permalinks enabled", function () {
+        beforeEach(() => {
+            vi.spyOn(SettingsStore, "getValue").mockImplementation((name) => name === "feature_matrix_uri_permalinks");
+        });
+
+        afterEach(() => {
+            vi.mocked(SettingsStore.getValue).mockRestore();
+        });
+
+        it("should generate a user permalink", function () {
+            const result = makeUserPermalink("@someone:example.org");
+            expect(result).toBe("matrix:u/someone:example.org");
+        });
+
+        it("should generate a room permalink for room IDs with some candidate servers", function () {
+            mockClient.getRoom.mockImplementation((roomId?: string) => {
+                return mockRoom(roomId!, [
+                    makeMemberWithPL(roomId!, "@alice:first", 100),
+                    makeMemberWithPL(roomId!, "@bob:second", 0),
+                ]);
+            });
+            const result = makeRoomPermalink(mockClient, "!somewhere:example.org");
+            expect(result).toBe("matrix:roomid/somewhere:example.org?via=first&via=second");
+        });
+
+        it("should generate a room permalink for room aliases", function () {
+            mockClient.getRoom.mockReturnValue(null);
+            const result = makeRoomPermalink(mockClient, "#somewhere:example.org");
+            expect(result).toBe("matrix:r/somewhere:example.org");
+        });
+
+        it("should generate an event permalink for room IDs with some candidate servers", function () {
+            const roomId = "!somewhere:example.org";
+            const room = mockRoom(roomId, [
+                makeMemberWithPL(roomId, "@alice:first", 100),
+                makeMemberWithPL(roomId, "@bob:second", 0),
+            ]);
+            const creator = new RoomPermalinkCreator(room);
+            creator.load();
+            const result = creator.forEvent("$something:example.com");
+            expect(result).toBe("matrix:roomid/somewhere:example.org/e/something:example.com?via=first&via=second");
+        });
+
+        it("should round-trip a generated matrix: link through parsePermalink", function () {
+            const link = makeUserPermalink("@someone:example.org");
+            const result = parsePermalink(link);
+            expect(result?.userId).toBe("@someone:example.org");
+        });
+
+        it("should still use permalink_prefix for non-pill links when both are set", function () {
+            const sdkConfigGet = SdkConfig.get;
+            vi.spyOn(SdkConfig, "get").mockImplementation((key: keyof IConfigOptions, altCaseName?: string) => {
+                if (key === "permalink_prefix") {
+                    return "https://element.fs.tld";
+                } else return sdkConfigGet(key, altCaseName);
+            });
+            const result = makeUserPermalink("@someone:example.org");
+            expect(result).toBe("https://element.fs.tld/#/user/@someone:example.org");
+            vi.mocked(SdkConfig.get).mockRestore();
+        });
     });
 
     describe("parsePermalink", () => {

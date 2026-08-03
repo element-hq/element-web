@@ -22,6 +22,7 @@ import ElementPermalinkConstructor from "./ElementPermalinkConstructor";
 import SdkConfig from "../../SdkConfig";
 import { ELEMENT_URL_PATTERN } from "../../linkify-matrix";
 import MatrixSchemePermalinkConstructor from "./MatrixSchemePermalinkConstructor";
+import SettingsStore from "../../settings/SettingsStore";
 
 // The maximum number of servers to pick when working out which servers
 // to add to permalinks. The servers are appended as ?via=example.org
@@ -430,18 +431,35 @@ export function getPrimaryPermalinkEntity(permalink: string): string | null {
 }
 
 /**
- * Returns the correct PermalinkConstructor based on permalink_prefix
- * and isPill
+ * Returns the correct PermalinkConstructor based on permalink_prefix,
+ * the feature_matrix_uri_permalinks lab, and isPill.
+ *
+ * Precedence (highest to lowest):
+ *  1. isPill && matrix: labs flag on -> matrix: (pills must stay resolvable by any
+ *     recipient regardless of this deployment's permalink_prefix, so when matrix: is
+ *     available and preferred, it takes that universal-link slot instead of matrix.to)
+ *  2. isPill && flag off -> matrix.to (unchanged default)
+ *  3. !isPill && custom permalink_prefix configured -> ElementPermalinkConstructor
+ *     (an admin's explicit deployment domain always wins over a personal labs toggle)
+ *  4. !isPill && flag on -> matrix:
+ *  5. !isPill && flag off -> matrix.to (unchanged default)
+ *
  * @param {boolean} isPill Should constructed links be pillifyable.
  * @returns {string|null} The transformed permalink or null if unable.
  */
 function getPermalinkConstructor(isPill = false): PermalinkConstructor {
+    const useMatrixScheme = SettingsStore.getValue("feature_matrix_uri_permalinks");
+
+    if (isPill) {
+        return useMatrixScheme ? new MatrixSchemePermalinkConstructor() : new MatrixToPermalinkConstructor();
+    }
+
     const elementPrefix = SdkConfig.get("permalink_prefix");
-    if (elementPrefix && elementPrefix !== matrixtoBaseUrl && !isPill) {
+    if (elementPrefix && elementPrefix !== matrixtoBaseUrl) {
         return new ElementPermalinkConstructor(elementPrefix);
     }
 
-    return new MatrixToPermalinkConstructor();
+    return useMatrixScheme ? new MatrixSchemePermalinkConstructor() : new MatrixToPermalinkConstructor();
 }
 
 export function parsePermalink(fullUrl: string): PermalinkParts | null {

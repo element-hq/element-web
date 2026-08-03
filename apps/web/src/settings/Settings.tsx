@@ -234,6 +234,7 @@ export interface Settings {
     "feature_user_status": IFeature;
     "feature_login_with_qr": IFeature;
     "feature_msc4095_url_preview_bundle": IFeature;
+    "feature_matrix_uri_permalinks": IFeature;
     // These are in the feature namespace but aren't actually features
     "feature_hidebold": IBaseSetting<boolean>;
 
@@ -713,6 +714,15 @@ export const SETTINGS: Settings = {
         labsGroup: LabGroup.Rooms,
         default: false,
         displayName: _td("labs|ask_to_join"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+    },
+    "feature_matrix_uri_permalinks": {
+        isFeature: true,
+        labsGroup: LabGroup.Rooms,
+        displayName: _td("labs|matrix_uri_permalinks"),
+        description: _td("labs|matrix_uri_permalinks_description"),
+        default: false,
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
     },

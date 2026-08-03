@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { vi, describe, it, expect, beforeEach, afterAll } from "vitest";
 
-import { getInitialScreenAfterLogin, init, onNewScreen } from "./routing";
+import { getInitialScreenAfterLogin, getScreenFromLocation, init, onNewScreen } from "./routing";
 import type MatrixChat from "../components/structures/MatrixChat.tsx";
 
 describe("onNewScreen", () => {
@@ -122,5 +122,76 @@ describe("init", () => {
         window.dispatchEvent(new HashChangeEvent("hashchange"));
 
         expect(window.matrixChat.showScreen).toHaveBeenCalledWith("room/!room:server", { via: "abc" });
+    });
+
+    it("should translate a raw matrix: URI hash and call showScreen with the translated screen", () => {
+        Object.defineProperty(window, "location", {
+            value: {
+                hash: "#matrix:u/hookshot:beefy",
+            },
+        });
+
+        window.matrixChat = {
+            showScreen: vi.fn(),
+        } as unknown as MatrixChat;
+
+        init();
+        window.dispatchEvent(new HashChangeEvent("hashchange"));
+
+        expect(window.matrixChat.showScreen).toHaveBeenCalledWith("user/@hookshot:beefy", {});
+    });
+});
+
+describe("getScreenFromLocation", () => {
+    const makeMockLocation = (hash: string) => {
+        const url = new URL("https://test.org");
+        url.hash = hash;
+        return url as unknown as Location;
+    };
+
+    it("translates a matrix: user URI", () => {
+        expect(getScreenFromLocation(makeMockLocation("#matrix:u/hookshot:beefy"))).toEqual({
+            screen: "user/@hookshot:beefy",
+            params: {},
+        });
+    });
+
+    it("translates a matrix: room alias URI", () => {
+        expect(getScreenFromLocation(makeMockLocation("#matrix:r/room:example.org"))).toEqual({
+            screen: "room/#room:example.org",
+            params: {},
+        });
+    });
+
+    it("translates a matrix: room-ID + event URI, preserving via params separately", () => {
+        expect(
+            getScreenFromLocation(
+                makeMockLocation("#matrix:roomid/somewhere:example.org/e/something:example.com?via=one.org"),
+            ),
+        ).toEqual({
+            screen: "room/!somewhere:example.org/$something:example.com",
+            params: { via: "one.org" },
+        });
+    });
+
+    it("passes an already-internal hash through unchanged", () => {
+        expect(getScreenFromLocation(makeMockLocation("#/room/!room:server"))).toEqual({
+            screen: "room/!room:server",
+            params: {},
+        });
+    });
+
+    it("does not mangle an OAuth-style fragment", () => {
+        expect(getScreenFromLocation(makeMockLocation("#code=abc123&state=xyz"))).toEqual({
+            screen: "",
+            params: { code: "abc123", state: "xyz" },
+        });
+    });
+
+    it("leaves a non-permalink, non-internal hash unchanged without throwing", () => {
+        expect(getScreenFromLocation(makeMockLocation("#foobar"))).toEqual({
+            screen: "oobar",
+            params: {},
+        });
     });
 });

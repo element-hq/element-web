@@ -3,7 +3,7 @@
     "name": "element-desktop-nightly",
     "productName": "Element Nightly",
     "description": "Element: the future of secure communication (nightly unstable build)",
-    "protocols": ["io.element.nightly", "element"],
+    "protocols": ["io.element.nightly", "element", "matrix"],
     "linux.executableName": "element-desktop-nightly",
     "linux.deb.name": "element-nightly"
 }

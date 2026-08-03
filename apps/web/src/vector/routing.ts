@@ -12,6 +12,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { type QueryDict } from "matrix-js-sdk/src/utils";
 
 import { parseQsFromFragment, searchParamsToQueryDict } from "./url_utils";
+import { tryTransformPermalinkToLocalHref } from "../utils/permalinks/Permalinks";
 
 let lastLocationHashSet: string | null = null;
 
@@ -22,8 +23,31 @@ export interface IScreen {
 
 export function getScreenFromLocation(location: Location): IScreen {
     const fragparts = parseQsFromFragment(location);
+    let screenLocation = fragparts.location;
+
+    // Our own internal routes always start with a leading slash (e.g. "/room/!id:server",
+    // see onNewScreen below). If this doesn't, the hash may instead be a raw permalink
+    // (a matrix: URI, a matrix.to URL, or a bare vector:// link) that ended up in our hash
+    // untranslated - e.g. forwarded verbatim by the desktop app's OS-level matrix: URI
+    // handler (see apps/desktop/src/protocol.ts), or a browser tab sitting on
+    // "https://app.element.io/#matrix:u/foo:bar". Try to translate it with the same helper
+    // used for permalinks everywhere else in the app.
+    if (screenLocation && !screenLocation.startsWith("/")) {
+        try {
+            const translated = tryTransformPermalinkToLocalHref(screenLocation);
+            // tryTransformPermalinkToLocalHref returns its argument completely unchanged if
+            // it isn't recognised as a permalink - only use the result if it changed
+            // something and produced one of our expected "#/..." internal routes.
+            if (translated !== screenLocation && translated.startsWith("#/")) {
+                screenLocation = translated.substring(1);
+            }
+        } catch (e) {
+            logger.warn("Failed to translate possible permalink hash", e);
+        }
+    }
+
     return {
-        screen: fragparts.location.substring(1),
+        screen: screenLocation.substring(1),
         params: fragparts.params ? searchParamsToQueryDict(fragparts.params) : {},
     };
 }

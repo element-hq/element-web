@@ -66,6 +66,9 @@ export default class MatrixSchemePermalinkConstructor extends PermalinkConstruct
 
         const url = new URL(fullUrl);
         const parts = url.pathname.split("/");
+        // Server candidates are always in the query string (url.search), never the opaque
+        // path, regardless of which entity type is being parsed below.
+        const via = url.searchParams.getAll("via");
 
         const identifier = parts[0];
         const entityNoSigil = parts[1];
@@ -77,16 +80,12 @@ export default class MatrixSchemePermalinkConstructor extends PermalinkConstruct
 
             if (parts.length === 2) {
                 // room without event permalink
-                const [roomId, query = ""] = entityNoSigil.split("?");
-                const via = query.split(/&?via=/g).filter((p) => !!p);
-                return PermalinkParts.forRoom(`${sigil}${roomId}`, via);
+                return PermalinkParts.forRoom(`${sigil}${entityNoSigil}`, via);
             }
 
             if (parts[2] === "e") {
                 // event permalink
-                const eventIdAndQuery = parts.length > 3 ? parts.slice(3).join("/") : "";
-                const [eventId, query = ""] = eventIdAndQuery.split("?");
-                const via = query.split(/&?via=/g).filter((p) => !!p);
+                const eventId = parts.length > 3 ? parts.slice(3).join("/") : "";
                 return PermalinkParts.forEvent(`${sigil}${entityNoSigil}`, `$${eventId}`, via);
             }
 
