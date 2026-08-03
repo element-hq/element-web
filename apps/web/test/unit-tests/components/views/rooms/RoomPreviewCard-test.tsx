@@ -88,7 +88,7 @@ describe("RoomPreviewCard", () => {
         expect(screen.queryByRole("button", { name: /beta/i })).toBeNull();
     });
 
-    it("lets you rejoin a restricted room you have left", async () => {
+    it("prompts the user to join in case of leaving a restricted room", async () => {
         jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Leave);
         jest.spyOn(room.currentState, "getJoinRule").mockReturnValue(JoinRule.Restricted);
 
@@ -98,7 +98,7 @@ describe("RoomPreviewCard", () => {
         expect(screen.queryByText(/you need an invite/)).toBeNull();
     });
 
-    it("still refuses an invite-only room you have left", async () => {
+    it("does not prompt the user to join if the room is invite-only", async () => {
         jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Leave);
         jest.spyOn(room.currentState, "getJoinRule").mockReturnValue(JoinRule.Invite);
 
