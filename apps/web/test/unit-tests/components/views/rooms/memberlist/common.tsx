@@ -142,7 +142,9 @@ export async function renderMemberList(
         },
     );
     await waitFor(async () => {
-        expect(root.container.querySelectorAll(".mx_MemberTileView")).toHaveLength(usersPerLevel * 3 + threePidEvents.length);
+        expect(root.container.querySelectorAll(".mx_MemberTileView")).toHaveLength(
+            usersPerLevel * 3 + threePidEvents.length,
+        );
     });
 
     const reRender = createReRenderFunction(client, memberListRoom);
