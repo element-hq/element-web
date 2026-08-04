@@ -39,6 +39,10 @@ interface IProps {
      * @param emoji - The emoji that was clicked
      */
     onClick: (ev: ButtonEvent, emoji: IEmoji) => void;
+    /**
+     * Optional function to override the default keyboard navigation mapping.
+     * When omitted, a default mapping based on `KeyboardEvent.key` is used.
+     */
     getAction?: RovingTabIndexProviderProps["getAction"];
 }
 
