@@ -706,3 +706,53 @@
     background-color: inherit;
     box-shadow: none;
 }
+
+/* File panel layout. The application File branch does not apply a timeline
+   data-layout, so explicitly reset the group-layout defaults owned by this
+   shared shell. */
+.root[data-shape="File"] {
+    padding-top: 0;
+    overflow-wrap: anywhere;
+}
+
+.root[data-shape="File"] .senderDetailsLink {
+    display: block;
+    margin-bottom: var(--cpd-space-1x, 4px);
+    text-decoration: none;
+}
+
+.root[data-shape="File"] .senderDetails {
+    display: flex;
+    align-items: center;
+    gap: var(--cpd-space-2x, 8px);
+    margin-top: -2px;
+}
+
+.root[data-shape="File"] .senderDetails .avatar {
+    position: relative;
+    inset: auto;
+    flex: 0 0 auto;
+}
+
+.root[data-shape="File"] .senderDetails .sender {
+    display: inline-flex;
+    align-items: center;
+    max-width: 100%;
+    min-height: 0;
+    margin-inline-start: 0;
+    line-height: normal;
+}
+
+.root[data-shape="File"] .senderDetails .timestamp {
+    position: initial;
+    inset: auto;
+    width: unset;
+    margin-inline-start: auto;
+    text-align: initial;
+}
+
+.root[data-shape="File"] .line {
+    margin-inline-end: 0;
+    padding: 0;
+    border-radius: 0;
+}

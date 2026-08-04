@@ -5,12 +5,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import {
-    eventTileStoryDefaults,
-    EventTileViewStory,
-} from "./EventTileView.story-fixtures";
+import { eventTileStoryDefaults, EventTileViewStory } from "./EventTileView.story-fixtures";
 
 const meta = {
     title: "Timeline/EventTileView/States",

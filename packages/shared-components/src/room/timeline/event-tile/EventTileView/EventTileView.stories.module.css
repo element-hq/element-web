@@ -195,7 +195,7 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background-color: var(--cpd-color-icon-primary, #17191c);
+    background-color: var(--cpd-color-icon-success-primary, #0d9f6e);
 }
 
 .timestamp {

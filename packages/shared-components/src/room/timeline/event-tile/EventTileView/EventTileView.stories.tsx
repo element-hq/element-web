@@ -19,7 +19,6 @@ import {
     StoryContextMenu,
     StoryReceipt,
     StorySender,
-    StoryThreadInfo,
     StoryThreadListInfo,
     StoryTimestamp,
 } from "./EventTileView.story-fixtures";
@@ -131,7 +130,7 @@ export const Notification: Story = {
             ),
             roomAvatar: (
                 <Slot name="roomAvatar">
-                    <StoryAvatar room />
+                    <StoryAvatar room size="28px" />
                 </Slot>
             ),
             notificationRoomLabel: (
