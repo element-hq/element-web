@@ -29,6 +29,7 @@ import { RedactedBodyViewModel } from "../../../viewmodels/message-body/Redacted
 import { getRedactedBodyViewModelProps } from "../../../viewmodels/room/timeline/event-tile/EventTileRedactedBodyState";
 import { VideoBodyViewModel } from "../../../viewmodels/message-body/VideoBodyViewModel";
 import { isMimeTypeAllowed } from "../../../utils/blobs";
+import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 
 type MBodyComponent = React.ComponentType<IBodyProps>;
 
@@ -52,6 +53,7 @@ export function FileBodyFactory({
                 timelineRenderingType,
                 refIFrame,
                 refLink,
+                rightPanelStore: RightPanelStore.instance,
             }),
     );
 

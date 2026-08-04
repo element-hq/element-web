@@ -28,6 +28,7 @@ import { type MediaEventHelper } from "../../utils/MediaEventHelper";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
+import type RightPanelStore from "../../stores/right-panel/RightPanelStore";
 
 export interface FileBodyViewModelProps {
     mxEvent: MatrixEvent;
@@ -37,6 +38,7 @@ export interface FileBodyViewModelProps {
     timelineRenderingType: TimelineRenderingType;
     refIFrame: RefObject<HTMLIFrameElement>;
     refLink: RefObject<HTMLAnchorElement>;
+    rightPanelStore: RightPanelStore;
 }
 
 // Cached copy of the download.svg asset for the sandboxed iframe.
@@ -115,12 +117,14 @@ export class FileBodyViewModel
     private decryptedBlob?: Blob;
     private userDidClick = false;
     private readonly fileDownloader: FileDownloader;
+    private readonly rightPanelStore: RightPanelStore;
 
     public constructor(props: FileBodyViewModelProps) {
         super(props, FileBodyViewModel.computeSnapshot(props));
         this.refIFrame = props.refIFrame;
         this.refLink = props.refLink;
         this.fileDownloader = new FileDownloader(() => this.refIFrame.current);
+        this.rightPanelStore = props.rightPanelStore;
     }
 
     private static getInfoIcon(content: MediaEventContent): FileBodyViewInfoIcon {
@@ -256,11 +260,7 @@ export class FileBodyViewModel
 
     public onInfoClick = async (): Promise<void> => {
         if (this.content.info?.mimetype === "application/pdf") {
-            // Lazy-loaded to avoid a circular import: RightPanelStore pulls in the store graph
-            // (via SDKContextClass), which reaches back into the message-rendering tree that this
-            // view model is part of, breaking module initialisation. See MBodyFactory import chain.
-            const { default: RightPanelStore } = await import("../../stores/right-panel/RightPanelStore");
-            RightPanelStore.instance.pushCard(
+            this.rightPanelStore.pushCard(
                 {
                     phase: RightPanelPhases.PdfViewer,
                     state: { pdfEventId: this.props.mxEvent.getId() },

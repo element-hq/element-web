@@ -15,6 +15,7 @@ import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
 import { type MediaEventHelper } from "../../../src/utils/MediaEventHelper";
 import { FileBodyViewModel } from "../../../src/viewmodels/message-body/FileBodyViewModel";
 import ErrorDialog from "../../../src/components/views/dialogs/ErrorDialog";
+import type RightPanelStore from "../../../src/stores/right-panel/RightPanelStore";
 
 const mockDownload = jest.fn();
 
@@ -71,6 +72,7 @@ describe("FileBodyViewModel", () => {
             timelineRenderingType: TimelineRenderingType.File,
             refIFrame: createRef<HTMLIFrameElement>() as RefObject<HTMLIFrameElement>,
             refLink: createRef<HTMLAnchorElement>() as RefObject<HTMLAnchorElement>,
+            rightPanelStore: { pushCard: jest.fn() } as unknown as RightPanelStore,
             ...overrides,
         });
 
