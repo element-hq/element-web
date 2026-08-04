@@ -15,6 +15,7 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type ViewRoom as ViewRoomEvent } from "@matrix-org/analytics-events/types/typescript/ViewRoom";
 import { type JoinedRoom as JoinedRoomEvent } from "@matrix-org/analytics-events/types/typescript/JoinedRoom";
+// oxlint-disable-next-line no-restricted-imports
 import EventEmitter from "events";
 import {
     RoomViewLifecycle,

@@ -41,7 +41,7 @@ jobs:
               run: pnpm install --frozen-lockfile
 
             - name: Build
-              run: pnpm --filter "./modules/$MODULE" run prepare
+              run: pnpm --filter "./modules/$MODULE" run build
 
             - name: Create archive
               run: zip -r "$ARCHIVE" -j "modules/$MODULE/lib"
