@@ -198,14 +198,14 @@ export function EventTileView({
         );
     }
 
-    // IRC layout: timestamp and sender details precede the line content.
+    // IRC layout: the leading metadata slots precede the line content.
     if (root.data.layout === "irc") {
         return renderRoot(
             <>
-                {renderSlot(slots.timestamp, styles.timestamp, classNameOverrides?.timestamp)}
-                {renderSlot(slots.sender, styles.sender, classNameOverrides?.sender)}
                 {renderSlot(slots.padlock, styles.padlock, classNameOverrides?.padlock)}
+                {renderSlot(slots.timestamp, styles.timestamp, classNameOverrides?.timestamp)}
                 {renderSlot(slots.avatar, styles.avatar, classNameOverrides?.avatar)}
+                {renderSlot(slots.sender, styles.sender, classNameOverrides?.sender)}
                 <div
                     id={root.id}
                     className={classNames(styles.line, classNameOverrides?.line)}

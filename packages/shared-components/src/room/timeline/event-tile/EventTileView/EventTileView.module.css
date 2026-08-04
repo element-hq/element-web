@@ -7,10 +7,20 @@
 
 /* Shared root and slot-boundary baseline. */
 .root {
+    /* Group geometry. */
     --event-tile-group-gutter: 64px;
     --event-tile-group-line-spacing-block-start: 1px;
     --event-tile-group-line-spacing-block-end: 3px;
     --event-tile-group-line-height: 22px;
+
+    /* IRC geometry. */
+    --event-tile-irc-line-height: 18px;
+    --event-tile-irc-name-width: 80px;
+    --event-tile-irc-icon-width: 14px;
+    --event-tile-irc-timestamp-width: 48px;
+    --event-tile-irc-right-padding: 5px;
+
+    /* Shared preview, action-bar, bubble, and interaction values. */
     --event-tile-preview-offset: 48px;
     --event-tile-action-bar-size: 28px;
     --event-tile-action-bar-margin: 3px;
@@ -23,6 +33,8 @@
     --event-tile-state-hover-background: var(--cpd-color-bg-subtle-secondary, #e9edf2);
     --event-tile-state-highlight-background: var(--cpd-color-yellow-200, #fff8e3);
     --event-tile-state-selected-background: var(--cpd-color-bg-subtle-secondary, #e9edf2);
+    --event-tile-state-marker-width: 4px;
+    --event-tile-state-marker-color: var(--cpd-color-bg-action-primary-rest, #0dbd8b);
 
     position: relative;
     flex-shrink: 0;
@@ -87,102 +99,105 @@
     padding-top: 0;
 }
 
-/* Shared interaction states for layouts whose message content is rendered in a line. */
-.root[data-layout="group"] .line,
-.root[data-layout="irc"] .line {
-    transition: background-color 120ms ease;
-}
-
-.root[data-layout="group"]:hover .line,
-.root[data-layout="irc"]:hover .line,
-.root[data-layout="group"]:focus-within .line,
-.root[data-layout="irc"]:focus-within .line {
-    background-color: var(--event-tile-state-hover-background);
-}
-
-.root[data-layout="group"][data-highlighted="true"] .line,
-.root[data-layout="irc"][data-highlighted="true"] .line {
-    background-color: var(--event-tile-state-highlight-background);
-}
-
-.root[data-layout="group"][data-selected="true"] .line,
-.root[data-layout="irc"][data-selected="true"] .line,
-.root[data-layout="group"][data-editing="true"] .line,
-.root[data-layout="irc"][data-editing="true"] .line {
-    background-color: var(--event-tile-state-selected-background);
-}
-
 /* Group layout. */
-.root[data-layout="group"] .line {
-    position: relative;
-    padding-block: var(--event-tile-group-line-spacing-block-start) var(--event-tile-group-line-spacing-block-end);
-    padding-inline-start: var(--event-tile-group-gutter);
-    margin-inline-end: 80px;
-    min-height: 14px;
-    line-height: var(--event-tile-group-line-height);
-}
+.root[data-layout="group"] {
+    &:hover .line,
+    &:focus-within .line {
+        background-color: var(--event-tile-state-hover-background);
+    }
 
-.root[data-layout="group"] .line {
-    border-radius: 8px;
-}
+    &[data-highlighted="true"] .line {
+        background-color: var(--event-tile-state-highlight-background);
+    }
 
-.root[data-layout="group"] .sender {
-    display: flex;
-    align-items: center;
-    max-width: calc(100% - var(--event-tile-group-gutter));
-    margin-inline-start: var(--event-tile-group-gutter);
-    min-height: 26px;
-    line-height: 20px;
-}
+    &[data-selected="true"] .line,
+    &[data-editing="true"] .line {
+        background-color: var(--event-tile-state-selected-background);
+    }
 
-.root[data-layout="group"] .avatar {
-    position: absolute;
-    z-index: 9;
-    inset-block-start: 14px;
-    inset-inline-start: var(--cpd-space-2x, 8px);
-}
+    &[data-selected="true"] .line::before,
+    &[data-editing="true"] .line::before {
+        content: "";
+        position: absolute;
+        z-index: 0;
+        inset-block: 0;
+        inset-inline-start: 0;
+        width: var(--event-tile-state-marker-width);
+        border-start-start-radius: inherit;
+        border-end-start-radius: inherit;
+        background: var(--event-tile-state-marker-color);
+        pointer-events: none;
+    }
 
-.root[data-layout="group"] .timestamp {
-    position: absolute;
-    inset-inline-start: 0;
-    width: var(--MessageTimestamp-width, 46px);
-    text-align: center;
-}
+    .line {
+        position: relative;
+        padding-block: var(--event-tile-group-line-spacing-block-start) var(--event-tile-group-line-spacing-block-end);
+        padding-inline-start: var(--event-tile-group-gutter);
+        margin-inline-end: 80px;
+        min-height: 14px;
+        border-radius: 8px;
+        line-height: var(--event-tile-group-line-height);
+        transition: background-color 120ms ease;
+    }
 
-.root[data-layout="group"] .padlock {
-    position: absolute;
-    inset-block-start: 0;
-    inset-inline-start: 44px;
-    height: var(--event-tile-group-line-height);
-    margin: 1px;
-}
+    .sender {
+        display: flex;
+        align-items: center;
+        max-width: calc(100% - var(--event-tile-group-gutter));
+        margin-inline-start: var(--event-tile-group-gutter);
+        min-height: 26px;
+        line-height: 20px;
+    }
 
-.root[data-layout="group"] .threadInfo {
-    margin-inline-start: var(--event-tile-group-gutter);
-}
+    .avatar {
+        position: absolute;
+        z-index: 9;
+        inset-block-start: 14px;
+        inset-inline-start: var(--cpd-space-2x, 8px);
+    }
 
-.root[data-layout="group"] .replyChain {
-    margin-inline-start: 0;
-    margin-bottom: var(--cpd-space-2x, 8px);
-}
+    .timestamp {
+        position: absolute;
+        inset-inline-start: 0;
+        width: var(--MessageTimestamp-width, 46px);
+        text-align: center;
+    }
 
-.root[data-layout="group"] .footer {
-    margin: var(--cpd-space-1x, 4px) 0 var(--cpd-space-1x, 4px) var(--event-tile-group-gutter);
-}
+    .padlock {
+        position: absolute;
+        inset-block-start: 0;
+        inset-inline-start: 44px;
+        height: var(--event-tile-group-line-height);
+        margin: 1px;
+    }
 
-.root[data-layout="group"] .receipt {
-    margin-inline-end: 10px;
-    float: inline-end;
-    position: relative;
-    inset-block-start: calc(-1 * (var(--event-tile-group-line-height) + 3px));
-    width: 90px;
-    height: 1px;
-    text-align: end;
-    overflow: visible;
-}
+    .threadInfo {
+        margin-inline-start: var(--event-tile-group-gutter);
+    }
 
-.root[data-layout="group"][data-continuation="true"] .line {
-    clear: both;
+    .replyChain {
+        margin-inline-start: 0;
+        margin-bottom: var(--cpd-space-2x, 8px);
+    }
+
+    .footer {
+        margin: var(--cpd-space-1x, 4px) 0 var(--cpd-space-1x, 4px) var(--event-tile-group-gutter);
+    }
+
+    .receipt {
+        margin-inline-end: 10px;
+        float: inline-end;
+        position: relative;
+        inset-block-start: calc(-1 * (var(--event-tile-group-line-height) + 3px));
+        width: 90px;
+        height: 1px;
+        text-align: end;
+        overflow: visible;
+    }
+
+    &[data-continuation="true"] .line {
+        clear: both;
+    }
 }
 
 /* IRC layout. */
@@ -190,56 +205,88 @@
     display: flex;
     align-items: flex-start;
     padding-top: 0;
-}
+    line-height: var(--event-tile-irc-line-height);
 
-.root[data-layout="irc"] > * {
-    margin-inline-end: var(--cpd-space-2x, 8px);
-}
+    &:hover .line,
+    &:focus-within .line {
+        background-color: var(--event-tile-state-hover-background);
+    }
 
-.root[data-layout="irc"] .timestamp {
-    min-width: var(--MessageTimestamp-width, 48px);
-    flex-shrink: 0;
-    text-align: end;
-}
+    &[data-highlighted="true"] .line {
+        background-color: var(--event-tile-state-highlight-background);
+    }
 
-.root[data-layout="irc"] .avatar {
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-    position: relative;
-    height: var(--irc-line-height, 22px);
-}
+    &[data-selected="true"] .line,
+    &[data-editing="true"] .line {
+        background-color: var(--event-tile-state-selected-background);
+    }
 
-.root[data-layout="irc"] .sender {
-    flex-shrink: 0;
-}
+    &[data-selected="true"] .line::before,
+    &[data-editing="true"] .line::before {
+        content: "";
+        position: absolute;
+        z-index: 0;
+        inset-block: 0;
+        inset-inline-start: 0;
+        width: var(--event-tile-state-marker-width);
+        background: var(--event-tile-state-marker-color);
+        pointer-events: none;
+    }
 
-.root[data-layout="irc"] .padlock,
-.root[data-layout="irc"] .footer,
-.root[data-layout="irc"] .threadInfo {
-    flex-shrink: 0;
-}
+    > * {
+        margin-inline-end: var(--event-tile-irc-right-padding);
+    }
 
-.root[data-layout="irc"] .receipt {
-    flex-shrink: 0;
-}
+    .timestamp {
+        min-width: var(--event-tile-irc-timestamp-width);
+        flex-shrink: 0;
+        text-align: end;
+    }
 
-.root[data-layout="irc"] .line {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    flex-shrink: 1;
-    min-width: 0;
-    padding-block: 1px;
-}
+    .avatar {
+        display: flex;
+        align-items: center;
+        flex: 0 0 var(--event-tile-irc-icon-width);
+        position: relative;
+        width: var(--event-tile-irc-icon-width);
+        height: var(--event-tile-irc-line-height);
+    }
 
-.root[data-layout="irc"] .replyChain {
-    margin: 0;
-}
+    .sender {
+        flex-shrink: 0;
+        width: var(--event-tile-irc-name-width);
+        margin-inline-end: 0;
+    }
 
-.root[data-layout="irc"] .footer {
-    margin-block: var(--cpd-space-1-5x, 6px);
+    .padlock,
+    .footer,
+    .threadInfo,
+    .receipt {
+        flex-shrink: 0;
+    }
+
+    .padlock {
+        position: absolute;
+    }
+
+    .line {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        flex-shrink: 1;
+        min-width: 0;
+        padding-block: 1px;
+        transition: background-color 120ms ease;
+    }
+
+    .replyChain {
+        margin: 0;
+    }
+
+    .footer {
+        margin-block: var(--cpd-space-1-5x, 6px);
+    }
 }
 
 /* Bubble layout. */

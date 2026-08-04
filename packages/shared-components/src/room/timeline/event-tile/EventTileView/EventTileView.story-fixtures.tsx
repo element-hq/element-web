@@ -114,11 +114,13 @@ export const StoryDebugFrame = ({ children }: React.PropsWithChildren): React.Re
 export const StoryAvatar = ({
     room = false,
     label = "A",
+    size = "30px",
     className,
     storyBoundary,
 }: {
     room?: boolean;
     label?: string;
+    size?: string;
     className?: string;
     storyBoundary?: string;
 }): React.ReactElement => (
@@ -127,7 +129,7 @@ export const StoryAvatar = ({
             id={room ? "!story-room:example.org" : `@${label.toLowerCase()}:example.org`}
             name={room ? "Story room" : label === "A" ? "Alice Example" : "Bob Example"}
             type="round"
-            size="30px"
+            size={size}
             aria-label={room ? "Story room avatar" : `${label} avatar`}
         />
     </div>
@@ -155,14 +157,18 @@ export const StorySender = ({
     );
 };
 
-export const StoryTimestamp = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => {
+export const StoryTimestamp = ({
+    className,
+    storyBoundary,
+    visible = true,
+}: StorySlotProps & { visible?: boolean }): React.ReactElement => {
     const vm = useMockedViewModel(
         { ts: "12:34", tsSentAt: "Tuesday, 4 August 2026 at 12:34", inhibitTooltip: true },
         {},
     );
     return (
         <span className={className} data-story-boundary={storyBoundary}>
-            <MessageTimestampView vm={vm} />
+            {visible && <MessageTimestampView vm={vm} />}
         </span>
     );
 };
@@ -173,10 +179,10 @@ export const StoryBody = ({ className, storyBoundary }: StorySlotProps): React.R
     </div>
 );
 export const StoryReplyChain = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => (
-    <div className={classNames(styles.replyChain, className)} data-story-boundary={storyBoundary}>
+    <blockquote className={classNames(styles.replyChain, className)} data-story-boundary={storyBoundary}>
         <span className={styles.replyAuthor}>Taylor Example</span>
         <span>Earlier message quoted in this reply.</span>
-    </div>
+    </blockquote>
 );
 export const StoryActionBar = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => {
     const vm = useMockedViewModel(
@@ -373,13 +379,26 @@ function EventTileViewStoryContent({
         isOwnEvent: boolean,
         suffix: string,
         boundaryState: EventTileViewProps["root"]["state"] = {},
+        isLast = false,
     ): React.ReactElement => {
         const tileState = { ...boundaryState, ...state };
         const interaction = tileInteractions[suffix] ?? { hovered: false, focused: false };
         const showActionBar = interaction.hovered || interaction.focused;
-        const sender = !tileState.continuation ? (
+        const showTimestamp = isLast || showActionBar;
+        const timestamp =
+            layout === "irc" || showTimestamp ? (
+                <Slot name="timestamp">
+                    <StoryTimestamp visible={showTimestamp} />
+                </Slot>
+            ) : undefined;
+        const showSenderAndAvatar = layout === "irc" || !tileState.continuation;
+        const sender = showSenderAndAvatar ? (
             <Slot name="sender" as="div">
-                <StorySender name={isOwnEvent ? "Alice" : "Bob"} id={isOwnEvent ? "@alice:example.org" : "@bob:example.org"} />
+                <StorySender
+                    name={isOwnEvent ? "Alice" : "Bob"}
+                    id={isOwnEvent ? "@alice:example.org" : "@bob:example.org"}
+                    className={layout === "irc" ? styles.ircSender : undefined}
+                />
             </Slot>
         ) : undefined;
 
@@ -389,11 +408,12 @@ function EventTileViewStoryContent({
                       // Keep Bob's boundary examples as plain text events.
                       ...(isOwnEvent ? props.slots : { body: props.slots.body }),
                       sender,
-                      avatar: !tileState.continuation ? (
+                      avatar: showSenderAndAvatar ? (
                           <Slot name="avatar">
-                              <StoryAvatar label={isOwnEvent ? "A" : "B"} />
+                              <StoryAvatar label={isOwnEvent ? "A" : "B"} size={layout === "irc" ? "14px" : "30px"} />
                           </Slot>
                       ) : undefined,
+                      timestamp,
                       actionBar: showActionBar ? props.slots?.actionBar : undefined,
                   }
                 : { ...props.slots, actionBar: showActionBar ? props.slots?.actionBar : undefined };
@@ -440,13 +460,13 @@ function EventTileViewStoryContent({
         <TimelineStoryFrame density={density} layout={layout}>
             {shape === "Room" ? (
                 roomMessages === "alice" ? (
-                    renderTile(true, "alice-single", { continuation: false, lastInSection: true })
+                    renderTile(true, "alice-single", { continuation: false, lastInSection: true }, true)
                 ) : (
                     <>
                         {renderTile(false, "bob-first", { continuation: false, lastInSection: false })}
                         {renderTile(false, "bob-middle", { continuation: true, lastInSection: false })}
                         {renderTile(false, "bob-last", { continuation: true, lastInSection: true })}
-                        {renderTile(true, "alice-single", { continuation: false, lastInSection: true })}
+                        {renderTile(true, "alice-single", { continuation: false, lastInSection: true }, true)}
                     </>
                 )
             ) : (

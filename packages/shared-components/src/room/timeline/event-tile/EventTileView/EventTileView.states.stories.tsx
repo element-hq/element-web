@@ -59,9 +59,3 @@ export const Selected: Story = {
         state: { selected: true },
     },
 };
-
-export const Editing: Story = {
-    args: {
-        state: { editing: true },
-    },
-};

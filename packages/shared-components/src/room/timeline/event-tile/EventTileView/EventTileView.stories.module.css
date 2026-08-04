@@ -129,6 +129,29 @@
     min-width: 0;
 }
 
+/* Match the application IRC profile treatment without adding application
+   selectors to the shared EventTileView stylesheet. */
+.ircSender {
+    width: var(--event-tile-irc-name-width, 80px);
+    margin-inline-end: 0;
+    overflow: hidden;
+    text-align: start;
+}
+
+.ircSender :global(.mx_DisambiguatedProfile_displayName) {
+    display: inline-block;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: start;
+}
+
+.ircSender :global(.mx_DisambiguatedProfile_mxid) {
+    visibility: collapse;
+    margin-inline-start: 0;
+    padding-inline: 5px;
+}
+
 .senderName {
     font-weight: 600;
 }
@@ -225,9 +248,10 @@
     display: grid;
     gap: 2px;
     max-width: 520px;
-    margin-block: 4px;
-    padding-inline-start: 12px;
-    border-inline-start: 2px solid var(--cpd-color-border-subtle, #c9ced4);
+    margin: 0;
+    padding-inline-start: 10px;
+    border-inline-start: 2px solid var(--username-color, #617b9b);
+    border-radius: 2px;
     color: var(--cpd-color-text-secondary, #626a73);
     font-size: 13px;
 }
