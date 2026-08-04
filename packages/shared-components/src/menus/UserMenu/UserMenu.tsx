@@ -181,7 +181,15 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
                         {userId}
                     </Text>
                     {manageAccountHref && (
-                        <Button as="a" target="_blank" rel="noreferrer noopener" size="md" kind="tertiary" href={manageAccountHref} Icon={PopOutIcon}>
+                        <Button
+                            as="a"
+                            target="_blank"
+                            rel="noreferrer noopener"
+                            size="md"
+                            kind="tertiary"
+                            href={manageAccountHref}
+                            Icon={PopOutIcon}
+                        >
                             {_t("menus|user_menu|manage_account")}
                         </Button>
                     )}
