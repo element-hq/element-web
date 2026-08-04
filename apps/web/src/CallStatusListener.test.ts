@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { EventEmitter } from "events";
+import { EventEmitter } from "node:events";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 

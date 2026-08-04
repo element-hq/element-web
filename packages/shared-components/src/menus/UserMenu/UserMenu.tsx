@@ -143,7 +143,7 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
     } = useViewModel(vm);
     const { translate: _t } = useI18n();
     const trigger = (
-        <button className={styles.triggerButton} aria-label={_t("menus|user_menu|title")}>
+        <button className={styles.triggerButton} aria-label={_t("menus|user_menu|title")} type="button">
             <div className={styles.avatarWrapper}>
                 <Avatar id={userId} name={displayName} type="round" size="36px" src={avatarUrl} />
                 {userStatus && (
