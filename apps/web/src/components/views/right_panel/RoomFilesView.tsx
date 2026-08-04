@@ -47,9 +47,9 @@ const FILTER_LABELS: Record<FileCategory, TranslationKey> = {
 };
 
 /**
- * The shared-media card: a filename/caption search in the card header, a row of media category filter chips
- * (Documents / Images / Videos / Audio), and a {@link TimelinePanel} over the room's shared-media timeline
- * (search Phase 4).
+ * The shared-media card: the card's own nav header (back / "Files" / close), a filename/caption search directly
+ * beneath it, a row of media category filter chips (Documents / Images / Videos / Audio), and a
+ * {@link TimelinePanel} over the room's shared-media timeline (search Phase 4).
  *
  * The chips are a *toggle*, not a tab strip: with no chip selected every media type shows, which is why there is
  * no "All" chip. This mirrors the room list's primary filters (`RoomListPrimaryFilters`).
@@ -104,22 +104,26 @@ export function RoomFilesView({
         filterRefs.current[target]?.focus();
     };
 
-    // The search sits in the card header, in place of the card title and alongside the close button.
-    const header = (
-        <Form.Root className="mx_RoomFilesView_search" onSubmit={(e) => e.preventDefault()}>
-            <Search
-                placeholder={_t("file_panel|search_placeholder")}
-                name="file_search"
-                value={searchTerm}
-                onChange={(e) => vm.setSearchTerm(e.currentTarget.value)}
-                className="mx_no_textinput"
-            />
-        </Form.Root>
-    );
-
     return (
-        <BaseCard className="mx_FilePanel" onClose={onClose} withoutScrollContainer ref={card} header={header}>
+        // A string header gets BaseCard's standard nav row: the back button (when the right panel has somewhere to
+        // go back to), the "Files" title and the close button. The search is a body row directly beneath it.
+        <BaseCard
+            className="mx_FilePanel"
+            onClose={onClose}
+            withoutScrollContainer
+            ref={card}
+            header={_t("right_panel|files_button")}
+        >
             <Measured sensor={card} onMeasurement={onMeasurement} />
+            <Form.Root className="mx_RoomFilesView_search" onSubmit={(e) => e.preventDefault()}>
+                <Search
+                    placeholder={_t("file_panel|search_placeholder")}
+                    name="file_search"
+                    value={searchTerm}
+                    onChange={(e) => vm.setSearchTerm(e.currentTarget.value)}
+                    className="mx_no_textinput"
+                />
+            </Form.Root>
             <SearchWarning isRoomEncrypted={isRoomEncrypted} kind={WarningKind.Files} />
             <Flex
                 as="div"

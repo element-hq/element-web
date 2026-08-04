@@ -12,6 +12,7 @@ import { render, screen, fireEvent } from "jest-matrix-react";
 import { RoomFilesView } from "../../../../../src/components/views/right_panel/RoomFilesView";
 import { clientAndSDKContextRenderOptions, mkEvent, stubClient } from "../../../../test-utils";
 import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
+import { RightPanelPhases } from "../../../../../src/stores/right-panel/RightPanelStorePhases";
 
 // Stub TimelinePanel so we can capture the `eventFilter` predicate it is handed without rendering a real timeline.
 let mockLastTimelineProps: { eventFilter?: (ev: MatrixEvent) => boolean } = {};
@@ -49,6 +50,9 @@ const renderView = (): void => {
 
 describe("RoomFilesView", () => {
     beforeEach(() => {
+        // Restored here rather than in an afterEach so it lands after React Testing Library has unmounted the
+        // previous render, never in the middle of one.
+        jest.restoreAllMocks();
         stubClient();
         mockLastTimelineProps = {};
     });
@@ -63,12 +67,23 @@ describe("RoomFilesView", () => {
         }
     });
 
-    it("puts the file search in the card header, alongside the close button", () => {
+    it("titles the card 'Files' and puts the search below the header rather than in it", () => {
         renderView();
 
-        const search = screen.getByPlaceholderText("Search files…");
-        expect(search.closest(".mx_BaseCard_header")).not.toBeNull();
+        expect(screen.getByRole("heading", { name: "Files" })).toBeInTheDocument();
         expect(screen.getByTestId("base-card-close-button")).toBeInTheDocument();
+        expect(screen.getByPlaceholderText("Search files…").closest(".mx_BaseCard_header")).toBeNull();
+    });
+
+    it("offers a back button when the right panel has a card to go back to", () => {
+        jest.spyOn(SDKContextClass.instance.rightPanelStore, "roomPhaseHistory", "get").mockReturnValue([
+            { phase: RightPanelPhases.RoomSummary, state: {} },
+            { phase: RightPanelPhases.FilePanel, state: {} },
+        ]);
+
+        renderView();
+
+        expect(screen.getByTestId("base-card-back-button")).toBeInTheDocument();
     });
 
     it("hands TimelinePanel a predicate that shows any media but not plain text when nothing is selected", () => {

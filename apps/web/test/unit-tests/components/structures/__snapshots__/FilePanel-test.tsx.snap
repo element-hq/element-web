@@ -8,37 +8,19 @@ exports[`FilePanel renders empty state 1`] = `
     <div
       class="mx_BaseCard_header"
     >
-      <form
-        class="_root_1o4d9_17 mx_RoomFilesView_search"
+      <div
+        class="mx_BaseCard_header_title"
       >
-        <label
-          class="_label_1o4d9_60 _field_1o4d9_27 _search_1lktl_8 mx_no_textinput"
-          for="react-use-id-1"
+        <p
+          aria-level="1"
+          class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 mx_BaseCard_header_title_heading"
+          role="heading"
         >
-          <svg
-            class="_icon_1lktl_37"
-            fill="currentColor"
-            height="20"
-            viewBox="0 0 24 24"
-            width="20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M15.05 16.463a7.5 7.5 0 1 1 1.414-1.414l3.243 3.244a1 1 0 0 1-1.414 1.414zM16 10.5a5.5 5.5 0 1 0-11 0 5.5 5.5 0 0 0 11 0"
-            />
-          </svg>
-          <input
-            class="_input_1lktl_52"
-            id="react-use-id-1"
-            name="file_search"
-            placeholder="Search files…"
-            type="search"
-            value=""
-          />
-        </label>
-      </form>
+          Files
+        </p>
+      </div>
       <button
-        aria-labelledby="react-use-id-2"
+        aria-labelledby="react-use-id-1"
         class="_icon-button_1215g_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
@@ -64,6 +46,35 @@ exports[`FilePanel renders empty state 1`] = `
         </div>
       </button>
     </div>
+    <form
+      class="_root_1o4d9_17 mx_RoomFilesView_search"
+    >
+      <label
+        class="_label_1o4d9_60 _field_1o4d9_27 _search_1lktl_8 mx_no_textinput"
+        for="react-use-id-2"
+      >
+        <svg
+          class="_icon_1lktl_37"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M15.05 16.463a7.5 7.5 0 1 1 1.414-1.414l3.243 3.244a1 1 0 0 1-1.414 1.414zM16 10.5a5.5 5.5 0 1 0-11 0 5.5 5.5 0 0 0 11 0"
+          />
+        </svg>
+        <input
+          class="_input_1lktl_52"
+          id="react-use-id-2"
+          name="file_search"
+          placeholder="Search files…"
+          type="search"
+          value=""
+        />
+      </label>
+    </form>
     <div
       aria-label="Filter files by type"
       class="_flex_4dswl_9 mx_RoomFilesView_filters"

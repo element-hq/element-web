@@ -5,14 +5,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-/* The file search replaces the card title, so it takes all the header space left by the close button. */
+/* The search is the first body row under the card's nav header, inset 16px from each edge. It carries no bottom
+   padding of its own — the filter row below supplies the 16px gap between the two. */
 .mx_RoomFilesView_search {
-    flex: 1;
-    min-width: 0;
+    padding: var(--cpd-space-4x) var(--cpd-space-4x) 0;
+    box-sizing: border-box;
+    width: 100%;
 }
 
 .mx_RoomFilesView_filters {
-    padding: var(--cpd-space-4x) var(--cpd-space-3x);
+    padding: var(--cpd-space-4x);
     box-sizing: border-box;
     width: 100%;
 
