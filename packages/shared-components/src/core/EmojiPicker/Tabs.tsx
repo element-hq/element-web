@@ -154,6 +154,7 @@ export const Tabs: React.FC<Props> = ({
                 });
                 return (
                     <button
+                        type="button"
                         disabled={!enabledCategories.includes(category.id)}
                         key={category.id}
                         ref={tabRefs.current[category.id]}

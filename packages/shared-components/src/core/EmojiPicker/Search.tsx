@@ -73,7 +73,7 @@ export const Search: React.FC<IProps> = ({ query, onChange, onEnter, onKeyDown, 
     let rightButton: JSX.Element;
     if (query) {
         rightButton = (
-            <button onClick={() => onChange("")} title={_t("emoji_picker|cancel_search_label")}>
+            <button type="button" onClick={() => onChange("")} title={_t("emoji_picker|cancel_search_label")}>
                 <CloseIcon />
             </button>
         );
