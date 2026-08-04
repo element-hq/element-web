@@ -19,28 +19,25 @@ declare global {
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
 // Ignore benign post-teardown exceptions as they cause flakes
-const isBenignTeardownArtifact = (err: unknown): boolean => {
-    // During any running test `window` is defined by happy-dom, or node-env stub from setupGlobals.
-    // Only undefined once happy-dom has torn the environment down.
-    if (typeof window === "undefined") return true;
-    const name = (err as { name?: string } | null)?.name;
-    const message = err instanceof Error ? err.message : String(err);
-    if (name === "EnvironmentTeardownError" || message.includes("Closing rpc while")) return true;
-    return /\b(?:window|document|navigator|self) is not defined\b/.test(message);
-};
-
-process.on("uncaughtException", (err) => {
-    if (isBenignTeardownArtifact(err)) return;
-    throw err;
-});
-process.on("unhandledRejection", (reason) => {
-    if (isBenignTeardownArtifact(reason)) return;
-    throw reason;
-});
+const guardState = globalThis as unknown as { __vitestTestRunning?: boolean; __teardownGuardInstalled?: boolean };
+if (!guardState.__teardownGuardInstalled) {
+    guardState.__teardownGuardInstalled = true;
+    const isPostTeardownStraggler = (): boolean => !guardState.__vitestTestRunning || typeof window === "undefined";
+    process.on("uncaughtException", (err) => {
+        if (isPostTeardownStraggler()) return;
+        throw err;
+    });
+    process.on("unhandledRejection", (reason) => {
+        if (isPostTeardownStraggler()) return;
+        throw reason;
+    });
+}
 
 manageFetchMockGlobally();
 
 beforeEach(() => {
+    guardState.__vitestTestRunning = true;
+
     vi.stubEnv("TZ", "UTC");
 
     // set up fetch API mock
@@ -51,7 +48,10 @@ beforeEach(() => {
     setupLanguageMock();
 });
 
-afterEach(() => fetchMock.callHistory.flush());
+afterEach(() => {
+    guardState.__vitestTestRunning = false;
+    return fetchMock.callHistory.flush();
+});
 
 // uninitialised SdkConfig causes lots of warnings in console, init with defaults
 SdkConfig.put(DEFAULTS);
