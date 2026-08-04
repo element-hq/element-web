@@ -81,7 +81,7 @@ jobs:
               shell: bash
               env:
                   # We need sudo on Linux as it is installed in /opt/
-                  RUN_AS: ${{ runner.os == 'Linux' && 'sudo' || '' }}
+                  RUN_AS: ${{ runner.os == 'Linux' && 'sudo -E' || '' }}
                   PNPM_PATH: ${{ steps.pnpm.outputs.bin_dest }}
                   EXECUTABLE: ${{ steps.executable.outputs.path }}
 
