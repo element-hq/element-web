@@ -270,21 +270,27 @@ jobs:
         uses: ./.github/workflows/build_desktop_linux.yaml
         strategy:
             matrix:
-                sqlcipher: [system, static]
+                # We only ever ship static sqlcipher builds (see build_desktop_and_deploy.yaml) —
+                # system/dynamic sqlcipher is exercised cheaply by check_desktop_native instead,
+                # rather than a full desktop build+Playwright pass for a variant nobody ships.
                 arch: [amd64, arm64]
                 runAllTests:
                     - ${{ needs.prepare.outputs.run-all-desktop == 'true' }}
                 exclude:
-                    # We ship static sqlcipher builds, so delegate testing the system builds to the merge queue
-                    - runAllTests: false
-                      sqlcipher: system
-                    # Additionally skip arm64 system builds on PRs, as the amd64 test is enough for a smoke test and includes the screenshot tests
+                    # Skip arm64 builds on PRs, as the amd64 test is enough for a smoke test and includes the screenshot tests
                     - runAllTests: false
                       arch: arm64
         with:
-            sqlcipher: ${{ matrix.sqlcipher }}
+            sqlcipher: static
             arch: ${{ matrix.arch }}
             blob_report: true
+
+    # Cheap, non-flaky check that the pinned matrix-seshat version has a
+    # working prebuilt for every arch/sqlcipher combo hak needs — doesn't
+    # depend on the webapp build, so it runs independently of prepare/prepare_ed.
+    check_desktop_native:
+        name: "Desktop native module check"
+        uses: ./.github/workflows/check_desktop_native.yaml
 
     build_ed_macos:
         needs: [prepare, prepare_ed]
@@ -306,6 +312,7 @@ jobs:
             - build_ed_windows
             - build_ed_linux
             - build_ed_macos
+            - check_desktop_native
         if: always()
         runs-on: ubuntu-24.04
         steps:
