@@ -8,7 +8,8 @@ Please see LICENSE in the repository root for full details.
 import * as os from "node:os";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { type Configuration as BaseConfiguration } from "electron-builder";
+import { type Configuration as BaseConfiguration, log } from "electron-builder";
+import { LogMessageByKey } from "app-builder-lib/out/node-module-collector/moduleManager.js";
 
 /**
  * This script has different outputs depending on your os platform.
@@ -238,5 +239,16 @@ if (os.platform() === "linux") {
         config.deb.recommends = config.deb.recommends?.filter((d) => d !== "libsqlcipher0");
     }
 }
+
+// Treat certain warnings as a fatal error
+const FATAL_WARNINGS = [LogMessageByKey.PKG_NOT_ON_DISK, LogMessageByKey.PKG_NOT_FOUND];
+// Otherwise we just burn time running the tests for no reason.
+const prevTransform = log.messageTransformer;
+log.messageTransformer = (message, level) => {
+    if (level === "warn" && FATAL_WARNINGS.some((w) => message.startsWith(w))) {
+        throw new Error(`electron-builder: ${message}`);
+    }
+    return prevTransform?.(message, level) ?? message;
+};
 
 export default config;
