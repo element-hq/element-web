@@ -98,7 +98,11 @@ export function CustomStatusView({ onSave, onCancel }: CustomStatusViewProps): J
                     </button>
                 }
             >
-                <EmojiPicker onChoose={onChooseEmoji} onFinished={() => setPickerOpen(false)} />
+                <EmojiPicker
+                    onChoose={onChooseEmoji}
+                    onFinished={() => setPickerOpen(false)}
+                    showQuickReactions={false}
+                />
             </Menu>
             <Field name="custom-status" className={styles.textField}>
                 <TextControl
