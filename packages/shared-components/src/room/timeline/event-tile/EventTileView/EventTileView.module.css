@@ -8,6 +8,9 @@
 /* Shared root and slot-boundary baseline. */
 .root {
     --event-tile-group-gutter: 64px;
+    --event-tile-group-line-spacing-block-start: 1px;
+    --event-tile-group-line-spacing-block-end: 3px;
+    --event-tile-group-line-height: 22px;
     --event-tile-preview-offset: 48px;
     --event-tile-action-bar-size: 28px;
     --event-tile-action-bar-margin: 3px;
@@ -107,14 +110,23 @@
 /* Group layout. */
 .root[data-layout="group"] .line {
     position: relative;
-    padding-block: 1px 3px;
+    padding-block: var(--event-tile-group-line-spacing-block-start) var(--event-tile-group-line-spacing-block-end);
     padding-inline-start: var(--event-tile-group-gutter);
-    line-height: 22px;
+    margin-inline-end: 80px;
+    min-height: 14px;
+    line-height: var(--event-tile-group-line-height);
+}
+
+.root[data-layout="group"] .line {
+    border-radius: 8px;
 }
 
 .root[data-layout="group"] .sender {
+    display: flex;
+    align-items: center;
     max-width: calc(100% - var(--event-tile-group-gutter));
     margin-inline-start: var(--event-tile-group-gutter);
+    min-height: 26px;
     line-height: 20px;
 }
 
@@ -128,15 +140,24 @@
 .root[data-layout="group"] .timestamp {
     position: absolute;
     inset-inline-start: 0;
+    width: var(--MessageTimestamp-width, 46px);
     text-align: center;
 }
 
-.root[data-layout="group"] .replyChain,
+.root[data-layout="group"] .padlock {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 44px;
+    height: var(--event-tile-group-line-height);
+    margin: 1px;
+}
+
 .root[data-layout="group"] .threadInfo {
     margin-inline-start: var(--event-tile-group-gutter);
 }
 
 .root[data-layout="group"] .replyChain {
+    margin-inline-start: 0;
     margin-bottom: var(--cpd-space-2x, 8px);
 }
 
@@ -146,6 +167,16 @@
 
 .root[data-layout="group"] .receipt {
     margin-inline-end: 10px;
+    float: inline-end;
+    position: relative;
+    width: 90px;
+    height: 1px;
+    text-align: end;
+    overflow: visible;
+}
+
+.root[data-layout="group"][data-continuation="true"] .line {
+    clear: both;
 }
 
 /* IRC layout. */

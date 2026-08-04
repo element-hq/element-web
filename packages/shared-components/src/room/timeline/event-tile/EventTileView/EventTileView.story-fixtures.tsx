@@ -8,10 +8,23 @@
 import React from "react";
 import classNames from "classnames";
 import { fn } from "storybook/test";
+import { Avatar } from "@vector-im/compound-web";
 
+import { useMockedViewModel } from "../../../../core/viewmodel";
 import { useEventPresentation } from "../../EventPresentation";
 import { withViewDocs } from "../../../../../.storybook/withViewDocs";
 import { EventTileView, type EventTileViewProps } from "./index";
+import { E2ePadlock, E2ePadlockIcon } from "./E2ePadlock";
+import { DisambiguatedProfileView } from "./DisambiguatedProfile";
+import { ActionBarAction, ActionBarView } from "../actions/ActionBarView";
+import { MessageTimestampView } from "../timestamp/MessageTimestampView";
+import { ReactionsRowView } from "../reactions/ReactionsRow";
+import { ReactionsRowButtonView } from "../reactions/ReactionsRowButton";
+import { type ReactionsRowButtonTooltipViewModel } from "../reactions/ReactionsRowButtonTooltip";
+import {
+    ThreadSummaryView,
+    type ThreadMessagePreviewViewSnapshot,
+} from "./ThreadSummary/ThreadSummaryView";
 import styles from "./EventTileView.stories.module.css";
 
 export const Slot = ({
@@ -24,11 +37,19 @@ export const Slot = ({
     }
 
     const child = children as React.ReactElement<StorySlotProps>;
+    const storyBoundary = `EventTileView.slots.${name}`;
+
+    if (typeof child.type === "string") {
+        return React.cloneElement(child, {
+            className: classNames(styles.slot, child.props.className, className),
+            "data-story-boundary": storyBoundary,
+        });
+    }
 
     return React.cloneElement(child, {
         className: classNames(styles.slot, child.props.className, className),
-        storyBoundary: `EventTileView.slots.${name}`,
-        "data-story-boundary": `EventTileView.slots.${name}`,
+        storyBoundary,
+        "data-story-boundary": storyBoundary,
     });
 };
 
@@ -101,13 +122,15 @@ export const StoryAvatar = ({
     className?: string;
     storyBoundary?: string;
 }): React.ReactElement => (
-    <span
-        className={classNames(room ? styles.roomAvatar : styles.avatar, className)}
-        data-story-boundary={storyBoundary}
-        aria-hidden="true"
-    >
-        {room ? "R" : label}
-    </span>
+    <div className={className} data-story-boundary={storyBoundary}>
+        <Avatar
+            id={room ? "!story-room:example.org" : `@${label.toLowerCase()}:example.org`}
+            name={room ? "Story room" : label === "A" ? "Alice Example" : "Bob Example"}
+            type="round"
+            size="30px"
+            aria-label={room ? "Story room avatar" : `${label} avatar`}
+        />
+    </div>
 );
 
 export const StorySender = ({
@@ -120,18 +143,29 @@ export const StorySender = ({
     id?: string;
     className?: string;
     storyBoundary?: string;
-}): React.ReactElement => (
-    <div className={classNames(styles.sender, className)} data-story-boundary={storyBoundary}>
-        <span className={styles.senderName}>{name}</span>
-        <span className={styles.senderId}>{id}</span>
-    </div>
-);
+}): React.ReactElement => {
+    const vm = useMockedViewModel(
+        { displayName: name, displayIdentifier: id, emphasizeDisplayName: true },
+        {},
+    );
+    return (
+        <span className={styles.storyBoundaryHost} data-story-boundary={storyBoundary}>
+            <DisambiguatedProfileView vm={vm} className={className} />
+        </span>
+    );
+};
 
-export const StoryTimestamp = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => (
-    <time className={classNames(styles.timestamp, className)} data-story-boundary={storyBoundary}>
-        12:34
-    </time>
-);
+export const StoryTimestamp = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => {
+    const vm = useMockedViewModel(
+        { ts: "12:34", tsSentAt: "Tuesday, 4 August 2026 at 12:34", inhibitTooltip: true },
+        {},
+    );
+    return (
+        <span className={className} data-story-boundary={storyBoundary}>
+            <MessageTimestampView vm={vm} />
+        </span>
+    );
+};
 export const StoryBody = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => (
     <div className={classNames(styles.body, className)} data-story-boundary={storyBoundary}>
         <div>Here is a realistic event tile body with enough text to show the available width.</div>
@@ -144,37 +178,116 @@ export const StoryReplyChain = ({ className, storyBoundary }: StorySlotProps): R
         <span>Earlier message quoted in this reply.</span>
     </div>
 );
-export const StoryActionBar = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => (
-    <div
-        className={classNames(styles.actionBarContent, className)}
-        data-story-boundary={storyBoundary}
-        role="toolbar"
-        aria-label="Message actions"
-    >
-        <button type="button">Reply</button>
-        <button type="button">React</button>
-        <button type="button">More</button>
-    </div>
-);
-export const StoryFooter = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => (
-    <div className={classNames(styles.footer, className)} data-story-boundary={storyBoundary}>
-        <span>👍 2</span>
-        <span>❤️ 1</span>
-    </div>
-);
-export const StoryThreadInfo = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => (
-    <div className={classNames(styles.threadInfo, className)} data-story-boundary={storyBoundary}>
-        3 replies
-    </div>
-);
+export const StoryActionBar = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => {
+    const vm = useMockedViewModel(
+        {
+            actions: [ActionBarAction.React, ActionBarAction.Reply, ActionBarAction.Options],
+            presentation: "icon" as const,
+            isDownloadEncrypted: false,
+            isDownloadLoading: false,
+            isPinned: false,
+            isQuoteExpanded: false,
+            isThreadReplyAllowed: true,
+        },
+        { onReactionsClick: fn(), onReplyClick: fn(), onOptionsClick: fn() },
+    );
+    return (
+        <div className={className} data-story-boundary={storyBoundary}>
+            <ActionBarView vm={vm} />
+        </div>
+    );
+};
+
+const useStoryReactionTooltipVm = (caption: string): ReactionsRowButtonTooltipViewModel =>
+    useMockedViewModel({ formattedSenders: "Alice Example and Bob Example", caption }, {});
+
+export const StoryFooter = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => {
+    const vm = useMockedViewModel(
+        {
+            ariaLabel: "Reactions",
+            isVisible: true,
+            showAddReactionButton: true,
+            addReactionButtonLabel: "Add reaction",
+            addReactionButtonVisible: true,
+        },
+        { onAddReactionClick: fn(), onAddReactionContextMenu: fn() },
+    );
+    const thumbsUpVm = useMockedViewModel(
+        {
+            content: "👍",
+            count: 2,
+            isSelected: false,
+            "aria-label": "Thumbs up, 2 reactions",
+            tooltipVm: useStoryReactionTooltipVm("Thumbs up"),
+        },
+        { onClick: fn() },
+    );
+    const heartVm = useMockedViewModel(
+        {
+            content: "❤️",
+            count: 1,
+            isSelected: true,
+            "aria-label": "Red heart, 1 reaction",
+            tooltipVm: useStoryReactionTooltipVm("Red heart"),
+        },
+        { onClick: fn() },
+    );
+    return (
+        <div className={classNames(styles.footer, className)} data-story-boundary={storyBoundary}>
+            <ReactionsRowView vm={vm}>
+                <ReactionsRowButtonView vm={thumbsUpVm} />
+                <ReactionsRowButtonView vm={heartVm} />
+            </ReactionsRowView>
+        </div>
+    );
+};
+const storyThreadPreview: ThreadMessagePreviewViewSnapshot = {
+    isVisible: true,
+    avatar: {
+        id: "@alice:example.org",
+        name: "Alice Example",
+        label: "Alice Example avatar",
+    },
+    showDisplayName: true,
+    senderName: "Alice Example",
+    previewContent: "Can you review the draft?",
+    previewTooltip: "Can you review the draft?",
+};
+
+export const StoryThreadInfo = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => {
+    const previewVm = useMockedViewModel(storyThreadPreview, {});
+    const threadSummaryVm = useMockedViewModel(
+        {
+            isVisible: true,
+            replyCountLabel: "3 replies",
+            openThreadLabel: "Open thread",
+            notificationIndicator: undefined,
+            narrow: false,
+            previewVm,
+        },
+        { onClick: fn() },
+    );
+
+    return <ThreadSummaryView vm={threadSummaryVm} className={className} data-story-boundary={storyBoundary} />;
+};
 export const StoryReceipt = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => (
-    <span className={classNames(styles.receipt, className)} data-story-boundary={storyBoundary}>
-        Read
+    <span
+        className={classNames(styles.receipt, className)}
+        data-story-boundary={storyBoundary}
+    >
+        <span className={styles.readReceiptGroup}>
+            <button type="button" className={styles.readReceiptButton} aria-label="Read by Alex and Taylor">
+                <span className={styles.readReceiptContainer} aria-hidden="true">
+                    <span className={styles.receiptAvatar}>T</span>
+                    <span className={styles.receiptAvatar}>A</span>
+                </span>
+            </button>
+        </span>
     </span>
 );
 export const StoryPadlock = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => (
-    <span className={classNames(styles.padlock, className)} data-story-boundary={storyBoundary}>
-        🔒
+    <span className={styles.storyBoundaryHost} data-story-boundary={storyBoundary}>
+        <E2ePadlock icon={E2ePadlockIcon.Normal} title="End-to-end encrypted" className={className} />
     </span>
 );
 export const StoryContextMenu = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => (
