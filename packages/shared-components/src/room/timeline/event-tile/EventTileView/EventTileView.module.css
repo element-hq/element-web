@@ -15,9 +15,14 @@
     --event-tile-action-bar-size: 28px;
     --event-tile-action-bar-margin: 3px;
     --event-tile-action-bar-offset: 8px;
-    --event-tile-state-hover-background: var(--cpd-color-bg-subtle-primary, rgb(240 241 242));
-    --event-tile-state-highlight-background: var(--cpd-color-bg-subtle-secondary, rgb(233 237 242));
-    --event-tile-state-selected-background: var(--cpd-color-bg-subtle-primary, rgb(240 241 242));
+    --event-tile-bubble-corner-radius: 12px;
+    --event-tile-bubble-gap: 5px;
+    --event-tile-bubble-gutter: 11px;
+    --event-tile-bubble-other-background: var(--cpd-color-gray-300, #e9edf2);
+    --event-tile-bubble-self-background: var(--cpd-color-green-300, #d8f5ed);
+    --event-tile-state-hover-background: var(--cpd-color-bg-subtle-secondary, #e9edf2);
+    --event-tile-state-highlight-background: var(--cpd-color-yellow-200, #fff8e3);
+    --event-tile-state-selected-background: var(--cpd-color-bg-subtle-secondary, #e9edf2);
 
     position: relative;
     flex-shrink: 0;
@@ -169,6 +174,7 @@
     margin-inline-end: 10px;
     float: inline-end;
     position: relative;
+    inset-block-start: calc(-1 * (var(--event-tile-group-line-height) + 3px));
     width: 90px;
     height: 1px;
     text-align: end;
@@ -243,10 +249,26 @@
     padding-top: 0;
 }
 
+.root[data-layout="bubble"]::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: -1px calc(-1 * var(--EventTile_bubble-margin-inline-end, 60px)) -1px
+        calc(-1 * var(--EventTile_bubble-margin-inline-start, 49px));
+    border-radius: 4px;
+    pointer-events: none;
+}
+
 .root[data-layout="bubble"] .line {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--event-tile-bubble-gap);
     width: fit-content;
     max-width: 70%;
+    margin-block: 0;
+    margin-inline: -9px -12px;
+    border-radius: var(--event-tile-bubble-corner-radius) var(--event-tile-bubble-corner-radius) 0 0;
     line-height: 18px;
 }
 
@@ -254,24 +276,159 @@
     position: absolute;
     z-index: 9;
     inset-block-start: 6px;
+    line-height: 0;
+    border: 4px solid var(--cpd-color-bg-canvas-default, #fff);
+    border-radius: 50%;
+}
+
+.root[data-layout="bubble"] .avatar > * {
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px var(--cpd-color-bg-canvas-default, #fff);
 }
 
 .root[data-layout="bubble"] .sender,
 .root[data-layout="bubble"] .line {
+    width: fit-content;
+    max-width: 70%;
     line-height: 18px;
 }
 
+.root[data-layout="bubble"] .sender {
+    position: relative;
+    inset-block-start: -2px;
+    inset-inline-start: 2px;
+    font-size: 15px;
+    white-space: normal;
+}
+
+.root[data-layout="bubble"] .timestamp {
+    position: absolute;
+    z-index: 3;
+    inset-block-end: 0;
+    inset-inline-end: 0;
+    padding: 4px 8px;
+}
+
+.root[data-layout="bubble"] > .receipt {
+    position: absolute;
+    z-index: 1;
+    inset-block-end: -3px;
+    inset-inline-end: -78px;
+}
+
+.root[data-layout="bubble"] .padlock {
+    flex-shrink: 0;
+    height: calc(18px + 2px);
+}
+
+.root[data-layout="bubble"] .line {
+    padding: calc(var(--event-tile-bubble-gutter) - 1px);
+    padding-inline-end: 60px;
+    background: var(--event-tile-bubble-other-background);
+}
+
+.root[data-layout="bubble"][data-self="false"] .line {
+    border-end-end-radius: var(--event-tile-bubble-corner-radius);
+}
+
+.root[data-layout="bubble"][data-self="false"] .avatar {
+    inset-inline-start: -36px;
+}
+
+.root[data-layout="bubble"][data-self="true"] .sender {
+    display: none;
+}
+
+.root[data-layout="bubble"][data-self="true"] .line {
+    border-end-start-radius: var(--event-tile-bubble-corner-radius);
+    background: var(--event-tile-bubble-self-background);
+}
+
+.root[data-layout="bubble"][data-self="true"] .avatar {
+    inset-block-start: -19px;
+    inset-inline-end: -38px;
+}
+
+.root[data-layout="bubble"][data-self="false"] .actionBar {
+    inset-block-start: -28px;
+    inset-inline-start: calc(100% - var(--event-tile-action-bar-size) - 2 * (var(--event-tile-action-bar-margin) + 1px));
+    inset-inline-end: auto;
+}
+
+.root[data-layout="bubble"][data-self="true"] .actionBar {
+    inset-block-start: -28px;
+    inset-inline-end: 0;
+}
+
+.root[data-layout="bubble"]:hover::before,
+.root[data-layout="bubble"][data-selected="true"]::before {
+    background: var(--event-tile-state-hover-background);
+}
+
+.root[data-layout="bubble"][data-highlighted="true"]::before {
+    background: var(--event-tile-state-highlight-background);
+}
+
+.root[data-layout="bubble"]:hover .avatar {
+    border-color: var(--event-tile-state-hover-background);
+}
+
+.root[data-layout="bubble"][data-highlighted="true"] .avatar {
+    border-color: var(--event-tile-state-highlight-background);
+}
+
+.root[data-layout="bubble"]:hover .avatar > *,
+.root[data-layout="bubble"][data-selected="true"] .avatar > * {
+    box-shadow: 0 0 0 3px var(--event-tile-state-hover-background);
+}
+
+.root[data-layout="bubble"][data-highlighted="true"] .avatar > * {
+    box-shadow: 0 0 0 3px var(--event-tile-state-highlight-background);
+}
+
 .root[data-layout="bubble"] .footer {
+    display: flex;
+    align-items: center;
     margin-block: var(--cpd-space-1-5x, 6px);
     margin-inline: -9px -12px;
+}
+
+.root[data-layout="bubble"][data-self="false"] .threadInfo {
+    margin-inline-start: -11px;
+    margin-inline-end: auto;
+}
+
+.root[data-layout="bubble"][data-self="true"] .footer {
+    justify-content: flex-end;
+}
+
+.root[data-layout="bubble"][data-self="true"] .threadInfo {
+    margin-inline-start: auto;
+    margin-inline-end: -11px;
 }
 
 .root[data-layout="bubble"][data-continuation="true"] {
     margin-top: 2px;
 }
 
+.root[data-layout="bubble"][data-continuation="true"][data-self="false"] .line {
+    border-start-start-radius: 0;
+}
+
+.root[data-layout="bubble"][data-continuation="true"][data-self="true"] .line {
+    border-start-end-radius: 0;
+}
+
 .root[data-layout="bubble"][data-last-in-section="true"] {
     margin-bottom: 24px;
+}
+
+.root[data-layout="bubble"][data-last-in-section="true"][data-self="false"] .line {
+    border-end-start-radius: var(--event-tile-bubble-corner-radius);
+}
+
+.root[data-layout="bubble"][data-last-in-section="true"][data-self="true"] .line {
+    border-end-end-radius: var(--event-tile-bubble-corner-radius);
 }
 
 .root[data-layout="bubble"][data-self="true"] .line {

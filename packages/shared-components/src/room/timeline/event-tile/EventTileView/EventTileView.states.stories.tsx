@@ -41,6 +41,7 @@ const meta = {
         ...eventTileStoryDefaults,
         shape: "Room",
         state: {},
+        roomMessages: "alice",
     },
 } satisfies Meta<typeof EventTileViewStory>;
 
@@ -62,17 +63,5 @@ export const Selected: Story = {
 export const Editing: Story = {
     args: {
         state: { editing: true },
-    },
-};
-
-export const Continuation: Story = {
-    args: {
-        state: { continuation: true },
-    },
-};
-
-export const LastInSection: Story = {
-    args: {
-        state: { lastInSection: true },
     },
 };

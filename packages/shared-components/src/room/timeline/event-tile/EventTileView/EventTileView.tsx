@@ -242,9 +242,9 @@ export function EventTileView({
                 {renderSlot(slots.body, styles.body, classNameOverrides?.body)}
                 {renderSlot(slots.actionBar, styles.actionBar, classNameOverrides?.actionBar)}
             </div>
-            {renderSlot(slots.receipt, styles.receipt, classNameOverrides?.receipt)}
             {renderSlot(slots.footer, styles.footer, classNameOverrides?.footer)}
             {renderSlot(slots.threadInfo, styles.threadInfo, classNameOverrides?.threadInfo)}
+            {renderSlot(slots.receipt, styles.receipt, classNameOverrides?.receipt)}
         </>,
         undefined,
         -1,

@@ -14,6 +14,16 @@
     position: relative;
 }
 
+.storyEventTile[data-layout="bubble"]::before {
+    /* Keep the story hover background above the Storybook surface. */
+    z-index: auto;
+}
+
+.storyEventTile[data-layout="bubble"] .footer {
+    position: relative;
+    z-index: 1;
+}
+
 [data-story-hovered="true"] {
     outline: 1px dashed var(--cpd-color-border-focused, #5e7cff);
     outline-offset: 2px;
@@ -173,7 +183,6 @@
 .readReceiptGroup {
     position: relative;
     display: inline-block;
-    inset-block-start: calc(-1 * (22px + 3px));
     z-index: 1;
     user-select: none;
 }
@@ -267,6 +276,18 @@
     margin-block-start: 6px;
     color: var(--cpd-color-text-secondary, #626a73);
     font-size: 12px;
+}
+
+.storyReactions {
+    display: flex;
+}
+
+.storyEventTile[data-layout="bubble"][data-self="true"] .storyReactions {
+    justify-content: flex-end;
+}
+
+.storyEventTile[data-layout="bubble"][data-self="true"] .storyReactions > :last-child {
+    order: -1;
 }
 
 .reactionButton {

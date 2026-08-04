@@ -234,7 +234,7 @@ export const StoryFooter = ({ className, storyBoundary }: StorySlotProps): React
     );
     return (
         <div className={classNames(styles.footer, className)} data-story-boundary={storyBoundary}>
-            <ReactionsRowView vm={vm}>
+            <ReactionsRowView vm={vm} className={styles.storyReactions}>
                 <ReactionsRowButtonView vm={thumbsUpVm} />
                 <ReactionsRowButtonView vm={heartVm} />
             </ReactionsRowView>
@@ -345,44 +345,110 @@ export const roomSlots: EventTileViewProps["slots"] = {
 export type EventTileStoryProps = Omit<EventTileViewProps, "root"> & {
     shape: EventTileViewProps["root"]["data"]["shape"];
     state?: EventTileViewProps["root"]["state"];
+    roomMessages?: "boundaries" | "alice";
 };
 
-function EventTileViewStoryContent({ shape, state, ...props }: EventTileStoryProps): React.ReactElement {
+function EventTileViewStoryContent({
+    shape,
+    state,
+    roomMessages = "boundaries",
+    ...props
+}: EventTileStoryProps): React.ReactElement {
     const { layout, density } = useEventPresentation();
-    const renderTile = (isOwnEvent: boolean, suffix: string): React.ReactElement => (
-        <EventTileView
-            key={suffix}
-            {...props}
-            classNames={{
-                ...props.classNames,
-                root: classNames(props.classNames?.root, "storyEventTile"),
-                line: classNames(props.classNames?.line, "storyEventLine"),
-            }}
-            slots={
-                shape === "Room"
-                    ? {
-                          ...props.slots,
-                          sender: <Slot name="sender" as="div"><StorySender name={isOwnEvent ? "Alice" : "Bob"} id={isOwnEvent ? "@alice:example.org" : "@bob:example.org"} /></Slot>,
-                          avatar: <Slot name="avatar"><StoryAvatar label={isOwnEvent ? "A" : "B"} /></Slot>,
-                      }
-                    : props.slots
-            }
-            root={{
-                ...baseRoot,
-                id: `${baseRoot.id}-${suffix}`,
-                scrollToken: `${baseRoot.scrollToken}-${suffix}`,
-                data: { ...baseRoot.data, eventId: `${baseRoot.data.eventId}-${suffix}`, layout, shape, isOwnEvent },
-                state,
-            }}
-        />
-    );
+    const [tileInteractions, setTileInteractions] = React.useState<
+        Record<string, { hovered: boolean; focused: boolean }>
+    >({});
+
+    const updateTileInteraction = (suffix: string, update: Partial<{ hovered: boolean; focused: boolean }>): void => {
+        setTileInteractions((current) => ({
+            ...current,
+            [suffix]: {
+                ...(current[suffix] ?? { hovered: false, focused: false }),
+                ...update,
+            },
+        }));
+    };
+
+    const renderTile = (
+        isOwnEvent: boolean,
+        suffix: string,
+        boundaryState: EventTileViewProps["root"]["state"] = {},
+    ): React.ReactElement => {
+        const tileState = { ...boundaryState, ...state };
+        const interaction = tileInteractions[suffix] ?? { hovered: false, focused: false };
+        const showActionBar = interaction.hovered || interaction.focused;
+        const sender = !tileState.continuation ? (
+            <Slot name="sender" as="div">
+                <StorySender name={isOwnEvent ? "Alice" : "Bob"} id={isOwnEvent ? "@alice:example.org" : "@bob:example.org"} />
+            </Slot>
+        ) : undefined;
+
+        const slots =
+            shape === "Room"
+                ? {
+                      // Keep Bob's boundary examples as plain text events.
+                      ...(isOwnEvent ? props.slots : { body: props.slots.body }),
+                      sender,
+                      avatar: !tileState.continuation ? (
+                          <Slot name="avatar">
+                              <StoryAvatar label={isOwnEvent ? "A" : "B"} />
+                          </Slot>
+                      ) : undefined,
+                      actionBar: showActionBar ? props.slots?.actionBar : undefined,
+                  }
+                : { ...props.slots, actionBar: showActionBar ? props.slots?.actionBar : undefined };
+
+        return (
+            <EventTileView
+                key={suffix}
+                {...props}
+                classNames={{
+                    ...props.classNames,
+                    root: classNames(props.classNames?.root, "storyEventTile", styles.storyEventTile),
+                    line: classNames(props.classNames?.line, "storyEventLine"),
+                }}
+                slots={slots}
+                root={{
+                    ...baseRoot,
+                    id: `${baseRoot.id}-${suffix}`,
+                    scrollToken: `${baseRoot.scrollToken}-${suffix}`,
+                    data: { ...baseRoot.data, eventId: `${baseRoot.data.eventId}-${suffix}`, layout, shape, isOwnEvent },
+                    state: tileState,
+                }}
+                onMouseEnter={(event) => {
+                    props.onMouseEnter?.(event);
+                    updateTileInteraction(suffix, { hovered: true });
+                }}
+                onMouseLeave={(event) => {
+                    props.onMouseLeave?.(event);
+                    updateTileInteraction(suffix, { hovered: false });
+                }}
+                onFocus={(event) => {
+                    props.onFocus?.(event);
+                    updateTileInteraction(suffix, { focused: true });
+                }}
+                onBlur={(event) => {
+                    props.onBlur?.(event);
+                    if (!(event.relatedTarget instanceof Node) || !event.currentTarget.contains(event.relatedTarget)) {
+                        updateTileInteraction(suffix, { focused: false });
+                    }
+                }}
+            />
+        );
+    };
     return (
         <TimelineStoryFrame density={density} layout={layout}>
             {shape === "Room" ? (
-                <>
-                    {renderTile(false, "received")}
-                    {renderTile(true, "sent")}
-                </>
+                roomMessages === "alice" ? (
+                    renderTile(true, "alice-single", { continuation: false, lastInSection: true })
+                ) : (
+                    <>
+                        {renderTile(false, "bob-first", { continuation: false, lastInSection: false })}
+                        {renderTile(false, "bob-middle", { continuation: true, lastInSection: false })}
+                        {renderTile(false, "bob-last", { continuation: true, lastInSection: true })}
+                        {renderTile(true, "alice-single", { continuation: false, lastInSection: true })}
+                    </>
+                )
             ) : (
                 renderTile(false, "event")
             )}
