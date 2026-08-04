@@ -48,11 +48,12 @@ describe("attachUrlPreviews", () => {
             },
         ],
         content: "https://example.com",
+        isModified: false,
     });
 
     it("does nothing when there are no previews", () => {
         const content = makeContent();
-        attachUrlPreviews({ entries: [], content: "" }, content, false);
+        attachUrlPreviews({ entries: [], content: "", isModified: false }, content, false);
         expect(content["com.beeper.linkpreviews"]).toBeUndefined();
     });
 
