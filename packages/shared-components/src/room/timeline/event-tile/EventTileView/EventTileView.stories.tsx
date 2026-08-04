@@ -20,6 +20,7 @@ import {
     StoryReceipt,
     StorySender,
     StoryThreadInfo,
+    StoryThreadListInfo,
     StoryTimestamp,
 } from "./EventTileView.story-fixtures";
 
@@ -60,6 +61,49 @@ type Story = StoryObj<typeof meta>;
 
 export const Room: Story = {};
 
+export const ThreadsList: Story = {
+    args: {
+        shape: "ThreadsList",
+        slots: {
+            sender: (
+                <Slot name="sender">
+                    <StorySender />
+                </Slot>
+            ),
+            avatar: (
+                <Slot name="avatar">
+                    <StoryAvatar />
+                </Slot>
+            ),
+            body: (
+                <Slot name="body">
+                    <StoryBody />
+                </Slot>
+            ),
+            timestamp: (
+                <Slot name="timestamp">
+                    <StoryTimestamp />
+                </Slot>
+            ),
+            notificationBadge: (
+                <Slot name="notificationBadge">
+                    <span className={styles.notificationDot} aria-label="Unread notifications" />
+                </Slot>
+            ),
+            threadInfo: (
+                <Slot name="threadInfo">
+                    <StoryThreadListInfo />
+                </Slot>
+            ),
+            actionBar: (
+                <Slot name="actionBar">
+                    <StoryActionBar />
+                </Slot>
+            ),
+        },
+    },
+};
+
 export const Thread: Story = {
     args: {
         shape: "Thread",
@@ -97,60 +141,12 @@ export const Notification: Story = {
             ),
             notificationBadge: (
                 <Slot name="notificationBadge">
-                    <span className={styles.badge}>Unread</span>
+                    <span className={styles.notificationDot} aria-label="Unread notifications" />
                 </Slot>
             ),
             threadInfo: (
                 <Slot name="threadInfo">
-                    <StoryThreadInfo />
-                </Slot>
-            ),
-            receipt: (
-                <Slot name="receipt">
-                    <StoryReceipt />
-                </Slot>
-            ),
-        },
-    },
-};
-
-export const ThreadsList: Story = {
-    args: {
-        shape: "ThreadsList",
-        slots: {
-            sender: (
-                <Slot name="sender">
-                    <StorySender />
-                </Slot>
-            ),
-            avatar: (
-                <Slot name="avatar">
-                    <StoryAvatar />
-                </Slot>
-            ),
-            body: (
-                <Slot name="body">
-                    <StoryBody />
-                </Slot>
-            ),
-            timestamp: (
-                <Slot name="timestamp">
-                    <StoryTimestamp />
-                </Slot>
-            ),
-            notificationBadge: (
-                <Slot name="notificationBadge">
-                    <span className={styles.badge}>Unread</span>
-                </Slot>
-            ),
-            threadInfo: (
-                <Slot name="threadInfo">
-                    <StoryThreadInfo />
-                </Slot>
-            ),
-            actionBar: (
-                <Slot name="actionBar">
-                    <StoryActionBar />
+                    <StoryThreadListInfo />
                 </Slot>
             ),
             receipt: (

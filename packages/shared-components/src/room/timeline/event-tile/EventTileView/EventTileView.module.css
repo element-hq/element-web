@@ -88,8 +88,8 @@
     z-index: 10;
     inset-block-start: calc(
         -1 *
-            (var(--event-tile-action-bar-size) +
-                2 * (var(--event-tile-action-bar-margin) + var(--cpd-border-width-1, 1px)))
+            (var(--event-tile-action-bar-size) + 2 *
+                (var(--event-tile-action-bar-margin) + var(--cpd-border-width-1, 1px)))
     );
     inset-inline-end: var(--event-tile-action-bar-offset);
     user-select: none;
@@ -97,6 +97,52 @@
 
 .root[data-continuation="true"] {
     padding-top: 0;
+}
+
+/* ThreadView adds a narrower group timeline around EventTile. */
+.root[data-shape="Thread"] {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding-top: 0;
+}
+
+.root[data-shape="Thread"][data-layout="group"] {
+    .senderDetails {
+        align-items: center;
+        gap: var(--cpd-space-4x, 16px);
+        padding-inline-start: var(--cpd-space-2x, 8px);
+    }
+
+    .senderDetails .avatar {
+        /* ThreadView keeps the avatar in the sender-details flex row. */
+        position: relative;
+        inset: auto;
+    }
+
+    .senderDetails .sender {
+        margin-inline-start: 0;
+        max-width: 100%;
+        min-height: 0;
+        line-height: normal;
+    }
+
+    .line {
+        padding-block: 2px;
+        padding-inline-start: 56px;
+        margin-inline-end: 8px;
+    }
+
+    .timestamp {
+        /* ThreadView aligns this with the event content, not the bottom of
+           the line's flex/content flow. */
+        inset-block-start: 2px;
+    }
+
+    .footer {
+        margin-inline-start: 56px;
+        margin-inline-end: 8px;
+    }
 }
 
 /* Group layout. */
@@ -137,7 +183,6 @@
         min-height: 14px;
         border-radius: 8px;
         line-height: var(--event-tile-group-line-height);
-        transition: background-color 120ms ease;
     }
 
     .sender {
@@ -277,7 +322,6 @@
         flex-shrink: 1;
         min-width: 0;
         padding-block: 1px;
-        transition: background-color 120ms ease;
     }
 
     .replyChain {
@@ -398,7 +442,9 @@
 
 .root[data-layout="bubble"][data-self="false"] .actionBar {
     inset-block-start: -28px;
-    inset-inline-start: calc(100% - var(--event-tile-action-bar-size) - 2 * (var(--event-tile-action-bar-margin) + 1px));
+    inset-inline-start: calc(
+        100% - var(--event-tile-action-bar-size) - 2 * (var(--event-tile-action-bar-margin) + 1px)
+    );
     inset-inline-end: auto;
 }
 
@@ -487,17 +533,107 @@
     clear: both;
 }
 
-/* Notification and ThreadsList layouts. */
-.root[data-shape="Notification"],
+/* Notification layout. */
+.root[data-shape="Notification"] {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    margin-block: 13px;
+    padding: 8px;
+    border-radius: 8px;
+
+    &:hover {
+        background-color: var(--cpd-color-bg-subtle-primary, #f0f1f2);
+    }
+}
+
+.root[data-shape="Notification"]::after {
+    content: "";
+    position: absolute;
+    inset: auto -8px -13px 56px;
+    height: 1px;
+}
+
+.root[data-shape="Notification"]:last-child::after {
+    content: unset;
+}
+
+.root[data-shape="Notification"]:first-child {
+    margin-top: 0;
+}
+
+.root[data-shape="Notification"]:last-child {
+    margin-bottom: 0;
+}
+
+.root[data-shape="Notification"] .details {
+    width: calc(100% - var(--event-tile-preview-offset));
+    margin-inline-start: var(--event-tile-preview-offset);
+    overflow: hidden;
+}
+
+.root[data-shape="Notification"] .sender {
+    /* In preview tiles the sender is a metadata-row profile, not the
+       group-layout sender above the event line. */
+    display: inline-flex;
+    align-items: center;
+    flex: 1;
+    max-width: 100%;
+    min-height: 0;
+    margin-inline-start: 0;
+    line-height: normal;
+}
+
+.root[data-shape="Notification"] .avatar {
+    position: absolute;
+    inset: 8px auto auto 8px;
+}
+
+.root[data-shape="Notification"] .line {
+    width: 100%;
+    box-sizing: border-box;
+    padding-inline-start: var(--event-tile-preview-offset);
+    padding-bottom: 0;
+}
+
+.root[data-shape="Notification"] .threadInfo {
+    /* The preview is inside the padded line in these modes; it does not use
+       the group-layout thread-summary gutter. */
+    margin-inline-start: 0;
+}
+
+.root[data-shape="Notification"] .timestamp {
+    display: block;
+    font-size: 12px;
+    overflow: hidden;
+    margin-inline-start: auto;
+    align-self: flex-start;
+    position: initial;
+    inset: auto;
+    width: unset;
+    text-align: initial;
+    text-overflow: ellipsis;
+}
+
+.root[data-shape="Notification"][data-layout="group"]:hover .line {
+    background-color: inherit;
+    box-shadow: none;
+}
+
+/* ThreadsList layout. */
 .root[data-shape="ThreadsList"] {
     display: flex;
     flex-flow: row wrap;
     align-items: center;
     margin-block: 13px;
     padding: 8px;
+    border-radius: 8px;
+
+    &:hover {
+        background-color: var(--cpd-color-bg-subtle-primary, #f0f1f2);
+    }
 }
 
-.root[data-shape="Notification"]::after,
 .root[data-shape="ThreadsList"]::after {
     content: "";
     position: absolute;
@@ -505,35 +641,41 @@
     height: 1px;
 }
 
-.root[data-shape="Notification"]:last-child::after,
 .root[data-shape="ThreadsList"]:last-child::after {
     content: unset;
 }
 
-.root[data-shape="Notification"]:first-child,
 .root[data-shape="ThreadsList"]:first-child {
     margin-top: 0;
 }
 
-.root[data-shape="Notification"]:last-child,
 .root[data-shape="ThreadsList"]:last-child {
     margin-bottom: 0;
 }
 
-.root[data-shape="Notification"] .details,
 .root[data-shape="ThreadsList"] .details {
     width: calc(100% - var(--event-tile-preview-offset));
     margin-inline-start: var(--event-tile-preview-offset);
     overflow: hidden;
 }
 
-.root[data-shape="Notification"] .avatar,
+.root[data-shape="ThreadsList"] .sender {
+    /* In preview tiles the sender is a metadata-row profile, not the
+       group-layout sender above the event line. */
+    display: inline-flex;
+    align-items: center;
+    flex: 1;
+    max-width: 100%;
+    min-height: 0;
+    margin-inline-start: 0;
+    line-height: normal;
+}
+
 .root[data-shape="ThreadsList"] .avatar {
     position: absolute;
     inset: 8px auto auto 8px;
 }
 
-.root[data-shape="Notification"] .line,
 .root[data-shape="ThreadsList"] .line {
     width: 100%;
     box-sizing: border-box;
@@ -541,9 +683,26 @@
     padding-bottom: 0;
 }
 
-.root[data-shape="Notification"] .timestamp,
+.root[data-shape="ThreadsList"] .threadInfo {
+    /* The preview is inside the padded line in this mode; it does not use
+       the group-layout thread-summary gutter. */
+    margin-inline-start: 0;
+}
+
 .root[data-shape="ThreadsList"] .timestamp {
+    display: block;
+    font-size: 12px;
     overflow: hidden;
     margin-inline-start: auto;
+    align-self: flex-start;
+    position: initial;
+    inset: auto;
+    width: unset;
+    text-align: initial;
     text-overflow: ellipsis;
+}
+
+.root[data-shape="ThreadsList"][data-layout="group"]:hover .line {
+    background-color: inherit;
+    box-shadow: none;
 }

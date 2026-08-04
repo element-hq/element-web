@@ -9,6 +9,7 @@ import React from "react";
 import classNames from "classnames";
 import { fn } from "storybook/test";
 import { Avatar } from "@vector-im/compound-web";
+import { ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { useMockedViewModel } from "../../../../core/viewmodel";
 import { useEventPresentation } from "../../EventPresentation";
@@ -23,6 +24,7 @@ import { ReactionsRowButtonView } from "../reactions/ReactionsRowButton";
 import { type ReactionsRowButtonTooltipViewModel } from "../reactions/ReactionsRowButtonTooltip";
 import {
     ThreadSummaryView,
+    ThreadMessagePreviewView,
     type ThreadMessagePreviewViewSnapshot,
 } from "./ThreadSummary/ThreadSummaryView";
 import styles from "./EventTileView.stories.module.css";
@@ -41,20 +43,20 @@ export const Slot = ({
 
     if (typeof child.type === "string") {
         return React.cloneElement(child, {
-            className: classNames(styles.slot, child.props.className, className),
+            "className": classNames(styles.slot, child.props.className, className),
             "data-story-boundary": storyBoundary,
         });
     }
 
     return React.cloneElement(child, {
-        className: classNames(styles.slot, child.props.className, className),
+        "className": classNames(styles.slot, child.props.className, className),
         storyBoundary,
         "data-story-boundary": storyBoundary,
     });
 };
 
 type StoryBoundary = HTMLElement;
-type StorySlotProps = { className?: string; storyBoundary?: string; "data-story-boundary"?: string };
+type StorySlotProps = { "className"?: string; "storyBoundary"?: string; "data-story-boundary"?: string };
 
 const getBoundary = (target: EventTarget | null, root: HTMLElement): StoryBoundary | null => {
     if (!(target instanceof HTMLElement)) return null;
@@ -102,9 +104,7 @@ export const StoryDebugFrame = ({ children }: React.PropsWithChildren): React.Re
             {activeBoundary && (
                 <div className={styles.debugTooltip} role="status">
                     {activeBoundary.dataset.storyBoundary ??
-                        (activeBoundary.classList.contains("storyEventTile")
-                            ? "EventTileView"
-                            : "EventTileView.line")}
+                        (activeBoundary.classList.contains("storyEventTile") ? "EventTileView" : "EventTileView.line")}
                 </div>
             )}
         </div>
@@ -146,10 +146,7 @@ export const StorySender = ({
     className?: string;
     storyBoundary?: string;
 }): React.ReactElement => {
-    const vm = useMockedViewModel(
-        { displayName: name, displayIdentifier: id, emphasizeDisplayName: true },
-        {},
-    );
+    const vm = useMockedViewModel({ displayName: name, displayIdentifier: id, emphasizeDisplayName: true }, {});
     return (
         <span className={styles.storyBoundaryHost} data-story-boundary={storyBoundary}>
             <DisambiguatedProfileView vm={vm} className={className} />
@@ -220,21 +217,21 @@ export const StoryFooter = ({ className, storyBoundary }: StorySlotProps): React
     );
     const thumbsUpVm = useMockedViewModel(
         {
-            content: "👍",
-            count: 2,
-            isSelected: false,
+            "content": "👍",
+            "count": 2,
+            "isSelected": false,
             "aria-label": "Thumbs up, 2 reactions",
-            tooltipVm: useStoryReactionTooltipVm("Thumbs up"),
+            "tooltipVm": useStoryReactionTooltipVm("Thumbs up"),
         },
         { onClick: fn() },
     );
     const heartVm = useMockedViewModel(
         {
-            content: "❤️",
-            count: 1,
-            isSelected: true,
+            "content": "❤️",
+            "count": 1,
+            "isSelected": true,
             "aria-label": "Red heart, 1 reaction",
-            tooltipVm: useStoryReactionTooltipVm("Red heart"),
+            "tooltipVm": useStoryReactionTooltipVm("Red heart"),
         },
         { onClick: fn() },
     );
@@ -276,11 +273,21 @@ export const StoryThreadInfo = ({ className, storyBoundary }: StorySlotProps): R
 
     return <ThreadSummaryView vm={threadSummaryVm} className={className} data-story-boundary={storyBoundary} />;
 };
+
+/** The ThreadsList view uses the compact inline replies preview, not ThreadSummaryView. */
+export const StoryThreadListInfo = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => {
+    const previewVm = useMockedViewModel(storyThreadPreview, {});
+
+    return (
+        <div className={classNames(styles.threadListInfo, className)} data-story-boundary={storyBoundary}>
+            <ThreadsIcon className={styles.threadListIcon} />
+            <span className={styles.threadListReplies}>3</span>
+            <ThreadMessagePreviewView vm={previewVm} />
+        </div>
+    );
+};
 export const StoryReceipt = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => (
-    <span
-        className={classNames(styles.receipt, className)}
-        data-story-boundary={storyBoundary}
-    >
+    <span className={classNames(styles.receipt, className)} data-story-boundary={storyBoundary}>
         <span className={styles.readReceiptGroup}>
             <button type="button" className={styles.readReceiptButton} aria-label="Read by Alex and Taylor">
                 <span className={styles.readReceiptContainer} aria-hidden="true">
@@ -335,17 +342,61 @@ const baseRoot: EventTileViewProps["root"] = {
 };
 
 export const roomSlots: EventTileViewProps["slots"] = {
-    sender: <Slot name="sender" as="div"><StorySender /></Slot>,
-    avatar: <Slot name="avatar"><StoryAvatar /></Slot>,
-    body: <Slot name="body" as="div"><StoryBody /></Slot>,
-    timestamp: <Slot name="timestamp"><StoryTimestamp /></Slot>,
-    padlock: <Slot name="padlock"><StoryPadlock /></Slot>,
-    replyChain: <Slot name="replyChain" as="div"><StoryReplyChain /></Slot>,
-    actionBar: <Slot name="actionBar" as="div"><StoryActionBar /></Slot>,
-    footer: <Slot name="footer" as="div"><StoryFooter /></Slot>,
-    threadInfo: <Slot name="threadInfo" as="div"><StoryThreadInfo /></Slot>,
-    receipt: <Slot name="receipt"><StoryReceipt /></Slot>,
-    contextMenu: <Slot name="contextMenu"><StoryContextMenu /></Slot>,
+    sender: (
+        <Slot name="sender" as="div">
+            <StorySender />
+        </Slot>
+    ),
+    avatar: (
+        <Slot name="avatar">
+            <StoryAvatar />
+        </Slot>
+    ),
+    body: (
+        <Slot name="body" as="div">
+            <StoryBody />
+        </Slot>
+    ),
+    timestamp: (
+        <Slot name="timestamp">
+            <StoryTimestamp />
+        </Slot>
+    ),
+    padlock: (
+        <Slot name="padlock">
+            <StoryPadlock />
+        </Slot>
+    ),
+    replyChain: (
+        <Slot name="replyChain" as="div">
+            <StoryReplyChain />
+        </Slot>
+    ),
+    actionBar: (
+        <Slot name="actionBar" as="div">
+            <StoryActionBar />
+        </Slot>
+    ),
+    footer: (
+        <Slot name="footer" as="div">
+            <StoryFooter />
+        </Slot>
+    ),
+    threadInfo: (
+        <Slot name="threadInfo" as="div">
+            <StoryThreadInfo />
+        </Slot>
+    ),
+    receipt: (
+        <Slot name="receipt">
+            <StoryReceipt />
+        </Slot>
+    ),
+    contextMenu: (
+        <Slot name="contextMenu">
+            <StoryContextMenu />
+        </Slot>
+    ),
 };
 
 export type EventTileStoryProps = Omit<EventTileViewProps, "root"> & {
@@ -416,7 +467,12 @@ function EventTileViewStoryContent({
                       timestamp,
                       actionBar: showActionBar ? props.slots?.actionBar : undefined,
                   }
-                : { ...props.slots, actionBar: showActionBar ? props.slots?.actionBar : undefined };
+                : {
+                      ...props.slots,
+                      actionBar: showActionBar ? props.slots?.actionBar : undefined,
+                      // The application Thread rendering branch places no thread-info slot.
+                      threadInfo: shape === "Thread" ? undefined : props.slots?.threadInfo,
+                  };
 
         return (
             <EventTileView
@@ -432,7 +488,13 @@ function EventTileViewStoryContent({
                     ...baseRoot,
                     id: `${baseRoot.id}-${suffix}`,
                     scrollToken: `${baseRoot.scrollToken}-${suffix}`,
-                    data: { ...baseRoot.data, eventId: `${baseRoot.data.eventId}-${suffix}`, layout, shape, isOwnEvent },
+                    data: {
+                        ...baseRoot.data,
+                        eventId: `${baseRoot.data.eventId}-${suffix}`,
+                        layout,
+                        shape,
+                        isOwnEvent,
+                    },
                     state: tileState,
                 }}
                 onMouseEnter={(event) => {

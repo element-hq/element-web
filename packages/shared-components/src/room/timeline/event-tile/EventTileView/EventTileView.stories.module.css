@@ -129,6 +129,30 @@
     min-width: 0;
 }
 
+.threadListInfo {
+    display: flex;
+    position: relative;
+    align-items: center;
+    margin-top: var(--cpd-space-2x, 8px);
+    font: var(--cpd-font-body-sm-regular);
+}
+
+.threadListIcon {
+    display: inline-block;
+    flex: 0 0 18px;
+    width: 18px;
+    height: 18px;
+    color: var(--cpd-color-icon-secondary, #626a73);
+}
+
+.threadListReplies {
+    position: relative;
+    padding: 0 var(--cpd-space-3x, 12px) 0 var(--cpd-space-2x, 8px);
+    color: var(--cpd-color-text-secondary, #626a73);
+    font-weight: var(--cpd-font-weight-semibold, 600);
+    white-space: nowrap;
+}
+
 /* Match the application IRC profile treatment without adding application
    selectors to the shared EventTileView stylesheet. */
 .ircSender {
@@ -163,6 +187,15 @@
     align-items: center;
     color: var(--cpd-color-text-secondary, #626a73);
     font-size: 12px;
+}
+
+.notificationDot {
+    display: block;
+    flex: 0 0 8px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--cpd-color-icon-primary, #17191c);
 }
 
 .timestamp {
@@ -368,18 +401,6 @@
 .addReactionButton svg {
     width: 16px;
     height: 16px;
-}
-
-.badge {
-    display: inline-flex;
-    align-items: center;
-    min-height: 18px;
-    padding-inline: 6px;
-    border-radius: 9px;
-    color: #fff;
-    background: #d34b4b;
-    font-size: 11px;
-    font-weight: 600;
 }
 
 .padlock {
