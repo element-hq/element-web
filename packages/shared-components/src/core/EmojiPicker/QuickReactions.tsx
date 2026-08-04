@@ -18,7 +18,7 @@ import { type ButtonEvent } from "./RovingButton";
 import styles from "./EmojiPicker.module.css";
 import { Heading } from "@vector-im/compound-web";
 
-// We use the variation-selector Heart in Quick Reactions for some reason
+// NB. This is the variation-selector Heart in Quick Reactions as per the spec)
 const QUICK_REACTIONS = ["👍", "👎", "😄", "🎉", "😕", "❤️", "🚀", "👀"].map((emoji) => {
     const data = getEmojiFromUnicode(emoji);
     if (!data) {
