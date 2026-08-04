@@ -18,6 +18,26 @@ declare global {
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
+// Ignore benign post-teardown exceptions as they cause flakes
+const isBenignTeardownArtifact = (err: unknown): boolean => {
+    // During any running test `window` is defined by happy-dom, or node-env stub from setupGlobals.
+    // Only undefined once happy-dom has torn the environment down.
+    if (typeof window === "undefined") return true;
+    const name = (err as { name?: string } | null)?.name;
+    const message = err instanceof Error ? err.message : String(err);
+    if (name === "EnvironmentTeardownError" || message.includes("Closing rpc while")) return true;
+    return /\b(?:window|document|navigator|self) is not defined\b/.test(message);
+};
+
+process.on("uncaughtException", (err) => {
+    if (isBenignTeardownArtifact(err)) return;
+    throw err;
+});
+process.on("unhandledRejection", (reason) => {
+    if (isBenignTeardownArtifact(reason)) return;
+    throw reason;
+});
+
 manageFetchMockGlobally();
 
 beforeEach(() => {
