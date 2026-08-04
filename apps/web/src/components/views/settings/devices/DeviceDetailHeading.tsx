@@ -122,8 +122,8 @@ export const DeviceDetailHeading: React.FC<Props> = ({ device, saveDeviceName })
         <DeviceNameEditor device={device} saveDeviceName={saveDeviceName} stopEditing={stopEditing} />
     ) : (
         <div className="mx_DeviceDetailHeading" data-testid="device-detail-heading">
-            <Heading size="4">
-                <span aria-live="polite">{device.display_name || device.device_id}</span>
+            <Heading size="4" aria-live="polite">
+                {device.display_name || device.device_id}
             </Heading>
             <AccessibleButton
                 ref={renameButtonRef}
