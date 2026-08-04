@@ -14,9 +14,15 @@ import classNames from "classnames";
 import styles from "./EmojiPicker.module.css";
 
 interface IProps {
+    /**
+     * The emoji to preview.
+     */
     emoji: Emoji;
 }
 
+/**
+ * A preview of the selected emoji, showing the emoji itself, its name, and its shortcode.
+ */
 export const Preview: React.FC<IProps> = ({ emoji }) => {
     const {
         unicode,
