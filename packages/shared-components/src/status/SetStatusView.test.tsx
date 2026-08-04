@@ -48,12 +48,12 @@ describe("SetStatusView", () => {
 
         await userEvent.click(screen.getByRole("button", { name: "Choose Emoji" }));
         // Pick from the always-rendered quick reactions row
-        await userEvent.click(await screen.findByText("🎉"));
+        await userEvent.click(await screen.findByText("🤩"));
 
-        await userEvent.type(screen.getByRole("textbox", { name: "What's your status?" }), "Party time");
+        await userEvent.type(screen.getByRole("textbox", { name: "What's your status?" }), "Starstruck");
         await userEvent.click(await screen.findByRole("button", { name: "Save" }));
 
-        expect(vm.setStatus).toHaveBeenCalledWith({ emoji: "🎉", text: "Party time" });
+        expect(vm.setStatus).toHaveBeenCalledWith({ emoji: "🤩", text: "Starstruck" });
     });
 
     it("returns to the set status prompt if the custom editor is cancelled", async () => {
