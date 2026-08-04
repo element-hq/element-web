@@ -135,10 +135,9 @@ export default function NotificationSettings2(): JSX.Element {
                 </Form.Root>
                 <SettingsSubsection
                     heading={
-                        <SettingsSubsectionHeading
-                            heading={_t("settings|notifications|default_setting_section")}
-                            as="h2"
-                        />
+                        <SettingsSubsectionHeading as="h2">
+                            {_t("settings|notifications|default_setting_section")}
+                        </SettingsSubsectionHeading>
                     }
                     description={_t("settings|notifications|default_setting_description")}
                 >
@@ -167,10 +166,9 @@ export default function NotificationSettings2(): JSX.Element {
                 </SettingsSubsection>
                 <SettingsSubsection
                     heading={
-                        <SettingsSubsectionHeading
-                            heading={_t("settings|notifications|play_sound_for_section")}
-                            as="h2"
-                        />
+                        <SettingsSubsectionHeading as="h2">
+                            {_t("settings|notifications|play_sound_for_section")}
+                        </SettingsSubsectionHeading>
                     }
                     description={_t("settings|notifications|play_sound_for_description")}
                 >
@@ -218,7 +216,11 @@ export default function NotificationSettings2(): JSX.Element {
                     />
                 </SettingsSubsection>
                 <SettingsSubsection
-                    heading={<SettingsSubsectionHeading heading={_t("settings|notifications|other_section")} as="h2" />}
+                    heading={
+                        <SettingsSubsectionHeading as="h2">
+                            {_t("settings|notifications|other_section")}
+                        </SettingsSubsectionHeading>
+                    }
                 >
                     <LabelledCheckbox
                         label={_t("settings|notifications|invites")}
@@ -265,7 +267,9 @@ export default function NotificationSettings2(): JSX.Element {
                 </SettingsSubsection>
                 <SettingsSubsection
                     heading={
-                        <SettingsSubsectionHeading heading={_t("settings|notifications|mentions_keywords")} as="h2" />
+                        <SettingsSubsectionHeading as="h2">
+                            {_t("settings|notifications|mentions_keywords")}
+                        </SettingsSubsectionHeading>
                     }
                     description={_t(
                         "settings|notifications|keywords",

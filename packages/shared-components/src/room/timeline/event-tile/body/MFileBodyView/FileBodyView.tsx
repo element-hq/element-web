@@ -257,6 +257,7 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
                                  * We'll use it to learn how the download button
                                  * would have been styled if it was rendered inline.
                                  * this violates multiple eslint rules so ignore it completely */}
+                                {/* oxlint-disable-next-line jsx-a11y/anchor-is-valid jsx-a11y/anchor-has-content */}
                                 <Button size="md" kind="secondary" Icon={DownloadIcon} as="a" ref={refLink} />
                             </div>
                             {/*

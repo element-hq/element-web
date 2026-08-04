@@ -13,18 +13,18 @@ import { SettingsSubsectionHeading } from "../../../../../../src/components/view
 
 describe("<SettingsSubsectionHeading />", () => {
     const defaultProps = {
-        heading: "test",
+        children: "test",
     };
     const getComponent = (props = {}) => render(<SettingsSubsectionHeading {...defaultProps} {...props} />);
 
-    it("renders without children", () => {
+    it("renders without contextMenu", () => {
         const { container } = getComponent();
         expect({ container }).toMatchSnapshot();
     });
 
-    it("renders with children", () => {
-        const children = <a href="/#">test</a>;
-        const { container } = getComponent({ children });
+    it("renders with contextMenu", () => {
+        const contextMenu = <a href="/#">test</a>;
+        const { container } = getComponent({ contextMenu });
         expect({ container }).toMatchSnapshot();
     });
 });

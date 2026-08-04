@@ -57,6 +57,8 @@ export function PillInput({
     const hasChildren = Children.toArray(children).length > 0;
 
     return (
+        // This is just a mouse shortcut, the input is keyboard accessible
+        // oxlint-disable-next-line jsx-a11y/click-events-have-key-events
         <Flex
             {...props}
             gap="var(--cpd-space-1x)"

@@ -50,7 +50,6 @@ export const RoomKickButton = ({
 
     return (
         <MenuItem
-            role="button"
             onSelect={async (ev) => {
                 ev.preventDefault();
                 vm.onKickClick();
@@ -68,7 +67,6 @@ const RedactMessagesButton: React.FC<IBaseProps> = ({ member }) => {
 
     return (
         <MenuItem
-            role="button"
             onSelect={async (ev) => {
                 ev.preventDefault();
                 vm.onRedactAllMessagesClick();
@@ -91,7 +89,6 @@ export const BanToggleButton = ({
 
     return (
         <MenuItem
-            role="button"
             onSelect={async (ev) => {
                 ev.preventDefault();
                 vm.onBanOrUnbanClick();
@@ -125,7 +122,6 @@ const MuteToggleButton: React.FC<IBaseRoomProps> = ({
 
     return (
         <MenuItem
-            role="button"
             onSelect={async (ev) => {
                 ev.preventDefault();
                 vm.onMuteButtonClick();
