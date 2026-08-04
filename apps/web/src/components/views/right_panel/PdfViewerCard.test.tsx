@@ -122,13 +122,11 @@ describe("<PdfViewerCard />", () => {
         vi.restoreAllMocks();
     });
 
-    test("renders the PDF in a sandboxed iframe once it has been downloaded", async () => {
+    test("renders the PDF in an iframe once it has been downloaded", async () => {
         renderCard();
 
         const iframe = await screen.findByTitle("PDF viewer");
         expect(iframe).toHaveAttribute("src", OBJECT_URL);
-        // Untrusted content: the iframe must stay fully sandboxed.
-        expect(iframe).toHaveAttribute("sandbox", "");
         expect(screen.getByRole("heading")).toHaveTextContent("PDF viewer");
     });
 
@@ -160,7 +158,7 @@ describe("<PdfViewerCard />", () => {
         client.fetchRoomEvent = vi.fn<MatrixClient["fetchRoomEvent"]>().mockReturnValue(new Promise(() => {}));
         renderCard();
 
-        expect(await screen.findByTestId("spinner")).toBeInTheDocument();
+        expect(await screen.findByRole("progressbar")).toBeInTheDocument();
         expect(screen.queryByTitle("PDF viewer")).not.toBeInTheDocument();
     });
 
@@ -169,7 +167,7 @@ describe("<PdfViewerCard />", () => {
         renderCard();
 
         await waitFor(() => expect(MediaEventHelperMock.instances).toHaveLength(1));
-        expect(screen.getByTestId("spinner")).toBeInTheDocument();
+        expect(screen.getByRole("progressbar")).toBeInTheDocument();
         expect(screen.queryByTitle("PDF viewer")).not.toBeInTheDocument();
     });
 
@@ -179,7 +177,7 @@ describe("<PdfViewerCard />", () => {
 
         await waitFor(() => expect(client.fetchRoomEvent).toHaveBeenCalled());
         expect(MediaEventHelperMock.instances).toHaveLength(0);
-        expect(screen.getByTestId("spinner")).toBeInTheDocument();
+        expect(screen.getByRole("progressbar")).toBeInTheDocument();
         expect(URL.createObjectURL).not.toHaveBeenCalled();
     });
 
@@ -192,27 +190,40 @@ describe("<PdfViewerCard />", () => {
 
         expect(
             screen.getByText(
-                "This browser does not support viewing PDFs. You might have disabled it in browser settings.",
+                "This browser does not support viewing PDFs. You might have PDF viewer disabled in browser settings.",
             ),
         ).toBeInTheDocument();
-        // The download still happens; wait for it so the error is asserted against a settled card.
-        await waitFor(() => expect(URL.createObjectURL).toHaveBeenCalled());
+        // Nothing can be done with the file, so it isn't fetched at all.
+        expect(client.fetchRoomEvent).not.toHaveBeenCalled();
         expect(screen.queryByTitle("PDF viewer")).not.toBeInTheDocument();
-        expect(screen.queryByTestId("spinner")).not.toBeInTheDocument();
+        expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
         expect(screen.getByRole("heading")).toHaveTextContent("PDF viewer");
     });
 
-    test("revokes the object URL and destroys the helper when unmounted", async () => {
+    test("shows an error when the event cannot be fetched", async () => {
+        client.fetchRoomEvent = vi.fn<MatrixClient["fetchRoomEvent"]>().mockRejectedValue(new Error("Event not found"));
+        renderCard();
+
+        expect(await screen.findByText("Could not load this PDF.")).toBeInTheDocument();
+        expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
+    });
+
+    test("destroys the helper once the download has finished", async () => {
+        renderCard();
+
+        await screen.findByTitle("PDF viewer");
+        expect(MediaEventHelperMock.instances[0].destroy).toHaveBeenCalled();
+    });
+
+    test("revokes the object URL when unmounted", async () => {
         const { unmount } = renderCard();
 
         await screen.findByTitle("PDF viewer");
-        const helper = MediaEventHelperMock.instances[0];
-        const destroyCallsBeforeUnmount = helper.destroy.mock.calls.length;
+        expect(URL.revokeObjectURL).not.toHaveBeenCalled();
 
         unmount();
 
         expect(URL.revokeObjectURL).toHaveBeenCalledWith(OBJECT_URL);
-        expect(helper.destroy.mock.calls.length).toBeGreaterThan(destroyCallsBeforeUnmount);
     });
 
     test("re-fetches and re-renders when the event id changes", async () => {

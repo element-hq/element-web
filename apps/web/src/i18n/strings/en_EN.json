@@ -1885,7 +1885,8 @@
         "extensions_empty_title": "Boost productivity with more tools, widgets and bots",
         "files_button": "Files",
         "pdf_viewer": {
-            "browser_not_supported": "This browser does not support viewing PDFs. You might have disabled it in browser settings.",
+            "browser_not_supported": "This browser does not support viewing PDFs. You might have PDF viewer disabled in browser settings.",
+            "load_failed": "Could not load this PDF.",
             "title": "PDF viewer"
         },
         "pinned_messages": {
