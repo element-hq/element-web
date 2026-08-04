@@ -27,7 +27,6 @@ import { FileDownloader } from "../../utils/FileDownloader";
 import { type MediaEventHelper } from "../../utils/MediaEventHelper";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
-import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
 
 export interface FileBodyViewModelProps {
@@ -257,6 +256,10 @@ export class FileBodyViewModel
 
     public onInfoClick = async (): Promise<void> => {
         if (this.content.info?.mimetype === "application/pdf") {
+            // Lazy-loaded to avoid a circular import: RightPanelStore pulls in the store graph
+            // (via SDKContextClass), which reaches back into the message-rendering tree that this
+            // view model is part of, breaking module initialisation. See MBodyFactory import chain.
+            const { default: RightPanelStore } = await import("../../stores/right-panel/RightPanelStore");
             RightPanelStore.instance.pushCard(
                 {
                     phase: RightPanelPhases.PdfViewer,
