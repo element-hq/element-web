@@ -20,6 +20,7 @@ export default defineConfig({
     outputDir: "playwright/test-results",
     workers: 1,
     retries: process.env.CI ? 2 : 0,
+    maxFailures: process.env.CI ? 2 : undefined,
     reporter: process.env.CI ? [["blob"], ["github"]] : [["html", { outputFolder: "playwright/html-report" }]],
     snapshotDir: "playwright/snapshots",
     snapshotPathTemplate: "{snapshotDir}/{testFilePath}/{arg}-{platform}{ext}",
