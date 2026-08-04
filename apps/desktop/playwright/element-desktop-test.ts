@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { _electron as electron, test as base, expect as baseExpect, type ElectronApplication } from "@playwright/test";
 import fs from "node:fs/promises";
-import path, { dirname } from "node:path";
+import path from "node:path";
 import os from "node:os";
 import { fileURLToPath } from "node:url";
 import { PassThrough } from "node:stream";
@@ -44,7 +44,7 @@ interface Fixtures {
     stderr: CapturedPassThrough;
 }
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export const test = base.extend<Fixtures>({
     extraEnv: {},
