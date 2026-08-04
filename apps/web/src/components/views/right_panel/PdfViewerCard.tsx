@@ -1,8 +1,15 @@
-import React, { JSX, useEffect, useMemo, useState } from "react";
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE in the repository root for full details.
+*/
+
+import React, { type JSX, useEffect, useMemo, useState } from "react";
 import BaseCard from "./BaseCard";
 
 import { _t } from "../../../languageHandler";
-import { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
 import Spinner from "../elements/Spinner";
@@ -29,7 +36,7 @@ export function PdfViewerCard({ eventId, onClose, room }: Props): JSX.Element | 
 
     useEffect(() => () => helper && helper.destroy());
 
-    let [url, setUrl] = useState<string | null>(null);
+    const [url, setUrl] = useState<string | null>(null);
 
     useEffect(() => {
         if (helper === undefined) return setUrl(null);
@@ -61,7 +68,7 @@ export function PdfViewerCard({ eventId, onClose, room }: Props): JSX.Element | 
                     <Spinner />
                 </div>
             );
-        else card = <iframe src={url} sandbox=""></iframe>;
+        else card = <iframe src={url} title={_t("right_panel|pdf_viewer|title")} sandbox=""></iframe>;
     } else {
         card = (
             <div className="mx_PdfViewerCard_Error">
