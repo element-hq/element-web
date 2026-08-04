@@ -8703,7 +8703,7 @@ packages:
     engines: {node: '>=12'}
 
   eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/4fbcbb4849a67c5f7343316eb9136daf9f281178#path:/eslint:
-    resolution: {gitHosted: true, integrity: sha512-/6tu+jAHUXe7U15Dl7qtGsAsEYS1onyrICN/ue0m9AgYyFKfXJgqwpA4w+Z1R+1Jfa0Ah712qjbVF5P5p96bOQ==, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/4fbcbb4849a67c5f7343316eb9136daf9f281178}
+    resolution: {gitHosted: true, path: /eslint, integrity: sha512-/6tu+jAHUXe7U15Dl7qtGsAsEYS1onyrICN/ue0m9AgYyFKfXJgqwpA4w+Z1R+1Jfa0Ah712qjbVF5P5p96bOQ==, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/4fbcbb4849a67c5f7343316eb9136daf9f281178}
     version: 0.0.0
 
   eslint-plugin-storybook@10.5.4:
