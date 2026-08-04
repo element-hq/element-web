@@ -21,8 +21,7 @@ import { NotificationLevel } from "../../../../../src/stores/notifications/Notif
 import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
 
 jest.mock("../../../../../src/stores/spaces/SpaceStore", () => {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const EventEmitter = require("events");
+    const EventEmitter = jest.requireActual("events");
     class MockSpaceStore extends EventEmitter {
         activeSpace: SpaceKey = "!space1";
         setActiveSpace = jest.fn();

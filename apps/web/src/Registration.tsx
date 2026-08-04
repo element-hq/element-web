@@ -56,6 +56,7 @@ export async function startAnyRegistrationFlow(
                           modal.close();
                           dis.dispatch({ action: "start_registration", screenAfterLogin: options.screen_after });
                       }}
+                      type="button"
                   >
                       {_t("auth|register_action")}
                   </button>,

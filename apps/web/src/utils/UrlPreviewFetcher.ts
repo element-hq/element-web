@@ -212,17 +212,6 @@ export class UrlPreviewFetcher {
      * Convert an MSC4095 URL preview bundle item to a UrlPreview
      */
     public previewFromBundle(single: UnstableBundledUrlPreviewSingle): UrlPreview {
-        // missing fields from the bundle because backend does provide it:
-        // - siteName (can be computed)
-        // - favicon
-        // - media is a video or audio?
-        // TODO in next PR: URL previews in encrypted chat?
-        const hasImage =
-            typeof single["og:image"] === "string" &&
-            typeof single["og:image:type"] === "string" &&
-            typeof single["og:image:width"] === "number" &&
-            typeof single["og:image:height"] === "number";
-
         const preview: UrlPreview = {
             link: single.matched_url,
             title: single["og:title"] ?? single.matched_url,
@@ -232,7 +221,17 @@ export class UrlPreviewFetcher {
             ogUrl: single["og:url"],
         };
 
-        if (hasImage) {
+        // missing fields from the bundle because backend does provide it:
+        // - siteName (can be computed)
+        // - favicon
+        // - media is a video or audio?
+        // TODO in next PR: URL previews in encrypted chat?
+        if (
+            typeof single["og:image"] === "string" &&
+            typeof single["og:image:type"] === "string" &&
+            typeof single["og:image:width"] === "number" &&
+            typeof single["og:image:height"] === "number"
+        ) {
             const media = mediaFromMxc(single["og:image"], this.client);
             const thumb = media.getThumbnailOfSourceHttp(PREVIEW_WIDTH_PX, PREVIEW_HEIGHT_PX, "scale");
 
@@ -245,10 +244,10 @@ export class UrlPreviewFetcher {
             preview.image = {
                 imageThumb: thumb,
                 imageFull: media.srcHttp,
-                imageType: single["og:image:type"] as string,
-                mxcImageFull: single["og:image"] as string,
-                width: single["og:image:width"] as number,
-                height: single["og:image:height"] as number,
+                imageType: single["og:image:type"],
+                mxcImageFull: single["og:image"],
+                width: single["og:image:width"],
+                height: single["og:image:height"],
                 playable: false, // TODO: do we know?
             };
         }
