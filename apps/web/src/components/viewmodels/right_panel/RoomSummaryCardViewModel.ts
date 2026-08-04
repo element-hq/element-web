@@ -122,7 +122,7 @@ const useIsDirectMessage = (room: Room): boolean => {
 
     useEffect(() => {
         for (const [, dmRoomList] of Object.entries(directRoomsList)) {
-            if (dmRoomList.includes(room?.roomId ?? "")) {
+            if (Array.isArray(dmRoomList) && dmRoomList.includes(room?.roomId ?? "")) {
                 setDirectMessage(true);
                 break;
             }
