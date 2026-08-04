@@ -25,6 +25,7 @@ function renderView(entries: MessageComposerUrlPreviewSnapshotEntry[], collapsed
     const snapshot: MessageComposerUrlPreviewSnapshot = {
         content: entries.map((entry) => entry.matched_url).join(" "),
         entries,
+        isModified: true,
     };
     const vm = new MockViewModel(snapshot);
     return render(
@@ -54,6 +55,7 @@ describe("MessageComposerUrlPreview", () => {
         const snapshot: MessageComposerUrlPreviewSnapshot = {
             content: "https://matrix.org",
             entries: Default.args.entries!,
+            isModified: true,
         };
         const vm = new MockViewModel(snapshot);
         const { container } = render(

@@ -31,6 +31,7 @@ exports[`MessageComposerUrlPreviewViewModel > should preview a URL with media 1`
       "status": "loaded",
     },
   ],
+  "isModified": true,
 }
 `;
 
@@ -55,5 +56,6 @@ exports[`MessageComposerUrlPreviewViewModel > should preview a valid URL in text
       "status": "loaded",
     },
   ],
+  "isModified": true,
 }
 `;

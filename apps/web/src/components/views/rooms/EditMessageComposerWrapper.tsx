@@ -1,24 +1,30 @@
-import React from "react";
+/*
+Copyright 2026 Element Creations Ltd.
 
-import { MatrixClientProps } from "../../../contexts/MatrixClientContext";
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE in the repository root for full details.
+*/
+
+import React, { type JSX } from "react";
+
+import { type MatrixClientProps } from "../../../contexts/MatrixClientContext";
 import { useSettingValue } from "../../../hooks/useSettings";
-import EditorStateTransfer from "../../../utils/EditorStateTransfer";
+import type EditorStateTransfer from "../../../utils/EditorStateTransfer";
 import { EditWysiwygComposer } from "./wysiwyg_composer";
 import {
     MessageComposerUrlPreviewViewModel,
-    MessageComposerUrlPreviewViewModelProps,
+    type MessageComposerUrlPreviewViewModelProps,
 } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
 import {
-    MessageComposerUrlPreviewSnapshotEntry,
-    MessageComposerUrlPreviewSnapshotEntryState,
+    type MessageComposerUrlPreviewSnapshotEntry,
     useCreateAutoDisposedViewModel,
     useViewModel,
 } from "@element-hq/web-shared-components";
 import PlatformPeg from "../../../PlatformPeg";
 import { MessageComposerUrlPreviewWrapper } from "./MessageComposerUrlPreview";
 import EditMessageComposer from "./EditMessageComposer";
-import EditorModel from "../../../editor/model";
-import { RoomMessageEventContent } from "../../../../@types/url-preview";
+import type EditorModel from "../../../editor/model";
+import { type RoomMessageEventContent } from "../../../../@types/url-preview";
 import { attachUrlPreviews } from "../../../utils/messages";
 import { UrlPreviewFetcher } from "../../../utils/UrlPreviewFetcher";
 
@@ -28,16 +34,16 @@ interface IEditMessageComposerProps extends MatrixClientProps {
     className?: string;
 }
 
-export function EditMessageComposerWrapper(props: IEditMessageComposerProps) {
+export function EditMessageComposerWrapper(props: IEditMessageComposerProps): JSX.Element {
     const urlPreviewBundleEnabled = useSettingValue("feature_msc4095_url_preview_bundle");
     const content = props.editState.getEvent().getContent<RoomMessageEventContent>();
     const bundleContent = content["com.beeper.linkpreviews"];
     const linksInMessage = MessageComposerUrlPreviewViewModel.linksIn(content.body);
-    const linksInBundle = new Set(bundleContent?.map((entry) => entry.matched_url)) ?? new Set();
+    const linksInBundle = new Set(bundleContent?.map((entry) => entry.matched_url));
 
     const vm = useCreateAutoDisposedViewModel(() => {
         const urlPreviewFetcher = new UrlPreviewFetcher(props.mxClient, props.editState.getEvent().getTs(), true);
-        let urlVmProps: MessageComposerUrlPreviewViewModelProps = {
+        const urlVmProps: MessageComposerUrlPreviewViewModelProps = {
             client: props.mxClient,
             visible: props.showUrlPreview,
             showTooltips: PlatformPeg.get()?.needsUrlTooltips() ?? true,
@@ -80,7 +86,7 @@ export function EditMessageComposerWrapper(props: IEditMessageComposerProps) {
         vm.updateWithText({ content: model.contentPlainText, debounced: true });
     };
 
-    const attachBundles = (newContent: RoomMessageEventContent, messageHasLinks: boolean) => {
+    const attachBundles = (newContent: RoomMessageEventContent, messageHasLinks: boolean): void => {
         attachUrlPreviews(vm.getSnapshot(), newContent, messageHasLinks);
     };
 

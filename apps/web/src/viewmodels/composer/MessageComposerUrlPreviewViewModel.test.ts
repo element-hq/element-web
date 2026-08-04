@@ -61,6 +61,7 @@ describe("MessageComposerUrlPreviewViewModel", () => {
           {
             "content": "",
             "entries": [],
+            "isModified": false,
           }
         `);
     });
