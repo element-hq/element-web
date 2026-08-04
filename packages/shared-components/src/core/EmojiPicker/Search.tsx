@@ -15,13 +15,33 @@ import { RovingTabIndexContext } from "../roving";
 import styles from "./EmojiPicker.module.css";
 
 interface IProps {
+    /**
+     * The current search query.
+     */
     query: string;
+    /**
+     * Called when the search query changes.
+     *
+     * @param value - The new search query
+     */
     onChange: (value: string) => void;
+    /**
+     * Called when the Enter key is pressed in the search input.
+     */
     onEnter: () => void;
+    /**
+     * Called when a key is pressed in the search input.
+     *
+     * @param event - The keyboard event
+     */
     onKeyDown: (event: React.KeyboardEvent) => void;
-    // The id of the element that this search box controls, for aria-controls.
+    /**
+     * The id of the element that this search box controls, for aria-controls.
+     */
     controlsId: string;
-    /** Ref to the search input, owned by the picker so it can inspect focus. */
+    /**
+     * Ref to the search input, owned by the picker so it can inspect focus.
+     */
     inputRef: React.RefObject<HTMLInputElement | null>;
 }
 
