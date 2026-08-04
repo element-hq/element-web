@@ -157,6 +157,17 @@ export class UrlPreviewGroupViewModel
      * for the previously-calculated links.
      */
     private async computeSnapshot(): Promise<void> {
+        // MSC4095: an empty bundled previews array means the sender opted out of previews.
+        const bundledLinkPreviews = this.props.mxEvent.getContent()[BUNDLED_LINK_PREVIEWS];
+        if (Array.isArray(bundledLinkPreviews) && bundledLinkPreviews.length === 0) {
+            this.snapshot.merge({
+                totalPreviewCount: 0,
+                previewsLimited: false,
+                overPreviewLimit: false,
+            });
+            return;
+        }
+
         const loadMedia = this.visibility === PreviewVisibility.Visible;
         let previews: (UrlPreview | null)[] | undefined;
 
