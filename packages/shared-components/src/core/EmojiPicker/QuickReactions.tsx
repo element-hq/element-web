@@ -28,7 +28,16 @@ const QUICK_REACTIONS = ["👍", "👎", "😄", "🎉", "😕", "❤️", "🚀
 });
 
 interface IProps {
+    /**
+     * Set of emojis already selected.
+     */
     selectedEmojis?: Set<string>;
+    /**
+     * Called when an emoji is clicked.
+     *
+     * @param ev - The button event
+     * @param emoji - The emoji that was clicked
+     */
     onClick: (ev: ButtonEvent, emoji: IEmoji) => void;
     getAction?: RovingTabIndexProviderProps["getAction"];
 }
