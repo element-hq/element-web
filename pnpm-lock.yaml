@@ -209,6 +209,9 @@ catalogs:
     '@fontsource/inter':
       specifier: 5.3.0
       version: 5.3.0
+    '@matrix-org/emojibase-bindings':
+      specifier: 1.5.0
+      version: 1.5.0
     '@playwright/test':
       specifier: 1.61.1
       version: 1.61.1
@@ -530,7 +533,7 @@ importers:
         specifier: ^0.37.0
         version: 0.37.0
       '@matrix-org/emojibase-bindings':
-        specifier: ^1.5.0
+        specifier: 'catalog:'
         version: 1.5.0
       '@matrix-org/react-sdk-module-api':
         specifier: ^2.4.0
@@ -1299,7 +1302,7 @@ importers:
         version: '@typescript/typescript6@6.0.2'
       unplugin-dts:
         specifier: 'catalog:'
-        version: 1.0.1(@microsoft/api-extractor@7.58.11)(@typescript/typescript6@6.0.2)(esbuild@0.27.4)(rolldown@1.1.5)(rollup@4.60.1)(vite@8.1.5)(webpack@5.109.0)
+        version: 1.0.1(@microsoft/api-extractor@7.58.11)(@typescript/typescript6@6.0.2)(esbuild@0.27.4)(rolldown@1.1.5)(rollup@4.60.1)(supports-color@7.2.0)(vite@8.1.5)(webpack@5.109.0)
       vite:
         specifier: 'catalog:'
         version: 8.1.5(@types/node@25.9.3)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1)(terser@5.49.0)(yaml@2.9.0)
@@ -1368,7 +1371,7 @@ importers:
         specifier: workspace:*
         version: link:../module-api
       '@matrix-org/emojibase-bindings':
-        specifier: ^1.5.0
+        specifier: 'catalog:'
         version: 1.5.0
       '@matrix-org/spec':
         specifier: ^1.7.0
@@ -1520,7 +1523,7 @@ importers:
         version: '@typescript/typescript6@6.0.2'
       unplugin-dts:
         specifier: 'catalog:'
-        version: 1.0.1(@microsoft/api-extractor@7.58.11)(@typescript/typescript6@6.0.2)(esbuild@0.27.4)(rolldown@1.1.5)(rollup@4.60.1)(vite@8.1.5)(webpack@5.109.0)
+        version: 1.0.1(@microsoft/api-extractor@7.58.11)(@typescript/typescript6@6.0.2)(esbuild@0.27.4)(rolldown@1.1.5)(rollup@4.60.1)(supports-color@7.2.0)(vite@8.1.5)(webpack@5.109.0)
       vite:
         specifier: 'catalog:'
         version: 8.1.5(@types/node@25.9.3)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1)(terser@5.49.0)(yaml@2.9.0)
@@ -8700,7 +8703,7 @@ packages:
     engines: {node: '>=12'}
 
   eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/62eeb10d382a7386953e02f12e3bf87031148ab1#path:/eslint:
-    resolution: {gitHosted: true, path: /eslint, integrity: sha512-IFSuCAiIua6NGcaPUuRwl7f+NlBCgRbjqU2IZO/nNuwc+T75GDgH3QwdMPQWkr9R4SYXTz06H/Ihq5btMMKXVw==, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/62eeb10d382a7386953e02f12e3bf87031148ab1}
+    resolution: {gitHosted: true, integrity: sha512-IFSuCAiIua6NGcaPUuRwl7f+NlBCgRbjqU2IZO/nNuwc+T75GDgH3QwdMPQWkr9R4SYXTz06H/Ihq5btMMKXVw==, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/62eeb10d382a7386953e02f12e3bf87031148ab1}
     version: 0.0.0
 
   eslint-plugin-storybook@10.5.4:
@@ -26399,7 +26402,7 @@ snapshots:
 
   unpipe@1.0.0: {}
 
-  unplugin-dts@1.0.1(@microsoft/api-extractor@7.58.11)(@typescript/typescript6@6.0.2)(esbuild@0.27.4)(rolldown@1.1.5)(rollup@4.60.1)(vite@8.1.5)(webpack@5.109.0):
+  unplugin-dts@1.0.1(@microsoft/api-extractor@7.58.11)(@typescript/typescript6@6.0.2)(esbuild@0.27.4)(rolldown@1.1.5)(rollup@4.60.1)(supports-color@7.2.0)(vite@8.1.5)(webpack@5.109.0):
     dependencies:
       '@rollup/pluginutils': 5.4.0(rollup@4.60.1)
       '@volar/typescript': 2.4.28
