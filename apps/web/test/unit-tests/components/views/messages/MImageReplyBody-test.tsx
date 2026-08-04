@@ -26,8 +26,11 @@ import {
     mockClientMethodsDevice,
     mockClientMethodsServer,
     mockClientMethodsUser,
+    TestSDKContext,
 } from "../../../../test-utils";
 import { useMediaVisible } from "../../../../../src/hooks/useMediaVisible";
+import { SDKContext } from "../../../../../src/contexts/SDKContext";
+import type RightPanelStore from "../../../../../src/stores/right-panel/RightPanelStore";
 
 jest.mock("../../../../../src/customisations/Media", () => ({
     mediaFromContent: jest.fn(),
@@ -152,6 +155,15 @@ describe("<MImageReplyBody />", () => {
         permalinkCreator: new RoomPermalinkCreator(new Room("!room:server", cli, cli.getUserId()!)),
     };
 
+    // The file body fallback takes the right panel store off the SDK context, so one has to be provided.
+    const sdkContext = new TestSDKContext();
+    sdkContext._RightPanelStore = { pushCard: jest.fn() } as unknown as RightPanelStore;
+    const renderOptions = {
+        wrapper: ({ children }: { children: React.ReactNode }) => (
+            <SDKContext.Provider value={sdkContext}>{children}</SDKContext.Provider>
+        ),
+    };
+
     const renderBase = ({
         timelineRenderingType = TimelineRenderingType.Room,
         overrides = {},
@@ -164,6 +176,7 @@ describe("<MImageReplyBody />", () => {
             <RoomContext.Provider value={{ timelineRenderingType } as any}>
                 <ImageBodyBaseInner ref={ref} {...props} {...overrides} />
             </RoomContext.Provider>,
+            renderOptions,
         );
         return { ...result, ref };
     };
@@ -440,6 +453,7 @@ describe("<MImageReplyBody />", () => {
                     setMediaVisible={jest.fn()}
                 />
             </RoomContext.Provider>,
+            renderOptions,
         );
 
         expect(ref.current!.state.contentUrl).toBeNull();
@@ -593,7 +607,7 @@ describe("<MImageReplyBody />", () => {
         const setMediaVisible = jest.fn();
         mockedUseMediaVisible.mockReturnValue([true, setMediaVisible]);
 
-        const { container } = render(<MImageReplyBody {...props} />);
+        const { container } = render(<MImageReplyBody {...props} />, renderOptions);
 
         await waitFor(() => expect(container.querySelector(".mx_MImageReplyBody")).not.toBeNull());
         expect(screen.getByRole("img", { name: "demo image" })).toBeInTheDocument();
