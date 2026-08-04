@@ -243,12 +243,14 @@ if (os.platform() === "linux") {
 // Treat certain warnings as a fatal error
 const FATAL_WARNINGS = [LogMessageByKey.PKG_NOT_ON_DISK, LogMessageByKey.PKG_NOT_FOUND];
 // Otherwise we just burn time running the tests for no reason.
-const prevTransform = log.messageTransformer;
-log.messageTransformer = (message, level) => {
-    if (level === "warn" && FATAL_WARNINGS.some((w) => message.startsWith(w))) {
-        throw new Error(`electron-builder: ${message}`);
-    }
-    return prevTransform?.(message, level) ?? message;
-};
+if (typeof log !== "undefined") {
+    const prevTransform = log.messageTransformer;
+    log.messageTransformer = (message, level) => {
+        if (level === "warn" && FATAL_WARNINGS.some((w) => message.startsWith(w))) {
+            throw new Error(`electron-builder: ${message}`);
+        }
+        return prevTransform?.(message, level) ?? message;
+    };
+}
 
 export default config;
