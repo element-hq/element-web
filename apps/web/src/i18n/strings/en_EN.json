@@ -584,6 +584,10 @@
         "warning": "Warning"
     },
     "composer": {
+        "attachments_animated_format": "%(format)s (animated)",
+        "attachments_item_a11y": "%(fileName)s, attachment %(position)s of %(count)s. Use the arrow keys to reorder.",
+        "attachments_label": "Attachments to send",
+        "attachments_remove": "Remove attachment",
         "autocomplete": {
             "@room_description": "Notify the whole room",
             "command_a11y": "Command Autocomplete",

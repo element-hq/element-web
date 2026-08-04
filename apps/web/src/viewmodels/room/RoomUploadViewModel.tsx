@@ -45,11 +45,14 @@ import { Action } from "../../dispatcher/actions";
 import type { ComposerInsertFilesPayload } from "../../dispatcher/payloads/ComposerInsertFilePayload";
 import { useDispatcher } from "../../hooks/useDispatcher";
 import type { ActionPayload } from "../../dispatcher/payloads";
+import { ComposerAttachment } from "../../models/ComposerAttachment";
 
 const logger = rootLogger.getChild("RoomUploadViewModel");
 
 interface RoomUploadViewSnapshot extends UploadButtonViewSnapshot {
     mayDragAndDropFile: boolean;
+    /** Files staged in the composer, not yet uploaded. */
+    attachments: ComposerAttachment[];
 }
 
 export class RoomUploadViewModel
@@ -57,6 +60,8 @@ export class RoomUploadViewModel
     implements UploadButtonViewActions
 {
     private readonly uploadSelectFns = new Map<string, ComposerApiFileUploadOption["onSelected"]>();
+    /** Serialises the file reads behind attachment descriptions. */
+    private describeQueue: Promise<void> = Promise.resolve();
     public constructor(
         private readonly room: Room,
         private readonly client: MatrixClient,
@@ -72,6 +77,7 @@ export class RoomUploadViewModel
             {
                 options: [],
                 mayDragAndDropFile: false,
+                attachments: [],
             },
         );
         // Initial check.
@@ -140,45 +146,135 @@ export class RoomUploadViewModel
         if (!this.checkCanUpload()) {
             return;
         }
-        const { roomId } = this.room;
-        logger.info("initiateViaInputFiles for", roomId);
         if (!files?.length) return;
-
-        try {
-            await ContentMessages.sharedInstance().sendContentListToRoom(
-                Array.from(files),
-                roomId,
-                this.threadRelation,
-                this.replyToEvent,
-                this.client,
-                this.timelineRenderingType,
-            );
-        } catch (ex) {
-            logger.warn("Failed to handle file upload transfer", ex);
-        }
+        this.stageFiles(Array.from(files));
     };
 
     public initiateViaDataTransfer = async (dataTransfer: DataTransfer): Promise<void> => {
         if (!this.checkCanUpload()) {
             return;
         }
-        const { roomId } = this.room;
-        logger.info("initiateViaDataTransfer for", roomId);
         if (!dataTransfer.files?.length) return;
+        this.stageFiles(Array.from(dataTransfer.files));
+    };
 
+    /** Add files to the composer. They are not uploaded until the message is sent. */
+    public stageFiles(files: File[]): void {
+        logger.info(`Staging ${files.length} attachment(s) for`, this.room.roomId);
+        const staged = files.map((file) => new ComposerAttachment(file));
+        this.snapshot.merge({
+            attachments: [...this.snapshot.current.attachments, ...staged],
+        });
+        // Warm the media config now so that sending does not stall behind a modal spinner.
+        ContentMessages.sharedInstance().prefetchMediaConfig(this.client);
+        this.queueDescriptions(staged);
+        this.dispatcher.dispatch({
+            action: Action.FocusSendMessageComposer,
+            context: this.timelineRenderingType,
+        });
+    }
+
+    /**
+     * Describing an image reads the whole file, so run them one at a time rather than
+     * holding a dropped folder of them in memory at once.
+     */
+    private queueDescriptions(staged: ComposerAttachment[]): void {
+        this.describeQueue = staged.reduce(
+            (queue, attachment) => queue.then(() => this.loadDescription(attachment)),
+            this.describeQueue,
+        );
+    }
+
+    private async loadDescription(attachment: ComposerAttachment): Promise<void> {
+        // It may have been removed or sent while it sat in the queue.
+        if (this.isDisposed || !this.snapshot.current.attachments.includes(attachment)) return;
+
+        let changed = false;
         try {
-            await ContentMessages.sharedInstance().sendContentListToRoom(
-                Array.from(dataTransfer.files),
-                roomId,
+            changed = await attachment.loadDescription();
+        } catch (ex) {
+            logger.warn("Failed to describe attachment", ex);
+            return;
+        }
+        if (!changed || this.isDisposed || !this.snapshot.current.attachments.includes(attachment)) return;
+        this.snapshot.merge({ attachments: [...this.snapshot.current.attachments] });
+    }
+
+    public moveAttachment = (id: string, toIndex: number): void => {
+        const attachments = this.snapshot.current.attachments;
+        const fromIndex = attachments.findIndex((attachment) => attachment.id === id);
+        const clamped = Math.max(0, Math.min(toIndex, attachments.length - 1));
+        if (fromIndex === -1 || fromIndex === clamped) return;
+
+        const reordered = [...attachments];
+        const [moved] = reordered.splice(fromIndex, 1);
+        reordered.splice(clamped, 0, moved);
+        this.snapshot.merge({ attachments: reordered });
+    };
+
+    public removeAttachment = (id: string): void => {
+        const remaining: ComposerAttachment[] = [];
+        for (const attachment of this.snapshot.current.attachments) {
+            if (attachment.id === id) {
+                attachment.dispose();
+            } else {
+                remaining.push(attachment);
+            }
+        }
+        this.snapshot.merge({ attachments: remaining });
+    };
+
+    public get hasAttachments(): boolean {
+        return this.snapshot.current.attachments.length > 0;
+    }
+
+    /**
+     * Upload and send every staged attachment as its own event, in order. Resolves once
+     * they have all been sent, so a trailing text message lands beneath them.
+     */
+    public sendStagedAttachments = async (opts: { includeReply?: boolean } = {}): Promise<boolean> => {
+        const attachments = this.snapshot.current.attachments;
+        if (!attachments.length) return false;
+
+        // Clear first so the composer empties immediately and the files cannot be sent twice.
+        this.snapshot.merge({ attachments: [] });
+
+        let sent = false;
+        try {
+            sent = await ContentMessages.sharedInstance().sendContentListToRoom(
+                attachments.map((attachment) => attachment.file),
+                this.room.roomId,
                 this.threadRelation,
-                this.replyToEvent,
+                opts.includeReply === false ? undefined : this.replyToEvent,
                 this.client,
                 this.timelineRenderingType,
+                // The staging area already showed the user what they are about to send.
+                { skipConfirmation: true },
             );
         } catch (ex) {
-            logger.warn("Failed to handle drag and drop data transfer", ex);
+            logger.warn("Failed to send staged attachments", ex);
         }
+
+        if (!sent) {
+            // The user backed out or it failed, so put the files back rather than dropping
+            // a selection they would have to pick from disk again.
+            logger.info("Staged attachments were not sent; restoring them to the composer");
+            this.snapshot.merge({ attachments: [...attachments, ...this.snapshot.current.attachments] });
+            return false;
+        }
+
+        for (const attachment of attachments) {
+            attachment.dispose();
+        }
+        return true;
     };
+
+    public dispose(): void {
+        for (const attachment of this.snapshot.current.attachments) {
+            attachment.dispose();
+        }
+        super.dispose();
+    }
 
     public onUploadOptionSelected = (type: ComposerApiFileUploadOption["type"]): void => {
         const fn = this.uploadSelectFns.get(type);

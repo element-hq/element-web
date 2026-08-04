@@ -23,6 +23,7 @@ import { createTestClient, flushPromises, mkEvent } from "../test-utils";
 import { BlurhashEncoder } from "../../src/BlurhashEncoder";
 import Modal from "../../src/Modal";
 import ErrorDialog from "../../src/components/views/dialogs/ErrorDialog";
+import UploadConfirmDialog from "../../src/components/views/dialogs/UploadConfirmDialog";
 import { _t } from "../../src/languageHandler";
 
 jest.mock("matrix-encrypt-attachment", () => ({ encryptAttachment: jest.fn().mockResolvedValue({}) }));
@@ -315,6 +316,66 @@ describe("ContentMessages", () => {
                     description: _t("upload_failed_size", { fileName: "fileName" }),
                 }),
             );
+            dialogSpy.mockRestore();
+        });
+    });
+
+    describe("sendContentListToRoom", () => {
+        const roomId = "!roomId:server";
+
+        beforeEach(() => {
+            mocked(doMaybeLocalRoomAction).mockImplementation(
+                <T>(roomId: string, fn: (actualRoomId: string) => Promise<T>) => fn(roomId),
+            );
+            mocked(client.getMediaConfig).mockResolvedValue({});
+            mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
+        });
+
+        it("resolves only once every file has actually been sent", async () => {
+            // Regression: it used to resolve as soon as the uploads were kicked off, so a
+            // message sent straight afterwards landed above the files instead of below them.
+            const files = [new File([], "one.txt"), new File([], "two.txt")];
+
+            await contentMessages.sendContentListToRoom(files, roomId, undefined, undefined, client, undefined, {
+                skipConfirmation: true,
+            });
+
+            expect(client.sendMessage).toHaveBeenCalledTimes(2);
+        });
+
+        it("skips the upload confirmation dialog when asked to", async () => {
+            const dialogSpy = jest.spyOn(Modal, "createDialog");
+
+            await contentMessages.sendContentListToRoom(
+                [new File([], "one.txt")],
+                roomId,
+                undefined,
+                undefined,
+                client,
+                undefined,
+                { skipConfirmation: true },
+            );
+
+            expect(dialogSpy).not.toHaveBeenCalledWith(UploadConfirmDialog, expect.anything(), expect.anything());
+            dialogSpy.mockRestore();
+        });
+
+        it("does not show the media config spinner once the config is prefetched", async () => {
+            contentMessages.prefetchMediaConfig(client);
+            await flushPromises();
+            const dialogSpy = jest.spyOn(Modal, "createDialog");
+
+            await contentMessages.sendContentListToRoom(
+                [new File([], "one.txt")],
+                roomId,
+                undefined,
+                undefined,
+                client,
+                undefined,
+                { skipConfirmation: true },
+            );
+
+            expect(dialogSpy).not.toHaveBeenCalled();
             dialogSpy.mockRestore();
         });
     });
