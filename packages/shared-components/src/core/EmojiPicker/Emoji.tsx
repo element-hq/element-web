@@ -15,6 +15,9 @@ import { RovingButton, type ButtonEvent } from "./RovingButton";
 import styles from "./EmojiPicker.module.css";
 
 interface IProps {
+    /**
+     * The emoji to render.
+     */
     emoji: IEmoji;
     /**
      * Set of which emojis are already selected and should be decorated as such.
