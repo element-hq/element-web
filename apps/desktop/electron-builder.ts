@@ -8,7 +8,7 @@ Please see LICENSE in the repository root for full details.
 import * as os from "node:os";
 import * as fs from "node:fs";
 import * as fsp from "node:fs/promises";
-import * as path from "node:path";
+import path from "node:path";
 import { type Configuration as BaseConfiguration, type BeforeBuildContext } from "electron-builder";
 
 /**

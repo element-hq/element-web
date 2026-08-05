@@ -13,7 +13,7 @@ import {
     RoomViewLifecycle,
     type ViewRoomOpts,
 } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
-import EventEmitter from "events";
+import EventEmitter from "node:events";
 
 import { RoomViewStore } from "../../../src/stores/RoomViewStore";
 import { Action } from "../../../src/dispatcher/actions";
@@ -98,9 +98,7 @@ jest.mock("../../../src/utils/DMRoomMap", () => {
 });
 
 jest.mock("../../../src/stores/WidgetStore", () => {
-    // This mock needs to use a real EventEmitter; require is the only way to import that in a hoisted block
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const EventEmitter = require("events");
+    const EventEmitter = jest.requireActual("events");
     const apps: IApp[] = [];
     const instance = new (class extends EventEmitter {
         getApps() {

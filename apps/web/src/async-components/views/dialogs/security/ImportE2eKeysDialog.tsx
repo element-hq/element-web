@@ -180,7 +180,7 @@ export default class ImportE2eKeysDialog extends React.Component<IProps, IState>
                             value={_t("action|import")}
                             disabled={!this.state.enableSubmit || disableForm}
                         />
-                        <button onClick={this.onCancelClick} disabled={disableForm}>
+                        <button onClick={this.onCancelClick} disabled={disableForm} type="button">
                             {_t("action|cancel")}
                         </button>
                     </div>
