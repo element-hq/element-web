@@ -21,7 +21,7 @@ import {
     StorySender,
     StoryThreadListInfo,
     StoryTimestamp,
-} from "./EventTileView.stories.helpers";
+} from "./EventTileView.story-helpers";
 
 const meta = {
     title: "Timeline/EventTileView",
