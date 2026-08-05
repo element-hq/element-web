@@ -9,7 +9,7 @@ import React, { createRef } from "react";
 import { describe, expect, it, vi } from "vitest";
 
 import { fireEvent, render } from "@test-utils";
-import { EventTileView, type EventTileViewProps } from "./index";
+import { EventTileView, type EventTileViewClassNames, type EventTileViewProps } from "./index";
 
 const renderState: EventTileViewProps["root"] = {
     id: "event-line-1",
@@ -38,6 +38,56 @@ function createProps(overrides: Partial<EventTileViewProps> = {}): EventTileView
             contextMenu: <span data-testid="context-menu">Context menu</span>,
         },
         ...overrides,
+    };
+}
+
+/**
+ * Styling hooks consumed by the web application's EventTile PCSS.
+ *
+ * Keep these names in this test until the application styling is migrated to
+ * shared-component selectors. The shared shell must preserve them alongside
+ * its own module classes.
+ */
+const applicationStylingClasses = {
+    root: "mx_EventTile",
+    line: "mx_EventTile_line",
+    details: "mx_EventTile_details",
+    avatar: "mx_EventTile_avatar",
+    senderDetails: "mx_EventTile_senderDetails",
+    senderDetailsLink: "mx_EventTile_senderDetailsLink",
+    body: "mx_EventTile_body",
+    notificationRoomLabel: "mx_EventTile_truncated",
+    notificationBadge: "mx_NotificationBadge",
+    sender: "mx_DisambiguatedProfile",
+    timestamp: "mx_MessageTimestamp",
+    padlock: "mx_EventTile_e2eIcon",
+    replyChain: "mx_EventTile_reply",
+    actionBar: "mx_MessageActionBar",
+    footer: "mx_EventTile_footer",
+    threadInfo: "mx_ThreadSummary",
+    receipt: "mx_ReadReceiptGroup_container",
+} satisfies Partial<EventTileViewClassNames>;
+
+function createStylingContractSlots(): EventTileViewProps["slots"] {
+    const slot = (name: string): React.ReactElement => (
+        <span data-testid={`styling-contract-${name}`}>{name}</span>
+    );
+
+    return {
+        avatar: slot("avatar"),
+        sender: slot("sender"),
+        body: slot("body"),
+        timestamp: slot("timestamp"),
+        padlock: slot("padlock"),
+        replyChain: slot("replyChain"),
+        actionBar: slot("actionBar"),
+        footer: slot("footer"),
+        threadInfo: slot("threadInfo"),
+        receipt: slot("receipt"),
+        roomAvatar: slot("room-avatar"),
+        notificationRoomLabel: slot("notificationRoomLabel"),
+        notificationBadge: slot("notificationBadge"),
+        contextMenu: slot("contextMenu"),
     };
 }
 
@@ -86,6 +136,84 @@ describe("EventTileView", () => {
         expect(root).toHaveAttribute("data-editing", "true");
         expect(root).toHaveAttribute("data-continuation", "true");
         expect(root).toHaveAttribute("data-last-in-section", "true");
+    });
+
+    it("preserves the application styling contract across rendering modes", () => {
+        const group = render(
+            <EventTileView
+                {...createProps({
+                    classNames: applicationStylingClasses,
+                    slots: createStylingContractSlots(),
+                })}
+            />,
+        );
+        const groupRoot = group.container.firstElementChild!;
+
+        expect(groupRoot).toHaveClass(applicationStylingClasses.root);
+        expect(group.getByTestId("styling-contract-body").parentElement).toHaveClass(applicationStylingClasses.line);
+
+        for (const slot of [
+            "sender",
+            "avatar",
+            "body",
+            "timestamp",
+            "padlock",
+            "replyChain",
+            "actionBar",
+            "footer",
+            "threadInfo",
+            "receipt",
+        ]) {
+            expect(group.getByTestId(`styling-contract-${slot}`)).toHaveClass(
+                applicationStylingClasses[slot as keyof typeof applicationStylingClasses],
+            );
+        }
+
+        const thread = render(
+            <EventTileView
+                {...createProps({
+                    classNames: applicationStylingClasses,
+                    root: { ...renderState, data: { ...renderState.data, shape: "Thread" } },
+                    slots: createStylingContractSlots(),
+                })}
+            />,
+        );
+        expect(thread.container.querySelector(".mx_EventTile_senderDetails")).toHaveClass(
+            applicationStylingClasses.senderDetails,
+        );
+
+        const preview = render(
+            <EventTileView
+                {...createProps({
+                    classNames: applicationStylingClasses,
+                    root: { ...renderState, data: { ...renderState.data, shape: "Notification" } },
+                    slots: createStylingContractSlots(),
+                })}
+            />,
+        );
+        expect(preview.container.querySelector(".mx_EventTile_details")).toHaveClass(
+            applicationStylingClasses.details,
+        );
+        expect(preview.getByTestId("styling-contract-notificationRoomLabel")).toHaveClass(
+            applicationStylingClasses.notificationRoomLabel,
+        );
+        expect(preview.getByTestId("styling-contract-notificationBadge")).toHaveClass(
+            applicationStylingClasses.notificationBadge,
+        );
+        expect(preview.getByTestId("styling-contract-room-avatar")).toHaveClass(applicationStylingClasses.avatar);
+
+        const file = render(
+            <EventTileView
+                {...createProps({
+                    classNames: applicationStylingClasses,
+                    root: { ...renderState, data: { ...renderState.data, shape: "File" } },
+                    slots: createStylingContractSlots(),
+                })}
+            />,
+        );
+        expect(file.container.querySelector(".mx_EventTile_senderDetailsLink")).toHaveClass(
+            applicationStylingClasses.senderDetailsLink,
+        );
     });
 
     it("renders the thread layout in the original slot order", () => {

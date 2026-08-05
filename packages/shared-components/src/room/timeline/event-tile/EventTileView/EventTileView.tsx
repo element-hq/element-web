@@ -198,6 +198,8 @@ export function EventTileView({
         );
     }
 
+    // Default shape: Pinned, Room, Search
+
     // IRC layout: the leading metadata slots precede the line content.
     if (root.data.layout === "irc") {
         return renderRoot(

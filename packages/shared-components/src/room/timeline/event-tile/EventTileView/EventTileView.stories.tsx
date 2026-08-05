@@ -21,10 +21,10 @@ import {
     StorySender,
     StoryThreadListInfo,
     StoryTimestamp,
-} from "./EventTileView.story-fixtures";
+} from "./EventTile.stories.helpers";
 
 const meta = {
-    title: "Timeline/EventTileView/Layouts",
+    title: "Timeline/EventTileView",
     component: EventTileViewStory,
     tags: ["autodocs"],
     render: (args) => <EventTileViewStory {...args} />,
@@ -86,7 +86,7 @@ export const ThreadsList: Story = {
             ),
             notificationBadge: (
                 <Slot name="notificationBadge">
-                    <span className={styles.notificationDot} aria-label="Unread notifications" />
+                    <span className={styles.notificationDot} role="img" aria-label="Unread notifications" />
                 </Slot>
             ),
             threadInfo: (
@@ -140,7 +140,7 @@ export const Notification: Story = {
             ),
             notificationBadge: (
                 <Slot name="notificationBadge">
-                    <span className={styles.notificationDot} aria-label="Unread notifications" />
+                    <span className={styles.notificationDot} role="img" aria-label="Unread notifications" />
                 </Slot>
             ),
             threadInfo: (
@@ -184,6 +184,64 @@ export const File: Story = {
             contextMenu: (
                 <Slot name="contextMenu">
                     <StoryContextMenu />
+                </Slot>
+            ),
+        },
+    },
+};
+
+export const Highlighted: Story = {
+    args: {
+        shape: "Thread",
+        state: { highlighted: true },
+        slots: {
+            sender: (
+                <Slot name="sender">
+                    <StorySender />
+                </Slot>
+            ),
+            avatar: (
+                <Slot name="avatar">
+                    <StoryAvatar />
+                </Slot>
+            ),
+            timestamp: (
+                <Slot name="timestamp">
+                    <StoryTimestamp />
+                </Slot>
+            ),
+            body: (
+                <Slot name="body">
+                    <StoryBody />
+                </Slot>
+            ),
+        },
+    },
+};
+
+export const Selected: Story = {
+    args: {
+        shape: "Thread",
+        state: { selected: true },
+        slots: {
+            sender: (
+                <Slot name="sender">
+                    <StorySender />
+                </Slot>
+            ),
+            avatar: (
+                <Slot name="avatar">
+                    <StoryAvatar />
+                </Slot>
+            ),
+            timestamp: (
+                <Slot name="timestamp">
+                    <StoryTimestamp />
+                </Slot>
+            ),
+            body: (
+                <Slot name="body">
+                    <StoryBody />
                 </Slot>
             ),
         },

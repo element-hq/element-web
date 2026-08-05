@@ -20,16 +20,18 @@
     --event-tile-irc-timestamp-width: 48px;
     --event-tile-irc-right-padding: 5px;
 
-    /* Shared preview, action-bar, bubble, and interaction values. */
-    --event-tile-preview-offset: 48px;
-    --event-tile-action-bar-size: 28px;
-    --event-tile-action-bar-margin: 3px;
-    --event-tile-action-bar-offset: 8px;
+    /* Bubble geometry. */
     --event-tile-bubble-corner-radius: 12px;
     --event-tile-bubble-gap: 5px;
     --event-tile-bubble-gutter: 11px;
     --event-tile-bubble-other-background: var(--cpd-color-gray-300, #e9edf2);
     --event-tile-bubble-self-background: var(--cpd-color-green-300, #d8f5ed);
+
+    /* Shared preview, action-bar, bubble, and interaction values. */
+    --event-tile-preview-offset: 48px;
+    --event-tile-action-bar-size: 28px;
+    --event-tile-action-bar-margin: 3px;
+    --event-tile-action-bar-offset: 8px;
     --event-tile-state-hover-background: var(--cpd-color-bg-subtle-secondary, #e9edf2);
     --event-tile-state-highlight-background: var(--cpd-color-yellow-200, #fff8e3);
     --event-tile-state-selected-background: var(--cpd-color-bg-subtle-secondary, #e9edf2);
@@ -41,18 +43,19 @@
     max-width: 100%;
     clear: both;
     padding-top: 18px;
+
+    &[data-continuation="true"] {
+        padding-top: 0;
+    }
 }
 
-.line,
 .sender,
 .body,
-.contextMenu,
 .notificationRoomLabel,
 .notificationBadge,
 .timestamp,
 .padlock,
 .replyChain,
-.actionBar,
 .footer,
 .threadInfo,
 .receipt {
@@ -61,10 +64,12 @@
 
 .line {
     position: relative;
+    min-width: 0;
 }
 
 .contextMenu {
     z-index: 1;
+    min-width: 0;
 }
 
 /* Shared structural containers. */
@@ -85,6 +90,7 @@
    Presence of the slot is the render/show signal supplied by the host. */
 .actionBar {
     position: absolute;
+    min-width: 0;
     z-index: 10;
     inset-block-start: calc(
         -1 *
@@ -93,56 +99,6 @@
     );
     inset-inline-end: var(--event-tile-action-bar-offset);
     user-select: none;
-}
-
-.root[data-continuation="true"] {
-    padding-top: 0;
-}
-
-/* ThreadView adds a narrower group timeline around EventTile. */
-.root[data-shape="Thread"] {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    padding-top: 0;
-}
-
-.root[data-shape="Thread"][data-layout="group"] {
-    .senderDetails {
-        align-items: center;
-        gap: var(--cpd-space-4x, 16px);
-        padding-inline-start: var(--cpd-space-2x, 8px);
-    }
-
-    .senderDetails .avatar {
-        /* ThreadView keeps the avatar in the sender-details flex row. */
-        position: relative;
-        inset: auto;
-    }
-
-    .senderDetails .sender {
-        margin-inline-start: 0;
-        max-width: 100%;
-        min-height: 0;
-        line-height: normal;
-    }
-
-    .line {
-        padding-block: 2px;
-        padding-inline-start: 56px;
-        margin-inline-end: 8px;
-    }
-
-    .timestamp {
-        /* ThreadView aligns this with the event content, not the bottom of
-           the line's flex/content flow. */
-        inset-block-start: 2px;
-    }
-
-    .footer {
-        margin-inline-start: 56px;
-        margin-inline-end: 8px;
-    }
 }
 
 /* Group layout. */
@@ -338,286 +294,258 @@
     max-width: unset;
     margin-inline: var(--EventTile_bubble-margin-inline-start, 49px) var(--EventTile_bubble-margin-inline-end, 60px);
     padding-top: 0;
-}
 
-.root[data-layout="bubble"]::before {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    inset: -1px calc(-1 * var(--EventTile_bubble-margin-inline-end, 60px)) -1px
-        calc(-1 * var(--EventTile_bubble-margin-inline-start, 49px));
-    border-radius: 4px;
-    pointer-events: none;
-}
+    &::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        inset: -1px calc(-1 * var(--EventTile_bubble-margin-inline-end, 60px)) -1px
+            calc(-1 * var(--EventTile_bubble-margin-inline-start, 49px));
+        border-radius: 4px;
+        pointer-events: none;
+    }
 
-.root[data-layout="bubble"] .line {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: var(--event-tile-bubble-gap);
-    width: fit-content;
-    max-width: 70%;
-    margin-block: 0;
-    margin-inline: -9px -12px;
-    border-radius: var(--event-tile-bubble-corner-radius) var(--event-tile-bubble-corner-radius) 0 0;
-    line-height: 18px;
-}
+    .line {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: var(--event-tile-bubble-gap);
+        width: fit-content;
+        max-width: 70%;
+        margin-block: 0;
+        margin-inline: -9px -12px;
+        border-radius: var(--event-tile-bubble-corner-radius) var(--event-tile-bubble-corner-radius) 0 0;
+        line-height: 18px;
+    }
 
-.root[data-layout="bubble"] .avatar {
-    position: absolute;
-    z-index: 9;
-    inset-block-start: 6px;
-    line-height: 0;
-    border: 4px solid var(--cpd-color-bg-canvas-default, #fff);
-    border-radius: 50%;
-}
+    .avatar {
+        position: absolute;
+        z-index: 9;
+        inset-block-start: 6px;
+        line-height: 0;
+        border: 4px solid var(--cpd-color-bg-canvas-default, #fff);
+        border-radius: 50%;
+    }
 
-.root[data-layout="bubble"] .avatar > * {
-    border-radius: 50%;
-    box-shadow: 0 0 0 3px var(--cpd-color-bg-canvas-default, #fff);
-}
+    .avatar > * {
+        border-radius: 50%;
+        box-shadow: 0 0 0 3px var(--cpd-color-bg-canvas-default, #fff);
+    }
 
-.root[data-layout="bubble"] .sender,
-.root[data-layout="bubble"] .line {
-    width: fit-content;
-    max-width: 70%;
-    line-height: 18px;
-}
+    .sender,
+    .line {
+        width: fit-content;
+        max-width: 70%;
+        line-height: 18px;
+    }
 
-.root[data-layout="bubble"] .sender {
-    position: relative;
-    inset-block-start: -2px;
-    inset-inline-start: 2px;
-    font-size: 15px;
-    white-space: normal;
-}
+    .sender {
+        position: relative;
+        inset-block-start: -2px;
+        inset-inline-start: 2px;
+        font-size: 15px;
+        white-space: normal;
+    }
 
-.root[data-layout="bubble"] .timestamp {
-    position: absolute;
-    z-index: 3;
-    inset-block-end: 0;
-    inset-inline-end: 0;
-    padding: 4px 8px;
-}
+    .timestamp {
+        position: absolute;
+        z-index: 3;
+        inset-block-end: 0;
+        inset-inline-end: 0;
+        padding: 4px 8px;
+    }
 
-.root[data-layout="bubble"] > .receipt {
-    position: absolute;
-    z-index: 1;
-    inset-block-end: -3px;
-    inset-inline-end: -78px;
-}
+    > .receipt {
+        position: absolute;
+        z-index: 1;
+        inset-block-end: -3px;
+        inset-inline-end: -78px;
+    }
 
-.root[data-layout="bubble"] .padlock {
-    flex-shrink: 0;
-    height: calc(18px + 2px);
-}
+    .padlock {
+        flex-shrink: 0;
+        height: calc(18px + 2px);
+    }
 
-.root[data-layout="bubble"] .line {
-    padding: calc(var(--event-tile-bubble-gutter) - 1px);
-    padding-inline-end: 60px;
-    background: var(--event-tile-bubble-other-background);
-}
+    .line {
+        padding: calc(var(--event-tile-bubble-gutter) - 1px);
+        padding-inline-end: 60px;
+        background: var(--event-tile-bubble-other-background);
+    }
 
-.root[data-layout="bubble"][data-self="false"] .line {
-    border-end-end-radius: var(--event-tile-bubble-corner-radius);
-}
+    &[data-self="false"] .line {
+        border-end-end-radius: var(--event-tile-bubble-corner-radius);
+    }
 
-.root[data-layout="bubble"][data-self="false"] .avatar {
-    inset-inline-start: -36px;
-}
+    &[data-self="false"] .avatar {
+        inset-inline-start: -36px;
+    }
 
-.root[data-layout="bubble"][data-self="true"] .sender {
-    display: none;
-}
+    &[data-self="true"] .sender {
+        display: none;
+    }
 
-.root[data-layout="bubble"][data-self="true"] .line {
-    border-end-start-radius: var(--event-tile-bubble-corner-radius);
-    background: var(--event-tile-bubble-self-background);
-}
+    &[data-self="true"] .line {
+        border-end-start-radius: var(--event-tile-bubble-corner-radius);
+        background: var(--event-tile-bubble-self-background);
+    }
 
-.root[data-layout="bubble"][data-self="true"] .avatar {
-    inset-block-start: -19px;
-    inset-inline-end: -38px;
-}
+    &[data-self="true"] .avatar {
+        inset-block-start: -19px;
+        inset-inline-end: -38px;
+    }
 
-.root[data-layout="bubble"][data-self="false"] .actionBar {
-    inset-block-start: -28px;
-    inset-inline-start: calc(
-        100% - var(--event-tile-action-bar-size) - 2 * (var(--event-tile-action-bar-margin) + 1px)
-    );
-    inset-inline-end: auto;
-}
+    &[data-self="false"] .actionBar {
+        inset-block-start: -28px;
+        inset-inline-start: calc(
+            100% - var(--event-tile-action-bar-size) - 2 * (var(--event-tile-action-bar-margin) + 1px)
+        );
+        inset-inline-end: auto;
+    }
 
-.root[data-layout="bubble"][data-self="true"] .actionBar {
-    inset-block-start: -28px;
-    inset-inline-end: 0;
-}
+    &[data-self="true"] .actionBar {
+        inset-block-start: -28px;
+        inset-inline-end: 0;
+    }
 
-.root[data-layout="bubble"]:hover::before,
-.root[data-layout="bubble"][data-selected="true"]::before {
-    background: var(--event-tile-state-hover-background);
-}
+    &[data-selected="true"] .line::before {
+        content: "";
+        position: absolute;
+        z-index: 0;
+        inset-block: 0;
+        inset-inline-start: 0;
+        width: var(--event-tile-state-marker-width);
+        border-start-start-radius: inherit;
+        border-end-start-radius: inherit;
+        background: var(--event-tile-state-marker-color);
+        pointer-events: none;
+    }
 
-.root[data-layout="bubble"][data-highlighted="true"]::before {
-    background: var(--event-tile-state-highlight-background);
-}
+    &:hover::before,
+    &[data-selected="true"]::before {
+        background: var(--event-tile-state-hover-background);
+    }
 
-.root[data-layout="bubble"]:hover .avatar {
-    border-color: var(--event-tile-state-hover-background);
-}
+    &[data-highlighted="true"]::before {
+        background: var(--event-tile-state-highlight-background);
+    }
 
-.root[data-layout="bubble"][data-highlighted="true"] .avatar {
-    border-color: var(--event-tile-state-highlight-background);
-}
+    &:hover .avatar {
+        border-color: var(--event-tile-state-hover-background);
+    }
 
-.root[data-layout="bubble"]:hover .avatar > *,
-.root[data-layout="bubble"][data-selected="true"] .avatar > * {
-    box-shadow: 0 0 0 3px var(--event-tile-state-hover-background);
-}
+    &[data-highlighted="true"] .avatar {
+        border-color: var(--event-tile-state-highlight-background);
+    }
 
-.root[data-layout="bubble"][data-highlighted="true"] .avatar > * {
-    box-shadow: 0 0 0 3px var(--event-tile-state-highlight-background);
-}
+    &:hover .avatar > *,
+    &[data-selected="true"] .avatar > * {
+        box-shadow: 0 0 0 3px var(--event-tile-state-hover-background);
+    }
 
-.root[data-layout="bubble"] .footer {
-    display: flex;
-    align-items: center;
-    margin-block: var(--cpd-space-1-5x, 6px);
-    margin-inline: -9px -12px;
-}
+    &[data-highlighted="true"] .avatar > * {
+        box-shadow: 0 0 0 3px var(--event-tile-state-highlight-background);
+    }
 
-.root[data-layout="bubble"][data-self="false"] .threadInfo {
-    margin-inline-start: -11px;
-    margin-inline-end: auto;
-}
+    .footer {
+        display: flex;
+        align-items: center;
+        margin-block: var(--cpd-space-1-5x, 6px);
+        margin-inline: -9px -12px;
+    }
 
-.root[data-layout="bubble"][data-self="true"] .footer {
-    justify-content: flex-end;
-}
+    &[data-self="false"] .threadInfo {
+        margin-inline-start: -11px;
+        margin-inline-end: auto;
+    }
 
-.root[data-layout="bubble"][data-self="true"] .threadInfo {
-    margin-inline-start: auto;
-    margin-inline-end: -11px;
-}
+    &[data-self="true"] .footer {
+        justify-content: flex-end;
+    }
 
-.root[data-layout="bubble"][data-continuation="true"] {
-    margin-top: 2px;
-}
+    &[data-self="true"] .threadInfo {
+        margin-inline-start: auto;
+        margin-inline-end: -11px;
+    }
 
-.root[data-layout="bubble"][data-continuation="true"][data-self="false"] .line {
-    border-start-start-radius: 0;
-}
+    &[data-continuation="true"] {
+        margin-top: 2px;
+    }
 
-.root[data-layout="bubble"][data-continuation="true"][data-self="true"] .line {
-    border-start-end-radius: 0;
-}
+    &[data-continuation="true"][data-self="false"] .line {
+        border-start-start-radius: 0;
+    }
 
-.root[data-layout="bubble"][data-last-in-section="true"] {
-    margin-bottom: 24px;
-}
+    &[data-continuation="true"][data-self="true"] .line {
+        border-start-end-radius: 0;
+    }
 
-.root[data-layout="bubble"][data-last-in-section="true"][data-self="false"] .line {
-    border-end-start-radius: var(--event-tile-bubble-corner-radius);
-}
+    &[data-last-in-section="true"] {
+        margin-bottom: 24px;
+    }
 
-.root[data-layout="bubble"][data-last-in-section="true"][data-self="true"] .line {
-    border-end-end-radius: var(--event-tile-bubble-corner-radius);
-}
+    &[data-last-in-section="true"][data-self="false"] .line {
+        border-end-start-radius: var(--event-tile-bubble-corner-radius);
+    }
 
-.root[data-layout="bubble"][data-self="true"] .line {
-    margin-inline-start: auto;
-}
+    &[data-last-in-section="true"][data-self="true"] .line {
+        border-end-end-radius: var(--event-tile-bubble-corner-radius);
+    }
 
-.root[data-layout="bubble"] .replyChain,
-.root[data-layout="bubble"] .threadInfo {
-    clear: both;
-}
+    &[data-self="true"] .line {
+        margin-inline-start: auto;
+    }
 
-/* Notification layout. */
-.root[data-shape="Notification"] {
-    display: flex;
-    flex-flow: row wrap;
-    align-items: center;
-    margin-block: 13px;
-    padding: 8px;
-    border-radius: 8px;
-
-    &:hover {
-        background-color: var(--cpd-color-bg-subtle-primary, #f0f1f2);
+    .replyChain,
+    .threadInfo {
+        clear: both;
     }
 }
 
-.root[data-shape="Notification"]::after {
-    content: "";
-    position: absolute;
-    inset: auto -8px -13px 56px;
-    height: 1px;
-}
-
-.root[data-shape="Notification"]:last-child::after {
-    content: unset;
-}
-
-.root[data-shape="Notification"]:first-child {
-    margin-top: 0;
-}
-
-.root[data-shape="Notification"]:last-child {
-    margin-bottom: 0;
-}
-
-.root[data-shape="Notification"] .details {
-    width: calc(100% - var(--event-tile-preview-offset));
-    margin-inline-start: var(--event-tile-preview-offset);
-    overflow: hidden;
-}
-
-.root[data-shape="Notification"] .sender {
-    /* In preview tiles the sender is a metadata-row profile, not the
-       group-layout sender above the event line. */
-    display: inline-flex;
-    align-items: center;
-    flex: 1;
-    max-width: 100%;
-    min-height: 0;
-    margin-inline-start: 0;
-    line-height: normal;
-}
-
-.root[data-shape="Notification"] .avatar {
-    position: absolute;
-    inset: 8px auto auto 8px;
-}
-
-.root[data-shape="Notification"] .line {
+/* ThreadView adds a narrower group timeline around EventTile. */
+.root[data-shape="Thread"] {
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    box-sizing: border-box;
-    padding-inline-start: var(--event-tile-preview-offset);
-    padding-bottom: 0;
-}
+    padding-top: 0;
 
-.root[data-shape="Notification"] .threadInfo {
-    /* The preview is inside the padded line in these modes; it does not use
-       the group-layout thread-summary gutter. */
-    margin-inline-start: 0;
-}
+    &[data-layout="group"] {
+        .senderDetails {
+            align-items: center;
+            gap: var(--cpd-space-4x, 16px);
+            padding-inline-start: var(--cpd-space-2x, 8px);
+        }
 
-.root[data-shape="Notification"] .timestamp {
-    display: block;
-    font-size: 12px;
-    overflow: hidden;
-    margin-inline-start: auto;
-    align-self: flex-start;
-    position: initial;
-    inset: auto;
-    width: unset;
-    text-align: initial;
-    text-overflow: ellipsis;
-}
+        .senderDetails .avatar {
+            /* ThreadView keeps the avatar in the sender-details flex row. */
+            position: relative;
+            inset: auto;
+        }
 
-.root[data-shape="Notification"][data-layout="group"]:hover .line {
-    background-color: inherit;
-    box-shadow: none;
+        .senderDetails .sender {
+            margin-inline-start: 0;
+            max-width: 100%;
+            min-height: 0;
+            line-height: normal;
+        }
+
+        .line {
+            padding-block: 2px;
+            padding-inline-start: 56px;
+            margin-inline-end: 8px;
+        }
+
+        .timestamp {
+            /* ThreadView aligns this with the event content, not the bottom of
+               the line's flex/content flow. */
+            inset-block-start: 2px;
+        }
+
+        .footer {
+            margin-inline-start: 56px;
+            margin-inline-end: 8px;
+        }
+    }
 }
 
 /* ThreadsList layout. */
@@ -632,79 +560,166 @@
     &:hover {
         background-color: var(--cpd-color-bg-subtle-primary, #f0f1f2);
     }
+
+    &::after {
+        content: "";
+        position: absolute;
+        inset: auto -8px -13px 56px;
+        height: 1px;
+    }
+
+    &:last-child::after {
+        content: unset;
+    }
+
+    &:first-child {
+        margin-top: 0;
+    }
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    .details {
+        width: calc(100% - var(--event-tile-preview-offset));
+        margin-inline-start: var(--event-tile-preview-offset);
+        overflow: hidden;
+    }
+
+    .sender {
+        /* In preview tiles the sender is a metadata-row profile, not the
+           group-layout sender above the event line. */
+        display: inline-flex;
+        align-items: center;
+        flex: 1;
+        max-width: 100%;
+        min-height: 0;
+        margin-inline-start: 0;
+        line-height: normal;
+    }
+
+    .avatar {
+        position: absolute;
+        inset: 8px auto auto 8px;
+    }
+
+    .line {
+        width: 100%;
+        box-sizing: border-box;
+        padding-inline-start: var(--event-tile-preview-offset);
+        padding-bottom: 0;
+    }
+
+    .threadInfo {
+        /* The preview is inside the padded line in this mode; it does not use
+           the group-layout thread-summary gutter. */
+        margin-inline-start: 0;
+    }
+
+    .timestamp {
+        display: block;
+        font-size: 12px;
+        overflow: hidden;
+        margin-inline-start: auto;
+        align-self: flex-start;
+        position: initial;
+        inset: auto;
+        width: unset;
+        text-align: initial;
+        text-overflow: ellipsis;
+    }
+
+    &[data-layout="group"]:hover .line {
+        background-color: inherit;
+        box-shadow: none;
+    }
 }
 
-.root[data-shape="ThreadsList"]::after {
-    content: "";
-    position: absolute;
-    inset: auto -8px -13px 56px;
-    height: 1px;
-}
-
-.root[data-shape="ThreadsList"]:last-child::after {
-    content: unset;
-}
-
-.root[data-shape="ThreadsList"]:first-child {
-    margin-top: 0;
-}
-
-.root[data-shape="ThreadsList"]:last-child {
-    margin-bottom: 0;
-}
-
-.root[data-shape="ThreadsList"] .details {
-    width: calc(100% - var(--event-tile-preview-offset));
-    margin-inline-start: var(--event-tile-preview-offset);
-    overflow: hidden;
-}
-
-.root[data-shape="ThreadsList"] .sender {
-    /* In preview tiles the sender is a metadata-row profile, not the
-       group-layout sender above the event line. */
-    display: inline-flex;
+/* Notification layout. */
+.root[data-shape="Notification"] {
+    display: flex;
+    flex-flow: row wrap;
     align-items: center;
-    flex: 1;
-    max-width: 100%;
-    min-height: 0;
-    margin-inline-start: 0;
-    line-height: normal;
-}
+    margin-block: 13px;
+    padding: 8px;
+    border-radius: 8px;
 
-.root[data-shape="ThreadsList"] .avatar {
-    position: absolute;
-    inset: 8px auto auto 8px;
-}
+    &:hover {
+        background-color: var(--cpd-color-bg-subtle-primary, #f0f1f2);
+    }
 
-.root[data-shape="ThreadsList"] .line {
-    width: 100%;
-    box-sizing: border-box;
-    padding-inline-start: var(--event-tile-preview-offset);
-    padding-bottom: 0;
-}
+    &::after {
+        content: "";
+        position: absolute;
+        inset: auto -8px -13px 56px;
+        height: 1px;
+    }
 
-.root[data-shape="ThreadsList"] .threadInfo {
-    /* The preview is inside the padded line in this mode; it does not use
-       the group-layout thread-summary gutter. */
-    margin-inline-start: 0;
-}
+    &:last-child::after {
+        content: unset;
+    }
 
-.root[data-shape="ThreadsList"] .timestamp {
-    display: block;
-    font-size: 12px;
-    overflow: hidden;
-    margin-inline-start: auto;
-    align-self: flex-start;
-    position: initial;
-    inset: auto;
-    width: unset;
-    text-align: initial;
-    text-overflow: ellipsis;
-}
+    &:first-child {
+        margin-top: 0;
+    }
 
-.root[data-shape="ThreadsList"][data-layout="group"]:hover .line {
-    background-color: inherit;
-    box-shadow: none;
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    .details {
+        width: calc(100% - var(--event-tile-preview-offset));
+        margin-inline-start: var(--event-tile-preview-offset);
+        overflow: hidden;
+    }
+
+    .sender {
+        /* In preview tiles the sender is a metadata-row profile, not the
+           group-layout sender above the event line. */
+        display: inline-flex;
+        align-items: center;
+        flex: 1;
+        max-width: 100%;
+        min-height: 0;
+        margin-inline-start: 0;
+        line-height: normal;
+    }
+
+    .avatar {
+        position: absolute;
+        inset: 8px auto auto 8px;
+    }
+
+    .line {
+        width: 100%;
+        box-sizing: border-box;
+        padding-inline-start: var(--event-tile-preview-offset);
+        padding-bottom: 0;
+    }
+
+    .threadInfo {
+        /* The preview is inside the padded line in these modes; it does not use
+           the group-layout thread-summary gutter. */
+        margin-inline-start: 0;
+    }
+
+    .timestamp {
+        display: block;
+        font-size: 12px;
+        overflow: hidden;
+        margin-inline-start: auto;
+        align-self: flex-start;
+        position: initial;
+        inset: auto;
+        width: unset;
+        text-align: initial;
+        text-overflow: ellipsis;
+    }
+
+    &[data-layout="group"]:hover .line {
+        background-color: inherit;
+        box-shadow: none;
+    }
 }
 
 /* File panel layout. The application File branch does not apply a timeline
@@ -713,46 +728,46 @@
 .root[data-shape="File"] {
     padding-top: 0;
     overflow-wrap: anywhere;
-}
 
-.root[data-shape="File"] .senderDetailsLink {
-    display: block;
-    margin-bottom: var(--cpd-space-1x, 4px);
-    text-decoration: none;
-}
+    .senderDetailsLink {
+        display: block;
+        margin-bottom: var(--cpd-space-1x, 4px);
+        text-decoration: none;
+    }
 
-.root[data-shape="File"] .senderDetails {
-    display: flex;
-    align-items: center;
-    gap: var(--cpd-space-2x, 8px);
-    margin-top: -2px;
-}
+    .senderDetails {
+        display: flex;
+        align-items: center;
+        gap: var(--cpd-space-2x, 8px);
+        margin-top: -2px;
+    }
 
-.root[data-shape="File"] .senderDetails .avatar {
-    position: relative;
-    inset: auto;
-    flex: 0 0 auto;
-}
+    .senderDetails .avatar {
+        position: relative;
+        inset: auto;
+        flex: 0 0 auto;
+    }
 
-.root[data-shape="File"] .senderDetails .sender {
-    display: inline-flex;
-    align-items: center;
-    max-width: 100%;
-    min-height: 0;
-    margin-inline-start: 0;
-    line-height: normal;
-}
+    .senderDetails .sender {
+        display: inline-flex;
+        align-items: center;
+        max-width: 100%;
+        min-height: 0;
+        margin-inline-start: 0;
+        line-height: normal;
+    }
 
-.root[data-shape="File"] .senderDetails .timestamp {
-    position: initial;
-    inset: auto;
-    width: unset;
-    margin-inline-start: auto;
-    text-align: initial;
-}
+    .senderDetails .timestamp {
+        position: initial;
+        inset: auto;
+        width: unset;
+        margin-inline-start: auto;
+        text-align: initial;
+    }
 
-.root[data-shape="File"] .line {
-    margin-inline-end: 0;
-    padding: 0;
-    border-radius: 0;
+    .line {
+        margin-inline-end: 0;
+        padding: 0;
+        border-radius: 0;
+    }
 }
