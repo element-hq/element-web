@@ -5,28 +5,30 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, afterEach } from "vitest";
 import React from "react";
-import { render } from "jest-matrix-react";
-import { mocked } from "jest-mock";
+import { render } from "test-utils-rtl";
 
-import E2eSetup from "../../../../../src/components/structures/auth/E2eSetup.tsx";
-import { InitialCryptoSetupStore } from "../../../../../src/stores/InitialCryptoSetupStore.ts";
+import E2eSetup from "./E2eSetup.tsx";
+import { InitialCryptoSetupStore } from "../../../stores/InitialCryptoSetupStore.ts";
 
-afterEach(() => jest.restoreAllMocks());
+afterEach(() => vi.restoreAllMocks());
 
 describe("LeftPanel", () => {
     it("should call `onCancelled` when the user clicks the cancel button", () => {
         const mockInitialCryptoSetupStore = {
-            getStatus: jest.fn(),
-            on: jest.fn(),
-            off: jest.fn(),
+            getStatus: vi.fn(),
+            on: vi.fn(),
+            off: vi.fn(),
         };
-        jest.spyOn(InitialCryptoSetupStore, "sharedInstance").mockReturnValue(mockInitialCryptoSetupStore as any);
+        vi.spyOn(InitialCryptoSetupStore, "sharedInstance").mockReturnValue(mockInitialCryptoSetupStore as any);
 
         // We need the setup process to have failed, for the dialog to present a cancel button.
-        mocked(mockInitialCryptoSetupStore.getStatus).mockReturnValue("error");
+        vi.mocked(mockInitialCryptoSetupStore.getStatus).mockReturnValue("error");
 
-        const onCancelled = jest.fn();
+        const onCancelled = vi.fn();
         const { getByRole } = render(<E2eSetup onCancelled={onCancelled} />);
 
         getByRole("button", { name: "Cancel" }).click();

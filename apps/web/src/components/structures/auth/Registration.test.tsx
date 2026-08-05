@@ -7,30 +7,27 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach, afterEach, type MockedObject } from "vitest";
 import React from "react";
-import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "jest-matrix-react";
+import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "test-utils-rtl";
 import { createClient, type MatrixClient, MatrixError, type ValidatedAuthMetadata } from "matrix-js-sdk/src/matrix";
-import { mocked, type MockedObject } from "jest-mock-vitest-adapter";
-import fetchMock from "@fetch-mock/jest";
+import fetchMock from "@fetch-mock/vitest";
+import { getMockClientWithEventEmitter, mkServerConfig, mockPlatformPeg, unmockPlatformPeg } from "test-utils";
+import { makeDelegatedAuthMetadata } from "test-utils/auth";
 
-import SdkConfig, { DEFAULTS } from "../../../../../src/SdkConfig";
-import {
-    getMockClientWithEventEmitter,
-    mkServerConfig,
-    mockPlatformPeg,
-    unmockPlatformPeg,
-} from "../../../../test-utils";
-import Registration from "../../../../../src/components/structures/auth/Registration";
-import { makeDelegatedAuthMetadata } from "../../../../test-utils/auth";
-import { startOAuthLogin } from "../../../../../src/utils/oauth/authorize";
+import SdkConfig, { DEFAULTS } from "../../../SdkConfig";
+import Registration from "./Registration";
+import { startOAuthLogin } from "../../../utils/oauth/authorize";
 
-jest.mock("../../../../../src/utils/oauth/authorize", () => ({
-    startOAuthLogin: jest.fn(),
+vi.mock("../../../utils/oauth/authorize", () => ({
+    startOAuthLogin: vi.fn(),
 }));
 
-jest.mock("matrix-js-sdk/src/matrix", () => ({
-    ...jest.requireActual("matrix-js-sdk/src/matrix"),
-    createClient: jest.fn(),
+vi.mock("matrix-js-sdk/src/matrix", async () => ({
+    ...(await vi.importActual("matrix-js-sdk/src/matrix")),
+    createClient: vi.fn(),
 }));
 
 /** The matrix versions our mock server claims to support */
@@ -45,9 +42,9 @@ describe("Registration", function () {
             disable_custom_urls: true,
         });
         mockClient = getMockClientWithEventEmitter({
-            registerRequest: jest.fn(),
-            loginFlows: jest.fn(),
-            getVersions: jest.fn().mockResolvedValue({ versions: SERVER_SUPPORTED_MATRIX_VERSIONS }),
+            registerRequest: vi.fn(),
+            loginFlows: vi.fn(),
+            getVersions: vi.fn().mockResolvedValue({ versions: SERVER_SUPPORTED_MATRIX_VERSIONS }),
         });
         mockClient.registerRequest.mockRejectedValueOnce(
             new MatrixError(
@@ -58,7 +55,7 @@ describe("Registration", function () {
             ),
         );
         mockClient.loginFlows.mockResolvedValue({ flows: [{ type: "m.login.password" }] });
-        mocked(createClient).mockImplementation((opts) => {
+        vi.mocked(createClient).mockImplementation((opts) => {
             mockClient.idBaseUrl = opts.idBaseUrl;
             mockClient.baseUrl = opts.baseUrl;
             return mockClient;
@@ -69,21 +66,21 @@ describe("Registration", function () {
             versions: SERVER_SUPPORTED_MATRIX_VERSIONS,
         });
         mockPlatformPeg({
-            startSingleSignOn: jest.fn(),
+            startSingleSignOn: vi.fn(),
         });
     });
 
     afterEach(function () {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
         SdkConfig.reset(); // we touch the config, so clean up
         unmockPlatformPeg();
     });
 
     const defaultProps = {
         defaultDeviceDisplayName: "test-device-display-name",
-        onLoggedIn: jest.fn(),
-        onLoginClick: jest.fn(),
-        onServerConfigChange: jest.fn(),
+        onLoggedIn: vi.fn(),
+        onLoginClick: vi.fn(),
+        onServerConfigChange: vi.fn(),
     };
 
     const defaultHsUrl = "https://matrix.org";

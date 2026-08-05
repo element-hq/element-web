@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`<LoginSplashView /> Renders a spinner 1`] = `
+exports[`<LoginSplashView /> > Renders a spinner 1`] = `
 <DocumentFragment>
   <div
     class="mx_MatrixChat_splash"
@@ -42,7 +42,7 @@ exports[`<LoginSplashView /> Renders a spinner 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<LoginSplashView /> Renders an error message 1`] = `
+exports[`<LoginSplashView /> > Renders an error message 1`] = `
 <DocumentFragment>
   <div
     class="mx_MatrixChat_splash"

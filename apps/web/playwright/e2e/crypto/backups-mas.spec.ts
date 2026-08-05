@@ -89,13 +89,13 @@ test.describe("Key backup reset from elsewhere", () => {
         await page.getByRole("textbox", { name: "Name" }).fill("test room");
         await page.getByRole("button", { name: "Create room" }).click();
 
-        const accessToken = await page.evaluate(() => window.mxMatrixClientPeg.get().getAccessToken());
+        const accessToken = await page.evaluate(() => window.mxMatrixClientPeg.get().getAccessToken()!);
 
         const csAPI = new TestClientServerAPI(request, homeserver, accessToken);
 
         const backupInfo = await csAPI.getCurrentBackupInfo();
 
-        await csAPI.deleteBackupVersion(backupInfo.version);
+        await csAPI.deleteBackupVersion(backupInfo!.version);
 
         await page.getByRole("textbox", { name: "Send a message…" }).fill("/discardsession");
         await page.getByRole("button", { name: "Send message" }).click();

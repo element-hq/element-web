@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { EventEmitter } from "events";
+import { EventEmitter } from "node:events";
 import { type RoomMember, type MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 
 import { mkEvent, mkRoomMember } from "../../../../../../test/test-utils";
