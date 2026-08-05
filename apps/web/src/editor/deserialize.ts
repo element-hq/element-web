@@ -17,6 +17,8 @@ import { textToHtmlRainbow } from "../utils/colour";
 import { stripPlainReply } from "../utils/Reply";
 
 const LIST_TYPES = ["UL", "OL", "LI"];
+/** What a nested list, or the continuation of a list item, is indented by. */
+const INDENT = " ".repeat(4);
 
 // Escapes all markup in the given text
 function escape(text: string): string {
@@ -43,6 +45,25 @@ export function longestBacktickSequence(text: string): number {
 
 function isListChild(n: Node): boolean {
     return LIST_TYPES.includes(n.parentNode?.nodeName || "");
+}
+
+/**
+ * Whether a node is one of several blocks making up a single list item, as opposed to a list item
+ * itself or a list nested inside one.
+ */
+function isListItemBlock(n: Node): boolean {
+    return n.parentNode?.nodeName === "LI" && !LIST_TYPES.includes(n.nodeName);
+}
+
+/**
+ * Whether a list was written with blank lines between its items. Markdown says so by giving each
+ * item a paragraph of its own rather than bare text, and a list that comes back without those blank
+ * lines is a tighter list than the one that was sent.
+ */
+function isLooseList(n: Node): boolean {
+    if (n.nodeName !== "UL" && n.nodeName !== "OL") return false;
+
+    return Array.from(n.childNodes).some((li) => Array.from(li.childNodes).some((child) => child.nodeName === "P"));
 }
 
 function parseAtRoomMentions(text: string, pc: PartCreator, opts: IParseOptions): Part[] {
@@ -143,10 +164,17 @@ function prefixLines(parts: Part[], prefix: string, pc: PartCreator): void {
 
 function parseChildren(n: Node, pc: PartCreator, opts: IParseOptions, mkListItem?: (li: Node) => Part[]): Part[] {
     let prev: ChildNode | undefined;
+    const loose = isLooseList(n);
     return Array.from(n.childNodes).flatMap((c) => {
         const parsed = parseNode(c, pc, opts, mkListItem);
         if (parsed.length && prev && (checkBlockNode(prev) || checkBlockNode(c))) {
-            if (isListChild(c)) {
+            if (isListItemBlock(c)) {
+                // An item made of more than one block is written as a blank line and an indented
+                // continuation. Run together on one line instead, the second block reads as more of
+                // the first when the message is parsed again.
+                prefixLines(parsed, INDENT, pc);
+                parsed.unshift(pc.newline(), pc.newline());
+            } else if (isListChild(c) && !loose) {
                 // Use tighter spacing within lists
                 parsed.unshift(pc.newline());
             } else {
@@ -212,7 +240,7 @@ function parseNode(n: Node, pc: PartCreator, opts: IParseOptions, mkListItem?: (
                 case "UL": {
                     const parts = parseChildren(n, pc, opts, (li) => [pc.plain("- "), ...parseChildren(li, pc, opts)]);
                     if (isListChild(n)) {
-                        prefixLines(parts, "    ", pc);
+                        prefixLines(parts, INDENT, pc);
                     }
                     return parts;
                 }
@@ -224,7 +252,7 @@ function parseNode(n: Node, pc: PartCreator, opts: IParseOptions, mkListItem?: (
                         return parts;
                     });
                     if (isListChild(n)) {
-                        prefixLines(parts, "    ", pc);
+                        prefixLines(parts, INDENT, pc);
                     }
                     return parts;
                 }

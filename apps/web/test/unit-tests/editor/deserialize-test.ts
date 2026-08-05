@@ -250,6 +250,24 @@ describe("editor/deserialize", function () {
             expect(parts[3]).toStrictEqual({ type: "newline", text: "\n" });
             expect(parts[4]).toStrictEqual({ type: "plain", text: "3. Finish" });
         });
+        it("list items of several paragraphs", () => {
+            const html = "<ul><li><p>Oak</p><p>A kind of tree.</p></li></ul>";
+            const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
+            expect(parts.length).toBe(4);
+            expect(parts[0]).toStrictEqual({ type: "plain", text: "- Oak" });
+            expect(parts[1]).toStrictEqual({ type: "newline", text: "\n" });
+            expect(parts[2]).toStrictEqual({ type: "newline", text: "\n" });
+            expect(parts[3]).toStrictEqual({ type: "plain", text: `${FOUR_SPACES}A kind of tree.` });
+        });
+        it("lists written with blank lines between the items", () => {
+            const html = "<ul><li><p>Oak</p></li><li><p>Spruce</p></li></ul>";
+            const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
+            expect(parts.length).toBe(4);
+            expect(parts[0]).toStrictEqual({ type: "plain", text: "- Oak" });
+            expect(parts[1]).toStrictEqual({ type: "newline", text: "\n" });
+            expect(parts[2]).toStrictEqual({ type: "newline", text: "\n" });
+            expect(parts[3]).toStrictEqual({ type: "plain", text: "- Spruce" });
+        });
         it("nested unordered lists", () => {
             const html = "<ul><li>Oak<ul><li>Spruce<ul><li>Birch</li></ul></li></ul></li></ul>";
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
