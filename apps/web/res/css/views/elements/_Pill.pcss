@@ -60,6 +60,20 @@ Please see LICENSE files in the repository root for full details.
         min-width: $font-16px; /* ensure the avatar is not compressed */
         user-select: text;
         vertical-align: top;
+
+        /* The avatar has to be asked for at a fixed 16px because that same number builds its
+           thumbnail URL, so it cannot simply be given a rem size. Everything else in the pill is
+           rem-based and grows with the font size setting, which left the image sitting in the corner
+           of a larger round hole. Compound sizes the avatar box, the image inside it and the fallback
+           letter from this one custom property, and sets it inline, so !important is what it takes to
+           scale all three with the rest of the pill. */
+        --cpd-avatar-size: $font-16px !important;
+    }
+
+    /* The image also carries the requested size as width and height attributes, which would hold it
+       short of its own box once that box has grown. */
+    .mx_BaseAvatar img {
+        block-size: auto;
     }
 
     .mx_Pill_text {
@@ -80,22 +94,23 @@ Please see LICENSE files in the repository root for full details.
         background-color: $link-external;
         box-sizing: border-box;
         color: $background;
-        height: 16px;
+        height: $font-16px;
         padding: 1px;
-        width: 16px;
+        width: $font-16px;
         border-radius: 50%;
     }
 
     .mx_Pill_UserIcon {
         box-sizing: border-box;
         color: $secondary-content;
-        height: 16px;
-        width: 16px;
+        height: $font-16px;
+        width: $font-16px;
     }
 
+    /* A space pill is squared off on the avatar side, so its corners have to follow the avatar. */
     &.mx_SpacePill {
-        border-top-left-radius: 8px;
-        border-bottom-left-radius: 8px;
-        padding-left: 4px;
+        border-top-left-radius: $font-8px;
+        border-bottom-left-radius: $font-8px;
+        padding-left: 0.25em;
     }
 }
