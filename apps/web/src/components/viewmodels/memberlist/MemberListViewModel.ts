@@ -20,7 +20,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { MatrixRTCSessionEvent } from "matrix-js-sdk/src/matrixrtc";
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { throttle } from "lodash";
 
 import { type RoomMember } from "../../../models/rooms/RoomMember";
@@ -159,6 +159,8 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
      * in the room when the search functionality is used.
      */
     const [memberCount, setMemberCount] = useState(0);
+    // Preserve the active filter when call-participant changes recreate loadMembers.
+    const searchQueryRef = useRef<string | undefined>(undefined);
 
     const loadMembers = useMemo(
         () =>
@@ -227,6 +229,14 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
         [callParticipantUserIds, sdkContext.memberListStore, roomId, room, memberCountWithout3Pid],
     );
 
+    const search = useCallback(
+        (searchQuery: string): void => {
+            searchQueryRef.current = searchQuery;
+            loadMembers(searchQuery);
+        },
+        [loadMembers],
+    );
+
     const isPresenceEnabled = useMemo(
         () => sdkContext.memberListStore.isPresenceEnabled(),
         [sdkContext.memberListStore],
@@ -293,7 +303,7 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
     // Initial load of the memberlist
     useEffect(() => {
         (async () => {
-            await loadMembers();
+            await loadMembers(searchQueryRef.current);
             /**
              * isLoading is used to render a spinner on initial call.
              * Further calls need not mutate this state since it's perfectly fine to
@@ -301,13 +311,14 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
              */
             setIsLoading(false);
         })();
+        return () => loadMembers.cancel();
     }, [loadMembers]);
 
     return {
         members: Array.from(memberMap.values()),
         memberCount,
         callParticipantUserIds,
-        search: loadMembers,
+        search,
         shouldShowInvite,
         isPresenceEnabled,
         isLoading,

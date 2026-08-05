@@ -180,7 +180,29 @@ describe("MemberListView and MemberlistHeaderView", () => {
             });
             expect(memberTile.querySelector(".mx_RoomMemberTileView_callIcon")).toBeNull();
             expect(root.container.querySelector(".mx_MemberListView_separator")).toBeNull();
-            expect(root.container.querySelector(".mx_MemberTileView")).not.toHaveAccessibleName(defaultUsers[0].userId);
+            expect(memberTile).toHaveAccessibleName(defaultUsers[0].userId);
+        });
+
+        it("should preserve an active search when call memberships change", async () => {
+            const { root, roomSession, adminUsers } = await renderMemberList(true, undefined, 7);
+            const searchInput = root.container.querySelector<HTMLInputElement>('input[name="searchMembers"]')!;
+
+            fireEvent.change(searchInput, { target: { value: "admin0" } });
+            await waitFor(() => {
+                expect(root.container.querySelectorAll(".mx_MemberTileView")).toHaveLength(1);
+            });
+
+            const membership = { userId: adminUsers[0].userId } as CallMembership;
+            await act(async () => {
+                roomSession.memberships = [membership];
+                roomSession.emit(MatrixRTCSessionEvent.MembershipsChanged, [], [membership]);
+            });
+
+            expect(searchInput).toHaveValue("admin0");
+            await waitFor(() => {
+                expect(root.container.querySelectorAll(".mx_MemberTileView")).toHaveLength(1);
+                expect(root.container.querySelector(".mx_RoomMemberTileView_callIcon")).not.toBeNull();
+            });
         });
 
         it("should group call participants first while preserving the order within both groups", async () => {
