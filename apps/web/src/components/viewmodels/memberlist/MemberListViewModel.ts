@@ -102,20 +102,21 @@ export function sdkRoomMemberToRoomMember(member: SdkRoomMember): Member {
 }
 
 export const SEPARATOR = "SEPARATOR";
-/** Separator placed between active call participants and other joined members. */
-export const CALL_PARTICIPANT_SEPARATOR = "CALL_PARTICIPANT_SEPARATOR";
-export type MemberWithSeparator = Member | typeof SEPARATOR | typeof CALL_PARTICIPANT_SEPARATOR;
+interface MemberListSeparator {
+    type: typeof SEPARATOR;
+    key: string;
+}
+export type MemberWithSeparator = Member | MemberListSeparator;
 
 /** Returns whether a member-list item is a non-focusable separator. */
-export function isMemberListSeparator(
-    item: MemberWithSeparator,
-): item is typeof SEPARATOR | typeof CALL_PARTICIPANT_SEPARATOR {
-    return item === SEPARATOR || item === CALL_PARTICIPANT_SEPARATOR;
+export function isMemberListSeparator(item: MemberWithSeparator): item is MemberListSeparator {
+    return "type" in item && item.type === SEPARATOR;
 }
 
 export interface MemberListViewState {
     members: MemberWithSeparator[];
     memberCount: number;
+    /** Matrix user IDs of members currently participating in this room's call. */
     callParticipantUserIds: ReadonlySet<string>;
     search: (searchQuery: string) => void;
     isPresenceEnabled: boolean;
@@ -170,16 +171,33 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
                     const threePidInvited = getPending3PidInvites(room, searchQuery);
 
                     const newMemberMap = new Map<string, MemberWithSeparator>();
+                    const joinedMembers = joinedSdk.map(sdkRoomMemberToRoomMember);
+                    const callParticipants: Member[] = [];
+                    const otherJoinedMembers: Member[] = [];
+                    for (const item of joinedMembers) {
+                        const target = callParticipantUserIds.has(item.member!.userId)
+                            ? callParticipants
+                            : otherJoinedMembers;
+                        target.push(item);
+                    }
 
-                    // First add the joined room members
-                    for (const member of joinedSdk) {
-                        const roomMember = sdkRoomMemberToRoomMember(member);
-                        newMemberMap.set(member.userId, roomMember);
+                    // First add call participants, followed by the other joined room members.
+                    for (const item of callParticipants) {
+                        newMemberMap.set(item.member!.userId, item);
+                    }
+                    if (callParticipants.length > 0 && otherJoinedMembers.length > 0) {
+                        const key = "call-participant-separator";
+                        newMemberMap.set(key, { type: SEPARATOR, key });
+                    }
+                    for (const item of otherJoinedMembers) {
+                        newMemberMap.set(item.member!.userId, item);
                     }
 
                     // Then a separator if needed
-                    if (joinedSdk.length > 0 && (invitedSdk.length > 0 || threePidInvited.length > 0))
-                        newMemberMap.set(SEPARATOR, SEPARATOR);
+                    if (joinedSdk.length > 0 && (invitedSdk.length > 0 || threePidInvited.length > 0)) {
+                        const key = "invite-separator";
+                        newMemberMap.set(key, { type: SEPARATOR, key });
+                    }
 
                     // Then add the invited room members
                     for (const member of invitedSdk) {
@@ -200,13 +218,13 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
                          * Since searching for members only gives you the relevant
                          * members matching the query, do not update the totalMemberCount!
                          **/
-                        setTotalMemberCount(newMemberMap.size);
+                        setTotalMemberCount(memberCountWithout3Pid + threePidInvited.length);
                     }
                 },
                 500,
                 { leading: true, trailing: true },
             ),
-        [sdkContext.memberListStore, roomId, room, memberCountWithout3Pid],
+        [callParticipantUserIds, sdkContext.memberListStore, roomId, room, memberCountWithout3Pid],
     );
 
     const isPresenceEnabled = useMemo(
@@ -285,24 +303,8 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
         })();
     }, [loadMembers]);
 
-    const members = useMemo((): MemberWithSeparator[] => {
-        const items = Array.from(memberMap.values());
-        const joinedMembers = items.filter(
-            (item): item is Member => !isMemberListSeparator(item) && !!item.member && !item.member.isInvite,
-        );
-        const callParticipants = joinedMembers.filter((item) => callParticipantUserIds.has(item.member!.userId));
-        const otherJoinedMembers = joinedMembers.filter((item) => !callParticipantUserIds.has(item.member!.userId));
-
-        if (callParticipants.length === 0 || otherJoinedMembers.length === 0) return items;
-
-        const invitesAndSeparator = items.filter(
-            (item) => isMemberListSeparator(item) || !item.member || item.member.isInvite,
-        );
-        return [...callParticipants, CALL_PARTICIPANT_SEPARATOR, ...otherJoinedMembers, ...invitesAndSeparator];
-    }, [callParticipantUserIds, memberMap]);
-
     return {
-        members,
+        members: Array.from(memberMap.values()),
         memberCount,
         callParticipantUserIds,
         search: loadMembers,

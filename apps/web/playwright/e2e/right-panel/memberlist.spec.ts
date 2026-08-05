@@ -175,8 +175,15 @@ test.describe("Memberlist", () => {
         await expect(memberlist.locator(".mx_RoomMemberTileView_callIcon")).toHaveCount(2);
         await expect(memberlist.getByRole("option").nth(0)).toHaveAccessibleName("Caller One, in a call");
         await expect(memberlist.getByRole("option").nth(1)).toHaveAccessibleName("Caller Two, in a call");
-        await expect(memberlist.locator(".mx_MemberListView_callParticipantSeparator")).toHaveCount(1);
         await expect(memberlist.locator(".mx_MemberListView_separator")).toHaveCount(2);
+        const firstNonCallerTile = memberlist.locator(".mx_MemberTileView").filter({ hasText: NAME });
+        await expect
+            .poll(async () => {
+                const callerBox = await callerTiles[0].boundingBox();
+                const nonCallerBox = await firstNonCallerTile.boundingBox();
+                return callerBox !== null && nonCallerBox !== null && callerBox.y < nonCallerBox.y;
+            })
+            .toBe(true);
         expect(
             await memberlist.getByRole("option").evaluateAll((options) =>
                 options.map((option) => ({
@@ -198,17 +205,24 @@ test.describe("Memberlist", () => {
         }, roomId);
         await expect(callIcons[0]).toHaveCount(0, { timeout: 10_000 });
         await expect(callIcons[1]).toBeVisible();
-        await expect(memberlist.getByRole("option").first()).toHaveAccessibleName("Caller Two, in a call");
+        await expect(callerTiles[1]).toHaveAccessibleName("Caller Two, in a call");
+        await expect
+            .poll(async () => {
+                const remainingCallerBox = await callerTiles[1].boundingBox();
+                const formerCallerBox = await callerTiles[0].boundingBox();
+                return (
+                    remainingCallerBox !== null && formerCallerBox !== null && remainingCallerBox.y < formerCallerBox.y
+                );
+            })
+            .toBe(true);
         await expect(memberlist.locator(".mx_RoomMemberTileView_callIcon")).toHaveCount(1);
-        await expect(memberlist.locator(".mx_MemberListView_callParticipantSeparator")).toHaveCount(1);
+        await expect(memberlist.locator(".mx_MemberListView_separator")).toHaveCount(2);
 
         await callers[1].evaluate(async (client, roomId) => {
             const room = client.getRoom(roomId)!;
             await client.matrixRTC.getRoomSession(room).leaveRoomSession(5_000);
         }, roomId);
         await expect(callIcons[1]).toHaveCount(0, { timeout: 10_000 });
-        await expect(memberlist.locator(".mx_MemberListView_callParticipantSeparator")).toHaveCount(0);
         await expect(memberlist.locator(".mx_MemberListView_separator")).toHaveCount(1);
-        await expect(memberlist.getByRole("option").first()).not.toHaveAccessibleName(/Caller/);
     });
 });
