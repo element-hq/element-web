@@ -306,7 +306,9 @@ describe("EventTileView", () => {
     });
 
     it("renders the file layout with permalink interactions", () => {
-        const onPermalinkClick = vi.fn();
+        const onPermalinkClick = vi.fn((event: React.MouseEvent<HTMLAnchorElement>) => {
+            event.preventDefault();
+        });
         const onPermalinkContextMenu = vi.fn();
         const { container, getByTestId } = render(
             <EventTileView
