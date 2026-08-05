@@ -29,6 +29,7 @@ interface Props {
     showUnsentTooltip?: boolean;
     tabIndex?: number;
     ariaLabel?: string;
+    className?: string;
     onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -38,6 +39,7 @@ export function NotificationBadge({
     showUnsentTooltip,
     tabIndex,
     ariaLabel,
+    className,
     onClick,
 }: Readonly<Props>): JSX.Element {
     const hideBold = useSettingValue("feature_hidebold");
@@ -87,5 +89,5 @@ export function NotificationBadge({
         });
     }, [vm, onClick, tabIndex, ariaLabel]);
 
-    return <NotificationBadgeView vm={vm} />;
+    return <NotificationBadgeView vm={vm} className={className} />;
 }

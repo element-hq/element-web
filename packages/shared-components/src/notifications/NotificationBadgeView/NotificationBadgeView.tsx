@@ -74,9 +74,10 @@ export type NotificationBadgeViewModel = ViewModel<NotificationBadgeViewSnapshot
 
 interface NotificationBadgeViewProps {
     vm: NotificationBadgeViewModel;
+    className?: string;
 }
 
-export function NotificationBadgeView({ vm }: Readonly<NotificationBadgeViewProps>): JSX.Element {
+export function NotificationBadgeView({ vm, className }: Readonly<NotificationBadgeViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
     const {
         shouldRender,
@@ -96,7 +97,7 @@ export function NotificationBadgeView({ vm }: Readonly<NotificationBadgeViewProp
         return <></>;
     }
 
-    const classes = classNames(styles.notificationBadge, {
+    const classes = classNames(className, styles.notificationBadge, {
         [styles.visible]: isVisible,
         [styles.notification]: isNotification,
         [styles.highlight]: isHighlight,
@@ -117,7 +118,6 @@ export function NotificationBadgeView({ vm }: Readonly<NotificationBadgeViewProp
     const badge = isClickable ? (
         <button
             type="button"
-            data-component="notification-badge"
             data-testid="notification-badge"
             data-badge-type={badgeType}
             data-notification-level={notificationLevel}
@@ -130,7 +130,6 @@ export function NotificationBadgeView({ vm }: Readonly<NotificationBadgeViewProp
         </button>
     ) : (
         <div
-            data-component="notification-badge"
             data-testid="notification-badge"
             data-badge-type={badgeType}
             data-notification-level={notificationLevel}

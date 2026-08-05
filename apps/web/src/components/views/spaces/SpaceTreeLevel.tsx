@@ -116,6 +116,7 @@ export const SpaceButton = <T extends keyof HTMLElementTagNameMap>({
                 <NotificationBadge
                     onClick={jumpToNotification}
                     notification={notificationState}
+                    className="mx_SpacePanel_notificationBadge"
                     ariaLabel={ariaLabel}
                     tabIndex={tabIndex}
                     showUnsentTooltip={true}

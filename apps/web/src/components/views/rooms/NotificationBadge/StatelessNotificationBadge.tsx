@@ -26,6 +26,7 @@ interface Props {
     forceDot?: boolean;
     tabIndex?: number;
     ariaLabel?: string;
+    className?: string;
     onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -37,6 +38,7 @@ export const StatelessNotificationBadge = ({
     forceDot,
     tabIndex,
     ariaLabel,
+    className,
     onClick,
 }: Readonly<Props>): JSX.Element => {
     const hideBold = useSettingValue("feature_hidebold");
@@ -80,5 +82,5 @@ export const StatelessNotificationBadge = ({
         });
     }, [vm, onClick, tabIndex, ariaLabel]);
 
-    return <NotificationBadgeView vm={vm} />;
+    return <NotificationBadgeView vm={vm} className={className} />;
 };

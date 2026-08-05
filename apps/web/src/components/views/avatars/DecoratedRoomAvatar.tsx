@@ -192,7 +192,13 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
 
         let badge: React.ReactNode;
         if (this.props.displayBadge && this.state.notificationState) {
-            badge = <NotificationBadge notification={this.state.notificationState} hideIfDot={this.props.hideIfDot} />;
+            badge = (
+                <NotificationBadge
+                    notification={this.state.notificationState}
+                    hideIfDot={this.props.hideIfDot}
+                    className="mx_DecoratedRoomAvatar_notificationBadge"
+                />
+            );
         }
 
         let icon: JSX.Element | undefined;

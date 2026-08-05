@@ -671,7 +671,10 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                     >
                         <DecoratedRoomAvatar room={result.room} size={AVATAR_SIZE} tooltipProps={{ tabIndex: -1 }} />
                         {result.room.name}
-                        <NotificationBadge notification={notification} />
+                        <NotificationBadge
+                            notification={notification}
+                            className="mx_SpotlightDialog_notificationBadge"
+                        />
                         <RoomContextDetails
                             id={`mx_SpotlightDialog_button_result_${result.room.roomId}_details`}
                             className="mx_SpotlightDialog_result_details"
@@ -1093,7 +1096,10 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                                         tooltipProps={{ tabIndex: -1 }}
                                     />
                                     {room.name}
-                                    <NotificationBadge notification={notification} />
+                                    <NotificationBadge
+                                        notification={notification}
+                                        className="mx_SpotlightDialog_notificationBadge"
+                                    />
                                     <RoomContextDetails
                                         id={`mx_SpotlightDialog_button_recentSearch_${room.roomId}_details`}
                                         className="mx_SpotlightDialog_result_details"

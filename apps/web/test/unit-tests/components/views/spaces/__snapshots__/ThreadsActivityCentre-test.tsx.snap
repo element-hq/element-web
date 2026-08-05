@@ -66,9 +66,8 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
         />
       </svg>
       <div
-        class="_notificationBadge_kb9ny_8 _visible_kb9ny_15 _highlight_kb9ny_47 _dot_kb9ny_32"
+        class="mx_ThreadsActivityCentre_notificationBadge _notificationBadge_kb9ny_8 _visible_kb9ny_15 _highlight_kb9ny_47 _dot_kb9ny_32"
         data-badge-type="dot"
-        data-component="notification-badge"
         data-notification-level="highlight"
         data-testid="notification-badge"
       >
@@ -118,9 +117,8 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
         />
       </svg>
       <div
-        class="_notificationBadge_kb9ny_8 _visible_kb9ny_15 _notification_kb9ny_8 _dot_kb9ny_32"
+        class="mx_ThreadsActivityCentre_notificationBadge _notificationBadge_kb9ny_8 _visible_kb9ny_15 _notification_kb9ny_8 _dot_kb9ny_32"
         data-badge-type="dot"
-        data-component="notification-badge"
         data-notification-level="notification"
         data-testid="notification-badge"
       >
@@ -233,9 +231,8 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
         />
       </svg>
       <div
-        class="_notificationBadge_kb9ny_8 _visible_kb9ny_15 _highlight_kb9ny_47 _dot_kb9ny_32"
+        class="mx_ThreadsActivityCentre_notificationBadge _notificationBadge_kb9ny_8 _visible_kb9ny_15 _highlight_kb9ny_47 _dot_kb9ny_32"
         data-badge-type="dot"
-        data-component="notification-badge"
         data-notification-level="highlight"
         data-testid="notification-badge"
       >
@@ -285,9 +282,8 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
         />
       </svg>
       <div
-        class="_notificationBadge_kb9ny_8 _visible_kb9ny_15 _highlight_kb9ny_47 _dot_kb9ny_32"
+        class="mx_ThreadsActivityCentre_notificationBadge _notificationBadge_kb9ny_8 _visible_kb9ny_15 _highlight_kb9ny_47 _dot_kb9ny_32"
         data-badge-type="dot"
-        data-component="notification-badge"
         data-notification-level="highlight"
         data-testid="notification-badge"
       >
@@ -337,9 +333,8 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
         />
       </svg>
       <div
-        class="_notificationBadge_kb9ny_8 _visible_kb9ny_15 _highlight_kb9ny_47 _dot_kb9ny_32"
+        class="mx_ThreadsActivityCentre_notificationBadge _notificationBadge_kb9ny_8 _visible_kb9ny_15 _highlight_kb9ny_47 _dot_kb9ny_32"
         data-badge-type="dot"
-        data-component="notification-badge"
         data-notification-level="highlight"
         data-testid="notification-badge"
       >

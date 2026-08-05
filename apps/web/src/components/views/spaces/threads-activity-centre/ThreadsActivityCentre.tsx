@@ -142,7 +142,13 @@ function ThreadsActivityCentreRow({ room, onClick, notificationLevel }: ThreadsA
             label={room.name}
             Icon={<DecoratedRoomAvatar room={room} size="32px" />}
         >
-            <StatelessNotificationBadge level={notificationLevel} count={0} symbol={null} forceDot={true} />
+            <StatelessNotificationBadge
+                level={notificationLevel}
+                count={0}
+                symbol={null}
+                forceDot={true}
+                className="mx_ThreadsActivityCentre_notificationBadge"
+            />
         </MenuItem>
     );
 }

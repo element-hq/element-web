@@ -640,9 +640,8 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
               <span>
                 Show a badge 
                 <div
-                  class="_notificationBadge_kb9ny_8 _visible_kb9ny_15 _notification_kb9ny_8 _badge2Char_kb9ny_56 cpd-theme-light"
+                  class="mx_NotificationSettings2_notificationBadge _notificationBadge_kb9ny_8 _visible_kb9ny_15 _notification_kb9ny_8 _badge2Char_kb9ny_56 cpd-theme-light"
                   data-badge-type="badge_2char"
-                  data-component="notification-badge"
                   data-notification-level="notification"
                   data-testid="notification-badge"
                 >
@@ -1659,9 +1658,8 @@ exports[`<Notifications /> matches the snapshot 1`] = `
               <span>
                 Show a badge 
                 <div
-                  class="_notificationBadge_kb9ny_8 _visible_kb9ny_15 _notification_kb9ny_8 _badge2Char_kb9ny_56 cpd-theme-light"
+                  class="mx_NotificationSettings2_notificationBadge _notificationBadge_kb9ny_8 _visible_kb9ny_15 _notification_kb9ny_8 _badge2Char_kb9ny_56 cpd-theme-light"
                   data-badge-type="badge_2char"
-                  data-component="notification-badge"
                   data-notification-level="notification"
                   data-testid="notification-badge"
                 >
