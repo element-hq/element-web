@@ -122,6 +122,9 @@ beforeEach(() => {
         doesServerSupportUnstableFeature: jest.fn().mockReturnValue(false),
         doesServerSupportExtendedProfiles: jest.fn().mockResolvedValue(false),
         getExtendedProfile: jest.fn().mockRejectedValue(new Error("Not supported")),
+        // Stands in for a user the homeserver has no profile for, which is what most of these tests
+        // are rendering.
+        getProfileInfo: jest.fn().mockResolvedValue(null),
         mxcUrlToHttp: jest.fn().mockReturnValue("mock-mxcUrlToHttp"),
         removeListener: jest.fn(),
         currentState: {
@@ -197,6 +200,25 @@ describe("<UserInfo />", () => {
         it("renders user info", () => {
             renderComponent();
             expect(screen.getByRole("heading", { name: defaultUserId })).toBeInTheDocument();
+        });
+
+        it("shows the name and avatar of a user we were only given the ID of", async () => {
+            mockClient.getProfileInfo.mockResolvedValue({
+                displayname: "Alice",
+                avatar_url: "mxc://example.com/alice",
+            });
+
+            renderComponent();
+
+            expect(await screen.findByText("Alice")).toBeInTheDocument();
+            expect(screen.getByTestId("avatar-img").querySelector("img")).toHaveAttribute("src", "mock-mxcUrlToHttp");
+        });
+
+        it("does not fetch a profile for a member who came from a room", async () => {
+            renderComponent({ user: new RoomMember(defaultRoomId, defaultUserId) });
+            await flushPromises();
+
+            expect(mockClient.getProfileInfo).not.toHaveBeenCalled();
         });
 
         describe.each([[ProfileKeyTimezone], [ProfileKeyMSC4175Timezone]])("timezone rendering (%s)", (profileKey) => {
