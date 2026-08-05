@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { vi, beforeEach, afterEach } from "vitest";
-import fetchMock, { manageFetchMockGlobally } from "@fetch-mock/vitest";
+import fetchMock from "@fetch-mock/vitest";
 
 import SdkConfig, { DEFAULTS } from "../SdkConfig";
 import "./setupGlobals.ts";
@@ -18,12 +18,15 @@ declare global {
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
-manageFetchMockGlobally();
+// Deliberately *not* calling `manageFetchMockGlobally()` as it monkey-patches `vi.restoreAllMocks`,
+// `vi.resetAllMocks` and `vi.unstubAllGlobals` such that they also tear the fetch mock down, putting the
+// environment's real `fetch` back on the global.
+// We re-set the mock before every test below, so the lifecycle integration buys us nothing.
 
 beforeEach(() => {
     vi.stubEnv("TZ", "UTC");
 
-    // set up fetch API mock
+    // set up fetch API mock. Unmatched requests 404 rather than reaching the network.
     fetchMock.hardReset();
     fetchMock.catch(404);
     fetchMock.mockGlobal();
