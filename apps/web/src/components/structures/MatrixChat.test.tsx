@@ -330,6 +330,7 @@ describe("<MatrixChat />", () => {
         vi.clearAllTimers();
 
         // RTL cleanup won't touch roots we render ourselves so clean those up manually
+        await clearAllModals();
 
         // This is a massive hack, but a lot of these tests end up completing while the login flow is still proceeding.
         // So then, we start the next test while stuff is still ongoing from the previous test, which messes up the current test.
