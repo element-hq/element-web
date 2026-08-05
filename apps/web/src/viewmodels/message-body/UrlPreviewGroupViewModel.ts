@@ -161,6 +161,7 @@ export class UrlPreviewGroupViewModel
         const bundledLinkPreviews = this.props.mxEvent.getContent()[BUNDLED_LINK_PREVIEWS];
         if (Array.isArray(bundledLinkPreviews) && bundledLinkPreviews.length === 0) {
             this.snapshot.merge({
+                previews: [],
                 totalPreviewCount: 0,
                 previewsLimited: false,
                 overPreviewLimit: false,
