@@ -362,7 +362,7 @@ test.describe("Editing", () => {
         const messageTile = page.locator(`[data-event-id="${originalEventId}"]`);
         // at this point, the edit event should still be unknown
         const timeline = await app.client.evaluate(
-            (cli, { testRoomId, editEventId }) => cli.getRoom(testRoomId).getTimelineForEvent(editEventId),
+            (cli, { testRoomId, editEventId }) => cli.getRoom(testRoomId)!.getTimelineForEvent(editEventId),
             { testRoomId, editEventId },
         );
         expect(timeline).toBeNull();

@@ -8,12 +8,12 @@ Please see LICENSE files in the repository root for full details.
 
 import { act } from "test-utils-rtl";
 
-import type EventEmitter from "events";
+import type EventEmitter from "node:events";
 import { type ActionPayload } from "../../src/dispatcher/payloads";
 import defaultDispatcher from "../../src/dispatcher/dispatcher";
 import { type DispatcherAction } from "../../src/dispatcher/actions";
 import Modal from "../../src/Modal";
-import { vi } from "../setup/adapter.ts";
+import { vi, beforeEach, afterEach } from "../setup/adapter.ts";
 
 export const emitPromise = (e: EventEmitter, k: string | symbol) => new Promise((r) => e.once(k, r));
 
