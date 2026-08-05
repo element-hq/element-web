@@ -176,6 +176,7 @@ export function MessageComposerUrlPreviewView({
                       </div>
                       {removePreview ? (
                           <button
+                              type="button"
                               onClick={() => removePreview(entry.matched_url)}
                               className={classNames(styles.removePreview, styles.spanLike)}
                           >
@@ -238,6 +239,7 @@ export function MessageComposerUrlPreviewView({
             <span className={styles.right}>
                 {removePreview && (
                     <button
+                        type="button"
                         className={classNames(styles.clearAll, styles.spanLike)}
                         onClick={() => links.forEach((entry) => removePreview(entry.matched_url))}
                     >
@@ -245,6 +247,7 @@ export function MessageComposerUrlPreviewView({
                     </button>
                 )}
                 <button
+                    type="button"
                     className={classNames(styles.collapse, styles.spanLike)}
                     onClick={toggleCollapsed}
                     aria-label="Collapse URL previews"

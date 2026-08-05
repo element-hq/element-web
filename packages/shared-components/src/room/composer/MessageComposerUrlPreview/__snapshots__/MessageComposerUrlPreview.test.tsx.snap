@@ -41,12 +41,14 @@ exports[`MessageComposerUrlPreview > failed entries > renders the failed placeho
       >
         <button
           class="MessageComposerUrlPreview-module_clearAll MessageComposerUrlPreview-module_spanLike"
+          type="button"
         >
           Clear all
         </button>
         <button
           aria-label="Collapse URL previews"
           class="MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
+          type="button"
         >
           <svg
             aria-hidden="true"
@@ -108,6 +110,7 @@ exports[`MessageComposerUrlPreview > failed entries > renders the failed placeho
       </div>
       <button
         class="MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
+        type="button"
       >
         <svg
           fill="currentColor"
@@ -167,12 +170,14 @@ exports[`MessageComposerUrlPreview > failed entries > renders the failed summary
       >
         <button
           class="MessageComposerUrlPreview-module_clearAll MessageComposerUrlPreview-module_spanLike"
+          type="button"
         >
           Clear all
         </button>
         <button
           aria-label="Collapse URL previews"
           class="MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
+          type="button"
         >
           <svg
             aria-hidden="true"
@@ -238,12 +243,14 @@ exports[`MessageComposerUrlPreview > loading entries > renders the loading place
       >
         <button
           class="MessageComposerUrlPreview-module_clearAll MessageComposerUrlPreview-module_spanLike"
+          type="button"
         >
           Clear all
         </button>
         <button
           aria-label="Collapse URL previews"
           class="MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
+          type="button"
         >
           <svg
             aria-hidden="true"
@@ -309,6 +316,7 @@ exports[`MessageComposerUrlPreview > loading entries > renders the loading place
       </div>
       <button
         class="MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
+        type="button"
       >
         <svg
           fill="currentColor"
@@ -372,12 +380,14 @@ exports[`MessageComposerUrlPreview > loading entries > renders the loading summa
       >
         <button
           class="MessageComposerUrlPreview-module_clearAll MessageComposerUrlPreview-module_spanLike"
+          type="button"
         >
           Clear all
         </button>
         <button
           aria-label="Collapse URL previews"
           class="MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
+          type="button"
         >
           <svg
             aria-hidden="true"
@@ -466,12 +476,14 @@ exports[`MessageComposerUrlPreview > renders a mix of loaded, loading and failed
       >
         <button
           class="MessageComposerUrlPreview-module_clearAll MessageComposerUrlPreview-module_spanLike"
+          type="button"
         >
           Clear all
         </button>
         <button
           aria-label="Collapse URL previews"
           class="MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
+          type="button"
         >
           <svg
             aria-hidden="true"
@@ -524,6 +536,7 @@ exports[`MessageComposerUrlPreview > renders a mix of loaded, loading and failed
       </div>
       <button
         class="MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
+        type="button"
       >
         <svg
           fill="currentColor"
@@ -587,6 +600,7 @@ exports[`MessageComposerUrlPreview > renders a mix of loaded, loading and failed
       </div>
       <button
         class="MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
+        type="button"
       >
         <svg
           fill="currentColor"
@@ -646,6 +660,7 @@ exports[`MessageComposerUrlPreview > renders a mix of loaded, loading and failed
       </div>
       <button
         class="MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
+        type="button"
       >
         <svg
           fill="currentColor"
@@ -696,6 +711,7 @@ exports[`MessageComposerUrlPreview > renders a preview 1`] = `
         <button
           aria-label="Collapse URL previews"
           class="MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
+          type="button"
         >
           <svg
             aria-hidden="true"
@@ -750,6 +766,7 @@ exports[`MessageComposerUrlPreview > renders a preview with an image 1`] = `
         <button
           aria-label="Collapse URL previews"
           class="MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
+          type="button"
         >
           <svg
             aria-hidden="true"
@@ -801,12 +818,14 @@ exports[`MessageComposerUrlPreview > renders the expanded previews when not coll
       >
         <button
           class="MessageComposerUrlPreview-module_clearAll MessageComposerUrlPreview-module_spanLike"
+          type="button"
         >
           Clear all
         </button>
         <button
           aria-label="Collapse URL previews"
           class="MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
+          type="button"
         >
           <svg
             aria-hidden="true"
@@ -859,6 +878,7 @@ exports[`MessageComposerUrlPreview > renders the expanded previews when not coll
       </div>
       <button
         class="MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
+        type="button"
       >
         <svg
           fill="currentColor"
