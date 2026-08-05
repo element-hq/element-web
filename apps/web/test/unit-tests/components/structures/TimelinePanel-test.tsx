@@ -439,6 +439,32 @@ describe("TimelinePanel", () => {
         expect(props.onEventScrolledIntoView).toHaveBeenCalledWith(events[1].getId());
     });
 
+    it("should scroll the event into view again when the same event is re-requested", () => {
+        const client = MatrixClientPeg.safeGet();
+        const room = mkRoom(client, "roomId");
+        const events = mockEvents(room);
+
+        const props = {
+            ...getProps(room, events),
+            eventId: events[1].getId(),
+            eventScrollIntoView: true,
+            onEventScrolledIntoView: jest.fn(),
+        };
+
+        const { rerender } = render(<TimelinePanel {...props} />);
+        expect(props.onEventScrolledIntoView).toHaveBeenCalledTimes(1);
+
+        // RoomView clears the flag once the jump has landed, so the event stays put on re-render.
+        props.eventScrollIntoView = false;
+        rerender(<TimelinePanel {...props} />);
+        expect(props.onEventScrolledIntoView).toHaveBeenCalledTimes(1);
+
+        // Clicking the same permalink a second time asks for the very same event again.
+        props.eventScrollIntoView = true;
+        rerender(<TimelinePanel {...props} />);
+        expect(props.onEventScrolledIntoView).toHaveBeenCalledTimes(2);
+    });
+
     it("paginates", async () => {
         const [client, room, events] = setupTestData();
         const eventsPage1 = events.slice(0, 1);

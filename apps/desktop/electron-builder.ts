@@ -9,7 +9,8 @@ import * as os from "node:os";
 import * as fs from "node:fs";
 import * as fsp from "node:fs/promises";
 import path from "node:path";
-import { type Configuration as BaseConfiguration, type BeforeBuildContext } from "electron-builder";
+import { type Configuration as BaseConfiguration, type BeforeBuildContext, log } from "electron-builder";
+import { LogMessageByKey } from "app-builder-lib/out/node-module-collector/moduleManager.js";
 
 /**
  * This script has different outputs depending on your os platform.
@@ -251,6 +252,19 @@ if (os.platform() === "linux") {
         // Remove sqlcipher dependency when using bundled
         config.deb.recommends = config.deb.recommends?.filter((d) => d !== "libsqlcipher0");
     }
+}
+
+// Treat certain warnings as a fatal error
+const FATAL_WARNINGS = [LogMessageByKey.PKG_NOT_ON_DISK, LogMessageByKey.PKG_NOT_FOUND];
+// Otherwise we just burn time running the tests for no reason.
+if (typeof log !== "undefined") {
+    const prevTransform = log.messageTransformer;
+    log.messageTransformer = (message, level) => {
+        if (level === "warn" && FATAL_WARNINGS.some((w) => message.startsWith(w))) {
+            throw new Error(`electron-builder: ${message}`);
+        }
+        return prevTransform?.(message, level) ?? message;
+    };
 }
 
 export default config;
