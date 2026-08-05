@@ -155,6 +155,8 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
     private model: EditorModel;
     private currentlyComposedEditorState: SerializedPart[] | null = null;
     private dispatcherRef?: string;
+    /** Whether a slash command typed into this composer is still running. */
+    private runningSlashCommand = false;
     private sendHistoryManager: SendHistoryManager;
 
     public constructor(props: ISendMessageComposerProps, context: React.ContextType<typeof RoomContext>) {
@@ -375,45 +377,58 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         let content: RoomMessageEventContent | null = null;
 
         if (!containsEmote(model) && isSlashCommand(this.model)) {
-            const [cmd, args, commandText] = getSlashCommand(this.props.room.roomId, this.model);
-            if (cmd) {
-                const threadId =
-                    this.props.relation?.rel_type === THREAD_RELATION_TYPE.name ? this.props.relation?.event_id : null;
+            // A message clears the composer before it is sent, so pressing enter again finds nothing
+            // left to send. A command is awaited first and the composer still holds it, so without
+            // this the command would run a second time — /topic would set the topic twice.
+            if (this.runningSlashCommand) return;
+            this.runningSlashCommand = true;
+            try {
+                const [cmd, args, commandText] = getSlashCommand(this.props.room.roomId, this.model);
+                if (cmd) {
+                    const threadId =
+                        this.props.relation?.rel_type === THREAD_RELATION_TYPE.name
+                            ? this.props.relation?.event_id
+                            : null;
 
-                let commandSuccessful: boolean;
-                [content, commandSuccessful] = await runSlashCommand(
-                    MatrixClientPeg.safeGet(),
-                    cmd,
-                    args,
-                    this.props.room.roomId,
-                    threadId ?? null,
-                );
-                if (!commandSuccessful) {
-                    return; // errored
-                }
+                    let commandSuccessful: boolean;
+                    [content, commandSuccessful] = await runSlashCommand(
+                        MatrixClientPeg.safeGet(),
+                        cmd,
+                        args,
+                        this.props.room.roomId,
+                        threadId ?? null,
+                    );
+                    if (!commandSuccessful) {
+                        return; // errored
+                    }
 
-                if (
-                    content &&
-                    [CommandCategories.messages as string, CommandCategories.effects as string].includes(cmd.category)
-                ) {
-                    // Attach any mentions which might be contained in the command content.
-                    attachMentions(this.props.mxClient.getSafeUserId(), content, model, replyToEvent);
-                    attachRelation(content, this.props.relation);
-                    if (replyToEvent) {
-                        addReplyToMessageContent(content, replyToEvent);
+                    if (
+                        content &&
+                        [CommandCategories.messages as string, CommandCategories.effects as string].includes(
+                            cmd.category,
+                        )
+                    ) {
+                        // Attach any mentions which might be contained in the command content.
+                        attachMentions(this.props.mxClient.getSafeUserId(), content, model, replyToEvent);
+                        attachRelation(content, this.props.relation);
+                        if (replyToEvent) {
+                            addReplyToMessageContent(content, replyToEvent);
+                        }
+                    } else {
+                        shouldSend = false;
                     }
                 } else {
-                    shouldSend = false;
+                    const sendAnyway = await shouldSendAnyway(commandText);
+                    // re-focus the composer after QuestionDialog is closed
+                    dis.dispatch({
+                        action: Action.FocusAComposer,
+                        context: this.context.timelineRenderingType,
+                    });
+                    // if !sendAnyway bail to let the user edit the composer and try again
+                    if (!sendAnyway) return;
                 }
-            } else {
-                const sendAnyway = await shouldSendAnyway(commandText);
-                // re-focus the composer after QuestionDialog is closed
-                dis.dispatch({
-                    action: Action.FocusAComposer,
-                    context: this.context.timelineRenderingType,
-                });
-                // if !sendAnyway bail to let the user edit the composer and try again
-                if (!sendAnyway) return;
+            } finally {
+                this.runningSlashCommand = false;
             }
         }
 

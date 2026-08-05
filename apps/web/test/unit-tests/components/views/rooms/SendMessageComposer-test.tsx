@@ -319,6 +319,23 @@ describe("<SendMessageComposer/>", () => {
             });
         });
 
+        it("only runs a slash command once when enter is pressed twice", async () => {
+            // Commands run against the client from the peg rather than the one passed as a prop.
+            const client = stubClient();
+            // Nothing resolves this, so the command is still running when the second enter arrives.
+            mocked(client.setRoomTopic).mockReturnValue(new Promise<never>(() => {}));
+
+            mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
+            const { container } = getComponent();
+
+            addTextToComposer(container, "/topic Nice topic");
+            const composer = container.querySelector(".mx_SendMessageComposer")!;
+            fireEvent.keyDown(composer, { key: "Enter" });
+            fireEvent.keyDown(composer, { key: "Enter" });
+
+            await waitFor(() => expect(client.setRoomTopic).toHaveBeenCalledTimes(1));
+        });
+
         it("correctly sends a reply using a slash command", async () => {
             stubClient();
             mocked(doMaybeLocalRoomAction).mockImplementation(
