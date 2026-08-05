@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { type MatrixRTCSession, MatrixRTCSessionManagerEvents, type Transport } from "matrix-js-sdk/src/matrixrtc";
-import { MatrixError, type EmptyObject, type Room } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, type EmptyObject, type Room } from "matrix-js-sdk/src/matrix";
 
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { UPDATE_EVENT } from "./AsyncStore";
@@ -16,7 +16,6 @@ import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import WidgetStore from "./WidgetStore";
 import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
-import SdkConfig from "../SdkConfig";
 import { Call, CallEvent, ConnectionState } from "../models/Call";
 
 export enum CallStoreEvent {
@@ -41,8 +40,6 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         return this._instance;
     }
 
-    private readonly configuredMatrixRTCTransports = new Set<Transport>();
-
     private constructor() {
         super(defaultDispatcher);
         this.setMaxListeners(100); // One for each RoomTile
@@ -52,44 +49,8 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         // nothing to do
     }
 
-    /**
-     * Fetch transports used by MatrixRTC services, such as Element Call.
-     * This function is called once during Store startup which means we don't refetch
-     * transports every time we need to check for Element Call support.
-     */
-    protected async fetchTransports(): Promise<void> {
-        if (!this.matrixClient) return;
-        this.configuredMatrixRTCTransports.clear();
-        // Prefer checking the proper endpoint for transports.
-        try {
-            const transports = await this.matrixClient._unstable_getRTCTransports();
-            transports.forEach((t) => this.configuredMatrixRTCTransports.add(t));
-        } catch (ex) {
-            // Expected, MSC not implemented.
-            //
-            // Homeservers will return a 404 M_UNRECOGNIZED matrix error if they
-            // don't implement a requested endpoint.
-            if (ex instanceof MatrixError === false || ex.errcode !== "M_UNRECOGNIZED") {
-                logger.warn("Unexpected error when trying to fetch RTC transports", ex);
-            }
-        }
-        // See https://github.com/matrix-org/matrix-spec-proposals/blob/d61969a9a3696b6c54d7987b1643b5bc03670927/proposals/4143-matrix-rtc.md#discovery-of-foci-using-well-knownmatrixclient
-        // This well-known option has since been removed from the spec but is still widely deployed.
-        // Reading it can be disabled via config; the modern endpoint above is unaffected.
-        if (SdkConfig.get("enable_client_well_known_lookups")) {
-            await this.matrixClient.waitForClientWellKnown();
-            const foci = this.matrixClient.getClientWellKnown()?.["org.matrix.msc4143.rtc_foci"];
-            if (Array.isArray(foci)) {
-                foci.forEach((foci) => this.configuredMatrixRTCTransports.add(foci));
-            }
-        }
-        this.emit(CallStoreEvent.TransportsUpdated);
-    }
-
     protected async onReady(): Promise<any> {
         if (!this.matrixClient) return;
-        // Fetch transports, but don't await the result.
-        void this.fetchTransports();
         // We assume that the calls present in a room are a function of room
         // widgets and group calls, so we initialize the room map here and then
         // update it whenever those change
@@ -98,6 +59,8 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         }
         this.matrixClient.matrixRTC.on(MatrixRTCSessionManagerEvents.SessionStarted, this.onRTCSessionStart);
         WidgetStore.instance.on(UPDATE_EVENT, this.onWidgets);
+
+        this.matrixClient.on(ClientEvent.RtcTransportsUpdated, this.onRTCTransportsUpdated);
 
         // If the room ID of a previously connected call is still in settings at
         // this time, that's a sign that we failed to disconnect from it
@@ -128,6 +91,7 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         this.configuredMatrixRTCTransports.clear();
 
         this.matrixClient?.matrixRTC.off(MatrixRTCSessionManagerEvents.SessionStarted, this.onRTCSessionStart);
+        this.matrixClient?.off(ClientEvent.RtcTransportsUpdated, this.onRTCTransportsUpdated);
         WidgetStore.instance.off(UPDATE_EVENT, this.onWidgets);
     }
 
@@ -242,10 +206,14 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
     };
 
     public getConfiguredRTCTransports(): Transport[] {
-        return [...this.configuredMatrixRTCTransports];
+        return this.matrixClient ? this.matrixClient.cachedRtcTransports.get() : [];
     }
 
     private onRTCSessionStart = (roomId: string, session: MatrixRTCSession): void => {
         this.updateRoom(session.room);
+    };
+
+    private onRTCTransportsUpdated = (transports: Transport[]): void => {
+        this.emit(CallStoreEvent.TransportsUpdated, transports);
     };
 }
