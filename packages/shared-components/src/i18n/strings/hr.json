@@ -1,0 +1,341 @@
+{
+    "a11y": {
+        "seek_bar_label": "Traka za traženje zvuka"
+    },
+    "action": {
+        "back": "Natrag",
+        "click": "Klikni",
+        "close": "Zatvori",
+        "collapse": "Sažmi",
+        "delete": "Izbriši",
+        "dismiss": "Odbaci",
+        "download": "Preuzmi",
+        "edit": "Uredi",
+        "explore_rooms": "Pretražuj sobe",
+        "go": "Idi",
+        "hide": "Sakrij",
+        "invite": "Pozovi",
+        "new_conversation": "Novi razgovor",
+        "new_room": "Nova soba",
+        "new_section": "Novi odjeljak",
+        "new_video_room": "Nova videosoba",
+        "open_menu": "Otvori izbornik",
+        "pause": "Pauziraj",
+        "pin": "Prikvači",
+        "play": "Reproduciraj",
+        "react": "Reagiraj",
+        "remove": "Ukloni",
+        "reply": "Odgovori",
+        "reply_in_thread": "Odgovori u niti",
+        "retry": "Pokušaj ponovno",
+        "search": "Pretraži",
+        "start_chat": "Započni razgovor",
+        "unpin": "Otkvači",
+        "view_source": "Prikaži izvor"
+    },
+    "common": {
+        "attachment": "Privitak",
+        "encryption_enabled": "Šifriranje je omogućeno",
+        "loading": "Učitavanje…",
+        "options": "Mogućnosti",
+        "preferences": "Osobne postavke",
+        "state_encryption_enabled": "Omogućeno je eksperimentalno šifriranje stanja"
+    },
+    "devtools": {
+        "toggle_event": "uključi/isključi događaj"
+    },
+    "keyboard": {
+        "shift": "Shift"
+    },
+    "left_panel": {
+        "open_dial_pad": "Otvori brojčanik",
+        "separator_label": "Kliknite ili povucite za proširivanje"
+    },
+    "menus": {
+        "user_menu": {
+            "clear_status": "Očisti",
+            "create_an_account": "Izradi račun",
+            "got_an_account": "Imate li račun?",
+            "manage_account": "Upravljanje računom",
+            "sign_in": "Prijava",
+            "title": "Korisnički izbornik"
+        }
+    },
+    "notifications": {
+        "all_messages": "Sve poruke",
+        "default_settings": "Uskladi zadane postavke",
+        "mentions_keywords": "Spominjanja i ključne riječi",
+        "mute_room": "Utišaj sobu"
+    },
+    "release_announcement": {
+        "room_list_section_close": "U redu",
+        "room_list_section_description": " Grupirajte svoje razgovore u odjeljke kako biste ih organizirali i olakšali navigaciju.",
+        "room_list_section_title": "Predstavljamo odjeljke"
+    },
+    "room": {
+        "context_menu": {
+            "title": "Mogućnosti soba"
+        },
+        "history_visibility_badge": {
+            "private": "Novi članovi ne vide povijest",
+            "shared": "Novi članovi vide povijest",
+            "world_readable": "Svatko može vidjeti povijest"
+        },
+        "jump_to_date": "Skoči na datum",
+        "jump_to_date_beginning": "Početak sobe",
+        "jump_to_date_prompt": "Odaberite datum na koji ćete skočiti",
+        "pinned_message_badge": "Prikvačena poruka",
+        "status_bar": {
+            "delete_all": "Izbriši sve",
+            "exceeded_resource_limit_description": "Za nastavak korištenja usluge obratite se administratoru usluge.",
+            "exceeded_resource_limit_title": "Vaša poruka nije poslana jer je ovaj matični poslužitelj premašio ograničenje resursa.",
+            "failed_to_create_room_title": "Nije moguće započeti razgovor s ovim korisnikom",
+            "homeserver_blocked_title": "Vaša poruka nije poslana jer je administrator blokirao ovaj matični poslužitelj.",
+            "monthly_user_limit_reached_title": "Vaša poruka nije poslana jer je ovaj matični poslužitelj dosegao mjesečno ograničenje aktivnih korisnika.",
+            "requires_consent_agreement_title": "Ne možete slati poruke dok ne pregledate i ne prihvatite naše uvjete i odredbe.",
+            "retry_all": "Pokušaj sve ponovno",
+            "select_messages_to_retry": "Možete odabrati sve ili pojedinačne poruke za ponovni pokušaj ili brisanje",
+            "server_connectivity_lost_description": "Poslane poruke bit će pohranjene dok se veza ponovno ne uspostavi.",
+            "server_connectivity_lost_title": "Izgubljena je veza s poslužiteljem.",
+            "some_messages_not_sent": "Neke od vaših poruka nisu poslane"
+        }
+    },
+    "room_list": {
+        "a11y": {
+            "default": "Otvori sobu %(roomName)s",
+            "drag_cancelled": "Povlačenje je otkazano",
+            "drag_end": "%(source)s je ispušten na %(target)s",
+            "drag_end_after": "%(source)s je ispušten nakon %(target)s",
+            "drag_end_before": "%(source)s je ispušten prije %(target)s",
+            "drag_end_original": "%(source)s se vratio u prvobitni položaj",
+            "drag_instructions": "Pritisnite razmaknicu za početak ili prekid povlačenja, tipke sa strelicama za pomicanje i Escape za otkazivanje.",
+            "drag_over": "%(source)s je iznad %(target)s",
+            "drag_over_after": "%(source)s će se ispustiti nakon %(target)s",
+            "drag_over_before": "%(source)s će se ispustiti prije %(target)s",
+            "drag_over_original": "%(source)s će se vratiti u svoj prvobitni položaj",
+            "drag_start": "Povlačenje %(source)s",
+            "invitation": "Otvorite pozivnicu za sobu %(roomName)s.",
+            "mention": {
+                "one": "Otvorite sobu %(roomName)s s jednim nepročitanim spominjanjem.",
+                "few": "Otvorite sobu %(roomName)s s %(count)s nepročitana spominjanja.",
+                "other": "Otvorite sobu %(roomName)s s %(count)s nepročitanih spominjanja."
+            },
+            "unread": {
+                "one": "Otvorite sobu %(roomName)s s jednom nepročitanom porukom.",
+                "few": "Otvorite sobu %(roomName)s s %(count)s nepročitane poruke.",
+                "other": "Otvorite sobu %(roomName)s s %(count)s nepročitanih poruka."
+            },
+            "unsent_message": "Otvorite sobu %(roomName)s s porukom koja nije poslana.",
+            "video_call": "Otvorite sobu %(roomName)s i pokrenite videopoziv.",
+            "voice_call": "Otvorite sobu %(roomName)s i pokrenite glasovni poziv."
+        },
+        "appearance": "Izgled",
+        "chat_moved": "Razgovor je premješten",
+        "collapse_all_sections": "Sažmi sve odjeljke",
+        "collapse_filters": "Sažmi popis filtara",
+        "empty": {
+            "no_chats": "Još nema razgovora",
+            "no_chats_description": "Započnite tako da nekome pošaljete poruku ili izradite sobu",
+            "no_chats_description_no_room_rights": "Započnite tako da nekome pošaljete poruku",
+            "no_invites": "Nemate nepročitanih pozivnica",
+            "no_mentions": "Nemate nepročitanih spominjanja",
+            "no_people": "Još nemate izravne razgovore ni s kim",
+            "no_people_description": "Možete poništiti odabir filtara kako biste vidjeli ostale razgovore",
+            "no_rooms": "Još niste ni u jednoj sobi",
+            "no_rooms_description": "Možete poništiti odabir filtara kako biste vidjeli ostale razgovore",
+            "no_unread": "Čestitamo! Nemate nepročitanih poruka",
+            "show_activity": "Prikaži sve aktivnosti",
+            "show_chats": "Prikaži sve razgovore"
+        },
+        "expand_all_sections": "Proširi sve odjeljke",
+        "expand_filters": "Proširi popis filtara",
+        "filters": {
+            "favourite": "Favoriti",
+            "invites": "Pozivnice",
+            "low_priority": "Niski prioritet",
+            "mentions": "Spominjanja",
+            "people": "Osobe",
+            "rooms": "Sobe",
+            "unread": "Nepročitano"
+        },
+        "list_title": "Popis soba",
+        "more_options": {
+            "copy_link": "Kopiraj poveznicu na sobu",
+            "favourited": "Označeno kao favorit",
+            "leave_room": "Napusti sobu",
+            "low_priority": "Niski prioritet",
+            "mark_read": "Označi kao pročitano",
+            "mark_unread": "Označi kao nepročitano",
+            "move_to_section": "Premjesti u",
+            "remove_from_section": "Ukloni iz odjeljka"
+        },
+        "notification_options": "Mogućnosti obavijesti",
+        "open_space_menu": "Otvori izbornik prostora",
+        "primary_filters": "Filtri popisa soba",
+        "room": {
+            "more_options": "Više mogućnosti"
+        },
+        "room_options": "Mogućnosti soba",
+        "section_created": "Odjeljak je izrađen",
+        "section_header": {
+            "edit_section": "Uredi odjeljak",
+            "more_options": "Više mogućnosti",
+            "remove_section": "Ukloni odjeljak",
+            "toggle": "Uključi/isključi odjeljak %(section)s",
+            "toggle_unread": "Uključi/isključi odjeljak %(section)s s nepročitanim sobama"
+        },
+        "show_message_previews": "Prikaži pretpreglede poruka",
+        "sort": "Razvrstaj",
+        "sort_type": {
+            "activity": "Najnovija aktivnost",
+            "atoz": "A – Z",
+            "unread_first": "Prvo nepročitano"
+        },
+        "space_menu": {
+            "home": "Početna stranica prostora",
+            "space_settings": "Postavke prostora"
+        },
+        "unread_messages": "Nepročitane poruke"
+    },
+    "status": {
+        "set_status": {
+            "away": "Odsutan/na",
+            "be_right_back": "Odmah se vraćam",
+            "focus_time": "Vrijeme za fokusiranje",
+            "in_a_meeting": "Na sastanku",
+            "on_the_road": "Na putu",
+            "set_status_prompt": "Kakav je tvoj status?"
+        }
+    },
+    "terms": {
+        "tac_button": "Pregledajte uvjete i odredbe"
+    },
+    "threads": {
+        "error_start_thread_existing_relation": "Nije moguće stvoriti nit iz događaja s postojećom povezanosti"
+    },
+    "time": {
+        "about_day_ago": "prije otprilike jednog dana",
+        "about_hour_ago": "prije otprilike sat vremena",
+        "about_minute_ago": "prije otprilike minutu",
+        "few_seconds_ago": "prije nekoliko sekunda",
+        "in_about_day": "otprilike za jedan dan",
+        "in_about_hour": "otprilike za sat vremena",
+        "in_about_minute": "otprilike za minutu",
+        "in_few_seconds": "za nekoliko sekunda",
+        "in_n_days": "%(num)s dana od sada",
+        "in_n_hours": "%(num)s sati od sada",
+        "in_n_minutes": "%(num)s minuta od sada",
+        "n_days_ago": "prije %(num)s dana",
+        "n_hours_ago": "prije %(num)s sati",
+        "n_minutes_ago": "prije %(num)s minuta"
+    },
+    "timeline": {
+        "call_tile": {
+            "declined": {
+                "call_declined": "Poziv je odbijen",
+                "call_declined_by_us": "Odbili ste poziv"
+            },
+            "ongoing": {
+                "common": {
+                    "call_started_by": "%(startedByDisplayName)s započeo/la je poziv",
+                    "join_button": "Pridruži se"
+                },
+                "dm": {
+                    "call_started": "Poziv je započeo",
+                    "title": "Poziv je u tijeku"
+                },
+                "room": {
+                    "join_count": {
+                        "one": "%(count)s se pridružio",
+                        "few": "%(count)s su se pridružila",
+                        "other": "%(count)s se pridružilo"
+                    },
+                    "title": "Grupni poziv je u tijeku"
+                }
+            },
+            "tombstone": {
+                "room": {
+                    "title": "Grupni poziv je završen"
+                }
+            },
+            "video_call_title": "Videopoziv",
+            "voice_call_title": "Glasovni poziv"
+        },
+        "decryption_failure": {
+            "blocked": "Pošiljatelj je blokirao primanje ove poruke jer vaš uređaj nije potvrđen",
+            "historical_event_no_key_backup": "Prijašnje poruke nisu dostupne na ovom uređaju",
+            "historical_event_unverified_device": "Trebate potvrditi ovaj uređaj kako biste mogli pristupiti prijašnjim porukama",
+            "historical_event_user_not_joined": "Nemate pristup ovoj poruci",
+            "sender_identity_previously_verified": "Pošiljateljev potvrđeni identitet je poništen",
+            "sender_unsigned_device": "Poslano s nesigurnog uređaja.",
+            "unable_to_decrypt": "Nije moguće dešifrirati poruku"
+        },
+        "download_action_decrypting": "Dešifriranje",
+        "download_action_downloading": "Preuzimanje",
+        "e2e_state": "Stanje sveobuhvatnog šifriranja",
+        "m.audio": {
+            "audio_player": "Reproduktor zvučnih sadržaja",
+            "error_downloading_audio": "Pogreška pri preuzimanju zvučnog zapisa",
+            "unnamed_audio": "Neimenovani zvučni zapis"
+        },
+        "m.file": {
+            "error_invalid": "Nevažeća datoteka"
+        },
+        "m.room.avatar": {
+            "changed_img": "%(senderDisplayName)s je promijenio/la avatar sobe u <img/>",
+            "removed": "%(senderDisplayName)s uklonio/la je avatar sobe."
+        },
+        "m.room.encryption": {
+            "disable_attempt": "Ignorirani pokušaj onemogućavanja šifriranja",
+            "disabled": "Šifriranje nije omogućeno",
+            "enabled": "Poruke u ovoj sobi sveobuhvatno su šifrirane. Kada se osobe pridruže, možete ih potvrditi u njihovu profilu, tako da samo dodirnete njihovu profilnu sliku.",
+            "enabled_dm": "Ovdje su poruke sveobuhvatno šifrirane. Potvrdite %(displayName)s u njihovu profilu – dodirnite njihovu profilnu sliku.",
+            "enabled_local": "Poruke u ovom razgovoru bit će sveobuhvatno šifrirane.",
+            "parameters_changed": "Neki parametri šifriranja su promijenjeni.",
+            "state_enabled": "Poruke i događaji u ovoj sobi sveobuhvatno su šifrirani. Kada se osobe pridruže, možete ih potvrditi u njihovu profilu, tako da samo dodirnete njihovu profilnu sliku.",
+            "unsupported": "Šifriranje kojim se koristi ova soba nije podržano."
+        },
+        "mab": {
+            "collapse_reply_chain": "Sažmi navode",
+            "copy_link_thread": "Kopiraj poveznicu u nit",
+            "expand_reply_chain": "Proširi navode",
+            "label": "Radnje s porukama",
+            "view_in_room": "Pregled u sobi"
+        },
+        "message_shared_by": "%(displayName)s (%(userId)s) podijelio/la je ovu poruku jer niste bili u sobi kada je poslana.",
+        "message_timestamp_received_at": "Primljeno u: %(dateTime)s",
+        "message_timestamp_sent_at": "Poslano u: %(dateTime)s",
+        "mjolnir": {
+            "message_hidden": "Ignorirali ste ovog korisnika, pa je njegova poruka skrivena.<a> Svejedno prikaži.</a>"
+        },
+        "pending_moderation": "Poruka čeka moderiranje",
+        "pending_moderation_reason": "Poruka čeka moderiranje: %(reason)s",
+        "url_preview": {
+            "close": "Zatvori pretpregled",
+            "open_link": "Otvori poveznicu",
+            "show_n_more": {
+                "one": "Prikaži %(count)s drugi pregled",
+                "few": "Prikaži %(count)s druga pregleda",
+                "other": "Prikaži %(count)s drugih pregleda"
+            },
+            "view_image": "Prikaži sliku"
+        }
+    },
+    "user_menu": {
+        "link_new_device": "Poveži novi uređaj",
+        "open_feedback": "Povratne informacije",
+        "open_home": "Početna stranica",
+        "open_security": "Sigurnost i privatnost",
+        "open_settings": "Sve postavke"
+    },
+    "widget": {
+        "context_menu": {
+            "move_left": "Premjesti ulijevo",
+            "move_right": "Premjesti udesno",
+            "remove": "Ukloni za sve",
+            "revoke": "Poništi dopuštenja",
+            "screenshot": "Fotografiraj",
+            "start_audio_stream": "Pokreni strujanje zvučnog sadržaja"
+        }
+    }
+}
