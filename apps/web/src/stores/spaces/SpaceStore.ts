@@ -877,8 +877,32 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
         }
     };
 
+    /**
+     * Whether the active space lists the given room as one of its children, joined or not.
+     *
+     * {@link getChildren} keeps only the children we are a member of, so a room being previewed from
+     * the space it was found in does not count as being in that space, even though the space says it
+     * is.
+     *
+     * @param roomId - The room being viewed.
+     * @returns True if the active space declares this room as a child.
+     */
+    private isChildOfActiveSpace(roomId: string): boolean {
+        if (isMetaSpace(this.activeSpace)) return false;
+        const child = this.matrixClient
+            ?.getRoom(this.activeSpace)
+            ?.currentState.getStateEvents(EventType.SpaceChild, roomId);
+        // Same test {@link getChildren} makes of a child event: a removed child has no via at all.
+        return !!child?.getContent().via;
+    }
+
     private switchToRelatedSpace = (roomId: string): void => {
         if (this.suggestedRooms.find((r) => r.room_id === roomId)) return;
+
+        // Previewing a room from the space that offered it should leave the user where they are, the
+        // same as it does for a suggested room. Without this the room belongs to no space we know of
+        // and they are taken to Home for looking.
+        if (this.isChildOfActiveSpace(roomId)) return;
 
         // try to find the canonical parent first
         let parent: SpaceKey | undefined = this.getCanonicalParent(roomId)?.roomId;
