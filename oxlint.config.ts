@@ -338,6 +338,7 @@ export default defineConfig({
                 "packages/playwright-common/src/**/*",
                 "**/scripts/**/*",
                 "apps/web/module_system/**/*",
+                "apps/web/webpack.config.ts",
             ],
             rules: {
                 "no-restricted-globals": "off",
