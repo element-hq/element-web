@@ -35,6 +35,7 @@ function getNormalizedAppVersion(version: string): string {
 }
 
 export default class WebPlatform extends BasePlatform {
+    // oxlint-disable-next-line node/no-process-env
     private static readonly VERSION = process.env.VERSION!; // baked in by Webpack
     private readonly registerServiceWorkerPromise: Promise<void>;
 

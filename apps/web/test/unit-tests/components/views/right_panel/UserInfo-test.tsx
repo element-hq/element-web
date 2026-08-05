@@ -19,7 +19,7 @@ import {
     ProfileKeyTimezone,
     ProfileKeyMSC4175Timezone,
 } from "matrix-js-sdk/src/matrix";
-import { EventEmitter } from "events";
+import { EventEmitter } from "node:events";
 import {
     UserVerificationStatus,
     type VerificationRequest,
