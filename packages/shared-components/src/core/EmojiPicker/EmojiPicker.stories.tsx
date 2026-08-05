@@ -39,6 +39,8 @@ export const WithSelected: Story = {
 };
 
 export const DisabledEmoji: Story = {
+    // Disable screenshot because it doesn't actually look any different
+    tags: ["!snapshot"],
     args: {
         isEmojiDisabled: (unicode: string) => unicode === "😀",
     },
