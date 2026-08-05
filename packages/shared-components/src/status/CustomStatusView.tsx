@@ -11,6 +11,7 @@ import { Field, Link, Menu, Root, TextControl } from "@vector-im/compound-web";
 import { _t, type UserStatus } from "..";
 import { EmojiPicker } from "../core/EmojiPicker";
 import styles from "./CustomStatusView.module.css";
+import classNames from "classnames";
 
 /**
  * The emoji shown on the picker trigger before the user has chosen one.
@@ -91,7 +92,7 @@ export function CustomStatusView({ onSave, onCancel }: CustomStatusViewProps): J
                 trigger={
                     <button
                         type="button"
-                        className={styles.emojiButton}
+                        className={classNames(styles.emojiButton, { [styles.selected]: pickerOpen })}
                         aria-label={_t("status|set_status|choose_emoji")}
                     >
                         {emoji}

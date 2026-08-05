@@ -20,18 +20,20 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    width: 48px;
+    height: 48px;
     padding: 0;
-    border: none;
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
     border-radius: var(--cpd-radius-pill-effect);
-    background: var(--cpd-color-bg-subtle-secondary);
-    font-size: var(--cpd-font-size-body-lg);
+    background: var(--cpd-color-bg-canvas-default);
+    font-size: var(--cpd-font-size-heading-sm);
     line-height: 1;
     cursor: pointer;
 
-    &:hover {
-        background: var(--cpd-color-bg-subtle-primary);
+    &:hover,
+    &.selected {
+        background: var(--cpd-color-bg-subtle-secondary);
+        border-color: var(--cpd-color-border-interactive-hover);
     }
 }
 
