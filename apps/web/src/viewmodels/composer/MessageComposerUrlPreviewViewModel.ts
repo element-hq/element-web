@@ -69,7 +69,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
     public static linksIn(content: string): Set<string> {
         return new Set(
             content
-                .split(" ")
+                .split(/ |\n/)
                 .map((w) => w.trim())
                 .filter((word) => URL.canParse(word)),
         );
