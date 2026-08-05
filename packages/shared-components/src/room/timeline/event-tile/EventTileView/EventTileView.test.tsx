@@ -69,9 +69,7 @@ const applicationStylingClasses = {
 } satisfies Partial<EventTileViewClassNames>;
 
 function createStylingContractSlots(): EventTileViewProps["slots"] {
-    const slot = (name: string): React.ReactElement => (
-        <span data-testid={`styling-contract-${name}`}>{name}</span>
-    );
+    const slot = (name: string): React.ReactElement => <span data-testid={`styling-contract-${name}`}>{name}</span>;
 
     return {
         avatar: slot("avatar"),
@@ -191,9 +189,7 @@ describe("EventTileView", () => {
                 })}
             />,
         );
-        expect(preview.container.querySelector(".mx_EventTile_details")).toHaveClass(
-            applicationStylingClasses.details,
-        );
+        expect(preview.container.querySelector(".mx_EventTile_details")).toHaveClass(applicationStylingClasses.details);
         expect(preview.getByTestId("styling-contract-notificationRoomLabel")).toHaveClass(
             applicationStylingClasses.notificationRoomLabel,
         );
@@ -332,8 +328,12 @@ describe("EventTileView", () => {
             />,
         );
         const root = container.firstElementChild!;
-        const link = getByTestId("sender").parentElement?.parentElement!;
+        const link = getByTestId("sender").parentElement?.parentElement;
         const senderDetails = getByTestId("sender").parentElement!;
+
+        if (!link) {
+            throw new Error("Expected sender details link");
+        }
 
         expect(link).toHaveAttribute("href", renderState.permalink);
         expect(link).toHaveClass("legacy-sender-details-link");
