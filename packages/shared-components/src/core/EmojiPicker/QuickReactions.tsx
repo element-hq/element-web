@@ -18,7 +18,7 @@ import { type ButtonEvent } from "./RovingButton";
 import styles from "./EmojiPicker.module.css";
 import { Heading } from "@vector-im/compound-web";
 
-// We use the variation-selector Heart in Quick Reactions for some reason
+// NB. This is the variation-selector Heart in Quick Reactions as per the spec)
 const QUICK_REACTIONS = ["👍", "👎", "😄", "🎉", "😕", "❤️", "🚀", "👀"].map((emoji) => {
     const data = getEmojiFromUnicode(emoji);
     if (!data) {
@@ -28,8 +28,21 @@ const QUICK_REACTIONS = ["👍", "👎", "😄", "🎉", "😕", "❤️", "🚀
 });
 
 interface IProps {
+    /**
+     * Set of emojis already selected.
+     */
     selectedEmojis?: Set<string>;
+    /**
+     * Called when an emoji is clicked.
+     *
+     * @param ev - The button event
+     * @param emoji - The emoji that was clicked
+     */
     onClick: (ev: ButtonEvent, emoji: IEmoji) => void;
+    /**
+     * Optional function to override the default keyboard navigation mapping.
+     * When omitted, a default mapping based on `KeyboardEvent.key` is used.
+     */
     getAction?: RovingTabIndexProviderProps["getAction"];
 }
 

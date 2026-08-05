@@ -15,17 +15,45 @@ import { RovingButton, type ButtonEvent } from "./RovingButton";
 import styles from "./EmojiPicker.module.css";
 
 interface IProps {
+    /**
+     * The emoji to render.
+     */
     emoji: IEmoji;
     /**
      * Set of which emojis are already selected and should be decorated as such.
      * If specified, emoji will use a checkbox role with aria-checked set appropriately.
      */
     selectedEmojis?: Set<string>;
+    /**
+     * Called when the emoji is clicked.
+     *
+     * @param ev - The button event
+     * @param emoji - The emoji that was clicked
+     */
     onClick: (ev: ButtonEvent, emoji: IEmoji) => void;
+    /**
+     * Called when the mouse enters the emoji.
+     *
+     * @param emoji - The emoji that the mouse entered
+     */
     onMouseEnter: (emoji: IEmoji) => void;
+    /**
+     * Called when the mouse leaves the emoji.
+     *
+     * @param emoji - The emoji that the mouse left
+     */
     onMouseLeave: (emoji: IEmoji) => void;
+    /**
+     * If true, the emoji will be disabled and not clickable.
+     */
     disabled?: boolean;
+    /**
+     * The id to use for the emoji button.
+     */
     id?: string;
+    /**
+     * Optional class name to apply to the emoji button.
+     */
     className?: string;
 }
 

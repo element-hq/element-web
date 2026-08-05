@@ -16,9 +16,23 @@ import { type CategoryKey, type Category } from "./EmojiPicker";
 import styles from "./EmojiPicker.module.css";
 
 interface Props {
+    /**
+     * The categories to display in the tab bar.
+     */
     categories: Category[];
+    /**
+     * The categories that are enabled and can be selected. Disabled categories will be rendered but not selectable.
+     */
     enabledCategories: CategoryKey[];
+    /**
+     * The currently selected category.
+     */
     selectedCategory: CategoryKey;
+    /**
+     * Called when a category tab is clicked.
+     *
+     * @param id - The id of the category that was clicked.
+     */
     onAnchorClick: (id: CategoryKey) => void;
     /**
      * Id of the scrollable picker body that the tabs control (for aria-controls).
@@ -140,6 +154,7 @@ export const Tabs: React.FC<Props> = ({
                 });
                 return (
                     <button
+                        type="button"
                         disabled={!enabledCategories.includes(category.id)}
                         key={category.id}
                         ref={tabRefs.current[category.id]}

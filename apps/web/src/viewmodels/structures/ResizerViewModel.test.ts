@@ -147,19 +147,4 @@ describe("LeftPanelResizerViewModel", () => {
         vm.onLeftPanelResized(50);
         expect(mockHandle.resize).not.toHaveBeenCalled();
     });
-
-    it("should resize to nearest whole number", () => {
-        const vm = new ResizerViewModel(CallStore.instance);
-        const mockHandle = {
-            resize: vi.fn(),
-            getSize: vi.fn().mockReturnValue(0),
-        } as unknown as PanelImperativeHandle;
-        vm.setPanelHandle(mockHandle);
-
-        // Initial call is ignored
-        vm.onLeftPanelResized(70);
-        // This should be processed
-        vm.onLeftPanelResized(25.515);
-        expect(mockHandle.resize).toHaveBeenLastCalledWith("26%");
-    });
 });

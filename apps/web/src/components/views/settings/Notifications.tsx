@@ -232,7 +232,7 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
     public componentDidMount(): void {
         this.settingWatchers = [
             SettingsStore.watchSetting("deviceNotificationsEnabled", null, (...[, , , , value]) => {
-                this.setState({ deviceNotificationsEnabled: value as boolean });
+                this.setState({ deviceNotificationsEnabled: value! });
             }),
         ];
 

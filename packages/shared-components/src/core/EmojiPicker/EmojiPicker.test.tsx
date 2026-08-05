@@ -388,11 +388,11 @@ describe("EmojiPicker", function () {
             });
 
             // Initially, people category should be visible
-            const peopleTab = container.querySelector('[title*="Smileys"]') as HTMLButtonElement;
+            const peopleTab = container.querySelector('[title*="Smileys"]')!;
             expect(peopleTab).toHaveAttribute("tabindex", "0");
 
             // Click on nature category tab
-            const natureTab = container.querySelector('[title*="Animals"]') as HTMLButtonElement;
+            const natureTab = container.querySelector('[title*="Animals"]')!;
             await userEvent.click(natureTab);
 
             // Wait for scroll and visibility update
@@ -410,7 +410,7 @@ describe("EmojiPicker", function () {
             });
 
             // Focus on the category header
-            const peopleTab = container.querySelector('[title*="Smileys"]') as HTMLButtonElement;
+            const peopleTab = container.querySelector<HTMLButtonElement>('[title*="Smileys"]')!;
             peopleTab.focus();
             expect(peopleTab).toHaveFocus();
 
@@ -437,14 +437,14 @@ describe("EmojiPicker", function () {
             });
 
             // Focus on the category header
-            const peopleTab = container.querySelector('[title*="Smileys"]') as HTMLButtonElement;
+            const peopleTab = container.querySelector<HTMLButtonElement>('[title*="Smileys"]')!;
             peopleTab.focus();
 
             // Press End to jump to last category
             await userEvent.keyboard("[End]");
 
             await waitFor(() => {
-                const flagsTab = container.querySelector('[title*="Flags"]') as HTMLButtonElement;
+                const flagsTab = container.querySelector('[title*="Flags"]')!;
                 expect(flagsTab).toHaveFocus();
             });
 

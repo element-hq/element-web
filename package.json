@@ -46,7 +46,7 @@
         "lodash": "^4.17.21",
         "mermaid": "^11.13.0",
         "minimist": "^1.2.6",
-        "nx": "23.1.0",
+        "nx": "catalog:",
         "oxfmt": "0.59.0",
         "oxlint": "^1.70.0",
         "oxlint-tsgolint": "^7.0.0",
@@ -62,7 +62,7 @@
     "devEngines": {
         "packageManager": {
             "name": "pnpm",
-            "version": "11.5.2",
+            "version": "11.20.0",
             "onFail": "download"
         }
     },
