@@ -20,7 +20,7 @@ export { findNextSiblingElement, RovingTabIndexContext } from "@element-hq/web-s
 export { checkInputableElement } from "@element-hq/web-shared-components";
 export { RovingStateActionType } from "@element-hq/web-shared-components";
 export { useRovingTabIndex } from "@element-hq/web-shared-components";
-export type { IAction, IState } from "@element-hq/web-shared-components";
+export type { IState } from "@element-hq/web-shared-components";
 
 /**
  * Module to simplify implementing the Roving TabIndex accessibility technique

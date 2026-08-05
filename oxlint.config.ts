@@ -348,6 +348,8 @@ export default defineConfig({
                 "no-restricted-imports": "off",
                 // They can use process.exit
                 "unicorn/no-process-exit": "off",
+                // They can use top level await
+                "node/no-top-level-await": "off",
             },
         },
         {
@@ -607,12 +609,6 @@ export default defineConfig({
             files: ["**/*.d.ts"],
             rules: {
                 "unicorn/require-module-specifiers": "off",
-            },
-        },
-        {
-            files: ["**/scripts/**/*"],
-            rules: {
-                "node/no-top-level-await": "off",
             },
         },
     ],
