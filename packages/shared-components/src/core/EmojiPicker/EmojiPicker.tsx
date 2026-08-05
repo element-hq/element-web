@@ -122,7 +122,6 @@ export interface EmojiPickerProps {
      * When omitted, a default mapping based on `KeyboardEvent.key` is used.
      */
     getAction?: RovingTabIndexProviderProps["getAction"];
-
     /**
      * Whether to show the quick reactions at the bottom of the picker. Defaults to true.
      * Previews of emoji are displayed in the same bar as will also be hidden when this is false.
