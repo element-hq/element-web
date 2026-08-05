@@ -181,6 +181,37 @@ export default function SearchWarning({ isRoomEncrypted, kind, showLogo = true, 
         );
     }
 
+    // Seshat is right here and the user has only turned message search off, so sending them to the
+    // desktop app they are already running would be no help at all.
+    if (EventIndexPeg.supportIsInstalled()) {
+        return (
+            <div className="mx_SearchWarning">
+                {_t(
+                    kind === WarningKind.Files
+                        ? "seshat|warning_kind_files_disabled"
+                        : "seshat|warning_kind_search_disabled",
+                    {},
+                    {
+                        a: (sub) => (
+                            <AccessibleButton
+                                kind="link_inline"
+                                onClick={(evt: ButtonEvent) => {
+                                    evt.preventDefault();
+                                    dis.dispatch({
+                                        action: Action.ViewUserSettings,
+                                        initialTabId: UserTab.Security,
+                                    });
+                                }}
+                            >
+                                {sub}
+                            </AccessibleButton>
+                        ),
+                    },
+                )}
+            </div>
+        );
+    }
+
     const brand = SdkConfig.get("brand");
     const desktopBuilds = SdkConfig.getObject("desktop_builds");
 
