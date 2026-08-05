@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { vi, beforeEach, afterEach } from "vitest";
+import { act } from "react";
 import fetchMock from "@fetch-mock/vitest";
 
 import SdkConfig, { DEFAULTS } from "../SdkConfig";
@@ -17,6 +18,10 @@ declare global {
 }
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
+
+// Captured before any test can install fake timers, so the drain in `afterEach` below always
+// runs against a real immediate and cannot hang.
+const realSetImmediate = globalThis.setImmediate;
 
 // Deliberately *not* calling `manageFetchMockGlobally()` as it monkey-patches `vi.restoreAllMocks`,
 // `vi.resetAllMocks` and `vi.unstubAllGlobals` such that they also tear the fetch mock down, putting the
@@ -34,7 +39,13 @@ beforeEach(() => {
     setupLanguageMock();
 });
 
-afterEach(() => fetchMock.callHistory.flush());
+afterEach(async () => {
+    await fetchMock.callHistory.flush();
+
+    await act(async () => {
+        await new Promise((resolve) => realSetImmediate(resolve));
+    });
+});
 
 // uninitialised SdkConfig causes lots of warnings in console, init with defaults
 SdkConfig.put(DEFAULTS);
