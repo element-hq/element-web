@@ -209,6 +209,9 @@ catalogs:
     '@fontsource/inter':
       specifier: 5.3.0
       version: 5.3.0
+    '@matrix-org/emojibase-bindings':
+      specifier: 1.5.0
+      version: 1.5.0
     '@playwright/test':
       specifier: 1.61.1
       version: 1.61.1
@@ -538,7 +541,7 @@ importers:
         specifier: ^0.37.0
         version: 0.37.0
       '@matrix-org/emojibase-bindings':
-        specifier: ^1.5.0
+        specifier: 'catalog:'
         version: 1.5.0
       '@matrix-org/react-sdk-module-api':
         specifier: ^2.4.0
@@ -1375,6 +1378,9 @@ importers:
       '@element-hq/element-web-module-api':
         specifier: workspace:*
         version: link:../module-api
+      '@matrix-org/emojibase-bindings':
+        specifier: 'catalog:'
+        version: 1.5.0
       '@matrix-org/spec':
         specifier: ^1.7.0
         version: 1.16.0
