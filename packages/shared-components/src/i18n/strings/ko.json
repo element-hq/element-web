@@ -129,7 +129,9 @@
         "expand_all_sections": "모든 섹션 펼치기",
         "expand_filters": "필터 목록 펼치기",
         "filters": {
+            "favourite": "즐겨찾기",
             "invites": "초대",
+            "low_priority": "우선순위 낮음",
             "mentions": "멘션",
             "people": "사람",
             "rooms": "채팅방",

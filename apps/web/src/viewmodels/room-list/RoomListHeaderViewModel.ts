@@ -17,7 +17,7 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
 import PosthogTrackers from "../../PosthogTrackers";
 import { Action } from "../../dispatcher/actions";
 import { getMetaSpaceName, type MetaSpace, UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE } from "../../stores/spaces";
-import { type SpaceStoreClass } from "../../stores/spaces/SpaceStore";
+import type SpaceStore from "../../stores/spaces/SpaceStore";
 import {
     shouldShowSpaceSettings,
     showCreateNewRoom,
@@ -42,7 +42,7 @@ export interface Props {
     /**
      * The space store instance.
      */
-    spaceStore: SpaceStoreClass;
+    spaceStore: SpaceStore;
 }
 
 /**
@@ -69,6 +69,13 @@ export class RoomListHeaderViewModel
             this.onVideoRoomsFeatureFlagChange,
         );
         this.disposables.track(() => SettingsStore.unwatchSetting(settingsFeatureVideoRef));
+
+        const settingsShowSectionsRef = SettingsStore.watchSetting(
+            "RoomList.showSections",
+            null,
+            this.onShowSectionsChange,
+        );
+        this.disposables.track(() => SettingsStore.unwatchSetting(settingsShowSectionsRef));
 
         // Listen for space changes
         this.disposables.trackListener(props.spaceStore, UPDATE_SELECTED_SPACE, this.onSpaceChange);
@@ -130,6 +137,15 @@ export class RoomListHeaderViewModel
     private readonly onVideoRoomsFeatureFlagChange = (): void => {
         this.snapshot.merge({
             canCreateVideoRoom: getCanCreateVideoRoom(this.snapshot.current.canCreateRoom),
+        });
+    };
+
+    /**
+     * Handles show sections setting change events.
+     */
+    private readonly onShowSectionsChange = (): void => {
+        this.snapshot.merge({
+            areSectionsEnabled: SettingsStore.getValue("RoomList.showSections"),
         });
     };
 
@@ -255,7 +271,7 @@ export class RoomListHeaderViewModel
  * @param matrixClient - The Matrix client instance.
  * @returns
  */
-function getInitialSnapshot(spaceStore: SpaceStoreClass, matrixClient: MatrixClient): RoomListHeaderViewSnapshot {
+function getInitialSnapshot(spaceStore: SpaceStore, matrixClient: MatrixClient): RoomListHeaderViewSnapshot {
     const sortingAlgorithm = SettingsStore.getValue("RoomList.preferredSorting");
 
     let activeSortOption: SortOption;
@@ -284,7 +300,7 @@ function getInitialSnapshot(spaceStore: SpaceStoreClass, matrixClient: MatrixCli
  * Get the header title based on the active space.
  * @param spaceStore - The space store instance.
  */
-function getHeaderTitle(spaceStore: SpaceStoreClass): string {
+function getHeaderTitle(spaceStore: SpaceStore): string {
     const activeSpace = spaceStore.activeSpaceRoom;
     const spaceName = activeSpace?.name;
     return spaceName ?? getMetaSpaceName(spaceStore.activeSpace as MetaSpace, spaceStore.allRoomsInHome);
@@ -305,11 +321,12 @@ function getCanCreateVideoRoom(canCreateRoom: boolean): boolean {
  * @returns The header space state containing title, permissions, and display flags.
  */
 function computeHeaderSpaceState(
-    spaceStore: SpaceStoreClass,
+    spaceStore: SpaceStore,
     matrixClient: MatrixClient,
 ): Omit<RoomListHeaderViewSnapshot, "activeSortOption" | "isMessagePreviewEnabled"> {
     const displaySectionReleaseAnnouncement =
         ReleaseAnnouncementStore.instance.getReleaseAnnouncement() === "room_list_section";
+    const areSectionsEnabled = SettingsStore.getValue("RoomList.showSections");
 
     const activeSpace = spaceStore.activeSpaceRoom;
     const title = getHeaderTitle(spaceStore);
@@ -330,5 +347,6 @@ function computeHeaderSpaceState(
         canInviteInSpace,
         canAccessSpaceSettings,
         displaySectionReleaseAnnouncement,
+        areSectionsEnabled,
     };
 }

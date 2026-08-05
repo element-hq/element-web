@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, useState } from "react";
+import React, { type JSX, useContext, useState } from "react";
 import { Menu, MenuItem } from "@vector-im/compound-web";
 import { type Room } from "matrix-js-sdk/src/matrix";
 
@@ -16,7 +16,6 @@ import DecoratedRoomAvatar from "../../avatars/DecoratedRoomAvatar";
 import { Action } from "../../../../dispatcher/actions";
 import defaultDispatcher from "../../../../dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../../../../dispatcher/payloads/ViewRoomPayload";
-import RightPanelStore from "../../../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../stores/right-panel/RightPanelStorePhases";
 import { useUnreadThreadRooms } from "./useUnreadThreadRooms";
 import { StatelessNotificationBadge } from "../../rooms/NotificationBadge/StatelessNotificationBadge";
@@ -25,6 +24,7 @@ import PosthogTrackers from "../../../../PosthogTrackers";
 import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
 import { useSettingValue } from "../../../../hooks/useSettings";
+import { SDKContext } from "../../../../contexts/SDKContext.ts";
 
 interface ThreadsActivityCentreProps {
     /**
@@ -117,6 +117,8 @@ interface ThreadsActivityRow {
  * Display a room with unread threads.
  */
 function ThreadsActivityCentreRow({ room, onClick, notificationLevel }: ThreadsActivityRow): JSX.Element {
+    const sdkContext = useContext(SDKContext);
+
     return (
         <MenuItem
             className="mx_ThreadsActivityCentreRow"
@@ -125,7 +127,7 @@ function ThreadsActivityCentreRow({ room, onClick, notificationLevel }: ThreadsA
 
                 // Set the right panel card for that room so the threads panel is open before we dispatch,
                 // so it will open once the room appears.
-                RightPanelStore.instance.setCard({ phase: RightPanelPhases.ThreadPanel }, true, room.roomId);
+                sdkContext.rightPanelStore.setCard({ phase: RightPanelPhases.ThreadPanel }, true, room.roomId);
 
                 // Track the click on the room
                 PosthogTrackers.trackInteraction("WebThreadsActivityCentreRoomItem", event);

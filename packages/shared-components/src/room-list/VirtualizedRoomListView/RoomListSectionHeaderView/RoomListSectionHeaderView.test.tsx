@@ -87,7 +87,6 @@ describe("<RoomListSectionHeaderView /> stories", () => {
         const user = userEvent.setup();
         const onKeyDown = vi.fn();
         render(
-            // eslint-disable-next-line jsx-a11y/no-static-element-interactions
             <div onKeyDown={onKeyDown}>
                 <Default isFocused={true} />
             </div>,

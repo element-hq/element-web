@@ -39,7 +39,7 @@ const ROOM_PREVIEW_CHANGED = "room_preview_changed";
 const MAX_EVENTS_BACKWARDS = 50;
 
 // type merging ftw
-type TAG_ANY = "im.vector.any"; // eslint-disable-line @typescript-eslint/naming-convention
+type TAG_ANY = "im.vector.any";
 const TAG_ANY: TAG_ANY = "im.vector.any";
 
 export interface MessagePreview {

@@ -22,6 +22,7 @@ import {
     RelationType,
     type Relations,
     Room,
+    RoomMember,
     TweakName,
 } from "matrix-js-sdk/src/matrix";
 import {
@@ -51,6 +52,8 @@ import SettingsStore from "../../../../../src/settings/SettingsStore";
 import EditorStateTransfer from "../../../../../src/utils/EditorStateTransfer";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import PlatformPeg from "../../../../../src/PlatformPeg";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
+import { SDKContext } from "../../../../../src/contexts/SDKContext.ts";
 
 function getTile(container: HTMLElement): HTMLElement {
     const tile = container.querySelector(".mx_EventTile");
@@ -289,6 +292,15 @@ describe("EventTile", () => {
             expect(getTile(container)).toContainElement(getLine(container));
         });
 
+        it("preserves the existing root and line markup", () => {
+            const { container } = getComponent();
+            const tile = getTile(container);
+
+            expect(tile.tagName).toBe("LI");
+            expect(tile).toContainElement(getLine(container));
+            expect(getLine(container)).toHaveClass("mx_EventTile_line");
+        });
+
         it("does not expose a scroll token for local echo events", () => {
             const localEcho = makeOwnMessage();
             localEcho.setStatus(EventStatus.SENDING);
@@ -516,7 +528,7 @@ describe("EventTile", () => {
     });
 
     describe("sender and avatar rendering", () => {
-        it("shows sender and avatar in room timelines", () => {
+        it("keeps the sender/avatar composition in room timelines", () => {
             const { container } = getComponent();
 
             expect(container.querySelector(".mx_DisambiguatedProfile")).not.toBeNull();
@@ -1057,6 +1069,25 @@ describe("EventTile", () => {
                 expect(screen.getByText("Pinned message")).toBeInTheDocument();
             },
         );
+
+        it("uses the current room member when current profiles are enabled", async () => {
+            const senderId = mxEvent.getSender()!;
+            const currentMember = new RoomMember(room.roomId, senderId);
+            currentMember.rawDisplayName = "Alan (away)";
+
+            jest.spyOn(room, "getMember").mockImplementation((userId) => (userId === senderId ? currentMember : null));
+            jest.spyOn(SettingsStore, "getValue").mockImplementation(
+                (settingName) => settingName === "useOnlyCurrentProfiles",
+            );
+
+            const { container } = getComponent();
+
+            await waitFor(() =>
+                expect(container.querySelector(".mx_DisambiguatedProfile_displayName")).toHaveTextContent(
+                    "Alan (away)",
+                ),
+            );
+        });
 
         it("renders the tile error fallback when tile rendering throws", async () => {
             jest.spyOn(console, "error").mockImplementation(() => {});
@@ -1652,7 +1683,11 @@ describe("EventTile", () => {
             return Element.prototype.matches.call(this, selector);
         });
 
-        const { container, rerender } = render(<WrappedEventTiles events={events} editEvent={firstEvent} />);
+        const { container, rerender } = render(<WrappedEventTiles events={events} editEvent={firstEvent} />, {
+            wrapper: ({ children }) => (
+                <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+            ),
+        });
         const editingTile = container.querySelector(".mx_EventTile_isEditing");
 
         expect(editingTile).not.toBeNull();

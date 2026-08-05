@@ -20,7 +20,7 @@ import {
     mockPlatformPeg,
 } from "../../../../../../test-utils";
 import { SDKContext } from "../../../../../../../src/contexts/SDKContext";
-import { SDKContextClass } from "../../../../../../../src/contexts/SDKContextClass";
+import { TestSDKContext } from "../../../../../TestSDKContext.ts";
 import defaultDispatcher from "../../../../../../../src/dispatcher/dispatcher";
 import { UIFeature } from "../../../../../../../src/settings/UIFeature";
 import SettingsStore from "../../../../../../../src/settings/SettingsStore";
@@ -42,8 +42,8 @@ describe("<SecurityUserSettingsTab />", () => {
         setIgnoredUsers,
     });
 
-    const sdkContext = new SDKContextClass();
-    sdkContext.client = mockClient;
+    const sdkContext = new TestSDKContext();
+    sdkContext._client = mockClient;
 
     const getComponent = () => (
         <MatrixClientContext.Provider value={mockClient}>

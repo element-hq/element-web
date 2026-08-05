@@ -12,6 +12,7 @@ exports[`<ThirdPartyMemberInfo /> should render invite 1`] = `
         class="mx_BaseCard_header_title"
       >
         <p
+          aria-level="1"
           class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 mx_BaseCard_header_title_heading"
           role="heading"
         >
@@ -58,6 +59,7 @@ exports[`<ThirdPartyMemberInfo /> should render invite 1`] = `
           style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <span
+            aria-level="2"
             class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74"
             role="heading"
           >
@@ -87,6 +89,7 @@ exports[`<ThirdPartyMemberInfo /> should render invite when room in not availabl
         class="mx_BaseCard_header_title"
       >
         <p
+          aria-level="1"
           class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 mx_BaseCard_header_title_heading"
           role="heading"
         >
@@ -133,6 +136,7 @@ exports[`<ThirdPartyMemberInfo /> should render invite when room in not availabl
           style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <span
+            aria-level="2"
             class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74"
             role="heading"
           >

@@ -12,7 +12,6 @@ import { type IWidget } from "matrix-widget-api";
 export interface IApp extends IWidget {
     "roomId": string;
     "eventId"?: string; // not present on virtual widgets
-    // eslint-disable-next-line camelcase
     "avatar_url"?: string; // MSC2765 https://github.com/matrix-org/matrix-doc/pull/2765
     // Whether the widget was created from `widget_build_url` and thus is a call widget of some kind
     "io.element.managed_hybrid"?: boolean;
@@ -22,7 +21,6 @@ export interface IWidgetEvent {
     id: string;
     type: string;
     sender: string;
-    // eslint-disable-next-line camelcase
     state_key: string;
     content: IApp;
 }

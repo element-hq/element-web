@@ -30,7 +30,7 @@ describe("TypingStore", () => {
             sendTyping: jest.fn(),
         } as unknown as MatrixClient;
         const context = new TestSDKContext();
-        context.client = mockClient;
+        context._client = mockClient;
         typingStore = new TypingStore(context);
         jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
             return name === "sendTypingNotifications";

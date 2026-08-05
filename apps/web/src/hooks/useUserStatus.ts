@@ -6,14 +6,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useEffect, useState } from "react";
-import { ClientEvent, MatrixError } from "matrix-js-sdk/src/matrix";
+import { ClientEvent } from "matrix-js-sdk/src/matrix";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { type UserStatus } from "@element-hq/web-shared-components";
 
 import { useMatrixClientContext } from "../contexts/MatrixClientContext";
 import { useTypedEventEmitter } from "./useEventEmitter";
 import { useFeatureEnabled } from "./useSettings";
-import { validateUserStatus } from "../utils/userStatus";
+import { fetchUserStatus, userStatusFromProfile } from "../utils/userStatus";
 
 const logger = rootLogger.getChild("useUserStatus");
 
@@ -27,14 +27,16 @@ const logger = rootLogger.getChild("useUserStatus");
 export function useUserStatus(userId: string | undefined): UserStatus | undefined {
     const isEnabled = useFeatureEnabled("feature_user_status");
     const matrixClient = useMatrixClientContext();
-    const [rawUserStatus, setRawUserStatus] = useState<unknown>();
+    const [userStatus, setUserStatus] = useState<UserStatus | undefined>();
 
     useTypedEventEmitter(matrixClient, ClientEvent.UserProfileUpdate, (syncedUserId, syncProfile) => {
         if (syncedUserId !== userId) {
             return;
         }
 
-        setRawUserStatus(syncProfile["org.matrix.msc4426.status"]);
+        setUserStatus(
+            userStatusFromProfile(syncProfile["org.matrix.msc4426.status"], syncProfile["org.matrix.msc4426.call"]),
+        );
     });
     useEffect(() => {
         (async () => {
@@ -42,22 +44,18 @@ export function useUserStatus(userId: string | undefined): UserStatus | undefine
                 return;
             }
             if (!userId) {
-                setRawUserStatus(undefined);
+                setUserStatus(undefined);
                 return;
             }
             if ((await matrixClient.doesServerSupportExtendedProfiles()) === false) {
-                setRawUserStatus(undefined);
+                setUserStatus(undefined);
                 return;
             }
             try {
-                const result = await matrixClient.getExtendedProfileProperty(userId, "org.matrix.msc4426.status");
-                setRawUserStatus(result);
+                const result = await fetchUserStatus(matrixClient, userId);
+                setUserStatus(result);
             } catch (ex) {
-                if (ex instanceof MatrixError && ex.errcode === "M_NOT_FOUND") {
-                    setRawUserStatus(undefined);
-                } else {
-                    logger.warn(`Failed to get userStatus for ${userId}`, ex);
-                }
+                logger.warn(`Failed to get userStatus for ${userId}`, ex);
             }
         })();
     }, [isEnabled, userId, matrixClient]);
@@ -65,5 +63,5 @@ export function useUserStatus(userId: string | undefined): UserStatus | undefine
         return;
     }
 
-    return validateUserStatus(rawUserStatus);
+    return userStatus;
 }

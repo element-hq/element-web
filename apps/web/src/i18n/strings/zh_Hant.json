@@ -418,7 +418,6 @@
         "encrypted": "開啟加密",
         "error": "錯誤",
         "faq": "常見問答集",
-        "favourites": "我的最愛",
         "feedback": "回饋",
         "filter_results": "過濾結果",
         "forward_message": "轉寄訊息",
@@ -441,7 +440,6 @@
         "message": "訊息",
         "message_layout": "訊息佈局",
         "microphone": "麥克風",
-        "model": "模型",
         "modern": "現代",
         "mute": "靜音",
         "n_members": {
@@ -1241,7 +1239,6 @@
         "experimental_description": "想要做點實驗？歡迎測試我們開發中的最新創意功能。這些功能尚未完成設計；可能不穩定、可能會變動，也可能會被完全捨棄。<a>取得更多資訊</a>。",
         "experimental_section": "提早預覽",
         "feature_wysiwyg_composer_description": "在訊息編輯器中使用格式化文字而非 Markdown。",
-        "group_calls": "全新的群組通話體驗",
         "group_developer": "開發者",
         "group_encryption": "加密",
         "group_experimental": "實驗性",
@@ -2331,7 +2328,6 @@
         "send_read_receipts_unsupported": "您的伺服器不支援停用傳送讀取回條。",
         "send_typing_notifications": "傳送「輸入中」的通知",
         "sessions": {
-            "browser": "瀏覽器",
             "confirm_sign_out": {
                 "one": "確認登出此裝置",
                 "other": "確認登出這些裝置"
@@ -2380,7 +2376,6 @@
             "no_sessions": "找不到工作階段。",
             "no_unverified_sessions": "找不到未驗證的工作階段。",
             "no_verified_sessions": "找不到已驗證的工作階段。",
-            "os": "作業系統",
             "other_sessions_heading": "其他工作階段",
             "push_heading": "推送通知",
             "push_subheading": "在此工作階段接收推送通知。",
@@ -2460,7 +2455,6 @@
             "audio_output": "音訊輸出",
             "audio_output_empty": "未偵測到音訊輸出",
             "auto_gain_control": "自動增益控制",
-            "connection_section": "連線",
             "dialog_title": "<strong>設定：</strong>語音與視訊",
             "echo_cancellation": "迴聲消除",
             "enable_fallback_ice_server": "允許使用備用通話輔助伺服器（%(server)s）",

@@ -17,11 +17,13 @@ import {
     LocalStorageCryptoStore,
     RoomNameType,
     type RoomNameState,
-    type TokenRefreshFunction,
     EventTimelineSet,
     EventTimeline,
+    type OAuth2,
+    TokenRefresher,
 } from "matrix-js-sdk/src/matrix";
 import { VerificationMethod } from "matrix-js-sdk/src/types";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import indexeddbWorkerFactory from "../workers/indexeddbWorkerFactory";
 import SettingsStore from "../settings/SettingsStore";
@@ -29,6 +31,7 @@ import { crossSigningCallbacks } from "../SecurityManager";
 import IdentityAuthClient from "../IdentityAuthClient";
 import { _t } from "../languageHandler";
 import { formatList } from "./FormattingUtils";
+import { persistTokens } from "./tokens/tokens.ts";
 
 const localStorage = window.localStorage;
 
@@ -116,14 +119,19 @@ function roomNameGenerator(_: string, state: RoomNameState): string | null {
  * Create a new matrix client from credentials with all the options needed.
  *
  * @param creds The credentials to create the client with
- * @param tokenRefreshFunction Optional function to call when the access token is expired
+ * @param oauth The OAuth2 instance for OAuth2-native sessions
  *
  * @returns {MatrixClient} the newly-created MatrixClient
  */
-export function createClientWithCreds(
-    creds: IMatrixClientCreds,
-    tokenRefreshFunction?: TokenRefreshFunction,
-): MatrixClient {
+export function createClientWithCreds(creds: IMatrixClientCreds, oauth?: OAuth2): MatrixClient {
+    let tokenRefreshFunction: ICreateClientOpts["tokenRefreshFunction"];
+    if (creds.refreshToken && oauth) {
+        const tokenRefresher = new TokenRefresher(oauth, persistTokens.bind(null, creds.pickleKey));
+        tokenRefreshFunction = tokenRefresher?.tokenRefreshFunction;
+    } else {
+        logger.debug("No refresh token was supplied: access token will not be refreshed");
+    }
+
     const opts: ICreateClientOpts = {
         baseUrl: creds.homeserverUrl,
         idBaseUrl: creds.identityServerUrl,

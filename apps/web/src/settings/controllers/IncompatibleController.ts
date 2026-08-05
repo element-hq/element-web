@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import SettingController from "./SettingController";
 import { type SettingLevel } from "../SettingLevel";
-import { type BooleanSettingKey } from "../Settings.tsx";
+import { type SettingKey, type Settings } from "../Settings.tsx";
 import PlatformPeg from "../../PlatformPeg.ts";
 
 /**
@@ -16,11 +16,16 @@ import PlatformPeg from "../../PlatformPeg.ts";
  * is also enabled, to prevent cascading undefined behaviour between conflicting
  * labs flags.
  */
-export default class IncompatibleController extends SettingController {
+export default class IncompatibleController<
+    ControlledSetting extends SettingKey,
+    WatchedSetting extends SettingKey,
+> extends SettingController {
     public constructor(
-        private settingName: BooleanSettingKey,
-        private forcedValue: any = false,
-        private incompatibleValue: any | ((v: any) => boolean) = true,
+        private settingName: WatchedSetting,
+        private forcedValue: Settings[ControlledSetting]["default"] = false,
+        private incompatibleValue:
+            | Settings[WatchedSetting]["default"]
+            | ((v: Settings[WatchedSetting]["default"]) => boolean) = true,
         private readonly disabledMessage?: string,
         private readonly forceReload = false,
     ) {

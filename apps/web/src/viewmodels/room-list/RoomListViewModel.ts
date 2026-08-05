@@ -22,7 +22,7 @@ import dispatcher from "../../dispatcher/dispatcher";
 import { type ViewRoomDeltaPayload } from "../../dispatcher/payloads/ViewRoomDeltaPayload";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { type RoomListSectionsCollapseStateChangedPayload } from "../../dispatcher/payloads/RoomListSectionsCollapseStateChangedPayload";
-import SpaceStore from "../../stores/spaces/SpaceStore";
+import type SpaceStore from "../../stores/spaces/SpaceStore";
 import RoomListStoreV3, {
     RoomListStoreV3Event,
     type RoomsResult,
@@ -34,7 +34,6 @@ import {
     UPDATE_STATUS_INDICATOR,
 } from "../../stores/notifications/RoomNotificationStateStore";
 import { RoomListItemViewModel } from "./RoomListItemViewModel";
-import { SDKContextClass } from "../../contexts/SDKContextClass";
 import { hasCreateRoomRights } from "./utils";
 import { keepIfSame } from "../../utils/keepIfSame";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
@@ -42,6 +41,8 @@ import { RoomListSectionHeaderViewModel } from "./RoomListSectionHeaderViewModel
 import { getCustomSectionData, isCustomSectionTag, CHATS_TAG } from "../../stores/room-list-v3/section";
 import { tagRoom } from "../../utils/room/tagRoom";
 import { getSectionTagForRoom } from "../../utils/room/getSectionTagForRoom";
+import SettingsStore from "../../settings/SettingsStore";
+import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 
 /**
  * Tracks the position of the active room within a specific section.
@@ -57,15 +58,37 @@ interface StickyRoomPosition {
 
 interface RoomListViewModelProps {
     client: MatrixClient;
+    roomViewStore: RoomViewStore;
+    spaceStore: SpaceStore;
 }
 
 const filterKeyToIdMap: Map<FilterEnum, FilterId> = new Map([
     [FilterEnum.UnreadFilter, "unread"],
     [FilterEnum.PeopleFilter, "people"],
     [FilterEnum.RoomsFilter, "rooms"],
+    [FilterEnum.FavouriteFilter, "favourite"],
     [FilterEnum.MentionsFilter, "mentions"],
     [FilterEnum.InvitesFilter, "invites"],
+    [FilterEnum.LowPriorityFilter, "low_priority"],
 ]);
+
+/**
+ * Filters that are redundant when sections are enabled: Favourites and Low Priority rooms
+ * already have their own sections, so these filters are only shown as chips when sectioning
+ * is disabled (see {@link getVisibleFilterIds}).
+ */
+const SECTION_ONLY_FILTER_IDS: ReadonlySet<FilterId> = new Set<FilterId>(["favourite", "low_priority"]);
+
+/**
+ * Compute the filter ids to display as primary filter chips.
+ * When sections are enabled, the Favourites and Low Priority filters are hidden because those
+ * rooms are surfaced as dedicated sections instead.
+ */
+function getVisibleFilterIds(): FilterId[] {
+    const areSectionsEnabled = SettingsStore.getValue("RoomList.showSections");
+    const filterIds = [...filterKeyToIdMap.values()];
+    return areSectionsEnabled ? filterIds.filter((id) => !SECTION_ONLY_FILTER_IDS.has(id)) : filterIds;
+}
 
 const TAG_TO_TITLE_MAP: Record<string, string> = {
     [DefaultTagID.Favourite]: _t("room_list|section|favourites"),
@@ -137,13 +160,13 @@ export class RoomListViewModel
     private scrollToIndex?: (index: number) => void;
 
     public constructor(props: RoomListViewModelProps) {
-        const activeSpace = SpaceStore.instance.activeSpaceRoom;
+        const activeSpace = props.spaceStore.activeSpaceRoom;
 
         // Get initial rooms
         const roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(undefined);
         const canCreateRoom = hasCreateRoomRights(props.client, activeSpace);
 
-        const filterIds = [...filterKeyToIdMap.values()];
+        const filterIds = getVisibleFilterIds();
 
         // By default, all sections are expanded
         const { sections, isFlatList } = computeSections(roomsResult, (tag) => true);
@@ -172,38 +195,26 @@ export class RoomListViewModel
         this.updateRoomsMap(roomsResult);
 
         // Subscribe to room list updates
-        this.disposables.trackListener(
-            RoomListStoreV3.instance,
-            RoomListStoreV3Event.ListsUpdate as any,
-            this.onListsUpdate,
-        );
+        this.disposables.trackListener(RoomListStoreV3.instance, RoomListStoreV3Event.ListsUpdate, this.onListsUpdate);
 
         // Subscribe to room list loaded
-        this.disposables.trackListener(
-            RoomListStoreV3.instance,
-            RoomListStoreV3Event.ListsLoaded as any,
-            this.onListsLoaded,
-        );
+        this.disposables.trackListener(RoomListStoreV3.instance, RoomListStoreV3Event.ListsLoaded, this.onListsLoaded);
 
         // Subscribe to section creation
         this.disposables.trackListener(
             RoomListStoreV3.instance,
-            RoomListStoreV3Event.SectionCreated as any,
+            RoomListStoreV3Event.SectionCreated,
             this.onSectionCreated as (...args: unknown[]) => void,
         );
 
         // Subscribe to room tagging
-        this.disposables.trackListener(
-            RoomListStoreV3.instance,
-            RoomListStoreV3Event.RoomTagged as any,
-            this.onRoomTagged,
-        );
+        this.disposables.trackListener(RoomListStoreV3.instance, RoomListStoreV3Event.RoomTagged, this.onRoomTagged);
 
         // Recompute the "unread activity below" toast when room notification state
         // changes (e.g. a room below the fold becomes unread, or is marked read).
         this.disposables.trackListener(
             RoomNotificationStateStore.instance,
-            UPDATE_STATUS_INDICATOR as any,
+            UPDATE_STATUS_INDICATOR,
             this.updateUnreadActivityBelow,
         );
 
@@ -212,6 +223,10 @@ export class RoomListViewModel
         this.disposables.track(() => {
             dispatcher.unregister(dispatcherRef);
         });
+
+        // Recompute the lis when setting changes
+        const showSectionsRef = SettingsStore.watchSetting("RoomList.showSections", null, this.onShowSectionsChange);
+        this.disposables.track(() => SettingsStore.unwatchSetting(showSectionsRef));
 
         // Track cleanup of all child view models
         this.disposables.track(() => {
@@ -245,6 +260,20 @@ export class RoomListViewModel
         // Update roomsMap immediately before clearing VMs
         this.updateRoomsMap(this.roomsResult);
 
+        this.updateRoomListData();
+    };
+
+    /**
+     * Handle changes to the {@link RoomList.showSections} setting.
+     * Toggling sections is a rare action, so we simply reset the filters and rebuild
+     * the list from scratch rather than trying to reconcile the previous state.
+     */
+    private readonly onShowSectionsChange = (): void => {
+        this.activeFilter = undefined;
+        this.clearViewModels();
+        this.roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace();
+        this.updateRoomsMap(this.roomsResult);
+        this.snapshot.merge({ filterIds: getVisibleFilterIds() });
         this.updateRoomListData();
     };
 
@@ -460,7 +489,48 @@ export class RoomListViewModel
         if (target) this.scrollToIndex?.(target.index);
     };
 
-    private onDispatch = (payload: any): void => {
+    /**
+     * Scroll a room into view, expanding its section first if it is collapsed so the tile can
+     * actually be shown.
+     */
+    private async scrollRoomIntoView(roomId: string): Promise<void> {
+        // Look in the full (pre-collapse) sections so we can find rooms hidden in collapsed sections.
+        const section = this.roomsResult.sections.find((s) => s.rooms.some((room) => room.roomId === roomId));
+        // Room not found
+        if (!section) return;
+
+        const headerViewModel = this.roomSectionHeaderViewModels.get(section.tag);
+        // Expand and rebuild the section
+        if (headerViewModel && !headerViewModel.isExpanded) {
+            headerViewModel.isExpanded = true;
+            await this.updateRoomListData();
+        }
+
+        // Scroll to the room
+        const index = this.getRoomEntryIndex(roomId);
+        if (index !== undefined) this.scrollToIndex?.(index);
+    }
+
+    /**
+     * Compute a room's index in the list's entry space, or undefined if it is not in the displayed
+     * sections (e.g. collapsed or filtered out). Flat list: the room index; grouped list: includes
+     * one slot per section header (matching {@link firstUnreadRoomBelowFold}).
+     */
+    private getRoomEntryIndex(roomId: string): number | undefined {
+        // A grouped list renders a header entry before each section's rooms; a flat list does not.
+        const hasSectionHeaders = !this.snapshot.current.isFlatList;
+
+        let entryIndex = 0;
+        for (const section of this.sections) {
+            if (hasSectionHeaders) entryIndex++; // section header entry
+            const indexInSection = section.rooms.findIndex((room) => room.roomId === roomId);
+            if (indexInSection !== -1) return entryIndex + indexInSection;
+            entryIndex += section.rooms.length;
+        }
+        return undefined;
+    }
+
+    private onDispatch = async (payload: any): Promise<void> => {
         if (payload.action === Action.ActiveRoomChanged) {
             // When the active room changes, update the room list data to reflect the new selected room
             // Pass isRoomChange=true so sticky logic doesn't prevent the index from updating
@@ -469,6 +539,8 @@ export class RoomListViewModel
             // Handle keyboard navigation shortcuts (Alt+ArrowUp/Down)
             // This was previously handled by useRoomListNavigation hook
             this.handleViewRoomDelta(payload as ViewRoomDeltaPayload);
+        } else if (payload.action === Action.ViewRoom && payload.show_room_tile && payload.room_id) {
+            await this.scrollRoomIntoView(payload.room_id);
         } else if (payload.action === Action.RoomListCollapseAllSections) {
             this.onCollapseAllSections(false);
         } else if (payload.action === Action.RoomListExpandAllSections) {
@@ -493,7 +565,7 @@ export class RoomListViewModel
      * Migrated from useRoomListNavigation hook.
      */
     private handleViewRoomDelta(payload: ViewRoomDeltaPayload): void {
-        const currentRoomId = SDKContextClass.instance.roomViewStore.getRoomId();
+        const currentRoomId = this.props.roomViewStore.getRoomId();
         if (!currentRoomId) return;
 
         const { delta, unread } = payload;
@@ -564,7 +636,7 @@ export class RoomListViewModel
             }
 
             // Space changed - get the last selected room for the new space to prevent flicker
-            const lastSelectedRoom = SpaceStore.instance.getLastSelectedRoomIdForSpace(newSpaceId);
+            const lastSelectedRoom = this.props.spaceStore.getLastSelectedRoomIdForSpace(newSpaceId);
 
             this.updateRoomListData(true, lastSelectedRoom);
             return;
@@ -669,9 +741,12 @@ export class RoomListViewModel
         roomIdOverride: string | null = null,
         scrollToSectionTag: string | undefined = undefined,
     ): Promise<void> {
+        // Store is still loading rooms - don't update the list yet, we'll get another update when loading finishes
+        if (RoomListStoreV3.instance.isLoadingRooms) return;
+
         // Determine the room ID to use for calculations
         // Use override if provided (e.g., during space changes), otherwise fall back to RoomViewStore
-        const roomId = roomIdOverride ?? SDKContextClass.instance.roomViewStore.getRoomId();
+        const roomId = roomIdOverride ?? this.props.roomViewStore.getRoomId();
 
         // Apply sticky room logic to keep selected room at same position within its section
         const stickySections = this.applyStickyRoom(isRoomChange, roomId);
@@ -698,12 +773,6 @@ export class RoomListViewModel
             this.roomsResult,
             (tag) => this.roomSectionHeaderViewModels.get(tag)?.isExpanded ?? true,
         );
-        // If it's a flat list, we need to make sure the single section is expanded and has all rooms, otherwise the room list will be empty
-        if (isFlatList) {
-            const chatSections = this.roomSectionHeaderViewModels.get(CHATS_TAG);
-            if (chatSections) chatSections.isExpanded = true;
-            chatSections?.setRooms(this.roomsResult.sections.flatMap((section) => section.rooms));
-        }
         this.sections = sections;
 
         // Calculate the active room index from the computed sections (which exclude collapsed sections' rooms)
@@ -776,7 +845,7 @@ export class RoomListViewModel
     };
 
     public createRoom = (): void => {
-        const activeSpace = SpaceStore.instance.activeSpaceRoom;
+        const activeSpace = this.props.spaceStore.activeSpaceRoom;
         if (activeSpace) {
             dispatcher.dispatch({
                 action: Action.CreateRoom,
@@ -799,6 +868,10 @@ export class RoomListViewModel
     };
 
     public onRoomTagged = (): void => {
+        const areSectionsEnabled = SettingsStore.getValue("RoomList.showSections");
+        // Only show the "chat moved" toast if sections are enabled
+        if (!areSectionsEnabled) return;
+
         this.showToast("chat_moved");
     };
 
@@ -882,19 +955,21 @@ function computeSections(
 ): { sections: Section[]; isFlatList: boolean } {
     const customSections = getCustomSectionData();
 
-    const sections = roomsResult.sections
+    const filtered = roomsResult.sections
         // Only include sections that have rooms, or custom sections that were created in the current space.
         .filter(
             (section) =>
                 section.rooms.length > 0 ||
                 (isCustomSectionTag(section.tag) && customSections[section.tag]?.spaceId === roomsResult.spaceId),
-        )
-        // Remove roomIds for sections that are currently collapsed according to their section header view model
-        .map((section) => ({
-            ...section,
-            rooms: isSectionExpanded(section.tag) ? section.rooms : [],
-        }));
-    const isFlatList = sections.length === 0 || (sections.length === 1 && sections[0].tag === CHATS_TAG);
+        );
+    const isFlatList = filtered.length === 0 || (filtered.length === 1 && filtered[0].tag === CHATS_TAG);
+
+    const sections = filtered.map((section) => ({
+        ...section,
+        // A flat list has no section header to toggle, so always render its rooms.
+        // Otherwise, remove roomIds for sections that are currently collapsed.
+        rooms: isFlatList || isSectionExpanded(section.tag) ? section.rooms : [],
+    }));
 
     return { sections, isFlatList };
 }

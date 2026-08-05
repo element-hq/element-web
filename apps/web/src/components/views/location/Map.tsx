@@ -163,7 +163,7 @@ const MapComponent: React.FC<MapProps> = ({
 }) => {
     const { map, bodyId } = useMapWithStyle({ centerGeoUri, onError, id, interactive, bounds, allowGeolocate });
 
-    const onMapClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
+    const onMapClick = (event: React.MouseEvent<HTMLDivElement>): void => {
         // Eat click events when clicking the attribution button
         const target = event.target as Element;
         if (target.classList.contains("maplibregl-ctrl-attrib-button")) {
@@ -174,6 +174,8 @@ const MapComponent: React.FC<MapProps> = ({
     };
 
     return (
+        // We break the rule here as this is a mouse-only interaction
+        // oxlint-disable-next-line jsx-a11y/click-events-have-key-events
         <div className={classNames("mx_Map", className)} id={bodyId} onClick={onMapClick}>
             {!!children && !!map && children({ map })}
         </div>

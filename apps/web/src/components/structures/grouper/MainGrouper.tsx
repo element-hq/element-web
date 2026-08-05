@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactNode } from "react";
+import React, { type ReactNode, useContext } from "react";
 import { EventType, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { DateSeparatorView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
@@ -18,6 +18,7 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import HistoryTile from "../../views/rooms/HistoryTile";
 import EventListSummary from "../../views/elements/EventListSummary";
 import { DateSeparatorViewModel } from "../../../viewmodels/room/timeline/DateSeparatorViewModel";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 const groupedStateEvents = [
     EventType.RoomMember,
@@ -30,7 +31,10 @@ const groupedStateEvents = [
  * Creates and auto-disposes the DateSeparatorViewModel for grouped timeline rendering.
  */
 function DateSeparatorWrapper({ roomId, ts }: { roomId: string; ts: number }): ReactNode {
-    const vm = useCreateAutoDisposedViewModel(() => new DateSeparatorViewModel({ roomId, ts }));
+    const sdkContext = useContext(SDKContext);
+    const vm = useCreateAutoDisposedViewModel(
+        () => new DateSeparatorViewModel({ roomId, ts, roomViewStore: sdkContext.roomViewStore }),
+    );
     return <DateSeparatorView vm={vm} className="mx_TimelineSeparator" />;
 }
 

@@ -33,6 +33,7 @@ import EditMessageComposer from "../rooms/EditMessageComposer";
 import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
 import { UrlPreviewGroupViewModel } from "../../../viewmodels/message-body/UrlPreviewGroupViewModel";
 import PlatformPeg from "../../../PlatformPeg";
+import { useSettingValue } from "../../../hooks/useSettings";
 
 const logger = rootLogger.getChild("TextualBodyFactory");
 
@@ -61,6 +62,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
     const willHaveWrapper = !!props.replacingEventId || !!props.isSeeingThroughMessageHiddenForModeration || isEmote;
     const stripReply = !props.mxEvent.replacingEvent() && !!getParentEventId(props.mxEvent);
     const contentRef = useRef<TextualBodyContentElement>(null);
+    const urlPreviewBundleEnabled = useSettingValue("feature_msc4095_url_preview_bundle");
 
     const textualBodyVm = useCreateAutoDisposedViewModel(
         () =>
@@ -121,6 +123,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
                 },
                 visible: props.showUrlPreview ?? false,
                 showTooltips: PlatformPeg.get()?.needsUrlTooltips() ?? true,
+                urlPreviewBundleEnabled,
             }),
     );
 

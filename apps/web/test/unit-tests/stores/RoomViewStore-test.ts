@@ -13,7 +13,7 @@ import {
     RoomViewLifecycle,
     type ViewRoomOpts,
 } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
-import EventEmitter from "events";
+import EventEmitter from "node:events";
 
 import { RoomViewStore } from "../../../src/stores/RoomViewStore";
 import { Action } from "../../../src/dispatcher/actions";
@@ -34,7 +34,7 @@ import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
 import { MatrixDispatcher } from "../../../src/dispatcher/dispatcher";
 import { UPDATE_EVENT } from "../../../src/stores/AsyncStore";
 import { type ActiveRoomChangedPayload } from "../../../src/dispatcher/payloads/ActiveRoomChangedPayload";
-import { SpaceStoreClass } from "../../../src/stores/spaces/SpaceStore";
+import SpaceStore from "../../../src/stores/spaces/SpaceStore";
 import { TestSDKContext } from "../TestSDKContext";
 import { type ViewRoomPayload } from "../../../src/dispatcher/payloads/ViewRoomPayload";
 import Modal from "../../../src/Modal";
@@ -48,8 +48,10 @@ import { CallStore } from "../../../src/stores/CallStore";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../src/MediaDeviceHandler";
 import { storeRoomAliasInCache } from "../../../src/RoomAliasCache.ts";
-import { type Call } from "../../../src/models/Call.ts";
+import { type Call, ConnectionState } from "../../../src/models/Call.ts";
+import ActiveWidgetStore from "../../../src/stores/ActiveWidgetStore";
 import { ModuleApi } from "../../../src/modules/Api";
+import { type JoinRoomPayload } from "../../../src/dispatcher/payloads/JoinRoomPayload.ts";
 
 jest.mock("../../../src/Modal");
 
@@ -59,7 +61,7 @@ const MockPosthogAnalytics = <jest.Mock<PosthogAnalytics>>(<unknown>PosthogAnaly
 jest.mock("../../../src/SlidingSyncManager");
 const MockSlidingSyncManager = <jest.Mock<SlidingSyncManager>>(<unknown>SlidingSyncManager);
 jest.mock("../../../src/stores/spaces/SpaceStore");
-const MockSpaceStore = <jest.Mock<SpaceStoreClass>>(<unknown>SpaceStoreClass);
+const MockSpaceStore = <jest.Mock<SpaceStore>>(<unknown>SpaceStore);
 
 // mock VoiceRecording because it contains all the audio APIs
 jest.mock("../../../src/audio/VoiceRecording", () => ({
@@ -96,9 +98,7 @@ jest.mock("../../../src/utils/DMRoomMap", () => {
 });
 
 jest.mock("../../../src/stores/WidgetStore", () => {
-    // This mock needs to use a real EventEmitter; require is the only way to import that in a hoisted block
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const EventEmitter = require("events");
+    const EventEmitter = jest.requireActual("events");
     const apps: IApp[] = [];
     const instance = new (class extends EventEmitter {
         getApps() {
@@ -193,7 +193,7 @@ describe("RoomViewStore", function () {
         dis = new MatrixDispatcher();
         slidingSyncManager = new MockSlidingSyncManager();
         stores = new TestSDKContext();
-        stores.client = mockClient;
+        stores._client = mockClient;
         stores._SlidingSyncManager = slidingSyncManager;
         stores._PosthogAnalytics = new MockPosthogAnalytics();
         // @ts-expect-error
@@ -430,8 +430,61 @@ describe("RoomViewStore", function () {
         expect(call.presented).toEqual(true);
     });
 
+    it("opens a voice-intent call directly in picture-in-picture rather than maximised", async () => {
+        const call = {
+            presented: false,
+            connectionState: ConnectionState.Disconnected,
+            widget: { id: "!widget:example.org" },
+            start: jest.fn(),
+        } as unknown as Call;
+        jest.spyOn(CallStore.instance, "getCall").mockReturnValue(call);
+        const persistenceSpy = jest.spyOn(ActiveWidgetStore.instance, "setWidgetPersistence");
+        await setupAsyncStoreWithClient(CallStore.instance, MatrixClientPeg.safeGet());
+
+        dis.dispatch<ViewRoomPayload>({
+            action: Action.ViewRoom,
+            room_id: roomId,
+            view_call: true,
+            voiceOnly: true,
+            metricsTrigger: undefined,
+        });
+        await untilDispatch(Action.ViewRoom, dis);
+
+        // The call is started and marked persistent so it renders in the PiP container...
+        expect(call.presented).toEqual(true);
+        expect(persistenceSpy).toHaveBeenCalledWith("!widget:example.org", roomId, true);
+        expect(call.start).toHaveBeenCalledWith(expect.objectContaining({ voiceOnly: true }));
+        // ...but the room is not switched to the maximised call view.
+        expect(roomViewStore.isViewingCall()).toEqual(false);
+    });
+
+    it("opens a video-intent call maximised in the room", async () => {
+        const call = {
+            presented: false,
+            connectionState: ConnectionState.Disconnected,
+            widget: { id: "!widget:example.org" },
+            start: jest.fn(),
+        } as unknown as Call;
+        jest.spyOn(CallStore.instance, "getCall").mockReturnValue(call);
+        const persistenceSpy = jest.spyOn(ActiveWidgetStore.instance, "setWidgetPersistence");
+        await setupAsyncStoreWithClient(CallStore.instance, MatrixClientPeg.safeGet());
+
+        dis.dispatch<ViewRoomPayload>({
+            action: Action.ViewRoom,
+            room_id: roomId,
+            view_call: true,
+            voiceOnly: false,
+            metricsTrigger: undefined,
+        });
+        await untilDispatch(Action.ViewRoom, dis);
+
+        expect(call.presented).toEqual(true);
+        expect(persistenceSpy).not.toHaveBeenCalled();
+        expect(call.start).toHaveBeenCalledWith(expect.objectContaining({ voiceOnly: false }));
+        expect(roomViewStore.isViewingCall()).toEqual(true);
+    });
+
     it("should display an error message when the room is unreachable via the roomId", async () => {
-        // When
         // View and wait for the room
         dis.dispatch({ action: Action.ViewRoom, room_id: roomId });
         await untilDispatch(Action.ActiveRoomChanged, dis);
@@ -442,7 +495,6 @@ describe("RoomViewStore", function () {
         // Check the modal props
         expect(mocked(Modal).createDialog.mock.calls[0][1]).toMatchSnapshot();
     });
-
     // The server bob is on will affect the message we send.
     it.each(["server", "another-server"])(
         "should display an invite-specific error message when the room is unreachable",
@@ -467,6 +519,12 @@ describe("RoomViewStore", function () {
             expect(mocked(Modal).createDialog.mock.calls[0][1]).toMatchSnapshot();
         },
     );
+
+    it("should display an error message when the provided room is invalid", async () => {
+        dis.dispatch({ action: Action.JoinRoom, room_id: "" });
+        const result = await untilDispatch(Action.JoinRoomError, dis);
+        expect(result.err.cause.message).toEqual("Cannot join room: no room ID or alias to join");
+    });
 
     it("should display the generic error message when the roomId doesnt match", async () => {
         // When
@@ -535,22 +593,34 @@ describe("RoomViewStore", function () {
             jest.spyOn(dis, "dispatch");
             jest.spyOn(mockClient, "joinRoom").mockRejectedValueOnce(err);
 
-            dis.dispatch({ action: Action.JoinRoom, canAskToJoin: true });
+            const roomId = "!hello:world";
+
+            dis.dispatch<JoinRoomPayload>({
+                action: Action.JoinRoom,
+                canAskToJoin: true,
+                roomId,
+                metricsTrigger: "RoomPreview",
+            });
             await untilDispatch(Action.PromptAskToJoin, dis);
 
-            expect(mocked(dis.dispatch).mock.calls[0][0]).toEqual({ action: "join_room", canAskToJoin: true });
+            expect(mocked(dis.dispatch).mock.calls[0][0]).toEqual({
+                action: Action.JoinRoom,
+                canAskToJoin: true,
+                metricsTrigger: "RoomPreview",
+                roomId,
+            });
             expect(mocked(dis.dispatch).mock.calls[1][0]).toEqual({
-                action: "join_room_error",
-                roomId: null,
+                action: Action.JoinRoomError,
+                roomId,
                 err,
                 canAskToJoin: true,
             });
-            expect(mocked(dis.dispatch).mock.calls[2][0]).toEqual({ action: "prompt_ask_to_join" });
+            expect(mocked(dis.dispatch).mock.calls[2][0]).toEqual({ action: Action.PromptAskToJoin });
         });
 
         it("sets 'acceptSharedHistory'", async () => {
-            dis.dispatch({ action: Action.ViewRoom, room_id: roomId });
-            dis.dispatch({ action: Action.JoinRoom });
+            dis.dispatch<ViewRoomPayload>({ action: Action.ViewRoom, room_id: roomId, metricsTrigger: "RoomList" });
+            dis.dispatch<JoinRoomPayload>({ action: Action.JoinRoom, roomId: roomId, metricsTrigger: "RoomPreview" });
             await untilDispatch(Action.JoinRoomReady, dis);
             expect(mockClient.joinRoom).toHaveBeenCalledWith(roomId, { acceptSharedHistory: true, viaServers: [] });
         });

@@ -466,7 +466,6 @@
         "encrypted": "암호화됨",
         "error": "오류",
         "faq": "자주 묻는 질문 (FAQ)",
-        "favourites": "즐겨찾기",
         "feedback": "피드백",
         "filter_results": "필터 결과",
         "forward_message": "전달 메세지",
@@ -490,7 +489,6 @@
         "message_layout": "메시지 레이아웃",
         "message_timestamp_invalid": "유효하지 않은 타임스탬프",
         "microphone": "마이크",
-        "model": "모델",
         "moderation_and_safety": "관리 및 안전",
         "modern": "모던",
         "mute": "음소거",
@@ -661,7 +659,6 @@
     "create_section_dialog": {
         "create_section": "섹션 생성",
         "description": "이 섹션은 당신만을 위한 공간입니다.",
-        "edit_section": "섹션 편집",
         "label": "섹션 이름",
         "title": "섹션 만들기",
         "title_edition": "섹션을 편집하세요"
@@ -1502,7 +1499,6 @@
             "required_msc_support": "레거시 동기화 프로필 업데이트를 위해 MSC4429 규격이 필요합니다."
         },
         "feature_wysiwyg_composer_description": "메시지 작성기에서 Markdown 대신 서식 있는 텍스트를 사용하세요",
-        "group_calls": "그룹 통화 새 기능",
         "group_developer": "개발자",
         "group_encryption": "암호화",
         "group_experimental": "실험적 기능",
@@ -2782,7 +2778,6 @@
         "send_typing_notifications": "입력 알림 보내기",
         "sessions": {
             "best_security_note": "최상의 보안을 위해 세션을 인증하고, 인식하지 못하거나 더 이상 사용하지 않는 세션은 제거하세요.",
-            "browser": "브라우저",
             "confirm_sign_out": {
                 "other": "이 기기들을 제거하시겠습니까?"
             },
@@ -2828,7 +2823,6 @@
             "no_sessions": "세션을 찾을 수 없습니다.",
             "no_unverified_sessions": "확인되지 않은 세션이 없습니다.",
             "no_verified_sessions": "확인된 세션이 없습니다.",
-            "os": "운영체제",
             "other_sessions_heading": "다른 세션",
             "push_heading": "푸시 알림",
             "push_subheading": "이 세션에 대한 푸시 알림을 받으세요.",
@@ -2918,7 +2912,6 @@
             "audio_output": "오디오 출력",
             "audio_output_empty": "오디오 출력 감지 없음",
             "auto_gain_control": "자동 이득 제어",
-            "connection_section": "연결",
             "dialog_title": "<strong>설정:</strong> 음성 및 영상",
             "echo_cancellation": "에코 제거",
             "echo_cancellation_description": "통화 중 마이크 입력에서 에코를 제거합니다. 이 설정은 Element Call에도 적용됩니다.",

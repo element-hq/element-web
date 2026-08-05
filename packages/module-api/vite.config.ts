@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { dirname, resolve } from "node:path";
+import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vitest/config";
 import dts from "unplugin-dts/vite";
@@ -13,12 +13,10 @@ import externalGlobals from "rollup-plugin-external-globals";
 
 import packageJson from "./package.json" with { type: "json" };
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
 export default defineConfig({
     build: {
         lib: {
-            entry: resolve(__dirname, "src/index.ts"),
+            entry: fileURLToPath(import.meta.resolve("./src/index.ts")),
             name: "element-web-plugin-engine",
             fileName: "element-web-plugin-engine",
         },
@@ -27,7 +25,17 @@ export default defineConfig({
         sourcemap: true,
     },
     plugins: [
-        dts(),
+        dts({
+            bundleTypes: {
+                configPath: "./api-extractor.json",
+                invokeOptions: {
+                    // Always overwrite element-web-module-api.api.md
+                    localBuild: true,
+                    // oxlint-disable-next-line unicorn/prefer-module
+                    typescriptCompilerFolder: path.resolve(require.resolve("@typescript/old"), "../.."),
+                },
+            },
+        }),
         externalGlobals({
             // Reuse React from the host app
             react: "window.React",

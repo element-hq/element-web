@@ -142,3 +142,17 @@ export const DisplaySectionReleaseAnnouncement: Story = {
         },
     },
 };
+
+export const SectionsDisabled: Story = {
+    args: {
+        areSectionsEnabled: false,
+    },
+};
+
+export const NoComposeMenu: Story = {
+    args: {
+        canCreateRoom: false,
+        canCreateVideoRoom: false,
+        areSectionsEnabled: false,
+    },
+};

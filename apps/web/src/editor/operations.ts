@@ -220,7 +220,7 @@ export function formatRangeAsLink(range: Range, text?: string): void {
         replaceRangeAndMoveCaret(range, newParts, 0);
     } else {
         // We set offset to -1 here so that the caret lands between the brackets
-        replaceRangeAndMoveCaret(range, [partCreator.plain("[" + range.text + "]" + "(" + (text ?? "") + ")")], -1);
+        replaceRangeAndMoveCaret(range, [partCreator.plain(`[${range.text}](${text ?? ""})`)], -1);
     }
 }
 

@@ -11,7 +11,7 @@ import { type SettingLevel } from "../SettingLevel";
 import MatrixClientBackedController from "./MatrixClientBackedController";
 import { type WatchManager } from "../WatchManager";
 import { type SettingKey } from "../Settings.tsx";
-import { _t } from "../../languageHandler.tsx";
+import { _t } from "../../languageHandler";
 import PlatformPeg from "../../PlatformPeg.ts";
 
 /**

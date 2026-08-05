@@ -467,7 +467,6 @@
         "encrypted": "Criptografada",
         "error": "Erro",
         "faq": "Perguntas frequentes",
-        "favourites": "Favoritos",
         "feedback": "Fale conosco",
         "filter_results": "Filtrar resultados",
         "forward_message": "Encaminhar",
@@ -491,7 +490,6 @@
         "message_layout": "Aparência da mensagem",
         "message_timestamp_invalid": "Data/hora inválido",
         "microphone": "Microfone",
-        "model": "Modelo",
         "moderation_and_safety": "Moderação e segurança",
         "modern": "Moderno",
         "mute": "Mudo",
@@ -1474,7 +1472,6 @@
         "extended_profiles_msc_support": "Requer que seu servidor ofereça suporte ao MSC4133",
         "feature_disable_call_per_sender_encryption": "Desativar a criptografia por remetente para Element Call",
         "feature_wysiwyg_composer_description": "Use rich text em vez de Markdown no compositor de mensagens.",
-        "group_calls": "Nova experiência de chamada em grupo",
         "group_developer": "Desenvolvedor",
         "group_encryption": "Criptografia",
         "group_experimental": "Experimental",
@@ -2752,7 +2749,6 @@
         "send_typing_notifications": "Permitir que saibam quando eu estiver digitando",
         "sessions": {
             "best_security_note": "Para maior segurança, verifique suas sessões e saia de qualquer sessão que você não reconhece ou não usa mais.",
-            "browser": "Navegador",
             "confirm_sign_out": {
                 "other": "Confirme a saída destes dispositivos",
                 "one": "Confirme a saída deste dispositivo"
@@ -2803,7 +2799,6 @@
             "no_sessions": "Nenhuma sessão encontrada.",
             "no_unverified_sessions": "Nenhuma sessão não verificada foi encontrada.",
             "no_verified_sessions": "Nenhuma sessão verificada foi encontrada.",
-            "os": "Sistema operacional",
             "other_sessions_heading": "Outras sessões",
             "push_heading": "Notificações push",
             "push_subheading": "Receber notificações push nesta sessão.",
@@ -2895,7 +2890,6 @@
             "audio_output": "Caixa de som",
             "audio_output_empty": "Nenhuma caixa de som detectada",
             "auto_gain_control": "Controle de ganho automático",
-            "connection_section": "Conexão",
             "dialog_title": "<strong>Configurações:</strong> Voz e Vídeo",
             "echo_cancellation": "Cancelamento de eco",
             "enable_fallback_ice_server": "Permitir servidor de assistência de chamada de fallback (%(server)s)",

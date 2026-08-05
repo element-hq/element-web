@@ -461,7 +461,6 @@
         "encrypted": "Şifrelenmiş",
         "error": "Hata",
         "faq": "SSS",
-        "favourites": "Favoriler",
         "feedback": "Geri bildirim",
         "filter_results": "Sonuçları filtrele",
         "forward_message": "Mesajı ilet",
@@ -485,7 +484,6 @@
         "message_layout": "Mesaj düzeni",
         "message_timestamp_invalid": "Geçersiz zaman damgası",
         "microphone": "Mikrofon",
-        "model": "Model",
         "modern": "Modern",
         "mute": "Sessiz",
         "n_members": {
@@ -1377,7 +1375,6 @@
         "extended_profiles_msc_support": "Sunucunuzun MSC4133 desteklemesini gerektirir",
         "feature_disable_call_per_sender_encryption": "Element Call için gönderen başına şifrelemeyi devre dışı bırakın",
         "feature_wysiwyg_composer_description": "Mesaj oluşturucu olarak Markdown yerine zengin metin kullanın.",
-        "group_calls": "Yeni grup görüşmesi deneyimi",
         "group_developer": "Geliştirici",
         "group_encryption": "Şifreleme",
         "group_experimental": "Deneysel",
@@ -2601,7 +2598,6 @@
         "send_typing_notifications": "Yazma bildirimlerini gönder",
         "sessions": {
             "best_security_note": "Güvenlik için oturumlarınızı doğrulayın ve tanımadığınız veya artık kullanmadığınız oturumlardan çıkış yapın.",
-            "browser": "Tarayıcı",
             "confirm_sign_out": {
                 "one": "Bu cihazın oturumunu kapatmayı onayla",
                 "other": "Şu cihazlardan oturumu kapatmayı onayla"
@@ -2652,7 +2648,6 @@
             "no_sessions": "Oturum bulunamadı.",
             "no_unverified_sessions": "Doğrulanmamış oturum bulunamadı.",
             "no_verified_sessions": "Doğrulanmış oturum bulunamadı.",
-            "os": "İşletim Sistemi",
             "other_sessions_heading": "Diğer oturumlar",
             "push_heading": "Anlık bildirimler",
             "push_subheading": "Bu oturumda anlık bildirimler alın.",
@@ -2738,7 +2733,6 @@
             "audio_output": "Ses Çıkışı",
             "audio_output_empty": "Ses çıkışları tespit edilemedi",
             "auto_gain_control": "Otomatik kazanç kontrolü",
-            "connection_section": "Bağlantı",
             "dialog_title": "<strong>Ayarlar:</strong> Ses ve Görüntü",
             "echo_cancellation": "Yankı giderme",
             "enable_fallback_ice_server": "Yedek arama destek sunucusuna (%(server)s) izin ver",

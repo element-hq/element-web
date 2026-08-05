@@ -14,7 +14,7 @@ import userEvent from "@testing-library/user-event";
 import * as stories from "./LinkedText.stories.tsx";
 import { LinkedText } from "./LinkedText.tsx";
 import { LinkifyOptionalSlashProtocols, PERMITTED_URL_SCHEMES } from "../linkify";
-import { LinkedTextContext } from "./LinkedTextContext.tsx";
+import { LinkedTextContext } from "./LinkedTextContext";
 
 const { Default, WithUserId, WithRoomAlias, WithCustomHref, WithCustomUrlTarget } = composeStories(stories);
 

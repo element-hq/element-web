@@ -13,6 +13,7 @@ import type AutocompleteWrapperModel from "../../../src/editor/autocomplete";
 import { type Caret } from "../../../src/editor/caret";
 import { type PillPart, type Part, PartCreator } from "../../../src/editor/parts";
 import DocumentPosition from "../../../src/editor/position";
+import { vi } from "../../setup/adapter.ts";
 
 export class MockAutoComplete {
     public _updateCallback;
@@ -68,8 +69,8 @@ export function createPartCreator(completions: PillPart[] = []) {
     };
     const room = new MockRoom() as unknown as Room;
     const client = {
-        getRooms: jest.fn().mockReturnValue([]),
-        getRoom: jest.fn().mockReturnValue(null),
+        getRooms: vi.fn().mockReturnValue([]),
+        getRoom: vi.fn().mockReturnValue(null),
     } as unknown as MatrixClient;
     return new PartCreator(room, client, autoCompleteCreator);
 }

@@ -34,7 +34,6 @@ import {
     type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
 import { mocked, type MockedObject } from "jest-mock-vitest-adapter";
-import fetchMock from "@fetch-mock/jest";
 
 import {
     clearAllModals,
@@ -57,9 +56,8 @@ import { INACTIVE_DEVICE_AGE_MS } from "../../../../../../../src/components/view
 import SettingsStore from "../../../../../../../src/settings/SettingsStore";
 import { getClientInformationEventType } from "../../../../../../../src/utils/device/clientInformation";
 import { SDKContext } from "../../../../../../../src/contexts/SDKContext";
-import { SDKContextClass } from "../../../../../../../src/contexts/SDKContextClass";
-import { type OidcClientStore } from "../../../../../../../src/stores/oidc/OidcClientStore";
-import { makeDelegatedAuthConfig } from "../../../../../../test-utils/oidc";
+import { TestSDKContext } from "../../../../../TestSDKContext.ts";
+import { makeDelegatedAuthMetadata } from "../../../../../../test-utils/auth";
 import MatrixClientContext from "../../../../../../../src/contexts/MatrixClientContext";
 
 mockPlatformPeg();
@@ -134,7 +132,7 @@ describe("<SessionManagerTab />", () => {
     } as unknown as CryptoApi);
 
     let mockClient!: MockedObject<MatrixClient>;
-    let sdkContext: SDKContextClass;
+    let sdkContext: TestSDKContext;
 
     const defaultProps = {};
     const getComponent = (props = {}): React.ReactElement => (
@@ -250,8 +248,8 @@ describe("<SessionManagerTab />", () => {
             }
         });
 
-        sdkContext = new SDKContextClass();
-        sdkContext.client = mockClient;
+        sdkContext = new TestSDKContext();
+        sdkContext._client = mockClient;
 
         // @ts-ignore allow delete of non-optional prop
         delete window.location;
@@ -950,18 +948,16 @@ describe("<SessionManagerTab />", () => {
                 toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
 
                 const deviceDetails = getByTestId(`device-detail-${alicesMobileDevice.device_id}`);
-                const signOutButton = deviceDetails.querySelector(
-                    '[data-testid="device-detail-sign-out-cta"]',
-                ) as Element;
+                const signOutButton = deviceDetails.querySelector('[data-testid="device-detail-sign-out-cta"]')!;
                 fireEvent.click(signOutButton);
 
                 await confirmSignout(getByTestId, false);
 
                 // doesnt enter loading state
                 expect(
-                    (deviceDetails.querySelector('[data-testid="device-detail-sign-out-cta"]') as Element).getAttribute(
-                        "aria-disabled",
-                    ),
+                    deviceDetails
+                        .querySelector('[data-testid="device-detail-sign-out-cta"]')!
+                        .getAttribute("aria-disabled"),
                 ).toEqual(null);
                 // delete not called
                 expect(mockClient.deleteMultipleDevices).not.toHaveBeenCalled();
@@ -993,9 +989,7 @@ describe("<SessionManagerTab />", () => {
                 toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
 
                 const deviceDetails = getByTestId(`device-detail-${alicesMobileDevice.device_id}`);
-                const signOutButton = deviceDetails.querySelector(
-                    '[data-testid="device-detail-sign-out-cta"]',
-                ) as Element;
+                const signOutButton = deviceDetails.querySelector('[data-testid="device-detail-sign-out-cta"]')!;
                 fireEvent.click(signOutButton);
                 await confirmSignout(getByTestId);
 
@@ -1054,17 +1048,15 @@ describe("<SessionManagerTab />", () => {
                 toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
 
                 const deviceDetails = getByTestId(`device-detail-${alicesMobileDevice.device_id}`);
-                const signOutButton = deviceDetails.querySelector(
-                    '[data-testid="device-detail-sign-out-cta"]',
-                ) as Element;
+                const signOutButton = deviceDetails.querySelector('[data-testid="device-detail-sign-out-cta"]')!;
                 fireEvent.click(signOutButton);
                 await confirmSignout(getByTestId);
 
                 // button is loading
                 expect(
-                    (deviceDetails.querySelector('[data-testid="device-detail-sign-out-cta"]') as Element).getAttribute(
-                        "aria-disabled",
-                    ),
+                    deviceDetails
+                        .querySelector('[data-testid="device-detail-sign-out-cta"]')!
+                        .getAttribute("aria-disabled"),
                 ).toEqual("true");
 
                 await flushPromises();
@@ -1096,9 +1088,9 @@ describe("<SessionManagerTab />", () => {
 
                 // loading state cleared
                 expect(
-                    (deviceDetails.querySelector('[data-testid="device-detail-sign-out-cta"]') as Element).getAttribute(
-                        "aria-disabled",
-                    ),
+                    deviceDetails
+                        .querySelector('[data-testid="device-detail-sign-out-cta"]')!
+                        .getAttribute("aria-disabled"),
                 ).toEqual(null);
             });
 
@@ -1180,10 +1172,10 @@ describe("<SessionManagerTab />", () => {
         describe("for an OIDC-aware server", () => {
             beforeEach(() => {
                 // just do an ugly mock here to avoid mocking initialisation
-                const mockOidcClientStore = {
-                    accountManagementEndpoint: "https://issuer.org/account",
-                } as unknown as OidcClientStore;
-                jest.spyOn(sdkContext, "oidcClientStore", "get").mockReturnValue(mockOidcClientStore);
+                mockClient.getAuthMetadata.mockResolvedValue({
+                    ...makeDelegatedAuthMetadata(),
+                    account_management_uri: "https://issuer.org/account",
+                } as any);
             });
 
             // signing out the current device works as usual
@@ -1243,7 +1235,7 @@ describe("<SessionManagerTab />", () => {
                     const deviceDetails = getByTestId(`device-detail-${alicesMobileDevice.device_id}`);
                     const manageDeviceButton = deviceDetails.querySelector(
                         '[data-testid="device-detail-sign-out-cta"]',
-                    ) as Element;
+                    )!;
                     expect(manageDeviceButton).toHaveAttribute(
                         "href",
                         `https://issuer.org/account?action=org.matrix.session_view&device_id=${alicesMobileDevice.device_id}`,
@@ -1637,7 +1629,7 @@ describe("<SessionManagerTab />", () => {
                     enabled: true,
                 },
             });
-            const delegatedAuthConfig = makeDelegatedAuthConfig(issuer);
+            const delegatedAuthConfig = makeDelegatedAuthMetadata(issuer);
             mockClient.getAuthMetadata.mockResolvedValue({
                 ...delegatedAuthConfig,
                 grant_types_supported: [
@@ -1646,13 +1638,6 @@ describe("<SessionManagerTab />", () => {
                 ],
             });
             mockCrypto.exportSecretsBundle = jest.fn();
-            fetchMock.route(delegatedAuthConfig.jwks_uri!, {
-                status: 200,
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                keys: [],
-            });
         });
 
         it("renders qr code login section", async () => {

@@ -1,17 +1,25 @@
-import genWorkflowMermaid from "../../scripts/gen-workflow-mermaid";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
+/*
+Copyright 2026 Element Creations Ltd.
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE in the repository root for full details.
+*/
+
+import genWorkflowMermaid from "../../scripts/gen-workflow-mermaid";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { type ResolvedRouteConfig } from "vitepress";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default {
-    async paths() {
-        const root = join(__dirname, "..", "..");
+    async paths(): Promise<Partial<ResolvedRouteConfig>[]> {
+        const root = path.join(__dirname, "..", "..");
 
         return [
             {
                 params: { id: "automations" },
-                content: await genWorkflowMermaid([root, join(root, "node_modules", "matrix-js-sdk")]),
+                content: await genWorkflowMermaid([root, path.join(root, "node_modules", "matrix-js-sdk")]),
             },
         ];
     },

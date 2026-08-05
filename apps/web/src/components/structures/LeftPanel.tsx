@@ -10,9 +10,9 @@ import React from "react";
 import classNames from "classnames";
 
 import type ResizeNotifier from "../../utils/ResizeNotifier";
-import SpaceStore from "../../stores/spaces/SpaceStore";
 import { type SpaceKey, UPDATE_SELECTED_SPACE } from "../../stores/spaces";
 import { RoomListPanel } from "../views/rooms/RoomListPanel";
+import { SDKContext } from "../../contexts/SDKContext.ts";
 
 interface IProps {
     isMinimized: boolean;
@@ -24,20 +24,23 @@ interface IState {
 }
 
 export default class LeftPanel extends React.Component<IProps, IState> {
-    public constructor(props: IProps) {
-        super(props);
+    public static contextType = SDKContext;
+    declare public context: React.ContextType<typeof SDKContext>;
+
+    public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
+        super(props, context);
 
         this.state = {
-            activeSpace: SpaceStore.instance.activeSpace,
+            activeSpace: context.spaceStore.activeSpace,
         };
     }
 
     public componentDidMount(): void {
-        SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
+        this.context.spaceStore.on(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
     }
 
     public componentWillUnmount(): void {
-        SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
+        this.context.spaceStore.off(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
     }
 
     private updateActiveSpace = (activeSpace: SpaceKey): void => {

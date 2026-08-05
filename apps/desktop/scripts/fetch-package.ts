@@ -1,6 +1,12 @@
 #!/usr/bin/env node
+/*
+Copyright 2026 Element Creations Ltd.
 
-import * as path from "node:path";
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE in the repository root for full details.
+*/
+
+import path from "node:path";
 import { createWriteStream, promises as fs } from "node:fs";
 import * as childProcess from "node:child_process";
 import * as tar from "tar";

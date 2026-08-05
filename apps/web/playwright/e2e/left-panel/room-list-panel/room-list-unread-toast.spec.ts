@@ -62,7 +62,7 @@ test.describe("Room list unread activity toast", () => {
 
             // A room with a real notification count, named so it sorts to the very bottom under A-Z.
             const targetId = await app.client.createRoom({ name: "zzz unread room" });
-            await app.client.inviteUser(targetId, bot.credentials.userId);
+            await app.client.inviteUser(targetId, bot.credentials!.userId);
             await bot.joinRoom(targetId);
 
             // Enough filler rooms to push the target well below the visible area.
@@ -100,12 +100,12 @@ test.describe("Room list unread activity toast", () => {
             // The target's unread state will only ever be an activity dot, never a notification count: set it
             // to "@mentions & keywords" so a plain (non-mention) message produces activity rather than a count.
             const targetId = await app.client.createRoom({ name: "zzz activity room" });
-            await app.client.inviteUser(targetId, bot.credentials.userId);
+            await app.client.inviteUser(targetId, bot.credentials!.userId);
             await bot.joinRoom(targetId);
 
             await app.viewRoomById(targetId);
             await app.settings.openRoomSettings("Notifications");
-            await page.getByText("@mentions & keywords").click();
+            await page.getByText("@mentions and replies only").click();
             await app.settings.closeDialog();
 
             // Enable showing activity (dots) in the room list, so the activity dot is actually rendered.
@@ -148,7 +148,7 @@ test.describe("Room list unread activity toast", () => {
 
             // A regular (Chats) room with a notification count.
             const notifyId = await app.client.createRoom({ name: "chats notify room" });
-            await app.client.inviteUser(notifyId, bot.credentials.userId);
+            await app.client.inviteUser(notifyId, bot.credentials!.userId);
             await bot.joinRoom(notifyId);
 
             // A favourite room so the list renders in section mode from the start.
@@ -180,15 +180,6 @@ test.describe("Room list unread activity toast", () => {
 
             // Wait until the collapsed Chats header has been pushed offscreen (all favourites synced).
             await expect(chatsHeader).not.toBeInViewport();
-
-            // Tagging rooms into the Favourites section raises a transient "Chat moved" toast, which
-            // shares the single toast slot with — and takes precedence over — the unread-activity toast
-            // (see RoomListView). Dismiss it via its close button so the unread toast can surface; by now
-            // all favourites have synced, so it will not re-appear.
-            const chatMovedToast = page.getByText("Chat moved");
-            await expect(chatMovedToast).toBeVisible();
-            await page.getByRole("button", { name: "Close" }).click();
-            await expect(chatMovedToast).not.toBeVisible();
 
             // The collapsed Chats header is offscreen, but its hidden notification raises the toast.
             await expect(getToast(page)).toBeVisible();

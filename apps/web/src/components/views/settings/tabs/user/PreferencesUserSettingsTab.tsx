@@ -272,6 +272,7 @@ export default class PreferencesUserSettingsTab extends React.Component<EmptyObj
 
                     <SettingsSubsection heading={_t("settings|preferences|room_list_heading")} formWrap>
                         <SettingsFlag name="RoomList.showMessagePreview" level={SettingLevel.DEVICE} />
+                        <SettingsFlag name="RoomList.showSections" level={SettingLevel.ACCOUNT} />
                     </SettingsSubsection>
 
                     <SettingsSubsection heading={_t("common|spaces")} formWrap>

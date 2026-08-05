@@ -18,6 +18,7 @@ import { MemberTileView } from "./common/MemberTileView";
 import { InvitedIconView } from "./common/InvitedIconView";
 import { type MemberWithSeparator } from "../../../../viewmodels/memberlist/MemberListViewModel";
 import { DisambiguatedProfileViewModel } from "../../../../../viewmodels/room/timeline/event-tile/DisambiguatedProfileViewModel";
+import { useUserStatus } from "../../../../../hooks/useUserStatus";
 
 interface IProps {
     /**
@@ -47,17 +48,22 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
         />
     );
     const name = vm.name;
+    const userStatus = useUserStatus(member.userId);
     const disambiguatedProfileVM = useCreateAutoDisposedViewModel(
         () =>
             new DisambiguatedProfileViewModel({
                 fallbackName: name,
                 member,
                 withTooltip: true,
+                userStatus,
             }),
     );
     useEffect(() => {
         disambiguatedProfileVM.setMember(name, member);
     }, [disambiguatedProfileVM, member, name]);
+    useEffect(() => {
+        disambiguatedProfileVM.setUserStatus(userStatus);
+    }, [disambiguatedProfileVM, userStatus]);
     const nameJSX = <DisambiguatedProfileView vm={disambiguatedProfileVM} className="mx_DisambiguatedProfile" />;
 
     const presenceState = member.presenceState;

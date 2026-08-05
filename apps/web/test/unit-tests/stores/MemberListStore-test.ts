@@ -29,7 +29,7 @@ describe("MemberListStore", () => {
         const context = new TestSDKContext();
         client = stubClient();
         client.baseUrl = "https://invalid.base.url.here";
-        context.client = client;
+        context._client = client;
         store = new MemberListStore(context);
         // alice is joined to the room.
         room = new Room(roomId, client, client.getUserId()!);

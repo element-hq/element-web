@@ -25,9 +25,9 @@ type RoomRef = { name: string; roomId: string };
  * - Invite the bot to both rooms and ensure that it has joined
  */
 export const test = base.extend<{
-    room1Name?: string;
+    room1Name: string;
     room1: { name: string; roomId: string };
-    room2Name?: string;
+    room2Name: string;
     room2: { name: string; roomId: string };
     msg: MessageBuilder;
     util: Helpers;
@@ -39,7 +39,7 @@ export const test = base.extend<{
     room1: async ({ room1Name: name, app, user, bot }, use) => {
         const roomId = await app.client.createRoom({
             name,
-            invite: [bot.credentials.userId],
+            invite: [bot.credentials!.userId],
             preset: "public_chat" as Preset,
         });
         await bot.awaitRoomMembership(roomId);
@@ -47,12 +47,12 @@ export const test = base.extend<{
     },
     room2Name: "Room 2",
     room2: async ({ room2Name: name, app, user, bot }, use) => {
-        const roomId = await app.client.createRoom({ name, invite: [bot.credentials.userId] });
+        const roomId = await app.client.createRoom({ name, invite: [bot.credentials!.userId] });
         await bot.awaitRoomMembership(roomId);
         await use({ name, roomId });
     },
     msg: async ({ page, app, util }, use) => {
-        await use(new MessageBuilder(page, app, util));
+        await use(new MessageBuilder());
     },
     util: async ({ room1, room2, page, app, bot }, use) => {
         await use(new Helpers(page, app, bot));
@@ -70,12 +70,6 @@ export const test = base.extend<{
  * which finds a message and then constructs a reply to it.
  */
 export class MessageBuilder {
-    constructor(
-        private page: Page,
-        private app: ElementAppPage,
-        private helpers: Helpers,
-    ) {}
-
     /**
      * Map of message content -> event.
      */
@@ -164,11 +158,7 @@ export class MessageBuilder {
  * MessageBuilder.replyTo} which creates a reply based on a previous message.
  */
 export abstract class MessageContentSpec {
-    messageFinder: MessageBuilder | null;
-
-    constructor(messageFinder: MessageBuilder = null) {
-        this.messageFinder = messageFinder;
-    }
+    constructor(public readonly messageFinder: MessageBuilder) {}
 
     public abstract getContent(room: JSHandle<Room>): Promise<Record<string, unknown>>;
 }
@@ -230,9 +220,9 @@ export class Helpers {
         await expect(this.page.locator(".mx_ThreadView_timelinePanelWrapper")).toBeVisible();
     }
 
-    async findRoomById(roomId: string): Promise<JSHandle<Room | undefined>> {
+    async findRoomById(roomId: string): Promise<JSHandle<Room>> {
         return this.app.client.evaluateHandle((cli, roomId) => {
-            return cli.getRooms().find((r) => r.roomId === roomId);
+            return cli.getRooms().find((r) => r.roomId === roomId)!;
         }, roomId);
     }
 

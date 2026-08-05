@@ -15,6 +15,7 @@ import { VirtuosoMockContext } from "@element-hq/web-shared-components";
 import {
     Room,
     type MatrixClient,
+    type MatrixEvent,
     type RoomState,
     RoomMember,
     User,
@@ -54,6 +55,7 @@ export async function renderMemberList(
     enablePresence: boolean,
     roomSetup?: (room: Room) => void,
     usersPerLevel: number = 2,
+    threePidEvents: MatrixEvent[] = [],
 ): Promise<Rendered> {
     TestUtils.stubClient();
     const client = MatrixClientPeg.safeGet();
@@ -109,7 +111,8 @@ export async function renderMemberList(
     memberListRoom.currentState = {
         members: {},
         getMember: jest.fn(),
-        getStateEvents: ((eventType, stateKey) => (stateKey === undefined ? [] : null)) as RoomState["getStateEvents"], // ignore 3pid invites
+        getStateEvents: TestUtils.mockStateEventImplementation(threePidEvents),
+        getInviteForThreePidToken: jest.fn().mockReturnValue(null),
         getInvitedMemberCount: jest.fn().mockReturnValue(0),
         getJoinedMemberCount: jest
             .fn()
@@ -122,7 +125,7 @@ export async function renderMemberList(
     }
 
     const context = new TestSDKContext();
-    context.client = client;
+    context._client = client;
     context.memberListStore.isPresenceEnabled = jest.fn().mockReturnValue(enablePresence);
     const root = render(
         <MatrixClientContext.Provider value={client}>
@@ -139,7 +142,9 @@ export async function renderMemberList(
         },
     );
     await waitFor(async () => {
-        expect(root.container.querySelectorAll(".mx_MemberTileView")).toHaveLength(usersPerLevel * 3);
+        expect(root.container.querySelectorAll(".mx_MemberTileView")).toHaveLength(
+            usersPerLevel * 3 + threePidEvents.length,
+        );
     });
 
     const reRender = createReRenderFunction(client, memberListRoom);

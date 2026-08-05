@@ -54,7 +54,7 @@ describe("WidgetPermissionStore", () => {
         );
         mockClient = stubClient();
         const context = new TestSDKContext();
-        context.client = mockClient;
+        context._client = mockClient;
         widgetPermissionStore = new WidgetPermissionStore(context);
     });
 
