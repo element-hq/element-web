@@ -85,6 +85,9 @@ test.describe("Composer", () => {
         test("renders in narrow viewports", { tag: "@screenshot" }, async ({ page, bot, app }) => {
             // Shrink the viewport
             await page.setViewportSize({ width: 500, height: 1080 });
+            // Shrinking the viewport will collapse the left-panel, so manually expand it.
+            await app.resizeLeftPanel(150);
+            // Now take the screenshot
             await expect(app.getComposer()).toMatchScreenshot("narrow.png");
         });
 
@@ -181,7 +184,7 @@ test.describe("Composer", () => {
             // Set up a private room so we have another user to mention
             await app.client.createRoom({
                 is_direct: true,
-                invite: [bot.credentials.userId],
+                invite: [bot.credentials!.userId],
             });
             await app.viewRoomByName("Bob");
 
@@ -191,7 +194,7 @@ test.describe("Composer", () => {
 
             // Note that we include the user ID here as the room tile is also an 'option' role
             // with text 'Bob'
-            await page.getByRole("option", { name: `Bob ${bot.credentials.userId}` }).click();
+            await page.getByRole("option", { name: `Bob ${bot.credentials!.userId}` }).click();
             await expect(composer.getByText("Bob")).toBeVisible();
             await expect(composer).toMatchScreenshot("mention.png");
             await composer.press("Enter");

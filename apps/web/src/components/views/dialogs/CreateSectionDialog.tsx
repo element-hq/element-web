@@ -69,9 +69,7 @@ export function CreateSectionDialog({ onFinished, sectionToEdit }: CreateSection
                 </Form.Root>
             </Flex>
             <DialogButtons
-                primaryButton={
-                    isEdition ? _t("create_section_dialog|edit_section") : _t("create_section_dialog|create_section")
-                }
+                primaryButton={isEdition ? _t("common|save") : _t("create_section_dialog|create_section")}
                 primaryDisabled={isInvalid}
                 hasCancel={true}
                 onCancel={() => onFinished(false, "")}

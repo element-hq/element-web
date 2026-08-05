@@ -12,7 +12,7 @@ import { waitFor, fireEvent } from "jest-matrix-react";
 import { type Room, type RoomMember, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { type CallMembership, MatrixRTCSessionEvent } from "matrix-js-sdk/src/matrixrtc";
 
-import { filterConsole } from "../../../../../test-utils";
+import { filterConsole, mkThirdPartyInviteEvent } from "../../../../../test-utils";
 import { type Rendered, renderMemberList } from "./common";
 
 jest.mock("../../../../../../src/customisations/helpers/UIComponents", () => ({
@@ -186,7 +186,7 @@ describe("MemberListView and MemberlistHeaderView", () => {
         it("should group call participants first while preserving the order within both groups", async () => {
             const participantUserIds = ["@moderator1:localhost", "@default0:localhost"];
             const memberships = participantUserIds.map((userId) => ({ userId }) as CallMembership);
-            const { root } = await renderMemberList(true, undefined, 2, memberships);
+            const { root } = await renderMemberList(true, undefined, 2, [], memberships);
 
             const memberTiles = Array.from(root.container.querySelectorAll(".mx_MemberTileView"));
             const orderedUserIds = memberTiles.map((tile) => tile.getAttribute("aria-label")!.split(", in a call")[0]);
@@ -215,7 +215,7 @@ describe("MemberListView and MemberlistHeaderView", () => {
                 { userId, deviceId: "DEVICE_1", memberId: `${userId}:DEVICE_1` },
                 { userId, deviceId: "DEVICE_2", memberId: `${userId}:DEVICE_2` },
             ] as CallMembership[];
-            const { root, memberListRoom, client } = await renderMemberList(true, undefined, 2, memberships);
+            const { root, memberListRoom, client } = await renderMemberList(true, undefined, 2, [], memberships);
 
             expect(client.matrixRTC.getRoomSession).toHaveBeenCalledWith(memberListRoom);
             expect(root.container.querySelectorAll(".mx_RoomMemberTileView_callIcon")).toHaveLength(1);
@@ -238,7 +238,14 @@ describe("MemberListView and MemberlistHeaderView", () => {
                 deviceId: "OTHER_ROOM_DEVICE",
                 memberId: `${userId}:OTHER_ROOM_DEVICE`,
             } as CallMembership;
-            const { root, otherRoomSession } = await renderMemberList(true, undefined, 2, [], [otherRoomMembership]);
+            const { root, otherRoomSession } = await renderMemberList(
+                true,
+                undefined,
+                2,
+                [],
+                [],
+                [otherRoomMembership],
+            );
             const memberTile = root.container.querySelector(`[aria-label="${userId}"]`)!;
 
             expect(memberTile.querySelector(".mx_RoomMemberTileView_callIcon")).toBeNull();
@@ -353,6 +360,20 @@ describe("MemberListView and MemberlistHeaderView", () => {
                     expectOrderedByPresenceAndPowerLevel(memberListRoom, tiles, enablePresence);
                 });
             });
+        });
+    });
+
+    describe("3PID invites", () => {
+        it("does not collapse invites with duplicate display names", async () => {
+            const threePidEvents = [
+                mkThirdPartyInviteEvent("@alice:localhost", "user@example.com", "!room:localhost"),
+                mkThirdPartyInviteEvent("@alice:localhost", "user@example.com", "!room:localhost"),
+            ];
+            const { root } = await renderMemberList(true, undefined, 2, threePidEvents);
+
+            const tiles = root.container.querySelectorAll(".mx_MemberTileView");
+            // 6 joined + 2 3PID invites
+            expect(tiles).toHaveLength(8);
         });
     });
 });

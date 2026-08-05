@@ -33,8 +33,8 @@ export const parseGeoUri = (uri: string): GeolocationCoordinates | undefined => 
     }
 
     const geoCoords = {
-        latitude: latitude!,
-        longitude: longitude!,
+        latitude: latitude,
+        longitude: longitude,
         altitude: parse(coords[2]),
         accuracy: uncertainty!,
         altitudeAccuracy: null,

@@ -174,7 +174,7 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
 
     const onHeaderFocus = (e: React.FocusEvent<HTMLButtonElement>): void => {
         onFocus(id, e);
-        if (!e.currentTarget.contains(e.relatedTarget as Node | null) && e.currentTarget.matches(":focus-visible")) {
+        if (!e.currentTarget.contains(e.relatedTarget) && e.currentTarget.matches(":focus-visible")) {
             setKeyboardActive(true);
         }
     };
@@ -183,10 +183,7 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
         // Keep it revealed while focus is on the menu button, and while the menu is open (focus is
         // then in the portaled popover, outside the header). That way closing with Escape restores
         // focus to the still-revealed trigger instead of dropping to <body>. Clear once focus leaves.
-        if (
-            !e.currentTarget.contains(e.relatedTarget as Node | null) &&
-            !e.currentTarget.querySelector('[data-state="open"]')
-        ) {
+        if (!e.currentTarget.contains(e.relatedTarget) && !e.currentTarget.querySelector('[data-state="open"]')) {
             setKeyboardActive(false);
         }
     };

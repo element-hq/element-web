@@ -5,14 +5,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import compound from "@vector-im/compound-web/dist/style.css" with { type: "css" };
-
 import type { Module, Api, ModuleFactory } from "@element-hq/element-web-module-api";
 import Translations from "./translations.json";
 import { ModuleConfig, CONFIG_KEY } from "./config";
 import { name as ModuleName } from "../package.json";
 import RoomPreviewBar from "./RoomPreviewBar.tsx";
 import AuthFooter from "./AuthFooter.tsx";
+import style from "./style.css" with { type: "css" };
 
 const GUEST_INVISIBLE_COMPONENTS = [
     "UIComponent.sendInvites",
@@ -37,7 +36,7 @@ class RestrictedGuestsModule implements Module {
             return;
         }
 
-        document.adoptedStyleSheets.push(compound);
+        document.adoptedStyleSheets.push(style);
 
         this.api.i18n.register(Translations);
 

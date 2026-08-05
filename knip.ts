@@ -90,7 +90,6 @@ export default {
                 "matrix-seshat",
             ],
             ignoreBinaries: [
-                "scripts/in-docker.sh",
                 // Used to build seshat (optional)
                 "rustc",
                 // Used by the fetch-package script (optional)

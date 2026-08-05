@@ -235,6 +235,24 @@
                 "call_declined": "Połączenie odrzucone",
                 "call_declined_by_us": "Odrzuciłeś połączenie"
             },
+            "ongoing": {
+                "common": {
+                    "call_started_by": "%(startedByDisplayName)s rozpoczął rozmowę",
+                    "join_button": "Dołącz"
+                },
+                "dm": {
+                    "call_started": "Rozmowa rozpoczęta",
+                    "title": "Trwa połączenie"
+                },
+                "room": {
+                    "join_count": {
+                        "one": "%(count)s dołączył",
+                        "few": "%(count)s dołączyło",
+                        "many": "%(count)s dołączyło"
+                    },
+                    "title": "Trwa połączenie grupowe"
+                }
+            },
             "tombstone": {
                 "room": {
                     "title": "Połączenie grupowe zakończone"

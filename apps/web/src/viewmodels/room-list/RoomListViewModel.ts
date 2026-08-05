@@ -195,38 +195,26 @@ export class RoomListViewModel
         this.updateRoomsMap(roomsResult);
 
         // Subscribe to room list updates
-        this.disposables.trackListener(
-            RoomListStoreV3.instance,
-            RoomListStoreV3Event.ListsUpdate as any,
-            this.onListsUpdate,
-        );
+        this.disposables.trackListener(RoomListStoreV3.instance, RoomListStoreV3Event.ListsUpdate, this.onListsUpdate);
 
         // Subscribe to room list loaded
-        this.disposables.trackListener(
-            RoomListStoreV3.instance,
-            RoomListStoreV3Event.ListsLoaded as any,
-            this.onListsLoaded,
-        );
+        this.disposables.trackListener(RoomListStoreV3.instance, RoomListStoreV3Event.ListsLoaded, this.onListsLoaded);
 
         // Subscribe to section creation
         this.disposables.trackListener(
             RoomListStoreV3.instance,
-            RoomListStoreV3Event.SectionCreated as any,
+            RoomListStoreV3Event.SectionCreated,
             this.onSectionCreated as (...args: unknown[]) => void,
         );
 
         // Subscribe to room tagging
-        this.disposables.trackListener(
-            RoomListStoreV3.instance,
-            RoomListStoreV3Event.RoomTagged as any,
-            this.onRoomTagged,
-        );
+        this.disposables.trackListener(RoomListStoreV3.instance, RoomListStoreV3Event.RoomTagged, this.onRoomTagged);
 
         // Recompute the "unread activity below" toast when room notification state
         // changes (e.g. a room below the fold becomes unread, or is marked read).
         this.disposables.trackListener(
             RoomNotificationStateStore.instance,
-            UPDATE_STATUS_INDICATOR as any,
+            UPDATE_STATUS_INDICATOR,
             this.updateUnreadActivityBelow,
         );
 
@@ -753,6 +741,9 @@ export class RoomListViewModel
         roomIdOverride: string | null = null,
         scrollToSectionTag: string | undefined = undefined,
     ): Promise<void> {
+        // Store is still loading rooms - don't update the list yet, we'll get another update when loading finishes
+        if (RoomListStoreV3.instance.isLoadingRooms) return;
+
         // Determine the room ID to use for calculations
         // Use override if provided (e.g., during space changes), otherwise fall back to RoomViewStore
         const roomId = roomIdOverride ?? this.props.roomViewStore.getRoomId();
@@ -782,12 +773,6 @@ export class RoomListViewModel
             this.roomsResult,
             (tag) => this.roomSectionHeaderViewModels.get(tag)?.isExpanded ?? true,
         );
-        // If it's a flat list, we need to make sure the single section is expanded and has all rooms, otherwise the room list will be empty
-        if (isFlatList) {
-            const chatSections = this.roomSectionHeaderViewModels.get(CHATS_TAG);
-            if (chatSections) chatSections.isExpanded = true;
-            chatSections?.setRooms(this.roomsResult.sections.flatMap((section) => section.rooms));
-        }
         this.sections = sections;
 
         // Calculate the active room index from the computed sections (which exclude collapsed sections' rooms)
@@ -970,19 +955,21 @@ function computeSections(
 ): { sections: Section[]; isFlatList: boolean } {
     const customSections = getCustomSectionData();
 
-    const sections = roomsResult.sections
+    const filtered = roomsResult.sections
         // Only include sections that have rooms, or custom sections that were created in the current space.
         .filter(
             (section) =>
                 section.rooms.length > 0 ||
                 (isCustomSectionTag(section.tag) && customSections[section.tag]?.spaceId === roomsResult.spaceId),
-        )
-        // Remove roomIds for sections that are currently collapsed according to their section header view model
-        .map((section) => ({
-            ...section,
-            rooms: isSectionExpanded(section.tag) ? section.rooms : [],
-        }));
-    const isFlatList = sections.length === 0 || (sections.length === 1 && sections[0].tag === CHATS_TAG);
+        );
+    const isFlatList = filtered.length === 0 || (filtered.length === 1 && filtered[0].tag === CHATS_TAG);
+
+    const sections = filtered.map((section) => ({
+        ...section,
+        // A flat list has no section header to toggle, so always render its rooms.
+        // Otherwise, remove roomIds for sections that are currently collapsed.
+        rooms: isFlatList || isSectionExpanded(section.tag) ? section.rooms : [],
+    }));
 
     return { sections, isFlatList };
 }

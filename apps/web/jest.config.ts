@@ -7,12 +7,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { env } from "node:process";
-import path, { dirname } from "node:path";
+import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import type { Config } from "jest";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const config: Config = {
     testEnvironment: "jest-fixed-jsdom",
@@ -34,6 +34,7 @@ const config: Config = {
         "\\.(css|scss|pcss)(\\?raw)?$": "<rootDir>/__mocks__/cssMock.js",
         "\\.(gif|png|ttf|woff2)$": "<rootDir>/__mocks__/imageMock.js",
         "\\.svg$": "<rootDir>/__mocks__/svg.js",
+        "\\.svg\\?react$": "<rootDir>/__mocks__/svg-react.js",
         "^matrix-js-sdk(.*)$": "<rootDir>/node_modules/matrix-js-sdk$1",
         "^react$": "<rootDir>/node_modules/react",
         "^react-dom$": "<rootDir>/node_modules/react-dom",
@@ -69,6 +70,7 @@ const config: Config = {
     prettierPath: null,
     moduleDirectories: ["node_modules", "test/test-utils"],
     workerIdleMemoryLimit: "512MB",
+    snapshotSerializers: ["<rootDir>/src/test/react-use-id-serializer.ts"],
 };
 
 // if we're running under GHA, enable relevant reporters

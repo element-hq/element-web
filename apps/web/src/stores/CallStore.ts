@@ -23,6 +23,9 @@ export enum CallStoreEvent {
     // Signals a change in the call associated with a given room
     Call = "call",
     // Signals a change in the active calls
+    // Parameters:
+    // - Set<Call> The set of calls the user is currently connected to
+    // - Set<Call> The set of calls the user was connected to before this event
     ConnectedCalls = "connected_calls",
     // Signals a change in the configured RTC transports.
     TransportsUpdated = "transports_updated",
@@ -136,8 +139,9 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         return this._connectedCalls;
     }
     private set connectedCalls(value: Set<Call>) {
+        const prevValue = this._connectedCalls;
         this._connectedCalls = value;
-        this.emit(CallStoreEvent.ConnectedCalls, value);
+        this.emit(CallStoreEvent.ConnectedCalls, value, prevValue);
 
         // The room IDs are persisted to settings so we can detect unclean disconnects
         SettingsStore.setValue(

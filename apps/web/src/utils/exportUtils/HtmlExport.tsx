@@ -362,9 +362,9 @@ export default class HTMLExporter extends Exporter {
     protected createModifiedEvent(text: string, mxEv: MatrixEvent, italic = true): MatrixEvent {
         const modifiedContent = {
             msgtype: MsgType.Text,
-            body: `${text}`,
+            body: text,
             format: "org.matrix.custom.html",
-            formatted_body: `${text}`,
+            formatted_body: text,
         };
         if (italic) {
             modifiedContent.formatted_body = "<em>" + modifiedContent.formatted_body + "</em>";

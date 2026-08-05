@@ -12,7 +12,7 @@ import { IconButton, Tooltip } from "@vector-im/compound-web";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ThreadsIcon, CheckIcon, ChevronDownIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { Icon as MarkAllThreadsReadIcon } from "../../../res/img/element-icons/check-all.svg";
+import MarkAllThreadsReadIcon from "../../../res/img/element-icons/check-all.svg?react";
 import BaseCard from "../views/right_panel/BaseCard";
 import type ResizeNotifier from "../../utils/ResizeNotifier";
 import MatrixClientContext, { useMatrixClientContext } from "../../contexts/MatrixClientContext";
@@ -70,7 +70,7 @@ export const ThreadPanelHeader: React.FC<{
 }> = ({ filterOption, setFilterOption }) => {
     const mxClient = useMatrixClientContext();
     const roomContext = useScopedRoomContext("room");
-    const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu<HTMLElement>();
+    const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
     const options: readonly ThreadPanelHeaderOption[] = [
         {
             label: _t("threads|all_threads"),

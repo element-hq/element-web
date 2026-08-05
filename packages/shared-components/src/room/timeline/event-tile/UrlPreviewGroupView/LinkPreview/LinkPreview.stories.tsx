@@ -11,6 +11,7 @@ import { fn } from "storybook/test";
 import type { Meta, StoryFn } from "@storybook/react-vite";
 import { LinkPreview } from "./LinkPreview";
 import { LinkedTextContext } from "../../../../../core/utils/LinkedText";
+import { waitForBackgroundImages } from "../../../../../../.storybook/waitForImages";
 import imageFile from "../../../../../../static/element.png";
 import imageFileWide from "../../../../../../static/wideImage.png";
 import imageFileTall from "../../../../../../static/tallImage.png";
@@ -21,6 +22,9 @@ export default {
     tags: ["autodocs"],
     args: {
         onImageClick: fn(),
+    },
+    play: async ({ canvasElement }) => {
+        await waitForBackgroundImages(canvasElement);
     },
     argTypes: {
         siteName: {
