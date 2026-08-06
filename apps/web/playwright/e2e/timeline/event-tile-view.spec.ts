@@ -170,6 +170,9 @@ test.describe("EventTileView application coverage", () => {
             await bot.sendMessage(roomId, "context after");
 
             await app.viewRoomById(roomId);
+            const timelineSummary = page.locator(".mx_RoomView_body .mx_ThreadSummary");
+            await expect(timelineSummary.getByText("Bob")).toBeAttached();
+            await expect(timelineSummary.getByText("match threaded reply")).toBeAttached();
             await app.toggleRoomInfoPanel();
             const search = page.locator(".mx_RoomSummaryCard_search").getByRole("searchbox");
             await search.fill("match");
