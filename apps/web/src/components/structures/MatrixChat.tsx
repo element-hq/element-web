@@ -1076,6 +1076,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     private viewSomethingBehindModal(): void {
+        // While the app is still starting there is nothing to put behind the modal yet, and sending
+        // the user to the welcome page would rewrite the URL out from under a session which is about
+        // to finish loading — leaving them on a half-started app they never asked to leave.
+        if (this.state.view === Views.LOADING || this.state.view === Views.PENDING_CLIENT_START) return;
+
         if (this.state.view !== Views.LOGGED_IN) {
             this.viewWelcome();
             return;
