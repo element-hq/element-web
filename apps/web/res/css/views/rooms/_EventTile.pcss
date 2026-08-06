@@ -839,6 +839,17 @@ $left-gutter: 64px;
         background-color: inherit !important;
     }
 
+    /* A width in percent counts for nothing while a table decides how wide its columns should be,
+    so an image sharing a row with a paragraph of text gets squeezed to a fraction of the size it
+    asked for before it is ever drawn. Inside a cell the image's own width has to speak for itself;
+    the max-width set alongside it still caps the result, and the table scrolls rather than clips.
+    The width being overridden is an inline one, hence the !important. Only images the sanitiser
+    produced sit directly inside a cell, so this leaves pill avatars alone. */
+    &.markdown-body td > img,
+    &.markdown-body th > img {
+        width: auto !important;
+    }
+
     .mx_EventTile_clamp & {
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
