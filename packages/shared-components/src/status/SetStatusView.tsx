@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useState } from "react";
+import React, { type JSX, useCallback, useState } from "react";
 import { Dropdown, type DropdownTriggerProps, Link, Text } from "@vector-im/compound-web";
 import { ReactionIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
@@ -15,16 +15,17 @@ import { StatusPillView } from "./StatusPillView";
 import { CustomStatusView } from "./CustomStatusView";
 import styles from "./SetStatusView.module.css";
 
-const PRESET_STATUSES = [
-    { emoji: "💬", textKey: _td("status|set_status|in_a_meeting") },
-    { emoji: "💡", textKey: _td("status|set_status|focus_time") },
-    { emoji: "🚙", textKey: _td("status|set_status|on_the_road") },
-    { emoji: "☕️", textKey: _td("status|set_status|be_right_back") },
-    { emoji: "🌴", textKey: _td("status|set_status|away") },
-];
-
-// Sentinel value used to distinguish the "Custom…" dropdown entry from a preset.
-const CUSTOM_STATUS_VALUE = "custom";
+const STATUSES = {
+    in_a_meeting: { emoji: "💬", textKey: _td("status|set_status|in_a_meeting") },
+    focus_time: { emoji: "💡", textKey: _td("status|set_status|focus_time") },
+    on_the_road: { emoji: "🚙", textKey: _td("status|set_status|on_the_road") },
+    be_right_back: { emoji: "☕️", textKey: _td("status|set_status|be_right_back") },
+    away: { emoji: "🌴", textKey: _td("status|set_status|away") },
+    custom: { emoji: "✍️", textKey: _td("status|set_status|custom") },
+};
+type StatusValue = keyof typeof STATUSES;
+// No need to keep recompyuting this, it won't change
+const STATUS_KEYS = Object.keys(STATUSES) as StatusValue[];
 
 export interface SetStatusViewSnapshot {
     /**
@@ -58,9 +59,24 @@ export type SetStatusViewProps = {
     vm: SetStatusViewModel;
 };
 
+function StatusOption({ value }: { value: StatusValue }): React.ReactNode {
+    return (
+        <>
+            <span className={styles.dropdownEmoji}>{STATUSES[value].emoji}</span>
+            <span>{_t(STATUSES[value].textKey)}</span>
+        </>
+    );
+}
+
 export function SetStatusView({ vm }: SetStatusViewProps): JSX.Element {
     const { userStatus } = useViewModel(vm);
     const [customMode, setCustomMode] = useState(false);
+
+    const renderItem = useCallback((value: StatusValue | null): React.ReactNode => {
+        if (value === null) return null;
+
+        return <StatusOption value={value} />;
+    }, []);
 
     if (userStatus) {
         return <StatusPillView status={userStatus} clearStatus={vm.clearStatus} />;
@@ -97,13 +113,13 @@ export function SetStatusView({ vm }: SetStatusViewProps): JSX.Element {
         return trigger;
     };
 
-    const onValueChange = (value: string): void => {
-        if (value === CUSTOM_STATUS_VALUE) {
+    const onValueChange = (value: StatusValue): void => {
+        if (value === "custom") {
             setCustomMode(true);
             return;
         }
 
-        const status = PRESET_STATUSES.find((s) => s.textKey === value);
+        const status = STATUSES[value];
 
         if (!status) {
             return;
@@ -115,20 +131,15 @@ export function SetStatusView({ vm }: SetStatusViewProps): JSX.Element {
         });
     };
 
-    const dropdownValues: Array<[string, string]> = [
-        ...PRESET_STATUSES.map((s): [string, string] => [s.textKey, `${s.emoji} ${_t(s.textKey)}`]),
-        [CUSTOM_STATUS_VALUE, `✍️ ${_t("status|set_status|custom")}`],
-    ];
-
     return vm.onSetStatusClick ? (
         renderTrigger({ onClick: vm.onSetStatusClick })
     ) : (
-        <Dropdown
-            values={dropdownValues}
+        <Dropdown<StatusValue>
+            values={STATUS_KEYS}
             label={null}
-            placeholder={null}
             trigger={renderTrigger}
             onValueChange={onValueChange}
+            renderItem={renderItem}
         />
     );
 }
