@@ -32,9 +32,7 @@ export interface CustomStatusViewProps {
 }
 
 /**
- * Editor for composing a custom user status: an emoji button that opens the
- * shared {@link EmojiPicker} in a popover, a free-text field, and a single link
- * that reads "Cancel" while the text is empty and "Save" once it is not.
+ * Editor for composing a custom user status text and choosing an emoji.
  */
 export function CustomStatusView({ onSave, onCancel }: CustomStatusViewProps): JSX.Element {
     const [emoji, setEmoji] = useState(DEFAULT_EMOJI);
