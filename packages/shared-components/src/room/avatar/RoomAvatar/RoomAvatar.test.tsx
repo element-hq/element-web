@@ -53,6 +53,7 @@ describe("RoomAvatarView", () => {
 
         const vm = new TestRoomAvatarViewModel(
             {
+                size: "36px",
                 name: "Test Room",
                 idName: "!room:example.com",
                 urls: ["https://example.com/avatar.png"],
@@ -62,7 +63,7 @@ describe("RoomAvatarView", () => {
             { onClick },
         ) as RoomAvatarViewModel;
 
-        render(<RoomAvatarView vm={vm} size="36px" />);
+        render(<RoomAvatarView vm={vm} />);
 
         await user.click(screen.getByTestId("avatar-img"));
 
@@ -71,6 +72,7 @@ describe("RoomAvatarView", () => {
 
     it("cycles to the next URL on image load error", () => {
         const vm = new MockViewModel<RoomAvatarViewSnapshot>({
+            size: "36px",
             name: "Test Room",
             idName: "!room:example.com",
             urls: ["https://example.com/first.png", "https://example.com/fallback.png"],
@@ -78,7 +80,7 @@ describe("RoomAvatarView", () => {
             isClickable: false,
         }) as unknown as RoomAvatarViewModel;
 
-        render(<RoomAvatarView vm={vm} size="36px" />);
+        render(<RoomAvatarView vm={vm} />);
 
         // The image lives inside the avatar root rendered with data-testid="avatar-img".
         const getImg = (): HTMLImageElement => screen.getByTestId("avatar-img").querySelector("img")!;

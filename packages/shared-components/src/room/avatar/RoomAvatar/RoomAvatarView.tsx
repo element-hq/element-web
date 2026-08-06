@@ -15,6 +15,10 @@ import { type ViewModel, useViewModel } from "../../../core/viewmodel";
  */
 export interface RoomAvatarViewSnapshot {
     /**
+     * Rendered size of the avatar in CSS units, e.g. `"36px"`.
+     */
+    size: string;
+    /**
      * Display name of the room, used for the initial-letter fallback.
      */
     name: string;
@@ -35,6 +39,31 @@ export interface RoomAvatarViewSnapshot {
      * Whether the avatar should respond to clicks.
      */
     isClickable: boolean;
+    /**
+     * Optional additional CSS class names applied to the avatar element.
+     */
+    className?: string;
+    /**
+     * Accessible label announced by assistive technologies.
+     * Defaults to `"Avatar"`.
+     */
+    altText?: string;
+    /**
+     * Browser tooltip shown on hover.
+     */
+    title?: string;
+    /**
+     * Tab index forwarded to the avatar element.
+     */
+    tabIndex?: number;
+    /**
+     * ARIA role override for the avatar element.
+     */
+    role?: AriaRole;
+    /**
+     * When `true`, hides the avatar from the accessibility tree.
+     */
+    ariaHidden?: boolean;
 }
 
 /**
@@ -58,35 +87,6 @@ interface RoomAvatarViewProps {
      */
     "vm": RoomAvatarViewModel;
     /**
-     * Rendered size of the avatar in CSS units, e.g. `"36px"`.
-     */
-    "size": string;
-    /**
-     * Optional additional CSS class names applied to the avatar element.
-     */
-    "className"?: string;
-    /**
-     * Accessible label announced by assistive technologies.
-     * Defaults to `"Avatar"`.
-     */
-    "altText"?: string;
-    /**
-     * Browser tooltip shown on hover.
-     */
-    "title"?: string;
-    /**
-     * Tab index forwarded to the avatar element.
-     */
-    "tabIndex"?: number;
-    /**
-     * ARIA role override for the avatar element.
-     */
-    "role"?: AriaRole;
-    /**
-     * When `true`, hides the avatar from the accessibility tree.
-     */
-    "aria-hidden"?: boolean | "true" | "false";
-    /**
      * Ref forwarded to the underlying avatar element.
      */
     "ref"?: Ref<HTMLButtonElement | HTMLSpanElement>;
@@ -95,22 +95,24 @@ interface RoomAvatarViewProps {
 /**
  * Renders a room avatar image with initial-letter fallback.
  *
- * Rendering data (name, URLs, shape, click behaviour) is supplied through the
- * ViewModel; UI-only concerns such as size, CSS class, and accessibility
- * attributes are accepted as direct props.
+ * Rendering data, styling hooks, and accessibility attributes are supplied
+ * through the ViewModel snapshot.
  */
-export function RoomAvatarView({
-    vm,
-    size,
-    className,
-    altText = "Avatar",
-    title,
-    tabIndex,
-    role,
-    "aria-hidden": ariaHidden,
-    ref,
-}: Readonly<RoomAvatarViewProps>): JSX.Element {
-    const { name, idName, urls, type, isClickable } = useViewModel(vm);
+export function RoomAvatarView({ vm, ref }: Readonly<RoomAvatarViewProps>): JSX.Element {
+    const {
+        name,
+        idName,
+        urls,
+        type,
+        size,
+        isClickable,
+        className,
+        altText = "Avatar",
+        title,
+        tabIndex,
+        role,
+        ariaHidden,
+    } = useViewModel(vm);
 
     const [urlIndex, setUrlIndex] = useState(0);
 

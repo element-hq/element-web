@@ -64,7 +64,36 @@ interface Props {
      * Optional shape override. When omitted, the VM derives the shape from the room type.
      */
     type?: "round" | "square";
+    /**
+     * Optional additional CSS class names applied to the avatar element.
+     */
+    className?: string;
+    /**
+     * Accessible label announced by assistive technologies.
+     */
+    altText?: string;
+    /**
+     * Browser tooltip shown on hover.
+     */
+    title?: string;
+    /**
+     * Tab index forwarded to the avatar element.
+     */
+    tabIndex?: number;
+    /**
+     * ARIA role override for the avatar element.
+     */
+    role?: RoomAvatarViewSnapshot["role"];
+    /**
+     * Whether to hide the avatar from the accessibility tree.
+     */
+    ariaHidden?: boolean;
 }
+
+type ViewProps = Pick<
+    Props,
+    "size" | "className" | "altText" | "title" | "tabIndex" | "role" | "ariaHidden"
+>;
 
 export class RoomAvatarViewModel
     extends BaseViewModel<RoomAvatarViewSnapshot, Props>
@@ -90,8 +119,8 @@ export class RoomAvatarViewModel
         this.refreshSnapshot();
     }
 
-    public setSize(size: string): void {
-        this.props = { ...this.props, size };
+    public setViewProps(viewProps: ViewProps): void {
+        this.props = { ...this.props, ...viewProps };
         this.refreshSnapshot();
     }
 
@@ -140,11 +169,18 @@ export class RoomAvatarViewModel
         const urls = RoomAvatarViewModel.computeUrls(props);
 
         return {
+            size: props.size,
             name: RoomAvatarViewModel.computeName(props.room, props.oobData),
             idName: RoomAvatarViewModel.computeIdName(props.room, props.oobData),
             urls,
             type: RoomAvatarViewModel.computeType(props),
             isClickable: Boolean(props.onClick || (props.viewAvatarOnClick && urls[0])),
+            className: props.className,
+            altText: props.altText,
+            title: props.title,
+            tabIndex: props.tabIndex,
+            role: props.role,
+            ariaHidden: props.ariaHidden,
         };
     }
 

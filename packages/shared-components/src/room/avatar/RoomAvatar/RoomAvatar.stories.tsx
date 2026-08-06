@@ -13,14 +13,14 @@ import { useMockedViewModel } from "../../../core/viewmodel";
 import { withViewDocs } from "../../../../.storybook/withViewDocs";
 import { RoomAvatarView, type RoomAvatarViewActions, type RoomAvatarViewSnapshot } from "./RoomAvatarView";
 
-type WrapperProps = RoomAvatarViewSnapshot & Partial<RoomAvatarViewActions> & { size: string; className?: string };
+type WrapperProps = RoomAvatarViewSnapshot & Partial<RoomAvatarViewActions>;
 
-const RoomAvatarViewWrapperImpl = ({ onClick, size, className, ...snapshotProps }: WrapperProps): JSX.Element => {
+const RoomAvatarViewWrapperImpl = ({ onClick, ...snapshotProps }: WrapperProps): JSX.Element => {
     const vm = useMockedViewModel(snapshotProps, {
         onClick: onClick ?? fn(),
     });
 
-    return <RoomAvatarView vm={vm} size={size} className={className} />;
+    return <RoomAvatarView vm={vm} />;
 };
 
 const RoomAvatarViewWrapper = withViewDocs(RoomAvatarViewWrapperImpl, RoomAvatarView);
