@@ -107,6 +107,58 @@ describe("attachMentions", () => {
         });
     });
 
+    describe("pills which the message does not end up linking to", () => {
+        // The body is built before attachMentions runs, so these are the contents the composer
+        // really hands it in each case.
+        const model = (): EditorModel => new EditorModel([partsCreator.userPill("Bob", "@bob:test")], partsCreator);
+
+        it("does not mention someone whose pill is inside a code block", () => {
+            const content: IContent = {
+                format: "org.matrix.custom.html",
+                formatted_body: "<pre><code>[Bob](https://matrix.to/#/@bob:test)\n</code></pre>",
+            };
+
+            attachMentions("@alice:test", content, model(), undefined);
+
+            expect(content["m.mentions"]).toEqual({});
+        });
+
+        it("does not mention someone whose pill was flattened into a spoiler", () => {
+            const content: IContent = {
+                format: "org.matrix.custom.html",
+                formatted_body: "<span data-mx-spoiler>Bob</span>",
+            };
+
+            attachMentions("@alice:test", content, model(), undefined);
+
+            expect(content["m.mentions"]).toEqual({});
+        });
+
+        it("still mentions someone the message links to", () => {
+            const content: IContent = {
+                format: "org.matrix.custom.html",
+                formatted_body: '<a href="https://matrix.to/#/@bob:test">Bob</a>',
+            };
+
+            attachMentions("@alice:test", content, model(), undefined);
+
+            expect(content["m.mentions"]).toEqual({ user_ids: ["@bob:test"] });
+        });
+
+        it("mentions someone pilled twice when only one of the two is in a code block", () => {
+            const content: IContent = {
+                format: "org.matrix.custom.html",
+                formatted_body:
+                    '<a href="https://matrix.to/#/@bob:test">Bob</a>' +
+                    "<pre><code>[Bob](https://matrix.to/#/@bob:test)\n</code></pre>",
+            };
+
+            attachMentions("@alice:test", content, model(), undefined);
+
+            expect(content["m.mentions"]).toEqual({ user_ids: ["@bob:test"] });
+        });
+    });
+
     it("test reply", () => {
         // Replying to an event adds the sender to the list of mentioned users.
         const model = new EditorModel([], partsCreator);
