@@ -35,10 +35,11 @@ describe("createMessageContent", () => {
 
             // Then
             expect(content).toEqual({
-                body: "*__hello__ world*",
-                format: "org.matrix.custom.html",
-                formatted_body: message,
-                msgtype: "m.text",
+                "body": "*__hello__ world*",
+                "format": "org.matrix.custom.html",
+                "formatted_body": message,
+                "msgtype": "m.text",
+                "m.mentions": {},
             });
         });
 
@@ -56,6 +57,7 @@ describe("createMessageContent", () => {
                 "format": "org.matrix.custom.html",
                 "formatted_body": message,
                 "msgtype": "m.text",
+                "m.mentions": {},
                 "m.relates_to": {
                     event_id: "myFakeThreadId",
                     rel_type: "m.thread",
@@ -89,11 +91,13 @@ describe("createMessageContent", () => {
                 "format": "org.matrix.custom.html",
                 "formatted_body": `* ${message}`,
                 "msgtype": "m.text",
+                "m.mentions": {},
                 "m.new_content": {
-                    body: "*__hello__ world*",
-                    format: "org.matrix.custom.html",
-                    formatted_body: message,
-                    msgtype: "m.text",
+                    "body": "*__hello__ world*",
+                    "format": "org.matrix.custom.html",
+                    "formatted_body": message,
+                    "msgtype": "m.text",
+                    "m.mentions": {},
                 },
                 "m.relates_to": {
                     event_id: editedEvent.getId(),
@@ -146,6 +150,76 @@ describe("createMessageContent", () => {
 
             expect(content).toMatchObject({
                 body: "#test_room:element.io ",
+            });
+        });
+    });
+
+    describe("mentions", () => {
+        const userPill = (userId: string, name: string): string =>
+            `<a href="https://matrix.to/#/${userId}" contenteditable="false" data-mention-type="user">${name}</a>`;
+        const atRoomPill = `<a href="#" contenteditable="false" data-mention-type="at-room">@room</a>`;
+        const sender = "@me:element.io";
+
+        it("mentions a user who was pilled", async () => {
+            const content = await createMessageContent(`hey ${userPill("@bob:element.io", "Bob")}`, false, { sender });
+
+            expect(content["m.mentions"]).toEqual({ user_ids: ["@bob:element.io"] });
+        });
+
+        it("mentions the room when @room was used", async () => {
+            const content = await createMessageContent(`${atRoomPill} listen up`, false, { sender });
+
+            expect(content["m.mentions"]).toEqual({ room: true });
+        });
+
+        it("does not mention the sender for pilling themselves", async () => {
+            const content = await createMessageContent(userPill(sender, "Me"), false, { sender });
+
+            expect(content["m.mentions"]).toEqual({});
+        });
+
+        it("does not mention anybody for a link to a room", async () => {
+            const messageComposerState = `<a href="https://matrix.to/#/#test_room:element.io" contenteditable="false" data-mention-type="room">a test room</a>`;
+
+            const content = await createMessageContent(messageComposerState, false, { sender });
+
+            expect(content["m.mentions"]).toEqual({});
+        });
+
+        it("mentions the sender of an event being replied to", async () => {
+            const replyToEvent = mkEvent({
+                type: "m.room.message",
+                room: "myfakeroom",
+                user: "@alice:element.io",
+                content: { msgtype: "m.text", body: "First message" },
+                event: true,
+            });
+
+            const content = await createMessageContent("a reply", false, { replyToEvent, sender });
+
+            expect(content["m.mentions"]).toEqual({ user_ids: ["@alice:element.io"] });
+        });
+
+        it("only tells the fallback about someone the edited message did not already mention", async () => {
+            const editedEvent = mkEvent({
+                type: "m.room.message",
+                room: "myfakeroom",
+                user: sender,
+                content: {
+                    "msgtype": "m.text",
+                    "body": "First message",
+                    "m.mentions": { user_ids: ["@bob:element.io"] },
+                },
+                event: true,
+            });
+            const message = `${userPill("@bob:element.io", "Bob")} and ${userPill("@carol:element.io", "Carol")}`;
+
+            const content = await createMessageContent(message, false, { editedEvent, sender });
+
+            // Bob was already notified by the message being edited, so only Carol is new.
+            expect(content["m.mentions"]).toEqual({ user_ids: ["@carol:element.io"] });
+            expect(content["m.new_content"]!["m.mentions"]).toEqual({
+                user_ids: ["@bob:element.io", "@carol:element.io"],
             });
         });
     });
