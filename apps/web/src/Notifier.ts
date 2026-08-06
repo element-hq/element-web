@@ -506,7 +506,13 @@ export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, Emi
         if (!data.liveEvent || !!toStartOfTimeline) return; // only notify for new things, not old.
         if (!this.isSyncing) return; // don't alert for any messages initially
         if (ev.getSender() === this.sdkContext.client.getUserId()) return;
-        if (data.timeline.getTimelineSet().threadListType !== null) return; // Ignore events on the thread list generated timelines
+        const timelineSet = data.timeline.getTimelineSet();
+        if (timelineSet.threadListType !== null) return; // Ignore events on the thread list generated timelines
+        // A message which highlights us in an unencrypted room is put on the global notification
+        // timeline as well as on its own room's, and the client re-emits from both, so without this
+        // the same event is announced twice. The room's copy is the one to keep: it arrives whether
+        // or not the event highlights, and in an encrypted room it is the only one there is.
+        if (timelineSet === this.sdkContext.client.getNotifTimelineSet()) return;
 
         this.sdkContext.client.decryptEventIfNeeded(ev);
 
