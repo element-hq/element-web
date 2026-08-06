@@ -1354,6 +1354,7 @@
         "error_find_room": "Something went wrong trying to invite the users.",
         "error_find_user_description": "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s",
         "error_find_user_title": "Failed to find the following users",
+        "error_forbidden": "The homeserver refused this invite: %(reason)s",
         "error_invite": "We couldn't invite those users. Please check the users you want to invite and try again.",
         "error_permissions_room": "You do not have permission to invite people to this room.",
         "error_permissions_space": "You do not have permission to invite people to this space.",

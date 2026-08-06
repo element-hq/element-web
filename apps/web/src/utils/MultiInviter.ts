@@ -269,19 +269,26 @@ export default class MultiInviter {
                     let errorText: string | undefined;
                     switch (err.errcode) {
                         case "M_FORBIDDEN":
-                            if (isSpace) {
-                                errorText =
-                                    isFederated === false
-                                        ? _t("invite|error_unfederated_space")
-                                        : _t("invite|error_permissions_space");
-                            } else {
-                                errorText =
-                                    isFederated === false
-                                        ? _t("invite|error_unfederated_room")
-                                        : _t("invite|error_permissions_room");
+                            if (isFederated === false) {
+                                errorText = isSpace
+                                    ? _t("invite|error_unfederated_space")
+                                    : _t("invite|error_unfederated_room");
+                                // No point doing further invites.
+                                this._fatal = true;
+                            } else if (!room?.canInvite(this.matrixClient.getSafeUserId())) {
+                                errorText = isSpace
+                                    ? _t("invite|error_permissions_space")
+                                    : _t("invite|error_permissions_room");
+                                // No point doing further invites.
+                                this._fatal = true;
+                            } else if (err.error) {
+                                // We do have the power to invite, so the server turned this particular
+                                // invite down for a reason only it knows — the invitee may have invites
+                                // switched off, or their server may not accept ours. Pass on what it said
+                                // rather than blaming a permission the user demonstrably has, and carry on
+                                // with the rest of the batch, which may well be accepted.
+                                errorText = _t("invite|error_forbidden", { reason: err.error });
                             }
-                            // No point doing further invites.
-                            this._fatal = true;
                             break;
                         case USER_ALREADY_INVITED:
                             if (isSpace) {

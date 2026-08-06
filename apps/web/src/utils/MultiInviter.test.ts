@@ -238,6 +238,58 @@ describe("MultiInviter", () => {
             );
         });
 
+        it("should pass on the server's reason for refusing an invite we are allowed to send", async () => {
+            vi.mocked(client.invite).mockRejectedValueOnce(
+                new MatrixError({
+                    errcode: "M_FORBIDDEN",
+                    error: "@user1:server is not accepting invites",
+                }),
+            );
+            const room = new Room(ROOMID, client, client.getSafeUserId());
+            room.updateMyMembership(KnownMembership.Join);
+            vi.mocked(client.getRoom).mockReturnValue(room);
+
+            await inviter.invite([MXID1, MXID2]);
+
+            expect(inviter.getErrorText(MXID1)).toMatchInlineSnapshot(
+                `"The homeserver refused this invite: @user1:server is not accepting invites"`,
+            );
+            // The refusal was about one invitee, so the rest of the batch is still worth trying.
+            expect(client.invite).toHaveBeenCalledWith(ROOMID, MXID2, { shareEncryptedHistory: true });
+        });
+
+        it("should blame permissions only when the user really cannot invite", async () => {
+            vi.mocked(client.invite).mockRejectedValue(
+                new MatrixError({
+                    errcode: "M_FORBIDDEN",
+                    error: "You don't have permission to invite users",
+                }),
+            );
+            const room = new Room(ROOMID, client, client.getSafeUserId());
+            room.updateMyMembership(KnownMembership.Join);
+            room.currentState.setStateEvents([
+                new MatrixEvent({
+                    type: EventType.RoomPowerLevels,
+                    state_key: "",
+                    content: { invite: 100 },
+                    room_id: ROOMID,
+                }),
+            ]);
+            const ourMember = new RoomMember(ROOMID, client.getSafeUserId());
+            ourMember.membership = KnownMembership.Join;
+            ourMember.powerLevel = 0;
+            room.getMember = (userId: string) => (userId === client.getSafeUserId() ? ourMember : null);
+            vi.mocked(client.getRoom).mockReturnValue(room);
+
+            await inviter.invite([MXID1, MXID2]);
+
+            expect(inviter.getErrorText(MXID1)).toMatchInlineSnapshot(
+                `"You do not have permission to invite people to this room."`,
+            );
+            // That will hold for everyone else too, so nothing further is attempted.
+            expect(client.invite).toHaveBeenCalledTimes(1);
+        });
+
         it("should show sensible error when attempting to invite over federation with m.federate=false to space", async () => {
             vi.mocked(client.invite).mockRejectedValueOnce(
                 new MatrixError({
