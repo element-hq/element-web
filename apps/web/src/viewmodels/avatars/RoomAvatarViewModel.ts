@@ -96,7 +96,7 @@ export class RoomAvatarViewModel
     extends BaseViewModel<RoomAvatarViewSnapshot, Props>
     implements RoomAvatarViewModelInterface
 {
-    private roomWithListeners?: Room;
+    private roomListenerDisposables?: Disposables;
     private mediaPreviewSettingDisposables?: Disposables;
 
     public constructor(props: Props) {
@@ -105,7 +105,8 @@ export class RoomAvatarViewModel
         this.bindMediaPreviewSettingWatcher(props.room);
 
         this.disposables.track(() => {
-            this.clearTrackedListeners();
+            this.roomListenerDisposables?.dispose();
+            this.clearMediaPreviewSettingWatcher();
         });
     }
 
@@ -247,17 +248,19 @@ export class RoomAvatarViewModel
     };
 
     private bindRoomListeners(room?: Room): void {
-        this.clearRoomListeners();
+        this.roomListenerDisposables?.dispose();
+        this.roomListenerDisposables = undefined;
         if (!room) return;
 
-        this.disposables.trackListener(room, RoomEvent.Name, this.refreshSnapshot);
-        this.disposables.trackListener(room, RoomEvent.MyMembership, this.refreshSnapshot);
-        this.disposables.trackListener(room, RoomStateEvent.Update, this.refreshSnapshot);
-        this.disposables.trackListener(room.currentState, RoomStateEvent.Update, this.refreshSnapshot);
-        this.disposables.trackListener(room.currentState, RoomStateEvent.Members, this.refreshSnapshot);
-        this.disposables.trackListener(room.client, ClientEvent.AccountData, this.refreshSnapshot);
+        const roomListenerDisposables = new Disposables();
+        roomListenerDisposables.trackListener(room, RoomEvent.Name, this.refreshSnapshot);
+        roomListenerDisposables.trackListener(room, RoomEvent.MyMembership, this.refreshSnapshot);
+        roomListenerDisposables.trackListener(room, RoomStateEvent.Update, this.refreshSnapshot);
+        roomListenerDisposables.trackListener(room.currentState, RoomStateEvent.Update, this.refreshSnapshot);
+        roomListenerDisposables.trackListener(room.currentState, RoomStateEvent.Members, this.refreshSnapshot);
+        roomListenerDisposables.trackListener(room.client, ClientEvent.AccountData, this.refreshSnapshot);
 
-        this.roomWithListeners = room;
+        this.roomListenerDisposables = roomListenerDisposables;
     }
 
     private bindMediaPreviewSettingWatcher(room?: Room): void {
@@ -270,21 +273,6 @@ export class RoomAvatarViewModel
             this.onMediaPreviewSettingChanged,
         );
         this.mediaPreviewSettingDisposables.track(() => SettingsStore.unwatchSetting(mediaPreviewSettingWatcherRef));
-    }
-
-    private clearTrackedListeners(): void {
-        this.clearRoomListeners();
-        this.clearMediaPreviewSettingWatcher();
-    }
-
-    private clearRoomListeners(): void {
-        this.roomWithListeners?.off(RoomEvent.Name, this.refreshSnapshot);
-        this.roomWithListeners?.off(RoomEvent.MyMembership, this.refreshSnapshot);
-        this.roomWithListeners?.off(RoomStateEvent.Update, this.refreshSnapshot);
-        this.roomWithListeners?.currentState.off(RoomStateEvent.Update, this.refreshSnapshot);
-        this.roomWithListeners?.currentState.off(RoomStateEvent.Members, this.refreshSnapshot);
-        this.roomWithListeners?.client.off(ClientEvent.AccountData, this.refreshSnapshot);
-        this.roomWithListeners = undefined;
     }
 
     private clearMediaPreviewSettingWatcher(): void {
