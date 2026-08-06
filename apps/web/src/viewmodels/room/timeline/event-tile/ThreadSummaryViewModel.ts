@@ -252,18 +252,20 @@ export class ThreadMessagePreviewViewModel
             return;
         }
 
-        try {
-            await this.props.cli.decryptEventIfNeeded(mxEvent);
-        } catch (error) {
-            logger.error("Failed to decrypt thread preview event", error);
-            if (!this.isCurrentPreviewRequest(requestId, mxEvent)) return;
+        if (mxEvent.isEncrypted()) {
+            try {
+                await this.props.cli.decryptEventIfNeeded(mxEvent);
+            } catch (error) {
+                logger.error("Failed to decrypt thread preview event", error);
+                if (!this.isCurrentPreviewRequest(requestId, mxEvent)) return;
 
-            if (mxEvent.isDecryptionFailure()) {
-                this.setDecryptionFailure(baseSnapshot);
-            } else {
-                this.setHidden();
+                if (mxEvent.isDecryptionFailure()) {
+                    this.setDecryptionFailure(baseSnapshot);
+                } else {
+                    this.setHidden();
+                }
+                return;
             }
-            return;
         }
 
         if (!this.isCurrentPreviewRequest(requestId, mxEvent)) return;
