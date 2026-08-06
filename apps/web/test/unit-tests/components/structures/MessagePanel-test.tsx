@@ -691,6 +691,33 @@ describe("MessagePanel", function () {
         expect(els[0].getAttribute("data-scroll-tokens")?.split(",")).toHaveLength(3);
     });
 
+    it.each([[true], [false]])(
+        "should hide a display name change the user has turned off, with hidden events shown: %s",
+        (showHiddenEvents) => {
+            const events = [
+                TestUtilsMatrix.mkEvent({
+                    event: true,
+                    type: "m.room.member",
+                    room: "!room:id",
+                    user: "@user:id",
+                    skey: "@user:id",
+                    content: { membership: KnownMembership.Join, displayname: "New name" },
+                    prev_content: { membership: KnownMembership.Join, displayname: "Old name" },
+                    ts: 1,
+                }),
+            ];
+
+            const { container } = render(
+                getComponent({ events }, { showHiddenEvents, showDisplaynameChanges: false }),
+                clientAndSDKContextRenderOptions(client, sdkContext),
+            );
+
+            // Showing hidden events is about events with no tile of their own; it is not a way to
+            // undo a preference set elsewhere in the settings.
+            expect(container.getElementsByClassName("mx_EventTile")).toHaveLength(0);
+        },
+    );
+
     it("should handle large numbers of hidden events quickly", () => {
         // Increase the length of the loop here to test performance issues with
         // rendering
