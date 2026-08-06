@@ -19,7 +19,7 @@ exports[`RoomAvatarView > renders a clickable avatar 1`] = `
       height="36px"
       loading="lazy"
       referrerpolicy="no-referrer"
-      src="https://example.com/avatar.png"
+      src="/static/element.png"
       width="36px"
     />
   </button>
