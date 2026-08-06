@@ -75,7 +75,7 @@ describe("RoomAvatarViewModel", () => {
         const listener = jest.fn();
         vm.subscribe(listener);
 
-        vm.setSize("36px");
+        vm.setViewProps({ size: "36px" });
         vm.setRoom(room);
         vm.setViewAvatarOnClick(undefined);
         vm.setOnClick(undefined);
