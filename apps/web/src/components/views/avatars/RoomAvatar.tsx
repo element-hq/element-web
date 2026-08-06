@@ -22,19 +22,19 @@ interface Props {
      * The room whose avatar should be displayed.
      * When omitted, `oobData.avatarUrl` must be provided.
      */
-    room?: Room;
+    "room"?: Room;
     /**
      * Out-of-band data used when the room object is not yet available,
      * e.g. during a three-pid invite flow.
      */
-    oobData?: IOOBData & {
+    "oobData"?: IOOBData & {
         roomId?: string;
     };
     /**
      * When `true`, clicking the avatar opens a full-size lightbox.
      * Defaults to `false`; `false` and `undefined` are equivalent.
      */
-    viewAvatarOnClick?: boolean;
+    "viewAvatarOnClick"?: boolean;
     /**
      * Custom click handler. Takes precedence over the lightbox when both are set.
      */
@@ -42,32 +42,32 @@ interface Props {
     /**
      * Rendered size of the avatar in CSS units. Defaults to `"36px"`.
      */
-    size?: string;
+    "size"?: string;
     /**
      * Avatar shape override. When omitted, the ViewModel derives `"square"` for
      * spaces and `"round"` for all other rooms and invites.
      */
-    type?: "round" | "square";
+    "type"?: "round" | "square";
     /**
      * Optional additional CSS class names.
      */
-    className?: string;
+    "className"?: string;
     /**
      * Accessible label announced by assistive technologies.
      */
-    altText?: string;
+    "altText"?: string;
     /**
      * Browser tooltip shown on hover.
      */
-    title?: string;
+    "title"?: string;
     /**
      * Tab index forwarded to the avatar element.
      */
-    tabIndex?: number;
+    "tabIndex"?: number;
     /**
      * ARIA role override for the avatar element.
      */
-    role?: RoomAvatarViewSnapshot["role"];
+    "role"?: RoomAvatarViewSnapshot["role"];
     /**
      * When `true`, hides the avatar from the accessibility tree.
      */
@@ -75,7 +75,7 @@ interface Props {
     /**
      * Ref forwarded to the underlying avatar element.
      */
-    ref?: Ref<HTMLButtonElement | HTMLSpanElement>;
+    "ref"?: Ref<HTMLButtonElement | HTMLSpanElement>;
 }
 
 /**

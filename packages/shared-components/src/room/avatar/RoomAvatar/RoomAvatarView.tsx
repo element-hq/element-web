@@ -85,11 +85,11 @@ interface RoomAvatarViewProps {
     /**
      * ViewModel providing room avatar state and the click action.
      */
-    "vm": RoomAvatarViewModel;
+    vm: RoomAvatarViewModel;
     /**
      * Ref forwarded to the underlying avatar element.
      */
-    "ref"?: Ref<HTMLButtonElement | HTMLSpanElement>;
+    ref?: Ref<HTMLButtonElement | HTMLSpanElement>;
 }
 
 /**

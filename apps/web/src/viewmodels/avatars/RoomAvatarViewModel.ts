@@ -90,10 +90,7 @@ interface Props {
     ariaHidden?: boolean;
 }
 
-type ViewProps = Pick<
-    Props,
-    "size" | "className" | "altText" | "title" | "tabIndex" | "role" | "ariaHidden"
->;
+type ViewProps = Pick<Props, "size" | "className" | "altText" | "title" | "tabIndex" | "role" | "ariaHidden">;
 
 export class RoomAvatarViewModel
     extends BaseViewModel<RoomAvatarViewSnapshot, Props>
