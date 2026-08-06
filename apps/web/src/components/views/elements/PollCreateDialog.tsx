@@ -215,7 +215,8 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
                 />
                 <h2>{_t("poll|options_heading")}</h2>
                 {this.state.options.map((op, i) => (
-                    <div key={op} className="mx_PollCreateDialog_option">
+                    // oxlint-disable-next-line react/no-array-index-key
+                    <div key={`option_${i}`} className="mx_PollCreateDialog_option">
                         <Field
                             id={`pollcreate_option_${i}`}
                             value={op}

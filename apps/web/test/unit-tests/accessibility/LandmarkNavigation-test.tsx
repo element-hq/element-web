@@ -80,9 +80,7 @@ describe("KeyboardLandmarkUtils", () => {
                 </button>
                 <button className="mx_Room" data-testid="mx_Room">
                     ROOM
-                    <button tabIndex={0} className="mx_MessageComposer">
-                        COMPOSER
-                    </button>
+                    <div className="mx_MessageComposer">COMPOSER</div>
                 </button>
             </div>,
         );
