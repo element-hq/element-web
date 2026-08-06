@@ -27,14 +27,22 @@ export const INFO_PLIST_STRINGS_DIR = "src/i18n/InfoPlist";
 /** The `.lproj` folder holding the English source strings, which are also the Info.plist fallback. */
 const SOURCE_LPROJ = "en.lproj";
 
-/** A `.strings` entry: `"KEY" = "VALUE";`, either side allowed to contain backslash escapes. */
-const ENTRY_PATTERN = /"((?:[^"\\]|\\.)*)"\s*=\s*"((?:[^"\\]|\\.)*)"\s*;/g;
+/**
+ * The whole `.strings` grammar, in the order it has to be tried: a comment, a quoted string, or the
+ * punctuation between them. Matching comments as tokens rather than stripping them up front is what
+ * keeps a commented-out entry out of the result while still allowing comment punctuation to appear
+ * inside a value — whichever token starts first consumes the text.
+ */
+const TOKEN_PATTERN = /\/\*[\s\S]*?\*\/|\/\/[^\n]*|"((?:[^"\\]|\\.)*)"|[=;]/g;
 
 const ESCAPES: Record<string, string> = { n: "\n", r: "\r", t: "\t" };
 
 function unescapeStringsValue(value: string): string {
-    // Anything else escaped in a `.strings` file stands for itself — notably \" and \\.
-    return value.replace(/\\(.)/g, (_, char: string) => ESCAPES[char] ?? char);
+    // \Uxxxx is Apple's escape for an arbitrary code unit; anything else escaped stands for itself,
+    // notably \" and \\.
+    return value.replace(/\\(?:[Uu]([0-9a-fA-F]{4})|(.))/g, (_, hex?: string, char?: string) =>
+        hex !== undefined ? String.fromCharCode(parseInt(hex, 16)) : (ESCAPES[char!] ?? char!),
+    );
 }
 
 /**
@@ -43,9 +51,20 @@ function unescapeStringsValue(value: string): string {
  */
 export function parseInfoPlistStrings(contents: string): Record<string, string> {
     const entries: Record<string, string> = {};
-    for (const [, key, value] of contents.matchAll(ENTRY_PATTERN)) {
-        entries[unescapeStringsValue(key)] = unescapeStringsValue(value);
+    let key: string | undefined;
+    let value: string | undefined;
+
+    for (const [token, quoted] of contents.matchAll(TOKEN_PATTERN)) {
+        if (quoted !== undefined) {
+            if (key === undefined) key = unescapeStringsValue(quoted);
+            else value = unescapeStringsValue(quoted);
+        } else if (token === ";" && key !== undefined && value !== undefined) {
+            entries[key] = value;
+            key = undefined;
+            value = undefined;
+        }
     }
+
     return entries;
 }
 
