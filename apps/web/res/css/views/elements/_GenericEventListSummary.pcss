@@ -125,6 +125,9 @@ Please see LICENSE files in the repository root for full details.
 .mx_GenericEventListSummary_avatars {
     display: inline-block;
     line-height: $font-12px;
+    /* The avatars are taller than the summary text, so align on their centres rather than letting
+       the text baseline push them out of line. */
+    vertical-align: middle;
 
     .mx_BaseAvatar {
         margin-right: -4px;
