@@ -202,7 +202,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
     const bundleContent = content["com.beeper.linkpreviews"];
 
     useEffect(() => {
-        void urlPreviewVm.recompute();
+        void urlPreviewVm.onBundleContentChanged();
     }, [bundleContent, urlPreviewVm]);
 
     useEffect(() => {

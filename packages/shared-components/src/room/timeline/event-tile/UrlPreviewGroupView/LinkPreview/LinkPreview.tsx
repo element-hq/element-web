@@ -107,15 +107,17 @@ function createImageClickHandler({ onImageClick, ...preview }: LinkPreviewProps)
 
 function RemoveButton({ onClick }: { onClick: () => void }): JSX.Element {
     const { translate: _t } = useI18n();
-    return <IconButton
-        kind="secondary"
-        size="28px"
-        className={styles.removePreview}
-        aria-label={_t("timeline|url_preview|close")}
-        onClick={onClick}
-    >
-        <CloseIcon />
-    </IconButton>
+    return (
+        <IconButton
+            kind="secondary"
+            size="28px"
+            className={styles.removePreview}
+            aria-label={_t("timeline|url_preview|close")}
+            onClick={onClick}
+        >
+            <CloseIcon />
+        </IconButton>
+    );
 }
 
 export function LinkPreviewCollapsed(preview: LinkPreviewProps): JSX.Element {
