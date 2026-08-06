@@ -42,7 +42,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
       </button>
     </div>
     <div
-      class="mx_AutoHideScrollbar"
+      class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar"
       tabindex="-1"
     >
       <header
@@ -181,7 +181,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
             style="--mx-box-flex: 1;"
           >
             <a
-              class="_link_k9ljz_8"
+              class="_link_13esb_8"
               data-kind="primary"
               data-size="md"
               rel="noreferrer noopener"
@@ -781,7 +781,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
       </button>
     </div>
     <div
-      class="mx_AutoHideScrollbar"
+      class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar"
       tabindex="-1"
     >
       <header
@@ -878,7 +878,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
             style="--mx-box-flex: 1;"
           >
             <a
-              class="_link_k9ljz_8"
+              class="_link_13esb_8"
               data-kind="primary"
               data-size="md"
               rel="noreferrer noopener"
@@ -1478,7 +1478,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
       </button>
     </div>
     <div
-      class="mx_AutoHideScrollbar"
+      class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar"
       tabindex="-1"
     >
       <header
@@ -1617,7 +1617,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
             style="--mx-box-flex: 1;"
           >
             <a
-              class="_link_k9ljz_8"
+              class="_link_13esb_8"
               data-kind="primary"
               data-size="md"
               rel="noreferrer noopener"

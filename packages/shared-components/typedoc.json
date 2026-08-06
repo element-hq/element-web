@@ -22,6 +22,9 @@
         },
         "react-virtuoso": {
             "*": "https://virtuoso.dev/"
+        },
+        "linkifyjs": {
+            "*": "https://linkify.js.org/docs/"
         }
     }
 }

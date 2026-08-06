@@ -37,7 +37,6 @@ interface IProps {
     phase?: Phase;
     onClose: () => void;
     isRoomEncrypted: boolean;
-    inDialog: boolean;
 }
 
 interface IState {
@@ -327,7 +326,6 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
                                 sas={this.state.sasEvent.sas}
                                 onCancel={this.onSasMismatchesClick}
                                 onDone={this.onSasMatchesClick}
-                                inDialog={this.props.inDialog}
                                 isSelf={request.isSelfVerification}
                             />
                         ) : (

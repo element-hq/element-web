@@ -13,6 +13,7 @@ package-lock.json
 /.tmp
 .vscode
 .vscode/
+.zed/
 .env
 .env.*
 coverage

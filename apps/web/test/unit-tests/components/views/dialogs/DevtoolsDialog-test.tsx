@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { getByLabelText, getAllByLabelText, render } from "jest-matrix-react";
+import { render, screen } from "jest-matrix-react";
 import { Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
 
@@ -49,11 +49,11 @@ describe("DevtoolsDialog", () => {
         const user = userEvent.setup();
         jest.spyOn(navigator.clipboard, "writeText");
 
-        const { container } = getComponent(room.roomId);
+        getComponent(room.roomId);
 
-        const copyBtn = getByLabelText(container, "Copy");
+        const copyBtn = screen.getByLabelText("Copy");
         await user.click(copyBtn);
-        const copiedBtn = getByLabelText(container, "Copied!");
+        const copiedBtn = screen.getByLabelText("Copied!");
 
         expect(copiedBtn).toBeInTheDocument();
         expect(navigator.clipboard.writeText).toHaveBeenCalledWith(room.roomId);
@@ -64,11 +64,11 @@ describe("DevtoolsDialog", () => {
         jest.spyOn(navigator.clipboard, "writeText");
 
         const threadRootId = "$test_event_id_goes_here";
-        const { container } = getComponent(room.roomId, threadRootId);
+        getComponent(room.roomId, threadRootId);
 
-        const copyBtn = getAllByLabelText(container, "Copy")[1];
+        const copyBtn = screen.getAllByLabelText("Copy")[1];
         await user.click(copyBtn);
-        const copiedBtn = getByLabelText(container, "Copied!");
+        const copiedBtn = screen.getByLabelText("Copied!");
 
         expect(copiedBtn).toBeInTheDocument();
         expect(navigator.clipboard.writeText).toHaveBeenCalledWith(threadRootId);

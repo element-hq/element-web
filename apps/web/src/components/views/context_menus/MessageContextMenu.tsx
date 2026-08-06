@@ -372,7 +372,6 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             {
                 matrixClient,
                 event: this.props.mxEvent,
-                getRelationsForEvent: this.props.getRelationsForEvent,
             },
             "mx_Dialog_endPoll",
         );

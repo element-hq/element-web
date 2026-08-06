@@ -11,6 +11,5 @@ import { type Action } from "../actions";
 
 export interface DoAfterSyncPreparedPayload<T extends ActionPayload> extends Pick<ActionPayload, "action"> {
     action: Action.DoAfterSyncPrepared;
-    // eslint-disable-next-line camelcase
     deferred_action: T;
 }

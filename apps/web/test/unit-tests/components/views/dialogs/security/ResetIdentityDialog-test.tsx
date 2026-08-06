@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { act } from "react";
 import { render } from "jest-matrix-react";
 import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
-import { type Mocked } from "jest-mock";
+import { type Mocked } from "jest-mock-vitest-adapter";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { getMockClientWithEventEmitter } from "../../../../../test-utils";

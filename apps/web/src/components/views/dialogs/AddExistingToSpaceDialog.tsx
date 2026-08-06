@@ -13,21 +13,20 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CheckIcon, ErrorIcon, RestartIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { AutoHideScrollbar } from "@element-hq/web-shared-components";
 
 import { _t, _td } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
 import Dropdown from "../elements/Dropdown";
 import SearchBox from "../../structures/SearchBox";
-import SpaceStore from "../../../stores/spaces/SpaceStore";
 import RoomAvatar from "../avatars/RoomAvatar";
 import { getDisplayAliasForRoom } from "../../../Rooms";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
-import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { calculateRoomVia } from "../../../utils/permalinks/Permalinks";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import { sortRooms } from "../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
+import { sortRoomsByRecency } from "../../../utils/room/sortRoomsByRecency";
 import ProgressBar from "../elements/ProgressBar";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import QueryMatcher from "../../../autocomplete/QueryMatcher";
@@ -35,6 +34,7 @@ import LazyRenderList from "../elements/LazyRenderList";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { filterBoolean } from "../../../utils/arrays";
 import { type NonEmptyArray } from "../../../@types/common";
+import { SDKContextClass } from "../../../contexts/SDKContextClass.ts";
 
 // These values match CSS
 const ROW_HEIGHT = 32 + 12;
@@ -142,7 +142,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
         [cli, msc3946ProcessDynamicPredecessor],
     );
 
-    const scrollRef = useRef<AutoHideScrollbar<"div">>(null);
+    const scrollRef = useRef<HTMLDivElement | null>(null);
     const [scrollState, setScrollState] = useState<IScrollState>({
         // these are estimates which update as soon as it mounts
         scrollTop: 0,
@@ -155,8 +155,14 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     const [query, setQuery] = useState("");
     const lcQuery = query.toLowerCase().trim();
 
-    const existingSubspacesSet = useMemo(() => new Set(SpaceStore.instance.getChildSpaces(space.roomId)), [space]);
-    const existingRoomsSet = useMemo(() => new Set(SpaceStore.instance.getChildRooms(space.roomId)), [space]);
+    const existingSubspacesSet = useMemo(
+        () => new Set(SDKContextClass.instance.spaceStore.getChildSpaces(space.roomId)),
+        [space],
+    );
+    const existingRoomsSet = useMemo(
+        () => new Set(SDKContextClass.instance.spaceStore.getChildRooms(space.roomId)),
+        [space],
+    );
 
     const [spaces, rooms, dms] = useMemo(() => {
         let rooms = visibleRooms;
@@ -172,7 +178,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
         }
 
         const joinRule = space.getJoinRule();
-        return sortRooms(rooms).reduce<[spaces: Room[], rooms: Room[], dms: Room[]]>(
+        return sortRoomsByRecency(rooms, cli.getSafeUserId()).reduce<[spaces: Room[], rooms: Room[], dms: Room[]]>(
             (arr, room) => {
                 if (room.isSpaceRoom()) {
                     if (room !== space && !existingSubspacesSet.has(room)) {
@@ -190,7 +196,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
             },
             [[], [], []],
         );
-    }, [visibleRooms, space, lcQuery, existingRoomsSet, existingSubspacesSet]);
+    }, [visibleRooms, space, lcQuery, existingRoomsSet, existingSubspacesSet, cli]);
 
     const addRooms = async (): Promise<void> => {
         setError(false);
@@ -201,15 +207,17 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
         for (const room of selectedToAdd) {
             const via = calculateRoomVia(room);
             try {
-                await SpaceStore.instance.addRoomToSpace(space, room.roomId, via).catch(async (e): Promise<void> => {
-                    if (e.errcode === "M_LIMIT_EXCEEDED") {
-                        await sleep(e.data.retry_after_ms);
-                        await SpaceStore.instance.addRoomToSpace(space, room.roomId, via); // retry
-                        return;
-                    }
+                await SDKContextClass.instance.spaceStore
+                    .addRoomToSpace(space, room.roomId, via)
+                    .catch(async (e): Promise<void> => {
+                        if (e.errcode === "M_LIMIT_EXCEEDED") {
+                            await sleep(e.data.retry_after_ms);
+                            await SDKContextClass.instance.spaceStore.addRoomToSpace(space, room.roomId, via); // retry
+                            return;
+                        }
 
-                    throw e;
-                });
+                        throw e;
+                    });
                 setProgress((i) => (i ?? 0) + 1);
             } catch (e) {
                 logger.error("Failed to add rooms to space", e);
@@ -300,7 +308,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     }
 
     const onScroll = (): void => {
-        const body = scrollRef.current?.containerRef.current;
+        const body = scrollRef.current;
         if (!body) return;
         setScrollState({
             scrollTop: body.scrollTop,
@@ -309,6 +317,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     };
 
     const wrappedRef = (body: HTMLDivElement | null): void => {
+        scrollRef.current = body;
         if (!body) return;
         setScrollState({
             scrollTop: body.scrollTop,
@@ -329,10 +338,9 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
                 autoFocus={true}
             />
             <AutoHideScrollbar
-                className="mx_AddExistingToSpace_content"
+                className="mx_AutoHideScrollbar mx_AddExistingToSpace_content"
                 onScroll={onScroll}
                 wrappedRef={wrappedRef}
-                ref={scrollRef}
             >
                 {rooms.length > 0 && roomsRenderer
                     ? roomsRenderer(rooms, selectedToAdd, roomsScrollState, onChange)
@@ -398,7 +406,7 @@ export const SubspaceSelector: React.FC<ISubspaceSelectorProps> = ({ title, spac
     const options = useMemo(() => {
         return [
             space,
-            ...SpaceStore.instance.getChildSpaces(space.roomId).filter((space) => {
+            ...SDKContextClass.instance.spaceStore.getChildSpaces(space.roomId).filter((space) => {
                 return space.currentState.maySendStateEvent(EventType.SpaceChild, space.client.getSafeUserId());
             }),
         ];

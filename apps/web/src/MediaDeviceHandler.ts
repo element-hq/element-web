@@ -7,6 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// oxlint-disable-next-line no-restricted-imports
 import EventEmitter from "events";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -54,7 +55,7 @@ export default class MediaDeviceHandler extends EventEmitter {
      * (https://developer.mozilla.org/en-US/docs/Web/API/Permissions_API)
      * is ready for primetime, it might help make this simpler.
      *
-     * @return Promise<IMediaDevices> The available media devices
+     * @returns Promise<IMediaDevices> The available media devices
      */
     public static async getDevices(): Promise<IMediaDevices | undefined> {
         try {

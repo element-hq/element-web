@@ -169,11 +169,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         const accessError = (): void => {
             Modal.createDialog(ErrorDialog, {
                 title: _t("voip|unable_to_access_audio_input_title"),
-                description: (
-                    <>
-                        <p>{_t("voip|unable_to_access_audio_input_description")}</p>
-                    </>
-                ),
+                description: <p>{_t("voip|unable_to_access_audio_input_description")}</p>,
             });
         };
 
@@ -184,11 +180,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             if (!devices?.[MediaDeviceKindEnum.AudioInput]?.length) {
                 Modal.createDialog(ErrorDialog, {
                     title: _t("voip|no_audio_input_title"),
-                    description: (
-                        <>
-                            <p>{_t("voip|no_audio_input_description")}</p>
-                        </>
-                    ),
+                    description: <p>{_t("voip|no_audio_input_description")}</p>,
                 });
                 return;
             }
@@ -288,7 +280,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         if (this.state.recordingPhase === RecordingState.Uploading) {
             uploadIndicator = (
                 <span className="mx_VoiceRecordComposerTile_uploadingState">
-                    <InlineSpinner w={16} h={16} />
+                    <InlineSpinner size={16} />
                 </span>
             );
         } else if (this.state.didUploadFail && this.state.recordingPhase === RecordingState.Ended) {

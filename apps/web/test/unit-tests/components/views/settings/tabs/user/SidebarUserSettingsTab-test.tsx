@@ -50,8 +50,6 @@ describe("<SidebarUserSettingsTab />", () => {
             if (settingName === "Spaces.enabledMetaSpaces") {
                 return {
                     [MetaSpace.Home]: true,
-                    [MetaSpace.Favourites]: true,
-                    [MetaSpace.People]: true,
                     [MetaSpace.Orphans]: true,
                 };
             }
@@ -77,8 +75,6 @@ describe("<SidebarUserSettingsTab />", () => {
             if (settingName === "Spaces.enabledMetaSpaces") {
                 return {
                     [MetaSpace.Home]: false,
-                    [MetaSpace.Favourites]: true,
-                    [MetaSpace.People]: true,
                     [MetaSpace.Orphans]: true,
                 };
             }

@@ -17,7 +17,7 @@ import {
     Visibility,
 } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
-import { type MockedObject } from "jest-mock";
+import { type MockedObject } from "jest-mock-vitest-adapter";
 
 import * as createRoomModule from "../../../../../src/createRoom";
 import SpaceCreateMenu, { createSpace } from "../../../../../src/components/views/spaces/SpaceCreateMenu";

@@ -119,7 +119,6 @@ export class DirectoryMember extends Member {
     private readonly displayName?: string;
     private readonly avatarUrl?: string;
 
-    // eslint-disable-next-line camelcase
     public constructor(userDirResult: { user_id: string; display_name?: string; avatar_url?: string }) {
         super();
         this._userId = userDirResult.user_id;

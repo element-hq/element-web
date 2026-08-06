@@ -36,7 +36,10 @@
 
 /* Show hover menu and background on hover/focus/menu-open states */
 .roomListItem:hover,
-.roomListItem:focus-visible,
+/* keyboardActive is toggled in JS for keyboard focus only (see RoomListItemView), and kept while
+   focus is on the hover-menu buttons so they stay reachable by Tab — without revealing the menu on
+   mouse-focused or selected rows the way :focus-within would */
+.roomListItem.keyboardActive,
 /* When the context menu is opened */
 .roomListItem[data-state="open"],
 /* When the options and notifications menu are opened */
@@ -94,6 +97,15 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.roomName {
+    /* Allow the room name to shrink and truncate when displayed next to the user status emoji */
+    min-width: 0;
+}
+
+.userStatusEmoji {
+    padding-left: var(--cpd-space-1-5x);
 }
 
 .selected {

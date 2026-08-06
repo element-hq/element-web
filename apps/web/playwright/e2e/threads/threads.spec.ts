@@ -29,7 +29,7 @@ test.describe("Threads", () => {
 
     test("should be usable for a conversation", { tag: "@screenshot" }, async ({ page, app, bot }) => {
         const roomId = await app.client.createRoom({});
-        await app.client.inviteUser(roomId, bot.credentials.userId);
+        await app.client.inviteUser(roomId, bot.credentials!.userId);
         await bot.joinRoom(roomId);
         await page.goto("/#/room/" + roomId);
 
@@ -140,7 +140,7 @@ test.describe("Threads", () => {
         await locator.hover();
         await locator.getByRole("toolbar", { name: "Message Actions" }).getByRole("button", { name: "React" }).click();
 
-        locator = page.locator(".mx_EmojiPicker");
+        locator = page.getByLabel("Emoji picker");
         await locator.getByRole("textbox").fill("wave");
         await page.getByRole("gridcell", { name: "👋" }).click();
 
@@ -269,7 +269,9 @@ test.describe("Threads", () => {
         // Check the number of the replies
         await expect(locator.locator(".mx_ThreadPanel_replies_amount").getByText("2")).toBeAttached();
         // Make sure the notification dot is visible
-        await expect(locator.locator(".mx_NotificationBadge_visible")).toBeVisible();
+        const notificationBadge = locator.getByTestId("notification-badge");
+        await expect(notificationBadge).toBeVisible();
+        await expect(notificationBadge).toHaveAttribute("data-badge-type", "dot");
         // User opens thread via threads list
         await locator.locator(".mx_EventTile_line").click();
 
@@ -434,7 +436,7 @@ test.describe("Threads", () => {
         { tag: ["@screenshot", "@no-firefox"] },
         async ({ page, app, bot }) => {
             const roomId = await app.client.createRoom({});
-            await app.client.inviteUser(roomId, bot.credentials.userId);
+            await app.client.inviteUser(roomId, bot.credentials!.userId);
             await bot.joinRoom(roomId);
             await page.goto("/#/room/" + roomId);
 

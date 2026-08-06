@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 
 import { expect, describe, it, beforeEach, vi } from "vitest";
 import { fs as memfs, vol } from "memfs";
-import path from "node:path";
 
 import { getIconPath } from "./icon.js";
+import { fileURLToPath } from "node:url";
 
 vi.mock("node:fs/promises", () => ({ default: memfs.promises }));
 
@@ -25,20 +25,20 @@ describe("getIconPath", () => {
                 "build/icon.png": "png",
                 "build/icon.ico": "ico",
             },
-            "../webapp",
+            fileURLToPath(import.meta.resolve("../webapp")),
         );
     });
 
     it("should use .ico on Windows", async () => {
         vi.spyOn(process, "platform", "get").mockReturnValue("win32");
-        await expect(getIconPath()).resolves.toEqual(path.resolve("../build/icon.ico"));
+        await expect(getIconPath()).resolves.toEqual(fileURLToPath(import.meta.resolve("../build/icon.ico")));
     });
     it("should use .png on macOS", async () => {
         vi.spyOn(process, "platform", "get").mockReturnValue("darwin");
-        await expect(getIconPath()).resolves.toEqual(path.resolve("../build/icon.png"));
+        await expect(getIconPath()).resolves.toEqual(fileURLToPath(import.meta.resolve("../build/icon.png")));
     });
     it("should use .png on Linux", async () => {
         vi.spyOn(process, "platform", "get").mockReturnValue("linux");
-        await expect(getIconPath()).resolves.toEqual(path.resolve("../build/icon.png"));
+        await expect(getIconPath()).resolves.toEqual(fileURLToPath(import.meta.resolve("../build/icon.png")));
     });
 });

@@ -90,7 +90,7 @@ exports[`<AddExistingToSpaceDialog /> looks as expected 1`] = `
         </div>
       </div>
       <div
-        class="mx_AutoHideScrollbar mx_AddExistingToSpace_content"
+        class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_AddExistingToSpace_content"
         tabindex="-1"
       >
         <span

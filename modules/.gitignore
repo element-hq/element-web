@@ -1,0 +1,13 @@
+lib/
+temp/
+coverage/
+
+/playwright-html-report/
+**/test-results
+**/_results
+# Only commit snapshots from Linux
+**/e2e/snapshots/**/*.png
+**/e2e/snapshots/**/*.yml
+!**/e2e/snapshots/**/*-linux.png
+!**/e2e/snapshots/**/*-linux.aria.yml
+/playwright-report/

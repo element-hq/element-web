@@ -96,13 +96,14 @@ export const getKeyboardShortcuts = (): IKeyboardShortcuts => {
             return true;
         })
         .reduce((o, key) => {
-            o[key as KeyBindingAction] = KEYBOARD_SHORTCUTS[key as KeyBindingAction];
+            o[key] = KEYBOARD_SHORTCUTS[key];
             return o;
         }, {} as IKeyboardShortcuts);
 };
 
 /**
  * Gets keyboard shortcuts that should be presented to the user in the UI.
+ * @knipignore - exported for tests
  */
 export const getKeyboardShortcutsForUI = (): IKeyboardShortcuts => {
     const entries = [...Object.entries(getUIOnlyShortcuts()), ...Object.entries(getKeyboardShortcuts())] as [

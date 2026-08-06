@@ -11,6 +11,7 @@ import { rejectToast } from "@element-hq/element-web-playwright-common";
 import { expect, test } from ".";
 import { CommandOrControl } from "../../utils";
 import { isDendrite } from "../../../plugins/homeserver/dendrite";
+import { getRoomList, getRoomOptionsMenu } from "../../left-panel/room-list-panel/utils";
 
 test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
     test.skip(
@@ -23,13 +24,15 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
         botCreateOpts: { displayName: "Other User" },
     });
 
+    test.beforeEach(async ({ page, app, user }) => {
+        await rejectToast(page, "Verify this device");
+        await rejectToast(page, "Notifications");
+    });
+
     test(
         "should have the button correctly aligned and displayed in the space panel when expanded",
         { tag: "@screenshot" },
         async ({ util, page }) => {
-            await rejectToast(page, "Verify this device");
-            await rejectToast(page, "Notifications");
-
             // Open the space panel
             await util.expandSpacePanel();
             // The buttons in the space panel should be aligned when expanded
@@ -41,9 +44,6 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
         "should not show indicator when there is no thread",
         { tag: "@screenshot" },
         async ({ room1, util, app, page }) => {
-            await rejectToast(page, "Verify this device");
-            await rejectToast(page, "Notifications");
-
             // No indicator should be shown
             await util.assertNoTacIndicator();
 
@@ -62,9 +62,6 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
         app,
         page,
     }) => {
-        await rejectToast(page, "Verify this device");
-        await rejectToast(page, "Notifications");
-
         await util.goTo(room1);
         await util.receiveMessages(room1, ["Msg1", msg.threadedOff("Msg1", "Resp1")]);
 
@@ -80,9 +77,6 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
         app,
         page,
     }) => {
-        await rejectToast(page, "Verify this device");
-        await rejectToast(page, "Notifications");
-
         await util.goTo(room1);
         await util.receiveMessages(room1, [
             "Msg1",
@@ -104,9 +98,6 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
         "should show the rooms with unread threads",
         { tag: "@screenshot" },
         async ({ room1, room2, util, msg, user, app, page }) => {
-            await rejectToast(page, "Verify this device");
-            await rejectToast(page, "Notifications");
-
             await util.goTo(room2);
             await util.populateThreads(room1, room2, msg, user);
             // The indicator should be shown
@@ -128,9 +119,6 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
         "should update with a thread is read",
         { tag: "@screenshot" },
         async ({ room1, room2, util, msg, user, app, page }) => {
-            await rejectToast(page, "Verify this device");
-            await rejectToast(page, "Notifications");
-
             await util.goTo(room2);
             await util.populateThreads(room1, room2, msg, user);
 
@@ -155,9 +143,6 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
     );
 
     test("should order by recency after notification level", async ({ room1, room2, util, msg, user, app, page }) => {
-        await rejectToast(page, "Verify this device");
-        await rejectToast(page, "Notifications");
-
         await util.goTo(room2);
         await util.populateThreads(room1, room2, msg, user, false);
 
@@ -169,9 +154,6 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
     });
 
     test("should block the Spotlight to open when the TAC is opened", async ({ util, page, app }) => {
-        await rejectToast(page, "Verify this device");
-        await rejectToast(page, "Notifications");
-
         const toggleSpotlight = () => page.keyboard.press(`${CommandOrControl}+k`);
 
         // Sanity check
@@ -187,9 +169,6 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
     });
 
     test("should have the correct hover state", { tag: "@screenshot" }, async ({ util, page, app }) => {
-        await rejectToast(page, "Verify this device");
-        await rejectToast(page, "Notifications");
-
         await util.hoverTacButton();
         await expect(util.getSpacePanel()).toMatchScreenshot("tac-hovered.png");
 
@@ -200,9 +179,6 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
     });
 
     test("should mark all threads as read", { tag: "@screenshot" }, async ({ room1, room2, util, msg, page, app }) => {
-        await rejectToast(page, "Verify this device");
-        await rejectToast(page, "Notifications");
-
         await util.receiveMessages(room1, ["Msg1", msg.threadedOff("Msg1", "Resp1")]);
 
         await util.assertNotificationTac();
@@ -223,14 +199,50 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
         app,
         page,
     }) => {
-        await rejectToast(page, "Verify this device");
-        await rejectToast(page, "Notifications");
-
         await util.receiveMessages(room1, ["Msg1", msg.threadedOff("Msg1", "Resp1")]);
 
         await util.openTac();
         await util.clickRoomInTac(room1.name);
 
         await util.assertThreadPanelIsOpened();
+    });
+
+    // The target room is named so that A-Z sorting places it at the very bottom of the room list.
+    test.describe("scrolling the room list when a room is selected", () => {
+        test.use({ room1Name: "zzz thread room" });
+
+        test("should scroll the room list to reveal the room clicked in the TAC", async ({
+            room1,
+            util,
+            msg,
+            app,
+            page,
+        }) => {
+            // Give the target room an unread thread so it shows up in the TAC.
+            await util.receiveMessages(room1, ["Msg1", msg.threadedOff("Msg1", "Resp1")]);
+            await util.assertNotificationTac();
+
+            // Create filler rooms that sort before "zzz …" so A-Z sorting pushes the target below the fold.
+            for (let i = 0; i < 20; i++) {
+                await app.client.createRoom({ name: `room ${String(i).padStart(2, "0")}` });
+            }
+
+            // Sort A-Z so room positions are deterministic and the target sits at the bottom.
+            await getRoomOptionsMenu(page).click();
+            await page.getByRole("menuitemradio", { name: "A-Z" }).click();
+
+            const roomList = getRoomList(page);
+            const targetRow = roomList.getByRole("option", { name: `Open room ${room1.name}` });
+
+            await expect(roomList.getByRole("option", { name: "Open room room 00" })).toBeVisible();
+            await expect(targetRow).not.toBeInViewport();
+
+            // Clicking the room in the TAC dispatches view_room with show_room_tile…
+            await util.openTac();
+            await util.clickRoomInTac(room1.name);
+
+            // …which scrolls the room list to bring the room's tile into view.
+            await expect(targetRow).toBeInViewport();
+        });
     });
 });

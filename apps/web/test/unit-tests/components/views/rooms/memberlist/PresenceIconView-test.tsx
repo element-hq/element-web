@@ -7,7 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render } from "jest-matrix-react";
+import { render, waitFor } from "jest-matrix-react";
+import userEvent from "@testing-library/user-event";
 
 import AvatarPresenceIconView from "../../../../../../src/components/views/rooms/MemberList/tiles/common/PresenceIconView";
 
@@ -38,5 +39,25 @@ describe("<PresenceIconView/>", () => {
         const { container } = render(<AvatarPresenceIconView presenceState="busy" />);
         expect(container.querySelector(".mx_PresenceIconView_dnd")).toBeDefined();
         expect(container).toMatchSnapshot();
+    });
+
+    it("renders the tooltip", async () => {
+        const user = userEvent.setup();
+
+        const { container, asFragment } = render(<AvatarPresenceIconView presenceState="busy" />);
+
+        const presence = container.querySelector(".mx_PresenceIconView")!;
+        expect(presence).toBeVisible();
+        await user.hover(presence!);
+
+        // wait for the tooltip to open
+        const tooltip = await waitFor(() => {
+            const tooltip = document.getElementById(presence.getAttribute("aria-labelledby")!);
+            expect(tooltip).toBeVisible();
+            return tooltip;
+        });
+        expect(tooltip).toHaveTextContent("Busy");
+
+        expect(asFragment()).toMatchSnapshot();
     });
 });

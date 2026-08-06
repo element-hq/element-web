@@ -5,8 +5,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventStatus, EventType, type MatrixEvent, MsgType, type RoomMember } from "matrix-js-sdk/src/matrix";
-
 import { ElementCallEventType } from "../../../../call-types";
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { Layout } from "../../../../settings/enums/Layout";
@@ -16,19 +14,17 @@ import { Layout } from "../../../../settings/enums/Layout";
  * Keep this module free of React lifecycle, DOM access, dispatch, and MatrixClientPeg lookups.
  */
 
-/** Whether the event send status represents a pending send state. */
-export function isSendingStatus(eventSendStatus?: EventStatus): boolean {
-    return [EventStatus.SENDING, EventStatus.QUEUED, EventStatus.ENCRYPTING].includes(eventSendStatus!);
-}
-
-/** The aria-live setting used by EventTile for the current send status. */
-export function getAriaLive(eventSendStatus?: EventStatus | null): "off" | undefined {
-    return eventSendStatus === null ? undefined : "off";
+/** Inputs for the stable scroll token derivation. */
+export interface ScrollTokenInput {
+    /** The event identifier, when available. */
+    eventId?: string;
+    /** Whether the event is a local echo. */
+    isLocalEcho: boolean;
 }
 
 /** The stable scroll token for a non-local-echo event. */
-export function getScrollToken(mxEvent: MatrixEvent): string | undefined {
-    return mxEvent.status ? undefined : mxEvent.getId();
+export function getScrollToken({ eventId, isLocalEcho }: ScrollTokenInput): string | undefined {
+    return isLocalEcho ? undefined : eventId;
 }
 
 /** Whether EventTile should render as a continuation in the current layout/rendering mode. */
@@ -65,11 +61,16 @@ export function getEventTileLineClassState({
     eventType,
     msgtype,
 }: EventTileLineClassState): Record<string, boolean> {
+    const roomMessageEventType = "m.room.message";
+    const stickerEventType = "m.sticker";
+    const imageMsgtype = "m.image";
+    const emoteMsgtype = "m.emote";
+
     return {
         mx_EventTile_mediaLine: isProbablyMedia,
-        mx_EventTile_image: eventType === EventType.RoomMessage && msgtype === MsgType.Image,
-        mx_EventTile_sticker: eventType === EventType.Sticker,
-        mx_EventTile_emote: eventType === EventType.RoomMessage && msgtype === MsgType.Emote,
+        mx_EventTile_image: eventType === roomMessageEventType && msgtype === imageMsgtype,
+        mx_EventTile_sticker: eventType === stickerEventType,
+        mx_EventTile_emote: eventType === roomMessageEventType && msgtype === emoteMsgtype,
     };
 }
 
@@ -89,6 +90,12 @@ export interface EventTileSenderProfileStateInput {
     isBubbleMessage: boolean;
     /** The current timeline layout. */
     layout?: Layout;
+    /** Whether the event is a room create event. */
+    isRoomCreate: boolean;
+    /** Whether the event is a call invite. */
+    isCallInvite: boolean;
+    /** Whether the event is an RTC notification. */
+    isRtcNotification: boolean;
 }
 
 /** EventTile avatar and sender profile display state. */
@@ -108,6 +115,9 @@ export function getEventTileSenderProfileState({
     eventType,
     isBubbleMessage,
     layout,
+    isRoomCreate,
+    isCallInvite,
+    isRtcNotification,
 }: EventTileSenderProfileStateInput): EventTileSenderProfileState {
     if (isRenderingNotification) {
         return { avatarSize: "24px", needsSenderProfile: true };
@@ -124,7 +134,7 @@ export function getEventTileSenderProfileState({
         return { avatarSize: "32px", needsSenderProfile: true };
     }
 
-    if (eventType === EventType.RoomCreate || isBubbleMessage) {
+    if (isRoomCreate || isBubbleMessage) {
         return { avatarSize: null, needsSenderProfile: false };
     }
 
@@ -134,9 +144,9 @@ export function getEventTileSenderProfileState({
 
     if (
         (continuation && timelineRenderingType !== TimelineRenderingType.File) ||
-        eventType === EventType.CallInvite ||
+        isCallInvite ||
         ElementCallEventType.matches(eventType) ||
-        eventType === EventType.RTCNotification
+        isRtcNotification
     ) {
         return { avatarSize: null, needsSenderProfile: false };
     }
@@ -146,15 +156,6 @@ export function getEventTileSenderProfileState({
     }
 
     return { avatarSize: "30px", needsSenderProfile: true };
-}
-
-/** The room member whose avatar should render for the EventTile. */
-export function getEventTileAvatarMember(mxEvent: MatrixEvent): RoomMember | null {
-    if (mxEvent.getContent().third_party_invite) {
-        return mxEvent.target;
-    }
-
-    return mxEvent.sender;
 }
 
 /** Whether clicking the avatar should open the user profile. */
@@ -239,8 +240,8 @@ export function getShouldShowMessageActionBar({
 export interface ShouldShowTimestampInput {
     /** The event origin timestamp. */
     eventTs: number;
-    /** The Matrix event type for event-type timestamp derivation. */
-    eventType: string;
+    /** Whether the event is an RTC notification. */
+    isRtcNotification: boolean;
     /** Whether timestamp rendering is disabled. */
     hideTimestamp?: boolean;
     /** Whether timestamps should always show. */
@@ -260,7 +261,7 @@ export interface ShouldShowTimestampInput {
 /** Whether EventTile should render the message timestamp. */
 export function getShouldShowTimestamp({
     eventTs,
-    eventType,
+    isRtcNotification,
     hideTimestamp,
     alwaysShowTimestamps,
     last,
@@ -271,7 +272,7 @@ export function getShouldShowTimestamp({
 }: ShouldShowTimestampInput): boolean {
     return (
         !!eventTs &&
-        eventType !== EventType.RTCNotification &&
+        !isRtcNotification &&
         !hideTimestamp &&
         (alwaysShowTimestamps || last || hover || focusWithin || actionBarFocused || hasContextMenu)
     );
@@ -420,6 +421,8 @@ export interface EventTileClassState {
     isContinuation?: boolean;
     /** The Matrix event type for event-type class derivation. */
     eventType: string;
+    /** Whether the event is a call invite. */
+    isCallInvite: boolean;
     /** Whether the tile is the last event in the timeline. */
     isLast?: boolean;
     /** Whether the tile is the last event in its section. */
@@ -455,6 +458,7 @@ export function getEventTileClassState({
     isSelected,
     isContinuation,
     eventType,
+    isCallInvite,
     isLast,
     isLastInSection,
     isContextual,
@@ -478,14 +482,13 @@ export function getEventTileClassState({
         mx_EventTile_sending: !isEditing && isSending,
         mx_EventTile_highlight: isHighlighted,
         mx_EventTile_selected: isSelected,
-        mx_EventTile_continuation:
-            isContinuation || eventType === EventType.CallInvite || ElementCallEventType.matches(eventType),
+        mx_EventTile_continuation: isContinuation || isCallInvite || ElementCallEventType.matches(eventType),
         mx_EventTile_last: isLast,
         mx_EventTile_lastInSection: isLastInSection,
         mx_EventTile_contextual: isContextual,
         mx_EventTile_actionBarFocused: isActionBarFocused,
         mx_EventTile_bad: isEncryptionFailure,
-        mx_EventTile_emote: msgtype === MsgType.Emote,
+        mx_EventTile_emote: msgtype === "m.emote",
         mx_EventTile_noSender: hideSender,
         mx_EventTile_clamp: timelineRenderingType === TimelineRenderingType.ThreadsList || isRenderingNotification,
         mx_EventTile_noBubble: noBubbleEvent,

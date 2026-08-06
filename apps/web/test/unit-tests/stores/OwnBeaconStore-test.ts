@@ -19,7 +19,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
-import { type Mocked } from "jest-mock";
+import { type Mocked } from "jest-mock-vitest-adapter";
 
 import { OwnBeaconStore, OwnBeaconStoreEvent } from "../../../src/stores/OwnBeaconStore";
 import {

@@ -18,7 +18,7 @@ import {
 
 import { FormattingButtons } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/components/FormattingButtons";
 import * as LinkModal from "../../../../../../../src/components/views/rooms/wysiwyg_composer/components/LinkModal";
-import { setLanguage } from "../../../../../../../src/languageHandler";
+import { setLanguage } from "../../../../../../../src/i18n/settings";
 
 const mockWysiwyg = {
     bold: jest.fn(),

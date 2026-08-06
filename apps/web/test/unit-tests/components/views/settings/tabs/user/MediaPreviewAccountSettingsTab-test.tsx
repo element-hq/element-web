@@ -18,7 +18,7 @@ import {
 } from "../../../../../../test-utils";
 import MatrixClientBackedController from "../../../../../../../src/settings/controllers/MatrixClientBackedController";
 import MatrixClientBackedSettingsHandler from "../../../../../../../src/settings/handlers/MatrixClientBackedSettingsHandler";
-import type { MockedObject } from "jest-mock";
+import type { MockedObject } from "jest-mock-vitest-adapter";
 import {
     MEDIA_PREVIEW_ACCOUNT_DATA_TYPE,
     type MediaPreviewConfig,

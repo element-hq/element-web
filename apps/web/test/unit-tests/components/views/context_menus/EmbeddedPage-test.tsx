@@ -47,4 +47,13 @@ describe("<EmbeddedPage />", () => {
         const { asFragment } = render(<EmbeddedPage />);
         expect(asFragment()).toMatchSnapshot();
     });
+
+    it("should sanitise input", async () => {
+        fetchMock.get("https://other.page", `<h1>Foo</h1><iframe src="https://home.page" />`);
+
+        const { asFragment } = render(<EmbeddedPage url="https://other.page" />);
+        await expect(screen.findByText("Foo")).resolves.toBeVisible();
+        expect(screen.queryByRole("iframe")).not.toBeInTheDocument();
+        expect(asFragment()).toMatchSnapshot();
+    });
 });

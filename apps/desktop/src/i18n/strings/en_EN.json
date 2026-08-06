@@ -27,6 +27,10 @@
         "yes": "Yes"
     },
     "confirm_quit": "Are you sure you want to quit?",
+    "download": {
+        "unable_to_open_description": "The file could not be opened. It may have been moved or deleted.",
+        "unable_to_open_title": "Unable to open file"
+    },
     "edit_menu": {
         "speech": "Speech",
         "speech_start_speaking": "Start Speaking",
@@ -52,6 +56,11 @@
         "hide_others": "Hide Others",
         "services": "Services",
         "unhide": "Unhide"
+    },
+    "renderer_crash": {
+        "detail": "Quit and reopen the app to continue. If this keeps happening, restarting your computer or clearing the app's cache may help.",
+        "message": "%(brand)s recovered from a problem several times but it keeps happening, so it has stopped trying.",
+        "title": "%(brand)s keeps crashing"
     },
     "right_click_menu": {
         "add_to_dictionary": "Add to dictionary",

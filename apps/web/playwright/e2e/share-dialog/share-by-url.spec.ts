@@ -30,6 +30,6 @@ test.describe("share from URL", () => {
         const lastMessage = page.locator(".mx_RoomView_MessageList .mx_EventTile_last");
         await expect(lastMessage).toBeVisible();
         const lastMessageText = await lastMessage.locator(".mx_EventTile_body").innerText();
-        await expect(lastMessageText).toBe("Hello world");
+        expect(lastMessageText).toBe("Hello world");
     });
 });

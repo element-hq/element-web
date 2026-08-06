@@ -9,7 +9,6 @@
             "other": "%(count)s nelegitaj mesaĝoj, inkluzive menciojn.",
             "one": "1 nelegita mencio."
         },
-        "room_name": "Ĉambro %(name)s",
         "unread_messages": "Nelegitaj mesaĝoj."
     },
     "a11y_jump_first_unread_room": "Salti al unua nelegita ĉambro.",
@@ -43,7 +42,6 @@
         "enter_fullscreen": "Plenekrano",
         "exit_fullscreeen": "Eliru plenekrano",
         "expand": "Etendi",
-        "explore_public_rooms": "Esplori publikajn ĉambrojn",
         "explore_rooms": "Esplori ĉambrojn",
         "export": "Elporti",
         "forward": "Plusendi",
@@ -55,7 +53,6 @@
         "ignore": "Malatenti",
         "import": "Enporti",
         "invite": "Inviti",
-        "invites_list": "Invitoj",
         "join": "Aliĝi",
         "learn_more": "Ekscii plion",
         "leave": "Foriri",
@@ -90,7 +87,6 @@
         "sign_out": "Adiaŭi",
         "skip": "Preterpasi",
         "start": "Komenci",
-        "start_chat": "Komenci babilon",
         "stop": "Fini",
         "submit": "Sendi",
         "subscribe": "Aboni",
@@ -346,7 +342,6 @@
         "encrypted": "Ĉifrata",
         "error": "Eraro",
         "faq": "Oftaj demandoj",
-        "favourites": "Elstarigitaj",
         "feedback": "Prikomenti",
         "filter_results": "Filtri rezultojn",
         "forward_message": "Plusendi mesaĝon",
@@ -354,7 +349,6 @@
         "go_to_settings": "Iri al agordoj",
         "guest": "Gasto",
         "help": "Helpo",
-        "historical": "Estintaj",
         "home": "Hejmo",
         "homeserver": "Hejmservilo",
         "identity_server": "Identiga servilo",
@@ -364,7 +358,6 @@
         "legal": "Jura",
         "light": "Hela",
         "location": "Loko",
-        "low_priority": "Malpli gravaj",
         "message": "Mesaĝo",
         "message_layout": "Aranĝo de mesaĝoj",
         "microphone": "Mikrofono",
@@ -417,7 +410,6 @@
         "success": "Sukceso",
         "suggestions": "Rekomendoj",
         "support": "Subteno",
-        "system_alerts": "Sistemaj avertoj",
         "theme": "Haŭto",
         "thread": "Fadeno",
         "threads": "Fadenoj",
@@ -625,13 +617,6 @@
             "warning": "Se vi ne forigis la rehavan metodon, eble atakanto provas aliri vian konton. Vi tuj ŝanĝu la pasvorton de via konto, kaj agordu novan rehavan metodon en la agordoj."
         },
         "set_up_toast_title": "Agordi Sekuran savkopiadon",
-        "udd": {
-            "other_ask_verify_text": "Petu, ke ĉi tiu la uzanto kontrolu sian salutaĵon, aŭ kontrolu ĝin permane sube.",
-            "other_new_session_text": "%(name)s (%(userId)s) salutis novan salutaĵon ne kontrolante ĝin:",
-            "own_ask_verify_text": "Kontrolu vian alian salutaĵon per unu el la ĉi-subaj elektebloj.",
-            "own_new_session_text": "Vi salutis novan salutaĵon sen kontrolo:",
-            "title": "Nefidata"
-        },
         "unable_to_setup_keys_error": "Ne povas agordi ŝlosilojn",
         "verification": {
             "accepting": "Akceptante…",
@@ -972,7 +957,6 @@
         "currently_experimental": "Nuntempe eksperimenta.",
         "custom_themes": "Subteni aldonadon de propraj haŭtoj",
         "element_call_video_rooms": "Element Call videoĉambroj",
-        "group_calls": "La nova grupvoka sperto",
         "group_developer": "Programisto",
         "group_encryption": "Ĉifrado",
         "group_profile": "Profilo",
@@ -981,7 +965,6 @@
         "group_threads": "Fadenoj",
         "group_voip": "Voĉo kaj vido",
         "group_widgets": "Fenestraĵoj",
-        "html_topic": "Montru HTML-prezenton de ĉambrotemoj",
         "join_beta": "Aliĝi al provado",
         "jump_to_date": "Salti ĝis nun (aldonas /jumptodate kaj saltu ĝis nun kapliniojn)",
         "latex_maths": "Bildigi matematikon de Lateĥo en mesaĝoj",
@@ -1034,9 +1017,6 @@
         "leave_space_question": "Ĉu vi certe volas forlasi la aron «%(spaceName)s»?",
         "room_rejoin_warning": "Ĉi tiu ĉambro ne estas publika. Vi ne povos re-aliĝi sen invito.",
         "space_rejoin_warning": "Ĉi tiu aro ne estas publika. Vi ne povos re-aliĝi sen invito."
-    },
-    "left_panel": {
-        "open_dial_pad": "Malfermi ciferplaton"
     },
     "lightbox": {
         "rotate_left": "Turni maldekstren",
@@ -1146,7 +1126,6 @@
     },
     "quick_settings": {
         "all_settings": "Ĉiuj agordoj",
-        "metaspace_section": "Fiksi al flanka breto",
         "sidebar_settings": "Pliaj elektebloj",
         "title": "Rapidaj agordoj"
     },
@@ -1287,29 +1266,11 @@
         }
     },
     "room_list": {
-        "add_room_label": "Aldoni ĉambron",
         "add_space_label": "Aldoni aron",
-        "breadcrumbs_empty": "Neniuj freŝdate vizititaj ĉambroj",
-        "breadcrumbs_label": "Freŝe vizititiaj ĉambroj",
         "failed_add_tag": "Malsukcesis aldoni etikedon %(tagName)s al ĉambro",
         "failed_remove_tag": "Malsukcesis forigi etikedon %(tagName)s el la ĉambro",
-        "joining_rooms_status": {
-            "one": "Nun aliĝante al %(count)s ĉambro",
-            "other": "Nun aliĝante al %(count)s ĉambroj"
-        },
         "notification_options": "Elektebloj pri sciigoj",
-        "show_less": "Montri malpli",
-        "show_n_more": {
-            "other": "Montri %(count)s pliajn",
-            "one": "Montri %(count)s plian"
-        },
-        "show_previews": "Montri antaŭrigardojn al mesaĝoj",
-        "sort_by": "Ordigi laŭ",
-        "sort_by_activity": "Aktiveco",
-        "sort_by_alphabet": "A–Z",
-        "sort_unread_first": "Montri ĉambrojn kun nelegitaj mesaĝoj kiel unuajn",
-        "sublist_options": "Elektebloj pri listo",
-        "suggested_rooms_heading": "Rekomendataj ĉambroj"
+        "show_less": "Montri malpli"
     },
     "room_settings": {
         "access": {
@@ -1746,7 +1707,6 @@
         "send_read_receipts": "Sendi legitajn kvitanojn",
         "send_typing_notifications": "Sendi sciigojn pri tajpado",
         "sessions": {
-            "browser": "Retumilo",
             "hide_details": "Kaŝi detalojn",
             "inactive_sessions": "Neaktivaj salutaĵoj",
             "inactive_sessions_explainer_1": "Neaktivaj salutaĵoj estas salutaĵoj, kiujn vi ne uzis dum kelka tempo, sed ili daŭre ricevas ĉifrajn ŝlosilojn.",
@@ -1944,10 +1904,6 @@
     },
     "space_settings": {
         "title": "Agordoj – %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "Vi ne havas permeson aldoni ĉambrojn al ĉi tiu aro",
-        "error_no_permission_create_room": "Vi ne havas permeson krei novajn ĉambrojn en ĉi tiu aro"
     },
     "spotlight": {
         "public_rooms": {
@@ -2536,13 +2492,7 @@
         },
         "context_menu": {
             "delete": "Forigi fenestraĵon",
-            "delete_warning": "Forigo de fenestraĵo efektiviĝos por ĉiuj uzantoj en ĉi tiu ĉambro. Ĉu vi certe volas ĝin forigi?",
-            "move_left": "Movi maldekstren",
-            "move_right": "Movi dekstren",
-            "remove": "Forigi por ĉiuj",
-            "revoke": "Nuligi permesojn",
-            "screenshot": "Foti",
-            "start_audio_stream": "Komenci sonelsendon"
+            "delete_warning": "Forigo de fenestraĵo efektiviĝos por ĉiuj uzantoj en ĉi tiu ĉambro. Ĉu vi certe volas ĝin forigi?"
         },
         "cookie_warning": "Ĉi tiu fenestraĵo povas uzi kuketojn.",
         "error_loading": "Eraris enlegado de fenestraĵo",

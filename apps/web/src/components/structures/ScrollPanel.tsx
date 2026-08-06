@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { createRef, type CSSProperties, type ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
+import { AutoHideScrollbar } from "@element-hq/web-shared-components";
 
 import SettingsStore from "../../settings/SettingsStore";
 import Timer from "../../utils/Timer";
-import AutoHideScrollbar from "./AutoHideScrollbar";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { SDKContext } from "../../contexts/SDKContext";
@@ -158,7 +158,7 @@ export default class ScrollPanel extends React.Component<IProps> {
             return Promise.resolve(false);
         },
         onUnfillRequest: function (backwards: boolean, scrollToken: string) {},
-        onScroll: function () {},
+        onScroll: function (): void {},
     };
 
     private readonly pendingFillRequests: Record<"b" | "f", boolean | null> = {
@@ -457,7 +457,7 @@ export default class ScrollPanel extends React.Component<IProps> {
             this.unfillDebouncer = window.setTimeout(() => {
                 this.unfillDebouncer = null;
                 debuglog("unfilling now", { backwards, origExcessHeight });
-                this.props.onUnfillRequest?.(backwards, markerScrollToken!);
+                this.props.onUnfillRequest?.(backwards, markerScrollToken);
             }, UNFILL_REQUEST_DEBOUNCE_MS);
         }
     }
@@ -666,7 +666,7 @@ export default class ScrollPanel extends React.Component<IProps> {
             debuglog("unable to save scroll state: found no children in the viewport");
             return;
         }
-        const scrollToken = node!.dataset.scrollTokens?.split(",")[0];
+        const scrollToken = node.dataset.scrollTokens?.split(",")[0];
         debuglog("saving anchored scroll state to message", scrollToken);
         const bottomOffset = this.topFromBottom(node);
         this.scrollState = {
@@ -788,7 +788,7 @@ export default class ScrollPanel extends React.Component<IProps> {
                 const m = messages[i] as HTMLElement;
                 // 'data-scroll-tokens' is a DOMString of comma-separated scroll tokens
                 // There might only be one scroll token
-                if (scrollToken && m.dataset.scrollTokens?.split(",").includes(scrollToken!)) {
+                if (scrollToken && m.dataset.scrollTokens?.split(",").includes(scrollToken)) {
                     node = m;
                     break;
                 }
@@ -940,7 +940,7 @@ export default class ScrollPanel extends React.Component<IProps> {
             <AutoHideScrollbar
                 wrappedRef={this.collectScroll}
                 onScroll={this.onScroll}
-                className={`mx_ScrollPanel ${this.props.className}`}
+                className={`mx_AutoHideScrollbar mx_ScrollPanel ${this.props.className}`}
                 style={this.props.style}
             >
                 {this.props.fixedChildren}

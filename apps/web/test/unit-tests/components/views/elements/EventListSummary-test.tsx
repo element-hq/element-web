@@ -21,7 +21,7 @@ import {
 import EventListSummary from "../../../../../src/components/views/elements/EventListSummary";
 import { Layout } from "../../../../../src/settings/enums/Layout";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import * as languageHandler from "../../../../../src/languageHandler";
+import * as languageSettings from "../../../../../src/i18n/settings";
 
 describe("EventListSummary", function () {
     const roomId = "!room:server.org";
@@ -130,7 +130,7 @@ describe("EventListSummary", function () {
 
     beforeEach(function () {
         jest.clearAllMocks();
-        jest.spyOn(languageHandler, "getUserLanguage").mockReturnValue("en-GB");
+        jest.spyOn(languageSettings, "getUserLanguage").mockReturnValue("en-GB");
     });
 
     afterAll(() => {
@@ -715,5 +715,76 @@ describe("EventListSummary", function () {
         const summary = container.querySelector(".mx_GenericEventListSummary_summary");
         expect(summary).toHaveTextContent("n...@d... was invited 2 times, d...@w... was invited");
         expect(summary).toMatchSnapshot();
+    });
+
+    describe("profile changes", () => {
+        /**
+         * Generates a join -> join membership event with the given profile fields spliced into
+         * `content` and `prev_content`, so that the null-versus-absent cases can be exercised.
+         */
+        const generateProfileEvent = (
+            userId: string,
+            prevProfile: Record<string, string | null>,
+            profile: Record<string, string | null>,
+        ): MatrixEvent => {
+            const member = new RoomMember(roomId, userId);
+            member.name = userId.match(/@([^:]*):/)![1];
+            const e = mkEvent({
+                event: true,
+                type: "m.room.member",
+                room: roomId,
+                user: userId,
+                skey: userId,
+                content: { membership: KnownMembership.Join, ...profile },
+                prev_content: { membership: KnownMembership.Join, ...prevProfile },
+            });
+            e.event.event_id = "event0";
+            e.target = member;
+            return e;
+        };
+
+        const summaryFor = (event: MatrixEvent): string => {
+            const { container } = renderComponent({
+                events: [event],
+                children: generateTiles([event]),
+                summaryLength: 1,
+                avatarsMaxLength: 5,
+                threshold: 1,
+            });
+            return container.querySelector(".mx_GenericEventListSummary_summary")!.textContent!;
+        };
+
+        it("treats an explicit null avatar_url the same as an absent one", () => {
+            const event = generateProfileEvent("@user_1:some.domain", {}, { avatar_url: null });
+            expect(summaryFor(event)).toBe("user_1 made no changes");
+        });
+
+        it("treats an explicit null displayname the same as an absent one", () => {
+            const event = generateProfileEvent("@user_1:some.domain", {}, { displayname: null });
+            expect(summaryFor(event)).toBe("user_1 made no changes");
+        });
+
+        it("still reports a real avatar change", () => {
+            const event = generateProfileEvent(
+                "@user_1:some.domain",
+                { avatar_url: "mxc://server/old" },
+                { avatar_url: "mxc://server/new" },
+            );
+            expect(summaryFor(event)).toBe("user_1 changed their profile picture");
+        });
+
+        it("still reports a real name change", () => {
+            const event = generateProfileEvent("@user_1:some.domain", { displayname: "Old" }, { displayname: "New" });
+            expect(summaryFor(event)).toBe("user_1 changed their name");
+        });
+
+        it("still reports an avatar being removed", () => {
+            const event = generateProfileEvent(
+                "@user_1:some.domain",
+                { avatar_url: "mxc://server/old" },
+                { avatar_url: null },
+            );
+            expect(summaryFor(event)).toBe("user_1 changed their profile picture");
+        });
     });
 });

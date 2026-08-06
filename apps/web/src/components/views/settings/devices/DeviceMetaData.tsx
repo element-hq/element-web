@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { Fragment } from "react";
 
-import { Icon as InactiveIcon } from "../../../../../res/img/element-icons/settings/inactive.svg";
+import InactiveIcon from "../../../../../res/img/element-icons/settings/inactive.svg?react";
 import { INACTIVE_DEVICE_AGE_DAYS, isDeviceInactive } from "../../../../components/views/settings/devices/filter";
 import { type ExtendedDevice } from "../../../../components/views/settings/devices/types";
 import { formatDate, formatRelativeTime } from "../../../../DateUtils";

@@ -69,14 +69,12 @@ const BeaconStatus: React.FC<Props & HTMLProps<HTMLDivElement>> = ({
                 )}
                 {displayStatus === BeaconDisplayStatus.Active && beacon && (
                     <>
-                        <>
-                            <span className="mx_BeaconStatus_label">{label}</span>
-                            {displayLiveTimeRemaining ? (
-                                <LiveTimeRemaining beacon={beacon} />
-                            ) : (
-                                <BeaconExpiryTime beacon={beacon} />
-                            )}
-                        </>
+                        <span className="mx_BeaconStatus_label">{label}</span>
+                        {displayLiveTimeRemaining ? (
+                            <LiveTimeRemaining beacon={beacon} />
+                        ) : (
+                            <BeaconExpiryTime beacon={beacon} />
+                        )}
                     </>
                 )}
             </div>

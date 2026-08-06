@@ -15,7 +15,7 @@ import {
     type SSOFlow,
     type SSOAction,
     type IIdentityProvider,
-    DELEGATED_OIDC_COMPATIBILITY,
+    OAUTH_AWARE_PREFERRED_FLOW_FIELD,
 } from "matrix-js-sdk/src/matrix";
 import { type Signup } from "@matrix-org/analytics-events/types/typescript/Signup";
 import { Button, Tooltip } from "@vector-im/compound-web";
@@ -25,11 +25,11 @@ import PlatformPeg from "../../../PlatformPeg";
 import { _t } from "../../../languageHandler";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { PosthogAnalytics } from "../../../PosthogAnalytics";
-import { Icon as FacebookIcon } from "../../../../res/img/element-icons/brands/facebook.svg";
-import { Icon as GithubIcon } from "../../../../res/img/element-icons/brands/github.svg";
-import { Icon as GitlabIcon } from "../../../../res/img/element-icons/brands/gitlab.svg";
-import { Icon as GoogleIcon } from "../../../../res/img/element-icons/brands/google.svg";
-import { Icon as TwitterIcon } from "../../../../res/img/element-icons/brands/twitter.svg";
+import FacebookIcon from "../../../../res/img/element-icons/brands/facebook.svg?react";
+import GithubIcon from "../../../../res/img/element-icons/brands/github.svg?react";
+import GitlabIcon from "../../../../res/img/element-icons/brands/gitlab.svg?react";
+import GoogleIcon from "../../../../res/img/element-icons/brands/google.svg?react";
+import TwitterIcon from "../../../../res/img/element-icons/brands/twitter.svg?react";
 
 interface ISSOButtonProps extends IProps {
     idp?: IIdentityProvider;
@@ -90,7 +90,7 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
     let label: string;
     if (idp) {
         label = _t("auth|continue_with_idp", { provider: idp.name });
-    } else if (DELEGATED_OIDC_COMPATIBILITY.findIn<boolean>(flow)) {
+    } else if (OAUTH_AWARE_PREFERRED_FLOW_FIELD.findIn<boolean>(flow)) {
         label = _t("action|continue");
     } else {
         label = _t("auth|sign_in_with_sso");

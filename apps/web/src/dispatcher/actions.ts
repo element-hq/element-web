@@ -109,11 +109,6 @@ export enum Action {
     ToggleSpacePanel = "toggle_space_panel",
 
     /**
-     * Sets the apps root font size. Should be used with UpdateFontSizePayload
-     */
-    MigrateBaseFontSize = "migrate_base_font_size",
-
-    /**
      * Sets the apps root font size delta. Should be used with UpdateFontSizeDeltaPayload
      * It will add the delta to the current font size.
      * The delta should be between {@link FontWatcher.MIN_DELTA} and {@link FontWatcher.MAX_DELTA}.
@@ -335,7 +330,7 @@ export enum Action {
      * access token from local storage). Note that this does not necessarily mean that a login action has happened,
      * just that authentication creds have been set up.
      *
-     * No additional payload information required.
+     * Use with a OnLoggedInPayload.
      */
     OnLoggedIn = "on_logged_in",
 

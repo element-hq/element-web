@@ -11,7 +11,7 @@ import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import TypingStore from "../../../src/stores/TypingStore";
 import { LOCAL_ROOM_ID_PREFIX } from "../../../src/models/LocalRoom";
 import SettingsStore from "../../../src/settings/SettingsStore";
-import { TestSdkContext } from "../TestSdkContext";
+import { TestSDKContext } from "../TestSDKContext";
 
 jest.mock("../../../src/settings/SettingsStore", () => ({
     getValue: jest.fn(),
@@ -29,8 +29,8 @@ describe("TypingStore", () => {
         mockClient = {
             sendTyping: jest.fn(),
         } as unknown as MatrixClient;
-        const context = new TestSdkContext();
-        context.client = mockClient;
+        const context = new TestSDKContext();
+        context._client = mockClient;
         typingStore = new TypingStore(context);
         jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
             return name === "sendTypingNotifications";

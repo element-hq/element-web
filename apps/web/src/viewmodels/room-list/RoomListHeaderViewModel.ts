@@ -17,7 +17,7 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
 import PosthogTrackers from "../../PosthogTrackers";
 import { Action } from "../../dispatcher/actions";
 import { getMetaSpaceName, type MetaSpace, UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE } from "../../stores/spaces";
-import { type SpaceStoreClass } from "../../stores/spaces/SpaceStore";
+import type SpaceStore from "../../stores/spaces/SpaceStore";
 import {
     shouldShowSpaceSettings,
     showCreateNewRoom,
@@ -32,6 +32,7 @@ import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import { SortingAlgorithm } from "../../stores/room-list-v3/skip-list/sorters";
 import { SettingLevel } from "../../settings/SettingLevel";
 import { createRoom, hasCreateRoomRights } from "./utils";
+import { ReleaseAnnouncementStore } from "../../stores/ReleaseAnnouncementStore";
 
 export interface Props {
     /**
@@ -41,7 +42,7 @@ export interface Props {
     /**
      * The space store instance.
      */
-    spaceStore: SpaceStoreClass;
+    spaceStore: SpaceStore;
 }
 
 /**
@@ -69,6 +70,13 @@ export class RoomListHeaderViewModel
         );
         this.disposables.track(() => SettingsStore.unwatchSetting(settingsFeatureVideoRef));
 
+        const settingsShowSectionsRef = SettingsStore.watchSetting(
+            "RoomList.showSections",
+            null,
+            this.onShowSectionsChange,
+        );
+        this.disposables.track(() => SettingsStore.unwatchSetting(settingsShowSectionsRef));
+
         // Listen for space changes
         this.disposables.trackListener(props.spaceStore, UPDATE_SELECTED_SPACE, this.onSpaceChange);
         this.disposables.trackListener(props.spaceStore, UPDATE_HOME_BEHAVIOUR, this.onHomeBehaviourChange);
@@ -82,6 +90,12 @@ export class RoomListHeaderViewModel
         // Listen for section collapse state changes from RoomListViewModel
         const dispatcherRef = defaultDispatcher.register(this.onDispatch);
         this.disposables.track(() => defaultDispatcher.unregister(dispatcherRef));
+
+        this.disposables.trackListener(
+            ReleaseAnnouncementStore.instance,
+            "releaseAnnouncementChanged",
+            this.onReleaseAnnouncementChanged,
+        );
     }
 
     /**
@@ -123,6 +137,15 @@ export class RoomListHeaderViewModel
     private readonly onVideoRoomsFeatureFlagChange = (): void => {
         this.snapshot.merge({
             canCreateVideoRoom: getCanCreateVideoRoom(this.snapshot.current.canCreateRoom),
+        });
+    };
+
+    /**
+     * Handles show sections setting change events.
+     */
+    private readonly onShowSectionsChange = (): void => {
+        this.snapshot.merge({
+            areSectionsEnabled: SettingsStore.getValue("RoomList.showSections"),
         });
     };
 
@@ -229,14 +252,26 @@ export class RoomListHeaderViewModel
             });
         }
     };
+
+    public closeSectionReleaseAnnouncement = (): void => {
+        ReleaseAnnouncementStore.instance.nextReleaseAnnouncement();
+        this.snapshot.merge({ displaySectionReleaseAnnouncement: false });
+    };
+
+    public onReleaseAnnouncementChanged = (): void => {
+        const displaySectionReleaseAnnouncement =
+            ReleaseAnnouncementStore.instance.getReleaseAnnouncement() === "room_list_section";
+        this.snapshot.merge({ displaySectionReleaseAnnouncement });
+    };
 }
+
 /**
  * Get the initial snapshot for the RoomListHeaderViewModel.
  * @param spaceStore - The space store instance.
  * @param matrixClient - The Matrix client instance.
  * @returns
  */
-function getInitialSnapshot(spaceStore: SpaceStoreClass, matrixClient: MatrixClient): RoomListHeaderViewSnapshot {
+function getInitialSnapshot(spaceStore: SpaceStore, matrixClient: MatrixClient): RoomListHeaderViewSnapshot {
     const sortingAlgorithm = SettingsStore.getValue("RoomList.preferredSorting");
 
     let activeSortOption: SortOption;
@@ -265,7 +300,7 @@ function getInitialSnapshot(spaceStore: SpaceStoreClass, matrixClient: MatrixCli
  * Get the header title based on the active space.
  * @param spaceStore - The space store instance.
  */
-function getHeaderTitle(spaceStore: SpaceStoreClass): string {
+function getHeaderTitle(spaceStore: SpaceStore): string {
     const activeSpace = spaceStore.activeSpaceRoom;
     const spaceName = activeSpace?.name;
     return spaceName ?? getMetaSpaceName(spaceStore.activeSpace as MetaSpace, spaceStore.allRoomsInHome);
@@ -286,35 +321,32 @@ function getCanCreateVideoRoom(canCreateRoom: boolean): boolean {
  * @returns The header space state containing title, permissions, and display flags.
  */
 function computeHeaderSpaceState(
-    spaceStore: SpaceStoreClass,
+    spaceStore: SpaceStore,
     matrixClient: MatrixClient,
 ): Omit<RoomListHeaderViewSnapshot, "activeSortOption" | "isMessagePreviewEnabled"> {
-    const isSectionFeatureEnabled = SettingsStore.getValue("feature_room_list_sections");
+    const displaySectionReleaseAnnouncement =
+        ReleaseAnnouncementStore.instance.getReleaseAnnouncement() === "room_list_section";
+    const areSectionsEnabled = SettingsStore.getValue("RoomList.showSections");
 
     const activeSpace = spaceStore.activeSpaceRoom;
     const title = getHeaderTitle(spaceStore);
 
     const canCreateRoom = hasCreateRoomRights(matrixClient, activeSpace);
     const canCreateVideoRoom = getCanCreateVideoRoom(canCreateRoom);
-    const displayComposeMenu = isSectionFeatureEnabled || canCreateRoom;
     const displaySpaceMenu = Boolean(activeSpace);
     const canInviteInSpace = Boolean(
         activeSpace?.getJoinRule() === JoinRule.Public || activeSpace?.canInvite(matrixClient.getSafeUserId()),
     );
     const canAccessSpaceSettings = Boolean(activeSpace && shouldShowSpaceSettings(activeSpace));
 
-    const useComposeIcon = !isSectionFeatureEnabled;
-    const canCreateSection = isSectionFeatureEnabled;
-
     return {
         title,
         canCreateRoom,
         canCreateVideoRoom,
-        displayComposeMenu,
         displaySpaceMenu,
         canInviteInSpace,
         canAccessSpaceSettings,
-        canCreateSection,
-        useComposeIcon,
+        displaySectionReleaseAnnouncement,
+        areSectionsEnabled,
     };
 }

@@ -35,7 +35,6 @@ interface IState {
     phase: number;
     sasVerified: boolean;
     opponentProfile: {
-        // eslint-disable-next-line camelcase
         avatar_url?: string;
         displayname?: string;
     } | null;
@@ -207,7 +206,6 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
                 onCancel={this.onCancelClick}
                 onDone={this.onSasMatchesClick}
                 isSelf={this.props.verifier.userId === MatrixClientPeg.safeGet().getUserId()}
-                inDialog={true}
             />
         );
     }

@@ -1,0 +1,6 @@
+- navigation:
+      - button "Show menu":
+            - img
+      - link "Show portal":
+            - /url: https://example.com/portal
+            - img "Portal logo"

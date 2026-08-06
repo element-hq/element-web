@@ -38,8 +38,8 @@ test.describe("permalinks", () => {
 
         await app.viewRoomByName(room1Name);
 
-        await app.client.inviteUser(room1Id, bob.credentials.userId);
-        await app.client.inviteUser(room2Id, charlotte.credentials.userId);
+        await app.client.inviteUser(room1Id, bob.credentials!.userId);
+        await app.client.inviteUser(room2Id, charlotte.credentials!.userId);
 
         await app.client.sendMessage(room1Id, "At room mention: @room");
 
@@ -65,11 +65,11 @@ test.describe("permalinks", () => {
 
         await app.client.sendMessage(
             room1Id,
-            `Permalink to a user in the room: ${permalinkPrefix}${bob.credentials.userId}`,
+            `Permalink to a user in the room: ${permalinkPrefix}${bob.credentials!.userId}`,
         );
         await app.client.sendMessage(
             room1Id,
-            `Permalink to a user in another room: ${permalinkPrefix}${charlotte.credentials.userId}`,
+            `Permalink to a user in another room: ${permalinkPrefix}${charlotte.credentials!.userId}`,
         );
         await app.client.sendMessage(
             room1Id,
@@ -117,14 +117,14 @@ test.describe("triple-click message selection", () => {
         await bot.prepareClient();
 
         const roomId = await app.client.createRoom({ name: "Test Room" });
-        await app.client.inviteUser(roomId, bot.credentials.userId);
+        await app.client.inviteUser(roomId, bot.credentials!.userId);
         await app.viewRoomByName("Test Room");
 
         // Send a message with user and room pills
         await app.client.sendMessage(
             roomId,
             `Testing triple-click message selection. ` +
-                `User: ${permalinkPrefix}${bot.credentials.userId}, ` +
+                `User: ${permalinkPrefix}${bot.credentials!.userId}, ` +
                 `Room: ${permalinkPrefix}${roomId}, ` +
                 `Message: ${permalinkPrefix}${roomId}/$dummy-event, ` +
                 `and @room mention.`,

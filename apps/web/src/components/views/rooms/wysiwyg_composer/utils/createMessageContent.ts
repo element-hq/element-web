@@ -25,7 +25,7 @@ export const EMOTE_PREFIX = "/me ";
 function attachRelation(content: IContent, relation?: IEventRelation): void {
     if (relation) {
         content["m.relates_to"] = {
-            ...(content["m.relates_to"] || {}),
+            ...content["m.relates_to"],
             ...relation,
         };
     }

@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
 }
 
 .mx_AutocompleteInput_search_icon {
-    margin-left: $spacing-8;
+    margin-left: var(--cpd-space-2x);
     fill: $secondary-content;
 }
 
@@ -32,7 +32,7 @@ Please see LICENSE files in the repository root for full details.
         resize: none;
         /* `!important` is required to bypass global input styles. */
         margin: 0 !important;
-        padding: $spacing-8 9px;
+        padding: var(--cpd-space-2x) 9px;
         border: none !important;
         color: $primary-content !important;
         font-weight: normal !important;
@@ -55,15 +55,15 @@ Please see LICENSE files in the repository root for full details.
 
 .mx_AutocompleteInput_editor_selection {
     display: flex;
-    margin-left: $spacing-8;
+    margin-left: var(--cpd-space-2x);
 }
 
 .mx_AutocompleteInput_editor_selection_pill {
     display: flex;
     align-items: center;
     border-radius: 12px;
-    padding-left: $spacing-8;
-    padding-right: $spacing-8;
+    padding-left: var(--cpd-space-2x);
+    padding-right: var(--cpd-space-2x);
     background-color: $username-variant1-color;
     color: #ffffff;
     font-size: $font-12px;
@@ -88,7 +88,7 @@ Please see LICENSE files in the repository root for full details.
 .mx_AutocompleteInput_suggestion {
     display: flex;
     align-items: center;
-    padding: $spacing-8;
+    padding: var(--cpd-space-2x);
     cursor: pointer;
 
     > * {
@@ -112,7 +112,7 @@ Please see LICENSE files in the repository root for full details.
 }
 
 .mx_AutocompleteInput_suggestion_title {
-    margin-right: $spacing-8;
+    margin-right: var(--cpd-space-2x);
 }
 
 .mx_AutocompleteInput_suggestion_description {

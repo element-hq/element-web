@@ -15,7 +15,7 @@ import {
     EventStatus,
 } from "matrix-js-sdk/src/matrix";
 import { RoomStatusBarState } from "@element-hq/web-shared-components";
-import { type MockedObject } from "jest-mock";
+import { type MockedObject } from "jest-mock-vitest-adapter";
 
 import { mkEvent, mkRoom, stubClient } from "../../test-utils";
 import { RoomStatusBarViewModel } from "../../../src/viewmodels/room/RoomStatusBar";

@@ -46,12 +46,14 @@ export function MemberTileView(props: Props): JSX.Element {
                 aria-label={props?.ariaLabel}
                 tabIndex={props.tabIndex}
                 role="option"
+                aria-selected={props.tabIndex === 0}
                 aria-posinset={props.memberIndex + 1}
                 aria-setsize={props.memberCount}
             >
                 <div aria-hidden className="mx_MemberTileView_left">
                     <div className="mx_MemberTileView_avatar">
-                        {props.avatarJsx} {props.presenceJsx}
+                        {props.avatarJsx}
+                        <div className="mx_MemberTileView_presence">{props.presenceJsx}</div>
                     </div>
                     <div className="mx_MemberTileView_name">{props.nameJsx}</div>
                 </div>

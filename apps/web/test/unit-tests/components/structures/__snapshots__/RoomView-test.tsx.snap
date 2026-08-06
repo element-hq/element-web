@@ -25,6 +25,7 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
         aria-label="Room info"
         class="mx_RoomHeader_infoWrapper"
         tabindex="0"
+        type="button"
       >
         <div
           class="mx_RoomHeader_info _box-flex_1odfs_9"
@@ -109,6 +110,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
         aria-label="Room info"
         class="mx_RoomHeader_infoWrapper"
         tabindex="0"
+        type="button"
       >
         <div
           class="mx_RoomHeader_info _box-flex_1odfs_9"
@@ -137,7 +139,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
         class="mx_RoomView_timeline"
       >
         <div
-          class="mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+          class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
           tabindex="-1"
         >
           <div
@@ -305,6 +307,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
         aria-label="Room info"
         class="mx_RoomHeader_infoWrapper"
         tabindex="0"
+        type="button"
       >
         <div
           class="mx_RoomHeader_info _box-flex_1odfs_9"
@@ -333,7 +336,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
         class="mx_RoomView_timeline"
       >
         <div
-          class="mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+          class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
           tabindex="-1"
         >
           <div
@@ -692,6 +695,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
         aria-label="Room info"
         class="mx_RoomHeader_infoWrapper"
         tabindex="0"
+        type="button"
       >
         <div
           class="mx_RoomHeader_info _box-flex_1odfs_9"
@@ -738,7 +742,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
         class="mx_RoomView_timeline"
       >
         <div
-          class="mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+          class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
           tabindex="-1"
         >
           <div
@@ -1161,6 +1165,7 @@ exports[`RoomView should hide the composer when hideComposer=true 1`] = `
             aria-label="Room info"
             class="mx_RoomHeader_infoWrapper"
             tabindex="0"
+            type="button"
           >
             <div
               class="mx_RoomHeader_info _box-flex_1odfs_9"
@@ -1306,7 +1311,7 @@ exports[`RoomView should hide the composer when hideComposer=true 1`] = `
           </div>
         </header>
         <div
-          class="mx_AutoHideScrollbar mx_AuxPanel"
+          class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_AuxPanel"
           role="region"
           tabindex="-1"
         >
@@ -1317,7 +1322,7 @@ exports[`RoomView should hide the composer when hideComposer=true 1`] = `
           data-testid="timeline"
         >
           <div
-            class="mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+            class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
             tabindex="-1"
           >
             <div
@@ -1376,7 +1381,7 @@ exports[`RoomView should hide the header when hideHeader=true 1`] = `
         data-layout="group"
       >
         <div
-          class="mx_AutoHideScrollbar mx_AuxPanel"
+          class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_AuxPanel"
           role="region"
           tabindex="-1"
         >
@@ -1387,7 +1392,7 @@ exports[`RoomView should hide the header when hideHeader=true 1`] = `
           data-testid="timeline"
         >
           <div
-            class="mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+            class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
             tabindex="-1"
           >
             <div
@@ -1715,6 +1720,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
             aria-label="Room info"
             class="mx_RoomHeader_infoWrapper"
             tabindex="0"
+            type="button"
           >
             <div
               class="mx_RoomHeader_info _box-flex_1odfs_9"
@@ -1860,7 +1866,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
           </div>
         </header>
         <div
-          class="mx_AutoHideScrollbar mx_AuxPanel"
+          class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_AuxPanel"
           role="region"
           tabindex="-1"
         >
@@ -1871,7 +1877,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
           data-testid="timeline"
         >
           <div
-            class="mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+            class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
             tabindex="-1"
           >
             <div
@@ -2199,6 +2205,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
             aria-label="Room info"
             class="mx_RoomHeader_infoWrapper"
             tabindex="0"
+            type="button"
           >
             <div
               class="mx_RoomHeader_info _box-flex_1odfs_9"
@@ -2344,7 +2351,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
           </div>
         </header>
         <div
-          class="mx_AutoHideScrollbar mx_AuxPanel"
+          class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_AuxPanel"
           role="region"
           tabindex="-1"
         >
@@ -2355,7 +2362,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
           data-testid="timeline"
         >
           <div
-            class="mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+            class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
             tabindex="-1"
           >
             <div
@@ -2683,6 +2690,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             aria-label="Room info"
             class="mx_RoomHeader_infoWrapper"
             tabindex="0"
+            type="button"
           >
             <div
               class="mx_RoomHeader_info _box-flex_1odfs_9"
@@ -2828,7 +2836,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           </div>
         </header>
         <div
-          class="mx_AutoHideScrollbar mx_AuxPanel"
+          class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_AuxPanel"
           role="region"
           tabindex="-1"
         >
@@ -2903,6 +2911,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             aria-label="Room info"
             class="mx_RoomHeader_infoWrapper"
             tabindex="0"
+            type="button"
           >
             <div
               class="mx_RoomHeader_info _box-flex_1odfs_9"
@@ -3066,7 +3075,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           </div>
         </header>
         <div
-          class="mx_AutoHideScrollbar mx_AuxPanel"
+          class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_AuxPanel"
           role="region"
           tabindex="-1"
         >
@@ -3077,7 +3086,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           data-testid="timeline"
         >
           <div
-            class="mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+            class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
             tabindex="-1"
           >
             <div
@@ -3445,6 +3454,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
             aria-label="Room info"
             class="mx_RoomHeader_infoWrapper"
             tabindex="0"
+            type="button"
           >
             <div
               class="mx_RoomHeader_info _box-flex_1odfs_9"
@@ -3628,6 +3638,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                 class="mx_BaseCard_header_title"
               >
                 <p
+                  aria-level="1"
                   class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 mx_BaseCard_header_title_heading"
                   role="heading"
                 >
@@ -3665,7 +3676,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
               class="mx_TimelineCard_timeline"
             >
               <div
-                class="mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+                class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
                 tabindex="-1"
               >
                 <div

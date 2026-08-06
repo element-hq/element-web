@@ -12,9 +12,8 @@ import { type RoomMember, type IEventRelation } from "matrix-js-sdk/src/matrix";
 import { LocationPinIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
-import { CollapsibleButton } from "../rooms/CollapsibleButton";
+import { CollapsibleButton, OverflowMenuContext } from "../rooms/CollapsibleButton";
 import { aboveLeftOf, useContextMenu, type MenuProps } from "../../structures/ContextMenu";
-import { OverflowMenuContext } from "../rooms/MessageComposerButtons";
 import LocationShareMenu from "./LocationShareMenu";
 
 export interface IProps {

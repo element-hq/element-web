@@ -15,8 +15,8 @@ import InfoDialog from "../../../../../src/components/views/dialogs/InfoDialog";
 
 describe("<LearnMore />", () => {
     const defaultProps = {
-        title: "Test",
-        description: "test test test",
+        "title": "Test",
+        "description": "test test test",
         ["data-testid"]: "testid",
     };
     const getComponent = (props = {}) => <LearnMore {...defaultProps} {...props} />;

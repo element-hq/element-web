@@ -6,11 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type ReactElement } from "react";
 import { render, screen } from "jest-matrix-react";
 import parse from "html-react-parser";
 
-import { bodyToHtml, bodyToNode, formatEmojis, topicToHtml } from "../../src/HtmlUtils";
+import { bodyToHtml, bodyToNode, formatEmojis, sanitizedHtmlNode, topicToHtml } from "../../src/HtmlUtils";
 import SettingsStore from "../../src/settings/SettingsStore";
 import { getMockClientWithEventEmitter } from "../test-utils";
 import { SettingLevel } from "../../src/settings/SettingLevel";
@@ -317,5 +317,14 @@ describe("bodyToNode", () => {
 
     afterEach(() => {
         jest.resetAllMocks();
+    });
+});
+
+describe("sanitizedHtmlNode", () => {
+    it("should respect className", () => {
+        const sanitized = sanitizedHtmlNode('<a href="https://google.com">Link</a>', "testClass");
+        const { asFragment, getByText } = render(sanitized as ReactElement);
+        expect(getByText("Link").parentNode).toHaveClass("testClass");
+        expect(asFragment()).toMatchSnapshot();
     });
 });

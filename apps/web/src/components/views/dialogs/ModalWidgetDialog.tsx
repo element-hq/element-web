@@ -25,7 +25,8 @@ import {
 import { ErrorIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import BaseDialog from "./BaseDialog";
-import { _t, getUserLanguage } from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
+import { getUserLanguage } from "../../../i18n/settings";
 import AccessibleButton, { type AccessibleButtonKind } from "../elements/AccessibleButton";
 import { ElementWidgetDriver } from "../../../stores/widgets/ElementWidgetDriver";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -115,7 +116,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
         if (isClose || !this.possibleButtons.includes(ev.detail.data.button)) {
             return this.state.messaging?.transport.reply(ev.detail, {
                 error: { message: "Invalid button" },
-            } as IWidgetApiErrorResponseData);
+            } satisfies IWidgetApiErrorResponseData);
         }
 
         let buttonIds: ModalButtonID[];
@@ -128,7 +129,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
             buttonIds = Array.from(tempSet);
         }
         this.setState({ disabledButtonIds: buttonIds });
-        this.state.messaging?.transport.reply(ev.detail, {} as IWidgetApiAcknowledgeResponseData);
+        this.state.messaging?.transport.reply(ev.detail, {} satisfies IWidgetApiAcknowledgeResponseData);
     };
 
     public render(): React.ReactNode {
@@ -206,6 +207,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
                     <iframe
                         title={this.widget.name ?? undefined}
                         ref={this.appFrame}
+                        // oxlint-disable-next-line react/iframe-missing-sandbox
                         sandbox="allow-forms allow-scripts allow-same-origin"
                         src={widgetUrl}
                         onLoad={this.onLoad}

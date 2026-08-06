@@ -16,9 +16,9 @@ import AskInviteAnywayDialog, {
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 
 describe("AskInviteaAnywayDialog", () => {
-    const onFinished: jest.Mock<any, any> = jest.fn();
-    const onGiveUp: jest.Mock<any, any> = jest.fn();
-    const onInviteAnyways: jest.Mock<any, any> = jest.fn();
+    const onFinished = jest.fn();
+    const onGiveUp = jest.fn();
+    const onInviteAnyways = jest.fn();
 
     function renderComponent(props: Partial<AskInviteAnywayDialogProps> = {}): RenderResult {
         return render(

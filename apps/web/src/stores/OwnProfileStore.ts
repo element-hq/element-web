@@ -16,6 +16,7 @@ import {
     ClientEvent,
 } from "matrix-js-sdk/src/matrix";
 import { throttle } from "lodash";
+import { type UserStatus } from "@element-hq/web-shared-components";
 
 import { type ActionPayload } from "../dispatcher/payloads";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
@@ -24,7 +25,7 @@ import { MatrixClientPeg } from "../MatrixClientPeg";
 import { _t } from "../languageHandler";
 import { mediaFromMxc } from "../customisations/Media";
 import SettingsStore from "../settings/SettingsStore";
-import { type UserStatus, validateUserStatus } from "../utils/userStatus";
+import { userStatusFromProfile } from "../utils/userStatus";
 
 interface IState {
     displayName?: string;
@@ -205,7 +206,8 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
             this.matrixClient.getSafeUserId(),
             "org.matrix.msc4426.status",
         );
-        await this.updateState({ userStatus: validateUserStatus(rawUserStatus) });
+        // We don't show our own "on a call" status so we pass undefined for the call status.
+        await this.updateState({ userStatus: userStatusFromProfile(rawUserStatus, undefined) });
     };
 
     private onStateEvents = async (ev: MatrixEvent): Promise<void> => {

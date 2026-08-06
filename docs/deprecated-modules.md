@@ -1,7 +1,7 @@
 # Deprecated Module system
 
 > [!CAUTION]
-> DEPRECATED. Use [Element web module api](https://github.com/element-hq/element-modules/tree/main/packages/element-web-module-api) instead.
+> DEPRECATED. Use [Element web module api](https://github.com/element-hq/element-web/tree/develop/packages/module-api) instead.
 
 The module system in Element Web is a way to add or modify functionality of Element Web itself, bundled at compile time
 for the app. This means that modules are loaded as part of the `pnpm build` process but have an effect on user experience

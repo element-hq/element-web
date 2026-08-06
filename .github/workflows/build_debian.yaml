@@ -8,13 +8,14 @@ jobs:
     build:
         name: Build package
         environment: packages.element.io
+        if: ${{ !startsWith(github.event.release.tag_name, 'module/') }}
         runs-on: ubuntu-24.04
         env:
             R2_INCOMING_BUCKET: ${{ vars.R2_INCOMING_BUCKET }}
             R2_URL: ${{ vars.CF_R2_S3_API }}
             VERSION: ${{ github.ref_name }}
         steps:
-            - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   persist-credentials: false
 

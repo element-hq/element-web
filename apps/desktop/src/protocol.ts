@@ -12,6 +12,8 @@ import path from "node:path";
 import fs from "node:fs";
 import { randomUUID } from "node:crypto";
 
+import { type Args, getArgsForProtocolRegistration } from "./args.js";
+
 const LEGACY_PROTOCOL = "element";
 const SEARCH_PARAM = "element-desktop-ssoid";
 const STORE_FILE_NAME = "sso-sessions.json";
@@ -24,32 +26,19 @@ export default class ProtocolHandler {
     private readonly sessionId: string;
 
     public constructor(private readonly protocol: string) {
-        // get all args except `hidden` as it'd mean the app would not get focused
-        // XXX: passing args to protocol handlers only works on Windows, so unpackaged deep-linking
-        // --profile/--profile-dir are passed via the SEARCH_PARAM var in the callback url
-        const args = process.argv.slice(1).filter((arg) => arg !== "--hidden" && arg !== "-hidden");
-        if (app.isPackaged) {
-            app.setAsDefaultProtocolClient(this.protocol, process.execPath, args);
-            app.setAsDefaultProtocolClient(LEGACY_PROTOCOL, process.execPath, args);
-        } else if (process.platform === "win32") {
-            // on Mac/Linux this would just cause the electron binary to open
-            // special handler for running without being packaged, e.g `electron .` by passing our app path to electron
-            app.setAsDefaultProtocolClient(this.protocol, process.execPath, [app.getAppPath(), ...args]);
-            app.setAsDefaultProtocolClient(LEGACY_PROTOCOL, process.execPath, [app.getAppPath(), ...args]);
-        }
-
         if (process.platform === "darwin") {
             // Protocol handler for macos
             app.on("open-url", (ev, url) => {
                 ev.preventDefault();
-                this.processUrl(url);
+                this.handleDeeplink(url);
             });
         } else {
             // Protocol handler for win32/Linux
             app.on("second-instance", (ev, commandLine) => {
-                const url = commandLine[commandLine.length - 1];
-                if (!url.startsWith(`${this.protocol}:/`) && !url.startsWith(`${LEGACY_PROTOCOL}://`)) return;
-                this.processUrl(url);
+                const url = commandLine.at(-1);
+                if (url && this.checkArgIsUrl(url)) {
+                    this.handleDeeplink(url);
+                }
             });
         }
 
@@ -59,6 +48,23 @@ export default class ProtocolHandler {
         ipcMain.handle("getProtocol", this.onGetProtocol);
     }
 
+    private checkArgIsUrl = (arg: string): boolean => {
+        return arg.startsWith(`${this.protocol}:/`) || arg.startsWith(`${LEGACY_PROTOCOL}://`);
+    };
+
+    private setAsDefaultProtocolClient(parsedArgs: Args): void {
+        const args = getArgsForProtocolRegistration(parsedArgs);
+        if (app.isPackaged) {
+            app.setAsDefaultProtocolClient(this.protocol, process.execPath, args);
+            app.setAsDefaultProtocolClient(LEGACY_PROTOCOL, process.execPath, args);
+        } else if (process.platform === "win32") {
+            // on Mac/Linux this would just cause the electron binary to open
+            // special handler for running without being packaged, e.g `electron .` by passing our app path to electron
+            app.setAsDefaultProtocolClient(this.protocol, process.execPath, [app.getAppPath(), ...args]);
+            app.setAsDefaultProtocolClient(LEGACY_PROTOCOL, process.execPath, [app.getAppPath(), ...args]);
+        }
+    }
+
     private readonly onGetProtocol = (): { protocol: string; sessionId: string } => {
         return {
             protocol: this.protocol,
@@ -66,8 +72,8 @@ export default class ProtocolHandler {
         };
     };
 
-    private processUrl(url: string): void {
-        if (!global.mainWindow) return;
+    private handleDeeplink(url: string): boolean {
+        if (!global.mainWindow) return false;
 
         const parsed = new URL(url);
         // sanity check: we only register for the one protocol, so we shouldn't
@@ -75,7 +81,7 @@ export default class ProtocolHandler {
         // with the Element app.
         if (parsed.protocol !== `${this.protocol}:` && parsed.protocol !== `${LEGACY_PROTOCOL}:`) {
             console.log("Ignoring unexpected protocol: ", parsed.protocol);
-            return;
+            return false;
         }
 
         const urlToLoad = new URL("vector://vector/webapp/");
@@ -90,6 +96,7 @@ export default class ProtocolHandler {
 
         console.log("Opening URL: ", urlToLoad.href);
         void global.mainWindow.loadURL(urlToLoad.href);
+        return true;
     }
 
     private readStore(): Record<string, string> {
@@ -107,16 +114,30 @@ export default class ProtocolHandler {
         fs.writeFileSync(storePath, JSON.stringify(this.store));
     }
 
-    public initialise(userDataPath: string): void {
+    /**
+     * Initialises the ProtocolHandler
+     * Registers the app as the default protocol client for deeplink handling.
+     * Handles any deeplink passed in via args on app start.
+     * Must be called after mainWindow is set up and any initial navigation is fired.
+     * @returns whether a deeplink was present in args and navigated to.
+     */
+    public initialise(args: Args): boolean {
+        this.setAsDefaultProtocolClient(args);
+
+        const url = args.positional.find(this.checkArgIsUrl);
+        const hasDeeplink = url ? this.handleDeeplink(url) : false;
+
         for (const key in this.store) {
             // ensure each instance only has one (the latest) session ID to prevent the file growing unbounded
-            if (this.store[key] === userDataPath) {
+            if (this.store[key] === args.userDataPath) {
                 delete this.store[key];
                 break;
             }
         }
-        this.store[this.sessionId] = userDataPath;
+        this.store[this.sessionId] = args.userDataPath;
         this.writeStore();
+
+        return hasDeeplink;
     }
 
     public getProfileFromDeeplink(args: string[]): string | undefined {
