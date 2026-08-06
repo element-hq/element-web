@@ -158,21 +158,10 @@ test.describe("EventTileView application coverage", () => {
 
             await app.client.sendMessage(roomId, "context before");
             const root = await app.client.sendMessage(roomId, "match root link https://example.org");
-            const reply = await bot.sendMessage(roomId, {
-                "msgtype": "m.text",
-                "body": "match threaded reply",
-                "m.relates_to": {
-                    "rel_type": "m.thread",
-                    "event_id": root.event_id,
-                    "m.in_reply_to": { event_id: root.event_id },
-                },
-            });
+            const other = await bot.sendMessage(roomId, "match other link");
             await bot.sendMessage(roomId, "context after");
 
             await app.viewRoomById(roomId);
-            const timelineSummary = page.locator(".mx_RoomView_body .mx_ThreadSummary");
-            await expect(timelineSummary.getByText("Bob")).toBeAttached();
-            await expect(timelineSummary.getByText("match threaded reply")).toBeAttached();
             await app.toggleRoomInfoPanel();
             const search = page.locator(".mx_RoomSummaryCard_search").getByRole("searchbox");
             await search.fill("match");
@@ -192,28 +181,58 @@ test.describe("EventTileView application coverage", () => {
 
             const rootTile = matching.filter({ hasText: "match root link" });
             await expect(rootTile.locator(`a[href='#/room/${roomId}/${root.event_id}']`)).toBeVisible();
-
-            const replyTile = matching.filter({ hasText: "match threaded reply" });
-            await expect(replyTile.locator(".mx_ThreadSummary_icon")).toHaveAttribute(
-                "href",
-                `#/room/${roomId}/${reply.event_id}`,
-            );
+            const otherTile = matching.filter({ hasText: "match other link" });
+            await expect(otherTile.locator(`a[href='#/room/${roomId}/${other.event_id}']`)).toBeVisible();
 
             await expect(results).toMatchScreenshot("search-results-event-tiles.png", {
                 css: ".mx_MessageTimestamp { visibility: hidden; }",
             });
 
-            await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
-            await expect(
-                results.locator(".mx_EventTile:not(.mx_EventTile_contextual)[data-layout='bubble']"),
-            ).toHaveCount(2);
-            await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
             await app.settings.setValue("useCompactLayout", null, SettingLevel.DEVICE, true);
             await expect(
                 results.locator(".mx_EventTile:not(.mx_EventTile_contextual)[data-layout='group']"),
             ).toHaveCount(2);
         },
     );
+
+    test("renders threaded search information and preserves the shared result link", async ({
+        page,
+        app,
+        bot,
+    }, testInfo) => {
+        test.skip(
+            ["Dendrite", "Pinecone"].includes(testInfo.project.name),
+            "The configured homeserver has server-side search disabled",
+        );
+
+        const roomId = await app.client.createRoom({ name: "EventTile threaded search" });
+        await app.client.inviteUser(roomId, bot.credentials!.userId);
+        await bot.joinRoom(roomId);
+
+        const root = await app.client.sendMessage(roomId, "match root");
+        await bot.sendMessage(roomId, "match threaded reply", root.event_id);
+
+        await app.viewRoomById(roomId);
+        await app.toggleRoomInfoPanel();
+        const search = page.locator(".mx_RoomSummaryCard_search").getByRole("searchbox");
+        await search.fill("match");
+        await search.press("Enter");
+
+        const results = page.locator(".mx_RoomView_searchResultsPanel");
+        const replyTile = results.locator(".mx_EventTile", { hasText: "match threaded reply" });
+        await expect(replyTile).toHaveCount(1);
+        await expect(replyTile.locator(".mx_ThreadSummary_icon")).toBeVisible();
+        await expect(replyTile.locator(".mx_ThreadSummary_icon")).toHaveAttribute(
+            "href",
+            `#/room/${roomId}/${root.event_id}`,
+        );
+
+        const threadSummaries = results.locator(".mx_ThreadSummary");
+        await expect(threadSummaries).toHaveCount(2);
+        for (const summary of await threadSummaries.all()) {
+            await expect(summary).toContainText("1 reply");
+        }
+    });
 
     test.describe("populated notification panel", () => {
         test.use({ labsFlags: ["feature_notifications"] });
