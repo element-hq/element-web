@@ -1191,7 +1191,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         const [shouldCreate, opts] = await modal.finished;
         if (shouldCreate) {
-            return createRoom(MatrixClientPeg.safeGet(), opts!);
+            await createRoom(MatrixClientPeg.safeGet(), opts!);
         }
     }
 

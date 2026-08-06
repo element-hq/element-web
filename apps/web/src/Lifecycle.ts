@@ -969,7 +969,7 @@ export async function logout(): Promise<void> {
     }
 
     _isLoggingOut = true;
-    await PlatformPeg.get()?.destroyPickleKey(client.getSafeUserId(), client.getDeviceId() ?? "");
+    void PlatformPeg.get()?.destroyPickleKey(client.getSafeUserId(), client.getDeviceId() ?? "");
 
     doLogout(client, oauth ?? null).then(onLoggedOut, (err) => {
         // Just throwing an error here is going to be very unhelpful
@@ -1078,7 +1078,7 @@ async function startMatrixClient(
 
     // Similarly, don't start sending presence updates until we've started the client
     if (!SettingsStore.getValue("lowBandwidth")) {
-        await Presence.start();
+        void Presence.start();
     }
 
     // Now that we have a MatrixClientPeg, update the Jitsi info
