@@ -49,6 +49,24 @@ describe("FilePanel", () => {
         expect(asFragment()).toMatchSnapshot();
     });
 
+    it("does not take the room's pending events, which are not filtered to files", async () => {
+        const cli = MatrixClientPeg.safeGet();
+        const room = new Room("!room:server", cli, cli.getSafeUserId(), {
+            pendingEventOrdering: PendingEventOrdering.Detached,
+        });
+        const timelineSet = new EventTimelineSet(room);
+        room.getOrCreateFilteredTimelineSet = jest.fn().mockReturnValue(timelineSet);
+        mocked(cli.getRoom).mockReturnValue(room);
+
+        render(
+            <FilePanel roomId={room.roomId} onClose={jest.fn()} />,
+            clientAndSDKContextRenderOptions(cli, SDKContextClass.instance),
+        );
+        await screen.findByText("No files visible in this room");
+
+        expect(room.getOrCreateFilteredTimelineSet).toHaveBeenCalledWith(expect.anything(), { pendingEvents: false });
+    });
+
     describe("addEncryptedLiveEvent", () => {
         it("should add file msgtype event to filtered timelineSet", async () => {
             const cli = MatrixClientPeg.safeGet();

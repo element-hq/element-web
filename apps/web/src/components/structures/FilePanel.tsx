@@ -159,7 +159,11 @@ class FilePanel extends React.Component<IProps, IState> {
         });
 
         filter.filterId = await client.getOrCreateFilter("FILTER_FILES_" + client.credentials.userId, filter);
-        return room.getOrCreateFilteredTimelineSet(filter);
+        // A timeline set is handed the room's pending events by default, and those are the whole
+        // room's rather than this filter's — so every message being sent flickered into the file
+        // panel until its remote echo arrived and the filter finally threw it out. A file sent from
+        // here still shows up as soon as it is sent, through the live event path above.
+        return room.getOrCreateFilteredTimelineSet(filter, { pendingEvents: false });
     }
 
     private onPaginationRequest = (
