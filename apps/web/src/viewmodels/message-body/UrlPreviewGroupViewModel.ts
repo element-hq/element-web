@@ -209,13 +209,13 @@ export class UrlPreviewGroupViewModel
      */
     public setUrlBundlesEnabled(value: boolean): void {
         this.props.urlPreviewBundleEnabled = value;
-        this.recompute();
+        this.onBundleContentChanged();
     }
 
     /*
      * Triggers a recalculation of snapshot, e.g. after the message is updated
      */
-    public recompute(): Promise<void> {
+    public onBundleContentChanged(): Promise<void> {
         return this.computeSnapshot();
     }
 
