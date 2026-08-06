@@ -7,7 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
+import { AuthType, type IAuthData } from "matrix-js-sdk/src/interactive-auth";
 
 import Field from "../elements/Field";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -50,6 +51,20 @@ interface IState {
     oldPassword: string;
     newPassword: string;
     newPasswordConfirm: string;
+}
+
+/**
+ * Whether the given error is a user-interactive authentication challenge which the current password
+ * on its own is enough to answer.
+ *
+ * @param err - The error the homeserver rejected the request with.
+ * @returns True if the challenge carries a session and offers a flow of nothing but a password stage.
+ */
+function isPasswordOnlyChallenge(err: unknown): err is MatrixError {
+    if (!(err instanceof MatrixError) || err.httpStatus !== 401) return false;
+    const challenge = err.data as IAuthData;
+    if (typeof challenge.session !== "string") return false;
+    return !!challenge.flows?.some((flow) => flow.stages.length === 1 && flow.stages[0] === AuthType.Password);
 }
 
 export default class ChangePassword extends React.Component<IProps, IState> {
@@ -95,6 +110,16 @@ export default class ChangePassword extends React.Component<IProps, IState> {
         });
 
         cli.setPassword(authDict, newPassword, false)
+            .catch((err) => {
+                // The spec has the client open a session with an unauthenticated request and answer the
+                // challenge in a second one. Sending the credentials straight away saves a round trip and
+                // is what most homeservers accept, but a homeserver is free to ignore an auth object which
+                // carries no session and reply with a challenge of its own. We are still holding the
+                // password at that point, so answer the challenge rather than leaving the user looking at
+                // a bare 401. Anything else the server might ask for we genuinely cannot supply here.
+                if (!isPasswordOnlyChallenge(err)) throw err;
+                return cli.setPassword({ ...authDict, session: err.data.session }, newPassword, false);
+            })
             .then(
                 () => {
                     if (this.props.shouldAskForEmail) {
