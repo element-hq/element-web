@@ -39,6 +39,8 @@ interface IState {
 }
 
 export default class LanguageDropdown extends React.Component<IProps, IState> {
+    private unmounted = false;
+
     public constructor(props: IProps) {
         super(props);
 
@@ -49,8 +51,11 @@ export default class LanguageDropdown extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
+        this.unmounted = false;
+
         getAllLanguagesWithLabels()
             .then((langs) => {
+                if (this.unmounted) return;
                 langs.sort(function (a, b) {
                     if (a.labelInTargetLanguage < b.labelInTargetLanguage) return -1;
                     if (a.labelInTargetLanguage > b.labelInTargetLanguage) return 1;
@@ -59,6 +64,7 @@ export default class LanguageDropdown extends React.Component<IProps, IState> {
                 this.setState({ langs });
             })
             .catch(() => {
+                if (this.unmounted) return;
                 this.setState({
                     langs: [
                         {
@@ -76,6 +82,10 @@ export default class LanguageDropdown extends React.Component<IProps, IState> {
             const language = getUserLanguage();
             this.props.onOptionChange(language);
         }
+    }
+
+    public componentWillUnmount(): void {
+        this.unmounted = true;
     }
 
     private onSearchChange = (search: string): void => {

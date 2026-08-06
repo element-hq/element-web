@@ -497,6 +497,7 @@ exports[`LogoutDialog shows a regular dialog when crypto is disabled 1`] = `
         class="mx_Dialog_buttons_row"
       >
         <button
+          class="cancel"
           data-testid="dialog-cancel-button"
           type="button"
         >

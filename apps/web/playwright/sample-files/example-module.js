@@ -19,6 +19,7 @@ export default class ExampleModule {
     }
     async load() {
         const brand = this.api.config.get("brand");
+        // oxlint-disable-next-line no-alert
         alert(this.api.i18n.translate("key", { brand }));
     }
 }

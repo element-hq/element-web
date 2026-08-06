@@ -1,3 +1,10 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE in the repository root for full details.
+*/
+
 import fs from "node:fs/promises";
 import path from "node:path";
 import YAML from "yaml";
@@ -192,19 +199,19 @@ interface WorkflowYaml {
         workflow_run?: {
             workflows: string[];
         }; // Magic
-        workflow_call?: {}; // Reusable
-        workflow_dispatch?: {}; // Manual
-        pull_request?: {};
-        merge_group?: {};
+        workflow_call?: unknown; // Reusable
+        workflow_dispatch?: unknown; // Manual
+        pull_request?: unknown;
+        merge_group?: unknown;
         push?: {
             tags?: string[];
             branches?: string[];
         };
         schedule?: { cron: string }[];
-        release?: {};
+        release?: unknown;
         //
-        label?: {};
-        issues?: {};
+        label?: unknown;
+        issues?: unknown;
     };
     jobs: {
         [job: string]: {
@@ -221,7 +228,7 @@ interface WorkflowYaml {
 type Trigger = Node;
 
 // TODO workflow_call reusables
-/* eslint-disable @typescript-eslint/naming-convention */
+
 const TRIGGERS: {
     [key in keyof WorkflowYaml["on"]]: (
         data: NonNullable<WorkflowYaml["on"][key]>,
@@ -266,13 +273,12 @@ const TRIGGERS: {
     // TODO should we be just dropping these?
     workflow_run: (data) => data.workflows.map((parent) => workflows.get(parent)).filter(Boolean) as Workflow[],
 };
-/* eslint-enable @typescript-eslint/naming-convention */
 
 const triggers = new Map<string, Trigger>(); // keyed by trigger id
 const projects = new Map<string, Project>(); // keyed by project name
 const workflows = new Map<string, Workflow>(); // keyed by workflow name
 
-function getTriggerNodes<K extends keyof WorkflowYaml["on"]>(key: K, workflow: Workflow, on?: string[]): Trigger[] {
+function getTriggerNodes(key: keyof WorkflowYaml["on"], workflow: Workflow, on?: string[]): Trigger[] {
     if (!TRIGGERS[key]) return [];
 
     if (on && !on.includes(key)) {
@@ -280,7 +286,7 @@ function getTriggerNodes<K extends keyof WorkflowYaml["on"]>(key: K, workflow: W
     }
 
     const data = workflow.on[key]!;
-    const nodes = toArray(TRIGGERS[key]!(data, workflow));
+    const nodes = toArray(TRIGGERS[key](data, workflow));
     return nodes.map((node) => {
         if (triggers.has(node.id)) return triggers.get(node.id)!;
         triggers.set(node.id, node);
@@ -561,7 +567,11 @@ export default async function main(dirs: string[], on?: string[], print = false,
                     subgraph.addNode(job);
                     if (job.needs) {
                         toArray(job.needs).forEach((req) => {
-                            subgraph.addEdge(node.jobs.find((job) => job.jobId === req)!, job, "needs");
+                            subgraph.addEdge(
+                                node.jobs.find((job) => job.jobId === req)!,
+                                job,
+                                "needs",
+                            );
                         });
                     }
                 }

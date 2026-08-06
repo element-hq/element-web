@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import Recorder from "opus-recorder/dist/recorder.min.js";
 import encoderPath from "opus-recorder/dist/encoderWorker.min.js";
 import { SimpleObservable } from "matrix-widget-api";
+// oxlint-disable-next-line no-restricted-imports
 import EventEmitter from "events";
 import { logger } from "matrix-js-sdk/src/logger";
 import { clamp } from "@element-hq/web-shared-components";
@@ -299,7 +300,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
 
             // Finally do our post-processing and clean up
             this.recording = false;
-            await this.recorder!.close();
+            this.recorder!.close();
             this.emit(RecordingState.Ended);
         });
     }

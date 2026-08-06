@@ -17,6 +17,15 @@ import { type MediaEventHelper } from "../../../../../src/utils/MediaEventHelper
 
 describe("<MAudioBody />", () => {
     let event: MatrixEvent;
+
+    const mediaEventHelper = {
+        sourceBlob: {
+            value: {
+                arrayBuffer: () => new ArrayBuffer(8),
+            },
+        },
+    } as unknown as MediaEventHelper;
+
     beforeEach(() => {
         const playback = new MockedPlayback(PlaybackState.Decoding, 50, 10) as unknown as Playback;
         jest.spyOn(PlaybackManager.instance, "createPlaybackInstance").mockReturnValue(playback);
@@ -34,15 +43,24 @@ describe("<MAudioBody />", () => {
     });
 
     it("should render", async () => {
-        const mediaEventHelper = {
-            sourceBlob: {
-                value: {
-                    arrayBuffer: () => new ArrayBuffer(8),
-                },
-            },
-        } as unknown as MediaEventHelper;
+        await act(() => render(<MAudioBody mxEvent={event} mediaEventHelper={mediaEventHelper} />));
+        expect(await screen.findByRole("region", { name: "Audio player" })).toBeInTheDocument();
+    });
+
+    it("should show the body as the title when there is no filename", async () => {
+        await act(() => render(<MAudioBody mxEvent={event} mediaEventHelper={mediaEventHelper} />));
+        expect(await screen.findByRole("region", { name: "Audio player" })).toBeInTheDocument();
+        expect(screen.getByText("audio name")).toBeInTheDocument();
+    });
+
+    it("should prefer the filename over the body as the title", async () => {
+        // A caption puts the human readable text in `body` and the actual file name in `filename`.
+        event.getContent().filename = "recording.ogg";
+        event.getContent().body = "Listen to this!";
 
         await act(() => render(<MAudioBody mxEvent={event} mediaEventHelper={mediaEventHelper} />));
         expect(await screen.findByRole("region", { name: "Audio player" })).toBeInTheDocument();
+        expect(screen.getByText("recording.ogg")).toBeInTheDocument();
+        expect(screen.queryByText("Listen to this!")).not.toBeInTheDocument();
     });
 });

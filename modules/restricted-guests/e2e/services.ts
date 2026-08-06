@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    StartedSynapseContainer,
+    type StartedSynapseContainer,
     SynapseContainer,
 } from "@element-hq/element-web-playwright-common/lib/testcontainers/index.js";
 import { Readable } from "node:stream";

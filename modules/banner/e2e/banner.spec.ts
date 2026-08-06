@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { input } from "zod/mini";
+import { type input } from "zod/mini";
 
 import { test as base, expect } from "../../playwright/element-web-test.ts";
 import { type ConfigSchema } from "../src/config.ts";
@@ -160,7 +160,6 @@ test.describe("Banner", () => {
                         await expect(sidebar).toMatchScreenshot(`${type}_menu_loading.png`);
                         navigationJsonResolver.resolve();
                     }
-                    await page.pause();
 
                     const emailApp = page.getByText("E-Mail");
                     await expect(emailApp).toHaveAttribute("href", "https://example.com/email");
@@ -233,6 +232,48 @@ test.describe("Banner", () => {
             await expect(sidebar.getByText("Failed to load")).toBeVisible();
             await expect(sidebar).toMatchScreenshot("univention_error.png");
             await expect(axe).toHaveNoViolations();
+        });
+    });
+
+    test.describe("static config", () => {
+        test.use({
+            config: {
+                "io.element.element-web-modules.banner": {
+                    logo_url: "https://domain/logo1.png",
+                    logo_link_url: "https://domain",
+                    title: "Title",
+                    menu: {
+                        type: "static",
+                        logo_url: "https://domain/logo2.png",
+                        logo_href: "https://domain/menu-link",
+                        categories: [
+                            {
+                                name: "Category 1",
+                                links: [
+                                    {
+                                        icon_uri: "https://domain/app1/logo.png",
+                                        name: "App 1",
+                                        link_url: "https://domain/app1",
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                },
+            },
+        });
+
+        test("should show a href on the menu logo if one is specified", async ({ page }) => {
+            await expect(page.getByLabel("Show portal")).toHaveAttribute("href", "https://domain");
+
+            const trigger = page.getByLabel("Show menu");
+            await trigger.click();
+
+            const sidebar = page.getByRole("dialog");
+            await expect(sidebar.getByRole("link", { name: "Show portal" })).toHaveAttribute(
+                "href",
+                "https://domain/menu-link",
+            );
         });
     });
 });

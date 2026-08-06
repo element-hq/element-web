@@ -11,7 +11,7 @@ import { MatrixEvent, type IContent, RoomStickyEventsEvent } from "matrix-js-sdk
 import { Alert, Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./BaseTool.tsx";
-import { _t, _td, UserFriendlyError } from "../../../../languageHandler.tsx";
+import { _t, _td, UserFriendlyError } from "../../../../languageHandler";
 import {
     EventEditor,
     eventTypeField,
@@ -56,7 +56,11 @@ export const StickyStateExplorer: React.FC<IDevtoolsProps> = ({ onBack, setTool 
                 <Alert
                     type="critical"
                     title={_t("common|error")}
-                    actions={<button onClick={onBack}>{_t("action|back")}</button>}
+                    actions={
+                        <button onClick={onBack} type="button">
+                            {_t("action|back")}
+                        </button>
+                    }
                 >
                     {_t("devtools|sticky_events_not_supported")}
                 </Alert>
@@ -107,7 +111,12 @@ export const StickyStateExplorer: React.FC<IDevtoolsProps> = ({ onBack, setTool 
         <BaseTool onBack={onBack} actionLabel={_td("devtools|send_custom_sticky_event")} onAction={onAction}>
             <p>
                 {uniqueEventTypes.map((eventType) => (
-                    <button key={eventType} className="mx_DevTools_button" onClick={() => setEventType(eventType)}>
+                    <button
+                        key={eventType}
+                        className="mx_DevTools_button"
+                        onClick={() => setEventType(eventType)}
+                        type="button"
+                    >
                         {eventType.length > 0 ? eventType : _t("devtools|empty_string")}
                     </button>
                 ))}

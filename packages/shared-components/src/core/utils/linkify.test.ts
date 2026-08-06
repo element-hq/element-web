@@ -104,7 +104,6 @@ describe("linkify-matrix", () => {
                     },
                 ]);
             });
-            // eslint-disable-next-line max-len
             it("should properly parse IPs v6 while ignoring dangling comma when without port name as the domain name", () => {
                 const test = char + "username:[1234:5678::abcd]:";
                 expect(isLinkable(test)).toEqual(true);
@@ -122,7 +121,7 @@ describe("linkify-matrix", () => {
             });
         });
         it("properly parses " + char + "_foonetic_xkcd:matrix.org", () => {
-            const test = "" + char + "_foonetic_xkcd:matrix.org";
+            const test = char + "_foonetic_xkcd:matrix.org";
             expect(isLinkable(test)).toEqual(true);
             const found = findLinksInString(test);
             expect(found).toEqual([
@@ -167,7 +166,7 @@ describe("linkify-matrix", () => {
             ]);
         });
         it("accept " + char + "foo:bar.com", () => {
-            const test = "" + char + "foo:bar.com";
+            const test = char + "foo:bar.com";
             expect(isLinkable(test)).toEqual(true);
             const found = findLinksInString(test);
             expect(found).toEqual([
@@ -182,7 +181,7 @@ describe("linkify-matrix", () => {
             ]);
         });
         it("accept " + char + "foo:com (mostly for (TLD|DOMAIN)+ mixing)", () => {
-            const test = "" + char + "foo:com";
+            const test = char + "foo:com";
             expect(isLinkable(test)).toEqual(true);
             const found = findLinksInString(test);
             expect(found).toEqual([
@@ -197,7 +196,7 @@ describe("linkify-matrix", () => {
             ]);
         });
         it("accept repeated TLDs (e.g .org.uk)", () => {
-            const test = "" + char + "foo:bar.org.uk";
+            const test = char + "foo:bar.org.uk";
             expect(isLinkable(test)).toEqual(true);
             const found = findLinksInString(test);
             expect(found).toEqual([
@@ -212,7 +211,7 @@ describe("linkify-matrix", () => {
             ]);
         });
         it("accept hyphens in name " + char + "foo-bar:server.com", () => {
-            const test = "" + char + "foo-bar:server.com";
+            const test = char + "foo-bar:server.com";
             expect(isLinkable(test)).toEqual(true);
             const found = findLinksInString(test);
             expect(found).toEqual([
@@ -227,7 +226,7 @@ describe("linkify-matrix", () => {
             ]);
         });
         it("ignores trailing `:`", () => {
-            const test = "" + char + "foo:bar.com:";
+            const test = char + "foo:bar.com:";
             expect(isLinkable(test)).toEqual(false);
             const found = findLinksInString(test);
             expect(found).toEqual([
@@ -242,7 +241,7 @@ describe("linkify-matrix", () => {
             ]);
         });
         it("accept :NUM (port specifier)", () => {
-            const test = "" + char + "foo:bar.com:2225";
+            const test = char + "foo:bar.com:2225";
             expect(isLinkable(test)).toEqual(true);
             const found = findLinksInString(test);
             expect(found).toEqual([
@@ -257,7 +256,7 @@ describe("linkify-matrix", () => {
             ]);
         });
         it("ignores duplicate :NUM (double port specifier)", () => {
-            const test = "" + char + "foo:bar.com:2225:1234";
+            const test = char + "foo:bar.com:2225:1234";
             expect(isLinkable(test)).toEqual(false);
             const found = findLinksInString(test);
             expect(found).toEqual([
@@ -272,7 +271,7 @@ describe("linkify-matrix", () => {
             ]);
         });
         it("ignores all the trailing :", () => {
-            const test = "" + char + "foo:bar.com::::";
+            const test = char + "foo:bar.com::::";
             expect(isLinkable(test)).toEqual(false);
             const found = findLinksInString(test);
             expect(found).toEqual([
@@ -287,7 +286,7 @@ describe("linkify-matrix", () => {
             ]);
         });
         it("properly parses room alias with dots in name", () => {
-            const test = "" + char + "foo.asdf:bar.com::::";
+            const test = char + "foo.asdf:bar.com::::";
             expect(isLinkable(test)).toEqual(false);
             const found = findLinksInString(test);
             expect(found).toEqual([
@@ -302,7 +301,7 @@ describe("linkify-matrix", () => {
             ]);
         });
         it("does not parse room alias with too many separators", () => {
-            const test = "" + char + "foo:::bar.com";
+            const test = char + "foo:::bar.com";
             expect(isLinkable(test)).toEqual(false);
             const found = findLinksInString(test);
             expect(found).toEqual([
@@ -317,7 +316,7 @@ describe("linkify-matrix", () => {
             ]);
         });
         it("properly parses room alias with hyphen in domain part", () => {
-            const test = "" + char + "foo:bar.com-baz.com";
+            const test = char + "foo:bar.com-baz.com";
             expect(isLinkable(test)).toEqual(true);
             const found = findLinksInString(test);
             expect(found).toEqual([

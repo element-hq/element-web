@@ -96,7 +96,7 @@ export const getKeyboardShortcuts = (): IKeyboardShortcuts => {
             return true;
         })
         .reduce((o, key) => {
-            o[key as KeyBindingAction] = KEYBOARD_SHORTCUTS[key as KeyBindingAction];
+            o[key] = KEYBOARD_SHORTCUTS[key];
             return o;
         }, {} as IKeyboardShortcuts);
 };

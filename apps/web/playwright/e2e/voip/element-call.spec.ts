@@ -63,7 +63,7 @@ async function sendRTCState(bot: Bot, roomId: string, notification?: "ring" | "n
             },
             "scope": "m.room",
         },
-        `_@${bot.credentials.userId}_OiDFxsZrjz_m.call`,
+        `_@${bot.credentials!.userId}_OiDFxsZrjz_m.call`,
     );
     if (!notification) {
         return;
@@ -102,14 +102,6 @@ test.use({
 
 test.describe("Element Call", () => {
     test.use({
-        config: {
-            element_call: {
-                use_exclusively: false,
-            },
-            features: {
-                feature_group_calls: true,
-            },
-        },
         displayName: "Alice",
         botCreateOpts: {
             autoAcceptInvites: true,
@@ -148,7 +140,7 @@ test.describe("Element Call", () => {
                 await charlie.prepareClient();
                 const roomId = await app.client.createRoom({
                     name: "TestRoom",
-                    invite: [bot.credentials.userId, charlie.credentials.userId],
+                    invite: [bot.credentials!.userId, charlie.credentials!.userId],
                 });
                 await use({ roomId });
             },
@@ -161,9 +153,9 @@ test.describe("Element Call", () => {
             await page.getByRole("menuitem", { name: "Element Call" }).click();
 
             const frameUrlStr = await page.locator("iframe").getAttribute("src");
-            await expect(frameUrlStr).toBeDefined();
+            expect(frameUrlStr).toBeDefined();
             // Ensure we set the correct parameters for ECall.
-            const url = new URL(frameUrlStr);
+            const url = new URL(frameUrlStr!);
             const hash = new URLSearchParams(url.hash.slice(1));
             assertCommonCallParameters(url.searchParams, hash, user, room);
             expect(hash.get("intent")).toEqual("start_call");
@@ -187,8 +179,8 @@ test.describe("Element Call", () => {
             await page.keyboard.up("Shift");
 
             const frameUrlStr = await page.locator("iframe").getAttribute("src");
-            await expect(frameUrlStr).toBeDefined();
-            const url = new URL(frameUrlStr);
+            expect(frameUrlStr).toBeDefined();
+            const url = new URL(frameUrlStr!);
             const hash = new URLSearchParams(url.hash.slice(1));
             assertCommonCallParameters(url.searchParams, hash, user, room);
             expect(hash.get("intent")).toEqual("start_call");
@@ -200,7 +192,7 @@ test.describe("Element Call", () => {
                 await app.viewRoomById(room.roomId);
                 // Allow bob to create a call
                 await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
-                await app.client.setPowerLevel(room.roomId, bot.credentials.userId, 50);
+                await app.client.setPowerLevel(room.roomId, bot.credentials!.userId, 50);
                 // Fake a start of a call
                 await sendRTCState(bot, room.roomId, undefined, callType === "voice" ? "audio" : "video");
                 const button = page.getByTestId("join-call-button");
@@ -212,8 +204,8 @@ test.describe("Element Call", () => {
                 // And test joining
                 await button.click();
                 const frameUrlStr = await page.locator("iframe").getAttribute("src");
-                await expect(frameUrlStr).toBeDefined();
-                const url = new URL(frameUrlStr);
+                expect(frameUrlStr).toBeDefined();
+                const url = new URL(frameUrlStr!);
                 const hash = new URLSearchParams(url.hash.slice(1));
                 assertCommonCallParameters(url.searchParams, hash, user, room);
 
@@ -245,7 +237,7 @@ test.describe("Element Call", () => {
                     await app.viewRoomById(room.roomId);
                     // Allow bob to create a call
                     await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
-                    await app.client.setPowerLevel(room.roomId, bot.credentials.userId, 50);
+                    await app.client.setPowerLevel(room.roomId, bot.credentials!.userId, 50);
                     // Fake a start of a call
                     await sendRTCState(bot, room.roomId, "notification", "video");
                     const toast = page.locator(".mx_Toast_toast");
@@ -262,8 +254,8 @@ test.describe("Element Call", () => {
                     // And test joining
                     await button.click();
                     const frameUrlStr = await page.locator("iframe").getAttribute("src");
-                    await expect(frameUrlStr).toBeDefined();
-                    const url = new URL(frameUrlStr);
+                    expect(frameUrlStr).toBeDefined();
+                    const url = new URL(frameUrlStr!);
                     const hash = new URLSearchParams(url.hash.slice(1));
                     assertCommonCallParameters(url.searchParams, hash, user, room);
 
@@ -280,7 +272,7 @@ test.describe("Element Call", () => {
                 await app.viewRoomById(room.roomId);
                 // Allow bob to create a call
                 await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
-                await app.client.setPowerLevel(room.roomId, bot.credentials.userId, 50);
+                await app.client.setPowerLevel(room.roomId, bot.credentials!.userId, 50);
                 // Fake a start of a call
                 await sendRTCState(bot, room.roomId, "notification", "audio");
                 const toast = page.locator(".mx_Toast_toast");
@@ -291,8 +283,8 @@ test.describe("Element Call", () => {
                 // And test joining
                 await button.click();
                 const frameUrlStr = await page.locator("iframe").getAttribute("src");
-                await expect(frameUrlStr).toBeDefined();
-                const url = new URL(frameUrlStr);
+                expect(frameUrlStr).toBeDefined();
+                const url = new URL(frameUrlStr!);
                 const hash = new URLSearchParams(url.hash.slice(1));
                 assertCommonCallParameters(url.searchParams, hash, user, room);
 
@@ -307,11 +299,11 @@ test.describe("Element Call", () => {
             room: async ({ page, app, user, bot }, use) => {
                 const roomId = await app.client.createRoom({
                     preset: "trusted_private_chat" as Preset.TrustedPrivateChat,
-                    invite: [bot.credentials.userId],
+                    invite: [bot.credentials!.userId],
                 });
                 await bot.awaitRoomMembership(roomId);
                 await app.client.setAccountData("m.direct" as EventType.Direct, {
-                    [bot.credentials.userId]: [roomId],
+                    [bot.credentials!.userId]: [roomId],
                 });
                 await use({ roomId });
             },
@@ -325,8 +317,8 @@ test.describe("Element Call", () => {
             await page.getByRole("menuitem", { name: "Element Call" }).click();
             const frameUrlStr = await page.locator("iframe").getAttribute("src");
 
-            await expect(frameUrlStr).toBeDefined();
-            const url = new URL(frameUrlStr);
+            expect(frameUrlStr).toBeDefined();
+            const url = new URL(frameUrlStr!);
             const hash = new URLSearchParams(url.hash.slice(1));
             assertCommonCallParameters(url.searchParams, hash, user, room);
             expect(hash.get("intent")).toEqual("start_call_dm");
@@ -343,8 +335,8 @@ test.describe("Element Call", () => {
             await page.keyboard.up("Shift");
             const frameUrlStr = await page.locator("iframe").getAttribute("src");
 
-            await expect(frameUrlStr).toBeDefined();
-            const url = new URL(frameUrlStr);
+            expect(frameUrlStr).toBeDefined();
+            const url = new URL(frameUrlStr!);
             const hash = new URLSearchParams(url.hash.slice(1));
             assertCommonCallParameters(url.searchParams, hash, user, room);
             expect(hash.get("intent")).toEqual("start_call_dm");
@@ -359,7 +351,7 @@ test.describe("Element Call", () => {
             await page.getByRole("menuitem", { name: "Element Call" }).click();
 
             const frameUrlStr = await page.locator("iframe").getAttribute("src");
-            await expect(frameUrlStr).toBeDefined();
+            expect(frameUrlStr).toBeDefined();
 
             // The call should be presented in the picture-in-picture container, right in the room we started it
             // from, rather than taking over the room view.
@@ -377,8 +369,8 @@ test.describe("Element Call", () => {
             // And test joining
             await button.click();
             const frameUrlStr = await page.locator("iframe").getAttribute("src");
-            await expect(frameUrlStr).toBeDefined();
-            const url = new URL(frameUrlStr);
+            expect(frameUrlStr).toBeDefined();
+            const url = new URL(frameUrlStr!);
             const hash = new URLSearchParams(url.hash.slice(1));
             assertCommonCallParameters(url.searchParams, hash, user, room);
 
@@ -417,8 +409,8 @@ test.describe("Element Call", () => {
                     // And test joining
                     await button.click();
                     const frameUrlStr = await page.locator("iframe").getAttribute("src");
-                    await expect(frameUrlStr).toBeDefined();
-                    const url = new URL(frameUrlStr);
+                    expect(frameUrlStr).toBeDefined();
+                    const url = new URL(frameUrlStr!);
                     const hash = new URLSearchParams(url.hash.slice(1));
                     assertCommonCallParameters(url.searchParams, hash, user, room);
 
@@ -451,8 +443,8 @@ test.describe("Element Call", () => {
                 // And test joining
                 await button.click();
                 const frameUrlStr = await page.locator("iframe").getAttribute("src");
-                await expect(frameUrlStr).toBeDefined();
-                const url = new URL(frameUrlStr);
+                expect(frameUrlStr).toBeDefined();
+                const url = new URL(frameUrlStr!);
                 const hash = new URLSearchParams(url.hash.slice(1));
                 assertCommonCallParameters(url.searchParams, hash, user, room);
 
@@ -483,9 +475,9 @@ test.describe("Element Call", () => {
             const roomId = new URL(page.url()).hash.slice("#/room/".length);
 
             const frameUrlStr = await page.locator("iframe").getAttribute("src");
-            await expect(frameUrlStr).toBeDefined();
+            expect(frameUrlStr).toBeDefined();
             // Ensure we set the correct parameters for ECall.
-            const url = new URL(frameUrlStr);
+            const url = new URL(frameUrlStr!);
             const hash = new URLSearchParams(url.hash.slice(1));
             assertCommonCallParameters(url.searchParams, hash, user, { roomId });
             expect(hash.get("intent")).toEqual("join_existing");
@@ -502,13 +494,14 @@ test.describe("Element Call", () => {
                 await charlie.prepareClient();
                 const roomId = await app.client.createRoom({
                     name: "TestRoom",
-                    invite: [bot.credentials.userId, charlie.credentials.userId],
+                    invite: [bot.credentials!.userId, charlie.credentials!.userId],
                 });
                 await app.client.createRoom({
                     name: "OtherRoom",
                 });
                 await use({ roomId });
             },
+            lockLeftPanelWidth: false,
         });
 
         async function openAndJoinCall(page: Page, existing = false) {
@@ -521,12 +514,12 @@ test.describe("Element Call", () => {
             const iframe = page.locator("iframe");
             await expect(iframe).toBeVisible();
             const frameUrlStr = await page.locator("iframe").getAttribute("src");
-            const callFrame = page.frame({ url: frameUrlStr });
+            const callFrame = page.frame({ url: frameUrlStr! })!;
             await callFrame.getByRole("button", { name: "Join Call" }).click();
             await expect(callFrame.getByText("In call", { exact: true })).toBeVisible();
 
             // Wait for Element Web to pickup the RTC session and update the room list entry.
-            await expect(await page.getByTestId("notification-decoration")).toBeVisible();
+            await expect(page.getByTestId("notification-decoration")).toBeVisible();
         }
 
         test("should be able to switch rooms and have the call persist", async ({ page, user, room, app }) => {
@@ -566,9 +559,9 @@ test.describe("Element Call", () => {
             await expect(pipContainer).not.toBeVisible();
 
             // Wait for call to stop.
-            await expect(await page.getByTestId("notification-decoration")).not.toBeVisible();
+            await expect(page.getByTestId("notification-decoration")).not.toBeVisible();
             await app.viewRoomById(room.roomId);
-            await expect(await page.getByTestId("join-call-button")).not.toBeVisible();
+            await expect(page.getByTestId("join-call-button")).not.toBeVisible();
 
             // Join the call again.
             await openAndJoinCall(page);
@@ -598,8 +591,8 @@ test.describe("Element Call", () => {
             await expect(pipContainer).not.toBeVisible();
 
             // Wait for call to stop.
-            await expect(await page.getByTestId("notification-decoration")).not.toBeVisible();
-            await expect(await page.getByTestId("join-call-button")).not.toBeVisible();
+            await expect(page.getByTestId("notification-decoration")).not.toBeVisible();
+            await expect(page.getByTestId("join-call-button")).not.toBeVisible();
 
             // Join the call again, but from the other room.
             await openAndJoinCall(page);
@@ -615,7 +608,7 @@ test.describe("Element Call", () => {
         }) => {
             await app.viewRoomById(room.roomId);
             await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
-            await app.client.setPowerLevel(room.roomId, bot.credentials.userId, 50);
+            await app.client.setPowerLevel(room.roomId, bot.credentials!.userId, 50);
 
             await sendRTCState(bot, room.roomId);
             await openAndJoinCall(page, true);
@@ -661,7 +654,7 @@ test.describe("Element Call", () => {
                 await charlie.prepareClient();
                 const roomId = await app.client.createRoom({
                     name: "VideoRoom",
-                    invite: [bot.credentials.userId, charlie.credentials.userId],
+                    invite: [bot.credentials!.userId, charlie.credentials!.userId],
                     creation_content: {
                         type: "org.matrix.msc3417.call",
                     },

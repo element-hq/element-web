@@ -467,7 +467,6 @@
         "encrypted": "Ծածկագրված",
         "error": "Սխալ",
         "faq": "Հաճախ տրվող հարցեր",
-        "favourites": "Ընտրյալներ",
         "feedback": "Հետադարձ կապ",
         "filter_results": "Ֆիլտրի արդյունքները",
         "forward_message": "Փոխանցել հաղորդագրությունը",
@@ -491,7 +490,6 @@
         "message_layout": "Հաղորդագրության դասավորություն",
         "message_timestamp_invalid": "Անվավեր ժամանակային դրոշմանիշ",
         "microphone": "Խոսափող",
-        "model": "Մոդել",
         "moderation_and_safety": "Վերահսկողություն և անվտանգություն",
         "modern": "Ժամանակակից",
         "mute": "Անջատել ձայնը",
@@ -1426,7 +1424,6 @@
         "extended_profiles_msc_support": "Պահանջում է, որ ձեր սերվերը աջակցի MSC4133-ը",
         "feature_disable_call_per_sender_encryption": "Անջատել յուրաքանչյուր ուղարկողի գաղտնագրումը Element զանգի համար",
         "feature_wysiwyg_composer_description": "Հաղորդագրության խմբագրիչում օգտագործել \"ձևաչափված տեքստ\" (Rich Text)՝ Markdown-ի փոխարեն",
-        "group_calls": "Խմբային զանգի նոր փորձ",
         "group_developer": "Ծրագրավորող",
         "group_encryption": "Գաղտնագրում",
         "group_experimental": "Փորձարարական",
@@ -2693,7 +2690,6 @@
         "send_typing_notifications": "Ուղարկել տեքստ գրելու ծանուցումներ",
         "sessions": {
             "best_security_note": "Լավագույն անվտանգության համար ստուգեք ձեր սեսիաները և դուրս եկեք ցանկացած սեսիայից, որը այլևս չեք ճանաչում կամ չեք օգտագործում։",
-            "browser": "Զննարկիչ",
             "confirm_sign_out": {
                 "one": "Հաստատեք այս սարքից դուրս գալը",
                 "other": "Հաստատեք այս սարքերից դուրս գալը"
@@ -2744,7 +2740,6 @@
             "no_sessions": "Սեսիաներ չեն գտնվել։",
             "no_unverified_sessions": "Չստուգված սեսիաներ չեն գտնվել:",
             "no_verified_sessions": "Հաստատված սեսիաներ չեն գտնվել։",
-            "os": "Օպերացիոն համակարգ",
             "other_sessions_heading": "Այլ սեսիաներ",
             "push_heading": "Push ծանուցումներ",
             "push_subheading": "Ստանալ push ծանուցումներ այս սեսիայում։",
@@ -2830,7 +2825,6 @@
             "audio_output": "Աուդիո ելք",
             "audio_output_empty": "Աուդիո ելքեր չեն հայտնաբերվել",
             "auto_gain_control": "Ավտոմատ ուժեղացման կառավարում",
-            "connection_section": "Միացում",
             "dialog_title": "<strong>Կարգավորումներ․</strong> Ձայն և վիդեո",
             "echo_cancellation": "Արձագանքի չեղարկում",
             "enable_fallback_ice_server": "Թույլատրել հետադարձ զանգի օժանդակ սերվեր () %(server)s",

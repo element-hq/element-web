@@ -14,8 +14,6 @@ import { MatrixClientPeg } from "./MatrixClientPeg";
 import SettingsStore from "./settings/SettingsStore";
 import { type IConfigOptions } from "./IConfigOptions";
 
-/* eslint-disable camelcase */
-
 type StorageContext = {
     storageManager_persisted?: string;
     storageManager_quota?: string;
@@ -57,8 +55,6 @@ type Contexts = {
     device: DeviceContext;
     storage: StorageContext;
 };
-
-/* eslint-enable camelcase */
 
 async function getStorageContext(): Promise<StorageContext> {
     const result: StorageContext = {};
@@ -205,6 +201,7 @@ export async function initSentry(sentryConfig: IConfigOptions["sentry"]): Promis
 
     Sentry.init({
         dsn: sentryConfig.dsn,
+        // oxlint-disable-next-line node/no-process-env
         release: process.env.VERSION,
         environment: sentryConfig.environment,
         defaultIntegrations: false,

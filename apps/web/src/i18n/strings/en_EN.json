@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Emoji picker",
         "jump_first_invite": "Jump to first invite.",
         "message_composer": "Message composer",
         "n_unread_messages": {
@@ -480,7 +479,6 @@
         "encrypted": "Encrypted",
         "error": "Error",
         "faq": "FAQ",
-        "favourites": "Favourites",
         "feedback": "Feedback",
         "filter_results": "Filter results",
         "forward_message": "Forward message",
@@ -495,6 +493,7 @@
         "integration_manager": "Integration manager",
         "joined": "Joined",
         "labs": "Labs",
+        "legacy_voice_and_video_settings": "Matrix 1:1 Calls (Legacy)",
         "legal": "Legal",
         "light": "Light",
         "loading": "Loading…",
@@ -504,7 +503,6 @@
         "message_layout": "Message layout",
         "message_timestamp_invalid": "Invalid timestamp",
         "microphone": "Microphone",
-        "model": "Model",
         "moderation_and_safety": "Moderation and safety",
         "modern": "Modern",
         "mute": "Mute",
@@ -677,7 +675,6 @@
     "create_section_dialog": {
         "create_section": "Create section",
         "description": "Sections are only for you",
-        "edit_section": "Edit section",
         "label": "Section name",
         "title": "Create a section",
         "title_edition": "Edit a section"
@@ -923,22 +920,6 @@
     },
     "dialog_close_label": "Close dialog",
     "download_completed": "Download Completed",
-    "emoji": {
-        "categories": "Categories",
-        "category_activities": "Activities",
-        "category_animals_nature": "Animals & Nature",
-        "category_flags": "Flags",
-        "category_food_drink": "Food & Drink",
-        "category_frequently_used": "Frequently Used",
-        "category_objects": "Objects",
-        "category_smileys_people": "Smileys & People",
-        "category_symbols": "Symbols",
-        "category_travel_places": "Travel & Places",
-        "quick_reactions": "Quick Reactions"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Cancel search"
-    },
     "empty_room": "Empty room",
     "empty_room_was_name": "Empty room (was %(oldName)s)",
     "encryption": {
@@ -1535,7 +1516,6 @@
             "required_msc_support": "Requires MSC4429 (Profile Updates for Legacy Sync)"
         },
         "feature_wysiwyg_composer_description": "Use rich text instead of Markdown in the message composer.",
-        "group_calls": "New group call experience",
         "group_developer": "Developer",
         "group_encryption": "Encryption",
         "group_experimental": "Experimental",
@@ -1573,6 +1553,8 @@
         "sliding_sync_disabled_notice": "Sign in again to disable",
         "sliding_sync_server_no_support": "Your server lacks support",
         "unrealiable_e2e": "Unreliable in encrypted rooms",
+        "url_preview_bundle": "URL Preview Bundle (MSC4095)",
+        "url_preview_bundle_description": "Send URL previews in message alongside message content",
         "video_rooms": "Video rooms",
         "video_rooms_a_new_way_to_chat": "A new way to chat over voice and video in %(brand)s.",
         "video_rooms_always_on_voip_channels": "Video rooms are always-on VoIP channels embedded within a room in %(brand)s.",
@@ -1722,8 +1704,8 @@
         "level_notification": "Notification",
         "level_unsent": "Unsent",
         "mark_all_read": "Mark all as read",
-        "mentions_and_keywords": "@mentions & keywords",
-        "mentions_and_keywords_description": "Get notified only with mentions and keywords as set up in your <a>settings</a>",
+        "mentions_and_keywords": "@mentions and replies only",
+        "mentions_and_keywords_description": "Get notified only with mentions, replies and keywords as set up in your <a>settings</a>",
         "mentions_keywords": "Mentions and keywords",
         "message_didnt_send": "Message didn't send. Click for info.",
         "mute_description": "You won't get any notifications"
@@ -2433,7 +2415,8 @@
         "warning_kind_files": "This version of %(brand)s does not support viewing some encrypted files",
         "warning_kind_files_app": "Use the <a>Desktop app</a> to see all encrypted files",
         "warning_kind_search": "This version of %(brand)s does not support searching encrypted messages",
-        "warning_kind_search_app": "Use the <a>Desktop app</a> to search encrypted messages"
+        "warning_kind_search_app": "Use the <a>Desktop app</a> to search encrypted messages",
+        "warning_kind_search_partial": "Results may be incomplete because your search index is still being built."
     },
     "setting": {
         "help_about": {
@@ -2764,13 +2747,13 @@
             "room_activity": "New room activity, upgrades and status messages occur",
             "rule_call": "Call invitation",
             "rule_contains_display_name": "Messages containing my display name",
-            "rule_contains_user_name": "Messages containing my username",
+            "rule_contains_user_name": "@mentions and replies",
             "rule_encrypted": "Encrypted messages in group chats",
             "rule_encrypted_room_one_to_one": "Encrypted messages in one-to-one chats",
             "rule_invite_for_me": "When I'm invited to a room",
             "rule_message": "Messages in group chats",
             "rule_room_one_to_one": "Messages in one-to-one chats",
-            "rule_roomnotif": "Messages containing @room",
+            "rule_roomnotif": "@room mentions",
             "rule_suppress_notices": "Messages sent by bot",
             "rule_tombstone": "When rooms are upgraded",
             "show_message_desktop_notification": "Show message in desktop notification",
@@ -2851,7 +2834,6 @@
         "send_typing_notifications": "Send typing notifications",
         "sessions": {
             "best_security_note": "For best security, verify your sessions and remove any session that you don't recognize or use anymore.",
-            "browser": "Browser",
             "confirm_sign_out": {
                 "one": "Confirm removing this device",
                 "other": "Confirm removing these devices"
@@ -2902,7 +2884,6 @@
             "no_sessions": "No sessions found.",
             "no_unverified_sessions": "No unverified sessions found.",
             "no_verified_sessions": "No verified sessions found.",
-            "os": "Operating system",
             "other_sessions_heading": "Other sessions",
             "push_heading": "Push notifications",
             "push_subheading": "Receive push notifications on this session.",
@@ -2995,21 +2976,25 @@
             "audio_output": "Audio Output",
             "audio_output_empty": "No Audio Outputs detected",
             "auto_gain_control": "Automatic gain control",
-            "connection_section": "Connection",
             "dialog_title": "<strong>Settings:</strong> Voice & Video",
             "echo_cancellation": "Echo cancellation",
             "echo_cancellation_description": "Removes echo from your microphone input during calls. This setting also applies to Element Call.",
             "enable_fallback_ice_server": "Allow fallback call assist server (%(server)s)",
             "enable_fallback_ice_server_description": "Only applies if your homeserver does not offer one. Your IP address would be shared during a call.",
+            "enable_legacy_calls": "Enable Legacy voice/video calls",
+            "enable_legacy_calls_description": "Applies to Jitsi and 1:1 WebRTC calls",
             "mirror_local_feed": "Mirror local video feed",
-            "missing_permissions_prompt": "Missing media permissions, click the button below to request.",
+            "missing_permissions_prompt": "To participate in calls, give %(brand)s permission to access your audio and video device.",
             "noise_suppression": "Noise suppression",
             "noise_suppression_description": "Reduces background noise in your microphone input during calls. This setting also applies to Element Call.",
-            "request_permissions": "Request media permissions",
+            "permissions": "Allow microphone and camera access",
+            "request_permissions": "Request",
             "title": "Voice & Video",
             "video_input_empty": "No Webcams detected",
             "video_section": "Video settings",
             "voice_agc": "Automatically adjust the microphone volume",
+            "voice_input_description": "The audio input configured here is used for voice messages and calls (Legacy/1:1).",
+            "voice_input_section": "Audio Input",
             "voice_processing": "Voice processing",
             "voice_section": "Voice settings"
         },
@@ -3549,7 +3534,7 @@
         },
         "redaction": "Message deleted by %(name)s",
         "reply": {
-            "error_loading": "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.",
+            "error_loading": "Unable to load event that was replied to; either it does not exist or you do not have permission to view it.",
             "in_reply_to": "<a>In reply to</a> <pill>",
             "in_reply_to_for_export": "In reply to <a>this message</a>"
         },
@@ -3822,6 +3807,9 @@
         "verification_unavailable": "User verification unavailable",
         "verify_button": "Verify User",
         "verify_explainer": "For extra security, verify this user by checking a one-time code on both of your devices."
+    },
+    "user_status": {
+        "on_a_call": "On a call"
     },
     "voip": {
         "already_in_call": "Already in call",

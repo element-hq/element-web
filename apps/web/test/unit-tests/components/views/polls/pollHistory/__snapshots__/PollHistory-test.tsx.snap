@@ -114,11 +114,13 @@ exports[`<PollHistory /> renders a list of active polls when there are polls in 
           class="mx_PollListItem"
           data-testid="pollListItem-$2"
         >
-          <span
+          <div
+            aria-label="View poll"
+            class="mx_AccessibleButton mx_PollListItemEnded_content"
+            role="button"
             tabindex="0"
           >
             <div
-              aria-labelledby="react-use-id-1"
               class="mx_PollListItem_content"
             >
               <span>
@@ -142,17 +144,19 @@ exports[`<PollHistory /> renders a list of active polls when there are polls in 
                 Where?
               </span>
             </div>
-          </span>
+          </div>
         </li>
         <li
           class="mx_PollListItem"
           data-testid="pollListItem-$1"
         >
-          <span
+          <div
+            aria-label="View poll"
+            class="mx_AccessibleButton mx_PollListItemEnded_content"
+            role="button"
             tabindex="0"
           >
             <div
-              aria-labelledby="react-use-id-2"
               class="mx_PollListItem_content"
             >
               <span>
@@ -176,7 +180,7 @@ exports[`<PollHistory /> renders a list of active polls when there are polls in 
                 Question?
               </span>
             </div>
-          </span>
+          </div>
         </li>
       </ol>
     </div>

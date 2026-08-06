@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import classNames from "classnames";
 import { BaseViewModel } from "@element-hq/web-shared-components";
+import { EventType, MsgType, type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import {
     type EventTileSenderProfileState,
@@ -27,6 +28,7 @@ import {
     type SenderProfileMode,
     type TimestampDisplayState,
 } from "./EventTileDerivedState";
+import { type MemberInfo } from "./DisambiguatedProfileViewModel";
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { type Layout } from "../../../../settings/enums/Layout";
 import { MessageTimestampViewModel, type MessageTimestampViewModelProps } from "./timestamp/MessageTimestampViewModel";
@@ -35,12 +37,15 @@ import {
     type ThreadMessagePreviewViewModelProps,
     ThreadSummaryViewModel,
     type ThreadSummaryViewModelProps,
-} from "./ThreadSummaryViewModel.tsx";
+} from "./ThreadSummaryViewModel";
 import {
     E2eMessageSharedIconViewModel,
     type E2eMessageSharedIconViewModelProps,
 } from "./E2eMessageSharedIconViewModel";
 import { EventPreviewViewModel, type EventPreviewViewModelProps } from "./EventPreviewViewModel";
+import { getEventTileReplyChainState } from "./EventTileReplyChainState";
+import { getEventDisplayInfo } from "../../../../utils/EventRenderingUtils";
+import { haveRendererForEvent } from "../../../../events/EventTileFactory";
 import {
     ThreadListActionBarViewModel,
     type ThreadListActionBarViewModelProps,
@@ -50,6 +55,18 @@ import { ReactionsRowViewModel, type ReactionsRowViewModelProps } from "./reacti
 
 /** Event-level inputs for deriving the EventTile snapshot. */
 export interface EventTileEventInput {
+    /** Whether the event is in a pending send state. */
+    isSending: boolean;
+    /** Whether EventTile should announce updates in an aria-live region. */
+    ariaLive?: "off";
+    /** Whether the event is currently being edited. */
+    isEditing: boolean;
+    /** Whether the tile is rendering for export. */
+    forExport?: boolean;
+}
+
+/** Event-level inputs after SDK data has been converted to pure values. */
+export interface EventTileDerivedEventInput extends EventTileEventInput {
     /** The event type rendered by the tile. */
     eventType: string;
     /** The Matrix message type rendered by the tile. */
@@ -58,24 +75,26 @@ export interface EventTileEventInput {
     eventTs: number;
     /** The stable event identifier, when available. */
     eventId?: string;
+    /** The event identifier replaced by this event, when available. */
+    replacingEventId?: string;
+    /** Whether the event is a state event. */
+    isState: boolean;
     /** Whether the event is a local echo. */
     isLocalEcho: boolean;
-    /** Whether the event is in a pending send state. */
-    isSending: boolean;
-    /** Whether EventTile should announce updates in an aria-live region. */
-    ariaLive?: "off";
     /** Whether the event is a room create event. */
     isRoomCreate: boolean;
     /** Whether the event is a call invite. */
     isCallInvite: boolean;
     /** Whether the event is an RTC notification. */
     isRtcNotification: boolean;
-    /** Whether the event is currently being edited. */
-    isEditing: boolean;
     /** Whether the event failed decryption. */
     isEncryptionFailure: boolean;
-    /** Whether the tile is rendering for export. */
-    forExport?: boolean;
+    /** Whether a renderer is available for the event. */
+    hasRenderer: boolean;
+    /** Whether the event should be rendered through the moderation fallback. */
+    isSeeingThroughMessageHiddenForModeration: boolean;
+    /** Whether EventTile should render the reply chain. */
+    hasReplyChain: boolean;
 }
 
 /** Display inputs for deriving the EventTile snapshot. */
@@ -89,15 +108,15 @@ export interface EventTileDisplayInput {
     /** Whether the event body is likely to render media content. */
     isProbablyMedia: boolean;
     /** Whether the tile should use bubble container styling. */
-    isBubbleMessage: boolean;
+    isBubbleMessage?: boolean;
     /** Whether the bubble tile is left-aligned. */
-    isLeftAlignedBubbleMessage: boolean;
+    isLeftAlignedBubbleMessage?: boolean;
     /** Whether the event is aligned between bubble columns. */
-    isAlignedBetweenBubbles: boolean;
+    isAlignedBetweenBubbles?: boolean;
     /** Whether the event renders as an informational timeline item. */
-    isInfoMessage: boolean;
+    isInfoMessage?: boolean;
     /** Whether bubble styling should be suppressed for this event. */
-    noBubbleEvent: boolean;
+    noBubbleEvent?: boolean;
     /** Whether timestamps use twelve-hour formatting. */
     isTwelveHour?: boolean;
     /** Whether the event should be highlighted. */
@@ -110,6 +129,15 @@ export interface EventTileDisplayInput {
     isLastInSection?: boolean;
     /** Whether the tile is being rendered in contextual mode. */
     isContextual?: boolean;
+}
+
+/** Event display inputs after renderer and event display information has been normalized. */
+export interface EventTileDerivedDisplayInput extends EventTileDisplayInput {
+    isBubbleMessage: boolean;
+    isLeftAlignedBubbleMessage: boolean;
+    isAlignedBetweenBubbles: boolean;
+    isInfoMessage: boolean;
+    noBubbleEvent: boolean;
 }
 
 /** Interaction inputs for deriving the EventTile snapshot. */
@@ -130,8 +158,14 @@ export interface EventTileInteractionInput {
 
 /** Sender inputs for deriving the EventTile snapshot. */
 export interface EventTileSenderInput {
+    /** The Matrix sender ID, when available. */
+    senderId?: string;
+    /** Plain member info for sender/profile rendering. */
+    member: MemberInfo | null;
     /** Whether sender details should be hidden. */
     hideSender?: boolean;
+    /** Whether the event body renders as an emote. */
+    isEmote?: boolean;
 }
 
 /** Timestamp inputs for deriving the EventTile snapshot. */
@@ -172,12 +206,44 @@ export interface EventTileViewModelProps {
     footer: EventTileFooterInput;
 }
 
+/** Pure EventTile inputs after event and sender data has been normalized. */
+export interface NormalizedEventTileViewModelProps {
+    event: EventTileDerivedEventInput;
+    display: EventTileDerivedDisplayInput;
+    interaction: EventTileInteractionInput;
+    sender: EventTileSenderInput;
+    timestamp: EventTileTimestampInput;
+    footer: EventTileFooterInput;
+}
+
+/** Application dependencies used by EventTileViewModel to derive render data. */
+export interface EventTileViewModelDependencies {
+    /** The Matrix event being rendered. */
+    mxEvent: MatrixEvent;
+    /** Matrix client used to select the event renderer. */
+    matrixClient: MatrixClient;
+    /** Whether hidden events should use their fallback renderer. */
+    showHiddenEvents: boolean;
+    /** Whether the event is hidden by the current tile context. */
+    hideEvent?: boolean;
+}
+
 /** Event-level state derived for the EventTile snapshot. */
 export interface EventTileEventSnapshot {
     /** The Matrix event type. */
     eventType: string;
     /** The Matrix message type. */
     msgtype?: string;
+    /** The stable event identifier, when available. */
+    eventId?: string;
+    /** The event identifier replaced by this event, when available. */
+    replacingEventId?: string;
+    /** Whether the event is a state event. */
+    isState: boolean;
+    /** The event origin timestamp. */
+    eventTs: number;
+    /** Whether the event is a local echo. */
+    isLocalEcho: boolean;
     /** Whether the event is in a pending send state. */
     isSending: boolean;
     /** Whether the event is currently being edited. */
@@ -186,6 +252,26 @@ export interface EventTileEventSnapshot {
     isContinuation?: boolean;
     /** Whether the tile is rendering as a notification. */
     isRenderingNotification: boolean;
+    /** Whether the event failed decryption. */
+    isEncryptionFailure: boolean;
+    /** Whether a renderer is available for the event. */
+    hasRenderer: boolean;
+    /** Whether the event should be rendered through the moderation fallback. */
+    isSeeingThroughMessageHiddenForModeration: boolean;
+}
+
+/** Plain data attributes rendered on the EventTile root element. */
+export interface EventTileRootData {
+    /** The event identifier exposed through `data-event-id`. */
+    eventId?: string;
+    /** The configured tile layout exposed through `data-layout`. */
+    layout?: Layout;
+    /** The timeline rendering mode exposed through `data-shape`. */
+    shape: TimelineRenderingType;
+    /** Whether the event belongs to the current user, exposed through `data-self`. */
+    isOwnEvent: boolean;
+    /** Whether EventTile renders a reply chain, exposed through `data-has-reply`. */
+    hasReply: boolean;
 }
 
 /** Root state derived for the EventTile snapshot. */
@@ -194,6 +280,8 @@ export interface EventTileRootSnapshot {
     ariaLive?: "off";
     /** The stable scroll token for the event. */
     scrollToken?: string;
+    /** Plain data attributes used by the EventTile root element. */
+    data: EventTileRootData;
     /** EventTile root CSS class flags. */
     classState: ReturnType<typeof getEventTileClassState>;
 }
@@ -206,6 +294,10 @@ export interface EventTileLineSnapshot {
 
 /** Sender state derived for the EventTile snapshot. */
 export interface EventTileSenderSnapshot {
+    /** The Matrix sender ID, when available. */
+    senderId?: string;
+    /** Plain member info for sender/profile rendering. */
+    member: MemberInfo | null;
     /** EventTile avatar and sender profile display state. */
     profileState: EventTileSenderProfileState;
     /** Whether clicking the avatar should open the user profile. */
@@ -214,6 +306,8 @@ export interface EventTileSenderSnapshot {
     profileMode: SenderProfileMode;
     /** Whether the avatar should use historical room member details. */
     forceHistoricalAvatar: boolean;
+    /** Whether the event body renders as an emote. */
+    isEmote: boolean;
 }
 
 /** Action bar state derived for the EventTile snapshot. */
@@ -275,6 +369,8 @@ export interface EventTileRenderState {
         scrollToken?: string;
         /** Whether the tile is rendering as a notification. */
         isRenderingNotification: boolean;
+        /** Plain data attributes used by the EventTile root element. */
+        data: EventTileRootData;
     };
     /** EventTile line render state. */
     line: {
@@ -306,7 +402,11 @@ export interface EventTileRenderState {
     };
 }
 
-/** Derives the current EventTile snapshot from component-owned inputs. */
+/**
+ * Aggregate application-side render-state boundary for EventTile.
+ *
+ * SDK objects are converted to plain render data here before the existing render tree consumes it.
+ */
 export class EventTileViewModel extends BaseViewModel<EventTileRenderState, EventTileViewModelProps> {
     private messageTimestampViewModel?: MessageTimestampViewModel;
     private linkedMessageTimestampViewModel?: MessageTimestampViewModel;
@@ -318,16 +418,18 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
     private actionBarViewModel?: EventTileActionBarViewModel;
     private reactionsRowViewModel?: ReactionsRowViewModel;
 
-    public constructor(props: EventTileViewModelProps) {
-        const initialRenderState = EventTileViewModel.createRenderState(props);
+    public constructor(dependencies: EventTileViewModelDependencies, props: EventTileViewModelProps) {
+        const normalizedProps = EventTileViewModel.normalizeDependencies(dependencies, props);
+        const initialRenderState = EventTileViewModel.createRenderState(normalizedProps);
 
-        super(props, initialRenderState);
+        super(normalizedProps, initialRenderState);
     }
 
-    /** Updates root EventTile inputs and refreshes the derived render state. */
-    public setProps(props: EventTileViewModelProps): void {
-        this.props = props;
-        this.snapshot.set(EventTileViewModel.createRenderState(props));
+    /** Updates dependencies and root inputs together, emitting one consistent render state. */
+    public setInputs(dependencies: EventTileViewModelDependencies, props: EventTileViewModelProps): void {
+        const normalizedProps = EventTileViewModel.normalizeDependencies(dependencies, props);
+        this.props = normalizedProps;
+        this.snapshot.set(EventTileViewModel.createRenderState(normalizedProps));
     }
 
     public override dispose(): void {
@@ -434,7 +536,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
     }
 
     /** Derives render-ready EventTile state from component-owned inputs. */
-    public static createRenderState(props: EventTileViewModelProps): EventTileRenderState {
+    public static createRenderState(props: NormalizedEventTileViewModelProps): EventTileRenderState {
         const snapshot = EventTileViewModel.createSnapshot(props);
         const useIRCLayout = snapshot.timestamp.displayState.useIRCLayout;
         const showPadlock = !props.display.isBubbleMessage;
@@ -446,6 +548,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
                 ariaLive: snapshot.root.ariaLive,
                 scrollToken: snapshot.root.scrollToken,
                 isRenderingNotification: snapshot.event.isRenderingNotification,
+                data: snapshot.root.data,
             },
             line: {
                 className: classNames("mx_EventTile_line", snapshot.line.classState),
@@ -468,18 +571,78 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
         };
     }
 
+    /**
+     * Derives pure inputs from application dependencies while keeping the VM's public props SDK-free.
+     */
+    private static normalizeDependencies(
+        dependencies: EventTileViewModelDependencies,
+        props: EventTileViewModelProps,
+    ): NormalizedEventTileViewModelProps {
+        const { mxEvent } = dependencies;
+        const eventType = mxEvent.getType();
+        const displayInfo = getEventDisplayInfo(
+            dependencies.matrixClient,
+            mxEvent,
+            dependencies.showHiddenEvents,
+            dependencies.hideEvent,
+        );
+        const replyChainState = getEventTileReplyChainState({
+            mxEvent,
+            // Replacement events have a fallback tile but must not show their own reply chain
+            hasRenderer: haveRendererForEvent(mxEvent, dependencies.matrixClient, dependencies.showHiddenEvents),
+        });
+
+        return {
+            ...props,
+            event: {
+                ...props.event,
+                eventType,
+                msgtype: mxEvent.getContent().msgtype,
+                eventTs: mxEvent.getTs(),
+                eventId: mxEvent.getId() ?? undefined,
+                replacingEventId: mxEvent.replacingEventId() ?? undefined,
+                isState: mxEvent.isState(),
+                isLocalEcho: !!mxEvent.status,
+                isRoomCreate: eventType === EventType.RoomCreate,
+                isCallInvite: eventType === EventType.CallInvite,
+                isRtcNotification: eventType === EventType.RTCNotification,
+                isEncryptionFailure: mxEvent.isDecryptionFailure(),
+                hasRenderer: displayInfo.hasRenderer,
+                isSeeingThroughMessageHiddenForModeration: displayInfo.isSeeingThroughMessageHiddenForModeration,
+                hasReplyChain: replyChainState.shouldShowReplyChain,
+            },
+            display: {
+                ...props.display,
+                ...displayInfo,
+            },
+            sender: {
+                ...props.sender,
+                senderId: mxEvent.getSender() ?? undefined,
+                isEmote: mxEvent.getContent().msgtype === MsgType.Emote,
+            },
+        };
+    }
+
     /** Creates an EventTile view model snapshot. */
-    public static createSnapshot(props: EventTileViewModelProps): EventTileViewModelSnapshot {
+    public static createSnapshot(props: NormalizedEventTileViewModelProps): EventTileViewModelSnapshot {
         const { event, display, interaction, sender, timestamp, footer } = props;
         const isContinuation = getIsContinuation(display.continuation, display.timelineRenderingType, display.layout);
         const isRenderingNotification = display.timelineRenderingType === TimelineRenderingType.Notification;
         const eventSnapshot: EventTileEventSnapshot = {
             eventType: event.eventType,
             msgtype: event.msgtype,
+            eventId: event.eventId,
+            replacingEventId: event.replacingEventId,
+            isState: event.isState,
+            eventTs: event.eventTs,
+            isLocalEcho: event.isLocalEcho,
             isSending: event.isSending,
             isEditing: event.isEditing,
             isContinuation,
             isRenderingNotification,
+            isEncryptionFailure: event.isEncryptionFailure,
+            hasRenderer: event.hasRenderer,
+            isSeeingThroughMessageHiddenForModeration: event.isSeeingThroughMessageHiddenForModeration,
         };
         const senderProfileState = getEventTileSenderProfileState({
             isRenderingNotification,
@@ -518,6 +681,13 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
                     eventId: event.eventId,
                     isLocalEcho: event.isLocalEcho,
                 }),
+                data: {
+                    eventId: event.eventId,
+                    layout: display.layout,
+                    shape: display.timelineRenderingType,
+                    isOwnEvent: footer.isOwnEvent,
+                    hasReply: event.hasReplyChain,
+                },
                 classState: EventTileViewModel.getClassState({
                     event,
                     display,
@@ -539,6 +709,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
                 }),
             },
             sender: {
+                senderId: sender.senderId,
+                member: sender.member ?? null,
                 profileState: senderProfileState,
                 viewUserOnClick: getShouldViewUserOnClick(
                     interaction.inhibitInteraction,
@@ -550,6 +722,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
                     timelineRenderingType: display.timelineRenderingType,
                 }),
                 forceHistoricalAvatar: event.eventType === "m.room.member",
+                isEmote: sender.isEmote ?? false,
             },
             actionBar: {
                 show: getShouldShowMessageActionBar({
@@ -600,8 +773,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
         isContinuation,
         isRenderingNotification,
     }: {
-        event: EventTileEventInput;
-        display: EventTileDisplayInput;
+        event: EventTileDerivedEventInput;
+        display: EventTileDerivedDisplayInput;
         interaction: EventTileInteractionInput;
         sender: EventTileSenderInput;
         eventType: string;

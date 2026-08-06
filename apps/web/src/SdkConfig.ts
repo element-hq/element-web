@@ -30,12 +30,12 @@ export const DEFAULTS = {
     integrations_rest_url: "https://scalar.vector.im/api",
     show_labs_settings: false,
     force_verification: false,
+    enable_client_well_known_lookups: true,
 
     jitsi: {
         preferred_domain: "meet.element.io",
     },
     element_call: {
-        use_exclusively: false,
         brand: "Element Call",
     },
 
@@ -95,6 +95,7 @@ type ObjectType<K extends keyof IConfigOptions> = IConfigOptions[K] extends obje
     ? SnakedObject<NonNullable<IConfigOptions[K]>>
     : SnakedObject<NonNullable<IConfigOptions[K]>> | null | undefined;
 
+// oxlint-disable-next-line typescript/no-extraneous-class
 export default class SdkConfig {
     private static instance: DeepReadonly<IConfigOptions>;
     private static fallback: SnakedObject<DeepReadonly<IConfigOptions>>;

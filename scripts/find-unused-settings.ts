@@ -12,20 +12,24 @@ Please see LICENSE files in the repository root for full details.
 // type-aware usage analysis, but setting names are unique enough in practice.
 
 import * as fs from "node:fs";
-import * as path from "node:path";
+import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
 import ts from "typescript";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const ROOT = path.resolve(__dirname, "..");
+const ROOT = fileURLToPath(import.meta.resolve(".."));
 const SETTINGS_DIR = path.join(ROOT, "apps/web/src/settings");
 const SETTINGS_FILE = path.join(SETTINGS_DIR, "Settings.tsx");
 
-// Only the settings *definitions* directory should be excluded from the usage search -
-// there are plenty of other directories literally named "settings" (e.g.
-// apps/web/src/components/views/settings/) which hold real usages and must stay included.
-const SETTINGS_DIR_RELATIVE = path.relative(ROOT, SETTINGS_DIR);
+const EXCLUDE_GLOBS = [
+    // Only the settings *definitions* directory should be excluded from the usage search -
+    // there are plenty of other directories literally named "settings" (e.g.
+    // apps/web/src/components/views/settings/) which hold real usages and must stay included.
+    "apps/web/src/settings/**",
+    "*/*/test/**",
+    "*-test.*",
+    "*.test.*",
+].map((pattern) => path.relative(ROOT, pattern));
 
 // See https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-error-message
 const SETTINGS_FILE_RELATIVE = path.relative(ROOT, SETTINGS_FILE);
@@ -36,7 +40,7 @@ const SETTINGS_FILE_RELATIVE = path.relative(ROOT, SETTINGS_FILE);
 // search terms, but keep this list as a manual escape hatch for cases the heuristic can't
 // see (e.g. usage mediated through a helper function rather than a literal reference).
 const KNOWN_USED_OVERRIDES = new Set<string>([
-    // e.g. "someSettingName",
+    "test_setting", // only used in tests
 ]);
 
 interface DeclaredSetting {
@@ -151,12 +155,9 @@ function findControllerText(settingValue: ts.Expression, sourceFile: ts.SourceFi
  */
 function isUsedOutsideSettings(searchTerms: string[]): boolean {
     const patternArgs = searchTerms.flatMap((term) => ["-e", term]);
+    const excludeArgs = EXCLUDE_GLOBS.map((term) => `:(exclude)${term}`);
     try {
-        execFileSync(
-            "git",
-            ["grep", "-F", "-q", ...patternArgs, "--", "apps", `:(exclude)${SETTINGS_DIR_RELATIVE}/**`],
-            { cwd: ROOT },
-        );
+        execFileSync("git", ["grep", "-F", "-q", ...patternArgs, "--", "apps", ...excludeArgs], { cwd: ROOT });
         return true;
     } catch (e) {
         if (typeof (e as { status?: number }).status === "number") return false;
@@ -205,7 +206,7 @@ function reportUnused(unused: DeclaredSetting[]): void {
     for (const { name, line } of unused) {
         console.error(`  Settings.tsx:${line}: "${name}"`);
         if (process.env.GITHUB_ACTIONS === "true") {
-            printAnnotation(line, `Setting "${name}" is declared but never used outside ${SETTINGS_DIR_RELATIVE}/`);
+            printAnnotation(line, `Setting "${name}" is declared but never used outside ${EXCLUDE_GLOBS}`);
         }
     }
 }

@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
  * Standard filter identifiers that can be used across implementations.
  * These are stable keys - the view layer maps them to translated labels.
  */
-export type FilterId = "unread" | "people" | "rooms" | "mentions" | "invites";
+export type FilterId = "unread" | "people" | "rooms" | "favourite" | "mentions" | "invites" | "low_priority";
 
 /**
  * A hook to sort the filter IDs by active state.

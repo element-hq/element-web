@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX } from "react";
+import React, { type JSX, useContext } from "react";
 import classNames from "classnames";
 import { SettingsSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { IconButton, Text, Tooltip } from "@vector-im/compound-web";
@@ -20,14 +20,15 @@ import { Action } from "../../../dispatcher/actions";
 import QuickThemeSwitcher from "./QuickThemeSwitcher";
 import Modal from "../../../Modal";
 import DevtoolsDialog from "../dialogs/DevtoolsDialog";
-import { SDKContextClass } from "../../../contexts/SDKContextClass";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 const QuickSettingsButton: React.FC<{
     isPanelCollapsed: boolean;
 }> = ({ isPanelCollapsed = false }) => {
+    const sdkContext = useContext(SDKContext);
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLButtonElement>();
 
-    const currentRoomId = SDKContextClass.instance.roomViewStore.getRoomId();
+    const currentRoomId = sdkContext.roomViewStore.getRoomId();
     const developerModeEnabled = useSettingValue("developerMode");
 
     let contextMenu: JSX.Element | undefined;

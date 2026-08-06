@@ -44,6 +44,23 @@
     "devtools": {
         "toggle_event": "toggle event"
     },
+    "emoji": {
+        "categories": "Categories",
+        "category_activities": "Activities",
+        "category_animals_nature": "Animals & Nature",
+        "category_flags": "Flags",
+        "category_food_drink": "Food & Drink",
+        "category_frequently_used": "Frequently Used",
+        "category_objects": "Objects",
+        "category_smileys_people": "Smileys & People",
+        "category_symbols": "Symbols",
+        "category_travel_places": "Travel & Places",
+        "quick_reactions": "Quick Reactions"
+    },
+    "emoji_picker": {
+        "cancel_search_label": "Cancel search",
+        "emoji_picker": "Emoji picker"
+    },
     "keyboard": {
         "shift": "Shift"
     },
@@ -148,7 +165,9 @@
         "expand_all_sections": "Expand all sections",
         "expand_filters": "Expand filter list",
         "filters": {
+            "favourite": "Favourites",
             "invites": "Invites",
+            "low_priority": "Low priority",
             "mentions": "Mentions",
             "people": "People",
             "rooms": "Rooms",
@@ -230,6 +249,28 @@
             "declined": {
                 "call_declined": "Call declined",
                 "call_declined_by_us": "You declined a call"
+            },
+            "ongoing": {
+                "common": {
+                    "call_started_by": "%(startedByDisplayName)s started a call",
+                    "join_button": "Join"
+                },
+                "dm": {
+                    "call_started": "Call started",
+                    "title": "Call in progress"
+                },
+                "room": {
+                    "join_count": {
+                        "one": "%(count)s joined",
+                        "other": "%(count)s joined"
+                    },
+                    "title": "Group call in progress"
+                }
+            },
+            "tombstone": {
+                "room": {
+                    "title": "Group call ended"
+                }
             },
             "video_call_title": "Video call",
             "voice_call_title": "Voice call"

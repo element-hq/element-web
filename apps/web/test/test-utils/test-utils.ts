@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import EventEmitter from "events";
+import EventEmitter from "node:events";
 import { type MockedObject } from "vitest";
 import {
     MatrixEvent,
@@ -27,7 +27,7 @@ import {
     type IPushRules,
     RelationType,
     JoinRule,
-    type OidcClientConfig,
+    type ValidatedAuthMetadata,
     type GroupCall,
     type EventStatus,
     type ICreateRoomOpts,
@@ -49,6 +49,7 @@ import { EnhancedMap } from "../../src/utils/maps";
 import { type AsyncStoreWithClient } from "../../src/stores/AsyncStoreWithClient";
 import MatrixClientBackedSettingsHandler from "../../src/settings/handlers/MatrixClientBackedSettingsHandler";
 import { vi } from "../setup/adapter.ts";
+import { SDKContextClass } from "../../src/contexts/SDKContextClass.ts";
 
 /**
  * Stub out the MatrixClient, and configure the MatrixClientPeg object to
@@ -76,6 +77,8 @@ export function stubClient(): MatrixClient {
     peg.get = () => client;
     peg.safeGet = () => client;
     MatrixClientBackedSettingsHandler.matrixClient = client;
+    // @ts-ignore
+    SDKContextClass.instance._client = client;
     return client;
 }
 
@@ -363,6 +366,7 @@ export function createTestClient(): MatrixClient {
         setRoomTag: vi.fn().mockResolvedValue({}),
         getExtendedProfileProperty: vi.fn(),
         setExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
+        doesServerSupportExtendedProfiles: vi.fn(),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);
@@ -414,7 +418,6 @@ type MakeEventProps = MakeEventPassThruProps & {
     redacts?: string;
     content: IContent;
     room?: Room["roomId"]; // to-device messages are roomless
-    // eslint-disable-next-line camelcase
     prev_content?: IContent;
     unsigned?: IUnsigned;
     status?: EventStatus;
@@ -663,9 +666,9 @@ export function mkMessage({
 
 export function mkStubRoom(
     roomId: string | null | undefined = null,
-    name?: string | undefined,
-    client?: MatrixClient | undefined,
-    state?: RoomState | undefined,
+    name?: string,
+    client?: MatrixClient,
+    state?: RoomState,
 ): Room {
     const stubTimeline = {
         getEvents: (): MatrixEvent[] => [],
@@ -778,7 +781,7 @@ export function mkRoomState(
 export function mkServerConfig(
     hsUrl: string,
     isUrl: string,
-    delegatedAuthentication?: OidcClientConfig,
+    delegatedAuthentication?: ValidatedAuthMetadata,
 ): ValidatedServerConfig {
     return {
         hsUrl,

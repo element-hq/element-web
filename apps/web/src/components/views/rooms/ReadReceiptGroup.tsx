@@ -108,7 +108,6 @@ export function ReadReceiptGroup({
                 readReceiptPosition = readReceiptMap[userId];
                 if (!readReceiptPosition) {
                     readReceiptPosition = {};
-                    // eslint-disable-next-line react-compiler/react-compiler
                     readReceiptMap[userId] = readReceiptPosition;
                 }
             }

@@ -44,8 +44,8 @@ export interface TestFixtures extends BaseTestFixtures {
     app: ElementAppPage;
 
     crypto: Crypto;
-    room?: { roomId: string };
-    uut?: Locator; // Unit Under Test, useful place to refer a prepared locator
+    room: { roomId: string };
+    uut: Locator; // Unit Under Test, useful place to refer a prepared locator
     botCreateOpts: CreateBotOpts;
     bot: Bot;
     webserver: Webserver;
@@ -93,7 +93,6 @@ export const test = base.extend<TestFixtures>({
         await bot.onTestFinished(testInfo);
     },
 
-    // eslint-disable-next-line no-empty-pattern
     webserver: async ({}, use) => {
         const webserver = new Webserver();
         await use(webserver);

@@ -29,8 +29,10 @@ interface IProps {
     // should there be a cancel button? default: true
     hasCancel?: boolean;
 
-    // The class of the cancel button, only used if a cancel button is
-    // enabled
+    /**
+     * The class of the cancel button, only used if a cancel button is enabled
+     * @default "cancel"
+     */
     cancelButtonClass?: string;
 
     // onClick handler for the cancel button.
@@ -58,6 +60,7 @@ export default class DialogButtons extends React.Component<IProps> {
     public static defaultProps: Partial<IProps> = {
         hasCancel: true,
         disabled: false,
+        cancelButtonClass: "cancel",
     };
 
     private onCancelClick = (event: React.MouseEvent): void => {

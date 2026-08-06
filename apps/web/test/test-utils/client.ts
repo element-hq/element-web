@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import EventEmitter from "events";
+import EventEmitter from "node:events";
 import { type MockedObject } from "vitest";
 import { type MethodLikeKeys, type PropertyLikeKeys } from "jest-mock";
 import { type MockedObjectDeep } from "@vitest/spy";
@@ -188,6 +188,7 @@ export const mockClientMethodsCrypto = (): Partial<
 });
 
 export const mockClientMethodsRooms = (rooms: Room[] = []): Partial<Record<MethodLikeKeys<MatrixClient>, unknown>> => ({
+    getVisibleRooms: vi.fn().mockReturnValue(rooms),
     getRooms: vi.fn().mockReturnValue(rooms),
     getRoom: vi.fn((roomId) => rooms.find((r) => r.roomId === roomId) ?? null),
     isRoomEncrypted: vi.fn(),

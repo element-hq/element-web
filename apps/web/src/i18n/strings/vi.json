@@ -383,7 +383,6 @@
         "encrypted": "Được mã hóa",
         "error": "Lỗi",
         "faq": "Câu hỏi thường gặp",
-        "favourites": "Yêu thích",
         "feedback": "Phản hồi",
         "filter_results": "Lọc kết quả",
         "forward_message": "Chuyển tiếp tin nhắn",
@@ -406,7 +405,6 @@
         "message": "Tin nhắn",
         "message_layout": "Bố cục tin nhắn",
         "microphone": "Micrô",
-        "model": "Mẫu mã",
         "modern": "Hiện đại",
         "mute": "Im lặng",
         "n_members": {
@@ -1170,7 +1168,6 @@
         "experimental_description": "Muốn trải nghiệm? Thử các ý tưởng mới nhất còn đang được phát triển của chúng tôi. Các tính năng này chưa được hoàn thiện, chúng có thể không ổn định, có thể thay đổi, hay bị loại bỏ hoàn toàn. <a>Tìm hiểu thêm</a>.",
         "experimental_section": "Thử trước tính năng mới",
         "feature_wysiwyg_composer_description": "Dùng văn bản giàu tính chất thay cho định dạng Markdown ở thanh soạn tin nhắn.",
-        "group_calls": "Trải nghiệm gọi nhóm mới",
         "group_developer": "Nhà phát triển",
         "group_encryption": "Mã hóa",
         "group_experimental": "Thử nghiệm",
@@ -2115,7 +2112,6 @@
         "send_read_receipts_unsupported": "Máy chủ của bạn không hỗ trợ tắt gửi thông báo đã học.",
         "send_typing_notifications": "Gửi thông báo đang gõ tin nhắn",
         "sessions": {
-            "browser": "Trình duyệt",
             "confirm_sign_out": {
                 "one": "Xác nhận đăng xuất khỏi thiết bị này",
                 "other": "Xác nhận đăng xuất khỏi các thiết bị này"
@@ -2162,7 +2158,6 @@
             "no_sessions": "Không thấy phiên nào.",
             "no_unverified_sessions": "Không thấy phiên chưa xác thực nào.",
             "no_verified_sessions": "Không thấy phiên được xác thực nào.",
-            "os": "Hệ điều hành",
             "other_sessions_heading": "Các phiên khác",
             "push_heading": "Thông báo đẩy",
             "push_subheading": "Nhận thông báo đẩy trong phiên này.",
@@ -2239,7 +2234,6 @@
             "audio_output": "Đầu ra âm thanh",
             "audio_output_empty": "Không phát hiện thấy đầu ra âm thanh",
             "auto_gain_control": "Tự động chiếm quyền điều khiển",
-            "connection_section": "Kết nối",
             "echo_cancellation": "Loại bỏ tiếng vang",
             "enable_fallback_ice_server": "Cho phép máy chủ hỗ trợ cuộc gọi dự phòng (%(server)s)",
             "enable_fallback_ice_server_description": "Chỉ áp dụng nếu máy chủ nhà của bạn không cung cấp. Địa chỉ Internet (IP) của bạn có thể được chia sẻ trong một cuộc gọi.",

@@ -21,6 +21,7 @@ import {
     RoomMember,
     RoomStateEvent,
     SearchResult,
+    User,
 } from "matrix-js-sdk/src/matrix";
 import { type CryptoApi, CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 import { KnownMembership } from "matrix-js-sdk/src/types";
@@ -1130,6 +1131,54 @@ describe("RoomView", () => {
             } satisfies ComposerInsertPayload);
             await expect(promise).rejects.toThrow();
         });
+    });
+
+    it("should handle Action.ViewUser", async () => {
+        await mountRoomView();
+        jest.spyOn(stores.rightPanelStore, "setCards");
+        const member = new User("@user:server");
+        defaultDispatcher.dispatch(
+            {
+                action: Action.ViewUser,
+                member,
+            },
+            true,
+        );
+        expect(stores.rightPanelStore.setCards).toHaveBeenCalledWith([
+            { phase: RightPanelPhases.RoomSummary },
+            { phase: RightPanelPhases.MemberList },
+            { phase: RightPanelPhases.MemberInfo, state: { member } },
+        ]);
+    });
+
+    it("should handle Action.ViewUser with push", async () => {
+        await mountRoomView();
+        jest.spyOn(stores.rightPanelStore, "pushCard");
+        const member = new User("@user:server");
+        defaultDispatcher.dispatch(
+            {
+                action: Action.ViewUser,
+                member,
+                push: true,
+            },
+            true,
+        );
+        expect(stores.rightPanelStore.pushCard).toHaveBeenCalledWith({
+            phase: RightPanelPhases.MemberInfo,
+            state: { member },
+        });
+    });
+
+    it("should handle Action.View3pidInvite", async () => {
+        await mountRoomView();
+        jest.spyOn(stores.rightPanelStore, "showOrHidePhase");
+        defaultDispatcher.dispatch(
+            {
+                action: Action.View3pidInvite,
+            },
+            true,
+        );
+        expect(stores.rightPanelStore.showOrHidePhase).toHaveBeenCalledWith("MemberList");
     });
 
     describe("when there is a RoomView", () => {

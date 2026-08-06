@@ -15,7 +15,6 @@ const E2EE_WK_KEY_DEPRECATED = "im.vector.riot.e2ee";
 export const TILE_SERVER_WK_KEY = new UnstableValue("m.tile_server", "org.matrix.msc3488.tile_server");
 const EMBEDDED_PAGES_WK_PROPERTY = "io.element.embedded_pages";
 
-/* eslint-disable camelcase */
 export interface ICallBehaviourWellKnown {
     widget_build_url?: string;
     ignore_dm?: boolean;
@@ -39,7 +38,6 @@ export interface ITileServerWellKnown {
 export interface IEmbeddedPagesWellKnown {
     home_url?: string;
 }
-/* eslint-enable camelcase */
 
 export function getCallBehaviourWellKnown(matrixClient: MatrixClient): ICallBehaviourWellKnown {
     const clientWellKnown = matrixClient.getClientWellKnown();
@@ -61,7 +59,7 @@ export function getTileServerWellKnown(matrixClient: MatrixClient): ITileServerW
     return tileServerFromWellKnown(matrixClient.getClientWellKnown());
 }
 
-export function tileServerFromWellKnown(clientWellKnown?: IClientWellKnown | undefined): ITileServerWellKnown {
+export function tileServerFromWellKnown(clientWellKnown?: IClientWellKnown): ITileServerWellKnown {
     return clientWellKnown?.[TILE_SERVER_WK_KEY.name] ?? clientWellKnown?.[TILE_SERVER_WK_KEY.altName];
 }
 
