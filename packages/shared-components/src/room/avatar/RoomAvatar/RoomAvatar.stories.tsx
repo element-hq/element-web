@@ -10,6 +10,7 @@ import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useMockedViewModel } from "../../../core/viewmodel";
+import avatarUrl from "../../../../static/element.png";
 import { withViewDocs } from "../../../../.storybook/withViewDocs";
 import { RoomAvatarView, type RoomAvatarViewActions, type RoomAvatarViewSnapshot } from "./RoomAvatarView";
 
@@ -46,7 +47,7 @@ export const Default: Story = {};
 
 export const WithAvatar: Story = {
     args: {
-        urls: ["https://example.com/avatar.png"],
+        urls: [avatarUrl],
     },
 };
 
@@ -61,7 +62,7 @@ export const SpaceRoom: Story = {
 export const Clickable: Story = {
     args: {
         isClickable: true,
-        urls: ["https://example.com/avatar.png"],
+        urls: [avatarUrl],
     },
 };
 
