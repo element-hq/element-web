@@ -106,6 +106,27 @@ export class PlaybackQueue {
         playback.clockInfo.liveData.onUpdate((clock) => this.onPlaybackClock(playback, mxEvent, clock));
     }
 
+    /**
+     * Forget everything the queue knows about an event, for when its playback is about to be destroyed.
+     *
+     * A destroyed Playback still holds its decoded audio and will play if it is asked to, but it has
+     * dropped its listeners by then, so nothing would show it playing and nothing could stop it. The
+     * queue must therefore not be left holding one as somewhere to continue to.
+     *
+     * @param mxEvent - The event whose playback is going away.
+     */
+    public dequeue(mxEvent: MatrixEvent): void {
+        const eventId = mxEvent.getId()!;
+        this.playbacks.delete(eventId);
+        this.playbackIdOrder = this.playbackIdOrder.filter((id) => id !== eventId);
+        this.recentFullPlays.delete(eventId);
+        if (this.currentPlaybackId === eventId) {
+            // Whatever was playing has gone away, so there is nothing left for the next message that
+            // stops to treat as its predecessor.
+            this.currentPlaybackId = null;
+        }
+    }
+
     private onPlaybackStateChange(playback: Playback, mxEvent: MatrixEvent, newState: PlaybackState): void {
         // Remember where the user got to in playback
         const wasLastPlaying = this.currentPlaybackId === mxEvent.getId();
