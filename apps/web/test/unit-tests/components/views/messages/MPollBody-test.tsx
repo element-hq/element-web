@@ -744,6 +744,46 @@ describe("MPollBody", () => {
         expect(options[2].innerHTML).toEqual("new answer 3");
     });
 
+    it("Displays edited content when the edit arrives after the poll has been seen", async () => {
+        const pollEvent = new MatrixEvent({
+            type: M_POLL_START.name,
+            event_id: "$mypoll",
+            room_id: "#myroom:example.com",
+            content: newPollStart(
+                [
+                    { id: "o1", [M_TEXT.name]: "old answer 1" },
+                    { id: "o2", [M_TEXT.name]: "old answer 2" },
+                ],
+                "old question",
+            ),
+        });
+        const renderResult = await newMPollBodyFromEvent(pollEvent, []);
+        expect(renderResult.getByTestId("pollQuestion").textContent).toEqual("old question");
+
+        // The room already knows about the poll by this point, which is the case the test above does
+        // not reach: it replaces the event before anything has had a chance to look at it.
+        const replacingEvent = new MatrixEvent({
+            type: M_POLL_START.name,
+            event_id: "$mypollreplacement",
+            room_id: "#myroom:example.com",
+            content: {
+                "m.new_content": newPollStart([{ id: "n1", [M_TEXT.name]: "new answer 1" }], "new question"),
+            },
+        });
+        act(() => pollEvent.makeReplaced(replacingEvent));
+        // Stands in for the timeline, which re-renders the tile when the event it holds is replaced.
+        renderResult.rerender(
+            <MatrixClientContext.Provider value={mockClient}>
+                <MPollBody {...getMPollBodyPropsFromEvent(pollEvent)} />
+            </MatrixClientContext.Provider>,
+        );
+
+        expect(renderResult.getByTestId("pollQuestion").textContent).toEqual("new question (edited)");
+        const options = renderResult.container.querySelectorAll(".mx_PollOption_optionText");
+        expect(options).toHaveLength(1);
+        expect(options[0].innerHTML).toEqual("new answer 1");
+    });
+
     it("renders a poll with no votes", async () => {
         const votes: MatrixEvent[] = [];
         const { container } = await newMPollBody(votes);
