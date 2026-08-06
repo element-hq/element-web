@@ -62,7 +62,7 @@ describe("<RoomListItemNotificationMenu />", () => {
         const button = screen.getByRole("button", { name: "Notification options" });
         await user.click(button);
 
-        const defaultOption = screen.getByRole("menuitem", { name: "Match default settings" });
+        const defaultOption = screen.getByRole("menuitemradio", { name: "Match default settings" });
         await user.click(defaultOption);
 
         expect(mockCallbacks.onSetRoomNotifState).toHaveBeenCalledWith(RoomNotifState.AllMessages);
@@ -75,7 +75,7 @@ describe("<RoomListItemNotificationMenu />", () => {
         const button = screen.getByRole("button", { name: "Notification options" });
         await user.click(button);
 
-        const allMessagesOption = screen.getByRole("menuitem", { name: "All messages" });
+        const allMessagesOption = screen.getByRole("menuitemradio", { name: "All messages" });
         await user.click(allMessagesOption);
 
         expect(mockCallbacks.onSetRoomNotifState).toHaveBeenCalledWith(RoomNotifState.AllMessagesLoud);
@@ -88,7 +88,7 @@ describe("<RoomListItemNotificationMenu />", () => {
         const button = screen.getByRole("button", { name: "Notification options" });
         await user.click(button);
 
-        const mentionsOption = screen.getByRole("menuitem", { name: "Mentions and keywords" });
+        const mentionsOption = screen.getByRole("menuitemradio", { name: "Mentions and keywords" });
         await user.click(mentionsOption);
 
         expect(mockCallbacks.onSetRoomNotifState).toHaveBeenCalledWith(RoomNotifState.MentionsOnly);
@@ -101,53 +101,68 @@ describe("<RoomListItemNotificationMenu />", () => {
         const button = screen.getByRole("button", { name: "Notification options" });
         await user.click(button);
 
-        const muteOption = screen.getByRole("menuitem", { name: "Mute room" });
+        const muteOption = screen.getByRole("menuitemradio", { name: "Mute room" });
         await user.click(muteOption);
 
         expect(mockCallbacks.onSetRoomNotifState).toHaveBeenCalledWith(RoomNotifState.Mute);
     });
 
-    it("should show check mark next to selected option - AllMessage", async () => {
+    it("should mark selected option as checked via ARIA - AllMessage", async () => {
         const user = userEvent.setup();
         renderMenu(RoomNotifState.AllMessages);
 
         const button = screen.getByRole("button", { name: "Notification options" });
         await user.click(button);
 
-        const defaultOption = screen.getByRole("menuitem", { name: "Match default settings" });
-        expect(defaultOption).toHaveAttribute("aria-selected", "true");
+        const defaultOption = screen.getByRole("menuitemradio", { name: "Match default settings" });
+        expect(defaultOption).toHaveAttribute("aria-checked", "true");
     });
 
-    it("should show check mark next to selected option - AllMessagesLoud", async () => {
+    it("should mark selected option as checked via ARIA - AllMessagesLoud", async () => {
         const user = userEvent.setup();
         renderMenu(RoomNotifState.AllMessagesLoud);
 
         const button = screen.getByRole("button", { name: "Notification options" });
         await user.click(button);
 
-        const allMessagesOption = screen.getByRole("menuitem", { name: "All messages" });
-        expect(allMessagesOption).toHaveAttribute("aria-selected", "true");
+        const allMessagesOption = screen.getByRole("menuitemradio", { name: "All messages" });
+        expect(allMessagesOption).toHaveAttribute("aria-checked", "true");
     });
 
-    it("should show check mark next to selected option - MentionsOnly", async () => {
+    it("should mark selected option as checked via ARIA - MentionsOnly", async () => {
         const user = userEvent.setup();
         renderMenu(RoomNotifState.MentionsOnly);
 
         const button = screen.getByRole("button", { name: "Notification options" });
         await user.click(button);
 
-        const mentionsOption = screen.getByRole("menuitem", { name: "Mentions and keywords" });
-        expect(mentionsOption).toHaveAttribute("aria-selected", "true");
+        const mentionsOption = screen.getByRole("menuitemradio", { name: "Mentions and keywords" });
+        expect(mentionsOption).toHaveAttribute("aria-checked", "true");
     });
 
-    it("should show check mark next to selected option - Mute", async () => {
+    it("should mark selected option as checked via ARIA - Mute", async () => {
         const user = userEvent.setup();
         renderMenu(RoomNotifState.Mute);
 
         const button = screen.getByRole("button", { name: "Notification options" });
         await user.click(button);
 
-        const muteOption = screen.getByRole("menuitem", { name: "Mute room" });
-        expect(muteOption).toHaveAttribute("aria-selected", "true");
+        const muteOption = screen.getByRole("menuitemradio", { name: "Mute room" });
+        expect(muteOption).toHaveAttribute("aria-checked", "true");
+    });
+
+    it("should mark non-selected options as not checked via ARIA", async () => {
+        const user = userEvent.setup();
+        renderMenu(RoomNotifState.AllMessages);
+
+        const button = screen.getByRole("button", { name: "Notification options" });
+        await user.click(button);
+
+        expect(screen.getByRole("menuitemradio", { name: "All messages" })).toHaveAttribute("aria-checked", "false");
+        expect(screen.getByRole("menuitemradio", { name: "Mentions and keywords" })).toHaveAttribute(
+            "aria-checked",
+            "false",
+        );
+        expect(screen.getByRole("menuitemradio", { name: "Mute room" })).toHaveAttribute("aria-checked", "false");
     });
 });
