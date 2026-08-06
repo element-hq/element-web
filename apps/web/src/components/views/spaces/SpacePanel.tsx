@@ -362,7 +362,15 @@ const SpacePanel: React.FC = () => {
     const sdkContext = useContext(SDKContext);
     const client = sdkContext.client!;
     const [dragging, setDragging] = useState(false);
-    const [isPanelCollapsed, setPanelCollapsed] = useState(true);
+    const [isPanelCollapsed, setPanelCollapsedState] = useState(() =>
+        SettingsStore.getValue("Spaces.isPanelCollapsed"),
+    );
+    // Remember how the panel was left so that it comes back the same way, as the room list beside it
+    // already does. Expanding it is a deliberate act, not something to undo on every launch.
+    const setPanelCollapsed = useCallback((collapsed: boolean): void => {
+        setPanelCollapsedState(collapsed);
+        SettingsStore.setValue("Spaces.isPanelCollapsed", null, SettingLevel.DEVICE, collapsed);
+    }, []);
     const ref = useRef<HTMLDivElement>(null);
     useLayoutEffect(() => {
         if (ref.current) UIStore.instance.trackElementDimensions("SpacePanel", ref.current);
