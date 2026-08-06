@@ -11,6 +11,7 @@ import React, { type CSSProperties, memo, type RefObject, type ReactNode } from 
 
 import { useIsExpanded } from "../hooks/useIsExpanded";
 import { useSelection } from "../hooks/useSelection";
+import { _t } from "../../../../../i18n";
 
 const HEIGHT_BREAKING_POINT = 24;
 

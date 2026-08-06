@@ -39,9 +39,10 @@ export default class NonUrgentToastContainer extends React.PureComponent<EmptyOb
     };
 
     public render(): React.ReactNode {
-        const toasts = this.state.toasts.map((t) => {
+        const toasts = this.state.toasts.map((t, i) => {
             return (
-                <div className="mx_NonUrgentToastContainer_toast" key={`toast-${t.key}`}>
+                // oxlint-disable-next-line react/no-array-index-key
+                <div className="mx_NonUrgentToastContainer_toast" key={`toast-${i}`}>
                     {React.createElement(t, {})}
                 </div>
             );

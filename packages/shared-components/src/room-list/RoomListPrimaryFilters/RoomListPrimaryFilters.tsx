@@ -100,9 +100,10 @@ export const RoomListPrimaryFilters = memo(function RoomListPrimaryFilters({
                 className={styles.list}
                 ref={ref}
             >
-                {visibleFilterIds.map((filterId) => (
+                {visibleFilterIds.map((filterId, index) => (
                     <ChatFilter
-                        key={filterId}
+                        // oxlint-disable-next-line react/no-array-index-key
+                        key={`${filterId}-${index}`}
                         role="option"
                         tabIndex={0}
                         aria-selected={filterId === activeFilterId}
