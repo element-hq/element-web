@@ -114,18 +114,16 @@ test.describe("EventTileView application coverage", () => {
             await expect(tile).not.toHaveClass(/mx_EventTile_selected/);
 
             const highlightedEvent = await bot.sendMessage(roomId, {
-                msgtype: "m.text",
-                body: "Highlighted notification",
-                format: "org.matrix.custom.html",
-                formatted_body: `<a href="https://matrix.to/#/${user.userId}">Highlighted notification</a>`,
+                "msgtype": "m.text",
+                "body": "Highlighted notification",
+                "format": "org.matrix.custom.html",
+                "formatted_body": `<a href="https://matrix.to/#/${user.userId}">Highlighted notification</a>`,
                 "m.mentions": {
                     user_ids: [user.userId],
                 },
             });
             if (!["Dendrite", "Pinecone"].includes(testInfo.project.name)) {
-                const highlightedTile = page.locator(
-                    `.mx_EventTile[data-event-id='${highlightedEvent.event_id}']`,
-                );
+                const highlightedTile = page.locator(`.mx_EventTile[data-event-id='${highlightedEvent.event_id}']`);
                 await expect(highlightedTile).toHaveClass(/mx_EventTile_highlight/);
             }
 
@@ -161,11 +159,11 @@ test.describe("EventTileView application coverage", () => {
             await app.client.sendMessage(roomId, "context before");
             const root = await app.client.sendMessage(roomId, "match root link https://example.org");
             const reply = await bot.sendMessage(roomId, {
-                msgtype: "m.text",
-                body: "match threaded reply",
+                "msgtype": "m.text",
+                "body": "match threaded reply",
                 "m.relates_to": {
-                    rel_type: "m.thread",
-                    event_id: root.event_id,
+                    "rel_type": "m.thread",
+                    "event_id": root.event_id,
                     "m.in_reply_to": { event_id: root.event_id },
                 },
             });
@@ -203,14 +201,14 @@ test.describe("EventTileView application coverage", () => {
             });
 
             await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
-            await expect(results.locator(".mx_EventTile:not(.mx_EventTile_contextual)[data-layout='bubble']")).toHaveCount(
-                2,
-            );
+            await expect(
+                results.locator(".mx_EventTile:not(.mx_EventTile_contextual)[data-layout='bubble']"),
+            ).toHaveCount(2);
             await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
             await app.settings.setValue("useCompactLayout", null, SettingLevel.DEVICE, true);
-            await expect(results.locator(".mx_EventTile:not(.mx_EventTile_contextual)[data-layout='group']")).toHaveCount(
-                2,
-            );
+            await expect(
+                results.locator(".mx_EventTile:not(.mx_EventTile_contextual)[data-layout='group']"),
+            ).toHaveCount(2);
         },
     );
 
@@ -235,10 +233,10 @@ test.describe("EventTileView application coverage", () => {
 
                 await app.viewRoomById(parkingRoomId);
                 const notificationEvent = await bot.sendMessage(sourceRoomId, {
-                    msgtype: "m.text",
-                    body: "Notification event",
-                    format: "org.matrix.custom.html",
-                    formatted_body: `<a href="https://matrix.to/#/${user.userId}">Notification event</a>`,
+                    "msgtype": "m.text",
+                    "body": "Notification event",
+                    "format": "org.matrix.custom.html",
+                    "formatted_body": `<a href="https://matrix.to/#/${user.userId}">Notification event</a>`,
                     "m.mentions": {
                         user_ids: [user.userId],
                     },
