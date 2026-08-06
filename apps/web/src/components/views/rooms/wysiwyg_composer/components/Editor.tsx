@@ -38,6 +38,7 @@ export const Editor = memo(function Editor({ disabled, placeholder, leftComponen
                     ref={ref}
                     contentEditable={!disabled}
                     role="textbox"
+                    aria-label={_t("a11y|message_composer")}
                     aria-multiline="true"
                     aria-autocomplete="list"
                     aria-haspopup="listbox"

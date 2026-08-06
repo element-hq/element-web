@@ -16,18 +16,18 @@ describe("KeyboardLandmarkUtils", () => {
     it("Landmarks are cycled through correctly without an opened room", () => {
         render(
             <div>
-                <div tabIndex={0} className="mx_SpaceButton_active" data-testid="mx_SpaceButton_active">
+                <button className="mx_SpaceButton_active" data-testid="mx_SpaceButton_active">
                     SPACE_BUTTON
-                </div>
-                <div tabIndex={0} id="room-list-search-button" data-testid="mx_RoomListSearch_search">
+                </button>
+                <button id="room-list-search-button" data-testid="mx_RoomListSearch_search">
                     ROOM_SEARCH
-                </div>
-                <div tabIndex={0} className="mx_RoomListItemView" data-testid="mx_RoomListItemView">
+                </button>
+                <button className="mx_RoomListItemView" data-testid="mx_RoomListItemView">
                     ROOM_TILE
-                </div>
-                <div tabIndex={0} className="mx_HomePage" data-testid="mx_HomePage">
+                </button>
+                <button className="mx_HomePage" data-testid="mx_HomePage">
                     HOME_PAGE
-                </div>
+                </button>
             </div>,
         );
         // ACTIVE_SPACE_BUTTON <-> ROOM_SEARCH <-> ROOM_LIST <-> HOME <-> ACTIVE_SPACE_BUTTON
@@ -69,21 +69,21 @@ describe("KeyboardLandmarkUtils", () => {
         defaultDispatcher.register(callback);
         render(
             <div>
-                <div tabIndex={0} className="mx_SpaceButton_active" data-testid="mx_SpaceButton_active">
+                <button className="mx_SpaceButton_active" data-testid="mx_SpaceButton_active">
                     SPACE_BUTTON
-                </div>
-                <div tabIndex={0} id="room-list-search-button" data-testid="mx_RoomListSearch_search">
+                </button>
+                <button id="room-list-search-button" data-testid="mx_RoomListSearch_search">
                     ROOM_SEARCH
-                </div>
-                <div tabIndex={0} className="mx_RoomListItemView_selected" data-testid="mx_RoomListItemView_selected">
+                </button>
+                <button className="mx_RoomListItemView_selected" data-testid="mx_RoomListItemView_selected">
                     ROOM_TILE
-                </div>
-                <div tabIndex={0} className="mx_Room" data-testid="mx_Room">
+                </button>
+                <button className="mx_Room" data-testid="mx_Room">
                     ROOM
-                    <div tabIndex={0} className="mx_MessageComposer">
+                    <button tabIndex={0} className="mx_MessageComposer">
                         COMPOSER
-                    </div>
-                </div>
+                    </button>
+                </button>
             </div>,
         );
         // ACTIVE_SPACE_BUTTON <-> ROOM_SEARCH <-> ROOM_LIST <-> MESSAGE_COMPOSER <-> ACTIVE_SPACE_BUTTON

@@ -214,8 +214,8 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
                     autoFocus={this.state.autoFocusTarget === FocusTarget.Topic}
                 />
                 <h2>{_t("poll|options_heading")}</h2>
-                {this.state.options.map((op, i) => (
-                    <div key={`option_${i}`} className="mx_PollCreateDialog_option">
+                {this.state.options.map((op) => (
+                    <div key={op} className="mx_PollCreateDialog_option">
                         <Field
                             id={`pollcreate_option_${i}`}
                             value={op}
