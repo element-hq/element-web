@@ -11,6 +11,8 @@ import path from "node:path";
 import { type Configuration as BaseConfiguration, log } from "electron-builder";
 import { LogMessageByKey } from "app-builder-lib/out/node-module-collector/moduleManager.js";
 
+import { INFO_PLIST_STRINGS_DIR, readBaseUsageDescriptions } from "./scripts/infoplist-strings.js";
+
 /**
  * This script has different outputs depending on your os platform.
  *
@@ -172,11 +174,10 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
         // raise the TCC consent prompt for camera/microphone; without them getUserMedia is denied
         // before the user is ever asked (element-web#32373). The matching device entitlements live
         // in build/entitlements.mac.plist, and the main process triggers the prompt via
-        // systemPreferences.askForMediaAccess in src/media-permissions.ts.
-        extendInfo: {
-            NSCameraUsageDescription: "The camera is used for video calls.",
-            NSMicrophoneUsageDescription: "The microphone is used for voice and video calls.",
-        },
+        // systemPreferences.askForMediaAccess in src/media-permissions.ts. These are the English
+        // source values: macOS prefers the translation in <lang>.lproj/InfoPlist.strings and falls
+        // back here per key, so a locale Localazy has not reached yet still gets a valid prompt.
+        extendInfo: readBaseUsageDescriptions(),
         icon: "build/icon.icon",
         mergeASARs: true,
         x64ArchFiles: "**/matrix-seshat/*.node", // hak already runs lipo
@@ -204,6 +205,15 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
     nativeRebuilder: "sequential",
     nodeGypRebuild: false,
     npmRebuild: true,
+    // macOS resolves the camera/microphone consent-prompt text against
+    // Contents/Resources/<lang>.lproj/InfoPlist.strings for the user's system language, so the
+    // translations have to be inside the bundle rather than loaded at runtime. Copying them once the
+    // .app exists but before it is signed keeps them covered by the signature.
+    afterPack: ({ appOutDir, electronPlatformName, packager }) => {
+        if (electronPlatformName !== "darwin") return;
+        const resourcesDir = path.join(appOutDir, `${packager.appInfo.productFilename}.app`, "Contents", "Resources");
+        fs.cpSync(path.resolve(INFO_PLIST_STRINGS_DIR), resourcesDir, { recursive: true });
+    },
 };
 
 /**

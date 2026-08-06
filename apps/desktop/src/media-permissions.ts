@@ -41,7 +41,6 @@ export function setupMediaPermissions(): void {
                     // OS won't show a prompt, so calling it would be a no-op (and could block needlessly).
                     if (systemPreferences.getMediaAccessStatus(osType) === "not-determined") {
                         // Sequential on purpose: surface one native dialog at a time rather than stacking them.
-                        // eslint-disable-next-line no-await-in-loop
                         await systemPreferences.askForMediaAccess(osType);
                     }
                 }
