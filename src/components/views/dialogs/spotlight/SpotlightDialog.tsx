@@ -220,6 +220,8 @@ const toMemberResult = (member: Member | RoomMember, alreadyFiltered: boolean): 
 
 const recentAlgorithm = new RecentAlgorithm();
 
+// Removed excessive API calling functions - using existing user directory results instead
+
 export const useWebSearchMetrics = (numResults: number, queryLength: number, viaSpotlight: boolean): void => {
     useEffect(() => {
         if (!queryLength) return;
@@ -355,6 +357,8 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
     useDebouncedCallback(filter === Filter.People, searchPeople, searchParams);
     useDebouncedCallback(filter === Filter.People, searchProfileInfo, searchParams);
 
+    // Note: Removed the excessive API calls - we'll use the existing user directory results instead
+
     const possibleResults = useMemo<Result[]>(() => {
         const visibleRooms = findVisibleRooms(cli, msc3946ProcessDynamicPredecessor);
         const roomResults = visibleRooms.map(toRoomResult);
@@ -379,9 +383,21 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         // culling this result based on local filtering.
                         result.alreadyFiltered = true;
                     }
+                    // If this is a DirectoryMember with workspace info, preserve it on the existing result
+                    if (user instanceof DirectoryMember && isMemberResult(result)) {
+                        if (user.isWorkspace()) (result.member as any).workspace = true;
+                        if (user.getDepartment()) (result.member as any).department = user.getDepartment();
+                        if (user.getTitle()) (result.member as any).title = user.getTitle();
+                    }
                     continue;
                 }
                 const result = toMemberResult(user, alreadyFiltered);
+                // If this is a DirectoryMember, copy workspace info to the member
+                if (user instanceof DirectoryMember) {
+                    if (user.isWorkspace()) (result.member as any).workspace = true;
+                    if (user.getDepartment()) (result.member as any).department = user.getDepartment();
+                    if (user.getTitle()) (result.member as any).title = user.getTitle();
+                }
                 alreadyAddedUserIds.set(user.userId, result);
                 userResults.push(result);
             }
@@ -638,6 +654,32 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                     "aria-label": unreadLabel ? `${result.room.name} ${unreadLabel}` : result.room.name,
                     "aria-describedby": `mx_SpotlightDialog_button_result_${result.room.roomId}_details`,
                 };
+
+                // Check if this is a DM room and get workspace info
+                const otherUserId = DMRoomMap.shared().getUserIdForRoomId(result.room.roomId);
+                let workspaceInfo = null;
+                if (otherUserId) {
+                    // Find workspace info from our user directory results or existing member data
+                    const userResult = userDirectorySearchResults.find(u => u.userId === otherUserId);
+                    if (userResult) {
+                        workspaceInfo = {
+                            isWorkspace: userResult.isWorkspace?.(),
+                            department: userResult.getDepartment?.(),
+                            title: userResult.getTitle?.(),
+                        };
+                    } else {
+                        // Check if we have cached workspace info on room members
+                        const roomMember = result.room.getMember(otherUserId);
+                        if (roomMember && (roomMember as any).workspace) {
+                            workspaceInfo = {
+                                isWorkspace: (roomMember as any).workspace,
+                                department: (roomMember as any).department,
+                                title: (roomMember as any).title,
+                            };
+                        }
+                    }
+                }
+
                 return (
                     <Option
                         id={`mx_SpotlightDialog_button_result_${result.room.roomId}`}
@@ -648,14 +690,38 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         endAdornment={<RoomResultContextMenus room={result.room} />}
                         {...ariaProperties}
                     >
-                        <DecoratedRoomAvatar room={result.room} size={AVATAR_SIZE} tooltipProps={{ tabIndex: -1 }} />
-                        {result.room.name}
-                        <NotificationBadge notification={notification} />
-                        <RoomContextDetails
-                            id={`mx_SpotlightDialog_button_result_${result.room.roomId}_details`}
-                            className="mx_SpotlightDialog_result_details"
-                            room={result.room}
-                        />
+                        {workspaceInfo?.isWorkspace ? (
+                            <>
+                                <div style={{ width: "24px", height: "24px", flexShrink: 0 }}>
+                                    <DecoratedRoomAvatar room={result.room} size={AVATAR_SIZE} tooltipProps={{ tabIndex: -1 }} />
+                                </div>
+                                <div style={{ marginLeft: "8px", flex: 1 }}>
+                                    <div>{result.room.name}</div>
+                                    <div className="mx_SpotlightDialog_result_details" style={{ paddingLeft: "0px" }}>
+                                        <div style={{ display: "flex", alignItems: "center" }}>
+                                            <span title="This person is in your organisation" style={{ fontSize: "1.1em", marginRight: "4px" }}>🏢</span>
+                                            <span style={{ fontSize: "0.85em", color: "var(--cpd-color-text-secondary)" }}>
+                                                {workspaceInfo.title && <span>{workspaceInfo.title}</span>}
+                                                {workspaceInfo.title && workspaceInfo.department && <span> • </span>}
+                                                {workspaceInfo.department && <span>{workspaceInfo.department}</span>}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <NotificationBadge notification={notification} />
+                            </>
+                        ) : (
+                            <>
+                                <DecoratedRoomAvatar room={result.room} size={AVATAR_SIZE} tooltipProps={{ tabIndex: -1 }} />
+                                {result.room.name}
+                                <NotificationBadge notification={notification} />
+                                <RoomContextDetails
+                                    id={`mx_SpotlightDialog_button_result_${result.room.roomId}_details`}
+                                    className="mx_SpotlightDialog_result_details"
+                                    room={result.room}
+                                />
+                            </>
+                        )}
                     </Option>
                 );
             }
@@ -673,14 +739,50 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         }
                         aria-describedby={`mx_SpotlightDialog_button_result_${result.member.userId}_details`}
                     >
-                        <SearchResultAvatar user={result.member} size={AVATAR_SIZE} />
-                        {result.member instanceof RoomMember ? result.member.rawDisplayName : result.member.name}
-                        <div
-                            id={`mx_SpotlightDialog_button_result_${result.member.userId}_details`}
-                            className="mx_SpotlightDialog_result_details"
-                        >
-                            {result.member.userId}
-                        </div>
+{(result.member as any).workspace ? (
+                            <>
+                                <div style={{ width: "32px", height: "32px", flexShrink: 0 }}>
+                                    <SearchResultAvatar user={result.member as any} size="32px" />
+                                </div>
+                                <div className="mx_SpotlightDialog_result_info" style={{ marginLeft: "12px", flex: 1 }}>
+                                    <div className="mx_SpotlightDialog_result_name">
+                                        {result.member instanceof RoomMember ? result.member.rawDisplayName : result.member.name}
+                                    </div>
+                                    <div
+                                        id={`mx_SpotlightDialog_button_result_${result.member.userId}_details`}
+                                        className="mx_SpotlightDialog_result_details"
+                                        style={{ marginLeft: "0px" }}
+                                    >
+                                        <div className="mx_SpotlightDialog_result_userId">
+                                            <span title="This person is in your organisation" style={{ fontSize: "1.2em", marginRight: "6px" }}>🏢</span>
+                                            {result.member.userId}
+                                        </div>
+                                        {((result.member as any).title || (result.member as any).department) && (
+                                            <div className="mx_SpotlightDialog_result_workplace" style={{ fontSize: "0.85em", color: "var(--cpd-color-text-secondary)", marginTop: "2px" }}>
+                                                {(result.member as any).title && (
+                                                    <span className="mx_SpotlightDialog_result_title">{(result.member as any).title}</span>
+                                                )}
+                                                {(result.member as any).title && (result.member as any).department && <span> • </span>}
+                                                {(result.member as any).department && (
+                                                    <span className="mx_SpotlightDialog_result_department">{(result.member as any).department}</span>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <SearchResultAvatar user={result.member as any} size={AVATAR_SIZE} />
+                                {result.member instanceof RoomMember ? result.member.rawDisplayName : result.member.name}
+                                <div
+                                    id={`mx_SpotlightDialog_button_result_${result.member.userId}_details`}
+                                    className="mx_SpotlightDialog_result_details"
+                                >
+                                    {result.member.userId}
+                                </div>
+                            </>
+                        )}
                     </Option>
                 );
             }

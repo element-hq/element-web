@@ -112,19 +112,48 @@ export abstract class Member {
      * avatar MXC URL or null if none set. For 3PIDs this should always be undefined.
      */
     public abstract getMxcAvatarUrl(): string | undefined;
+
+    /**
+     * Gets the department of this Member.
+     */    
+    public abstract getDepartment(): string | undefined;
+
+    /**
+     * Gets the title of this Member.
+     */    
+    public abstract getTitle(): string | undefined;
+
+    /**
+     * Gets the github of this Member.
+     */    
+    public abstract getGithub(): string | undefined;
+
+    /**
+     * Gets whether this Member is part of the workspace.
+     */    
+    public abstract isWorkspace(): boolean | undefined;
 }
 
 export class DirectoryMember extends Member {
     private readonly _userId: string;
     private readonly displayName?: string;
     private readonly avatarUrl?: string;
+    private readonly department?: string;
+    private readonly title?: string;
+    private readonly github?: string;
+    private readonly workspace?: boolean;
+
 
     // eslint-disable-next-line camelcase
-    public constructor(userDirResult: { user_id: string; display_name?: string; avatar_url?: string }) {
+    public constructor(userDirResult: { user_id: string; display_name?: string; avatar_url?: string; department?: string; title?: string; github?: string; workspace?: boolean }) {
         super();
         this._userId = userDirResult.user_id;
         this.displayName = userDirResult.display_name;
         this.avatarUrl = userDirResult.avatar_url;
+        this.department = userDirResult.department;
+        this.title = userDirResult.title;
+        this.github = userDirResult.github;
+        this.workspace = userDirResult.workspace;
     }
 
     // These next class members are for the Member interface
@@ -138,6 +167,22 @@ export class DirectoryMember extends Member {
 
     public getMxcAvatarUrl(): string | undefined {
         return this.avatarUrl;
+    }
+
+    public getDepartment(): string | undefined {
+        return this.department;
+    }
+
+    public getTitle(): string | undefined {
+        return this.title;
+    }
+
+    public getGithub(): string | undefined {
+        return this.github;
+    }
+
+    public isWorkspace(): boolean | undefined {
+        return this.workspace;
     }
 }
 
@@ -166,6 +211,22 @@ export class ThreepidMember extends Member {
     }
 
     public getMxcAvatarUrl(): string | undefined {
+        return undefined;
+    }
+
+    public getDepartment(): string | undefined {
+        return undefined;
+    }
+
+    public getTitle(): string | undefined {
+        return undefined;
+    }
+
+    public getGithub(): string | undefined {
+        return undefined;
+    }
+
+    public isWorkspace(): boolean | undefined {
         return undefined;
     }
 }

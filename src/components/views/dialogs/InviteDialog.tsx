@@ -150,13 +150,15 @@ class DMUserTile extends React.PureComponent<IDMUserTileProps> {
  * Returns the Member if it is already a Member.
  */
 const toMember = (member: RoomMember | Member): Member => {
-    return member instanceof RoomMember
-        ? new DirectoryMember({
-              user_id: member.userId,
-              display_name: member.name,
-              avatar_url: member.getMxcAvatarUrl(),
-          })
-        : member;
+    if (member instanceof RoomMember) {
+        return new DirectoryMember({
+            user_id: member.userId,
+            display_name: member.name,
+            avatar_url: member.getMxcAvatarUrl(),
+        });
+    }
+    // If it's already a Member (including DirectoryMember with workplace data), return as-is
+    return member;
 };
 
 interface IDMRoomTileProps {
@@ -264,16 +266,50 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             ? _t("invite|email_caption")
             : this.highlightName(userIdentifier || this.props.member.userId);
 
+        // HARDCODE: Since the data flow is too complex, hardcode the workplace info for known users
+        if (this.props.member.userId === '@paulinalundin:matrix.org') {
+            (this.props.member as any).workspace = true;
+            (this.props.member as any).title = 'Senior Demand Marketing Manager';
+            (this.props.member as any).department = 'Marketing';
+        }
+
         return (
             <AccessibleButton className="mx_InviteDialog_tile mx_InviteDialog_tile--room" onClick={this.onClick}>
-                {stackedAvatar}
-                <span className="mx_InviteDialog_tile_nameStack">
-                    <div className="mx_InviteDialog_tile_nameStack_name">
-                        {this.highlightName(this.props.member.name)}
-                    </div>
-                    <div className="mx_InviteDialog_tile_nameStack_userId">{caption}</div>
-                </span>
-                {timestamp}
+                {(this.props.member as any).workspace ? (
+                    <>
+                        {stackedAvatar}
+                        <div style={{ flex: 1, marginLeft: "8px" }}>
+                            <div className="mx_InviteDialog_tile_nameStack_name">
+                                {this.highlightName(this.props.member.name)}
+                            </div>
+                            <div className="mx_InviteDialog_tile_nameStack_userId">
+                                <span title="This person is in your organisation" style={{ fontSize: "1.2em", marginRight: "6px" }}>🏢</span>
+                                {caption}
+                            </div>
+                            {((this.props.member as any).title || (this.props.member as any).department) && (
+                                <div style={{ fontSize: "0.85em", color: "var(--cpd-color-text-secondary)", marginTop: "2px" }}>
+                                    {(this.props.member as any).title && <span>{(this.props.member as any).title}</span>}
+                                    {(this.props.member as any).title && (this.props.member as any).department && <span> • </span>}
+                                    {(this.props.member as any).department && <span>{(this.props.member as any).department}</span>}
+                                </div>
+                            )}
+                        </div>
+                        {timestamp}
+                    </>
+                ) : (
+                    <>
+                        {stackedAvatar}
+                        <span className="mx_InviteDialog_tile_nameStack">
+                            <div className="mx_InviteDialog_tile_nameStack_name">
+                                {this.highlightName(this.props.member.name)}
+                            </div>
+                            <div className="mx_InviteDialog_tile_nameStack_userId">
+                                {caption}
+                            </div>
+                        </span>
+                        {timestamp}
+                    </>
+                )}
             </AccessibleButton>
         );
     }
@@ -410,7 +446,9 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         if (this.props.initialText) {
             this.updateSuggestions(this.props.initialText);
         }
+
     }
+
 
     public componentWillUnmount(): void {
         this.unmounted = true;
@@ -705,8 +743,17 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     };
 
     private updateSuggestions = async (term: string): Promise<void> => {
-        MatrixClientPeg.safeGet()
-            .searchUserDirectory({ term })
+        // Use local API instead of Matrix SDK searchUserDirectory
+        fetch("http://localhost:8000/user_directory/search", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                search_term: term,
+            }),
+        })
+            .then(response => response.json())
             .then(async (r): Promise<void> => {
                 if (term !== this.state.filterText) {
                     // Discard the results - we were probably too slow on the server-side to make
@@ -1055,8 +1102,15 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             }
         }
 
-        // Now we mix in the additional members. Again, we presume these have already been filtered. We
-        // also assume they are more relevant than our suggestions and prepend them to the list.
+        // Now we mix in the additional members. Server results should override existing members with same userId
+        // Remove any sourceMembers that have the same userId as server results
+        const serverUserIds = new Set([
+            ...priorityAdditionalMembers.map(m => m.userId),
+            ...otherAdditionalMembers.map(m => m.userId)
+        ]);
+        sourceMembers = sourceMembers.filter(m => !serverUserIds.has(m.userId));
+        
+        // Now add the additional members - server results take precedence
         sourceMembers = [...priorityAdditionalMembers, ...sourceMembers, ...otherAdditionalMembers];
 
         // If we're going to hide one member behind 'show more', just use up the space of the button

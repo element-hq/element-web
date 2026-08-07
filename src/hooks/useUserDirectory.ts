@@ -41,10 +41,24 @@ export const useUserDirectory = (): {
 
             try {
                 setLoading(true);
-                const { results } = await MatrixClientPeg.safeGet().searchUserDirectory(opts);
+                const response = await fetch("http://localhost:8000/user_directory/search/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        search_term: opts.term,
+                    }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const { results } = await response.json();
                 updateResult(
                     opts,
-                    results.map((user) => new DirectoryMember(user)),
+                    results.map((user: any) => new DirectoryMember(user)),
                 );
                 return true;
             } catch (e) {
