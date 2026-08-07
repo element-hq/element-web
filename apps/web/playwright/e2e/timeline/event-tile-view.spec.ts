@@ -195,11 +195,7 @@ test.describe("EventTileView application coverage", () => {
         },
     );
 
-    test("renders threaded search information and preserves the shared result link", async ({
-        page,
-        app,
-        bot,
-    }, testInfo) => {
+    test("renders threaded search information and preserves the result link", async ({ page, app, bot }, testInfo) => {
         test.skip(
             ["Dendrite", "Pinecone"].includes(testInfo.project.name),
             "The configured homeserver has server-side search disabled",
@@ -210,7 +206,7 @@ test.describe("EventTileView application coverage", () => {
         await bot.joinRoom(roomId);
 
         const root = await app.client.sendMessage(roomId, "match root");
-        await bot.sendMessage(roomId, "match threaded reply", root.event_id);
+        const reply = await bot.sendMessage(roomId, "match threaded reply", root.event_id);
 
         await app.viewRoomById(roomId);
         await app.toggleRoomInfoPanel();
@@ -219,12 +215,14 @@ test.describe("EventTileView application coverage", () => {
         await search.press("Enter");
 
         const results = page.locator(".mx_RoomView_searchResultsPanel");
-        const replyTile = results.locator(".mx_EventTile", { hasText: "match threaded reply" });
+        const replyTile = results.locator(
+            `.mx_EventTile[data-event-id='${reply.event_id}']:not(.mx_EventTile_contextual)`,
+        );
         await expect(replyTile).toHaveCount(1);
         await expect(replyTile.locator(".mx_ThreadSummary_icon")).toBeVisible();
         await expect(replyTile.locator(".mx_ThreadSummary_icon")).toHaveAttribute(
             "href",
-            `#/room/${roomId}/${root.event_id}`,
+            `#/room/${roomId}/${reply.event_id}`,
         );
 
         const threadSummaries = results.locator(".mx_ThreadSummary");
