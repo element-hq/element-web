@@ -27,6 +27,10 @@
         "yes": "Так"
     },
     "confirm_quit": "Ви впевнені, що хочете вийти?",
+    "download": {
+        "unable_to_open_description": "Не вдалося відкрити файл. Можливо, його було переміщено або видалено.",
+        "unable_to_open_title": "Неможливо відкрити файл"
+    },
     "edit_menu": {
         "speech": "Мовлення",
         "speech_start_speaking": "Почати говорити",
