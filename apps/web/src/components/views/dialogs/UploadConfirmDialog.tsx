@@ -104,7 +104,11 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
 
         let uploadAllButton: JSX.Element | undefined;
         if (this.props.currentIndex + 1 < this.props.totalFiles) {
-            uploadAllButton = <button onClick={this.onUploadAllClick}>{_t("upload_file|upload_all_button")}</button>;
+            uploadAllButton = (
+                <button onClick={this.onUploadAllClick} type="button">
+                    {_t("upload_file|upload_all_button")}
+                </button>
+            );
         }
 
         return (

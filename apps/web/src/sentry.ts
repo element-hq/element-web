@@ -201,6 +201,7 @@ export async function initSentry(sentryConfig: IConfigOptions["sentry"]): Promis
 
     Sentry.init({
         dsn: sentryConfig.dsn,
+        // oxlint-disable-next-line node/no-process-env
         release: process.env.VERSION,
         environment: sentryConfig.environment,
         defaultIntegrations: false,
