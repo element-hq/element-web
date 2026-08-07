@@ -26,6 +26,7 @@ import { type CustomisationsApi } from "./customisations.ts";
 import { type ComposerApi } from "./composer.ts";
 import { type StorageHelperApi } from "./storage-helper.ts";
 import { type SettingsApi } from "./settings.ts";
+import { type ClientCreationManagementApi } from "./client-creation-management.ts";
 
 /**
  * Module interface for modules to implement.
@@ -137,6 +138,12 @@ export interface Api
      * Allows modules to access a limited functionality of certain stores from Element Web.
      */
     readonly stores: StoresApi;
+
+    /**
+     * Allows modules to modify aspects of the way the matrix-js-sdk client is created and configured.
+     * @alpha Subject to change.
+     */
+    readonly clientCreationManagement: ClientCreationManagementApi;
 
     /**
      * Access some very specific functionality from the client.

@@ -29,6 +29,7 @@ import { overwriteAccountAuth } from "./Auth.ts";
 import { ElementWebExtrasApi } from "./ExtrasApi.ts";
 import { ElementWebBuiltinsApi } from "./BuiltinsApi.tsx";
 import { ClientApi } from "./ClientApi.ts";
+import { ClientCreationManagementApi } from "./ClientCreationManagementApi.ts";
 import { StoresApi } from "./StoresApi.ts";
 import { WidgetLifecycleApi } from "./WidgetLifecycleApi.ts";
 import { WidgetApi } from "./WidgetApi.ts";
@@ -95,6 +96,7 @@ export class ModuleApi implements Api {
     public readonly widgetLifecycle = new WidgetLifecycleApi();
     public readonly widget = new WidgetApi();
     public readonly rootNode = document.getElementById("matrixchat")!;
+    public readonly clientCreationManagement = new ClientCreationManagementApi();
     public readonly client = new ClientApi();
     public readonly stores = new StoresApi();
     public readonly composer = new ComposerApi(defaultDispatcher);
