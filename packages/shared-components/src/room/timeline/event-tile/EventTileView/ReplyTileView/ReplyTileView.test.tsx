@@ -1,0 +1,53 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+import React from "react";
+import userEvent from "@testing-library/user-event";
+import { render, screen } from "@test-utils";
+import { describe, expect, it, vi } from "vitest";
+
+import { ReplyTileView } from "./ReplyTileView";
+import styles from "./ReplyTileView.module.css";
+
+describe("ReplyTileView", () => {
+    it("renders the reply link, sender, and content", () => {
+        render(
+            <ReplyTileView href="/room/event" sender={<span>Sender</span>}>
+                <span>Reply content</span>
+            </ReplyTileView>,
+        );
+
+        expect(screen.getByRole("link")).toHaveAttribute("href", "/room/event");
+        expect(screen.getByText("Sender")).toBeInTheDocument();
+        expect(screen.getByText("Reply content")).toBeInTheDocument();
+    });
+
+    it("applies inline and informational modifiers", () => {
+        const { container } = render(
+            <ReplyTileView href="#" inline info>
+                Reply content
+            </ReplyTileView>,
+        );
+
+        expect(container.firstElementChild).toHaveClass(styles.root, styles.inline, styles.info);
+    });
+
+    it("passes clicks to the reply action", async () => {
+        const user = userEvent.setup();
+        const onClick = vi.fn();
+
+        render(
+            <ReplyTileView href="#" onClick={onClick}>
+                Reply content
+            </ReplyTileView>,
+        );
+
+        await user.click(screen.getByRole("link"));
+
+        expect(onClick).toHaveBeenCalledTimes(1);
+    });
+});

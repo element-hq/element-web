@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef } from "react";
-import classNames from "classnames";
 import { type MatrixEvent, MatrixEventEvent, EventType, MsgType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { ReplyTileView } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
@@ -110,11 +110,6 @@ export default class ReplyTile extends React.PureComponent<IProps> {
             );
         }
 
-        const classes = classNames("mx_ReplyTile", {
-            mx_ReplyTile_inline: msgType === MsgType.Emote,
-            mx_ReplyTile_info: isInfoMessage && !mxEvent.isRedacted(),
-        });
-
         let permalink = "#";
         if (this.props.permalinkCreator) {
             permalink = this.props.permalinkCreator.forEvent(mxEvent.getId()!);
@@ -124,14 +119,14 @@ export default class ReplyTile extends React.PureComponent<IProps> {
         const hasOwnSender = isInfoMessage || evType === EventType.RoomCreate;
         if (!hasOwnSender) {
             sender = (
-                <div className="mx_ReplyTile_sender">
+                <>
                     <MemberAvatar member={mxEvent.sender} fallbackUserId={mxEvent.getSender()} size="16px" />
                     <SenderProfile
                         senderId={mxEvent.getSender() ?? undefined}
                         member={roomMemberToMemberInfo(mxEvent.sender)}
                         isEmote={msgType === MsgType.Emote}
                     />
-                </div>
+                </>
             );
         }
 
@@ -149,31 +144,35 @@ export default class ReplyTile extends React.PureComponent<IProps> {
         };
 
         return (
-            <div className={classes}>
-                <a href={permalink} onClick={this.onClick} ref={this.anchorElement}>
-                    {sender}
-                    {renderReplyTile(
-                        {
-                            ...this.props,
+            <ReplyTileView
+                href={permalink}
+                onClick={this.onClick}
+                ref={this.anchorElement}
+                inline={msgType === MsgType.Emote}
+                info={isInfoMessage && !mxEvent.isRedacted()}
+                sender={sender}
+            >
+                {renderReplyTile(
+                    {
+                        ...this.props,
 
-                            // overrides
-                            ref: undefined,
-                            showUrlPreview: false,
-                            overrideBodyTypes: msgtypeOverrides,
-                            overrideEventTypes: evOverrides,
-                            maxImageHeight: 96,
-                            isSeeingThroughMessageHiddenForModeration,
+                        // overrides
+                        ref: undefined,
+                        showUrlPreview: false,
+                        overrideBodyTypes: msgtypeOverrides,
+                        overrideEventTypes: evOverrides,
+                        maxImageHeight: 96,
+                        isSeeingThroughMessageHiddenForModeration,
 
-                            // appease TS
-                            highlights: this.props.highlights,
-                            highlightLink: this.props.highlightLink,
-                            permalinkCreator: this.props.permalinkCreator,
-                            showHiddenEvents: false,
-                        },
-                        false /* showHiddenEvents shouldn't be relevant */,
-                    )}
-                </a>
-            </div>
+                        // appease TS
+                        highlights: this.props.highlights,
+                        highlightLink: this.props.highlightLink,
+                        permalinkCreator: this.props.permalinkCreator,
+                        showHiddenEvents: false,
+                    },
+                    false /* showHiddenEvents shouldn't be relevant */,
+                )}
+            </ReplyTileView>
         );
     }
 }

@@ -1,0 +1,122 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.root {
+    position: relative;
+    padding: 2px 0;
+    font: var(--cpd-font-body-md-regular);
+
+    > a {
+        display: grid;
+        grid-template:
+            "sender" auto
+            "message" auto
+            / 100%;
+        text-decoration: none;
+        color: var(--cpd-color-text-secondary);
+        transition: color ease 0.15s;
+        gap: 2px;
+        max-width: 100%;
+
+        &:hover {
+            color: var(--cpd-color-text-primary);
+        }
+    }
+
+    :global(.mx_RedactedBody) {
+        line-height: 1.125rem;
+    }
+
+    :global(.mx_RedactedBody),
+    :global(.mx_HiddenBody) {
+        padding: 4px 0 2px 20px;
+
+        &::before {
+            height: 13px;
+            width: 13px;
+            top: 3px;
+        }
+    }
+
+    :global(.mx_EventTile_content) {
+        grid-area: message;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+
+        :global(.mx_EventTile_body.mx_EventTile_bigEmoji) {
+            line-height: 1.375rem !important;
+            font-size: 0.875rem !important;
+        }
+
+        :global(.mx_EventTile_body) {
+            display: inline;
+        }
+
+        :global([data-textual-body-annotation-wrapper]) {
+            display: contents;
+        }
+
+        :global(.mx_EventTile_lineNumbers),
+        :global([data-textual-body-edited-marker]) {
+            display: none;
+        }
+
+        :global(.mx_EventTile_pre_container > pre) {
+            overflow-x: scroll;
+            overflow-y: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            padding: 4px;
+        }
+
+        :global(.markdown-body blockquote),
+        :global(.markdown-body dl),
+        :global(.markdown-body ol),
+        :global(.markdown-body p),
+        :global(.markdown-body pre),
+        :global(.markdown-body table),
+        :global(.markdown-body ul) {
+            margin-bottom: 4px;
+        }
+    }
+}
+
+.inline > a {
+    grid-template:
+        "sender        message" auto
+        / max-content auto;
+    gap: 4px;
+}
+
+.info {
+    padding-top: 0;
+}
+
+.sender {
+    grid-area: sender;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    :global(.mx_DisambiguatedProfile) {
+        font: var(--cpd-font-body-md-regular);
+        display: inline-block;
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    :global(.mx_BaseAvatar) {
+        flex-shrink: 0;
+    }
+}
