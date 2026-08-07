@@ -266,11 +266,11 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             ? _t("invite|email_caption")
             : this.highlightName(userIdentifier || this.props.member.userId);
 
-        // HARDCODE: Since the data flow is too complex, hardcode the workplace info for known users
-        if (this.props.member.userId === '@paulinalundin:matrix.org') {
+        // HARDCODE: Since the data flow is too complex, hardcode the workplace info for known users - I think this was just for the invite dialog box, when I was trying to trial and error it to work
+        if (this.props.member.userId === '@XXX:matrix.org') {
             (this.props.member as any).workspace = true;
-            (this.props.member as any).title = 'Senior Demand Marketing Manager';
-            (this.props.member as any).department = 'Marketing';
+            (this.props.member as any).title = 'JOB TITLE';
+            (this.props.member as any).department = 'DEPARTMENT';
         }
 
         return (
