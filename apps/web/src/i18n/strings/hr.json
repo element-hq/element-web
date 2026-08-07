@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Birač emotikona",
         "jump_first_invite": "Skoči na prvu pozivnicu.",
         "message_composer": "Sastavljač poruka",
         "n_unread_messages": {
@@ -928,22 +927,6 @@
     },
     "dialog_close_label": "Zatvori dijaloški okvir",
     "download_completed": "Preuzimanje je dovršeno",
-    "emoji": {
-        "categories": "Kategorije",
-        "category_activities": "Aktivnosti",
-        "category_animals_nature": "Životinje i priroda",
-        "category_flags": "Zastave",
-        "category_food_drink": "Hrana i piće",
-        "category_frequently_used": "Često korišteno",
-        "category_objects": "Predmeti",
-        "category_smileys_people": "Smješkići i ljudi",
-        "category_symbols": "Simboli",
-        "category_travel_places": "Putovanje i mjesta",
-        "quick_reactions": "Brze reakcije"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Otkaži pretraživanje"
-    },
     "empty_room": "Prazna soba",
     "empty_room_was_name": "Prazna soba (bila je %(oldName)s)",
     "encryption": {

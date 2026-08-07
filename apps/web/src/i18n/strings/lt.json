@@ -485,22 +485,6 @@
     },
     "dialog_close_label": "Uždaryti dialogą",
     "download_completed": "Atsisiuntimas baigtas",
-    "emoji": {
-        "categories": "Kategorijos",
-        "category_activities": "Veikla",
-        "category_animals_nature": "Gyvūnai & Gamta",
-        "category_flags": "Vėliavos",
-        "category_food_drink": "Maistas & Gėrimai",
-        "category_frequently_used": "Dažnai Naudojama",
-        "category_objects": "Objektai",
-        "category_smileys_people": "Šypsenėlės ir Žmonės",
-        "category_symbols": "Simboliai",
-        "category_travel_places": "Kelionės & Vietovės",
-        "quick_reactions": "Greitos Reakcijos"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Atšaukti paiešką"
-    },
     "empty_room": "Tuščias kambarys",
     "empty_room_was_name": "Tuščias kambarys (buvo %(oldName)s)",
     "encryption": {
