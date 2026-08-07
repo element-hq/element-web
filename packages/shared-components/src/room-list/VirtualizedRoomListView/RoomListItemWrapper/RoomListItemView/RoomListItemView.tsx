@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, memo, useEffect, useRef, useState, type ReactNode, type Ref } from "react";
+import React, { type JSX, memo, useCallback, useEffect, useRef, useState, type ReactNode, type Ref } from "react";
 import classNames from "classnames";
 import { useMergeRefs } from "react-merge-refs";
 
@@ -188,11 +188,26 @@ export const RoomListItemView = memo(function RoomListItemView({
     // browser's own :focus-visible determination) and keep it set until focus leaves the row entirely.
     const [keyboardActive, setKeyboardActive] = useState(false);
 
+    // The hover menu is mounted on demand rather than rendered for every row and hidden with CSS,
+    // because its icon buttons carry label tooltips, and a mounted tooltip costs a subtree, a portal
+    // and a Floating-UI context each.
+    const [pointerOver, setPointerOver] = useState(false);
+    // Counted rather than held as a boolean: both menus report into it, and a boolean would take
+    // either one's close as meaning neither is open.
+    const [openMenus, setOpenMenus] = useState(0);
+    const onMenuOpenChange = useCallback(
+        (open: boolean) => setOpenMenus((count) => Math.max(0, count + (open ? 1 : -1))),
+        [],
+    );
+
     useEffect(() => {
         if (isFocused) {
             internalRef.current?.focus({ preventScroll: true });
         }
     }, [isFocused]);
+
+    const onMouseMove = (): void => setPointerOver(true);
+    const onMouseLeave = (): void => setPointerOver(false);
 
     const onItemFocus = (e: React.FocusEvent<HTMLButtonElement>): void => {
         onFocus(item.id, e);
@@ -236,11 +251,20 @@ export const RoomListItemView = memo(function RoomListItemView({
                 onClick={vm.onOpenRoom}
                 onFocus={onItemFocus}
                 onBlur={onItemBlur}
+                // `mousemove` rather than `mouseenter`, which a list scrolling under a stationary
+                // cursor fires for every row it passes.
+                onMouseMove={onMouseMove}
+                onMouseLeave={onMouseLeave}
                 tabIndex={isFocused ? 0 : -1}
                 aria-selected={props.role === "option" ? isSelected : undefined}
                 {...props}
             >
-                <RoomListItemContent vm={vm} renderAvatar={renderAvatar} />
+                <RoomListItemContent
+                    vm={vm}
+                    renderAvatar={renderAvatar}
+                    showHoverMenu={pointerOver || keyboardActive || openMenus > 0}
+                    onMenuOpenChange={onMenuOpenChange}
+                />
             </Flex>
         </RoomListItemContextMenu>
     );

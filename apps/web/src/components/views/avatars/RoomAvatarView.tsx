@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { memo, type JSX } from "react";
+import React, { memo, useCallback, useMemo, useState, type JSX } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import PublicIcon from "@vector-im/compound-design-tokens/assets/web/icons/public";
 import VideoIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
@@ -35,6 +35,17 @@ interface RoomAvatarViewProps {
  */
 export const RoomAvatarView = memo(function RoomAvatarView({ room }: RoomAvatarViewProps): JSX.Element {
     const vm = useRoomAvatarViewModel(room);
+    // Mounted on demand because a room list holds hundreds of rows, and a mounted tooltip costs a
+    // subtree, a portal and a Floating-UI context each. The icons carry their own `aria-label`,
+    // so the accessible name survives unmounting.
+    const [pointerOver, setPointerOver] = useState(false);
+    const onMouseMove = useCallback(() => setPointerOver(true), []);
+    const onMouseLeave = useCallback(() => setPointerOver(false), []);
+    // Where the pointer cannot hover there is nothing to gate on, and Compound reveals the tooltip on
+    // a touch long press through a handler on its own anchor, so gating would leave the label
+    // unreachable.
+    const canHover = useMemo(() => window.matchMedia("(hover: hover)").matches, []);
+
     // No decoration, we just show the avatar
     if (!vm.badgeDecoration) return <RoomAvatar size="32px" room={room} />;
 
@@ -49,9 +60,15 @@ export const RoomAvatarView = memo(function RoomAvatarView({ room }: RoomAvatarV
             : "mx_RoomAvatarView_RoomAvatar_icon";
 
     return (
-        <Flex className="mx_RoomAvatarView">
+        <Flex
+            className="mx_RoomAvatarView"
+            // `mousemove` rather than `mouseenter`, which a list scrolling under a stationary cursor
+            // fires for every row it passes.
+            onMouseMove={onMouseMove}
+            onMouseLeave={onMouseLeave}
+        >
             <RoomAvatar className={classNames("mx_RoomAvatarView_RoomAvatar", maskClass)} size="32px" room={room} />
-            {label ? <Tooltip label={label}>{icon}</Tooltip> : icon}
+            {label && (pointerOver || !canHover) ? <Tooltip label={label}>{icon}</Tooltip> : icon}
         </Flex>
     );
 });
