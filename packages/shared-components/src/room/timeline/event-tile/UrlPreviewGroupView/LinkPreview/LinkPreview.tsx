@@ -178,6 +178,7 @@ export function LinkPreviewExpanded(preview: LinkPreviewProps): JSX.Element {
                     className={styles.preview}
                     onClick={createImageClickHandler(preview)}
                     aria-label={_t("timeline|url_preview|view_image")}
+                    type="button"
                 />
             );
         }

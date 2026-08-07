@@ -15,7 +15,7 @@ export default {
         "packages/shared-components": {
             entry: ["src/index.ts!", "scripts/**"],
             project: [
-                "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}!",
+                "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,mdx,pcss}!",
                 "!scripts/**!",
                 "!src/test/**!",
                 "!src/**/test-*!",
@@ -25,7 +25,7 @@ export default {
         "packages/playwright-common": {
             entry: ["src/fixtures/index.ts!", "src/testcontainers/index.ts!"],
             project: [
-                "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}!",
+                "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!",
                 "!src/flaky-reporter.ts!",
                 "!src/stale-screenshot-reporter.ts!",
             ],
@@ -47,7 +47,7 @@ export default {
                 "test/**",
                 "res/decoder-ring/**",
                 "res/jitsi_external_api.min.js",
-                "res/themes/*/css/*.pcss",
+                "res/themes/*/css/*.pcss!",
                 "I18nWebpackPlugin.ts!",
                 "module_system/**!",
                 // Keep for now
@@ -60,7 +60,7 @@ export default {
                 "src/stores/LifecycleStore.ts!",
             ],
             project: [
-                "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}!",
+                "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!",
                 "!scripts/**!",
                 "!src/test/**!",
                 "!recorder-worklet-loader.cjs!",
@@ -84,7 +84,7 @@ export default {
         },
         "apps/desktop": {
             entry: ["src/preload.cts!", "electron-builder.ts!", "scripts/**", "hak/**"],
-            project: ["**/*.{js,ts}"],
+            project: ["**/*.{js,ts,pcss}"],
             ignoreDependencies: [
                 // Brought in via hak scripts
                 "matrix-seshat",
@@ -99,11 +99,11 @@ export default {
             ],
         },
         "modules": {
-            project: ["**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}!", "!playwright/**!"],
+            project: ["**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!", "!playwright/**!"],
         },
         "modules/*": {
             entry: ["src/index.ts{x,}!"],
-            project: ["**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}!", "!src/tests/**!", "!e2e/**!"],
+            project: ["**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!", "!src/tests/**!", "!e2e/**!"],
         },
         ".": {
             entry: ["scripts/**", "docs/**"],

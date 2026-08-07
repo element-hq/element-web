@@ -292,6 +292,15 @@ describe("EventTile", () => {
             expect(getTile(container)).toContainElement(getLine(container));
         });
 
+        it("preserves the existing root and line markup", () => {
+            const { container } = getComponent();
+            const tile = getTile(container);
+
+            expect(tile.tagName).toBe("LI");
+            expect(tile).toContainElement(getLine(container));
+            expect(getLine(container)).toHaveClass("mx_EventTile_line");
+        });
+
         it("does not expose a scroll token for local echo events", () => {
             const localEcho = makeOwnMessage();
             localEcho.setStatus(EventStatus.SENDING);
