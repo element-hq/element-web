@@ -26,7 +26,7 @@ exports[`UrlPreviewGroupViewModel should handle being hidden and shown by the us
   "overPreviewLimit": false,
   "previews": [],
   "previewsLimited": true,
-  "totalPreviewCount": 1,
+  "totalPreviewCount": 0,
 }
 `;
 
@@ -56,7 +56,7 @@ exports[`UrlPreviewGroupViewModel should hide preview when invisible 1`] = `
   "overPreviewLimit": false,
   "previews": [],
   "previewsLimited": true,
-  "totalPreviewCount": 1,
+  "totalPreviewCount": 0,
 }
 `;
 
@@ -65,7 +65,7 @@ exports[`UrlPreviewGroupViewModel should ignore failed previews 1`] = `
   "overPreviewLimit": false,
   "previews": [],
   "previewsLimited": true,
-  "totalPreviewCount": 1,
+  "totalPreviewCount": 0,
 }
 `;
 

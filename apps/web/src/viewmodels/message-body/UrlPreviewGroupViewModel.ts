@@ -169,34 +169,35 @@ export class UrlPreviewGroupViewModel
         }
 
         const loadMedia = this.visibility === PreviewVisibility.Visible;
-        let previews: (UrlPreview | null)[] | undefined;
+        let previews: UrlPreview[] | undefined;
 
         if (this.visibility <= PreviewVisibility.UserHidden) {
             previews = [];
         }
 
         const content = this.props.mxEvent.getContent();
-        if (content.msgtype === MsgType.Text && this.props.urlPreviewBundleEnabled) {
+        if (previews === undefined && content.msgtype === MsgType.Text && this.props.urlPreviewBundleEnabled) {
             const messageContent = content as RoomMessageEventContent;
 
             if (messageContent[BUNDLED_LINK_PREVIEWS] !== undefined) {
-                previews = messageContent[BUNDLED_LINK_PREVIEWS]
-                    .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
-                    .map((preview) => this.fetcher.previewFromBundle(preview));
+                previews = messageContent[BUNDLED_LINK_PREVIEWS].map((preview) =>
+                    this.fetcher.previewFromBundle(preview),
+                );
             }
         }
 
-        previews ??= await Promise.all(
-            this.links
-                .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
-                .map((link) => this.fetcher.fetchPreview(link, loadMedia)),
+        // Resolve every link, including the ones the limit would hide: a link the server
+        // cannot preview renders nothing at all, so counting links rather than previews
+        // offers to expand a group whose hidden entries do not exist.
+        previews ??= (await Promise.all(this.links.map((link) => this.fetcher.fetchPreview(link, loadMedia)))).filter(
+            (p) => !!p,
         );
 
         this.snapshot.merge({
-            previews: previews.filter((p) => !!p),
-            totalPreviewCount: this.links.length,
+            previews: this.limitPreviews ? previews.slice(0, MAX_PREVIEWS_WHEN_LIMITED) : previews,
+            totalPreviewCount: previews.length,
             previewsLimited: this.limitPreviews,
-            overPreviewLimit: this.links.length > MAX_PREVIEWS_WHEN_LIMITED,
+            overPreviewLimit: previews.length > MAX_PREVIEWS_WHEN_LIMITED,
         });
     }
 
