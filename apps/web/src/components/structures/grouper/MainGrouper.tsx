@@ -97,8 +97,11 @@ export class MainGrouper extends BaseGrouper {
             if (!hasText(ev, MatrixClientPeg.safeGet(), this.panel.showHiddenEvents)) return;
         }
         this.readMarker = this.readMarker || this.panel.readMarkerForEvent(ev.getId()!, ev === this.lastShownEvent);
-        if (!this.panel.showHiddenEvents && !shouldShow) {
-            // absorb hidden events to not split the summary
+        if (!shouldShow) {
+            // Absorb hidden events so they do not split the summary, but never render them. Once
+            // hidden events are being shown, shouldShowEvent() only returns false for an event
+            // filtered out of the timeline altogether — an ignored sender, or a message that
+            // belongs to a thread — and a developer setting must not bring those back.
             return;
         }
 
