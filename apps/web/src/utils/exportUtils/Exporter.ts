@@ -137,6 +137,29 @@ export default abstract class Exporter {
         return limit;
     }
 
+    /**
+     * The events of the current timeline, in timestamp order.
+     *
+     * Thread replies are kept out of the room's live timeline, so reading that alone exports the
+     * thread roots and none of the conversation under them. The other export types go through
+     * `/messages`, which returns thread replies with everything else.
+     */
+    private getCurrentTimelineEvents(): MatrixEvent[] {
+        const events = [...this.room.getLiveTimeline().getEvents()];
+        const seen = new Set(events.map((ev) => ev.getId()));
+
+        for (const thread of this.room.getThreads()) {
+            for (const ev of thread.liveTimeline.getEvents()) {
+                // The root lives in both timelines.
+                if (seen.has(ev.getId())) continue;
+                seen.add(ev.getId());
+                events.push(ev);
+            }
+        }
+
+        return events.sort((a, b) => a.getTs() - b.getTs());
+    }
+
     protected async getRequiredEvents(): Promise<MatrixEvent[]> {
         const eventMapper = this.room.client.getEventMapper();
 
@@ -144,7 +167,7 @@ export default abstract class Exporter {
 
         let events: MatrixEvent[] = [];
         if (this.exportType === ExportType.Timeline) {
-            events = this.room.getLiveTimeline().getEvents();
+            events = this.getCurrentTimelineEvents();
         } else {
             let limit = this.getLimit();
             while (limit) {
