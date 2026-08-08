@@ -31,6 +31,22 @@ describe("MessageEventPreview", () => {
             expect(preview.getTextFor(event)).toBeNull();
         });
 
+        it("when called with an undecryptable event should return the same wording as the timeline", () => {
+            const event = mkEvent({
+                event: true,
+                content: {
+                    msgtype: "m.bad.encrypted",
+                    body: "** Unable to decrypt: The sender's device has not sent us the keys for this message. **",
+                },
+                user: userId,
+                room: "!room:example.com",
+                type: "m.room.message",
+            });
+            jest.spyOn(event, "isDecryptionFailure").mockReturnValue(true);
+
+            expect(preview.getTextFor(event)).toBe(`${userId}: Unable to decrypt message`);
+        });
+
         it("when called with an event with empty body should return null", () => {
             const event = mkEvent({
                 event: true,
