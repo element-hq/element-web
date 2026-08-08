@@ -13,6 +13,7 @@ import { checkBlockNode } from "../HtmlUtils";
 import { getPrimaryPermalinkEntity } from "../utils/permalinks/Permalinks";
 import { type Part, type PartCreator, Type } from "./parts";
 import SdkConfig from "../SdkConfig";
+import Markdown from "../Markdown";
 import { textToHtmlRainbow } from "../utils/colour";
 import { stripPlainReply } from "../utils/Reply";
 
@@ -21,6 +22,21 @@ const LIST_TYPES = ["UL", "OL", "LI"];
 // Escapes all markup in the given text
 function escape(text: string): string {
     return text.replace(/[\\*_[\]`<]|^>/g, (match) => `\\${match}`);
+}
+
+/**
+ * Whether a body which was sent as plain text has to be escaped to survive a round trip through the
+ * composer. A body the markdown parser would leave alone comes back out of the composer unchanged
+ * whether or not it was escaped, so escaping it only adds backslashes the sender never typed.
+ *
+ * @param body - The plain text body of the event being opened for editing.
+ * @returns True if the body has to be escaped to be preserved.
+ */
+function needsEscaping(body: string): boolean {
+    // A backslash is markup in its own right once the body goes back through the parser, so a body
+    // containing one has to be escaped even when nothing else in it is markup.
+    if (body.includes("\\")) return true;
+    return !new Markdown(body).isPlainText();
 }
 
 // Finds the length of the longest backtick sequence in the given text, used for
@@ -300,7 +316,10 @@ export function parseEvent(event: MatrixEvent, pc: PartCreator, opts: IParseOpti
         if (event.replyEventId) {
             body = stripPlainReply(body);
         }
-        parts = parsePlainTextMessage(body, pc, opts);
+        parts = parsePlainTextMessage(body, pc, {
+            ...opts,
+            shouldEscape: opts.shouldEscape && needsEscaping(body),
+        });
     }
 
     if (isEmote && isRainbow) {
