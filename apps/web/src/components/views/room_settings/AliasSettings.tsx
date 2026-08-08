@@ -14,7 +14,7 @@ import React, {
     createRef,
     type SyntheticEvent,
 } from "react";
-import { type MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, EventType, MatrixError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type RoomCanonicalAliasEventContent } from "matrix-js-sdk/src/types";
 
@@ -74,6 +74,26 @@ class EditableAliasesList extends EditableItemList<IEditableAliasesListProps> {
                 </AccessibleButton>
             </form>
         );
+    }
+}
+
+/**
+ * Turn a failure from `createAlias` into something that says what to do about it. The generic
+ * message covers a genuinely unknown failure, but the common ones - the address is taken, it is
+ * malformed, or the server will not let this user publish it - are all recoverable and the user
+ * cannot act on "it may not be allowed by the server or a temporary failure occurred".
+ */
+export function getAliasCreationErrorMessage(err: unknown): string {
+    switch (err instanceof MatrixError ? err.errcode : undefined) {
+        case "M_ROOM_IN_USE":
+            return _t("room_settings|general|error_creating_alias_description_in_use");
+        case "M_INVALID_PARAM":
+            return _t("room_settings|general|error_creating_alias_description_invalid");
+        case "M_FORBIDDEN":
+        case "M_EXCLUSIVE":
+            return _t("room_settings|general|error_creating_alias_description_forbidden");
+        default:
+            return _t("room_settings|general|error_creating_alias_description");
     }
 }
 
@@ -251,7 +271,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
                 logger.error(err);
                 Modal.createDialog(ErrorDialog, {
                     title: _t("room_settings|general|error_creating_alias_title"),
-                    description: _t("room_settings|general|error_creating_alias_description"),
+                    description: getAliasCreationErrorMessage(err),
                 });
             });
     };
