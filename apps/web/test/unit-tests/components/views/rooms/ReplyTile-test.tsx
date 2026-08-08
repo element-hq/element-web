@@ -13,6 +13,8 @@ import ReplyTile from "../../../../../src/components/views/rooms/ReplyTile";
 import { renderReplyTile } from "../../../../../src/events/EventTileFactory";
 import { VideoBodyFactory } from "../../../../../src/components/views/messages/MBodyFactory";
 import { mkEvent, stubClient } from "../../../../test-utils";
+import dis from "../../../../../src/dispatcher/dispatcher";
+import { Action } from "../../../../../src/dispatcher/actions";
 
 jest.mock("../../../../../src/events/EventTileFactory", () => {
     const actual = jest.requireActual("../../../../../src/events/EventTileFactory");
@@ -63,5 +65,53 @@ describe("ReplyTile", () => {
             }),
             false,
         );
+    });
+
+    describe("clicking a reply", () => {
+        const mkTextEvent = () =>
+            mkEvent({
+                event: true,
+                type: EventType.RoomMessage,
+                user: "@alice:server",
+                room: "!room:server",
+                id: "$text",
+                content: { body: "hello", msgtype: MsgType.Text },
+            });
+
+        // The quoted body is injected as markup rather than as JSX because React refuses to nest an
+        // anchor inside the anchor which wraps the whole tile, and the test setup turns that warning
+        // into a failure.
+        const renderWithBody = (html: string) => {
+            jest.mocked(renderReplyTile).mockReturnValue(
+                <div className="mx_EventTile_body" dangerouslySetInnerHTML={{ __html: html }} />,
+            );
+            return render(<ReplyTile mxEvent={mkTextEvent()} />);
+        };
+
+        const clickOn = (element: Element): MouseEvent => {
+            const click = new MouseEvent("click", { bubbles: true, cancelable: true });
+            element.dispatchEvent(click);
+            return click;
+        };
+
+        it("follows a link the click landed inside rather than jumping to the replied-to message", () => {
+            const dispatch = jest.spyOn(dis, "dispatch");
+            const { container } = renderWithBody('<a href="https://example.com/foo"><b id="inner">docs</b></a>');
+
+            const click = clickOn(container.querySelector("#inner")!);
+
+            expect(click.defaultPrevented).toBe(false);
+            expect(dispatch).not.toHaveBeenCalledWith(expect.objectContaining({ action: Action.ViewRoom }));
+        });
+
+        it("jumps to the replied-to message when the click was not on a link", () => {
+            const dispatch = jest.spyOn(dis, "dispatch");
+            const { container } = renderWithBody('<b id="plain">docs</b>');
+
+            const click = clickOn(container.querySelector("#plain")!);
+
+            expect(click.defaultPrevented).toBe(true);
+            expect(dispatch).toHaveBeenCalledWith(expect.objectContaining({ action: Action.ViewRoom }));
+        });
     });
 });
