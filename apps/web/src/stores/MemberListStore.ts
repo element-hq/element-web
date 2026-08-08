@@ -199,11 +199,12 @@ export class MemberListStore {
         const userA = memberA.user;
         const userB = memberB.user;
 
-        if (!userA && !userB) return 0;
-        if (userA && !userB) return -1;
-        if (!userA && userB) return 1;
+        // A member the client has no User for has no presence and no last-active time, but its
+        // power level and name are still known. Returning 0 for every such pair left the whole
+        // list in whatever order it was built in, which reads as random.
+        if (!!userA !== !!userB) return userA ? -1 : 1;
 
-        const showPresence = this.isPresenceEnabled();
+        const showPresence = this.isPresenceEnabled() && !!userA && !!userB;
 
         // First by presence
         if (showPresence) {

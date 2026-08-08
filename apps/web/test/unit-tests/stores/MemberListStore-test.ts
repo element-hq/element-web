@@ -124,6 +124,22 @@ describe("MemberListStore", () => {
         ]);
     });
 
+    it("sorts by name when the client has no user for any of the members", async () => {
+        const doris = "@doris:bar";
+        addMember(room, bob, KnownMembership.Join);
+        addMember(room, charlie, KnownMembership.Join);
+        addMember(room, doris, KnownMembership.Join, "AAAAA");
+        setPowerLevels(room, {
+            users_default: 10,
+        });
+        // Lazy loading means the client may hold no User for a member at all, which is the only
+        // thing that ever populates RoomMember.user.
+        mocked(client.getUser).mockReturnValue(null);
+
+        const { joined } = await store.loadMemberList(roomId);
+        expect(joined.map((m) => m.userId)).toEqual([doris, alice, bob, charlie]);
+    });
+
     it("filters based on a search query", async () => {
         const mice = "@mice:bar";
         const zorro = "@zorro:bar";
