@@ -61,7 +61,10 @@ export async function createMessageContent(
 
     // if we're editing rich text, the message content is pure html
     // BUT if we're not, the message content will be plain text where we need to convert the mentions
-    const body = isHTML ? await richToPlain(message, false) : convertPlainTextToBody(message);
+    // Ask for the MESSAGE representation rather than the editor's own: the editor representation keeps
+    // a mention as the anchor that renders its pill, so a client which only reads the body would be
+    // shown that markup instead of the name the mention stands for.
+    const body = isHTML ? await richToPlain(message, true) : convertPlainTextToBody(message);
 
     const content = {
         msgtype: isEmote ? MsgType.Emote : MsgType.Text,
