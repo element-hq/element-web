@@ -69,6 +69,7 @@ import { type OnLoggedInPayload } from "./dispatcher/payloads/OnLoggedInPayload.
 import { filterBoolean } from "./utils/arrays.ts";
 import { CallStatusListener } from "./CallStatusListener.ts";
 import { CallStore } from "./stores/CallStore.ts";
+import { ModuleApi } from "./modules/Api.ts";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -843,7 +844,10 @@ async function doSetLoggedIn(
     // Dispatch this synchronously so SDKContextClass can set the client for other modules to consume.
     dis.dispatch<OnLoggedInPayload>({ action: Action.OnLoggedIn, client }, true);
 
-    const clientPegOpts: MatrixClientPegAssignOpts = {};
+    const clientPegOpts: MatrixClientPegAssignOpts = {
+        userVerificationCaCertsPem: ModuleApi.instance.clientCreationManagement.userVerificationCaCertsPem ?? undefined,
+    };
+
     if (credentials.pickleKey) {
         // The pickleKey, if provided, is probably a base64-encoded 256-bit key, so can be used for the crypto store.
         if (credentials.pickleKey.length === 43) {
