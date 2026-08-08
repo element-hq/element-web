@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Pemilih emoji",
         "jump_first_invite": "Pergi ke undangan pertama.",
         "message_composer": "Komposer pesan",
         "n_unread_messages": {
@@ -886,22 +885,6 @@
     },
     "dialog_close_label": "Tutup dialog",
     "download_completed": "Unduhan Selesai",
-    "emoji": {
-        "categories": "Categori",
-        "category_activities": "Aktivitas",
-        "category_animals_nature": "Hewan & Alam",
-        "category_flags": "Bendera",
-        "category_food_drink": "Makanan & Minuman",
-        "category_frequently_used": "Sering Digunakan",
-        "category_objects": "Obyek",
-        "category_smileys_people": "Senyuman & Orang",
-        "category_symbols": "Simbol",
-        "category_travel_places": "Aktivitas & Tempat",
-        "quick_reactions": "Reaksi Cepat"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Batalkan pencarian"
-    },
     "empty_room": "Ruangan kosong",
     "empty_room_was_name": "Ruangan kosong (sebelumnya %(oldName)s)",
     "encryption": {

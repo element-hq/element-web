@@ -41,6 +41,23 @@
         "preferences": "Налаштування",
         "state_encryption_enabled": "Увімкнено експериментальне шифрування стану"
     },
+    "emoji": {
+        "categories": "Категорії",
+        "category_activities": "Діяльність",
+        "category_animals_nature": "Тварини та природа",
+        "category_flags": "Прапори",
+        "category_food_drink": "Їжа та напої",
+        "category_frequently_used": "Часто використовувані",
+        "category_objects": "Об'єкти",
+        "category_smileys_people": "Смайлики та люди",
+        "category_symbols": "Символи",
+        "category_travel_places": "Подорожі та місця",
+        "quick_reactions": "Швидкі реакції"
+    },
+    "emoji_picker": {
+        "cancel_search_label": "Скасувати пошук",
+        "emoji_picker": "Панель емоджі"
+    },
     "keyboard": {
         "shift": "Shift"
     },
@@ -59,6 +76,7 @@
     },
     "notifications": {
         "all_messages": "Усі повідомлення",
+        "default_settings": "Згідно з усталеними налаштуваннями",
         "mentions_keywords": "Згадки та ключові слова",
         "mute_room": "Вимкнути сповіщення кімнати"
     },
@@ -99,7 +117,18 @@
         "a11y": {
             "default": "Відкрити кімнату %(roomName)s",
             "drag_cancelled": "Перетягування скасовано",
+            "drag_end_original": "%(source)s повернено у вихідне положення",
             "invitation": "Відкрити запрошення кімнати %(roomName)s.",
+            "mention": {
+                "one": "Відкрити кімнату %(roomName)s з 1 непрочитаною згадкою.",
+                "few": "Відкрити кімнату %(roomName)s з %(count)s непрочитаними згадками.",
+                "many": "Відкрити кімнату %(roomName)s з %(count)s непрочитаними згадками."
+            },
+            "unread": {
+                "one": "Відкрити кімнату %(roomName)s з 1 непрочитаним повідомленням.",
+                "few": "Відкрити кімнату %(roomName)s з %(count)s непрочитаними повідомленнями.",
+                "many": "Відкрити кімнату %(roomName)s з %(count)s непрочитаними повідомленнями."
+            },
             "unsent_message": "Відкрити кімнату %(roomName)s з ненадісланим повідомленням.",
             "video_call": "Відкрити кімнату %(roomName)s за допомогою відеовиклику.",
             "voice_call": "Відкрити кімнату %(roomName)s за допомогою голосового виклику."
@@ -286,6 +315,11 @@
         "url_preview": {
             "close": "Закрити попередній перегляд",
             "open_link": "Відкрити посилання",
+            "show_n_more": {
+                "one": "Показати ще %(count)s попередній перегляд",
+                "few": "Показати ще %(count)s попередні перегляди",
+                "many": "Показати ще %(count)s попередні перегляди"
+            },
             "view_image": "Переглянути зображення"
         }
     },

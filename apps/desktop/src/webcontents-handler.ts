@@ -243,12 +243,22 @@ function onEditableContextMenu(ev: Event, params: ContextMenuParams, webContents
 
 let userDownloadIndex = 0;
 const userDownloadMap = new Map<number, string>(); // Map from id to path
-ipcMain.on("userDownloadAction", function (ev: IpcMainEvent, { id, open = false }) {
+ipcMain.on("userDownloadAction", async function (ev: IpcMainEvent, { id, open = false }) {
     const path = userDownloadMap.get(id);
-    if (open && path) {
-        void shell.openPath(path);
-    }
     userDownloadMap.delete(id);
+    if (open && path) {
+        // openPath resolves to a non-empty error string on failure, an empty one on success.
+        const error = await shell.openPath(path);
+        if (error) {
+            console.error(`Failed to open downloaded file ${path}: ${error}`);
+            void dialog.showMessageBox({
+                type: "error",
+                title: _t("download|unable_to_open_title"),
+                message: _t("download|unable_to_open_description"),
+                detail: error,
+            });
+        }
+    }
 });
 
 export default (webContents: WebContents): void => {

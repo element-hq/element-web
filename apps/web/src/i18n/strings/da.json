@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Emoji-vælger",
         "jump_first_invite": "Gå til første invitation.",
         "message_composer": "Skriv besked",
         "n_unread_messages": {
@@ -784,22 +783,6 @@
         "widget_screenshots": "Aktivér widget-skærmbilleder på understøttede widgets"
     },
     "dialog_close_label": "Luk dialogboksen",
-    "emoji": {
-        "categories": "Kategorier",
-        "category_activities": "Aktiviteter",
-        "category_animals_nature": "Dyr og natur",
-        "category_flags": "Flag",
-        "category_food_drink": "Mad og drikke",
-        "category_frequently_used": "Ofte brugt",
-        "category_objects": "Objekter",
-        "category_smileys_people": "Smileys og mennesker",
-        "category_symbols": "Symboler",
-        "category_travel_places": "Rejser og steder",
-        "quick_reactions": "Hurtige reaktioner"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Annullér søgning"
-    },
     "empty_room": "Tom klynge",
     "empty_room_was_name": "Tomt rum (var %(oldName)s)",
     "encryption": {
