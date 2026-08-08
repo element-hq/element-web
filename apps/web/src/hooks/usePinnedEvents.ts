@@ -180,13 +180,24 @@ async function fetchPinnedEvent(room: Room, pinnedEventId: string, cli: MatrixCl
 export function useFetchedPinnedEvents(room: Room, pinnedEventIds: string[]): Array<MatrixEvent> {
     const cli = useMatrixClientContext();
 
+    // Editing a pinned message leaves the pinned ids untouched, so nothing here would change and
+    // the pinned event would keep rendering its original content. Count the edits that land on a
+    // pinned event and refetch on each one.
+    const [editCount, setEditCount] = useState(0);
+    useTypedEventEmitter(room, RoomEvent.Timeline, (ev: MatrixEvent) => {
+        const relation = ev.getRelation();
+        if (relation?.rel_type !== RelationType.Replace || !relation.event_id) return;
+        if (!pinnedEventIds.includes(relation.event_id)) return;
+        setEditCount((count) => count + 1);
+    });
+
     const events = useAsyncMemo(
         () => {
             const fetchPromises = pinnedEventIds.map((eventId) => () => fetchPinnedEvent(room, eventId, cli));
             // Fetch the pinned events in batches of 10
             return batch(fetchPromises, 10);
         },
-        [cli, room, pinnedEventIds],
+        [cli, room, pinnedEventIds, editCount],
         [],
     );
     return filterBoolean(events);
