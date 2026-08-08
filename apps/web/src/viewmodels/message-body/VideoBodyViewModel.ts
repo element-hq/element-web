@@ -239,8 +239,11 @@ export class VideoBodyViewModel
 
         return {
             state: VideoBodyViewState.READY,
-            videoLabel: content.body,
-            videoTitle: content.body,
+            // With a filename present the body is a caption rather than the name of the file, so
+            // naming the video by its body puts the caption in the hover text and the accessible
+            // name where the filename belongs.
+            videoLabel: content.filename || content.body,
+            videoTitle: content.filename || content.body,
             maxWidth,
             maxHeight,
             aspectRatio,

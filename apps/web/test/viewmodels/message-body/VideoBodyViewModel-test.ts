@@ -442,6 +442,20 @@ describe("VideoBodyViewModel", () => {
         expect(vm.getSnapshot().src).toBe("data:video/mp4,");
     });
 
+    it("names the video by its filename rather than its caption", () => {
+        const vm = createVm({
+            mxEvent: createEvent({
+                body: "a caption",
+                content: { filename: "holiday.mp4" },
+            }),
+        });
+
+        vm.setMediaVisible(true);
+
+        expect(vm.getSnapshot().videoTitle).toBe("holiday.mp4");
+        expect(vm.getSnapshot().videoLabel).toBe("holiday.mp4");
+    });
+
     it("does not emit for unchanged targeted setters", () => {
         const event = createEvent();
         const onPreviewClick = jest.fn();
