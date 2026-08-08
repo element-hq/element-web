@@ -691,7 +691,12 @@ export class RoomListViewModel
      * @returns The modified sections array with sticky positioning applied
      */
     private applyStickyRoom(isRoomChange: boolean, roomId: string | null | undefined): Section[] {
-        const sections = this.roomsResult.sections;
+        // Ask the store rather than reading `this.roomsResult`: the sections held there have already
+        // had a previous sticky adjustment written into them, so using them as the baseline would
+        // measure the newly opened room against a list in which the room just left is still pinned,
+        // and record its position one slot too low.
+        const filterKeys = this.activeFilter !== undefined ? [this.activeFilter] : undefined;
+        const sections = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filterKeys).sections;
 
         // When opening another room, the index should obviously change
         if (!roomId || isRoomChange) return sections;

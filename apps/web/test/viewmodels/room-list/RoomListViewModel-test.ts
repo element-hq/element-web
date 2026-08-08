@@ -361,6 +361,56 @@ describe("RoomListViewModel", () => {
             expect(viewModel.getSnapshot().sections[0].roomIds[1]).toBe("!room2:server");
         });
 
+        it("should measure a newly opened room against the store order, not the previous pin", async () => {
+            viewModel = new RoomListViewModel({
+                client: matrixClient,
+                spaceStore: SDKContextClass.instance.spaceStore,
+                roomViewStore: SDKContextClass.instance.roomViewStore,
+            });
+
+            // Open the room at the top of the list.
+            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room1:server");
+            dispatcher.dispatch({ action: Action.ActiveRoomChanged, newRoomId: "!room1:server" });
+            await flushPromises();
+            expect(viewModel.getSnapshot().roomListState.activeRoomIndex).toBe(0);
+
+            // Reading it demotes it in the store, but sticky keeps it where the user is looking.
+            jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                spaceId: "home",
+                sections: [{ tag: CHATS_TAG, rooms: [room2, room3, room1] }],
+            });
+            RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
+            expect(viewModel.getSnapshot().sections[0].roomIds).toEqual([
+                "!room1:server",
+                "!room2:server",
+                "!room3:server",
+            ]);
+
+            // Moving to the next room down has to fall back to the store's order, in which the room
+            // being left is last. Reusing the pinned order would record room2 at index 1.
+            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
+            dispatcher.dispatch({
+                action: Action.ActiveRoomChanged,
+                oldRoomId: "!room1:server",
+                newRoomId: "!room2:server",
+            });
+            await flushPromises();
+            expect(viewModel.getSnapshot().sections[0].roomIds).toEqual([
+                "!room2:server",
+                "!room3:server",
+                "!room1:server",
+            ]);
+            expect(viewModel.getSnapshot().roomListState.activeRoomIndex).toBe(0);
+
+            // So when room2 is read in turn, the still-unread room3 does not jump above it.
+            jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                spaceId: "home",
+                sections: [{ tag: CHATS_TAG, rooms: [room3, room2, room1] }],
+            });
+            RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
+            expect(viewModel.getSnapshot().roomListState.activeRoomIndex).toBe(0);
+        });
+
         it("should not apply sticky behavior when user changes rooms", async () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
