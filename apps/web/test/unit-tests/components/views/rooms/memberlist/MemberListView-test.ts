@@ -205,6 +205,92 @@ describe("MemberListView and MemberlistHeaderView", () => {
             });
         });
 
+        it("should ignore stale member loads after call memberships change", async () => {
+            const { root, roomSession, context, memberListRoom, adminUsers, moderatorUsers } = rendered;
+            const loadResult = await context.memberListStore.loadMemberList(memberListRoom.roomId);
+            const firstLoad = Promise.withResolvers<typeof loadResult>();
+            const secondLoad = Promise.withResolvers<typeof loadResult>();
+            const loadMemberList = jest
+                .spyOn(context.memberListStore, "loadMemberList")
+                .mockImplementationOnce(() => firstLoad.promise)
+                .mockImplementationOnce(() => secondLoad.promise);
+            const firstMembership = { userId: adminUsers[0].userId } as CallMembership;
+            const secondMembership = { userId: moderatorUsers[0].userId } as CallMembership;
+
+            await act(async () => {
+                roomSession.memberships = [firstMembership];
+                roomSession.emit(MatrixRTCSessionEvent.MembershipsChanged, [], [firstMembership]);
+            });
+            await waitFor(() => expect(loadMemberList).toHaveBeenCalledTimes(1));
+
+            await act(async () => {
+                roomSession.memberships = [secondMembership];
+                roomSession.emit(MatrixRTCSessionEvent.MembershipsChanged, [firstMembership], [secondMembership]);
+            });
+            await waitFor(() => expect(loadMemberList).toHaveBeenCalledTimes(2));
+
+            await act(async () => secondLoad.resolve(loadResult));
+            await waitFor(() => {
+                expect(root.container.querySelector(".mx_MemberTileView")).toHaveAccessibleName(
+                    `${moderatorUsers[0].userId}, in a call`,
+                );
+            });
+
+            await act(async () => firstLoad.resolve(loadResult));
+            expect(root.container.querySelector(".mx_MemberTileView")).toHaveAccessibleName(
+                `${moderatorUsers[0].userId}, in a call`,
+            );
+        });
+
+        it("should remain loading when a stale initial member load resolves", async () => {
+            type LoadResult = Awaited<ReturnType<Rendered["context"]["memberListStore"]["loadMemberList"]>>;
+            const discardedStrictModeLoad = Promise.withResolvers<LoadResult>();
+            const initialLoad = Promise.withResolvers<LoadResult>();
+            const membershipLoad = Promise.withResolvers<LoadResult>();
+            const setup = Promise.withResolvers<{
+                roomSession: Rendered["roomSession"];
+                loadMemberList: jest.SpiedFunction<Rendered["context"]["memberListStore"]["loadMemberList"]>;
+                loadResult: LoadResult;
+            }>();
+            const renderPromise = renderMemberList(
+                true,
+                undefined,
+                2,
+                [],
+                [],
+                [],
+                0,
+                async (context, roomSession, memberListRoom) => {
+                    const loadResult = await context.memberListStore.loadMemberList(memberListRoom.roomId);
+                    const loadMemberList = jest
+                        .spyOn(context.memberListStore, "loadMemberList")
+                        .mockImplementationOnce(() => discardedStrictModeLoad.promise)
+                        .mockImplementationOnce(() => initialLoad.promise)
+                        .mockImplementationOnce(() => membershipLoad.promise);
+                    setup.resolve({ roomSession, loadMemberList, loadResult });
+                },
+            );
+            const { roomSession, loadMemberList, loadResult } = await setup.promise;
+            await waitFor(() => expect(loadMemberList).toHaveBeenCalledTimes(2));
+
+            const membership = { userId: "@moderator0:localhost" } as CallMembership;
+            await act(async () => {
+                roomSession.memberships = [membership];
+                roomSession.emit(MatrixRTCSessionEvent.MembershipsChanged, [], [membership]);
+            });
+            await waitFor(() => expect(loadMemberList).toHaveBeenCalledTimes(3));
+
+            await act(async () => initialLoad.resolve(loadResult));
+            expect(document.body).toHaveTextContent("Loading");
+
+            await act(async () => membershipLoad.resolve(loadResult));
+            const { root } = await renderPromise;
+            expect(root.container.querySelector(".mx_MemberTileView")).toHaveAccessibleName(
+                "@moderator0:localhost, in a call",
+            );
+            await act(async () => discardedStrictModeLoad.resolve(loadResult));
+        });
+
         it("should group call participants first while preserving the order within both groups", async () => {
             const participantUserIds = ["@moderator1:localhost", "@default0:localhost"];
             const memberships = participantUserIds.map((userId) => ({ userId }) as CallMembership);

@@ -50,6 +50,7 @@ export function createRoom(client: MatrixClient, opts = {}) {
 
 export type Rendered = {
     client: MatrixClient;
+    context: TestSDKContext;
     root: RenderResult;
     memberListRoom: Room;
     adminUsers: RoomMember[];
@@ -69,6 +70,11 @@ export async function renderMemberList(
     callMemberships: CallMembership[] = [],
     otherRoomCallMemberships: CallMembership[] = [],
     invitedUserCount: number = 0,
+    beforeRender?: (
+        context: TestSDKContext,
+        roomSession: MatrixRTCSession,
+        memberListRoom: Room,
+    ) => void | Promise<void>,
 ): Promise<Rendered> {
     TestUtils.stubClient();
     const client = MatrixClientPeg.safeGet();
@@ -160,6 +166,7 @@ export async function renderMemberList(
     const context = new TestSDKContext();
     context._client = client;
     context.memberListStore.isPresenceEnabled = jest.fn().mockReturnValue(enablePresence);
+    await beforeRender?.(context, roomSession, memberListRoom);
     const root = render(
         <MatrixClientContext.Provider value={client}>
             <SDKContext.Provider value={context}>
@@ -184,6 +191,7 @@ export async function renderMemberList(
 
     return {
         client,
+        context,
         root,
         memberListRoom,
         adminUsers,

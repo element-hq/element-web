@@ -161,15 +161,18 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
     const [memberCount, setMemberCount] = useState(0);
     // Preserve the active filter when call-participant changes recreate loadMembers.
     const searchQueryRef = useRef<string | undefined>(undefined);
+    const loadRequestIdRef = useRef(0);
 
     const loadMembers = useMemo(
         () =>
             throttle(
                 async (searchQuery?: string): Promise<void> => {
+                    const loadRequestId = ++loadRequestIdRef.current;
                     const { joined: joinedSdk, invited: invitedSdk } = await sdkContext.memberListStore.loadMemberList(
                         roomId,
                         searchQuery,
                     );
+                    if (loadRequestId !== loadRequestIdRef.current) return;
                     const threePidInvited = getPending3PidInvites(room, searchQuery);
 
                     const newMemberMap = new Map<string, MemberWithSeparator>();
@@ -222,6 +225,12 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
                          **/
                         setTotalMemberCount(memberCountWithout3Pid + threePidInvited.length);
                     }
+                    /**
+                     * isLoading is used to render a spinner on initial call.
+                     * Further calls need not mutate this state since it's perfectly fine to
+                     * show the existing memberlist until the new one loads.
+                     */
+                    setIsLoading(false);
                 },
                 500,
                 { leading: true, trailing: true },
@@ -302,16 +311,11 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
 
     // Initial load of the memberlist
     useEffect(() => {
-        (async () => {
-            await loadMembers(searchQueryRef.current);
-            /**
-             * isLoading is used to render a spinner on initial call.
-             * Further calls need not mutate this state since it's perfectly fine to
-             * show the existing memberlist until the new one loads.
-             */
-            setIsLoading(false);
-        })();
-        return () => loadMembers.cancel();
+        loadMembers(searchQueryRef.current);
+        return () => {
+            loadRequestIdRef.current += 1;
+            loadMembers.cancel();
+        };
     }, [loadMembers]);
 
     return {
