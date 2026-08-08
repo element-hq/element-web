@@ -15,6 +15,7 @@ import {
     MsgType,
     type IContent,
     MatrixEvent,
+    RelationType,
     SyncState,
     type AccountDataEvents,
 } from "matrix-js-sdk/src/matrix";
@@ -333,6 +334,30 @@ describe("Notifier", () => {
             mockClient.setAccountData(accountDataEventKey, event!);
             notifier.displayPopupNotification(testEvent, testRoom);
             expect(MockPlatform.displayNotification).toHaveBeenCalledTimes(count);
+        });
+
+        it("should display a notification for a reaction", () => {
+            const reaction = mkEvent({
+                event: true,
+                type: EventType.Reaction,
+                user: mockClient.getSafeUserId(),
+                room: testRoom.roomId,
+                content: {
+                    "m.relates_to": {
+                        rel_type: RelationType.Annotation,
+                        event_id: "$target:example.org",
+                        key: "👍",
+                    },
+                },
+            });
+            notifier.displayPopupNotification(reaction, testRoom);
+            expect(MockPlatform.displayNotification).toHaveBeenCalledWith(
+                "@bob:example.org (!room1:server)",
+                "Reacted with 👍",
+                expect.any(String),
+                testRoom,
+                reaction,
+            );
         });
 
         it("should display a notification for a voice message", () => {
