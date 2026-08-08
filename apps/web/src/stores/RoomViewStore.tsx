@@ -616,6 +616,7 @@ export class RoomViewStore extends EventEmitter {
     }
 
     public showJoinRoomError(err: unknown, roomId: string | null): void {
+        let title = _t("room|error_join_title");
         let description: ReactNode = err instanceof Error && err.message ? err.message : JSON.stringify(err);
         if (err instanceof MatrixError === false) {
             // This isn't a MatrixError so just show the error verbatim.
@@ -640,6 +641,15 @@ export class RoomViewStore extends EventEmitter {
                     description = _t("room|error_join_404_invite");
                 }
             }
+            // The client already knows this room, so the user cannot have reached it by pasting a
+            // bare room ID and the advice below does not apply to them. Rejoining a room they left
+            // is the usual way here.
+            else if (roomId && MatrixClientPeg.safeGet().getRoom(roomId)?.getMyMembership() === KnownMembership.Leave) {
+                // The 404 is the entire outcome, so it reads as the heading and the body is left to
+                // say only why it might have happened.
+                title = _t("room|error_join_404_left_title");
+                description = _t("room|error_join_404_left");
+            }
             // provide a more detailed error than "No known servers" when attempting to
             // join using a room ID and no via servers
             else if (roomId === this.state.roomId && this.state.viaServers.length === 0) {
@@ -655,10 +665,16 @@ export class RoomViewStore extends EventEmitter {
         }
         logger.log("Failed to join room:", description);
 
-        Modal.createDialog(ErrorDialog, {
-            title: _t("room|error_join_title"),
-            description,
-        });
+        Modal.createDialog(
+            ErrorDialog,
+            {
+                title,
+                description,
+            },
+            // Every description here is a sentence or two, which the shared dialog width strands in
+            // whitespace. The class narrows this one dialog rather than the error dialog generally.
+            "mx_JoinRoomErrorDialog",
+        );
     }
 
     private joinRoomError(payload: JoinRoomErrorPayload): void {
