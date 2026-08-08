@@ -18,6 +18,8 @@ import { SummarizedNotificationState } from "./SummarizedNotificationState";
 import { isRoomVisible } from "../room-list-v3/isRoomVisible";
 import { PosthogAnalytics } from "../../PosthogAnalytics";
 import SettingsStore from "../../settings/SettingsStore";
+import { getRoomNotifsState, RoomNotifState } from "../../RoomNotifs";
+import { NotificationLevel } from "./NotificationLevel";
 
 export const UPDATE_STATUS_INDICATOR = Symbol("update-status-indicator");
 
@@ -117,7 +119,17 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject
         let numFavourites = 0;
         for (const room of visibleRooms) {
             if (isRoomVisible(room)) {
-                globalState.add(this.getRoomState(room));
+                const roomState = this.getRoomState(room);
+
+                // A room set to "mentions & keywords" has asked not to be told about ordinary
+                // traffic, and the app-level indicators this feeds - the asterisk in the page
+                // title and the dot on the tray icon - carry no room context to explain
+                // themselves. Its mere activity is therefore left out. Anything louder than
+                // activity is a mention, a marked-unread or an invite, and still counts.
+                const isActivityOnly = roomState.level === NotificationLevel.Activity;
+                if (!isActivityOnly || getRoomNotifsState(room.client, room.roomId) !== RoomNotifState.MentionsOnly) {
+                    globalState.add(roomState);
+                }
 
                 if (room.tags[DefaultTagID.Favourite] && !room.getType()) numFavourites++;
             }

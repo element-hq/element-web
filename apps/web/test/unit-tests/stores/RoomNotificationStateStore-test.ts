@@ -7,13 +7,15 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked } from "jest-mock";
-import { ClientEvent, type MatrixClient, Room, SyncState } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, type MatrixClient, PushRuleActionName, Room, SyncState } from "matrix-js-sdk/src/matrix";
 
 import { createTestClient, setupAsyncStoreWithClient } from "../../test-utils";
 import {
     RoomNotificationStateStore,
     UPDATE_STATUS_INDICATOR,
 } from "../../../src/stores/notifications/RoomNotificationStateStore";
+import { NotificationLevel } from "../../../src/stores/notifications/NotificationLevel";
+import { type RoomNotificationState } from "../../../src/stores/notifications/RoomNotificationState";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { MatrixDispatcher } from "../../../src/dispatcher/dispatcher";
 
@@ -106,6 +108,43 @@ describe("RoomNotificationStateStore", function () {
             // Then we check visible rooms, using the dynamic predecessor flag
             expect(client.getVisibleRooms).toHaveBeenCalledWith(true);
             expect(client.getVisibleRooms).not.toHaveBeenCalledWith(false);
+        });
+    });
+
+    describe("when a room is set to mentions & keywords", () => {
+        function fakeActivityRoom(level: NotificationLevel): Room {
+            const room = fakeRoom(0);
+            client.getRoomPushRule = jest.fn().mockReturnValue({
+                rule_id: room.roomId,
+                enabled: true,
+                default: false,
+                actions: [PushRuleActionName.DontNotify],
+            });
+            jest.spyOn(store, "getRoomState").mockReturnValue({
+                level,
+                symbol: null,
+                count: 0,
+                hasUnreadCount: true,
+            } as RoomNotificationState);
+            return room;
+        }
+
+        it("keeps its activity out of the global state", async () => {
+            const room = fakeActivityRoom(NotificationLevel.Activity);
+
+            mocked(client.getVisibleRooms).mockReturnValue([room]);
+            client.emit(ClientEvent.Sync, SyncState.Syncing, SyncState.Syncing);
+
+            expect(store.emit).not.toHaveBeenCalled();
+        });
+
+        it("still contributes a mention to the global state", async () => {
+            const room = fakeActivityRoom(NotificationLevel.Highlight);
+
+            mocked(client.getVisibleRooms).mockReturnValue([room]);
+            client.emit(ClientEvent.Sync, SyncState.Syncing, SyncState.Syncing);
+
+            expect(store.emit).toHaveBeenCalledWith(UPDATE_STATUS_INDICATOR, expect.anything(), "SYNCING");
         });
     });
 
