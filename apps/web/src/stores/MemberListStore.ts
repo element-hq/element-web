@@ -215,8 +215,8 @@ export class MemberListStore {
                 return idx === -1 ? order.length : idx; // unknown states at the end
             };
 
-            const idxA = presenceIndex(userA!.currentlyActive ? "active" : userA!.presence);
-            const idxB = presenceIndex(userB!.currentlyActive ? "active" : userB!.presence);
+            const idxA = presenceIndex(userA.currentlyActive ? "active" : userA.presence);
+            const idxB = presenceIndex(userB.currentlyActive ? "active" : userB.presence);
             if (idxA !== idxB) {
                 return idxA - idxB;
             }
@@ -228,8 +228,8 @@ export class MemberListStore {
         }
 
         // Third by last active
-        if (showPresence && userA!.getLastActiveTs() !== userB!.getLastActiveTs()) {
-            return userB!.getLastActiveTs() - userA!.getLastActiveTs();
+        if (showPresence && userA.getLastActiveTs() !== userB.getLastActiveTs()) {
+            return userB.getLastActiveTs() - userA.getLastActiveTs();
         }
 
         // Fourth by name (alphabetical)
