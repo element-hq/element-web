@@ -22,6 +22,7 @@ describe("display-media requester ownership", () => {
     beforeEach(() => {
         electronApp.isPackaged = true;
         delete process.env.ELEMENT_SCREEN_SHARE_AUDIO_FAKE_PROVIDER;
+        delete process.env.ELEMENT_SCREEN_SHARE_AUDIO_PROCESS_LOOPBACK_EXECUTABLE;
         vi.resetModules();
     });
 
@@ -33,6 +34,14 @@ describe("display-media requester ownership", () => {
         vi.resetModules();
         const unpackaged = await import("./display-media.js");
         expect(Object.hasOwn(electronApp, unpackaged.developmentFakeAuditProperty)).toBe(false);
+    });
+
+    it("extracts only bounded widget identities from the requesting frame URL", async () => {
+        const { getRequesterWidgetId } = await import("./display-media.js");
+        expect(getRequesterWidgetId("https://call.example/#?widgetId=fragment-only")).toBeNull();
+        expect(getRequesterWidgetId("https://call.example/?widgetId=widget-1#/?room=x")).toBe("widget-1");
+        expect(getRequesterWidgetId(`https://call.example/?widgetId=${"x".repeat(256)}`)).toBeNull();
+        expect(getRequesterWidgetId("not a url")).toBeNull();
     });
 
     it("observes only cross-document navigation of the exact frame and detached frames", async () => {

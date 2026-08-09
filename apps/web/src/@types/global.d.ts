@@ -125,6 +125,7 @@ declare global {
             protocol: string;
             sessionId: string;
             supportsBadgeOverlay: boolean;
+            supportsIsolatedScreenShareAudio: boolean;
             config: IConfigOptions;
             supportedSettings: Record<string, boolean>;
         }>;
@@ -141,6 +142,7 @@ declare global {
 
     interface DesktopCapturerSourcePickerRequest {
         requestId: number;
+        requesterWidgetId?: string | null;
     }
 
     interface GetSourcesOptions {

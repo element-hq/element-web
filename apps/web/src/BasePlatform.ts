@@ -308,6 +308,16 @@ export default abstract class BasePlatform {
         return false;
     }
 
+    public supportsIsolatedScreenShareAudio(): boolean {
+        return false;
+    }
+
+    public async acquireIsolatedScreenShareAudio(_widgetId: string, _sessionId: string): Promise<boolean> {
+        return false;
+    }
+
+    public async releaseIsolatedScreenShareAudio(_widgetId: string, _sessionId: string): Promise<void> {}
+
     public supportsJitsiScreensharing(): boolean {
         return true;
     }

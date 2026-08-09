@@ -51,6 +51,7 @@ import SdkConfig from "../../../src/SdkConfig.ts";
 import DMRoomMap from "../../../src/utils/DMRoomMap.ts";
 import { WidgetMessagingEvent, type WidgetMessaging } from "../../../src/stores/widgets/WidgetMessaging.ts";
 import { BugReportEndpointURLLocal } from "../../../src/IConfigOptions.ts";
+import PlatformPeg from "../../../src/PlatformPeg.ts";
 
 const { enabledSettings } = enableCalls();
 
@@ -542,6 +543,15 @@ describe("ElementCall", () => {
             SettingsStore.getValue = originalGetValue;
         });
 
+        it("advertises isolated screen-share audio only when the platform supports it", () => {
+            jest.spyOn(PlatformPeg.get()!, "supportsIsolatedScreenShareAudio").mockReturnValue(true);
+            ElementCall.create(room);
+            const call = ElementCall.get(room);
+            expect(new URLSearchParams(new URL(call!.widget.url).hash.slice(1)).get("isolatedScreenShareAudio")).toBe(
+                "true",
+            );
+        });
+
         it("finds ongoing calls that are created by the session manager", async () => {
             // There is an existing session created by another user in this room.
             roomSession.memberships.push({} as CallMembership);
@@ -959,6 +969,110 @@ describe("ElementCall", () => {
             widgetApi.emit(`action:${ElementWidgetActions.DeviceMute}`, mockEv);
             expect(widgetApi.transport.reply).toHaveBeenCalledWith({ video_enabled: false }, {});
             expect(preventDefault).toHaveBeenCalled();
+        });
+
+        it("strictly validates and acknowledges isolated screen-share audio ownership", async () => {
+            const platform = PlatformPeg.get()!;
+            const acquire = jest.spyOn(platform, "acquireIsolatedScreenShareAudio").mockResolvedValue(true);
+            const release = jest.spyOn(platform, "releaseIsolatedScreenShareAudio").mockResolvedValue();
+            await connect(call, widgetApi);
+            const sessionId = "12345678-1234-4123-8123-123456789abc";
+            const acquireDetail = { data: { version: 1, state: "acquire", session_id: sessionId } };
+            widgetApi.emit(`action:${ElementWidgetActions.ScreenShareAudioSession}`, {
+                preventDefault: jest.fn(),
+                detail: acquireDetail,
+            });
+            await waitFor(() => expect(acquire).toHaveBeenCalledWith(call.widget.id, sessionId));
+            expect(widgetApi.transport.reply).toHaveBeenCalledWith(acquireDetail, { accepted: true });
+
+            const releaseDetail = { data: { version: 1, state: "release", session_id: sessionId } };
+            widgetApi.emit(`action:${ElementWidgetActions.ScreenShareAudioSession}`, {
+                preventDefault: jest.fn(),
+                detail: releaseDetail,
+            });
+            await waitFor(() => expect(release).toHaveBeenCalledWith(call.widget.id, sessionId));
+            expect(widgetApi.transport.reply).toHaveBeenCalledWith(releaseDetail, { accepted: true });
+        });
+
+        it("rejects malformed isolated screen-share audio ownership without calling the platform", async () => {
+            const acquire = jest.spyOn(PlatformPeg.get()!, "acquireIsolatedScreenShareAudio");
+            await connect(call, widgetApi);
+            const detail = { data: { version: 1, state: "acquire", session_id: "not-a-uuid", extra: true } };
+            widgetApi.emit(`action:${ElementWidgetActions.ScreenShareAudioSession}`, {
+                preventDefault: jest.fn(),
+                detail,
+            });
+            expect(widgetApi.transport.reply).toHaveBeenCalledWith(detail, { accepted: false });
+            expect(acquire).not.toHaveBeenCalled();
+        });
+
+        it("does not let a stale release cancel a pending successor session", async () => {
+            const platform = PlatformPeg.get()!;
+            const successor = Promise.withResolvers<boolean>();
+            const acquire = jest
+                .spyOn(platform, "acquireIsolatedScreenShareAudio")
+                .mockResolvedValueOnce(true)
+                .mockReturnValueOnce(successor.promise);
+            const release = jest.spyOn(platform, "releaseIsolatedScreenShareAudio").mockResolvedValue();
+            await connect(call, widgetApi);
+            const oldSession = "12345678-1234-4123-8123-123456789abc";
+            const newSession = "22345678-1234-4123-8123-123456789abc";
+            const emit = (state: "acquire" | "release", sessionId: string) => {
+                const detail = { data: { version: 1, state, session_id: sessionId } };
+                widgetApi.emit(`action:${ElementWidgetActions.ScreenShareAudioSession}`, {
+                    preventDefault: jest.fn(),
+                    detail,
+                });
+                return detail;
+            };
+            emit("acquire", oldSession);
+            await waitFor(() => expect(acquire).toHaveBeenCalledTimes(1));
+            emit("acquire", newSession);
+            await waitFor(() => expect(acquire).toHaveBeenCalledTimes(2));
+            const staleRelease = emit("release", oldSession);
+            await waitFor(() =>
+                expect(widgetApi.transport.reply).toHaveBeenCalledWith(staleRelease, { accepted: true }),
+            );
+            successor.resolve(true);
+            await waitFor(() =>
+                expect(widgetApi.transport.reply).toHaveBeenCalledWith(
+                    { data: { version: 1, state: "acquire", session_id: newSession } },
+                    { accepted: true },
+                ),
+            );
+            const currentRelease = emit("release", newSession);
+            await waitFor(() =>
+                expect(widgetApi.transport.reply).toHaveBeenCalledWith(currentRelease, { accepted: true }),
+            );
+            expect(release).toHaveBeenCalledWith(call.widget.id, newSession);
+        });
+
+        it("cancels only a matching pending acquire and releases late accepted ownership once", async () => {
+            const platform = PlatformPeg.get()!;
+            const pending = Promise.withResolvers<boolean>();
+            jest.spyOn(platform, "acquireIsolatedScreenShareAudio").mockReturnValue(pending.promise);
+            const release = jest.spyOn(platform, "releaseIsolatedScreenShareAudio").mockResolvedValue();
+            await connect(call, widgetApi);
+            const sessionId = "32345678-1234-4123-8123-123456789abc";
+            const acquireDetail = { data: { version: 1, state: "acquire", session_id: sessionId } };
+            widgetApi.emit(`action:${ElementWidgetActions.ScreenShareAudioSession}`, {
+                preventDefault: jest.fn(),
+                detail: acquireDetail,
+            });
+            await Promise.resolve();
+            const releaseDetail = { data: { version: 1, state: "release", session_id: sessionId } };
+            widgetApi.emit(`action:${ElementWidgetActions.ScreenShareAudioSession}`, {
+                preventDefault: jest.fn(),
+                detail: releaseDetail,
+            });
+            expect(widgetApi.transport.reply).toHaveBeenCalledWith(releaseDetail, { accepted: true });
+            expect(release).not.toHaveBeenCalled();
+            pending.resolve(true);
+            await waitFor(() =>
+                expect(widgetApi.transport.reply).toHaveBeenCalledWith(acquireDetail, { accepted: false }),
+            );
+            expect(release).toHaveBeenCalledTimes(1);
+            expect(release).toHaveBeenCalledWith(call.widget.id, sessionId);
         });
 
         it("emits events when connection state changes", async () => {

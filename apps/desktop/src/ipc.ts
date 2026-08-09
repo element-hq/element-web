@@ -9,7 +9,12 @@ import { app, autoUpdater, desktopCapturer, ipcMain, powerSaveBlocker, TouchBar,
 
 import IpcMainEvent = Electron.IpcMainEvent;
 import { randomArray } from "./utils.js";
-import { handleDisplayMediaPickerReply } from "./display-media.js";
+import {
+    handleDisplayMediaPickerReply,
+    handleScreenShareAudioSessionBinding,
+    handleScreenShareAudioSessionRelease,
+    supportsIsolatedScreenShareAudio,
+} from "./display-media.js";
 import Store, { clearDataAndRelaunch } from "./store.js";
 import { getConfig } from "./config.js";
 
@@ -26,6 +31,8 @@ ipcMain.on("loudNotification", function (): void {
         }
     }
 });
+
+ipcMain.handle("supportsIsolatedScreenShareAudio", () => supportsIsolatedScreenShareAudio());
 
 let powerSaveBlockerId: number | null = null;
 ipcMain.on("app_onAction", function (_ev: IpcMainEvent, payload) {
@@ -158,6 +165,13 @@ ipcMain.on("ipcCall", async function (ev: IpcMainEvent, payload) {
         case "callDisplayMediaCallback":
             handleDisplayMediaPickerReply(ev.sender.id, args[0]);
             ret = null;
+            break;
+        case "releaseScreenShareAudioSession":
+            handleScreenShareAudioSessionRelease(ev.sender.id, args[0]);
+            ret = null;
+            break;
+        case "bindScreenShareAudioSession":
+            ret = handleScreenShareAudioSessionBinding(ev.sender.id, args[0]);
             break;
 
         case "clearStorage":

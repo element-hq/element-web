@@ -94,6 +94,16 @@ describe("screen-share audio bridge transport", () => {
         expect(`${documentSource}\n${rendererSource}`).not.toMatch(/\b(?:data:|Blob\b)/);
     });
 
+    it("keeps every supported active bridge failure connected to the terminal signal", () => {
+        const bridgeSource = fs.readFileSync(fileURLToPath(new URL("./bridge.ts", import.meta.url)), "utf8");
+        expect(bridgeSource).toContain('this.port.once("close"');
+        expect(bridgeSource).toContain('this.window.once("closed", this.bridgeGoneListener)');
+        expect(bridgeSource).toContain('this.window.webContents.once("render-process-gone", this.bridgeGoneListener)');
+        expect(bridgeSource).toContain('this.capture.onTerminal(() => failPreparation("capture-terminal"))');
+        expect(bridgeSource).toContain("this.terminal.resolve()");
+        expect(bridgeSource).toContain('data.type === "failed"');
+    });
+
     it("stops never-captured consumers after the existing timeout and clears its timers", () => {
         vi.useFakeTimers();
         const stopped = vi.fn();

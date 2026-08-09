@@ -19,6 +19,7 @@ export type DisplayMediaSessionState = "Idle" | "Selecting" | "PreparingAudio" |
 
 export interface DisplayMediaRequest {
     senderId: number;
+    requesterWidgetId: string | null;
     audioRequested: boolean;
     callback: (streams: Streams) => void;
     onRequesterDestroyed(listener: () => void): () => void;
@@ -27,11 +28,21 @@ export interface DisplayMediaRequest {
 export interface PickerReply {
     requestId: number;
     sourceId: string | null;
+    requesterWidgetId?: string | null;
+    sessionId?: string | null;
 }
+
+export interface ScreenShareAudioSessionRelease {
+    requestId: number;
+    requesterWidgetId: string;
+    sessionId: string;
+}
+
+export type ScreenShareAudioSessionBinding = ScreenShareAudioSessionRelease;
 
 export interface DisplayMediaSessionDependencies {
     enumerateSources(): Promise<DesktopCapturerSource[]>;
-    openPicker(senderId: number, requestId: number): boolean;
+    openPicker(senderId: number, requestId: number, requesterWidgetId: string | null): boolean;
     isElementOwnedSource(source: DesktopCapturerSource): boolean;
     provider?: ScreenShareAudioProvider;
     bridgeFactory?: ScreenShareAudioBridgeFactory;
@@ -44,6 +55,7 @@ interface OwnedRequest extends DisplayMediaRequest {
     disposeRequesterListener?: () => void;
     capture?: PreparedScreenShareAudioCapture;
     bridge?: PreparedScreenShareAudioBridge;
+    sessionId?: string;
     cleanup?: Promise<void>;
 }
 
@@ -98,6 +110,13 @@ export class DisplayMediaSessionController {
             this.invalidate(owned, true);
             return;
         }
+        if (
+            owned.sessionId &&
+            (reply.requesterWidgetId !== undefined || reply.sessionId !== undefined) &&
+            (reply.requesterWidgetId !== owned.requesterWidgetId || reply.sessionId !== owned.sessionId)
+        ) {
+            owned.sessionId = undefined;
+        }
         this.state = "PreparingAudio";
         void this.prepare(owned, reply.sourceId);
     }
@@ -109,12 +128,45 @@ export class DisplayMediaSessionController {
         return this.cleanup(owned);
     }
 
+    public bind(senderId: number, binding: ScreenShareAudioSessionBinding): boolean {
+        const owned = this.current;
+        if (
+            !owned ||
+            this.state !== "Selecting" ||
+            owned.senderId !== senderId ||
+            owned.id !== binding.requestId ||
+            owned.requesterWidgetId !== binding.requesterWidgetId ||
+            owned.sessionId !== undefined
+        ) {
+            return false;
+        }
+        owned.sessionId = binding.sessionId;
+        return true;
+    }
+
+    public release(senderId: number, release: ScreenShareAudioSessionRelease): Promise<void> {
+        const owned = this.current;
+        if (
+            !owned ||
+            owned.senderId !== senderId ||
+            owned.id !== release.requestId ||
+            owned.requesterWidgetId !== release.requesterWidgetId ||
+            owned.sessionId !== release.sessionId
+        ) {
+            return Promise.resolve();
+        }
+        this.invalidate(owned, true);
+        return this.cleanup(owned);
+    }
+
     private async openAfterCleanup(owned: OwnedRequest, previous?: OwnedRequest): Promise<void> {
         if (previous) await this.cleanup(previous);
         if (!this.isCurrent(owned)) return;
         this.state = "Selecting";
         try {
-            if (!this.deps.openPicker(owned.senderId, owned.id)) this.invalidate(owned, true);
+            if (!this.deps.openPicker(owned.senderId, owned.id, owned.requesterWidgetId)) {
+                this.invalidate(owned, true);
+            }
         } catch {
             this.invalidate(owned, true);
         }
@@ -135,7 +187,13 @@ export class DisplayMediaSessionController {
 
             const provider = this.deps.provider;
             const bridgeFactory = this.deps.bridgeFactory;
-            if (!owned.audioRequested || this.deps.isElementOwnedSource(source) || !provider || !bridgeFactory) {
+            if (
+                !owned.audioRequested ||
+                !owned.sessionId ||
+                this.deps.isElementOwnedSource(source) ||
+                !provider ||
+                !bridgeFactory
+            ) {
                 this.activateVideoOnly(owned, source);
                 return;
             }
@@ -164,7 +222,7 @@ export class DisplayMediaSessionController {
             owned.bridge = bridge;
             this.complete(owned, { video: source, audio: bridge.frame, enableLocalEcho: false });
             this.state = "Active";
-            void bridge.waitForConsumerStop().then(() => this.invalidateIfCurrent(owned, false));
+            void bridge.waitForTerminal().then(() => this.invalidateIfCurrent(owned, false));
         } catch {
             if (this.isCurrent(owned)) {
                 try {

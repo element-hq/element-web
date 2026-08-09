@@ -42,12 +42,18 @@ function harness(
     });
     controller.begin({
         senderId: 7,
+        requesterWidgetId: "widget",
         audioRequested,
         callback: (streams) => callbacks.push(streams),
         onRequesterDestroyed: (listener) => {
             requesterListener = listener;
             return vi.fn();
         },
+    });
+    controller.bind(7, {
+        requestId: 1,
+        requesterWidgetId: "widget",
+        sessionId: "12345678-1234-4123-8123-123456789abc",
     });
     return { controller, callbacks, picker, destroyRequester: () => requesterListener() };
 }
@@ -67,7 +73,7 @@ describe("DisplayMediaSessionController", () => {
             provider: { getAvailability: async () => "available", prepare },
         });
         await tick();
-        expect(picker).toHaveBeenCalledWith(7, 1);
+        expect(picker).toHaveBeenCalledWith(7, 1, "widget");
         controller.reply(7, { requestId: 1, sourceId: null });
         controller.reply(7, { requestId: 1, sourceId: null });
         await tick();
@@ -104,6 +110,7 @@ describe("DisplayMediaSessionController", () => {
         const secondCallback = vi.fn();
         first.controller.begin({
             senderId: 7,
+            requesterWidgetId: "widget",
             audioRequested: true,
             callback: secondCallback,
             onRequesterDestroyed: () => vi.fn(),
@@ -111,8 +118,8 @@ describe("DisplayMediaSessionController", () => {
         await tick();
         expect(first.callbacks).toHaveLength(1);
         expect(first.picker.mock.calls).toEqual([
-            [7, 1],
-            [7, 2],
+            [7, 1, "widget"],
+            [7, 2, "widget"],
         ]);
         expect(secondCallback).not.toHaveBeenCalled();
     });
@@ -180,8 +187,7 @@ describe("DisplayMediaSessionController", () => {
         expect(controller.getAudit()).toMatchObject({ state: "Idle", activeRequests: 0 });
     });
 
-    it("owns a prepared bridge until consumer stop and tears it down idempotently", async () => {
-        const stopped = Promise.withResolvers<void>();
+    it("owns a prepared bridge until its exact session is released and tears it down idempotently", async () => {
         const capture = {
             format: { sampleRate: 48_000, channelCount: 2, sampleFormat: "pcm-s16le" },
             start: vi.fn(),
@@ -191,7 +197,8 @@ describe("DisplayMediaSessionController", () => {
         const bridge = {
             frame: { routingId: 1 },
             port: {},
-            waitForConsumerStop: () => stopped.promise,
+            waitForConsumerStop: () => new Promise(() => {}),
+            waitForTerminal: () => new Promise(() => {}),
             stop: vi.fn(),
         } as unknown as PreparedScreenShareAudioBridge;
         const provider: ScreenShareAudioProvider = {
@@ -204,8 +211,11 @@ describe("DisplayMediaSessionController", () => {
         await tick();
         expect(callbacks[0]).toMatchObject({ audio: bridge.frame, enableLocalEcho: false });
         expect(controller.state).toBe("Active");
-        stopped.resolve();
-        await tick();
+        await controller.release(7, {
+            requestId: 1,
+            requesterWidgetId: "widget",
+            sessionId: "12345678-1234-4123-8123-123456789abc",
+        });
         await controller.stop();
         expect(bridge.stop).toHaveBeenCalledOnce();
         expect(controller.state).toBe("Idle");
@@ -237,6 +247,7 @@ describe("DisplayMediaSessionController", () => {
         await tick();
         controller.begin({
             senderId: 7,
+            requesterWidgetId: "widget",
             audioRequested: true,
             callback: vi.fn(),
             onRequesterDestroyed: () => vi.fn(),
@@ -284,12 +295,13 @@ describe("DisplayMediaSessionController", () => {
         await tick();
         controller.begin({
             senderId: 7,
+            requesterWidgetId: "widget",
             audioRequested: true,
             callback: vi.fn(),
             onRequesterDestroyed: () => vi.fn(),
         });
         await tick();
-        expect(picker).toHaveBeenLastCalledWith(7, 2);
+        expect(picker).toHaveBeenLastCalledWith(7, 2, "widget");
         expect(controller.state).toBe("Selecting");
     });
 
@@ -329,6 +341,7 @@ describe("DisplayMediaSessionController", () => {
             frame: {},
             port: {},
             waitForConsumerStop: vi.fn(),
+            waitForTerminal: vi.fn(() => new Promise(() => {})),
             stop: vi.fn(),
         } as unknown as PreparedScreenShareAudioBridge;
         const { controller, destroyRequester } = harness({
@@ -355,5 +368,83 @@ describe("DisplayMediaSessionController", () => {
         await tick();
         expect(callbacks).toHaveLength(1);
         expect(controller.state).toBe("Idle");
+    });
+
+    it("accepts release while Selecting and ignores stale or cross-sender tuples", async () => {
+        const { controller, callbacks } = harness();
+        await tick();
+        await controller.release(8, {
+            requestId: 1,
+            requesterWidgetId: "widget",
+            sessionId: "12345678-1234-4123-8123-123456789abc",
+        });
+        await controller.release(7, {
+            requestId: 1,
+            requesterWidgetId: "other-widget",
+            sessionId: "22345678-1234-4123-8123-123456789abc",
+        });
+        await controller.release(7, {
+            requestId: 2,
+            requesterWidgetId: "widget",
+            sessionId: "12345678-1234-4123-8123-123456789abc",
+        });
+        expect(controller.state).toBe("Selecting");
+        await controller.release(7, {
+            requestId: 1,
+            requesterWidgetId: "widget",
+            sessionId: "12345678-1234-4123-8123-123456789abc",
+        });
+        expect(callbacks).toHaveLength(1);
+        expect(controller.state).toBe("Idle");
+    });
+
+    it("aborts a pending preparation on exact release and cleans a late capture", async () => {
+        const preparation = Promise.withResolvers<PreparedScreenShareAudioCapture>();
+        const lateCapture = capture();
+        const { controller } = harness({
+            provider: { getAvailability: async () => "available", prepare: () => preparation.promise },
+            bridgeFactory: { prepare: vi.fn() },
+        });
+        await tick();
+        controller.reply(7, { requestId: 1, sourceId: source().id });
+        await tick();
+        await controller.release(7, {
+            requestId: 1,
+            requesterWidgetId: "widget",
+            sessionId: "12345678-1234-4123-8123-123456789abc",
+        });
+        preparation.resolve(lateCapture);
+        await tick();
+        expect(lateCapture.stop).toHaveBeenCalledOnce();
+        expect(controller.state).toBe("Idle");
+    });
+
+    it("returns Active to Idle exactly once when the bridge reports a terminal failure", async () => {
+        const terminal = Promise.withResolvers<void>();
+        const bridge = {
+            frame: { routingId: 1 },
+            port: {},
+            waitForConsumerStop: () => new Promise(() => {}),
+            waitForTerminal: () => terminal.promise,
+            stop: vi.fn(),
+        } as unknown as PreparedScreenShareAudioBridge;
+        const { controller, callbacks } = harness({
+            provider: { getAvailability: async () => "available", prepare: async () => capture() },
+            bridgeFactory: { prepare: async () => bridge },
+        });
+        await tick();
+        controller.reply(7, { requestId: 1, sourceId: source().id });
+        await tick();
+        expect(controller.state).toBe("Active");
+        terminal.resolve();
+        await tick();
+        expect(callbacks).toHaveLength(1);
+        expect(bridge.stop).toHaveBeenCalledOnce();
+        expect(controller.getAudit()).toMatchObject({
+            state: "Idle",
+            activeRequests: 0,
+            activeCaptures: 0,
+            activeBridges: 0,
+        });
     });
 });

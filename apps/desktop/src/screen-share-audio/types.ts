@@ -47,6 +47,7 @@ export interface PreparedScreenShareAudioBridge {
     readonly frame: WebFrameMain;
     readonly port: MessagePortMain;
     waitForConsumerStop(): Promise<void>;
+    waitForTerminal(): Promise<void>;
     stop(): Promise<void>;
 }
 

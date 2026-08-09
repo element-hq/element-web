@@ -17,10 +17,36 @@ import {
 import { ElectronScreenShareAudioBridgeFactory, getScreenShareAudioBridgeAudit } from "./screen-share-audio/bridge.js";
 import { createDevelopmentFakeProvider, getFakeScreenShareAudioAudit } from "./screen-share-audio/fake-provider.js";
 import {
+    createDevelopmentProcessLoopbackProvider,
+    getProcessLoopbackProviderAudit,
+} from "./screen-share-audio/process-loopback-provider.js";
+import {
     DisplayMediaSessionController,
     type DisplayMediaRequest,
     type PickerReply,
+    type ScreenShareAudioSessionRelease,
+    type ScreenShareAudioSessionBinding,
 } from "./screen-share-audio/session-controller.js";
+
+const sessionIdPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+function isValidWidgetId(value: unknown): value is string {
+    return (
+        typeof value === "string" &&
+        value.length > 0 &&
+        value.length <= 255 &&
+        [...value].every((character) => character.charCodeAt(0) >= 32 && character.charCodeAt(0) !== 127)
+    );
+}
+
+export function getRequesterWidgetId(frameUrl: string): string | null {
+    try {
+        const value = new URL(frameUrl).searchParams.get("widgetId");
+        return isValidWidgetId(value) ? value : null;
+    } catch {
+        return null;
+    }
+}
 
 export function observeRequester(
     frame: Electron.WebFrameMain,
@@ -47,13 +73,17 @@ export function observeRequester(
 }
 
 const developmentFakeProvider = createDevelopmentFakeProvider();
+const developmentProcessLoopbackProvider = developmentFakeProvider
+    ? undefined
+    : createDevelopmentProcessLoopbackProvider();
+const developmentProvider = developmentFakeProvider ?? developmentProcessLoopbackProvider;
 
 export const displayMediaController = new DisplayMediaSessionController({
     enumerateSources: async () => desktopCapturer.getSources({ types: ["screen", "window"] }),
-    openPicker: (senderId, requestId) => {
+    openPicker: (senderId, requestId, requesterWidgetId) => {
         const mainWindow = global.mainWindow;
         if (mainWindow?.webContents.id === senderId) {
-            mainWindow.webContents.send("openDesktopCapturerSourcePicker", { requestId });
+            mainWindow.webContents.send("openDesktopCapturerSourcePicker", { requestId, requesterWidgetId });
             return true;
         }
         return false;
@@ -62,12 +92,12 @@ export const displayMediaController = new DisplayMediaSessionController({
         BrowserWindow.getAllWindows().some(
             (window) => !window.isDestroyed() && window.getMediaSourceId() === source.id,
         ),
-    provider: developmentFakeProvider,
+    provider: developmentProvider,
     bridgeFactory: new ElectronScreenShareAudioBridgeFactory(),
 });
 
 export const developmentFakeAuditProperty = "__elementScreenShareAudioFakeAudit_9f8c24f1";
-if (developmentFakeProvider && !app.isPackaged) {
+if (developmentProvider && !app.isPackaged) {
     Object.defineProperty(app, developmentFakeAuditProperty, {
         enumerable: false,
         configurable: false,
@@ -85,6 +115,7 @@ if (developmentFakeProvider && !app.isPackaged) {
                 },
                 bridge: getScreenShareAudioBridgeAudit(),
                 fake: getFakeScreenShareAudioAudit(),
+                ...(developmentProcessLoopbackProvider && { processLoopback: getProcessLoopbackProviderAudit() }),
             };
         },
     });
@@ -102,6 +133,7 @@ export function handleDisplayMediaRequest(
     }
     displayMediaController.begin({
         senderId: contents.id,
+        requesterWidgetId: getRequesterWidgetId(frame.url),
         audioRequested: request.audioRequested,
         callback,
         onRequesterDestroyed: observeRequester(frame, contents),
@@ -113,9 +145,53 @@ export function handleDisplayMediaPickerReply(senderId: number, reply: PickerRep
         typeof reply !== "object" ||
         reply === null ||
         !Number.isSafeInteger(reply.requestId) ||
-        (typeof reply.sourceId !== "string" && reply.sourceId !== null)
+        (typeof reply.sourceId !== "string" && reply.sourceId !== null) ||
+        (reply.requesterWidgetId !== undefined &&
+            typeof reply.requesterWidgetId !== "string" &&
+            reply.requesterWidgetId !== null) ||
+        (reply.sessionId !== undefined && typeof reply.sessionId !== "string" && reply.sessionId !== null) ||
+        (reply.sessionId !== undefined && reply.sessionId !== null && !sessionIdPattern.test(reply.sessionId))
     ) {
         return;
     }
-    displayMediaController.reply(senderId, reply);
+    displayMediaController.reply(senderId, {
+        ...reply,
+        requesterWidgetId: reply.requesterWidgetId ?? null,
+        sessionId: reply.sessionId ?? null,
+    });
+}
+
+export function handleScreenShareAudioSessionRelease(senderId: number, release: ScreenShareAudioSessionRelease): void {
+    if (
+        typeof release !== "object" ||
+        release === null ||
+        !Number.isSafeInteger(release.requestId) ||
+        !isValidWidgetId(release.requesterWidgetId) ||
+        typeof release.sessionId !== "string" ||
+        !sessionIdPattern.test(release.sessionId)
+    ) {
+        return;
+    }
+    void displayMediaController.release(senderId, release);
+}
+
+export function handleScreenShareAudioSessionBinding(
+    senderId: number,
+    binding: ScreenShareAudioSessionBinding,
+): boolean {
+    if (
+        typeof binding !== "object" ||
+        binding === null ||
+        !Number.isSafeInteger(binding.requestId) ||
+        !isValidWidgetId(binding.requesterWidgetId) ||
+        typeof binding.sessionId !== "string" ||
+        !sessionIdPattern.test(binding.sessionId)
+    ) {
+        return false;
+    }
+    return displayMediaController.bind(senderId, binding);
+}
+
+export function supportsIsolatedScreenShareAudio(): boolean {
+    return developmentProvider !== undefined && !app.isPackaged;
 }

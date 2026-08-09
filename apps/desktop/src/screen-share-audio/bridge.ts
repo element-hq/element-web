@@ -174,6 +174,7 @@ class ElectronScreenShareAudioBridge implements PreparedScreenShareAudioBridge {
     private stopped = false;
     private consumerMonitor?: ConsumerCaptureMonitor;
     private readonly consumerStopped = Promise.withResolvers<void>();
+    private readonly terminal = Promise.withResolvers<void>();
     private stopPromise?: Promise<void>;
     private disposeCaptureTerminal?: () => void;
     private bridgeGoneListener?: () => void;
@@ -198,6 +199,7 @@ class ElectronScreenShareAudioBridge implements PreparedScreenShareAudioBridge {
         void prebuffered.promise.catch(() => {});
         const failPreparation = (failure: BridgePreparationFailure): void => {
             recordFailure(failure);
+            this.terminal.resolve();
             const error = new Error("Screen-share audio bridge terminated");
             ready.reject(error);
             prebuffered.reject(error);
@@ -295,6 +297,10 @@ class ElectronScreenShareAudioBridge implements PreparedScreenShareAudioBridge {
 
     public waitForConsumerStop(): Promise<void> {
         return this.consumerStopped.promise;
+    }
+
+    public waitForTerminal(): Promise<void> {
+        return this.terminal.promise;
     }
 
     public stop(): Promise<void> {

@@ -24,7 +24,7 @@ const { ipcHandlers, mockStore, send, randomArray } = vi.hoisted(() => ({
 }));
 
 vi.mock("electron", () => ({
-    app: { getVersion: vi.fn(() => "1.0.0") },
+    app: { getVersion: vi.fn(() => "1.0.0"), isPackaged: true },
     autoUpdater: { getFeedURL: vi.fn() },
     desktopCapturer: { getSources: vi.fn() },
     ipcMain: {
@@ -49,9 +49,11 @@ vi.mock("./store.js", () => ({
     SafeStorageDecryptionError: class SafeStorageDecryptionError extends Error {},
 }));
 vi.mock("./utils.js", () => ({ randomArray }));
-vi.mock("./displayMediaCallback.js", () => ({
-    getDisplayMediaCallback: vi.fn(),
-    setDisplayMediaCallback: vi.fn(),
+vi.mock("./display-media.js", () => ({
+    handleDisplayMediaPickerReply: vi.fn(),
+    handleScreenShareAudioSessionBinding: vi.fn(),
+    handleScreenShareAudioSessionRelease: vi.fn(),
+    supportsIsolatedScreenShareAudio: vi.fn().mockResolvedValue(false),
 }));
 vi.mock("./config.js");
 
