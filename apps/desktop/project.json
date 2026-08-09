@@ -30,8 +30,8 @@
         "build:res": {
             "cache": true,
             "command": "node scripts/copy-res.ts",
-            "inputs": ["{projectRoot}/i18n"],
-            "outputs": ["{projectRoot}/lib/i18n"],
+            "inputs": ["{projectRoot}/i18n", "{projectRoot}/src/screen-share-audio/assets"],
+            "outputs": ["{projectRoot}/lib/i18n", "{projectRoot}/lib/screen-share-audio/assets"],
             "options": { "cwd": "apps/desktop" }
         },
         "build": {

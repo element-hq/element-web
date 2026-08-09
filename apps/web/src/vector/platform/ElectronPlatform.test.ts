@@ -106,7 +106,7 @@ describe("ElectronPlatform", () => {
 
         // @ts-ignore mock
         vi.mocked(Modal.createDialog).mockReturnValue({
-            finished: new Promise((r) => r(["source"])),
+            finished: new Promise((r) => r([{ id: "source" }])),
         });
 
         let res: () => void;
@@ -119,14 +119,53 @@ describe("ElectronPlatform", () => {
         });
 
         const [event, handler] = getElectronEventHandlerCall("openDesktopCapturerSourcePicker")!;
-        handler();
+        handler({} as any, { requestId: 42 });
 
         await waitForIPCSend;
 
         expect(event).toBeTruthy();
         expect(Modal.createDialog).toHaveBeenCalledWith(DesktopCapturerSourcePicker);
         // @ts-ignore mock
-        expect(plat.ipc.call).toHaveBeenCalledWith("callDisplayMediaCallback", "source");
+        expect(plat.ipc.call).toHaveBeenCalledWith("callDisplayMediaCallback", {
+            requestId: 42,
+            sourceId: "source",
+        });
+    });
+
+    it("returns a request-aware cancellation without changing the picker", async () => {
+        const plat = new ElectronPlatform();
+        Modal.createDialog = vi.fn().mockReturnValue({ finished: Promise.resolve([]) });
+        // @ts-ignore mock
+        const call = vi.spyOn(plat.ipc, "call").mockResolvedValue(undefined);
+
+        const [, handler] = getElectronEventHandlerCall("openDesktopCapturerSourcePicker")!;
+        await handler({} as any, { requestId: 9 });
+
+        expect(Modal.createDialog).toHaveBeenCalledWith(DesktopCapturerSourcePicker);
+        expect(call).toHaveBeenCalledWith("callDisplayMediaCallback", { requestId: 9, sourceId: null });
+    });
+
+    it("closes an overlapping picker and ignores its late result", async () => {
+        const plat = new ElectronPlatform();
+        const first = Promise.withResolvers<any[]>();
+        const second = Promise.withResolvers<any[]>();
+        const firstHandle = { finished: first.promise, close: vi.fn() };
+        const secondHandle = { finished: second.promise, close: vi.fn() };
+        Modal.createDialog = vi.fn().mockReturnValueOnce(firstHandle).mockReturnValueOnce(secondHandle);
+        // @ts-ignore mock
+        const call = vi.spyOn(plat.ipc, "call").mockResolvedValue(undefined);
+        const [, handler] = getElectronEventHandlerCall("openDesktopCapturerSourcePicker")!;
+
+        const firstRun = handler({} as any, { requestId: 1 });
+        const secondRun = handler({} as any, { requestId: 2 });
+        expect(firstHandle.close).toHaveBeenCalledOnce();
+        first.resolve([{ id: "stale" }]);
+        second.resolve([{ id: "current" }]);
+        await Promise.all([firstRun, secondRun]);
+
+        expect(call).toHaveBeenCalledOnce();
+        expect(call).toHaveBeenCalledWith("callDisplayMediaCallback", { requestId: 2, sourceId: "current" });
+        expect(secondHandle.close).not.toHaveBeenCalled();
     });
 
     it("should show a toast when showToast is fired", async () => {

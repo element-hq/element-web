@@ -9,7 +9,7 @@ import { app, autoUpdater, desktopCapturer, ipcMain, powerSaveBlocker, TouchBar,
 
 import IpcMainEvent = Electron.IpcMainEvent;
 import { randomArray } from "./utils.js";
-import { getDisplayMediaCallback, setDisplayMediaCallback } from "./displayMediaCallback.js";
+import { handleDisplayMediaPickerReply } from "./display-media.js";
 import Store, { clearDataAndRelaunch } from "./store.js";
 import { getConfig } from "./config.js";
 
@@ -46,7 +46,7 @@ ipcMain.on("app_onAction", function (_ev: IpcMainEvent, payload) {
     }
 });
 
-ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
+ipcMain.on("ipcCall", async function (ev: IpcMainEvent, payload) {
     const store = Store.instance;
     if (!global.mainWindow || !store) return;
 
@@ -156,8 +156,7 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
             }));
             break;
         case "callDisplayMediaCallback":
-            getDisplayMediaCallback()?.({ video: args[0] });
-            setDisplayMediaCallback(null);
+            handleDisplayMediaPickerReply(ev.sender.id, args[0]);
             ret = null;
             break;
 

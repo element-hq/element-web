@@ -26,7 +26,7 @@ import dis from "../../dispatcher/dispatcher";
 import SdkConfig from "../../SdkConfig";
 import { type IConfigOptions } from "../../IConfigOptions";
 import * as rageshake from "../../rageshake/rageshake";
-import Modal from "../../Modal";
+import Modal, { type IHandle } from "../../Modal";
 import InfoDialog from "../../components/views/dialogs/InfoDialog";
 import Spinner from "../../components/views/elements/Spinner";
 import { Action } from "../../dispatcher/actions";
@@ -92,6 +92,7 @@ export default class ElectronPlatform extends BasePlatform {
     private readonly eventIndexManager: BaseEventIndexManager = new SeshatIndexManager();
     public readonly initialised: Promise<void>;
     private readonly electron: Electron;
+    private desktopCapturerPicker?: IHandle<typeof DesktopCapturerSourcePicker>;
     private protocol!: string;
     private sessionId!: string;
     private badgeOverlayRenderer?: BadgeOverlayRenderer;
@@ -178,11 +179,14 @@ export default class ElectronPlatform extends BasePlatform {
             });
         });
 
-        this.electron.on("openDesktopCapturerSourcePicker", async () => {
-            const { finished } = Modal.createDialog(DesktopCapturerSourcePicker);
-            const [source] = await finished;
-            // getDisplayMedia promise does not return if no dummy is passed here as source
-            await this.ipc.call("callDisplayMediaCallback", source ?? { id: "", name: "", thumbnailURL: "" });
+        this.electron.on("openDesktopCapturerSourcePicker", async (_event, { requestId }) => {
+            this.desktopCapturerPicker?.close();
+            const picker = Modal.createDialog(DesktopCapturerSourcePicker);
+            this.desktopCapturerPicker = picker;
+            const [source] = await picker.finished;
+            if (this.desktopCapturerPicker !== picker) return;
+            this.desktopCapturerPicker = undefined;
+            await this.ipc.call("callDisplayMediaCallback", { requestId, sourceId: source?.id ?? null });
         });
 
         this.electron.on("showToast", async (ev, { title, description, priority = 40 }) => {
