@@ -47,19 +47,13 @@
     &[data-continuation="true"] {
         padding-top: 0;
     }
-}
 
-.sender,
-.body,
-.notificationRoomLabel,
-.notificationBadge,
-.timestamp,
-.padlock,
-.replyChain,
-.footer,
-.threadInfo,
-.receipt {
-    min-width: 0;
+    /* Slot wrappers are the public styling boundary. The supplied content may be
+       a component, fragment, or multiple elements and does not need to forward
+       layout props. */
+    [data-event-tile-slot] {
+        min-width: 0;
+    }
 }
 
 .line {
@@ -69,7 +63,6 @@
 
 .contextMenu {
     z-index: 1;
-    min-width: 0;
 }
 
 /* Shared structural containers. */
@@ -90,7 +83,6 @@
    Presence of the slot is the render/show signal supplied by the host. */
 .actionBar {
     position: absolute;
-    min-width: 0;
     z-index: 10;
     inset-block-start: calc(
         -1 *
@@ -132,7 +124,6 @@
     }
 
     .line {
-        position: relative;
         padding-block: var(--event-tile-group-line-spacing-block-start) var(--event-tile-group-line-spacing-block-end);
         padding-inline-start: var(--event-tile-group-gutter);
         margin-inline-end: 80px;
@@ -234,7 +225,8 @@
         pointer-events: none;
     }
 
-    > * {
+    > [data-event-tile-slot],
+    > .line {
         margin-inline-end: var(--event-tile-irc-right-padding);
     }
 
@@ -271,12 +263,10 @@
     }
 
     .line {
-        position: relative;
         display: flex;
         flex-direction: column;
         flex-grow: 1;
         flex-shrink: 1;
-        min-width: 0;
         padding-block: 1px;
     }
 
@@ -306,7 +296,6 @@
     }
 
     .line {
-        position: relative;
         display: flex;
         flex-direction: column;
         gap: var(--event-tile-bubble-gap);

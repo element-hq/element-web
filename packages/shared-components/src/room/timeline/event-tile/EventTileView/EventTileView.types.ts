@@ -58,7 +58,7 @@ export interface EventTileViewRootState {
     state?: EventTileViewRootStateFlags;
 }
 
-/** Optional application CSS class overrides for shell-owned structural elements. */
+/** Optional application CSS class overrides for shell-owned structural elements and slot boundaries. */
 export interface EventTileViewClassNames {
     root?: string;
     line?: string;
@@ -144,7 +144,7 @@ export interface EventTileViewProps extends EventTileViewHandlers {
     root: EventTileViewRootState;
     /** Optional application CSS class overrides for shell-owned elements. */
     classNames?: EventTileViewClassNames;
-    /** Render-ready children supplied by the application layer. */
+    /** Render-ready children supplied by the application layer. Each slot is rendered inside a named shell boundary. */
     slots: EventTileViewSlots;
     /** DOM refs supplied by the application layer. */
     refs?: EventTileViewRefs;

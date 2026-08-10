@@ -93,7 +93,8 @@ describe("EventTileView", () => {
     it("renders the common root and line structure", () => {
         const { container, getByTestId } = render(<EventTileView {...createProps()} />);
         const root = container.firstElementChild;
-        const line = getByTestId("body").parentElement;
+        const line = getByTestId("body").closest(".custom-line");
+        const contextMenu = getByTestId("context-menu").parentElement;
 
         expect(root).toHaveClass("custom-root");
         expect(root).toHaveAttribute("aria-live", "off");
@@ -107,7 +108,8 @@ describe("EventTileView", () => {
         expect(line).toHaveClass("custom-line");
         expect(line).toHaveAttribute("id", "event-line-1");
         expect(getByTestId("context-menu")).toBeInTheDocument();
-        expect(getByTestId("context-menu")).toHaveClass("custom-context-menu");
+        expect(contextMenu).toHaveClass("custom-context-menu");
+        expect(contextMenu).toHaveAttribute("data-event-tile-slot", "contextMenu");
     });
 
     it("exposes shell state through application-neutral data attributes", () => {
@@ -148,7 +150,9 @@ describe("EventTileView", () => {
         const groupRoot = group.container.firstElementChild!;
 
         expect(groupRoot).toHaveClass(applicationStylingClasses.root);
-        expect(group.getByTestId("styling-contract-body").parentElement).toHaveClass(applicationStylingClasses.line);
+        expect(
+            group.getByTestId("styling-contract-body").closest(`.${applicationStylingClasses.line}`),
+        ).toBeInTheDocument();
 
         for (const slot of [
             "sender",
@@ -162,8 +166,12 @@ describe("EventTileView", () => {
             "threadInfo",
             "receipt",
         ]) {
-            expect(group.getByTestId(`styling-contract-${slot}`)).toHaveClass(
+            expect(group.getByTestId(`styling-contract-${slot}`).closest("[data-event-tile-slot]")).toHaveClass(
                 applicationStylingClasses[slot as keyof typeof applicationStylingClasses],
+            );
+            expect(group.getByTestId(`styling-contract-${slot}`).closest("[data-event-tile-slot]")).toHaveAttribute(
+                "data-event-tile-slot",
+                slot,
             );
         }
 
@@ -190,13 +198,15 @@ describe("EventTileView", () => {
             />,
         );
         expect(preview.container.querySelector(".mx_EventTile_details")).toHaveClass(applicationStylingClasses.details);
-        expect(preview.getByTestId("styling-contract-notificationRoomLabel")).toHaveClass(
+        expect(preview.getByTestId("styling-contract-notificationRoomLabel").parentElement).toHaveClass(
             applicationStylingClasses.notificationRoomLabel,
         );
-        expect(preview.getByTestId("styling-contract-notificationBadge")).toHaveClass(
+        expect(preview.getByTestId("styling-contract-notificationBadge").parentElement).toHaveClass(
             applicationStylingClasses.notificationBadge,
         );
-        expect(preview.getByTestId("styling-contract-room-avatar")).toHaveClass(applicationStylingClasses.avatar);
+        expect(preview.getByTestId("styling-contract-room-avatar").parentElement).toHaveClass(
+            applicationStylingClasses.avatar,
+        );
 
         const file = render(
             <EventTileView
@@ -237,8 +247,8 @@ describe("EventTileView", () => {
             />,
         );
         const root = container.firstElementChild!;
-        const senderDetails = getByTestId("avatar").parentElement!;
-        const line = getByTestId("body").parentElement!;
+        const senderDetails = getByTestId("avatar").parentElement?.parentElement!;
+        const line = getByTestId("body").parentElement?.parentElement!;
 
         expect(senderDetails).toContainElement(getByTestId("sender"));
         expect(senderDetails).toHaveClass("legacy-sender-details");
@@ -247,7 +257,7 @@ describe("EventTileView", () => {
         expect(line).toContainElement(getByTestId("action-bar"));
         expect(line).toContainElement(getByTestId("timestamp"));
         expect(line).toContainElement(getByTestId("receipt"));
-        expect(getByTestId("footer").parentElement).toBe(root);
+        expect(getByTestId("footer").parentElement?.parentElement).toBe(root);
     });
 
     it.each(["Notification", "ThreadsList"] as const)("renders the %s preview layout", (shape) => {
@@ -280,24 +290,24 @@ describe("EventTileView", () => {
             />,
         );
         const root = container.firstElementChild!;
-        const details = getByTestId("sender").parentElement!;
-        const line = getByTestId("body").parentElement!;
+        const details = getByTestId("sender").parentElement?.parentElement!;
+        const line = getByTestId("body").parentElement?.parentElement!;
 
         expect(root).toHaveAttribute("tabindex", "-1");
         expect(details).toContainElement(getByTestId("timestamp"));
         expect(details).toHaveClass("legacy-details");
         expect(details).toContainElement(getByTestId("badge"));
         expect(line).toContainElement(getByTestId("thread-info"));
-        expect(getByTestId("receipt").parentElement).toBe(root);
+        expect(getByTestId("receipt").parentElement?.parentElement).toBe(root);
 
         if (shape === "Notification") {
-            const avatar = getByTestId("room-avatar");
+            const avatar = getByTestId("room-avatar").parentElement!;
             expect(avatar.parentElement).toBe(root);
             expect(avatar).toHaveClass("legacy-avatar");
             expect(queryByTestId("action-bar")).not.toBeInTheDocument();
         } else {
-            const avatar = getByTestId("avatar");
-            const actionBar = getByTestId("action-bar");
+            const avatar = getByTestId("avatar").parentElement!;
+            const actionBar = getByTestId("action-bar").parentElement!;
             expect(avatar.parentElement).toBe(root);
             expect(actionBar.parentElement).toBe(root);
             expect(actionBar).toHaveClass("legacy-thread-action-bar");
@@ -330,18 +340,21 @@ describe("EventTileView", () => {
             />,
         );
         const root = container.firstElementChild!;
-        const link = getByTestId("sender").parentElement?.parentElement;
-        const senderDetails = getByTestId("sender").parentElement!;
+        const link = getByTestId("sender").closest("a");
+        const senderDetails = getByTestId("sender").closest(".legacy-sender-details");
 
         if (!link) {
             throw new Error("Expected sender details link");
+        }
+        if (!senderDetails) {
+            throw new Error("Expected sender details container");
         }
 
         expect(link).toHaveAttribute("href", renderState.permalink);
         expect(link).toHaveClass("legacy-sender-details-link");
         expect(senderDetails).toHaveClass("legacy-sender-details");
         expect(senderDetails).toContainElement(getByTestId("timestamp"));
-        expect(getByTestId("body").parentElement).toBe(root.lastElementChild);
+        expect(getByTestId("body").closest("#event-line-1")).toBe(root.lastElementChild);
 
         fireEvent.click(link);
         fireEvent.contextMenu(senderDetails);
@@ -358,7 +371,7 @@ describe("EventTileView", () => {
             />,
         );
 
-        expect(getByTestId("body").parentElement?.previousElementSibling).toHaveAttribute("href", "#");
+        expect(getByTestId("body").closest("#event-line-1")?.previousElementSibling).toHaveAttribute("href", "#");
     });
 
     it.each(["group", "irc"] as const)("renders the %s timeline layout", (layout) => {
@@ -383,7 +396,7 @@ describe("EventTileView", () => {
             />,
         );
         const root = container.firstElementChild!;
-        const line = getByTestId("body").parentElement!;
+        const line = getByTestId("body").parentElement?.parentElement!;
 
         expect(root).toHaveAttribute("tabindex", "-1");
         expect(line).toContainElement(getByTestId("reply-chain"));
@@ -396,17 +409,17 @@ describe("EventTileView", () => {
             expect(root.children[3]).toContainElement(getByTestId("sender"));
             expect(root.children[4]).toBe(line);
             expect(root.children[5]).toContainElement(getByTestId("receipt"));
-            expect(getByTestId("padlock").parentElement).toBe(root);
-            expect(getByTestId("footer").parentElement).toBe(line);
-            expect(getByTestId("thread-info").parentElement).toBe(line);
+            expect(getByTestId("padlock").parentElement?.parentElement).toBe(root);
+            expect(getByTestId("footer").parentElement?.parentElement).toBe(line);
+            expect(getByTestId("thread-info").parentElement?.parentElement).toBe(line);
         } else {
-            expect(getByTestId("timestamp").parentElement).toBe(line);
-            expect(getByTestId("padlock").parentElement).toBe(line);
-            expect(getByTestId("footer").parentElement).toBe(root);
-            expect(getByTestId("thread-info").parentElement).toBe(root);
+            expect(getByTestId("timestamp").parentElement?.parentElement).toBe(line);
+            expect(getByTestId("padlock").parentElement?.parentElement).toBe(line);
+            expect(getByTestId("footer").parentElement?.parentElement).toBe(root);
+            expect(getByTestId("thread-info").parentElement?.parentElement).toBe(root);
         }
 
-        expect(getByTestId("receipt").parentElement).toBe(root);
+        expect(getByTestId("receipt").parentElement?.parentElement).toBe(root);
     });
 
     it("forwards root and line interactions", () => {

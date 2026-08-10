@@ -30,39 +30,14 @@ import {
 } from "./ThreadSummary/ThreadSummaryView";
 import styles from "./EventTileView.stories.module.css";
 
-const Slot = ({
-    name,
-    className,
-    children,
-}: React.PropsWithChildren<{ name: string; as?: "div" | "span"; className?: string }>): React.ReactElement => {
-    if (!React.isValidElement(children)) {
-        return <span data-story-boundary={`EventTileView.slots.${name}`}>{children}</span>;
-    }
-
-    const child = children as React.ReactElement<StorySlotProps>;
-    const storyBoundary = `EventTileView.slots.${name}`;
-
-    if (typeof child.type === "string") {
-        return React.cloneElement(child, {
-            "className": classNames(styles.slot, child.props.className, className),
-            "data-story-boundary": storyBoundary,
-        });
-    }
-
-    return React.cloneElement(child, {
-        "className": classNames(styles.slot, child.props.className, className),
-        storyBoundary,
-        "data-story-boundary": storyBoundary,
-    });
-};
-
 type StoryBoundary = HTMLElement;
-type StorySlotProps = { "className"?: string; "storyBoundary"?: string; "data-story-boundary"?: string };
 
 const getBoundary = (target: EventTarget | null, root: HTMLElement): StoryBoundary | null => {
     if (!(target instanceof HTMLElement)) return null;
 
-    const boundary = target.closest<StoryBoundary>("[data-story-boundary], .storyEventTile, .storyEventLine");
+    const boundary = target.closest<StoryBoundary>(
+        "[data-story-boundary], [data-event-tile-slot], .storyEventTile, .storyEventLine",
+    );
     return boundary && root.contains(boundary) ? boundary : null;
 };
 
@@ -105,7 +80,11 @@ const StoryDebugFrame = ({ children }: React.PropsWithChildren): React.ReactElem
             {activeBoundary && (
                 <div className={styles.debugTooltip} role="status">
                     {activeBoundary.dataset.storyBoundary ??
-                        (activeBoundary.classList.contains("storyEventTile") ? "EventTileView" : "EventTileView.line")}
+                        (activeBoundary.dataset.eventTileSlot
+                            ? `EventTileView.slots.${activeBoundary.dataset.eventTileSlot}`
+                            : activeBoundary.classList.contains("storyEventTile")
+                              ? "EventTileView"
+                              : "EventTileView.line")}
                 </div>
             )}
         </div>
@@ -117,72 +96,61 @@ const StoryAvatar = ({
     label = "A",
     size = "30px",
     className,
-    storyBoundary,
 }: {
     room?: boolean;
     label?: string;
     size?: string;
     className?: string;
-    storyBoundary?: string;
 }): React.ReactElement => (
-    <div className={className} data-story-boundary={storyBoundary}>
-        <Avatar
-            id={room ? "!story-room:example.org" : `@${label.toLowerCase()}:example.org`}
-            name={room ? "Story room" : label === "A" ? "Alice Example" : "Bob Example"}
-            type="round"
-            size={size}
-            aria-label={room ? "Story room avatar" : `${label} avatar`}
-        />
-    </div>
+    <Avatar
+        id={room ? "!story-room:example.org" : `@${label.toLowerCase()}:example.org`}
+        name={room ? "Story room" : label === "A" ? "Alice Example" : "Bob Example"}
+        type="round"
+        size={size}
+        className={className}
+        aria-label={room ? "Story room avatar" : `${label} avatar`}
+    />
 );
 
 const StorySender = ({
     name = "Alex Example",
     id = "@alex:example.org",
     className,
-    storyBoundary,
 }: {
     name?: string;
     id?: string;
     className?: string;
-    storyBoundary?: string;
 }): React.ReactElement => {
     const vm = useMockedViewModel({ displayName: name, displayIdentifier: id, emphasizeDisplayName: true }, {});
-    return (
-        <span className={styles.storyBoundaryHost} data-story-boundary={storyBoundary}>
-            <DisambiguatedProfileView vm={vm} className={className} />
-        </span>
-    );
+    return <DisambiguatedProfileView vm={vm} className={className} />;
 };
 
 const StoryTimestamp = ({
     className,
-    storyBoundary,
     visible = true,
-}: StorySlotProps & { visible?: boolean }): React.ReactElement => {
+}: {
+    className?: string;
+    visible?: boolean;
+}): React.ReactElement | null => {
     const vm = useMockedViewModel(
         { ts: "12:34", tsSentAt: "Tuesday, 4 August 2026 at 12:34", inhibitTooltip: true },
         {},
     );
-    return (
-        <span className={className} data-story-boundary={storyBoundary}>
-            {visible && <MessageTimestampView vm={vm} />}
-        </span>
-    );
+    return visible ? <MessageTimestampView vm={vm} className={className} /> : null;
 };
-const StoryBody = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => (
-    <div className={classNames(styles.body, className)} data-story-boundary={storyBoundary}>
+const StoryBody = (): React.ReactElement => (
+    <div className={styles.body}>
         <div>Here is a realistic event tile body with enough text to show the available width.</div>
         <div>This second line makes wrapping and vertical rhythm visible in Storybook.</div>
     </div>
 );
-const StoryReplyChain = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => (
-    <blockquote className={classNames(styles.replyChain, className)} data-story-boundary={storyBoundary}>
+const StoryReplyChain = (): React.ReactElement => (
+    <blockquote className={styles.replyChain}>
         <span className={styles.replyAuthor}>Taylor Example</span>
         <span>Earlier message quoted in this reply.</span>
     </blockquote>
 );
-const StoryActionBar = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => {
+const StoryActionBar = (): React.ReactElement | null => {
     const vm = useMockedViewModel(
         {
             actions: [ActionBarAction.React, ActionBarAction.Reply, ActionBarAction.Options],
@@ -195,17 +163,13 @@ const StoryActionBar = ({ className, storyBoundary }: StorySlotProps): React.Rea
         },
         { onReactionsClick: fn(), onReplyClick: fn(), onOptionsClick: fn() },
     );
-    return (
-        <div className={className} data-story-boundary={storyBoundary}>
-            <ActionBarView vm={vm} />
-        </div>
-    );
+    return <ActionBarView vm={vm} />;
 };
 
 const useStoryReactionTooltipVm = (caption: string): ReactionsRowButtonTooltipViewModel =>
     useMockedViewModel({ formattedSenders: "Alice Example and Bob Example", caption }, {});
 
-const StoryFooter = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => {
+const StoryFooter = (): React.ReactElement => {
     const vm = useMockedViewModel(
         {
             ariaLabel: "Reactions",
@@ -237,12 +201,10 @@ const StoryFooter = ({ className, storyBoundary }: StorySlotProps): React.ReactE
         { onClick: fn() },
     );
     return (
-        <div className={classNames(styles.footer, className)} data-story-boundary={storyBoundary}>
-            <ReactionsRowView vm={vm} className={styles.storyReactions}>
-                <ReactionsRowButtonView vm={thumbsUpVm} />
-                <ReactionsRowButtonView vm={heartVm} />
-            </ReactionsRowView>
-        </div>
+        <ReactionsRowView vm={vm} className={styles.storyReactions}>
+            <ReactionsRowButtonView vm={thumbsUpVm} />
+            <ReactionsRowButtonView vm={heartVm} />
+        </ReactionsRowView>
     );
 };
 const storyThreadPreview: ThreadMessagePreviewViewSnapshot = {
@@ -258,7 +220,7 @@ const storyThreadPreview: ThreadMessagePreviewViewSnapshot = {
     previewTooltip: "Can you review the draft?",
 };
 
-const StoryThreadInfo = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => {
+const StoryThreadInfo = (): React.ReactElement => {
     const previewVm = useMockedViewModel(storyThreadPreview, {});
     const threadSummaryVm = useMockedViewModel(
         {
@@ -272,23 +234,23 @@ const StoryThreadInfo = ({ className, storyBoundary }: StorySlotProps): React.Re
         { onClick: fn() },
     );
 
-    return <ThreadSummaryView vm={threadSummaryVm} className={className} data-story-boundary={storyBoundary} />;
+    return <ThreadSummaryView vm={threadSummaryVm} />;
 };
 
 /** The ThreadsList view uses the compact inline replies preview, not ThreadSummaryView. */
-const StoryThreadListInfo = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => {
+const StoryThreadListInfo = (): React.ReactElement => {
     const previewVm = useMockedViewModel(storyThreadPreview, {});
 
     return (
-        <div className={classNames(styles.threadListInfo, className)} data-story-boundary={storyBoundary}>
+        <div className={styles.threadListInfo}>
             <ThreadsIcon className={styles.threadListIcon} />
             <span className={styles.threadListReplies}>3</span>
             <ThreadMessagePreviewView vm={previewVm} />
         </div>
     );
 };
-const StoryReceipt = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => (
-    <span className={classNames(styles.receipt, className)} data-story-boundary={storyBoundary}>
+const StoryReceipt = (): React.ReactElement => (
+    <span className={styles.receipt}>
         <span className={styles.readReceiptGroup}>
             <button type="button" className={styles.readReceiptButton} aria-label="Read by Alex and Taylor">
                 <span className={styles.readReceiptContainer} aria-hidden="true">
@@ -299,16 +261,8 @@ const StoryReceipt = ({ className, storyBoundary }: StorySlotProps): React.React
         </span>
     </span>
 );
-const StoryPadlock = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => (
-    <span className={styles.storyBoundaryHost} data-story-boundary={storyBoundary}>
-        <E2ePadlock icon={E2ePadlockIcon.Normal} title="End-to-end encrypted" className={className} />
-    </span>
-);
-const StoryContextMenu = ({ className, storyBoundary }: StorySlotProps): React.ReactElement => (
-    <span className={classNames(styles.contextMenu, className)} data-story-boundary={storyBoundary}>
-        ⋯
-    </span>
-);
+const StoryPadlock = (): React.ReactElement => <E2ePadlock icon={E2ePadlockIcon.Normal} title="End-to-end encrypted" />;
+const StoryContextMenu = (): React.ReactElement => <span className={styles.contextMenu}>⋯</span>;
 
 const TimelineStoryFrame = ({
     density,
@@ -343,61 +297,17 @@ const baseRoot: EventTileViewProps["root"] = {
 };
 
 const roomSlots: EventTileViewProps["slots"] = {
-    sender: (
-        <Slot name="sender" as="div">
-            <StorySender />
-        </Slot>
-    ),
-    avatar: (
-        <Slot name="avatar">
-            <StoryAvatar />
-        </Slot>
-    ),
-    body: (
-        <Slot name="body" as="div">
-            <StoryBody />
-        </Slot>
-    ),
-    timestamp: (
-        <Slot name="timestamp">
-            <StoryTimestamp />
-        </Slot>
-    ),
-    padlock: (
-        <Slot name="padlock">
-            <StoryPadlock />
-        </Slot>
-    ),
-    replyChain: (
-        <Slot name="replyChain" as="div">
-            <StoryReplyChain />
-        </Slot>
-    ),
-    actionBar: (
-        <Slot name="actionBar" as="div">
-            <StoryActionBar />
-        </Slot>
-    ),
-    footer: (
-        <Slot name="footer" as="div">
-            <StoryFooter />
-        </Slot>
-    ),
-    threadInfo: (
-        <Slot name="threadInfo" as="div">
-            <StoryThreadInfo />
-        </Slot>
-    ),
-    receipt: (
-        <Slot name="receipt">
-            <StoryReceipt />
-        </Slot>
-    ),
-    contextMenu: (
-        <Slot name="contextMenu">
-            <StoryContextMenu />
-        </Slot>
-    ),
+    sender: <StorySender />,
+    avatar: <StoryAvatar />,
+    body: <StoryBody />,
+    timestamp: <StoryTimestamp />,
+    padlock: <StoryPadlock />,
+    replyChain: <StoryReplyChain />,
+    actionBar: <StoryActionBar />,
+    footer: <StoryFooter />,
+    threadInfo: <StoryThreadInfo />,
+    receipt: <StoryReceipt />,
+    contextMenu: <StoryContextMenu />,
 };
 
 type EventTileStoryProps = Omit<EventTileViewProps, "root"> & {
@@ -437,21 +347,14 @@ function EventTileViewStoryContent({
         const interaction = tileInteractions[suffix] ?? { hovered: false, focused: false };
         const showActionBar = interaction.hovered || interaction.focused;
         const showTimestamp = isLast || showActionBar;
-        const timestamp =
-            layout === "irc" || showTimestamp ? (
-                <Slot name="timestamp">
-                    <StoryTimestamp visible={showTimestamp} />
-                </Slot>
-            ) : undefined;
+        const timestamp = layout === "irc" || showTimestamp ? <StoryTimestamp visible={showTimestamp} /> : undefined;
         const showSenderAndAvatar = layout === "irc" || !tileState.continuation;
         const sender = showSenderAndAvatar ? (
-            <Slot name="sender" as="div">
-                <StorySender
-                    name={isOwnEvent ? "Alice" : "Bob"}
-                    id={isOwnEvent ? "@alice:example.org" : "@bob:example.org"}
-                    className={layout === "irc" ? styles.ircSender : undefined}
-                />
-            </Slot>
+            <StorySender
+                name={isOwnEvent ? "Alice" : "Bob"}
+                id={isOwnEvent ? "@alice:example.org" : "@bob:example.org"}
+                className={layout === "irc" ? styles.ircSender : undefined}
+            />
         ) : undefined;
 
         const slots =
@@ -461,9 +364,7 @@ function EventTileViewStoryContent({
                       ...(isOwnEvent ? props.slots : { body: props.slots.body }),
                       sender,
                       avatar: showSenderAndAvatar ? (
-                          <Slot name="avatar">
-                              <StoryAvatar label={isOwnEvent ? "A" : "B"} size={layout === "irc" ? "14px" : "30px"} />
-                          </Slot>
+                          <StoryAvatar label={isOwnEvent ? "A" : "B"} size={layout === "irc" ? "14px" : "30px"} />
                       ) : undefined,
                       timestamp,
                       actionBar: showActionBar ? props.slots?.actionBar : undefined,
@@ -595,41 +496,13 @@ export const ThreadsList: Story = {
     args: {
         shape: "ThreadsList",
         slots: {
-            sender: (
-                <Slot name="sender">
-                    <StorySender />
-                </Slot>
-            ),
-            avatar: (
-                <Slot name="avatar">
-                    <StoryAvatar />
-                </Slot>
-            ),
-            body: (
-                <Slot name="body">
-                    <StoryBody />
-                </Slot>
-            ),
-            timestamp: (
-                <Slot name="timestamp">
-                    <StoryTimestamp />
-                </Slot>
-            ),
-            notificationBadge: (
-                <Slot name="notificationBadge">
-                    <span className={styles.notificationDot} role="img" aria-label="Unread notifications" />
-                </Slot>
-            ),
-            threadInfo: (
-                <Slot name="threadInfo">
-                    <StoryThreadListInfo />
-                </Slot>
-            ),
-            actionBar: (
-                <Slot name="actionBar">
-                    <StoryActionBar />
-                </Slot>
-            ),
+            sender: <StorySender />,
+            avatar: <StoryAvatar />,
+            body: <StoryBody />,
+            timestamp: <StoryTimestamp />,
+            notificationBadge: <span className={styles.notificationDot} role="img" aria-label="Unread notifications" />,
+            threadInfo: <StoryThreadListInfo />,
+            actionBar: <StoryActionBar />,
         },
     },
 };
@@ -644,46 +517,14 @@ export const Notification: Story = {
     args: {
         shape: "Notification",
         slots: {
-            sender: (
-                <Slot name="sender">
-                    <StorySender />
-                </Slot>
-            ),
-            body: (
-                <Slot name="body">
-                    <StoryBody />
-                </Slot>
-            ),
-            timestamp: (
-                <Slot name="timestamp">
-                    <StoryTimestamp />
-                </Slot>
-            ),
-            roomAvatar: (
-                <Slot name="roomAvatar">
-                    <StoryAvatar room size="28px" />
-                </Slot>
-            ),
-            notificationRoomLabel: (
-                <Slot name="notificationRoomLabel">
-                    <span className={styles.roomLabel}>in Example room</span>
-                </Slot>
-            ),
-            notificationBadge: (
-                <Slot name="notificationBadge">
-                    <span className={styles.notificationDot} role="img" aria-label="Unread notifications" />
-                </Slot>
-            ),
-            threadInfo: (
-                <Slot name="threadInfo">
-                    <StoryThreadListInfo />
-                </Slot>
-            ),
-            receipt: (
-                <Slot name="receipt">
-                    <StoryReceipt />
-                </Slot>
-            ),
+            sender: <StorySender />,
+            body: <StoryBody />,
+            timestamp: <StoryTimestamp />,
+            roomAvatar: <StoryAvatar room size="28px" />,
+            notificationRoomLabel: <span className={styles.roomLabel}>in Example room</span>,
+            notificationBadge: <span className={styles.notificationDot} role="img" aria-label="Unread notifications" />,
+            threadInfo: <StoryThreadListInfo />,
+            receipt: <StoryReceipt />,
         },
     },
 };
@@ -692,31 +533,11 @@ export const File: Story = {
     args: {
         shape: "File",
         slots: {
-            sender: (
-                <Slot name="sender">
-                    <StorySender />
-                </Slot>
-            ),
-            avatar: (
-                <Slot name="avatar">
-                    <StoryAvatar />
-                </Slot>
-            ),
-            timestamp: (
-                <Slot name="timestamp">
-                    <StoryTimestamp />
-                </Slot>
-            ),
-            body: (
-                <Slot name="body">
-                    <StoryBody />
-                </Slot>
-            ),
-            contextMenu: (
-                <Slot name="contextMenu">
-                    <StoryContextMenu />
-                </Slot>
-            ),
+            sender: <StorySender />,
+            avatar: <StoryAvatar />,
+            timestamp: <StoryTimestamp />,
+            body: <StoryBody />,
+            contextMenu: <StoryContextMenu />,
         },
     },
 };
@@ -726,26 +547,10 @@ export const Highlighted: Story = {
         shape: "Thread",
         state: { highlighted: true },
         slots: {
-            sender: (
-                <Slot name="sender">
-                    <StorySender />
-                </Slot>
-            ),
-            avatar: (
-                <Slot name="avatar">
-                    <StoryAvatar />
-                </Slot>
-            ),
-            timestamp: (
-                <Slot name="timestamp">
-                    <StoryTimestamp />
-                </Slot>
-            ),
-            body: (
-                <Slot name="body">
-                    <StoryBody />
-                </Slot>
-            ),
+            sender: <StorySender />,
+            avatar: <StoryAvatar />,
+            timestamp: <StoryTimestamp />,
+            body: <StoryBody />,
         },
     },
 };
@@ -755,26 +560,10 @@ export const Selected: Story = {
         shape: "Thread",
         state: { selected: true },
         slots: {
-            sender: (
-                <Slot name="sender">
-                    <StorySender />
-                </Slot>
-            ),
-            avatar: (
-                <Slot name="avatar">
-                    <StoryAvatar />
-                </Slot>
-            ),
-            timestamp: (
-                <Slot name="timestamp">
-                    <StoryTimestamp />
-                </Slot>
-            ),
-            body: (
-                <Slot name="body">
-                    <StoryBody />
-                </Slot>
-            ),
+            sender: <StorySender />,
+            avatar: <StoryAvatar />,
+            timestamp: <StoryTimestamp />,
+            body: <StoryBody />,
         },
     },
 };

@@ -19,21 +19,7 @@
     z-index: auto;
 }
 
-.storyEventTile[data-layout="bubble"] .footer {
-    position: relative;
-    z-index: 1;
-}
-
 [data-story-hovered="true"] {
-    outline: 1px dashed var(--cpd-color-border-focused, #5e7cff);
-    outline-offset: 2px;
-}
-
-.storyBoundaryHost {
-    display: contents;
-}
-
-.storyBoundaryHost[data-story-hovered="true"] > * {
     outline: 1px dashed var(--cpd-color-border-focused, #5e7cff);
     outline-offset: 2px;
 }
@@ -97,38 +83,6 @@
     /* Marker class used by state stories to style the shared line slot. */
 }
 
-.avatar,
-.roomAvatar {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 30px;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    color: #fff;
-    background: #617b9b;
-    font-size: 13px;
-    font-weight: 700;
-}
-
-.roomAvatar {
-    background: #7e5c96;
-}
-
-.avatar,
-.roomAvatar {
-    cursor: pointer;
-    user-select: none;
-}
-
-.sender {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 8px;
-    min-width: 0;
-}
-
 .threadListInfo {
     display: flex;
     position: relative;
@@ -176,11 +130,6 @@
     padding-inline: 5px;
 }
 
-.senderName {
-    font-weight: 600;
-}
-
-.senderId,
 .replyAuthor,
 .roomLabel {
     display: inline-flex;
@@ -196,16 +145,6 @@
     height: 8px;
     border-radius: 50%;
     background-color: var(--cpd-color-icon-success-primary, #0d9f6e);
-}
-
-.timestamp {
-    display: inline-block;
-    color: var(--cpd-color-text-secondary, #626a73);
-    font-size: 0.625rem;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-    user-select: none;
-    text-decoration: none;
 }
 
 .receiptAvatar {
@@ -293,48 +232,6 @@
     font-weight: 600;
 }
 
-.actionBarContent {
-    display: flex;
-    gap: var(--cpd-space-0-5x, 2px);
-    align-items: center;
-    border: var(--cpd-border-width-1, 1px) solid
-        var(--cpd-color-border-disabled, var(--cpd-color-border-subtle, #c9ced4));
-    border-radius: 8px;
-    background: var(--cpd-color-bg-canvas-default, #fff);
-}
-
-.actionBarContent button {
-    display: grid;
-    width: 28px;
-    height: 28px;
-    margin: 3px;
-    padding: 0;
-    place-items: center;
-    border: 0;
-    border-radius: 6px;
-    color: var(--cpd-color-text-secondary, #626a73);
-    background: transparent;
-}
-
-.actionBarContent button:hover {
-    background: var(--cpd-color-bg-subtle-secondary, #e9edf2);
-}
-
-.actionBarContent button svg {
-    width: 20px;
-    height: 20px;
-}
-
-.footer {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--cpd-space-1x, 4px);
-    margin-block-start: 6px;
-    color: var(--cpd-color-text-secondary, #626a73);
-    font-size: 12px;
-}
-
 .storyReactions {
     display: flex;
 }
@@ -345,75 +242,6 @@
 
 .storyEventTile[data-layout="bubble"][data-self="true"] .storyReactions > :last-child {
     order: -1;
-}
-
-.reactionButton {
-    all: unset;
-    display: inline-flex;
-    align-items: center;
-    padding: 1px var(--cpd-space-1-5x, 6px);
-    border: 1px solid var(--cpd-color-gray-400, #b7bec8);
-    border-radius: 10px;
-    color: var(--cpd-color-text-primary, #17191c);
-    background: var(--cpd-color-gray-200, #e3e7eb);
-    cursor: pointer;
-    line-height: var(--cpd-font-size-heading-sm, 20px);
-    user-select: none;
-}
-
-.reactionButton:hover,
-.reactionButton:focus-visible {
-    border-color: var(--cpd-color-border-focused, #5e7cff);
-}
-
-.reactionContent {
-    max-width: 100px;
-    padding-inline-end: var(--cpd-space-1x, 4px);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.reactionCount {
-    white-space: nowrap;
-}
-
-.addReactionButton {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 16px;
-    height: 16px;
-    margin-inline: var(--cpd-space-1x, 4px);
-    padding: var(--cpd-space-1x, 4px);
-    border: 0;
-    border-radius: var(--cpd-space-1x, 4px);
-    color: var(--cpd-color-icon-secondary, #626a73);
-    background: transparent;
-    cursor: pointer;
-}
-
-.addReactionButton:hover,
-.addReactionButton:focus-visible {
-    color: var(--cpd-color-icon-primary, #17191c);
-}
-
-.addReactionButton svg {
-    width: 16px;
-    height: 16px;
-}
-
-.padlock {
-    display: block;
-    width: 14px;
-    height: 14px;
-    color: var(--cpd-color-icon-tertiary, #8d96a0);
-}
-
-.padlock svg {
-    display: block;
-    width: inherit;
-    height: inherit;
 }
 
 .contextMenu {
