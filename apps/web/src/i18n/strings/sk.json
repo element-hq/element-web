@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Výber emotikonov",
         "jump_first_invite": "Prejsť na prvú pozvánku.",
         "message_composer": "Editor správ",
         "n_unread_messages": {
@@ -894,22 +893,6 @@
     },
     "dialog_close_label": "Zavrieť dialógové okno",
     "download_completed": "Preberanie dokončené",
-    "emoji": {
-        "categories": "Kategórie",
-        "category_activities": "Aktivity",
-        "category_animals_nature": "Zvieratá a príroda",
-        "category_flags": "Vlajky",
-        "category_food_drink": "Jedlo a nápoje",
-        "category_frequently_used": "Často používané",
-        "category_objects": "Objekty",
-        "category_smileys_people": "Smajlíky a ľudia",
-        "category_symbols": "Symboly",
-        "category_travel_places": "Cestovanie a miesta",
-        "quick_reactions": "Rýchle reakcie"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Zrušiť vyhľadávanie"
-    },
     "empty_room": "Prázdna miestnosť",
     "empty_room_was_name": "Prázdna miestnosť (bola %(oldName)s)",
     "encryption": {
