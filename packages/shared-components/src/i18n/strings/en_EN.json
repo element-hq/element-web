@@ -4,6 +4,7 @@
     },
     "action": {
         "back": "Back",
+        "cancel": "Cancel",
         "click": "Click",
         "close": "Close",
         "collapse": "Collapse",
@@ -28,6 +29,7 @@
         "reply": "Reply",
         "reply_in_thread": "Reply in thread",
         "retry": "Retry",
+        "save": "Save",
         "search": "Search",
         "start_chat": "Start chat",
         "unpin": "Unpin",
@@ -218,6 +220,8 @@
         "set_status": {
             "away": "Away",
             "be_right_back": "Be right back",
+            "choose_emoji": "Choose Emoji",
+            "custom": "Custom…",
             "focus_time": "Focus Time",
             "in_a_meeting": "In a meeting",
             "on_the_road": "On the road",
