@@ -39,6 +39,7 @@ describe("SetStatusViewModel", () => {
         client = getMockClientWithEventEmitter({
             ...mockClientMethodsUser(),
             ...mockClientMethodsServer(),
+            getExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
             setExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
         });
         vi.mocked(mockOwnProfileStoreInstance).userStatus = undefined;
@@ -127,6 +128,7 @@ describe("SetStatusViewModel", () => {
         });
 
         it("calls setExtendedProfileProperty with null", async () => {
+            client.getExtendedProfileProperty.mockResolvedValue(STATUS);
             const vm = new SetStatusViewModel({ client, ownProfileStore: mockOwnProfileStoreInstance });
             vm.clearStatus();
             await waitFor(() =>
@@ -145,6 +147,7 @@ describe("SetStatusViewModel", () => {
 
         it("rolls back the snapshot on failure", async () => {
             vi.mocked(mockOwnProfileStoreInstance).userStatus = STATUS;
+            client.getExtendedProfileProperty.mockResolvedValue(STATUS);
             client.setExtendedProfileProperty.mockRejectedValue(new Error("network error"));
             const vm = new SetStatusViewModel({ client, ownProfileStore: mockOwnProfileStoreInstance });
             vm.clearStatus();

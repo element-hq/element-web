@@ -143,34 +143,17 @@ export function setUserStatus(client: MatrixClient, userStatus: UserStatus): Pro
  * if anything is set in those fields.
  *
  * @param client The Matrix client to use.
+ * @throws If either request fails, in which case the other may also not have been cleared.
  */
 export async function clearAllUserStatus(client: MatrixClient): Promise<void> {
-    try {
-        const rawUserStatus = await client.getExtendedProfileProperty(
-            client.getSafeUserId(),
-            "org.matrix.msc4426.status",
-        );
-        if (rawUserStatus) {
-            await client.setExtendedProfileProperty("org.matrix.msc4426.status", null);
-        }
-    } catch (ex) {
-        if (!(ex instanceof MatrixError && ex.errcode === "M_NOT_FOUND")) {
-            logger.warn(`Failed to get user status`, ex);
-        }
+    const rawUserStatus = await client.getExtendedProfileProperty(client.getSafeUserId(), "org.matrix.msc4426.status");
+    if (rawUserStatus) {
+        await client.setExtendedProfileProperty("org.matrix.msc4426.status", null);
     }
 
-    try {
-        const rawCallStatus = await client.getExtendedProfileProperty(
-            client.getSafeUserId(),
-            "org.matrix.msc4426.call",
-        );
-        if (rawCallStatus) {
-            setUserOnCall(client, false);
-        }
-    } catch (ex) {
-        if (!(ex instanceof MatrixError && ex.errcode === "M_NOT_FOUND")) {
-            logger.warn(`Failed to get call status`, ex);
-        }
+    const rawCallStatus = await client.getExtendedProfileProperty(client.getSafeUserId(), "org.matrix.msc4426.call");
+    if (rawCallStatus) {
+        await setUserOnCall(client, false);
     }
 }
 
