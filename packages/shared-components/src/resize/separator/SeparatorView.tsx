@@ -61,6 +61,7 @@ export function SeparatorView({ vm, className }: Props): React.ReactNode {
 
     const barContent = (
         <DragIcon
+            className={styles.dragIcon}
             width="20px"
             height="12px"
             // Without a custom view-box, this svg would scale incorrectly and would appear tiny within the separator.

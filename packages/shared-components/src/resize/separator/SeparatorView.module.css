@@ -16,6 +16,7 @@
     display: flex;
     justify-content: center;
     height: 100%;
+    cursor: ew-resize;
 }
 
 /* When type=border, we just render a 1px border */
@@ -86,4 +87,8 @@
         /* Fade in/ fade out the border */
         transition: border 0.15s ease-in-out 0.3s;
     }
+}
+
+.dragIcon {
+    cursor: pointer;
 }
