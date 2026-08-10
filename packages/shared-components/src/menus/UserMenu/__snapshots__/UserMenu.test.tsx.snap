@@ -380,6 +380,14 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
                 🌴 Away
                  
               </li>
+              <li
+                aria-selected="false"
+                role="option"
+                tabindex="0"
+              >
+                ✍️ Custom…
+                 
+              </li>
             </ul>
           </div>
         </div>
@@ -804,6 +812,14 @@ exports[`UserMenu > renders an open menu 1`] = `
                 tabindex="0"
               >
                 🌴 Away
+                 
+              </li>
+              <li
+                aria-selected="false"
+                role="option"
+                tabindex="0"
+              >
+                ✍️ Custom…
                  
               </li>
             </ul>

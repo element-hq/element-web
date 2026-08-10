@@ -136,7 +136,7 @@ overrides:
     "@types/react": "catalog:"
     "@types/react-dom": "catalog:"
     caniuse-lite: 1.0.30001806
-    matrix-widget-api: "^1.17.0"
+    matrix-widget-api: "^1.18.0"
     "@types/node": 25.9.3
     config-file-ts: 0.2.8-rc1
     node-abi: 4.33.0
