@@ -6,7 +6,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { vi, beforeEach, afterEach } from "vitest";
-import fetchMock, { manageFetchMockGlobally } from "@fetch-mock/vitest";
+import { act } from "react";
+import fetchMock from "@fetch-mock/vitest";
 
 import SdkConfig, { DEFAULTS } from "../SdkConfig";
 import "./setupGlobals.ts";
@@ -18,29 +19,19 @@ declare global {
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
-// Ignore benign post-teardown exceptions as they cause flakes
-const guardState = globalThis as unknown as { __vitestTestRunning?: boolean; __teardownGuardInstalled?: boolean };
-if (!guardState.__teardownGuardInstalled) {
-    guardState.__teardownGuardInstalled = true;
-    const isPostTeardownStraggler = (): boolean => !guardState.__vitestTestRunning || typeof window === "undefined";
-    process.on("uncaughtException", (err) => {
-        if (isPostTeardownStraggler()) return;
-        throw err;
-    });
-    process.on("unhandledRejection", (reason) => {
-        if (isPostTeardownStraggler()) return;
-        throw reason;
-    });
-}
+// Captured before any test can install fake timers, so the drain in `afterEach` below always
+// runs against a real immediate and cannot hang.
+const realSetImmediate = globalThis.setImmediate;
 
-manageFetchMockGlobally();
+// Deliberately *not* calling `manageFetchMockGlobally()` as it monkey-patches `vi.restoreAllMocks`,
+// `vi.resetAllMocks` and `vi.unstubAllGlobals` such that they also tear the fetch mock down, putting the
+// environment's real `fetch` back on the global.
+// We re-set the mock before every test below, so the lifecycle integration buys us nothing.
 
 beforeEach(() => {
-    guardState.__vitestTestRunning = true;
-
     vi.stubEnv("TZ", "UTC");
 
-    // set up fetch API mock
+    // set up fetch API mock. Unmatched requests 404 rather than reaching the network.
     fetchMock.hardReset();
     fetchMock.catch(404);
     fetchMock.mockGlobal();
@@ -48,9 +39,12 @@ beforeEach(() => {
     setupLanguageMock();
 });
 
-afterEach(() => {
-    guardState.__vitestTestRunning = false;
-    return fetchMock.callHistory.flush();
+afterEach(async () => {
+    await fetchMock.callHistory.flush();
+
+    await act(async () => {
+        await new Promise((resolve) => realSetImmediate(resolve));
+    });
 });
 
 // uninitialised SdkConfig causes lots of warnings in console, init with defaults

@@ -711,22 +711,6 @@
     },
     "dialog_close_label": "Mbylle dialogun",
     "download_completed": "Shkarkim i Plotësuar",
-    "emoji": {
-        "categories": "Kategori",
-        "category_activities": "Veprimtari",
-        "category_animals_nature": "Kafshë & Natyrë",
-        "category_flags": "Flamuj",
-        "category_food_drink": "Ushqim & Pije",
-        "category_frequently_used": "Përdorur Shpesh",
-        "category_objects": "Objekte",
-        "category_smileys_people": "Emotikone & Persona",
-        "category_symbols": "Simbole",
-        "category_travel_places": "Udhëtim & Vende",
-        "quick_reactions": "Reagime të Shpejta"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Anulo kërkimin"
-    },
     "empty_room": "Dhomë e zbrazët",
     "empty_room_was_name": "Dhomë e zbrazët (qe %(oldName)s)",
     "encryption": {
