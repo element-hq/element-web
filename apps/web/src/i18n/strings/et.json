@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Emojide valija",
         "jump_first_invite": "Siirdu esimese kutse juurde.",
         "message_composer": "Sõnumikoostaja",
         "n_unread_messages": {
@@ -921,22 +920,6 @@
     },
     "dialog_close_label": "Sulge dialoog",
     "download_completed": "Allalaadimine on lõpetatud",
-    "emoji": {
-        "categories": "Kategooriad",
-        "category_activities": "Tegevused",
-        "category_animals_nature": "Loomad ja loodus",
-        "category_flags": "Lipud",
-        "category_food_drink": "Toit ja jook",
-        "category_frequently_used": "Enamkasutatud",
-        "category_objects": "Esemed",
-        "category_smileys_people": "Vigurnäod ja inimesed",
-        "category_symbols": "Sümbolid",
-        "category_travel_places": "Reisimine ja kohad",
-        "quick_reactions": "Reageeri lennult"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Tühista otsing"
-    },
     "empty_room": "Tühi jututuba",
     "empty_room_was_name": "Tühi jututuba (varasema nimega %(oldName)s)",
     "encryption": {

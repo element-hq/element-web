@@ -97,7 +97,7 @@ const DevtoolsDialog: React.FC<IProps> = ({ roomId, threadRootId, onFinished }) 
                                 setTool([label, tool]);
                             };
                             return (
-                                <button className="mx_DevTools_button" key={label} onClick={onClick}>
+                                <button className="mx_DevTools_button" key={label} onClick={onClick} type="button">
                                     {_t(label)}
                                 </button>
                             );
