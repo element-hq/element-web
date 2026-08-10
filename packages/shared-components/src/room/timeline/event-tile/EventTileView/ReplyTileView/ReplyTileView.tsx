@@ -47,6 +47,7 @@ export function ReplyTileView({
 }: ReplyTileViewProps): JSX.Element {
     return (
         <div
+            data-reply-tile
             className={classNames(
                 styles.root,
                 {
@@ -57,7 +58,11 @@ export function ReplyTileView({
             )}
         >
             <a href={href} onClick={onClick} ref={ref}>
-                {sender ? <div className={styles.sender}>{sender}</div> : null}
+                {sender ? (
+                    <div data-reply-tile-sender className={styles.sender}>
+                        {sender}
+                    </div>
+                ) : null}
                 {children}
             </a>
         </div>

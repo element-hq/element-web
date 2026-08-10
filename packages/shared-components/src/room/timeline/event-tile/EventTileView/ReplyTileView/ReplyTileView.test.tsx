@@ -14,13 +14,15 @@ import { ReplyTileView } from "./ReplyTileView";
 import styles from "./ReplyTileView.module.css";
 
 describe("ReplyTileView", () => {
-    it("renders the reply link, sender, and content", () => {
-        render(
+    it("renders stable integration hooks for the reply and sender", () => {
+        const { container } = render(
             <ReplyTileView href="/room/event" sender={<span>Sender</span>}>
                 <span>Reply content</span>
             </ReplyTileView>,
         );
 
+        expect(container.firstElementChild).toHaveAttribute("data-reply-tile");
+        expect(screen.getByText("Sender").parentElement).toHaveAttribute("data-reply-tile-sender");
         expect(screen.getByRole("link")).toHaveAttribute("href", "/room/event");
         expect(screen.getByText("Sender")).toBeInTheDocument();
         expect(screen.getByText("Reply content")).toBeInTheDocument();
@@ -34,6 +36,18 @@ describe("ReplyTileView", () => {
         );
 
         expect(container.firstElementChild).toHaveClass(styles.root, styles.inline, styles.info);
+    });
+
+    it("clips production-shaped event content to the reply preview", () => {
+        const { container } = render(
+            <ReplyTileView href="#">
+                <div className="mx_EventTile_content">Long reply content</div>
+            </ReplyTileView>,
+        );
+
+        const content = container.querySelector<HTMLElement>(".mx_EventTile_content");
+        expect(content).not.toBeNull();
+        expect(getComputedStyle(content!).overflow).toBe("hidden");
     });
 
     it("passes clicks to the reply action", async () => {

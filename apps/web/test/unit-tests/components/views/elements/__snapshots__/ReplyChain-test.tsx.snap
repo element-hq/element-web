@@ -11,13 +11,15 @@ exports[`ReplyChain should call setQuoteExpanded if chain is longer than 2 lines
         class="mx_ReplyChain mx_ReplyChain_color2"
       >
         <div
-          class="_root_18l6q_8"
+          class="_root_ffegs_8"
+          data-reply-tile="true"
         >
           <a
             href="#"
           >
             <div
-              class="_sender_18l6q_103"
+              class="_sender_ffegs_104"
+              data-reply-tile-sender="true"
             >
               <span
                 class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"

@@ -45,6 +45,7 @@
     :global(.mx_EventTile_content) {
         grid-area: message;
         text-overflow: ellipsis;
+        overflow: hidden;
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
