@@ -15,6 +15,7 @@
 
     display: flex;
     justify-content: center;
+    height: 100%;
 }
 
 /* When type=border, we just render a 1px border */

@@ -60,16 +60,14 @@ export function SeparatorView({ vm, className }: Props): React.ReactNode {
     const type = isCollapsed ? "bar" : "border";
 
     const barContent = (
-        <Tooltip description={_t("left_panel|separator_label")} placement="right">
-            <DragIcon
-                width="20px"
-                height="12px"
-                // Without a custom view-box, this svg would scale incorrectly and would appear tiny within the separator.
-                // See https://github.com/element-hq/compound/issues/242
-                viewBox="3.999704360961914 8.999704360961914 16.000295639038086 6.000591278076172"
-                transform="rotate(90)"
-            />
-        </Tooltip>
+        <DragIcon
+            width="20px"
+            height="12px"
+            // Without a custom view-box, this svg would scale incorrectly and would appear tiny within the separator.
+            // See https://github.com/element-hq/compound/issues/242
+            viewBox="3.999704360961914 8.999704360961914 16.000295639038086 6.000591278076172"
+            transform="rotate(90)"
+        />
     );
 
     /**
@@ -84,17 +82,21 @@ export function SeparatorView({ vm, className }: Props): React.ReactNode {
     );
 
     return (
-        <Separator
-            className={classNames(styles.separator, className)}
-            onPointerUp={vm.onPointerUp}
-            onPointerMove={vm.onPointerMove}
-            onPointerDown={vm.onPointerDown}
-            aria-label={_t("left_panel|separator_label")}
-            data-separator-type={type}
-            onDoubleClick={vm.onDoubleClick}
-            disableDoubleClick
-        >
-            {type === "bar" ? barContent : border}
-        </Separator>
+        <Tooltip description={_t("left_panel|separator_label")} placement="right" disabled={type === "border"}>
+            <div>
+                <Separator
+                    className={classNames(styles.separator, className)}
+                    onPointerUp={vm.onPointerUp}
+                    onPointerMove={vm.onPointerMove}
+                    onPointerDown={vm.onPointerDown}
+                    aria-label={_t("left_panel|separator_label")}
+                    data-separator-type={type}
+                    onDoubleClick={vm.onDoubleClick}
+                    disableDoubleClick
+                >
+                    {type === "bar" ? barContent : border}
+                </Separator>
+            </div>
+        </Tooltip>
     );
 }
