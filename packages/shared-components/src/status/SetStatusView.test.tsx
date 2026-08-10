@@ -24,7 +24,7 @@ class SetStatusViewModel extends MockViewModel<SetStatusViewSnapshot> implements
  */
 async function openCustomEditor(): Promise<void> {
     await userEvent.click(screen.getByRole("combobox"));
-    await userEvent.click(screen.getByRole("option", { name: "✍️ Custom…" }));
+    await userEvent.click(screen.getByRole("option", { name: "✍️Custom…" }));
 }
 
 describe("SetStatusView", () => {
