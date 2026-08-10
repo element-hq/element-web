@@ -338,6 +338,7 @@ export default defineConfig({
                 "packages/playwright-common/src/**/*",
                 "**/scripts/**/*",
                 "apps/web/module_system/**/*",
+                "apps/web/webpack.config.ts",
             ],
             rules: {
                 "no-restricted-globals": "off",
@@ -348,6 +349,8 @@ export default defineConfig({
                 "no-restricted-imports": "off",
                 // They can use process.exit
                 "unicorn/no-process-exit": "off",
+                // They can use top level await
+                "node/no-top-level-await": "off",
             },
         },
         {
