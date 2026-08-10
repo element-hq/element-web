@@ -16,11 +16,13 @@
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    /* Disable the browser's native scroll anchoring; core owns it. */
+    /* Turn off the browser's own scroll anchoring. It would try to hold the scroll position
+       when content changes, which conflicts with TanStack doing the same job in JS. */
     overflow-anchor: none;
 }
 
-/* Cold-load cover: the list is laid out but hidden until the anchor settles. */
+/* Applied during the first load. The list is laid out and scrolled into position, but kept
+   hidden (a spinner shows instead) so the user does not watch it shuffle into place. */
 .hidden {
     visibility: hidden;
 }
@@ -32,8 +34,10 @@
     margin: 0;
 }
 
-/* Absolutely-positioned rows. The virtualizer writes each row's translate3d and the
-   container height straight to the DOM (directDomUpdates), so never set transform/height here. */
+/* Rows are positioned absolutely, stacked by TanStack rather than by normal document flow.
+   TanStack writes each row's transform and the container's height straight to the DOM (the
+   directDomUpdates option), so never set transform or height here — it would be overwritten
+   or fight with what TanStack writes. */
 .tile {
     position: absolute;
     top: 0;
@@ -43,7 +47,7 @@
     list-style: none;
 }
 
-/* Centered spinner shown over the cover before the timeline reveals. */
+/* Holds the spinner shown in the middle of the panel while the timeline is still hidden. */
 .cover {
     position: absolute;
     inset: 0;

@@ -17,20 +17,46 @@ import { TimelineOverlayButtons } from "./TimelineOverlayButtons";
 import styles from "./TimelineView.module.css";
 
 /**
- * Headless TanStack virtualizer driven imperatively from `RoomTimelineViewModel`.
- * `anchorTo: "end"` keeps the viewport stable across prepends, trims and spinner toggles.
+ * Renders the room timeline: a scrollable list of messages.
  *
- *  - History prepend: `anchorTo: "end"` re-pins before paint; the `isValidAnchorItem`
- *    patch stops it anchoring on a loading spinner whose key vanishes on batch arrival.
- *  - Stick-to-bottom: `followOnAppend`, gated on `atLiveEnd && !pendingAnchor`.
- *  - startReached/endReached: derived from the rendered range — core has no such callbacks.
- *  - Jump-to: resolve the offset and `scrollToOffset` it, never `scrollToIndex` (its
- *    reconcile chases the index across prepends; see `offsetForKey`).
+ * The list is virtualised — only the rows currently on screen (plus a few just outside it)
+ * exist in the DOM, so a room with thousands of messages stays fast. TanStack Virtual does
+ * that work; we drive it from `RoomTimelineViewModel`, which supplies the rows to show and
+ * is told in return what the user can see.
  *
- * `directDomUpdates: true` writes row transforms and container height pre-paint, so
- * measure→reposition is one frame; React re-renders only on range change.
+ * The hard part of a chat timeline is holding the scroll position steady while the list
+ * changes underneath the reader. Rows appear at the top when older history loads, get
+ * removed when the loaded window is trimmed, and loading spinners come and go. Each of
+ * those shifts everything below it, which without care makes the message someone is
+ * reading jump away mid-sentence. How each case is handled:
  *
- * Known gaps: `overscan` is an item count, not px; short rooms sit top-aligned.
+ *  - **Older history arrives at the top.** `anchorTo: "end"` makes TanStack remember which
+ *    row the user is looking at and, once the new rows are inserted above it, adjust the
+ *    scroll position by the height that was added so that row stays exactly where it was
+ *    on screen. It does this before the browser paints, so the shift is never visible.
+ *
+ *    `isValidAnchorItem` stops it picking a loading spinner as that remembered row: the
+ *    spinner is replaced by the messages it was waiting for, so afterwards there is no
+ *    such row left to line up against and the timeline would lurch to the top instead.
+ *
+ *  - **New messages arrive at the bottom.** `followOnAppend` scrolls down to keep them in
+ *    view, but only when we are already at the live end and not jumping somewhere else.
+ *
+ *  - **Reaching either end**, which is the cue to load more, is worked out from which rows
+ *    are currently rendered. TanStack has no "you reached the top/bottom" callback.
+ *
+ *  - **Jumping to a particular message** looks up how far down that message sits and
+ *    scrolls straight to that position. We avoid TanStack's `scrollToIndex`, which keeps
+ *    steering towards a row *number*: if history loads while it is doing that, every row
+ *    shifts down and it follows the wrong one to the top. See `offsetForKey`.
+ *
+ * `directDomUpdates: true` lets TanStack position rows by writing to the DOM itself rather
+ * than going through a React render, so measuring a row and moving it happen in the same
+ * frame (splitting them across two caused a visible stutter). React still re-renders when
+ * the set of visible rows changes.
+ *
+ * Known gap: `overscan` counts rows rather than pixels, so how far it actually reaches
+ * beyond the viewport varies with how tall those rows happen to be.
  */
 
 /** Seed height for not-yet-measured rows; kept near a typical chat row so the
@@ -40,15 +66,23 @@ const ESTIMATED_ITEM_HEIGHT = 48;
 const OVERSCAN = 16;
 /** px from the list bottom still counted as "at the bottom". */
 const AT_BOTTOM_THRESHOLD_PX = 4;
-/** Cold-load reveal cap: reveal anyway after this many frames if the anchor row
- * never lands (unreachable target), so we never strand behind the cover.
- * 60 frames is roughly 1 second on a 60Hz screen (~0.5s at 120Hz). */
+/**
+ * Give-up limit for the first load.
+ *
+ * While the timeline is being scrolled to its starting message it is kept hidden behind a
+ * spinner, and we only reveal it once that scroll has arrived (see the first-load effect
+ * below). If the target can never be reached — for example the view model asked for a
+ * message that is not in the loaded window — that check would never pass and the timeline
+ * would stay hidden behind the spinner forever. So we reveal it anyway after this many
+ * animation frames: 60 frames is roughly one second on a 60Hz screen, about half that at
+ * 120Hz.
+ */
 const COLD_CAP_FRAMES = 60;
 
 /**
  * How far the view has got through its first load:
- *  - "init"    — nothing rendered yet; waiting for the first batch of items.
- *  - "placing" — items are laid out but hidden while we scroll to the right spot.
+ *  - "init"    — nothing rendered yet; waiting for the first batch of messages.
+ *  - "placing" — rows are laid out but still hidden while we scroll to the right spot.
  *  - "live"    — the timeline is visible and the user is in control of scrolling.
  */
 type Phase = "init" | "placing" | "live";
@@ -56,57 +90,78 @@ type Phase = "init" | "placing" | "live";
 export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element {
     const snapshot = useViewModel(vm);
 
-    // Always-current snapshot for the imperative effects/callbacks below (they run
-    // outside render and must not close over a stale items array).
+    // The effects and callbacks below run outside React's render — from scroll events and
+    // animation frames — so they cannot use the `snapshot` variable captured when this
+    // function last ran, as it may be out of date by then. These refs always hold the
+    // latest values for them to read.
     const snapshotRef = useRef(snapshot);
     snapshotRef.current = snapshot;
 
-    // Spinners are projected as edge list items (kind:"loading") so they reserve scroll
-    // space that anchorTo compensates on add/remove. (anchorTo would otherwise anchor on
-    // the spinner — see isValidAnchorItem below.)
+    // Loading spinners are ordinary entries in this list (kind: "loading") rather than
+    // something floating on top of it. That way each spinner occupies real space in the
+    // scroll area, so showing or hiding one is just another change to the list that the
+    // scroll anchoring described above already knows how to absorb.
     const items = snapshot.items;
     const itemsRef = useRef(items);
     itemsRef.current = items;
 
     const scrollerRef = useRef<HTMLDivElement | null>(null);
 
-    // Why: an uncovered list would visibly jump as messages stream in above/below the anchor.
-    // Cold-load cover: lay out hidden, place the anchor, reveal once settled.
-    // One-shot (the panel is keyed on roomId).
+    // On the first load we lay the rows out, scroll to the message we should start at, and
+    // only then show the result. Otherwise the user would watch the list shuffle around as
+    // rows are measured and the scroll position corrected. A spinner covers the gap. This
+    // happens once per room, as the panel is recreated when the room changes.
     const [revealed, setRevealed] = useState(false);
     const revealedRef = useRef(false);
 
-    // Stable keys (event ids) drive anchoring; core diffs getItemKey(0) across renders
-    // to detect prepends/trims, so this must close over the current items.
+    // Gives each row a stable identity (its event id). TanStack uses these to recognise the
+    // same row from one update to the next, which is what makes the scroll anchoring
+    // possible at all. It also compares the first row's key between renders to spot when
+    // rows have been added or removed at the top, so this must always read the current list.
     const getItemKey = useCallback((index: number): string => items[index]?.key ?? String(index), [items]);
 
-    // Match spinners by STABLE key, not index: at an edge change the VirtualItem's `.index`
-    // is pre-update while `items` is post-update. Keys are shared with the VM (types.ts).
+    // Refuses loading spinners as the row the scroll position is anchored to; see the note
+    // on `isValidAnchorItem` in the file comment above for why anchoring to one breaks.
+    //
+    // This tests the row's key rather than its position in the list. When rows are added or
+    // removed, TanStack is still working from the positions as they were before the change
+    // while `items` already reflects it, so looking a row up by position here would check
+    // the wrong one. The spinner keys are shared with the view model, in types.ts.
     const isValidAnchorItem = useCallback(
         (item: VirtualItem): boolean => item.key !== BACKWARD_LOADING_KEY && item.key !== FORWARD_LOADING_KEY,
         [],
     );
 
-    // ─── Phase + live-reporting state (read by the virtualizer's onChange below) ───
+    // ─── State used by the scroll reporting below ──────────────────────────────
     const phaseRef = useRef<Phase>("init");
-    // Each ref holds the last value reported to the VM, so we only notify on a real change.
+    // We only want to tell the view model about things that have actually changed, so these
+    // hold the last values we sent and repeats are skipped.
     const lastVisibleRangeRef = useRef<{ start: number; end: number } | null>(null);
     const lastAtBottomRef = useRef<boolean | null>(null);
-    // Pagination dedup token, "itemCount:boundaryIndex" at an edge and "" away from it —
-    // re-fires as the user scrolls into freshly-loaded history.
+    // For the "reached the top/bottom" reports we remember a short description of the
+    // situation we last reported, in the form "<number of rows>:<row index>", and clear it
+    // whenever we move away from that end. This stops us reporting over and over while
+    // sitting still at the end, while still reporting again once more history has loaded
+    // and the user scrolls further into it.
     const startEdgeTokenRef = useRef("");
     const endEdgeTokenRef = useRef("");
 
-    // Push virtualizer-derived state to the VM. Called from onChange — on the virtualizer's own
-    // updates (range/scroll/measure), not every React commit. Read-only; suppressed until "live"
-    // and while an anchor placement is pending (the range then reflects auto-placement).
+    // Tells the view model what the user can currently see: which rows are on screen,
+    // whether we are at the bottom, and whether either end of the loaded messages has been
+    // reached (the cue for it to load more). TanStack calls this whenever it updates —
+    // on scroll, after measuring a row, or when the set of visible rows changes.
+    //
+    // This only reads state, it never scrolls. It stays quiet until the first load has
+    // finished and while we are scrolling to a message the view model asked for, because
+    // until then the scroll position reflects our own automatic placement rather than
+    // anything the user did.
     const reportVisibleState = useCallback(
         (v: Virtualizer<HTMLDivElement, Element>): void => {
             if (phaseRef.current !== "live" || snapshotRef.current.pendingAnchor !== null) return;
             const itemCount = itemsRef.current.length;
             const visibleRange = v.range;
 
-            // Visible range (indices 0-based into items).
+            // Which rows are on screen, given as positions in the items array.
             if (
                 visibleRange &&
                 (lastVisibleRangeRef.current?.start !== visibleRange.startIndex ||
@@ -116,7 +171,9 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
                 vm.onVisibleRangeChanged(visibleRange.startIndex, visibleRange.endIndex);
             }
 
-            // At-bottom (from measured offset/viewport/total — no forced layout read).
+            // Are we scrolled to the bottom? Worked out from figures TanStack already holds
+            // (how far we have scrolled, the viewport height, the total height) rather than
+            // measuring the DOM, which would force the browser to redo layout on every call.
             const scrollOffset = v.scrollOffset ?? 0;
             const viewportHeight = v.scrollRect?.height ?? 0;
             const totalSize = v.getTotalSize();
@@ -126,7 +183,9 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
                 vm.onAtBottomStateChange(atBottom);
             }
 
-            // Pagination edges from the rendered range: fire when index 0 / itemCount-1 is rendered.
+            // Have we reached either end of the loaded messages? True once the very first or
+            // very last row is among those being rendered, which tells the view model it may
+            // need to load more history in that direction.
             const renderedItems = v.getVirtualItems();
             const firstRenderedIndex = renderedItems.length ? renderedItems[0].index : -1;
             const lastRenderedIndex = renderedItems.length ? renderedItems[renderedItems.length - 1].index : -1;
@@ -155,31 +214,39 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
     const virtualizer = useVirtualizer({
         count: items.length,
         getScrollElement: () => scrollerRef.current,
-        // Used for not-yet-measured rows only: TanStack caches each measured row by key
-        // and reuses it across prepends/trims/reloads, so its default measureElement is
-        // enough — no need for our own size cache.
+        // Only consulted for rows that have not been measured yet. TanStack measures each
+        // row as it renders and remembers the result by key, reusing it as rows are added,
+        // trimmed or reloaded, so we do not need a size cache of our own.
         estimateSize: () => ESTIMATED_ITEM_HEIGHT,
         getItemKey,
         overscan: OVERSCAN,
-        // Chat mode: keep the visible item fixed across any edge change before paint.
+        // Keep whatever the user is looking at visually still when rows are added or
+        // removed, correcting the scroll position before the browser paints. This is the
+        // main thing stopping the timeline jumping; see the file comment for how it works.
         anchorTo: "end",
-        // Stop anchorTo anchoring on a loading spinner, whose key vanishes when the batch
-        // replaces it — that would leave the prepend un-compensated (the "jump to top").
-        // Our @tanstack/virtual-core patch adds this option (pending upstream).
+        // ...but never hold onto a loading spinner as that reference row (see above). This
+        // option comes from our @tanstack/virtual-core patch and is pending upstream.
         isValidAnchorItem,
-        // Follow tail messages only at the live end and not mid-anchored-load.
+        // Scroll down to follow newly arrived messages, but only when we are at the live end
+        // of the timeline and are not part-way through jumping somewhere else.
         followOnAppend: snapshot.atLiveEnd && snapshot.pendingAnchor === null,
-        // Write row transforms + container height straight to the DOM pre-paint, collapsing
-        // measure→reposition into one frame. Do NOT also set transform/height in JSX.
+        // Let TanStack place rows by writing to the DOM directly instead of re-rendering.
+        // Because of this, never set transform or height on a row in JSX below — it would
+        // fight with what TanStack writes.
         directDomUpdates: true,
-        // Report visible range / at-bottom / pagination edges to the VM on each virtualizer
-        // update (range/scroll/measure) — more direct than a per-commit layout effect.
+        // Called on every TanStack update; we use it to report what is on screen upwards.
         onChange: reportVisibleState,
     });
 
-    // Document offset placing `targetKey` at `align`, or null if off-window. Callers feed
-    // this to scrollToOffset (a fixed-offset scroll), not scrollToIndex — the latter's
-    // reconcile chases the index across mid-flight prepends (runaway scroll-to-top).
+    // Works out how far down the list we would have to scroll, in pixels, to bring the row
+    // with `targetKey` into view — `align` saying whether it should end up at the top,
+    // the middle or the bottom of the viewport. Returns null if that message is not among
+    // the ones currently loaded, in which case the caller cannot scroll to it yet.
+    //
+    // Callers hand the result to `scrollToOffset`, which simply scrolls to a fixed pixel
+    // position. We deliberately do not use `scrollToIndex`: that keeps steering towards a
+    // row *number* as rows are measured, so if older history loads while it is still
+    // adjusting, every row shifts down and it follows the wrong one up to the top.
     const offsetForKey = useCallback(
         (targetKey: string | null, align: AnchorAlign): number | null => {
             const idx = targetKey ? itemsRef.current.findIndex((i) => i.key === targetKey) : -1;
@@ -189,23 +256,29 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
         },
         [virtualizer],
     );
-    // ─── Cold load: place the anchor hidden, settle, then reveal ───────────────
+    // ─── First load: scroll to the starting message while hidden, then reveal ──
+    // Runs once, as soon as the first batch of messages arrives.
     const coldRafRef = useRef(0);
     useEffect(() => () => cancelAnimationFrame(coldRafRef.current), []);
     useLayoutEffect(() => {
         if (phaseRef.current !== "init" || items.length === 0) return;
-        // Flip phase synchronously so re-runs (data arriving mid-settle) early-return.
+        // Move out of "init" immediately, so that if more messages arrive while we are
+        // still placing this effect runs again but returns here rather than starting over.
         phaseRef.current = "placing";
+        // Start at the message the view model asked for. If it did not ask for one, or that
+        // message is not in the batch we were given, start at the newest message instead.
         const anchor = snapshotRef.current.pendingAnchor;
         const list = itemsRef.current;
         let idx = anchor ? list.findIndex((i) => i.key === anchor.targetKey) : -1;
         if (idx < 0) idx = list.length - 1;
         const align: AnchorAlign = anchor?.align ?? "end";
-        // Let core own the placement scroll (its reconcile re-targets as heights measure).
-        // Don't also write scrollTop — two controllers drift the viewport.
+        // Let TanStack carry out this scroll: it keeps correcting the target as rows are
+        // measured and their real heights become known. We must not set the scroll position
+        // ourselves as well — two things moving the viewport at once end up fighting.
         if (idx >= 0) virtualizer.scrollToIndex(idx, { align, behavior: "auto" });
-        // Reveal once the anchor row sits at its target offset (core's landed criterion);
-        // the cap covers unreachable targets so we never strand behind the cover.
+        // Now watch each frame until that row actually reaches the position it was heading
+        // for, and reveal the timeline once it has. `cap` counts frames down so we give up
+        // and reveal anyway if it never gets there — see COLD_CAP_FRAMES above.
         let cap = COLD_CAP_FRAMES;
         const tick = (): void => {
             const info = virtualizer.getOffsetForIndex(idx, align);
@@ -226,9 +299,16 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
         coldRafRef.current = requestAnimationFrame(tick);
     }, [items.length, virtualizer, vm]);
 
-    // ─── Live: re-assert an in-place reload's anchor before paint ──────────────
-    // (jump-to-live / read-marker reload). The read-only reporting lives in the virtualizer's
-    // onChange (reportVisibleState); only the imperative pre-paint scroll write is here.
+    // ─── Later jumps: scroll to a message the view model has asked for ─────────
+    // Once the first load is done, the view model can ask us to jump somewhere by setting
+    // `pendingAnchor`. This is used by "jump to the latest message" and "jump to the first
+    // unread message" when the target was not already loaded, so it had to be fetched and
+    // the timeline rebuilt around it first.
+    //
+    // This effect runs after every render, so it acts as soon as those messages appear, and
+    // it scrolls before the browser paints so the jump is never seen as a scrolling motion.
+    // `lastPlacedAnchorKeyRef` records which message we last jumped to, so that later
+    // renders do not repeat the same jump and fight the user's own scrolling.
     const lastPlacedAnchorKeyRef = useRef<string | null>(null);
     useLayoutEffect(() => {
         if (phaseRef.current !== "live") return;
@@ -247,9 +327,9 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
         }
     });
 
-    // Imperative scroll for VM actions whose target is already in the window (jump-to-live
-    // at the live end, jump-to-read-marker in range). scrollToOffset pins the resolved
-    // offset and self-corrects the residual on settle.
+    // Handed to the overlay buttons, and through them to the view model, so it can scroll
+    // us straight away when the message it wants is already loaded — no fetch needed, and
+    // no round trip through `pendingAnchor` above.
     const scrollNow = useCallback<ImmediateScroll>(
         (anchor) => {
             const target = offsetForKey(anchor.targetKey, anchor.align);
@@ -268,8 +348,11 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
                 tabIndex={0}
                 className={classNames(styles.scroller, { [styles.hidden]: !revealed })}
             >
-                {/* <ol>/<li> so screen readers announce a list. role="list" is explicit because
-                    Safari+VoiceOver drop list semantics under list-style:none (as ScrollPanel does). */}
+                {/* An <ol> of <li> rows, so screen readers announce this as a list of messages
+                    and can say how many there are. The role="list" is stated explicitly even
+                    though an <ol> already is one: Safari with VoiceOver stops treating a list
+                    as a list once list-style is set to none, which our CSS does. The old
+                    ScrollPanel does the same thing for the same reason. */}
                 {/* eslint-disable jsx-a11y/no-redundant-roles -- see comment above */}
                 <ol
                     ref={virtualizer.containerRef}
