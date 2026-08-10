@@ -172,6 +172,7 @@ describe("UserMenuSetStatusViewModel", () => {
         client = getMockClientWithEventEmitter({
             ...mockClientMethodsUser(),
             ...mockClientMethodsServer(),
+            getExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
             setExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
         });
         vi.mocked(mockOwnProfileStoreInstance).userStatus = undefined;
@@ -206,6 +207,7 @@ describe("UserMenuSetStatusViewModel", () => {
     });
 
     it("inherits clearStatus from SetStatusViewModel", async () => {
+        client.getExtendedProfileProperty.mockResolvedValue(STATUS);
         const vm = new UserMenuSetStatusViewModel({ client, ownProfileStore: mockOwnProfileStoreInstance });
         vm.clearStatus();
         await waitFor(() =>
