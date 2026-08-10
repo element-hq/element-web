@@ -276,6 +276,7 @@ export default function NotificationSettings2(): JSX.Element {
                                     symbol="1"
                                     count={1}
                                     level={NotificationLevel.Notification}
+                                    className="mx_NotificationSettings2_notificationBadge"
                                 />
                             ),
                         },
