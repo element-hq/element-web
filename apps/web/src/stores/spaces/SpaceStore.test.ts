@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { vi, describe, it, expect, beforeAll, beforeEach, afterEach } from "vitest";
-import { type EventEmitter } from "events";
+import { type EventEmitter } from "node:events";
 import {
     EventType,
     RoomMember,
