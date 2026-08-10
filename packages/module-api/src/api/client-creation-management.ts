@@ -16,7 +16,7 @@ export interface ClientCreationManagementApi {
      *
      * @param pem: Optional PEM-formatted string that provides CA certificates. These will be used to check
      *      X.509 signatures on user identities. Any user identity that has a valid signature according to the supplied
-     *     CAs will be considered verified, without any manual verification taking place.
+     *      CAs will be considered verified, without any manual verification taking place.
      */
     setUserVerificationCaCertsPem(pem: string | null): void;
 }
