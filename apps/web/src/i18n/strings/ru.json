@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Выбор эмодзи",
         "jump_first_invite": "Перейти к первому приглашению.",
         "message_composer": "Автор сообщения",
         "n_unread_messages": {
@@ -896,22 +895,6 @@
     },
     "dialog_close_label": "Закрыть диалог",
     "download_completed": "Скачивание завершено",
-    "emoji": {
-        "categories": "Категории",
-        "category_activities": "Действия",
-        "category_animals_nature": "Животные и природа",
-        "category_flags": "Флаги",
-        "category_food_drink": "Еда и напитки",
-        "category_frequently_used": "Часто используемые",
-        "category_objects": "Объекты",
-        "category_smileys_people": "Смайлики и люди",
-        "category_symbols": "Символы",
-        "category_travel_places": "Путешествия и места",
-        "quick_reactions": "Быстрая реакция"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Отменить поиск"
-    },
     "empty_room": "Пустая комната",
     "empty_room_was_name": "Пустая комната (без %(oldName)s)",
     "encryption": {
