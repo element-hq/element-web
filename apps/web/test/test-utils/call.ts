@@ -20,7 +20,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { mocked, type Mocked } from "jest-mock";
-import { type MatrixRTCSession, type Transport } from "matrix-js-sdk/src/matrixrtc";
+import { type MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 
 import { mkEvent, mkRoomMember, setupAsyncStoreWithClient, stubClient } from "./test-utils";
 import { Call, type ConnectionState, ElementCall, JitsiCall } from "../../src/models/Call";
@@ -31,7 +31,6 @@ import { MockEventEmitter } from "./client";
 import WidgetStore from "../../src/stores/WidgetStore";
 import { WidgetMessagingStore } from "../../src/stores/widgets/WidgetMessagingStore";
 import SettingsStore from "../../src/settings/SettingsStore";
-import type { PollingCachedValue } from "../../../../../matrix-js-sdk/src/pollingCachedValue.ts";
 
 export class MockedCall extends Call {
     public static readonly EVENT_TYPE = "org.example.mocked_call";
@@ -159,7 +158,7 @@ export function setUpClientRoomAndStores(): {
     client.cachedRtcTransports = {
         wait: jest.fn(),
         get: jest.fn(),
-    } as unknown as Mocked<PollingCachedValue<Transport[]>>;
+    } as unknown as any;
     const room = new Room("!1:example.org", client, "@alice:example.org", {
         pendingEventOrdering: PendingEventOrdering.Detached,
     });
