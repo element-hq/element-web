@@ -44,7 +44,7 @@
     clear: both;
     padding-top: 18px;
 
-    &[data-continuation="true"] {
+    &.stateContinuation {
         padding-top: 0;
     }
 
@@ -54,6 +54,17 @@
     [data-event-tile-slot] {
         min-width: 0;
     }
+}
+
+/* Root state markers are intentionally empty; their presence is consumed by
+   the selectors below. */
+.stateOwnEvent,
+.stateHasReply,
+.stateHighlighted,
+.stateSelected,
+.stateEditing,
+.stateContinuation,
+.stateLastInSection {
 }
 
 .line {
@@ -108,17 +119,17 @@
         background-color: var(--event-tile-state-hover-background);
     }
 
-    &[data-highlighted="true"] .line {
+    &.stateHighlighted .line {
         background-color: var(--event-tile-state-highlight-background);
     }
 
-    &[data-selected="true"] .line,
-    &[data-editing="true"] .line {
+    &.stateSelected .line,
+    &.stateEditing .line {
         background-color: var(--event-tile-state-selected-background);
     }
 
-    &[data-selected="true"] .line::before,
-    &[data-editing="true"] .line::before {
+    &.stateSelected .line::before,
+    &.stateEditing .line::before {
         content: "";
         position: absolute;
         z-index: 0;
@@ -195,7 +206,7 @@
         overflow: visible;
     }
 
-    &[data-continuation="true"] .line {
+    &.stateContinuation .line {
         clear: both;
     }
 }
@@ -212,17 +223,17 @@
         background-color: var(--event-tile-state-hover-background);
     }
 
-    &[data-highlighted="true"] .line {
+    &.stateHighlighted .line {
         background-color: var(--event-tile-state-highlight-background);
     }
 
-    &[data-selected="true"] .line,
-    &[data-editing="true"] .line {
+    &.stateSelected .line,
+    &.stateEditing .line {
         background-color: var(--event-tile-state-selected-background);
     }
 
-    &[data-selected="true"] .line::before,
-    &[data-editing="true"] .line::before {
+    &.stateSelected .line::before,
+    &.stateEditing .line::before {
         content: "";
         position: absolute;
         z-index: 0;
@@ -370,29 +381,29 @@
         background: var(--event-tile-bubble-other-background);
     }
 
-    &[data-self="false"] .line {
+    &:not(.stateOwnEvent) .line {
         border-end-end-radius: var(--event-tile-bubble-corner-radius);
     }
 
-    &[data-self="false"] .slotAvatar {
+    &:not(.stateOwnEvent) .slotAvatar {
         inset-inline-start: -36px;
     }
 
-    &[data-self="true"] .slotSender {
+    &.stateOwnEvent .slotSender {
         display: none;
     }
 
-    &[data-self="true"] .line {
+    &.stateOwnEvent .line {
         border-end-start-radius: var(--event-tile-bubble-corner-radius);
         background: var(--event-tile-bubble-self-background);
     }
 
-    &[data-self="true"] .slotAvatar {
+    &.stateOwnEvent .slotAvatar {
         inset-block-start: -19px;
         inset-inline-end: -38px;
     }
 
-    &[data-self="false"] .slotActionBar {
+    &:not(.stateOwnEvent) .slotActionBar {
         inset-block-start: -28px;
         inset-inline-start: calc(
             100% - var(--event-tile-action-bar-size) - 2 * (var(--event-tile-action-bar-margin) + 1px)
@@ -400,12 +411,12 @@
         inset-inline-end: auto;
     }
 
-    &[data-self="true"] .slotActionBar {
+    &.stateOwnEvent .slotActionBar {
         inset-block-start: -28px;
         inset-inline-end: 0;
     }
 
-    &[data-selected="true"] .line::before {
+    &.stateSelected .line::before {
         content: "";
         position: absolute;
         z-index: 0;
@@ -419,11 +430,11 @@
     }
 
     &:hover::before,
-    &[data-selected="true"]::before {
+    &.stateSelected::before {
         background: var(--event-tile-state-hover-background);
     }
 
-    &[data-highlighted="true"]::before {
+    &.stateHighlighted::before {
         background: var(--event-tile-state-highlight-background);
     }
 
@@ -431,16 +442,16 @@
         border-color: var(--event-tile-state-hover-background);
     }
 
-    &[data-highlighted="true"] .slotAvatar {
+    &.stateHighlighted .slotAvatar {
         border-color: var(--event-tile-state-highlight-background);
     }
 
     &:hover .slotAvatar > *,
-    &[data-selected="true"] .slotAvatar > * {
+    &.stateSelected .slotAvatar > * {
         box-shadow: 0 0 0 3px var(--event-tile-state-hover-background);
     }
 
-    &[data-highlighted="true"] .slotAvatar > * {
+    &.stateHighlighted .slotAvatar > * {
         box-shadow: 0 0 0 3px var(--event-tile-state-highlight-background);
     }
 
@@ -451,45 +462,45 @@
         margin-inline: -9px -12px;
     }
 
-    &[data-self="false"] .slotThreadInfo {
+    &:not(.stateOwnEvent) .slotThreadInfo {
         margin-inline-start: -11px;
         margin-inline-end: auto;
     }
 
-    &[data-self="true"] .slotFooter {
+    &.stateOwnEvent .slotFooter {
         justify-content: flex-end;
     }
 
-    &[data-self="true"] .slotThreadInfo {
+    &.stateOwnEvent .slotThreadInfo {
         margin-inline-start: auto;
         margin-inline-end: -11px;
     }
 
-    &[data-continuation="true"] {
+    &.stateContinuation {
         margin-top: 2px;
     }
 
-    &[data-continuation="true"][data-self="false"] .line {
+    &.stateContinuation:not(.stateOwnEvent) .line {
         border-start-start-radius: 0;
     }
 
-    &[data-continuation="true"][data-self="true"] .line {
+    &.stateContinuation.stateOwnEvent .line {
         border-start-end-radius: 0;
     }
 
-    &[data-last-in-section="true"] {
+    &.stateLastInSection {
         margin-bottom: 24px;
     }
 
-    &[data-last-in-section="true"][data-self="false"] .line {
+    &.stateLastInSection:not(.stateOwnEvent) .line {
         border-end-start-radius: var(--event-tile-bubble-corner-radius);
     }
 
-    &[data-last-in-section="true"][data-self="true"] .line {
+    &.stateLastInSection.stateOwnEvent .line {
         border-end-end-radius: var(--event-tile-bubble-corner-radius);
     }
 
-    &[data-self="true"] .line {
+    &.stateOwnEvent .line {
         margin-inline-start: auto;
     }
 

@@ -382,7 +382,12 @@ function EventTileViewStoryContent({
                 {...props}
                 classNames={{
                     ...props.classNames,
-                    root: classNames(props.classNames?.root, "storyEventTile", styles.storyEventTile),
+                    root: classNames(
+                        props.classNames?.root,
+                        "storyEventTile",
+                        styles.storyEventTile,
+                        isOwnEvent && styles.storyOwnEvent,
+                    ),
                     line: classNames(props.classNames?.line, "storyEventLine"),
                 }}
                 slots={slots}

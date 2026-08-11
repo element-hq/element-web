@@ -134,8 +134,8 @@ describe("EventTileView", () => {
         expect(root).toHaveAttribute("data-event-id", "$event-1");
         expect(root).toHaveAttribute("data-layout", "group");
         expect(root).toHaveAttribute("data-shape", "Room");
-        expect(root).toHaveAttribute("data-self", "true");
-        expect(root).toHaveAttribute("data-has-reply", "true");
+        expect(root).toHaveClass(styles.stateOwnEvent);
+        expect(root).toHaveClass(styles.stateHasReply);
         expect(line).toHaveClass("custom-line");
         expect(line).toHaveAttribute("id", "event-line-1");
         expect(getByTestId("context-menu")).toBeInTheDocument();
@@ -162,11 +162,11 @@ describe("EventTileView", () => {
         );
         const root = container.firstElementChild!;
 
-        expect(root).toHaveAttribute("data-highlighted", "true");
-        expect(root).toHaveAttribute("data-selected", "true");
-        expect(root).toHaveAttribute("data-editing", "true");
-        expect(root).toHaveAttribute("data-continuation", "true");
-        expect(root).toHaveAttribute("data-last-in-section", "true");
+        expect(root).toHaveClass(styles.stateHighlighted);
+        expect(root).toHaveClass(styles.stateSelected);
+        expect(root).toHaveClass(styles.stateEditing);
+        expect(root).toHaveClass(styles.stateContinuation);
+        expect(root).toHaveClass(styles.stateLastInSection);
     });
 
     it("preserves the application styling contract across rendering modes", () => {

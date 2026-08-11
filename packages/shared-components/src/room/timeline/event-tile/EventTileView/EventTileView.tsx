@@ -58,20 +58,21 @@ export function EventTileView({
     ): JSX.Element => (
         <Root
             ref={refs?.root}
-            className={classNames(styles.root, classNameOverrides?.root)}
+            className={classNames(styles.root, classNameOverrides?.root, {
+                [styles.stateOwnEvent]: root.data.isOwnEvent,
+                [styles.stateHasReply]: root.data.hasReply,
+                [styles.stateHighlighted]: root.state?.highlighted,
+                [styles.stateSelected]: root.state?.selected,
+                [styles.stateEditing]: root.state?.editing,
+                [styles.stateContinuation]: root.state?.continuation,
+                [styles.stateLastInSection]: root.state?.lastInSection,
+            })}
             aria-live={root.ariaLive}
             aria-atomic={true}
             data-scroll-tokens={root.scrollToken}
             data-event-id={root.data.eventId}
             data-layout={root.data.layout}
             data-shape={root.data.shape}
-            data-self={root.data.isOwnEvent}
-            data-has-reply={root.data.hasReply}
-            data-highlighted={root.state?.highlighted || undefined}
-            data-selected={root.state?.selected || undefined}
-            data-editing={root.state?.editing || undefined}
-            data-continuation={root.state?.continuation || undefined}
-            data-last-in-section={root.state?.lastInSection || undefined}
             tabIndex={rootTabIndex}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}

@@ -236,11 +236,14 @@
     display: flex;
 }
 
-.storyEventTile[data-layout="bubble"][data-self="true"] .storyReactions {
+.storyOwnEvent {
+}
+
+.storyEventTile.storyOwnEvent[data-layout="bubble"] .storyReactions {
     justify-content: flex-end;
 }
 
-.storyEventTile[data-layout="bubble"][data-self="true"] .storyReactions > :last-child {
+.storyEventTile.storyOwnEvent[data-layout="bubble"] .storyReactions > :last-child {
     order: -1;
 }
 
