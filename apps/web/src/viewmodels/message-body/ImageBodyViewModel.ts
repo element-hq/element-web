@@ -168,10 +168,17 @@ export class ImageBodyViewModel
             props.maxImageHeight,
         );
 
+        // Once the image itself has loaded its own dimensions are authoritative, so the box we
+        // reserve for it matches the picture rather than whatever the sender claimed. Only the
+        // aspect ratio is taken from them: the src of an unencrypted image is a thumbnail, so
+        // sizing from the loaded dimensions would shrink every image in the timeline.
+        const ratioWidth = state.loadedImageDimensions?.naturalWidth || naturalWidth;
+        const ratioHeight = state.loadedImageDimensions?.naturalHeight || naturalHeight;
+
         return {
             maxWidth,
             maxHeight,
-            aspectRatio: `${naturalWidth}/${naturalHeight}`,
+            aspectRatio: `${ratioWidth}/${ratioHeight}`,
             isSvg: info?.mimetype === "image/svg+xml",
         };
     }
