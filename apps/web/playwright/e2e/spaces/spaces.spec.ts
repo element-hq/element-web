@@ -261,40 +261,39 @@ test.describe("Spaces", () => {
         await expect(buttons.nth(2)).toHaveAttribute("aria-label", "My Space");
     });
 
-    test("should render readable notification badges in the space panel", async ({ app, user, bot }) => {
-        const roomId = await app.client.createRoom({
-            name: "Unread Room",
-        });
-        await app.client.createSpace({
-            name: "Unread Space",
-            initial_state: [spaceChildInitialState(user.homeServer, roomId)],
-        });
-        const spaceButton = await app.getSpacePanelButton("Unread Space");
-        await expect(spaceButton).toBeVisible();
+    test(
+        "should render readable notification badges in the space panel",
+        { tag: "@screenshot" },
+        async ({ app, user, bot }) => {
+            const roomId = await app.client.createRoom({
+                name: "Unread Room",
+            });
+            await app.client.createSpace({
+                name: "Unread Space",
+                initial_state: [spaceChildInitialState(user.homeServer, roomId)],
+            });
+            const spaceButton = await app.getSpacePanelButton("Unread Space");
+            await expect(spaceButton).toBeVisible();
 
-        await bot.prepareClient();
-        const botUserId = await bot.evaluate((client) => client.getSafeUserId());
-        await app.client.evaluate(
-            async (client, { botUserId, roomId }) => {
-                await client.invite(roomId, botUserId);
-            },
-            { botUserId, roomId },
-        );
-        await bot.joinRoom(roomId);
+            await bot.prepareClient();
+            const botUserId = await bot.evaluate((client) => client.getSafeUserId());
+            await app.client.evaluate(
+                async (client, { botUserId, roomId }) => {
+                    await client.invite(roomId, botUserId);
+                },
+                { botUserId, roomId },
+            );
+            await bot.joinRoom(roomId);
 
-        for (let i = 0; i < 10; i++) {
-            await bot.sendMessage(roomId, `${user.displayName} unread message ${i}`);
-        }
+            for (let i = 0; i < 10; i++) {
+                await bot.sendMessage(roomId, `${user.displayName} unread message ${i}`);
+            }
 
-        const badge = spaceButton.locator(".mx_SpacePanel_notificationBadge");
-        await expect(badge).toHaveText("10");
-        await expect(badge).toHaveAttribute("data-badge-type", "badge_2char");
-
-        const box = await badge.boundingBox();
-        expect(box).not.toBeNull();
-        expect(box!.width).toBeGreaterThanOrEqual(20);
-        expect(box!.height).toBeGreaterThanOrEqual(20);
-    });
+            const badge = spaceButton.locator(".mx_SpacePanel_notificationBadge");
+            await expect(badge).toHaveText("10");
+            await expect(badge).toMatchScreenshot("space-panel-notification-badge.png");
+        },
+    );
 
     test("should include rooms in space home", async ({ page, app, user }) => {
         const roomId1 = await app.client.createRoom({
