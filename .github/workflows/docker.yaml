@@ -18,7 +18,8 @@ jobs:
             id-token: write # needed for signing the images with GitHub OIDC Token
             packages: write # needed for publishing packages to GHCR
         env:
-            TEST_TAG: vectorim/element-web:test
+            TEST_TAG: ghcr.io/element-hq/element-web:test
+            TEST_TAG_MODULES: ghcr.io/element-hq/element-web/modules:test
         steps:
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
@@ -38,16 +39,18 @@ jobs:
                   install: true
 
             - name: Build and load
-              id: test-build
-              uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7
+              uses: docker/bake-action@d3418bd7d0e9324001bca92fa8ba175ea7e6dc9b # v7
               with:
-                  context: .
-                  file: apps/web/Dockerfile
+                  source: .
+                  files: ./docker-bake.hcl
                   load: true
+                  set: |
+                      element-web.tags=${{ env.TEST_TAG }}
+                      element-web-modules.tags=${{ env.TEST_TAG_MODULES }}
 
             - name: Test the image
               env:
-                  IMAGEID: ${{ steps.test-build.outputs.imageid }}
+                  IMAGE: ${{ env.TEST_TAG }}
               timeout-minutes: 2
               run: |
                   set -x
@@ -65,7 +68,7 @@ jobs:
                           -e "ELEMENT_WEB_PORT=$ELEMENT_WEB_PORT" \
                           -dp "$ELEMENT_WEB_PORT:$ELEMENT_WEB_PORT" \
                           -v $(pwd)/test_modules:/modules \
-                          "$IMAGEID" \
+                          "$IMAGE" \
                   )
 
                   # Run some smoke tests
@@ -75,6 +78,41 @@ jobs:
 
                   # Check healthcheck
                   until test "$(docker inspect -f {{.State.Health.Status}} $CONTAINER_ID)" == "healthy"; do
+                      sleep 1
+                  done
+
+                  # Clean up
+                  docker stop "$CONTAINER_ID"
+
+            - name: Test the modules image
+              env:
+                  IMAGE: ${{ env.TEST_TAG_MODULES }}
+              timeout-minutes: 2
+              run: |
+                  set -x
+
+                  ELEMENT_WEB_PORT=8182
+                  CONTAINER_ID=$(
+                      docker run \
+                          --rm \
+                          -e "ELEMENT_WEB_PORT=$ELEMENT_WEB_PORT" \
+                          -dp "$ELEMENT_WEB_PORT:$ELEMENT_WEB_PORT" \
+                          "$IMAGE" \
+                  )
+
+                  # Every module pinned in the Dockerfile should be listed in the config and served
+                  MODULES=$(grep -oE '^ARG MODULE_[A-Z0-9_]+_VERSION=' apps/web/Dockerfile |
+                      sed -E 's/^ARG MODULE_(.*)_VERSION=$/\1/' | tr '[:upper:]_' '[:lower:]-')
+                  test -n "$MODULES"
+
+                  CONFIG=$(wget --retry-connrefused --tries=5 -q --wait=3 -O - "http://localhost:$ELEMENT_WEB_PORT/config.json")
+                  for MODULE in $MODULES; do
+                      echo "$CONFIG" | jq -e --arg m "/modules/$MODULE/index.js" '.modules | index($m)'
+                      wget -q --spider "http://localhost:$ELEMENT_WEB_PORT/modules/$MODULE/index.js"
+                  done
+
+                  # Check healthcheck
+                  until test "$(docker inspect -f '{{.State.Health.Status}}' "$CONTAINER_ID")" == "healthy"; do
                       sleep 1
                   done
 
@@ -95,6 +133,20 @@ jobs:
                       type=ref,event=tag
                   flavor: |
                       latest=${{ contains(github.ref_name, '-rc.') && 'false' || 'auto' }}
+                  bake-target: docker-metadata-action
+
+            - name: Docker meta (modules)
+              id: meta-modules
+              uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6
+              if: github.event_name != 'pull_request'
+              with:
+                  images: ghcr.io/element-hq/element-web/modules
+                  tags: |
+                      type=ref,event=branch
+                      type=ref,event=tag
+                  flavor: |
+                      latest=${{ contains(github.ref_name, '-rc.') && 'false' || 'auto' }}
+                  bake-target: docker-metadata-action-modules
 
             - name: Login to Docker Hub
               uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4
@@ -147,28 +199,37 @@ jobs:
                   username: ${{ steps.import-secrets.outputs.OCI_USERNAME }}
                   password: ${{ steps.import-secrets.outputs.OCI_PASSWORD }}
 
+            # Both targets are built in a single bake so that the app is only compiled once.
             - name: Build and push
               id: build-and-push
-              uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7
+              uses: docker/bake-action@d3418bd7d0e9324001bca92fa8ba175ea7e6dc9b # v7
               if: github.event_name != 'pull_request'
               with:
-                  context: .
-                  file: apps/web/Dockerfile
+                  source: .
+                  files: |
+                      ./docker-bake.hcl
+                      ${{ steps.meta.outputs.bake-file }}
+                      ${{ steps.meta-modules.outputs.bake-file }}
                   push: true
-                  platforms: linux/amd64,linux/arm64
-                  tags: ${{ steps.meta.outputs.tags }}
-                  labels: ${{ steps.meta.outputs.labels }}
+                  vars: |
+                      PLATFORMS=linux/amd64,linux/arm64
 
             - name: Sign the images with GitHub OIDC Token
               env:
-                  DIGEST: ${{ steps.build-and-push.outputs.digest }}
+                  METADATA: ${{ steps.build-and-push.outputs.metadata }}
                   TAGS: ${{ steps.meta.outputs.tags }}
+                  TAGS_MODULES: ${{ steps.meta-modules.outputs.tags }}
               if: github.event_name != 'pull_request'
               run: |
                   images=""
-                  for tag in ${TAGS}; do
-                      images+="${tag}@${DIGEST} "
-                  done
+                  sign_target() {
+                      digest=$(echo "$METADATA" | jq -er --arg t "$1" '.[$t]."containerimage.digest"')
+                      for tag in $2; do
+                          images+="${tag}@${digest} "
+                      done
+                  }
+                  sign_target element-web "$TAGS"
+                  sign_target element-web-modules "$TAGS_MODULES"
                   cosign sign --yes ${images}
 
             - name: Update repo description

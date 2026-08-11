@@ -83,7 +83,7 @@ import { SearchResultAvatar } from "../../avatars/SearchResultAvatar";
 import { NetworkDropdown } from "../../directory/NetworkDropdown";
 import AccessibleButton, { type ButtonEvent } from "../../elements/AccessibleButton";
 import Spinner from "../../elements/Spinner";
-import NotificationBadge from "../../rooms/NotificationBadge";
+import { NotificationBadge } from "../../rooms/NotificationBadge/NotificationBadge";
 import BaseDialog from "../BaseDialog";
 import { Option } from "./Option";
 import { PublicRoomResultDetails } from "./PublicRoomResultDetails";
@@ -667,7 +667,10 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         <span className="mx_SpotlightDialog_result_name" title={result.room.name}>
                             {result.room.name}
                         </span>
-                        <NotificationBadge notification={notification} />
+                        <NotificationBadge
+                            notification={notification}
+                            className="mx_SpotlightDialog_notificationBadge"
+                        />
                         <RoomContextDetails
                             id={`mx_SpotlightDialog_button_result_${result.room.roomId}_details`}
                             className="mx_SpotlightDialog_result_details"
@@ -1096,7 +1099,10 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                                         tooltipProps={{ tabIndex: -1 }}
                                     />
                                     {room.name}
-                                    <NotificationBadge notification={notification} />
+                                    <NotificationBadge
+                                        notification={notification}
+                                        className="mx_SpotlightDialog_notificationBadge"
+                                    />
                                     <RoomContextDetails
                                         id={`mx_SpotlightDialog_button_recentSearch_${room.roomId}_details`}
                                         className="mx_SpotlightDialog_result_details"
