@@ -17,10 +17,10 @@ const renderState: EventTileViewProps["root"] = {
     ariaLive: "off",
     scrollToken: "event-1",
     permalink: "https://example.org/event-1",
-    data: {
-        eventId: "$event-1",
-        layout: "group",
-        shape: "Room",
+    eventId: "$event-1",
+    layout: "group",
+    shape: "Room",
+    state: {
         isOwnEvent: true,
         hasReply: true,
     },
@@ -132,24 +132,24 @@ describe("EventTileView", () => {
         expect(root).toHaveAttribute("aria-atomic", "true");
         expect(root).toHaveAttribute("data-scroll-tokens", "event-1");
         expect(root).toHaveAttribute("data-event-id", "$event-1");
-        expect(root).toHaveAttribute("data-layout", "group");
-        expect(root).toHaveAttribute("data-shape", "Room");
+        expect(root).toHaveClass(styles.layoutGroup);
         expect(root).toHaveClass(styles.stateOwnEvent);
-        expect(root).toHaveClass(styles.stateHasReply);
         expect(line).toHaveClass("custom-line");
         expect(line).toHaveAttribute("id", "event-line-1");
         expect(getByTestId("context-menu")).toBeInTheDocument();
         expect(contextMenu).toHaveClass("custom-context-menu");
-        expect(contextMenu).toHaveAttribute("data-event-tile-slot", "contextMenu");
+        expect(contextMenu).toHaveClass(styles.slot);
+        expect(contextMenu).toHaveAttribute("data-testid", "event-tile-slot-contextMenu");
     });
 
-    it("exposes shell state through application-neutral data attributes", () => {
+    it("exposes shell state through application-neutral state classes", () => {
         const { container } = render(
             <EventTileView
                 {...createProps({
                     root: {
                         ...renderState,
                         state: {
+                            ...renderState.state,
                             highlighted: true,
                             selected: true,
                             editing: true,
@@ -197,15 +197,15 @@ describe("EventTileView", () => {
             "threadInfo",
             "receipt",
         ]) {
-            expect(group.getByTestId(`styling-contract-${slot}`).closest("[data-event-tile-slot]")).toHaveClass(
+            expect(group.getByTestId(`styling-contract-${slot}`).closest(`.${styles.slot}`)).toHaveClass(
                 applicationStylingClasses[applicationSlotClassNames[slot]],
             );
-            expect(group.getByTestId(`styling-contract-${slot}`).closest("[data-event-tile-slot]")).toHaveClass(
+            expect(group.getByTestId(`styling-contract-${slot}`).closest(`.${styles.slot}`)).toHaveClass(
                 slotClasses[slot],
             );
-            expect(group.getByTestId(`styling-contract-${slot}`).closest("[data-event-tile-slot]")).toHaveAttribute(
-                "data-event-tile-slot",
-                slot,
+            expect(group.getByTestId(`styling-contract-${slot}`).closest(`.${styles.slot}`)).toHaveAttribute(
+                "data-testid",
+                `event-tile-slot-${slot}`,
             );
         }
 
@@ -213,7 +213,7 @@ describe("EventTileView", () => {
             <EventTileView
                 {...createProps({
                     classNames: applicationStylingClasses,
-                    root: { ...renderState, data: { ...renderState.data, shape: "Thread" } },
+                    root: { ...renderState, shape: "Thread" },
                     slots: createStylingContractSlots(),
                 })}
             />,
@@ -226,7 +226,7 @@ describe("EventTileView", () => {
             <EventTileView
                 {...createProps({
                     classNames: applicationStylingClasses,
-                    root: { ...renderState, data: { ...renderState.data, shape: "Notification" } },
+                    root: { ...renderState, shape: "Notification" },
                     slots: createStylingContractSlots(),
                 })}
             />,
@@ -246,7 +246,7 @@ describe("EventTileView", () => {
             <EventTileView
                 {...createProps({
                     classNames: applicationStylingClasses,
-                    root: { ...renderState, data: { ...renderState.data, shape: "File" } },
+                    root: { ...renderState, shape: "File" },
                     slots: createStylingContractSlots(),
                 })}
             />,
@@ -265,7 +265,7 @@ describe("EventTileView", () => {
                     },
                     root: {
                         ...renderState,
-                        data: { ...renderState.data, shape: "Thread" },
+                        shape: "Thread",
                     },
                     slots: {
                         avatar: <span data-testid="avatar">Avatar</span>,
@@ -309,7 +309,7 @@ describe("EventTileView", () => {
                     },
                     root: {
                         ...renderState,
-                        data: { ...renderState.data, shape },
+                        shape,
                     },
                     slots: {
                         sender: <span data-testid="sender">Sender</span>,
@@ -336,6 +336,7 @@ describe("EventTileView", () => {
         }
 
         expect(root).toHaveAttribute("tabindex", "-1");
+        expect(root).toHaveClass(shape === "Notification" ? styles.shapeNotification : styles.shapeThreadsList);
         expect(details).toContainElement(getByTestId("timestamp"));
         expect(details).toHaveClass("legacy-details");
         expect(details).toContainElement(getByTestId("badge"));
@@ -365,7 +366,7 @@ describe("EventTileView", () => {
         const { container, getByTestId } = render(
             <EventTileView
                 {...createProps({
-                    root: { ...renderState, data: { ...renderState.data, shape: "File" } },
+                    root: { ...renderState, shape: "File" },
                     classNames: {
                         senderDetails: "legacy-sender-details",
                         senderDetailsLink: "legacy-sender-details-link",
@@ -384,6 +385,8 @@ describe("EventTileView", () => {
         const root = container.firstElementChild!;
         const link = getByTestId("sender").closest("a");
         const senderDetails = getByTestId("sender").closest(".legacy-sender-details");
+
+        expect(root).toHaveClass(styles.shapeFile);
 
         if (!link) {
             throw new Error("Expected sender details link");
@@ -408,7 +411,7 @@ describe("EventTileView", () => {
         const { getByTestId } = render(
             <EventTileView
                 {...createProps({
-                    root: { ...renderState, permalink: undefined, data: { ...renderState.data, shape: "File" } },
+                    root: { ...renderState, permalink: undefined, shape: "File" },
                 })}
             />,
         );
@@ -420,7 +423,7 @@ describe("EventTileView", () => {
         const { container, getByTestId } = render(
             <EventTileView
                 {...createProps({
-                    root: { ...renderState, data: { ...renderState.data, layout } },
+                    root: { ...renderState, layout },
                     slots: {
                         sender: <span data-testid="sender">Sender</span>,
                         avatar: <span data-testid="avatar">Avatar</span>,
@@ -445,6 +448,7 @@ describe("EventTileView", () => {
         }
 
         expect(root).toHaveAttribute("tabindex", "-1");
+        expect(root).toHaveClass(layout === "irc" ? styles.layoutIrc : styles.layoutGroup);
         expect(line).toContainElement(getByTestId("reply-chain"));
         expect(line).toContainElement(getByTestId("action-bar"));
 
@@ -482,7 +486,7 @@ describe("EventTileView", () => {
         const { container: previewContainer } = render(
             <EventTileView
                 {...createProps({
-                    root: { ...renderState, data: { ...renderState.data, shape: "Notification" } },
+                    root: { ...renderState, shape: "Notification" },
                     onClick,
                 })}
             />,
@@ -496,7 +500,7 @@ describe("EventTileView", () => {
         const { getByTestId } = render(
             <EventTileView
                 {...createProps({
-                    root: { ...renderState, data: { ...renderState.data, shape: "Notification" } },
+                    root: { ...renderState, shape: "Notification" },
                     onContextMenu,
                 })}
             />,

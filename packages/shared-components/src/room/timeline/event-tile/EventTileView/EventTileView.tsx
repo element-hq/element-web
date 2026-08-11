@@ -45,7 +45,10 @@ export function EventTileView({
         if (content === null || content === undefined || typeof content === "boolean") return null;
 
         return (
-            <div data-event-tile-slot={slotName} className={classNames(slotClassName, overrideClassName)}>
+            <div
+                data-testid={`event-tile-slot-${slotName}`}
+                className={classNames(styles.slot, slotClassName, overrideClassName)}
+            >
                 {content}
             </div>
         );
@@ -59,20 +62,24 @@ export function EventTileView({
         <Root
             ref={refs?.root}
             className={classNames(styles.root, classNameOverrides?.root, {
-                [styles.stateOwnEvent]: root.data.isOwnEvent,
-                [styles.stateHasReply]: root.data.hasReply,
+                [styles.stateOwnEvent]: root.state.isOwnEvent,
                 [styles.stateHighlighted]: root.state?.highlighted,
                 [styles.stateSelected]: root.state?.selected,
                 [styles.stateEditing]: root.state?.editing,
                 [styles.stateContinuation]: root.state?.continuation,
                 [styles.stateLastInSection]: root.state?.lastInSection,
+                [styles.layoutGroup]: root.layout === "group",
+                [styles.layoutBubble]: root.layout === "bubble",
+                [styles.layoutIrc]: root.layout === "irc",
+                [styles.shapeThread]: root.shape === "Thread",
+                [styles.shapeThreadsList]: root.shape === "ThreadsList",
+                [styles.shapeFile]: root.shape === "File",
+                [styles.shapeNotification]: root.shape === "Notification",
             })}
             aria-live={root.ariaLive}
             aria-atomic={true}
             data-scroll-tokens={root.scrollToken}
-            data-event-id={root.data.eventId}
-            data-layout={root.data.layout}
-            data-shape={root.data.shape}
+            data-event-id={root.eventId}
             tabIndex={rootTabIndex}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
@@ -85,7 +92,7 @@ export function EventTileView({
     );
 
     // Thread view: sender details, line content, then footer.
-    if (root.data.shape === "Thread") {
+    if (root.shape === "Thread") {
         return renderRoot(
             <>
                 <div className={classNames(styles.senderDetails, classNameOverrides?.senderDetails)}>
@@ -111,7 +118,7 @@ export function EventTileView({
     }
 
     // Notification view: metadata, room avatar, and preview content.
-    if (root.data.shape === "Notification") {
+    if (root.shape === "Notification") {
         return renderRoot(
             <>
                 <div className={classNames(styles.details, classNameOverrides?.details)}>
@@ -145,7 +152,7 @@ export function EventTileView({
     }
 
     // ThreadsList view: metadata, avatar, preview content, and action bar.
-    if (root.data.shape === "ThreadsList") {
+    if (root.shape === "ThreadsList") {
         return renderRoot(
             <>
                 <div className={classNames(styles.details, classNameOverrides?.details)}>
@@ -178,7 +185,7 @@ export function EventTileView({
     }
 
     // File view: permalink-wrapped sender details followed by the file body.
-    if (root.data.shape === "File") {
+    if (root.shape === "File") {
         return renderRoot(
             <>
                 <a
@@ -211,7 +218,7 @@ export function EventTileView({
     // Default shape: Pinned, Room, Search
 
     // IRC layout: the leading metadata slots precede the line content.
-    if (root.data.layout === "irc") {
+    if (root.layout === "irc") {
         return renderRoot(
             <>
                 {renderSlot("padlock", slots.padlock, styles.slotPadlock, classNameOverrides?.slotPadlock)}

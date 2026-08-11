@@ -12,8 +12,7 @@ export type {
     EventTileViewHandlers,
     EventTileViewProps,
     EventTileViewRefs,
-    EventTileViewRootData,
+    EventTileViewRoot,
     EventTileViewRootState,
-    EventTileViewRootStateFlags,
     EventTileViewSlots,
 } from "./EventTileView.types";

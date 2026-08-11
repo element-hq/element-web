@@ -48,27 +48,17 @@
         padding-top: 0;
     }
 
-    /* Slot wrappers are the public styling boundary. The supplied content may be
-       a component, fragment, or multiple elements and does not need to forward
-       layout props. */
-    [data-event-tile-slot] {
-        min-width: 0;
-    }
-}
-
-/* Root state markers are intentionally empty; their presence is consumed by
-   the selectors below. */
-.stateOwnEvent,
-.stateHasReply,
-.stateHighlighted,
-.stateSelected,
-.stateEditing,
-.stateContinuation,
-.stateLastInSection {
 }
 
 .line {
     position: relative;
+    min-width: 0;
+}
+
+/* Slot wrappers are the public styling boundary. The supplied content may be
+   a component, fragment, or multiple elements and does not need to forward
+   layout props. */
+.slot {
     min-width: 0;
 }
 
@@ -113,7 +103,7 @@
 }
 
 /* Group layout. */
-.root[data-layout="group"] {
+.root.layoutGroup {
     &:hover .line,
     &:focus-within .line {
         background-color: var(--event-tile-state-hover-background);
@@ -212,7 +202,7 @@
 }
 
 /* IRC layout. */
-.root[data-layout="irc"] {
+.root.layoutIrc {
     display: flex;
     align-items: flex-start;
     padding-top: 0;
@@ -244,7 +234,7 @@
         pointer-events: none;
     }
 
-    > [data-event-tile-slot],
+    > .slot,
     > .line {
         margin-inline-end: var(--event-tile-irc-right-padding);
     }
@@ -299,7 +289,7 @@
 }
 
 /* Bubble layout. */
-.root[data-layout="bubble"] {
+.root.layoutBubble {
     max-width: unset;
     margin-inline: var(--EventTile_bubble-margin-inline-start, 49px) var(--EventTile_bubble-margin-inline-end, 60px);
     padding-top: 0;
@@ -511,13 +501,13 @@
 }
 
 /* ThreadView adds a narrower group timeline around EventTile. */
-.root[data-shape="Thread"] {
+.root.shapeThread {
     display: flex;
     flex-direction: column;
     width: 100%;
     padding-top: 0;
 
-    &[data-layout="group"] {
+    &.layoutGroup {
         .senderDetails {
             align-items: center;
             gap: var(--cpd-space-4x, 16px);
@@ -557,7 +547,7 @@
 }
 
 /* ThreadsList layout. */
-.root[data-shape="ThreadsList"] {
+.root.shapeThreadsList {
     display: flex;
     flex-flow: row wrap;
     align-items: center;
@@ -637,14 +627,14 @@
         text-overflow: ellipsis;
     }
 
-    &[data-layout="group"]:hover .line {
+    &.layoutGroup:hover .line {
         background-color: inherit;
         box-shadow: none;
     }
 }
 
 /* Notification layout. */
-.root[data-shape="Notification"] {
+.root.shapeNotification {
     display: flex;
     flex-flow: row wrap;
     align-items: center;
@@ -724,16 +714,16 @@
         text-overflow: ellipsis;
     }
 
-    &[data-layout="group"]:hover .line {
+    &.layoutGroup:hover .line {
         background-color: inherit;
         box-shadow: none;
     }
 }
 
 /* File panel layout. The application File branch does not apply a timeline
-   data-layout, so explicitly reset the group-layout defaults owned by this
+   layout class, so explicitly reset the group-layout defaults owned by this
    shared shell. */
-.root[data-shape="File"] {
+.root.shapeFile {
     padding-top: 0;
     overflow-wrap: anywhere;
 

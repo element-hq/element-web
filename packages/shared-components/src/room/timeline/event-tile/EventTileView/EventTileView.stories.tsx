@@ -31,12 +31,13 @@ import {
 import styles from "./EventTileView.stories.module.css";
 
 type StoryBoundary = HTMLElement;
+const eventTileSlotTestIdPrefix = "event-tile-slot-";
 
 const getBoundary = (target: EventTarget | null, root: HTMLElement): StoryBoundary | null => {
     if (!(target instanceof HTMLElement)) return null;
 
     const boundary = target.closest<StoryBoundary>(
-        "[data-story-boundary], [data-event-tile-slot], .storyEventTile, .storyEventLine",
+        `[data-story-boundary], [data-testid^="${eventTileSlotTestIdPrefix}"], .storyEventTile, .storyEventLine`,
     );
     return boundary && root.contains(boundary) ? boundary : null;
 };
@@ -80,8 +81,8 @@ const StoryDebugFrame = ({ children }: React.PropsWithChildren): React.ReactElem
             {activeBoundary && (
                 <div className={styles.debugTooltip} role="status">
                     {activeBoundary.dataset.storyBoundary ??
-                        (activeBoundary.dataset.eventTileSlot
-                            ? `EventTileView.slots.${activeBoundary.dataset.eventTileSlot}`
+                        (activeBoundary.dataset.testid?.startsWith(eventTileSlotTestIdPrefix)
+                            ? `EventTileView.slots.${activeBoundary.dataset.testid.slice(eventTileSlotTestIdPrefix.length)}`
                             : activeBoundary.classList.contains("storyEventTile")
                               ? "EventTileView"
                               : "EventTileView.line")}
@@ -293,7 +294,10 @@ const baseRoot: EventTileViewProps["root"] = {
     ariaLive: "off",
     scrollToken: "event-tile-story",
     permalink: "https://example.org/event-tile-story",
-    data: { eventId: "$event-tile-story", layout: "group", shape: "Room", isOwnEvent: false, hasReply: true },
+    eventId: "$event-tile-story",
+    layout: "group",
+    shape: "Room",
+    state: { isOwnEvent: false, hasReply: true },
 };
 
 const roomSlots: EventTileViewProps["slots"] = {
@@ -311,8 +315,8 @@ const roomSlots: EventTileViewProps["slots"] = {
 };
 
 type EventTileStoryProps = Omit<EventTileViewProps, "root"> & {
-    shape: EventTileViewProps["root"]["data"]["shape"];
-    state?: EventTileViewProps["root"]["state"];
+    shape: EventTileViewProps["root"]["shape"];
+    state?: Partial<EventTileViewProps["root"]["state"]>;
     roomMessages?: "boundaries" | "alice";
 };
 
@@ -340,7 +344,7 @@ function EventTileViewStoryContent({
     const renderTile = (
         isOwnEvent: boolean,
         suffix: string,
-        boundaryState: EventTileViewProps["root"]["state"] = {},
+        boundaryState: Partial<EventTileViewProps["root"]["state"]> = {},
         isLast = false,
     ): React.ReactElement => {
         const tileState = { ...boundaryState, ...state };
@@ -387,6 +391,7 @@ function EventTileViewStoryContent({
                         "storyEventTile",
                         styles.storyEventTile,
                         isOwnEvent && styles.storyOwnEvent,
+                        layout === "bubble" && styles.storyLayoutBubble,
                     ),
                     line: classNames(props.classNames?.line, "storyEventLine"),
                 }}
@@ -395,14 +400,14 @@ function EventTileViewStoryContent({
                     ...baseRoot,
                     id: `${baseRoot.id}-${suffix}`,
                     scrollToken: `${baseRoot.scrollToken}-${suffix}`,
-                    data: {
-                        ...baseRoot.data,
-                        eventId: `${baseRoot.data.eventId}-${suffix}`,
-                        layout,
-                        shape,
+                    eventId: `${baseRoot.eventId}-${suffix}`,
+                    layout,
+                    shape,
+                    state: {
+                        ...baseRoot.state,
+                        ...tileState,
                         isOwnEvent,
                     },
-                    state: tileState,
                 }}
                 onMouseEnter={(event) => {
                     props.onMouseEnter?.(event);

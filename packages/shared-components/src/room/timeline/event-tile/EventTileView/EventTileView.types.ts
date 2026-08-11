@@ -12,22 +12,12 @@ import type { EventLayout } from "../../EventPresentation/EventPresentation.type
 /** Timeline rendering modes supported by the EventTile shell. */
 export type EventTileRenderingMode = "Room" | "Thread" | "ThreadsList" | "File" | "Notification" | "Search" | "Pinned";
 
-/** Plain data attributes rendered on the EventTile root element. */
-export interface EventTileViewRootData {
-    /** Event identifier exposed through `data-event-id`. */
-    eventId?: string;
-    /** Configured tile layout exposed through `data-layout`. */
-    layout: EventLayout;
-    /** Timeline rendering mode exposed through `data-shape`. */
-    shape: EventTileRenderingMode;
-    /** Whether the event belongs to the current user, exposed through `stateOwnEvent`. */
+/** Conditional state used to derive EventTile root classes. */
+export interface EventTileViewRootState {
+    /** Whether the event belongs to the current user. */
     isOwnEvent: boolean;
-    /** Whether EventTile renders a reply chain, exposed through `stateHasReply`. */
+    /** Whether EventTile renders a reply chain. */
     hasReply: boolean;
-}
-
-/** Shell states consumed by EventTileView without application-specific class names. */
-export interface EventTileViewRootStateFlags {
     /** Whether the event is highlighted by search or navigation. */
     highlighted?: boolean;
     /** Whether the event is selected. */
@@ -40,8 +30,8 @@ export interface EventTileViewRootStateFlags {
     lastInSection?: boolean;
 }
 
-/** Root data consumed by the shared EventTile shell. */
-export interface EventTileViewRootState {
+/** Complete root state consumed by EventTileView. */
+export interface EventTileViewRoot {
     /** Stable unique id for the component instance. */
     id: string;
     /** Element used for the EventTile root. Defaults to `li`. */
@@ -52,10 +42,14 @@ export interface EventTileViewRootState {
     scrollToken?: string;
     /** Optional permalink used by sender details. */
     permalink?: string;
-    /** Plain root data attributes. */
-    data: EventTileViewRootData;
-    /** Shared shell states, independent of application class naming. */
-    state?: EventTileViewRootStateFlags;
+    /** Optional event identifier exposed through `data-event-id`. */
+    eventId?: string;
+    /** Configured tile layout. */
+    layout: EventLayout;
+    /** Timeline rendering mode. */
+    shape: EventTileRenderingMode;
+    /** Conditional state classes and styling state. */
+    state: EventTileViewRootState;
 }
 
 /** Optional application CSS class overrides for shell-owned structural elements and slot boundaries. */
@@ -141,7 +135,7 @@ export interface EventTileViewHandlers {
 /** Props for the shared EventTile shell. */
 export interface EventTileViewProps extends EventTileViewHandlers {
     /** Pure root render state. */
-    root: EventTileViewRootState;
+    root: EventTileViewRoot;
     /** Optional application CSS class overrides for shell-owned elements. */
     classNames?: EventTileViewClassNames;
     /** Render-ready children supplied by the application layer. Each slot is rendered inside a named shell boundary. */
