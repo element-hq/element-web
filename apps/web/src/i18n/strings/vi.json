@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Trình chọn biểu tượng cảm xúc",
         "jump_first_invite": "Chuyển đến lời mời đầu tiên.",
         "message_composer": "Trình soạn tin nhắn",
         "n_unread_messages": {
@@ -698,22 +697,6 @@
     },
     "dialog_close_label": "Đóng hộp thoại",
     "download_completed": "Tải xuống hoàn tất",
-    "emoji": {
-        "categories": "Hạng mục",
-        "category_activities": "Các hoạt động",
-        "category_animals_nature": "Động vật & Thiên nhiên",
-        "category_flags": "Cờ",
-        "category_food_drink": "Đồ ăn thức uống",
-        "category_frequently_used": "Thường xuyên sử dụng",
-        "category_objects": "Các đối tượng",
-        "category_smileys_people": "Biểu tượng mặt cười và con người",
-        "category_symbols": "Ký hiệu",
-        "category_travel_places": "Du lịch & Địa điểm",
-        "quick_reactions": "Phản ứng nhanh"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Hủy tìm kiếm"
-    },
     "empty_room": "Phòng trống",
     "empty_room_was_name": "Phòng trống (trước kia là %(oldName)s)",
     "encryption": {

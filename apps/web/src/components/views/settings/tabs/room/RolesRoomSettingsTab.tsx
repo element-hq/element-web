@@ -387,7 +387,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
         }
 
         const powerSelectors = Object.keys(powerLevelDescriptors)
-            .map((key, index) => {
+            .map((key) => {
                 const descriptor = powerLevelDescriptors[key];
                 if (isSpaceRoom && descriptor.hideForSpace) {
                     return null;
@@ -395,7 +395,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
 
                 const value = parseIntWithDefault(get(plContent, key), descriptor.defaultValue);
                 return (
-                    <div key={index} className="">
+                    <div key={key}>
                         <PowerSelector
                             label={descriptor.desc}
                             value={value}

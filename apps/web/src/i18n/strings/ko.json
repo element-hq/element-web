@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "이모지 선택",
         "jump_first_invite": "첫 초대로 건너뜁니다.",
         "message_composer": "메세지 작성자",
         "n_unread_messages": {
@@ -900,22 +899,6 @@
     },
     "dialog_close_label": "대화 상자 닫기",
     "download_completed": "다운로드 완료",
-    "emoji": {
-        "categories": "카테고리",
-        "category_activities": "활동",
-        "category_animals_nature": "동물 & 자연",
-        "category_flags": "깃발",
-        "category_food_drink": "음식 & 음료",
-        "category_frequently_used": "자주 사용함",
-        "category_objects": "물건",
-        "category_smileys_people": "표정 & 사람",
-        "category_symbols": "기호",
-        "category_travel_places": "여행 & 장소",
-        "quick_reactions": "빠른 리액션"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "검색 취소"
-    },
     "empty_room": "빈 채팅방",
     "empty_room_was_name": "빈 채팅방 (이전 이름: %(oldName)s)",
     "encryption": {

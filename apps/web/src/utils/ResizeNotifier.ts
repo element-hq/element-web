@@ -15,6 +15,7 @@ Please see LICENSE files in the repository root for full details.
  * @event module:utils~ResizeNotifier#"middlePanelResizedNoisy"
  */
 
+// oxlint-disable-next-line no-restricted-imports
 import { EventEmitter } from "events";
 import { throttle } from "lodash";
 

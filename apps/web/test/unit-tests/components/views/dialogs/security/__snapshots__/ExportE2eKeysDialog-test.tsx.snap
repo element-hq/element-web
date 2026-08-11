@@ -92,7 +92,9 @@ exports[`ExportE2eKeysDialog renders 1`] = `
           type="submit"
           value="Export"
         />
-        <button>
+        <button
+          type="button"
+        >
           Cancel
         </button>
       </div>

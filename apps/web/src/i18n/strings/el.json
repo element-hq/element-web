@@ -722,22 +722,6 @@
     },
     "dialog_close_label": "Κλείσιμο διαλόγου",
     "download_completed": "Η λήψη ολοκληρώθηκε",
-    "emoji": {
-        "categories": "Κατηγορίες",
-        "category_activities": "Δραστηριότητες",
-        "category_animals_nature": "Ζώα & Φύση",
-        "category_flags": "Σημαίες",
-        "category_food_drink": "Φαγητό & Ποτό",
-        "category_frequently_used": "Συχνά χρησιμοποιούμενα",
-        "category_objects": "Αντικείμενα",
-        "category_smileys_people": "Smileys & Άνθρωποι",
-        "category_symbols": "Σύμβολα",
-        "category_travel_places": "Ταξίδια & Μέρη",
-        "quick_reactions": "Γρήγορες Αντιδράσεις"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Ακύρωση αναζήτησης"
-    },
     "empty_room": "Άδειο δωμάτιο",
     "empty_room_was_name": "Άδεια αίθουσα (ήταν %(oldName)s)",
     "encryption": {
