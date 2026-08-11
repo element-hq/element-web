@@ -21,56 +21,49 @@ test.describe("EventTileView application coverage", () => {
         },
     });
 
-    test("renders own and other-user messages with layout and section metadata", async ({ page, app, bot }) => {
-        const roomId = await app.client.createRoom({ name: "EventTile layouts" });
-        await app.client.inviteUser(roomId, bot.credentials!.userId);
-        await bot.joinRoom(roomId);
+    test(
+        "renders grouped messages from both users in each layout",
+        { tag: "@screenshot" },
+        async ({ page, app, bot }) => {
+            const roomId = await app.client.createRoom({ name: "EventTile layouts" });
+            await app.client.inviteUser(roomId, bot.credentials!.userId);
+            await bot.joinRoom(roomId);
 
-        await app.client.sendMessage(roomId, "Alice first");
-        await app.client.sendMessage(roomId, "Alice continuation");
-        await bot.sendMessage(roomId, "Bob first");
-        await bot.sendMessage(roomId, "Bob continuation");
+            await app.client.sendMessage(roomId, "Alice first");
+            await app.client.sendMessage(roomId, "Alice continuation");
+            await bot.sendMessage(roomId, "Bob first");
+            await bot.sendMessage(roomId, "Bob continuation");
 
-        await app.viewRoomById(roomId);
-        const messages = roomMessageList(page);
-        const tileFor = (message: string) => messages.locator(".mx_EventTile").filter({ hasText: message }).last();
+            await app.viewRoomById(roomId);
+            const messages = roomMessageList(page);
 
-        for (const layout of [Layout.Group, Layout.Bubble, Layout.IRC]) {
-            await app.settings.setValue("layout", null, SettingLevel.DEVICE, layout);
-            await app.settings.setValue("useCompactLayout", null, SettingLevel.DEVICE, false);
+            for (const layout of [Layout.Group, Layout.Bubble, Layout.IRC]) {
+                await app.settings.setValue("layout", null, SettingLevel.DEVICE, layout);
+                await app.settings.setValue("useCompactLayout", null, SettingLevel.DEVICE, false);
 
-            const aliceFirst = tileFor("Alice first");
-            const aliceContinuation = tileFor("Alice continuation");
-            const bobFirst = tileFor("Bob first");
-            const bobContinuation = tileFor("Bob continuation");
+                await expect(
+                    messages.locator(`.mx_EventTile[data-layout='${layout}']`).filter({
+                        has: page.locator(".mx_EventTile_body"),
+                    }),
+                ).toHaveCount(4);
 
+                await expect(messages).toMatchScreenshot(`event-tile-${layout}.png`, {
+                    css: ".mx_MessageTimestamp { visibility: hidden; }",
+                });
+            }
+
+            await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
+            await app.settings.setValue("useCompactLayout", null, SettingLevel.DEVICE, true);
             await expect(
-                messages.locator(`.mx_EventTile[data-layout='${layout}']`).filter({
-                    has: page.locator(".mx_EventTile_body"),
-                }),
+                messages
+                    .locator(".mx_EventTile[data-layout='group']")
+                    .filter({ has: page.locator(".mx_EventTile_body") }),
             ).toHaveCount(4);
-            await expect(aliceFirst).toHaveAttribute("data-layout", layout);
-            await expect(aliceFirst).toHaveAttribute("data-self", "true");
-            await expect(aliceFirst).toHaveAttribute("data-event-id", /.+/);
-            await expect(bobFirst).toHaveAttribute("data-self", "false");
-
-            await expect(aliceFirst).not.toHaveClass(/mx_EventTile_continuation/);
-            await expect(aliceContinuation).toHaveClass(/mx_EventTile_continuation/);
-            await expect(aliceContinuation).toHaveClass(/mx_EventTile_lastInSection/);
-            await expect(bobFirst).not.toHaveClass(/mx_EventTile_continuation/);
-            await expect(bobContinuation).toHaveClass(/mx_EventTile_continuation/);
-            await expect(bobContinuation).toHaveClass(/mx_EventTile_lastInSection/);
-            await expect(bobContinuation).toHaveClass(/mx_EventTile_last/);
-        }
-
-        await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
-        await app.settings.setValue("useCompactLayout", null, SettingLevel.DEVICE, true);
-        await expect(
-            messages.locator(".mx_EventTile[data-layout='group']").filter({ has: page.locator(".mx_EventTile_body") }),
-        ).toHaveCount(4);
-        await expect(tileFor("Alice continuation")).toHaveClass(/mx_EventTile_continuation/);
-        await expect(tileFor("Bob continuation")).toHaveClass(/mx_EventTile_lastInSection/);
-    });
+            await expect(messages).toMatchScreenshot("event-tile-group-compact.png", {
+                css: ".mx_MessageTimestamp { visibility: hidden; }",
+            });
+        },
+    );
 
     test(
         "keeps tile interaction states in the application DOM",
@@ -108,10 +101,15 @@ test.describe("EventTileView application coverage", () => {
             await expect(tile.locator(".mx_MessageTimestamp")).toBeVisible();
 
             await line.click({ button: "right" });
-            await expect(tile).toHaveClass(/mx_EventTile_selected/);
             await expect(page.locator(".mx_IconizedContextMenu")).toBeVisible();
+            // The context menu is rendered in a portal above the tile, so capturing the tile alone clips its menu.
+            await expect(page).toMatchScreenshot("event-tile-context-menu-selected.png", {
+                css: ".mx_MessageTimestamp { visibility: hidden; }",
+            });
             await page.keyboard.press("Escape");
-            await expect(tile).not.toHaveClass(/mx_EventTile_selected/);
+            await expect(tile).toMatchScreenshot("event-tile-context-menu-closed.png", {
+                css: ".mx_MessageTimestamp { visibility: hidden; }",
+            });
 
             const highlightedEvent = await bot.sendMessage(roomId, {
                 "msgtype": "m.text",
@@ -124,16 +122,24 @@ test.describe("EventTileView application coverage", () => {
             });
             if (!["Dendrite", "Pinecone"].includes(testInfo.project.name)) {
                 const highlightedTile = page.locator(`.mx_EventTile[data-event-id='${highlightedEvent.event_id}']`);
-                await expect(highlightedTile).toHaveClass(/mx_EventTile_highlight/);
+                await expect(highlightedTile).toMatchScreenshot("event-tile-highlighted.png", {
+                    css: ".mx_MessageTimestamp { visibility: hidden; }",
+                });
             }
 
             await page.goto(`/#/room/${roomId}/${event.event_id}`);
             const selectedTile = page.locator(`.mx_EventTile[data-event-id='${event.event_id}']`);
-            await expect(selectedTile).toHaveClass(/mx_EventTile_selected/);
+            await expect(selectedTile).toMatchScreenshot("event-tile-permalink-selected.png", {
+                css: ".mx_MessageTimestamp { visibility: hidden; }",
+            });
 
             await selectedTile.locator(".mx_EventTile_line").hover();
-            await selectedTile.getByRole("button", { name: "Edit", exact: true }).click();
-            await expect(selectedTile).toHaveClass(/mx_EventTile_isEditing/);
+            const editButton = selectedTile.getByRole("button", { name: "Edit", exact: true });
+            await expect(editButton).toBeVisible();
+            await editButton.click();
+            await expect(selectedTile).toMatchScreenshot("event-tile-editing.png", {
+                css: ".mx_MessageTimestamp { visibility: hidden; }",
+            });
             await expect(page.getByRole("textbox", { name: "Edit message" })).toBeVisible();
             await page.getByRole("textbox", { name: "Edit message" }).fill("Interaction target edited");
             await page.getByRole("textbox", { name: "Edit message" }).press("Enter");
@@ -170,18 +176,24 @@ test.describe("EventTileView application coverage", () => {
             const results = page.locator(".mx_RoomView_searchResultsPanel");
             const matching = results.locator(".mx_EventTile:not(.mx_EventTile_contextual)");
             const contextual = results.locator(".mx_EventTile.mx_EventTile_contextual");
+            const rootTile = results.locator(
+                `.mx_EventTile[data-event-id='${root.event_id}']:not(.mx_EventTile_contextual)`,
+            );
+            const otherTile = results.locator(
+                `.mx_EventTile[data-event-id='${other.event_id}']:not(.mx_EventTile_contextual)`,
+            );
             await expect(matching).toHaveCount(2);
             expect(await contextual.count()).toBeGreaterThan(0);
             await expect(contextual.first()).toHaveCSS("opacity", "0.4");
 
-            for (const tile of await matching.all()) {
+            await expect(rootTile).toHaveCount(1);
+            await expect(otherTile).toHaveCount(1);
+            for (const tile of [rootTile, otherTile]) {
                 await expect(tile.locator(".mx_EventTile_searchHighlight")).toBeVisible();
                 await expect(tile).toHaveAttribute("data-layout", /group|bubble|irc/);
             }
 
-            const rootTile = matching.filter({ hasText: "match root link" });
             await expect(rootTile.locator(`a[href='#/room/${roomId}/${root.event_id}']`)).toBeVisible();
-            const otherTile = matching.filter({ hasText: "match other link" });
             await expect(otherTile.locator(`a[href='#/room/${roomId}/${other.event_id}']`)).toBeVisible();
 
             await expect(results).toMatchScreenshot("search-results-event-tiles.png", {
@@ -195,42 +207,50 @@ test.describe("EventTileView application coverage", () => {
         },
     );
 
-    test("renders threaded search information and preserves the result link", async ({ page, app, bot }, testInfo) => {
-        test.skip(
-            ["Dendrite", "Pinecone"].includes(testInfo.project.name),
-            "The configured homeserver has server-side search disabled",
-        );
+    test(
+        "renders threaded search information and preserves the result link",
+        { tag: "@screenshot" },
+        async ({ page, app, bot }, testInfo) => {
+            test.skip(
+                ["Dendrite", "Pinecone"].includes(testInfo.project.name),
+                "The configured homeserver has server-side search disabled",
+            );
 
-        const roomId = await app.client.createRoom({ name: "EventTile threaded search" });
-        await app.client.inviteUser(roomId, bot.credentials!.userId);
-        await bot.joinRoom(roomId);
+            const roomId = await app.client.createRoom({ name: "EventTile threaded search" });
+            await app.client.inviteUser(roomId, bot.credentials!.userId);
+            await bot.joinRoom(roomId);
 
-        const root = await app.client.sendMessage(roomId, "match root");
-        const reply = await bot.sendMessage(roomId, "match threaded reply", root.event_id);
+            const root = await app.client.sendMessage(roomId, "match root");
+            const reply = await bot.sendMessage(roomId, "match threaded reply", root.event_id);
 
-        await app.viewRoomById(roomId);
-        await app.toggleRoomInfoPanel();
-        const search = page.locator(".mx_RoomSummaryCard_search").getByRole("searchbox");
-        await search.fill("match");
-        await search.press("Enter");
+            await app.viewRoomById(roomId);
+            await app.toggleRoomInfoPanel();
+            const search = page.locator(".mx_RoomSummaryCard_search").getByRole("searchbox");
+            await search.fill("match");
+            await search.press("Enter");
 
-        const results = page.locator(".mx_RoomView_searchResultsPanel");
-        const replyTile = results.locator(
-            `.mx_EventTile[data-event-id='${reply.event_id}']:not(.mx_EventTile_contextual)`,
-        );
-        await expect(replyTile).toHaveCount(1);
-        await expect(replyTile.locator(".mx_ThreadSummary_icon")).toBeVisible();
-        await expect(replyTile.locator(".mx_ThreadSummary_icon")).toHaveAttribute(
-            "href",
-            `#/room/${roomId}/${reply.event_id}`,
-        );
+            const results = page.locator(".mx_RoomView_searchResultsPanel");
+            const replyTile = results.locator(
+                `.mx_EventTile[data-event-id='${reply.event_id}']:not(.mx_EventTile_contextual)`,
+            );
+            await expect(replyTile).toHaveCount(1);
+            await expect(replyTile.locator(".mx_ThreadSummary_icon")).toBeVisible();
+            await expect(replyTile.locator(".mx_ThreadSummary_icon")).toHaveAttribute(
+                "href",
+                `#/room/${roomId}/${reply.event_id}`,
+            );
 
-        const threadSummaries = results.locator(".mx_ThreadSummary");
-        await expect(threadSummaries).toHaveCount(2);
-        for (const summary of await threadSummaries.all()) {
-            await expect(summary).toContainText("1 reply");
-        }
-    });
+            const threadSummaries = results.locator(".mx_ThreadSummary");
+            await expect(threadSummaries).toHaveCount(2);
+            for (const summary of await threadSummaries.all()) {
+                await expect(summary).toContainText("1 reply");
+            }
+
+            await expect(results).toMatchScreenshot("threaded-search-event-tiles.png", {
+                css: ".mx_MessageTimestamp { visibility: hidden; }",
+            });
+        },
+    );
 
     test.describe("populated notification panel", () => {
         test.use({ labsFlags: ["feature_notifications"] });
