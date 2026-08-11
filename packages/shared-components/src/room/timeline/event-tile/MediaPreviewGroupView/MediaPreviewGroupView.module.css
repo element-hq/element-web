@@ -1,6 +1,5 @@
 .container {
-    /* to match URL preview width */
-    max-width: 478px;
+    max-width: var(--MediaPreview-width);
 
     display: flex;
     flex-direction: column;
