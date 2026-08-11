@@ -161,10 +161,10 @@ b {
     font-weight: bold;
 }
 
-/* Keep the legacy link colour without overriding Compound anchors or shared timestamp styling. */
-a:where(:not([data-kind]):not(.mx_MessageTimestamp)):hover,
-a:where(:not([data-kind]):not(.mx_MessageTimestamp)):link,
-a:where(:not([data-kind]):not(.mx_MessageTimestamp)):visited {
+/* Keep the legacy link colour without overriding Compound anchors or shared timeline styling. */
+a:where(:not([data-kind]):not(.mx_MessageTimestamp):not([data-reply-tile-link])):hover,
+a:where(:not([data-kind]):not(.mx_MessageTimestamp):not([data-reply-tile-link])):link,
+a:where(:not([data-kind]):not(.mx_MessageTimestamp):not([data-reply-tile-link])):visited {
     color: $accent-alt;
 }
 

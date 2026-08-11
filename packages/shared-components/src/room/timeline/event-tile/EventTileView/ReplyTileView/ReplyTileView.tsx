@@ -57,7 +57,7 @@ export function ReplyTileView({
                 className,
             )}
         >
-            <a href={href} onClick={onClick} ref={ref}>
+            <a data-reply-tile-link href={href} onClick={onClick} ref={ref}>
                 {sender ? (
                     <div data-reply-tile-sender className={styles.sender}>
                         {sender}

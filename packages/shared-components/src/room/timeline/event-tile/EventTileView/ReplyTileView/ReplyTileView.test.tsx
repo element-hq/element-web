@@ -22,6 +22,7 @@ describe("ReplyTileView", () => {
         );
 
         expect(container.firstElementChild).toHaveAttribute("data-reply-tile");
+        expect(screen.getByRole("link")).toHaveAttribute("data-reply-tile-link");
         expect(screen.getByText("Sender").parentElement).toHaveAttribute("data-reply-tile-sender");
         expect(screen.getByRole("link")).toHaveAttribute("href", "/room/event");
         expect(screen.getByText("Sender")).toBeInTheDocument();
