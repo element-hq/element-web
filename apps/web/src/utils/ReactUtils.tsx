@@ -18,6 +18,7 @@ export function jsxJoin(array: ReactNode[], joiner?: string | JSX.Element): JSX.
     return (
         <>
             {array.map((element, index) => (
+                // oxlint-disable-next-line react/no-array-index-key
                 <React.Fragment key={index}>
                     {element}
                     {index === array.length - 1 ? null : joiner}

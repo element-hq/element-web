@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Էմոջիների ընտրիչ",
         "jump_first_invite": "Անցնել առաջին հրավերին:",
         "message_composer": "Հաղորդագրություն կազմող",
         "n_unread_messages": {
@@ -856,22 +855,6 @@
     },
     "dialog_close_label": "Փակել երկխոսությունը",
     "download_completed": "Ներբեռնումն ավարտվեց",
-    "emoji": {
-        "categories": "Բաժիններ",
-        "category_activities": "Գործունեություն",
-        "category_animals_nature": "Կենդանիներ և բնություն",
-        "category_flags": "Դրոշներ",
-        "category_food_drink": "Սնունդ և ըմպելիք",
-        "category_frequently_used": "Հաճախակի օգտագործվող",
-        "category_objects": "Առարկաներ",
-        "category_smileys_people": "Սմայլիկներ և մարդիկ",
-        "category_symbols": "Նշաններ",
-        "category_travel_places": "Ճանապարհորդություն և վայրեր",
-        "quick_reactions": "Արագ արձագանքներ"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Չեղարկել որոնումը"
-    },
     "empty_room": "Դատարկ սենյակ",
     "empty_room_was_name": "Դատարկ սենյակ (նախկինում՝ %(oldName)s)",
     "encryption": {
