@@ -20,9 +20,10 @@ interface Props {
      * be displayed.
      */
     forceDot?: boolean;
+    className?: string;
 }
 
-export function UnreadNotificationBadge({ room, threadId, forceDot }: Props): JSX.Element {
+export function UnreadNotificationBadge({ room, threadId, forceDot, className }: Props): JSX.Element {
     const vm = useCreateAutoDisposedViewModel(
         () =>
             new UnreadNotificationBadgeViewModel({
@@ -44,5 +45,5 @@ export function UnreadNotificationBadge({ room, threadId, forceDot }: Props): JS
         vm.setForceDot(forceDot);
     }, [forceDot, vm]);
 
-    return <NotificationBadgeView vm={vm} />;
+    return <NotificationBadgeView vm={vm} className={className} />;
 }
