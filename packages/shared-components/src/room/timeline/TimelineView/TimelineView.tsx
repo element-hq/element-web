@@ -67,17 +67,22 @@ const OVERSCAN = 16;
 /** px from the list bottom still counted as "at the bottom". */
 const AT_BOTTOM_THRESHOLD_PX = 4;
 /**
- * Give-up limit for the first load.
+ * How long we are willing to keep the timeline hidden on first load, in milliseconds.
  *
- * While the timeline is being scrolled to its starting message it is kept hidden behind a
- * spinner, and we only reveal it once that scroll has arrived (see the first-load effect
- * below). If the target can never be reached — for example the view model asked for a
- * message that is not in the loaded window — that check would never pass and the timeline
- * would stay hidden behind the spinner forever. So we reveal it anyway after this many
- * animation frames: 60 frames is roughly one second on a 60Hz screen, about half that at
- * 120Hz.
+ * A spinner covers the list while it scrolls to the message it should start at, because that
+ * scroll is neither instant nor nice to watch: rows are still being measured, so the user
+ * would see blank white space where messages have not been placed yet, and would watch rows
+ * resize as their content finishes arriving — URL previews appearing, polls decrypting. We
+ * drop the cover as soon as the target row settles at the position it was aiming for.
+ *
+ * That content can keep changing height for a while, which shifts the target underneath the
+ * scroll, so settling sometimes takes longer than expected — and occasionally never quite
+ * completes, for instance when the requested alignment would need more content below it than
+ * the room has, and the browser clamps the scroll short of it. This is the point at which we
+ * stop waiting and show the timeline anyway: a slightly unsettled timeline beats an endless
+ * spinner.
  */
-const COLD_CAP_FRAMES = 60;
+const REVEAL_TIMEOUT_MS = 1000;
 
 /**
  * How far the view has got through its first load:
@@ -258,8 +263,16 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
     );
     // ─── First load: scroll to the starting message while hidden, then reveal ──
     // Runs once, as soon as the first batch of messages arrives.
-    const coldRafRef = useRef(0);
-    useEffect(() => () => cancelAnimationFrame(coldRafRef.current), []);
+    // Holds the pending animation frame from the settle loop below, so it can be cancelled
+    // if the panel goes away while that loop is still running — switching room part-way
+    // through the first load, for example. Without this the callback would carry on and
+    // update state on a component that no longer exists, and call a disposed view model.
+    const coldRafRef = useRef<number | undefined>(undefined);
+    useEffect(() => {
+        return () => {
+            if (coldRafRef.current !== undefined) cancelAnimationFrame(coldRafRef.current);
+        };
+    }, []);
     useLayoutEffect(() => {
         if (phaseRef.current !== "init" || items.length === 0) return;
         // Move out of "init" immediately, so that if more messages arrive while we are
@@ -277,15 +290,15 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
         // ourselves as well — two things moving the viewport at once end up fighting.
         if (idx >= 0) virtualizer.scrollToIndex(idx, { align, behavior: "auto" });
         // Now watch each frame until that row actually reaches the position it was heading
-        // for, and reveal the timeline once it has. `cap` counts frames down so we give up
-        // and reveal anyway if it never gets there — see COLD_CAP_FRAMES above.
-        let cap = COLD_CAP_FRAMES;
-        const tick = (): void => {
+        // for, and reveal the timeline once it has. requestAnimationFrame passes the frame's
+        // timestamp, so we can measure how long we have been waiting in real time and give up
+        let startedAt: number | undefined;
+        const tick = (now: number): void => {
+            startedAt ??= now;
             const info = virtualizer.getOffsetForIndex(idx, align);
             const offset = virtualizer.scrollOffset ?? 0;
-            cap -= 1;
             const landed = info !== undefined && Math.abs(info[0] - offset) <= 1.5;
-            if (landed || cap <= 0) {
+            if (landed || now - startedAt >= REVEAL_TIMEOUT_MS) {
                 phaseRef.current = "live";
                 if (!revealedRef.current) {
                     revealedRef.current = true;
@@ -345,6 +358,7 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
             <div
                 ref={scrollerRef}
                 data-testid="timeline-scroller"
+                // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex
                 tabIndex={0}
                 className={classNames(styles.scroller, { [styles.hidden]: !revealed })}
             >
