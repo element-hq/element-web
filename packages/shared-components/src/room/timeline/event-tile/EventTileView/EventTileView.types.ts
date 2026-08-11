@@ -63,21 +63,21 @@ export interface EventTileViewClassNames {
     root?: string;
     line?: string;
     details?: string;
-    avatar?: string;
     senderDetails?: string;
     senderDetailsLink?: string;
-    body?: string;
-    contextMenu?: string;
-    notificationRoomLabel?: string;
-    notificationBadge?: string;
-    sender?: string;
-    timestamp?: string;
-    padlock?: string;
-    replyChain?: string;
-    actionBar?: string;
-    footer?: string;
-    threadInfo?: string;
-    receipt?: string;
+    slotActionBar?: string;
+    slotAvatar?: string;
+    slotBody?: string;
+    slotContextMenu?: string;
+    slotFooter?: string;
+    slotNotificationRoomLabel?: string;
+    slotNotificationBadge?: string;
+    slotPadlock?: string;
+    slotReceipt?: string;
+    slotReplyChain?: string;
+    slotSender?: string;
+    slotThreadInfo?: string;
+    slotTimestamp?: string;
 }
 
 /** Render-ready children supplied by the application integration layer. */

@@ -10,6 +10,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import { fireEvent, render } from "@test-utils";
 import { EventTileView, type EventTileViewClassNames, type EventTileViewProps } from "./index";
+import styles from "./EventTileView.module.css";
 
 const renderState: EventTileViewProps["root"] = {
     id: "event-line-1",
@@ -31,7 +32,7 @@ function createProps(overrides: Partial<EventTileViewProps> = {}): EventTileView
         classNames: {
             root: "custom-root",
             line: "custom-line",
-            contextMenu: "custom-context-menu",
+            slotContextMenu: "custom-context-menu",
         },
         slots: {
             body: <span data-testid="body">Body</span>,
@@ -52,21 +53,51 @@ const applicationStylingClasses = {
     root: "mx_EventTile",
     line: "mx_EventTile_line",
     details: "mx_EventTile_details",
-    avatar: "mx_EventTile_avatar",
+    slotAvatar: "mx_EventTile_avatar",
     senderDetails: "mx_EventTile_senderDetails",
     senderDetailsLink: "mx_EventTile_senderDetailsLink",
-    body: "mx_EventTile_body",
-    notificationRoomLabel: "mx_EventTile_truncated",
-    notificationBadge: "mx_NotificationBadge",
-    sender: "mx_DisambiguatedProfile",
-    timestamp: "mx_MessageTimestamp",
-    padlock: "mx_EventTile_e2eIcon",
-    replyChain: "mx_EventTile_reply",
-    actionBar: "mx_MessageActionBar",
-    footer: "mx_EventTile_footer",
-    threadInfo: "mx_ThreadSummary",
-    receipt: "mx_ReadReceiptGroup_container",
+    slotBody: "mx_EventTile_body",
+    slotNotificationRoomLabel: "mx_EventTile_truncated",
+    slotNotificationBadge: "mx_NotificationBadge",
+    slotSender: "mx_DisambiguatedProfile",
+    slotTimestamp: "mx_MessageTimestamp",
+    slotPadlock: "mx_EventTile_e2eIcon",
+    slotReplyChain: "mx_EventTile_reply",
+    slotActionBar: "mx_MessageActionBar",
+    slotFooter: "mx_EventTile_footer",
+    slotThreadInfo: "mx_ThreadSummary",
+    slotReceipt: "mx_ReadReceiptGroup_container",
 } satisfies Partial<EventTileViewClassNames>;
+
+const applicationSlotClassNames: Record<string, keyof typeof applicationStylingClasses> = {
+    avatar: "slotAvatar",
+    sender: "slotSender",
+    body: "slotBody",
+    timestamp: "slotTimestamp",
+    padlock: "slotPadlock",
+    replyChain: "slotReplyChain",
+    actionBar: "slotActionBar",
+    footer: "slotFooter",
+    threadInfo: "slotThreadInfo",
+    receipt: "slotReceipt",
+};
+
+const slotClasses: Record<string, string> = {
+    avatar: styles.slotAvatar,
+    sender: styles.slotSender,
+    body: styles.slotBody,
+    contextMenu: styles.slotContextMenu,
+    replyChain: styles.slotReplyChain,
+    actionBar: styles.slotActionBar,
+    timestamp: styles.slotTimestamp,
+    padlock: styles.slotPadlock,
+    footer: styles.slotFooter,
+    threadInfo: styles.slotThreadInfo,
+    receipt: styles.slotReceipt,
+    roomAvatar: styles.slotAvatar,
+    notificationRoomLabel: styles.slotNotificationRoomLabel,
+    notificationBadge: styles.slotNotificationBadge,
+};
 
 function createStylingContractSlots(): EventTileViewProps["slots"] {
     const slot = (name: string): React.ReactElement => <span data-testid={`styling-contract-${name}`}>{name}</span>;
@@ -167,7 +198,10 @@ describe("EventTileView", () => {
             "receipt",
         ]) {
             expect(group.getByTestId(`styling-contract-${slot}`).closest("[data-event-tile-slot]")).toHaveClass(
-                applicationStylingClasses[slot as keyof typeof applicationStylingClasses],
+                applicationStylingClasses[applicationSlotClassNames[slot]],
+            );
+            expect(group.getByTestId(`styling-contract-${slot}`).closest("[data-event-tile-slot]")).toHaveClass(
+                slotClasses[slot],
             );
             expect(group.getByTestId(`styling-contract-${slot}`).closest("[data-event-tile-slot]")).toHaveAttribute(
                 "data-event-tile-slot",
@@ -199,13 +233,13 @@ describe("EventTileView", () => {
         );
         expect(preview.container.querySelector(".mx_EventTile_details")).toHaveClass(applicationStylingClasses.details);
         expect(preview.getByTestId("styling-contract-notificationRoomLabel").parentElement).toHaveClass(
-            applicationStylingClasses.notificationRoomLabel,
+                applicationStylingClasses.slotNotificationRoomLabel,
         );
         expect(preview.getByTestId("styling-contract-notificationBadge").parentElement).toHaveClass(
-            applicationStylingClasses.notificationBadge,
+                applicationStylingClasses.slotNotificationBadge,
         );
         expect(preview.getByTestId("styling-contract-room-avatar").parentElement).toHaveClass(
-            applicationStylingClasses.avatar,
+                applicationStylingClasses.slotAvatar,
         );
 
         const file = render(
@@ -247,8 +281,12 @@ describe("EventTileView", () => {
             />,
         );
         const root = container.firstElementChild!;
-        const senderDetails = getByTestId("avatar").parentElement?.parentElement!;
-        const line = getByTestId("body").parentElement?.parentElement!;
+        const senderDetails = getByTestId("avatar").parentElement?.parentElement;
+        const line = getByTestId("body").parentElement?.parentElement;
+
+        if (!senderDetails || !line) {
+            throw new Error("Expected EventTile thread layout elements to be present");
+        }
 
         expect(senderDetails).toContainElement(getByTestId("sender"));
         expect(senderDetails).toHaveClass("legacy-sender-details");
@@ -266,8 +304,8 @@ describe("EventTileView", () => {
                 {...createProps({
                     classNames: {
                         details: "legacy-details",
-                        avatar: "legacy-avatar",
-                        actionBar: "legacy-thread-action-bar",
+                        slotAvatar: "legacy-avatar",
+                        slotActionBar: "legacy-thread-action-bar",
                     },
                     root: {
                         ...renderState,
@@ -290,8 +328,12 @@ describe("EventTileView", () => {
             />,
         );
         const root = container.firstElementChild!;
-        const details = getByTestId("sender").parentElement?.parentElement!;
-        const line = getByTestId("body").parentElement?.parentElement!;
+        const details = getByTestId("sender").parentElement?.parentElement;
+        const line = getByTestId("body").parentElement?.parentElement;
+
+        if (!details || !line) {
+            throw new Error(`Expected EventTile ${shape} layout elements to be present`);
+        }
 
         expect(root).toHaveAttribute("tabindex", "-1");
         expect(details).toContainElement(getByTestId("timestamp"));
@@ -396,7 +438,11 @@ describe("EventTileView", () => {
             />,
         );
         const root = container.firstElementChild!;
-        const line = getByTestId("body").parentElement?.parentElement!;
+        const line = getByTestId("body").parentElement?.parentElement;
+
+        if (!line) {
+            throw new Error(`Expected EventTile ${layout} layout line to be present`);
+        }
 
         expect(root).toHaveAttribute("tabindex", "-1");
         expect(line).toContainElement(getByTestId("reply-chain"));

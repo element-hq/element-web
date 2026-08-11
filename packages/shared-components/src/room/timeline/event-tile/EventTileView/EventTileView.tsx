@@ -88,22 +88,22 @@ export function EventTileView({
         return renderRoot(
             <>
                 <div className={classNames(styles.senderDetails, classNameOverrides?.senderDetails)}>
-                    {renderSlot("avatar", slots.avatar, styles.avatar, classNameOverrides?.avatar)}
-                    {renderSlot("sender", slots.sender, styles.sender, classNameOverrides?.sender)}
+                    {renderSlot("avatar", slots.avatar, styles.slotAvatar, classNameOverrides?.slotAvatar)}
+                    {renderSlot("sender", slots.sender, styles.slotSender, classNameOverrides?.slotSender)}
                 </div>
                 <div
                     id={root.id}
                     className={classNames(styles.line, classNameOverrides?.line)}
                     onContextMenu={onContextMenu}
                 >
-                    {renderSlot("contextMenu", slots.contextMenu, styles.contextMenu, classNameOverrides?.contextMenu)}
-                    {renderSlot("replyChain", slots.replyChain, styles.replyChain, classNameOverrides?.replyChain)}
-                    {renderSlot("body", slots.body, styles.body, classNameOverrides?.body)}
-                    {renderSlot("actionBar", slots.actionBar, styles.actionBar, classNameOverrides?.actionBar)}
-                    {renderSlot("timestamp", slots.timestamp, styles.timestamp, classNameOverrides?.timestamp)}
-                    {renderSlot("receipt", slots.receipt, styles.receipt, classNameOverrides?.receipt)}
+                    {renderSlot("contextMenu", slots.contextMenu, styles.slotContextMenu, classNameOverrides?.slotContextMenu)}
+                    {renderSlot("replyChain", slots.replyChain, styles.slotReplyChain, classNameOverrides?.slotReplyChain)}
+                    {renderSlot("body", slots.body, styles.slotBody, classNameOverrides?.slotBody)}
+                    {renderSlot("actionBar", slots.actionBar, styles.slotActionBar, classNameOverrides?.slotActionBar)}
+                    {renderSlot("timestamp", slots.timestamp, styles.slotTimestamp, classNameOverrides?.slotTimestamp)}
+                    {renderSlot("receipt", slots.receipt, styles.slotReceipt, classNameOverrides?.slotReceipt)}
                 </div>
-                {renderSlot("footer", slots.footer, styles.footer, classNameOverrides?.footer)}
+                {renderSlot("footer", slots.footer, styles.slotFooter, classNameOverrides?.slotFooter)}
             </>,
             undefined,
         );
@@ -114,29 +114,29 @@ export function EventTileView({
         return renderRoot(
             <>
                 <div className={classNames(styles.details, classNameOverrides?.details)}>
-                    {renderSlot("sender", slots.sender, styles.sender, classNameOverrides?.sender)}
+                    {renderSlot("sender", slots.sender, styles.slotSender, classNameOverrides?.slotSender)}
                     {renderSlot(
                         "notificationRoomLabel",
                         slots.notificationRoomLabel,
-                        styles.notificationRoomLabel,
-                        classNameOverrides?.notificationRoomLabel,
+                        styles.slotNotificationRoomLabel,
+                        classNameOverrides?.slotNotificationRoomLabel,
                     )}
-                    {renderSlot("timestamp", slots.timestamp, styles.timestamp, classNameOverrides?.timestamp)}
+                    {renderSlot("timestamp", slots.timestamp, styles.slotTimestamp, classNameOverrides?.slotTimestamp)}
                     {renderSlot(
                         "notificationBadge",
                         slots.notificationBadge,
-                        styles.notificationBadge,
-                        classNameOverrides?.notificationBadge,
+                        styles.slotNotificationBadge,
+                        classNameOverrides?.slotNotificationBadge,
                     )}
                 </div>
                 {slots.roomAvatar
-                    ? renderSlot("roomAvatar", slots.roomAvatar, styles.avatar, classNameOverrides?.avatar)
-                    : renderSlot("avatar", slots.avatar, styles.avatar, classNameOverrides?.avatar)}
+                    ? renderSlot("roomAvatar", slots.roomAvatar, styles.slotAvatar, classNameOverrides?.slotAvatar)
+                    : renderSlot("avatar", slots.avatar, styles.slotAvatar, classNameOverrides?.slotAvatar)}
                 <div className={classNames(styles.line, classNameOverrides?.line)} id={root.id}>
-                    {renderSlot("body", slots.body, styles.body, classNameOverrides?.body)}
-                    {renderSlot("threadInfo", slots.threadInfo, styles.threadInfo, classNameOverrides?.threadInfo)}
+                    {renderSlot("body", slots.body, styles.slotBody, classNameOverrides?.slotBody)}
+                    {renderSlot("threadInfo", slots.threadInfo, styles.slotThreadInfo, classNameOverrides?.slotThreadInfo)}
                 </div>
-                {renderSlot("receipt", slots.receipt, styles.receipt, classNameOverrides?.receipt)}
+                {renderSlot("receipt", slots.receipt, styles.slotReceipt, classNameOverrides?.slotReceipt)}
             </>,
             onClick,
             -1,
@@ -148,28 +148,28 @@ export function EventTileView({
         return renderRoot(
             <>
                 <div className={classNames(styles.details, classNameOverrides?.details)}>
-                    {renderSlot("sender", slots.sender, styles.sender, classNameOverrides?.sender)}
+                    {renderSlot("sender", slots.sender, styles.slotSender, classNameOverrides?.slotSender)}
                     {renderSlot(
                         "notificationRoomLabel",
                         slots.notificationRoomLabel,
-                        styles.notificationRoomLabel,
-                        classNameOverrides?.notificationRoomLabel,
+                        styles.slotNotificationRoomLabel,
+                        classNameOverrides?.slotNotificationRoomLabel,
                     )}
-                    {renderSlot("timestamp", slots.timestamp, styles.timestamp, classNameOverrides?.timestamp)}
+                    {renderSlot("timestamp", slots.timestamp, styles.slotTimestamp, classNameOverrides?.slotTimestamp)}
                     {renderSlot(
                         "notificationBadge",
                         slots.notificationBadge,
-                        styles.notificationBadge,
-                        classNameOverrides?.notificationBadge,
+                        styles.slotNotificationBadge,
+                        classNameOverrides?.slotNotificationBadge,
                     )}
                 </div>
-                {renderSlot("avatar", slots.avatar, styles.avatar, classNameOverrides?.avatar)}
+                {renderSlot("avatar", slots.avatar, styles.slotAvatar, classNameOverrides?.slotAvatar)}
                 <div className={classNames(styles.line, classNameOverrides?.line)} id={root.id}>
-                    {renderSlot("body", slots.body, styles.body, classNameOverrides?.body)}
-                    {renderSlot("threadInfo", slots.threadInfo, styles.threadInfo, classNameOverrides?.threadInfo)}
+                    {renderSlot("body", slots.body, styles.slotBody, classNameOverrides?.slotBody)}
+                    {renderSlot("threadInfo", slots.threadInfo, styles.slotThreadInfo, classNameOverrides?.slotThreadInfo)}
                 </div>
-                {renderSlot("actionBar", slots.actionBar, styles.actionBar, classNameOverrides?.actionBar)}
-                {renderSlot("receipt", slots.receipt, styles.receipt, classNameOverrides?.receipt)}
+                {renderSlot("actionBar", slots.actionBar, styles.slotActionBar, classNameOverrides?.slotActionBar)}
+                {renderSlot("receipt", slots.receipt, styles.slotReceipt, classNameOverrides?.slotReceipt)}
             </>,
             onClick,
             -1,
@@ -189,9 +189,9 @@ export function EventTileView({
                         className={classNames(styles.senderDetails, classNameOverrides?.senderDetails)}
                         onContextMenu={onPermalinkContextMenu}
                     >
-                        {renderSlot("avatar", slots.avatar, styles.avatar, classNameOverrides?.avatar)}
-                        {renderSlot("sender", slots.sender, styles.sender, classNameOverrides?.sender)}
-                        {renderSlot("timestamp", slots.timestamp, styles.timestamp, classNameOverrides?.timestamp)}
+                        {renderSlot("avatar", slots.avatar, styles.slotAvatar, classNameOverrides?.slotAvatar)}
+                        {renderSlot("sender", slots.sender, styles.slotSender, classNameOverrides?.slotSender)}
+                        {renderSlot("timestamp", slots.timestamp, styles.slotTimestamp, classNameOverrides?.slotTimestamp)}
                     </div>
                 </a>
                 <div
@@ -199,8 +199,8 @@ export function EventTileView({
                     className={classNames(styles.line, classNameOverrides?.line)}
                     onContextMenu={onContextMenu}
                 >
-                    {renderSlot("contextMenu", slots.contextMenu, styles.contextMenu, classNameOverrides?.contextMenu)}
-                    {renderSlot("body", slots.body, styles.body, classNameOverrides?.body)}
+                    {renderSlot("contextMenu", slots.contextMenu, styles.slotContextMenu, classNameOverrides?.slotContextMenu)}
+                    {renderSlot("body", slots.body, styles.slotBody, classNameOverrides?.slotBody)}
                 </div>
             </>,
             undefined,
@@ -213,23 +213,23 @@ export function EventTileView({
     if (root.data.layout === "irc") {
         return renderRoot(
             <>
-                {renderSlot("padlock", slots.padlock, styles.padlock, classNameOverrides?.padlock)}
-                {renderSlot("timestamp", slots.timestamp, styles.timestamp, classNameOverrides?.timestamp)}
-                {renderSlot("avatar", slots.avatar, styles.avatar, classNameOverrides?.avatar)}
-                {renderSlot("sender", slots.sender, styles.sender, classNameOverrides?.sender)}
+                {renderSlot("padlock", slots.padlock, styles.slotPadlock, classNameOverrides?.slotPadlock)}
+                {renderSlot("timestamp", slots.timestamp, styles.slotTimestamp, classNameOverrides?.slotTimestamp)}
+                {renderSlot("avatar", slots.avatar, styles.slotAvatar, classNameOverrides?.slotAvatar)}
+                {renderSlot("sender", slots.sender, styles.slotSender, classNameOverrides?.slotSender)}
                 <div
                     id={root.id}
                     className={classNames(styles.line, classNameOverrides?.line)}
                     onContextMenu={onContextMenu}
                 >
-                    {renderSlot("contextMenu", slots.contextMenu, styles.contextMenu, classNameOverrides?.contextMenu)}
-                    {renderSlot("replyChain", slots.replyChain, styles.replyChain, classNameOverrides?.replyChain)}
-                    {renderSlot("body", slots.body, styles.body, classNameOverrides?.body)}
-                    {renderSlot("actionBar", slots.actionBar, styles.actionBar, classNameOverrides?.actionBar)}
-                    {renderSlot("footer", slots.footer, styles.footer, classNameOverrides?.footer)}
-                    {renderSlot("threadInfo", slots.threadInfo, styles.threadInfo, classNameOverrides?.threadInfo)}
+                    {renderSlot("contextMenu", slots.contextMenu, styles.slotContextMenu, classNameOverrides?.slotContextMenu)}
+                    {renderSlot("replyChain", slots.replyChain, styles.slotReplyChain, classNameOverrides?.slotReplyChain)}
+                    {renderSlot("body", slots.body, styles.slotBody, classNameOverrides?.slotBody)}
+                    {renderSlot("actionBar", slots.actionBar, styles.slotActionBar, classNameOverrides?.slotActionBar)}
+                    {renderSlot("footer", slots.footer, styles.slotFooter, classNameOverrides?.slotFooter)}
+                    {renderSlot("threadInfo", slots.threadInfo, styles.slotThreadInfo, classNameOverrides?.slotThreadInfo)}
                 </div>
-                {renderSlot("receipt", slots.receipt, styles.receipt, classNameOverrides?.receipt)}
+                {renderSlot("receipt", slots.receipt, styles.slotReceipt, classNameOverrides?.slotReceipt)}
             </>,
             undefined,
             -1,
@@ -239,23 +239,23 @@ export function EventTileView({
     // Group and bubble layouts: sender details precede the line content.
     return renderRoot(
         <>
-            {renderSlot("sender", slots.sender, styles.sender, classNameOverrides?.sender)}
-            {renderSlot("avatar", slots.avatar, styles.avatar, classNameOverrides?.avatar)}
+            {renderSlot("sender", slots.sender, styles.slotSender, classNameOverrides?.slotSender)}
+            {renderSlot("avatar", slots.avatar, styles.slotAvatar, classNameOverrides?.slotAvatar)}
             <div
                 id={root.id}
                 className={classNames(styles.line, classNameOverrides?.line)}
                 onContextMenu={onContextMenu}
             >
-                {renderSlot("contextMenu", slots.contextMenu, styles.contextMenu, classNameOverrides?.contextMenu)}
-                {renderSlot("timestamp", slots.timestamp, styles.timestamp, classNameOverrides?.timestamp)}
-                {renderSlot("padlock", slots.padlock, styles.padlock, classNameOverrides?.padlock)}
-                {renderSlot("replyChain", slots.replyChain, styles.replyChain, classNameOverrides?.replyChain)}
-                {renderSlot("body", slots.body, styles.body, classNameOverrides?.body)}
-                {renderSlot("actionBar", slots.actionBar, styles.actionBar, classNameOverrides?.actionBar)}
+                {renderSlot("contextMenu", slots.contextMenu, styles.slotContextMenu, classNameOverrides?.slotContextMenu)}
+                {renderSlot("timestamp", slots.timestamp, styles.slotTimestamp, classNameOverrides?.slotTimestamp)}
+                {renderSlot("padlock", slots.padlock, styles.slotPadlock, classNameOverrides?.slotPadlock)}
+                {renderSlot("replyChain", slots.replyChain, styles.slotReplyChain, classNameOverrides?.slotReplyChain)}
+                {renderSlot("body", slots.body, styles.slotBody, classNameOverrides?.slotBody)}
+                {renderSlot("actionBar", slots.actionBar, styles.slotActionBar, classNameOverrides?.slotActionBar)}
             </div>
-            {renderSlot("footer", slots.footer, styles.footer, classNameOverrides?.footer)}
-            {renderSlot("threadInfo", slots.threadInfo, styles.threadInfo, classNameOverrides?.threadInfo)}
-            {renderSlot("receipt", slots.receipt, styles.receipt, classNameOverrides?.receipt)}
+            {renderSlot("footer", slots.footer, styles.slotFooter, classNameOverrides?.slotFooter)}
+            {renderSlot("threadInfo", slots.threadInfo, styles.slotThreadInfo, classNameOverrides?.slotThreadInfo)}
+            {renderSlot("receipt", slots.receipt, styles.slotReceipt, classNameOverrides?.slotReceipt)}
         </>,
         undefined,
         -1,

@@ -61,7 +61,15 @@
     min-width: 0;
 }
 
-.contextMenu {
+/* Slot boundaries. Keep these names distinct from the structural shell classes
+   above and from the state/variant classes applied to the root. */
+.slotBody,
+.slotNotificationRoomLabel,
+.slotNotificationBadge {
+    min-width: 0;
+}
+
+.slotContextMenu {
     z-index: 1;
 }
 
@@ -81,7 +89,7 @@
 
 /* The shell owns the action-bar boundary. The action-bar contents own their controls.
    Presence of the slot is the render/show signal supplied by the host. */
-.actionBar {
+.slotActionBar {
     position: absolute;
     z-index: 10;
     inset-block-start: calc(
@@ -132,7 +140,7 @@
         line-height: var(--event-tile-group-line-height);
     }
 
-    .sender {
+    .slotSender {
         display: flex;
         align-items: center;
         max-width: calc(100% - var(--event-tile-group-gutter));
@@ -141,21 +149,21 @@
         line-height: 20px;
     }
 
-    .avatar {
+    .slotAvatar {
         position: absolute;
         z-index: 9;
         inset-block-start: 14px;
         inset-inline-start: var(--cpd-space-2x, 8px);
     }
 
-    .timestamp {
+    .slotTimestamp {
         position: absolute;
         inset-inline-start: 0;
         width: var(--MessageTimestamp-width, 46px);
         text-align: center;
     }
 
-    .padlock {
+    .slotPadlock {
         position: absolute;
         inset-block-start: 0;
         inset-inline-start: 44px;
@@ -163,20 +171,20 @@
         margin: 1px;
     }
 
-    .threadInfo {
+    .slotThreadInfo {
         margin-inline-start: var(--event-tile-group-gutter);
     }
 
-    .replyChain {
+    .slotReplyChain {
         margin-inline-start: 0;
         margin-bottom: var(--cpd-space-2x, 8px);
     }
 
-    .footer {
+    .slotFooter {
         margin: var(--cpd-space-1x, 4px) 0 var(--cpd-space-1x, 4px) var(--event-tile-group-gutter);
     }
 
-    .receipt {
+    .slotReceipt {
         margin-inline-end: 10px;
         float: inline-end;
         position: relative;
@@ -230,13 +238,13 @@
         margin-inline-end: var(--event-tile-irc-right-padding);
     }
 
-    .timestamp {
+    .slotTimestamp {
         min-width: var(--event-tile-irc-timestamp-width);
         flex-shrink: 0;
         text-align: end;
     }
 
-    .avatar {
+    .slotAvatar {
         display: flex;
         align-items: center;
         flex: 0 0 var(--event-tile-irc-icon-width);
@@ -245,20 +253,20 @@
         height: var(--event-tile-irc-line-height);
     }
 
-    .sender {
+    .slotSender {
         flex-shrink: 0;
         width: var(--event-tile-irc-name-width);
         margin-inline-end: 0;
     }
 
-    .padlock,
-    .footer,
-    .threadInfo,
-    .receipt {
+    .slotPadlock,
+    .slotFooter,
+    .slotThreadInfo,
+    .slotReceipt {
         flex-shrink: 0;
     }
 
-    .padlock {
+    .slotPadlock {
         position: absolute;
     }
 
@@ -270,11 +278,11 @@
         padding-block: 1px;
     }
 
-    .replyChain {
+    .slotReplyChain {
         margin: 0;
     }
 
-    .footer {
+    .slotFooter {
         margin-block: var(--cpd-space-1-5x, 6px);
     }
 }
@@ -307,7 +315,7 @@
         line-height: 18px;
     }
 
-    .avatar {
+    .slotAvatar {
         position: absolute;
         z-index: 9;
         inset-block-start: 6px;
@@ -316,19 +324,19 @@
         border-radius: 50%;
     }
 
-    .avatar > * {
+    .slotAvatar > * {
         border-radius: 50%;
         box-shadow: 0 0 0 3px var(--cpd-color-bg-canvas-default, #fff);
     }
 
-    .sender,
+    .slotSender,
     .line {
         width: fit-content;
         max-width: 70%;
         line-height: 18px;
     }
 
-    .sender {
+    .slotSender {
         position: relative;
         inset-block-start: -2px;
         inset-inline-start: 2px;
@@ -336,7 +344,7 @@
         white-space: normal;
     }
 
-    .timestamp {
+    .slotTimestamp {
         position: absolute;
         z-index: 3;
         inset-block-end: 0;
@@ -344,14 +352,14 @@
         padding: 4px 8px;
     }
 
-    > .receipt {
+    > .slotReceipt {
         position: absolute;
         z-index: 1;
         inset-block-end: -3px;
         inset-inline-end: -78px;
     }
 
-    .padlock {
+    .slotPadlock {
         flex-shrink: 0;
         height: calc(18px + 2px);
     }
@@ -366,11 +374,11 @@
         border-end-end-radius: var(--event-tile-bubble-corner-radius);
     }
 
-    &[data-self="false"] .avatar {
+    &[data-self="false"] .slotAvatar {
         inset-inline-start: -36px;
     }
 
-    &[data-self="true"] .sender {
+    &[data-self="true"] .slotSender {
         display: none;
     }
 
@@ -379,12 +387,12 @@
         background: var(--event-tile-bubble-self-background);
     }
 
-    &[data-self="true"] .avatar {
+    &[data-self="true"] .slotAvatar {
         inset-block-start: -19px;
         inset-inline-end: -38px;
     }
 
-    &[data-self="false"] .actionBar {
+    &[data-self="false"] .slotActionBar {
         inset-block-start: -28px;
         inset-inline-start: calc(
             100% - var(--event-tile-action-bar-size) - 2 * (var(--event-tile-action-bar-margin) + 1px)
@@ -392,7 +400,7 @@
         inset-inline-end: auto;
     }
 
-    &[data-self="true"] .actionBar {
+    &[data-self="true"] .slotActionBar {
         inset-block-start: -28px;
         inset-inline-end: 0;
     }
@@ -419,40 +427,40 @@
         background: var(--event-tile-state-highlight-background);
     }
 
-    &:hover .avatar {
+    &:hover .slotAvatar {
         border-color: var(--event-tile-state-hover-background);
     }
 
-    &[data-highlighted="true"] .avatar {
+    &[data-highlighted="true"] .slotAvatar {
         border-color: var(--event-tile-state-highlight-background);
     }
 
-    &:hover .avatar > *,
-    &[data-selected="true"] .avatar > * {
+    &:hover .slotAvatar > *,
+    &[data-selected="true"] .slotAvatar > * {
         box-shadow: 0 0 0 3px var(--event-tile-state-hover-background);
     }
 
-    &[data-highlighted="true"] .avatar > * {
+    &[data-highlighted="true"] .slotAvatar > * {
         box-shadow: 0 0 0 3px var(--event-tile-state-highlight-background);
     }
 
-    .footer {
+    .slotFooter {
         display: flex;
         align-items: center;
         margin-block: var(--cpd-space-1-5x, 6px);
         margin-inline: -9px -12px;
     }
 
-    &[data-self="false"] .threadInfo {
+    &[data-self="false"] .slotThreadInfo {
         margin-inline-start: -11px;
         margin-inline-end: auto;
     }
 
-    &[data-self="true"] .footer {
+    &[data-self="true"] .slotFooter {
         justify-content: flex-end;
     }
 
-    &[data-self="true"] .threadInfo {
+    &[data-self="true"] .slotThreadInfo {
         margin-inline-start: auto;
         margin-inline-end: -11px;
     }
@@ -485,8 +493,8 @@
         margin-inline-start: auto;
     }
 
-    .replyChain,
-    .threadInfo {
+    .slotReplyChain,
+    .slotThreadInfo {
         clear: both;
     }
 }
@@ -505,13 +513,13 @@
             padding-inline-start: var(--cpd-space-2x, 8px);
         }
 
-        .senderDetails .avatar {
+        .senderDetails .slotAvatar {
             /* ThreadView keeps the avatar in the sender-details flex row. */
             position: relative;
             inset: auto;
         }
 
-        .senderDetails .sender {
+        .senderDetails .slotSender {
             margin-inline-start: 0;
             max-width: 100%;
             min-height: 0;
@@ -524,13 +532,13 @@
             margin-inline-end: 8px;
         }
 
-        .timestamp {
+        .slotTimestamp {
             /* ThreadView aligns this with the event content, not the bottom of
                the line's flex/content flow. */
             inset-block-start: 2px;
         }
 
-        .footer {
+        .slotFooter {
             margin-inline-start: 56px;
             margin-inline-end: 8px;
         }
@@ -575,7 +583,7 @@
         overflow: hidden;
     }
 
-    .sender {
+    .slotSender {
         /* In preview tiles the sender is a metadata-row profile, not the
            group-layout sender above the event line. */
         display: inline-flex;
@@ -587,7 +595,7 @@
         line-height: normal;
     }
 
-    .avatar {
+    .slotAvatar {
         position: absolute;
         inset: 8px auto auto 8px;
     }
@@ -599,13 +607,13 @@
         padding-bottom: 0;
     }
 
-    .threadInfo {
+    .slotThreadInfo {
         /* The preview is inside the padded line in this mode; it does not use
            the group-layout thread-summary gutter. */
         margin-inline-start: 0;
     }
 
-    .timestamp {
+    .slotTimestamp {
         display: block;
         font-size: 12px;
         overflow: hidden;
@@ -662,7 +670,7 @@
         overflow: hidden;
     }
 
-    .sender {
+    .slotSender {
         /* In preview tiles the sender is a metadata-row profile, not the
            group-layout sender above the event line. */
         display: inline-flex;
@@ -674,7 +682,7 @@
         line-height: normal;
     }
 
-    .avatar {
+    .slotAvatar {
         position: absolute;
         inset: 8px auto auto 8px;
     }
@@ -686,13 +694,13 @@
         padding-bottom: 0;
     }
 
-    .threadInfo {
+    .slotThreadInfo {
         /* The preview is inside the padded line in these modes; it does not use
            the group-layout thread-summary gutter. */
         margin-inline-start: 0;
     }
 
-    .timestamp {
+    .slotTimestamp {
         display: block;
         font-size: 12px;
         overflow: hidden;
@@ -731,13 +739,13 @@
         margin-top: -2px;
     }
 
-    .senderDetails .avatar {
+    .senderDetails .slotAvatar {
         position: relative;
         inset: auto;
         flex: 0 0 auto;
     }
 
-    .senderDetails .sender {
+    .senderDetails .slotSender {
         display: inline-flex;
         align-items: center;
         max-width: 100%;
@@ -746,7 +754,7 @@
         line-height: normal;
     }
 
-    .senderDetails .timestamp {
+    .senderDetails .slotTimestamp {
         position: initial;
         inset: auto;
         width: unset;
