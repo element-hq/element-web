@@ -9,13 +9,10 @@ import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import {
-    SectionCreationView,
-    type SectionCreationViewActions,
-    type SectionCreationViewSnapshot,
-} from "./SectionCreationView";
+import { SectionCreationView } from "./SectionCreationView";
 import { useMockedViewModel } from "../../core/viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
+import { type SectionCreationViewActions, type SectionCreationViewSnapshot } from "./types";
 
 type SectionCreationProps = SectionCreationViewSnapshot & SectionCreationViewActions;
 

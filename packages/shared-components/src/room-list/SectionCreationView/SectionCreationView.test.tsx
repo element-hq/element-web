@@ -12,12 +12,9 @@ import userEvent from "@testing-library/user-event";
 import { describe, it, vi, afterEach, expect } from "vitest";
 
 import * as stories from "./SectionCreationView.stories";
-import {
-    SectionCreationView,
-    type SectionCreationViewActions,
-    type SectionCreationViewSnapshot,
-} from "./SectionCreationView";
+import { SectionCreationView } from "./SectionCreationView";
 import { MockViewModel } from "../../core/viewmodel/MockViewModel";
+import { type SectionCreationViewActions, type SectionCreationViewSnapshot } from "./types";
 
 const { Default, Edition } = composeStories(stories);
 
