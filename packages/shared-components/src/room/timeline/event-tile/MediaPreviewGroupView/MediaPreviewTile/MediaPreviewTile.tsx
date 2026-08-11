@@ -3,6 +3,7 @@ import type {
     MediaPreviewGroupAudioEntry,
     MediaPreviewGroupEntryBase,
     MediaPreviewGroupImageEntry,
+    MediaPreviewGroupTextEntry,
     MediaPreviewGroupVideoEntry,
 } from "../MediaPreviewGroupView";
 import styles from "./MediaPreviewTile.module.css";
@@ -42,4 +43,8 @@ export function VideoPreviewTile(props: MediaPreviewGroupVideoEntry): JSX.Elemen
 
 export function AudioPreviewTile(props: MediaPreviewGroupAudioEntry): JSX.Element {
     return <MediaPreviewTile above={<Audio {...props} />} {...props} />;
+}
+
+export function TextPreviewTile(props: MediaPreviewGroupTextEntry): JSX.Element {
+    return <MediaPreviewTile {...props} />;
 }
