@@ -168,6 +168,9 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
             this.element.src = URL.createObjectURL(new Blob([this.buf]));
             await deferred.promise; // make sure the audio element is ready for us
         } else {
+            // decodeAudioData detaches the buffer it is given, so the copy the fallback needs has
+            // to be taken before we call it rather than inside the error handler.
+            const fallbackBuf = this.buf.slice(0);
             try {
                 this.audioBuf = await this.context.decodeAudioData(this.buf);
             } catch (e) {
@@ -176,7 +179,7 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
 
                 try {
                     // This error handler is largely for Safari, which doesn't support Opus/Ogg very well.
-                    const wav = await decodeOgg(this.buf);
+                    const wav = await decodeOgg(fallbackBuf);
                     this.audioBuf = await this.context.decodeAudioData(wav);
                 } catch (e) {
                     logger.error("Error decoding recording:", e);

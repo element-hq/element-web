@@ -176,6 +176,34 @@ describe("Playback", () => {
             expect(playback.currentState).toEqual(PlaybackState.Stopped);
         });
 
+        it("hands the ogg fallback a buffer which decodeAudioData has not detached", async () => {
+            // stub logger to keep console clean from expected error
+            jest.spyOn(logger, "error").mockReturnValue(undefined);
+            jest.spyOn(logger, "warn").mockReturnValue(undefined);
+
+            const buffer = new ArrayBuffer(8);
+            mockAudioContext.decodeAudioData
+                .mockImplementationOnce((buf: ArrayBuffer) => {
+                    // The real decodeAudioData detaches the buffer it is handed, even when it fails.
+                    structuredClone(buf, { transfer: [buf] });
+                    return Promise.reject(new Error("test"));
+                })
+                .mockResolvedValueOnce(mockAudioBuffer);
+            // Constructing a view over a detached buffer throws, which is what decodeOgg does first.
+            mocked(decodeOgg).mockImplementationOnce(async (audioBuffer: ArrayBuffer) => {
+                expect(() => new Uint8Array(audioBuffer)).not.toThrow();
+                return new ArrayBuffer(1);
+            });
+
+            const playback = new Playback(buffer);
+
+            await playback.prepare();
+
+            expect(decodeOgg).toHaveBeenCalled();
+            expect(mockAudioContext.decodeAudioData).toHaveBeenCalledTimes(2);
+            expect(playback.currentState).toEqual(PlaybackState.Stopped);
+        });
+
         it("does not try to re-decode audio", async () => {
             const buffer = new ArrayBuffer(8);
             const playback = new Playback(buffer);
