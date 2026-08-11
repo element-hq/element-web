@@ -11,10 +11,10 @@ import FileIcon from "@vector-im/compound-design-tokens/assets/web/icons/documen
 import ExpandIcon from "@vector-im/compound-design-tokens/assets/web/icons/expand";
 import DownloadIcon from "@vector-im/compound-design-tokens/assets/web/icons/download";
 
-import { TextPreviewTile } from "./TextPreviewTile";
+import { TextPreviewTile } from "./MediaPreviewTile";
 
 const meta = {
-    title: "Room/Timeline/MediaPreviewGroupView/TextPreviewTile",
+    title: "Room/Timeline/MediaPreviewGroupView/MediaPreviewTile/TextPreviewTile",
     component: TextPreviewTile,
     tags: ["autodocs"],
     args: {
