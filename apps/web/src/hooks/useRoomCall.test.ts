@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
-import { renderHook, waitFor } from "test-utils-rtl";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { act, renderHook, waitFor } from "test-utils-rtl";
 import {
     getMockClientWithEventEmitter,
     mkRoom,
@@ -25,6 +25,8 @@ import RoomContext, { type RoomContextType } from "../contexts/RoomContext";
 import type LegacyCallHandler from "../LegacyCallHandler";
 import { CallStore } from "../stores/CallStore";
 import { SDKContextClass } from "../contexts/SDKContextClass";
+import { createRtcTransportsCachedValue } from "../../../../../matrix-js-sdk/src/rtcTransportsCachedValue.ts";
+import { logger } from "matrix-js-sdk/src/logger";
 
 describe("useRoomCall", () => {
     const client = getMockClientWithEventEmitter({
@@ -35,6 +37,7 @@ describe("useRoomCall", () => {
         _unstable_getRTCTransports: vi.fn().mockResolvedValue([]),
         getCrypto: () => null,
     });
+    client.cachedRtcTransports = createRtcTransportsCachedValue(client, logger);
     const room = mkRoom(client, "!test-room");
     // Create a stable room context for this test
     const mockRoomViewStore = {
@@ -101,6 +104,7 @@ describe("useRoomCall", () => {
             client._unstable_getRTCTransports.mockResolvedValue([
                 { type: "livekit", livekit_service_url: "https://example.org" },
             ]);
+            client.cachedRtcTransports.start();
             await setupAsyncStoreWithClient(CallStore.instance, client);
 
             const { result } = render();
@@ -115,6 +119,7 @@ describe("useRoomCall", () => {
                     livekit_service_url: "https://example.org",
                 },
             });
+            client.cachedRtcTransports.start();
             await setupAsyncStoreWithClient(CallStore.instance, client);
             const { result } = render();
             await waitFor(() =>
@@ -126,6 +131,7 @@ describe("useRoomCall", () => {
             client._unstable_getRTCTransports.mockResolvedValue([]);
             client.getClientWellKnown.mockReturnValue({});
 
+            await client.cachedRtcTransports.refresh();
             await setupAsyncStoreWithClient(CallStore.instance, client);
             const { result } = render();
 
@@ -136,6 +142,11 @@ describe("useRoomCall", () => {
             client._unstable_getRTCTransports.mockResolvedValue([
                 { type: "livekit", livekit_service_url: "https://example.org" },
             ]);
+
+            await act(async () => {
+                await client.cachedRtcTransports.refresh();
+            });
+
             await setupAsyncStoreWithClient(CallStore.instance, client);
             await waitFor(() =>
                 expect(result.current.callOptions).toEqual([PlatformCallType.ElementCall, PlatformCallType.LegacyCall]),
