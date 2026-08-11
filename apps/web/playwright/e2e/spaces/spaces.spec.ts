@@ -264,7 +264,7 @@ test.describe("Spaces", () => {
     test(
         "should render readable notification badges in the space panel",
         { tag: "@screenshot" },
-        async ({ app, user, bot }) => {
+        async ({ page, app, user, bot }) => {
             const roomId = await app.client.createRoom({
                 name: "Unread Room",
             });
@@ -291,7 +291,7 @@ test.describe("Spaces", () => {
 
             const badge = spaceButton.locator(".mx_SpacePanel_notificationBadge");
             await expect(badge).toHaveText("10");
-            await expect(badge).toMatchScreenshot("space-panel-notification-badge.png");
+            await expect(page.locator(".mx_SpacePanel")).toMatchScreenshot("space-panel-notification-badge.png");
         },
     );
 
