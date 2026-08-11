@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import EventEmitter from "events";
+import EventEmitter from "node:events";
 import {
     type MatrixClient,
     type MatrixEvent,

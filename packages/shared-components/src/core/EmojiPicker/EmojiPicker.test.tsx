@@ -1,184 +1,151 @@
 /*
-Copyright 2024 New Vector Ltd.
-Copyright 2023 The Matrix.org Foundation C.I.C.
+ * Copyright 2026 Element Creations Ltd.
+ * Copyright 2023 The Matrix.org Foundation C.I.C.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
-Please see LICENSE files in the repository root for full details.
-*/
-
-import React, { createRef } from "react";
-import { render, waitFor, act } from "jest-matrix-react";
+import React from "react";
+import { DATA_BY_CATEGORY } from "@matrix-org/emojibase-bindings";
 import userEvent from "@testing-library/user-event";
+import { render, waitFor, screen } from "@test-utils";
+import { describe, expect, it, vi } from "vitest";
 
-import EmojiPicker from "../../../../../src/components/views/emojipicker/EmojiPicker";
-import { stubClient } from "../../../../test-utils";
-import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../../../src/settings/SettingLevel.ts";
+import { EmojiPicker, filterEmojis } from "./EmojiPicker";
 
 describe("EmojiPicker", function () {
-    stubClient();
+    // Recent emojis as they would be provided by the app, most used first
+    const RECENT_EMOJIS = ["😀", "🎉", "❤️"];
 
     // Helper to get the currently active emoji's text content from the grid
     const getActiveEmojiText = (container: HTMLElement): string =>
-        container.querySelector('.mx_EmojiPicker_body .mx_EmojiPicker_item_wrapper [tabindex="0"]')?.textContent || "";
+        container.querySelector('[role="gridcell"] [tabindex="0"]')?.textContent || "";
 
-    beforeEach(() => {
-        // Clear recent emojis to prevent test pollution
-        SettingsStore.reset();
+    it("should disable the recent category when no recent emojis", () => {
+        render(<EmojiPicker onChoose={() => false} onFinished={vi.fn()} />);
+
+        const recentTab = screen.getByRole("tab", { name: "🕒" });
+        expect(recentTab).toBeDisabled();
     });
 
-    afterEach(() => {
-        jest.restoreAllMocks();
+    it("should select the people category by default when no recent emojis", () => {
+        render(<EmojiPicker onChoose={() => false} onFinished={vi.fn()} />);
+
+        const peopleTab = screen.getByRole("tab", { name: "😀" });
+        expect(peopleTab).toHaveAttribute("aria-selected", "true");
     });
 
-    it("should initialize categories with correct state when no recent emojis", () => {
-        const ref = createRef<EmojiPicker>();
-        render(<EmojiPicker ref={ref} onChoose={(str: string) => false} onFinished={jest.fn()} />);
+    it("should enable and select the recent category when recent emojis are supplied", () => {
+        render(<EmojiPicker onChoose={() => false} onFinished={vi.fn()} recentEmojis={RECENT_EMOJIS} />);
 
-        //@ts-ignore private access
-        const categories = ref.current!.categories;
-
-        // Verify we have all expected categories
-        expect(categories).toHaveLength(9);
-        expect(categories.map((c) => c.id)).toEqual([
-            "recent",
-            "people",
-            "nature",
-            "foods",
-            "activity",
-            "places",
-            "objects",
-            "symbols",
-            "flags",
-        ]);
-
-        // Recent category should be disabled when empty
-        const recentCategory = categories.find((c) => c.id === "recent");
-        expect(recentCategory).toMatchObject({
-            id: "recent",
-            enabled: false,
-            visible: false,
-            firstVisible: false,
-        });
-
-        // People category should be the first visible when no recent emojis
-        const peopleCategory = categories.find((c) => c.id === "people");
-        expect(peopleCategory).toMatchObject({
-            id: "people",
-            enabled: true,
-            visible: true,
-            firstVisible: true,
-        });
-
-        // Other categories should start as not visible and not firstVisible
-        const natureCategory = categories.find((c) => c.id === "nature");
-        expect(natureCategory).toMatchObject({
-            id: "nature",
-            enabled: true,
-            visible: false,
-            firstVisible: false,
-        });
-
-        const flagsCategory = categories.find((c) => c.id === "flags");
-        expect(flagsCategory).toMatchObject({
-            id: "flags",
-            enabled: true,
-            visible: false,
-            firstVisible: false,
-        });
-
-        // All categories should have refs and names
-        categories.forEach((cat) => {
-            expect(cat.ref).toBeTruthy();
-            expect(cat.name).toBeTruthy();
-        });
+        const recentTab = screen.getByRole("tab", { name: "🕒" });
+        expect(recentTab).toBeEnabled();
+        expect(recentTab).toHaveAttribute("aria-selected", "true");
     });
 
-    it("should initialize categories with recent as firstVisible when recent emojis exist", () => {
-        // Mock recent emojis
-        SettingsStore.setValue("recent_emoji", null, SettingLevel.ACCOUNT, [
-            { emoji: "😀", total: 3 },
-            { emoji: "🎉", total: 2 },
-            { emoji: "❤️", total: 2 },
-        ]);
+    it("should record recent emoji when onChoose does not return false", async () => {
+        const onChoose = vi.fn(() => true);
+        const onRecordRecent = vi.fn();
+        const { container } = render(
+            <EmojiPicker onChoose={onChoose} onFinished={vi.fn()} onRecordRecent={onRecordRecent} />,
+        );
 
-        const ref = createRef<EmojiPicker>();
-        render(<EmojiPicker ref={ref} onChoose={(str: string) => false} onFinished={jest.fn()} />);
-
-        //@ts-ignore private access
-        const categories = ref.current!.categories;
-
-        // Recent category should be enabled and firstVisible
-        const recentCategory = categories.find((c) => c.id === "recent");
-        expect(recentCategory).toMatchObject({
-            id: "recent",
-            enabled: true,
-            visible: true,
-            firstVisible: true,
+        await waitFor(() => {
+            expect(container.querySelector('[role="gridcell"]')).toBeInTheDocument();
         });
 
-        // People category should be visible but NOT firstVisible when recent exists
-        const peopleCategory = categories.find((c) => c.id === "people");
-        expect(peopleCategory).toMatchObject({
-            id: "people",
-            enabled: true,
-            visible: true,
-            firstVisible: false,
+        await userEvent.click(container.querySelector('[role="gridcell"] [role="button"]')!);
+        expect(onChoose).toHaveBeenCalledWith("😀");
+        expect(onRecordRecent).toHaveBeenCalledWith("😀");
+    });
+
+    it("should not record recent emoji when onChoose returns false", async () => {
+        const onRecordRecent = vi.fn();
+        const { container } = render(
+            <EmojiPicker onChoose={() => false} onFinished={vi.fn()} onRecordRecent={onRecordRecent} />,
+        );
+
+        await waitFor(() => {
+            expect(container.querySelector('[role="gridcell"]')).toBeInTheDocument();
         });
+
+        await userEvent.click(container.querySelector('[role="gridcell"] [role="button"]')!);
+        expect(onRecordRecent).not.toHaveBeenCalled();
     });
 
     it("should not mangle default order after filtering", async () => {
-        const ref = createRef<EmojiPicker>();
-        const { container } = render(
-            <EmojiPicker ref={ref} onChoose={(str: string) => false} onFinished={jest.fn()} />,
+        const { container } = render(<EmojiPicker onChoose={() => false} onFinished={vi.fn()} />);
+
+        // Extract the list of emoji currently visible in the grid
+        const getVisibleEmojis = (): string[] =>
+            Array.from(container.querySelectorAll('[role="gridcell"]')).map((cell) => cell.textContent || "");
+
+        await waitFor(() => {
+            expect(container.querySelector('[role="gridcell"]')).toBeInTheDocument();
+        });
+
+        // Wait for the virtualized rows to settle (out-of-view categories drop
+        // their transient initial rows once measured) before capturing.
+        const beforeEmojis = getVisibleEmojis();
+
+        const input = container.querySelector("input")!;
+
+        // Apply a filter and assert that the visible emoji have changed
+        await userEvent.type(input, "test");
+        await waitFor(() => expect(getVisibleEmojis()).not.toEqual(beforeEmojis));
+
+        // There may be different numbers of emoji before after since virtuoso may
+        // end up rendering more or fewer off screen. Chop any excess off so that it's
+        // just the *order* we're comparing.
+        await userEvent.clear(input);
+        await waitFor(() => {
+            const afterEmojis = getVisibleEmojis();
+            const length = Math.min(beforeEmojis.length, afterEmojis.length);
+            expect(afterEmojis.slice(0, length)).toEqual(beforeEmojis.slice(0, length));
+        });
+    });
+
+    it("should keep the filter applied when recentEmojis prop is changed", async () => {
+        const { container, rerender } = render(
+            <EmojiPicker onChoose={() => false} onFinished={vi.fn()} recentEmojis={[...RECENT_EMOJIS]} />,
         );
 
-        // Record the HTML before filtering
-        const beforeHtml = container.innerHTML;
+        const getVisibleEmojis = (): string[] =>
+            Array.from(container.querySelectorAll('[role="gridcell"]')).map((cell) => cell.textContent || "");
 
-        // Apply a filter and assert that the HTML has changed
-        //@ts-ignore private access
-        act(() => ref.current!.onChangeFilter("test"));
-        expect(beforeHtml).not.toEqual(container.innerHTML);
+        const input = container.querySelector("input")!;
+        await userEvent.type(input, "wave");
+        await waitFor(() => expect(getVisibleEmojis()).toContain("👋"));
+        const filtered = getVisibleEmojis();
 
-        // Clear the filter and assert that the HTML matches what it was before filtering
-        //@ts-ignore private access
-        act(() => ref.current!.onChangeFilter(""));
-        await waitFor(() => expect(beforeHtml).toEqual(container.innerHTML));
+        // add another recently used emoji but it doesn't match the filter, so it should not change what's visible.
+        rerender(<EmojiPicker onChoose={() => false} onFinished={vi.fn()} recentEmojis={["🦡", ...RECENT_EMOJIS]} />);
+
+        expect(input).toHaveValue("wave");
+        expect(getVisibleEmojis()).toEqual(filtered);
     });
 
     it("sort emojis by shortcode and size", function () {
-        const ep = new EmojiPicker({ onChoose: (str: string) => false, onFinished: jest.fn() });
+        const sorted = filterEmojis(DATA_BY_CATEGORY.people, "heart");
 
-        //@ts-ignore private access
-        act(() => ep.onChangeFilter("heart"));
-
-        //@ts-ignore private access
-        expect(ep.memoizedDataByCategory["people"][0].shortcodes[0]).toEqual("heart");
-        //@ts-ignore private access
-        expect(ep.memoizedDataByCategory["people"][1].shortcodes[0]).toEqual("heartbeat");
+        expect(sorted[0].shortcodes[0]).toEqual("heart");
+        expect(sorted[1].shortcodes[0]).toEqual("heartbeat");
     });
 
     it("should allow keyboard navigation using arrow keys", async () => {
-        // mock offsetParent
-        Object.defineProperty(HTMLElement.prototype, "offsetParent", {
-            get() {
-                return this.parentNode;
-            },
-        });
-
-        const onChoose = jest.fn();
-        const onFinished = jest.fn();
+        const onChoose = vi.fn();
+        const onFinished = vi.fn();
         const { container } = render(<EmojiPicker onChoose={onChoose} onFinished={onFinished} />);
 
         const input = container.querySelector("input")!;
-        expect(input).toHaveFocus();
+        await waitFor(() => expect(input).toHaveFocus());
 
         function getEmoji(): string {
             return getActiveEmojiText(container);
         }
 
-        expect(getEmoji()).toEqual("😀");
+        await waitFor(() => expect(getEmoji()).toEqual("😀"));
         // First arrow key press shows highlight without navigating
         await userEvent.keyboard("[ArrowDown]");
         expect(getEmoji()).toEqual("😀");
@@ -188,6 +155,7 @@ describe("EmojiPicker", function () {
         await userEvent.keyboard("[ArrowUp]");
         expect(getEmoji()).toEqual("😀");
         await userEvent.keyboard("Flag");
+        await waitFor(() => expect(getEmoji()).not.toEqual("😀"));
         await userEvent.keyboard("[ArrowRight]");
         await userEvent.keyboard("[ArrowRight]");
         expect(getEmoji()).toEqual("📫️");
@@ -206,19 +174,12 @@ describe("EmojiPicker", function () {
     });
 
     it("should move actual focus when navigating between emojis after Tab", async () => {
-        // mock offsetParent
-        Object.defineProperty(HTMLElement.prototype, "offsetParent", {
-            get() {
-                return this.parentNode;
-            },
-        });
-
-        const onChoose = jest.fn();
-        const onFinished = jest.fn();
+        const onChoose = vi.fn();
+        const onFinished = vi.fn();
         const { container } = render(<EmojiPicker onChoose={onChoose} onFinished={onFinished} />);
 
         const input = container.querySelector("input")!;
-        expect(input).toHaveFocus();
+        await waitFor(() => expect(input).toHaveFocus());
 
         // Wait for emojis to render
         await waitFor(() => {
@@ -271,19 +232,12 @@ describe("EmojiPicker", function () {
     });
 
     it("should not select emoji on Enter press before highlight is shown", async () => {
-        // mock offsetParent
-        Object.defineProperty(HTMLElement.prototype, "offsetParent", {
-            get() {
-                return this.parentNode;
-            },
-        });
-
-        const onChoose = jest.fn();
-        const onFinished = jest.fn();
+        const onChoose = vi.fn();
+        const onFinished = vi.fn();
         const { container } = render(<EmojiPicker onChoose={onChoose} onFinished={onFinished} />);
 
         const input = container.querySelector("input")!;
-        expect(input).toHaveFocus();
+        await waitFor(() => expect(input).toHaveFocus());
 
         // Wait for emojis to render
         await waitFor(() => {
@@ -309,26 +263,19 @@ describe("EmojiPicker", function () {
     });
 
     it("should reset to first emoji when filter is cleared after navigation", async () => {
-        // mock offsetParent
-        Object.defineProperty(HTMLElement.prototype, "offsetParent", {
-            get() {
-                return this.parentNode;
-            },
-        });
-
-        const onChoose = jest.fn();
-        const onFinished = jest.fn();
+        const onChoose = vi.fn();
+        const onFinished = vi.fn();
         const { container } = render(<EmojiPicker onChoose={onChoose} onFinished={onFinished} />);
 
         const input = container.querySelector("input")!;
-        expect(input).toHaveFocus();
+        await waitFor(() => expect(input).toHaveFocus());
 
         function getEmoji(): string {
             return getActiveEmojiText(container);
         }
 
         // Initially on first emoji
-        expect(getEmoji()).toEqual("😀");
+        await waitFor(() => expect(getEmoji()).toEqual("😀"));
 
         // Show highlight with first arrow press
         await userEvent.keyboard("[ArrowDown]");
@@ -364,18 +311,41 @@ describe("EmojiPicker", function () {
         expect(getEmoji()).toEqual("🙂");
     });
 
-    describe("Category keyboard selection", () => {
-        beforeEach(() => {
-            // mock offsetParent
-            Object.defineProperty(HTMLElement.prototype, "offsetParent", {
-                get() {
-                    return this.parentNode;
-                },
-            });
-        });
+    it("should point aria-activedescendant at the active emoji while searching", async () => {
+        const { container } = render(<EmojiPicker onChoose={vi.fn()} onFinished={vi.fn()} />);
 
+        const input = container.querySelector("input")!;
+        await waitFor(() => expect(input).toHaveFocus());
+
+        function getActiveEmoji(): HTMLElement {
+            return container.querySelector<HTMLElement>('[role="gridcell"] [tabindex="0"]')!;
+        }
+
+        // With no query, the input must not claim an active descendant: doing so makes
+        // screen readers read out the first emoji merely on focusing the input.
+        await waitFor(() => expect(getActiveEmoji()).toBeInTheDocument());
+        expect(input).not.toHaveAttribute("aria-activedescendant");
+
+        // Once there's a query, the active emoji must be identified to screen readers,
+        // which requires the emoji cells to have IDs for aria-activedescendant to target.
+        await userEvent.type(input, "te");
+        await waitFor(() => expect(getActiveEmoji().textContent).toEqual("🧑‍🏫"));
+
+        const activeId = getActiveEmoji().id;
+        expect(activeId).not.toEqual("");
+        expect(input).toHaveAttribute("aria-activedescendant", activeId);
+        expect(container.querySelectorAll(`[id="${activeId}"]`)).toHaveLength(1);
+
+        // ...and it must follow the selection as the query changes
+        await userEvent.type(input, "s");
+        await waitFor(() => expect(getActiveEmoji().textContent).toEqual("🧪"));
+        expect(input).toHaveAttribute("aria-activedescendant", getActiveEmoji().id);
+        expect(getActiveEmoji().id).not.toEqual(activeId);
+    });
+
+    describe("Category keyboard selection", () => {
         it("check tabindex for the first category when no recent emojis", async () => {
-            const { container } = render(<EmojiPicker onChoose={jest.fn()} onFinished={jest.fn()} />);
+            const { container } = render(<EmojiPicker onChoose={vi.fn()} onFinished={vi.fn()} />);
 
             await waitFor(() => {
                 expect(container.querySelector('[data-category-id="people"]')).toBeInTheDocument();
@@ -392,13 +362,9 @@ describe("EmojiPicker", function () {
         });
 
         it("check tabindex for recent category when recent emojis exist", async () => {
-            // Mock recent emojis
-            SettingsStore.setValue("recent_emoji", null, SettingLevel.ACCOUNT, [
-                { emoji: "😀", total: 3 },
-                { emoji: "🎉", total: 2 },
-            ]);
-
-            const { container } = render(<EmojiPicker onChoose={jest.fn()} onFinished={jest.fn()} />);
+            const { container } = render(
+                <EmojiPicker recentEmojis={RECENT_EMOJIS.slice(0, 2)} onChoose={vi.fn()} onFinished={vi.fn()} />,
+            );
 
             await waitFor(() => {
                 expect(container.querySelector('[data-category-id="recent"]')).toBeInTheDocument();
@@ -415,18 +381,18 @@ describe("EmojiPicker", function () {
         });
 
         it("should update table position when clicking on a different category tab", async () => {
-            const { container } = render(<EmojiPicker onChoose={jest.fn()} onFinished={jest.fn()} />);
+            const { container } = render(<EmojiPicker onChoose={vi.fn()} onFinished={vi.fn()} />);
 
             await waitFor(() => {
                 expect(container.querySelector('[data-category-id="people"]')).toBeInTheDocument();
             });
 
             // Initially, people category should be visible
-            const peopleTab = container.querySelector('[title*="Smileys"]') as HTMLButtonElement;
+            const peopleTab = container.querySelector('[title*="Smileys"]')!;
             expect(peopleTab).toHaveAttribute("tabindex", "0");
 
             // Click on nature category tab
-            const natureTab = container.querySelector('[title*="Animals"]') as HTMLButtonElement;
+            const natureTab = container.querySelector('[title*="Animals"]')!;
             await userEvent.click(natureTab);
 
             // Wait for scroll and visibility update
@@ -437,14 +403,14 @@ describe("EmojiPicker", function () {
         });
 
         it("should navigate between category tabs using arrow keys", async () => {
-            const { container } = render(<EmojiPicker onChoose={jest.fn()} onFinished={jest.fn()} />);
+            const { container } = render(<EmojiPicker onChoose={vi.fn()} onFinished={vi.fn()} />);
 
             await waitFor(() => {
                 expect(container.querySelector('[data-category-id="people"]')).toBeInTheDocument();
             });
 
             // Focus on the category header
-            const peopleTab = container.querySelector('[title*="Smileys"]') as HTMLButtonElement;
+            const peopleTab = container.querySelector<HTMLButtonElement>('[title*="Smileys"]')!;
             peopleTab.focus();
             expect(peopleTab).toHaveFocus();
 
@@ -464,21 +430,21 @@ describe("EmojiPicker", function () {
         });
 
         it("should navigate to first/last category using Home/End keys", async () => {
-            const { container } = render(<EmojiPicker onChoose={jest.fn()} onFinished={jest.fn()} />);
+            const { container } = render(<EmojiPicker onChoose={vi.fn()} onFinished={vi.fn()} />);
 
             await waitFor(() => {
                 expect(container.querySelector('[data-category-id="people"]')).toBeInTheDocument();
             });
 
             // Focus on the category header
-            const peopleTab = container.querySelector('[title*="Smileys"]') as HTMLButtonElement;
+            const peopleTab = container.querySelector<HTMLButtonElement>('[title*="Smileys"]')!;
             peopleTab.focus();
 
             // Press End to jump to last category
             await userEvent.keyboard("[End]");
 
             await waitFor(() => {
-                const flagsTab = container.querySelector('[title*="Flags"]') as HTMLButtonElement;
+                const flagsTab = container.querySelector('[title*="Flags"]')!;
                 expect(flagsTab).toHaveFocus();
             });
 

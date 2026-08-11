@@ -8,7 +8,7 @@
 import React, { act } from "react";
 import { render, type RenderOptions } from "jest-matrix-react";
 import { type MatrixClient, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
-import { EventEmitter } from "events";
+import { EventEmitter } from "node:events";
 
 import { stubClient } from "../../test-utils";
 import DMRoomMap from "../../../src/utils/DMRoomMap";

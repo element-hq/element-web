@@ -24,6 +24,7 @@ import { type WidgetLifecycleApi } from "./widget-lifecycle.ts";
 import { type WidgetApi } from "./widget.ts";
 import { type CustomisationsApi } from "./customisations.ts";
 import { type ComposerApi } from "./composer.ts";
+import { type StorageHelperApi } from "./storage-helper.ts";
 import { type SettingsApi } from "./settings.ts";
 
 /**
@@ -167,6 +168,11 @@ export interface Api
      */
     readonly composer: ComposerApi;
 
+    /**
+     * Allows modules to access storage helper functions.
+     * @alpha Subject to change.
+     */
+    readonly storageHelper: StorageHelperApi;
     /**
      * Allows modules to read application settings.
      * @alpha Subject to change.

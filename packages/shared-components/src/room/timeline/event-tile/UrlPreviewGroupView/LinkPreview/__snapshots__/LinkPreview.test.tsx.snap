@@ -72,6 +72,7 @@ exports[`LinkPreview > renders a preview 1`] = `
       aria-label="View image"
       class="LinkPreview-module_preview"
       style="background-image: url("/static/element.png");"
+      type="button"
     />
     <div
       class="LinkPreview-module_textContent"

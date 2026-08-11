@@ -158,7 +158,7 @@ export default class ScrollPanel extends React.Component<IProps> {
             return Promise.resolve(false);
         },
         onUnfillRequest: function (backwards: boolean, scrollToken: string) {},
-        onScroll: function () {},
+        onScroll: function (): void {},
     };
 
     private readonly pendingFillRequests: Record<"b" | "f", boolean | null> = {

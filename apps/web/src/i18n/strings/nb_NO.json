@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Emoji-velger",
         "jump_first_invite": "Hopp til den første invitasjonen.",
         "message_composer": "Meldingsfelt",
         "n_unread_messages": {
@@ -887,22 +886,6 @@
     },
     "dialog_close_label": "Lukk dialog",
     "download_completed": "Nedlasting fullført",
-    "emoji": {
-        "categories": "Kategorier",
-        "category_activities": "Aktiviteter",
-        "category_animals_nature": "Dyreliv og natur",
-        "category_flags": "Flagg",
-        "category_food_drink": "Mat og drikke",
-        "category_frequently_used": "Ofte brukte",
-        "category_objects": "Objekter",
-        "category_smileys_people": "Smilefjes og folk",
-        "category_symbols": "Symboler",
-        "category_travel_places": "Reise og steder",
-        "quick_reactions": "Hurtigreaksjoner"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Avbryt søket"
-    },
     "empty_room": "Tomt rom",
     "empty_room_was_name": "Tomt rom (var %(oldName)s)",
     "encryption": {
