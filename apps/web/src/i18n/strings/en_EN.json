@@ -1607,7 +1607,9 @@
         "room_leave_admin_warning": "You're the only administrator in this room. If you leave, nobody will be able to change room settings or take other important actions.",
         "room_leave_mod_warning": "You're the only moderator in this room. If you leave, nobody will be able to change room settings or take other important actions.",
         "room_rejoin_warning": "This room is not public. You will not be able to rejoin without an invite.",
-        "space_rejoin_warning": "This space is not public. You will not be able to rejoin without an invite."
+        "room_rejoin_warning_restricted": "This room is restricted and cannot be rejoined unless you are in one of its authorised spaces or invited.",
+        "space_rejoin_warning": "This space is not public. You will not be able to rejoin without an invite.",
+        "space_rejoin_warning_restricted": "This space is restricted and cannot be rejoined unless you are in one of its authorised spaces or invited."
     },
     "lightbox": {
         "rotate_left": "Rotate Left",

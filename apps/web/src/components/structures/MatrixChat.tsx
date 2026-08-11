@@ -12,6 +12,7 @@ import {
     createClient,
     EventType,
     HttpApiEvent,
+    JoinRule,
     type MatrixClient,
     MatrixEvent,
     MsgType,
@@ -1248,13 +1249,24 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const joinRules = roomToLeave?.currentState.getStateEvents("m.room.join_rules", "");
         if (joinRules) {
             const rule = joinRules.getContent().join_rule;
-            if (rule !== "public") {
+            if (rule !== JoinRule.Public) {
+                // A restricted room is reachable again from any of its authorised spaces, so telling
+                // someone who is still in one that they need an invite back is untrue.
+                const isRestricted = rule === JoinRule.Restricted;
+                let warning: string;
+                if (isSpace) {
+                    warning = isRestricted
+                        ? _t("leave_room_dialog|space_rejoin_warning_restricted")
+                        : _t("leave_room_dialog|space_rejoin_warning");
+                } else {
+                    warning = isRestricted
+                        ? _t("leave_room_dialog|room_rejoin_warning_restricted")
+                        : _t("leave_room_dialog|room_rejoin_warning");
+                }
                 warnings.push(
                     <strong className="warning" key="non_public_warning">
                         {" " /* Whitespace, otherwise the sentences get smashed together */}
-                        {isSpace
-                            ? _t("leave_room_dialog|space_rejoin_warning")
-                            : _t("leave_room_dialog|room_rejoin_warning")}
+                        {warning}
                     </strong>,
                 );
             }
