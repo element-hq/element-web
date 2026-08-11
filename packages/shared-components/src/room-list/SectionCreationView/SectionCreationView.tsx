@@ -11,6 +11,7 @@ import { useViewModel } from "../../core/viewmodel";
 import styles from "./SectionCreationView.module.css";
 import { type SectionCreationViewModel } from "./types";
 import { SectionFormView } from "./SectionFormView";
+import { RoomPickerView } from "../../core/RoomPickerView";
 
 interface SectionCreationViewProps {
     /**
@@ -33,6 +34,9 @@ export function SectionCreationView({ vm }: Readonly<SectionCreationViewProps>):
     const { step } = useViewModel(vm);
 
     return (
-        <>{(step === "creation" || step === "edition") && <SectionFormView vm={vm} className={styles.container} />}</>
+        <>
+            {(step === "creation" || step === "edition") && <SectionFormView vm={vm} className={styles.container} />}
+            {step === "add_rooms" && <RoomPickerView vm={vm} className={styles.container} />}
+        </>
     );
 }

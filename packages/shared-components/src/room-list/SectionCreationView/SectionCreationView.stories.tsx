@@ -13,17 +13,26 @@ import { SectionCreationView } from "./SectionCreationView";
 import { useMockedViewModel } from "../../core/viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 import { type SectionCreationViewActions, type SectionCreationViewSnapshot } from "./types";
+import { type RoomOfRoomPickerView } from "../../core/RoomPickerView";
 
 type SectionCreationProps = SectionCreationViewSnapshot & SectionCreationViewActions;
 
 const SectionCreationViewWrapperImpl = ({
     createOrEditSection,
     setSection,
+    toggleRoom,
+    search,
+    unSelectLastRoom,
+    renderRoomAvatar,
     ...rest
 }: SectionCreationProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {
         createOrEditSection,
         setSection,
+        toggleRoom,
+        search,
+        unSelectLastRoom,
+        renderRoomAvatar,
     });
     return <SectionCreationView vm={vm} />;
 };
@@ -36,9 +45,49 @@ const meta = {
     args: {
         value: "",
         step: "creation",
-        isSectionValid: false,
+        placeholder: "Search for people or rooms",
+        listTitle: "Suggested",
+        emptyListText: "No rooms found",
+        selectedRooms: [
+            {
+                id: "!room2:matrix.org",
+                name: "Room 2",
+                description: "#room2:matrix.org",
+                timestamp: Date.now() - 60000,
+                selected: true,
+            },
+        ],
+        rooms: [
+            {
+                id: "!room1:matrix.org",
+                name: "Room 1",
+                description: "#room1:matrix.org",
+                timestamp: Date.now() - 60000,
+                selected: false,
+            },
+            {
+                id: "!room2:matrix.org",
+                name: "Room 2",
+                description: "#room2:matrix.org",
+                timestamp: Date.now() - 60000,
+                selected: true,
+            },
+            {
+                id: "!room3:matrix.org",
+                name: "Room 3",
+                description: "#room3:matrix.org",
+                timestamp: Date.now() - 60000,
+                selected: false,
+            },
+        ],
         createOrEditSection: fn(),
         setSection: fn(),
+        toggleRoom: fn(),
+        search: fn(),
+        unSelectLastRoom: fn(),
+        renderRoomAvatar: (room: RoomOfRoomPickerView, size: string): JSX.Element => (
+            <div style={{ width: size, height: size, backgroundColor: "#ccc", borderRadius: "50%" }} />
+        ),
     },
     parameters: {
         design: {
@@ -65,6 +114,15 @@ export const Edition: Story = {
     args: {
         value: "My section",
         step: "edition",
-        isSectionValid: true,
+    },
+};
+
+/**
+ * Add rooms mode: the field is pre-filled with the existing section name.
+ */
+export const AddRooms: Story = {
+    args: {
+        value: "My section",
+        step: "add_rooms",
     },
 };

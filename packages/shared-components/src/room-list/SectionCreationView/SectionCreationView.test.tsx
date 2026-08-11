@@ -16,7 +16,7 @@ import { SectionCreationView } from "./SectionCreationView";
 import { MockViewModel } from "../../core/viewmodel/MockViewModel";
 import { type SectionCreationViewActions, type SectionCreationViewSnapshot } from "./types";
 
-const { Default, Edition } = composeStories(stories);
+const { Default, Edition, AddRooms } = composeStories(stories);
 
 describe("SectionCreationView", () => {
     afterEach(() => {
@@ -33,6 +33,11 @@ describe("SectionCreationView", () => {
             const { container } = render(<Edition />);
             expect(container).toMatchSnapshot();
         });
+
+        it("renders the add room state", () => {
+            const { container } = render(<AddRooms />);
+            expect(container).toMatchSnapshot();
+        });
     });
 
     describe("User interactions", () => {
@@ -42,11 +47,24 @@ describe("SectionCreationView", () => {
         class TestViewModel extends MockViewModel<SectionCreationViewSnapshot> implements SectionCreationViewActions {
             public createOrEditSection = createOrEditSection;
             public setSection = setSection;
+            public toggleRoom = vi.fn();
+            public addRooms = vi.fn();
+            public search = vi.fn();
+            public unSelectLastRoom = vi.fn();
+            public renderRoomAvatar = vi.fn();
         }
 
         it("updates the section value when the input is filled", async () => {
             const user = userEvent.setup();
-            const vm = new TestViewModel({ value: "", step: "creation", isSectionValid: false });
+            const vm = new TestViewModel({
+                value: "",
+                step: "creation",
+                rooms: [],
+                selectedRooms: [],
+                placeholder: "Search rooms",
+                listTitle: "Rooms",
+                emptyListText: "No rooms found",
+            });
 
             render(<SectionCreationView vm={vm} />);
 

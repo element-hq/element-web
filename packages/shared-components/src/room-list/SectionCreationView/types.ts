@@ -6,23 +6,20 @@
  */
 
 import { type ViewModel } from "../../core/viewmodel";
+import { type RoomPickerViewSnapshot, type RoomPickerViewActions } from "../../core/RoomPickerView";
 
-export interface SectionCreationViewSnapshot {
+export interface SectionCreationViewSnapshot extends RoomPickerViewSnapshot {
     /**
      * The current value of the section name input.
      */
     value: string;
-    /**
-     * Whether the current section name is valid and can be submitted.
-     */
-    isSectionValid: boolean;
     /**
      * The current step of the section creation process.
      */
     step: "creation" | "edition" | "add_rooms";
 }
 
-export interface SectionCreationViewActions {
+export interface SectionCreationViewActions extends RoomPickerViewActions {
     /**
      * Creates a new section or saves the edited one, depending on the current mode.
      */
