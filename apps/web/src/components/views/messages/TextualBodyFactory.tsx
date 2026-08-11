@@ -188,34 +188,10 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
         }
     };
 
-    const newUrlVm = useCreateAutoDisposedViewModel(
+    const mediaPreviewVm = useCreateAutoDisposedViewModel(
         () =>
             new MediaPreviewGroupViewModel({
                 entries: previews.map(previewToEntry),
-                /*
-                    entries: [
-                        {
-                            style: "text",
-                            header: mediaEventHelper?.fileName!,
-                            body: size === undefined ? "Size unknown" : fileSize(size),
-                            buttons:
-                                mediaEventHelper === undefined
-                                    ? undefined
-                                    : [
-                                        {
-                                            icon: <DownloadIcon />,
-                                            onClick: async () => {
-                                                downloader.download({
-                                                    blob: await mediaEventHelper.sourceBlob.value, // decrypts transparently if E2EE
-                                                    name: mediaEventHelper.fileName || _t("common|attachment"),
-                                                });
-                                            },
-                                        },
-                                    ],
-                            ...attachmentIconOfType("light", content.info?.mimetype),
-                        },
-                    ],
-                    */
             }),
     );
 
@@ -289,10 +265,10 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
     }, [mediaVisible, urlPreviewVm]);
 
     useEffect(() => {
-        newUrlVm.replace({
+        mediaPreviewVm.replace({
             entries: previews.map(previewToEntry),
         });
-    }, [previews, newUrlVm]);
+    }, [previews, mediaPreviewVm]);
 
     useEffect(() => {
         if (previews.length === 0) {
@@ -317,7 +293,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
             vm={textualBodyVm}
             body={<EventContentBodyView vm={eventContentBodyVm} as={willHaveWrapper ? "span" : "div"} />}
             bodyRef={contentRef}
-            urlPreviews={<MediaPreviewGroupPreview vm={newUrlVm} />}
+            urlPreviews={<MediaPreviewGroupPreview vm={mediaPreviewVm} />}
             className={getTextualBodyClassName(content.msgtype as MsgType | undefined)}
         />
     );
