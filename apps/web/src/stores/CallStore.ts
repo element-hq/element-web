@@ -17,6 +17,7 @@ import WidgetStore from "./WidgetStore";
 import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
 import { Call, CallEvent, ConnectionState } from "../models/Call";
+import SdkConfig from "../SdkConfig.ts";
 
 export enum CallStoreEvent {
     // Signals a change in the call associated with a given room
@@ -51,6 +52,13 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
 
     protected async onReady(): Promise<any> {
         if (!this.matrixClient) return;
+        // Fetch transports, but don't await the result.
+        this.matrixClient.cachedRtcTransports.wait().catch(() => {
+            if (SdkConfig.get("enable_client_well_known_lookups")) {
+                void this.matrixClient?.waitForClientWellKnown();
+            }
+        });
+
         // We assume that the calls present in a room are a function of room
         // widgets and group calls, so we initialize the room map here and then
         // update it whenever those change
@@ -101,6 +109,7 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
     public get connectedCalls(): Set<Call> {
         return this._connectedCalls;
     }
+
     private set connectedCalls(value: Set<Call>) {
         const prevValue = this._connectedCalls;
         this._connectedCalls = value;
@@ -119,6 +128,7 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
     private callListeners = new Map<Call, Map<CallEvent, (...args: unknown[]) => unknown>>();
 
     private inUpdateRoom = false;
+
     private updateRoom(room: Room): void {
         // XXX: This method is guarded with the flag this.inUpdateRoom because
         // we need to block this method from calling itself recursively. That
@@ -205,7 +215,19 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
     };
 
     public getConfiguredRTCTransports(): Transport[] {
-        return this.matrixClient?.cachedRtcTransports.get() ?? [];
+        let rtcTransports = this.matrixClient?.cachedRtcTransports.get();
+        const enableClientWellKnownLookups = SdkConfig.get("enable_client_well_known_lookups");
+        if (rtcTransports || !enableClientWellKnownLookups) {
+            return rtcTransports ?? [];
+        }
+        const wellKnown = this.matrixClient?.getClientWellKnown();
+        const foci = wellKnown?.["org.matrix.msc4143.rtc_foci"];
+        if (!Array.isArray(foci)) {
+            logger.warn(`org.matrix.msc4143.rtc_foci is not an array in .well-known`);
+            return [];
+        } else {
+            return foci;
+        }
     }
 
     private onRTCSessionStart = (roomId: string, session: MatrixRTCSession): void => {

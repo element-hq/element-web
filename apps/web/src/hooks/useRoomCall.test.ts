@@ -26,7 +26,6 @@ import type LegacyCallHandler from "../LegacyCallHandler";
 import { CallStore } from "../stores/CallStore";
 import { SDKContextClass } from "../contexts/SDKContextClass";
 import { ClientEvent } from "matrix-js-sdk/src/matrix";
-import type { MockedObject } from "jest-mock";
 import { act } from "react";
 
 describe("useRoomCall", () => {
@@ -35,10 +34,6 @@ describe("useRoomCall", () => {
         ...mockClientMethodsServer(),
         ...mockClientMethodsRooms(),
         matrixRTC: new MockEventEmitter(),
-        cachedRtcTransports: {
-            wait: vi.fn(),
-            get: vi.fn(),
-        } as unknown as MockedObject<typeof client.cachedRtcTransports>,
         getCrypto: () => null,
     });
 
