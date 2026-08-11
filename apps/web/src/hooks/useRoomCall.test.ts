@@ -25,7 +25,7 @@ import RoomContext, { type RoomContextType } from "../contexts/RoomContext";
 import type LegacyCallHandler from "../LegacyCallHandler";
 import { CallStore } from "../stores/CallStore";
 import { SDKContextClass } from "../contexts/SDKContextClass";
-import { ClientEvent } from "../../../../../matrix-js-sdk/src";
+import { ClientEvent } from "matrix-js-sdk/src/matrix";
 
 describe("useRoomCall", () => {
     const client = getMockClientWithEventEmitter({
@@ -38,7 +38,7 @@ describe("useRoomCall", () => {
     client.cachedRtcTransports = {
         wait: vi.fn(),
         get: vi.fn(),
-    } as unknown as any;
+    } as unknown as Mocked<typeof client.cachedRtcTransports>;
 
     const room = mkRoom(client, "!test-room");
     // Create a stable room context for this test
