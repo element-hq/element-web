@@ -14,9 +14,10 @@
     position: relative;
 }
 
-.storyEventTile.storyLayoutBubble::before {
-    /* Keep the story hover background above the Storybook surface. */
-    z-index: auto;
+/* Keep the bubble hover layer above the Storybook surface while keeping it
+   behind the tile content. */
+.storyEventTile.storyLayoutBubble {
+    isolation: isolate;
 }
 
 [data-story-hovered="true"] {

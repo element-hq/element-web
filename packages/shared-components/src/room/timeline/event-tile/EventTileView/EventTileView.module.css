@@ -47,7 +47,6 @@
     &.stateContinuation {
         padding-top: 0;
     }
-
 }
 
 .line {
@@ -58,15 +57,19 @@
 /* Slot wrappers are the public styling boundary. The supplied content may be
    a component, fragment, or multiple elements and does not need to forward
    layout props. */
-.slot {
-    min-width: 0;
-}
-
-/* Slot boundaries. Keep these names distinct from the structural shell classes
-   above and from the state/variant classes applied to the root. */
+.slotActionBar,
+.slotAvatar,
 .slotBody,
+.slotContextMenu,
+.slotFooter,
+.slotNotificationBadge,
 .slotNotificationRoomLabel,
-.slotNotificationBadge {
+.slotPadlock,
+.slotReceipt,
+.slotReplyChain,
+.slotSender,
+.slotThreadInfo,
+.slotTimestamp {
     min-width: 0;
 }
 
@@ -234,7 +237,19 @@
         pointer-events: none;
     }
 
-    > .slot,
+    > .slotActionBar,
+    > .slotAvatar,
+    > .slotBody,
+    > .slotContextMenu,
+    > .slotFooter,
+    > .slotNotificationBadge,
+    > .slotNotificationRoomLabel,
+    > .slotPadlock,
+    > .slotReceipt,
+    > .slotReplyChain,
+    > .slotSender,
+    > .slotThreadInfo,
+    > .slotTimestamp,
     > .line {
         margin-inline-end: var(--event-tile-irc-right-padding);
     }
@@ -304,6 +319,7 @@
         pointer-events: none;
     }
 
+    /* Bubble geometry and slot placement. */
     .line {
         display: flex;
         flex-direction: column;
@@ -320,6 +336,7 @@
         position: absolute;
         z-index: 9;
         inset-block-start: 6px;
+        inset-inline-start: -36px;
         line-height: 0;
         border: 4px solid var(--cpd-color-bg-canvas-default, #fff);
         border-radius: 50%;
@@ -365,35 +382,7 @@
         height: calc(18px + 2px);
     }
 
-    .line {
-        padding: calc(var(--event-tile-bubble-gutter) - 1px);
-        padding-inline-end: 60px;
-        background: var(--event-tile-bubble-other-background);
-    }
-
-    &:not(.stateOwnEvent) .line {
-        border-end-end-radius: var(--event-tile-bubble-corner-radius);
-    }
-
-    &:not(.stateOwnEvent) .slotAvatar {
-        inset-inline-start: -36px;
-    }
-
-    &.stateOwnEvent .slotSender {
-        display: none;
-    }
-
-    &.stateOwnEvent .line {
-        border-end-start-radius: var(--event-tile-bubble-corner-radius);
-        background: var(--event-tile-bubble-self-background);
-    }
-
-    &.stateOwnEvent .slotAvatar {
-        inset-block-start: -19px;
-        inset-inline-end: -38px;
-    }
-
-    &:not(.stateOwnEvent) .slotActionBar {
+    .slotActionBar {
         inset-block-start: -28px;
         inset-inline-start: calc(
             100% - var(--event-tile-action-bar-size) - 2 * (var(--event-tile-action-bar-margin) + 1px)
@@ -401,11 +390,67 @@
         inset-inline-end: auto;
     }
 
+    .slotFooter {
+        display: flex;
+        align-items: center;
+        margin-block: var(--cpd-space-1-5x, 6px);
+        margin-inline: -9px -12px;
+    }
+
+    .slotThreadInfo {
+        margin-inline-start: -11px;
+        margin-inline-end: auto;
+    }
+
+    .slotReplyChain,
+    .slotThreadInfo {
+        clear: both;
+    }
+
+    .line {
+        padding: calc(var(--event-tile-bubble-gutter) - 1px);
+        padding-inline-end: 60px;
+        background: var(--event-tile-bubble-other-background);
+        border-end-end-radius: var(--event-tile-bubble-corner-radius);
+    }
+
+    /* Own-event modifiers. */
+    &.stateOwnEvent .slotSender {
+        display: none;
+    }
+
+    &.stateOwnEvent .line {
+        border-end-start-radius: var(--event-tile-bubble-corner-radius);
+        border-end-end-radius: 0;
+        background: var(--event-tile-bubble-self-background);
+    }
+
+    &.stateOwnEvent .slotAvatar {
+        inset-block-start: -19px;
+        inset-inline-start: auto;
+        inset-inline-end: -38px;
+    }
+
     &.stateOwnEvent .slotActionBar {
         inset-block-start: -28px;
+        inset-inline-start: auto;
         inset-inline-end: 0;
     }
 
+    &.stateOwnEvent .slotFooter {
+        justify-content: flex-end;
+    }
+
+    &.stateOwnEvent .slotThreadInfo {
+        margin-inline-start: auto;
+        margin-inline-end: -11px;
+    }
+
+    &.stateOwnEvent .line {
+        margin-inline-start: auto;
+    }
+
+    /* Interaction state. */
     &.stateSelected .line::before {
         content: "";
         position: absolute;
@@ -445,36 +490,17 @@
         box-shadow: 0 0 0 3px var(--event-tile-state-highlight-background);
     }
 
-    .slotFooter {
-        display: flex;
-        align-items: center;
-        margin-block: var(--cpd-space-1-5x, 6px);
-        margin-inline: -9px -12px;
-    }
-
-    &:not(.stateOwnEvent) .slotThreadInfo {
-        margin-inline-start: -11px;
-        margin-inline-end: auto;
-    }
-
-    &.stateOwnEvent .slotFooter {
-        justify-content: flex-end;
-    }
-
-    &.stateOwnEvent .slotThreadInfo {
-        margin-inline-start: auto;
-        margin-inline-end: -11px;
-    }
-
+    /* Section state. */
     &.stateContinuation {
         margin-top: 2px;
     }
 
-    &.stateContinuation:not(.stateOwnEvent) .line {
+    &.stateContinuation .line {
         border-start-start-radius: 0;
     }
 
     &.stateContinuation.stateOwnEvent .line {
+        border-start-start-radius: var(--event-tile-bubble-corner-radius);
         border-start-end-radius: 0;
     }
 
@@ -482,21 +508,13 @@
         margin-bottom: 24px;
     }
 
-    &.stateLastInSection:not(.stateOwnEvent) .line {
+    &.stateLastInSection .line {
         border-end-start-radius: var(--event-tile-bubble-corner-radius);
     }
 
     &.stateLastInSection.stateOwnEvent .line {
+        border-end-start-radius: 0;
         border-end-end-radius: var(--event-tile-bubble-corner-radius);
-    }
-
-    &.stateOwnEvent .line {
-        margin-inline-start: auto;
-    }
-
-    .slotReplyChain,
-    .slotThreadInfo {
-        clear: both;
     }
 }
 

@@ -138,7 +138,6 @@ describe("EventTileView", () => {
         expect(line).toHaveAttribute("id", "event-line-1");
         expect(getByTestId("context-menu")).toBeInTheDocument();
         expect(contextMenu).toHaveClass("custom-context-menu");
-        expect(contextMenu).toHaveClass(styles.slot);
         expect(contextMenu).toHaveAttribute("data-testid", "event-tile-slot-contextMenu");
     });
 
@@ -197,16 +196,15 @@ describe("EventTileView", () => {
             "threadInfo",
             "receipt",
         ]) {
-            expect(group.getByTestId(`styling-contract-${slot}`).closest(`.${styles.slot}`)).toHaveClass(
-                applicationStylingClasses[applicationSlotClassNames[slot]],
-            );
-            expect(group.getByTestId(`styling-contract-${slot}`).closest(`.${styles.slot}`)).toHaveClass(
-                slotClasses[slot],
-            );
-            expect(group.getByTestId(`styling-contract-${slot}`).closest(`.${styles.slot}`)).toHaveAttribute(
-                "data-testid",
-                `event-tile-slot-${slot}`,
-            );
+            expect(
+                group.getByTestId(`styling-contract-${slot}`).closest('[data-testid^="event-tile-slot-"]'),
+            ).toHaveClass(applicationStylingClasses[applicationSlotClassNames[slot]]);
+            expect(
+                group.getByTestId(`styling-contract-${slot}`).closest('[data-testid^="event-tile-slot-"]'),
+            ).toHaveClass(slotClasses[slot]);
+            expect(
+                group.getByTestId(`styling-contract-${slot}`).closest('[data-testid^="event-tile-slot-"]'),
+            ).toHaveAttribute("data-testid", `event-tile-slot-${slot}`);
         }
 
         const thread = render(
@@ -233,13 +231,13 @@ describe("EventTileView", () => {
         );
         expect(preview.container.querySelector(".mx_EventTile_details")).toHaveClass(applicationStylingClasses.details);
         expect(preview.getByTestId("styling-contract-notificationRoomLabel").parentElement).toHaveClass(
-                applicationStylingClasses.slotNotificationRoomLabel,
+            applicationStylingClasses.slotNotificationRoomLabel,
         );
         expect(preview.getByTestId("styling-contract-notificationBadge").parentElement).toHaveClass(
-                applicationStylingClasses.slotNotificationBadge,
+            applicationStylingClasses.slotNotificationBadge,
         );
         expect(preview.getByTestId("styling-contract-room-avatar").parentElement).toHaveClass(
-                applicationStylingClasses.slotAvatar,
+            applicationStylingClasses.slotAvatar,
         );
 
         const file = render(
