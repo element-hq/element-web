@@ -4,13 +4,10 @@
 }
 
 .tile {
-    border: 1px solid #e1e6ec;
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
     border-radius: 14px;
 
     max-width: 100%;
     overflow: clip;
-
-    margin-top: 0.25em;
-    margin-bottom: 0.25em;
     background: var(--cpd-color-bg-subtle-secondary);
 }
