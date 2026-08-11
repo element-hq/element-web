@@ -264,7 +264,7 @@ test.describe("Spaces", () => {
     test(
         "should render readable notification badges in the space panel",
         { tag: "@screenshot" },
-        async ({ page, app, user, bot }) => {
+        async ({ app, user, bot }) => {
             const roomId = await app.client.createRoom({
                 name: "Unread Room",
             });
@@ -291,7 +291,15 @@ test.describe("Spaces", () => {
 
             const badge = spaceButton.locator(".mx_SpacePanel_notificationBadge");
             await expect(badge).toHaveText("10");
-            await expect(page.locator(".mx_SpacePanel")).toMatchScreenshot("space-panel-notification-badge.png");
+            await expect(spaceButton).toMatchScreenshot("space-panel-notification-badge.png", {
+                /* Avatar initials can render differently in CI; keep this snapshot focused on the badge. */
+                css: `
+                    .mx_SpacePanel [role="img"][data-color],
+                    .mx_SpacePanel .mx_BaseAvatar {
+                        color: transparent !important;
+                    }
+                `,
+            });
         },
     );
 
