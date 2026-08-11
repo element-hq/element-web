@@ -1,8 +1,12 @@
 import React, { JSX } from "react";
 import { useViewModel, ViewModel } from "../../../../core/viewmodel";
 import styles from "./MediaPreviewGroupView.module.css";
-import { TextPreviewTile } from "./TextPreviewTile/TextPreviewTile";
-import { AudioPreviewTile, ImagePreviewTile, VideoPreviewTile } from "./MediaPreviewTile/MediaPreviewTile";
+import {
+    AudioPreviewTile,
+    ImagePreviewTile,
+    TextPreviewTile,
+    VideoPreviewTile,
+} from "./MediaPreviewTile/MediaPreviewTile";
 
 export type MediaPreviewGroupEntryTextContent = {
     style: "text";

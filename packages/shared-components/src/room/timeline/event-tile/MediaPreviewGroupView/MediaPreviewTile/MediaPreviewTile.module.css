@@ -11,13 +11,3 @@
         margin: var(--cpd-space-3x);
     }
 }
-
-.tileWithoutAbove {
-    padding: var(--cpd-space-3x);
-
-    display: flex;
-    gap: 12px;
-
-    max-width: 100%;
-    background: var(--cpd-color-bg-subtle-secondary);
-}
