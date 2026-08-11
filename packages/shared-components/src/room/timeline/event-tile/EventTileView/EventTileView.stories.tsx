@@ -33,6 +33,19 @@ import styles from "./EventTileView.stories.module.css";
 type StoryBoundary = HTMLElement;
 const eventTileSlotTestIdPrefix = "event-tile-slot-";
 
+const getBoundaryLabel = (boundary: StoryBoundary): string => {
+    const storyBoundary = boundary.dataset.storyBoundary;
+    if (storyBoundary) return storyBoundary;
+
+    const testId = boundary.dataset.testid;
+    if (testId?.startsWith(eventTileSlotTestIdPrefix)) {
+        return `EventTileView.slots.${testId.slice(eventTileSlotTestIdPrefix.length)}`;
+    }
+
+    if (boundary.classList.contains("storyEventTile")) return "EventTileView";
+    return "EventTileView.line";
+};
+
 const getBoundary = (target: EventTarget | null, root: HTMLElement): StoryBoundary | null => {
     if (!(target instanceof HTMLElement)) return null;
 
@@ -78,16 +91,7 @@ const StoryDebugFrame = ({ children }: React.PropsWithChildren): React.ReactElem
             onPointerLeave={clearActiveBoundary}
         >
             {children}
-            {activeBoundary && (
-                <div className={styles.debugTooltip} role="status">
-                    {activeBoundary.dataset.storyBoundary ??
-                        (activeBoundary.dataset.testid?.startsWith(eventTileSlotTestIdPrefix)
-                            ? `EventTileView.slots.${activeBoundary.dataset.testid.slice(eventTileSlotTestIdPrefix.length)}`
-                            : activeBoundary.classList.contains("storyEventTile")
-                              ? "EventTileView"
-                              : "EventTileView.line")}
-                </div>
-            )}
+            {activeBoundary && <output className={styles.debugTooltip}>{getBoundaryLabel(activeBoundary)}</output>}
         </div>
     );
 };
@@ -105,13 +109,19 @@ const StoryAvatar = ({
 }): React.ReactElement => (
     <Avatar
         id={room ? "!story-room:example.org" : `@${label.toLowerCase()}:example.org`}
-        name={room ? "Story room" : label === "A" ? "Alice Example" : "Bob Example"}
+        name={getStoryAvatarName(room, label)}
         type="round"
         size={size}
         className={className}
         aria-label={room ? "Story room avatar" : `${label} avatar`}
     />
 );
+
+function getStoryAvatarName(room: boolean, label: string): string {
+    if (room) return "Story room";
+    if (label === "A") return "Alice Example";
+    return "Bob Example";
+}
 
 const StorySender = ({
     name = "Alex Example",
@@ -124,6 +134,31 @@ const StorySender = ({
 }): React.ReactElement => {
     const vm = useMockedViewModel({ displayName: name, displayIdentifier: id, emphasizeDisplayName: true }, {});
     return <DisambiguatedProfileView vm={vm} className={className} />;
+};
+
+const createStorySender = (
+    isOwnEvent: boolean,
+    layout: EventTileViewProps["root"]["layout"],
+    showSenderAndAvatar: boolean,
+): React.ReactElement | undefined => {
+    if (!showSenderAndAvatar) return undefined;
+
+    const name = isOwnEvent ? "Alice" : "Bob";
+    const id = isOwnEvent ? "@alice:example.org" : "@bob:example.org";
+    const className = layout === "irc" ? styles.ircSender : undefined;
+    return <StorySender name={name} id={id} className={className} />;
+};
+
+const createStoryAvatar = (
+    isOwnEvent: boolean,
+    layout: EventTileViewProps["root"]["layout"],
+    showSenderAndAvatar: boolean,
+): React.ReactElement | undefined => {
+    if (!showSenderAndAvatar) return undefined;
+
+    const label = isOwnEvent ? "A" : "B";
+    const size = layout === "irc" ? "14px" : "30px";
+    return <StoryAvatar label={label} size={size} />;
 };
 
 const StoryTimestamp = ({
@@ -320,6 +355,58 @@ type EventTileStoryProps = Omit<EventTileViewProps, "root"> & {
     roomMessages?: "boundaries" | "alice";
 };
 
+const createStoryTimestamp = (
+    layout: EventTileViewProps["root"]["layout"],
+    isLast: boolean,
+    showActionBar: boolean,
+): React.ReactElement | undefined => {
+    const showTimestamp = layout === "irc" || isLast || showActionBar;
+    return showTimestamp ? <StoryTimestamp visible={showTimestamp} /> : undefined;
+};
+
+const createRoomStorySlots = ({
+    isOwnEvent,
+    slots,
+    sender,
+    avatar,
+    timestamp,
+    showActionBar,
+}: {
+    isOwnEvent: boolean;
+    slots: EventTileViewProps["slots"];
+    sender?: React.ReactNode;
+    avatar?: React.ReactNode;
+    timestamp?: React.ReactNode;
+    showActionBar: boolean;
+}): EventTileViewProps["slots"] => {
+    const baseSlots = isOwnEvent ? slots : { body: slots.body };
+    return {
+        ...baseSlots,
+        sender,
+        avatar,
+        timestamp,
+        actionBar: showActionBar ? slots.actionBar : undefined,
+    };
+};
+
+const createPreviewStorySlots = ({
+    shape,
+    slots,
+    showActionBar,
+}: {
+    shape: EventTileViewProps["root"]["shape"];
+    slots: EventTileViewProps["slots"];
+    showActionBar: boolean;
+}): EventTileViewProps["slots"] => {
+    const threadInfo = shape === "Thread" ? undefined : slots.threadInfo;
+    return {
+        ...slots,
+        actionBar: showActionBar ? slots.actionBar : undefined,
+        // The application Thread rendering branch places no thread-info slot.
+        threadInfo,
+    };
+};
+
 function EventTileViewStoryContent({
     shape,
     state,
@@ -350,35 +437,21 @@ function EventTileViewStoryContent({
         const tileState = { ...boundaryState, ...state };
         const interaction = tileInteractions[suffix] ?? { hovered: false, focused: false };
         const showActionBar = interaction.hovered || interaction.focused;
-        const showTimestamp = isLast || showActionBar;
-        const timestamp = layout === "irc" || showTimestamp ? <StoryTimestamp visible={showTimestamp} /> : undefined;
+        const timestamp = createStoryTimestamp(layout, isLast, showActionBar);
         const showSenderAndAvatar = layout === "irc" || !tileState.continuation;
-        const sender = showSenderAndAvatar ? (
-            <StorySender
-                name={isOwnEvent ? "Alice" : "Bob"}
-                id={isOwnEvent ? "@alice:example.org" : "@bob:example.org"}
-                className={layout === "irc" ? styles.ircSender : undefined}
-            />
-        ) : undefined;
-
+        const sender = createStorySender(isOwnEvent, layout, showSenderAndAvatar);
+        const avatar = createStoryAvatar(isOwnEvent, layout, showSenderAndAvatar);
         const slots =
             shape === "Room"
-                ? {
-                      // Keep Bob's boundary examples as plain text events.
-                      ...(isOwnEvent ? props.slots : { body: props.slots.body }),
+                ? createRoomStorySlots({
+                      isOwnEvent,
+                      slots: props.slots,
                       sender,
-                      avatar: showSenderAndAvatar ? (
-                          <StoryAvatar label={isOwnEvent ? "A" : "B"} size={layout === "irc" ? "14px" : "30px"} />
-                      ) : undefined,
+                      avatar,
                       timestamp,
-                      actionBar: showActionBar ? props.slots?.actionBar : undefined,
-                  }
-                : {
-                      ...props.slots,
-                      actionBar: showActionBar ? props.slots?.actionBar : undefined,
-                      // The application Thread rendering branch places no thread-info slot.
-                      threadInfo: shape === "Thread" ? undefined : props.slots?.threadInfo,
-                  };
+                      showActionBar,
+                  })
+                : createPreviewStorySlots({ shape, slots: props.slots, showActionBar });
 
         return (
             <EventTileView
@@ -430,22 +503,27 @@ function EventTileViewStoryContent({
             />
         );
     };
+
+    const renderRoomTiles = (): React.ReactNode => {
+        if (roomMessages === "alice") {
+            return renderTile(true, "alice-single", { continuation: false, lastInSection: true }, true);
+        }
+
+        return (
+            <>
+                {renderTile(false, "bob-first", { continuation: false, lastInSection: false })}
+                {renderTile(false, "bob-middle", { continuation: true, lastInSection: false })}
+                {renderTile(false, "bob-last", { continuation: true, lastInSection: true })}
+                {renderTile(true, "alice-single", { continuation: false, lastInSection: true }, true)}
+            </>
+        );
+    };
+
+    const tiles = shape === "Room" ? renderRoomTiles() : renderTile(false, "event");
+
     return (
         <TimelineStoryFrame density={density} layout={layout}>
-            {shape === "Room" ? (
-                roomMessages === "alice" ? (
-                    renderTile(true, "alice-single", { continuation: false, lastInSection: true }, true)
-                ) : (
-                    <>
-                        {renderTile(false, "bob-first", { continuation: false, lastInSection: false })}
-                        {renderTile(false, "bob-middle", { continuation: true, lastInSection: false })}
-                        {renderTile(false, "bob-last", { continuation: true, lastInSection: true })}
-                        {renderTile(true, "alice-single", { continuation: false, lastInSection: true }, true)}
-                    </>
-                )
-            ) : (
-                renderTile(false, "event")
-            )}
+            {tiles}
         </TimelineStoryFrame>
     );
 }
@@ -510,7 +588,7 @@ export const ThreadsList: Story = {
             avatar: <StoryAvatar />,
             body: <StoryBody />,
             timestamp: <StoryTimestamp />,
-            notificationBadge: <span className={styles.notificationDot} role="img" aria-label="Unread notifications" />,
+            notificationBadge: <span className={styles.notificationDot} aria-hidden="true" />,
             threadInfo: <StoryThreadListInfo />,
             actionBar: <StoryActionBar />,
         },
@@ -532,7 +610,7 @@ export const Notification: Story = {
             timestamp: <StoryTimestamp />,
             roomAvatar: <StoryAvatar room size="28px" />,
             notificationRoomLabel: <span className={styles.roomLabel}>in Example room</span>,
-            notificationBadge: <span className={styles.notificationDot} role="img" aria-label="Unread notifications" />,
+            notificationBadge: <span className={styles.notificationDot} aria-hidden="true" />,
             threadInfo: <StoryThreadListInfo />,
             receipt: <StoryReceipt />,
         },

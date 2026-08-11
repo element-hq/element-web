@@ -330,6 +330,10 @@
         margin-inline: -9px -12px;
         border-radius: var(--event-tile-bubble-corner-radius) var(--event-tile-bubble-corner-radius) 0 0;
         line-height: 18px;
+        padding: calc(var(--event-tile-bubble-gutter) - 1px);
+        padding-inline-end: 60px;
+        background: var(--event-tile-bubble-other-background);
+        border-end-end-radius: var(--event-tile-bubble-corner-radius);
     }
 
     .slotAvatar {
@@ -407,13 +411,6 @@
         clear: both;
     }
 
-    .line {
-        padding: calc(var(--event-tile-bubble-gutter) - 1px);
-        padding-inline-end: 60px;
-        background: var(--event-tile-bubble-other-background);
-        border-end-end-radius: var(--event-tile-bubble-corner-radius);
-    }
-
     /* Own-event modifiers. */
     &.stateOwnEvent .slotSender {
         display: none;
@@ -423,6 +420,7 @@
         border-end-start-radius: var(--event-tile-bubble-corner-radius);
         border-end-end-radius: 0;
         background: var(--event-tile-bubble-self-background);
+        margin-inline-start: auto;
     }
 
     &.stateOwnEvent .slotAvatar {
@@ -444,10 +442,6 @@
     &.stateOwnEvent .slotThreadInfo {
         margin-inline-start: auto;
         margin-inline-end: -11px;
-    }
-
-    &.stateOwnEvent .line {
-        margin-inline-start: auto;
     }
 
     /* Interaction state. */
