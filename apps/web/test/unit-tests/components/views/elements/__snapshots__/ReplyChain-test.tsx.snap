@@ -15,6 +15,7 @@ exports[`ReplyChain should call setQuoteExpanded if chain is longer than 2 lines
           data-reply-tile="true"
         >
           <a
+            data-reply-tile-link="true"
             href="#"
           >
             <div
