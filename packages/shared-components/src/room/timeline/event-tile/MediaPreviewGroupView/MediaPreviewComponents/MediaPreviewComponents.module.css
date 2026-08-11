@@ -16,12 +16,11 @@
 
 .header {
     font-weight: 600;
-    font-size: 15px;
 }
 
 .body {
-    font-size: 13px;
-    color: #656d77;
+    font-size: 86.666%; /* 13/15 of header size */
+    color: var(--cpd-color-gray-900);
 }
 
 .textContent {
@@ -32,8 +31,8 @@
     button {
         border: none;
         background: none;
-        width: 100%;
         height: 100%;
+        aspect-ratio: 100%;
         align-items: center;
         justify-content: center;
         display: flex;
@@ -42,25 +41,24 @@
     }
 
     display: flex;
-    height: calc(28px * 1.5);
-    width: calc(28px * 1.5);
+    height: 100%;
+    aspect-ratio: 1;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
 
     border-radius: 6px;
-    border: 1px solid rgba(1, 21, 50, 0.35);
-    background-color: #f1efff;
+    border: 1px solid var(--cpd-color-icon-quaternary);
+    background-color: var(--cpd-color-bg-decorative-4);
 
     svg {
         display: block;
-        height: 24px;
-        width: 24px;
+        height: 57%;
+        width: 57%;
     }
 }
 
 .buttonGroup {
-    height: calc(28px * 1.5);
     display: flex;
     gap: 12px;
 }
@@ -71,10 +69,10 @@
     cursor: pointer;
 
     svg {
-        color: #656d77;
+        color: var(--cpd-color-icon-secondary);
         display: block;
-        height: 19px;
-        width: 19px;
+        height: calc(var(--cpd-icon-button-size) * 0.625);
+        width: calc(var(--cpd-icon-button-size) * 0.625);
     }
 }
 
