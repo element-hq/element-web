@@ -314,7 +314,11 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
                 });
 
                 return completions.length > 0 ? (
-                    <div key={i} className="mx_Autocomplete_ProviderSection" role="presentation">
+                    <div
+                        key={completionResult.provider.getName()}
+                        className="mx_Autocomplete_ProviderSection"
+                        role="presentation"
+                    >
                         <div className="mx_Autocomplete_provider_name">{completionResult.provider.getName()}</div>
                         {completionResult.provider.renderCompletions(completions)}
                     </div>

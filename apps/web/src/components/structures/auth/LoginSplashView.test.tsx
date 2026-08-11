@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import { act, render, type RenderResult } from "test-utils-rtl";
 import React, { type ComponentProps } from "react";
-import EventEmitter from "events";
+import EventEmitter from "node:events";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { sleep } from "matrix-js-sdk/src/utils";
 

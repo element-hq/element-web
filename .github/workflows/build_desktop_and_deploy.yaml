@@ -45,6 +45,10 @@ permissions: {} # Uses ELEMENT_BOT_TOKEN
 jobs:
     prepare:
         uses: ./.github/workflows/build_desktop_prepare.yaml
+        # Run if it's NOT a release, OR if it is a release and does NOT start with 'module/'
+        if: |
+            github.event_name != 'release' ||
+            !startsWith(github.event.release.tag_name, 'module/')
         permissions:
             contents: read
         with:

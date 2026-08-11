@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Emocijzīmju atlasītājs",
         "jump_first_invite": "Pārlēkt uz pirmo uzaicinājumu.",
         "message_composer": "Ziņas sastādītājs",
         "n_unread_messages": {
@@ -785,22 +784,6 @@
     },
     "dialog_close_label": "Aizvērt dialoglodziņu",
     "download_completed": "Lejupielāde pabeigta",
-    "emoji": {
-        "categories": "Kategorijas",
-        "category_activities": "Aktivitātes",
-        "category_animals_nature": "Dzīvnieki un daba",
-        "category_flags": "Karogi",
-        "category_food_drink": "Pārtika un dzērieni",
-        "category_frequently_used": "Bieži lietotas",
-        "category_objects": "Objekti",
-        "category_smileys_people": "Smaidiņi & cilvēki",
-        "category_symbols": "Simboli",
-        "category_travel_places": "Ceļojumi un vietas",
-        "quick_reactions": "Ātra reaģēšana"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Atcelt meklējumu"
-    },
     "empty_room": "Tukša istaba",
     "empty_room_was_name": "Tukša istaba (bija %(oldName)s)",
     "encryption": {

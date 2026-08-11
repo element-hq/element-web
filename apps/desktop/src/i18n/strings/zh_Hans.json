@@ -27,6 +27,10 @@
         "yes": "是"
     },
     "confirm_quit": "你确定要退出吗？",
+    "download": {
+        "unable_to_open_description": "无法打开文件，它可能已被移动或删除。",
+        "unable_to_open_title": "无法打开文件"
+    },
     "edit_menu": {
         "speech": "讲话",
         "speech_start_speaking": "开始讲话",
