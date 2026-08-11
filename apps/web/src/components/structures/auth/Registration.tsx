@@ -26,6 +26,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { Button } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
+import { formatSeconds } from "../../../DateUtils";
 import { adminContactStrings, messageForResourceLimitError, resourceLimitStrings } from "../../../utils/ErrorUtils";
 import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
 import * as Lifecycle from "../../../Lifecycle";
@@ -125,12 +126,17 @@ interface IState {
     // the OIDC native login flow, when supported and enabled
     // if present, must be used for registration
     oauthNativeFlow?: OAuthNativeFlow;
+    // Set while the server is rate limiting registration. Kept apart from errorText so the warning
+    // can sit next to the disabled submit button rather than above the server picker.
+    rateLimitError?: string;
 }
 
 export default class Registration extends React.Component<IProps, IState> {
     private readonly loginLogic: Login;
     // `replaceClient` tracks latest serverConfig to spot when it changes under the async method which fetches flows
     private latestServerConfig?: ValidatedServerConfig;
+    // Pending re-query for after a rate limit expires, so the form comes back on its own
+    private rateLimitTimer?: ReturnType<typeof setTimeout>;
 
     public constructor(props: IProps) {
         super(props);
@@ -164,6 +170,7 @@ export default class Registration extends React.Component<IProps, IState> {
 
     public componentWillUnmount(): void {
         window.removeEventListener("beforeunload", this.unloadCallback);
+        clearTimeout(this.rateLimitTimer);
     }
 
     private unloadCallback = (event: BeforeUnloadEvent): string | undefined => {
@@ -187,8 +194,12 @@ export default class Registration extends React.Component<IProps, IState> {
         this.latestServerConfig = serverConfig;
         const { hsUrl, isUrl } = serverConfig;
 
+        clearTimeout(this.rateLimitTimer);
+        this.rateLimitTimer = undefined;
+
         this.setState({
             errorText: null,
+            rateLimitError: undefined,
             serverDeadError: null,
             serverErrorIsFatal: false,
             // busy while we do live-ness check (we need to avoid trying to render
@@ -288,6 +299,27 @@ export default class Registration extends React.Component<IProps, IState> {
                         // add empty flows array to get rid of spinner
                         flows: [],
                     });
+                }
+            } else if (e instanceof MatrixError && e.httpStatus === 429) {
+                // The server is rate limiting us, which the generic error below does not convey.
+                const retryAfterMs = parseInt(e.data?.retry_after_ms, 10);
+                this.setState({
+                    rateLimitError: isNaN(retryAfterMs)
+                        ? _t("auth|registration_rate_limited")
+                        : _t("auth|registration_rate_limited_with_time", {
+                              timeout: formatSeconds(retryAfterMs / 1000),
+                          }),
+                    // add empty flows array to get rid of spinner
+                    flows: [],
+                });
+                // Ask again once the wait is over so the form comes back by itself, rather than
+                // leaving the user to guess when it is worth reloading.
+                if (!isNaN(retryAfterMs)) {
+                    clearTimeout(this.rateLimitTimer);
+                    this.rateLimitTimer = setTimeout(() => {
+                        this.rateLimitTimer = undefined;
+                        this.replaceClient(this.props.serverConfig);
+                    }, retryAfterMs);
                 }
             } else {
                 logger.log("Unable to query for supported registration methods.", e);
@@ -537,6 +569,18 @@ export default class Registration extends React.Component<IProps, IState> {
                     emailSid={this.props.idSid}
                     poll={true}
                 />
+            );
+        } else if (this.state.rateLimitError) {
+            // Keep the warning with the submit button it is disabling, below the server picker, so it
+            // reads as "this is why you cannot continue". Both are replaced by the real form once
+            // replaceClient runs again after the wait.
+            return (
+                <Fragment>
+                    <div className="mx_Login_error mx_Registration_rateLimitError">{this.state.rateLimitError}</div>
+                    <Button className="mx_Login_fullWidthButton" kind="primary" size="md" disabled={true}>
+                        {_t("action|continue")}
+                    </Button>
+                </Fragment>
             );
         } else if (!this.state.matrixClient && !this.state.busy) {
             return null;
