@@ -762,7 +762,7 @@ export class ElementWidgetDriver extends WidgetDriver {
             // legacy well-known lookup.
             try {
                 const transports = await client.cachedRtcTransports.wait();
-                return { rtc_transports: transports };
+                return { rtc_transports: transports ?? [] };
             } catch (e) {
                 if (e instanceof MatrixError && e.errcode === "M_NOT_FOUND") {
                     // Fallback to well-known

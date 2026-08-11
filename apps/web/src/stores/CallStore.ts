@@ -88,7 +88,6 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         this.callListeners.clear();
         this.calls.clear();
         this._connectedCalls.clear();
-        this.configuredMatrixRTCTransports.clear();
 
         this.matrixClient?.matrixRTC.off(MatrixRTCSessionManagerEvents.SessionStarted, this.onRTCSessionStart);
         this.matrixClient?.off(ClientEvent.RtcTransportsUpdated, this.onRTCTransportsUpdated);
@@ -206,7 +205,7 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
     };
 
     public getConfiguredRTCTransports(): Transport[] {
-        return this.matrixClient ? this.matrixClient.cachedRtcTransports.get() : [];
+        return this.matrixClient?.cachedRtcTransports.get() ?? [];
     }
 
     private onRTCSessionStart = (roomId: string, session: MatrixRTCSession): void => {

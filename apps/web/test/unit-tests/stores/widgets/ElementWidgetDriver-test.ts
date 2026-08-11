@@ -476,7 +476,7 @@ describe("ElementWidgetDriver", () => {
                 if (key === "enable_client_well_known_lookups") return false;
                 return sdkConfigGet(key, altCaseName);
             });
-            client._unstable_getRTCTransports.mockReturnValue([]);
+            client._unstable_getRTCTransports.mockResolvedValue([]);
 
             await expect(driver.getRtcTransports()).rejects.toThrow();
 
