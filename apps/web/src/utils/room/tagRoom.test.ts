@@ -66,6 +66,7 @@ describe("tagRoom()", () => {
                 room,
                 null, // remove
                 DefaultTagID.Favourite, // add
+                false, // showToast
             );
         });
 
@@ -80,6 +81,7 @@ describe("tagRoom()", () => {
                 room,
                 null, // remove
                 DefaultTagID.LowPriority, // add
+                false, // showToast
             );
         });
 
@@ -94,6 +96,7 @@ describe("tagRoom()", () => {
                 room,
                 null, // remove
                 customTag, // add
+                false, // showToast
             );
         });
 
@@ -108,6 +111,7 @@ describe("tagRoom()", () => {
                 room,
                 null, // remove
                 null, // add
+                false, // showToast
             );
         });
     });
@@ -124,6 +128,7 @@ describe("tagRoom()", () => {
                 room,
                 DefaultTagID.Favourite, // remove
                 null, // add
+                false, // showToast
             );
         });
 
@@ -138,6 +143,7 @@ describe("tagRoom()", () => {
                 room,
                 DefaultTagID.Favourite, // remove
                 DefaultTagID.LowPriority, // add
+                false, // showToast
             );
         });
 
@@ -152,6 +158,7 @@ describe("tagRoom()", () => {
                 room,
                 DefaultTagID.Favourite, // remove
                 null, // add
+                false, // showToast
             );
         });
     });
@@ -168,6 +175,7 @@ describe("tagRoom()", () => {
                 room,
                 DefaultTagID.LowPriority, // remove
                 DefaultTagID.Favourite, // add
+                false, // showToast
             );
         });
 
@@ -182,6 +190,7 @@ describe("tagRoom()", () => {
                 room,
                 DefaultTagID.LowPriority, // remove
                 null, // add
+                false, // showToast
             );
         });
     });
@@ -205,6 +214,7 @@ describe("tagRoom()", () => {
                 room,
                 customTag, // remove
                 expectedAdd, // add
+                false, // showToast
             );
         });
     });
