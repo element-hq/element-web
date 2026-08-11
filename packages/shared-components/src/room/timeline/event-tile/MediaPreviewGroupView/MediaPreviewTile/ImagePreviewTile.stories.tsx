@@ -11,27 +11,27 @@ import FileIcon from "@vector-im/compound-design-tokens/assets/web/icons/documen
 import ExpandIcon from "@vector-im/compound-design-tokens/assets/web/icons/expand";
 import DownloadIcon from "@vector-im/compound-design-tokens/assets/web/icons/download";
 
-import { VideoPreviewTile } from "./VideoPreviewTile";
+import { ImagePreviewTile } from "./MediaPreviewTile";
 
 const meta = {
-    title: "Room/Timeline/MediaPreviewGroupView/VideoPreviewTile",
-    component: VideoPreviewTile,
+    title: "Room/Timeline/MediaPreviewGroupView/MediaPreviewTile/ImagePreviewTile",
+    component: ImagePreviewTile,
     tags: ["autodocs"],
     args: {
-        style: "video",
-        video: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
-        videoSize: "banner",
+        style: "image",
+        image: "https://picsum.photos/seed/element/480/270",
+        imageSize: "banner",
         icon: <FileIcon />,
         iconOnClick: () => {},
         color: "#4200A6",
-        header: "holiday-clip.mp4",
-        body: "12.4 MB",
+        header: "annual-report.pdf",
+        body: "2.3 MB",
         buttons: [
             { icon: <ExpandIcon />, onClick: () => ({}) },
             { icon: <DownloadIcon />, onClick: () => ({}) },
         ],
     },
-} satisfies Meta<typeof VideoPreviewTile>;
+} satisfies Meta<typeof ImagePreviewTile>;
 
 export default meta;
 
@@ -41,30 +41,38 @@ export const Default: Story = {};
 
 export const Uncollapsed: Story = {
     args: {
-        videoSize: "full",
+        imageSize: "full",
     },
 };
 
-export const ClickableUncollapsedVideo: Story = {
+export const ClickableUncollapsedImage: Story = {
     args: {
-        videoSize: "full",
-        videoOnClick: () => {
-            window.alert("Video clicked");
+        imageSize: "full",
+        imageOnClick: () => {
+            window.alert("Image clicked");
             return {};
         },
     },
 };
 
+/*
+export const WithFooter: Story = {
+    args: {
+        footer: "Shared by Alice · 12:45",
+    },
+};
+*/
+
 export const WithHeaderUrl: Story = {
     args: {
-        headerUrl: "https://example.com/holiday-clip.mp4",
+        headerUrl: "https://example.com/annual-report.pdf",
     },
 };
 
-export const ClickableVideo: Story = {
+export const ClickableImage: Story = {
     args: {
-        videoOnClick: () => {
-            window.alert("Video clicked");
+        imageOnClick: () => {
+            window.alert("Image clicked");
             return {};
         },
     },
