@@ -1,10 +1,11 @@
 .container {
-    margin-right: var(--EventTile_content-margin-inline-end);
-
     /* to match URL preview width */
     max-width: 478px;
 
     display: flex;
     flex-direction: column;
-    gap: 0.5em;
+    gap: var(--cpd-space-1x);
+
+    margin-top: var(--cpd-space-2x);
+    margin-bottom: var(--cpd-space-2x);
 }
