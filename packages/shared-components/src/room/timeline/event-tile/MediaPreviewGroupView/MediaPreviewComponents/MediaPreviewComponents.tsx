@@ -1,4 +1,4 @@
-import React, { JSX } from "react";
+import React, { JSX, useEffect, useState } from "react";
 import styles from "./MediaPreviewComponents.module.css";
 import classNames from "classnames";
 import { ImageSize, MediaPreviewEntryButton } from "../MediaPreviewGroupView";
@@ -63,6 +63,24 @@ export function LeftGroup({ children }: { children: React.ReactNode }): JSX.Elem
     return <div className={styles.leftGroup}>{children}</div>;
 }
 
+interface ValidityState { valid: boolean, src: string };
+
+function useIsValid(check: (src: string) => Promise<boolean>, src: string): ValidityState {
+    let [state, setState]: [ValidityState, React.Dispatch<React.SetStateAction<ValidityState>>] = useState({ valid: false, src } as ValidityState);
+
+    useEffect(() => {
+        let cancelled = false;
+        check(src).then((value) => {
+            if (!cancelled)
+                setState({ valid: value, src });
+        });
+
+        return () => { cancelled = true; }
+    }, [src]);
+
+    return state;
+}
+
 export function Image({
     image,
     imageOnClick,
@@ -71,8 +89,21 @@ export function Image({
     image: string;
     imageOnClick?: () => void;
     imageSize: ImageSize;
-}): JSX.Element {
+}): JSX.Element | null {
     let classes = [styles.image];
+
+    let { valid, src } = useIsValid((src) => new Promise(res => {
+        const img = new window.Image();
+        img.onload = () => res(img.naturalWidth > 0 && img.naturalHeight > 0);
+        img.onerror = (e) => {
+            console.error(`Failed to display image ${src}`, e);
+            res(false)
+        };
+        img.src = src;
+    }), image);
+
+    if (!valid || src !== image) return null;
+
     switch (imageSize) {
         case "full":
             classes.push(styles.fullImage);
