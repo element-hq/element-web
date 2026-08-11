@@ -53,7 +53,7 @@ describe("ReplyTile", () => {
             },
         });
 
-        render(<ReplyTile mxEvent={mxEvent} />);
+        const { container } = render(<ReplyTile mxEvent={mxEvent} />);
 
         expect(renderReplyTile).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -63,5 +63,25 @@ describe("ReplyTile", () => {
             }),
             false,
         );
+        expect(container.querySelector(".mx_ReplyTile")).toBeInTheDocument();
+        expect(container.querySelector(".mx_ReplyTile_sender")).toBeInTheDocument();
+    });
+
+    it("provides the legacy inline class for emote replies", () => {
+        const mxEvent = mkEvent({
+            event: true,
+            type: EventType.RoomMessage,
+            user: "@alice:server",
+            room: "!room:server",
+            id: "$emote",
+            content: {
+                body: "waves",
+                msgtype: MsgType.Emote,
+            },
+        });
+
+        const { container } = render(<ReplyTile mxEvent={mxEvent} />);
+
+        expect(container.querySelector(".mx_ReplyTile")).toHaveClass("mx_ReplyTile_inline");
     });
 });

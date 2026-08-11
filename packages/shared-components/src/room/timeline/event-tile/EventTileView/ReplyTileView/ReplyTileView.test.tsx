@@ -14,16 +14,20 @@ import { ReplyTileView } from "./ReplyTileView";
 import styles from "./ReplyTileView.module.css";
 
 describe("ReplyTileView", () => {
-    it("renders stable integration hooks for the reply and sender", () => {
+    it("applies host class names to the reply and sender", () => {
         const { container } = render(
-            <ReplyTileView href="/room/event" sender={<span>Sender</span>}>
+            <ReplyTileView
+                href="/room/event"
+                sender={<span>Sender</span>}
+                className="host-root"
+                senderClassName="host-sender"
+            >
                 <span>Reply content</span>
             </ReplyTileView>,
         );
 
-        expect(container.firstElementChild).toHaveAttribute("data-reply-tile");
-        expect(screen.getByRole("link")).toHaveAttribute("data-reply-tile-link");
-        expect(screen.getByText("Sender").parentElement).toHaveAttribute("data-reply-tile-sender");
+        expect(container.firstElementChild).toHaveClass("host-root");
+        expect(screen.getByText("Sender").parentElement).toHaveClass("host-sender");
         expect(screen.getByRole("link")).toHaveAttribute("href", "/room/event");
         expect(screen.getByText("Sender")).toBeInTheDocument();
         expect(screen.getByText("Reply content")).toBeInTheDocument();

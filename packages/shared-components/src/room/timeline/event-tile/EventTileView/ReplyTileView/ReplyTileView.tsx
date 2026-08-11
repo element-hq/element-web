@@ -27,6 +27,8 @@ export interface ReplyTileViewProps {
     ref?: Ref<HTMLAnchorElement>;
     /** Optional class name applied to the root element. */
     className?: string;
+    /** Optional class name applied to the sender container. */
+    senderClassName?: string;
 }
 
 /**
@@ -44,10 +46,10 @@ export function ReplyTileView({
     children,
     ref,
     className,
+    senderClassName,
 }: ReplyTileViewProps): JSX.Element {
     return (
         <div
-            data-reply-tile
             className={classNames(
                 styles.root,
                 {
@@ -57,12 +59,8 @@ export function ReplyTileView({
                 className,
             )}
         >
-            <a data-reply-tile-link href={href} onClick={onClick} ref={ref}>
-                {sender ? (
-                    <div data-reply-tile-sender className={styles.sender}>
-                        {sender}
-                    </div>
-                ) : null}
+            <a href={href} onClick={onClick} ref={ref}>
+                {sender ? <div className={classNames(styles.sender, senderClassName)}>{sender}</div> : null}
                 {children}
             </a>
         </div>

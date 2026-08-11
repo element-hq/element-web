@@ -10,6 +10,7 @@ import React, { createRef } from "react";
 import { type MatrixEvent, MatrixEventEvent, EventType, MsgType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ReplyTileView } from "@element-hq/web-shared-components";
+import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
@@ -145,6 +146,11 @@ export default class ReplyTile extends React.PureComponent<IProps> {
 
         return (
             <ReplyTileView
+                className={classNames("mx_ReplyTile", {
+                    mx_ReplyTile_inline: msgType === MsgType.Emote,
+                    mx_ReplyTile_info: isInfoMessage && !mxEvent.isRedacted(),
+                })}
+                senderClassName="mx_ReplyTile_sender"
                 href={permalink}
                 onClick={this.onClick}
                 ref={this.anchorElement}
