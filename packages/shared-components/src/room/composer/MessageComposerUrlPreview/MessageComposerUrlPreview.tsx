@@ -6,13 +6,42 @@
  */
 
 import React, { type JSX } from "react";
-import { Text } from "@vector-im/compound-web";
+import { Avatar, Text, Tooltip } from "@vector-im/compound-web";
 import classNames from "classnames";
 
-import { type UrlPreview } from "../../timeline/event-tile/UrlPreviewGroupView";
+import { type UrlPreview } from "../../urlPreview";
 import styles from "./MessageComposerUrlPreview.module.css";
-import { LinkSiteName, LinkTitle } from "../../timeline/event-tile/UrlPreviewGroupView/LinkPreview/LinkPreview";
 import { useViewModel, type ViewModel } from "../../../core/viewmodel";
+
+function LinkTitle({ title, showTooltipOnLink, link }: Pick<UrlPreview, "title" | "showTooltipOnLink" | "link">): JSX.Element {
+    const caption = new URL(link).toString();
+    const anchor = (
+        <Text
+            as="a"
+            type="body"
+            weight="semibold"
+            size="md"
+            className={styles.title}
+            href={link}
+            target="_blank"
+            rel="noreferrer noopener"
+        >
+            {title}
+        </Text>
+    );
+    return showTooltipOnLink ? <Tooltip label={caption}>{anchor}</Tooltip> : anchor;
+}
+
+function LinkSiteName({ siteIcon, siteName }: Pick<UrlPreview, "siteIcon" | "siteName">): JSX.Element {
+    return (
+        <div className={styles.siteName}>
+            {siteIcon && <Avatar size="16px" name={siteName} id={siteName} src={siteIcon} />}
+            <Text as="span" size="sm" weight="regular">
+                {siteName}
+            </Text>
+        </div>
+    );
+}
 
 /** Snapshot data for rendering a URL preview attached to the composer. */
 export interface MessageComposerUrlPreviewSnapshot {

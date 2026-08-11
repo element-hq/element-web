@@ -13,7 +13,6 @@ import {
     TextualBodyView,
     type TextualBodyContentElement,
     type UrlPreview,
-    UrlPreviewGroupView,
     useCreateAutoDisposedViewModel,
     MediaPreviewGroupPreview,
     useViewModel,

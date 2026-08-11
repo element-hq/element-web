@@ -10,7 +10,7 @@ exports[`MessageComposerUrlPreview > renders a preview 1`] = `
         class="MessageComposerUrlPreview-module_text"
       >
         <div
-          class="LinkPreview-module_siteName"
+          class="MessageComposerUrlPreview-module_siteName"
         >
           <span
             class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
@@ -19,7 +19,7 @@ exports[`MessageComposerUrlPreview > renders a preview 1`] = `
           </span>
         </div>
         <a
-          class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 LinkPreview-module_title"
+          class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 MessageComposerUrlPreview-module_title"
           href="https://matrix.org"
           rel="noreferrer noopener"
           target="_blank"
@@ -52,7 +52,7 @@ exports[`MessageComposerUrlPreview > renders a preview with an image 1`] = `
         class="MessageComposerUrlPreview-module_text"
       >
         <div
-          class="LinkPreview-module_siteName"
+          class="MessageComposerUrlPreview-module_siteName"
         >
           <span
             class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
@@ -61,7 +61,7 @@ exports[`MessageComposerUrlPreview > renders a preview with an image 1`] = `
           </span>
         </div>
         <a
-          class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 LinkPreview-module_title"
+          class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 MessageComposerUrlPreview-module_title"
           href="https://matrix.org"
           rel="noreferrer noopener"
           target="_blank"
