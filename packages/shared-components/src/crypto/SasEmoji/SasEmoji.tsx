@@ -31,6 +31,7 @@ export function SasEmoji({ emoji, className }: Props): JSX.Element {
     const { language } = useI18n();
 
     const emojiBlocks = emoji.map((emoji, i) => (
+        // oxlint-disable-next-line react/no-array-index-key
         <div className={styles.segment} key={i}>
             <div className={styles.emoji} aria-hidden={true}>
                 {emoji}

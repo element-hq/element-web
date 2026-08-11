@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Emoji-valitsin",
         "jump_first_invite": "Siirry ensimmäiseen kutsuun.",
         "message_composer": "Viestin kirjoitusikkuna",
         "n_unread_messages": {
@@ -751,22 +750,6 @@
     },
     "dialog_close_label": "Sulje dialogi",
     "download_completed": "Lataus valmis",
-    "emoji": {
-        "categories": "Luokat",
-        "category_activities": "Aktiviteetit",
-        "category_animals_nature": "Eläimet ja luonto",
-        "category_flags": "Liput",
-        "category_food_drink": "Ruoka ja juoma",
-        "category_frequently_used": "Usein käytetyt",
-        "category_objects": "Esineet",
-        "category_smileys_people": "Hymiöt ja ihmiset",
-        "category_symbols": "Symbolit",
-        "category_travel_places": "Matkustaminen ja paikat",
-        "quick_reactions": "Pikareaktiot"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Peruuta haku"
-    },
     "empty_room": "Tyhjä huone",
     "empty_room_was_name": "Tyhjä huone (oli %(oldName)s)",
     "encryption": {

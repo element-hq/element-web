@@ -24,10 +24,12 @@ import { type IBodyProps } from "./IBodyProps";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDeviceVerificationStateContext";
 import { useMediaVisible } from "../../../hooks/useMediaVisible";
+import { useSettingValue } from "../../../hooks/useSettings";
 import { DecryptionFailureBodyViewModel } from "../../../viewmodels/room/timeline/event-tile/body/DecryptionFailureBodyViewModel";
 import { FileBodyViewModel } from "../../../viewmodels/message-body/FileBodyViewModel";
 import { ImageBodyViewModel } from "../../../viewmodels/message-body/ImageBodyViewModel";
 import { RedactedBodyViewModel } from "../../../viewmodels/message-body/RedactedBodyViewModel";
+import { getRedactedBodyViewModelProps } from "../../../viewmodels/room/timeline/event-tile/EventTileRedactedBodyState";
 import { VideoBodyViewModel } from "../../../viewmodels/message-body/VideoBodyViewModel";
 import { isMimeTypeAllowed } from "../../../utils/blobs";
 import { MediaPreviewGroupViewModel } from "../../../viewmodels/message-body/MediaPreviewGroupViewModel";
@@ -273,11 +275,13 @@ export function ImageBodyFactory({
 }
 
 export function RedactedBodyFactory({ mxEvent, ref }: Pick<IBodyProps, "mxEvent" | "ref">): JSX.Element {
-    const vm = useCreateAutoDisposedViewModel(() => new RedactedBodyViewModel({ mxEvent }));
+    const showTwelveHour = useSettingValue("showTwelveHourTimestamps");
+    const props = getRedactedBodyViewModelProps(mxEvent, showTwelveHour);
+    const vm = useCreateAutoDisposedViewModel(() => new RedactedBodyViewModel(props));
 
     useEffect(() => {
-        vm.setEvent(mxEvent);
-    }, [mxEvent, vm]);
+        vm.setProps(getRedactedBodyViewModelProps(mxEvent, showTwelveHour));
+    }, [mxEvent, showTwelveHour, vm]);
 
     return <RedactedBodyView vm={vm} ref={ref} className="mx_RedactedBody" />;
 }
@@ -310,7 +314,7 @@ const MESSAGE_BODY_TYPES = new Map<string, MBodyComponent>([
 // Render a body using the picked factory.
 // Falls back to the provided factory when msgtype has no specific handler.
 export function renderMBody(props: IBodyProps, fallbackFactory?: MBodyComponent): JSX.Element | null {
-    const BodyType = MESSAGE_BODY_TYPES.get(props.mxEvent.getContent().msgtype as string) ?? fallbackFactory;
+    const BodyType = MESSAGE_BODY_TYPES.get(props.mxEvent.getContent().msgtype!) ?? fallbackFactory;
     if (!BodyType) {
         return null;
     }

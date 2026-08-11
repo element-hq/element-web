@@ -7,14 +7,36 @@
 
 import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
 import { Layout } from "../../../src/settings/enums/Layout";
+import { mkEvent, stubClient } from "../../test-utils";
 import {
     EventTileViewModel,
+    type EventTileViewModelDependencies,
+    type NormalizedEventTileViewModelProps,
     type EventTileViewModelProps,
 } from "../../../src/viewmodels/room/timeline/event-tile/EventTileViewModel";
 
 describe("EventTileViewModel", () => {
+    const matrixClient = stubClient();
+
+    const makeEvent = () =>
+        mkEvent({
+            event: true,
+            id: "$event",
+            room: "!room:example.org",
+            ts: 123,
+            type: "m.room.message",
+            user: "@alice:example.org",
+            content: { msgtype: "m.text" },
+        });
+
+    const makeDependencies = (mxEvent = makeEvent()): EventTileViewModelDependencies => ({
+        mxEvent,
+        matrixClient,
+        showHiddenEvents: false,
+    });
+
     type EventTileViewModelPropsOverrides = {
-        event?: Partial<EventTileViewModelProps["event"]>;
+        event?: Partial<NormalizedEventTileViewModelProps["event"]>;
         display?: Partial<EventTileViewModelProps["display"]>;
         interaction?: Partial<EventTileViewModelProps["interaction"]>;
         sender?: Partial<EventTileViewModelProps["sender"]>;
@@ -22,13 +44,15 @@ describe("EventTileViewModel", () => {
         footer?: Partial<EventTileViewModelProps["footer"]>;
     };
 
-    function makeProps(overrides: EventTileViewModelPropsOverrides = {}): EventTileViewModelProps {
+    function makeProps(overrides: EventTileViewModelPropsOverrides = {}): NormalizedEventTileViewModelProps {
         return {
             event: {
                 eventType: "m.room.message",
                 msgtype: "m.text",
                 eventTs: 123,
                 eventId: "$event",
+                isState: false,
+                hasReplyChain: false,
                 isLocalEcho: false,
                 isSending: false,
                 ariaLive: "off",
@@ -37,6 +61,8 @@ describe("EventTileViewModel", () => {
                 isRtcNotification: false,
                 isEditing: false,
                 isEncryptionFailure: false,
+                hasRenderer: true,
+                isSeeingThroughMessageHiddenForModeration: false,
                 forExport: false,
                 ...overrides.event,
             },
@@ -91,8 +117,21 @@ describe("EventTileViewModel", () => {
         );
 
         expect(snapshot.event.isSending).toBe(true);
+        expect(snapshot.event).toMatchObject({
+            eventId: "$event",
+            eventTs: 123,
+            isLocalEcho: true,
+            isEncryptionFailure: false,
+        });
         expect(snapshot.root.ariaLive).toBe("off");
         expect(snapshot.root.scrollToken).toBeUndefined();
+        expect(snapshot.root.data).toEqual({
+            eventId: "$event",
+            layout: Layout.Group,
+            shape: TimelineRenderingType.Room,
+            isOwnEvent: false,
+            hasReply: false,
+        });
         expect(snapshot.root.classState.mx_EventTile_sending).toBe(true);
     });
 
@@ -468,13 +507,13 @@ describe("EventTileViewModel", () => {
     });
 
     it("updates an instance snapshot when inputs change", () => {
-        const vm = new EventTileViewModel(makeProps());
+        const vm = new EventTileViewModel(makeDependencies(), makeProps());
         const listener = jest.fn();
         const unsubscribe = vm.subscribe(listener);
 
         expect(vm.getSnapshot().snapshot.timestamp.show).toBe(false);
 
-        vm.setProps(makeProps({ interaction: { hover: true } }));
+        vm.setInputs(makeDependencies(), makeProps({ interaction: { hover: true } }));
 
         expect(vm.getSnapshot().snapshot.timestamp.show).toBe(true);
         expect(listener).toHaveBeenCalled();
@@ -483,8 +522,162 @@ describe("EventTileViewModel", () => {
         vm.dispose();
     });
 
+    it("emits once when dependencies and inputs are updated together", () => {
+        const vm = new EventTileViewModel(makeDependencies(), makeProps());
+        const listener = jest.fn();
+        const unsubscribe = vm.subscribe(listener);
+
+        vm.setInputs(makeDependencies(), makeProps({ interaction: { hover: true } }));
+
+        expect(listener).toHaveBeenCalledTimes(1);
+
+        unsubscribe();
+        vm.dispose();
+    });
+
+    it("normalizes event and sender state from its SDK dependency", () => {
+        const event = mkEvent({
+            event: true,
+            id: "$member-event",
+            room: "!room:example.org",
+            ts: 456,
+            type: "m.room.member",
+            user: "@bob:example.org",
+            content: { membership: "join" },
+        });
+        const vm = new EventTileViewModel(
+            makeDependencies(event),
+            makeProps({
+                event: {
+                    eventType: "m.room.message",
+                    eventId: "$wrong-event",
+                    eventTs: 123,
+                },
+                sender: {
+                    senderId: "@wrong:example.org",
+                    isEmote: false,
+                },
+            }),
+        );
+
+        expect(vm.getSnapshot().snapshot.event).toMatchObject({
+            eventType: "m.room.member",
+            eventId: "$member-event",
+            eventTs: 456,
+            isState: true,
+        });
+        expect(vm.getSnapshot().snapshot.sender).toMatchObject({
+            senderId: "@bob:example.org",
+            forceHistoricalAvatar: true,
+            isEmote: false,
+        });
+
+        vm.setInputs(
+            makeDependencies(
+                mkEvent({
+                    event: true,
+                    id: "$updated-event",
+                    room: "!room:example.org",
+                    ts: 789,
+                    type: "m.call.invite",
+                    user: "@carol:example.org",
+                    content: { msgtype: "m.call.invite" },
+                }),
+            ),
+            makeProps(),
+        );
+
+        expect(vm.getSnapshot().snapshot.event).toMatchObject({
+            eventType: "m.call.invite",
+            eventId: "$updated-event",
+            eventTs: 789,
+        });
+        expect(vm.getSnapshot().snapshot.sender.senderId).toBe("@carol:example.org");
+
+        vm.dispose();
+    });
+
+    it("normalizes event identity, replacement, renderer, and decryption state", () => {
+        const event = makeEvent();
+        jest.spyOn(event, "replacingEventId").mockReturnValue("$replaced-event");
+        jest.spyOn(event, "isDecryptionFailure").mockReturnValue(true);
+
+        const vm = new EventTileViewModel(makeDependencies(event), makeProps());
+        const snapshot = vm.getSnapshot().snapshot;
+
+        expect(snapshot.event).toMatchObject({
+            eventType: "m.room.message",
+            eventId: "$event",
+            replacingEventId: "$replaced-event",
+            isEncryptionFailure: true,
+            hasRenderer: true,
+        });
+
+        vm.dispose();
+    });
+
+    it("does not show a reply chain for replacement events", () => {
+        const event = mkEvent({
+            event: true,
+            id: "$replacement-event",
+            room: "!room:example.org",
+            ts: 123,
+            type: "m.room.message",
+            user: "@alice:example.org",
+            content: {
+                "msgtype": "m.text",
+                "m.relates_to": {
+                    "rel_type": "m.replace",
+                    "event_id": "$original-event",
+                    "m.in_reply_to": {
+                        event_id: "$parent-event",
+                    },
+                },
+            },
+        });
+        const vm = new EventTileViewModel(makeDependencies(event), makeProps());
+
+        expect(vm.getSnapshot().snapshot.root.data.hasReply).toBe(false);
+
+        vm.dispose();
+    });
+
+    it("derives an unavailable renderer for unsupported events", () => {
+        const event = mkEvent({
+            event: true,
+            room: "!room:example.org",
+            type: "org.example.unsupported",
+            user: "@alice:example.org",
+            content: {},
+        });
+        const vm = new EventTileViewModel(makeDependencies(event), makeProps());
+
+        expect(vm.getSnapshot().snapshot.event.hasRenderer).toBe(false);
+
+        vm.dispose();
+    });
+
+    it("recalculates renderer state when dependencies change", () => {
+        const event = mkEvent({
+            event: true,
+            room: "!room:example.org",
+            type: "org.example.unsupported",
+            user: "@alice:example.org",
+            content: {},
+        });
+        const vm = new EventTileViewModel(makeDependencies(event), makeProps());
+
+        expect(vm.getSnapshot().snapshot.event.hasRenderer).toBe(false);
+
+        vm.setInputs(makeDependencies(makeEvent()), makeProps());
+
+        expect(vm.getSnapshot().snapshot.event.hasRenderer).toBe(true);
+
+        vm.dispose();
+    });
+
     it("lazily owns timestamp child view models", () => {
-        const vm = new EventTileViewModel(makeProps());
+        const vm = new EventTileViewModel(makeDependencies(), makeProps());
         const messageTimestampViewModel = vm.getMessageTimestampViewModel({ ts: 123 });
         const linkedMessageTimestampViewModel = vm.getLinkedMessageTimestampViewModel({ ts: 456 });
 
@@ -496,6 +689,7 @@ describe("EventTileViewModel", () => {
 
     it("does not initialize timestamp child view models for events without an origin timestamp", () => {
         const vm = new EventTileViewModel(
+            makeDependencies(),
             makeProps({
                 event: {
                     eventTs: 0,
@@ -512,7 +706,7 @@ describe("EventTileViewModel", () => {
     });
 
     it("owns and updates the thread-list action bar child view model", () => {
-        const vm = new EventTileViewModel(makeProps());
+        const vm = new EventTileViewModel(makeDependencies(), makeProps());
         const onViewInRoomClick = jest.fn();
         const onCopyLinkClick = jest.fn();
 

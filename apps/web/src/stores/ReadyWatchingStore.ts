@@ -7,6 +7,7 @@
  */
 
 import { type MatrixClient, SyncState } from "matrix-js-sdk/src/matrix";
+// oxlint-disable-next-line no-restricted-imports
 import { EventEmitter } from "events";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
