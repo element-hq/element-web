@@ -70,6 +70,9 @@ describe("ElementWidgetDriver", () => {
     beforeEach(() => {
         stubClient();
         client = mocked(MatrixClientPeg.safeGet());
+        client.cachedRtcTransports = {
+            wait: jest.fn(),
+        } as any;
         client.getUserId.mockReturnValue("@alice:example.org");
         client.getSafeUserId.mockReturnValue("@alice:example.org");
     });
@@ -432,11 +435,10 @@ describe("ElementWidgetDriver", () => {
 
         it("gets the RTC transports from the homeserver", async () => {
             const transports = [{ type: "livekit", livekit_service_url: "https://livekit-jwt.example.com" }];
-            client._unstable_getRTCTransports.mockResolvedValue(transports);
+            client.cachedRtcTransports.wait.mockResolvedValue(transports);
 
             await expect(driver.getRtcTransports()).resolves.toEqual({ rtc_transports: transports });
 
-            expect(client._unstable_getRTCTransports).toHaveBeenCalledWith();
         });
 
         it("propagates errors from the homeserver", async () => {
@@ -449,7 +451,7 @@ describe("ElementWidgetDriver", () => {
                 429,
             );
 
-            client._unstable_getRTCTransports.mockRejectedValue(error);
+            client.cachedRtcTransports.wait.mockRejectedValue(error);
 
             await expect(driver.getRtcTransports()).rejects.toBe(error);
         });
@@ -460,7 +462,7 @@ describe("ElementWidgetDriver", () => {
                 if (key === "enable_client_well_known_lookups") return false;
                 return sdkConfigGet(key, altCaseName);
             });
-            client._unstable_getRTCTransports.mockRejectedValue(
+            client.cachedRtcTransports.wait.mockRejectedValue(
                 new MatrixError({ errcode: "M_NOT_FOUND", error: "Not found" }, 404),
             );
 
@@ -476,7 +478,9 @@ describe("ElementWidgetDriver", () => {
                 if (key === "enable_client_well_known_lookups") return false;
                 return sdkConfigGet(key, altCaseName);
             });
-            client._unstable_getRTCTransports.mockResolvedValue([]);
+            client.cachedRtcTransports.wait.mockRejectedValue(
+                new MatrixError({ errcode: "M_NOT_FOUND", error: "Not found" }, 404),
+            );
 
             await expect(driver.getRtcTransports()).rejects.toThrow();
 
@@ -490,7 +494,7 @@ describe("ElementWidgetDriver", () => {
                 if (key === "enable_client_well_known_lookups") return true;
                 return sdkConfigGet(key, altCaseName);
             });
-            client._unstable_getRTCTransports.mockRejectedValue(
+            client.cachedRtcTransports.wait.mockRejectedValue(
                 new MatrixError({ errcode: "M_NOT_FOUND", error: "Not found" }, 404),
             );
 
