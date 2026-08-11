@@ -438,7 +438,6 @@ describe("ElementWidgetDriver", () => {
             client.cachedRtcTransports.wait.mockResolvedValue(transports);
 
             await expect(driver.getRtcTransports()).resolves.toEqual({ rtc_transports: transports });
-
         });
 
         it("propagates errors from the homeserver", async () => {
