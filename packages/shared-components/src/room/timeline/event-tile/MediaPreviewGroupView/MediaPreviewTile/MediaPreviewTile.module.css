@@ -1,0 +1,23 @@
+.tile {
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+    border-radius: 14px;
+
+    max-width: 100%;
+    overflow: clip;
+    background: var(--cpd-color-bg-subtle-secondary);
+
+    .below {
+        display: flex;
+        margin: var(--cpd-space-3x);
+    }
+}
+
+.tileWithoutAbove {
+    padding: var(--cpd-space-3x);
+
+    display: flex;
+    gap: 12px;
+
+    max-width: 100%;
+    background: var(--cpd-color-bg-subtle-secondary);
+}

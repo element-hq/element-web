@@ -11,27 +11,26 @@ import FileIcon from "@vector-im/compound-design-tokens/assets/web/icons/documen
 import ExpandIcon from "@vector-im/compound-design-tokens/assets/web/icons/expand";
 import DownloadIcon from "@vector-im/compound-design-tokens/assets/web/icons/download";
 
-import { ImagePreviewTile } from "./ImagePreviewTile";
+import { AudioPreviewTile } from "./MediaPreviewTile";
 
 const meta = {
-    title: "Room/Timeline/MediaPreviewGroupView/ImagePreviewTile",
-    component: ImagePreviewTile,
+    title: "Room/Timeline/MediaPreviewGroupView/MediaPreviewTile/AudioPreviewTile",
+    component: AudioPreviewTile,
     tags: ["autodocs"],
     args: {
-        style: "image",
-        image: "https://picsum.photos/seed/element/480/270",
-        imageSize: "banner",
+        style: "audio",
+        audio: "https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3",
         icon: <FileIcon />,
         iconOnClick: () => {},
         color: "#4200A6",
-        header: "annual-report.pdf",
-        body: "2.3 MB",
+        header: "voice-message.mp3",
+        body: "1.1 MB",
         buttons: [
             { icon: <ExpandIcon />, onClick: () => ({}) },
             { icon: <DownloadIcon />, onClick: () => ({}) },
         ],
     },
-} satisfies Meta<typeof ImagePreviewTile>;
+} satisfies Meta<typeof AudioPreviewTile>;
 
 export default meta;
 
@@ -39,42 +38,18 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Uncollapsed: Story = {
+export const ClickableAudio: Story = {
     args: {
-        imageSize: "full",
-    },
-};
-
-export const ClickableUncollapsedImage: Story = {
-    args: {
-        imageSize: "full",
-        imageOnClick: () => {
-            window.alert("Image clicked");
+        audioOnClick: () => {
+            window.alert("Audio clicked");
             return {};
         },
     },
 };
-
-/*
-export const WithFooter: Story = {
-    args: {
-        footer: "Shared by Alice · 12:45",
-    },
-};
-*/
 
 export const WithHeaderUrl: Story = {
     args: {
-        headerUrl: "https://example.com/annual-report.pdf",
-    },
-};
-
-export const ClickableImage: Story = {
-    args: {
-        imageOnClick: () => {
-            window.alert("Image clicked");
-            return {};
-        },
+        headerUrl: "https://example.com/voice-message.mp3",
     },
 };
 
