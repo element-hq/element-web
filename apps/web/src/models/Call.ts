@@ -26,6 +26,7 @@ import {
     MatrixRTCSessionManagerEvents,
 } from "matrix-js-sdk/src/matrixrtc";
 
+// oxlint-disable-next-line no-restricted-imports
 import type EventEmitter from "events";
 import type { IApp } from "../stores/WidgetStore";
 import SettingsStore from "../settings/SettingsStore";
@@ -336,6 +337,7 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
     };
 }
 
+/** @knipignore - exported for tests */
 export type { JitsiCallMemberContent };
 
 /**

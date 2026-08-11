@@ -530,22 +530,6 @@
     },
     "dialog_close_label": "סגור דיאלוג",
     "download_completed": "ההורדה הושלמה",
-    "emoji": {
-        "categories": "נושאים",
-        "category_activities": "פעילויות",
-        "category_animals_nature": "חיות וטבע",
-        "category_flags": "דגלים",
-        "category_food_drink": "משקאות ומזון",
-        "category_frequently_used": "לעיתים קרובות בשימוש",
-        "category_objects": "עצמים",
-        "category_smileys_people": "סמיילי ואנשים",
-        "category_symbols": "סמלים",
-        "category_travel_places": "טיולים ומקומות",
-        "quick_reactions": "תגובות מהירות"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "בטל חיפוש"
-    },
     "empty_room": "חדר ריק",
     "encryption": {
         "access_secret_storage_dialog": {
