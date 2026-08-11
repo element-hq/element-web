@@ -8,18 +8,15 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
-import { FilesIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import { fileSize } from "../../../utils/FileUtils";
 import {
-    attachmentIcon,
     attachmentIconOfType,
     MediaPreviewGroupEntry,
     MediaPreviewGroupPreview,
-    useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
 import { MediaPreviewGroupViewModel } from "../../../viewmodels/message-body/MediaPreviewGroupViewModel";
 
@@ -84,13 +81,9 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
             title = _t("upload_file|title");
         }
 
-        // const fileId = `mx-uploadconfirmdialog-${this.props.file.name}`;
         const mimeType = this.props.file.type;
-
-        // let preview: JSX.Element | undefined;
-        // let placeholder: JSX.Element | undefined;
-
         let preview: MediaPreviewGroupEntry;
+
         if (mimeType.startsWith("image/")) {
             preview = {
                 style: "image",
@@ -100,15 +93,6 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
                 body: fileSize(this.props.file.size),
                 ...attachmentIconOfType("light", mimeType),
             };
-            /*
-            preview = (
-                <img
-                    className="mx_UploadConfirmDialog_imagePreview"
-                    src={this.state.objectUrl}
-                    aria-labelledby={fileId}
-                />
-            );
-            */
         } else if (mimeType.startsWith("video/")) {
             preview = {
                 style: "video",
@@ -118,16 +102,6 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
                 body: fileSize(this.props.file.size),
                 ...attachmentIconOfType("light", mimeType),
             };
-            /*
-            preview = (
-                <video
-                    className="mx_UploadConfirmDialog_imagePreview"
-                    src={this.state.objectUrl}
-                    playsInline
-                    controls={true}
-                />
-            );
-            */
         } else if (mimeType.startsWith("audio/")) {
             preview = {
                 style: "audio",
@@ -142,10 +116,7 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
                 header: this.props.file.name,
                 body: fileSize(this.props.file.size),
                 ...attachmentIconOfType("light", mimeType),
-            };
-            /*
-            placeholder = <FilesIcon className="mx_UploadConfirmDialog_fileIcon" height="18px" width="18px" />;
-            */
+            }
         }
 
         let uploadAllButton: JSX.Element | undefined;
