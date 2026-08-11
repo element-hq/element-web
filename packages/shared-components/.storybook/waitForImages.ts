@@ -9,7 +9,7 @@
  * A Storybook `play` helper that waits for every CSS `background-image` inside the
  * rendered story to finish decoding before the visual-regression snapshot is taken.
  *
- * Components such as `LinkPreview` render their thumbnails as CSS `background-image`s
+ * Some components render their thumbnails as CSS `background-image`s
  * rather than `<img>` elements, so there is no load event for the snapshot machinery
  * to await. A larger image (e.g. the tall test image) can therefore still be decoding
  * when the screenshot is captured, producing a non-deterministic placeholder frame.
