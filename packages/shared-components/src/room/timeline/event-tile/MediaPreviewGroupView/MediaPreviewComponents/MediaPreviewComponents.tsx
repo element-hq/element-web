@@ -138,8 +138,22 @@ export function Video({
     video: string;
     videoOnClick?: () => void;
     videoSize: ImageSize;
-}): JSX.Element {
+}): JSX.Element | null {
     let classes = [styles.video];
+
+    let { valid, src } = useIsValid((src) => new Promise(res => {
+        const vid = document.createElement("video");
+        vid.preload = "metadata";
+        vid.onloadedmetadata = () => res(vid.videoWidth > 0 && vid.videoHeight > 0);
+        vid.onerror = (e) => {
+            console.error(`Failed to display video ${src}`, e);
+            res(false)
+        };
+        vid.src = src;
+    }), video);
+
+    if (!valid || src !== video) return null;
+
     switch (videoSize) {
         case "full":
             classes.push(styles.fullVideo);
@@ -166,7 +180,20 @@ export function Video({
     }
 }
 
-export function Audio({ audio, audioOnClick }: { audio: string; audioOnClick?: () => void }): JSX.Element {
+export function Audio({ audio, audioOnClick }: { audio: string; audioOnClick?: () => void }): JSX.Element | null {
+    let { valid, src } = useIsValid((src) => new Promise(res => {
+        const aud = document.createElement("audio");
+        aud.preload = "metadata";
+        aud.onloadedmetadata = () => res(true);
+        aud.onerror = (e) => {
+            console.error(`Failed to display audio ${src}`, e);
+            res(false)
+        };
+        aud.src = src;
+    }), audio);
+
+    if (!valid || src !== audio) return null;
+
     if (audioOnClick) {
         return (
             <div className={styles.audio}>

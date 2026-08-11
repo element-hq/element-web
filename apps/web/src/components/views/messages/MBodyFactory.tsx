@@ -65,25 +65,27 @@ export function FileBodyFactory({
                             mediaEventHelper === undefined
                                 ? undefined
                                 : [
-                                    {
-                                        icon: <DownloadIcon />,
-                                        onClick: async () => {
-                                            downloader.download({
-                                                blob: await mediaEventHelper.sourceBlob.value, // decrypts transparently if E2EE
-                                                name: mediaEventHelper.fileName || _t("common|attachment"),
-                                            });
-                                        },
-                                    },
-                                ],
+                                      {
+                                          icon: <DownloadIcon />,
+                                          onClick: async () => {
+                                              downloader.download({
+                                                  blob: await mediaEventHelper.sourceBlob.value, // decrypts transparently if E2EE
+                                                  name: mediaEventHelper.fileName || _t("common|attachment"),
+                                              });
+                                          },
+                                      },
+                                  ],
                         ...attachmentIconOfType("light", content.info?.mimetype),
                     },
                 ],
             }),
     );
 
-    return <div className="mx_EventTile_content">
-        <MediaPreviewGroupPreview vm={vm} />
-    </div>
+    return (
+        <div className="mx_EventTile_content">
+            <MediaPreviewGroupPreview vm={vm} />
+        </div>
+    );
 }
 
 export function VideoBodyFactory({

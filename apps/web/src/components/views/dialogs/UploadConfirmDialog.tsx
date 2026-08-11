@@ -44,7 +44,11 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
     }
 
     public componentDidMount(): void {
-        if (this.props.file.type.startsWith("image/") || this.props.file.type.startsWith("video/")) {
+        if (
+            this.props.file.type.startsWith("image/") ||
+            this.props.file.type.startsWith("video/") ||
+            this.props.file.type.startsWith("audio/")
+        ) {
             this.setState({
                 // We do not filter the mimetype using getBlobSafeMimeType here as if the user is uploading the file
                 // themselves they should be trusting it enough to open/load it, and it will be rendered into a hidden
@@ -116,7 +120,7 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
                 header: this.props.file.name,
                 body: fileSize(this.props.file.size),
                 ...attachmentIconOfType("light", mimeType),
-            }
+            };
         }
 
         let uploadAllButton: JSX.Element | undefined;
