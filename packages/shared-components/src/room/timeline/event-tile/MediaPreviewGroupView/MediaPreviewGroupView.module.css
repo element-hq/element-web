@@ -3,4 +3,8 @@
 
     /* to match URL preview width */
     max-width: 478px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
 }
