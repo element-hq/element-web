@@ -419,9 +419,9 @@ describe("RoomHeader", () => {
         beforeEach(async () => {
             SdkConfig.put({});
             // Enable Element Call
-            client._unstable_getRTCTransports = vi
-                .fn()
-                .mockResolvedValue([{ type: "livekit", livekit_service_url: "https://example.org" }]);
+            vi.spyOn(client.cachedRtcTransports, "get").mockResolvedValue([
+                { type: "livekit", livekit_service_url: "https://example.org" },
+            ]);
             // And ensure the CallStore has the transports configured.
             await setupAsyncStoreWithClient(CallStore.instance, client);
         });
