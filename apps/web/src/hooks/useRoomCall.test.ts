@@ -27,6 +27,7 @@ import { CallStore } from "../stores/CallStore";
 import { SDKContextClass } from "../contexts/SDKContextClass";
 import { ClientEvent } from "matrix-js-sdk/src/matrix";
 import type { MockedObject } from "jest-mock";
+import { act } from "react";
 
 describe("useRoomCall", () => {
     const client = getMockClientWithEventEmitter({
@@ -137,9 +138,11 @@ describe("useRoomCall", () => {
             expect(result.current.callOptions).toEqual([PlatformCallType.LegacyCall]);
 
             // Now enable a transport and ensure that useRoomCall picks it up reactively.
-            const transports = [{ type: "livekit", livekit_service_url: "https://example.org" }];
-            vi.mocked(client.cachedRtcTransports.get).mockReturnValue(transports);
-            client.emit(ClientEvent.RtcTransportsUpdated, transports);
+            act(() => {
+                const transports = [{ type: "livekit", livekit_service_url: "https://example.org" }];
+                vi.mocked(client.cachedRtcTransports.get).mockReturnValue(transports);
+                client.emit(ClientEvent.RtcTransportsUpdated, transports);
+            });
 
             await setupAsyncStoreWithClient(CallStore.instance, client);
             await waitFor(() =>
