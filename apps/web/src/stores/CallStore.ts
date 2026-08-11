@@ -215,7 +215,7 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
     };
 
     public getConfiguredRTCTransports(): Transport[] {
-        let rtcTransports = this.matrixClient?.cachedRtcTransports.get();
+        const rtcTransports = this.matrixClient?.cachedRtcTransports.get();
         const enableClientWellKnownLookups = SdkConfig.get("enable_client_well_known_lookups");
         if (rtcTransports || !enableClientWellKnownLookups) {
             return rtcTransports ?? [];
