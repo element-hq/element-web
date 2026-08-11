@@ -11,26 +11,27 @@ import FileIcon from "@vector-im/compound-design-tokens/assets/web/icons/documen
 import ExpandIcon from "@vector-im/compound-design-tokens/assets/web/icons/expand";
 import DownloadIcon from "@vector-im/compound-design-tokens/assets/web/icons/download";
 
-import { AudioPreviewTile } from "./AudioPreviewTile";
+import { VideoPreviewTile } from "./MediaPreviewTile";
 
 const meta = {
-    title: "Room/Timeline/MediaPreviewGroupView/AudioPreviewTile",
-    component: AudioPreviewTile,
+    title: "Room/Timeline/MediaPreviewGroupView/MediaPreviewTile/VideoPreviewTile",
+    component: VideoPreviewTile,
     tags: ["autodocs"],
     args: {
-        style: "audio",
-        audio: "https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3",
+        style: "video",
+        video: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+        videoSize: "banner",
         icon: <FileIcon />,
         iconOnClick: () => {},
         color: "#4200A6",
-        header: "voice-message.mp3",
-        body: "1.1 MB",
+        header: "holiday-clip.mp4",
+        body: "12.4 MB",
         buttons: [
             { icon: <ExpandIcon />, onClick: () => ({}) },
             { icon: <DownloadIcon />, onClick: () => ({}) },
         ],
     },
-} satisfies Meta<typeof AudioPreviewTile>;
+} satisfies Meta<typeof VideoPreviewTile>;
 
 export default meta;
 
@@ -38,10 +39,17 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const ClickableAudio: Story = {
+export const Uncollapsed: Story = {
     args: {
-        audioOnClick: () => {
-            window.alert("Audio clicked");
+        videoSize: "full",
+    },
+};
+
+export const ClickableUncollapsedVideo: Story = {
+    args: {
+        videoSize: "full",
+        videoOnClick: () => {
+            window.alert("Video clicked");
             return {};
         },
     },
@@ -49,7 +57,16 @@ export const ClickableAudio: Story = {
 
 export const WithHeaderUrl: Story = {
     args: {
-        headerUrl: "https://example.com/voice-message.mp3",
+        headerUrl: "https://example.com/holiday-clip.mp4",
+    },
+};
+
+export const ClickableVideo: Story = {
+    args: {
+        videoOnClick: () => {
+            window.alert("Video clicked");
+            return {};
+        },
     },
 };
 
