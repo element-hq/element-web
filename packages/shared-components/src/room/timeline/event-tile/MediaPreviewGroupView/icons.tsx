@@ -8,13 +8,13 @@ export type ThemeType = "light" | "dark";
 export function attachmentIcon(_mimeType?: string): MediaPreviewIcon {
     return {
         icon: <FileIcon />,
-        color: "var(--cpd-color-text-decorative-4)"
+        color: "var(--cpd-color-text-decorative-4)",
     };
 }
 
 export function linkIcon(): MediaPreviewIcon {
     return {
         icon: <LinkIcon />,
-        color: "var(--cpd-color-text-decorative-4)"
+        color: "var(--cpd-color-text-decorative-4)",
     };
 }

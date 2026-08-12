@@ -78,7 +78,7 @@
 }
 
 .button:hover svg {
-    color: var(--cpd-color-icon-primary)
+    color: var(--cpd-color-icon-primary);
 }
 
 .image {
