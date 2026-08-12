@@ -18,8 +18,7 @@ import dispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
 
 jest.mock("../../../../../src/stores/OwnBeaconStore", () => {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const EventEmitter = require("events");
+    const EventEmitter = jest.requireActual("events");
     class MockOwnBeaconStore extends EventEmitter {
         public getLiveBeaconIdsWithLocationPublishError = jest.fn().mockReturnValue([]);
         public getBeaconById = jest.fn();

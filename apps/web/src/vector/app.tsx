@@ -36,6 +36,7 @@ import { ModuleNotificationDecoration } from "../modules/components/ModuleNotifi
 import Login from "../Login.ts";
 import { startOAuthLogin } from "../utils/oauth/authorize.ts";
 
+// oxlint-disable-next-line node/no-process-env
 logger.log(`Application is running in ${process.env.NODE_ENV} mode`);
 
 window.matrixLogger = logger;
