@@ -5,8 +5,8 @@
     flex-direction: column;
     gap: var(--cpd-space-1x);
 
-    margin-top: var(--cpd-space-2x);
-    margin-bottom: var(--cpd-space-2x);
+    margin-top: calc(0.5 * var(--cpd-space-1x));
+    margin-bottom: calc(0.5 * var(--cpd-space-1x));
 
     .toggleButton[data-kind="tertiary"] {
         margin-left: auto;
