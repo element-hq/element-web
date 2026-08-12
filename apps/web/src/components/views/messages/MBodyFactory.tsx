@@ -16,7 +16,7 @@ import {
     RedactedBodyView,
     VideoBodyView,
     _t,
-    attachmentIconOfType,
+    attachmentIcon,
     useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
 
@@ -42,12 +42,51 @@ import path from "path";
 
 type MBodyComponent = React.ComponentType<IBodyProps>;
 
-export function FileBodyFactory({
-    mxEvent,
-    mediaEventHelper,
-    forExport,
-    showFileInfo,
-}: Pick<IBodyProps, "mxEvent" | "mediaEventHelper" | "forExport" | "showFileInfo">): JSX.Element {
+type FileBodyProps = Pick<IBodyProps, "mxEvent" | "mediaEventHelper" | "forExport" | "showFileInfo">;
+
+export function FileBodyFactory(props: FileBodyProps): JSX.Element {
+    // Image/video/audio bodies embed this as a download-only fallback (`showFileInfo: false`) in the
+    // panels which don't render the media itself, e.g. the files and notification panels. Those, and
+    // exports, keep the classic file body; only the standalone m.file body uses the preview tile.
+    if (props.forExport || props.showFileInfo === false) {
+        return <LegacyFileBody {...props} />;
+    }
+
+    return <PreviewFileBody {...props} />;
+}
+
+function LegacyFileBody({ mxEvent, mediaEventHelper, forExport, showFileInfo }: FileBodyProps): JSX.Element {
+    const { timelineRenderingType } = useContext(RoomContext);
+    const refIFrame = useRef<HTMLIFrameElement>(null) as RefObject<HTMLIFrameElement>;
+    const refLink = useRef<HTMLAnchorElement>(null) as RefObject<HTMLAnchorElement>;
+
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new FileBodyViewModel({
+                mxEvent,
+                mediaEventHelper,
+                forExport,
+                showFileInfo,
+                timelineRenderingType,
+                refIFrame,
+                refLink,
+            }),
+    );
+
+    useEffect(() => {
+        vm.setProps({
+            mxEvent,
+            mediaEventHelper,
+            forExport,
+            showFileInfo,
+            timelineRenderingType,
+        });
+    }, [mxEvent, mediaEventHelper, forExport, showFileInfo, timelineRenderingType, vm]);
+
+    return <FileBodyView vm={vm} refIFrame={refIFrame} refLink={refLink} className="mx_MFileBody" />;
+}
+
+function PreviewFileBody({ mxEvent, mediaEventHelper }: FileBodyProps): JSX.Element {
     const content = mxEvent.getContent<MediaEventContent>();
     const size = content.info?.size;
 
@@ -75,7 +114,7 @@ export function FileBodyFactory({
                                           },
                                       },
                                   ],
-                        ...attachmentIconOfType("light", content.info?.mimetype),
+                        ...attachmentIcon(content.info?.mimetype),
                     },
                 ],
             }),

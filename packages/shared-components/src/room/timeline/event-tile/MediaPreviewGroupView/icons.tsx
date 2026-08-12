@@ -5,53 +5,16 @@ import React from "react";
 
 export type ThemeType = "light" | "dark";
 
-export function attachmentIconOfType(theme: ThemeType, mimeType?: string): MediaPreviewIcon {
-    switch (mimeType) {
-        case "application/pdf":
-            return pdfIcon(theme);
-        default:
-            return attachmentIcon(theme);
-    }
+export function attachmentIcon(_mimeType?: string): MediaPreviewIcon {
+    return {
+        icon: <FileIcon />,
+        color: "var(--cpd-color-text-decorative-4)"
+    };
 }
 
-export function attachmentIcon(theme: ThemeType): MediaPreviewIcon {
-    if (theme === "light") {
-        return {
-            icon: <FileIcon />,
-            color: "#4200A6",
-        };
-    } else {
-        return {
-            icon: <FileIcon />,
-            color: "#4200A6",
-        };
-    }
-}
-
-export function pdfIcon(theme: ThemeType): MediaPreviewIcon {
-    if (theme === "light") {
-        return {
-            icon: <FileIcon />,
-            color: "#D51928",
-        };
-    } else {
-        return {
-            icon: <FileIcon />,
-            color: "#D51928",
-        };
-    }
-}
-
-export function linkIcon(theme: ThemeType): MediaPreviewIcon {
-    if (theme === "light") {
-        return {
-            icon: <LinkIcon />,
-            color: "#4200A6",
-        };
-    } else {
-        return {
-            icon: <LinkIcon />,
-            color: "#4200A6",
-        };
-    }
+export function linkIcon(): MediaPreviewIcon {
+    return {
+        icon: <LinkIcon />,
+        color: "var(--cpd-color-text-decorative-4)"
+    };
 }
