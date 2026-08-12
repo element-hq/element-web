@@ -261,6 +261,66 @@ test.describe("Spaces", () => {
         await expect(buttons.nth(2)).toHaveAttribute("aria-label", "My Space");
     });
 
+    test(
+        "should render readable notification badges in the space panel",
+        { tag: "@screenshot" },
+        async ({ app, user, bot }) => {
+            const roomId = await app.client.createRoom({
+                name: "Unread Room",
+            });
+            await app.client.createSpace({
+                name: "Unread Space",
+                initial_state: [spaceChildInitialState(user.homeServer, roomId)],
+            });
+            const spaceButton = await app.getSpacePanelButton("Unread Space");
+            await expect(spaceButton).toBeVisible();
+
+            await bot.prepareClient();
+            const botUserId = await bot.evaluate((client) => client.getSafeUserId());
+            await app.client.evaluate(
+                async (client, { botUserId, roomId }) => {
+                    await client.invite(roomId, botUserId);
+                },
+                { botUserId, roomId },
+            );
+            await bot.joinRoom(roomId);
+
+            for (let i = 0; i < 10; i++) {
+                await bot.sendMessage(roomId, `${user.displayName} unread message ${i}`);
+            }
+
+            const badge = spaceButton.locator(".mx_SpacePanel_notificationBadge");
+            await expect(badge).toHaveText("10");
+
+            await expect(spaceButton).toMatchScreenshot("space-panel-notification-badge.png", {
+                css: `
+                    /* Mask the unstable anti-aliased badge edge at the screenshot crop boundary. */
+                    .mx_SpacePanel .mx_SpaceButton {
+                        position: relative !important;
+                    }
+
+                    .mx_SpacePanel .mx_SpaceButton::before {
+                        content: "";
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        height: 3px;
+                        background: var(--cpd-color-bg-canvas-default);
+                        z-index: 1;
+                        pointer-events: none;
+                    }
+
+                    /* Avatar initials can render differently in CI; keep this snapshot focused on the badge. */
+                    .mx_SpacePanel [role="img"][data-color],
+                    .mx_SpacePanel .mx_BaseAvatar {
+                        color: transparent !important;
+                    }
+                `,
+            });
+        },
+    );
+
     test("should include rooms in space home", async ({ page, app, user }) => {
         const roomId1 = await app.client.createRoom({
             name: "Music",
