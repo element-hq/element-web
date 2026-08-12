@@ -5,7 +5,7 @@
 FROM --platform=$BUILDPLATFORM ghcr.io/pnpm/pnpm:11.10.0@sha256:9a6eb06d5f861d830fe27d85a91415e60527fa45ec45b52ee43c92a8aaf3bf8a AS pnpm
 
 # Builder
-FROM --platform=$BUILDPLATFORM node:24-bullseye@sha256:f7250178a8fcdde6e7340c7f3945e0c5cbcc10bedddc6bcf61edb39ce8f390d2 AS builder
+FROM --platform=$BUILDPLATFORM node:24-bullseye@sha256:e98b72e72be9ca56f9467559af60619f738b736c0622b7a9afa39d8fc6fed2b5 AS builder
 
 COPY --from=pnpm /opt/pnpm /opt/pnpm
 RUN ln -s /opt/pnpm/pnpm /usr/local/bin/pnpm
