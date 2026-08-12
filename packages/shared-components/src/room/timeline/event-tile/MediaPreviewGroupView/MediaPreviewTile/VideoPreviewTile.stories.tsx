@@ -13,6 +13,7 @@ import DownloadIcon from "@vector-im/compound-design-tokens/assets/web/icons/dow
 
 import { VideoPreviewTile } from "./MediaPreviewTile";
 import demoVideo from "../../../../../../static/videoBodyDemo.webm";
+import { waitForBufferedVideos } from "../../../../../../.storybook/waitForBufferedVideos";
 
 const meta = {
     title: "Room/Timeline/MediaPreviewGroupView/MediaPreviewTile/VideoPreviewTile",
@@ -33,6 +34,7 @@ const meta = {
             { label: "Download", icon: <DownloadIcon />, onClick: () => ({}) },
         ],
     },
+    play: ({ canvasElement }) => waitForBufferedVideos(canvasElement),
 } satisfies Meta<typeof VideoPreviewTile>;
 
 export default meta;
