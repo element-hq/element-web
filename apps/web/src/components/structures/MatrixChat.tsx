@@ -1310,19 +1310,16 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         const isSpace = roomToLeave?.isSpaceRoom();
         const { finished } = Modal.createDialog(QuestionDialog, {
-            title: isSpace ? _t("space|leave_dialog_action") : _t("action|leave_room"),
-            description: (
-                <span>
-                    {isSpace
-                        ? _t("leave_room_dialog|leave_space_question", {
-                              spaceName: roomToLeave?.name ?? _t("common|unnamed_space"),
-                          })
-                        : _t("leave_room_dialog|leave_room_question", {
-                              roomName: roomToLeave?.name ?? _t("common|unnamed_room"),
-                          })}
-                    {warnings}
-                </span>
-            ),
+            // Naming the room in the question is what the title is for, and it leaves the body to
+            // the warnings alone. A room with nothing to warn about then needs no body at all.
+            title: isSpace
+                ? _t("leave_room_dialog|leave_space_title", {
+                      spaceName: roomToLeave?.name ?? _t("common|unnamed_space"),
+                  })
+                : _t("leave_room_dialog|leave_room_title", {
+                      roomName: roomToLeave?.name ?? _t("common|unnamed_room"),
+                  }),
+            description: warnings.length > 0 ? <span>{warnings}</span> : undefined,
             button: _t("action|leave"),
             danger: warnings.length > 0,
         });
