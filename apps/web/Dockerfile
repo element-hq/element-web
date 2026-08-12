@@ -30,7 +30,7 @@ RUN --mount=type=bind,source=.git,target=/src/.git /src/scripts/docker-package.s
 RUN cp /src/apps/web/config.sample.json /src/apps/web/webapp/config.json
 
 # App
-FROM nginxinc/nginx-unprivileged:alpine-slim@sha256:22f839c5fb4007dc24d203a170a9e03fc185d660bfefc34ac6823a7aef085cbc
+FROM nginxinc/nginx-unprivileged:alpine-slim@sha256:22f839c5fb4007dc24d203a170a9e03fc185d660bfefc34ac6823a7aef085cbc AS element_web
 
 # Need root user to install packages & manipulate the usr directory
 USER root
@@ -55,3 +55,39 @@ USER nginx
 ENV ELEMENT_WEB_PORT=80
 
 HEALTHCHECK --start-period=5s CMD wget -q --spider http://localhost:$ELEMENT_WEB_PORT/config.json
+
+# Modules are consumed as prebuilt release artifacts rather than built from source.
+# Each module is pinned to a version and the sha256 of its release archive.
+FROM --platform=$BUILDPLATFORM alpine:3.22@sha256:14358309a308569c32bdc37e2e0e9694be33a9d99e68afb0f5ff33cc1f695dce AS modules
+
+ARG MODULE_BANNER_VERSION=v1.0.0
+ADD --checksum=sha256:8aabd9d43d40ffb499050246f7968323a08895b6f53bd48a71d4c7f0daf96634 \
+    https://github.com/element-hq/element-web/releases/download/module%2Fbanner%2F${MODULE_BANNER_VERSION}/banner-${MODULE_BANNER_VERSION}.zip \
+    /tmp/modules/banner.zip
+
+ARG MODULE_RESTRICTED_GUESTS_VERSION=v1.0.0
+ADD --checksum=sha256:d883327469ae78504a4e0aa8ebf2bbf525a9407ab10430ef42cf9338cc0821bb \
+    https://github.com/element-hq/element-web/releases/download/module%2Frestricted-guests%2F${MODULE_RESTRICTED_GUESTS_VERSION}/restricted-guests-${MODULE_RESTRICTED_GUESTS_VERSION}.zip \
+    /tmp/modules/restricted-guests.zip
+
+ARG MODULE_WIDGET_LIFECYCLE_VERSION=v1.0.0
+ADD --checksum=sha256:125e5a7a045e3cebee2c82ca30a477ebc8e31ee3bd139ae46e177612c25cc988 \
+    https://github.com/element-hq/element-web/releases/download/module%2Fwidget-lifecycle%2F${MODULE_WIDGET_LIFECYCLE_VERSION}/widget-lifecycle-${MODULE_WIDGET_LIFECYCLE_VERSION}.zip \
+    /tmp/modules/widget-lifecycle.zip
+
+ARG MODULE_WIDGET_TOGGLES_VERSION=v1.0.0
+ADD --checksum=sha256:27b0d0d9d803c41855aa94f02493ce214321f8d0c65af500d85875a3ef20efb0 \
+    https://github.com/element-hq/element-web/releases/download/module%2Fwidget-toggles%2F${MODULE_WIDGET_TOGGLES_VERSION}/widget-toggles-${MODULE_WIDGET_TOGGLES_VERSION}.zip \
+    /tmp/modules/widget-toggles.zip
+
+# Unpack the modules
+RUN apk add --no-cache unzip && \
+    for archive in /tmp/modules/*.zip; do \
+        name=$(basename "$archive" .zip); \
+        mkdir -p "/modules/$name" && unzip -q "$archive" -d "/modules/$name"; \
+    done
+
+# Target with element_web + `/modules` copied in
+FROM element_web AS element_web_modules
+
+COPY --from=modules /modules /modules

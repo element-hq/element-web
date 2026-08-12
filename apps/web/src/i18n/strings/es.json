@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Selector de emojis",
         "jump_first_invite": "Salte a la primera invitación.",
         "message_composer": "Compositor de mensajes",
         "n_unread_messages": {
@@ -776,22 +775,6 @@
     },
     "dialog_close_label": "Cerrar diálogo",
     "download_completed": "Descarga completada",
-    "emoji": {
-        "categories": "Categorías",
-        "category_activities": "Actividades",
-        "category_animals_nature": "Animales y naturaleza",
-        "category_flags": "Banderas",
-        "category_food_drink": "Comida y bebida",
-        "category_frequently_used": "Frecuente",
-        "category_objects": "Objetos",
-        "category_smileys_people": "Caritas y personas",
-        "category_symbols": "Símbolos",
-        "category_travel_places": "Viajes y lugares",
-        "quick_reactions": "Reacciones rápidas"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Cancelar búsqueda"
-    },
     "empty_room": "Sala vacía",
     "empty_room_was_name": "Sala vacía (antes era %(oldName)s)",
     "encryption": {

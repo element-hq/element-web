@@ -15,6 +15,7 @@ import {
     type WebContents,
     type ContextMenuParams,
     type DownloadItem,
+    type FileFilter,
     type MenuItemConstructorOptions,
     type IpcMainEvent,
     type Event,
@@ -29,6 +30,27 @@ import { getConfig } from "./config.js";
 const MAILTO_PREFIX = "mailto:";
 
 const PERMITTED_URL_SCHEMES: string[] = ["http:", "https:", MAILTO_PREFIX];
+
+/**
+ * Work out the filters a save dialog should offer so that a file keeps its own extension.
+ *
+ * A dialog which only offers "All Files" lets someone replace "photo.jpg" with "photo" and end up
+ * with a file the shell no longer knows how to open — the extension is simply gone. Naming the
+ * file's own type first means the dialog puts the extension back, which is what a browser already
+ * does for the same download.
+ *
+ * @param fileName - The name being suggested to the user, which may carry no extension at all.
+ * @returns Filters to pass to a save dialog, or undefined when there is no extension to preserve.
+ */
+function saveDialogFilters(fileName: string): FileFilter[] | undefined {
+    // extname() keeps the leading dot, and returns an empty string for a name which has none.
+    const extension = path.extname(fileName).slice(1);
+    if (!extension) return undefined;
+    return [
+        { name: _t("save_dialog|named_file_type", { extension: extension.toUpperCase() }), extensions: [extension] },
+        { name: _t("save_dialog|all_files"), extensions: ["*"] },
+    ];
+}
 
 function safeOpenURL(target: string): void {
     // openExternal passes the target to open/start/xdg-open,
@@ -129,6 +151,7 @@ function onLinkContextMenu(ev: Event, params: ContextMenuParams, webContents: We
                     const targetFileName = params.suggestedFilename || params.altText || "image.png";
                     const { filePath } = await dialog.showSaveDialog({
                         defaultPath: targetFileName,
+                        filters: saveDialogFilters(targetFileName),
                     });
 
                     if (!filePath) return; // user cancelled dialog
@@ -283,6 +306,11 @@ export default (webContents: WebContents): void => {
     });
 
     webContents.session.on("will-download", (event: Event, item: DownloadItem): void => {
+        // Electron only offers "All Files" unless it is told otherwise, so say what this download is
+        // before it puts the save dialog up.
+        const filters = saveDialogFilters(item.getFilename());
+        if (filters) item.setSaveDialogOptions({ filters });
+
         item.once("done", (event, state) => {
             if (state === "completed") {
                 const savePath = item.getSavePath();

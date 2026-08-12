@@ -285,6 +285,8 @@
         },
         "registration_disabled": "Registration has been disabled on this homeserver.",
         "registration_msisdn_field_required_invalid": "Enter phone number (required on this homeserver)",
+        "registration_rate_limited": "Too many attempts in a short time. Wait some time before trying again.",
+        "registration_rate_limited_with_time": "Too many attempts in a short time. Retry after %(timeout)s.",
         "registration_successful": "Registration Successful",
         "registration_username_in_use": "Someone already has that username. Try another or if it is you, sign in below.",
         "registration_username_unable_check": "Unable to check if username has been taken. Try again later.",
@@ -1707,7 +1709,6 @@
         "mentions_and_keywords": "@mentions and replies only",
         "mentions_and_keywords_description": "Get notified only with mentions, replies and keywords as set up in your <a>settings</a>",
         "mentions_keywords": "Mentions and keywords",
-        "message_didnt_send": "Message didn't send. Click for info.",
         "mute_description": "You won't get any notifications"
     },
     "notifier": {
