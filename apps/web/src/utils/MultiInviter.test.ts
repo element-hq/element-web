@@ -238,7 +238,7 @@ describe("MultiInviter", () => {
             );
         });
 
-        it("should pass on the server's reason for refusing an invite we are allowed to send", async () => {
+        it("should not blame permissions for a refusal of an invite we are allowed to send", async () => {
             vi.mocked(client.invite).mockRejectedValueOnce(
                 new MatrixError({
                     errcode: "M_FORBIDDEN",
@@ -251,9 +251,9 @@ describe("MultiInviter", () => {
 
             await inviter.invite([MXID1, MXID2]);
 
-            expect(inviter.getErrorText(MXID1)).toMatchInlineSnapshot(
-                `"The homeserver refused this invite: @user1:server is not accepting invites"`,
-            );
+            expect(inviter.getErrorText(MXID1)).toMatchInlineSnapshot(`"The homeserver refused this invite."`);
+            // The server's own wording is untranslated, so it must not reach the user.
+            expect(inviter.getErrorText(MXID1)).not.toContain("not accepting invites");
             // The refusal was about one invitee, so the rest of the batch is still worth trying.
             expect(client.invite).toHaveBeenCalledWith(ROOMID, MXID2, { shareEncryptedHistory: true });
         });

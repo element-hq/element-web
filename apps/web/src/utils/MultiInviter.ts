@@ -281,13 +281,14 @@ export default class MultiInviter {
                                     : _t("invite|error_permissions_room");
                                 // No point doing further invites.
                                 this._fatal = true;
-                            } else if (err.error) {
+                            } else {
                                 // We do have the power to invite, so the server turned this particular
                                 // invite down for a reason only it knows — the invitee may have invites
-                                // switched off, or their server may not accept ours. Pass on what it said
-                                // rather than blaming a permission the user demonstrably has, and carry on
-                                // with the rest of the batch, which may well be accepted.
-                                errorText = _t("invite|error_forbidden", { reason: err.error });
+                                // switched off, or their server may not accept ours. Its wording is
+                                // untranslated, so it stays in the log the catch block already wrote
+                                // rather than reaching the UI; all we can say is that it was refused.
+                                // Carry on with the rest of the batch, which may well be accepted.
+                                errorText = _t("invite|error_forbidden");
                             }
                             break;
                         case USER_ALREADY_INVITED:
