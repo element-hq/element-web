@@ -1722,7 +1722,6 @@
         "mentions_and_keywords": "samo @spominjanja i odgovori",
         "mentions_and_keywords_description": "Primajte obavijesti samo o spominjanjima, odgovorima i ključnim riječima kako je postavljeno u vašim <a>postavkama</a>",
         "mentions_keywords": "Spominjanja i ključne riječi",
-        "message_didnt_send": "Poruka nije poslana. Kliknite za informacije.",
         "mute_description": "Nećete primati nikakve obavijesti"
     },
     "notifier": {

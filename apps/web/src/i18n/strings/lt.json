@@ -932,7 +932,6 @@
         "mentions_and_keywords": "@paminėjimai & raktažodžiai",
         "mentions_and_keywords_description": "Gaukite pranešimus tik apie paminėjimus ir raktinius žodžius, kaip nustatyta jūsų <a>nustatymuose</a>",
         "mentions_keywords": "Paminėjimai & Raktažodžiai",
-        "message_didnt_send": "Žinutė nebuvo išsiųsta. Spustelėkite norėdami gauti informacijos.",
         "mute_description": "Negausite jokių pranešimų"
     },
     "notifier": {

@@ -1546,7 +1546,6 @@
         "mentions_and_keywords": "@menções e palavras-chave",
         "mentions_and_keywords_description": "Recebe notificações apenas com menções e palavras-chave, conforme definido nas tuas definições de <a></a>",
         "mentions_keywords": "Menções e palavras-chave",
-        "message_didnt_send": "A mensagem não foi enviada. Clica para obteres informações.",
         "mute_description": "Não receberás quaisquer notificações"
     },
     "notifier": {

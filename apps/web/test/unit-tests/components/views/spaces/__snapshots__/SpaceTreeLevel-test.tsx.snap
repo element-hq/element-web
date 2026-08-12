@@ -27,7 +27,7 @@ exports[`SpaceButton metaspace should render notificationState if one is provide
         >
           <button
             aria-label="Jump to first unread room."
-            class="mx_SpacePanel_notificationBadge _notificationBadge_kb9ny_8 _visible_kb9ny_15 _notification_kb9ny_8 _badge2Char_kb9ny_56 cpd-theme-light"
+            class="mx_SpacePanel_notificationBadge _notificationBadge_19whq_8 _visible_19whq_16 _notification_19whq_8 _badge2Char_19whq_57 cpd-theme-light"
             data-badge-type="badge_2char"
             data-notification-level="notification"
             data-testid="notification-badge"
@@ -35,7 +35,7 @@ exports[`SpaceButton metaspace should render notificationState if one is provide
             type="button"
           >
             <span
-              class="_count_kb9ny_39"
+              class="_count_19whq_40"
             >
               8
             </span>
