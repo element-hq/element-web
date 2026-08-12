@@ -1,0 +1,783 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+/* Shared root and slot-boundary baseline. */
+.root {
+    /* Group geometry. */
+    --event-tile-group-gutter: 64px;
+    --event-tile-group-line-spacing-block-start: 1px;
+    --event-tile-group-line-spacing-block-end: 3px;
+    --event-tile-group-line-height: 22px;
+
+    /* IRC geometry. */
+    --event-tile-irc-line-height: 18px;
+    --event-tile-irc-name-width: 80px;
+    --event-tile-irc-icon-width: 14px;
+    --event-tile-irc-timestamp-width: 48px;
+    --event-tile-irc-right-padding: 5px;
+
+    /* Bubble geometry. */
+    --event-tile-bubble-corner-radius: 12px;
+    --event-tile-bubble-gap: 5px;
+    --event-tile-bubble-gutter: 11px;
+    --event-tile-bubble-other-background: var(--cpd-color-gray-300, #e9edf2);
+    --event-tile-bubble-self-background: var(--cpd-color-green-300, #d8f5ed);
+
+    /* Shared preview, action-bar, bubble, and interaction values. */
+    --event-tile-preview-offset: 48px;
+    --event-tile-action-bar-size: 28px;
+    --event-tile-action-bar-margin: 3px;
+    --event-tile-action-bar-offset: 8px;
+    --event-tile-state-hover-background: var(--cpd-color-bg-subtle-secondary, #e9edf2);
+    --event-tile-state-highlight-background: var(--cpd-color-yellow-200, #fff8e3);
+    --event-tile-state-selected-background: var(--cpd-color-bg-subtle-secondary, #e9edf2);
+    --event-tile-state-marker-width: 4px;
+    --event-tile-state-marker-color: var(--cpd-color-bg-action-primary-rest, #0dbd8b);
+
+    position: relative;
+    flex-shrink: 0;
+    max-width: 100%;
+    clear: both;
+    padding-top: 18px;
+
+    &.stateContinuation {
+        padding-top: 0;
+    }
+}
+
+.line {
+    position: relative;
+    min-width: 0;
+}
+
+/* Slot wrappers are the public styling boundary. The supplied content may be
+   a component, fragment, or multiple elements and does not need to forward
+   layout props. */
+.slotActionBar,
+.slotAvatar,
+.slotBody,
+.slotContextMenu,
+.slotFooter,
+.slotNotificationBadge,
+.slotNotificationRoomLabel,
+.slotPadlock,
+.slotReceipt,
+.slotReplyChain,
+.slotSender,
+.slotThreadInfo,
+.slotTimestamp {
+    min-width: 0;
+}
+
+.slotContextMenu {
+    z-index: 1;
+}
+
+/* Shared structural containers. */
+.senderDetails {
+    display: flex;
+    align-items: flex-start;
+}
+
+.details {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--cpd-space-2x, 8px);
+}
+
+/* The shell owns the action-bar boundary. The action-bar contents own their controls.
+   Presence of the slot is the render/show signal supplied by the host. */
+.slotActionBar {
+    position: absolute;
+    z-index: 10;
+    inset-block-start: calc(
+        -1 *
+            (var(--event-tile-action-bar-size) + 2 *
+                (var(--event-tile-action-bar-margin) + var(--cpd-border-width-1, 1px)))
+    );
+    inset-inline-end: var(--event-tile-action-bar-offset);
+    user-select: none;
+}
+
+/* Group layout. */
+.root.layoutGroup {
+    &:hover .line,
+    &:focus-within .line {
+        background-color: var(--event-tile-state-hover-background);
+    }
+
+    &.stateHighlighted .line {
+        background-color: var(--event-tile-state-highlight-background);
+    }
+
+    &.stateSelected .line,
+    &.stateEditing .line {
+        background-color: var(--event-tile-state-selected-background);
+    }
+
+    &.stateSelected .line::before,
+    &.stateEditing .line::before {
+        content: "";
+        position: absolute;
+        z-index: 0;
+        inset-block: 0;
+        inset-inline-start: 0;
+        width: var(--event-tile-state-marker-width);
+        border-start-start-radius: inherit;
+        border-end-start-radius: inherit;
+        background: var(--event-tile-state-marker-color);
+        pointer-events: none;
+    }
+
+    .line {
+        padding-block: var(--event-tile-group-line-spacing-block-start) var(--event-tile-group-line-spacing-block-end);
+        padding-inline-start: var(--event-tile-group-gutter);
+        margin-inline-end: 80px;
+        min-height: 14px;
+        border-radius: 8px;
+        line-height: var(--event-tile-group-line-height);
+    }
+
+    .slotSender {
+        display: flex;
+        align-items: center;
+        max-width: calc(100% - var(--event-tile-group-gutter));
+        margin-inline-start: var(--event-tile-group-gutter);
+        min-height: 26px;
+        line-height: 20px;
+    }
+
+    .slotAvatar {
+        position: absolute;
+        z-index: 9;
+        inset-block-start: 14px;
+        inset-inline-start: var(--cpd-space-2x, 8px);
+    }
+
+    .slotTimestamp {
+        position: absolute;
+        inset-inline-start: 0;
+        width: var(--MessageTimestamp-width, 46px);
+        text-align: center;
+    }
+
+    .slotPadlock {
+        position: absolute;
+        inset-block-start: 0;
+        inset-inline-start: 44px;
+        height: var(--event-tile-group-line-height);
+        margin: 1px;
+    }
+
+    .slotThreadInfo {
+        margin-inline-start: var(--event-tile-group-gutter);
+    }
+
+    .slotReplyChain {
+        margin-inline-start: 0;
+        margin-bottom: var(--cpd-space-2x, 8px);
+    }
+
+    .slotFooter {
+        margin: var(--cpd-space-1x, 4px) 0 var(--cpd-space-1x, 4px) var(--event-tile-group-gutter);
+    }
+
+    .slotReceipt {
+        margin-inline-end: 10px;
+        float: inline-end;
+        position: relative;
+        inset-block-start: calc(-1 * (var(--event-tile-group-line-height) + 3px));
+        width: 90px;
+        height: 1px;
+        text-align: end;
+        overflow: visible;
+    }
+
+    &.stateContinuation .line {
+        clear: both;
+    }
+}
+
+/* IRC layout. */
+.root.layoutIrc {
+    display: flex;
+    align-items: flex-start;
+    padding-top: 0;
+    line-height: var(--event-tile-irc-line-height);
+
+    &:hover .line,
+    &:focus-within .line {
+        background-color: var(--event-tile-state-hover-background);
+    }
+
+    &.stateHighlighted .line {
+        background-color: var(--event-tile-state-highlight-background);
+    }
+
+    &.stateSelected .line,
+    &.stateEditing .line {
+        background-color: var(--event-tile-state-selected-background);
+    }
+
+    &.stateSelected .line::before,
+    &.stateEditing .line::before {
+        content: "";
+        position: absolute;
+        z-index: 0;
+        inset-block: 0;
+        inset-inline-start: 0;
+        width: var(--event-tile-state-marker-width);
+        background: var(--event-tile-state-marker-color);
+        pointer-events: none;
+    }
+
+    > .slotActionBar,
+    > .slotAvatar,
+    > .slotBody,
+    > .slotContextMenu,
+    > .slotFooter,
+    > .slotNotificationBadge,
+    > .slotNotificationRoomLabel,
+    > .slotPadlock,
+    > .slotReceipt,
+    > .slotReplyChain,
+    > .slotSender,
+    > .slotThreadInfo,
+    > .slotTimestamp,
+    > .line {
+        margin-inline-end: var(--event-tile-irc-right-padding);
+    }
+
+    .slotTimestamp {
+        min-width: var(--event-tile-irc-timestamp-width);
+        flex-shrink: 0;
+        text-align: end;
+    }
+
+    .slotAvatar {
+        display: flex;
+        align-items: center;
+        flex: 0 0 var(--event-tile-irc-icon-width);
+        position: relative;
+        width: var(--event-tile-irc-icon-width);
+        height: var(--event-tile-irc-line-height);
+    }
+
+    .slotSender {
+        flex-shrink: 0;
+        width: var(--event-tile-irc-name-width);
+        margin-inline-end: 0;
+    }
+
+    .slotPadlock,
+    .slotFooter,
+    .slotThreadInfo,
+    .slotReceipt {
+        flex-shrink: 0;
+    }
+
+    .slotPadlock {
+        position: absolute;
+    }
+
+    .line {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        flex-shrink: 1;
+        padding-block: 1px;
+    }
+
+    .slotReplyChain {
+        margin: 0;
+    }
+
+    .slotFooter {
+        margin-block: var(--cpd-space-1-5x, 6px);
+    }
+}
+
+/* Bubble layout. */
+.root.layoutBubble {
+    max-width: unset;
+    margin-inline: var(--EventTile_bubble-margin-inline-start, 49px) var(--EventTile_bubble-margin-inline-end, 60px);
+    padding-top: 0;
+
+    &::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        inset: -1px calc(-1 * var(--EventTile_bubble-margin-inline-end, 60px)) -1px
+            calc(-1 * var(--EventTile_bubble-margin-inline-start, 49px));
+        border-radius: 4px;
+        pointer-events: none;
+    }
+
+    /* Bubble geometry and slot placement. */
+    .line {
+        display: flex;
+        flex-direction: column;
+        gap: var(--event-tile-bubble-gap);
+        width: fit-content;
+        max-width: 70%;
+        margin-block: 0;
+        margin-inline: -9px -12px;
+        border-radius: var(--event-tile-bubble-corner-radius) var(--event-tile-bubble-corner-radius) 0 0;
+        line-height: 18px;
+        padding: calc(var(--event-tile-bubble-gutter) - 1px);
+        padding-inline-end: 60px;
+        background: var(--event-tile-bubble-other-background);
+        border-end-end-radius: var(--event-tile-bubble-corner-radius);
+    }
+
+    .slotAvatar {
+        position: absolute;
+        z-index: 9;
+        inset-block-start: 6px;
+        inset-inline-start: -36px;
+        line-height: 0;
+        border: 4px solid var(--cpd-color-bg-canvas-default, #fff);
+        border-radius: 50%;
+    }
+
+    .slotAvatar > * {
+        border-radius: 50%;
+        box-shadow: 0 0 0 3px var(--cpd-color-bg-canvas-default, #fff);
+    }
+
+    .slotSender,
+    .line {
+        width: fit-content;
+        max-width: 70%;
+        line-height: 18px;
+    }
+
+    .slotSender {
+        position: relative;
+        inset-block-start: -2px;
+        inset-inline-start: 2px;
+        font-size: 15px;
+        white-space: normal;
+    }
+
+    .slotTimestamp {
+        position: absolute;
+        z-index: 3;
+        inset-block-end: 0;
+        inset-inline-end: 0;
+        padding: 4px 8px;
+    }
+
+    > .slotReceipt {
+        position: absolute;
+        z-index: 1;
+        inset-block-end: -3px;
+        inset-inline-end: -78px;
+    }
+
+    .slotPadlock {
+        flex-shrink: 0;
+        height: calc(18px + 2px);
+    }
+
+    .slotActionBar {
+        inset-block-start: -28px;
+        inset-inline-start: calc(
+            100% - var(--event-tile-action-bar-size) - 2 * (var(--event-tile-action-bar-margin) + 1px)
+        );
+        inset-inline-end: auto;
+    }
+
+    .slotFooter {
+        display: flex;
+        align-items: center;
+        margin-block: var(--cpd-space-1-5x, 6px);
+        margin-inline: -9px -12px;
+    }
+
+    .slotThreadInfo {
+        margin-inline-start: -11px;
+        margin-inline-end: auto;
+    }
+
+    .slotReplyChain,
+    .slotThreadInfo {
+        clear: both;
+    }
+
+    /* Own-event modifiers. */
+    &.stateOwnEvent .slotSender {
+        display: none;
+    }
+
+    &.stateOwnEvent .line {
+        border-end-start-radius: var(--event-tile-bubble-corner-radius);
+        border-end-end-radius: 0;
+        background: var(--event-tile-bubble-self-background);
+        margin-inline-start: auto;
+    }
+
+    &.stateOwnEvent .slotAvatar {
+        inset-block-start: -19px;
+        inset-inline-start: auto;
+        inset-inline-end: -38px;
+    }
+
+    &.stateOwnEvent .slotActionBar {
+        inset-block-start: -28px;
+        inset-inline-start: auto;
+        inset-inline-end: 0;
+    }
+
+    &.stateOwnEvent .slotFooter {
+        justify-content: flex-end;
+    }
+
+    &.stateOwnEvent .slotThreadInfo {
+        margin-inline-start: auto;
+        margin-inline-end: -11px;
+    }
+
+    /* Interaction state. */
+    &.stateSelected .line::before {
+        content: "";
+        position: absolute;
+        z-index: 0;
+        inset-block: 0;
+        inset-inline-start: 0;
+        width: var(--event-tile-state-marker-width);
+        border-start-start-radius: inherit;
+        border-end-start-radius: inherit;
+        background: var(--event-tile-state-marker-color);
+        pointer-events: none;
+    }
+
+    &:hover::before,
+    &.stateSelected::before {
+        background: var(--event-tile-state-hover-background);
+    }
+
+    &.stateHighlighted::before {
+        background: var(--event-tile-state-highlight-background);
+    }
+
+    &:hover .slotAvatar {
+        border-color: var(--event-tile-state-hover-background);
+    }
+
+    &.stateHighlighted .slotAvatar {
+        border-color: var(--event-tile-state-highlight-background);
+    }
+
+    &:hover .slotAvatar > *,
+    &.stateSelected .slotAvatar > * {
+        box-shadow: 0 0 0 3px var(--event-tile-state-hover-background);
+    }
+
+    &.stateHighlighted .slotAvatar > * {
+        box-shadow: 0 0 0 3px var(--event-tile-state-highlight-background);
+    }
+
+    /* Section state. */
+    &.stateContinuation {
+        margin-top: 2px;
+    }
+
+    &.stateContinuation .line {
+        border-start-start-radius: 0;
+    }
+
+    &.stateContinuation.stateOwnEvent .line {
+        border-start-start-radius: var(--event-tile-bubble-corner-radius);
+        border-start-end-radius: 0;
+    }
+
+    &.stateLastInSection {
+        margin-bottom: 24px;
+    }
+
+    &.stateLastInSection .line {
+        border-end-start-radius: var(--event-tile-bubble-corner-radius);
+    }
+
+    &.stateLastInSection.stateOwnEvent .line {
+        border-end-start-radius: 0;
+        border-end-end-radius: var(--event-tile-bubble-corner-radius);
+    }
+}
+
+/* ThreadView adds a narrower group timeline around EventTile. */
+.root.shapeThread {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding-top: 0;
+
+    &.layoutGroup {
+        .senderDetails {
+            align-items: center;
+            gap: var(--cpd-space-4x, 16px);
+            padding-inline-start: var(--cpd-space-2x, 8px);
+        }
+
+        .senderDetails .slotAvatar {
+            /* ThreadView keeps the avatar in the sender-details flex row. */
+            position: relative;
+            inset: auto;
+        }
+
+        .senderDetails .slotSender {
+            margin-inline-start: 0;
+            max-width: 100%;
+            min-height: 0;
+            line-height: normal;
+        }
+
+        .line {
+            padding-block: 2px;
+            padding-inline-start: 56px;
+            margin-inline-end: 8px;
+        }
+
+        .slotTimestamp {
+            /* ThreadView aligns this with the event content, not the bottom of
+               the line's flex/content flow. */
+            inset-block-start: 2px;
+        }
+
+        .slotFooter {
+            margin-inline-start: 56px;
+            margin-inline-end: 8px;
+        }
+    }
+}
+
+/* ThreadsList layout. */
+.root.shapeThreadsList {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    margin-block: 13px;
+    padding: 8px;
+    border-radius: 8px;
+
+    &:hover {
+        background-color: var(--cpd-color-bg-subtle-primary, #f0f1f2);
+    }
+
+    &::after {
+        content: "";
+        position: absolute;
+        inset: auto -8px -13px 56px;
+        height: 1px;
+    }
+
+    &:last-child::after {
+        content: unset;
+    }
+
+    &:first-child {
+        margin-top: 0;
+    }
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    .details {
+        width: calc(100% - var(--event-tile-preview-offset));
+        margin-inline-start: var(--event-tile-preview-offset);
+        overflow: hidden;
+    }
+
+    .slotSender {
+        /* In preview tiles the sender is a metadata-row profile, not the
+           group-layout sender above the event line. */
+        display: inline-flex;
+        align-items: center;
+        flex: 1;
+        max-width: 100%;
+        min-height: 0;
+        margin-inline-start: 0;
+        line-height: normal;
+    }
+
+    .slotAvatar {
+        position: absolute;
+        inset: 8px auto auto 8px;
+    }
+
+    .line {
+        width: 100%;
+        box-sizing: border-box;
+        padding-inline-start: var(--event-tile-preview-offset);
+        padding-bottom: 0;
+    }
+
+    .slotThreadInfo {
+        /* The preview is inside the padded line in this mode; it does not use
+           the group-layout thread-summary gutter. */
+        margin-inline-start: 0;
+    }
+
+    .slotTimestamp {
+        display: block;
+        font-size: 12px;
+        overflow: hidden;
+        margin-inline-start: auto;
+        align-self: flex-start;
+        position: initial;
+        inset: auto;
+        width: unset;
+        text-align: initial;
+        text-overflow: ellipsis;
+    }
+
+    &.layoutGroup:hover .line {
+        background-color: inherit;
+        box-shadow: none;
+    }
+}
+
+/* Notification layout. */
+.root.shapeNotification {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    margin-block: 13px;
+    padding: 8px;
+    border-radius: 8px;
+
+    &:hover {
+        background-color: var(--cpd-color-bg-subtle-primary, #f0f1f2);
+    }
+
+    &::after {
+        content: "";
+        position: absolute;
+        inset: auto -8px -13px 56px;
+        height: 1px;
+    }
+
+    &:last-child::after {
+        content: unset;
+    }
+
+    &:first-child {
+        margin-top: 0;
+    }
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    .details {
+        width: calc(100% - var(--event-tile-preview-offset));
+        margin-inline-start: var(--event-tile-preview-offset);
+        overflow: hidden;
+    }
+
+    .slotSender {
+        /* In preview tiles the sender is a metadata-row profile, not the
+           group-layout sender above the event line. */
+        display: inline-flex;
+        align-items: center;
+        flex: 1;
+        max-width: 100%;
+        min-height: 0;
+        margin-inline-start: 0;
+        line-height: normal;
+    }
+
+    .slotAvatar {
+        position: absolute;
+        inset: 8px auto auto 8px;
+    }
+
+    .line {
+        width: 100%;
+        box-sizing: border-box;
+        padding-inline-start: var(--event-tile-preview-offset);
+        padding-bottom: 0;
+    }
+
+    .slotThreadInfo {
+        /* The preview is inside the padded line in these modes; it does not use
+           the group-layout thread-summary gutter. */
+        margin-inline-start: 0;
+    }
+
+    .slotTimestamp {
+        display: block;
+        font-size: 12px;
+        overflow: hidden;
+        margin-inline-start: auto;
+        align-self: flex-start;
+        position: initial;
+        inset: auto;
+        width: unset;
+        text-align: initial;
+        text-overflow: ellipsis;
+    }
+
+    &.layoutGroup:hover .line {
+        background-color: inherit;
+        box-shadow: none;
+    }
+}
+
+/* File panel layout. The application File branch does not apply a timeline
+   layout class, so explicitly reset the group-layout defaults owned by this
+   shared shell. */
+.root.shapeFile {
+    padding-top: 0;
+    overflow-wrap: anywhere;
+
+    .senderDetailsLink {
+        display: block;
+        margin-bottom: var(--cpd-space-1x, 4px);
+        text-decoration: none;
+    }
+
+    .senderDetails {
+        display: flex;
+        align-items: center;
+        gap: var(--cpd-space-2x, 8px);
+        margin-top: -2px;
+    }
+
+    .senderDetails .slotAvatar {
+        position: relative;
+        inset: auto;
+        flex: 0 0 auto;
+    }
+
+    .senderDetails .slotSender {
+        display: inline-flex;
+        align-items: center;
+        max-width: 100%;
+        min-height: 0;
+        margin-inline-start: 0;
+        line-height: normal;
+    }
+
+    .senderDetails .slotTimestamp {
+        position: initial;
+        inset: auto;
+        width: unset;
+        margin-inline-start: auto;
+        text-align: initial;
+    }
+
+    .line {
+        margin-inline-end: 0;
+        padding: 0;
+        border-radius: 0;
+    }
+}

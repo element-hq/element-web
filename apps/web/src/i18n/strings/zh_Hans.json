@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Emoji 选择器",
         "jump_first_invite": "跳转到首个邀请",
         "message_composer": "消息编辑器",
         "n_unread_messages": {
@@ -286,6 +285,8 @@
         },
         "registration_disabled": "此主服务器已禁用注册。",
         "registration_msisdn_field_required_invalid": "输入电话号码（在此主服务器为必需）",
+        "registration_rate_limited": "短时间内尝试次数过多。请稍后再试。",
+        "registration_rate_limited_with_time": "短时间内尝试次数过多。请于 %(timeout)s 秒后重试。",
         "registration_successful": "注册成功",
         "registration_username_in_use": "该用户名已被使用。请尝试其它用户名，如果是你本人，请在下方登录。",
         "registration_username_unable_check": "无法检查用户名是否被占用。稍后再试。",
@@ -920,22 +921,6 @@
     },
     "dialog_close_label": "关闭对话框",
     "download_completed": "下载完成",
-    "emoji": {
-        "categories": "类别",
-        "category_activities": "节假日",
-        "category_animals_nature": "动物与自然",
-        "category_flags": "旗帜",
-        "category_food_drink": "饮食",
-        "category_frequently_used": "经常使用",
-        "category_objects": "日常物品",
-        "category_smileys_people": "人与表情",
-        "category_symbols": "符号",
-        "category_travel_places": "文旅景点",
-        "quick_reactions": "快速反应"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "取消搜索"
-    },
     "empty_room": "空房间",
     "empty_room_was_name": "空房间（曾是 %(oldName)s）",
     "encryption": {
@@ -1723,7 +1708,6 @@
         "mentions_and_keywords": "仅限提及（@）与回复",
         "mentions_and_keywords_description": "仅为在<a>设置</a>中针对提及与关键词的配置获取通知",
         "mentions_keywords": "提及与关键词",
-        "message_didnt_send": "消息未发送。点击以获取信息。",
         "mute_description": "你不会收到任何通知"
     },
     "notifier": {

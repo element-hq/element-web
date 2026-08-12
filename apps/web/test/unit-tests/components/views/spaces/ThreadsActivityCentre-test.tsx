@@ -124,7 +124,7 @@ describe("ThreadsActivityCentre", () => {
         expect(tacRows.length).toEqual(1);
 
         getByText(tacRows[0], "A notification");
-        expect(tacRows[0].getElementsByClassName("mx_NotificationBadge_level_notification").length).toEqual(1);
+        expect(tacRows[0].querySelector('[data-notification-level="notification"]')).toBeInTheDocument();
     });
 
     it("should render a room with a highlight notification in the TAC", async () => {
@@ -136,7 +136,7 @@ describe("ThreadsActivityCentre", () => {
         expect(tacRows.length).toEqual(1);
 
         getByText(tacRows[0], "This is a real highlight");
-        expect(tacRows[0].getElementsByClassName("mx_NotificationBadge_level_highlight").length).toEqual(1);
+        expect(tacRows[0].querySelector('[data-notification-level="highlight"]')).toBeInTheDocument();
     });
 
     it("renders notifications matching the snapshot", async () => {
