@@ -192,7 +192,9 @@ export function Video({
 
     if (!valid || src !== video) return null;
 
-    const videoElem = <video src={video} controls />;
+    // Only fetch the metadata up front, matching the video body: a preview should not pull down the
+    // whole file before the user has asked to play it.
+    const videoElem = <video src={video} controls preload="metadata" />;
 
     return (
         <div className={classNames(classes)}>
