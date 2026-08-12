@@ -17,6 +17,9 @@ import {
     type MediaPreviewGroupSnapshot,
 } from "./MediaPreviewGroupView";
 import { MockViewModel } from "../../../../core/viewmodel/MockViewModel";
+import demoImage from "../../../../../static/wideImage.png";
+import demoVideo from "../../../../../static/videoBodyDemo.webm";
+import demoAudio from "../../../../../static/audioDemo.ogg";
 
 const buttons = [
     { label: "Expand", icon: <ExpandIcon />, onClick: () => ({}) },
@@ -36,7 +39,7 @@ const textEntry: MediaPreviewGroupEntry = {
 const imageEntry: MediaPreviewGroupEntry = {
     id: "screenshot.png",
     style: "image",
-    image: "https://picsum.photos/seed/element/480/270",
+    image: demoImage,
     imageSize: "banner",
     icon: <FileIcon />,
     color: "#4200A6",
@@ -48,7 +51,7 @@ const imageEntry: MediaPreviewGroupEntry = {
 const videoEntry: MediaPreviewGroupEntry = {
     id: "holiday-clip.mp4",
     style: "video",
-    video: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+    video: demoVideo,
     videoSize: "banner",
     icon: <FileIcon />,
     color: "#4200A6",
@@ -60,7 +63,7 @@ const videoEntry: MediaPreviewGroupEntry = {
 const audioEntry: MediaPreviewGroupEntry = {
     id: "voice-message.mp3",
     style: "audio",
-    audio: "https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3",
+    audio: demoAudio,
     icon: <FileIcon />,
     color: "#4200A6",
     header: "voice-message.mp3",

@@ -42,10 +42,11 @@ type MBodyComponent = React.ComponentType<IBodyProps>;
 type FileBodyProps = Pick<IBodyProps, "mxEvent" | "mediaEventHelper" | "forExport" | "showFileInfo">;
 
 export function FileBodyFactory(props: FileBodyProps): JSX.Element {
-    // Image/video/audio bodies embed this as a download-only fallback (`showFileInfo: false`) in the
-    // panels which don't render the media itself, e.g. the files and notification panels. Those, and
-    // exports, keep the classic file body; only the standalone m.file body uses the preview tile.
-    if (props.forExport || props.showFileInfo === false) {
+    // Only the standalone m.file body uses the preview tile. Image/video/audio bodies embed this as a
+    // fallback for media they cannot render themselves — sometimes download-only (`showFileInfo: false`)
+    // in the panels which don't render the media, e.g. the files and notification panels — and those,
+    // like exports, keep the classic file body.
+    if (props.forExport || props.showFileInfo === false || props.mxEvent.getContent().msgtype !== MsgType.File) {
         return <LegacyFileBody {...props} />;
     }
 
