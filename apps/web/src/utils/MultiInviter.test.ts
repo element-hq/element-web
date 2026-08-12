@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeEach, type Mocked } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterEach, type Mocked } from "vitest";
 import { EventType, type MatrixClient, MatrixError, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import * as TestUtilsMatrix from "test-utils";
@@ -119,6 +119,83 @@ describe("MultiInviter", () => {
             invitePromise.resolve({});
             await resultPromise;
             expect(mockModalHandle.close).toHaveBeenCalled();
+        });
+
+        describe("when the server rate limits us", () => {
+            const rateLimited = (retryAfterMs?: number) =>
+                new MatrixError({
+                    errcode: "M_LIMIT_EXCEEDED",
+                    error: "Too Many Requests",
+                    retry_after_ms: retryAfterMs,
+                });
+
+            beforeEach(() => {
+                mockPromptBeforeInviteUnknownUsers(false);
+                vi.useFakeTimers();
+            });
+
+            afterEach(() => {
+                vi.useRealTimers();
+            });
+
+            it("should wait as long as the server asks before retrying", async () => {
+                client.invite.mockRejectedValueOnce(rateLimited(2000)).mockResolvedValue({});
+
+                const resultPromise = inviter.invite([MXID1]);
+
+                await vi.advanceTimersByTimeAsync(1999);
+                expect(client.invite).toHaveBeenCalledTimes(1);
+
+                await vi.advanceTimersByTimeAsync(1);
+                await resultPromise;
+
+                expect(client.invite).toHaveBeenCalledTimes(2);
+                expect(inviter.getCompletionState(MXID1)).toBe("invited");
+            });
+
+            it("should give up instead of retrying forever", async () => {
+                client.invite.mockRejectedValue(rateLimited(1000));
+
+                const resultPromise = inviter.invite([MXID1]);
+                await vi.advanceTimersByTimeAsync(10 * 60 * 1000);
+                await resultPromise;
+
+                // the initial attempt plus a bounded number of retries, not an unbounded loop
+                expect(client.invite).toHaveBeenCalledTimes(4);
+                expect(inviter.getCompletionState(MXID1)).toBe("error");
+                expect(inviter.getErrorText(MXID1)).toMatchInlineSnapshot(
+                    `"Too many invites were sent. Please try again later."`,
+                );
+            });
+
+            it("should fall back to a fixed delay when the server does not say how long to wait", async () => {
+                client.invite.mockRejectedValueOnce(rateLimited()).mockResolvedValue({});
+
+                const resultPromise = inviter.invite([MXID1]);
+
+                await vi.advanceTimersByTimeAsync(4999);
+                expect(client.invite).toHaveBeenCalledTimes(1);
+
+                await vi.advanceTimersByTimeAsync(1);
+                await resultPromise;
+
+                expect(client.invite).toHaveBeenCalledTimes(2);
+            });
+
+            it("should not wait longer than the maximum delay however long the server asks for", async () => {
+                // The report which prompted this had the server asking for over four minutes.
+                client.invite.mockRejectedValueOnce(rateLimited(255839)).mockResolvedValue({});
+
+                const resultPromise = inviter.invite([MXID1]);
+
+                await vi.advanceTimersByTimeAsync(29999);
+                expect(client.invite).toHaveBeenCalledTimes(1);
+
+                await vi.advanceTimersByTimeAsync(1);
+                await resultPromise;
+
+                expect(client.invite).toHaveBeenCalledTimes(2);
+            });
         });
 
         describe("with promptBeforeInviteUnknownUsers = false", () => {

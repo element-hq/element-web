@@ -19,7 +19,7 @@ type RoomRef = { name: string; roomId: string };
  * Set up for pinned message tests.
  */
 export const test = base.extend<{
-    room1Name?: string;
+    room1Name: string;
     room1: { name: string; roomId: string };
     util: Helpers;
 }>({
@@ -28,7 +28,7 @@ export const test = base.extend<{
 
     room1Name: "Room 1",
     room1: async ({ room1Name: name, app, user, bot }, use) => {
-        const roomId = await app.client.createRoom({ name, invite: [bot.credentials.userId] });
+        const roomId = await app.client.createRoom({ name, invite: [bot.credentials!.userId] });
         await bot.awaitRoomMembership(roomId);
         await use({ name, roomId });
     },
