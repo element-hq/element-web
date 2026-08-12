@@ -7,4 +7,12 @@
 
     margin-top: var(--cpd-space-2x);
     margin-bottom: var(--cpd-space-2x);
+
+    .toggleButton[data-kind="tertiary"] {
+        margin-left: auto;
+        margin-right: auto;
+        text-decoration: none;
+        color: var(--cpd-color-icon-accent-primary);
+        font-weight: var(--cpd-font-weight-regular);
+    }
 }

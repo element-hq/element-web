@@ -97,3 +97,17 @@ export const SingleVideo: Story = {
 export const SingleAudio: Story = {
     args: withEntries([audioEntry]),
 };
+
+export const Collapsed: Story = {
+    args: {
+        ...withEntries([textEntry, imageEntry]),
+        collapse: { collapsed: true, hiddenCount: 3, onToggle: () => ({}) },
+    },
+};
+
+export const Expanded: Story = {
+    args: {
+        ...withEntries([textEntry, imageEntry, videoEntry, audioEntry]),
+        collapse: { collapsed: false, hiddenCount: 0, onToggle: () => ({}) },
+    },
+};
