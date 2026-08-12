@@ -222,8 +222,8 @@ catalogs:
       specifier: 10.2.1
       version: 10.2.1
     '@vector-im/compound-web':
-      specifier: 10.0.0
-      version: 10.0.0
+      specifier: 10.0.1
+      version: 10.0.1
     '@vitejs/plugin-react':
       specifier: 6.0.5
       version: 6.0.5
@@ -558,7 +558,7 @@ importers:
         version: 10.2.1(@types/react@19.2.18)(react@19.2.8)
       '@vector-im/compound-web':
         specifier: 'catalog:'
-        version: 10.0.0(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.3.0)(@types/react-dom@19.2.3)(@types/react@19.2.18)(@vector-im/compound-design-tokens@10.2.1)(react-dom@19.2.8)(react@19.2.8)
+        version: 10.0.1(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.3.0)(@types/react-dom@19.2.3)(@types/react@19.2.18)(@vector-im/compound-design-tokens@10.2.1)(react-dom@19.2.8)(react@19.2.8)
       '@vector-im/matrix-wysiwyg':
         specifier: 2.40.0
         version: 2.40.0(patch_hash=7bdf6150f2905bc2f055a6bcaa7b9d78fa7ffde82e800bcc454ac7b0096bd65e)(react@19.2.8)
@@ -1505,7 +1505,7 @@ importers:
         version: typescript@7.0.2
       '@vector-im/compound-web':
         specifier: 'catalog:'
-        version: 10.0.0(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.3.0)(@types/react-dom@19.2.3)(@types/react@19.2.18)(@vector-im/compound-design-tokens@10.2.1)(react-dom@19.2.8)(react@19.2.8)
+        version: 10.0.1(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.3.0)(@types/react-dom@19.2.3)(@types/react@19.2.18)(@vector-im/compound-design-tokens@10.2.1)(react-dom@19.2.8)(react@19.2.8)
       '@vitejs/plugin-react':
         specifier: 'catalog:'
         version: 6.0.5(vite@8.2.0)
@@ -6585,8 +6585,8 @@ packages:
       react:
         optional: true
 
-  '@vector-im/compound-web@10.0.0':
-    resolution: {integrity: sha512-Gdxi+MjOTds1QwXw1bFy6NQnTgynNeSCmmOS7Q9c7pogaZQlpEYaEu6mPXww6T6TwBRgK7MNDXvF3k5C8h653Q==}
+  '@vector-im/compound-web@10.0.1':
+    resolution: {integrity: sha512-CT3aGMalPSf53o3JUbBF7EA10Rfp+auftIuBwOUSna+hfZ/zPxGLTFcuCuOJ7L8hrzijM+V4I8L0PUkfyOczpg==}
     peerDependencies:
       '@fontsource/inconsolata': ^5
       '@fontsource/inter': ^5
@@ -19145,7 +19145,7 @@ snapshots:
       '@types/react': 19.2.18
       react: 19.2.8
 
-  '@vector-im/compound-web@10.0.0(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.3.0)(@types/react-dom@19.2.3)(@types/react@19.2.18)(@vector-im/compound-design-tokens@10.2.1)(react-dom@19.2.8)(react@19.2.8)':
+  '@vector-im/compound-web@10.0.1(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.3.0)(@types/react-dom@19.2.3)(@types/react@19.2.18)(@vector-im/compound-design-tokens@10.2.1)(react-dom@19.2.8)(react@19.2.8)':
     dependencies:
       '@floating-ui/react': 0.27.17(react-dom@19.2.8)(react@19.2.8)
       '@floating-ui/react-dom': 2.1.9(react-dom@19.2.8)(react@19.2.8)

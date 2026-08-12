@@ -345,13 +345,15 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
                 role="option"
                 tabindex="0"
               >
-                <span
-                  class="SetStatusView-module_dropdownEmoji"
-                >
-                  💬
-                </span>
                 <span>
-                  In a meeting
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    💬
+                  </span>
+                  <span>
+                    In a meeting
+                  </span>
                 </span>
                  
               </li>
@@ -360,13 +362,15 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
                 role="option"
                 tabindex="0"
               >
-                <span
-                  class="SetStatusView-module_dropdownEmoji"
-                >
-                  💡
-                </span>
                 <span>
-                  Focus Time
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    💡
+                  </span>
+                  <span>
+                    Focus Time
+                  </span>
                 </span>
                  
               </li>
@@ -375,13 +379,15 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
                 role="option"
                 tabindex="0"
               >
-                <span
-                  class="SetStatusView-module_dropdownEmoji"
-                >
-                  🚙
-                </span>
                 <span>
-                  On the road
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    🚙
+                  </span>
+                  <span>
+                    On the road
+                  </span>
                 </span>
                  
               </li>
@@ -390,13 +396,15 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
                 role="option"
                 tabindex="0"
               >
-                <span
-                  class="SetStatusView-module_dropdownEmoji"
-                >
-                  ☕️
-                </span>
                 <span>
-                  Be right back
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    ☕️
+                  </span>
+                  <span>
+                    Be right back
+                  </span>
                 </span>
                  
               </li>
@@ -405,13 +413,15 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
                 role="option"
                 tabindex="0"
               >
-                <span
-                  class="SetStatusView-module_dropdownEmoji"
-                >
-                  🌴
-                </span>
                 <span>
-                  Away
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    🌴
+                  </span>
+                  <span>
+                    Away
+                  </span>
                 </span>
                  
               </li>
@@ -420,13 +430,15 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
                 role="option"
                 tabindex="0"
               >
-                <span
-                  class="SetStatusView-module_dropdownEmoji"
-                >
-                  ✍️
-                </span>
                 <span>
-                  Custom…
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    ✍️
+                  </span>
+                  <span>
+                    Custom…
+                  </span>
                 </span>
                  
               </li>
@@ -821,13 +833,15 @@ exports[`UserMenu > renders an open menu 1`] = `
                 role="option"
                 tabindex="0"
               >
-                <span
-                  class="SetStatusView-module_dropdownEmoji"
-                >
-                  💬
-                </span>
                 <span>
-                  In a meeting
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    💬
+                  </span>
+                  <span>
+                    In a meeting
+                  </span>
                 </span>
                  
               </li>
@@ -836,13 +850,15 @@ exports[`UserMenu > renders an open menu 1`] = `
                 role="option"
                 tabindex="0"
               >
-                <span
-                  class="SetStatusView-module_dropdownEmoji"
-                >
-                  💡
-                </span>
                 <span>
-                  Focus Time
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    💡
+                  </span>
+                  <span>
+                    Focus Time
+                  </span>
                 </span>
                  
               </li>
@@ -851,13 +867,15 @@ exports[`UserMenu > renders an open menu 1`] = `
                 role="option"
                 tabindex="0"
               >
-                <span
-                  class="SetStatusView-module_dropdownEmoji"
-                >
-                  🚙
-                </span>
                 <span>
-                  On the road
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    🚙
+                  </span>
+                  <span>
+                    On the road
+                  </span>
                 </span>
                  
               </li>
@@ -866,13 +884,15 @@ exports[`UserMenu > renders an open menu 1`] = `
                 role="option"
                 tabindex="0"
               >
-                <span
-                  class="SetStatusView-module_dropdownEmoji"
-                >
-                  ☕️
-                </span>
                 <span>
-                  Be right back
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    ☕️
+                  </span>
+                  <span>
+                    Be right back
+                  </span>
                 </span>
                  
               </li>
@@ -881,13 +901,15 @@ exports[`UserMenu > renders an open menu 1`] = `
                 role="option"
                 tabindex="0"
               >
-                <span
-                  class="SetStatusView-module_dropdownEmoji"
-                >
-                  🌴
-                </span>
                 <span>
-                  Away
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    🌴
+                  </span>
+                  <span>
+                    Away
+                  </span>
                 </span>
                  
               </li>
@@ -896,13 +918,15 @@ exports[`UserMenu > renders an open menu 1`] = `
                 role="option"
                 tabindex="0"
               >
-                <span
-                  class="SetStatusView-module_dropdownEmoji"
-                >
-                  ✍️
-                </span>
                 <span>
-                  Custom…
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    ✍️
+                  </span>
+                  <span>
+                    Custom…
+                  </span>
                 </span>
                  
               </li>
