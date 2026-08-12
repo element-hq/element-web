@@ -11,18 +11,12 @@ import { initSentry } from "../../src/sentry";
 
 jest.mock("@sentry/browser", () => ({
     init: jest.fn(),
-    inboundFiltersIntegration: jest
-        .fn()
-        .mockReturnValue({ name: "InboundFilters" }),
-    functionToStringIntegration: jest
-        .fn()
-        .mockReturnValue({ name: "FunctionToString" }),
+    inboundFiltersIntegration: jest.fn().mockReturnValue({ name: "InboundFilters" }),
+    functionToStringIntegration: jest.fn().mockReturnValue({ name: "FunctionToString" }),
     breadcrumbsIntegration: jest.fn().mockReturnValue({ name: "Breadcrumbs" }),
     httpContextIntegration: jest.fn().mockReturnValue({ name: "HttpContext" }),
     dedupeIntegration: jest.fn().mockReturnValue({ name: "Dedupe" }),
-    rewriteFramesIntegration: jest
-        .fn()
-        .mockReturnValue({ name: "RewriteFrames" }),
+    rewriteFramesIntegration: jest.fn().mockReturnValue({ name: "RewriteFrames" }),
 }));
 
 describe("initSentry", () => {
@@ -47,9 +41,7 @@ describe("initSentry", () => {
         });
 
         const { integrations } = jest.mocked(Sentry.init).mock.calls[0][0]!;
-        expect(integrations).toEqual(
-            expect.arrayContaining([{ name: "RewriteFrames" }]),
-        );
+        expect(integrations).toEqual(expect.arrayContaining([{ name: "RewriteFrames" }]));
     });
 });
 
@@ -74,8 +66,7 @@ describe("rewriteFramesIntegration output", () => {
                         stacktrace: {
                             frames: [
                                 {
-                                    filename:
-                                        "vector://vector/webapp/bundles/abc123/bundle.js",
+                                    filename: "vector://vector/webapp/bundles/abc123/bundle.js",
                                 },
                             ],
                         },
@@ -84,13 +75,7 @@ describe("rewriteFramesIntegration output", () => {
             },
         };
 
-        const processed = integration.processEvent!(
-            event,
-            {},
-            {} as any,
-        ) as any;
-        expect(
-            processed.exception.values[0].stacktrace.frames[0].filename,
-        ).toBe("app:///bundles/abc123/bundle.js");
+        const processed = integration.processEvent!(event, {}, {} as any) as any;
+        expect(processed.exception.values[0].stacktrace.frames[0].filename).toBe("app:///bundles/abc123/bundle.js");
     });
 });
