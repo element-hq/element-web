@@ -9,6 +9,7 @@ import React, { type JSX, useContext, useEffect, useRef } from "react";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { MsgType } from "matrix-js-sdk/src/matrix";
 import {
+    _t,
     EventContentBodyView,
     TextualBodyView,
     type TextualBodyContentElement,
@@ -17,8 +18,8 @@ import {
     MediaPreviewGroupPreview,
     useViewModel,
     linkIcon,
-    MediaPreviewGroupEntry,
-    MediaPreviewGroupEntryContent,
+    type MediaPreviewGroupEntry,
+    type MediaPreviewGroupEntryContent,
 } from "@element-hq/web-shared-components";
 
 import { type IBodyProps } from "./IBodyProps";
@@ -157,7 +158,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
                     Modal.createDialog(
                         ImageView,
                         {
-                            src: preview.image?.imageFull!, // full-res URL
+                            src: preview.image!.imageFull, // full-res URL
                             name: `Thumbnail of ${preview.title}`,
                             width: preview.image?.width,
                             height: preview.image?.height,
@@ -172,11 +173,13 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
         }
 
         return {
+            id: preview.link,
             header: preview.title,
             headerUrl: preview.link,
             body: preview.description!,
             buttons: [
                 {
+                    label: _t("timeline|url_preview|open_link"),
                     icon: <PopOutIcon />,
                     onClick: async () => {
                         window.open(preview.link, "_blank", "noreferrer");

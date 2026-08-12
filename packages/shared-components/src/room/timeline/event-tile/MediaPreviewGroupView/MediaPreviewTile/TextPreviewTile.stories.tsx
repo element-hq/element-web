@@ -18,6 +18,7 @@ const meta = {
     component: TextPreviewTile,
     tags: ["autodocs"],
     args: {
+        id: "annual-report.pdf",
         style: "text",
         icon: <FileIcon />,
         iconOnClick: () => {},
@@ -25,8 +26,8 @@ const meta = {
         header: "annual-report.pdf",
         body: "2.3 MB",
         buttons: [
-            { icon: <ExpandIcon />, onClick: () => ({}) },
-            { icon: <DownloadIcon />, onClick: () => ({}) },
+            { label: "Expand", icon: <ExpandIcon />, onClick: () => ({}) },
+            { label: "Download", icon: <DownloadIcon />, onClick: () => ({}) },
         ],
     },
 } satisfies Meta<typeof TextPreviewTile>;
@@ -51,6 +52,6 @@ export const NoButtons: Story = {
 
 export const ClickableIcon: Story = {
     args: {
-        iconOnClick: () => window.alert("Icon clicked"),
+        iconOnClick: () => {},
     },
 };

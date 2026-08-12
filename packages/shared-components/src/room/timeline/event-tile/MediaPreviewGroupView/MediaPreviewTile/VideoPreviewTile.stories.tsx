@@ -18,6 +18,7 @@ const meta = {
     component: VideoPreviewTile,
     tags: ["autodocs"],
     args: {
+        id: "holiday-clip.mp4",
         style: "video",
         video: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
         videoSize: "banner",
@@ -27,8 +28,8 @@ const meta = {
         header: "holiday-clip.mp4",
         body: "12.4 MB",
         buttons: [
-            { icon: <ExpandIcon />, onClick: () => ({}) },
-            { icon: <DownloadIcon />, onClick: () => ({}) },
+            { label: "Expand", icon: <ExpandIcon />, onClick: () => ({}) },
+            { label: "Download", icon: <DownloadIcon />, onClick: () => ({}) },
         ],
     },
 } satisfies Meta<typeof VideoPreviewTile>;
@@ -49,7 +50,6 @@ export const ClickableUncollapsedVideo: Story = {
     args: {
         videoSize: "full",
         videoOnClick: () => {
-            window.alert("Video clicked");
             return {};
         },
     },
@@ -63,10 +63,7 @@ export const WithHeaderUrl: Story = {
 
 export const ClickableVideo: Story = {
     args: {
-        videoOnClick: () => {
-            window.alert("Video clicked");
-            return {};
-        },
+        videoOnClick: () => {},
     },
 };
 
