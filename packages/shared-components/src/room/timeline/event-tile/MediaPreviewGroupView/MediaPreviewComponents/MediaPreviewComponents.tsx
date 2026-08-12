@@ -1,7 +1,14 @@
-import React, { JSX, useEffect, useState } from "react";
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE in the repository root for full details.
+*/
+
+import React, { type JSX, useEffect, useState } from "react";
 import styles from "./MediaPreviewComponents.module.css";
 import classNames from "classnames";
-import { ImageSize, MediaPreviewEntryButton } from "../MediaPreviewGroupView";
+import { type ImageSize, type MediaPreviewEntryButton } from "../MediaPreviewGroupView";
 
 export function Header({ header, headerUrl }: { header: string; headerUrl?: string }): JSX.Element {
     if (headerUrl === undefined) return <div className={classNames(styles.textHeader, styles.header)}>{header}</div>;
@@ -28,13 +35,23 @@ export function TextContent(props: { header: string; headerUrl?: string; body: s
     );
 }
 
-export function Icon({ icon, iconOnClick, color }: { icon: JSX.Element; iconOnClick?: () => void; color: string }) {
+export function Icon({
+    icon,
+    iconOnClick,
+    color,
+}: {
+    icon: JSX.Element;
+    iconOnClick?: () => void;
+    color: string;
+}): JSX.Element {
     icon = React.cloneElement(icon, { style: { color } });
 
     if (iconOnClick) {
         return (
             <div className={classNames(styles.icon, styles.iconClickable)}>
-                <button onClick={iconOnClick}>{icon}</button>
+                <button onClick={iconOnClick} type="button">
+                    {icon}
+                </button>
             </div>
         );
     } else {
@@ -45,8 +62,8 @@ export function Icon({ icon, iconOnClick, color }: { icon: JSX.Element; iconOnCl
 export function Buttons({ buttons }: { buttons: Array<MediaPreviewEntryButton> }): JSX.Element {
     return (
         <div className={styles.buttonGroup}>
-            {buttons.map(({ icon, onClick }) => (
-                <button className={styles.button} onClick={onClick}>
+            {buttons.map(({ icon, onClick, label }) => (
+                <button key={label} aria-label={label} type="button" className={styles.button} onClick={onClick}>
                     {icon}
                 </button>
             ))}
@@ -64,7 +81,7 @@ interface ValidityState {
 }
 
 function useIsValid(check: (src: string) => Promise<boolean>, src: string): ValidityState {
-    let [state, setState]: [ValidityState, React.Dispatch<React.SetStateAction<ValidityState>>] = useState({
+    const [state, setState]: [ValidityState, React.Dispatch<React.SetStateAction<ValidityState>>] = useState({
         valid: false,
         src,
     } as ValidityState);
@@ -78,7 +95,7 @@ function useIsValid(check: (src: string) => Promise<boolean>, src: string): Vali
         return () => {
             cancelled = true;
         };
-    }, [src]);
+    }, [src, check]);
 
     return state;
 }
@@ -92,9 +109,9 @@ export function Image({
     imageOnClick?: () => void;
     imageSize: ImageSize;
 }): JSX.Element | null {
-    let classes = [styles.image, imageSize === "full" ? styles.fullImage : styles.bannerImage];
+    const classes = [styles.image, imageSize === "full" ? styles.fullImage : styles.bannerImage];
 
-    let { valid, src } = useIsValid(
+    const { valid, src } = useIsValid(
         (src) =>
             new Promise((res) => {
                 const img = new window.Image();
@@ -110,14 +127,15 @@ export function Image({
 
     if (!valid || src !== image) return null;
 
+    const imageElem = <img src={image} alt="" />;
     return (
         <div className={classNames(classes)}>
             {imageOnClick ? (
-                <button onClick={imageOnClick}>
-                    <img src={image} />
+                <button onClick={imageOnClick} type="button">
+                    {imageElem}
                 </button>
             ) : (
-                <img src={image} />
+                imageElem
             )}
         </div>
     );
@@ -132,9 +150,9 @@ export function Video({
     videoOnClick?: () => void;
     videoSize: ImageSize;
 }): JSX.Element | null {
-    let classes = [styles.video, videoSize === "full" ? styles.fullVideo : styles.bannenrVideo];
+    const classes = [styles.video, videoSize === "full" ? styles.fullVideo : styles.bannenrVideo];
 
-    let { valid, src } = useIsValid(
+    const { valid, src } = useIsValid(
         (src) =>
             new Promise((res) => {
                 const vid = document.createElement("video");
@@ -151,21 +169,23 @@ export function Video({
 
     if (!valid || src !== video) return null;
 
+    const videoElem = <video src={video} controls />;
+
     return (
         <div className={classNames(classes)}>
             {videoOnClick ? (
-                <button onClick={videoOnClick}>
-                    <video src={video} controls />
+                <button onClick={videoOnClick} type="button">
+                    {videoElem}
                 </button>
             ) : (
-                <video src={video} controls />
+                videoElem
             )}
         </div>
     );
 }
 
 export function Audio({ audio, audioOnClick }: { audio: string; audioOnClick?: () => void }): JSX.Element | null {
-    let { valid, src } = useIsValid(
+    const { valid, src } = useIsValid(
         (src) =>
             new Promise((res) => {
                 const aud = document.createElement("audio");
@@ -182,14 +202,15 @@ export function Audio({ audio, audioOnClick }: { audio: string; audioOnClick?: (
 
     if (!valid || src !== audio) return null;
 
+    const audioElem = <audio src={audio} controls />;
     return (
         <div className={styles.audio}>
             {audioOnClick ? (
-                <button onClick={audioOnClick}>
-                    <audio src={audio} controls />
+                <button onClick={audioOnClick} type="button">
+                    {audioElem}
                 </button>
             ) : (
-                <audio src={audio} controls />
+                audioElem
             )}
         </div>
     );

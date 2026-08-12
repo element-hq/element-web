@@ -1,6 +1,13 @@
-import React, { JSX } from "react";
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE in the repository root for full details.
+*/
+
+import React, { type JSX } from "react";
 import { Button } from "@vector-im/compound-web";
-import { useViewModel, ViewModel } from "../../../../core/viewmodel";
+import { useViewModel, type ViewModel } from "../../../../core/viewmodel";
 import { useI18n } from "../../../../core/i18n/i18nContext";
 import styles from "./MediaPreviewGroupView.module.css";
 import {
@@ -45,6 +52,7 @@ export type MediaPreviewGroupEntryContent =
 export interface MediaPreviewEntryButton {
     icon: JSX.Element;
     onClick: () => void;
+    label: string;
 }
 
 export interface MediaPreviewIcon {
@@ -54,6 +62,11 @@ export interface MediaPreviewIcon {
 }
 
 export type MediaPreviewGroupEntryBase = {
+    /**
+     * Identifies the entry within its group, used as the React key. Must be stable across renders
+     * and unique within the group: the previewed link for URL previews, the event ID for attachments.
+     */
+    id: string;
     header: string;
     headerUrl?: string;
     body: string;
@@ -107,7 +120,7 @@ function CollapseToggle({ collapsed, hiddenCount, onToggle }: MediaPreviewGroupC
 }
 
 export function MediaPreviewGroupPreview({ vm, collapse }: MediaPreviewGroupPreviewProps): JSX.Element | null {
-    let { entries } = useViewModel(vm);
+    const { entries } = useViewModel(vm);
 
     if (entries.length === 0) return null;
 
@@ -116,13 +129,13 @@ export function MediaPreviewGroupPreview({ vm, collapse }: MediaPreviewGroupPrev
             {entries.map((entry) => {
                 switch (entry.style) {
                     case "text":
-                        return <TextPreviewTile {...entry} />;
+                        return <TextPreviewTile key={entry.id} {...entry} />;
                     case "image":
-                        return <ImagePreviewTile {...entry} />;
+                        return <ImagePreviewTile key={entry.id} {...entry} />;
                     case "video":
-                        return <VideoPreviewTile {...entry} />;
+                        return <VideoPreviewTile key={entry.id} {...entry} />;
                     case "audio":
-                        return <AudioPreviewTile {...entry} />;
+                        return <AudioPreviewTile key={entry.id} {...entry} />;
                 }
             })}
             {collapse && <CollapseToggle {...collapse} />}
