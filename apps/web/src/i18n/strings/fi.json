@@ -1363,7 +1363,6 @@
         "mentions_and_keywords": "Vain @maininnat ja vastaukset",
         "mentions_and_keywords_description": "Saat ilmoituksia vain maininnoista, vastauksista ja avainsanoista <a>asetuksissa</a> määrittämälläsi tavalla",
         "mentions_keywords": "Maininnat ja avainsanat",
-        "message_didnt_send": "Viestiä ei lähetetty. Lisätietoa napsauttamalla.",
         "mute_description": "Et saa ilmoituksia"
     },
     "notifier": {

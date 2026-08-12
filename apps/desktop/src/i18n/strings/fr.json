@@ -27,6 +27,10 @@
         "yes": "Oui"
     },
     "confirm_quit": "Êtes-vous sûr de vouloir quitter ?",
+    "download": {
+        "unable_to_open_description": "Impossible d'ouvrir le fichier. Il a peut-être été déplacé ou supprimé.",
+        "unable_to_open_title": "Impossible d'ouvrir le fichier"
+    },
     "edit_menu": {
         "speech": "Dictée",
         "speech_start_speaking": "Commencer la dictée",

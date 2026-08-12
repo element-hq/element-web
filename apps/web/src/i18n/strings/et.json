@@ -1707,7 +1707,6 @@
         "mentions_and_keywords": "vaid @mainimiste ja võtmesõnade puhul",
         "mentions_and_keywords_description": "Saad teavitusi mainimiste, vastuste ja võtmesõnade puhul, nagu sa neid oled <a>seadistanud</a>",
         "mentions_keywords": "Mainimised ja märksõnad",
-        "message_didnt_send": "Sõnum jäi saatmata. Lisateabe saamiseks klõpsi.",
         "mute_description": "Sa ei saa üldse teavitusi"
     },
     "notifier": {

@@ -1319,7 +1319,6 @@
         "mentions_and_keywords": "@përmendje & fjalëkyçe",
         "mentions_and_keywords_description": "Merrni njoftime vetëm për përmendje dhe fjalëkyçe që keni ujdisur te <a>rregullimet</a> tuaja",
         "mentions_keywords": "Përmendje & fjalëkyçe",
-        "message_didnt_send": "Mesazhi s’u dërgua. Klikoni për hollësi.",
         "mute_description": "S’do të merrni ndonjë njoftim"
     },
     "notifier": {

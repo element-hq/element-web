@@ -1207,7 +1207,6 @@
         "mentions_and_keywords": "@vermeldingen & trefwoorden",
         "mentions_and_keywords_description": "Krijg alleen meldingen met vermeldingen en trefwoorden zoals ingesteld in je <a>instellingen</a>",
         "mentions_keywords": "Vermeldingen & trefwoorden",
-        "message_didnt_send": "Bericht is niet verstuur. Klik voor meer info.",
         "mute_description": "Je krijgt geen meldingen"
     },
     "notifier": {

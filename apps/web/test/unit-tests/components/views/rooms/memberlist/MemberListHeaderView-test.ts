@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { act, fireEvent, screen, waitFor } from "jest-matrix-react";
-import { RoomMember, User, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { RoomMember, User, RoomEvent, RoomStateEvent, type RoomState } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { mocked } from "jest-mock";
 
@@ -94,6 +94,26 @@ describe("MemberListHeaderView", () => {
             jest.spyOn(memberListRoom, "getMyMembership").mockReturnValue(KnownMembership.Join);
             jest.spyOn(memberListRoom, "canInvite").mockReturnValue(true);
             await reRender();
+            await waitFor(() =>
+                expect(screen.getByRole("button", { name: "Invite" })).not.toHaveAttribute("aria-disabled", "true"),
+            );
+        });
+
+        it("Updates the invite button when a power level change grants invite rights", async () => {
+            const { memberListRoom, client, reRender } = rendered;
+            jest.spyOn(memberListRoom, "getMyMembership").mockReturnValue(KnownMembership.Join);
+            jest.spyOn(memberListRoom, "canInvite").mockReturnValue(false);
+            await reRender();
+            await waitFor(() =>
+                expect(screen.getByRole("button", { name: "Invite" })).toHaveAttribute("aria-disabled", "true"),
+            );
+
+            // Grant the right to invite, and announce it the way a power level change does
+            jest.spyOn(memberListRoom, "canInvite").mockReturnValue(true);
+            act(() => {
+                client.emit(RoomStateEvent.Update, { roomId: memberListRoom.roomId } as RoomState);
+            });
+
             await waitFor(() =>
                 expect(screen.getByRole("button", { name: "Invite" })).not.toHaveAttribute("aria-disabled", "true"),
             );
