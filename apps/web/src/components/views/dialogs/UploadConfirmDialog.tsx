@@ -15,8 +15,8 @@ import DialogButtons from "../elements/DialogButtons";
 import { fileSize } from "../../../utils/FileUtils";
 import {
     attachmentIcon,
-    MediaPreviewGroupEntry,
-    MediaPreviewGroupEntryContent,
+    type MediaPreviewGroupEntry,
+    type MediaPreviewGroupEntryContent,
     MediaPreviewGroupPreview,
 } from "@element-hq/web-shared-components";
 import { MediaPreviewGroupViewModel } from "../../../viewmodels/message-body/MediaPreviewGroupViewModel";
@@ -113,6 +113,7 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
         }
 
         const preview: MediaPreviewGroupEntry = {
+            id: this.props.file.name,
             header: this.props.file.name,
             body: fileSize(this.props.file.size),
             ...attachmentIcon(mimeType),
@@ -128,7 +129,7 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
             );
         }
 
-        let vm = new MediaPreviewGroupViewModel({ entries: [preview] });
+        const vm = new MediaPreviewGroupViewModel({ entries: [preview] });
 
         return (
             <BaseDialog
