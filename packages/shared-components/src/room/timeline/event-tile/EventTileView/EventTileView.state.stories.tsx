@@ -17,6 +17,7 @@ const {
     groupGlobals,
     ircGlobals,
     StoryDecryptionFailureBody,
+    StoryInformationalBody,
     StoryMediaBody,
     StoryReplyChain,
     StoryStickerBody,
@@ -64,7 +65,7 @@ export const Informational: Story = {
         shape: "Room",
         roomMessages: "bob",
         state: { info: true, hasReply: false },
-        slots: { ...eventTileStoryDefaults.slots, replyChain: undefined },
+        slots: { ...eventTileStoryDefaults.slots, body: <StoryInformationalBody />, replyChain: undefined },
     },
 };
 

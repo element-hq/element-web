@@ -15,6 +15,7 @@ import { ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons"
 import { useMockedViewModel } from "../../../../core/viewmodel";
 import { useEventPresentation } from "../../EventPresentation";
 import { withViewDocs } from "../../../../../.storybook/withViewDocs";
+import { NotificationBadgeView, type NotificationBadgeViewSnapshot } from "../../../../notifications/NotificationBadgeView";
 import { EventTileView, type EventTileViewProps } from "./index";
 import { E2ePadlock, E2ePadlockIcon } from "./E2ePadlock";
 import { DisambiguatedProfileView } from "./DisambiguatedProfile";
@@ -30,10 +31,16 @@ import {
     type DecryptionFailureBodyViewSnapshot,
 } from "../body/DecryptionFailureBodyView";
 import {
+    EventContentBodyView,
+    type EventContentBodyViewSnapshot,
+} from "../body/EventContentBodyView";
+import { TextualBodyView, TextualBodyViewKind, type TextualBodyViewSnapshot } from "../body/TextualBodyView";
+import {
     ThreadSummaryView,
     ThreadMessagePreviewView,
     type ThreadMessagePreviewViewSnapshot,
 } from "./ThreadSummary/ThreadSummaryView";
+import { TextualEventView, type TextualEventViewSnapshot } from "./TextualEventView";
 import styles from "./EventTileView.stories.module.css";
 import storyMediaSrc from "../../../../../static/image-body/install-spinner.png";
 
@@ -181,12 +188,32 @@ const StoryTimestamp = ({
     );
     return visible ? <MessageTimestampView vm={vm} className={className} /> : null;
 };
-const StoryBody = (): React.ReactElement => (
-    <div className={styles.body}>
-        <div>Here is a realistic event tile body with enough text to show the available width.</div>
-        <div>This second line makes wrapping and vertical rhythm visible in Storybook.</div>
-    </div>
-);
+const StoryBody = (): React.ReactElement => {
+    const contentSnapshot: EventContentBodyViewSnapshot = {
+        body: [
+            <div key="first-line">Here is a realistic event tile body with enough text to show the available width.</div>,
+            <div key="second-line">This second line makes wrapping and vertical rhythm visible in Storybook.</div>,
+        ],
+        className: styles.body,
+    };
+    const contentVm = useMockedViewModel(contentSnapshot, {});
+    const bodySnapshot: TextualBodyViewSnapshot = { kind: TextualBodyViewKind.TEXT };
+    const bodyVm = useMockedViewModel(bodySnapshot, {});
+
+    return <TextualBodyView vm={bodyVm} body={<EventContentBodyView vm={contentVm} as="div" />} />;
+};
+const StoryInformationalBody = (): React.ReactElement => {
+    const snapshot: TextualEventViewSnapshot = {
+        content: (
+            <>
+                <div>Alex changed the room name to Example room.</div>
+                <div>This informational event demonstrates the shared textual event styling.</div>
+            </>
+        ),
+    };
+    const vm = useMockedViewModel(snapshot, {});
+    return <TextualEventView vm={vm} />;
+};
 const StoryReplyChain = (): React.ReactElement => (
     <blockquote className={styles.replyChain}>
         <span className={styles.replyAuthor}>Taylor Example</span>
@@ -218,6 +245,21 @@ const StoryDecryptionFailureBody = (): React.ReactElement => {
     };
     const vm = useMockedViewModel(snapshot, {});
     return <DecryptionFailureBodyView vm={vm} />;
+};
+const StoryNotificationBadge = (): React.ReactElement => {
+    const snapshot: NotificationBadgeViewSnapshot = {
+        shouldRender: true,
+        isVisible: true,
+        isNotification: true,
+        isHighlight: false,
+        isKnocked: false,
+        badgeType: "dot",
+        symbol: null,
+        isClickable: false,
+        showUnsentTooltip: false,
+    };
+    const vm = useMockedViewModel(snapshot, {});
+    return <NotificationBadgeView vm={vm} />;
 };
 const StoryActionBar = (): React.ReactElement | null => {
     const vm = useMockedViewModel(
@@ -595,6 +637,7 @@ const storyHelpers = {
     ircGlobals,
     compactGroupGlobals,
     StoryDecryptionFailureBody,
+    StoryInformationalBody,
     StoryMediaBody,
     StoryReplyChain,
     StoryStickerBody,
@@ -645,7 +688,7 @@ export const ThreadsList: Story = {
             avatar: <StoryAvatar />,
             body: <StoryBody />,
             timestamp: <StoryTimestamp />,
-            notificationBadge: <span className={styles.notificationDot} aria-hidden="true" />,
+            notificationBadge: <StoryNotificationBadge />,
             threadInfo: <StoryThreadListInfo />,
             actionBar: <StoryActionBar />,
         },
@@ -669,7 +712,7 @@ export const Notification: Story = {
             timestamp: <StoryTimestamp />,
             roomAvatar: <StoryAvatar room size="28px" />,
             notificationRoomLabel: <span className={styles.roomLabel}>in Example room</span>,
-            notificationBadge: <span className={styles.notificationDot} aria-hidden="true" />,
+            notificationBadge: <StoryNotificationBadge />,
             threadInfo: <StoryThreadListInfo />,
             receipt: <StoryReceipt />,
         },
