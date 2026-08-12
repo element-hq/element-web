@@ -18,9 +18,12 @@ import {
 } from "./MediaPreviewGroupView";
 import { MockViewModel } from "../../../../core/viewmodel/MockViewModel";
 import demoImage from "../../../../../static/wideImage.png";
-import demoVideo from "../../../../../static/videoBodyDemo.webm";
+// Inlined as a data URI, and short enough to be buffered in full the moment it is decoded: the native
+// video controls draw a buffered-progress bar, so a clip that is still downloading when the snapshot
+// is taken makes the screenshot non-reproducible.
+import demoVideo from "../../../../../static/videoPreviewDemo.webm?inline";
 import demoAudio from "../../../../../static/audioDemo.ogg";
-import { waitForBufferedVideos } from "../../../../../.storybook/waitForBufferedVideos";
+import { prepareVideosForSnapshot } from "../../../../../.storybook/prepareVideosForSnapshot";
 
 const buttons = [
     { label: "Expand", icon: <ExpandIcon />, onClick: () => ({}) },
@@ -80,7 +83,7 @@ const meta = {
     title: "Room/Timeline/MediaPreviewGroupView/MediaPreviewGroupView",
     component: MediaPreviewGroupPreview,
     tags: ["autodocs"],
-    play: ({ canvasElement }) => waitForBufferedVideos(canvasElement),
+    play: ({ canvasElement }) => prepareVideosForSnapshot(canvasElement),
 } satisfies Meta<typeof MediaPreviewGroupPreview>;
 
 export default meta;
