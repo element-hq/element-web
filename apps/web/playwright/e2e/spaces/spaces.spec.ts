@@ -291,9 +291,27 @@ test.describe("Spaces", () => {
 
             const badge = spaceButton.locator(".mx_SpacePanel_notificationBadge");
             await expect(badge).toHaveText("10");
+
             await expect(spaceButton).toMatchScreenshot("space-panel-notification-badge.png", {
-                /* Avatar initials can render differently in CI; keep this snapshot focused on the badge. */
                 css: `
+                    /* Mask the unstable anti-aliased badge edge at the screenshot crop boundary. */
+                    .mx_SpacePanel .mx_SpaceButton {
+                        position: relative !important;
+                    }
+
+                    .mx_SpacePanel .mx_SpaceButton::before {
+                        content: "";
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        height: 3px;
+                        background: var(--cpd-color-bg-canvas-default);
+                        z-index: 1;
+                        pointer-events: none;
+                    }
+
+                    /* Avatar initials can render differently in CI; keep this snapshot focused on the badge. */
                     .mx_SpacePanel [role="img"][data-color],
                     .mx_SpacePanel .mx_BaseAvatar {
                         color: transparent !important;
