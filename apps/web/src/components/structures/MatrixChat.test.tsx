@@ -977,9 +977,7 @@ describe("<MatrixChat />", () => {
                             dispatchAction();
                             await screen.findByRole("dialog");
                             expect(
-                                screen.getByText(
-                                    "This room is not public. You will not be able to rejoin without an invite.",
-                                ),
+                                screen.getByText("This room is private and cannot be rejoined without an invite."),
                             ).toBeInTheDocument();
                         });
                         it("should say a restricted room can be rejoined from an authorised space", async () => {
@@ -999,9 +997,7 @@ describe("<MatrixChat />", () => {
                             dispatchAction();
                             await screen.findByRole("dialog");
                             expect(
-                                screen.getByText(
-                                    "This room is not public. You will not be able to rejoin without an invite.",
-                                ),
+                                screen.getByText("This room is private and cannot be rejoined without an invite."),
                             ).toBeInTheDocument();
                         });
                         it("should warn when user is the last admin", async () => {
@@ -1067,9 +1063,7 @@ describe("<MatrixChat />", () => {
                             dispatchAction();
                             await screen.findByRole("dialog");
                             expect(
-                                screen.getByText(
-                                    "This space is not public. You will not be able to rejoin without an invite.",
-                                ),
+                                screen.getByText("This space is private and cannot be rejoined without an invite."),
                             ).toBeInTheDocument();
                         });
                         it("should say a restricted space can be rejoined from an authorised space", async () => {
@@ -1089,9 +1083,7 @@ describe("<MatrixChat />", () => {
                             dispatchAction();
                             await screen.findByRole("dialog");
                             expect(
-                                screen.getByText(
-                                    "This space is not public. You will not be able to rejoin without an invite.",
-                                ),
+                                screen.getByText("This space is private and cannot be rejoined without an invite."),
                             ).toBeInTheDocument();
                         });
                     });
