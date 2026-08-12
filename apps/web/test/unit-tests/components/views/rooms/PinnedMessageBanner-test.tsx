@@ -20,7 +20,7 @@ import RightPanelStore from "../../../../../src/stores/right-panel/RightPanelSto
 import { RightPanelPhases } from "../../../../../src/stores/right-panel/RightPanelStorePhases";
 import { UPDATE_EVENT } from "../../../../../src/stores/AsyncStore";
 import { Action } from "../../../../../src/dispatcher/actions";
-import { SdkContextClass } from "../../../../../src/contexts/SDKContext.ts";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
 
 describe("<PinnedMessageBanner />", () => {
     const userId = "@alice:server.org";
@@ -29,12 +29,12 @@ describe("<PinnedMessageBanner />", () => {
     let mockClient: MatrixClient;
     let room: Room;
     let permalinkCreator: RoomPermalinkCreator;
-    let sdkContext: SdkContextClass;
+    let sdkContext: SDKContextClass;
     beforeEach(() => {
         mockClient = stubClient();
         room = new Room(roomId, mockClient, userId);
         permalinkCreator = new RoomPermalinkCreator(room);
-        sdkContext = new SdkContextClass();
+        sdkContext = new SDKContextClass();
         jest.spyOn(dis, "dispatch").mockReturnValue(undefined);
     });
 

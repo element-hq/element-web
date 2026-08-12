@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type ActionPayload } from "../payloads";
 import { type Action } from "../actions";
-import { type IMatrixClientCreds } from "../../MatrixClientPeg";
+import { type IMatrixClientCreds } from "../../utils/createMatrixClient";
 
 export interface OverwriteLoginPayload extends ActionPayload {
     action: Action.OverwriteLogin;

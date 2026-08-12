@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { useCallback, type JSX, type ReactNode } from "react";
+import React, { useCallback, type JSX, type ReactNode, useContext } from "react";
 import {
     RoomListView as SharedRoomListView,
     useCreateAutoDisposedViewModel,
@@ -13,21 +13,28 @@ import {
 } from "@element-hq/web-shared-components";
 import { type Room } from "matrix-js-sdk/src/matrix";
 
-import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { RoomAvatarView } from "../../avatars/RoomAvatarView";
 import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
 import { Landmark, LandmarkNavigation } from "../../../../accessibility/LandmarkNavigation";
 import { RoomListViewModel } from "../../../../viewmodels/room-list/RoomListViewModel";
+import { SDKContext } from "../../../../contexts/SDKContext.ts";
 
 /**
  * RoomListView component using shared components with proper MVVM pattern.
  */
 export function RoomListView(): JSX.Element {
-    const matrixClient = useMatrixClientContext();
+    const sdkContext = useContext(SDKContext);
 
     // Create and auto-dispose ViewModel instance
-    const vm = useCreateAutoDisposedViewModel(() => new RoomListViewModel({ client: matrixClient }));
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new RoomListViewModel({
+                client: sdkContext.client!,
+                roomViewStore: sdkContext.roomViewStore,
+                spaceStore: sdkContext.spaceStore,
+            }),
+    );
 
     // Render avatar for each room - memoized to prevent re-renders
     const renderAvatar = useCallback((room: SharedRoom): ReactNode => {

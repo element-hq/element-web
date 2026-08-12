@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { type Room } from "matrix-js-sdk/src/matrix";
+import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import React, { type JSX, useContext } from "react";
 import {
     FavouriteSolidIcon,
@@ -30,7 +30,6 @@ import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { _t } from "../../../languageHandler";
 import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
 import { DefaultTagID, type TagID } from "../../../stores/room-list-v3/skip-list/tag";
-import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { clearRoomNotification, setMarkedUnreadState } from "../../../utils/notifications";
 import { type IProps as IContextMenuProps } from "../../structures/ContextMenu";
@@ -122,7 +121,7 @@ export const RoomGeneralContextMenu: React.FC<RoomGeneralContextMenuProps> = ({
     ...props
 }) => {
     const cli = useContext(MatrixClientContext);
-    const roomTags = useEventEmitterState(RoomListStore.instance, LISTS_UPDATE_EVENT, () => getTagsForRoom(room));
+    const roomTags = useEventEmitterState(room, RoomEvent.Tags, () => getTagsForRoom(room));
     const isDm = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
     const wrapHandler = (
         handler: (ev: ButtonEvent) => void,

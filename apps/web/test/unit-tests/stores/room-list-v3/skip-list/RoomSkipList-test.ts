@@ -15,12 +15,12 @@ import { RoomSkipList } from "../../../../../src/stores/room-list-v3/skip-list/R
 import { RecencySorter } from "../../../../../src/stores/room-list-v3/skip-list/sorters/RecencySorter";
 import { AlphabeticSorter } from "../../../../../src/stores/room-list-v3/skip-list/sorters/AlphabeticSorter";
 import { getMockedRooms } from "./getMockedRooms";
-import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import { MetaSpace } from "../../../../../src/stores/spaces";
 import { RoomNotificationStateStore } from "../../../../../src/stores/notifications/RoomNotificationStateStore";
 import { FavouriteFilter } from "../../../../../src/stores/room-list-v3/skip-list/filters/FavouriteFilter";
 import { FilterEnum } from "../../../../../src/stores/room-list-v3/skip-list/filters";
 import { DefaultTagID } from "../../../../../src/stores/room-list-v3/skip-list/tag";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
 
 describe("RoomSkipList", () => {
     function generateSkipList(roomCount?: number): {
@@ -38,9 +38,13 @@ describe("RoomSkipList", () => {
     }
 
     beforeEach(() => {
-        jest.spyOn(SpaceStore.instance, "isRoomInSpace").mockImplementation((space) => space === MetaSpace.Home);
-        jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockImplementation(() => MetaSpace.Home);
-        jest.spyOn(SpaceStore.instance, "storeReadyPromise", "get").mockImplementation(() => Promise.resolve());
+        jest.spyOn(SDKContextClass.instance.spaceStore, "isRoomInSpace").mockImplementation(
+            (space) => space === MetaSpace.Home,
+        );
+        jest.spyOn(SDKContextClass.instance.spaceStore, "activeSpace", "get").mockImplementation(() => MetaSpace.Home);
+        jest.spyOn(SDKContextClass.instance.spaceStore, "storeReadyPromise", "get").mockImplementation(() =>
+            Promise.resolve(),
+        );
         jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation(() => {
             const state = {
                 mute: false,
@@ -96,10 +100,13 @@ describe("RoomSkipList", () => {
         }
     });
 
-    it("Throws error when same room is added via addNewRoom", () => {
+    it("Room is not duplicated when same room is added via addNewRoom", () => {
         const { skipList, rooms } = generateSkipList();
         const room = rooms[5];
-        expect(() => skipList.addNewRoom(room)).toThrow("Can't add room to skiplist");
+        const sizeBefore = skipList.size;
+        skipList.addNewRoom(room);
+
+        expect(skipList.size).toEqual(sizeBefore);
     });
 
     it("Filters are applied to existing nodes when useNewFilters is called", () => {

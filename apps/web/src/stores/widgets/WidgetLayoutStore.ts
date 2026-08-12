@@ -483,7 +483,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         for (const [container, containerValue] of containers) {
             const widgets = containerValue.ordered;
             for (const widget of widgets) {
-                ret.push([widget, container as Container]);
+                ret.push([widget, container]);
             }
         }
         return ret;
@@ -514,5 +514,3 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         this.recalculateRoom(room); // call to try local echo on changes (the catch above undoes any errors)
     }
 }
-
-window.mxWidgetLayoutStore = WidgetLayoutStore.instance;

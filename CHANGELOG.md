@@ -1,3 +1,108 @@
+Changes in [1.12.25](https://github.com/element-hq/element-web/releases/tag/v1.12.25) (2026-08-05)
+==================================================================================================
+## 🦖 Deprecations
+
+* Remove support for MSC3391 \& MSC3852 ([#34400](https://github.com/element-hq/element-web/pull/34400)). Contributed by @t3chguy.
+
+## ✨ Features
+
+* Auto Collapse Behaviour - Collapse left panel during calls ([#33771](https://github.com/element-hq/element-web/pull/33771)). Contributed by @MidhunSureshR.
+* Use correct color for cancel button in dialog ([#34308](https://github.com/element-hq/element-web/pull/34308)). Contributed by @florianduros.
+* Auto Collapse Behaviour - Collapse left panel on window resize ([#32964](https://github.com/element-hq/element-web/pull/32964)). Contributed by @MidhunSureshR.
+* Room list: change `Edit section` label to `Save` in edit section dialog ([#34364](https://github.com/element-hq/element-web/pull/34364)). Contributed by @florianduros.
+* Set auto on-a-call status ([#34306](https://github.com/element-hq/element-web/pull/34306)). Contributed by @dbkr.
+* Collapsed URL previews in timeline ([#34165](https://github.com/element-hq/element-web/pull/34165)). Contributed by @Siriusmart.
+* Include the url preview bundle field in the devtools timeline event editor ([#34289](https://github.com/element-hq/element-web/pull/34289)). Contributed by @Siriusmart.
+* Use url preview bundle for URL preview in timeline (MSC4095) ([#34170](https://github.com/element-hq/element-web/pull/34170)). Contributed by @Siriusmart.
+* Support for reading m.call status ([#34295](https://github.com/element-hq/element-web/pull/34295)). Contributed by @dbkr.
+* Auto Collapse Behaviour - Add necessary functionality to `UIStore` ([#32963](https://github.com/element-hq/element-web/pull/32963)). Contributed by @MidhunSureshR.
+* Introduce a Module API to get application settings. ([#34278](https://github.com/element-hq/element-web/pull/34278)). Contributed by @Half-Shot.
+* Make notification settings copy/layout more user-friendly ([#34120](https://github.com/element-hq/element-web/pull/34120)). Contributed by @mxandreas.
+
+## 🐛 Bug Fixes
+
+* Fix various dialogs failing to open due to containing linked text ([#34304](https://github.com/element-hq/element-web/pull/34304)). Contributed by @Half-Shot.
+* Draw a styled 32px macOS title bar band ([#34419](https://github.com/element-hq/element-web/pull/34419)). Contributed by @langleyd.
+* Room list: fix scrolling with touch device ([#34381](https://github.com/element-hq/element-web/pull/34381)). Contributed by @florianduros.
+* Update to Seshat 5.0.0, fixing panics ([#34396](https://github.com/element-hq/element-web/pull/34396)). Contributed by @richvdh.
+* Add ellipsis and title to spotlight search results ([#34379](https://github.com/element-hq/element-web/pull/34379)). Contributed by @langleyd.
+* Room list: increase startup performance when rooms have notifications ([#34358](https://github.com/element-hq/element-web/pull/34358)). Contributed by @florianduros.
+* Widen the macOS title-bar drag strips so the window is easy to move ([#33991](https://github.com/element-hq/element-web/pull/33991)). Contributed by @hayaksi1.
+* Warn when an encrypted search runs before the index has finished building ([#34001](https://github.com/element-hq/element-web/pull/34001)). Contributed by @hayaksi1.
+* Make the text copy button use IconButton ([#34224](https://github.com/element-hq/element-web/pull/34224)). Contributed by @dbkr.
+* Room list: fix \*Chat moved\* toast appearing when room list is loaded ([#34305](https://github.com/element-hq/element-web/pull/34305)). Contributed by @florianduros.
+* Enable some oxlint a11y rules \& improve keyboard accessibility ([#34291](https://github.com/element-hq/element-web/pull/34291)). Contributed by @t3chguy.
+* Fix join call button in header having two labels ([#34293](https://github.com/element-hq/element-web/pull/34293)). Contributed by @robintown.
+* Fixed sending url preview bundles relying on update delay ([#34266](https://github.com/element-hq/element-web/pull/34266)). Contributed by @Siriusmart.
+* Room list: fix when a room is added twice ([#34281](https://github.com/element-hq/element-web/pull/34281)). Contributed by @florianduros.
+* Make the persistent-storage request observable and warn when it is denied ([#33987](https://github.com/element-hq/element-web/pull/33987)). Contributed by @hayaksi1.
+* Give the collapsed space panel separator clearance from the macOS traffic lights ([#34243](https://github.com/element-hq/element-web/pull/34243)). Contributed by @spoisseroux.
+* Fix incorrect plural form in call tile ([#34272](https://github.com/element-hq/element-web/pull/34272)). Contributed by @florianduros.
+
+
+Changes in [1.12.24](https://github.com/element-hq/element-web/releases/tag/v1.12.24) (2026-07-21)
+==================================================================================================
+## ✨ Features
+
+* Add user status to autocomplete suggestion ([#34241](https://github.com/element-hq/element-web/pull/34241)). Contributed by @dbkr.
+* Add user status to dm room header ([#34225](https://github.com/element-hq/element-web/pull/34225)). Contributed by @dbkr.
+* User status in room summary card ([#34239](https://github.com/element-hq/element-web/pull/34239)). Contributed by @dbkr.
+* Sending URL Preview Bundles (MSC 4095) ([#34150](https://github.com/element-hq/element-web/pull/34150)). Contributed by @Siriusmart.
+* Add config param to disable client wellknown fetch ([#34084](https://github.com/element-hq/element-web/pull/34084)). Contributed by @langleyd.
+* Ongoing call tiles - Implement the view-models and store ([#34198](https://github.com/element-hq/element-web/pull/34198)). Contributed by @MidhunSureshR.
+* Ongoing call tiles - Implement the required views ([#34197](https://github.com/element-hq/element-web/pull/34197)). Contributed by @MidhunSureshR.
+* Add user status emoji to member list ([#34210](https://github.com/element-hq/element-web/pull/34210)). Contributed by @dbkr.
+* Add user status in user info right panel card ([#34212](https://github.com/element-hq/element-web/pull/34212)). Contributed by @dbkr.
+* RoomList: add back Favourites and Low Priority filters when sections are disabled ([#34162](https://github.com/element-hq/element-web/pull/34162)). Contributed by @florianduros.
+* Add user status to DM rooms in the room list ([#34191](https://github.com/element-hq/element-web/pull/34191)). Contributed by @dbkr.
+* Adapt OAuth2 implementation to Matrix Spec v1.18 ([#34026](https://github.com/element-hq/element-web/pull/34026)). Contributed by @t3chguy.
+* Implement tombstone tiles for calls in room and DM ([#34141](https://github.com/element-hq/element-web/pull/34141)). Contributed by @MidhunSureshR.
+* Allow disabling legacy calls and make `Voice & Video` settings `Legacy Voice & Video` ([#33692](https://github.com/element-hq/element-web/pull/33692)). Contributed by @toger5.
+* UI for setting user status ([#33856](https://github.com/element-hq/element-web/pull/33856)). Contributed by @dbkr.
+* Start voice call in PiP (not in fullscreen) ([#34055](https://github.com/element-hq/element-web/pull/34055)). Contributed by @toger5.
+* Add a module API for overriding the composer preview. ([#33978](https://github.com/element-hq/element-web/pull/33978)). Contributed by @Half-Shot.
+* Remove legacy room list ([#34040](https://github.com/element-hq/element-web/pull/34040)). Contributed by @florianduros.
+* Add URL preview above message composer ([#33964](https://github.com/element-hq/element-web/pull/33964)). Contributed by @Half-Shot.
+
+## 🐛 Bug Fixes
+
+* Fix icon in Jitsi lobby not rendering correctly ([#34246](https://github.com/element-hq/element-web/pull/34246)). Contributed by @t3chguy.
+* Automatically recover from a renderer crash instead of leaving a blank window ([#33988](https://github.com/element-hq/element-web/pull/33988)). Contributed by @hayaksi1.
+* Fetch authenticated media through the session for "Save image as" ([#33997](https://github.com/element-hq/element-web/pull/33997)). Contributed by @hayaksi1.
+* RoomList: fix room scroll when clicked in thread activity centre ([#34179](https://github.com/element-hq/element-web/pull/34179)). Contributed by @florianduros.
+* Center long user ids in the user menu ([#34182](https://github.com/element-hq/element-web/pull/34182)). Contributed by @dbkr.
+* Fix composer preview getting stuck on a single module API preview ([#34173](https://github.com/element-hq/element-web/pull/34173)). Contributed by @Half-Shot.
+* Throttle notification sounds so a backlog doesn't play them all at once ([#33989](https://github.com/element-hq/element-web/pull/33989)). Contributed by @hayaksi1.
+* Change user ID colour to secondary ([#34129](https://github.com/element-hq/element-web/pull/34129)). Contributed by @dbkr.
+* Fix map tooltip overlapping message composer ([#33982](https://github.com/element-hq/element-web/pull/33982)). Contributed by @Tamajit-005.
+* Clear the composer preview after sending a message. ([#34116](https://github.com/element-hq/element-web/pull/34116)). Contributed by @Half-Shot.
+* Room list: fix unnecessary re-rendering of room list items while scrolling ([#34112](https://github.com/element-hq/element-web/pull/34112)). Contributed by @florianduros.
+* Room list: improve performance with smarter custom section loading ([#34102](https://github.com/element-hq/element-web/pull/34102)). Contributed by @florianduros.
+* Pluralise the multi-session remove button and confirmation dialog ([#33983](https://github.com/element-hq/element-web/pull/33983)). Contributed by @nnhhoang.
+
+
+Changes in [1.12.23](https://github.com/element-hq/element-web/releases/tag/v1.12.23) (2026-07-07)
+==================================================================================================
+## ✨ Features
+
+* Sticky Header for Room List Sections ([#33968](https://github.com/element-hq/element-web/pull/33968)). Contributed by @langleyd.
+* Improve link preview look and feel ([#33981](https://github.com/element-hq/element-web/pull/33981)). Contributed by @Half-Shot.
+* Room list: move sections out of labs to all the users ([#33810](https://github.com/element-hq/element-web/pull/33810)). Contributed by @florianduros.
+* Add "user identity" display to dev tools ([#33977](https://github.com/element-hq/element-web/pull/33977)). Contributed by @richvdh.
+* Add unread toast to room list sections ([#33961](https://github.com/element-hq/element-web/pull/33961)). Contributed by @langleyd.
+* Room list: add drag and drop of sections to reorder them ([#33606](https://github.com/element-hq/element-web/pull/33606)). Contributed by @florianduros.
+* Room list: add release announcement for sections ([#33800](https://github.com/element-hq/element-web/pull/33800)). Contributed by @florianduros.
+
+## 🐛 Bug Fixes
+
+* [Backport staging] Room list: put toast over sticky headers ([#34137](https://github.com/element-hq/element-web/pull/34137)). Contributed by @RiotRobot.
+* [Backport staging] Update Compound to fix tooltips ([#34097](https://github.com/element-hq/element-web/pull/34097)). Contributed by @RiotRobot.
+* Fix: Focusing a room in the room list(without hovering) doesn't allow tabbing to the more menu ([#34043](https://github.com/element-hq/element-web/pull/34043)). Contributed by @langleyd.
+* Fix double tooltip on collapsed Quick Settings button ([#33923](https://github.com/element-hq/element-web/pull/33923)). Contributed by @t3chguy.
+* Fix long display / user names in UserMenu ([#33900](https://github.com/element-hq/element-web/pull/33900)). Contributed by @dbkr.
+* Fix handling of deeplinks on Element Desktop ([#33827](https://github.com/element-hq/element-web/pull/33827)). Contributed by @t3chguy.
+
+
 Changes in [1.12.22](https://github.com/element-hq/element-web/releases/tag/v1.12.22) (2026-06-23)
 ==================================================================================================
 ## ✨ Features

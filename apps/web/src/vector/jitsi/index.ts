@@ -392,7 +392,6 @@ async function joinConference(audioInput?: string | null, videoInput?: string | 
         logger.log("Got OpenID Connect token");
 
         if (!openIdToken?.access_token) {
-            // eslint-disable-line camelcase
             // We've failing to get a token, don't try to init conference
             logger.warn("Expected to have an OpenID credential, cannot initialize widget.");
             document.getElementById("widgetActionContainer")!.innerText = "Failed to load Jitsi widget";
@@ -439,7 +438,7 @@ async function joinConference(audioInput?: string | null, videoInput?: string | 
             // back over the iframe API, and therefore end up crashing
             // https://github.com/jitsi/jitsi-meet/issues/11585
             apiLogLevels: ["warn", "error"],
-        } as any,
+        },
         jwt: jwt,
         lang: mapLanguage(normalizeLanguage(language)),
     };
@@ -469,7 +468,7 @@ async function joinConference(audioInput?: string | null, videoInput?: string | 
     // (regardless of video on or off)
     meetApi.on("videoConferenceJoined", onVideoConferenceJoined);
     meetApi.on("videoConferenceLeft", onVideoConferenceLeft);
-    meetApi.on("readyToClose", closeConference as ExternalAPIEventCallbacks["readyToClose"]);
+    meetApi.on("readyToClose", closeConference satisfies ExternalAPIEventCallbacks["readyToClose"]);
     meetApi.on("errorOccurred", onErrorOccurred);
     meetApi.on("audioMuteStatusChanged", onMuteStatusChanged);
     meetApi.on("videoMuteStatusChanged", onVideoMuteStatusChanged);

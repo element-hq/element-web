@@ -26,9 +26,9 @@ import {
 } from "../../../../test-utils";
 import { UIFeature } from "../../../../../src/settings/UIFeature";
 import { SettingLevel } from "../../../../../src/settings/SettingLevel";
-import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { TestSDKContext } from "../../../TestSDKContext.ts";
 import { type FeatureSettingKey } from "../../../../../src/settings/Settings.tsx";
-import { mockOpenIdConfiguration } from "../../../../test-utils/oidc.ts";
+import { makeDelegatedAuthMetadata } from "../../../../test-utils/auth.ts";
 
 mockPlatformPeg({
     supportsSpellCheckSettings: jest.fn().mockReturnValue(false),
@@ -57,7 +57,7 @@ describe("<UserSettingsDialog />", () => {
     const mockSettingsStore = mocked(SettingsStore);
     let mockClient!: MockedObject<MatrixClient>;
 
-    let sdkContext: SdkContextClass;
+    let sdkContext: TestSDKContext;
     const defaultProps = { onFinished: jest.fn() };
     const getComponent = (
         props: Partial<typeof defaultProps & { initialTabId?: UserTab; props: Record<string, any> }> = {},
@@ -74,10 +74,10 @@ describe("<UserSettingsDialog />", () => {
             getPushers: jest.fn().mockResolvedValue([]),
             getProfileInfo: jest.fn().mockResolvedValue({}),
             getMediaConfig: jest.fn(),
-            getAuthMetadata: jest.fn().mockResolvedValue(mockOpenIdConfiguration()),
+            getAuthMetadata: jest.fn().mockResolvedValue(makeDelegatedAuthMetadata()),
         });
-        sdkContext = new SdkContextClass();
-        sdkContext.client = mockClient;
+        sdkContext = new TestSDKContext();
+        sdkContext._client = mockClient;
         mockSettingsStore.getValue.mockReturnValue(false);
         mockSettingsStore.getValueAt.mockReturnValue(false);
         mockSettingsStore.getFeatureSettingNames.mockReturnValue([]);

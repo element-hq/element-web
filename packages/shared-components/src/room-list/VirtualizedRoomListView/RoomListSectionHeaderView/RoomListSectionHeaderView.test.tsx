@@ -6,7 +6,7 @@
  */
 
 import React from "react";
-import { render, screen } from "@test-utils";
+import { render, screen, waitFor } from "@test-utils";
 import { composeStories } from "@storybook/react-vite";
 import { describe, it, expect, type Mock, afterEach, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
@@ -44,6 +44,17 @@ describe("<RoomListSectionHeaderView /> stories", () => {
         expect(document.activeElement).toBe(button);
     });
 
+    it("reveals the section menu on keyboard focus and clears it when focus leaves", async () => {
+        // isFocused focuses the header via the keyboard on mount, so the menu is revealed.
+        render(<Default isFocused={true} />);
+        const button = screen.getByRole("button", { name: HEADER_NAME });
+        expect(button.className).toMatch(/keyboardActive/);
+
+        // Focus leaving the header hides the menu again.
+        button.blur();
+        await waitFor(() => expect(button.className).not.toMatch(/keyboardActive/));
+    });
+
     it("expands a collapsed section on ArrowRight", async () => {
         const user = userEvent.setup();
         render(<Collapsed isFocused={true} />);
@@ -76,7 +87,6 @@ describe("<RoomListSectionHeaderView /> stories", () => {
         const user = userEvent.setup();
         const onKeyDown = vi.fn();
         render(
-            // eslint-disable-next-line jsx-a11y/no-static-element-interactions
             <div onKeyDown={onKeyDown}>
                 <Default isFocused={true} />
             </div>,

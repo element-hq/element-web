@@ -99,7 +99,7 @@ export default function NotificationSettings2(): JSX.Element {
                 <SettingsBanner
                     icon={<img src={NewAndImprovedIcon} alt="" width={12} />}
                     action={_t("action|proceed")}
-                    onAction={() => reconcile(model!)}
+                    onAction={() => reconcile(model)}
                 >
                     {_t(
                         "settings|notifications|labs_notice_prompt",
@@ -276,6 +276,7 @@ export default function NotificationSettings2(): JSX.Element {
                                     symbol="1"
                                     count={1}
                                     level={NotificationLevel.Notification}
+                                    className="mx_NotificationSettings2_notificationBadge"
                                 />
                             ),
                         },

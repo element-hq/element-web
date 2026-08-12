@@ -60,7 +60,7 @@ export type PageFunctionOn<On, Arg2, R> = string | ((on: On, arg2: Unboxed<Arg2>
 
 export class Client {
     public network: Network;
-    protected client: JSHandle<MatrixClient>;
+    protected client: JSHandle<MatrixClient> | null = null;
 
     protected getClientHandle(): Promise<JSHandle<MatrixClient>> {
         return this.page.evaluateHandle(() => window.mxMatrixClientPeg.get());
@@ -93,8 +93,8 @@ export class Client {
         arg?: any,
     ): Promise<R>;
     public async evaluate<T>(fn: (client: MatrixClient) => T, arg?: any): Promise<T> {
-        await this.prepareClient();
-        return this.client.evaluate(fn, arg);
+        const client = await this.prepareClient();
+        return client.evaluate(fn, arg);
     }
 
     public evaluateHandle<R, Arg, O extends MatrixClient = MatrixClient>(
@@ -106,8 +106,8 @@ export class Client {
         arg?: any,
     ): Promise<JSHandle<R>>;
     public async evaluateHandle<T>(fn: (client: MatrixClient) => T, arg?: any): Promise<JSHandle<T>> {
-        await this.prepareClient();
-        return this.client.evaluateHandle(fn, arg);
+        const client = await this.prepareClient();
+        return client.evaluateHandle(fn, arg);
     }
 
     /**
@@ -202,7 +202,7 @@ export class Client {
     /**
      * Create a room with given options.
      * @param options the options to apply when creating the room
-     * @return the ID of the newly created room
+     * @returns the ID of the newly created room
      */
     public async createRoom(options: ICreateRoomOpts): Promise<string> {
         const client = await this.prepareClient();
@@ -217,7 +217,7 @@ export class Client {
     /**
      * Create a space with given options.
      * @param options the options to apply when creating the space
-     * @return the ID of the newly created space (room)
+     * @returns the ID of the newly created space (room)
      */
     public async createSpace(options: ICreateRoomOpts): Promise<string> {
         return this.createRoom({
@@ -248,7 +248,7 @@ export class Client {
         const client = await this.prepareClient();
         return client.evaluate(
             async (client, { roomName }) => {
-                const room = client.getRooms().find((r) => r.getDefaultRoomName(client.getUserId()) === roomName);
+                const room = client.getRooms().find((r) => r.getDefaultRoomName(client.getSafeUserId()) === roomName);
                 if (room) {
                     await client.joinRoom(room.roomId);
                     return room.roomId;
@@ -268,7 +268,7 @@ export class Client {
         await this.page.waitForResponse(async (response) => {
             const accessToken = await this.evaluate((client) => client.getAccessToken());
             const authHeader = await response.request().headerValue("authorization");
-            return response.url().includes("/sync") && authHeader.includes(accessToken);
+            return response.url().includes("/sync") && !!accessToken && !!authHeader?.includes(accessToken);
         });
     }
 
@@ -392,11 +392,11 @@ export class Client {
         event: JSHandle<MatrixEvent>,
         receiptType?: ReceiptType,
         unthreaded?: boolean,
-    ): Promise<EmptyObject> {
+    ): Promise<void> {
         const client = await this.prepareClient();
         return client.evaluate(
-            (client, { event, receiptType, unthreaded }) => {
-                return client.sendReadReceipt(event, receiptType, unthreaded);
+            async (client, { event, receiptType, unthreaded }) => {
+                await client.sendReadReceipt(event, receiptType, unthreaded);
             },
             { event, receiptType, unthreaded },
         );
@@ -412,8 +412,8 @@ export class Client {
     /**
      * @param {string} name
      * @param {module:client.callback} callback Optional.
-     * @return {Promise} Resolves: {} an empty object.
-     * @return {module:http-api.MatrixError} Rejects: with an error response.
+     * @returns {Promise} Resolves: {} an empty object.
+     * @returns {module:http-api.MatrixError} Rejects: with an error response.
      */
     public async setDisplayName(name: string): Promise<EmptyObject> {
         const client = await this.prepareClient();
@@ -423,8 +423,8 @@ export class Client {
     /**
      * @param {string} url
      * @param {module:client.callback} callback Optional.
-     * @return {Promise} Resolves: {} an empty object.
-     * @return {module:http-api.MatrixError} Rejects: with an error response.
+     * @returns {Promise} Resolves: {} an empty object.
+     * @returns {module:http-api.MatrixError} Rejects: with an error response.
      */
     public async setAvatarUrl(url: string): Promise<EmptyObject> {
         const client = await this.prepareClient();
@@ -555,7 +555,7 @@ export function bootstrapCrossSigningForClient(
 ) {
     return client.evaluate(
         async (client, { credentials, resetKeys }) => {
-            await client.getCrypto().bootstrapCrossSigning({
+            await client.getCrypto()!.bootstrapCrossSigning({
                 authUploadDeviceSigningKeys: async (func) => {
                     await func({
                         type: "m.login.password",

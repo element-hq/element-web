@@ -14,7 +14,7 @@ import {
     INVITE_RULES_ACCOUNT_DATA_TYPE,
     type InviteConfigAccountData,
 } from "../../@types/invite-rules.ts";
-import { _t } from "../../languageHandler.tsx";
+import { _t } from "../../languageHandler";
 
 /**
  * Handles invite filtering rules provided by MSC4155.

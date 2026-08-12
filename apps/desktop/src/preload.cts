@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // This file is compiled to CommonJS rather than ESM otherwise the browser chokes on the import statement.
 
-import { ipcRenderer, contextBridge, IpcRendererEvent } from "electron";
+import { ipcRenderer, contextBridge, type IpcRendererEvent } from "electron";
 import type { ConfigOptions } from "./config.js" with { "resolution-mode": "import" };
 
 // Expose only expected IPC wrapper APIs to the renderer process to avoid

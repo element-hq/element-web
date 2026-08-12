@@ -23,14 +23,16 @@ export interface SeparatorViewActions {
     onPointerUp: () => void;
 
     /**
-     * onPointerMove handler for separator.
+     * onPointerMove handler for separator. Takes the event so that how far the pointer has travelled
+     * since it went down can be measured.
      */
-    onPointerMove: () => void;
+    onPointerMove: (event: React.PointerEvent) => void;
 
     /**
-     * onPointerDown handler for separator.
+     * onPointerDown handler for separator. Takes the event so that where the pointer went down can be
+     * measured from.
      */
-    onPointerDown: () => void;
+    onPointerDown: (event: React.PointerEvent) => void;
 
     /**
      * onDoubleClick handler for the separator.

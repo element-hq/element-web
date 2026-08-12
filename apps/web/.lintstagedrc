@@ -1,7 +1,5 @@
 {
     "*": "oxfmt --no-error-on-unmatched-pattern",
-    "src/**/*.(ts|tsx)": ["eslint --fix"],
-    "scripts/**/*.(ts|tsx)": ["eslint --fix"],
-    "module_system/**/*.(ts|tsx)": ["eslint --fix"],
+    "*.{js,jsx,ts,tsx,mjs,cjs}": "oxlint --no-error-on-unmatched-pattern",
     "*.pcss": ["stylelint --fix"]
 }

@@ -18,8 +18,9 @@ import EditorModel from "../../../../../src/editor/model";
 import { createPartCreator, createRenderer } from "../../../editor/mock";
 import { CommandPartCreator } from "../../../../../src/editor/parts";
 import DocumentOffset from "../../../../../src/editor/offset";
-import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
+import { SDKContext } from "../../../../../src/contexts/SDKContext.ts";
 
 describe("BasicMessageComposer", () => {
     const renderer = createRenderer();
@@ -35,7 +36,11 @@ describe("BasicMessageComposer", () => {
 
     it("should allow a user to paste a URL without it being mangled", async () => {
         const model = new EditorModel([], pc, renderer);
-        render(<BasicMessageComposer model={model} room={room} />);
+        render(<BasicMessageComposer model={model} room={room} />, {
+            wrapper: ({ children }) => (
+                <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+            ),
+        });
         const testUrl = "https://element.io";
         const mockDataTransfer = generateMockDataTransferForString(testUrl);
         await userEvent.paste(mockDataTransfer);
@@ -51,7 +56,11 @@ describe("BasicMessageComposer", () => {
         });
         userEvent.setup();
         const model = new EditorModel([], pc, renderer);
-        render(<BasicMessageComposer model={model} room={room} />);
+        render(<BasicMessageComposer model={model} room={room} />, {
+            wrapper: ({ children }) => (
+                <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+            ),
+        });
 
         const tranformations = [
             { before: "4:3 video", after: "4:3 video" },
@@ -81,7 +90,11 @@ describe("BasicMessageComposer", () => {
 
     it("should not mangle shift-enter when the autocomplete is open", async () => {
         const model = new EditorModel([], pc, renderer);
-        render(<BasicMessageComposer model={model} room={room} />);
+        render(<BasicMessageComposer model={model} room={room} />, {
+            wrapper: ({ children }) => (
+                <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+            ),
+        });
 
         const input = screen.getByRole("textbox");
 
@@ -91,9 +104,45 @@ describe("BasicMessageComposer", () => {
         expect(transformedText).toBe("/plain foobar\n");
     });
 
+    it("should replace the selected text when inserting a new line", async () => {
+        const model = new EditorModel([], pc, renderer);
+        render(<BasicMessageComposer model={model} room={room} />, {
+            wrapper: ({ children }) => (
+                <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+            ),
+        });
+
+        const input = screen.getByRole("textbox");
+        await userEvent.type(input, "hello world");
+
+        // Select "world".
+        const textNode = document.createTreeWalker(input, NodeFilter.SHOW_TEXT).nextNode()!;
+        const range = document.createRange();
+        range.setStart(textNode, 6);
+        range.setEnd(textNode, 11);
+        // jsdom does not implement Range.getBoundingClientRect, which the format bar asks for when
+        // the selection changes.
+        range.getBoundingClientRect = jest.fn().mockReturnValue({ top: 0, left: 0, width: 0, height: 0 });
+        const selection = document.getSelection()!;
+        selection.removeAllRanges();
+        selection.addRange(range);
+
+        // Guard: without a real selection this test would only be exercising the caret path.
+        expect(selection.isCollapsed).toBe(false);
+        expect(selection.toString()).toBe("world");
+
+        await userEvent.keyboard("{Shift>}{Enter}{/Shift}");
+
+        expect(model.parts.map((part) => part.text).join("")).toBe("hello \n");
+    });
+
     it("should escape single quote in placeholder", async () => {
         const model = new EditorModel([], pc, renderer);
-        const composer = render(<BasicMessageComposer placeholder="Don't" model={model} room={room} />);
+        const composer = render(<BasicMessageComposer placeholder="Don't" model={model} room={room} />, {
+            wrapper: ({ children }) => (
+                <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+            ),
+        });
         const input = composer.queryAllByRole("textbox");
         const placeholder = input[0].style.getPropertyValue("--placeholder");
         expect(placeholder).toMatch("'Don\\'t'");
@@ -101,7 +150,11 @@ describe("BasicMessageComposer", () => {
 
     it("should escape backslash in placeholder", async () => {
         const model = new EditorModel([], pc, renderer);
-        const composer = render(<BasicMessageComposer placeholder={"w\\e"} model={model} room={room} />);
+        const composer = render(<BasicMessageComposer placeholder={"w\\e"} model={model} room={room} />, {
+            wrapper: ({ children }) => (
+                <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+            ),
+        });
         const input = composer.queryAllByRole("textbox");
         const placeholder = input[0].style.getPropertyValue("--placeholder");
         expect(placeholder).toMatch("'w\\\\e'");
@@ -114,9 +167,13 @@ describe("BasicMessageComposer", () => {
         const model = new EditorModel([commandPart], commandPc, renderer);
 
         // spy on typingStore.setSelfTyping
-        const spy = jest.spyOn(SdkContextClass.instance.typingStore, "setSelfTyping");
+        const spy = jest.spyOn(SDKContextClass.instance.typingStore, "setSelfTyping");
 
-        render(<BasicMessageComposer model={model} room={room} />);
+        render(<BasicMessageComposer model={model} room={room} />, {
+            wrapper: ({ children }) => (
+                <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+            ),
+        });
 
         // simulate typing by updating the model - this will call the component's update callback
         await model.update(commandPart.text, "insertText", new DocumentOffset(commandPart.text.length, true));
@@ -128,7 +185,11 @@ describe("BasicMessageComposer", () => {
 
     it("should ignore keydown events during IME composition", () => {
         const model = new EditorModel([], pc, renderer);
-        render(<BasicMessageComposer model={model} room={room} />);
+        render(<BasicMessageComposer model={model} room={room} />, {
+            wrapper: ({ children }) => (
+                <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+            ),
+        });
         const input = screen.getByRole("textbox");
 
         // Start IME composition
@@ -167,7 +228,11 @@ describe("BasicMessageComposer", () => {
 
     it("should handle keydown events normally when not composing", () => {
         const model = new EditorModel([], pc, renderer);
-        render(<BasicMessageComposer model={model} room={room} />);
+        render(<BasicMessageComposer model={model} room={room} />, {
+            wrapper: ({ children }) => (
+                <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+            ),
+        });
         const input = screen.getByRole("textbox");
 
         // Simulate Tab key when NOT composing

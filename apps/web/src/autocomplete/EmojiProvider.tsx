@@ -175,7 +175,6 @@ export default class EmojiProvider extends AutocompleteProvider {
         return (
             <div
                 className="mx_Autocomplete_Completion_container_pill"
-                role="presentation"
                 aria-label={_t("composer|autocomplete|emoji_a11y")}
             >
                 {completions}

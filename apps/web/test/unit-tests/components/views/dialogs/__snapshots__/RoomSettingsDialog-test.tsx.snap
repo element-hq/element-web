@@ -4,6 +4,7 @@ exports[`<RoomSettingsDialog /> Settings tabs renders default tabs correctly 1`]
 NodeList [
   <li
     aria-controls="mx_tabpanel_ROOM_GENERAL_TAB"
+    aria-labelledby="mx_tabpanel_ROOM_GENERAL_TAB_label"
     aria-selected="true"
     class="mx_AccessibleButton mx_TabbedView_tabLabel mx_TabbedView_tabLabel_active"
     data-testid="settings-tab-ROOM_GENERAL_TAB"
@@ -32,7 +33,37 @@ NodeList [
     </span>
   </li>,
   <li
+    aria-controls="mx_tabpanel_ROOM_VOIP_TAB"
+    aria-labelledby="mx_tabpanel_ROOM_VOIP_TAB_label"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel"
+    data-testid="settings-tab-ROOM_VOIP_TAB"
+    role="tab"
+    tabindex="-1"
+  >
+    <svg
+      fill="currentColor"
+      height="1em"
+      viewBox="0 0 24 24"
+      width="1em"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        clip-rule="evenodd"
+        d="M8.929 15.1a13.6 13.6 0 0 0 4.654 3.066q2.62 1.036 5.492.923h.008l.003-.004.003-.002-.034-3.124-3.52-.483-1.791 1.792-.645-.322a13.5 13.5 0 0 1-3.496-2.52 13.4 13.4 0 0 1-2.52-3.496l-.322-.645 1.792-1.791-.483-3.52-3.123-.033-.003.002-.003.004v.002a13.65 13.65 0 0 0 .932 5.492A13.4 13.4 0 0 0 8.93 15.1m3.92 4.926a15.6 15.6 0 0 1-5.334-3.511 15.4 15.4 0 0 1-3.505-5.346 15.6 15.6 0 0 1-1.069-6.274 1.93 1.93 0 0 1 .589-1.366c.366-.366.84-.589 1.386-.589h.01l3.163.035a1.96 1.96 0 0 1 1.958 1.694v.005l.487 3.545v.003c.043.297.025.605-.076.907a2 2 0 0 1-.485.773l-.762.762a11.3 11.3 0 0 0 1.806 2.348 11.4 11.4 0 0 0 2.348 1.806l.762-.762a2 2 0 0 1 .774-.485c.302-.1.61-.118.907-.076l3.553.487a1.96 1.96 0 0 1 1.694 1.958l.034 3.174c0 .546-.223 1.02-.588 1.386-.36.36-.827.582-1.363.588a15.3 15.3 0 0 1-6.29-1.062"
+        fill-rule="evenodd"
+      />
+    </svg>
+    <span
+      class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_ROOM_VOIP_TAB_label"
+    >
+      Voice & Video
+    </span>
+  </li>,
+  <li
     aria-controls="mx_tabpanel_ROOM_SECURITY_TAB"
+    aria-labelledby="mx_tabpanel_ROOM_SECURITY_TAB_label"
     aria-selected="false"
     class="mx_AccessibleButton mx_TabbedView_tabLabel"
     data-testid="settings-tab-ROOM_SECURITY_TAB"
@@ -59,6 +90,7 @@ NodeList [
   </li>,
   <li
     aria-controls="mx_tabpanel_ROOM_ROLES_TAB"
+    aria-labelledby="mx_tabpanel_ROOM_ROLES_TAB_label"
     aria-selected="false"
     class="mx_AccessibleButton mx_TabbedView_tabLabel"
     data-testid="settings-tab-ROOM_ROLES_TAB"
@@ -87,6 +119,7 @@ NodeList [
   </li>,
   <li
     aria-controls="mx_tabpanel_ROOM_NOTIFICATIONS_TAB"
+    aria-labelledby="mx_tabpanel_ROOM_NOTIFICATIONS_TAB_label"
     aria-selected="false"
     class="mx_AccessibleButton mx_TabbedView_tabLabel"
     data-testid="settings-tab-ROOM_NOTIFICATIONS_TAB"
@@ -113,6 +146,7 @@ NodeList [
   </li>,
   <li
     aria-controls="mx_tabpanel_ROOM_POLL_HISTORY_TAB"
+    aria-labelledby="mx_tabpanel_ROOM_POLL_HISTORY_TAB_label"
     aria-selected="false"
     class="mx_AccessibleButton mx_TabbedView_tabLabel"
     data-testid="settings-tab-ROOM_POLL_HISTORY_TAB"

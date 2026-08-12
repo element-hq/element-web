@@ -25,7 +25,7 @@ import { MatrixClientPeg } from "../MatrixClientPeg";
 import { _t } from "../languageHandler";
 import { mediaFromMxc } from "../customisations/Media";
 import SettingsStore from "../settings/SettingsStore";
-import { validateUserStatus } from "../utils/userStatus";
+import { fetchUserStatus } from "../utils/userStatus";
 
 interface IState {
     displayName?: string;
@@ -202,11 +202,8 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
         if (!this.matrixClient) return;
         if (!SettingsStore.getValue("feature_user_status")) return;
 
-        const rawUserStatus = await this.matrixClient.getExtendedProfileProperty(
-            this.matrixClient.getSafeUserId(),
-            "org.matrix.msc4426.status",
-        );
-        await this.updateState({ userStatus: validateUserStatus(rawUserStatus) });
+        const userStatus = await fetchUserStatus(this.matrixClient, this.matrixClient.getSafeUserId());
+        await this.updateState({ userStatus });
     };
 
     private onStateEvents = async (ev: MatrixEvent): Promise<void> => {

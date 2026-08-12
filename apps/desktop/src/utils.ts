@@ -9,6 +9,7 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import afs from "node:fs/promises";
+import { type JsonDocument } from "shared-types";
 
 /**
  * Returns a random array of a specified size in unpadded base64
@@ -26,19 +27,12 @@ export async function randomArray(size: number): Promise<string> {
     });
 }
 
-type JsonValue = null | string | number;
-type JsonArray = Array<JsonValue | JsonObject | JsonArray>;
-export interface JsonObject {
-    [key: string]: JsonObject | JsonArray | JsonValue;
-}
-export type Json = JsonArray | JsonObject;
-
 /**
  * Synchronously load a JSON file from the local filesystem.
  * Unlike `require`, will never execute any javascript in a loaded file.
  * @param paths - An array of path segments which will be joined using the system's path delimiter.
  */
-export function loadJsonFile<T extends Json>(...paths: string[]): T {
+export function loadJsonFile<T extends JsonDocument>(...paths: string[]): T {
     const joinedPaths = path.join(...paths);
 
     if (!fs.existsSync(joinedPaths)) {

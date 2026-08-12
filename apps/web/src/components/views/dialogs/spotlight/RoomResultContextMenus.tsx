@@ -22,13 +22,21 @@ import { RoomGeneralContextMenu } from "../../context_menus/RoomGeneralContextMe
 import { RoomNotificationContextMenu } from "../../context_menus/RoomNotificationContextMenu";
 import SpaceContextMenu from "../../context_menus/SpaceContextMenu";
 import { type ButtonEvent } from "../../elements/AccessibleButton";
-import { contextMenuBelow } from "../../rooms/RoomTile";
+import { ChevronFace, type MenuProps } from "../../../structures/ContextMenu";
 import { shouldShowComponent } from "../../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../settings/UIFeature";
 
 interface Props {
     room: Room;
 }
+
+const contextMenuBelow = (elementRect: DOMRect): MenuProps => {
+    // align the context menu's icons with the icon which opened the context menu
+    const left = elementRect.left + window.scrollX - 9;
+    const top = elementRect.bottom + window.scrollY + 17;
+    const chevronFace = ChevronFace.None;
+    return { left, top, chevronFace };
+};
 
 export function getNotificationIcon(state: RoomNotifState): ReactNode {
     switch (state) {

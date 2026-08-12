@@ -53,6 +53,7 @@ import { SettingsSubsection } from "./shared/SettingsSubsection";
 import { doesRoomHaveUnreadMessages } from "../../../Unread";
 import SettingsFlag from "../elements/SettingsFlag";
 import { onSubmitPreventDefault } from "../../../utils/form.ts";
+import { keywordRuleId } from "../../../models/notificationsettings/keywordRuleId.ts";
 
 // TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.
@@ -89,9 +90,9 @@ const RULE_DISPLAY_ORDER: string[] = [
     RuleId.EncryptedMessage,
 
     // Mentions
-    RuleId.ContainsDisplayName,
     RuleId.ContainsUserName,
     RuleId.AtRoomNotification,
+    RuleId.ContainsDisplayName,
 
     // Other
     RuleId.InviteToSelf,
@@ -232,7 +233,7 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
     public componentDidMount(): void {
         this.settingWatchers = [
             SettingsStore.watchSetting("deviceNotificationsEnabled", null, (...[, , , , value]) => {
-                this.setState({ deviceNotificationsEnabled: value as boolean });
+                this.setState({ deviceNotificationsEnabled: value! });
             }),
         ];
 
@@ -289,7 +290,7 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
     }
 
     private async refreshRules(): Promise<Partial<IState>> {
-        const ruleSets = await MatrixClientPeg.safeGet().getPushRules()!;
+        const ruleSets = await MatrixClientPeg.safeGet().getPushRules();
         const categories: Record<string, RuleClass> = {
             [RuleId.Master]: RuleClass.Master,
 
@@ -353,7 +354,7 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
             for (const rule of defaultRules[category]) {
                 const definition: VectorPushRuleDefinition = VectorPushRulesDefinitions[rule.rule_id];
                 const vectorState = definition.ruleToVectorState(rule)!;
-                preparedNewState.vectorPushRules[category]!.push({
+                preparedNewState.vectorPushRules[category].push({
                     ruleId: rule.rule_id,
                     rule,
                     vectorState,
@@ -363,7 +364,7 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
             }
 
             // Quickly sort the rules for display purposes
-            preparedNewState.vectorPushRules[category]!.sort((a, b) => {
+            preparedNewState.vectorPushRules[category].sort((a, b) => {
                 let idxA = RULE_DISPLAY_ORDER.indexOf(a.ruleId);
                 let idxB = RULE_DISPLAY_ORDER.indexOf(b.ruleId);
 
@@ -375,7 +376,7 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
             });
 
             if (category === KEYWORD_RULE_CATEGORY) {
-                preparedNewState.vectorPushRules[category]!.push({
+                preparedNewState.vectorPushRules[category].push({
                     ruleId: KEYWORD_RULE_ID,
                     description: _t("settings|notifications|messages_containing_keywords"),
                     vectorState: preparedNewState.vectorKeywordRuleInfo.vectorState,
@@ -565,13 +566,16 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
                 ruleVectorState = existingRuleVectorState ?? VectorState.On; //default
             }
             const kind = PushRuleKind.ContentSpecific;
+            const ruleIds = new Set(originalRules.map((r) => r.rule_id));
             for (const word of diff.added) {
-                await MatrixClientPeg.safeGet().addPushRule("global", kind, word, {
+                const ruleId = keywordRuleId(word, ruleIds);
+                ruleIds.add(ruleId);
+                await MatrixClientPeg.safeGet().addPushRule("global", kind, ruleId, {
                     actions: PushRuleVectorState.actionsFor(ruleVectorState),
                     pattern: word,
                 });
                 if (ruleVectorState === VectorState.Off) {
-                    await MatrixClientPeg.safeGet().setPushRuleEnabled("global", kind, word, false);
+                    await MatrixClientPeg.safeGet().setPushRuleEnabled("global", kind, ruleId, false);
                 }
             }
 

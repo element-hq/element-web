@@ -3,7 +3,7 @@
 exports[`SpaceButton metaspace should render notificationState if one is provided 1`] = `
 <DocumentFragment>
   <div
-    aria-label="People"
+    aria-label="Home"
     class="mx_AccessibleButton mx_SpaceButton mx_SpaceButton_active"
     data-testid="create-space-button"
     role="button"
@@ -25,23 +25,27 @@ exports[`SpaceButton metaspace should render notificationState if one is provide
         <div
           class="mx_SpacePanel_badgeContainer"
         >
-          <div
-            class="mx_AccessibleButton mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_level_notification mx_NotificationBadge_2char cpd-theme-light"
-            role="button"
+          <button
+            aria-label="Jump to first unread room."
+            class="mx_SpacePanel_notificationBadge _notificationBadge_19whq_8 _visible_19whq_16 _notification_19whq_8 _badge2Char_19whq_57 cpd-theme-light"
+            data-badge-type="badge_2char"
+            data-notification-level="notification"
+            data-testid="notification-badge"
             tabindex="-1"
+            type="button"
           >
             <span
-              class="mx_NotificationBadge_count"
+              class="_count_19whq_40"
             >
               8
             </span>
-          </div>
+          </button>
         </div>
       </div>
       <span
         class="mx_SpaceButton_name"
       >
-        People
+        Home
       </span>
     </div>
   </div>

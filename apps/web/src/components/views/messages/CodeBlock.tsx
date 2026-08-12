@@ -13,6 +13,8 @@ import { CollapseIcon, CopyIcon, ExpandIcon } from "@vector-im/compound-design-t
 
 import { useSettingValue } from "../../../hooks/useSettings.ts";
 import { CopyTextButton } from "../elements/CopyableText.tsx";
+import AccessibleButton from "../elements/AccessibleButton.tsx";
+import { _t } from "../../../i18n";
 
 const MAX_HIGHLIGHT_LENGTH = 4096;
 const MAX_LINES_BEFORE_COLLAPSE = 5;
@@ -26,9 +28,14 @@ const ExpandCollapseButton: React.FC<{
     onClick(this: void): void;
 }> = ({ expanded, onClick }) => {
     return (
-        <span className="mx_EventTile_button" onClick={onClick}>
+        <AccessibleButton
+            element="button"
+            title={expanded ? _t("action|collapse") : _t("action|expand")}
+            onClick={onClick}
+            className="mx_EventTile_button"
+        >
             {expanded ? <CollapseIcon /> : <ExpandIcon />}
-        </span>
+        </AccessibleButton>
     );
 };
 

@@ -69,7 +69,7 @@ export default class AddThreepid {
      * Attempt to add an email threepid to the homeserver.
      * This will trigger a side-effect of sending an email to the provided email address.
      * @param {string} emailAddress The email address to add
-     * @return {Promise} Resolves when the email has been sent. Then call checkEmailLinkClicked().
+     * @returns {Promise} Resolves when the email has been sent. Then call checkEmailLinkClicked().
      */
     public async addEmailAddress(emailAddress: string): Promise<IRequestTokenResponse> {
         try {
@@ -91,7 +91,7 @@ export default class AddThreepid {
      * Attempt to bind an email threepid on the identity server via the homeserver.
      * This will trigger a side-effect of sending an email to the provided email address.
      * @param {string} emailAddress The email address to add
-     * @return {Promise} Resolves when the email has been sent. Then call checkEmailLinkClicked().
+     * @returns {Promise} Resolves when the email has been sent. Then call checkEmailLinkClicked().
      */
     public async bindEmailAddress(emailAddress: string): Promise<IRequestTokenResponse> {
         this.bind = true;
@@ -122,7 +122,7 @@ export default class AddThreepid {
      * This will trigger a side-effect of sending an SMS to the provided phone number.
      * @param {string} phoneCountry The ISO 2 letter code of the country to resolve phoneNumber in
      * @param {string} phoneNumber The national or international formatted phone number to add
-     * @return {Promise} Resolves when the text message has been sent. Then call haveMsisdnToken().
+     * @returns {Promise} Resolves when the text message has been sent. Then call haveMsisdnToken().
      *
      * @throws {UserFriendlyError} An appropriate user-friendly error if the verification code could not be sent.
      */
@@ -155,7 +155,7 @@ export default class AddThreepid {
      * This will trigger a side-effect of sending an SMS to the provided phone number.
      * @param {string} phoneCountry The ISO 2 letter code of the country to resolve phoneNumber in
      * @param {string} phoneNumber The national or international formatted phone number to add
-     * @return {Promise} Resolves when the text message has been sent. Then call haveMsisdnToken().
+     * @returns {Promise} Resolves when the text message has been sent. Then call haveMsisdnToken().
      */
     public async bindMsisdn(phoneCountry: string, phoneNumber: string): Promise<IRequestMsisdnTokenResponse> {
         this.bind = true;
@@ -184,7 +184,7 @@ export default class AddThreepid {
 
     /**
      * Checks if the email link has been clicked by attempting to add the threepid
-     * @return {Promise} Resolves if the email address was added. Rejects with an object
+     * @returns {Promise} Resolves if the email address was added. Rejects with an object
      * with a "message" property which contains a human-readable message detailing why
      * the request failed.
      */
@@ -254,7 +254,7 @@ export default class AddThreepid {
 
     /**
      * @param {{type: string, session?: string}} auth UI auth object
-     * @return {Promise<Object>} Response from /3pid/add call (in current spec, an empty object)
+     * @returns {Promise<Object>} Response from /3pid/add call (in current spec, an empty object)
      */
     // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     private makeAddThreepidOnlyRequest = (auth?: IAddThreePidOnlyBody["auth"] | null): Promise<{}> => {
@@ -269,7 +269,7 @@ export default class AddThreepid {
      * Takes a phone number verification code as entered by the user and validates
      * it with the identity server, then if successful, adds the phone number.
      * @param {string} msisdnToken phone number verification code as entered by the user
-     * @return {Promise} Resolves if the phone number was added. Rejects with an object
+     * @returns {Promise} Resolves if the phone number was added. Rejects with an object
      * with a "message" property which contains a human-readable message detailing why
      * the request failed.
      */

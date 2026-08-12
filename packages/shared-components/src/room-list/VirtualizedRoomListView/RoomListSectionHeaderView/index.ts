@@ -13,3 +13,5 @@ export type {
     RoomListSectionHeaderViewSnapshot,
     RoomListSectionHeaderActions,
 } from "./RoomListSectionHeaderView";
+export { RoomListStickySectionHeaderView } from "./RoomListStickySectionHeaderView";
+export type { RoomListStickySectionHeaderViewProps } from "./RoomListStickySectionHeaderView";

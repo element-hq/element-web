@@ -85,3 +85,35 @@ exports[`<RoomListToast /> > renders SectionCreated story 1`] = `
   </div>
 </div>
 `;
+
+exports[`<RoomListToast /> > renders UnreadActivity story 1`] = `
+<div>
+  <div
+    style="position: relative; width: 320px; height: 100px; background-color: grey;"
+  >
+    <button
+      class="_toast-container_1jkz7_8 _clickable_1jkz7_33 RoomListToast-module_toast"
+      type="button"
+    >
+      <div
+        class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _content_1jkz7_68"
+      >
+        <svg
+          aria-hidden="true"
+          class="_icon_1jkz7_55"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 4.5a1 1 0 0 1 1 1v10.586l4.293-4.293a1 1 0 0 1 1.414 1.414l-6 6a1 1 0 0 1-1.414 0l-6-6a1 1 0 1 1 1.414-1.414L11 16.086V5.5a1 1 0 0 1 1-1"
+          />
+        </svg>
+        Unread messages
+      </div>
+    </button>
+  </div>
+</div>
+`;

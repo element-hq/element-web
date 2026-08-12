@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
+import { type AccessTokens } from "matrix-js-sdk/src/matrix";
 import decryptAESSecretStorageItem from "matrix-js-sdk/src/utils/decryptAESSecretStorageItem";
 import encryptAESSecretStorageItem from "matrix-js-sdk/src/utils/encryptAESSecretStorageItem";
 import { type AESEncryptedSecretStoragePayload } from "matrix-js-sdk/src/types";
@@ -51,7 +52,6 @@ async function pickleKeyToAesKey(pickleKey: string): Promise<Uint8Array<ArrayBuf
             {
                 name: "HKDF",
                 hash: "SHA-256",
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore: https://github.com/microsoft/TypeScript-DOM-lib-generator/pull/879
                 salt: new Uint8Array(32),
                 info: new Uint8Array(0),
@@ -116,7 +116,7 @@ export async function tryDecryptToken(
  * @param hasTokenStorageKey Localstorage key for an item which stores whether we expect to have a token in indexeddb,
  *    eg "mx_has_access_token".
  */
-export async function persistTokenInStorage(
+async function persistTokenInStorage(
     storageKey: string,
     tokenName: string,
     token: string | undefined,
@@ -174,40 +174,24 @@ export async function persistTokenInStorage(
 }
 
 /**
- * Wraps {@link persistTokenInStorage} with accessToken storage keys
+ * Wraps {@link persistTokenInStorage} with accessToken & refreshToken storage keys
  *
- * @param token - The token to store. When undefined, any existing accessToken is removed from storage.
- * @param pickleKey - Pickle key: used to derive the key used to encrypt token. If `undefined`, the token will be stored
- *    unencrypted.
+ * @param tokens - The tokens to persist
+ * @param pickleKey - Pickle key: used to derive the key used to encrypt token.
+ *     If `undefined`, the token will be stored unencrypted.
  */
-export async function persistAccessTokenInStorage(
-    token: string | undefined,
-    pickleKey: string | undefined,
-): Promise<void> {
-    return persistTokenInStorage(
+export async function persistTokens(pickleKey: string | undefined, tokens: AccessTokens): Promise<void> {
+    await persistTokenInStorage(
         ACCESS_TOKEN_STORAGE_KEY,
         ACCESS_TOKEN_IV,
-        token,
+        tokens.accessToken,
         pickleKey,
         HAS_ACCESS_TOKEN_STORAGE_KEY,
     );
-}
-
-/**
- * Wraps {@link persistTokenInStorage} with refreshToken storage keys.
- *
- * @param token - The token to store. When undefined, any existing refreshToken is removed from storage.
- * @param pickleKey - Pickle key: used to derive the key used to encrypt token. If `undefined`, the token will be stored
- *    unencrypted.
- */
-export async function persistRefreshTokenInStorage(
-    token: string | undefined,
-    pickleKey: string | undefined,
-): Promise<void> {
-    return persistTokenInStorage(
+    await persistTokenInStorage(
         REFRESH_TOKEN_STORAGE_KEY,
         REFRESH_TOKEN_IV,
-        token,
+        tokens.refreshToken,
         pickleKey,
         HAS_REFRESH_TOKEN_STORAGE_KEY,
     );

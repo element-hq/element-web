@@ -31,7 +31,7 @@ import QuestionDialog from "../../../dialogs/QuestionDialog";
 import { type FilterVariation } from "../../devices/filter";
 import { OtherSessionsSectionHeading } from "../../devices/OtherSessionsSectionHeading";
 import { SettingsSection } from "../../shared/SettingsSection";
-import { getManageDeviceUrl } from "../../../../../utils/oidc/urls.ts";
+import { getManageDeviceUrl } from "../../../../../utils/oauth/urls.ts";
 import { SDKContext } from "../../../../../contexts/SDKContext";
 import Spinner from "../../../elements/Spinner";
 
@@ -40,7 +40,7 @@ const LoginWithQR = lazy(() => import("../../../auth/LoginWithQR"));
 
 const confirmSignOut = async (sessionsToSignOutCount: number): Promise<boolean> => {
     const { finished } = Modal.createDialog(QuestionDialog, {
-        title: _t("action|sign_out"),
+        title: _t("settings|sessions|sign_out_n_sessions", { count: sessionsToSignOutCount }),
         description: (
             <div>
                 <p>
@@ -51,7 +51,7 @@ const confirmSignOut = async (sessionsToSignOutCount: number): Promise<boolean> 
             </div>
         ),
         cancelButton: _t("action|cancel"),
-        button: _t("action|sign_out"),
+        button: _t("settings|sessions|sign_out_n_sessions", { count: sessionsToSignOutCount }),
     });
     const [confirmed] = await finished;
 
@@ -154,12 +154,12 @@ const SessionManagerTab: React.FC<{
      * See https://github.com/matrix-org/matrix-spec-proposals/pull/3824
      */
     const accountManagement = useAsyncMemo(async () => {
-        await sdkContext.oidcClientStore.readyPromise; // wait for the store to be ready
+        const authMetadata = await matrixClient.getAuthMetadata().catch(() => {});
         return {
-            endpoint: sdkContext.oidcClientStore.accountManagementEndpoint,
-            actionsSupported: sdkContext.oidcClientStore.accountManagementActionsSupported,
+            endpoint: authMetadata?.account_management_uri,
+            actionsSupported: authMetadata?.account_management_actions_supported,
         };
-    }, [sdkContext.oidcClientStore]);
+    }, [matrixClient]);
     const disableMultipleSignout = !!accountManagement?.endpoint;
     const userId = matrixClient?.getUserId();
     const currentUserMember = (userId && matrixClient?.getUser(userId)) || undefined;

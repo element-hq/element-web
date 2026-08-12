@@ -1,7 +1,7 @@
 {
     "name": "@element-hq/element-web-module-banner",
     "private": true,
-    "version": "0.0.0",
+    "version": "1.0.0",
     "type": "module",
     "main": "lib/index.js",
     "license": "SEE LICENSE IN README.md",

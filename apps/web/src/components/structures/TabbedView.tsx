@@ -111,6 +111,7 @@ function TabLabel<T extends string>({ tab, isActive, showToolip, onClick }: ITab
             aria-controls={id}
             element="li"
             title={showToolip ? label : undefined}
+            aria-labelledby={`${id}_label`}
         >
             {tabIcon}
             <span className="mx_TabbedView_tabLabel_text" id={`${id}_label`}>

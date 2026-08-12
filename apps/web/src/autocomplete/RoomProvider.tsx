@@ -108,21 +108,19 @@ export default class RoomProvider extends AutocompleteProvider {
             ]);
             completions = uniqBy(completions, (match) => match.room);
             return completions
-                .map(
-                    (room): ICompletion => ({
-                        completion: room.displayedAlias,
-                        completionId: room.room.roomId,
-                        type: "room",
-                        suffix: " ",
-                        href: makeRoomPermalink(this.room.client, room.displayedAlias),
-                        component: (
-                            <PillCompletion title={room.room.name} description={room.displayedAlias}>
-                                <RoomAvatar size="24px" room={room.room} />
-                            </PillCompletion>
-                        ),
-                        range: range!,
-                    }),
-                )
+                .map((room): ICompletion => ({
+                    completion: room.displayedAlias,
+                    completionId: room.room.roomId,
+                    type: "room",
+                    suffix: " ",
+                    href: makeRoomPermalink(this.room.client, room.displayedAlias),
+                    component: (
+                        <PillCompletion title={room.room.name} description={room.displayedAlias}>
+                            <RoomAvatar size="24px" room={room.room} />
+                        </PillCompletion>
+                    ),
+                    range: range!,
+                }))
                 .filter((completion) => !!completion.completion && completion.completion.length > 0);
         }
         return [];
@@ -136,7 +134,6 @@ export default class RoomProvider extends AutocompleteProvider {
         return (
             <div
                 className="mx_Autocomplete_Completion_container_pill mx_Autocomplete_Completion_container_truncate"
-                role="presentation"
                 aria-label={_t("composer|autocomplete|room_a11y")}
             >
                 {completions}
