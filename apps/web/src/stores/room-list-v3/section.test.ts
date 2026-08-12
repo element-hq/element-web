@@ -32,11 +32,29 @@ import { RemoveSectionDialog } from "../../components/views/dialogs/RemoveSectio
 import { DefaultTagID } from "./skip-list/tag";
 import { MetaSpace } from "../spaces";
 import { SDKContextClass } from "../../contexts/SDKContextClass.ts";
+import { mkStubRoom } from "test-utils";
+import { tagRoom } from "../../utils/room/tagRoom.ts";
+
+vi.mock("../../utils/room/tagRoom.ts", () => ({
+    tagRoom: vi.fn(),
+}));
 
 describe("section", () => {
     afterEach(() => {
         vi.restoreAllMocks();
+        vi.mocked(tagRoom).mockClear();
     });
+
+    /**
+     * Make the given rooms resolvable through the client.
+     * @param roomIds - The ids of the rooms the client knows about.
+     */
+    function setupRooms(roomIds: string[]): void {
+        const rooms = roomIds.map((roomId) => mkStubRoom(roomId, roomId));
+        vi.spyOn(SDKContextClass.instance, "client", "get").mockReturnValue({
+            getRoom: (roomId: string) => rooms.find((room) => room.roomId === roomId) ?? null,
+        } as any);
+    }
 
     describe("getCustomSectionData", () => {
         const validTag = "element.io.section.valid";
@@ -201,12 +219,12 @@ describe("section", () => {
         });
 
         it.each([
-            [false, "", undefined],
-            [true, "", undefined],
-            [true, "My Section", expect.stringMatching(/^element\.io\.section\./)],
-        ])("returns %s when shouldCreate=%s and name='%s'", async (shouldCreate, name, expected) => {
+            [undefined, undefined],
+            ["", undefined],
+            ["My Section", expect.stringMatching(/^element\.io\.section\./)],
+        ])("returns %s when the dialog is finished with name='%s'", async (name, expected) => {
             vi.spyOn(Modal, "createDialog").mockReturnValue({
-                finished: Promise.resolve([shouldCreate, name]),
+                finished: Promise.resolve([name]),
                 close: vi.fn(),
             } as any);
 
@@ -216,7 +234,7 @@ describe("section", () => {
 
         it("returns the new tag when section is created", async () => {
             vi.spyOn(Modal, "createDialog").mockReturnValue({
-                finished: Promise.resolve([true, "My Section"]),
+                finished: Promise.resolve(["My Section"]),
                 close: vi.fn(),
             } as any);
 
@@ -226,12 +244,29 @@ describe("section", () => {
 
         it("opens the CreateSectionDialog", async () => {
             const createDialogSpy = vi.spyOn(Modal, "createDialog").mockReturnValue({
-                finished: Promise.resolve([false, ""]),
+                finished: Promise.resolve([undefined]),
                 close: vi.fn(),
             } as any);
 
             await createSection(MetaSpace.Home);
             expect(createDialogSpy).toHaveBeenCalledWith(CreateSectionDialog);
+        });
+
+        it("tags the rooms chosen in the dialog with the new section", async () => {
+            vi.spyOn(Modal, "createDialog").mockReturnValue({
+                finished: Promise.resolve(["My Section", ["!picked:example.org"]]),
+                close: vi.fn(),
+            } as any);
+
+            const room = mkStubRoom("!picked:example.org", "Picked");
+            room.tags = {};
+            vi.spyOn(SDKContextClass.instance, "client", "get").mockReturnValue({
+                getRoom: () => room,
+            } as any);
+
+            const newTag = await createSection(MetaSpace.Home);
+
+            expect(tagRoom).toHaveBeenCalledWith(room, newTag);
         });
 
         it("saves section data and ordered sections at ACCOUNT level when confirmed", async () => {
@@ -243,7 +278,7 @@ describe("section", () => {
                 return null;
             });
             vi.spyOn(Modal, "createDialog").mockReturnValue({
-                finished: Promise.resolve([true, "My Section"]),
+                finished: Promise.resolve(["My Section"]),
                 close: vi.fn(),
             } as any);
             const setValueSpy = vi.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
@@ -291,21 +326,19 @@ describe("section", () => {
 
         it("opens the CreateSectionDialog with the current section name", async () => {
             const createDialogSpy = vi.spyOn(Modal, "createDialog").mockReturnValue({
-                finished: Promise.resolve([false, ""]),
+                finished: Promise.resolve([undefined]),
                 close: vi.fn(),
             } as any);
 
             await editSection(tag);
-            expect(createDialogSpy).toHaveBeenCalledWith(CreateSectionDialog, { sectionToEdit: "Old Name" });
+            expect(createDialogSpy).toHaveBeenCalledWith(CreateSectionDialog, {
+                sectionToEdit: { tag, name: "Old Name", spaceId: MetaSpace.Home },
+            });
         });
 
-        it.each([
-            [false, "New Name"],
-            [true, ""],
-            [true, "Old Name"],
-        ])("does not save when shouldEdit=%s and name='%s'", async (shouldEdit, name) => {
+        it.each([[undefined], [""], ["Old Name"]])("does not save when the name is '%s'", async (name) => {
             vi.spyOn(Modal, "createDialog").mockReturnValue({
-                finished: Promise.resolve([shouldEdit, name]),
+                finished: Promise.resolve([name]),
                 close: vi.fn(),
             } as any);
             const setValueSpy = vi.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
@@ -316,7 +349,7 @@ describe("section", () => {
 
         it("saves the new name when confirmed with a different name", async () => {
             vi.spyOn(Modal, "createDialog").mockReturnValue({
-                finished: Promise.resolve([true, "New Name"]),
+                finished: Promise.resolve(["New Name"]),
                 close: vi.fn(),
             } as any);
             const setValueSpy = vi.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
@@ -329,6 +362,34 @@ describe("section", () => {
                 expect.anything(),
                 expect.objectContaining({ [tag]: expect.objectContaining({ tag, name: "New Name" }) }),
             );
+        });
+
+        it("tags the rooms added to the section and untags the ones removed from it", async () => {
+            setupRooms(["!added:example.org", "!removed:example.org"]);
+            vi.spyOn(Modal, "createDialog").mockReturnValue({
+                finished: Promise.resolve(["New Name", ["!added:example.org"], ["!removed:example.org"]]),
+                close: vi.fn(),
+            } as any);
+
+            await editSection(tag);
+
+            expect(tagRoom).toHaveBeenCalledTimes(2);
+            expect(tagRoom).toHaveBeenCalledWith(expect.objectContaining({ roomId: "!added:example.org" }), tag);
+            expect(tagRoom).toHaveBeenCalledWith(expect.objectContaining({ roomId: "!removed:example.org" }), tag);
+        });
+
+        it("applies the room changes even when the name is unchanged", async () => {
+            setupRooms(["!added:example.org"]);
+            vi.spyOn(Modal, "createDialog").mockReturnValue({
+                finished: Promise.resolve(["Old Name", ["!added:example.org"], []]),
+                close: vi.fn(),
+            } as any);
+            const setValueSpy = vi.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+
+            await editSection(tag);
+
+            expect(tagRoom).toHaveBeenCalledWith(expect.objectContaining({ roomId: "!added:example.org" }), tag);
+            expect(setValueSpy).not.toHaveBeenCalled();
         });
     });
 

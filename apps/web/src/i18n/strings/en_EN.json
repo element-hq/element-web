@@ -555,6 +555,7 @@
         "settings": "Settings",
         "setup_secure_messages": "Set up Secure Messages",
         "show_more": "Show more",
+        "skip": "Skip",
         "someone": "Someone",
         "space": "Space",
         "spaces": "Spaces",
@@ -675,8 +676,13 @@
         "unsupported_version": "The server does not support the room version specified."
     },
     "create_section_dialog": {
+        "add_rooms": "Add chats",
         "create_section": "Create section",
+        "empty_list_text": "No rooms found",
+        "list_title": "Suggested",
+        "placeholder": "Search for people or rooms",
         "title": "Create a section",
+        "title_add_rooms": "Add chats to %(section)s",
         "title_edition": "Edit a section"
     },
     "create_space": {
