@@ -18,6 +18,7 @@ import {
     useViewModel,
     linkIcon,
     MediaPreviewGroupEntry,
+    MediaPreviewGroupEntryContent,
 } from "@element-hq/web-shared-components";
 
 import { type IBodyProps } from "./IBodyProps";
@@ -134,27 +135,14 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
     const { previews } = useViewModel(urlPreviewVm);
 
     const previewToEntry = (preview: UrlPreview): MediaPreviewGroupEntry => {
+        let content: MediaPreviewGroupEntryContent;
         if (preview.image === undefined) {
-            return {
+            content = {
                 style: "text",
-                header: preview.title,
-                headerUrl: preview.link,
-                body: preview.description!,
-                buttons: [
-                    {
-                        icon: <PopOutIcon />,
-                        onClick: async () => {
-                            window.open(preview.link, "_blank", "noreferrer");
-                        },
-                    },
-                ],
-                ...linkIcon(),
             };
         } else {
-            return {
+            content = {
                 style: "image",
-                header: preview.title,
-                headerUrl: preview.link,
                 image: preview.image.imageFull,
                 imageSize: "banner",
                 imageOnClick: () => {
@@ -172,18 +160,24 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
                         true,
                     );
                 },
-                body: preview.description!,
-                buttons: [
-                    {
-                        icon: <PopOutIcon />,
-                        onClick: async () => {
-                            window.open(preview.link, "_blank", "noreferrer");
-                        },
-                    },
-                ],
-                ...linkIcon(),
             };
         }
+
+        return {
+            header: preview.title,
+            headerUrl: preview.link,
+            body: preview.description!,
+            buttons: [
+                {
+                    icon: <PopOutIcon />,
+                    onClick: async () => {
+                        window.open(preview.link, "_blank", "noreferrer");
+                    },
+                },
+            ],
+            ...linkIcon(),
+            ...content,
+        };
     };
 
     const mediaPreviewVm = useCreateAutoDisposedViewModel(
