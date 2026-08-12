@@ -211,11 +211,26 @@ export class UrlPreviewFetcher {
     /*
      * Convert an MSC4095 URL preview bundle item to a UrlPreview
      */
-    public previewFromBundle(single: UnstableBundledUrlPreviewSingle): UrlPreview {
+    public previewFromBundle(single: UnstableBundledUrlPreviewSingle): UrlPreview | null {
+        // The bundle and its `matched_url` come from the message sender and are therefore
+        // untrusted (unlike the homeserver-fetched preview path, whose link originates from the
+        // linkified message body). Only allow http(s) URLs so that a malicious sender cannot
+        // supply a `javascript:`/`data:` (or otherwise unsafe) URL that would then be rendered as
+        // the preview link's `href`, and so that a malformed URL cannot throw while rendering.
+        let matchedUrl: URL;
+        try {
+            matchedUrl = new URL(single.matched_url);
+        } catch {
+            return null;
+        }
+        if (matchedUrl.protocol !== "http:" && matchedUrl.protocol !== "https:") {
+            return null;
+        }
+
         const preview: UrlPreview = {
             link: single.matched_url,
             title: single["og:title"] ?? single.matched_url,
-            siteName: new URL(single.matched_url).hostname,
+            siteName: matchedUrl.hostname,
             showTooltipOnLink: !!(single.matched_url !== single["og:title"] && this.showTooltips),
             description: single["og:description"],
             ogUrl: single["og:url"],
