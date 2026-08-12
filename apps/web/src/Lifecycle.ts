@@ -845,7 +845,7 @@ async function doSetLoggedIn(
     dis.dispatch<OnLoggedInPayload>({ action: Action.OnLoggedIn, client }, true);
 
     const clientPegOpts: MatrixClientPegAssignOpts = {
-        userVerificationCaCertsPem: ModuleApi.instance.clientCreationManagement.userVerificationCaCertsPem ?? undefined,
+        userVerificationCaCertsPem: ModuleApi.instance.client.creationManagement.userVerificationCaCertsPem ?? undefined,
     };
 
     if (credentials.pickleKey) {
