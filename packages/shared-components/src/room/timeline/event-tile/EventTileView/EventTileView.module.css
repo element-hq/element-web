@@ -64,11 +64,6 @@
     min-width: 0;
 }
 
-/* Semantic hook retained for the state contract until reply-chain shell
-   placement is added. */
-.stateHasReply {
-}
-
 /* Slot wrappers are the public styling boundary. The supplied content may be
    a component, fragment, or multiple elements and does not need to forward
    layout props. */
@@ -196,7 +191,12 @@
 
     .slotReplyChain {
         margin-inline-start: 0;
-        margin-bottom: var(--cpd-space-2x, 8px);
+    }
+
+    /* Reply-chain spacing belongs to the group shell; nested reply content
+       remains application-owned. */
+    &.stateHasReply .slotReplyChain {
+        margin-block-end: var(--cpd-space-2x, 8px);
     }
 
     .slotFooter {
@@ -535,6 +535,12 @@
     .slotReplyChain,
     .slotThreadInfo {
         clear: both;
+    }
+
+    /* Reply-chain spacing belongs to the bubble shell; nested reply content
+       remains application-owned. */
+    &.stateHasReply .slotReplyChain {
+        margin-block-end: var(--cpd-space-2x, 8px);
     }
 
     /* Own-event modifiers. */

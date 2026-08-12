@@ -418,7 +418,7 @@ describe("EventTileView", () => {
         );
     });
 
-    it("renders the thread layout in the original slot order", () => {
+    it.each(["group", "bubble"] as const)("renders the %s thread layout in the original slot order", (layout) => {
         const { container, getByTestId } = render(
             <EventTileView
                 {...createProps({
@@ -427,6 +427,7 @@ describe("EventTileView", () => {
                     },
                     root: {
                         ...renderState,
+                        layout,
                         shape: "Thread",
                     },
                     slots: {
@@ -458,6 +459,14 @@ describe("EventTileView", () => {
         expect(line).toContainElement(getByTestId("timestamp"));
         expect(line).toContainElement(getByTestId("receipt"));
         expect(getByTestId("footer").parentElement?.parentElement).toBe(root);
+
+        expect(Array.from(line.children).map((child) => child.getAttribute("data-testid"))).toEqual([
+            "event-tile-slot-replyChain",
+            "event-tile-slot-body",
+            "event-tile-slot-actionBar",
+            "event-tile-slot-timestamp",
+            "event-tile-slot-receipt",
+        ]);
     });
 
     it.each(["Notification", "ThreadsList"] as const)("renders the %s preview layout", (shape) => {
