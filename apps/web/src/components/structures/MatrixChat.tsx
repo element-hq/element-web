@@ -16,11 +16,13 @@ import {
     type MatrixClient,
     MatrixEvent,
     MsgType,
+    RestrictedAllowType,
     type RoomType,
     SyncState,
     type SyncStateData,
     type TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
+import { type RoomJoinRulesEventContent } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { throttle } from "lodash";
 import { CryptoEvent, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
@@ -1248,18 +1250,23 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         const joinRules = roomToLeave?.currentState.getStateEvents("m.room.join_rules", "");
         if (joinRules) {
-            const rule = joinRules.getContent().join_rule;
-            if (rule !== JoinRule.Public) {
+            const content = joinRules.getContent<RoomJoinRulesEventContent>();
+            if (content.join_rule !== JoinRule.Public) {
                 // A restricted room is reachable again from any of its authorised spaces, so telling
-                // someone who is still in one that they need an invite back is untrue.
-                const isRestricted = rule === JoinRule.Restricted;
+                // someone who is still in one that they need an invite back is untrue. An empty allow
+                // list is the exception that keeps the old sentence honest: no space membership can
+                // satisfy the rule, so the server turns every join away and an invite really is the
+                // only way back. Room settings already present that state as invite only.
+                const hasAuthorisedSpaces =
+                    content.join_rule === JoinRule.Restricted &&
+                    !!content.allow?.some(({ type }) => type === RestrictedAllowType.RoomMembership);
                 let warning: string;
                 if (isSpace) {
-                    warning = isRestricted
+                    warning = hasAuthorisedSpaces
                         ? _t("leave_room_dialog|space_rejoin_warning_restricted")
                         : _t("leave_room_dialog|space_rejoin_warning");
                 } else {
-                    warning = isRestricted
+                    warning = hasAuthorisedSpaces
                         ? _t("leave_room_dialog|room_rejoin_warning_restricted")
                         : _t("leave_room_dialog|room_rejoin_warning");
                 }

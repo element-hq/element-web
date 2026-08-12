@@ -941,6 +941,15 @@ describe("<MatrixChat />", () => {
                         type: "m.room.join_rules",
                         content: {
                             join_rule: "restricted",
+                            allow: [{ type: "m.room_membership", room_id: "!authorised-space:server.org" }],
+                        },
+                    });
+                    // A restricted room can name no space at all, and then nobody satisfies the rule.
+                    const unauthorisedRestrictedJoinRule = new MatrixEvent({
+                        type: "m.room.join_rules",
+                        content: {
+                            join_rule: "restricted",
+                            allow: [],
                         },
                     });
                     describe("for a room", () => {
@@ -980,6 +989,18 @@ describe("<MatrixChat />", () => {
                             expect(
                                 screen.getByText(
                                     "This room is restricted and cannot be rejoined unless you are in one of its authorised spaces or invited.",
+                                ),
+                            ).toBeInTheDocument();
+                        });
+                        it("should warn when a restricted room has no authorised spaces", async () => {
+                            vi.spyOn(room.currentState, "getStateEvents").mockReturnValue(
+                                unauthorisedRestrictedJoinRule,
+                            );
+                            dispatchAction();
+                            await screen.findByRole("dialog");
+                            expect(
+                                screen.getByText(
+                                    "This room is not public. You will not be able to rejoin without an invite.",
                                 ),
                             ).toBeInTheDocument();
                         });
@@ -1058,6 +1079,18 @@ describe("<MatrixChat />", () => {
                             expect(
                                 screen.getByText(
                                     "This space is restricted and cannot be rejoined unless you are in one of its authorised spaces or invited.",
+                                ),
+                            ).toBeInTheDocument();
+                        });
+                        it("should warn when a restricted space has no authorised spaces", async () => {
+                            vi.spyOn(spaceRoom.currentState, "getStateEvents").mockReturnValue(
+                                unauthorisedRestrictedJoinRule,
+                            );
+                            dispatchAction();
+                            await screen.findByRole("dialog");
+                            expect(
+                                screen.getByText(
+                                    "This space is not public. You will not be able to rejoin without an invite.",
                                 ),
                             ).toBeInTheDocument();
                         });
