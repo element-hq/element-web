@@ -188,7 +188,6 @@
         "oxfmt": "0.60.0",
         "playwright-core": "catalog:",
         "postcss": "8.5.25",
-        "postcss-easings": "4.0.0",
         "postcss-hexrgba": "2.1.0",
         "postcss-import": "16.1.1",
         "postcss-loader": "8.2.1",
