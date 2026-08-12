@@ -49,8 +49,6 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
     readonly builtins: BuiltinsApi;
     readonly client: ClientApi;
     // @alpha
-    readonly clientCreationManagement: ClientCreationManagementApi;
-    // @alpha
     readonly composer: ComposerApi;
     readonly config: ConfigApi;
     createRoot(element: Element): Root;
@@ -98,6 +96,8 @@ export interface ChatExportCustomisations<ExportFormat, ExportType> {
 // @public
 export interface ClientApi {
     accountData: AccountDataApi;
+    // @alpha
+    readonly creationManagement: ClientCreationManagementApi;
     getRoom: (id: string) => Room | null;
 }
 
