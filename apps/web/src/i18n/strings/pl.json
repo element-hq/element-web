@@ -1722,7 +1722,6 @@
         "mentions_and_keywords": "Tylko @wzmianki i odpowiedzi",
         "mentions_and_keywords_description": "Otrzymuj powiadomienia tylko od wzmianek i słów kluczowych zgodnie z Twoimi <a>ustawieniami</a>",
         "mentions_keywords": "Wzmianki i słowa kluczowe",
-        "message_didnt_send": "Nie wysłano wiadomości. Kliknij po więcej informacji.",
         "mute_description": "Nie otrzymasz żadnych powiadomień"
     },
     "notifier": {

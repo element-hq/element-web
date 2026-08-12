@@ -1698,7 +1698,6 @@
         "mentions_and_keywords": "@zmínky a klíčová slova",
         "mentions_and_keywords_description": "Dostávat oznámení pouze o zmínkách a klíčových slovech podle <a>nastavení</a>",
         "mentions_keywords": "Zmínky a klíčová slova",
-        "message_didnt_send": "Zpráva se neodeslala. Klikněte pro informace.",
         "mute_description": "Nebudete dostávat žádná oznámení"
     },
     "notifier": {
