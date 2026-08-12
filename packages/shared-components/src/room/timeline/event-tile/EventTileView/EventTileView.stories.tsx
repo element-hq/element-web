@@ -23,12 +23,19 @@ import { MessageTimestampView } from "../timestamp/MessageTimestampView";
 import { ReactionsRowView } from "../reactions/ReactionsRow";
 import { ReactionsRowButtonView } from "../reactions/ReactionsRowButton";
 import { type ReactionsRowButtonTooltipViewModel } from "../reactions/ReactionsRowButtonTooltip";
+import { ImageBodyView, ImageBodyViewState, type ImageBodyViewSnapshot } from "../body/MImageBodyView";
+import {
+    DecryptionFailureBodyView,
+    DecryptionFailureReason,
+    type DecryptionFailureBodyViewSnapshot,
+} from "../body/DecryptionFailureBodyView";
 import {
     ThreadSummaryView,
     ThreadMessagePreviewView,
     type ThreadMessagePreviewViewSnapshot,
 } from "./ThreadSummary/ThreadSummaryView";
 import styles from "./EventTileView.stories.module.css";
+import storyMediaSrc from "../../../../../static/image-body/install-spinner.png";
 
 type StoryBoundary = HTMLElement;
 const eventTileSlotTestIdPrefix = "event-tile-slot-";
@@ -186,6 +193,32 @@ const StoryReplyChain = (): React.ReactElement => (
         <span>Earlier message quoted in this reply.</span>
     </blockquote>
 );
+const StoryMediaBody = (): React.ReactElement => {
+    const snapshot: ImageBodyViewSnapshot = {
+        state: ImageBodyViewState.READY,
+        alt: "Example media",
+        src: storyMediaSrc,
+        thumbnailSrc: storyMediaSrc,
+        maxWidth: 320,
+        maxHeight: 180,
+        aspectRatio: "16 / 9",
+    };
+    const vm = useMockedViewModel(snapshot, {});
+    return <ImageBodyView vm={vm} />;
+};
+const StoryStickerBody = (): React.ReactElement => (
+    <div className={styles.stickerBody} aria-label="Sticker placeholder">
+        🌈
+    </div>
+);
+const StoryDecryptionFailureBody = (): React.ReactElement => {
+    const snapshot: DecryptionFailureBodyViewSnapshot = {
+        decryptionFailureReason: DecryptionFailureReason.UNABLE_TO_DECRYPT,
+        isLocalDeviceVerified: true,
+    };
+    const vm = useMockedViewModel(snapshot, {});
+    return <DecryptionFailureBodyView vm={vm} />;
+};
 const StoryActionBar = (): React.ReactElement | null => {
     const vm = useMockedViewModel(
         {
@@ -332,7 +365,7 @@ const baseRoot: EventTileViewProps["root"] = {
     eventId: "$event-tile-story",
     layout: "group",
     shape: "Room",
-    state: { isOwnEvent: false, hasReply: true },
+    state: { isOwnEvent: false, hasReply: false },
 };
 
 const roomSlots: EventTileViewProps["slots"] = {
@@ -341,7 +374,6 @@ const roomSlots: EventTileViewProps["slots"] = {
     body: <StoryBody />,
     timestamp: <StoryTimestamp />,
     padlock: <StoryPadlock />,
-    replyChain: <StoryReplyChain />,
     actionBar: <StoryActionBar />,
     footer: <StoryFooter />,
     threadInfo: <StoryThreadInfo />,
@@ -352,7 +384,7 @@ const roomSlots: EventTileViewProps["slots"] = {
 type EventTileStoryProps = Omit<EventTileViewProps, "root"> & {
     shape: EventTileViewProps["root"]["shape"];
     state?: Partial<EventTileViewProps["root"]["state"]>;
-    roomMessages?: "boundaries" | "alice";
+    roomMessages?: "boundaries" | "alice" | "bob";
 };
 
 const createStoryTimestamp = (
@@ -439,7 +471,7 @@ function EventTileViewStoryContent({
         const showActionBar = interaction.hovered || interaction.focused;
         const timestamp = createStoryTimestamp(layout, isLast, showActionBar);
         const showSenderAndAvatar = layout === "irc" || !tileState.continuation;
-        const sender = createStorySender(isOwnEvent, layout, showSenderAndAvatar);
+        const sender = createStorySender(isOwnEvent, layout, showSenderAndAvatar && !tileState.noSender);
         const avatar = createStoryAvatar(isOwnEvent, layout, showSenderAndAvatar);
         const slots =
             shape === "Room"
@@ -509,6 +541,10 @@ function EventTileViewStoryContent({
             return renderTile(true, "alice-single", { continuation: false, lastInSection: true }, true);
         }
 
+        if (roomMessages === "bob") {
+            return renderTile(false, "bob-single", { continuation: false, lastInSection: true }, true);
+        }
+
         return (
             <>
                 {renderTile(false, "bob-first", { continuation: false, lastInSection: false })}
@@ -543,20 +579,37 @@ const eventTileStoryDefaults = {
     slots: roomSlots,
 };
 
+const groupGlobals = { eventLayout: "group", eventDensity: "default" } as const;
+const bubbleGlobals = {
+    eventLayout: "bubble",
+    eventDensity: "default",
+} as const;
+const ircGlobals = { eventLayout: "irc", eventDensity: "default" } as const;
+const compactGroupGlobals = { eventLayout: "group", eventDensity: "compact" } as const;
+
+const storyHelpers = {
+    EventTileViewStory,
+    eventTileStoryDefaults,
+    bubbleGlobals,
+    groupGlobals,
+    ircGlobals,
+    compactGroupGlobals,
+    StoryDecryptionFailureBody,
+    StoryMediaBody,
+    StoryReplyChain,
+    StoryStickerBody,
+};
+
 const meta = {
-    title: "Timeline/EventTileView",
+    title: "Timeline/EventTileView/Layout & Shape",
     component: EventTileViewStory,
     tags: ["autodocs"],
     render: (args) => <EventTileViewStory {...args} />,
     argTypes: {
         shape: {
-            control: "select",
-            options: ["Room", "Thread", "ThreadsList", "File", "Notification", "Search", "Pinned"],
+            table: { disable: true },
         },
         classNames: { table: { disable: true } },
-        state: {
-            control: "object",
-        },
         onMouseEnter: { table: { disable: true } },
         onMouseLeave: { table: { disable: true } },
         onFocus: { table: { disable: true } },
@@ -570,17 +623,21 @@ const meta = {
     },
     args: {
         shape: "Room",
-        state: {},
         ...eventTileStoryDefaults,
     },
-} satisfies Meta<typeof EventTileViewStory>;
+    storyHelpers,
+} satisfies Meta<typeof EventTileViewStory> & { storyHelpers: typeof storyHelpers };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Room: Story = {};
+const interactiveTags = ["skip-test", "!snapshot"];
+const visualTags = ["!dev", "!autodocs", "snapshot"];
+
+export const Room: Story = { tags: interactiveTags };
 
 export const ThreadsList: Story = {
+    tags: interactiveTags,
     args: {
         shape: "ThreadsList",
         slots: {
@@ -596,12 +653,14 @@ export const ThreadsList: Story = {
 };
 
 export const Thread: Story = {
+    tags: interactiveTags,
     args: {
         shape: "Thread",
     },
 };
 
 export const Notification: Story = {
+    tags: interactiveTags,
     args: {
         shape: "Notification",
         slots: {
@@ -618,6 +677,7 @@ export const Notification: Story = {
 };
 
 export const File: Story = {
+    tags: interactiveTags,
     args: {
         shape: "File",
         slots: {
@@ -630,28 +690,86 @@ export const File: Story = {
     },
 };
 
-export const Highlighted: Story = {
+export const Search: Story = {
+    tags: interactiveTags,
     args: {
-        shape: "Thread",
-        state: { highlighted: true },
-        slots: {
-            sender: <StorySender />,
-            avatar: <StoryAvatar />,
-            timestamp: <StoryTimestamp />,
-            body: <StoryBody />,
-        },
+        shape: "Search",
     },
 };
 
-export const Selected: Story = {
+export const Pinned: Story = {
+    tags: interactiveTags,
     args: {
-        shape: "Thread",
-        state: { selected: true },
-        slots: {
-            sender: <StorySender />,
-            avatar: <StoryAvatar />,
-            timestamp: <StoryTimestamp />,
-            body: <StoryBody />,
-        },
+        shape: "Pinned",
     },
+};
+
+export const RoomGroupDefault: Story = {
+    name: "Room - Group - Default",
+    tags: visualTags,
+    globals: groupGlobals,
+    args: Room.args,
+};
+
+export const RoomGroupCompact: Story = {
+    name: "Room - Group - Compact",
+    tags: visualTags,
+    globals: compactGroupGlobals,
+    args: Room.args,
+};
+
+export const RoomBubbleDefault: Story = {
+    name: "Room - Bubble - Default",
+    tags: visualTags,
+    globals: bubbleGlobals,
+    args: Room.args,
+};
+
+export const RoomIrcDefault: Story = {
+    name: "Room - IRC - Default",
+    tags: visualTags,
+    globals: ircGlobals,
+    args: Room.args,
+};
+
+export const ThreadsListGroup: Story = {
+    name: "Threads list - Group",
+    tags: visualTags,
+    globals: groupGlobals,
+    args: ThreadsList.args,
+};
+
+export const ThreadGroup: Story = {
+    name: "Thread - Group",
+    tags: visualTags,
+    globals: groupGlobals,
+    args: Thread.args,
+};
+
+export const NotificationGroup: Story = {
+    name: "Notification - Group",
+    tags: visualTags,
+    globals: groupGlobals,
+    args: Notification.args,
+};
+
+export const FileGroup: Story = {
+    name: "File - Group",
+    tags: visualTags,
+    globals: groupGlobals,
+    args: File.args,
+};
+
+export const SearchGroup: Story = {
+    name: "Search - Group",
+    tags: visualTags,
+    globals: groupGlobals,
+    args: Search.args,
+};
+
+export const PinnedGroup: Story = {
+    name: "Pinned - Group",
+    tags: visualTags,
+    globals: groupGlobals,
+    args: Pinned.args,
 };
