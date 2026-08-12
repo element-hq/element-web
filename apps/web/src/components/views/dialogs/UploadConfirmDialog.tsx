@@ -16,6 +16,7 @@ import { fileSize } from "../../../utils/FileUtils";
 import {
     attachmentIcon,
     MediaPreviewGroupEntry,
+    MediaPreviewGroupEntryContent,
     MediaPreviewGroupPreview,
 } from "@element-hq/web-shared-components";
 import { MediaPreviewGroupViewModel } from "../../../viewmodels/message-body/MediaPreviewGroupViewModel";
@@ -44,11 +45,7 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
     }
 
     public componentDidMount(): void {
-        if (
-            this.props.file.type.startsWith("image/") ||
-            this.props.file.type.startsWith("video/") ||
-            this.props.file.type.startsWith("audio/")
-        ) {
+        if (["video", "audio", "image"].includes(this.props.file.type.split("/")[0])) {
             this.setState({
                 // We do not filter the mimetype using getBlobSafeMimeType here as if the user is uploading the file
                 // themselves they should be trusting it enough to open/load it, and it will be rendered into a hidden
@@ -86,42 +83,41 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
         }
 
         const mimeType = this.props.file.type;
-        let preview: MediaPreviewGroupEntry;
+        let previewContent: MediaPreviewGroupEntryContent;
 
-        if (mimeType.startsWith("image/")) {
-            preview = {
-                style: "image",
-                imageSize: "full",
-                image: this.state.objectUrl!,
-                header: this.props.file.name,
-                body: fileSize(this.props.file.size),
-                ...attachmentIcon(mimeType),
-            };
-        } else if (mimeType.startsWith("video/")) {
-            preview = {
-                style: "video",
-                videoSize: "full",
-                video: this.state.objectUrl!,
-                header: this.props.file.name,
-                body: fileSize(this.props.file.size),
-                ...attachmentIcon(mimeType),
-            };
-        } else if (mimeType.startsWith("audio/")) {
-            preview = {
-                style: "audio",
-                audio: this.state.objectUrl!,
-                header: this.props.file.name,
-                body: fileSize(this.props.file.size),
-                ...attachmentIcon(mimeType),
-            };
-        } else {
-            preview = {
-                style: "text",
-                header: this.props.file.name,
-                body: fileSize(this.props.file.size),
-                ...attachmentIcon(mimeType),
-            };
+        switch (mimeType.split("/")[0]) {
+            case "image":
+                previewContent = {
+                    style: "image",
+                    imageSize: "full",
+                    image: this.state.objectUrl!,
+                };
+                break;
+            case "video":
+                previewContent = {
+                    style: "video",
+                    videoSize: "full",
+                    video: this.state.objectUrl!,
+                };
+                break;
+            case "audio":
+                previewContent = {
+                    style: "audio",
+                    audio: this.state.objectUrl!,
+                };
+                break;
+            default:
+                previewContent = {
+                    style: "text",
+                };
         }
+
+        const preview: MediaPreviewGroupEntry = {
+            header: this.props.file.name,
+            body: fileSize(this.props.file.size),
+            ...attachmentIcon(mimeType),
+            ...previewContent,
+        };
 
         let uploadAllButton: JSX.Element | undefined;
         if (this.props.currentIndex + 1 < this.props.totalFiles) {
@@ -145,9 +141,7 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
                 <div id="mx_Dialog_content">
                     <div className="mx_UploadConfirmDialog_previewOuter">
                         <div className="mx_UploadConfirmDialog_previewInner">
-                            <div>
-                                <MediaPreviewGroupPreview vm={vm} />
-                            </div>
+                            <MediaPreviewGroupPreview vm={vm} />
                         </div>
                     </div>
                 </div>
