@@ -55,14 +55,6 @@ export const ClickableUncollapsedImage: Story = {
     },
 };
 
-/*
-export const WithFooter: Story = {
-    args: {
-        footer: "Shared by Alice · 12:45",
-    },
-};
-*/
-
 export const WithHeaderUrl: Story = {
     args: {
         headerUrl: "https://example.com/annual-report.pdf",
