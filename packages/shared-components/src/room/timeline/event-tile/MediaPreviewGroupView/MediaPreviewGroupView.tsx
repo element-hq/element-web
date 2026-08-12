@@ -1,5 +1,7 @@
 import React, { JSX } from "react";
+import { Button } from "@vector-im/compound-web";
 import { useViewModel, ViewModel } from "../../../../core/viewmodel";
+import { useI18n } from "../../../../core/i18n/i18nContext";
 import styles from "./MediaPreviewGroupView.module.css";
 import {
     AudioPreviewTile,
@@ -76,11 +78,35 @@ export interface MediaPreviewGroupSnapshot {
 
 export type MediaPreviewGroupViewModel = ViewModel<MediaPreviewGroupSnapshot>;
 
-export interface MediaPreviewGroupPreviewProps {
-    vm: MediaPreviewGroupViewModel;
+export interface MediaPreviewGroupCollapse {
+    /** Whether the group is currently collapsed, i.e. only showing a subset of the entries. */
+    collapsed: boolean;
+    /** How many further entries are available while collapsed. */
+    hiddenCount: number;
+    /** Invoked when the user toggles between the collapsed and expanded state. */
+    onToggle: () => void;
 }
 
-export function MediaPreviewGroupPreview({ vm }: MediaPreviewGroupPreviewProps): JSX.Element | null {
+export interface MediaPreviewGroupPreviewProps {
+    vm: MediaPreviewGroupViewModel;
+    /**
+     * When set, a toggle is rendered underneath the entries to collapse or expand the group.
+     * Omit for groups that are never collapsible, e.g. a single attachment.
+     */
+    collapse?: MediaPreviewGroupCollapse;
+}
+
+function CollapseToggle({ collapsed, hiddenCount, onToggle }: MediaPreviewGroupCollapse): JSX.Element {
+    const { translate: _t } = useI18n();
+
+    return (
+        <Button className={styles.toggleButton} kind="tertiary" size="md" onClick={onToggle}>
+            {collapsed ? _t("timeline|url_preview|show_n_more", { count: hiddenCount }) : _t("action|collapse")}
+        </Button>
+    );
+}
+
+export function MediaPreviewGroupPreview({ vm, collapse }: MediaPreviewGroupPreviewProps): JSX.Element | null {
     let { entries } = useViewModel(vm);
 
     if (entries.length === 0) return null;
@@ -99,6 +125,7 @@ export function MediaPreviewGroupPreview({ vm }: MediaPreviewGroupPreviewProps):
                         return <AudioPreviewTile {...entry} />;
                 }
             })}
+            {collapse && <CollapseToggle {...collapse} />}
         </div>
     );
 }
