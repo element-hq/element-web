@@ -26,6 +26,12 @@ import { ReactionsRowButtonView } from "../reactions/ReactionsRowButton";
 import { type ReactionsRowButtonTooltipViewModel } from "../reactions/ReactionsRowButtonTooltip";
 import { ImageBodyView, ImageBodyViewState, type ImageBodyViewSnapshot } from "../body/MImageBodyView";
 import {
+    FileBodyView,
+    FileBodyViewInfoIcon,
+    FileBodyViewState,
+    type FileBodyViewSnapshot,
+} from "../body/MFileBodyView";
+import {
     DecryptionFailureBodyView,
     DecryptionFailureReason,
     type DecryptionFailureBodyViewSnapshot,
@@ -40,6 +46,8 @@ import {
     ThreadMessagePreviewView,
     type ThreadMessagePreviewViewSnapshot,
 } from "./ThreadSummary/ThreadSummaryView";
+import { EventPreviewView, type EventPreviewViewSnapshot } from "./EventPreviewView";
+import { PinnedMessageBadge } from "./PinnedMessageBadge";
 import { TextualEventView, type TextualEventViewSnapshot } from "./TextualEventView";
 import styles from "./EventTileView.stories.module.css";
 import storyMediaSrc from "../../../../../static/image-body/install-spinner.png";
@@ -167,27 +175,36 @@ const createStoryAvatar = (
     isOwnEvent: boolean,
     layout: EventTileViewProps["root"]["layout"],
     showSenderAndAvatar: boolean,
+    sizeOverride?: string,
 ): React.ReactElement | undefined => {
     if (!showSenderAndAvatar) return undefined;
 
     const label = isOwnEvent ? "A" : "B";
-    const size = layout === "irc" ? "14px" : "30px";
+    const size = sizeOverride ?? (layout === "irc" ? "14px" : "30px");
     return <StoryAvatar label={label} size={size} />;
 };
 
 const StoryTimestamp = ({
     className,
     visible = true,
+    linked = false,
 }: {
     className?: string;
     visible?: boolean;
+    linked?: boolean;
 }): React.ReactElement | null => {
     const vm = useMockedViewModel(
-        { ts: "12:34", tsSentAt: "Tuesday, 4 August 2026 at 12:34", inhibitTooltip: true },
-        {},
+        {
+            ts: "12:34",
+            tsSentAt: "Tuesday, 4 August 2026 at 12:34",
+            inhibitTooltip: true,
+            href: linked ? "https://example.org/event-tile-story" : undefined,
+        },
+        linked ? { onClick: fn(), onContextMenu: fn() } : {},
     );
     return visible ? <MessageTimestampView vm={vm} className={className} /> : null;
 };
+const StoryLinkedTimestamp = (): React.ReactElement => <StoryTimestamp linked />;
 const StoryBody = (): React.ReactElement => {
     const contentSnapshot: EventContentBodyViewSnapshot = {
         body: [
@@ -202,6 +219,45 @@ const StoryBody = (): React.ReactElement => {
 
     return <TextualBodyView vm={bodyVm} body={<EventContentBodyView vm={contentVm} as="div" />} />;
 };
+const StoryPreviewBody = (): React.ReactElement => {
+    const snapshot: EventPreviewViewSnapshot = {
+        isVisible: true,
+        previewContent: "Can you review the draft?",
+        previewTooltip: "Can you review the draft?",
+    };
+    const vm = useMockedViewModel(snapshot, {});
+    return <EventPreviewView vm={vm} />;
+};
+const StorySearchBody = (): React.ReactElement => {
+    const contentSnapshot: EventContentBodyViewSnapshot = {
+        body: [
+            <div key="first-line">
+                Can you review the <mark>draft</mark> before the meeting?
+            </div>,
+            <div key="second-line">The highlighted term represents the matching search result.</div>,
+        ],
+        className: styles.body,
+    };
+    const contentVm = useMockedViewModel(contentSnapshot, {});
+    const bodyVm = useMockedViewModel({ kind: TextualBodyViewKind.TEXT } satisfies TextualBodyViewSnapshot, {});
+    return <TextualBodyView vm={bodyVm} body={<EventContentBodyView vm={contentVm} as="div" />} />;
+};
+const StoryFileBody = (): React.ReactElement => {
+    const snapshot: FileBodyViewSnapshot = {
+        state: FileBodyViewState.UNENCRYPTED,
+        showInfo: true,
+        infoLabel: "spec.pdf",
+        infoTooltip: "spec.pdf (22 KB)",
+        infoIcon: FileBodyViewInfoIcon.ATTACHMENT,
+        infoHref: "https://example.org/spec.pdf",
+        showDownload: true,
+        downloadLabel: "Download file",
+        downloadTitle: "Download spec.pdf",
+        downloadHref: "https://example.org/download/spec.pdf",
+    };
+    const vm = useMockedViewModel(snapshot, {});
+    return <FileBodyView vm={vm} />;
+};
 const StoryInformationalBody = (): React.ReactElement => {
     const snapshot: TextualEventViewSnapshot = {
         content: (
@@ -213,6 +269,49 @@ const StoryInformationalBody = (): React.ReactElement => {
     };
     const vm = useMockedViewModel(snapshot, {});
     return <TextualEventView vm={vm} />;
+};
+const StoryHighlightedBody = (): React.ReactElement => {
+    const contentSnapshot: EventContentBodyViewSnapshot = {
+        body: "Message with a highlighted word.",
+        formattedBody: 'Message with a <span class="mx_EventTile_searchHighlight">highlighted</span> word.',
+        className: styles.body,
+    };
+    const contentVm = useMockedViewModel(contentSnapshot, {});
+    const bodyVm = useMockedViewModel({ kind: TextualBodyViewKind.TEXT }, {});
+
+    return <TextualBodyView vm={bodyVm} body={<EventContentBodyView vm={contentVm} as="div" />} />;
+};
+const StoryEditedBody = (): React.ReactElement => {
+    const contentSnapshot: EventContentBodyViewSnapshot = {
+        body: "This message is currently being edited.",
+        className: styles.body,
+    };
+    const contentVm = useMockedViewModel(contentSnapshot, {});
+    const bodyVm = useMockedViewModel(
+        {
+            kind: TextualBodyViewKind.TEXT,
+            showEditedMarker: true,
+            editedMarkerText: "(edited)",
+            editedMarkerAriaLabel: "Edited",
+            editedMarkerTooltip: "This message was edited",
+        },
+        { onEditedMarkerClick: fn() },
+    );
+
+    return <TextualBodyView vm={bodyVm} body={<EventContentBodyView vm={contentVm} as="div" />} />;
+};
+const StoryEmoteBody = (): React.ReactElement => {
+    const contentSnapshot: EventContentBodyViewSnapshot = {
+        body: "waves hello to the room",
+        className: styles.body,
+    };
+    const contentVm = useMockedViewModel(contentSnapshot, {});
+    const bodyVm = useMockedViewModel(
+        { kind: TextualBodyViewKind.EMOTE, emoteSenderName: "Bob" },
+        { onEmoteSenderClick: fn() },
+    );
+
+    return <TextualBodyView vm={bodyVm} body={<EventContentBodyView vm={contentVm} as="div" />} />;
 };
 const StoryReplyChain = (): React.ReactElement => (
     <blockquote className={styles.replyChain}>
@@ -233,11 +332,19 @@ const StoryMediaBody = (): React.ReactElement => {
     const vm = useMockedViewModel(snapshot, {});
     return <ImageBodyView vm={vm} />;
 };
-const StoryStickerBody = (): React.ReactElement => (
-    <div className={styles.stickerBody} aria-label="Sticker placeholder">
-        🌈
-    </div>
-);
+const StoryStickerBody = (): React.ReactElement => {
+    const snapshot: ImageBodyViewSnapshot = {
+        state: ImageBodyViewState.READY,
+        alt: "Example sticker",
+        src: storyMediaSrc,
+        thumbnailSrc: storyMediaSrc,
+        maxWidth: 240,
+        maxHeight: 240,
+        aspectRatio: "1 / 1",
+    };
+    const vm = useMockedViewModel(snapshot, {});
+    return <ImageBodyView vm={vm} />;
+};
 const StoryDecryptionFailureBody = (): React.ReactElement => {
     const snapshot: DecryptionFailureBodyViewSnapshot = {
         decryptionFailureReason: DecryptionFailureReason.UNABLE_TO_DECRYPT,
@@ -246,6 +353,9 @@ const StoryDecryptionFailureBody = (): React.ReactElement => {
     const vm = useMockedViewModel(snapshot, {});
     return <DecryptionFailureBodyView vm={vm} />;
 };
+const StoryDecryptionFailurePadlock = (): React.ReactElement => (
+    <E2ePadlock icon={E2ePadlockIcon.DecryptionFailure} title="Unable to decrypt" />
+);
 const StoryNotificationBadge = (): React.ReactElement => {
     const snapshot: NotificationBadgeViewSnapshot = {
         shouldRender: true,
@@ -261,18 +371,34 @@ const StoryNotificationBadge = (): React.ReactElement => {
     const vm = useMockedViewModel(snapshot, {});
     return <NotificationBadgeView vm={vm} />;
 };
-const StoryActionBar = (): React.ReactElement | null => {
+const StoryActionBar = ({ isPinned = false }: { isPinned?: boolean } = {}): React.ReactElement | null => {
     const vm = useMockedViewModel(
         {
             actions: [ActionBarAction.React, ActionBarAction.Reply, ActionBarAction.Options],
             presentation: "icon" as const,
             isDownloadEncrypted: false,
             isDownloadLoading: false,
-            isPinned: false,
+            isPinned,
             isQuoteExpanded: false,
             isThreadReplyAllowed: true,
         },
         { onReactionsClick: fn(), onReplyClick: fn(), onOptionsClick: fn() },
+    );
+    return <ActionBarView vm={vm} />;
+};
+const StoryPinnedActionBar = (): React.ReactElement => <StoryActionBar isPinned />;
+const StoryThreadListActionBar = (): React.ReactElement => {
+    const vm = useMockedViewModel(
+        {
+            actions: [ActionBarAction.ViewInRoom, ActionBarAction.CopyLink],
+            presentation: "icon" as const,
+            isDownloadEncrypted: false,
+            isDownloadLoading: false,
+            isPinned: false,
+            isQuoteExpanded: false,
+            isThreadReplyAllowed: false,
+        },
+        { onViewInRoomClick: fn(), onCopyLinkClick: fn() },
     );
     return <ActionBarView vm={vm} />;
 };
@@ -318,6 +444,12 @@ const StoryFooter = (): React.ReactElement => {
         </ReactionsRowView>
     );
 };
+const StoryPinnedFooter = (): React.ReactElement => (
+    <div className={styles.pinnedFooter}>
+        <PinnedMessageBadge />
+        <StoryFooter />
+    </div>
+);
 const storyThreadPreview: ThreadMessagePreviewViewSnapshot = {
     isVisible: true,
     avatar: {
@@ -350,7 +482,7 @@ const StoryThreadInfo = (): React.ReactElement => {
 
 /** The ThreadsList view uses the compact inline replies preview, not ThreadSummaryView. */
 const StoryThreadListInfo = (): React.ReactElement => {
-    const previewVm = useMockedViewModel(storyThreadPreview, {});
+    const previewVm = useMockedViewModel({ ...storyThreadPreview, showDisplayName: false }, {});
 
     return (
         <div className={styles.threadListInfo}>
@@ -360,6 +492,12 @@ const StoryThreadListInfo = (): React.ReactElement => {
         </div>
     );
 };
+const StorySearchThreadInfo = (): React.ReactElement => (
+    <a className={styles.searchThreadInfo} href="https://example.org/event-tile-story/thread">
+        <ThreadsIcon />
+        View in thread
+    </a>
+);
 const StoryReceipt = (): React.ReactElement => (
     <span className={styles.receipt}>
         <span className={styles.readReceiptGroup}>
@@ -423,6 +561,25 @@ const roomSlots: EventTileViewProps["slots"] = {
     contextMenu: <StoryContextMenu />,
 };
 
+/** Slots for the default Room-like shapes without a context menu fixture. */
+const defaultShapeSlots: EventTileViewProps["slots"] = {
+    sender: <StorySender />,
+    avatar: <StoryAvatar />,
+    body: <StoryBody />,
+    timestamp: <StoryLinkedTimestamp />,
+    padlock: <StoryPadlock />,
+    actionBar: <StoryActionBar />,
+    footer: <StoryFooter />,
+    threadInfo: <StoryThreadInfo />,
+    receipt: <StoryReceipt />,
+};
+
+const threadSlots: EventTileViewProps["slots"] = {
+    ...defaultShapeSlots,
+    avatar: <StoryAvatar size="32px" />,
+    threadInfo: undefined,
+};
+
 type EventTileStoryProps = Omit<EventTileViewProps, "root"> & {
     shape: EventTileViewProps["root"]["shape"];
     state?: Partial<EventTileViewProps["root"]["state"]>;
@@ -435,7 +592,7 @@ const createStoryTimestamp = (
     showActionBar: boolean,
 ): React.ReactElement | undefined => {
     const showTimestamp = layout === "irc" || isLast || showActionBar;
-    return showTimestamp ? <StoryTimestamp visible={showTimestamp} /> : undefined;
+    return showTimestamp ? <StoryTimestamp visible={showTimestamp} linked /> : undefined;
 };
 
 const createRoomStorySlots = ({
@@ -513,8 +670,12 @@ function EventTileViewStoryContent({
         const showActionBar = interaction.hovered || interaction.focused;
         const timestamp = createStoryTimestamp(layout, isLast, showActionBar);
         const showSenderAndAvatar = layout === "irc" || !tileState.continuation;
-        const sender = createStorySender(isOwnEvent, layout, showSenderAndAvatar && !tileState.noSender);
-        const avatar = createStoryAvatar(isOwnEvent, layout, showSenderAndAvatar);
+        const sender = createStorySender(
+            isOwnEvent,
+            layout,
+            showSenderAndAvatar && !tileState.noSender && !tileState.info,
+        );
+        const avatar = createStoryAvatar(isOwnEvent, layout, showSenderAndAvatar, tileState.info ? "14px" : undefined);
         const slots =
             shape === "Room"
                 ? createRoomStorySlots({
@@ -637,7 +798,12 @@ const storyHelpers = {
     ircGlobals,
     compactGroupGlobals,
     StoryDecryptionFailureBody,
+    StoryDecryptionFailurePadlock,
+    StoryEditedBody,
+    StoryEmoteBody,
+    StoryHighlightedBody,
     StoryInformationalBody,
+    StoryLinkedTimestamp,
     StoryMediaBody,
     StoryReplyChain,
     StoryStickerBody,
@@ -685,12 +851,12 @@ export const ThreadsList: Story = {
         shape: "ThreadsList",
         slots: {
             sender: <StorySender />,
-            avatar: <StoryAvatar />,
-            body: <StoryBody />,
+            avatar: <StoryAvatar size="32px" />,
+            body: <StoryPreviewBody />,
             timestamp: <StoryTimestamp />,
             notificationBadge: <StoryNotificationBadge />,
             threadInfo: <StoryThreadListInfo />,
-            actionBar: <StoryActionBar />,
+            actionBar: <StoryThreadListActionBar />,
         },
     },
 };
@@ -699,6 +865,7 @@ export const Thread: Story = {
     tags: interactiveTags,
     args: {
         shape: "Thread",
+        slots: threadSlots,
     },
 };
 
@@ -708,13 +875,17 @@ export const Notification: Story = {
         shape: "Notification",
         slots: {
             sender: <StorySender />,
-            body: <StoryBody />,
+            body: <StoryPreviewBody />,
             timestamp: <StoryTimestamp />,
             roomAvatar: <StoryAvatar room size="28px" />,
-            notificationRoomLabel: <span className={styles.roomLabel}>in Example room</span>,
+            notificationRoomLabel: (
+                <span className={styles.roomLabel}>
+                    {" in "}
+                    <strong>Example room</strong>
+                </span>
+            ),
             notificationBadge: <StoryNotificationBadge />,
             threadInfo: <StoryThreadListInfo />,
-            receipt: <StoryReceipt />,
         },
     },
 };
@@ -725,10 +896,9 @@ export const File: Story = {
         shape: "File",
         slots: {
             sender: <StorySender />,
-            avatar: <StoryAvatar />,
-            timestamp: <StoryTimestamp />,
-            body: <StoryBody />,
-            contextMenu: <StoryContextMenu />,
+            avatar: <StoryAvatar size="20px" />,
+            timestamp: <StoryLinkedTimestamp />,
+            body: <StoryFileBody />,
         },
     },
 };
@@ -737,6 +907,11 @@ export const Search: Story = {
     tags: interactiveTags,
     args: {
         shape: "Search",
+        slots: {
+            ...defaultShapeSlots,
+            body: <StorySearchBody />,
+            threadInfo: <StorySearchThreadInfo />,
+        },
     },
 };
 
@@ -744,6 +919,11 @@ export const Pinned: Story = {
     tags: interactiveTags,
     args: {
         shape: "Pinned",
+        slots: {
+            ...defaultShapeSlots,
+            actionBar: <StoryPinnedActionBar />,
+            footer: <StoryPinnedFooter />,
+        },
     },
 };
 

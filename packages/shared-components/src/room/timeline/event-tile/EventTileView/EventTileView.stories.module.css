@@ -108,6 +108,19 @@
     white-space: nowrap;
 }
 
+.searchThreadInfo {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--cpd-space-2x, 8px);
+    color: var(--cpd-color-text-secondary, #626a73);
+    font: var(--cpd-font-body-sm-regular);
+}
+
+.searchThreadInfo svg {
+    width: 18px;
+    height: 18px;
+}
+
 /* Match the application IRC profile treatment without adding application
    selectors to the shared EventTileView stylesheet. */
 .ircSender {
@@ -232,6 +245,12 @@
 
 .storyReactions {
     display: flex;
+}
+
+.pinnedFooter {
+    display: flex;
+    align-items: center;
+    gap: var(--cpd-space-2x, 8px);
 }
 
 .storyEventTile.storyOwnEvent.storyLayoutBubble .storyReactions {
