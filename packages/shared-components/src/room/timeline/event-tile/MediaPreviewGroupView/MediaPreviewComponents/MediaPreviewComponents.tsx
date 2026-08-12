@@ -9,6 +9,7 @@ import React, { type JSX, useEffect, useState } from "react";
 import styles from "./MediaPreviewComponents.module.css";
 import classNames from "classnames";
 import { type ImageSize, type MediaPreviewEntryButton } from "../MediaPreviewGroupView";
+import { useI18n } from "../../../../../core/i18n/i18nContext";
 
 export function Header({ header, headerUrl }: { header: string; headerUrl?: string }): JSX.Element {
     if (headerUrl === undefined) return <div className={classNames(styles.textHeader, styles.header)}>{header}</div>;
@@ -44,12 +45,14 @@ export function Icon({
     iconOnClick?: () => void;
     color: string;
 }): JSX.Element {
+    const { translate: _t } = useI18n();
+
     icon = React.cloneElement(icon, { style: { color } });
 
     if (iconOnClick) {
         return (
             <div className={classNames(styles.icon, styles.iconClickable)}>
-                <button onClick={iconOnClick} type="button">
+                <button onClick={iconOnClick} type="button" aria-label={_t("timeline|url_preview|view_file")}>
                     {icon}
                 </button>
             </div>
@@ -80,9 +83,52 @@ interface ValidityState {
     src: string;
 }
 
+/**
+ * Media checks are defined at module scope so that their identity is stable: passing a fresh
+ * closure on every render would re-run the effect in {@link useIsValid} after each state update,
+ * leaving the component re-rendering in a loop.
+ */
+function checkImage(src: string): Promise<boolean> {
+    return new Promise((res) => {
+        const img = new window.Image();
+        img.onload = () => res(img.naturalWidth > 0 && img.naturalHeight > 0);
+        img.onerror = (e) => {
+            console.error(`Failed to display image ${src}`, e);
+            res(false);
+        };
+        img.src = src;
+    });
+}
+
+function checkVideo(src: string): Promise<boolean> {
+    return new Promise((res) => {
+        const vid = document.createElement("video");
+        vid.preload = "metadata";
+        vid.onloadedmetadata = () => res(vid.videoWidth > 0 && vid.videoHeight > 0);
+        vid.onerror = (e) => {
+            console.error(`Failed to display video ${src}`, e);
+            res(false);
+        };
+        vid.src = src;
+    });
+}
+
+function checkAudio(src: string): Promise<boolean> {
+    return new Promise((res) => {
+        const aud = document.createElement("audio");
+        aud.preload = "metadata";
+        aud.onloadedmetadata = () => res(true);
+        aud.onerror = (e) => {
+            console.error(`Failed to display audio ${src}`, e);
+            res(false);
+        };
+        aud.src = src;
+    });
+}
+
 function useIsValid(check: (src: string) => Promise<boolean>, src: string): ValidityState {
     const [state, setState]: [ValidityState, React.Dispatch<React.SetStateAction<ValidityState>>] = useState({
-        valid: false,
+        valid: true,
         src,
     } as ValidityState);
 
@@ -109,21 +155,10 @@ export function Image({
     imageOnClick?: () => void;
     imageSize: ImageSize;
 }): JSX.Element | null {
+    const { translate: _t } = useI18n();
     const classes = [styles.image, imageSize === "full" ? styles.fullImage : styles.bannerImage];
 
-    const { valid, src } = useIsValid(
-        (src) =>
-            new Promise((res) => {
-                const img = new window.Image();
-                img.onload = () => res(img.naturalWidth > 0 && img.naturalHeight > 0);
-                img.onerror = (e) => {
-                    console.error(`Failed to display image ${src}`, e);
-                    res(false);
-                };
-                img.src = src;
-            }),
-        image,
-    );
+    const { valid, src } = useIsValid(checkImage, image);
 
     if (!valid || src !== image) return null;
 
@@ -131,7 +166,7 @@ export function Image({
     return (
         <div className={classNames(classes)}>
             {imageOnClick ? (
-                <button onClick={imageOnClick} type="button">
+                <button onClick={imageOnClick} type="button" aria-label={_t("timeline|url_preview|view_image")}>
                     {imageElem}
                 </button>
             ) : (
@@ -150,22 +185,10 @@ export function Video({
     videoOnClick?: () => void;
     videoSize: ImageSize;
 }): JSX.Element | null {
+    const { translate: _t } = useI18n();
     const classes = [styles.video, videoSize === "full" ? styles.fullVideo : styles.bannenrVideo];
 
-    const { valid, src } = useIsValid(
-        (src) =>
-            new Promise((res) => {
-                const vid = document.createElement("video");
-                vid.preload = "metadata";
-                vid.onloadedmetadata = () => res(vid.videoWidth > 0 && vid.videoHeight > 0);
-                vid.onerror = (e) => {
-                    console.error(`Failed to display video ${src}`, e);
-                    res(false);
-                };
-                vid.src = src;
-            }),
-        video,
-    );
+    const { valid, src } = useIsValid(checkVideo, video);
 
     if (!valid || src !== video) return null;
 
@@ -174,7 +197,7 @@ export function Video({
     return (
         <div className={classNames(classes)}>
             {videoOnClick ? (
-                <button onClick={videoOnClick} type="button">
+                <button onClick={videoOnClick} type="button" aria-label={_t("timeline|url_preview|view_video")}>
                     {videoElem}
                 </button>
             ) : (
@@ -185,20 +208,8 @@ export function Video({
 }
 
 export function Audio({ audio, audioOnClick }: { audio: string; audioOnClick?: () => void }): JSX.Element | null {
-    const { valid, src } = useIsValid(
-        (src) =>
-            new Promise((res) => {
-                const aud = document.createElement("audio");
-                aud.preload = "metadata";
-                aud.onloadedmetadata = () => res(true);
-                aud.onerror = (e) => {
-                    console.error(`Failed to display audio ${src}`, e);
-                    res(false);
-                };
-                aud.src = src;
-            }),
-        audio,
-    );
+    const { translate: _t } = useI18n();
+    const { valid, src } = useIsValid(checkAudio, audio);
 
     if (!valid || src !== audio) return null;
 
@@ -206,7 +217,7 @@ export function Audio({ audio, audioOnClick }: { audio: string; audioOnClick?: (
     return (
         <div className={styles.audio}>
             {audioOnClick ? (
-                <button onClick={audioOnClick} type="button">
+                <button onClick={audioOnClick} type="button" aria-label={_t("timeline|url_preview|view_audio")}>
                     {audioElem}
                 </button>
             ) : (

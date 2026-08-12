@@ -12,6 +12,7 @@ import ExpandIcon from "@vector-im/compound-design-tokens/assets/web/icons/expan
 import DownloadIcon from "@vector-im/compound-design-tokens/assets/web/icons/download";
 
 import { ImagePreviewTile } from "./MediaPreviewTile";
+import demoImage from "../../../../../../static/wideImage.png";
 
 const meta = {
     title: "Room/Timeline/MediaPreviewGroupView/MediaPreviewTile/ImagePreviewTile",
@@ -20,7 +21,7 @@ const meta = {
     args: {
         id: "annual-report.pdf",
         style: "image",
-        image: "https://picsum.photos/seed/element/480/270",
+        image: demoImage,
         imageSize: "banner",
         icon: <FileIcon />,
         iconOnClick: () => {},

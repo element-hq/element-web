@@ -12,6 +12,7 @@ import ExpandIcon from "@vector-im/compound-design-tokens/assets/web/icons/expan
 import DownloadIcon from "@vector-im/compound-design-tokens/assets/web/icons/download";
 
 import { AudioPreviewTile } from "./MediaPreviewTile";
+import demoAudio from "../../../../../../static/audioDemo.ogg";
 
 const meta = {
     title: "Room/Timeline/MediaPreviewGroupView/MediaPreviewTile/AudioPreviewTile",
@@ -20,7 +21,7 @@ const meta = {
     args: {
         id: "voice-message.mp3",
         style: "audio",
-        audio: "https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3",
+        audio: demoAudio,
         icon: <FileIcon />,
         iconOnClick: () => {},
         color: "#4200A6",
