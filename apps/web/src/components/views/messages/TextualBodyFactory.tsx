@@ -16,7 +16,6 @@ import {
     useCreateAutoDisposedViewModel,
     MediaPreviewGroupPreview,
     useViewModel,
-    attachmentIconOfType,
     linkIcon,
     MediaPreviewGroupEntry,
 } from "@element-hq/web-shared-components";
@@ -149,7 +148,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
                         },
                     },
                 ],
-                ...linkIcon("light"),
+                ...linkIcon(),
             };
         } else {
             return {
@@ -182,7 +181,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
                         },
                     },
                 ],
-                ...linkIcon("light"),
+                ...linkIcon(),
             };
         }
     };
