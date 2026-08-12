@@ -18,6 +18,7 @@ const meta = {
     component: ImagePreviewTile,
     tags: ["autodocs"],
     args: {
+        id: "annual-report.pdf",
         style: "image",
         image: "https://picsum.photos/seed/element/480/270",
         imageSize: "banner",
@@ -27,8 +28,8 @@ const meta = {
         header: "annual-report.pdf",
         body: "2.3 MB",
         buttons: [
-            { icon: <ExpandIcon />, onClick: () => ({}) },
-            { icon: <DownloadIcon />, onClick: () => ({}) },
+            { label: "Expand", icon: <ExpandIcon />, onClick: () => ({}) },
+            { label: "Download", icon: <DownloadIcon />, onClick: () => ({}) },
         ],
     },
 } satisfies Meta<typeof ImagePreviewTile>;
@@ -48,10 +49,7 @@ export const Uncollapsed: Story = {
 export const ClickableUncollapsedImage: Story = {
     args: {
         imageSize: "full",
-        imageOnClick: () => {
-            window.alert("Image clicked");
-            return {};
-        },
+        imageOnClick: () => {},
     },
 };
 
@@ -63,10 +61,7 @@ export const WithHeaderUrl: Story = {
 
 export const ClickableImage: Story = {
     args: {
-        imageOnClick: () => {
-            window.alert("Image clicked");
-            return {};
-        },
+        imageOnClick: () => {},
     },
 };
 

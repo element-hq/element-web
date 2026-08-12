@@ -18,6 +18,7 @@ const meta = {
     component: AudioPreviewTile,
     tags: ["autodocs"],
     args: {
+        id: "voice-message.mp3",
         style: "audio",
         audio: "https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3",
         icon: <FileIcon />,
@@ -26,8 +27,8 @@ const meta = {
         header: "voice-message.mp3",
         body: "1.1 MB",
         buttons: [
-            { icon: <ExpandIcon />, onClick: () => ({}) },
-            { icon: <DownloadIcon />, onClick: () => ({}) },
+            { label: "Expand", icon: <ExpandIcon />, onClick: () => ({}) },
+            { label: "Download", icon: <DownloadIcon />, onClick: () => ({}) },
         ],
     },
 } satisfies Meta<typeof AudioPreviewTile>;
@@ -40,10 +41,7 @@ export const Default: Story = {};
 
 export const ClickableAudio: Story = {
     args: {
-        audioOnClick: () => {
-            window.alert("Audio clicked");
-            return {};
-        },
+        audioOnClick: () => {},
     },
 };
 
