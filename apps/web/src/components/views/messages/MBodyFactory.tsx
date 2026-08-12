@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type RefObject, useContext, useEffect, useRef } from "react";
 import { MsgType } from "matrix-js-sdk/src/matrix";
-import { MediaEventContent, type ImageContent } from "matrix-js-sdk/src/types";
+import { type MediaEventContent, type ImageContent } from "matrix-js-sdk/src/types";
 import {
     DecryptionFailureBodyView,
     FileBodyView,
@@ -94,14 +94,16 @@ function PreviewFileBody({ mxEvent, mediaEventHelper }: FileBodyProps): JSX.Elem
             new MediaPreviewGroupViewModel({
                 entries: [
                     {
+                        id: mxEvent.getId()!,
                         style: "text",
-                        header: mediaEventHelper?.fileName!,
+                        header: mediaEventHelper!.fileName,
                         body: size === undefined ? "Size unknown" : fileSize(size),
                         buttons:
                             mediaEventHelper === undefined
                                 ? undefined
                                 : [
                                       {
+                                          label: _t("action|download"),
                                           icon: <DownloadIcon />,
                                           onClick: async () => {
                                               downloader.download({
