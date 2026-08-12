@@ -12,6 +12,7 @@ import ExpandIcon from "@vector-im/compound-design-tokens/assets/web/icons/expan
 import DownloadIcon from "@vector-im/compound-design-tokens/assets/web/icons/download";
 
 import { VideoPreviewTile } from "./MediaPreviewTile";
+import demoVideo from "../../../../../../static/videoBodyDemo.webm";
 
 const meta = {
     title: "Room/Timeline/MediaPreviewGroupView/MediaPreviewTile/VideoPreviewTile",
@@ -20,7 +21,7 @@ const meta = {
     args: {
         id: "holiday-clip.mp4",
         style: "video",
-        video: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+        video: demoVideo,
         videoSize: "banner",
         icon: <FileIcon />,
         iconOnClick: () => {},
