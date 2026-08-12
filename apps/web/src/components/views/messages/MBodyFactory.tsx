@@ -36,9 +36,6 @@ import { MediaPreviewGroupViewModel } from "../../../viewmodels/message-body/Med
 import { fileSize } from "../../../utils/FileUtils";
 import DownloadIcon from "@vector-im/compound-design-tokens/assets/web/icons/download";
 import { FileDownloader } from "../../../utils/FileDownloader";
-import Modal from "../../../Modal";
-import ImageView from "../elements/ImageView";
-import path from "path";
 
 type MBodyComponent = React.ComponentType<IBodyProps>;
 
