@@ -13,7 +13,11 @@ import { type UrlPreview } from "../../urlPreview";
 import styles from "./MessageComposerUrlPreview.module.css";
 import { useViewModel, type ViewModel } from "../../../core/viewmodel";
 
-function LinkTitle({ title, showTooltipOnLink, link }: Pick<UrlPreview, "title" | "showTooltipOnLink" | "link">): JSX.Element {
+function LinkTitle({
+    title,
+    showTooltipOnLink,
+    link,
+}: Pick<UrlPreview, "title" | "showTooltipOnLink" | "link">): JSX.Element {
     const caption = new URL(link).toString();
     const anchor = (
         <Text
