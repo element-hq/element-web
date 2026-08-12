@@ -1239,10 +1239,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const memberCount = roomToLeave?.currentState.getJoinedMemberCount();
         if (memberCount === 1) {
             warnings.push(
-                <strong className="warning" key="only_member_warning">
+                <span key="only_member_warning">
                     {" " /* Whitespace, otherwise the sentences get smashed together */}
                     {_t("leave_room_dialog|last_person_warning")}
-                </strong>,
+                </span>,
             );
 
             return warnings;
@@ -1252,11 +1252,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         if (joinRules) {
             const content = joinRules.getContent<RoomJoinRulesEventContent>();
             if (content.join_rule !== JoinRule.Public) {
-                // A restricted room is reachable again from any of its authorised spaces, so telling
-                // someone who is still in one that they need an invite back is untrue. An empty allow
-                // list is the exception that keeps the old sentence honest: no space membership can
-                // satisfy the rule, so the server turns every join away and an invite really is the
-                // only way back. Room settings already present that state as invite only.
                 const hasAuthorisedSpaces =
                     content.join_rule === JoinRule.Restricted &&
                     !!content.allow?.some(({ type }) => type === RestrictedAllowType.RoomMembership);
@@ -1271,10 +1266,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                         : _t("leave_room_dialog|room_rejoin_warning");
                 }
                 warnings.push(
-                    <strong className="warning" key="non_public_warning">
+                    <span key="non_public_warning">
                         {" " /* Whitespace, otherwise the sentences get smashed together */}
                         {warning}
-                    </strong>,
+                    </span>,
                 );
             }
         }
@@ -1292,10 +1287,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                         ? _t("leave_room_dialog|room_leave_admin_warning")
                         : _t("leave_room_dialog|room_leave_mod_warning");
                 warnings.push(
-                    <strong className="warning" key="last_admin_warning">
+                    <span key="last_admin_warning">
                         {" " /* Whitespace, otherwise the sentences get smashed together */}
                         {warning}
-                    </strong>,
+                    </span>,
                 );
             }
         }
@@ -1309,20 +1304,22 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const warnings = this.leaveRoomWarnings(roomId);
 
         const isSpace = roomToLeave?.isSpaceRoom();
-        const { finished } = Modal.createDialog(QuestionDialog, {
-            // Naming the room in the question is what the title is for, and it leaves the body to
-            // the warnings alone. A room with nothing to warn about then needs no body at all.
-            title: isSpace
-                ? _t("leave_room_dialog|leave_space_title", {
-                      spaceName: roomToLeave?.name ?? _t("common|unnamed_space"),
-                  })
-                : _t("leave_room_dialog|leave_room_title", {
-                      roomName: roomToLeave?.name ?? _t("common|unnamed_room"),
-                  }),
-            description: warnings.length > 0 ? <span>{warnings}</span> : undefined,
-            button: _t("action|leave"),
-            danger: warnings.length > 0,
-        });
+        const { finished } = Modal.createDialog(
+            QuestionDialog,
+            {
+                title: isSpace
+                    ? _t("leave_room_dialog|leave_space_title", {
+                          spaceName: roomToLeave?.name ?? _t("common|unnamed_space"),
+                      })
+                    : _t("leave_room_dialog|leave_room_title", {
+                          roomName: roomToLeave?.name ?? _t("common|unnamed_room"),
+                      }),
+                description: warnings.length > 0 ? <span>{warnings}</span> : undefined,
+                button: _t("action|leave"),
+                danger: warnings.length > 0,
+            },
+            "mx_LeaveRoomDialog",
+        );
 
         finished.then(async ([shouldLeave]) => {
             if (shouldLeave) {
