@@ -6,7 +6,8 @@
  */
 
 .notificationBadge {
-    box-sizing: border-box;
+    /* App-side badge borders should sit outside the fixed badge size. */
+    box-sizing: content-box;
     padding: 0;
     border: 0;
     font: inherit;

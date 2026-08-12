@@ -1,0 +1,234 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+import React, { type JSX } from "react";
+import classNames from "classnames";
+
+import type { EventTileViewClassNames, EventTileViewProps, EventTileViewSlots } from "./EventTileView.types";
+import styles from "./EventTileView.module.css";
+
+type EventTileSlotName = keyof EventTileViewSlots;
+
+/**
+ * Renders the common EventTile root and event-line structure.
+ *
+ * Rendering-mode branches own the timeline-specific slot placement. The
+ * application supplies render-ready content; this component owns the shared
+ * structure, slot boundaries, placement classes, and root behavior.
+ */
+export function EventTileView({
+    root,
+    slots,
+    classNames: classNameOverrides,
+    refs,
+    onMouseEnter,
+    onMouseLeave,
+    onFocus,
+    onBlur,
+    onClick,
+    onContextMenu,
+    onPermalinkClick,
+    onPermalinkContextMenu,
+}: Readonly<EventTileViewProps>): JSX.Element {
+    const Root = root.as ?? "li";
+
+    const renderSlot = (slotName: EventTileSlotName, content: React.ReactNode = slots[slotName]): React.ReactNode => {
+        if (content === null || content === undefined || typeof content === "boolean") return null;
+
+        const slotConfig: Record<EventTileSlotName, { style: string; className: keyof EventTileViewClassNames }> = {
+            avatar: { style: styles.slotAvatar, className: "slotAvatar" },
+            sender: { style: styles.slotSender, className: "slotSender" },
+            body: { style: styles.slotBody, className: "slotBody" },
+            timestamp: { style: styles.slotTimestamp, className: "slotTimestamp" },
+            padlock: { style: styles.slotPadlock, className: "slotPadlock" },
+            replyChain: { style: styles.slotReplyChain, className: "slotReplyChain" },
+            actionBar: { style: styles.slotActionBar, className: "slotActionBar" },
+            footer: { style: styles.slotFooter, className: "slotFooter" },
+            threadInfo: { style: styles.slotThreadInfo, className: "slotThreadInfo" },
+            receipt: { style: styles.slotReceipt, className: "slotReceipt" },
+            roomAvatar: { style: styles.slotAvatar, className: "slotAvatar" },
+            notificationRoomLabel: { style: styles.slotNotificationRoomLabel, className: "slotNotificationRoomLabel" },
+            notificationBadge: { style: styles.slotNotificationBadge, className: "slotNotificationBadge" },
+            contextMenu: { style: styles.slotContextMenu, className: "slotContextMenu" },
+        };
+
+        const { style, className } = slotConfig[slotName];
+
+        return (
+            <div
+                key={slotName}
+                data-testid={`event-tile-slot-${slotName}`}
+                className={classNames(style, classNameOverrides?.[className])}
+            >
+                {content}
+            </div>
+        );
+    };
+
+    const renderSlots = (...slotNames: EventTileSlotName[]): React.ReactNode =>
+        slotNames.map((slotName) => renderSlot(slotName));
+
+    const renderRoot = (
+        children: React.ReactNode,
+        rootClickHandler: React.MouseEventHandler<HTMLElement> | undefined,
+        rootTabIndex?: number,
+    ): JSX.Element => (
+        <Root
+            ref={refs?.root}
+            className={classNames(styles.root, classNameOverrides?.root, {
+                [styles.stateOwnEvent]: root.state.isOwnEvent,
+                [styles.stateHighlighted]: root.state?.highlighted,
+                [styles.stateSelected]: root.state?.selected,
+                [styles.stateEditing]: root.state?.editing,
+                [styles.stateContinuation]: root.state?.continuation,
+                [styles.stateLastInSection]: root.state?.lastInSection,
+                [styles.layoutGroup]: root.layout === "group",
+                [styles.layoutBubble]: root.layout === "bubble",
+                [styles.layoutIrc]: root.layout === "irc",
+                [styles.shapeThread]: root.shape === "Thread",
+                [styles.shapeThreadsList]: root.shape === "ThreadsList",
+                [styles.shapeFile]: root.shape === "File",
+                [styles.shapeNotification]: root.shape === "Notification",
+            })}
+            aria-live={root.ariaLive}
+            aria-atomic={true}
+            data-scroll-tokens={root.scrollToken}
+            data-event-id={root.eventId}
+            tabIndex={rootTabIndex}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+            onFocus={onFocus}
+            onBlur={onBlur}
+            onClick={rootClickHandler}
+        >
+            {children}
+        </Root>
+    );
+
+    // Thread view: sender details, line content, then footer.
+    if (root.shape === "Thread") {
+        return renderRoot(
+            <>
+                <div className={classNames(styles.senderDetails, classNameOverrides?.senderDetails)}>
+                    {renderSlots("avatar", "sender")}
+                </div>
+                <div
+                    id={root.id}
+                    className={classNames(styles.line, classNameOverrides?.line)}
+                    onContextMenu={onContextMenu}
+                >
+                    {renderSlots("contextMenu", "replyChain", "body", "actionBar", "timestamp", "receipt")}
+                </div>
+                {renderSlot("footer")}
+            </>,
+            undefined,
+        );
+    }
+
+    // Notification view: metadata, room avatar, and preview content.
+    if (root.shape === "Notification") {
+        return renderRoot(
+            <>
+                <div className={classNames(styles.details, classNameOverrides?.details)}>
+                    {renderSlots("sender", "notificationRoomLabel", "timestamp", "notificationBadge")}
+                </div>
+                {slots.roomAvatar ? renderSlot("roomAvatar") : renderSlot("avatar")}
+                <div className={classNames(styles.line, classNameOverrides?.line)} id={root.id}>
+                    {renderSlots("body", "threadInfo")}
+                </div>
+                {renderSlot("receipt")}
+            </>,
+            onClick,
+            -1,
+        );
+    }
+
+    // ThreadsList view: metadata, avatar, preview content, and action bar.
+    if (root.shape === "ThreadsList") {
+        return renderRoot(
+            <>
+                <div className={classNames(styles.details, classNameOverrides?.details)}>
+                    {renderSlots("sender", "notificationRoomLabel", "timestamp", "notificationBadge")}
+                </div>
+                {renderSlot("avatar")}
+                <div className={classNames(styles.line, classNameOverrides?.line)} id={root.id}>
+                    {renderSlots("body", "threadInfo")}
+                </div>
+                {renderSlot("actionBar")}
+                {renderSlot("receipt")}
+            </>,
+            onClick,
+            -1,
+        );
+    }
+
+    // File view: permalink-wrapped sender details followed by the file body.
+    if (root.shape === "File") {
+        return renderRoot(
+            <>
+                <a
+                    className={classNames(styles.senderDetailsLink, classNameOverrides?.senderDetailsLink)}
+                    href={root.permalink ?? "#"}
+                    onClick={onPermalinkClick}
+                >
+                    <div
+                        className={classNames(styles.senderDetails, classNameOverrides?.senderDetails)}
+                        onContextMenu={onPermalinkContextMenu}
+                    >
+                        {renderSlots("avatar", "sender", "timestamp")}
+                    </div>
+                </a>
+                <div
+                    id={root.id}
+                    className={classNames(styles.line, classNameOverrides?.line)}
+                    onContextMenu={onContextMenu}
+                >
+                    {renderSlots("contextMenu", "body")}
+                </div>
+            </>,
+            undefined,
+        );
+    }
+
+    // Default shape: Pinned, Room, Search
+
+    // IRC layout: the leading metadata slots precede the line content.
+    if (root.layout === "irc") {
+        return renderRoot(
+            <>
+                {renderSlots("padlock", "timestamp", "avatar", "sender")}
+                <div
+                    id={root.id}
+                    className={classNames(styles.line, classNameOverrides?.line)}
+                    onContextMenu={onContextMenu}
+                >
+                    {renderSlots("contextMenu", "replyChain", "body", "actionBar", "footer", "threadInfo")}
+                </div>
+                {renderSlot("receipt")}
+            </>,
+            undefined,
+            -1,
+        );
+    }
+
+    // Group and bubble layouts: sender details precede the line content.
+    return renderRoot(
+        <>
+            {renderSlots("sender", "avatar")}
+            <div
+                id={root.id}
+                className={classNames(styles.line, classNameOverrides?.line)}
+                onContextMenu={onContextMenu}
+            >
+                {renderSlots("contextMenu", "timestamp", "padlock", "replyChain", "body", "actionBar")}
+            </div>
+            {renderSlots("footer", "threadInfo", "receipt")}
+        </>,
+        undefined,
+        -1,
+    );
+}
