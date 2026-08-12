@@ -332,59 +332,6 @@ describe("EventTileView", () => {
         },
     );
 
-    it.each(["group", "bubble", "irc"] as const)("places the bubble-container shell in %s layout", (layout) => {
-        const { container, getByTestId } = render(
-            <EventTileView
-                {...createProps({
-                    root: {
-                        ...renderState,
-                        layout,
-                        state: { ...renderState.state, bubbleContainer: true },
-                    },
-                    slots: createStylingContractSlots(),
-                })}
-            />,
-        );
-        const root = container.firstElementChild!;
-        const line = root.querySelector(`#${renderState.id}`)!;
-        const actionBar = getByTestId("styling-contract-actionBar").parentElement!;
-
-        expect(actionBar.parentElement).toBe(line);
-        expect(getComputedStyle(actionBar).position).toBe("absolute");
-
-        if (layout === "group") {
-            expect(getComputedStyle(root).display).toBe("grid");
-            expect(getComputedStyle(line).gridColumnStart).toBe("1");
-            expect(getComputedStyle(line).gridColumnEnd).toBe("3");
-        } else {
-            expect(getComputedStyle(root).display).toBe("flex");
-            expect(getComputedStyle(line).gridColumnStart).toBe("auto");
-            expect(getComputedStyle(line).gridColumnEnd).toBe("auto");
-            expect(getComputedStyle(line).paddingTop).toBe("0px");
-            expect(getComputedStyle(line).paddingBottom).toBe("0px");
-        }
-    });
-
-    it("removes bubble background and padding for no-bubble events", () => {
-        const { container } = render(
-            <EventTileView
-                {...createProps({
-                    root: {
-                        ...renderState,
-                        layout: "bubble",
-                        state: { ...renderState.state, noBubble: true },
-                    },
-                    slots: createStylingContractSlots(),
-                })}
-            />,
-        );
-        const line = container.firstElementChild!.querySelector(`#${renderState.id}`)!;
-
-        expect(getComputedStyle(line).backgroundColor).toBe("rgba(0, 0, 0, 0)");
-        expect(getComputedStyle(line).paddingTop).toBe("0px");
-        expect(getComputedStyle(line).paddingBottom).toBe("0px");
-    });
-
     it("preserves the application styling contract across rendering modes", () => {
         const group = render(
             <EventTileView

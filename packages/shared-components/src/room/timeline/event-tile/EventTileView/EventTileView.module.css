@@ -27,6 +27,7 @@
     --event-tile-bubble-corner-radius: 12px;
     --event-tile-bubble-gap: 5px;
     --event-tile-bubble-gutter: 11px;
+    --event-tile-bubble-line-max-width: 70%;
     --event-tile-bubble-line-margin-inline-start: -9px;
     --event-tile-bubble-line-margin-inline-end: -12px;
     --event-tile-bubble-other-background: var(--cpd-color-gray-300, #e9edf2);
@@ -63,14 +64,9 @@
     min-width: 0;
 }
 
-/* Semantic hooks for the EventTile state contract. Placement rules are added
-   incrementally as the application renderer adopts the shared shell. */
-.stateAlignedBetweenBubbles,
-.stateEmote,
-.stateHasReply,
-.lineEmote,
-.lineMedia,
-.lineSticker {
+/* Semantic hook retained for the state contract until reply-chain shell
+   placement is added. */
+.stateHasReply {
 }
 
 /* Slot wrappers are the public styling boundary. The supplied content may be
@@ -275,6 +271,7 @@
             background: inherit;
         }
     }
+
 }
 
 /* IRC layout. */
@@ -404,6 +401,12 @@
         }
     }
 
+    &.stateEmote .slotAvatar {
+        margin-inline-start: calc(
+            var(--event-tile-irc-name-width) + var(--event-tile-irc-icon-width) + var(--event-tile-irc-right-padding)
+        );
+    }
+
     &.stateContinuation .line {
         clear: both;
     }
@@ -431,7 +434,7 @@
         flex-direction: column;
         gap: var(--event-tile-bubble-gap);
         width: fit-content;
-        max-width: 70%;
+        max-width: var(--event-tile-bubble-line-max-width);
         margin-block: 0;
         margin-inline: var(--event-tile-bubble-line-margin-inline-start)
             var(--event-tile-bubble-line-margin-inline-end);
@@ -441,6 +444,21 @@
         padding-inline-end: 60px;
         background: var(--event-tile-bubble-other-background);
         border-end-end-radius: var(--event-tile-bubble-corner-radius);
+    }
+
+    /* Media bodies provide their own appearance and dimensions. The shell
+       removes message padding while retaining the normal bubble width. */
+    .lineMedia {
+        padding: 0;
+        background: transparent;
+        max-width: var(--event-tile-bubble-line-max-width);
+    }
+
+    /* Stickers are un-bubbled content, so their timestamp sits immediately
+       after the line instead of over its lower-right corner. */
+    .lineSticker .slotTimestamp {
+        inset-inline-start: 100%;
+        inset-inline-end: auto;
     }
 
     .slotAvatar {
@@ -529,6 +547,16 @@
         border-end-end-radius: 0;
         background: var(--event-tile-bubble-self-background);
         margin-inline-start: auto;
+    }
+
+    &.stateOwnEvent .lineMedia {
+        margin-block: 0;
+        margin-inline: 0 var(--event-tile-bubble-line-margin-inline-end);
+        background: transparent;
+    }
+
+    &.stateOwnEvent .lineSticker {
+        margin-inline-end: 32px;
     }
 
     &.stateOwnEvent .slotAvatar {
@@ -624,6 +652,15 @@
     &.stateNoBubble .line {
         background: transparent;
         padding: 0;
+    }
+
+    &.stateNoBubble .lineEmote {
+        padding-inline-end: 60px;
+
+        .slotTimestamp {
+            inset-block: auto;
+            align-self: center;
+        }
     }
 
     /* Events without sender details use the same avatar placement as an own
