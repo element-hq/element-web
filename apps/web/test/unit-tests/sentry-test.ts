@@ -1,22 +1,21 @@
-/*
-Copyright 2026 New Vector Ltd.
-
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
-Please see LICENSE files in the repository root for full details.
-*/
-
 import * as Sentry from "@sentry/browser";
 
 import { initSentry } from "../../src/sentry";
 
 jest.mock("@sentry/browser", () => ({
     init: jest.fn(),
-    inboundFiltersIntegration: jest.fn().mockReturnValue({ name: "InboundFilters" }),
-    functionToStringIntegration: jest.fn().mockReturnValue({ name: "FunctionToString" }),
+    inboundFiltersIntegration: jest
+        .fn()
+        .mockReturnValue({ name: "InboundFilters" }),
+    functionToStringIntegration: jest
+        .fn()
+        .mockReturnValue({ name: "FunctionToString" }),
     breadcrumbsIntegration: jest.fn().mockReturnValue({ name: "Breadcrumbs" }),
     httpContextIntegration: jest.fn().mockReturnValue({ name: "HttpContext" }),
     dedupeIntegration: jest.fn().mockReturnValue({ name: "Dedupe" }),
-    rewriteFramesIntegration: jest.fn().mockReturnValue({ name: "RewriteFrames" }),
+    rewriteFramesIntegration: jest
+        .fn()
+        .mockReturnValue({ name: "RewriteFrames" }),
 }));
 
 describe("initSentry", () => {
@@ -30,7 +29,10 @@ describe("initSentry", () => {
     });
 
     it("normalizes Element Desktop's vector:// stack frames so they group with Element Web", async () => {
-        await initSentry({ dsn: "https://examplePublicKey@o0.ingest.sentry.io/0", environment: "test" });
+        await initSentry({
+            dsn: "https://examplePublicKey@o0.ingest.sentry.io/0",
+            environment: "test",
+        });
 
         expect(Sentry.rewriteFramesIntegration).toHaveBeenCalledWith({
             root: "vector://vector/webapp",
@@ -38,7 +40,9 @@ describe("initSentry", () => {
         });
 
         const { integrations } = jest.mocked(Sentry.init).mock.calls[0][0]!;
-        expect(integrations).toEqual(expect.arrayContaining([{ name: "RewriteFrames" }]));
+        expect(integrations).toEqual(
+            expect.arrayContaining([{ name: "RewriteFrames" }]),
+        );
     });
 });
 
@@ -61,14 +65,25 @@ describe("rewriteFramesIntegration output", () => {
                 values: [
                     {
                         stacktrace: {
-                            frames: [{ filename: "vector://vector/webapp/bundles/abc123/bundle.js" }],
+                            frames: [
+                                {
+                                    filename:
+                                        "vector://vector/webapp/bundles/abc123/bundle.js",
+                                },
+                            ],
                         },
                     },
                 ],
             },
         };
 
-        const processed = integration.processEvent!(event, {}, {} as any) as any;
-        expect(processed.exception.values[0].stacktrace.frames[0].filename).toBe("app:///bundles/abc123/bundle.js");
+        const processed = integration.processEvent!(
+            event,
+            {},
+            {} as any,
+        ) as any;
+        expect(
+            processed.exception.values[0].stacktrace.frames[0].filename,
+        ).toBe("app:///bundles/abc123/bundle.js");
     });
 });
