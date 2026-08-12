@@ -132,7 +132,15 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
             }),
     );
 
-    const { previews } = useViewModel(urlPreviewVm);
+    const { previews, totalPreviewCount, previewsLimited, overPreviewLimit } = useViewModel(urlPreviewVm);
+
+    const collapse = overPreviewLimit
+        ? {
+              collapsed: previewsLimited,
+              hiddenCount: totalPreviewCount - previews.length,
+              onToggle: () => void urlPreviewVm.onTogglePreviewLimit(),
+          }
+        : undefined;
 
     const previewToEntry = (preview: UrlPreview): MediaPreviewGroupEntry => {
         let content: MediaPreviewGroupEntryContent;
@@ -285,7 +293,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
             vm={textualBodyVm}
             body={<EventContentBodyView vm={eventContentBodyVm} as={willHaveWrapper ? "span" : "div"} />}
             bodyRef={contentRef}
-            urlPreviews={<MediaPreviewGroupPreview vm={mediaPreviewVm} />}
+            urlPreviews={<MediaPreviewGroupPreview vm={mediaPreviewVm} collapse={collapse} />}
             className={getTextualBodyClassName(content.msgtype as MsgType | undefined)}
         />
     );
