@@ -265,44 +265,40 @@ describe("EventTileView", () => {
         expect(getByTestId("styling-contract-body").closest(`.${styles.line}`)).toHaveClass(styles[hook]);
     });
 
-    it.each(shellPlacementMatrix)("keeps $name slots contained and ordered by the shell", ({ rootState, lineState }) => {
-        const { container } = render(
-            <EventTileView
-                {...createProps({
-                    root: {
-                        ...renderState,
-                        state: { ...renderState.state, ...rootState },
-                    },
-                    line: lineState,
-                    slots: createStylingContractSlots(),
-                })}
-            />,
-        );
-        const root = container.firstElementChild;
-        const line = root?.querySelector(`#${renderState.id}`);
+    it.each(shellPlacementMatrix)(
+        "keeps $name slots contained and ordered by the shell",
+        ({ rootState, lineState }) => {
+            const { container } = render(
+                <EventTileView
+                    {...createProps({
+                        root: {
+                            ...renderState,
+                            state: { ...renderState.state, ...rootState },
+                        },
+                        line: lineState,
+                        slots: createStylingContractSlots(),
+                    })}
+                />,
+            );
+            const root = container.firstElementChild;
+            const line = root?.querySelector(`#${renderState.id}`);
 
-        if (!root || !line) {
-            throw new Error("Expected EventTile root and line to be present");
-        }
+            if (!root || !line) {
+                throw new Error("Expected EventTile root and line to be present");
+            }
 
-        expect(Array.from(line.children).map((child) => child.getAttribute("data-testid"))).toEqual(
-            groupLineSlotOrder,
-        );
-        expect(Array.from(root.children).map((child) => child.getAttribute("data-testid") ?? child.id)).toEqual(
-            groupRootSlotOrder,
-        );
+            expect(Array.from(line.children).map((child) => child.getAttribute("data-testid"))).toEqual(
+                groupLineSlotOrder,
+            );
+            expect(Array.from(root.children).map((child) => child.getAttribute("data-testid") ?? child.id)).toEqual(
+                groupRootSlotOrder,
+            );
 
-        for (const slotName of [
-            "contextMenu",
-            "timestamp",
-            "padlock",
-            "replyChain",
-            "body",
-            "actionBar",
-        ]) {
-            expect(root.querySelector(`[data-testid="event-tile-slot-${slotName}"]`)?.parentElement).toBe(line);
-        }
-    });
+            for (const slotName of ["contextMenu", "timestamp", "padlock", "replyChain", "body", "actionBar"]) {
+                expect(root.querySelector(`[data-testid="event-tile-slot-${slotName}"]`)?.parentElement).toBe(line);
+            }
+        },
+    );
 
     it("preserves the application styling contract across rendering modes", () => {
         const group = render(

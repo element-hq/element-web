@@ -132,11 +132,7 @@ export function EventTileView({
                 <div className={classNames(styles.senderDetails, classNameOverrides?.senderDetails)}>
                     {renderSlots("avatar", "sender")}
                 </div>
-                <div
-                    id={root.id}
-                    className={lineClassName}
-                    onContextMenu={onContextMenu}
-                >
+                <div id={root.id} className={lineClassName} onContextMenu={onContextMenu}>
                     {renderSlots("contextMenu", "replyChain", "body", "actionBar", "timestamp", "receipt")}
                 </div>
                 {renderSlot("footer")}
@@ -198,11 +194,7 @@ export function EventTileView({
                         {renderSlots("avatar", "sender", "timestamp")}
                     </div>
                 </a>
-                <div
-                    id={root.id}
-                    className={lineClassName}
-                    onContextMenu={onContextMenu}
-                >
+                <div id={root.id} className={lineClassName} onContextMenu={onContextMenu}>
                     {renderSlots("contextMenu", "body")}
                 </div>
             </>,
@@ -217,11 +209,7 @@ export function EventTileView({
         return renderRoot(
             <>
                 {renderSlots("padlock", "timestamp", "avatar", "sender")}
-                <div
-                    id={root.id}
-                    className={lineClassName}
-                    onContextMenu={onContextMenu}
-                >
+                <div id={root.id} className={lineClassName} onContextMenu={onContextMenu}>
                     {renderSlots("contextMenu", "replyChain", "body", "actionBar", "footer", "threadInfo")}
                 </div>
                 {renderSlot("receipt")}
@@ -235,11 +223,7 @@ export function EventTileView({
     return renderRoot(
         <>
             {renderSlots("sender", "avatar")}
-            <div
-                id={root.id}
-                className={lineClassName}
-                onContextMenu={onContextMenu}
-            >
+            <div id={root.id} className={lineClassName} onContextMenu={onContextMenu}>
                 {renderSlots("contextMenu", "timestamp", "padlock", "replyChain", "body", "actionBar")}
             </div>
             {renderSlots("footer", "threadInfo", "receipt")}

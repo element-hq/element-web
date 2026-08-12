@@ -19,6 +19,9 @@
     --event-tile-irc-icon-width: 14px;
     --event-tile-irc-timestamp-width: 48px;
     --event-tile-irc-right-padding: 5px;
+    --event-tile-irc-info-offset: calc(
+        var(--event-tile-irc-name-width) + var(--event-tile-irc-icon-width) + var(--event-tile-irc-right-padding)
+    );
 
     /* Bubble geometry. */
     --event-tile-bubble-corner-radius: 12px;
@@ -47,6 +50,10 @@
     &.stateContinuation {
         padding-top: 0;
     }
+
+    &.stateEditing .slotTimestamp {
+        visibility: hidden;
+    }
 }
 
 .line {
@@ -59,9 +66,7 @@
 .stateAlignedBetweenBubbles,
 .stateBubbleContainer,
 .stateEmote,
-.stateEncryptionFailure,
 .stateHasReply,
-.stateInfo,
 .stateLeftAlignedBubble,
 .stateNoBubble,
 .stateNoSender,
@@ -215,6 +220,34 @@
         overflow: visible;
     }
 
+    /* Informational events use a smaller metadata row while retaining the
+       normal group slot order. */
+    &.stateInfo {
+        padding-top: 0;
+
+        .slotAvatar,
+        .slotPadlock {
+            line-height: 1;
+            margin-block: 3px 2px;
+        }
+
+        .slotAvatar {
+            inset-block-start: auto;
+            inset-inline-start: var(--event-tile-group-gutter);
+            height: 14px;
+        }
+
+        .line {
+            padding-block: 3px 2px;
+            padding-inline-start: calc(var(--event-tile-group-gutter) + 20px);
+        }
+
+        .slotTimestamp,
+        .slotPadlock {
+            inset-block-start: 0;
+        }
+    }
+
     &.stateContinuation .line {
         clear: both;
     }
@@ -316,6 +349,27 @@
 
     .slotFooter {
         margin-block: var(--cpd-space-1-5x, 6px);
+    }
+
+    &.stateInfo {
+        .slotAvatar {
+            inset-block-start: 0;
+            inset-inline-start: var(--event-tile-irc-info-offset);
+            margin-inline-end: var(--event-tile-irc-right-padding);
+            padding-block: 1px;
+        }
+
+        .slotPadlock {
+            inset-block-start: 0;
+        }
+
+        .line {
+            margin-inline-start: var(--event-tile-irc-info-offset);
+        }
+    }
+
+    &.stateContinuation .line {
+        clear: both;
     }
 }
 
@@ -525,6 +579,80 @@
     &.stateLastInSection.stateOwnEvent .line {
         border-end-start-radius: 0;
         border-end-end-radius: var(--event-tile-bubble-corner-radius);
+    }
+
+    /* Informational bubble rows are metadata rows, not message bubbles. */
+    &.stateInfo {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding-block: 5px;
+
+        .slotAvatar {
+            position: static;
+            order: -1;
+            display: inline-flex;
+            margin-inline-end: var(--event-tile-bubble-gap);
+            border: 0;
+        }
+
+        .line {
+            min-width: 100%;
+            margin: 0;
+            background: transparent;
+        }
+
+        .slotTimestamp {
+            inset-block: auto;
+            inset-inline: -77px auto;
+            align-self: center;
+        }
+
+        .slotPadlock {
+            margin-inline-start: 0;
+            align-self: center;
+        }
+    }
+
+    /* UTD events have a shell-owned two-row grid. The decryption body keeps
+       its application-owned appearance and only receives its grid area here. */
+    &.stateEncryptionFailure {
+        &:hover::before {
+            background: transparent;
+        }
+
+        .line {
+            display: grid;
+            grid-template:
+                "reply reply" auto
+                "shield body" auto
+                / auto 1fr;
+        }
+
+        .slotPadlock {
+            grid-area: shield;
+            margin-block: auto;
+        }
+
+        .slotBody {
+            grid-area: body;
+        }
+
+        .slotReplyChain {
+            grid-area: reply;
+        }
+
+        &.stateInfo .line {
+            gap: 0 9px;
+            align-items: center;
+            grid-template:
+                "shield source" auto
+                / auto 1fr;
+        }
+
+        &.stateInfo .slotBody {
+            grid-area: source;
+        }
     }
 }
 
