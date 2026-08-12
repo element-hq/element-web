@@ -19,11 +19,12 @@ import {
 import { MockViewModel } from "../../../../core/viewmodel/MockViewModel";
 
 const buttons = [
-    { icon: <ExpandIcon />, onClick: () => ({}) },
-    { icon: <DownloadIcon />, onClick: () => ({}) },
+    { label: "Expand", icon: <ExpandIcon />, onClick: () => ({}) },
+    { label: "Download", icon: <DownloadIcon />, onClick: () => ({}) },
 ];
 
 const textEntry: MediaPreviewGroupEntry = {
+    id: "annual-report.pdf",
     style: "text",
     icon: <FileIcon />,
     color: "#4200A6",
@@ -33,6 +34,7 @@ const textEntry: MediaPreviewGroupEntry = {
 };
 
 const imageEntry: MediaPreviewGroupEntry = {
+    id: "screenshot.png",
     style: "image",
     image: "https://picsum.photos/seed/element/480/270",
     imageSize: "banner",
@@ -44,6 +46,7 @@ const imageEntry: MediaPreviewGroupEntry = {
 };
 
 const videoEntry: MediaPreviewGroupEntry = {
+    id: "holiday-clip.mp4",
     style: "video",
     video: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
     videoSize: "banner",
@@ -55,6 +58,7 @@ const videoEntry: MediaPreviewGroupEntry = {
 };
 
 const audioEntry: MediaPreviewGroupEntry = {
+    id: "voice-message.mp3",
     style: "audio",
     audio: "https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3",
     icon: <FileIcon />,

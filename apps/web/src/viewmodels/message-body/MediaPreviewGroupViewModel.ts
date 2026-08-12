@@ -1,7 +1,14 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE in the repository root for full details.
+*/
+
 import {
     BaseViewModel,
-    MediaPreviewGroupSnapshot,
-    MediaPreviewGroupViewModel as MediaPreviewGroupViewModelInterface,
+    type MediaPreviewGroupSnapshot,
+    type MediaPreviewGroupViewModel as MediaPreviewGroupViewModelInterface,
 } from "@element-hq/web-shared-components";
 
 export type MediaPreviewGroupProps = MediaPreviewGroupSnapshot;
@@ -14,7 +21,7 @@ export class MediaPreviewGroupViewModel
         super(props, props);
     }
 
-    public replace(props: MediaPreviewGroupProps) {
+    public replace(props: MediaPreviewGroupProps): void {
         this.props = props;
         this.snapshot.set(props);
     }
