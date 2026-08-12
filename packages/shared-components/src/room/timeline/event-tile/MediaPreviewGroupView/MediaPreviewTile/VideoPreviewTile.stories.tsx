@@ -12,8 +12,11 @@ import ExpandIcon from "@vector-im/compound-design-tokens/assets/web/icons/expan
 import DownloadIcon from "@vector-im/compound-design-tokens/assets/web/icons/download";
 
 import { VideoPreviewTile } from "./MediaPreviewTile";
-import demoVideo from "../../../../../../static/videoBodyDemo.webm";
-import { waitForBufferedVideos } from "../../../../../../.storybook/waitForBufferedVideos";
+// Inlined as a data URI, and short enough to be buffered in full the moment it is decoded: the native
+// video controls draw a buffered-progress bar, so a clip that is still downloading when the snapshot
+// is taken makes the screenshot non-reproducible.
+import demoVideo from "../../../../../../static/videoPreviewDemo.webm?inline";
+import { prepareVideosForSnapshot } from "../../../../../../.storybook/prepareVideosForSnapshot";
 
 const meta = {
     title: "Room/Timeline/MediaPreviewGroupView/MediaPreviewTile/VideoPreviewTile",
@@ -34,7 +37,7 @@ const meta = {
             { label: "Download", icon: <DownloadIcon />, onClick: () => ({}) },
         ],
     },
-    play: ({ canvasElement }) => waitForBufferedVideos(canvasElement),
+    play: ({ canvasElement }) => prepareVideosForSnapshot(canvasElement),
 } satisfies Meta<typeof VideoPreviewTile>;
 
 export default meta;
