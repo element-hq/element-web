@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Výběr emodži",
         "jump_first_invite": "Přejít na první pozvánku.",
         "message_composer": "Editor zprávy",
         "n_unread_messages": {
@@ -918,22 +917,6 @@
     },
     "dialog_close_label": "Zavřít dialog",
     "download_completed": "Stahování dokončeno",
-    "emoji": {
-        "categories": "Kategorie",
-        "category_activities": "Aktivity",
-        "category_animals_nature": "Zvířata a příroda",
-        "category_flags": "Vlajky",
-        "category_food_drink": "Jídlo a nápoje",
-        "category_frequently_used": "Často používané",
-        "category_objects": "Objekty",
-        "category_smileys_people": "Obličeje a lidé",
-        "category_symbols": "Symboly",
-        "category_travel_places": "Cestování a místa",
-        "quick_reactions": "Rychlé reakce"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Zrušit hledání"
-    },
     "empty_room": "Prázdná místnost",
     "empty_room_was_name": "Prázdná místnost (dříve %(oldName)s)",
     "encryption": {
@@ -1715,7 +1698,6 @@
         "mentions_and_keywords": "@zmínky a klíčová slova",
         "mentions_and_keywords_description": "Dostávat oznámení pouze o zmínkách a klíčových slovech podle <a>nastavení</a>",
         "mentions_keywords": "Zmínky a klíčová slova",
-        "message_didnt_send": "Zpráva se neodeslala. Klikněte pro informace.",
         "mute_description": "Nebudete dostávat žádná oznámení"
     },
     "notifier": {

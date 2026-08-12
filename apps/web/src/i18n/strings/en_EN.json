@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Emoji picker",
         "jump_first_invite": "Jump to first invite.",
         "message_composer": "Message composer",
         "n_unread_messages": {
@@ -286,6 +285,8 @@
         },
         "registration_disabled": "Registration has been disabled on this homeserver.",
         "registration_msisdn_field_required_invalid": "Enter phone number (required on this homeserver)",
+        "registration_rate_limited": "Too many attempts in a short time. Wait some time before trying again.",
+        "registration_rate_limited_with_time": "Too many attempts in a short time. Retry after %(timeout)s.",
         "registration_successful": "Registration Successful",
         "registration_username_in_use": "Someone already has that username. Try another or if it is you, sign in below.",
         "registration_username_unable_check": "Unable to check if username has been taken. Try again later.",
@@ -921,22 +922,6 @@
     },
     "dialog_close_label": "Close dialog",
     "download_completed": "Download Completed",
-    "emoji": {
-        "categories": "Categories",
-        "category_activities": "Activities",
-        "category_animals_nature": "Animals & Nature",
-        "category_flags": "Flags",
-        "category_food_drink": "Food & Drink",
-        "category_frequently_used": "Frequently Used",
-        "category_objects": "Objects",
-        "category_smileys_people": "Smileys & People",
-        "category_symbols": "Symbols",
-        "category_travel_places": "Travel & Places",
-        "quick_reactions": "Quick Reactions"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Cancel search"
-    },
     "empty_room": "Empty room",
     "empty_room_was_name": "Empty room (was %(oldName)s)",
     "encryption": {
@@ -1724,7 +1709,6 @@
         "mentions_and_keywords": "@mentions and replies only",
         "mentions_and_keywords_description": "Get notified only with mentions, replies and keywords as set up in your <a>settings</a>",
         "mentions_keywords": "Mentions and keywords",
-        "message_didnt_send": "Message didn't send. Click for info.",
         "mute_description": "You won't get any notifications"
     },
     "notifier": {

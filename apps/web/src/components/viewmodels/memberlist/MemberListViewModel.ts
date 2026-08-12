@@ -167,7 +167,7 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
 
                     // Finally add the third party invites
                     for (const invited of threePidInvited) {
-                        const key = invited.threePidInvite!.event.getContent().display_name;
+                        const key = `threePidInvite-${invited.threePidInvite!.event.getStateKey()}`;
                         newMemberMap.set(key, invited);
                     }
 
@@ -218,7 +218,12 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
     });
 
     useTypedEventEmitter(cli, RoomStateEvent.Update, (state: RoomState) => {
-        if (state.roomId === roomId) loadMembers();
+        if (state.roomId === roomId) {
+            loadMembers();
+            // Power level and join rule changes both surface here, and both can change whether we may
+            // invite. Mirrors RoomSummaryCardViewModel, which recomputes canInviteTo on the same event.
+            setCanInvite(getCanUserInviteToThisRoom());
+        }
     });
 
     useTypedEventEmitter(cli, RoomMemberEvent.Name, (_: MatrixEvent, member: SdkRoomMember) => {

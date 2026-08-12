@@ -14,6 +14,7 @@ import {
     type ITurnServer as IClientTurnServer,
     Direction,
     EventType,
+    MatrixError,
     MatrixEvent,
     MsgType,
     RelationType,
@@ -89,6 +90,7 @@ describe("ElementWidgetDriver", () => {
         const requestedCapabilities = new Set([
             "m.always_on_screen",
             "town.robin.msc3846.turn_servers",
+            "org.matrix.msc4515.rtc_transports",
             "org.matrix.msc2762.timeline:!1:example.org",
             "org.matrix.msc2762.send.event:org.matrix.msc4075.call.notify",
             "org.matrix.msc2762.send.event:org.matrix.msc4075.rtc.notification",
@@ -420,6 +422,31 @@ describe("ElementWidgetDriver", () => {
         });
     });
 
+    describe("getRtcTransports", () => {
+        let driver: WidgetDriver;
+
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
+
+        it("gets the RTC transports from the homeserver", async () => {
+            const transports = [{ type: "livekit", livekit_service_url: "https://livekit-jwt.example.com" }];
+            client._unstable_getRTCTransports.mockResolvedValue(transports);
+
+            await expect(driver.getRtcTransports()).resolves.toEqual({ rtc_transports: transports });
+
+            expect(client._unstable_getRTCTransports).toHaveBeenCalledWith();
+        });
+
+        it("propagates errors from the homeserver", async () => {
+            const error = new MatrixError({ errcode: "M_NOT_FOUND", error: "Not found" }, 404);
+
+            client._unstable_getRTCTransports.mockRejectedValue(error);
+
+            await expect(driver.getRtcTransports()).rejects.toBe(error);
+        });
+    });
+
     describe("readEventRelations", () => {
         let driver: WidgetDriver;
 
@@ -540,18 +567,12 @@ describe("ElementWidgetDriver", () => {
             driver = mkDefaultDriver();
         });
 
-        it("cannot send delayed events with missing arguments", async () => {
-            await expect(driver.sendDelayedEvent(null, null, EventType.RoomMessage, {})).rejects.toThrow(
-                "Must provide at least one of",
-            );
-        });
-
         it("sends delayed message events", async () => {
             client._unstable_sendDelayedEvent.mockResolvedValue({
                 delay_id: "id",
             });
 
-            await expect(driver.sendDelayedEvent(2000, null, EventType.RoomMessage, {})).resolves.toEqual({
+            await expect(driver.sendDelayedEvent(2000, EventType.RoomMessage, {})).resolves.toEqual({
                 roomId,
                 delayId: "id",
             });
@@ -559,25 +580,6 @@ describe("ElementWidgetDriver", () => {
             expect(client._unstable_sendDelayedEvent).toHaveBeenCalledWith(
                 roomId,
                 { delay: 2000 },
-                null,
-                EventType.RoomMessage,
-                {},
-            );
-        });
-
-        it("sends child action delayed message events", async () => {
-            client._unstable_sendDelayedEvent.mockResolvedValue({
-                delay_id: "id-child",
-            });
-
-            await expect(driver.sendDelayedEvent(null, "id-parent", EventType.RoomMessage, {})).resolves.toEqual({
-                roomId,
-                delayId: "id-child",
-            });
-
-            expect(client._unstable_sendDelayedEvent).toHaveBeenCalledWith(
-                roomId,
-                { parent_delay_id: "id-parent" },
                 null,
                 EventType.RoomMessage,
                 {},
@@ -589,7 +591,7 @@ describe("ElementWidgetDriver", () => {
                 delay_id: "id",
             });
 
-            await expect(driver.sendDelayedEvent(2000, null, EventType.RoomTopic, {}, "")).resolves.toEqual({
+            await expect(driver.sendDelayedEvent(2000, EventType.RoomTopic, {}, "")).resolves.toEqual({
                 roomId,
                 delayId: "id",
             });
@@ -597,25 +599,6 @@ describe("ElementWidgetDriver", () => {
             expect(client._unstable_sendDelayedStateEvent).toHaveBeenCalledWith(
                 roomId,
                 { delay: 2000 },
-                EventType.RoomTopic,
-                {},
-                "",
-            );
-        });
-
-        it("sends child action delayed state events", async () => {
-            client._unstable_sendDelayedStateEvent.mockResolvedValue({
-                delay_id: "id-child",
-            });
-
-            await expect(driver.sendDelayedEvent(null, "id-parent", EventType.RoomTopic, {}, "")).resolves.toEqual({
-                roomId,
-                delayId: "id-child",
-            });
-
-            expect(client._unstable_sendDelayedStateEvent).toHaveBeenCalledWith(
-                roomId,
-                { parent_delay_id: "id-parent" },
                 EventType.RoomTopic,
                 {},
                 "",
@@ -743,7 +726,7 @@ describe("ElementWidgetDriver", () => {
                 delay_id: "id",
             });
 
-            await expect(driver.sendDelayedStickyEvent(1000, null, 2000, EventType.RoomMessage, {})).resolves.toEqual({
+            await expect(driver.sendDelayedStickyEvent(1000, 2000, EventType.RoomMessage, {})).resolves.toEqual({
                 roomId,
                 delayId: "id",
             });
@@ -752,27 +735,6 @@ describe("ElementWidgetDriver", () => {
                 roomId,
                 2000,
                 { delay: 1000 },
-                null,
-                EventType.RoomMessage,
-                {},
-            );
-        });
-        it("sends child action delayed sticky message events", async () => {
-            client._unstable_sendStickyDelayedEvent.mockResolvedValue({
-                delay_id: "id-child",
-            });
-
-            await expect(
-                driver.sendDelayedStickyEvent(null, "id-parent", 2000, EventType.RoomMessage, {}),
-            ).resolves.toEqual({
-                roomId,
-                delayId: "id-child",
-            });
-
-            expect(client._unstable_sendStickyDelayedEvent).toHaveBeenCalledWith(
-                roomId,
-                2000,
-                { parent_delay_id: "id-parent" },
                 null,
                 EventType.RoomMessage,
                 {},

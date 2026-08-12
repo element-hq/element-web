@@ -1,0 +1,259 @@
+/* Story-only timeline context. The hierarchy mirrors RoomView/ScrollPanel. */
+
+.storySurface {
+    width: min(100%, 680px);
+    min-height: 220px;
+    margin: 0;
+    padding: 24px;
+    list-style: none;
+    background: var(--cpd-color-bg-canvas-default, #fff);
+    color: var(--cpd-color-text-primary, #17191c);
+}
+
+.debugFrame {
+    position: relative;
+}
+
+/* Keep the bubble hover layer above the Storybook surface while keeping it
+   behind the tile content. */
+.storyEventTile.storyLayoutBubble {
+    isolation: isolate;
+}
+
+[data-story-hovered="true"] {
+    outline: 1px dashed var(--cpd-color-border-focused, #5e7cff);
+    outline-offset: 2px;
+}
+
+.debugTooltip {
+    position: fixed;
+    z-index: 1000;
+    inset-block-end: 12px;
+    inset-inline-start: 12px;
+    max-width: min(80vw, 360px);
+    padding: 4px 8px;
+    border: 1px solid var(--cpd-color-border-subtle, #c9ced4);
+    border-radius: 4px;
+    color: var(--cpd-color-text-primary, #17191c);
+    background: var(--cpd-color-bg-canvas-default, #fff);
+    box-shadow: 0 2px 8px rgb(0 0 0 / 18%);
+    font:
+        12px/1.3 ui-monospace,
+        SFMono-Regular,
+        Consolas,
+        monospace;
+    pointer-events: none;
+}
+
+.timeline,
+.scrollPanel,
+.messageListWrapper {
+    display: flex;
+    min-width: 0;
+    width: 100%;
+    flex-direction: column;
+}
+
+.messageListWrapper {
+    position: relative;
+    justify-content: flex-end;
+}
+
+.messageList {
+    display: flex;
+    min-width: 0;
+    width: 100%;
+    flex-direction: column;
+    justify-content: flex-end;
+    box-sizing: border-box;
+    margin: 0;
+    padding: var(--RoomView_MessageList-padding, 18px);
+    list-style: none;
+}
+
+.messageList > li {
+    clear: both;
+}
+
+/* Let the story-only slot labels escape the notification metadata row. */
+.detailsContainer {
+    overflow: visible !important;
+}
+
+.line {
+    /* Marker class used by state stories to style the shared line slot. */
+}
+
+.threadListInfo {
+    display: flex;
+    position: relative;
+    align-items: center;
+    margin-top: var(--cpd-space-2x, 8px);
+    font: var(--cpd-font-body-sm-regular);
+}
+
+.threadListIcon {
+    display: inline-block;
+    flex: 0 0 18px;
+    width: 18px;
+    height: 18px;
+    color: var(--cpd-color-icon-secondary, #626a73);
+}
+
+.threadListReplies {
+    position: relative;
+    padding: 0 var(--cpd-space-3x, 12px) 0 var(--cpd-space-2x, 8px);
+    color: var(--cpd-color-text-secondary, #626a73);
+    font-weight: var(--cpd-font-weight-semibold, 600);
+    white-space: nowrap;
+}
+
+/* Match the application IRC profile treatment without adding application
+   selectors to the shared EventTileView stylesheet. */
+.ircSender {
+    width: var(--event-tile-irc-name-width, 80px);
+    margin-inline-end: 0;
+    overflow: hidden;
+    text-align: start;
+}
+
+.ircSender :global(.mx_DisambiguatedProfile_displayName) {
+    display: inline-block;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: start;
+}
+
+.ircSender :global(.mx_DisambiguatedProfile_mxid) {
+    visibility: collapse;
+    margin-inline-start: 0;
+    padding-inline: 5px;
+}
+
+.replyAuthor,
+.roomLabel {
+    display: inline-flex;
+    align-items: center;
+    color: var(--cpd-color-text-secondary, #626a73);
+    font-size: 12px;
+}
+
+.notificationDot {
+    display: block;
+    flex: 0 0 8px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--cpd-color-icon-success-primary, #0d9f6e);
+}
+
+.receiptAvatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: content-box;
+    position: absolute;
+    top: 0;
+    width: 14px;
+    height: 14px;
+    border: 1px solid var(--cpd-color-bg-canvas-default, #fff);
+    border-radius: 50%;
+    color: #fff;
+    background: #526b89;
+    font-size: 8px;
+    line-height: 14px;
+    font-weight: 700;
+}
+
+.receiptAvatar:first-child {
+    inset-inline-start: 0;
+    z-index: 1;
+}
+
+.receiptAvatar + .receiptAvatar {
+    inset-inline-start: 10px;
+    background: #7e5c96;
+}
+
+.readReceiptGroup {
+    position: relative;
+    display: inline-block;
+    z-index: 1;
+    user-select: none;
+}
+
+.readReceiptButton {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: stretch;
+    height: 16px;
+    padding: 4px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    box-sizing: content-box;
+    appearance: none;
+    margin: 0;
+    font: inherit;
+    line-height: inherit;
+    cursor: pointer;
+}
+
+.readReceiptButton:hover {
+    background: var(--cpd-color-bg-subtle-primary, #f0f1f2);
+}
+
+.readReceiptContainer {
+    position: relative;
+    display: block;
+    width: 24px;
+    height: 100%;
+}
+
+.body {
+    max-width: 560px;
+    padding-block: 4px;
+    line-height: 1.45;
+}
+
+.replyChain {
+    display: grid;
+    gap: 2px;
+    max-width: 520px;
+    margin: 0;
+    padding-inline-start: 10px;
+    border-inline-start: 2px solid var(--username-color, #617b9b);
+    border-radius: 2px;
+    color: var(--cpd-color-text-secondary, #626a73);
+    font-size: 13px;
+}
+
+.replyAuthor {
+    font-weight: 600;
+}
+
+.storyReactions {
+    display: flex;
+}
+
+.storyEventTile.storyOwnEvent.storyLayoutBubble .storyReactions {
+    justify-content: flex-end;
+}
+
+.storyEventTile.storyOwnEvent.storyLayoutBubble .storyReactions > :last-child {
+    order: -1;
+}
+
+.contextMenu {
+    display: none;
+}
+
+.messageList[data-event-density="compact"] {
+    padding-block: 8px;
+}
+
+.messageList[data-event-density="compact"] .body {
+    padding-block: 2px;
+    line-height: 1.3;
+}
