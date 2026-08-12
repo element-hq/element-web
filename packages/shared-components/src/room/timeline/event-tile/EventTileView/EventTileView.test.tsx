@@ -172,26 +172,50 @@ const groupRootSlotOrder = [
     "event-tile-slot-receipt",
 ];
 
+const ircLineSlotOrder = [
+    "event-tile-slot-contextMenu",
+    "event-tile-slot-replyChain",
+    "event-tile-slot-body",
+    "event-tile-slot-actionBar",
+    "event-tile-slot-footer",
+    "event-tile-slot-threadInfo",
+];
+
+const ircRootSlotOrder = [
+    "event-tile-slot-padlock",
+    "event-tile-slot-timestamp",
+    "event-tile-slot-avatar",
+    "event-tile-slot-sender",
+    "event-line-1",
+    "event-tile-slot-receipt",
+];
+
 const shellPlacementMatrix = [
-    { name: "informational", rootState: { info: true }, lineState: {} },
-    { name: "bubble container", rootState: { bubbleContainer: true }, lineState: {} },
-    { name: "left-aligned bubble", rootState: { leftAlignedBubble: true }, lineState: {} },
-    { name: "aligned between bubbles", rootState: { alignedBetweenBubbles: true }, lineState: {} },
-    { name: "no bubble", rootState: { noBubble: true }, lineState: {} },
-    { name: "no sender", rootState: { noSender: true }, lineState: {} },
+    { name: "informational", rootState: { info: true }, lineState: {}, layout: "group" },
+    { name: "bubble container in group layout", rootState: { bubbleContainer: true }, lineState: {}, layout: "group" },
+    { name: "bubble container in bubble layout", rootState: { bubbleContainer: true }, lineState: {}, layout: "bubble" },
+    { name: "bubble container in IRC layout", rootState: { bubbleContainer: true }, lineState: {}, layout: "irc" },
+    { name: "left-aligned bubble", rootState: { leftAlignedBubble: true }, lineState: {}, layout: "bubble" },
+    { name: "aligned between bubbles", rootState: { alignedBetweenBubbles: true }, lineState: {}, layout: "bubble" },
+    { name: "no bubble", rootState: { noBubble: true }, lineState: {}, layout: "bubble" },
+    { name: "no sender", rootState: { noSender: true }, lineState: {}, layout: "bubble" },
     {
         name: "encryption failure with reply",
         rootState: { encryptionFailure: true, hasReply: true },
         lineState: {},
+        layout: "bubble",
     },
-    { name: "editing continuation", rootState: { editing: true, continuation: true }, lineState: {} },
-    { name: "media line", rootState: {}, lineState: { media: true } },
-    { name: "sticker line", rootState: {}, lineState: { sticker: true } },
-    { name: "emote line", rootState: {}, lineState: { emote: true } },
+    { name: "editing continuation", rootState: { editing: true, continuation: true }, lineState: {}, layout: "bubble" },
+    { name: "media line", rootState: {}, lineState: { media: true }, layout: "group" },
+    { name: "sticker line", rootState: {}, lineState: { sticker: true }, layout: "bubble" },
+    { name: "emote line", rootState: {}, lineState: { emote: true }, layout: "bubble" },
+    { name: "other-event bubble alignment", rootState: {}, lineState: {}, layout: "bubble", isOwnEvent: false },
 ] satisfies ReadonlyArray<{
     name: string;
     rootState: Partial<EventTileViewRootState>;
     lineState: EventTileViewLine;
+    layout: EventTileViewProps["root"]["layout"];
+    isOwnEvent?: boolean;
 }>;
 
 describe("EventTileView", () => {
@@ -267,13 +291,14 @@ describe("EventTileView", () => {
 
     it.each(shellPlacementMatrix)(
         "keeps $name slots contained and ordered by the shell",
-        ({ rootState, lineState }) => {
+        ({ rootState, lineState, layout, isOwnEvent = renderState.state.isOwnEvent }) => {
             const { container } = render(
                 <EventTileView
                     {...createProps({
                         root: {
                             ...renderState,
-                            state: { ...renderState.state, ...rootState },
+                            layout,
+                            state: { ...renderState.state, ...rootState, isOwnEvent },
                         },
                         line: lineState,
                         slots: createStylingContractSlots(),
@@ -287,18 +312,78 @@ describe("EventTileView", () => {
                 throw new Error("Expected EventTile root and line to be present");
             }
 
+            const lineSlotOrder = layout === "irc" ? ircLineSlotOrder : groupLineSlotOrder;
+            const rootSlotOrder = layout === "irc" ? ircRootSlotOrder : groupRootSlotOrder;
+
             expect(Array.from(line.children).map((child) => child.getAttribute("data-testid"))).toEqual(
-                groupLineSlotOrder,
+                lineSlotOrder,
             );
             expect(Array.from(root.children).map((child) => child.getAttribute("data-testid") ?? child.id)).toEqual(
-                groupRootSlotOrder,
+                rootSlotOrder,
             );
 
-            for (const slotName of ["contextMenu", "timestamp", "padlock", "replyChain", "body", "actionBar"]) {
+            const containedLineSlots =
+                layout === "irc"
+                    ? ["contextMenu", "replyChain", "body", "actionBar", "footer", "threadInfo"]
+                    : ["contextMenu", "timestamp", "padlock", "replyChain", "body", "actionBar"];
+            for (const slotName of containedLineSlots) {
                 expect(root.querySelector(`[data-testid="event-tile-slot-${slotName}"]`)?.parentElement).toBe(line);
             }
         },
     );
+
+    it.each(["group", "bubble", "irc"] as const)("places the bubble-container shell in %s layout", (layout) => {
+        const { container, getByTestId } = render(
+            <EventTileView
+                {...createProps({
+                    root: {
+                        ...renderState,
+                        layout,
+                        state: { ...renderState.state, bubbleContainer: true },
+                    },
+                    slots: createStylingContractSlots(),
+                })}
+            />,
+        );
+        const root = container.firstElementChild!;
+        const line = root.querySelector(`#${renderState.id}`)!;
+        const actionBar = getByTestId("styling-contract-actionBar").parentElement!;
+
+        expect(actionBar.parentElement).toBe(line);
+        expect(getComputedStyle(actionBar).position).toBe("absolute");
+
+        if (layout === "group") {
+            expect(getComputedStyle(root).display).toBe("grid");
+            expect(getComputedStyle(line).gridColumnStart).toBe("1");
+            expect(getComputedStyle(line).gridColumnEnd).toBe("3");
+        } else {
+            expect(getComputedStyle(root).display).toBe("flex");
+            expect(getComputedStyle(line).gridColumnStart).toBe("auto");
+            expect(getComputedStyle(line).gridColumnEnd).toBe("auto");
+            expect(getComputedStyle(line).paddingTop).toBe("0px");
+            expect(getComputedStyle(line).paddingBottom).toBe("0px");
+        }
+    });
+
+    it("removes bubble background and padding for no-bubble events", () => {
+        const { container } = render(
+            <EventTileView
+                {...createProps({
+                    root: {
+                        ...renderState,
+                        layout: "bubble",
+                        state: { ...renderState.state, noBubble: true },
+                    },
+                    slots: createStylingContractSlots(),
+                })}
+            />,
+        );
+        const line = container.firstElementChild!.querySelector(`#${renderState.id}`)!;
+
+        expect(getComputedStyle(line).backgroundColor).toBe("rgba(0, 0, 0, 0)");
+        expect(getComputedStyle(line).paddingTop).toBe("0px");
+        expect(getComputedStyle(line).paddingBottom).toBe("0px");
+    });
 
     it("preserves the application styling contract across rendering modes", () => {
         const group = render(
