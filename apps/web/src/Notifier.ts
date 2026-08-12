@@ -370,7 +370,7 @@ export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, Emi
         // make sure that we persist the current setting audio_enabled setting
         // before changing anything
         if (SettingsStore.isLevelSupported(SettingLevel.DEVICE)) {
-            SettingsStore.setValue("audioNotificationsEnabled", null, SettingLevel.DEVICE, this.isEnabled());
+            SettingsStore.setValue("audioNotificationsEnabled", null, SettingLevel.DEVICE, this.isAudioEnabled());
         }
 
         if (enable) {
