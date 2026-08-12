@@ -90,6 +90,10 @@ Under the hood this stops Element Web from adding the `perParticipantE2EE` flag 
 
 This is useful while we experiment with encryption and to make calling compatible with platforms that don't use encryption yet.
 
+## MatrixRTC call slots (`feature_matrixrtc_slots`) [In Development]
+
+Only allows starting or joining Element Call calls with a valid slot state event in the room.
+
 ## Enable the notifications panel in the room header (`feature_notifications`)
 
 Unreliable in encrypted rooms.

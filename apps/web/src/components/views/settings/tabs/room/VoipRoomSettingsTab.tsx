@@ -18,6 +18,8 @@ import { useRoomState } from "../../../../../hooks/useRoomState";
 import SdkConfig, { DEFAULTS } from "../../../../../SdkConfig";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { ElementCallEventType, ElementCallMemberEventType } from "../../../../../call-types";
+import { ensureSlotOpen, ensureSlotClosed } from "../../../../../utils/room/rtcSlot";
+import { useSettingValue } from "../../../../../hooks/useSettings";
 
 interface ElementCallSwitchProps {
     room: Room;
@@ -25,7 +27,7 @@ interface ElementCallSwitchProps {
 
 const ElementCallSwitch: React.FC<ElementCallSwitchProps> = ({ room }) => {
     const isPublic = useMemo(() => room.getJoinRule() === JoinRule.Public, [room]);
-    const [content, maySend] = useRoomState(
+    const [content, maySendPowerLevels, maySendSlot] = useRoomState(
         room,
         useCallback(
             (state: RoomState) => {
@@ -35,18 +37,26 @@ const ElementCallSwitch: React.FC<ElementCallSwitchProps> = ({ room }) => {
                 return [
                     content ?? {},
                     state?.maySendStateEvent(EventType.RoomPowerLevels, room.client.getSafeUserId()),
+                    state?.maySendStateEvent(EventType.RTCSlot, room.client.getSafeUserId()),
                 ] as const;
             },
             [room.client],
         ),
     );
 
+    const matrixRtcSlotsEnabled = useSettingValue("feature_matrixrtc_slots");
+    const maySend = maySendPowerLevels && (!matrixRtcSlotsEnabled || maySendSlot);
+
     const [elementCallEnabled, setElementCallEnabled] = useState<boolean>(() => {
-        return content.events?.[ElementCallMemberEventType.name] === 0;
+        const anyoneCanSendCallMemberEvents = content.events?.[ElementCallMemberEventType.name] === 0;
+        const slotOpenOrNoSlotRequired = room.client.matrixRTC.isSlotClosed(room) === false || !matrixRtcSlotsEnabled;
+        return anyoneCanSendCallMemberEvents && slotOpenOrNoSlotRequired;
     });
 
     const onChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
         (evt): void => {
+            if (!maySend) return;
+
             const enabled = evt.target.checked;
             setElementCallEnabled(enabled);
 
@@ -67,8 +77,14 @@ const ElementCallSwitch: React.FC<ElementCallSwitchProps> = ({ room }) => {
             }
 
             room.client.sendStateEvent(room.roomId, EventType.RoomPowerLevels, newContent);
+
+            if (enabled) {
+                ensureSlotOpen(room);
+            } else {
+                ensureSlotClosed(room);
+            }
         },
-        [room.client, room.roomId, content, isPublic],
+        [room, content, isPublic, maySend],
     );
 
     const brand = SdkConfig.get("element_call").brand ?? DEFAULTS.element_call.brand;

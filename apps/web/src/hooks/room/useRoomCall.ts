@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Room } from "matrix-js-sdk/src/matrix";
+import { EventType, type Room } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { type ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
@@ -39,6 +39,7 @@ import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
 import { useScopedRoomContext } from "../../contexts/ScopedRoomContext";
 import { SDKContext } from "../../contexts/SDKContext.ts";
 import SdkConfig from "../../SdkConfig";
+import { ensureSlotOpen as ensureSlotOpenUtil } from "../../utils/room/rtcSlot";
 
 const logger = rootLogger.getChild("useRoomCall");
 
@@ -113,6 +114,7 @@ export const useRoomCall = (
     const widgetsFeatureEnabled = useSettingValue(UIFeature.Widgets);
     const voipFeatureEnabled = useSettingValue(UIFeature.Voip);
     const enableLegacyCallsVoip = useSettingValue("enableLegacyCallsVoip");
+    const matrixRtcSlotsEnabled = useSettingValue("feature_matrixrtc_slots");
     const sdkConfigEcOnly = useMemo(() => {
         return SdkConfig.get("element_call").use_exclusively;
     }, []);
@@ -166,12 +168,17 @@ export const useRoomCall = (
     // room
     const memberCount = useRoomMemberCount(room);
 
-    const [mayEditWidgets, mayCreateElementCallState] = useRoomState(room, () => [
+    const [mayEditWidgets, mayCreateElementCallState, maySendSlotState, isSlotClosed] = useRoomState(room, () => [
         room.currentState.mayClientSendStateEvent("im.vector.modular.widgets", room.client),
         room.currentState.mayClientSendStateEvent(ElementCallMemberEventType.name, room.client),
+        matrixRtcSlotsEnabled ? room.currentState.mayClientSendStateEvent(EventType.RTCSlot, room.client) : false,
+        matrixRtcSlotsEnabled ? room.client.matrixRTC.isSlotClosed(room) : undefined,
     ]);
 
-    const mayCreateElementCalls = mayCreateElementCallState && serverIsConfiguredForElementCall;
+    const mayOpenClosedSlotOrNoSlotExists = maySendSlotState || isSlotClosed !== true;
+    const mayCreateElementCalls =
+        mayCreateElementCallState && serverIsConfiguredForElementCall && mayOpenClosedSlotOrNoSlotExists;
+    const shouldEnsureSlotOpen = !hasGroupCall && maySendSlotState && isSlotClosed !== false;
 
     // The options provided to the RoomHeader.
     // If there are multiple options, the user will be prompted to choose.
@@ -263,43 +270,75 @@ export const useRoomCall = (
         room.roomId,
     ]);
 
+    const ensureSlotOpen = useCallback((): Promise<boolean> => ensureSlotOpenUtil(room), [room]);
+
     const voiceCallClick = useCallback(
-        (evt: React.MouseEvent | undefined, callPlatformType: PlatformCallType): void => {
+        async (evt: React.MouseEvent | undefined, callPlatformType: PlatformCallType): Promise<void> => {
             evt?.stopPropagation();
             if (widget && promptPinWidget) {
                 sdkContext.widgetLayoutStore.moveToContainer(room, widget, "top");
-            } else {
-                placeCall(
-                    sdkContext.legacyCallHandler,
-                    room,
-                    CallType.Voice,
-                    callPlatformType,
-                    evt?.shiftKey || undefined,
-                    true,
-                );
+                return;
             }
+            if (
+                callPlatformType === PlatformCallType.ElementCall &&
+                shouldEnsureSlotOpen &&
+                !(await ensureSlotOpen())
+            ) {
+                return;
+            }
+            placeCall(
+                sdkContext.legacyCallHandler,
+                room,
+                CallType.Voice,
+                callPlatformType,
+                evt?.shiftKey || undefined,
+                true,
+            );
         },
-        [promptPinWidget, room, widget, sdkContext.widgetLayoutStore, sdkContext.legacyCallHandler],
+        [
+            promptPinWidget,
+            room,
+            widget,
+            sdkContext.widgetLayoutStore,
+            sdkContext.legacyCallHandler,
+            shouldEnsureSlotOpen,
+            ensureSlotOpen,
+        ],
     );
     const videoCallClick = useCallback(
-        (evt: React.MouseEvent | undefined, callPlatformType: PlatformCallType): void => {
+        async (evt: React.MouseEvent | undefined, callPlatformType: PlatformCallType): Promise<void> => {
             evt?.stopPropagation();
             if (widget && promptPinWidget) {
                 sdkContext.widgetLayoutStore.moveToContainer(room, widget, "top");
-            } else {
-                // If we have pressed shift then always skip the lobby, otherwise `undefined` will defer
-                // to the defaults of the call implementation.
-                placeCall(
-                    sdkContext.legacyCallHandler,
-                    room,
-                    CallType.Video,
-                    callPlatformType,
-                    evt?.shiftKey || undefined,
-                    false,
-                );
+                return;
             }
+            if (
+                callPlatformType === PlatformCallType.ElementCall &&
+                shouldEnsureSlotOpen &&
+                !(await ensureSlotOpen())
+            ) {
+                return;
+            }
+            // If we have pressed shift then always skip the lobby, otherwise `undefined` will defer
+            // to the defaults of the call implementation.
+            placeCall(
+                sdkContext.legacyCallHandler,
+                room,
+                CallType.Video,
+                callPlatformType,
+                evt?.shiftKey || undefined,
+                false,
+            );
         },
-        [widget, promptPinWidget, room, sdkContext.widgetLayoutStore, sdkContext.legacyCallHandler],
+        [
+            widget,
+            promptPinWidget,
+            room,
+            sdkContext.widgetLayoutStore,
+            sdkContext.legacyCallHandler,
+            shouldEnsureSlotOpen,
+            ensureSlotOpen,
+        ],
     );
 
     let voiceCallDisabledReason: string | null;
