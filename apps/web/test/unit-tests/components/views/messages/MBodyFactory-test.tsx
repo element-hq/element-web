@@ -165,7 +165,7 @@ describe("MBodyFactory", () => {
                 },
             });
 
-            const { container, getByRole } = render(
+            const { container, getByRole, getByText } = render(
                 <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.File } as any)}>
                     {renderMBody(
                         {
@@ -179,7 +179,15 @@ describe("MBodyFactory", () => {
                 </ScopedRoomContextProvider>,
             );
 
-            expect(getByRole("button", { name: "alt" })).toBeInTheDocument();
+            expect(getByText("alt")).toBeInTheDocument();
+            // m.file renders the preview tile, which gives the download its own button and leaves the
+            // filename as plain text. The other msgtypes keep the legacy file body, where the filename
+            // itself is the button. See FileBodyFactory.
+            if (msgtype === "m.file") {
+                expect(getByRole("button", { name: "Download" })).toBeInTheDocument();
+            } else {
+                expect(getByRole("button", { name: "alt" })).toBeInTheDocument();
+            }
             expect(container).toMatchSnapshot();
         },
     );
