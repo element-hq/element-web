@@ -22,6 +22,7 @@ type EventTileSlotName = keyof EventTileViewSlots;
  */
 export function EventTileView({
     root,
+    line: lineState,
     slots,
     classNames: classNameOverrides,
     refs,
@@ -72,6 +73,12 @@ export function EventTileView({
     const renderSlots = (...slotNames: EventTileSlotName[]): React.ReactNode =>
         slotNames.map((slotName) => renderSlot(slotName));
 
+    const lineClassName = classNames(styles.line, classNameOverrides?.line, {
+        [styles.lineMedia]: lineState?.media,
+        [styles.lineSticker]: lineState?.sticker,
+        [styles.lineEmote]: lineState?.emote,
+    });
+
     const renderRoot = (
         children: React.ReactNode,
         rootClickHandler: React.MouseEventHandler<HTMLElement> | undefined,
@@ -81,6 +88,15 @@ export function EventTileView({
             ref={refs?.root}
             className={classNames(styles.root, classNameOverrides?.root, {
                 [styles.stateOwnEvent]: root.state.isOwnEvent,
+                [styles.stateInfo]: root.state?.info,
+                [styles.stateBubbleContainer]: root.state?.bubbleContainer,
+                [styles.stateLeftAlignedBubble]: root.state?.leftAlignedBubble,
+                [styles.stateAlignedBetweenBubbles]: root.state?.alignedBetweenBubbles,
+                [styles.stateNoBubble]: root.state?.noBubble,
+                [styles.stateNoSender]: root.state?.noSender,
+                [styles.stateEncryptionFailure]: root.state?.encryptionFailure,
+                [styles.stateEmote]: root.state?.emote,
+                [styles.stateHasReply]: root.state?.hasReply,
                 [styles.stateHighlighted]: root.state?.highlighted,
                 [styles.stateSelected]: root.state?.selected,
                 [styles.stateEditing]: root.state?.editing,
@@ -118,7 +134,7 @@ export function EventTileView({
                 </div>
                 <div
                     id={root.id}
-                    className={classNames(styles.line, classNameOverrides?.line)}
+                    className={lineClassName}
                     onContextMenu={onContextMenu}
                 >
                     {renderSlots("contextMenu", "replyChain", "body", "actionBar", "timestamp", "receipt")}
@@ -137,7 +153,7 @@ export function EventTileView({
                     {renderSlots("sender", "notificationRoomLabel", "timestamp", "notificationBadge")}
                 </div>
                 {slots.roomAvatar ? renderSlot("roomAvatar") : renderSlot("avatar")}
-                <div className={classNames(styles.line, classNameOverrides?.line)} id={root.id}>
+                <div className={lineClassName} id={root.id}>
                     {renderSlots("body", "threadInfo")}
                 </div>
                 {renderSlot("receipt")}
@@ -155,7 +171,7 @@ export function EventTileView({
                     {renderSlots("sender", "notificationRoomLabel", "timestamp", "notificationBadge")}
                 </div>
                 {renderSlot("avatar")}
-                <div className={classNames(styles.line, classNameOverrides?.line)} id={root.id}>
+                <div className={lineClassName} id={root.id}>
                     {renderSlots("body", "threadInfo")}
                 </div>
                 {renderSlot("actionBar")}
@@ -184,7 +200,7 @@ export function EventTileView({
                 </a>
                 <div
                     id={root.id}
-                    className={classNames(styles.line, classNameOverrides?.line)}
+                    className={lineClassName}
                     onContextMenu={onContextMenu}
                 >
                     {renderSlots("contextMenu", "body")}
@@ -203,7 +219,7 @@ export function EventTileView({
                 {renderSlots("padlock", "timestamp", "avatar", "sender")}
                 <div
                     id={root.id}
-                    className={classNames(styles.line, classNameOverrides?.line)}
+                    className={lineClassName}
                     onContextMenu={onContextMenu}
                 >
                     {renderSlots("contextMenu", "replyChain", "body", "actionBar", "footer", "threadInfo")}
@@ -221,7 +237,7 @@ export function EventTileView({
             {renderSlots("sender", "avatar")}
             <div
                 id={root.id}
-                className={classNames(styles.line, classNameOverrides?.line)}
+                className={lineClassName}
                 onContextMenu={onContextMenu}
             >
                 {renderSlots("contextMenu", "timestamp", "padlock", "replyChain", "body", "actionBar")}

@@ -9,7 +9,13 @@ import React, { createRef } from "react";
 import { describe, expect, it, vi } from "vitest";
 
 import { fireEvent, render } from "@test-utils";
-import { EventTileView, type EventTileViewClassNames, type EventTileViewProps } from "./index";
+import {
+    EventTileView,
+    type EventTileViewClassNames,
+    type EventTileViewLine,
+    type EventTileViewProps,
+    type EventTileViewRootState,
+} from "./index";
 import styles from "./EventTileView.module.css";
 
 const renderState: EventTileViewProps["root"] = {
@@ -120,6 +126,74 @@ function createStylingContractSlots(): EventTileViewProps["slots"] {
     };
 }
 
+const rootStateMatrix = [
+    { name: "informational", state: { info: true }, hook: "stateInfo" },
+    { name: "bubble container", state: { bubbleContainer: true }, hook: "stateBubbleContainer" },
+    { name: "left-aligned bubble", state: { leftAlignedBubble: true }, hook: "stateLeftAlignedBubble" },
+    { name: "aligned between bubbles", state: { alignedBetweenBubbles: true }, hook: "stateAlignedBetweenBubbles" },
+    { name: "no bubble", state: { noBubble: true }, hook: "stateNoBubble" },
+    { name: "no sender", state: { noSender: true }, hook: "stateNoSender" },
+    { name: "encryption failure", state: { encryptionFailure: true }, hook: "stateEncryptionFailure" },
+    { name: "emote", state: { emote: true }, hook: "stateEmote" },
+    { name: "reply chain", state: { hasReply: true }, hook: "stateHasReply" },
+    { name: "editing", state: { editing: true }, hook: "stateEditing" },
+    { name: "continuation", state: { continuation: true }, hook: "stateContinuation" },
+] satisfies ReadonlyArray<{
+    name: string;
+    state: Partial<EventTileViewRootState>;
+    hook: keyof typeof styles;
+}>;
+
+const lineStateMatrix = [
+    { name: "media", state: { media: true }, hook: "lineMedia" },
+    { name: "sticker", state: { sticker: true }, hook: "lineSticker" },
+    { name: "emote", state: { emote: true }, hook: "lineEmote" },
+] satisfies ReadonlyArray<{
+    name: string;
+    state: EventTileViewLine;
+    hook: keyof typeof styles;
+}>;
+
+const groupLineSlotOrder = [
+    "event-tile-slot-contextMenu",
+    "event-tile-slot-timestamp",
+    "event-tile-slot-padlock",
+    "event-tile-slot-replyChain",
+    "event-tile-slot-body",
+    "event-tile-slot-actionBar",
+];
+
+const groupRootSlotOrder = [
+    "event-tile-slot-sender",
+    "event-tile-slot-avatar",
+    "event-line-1",
+    "event-tile-slot-footer",
+    "event-tile-slot-threadInfo",
+    "event-tile-slot-receipt",
+];
+
+const shellPlacementMatrix = [
+    { name: "informational", rootState: { info: true }, lineState: {} },
+    { name: "bubble container", rootState: { bubbleContainer: true }, lineState: {} },
+    { name: "left-aligned bubble", rootState: { leftAlignedBubble: true }, lineState: {} },
+    { name: "aligned between bubbles", rootState: { alignedBetweenBubbles: true }, lineState: {} },
+    { name: "no bubble", rootState: { noBubble: true }, lineState: {} },
+    { name: "no sender", rootState: { noSender: true }, lineState: {} },
+    {
+        name: "encryption failure with reply",
+        rootState: { encryptionFailure: true, hasReply: true },
+        lineState: {},
+    },
+    { name: "editing continuation", rootState: { editing: true, continuation: true }, lineState: {} },
+    { name: "media line", rootState: {}, lineState: { media: true } },
+    { name: "sticker line", rootState: {}, lineState: { sticker: true } },
+    { name: "emote line", rootState: {}, lineState: { emote: true } },
+] satisfies ReadonlyArray<{
+    name: string;
+    rootState: Partial<EventTileViewRootState>;
+    lineState: EventTileViewLine;
+}>;
+
 describe("EventTileView", () => {
     it("renders the common root and line structure", () => {
         const { container, getByTestId } = render(<EventTileView {...createProps()} />);
@@ -166,6 +240,68 @@ describe("EventTileView", () => {
         expect(root).toHaveClass(styles.stateEditing);
         expect(root).toHaveClass(styles.stateContinuation);
         expect(root).toHaveClass(styles.stateLastInSection);
+    });
+
+    it.each(rootStateMatrix)("maps the $name root state to its semantic shell hook", ({ state, hook }) => {
+        const { container } = render(
+            <EventTileView
+                {...createProps({
+                    root: {
+                        ...renderState,
+                        state: { ...renderState.state, ...state },
+                    },
+                })}
+            />,
+        );
+
+        expect(container.firstElementChild).toHaveClass(styles[hook]);
+    });
+
+    it.each(lineStateMatrix)("maps the $name line state to its semantic shell hook", ({ state, hook }) => {
+        const { getByTestId } = render(
+            <EventTileView {...createProps({ line: state, slots: createStylingContractSlots() })} />,
+        );
+
+        expect(getByTestId("styling-contract-body").closest(`.${styles.line}`)).toHaveClass(styles[hook]);
+    });
+
+    it.each(shellPlacementMatrix)("keeps $name slots contained and ordered by the shell", ({ rootState, lineState }) => {
+        const { container } = render(
+            <EventTileView
+                {...createProps({
+                    root: {
+                        ...renderState,
+                        state: { ...renderState.state, ...rootState },
+                    },
+                    line: lineState,
+                    slots: createStylingContractSlots(),
+                })}
+            />,
+        );
+        const root = container.firstElementChild;
+        const line = root?.querySelector(`#${renderState.id}`);
+
+        if (!root || !line) {
+            throw new Error("Expected EventTile root and line to be present");
+        }
+
+        expect(Array.from(line.children).map((child) => child.getAttribute("data-testid"))).toEqual(
+            groupLineSlotOrder,
+        );
+        expect(Array.from(root.children).map((child) => child.getAttribute("data-testid") ?? child.id)).toEqual(
+            groupRootSlotOrder,
+        );
+
+        for (const slotName of [
+            "contextMenu",
+            "timestamp",
+            "padlock",
+            "replyChain",
+            "body",
+            "actionBar",
+        ]) {
+            expect(root.querySelector(`[data-testid="event-tile-slot-${slotName}"]`)?.parentElement).toBe(line);
+        }
     });
 
     it("preserves the application styling contract across rendering modes", () => {

@@ -54,6 +54,22 @@
     min-width: 0;
 }
 
+/* Semantic hooks for the EventTile state contract. Placement rules are added
+   incrementally as the application renderer adopts the shared shell. */
+.stateAlignedBetweenBubbles,
+.stateBubbleContainer,
+.stateEmote,
+.stateEncryptionFailure,
+.stateHasReply,
+.stateInfo,
+.stateLeftAlignedBubble,
+.stateNoBubble,
+.stateNoSender,
+.lineEmote,
+.lineMedia,
+.lineSticker {
+}
+
 /* Slot wrappers are the public styling boundary. The supplied content may be
    a component, fragment, or multiple elements and does not need to forward
    layout props. */
