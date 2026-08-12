@@ -19,16 +19,11 @@ export function Body({ body }: { body: string }): JSX.Element {
     return <div className={styles.body}>{body}</div>;
 }
 
-export function Footer({ footer }: { footer: string }): JSX.Element {
-    return <div className={styles.footer}>{footer}</div>;
-}
-
-export function TextContent(props: { header: string; headerUrl?: string; body: string; footer?: string }): JSX.Element {
+export function TextContent(props: { header: string; headerUrl?: string; body: string }): JSX.Element {
     return (
         <div className={styles.textContent}>
             <Header {...props} />
             <Body {...props} />
-            {props.footer !== undefined && <Footer footer={props.footer} />}
         </div>
     );
 }
@@ -97,7 +92,7 @@ export function Image({
     imageOnClick?: () => void;
     imageSize: ImageSize;
 }): JSX.Element | null {
-    let classes = [styles.image];
+    let classes = [styles.image, imageSize === "full" ? styles.fullImage : styles.bannerImage];
 
     let { valid, src } = useIsValid(
         (src) =>
@@ -115,30 +110,17 @@ export function Image({
 
     if (!valid || src !== image) return null;
 
-    switch (imageSize) {
-        case "full":
-            classes.push(styles.fullImage);
-            break;
-        case "banner":
-            classes.push(styles.bannerImage);
-            break;
-    }
-
-    if (imageOnClick) {
-        return (
-            <div className={classNames(classes)}>
+    return (
+        <div className={classNames(classes)}>
+            {imageOnClick ? (
                 <button onClick={imageOnClick}>
                     <img src={image} />
                 </button>
-            </div>
-        );
-    } else {
-        return (
-            <div className={classNames(classes)}>
+            ) : (
                 <img src={image} />
-            </div>
-        );
-    }
+            )}
+        </div>
+    );
 }
 
 export function Video({
@@ -150,7 +132,7 @@ export function Video({
     videoOnClick?: () => void;
     videoSize: ImageSize;
 }): JSX.Element | null {
-    let classes = [styles.video];
+    let classes = [styles.video, videoSize === "full" ? styles.fullVideo : styles.bannenrVideo];
 
     let { valid, src } = useIsValid(
         (src) =>
@@ -169,30 +151,17 @@ export function Video({
 
     if (!valid || src !== video) return null;
 
-    switch (videoSize) {
-        case "full":
-            classes.push(styles.fullVideo);
-            break;
-        case "banner":
-            classes.push(styles.bannerVideo);
-            break;
-    }
-
-    if (videoOnClick) {
-        return (
-            <div className={classNames(classes)}>
+    return (
+        <div className={classNames(classes)}>
+            {videoOnClick ? (
                 <button onClick={videoOnClick}>
                     <video src={video} controls />
                 </button>
-            </div>
-        );
-    } else {
-        return (
-            <div className={classNames(classes)}>
+            ) : (
                 <video src={video} controls />
-            </div>
-        );
-    }
+            )}
+        </div>
+    );
 }
 
 export function Audio({ audio, audioOnClick }: { audio: string; audioOnClick?: () => void }): JSX.Element | null {
@@ -213,19 +182,15 @@ export function Audio({ audio, audioOnClick }: { audio: string; audioOnClick?: (
 
     if (!valid || src !== audio) return null;
 
-    if (audioOnClick) {
-        return (
-            <div className={styles.audio}>
+    return (
+        <div className={styles.audio}>
+            {audioOnClick ? (
                 <button onClick={audioOnClick}>
                     <audio src={audio} controls />
                 </button>
-            </div>
-        );
-    } else {
-        return (
-            <div className={styles.audio}>
+            ) : (
                 <audio src={audio} controls />
-            </div>
-        );
-    }
+            )}
+        </div>
+    );
 }
