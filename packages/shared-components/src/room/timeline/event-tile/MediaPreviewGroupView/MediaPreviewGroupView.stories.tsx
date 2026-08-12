@@ -20,6 +20,7 @@ import { MockViewModel } from "../../../../core/viewmodel/MockViewModel";
 import demoImage from "../../../../../static/wideImage.png";
 import demoVideo from "../../../../../static/videoBodyDemo.webm";
 import demoAudio from "../../../../../static/audioDemo.ogg";
+import { waitForBufferedVideos } from "../../../../../.storybook/waitForBufferedVideos";
 
 const buttons = [
     { label: "Expand", icon: <ExpandIcon />, onClick: () => ({}) },
@@ -79,6 +80,7 @@ const meta = {
     title: "Room/Timeline/MediaPreviewGroupView/MediaPreviewGroupView",
     component: MediaPreviewGroupPreview,
     tags: ["autodocs"],
+    play: ({ canvasElement }) => waitForBufferedVideos(canvasElement),
 } satisfies Meta<typeof MediaPreviewGroupPreview>;
 
 export default meta;
