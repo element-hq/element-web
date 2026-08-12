@@ -1666,7 +1666,6 @@
         "mentions_and_keywords": "@zmienky a kľúčové slová",
         "mentions_and_keywords_description": "Dostávajte upozornenia len na zmienky a kľúčové slová nastavené vo vašich <a>nastaveniach</a>",
         "mentions_keywords": "Zmienky a kľúčové slová",
-        "message_didnt_send": "Správa sa neodoslala. Kliknite pre informácie.",
         "mute_description": "Nebudete dostávať žiadne oznámenia"
     },
     "notifier": {

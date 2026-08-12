@@ -1349,7 +1349,6 @@
         "mentions_and_keywords": "@pieminēšana un atslēgvārdi",
         "mentions_and_keywords_description": "Saņemt paziņojumus tikai par pieminēšanu un atslēgvārdiem, kā tas ir norādīts <a>iestatījumos</a>.",
         "mentions_keywords": "Pieminēšana un atslēgvārdi",
-        "message_didnt_send": "Ziņa netika nosūtīta. Noklikšķiniet, lai iegūtu vairāk informācijas.",
         "mute_description": "Jūs nesaņemsit nekādus paziņojumus"
     },
     "notifier": {

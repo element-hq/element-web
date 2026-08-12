@@ -4,6 +4,7 @@
     },
     "action": {
         "back": "返回",
+        "cancel": "取消",
         "click": "点击",
         "close": "关闭",
         "collapse": "折叠",
@@ -28,6 +29,7 @@
         "reply": "回复",
         "reply_in_thread": "在消息列中回复",
         "retry": "重试",
+        "save": "保存",
         "search": "搜索",
         "start_chat": "开始聊天",
         "unpin": "取消置顶",
@@ -76,6 +78,7 @@
         "all_messages": "所有消息",
         "default_settings": "跟随系统设置",
         "mentions_keywords": "提及与关键词",
+        "message_didnt_send": "消息未发送。点击以获取信息。",
         "mute_room": "静默房间"
     },
     "release_announcement": {
@@ -95,6 +98,7 @@
         "jump_to_date": "跳转到日期",
         "jump_to_date_beginning": "房间的开头",
         "jump_to_date_prompt": "选择日期以跳转",
+        "knock_sent": "已发送加入申请",
         "pinned_message_badge": "已被置顶的消息",
         "status_bar": {
             "delete_all": "全部删除",
@@ -208,6 +212,8 @@
         "set_status": {
             "away": "离开",
             "be_right_back": "马上回来",
+            "choose_emoji": "选择 Emoji",
+            "custom": "自定义…",
             "focus_time": "专注时间",
             "in_a_meeting": "正在开会",
             "on_the_road": "在路上",
