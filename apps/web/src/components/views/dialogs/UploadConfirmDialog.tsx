@@ -14,7 +14,7 @@ import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import { fileSize } from "../../../utils/FileUtils";
 import {
-    attachmentIconOfType,
+    attachmentIcon,
     MediaPreviewGroupEntry,
     MediaPreviewGroupPreview,
 } from "@element-hq/web-shared-components";
@@ -95,7 +95,7 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
                 image: this.state.objectUrl!,
                 header: this.props.file.name,
                 body: fileSize(this.props.file.size),
-                ...attachmentIconOfType("light", mimeType),
+                ...attachmentIcon(mimeType),
             };
         } else if (mimeType.startsWith("video/")) {
             preview = {
@@ -104,7 +104,7 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
                 video: this.state.objectUrl!,
                 header: this.props.file.name,
                 body: fileSize(this.props.file.size),
-                ...attachmentIconOfType("light", mimeType),
+                ...attachmentIcon(mimeType),
             };
         } else if (mimeType.startsWith("audio/")) {
             preview = {
@@ -112,14 +112,14 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
                 audio: this.state.objectUrl!,
                 header: this.props.file.name,
                 body: fileSize(this.props.file.size),
-                ...attachmentIconOfType("light", mimeType),
+                ...attachmentIcon(mimeType),
             };
         } else {
             preview = {
                 style: "text",
                 header: this.props.file.name,
                 body: fileSize(this.props.file.size),
-                ...attachmentIconOfType("light", mimeType),
+                ...attachmentIcon(mimeType),
             };
         }
 
