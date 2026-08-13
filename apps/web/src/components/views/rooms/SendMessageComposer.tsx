@@ -342,8 +342,13 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
      */
     public async sendMessage({ urlPreviewSnapshot }: ISendMessageActionProps): Promise<void> {
         const model = this.model;
+        const hasAttachments = this.props.uploadVm.hasAttachments;
 
         if (model.isEmpty) {
+            // Attachments on their own are still worth sending, and carry the reply.
+            if (hasAttachments) {
+                await this.props.uploadVm.sendStagedAttachments();
+            }
             return;
         }
 
@@ -422,6 +427,11 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
             this.sendQuickReaction();
         }
 
+        // The text below them carries the reply, so the files are sent plain. Callers guard
+        // on hasAttachments: awaiting even a no-op would defer the text send by a microtask.
+        const sendAttachments = (): Promise<boolean> =>
+            this.props.uploadVm.sendStagedAttachments({ includeReply: false });
+
         const clearComposerAndPushHistory = (): void => {
             this.sendHistoryManager.save(model, replyToEvent);
             // clear composer
@@ -449,11 +459,17 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
             }
 
             // don't bother sending an empty message
-            if (!content.body.trim()) return;
+            if (!content.body.trim()) {
+                if (hasAttachments) await sendAttachments();
+                return;
+            }
 
             // clear composer first so the user doesn't actually see the delay of attach URL preview image files
             clearComposerAndPushHistory();
             attachUrlPreviews(urlPreviewSnapshot, content);
+
+            // Send the attachments first so the message text lands beneath them in the timeline.
+            if (hasAttachments) await sendAttachments();
 
             if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
                 decorateStartSendingTime(content);
@@ -494,6 +510,8 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
             }
         } else {
             clearComposerAndPushHistory();
+            // A slash command or quick reaction still leaves the staged files to send.
+            if (hasAttachments) await sendAttachments();
         }
     }
 

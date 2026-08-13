@@ -404,6 +404,7 @@ export async function uploadFile(
 export default class ContentMessages {
     private inprogress: RoomUpload[] = [];
     private mediaConfig: IMediaConfig | null = null;
+    private mediaConfigFetch?: Promise<void>;
 
     public sendStickerContentToRoom(
         url: string,
@@ -435,7 +436,9 @@ export default class ContentMessages {
      * @param replyToEvent - The event being replied to, if any.
      * @param matrixClient - The Matrix client to use for sending the files.
      * @param context - The context in which the files are being sent.
-     * @returns A promise that resolves when the files have been sent.
+     * @param opts - Set `skipConfirmation` when the caller has already shown the user what
+     *   is about to be sent, such as the composer staging area.
+     * @returns True once the files have been sent, false if the user backed out.
      */
     public async sendContentListToRoom(
         files: File[],
@@ -444,10 +447,11 @@ export default class ContentMessages {
         replyToEvent: MatrixEvent | undefined,
         matrixClient: MatrixClient,
         context = TimelineRenderingType.Room,
-    ): Promise<void> {
+        opts: { skipConfirmation?: boolean } = {},
+    ): Promise<boolean> {
         if (matrixClient.isGuest()) {
             dis.dispatch({ action: "require_registration" });
-            return;
+            return false;
         }
 
         if (!this.mediaConfig) {
@@ -456,7 +460,7 @@ export default class ContentMessages {
             await Promise.race([this.ensureMediaConfigFetched(matrixClient), modal.finished]);
             if (!this.mediaConfig) {
                 // User cancelled by clicking away on the spinner
-                return;
+                return false;
             } else {
                 modal.close();
             }
@@ -480,13 +484,14 @@ export default class ContentMessages {
                 contentMessages: this,
             });
             const [shouldContinue] = await finished;
-            if (!shouldContinue) return;
+            if (!shouldContinue) return false;
         }
 
-        let uploadAll = false;
+        let uploadAll = opts.skipConfirmation === true;
         // Promise to complete before sending next file into room, used for synchronisation of file-sending
         // to match the order the files were specified in
         let promBefore: Promise<any> = Promise.resolve();
+        let sentAny = false;
         for (let i = 0; i < okFiles.length; ++i) {
             const file = okFiles[i];
             const loopPromiseBefore = promBefore;
@@ -504,6 +509,7 @@ export default class ContentMessages {
                 }
             }
 
+            sentAny = true;
             promBefore = doMaybeLocalRoomAction(
                 roomId,
                 (actualRoomId) =>
@@ -533,6 +539,25 @@ export default class ContentMessages {
             action: Action.FocusSendMessageComposer,
             context,
         });
+
+        // Wait for the last file to be sent, so callers sending a message afterwards end up
+        // below these events rather than above them.
+        await promBefore;
+        return sentAny;
+    }
+
+    /**
+     * Fetch the media config ahead of time so sending does not block on it behind a modal
+     * spinner. Best effort: sending fetches it itself if this did not work out.
+     */
+    public prefetchMediaConfig(matrixClient: MatrixClient): void {
+        try {
+            this.ensureMediaConfigFetched(matrixClient).catch((e) => {
+                logger.warn("[Media Config] Prefetch failed", e);
+            });
+        } catch (e) {
+            logger.warn("[Media Config] Prefetch failed", e);
+        }
     }
 
     public getCurrentUploads(relation?: IEventRelation): RoomUpload[] {
@@ -691,9 +716,11 @@ export default class ContentMessages {
 
     private ensureMediaConfigFetched(matrixClient: MatrixClient): Promise<void> {
         if (this.mediaConfig !== null) return Promise.resolve();
+        // Callers before the first response lands should join it, not start another request.
+        if (this.mediaConfigFetch) return this.mediaConfigFetch;
 
         logger.log("[Media Config] Fetching");
-        return matrixClient
+        this.mediaConfigFetch = matrixClient
             .getMediaConfig()
             .then((config) => {
                 logger.log("[Media Config] Fetched config:", config);
@@ -706,7 +733,11 @@ export default class ContentMessages {
             })
             .then((config) => {
                 this.mediaConfig = config;
+            })
+            .finally(() => {
+                this.mediaConfigFetch = undefined;
             });
+        return this.mediaConfigFetch;
     }
 
     public static sharedInstance(): ContentMessages {

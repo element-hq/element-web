@@ -1,0 +1,142 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.mx_ComposerAttachments {
+    display: flex;
+    flex-direction: row;
+    gap: var(--cpd-space-3x);
+    align-items: flex-start;
+
+    list-style: none;
+    margin: 0;
+    /* Leaves room for a dragged card to lift; the scroll container cannot show overflow
+       on one axis only, so anything outside this padding is clipped. */
+    padding: 14px 0;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.mx_ComposerAttachments_item {
+    position: relative;
+    flex: 0 0 auto;
+
+    box-sizing: border-box;
+    width: 180px;
+    padding: var(--cpd-space-3x);
+
+    background-color: var(--cpd-color-theme-bg);
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+    border-radius: var(--cpd-space-3x);
+
+    cursor: grab;
+    /* Dragging is driven by pointer events, so the browser must not pan or select instead. */
+    touch-action: none;
+    user-select: none;
+    /* Keep in step with DROP_ANIMATION_MS. */
+    transition:
+        transform 180ms ease,
+        box-shadow 180ms ease;
+}
+
+/* Raised while being dragged, and until it has finished easing into place. */
+.mx_ComposerAttachments_item--floating {
+    z-index: 1;
+    box-shadow: 0 2px 6px 0 $menu-box-shadow-color;
+}
+
+.mx_ComposerAttachments_item--dragging {
+    cursor: grabbing;
+}
+
+.mx_ComposerAttachments_preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 120px;
+    margin-bottom: var(--cpd-space-2x);
+    overflow: hidden;
+
+    background-color: var(--cpd-color-theme-bg);
+    border-radius: var(--cpd-space-2x);
+}
+
+.mx_ComposerAttachments_image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+
+    /* The card owns the drag, so the browser must not start an image drag instead. */
+    pointer-events: none;
+}
+
+.mx_ComposerAttachments_fileIcon {
+    width: 44px;
+    height: 44px;
+    color: var(--cpd-color-icon-secondary);
+}
+
+.mx_ComposerAttachments_meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cpd-space-1x);
+    min-width: 0;
+}
+
+.mx_ComposerAttachments_name,
+.mx_ComposerAttachments_description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mx_ComposerAttachments_name {
+    color: var(--cpd-color-text-primary);
+    font: var(--cpd-font-body-sm-medium);
+}
+
+.mx_ComposerAttachments_description {
+    color: var(--cpd-color-text-secondary);
+    font: var(--cpd-font-body-xs-regular);
+}
+
+.mx_ComposerAttachments_actions {
+    position: absolute;
+    top: var(--cpd-space-2x);
+    right: var(--cpd-space-2x);
+
+    display: flex;
+    gap: var(--cpd-space-1x);
+    padding: 3px;
+
+    background-color: var(--cpd-color-theme-bg);
+    border-radius: 7px;
+    box-shadow: 0 1px 3px 0 $menu-box-shadow-color;
+}
+
+.mx_ComposerAttachments_action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 3px;
+    border-radius: 4px;
+
+    svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    &:hover {
+        background-color: var(--cpd-color-bg-subtle-primary);
+    }
+}
+
+.mx_ComposerAttachments_action--remove svg {
+    color: var(--cpd-color-icon-critical-primary);
+}

@@ -6,10 +6,15 @@
  */
 import React from "react";
 import { type IEventRelation, type MatrixClient, type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
-import { render } from "jest-matrix-react";
+import { act, render, screen } from "jest-matrix-react";
+import { useViewModel } from "@element-hq/web-shared-components";
 
 import type { MockedObject } from "jest-mock";
-import { RoomUploadContextProvider, RoomUploadViewModel } from "../../../src/viewmodels/room/RoomUploadViewModel";
+import {
+    RoomUploadContextProvider,
+    RoomUploadViewModel,
+    useRoomUploadViewModel,
+} from "../../../src/viewmodels/room/RoomUploadViewModel";
 import { getRoomContext, mkEvent, mkStubRoom, stubClient } from "../../test-utils";
 import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
 import defaultDispatcher, { MatrixDispatcher } from "../../../src/dispatcher/dispatcher";
@@ -20,6 +25,11 @@ import { ScopedRoomContextProvider } from "../../../src/contexts/ScopedRoomConte
 import { Action } from "../../../src/dispatcher/actions";
 import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
 const sendContentListToRoomSpy = jest.spyOn(ContentMessages.sharedInstance(), "sendContentListToRoom");
+
+function StagedAttachmentNames(): React.ReactNode {
+    const { attachments } = useViewModel(useRoomUploadViewModel());
+    return <p data-testid="staged">{attachments.map((attachment) => attachment.name).join(", ")}</p>;
+}
 
 describe("RoomUploadViewModel", () => {
     let client: MockedObject<MatrixClient>;
@@ -117,8 +127,8 @@ describe("RoomUploadViewModel", () => {
             await vm.initiateViaInputFiles([] as unknown as FileList);
             expect(dis.dispatch).not.toHaveBeenCalled();
         });
-        it("uploads with correct context", async () => {
-            sendContentListToRoomSpy.mockResolvedValue(undefined);
+        it("stages files rather than sending them immediately", async () => {
+            sendContentListToRoomSpy.mockResolvedValue(true);
             const vm = new RoomUploadViewModel(
                 room,
                 client,
@@ -128,10 +138,6 @@ describe("RoomUploadViewModel", () => {
                 undefined,
                 () => {},
             );
-            const replyEvent = mkEvent({ event: true, type: "anything", user: "anyone", content: {} });
-            vm.setReplyToEvent(replyEvent);
-            const threadRelation: IEventRelation = { key: "foo" };
-            vm.setThreadRelation(threadRelation);
             const fileList = [
                 {
                     name: "fake.png",
@@ -140,14 +146,9 @@ describe("RoomUploadViewModel", () => {
                 },
             ] as unknown as FileList;
             await vm.initiateViaInputFiles(fileList);
-            expect(sendContentListToRoomSpy).toHaveBeenCalledWith(
-                fileList,
-                room.roomId,
-                threadRelation,
-                replyEvent,
-                client,
-                TimelineRenderingType.Thread,
-            );
+            expect(sendContentListToRoomSpy).not.toHaveBeenCalled();
+            expect(vm.getSnapshot().attachments).toHaveLength(1);
+            expect(vm.getSnapshot().attachments[0].name).toEqual("fake.png");
         });
     });
 
@@ -179,8 +180,8 @@ describe("RoomUploadViewModel", () => {
             await vm.initiateViaDataTransfer({ files: [] as unknown as FileList } as DataTransfer);
             expect(dis.dispatch).not.toHaveBeenCalled();
         });
-        it("uploads with correct context", async () => {
-            sendContentListToRoomSpy.mockResolvedValue(undefined);
+        it("stages files rather than sending them immediately", async () => {
+            sendContentListToRoomSpy.mockResolvedValue(true);
             const vm = new RoomUploadViewModel(
                 room,
                 client,
@@ -190,10 +191,6 @@ describe("RoomUploadViewModel", () => {
                 undefined,
                 () => {},
             );
-            const replyEvent = mkEvent({ event: true, type: "anything", user: "anyone", content: {} });
-            vm.setReplyToEvent(replyEvent);
-            const threadRelation: IEventRelation = { key: "foo" };
-            vm.setThreadRelation(threadRelation);
             const files = [
                 {
                     name: "fake.png",
@@ -202,25 +199,151 @@ describe("RoomUploadViewModel", () => {
                 },
             ] as unknown as FileList;
             await vm.initiateViaDataTransfer({ files } as DataTransfer);
+            expect(sendContentListToRoomSpy).not.toHaveBeenCalled();
+            expect(vm.getSnapshot().attachments).toHaveLength(1);
+        });
+    });
+
+    describe("staged attachments", () => {
+        const file = { name: "fake.png", size: 1024, type: "image/png" } as File;
+
+        function mkViewModel(): RoomUploadViewModel {
+            return new RoomUploadViewModel(
+                room,
+                client,
+                TimelineRenderingType.Thread,
+                dis,
+                undefined,
+                undefined,
+                () => {},
+            );
+        }
+
+        it("sends staged attachments with the correct context", async () => {
+            sendContentListToRoomSpy.mockResolvedValue(true);
+            const vm = mkViewModel();
+            const replyEvent = mkEvent({ event: true, type: "anything", user: "anyone", content: {} });
+            vm.setReplyToEvent(replyEvent);
+            const threadRelation: IEventRelation = { key: "foo" };
+            vm.setThreadRelation(threadRelation);
+
+            vm.stageFiles([file]);
+            await vm.sendStagedAttachments();
+
             expect(sendContentListToRoomSpy).toHaveBeenCalledWith(
-                files,
+                [file],
                 room.roomId,
                 threadRelation,
                 replyEvent,
                 client,
                 TimelineRenderingType.Thread,
+                { skipConfirmation: true },
             );
+            expect(vm.getSnapshot().attachments).toHaveLength(0);
+        });
+
+        it("keeps the files staged when the send is abandoned", async () => {
+            // e.g. the user cancelled the "file too big" dialog, so nothing was sent.
+            sendContentListToRoomSpy.mockResolvedValue(false);
+            const vm = mkViewModel();
+            vm.stageFiles([file]);
+
+            await expect(vm.sendStagedAttachments()).resolves.toBe(false);
+
+            expect(vm.getSnapshot().attachments).toHaveLength(1);
+            expect(vm.getSnapshot().attachments[0].name).toEqual("fake.png");
+            // Still usable, so its preview must not have been revoked.
+            expect(URL.revokeObjectURL).not.toHaveBeenCalled();
+        });
+
+        it("keeps files staged when sending throws", async () => {
+            sendContentListToRoomSpy.mockRejectedValue(new Error("boom"));
+            const vm = mkViewModel();
+            vm.stageFiles([file]);
+
+            await expect(vm.sendStagedAttachments()).resolves.toBe(false);
+
+            expect(vm.getSnapshot().attachments).toHaveLength(1);
+        });
+
+        it("puts restored files back ahead of anything staged since", async () => {
+            sendContentListToRoomSpy.mockImplementation(async () => {
+                // Something else lands in the composer while the send is in flight.
+                vm.stageFiles([{ ...file, name: "later.png" } as File]);
+                return false;
+            });
+            const vm = mkViewModel();
+            vm.stageFiles([file]);
+
+            await vm.sendStagedAttachments();
+
+            expect(vm.getSnapshot().attachments.map((a) => a.name)).toEqual(["fake.png", "later.png"]);
+        });
+
+        it("omits the reply when the caller is sending its own message below", async () => {
+            sendContentListToRoomSpy.mockResolvedValue(true);
+            const vm = mkViewModel();
+            vm.setReplyToEvent(mkEvent({ event: true, type: "anything", user: "anyone", content: {} }));
+            vm.stageFiles([file]);
+
+            await vm.sendStagedAttachments({ includeReply: false });
+
+            expect(sendContentListToRoomSpy).toHaveBeenCalledWith(
+                [file],
+                room.roomId,
+                undefined,
+                undefined,
+                client,
+                TimelineRenderingType.Thread,
+                { skipConfirmation: true },
+            );
+        });
+
+        it("appends to the existing staged files", () => {
+            const vm = mkViewModel();
+            vm.stageFiles([file]);
+            vm.stageFiles([file]);
+            expect(vm.getSnapshot().attachments).toHaveLength(2);
+            expect(vm.hasAttachments).toBe(true);
+        });
+
+        it("removes a staged file and revokes its preview", () => {
+            const vm = mkViewModel();
+            vm.stageFiles([file, { ...file, name: "other.png" } as File]);
+            const [first] = vm.getSnapshot().attachments;
+
+            vm.removeAttachment(first.id);
+
+            expect(vm.getSnapshot().attachments).toHaveLength(1);
+            expect(vm.getSnapshot().attachments[0].name).toEqual("other.png");
+            expect(URL.revokeObjectURL).toHaveBeenCalledWith(first.previewUrl);
+        });
+
+        it("does nothing when there is nothing staged", async () => {
+            const vm = mkViewModel();
+            await vm.sendStagedAttachments();
+            expect(sendContentListToRoomSpy).not.toHaveBeenCalled();
+        });
+
+        it("revokes previews of files still staged on dispose", () => {
+            const vm = mkViewModel();
+            vm.stageFiles([file]);
+            const [staged] = vm.getSnapshot().attachments;
+
+            vm.dispose();
+
+            expect(URL.revokeObjectURL).toHaveBeenCalledWith(staged.previewUrl);
         });
     });
 
     describe("RoomUploadContextProvider", () => {
-        it("uploads when called via module API", async () => {
-            sendContentListToRoomSpy.mockResolvedValue(undefined);
+        it("stages files when called via module API", async () => {
+            sendContentListToRoomSpy.mockResolvedValue(true);
             render(
                 <MatrixClientContext.Provider value={client}>
                     <ScopedRoomContextProvider {...getRoomContext(room, {})}>
                         <RoomUploadContextProvider>
-                            <p>Any child</p>
+                            <StagedAttachmentNames />
                         </RoomUploadContextProvider>
                     </ScopedRoomContextProvider>
                 </MatrixClientContext.Provider>,
@@ -232,22 +355,18 @@ describe("RoomUploadViewModel", () => {
                     type: "image/png",
                 },
             ] as File[];
-            defaultDispatcher.dispatch(
-                {
-                    action: Action.ComposerFileInsert,
-                    files,
-                    timelineRenderingType: TimelineRenderingType.Room,
-                } satisfies ComposerInsertFilesPayload,
-                true,
+            act(() =>
+                defaultDispatcher.dispatch(
+                    {
+                        action: Action.ComposerFileInsert,
+                        files,
+                        timelineRenderingType: TimelineRenderingType.Room,
+                    } satisfies ComposerInsertFilesPayload,
+                    true,
+                ),
             );
-            expect(sendContentListToRoomSpy).toHaveBeenCalledWith(
-                files,
-                room.roomId,
-                undefined,
-                undefined,
-                client,
-                TimelineRenderingType.Room,
-            );
+            expect(sendContentListToRoomSpy).not.toHaveBeenCalled();
+            expect(await screen.findByTestId("staged")).toHaveTextContent("fake.png");
         });
     });
 });

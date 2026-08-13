@@ -19,7 +19,7 @@ import {
 import { Tooltip } from "@vector-im/compound-web";
 import { logger } from "matrix-js-sdk/src/logger";
 import { LockOffIcon, SendSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
+import { useCreateAutoDisposedViewModel, useViewModel } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -64,6 +64,8 @@ import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
 import PlatformPeg from "../../../PlatformPeg";
 import { useSettingValue } from "../../../hooks/useSettings";
+import { ComposerAttachments } from "./ComposerAttachments";
+import { type RoomUploadViewModel, useRoomUploadViewModel } from "../../../viewmodels/room/RoomUploadViewModel";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const WYSIWYG_EDITOR_STATE_STORAGE_PREFIX = "mx_wysiwyg_state_";
@@ -97,6 +99,8 @@ interface IProps extends MatrixClientProps {
     e2eStatus?: E2EStatus;
     compact?: boolean;
     urlPreviewVm: MessageComposerUrlPreviewViewModel;
+    uploadVm: RoomUploadViewModel;
+    hasAttachments: boolean;
 }
 
 interface IState {
@@ -408,7 +412,10 @@ export class MessageComposer extends React.Component<IProps, IState> {
         this.props.urlPreviewVm.updateWithText({ content: "", debounced: false });
         if (this.state.haveRecording && this.voiceRecordingButton.current) {
             // There shouldn't be any text message to send when a voice recording is active, so
-            // just send out the voice recording.
+            // just send out the voice recording. Files can still be dropped while recording.
+            if (this.props.hasAttachments) {
+                await this.props.uploadVm.sendStagedAttachments();
+            }
             await this.voiceRecordingButton.current?.send();
             return;
         }
@@ -423,6 +430,10 @@ export class MessageComposer extends React.Component<IProps, IState> {
                 action: Action.ClearAndFocusSendMessageComposer,
                 timelineRenderingType: this.context.timelineRenderingType,
             });
+            // Attachments go first so the text lands beneath them, and the text carries the reply.
+            if (this.props.hasAttachments) {
+                await this.props.uploadVm.sendStagedAttachments({ includeReply: !composerContent });
+            }
             await sendMessage(composerContent, this.state.isRichTextEnabled, {
                 mxClient: this.props.mxClient,
                 roomContext: this.context,
@@ -685,7 +696,8 @@ export class MessageComposer extends React.Component<IProps, IState> {
             />,
         );
 
-        const showSendButton = canSendMessages && (!this.state.isComposerEmpty || this.state.haveRecording);
+        const showSendButton =
+            canSendMessages && (!this.state.isComposerEmpty || this.state.haveRecording || this.props.hasAttachments);
 
         const classes = classNames({
             "mx_MessageComposer": true,
@@ -703,6 +715,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                         replyToEvent={this.props.replyToEvent}
                         permalinkCreator={this.props.permalinkCreator}
                     />
+                    {canSendMessages && <ComposerAttachments />}
                     <div className="mx_MessageComposer_row">
                         {leftIcon}
                         {composer}
@@ -747,9 +760,13 @@ export class MessageComposer extends React.Component<IProps, IState> {
 
 const MessageComposerWithMatrixClient = withMatrixClientHOC(MessageComposer);
 
-export default function MessageComposerWrapper(props: Omit<IProps, "mxClient" | "urlPreviewVm">): JSX.Element {
+export default function MessageComposerWrapper(
+    props: Omit<IProps, "mxClient" | "urlPreviewVm" | "uploadVm" | "hasAttachments">,
+): JSX.Element {
     const { showUrlPreview } = useScopedRoomContext("showUrlPreview");
     const client = useMatrixClientContext();
+    const uploadVm = useRoomUploadViewModel();
+    const { attachments } = useViewModel(uploadVm);
     const urlPreviewBundle = useSettingValue("feature_msc4095_url_preview_bundle");
     const urlPreviewVm = useCreateAutoDisposedViewModel(
         () =>
@@ -765,5 +782,12 @@ export default function MessageComposerWrapper(props: Omit<IProps, "mxClient" | 
         void urlPreviewVm.updateUrlPreviewVisible(showUrlPreview);
     }, [urlPreviewVm, showUrlPreview]);
 
-    return <MessageComposerWithMatrixClient {...props} urlPreviewVm={urlPreviewVm} />;
+    return (
+        <MessageComposerWithMatrixClient
+            {...props}
+            urlPreviewVm={urlPreviewVm}
+            uploadVm={uploadVm}
+            hasAttachments={attachments.length > 0}
+        />
+    );
 }
