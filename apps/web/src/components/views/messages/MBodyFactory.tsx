@@ -41,23 +41,12 @@ type MBodyComponent = React.ComponentType<IBodyProps>;
 
 type FileBodyProps = Pick<IBodyProps, "mxEvent" | "mediaEventHelper" | "forExport" | "showFileInfo">;
 
-// The preview tile is a timeline treatment: the panels list files in their own compact layout and
-// keep the classic file body.
-const PREVIEW_RENDERING_TYPES = [TimelineRenderingType.Room, TimelineRenderingType.Thread];
-
 export function FileBodyFactory(props: FileBodyProps): JSX.Element {
-    const { timelineRenderingType } = useContext(RoomContext);
-
     // Only the standalone m.file body uses the preview tile. Image/video/audio bodies embed this as a
     // fallback for media they cannot render themselves — sometimes download-only (`showFileInfo: false`)
     // in the panels which don't render the media, e.g. the files and notification panels — and those,
     // like exports, keep the classic file body.
-    if (
-        props.forExport ||
-        props.showFileInfo === false ||
-        props.mxEvent.getContent().msgtype !== MsgType.File ||
-        !PREVIEW_RENDERING_TYPES.includes(timelineRenderingType)
-    ) {
+    if (props.forExport || props.showFileInfo === false || props.mxEvent.getContent().msgtype !== MsgType.File) {
         return <LegacyFileBody {...props} />;
     }
 
