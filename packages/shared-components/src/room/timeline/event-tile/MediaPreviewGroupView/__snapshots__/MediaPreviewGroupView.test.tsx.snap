@@ -38,11 +38,11 @@ exports[`MediaPreviewGroupPreview > stories > renders the single text story 1`] 
             >
               annual-report.pdf
             </div>
-            <div
-              class="MediaPreviewComponents-module_body"
+            <p
+              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkedText-module_container MediaPreviewComponents-module_body"
             >
               2.3 MB
-            </div>
+            </p>
           </div>
         </div>
         <div

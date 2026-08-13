@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render } from "jest-matrix-react";
 import { EventType, getHttpUriForMxc, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { LinkedTextContext } from "@element-hq/web-shared-components";
 
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import {
@@ -180,17 +181,45 @@ describe("MBodyFactory", () => {
             );
 
             expect(getByText("alt")).toBeInTheDocument();
-            // m.file renders the preview tile, which gives the download its own button and leaves the
-            // filename as plain text. The other msgtypes keep the legacy file body, where the filename
-            // itself is the button. See FileBodyFactory.
-            if (msgtype === "m.file") {
-                expect(getByRole("button", { name: "Download" })).toBeInTheDocument();
-            } else {
-                expect(getByRole("button", { name: "alt" })).toBeInTheDocument();
-            }
+            // The panels render the legacy file body, where the filename itself is the button.
+            // See FileBodyFactory.
+            expect(getByRole("button", { name: "alt" })).toBeInTheDocument();
             expect(container).toMatchSnapshot();
         },
     );
+
+    it("renderMBody shows the preview tile for m.file in the timeline", async () => {
+        const mediaEvent = new MatrixEvent({
+            room_id: "!room:server",
+            sender: userId,
+            type: EventType.RoomMessage,
+            content: {
+                body: "alt",
+                msgtype: "m.file",
+                url: "mxc://server/image",
+            },
+        });
+
+        const { getByRole, getByText } = render(
+            <LinkedTextContext.Provider value={{}}>
+                <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.Room } as any)}>
+                    {renderMBody(
+                        {
+                            ...props,
+                            mxEvent: mediaEvent,
+                            mediaEventHelper: new MediaEventHelper(mediaEvent),
+                            showFileInfo: true,
+                        },
+                        FileBodyFactory,
+                    )}
+                </ScopedRoomContextProvider>
+            </LinkedTextContext.Provider>,
+        );
+
+        // The preview tile leaves the filename as plain text and gives the download its own button.
+        expect(getByText("alt")).toBeInTheDocument();
+        expect(getByRole("button", { name: "Download" })).toBeInTheDocument();
+    });
 
     describe("ImageBodyFactory", () => {
         const imageContent = {
