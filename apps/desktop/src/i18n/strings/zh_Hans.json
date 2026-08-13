@@ -71,6 +71,10 @@
         "save_image_as_error_description": "图片保存失败",
         "save_image_as_error_title": "图片保存失败"
     },
+    "save_dialog": {
+        "all_files": "所有文件",
+        "named_file_type": "%(extension)s 文件"
+    },
     "store": {
         "error": {
             "backend_changed": "清除数据并重新加载？",

@@ -1390,7 +1390,6 @@
         "mentions_and_keywords": "@提及與關鍵字",
         "mentions_and_keywords_description": "僅在提及您與您在<a>設定</a>中列出的關鍵字時收到通知",
         "mentions_keywords": "提及與關鍵字",
-        "message_didnt_send": "訊息未傳送。點擊以取得更多資訊。",
         "mute_description": "不會收到任何通知"
     },
     "notifier": {
