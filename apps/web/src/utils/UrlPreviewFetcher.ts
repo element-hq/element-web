@@ -211,7 +211,11 @@ export class UrlPreviewFetcher {
     /*
      * Convert an MSC4095 URL preview bundle item to a UrlPreview
      */
-    public previewFromBundle(single: UnstableBundledUrlPreviewSingle): UrlPreview {
+    public previewFromBundle(single: UnstableBundledUrlPreviewSingle, messageBody: string): UrlPreview|null {
+        if (!messageBody.includes(single.matched_url)) {
+            // If the url does not appear in the body, it should be hidden.
+            return null;
+        }
         const preview: UrlPreview = {
             link: single.matched_url,
             title: single["og:title"] ?? single.matched_url,
