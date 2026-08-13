@@ -433,7 +433,8 @@ async function getLanguage(langPath: string): Promise<ICounterpartTranslation> {
 }
 
 export async function getLangsJson(): Promise<Languages> {
-    const url = i18nFolder + "languages.json";
+    const cachebust = Math.random().toString(16).slice(2);
+    const url = `${i18nFolder}languages.json?${cachebust}`;
 
     const res = await fetch(url, { method: "GET" });
 
