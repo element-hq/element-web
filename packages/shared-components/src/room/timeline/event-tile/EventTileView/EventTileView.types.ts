@@ -7,8 +7,6 @@
 
 import type React from "react";
 
-import type { EventLayout } from "../../EventPresentation/EventPresentation.types";
-
 /** Timeline rendering modes supported by the EventTile shell. */
 export type EventTileRenderingMode = "Room" | "Thread" | "ThreadsList" | "File" | "Notification" | "Search" | "Pinned";
 
@@ -44,6 +42,12 @@ export interface EventTileViewRootState {
     continuation?: boolean;
     /** Whether this is the last event in a section. */
     lastInSection?: boolean;
+    /** Whether the tile is a contextual search result. */
+    contextual?: boolean;
+    /** Whether the action bar currently has focus. */
+    actionBarFocused?: boolean;
+    /** Whether the body should be clamped to a preview. */
+    previewClamped?: boolean;
 }
 
 /** Semantic state consumed by EventTileView for the event line. */
@@ -54,6 +58,8 @@ export interface EventTileViewLine {
     sticker?: boolean;
     /** Whether the event body is an emote. */
     emote?: boolean;
+    /** Whether the event body is an image. */
+    image?: boolean;
 }
 
 /** Complete root state consumed by EventTileView. */
@@ -70,8 +76,6 @@ export interface EventTileViewRoot {
     permalink?: string;
     /** Optional event identifier exposed through `data-event-id`. */
     eventId?: string;
-    /** Configured tile layout. */
-    layout: EventLayout;
     /** Timeline rendering mode. */
     shape: EventTileRenderingMode;
     /** Conditional state classes and styling state. */

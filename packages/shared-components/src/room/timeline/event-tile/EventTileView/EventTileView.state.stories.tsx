@@ -29,7 +29,7 @@ const {
 } = layoutMeta.storyHelpers;
 
 const meta = {
-    title: "Timeline/EventTileView/State",
+    title: "Timeline/EventTileView/States",
     component: EventTileViewStory,
     tags: ["autodocs"],
     render: (args) => <EventTileViewStory {...args} />,

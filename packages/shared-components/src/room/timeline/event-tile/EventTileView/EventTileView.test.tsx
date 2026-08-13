@@ -9,6 +9,7 @@ import React, { createRef } from "react";
 import { describe, expect, it, vi } from "vitest";
 
 import { fireEvent, render } from "@test-utils";
+import type { EventLayout } from "../../EventPresentation";
 import {
     EventTileView,
     type EventTileViewClassNames,
@@ -24,7 +25,6 @@ const renderState: EventTileViewProps["root"] = {
     scrollToken: "event-1",
     permalink: "https://example.org/event-1",
     eventId: "$event-1",
-    layout: "group",
     shape: "Room",
     state: {
         isOwnEvent: true,
@@ -138,6 +138,9 @@ const rootStateMatrix = [
     { name: "reply chain", state: { hasReply: true }, hook: "stateHasReply" },
     { name: "editing", state: { editing: true }, hook: "stateEditing" },
     { name: "continuation", state: { continuation: true }, hook: "stateContinuation" },
+    { name: "contextual", state: { contextual: true }, hook: "stateContextual" },
+    { name: "action bar focused", state: { actionBarFocused: true }, hook: "stateActionBarFocused" },
+    { name: "preview clamped", state: { previewClamped: true }, hook: "statePreviewClamped" },
 ] satisfies ReadonlyArray<{
     name: string;
     state: Partial<EventTileViewRootState>;
@@ -146,6 +149,7 @@ const rootStateMatrix = [
 
 const lineStateMatrix = [
     { name: "media", state: { media: true }, hook: "lineMedia" },
+    { name: "image", state: { image: true }, hook: "lineImage" },
     { name: "sticker", state: { sticker: true }, hook: "lineSticker" },
     { name: "emote", state: { emote: true }, hook: "lineEmote" },
 ] satisfies ReadonlyArray<{
@@ -214,7 +218,7 @@ const shellPlacementMatrix = [
     name: string;
     rootState: Partial<EventTileViewRootState>;
     lineState: EventTileViewLine;
-    layout: EventTileViewProps["root"]["layout"];
+    layout: EventLayout;
     isOwnEvent?: boolean;
 }>;
 
@@ -281,6 +285,15 @@ describe("EventTileView", () => {
         expect(container.firstElementChild).toHaveClass(styles[hook]);
     });
 
+    it("maps presentation density to a shell hook instead of event state", () => {
+        const { container } = render(<EventTileView {...createProps()} />, {
+            presentation: { layout: "group", density: "compact" },
+        });
+
+        expect(container.firstElementChild).toHaveClass(styles.densityCompact);
+        expect(container.firstElementChild).not.toHaveClass("stateCompact");
+    });
+
     it.each(lineStateMatrix)("maps the $name line state to its semantic shell hook", ({ state, hook }) => {
         const { getByTestId } = render(
             <EventTileView {...createProps({ line: state, slots: createStylingContractSlots() })} />,
@@ -297,13 +310,13 @@ describe("EventTileView", () => {
                     {...createProps({
                         root: {
                             ...renderState,
-                            layout,
                             state: { ...renderState.state, ...rootState, isOwnEvent },
                         },
                         line: lineState,
                         slots: createStylingContractSlots(),
                     })}
                 />,
+                { presentation: { layout } },
             );
             const root = container.firstElementChild;
             const line = root?.querySelector(`#${renderState.id}`);
@@ -427,7 +440,6 @@ describe("EventTileView", () => {
                     },
                     root: {
                         ...renderState,
-                        layout,
                         shape: "Thread",
                     },
                     slots: {
@@ -442,6 +454,7 @@ describe("EventTileView", () => {
                     },
                 })}
             />,
+            { presentation: { layout } },
         );
         const root = container.firstElementChild!;
         const senderDetails = getByTestId("avatar").parentElement?.parentElement;
@@ -594,7 +607,7 @@ describe("EventTileView", () => {
         const { container, getByTestId } = render(
             <EventTileView
                 {...createProps({
-                    root: { ...renderState, layout },
+                    root: renderState,
                     slots: {
                         sender: <span data-testid="sender">Sender</span>,
                         avatar: <span data-testid="avatar">Avatar</span>,
@@ -610,6 +623,7 @@ describe("EventTileView", () => {
                     },
                 })}
             />,
+            { presentation: { layout } },
         );
         const root = container.firstElementChild!;
         const line = getByTestId("body").parentElement?.parentElement;

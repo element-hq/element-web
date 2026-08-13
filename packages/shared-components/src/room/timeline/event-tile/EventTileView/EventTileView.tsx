@@ -8,6 +8,7 @@
 import React, { type JSX } from "react";
 import classNames from "classnames";
 
+import { useEventPresentation } from "../../EventPresentation";
 import type { EventTileViewClassNames, EventTileViewProps, EventTileViewSlots } from "./EventTileView.types";
 import styles from "./EventTileView.module.css";
 
@@ -36,6 +37,7 @@ export function EventTileView({
     onPermalinkContextMenu,
 }: Readonly<EventTileViewProps>): JSX.Element {
     const Root = root.as ?? "li";
+    const { layout, density } = useEventPresentation();
 
     const renderSlot = (slotName: EventTileSlotName, content: React.ReactNode = slots[slotName]): React.ReactNode => {
         if (content === null || content === undefined || typeof content === "boolean") return null;
@@ -77,6 +79,7 @@ export function EventTileView({
         [styles.lineMedia]: lineState?.media,
         [styles.lineSticker]: lineState?.sticker,
         [styles.lineEmote]: lineState?.emote,
+        [styles.lineImage]: lineState?.image,
     });
 
     const renderRoot = (
@@ -102,9 +105,13 @@ export function EventTileView({
                 [styles.stateEditing]: root.state?.editing,
                 [styles.stateContinuation]: root.state?.continuation,
                 [styles.stateLastInSection]: root.state?.lastInSection,
-                [styles.layoutGroup]: root.layout === "group",
-                [styles.layoutBubble]: root.layout === "bubble",
-                [styles.layoutIrc]: root.layout === "irc",
+                [styles.stateContextual]: root.state?.contextual,
+                [styles.stateActionBarFocused]: root.state?.actionBarFocused,
+                [styles.statePreviewClamped]: root.state?.previewClamped,
+                [styles.densityCompact]: density === "compact",
+                [styles.layoutGroup]: layout === "group",
+                [styles.layoutBubble]: layout === "bubble",
+                [styles.layoutIrc]: layout === "irc",
                 [styles.shapeThread]: root.shape === "Thread",
                 [styles.shapeThreadsList]: root.shape === "ThreadsList",
                 [styles.shapeFile]: root.shape === "File",
@@ -205,7 +212,7 @@ export function EventTileView({
     // Default shape: Pinned, Room, Search
 
     // IRC layout: the leading metadata slots precede the line content.
-    if (root.layout === "irc") {
+    if (layout === "irc") {
         return renderRoot(
             <>
                 {renderSlots("padlock", "timestamp", "avatar", "sender")}

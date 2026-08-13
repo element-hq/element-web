@@ -13,9 +13,12 @@ import { Avatar } from "@vector-im/compound-web";
 import { ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { useMockedViewModel } from "../../../../core/viewmodel";
-import { useEventPresentation } from "../../EventPresentation";
+import { useEventPresentation, type EventLayout } from "../../EventPresentation";
 import { withViewDocs } from "../../../../../.storybook/withViewDocs";
-import { NotificationBadgeView, type NotificationBadgeViewSnapshot } from "../../../../notifications/NotificationBadgeView";
+import {
+    NotificationBadgeView,
+    type NotificationBadgeViewSnapshot,
+} from "../../../../notifications/NotificationBadgeView";
 import { EventTileView, type EventTileViewProps } from "./index";
 import { E2ePadlock, E2ePadlockIcon } from "./E2ePadlock";
 import { DisambiguatedProfileView } from "./DisambiguatedProfile";
@@ -36,10 +39,7 @@ import {
     DecryptionFailureReason,
     type DecryptionFailureBodyViewSnapshot,
 } from "../body/DecryptionFailureBodyView";
-import {
-    EventContentBodyView,
-    type EventContentBodyViewSnapshot,
-} from "../body/EventContentBodyView";
+import { EventContentBodyView, type EventContentBodyViewSnapshot } from "../body/EventContentBodyView";
 import { TextualBodyView, TextualBodyViewKind, type TextualBodyViewSnapshot } from "../body/TextualBodyView";
 import {
     ThreadSummaryView,
@@ -160,7 +160,7 @@ const StorySender = ({
 
 const createStorySender = (
     isOwnEvent: boolean,
-    layout: EventTileViewProps["root"]["layout"],
+    layout: EventLayout,
     showSenderAndAvatar: boolean,
 ): React.ReactElement | undefined => {
     if (!showSenderAndAvatar) return undefined;
@@ -173,7 +173,7 @@ const createStorySender = (
 
 const createStoryAvatar = (
     isOwnEvent: boolean,
-    layout: EventTileViewProps["root"]["layout"],
+    layout: EventLayout,
     showSenderAndAvatar: boolean,
     sizeOverride?: string,
 ): React.ReactElement | undefined => {
@@ -208,7 +208,9 @@ const StoryLinkedTimestamp = (): React.ReactElement => <StoryTimestamp linked />
 const StoryBody = (): React.ReactElement => {
     const contentSnapshot: EventContentBodyViewSnapshot = {
         body: [
-            <div key="first-line">Here is a realistic event tile body with enough text to show the available width.</div>,
+            <div key="first-line">
+                Here is a realistic event tile body with enough text to show the available width.
+            </div>,
             <div key="second-line">This second line makes wrapping and vertical rhythm visible in Storybook.</div>,
         ],
         className: styles.body,
@@ -543,7 +545,6 @@ const baseRoot: EventTileViewProps["root"] = {
     scrollToken: "event-tile-story",
     permalink: "https://example.org/event-tile-story",
     eventId: "$event-tile-story",
-    layout: "group",
     shape: "Room",
     state: { isOwnEvent: false, hasReply: false },
 };
@@ -587,7 +588,7 @@ type EventTileStoryProps = Omit<EventTileViewProps, "root"> & {
 };
 
 const createStoryTimestamp = (
-    layout: EventTileViewProps["root"]["layout"],
+    layout: EventLayout,
     isLast: boolean,
     showActionBar: boolean,
 ): React.ReactElement | undefined => {
@@ -709,7 +710,6 @@ function EventTileViewStoryContent({
                     id: `${baseRoot.id}-${suffix}`,
                     scrollToken: `${baseRoot.scrollToken}-${suffix}`,
                     eventId: `${baseRoot.eventId}-${suffix}`,
-                    layout,
                     shape,
                     state: {
                         ...baseRoot.state,
@@ -810,7 +810,7 @@ const storyHelpers = {
 };
 
 const meta = {
-    title: "Timeline/EventTileView/Layout & Shape",
+    title: "Timeline/EventTileView/Shapes",
     component: EventTileViewStory,
     tags: ["autodocs"],
     render: (args) => <EventTileViewStory {...args} />,

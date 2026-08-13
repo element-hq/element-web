@@ -64,6 +64,24 @@
     min-width: 0;
 }
 
+.root.stateInfo {
+    font-size: var(--cpd-font-size-body-sm, 0.8125rem);
+    color: var(--cpd-color-text-secondary, #737d86);
+}
+
+.root.stateContextual {
+    opacity: 0.4;
+}
+
+.root.statePreviewClamped .slotBody,
+.root.statePreviewClamped .slotBody > * {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 /* Slot wrappers are the public styling boundary. The supplied content may be
    a component, fragment, or multiple elements and does not need to forward
    layout props. */
@@ -127,7 +145,8 @@
     }
 
     &.stateSelected .line,
-    &.stateEditing .line {
+    &.stateEditing .line,
+    &.stateActionBarFocused .line {
         background-color: var(--event-tile-state-selected-background);
     }
 
@@ -272,6 +291,61 @@
         }
     }
 
+    &.densityCompact {
+        padding-top: var(--cpd-space-1x, 4px);
+
+        .line {
+            padding-block: 0;
+        }
+
+        .slotAvatar {
+            inset-block-start: var(--cpd-space-0-5x, 2px);
+        }
+
+        .slotPadlock {
+            margin: 0;
+        }
+
+        .slotSender {
+            font-size: 13px;
+        }
+
+        &.stateInfo {
+            padding-top: 0;
+            font-size: 13px;
+
+            .slotAvatar,
+            .slotPadlock {
+                inset-block-start: 0;
+                margin-block: 0;
+            }
+
+            .line {
+                line-height: 20px;
+            }
+        }
+
+        &.stateEmote {
+            padding-top: var(--cpd-space-2x, 8px);
+
+            .slotAvatar {
+                inset-block-start: var(--cpd-space-0-5x, 2px);
+            }
+
+            .line {
+                padding-bottom: 1px;
+            }
+
+            &.stateContinuation .line {
+                padding-bottom: 0;
+            }
+        }
+
+        &.stateContinuation {
+            padding-top: 0;
+        }
+    }
+
 }
 
 /* IRC layout. */
@@ -291,7 +365,8 @@
     }
 
     &.stateSelected .line,
-    &.stateEditing .line {
+    &.stateEditing .line,
+    &.stateActionBarFocused .line {
         background-color: var(--event-tile-state-selected-background);
     }
 
@@ -452,6 +527,13 @@
         padding: 0;
         background: transparent;
         max-width: var(--event-tile-bubble-line-max-width);
+    }
+
+    .lineMedia.lineImage .slotTimestamp {
+        border-radius: var(--MBody-border-radius, 8px);
+        background-color: rgb(0 0 0 / 60%);
+        color: #fff;
+        padding: 0 4px;
     }
 
     /* Stickers are un-bubbled content, so their timestamp sits immediately
@@ -927,6 +1009,16 @@
         width: unset;
         text-align: initial;
         text-overflow: ellipsis;
+    }
+
+    .slotActionBar {
+        visibility: hidden;
+    }
+
+    &:hover .slotActionBar,
+    &:focus-within .slotActionBar,
+    &.stateActionBarFocused .slotActionBar {
+        visibility: visible;
     }
 
     &.layoutGroup:hover .line {
