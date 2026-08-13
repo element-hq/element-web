@@ -10,6 +10,7 @@ import styles from "./MediaPreviewComponents.module.css";
 import classNames from "classnames";
 import { type ImageSize, type MediaPreviewEntryButton } from "../MediaPreviewGroupView";
 import { useI18n } from "../../../../../core/i18n/i18nContext";
+import { LinkedText } from "../../../../../core/utils/LinkedText";
 
 export function Header({ header, headerUrl }: { header: string; headerUrl?: string }): JSX.Element {
     if (headerUrl === undefined) return <div className={classNames(styles.textHeader, styles.header)}>{header}</div>;
@@ -24,7 +25,11 @@ export function Header({ header, headerUrl }: { header: string; headerUrl?: stri
 }
 
 export function Body({ body }: { body: string }): JSX.Element {
-    return <div className={styles.body}>{body}</div>;
+    return (
+        <LinkedText type="body" size="md" className={styles.body}>
+            {body}
+        </LinkedText>
+    );
 }
 
 export function TextContent(props: { header: string; headerUrl?: string; body: string }): JSX.Element {
