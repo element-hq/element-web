@@ -250,7 +250,7 @@ describe("EventTileViewModel", () => {
         });
     });
 
-    it("derives timestamp slots for group layout", () => {
+    it("keeps timestamp display state for group layout", () => {
         const renderState = EventTileViewModel.createRenderState(
             makeProps({
                 display: {
@@ -262,12 +262,10 @@ describe("EventTileViewModel", () => {
             }),
         );
 
-        expect(renderState.timestamp.showDummy).toBe(false);
-        expect(renderState.timestamp.showInGroupLine).toBe(true);
-        expect(renderState.timestamp.showInIrcLine).toBe(false);
+        expect(renderState.timestamp.displayState.showRealTimestamp).toBe(true);
     });
 
-    it("derives timestamp slots for IRC layout", () => {
+    it("keeps timestamp display state for IRC layout", () => {
         const renderState = EventTileViewModel.createRenderState(
             makeProps({
                 display: {
@@ -279,12 +277,10 @@ describe("EventTileViewModel", () => {
             }),
         );
 
-        expect(renderState.timestamp.showDummy).toBe(true);
-        expect(renderState.timestamp.showInGroupLine).toBe(false);
-        expect(renderState.timestamp.showInIrcLine).toBe(true);
+        expect(renderState.timestamp.displayState.showLinkedTimestamp).toBe(true);
     });
 
-    it("keeps the IRC timestamp slot for the dummy timestamp when timestamps are hidden", () => {
+    it("does not create a timestamp slot when IRC timestamps are hidden", () => {
         const renderState = EventTileViewModel.createRenderState(
             makeProps({
                 display: {
@@ -299,10 +295,7 @@ describe("EventTileViewModel", () => {
             }),
         );
 
-        expect(renderState.timestamp.showDummy).toBe(true);
         expect(renderState.timestamp.displayState.showLinkedTimestamp).toBe(false);
-        expect(renderState.timestamp.showInGroupLine).toBe(false);
-        expect(renderState.timestamp.showInIrcLine).toBe(true);
     });
 
     it("normalizes continuation by rendering mode and bubble layout", () => {

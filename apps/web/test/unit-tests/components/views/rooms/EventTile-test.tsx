@@ -54,6 +54,7 @@ import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permal
 import PlatformPeg from "../../../../../src/PlatformPeg";
 import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
 import { SDKContext } from "../../../../../src/contexts/SDKContext.ts";
+import { EventPresentationContextProvider } from "../../../../../src/utils/EventPresentationContextProvider.tsx";
 
 function getTile(container: HTMLElement): HTMLElement {
     const tile = container.querySelector(".mx_EventTile");
@@ -154,14 +155,18 @@ describe("EventTile", () => {
         roomContext: RoomContextType;
         eventTilePropertyOverrides?: Partial<EventTileProps>;
     }) {
+        const layout = props.eventTilePropertyOverrides?.layout ?? Layout.Group;
+
         return (
             <MatrixClientContext.Provider value={client}>
                 <ScopedRoomContextProvider {...props.roomContext}>
-                    <EventTile
-                        mxEvent={mxEvent}
-                        replacingEventId={mxEvent.replacingEventId()}
-                        {...(props.eventTilePropertyOverrides ?? {})}
-                    />
+                    <EventPresentationContextProvider layout={layout}>
+                        <EventTile
+                            mxEvent={mxEvent}
+                            replacingEventId={mxEvent.replacingEventId()}
+                            {...(props.eventTilePropertyOverrides ?? {})}
+                        />
+                    </EventPresentationContextProvider>
                 </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>
         );
@@ -208,16 +213,20 @@ describe("EventTile", () => {
         return (
             <MatrixClientContext.Provider value={client}>
                 <ScopedRoomContextProvider {...roomContext}>
-                    {props.events.map((event) => (
-                        <EventTile
-                            key={event.getId()}
-                            mxEvent={event}
-                            replacingEventId={event.replacingEventId()}
-                            editState={
-                                props.editEvent?.getId() === event.getId() ? new EditorStateTransfer(event) : undefined
-                            }
-                        />
-                    ))}
+                    <EventPresentationContextProvider layout={Layout.Group}>
+                        {props.events.map((event) => (
+                            <EventTile
+                                key={event.getId()}
+                                mxEvent={event}
+                                replacingEventId={event.replacingEventId()}
+                                editState={
+                                    props.editEvent?.getId() === event.getId()
+                                        ? new EditorStateTransfer(event)
+                                        : undefined
+                                }
+                            />
+                        ))}
+                    </EventPresentationContextProvider>
                 </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>
         );
@@ -267,19 +276,6 @@ describe("EventTile", () => {
             expectTileClass(container, className);
         });
 
-        it("marks events from other users as non-self events", () => {
-            const { container } = getComponent();
-
-            expect(getTile(container)).toHaveAttribute("data-self", "false");
-        });
-
-        it("marks events from the current user as self events", () => {
-            const ownEvent = makeOwnMessage();
-            const { container } = getComponent({ mxEvent: ownEvent });
-
-            expect(getTile(container)).toHaveAttribute("data-self", "true");
-        });
-
         it("exposes the rendered event id in room timelines", () => {
             const { container } = getComponent();
 
@@ -290,6 +286,14 @@ describe("EventTile", () => {
             const { container } = getComponent();
 
             expect(getTile(container)).toContainElement(getLine(container));
+        });
+
+        it("does not render empty shared slot boundaries", () => {
+            const { container } = getComponent({ continuation: true });
+
+            for (const slotName of ["avatar", "sender", "timestamp", "footer", "threadInfo", "receipt"] as const) {
+                expect(container.querySelector(`[data-testid="event-tile-slot-${slotName}"]`)).toBeNull();
+            }
         });
 
         it("preserves the existing root and line markup", () => {
@@ -322,64 +326,23 @@ describe("EventTile", () => {
         });
     });
 
-    describe("rendering root attributes", () => {
-        type RootAttribute =
-            | "data-scroll-tokens"
-            | "data-layout"
-            | "data-shape"
-            | "data-self"
-            | "data-event-id"
-            | "data-has-reply";
-
+    describe("shared root attributes", () => {
         it.each([
-            [
-                TimelineRenderingType.Room,
-                ["data-scroll-tokens", "data-layout", "data-self", "data-event-id", "data-has-reply"],
-                ["data-shape"],
-            ],
-            [
-                TimelineRenderingType.Thread,
-                ["data-scroll-tokens", "data-layout", "data-self", "data-event-id", "data-has-reply"],
-                ["data-shape"],
-            ],
-            [
-                TimelineRenderingType.ThreadsList,
-                ["data-scroll-tokens", "data-layout", "data-shape", "data-self", "data-has-reply"],
-                ["data-event-id"],
-            ],
-            [
-                TimelineRenderingType.Notification,
-                ["data-scroll-tokens", "data-layout", "data-shape", "data-self", "data-has-reply"],
-                ["data-event-id"],
-            ],
-            [
-                TimelineRenderingType.File,
-                ["data-scroll-tokens"],
-                ["data-layout", "data-shape", "data-self", "data-event-id", "data-has-reply"],
-            ],
-        ] as const)(
-            "sets root attributes for %s rendering",
-            (renderingType, expectedPresentAttributes, expectedAbsentAttributes) => {
-                const { container } = getComponent({}, renderingType);
-                const tile = getTile(container);
-                const expectedValues: Record<RootAttribute, string> = {
-                    "data-scroll-tokens": mxEvent.getId()!,
-                    "data-layout": Layout.Group,
-                    "data-shape": renderingType,
-                    "data-self": "false",
-                    "data-event-id": mxEvent.getId()!,
-                    "data-has-reply": "false",
-                };
-
-                for (const attribute of expectedPresentAttributes) {
-                    expect(tile).toHaveAttribute(attribute, expectedValues[attribute]);
-                }
-
-                for (const attribute of expectedAbsentAttributes) {
-                    expect(tile).not.toHaveAttribute(attribute);
-                }
-            },
-        );
+            TimelineRenderingType.Room,
+            TimelineRenderingType.Thread,
+            TimelineRenderingType.ThreadsList,
+            TimelineRenderingType.Notification,
+            TimelineRenderingType.File,
+        ])("keeps stable DOM identifiers for %s rendering", (renderingType) => {
+            const { container } = getComponent({}, renderingType);
+            const tile = getTile(container);
+            expect(tile).toHaveAttribute("data-scroll-tokens", mxEvent.getId());
+            expect(tile).toHaveAttribute("data-event-id", mxEvent.getId());
+            expect(tile).not.toHaveAttribute("data-layout");
+            expect(tile).not.toHaveAttribute("data-shape");
+            expect(tile).not.toHaveAttribute("data-self");
+            expect(tile).not.toHaveAttribute("data-has-reply");
+        });
     });
 
     describe("message type classes", () => {
@@ -499,12 +462,10 @@ describe("EventTile", () => {
             expect(container.querySelector(".mx_MessageTimestamp")).toBeNull();
         });
 
-        it("renders a placeholder timestamp in IRC layout", () => {
+        it("does not render a placeholder timestamp in IRC layout", () => {
             const { container } = getComponent({ layout: Layout.IRC });
-            const timestamp = container.querySelector(".mx_MessageTimestamp");
 
-            expect(timestamp).not.toBeNull();
-            expect(timestamp?.tagName).toBe("SPAN");
+            expect(container.querySelector(".mx_MessageTimestamp")).toBeNull();
         });
 
         it("dispatches a room view when the linked timestamp is clicked", () => {
@@ -912,18 +873,16 @@ describe("EventTile", () => {
     });
 
     describe("reply chain", () => {
-        it("marks non-reply events as having no reply", () => {
+        it("does not render a reply chain for non-reply events", () => {
             const { container } = getComponent();
 
-            expect(getTile(container)).toHaveAttribute("data-has-reply", "false");
             expect(container.querySelector(".mx_ReplyChain_wrapper")).toBeNull();
         });
 
-        it("marks reply events as having a reply chain", () => {
+        it("renders a reply chain for reply events", () => {
             const replyEvent = makeReplyEvent(room.roomId);
             const { container } = getComponent({ mxEvent: replyEvent });
 
-            expect(getTile(container)).toHaveAttribute("data-has-reply", "true");
             expect(container.querySelector(".mx_ReplyChain_wrapper")).not.toBeNull();
         });
 
@@ -932,7 +891,6 @@ describe("EventTile", () => {
             jest.spyOn(replyEvent, "isRedacted").mockReturnValue(true);
             const { container } = getComponent({ mxEvent: replyEvent });
 
-            expect(getTile(container)).toHaveAttribute("data-has-reply", "false");
             expect(container.querySelector(".mx_ReplyChain_wrapper")).toBeNull();
         });
     });
@@ -1147,6 +1105,12 @@ describe("EventTile", () => {
     });
 
     describe("EventTile in the right panel", () => {
+        it("does not render an empty unread notification badge slot", () => {
+            const { container } = getComponent({}, TimelineRenderingType.Notification);
+
+            expect(container.querySelector('[data-testid="event-tile-slot-notificationBadge"]')).toBeNull();
+        });
+
         it("renders the room name for notifications", () => {
             const { container } = getComponent({}, TimelineRenderingType.Notification);
             expect(container.getElementsByClassName("mx_EventTile_details")[0]).toHaveTextContent(
@@ -1225,8 +1189,8 @@ describe("EventTile", () => {
             expect(eventTiles).toHaveLength(1);
 
             // there should be a warning shield
-            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(1);
-            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")[0]).toHaveAccessibleName(
+            expect(container.querySelectorAll('[data-testid="e2e-padlock"]')).toHaveLength(1);
+            expect(container.querySelector('[data-testid="e2e-padlock"]')).toHaveAccessibleName(
                 "Encrypted by a device not verified by its owner.",
             );
         });
@@ -1250,7 +1214,7 @@ describe("EventTile", () => {
             expect(eventTiles).toHaveLength(1);
 
             // there should be no warning
-            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(0);
+            expect(container.querySelectorAll('[data-testid="e2e-padlock"]')).toHaveLength(0);
         });
 
         it.each([
@@ -1284,7 +1248,7 @@ describe("EventTile", () => {
             const { container } = getComponent();
             await flushPromises();
 
-            const e2eIcons = container.getElementsByClassName("mx_EventTile_e2eIcon");
+            const e2eIcons = container.querySelectorAll('[data-testid="e2e-padlock"]');
             expect(e2eIcons).toHaveLength(1);
             expect(e2eIcons[0]).toHaveAccessibleName(expectedText);
         });
@@ -1336,8 +1300,8 @@ describe("EventTile", () => {
                 const eventTiles = container.getElementsByClassName("mx_EventTile");
                 expect(eventTiles).toHaveLength(1);
 
-                expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(1);
-                expect(container.getElementsByClassName("mx_EventTile_e2eIcon")[0]).toHaveAccessibleName(
+                expect(container.querySelectorAll('[data-testid="e2e-padlock"]')).toHaveLength(1);
+                expect(container.querySelector('[data-testid="e2e-padlock"]')).toHaveAccessibleName(
                     "This message could not be decrypted",
                 );
             });
@@ -1365,7 +1329,7 @@ describe("EventTile", () => {
                 const eventTiles = container.getElementsByClassName("mx_EventTile");
                 expect(eventTiles).toHaveLength(1);
 
-                expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(0);
+                expect(container.querySelectorAll('[data-testid="e2e-padlock"]')).toHaveLength(0);
             });
         });
 
@@ -1391,7 +1355,7 @@ describe("EventTile", () => {
             expect(eventTiles).toHaveLength(1);
 
             // there should be no warning
-            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(0);
+            expect(container.querySelectorAll('[data-testid="e2e-padlock"]')).toHaveLength(0);
 
             // then we replace the event with one from the unverified device
             const replacementEvent = await mkEncryptedMatrixEvent({
@@ -1412,8 +1376,8 @@ describe("EventTile", () => {
             });
 
             // check it was updated
-            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(1);
-            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")[0]).toHaveAccessibleName(
+            expect(container.querySelectorAll('[data-testid="e2e-padlock"]')).toHaveLength(1);
+            expect(container.querySelector('[data-testid="e2e-padlock"]')).toHaveAccessibleName(
                 "Encrypted by a device not verified by its owner.",
             );
         });
@@ -1440,7 +1404,7 @@ describe("EventTile", () => {
             expect(eventTiles).toHaveLength(1);
 
             // there should be no warning
-            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(0);
+            expect(container.querySelectorAll('[data-testid="e2e-padlock"]')).toHaveLength(0);
 
             // then we replace the event with an unencrypted one
             const replacementEvent = await mkMessage({
@@ -1457,8 +1421,8 @@ describe("EventTile", () => {
             });
 
             // check it was updated
-            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(1);
-            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")[0]).toHaveAccessibleName("Not encrypted");
+            expect(container.querySelectorAll('[data-testid="e2e-padlock"]')).toHaveLength(1);
+            expect(container.querySelector('[data-testid="e2e-padlock"]')).toHaveAccessibleName("Not encrypted");
         });
 
         it.each([EventStatus.ENCRYPTING, EventStatus.NOT_SENT])(
@@ -1474,7 +1438,7 @@ describe("EventTile", () => {
                     },
                 );
 
-                expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(0);
+                expect(container.querySelectorAll('[data-testid="e2e-padlock"]')).toHaveLength(0);
             },
         );
 
@@ -1491,7 +1455,7 @@ describe("EventTile", () => {
                 isRoomEncrypted: true,
             });
 
-            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(0);
+            expect(container.querySelectorAll('[data-testid="e2e-padlock"]')).toHaveLength(0);
         });
 
         it("does not show the unencrypted warning for redacted events in encrypted rooms", () => {
@@ -1500,7 +1464,7 @@ describe("EventTile", () => {
                 isRoomEncrypted: true,
             });
 
-            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(0);
+            expect(container.querySelectorAll('[data-testid="e2e-padlock"]')).toHaveLength(0);
         });
 
         it("does not show the unencrypted warning for local-room events in encrypted rooms", () => {
@@ -1509,7 +1473,7 @@ describe("EventTile", () => {
                 isRoomEncrypted: true,
             });
 
-            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(0);
+            expect(container.querySelectorAll('[data-testid="e2e-padlock"]')).toHaveLength(0);
         });
     });
 
