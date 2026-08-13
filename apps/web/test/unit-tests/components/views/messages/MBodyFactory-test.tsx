@@ -152,74 +152,75 @@ describe("MBodyFactory", () => {
         });
     });
 
-    it.each(["m.file", "m.audio"])(
-        "renderMBody fallback shows %s generic placeholder when showFileInfo is true",
-        async (msgtype) => {
-            const mediaEvent = new MatrixEvent({
-                room_id: "!room:server",
-                sender: userId,
-                type: EventType.RoomMessage,
-                content: {
-                    body: "alt",
-                    msgtype,
-                    url: "mxc://server/image",
-                },
-            });
-
-            const { container, getByRole, getByText } = render(
-                <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.File } as any)}>
-                    {renderMBody(
-                        {
-                            ...props,
-                            mxEvent: mediaEvent,
-                            mediaEventHelper: new MediaEventHelper(mediaEvent),
-                            showFileInfo: true,
-                        },
-                        FileBodyFactory,
-                    )}
-                </ScopedRoomContextProvider>,
-            );
-
-            expect(getByText("alt")).toBeInTheDocument();
-            // The panels render the legacy file body, where the filename itself is the button.
-            // See FileBodyFactory.
-            expect(getByRole("button", { name: "alt" })).toBeInTheDocument();
-            expect(container).toMatchSnapshot();
-        },
-    );
-
-    it("renderMBody shows the preview tile for m.file in the timeline", async () => {
+    it("renderMBody fallback shows m.audio generic placeholder when showFileInfo is true", async () => {
         const mediaEvent = new MatrixEvent({
             room_id: "!room:server",
             sender: userId,
             type: EventType.RoomMessage,
             content: {
                 body: "alt",
-                msgtype: "m.file",
+                msgtype: "m.audio",
                 url: "mxc://server/image",
             },
         });
 
-        const { getByRole, getByText } = render(
-            <LinkedTextContext.Provider value={{}}>
-                <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.Room } as any)}>
-                    {renderMBody(
-                        {
-                            ...props,
-                            mxEvent: mediaEvent,
-                            mediaEventHelper: new MediaEventHelper(mediaEvent),
-                            showFileInfo: true,
-                        },
-                        FileBodyFactory,
-                    )}
-                </ScopedRoomContextProvider>
-            </LinkedTextContext.Provider>,
+        const { container, getByRole, getByText } = render(
+            <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.File } as any)}>
+                {renderMBody(
+                    {
+                        ...props,
+                        mxEvent: mediaEvent,
+                        mediaEventHelper: new MediaEventHelper(mediaEvent),
+                        showFileInfo: true,
+                    },
+                    FileBodyFactory,
+                )}
+            </ScopedRoomContextProvider>,
         );
 
-        // The preview tile leaves the filename as plain text and gives the download its own button.
         expect(getByText("alt")).toBeInTheDocument();
-        expect(getByRole("button", { name: "Download" })).toBeInTheDocument();
+        // Only m.file gets the preview tile; everything else keeps the legacy file body,
+        // where the filename itself is the button. See FileBodyFactory.
+        expect(getByRole("button", { name: "alt" })).toBeInTheDocument();
+        expect(container).toMatchSnapshot();
     });
+
+    it.each([TimelineRenderingType.Room, TimelineRenderingType.File])(
+        "renderMBody shows the preview tile for m.file in %s",
+        async (timelineRenderingType) => {
+            const mediaEvent = new MatrixEvent({
+                room_id: "!room:server",
+                sender: userId,
+                type: EventType.RoomMessage,
+                content: {
+                    body: "alt",
+                    msgtype: "m.file",
+                    url: "mxc://server/image",
+                },
+            });
+
+            const { container, getByRole, getByText } = render(
+                <LinkedTextContext.Provider value={{}}>
+                    <ScopedRoomContextProvider {...({ timelineRenderingType } as any)}>
+                        {renderMBody(
+                            {
+                                ...props,
+                                mxEvent: mediaEvent,
+                                mediaEventHelper: new MediaEventHelper(mediaEvent),
+                                showFileInfo: true,
+                            },
+                            FileBodyFactory,
+                        )}
+                    </ScopedRoomContextProvider>
+                </LinkedTextContext.Provider>,
+            );
+
+            // The preview tile leaves the filename as plain text and gives the download its own button.
+            expect(getByText("alt")).toBeInTheDocument();
+            expect(getByRole("button", { name: "Download" })).toBeInTheDocument();
+            expect(container).toMatchSnapshot();
+        },
+    );
 
     describe("ImageBodyFactory", () => {
         const imageContent = {

@@ -38,7 +38,7 @@ exports[`<UploadConfirmDialog /> should display image preview 1`] = `
             class="_container_1q45w_1"
           >
             <div
-              class="_tile_7mki7_1"
+              class="_tile_1vd22_1"
             >
               <div
                 class="_image_18iaw_84 _fullImage_18iaw_104"
@@ -49,7 +49,7 @@ exports[`<UploadConfirmDialog /> should display image preview 1`] = `
                 />
               </div>
               <div
-                class="_below_7mki7_9"
+                class="_below_1vd22_9"
               >
                 <div
                   class="_leftGroup_18iaw_11"
