@@ -1651,7 +1651,6 @@
         "mentions_and_keywords": "@mentions & nøkkelord",
         "mentions_and_keywords_description": "Bli varslet bare med omtaler og nøkkelord som konfigurert i <a> innstillingene dine </a>",
         "mentions_keywords": "Omtaler og nøkkelord",
-        "message_didnt_send": "Meldingen ble ikke sendt. Klikk for informasjon.",
         "mute_description": "Du vil ikke få noen varsler"
     },
     "notifier": {

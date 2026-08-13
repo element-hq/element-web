@@ -1643,7 +1643,6 @@
         "mentions_and_keywords": "@menções e palavras-chave",
         "mentions_and_keywords_description": "Receba notificações apenas com menções e palavras-chave conforme definido em suas <a>configurações</a>",
         "mentions_keywords": "Menções e palavras-chave!",
-        "message_didnt_send": "A mensagem não foi enviada. Clique para mais informações.",
         "mute_description": "Você não receberá nenhuma notificação"
     },
     "notifier": {

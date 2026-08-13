@@ -1410,7 +1410,6 @@
         "mentions_and_keywords": "@citazioni e parole chiave",
         "mentions_and_keywords_description": "Ricevi notifiche solo per citazioni e parole chiave come configurato nelle tue <a>impostazioni</a>",
         "mentions_keywords": "Citazioni e parole chiave",
-        "message_didnt_send": "Il messaggio non è stato inviato. Clicca per informazioni.",
         "mute_description": "Non riceverai alcuna notifica"
     },
     "notifier": {

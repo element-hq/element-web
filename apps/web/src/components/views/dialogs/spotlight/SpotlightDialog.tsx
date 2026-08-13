@@ -901,34 +901,32 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         {_t("spotlight_dialog|other_rooms_in_space", { spaceName: activeSpace.name })}
                     </h4>
                     <div>
-                        {spaceResults.slice(0, SECTION_LIMIT).map(
-                            (room: HierarchyRoom): JSX.Element => (
-                                <Option
-                                    id={`mx_SpotlightDialog_button_result_${room.room_id}`}
-                                    key={room.room_id}
-                                    onClick={(ev) => {
-                                        viewRoom({ roomId: room.room_id }, true, ev?.type !== "click");
-                                    }}
-                                >
-                                    <BaseAvatar
-                                        name={room.name}
-                                        idName={room.room_id}
-                                        url={
-                                            room.avatar_url
-                                                ? mediaFromMxc(room.avatar_url).getSquareThumbnailHttp(
-                                                      parseInt(AVATAR_SIZE, 10),
-                                                  )
-                                                : null
-                                        }
-                                        size={AVATAR_SIZE}
-                                    />
-                                    {room.name || room.canonical_alias}
-                                    {room.name && room.canonical_alias && (
-                                        <div className="mx_SpotlightDialog_result_details">{room.canonical_alias}</div>
-                                    )}
-                                </Option>
-                            ),
-                        )}
+                        {spaceResults.slice(0, SECTION_LIMIT).map((room: HierarchyRoom): JSX.Element => (
+                            <Option
+                                id={`mx_SpotlightDialog_button_result_${room.room_id}`}
+                                key={room.room_id}
+                                onClick={(ev) => {
+                                    viewRoom({ roomId: room.room_id }, true, ev?.type !== "click");
+                                }}
+                            >
+                                <BaseAvatar
+                                    name={room.name}
+                                    idName={room.room_id}
+                                    url={
+                                        room.avatar_url
+                                            ? mediaFromMxc(room.avatar_url).getSquareThumbnailHttp(
+                                                  parseInt(AVATAR_SIZE, 10),
+                                              )
+                                            : null
+                                    }
+                                    size={AVATAR_SIZE}
+                                />
+                                {room.name || room.canonical_alias}
+                                {room.name && room.canonical_alias && (
+                                    <div className="mx_SpotlightDialog_result_details">{room.canonical_alias}</div>
+                                )}
+                            </Option>
+                        ))}
                         {spaceResultsLoading && <Spinner />}
                     </div>
                 </div>

@@ -1707,7 +1707,6 @@
         "mentions_and_keywords": "@mentions et réponses uniquement",
         "mentions_and_keywords_description": "Recevoir des notifications uniquement pour les mentions, les réponses et mot-clés comme défini dans vos <a>paramètres</a>",
         "mentions_keywords": "Mentions et mots-clés",
-        "message_didnt_send": "Le message n’a pas été envoyé. Cliquer pour plus d’info.",
         "mute_description": "Vous n’aurez aucune notification"
     },
     "notifier": {
