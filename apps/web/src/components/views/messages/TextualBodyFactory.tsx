@@ -172,11 +172,15 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
             };
         }
 
+        let body: string;
+        if (preview.description === undefined || preview.description.trim().length === 0) body = preview.siteName;
+        else body = preview.description!;
+
         return {
             id: preview.link,
             header: preview.title,
             headerUrl: preview.link,
-            body: preview.description!,
+            body,
             buttons: [
                 {
                     label: _t("timeline|url_preview|open_link"),
