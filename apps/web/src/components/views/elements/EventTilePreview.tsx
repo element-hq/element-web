@@ -13,6 +13,7 @@ import { MatrixEvent, type RoomMember, MsgType } from "matrix-js-sdk/src/matrix"
 import * as Avatar from "../../../Avatar";
 import EventTile from "../rooms/EventTile";
 import { Layout } from "../../../settings/enums/Layout";
+import { EventPresentationContextProvider } from "../../../utils/EventPresentationContextProvider";
 import Spinner from "./Spinner";
 
 interface IProps {
@@ -117,14 +118,16 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
 
         return (
             <div className={className} role="presentation">
-                <EventTile
-                    mxEvent={event}
-                    layout={this.props.layout}
-                    as="div"
-                    hideTimestamp
-                    inhibitInteraction
-                    useEventSenderSnapshot
-                />
+                <EventPresentationContextProvider layout={this.props.layout}>
+                    <EventTile
+                        mxEvent={event}
+                        layout={this.props.layout}
+                        as="div"
+                        hideTimestamp
+                        inhibitInteraction
+                        useEventSenderSnapshot
+                    />
+                </EventPresentationContextProvider>
             </div>
         );
     }

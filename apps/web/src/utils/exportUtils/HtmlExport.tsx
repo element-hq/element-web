@@ -32,6 +32,7 @@ import { textForEvent } from "../../TextForEvent";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
 import { SDKContext } from "../../contexts/SDKContext.ts";
 import { SDKContextClass } from "../../contexts/SDKContextClass";
+import { EventPresentationContextProvider } from "../EventPresentationContextProvider";
 import { DateSeparatorViewModel } from "../../viewmodels/room/timeline/DateSeparatorViewModel";
 import exportJS from "./exportJS.js?raw";
 
@@ -289,27 +290,29 @@ export default class HTMLExporter extends Exporter {
                     <MatrixClientContext.Provider value={this.room.client}>
                         <SDKContext.Provider value={SDKContextClass.instance}>
                             <TooltipProvider>
-                                <EventTile
-                                    mxEvent={mxEv}
-                                    continuation={continuation}
-                                    isRedacted={mxEv.isRedacted()}
-                                    replacingEventId={mxEv.replacingEventId()}
-                                    forExport={true}
-                                    alwaysShowTimestamps={true}
-                                    showUrlPreview={false}
-                                    checkUnmounting={() => false}
-                                    isTwelveHour={false}
-                                    last={false}
-                                    lastInSection={false}
-                                    permalinkCreator={this.permalinkCreator}
-                                    lastSuccessful={false}
-                                    isSelectedEvent={false}
-                                    showReactions={true}
-                                    layout={Layout.Group}
-                                    showReadReceipts={false}
-                                    getRelationsForEvent={this.getRelationsForEvent}
-                                    ref={ref}
-                                />
+                                <EventPresentationContextProvider layout={Layout.Group}>
+                                    <EventTile
+                                        mxEvent={mxEv}
+                                        continuation={continuation}
+                                        isRedacted={mxEv.isRedacted()}
+                                        replacingEventId={mxEv.replacingEventId()}
+                                        forExport={true}
+                                        alwaysShowTimestamps={true}
+                                        showUrlPreview={false}
+                                        checkUnmounting={() => false}
+                                        isTwelveHour={false}
+                                        last={false}
+                                        lastInSection={false}
+                                        permalinkCreator={this.permalinkCreator}
+                                        lastSuccessful={false}
+                                        isSelectedEvent={false}
+                                        showReactions={true}
+                                        layout={Layout.Group}
+                                        showReadReceipts={false}
+                                        getRelationsForEvent={this.getRelationsForEvent}
+                                        ref={ref}
+                                    />
+                                </EventPresentationContextProvider>
                             </TooltipProvider>
                         </SDKContext.Provider>
                     </MatrixClientContext.Provider>
