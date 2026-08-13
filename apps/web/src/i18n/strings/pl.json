@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Selektor emoji",
         "jump_first_invite": "Przejdź do pierwszego zaproszenia.",
         "message_composer": "Kompozytor wiadomości",
         "n_unread_messages": {
@@ -928,22 +927,6 @@
     },
     "dialog_close_label": "Zamknij okno dialogowe",
     "download_completed": "Pobieranie zakończone",
-    "emoji": {
-        "categories": "Kategorie",
-        "category_activities": "Aktywności",
-        "category_animals_nature": "Zwierzęta i natura",
-        "category_flags": "Flagi",
-        "category_food_drink": "Żywność i napoje",
-        "category_frequently_used": "Często używane",
-        "category_objects": "Przedmioty",
-        "category_smileys_people": "Buźki i osoby",
-        "category_symbols": "Symbole",
-        "category_travel_places": "Podróże i miejsca",
-        "quick_reactions": "Szybkie reakcje"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Anuluj wyszukiwanie"
-    },
     "empty_room": "Pusty pokój",
     "empty_room_was_name": "Pusty pokój (poprzednio %(oldName)s)",
     "encryption": {
@@ -1739,7 +1722,6 @@
         "mentions_and_keywords": "Tylko @wzmianki i odpowiedzi",
         "mentions_and_keywords_description": "Otrzymuj powiadomienia tylko od wzmianek i słów kluczowych zgodnie z Twoimi <a>ustawieniami</a>",
         "mentions_keywords": "Wzmianki i słowa kluczowe",
-        "message_didnt_send": "Nie wysłano wiadomości. Kliknij po więcej informacji.",
         "mute_description": "Nie otrzymasz żadnych powiadomień"
     },
     "notifier": {

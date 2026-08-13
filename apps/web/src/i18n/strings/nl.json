@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Emoji kiezer",
         "jump_first_invite": "Ga naar de eerste uitnodiging.",
         "message_composer": "Bericht opsteller",
         "n_unread_messages": {
@@ -645,22 +644,6 @@
     },
     "dialog_close_label": "Dialoog sluiten",
     "download_completed": "Download voltooid",
-    "emoji": {
-        "categories": "Categorieën",
-        "category_activities": "Activiteiten",
-        "category_animals_nature": "Dieren en natuur",
-        "category_flags": "Vlaggen",
-        "category_food_drink": "Eten en drinken",
-        "category_frequently_used": "Vaak gebruikt",
-        "category_objects": "Objecten",
-        "category_smileys_people": "Smileys & Personen",
-        "category_symbols": "Symbolen",
-        "category_travel_places": "Reizen en plaatsen",
-        "quick_reactions": "Snelle reacties"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Zoeken annuleren"
-    },
     "empty_room": "Lege kamer",
     "empty_room_was_name": "Lege ruimte (was %(oldName)s)",
     "encryption": {
@@ -1224,7 +1207,6 @@
         "mentions_and_keywords": "@vermeldingen & trefwoorden",
         "mentions_and_keywords_description": "Krijg alleen meldingen met vermeldingen en trefwoorden zoals ingesteld in je <a>instellingen</a>",
         "mentions_keywords": "Vermeldingen & trefwoorden",
-        "message_didnt_send": "Bericht is niet verstuur. Klik voor meer info.",
         "mute_description": "Je krijgt geen meldingen"
     },
     "notifier": {

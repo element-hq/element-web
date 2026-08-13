@@ -14,7 +14,7 @@ import {
     type UserStatus,
 } from "@element-hq/web-shared-components";
 
-import { clearUserStatus, setUserStatus } from "../../utils/userStatus";
+import { clearAllUserStatus, setUserStatus } from "../../utils/userStatus";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import dis from "../../dispatcher/dispatcher";
 import { UserTab } from "../../components/views/dialogs/UserTab";
@@ -59,7 +59,7 @@ export class SetStatusViewModel
         const oldStatus = this.snapshot.current.userStatus;
 
         this.snapshot.merge({ userStatus: undefined });
-        clearUserStatus(this.props.client).catch((err) => {
+        clearAllUserStatus(this.props.client).catch((err) => {
             this.snapshot.merge({ userStatus: oldStatus });
             logger.warn("Failed to clear user status", err);
         });

@@ -18,6 +18,8 @@ const formatMap = {
 export class BackgroundAudio {
     private audioContext = createAudioContext();
     private sounds: Record<string, AudioBuffer> = {};
+    /** How many sounds started here are still going. */
+    private playing = 0;
 
     public async pickFormatAndPlay<F extends Array<keyof typeof formatMap>>(
         urlPrefix: string,
@@ -50,8 +52,16 @@ export class BackgroundAudio {
         source.connect(this.audioContext.destination);
 
         await this.audioContext.resume();
+        this.playing++;
         source.onended = () => {
-            this.audioContext.suspend();
+            source.disconnect();
+            this.playing--;
+            // Every sound played here shares the one context, which is suspended rather than closed so
+            // that it can be reused. Suspending it while another sound is still going would cut that
+            // one off mid-way and leave it to pick up again the next time anything is played.
+            if (this.playing === 0) {
+                this.audioContext.suspend();
+            }
         };
 
         source.start();

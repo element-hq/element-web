@@ -6,16 +6,23 @@
  */
 
 import React, { type JSX } from "react";
+import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useMockedViewModel } from "../../core/viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
-import { NotificationBadgeView, type NotificationBadgeViewSnapshot } from "./NotificationBadgeView";
+import {
+    NotificationBadgeView,
+    type NotificationBadgeViewActions,
+    type NotificationBadgeViewSnapshot,
+} from "./NotificationBadgeView";
 
-type WrapperProps = NotificationBadgeViewSnapshot;
+type WrapperProps = NotificationBadgeViewSnapshot & NotificationBadgeViewActions;
 
-const NotificationBadgeViewWrapperImpl = ({ ...snapshotProps }: WrapperProps): JSX.Element => {
-    const vm = useMockedViewModel(snapshotProps, {});
+const NotificationBadgeViewWrapperImpl = ({ onClick, ...snapshotProps }: WrapperProps): JSX.Element => {
+    const vm = useMockedViewModel(snapshotProps, {
+        onClick: onClick ?? fn(),
+    });
 
     return <NotificationBadgeView vm={vm} />;
 };
@@ -34,7 +41,10 @@ const meta = {
         isKnocked: false,
         badgeType: "badge_2char",
         symbol: "3",
-        knockLabel: "Request to join sent",
+        isClickable: false,
+        ariaLabel: undefined,
+        tabIndex: undefined,
+        showUnsentTooltip: false,
     },
 } satisfies Meta<typeof NotificationBadgeViewWrapper>;
 
@@ -62,6 +72,22 @@ export const Knocked: Story = {
     args: {
         isKnocked: true,
         symbol: "!",
+    },
+};
+
+export const Clickable: Story = {
+    args: {
+        isClickable: true,
+        ariaLabel: "Jump to first unread room",
+        tabIndex: 0,
+    },
+};
+
+export const WithTooltip: Story = {
+    args: {
+        isHighlight: true,
+        symbol: "!",
+        showUnsentTooltip: true,
     },
 };
 
