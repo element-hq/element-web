@@ -43,7 +43,6 @@
     --event-tile-state-selected-background: var(--cpd-color-bg-subtle-secondary, #e9edf2);
     --event-tile-state-marker-width: 4px;
     --event-tile-state-marker-color: var(--cpd-color-bg-action-primary-rest, #0dbd8b);
-
     position: relative;
     flex-shrink: 0;
     max-width: 100%;
@@ -78,6 +77,7 @@
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -210,6 +210,13 @@
 
     .slotReplyChain {
         margin-inline-start: 0;
+        margin-inline-end: 10px;
+    }
+
+    .line,
+    .slotReplyChain {
+        position: relative;
+        border-radius: 8px;
     }
 
     /* Reply-chain spacing belongs to the group shell; nested reply content
@@ -344,8 +351,15 @@
         &.stateContinuation {
             padding-top: 0;
         }
-    }
 
+        .slotReplyChain {
+            margin-block-end: var(--cpd-space-1x, 4px);
+        }
+
+        .slotReceipt {
+            inset-block-start: -2rem;
+        }
+    }
 }
 
 /* IRC layout. */
@@ -443,6 +457,23 @@
         margin: 0;
     }
 
+    .line,
+    .slotReplyChain {
+        position: relative;
+        border-radius: 8px;
+    }
+
+    .slotBody,
+    .slotPadlock {
+        padding-block: 1px;
+    }
+
+    .slotReceipt {
+        order: 5;
+        position: relative;
+        inset-block-start: -0.3rem;
+    }
+
     .slotFooter {
         margin-block: var(--cpd-space-1-5x, 6px);
     }
@@ -485,6 +516,24 @@
     &.stateContinuation .line {
         clear: both;
     }
+
+    &.stateInfo {
+        padding-top: 0;
+
+        .slotAvatar {
+            transform: translateY(-50%);
+            margin-block-start: -2px;
+        }
+
+        .line {
+            line-height: 12px;
+
+            .slotBody {
+                width: auto;
+                font-size: 12px;
+            }
+        }
+    }
 }
 
 /* Bubble layout. */
@@ -511,8 +560,7 @@
         width: fit-content;
         max-width: var(--event-tile-bubble-line-max-width);
         margin-block: 0;
-        margin-inline: var(--event-tile-bubble-line-margin-inline-start)
-            var(--event-tile-bubble-line-margin-inline-end);
+        margin-inline: var(--event-tile-bubble-line-margin-inline-start) var(--event-tile-bubble-line-margin-inline-end);
         border-radius: var(--event-tile-bubble-corner-radius) var(--event-tile-bubble-corner-radius) 0 0;
         line-height: 18px;
         padding: calc(var(--event-tile-bubble-gutter) - 1px);
@@ -534,6 +582,13 @@
         background-color: rgb(0 0 0 / 60%);
         color: #fff;
         padding: 0 4px;
+    }
+
+    .lineMedia .slotTimestamp {
+        position: absolute;
+        z-index: 3;
+        inset-block-end: 0;
+        inset-inline-end: 0;
     }
 
     /* Stickers are un-bubbled content, so their timestamp sits immediately
@@ -605,8 +660,7 @@
         display: flex;
         align-items: center;
         margin-block: var(--cpd-space-1-5x, 6px);
-        margin-inline: var(--event-tile-bubble-line-margin-inline-start)
-            var(--event-tile-bubble-line-margin-inline-end);
+        margin-inline: var(--event-tile-bubble-line-margin-inline-start) var(--event-tile-bubble-line-margin-inline-end);
     }
 
     .slotThreadInfo {
@@ -744,10 +798,16 @@
 
     &.stateNoBubble .lineEmote {
         padding-inline-end: 60px;
+        font-style: italic;
+
+        .slotBody {
+            padding-block: 4px;
+        }
 
         .slotTimestamp {
             inset-block: auto;
             align-self: center;
+            font-style: normal;
         }
     }
 
@@ -926,6 +986,54 @@
         .slotFooter {
             margin-inline-start: 56px;
             margin-inline-end: 8px;
+        }
+    }
+
+    &.stateInfo {
+        .senderDetails .slotAvatar {
+            position: absolute;
+            inset-block-start: 50%;
+            transform: translateY(-50%);
+            margin-block-start: -2px;
+            margin-block-end: 0;
+        }
+
+        .line {
+            padding-inline-start: 0;
+            line-height: 12px;
+
+            .slotBody {
+                width: auto;
+                font-size: 12px;
+            }
+        }
+
+        &.layoutGroup,
+        &.layoutIrc {
+            padding-top: 0;
+
+            .senderDetails .slotAvatar {
+                inset-inline-start: calc(var(--event-tile-irc-timestamp-width) + 14px - 4px);
+                z-index: 9;
+            }
+
+            .slotTimestamp {
+                inset-block-start: 2px;
+            }
+
+            .line .slotBody {
+                margin-inline-start: 20px;
+            }
+        }
+
+        &.layoutBubble {
+            .senderDetails .slotAvatar {
+                inset-inline-start: 0;
+            }
+
+            .line .slotBody {
+                margin-inline-start: calc(56px + 14px + 6px);
+            }
         }
     }
 }
