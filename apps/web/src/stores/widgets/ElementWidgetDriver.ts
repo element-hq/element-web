@@ -749,34 +749,27 @@ export class ElementWidgetDriver extends WidgetDriver {
 
     public async getRtcTransports(): Promise<IRtcTransportsResult> {
         const client = MatrixClientPeg.safeGet();
-        const disableClientWellKnownLookups = !SdkConfig.get("enable_client_well_known_lookups");
-        if (disableClientWellKnownLookups) {
-            // Delegate to the authenticated CS endpoint (MSC4143). Any error (e.g. the
-            // homeserver not supporting it) propagates and is turned into a widget error
-            // response by ClientWidgetApi. The js-sdk Transport and widget-api IRtcTransport
-            // types are structurally identical.
+        try {
+            // Delegate to the authenticated CS endpoint (MSC4519). The js-sdk Transport and
+            // widget-api IRtcTransport types are structurally identical.
             const transports = await client.cachedRtcTransports.wait();
             return { rtc_transports: transports ?? [] };
-        } else {
-            // If the homeserver does not support the API, fallback to the
-            // legacy well-known lookup.
-            try {
-                const transports = await client.cachedRtcTransports.wait();
-                return { rtc_transports: transports ?? [] };
-            } catch (e) {
-                if (e instanceof MatrixError && e.errcode === "M_NOT_FOUND") {
-                    // Fallback to well-known
-                    const wellKnown = await client.waitForClientWellKnown();
-                    const foci = wellKnown?.["org.matrix.msc4143.rtc_foci"];
-                    if (!Array.isArray(foci)) {
-                        logger.warn(`org.matrix.msc4143.rtc_foci is not an array in .well-known`);
-                    } else {
-                        return { rtc_transports: foci };
-                    }
+        } catch (e) {
+            // If the homeserver does not support the API, fall back to legacy well-known lookup.
+            if (
+                e instanceof MatrixError &&
+                e.errcode === "M_NOT_FOUND" &&
+                SdkConfig.get("enable_client_well_known_lookups")
+            ) {
+                const wellKnown = await client.waitForClientWellKnown();
+                const foci = wellKnown?.["org.matrix.msc4143.rtc_foci"];
+                if (foci !== undefined) {
+                    if (Array.isArray(foci)) return { rtc_transports: foci };
+                    else logger.warn(`org.matrix.msc4143.rtc_foci is not an array in .well-known`);
                 }
-                // re-throw non 404
-                throw e;
             }
+            // Re-throw to turn the error into a widget error response
+            throw e;
         }
     }
 
