@@ -63,10 +63,10 @@ test.describe("FilePanel", () => {
             // Assert that the audio player is rendered
             await expect(roomViewBody.getByRole("region", { name: "Audio player" })).toBeVisible();
 
-            // Assert that the file button exists
-            await expect(
-                roomViewBody.locator(".mx_EventTile_last[data-layout='group'] .mx_MFileBody", { hasText: ".json" }),
-            ).toBeVisible();
+            // Assert that the file is rendered as a preview tile with its name and a download button
+            const fileTile = roomViewBody.locator(".mx_EventTile_last[data-layout='group']");
+            await expect(fileTile.getByText(/matrix.*?\.json/)).toBeVisible();
+            await expect(fileTile.getByRole("button", { name: "Download" })).toBeVisible();
 
             const filePanel = page.locator(".mx_FilePanel");
             // Assert that the file panel is opened inside mx_RightPanel and visible
