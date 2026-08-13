@@ -51,7 +51,7 @@ expect.addSnapshotSerializer({
 
 function setupLanguageMock(): void {
     fetchMock
-        .get("end:/i18n/languages.json?*", {
+        .get("include:/i18n/languages.json?", {
             en: "en_EN.json",
         })
         .get("end:en_EN.json", en);
