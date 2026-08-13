@@ -392,6 +392,20 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     private insertText(textToInsert: string, inputType = "insertText"): void {
         if (!this.editorRef.current) return;
         const sel = document.getSelection()!;
+
+        if (!sel.isCollapsed) {
+            // A caret offset cannot describe a selected range, so splicing at it would leave the
+            // selected text in place. Replace the range instead, as onPaste does.
+            const model = this.props.model;
+            const range = getRangeForSelection(this.editorRef.current, model, sel);
+            this.modifiedFlag = true;
+            replaceRangeAndMoveCaret(
+                range,
+                parsePlainTextMessage(textToInsert, model.partCreator, { shouldEscape: false }),
+            );
+            return;
+        }
+
         const { caret, text } = getCaretOffsetAndText(this.editorRef.current, sel);
         const newText = text.slice(0, caret.offset) + textToInsert + text.slice(caret.offset);
         caret.offset += textToInsert.length;
