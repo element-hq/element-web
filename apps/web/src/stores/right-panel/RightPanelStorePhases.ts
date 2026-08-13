@@ -17,6 +17,7 @@ export enum RightPanelPhases {
 
     // Room stuff
     FilePanel = "FilePanel",
+    PdfViewer = "PdfViewer",
     NotificationPanel = "NotificationPanel",
     EncryptionPanel = "EncryptionPanel",
     RoomSummary = "RoomSummary",

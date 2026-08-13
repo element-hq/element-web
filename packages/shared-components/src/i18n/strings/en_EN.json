@@ -93,6 +93,11 @@
         "room_list_section_description": " Group your chats into sections to keep conversations organised and easy to navigate.",
         "room_list_section_title": "Introducing Sections"
     },
+    "right_panel": {
+        "pdf_viewer": {
+            "title": "PDF viewer"
+        }
+    },
     "room": {
         "context_menu": {
             "title": "Room options"

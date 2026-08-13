@@ -34,6 +34,7 @@ import { Action } from "../../dispatcher/actions";
 import { type XOR } from "../../@types/common";
 import ExtensionsCard from "../views/right_panel/ExtensionsCard";
 import MemberListView from "../views/rooms/MemberList/MemberListView";
+import { PdfViewerCard } from "../views/right_panel/PdfViewerCard";
 
 interface BaseProps {
     overwriteCard?: IRightPanelCard; // used to display a custom card and ignoring the RightPanelStore (used for UserView)
@@ -150,7 +151,13 @@ export default class RightPanel extends React.Component<Props, IState> {
         const roomId = this.props.room?.roomId;
         const phase = this.props.overwriteCard?.phase ?? this.state.phase;
         const cardState = this.props.overwriteCard?.state ?? this.state.cardState;
+        const pdfViewerEventId = this.state.cardState?.pdfEventId;
         switch (phase) {
+            case RightPanelPhases.PdfViewer:
+                if (!!pdfViewerEventId && !!this.props.room) {
+                    card = <PdfViewerCard eventId={pdfViewerEventId} onClose={this.onClose} room={this.props.room} />;
+                }
+                break;
             case RightPanelPhases.MemberList:
                 if (!!roomId) {
                     card = <MemberListView roomId={roomId} onClose={this.onClose} />;

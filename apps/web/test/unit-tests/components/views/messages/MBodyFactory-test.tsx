@@ -16,6 +16,7 @@ import {
     mockClientMethodsDevice,
     mockClientMethodsServer,
     mockClientMethodsUser,
+    TestSDKContext,
 } from "../../../../test-utils";
 import { MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
@@ -30,6 +31,8 @@ import {
 import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext.ts";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 import { useMediaVisible } from "../../../../../src/hooks/useMediaVisible";
+import { SDKContext } from "../../../../../src/contexts/SDKContext";
+import type RightPanelStore from "../../../../../src/stores/right-panel/RightPanelStore";
 
 jest.mock("matrix-encrypt-attachment", () => ({
     decryptAttachment: jest.fn(),
@@ -68,6 +71,15 @@ describe("MBodyFactory", () => {
     const props = {
         onMessageAllowed: jest.fn(),
         permalinkCreator: new RoomPermalinkCreator(new Room("!room:server", cli, cli.getUserId()!)),
+    };
+
+    // The file body takes the right panel store off the SDK context, so one has to be provided.
+    const sdkContext = new TestSDKContext();
+    sdkContext._RightPanelStore = { pushCard: jest.fn() } as unknown as RightPanelStore;
+    const renderOptions = {
+        wrapper: ({ children }: { children: React.ReactNode }) => (
+            <SDKContext.Provider value={sdkContext}>{children}</SDKContext.Provider>
+        ),
     };
     const mkEvent = (msgtype?: string, content: Record<string, unknown> = {}): MatrixEvent =>
         new MatrixEvent({
@@ -111,6 +123,7 @@ describe("MBodyFactory", () => {
                         showFileInfo: false,
                     })}
                 </ScopedRoomContextProvider>,
+                renderOptions,
             );
 
             expect(getByRole("link", { name: "Download" })).toBeInTheDocument();
@@ -146,6 +159,7 @@ describe("MBodyFactory", () => {
                         FileBodyFactory,
                     )}
                 </ScopedRoomContextProvider>,
+                renderOptions,
             );
             expect(getByRole("button", { name: "alt" })).toBeInTheDocument();
         });
@@ -177,6 +191,7 @@ describe("MBodyFactory", () => {
                         FileBodyFactory,
                     )}
                 </ScopedRoomContextProvider>,
+                renderOptions,
             );
 
             expect(getByRole("button", { name: "alt" })).toBeInTheDocument();
@@ -205,6 +220,7 @@ describe("MBodyFactory", () => {
                         mediaEventHelper={new MediaEventHelper(mediaEvent)}
                     />
                 </ScopedRoomContextProvider>,
+                renderOptions,
             );
 
             expect(container.querySelector(".mx_ImageBody")).not.toBeNull();
@@ -222,6 +238,7 @@ describe("MBodyFactory", () => {
                         mediaEventHelper={new MediaEventHelper(mediaEvent)}
                     />
                 </ScopedRoomContextProvider>,
+                renderOptions,
             );
 
             expect(container.querySelector(".mx_ImageBody")).not.toBeNull();
@@ -246,6 +263,7 @@ describe("MBodyFactory", () => {
                         mediaEventHelper={{ media: { isEncrypted: true } } as MediaEventHelper}
                     />
                 </ScopedRoomContextProvider>,
+                renderOptions,
             );
 
             expect(container.querySelector(".mx_ImageBody")).toBeNull();
@@ -267,6 +285,7 @@ describe("MBodyFactory", () => {
                 <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.Room } as any)}>
                     <ImageBodyFactory {...props} mxEvent={mediaEvent} mediaEventHelper={encryptedImageHelper()} />
                 </ScopedRoomContextProvider>,
+                renderOptions,
             );
 
             expect(container.querySelector(".mx_ImageBody")).not.toBeNull();
@@ -295,6 +314,7 @@ describe("MBodyFactory", () => {
                         forExport={false}
                     />
                 </ScopedRoomContextProvider>,
+                renderOptions,
             );
 
             expect(container.querySelector(".mx_MVideoBody")).not.toBeNull();
@@ -312,6 +332,7 @@ describe("MBodyFactory", () => {
                         forExport={false}
                     />
                 </ScopedRoomContextProvider>,
+                renderOptions,
             );
 
             expect(container.querySelector(".mx_MVideoBody")).not.toBeNull();

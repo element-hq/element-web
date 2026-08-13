@@ -29,6 +29,10 @@ import { RedactedBodyViewModel } from "../../../viewmodels/message-body/Redacted
 import { getRedactedBodyViewModelProps } from "../../../viewmodels/room/timeline/event-tile/EventTileRedactedBodyState";
 import { VideoBodyViewModel } from "../../../viewmodels/message-body/VideoBodyViewModel";
 import { isMimeTypeAllowed } from "../../../utils/blobs";
+// Importing RightPanelStore here would drag the whole store graph into module initialisation, which
+// circles back through EventTileFactory into the message bodies this file renders. The context module
+// is only a createContext() call, so the store has to come from there.
+import { SDKContext } from "../../../contexts/SDKContext";
 
 type MBodyComponent = React.ComponentType<IBodyProps>;
 
@@ -39,6 +43,7 @@ export function FileBodyFactory({
     showFileInfo,
 }: Pick<IBodyProps, "mxEvent" | "mediaEventHelper" | "forExport" | "showFileInfo">): JSX.Element {
     const { timelineRenderingType } = useContext(RoomContext);
+    const { rightPanelStore } = useContext(SDKContext);
     const refIFrame = useRef<HTMLIFrameElement>(null) as RefObject<HTMLIFrameElement>;
     const refLink = useRef<HTMLAnchorElement>(null) as RefObject<HTMLAnchorElement>;
 
@@ -52,6 +57,7 @@ export function FileBodyFactory({
                 timelineRenderingType,
                 refIFrame,
                 refLink,
+                rightPanelStore,
             }),
     );
 
