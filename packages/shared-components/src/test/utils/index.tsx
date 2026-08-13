@@ -30,6 +30,7 @@ type SharedRenderOptions = RenderOptions & {
 };
 
 const i18nApi = new I18nApi();
+const linkedTextConfiguration = {};
 
 const wrapWithTooltipProvider = (Wrapper: RenderOptions["wrapper"], presentation?: Partial<EventPresentation>) => {
     return ({ children }: { children: React.ReactNode }) => {
@@ -48,7 +49,7 @@ const wrapWithTooltipProvider = (Wrapper: RenderOptions["wrapper"], presentation
 
         return (
             <I18nContext.Provider value={i18nApi}>
-                <LinkedTextContext.Provider value={{}}>{wrapped}</LinkedTextContext.Provider>
+                <LinkedTextContext.Provider value={linkedTextConfiguration}>{wrapped}</LinkedTextContext.Provider>
             </I18nContext.Provider>
         );
     };

@@ -78,11 +78,11 @@ exports[`<UploadConfirmDialog /> should display image preview 1`] = `
                     >
                       image.png
                     </div>
-                    <div
-                      class="_body_18iaw_2"
+                    <p
+                      class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 _container_15awj_8 _body_18iaw_2"
                     >
                       124 KB
-                    </div>
+                    </p>
                   </div>
                 </div>
               </div>
