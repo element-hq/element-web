@@ -80,8 +80,9 @@ test.describe("FilePanel", () => {
             // Assert that all of the file tiles are rendered
             await expect(filePanelMessageList.locator(".mx_EventTile")).toHaveCount(3);
 
-            // Assert that the download links are rendered
-            await expect(filePanelMessageList.locator(".mx_MFileBody")).toHaveCount(3);
+            // Assert that the download links are rendered for the image and the audio file, which embed
+            // the classic file body as their download-only fallback
+            await expect(filePanelMessageList.locator(".mx_MFileBody")).toHaveCount(2);
 
             // Assert that the sender of the files is rendered on all of the tiles
             await expect(filePanelMessageList.getByText(NAME)).toHaveCount(3);
@@ -98,10 +99,10 @@ test.describe("FilePanel", () => {
             await expect(audio.getByRole("button", { name: "Play" })).toBeVisible();
 
             // Detect the JSON file
-            // Assert that the tile is rendered as a button
-            const file = filePanelMessageList.locator(".mx_EventTile_mediaLine .mx_MFileBody [role='button']");
-            // Assert that the file name is rendered inside the button with ellipsis
+            // Assert that the file is rendered as a preview tile with its name and a download button
+            const file = filePanelMessageList.locator(".mx_EventTile").last();
             await expect(file.getByText(/matrix.*?\.json/)).toBeVisible();
+            await expect(file.getByRole("button", { name: "Download" })).toBeVisible();
 
             // Make the viewport tall enough to display all of the file tiles on FilePanel
             await page.setViewportSize({ width: 800, height: 1000 });
@@ -171,7 +172,8 @@ test.describe("FilePanel", () => {
             const tile = page.locator(".mx_FilePanel .mx_EventTile");
             // Assert that the file size is displayed in kibibytes, not kilobytes (1000 bytes)
             // See: https://github.com/vector-im/element-web/issues/24866
-            await expect(tile.locator(".mx_MFileBody [data-type='info']", { hasText: size })).toBeVisible();
+            // The panel renders files as a preview tile, which shows the size as the tile body.
+            await expect(tile.getByText(size)).toBeVisible();
         });
     });
 
