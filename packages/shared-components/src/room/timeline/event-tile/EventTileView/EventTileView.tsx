@@ -215,7 +215,7 @@ export function EventTileView({
     if (layout === "irc") {
         return renderRoot(
             <>
-                {renderSlots("padlock", "timestamp", "avatar", "sender")}
+                {renderSlots("timestamp", "padlock", "avatar", "sender")}
                 <div id={root.id} className={lineClassName} onContextMenu={onContextMenu}>
                     {renderSlots("contextMenu", "replyChain", "body", "actionBar", "footer", "threadInfo")}
                 </div>

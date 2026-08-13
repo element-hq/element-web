@@ -186,8 +186,8 @@ const ircLineSlotOrder = [
 ];
 
 const ircRootSlotOrder = [
-    "event-tile-slot-padlock",
     "event-tile-slot-timestamp",
+    "event-tile-slot-padlock",
     "event-tile-slot-avatar",
     "event-tile-slot-sender",
     "event-line-1",
@@ -638,8 +638,8 @@ describe("EventTileView", () => {
         expect(line).toContainElement(getByTestId("action-bar"));
 
         if (layout === "irc") {
-            expect(root.children[0]).toContainElement(getByTestId("padlock"));
-            expect(root.children[1]).toContainElement(getByTestId("timestamp"));
+            expect(root.children[0]).toContainElement(getByTestId("timestamp"));
+            expect(root.children[1]).toContainElement(getByTestId("padlock"));
             expect(root.children[2]).toContainElement(getByTestId("avatar"));
             expect(root.children[3]).toContainElement(getByTestId("sender"));
             expect(root.children[4]).toBe(line);
