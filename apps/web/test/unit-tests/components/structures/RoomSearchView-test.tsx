@@ -330,6 +330,33 @@ describe("<RoomSearchView/>", () => {
         expect(onUpdate).toHaveBeenCalledTimes(2);
     });
 
+    it("does not report an aborted search as an error", async () => {
+        const onUpdate = jest.fn();
+        const deferred = Promise.withResolvers<ISearchResults>();
+
+        render(
+            <MatrixClientContext.Provider value={client}>
+                <RoomSearchView
+                    inProgress={false}
+                    term="search term"
+                    scope={SearchScope.All}
+                    promise={deferred.promise}
+                    className="someClass"
+                    onUpdate={onUpdate}
+                />
+            </MatrixClientContext.Provider>,
+        );
+        // What fetch rejects with when RoomView aborts the search to open one of its results.
+        deferred.reject(new DOMException("signal is aborted without reason", "AbortError"));
+        try {
+            // Wait for RoomSearchView to process the promise
+            await deferred.promise;
+        } catch {}
+
+        expect(onUpdate).toHaveBeenCalledTimes(1);
+        expect(onUpdate).toHaveBeenCalledWith(true, null, null);
+    });
+
     it("should combine search results when the query is present in multiple sucessive messages", async () => {
         const searchResults: ISearchResults = {
             results: [
