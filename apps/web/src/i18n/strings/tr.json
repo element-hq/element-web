@@ -1545,7 +1545,6 @@
         "mentions_and_keywords": "@bahsetmeler ve anahtar kelimeler",
         "mentions_and_keywords_description": "Yalnızca <a>settings</a> ayarlarınızda ayarlanan bahsetmeler ve anahtar kelimelerle bildirim alın",
         "mentions_keywords": "Bahsetmeler ve anahtar kelimeler",
-        "message_didnt_send": "Mesaj gönderilmedi. Bilgi için tıklayınız.",
         "mute_description": "Hiçbir bildirim almayacaksınız"
     },
     "notifier": {

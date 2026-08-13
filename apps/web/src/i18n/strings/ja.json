@@ -1311,7 +1311,6 @@
         "mentions_and_keywords": "メンションとキーワード",
         "mentions_and_keywords_description": "メンションと、<a>設定</a>したキーワードのみを通知",
         "mentions_keywords": "メンションとキーワード",
-        "message_didnt_send": "メッセージが送信されませんでした。クリックすると詳細を表示します。",
         "mute_description": "通知を送信しません"
     },
     "notifier": {

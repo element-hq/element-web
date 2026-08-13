@@ -69,9 +69,6 @@ export default {
             ignoreDependencies: [
                 // False positive
                 "sw.js",
-                // Used by webpack
-                "process",
-                "util",
                 // Embedded into webapp
                 "@element-hq/element-call-embedded",
 
