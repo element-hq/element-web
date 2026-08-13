@@ -197,7 +197,12 @@ const ircRootSlotOrder = [
 const shellPlacementMatrix = [
     { name: "informational", rootState: { info: true }, lineState: {}, layout: "group" },
     { name: "bubble container in group layout", rootState: { bubbleContainer: true }, lineState: {}, layout: "group" },
-    { name: "bubble container in bubble layout", rootState: { bubbleContainer: true }, lineState: {}, layout: "bubble" },
+    {
+        name: "bubble container in bubble layout",
+        rootState: { bubbleContainer: true },
+        lineState: {},
+        layout: "bubble",
+    },
     { name: "bubble container in IRC layout", rootState: { bubbleContainer: true }, lineState: {}, layout: "irc" },
     { name: "left-aligned bubble", rootState: { leftAlignedBubble: true }, lineState: {}, layout: "bubble" },
     { name: "aligned between bubbles", rootState: { alignedBetweenBubbles: true }, lineState: {}, layout: "bubble" },
@@ -328,9 +333,7 @@ describe("EventTileView", () => {
             const lineSlotOrder = layout === "irc" ? ircLineSlotOrder : groupLineSlotOrder;
             const rootSlotOrder = layout === "irc" ? ircRootSlotOrder : groupRootSlotOrder;
 
-            expect(Array.from(line.children).map((child) => child.getAttribute("data-testid"))).toEqual(
-                lineSlotOrder,
-            );
+            expect(Array.from(line.children).map((child) => child.getAttribute("data-testid"))).toEqual(lineSlotOrder);
             expect(Array.from(root.children).map((child) => child.getAttribute("data-testid") ?? child.id)).toEqual(
                 rootSlotOrder,
             );
@@ -637,13 +640,12 @@ describe("EventTileView", () => {
         expect(line).toContainElement(getByTestId("reply-chain"));
         expect(line).toContainElement(getByTestId("action-bar"));
 
+        const expectedRootSlotOrder = layout === "irc" ? ircRootSlotOrder : groupRootSlotOrder;
+        expect(Array.from(root.children).map((child) => child.getAttribute("data-testid") ?? child.id)).toEqual(
+            expectedRootSlotOrder,
+        );
+
         if (layout === "irc") {
-            expect(root.children[0]).toContainElement(getByTestId("timestamp"));
-            expect(root.children[1]).toContainElement(getByTestId("padlock"));
-            expect(root.children[2]).toContainElement(getByTestId("avatar"));
-            expect(root.children[3]).toContainElement(getByTestId("sender"));
-            expect(root.children[4]).toBe(line);
-            expect(root.children[5]).toContainElement(getByTestId("receipt"));
             expect(getByTestId("padlock").parentElement?.parentElement).toBe(root);
             expect(getByTestId("footer").parentElement?.parentElement).toBe(line);
             expect(getByTestId("thread-info").parentElement?.parentElement).toBe(line);
