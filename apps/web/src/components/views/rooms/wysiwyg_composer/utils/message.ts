@@ -159,7 +159,7 @@ export async function sendMessage(
         }
     });
     if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
-        prom.then((resp) => {
+        void prom.then((resp) => {
             sendRoundTripMetric(mxClient, roomId, resp.event_id);
         });
     }
