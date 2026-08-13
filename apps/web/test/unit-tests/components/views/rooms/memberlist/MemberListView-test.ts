@@ -11,7 +11,7 @@ import { act } from "react";
 import { waitFor, fireEvent } from "jest-matrix-react";
 import { type Room, type RoomMember, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import { filterConsole } from "../../../../../test-utils";
+import { filterConsole, mkThirdPartyInviteEvent } from "../../../../../test-utils";
 import { type Rendered, renderMemberList } from "./common";
 
 jest.mock("../../../../../../src/customisations/helpers/UIComponents", () => ({
@@ -260,6 +260,20 @@ describe("MemberListView and MemberlistHeaderView", () => {
                     expectOrderedByPresenceAndPowerLevel(memberListRoom, tiles, enablePresence);
                 });
             });
+        });
+    });
+
+    describe("3PID invites", () => {
+        it("does not collapse invites with duplicate display names", async () => {
+            const threePidEvents = [
+                mkThirdPartyInviteEvent("@alice:localhost", "user@example.com", "!room:localhost"),
+                mkThirdPartyInviteEvent("@alice:localhost", "user@example.com", "!room:localhost"),
+            ];
+            const { root } = await renderMemberList(true, undefined, 2, threePidEvents);
+
+            const tiles = root.container.querySelectorAll(".mx_MemberTileView");
+            // 6 joined + 2 3PID invites
+            expect(tiles).toHaveLength(8);
         });
     });
 });
