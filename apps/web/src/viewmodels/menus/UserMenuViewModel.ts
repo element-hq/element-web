@@ -83,7 +83,7 @@ export class UserMenuViewModel
         super(props, UserMenuViewModel.computeSnapshot(client, props.ownProfileStore, isPanelCollapsed));
         this.setStatusVm = new UserMenuSetStatusViewModel({ client, ownProfileStore: props.ownProfileStore });
         props.ownProfileStore.on(UPDATE_EVENT, this.recalculateProfile);
-        this.loadAuthMetadata();
+        void this.loadAuthMetadata();
     }
 
     public dispose(): void {

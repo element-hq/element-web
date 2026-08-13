@@ -69,10 +69,10 @@ export class SetupEncryptionStore extends EventEmitter {
             // If there are multiple, we take the most recent. Equally if the user sends another request from
             // another device after this screen has been shown, we'll switch to the new one, so this
             // generally doesn't support multiple requests.
-            this.setActiveVerificationRequest(requestsInProgress[requestsInProgress.length - 1]);
+            void this.setActiveVerificationRequest(requestsInProgress[requestsInProgress.length - 1]);
         }
 
-        this.fetchKeyInfo();
+        void this.fetchKeyInfo();
     }
 
     public stop(): void {
@@ -174,7 +174,7 @@ export class SetupEncryptionStore extends EventEmitter {
     };
 
     public onVerificationRequest = (request: VerificationRequest): void => {
-        this.setActiveVerificationRequest(request);
+        void this.setActiveVerificationRequest(request);
     };
 
     public onVerificationRequestChange = async (): Promise<void> => {

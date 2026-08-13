@@ -85,10 +85,9 @@ export default class ImportE2eKeysDialog extends React.Component<IProps, IState>
 
     private onFormSubmit = (ev: React.FormEvent): boolean => {
         ev.preventDefault();
-        // noinspection JSIgnoredPromiseFromCall
         const file = this.file.current?.files?.[0];
         if (file) {
-            this.startImport(file, this.state.passphrase);
+            void this.startImport(file, this.state.passphrase);
         }
         return false;
     };
