@@ -125,14 +125,22 @@ describe("EventTileViewModel", () => {
         });
         expect(snapshot.root.ariaLive).toBe("off");
         expect(snapshot.root.scrollToken).toBeUndefined();
-        expect(snapshot.root.data).toEqual({
+        expect(snapshot.root).toMatchObject({
+            eventId: "$event",
+            shape: "Room",
+            state: {
+                isOwnEvent: false,
+                hasReply: false,
+            },
+        });
+        expect(snapshot.legacy.rootData).toEqual({
             eventId: "$event",
             layout: Layout.Group,
             shape: TimelineRenderingType.Room,
             isOwnEvent: false,
             hasReply: false,
         });
-        expect(snapshot.root.classState.mx_EventTile_sending).toBe(true);
+        expect(snapshot.legacy.rootClassState.mx_EventTile_sending).toBe(true);
     });
 
     it("derives a scroll token for non-local-echo events", () => {
@@ -162,13 +170,35 @@ describe("EventTileViewModel", () => {
         );
 
         expect(renderState.snapshot.event.isSending).toBe(true);
-        expect(renderState.root.className).toContain("mx_EventTile");
-        expect(renderState.root.className).toContain("mx_EventTile_sending");
-        expect(renderState.root.className).toContain("mx_EventTile_highlight");
+        expect(renderState.legacy.root.className).toContain("mx_EventTile");
+        expect(renderState.legacy.root.className).toContain("mx_EventTile_sending");
+        expect(renderState.legacy.root.className).toContain("mx_EventTile_highlight");
         expect(renderState.root.ariaLive).toBe("off");
         expect(renderState.root.scrollToken).toBeUndefined();
-        expect(renderState.root.isRenderingNotification).toBe(false);
-        expect(renderState.line.className).toContain("mx_EventTile_line");
+        expect(renderState.root.eventId).toBe("$event");
+        expect(renderState.root.shape).toBe("Room");
+        expect(renderState.root.state).toMatchObject({
+            isOwnEvent: false,
+            hasReply: false,
+            highlighted: true,
+            selected: false,
+            editing: false,
+            continuation: false,
+        });
+        expect(renderState.legacy.root.isRenderingNotification).toBe(false);
+        expect(renderState.classNames).toMatchObject({
+            root: renderState.legacy.root.className,
+            line: renderState.legacy.line.className,
+            slotBody: "mx_EventTile_body",
+            slotSender: "mx_DisambiguatedProfile",
+        });
+        expect(renderState.legacy.line.className).toContain("mx_EventTile_line");
+        expect(renderState.line).toEqual({
+            media: false,
+            sticker: false,
+            emote: false,
+            image: false,
+        });
         expect(renderState.timestamp).toMatchObject(renderState.snapshot.timestamp);
     });
 
@@ -311,11 +341,80 @@ describe("EventTileViewModel", () => {
             }),
         );
 
-        expect(snapshot.line.classState).toMatchObject({
+        expect(snapshot.legacy.lineClassState).toMatchObject({
             mx_EventTile_mediaLine: true,
             mx_EventTile_image: true,
             mx_EventTile_sticker: false,
             mx_EventTile_emote: false,
+        });
+        expect(snapshot.line).toEqual({
+            media: true,
+            sticker: false,
+            emote: false,
+            image: true,
+        });
+    });
+
+    it("derives shared EventTileView root states from application inputs", () => {
+        const snapshot = EventTileViewModel.createSnapshot(
+            makeProps({
+                event: {
+                    eventType: "m.sticker",
+                    msgtype: "m.emote",
+                    isEncryptionFailure: true,
+                    isEditing: true,
+                },
+                display: {
+                    timelineRenderingType: TimelineRenderingType.ThreadsList,
+                    continuation: true,
+                    isBubbleMessage: true,
+                    isLeftAlignedBubbleMessage: true,
+                    isAlignedBetweenBubbles: true,
+                    isInfoMessage: true,
+                    noBubbleEvent: true,
+                    isHighlighted: true,
+                    isSelected: true,
+                    isLastInSection: true,
+                    isContextual: true,
+                },
+                interaction: {
+                    isActionBarFocused: true,
+                },
+                sender: {
+                    hideSender: true,
+                    isEmote: true,
+                },
+                footer: {
+                    isOwnEvent: true,
+                },
+            }),
+        );
+
+        expect(snapshot.root.state).toEqual({
+            isOwnEvent: true,
+            hasReply: false,
+            info: true,
+            bubbleContainer: true,
+            leftAlignedBubble: true,
+            alignedBetweenBubbles: true,
+            noBubble: true,
+            noSender: true,
+            encryptionFailure: true,
+            emote: true,
+            highlighted: true,
+            selected: true,
+            editing: true,
+            continuation: false,
+            lastInSection: true,
+            contextual: true,
+            actionBarFocused: true,
+            previewClamped: true,
+        });
+        expect(snapshot.line).toEqual({
+            media: false,
+            sticker: true,
+            emote: true,
+            image: false,
         });
     });
 
@@ -328,7 +427,7 @@ describe("EventTileViewModel", () => {
             }),
         );
 
-        expect(snapshot.root.classState.mx_EventTile_alignedBetweenBubbles).toBe(true);
+        expect(snapshot.legacy.rootClassState.mx_EventTile_alignedBetweenBubbles).toBe(true);
     });
 
     it("derives avatar and sender profile state for thread timelines", () => {
@@ -637,7 +736,7 @@ describe("EventTileViewModel", () => {
         });
         const vm = new EventTileViewModel(makeDependencies(event), makeProps());
 
-        expect(vm.getSnapshot().snapshot.root.data.hasReply).toBe(false);
+        expect(vm.getSnapshot().snapshot.legacy.rootData.hasReply).toBe(false);
 
         vm.dispose();
     });

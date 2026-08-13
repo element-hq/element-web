@@ -72,7 +72,7 @@ import { EventTileThreadInfo, EventTileThreadPanelSummary } from "./EventTile/Ev
 import { EventTileTimestampSlot } from "./EventTile/EventTileTimestampSlot";
 import {
     EventTileViewModel,
-    type EventTileRenderState,
+    type EventTileLegacyRenderState,
     type EventTileViewModelProps,
     type EventTileViewModelDependencies,
 } from "../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
@@ -784,7 +784,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         className,
         ariaLive,
         scrollToken,
-    }: EventTileRenderState["root"]): Record<string, unknown> {
+    }: EventTileLegacyRenderState["root"]): Record<string, unknown> {
         return {
             "className": className,
             "aria-live": ariaLive,
@@ -793,7 +793,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         };
     }
 
-    private createInteractiveRootAttributes(rootRenderState: EventTileRenderState["root"]): Record<string, unknown> {
+    private createInteractiveRootAttributes(
+        rootRenderState: EventTileLegacyRenderState["root"],
+    ): Record<string, unknown> {
         return {
             ...this.createRootAttributes(rootRenderState),
             ref: this.ref,
@@ -952,6 +954,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.viewModel.setInputs(this.createViewModelDependencies(), this.createViewModelProps(renderInputs));
         const eventTileRenderState = this.viewModel.getSnapshot();
         const eventTileSnapshot = eventTileRenderState.snapshot;
+        const legacyRenderState = eventTileRenderState.legacy;
 
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
@@ -966,13 +969,13 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             );
         }
 
-        const lineClasses = eventTileRenderState.line.className;
+        const lineClasses = legacyRenderState.line.className;
         const isRenderingNotification = eventTileSnapshot.event.isRenderingNotification;
         const isSeeingThroughMessageHiddenForModeration =
             eventTileSnapshot.event.isSeeingThroughMessageHiddenForModeration;
 
         const permalink = this.getPermalink();
-        const rootRenderState = eventTileRenderState.root;
+        const rootRenderState = legacyRenderState.root;
 
         const avatarMember = this.getAvatarMember();
         const avatar = <EventTileAvatarAdapter avatarMember={avatarMember} senderSnapshot={eventTileSnapshot.sender} />;
@@ -1041,7 +1044,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         );
 
         let replyChain: JSX.Element | undefined;
-        if (eventTileSnapshot.root.data.hasReply) {
+        if (eventTileSnapshot.legacy.rootData.hasReply) {
             replyChain = (
                 <ReplyChain
                     parentEv={this.props.mxEvent}
@@ -1064,10 +1067,10 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                     this.props.as || "li",
                     {
                         ...this.createInteractiveRootAttributes(rootRenderState),
-                        "data-has-reply": eventTileSnapshot.root.data.hasReply,
-                        "data-layout": eventTileSnapshot.root.data.layout,
-                        "data-self": eventTileSnapshot.root.data.isOwnEvent,
-                        "data-event-id": eventTileSnapshot.root.data.eventId,
+                        "data-has-reply": eventTileSnapshot.legacy.rootData.hasReply,
+                        "data-layout": eventTileSnapshot.legacy.rootData.layout,
+                        "data-self": eventTileSnapshot.legacy.rootData.isOwnEvent,
+                        "data-event-id": eventTileSnapshot.legacy.rootData.eventId,
                     },
                     [
                         <div className="mx_EventTile_senderDetails" key="mx_EventTile_senderDetails">
@@ -1118,10 +1121,10 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                     {
                         ...this.createInteractiveRootAttributes(rootRenderState),
                         "tabIndex": -1,
-                        "data-layout": eventTileSnapshot.root.data.layout,
-                        "data-shape": eventTileSnapshot.root.data.shape,
-                        "data-self": eventTileSnapshot.root.data.isOwnEvent,
-                        "data-has-reply": eventTileSnapshot.root.data.hasReply,
+                        "data-layout": eventTileSnapshot.legacy.rootData.layout,
+                        "data-shape": eventTileSnapshot.legacy.rootData.shape,
+                        "data-self": eventTileSnapshot.legacy.rootData.isOwnEvent,
+                        "data-has-reply": eventTileSnapshot.legacy.rootData.hasReply,
                         "onClick": (ev: MouseEvent) => {
                             const target = ev.currentTarget as HTMLElement;
                             let index = -1;
@@ -1159,7 +1162,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             {timestamp}
                             <UnreadNotificationBadge
                                 room={room || undefined}
-                                threadId={eventTileSnapshot.root.data.eventId}
+                                threadId={eventTileSnapshot.legacy.rootData.eventId}
                                 forceDot={true}
                             />
                         </div>
@@ -1223,10 +1226,10 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                     {
                         ...this.createInteractiveRootAttributes(rootRenderState),
                         "tabIndex": -1,
-                        "data-layout": eventTileSnapshot.root.data.layout,
-                        "data-self": eventTileSnapshot.root.data.isOwnEvent,
-                        "data-event-id": eventTileSnapshot.root.data.eventId,
-                        "data-has-reply": eventTileSnapshot.root.data.hasReply,
+                        "data-layout": eventTileSnapshot.legacy.rootData.layout,
+                        "data-self": eventTileSnapshot.legacy.rootData.isOwnEvent,
+                        "data-event-id": eventTileSnapshot.legacy.rootData.eventId,
+                        "data-has-reply": eventTileSnapshot.legacy.rootData.hasReply,
                     },
                     <>
                         {ircTimestamp}
@@ -1244,7 +1247,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             {groupPadlock}
                             {replyChain}
                             {renderTile(
-                                eventTileSnapshot.root.data.shape,
+                                eventTileSnapshot.legacy.rootData.shape,
                                 this.createRenderTileProps({
                                     isSeeingThroughMessageHiddenForModeration,
                                 }),

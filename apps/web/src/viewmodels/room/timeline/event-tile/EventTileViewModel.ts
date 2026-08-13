@@ -6,9 +6,16 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import { BaseViewModel } from "@element-hq/web-shared-components";
+import {
+    BaseViewModel,
+    type EventTileRenderingMode,
+    type EventTileViewClassNames,
+    type EventTileViewLine,
+    type EventTileViewRoot,
+} from "@element-hq/web-shared-components";
 import { EventType, MsgType, type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
+import { ElementCallEventType } from "../../../../call-types";
 import {
     type EventTileSenderProfileState,
     type FooterDisplayState,
@@ -260,8 +267,8 @@ export interface EventTileEventSnapshot {
     isSeeingThroughMessageHiddenForModeration: boolean;
 }
 
-/** Plain data attributes rendered on the EventTile root element. */
-export interface EventTileRootData {
+/** Legacy data attributes rendered on the UnwrappedEventTile root element. */
+export interface EventTileLegacyRootData {
     /** The event identifier exposed through `data-event-id`. */
     eventId?: string;
     /** The configured tile layout exposed through `data-layout`. */
@@ -274,23 +281,37 @@ export interface EventTileRootData {
     hasReply: boolean;
 }
 
-/** Root state derived for the EventTile snapshot. */
-export interface EventTileRootSnapshot {
-    /** The aria-live setting used by EventTile. */
-    ariaLive?: "off";
-    /** The stable scroll token for the event. */
-    scrollToken?: string;
-    /** Plain data attributes used by the EventTile root element. */
-    data: EventTileRootData;
-    /** EventTile root CSS class flags. */
-    classState: ReturnType<typeof getEventTileClassState>;
+/** Root state derived for the EventTile snapshot, aligned with EventTileView. */
+export type EventTileRootSnapshot = Omit<EventTileViewRoot, "id" | "as" | "permalink">;
+
+/** Legacy root and line state retained while UnwrappedEventTile is being replaced. */
+export interface EventTileLegacySnapshot {
+    /** Data attributes still rendered by UnwrappedEventTile. */
+    rootData: EventTileLegacyRootData;
+    /** CSS class flags still rendered by UnwrappedEventTile. */
+    rootClassState: ReturnType<typeof getEventTileClassState>;
+    /** CSS class flags still rendered on the legacy event line. */
+    lineClassState: ReturnType<typeof getEventTileLineClassState>;
 }
 
-/** Line state derived for the EventTile snapshot. */
-export interface EventTileLineSnapshot {
-    /** EventTile line CSS class flags. */
-    classState: ReturnType<typeof getEventTileLineClassState>;
-}
+/** Fixed application class names for the shared EventTileView shell and its slot boundaries. */
+const EVENT_TILE_VIEW_CLASS_NAMES: EventTileViewClassNames = {
+    details: "mx_EventTile_details",
+    senderDetails: "mx_EventTile_senderDetails",
+    senderDetailsLink: "mx_EventTile_senderDetailsLink",
+    slotActionBar: "mx_MessageActionBar",
+    slotAvatar: "mx_EventTile_avatar",
+    slotBody: "mx_EventTile_body",
+    slotFooter: "mx_EventTile_footer",
+    slotNotificationRoomLabel: "mx_EventTile_truncated",
+    slotNotificationBadge: "mx_NotificationBadge",
+    slotPadlock: "mx_EventTile_e2eIcon",
+    slotReceipt: "mx_ReadReceiptGroup_container",
+    slotReplyChain: "mx_EventTile_reply",
+    slotSender: "mx_DisambiguatedProfile",
+    slotThreadInfo: "mx_ThreadSummary",
+    slotTimestamp: "mx_MessageTimestamp",
+};
 
 /** Sender state derived for the EventTile snapshot. */
 export interface EventTileSenderSnapshot {
@@ -341,8 +362,10 @@ export interface EventTileViewModelSnapshot {
     event: EventTileEventSnapshot;
     /** Root derived state. */
     root: EventTileRootSnapshot;
-    /** Line derived state. */
-    line: EventTileLineSnapshot;
+    /** Line state consumed directly by the shared EventTileView shell. */
+    line: EventTileViewLine;
+    /** Compatibility state for the legacy renderer. */
+    legacy: EventTileLegacySnapshot;
     /** Sender derived state. */
     sender: EventTileSenderSnapshot;
     /** Action bar derived state. */
@@ -355,11 +378,8 @@ export interface EventTileViewModelSnapshot {
     footer: EventTileFooterSnapshot;
 }
 
-/** Render-ready EventTile state consumed by the existing component. */
-export interface EventTileRenderState {
-    /** Derived EventTile view state. */
-    snapshot: EventTileViewModelSnapshot;
-    /** EventTile root render state. */
+/** Root and line state retained temporarily for the legacy UnwrappedEventTile renderer. */
+export interface EventTileLegacyRenderState {
     root: {
         /** EventTile root CSS classes. */
         className: string;
@@ -370,13 +390,32 @@ export interface EventTileRenderState {
         /** Whether the tile is rendering as a notification. */
         isRenderingNotification: boolean;
         /** Plain data attributes used by the EventTile root element. */
-        data: EventTileRootData;
+        data: EventTileLegacyRootData;
     };
-    /** EventTile line render state. */
     line: {
         /** EventTile line CSS classes. */
         className: string;
     };
+}
+
+/**
+ * Aggregate application-side render state consumed by EventTileView.
+ *
+ * The root and classNames fields intentionally follow the shared EventTileView
+ * boundary. React slots, handlers, refs, and runtime DOM identity remain with
+ * the application component that composes EventTileView.
+ */
+export interface EventTileViewModelRenderState {
+    /** Application snapshot still used to build the event-specific slots. */
+    snapshot: EventTileViewModelSnapshot;
+    /** Root state consumed directly by the shared EventTileView shell. */
+    root: Omit<EventTileViewRoot, "id" | "as" | "permalink">;
+    /** Line state consumed directly by the shared EventTileView shell. */
+    line: EventTileViewLine;
+    /** Application class names consumed by the shared EventTileView shell. */
+    classNames: EventTileViewClassNames;
+    /** Temporary compatibility state for the legacy UnwrappedEventTile renderer. */
+    legacy: EventTileLegacyRenderState;
     /** EventTile timestamp render state. */
     timestamp: EventTileTimestampSnapshot & {
         /** Whether EventTile should render the placeholder timestamp used by IRC layout. */
@@ -405,9 +444,9 @@ export interface EventTileRenderState {
 /**
  * Aggregate application-side render-state boundary for EventTile.
  *
- * SDK objects are converted to plain render data here before the existing render tree consumes it.
+ * SDK objects are converted to plain render data here before the application render tree consumes it.
  */
-export class EventTileViewModel extends BaseViewModel<EventTileRenderState, EventTileViewModelProps> {
+export class EventTileViewModel extends BaseViewModel<EventTileViewModelRenderState, EventTileViewModelProps> {
     private messageTimestampViewModel?: MessageTimestampViewModel;
     private linkedMessageTimestampViewModel?: MessageTimestampViewModel;
     private threadMessagePreviewViewModel?: ThreadMessagePreviewViewModel;
@@ -536,22 +575,34 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
     }
 
     /** Derives render-ready EventTile state from component-owned inputs. */
-    public static createRenderState(props: NormalizedEventTileViewModelProps): EventTileRenderState {
+    public static createRenderState(props: NormalizedEventTileViewModelProps): EventTileViewModelRenderState {
         const snapshot = EventTileViewModel.createSnapshot(props);
         const useIRCLayout = snapshot.timestamp.displayState.useIRCLayout;
         const showPadlock = !props.display.isBubbleMessage;
+        const rootClassName = classNames(snapshot.legacy.rootClassState);
+        const lineClassName = classNames("mx_EventTile_line", snapshot.legacy.lineClassState);
+        const eventTileClassNames: EventTileViewClassNames = {
+            ...EVENT_TILE_VIEW_CLASS_NAMES,
+            root: rootClassName,
+            line: lineClassName,
+        };
 
         return {
             snapshot,
-            root: {
-                className: classNames(snapshot.root.classState),
-                ariaLive: snapshot.root.ariaLive,
-                scrollToken: snapshot.root.scrollToken,
-                isRenderingNotification: snapshot.event.isRenderingNotification,
-                data: snapshot.root.data,
-            },
-            line: {
-                className: classNames("mx_EventTile_line", snapshot.line.classState),
+            root: snapshot.root,
+            line: snapshot.line,
+            classNames: eventTileClassNames,
+            legacy: {
+                root: {
+                    className: rootClassName,
+                    ariaLive: snapshot.root.ariaLive,
+                    scrollToken: snapshot.root.scrollToken,
+                    isRenderingNotification: snapshot.event.isRenderingNotification,
+                    data: snapshot.legacy.rootData,
+                },
+                line: {
+                    className: lineClassName,
+                },
             },
             timestamp: {
                 ...snapshot.timestamp,
@@ -672,41 +723,75 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
             eventTs: event.eventTs,
             threadReplyEventTs: timestamp.threadReplyEventTs,
         });
+        const scrollToken = getScrollToken({
+            eventId: event.eventId,
+            isLocalEcho: event.isLocalEcho,
+        });
+        const rootState: EventTileRootSnapshot["state"] = {
+            isOwnEvent: footer.isOwnEvent,
+            hasReply: event.hasReplyChain,
+            info: display.isInfoMessage,
+            bubbleContainer: display.isBubbleMessage,
+            leftAlignedBubble: display.isLeftAlignedBubbleMessage,
+            alignedBetweenBubbles: display.isAlignedBetweenBubbles,
+            noBubble: display.noBubbleEvent,
+            noSender: sender.hideSender,
+            encryptionFailure: event.isEncryptionFailure,
+            emote: sender.isEmote,
+            highlighted: display.isHighlighted,
+            selected: display.isSelected,
+            editing: event.isEditing,
+            continuation: isContinuation || event.isCallInvite || ElementCallEventType.matches(event.eventType),
+            lastInSection: display.isLastInSection,
+            contextual: display.isContextual,
+            actionBarFocused: interaction.isActionBarFocused,
+            previewClamped:
+                display.timelineRenderingType === TimelineRenderingType.ThreadsList || isRenderingNotification,
+        };
+        const lineState: EventTileViewLine = {
+            media: display.isProbablyMedia,
+            sticker: event.eventType === "m.sticker",
+            emote: sender.isEmote,
+            image: event.eventType === EventType.RoomMessage && event.msgtype === MsgType.Image,
+        };
+        const rootClassState = EventTileViewModel.getClassState({
+            event,
+            display,
+            interaction,
+            sender,
+            eventType: event.eventType,
+            msgtype: event.msgtype,
+            isSending: event.isSending,
+            isCallInvite: event.isCallInvite,
+            isContinuation,
+            isRenderingNotification,
+        });
+        const lineClassState = getEventTileLineClassState({
+            isProbablyMedia: display.isProbablyMedia,
+            eventType: event.eventType,
+            msgtype: event.msgtype,
+        });
 
         return {
             event: eventSnapshot,
             root: {
                 ariaLive: event.ariaLive,
-                scrollToken: getScrollToken({
-                    eventId: event.eventId,
-                    isLocalEcho: event.isLocalEcho,
-                }),
-                data: {
+                scrollToken,
+                eventId: event.eventId,
+                shape: EventTileViewModel.toEventTileViewShape(display.timelineRenderingType),
+                state: rootState,
+            },
+            line: lineState,
+            legacy: {
+                rootData: {
                     eventId: event.eventId,
                     layout: display.layout,
                     shape: display.timelineRenderingType,
                     isOwnEvent: footer.isOwnEvent,
                     hasReply: event.hasReplyChain,
                 },
-                classState: EventTileViewModel.getClassState({
-                    event,
-                    display,
-                    interaction,
-                    sender,
-                    eventType: event.eventType,
-                    msgtype: event.msgtype,
-                    isSending: event.isSending,
-                    isCallInvite: event.isCallInvite,
-                    isContinuation,
-                    isRenderingNotification,
-                }),
-            },
-            line: {
-                classState: getEventTileLineClassState({
-                    isProbablyMedia: display.isProbablyMedia,
-                    eventType: event.eventType,
-                    msgtype: event.msgtype,
-                }),
+                rootClassState,
+                lineClassState,
             },
             sender: {
                 senderId: sender.senderId,
@@ -759,6 +844,26 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
                 isOwnEvent: footer.isOwnEvent,
             }),
         };
+    }
+
+    private static toEventTileViewShape(shape: TimelineRenderingType): EventTileRenderingMode {
+        switch (shape) {
+            case TimelineRenderingType.Thread:
+                return "Thread";
+            case TimelineRenderingType.ThreadsList:
+                return "ThreadsList";
+            case TimelineRenderingType.File:
+                return "File";
+            case TimelineRenderingType.Notification:
+                return "Notification";
+            case TimelineRenderingType.Search:
+                return "Search";
+            case TimelineRenderingType.Pinned:
+                return "Pinned";
+            case TimelineRenderingType.Room:
+            default:
+                return "Room";
+        }
     }
 
     private static getClassState({
