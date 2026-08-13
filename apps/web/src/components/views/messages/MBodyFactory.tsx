@@ -107,7 +107,7 @@ function PreviewFileBody({ mxEvent, mediaEventHelper }: FileBodyProps): JSX.Elem
                                           label: _t("action|download"),
                                           icon: <DownloadIcon />,
                                           onClick: async () => {
-                                              downloader.download({
+                                              await downloader.download({
                                                   blob: await mediaEventHelper.sourceBlob.value, // decrypts transparently if E2EE
                                                   name: mediaEventHelper.fileName || _t("common|attachment"),
                                               });
