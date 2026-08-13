@@ -213,10 +213,29 @@ describe("TextualBodyViewModel", () => {
         ).toThrow("TextualBodyViewModel should only render pending moderation for hidden messages");
     });
 
-    it("ignores linkified root clicks", () => {
+    it("rewrites linkified permalink clicks to local hashes", () => {
         const vm = createVm();
         const preventDefault = jest.fn();
-        const transformSpy = jest.spyOn(permalinkUtils, "tryTransformPermalinkToLocalHref");
+        jest.spyOn(permalinkUtils, "tryTransformPermalinkToLocalHref").mockReturnValue("#/room/#room:example.org");
+
+        vm.onRootClick({
+            preventDefault,
+            target: {
+                dataset: {
+                    [LINKIFIED_DATA_ATTRIBUTE]: "true",
+                },
+                href: "https://matrix.to/#/#room:example.org",
+                nodeName: "A",
+            },
+        } as any);
+
+        expect(preventDefault).toHaveBeenCalled();
+        expect(window.location.hash).toBe("#/room/#room:example.org");
+    });
+
+    it("leaves linkified ordinary links alone", () => {
+        const vm = createVm();
+        const preventDefault = jest.fn();
 
         vm.onRootClick({
             preventDefault,
@@ -229,8 +248,8 @@ describe("TextualBodyViewModel", () => {
             },
         } as any);
 
-        expect(transformSpy).not.toHaveBeenCalled();
         expect(preventDefault).not.toHaveBeenCalled();
+        expect(window.location.hash).toBe("");
     });
 
     it("rewrites permalink clicks to local hashes", () => {

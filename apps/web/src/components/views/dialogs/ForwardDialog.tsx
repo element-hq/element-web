@@ -36,7 +36,7 @@ import EventTile from "../rooms/EventTile";
 import SearchBox from "../../structures/SearchBox";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
-import NotificationBadge from "../rooms/NotificationBadge";
+import { NotificationBadge } from "../rooms/NotificationBadge/NotificationBadge";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { sortRoomsByRecency } from "../../../utils/room/sortRoomsByRecency";
 import QueryMatcher from "../../../autocomplete/QueryMatcher";
@@ -138,7 +138,12 @@ const Entry: React.FC<IEntryProps<any>> = ({ room, type, content, matrixClient: 
         className = "mx_ForwardList_sendFailed";
         disabled = true;
         title = _t("timeline|send_state_failed");
-        icon = <NotificationBadge notification={StaticNotificationState.RED_EXCLAMATION} />;
+        icon = (
+            <NotificationBadge
+                notification={StaticNotificationState.RED_EXCLAMATION}
+                className="mx_ForwardDialog_notificationBadge"
+            />
+        );
     }
 
     const id = `mx_ForwardDialog_entry_${room.roomId}`;

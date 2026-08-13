@@ -627,22 +627,6 @@
     },
     "dialog_close_label": "Loka glugga",
     "download_completed": "Niðurhali lokið",
-    "emoji": {
-        "categories": "Flokkar",
-        "category_activities": "Afþreying",
-        "category_animals_nature": "Dýr og náttúra",
-        "category_flags": "Fánar",
-        "category_food_drink": "Mat og drykkur",
-        "category_frequently_used": "Oft notað",
-        "category_objects": "Hlutir",
-        "category_smileys_people": "Broskarlar og fólk",
-        "category_symbols": "Tákn",
-        "category_travel_places": "Ferðalög og staðir",
-        "quick_reactions": "Flýtiviðbrögð"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Hætta við leitina"
-    },
     "empty_room": "Tóm spjallrás",
     "empty_room_was_name": "Tóm spjallrás (var %(oldName)s)",
     "encryption": {
@@ -1172,7 +1156,6 @@
         "mark_all_read": "Merkja allt sem lesið",
         "mentions_and_keywords": "@minnst á og stikkorð",
         "mentions_keywords": "Tilvísanir og stikkorð",
-        "message_didnt_send": "Mistókst að senda skilaboð. Smelltu til að fá nánari upplýsingar.",
         "mute_description": "Þú munt ekki fá neinar tilkynningar"
     },
     "notifier": {

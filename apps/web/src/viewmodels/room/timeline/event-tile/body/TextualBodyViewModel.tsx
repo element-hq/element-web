@@ -9,7 +9,6 @@ import React, { type MouseEvent } from "react";
 import { MatrixEventEvent, MsgType, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import {
     BaseViewModel,
-    LINKIFIED_DATA_ATTRIBUTE,
     TextualBodyViewBodyWrapperKind,
     TextualBodyViewKind,
     type TextualBodyViewModel as TextualBodyViewModelInterface,
@@ -277,10 +276,6 @@ export class TextualBodyViewModel
 
     public onRootClick = (event: MouseEvent<HTMLDivElement>): void => {
         let target: HTMLLinkElement | null = event.target as HTMLLinkElement;
-
-        if (target.dataset?.[LINKIFIED_DATA_ATTRIBUTE]) {
-            return;
-        }
 
         if (target.nodeName !== "A") {
             target = target.closest<HTMLLinkElement>("a");

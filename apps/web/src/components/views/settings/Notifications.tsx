@@ -53,6 +53,7 @@ import { SettingsSubsection } from "./shared/SettingsSubsection";
 import { doesRoomHaveUnreadMessages } from "../../../Unread";
 import SettingsFlag from "../elements/SettingsFlag";
 import { onSubmitPreventDefault } from "../../../utils/form.ts";
+import { keywordRuleId } from "../../../models/notificationsettings/keywordRuleId.ts";
 
 // TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.
@@ -564,13 +565,16 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
                 ruleVectorState = existingRuleVectorState ?? VectorState.On; //default
             }
             const kind = PushRuleKind.ContentSpecific;
+            const ruleIds = new Set(originalRules.map((r) => r.rule_id));
             for (const word of diff.added) {
-                await MatrixClientPeg.safeGet().addPushRule("global", kind, word, {
+                const ruleId = keywordRuleId(word, ruleIds);
+                ruleIds.add(ruleId);
+                await MatrixClientPeg.safeGet().addPushRule("global", kind, ruleId, {
                     actions: PushRuleVectorState.actionsFor(ruleVectorState),
                     pattern: word,
                 });
                 if (ruleVectorState === VectorState.Off) {
-                    await MatrixClientPeg.safeGet().setPushRuleEnabled("global", kind, word, false);
+                    await MatrixClientPeg.safeGet().setPushRuleEnabled("global", kind, ruleId, false);
                 }
             }
 

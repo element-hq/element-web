@@ -31,6 +31,12 @@ Please see LICENSE files in the repository root for full details.
     }
 }
 
+/* Medium rather than the bold every other auth error uses: this one sits directly above the button it
+   is disabling, and does not need to shout over it. Scoped so the login errors keep their weight. */
+.mx_Login_error.mx_Registration_rateLimitError {
+    font-weight: var(--cpd-font-weight-medium);
+}
+
 .mx_Register_footerActions {
     display: flex;
     flex-direction: row;

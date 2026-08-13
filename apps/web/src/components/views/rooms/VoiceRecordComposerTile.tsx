@@ -23,7 +23,7 @@ import RecordingPlayback, { PlaybackLayout } from "../audio_messages/RecordingPl
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../MediaDeviceHandler";
-import NotificationBadge from "./NotificationBadge";
+import { NotificationBadge } from "./NotificationBadge/NotificationBadge";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
 import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
 import InlineSpinner from "../elements/InlineSpinner";

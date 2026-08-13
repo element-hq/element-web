@@ -655,6 +655,7 @@ class RoomPreviewBar extends React.Component<IProps, IState> {
             if (!Array.isArray(subTitle)) {
                 subTitle = [subTitle];
             }
+            // oxlint-disable-next-line react/no-array-index-key
             subTitleElements = subTitle.map((t, i) => <p key={`subTitle${i}`}>{t}</p>);
         }
 
