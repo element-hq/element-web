@@ -45,7 +45,7 @@ export function setupLanguageMock() {
 
     fetchMock
         .get(
-            "end:/i18n/languages.json",
+            "end:/i18n/languages.json?*",
             {
                 en: "en_EN.json",
                 de: "de_DE.json",
