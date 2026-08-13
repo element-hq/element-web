@@ -12,7 +12,9 @@ import {
     Direction,
     EventType,
     MatrixEvent,
+    MatrixEventEvent,
     PendingEventOrdering,
+    ReceiptType,
     Room,
     RoomEvent,
     type MatrixClient,
@@ -45,6 +47,26 @@ describe("RoomTimelineViewModel", () => {
             ts: opts.ts,
         });
 
+    /**
+     * A message that is encrypted and has not decrypted yet, so the view model holds it back.
+     * Call the returned `decrypt()` to make it readable and fire the SDK's Decrypted event.
+     */
+    const makeEncryptedPending = (id: string): { event: MatrixEvent; decrypt: () => void } => {
+        const event = makeMessage(id);
+        let decrypted = false;
+        vi.spyOn(event, "getWireType").mockReturnValue(EventType.RoomMessageEncrypted);
+        vi.spyOn(event, "isEncrypted").mockReturnValue(true);
+        vi.spyOn(event, "isDecryptionFailure").mockReturnValue(false);
+        vi.spyOn(event, "getClearContent").mockImplementation(() => (decrypted ? { body: "secret" } : null) as any);
+        return {
+            event,
+            decrypt: () => {
+                decrypted = true;
+                client.emit(MatrixEventEvent.Decrypted, event);
+            },
+        };
+    };
+
     /** Put `events` into the room's live timeline, oldest first. */
     const seedTimeline = (events: MatrixEvent[]): void => {
         const timelineSet = room.getUnfilteredTimelineSet();
@@ -66,17 +88,21 @@ describe("RoomTimelineViewModel", () => {
 
     const kinds = (items: TimelineItem[]): string[] => items.map((i) => i.kind);
 
+    /** Position of a message in the rendered list, which also contains date separators etc. */
+    const indexOfKey = (items: TimelineItem[], key: string): number => items.findIndex((i) => i.key === key);
+
     beforeEach(() => {
         vms = [];
         client = createTestClient();
         room = new Room(ROOM_ID, client, USER_ID, { pendingEventOrdering: PendingEventOrdering.Detached });
         vi.spyOn(client, "getRoom").mockReturnValue(room);
 
-        // The VM reads a handful of settings while building items; default them all off
-        // so a test only has to opt in to the one it cares about.
+        // The only two settings the view model reads, at their real-world defaults. A test that
+        // cares about either one overrides this.
         vi.mocked(SettingsStore).getValue.mockImplementation((key): any => {
+            if (key === "sendReadReceipts") return true;
             if (key === "showHiddenEventsInTimeline") return false;
-            return false;
+            return undefined;
         });
         vi.mocked(SettingsStore).watchSetting.mockReturnValue("watch-ref");
         vi.mocked(SettingsStore).unwatchSetting.mockImplementation(() => {});
@@ -287,6 +313,83 @@ describe("RoomTimelineViewModel", () => {
         });
     });
 
+    describe("pagination (continued)", () => {
+        /** Point the window's paginate/canPaginate at test doubles. */
+        const stubWindow = (
+            vm: RoomTimelineViewModel,
+            opts: { canPaginate: Direction[]; paginate?: () => Promise<boolean> },
+        ): { paginate: ReturnType<typeof vi.fn> } => {
+            const tw = (vm as any).timelineWindow;
+            const paginate = vi.fn(opts.paginate ?? (() => Promise.resolve(false)));
+            vi.spyOn(tw, "paginate").mockImplementation(paginate);
+            vi.spyOn(tw, "canPaginate").mockImplementation((...args: unknown[]) =>
+                opts.canPaginate.includes(args[0] as Direction),
+            );
+            return { paginate };
+        };
+
+        it("asks for newer messages when the bottom of the list is reached", async () => {
+            seedTimeline([makeMessage("$a")]);
+            const vm = await createStartedViewModel();
+            vm.onAnchorReached();
+            const { paginate } = stubWindow(vm, { canPaginate: [Direction.Forward] });
+
+            vm.onEndReached();
+
+            await vi.waitFor(() => expect(paginate).toHaveBeenCalledWith(Direction.Forward, expect.any(Number)));
+        });
+
+        it("does not ask for newer messages once the latest is loaded", async () => {
+            seedTimeline([makeMessage("$a")]);
+            const vm = await createStartedViewModel();
+            vm.onAnchorReached();
+            const { paginate } = stubWindow(vm, { canPaginate: [] });
+
+            vm.onEndReached();
+
+            expect(paginate).not.toHaveBeenCalled();
+        });
+
+        it("clears the spinner when fetching fails", async () => {
+            seedTimeline([makeMessage("$a")]);
+            const vm = await createStartedViewModel();
+            vm.onAnchorReached();
+            stubWindow(vm, {
+                canPaginate: [Direction.Backward],
+                paginate: () => Promise.reject(new Error("network went away")),
+            });
+
+            vm.onStartReached();
+
+            // The failure must not leave a spinner stuck in the list forever.
+            await vi.waitFor(() => expect(kinds(vm.getSnapshot().items)).not.toContain("loading"));
+        });
+
+        it("waits for a fetched message to decrypt before showing it", async () => {
+            seedTimeline([makeMessage("$a")]);
+            const vm = await createStartedViewModel();
+            vm.onAnchorReached();
+
+            const tw = (vm as any).timelineWindow;
+            const existing = tw.getEvents();
+            const { event: encrypted, decrypt } = makeEncryptedPending("$enc");
+            let fetched = false;
+            vi.spyOn(tw, "canPaginate").mockImplementation((...a: unknown[]) => a[0] === Direction.Backward);
+            vi.spyOn(tw, "paginate").mockImplementation(async () => {
+                fetched = true;
+                return false;
+            });
+            vi.spyOn(tw, "getEvents").mockImplementation(() => (fetched ? [encrypted, ...existing] : existing));
+
+            vm.onStartReached();
+            // Let the fetch land, then decrypt while the view model is still waiting on it.
+            await vi.waitFor(() => expect(fetched).toBe(true));
+            decrypt();
+
+            await vi.waitFor(() => expect(eventKeys(vm.getSnapshot().items)).toContain("$enc"));
+        });
+    });
+
     describe("scroll reporting", () => {
         it("clears the pending anchor once the view reports it has arrived", async () => {
             seedTimeline([makeMessage("$a"), makeMessage("$b")]);
@@ -361,6 +464,40 @@ describe("RoomTimelineViewModel", () => {
             expect(scrollNow).toHaveBeenCalledWith(expect.objectContaining({ targetKey: "read-marker" }));
         });
 
+        it("offers a jump when the marker is older than the loaded messages", async () => {
+            seedTimeline([makeMessage("$a"), makeMessage("$b")]);
+            room.addAccountData([
+                new MatrixEvent({ type: EventType.FullyRead, room_id: ROOM_ID, content: { event_id: "$gone" } }),
+            ]);
+            const vm = await createStartedViewModel();
+            vm.onAnchorReached();
+            // The marker is not among the loaded messages, and there is older history behind us.
+            const tw = (vm as any).timelineWindow;
+            vi.spyOn(tw, "canPaginate").mockImplementation((...a: unknown[]) => a[0] === Direction.Backward);
+
+            vm.onVisibleRangeChanged(0, vm.getSnapshot().items.length - 1);
+
+            expect(vm.getSnapshot().canJumpToReadMarker).toBe("above");
+        });
+
+        it("reloads the timeline when the marker is not loaded", async () => {
+            seedTimeline([makeMessage("$a"), makeMessage("$b")]);
+            room.addAccountData([
+                new MatrixEvent({ type: EventType.FullyRead, room_id: ROOM_ID, content: { event_id: "$b" } }),
+            ]);
+            const vm = await createStartedViewModel();
+            vm.onAnchorReached();
+            // Marker exists but its row is not in the list, so it cannot simply be scrolled to.
+            (vm as any).baseItems = [];
+            (vm as any).republish("test");
+            const scrollNow = vi.fn();
+
+            vm.onJumpToReadMarker(scrollNow);
+
+            // Falls back to fetching around the marker rather than scrolling nowhere.
+            expect(scrollNow).not.toHaveBeenCalled();
+        });
+
         it("removes the marker when everything is marked as read", async () => {
             seedTimeline([makeMessage("$a"), makeMessage("$b")]);
             room.addAccountData([
@@ -379,6 +516,104 @@ describe("RoomTimelineViewModel", () => {
         });
     });
 
+    describe("decryption", () => {
+        it("holds back a message that has not decrypted yet", async () => {
+            const { event } = makeEncryptedPending("$enc");
+            seedTimeline([makeMessage("$a"), event]);
+
+            const vm = await createStartedViewModel();
+
+            expect(eventKeys(vm.getSnapshot().items)).not.toContain("$enc");
+        });
+
+        it("shows it once it decrypts, without needing a scroll or a new message", async () => {
+            const { event, decrypt } = makeEncryptedPending("$enc");
+            seedTimeline([makeMessage("$a"), event]);
+            const vm = await createStartedViewModel();
+            expect(eventKeys(vm.getSnapshot().items)).not.toContain("$enc");
+
+            decrypt();
+
+            await vi.waitFor(() => expect(eventKeys(vm.getSnapshot().items)).toContain("$enc"));
+        });
+
+        it("shows a message that failed to decrypt rather than hiding it", async () => {
+            // A failure may never resolve, so hiding it would silently drop the message.
+            const failed = makeMessage("$utd");
+            vi.spyOn(failed, "getWireType").mockReturnValue(EventType.RoomMessageEncrypted);
+            vi.spyOn(failed, "isEncrypted").mockReturnValue(true);
+            vi.spyOn(failed, "isDecryptionFailure").mockReturnValue(true);
+            seedTimeline([makeMessage("$a"), failed]);
+
+            const vm = await createStartedViewModel();
+
+            expect(eventKeys(vm.getSnapshot().items)).toContain("$utd");
+        });
+
+        it("ignores decryption of a message outside the loaded window", async () => {
+            seedTimeline([makeMessage("$a")]);
+            const vm = await createStartedViewModel();
+            const before = vm.getSnapshot().items;
+
+            const stranger = makeMessage("$elsewhere");
+            client.emit(MatrixEventEvent.Decrypted, stranger);
+
+            expect(vm.getSnapshot().items).toBe(before);
+        });
+    });
+
+    describe("read receipts", () => {
+        const flushReceiptDebounce = async (): Promise<void> => {
+            await vi.waitFor(() => expect(client.sendReadReceipt).toHaveBeenCalled(), { timeout: 2000 });
+        };
+
+        it("sends a receipt for the bottommost visible message", async () => {
+            seedTimeline([makeMessage("$a"), makeMessage("$b")]);
+            const vm = await createStartedViewModel();
+            vm.onAnchorReached();
+
+            vm.onVisibleRangeChanged(0, vm.getSnapshot().items.length - 1);
+
+            await flushReceiptDebounce();
+            const [receiptedEvent, receiptType] = vi.mocked(client.sendReadReceipt).mock.calls[0];
+            expect(receiptedEvent?.getId()).toBe("$b");
+            expect(receiptType).toBe(ReceiptType.Read);
+        });
+
+        it("sends a private receipt when the user has read receipts turned off", async () => {
+            vi.mocked(SettingsStore).getValue.mockImplementation((key): any => {
+                if (key === "sendReadReceipts") return false;
+                if (key === "showHiddenEventsInTimeline") return false;
+                return undefined;
+            });
+            seedTimeline([makeMessage("$a"), makeMessage("$b")]);
+            const vm = await createStartedViewModel();
+            vm.onAnchorReached();
+
+            vm.onVisibleRangeChanged(0, vm.getSnapshot().items.length - 1);
+
+            await flushReceiptDebounce();
+            expect(client.sendReadReceipt).toHaveBeenCalledWith(expect.anything(), ReceiptType.ReadPrivate);
+        });
+
+        it("does not move the receipt backwards when the user scrolls up", async () => {
+            seedTimeline([makeMessage("$a"), makeMessage("$b"), makeMessage("$c")]);
+            const vm = await createStartedViewModel();
+            vm.onAnchorReached();
+            const items = vm.getSnapshot().items;
+
+            vm.onVisibleRangeChanged(0, items.length - 1);
+            await flushReceiptDebounce();
+            const callsAfterBottom = vi.mocked(client.sendReadReceipt).mock.calls.length;
+
+            // Scroll back up: the bottommost visible message is now an older one.
+            vm.onVisibleRangeChanged(0, 0);
+            await new Promise((r) => setTimeout(r, 700));
+
+            expect(vi.mocked(client.sendReadReceipt).mock.calls.length).toBe(callsAfterBottom);
+        });
+    });
+
     describe("dispose", () => {
         it("stops listening to the room", async () => {
             seedTimeline([makeMessage("$a")]);
@@ -388,6 +623,53 @@ describe("RoomTimelineViewModel", () => {
             vm.dispose();
 
             expect(room.listenerCount(RoomEvent.Timeline)).toBeLessThan(before);
+        });
+
+        it("remembers where the reader got to, so the next visit resumes there", async () => {
+            seedTimeline([makeMessage("$a"), makeMessage("$b"), makeMessage("$c")]);
+            const vm = await createStartedViewModel();
+            vm.onAnchorReached();
+            vm.onAtBottomStateChange(false);
+            vm.onVisibleRangeChanged(0, indexOfKey(vm.getSnapshot().items, "$b"));
+
+            vm.dispose();
+
+            expect(localStorage.getItem(`timeline_scroll_${ROOM_ID}`)).toBe("$b");
+        });
+
+        it("forgets the position when the reader was already at the bottom", async () => {
+            localStorage.setItem(`timeline_scroll_${ROOM_ID}`, "$a");
+            seedTimeline([makeMessage("$a"), makeMessage("$b")]);
+            const vm = await createStartedViewModel();
+            vm.onAnchorReached();
+            vm.onVisibleRangeChanged(0, vm.getSnapshot().items.length - 1);
+            vm.onAtBottomStateChange(true);
+
+            vm.dispose();
+
+            // Nothing saved means the next visit starts at the newest message.
+            expect(localStorage.getItem(`timeline_scroll_${ROOM_ID}`)).toBeNull();
+        });
+
+        it("moves the unread marker to what the reader actually saw", async () => {
+            seedTimeline([makeMessage("$a"), makeMessage("$b")]);
+            const vm = await createStartedViewModel();
+            vm.onAnchorReached();
+            vm.onVisibleRangeChanged(0, indexOfKey(vm.getSnapshot().items, "$b"));
+
+            vm.dispose();
+
+            expect(client.setRoomReadMarkers).toHaveBeenCalledWith(ROOM_ID, "$b");
+        });
+
+        it("leaves a saved position alone when nothing was ever visible", async () => {
+            localStorage.setItem(`timeline_scroll_${ROOM_ID}`, "$a");
+            seedTimeline([makeMessage("$a")]);
+            const vm = await createStartedViewModel();
+
+            vm.dispose();
+
+            expect(localStorage.getItem(`timeline_scroll_${ROOM_ID}`)).toBe("$a");
         });
 
         it("ignores late events that arrive after disposal", async () => {
