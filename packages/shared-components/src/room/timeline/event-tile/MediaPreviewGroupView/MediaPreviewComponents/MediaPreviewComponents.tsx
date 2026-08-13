@@ -139,7 +139,7 @@ function useIsValid(check: (src: string) => Promise<boolean>, src: string): Vali
 
     useEffect(() => {
         let cancelled = false;
-        check(src).then((value) => {
+        void check(src).then((value) => {
             if (!cancelled) setState({ valid: value, src });
         });
 
