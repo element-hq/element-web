@@ -21,6 +21,7 @@ import {
     EventPresentationProvider,
     I18nApi,
     I18nContext,
+    LinkedTextContext,
     type EventPresentation,
 } from "../..";
 
@@ -43,15 +44,13 @@ const wrapWithTooltipProvider = (Wrapper: RenderOptions["wrapper"], presentation
             <TooltipProvider>{children}</TooltipProvider>
         );
 
-        if (Wrapper) {
-            return (
-                <I18nContext.Provider value={i18nApi}>
-                    <Wrapper>{content}</Wrapper>
-                </I18nContext.Provider>
-            );
-        } else {
-            return <I18nContext.Provider value={i18nApi}>{content}</I18nContext.Provider>;
-        }
+        const wrapped = Wrapper ? <Wrapper>{content}</Wrapper> : content;
+
+        return (
+            <I18nContext.Provider value={i18nApi}>
+                <LinkedTextContext.Provider value={{}}>{wrapped}</LinkedTextContext.Provider>
+            </I18nContext.Provider>
+        );
     };
 };
 

@@ -48,11 +48,11 @@ exports[`ImagePreviewTile > renders the default story with its image 1`] = `
           >
             annual-report.pdf
           </div>
-          <div
-            class="MediaPreviewComponents-module_body"
+          <p
+            class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkedText-module_container MediaPreviewComponents-module_body"
           >
             2.3 MB
-          </div>
+          </p>
         </div>
       </div>
       <div
@@ -127,11 +127,11 @@ exports[`MediaPreviewTile > renders the icon and text content without any media 
           >
             annual-report.pdf
           </div>
-          <div
-            class="MediaPreviewComponents-module_body"
+          <p
+            class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkedText-module_container MediaPreviewComponents-module_body"
           >
             2.3 MB
-          </div>
+          </p>
         </div>
       </div>
     </div>
@@ -179,11 +179,11 @@ exports[`TextPreviewTile > renders the default story 1`] = `
           >
             annual-report.pdf
           </div>
-          <div
-            class="MediaPreviewComponents-module_body"
+          <p
+            class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkedText-module_container MediaPreviewComponents-module_body"
           >
             2.3 MB
-          </div>
+          </p>
         </div>
       </div>
       <div
