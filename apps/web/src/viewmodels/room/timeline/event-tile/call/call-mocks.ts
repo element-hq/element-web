@@ -5,10 +5,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { EventEmitter } from "events";
+import { EventEmitter } from "node:events";
 import { type RoomMember, type MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 
-import { mkEvent } from "../../../../../../test/test-utils";
+import { mkEvent, mkRoomMember } from "../../../../../../test/test-utils";
 import { type ElementCall } from "../../../../../models/Call";
 import type { CallStore } from "../../../../../stores/CallStore";
 import type { CallMembership, MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
@@ -47,6 +47,12 @@ export function getMockedRtcDeclineEvent(rtcNotificationEvent: MatrixEvent, send
         event: true,
     });
     return mockEvent;
+}
+
+export function getMockedMember(roomId: string, userId: string, name: string): RoomMember {
+    const member = mkRoomMember(roomId, userId);
+    member.name = name;
+    return member;
 }
 
 interface MockCallStoreType extends CallStore {

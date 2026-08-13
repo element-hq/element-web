@@ -17,7 +17,7 @@ import { MemberListStore } from "../stores/MemberListStore";
 import { RoomNotificationStateStore } from "../stores/notifications/RoomNotificationStateStore";
 import RightPanelStore from "../stores/right-panel/RightPanelStore";
 import { RoomViewStore } from "../stores/RoomViewStore";
-import SpaceStore, { type SpaceStoreClass } from "../stores/spaces/SpaceStore";
+import SpaceStore from "../stores/spaces/SpaceStore";
 import TypingStore from "../stores/TypingStore";
 import { UserProfilesStore } from "../stores/UserProfilesStore";
 import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
@@ -30,6 +30,8 @@ import { Action } from "../dispatcher/actions.ts";
 import { type OnLoggedInPayload } from "../dispatcher/payloads/OnLoggedInPayload.ts";
 import Notifier from "../Notifier.ts";
 import SettingController from "../settings/controllers/SettingController.ts";
+import { CallStore } from "../stores/CallStore";
+import { LatestRtcNotificationEventStore } from "../stores/LatestRtcNotificationEventStore";
 
 /**
  * A class which (mostly) lazily initialises stores as and when they are requested, ensuring they remain
@@ -65,13 +67,15 @@ export class SDKContextClass {
     protected _WidgetStore?: WidgetStore;
     protected _PosthogAnalytics?: PosthogAnalytics;
     protected _SlidingSyncManager?: SlidingSyncManager;
-    protected _SpaceStore?: SpaceStoreClass;
+    protected _SpaceStore?: SpaceStore;
     protected _LegacyCallHandler?: LegacyCallHandler;
     protected _TypingStore?: TypingStore;
     protected _UserProfilesStore?: UserProfilesStore;
     protected _ResizeNotifier?: ResizeNotifier;
     protected _MultiRoomViewStore?: MultiRoomViewStore;
     protected _Notifier?: Notifier;
+    protected _CallStore?: CallStore;
+    protected _LatestRtcNotificationEventStore?: LatestRtcNotificationEventStore;
 
     public constructor() {
         SettingController.sdkContext = this;
@@ -153,9 +157,10 @@ export class SDKContextClass {
         }
         return this._SlidingSyncManager;
     }
-    public get spaceStore(): SpaceStoreClass {
+    public get spaceStore(): SpaceStore {
         if (!this._SpaceStore) {
-            this._SpaceStore = SpaceStore.instance;
+            this._SpaceStore = new SpaceStore(defaultDispatcher, this);
+            this._SpaceStore.start();
         }
         return this._SpaceStore;
     }
@@ -200,6 +205,19 @@ export class SDKContextClass {
             this._Notifier = new Notifier(defaultDispatcher, this);
         }
         return this._Notifier;
+    }
+
+    public get callStore(): CallStore {
+        this._CallStore ??= CallStore.instance;
+        return this._CallStore;
+    }
+
+    public get latestRtcNotificationEventStore(): LatestRtcNotificationEventStore {
+        if (!this._LatestRtcNotificationEventStore) {
+            this._LatestRtcNotificationEventStore = new LatestRtcNotificationEventStore(this.callStore);
+            this._LatestRtcNotificationEventStore.start();
+        }
+        return this._LatestRtcNotificationEventStore;
     }
 
     public onLoggedOut(): void {

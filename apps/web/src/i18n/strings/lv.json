@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Emocijzīmju atlasītājs",
         "jump_first_invite": "Pārlēkt uz pirmo uzaicinājumu.",
         "message_composer": "Ziņas sastādītājs",
         "n_unread_messages": {
@@ -451,7 +450,6 @@
         "encrypted": "Šifrēts",
         "error": "Kļūda",
         "faq": "BUJ",
-        "favourites": "Izlase",
         "feedback": "Atsauksmes",
         "filter_results": "Filtrēt rezultātus",
         "forward_message": "Pārsūtīt ziņu",
@@ -475,7 +473,6 @@
         "message_layout": "Ziņas izkārtojums",
         "message_timestamp_invalid": "Nederīgs laikspiedols",
         "microphone": "Mikrofons",
-        "model": "Modelis",
         "modern": "Mūsdienīgs",
         "mute": "Apklusināt",
         "n_members": {
@@ -787,22 +784,6 @@
     },
     "dialog_close_label": "Aizvērt dialoglodziņu",
     "download_completed": "Lejupielāde pabeigta",
-    "emoji": {
-        "categories": "Kategorijas",
-        "category_activities": "Aktivitātes",
-        "category_animals_nature": "Dzīvnieki un daba",
-        "category_flags": "Karogi",
-        "category_food_drink": "Pārtika un dzērieni",
-        "category_frequently_used": "Bieži lietotas",
-        "category_objects": "Objekti",
-        "category_smileys_people": "Smaidiņi & cilvēki",
-        "category_symbols": "Simboli",
-        "category_travel_places": "Ceļojumi un vietas",
-        "quick_reactions": "Ātra reaģēšana"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Atcelt meklējumu"
-    },
     "empty_room": "Tukša istaba",
     "empty_room_was_name": "Tukša istaba (bija %(oldName)s)",
     "encryption": {
@@ -1368,7 +1349,6 @@
         "mentions_and_keywords": "@pieminēšana un atslēgvārdi",
         "mentions_and_keywords_description": "Saņemt paziņojumus tikai par pieminēšanu un atslēgvārdiem, kā tas ir norādīts <a>iestatījumos</a>.",
         "mentions_keywords": "Pieminēšana un atslēgvārdi",
-        "message_didnt_send": "Ziņa netika nosūtīta. Noklikšķiniet, lai iegūtu vairāk informācijas.",
         "mute_description": "Jūs nesaņemsit nekādus paziņojumus"
     },
     "notifier": {
@@ -2243,7 +2223,6 @@
         "send_typing_notifications": "Sūtīt paziņojumus par rakstīšanu",
         "sessions": {
             "best_security_note": "Visdrošāk ir apliecināt savas sesijas un atteikties no jebkuras sesijas, kas nav atpazīstama vai netiek vairs izmantota.",
-            "browser": "Pārlūks",
             "confirm_sign_out": {
                 "zero": "Jāapstiprina atteikšanās no šīm ierīcēm.",
                 "one": "Jāapstiprina atteikšanās no šīs ierīces.",
@@ -2297,7 +2276,6 @@
             "no_sessions": "Netika atrasta neviena sesija.",
             "no_unverified_sessions": "Netika atrasta neviena neapliecināta sesija.",
             "no_verified_sessions": "Netika atrasta neviena apliecināta sesija.",
-            "os": "Operētājsistēma",
             "other_sessions_heading": "Citas sesijas",
             "push_heading": "Pašpiegādes paziņojumi",
             "push_subheading": "Saņemt pašpiegādes paziņojumus šajā sesijā.",

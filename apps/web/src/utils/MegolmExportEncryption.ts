@@ -108,7 +108,7 @@ export async function decryptMegolmKeyFile(data: ArrayBuffer, password: string):
 export async function encryptMegolmKeyFile(
     data: string,
     password: string,
-    options?: { kdf_rounds?: number }, // eslint-disable-line camelcase
+    options?: { kdf_rounds?: number },
 ): Promise<ArrayBuffer> {
     options = options || {};
     const kdfRounds = options.kdf_rounds || 500000;

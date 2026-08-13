@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Emoji-Auswahl",
         "jump_first_invite": "Zur ersten Einladung springen.",
         "message_composer": "Texteingabefeld",
         "n_unread_messages": {
@@ -467,7 +466,6 @@
         "encrypted": "Verschlüsselt",
         "error": "Fehler",
         "faq": "Häufige Fragen",
-        "favourites": "Favoriten",
         "feedback": "Rückmeldung",
         "filter_results": "Ergebnisse filtern",
         "forward_message": "Nachricht weiterleiten",
@@ -491,7 +489,6 @@
         "message_layout": "Nachrichtenlayout",
         "message_timestamp_invalid": "Ungültiger Zeitstempel",
         "microphone": "Mikrofon",
-        "model": "Modell",
         "moderation_and_safety": "Moderation und Sicherheit",
         "modern": "Modern",
         "mute": "Stummschalten",
@@ -889,22 +886,6 @@
     },
     "dialog_close_label": "Dialog schließen",
     "download_completed": "Herunterladen fertiggestellt",
-    "emoji": {
-        "categories": "Kategorien",
-        "category_activities": "Aktivitäten",
-        "category_animals_nature": "Tiere und Natur",
-        "category_flags": "Flaggen",
-        "category_food_drink": "Essen und Trinken",
-        "category_frequently_used": "Oft verwendet",
-        "category_objects": "Objekte",
-        "category_smileys_people": "Smileys und Leute",
-        "category_symbols": "Symbole",
-        "category_travel_places": "Reisen und Orte",
-        "quick_reactions": "Schnelle Reaktionen"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Suche abbrechen"
-    },
     "empty_room": "Leerer Chat",
     "empty_room_was_name": "Leerer Chat (war %(oldName)s)",
     "encryption": {
@@ -1670,7 +1651,6 @@
         "mentions_and_keywords": "@Erwähnungen und Schlüsselwörter",
         "mentions_and_keywords_description": "Nur bei Erwähnungen und Schlüsselwörtern benachrichtigen, die du in den <a>Einstellungen</a> konfigurieren kannst",
         "mentions_keywords": "Erwähnungen und Schlüsselwörter",
-        "message_didnt_send": "Nachricht nicht gesendet. Klicke für Details.",
         "mute_description": "Du wirst keine Benachrichtigungen erhalten"
     },
     "notifier": {
@@ -2779,7 +2759,6 @@
         "send_typing_notifications": "Tippbenachrichtigungen senden",
         "sessions": {
             "best_security_note": "Für beste Sicherheit verifiziere deine Sitzungen und melde dich von allen Sitzungen ab, die du nicht erkennst oder nicht mehr verwendest.",
-            "browser": "Internet Browser",
             "confirm_sign_out": {
                 "one": "Abmelden des Geräts bestätigen",
                 "other": "Abmelden dieser Geräte bestätigen"
@@ -2830,7 +2809,6 @@
             "no_sessions": "Keine Sitzungen gefunden.",
             "no_unverified_sessions": "Keine unverifizierten Sitzungen gefunden.",
             "no_verified_sessions": "Keine verifizierten Sitzungen gefunden.",
-            "os": "Betriebssystem",
             "other_sessions_heading": "Andere Sitzungen",
             "push_heading": "Push-Benachrichtigungen",
             "push_subheading": "Erhalte Push-Benachrichtigungen in dieser Sitzung.",

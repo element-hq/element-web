@@ -48,7 +48,7 @@ test.describe("Room list filters and sort", () => {
         We will also send a simple message in this room.
         */
         const oldRoomId = await app.client.createRoom({ name: "Old Room" });
-        await app.client.inviteUser(oldRoomId, bot.credentials.userId);
+        await app.client.inviteUser(oldRoomId, bot.credentials!.userId);
         await bot.joinRoom(oldRoomId);
         const response = await app.client.sendMessage(oldRoomId, "Hello!");
 
@@ -99,8 +99,8 @@ test.describe("Room list filters and sort", () => {
     });
 
     test.describe("Room list", () => {
-        let unReadDmId: string | undefined;
-        let unReadRoomId: string | undefined;
+        let unReadDmId: string;
+        let unReadRoomId: string;
 
         test.beforeEach(async ({ page, app, bot, user }) => {
             await app.client.createRoom({ name: "empty room" });
@@ -114,7 +114,7 @@ test.describe("Room list filters and sort", () => {
             await bot.sendMessage(unReadDmId, "I am a robot. Beep.");
 
             unReadRoomId = await app.client.createRoom({ name: "unread room" });
-            await app.client.inviteUser(unReadRoomId, bot.credentials.userId);
+            await app.client.inviteUser(unReadRoomId, bot.credentials!.userId);
             await bot.joinRoom(unReadRoomId);
             await bot.sendMessage(unReadRoomId, "I am a robot. Beep.");
 
@@ -135,7 +135,7 @@ test.describe("Room list filters and sort", () => {
             });
 
             const mentionRoomId = await app.client.createRoom({ name: "room with mention" });
-            await app.client.inviteUser(mentionRoomId, bot.credentials.userId);
+            await app.client.inviteUser(mentionRoomId, bot.credentials!.userId);
             await bot.joinRoom(mentionRoomId);
 
             const clientBot = await bot.prepareClient();
@@ -214,7 +214,7 @@ test.describe("Room list filters and sort", () => {
                 // Let's configure unread dm room so that we only get notification for mentions and keywords
                 await app.viewRoomById(unReadDmId);
                 await app.settings.openRoomSettings("Notifications");
-                await page.getByText("@mentions & keywords").click();
+                await page.getByText("@mentions and replies").click();
                 await app.settings.closeDialog();
 
                 // Let's open a room other than unread room or unread dm

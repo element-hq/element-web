@@ -14,7 +14,6 @@ import StyledRadioGroup, { type IDefinition } from "../elements/StyledRadioGroup
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import RoomAvatar from "../avatars/RoomAvatar";
-import SpaceStore from "../../../stores/spaces/SpaceStore";
 import Modal from "../../../Modal";
 import ManageRestrictedJoinRuleDialog from "../dialogs/ManageRestrictedJoinRuleDialog";
 import RoomUpgradeWarningDialog, { type IFinishedOpts } from "../dialogs/RoomUpgradeWarningDialog";
@@ -28,6 +27,7 @@ import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPaylo
 import { doesRoomVersionSupport, PreferredRoomVersions } from "../../../utils/PreferredRoomVersions";
 import SettingsStore from "../../../settings/SettingsStore";
 import LabelledCheckbox from "../elements/LabelledCheckbox";
+import { SDKContextClass } from "../../../contexts/SDKContextClass.ts";
 
 export interface JoinRuleSettingsProps {
     room: Room;
@@ -92,8 +92,8 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
 
     const editRestrictedRoomIds = async (): Promise<string[] | undefined> => {
         let selected = restrictedAllowRoomIds;
-        if (!selected?.length && SpaceStore.instance.activeSpaceRoom) {
-            selected = [SpaceStore.instance.activeSpaceRoom.roomId];
+        if (!selected?.length && SDKContextClass.instance.spaceStore.activeSpaceRoom) {
+            selected = [SDKContextClass.instance.spaceStore.activeSpaceRoom.roomId];
         }
 
         const { finished } = Modal.createDialog(
@@ -296,12 +296,12 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
                     </div>
                 </div>
             );
-        } else if (SpaceStore.instance.activeSpaceRoom) {
+        } else if (SDKContextClass.instance.spaceStore.activeSpaceRoom) {
             description = _t(
                 "room_settings|security|join_rule_restricted_description_active_space",
                 {},
                 {
-                    spaceName: () => <strong>{SpaceStore.instance.activeSpaceRoom!.name}</strong>,
+                    spaceName: () => <strong>{SDKContextClass.instance.spaceStore.activeSpaceRoom!.name}</strong>,
                 },
             );
         } else {
@@ -365,9 +365,9 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
 
                 let warning: JSX.Element | undefined;
                 const userId = cli.getUserId()!;
-                const unableToUpdateSomeParents = Array.from(SpaceStore.instance.getKnownParents(room.roomId)).some(
-                    (roomId) => !cli.getRoom(roomId)?.currentState.maySendStateEvent(EventType.SpaceChild, userId),
-                );
+                const unableToUpdateSomeParents = Array.from(
+                    SDKContextClass.instance.spaceStore.getKnownParents(room.roomId),
+                ).some((roomId) => !cli.getRoom(roomId)?.currentState.maySendStateEvent(EventType.SpaceChild, userId));
                 if (unableToUpdateSomeParents) {
                     warning = <strong>{_t("room_settings|security|join_rule_restricted_upgrade_warning")}</strong>;
                 }

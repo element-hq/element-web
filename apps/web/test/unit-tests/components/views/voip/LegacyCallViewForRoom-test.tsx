@@ -16,7 +16,6 @@ import { clientAndSDKContextRenderOptions, mkStubRoom, stubClient } from "../../
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import LegacyCallHandler from "../../../../../src/LegacyCallHandler";
-import { SDKContext } from "../../../../../src/contexts/SDKContext";
 import { TestSDKContext } from "../../../TestSDKContext.ts";
 
 jest.mock("../../../../../src/components/views/voip/LegacyCallView", () => jest.fn(() => "LegacyCallView"));
@@ -93,9 +92,10 @@ describe("LegacyCallViewForRoom", () => {
         jest.spyOn(sdkContext.resizeNotifier, "stopResizing");
         jest.spyOn(sdkContext.resizeNotifier, "notifyTimelineHeightChanged");
 
-        const { container } = render(<LegacyCallViewForRoom roomId={call.roomId} />, {
-            wrapper: ({ children }) => <SDKContext.Provider value={sdkContext}>{children}</SDKContext.Provider>,
-        });
+        const { container } = render(
+            <LegacyCallViewForRoom roomId={call.roomId} />,
+            clientAndSDKContextRenderOptions(sdkContext.client!, sdkContext),
+        );
 
         const resizer = container.querySelector(".mx_LegacyCallViewForRoom_ResizeHandle");
         await waitFor(() => {

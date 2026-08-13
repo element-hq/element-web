@@ -380,7 +380,6 @@
         "encrypted": "დაშიფრულია",
         "error": "შეცდომა",
         "faq": "ხშირად დასმული კითხვები",
-        "favourites": "რჩეულები",
         "feedback": "კავშირი",
         "filter_results": "შედეგების გაფილტვრა",
         "forward_message": "შეტყობინების გადაგზავნა",
@@ -403,7 +402,6 @@
         "message": "შეტყობინება",
         "message_layout": "შეტყობინებების ფორმა",
         "microphone": "მიკროფონი",
-        "model": "მოდელი",
         "modern": "თანამედროვე",
         "mute": "დადუმება",
         "n_members": {
@@ -615,19 +613,6 @@
         "view_source_decrypted_event_source": "გაშიფრული მოვლენის წყარო",
         "view_source_decrypted_event_source_unavailable": "გაშიფრული წყარო მიუწვდომელია",
         "widget_screenshots": "ჩართეთ ვიჯეტის ეკრანის ანაბეჭდები მხარდაჭერილ ვიჯეტებზე"
-    },
-    "emoji": {
-        "categories": "კატეგორიები",
-        "category_activities": "Საქმიანობის",
-        "category_animals_nature": "ცხოველები და ბუნება",
-        "category_flags": "დროშები",
-        "category_food_drink": "Საჭმელ - სასმელი",
-        "category_frequently_used": "ხშირად გამოყენებული",
-        "category_objects": "ობიექტები",
-        "category_smileys_people": "სმაილი და ხალხი",
-        "category_symbols": "სიმბოლოები",
-        "category_travel_places": "მოგზაურობა და ადგილები",
-        "quick_reactions": "სწრაფი რეაქციები"
     },
     "empty_room": "ცარიელი ოთახი",
     "empty_room_was_name": "ცარიელი ოთახი (იყო%(oldName)s )",
@@ -1109,7 +1094,6 @@
         "mentions_and_keywords": "@ხსენებები და საკვანძო სიტყვები",
         "mentions_and_keywords_description": "მიიღეთ შეტყობინებები მხოლოდ ხსენებებითა და საკვანძო სიტყვებით, როგორც დაყენებულია თქვენსში<a> პარამეტრები</a>",
         "mentions_keywords": "ხსენებები და საკვანძო სიტყვები",
-        "message_didnt_send": "შეტყობინება არ გაიგზავნა. დააწკაპუნეთ ინფორმაციისთვის.",
         "mute_description": "თქვენ არ მიიღებთ შეტყობინებებს"
     },
     "notifier": {
@@ -1807,7 +1791,6 @@
         "send_typing_notifications": "აკრეფის შეტყობინებების გაგზავნა",
         "sessions": {
             "best_security_note": "საუკეთესო უსაფრთხოებისთვის, გადაამოწმეთ თქვენი სესიები და გამოდით ნებისმიერი სესიიდან, რომელსაც აღარ იცნობთ ან აღარ იყენებთ.",
-            "browser": "ბრაუზერი",
             "confirm_sign_out": {
                 "one": "დაადასტურეთ ამ მოწყობილობის გამოსვლა",
                 "other": "დაადასტურეთ ამ მოწყობილობებიდან გამოსვლა"
@@ -1856,7 +1839,6 @@
             "no_sessions": "სესიები ვერ მოიძებნა.",
             "no_unverified_sessions": "დაუდასტურებელი სესიები ვერ მოიძებნა.",
             "no_verified_sessions": "დადასტურებული სესიები ვერ მოიძებნა.",
-            "os": "ოპერაციული სისტემა",
             "other_sessions_heading": "სხვა სესიები",
             "push_heading": "Push შეტყობინებები",
             "push_subheading": "მიიღეთ push-შეტყობინებები ამ სესიაზე.",

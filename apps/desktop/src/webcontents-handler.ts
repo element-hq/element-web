@@ -7,31 +7,50 @@ Please see LICENSE files in the repository root for full details.
 
 import {
     clipboard,
-    nativeImage,
     Menu,
     MenuItem,
     shell,
     dialog,
     ipcMain,
-    type NativeImage,
     type WebContents,
     type ContextMenuParams,
     type DownloadItem,
+    type FileFilter,
     type MenuItemConstructorOptions,
     type IpcMainEvent,
     type Event,
 } from "electron";
 import url from "node:url";
-import fs from "node:fs";
-import { pipeline } from "node:stream/promises";
 import path from "node:path";
 
 import { _t } from "./language-helper.js";
+import { saveImageToFile } from "./save-image.js";
 import { getConfig } from "./config.js";
 
 const MAILTO_PREFIX = "mailto:";
 
 const PERMITTED_URL_SCHEMES: string[] = ["http:", "https:", MAILTO_PREFIX];
+
+/**
+ * Work out the filters a save dialog should offer so that a file keeps its own extension.
+ *
+ * A dialog which only offers "All Files" lets someone replace "photo.jpg" with "photo" and end up
+ * with a file the shell no longer knows how to open — the extension is simply gone. Naming the
+ * file's own type first means the dialog puts the extension back, which is what a browser already
+ * does for the same download.
+ *
+ * @param fileName - The name being suggested to the user, which may carry no extension at all.
+ * @returns Filters to pass to a save dialog, or undefined when there is no extension to preserve.
+ */
+function saveDialogFilters(fileName: string): FileFilter[] | undefined {
+    // extname() keeps the leading dot, and returns an empty string for a name which has none.
+    const extension = path.extname(fileName).slice(1);
+    if (!extension) return undefined;
+    return [
+        { name: _t("save_dialog|named_file_type", { extension: extension.toUpperCase() }), extensions: [extension] },
+        { name: _t("save_dialog|all_files"), extensions: ["*"] },
+    ];
+}
 
 function safeOpenURL(target: string): void {
     // openExternal passes the target to open/start/xdg-open,
@@ -55,19 +74,6 @@ function onWindowOrNavigate(ev: Event, target: string): void {
     // url in a window that has node scripting access.
     ev.preventDefault();
     safeOpenURL(target);
-}
-
-function writeNativeImage(filePath: string, img: NativeImage): Promise<void> {
-    switch (filePath.split(".").pop()?.toLowerCase()) {
-        case "jpg":
-        case "jpeg":
-            return fs.promises.writeFile(filePath, img.toJPEG(100));
-        case "bmp":
-            return fs.promises.writeFile(filePath, img.toBitmap());
-        case "png":
-        default:
-            return fs.promises.writeFile(filePath, img.toPNG());
-    }
 }
 
 function onLinkContextMenu(ev: Event, params: ContextMenuParams, webContents: WebContents): void {
@@ -145,19 +151,13 @@ function onLinkContextMenu(ev: Event, params: ContextMenuParams, webContents: We
                     const targetFileName = params.suggestedFilename || params.altText || "image.png";
                     const { filePath } = await dialog.showSaveDialog({
                         defaultPath: targetFileName,
+                        filters: saveDialogFilters(targetFileName),
                     });
 
                     if (!filePath) return; // user cancelled dialog
 
                     try {
-                        if (url.startsWith("data:")) {
-                            await writeNativeImage(filePath, nativeImage.createFromDataURL(url));
-                        } else {
-                            const resp = await fetch(url);
-                            if (!resp.ok) throw new Error(`unexpected response ${resp.statusText}`);
-                            if (!resp.body) throw new Error(`unexpected response has no body ${resp.statusText}`);
-                            await pipeline(resp.body, fs.createWriteStream(filePath));
-                        }
+                        await saveImageToFile(url, filePath, webContents.session);
                     } catch (err) {
                         console.error(err);
                         void dialog.showMessageBox({
@@ -266,12 +266,22 @@ function onEditableContextMenu(ev: Event, params: ContextMenuParams, webContents
 
 let userDownloadIndex = 0;
 const userDownloadMap = new Map<number, string>(); // Map from id to path
-ipcMain.on("userDownloadAction", function (ev: IpcMainEvent, { id, open = false }) {
+ipcMain.on("userDownloadAction", async function (ev: IpcMainEvent, { id, open = false }) {
     const path = userDownloadMap.get(id);
-    if (open && path) {
-        void shell.openPath(path);
-    }
     userDownloadMap.delete(id);
+    if (open && path) {
+        // openPath resolves to a non-empty error string on failure, an empty one on success.
+        const error = await shell.openPath(path);
+        if (error) {
+            console.error(`Failed to open downloaded file ${path}: ${error}`);
+            void dialog.showMessageBox({
+                type: "error",
+                title: _t("download|unable_to_open_title"),
+                message: _t("download|unable_to_open_description"),
+                detail: error,
+            });
+        }
+    }
 });
 
 export default (webContents: WebContents): void => {
@@ -296,6 +306,11 @@ export default (webContents: WebContents): void => {
     });
 
     webContents.session.on("will-download", (event: Event, item: DownloadItem): void => {
+        // Electron only offers "All Files" unless it is told otherwise, so say what this download is
+        // before it puts the save dialog up.
+        const filters = saveDialogFilters(item.getFilename());
+        if (filters) item.setSaveDialogOptions({ filters });
+
         item.once("done", (event, state) => {
             if (state === "completed") {
                 const savePath = item.getSavePath();

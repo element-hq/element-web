@@ -52,7 +52,6 @@ async function pickleKeyToAesKey(pickleKey: string): Promise<Uint8Array<ArrayBuf
             {
                 name: "HKDF",
                 hash: "SHA-256",
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore: https://github.com/microsoft/TypeScript-DOM-lib-generator/pull/879
                 salt: new Uint8Array(32),
                 info: new Uint8Array(0),

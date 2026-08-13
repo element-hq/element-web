@@ -102,8 +102,11 @@ export const RoomListPrimaryFilters = memo(function RoomListPrimaryFilters({
             >
                 {visibleFilterIds.map((filterId, index) => (
                     <ChatFilter
+                        // oxlint-disable-next-line react/no-array-index-key
                         key={`${filterId}-${index}`}
                         role="option"
+                        tabIndex={0}
+                        aria-selected={filterId === activeFilterId}
                         selected={filterId === activeFilterId}
                         onClick={() => onToggleFilter(filterId)}
                     >

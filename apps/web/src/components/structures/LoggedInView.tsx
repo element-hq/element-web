@@ -53,7 +53,6 @@ import UserView from "./UserView";
 import { mediaFromMxc } from "../../customisations/Media";
 import { UserTab } from "../views/dialogs/UserTab";
 import { type OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
-import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { type SwitchSpacePayload } from "../../dispatcher/payloads/SwitchSpacePayload";
@@ -85,7 +84,7 @@ interface IProps {
     // transitioned to PWLU)
     onRegistered: (this: void, credentials: IMatrixClientCreds) => Promise<MatrixClient>;
     hideToSRUsers: boolean;
-    // eslint-disable-next-line camelcase
+
     page_type?: string;
     threepidInvite?: IThreepidInvite;
     roomOobData?: IOOBData;
@@ -189,7 +188,7 @@ class LoggedInView extends React.Component<IProps, IState> {
 
     private getResizerViewModel(): ResizerViewModel {
         if (!this.resizerViewModel) {
-            this.resizerViewModel = new ResizerViewModel();
+            this.resizerViewModel = new ResizerViewModel(this.context.callStore);
         }
         return this.resizerViewModel;
     }
@@ -238,7 +237,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         SettingsStore.unwatchSetting(this.compactLayoutWatcherRef);
         SettingsStore.unwatchSetting(this.backgroundImageWatcherRef);
         this.timezoneProfileUpdateRef?.forEach((s) => SettingsStore.unwatchSetting(s));
-        this.resizerViewModel?.dispose();
+        this.disposeResizerViewModel();
     }
 
     private onCallState = (): void => {
@@ -494,7 +493,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                 break;
             case KeyBindingAction.ToggleRoomSidePanel:
                 if (this.props.page_type === "room_view") {
-                    RightPanelStore.instance.togglePanel(null);
+                    this.context.rightPanelStore.togglePanel(null);
                     handled = true;
                 }
                 break;

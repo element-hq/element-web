@@ -240,11 +240,11 @@ export default class AliasSettings extends React.Component<IProps, IState> {
             .createAlias(alias, this.props.roomId)
             .then(() => {
                 this.setState({
-                    localAliases: this.state.localAliases.concat(alias!),
+                    localAliases: this.state.localAliases.concat(alias),
                     newAlias: undefined,
                 });
                 if (!this.state.canonicalAlias) {
-                    this.changeCanonicalAlias(alias!);
+                    this.changeCanonicalAlias(alias);
                 }
             })
             .catch((err) => {
@@ -347,10 +347,10 @@ export default class AliasSettings extends React.Component<IProps, IState> {
                 <option value="" key="unset">
                     {_t("room_settings|alias_not_specified")}
                 </option>
-                {this.getAliases().map((alias, i) => {
+                {this.getAliases().map((alias) => {
                     if (alias === this.state.canonicalAlias) found = true;
                     return (
-                        <option value={alias} key={i}>
+                        <option value={alias} key={alias}>
                             {alias}
                         </option>
                     );
@@ -414,7 +414,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
                     )}
                     <datalist id="mx_AliasSettings_altRecommendations">
                         {this.getLocalNonAltAliases().map((alias) => {
-                            return <option value={alias} key={alias} />;
+                            return <option value={alias} key={alias} aria-label={alias} />;
                         })}
                     </datalist>
                     <EditableAliasesList

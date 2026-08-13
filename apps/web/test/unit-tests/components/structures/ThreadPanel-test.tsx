@@ -24,10 +24,18 @@ import { _t } from "../../../../src/languageHandler";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
-import { createTestClient, getRoomContext, mkRoom, mockPlatformPeg, stubClient } from "../../../test-utils";
+import {
+    clientAndSDKContextRenderOptions,
+    createTestClient,
+    getRoomContext,
+    mkRoom,
+    mockPlatformPeg,
+    stubClient,
+} from "../../../test-utils";
 import { mkThread } from "../../../test-utils/threads";
 import { ScopedRoomContextProvider } from "../../../../src/contexts/ScopedRoomContext.tsx";
 import type { RoomContextType } from "../../../../src/contexts/RoomContext.ts";
+import { SDKContextClass } from "../../../../src/contexts/SDKContextClass.ts";
 
 jest.mock("../../../../src/utils/Feedback");
 
@@ -215,7 +223,10 @@ describe("ThreadPanel", () => {
             myThreads!.addLiveEvent(mixedThread.rootEvent, { addToState: true });
             myThreads!.addLiveEvent(ownThread.rootEvent, { addToState: true });
 
-            const renderResult = render(<TestThreadPanel />);
+            const renderResult = render(
+                <TestThreadPanel />,
+                clientAndSDKContextRenderOptions(createTestClient(), SDKContextClass.instance),
+            );
             await waitFor(() => expect(renderResult.container.querySelector(".mx_AutoHideScrollbar")).toBeFalsy());
             await waitFor(() => {
                 const events = findEvents(renderResult.container);
@@ -260,7 +271,10 @@ describe("ThreadPanel", () => {
             const [allThreads] = room.threadsTimelineSets;
             allThreads!.addLiveEvent(otherThread.rootEvent, { addToState: true });
 
-            const renderResult = render(<TestThreadPanel />);
+            const renderResult = render(
+                <TestThreadPanel />,
+                clientAndSDKContextRenderOptions(createTestClient(), SDKContextClass.instance),
+            );
             await waitFor(() => expect(renderResult.container.querySelector(".mx_AutoHideScrollbar")).toBeFalsy());
             await waitFor(() => {
                 const events = findEvents(renderResult.container);

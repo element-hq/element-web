@@ -329,7 +329,6 @@
         "encrypted": "رمزشده",
         "error": "خطا",
         "faq": "سوالات پرتکرار",
-        "favourites": "موردعلاقه‌ها",
         "feedback": "بازخورد",
         "filter_results": "پالایش نتایج",
         "general": "عمومی",
@@ -518,22 +517,6 @@
     },
     "dialog_close_label": "بستن گفتگو",
     "download_completed": "بارگیری کامل شد",
-    "emoji": {
-        "categories": "دسته بندی ها",
-        "category_activities": "فعالیت ها",
-        "category_animals_nature": "حیوانات و طبیعت",
-        "category_flags": "پرچم ها",
-        "category_food_drink": "غذا و نوشیدنی",
-        "category_frequently_used": "متداول",
-        "category_objects": "اشیاء",
-        "category_smileys_people": "لبخند و افراد",
-        "category_symbols": "نمادها",
-        "category_travel_places": "سفر و اماکن",
-        "quick_reactions": "واکنش سریع"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "لغو جستجو"
-    },
     "empty_room": "اتاق خالی",
     "empty_room_was_name": "اتاق خالی (نام قبلی: %(oldName)s)",
     "encryption": {

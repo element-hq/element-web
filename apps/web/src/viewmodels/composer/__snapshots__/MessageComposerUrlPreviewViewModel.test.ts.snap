@@ -2,38 +2,48 @@
 
 exports[`MessageComposerUrlPreviewViewModel > should preview a URL with media 1`] = `
 {
-  "preview": {
-    "author": undefined,
-    "description": undefined,
-    "image": {
-      "alt": undefined,
-      "fileSize": 10000,
-      "height": 128,
-      "imageFull": "https://example.org/image/src",
-      "imageThumb": "https://example.org/image/thumb",
-      "playable": false,
-      "width": 128,
+  "content": "https://example.org",
+  "previews": [
+    {
+      "author": undefined,
+      "description": undefined,
+      "image": {
+        "alt": undefined,
+        "fileSize": 10000,
+        "height": 128,
+        "imageFull": "https://example.org/image/src",
+        "imageThumb": "https://example.org/image/thumb",
+        "imageType": undefined,
+        "mxcImageFull": "mxc://example.org/abc",
+        "playable": false,
+        "width": 128,
+      },
+      "link": "https://example.org",
+      "ogUrl": "https://example.org",
+      "showTooltipOnLink": false,
+      "siteIcon": undefined,
+      "siteName": "example.org",
+      "title": "Media example",
     },
-    "link": "https://example.org",
-    "showTooltipOnLink": false,
-    "siteIcon": undefined,
-    "siteName": "example.org",
-    "title": "Media example",
-  },
+  ],
 }
 `;
 
 exports[`MessageComposerUrlPreviewViewModel > should preview a valid URL in text 1`] = `
 {
-  "preview": {
-    "author": undefined,
-    "description": "This is a description",
-    "image": undefined,
-    "link": "https://example.org",
-    "showTooltipOnLink": false,
-    "siteIcon": undefined,
-    "siteName": "Example.org",
-    "title": "This is an example!",
-  },
+  "content": "Check out https://example.org today",
+  "previews": [
+    {
+      "author": undefined,
+      "description": "This is a description",
+      "image": undefined,
+      "link": "https://example.org",
+      "ogUrl": "https://example.org",
+      "showTooltipOnLink": false,
+      "siteIcon": undefined,
+      "siteName": "Example.org",
+      "title": "This is an example!",
+    },
+  ],
 }
 `;

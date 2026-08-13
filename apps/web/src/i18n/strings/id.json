@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Pemilih emoji",
         "jump_first_invite": "Pergi ke undangan pertama.",
         "message_composer": "Komposer pesan",
         "n_unread_messages": {
@@ -467,7 +466,6 @@
         "encrypted": "Terenkripsi",
         "error": "Kesalahan",
         "faq": "Pertanyaan Umum",
-        "favourites": "Favorit",
         "feedback": "Masukan",
         "filter_results": "Saring hasil",
         "forward_message": "Teruskan pesan",
@@ -491,7 +489,6 @@
         "message_layout": "Tata letak pesan",
         "message_timestamp_invalid": "Stempel waktu tidak valid",
         "microphone": "Mikrofon",
-        "model": "Model",
         "moderation_and_safety": "Moderasi dan keamanan",
         "modern": "Modern",
         "mute": "Bisukan",
@@ -888,22 +885,6 @@
     },
     "dialog_close_label": "Tutup dialog",
     "download_completed": "Unduhan Selesai",
-    "emoji": {
-        "categories": "Categori",
-        "category_activities": "Aktivitas",
-        "category_animals_nature": "Hewan & Alam",
-        "category_flags": "Bendera",
-        "category_food_drink": "Makanan & Minuman",
-        "category_frequently_used": "Sering Digunakan",
-        "category_objects": "Obyek",
-        "category_smileys_people": "Senyuman & Orang",
-        "category_symbols": "Simbol",
-        "category_travel_places": "Aktivitas & Tempat",
-        "quick_reactions": "Reaksi Cepat"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Batalkan pencarian"
-    },
     "empty_room": "Ruangan kosong",
     "empty_room_was_name": "Ruangan kosong (sebelumnya %(oldName)s)",
     "encryption": {
@@ -1668,7 +1649,6 @@
         "mentions_and_keywords": "@sebutan & kata kunci",
         "mentions_and_keywords_description": "Dapatkan notifikasi hanya dengan sebutan dan kata kunci yang diatur di <a>pengaturan</a> Anda",
         "mentions_keywords": "Sebutan dan kata kunci",
-        "message_didnt_send": "Pesan tidak terkirim. Klik untuk informasi.",
         "mute_description": "Anda tidak akan mendapatkan notifikasi apa pun"
     },
     "notifier": {
@@ -2768,7 +2748,6 @@
         "send_typing_notifications": "Kirim notifikasi pengetikan",
         "sessions": {
             "best_security_note": "Untuk keamanan yang terbaik, verifikasi sesi Anda dan keluarkan sesi yang Anda tidak kenal atau tidak digunakan lagi.",
-            "browser": "Peramban",
             "confirm_sign_out": {
                 "one": "Konfirmasi mengeluarkan perangkat ini",
                 "other": "Konfirmasi mengeluarkan perangkat ini"
@@ -2819,7 +2798,6 @@
             "no_sessions": "Tidak ditemukan sesi apa pun.",
             "no_unverified_sessions": "Tidak ditemukan sesi yang belum diverifikasi.",
             "no_verified_sessions": "Tidak ditemukan sesi yang terverifikasi.",
-            "os": "Sistem operasi",
             "other_sessions_heading": "Sesi lainnya",
             "push_heading": "Notifikasi dorongan",
             "push_subheading": "Terima notifikasi dorongan di sesi ini.",

@@ -135,7 +135,7 @@ interface IState {
 
 export default class AppTile extends React.Component<IProps, IState> {
     public static contextType = SDKContext;
-    declare public context: ContextType<typeof SDKContext>;
+    declare public context: React.ContextType<typeof SDKContext>;
 
     public static defaultProps: Partial<IProps> = {
         waitForIframeLoad: true,

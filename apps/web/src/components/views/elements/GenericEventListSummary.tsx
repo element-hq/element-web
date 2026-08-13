@@ -99,6 +99,9 @@ const GenericEventListSummary: React.FC<IProps> = ({
         body = (
             <div className="mx_EventTile_line">
                 <div className="mx_EventTile_info">
+                    {/* We break the rule here as this is a mouse-only interaction */}
+                    {/* mx_GenericEventListSummary_toggle is the keyboard friendly outer one */}
+                    {/* oxlint-disable-next-line jsx-a11y/click-events-have-key-events */}
                     <span className="mx_GenericEventListSummary_avatars" onClick={toggleExpanded}>
                         {avatars}
                     </span>

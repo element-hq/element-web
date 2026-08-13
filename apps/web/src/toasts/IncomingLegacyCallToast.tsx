@@ -20,7 +20,6 @@ import {
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { LegacyCallHandlerEvent } from "../LegacyCallHandler";
-import { MatrixClientPeg } from "../MatrixClientPeg";
 import { _t } from "../languageHandler";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
 import AccessibleButton, { type ButtonEvent } from "../components/views/elements/AccessibleButton";
@@ -96,7 +95,7 @@ export default class IncomingLegacyCallToast extends React.Component<IProps, ISt
     };
 
     public render(): React.ReactNode {
-        const room = MatrixClientPeg.safeGet().getRoom(this.roomId);
+        const room = this.context.client?.getRoom(this.roomId);
         const isVoice = this.props.call.type === CallType.Voice;
         const callForcedSilent = this.context.legacyCallHandler.isForcedSilent();
 
@@ -109,7 +108,7 @@ export default class IncomingLegacyCallToast extends React.Component<IProps, ISt
             <React.Fragment>
                 <RoomAvatar room={room ?? undefined} size="32px" />
                 <div className="mx_IncomingLegacyCallToast_content">
-                    <span className="mx_LegacyCallEvent_caller">{room ? room.name : _t("voip|unknown_caller")}</span>
+                    <span className="mx_LegacyCallEvent_caller">{room?.name ?? _t("voip|unknown_caller")}</span>
                     <div className="mx_LegacyCallEvent_type">
                         {getCallStateIcon(isVoice, undefined)}
                         {isVoice ? _t("voip|voice_call") : _t("voip|video_call")}

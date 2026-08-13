@@ -341,8 +341,12 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
         const differentEventId = prevProps.eventId != this.props.eventId;
         const differentHighlightedEventId = prevProps.highlightedEventId != this.props.highlightedEventId;
-        const differentAvoidJump = prevProps.eventScrollIntoView && !this.props.eventScrollIntoView;
-        if (differentEventId || differentHighlightedEventId || differentAvoidJump) {
+        // Both directions matter. The flag is cleared once a jump has landed, so clicking the same
+        // permalink again flips it back to true and has to jump afresh. An unset prop means true,
+        // matching the default in loadTimeline.
+        const differentScrollIntoView =
+            (prevProps.eventScrollIntoView ?? true) !== (this.props.eventScrollIntoView ?? true);
+        if (differentEventId || differentHighlightedEventId || differentScrollIntoView) {
             logger.log(
                 `TimelinePanel switching to eventId ${this.props.eventId} (was ${prevProps.eventId}), ` +
                     `scrollIntoView: ${this.props.eventScrollIntoView} (was ${prevProps.eventScrollIntoView})`,
@@ -1532,6 +1536,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 description,
             });
             if (onFinished) {
+                // oxlint-disable-next-line promise/no-promise-in-callback
                 finished.then(onFinished);
             }
         };

@@ -8,6 +8,8 @@
 import React from "react";
 
 import { useViewModel, type ViewModel } from "../../../../core/viewmodel";
+import { RoomOngoingCallTileView, type RoomCallStartedTileViewModel } from "./ongoing/room/RoomOngoingCallTileView";
+import { DmOngoingCallTileView, type DmOngoingCallTileViewModel } from "./ongoing/dm/DmOngoingCallTileView";
 import {
     RoomTombstoneCallTileView,
     type RoomTombstoneCallTileViewModel,
@@ -18,6 +20,8 @@ import { DmTombstoneCallTileView, type DmTombstoneCallTileViewModel } from "./to
  * Map from tile type to view model.
  */
 interface TileTypeToViewModelMap {
+    "ongoing-call-room": RoomCallStartedTileViewModel;
+    "ongoing-call-dm": DmOngoingCallTileViewModel;
     "tombstone-call-room": RoomTombstoneCallTileViewModel;
     "tombstone-call-dm": DmTombstoneCallTileViewModel;
 }
@@ -39,6 +43,10 @@ interface Props {
 export function RootCallTileView({ vm }: Props): React.ReactNode {
     const { tileType, tileViewModel } = useViewModel(vm);
     switch (tileType) {
+        case "ongoing-call-room":
+            return <RoomOngoingCallTileView vm={tileViewModel as TileTypeToViewModelMap["ongoing-call-room"]} />;
+        case "ongoing-call-dm":
+            return <DmOngoingCallTileView vm={tileViewModel as TileTypeToViewModelMap["ongoing-call-dm"]} />;
         case "tombstone-call-room":
             return <RoomTombstoneCallTileView vm={tileViewModel as TileTypeToViewModelMap["tombstone-call-room"]} />;
         case "tombstone-call-dm":

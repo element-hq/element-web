@@ -20,7 +20,6 @@ import { Action } from "../dispatcher/actions";
 import { leaveRoomBehaviour } from "./leave-behaviour";
 import { SDKContextClass } from "../contexts/SDKContextClass";
 import DMRoomMap from "../utils/DMRoomMap";
-import SpaceStore from "../stores/spaces/SpaceStore";
 import { MetaSpace } from "../stores/spaces";
 import { type ActionPayload } from "../dispatcher/payloads";
 import SettingsStore from "../settings/SettingsStore";
@@ -55,12 +54,12 @@ describe("leaveRoomBehaviour", () => {
             }
         });
 
-        await setupAsyncStoreWithClient(SpaceStore.instance, client);
+        await setupAsyncStoreWithClient(SDKContextClass.instance.spaceStore, client);
     });
 
     afterEach(async () => {
-        SpaceStore.instance.setActiveSpace(MetaSpace.Home);
-        await resetAsyncStoreWithClient(SpaceStore.instance);
+        SDKContextClass.instance.spaceStore.setActiveSpace(MetaSpace.Home);
+        await resetAsyncStoreWithClient(SDKContextClass.instance.spaceStore);
         vi.restoreAllMocks();
     });
 
@@ -114,11 +113,11 @@ describe("leaveRoomBehaviour", () => {
     });
 
     it("returns to the parent space after leaving a room inside of a space that was being viewed", async () => {
-        vi.spyOn(SpaceStore.instance, "getCanonicalParent").mockImplementation((roomId) =>
+        vi.spyOn(SDKContextClass.instance.spaceStore, "getCanonicalParent").mockImplementation((roomId) =>
             roomId === room.roomId ? space : null,
         );
         viewRoom(room);
-        SpaceStore.instance.setActiveSpace(space.roomId, false);
+        SDKContextClass.instance.spaceStore.setActiveSpace(space.roomId, false);
 
         await leaveRoomBehaviour(client, room.roomId);
         await expectDispatch({
@@ -130,7 +129,7 @@ describe("leaveRoomBehaviour", () => {
 
     it("returns to the home page after leaving a top-level space that was being viewed", async () => {
         viewRoom(space);
-        SpaceStore.instance.setActiveSpace(space.roomId, false);
+        SDKContextClass.instance.spaceStore.setActiveSpace(space.roomId, false);
 
         await leaveRoomBehaviour(client, space.roomId);
         await expectDispatch({ action: Action.ViewHomePage });
@@ -138,11 +137,11 @@ describe("leaveRoomBehaviour", () => {
 
     it("returns to the parent space after leaving a subspace that was being viewed", async () => {
         room.isSpaceRoom.mockReturnValue(true);
-        vi.spyOn(SpaceStore.instance, "getCanonicalParent").mockImplementation((roomId) =>
+        vi.spyOn(SDKContextClass.instance.spaceStore, "getCanonicalParent").mockImplementation((roomId) =>
             roomId === room.roomId ? space : null,
         );
         viewRoom(room);
-        SpaceStore.instance.setActiveSpace(room.roomId, false);
+        SDKContextClass.instance.spaceStore.setActiveSpace(room.roomId, false);
 
         await leaveRoomBehaviour(client, room.roomId);
         await expectDispatch({

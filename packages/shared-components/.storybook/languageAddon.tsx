@@ -24,6 +24,7 @@ export const languageAddon: Addon = {
     title: "Language Selector",
     type: types.TOOL,
     render: ({ active }) => {
+        // oxlint-disable-next-line react-hooks/rules-of-hooks
         const [globals, updateGlobals] = useGlobals();
         const selectedLanguage = globals.language || "en";
 

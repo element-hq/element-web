@@ -46,7 +46,6 @@ export const mockAvatar = (name: string): React.ReactElement => (
  */
 export const renderAvatar = (room: Room): React.ReactElement => {
     // Cast to any to access properties - in real usage, the room object from the SDK will have these
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return mockAvatar((room as any)?.name || "Room");
 };
 

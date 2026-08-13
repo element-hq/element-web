@@ -401,7 +401,6 @@
         "encrypted": "暗号化",
         "error": "エラー",
         "faq": "よくある質問",
-        "favourites": "お気に入り",
         "feedback": "フィードバック",
         "filter_results": "結果を絞り込む",
         "forward_message": "メッセージを転送",
@@ -423,7 +422,6 @@
         "message": "メッセージ",
         "message_layout": "メッセージのレイアウト",
         "microphone": "マイク",
-        "model": "形式",
         "modern": "モダン",
         "mute": "ミュート",
         "n_members": {
@@ -709,22 +707,6 @@
     },
     "dialog_close_label": "ダイアログを閉じる",
     "download_completed": "ダウンロードが完了しました",
-    "emoji": {
-        "categories": "カテゴリー",
-        "category_activities": "アクティビティー",
-        "category_animals_nature": "動物と自然",
-        "category_flags": "旗",
-        "category_food_drink": "食べ物と飲み物",
-        "category_frequently_used": "使用頻度の高いリアクション",
-        "category_objects": "物体",
-        "category_smileys_people": "表情と人々",
-        "category_symbols": "シンボル",
-        "category_travel_places": "旅行と場所",
-        "quick_reactions": "一般的なリアクション"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "検索をキャンセル"
-    },
     "empty_room": "空のルーム",
     "empty_room_was_name": "空のルーム（以前の名前は%(oldName)s）",
     "encryption": {
@@ -1329,7 +1311,6 @@
         "mentions_and_keywords": "メンションとキーワード",
         "mentions_and_keywords_description": "メンションと、<a>設定</a>したキーワードのみを通知",
         "mentions_keywords": "メンションとキーワード",
-        "message_didnt_send": "メッセージが送信されませんでした。クリックすると詳細を表示します。",
         "mute_description": "通知を送信しません"
     },
     "notifier": {
@@ -2099,7 +2080,6 @@
         "send_read_receipts_unsupported": "あなたのサーバーは開封確認メッセージの送信防止をサポートしていません。",
         "send_typing_notifications": "入力中通知を送信",
         "sessions": {
-            "browser": "ブラウザー",
             "confirm_sign_out": {
                 "other": "端末からのサインアウトを承認",
                 "one": "端末からのサインアウトを承認"
@@ -2147,7 +2127,6 @@
             "no_sessions": "セッションが見つかりません。",
             "no_unverified_sessions": "未認証のセッションはありません。",
             "no_verified_sessions": "認証済のセッションはありません。",
-            "os": "オペレーティングシステム",
             "other_sessions_heading": "その他のセッション",
             "push_heading": "プッシュ通知",
             "push_subheading": "このセッションでプッシュ通知を受信。",

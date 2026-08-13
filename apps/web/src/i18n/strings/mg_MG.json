@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Mpifidy Emoji",
         "jump_first_invite": "Hanketo amin'ny fanasana voalohany.",
         "message_composer": "Mpamorona hafatra",
         "n_unread_messages": {
@@ -416,7 +415,6 @@
         "encrypted": "Nafenina",
         "error": "Fahadisoana",
         "faq": "Soloky",
-        "favourites": "Ankafizina",
         "feedback": "Iverina",
         "filter_results": "Sivana ny valiny",
         "forward_message": "Talohan'ny",
@@ -439,7 +437,6 @@
         "message": "Hafatra",
         "message_layout": "Fandaharana",
         "microphone": "Fanamafisampeo ara taribia",
-        "model": "Modely",
         "modern": "Ankehitriny",
         "mute": "Moana",
         "n_members": {
@@ -745,22 +742,6 @@
         "widget_screenshots": "Alefaso ny pikantsary widget amin'ny widget tohanana"
     },
     "dialog_close_label": "Akatona ny fifanakalozan-kevitra",
-    "emoji": {
-        "categories": "Sokajy",
-        "category_activities": "Fiaraha-mientana",
-        "category_animals_nature": "Ny biby sy ny natiora",
-        "category_flags": "Saina",
-        "category_food_drink": "Sakafo sy zava-pisotro",
-        "category_frequently_used": "Ampiasaina matetika",
-        "category_objects": "Zavatra",
-        "category_smileys_people": "Smileys sy olona",
-        "category_symbols": "Sariohatra",
-        "category_travel_places": "Fitsidihana & Toerana",
-        "quick_reactions": "Fanehoan-kevitra haingana"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Hanafoana ny fikarohana"
-    },
     "empty_room": "Efitra banga",
     "empty_room_was_name": "Efitra banga (dia%(oldName)s )",
     "encryption": {
@@ -1414,7 +1395,6 @@
         "mentions_and_keywords": "@fanononana sy teny fanalahidy",
         "mentions_and_keywords_description": "Mahazoa fampandrenesana afa-tsy amin'ny teny sy teny fanalahidy araka ny napetraka ao amin'ny anao<a> Fikirana</a>",
         "mentions_keywords": "Fanononana sy teny fototra",
-        "message_didnt_send": "Tsy lasa ny hafatra. Tsindrio raha mila fanazavana.",
         "mute_description": "Tsy hahazo fampandrenesana ianao"
     },
     "notifier": {
@@ -2309,7 +2289,6 @@
         "send_typing_notifications": "Alefaso fampandrenesana fanoratana",
         "sessions": {
             "best_security_note": "Ho fiarovana tsara indrindra, hamarino ny fotoam-pivorianao ary midira amin'ny fivoriana izay tsy fantatrao na tsy ampiasainao intsony.",
-            "browser": "Mpitety",
             "confirm_sign_out": {
                 "one": "Hamafiso ny fivoahana ity fitaovana ity",
                 "other": "Hamafiso ny fisoratana anarana ireto fitaovana ireto"
@@ -2358,7 +2337,6 @@
             "no_sessions": "Tsy misy fivoriana hita.",
             "no_unverified_sessions": "Tsy misy fivoriana tsy voamarina hita.",
             "no_verified_sessions": "Tsy misy fivoriana voamarina hita.",
-            "os": "Rafitra fikirakirana",
             "other_sessions_heading": "Fivoriana hafa",
             "push_heading": "Fampandrenesana manosika",
             "push_subheading": "Mandraisa fampandrenesana fanosehana amin'ity fivoriana ity.",

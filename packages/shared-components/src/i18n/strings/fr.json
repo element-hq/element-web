@@ -4,6 +4,7 @@
     },
     "action": {
         "back": "Retour",
+        "cancel": "Annuler",
         "click": "Clic",
         "close": "Fermer",
         "collapse": "Réduire",
@@ -28,6 +29,7 @@
         "reply": "Répondre",
         "reply_in_thread": "Répondre dans le fil de discussion",
         "retry": "Réessayer",
+        "save": "Enregistrer",
         "search": "Rechercher",
         "start_chat": "Démarrer une discussion",
         "unpin": "Désépingler",
@@ -43,6 +45,23 @@
     },
     "devtools": {
         "toggle_event": "afficher/masquer l’évènement"
+    },
+    "emoji": {
+        "categories": "Catégories",
+        "category_activities": "Activités",
+        "category_animals_nature": "Animaux et nature",
+        "category_flags": "Drapeaux",
+        "category_food_drink": "Nourriture et boissons",
+        "category_frequently_used": "Utilisé fréquemment",
+        "category_objects": "Objets",
+        "category_smileys_people": "Émoticônes et personnes",
+        "category_symbols": "Symboles",
+        "category_travel_places": "Voyages & lieux",
+        "quick_reactions": "Réactions rapides"
+    },
+    "emoji_picker": {
+        "cancel_search_label": "Annuler la recherche",
+        "emoji_picker": "Sélecteur d'emoji"
     },
     "keyboard": {
         "shift": "Maj"
@@ -65,6 +84,7 @@
         "all_messages": "Tous les messages",
         "default_settings": "Correspondre aux paramètres par défaut",
         "mentions_keywords": "Mentions et mots-clés",
+        "message_didnt_send": "Le message n’a pas été envoyé. Cliquer pour plus d’info.",
         "mute_room": "Rendre le salon muet"
     },
     "release_announcement": {
@@ -84,6 +104,7 @@
         "jump_to_date": "Aller à la date",
         "jump_to_date_beginning": "Le début du salon",
         "jump_to_date_prompt": "Choisissez vers quelle date aller",
+        "knock_sent": "Demande d’accès envoyée",
         "pinned_message_badge": "Message épinglé",
         "status_bar": {
             "delete_all": "Tout supprimer",
@@ -148,7 +169,9 @@
         "expand_all_sections": "Développer toutes les sections",
         "expand_filters": "Développer la liste des filtres",
         "filters": {
+            "favourite": "Favoris",
             "invites": "Invitations",
+            "low_priority": "Priorité basse",
             "mentions": "Mentions",
             "people": "Personnes",
             "rooms": "Salons",
@@ -197,6 +220,8 @@
         "set_status": {
             "away": "Absent",
             "be_right_back": "Je reviens tout de suite",
+            "choose_emoji": "Choisissez un emoji",
+            "custom": "Personnalisé…",
             "focus_time": "Temps de Concentration",
             "in_a_meeting": "En réunion",
             "on_the_road": "Sur la route",
@@ -230,6 +255,28 @@
             "declined": {
                 "call_declined": "Appel refusé",
                 "call_declined_by_us": "Vous avez rejeté un appel"
+            },
+            "ongoing": {
+                "common": {
+                    "call_started_by": "%(startedByDisplayName)s a démarré un appel",
+                    "join_button": "Rejoindre"
+                },
+                "dm": {
+                    "call_started": "Appel démarré",
+                    "title": "Appel en cours"
+                },
+                "room": {
+                    "join_count": {
+                        "one": "%(count)s participant",
+                        "other": "%(count)s participants"
+                    },
+                    "title": "Appel de groupe en cours"
+                }
+            },
+            "tombstone": {
+                "room": {
+                    "title": "L'appel de groupe est terminé"
+                }
             },
             "video_call_title": "Appel vidéo",
             "voice_call_title": "Appel audio"

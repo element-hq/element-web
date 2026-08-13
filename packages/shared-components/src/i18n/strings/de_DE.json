@@ -84,7 +84,9 @@
         },
         "expand_filters": "Filterliste ausklappen",
         "filters": {
+            "favourite": "Favoriten",
             "invites": "Einladungen",
+            "low_priority": "Niedrige Priorität",
             "mentions": "Erwähnungen",
             "people": "Personen",
             "rooms": "Gruppen",

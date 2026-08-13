@@ -23,7 +23,8 @@
             "test-utils": ["./test/test-utils"],
             "test-utils/*": ["./test/test-utils/*"],
             "jest-mock-vitest-adapter": ["./test/setup/adapter.ts"]
-        }
+        },
+        "skipLibCheck": true
     },
     "include": [
         "./node_modules/matrix-js-sdk/src/@types/*.d.ts",

@@ -411,7 +411,6 @@
         "encrypted": "Κρυπτογραφημένο",
         "error": "Σφάλμα",
         "faq": "Συχνές ερωτήσεις",
-        "favourites": "Αγαπημένα",
         "feedback": "Ανατροφοδότηση",
         "filter_results": "Φιλτράρισμα αποτελεσμάτων",
         "forward_message": "Προώθηση μηνύματος",
@@ -434,7 +433,6 @@
         "message": "Μήνυμα",
         "message_layout": "Διάταξη μηνύματος",
         "microphone": "Μικρόφωνο",
-        "model": "Μοντέλο",
         "modern": "Μοντέρνο",
         "mute": "Σίγαση",
         "n_members": {
@@ -724,22 +722,6 @@
     },
     "dialog_close_label": "Κλείσιμο διαλόγου",
     "download_completed": "Η λήψη ολοκληρώθηκε",
-    "emoji": {
-        "categories": "Κατηγορίες",
-        "category_activities": "Δραστηριότητες",
-        "category_animals_nature": "Ζώα & Φύση",
-        "category_flags": "Σημαίες",
-        "category_food_drink": "Φαγητό & Ποτό",
-        "category_frequently_used": "Συχνά χρησιμοποιούμενα",
-        "category_objects": "Αντικείμενα",
-        "category_smileys_people": "Smileys & Άνθρωποι",
-        "category_symbols": "Σύμβολα",
-        "category_travel_places": "Ταξίδια & Μέρη",
-        "quick_reactions": "Γρήγορες Αντιδράσεις"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Ακύρωση αναζήτησης"
-    },
     "empty_room": "Άδειο δωμάτιο",
     "empty_room_was_name": "Άδεια αίθουσα (ήταν %(oldName)s)",
     "encryption": {
@@ -1333,7 +1315,6 @@
         "mentions_and_keywords": "@αναφορές & λέξεις-κλειδιά",
         "mentions_and_keywords_description": "Λάβετε ειδοποιήσεις μόνο με αναφορές και λέξεις-κλειδιά όπως έχουν ρυθμιστεί στις <a>ρυθμίσεις</a> σας",
         "mentions_keywords": "Αναφορές & λέξεις-κλειδιά",
-        "message_didnt_send": "Το μήνυμα δεν στάλθηκε. Κάντε κλικ για πληροφορίες.",
         "mute_description": "Δεν θα λαμβάνετε ειδοποιήσεις"
     },
     "notifier": {
@@ -2124,7 +2105,6 @@
         "send_typing_notifications": "Αποστολή ειδοποιήσεων πληκτρολόγησης",
         "sessions": {
             "best_security_note": "Για τη βέλτιστη ασφάλεια, επαληθεύστε τις συνεδρίες σας και αποσυνδεθείτε από οποιαδήποτε συνεδρία που δεν αναγνωρίζετε ή χρησιμοποιείτε πλέον.",
-            "browser": "Πρόγραμμα περιήγησης",
             "confirm_sign_out": {
                 "one": "Επιβεβαιώστε την αποσύνδεση αυτής της συσκευής",
                 "other": "Επιβεβαιώστε την αποσύνδεση αυτών των συσκευών"
@@ -2173,7 +2153,6 @@
             "no_sessions": "Δεν βρέθηκαν συνεδρίες.",
             "no_unverified_sessions": "Δεν βρέθηκαν μη επαληθευμένες συνεδρίες.",
             "no_verified_sessions": "Δεν βρέθηκαν επαληθευμένες συνεδρίες.",
-            "os": "Λειτουργικό σύστημα",
             "other_sessions_heading": "Άλλες συνεδρίες",
             "push_heading": "Ειδοποιήσεις push",
             "push_subheading": "Λάβετε ειδοποιήσεις push σε αυτήν τη συνεδρία.",

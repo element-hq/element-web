@@ -72,7 +72,6 @@ import { RoomNotificationStateStore } from "../../../../stores/notifications/Roo
 import { compareRoomsByRecency } from "../../../../utils/room/sortRoomsByRecency";
 import { SDKContextClass } from "../../../../contexts/SDKContextClass";
 import { getMetaSpaceName, MetaSpace } from "../../../../stores/spaces";
-import SpaceStore from "../../../../stores/spaces/SpaceStore";
 import { DirectoryMember, type Member, startDmOnFirstMessage } from "../../../../utils/direct-messages";
 import DMRoomMap from "../../../../utils/DMRoomMap";
 import { makeUserPermalink } from "../../../../utils/permalinks/Permalinks";
@@ -84,7 +83,7 @@ import { SearchResultAvatar } from "../../avatars/SearchResultAvatar";
 import { NetworkDropdown } from "../../directory/NetworkDropdown";
 import AccessibleButton, { type ButtonEvent } from "../../elements/AccessibleButton";
 import Spinner from "../../elements/Spinner";
-import NotificationBadge from "../../rooms/NotificationBadge";
+import { NotificationBadge } from "../../rooms/NotificationBadge/NotificationBadge";
 import BaseDialog from "../BaseDialog";
 import { Option } from "./Option";
 import { PublicRoomResultDetails } from "./PublicRoomResultDetails";
@@ -420,13 +419,13 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         }
 
         return [
-            ...SpaceStore.instance.enabledMetaSpaces.map((spaceKey) => ({
+            ...SDKContextClass.instance.spaceStore.enabledMetaSpaces.map((spaceKey) => ({
                 section: Section.Spaces,
                 filter: [] as Filter[],
                 avatar: <div className="mx_SpotlightDialog_metaspaceResult">{metaspaceToIcon(spaceKey)}</div>,
-                name: getMetaSpaceName(spaceKey, SpaceStore.instance.allRoomsInHome),
+                name: getMetaSpaceName(spaceKey, SDKContextClass.instance.spaceStore.allRoomsInHome),
                 onClick() {
-                    SpaceStore.instance.setActiveSpace(spaceKey);
+                    SDKContextClass.instance.spaceStore.setActiveSpace(spaceKey);
                 },
             })),
             ...roomResults,
@@ -517,7 +516,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
     const numResults = sum(Object.values(results).map((it) => it.length));
     useWebSearchMetrics(numResults, query.length, true);
 
-    const activeSpace = SpaceStore.instance.activeSpaceRoom;
+    const activeSpace = SDKContextClass.instance.spaceStore.activeSpaceRoom;
     const [spaceResults, spaceResultsLoading] = useSpaceResults(activeSpace ?? undefined, query);
 
     const setQuery = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -539,7 +538,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         });
         // we intentionally ignore changes to the rovingContext for the purpose of this hook
         // we only want to reset the focus whenever the results or filters change
-        // eslint-disable-next-line
+        // oxlint-disable-next-line react-hooks/exhaustive-deps
     }, [results, filter]);
 
     const viewRoom = (
@@ -665,8 +664,13 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         {...ariaProperties}
                     >
                         <DecoratedRoomAvatar room={result.room} size={AVATAR_SIZE} tooltipProps={{ tabIndex: -1 }} />
-                        {result.room.name}
-                        <NotificationBadge notification={notification} />
+                        <span className="mx_SpotlightDialog_result_name" title={result.room.name}>
+                            {result.room.name}
+                        </span>
+                        <NotificationBadge
+                            notification={notification}
+                            className="mx_SpotlightDialog_notificationBadge"
+                        />
                         <RoomContextDetails
                             id={`mx_SpotlightDialog_button_result_${result.room.roomId}_details`}
                             className="mx_SpotlightDialog_result_details"
@@ -690,7 +694,14 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         aria-describedby={`mx_SpotlightDialog_button_result_${result.member.userId}_details`}
                     >
                         <SearchResultAvatar user={result.member} size={AVATAR_SIZE} />
-                        {result.member instanceof RoomMember ? result.member.rawDisplayName : result.member.name}
+                        <span
+                            className="mx_SpotlightDialog_result_name"
+                            title={
+                                result.member instanceof RoomMember ? result.member.rawDisplayName : result.member.name
+                            }
+                        >
+                            {result.member instanceof RoomMember ? result.member.rawDisplayName : result.member.name}
+                        </span>
                         <div
                             id={`mx_SpotlightDialog_button_result_${result.member.userId}_details`}
                             className="mx_SpotlightDialog_result_details"
@@ -890,34 +901,32 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         {_t("spotlight_dialog|other_rooms_in_space", { spaceName: activeSpace.name })}
                     </h4>
                     <div>
-                        {spaceResults.slice(0, SECTION_LIMIT).map(
-                            (room: HierarchyRoom): JSX.Element => (
-                                <Option
-                                    id={`mx_SpotlightDialog_button_result_${room.room_id}`}
-                                    key={room.room_id}
-                                    onClick={(ev) => {
-                                        viewRoom({ roomId: room.room_id }, true, ev?.type !== "click");
-                                    }}
-                                >
-                                    <BaseAvatar
-                                        name={room.name}
-                                        idName={room.room_id}
-                                        url={
-                                            room.avatar_url
-                                                ? mediaFromMxc(room.avatar_url).getSquareThumbnailHttp(
-                                                      parseInt(AVATAR_SIZE, 10),
-                                                  )
-                                                : null
-                                        }
-                                        size={AVATAR_SIZE}
-                                    />
-                                    {room.name || room.canonical_alias}
-                                    {room.name && room.canonical_alias && (
-                                        <div className="mx_SpotlightDialog_result_details">{room.canonical_alias}</div>
-                                    )}
-                                </Option>
-                            ),
-                        )}
+                        {spaceResults.slice(0, SECTION_LIMIT).map((room: HierarchyRoom): JSX.Element => (
+                            <Option
+                                id={`mx_SpotlightDialog_button_result_${room.room_id}`}
+                                key={room.room_id}
+                                onClick={(ev) => {
+                                    viewRoom({ roomId: room.room_id }, true, ev?.type !== "click");
+                                }}
+                            >
+                                <BaseAvatar
+                                    name={room.name}
+                                    idName={room.room_id}
+                                    url={
+                                        room.avatar_url
+                                            ? mediaFromMxc(room.avatar_url).getSquareThumbnailHttp(
+                                                  parseInt(AVATAR_SIZE, 10),
+                                              )
+                                            : null
+                                    }
+                                    size={AVATAR_SIZE}
+                                />
+                                {room.name || room.canonical_alias}
+                                {room.name && room.canonical_alias && (
+                                    <div className="mx_SpotlightDialog_result_details">{room.canonical_alias}</div>
+                                )}
+                            </Option>
+                        ))}
                         {spaceResultsLoading && <Spinner />}
                     </div>
                 </div>
@@ -1088,7 +1097,10 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                                         tooltipProps={{ tabIndex: -1 }}
                                     />
                                     {room.name}
-                                    <NotificationBadge notification={notification} />
+                                    <NotificationBadge
+                                        notification={notification}
+                                        className="mx_SpotlightDialog_notificationBadge"
+                                    />
                                     <RoomContextDetails
                                         id={`mx_SpotlightDialog_button_recentSearch_${room.roomId}_details`}
                                         className="mx_SpotlightDialog_result_details"

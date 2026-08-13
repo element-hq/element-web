@@ -231,7 +231,7 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
                                     value: RoomNotifState.Mute,
                                     label: (
                                         <>
-                                            {_t("common|off")}
+                                            {_t("common|mute")}
                                             <div className="mx_NotificationSettingsTab_microCopy">
                                                 {_t("notifications|mute_description")}
                                             </div>

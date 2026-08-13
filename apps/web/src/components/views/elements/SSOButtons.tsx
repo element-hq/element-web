@@ -25,11 +25,11 @@ import PlatformPeg from "../../../PlatformPeg";
 import { _t } from "../../../languageHandler";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { PosthogAnalytics } from "../../../PosthogAnalytics";
-import { Icon as FacebookIcon } from "../../../../res/img/element-icons/brands/facebook.svg";
-import { Icon as GithubIcon } from "../../../../res/img/element-icons/brands/github.svg";
-import { Icon as GitlabIcon } from "../../../../res/img/element-icons/brands/gitlab.svg";
-import { Icon as GoogleIcon } from "../../../../res/img/element-icons/brands/google.svg";
-import { Icon as TwitterIcon } from "../../../../res/img/element-icons/brands/twitter.svg";
+import FacebookIcon from "../../../../res/img/element-icons/brands/facebook.svg?react";
+import GithubIcon from "../../../../res/img/element-icons/brands/github.svg?react";
+import GitlabIcon from "../../../../res/img/element-icons/brands/gitlab.svg?react";
+import GoogleIcon from "../../../../res/img/element-icons/brands/google.svg?react";
+import TwitterIcon from "../../../../res/img/element-icons/brands/twitter.svg?react";
 
 interface ISSOButtonProps extends IProps {
     idp?: IIdentityProvider;

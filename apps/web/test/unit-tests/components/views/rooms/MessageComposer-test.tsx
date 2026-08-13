@@ -214,10 +214,8 @@ describe("MessageComposer", () => {
 
                     it(`should${value ? "" : " not"} display the button`, () => {
                         if (value) {
-                            // eslint-disable-next-line jest/no-conditional-expect
                             expect(screen.getByLabelText(buttonLabel)).toBeInTheDocument();
                         } else {
-                            // eslint-disable-next-line jest/no-conditional-expect
                             expect(screen.queryByLabelText(buttonLabel)).not.toBeInTheDocument();
                         }
                     });
@@ -240,10 +238,8 @@ describe("MessageComposer", () => {
 
                         it(`should${!value || "not"} display the button`, () => {
                             if (!value) {
-                                // eslint-disable-next-line jest/no-conditional-expect
                                 expect(screen.getByLabelText(buttonLabel)).toBeInTheDocument();
                             } else {
-                                // eslint-disable-next-line jest/no-conditional-expect
                                 expect(screen.queryByLabelText(buttonLabel)).not.toBeInTheDocument();
                             }
                         });

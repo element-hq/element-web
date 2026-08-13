@@ -33,6 +33,18 @@ const onPinnedMessagesClick = (): void => {
 
 const TARGET_AS_DISPLAY_NAME_EVENTS = [EventType.RoomMember];
 
+/**
+ * Whether a profile field on a membership event actually changed.
+ *
+ * An absent field, an explicit `null` and an empty string all mean "unset", so none of them is a
+ * change from any of the others. This mirrors `getModification` in `TextForEvent`, which labels the
+ * same event when it is rendered on its own — without it a collapsed summary can contradict the
+ * events it summarises.
+ */
+function profileFieldChanged(prev?: string | null, value?: string | null): boolean {
+    return (prev || undefined) !== (value || undefined);
+}
+
 interface IProps extends Omit<ComponentProps<typeof GenericEventListSummary>, "summaryText" | "summaryMembers"> {
     // The maximum number of names to show in either each summary e.g. 2 would result "A, B and 234 others left"
     summaryLength?: number;
@@ -306,8 +318,8 @@ export default class EventListSummary extends React.Component<Props, State> {
 
             let transition = t;
 
-            if (i < transitions.length - 1 && modMap[t] && modMap[t]!.after === t2) {
-                transition = modMap[t]!.newTransition;
+            if (i < transitions.length - 1 && modMap[t] && modMap[t].after === t2) {
+                transition = modMap[t].newTransition;
                 i++;
             }
 
@@ -532,9 +544,11 @@ export default class EventListSummary extends React.Component<Props, State> {
                         return TransitionType.Banned;
                     case KnownMembership.Join:
                         if (e.mxEvent.getPrevContent().membership === KnownMembership.Join) {
-                            if (e.mxEvent.getContent().displayname !== e.mxEvent.getPrevContent().displayname) {
+                            const content = e.mxEvent.getContent();
+                            const prevContent = e.mxEvent.getPrevContent();
+                            if (profileFieldChanged(prevContent.displayname, content.displayname)) {
                                 return TransitionType.ChangedName;
-                            } else if (e.mxEvent.getContent().avatar_url !== e.mxEvent.getPrevContent().avatar_url) {
+                            } else if (profileFieldChanged(prevContent.avatar_url, content.avatar_url)) {
                                 return TransitionType.ChangedAvatar;
                             }
                             return TransitionType.NoChange;

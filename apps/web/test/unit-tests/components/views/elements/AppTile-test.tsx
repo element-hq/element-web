@@ -73,6 +73,8 @@ describe("AppTile", () => {
         r1 = new Room("r1", cli, "@name:example.com");
         r2 = new Room("r2", cli, "@name:example.com");
 
+        jest.spyOn(r1, "getPendingEvents").mockReturnValue([]);
+        jest.spyOn(r2, "getPendingEvents").mockReturnValue([]);
         jest.spyOn(cli, "getRoom").mockImplementation((roomId) => {
             if (roomId === "r1") return r1;
             if (roomId === "r2") return r2;

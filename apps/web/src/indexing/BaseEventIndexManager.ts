@@ -14,7 +14,6 @@ import {
 } from "matrix-js-sdk/src/matrix";
 
 // The following interfaces take their names and member names from seshat and the spec
-/* eslint-disable camelcase */
 
 /** A record of a place to resume crawling events in a given room. */
 export interface ICrawlerCheckpoint {

@@ -362,7 +362,6 @@
         "encrypted": "Dulritað",
         "error": "Villa",
         "faq": "Algengar spurningar",
-        "favourites": "Eftirlæti",
         "feedback": "Umsagnir",
         "filter_results": "Sía niðurstöður",
         "forward_message": "Áframsenda skilaboð",
@@ -383,7 +382,6 @@
         "message": "Skilaboð",
         "message_layout": "Framsetning skilaboða",
         "microphone": "Hljóðnemi",
-        "model": "Gerð",
         "modern": "Nútímalegt",
         "mute": "Þagga niður",
         "n_members": {
@@ -629,22 +627,6 @@
     },
     "dialog_close_label": "Loka glugga",
     "download_completed": "Niðurhali lokið",
-    "emoji": {
-        "categories": "Flokkar",
-        "category_activities": "Afþreying",
-        "category_animals_nature": "Dýr og náttúra",
-        "category_flags": "Fánar",
-        "category_food_drink": "Mat og drykkur",
-        "category_frequently_used": "Oft notað",
-        "category_objects": "Hlutir",
-        "category_smileys_people": "Broskarlar og fólk",
-        "category_symbols": "Tákn",
-        "category_travel_places": "Ferðalög og staðir",
-        "quick_reactions": "Flýtiviðbrögð"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Hætta við leitina"
-    },
     "empty_room": "Tóm spjallrás",
     "empty_room_was_name": "Tóm spjallrás (var %(oldName)s)",
     "encryption": {
@@ -1174,7 +1156,6 @@
         "mark_all_read": "Merkja allt sem lesið",
         "mentions_and_keywords": "@minnst á og stikkorð",
         "mentions_keywords": "Tilvísanir og stikkorð",
-        "message_didnt_send": "Mistókst að senda skilaboð. Smelltu til að fá nánari upplýsingar.",
         "mute_description": "Þú munt ekki fá neinar tilkynningar"
     },
     "notifier": {
@@ -1853,7 +1834,6 @@
         "send_read_receipts_unsupported": "Netþjónninn þinn styður ekki að sending leskvittana sé gerð óvirk.",
         "send_typing_notifications": "Senda skriftilkynningar",
         "sessions": {
-            "browser": "Vafri",
             "confirm_sign_out": {
                 "one": "Staðfestu útskráningu þessa tækis",
                 "other": "Staðfestu útskráningu þessara tækja"
@@ -1893,7 +1873,6 @@
             "no_sessions": "Engar setur fundust.",
             "no_unverified_sessions": "Engar óstaðfestar setur fundust.",
             "no_verified_sessions": "Engar staðfestar setur fundust.",
-            "os": "Stýrikerfi",
             "other_sessions_heading": "Aðrar setur",
             "push_heading": "Ýti-tilkynningar",
             "push_subheading": "Taka á móti ýti-tilkynningum á þessu tæki.",

@@ -22,6 +22,7 @@ describe("<SyntaxHighlight />", () => {
     it.each(["json", "javascript", "css"])("uses the provided language", async (lang) => {
         const mock = jest.spyOn(hljs, "highlight");
 
+        // oxlint-disable-next-line react/jsx-no-comment-textnodes
         const { container } = render(<SyntaxHighlight language={lang}>// Hello, World</SyntaxHighlight>);
         await waitFor(() => expect(container.querySelector(`.language-${lang}`)).toBeTruthy());
 

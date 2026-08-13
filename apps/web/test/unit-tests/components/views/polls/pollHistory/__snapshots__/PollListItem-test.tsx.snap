@@ -6,11 +6,13 @@ exports[`<PollListItem /> renders a poll 1`] = `
     class="mx_PollListItem"
     data-testid="pollListItem-$mypoll"
   >
-    <span
+    <div
+      aria-label="View poll"
+      class="mx_AccessibleButton mx_PollListItemEnded_content"
+      role="button"
       tabindex="0"
     >
       <div
-        aria-labelledby="react-use-id-1"
         class="mx_PollListItem_content"
       >
         <span>
@@ -34,7 +36,7 @@ exports[`<PollListItem /> renders a poll 1`] = `
           Question?
         </span>
       </div>
-    </span>
+    </div>
   </li>
 </div>
 `;

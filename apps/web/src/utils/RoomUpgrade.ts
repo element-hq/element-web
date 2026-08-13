@@ -14,9 +14,9 @@ import { showAnyInviteErrors } from "../RoomInvite";
 import Modal, { type IHandle } from "../Modal";
 import { _t } from "../languageHandler";
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";
-import SpaceStore from "../stores/spaces/SpaceStore";
 import Spinner from "../components/views/elements/Spinner";
 import MultiInviter, { type MultiInviterOptions } from "./MultiInviter";
+import { SDKContextClass } from "../contexts/SDKContextClass.ts";
 
 export interface RoomUpgradeProgress {
     roomUpgraded: boolean;
@@ -73,7 +73,7 @@ export async function upgradeRoom(
 
     let parentsToRelink: Room[] = [];
     if (updateSpaces) {
-        parentsToRelink = Array.from(SpaceStore.instance.getKnownParents(room.roomId))
+        parentsToRelink = Array.from(SDKContextClass.instance.spaceStore.getKnownParents(room.roomId))
             .map((roomId) => cli.getRoom(roomId))
             .filter((parent) =>
                 parent?.currentState.maySendStateEvent(EventType.SpaceChild, cli.getUserId()!),

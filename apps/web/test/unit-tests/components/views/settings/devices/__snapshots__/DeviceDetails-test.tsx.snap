@@ -267,42 +267,6 @@ exports[`<DeviceDetails /> renders device with metadata 1`] = `
             <td
               class="mxDeviceDetails_metadataLabel"
             >
-              Model
-            </td>
-            <td
-              class="mxDeviceDetails_metadataValue"
-            >
-              Iphone X
-            </td>
-          </tr>
-          <tr>
-            <td
-              class="mxDeviceDetails_metadataLabel"
-            >
-              Operating system
-            </td>
-            <td
-              class="mxDeviceDetails_metadataValue"
-            >
-              Windows 95
-            </td>
-          </tr>
-          <tr>
-            <td
-              class="mxDeviceDetails_metadataLabel"
-            >
-              Browser
-            </td>
-            <td
-              class="mxDeviceDetails_metadataValue"
-            >
-              Firefox 100
-            </td>
-          </tr>
-          <tr>
-            <td
-              class="mxDeviceDetails_metadataLabel"
-            >
               IP address
             </td>
             <td

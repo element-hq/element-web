@@ -23,7 +23,6 @@ const createMemberFromProfile = (userId: string, profile: IMatrixProfile): RoomM
             return { avatar_url: profile.avatar_url };
         },
         getDirectionalContent: function () {
-            // eslint-disable-next-line
             return this.getContent();
         },
     } as MatrixEvent;

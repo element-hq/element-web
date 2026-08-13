@@ -117,7 +117,7 @@ export function showAnyInviteErrors(
                                                 (avatarUrl && mediaFromMxc(avatarUrl).getSquareThumbnailHttp(24)) ??
                                                 undefined
                                             }
-                                            name={name!}
+                                            name={name}
                                             idName={user?.userId}
                                             size="36px"
                                         />

@@ -53,7 +53,11 @@ import InviteRulesConfigController from "./controllers/InviteRulesConfigControll
 import { type ComputedInviteConfig } from "../@types/invite-rules.ts";
 import BlockInvitesConfigController from "./controllers/BlockInvitesConfigController.ts";
 import RequiresSettingsController from "./controllers/RequiresSettingsController.ts";
-import { type ReorderableSection, type CustomSectionsData } from "../stores/room-list-v3/section.ts";
+import {
+    type ReorderableSection,
+    type CustomSectionsData,
+    type SectionExpansionState,
+} from "../stores/room-list-v3/section.ts";
 import { type NotificationSound } from "../Notifier.ts";
 import VideoRoomsBetaImage from "../../res/img/betas/video_rooms.png";
 
@@ -229,6 +233,7 @@ export interface Settings {
     "feature_msc4362_encrypted_state_events": IFeature;
     "feature_user_status": IFeature;
     "feature_login_with_qr": IFeature;
+    "feature_msc4095_url_preview_bundle": IFeature;
     // These are in the feature namespace but aren't actually features
     "feature_hidebold": IBaseSetting<boolean>;
 
@@ -237,15 +242,12 @@ export interface Settings {
     "mjolnirPersonalRoom": IBaseSetting<string | null>;
     "RoomList.backgroundImage": IBaseSetting<string | null>;
     "sendReadReceipts": IBaseSetting<boolean>;
-    "baseFontSize": IBaseSetting<"" | number>;
-    "baseFontSizeV2": IBaseSetting<"" | number>;
     "fontSizeDelta": IBaseSetting<number>;
     "useCustomFontSize": IBaseSetting<boolean>;
     "MessageComposerInput.suggestEmoji": IBaseSetting<boolean>;
     "MessageComposerInput.showStickersButton": IBaseSetting<boolean>;
     "MessageComposerInput.showPollsButton": IBaseSetting<boolean>;
     "MessageComposerInput.insertTrailingColon": IBaseSetting<boolean>;
-    "Notifications.alwaysShowBadgeCounts": IBaseSetting<boolean>;
     "Notifications.showbold": IBaseSetting<boolean>;
     "Notifications.tac_only_notifications": IBaseSetting<boolean>;
     "useCompactLayout": IBaseSetting<boolean>;
@@ -365,15 +367,23 @@ export interface Settings {
     "Developer.elementCallUrl": IBaseSetting<string>;
     "RoomList.CustomSectionData": IBaseSetting<CustomSectionsData>;
     "RoomList.OrderedCustomSections": IBaseSetting<ReorderableSection[]>;
+    "RoomList.SectionExpansionState": IBaseSetting<SectionExpansionState>;
     "RoomList.showSections": IBaseSetting<boolean>;
 }
 
 export type SettingKey = keyof Settings;
 export type FeatureSettingKey = Assignable<Settings, IFeature>;
 export type BooleanSettingKey = Assignable<Settings, IBaseSetting<boolean>> | FeatureSettingKey;
+export type NullableBooleanSettingKey = Assignable<Settings, IBaseSetting<boolean | null>> | FeatureSettingKey;
 export type StringSettingKey = Assignable<Settings, IBaseSetting<string>>;
 
 export const SETTINGS: Settings = {
+    // Used in tests only
+    "test_setting": {
+        supportedLevels: [],
+        default: "",
+    },
+
     "feature_video_rooms": {
         isFeature: true,
         labsGroup: LabGroup.VoiceAndVideo,
@@ -615,15 +625,6 @@ export const SETTINGS: Settings = {
         shouldWarn: true,
         default: false,
     },
-    /**
-     * @deprecated in favor of {@link fontSizeDelta}
-     */
-    "baseFontSize": {
-        displayName: _td("settings|appearance|font_size"),
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        default: "",
-        controller: new FontSizeController(),
-    },
     "feature_render_reaction_images": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
@@ -641,21 +642,17 @@ export const SETTINGS: Settings = {
         isFeature: true,
         default: false,
     },
-    /**
-     * With the transition to Compound we are moving to a base font size
-     * of 16px. We're taking the opportunity to move away from the `baseFontSize`
-     * setting that had a 5px offset.
-     * @deprecated in favor {@link fontSizeDelta}
-     */
-    "baseFontSizeV2": {
-        displayName: _td("settings|appearance|font_size"),
-        supportedLevels: [SettingLevel.DEVICE],
-        default: "",
-        controller: new FontSizeController(),
+    "feature_msc4095_url_preview_bundle": {
+        labsGroup: LabGroup.Messaging,
+        displayName: _td("labs|url_preview_bundle"),
+        description: _td("labs|url_preview_bundle_description"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        isFeature: true,
+        default: false,
     },
     /**
      * This delta is added to the browser default font size
-     * Moving from `baseFontSizeV2` to `fontSizeDelta` to replace the default 16px to --cpd-font-size-root (browser default font size) + fontSizeDelta
      */
     "fontSizeDelta": {
         displayName: _td("settings|appearance|font_size"),
@@ -689,11 +686,6 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("settings|insert_trailing_colon_mentions"),
         default: true,
-    },
-    // TODO: Wire up appropriately to UI (FTUE notifications)
-    "Notifications.alwaysShowBadgeCounts": {
-        supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
-        default: false,
     },
     // Used to be a feature, name kept for backwards compat
     "feature_hidebold": {
@@ -1355,6 +1347,14 @@ export const SETTINGS: Settings = {
     "RoomList.OrderedCustomSections": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: [],
+    },
+    /**
+     * Managed by the {@link RoomListSectionHeaderViewModel}
+     * Store the expanded/collapsed state of the room list sections, per space and per section tag
+     */
+    "RoomList.SectionExpansionState": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: {},
     },
     [UIFeature.RoomHistorySettings]: {
         supportedLevels: LEVELS_UI_FEATURE,

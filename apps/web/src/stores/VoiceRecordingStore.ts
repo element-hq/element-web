@@ -84,11 +84,7 @@ export class VoiceRecordingStore extends AsyncStoreWithClient<IState> {
     public disposeRecording(voiceRecordingId: string): Promise<void> {
         this.state[voiceRecordingId]?.destroy(); // stops internally
 
-        const {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            [voiceRecordingId]: _toDelete,
-            ...newState
-        } = this.state;
+        const { [voiceRecordingId]: _toDelete, ...newState } = this.state;
         // unexpectedly AsyncStore.updateState merges state
         // AsyncStore.reset actually just *sets*
         return this.reset(newState);

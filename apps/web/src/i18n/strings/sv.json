@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Emojiväljare",
         "jump_first_invite": "Hoppa till första inbjudan.",
         "message_composer": "Meddelanderedigerare",
         "n_unread_messages": {
@@ -467,7 +466,6 @@
         "encrypted": "Krypterat",
         "error": "Fel",
         "faq": "Vanliga frågor",
-        "favourites": "Favoriter",
         "feedback": "Återkoppling",
         "filter_results": "Filtrera resultaten",
         "forward_message": "Vidarebefordra meddelande",
@@ -491,7 +489,6 @@
         "message_layout": "Meddelandearrangemang",
         "message_timestamp_invalid": "Ogiltig tidsstämpel",
         "microphone": "Mikrofon",
-        "model": "Modell",
         "moderation_and_safety": "Moderering och säkerhet",
         "modern": "Modernt",
         "mute": "Tysta",
@@ -857,22 +854,6 @@
     },
     "dialog_close_label": "Stäng dialogrutan",
     "download_completed": "Nedladdning slutförd",
-    "emoji": {
-        "categories": "Kategorier",
-        "category_activities": "Aktiviteter",
-        "category_animals_nature": "Djur & natur",
-        "category_flags": "Flaggor",
-        "category_food_drink": "Mat & dryck",
-        "category_frequently_used": "Ofta använda",
-        "category_objects": "Objekt",
-        "category_smileys_people": "Smileys & personer",
-        "category_symbols": "Symboler",
-        "category_travel_places": "Resor & platser",
-        "quick_reactions": "Snabbreaktioner"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Avbryt sökningen"
-    },
     "empty_room": "Tomt rum",
     "empty_room_was_name": "Tomt rum (var %(oldName)s)",
     "encryption": {
@@ -1613,7 +1594,6 @@
         "mentions_and_keywords": "@omnämnanden och nyckelord",
         "mentions_and_keywords_description": "Bli endast aviserad om omnämnanden och nyckelord i enlighet med dina <a>inställningar</a>",
         "mentions_keywords": "Omnämnanden & nyckelord",
-        "message_didnt_send": "Meddelande skickades inte. Klicka för info.",
         "mute_description": "Du får inga aviseringar"
     },
     "notifier": {
@@ -2496,7 +2476,7 @@
             "unable_to_load_msisdns": "Det går inte att läsa in telefonnummer",
             "username": "Användarnamn"
         },
-        "inline_url_previews_default": "Aktivera inbäddad URL-förhandsgranskning som standard",
+        "inline_url_previews_default": "Aktivera förhandsgranskningar",
         "insert_trailing_colon_mentions": "Infoga kolon efter användaromnämnande på början av ett meddelande",
         "invite_controls": {
             "default_label": "Tillåt användare att bjuda in dig till rum"
@@ -2607,13 +2587,13 @@
             "room_activity": "Ny rumsaktivitet, uppgraderingar och statusmeddelanden inträffar",
             "rule_call": "Inbjudan till samtal",
             "rule_contains_display_name": "Meddelanden som innehåller mitt visningsnamn",
-            "rule_contains_user_name": "Meddelanden som innehåller mitt användarnamn",
+            "rule_contains_user_name": "@omnämnanden och svar",
             "rule_encrypted": "Krypterade meddelanden i gruppchattar",
             "rule_encrypted_room_one_to_one": "Krypterade meddelanden i en-till-en-chattar",
             "rule_invite_for_me": "När jag bjuds in till ett rum",
             "rule_message": "Meddelanden i gruppchattar",
             "rule_room_one_to_one": "Meddelanden i en-till-en-chattar",
-            "rule_roomnotif": "Meddelanden som innehåller @room",
+            "rule_roomnotif": "@rumsomnämnanden",
             "rule_suppress_notices": "Meddelanden från bottar",
             "rule_tombstone": "När rum uppgraderas",
             "show_message_desktop_notification": "Visa meddelande i skrivbordsavisering",
@@ -2690,7 +2670,6 @@
         "send_typing_notifications": "Skicka \"skriver\"-statusar",
         "sessions": {
             "best_security_note": "För bästa säkerhet, verifiera dina sessioner och logga ut från sessioner som du inte känner igen eller använder längre.",
-            "browser": "Webbläsare",
             "confirm_sign_out": {
                 "one": "Bekräfta utloggning av denna enhet",
                 "other": "Bekräfta utloggning av dessa enheter"
@@ -2741,7 +2720,6 @@
             "no_sessions": "Inga sessioner hittades.",
             "no_unverified_sessions": "Inga overifierade sessioner hittades.",
             "no_verified_sessions": "Inga verifierade sessioner hittades.",
-            "os": "Operativsystem",
             "other_sessions_heading": "Andra sessioner",
             "push_heading": "Pushnotiser",
             "push_subheading": "Få pushnotiser på den här sessionen.",

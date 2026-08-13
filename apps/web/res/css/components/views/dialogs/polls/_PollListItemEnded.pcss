@@ -22,7 +22,7 @@ Please see LICENSE files in the repository root for full details.
     display: grid;
     justify-content: left;
     align-items: center;
-    gap: $spacing-8;
+    gap: var(--cpd-space-2x);
     grid-template-columns: min-content 1fr min-content;
     grid-template-rows: auto;
 }
@@ -31,7 +31,7 @@ Please see LICENSE files in the repository root for full details.
     height: 14px;
     width: 14px;
     color: $quaternary-content;
-    padding-left: $spacing-8;
+    padding-left: var(--cpd-space-2x);
 }
 
 .mx_PollListItemEnded_date {
@@ -47,11 +47,11 @@ Please see LICENSE files in the repository root for full details.
 
 .mx_PollListItemEnded_answers {
     display: grid;
-    gap: $spacing-8;
-    margin-top: $spacing-12;
+    gap: var(--cpd-space-2x);
+    margin-top: var(--cpd-space-3x);
 }
 
 .mx_PollListItemEnded_voteCount {
     /* 6px to match PollOption padding */
-    margin: $spacing-8 0 0 6px;
+    margin: var(--cpd-space-2x) 0 0 6px;
 }

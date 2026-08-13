@@ -8,12 +8,12 @@ Please see LICENSE files in the repository root for full details.
 
 import { act } from "test-utils-rtl";
 
-import type EventEmitter from "events";
+import type EventEmitter from "node:events";
 import { type ActionPayload } from "../../src/dispatcher/payloads";
 import defaultDispatcher from "../../src/dispatcher/dispatcher";
 import { type DispatcherAction } from "../../src/dispatcher/actions";
 import Modal from "../../src/Modal";
-import { vi } from "../setup/adapter.ts";
+import { vi, beforeEach, afterEach } from "../setup/adapter.ts";
 
 export const emitPromise = (e: EventEmitter, k: string | symbol) => new Promise((r) => e.once(k, r));
 
@@ -31,13 +31,12 @@ export function untilDispatch(
     timeout = 1000,
 ): Promise<ActionPayload> {
     const callerLine = new Error().stack!.toString().split("\n")[2];
-    if (typeof waitForAction === "string") {
-        const action = waitForAction;
-        waitForAction = (payload) => {
-            return payload.action === action;
-        };
-    }
-    const callback = waitForAction as (payload: ActionPayload) => boolean;
+    const callback =
+        typeof waitForAction === "string"
+            ? (payload: ActionPayload) => {
+                  return payload.action === waitForAction;
+              }
+            : waitForAction;
     return new Promise((resolve, reject) => {
         let fulfilled = false;
         let timeoutId: number;
@@ -45,7 +44,11 @@ export function untilDispatch(
         if (timeout > 0) {
             timeoutId = window.setTimeout(() => {
                 if (!fulfilled) {
-                    reject(new Error(`untilDispatch: timed out at ${callerLine}`));
+                    reject(
+                        new Error(
+                            `untilDispatch: timed out (waiting for: ${typeof waitForAction === "function" ? "fn" : waitForAction}) at ${callerLine}`,
+                        ),
+                    );
                     fulfilled = true;
                 }
             }, timeout);

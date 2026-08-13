@@ -16,7 +16,7 @@ const slowTestReporter: Reporter = {
         const tests = testModules
             .flatMap((m) => Array.from(m.children.allTests()))
             .filter((test) => test.diagnostic()?.slow);
-        tests.sort((x, y) => x.diagnostic()!.duration! - y.diagnostic()!.duration!);
+        tests.sort((x, y) => x.diagnostic()!.duration - y.diagnostic()!.duration);
         tests.reverse();
 
         if (tests.length > 0) {

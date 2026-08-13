@@ -19,6 +19,7 @@ import {
 import { useMockedViewModel } from "../../../../core/viewmodel";
 import { LinkedTextContext } from "../../../../core/utils/LinkedText";
 import { withViewDocs } from "../../../../../.storybook/withViewDocs";
+import { waitForBackgroundImages } from "../../../../../.storybook/waitForImages";
 
 type UrlPreviewGroupViewProps = UrlPreviewGroupViewSnapshot & UrlPreviewGroupViewActions;
 
@@ -72,6 +73,9 @@ export default {
         onImageClick: fn(),
         onTogglePreviewLimit: fn(),
     },
+    play: async ({ canvasElement }) => {
+        await waitForBackgroundImages(canvasElement);
+    },
     parameters: {
         design: {
             type: "figma",
@@ -96,6 +100,7 @@ Default.args = {
                 imageFull: imageFile,
                 alt: "The element logo",
                 playable: false,
+                mxcImageFull: "mxc://server/file",
             },
         },
     ],
@@ -123,6 +128,7 @@ MultiplePreviewsVisible.args = {
                 imageFull: imageFile,
                 alt: "The element logo",
                 playable: false,
+                mxcImageFull: "mxc://server/file",
             },
         },
         // These images should appear the same size despite having different dimensions.
@@ -137,6 +143,7 @@ MultiplePreviewsVisible.args = {
                 imageFull: tallImageFile,
                 alt: "A dog",
                 playable: false,
+                mxcImageFull: "mxc://server/file",
             },
         },
         {
@@ -150,6 +157,7 @@ MultiplePreviewsVisible.args = {
                 imageFull: imageFile,
                 alt: "The element logo",
                 playable: false,
+                mxcImageFull: "mxc://server/file",
             },
         },
     ],

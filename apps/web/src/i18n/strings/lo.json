@@ -361,7 +361,6 @@
         "encrypted": "ເຂົ້າລະຫັດແລ້ວ",
         "error": "ມີບັນຫາ",
         "faq": "ຄໍາຖາມທີ່ພົບເປັນປະຈໍາ",
-        "favourites": "ລາຍການທີ່ມັກ",
         "feedback": "ຄໍາຕິຊົມ",
         "filter_results": "ການກັ່ນຕອງຜົນຮັບ",
         "forward_message": "ສົ່ງຂໍ້ຄວາມຕໍ່",
@@ -619,22 +618,6 @@
     },
     "dialog_close_label": "ປິດກ່ອງໂຕ້ຕອບ",
     "download_completed": "ດາວໂຫຼດສຳເລັດແລ້ວ",
-    "emoji": {
-        "categories": "ໝວດໝູ່",
-        "category_activities": "ກິດຈະກໍາ",
-        "category_animals_nature": "ສັດ & ທໍາມະຊາດ",
-        "category_flags": "ທຸງ",
-        "category_food_drink": "ອາຫານ ແລະ ເຄື່ອງດື່ມ",
-        "category_frequently_used": "ໃຊ້ເປັນປະຈຳ",
-        "category_objects": "ວັດຖຸ",
-        "category_smileys_people": "ຮອຍຍິ້ມ & ຜູ້ຄົນ",
-        "category_symbols": "ສັນຍາລັກ",
-        "category_travel_places": "ການເດີນທາງ & ສະຖານທີ່",
-        "quick_reactions": "ການໂຕ້ຕອບທັນທີ"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "ຍົກເລີກການຄົ້ນຫາ"
-    },
     "empty_room": "ຫ້ອງຫວ່າງ",
     "encryption": {
         "access_secret_storage_dialog": {
@@ -1186,7 +1169,6 @@
         "mentions_and_keywords": "@ກ່າວເຖິງ & ຄໍາສໍາຄັນ",
         "mentions_and_keywords_description": "ຮັບການແຈ້ງເຕືອນພຽງແຕ່ມີການກ່າວເຖິງ ແລະ ຄໍາທີ່ກຳນົດໄວ້ໃນ<a>settings</a>ຂອງທ່ານ",
         "mentions_keywords": "ກ່າວເຖິງ & ຄໍາສໍາຄັນ",
-        "message_didnt_send": "ບໍ່ໄດ້ສົ່ງຂໍ້ຄວາມ. ກົດສຳລັບຂໍ້ມູນ.",
         "mute_description": "ທ່ານຈະບໍ່ໄດ້ຮັບການແຈ້ງເຕືອນໃດໆ"
     },
     "notifier": {

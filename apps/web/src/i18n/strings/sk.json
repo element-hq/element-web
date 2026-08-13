@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Výber emotikonov",
         "jump_first_invite": "Prejsť na prvú pozvánku.",
         "message_composer": "Editor správ",
         "n_unread_messages": {
@@ -470,7 +469,6 @@
         "encrypted": "Zašifrované",
         "error": "Chyba",
         "faq": "Často kladené otázky (FAQ)",
-        "favourites": "Obľúbené",
         "feedback": "Spätná väzba",
         "filter_results": "Filtrovať výsledky",
         "forward_message": "Preposlať správu",
@@ -494,7 +492,6 @@
         "message_layout": "Rozloženie správy",
         "message_timestamp_invalid": "Neplatná časová značka",
         "microphone": "Mikrofón",
-        "model": "Model",
         "moderation_and_safety": "Moderovanie a bezpečnosť",
         "modern": "Moderný",
         "mute": "Umlčať",
@@ -896,22 +893,6 @@
     },
     "dialog_close_label": "Zavrieť dialógové okno",
     "download_completed": "Preberanie dokončené",
-    "emoji": {
-        "categories": "Kategórie",
-        "category_activities": "Aktivity",
-        "category_animals_nature": "Zvieratá a príroda",
-        "category_flags": "Vlajky",
-        "category_food_drink": "Jedlo a nápoje",
-        "category_frequently_used": "Často používané",
-        "category_objects": "Objekty",
-        "category_smileys_people": "Smajlíky a ľudia",
-        "category_symbols": "Symboly",
-        "category_travel_places": "Cestovanie a miesta",
-        "quick_reactions": "Rýchle reakcie"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Zrušiť vyhľadávanie"
-    },
     "empty_room": "Prázdna miestnosť",
     "empty_room_was_name": "Prázdna miestnosť (bola %(oldName)s)",
     "encryption": {
@@ -1685,7 +1666,6 @@
         "mentions_and_keywords": "@zmienky a kľúčové slová",
         "mentions_and_keywords_description": "Dostávajte upozornenia len na zmienky a kľúčové slová nastavené vo vašich <a>nastaveniach</a>",
         "mentions_keywords": "Zmienky a kľúčové slová",
-        "message_didnt_send": "Správa sa neodoslala. Kliknite pre informácie.",
         "mute_description": "Nebudete dostávať žiadne oznámenia"
     },
     "notifier": {
@@ -2811,7 +2791,6 @@
         "send_typing_notifications": "Posielať oznámenia, keď píšete",
         "sessions": {
             "best_security_note": "V záujme čo najlepšieho zabezpečenia overte svoje relácie a odhláste sa z každej relácie, ktorú už nepoznáte alebo nepoužívate.",
-            "browser": "Prehliadač",
             "confirm_sign_out": {
                 "one": "Potvrďte odhlásenie z tohto zariadenia",
                 "other": "Potvrdiť odhlásenie týchto zariadení"
@@ -2863,7 +2842,6 @@
             "no_sessions": "Nenašli sa žiadne relácie.",
             "no_unverified_sessions": "Nenašli sa žiadne neoverené relácie.",
             "no_verified_sessions": "Nenašli sa žiadne overené relácie.",
-            "os": "Operačný systém",
             "other_sessions_heading": "Iné relácie",
             "push_heading": "Push oznámenia",
             "push_subheading": "Prijímať push oznámenia v tejto relácii.",

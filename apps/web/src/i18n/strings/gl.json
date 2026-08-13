@@ -361,7 +361,6 @@
         "encrypted": "Cifrado",
         "error": "Fallo",
         "faq": "PMF",
-        "favourites": "Favoritas",
         "feedback": "Comenta",
         "filter_results": "Filtrar resultados",
         "forward_message": "Reenviar mensaxe",
@@ -625,22 +624,6 @@
     },
     "dialog_close_label": "Pechar diálogo",
     "download_completed": "Descarga realizada",
-    "emoji": {
-        "categories": "Categorías",
-        "category_activities": "Actividades",
-        "category_animals_nature": "Animais e Natureza",
-        "category_flags": "Bandeiras",
-        "category_food_drink": "Comida e Bebida",
-        "category_frequently_used": "Utilizado con frecuencia",
-        "category_objects": "Obxectos",
-        "category_smileys_people": "Sorrisos e Persoas",
-        "category_symbols": "Símbolos",
-        "category_travel_places": "Viaxes e Lugares",
-        "quick_reactions": "Reaccións rápidas"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Cancelar busca"
-    },
     "empty_room": "Sala baleira",
     "empty_room_was_name": "Sala baleira (era %(oldName)s)",
     "encryption": {
@@ -1216,7 +1199,6 @@
         "mentions_and_keywords": "@mencións & palabras chave",
         "mentions_and_keywords_description": "Ter notificacións só cando te mencionan e con palabras chave que indiques nos <a>axustes</a>",
         "mentions_keywords": "Mencións e palabras chave",
-        "message_didnt_send": "Non se enviou a mensaxe. Click para info.",
         "mute_description": "Non recibirás ningunha notificación"
     },
     "notifier": {

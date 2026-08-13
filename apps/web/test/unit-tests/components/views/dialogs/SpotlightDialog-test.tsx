@@ -34,7 +34,7 @@ import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import SdkConfig from "../../../../../src/SdkConfig";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { MetaSpace } from "../../../../../src/stores/spaces";
-import SpaceStore from "../../../../../src/stores/spaces/SpaceStore.ts";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
 
 jest.useFakeTimers();
 
@@ -704,7 +704,7 @@ describe("Spotlight Dialog", () => {
 
     describe("metaspaces", () => {
         beforeEach(() => {
-            jest.spyOn(SpaceStore.instance, "enabledMetaSpaces", "get").mockReturnValue([
+            jest.spyOn(SDKContextClass.instance.spaceStore, "enabledMetaSpaces", "get").mockReturnValue([
                 MetaSpace.Home,
                 MetaSpace.Orphans,
             ]);

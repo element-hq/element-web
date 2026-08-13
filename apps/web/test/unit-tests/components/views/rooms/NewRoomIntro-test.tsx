@@ -15,29 +15,29 @@ import { LinkedTextContext } from "@element-hq/web-shared-components";
 
 import { LocalRoom } from "../../../../../src/models/LocalRoom";
 import {
+    clientAndSDKContextRenderOptions,
     filterConsole,
     mkEvent,
     mkRoomMemberJoinEvent,
     mkThirdPartyInviteEvent,
     stubClient,
 } from "../../../../test-utils";
-import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import NewRoomIntro from "../../../../../src/components/views/rooms/NewRoomIntro";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { DirectoryMember } from "../../../../../src/utils/direct-messages";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import type { RoomContextType } from "../../../../../src/contexts/RoomContext.ts";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
 
 const renderNewRoomIntro = (client: MatrixClient, room: Room | LocalRoom) => {
     render(
-        <MatrixClientContext.Provider value={client}>
-            <ScopedRoomContextProvider {...({ room, roomId: room.roomId } as unknown as RoomContextType)}>
-                <LinkedTextContext.Provider value={{}}>
-                    <NewRoomIntro />
-                </LinkedTextContext.Provider>
-            </ScopedRoomContextProvider>
-        </MatrixClientContext.Provider>,
+        <ScopedRoomContextProvider {...({ room, roomId: room.roomId } as unknown as RoomContextType)}>
+            <LinkedTextContext.Provider value={{}}>
+                <NewRoomIntro />
+            </LinkedTextContext.Provider>
+        </ScopedRoomContextProvider>,
+        clientAndSDKContextRenderOptions(client, SDKContextClass.instance),
     );
 };
 

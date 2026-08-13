@@ -36,8 +36,9 @@ import { type IWidgetEvent, type UserWidget } from "./WidgetUtils-types";
 // before waitFor[Room/User]Widget rejects its promise
 const WIDGET_WAIT_TIME = 20000;
 
-export type { IWidgetEvent, UserWidget };
+export type { UserWidget };
 
+// oxlint-disable-next-line typescript/no-extraneous-class
 export default class WidgetUtils {
     /**
      * Returns true if user is able to send state events to modify widgets in this room

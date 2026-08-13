@@ -858,6 +858,20 @@ describe("<Notifications />", () => {
             });
         });
 
+        it("adds a keyword that starts with a dot", async () => {
+            await getComponentAndWait();
+
+            await userEvent.type(screen.getByLabelText("Keyword"), ".jest");
+
+            fireEvent.click(screen.getByText("Add"));
+
+            // The homeserver rejects a rule id beginning with a dot, so only the pattern keeps it.
+            expect(mockClient.addPushRule).toHaveBeenCalledWith("global", PushRuleKind.ContentSpecific, "jest", {
+                actions: [PushRuleActionName.Notify, { set_tweak: "highlight", value: false }],
+                pattern: ".jest",
+            });
+        });
+
         it("adds a new keyword with same actions as existing rules when keywords rule is off", async () => {
             const offContentRule = {
                 ...bananaRule,
