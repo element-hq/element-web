@@ -67,8 +67,6 @@ export const useUserInfoPowerlevelViewModel = (user: RoomMember, room: Room): Us
             if (!powerLevelEvent) return;
 
             const myUserId = cli.getUserId();
-            // Read our own level off the member rather than the `users` map: the map omits anyone
-            // sitting on `users_default`, and omits room creators, who outrank everyone.
             const myPower = myUserId ? room.getMember(myUserId)?.powerLevel : undefined;
             if (myPower !== undefined && myPower <= powerLevel && myUserId !== target) {
                 const { finished } = Modal.createDialog(QuestionDialog, {
