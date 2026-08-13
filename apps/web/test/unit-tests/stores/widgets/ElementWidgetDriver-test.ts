@@ -477,17 +477,15 @@ describe("ElementWidgetDriver", () => {
                 if (key === "enable_client_well_known_lookups") return false;
                 return sdkConfigGet(key, altCaseName);
             });
-            client.cachedRtcTransports.wait.mockRejectedValue(
-                new MatrixError({ errcode: "M_NOT_FOUND", error: "Not found" }, 404),
-            );
+            client.cachedRtcTransports.wait.mockResolvedValue([]);
 
-            await expect(driver.getRtcTransports()).rejects.toThrow();
+            await expect(driver.getRtcTransports()).resolves.toEqual({ rtc_transports: [] });
 
             expect(client.waitForClientWellKnown).not.toHaveBeenCalled();
             expect(client.getClientWellKnown).not.toHaveBeenCalled();
         });
 
-        it("Should  fallback to well-known if config allows", async () => {
+        it("Should fallback to well-known if config allows", async () => {
             const sdkConfigGet = SdkConfig.get;
             jest.spyOn(SdkConfig, "get").mockImplementation((key?: any, altCaseName?: string): any => {
                 if (key === "enable_client_well_known_lookups") return true;

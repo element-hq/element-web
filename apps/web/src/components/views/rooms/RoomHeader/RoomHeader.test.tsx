@@ -117,7 +117,6 @@ describe("RoomHeader", () => {
             getUserIdForRoomId: vi.fn(),
         } as unknown as DMRoomMap);
 
-        // vi.mocked(client.cachedRtcTransports.get).mockReturnValue([]);
         setCardSpy = vi.spyOn(RightPanelStore.instance, "setCard");
         vi.spyOn(ShieldUtils, "shieldStatusForRoom").mockResolvedValue(ShieldUtils.E2EStatus.Normal);
 
