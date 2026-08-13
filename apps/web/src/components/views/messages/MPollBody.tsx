@@ -157,7 +157,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         const room = this.context?.getRoom(this.props.mxEvent.getRoomId());
         const poll = room?.polls.get(this.props.mxEvent.getId()!);
         if (poll) {
-            this.setPollInstance(poll);
+            void this.setPollInstance(poll);
         } else {
             room?.on(PollEvent.New, this.setPollInstance.bind(this));
         }

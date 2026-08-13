@@ -187,7 +187,7 @@ export class DeviceListenerOtherDevices {
 
         // Show toasts for new unverified devices if they aren't already there
         for (const deviceId of newUnverifiedDeviceIds) {
-            showUnverifiedSessionToast(deviceId);
+            void showUnverifiedSessionToast(deviceId);
         }
 
         // ...and hide any we don't need any more

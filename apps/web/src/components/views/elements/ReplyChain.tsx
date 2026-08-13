@@ -86,7 +86,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
 
     public componentDidMount(): void {
         this.unmounted = false;
-        this.initialize();
+        void this.initialize();
         this.trySetExpandableQuotes();
     }
 
@@ -169,7 +169,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
     };
 
     public collapse = (): void => {
-        this.initialize();
+        void this.initialize();
     };
 
     private onQuoteClick = async (): Promise<void> => {

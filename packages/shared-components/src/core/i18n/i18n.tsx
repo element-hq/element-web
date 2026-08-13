@@ -361,11 +361,11 @@ export function replaceByRegexes(text: string, mapping: IVariables | Tags): stri
 
             // Insert in reverse order as splice does insert-before and this way we get the final order correct
             // remove the old element at the same time
-            output.splice(outputIndex, 1, ...parts);
+            void output.splice(outputIndex, 1, ...parts);
 
             if (head !== "") {
                 // Don't push empty nodes, they are of no use
-                output.splice(outputIndex, 0, head);
+                void output.splice(outputIndex, 0, head);
             }
         }
         if (!matchFoundSomewhere) {

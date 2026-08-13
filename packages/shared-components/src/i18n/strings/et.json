@@ -44,6 +44,23 @@
     "devtools": {
         "toggle_event": "lülita sündmus sisse/välja"
     },
+    "emoji": {
+        "categories": "Kategooriad",
+        "category_activities": "Tegevused",
+        "category_animals_nature": "Loomad ja loodus",
+        "category_flags": "Lipud",
+        "category_food_drink": "Toit ja jook",
+        "category_frequently_used": "Enamkasutatud",
+        "category_objects": "Esemed",
+        "category_smileys_people": "Vigurnäod ja inimesed",
+        "category_symbols": "Sümbolid",
+        "category_travel_places": "Reisimine ja kohad",
+        "quick_reactions": "Reageeri lennult"
+    },
+    "emoji_picker": {
+        "cancel_search_label": "Katkesta otsing",
+        "emoji_picker": "Emojide valija"
+    },
     "keyboard": {
         "shift": "Shift"
     },

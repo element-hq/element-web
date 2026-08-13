@@ -674,7 +674,7 @@ export default class SettingsStore {
                 .filter((k) => k.startsWith("mx_ShowImage_"))
                 .map((k) => [k.slice("mx_ShowImage_".length), true]),
         );
-        this.setValue("showMediaEventIds", null, SettingLevel.DEVICE, newValue);
+        void this.setValue("showMediaEventIds", null, SettingLevel.DEVICE, newValue);
 
         localStorage.setItem(MIGRATION_DONE_FLAG, "true");
     }
@@ -701,7 +701,7 @@ export default class SettingsStore {
         const showAvatarsOnInvites = handler.getValue("showAvatarsOnInvites", null);
 
         if (typeof showImages === "boolean" || typeof showAvatarsOnInvites === "boolean") {
-            this.setValue("mediaPreviewConfig", null, SettingLevel.ACCOUNT, {
+            await this.setValue("mediaPreviewConfig", null, SettingLevel.ACCOUNT, {
                 invite_avatars: showAvatarsOnInvites === false ? MediaPreviewValue.Off : MediaPreviewValue.On,
                 media_previews: showImages === false ? MediaPreviewValue.Off : MediaPreviewValue.On,
             });

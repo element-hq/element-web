@@ -32,6 +32,7 @@ describe("UserMenuViewModel", () => {
             ...mockClientMethodsUser(),
             ...mockClientMethodsServer(),
             getAuthMetadata: jest.fn().mockRejectedValue(new MatrixError({ errcode: "M_UNRECOGNIZED" }, 404)),
+            getExtendedProfileProperty: jest.fn().mockResolvedValue(undefined),
             setExtendedProfileProperty: jest.fn().mockResolvedValue(undefined),
         });
         sdkContext = new TestSDKContext();
@@ -178,6 +179,7 @@ describe("UserMenuViewModel", () => {
     });
 
     it("can clear a user status", async () => {
+        client.getExtendedProfileProperty.mockResolvedValue({ emoji: "🧪", text: "Testing" });
         const vm = new UserMenuViewModel({ ownProfileStore: mockOwnProfileStore }, dispatcher, client, true);
         vm.setOpen(true);
         vm.clearStatus();
