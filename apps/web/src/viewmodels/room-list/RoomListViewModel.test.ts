@@ -7,7 +7,7 @@
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeEach, afterEach, beforeAll, afterAll } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "test-utils-rtl";
 import {
@@ -24,7 +24,6 @@ import { FilterEnum } from "../../stores/room-list-v3/skip-list/filters";
 import dispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import { SDKContextClass } from "../../contexts/SDKContextClass";
-import { MatrixClientPeg } from "../../MatrixClientPeg";
 import DMRoomMap from "../../utils/DMRoomMap";
 import { RoomListViewModel } from "./RoomListViewModel";
 import { hasCreateRoomRights } from "./utils";
@@ -61,22 +60,6 @@ describe("RoomListViewModel", () => {
     // In-memory backing store for the persisted section expansion setting, reset each test so
     // collapse state does not leak between tests and writes round-trip synchronously.
     let sectionExpansionState: SectionExpansionState;
-
-    // Stub MatrixClientPeg.safeGet (via plain assignment, not vi.spyOn, so it survives every
-    // test's `vi.restoreAllMocks()`) so that a real ViewRoom dispatch triggered asynchronously by
-    // the (unmocked) global dispatcher -- e.g. from a dangling `dispatcher.dispatch()` call in an
-    // earlier test that hasn't settled by the time a later one starts/ends -- never crashes the
-    // global RoomViewStore singleton with "User is not logged in". Deliberately leaves
-    // MatrixClientPeg.get() untouched (unlike `stubClient()`) since some tests in this file
-    // lazily start real AsyncStoreWithClient-backed stores (e.g. SpaceStore) that key off of
-    // `MatrixClientPeg.get()` returning null to skip their real onReady() logic.
-    const originalSafeGet = MatrixClientPeg.safeGet.bind(MatrixClientPeg);
-    beforeAll(() => {
-        MatrixClientPeg.safeGet = (): MatrixClient => matrixClient;
-    });
-    afterAll(() => {
-        MatrixClientPeg.safeGet = originalSafeGet;
-    });
 
     beforeEach(() => {
         matrixClient = createTestClient();
@@ -667,7 +650,7 @@ describe("RoomListViewModel", () => {
                 roomViewStore: SDKContextClass.instance.roomViewStore,
             });
 
-            const dispatchSpy = vi.spyOn(dispatcher, "fire");
+            const dispatchSpy = vi.spyOn(dispatcher, "fire").mockImplementation(() => {});
 
             viewModel.createChatRoom();
 
@@ -681,7 +664,7 @@ describe("RoomListViewModel", () => {
                 roomViewStore: SDKContextClass.instance.roomViewStore,
             });
 
-            const dispatchSpy = vi.spyOn(dispatcher, "dispatch");
+            const dispatchSpy = vi.spyOn(dispatcher, "dispatch").mockImplementation(() => {});
 
             viewModel.createRoom();
 
@@ -700,7 +683,7 @@ describe("RoomListViewModel", () => {
                 roomViewStore: SDKContextClass.instance.roomViewStore,
             });
 
-            const dispatchSpy = vi.spyOn(dispatcher, "dispatch");
+            const dispatchSpy = vi.spyOn(dispatcher, "dispatch").mockImplementation(() => {});
 
             viewModel.createRoom();
 
@@ -733,6 +716,7 @@ describe("RoomListViewModel", () => {
                 delta: 1,
                 unread: false,
             });
+            dispatchSpy.mockImplementation(() => {});
 
             await flushPromises();
 
@@ -760,6 +744,7 @@ describe("RoomListViewModel", () => {
                 delta: -1,
                 unread: false,
             });
+            dispatchSpy.mockImplementation(() => {});
 
             await flushPromises();
 
@@ -787,6 +772,7 @@ describe("RoomListViewModel", () => {
                 delta: -1,
                 unread: false,
             });
+            dispatchSpy.mockImplementation(() => {});
 
             await flushPromises();
 
@@ -815,6 +801,7 @@ describe("RoomListViewModel", () => {
                 delta: 1,
                 unread: false,
             });
+            dispatchSpy.mockImplementation(() => {});
 
             await flushPromises();
 
@@ -843,6 +830,7 @@ describe("RoomListViewModel", () => {
                 delta: 1,
                 unread: false,
             });
+            dispatchSpy.mockImplementation(() => {});
 
             await flushPromises();
 
@@ -1482,7 +1470,7 @@ describe("RoomListViewModel", () => {
                         roomViewStore: SDKContextClass.instance.roomViewStore,
                     });
 
-                    const dispatchSpy = vi.spyOn(dispatcher, "dispatch");
+                    const dispatchSpy = vi.spyOn(dispatcher, "dispatch").mockImplementation(() => {});
                     RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
 
                     expect(dispatchSpy).toHaveBeenCalledWith({
@@ -1503,7 +1491,7 @@ describe("RoomListViewModel", () => {
                     viewModel.getSectionHeaderViewModel(CHATS_TAG).isExpanded = false;
                     viewModel.getSectionHeaderViewModel(DefaultTagID.LowPriority).isExpanded = false;
 
-                    const dispatchSpy = vi.spyOn(dispatcher, "dispatch");
+                    const dispatchSpy = vi.spyOn(dispatcher, "dispatch").mockImplementation(() => {});
                     RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
 
                     expect(dispatchSpy).toHaveBeenCalledWith({
@@ -1530,7 +1518,7 @@ describe("RoomListViewModel", () => {
                         roomViewStore: SDKContextClass.instance.roomViewStore,
                     });
 
-                    const dispatchSpy = vi.spyOn(dispatcher, "dispatch");
+                    const dispatchSpy = vi.spyOn(dispatcher, "dispatch").mockImplementation(() => {});
                     RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
 
                     expect(dispatchSpy).toHaveBeenCalledWith({
