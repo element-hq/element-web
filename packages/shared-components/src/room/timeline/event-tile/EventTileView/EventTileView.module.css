@@ -609,9 +609,6 @@
         width: fit-content;
         max-width: 70%;
         line-height: 18px;
-    }
-
-    .slotSender {
         position: relative;
         inset-block-start: -2px;
         inset-inline-start: 2px;
