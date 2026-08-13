@@ -18,7 +18,6 @@ import {
 import { type RoomAvatarEventContent } from "matrix-js-sdk/src/types";
 import {
     BaseViewModel,
-    Disposables,
     type RoomAvatarViewModel as RoomAvatarViewModelInterface,
     type RoomAvatarViewSnapshot,
 } from "@element-hq/web-shared-components";
@@ -96,18 +95,13 @@ export class RoomAvatarViewModel
     extends BaseViewModel<RoomAvatarViewSnapshot, Props>
     implements RoomAvatarViewModelInterface
 {
-    private roomListenerDisposables?: Disposables;
-    private mediaPreviewSettingDisposables?: Disposables;
+    private readonly roomsWithListeners = new WeakSet<Room>();
+    private readonly mediaPreviewSettingRoomIdsWithWatchers = new Set<string | null>();
 
     public constructor(props: Props) {
         super(props, RoomAvatarViewModel.computeSnapshot(props));
         this.bindRoomListeners(props.room);
         this.bindMediaPreviewSettingWatcher(props.room);
-
-        this.disposables.track(() => {
-            this.roomListenerDisposables?.dispose();
-            this.clearMediaPreviewSettingWatcher();
-        });
     }
 
     public setRoom(room?: Room): void {
@@ -248,39 +242,31 @@ export class RoomAvatarViewModel
     };
 
     private bindRoomListeners(room?: Room): void {
-        this.roomListenerDisposables?.dispose();
-        this.roomListenerDisposables = undefined;
-        if (!room) return;
+        if (!room || this.roomsWithListeners.has(room)) return;
 
-        const roomListenerDisposables = new Disposables();
-        roomListenerDisposables.trackListener(room, RoomEvent.Name, this.refreshSnapshot);
-        roomListenerDisposables.trackListener(room, RoomEvent.MyMembership, this.refreshSnapshot);
-        roomListenerDisposables.trackListener(room, RoomStateEvent.Update, this.refreshSnapshot);
-        roomListenerDisposables.trackListener(room.currentState, RoomStateEvent.Update, this.refreshSnapshot);
-        roomListenerDisposables.trackListener(room.currentState, RoomStateEvent.Members, this.refreshSnapshot);
-        roomListenerDisposables.trackListener(room.client, ClientEvent.AccountData, this.refreshSnapshot);
+        this.roomsWithListeners.add(room);
+        const refreshSnapshotForRoom = (): void => {
+            if (this.props.room !== room) return;
+            this.refreshSnapshot();
+        };
 
-        this.roomListenerDisposables = roomListenerDisposables;
+        this.disposables.trackListener(room, RoomEvent.Name, refreshSnapshotForRoom);
+        this.disposables.trackListener(room, RoomEvent.MyMembership, refreshSnapshotForRoom);
+        this.disposables.trackListener(room, RoomStateEvent.Update, refreshSnapshotForRoom);
+        this.disposables.trackListener(room.currentState, RoomStateEvent.Update, refreshSnapshotForRoom);
+        this.disposables.trackListener(room.currentState, RoomStateEvent.Members, refreshSnapshotForRoom);
+        this.disposables.trackListener(room.client, ClientEvent.AccountData, refreshSnapshotForRoom);
     }
 
     private bindMediaPreviewSettingWatcher(room?: Room): void {
-        this.clearMediaPreviewSettingWatcher();
-        this.mediaPreviewSettingDisposables = new Disposables();
+        const roomId = room?.roomId ?? null;
+        if (this.mediaPreviewSettingRoomIdsWithWatchers.has(roomId)) return;
 
-        const mediaPreviewSettingWatcherRef = SettingsStore.watchSetting(
-            "mediaPreviewConfig",
-            room?.roomId ?? null,
-            this.onMediaPreviewSettingChanged,
-        );
-        this.mediaPreviewSettingDisposables.track(() => SettingsStore.unwatchSetting(mediaPreviewSettingWatcherRef));
+        this.mediaPreviewSettingRoomIdsWithWatchers.add(roomId);
+        const mediaPreviewSettingWatcherRef = SettingsStore.watchSetting("mediaPreviewConfig", roomId, () => {
+            if ((this.props.room?.roomId ?? null) !== roomId) return;
+            this.refreshSnapshot();
+        });
+        this.disposables.track(() => SettingsStore.unwatchSetting(mediaPreviewSettingWatcherRef));
     }
-
-    private clearMediaPreviewSettingWatcher(): void {
-        this.mediaPreviewSettingDisposables?.dispose();
-        this.mediaPreviewSettingDisposables = undefined;
-    }
-
-    private readonly onMediaPreviewSettingChanged = (): void => {
-        this.refreshSnapshot();
-    };
 }
