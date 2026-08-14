@@ -4,6 +4,7 @@
     },
     "action": {
         "back": "Назад",
+        "cancel": "Скасувати",
         "click": "Натисніть",
         "close": "Закрити",
         "collapse": "Згорнути",
@@ -28,6 +29,7 @@
         "reply": "Відповісти",
         "reply_in_thread": "Відповісти в гілці",
         "retry": "Повторити спробу",
+        "save": "Зберегти",
         "search": "Пошук",
         "start_chat": "Розпочати бесіду",
         "unpin": "Відкріпити",
@@ -41,11 +43,32 @@
         "preferences": "Налаштування",
         "state_encryption_enabled": "Увімкнено експериментальне шифрування стану"
     },
+    "devtools": {
+        "toggle_event": "перемкнути подію"
+    },
+    "emoji": {
+        "categories": "Категорії",
+        "category_activities": "Діяльність",
+        "category_animals_nature": "Тварини та природа",
+        "category_flags": "Прапори",
+        "category_food_drink": "Їжа та напої",
+        "category_frequently_used": "Часто використовувані",
+        "category_objects": "Об'єкти",
+        "category_smileys_people": "Смайлики та люди",
+        "category_symbols": "Символи",
+        "category_travel_places": "Подорожі та місця",
+        "quick_reactions": "Швидкі реакції"
+    },
+    "emoji_picker": {
+        "cancel_search_label": "Скасувати пошук",
+        "emoji_picker": "Панель емоджі"
+    },
     "keyboard": {
         "shift": "Shift"
     },
     "left_panel": {
-        "open_dial_pad": "Відкрити номеронабирач"
+        "open_dial_pad": "Відкрити номеронабирач",
+        "separator_label": "Натисніть або перетягніть, щоб розгорнути"
     },
     "menus": {
         "user_menu": {
@@ -59,7 +82,10 @@
     },
     "notifications": {
         "all_messages": "Усі повідомлення",
+        "default_settings": "Згідно з усталеними налаштуваннями",
+        "mark_all_read": "Позначити всі прочитаними",
         "mentions_keywords": "Згадки та ключові слова",
+        "message_didnt_send": "Повідомлення не надіслане. Натисніть, щоб дізнатись більше.",
         "mute_room": "Вимкнути сповіщення кімнати"
     },
     "release_announcement": {
@@ -76,9 +102,12 @@
             "shared": "Нові учасники бачать історію",
             "world_readable": "Будь-хто може бачити історію"
         },
+        "jump_read_marker": "Перейти до першого непрочитаного повідомлення.",
+        "jump_to_bottom_button": "Перейти до найновіших повідомлень",
         "jump_to_date": "Перейти до дати",
         "jump_to_date_beginning": "Початок кімнати",
         "jump_to_date_prompt": "Виберіть до якої дати перейти",
+        "knock_sent": "Запит на приєднання надіслано",
         "pinned_message_badge": "Закріплене повідомлення",
         "status_bar": {
             "delete_all": "Видалити все",
@@ -99,7 +128,22 @@
         "a11y": {
             "default": "Відкрити кімнату %(roomName)s",
             "drag_cancelled": "Перетягування скасовано",
+            "drag_end": "%(source)s перенесено до %(target)s",
+            "drag_end_original": "%(source)s повернено у вихідне положення",
+            "drag_instructions": "Натисніть Пробіл, щоб розпочати або зупинити перетягування, клавіші зі стрілками для переміщення та Escape для скасування.",
+            "drag_over_original": "%(source)s повернеться у вихідне положення",
+            "drag_start": "Перетягування %(source)s",
             "invitation": "Відкрити запрошення кімнати %(roomName)s.",
+            "mention": {
+                "one": "Відкрити кімнату %(roomName)s з 1 непрочитаною згадкою.",
+                "few": "Відкрити кімнату %(roomName)s з %(count)s непрочитаними згадками.",
+                "many": "Відкрити кімнату %(roomName)s з %(count)s непрочитаними згадками."
+            },
+            "unread": {
+                "one": "Відкрити кімнату %(roomName)s з 1 непрочитаним повідомленням.",
+                "few": "Відкрити кімнату %(roomName)s з %(count)s непрочитаними повідомленнями.",
+                "many": "Відкрити кімнату %(roomName)s з %(count)s непрочитаними повідомленнями."
+            },
             "unsent_message": "Відкрити кімнату %(roomName)s з ненадісланим повідомленням.",
             "video_call": "Відкрити кімнату %(roomName)s за допомогою відеовиклику.",
             "voice_call": "Відкрити кімнату %(roomName)s за допомогою голосового виклику."
@@ -174,6 +218,8 @@
         "set_status": {
             "away": "Не на місці",
             "be_right_back": "Зараз повернуся",
+            "choose_emoji": "Виберіть емодзі",
+            "custom": "Власний...",
             "focus_time": "Зосереджений(а)",
             "in_a_meeting": "На зустрічі",
             "on_the_road": "У дорозі",
@@ -286,6 +332,11 @@
         "url_preview": {
             "close": "Закрити попередній перегляд",
             "open_link": "Відкрити посилання",
+            "show_n_more": {
+                "one": "Показати ще %(count)s попередній перегляд",
+                "few": "Показати ще %(count)s попередні перегляди",
+                "many": "Показати ще %(count)s попередні перегляди"
+            },
             "view_image": "Переглянути зображення"
         }
     },

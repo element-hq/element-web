@@ -25,7 +25,6 @@ import postcssPresetEnv from "postcss-preset-env";
 import postcssImport from "postcss-import";
 import postcssMixins from "postcss-mixins";
 import postcssNested from "postcss-nested";
-import postcssEasings from "postcss-easings";
 
 import pkgJson from "./package.json" with { type: "json" };
 import componentsJson from "./components.json" with { type: "json" };
@@ -411,7 +410,6 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                                         postcssMixins(),
                                         postcssSimpleVars(),
                                         postcssNested(),
-                                        postcssEasings(),
                                         postcssHexrgba(),
 
                                         // It's important that this plugin is last otherwise we end

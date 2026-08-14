@@ -249,7 +249,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         this.encryptionByDefault = privateShouldBeEncrypted(MatrixClientPeg.safeGet());
 
         if (this.props.initialText) {
-            this.updateSuggestions(this.props.initialText);
+            void this.updateSuggestions(this.props.initialText);
         }
     }
 
@@ -482,13 +482,13 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 return;
             }
 
-            SDKContextClass.instance.legacyCallHandler.startTransferToMatrixID(
+            await SDKContextClass.instance.legacyCallHandler.startTransferToMatrixID(
                 this.props.call,
                 targetIds[0],
                 this.state.consultFirst,
             );
         } else {
-            SDKContextClass.instance.legacyCallHandler.startTransferToPhoneNumber(
+            await SDKContextClass.instance.legacyCallHandler.startTransferToPhoneNumber(
                 this.props.call,
                 this.state.dialPadValue,
                 this.state.consultFirst,
@@ -650,7 +650,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     private updateFilter = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const term = e.target.value;
         this.setState({ filterText: term });
-        this.updateSuggestions(term);
+        void this.updateSuggestions(term);
     };
 
     private showMoreRecents = (): void => {
@@ -1001,7 +1001,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
     private onDialFormSubmit = (ev: SyntheticEvent): void => {
         ev.preventDefault();
-        this.transferCall();
+        void this.transferCall();
     };
 
     private onDialChange = (ev: React.ChangeEvent<HTMLInputElement>): void => {
