@@ -1609,8 +1609,16 @@ class TimelinePanel extends React.Component<IProps, IState> {
         // if we're at the end of the live timeline, append the pending events
         if (!this.timelineWindow!.canPaginate(EventTimeline.FORWARDS)) {
             const pendingEvents = this.props.timelineSet.getPendingEvents();
+            // Pending events are the whole room's, so a filtered timeline set is handed events its
+            // own filter would never accept. Without this every message being sent flickers through
+            // panels like the file panel until its remote echo arrives and the filter rejects it.
+            const filter = this.props.timelineSet.getFilter?.();
             events.push(
                 ...pendingEvents.filter((event) => {
+                    if (filter && !filter.filterRoomTimeline([event]).length) {
+                        return false;
+                    }
+
                     const { shouldLiveInRoom, threadId } = this.props.timelineSet.room!.eventShouldLiveIn(
                         event,
                         pendingEvents,

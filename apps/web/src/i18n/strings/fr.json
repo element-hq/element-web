@@ -285,6 +285,8 @@
         },
         "registration_disabled": "L’inscription a été désactivée sur ce serveur d’accueil.",
         "registration_msisdn_field_required_invalid": "Saisir le numéro de téléphone (obligatoire sur ce serveur d’accueil)",
+        "registration_rate_limited": "Trop de tentatives consécutives. Attendez un peu avant de réessayer.",
+        "registration_rate_limited_with_time": "Trop de tentatives consécutives. Réessayez après %(timeout)s.",
         "registration_successful": "Inscription réussie",
         "registration_username_in_use": "Quelqu’un d’autre a déjà ce nom d’utilisateur. Essayez-en un autre ou bien, si c’est vous, connecter vous ci-dessous.",
         "registration_username_unable_check": "Impossible de vérifier si le nom d’utilisateur est déjà utilisé. Veuillez réessayer plus tard.",

@@ -32,6 +32,12 @@ export interface SetStatusViewSnapshot {
      * The current user status, or undefined if no status is set.
      */
     userStatus?: UserStatus;
+
+    /**
+     * Recently used emoji (unicode strings, most relevant first) to offer when
+     * choosing an emoji for a custom status.
+     */
+    recentEmojis?: string[];
 }
 
 export interface SetStatusViewActions {
@@ -51,6 +57,12 @@ export interface SetStatusViewActions {
      * Called when the user clears their current status.
      */
     clearStatus: () => void;
+
+    /**
+     * Called with the unicode of an emoji the user picked for a custom status,
+     * so it can be recorded as recently used.
+     */
+    recordRecentEmoji?: (unicode: string) => void;
 }
 
 export type SetStatusViewModel = ViewModel<SetStatusViewSnapshot, SetStatusViewActions>;
@@ -76,7 +88,7 @@ function StatusOption({ value }: { value: StatusValue }): React.ReactNode {
 }
 
 export function SetStatusView({ vm, initialCustomMode = false }: SetStatusViewProps): JSX.Element {
-    const { userStatus } = useViewModel(vm);
+    const { userStatus, recentEmojis } = useViewModel(vm);
     const [customMode, setCustomMode] = useState(initialCustomMode);
 
     const renderItem = useCallback((value: StatusValue | null): React.ReactNode => {
@@ -97,6 +109,8 @@ export function SetStatusView({ vm, initialCustomMode = false }: SetStatusViewPr
                     vm.setStatus(status);
                 }}
                 onCancel={() => setCustomMode(false)}
+                recentEmojis={recentEmojis}
+                onRecordRecentEmoji={vm.recordRecentEmoji}
             />
         );
     }
