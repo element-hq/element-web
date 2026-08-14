@@ -7,18 +7,25 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { waitFor } from "jest-matrix-react";
+// @vitest-environment happy-dom
+// @vitest-environment-options {"settings": {"navigation": {"disableChildFrameNavigation": true }}}
 
-import WidgetUtils from "../../../src/utils/WidgetUtils";
-import { setUpCommandTest } from "./utils";
-import { WidgetType } from "../../../src/widgets/WidgetType";
+import { describe, it, expect, vi } from "vitest";
+import { waitFor } from "test-utils-rtl";
+
+import WidgetUtils from "../utils/WidgetUtils";
+import { setUpCommandTest } from "./__mocks__";
+import { WidgetType } from "../widgets/WidgetType";
 
 describe("/addwidget", () => {
     const roomId = "!room:example.com";
 
     it("should parse html iframe snippets", async () => {
-        jest.spyOn(WidgetUtils, "canUserModifyWidgets").mockReturnValue(true);
-        const spy = jest.spyOn(WidgetUtils, "setRoomWidget");
+        vi.spyOn(WidgetUtils, "canUserModifyWidgets").mockReturnValue(true);
+        // This only asserts the call args below -- block the real implementation so it doesn't
+        // actually try to set up the widget (which, for a real URL like "https://element.io", ends
+        // up making a genuine outbound network request under happy-dom).
+        const spy = vi.spyOn(WidgetUtils, "setRoomWidget").mockResolvedValue(undefined);
 
         const { client, command } = setUpCommandTest(roomId, `/addwidget`);
 

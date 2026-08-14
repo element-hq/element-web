@@ -9,11 +9,11 @@ import { Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { vi } from "vitest";
 import { stubClient } from "test-utils";
 
-import { type Command } from "./command";
-import { getCommand } from "./SlashCommands";
-import { SDKContextClass } from "../contexts/SDKContextClass";
-import { LocalRoom } from "../models/LocalRoom";
-import DMRoomMap from "../utils/DMRoomMap";
+import { type Command } from "../command";
+import { getCommand } from "../SlashCommands";
+import { SDKContextClass } from "../../contexts/SDKContextClass";
+import { LocalRoom } from "../../models/LocalRoom";
+import DMRoomMap from "../../utils/DMRoomMap";
 
 export function setUpCommandTest(
     roomId: string,
