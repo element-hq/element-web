@@ -32,8 +32,7 @@ exports[`MessageComposerUrlPreview > failed entries > renders the failed placeho
         <span
           class="MessageComposerUrlPreview-module_linkCount"
         >
-          1
-           link
+          1 link
         </span>
       </span>
       <span
@@ -160,8 +159,7 @@ exports[`MessageComposerUrlPreview > failed entries > renders the failed summary
         <span
           class="MessageComposerUrlPreview-module_linkCount"
         >
-          1
-           link
+          1 link
         </span>
       </span>
       <span
@@ -231,8 +229,7 @@ exports[`MessageComposerUrlPreview > loading entries > renders the loading place
         <span
           class="MessageComposerUrlPreview-module_linkCount"
         >
-          1
-           link
+          1 link
         </span>
       </span>
       <span
@@ -296,7 +293,7 @@ exports[`MessageComposerUrlPreview > loading entries > renders the loading place
             rel="noreferrer noopener"
             target="_blank"
           >
-            Fetching preview...
+            Fetching preview…
           </a>
           <div
             class="LinkPreview-module_siteName MessageComposerUrlPreview-module_linkSiteName"
@@ -367,8 +364,7 @@ exports[`MessageComposerUrlPreview > loading entries > renders the loading summa
         <span
           class="MessageComposerUrlPreview-module_linkCount"
         >
-          1
-           link
+          1 link
         </span>
       </span>
       <span
@@ -460,9 +456,7 @@ exports[`MessageComposerUrlPreview > renders a mix of loaded, loading and failed
         <span
           class="MessageComposerUrlPreview-module_linkCount"
         >
-          3
-           link
-          s
+          3 links
         </span>
       </span>
       <span
@@ -578,7 +572,7 @@ exports[`MessageComposerUrlPreview > renders a mix of loaded, loading and failed
             rel="noreferrer noopener"
             target="_blank"
           >
-            Fetching preview...
+            Fetching preview…
           </a>
           <div
             class="LinkPreview-module_siteName MessageComposerUrlPreview-module_linkSiteName"
@@ -696,8 +690,7 @@ exports[`MessageComposerUrlPreview > renders a preview 1`] = `
         <span
           class="MessageComposerUrlPreview-module_linkCount"
         >
-          1
-           link
+          1 link
         </span>
       </span>
       <span
@@ -750,8 +743,7 @@ exports[`MessageComposerUrlPreview > renders a preview with an image 1`] = `
         <span
           class="MessageComposerUrlPreview-module_linkCount"
         >
-          1
-           link
+          1 link
         </span>
       </span>
       <span
@@ -802,8 +794,7 @@ exports[`MessageComposerUrlPreview > renders the expanded previews when not coll
         <span
           class="MessageComposerUrlPreview-module_linkCount"
         >
-          1
-           link
+          1 link
         </span>
       </span>
       <span

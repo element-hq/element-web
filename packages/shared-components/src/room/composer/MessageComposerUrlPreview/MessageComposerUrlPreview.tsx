@@ -16,6 +16,7 @@ import { type UrlPreview } from "../../timeline/event-tile/UrlPreviewGroupView";
 import styles from "./MessageComposerUrlPreview.module.css";
 import { LinkSiteName, LinkTitle } from "../../timeline/event-tile/UrlPreviewGroupView/LinkPreview/LinkPreview";
 import { useViewModel, type ViewModel } from "../../../core/viewmodel";
+import { useI18n } from "../../../core/i18n/i18nContext";
 
 export interface MessageComposerUrlPreviewSnapshotEntryLoaded {
     status: "loaded";
@@ -104,6 +105,8 @@ function UrlPreviewExpandedEntry({
     removePreview?: (url: string) => void;
     className?: string;
 }): JSX.Element {
+    const { translate: _t } = useI18n();
+
     const hostname = new URL(entry.matched_url).hostname;
     let entryIcon: JSX.Element;
     let entryTitle: string;
@@ -138,7 +141,7 @@ function UrlPreviewExpandedEntry({
                     <InlineSpinner />
                 </div>
             );
-            entryTitle = "Fetching preview...";
+            entryTitle = _t("composer|url_preview|loading");
             showTooltipOnLink = false;
             break;
 
@@ -148,7 +151,7 @@ function UrlPreviewExpandedEntry({
                     <ErrorIcon />
                 </div>
             );
-            entryTitle = "Failed to fetch preview";
+            entryTitle = _t("composer|url_preview|failed");
             showTooltipOnLink = false;
             break;
     }
@@ -175,7 +178,7 @@ function UrlPreviewExpandedEntry({
                 <button
                     onClick={onRemovePreview}
                     className={classNames(styles.removePreview, styles.spanLike)}
-                    aria-label="Remove URL preview"
+                    aria-label={_t("composer|url_preview|remove")}
                 >
                     <CloseIcon aria-hidden={true} />
                 </button>
@@ -194,6 +197,8 @@ export function MessageComposerUrlPreviewView({
     toggleCollapsed,
     removePreview,
 }: MessageComposerUrlPreviewProps): JSX.Element | null {
+    const { translate: _t } = useI18n();
+
     const { entries } = useViewModel(vm);
     const links = entries.filter((entry) => entry.include);
 
@@ -263,20 +268,18 @@ export function MessageComposerUrlPreviewView({
                         );
                     })}
                 </span>
-                <span className={styles.linkCount}>
-                    {links.length} link{links.length <= 1 ? "" : "s"}
-                </span>
+                <span className={styles.linkCount}>{_t("composer|url_preview|n_links", { count: links.length })}</span>
             </span>
             <span className={styles.right}>
                 {removePreview && (
                     <button className={classNames(styles.clearAll, styles.spanLike)} onClick={clearAll}>
-                        Clear all
+                        {_t("composer|url_preview|clear_all")}
                     </button>
                 )}
                 <button
                     className={classNames(styles.collapse, styles.spanLike)}
                     onClick={toggleCollapsed}
-                    aria-label="Collapse URL previews"
+                    aria-label={_t("composer|url_preview|collapse")}
                 >
                     <ChevronDownIcon aria-hidden={true} />
                 </button>

@@ -84,7 +84,7 @@ describe("MessageComposerUrlPreview", () => {
     describe("loading entries", () => {
         it("renders the loading placeholder when expanded", () => {
             const { container } = renderView([loadingEntry], false);
-            expect(screen.getByText("Fetching preview...")).toBeInTheDocument();
+            expect(screen.getByText("Fetching preview…")).toBeInTheDocument();
             expect(container).toMatchSnapshot();
         });
 
@@ -112,7 +112,7 @@ describe("MessageComposerUrlPreview", () => {
     it("renders a mix of loaded, loading and failed entries", () => {
         const entries: MessageComposerUrlPreviewSnapshotEntry[] = [Default.args.entries![0], loadingEntry, failedEntry];
         const { container } = renderView(entries, false);
-        expect(screen.getByText("Fetching preview...")).toBeInTheDocument();
+        expect(screen.getByText("Fetching preview…")).toBeInTheDocument();
         expect(screen.getByText("Failed to fetch preview")).toBeInTheDocument();
         expect(screen.getByText("3 links")).toBeInTheDocument();
         expect(container).toMatchSnapshot();

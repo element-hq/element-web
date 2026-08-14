@@ -41,6 +41,19 @@
         "preferences": "Preferences",
         "state_encryption_enabled": "Experimental state encryption enabled"
     },
+    "composer": {
+        "url_preview": {
+            "clear_all": "Clear all",
+            "collapse": "Collapse URL previews",
+            "failed": "Failed to fetch preview",
+            "loading": "Fetching preview…",
+            "n_links": {
+                "one": "%(count)s link",
+                "other": "%(count)s links"
+            },
+            "remove": "Remove URL preview"
+        }
+    },
     "devtools": {
         "toggle_event": "toggle event"
     },
