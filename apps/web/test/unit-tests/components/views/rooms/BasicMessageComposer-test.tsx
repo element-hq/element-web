@@ -104,6 +104,38 @@ describe("BasicMessageComposer", () => {
         expect(transformedText).toBe("/plain foobar\n");
     });
 
+    it("should replace the selected text when inserting a new line", async () => {
+        const model = new EditorModel([], pc, renderer);
+        render(<BasicMessageComposer model={model} room={room} />, {
+            wrapper: ({ children }) => (
+                <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+            ),
+        });
+
+        const input = screen.getByRole("textbox");
+        await userEvent.type(input, "hello world");
+
+        // Select "world".
+        const textNode = document.createTreeWalker(input, NodeFilter.SHOW_TEXT).nextNode()!;
+        const range = document.createRange();
+        range.setStart(textNode, 6);
+        range.setEnd(textNode, 11);
+        // jsdom does not implement Range.getBoundingClientRect, which the format bar asks for when
+        // the selection changes.
+        range.getBoundingClientRect = jest.fn().mockReturnValue({ top: 0, left: 0, width: 0, height: 0 });
+        const selection = document.getSelection()!;
+        selection.removeAllRanges();
+        selection.addRange(range);
+
+        // Guard: without a real selection this test would only be exercising the caret path.
+        expect(selection.isCollapsed).toBe(false);
+        expect(selection.toString()).toBe("world");
+
+        await userEvent.keyboard("{Shift>}{Enter}{/Shift}");
+
+        expect(model.parts.map((part) => part.text).join("")).toBe("hello \n");
+    });
+
     it("should escape single quote in placeholder", async () => {
         const model = new EditorModel([], pc, renderer);
         const composer = render(<BasicMessageComposer placeholder="Don't" model={model} room={room} />, {

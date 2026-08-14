@@ -41,6 +41,13 @@ const USER_ALREADY_JOINED = "IO.ELEMENT.ALREADY_JOINED";
 const USER_ALREADY_INVITED = "IO.ELEMENT.ALREADY_INVITED";
 const USER_BANNED = "IO.ELEMENT.BANNED";
 
+/** How long to wait before retrying a rate limited invite, when the server does not tell us. */
+const RATE_LIMIT_DEFAULT_DELAY_MS = 5000;
+/** The longest we will wait between retries, however long the server asks us to wait. */
+const RATE_LIMIT_MAX_DELAY_MS = 30000;
+/** How many times a single address is retried before we give up and report an error. */
+const RATE_LIMIT_MAX_RETRIES = 3;
+
 /** Options interface for {@link MultiInviter} */
 export interface MultiInviterOptions {
     /** Optional callback, fired after each invite */
@@ -61,6 +68,7 @@ export default class MultiInviter {
     private _fatal = false;
     private completionStates: CompletionStates = {}; // State of each address (invited or error)
     private errors: Record<string, IError> = {}; // { address: {errorText, errcode} }
+    private rateLimitRetries: Record<string, number> = {}; // { address: number of retries so far }
     private reason: string | undefined;
 
     /**
@@ -253,6 +261,7 @@ export default class MultiInviter {
                 .then(() => {
                     this.completionStates[address] = InviteState.Invited;
                     delete this.errors[address];
+                    delete this.rateLimitRetries[address];
 
                     resolve();
                     this.options.progressCallback?.();
@@ -297,12 +306,30 @@ export default class MultiInviter {
                                 errorText = _t("invite|error_already_joined_room");
                             }
                             break;
-                        case "M_LIMIT_EXCEEDED":
-                            // we're being throttled so wait a bit & try again
+                        case "M_LIMIT_EXCEEDED": {
+                            const retries = this.rateLimitRetries[address] ?? 0;
+                            if (retries >= RATE_LIMIT_MAX_RETRIES) {
+                                // We have given the server several chances; stop hammering it.
+                                errorText = _t("invite|error_rate_limited");
+                                break;
+                            }
+                            this.rateLimitRetries[address] = retries + 1;
+
+                            // we're being throttled so wait as long as the server asks & try again.
+                            // The delay is capped so that a very long backoff does not leave the
+                            // invite dialog hanging with no way out.
+                            const retryAfterMs = Number(err.data?.retry_after_ms);
+                            const delayMs = Math.min(
+                                Number.isFinite(retryAfterMs) && retryAfterMs >= 0
+                                    ? retryAfterMs
+                                    : RATE_LIMIT_DEFAULT_DELAY_MS,
+                                RATE_LIMIT_MAX_DELAY_MS,
+                            );
                             window.setTimeout(() => {
                                 this.doInvite(address, ignoreProfile).then(resolve, reject);
-                            }, 5000);
+                            }, delayMs);
                             return;
+                        }
                         case "M_NOT_FOUND":
                         case "M_USER_NOT_FOUND":
                             errorText = _t("invite|error_user_not_found");
@@ -356,7 +383,7 @@ export default class MultiInviter {
         return new Promise<void>((resolve) => {
             const inviteUnknowns = (): void => {
                 const promises = unknownProfileUsers.map((u) => this.doInvite(u, true));
-                Promise.all(promises).then(() => resolve());
+                void Promise.all(promises).then(() => resolve());
             };
 
             if (!SettingsStore.getValue("promptBeforeInviteUnknownUsers", this.roomId)) {

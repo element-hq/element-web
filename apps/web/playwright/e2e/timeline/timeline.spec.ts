@@ -909,6 +909,30 @@ test.describe("Timeline", () => {
             });
         });
 
+        test("should not enlarge emoji inside a code block", async ({ page, app, room }) => {
+            await page.goto(`/#/room/${room.roomId}`);
+
+            const composer = app.getComposerField();
+            await composer.fill("```\nconst waving = '👋';\n```");
+            await composer.press("Enter");
+            await composer.fill("👋 hello");
+            await composer.press("Enter");
+
+            const codeBlock = page.locator(".mx_EventTile_pre_container").first();
+            await expect(codeBlock).toBeVisible();
+
+            const fontSize = (locator: Locator): Promise<string> =>
+                locator.evaluate((node) => window.getComputedStyle(node).fontSize);
+
+            // Inside a code block the emoji must not be any larger than the code around it,
+            // otherwise the line it sits on grows and the line numbers stop lining up
+            expect(await fontSize(codeBlock.locator(".mx_Emoji"))).toEqual(await fontSize(codeBlock.locator("code")));
+
+            // ...but emoji in an ordinary message are still enlarged
+            const message = page.locator(".mx_EventTile_last .mx_EventTile_body");
+            expect(await fontSize(message.locator(".mx_Emoji"))).not.toEqual(await fontSize(message));
+        });
+
         test(
             "should be able to hide an image",
             { tag: "@screenshot" },

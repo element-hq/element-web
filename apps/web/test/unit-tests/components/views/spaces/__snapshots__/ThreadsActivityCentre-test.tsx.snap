@@ -66,10 +66,13 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
         />
       </svg>
       <div
-        class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_level_highlight mx_NotificationBadge_dot"
+        class="mx_ThreadsActivityCentre_notificationBadge _notificationBadge_19whq_8 _visible_19whq_16 _highlight_19whq_48 _dot_19whq_33"
+        data-badge-type="dot"
+        data-notification-level="highlight"
+        data-testid="notification-badge"
       >
         <span
-          class="mx_NotificationBadge_count"
+          class="_count_19whq_40"
         />
       </div>
     </button>
@@ -114,10 +117,13 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
         />
       </svg>
       <div
-        class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_level_notification mx_NotificationBadge_dot"
+        class="mx_ThreadsActivityCentre_notificationBadge _notificationBadge_19whq_8 _visible_19whq_16 _notification_19whq_8 _dot_19whq_33"
+        data-badge-type="dot"
+        data-notification-level="notification"
+        data-testid="notification-badge"
       >
         <span
-          class="mx_NotificationBadge_count"
+          class="_count_19whq_40"
         />
       </div>
     </button>
@@ -225,10 +231,13 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
         />
       </svg>
       <div
-        class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_level_highlight mx_NotificationBadge_dot"
+        class="mx_ThreadsActivityCentre_notificationBadge _notificationBadge_19whq_8 _visible_19whq_16 _highlight_19whq_48 _dot_19whq_33"
+        data-badge-type="dot"
+        data-notification-level="highlight"
+        data-testid="notification-badge"
       >
         <span
-          class="mx_NotificationBadge_count"
+          class="_count_19whq_40"
         />
       </div>
     </button>
@@ -273,10 +282,13 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
         />
       </svg>
       <div
-        class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_level_highlight mx_NotificationBadge_dot"
+        class="mx_ThreadsActivityCentre_notificationBadge _notificationBadge_19whq_8 _visible_19whq_16 _highlight_19whq_48 _dot_19whq_33"
+        data-badge-type="dot"
+        data-notification-level="highlight"
+        data-testid="notification-badge"
       >
         <span
-          class="mx_NotificationBadge_count"
+          class="_count_19whq_40"
         />
       </div>
     </button>
@@ -321,10 +333,13 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
         />
       </svg>
       <div
-        class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_level_highlight mx_NotificationBadge_dot"
+        class="mx_ThreadsActivityCentre_notificationBadge _notificationBadge_19whq_8 _visible_19whq_16 _highlight_19whq_48 _dot_19whq_33"
+        data-badge-type="dot"
+        data-notification-level="highlight"
+        data-testid="notification-badge"
       >
         <span
-          class="mx_NotificationBadge_count"
+          class="_count_19whq_40"
         />
       </div>
     </button>
