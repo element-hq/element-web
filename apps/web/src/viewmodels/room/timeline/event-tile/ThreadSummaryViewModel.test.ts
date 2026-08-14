@@ -73,6 +73,7 @@ const clientMxcUrlToHttpMocks = new WeakMap<MatrixClient, Mock>();
 class TestRoom extends EventEmitter {
     public roomId = roomId;
     public getMember = vi.fn();
+    public client = new EventEmitter() as unknown as MatrixClient;
 }
 
 class TestThread extends EventEmitter {
@@ -335,6 +336,27 @@ describe("ThreadSummaryViewModel", () => {
         expect(vm.getSnapshot().notificationIndicator).toBeUndefined();
 
         room.emit(RoomEvent.Receipt);
+
+        expect(determineUnreadState).toHaveBeenCalledWith(room, "$root", false);
+        expect(vm.getSnapshot().notificationIndicator).toBe("success");
+    });
+
+    it("refreshes the notification indicator when an event of the room is decrypted", () => {
+        const { vm, room } = makeSummaryVm();
+        vi.mocked(determineUnreadState).mockClear();
+        vi.mocked(determineUnreadState).mockReturnValue({
+            symbol: null,
+            count: 1,
+            level: NotificationLevel.Notification,
+            invited: false,
+        });
+
+        room.client.emit(MatrixEventEvent.Decrypted, { getRoomId: () => "!other:example.org" } as MatrixEvent);
+
+        expect(determineUnreadState).not.toHaveBeenCalled();
+        expect(vm.getSnapshot().notificationIndicator).toBeUndefined();
+
+        room.client.emit(MatrixEventEvent.Decrypted, { getRoomId: () => roomId } as MatrixEvent);
 
         expect(determineUnreadState).toHaveBeenCalledWith(room, "$root", false);
         expect(vm.getSnapshot().notificationIndicator).toBe("success");
