@@ -37,7 +37,7 @@ export default class SessionRestoreErrorDialog extends React.Component<IProps> {
             button: _t("action|sign_out"),
             danger: true,
         });
-        finished.then(([ok]) => this.props.onFinished(ok));
+        void finished.then(([ok]) => this.props.onFinished(ok));
     };
 
     private onRefreshClick = (): void => {

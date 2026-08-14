@@ -271,7 +271,7 @@ function loadVideoElement(videoFile: File): Promise<HTMLVideoElement> {
 
             video.src = dataUrl;
             video.load();
-            video.play();
+            void video.play();
         };
         reader.onerror = function (e): void {
             reject(e);
