@@ -39,7 +39,15 @@ export type MessageComposerUrlPreviewSnapshotEntryState =
  * An entry in the URL preview box
  */
 export type MessageComposerUrlPreviewSnapshotEntry = MessageComposerUrlPreviewSnapshotEntryState & {
+    /**
+     * default: true
+     * set to false when the preview is removed by the user
+     * so the vm remembers to not show the previews list even after another computeSnapshot
+     */
     include: boolean;
+    /**
+     * the url string that the preview is representing
+     */
     matched_url: string;
 };
 
