@@ -496,7 +496,6 @@ const onVideoConferenceJoined = (): void => {
 
     if (widgetApi) {
         // ignored promise because we don't care if it works
-        // noinspection JSIgnoredPromiseFromCall
         void widgetApi.setAlwaysOnScreen(true);
         void widgetApi.transport.send(ElementWidgetActions.JoinCall, {});
     }

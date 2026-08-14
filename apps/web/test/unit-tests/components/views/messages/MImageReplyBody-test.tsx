@@ -227,7 +227,7 @@ describe("<MImageReplyBody />", () => {
     it("opens the image viewer with thumbnail geometry", async () => {
         const { container } = renderBase();
         await waitFor(() => expect(screen.getByRole("img", { name: "demo image" })).toBeInTheDocument());
-        const image = container.querySelector("img.mx_MImageBody_thumbnail") as HTMLImageElement;
+        const image = container.querySelector("img.mx_MImageBody_thumbnail")!;
         image.getBoundingClientRect = () => ({ width: 100, height: 80, x: 10, y: 20 }) as DOMRect;
         jest.spyOn(Modal, "createDialog").mockReturnValue({} as any);
 
@@ -257,7 +257,7 @@ describe("<MImageReplyBody />", () => {
     it("updates load dimensions and toggles hover/focus banner state", async () => {
         const { container, ref } = renderBase();
         await waitFor(() => expect(screen.getByRole("img", { name: "demo image" })).toBeInTheDocument());
-        const image = container.querySelector("img.mx_MImageBody_thumbnail") as HTMLImageElement;
+        const image = container.querySelector("img.mx_MImageBody_thumbnail")!;
         Object.defineProperty(image, "naturalWidth", { configurable: true, value: 640 });
         Object.defineProperty(image, "naturalHeight", { configurable: true, value: 480 });
 
@@ -466,7 +466,7 @@ describe("<MImageReplyBody />", () => {
             },
         });
         await waitFor(() => expect(container.querySelector("img[style*='display: none']")).not.toBeNull());
-        const image = container.querySelector("img[style*='display: none']") as HTMLImageElement;
+        const image = container.querySelector("img[style*='display: none']")!;
         Object.defineProperty(image, "naturalWidth", { configurable: true, value: 640 });
         Object.defineProperty(image, "naturalHeight", { configurable: true, value: 480 });
 
