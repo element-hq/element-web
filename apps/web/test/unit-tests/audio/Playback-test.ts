@@ -29,11 +29,18 @@ describe("Playback", () => {
         connect: jest.fn(),
         start: jest.fn(),
     };
+    const mockMediaElementSourceNode = {
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        connect: jest.fn(),
+        disconnect: jest.fn(),
+    };
     const mockAudioContext = {
         decodeAudioData: jest.fn(),
         suspend: jest.fn(),
         resume: jest.fn(),
         createBufferSource: jest.fn().mockReturnValue(mockAudioBufferSourceNode),
+        createMediaElementSource: jest.fn().mockReturnValue(mockMediaElementSourceNode),
         currentTime: 1337,
     };
 
@@ -169,6 +176,34 @@ describe("Playback", () => {
             expect(playback.currentState).toEqual(PlaybackState.Stopped);
         });
 
+        it("hands the ogg fallback a buffer which decodeAudioData has not detached", async () => {
+            // stub logger to keep console clean from expected error
+            jest.spyOn(logger, "error").mockReturnValue(undefined);
+            jest.spyOn(logger, "warn").mockReturnValue(undefined);
+
+            const buffer = new ArrayBuffer(8);
+            mockAudioContext.decodeAudioData
+                .mockImplementationOnce((buf: ArrayBuffer) => {
+                    // The real decodeAudioData detaches the buffer it is handed, even when it fails.
+                    structuredClone(buf, { transfer: [buf] });
+                    return Promise.reject(new Error("test"));
+                })
+                .mockResolvedValueOnce(mockAudioBuffer);
+            // Constructing a view over a detached buffer throws, which is what decodeOgg does first.
+            mocked(decodeOgg).mockImplementationOnce(async (audioBuffer: ArrayBuffer) => {
+                expect(() => new Uint8Array(audioBuffer)).not.toThrow();
+                return new ArrayBuffer(1);
+            });
+
+            const playback = new Playback(buffer);
+
+            await playback.prepare();
+
+            expect(decodeOgg).toHaveBeenCalled();
+            expect(mockAudioContext.decodeAudioData).toHaveBeenCalledTimes(2);
+            expect(playback.currentState).toEqual(PlaybackState.Stopped);
+        });
+
         it("does not try to re-decode audio", async () => {
             const buffer = new ArrayBuffer(8);
             const playback = new Playback(buffer);
@@ -179,6 +214,84 @@ describe("Playback", () => {
 
             // only called once in first prepare
             expect(mockAudioContext.decodeAudioData).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe("audio larger than 5mb", () => {
+        // Anything over 5mb is played through an <audio /> element rather than a decoded buffer
+        const largeBuffer = (): ArrayBuffer => new ArrayBuffer(5 * 1024 * 1024 + 1);
+
+        let element: ReturnType<typeof mockAudioElement>;
+
+        /**
+         * A stand-in for the <audio /> element Playback creates. Assigning `src` resolves the load
+         * the same way the browser does, and listeners registered on it can be fired by hand.
+         */
+        const mockAudioElement = () => {
+            const listeners = new Map<string, Set<() => void | Promise<void>>>();
+            const el = {
+                duration: 42,
+                currentTime: 0,
+                onloadeddata: undefined as undefined | (() => void),
+                onerror: undefined as undefined | (() => void),
+                play: jest.fn().mockResolvedValue(undefined),
+                pause: jest.fn(),
+                remove: jest.fn(),
+                addEventListener: jest.fn((type: string, cb: () => void) => {
+                    if (!listeners.has(type)) listeners.set(type, new Set());
+                    listeners.get(type)!.add(cb);
+                }),
+                removeEventListener: jest.fn((type: string, cb: () => void) => {
+                    listeners.get(type)?.delete(cb);
+                }),
+                listenerCount: (type: string): number => listeners.get(type)?.size ?? 0,
+                fire: async (type: string): Promise<void> => {
+                    for (const cb of listeners.get(type) ?? []) await cb();
+                },
+            };
+            Object.defineProperty(el, "src", {
+                set() {
+                    el.onloadeddata?.();
+                },
+            });
+            return el;
+        };
+
+        beforeEach(() => {
+            element = mockAudioElement();
+            jest.spyOn(document, "createElement").mockReturnValue(element as unknown as HTMLElement);
+            global.URL.createObjectURL = jest.fn().mockReturnValue("blob:audio");
+            global.URL.revokeObjectURL = jest.fn();
+            mockAudioContext.createMediaElementSource.mockClear().mockReturnValue(mockMediaElementSourceNode);
+            mockMediaElementSourceNode.connect.mockClear();
+        });
+
+        afterEach(() => {
+            mocked(document.createElement).mockRestore();
+        });
+
+        it("stops when the media element ends", async () => {
+            const playback = new Playback(largeBuffer());
+            await playback.prepare();
+            await playback.play();
+            expect(playback.currentState).toEqual(PlaybackState.Playing);
+
+            await element.fire("ended");
+
+            expect(mockAudioContext.suspend).toHaveBeenCalled();
+            expect(playback.currentState).toEqual(PlaybackState.Stopped);
+            expect(playback.timeSeconds).toEqual(0);
+        });
+
+        it("stops listening to the media element once destroyed", async () => {
+            const playback = new Playback(largeBuffer());
+            await playback.prepare();
+            await playback.play();
+            expect(element.listenerCount("ended")).toEqual(1);
+
+            playback.destroy();
+
+            expect(element.listenerCount("ended")).toEqual(0);
         });
     });
 });

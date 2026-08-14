@@ -110,6 +110,20 @@ describe("OwnProfileStore", () => {
             expect(ownProfileStore.userStatus).toEqual({ emoji: "🏝️", text: "On a tropical holiday" });
         });
 
+        it("should reflect our own on-a-call status if no other status is set", async () => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
+            client.getExtendedProfileProperty.mockImplementation(async (_userId, key) =>
+                key === "org.matrix.msc4426.call" ? { call_joined_ts: 12345 } : undefined,
+            );
+            await ownProfileStore.start();
+
+            expect(client.getExtendedProfileProperty).toHaveBeenCalledWith(
+                client.getSafeUserId(),
+                "org.matrix.msc4426.call",
+            );
+            expect(ownProfileStore.userStatus).toEqual({ emoji: "📞", text: "On a call" });
+        });
+
         it("should update the user status when a UserProfileUpdate event is received for the current user", async () => {
             jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
             client.getExtendedProfileProperty.mockResolvedValue({ emoji: "🏝️", text: "On a tropical holiday" });

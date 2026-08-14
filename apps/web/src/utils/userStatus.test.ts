@@ -12,7 +12,7 @@ import { type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 import { stubClient } from "test-utils";
 
 import {
-    clearUserStatus,
+    clearAllUserStatus,
     fetchUserStatus,
     setUserOnCall,
     setUserStatus,
@@ -143,7 +143,7 @@ describe("userStatus utils", () => {
         });
     });
 
-    describe("clearUserStatus", () => {
+    describe("clearAllUserStatus", () => {
         let client: MatrixClient;
 
         beforeEach(() => {
@@ -151,9 +151,19 @@ describe("userStatus utils", () => {
         });
 
         it("clears the user status", async () => {
-            clearUserStatus(client);
+            vi.mocked(client.getExtendedProfileProperty).mockResolvedValue({ emoji: "🍩", text: "Arbitrary Status" });
+
+            await clearAllUserStatus(client);
 
             expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.status", null);
+        });
+
+        it("clears the call status", async () => {
+            vi.mocked(client.getExtendedProfileProperty).mockResolvedValue({ call_joined_ts: 12345 });
+
+            await clearAllUserStatus(client);
+
+            expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.call", null);
         });
     });
 
