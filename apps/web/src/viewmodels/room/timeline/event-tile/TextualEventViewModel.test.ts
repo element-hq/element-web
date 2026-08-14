@@ -42,9 +42,10 @@ describe("TextualEventViewModel", () => {
         const client = stubClient();
         vi.mocked(textForEvent).mockClear();
 
-        new TextualEventViewModel({ showHiddenEvents: false, mxEvent: fakeEvent });
+        const vm = new TextualEventViewModel({ showHiddenEvents: false, mxEvent: fakeEvent });
 
         expect(textForEvent).toHaveBeenCalledWith(fakeEvent, client, true, false);
+        expect(vm.getSnapshot().content).toBe("Test Message");
     });
 
     it("should ask for plain content when exporting", () => {
@@ -52,9 +53,9 @@ describe("TextualEventViewModel", () => {
         const client = stubClient();
         vi.mocked(textForEvent).mockClear();
 
-        // Buttons rendered into an export are dead, so the export must not be given any
-        new TextualEventViewModel({ showHiddenEvents: false, mxEvent: fakeEvent, forExport: true });
+        const vm = new TextualEventViewModel({ showHiddenEvents: false, mxEvent: fakeEvent, forExport: true });
 
         expect(textForEvent).toHaveBeenCalledWith(fakeEvent, client);
+        expect(vm.getSnapshot().content).toBe("Test Message");
     });
 });
