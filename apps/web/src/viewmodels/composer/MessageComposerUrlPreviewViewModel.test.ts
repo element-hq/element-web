@@ -10,7 +10,6 @@ import { vi, describe, it, expect, type Mock, beforeAll, afterAll } from "vitest
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { MessageComposerUrlPreviewViewModel } from "./MessageComposerUrlPreviewViewModel";
 import { type MessageComposerUrlPreviewSnapshotEntry } from "@element-hq/web-shared-components";
-import { sleep } from "matrix-js-sdk/src/utils";
 import { waitFor } from "jest-matrix-react";
 
 const IMAGE_MXC = "mxc://example.org/abc";
@@ -81,7 +80,7 @@ describe("MessageComposerUrlPreviewViewModel", () => {
         await waitFor(() => {
             expect(vm.getSnapshot().entries).toHaveLength(0);
             expect(client.getUrlPreview).not.toHaveBeenCalled();
-        })
+        });
     });
 
     it("should return list of failed previews when all URL fetches fail", async () => {
@@ -92,7 +91,7 @@ describe("MessageComposerUrlPreviewViewModel", () => {
             expect(vm.getSnapshot().entries.map(getEntrySummary)).toEqual([
                 { matched_url: "https://example.org", include: true, status: "failed" },
             ]);
-        })
+        });
     });
 
     it("should use all URLs with a valid preview when multiple are given", async () => {
@@ -114,7 +113,7 @@ describe("MessageComposerUrlPreviewViewModel", () => {
                     include: true,
                 },
             ]);
-        })
+        });
     });
 
     it("should not re-fetch when text changes but the URL set does not", async () => {
@@ -124,7 +123,7 @@ describe("MessageComposerUrlPreviewViewModel", () => {
         vm.updateWithText({ content: "https://example.org some extra words", debounced: false });
         await waitFor(() => {
             expect(client.getUrlPreview).toHaveBeenCalledTimes(1);
-        })
+        });
     });
 
     it("should deduplicate repeated URLs", async () => {
@@ -136,7 +135,7 @@ describe("MessageComposerUrlPreviewViewModel", () => {
         });
         await waitFor(() => {
             expect(client.getUrlPreview).toHaveBeenCalledTimes(1);
-        })
+        });
     });
 
     it("should hide preview when made invisible", async () => {
@@ -145,11 +144,11 @@ describe("MessageComposerUrlPreviewViewModel", () => {
         vm.updateWithText({ content: "https://example.org", debounced: false });
         await waitFor(() => {
             expect(vm.getSnapshot().entries).not.toHaveLength(0);
-        })
+        });
         vm.updateUrlPreviewVisible(false);
         await waitFor(() => {
             expect(vm.getSnapshot().entries).toHaveLength(0);
-        })
+        });
     });
 
     it("should restore preview when made visible again", async () => {
@@ -158,11 +157,11 @@ describe("MessageComposerUrlPreviewViewModel", () => {
         vm.updateWithText({ content: "https://example.org", debounced: false });
         await waitFor(() => {
             expect(vm.getSnapshot().entries).toHaveLength(0);
-        })
+        });
         vm.updateUrlPreviewVisible(true);
         await waitFor(() => {
             expect(vm.getSnapshot().entries).not.toHaveLength(0);
-        })
+        });
     });
 
     it("should preview a URL with media", async () => {
@@ -185,6 +184,6 @@ describe("MessageComposerUrlPreviewViewModel", () => {
         vm.updateWithText({ content: "https://example.org", debounced: false });
         await waitFor(() => {
             expect(vm.getSnapshot()).toMatchSnapshot();
-        })
+        });
     });
 });

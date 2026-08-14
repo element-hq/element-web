@@ -7,7 +7,7 @@
 
 .wrapper {
     background-color: var(--cpd-color-bg-subtle-secondary);
-    padding: calc(var(--cpd-space-1x) * 0.5) var(--cpd-space-2x) var(--cpd-space-3x) var(--cpd-space-2x);
+    padding: 0 var(--cpd-space-2x) var(--cpd-space-2x) var(--cpd-space-2x);
     border-radius: 10px;
 }
 
@@ -57,15 +57,15 @@
         line-height: 100%;
     }
 
-    .summaryIcon:not(:first-child) {
-        margin-left: calc(-var(--cpd-space-2x));
+    /* give the icons a bit of overlap */
+    .summaryIcon:not(:first-of-type) {
+        margin-left: calc(-1 * var(--cpd-space-1x));
     }
 
     .summaryIcon {
         overflow: hidden;
         display: inline-block;
         position: relative;
-        left: calc(var(--cpd-space-1x) * 0.5);
 
         width: 18px;
         height: 18px;
@@ -92,6 +92,7 @@
         }
 
         svg {
+            /* the spinner svg has its size set to 20x20px, overriding that */
             width: 50% !important;
             height: 50% !important;
         }
@@ -100,12 +101,12 @@
     .linkCount {
         margin-left: var(--cpd-space-3x);
         font-weight: 500;
-        font-size: 85%;
+        font-size: var(--cpd-font-size-body-sm);
     }
 
     .clearAll {
-        font-size: 75%;
-        margin-right: calc(var(--cpd-space-1x) * 2.5);
+        font-size: var(--cpd-font-size-body-xs);
+        margin-right: var(--cpd-space-2x);
         color: var(--cpd-color-gray-900);
         cursor: pointer;
     }

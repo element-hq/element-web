@@ -49,8 +49,9 @@ describe("MessageComposerUrlPreview", () => {
         expect(container).toMatchSnapshot();
     });
     it("renders the expanded previews when not collapsed", () => {
-        // The stories always render with `collapsed={true}`, so drive the view directly to
-        // cover the expanded branch (equivalent to the composerUrlPreviewCollapsed setting being false).
+        // Drive the view directly rather than using the `Expanded` story, so that the
+        // remove affordances are covered too (equivalent to the composerUrlPreviewCollapsed
+        // setting being false with the URL preview bundle feature enabled).
         const snapshot: MessageComposerUrlPreviewSnapshot = {
             content: "https://matrix.org",
             entries: Default.args.entries!,

@@ -184,8 +184,9 @@ export function MessageComposerUrlPreviewView({
                           <button
                               onClick={() => removePreview(entry.matched_url)}
                               className={classNames(styles.removePreview, styles.spanLike)}
+                              aria-label="Remove URL preview"
                           >
-                              <CloseIcon />
+                              <CloseIcon aria-hidden={true} />
                           </button>
                       ) : null}
                   </div>

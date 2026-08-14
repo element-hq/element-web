@@ -107,9 +107,11 @@ exports[`MessageComposerUrlPreview > failed entries > renders the failed placeho
         </div>
       </div>
       <button
+        aria-label="Remove URL preview"
         class="MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
       >
         <svg
+          aria-hidden="true"
           fill="currentColor"
           height="1em"
           viewBox="0 0 24 24"
@@ -308,9 +310,11 @@ exports[`MessageComposerUrlPreview > loading entries > renders the loading place
         </div>
       </div>
       <button
+        aria-label="Remove URL preview"
         class="MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
       >
         <svg
+          aria-hidden="true"
           fill="currentColor"
           height="1em"
           viewBox="0 0 24 24"
@@ -523,9 +527,11 @@ exports[`MessageComposerUrlPreview > renders a mix of loaded, loading and failed
         </div>
       </div>
       <button
+        aria-label="Remove URL preview"
         class="MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
       >
         <svg
+          aria-hidden="true"
           fill="currentColor"
           height="1em"
           viewBox="0 0 24 24"
@@ -586,9 +592,11 @@ exports[`MessageComposerUrlPreview > renders a mix of loaded, loading and failed
         </div>
       </div>
       <button
+        aria-label="Remove URL preview"
         class="MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
       >
         <svg
+          aria-hidden="true"
           fill="currentColor"
           height="1em"
           viewBox="0 0 24 24"
@@ -645,9 +653,11 @@ exports[`MessageComposerUrlPreview > renders a mix of loaded, loading and failed
         </div>
       </div>
       <button
+        aria-label="Remove URL preview"
         class="MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
       >
         <svg
+          aria-hidden="true"
           fill="currentColor"
           height="1em"
           viewBox="0 0 24 24"
@@ -858,9 +868,11 @@ exports[`MessageComposerUrlPreview > renders the expanded previews when not coll
         </div>
       </div>
       <button
+        aria-label="Remove URL preview"
         class="MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
       >
         <svg
+          aria-hidden="true"
           fill="currentColor"
           height="1em"
           viewBox="0 0 24 24"
