@@ -8,14 +8,16 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, afterAll, beforeEach } from "vitest";
+import { vi, describe, it, expect, afterAll, afterEach, beforeEach } from "vitest";
 import fetchMock from "@fetch-mock/vitest";
 import { emitPromise } from "test-utils/utilities";
 import "vitest-canvas-mock";
 
 import { UpdateCheckStatus } from "../../BasePlatform";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
+import SettingsStore from "../../settings/SettingsStore";
 import WebPlatform from "./WebPlatform";
+import { BrowserEventIndexManager } from "./BrowserEventIndexManager";
 import ToastStore from "../../stores/ToastStore.ts";
 import defaultDispatcher from "../../dispatcher/dispatcher.ts";
 import { Action } from "../../dispatcher/actions.ts";
@@ -282,6 +284,34 @@ describe("WebPlatform", () => {
 
             expect(url.searchParams.has("updated")).toBe(false);
             expect(url.searchParams.get("no_universal_links")).toEqual("true");
+        });
+    });
+
+    describe("getEventIndexingManager()", () => {
+        afterEach(() => {
+            vi.unstubAllGlobals();
+            vi.restoreAllMocks();
+        });
+
+        it("returns null while the labs flag is off", () => {
+            vi.stubGlobal("indexedDB", {});
+            vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+            expect(new WebPlatform().getEventIndexingManager()).toBeNull();
+        });
+
+        it("returns null when the browser cannot back an index", () => {
+            vi.stubGlobal("indexedDB", undefined);
+            vi.spyOn(SettingsStore, "getValue").mockReturnValue(true);
+            expect(new WebPlatform().getEventIndexingManager()).toBeNull();
+        });
+
+        it("returns the same manager on every call once enabled", () => {
+            vi.stubGlobal("indexedDB", {});
+            vi.spyOn(SettingsStore, "getValue").mockReturnValue(true);
+            const platform = new WebPlatform();
+            const manager = platform.getEventIndexingManager();
+            expect(manager).toBeInstanceOf(BrowserEventIndexManager);
+            expect(platform.getEventIndexingManager()).toBe(manager);
         });
     });
 });

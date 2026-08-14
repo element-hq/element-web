@@ -12,6 +12,8 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import BasePlatform, { UpdateCheckStatus, type UpdateStatus } from "../../BasePlatform";
+import type BaseEventIndexManager from "../../indexing/BaseEventIndexManager";
+import { BrowserEventIndexManager, isBrowserEventIndexEnabled } from "./BrowserEventIndexManager";
 import dis from "../../dispatcher/dispatcher";
 import { hideToast as hideUpdateToast, showToast as showUpdateToast } from "../../toasts/UpdateToast";
 import { Action } from "../../dispatcher/actions";
@@ -38,6 +40,7 @@ export default class WebPlatform extends BasePlatform {
     // oxlint-disable-next-line node/no-process-env
     private static readonly VERSION = process.env.VERSION!; // baked in by Webpack
     private readonly registerServiceWorkerPromise: Promise<void>;
+    private eventIndexManager: BrowserEventIndexManager | null = null;
 
     public constructor() {
         super();
@@ -267,6 +270,12 @@ export default class WebPlatform extends BasePlatform {
 
     public reload(): void {
         window.location.reload();
+    }
+
+    public getEventIndexingManager(): BaseEventIndexManager | null {
+        if (!isBrowserEventIndexEnabled()) return null;
+        this.eventIndexManager ??= new BrowserEventIndexManager();
+        return this.eventIndexManager;
     }
 
     public checkSessionLockFree(): boolean {
