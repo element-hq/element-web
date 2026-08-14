@@ -70,7 +70,7 @@ export class LatestRtcNotificationEventStore extends AsyncStoreWithClient<EmptyO
 
     protected async onReady(): Promise<void> {
         this.callStore.on(CallStoreEvent.Call, this.onCallStoreEvent);
-        this.populateMap();
+        await this.populateMap();
     }
 
     protected async onNotReady(): Promise<void> {
@@ -91,12 +91,12 @@ export class LatestRtcNotificationEventStore extends AsyncStoreWithClient<EmptyO
         } else if (call && !this.eventIdMap.has(roomId)) {
             // If there's a call, find the event id and add it to the map.
             if (call.participants.size) {
-                this.findAndSetNotificationEvent(call, roomId);
+                void this.findAndSetNotificationEvent(call, roomId);
             } else {
                 // This call just started but the participants haven't been added yet.
                 // So wait until participants are added and then compute the event id.
                 call.once(CallEvent.Participants, () => {
-                    this.findAndSetNotificationEvent(call, roomId);
+                    void this.findAndSetNotificationEvent(call, roomId);
                 });
             }
         }

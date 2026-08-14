@@ -312,10 +312,10 @@ class TimelinePanel extends React.Component<IProps, IState> {
         this.props.timelineSet.room?.on(ThreadEvent.Update, this.onThreadUpdate);
 
         if (this.props.manageReadReceipts && this.props.enableReadReceiptsAndMarkersOnActivity) {
-            this.updateReadReceiptOnUserActivity();
+            void this.updateReadReceiptOnUserActivity();
         }
         if (this.props.manageReadMarkers && this.props.enableReadReceiptsAndMarkersOnActivity) {
-            this.updateReadMarkerOnUserActivity();
+            void this.updateReadMarkerOnUserActivity();
         }
         this.initTimeline(this.props);
     }
@@ -706,7 +706,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         // timeline window.
         //
         // see https://github.com/vector-im/vector-web/issues/1035
-        this.timelineWindow!.paginate(EventTimeline.FORWARDS, 1, false).then(() => {
+        void this.timelineWindow!.paginate(EventTimeline.FORWARDS, 1, false).then(() => {
             if (this.unmounted) {
                 return;
             }
@@ -738,7 +738,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
                     // we know we're stuckAtBottom, so we can advance the RM
                     // immediately, to save a later render cycle
 
-                    this.setReadMarker(lastLiveEvent.getId() ?? null, lastLiveEvent.getTs(), true);
+                    void this.setReadMarker(lastLiveEvent.getId() ?? null, lastLiveEvent.getTs(), true);
                     updatedState.readMarkerVisible = false;
                     updatedState.readMarkerEventId = lastLiveEvent.getId();
                     callRMUpdated = true;
@@ -1228,7 +1228,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         i--;
 
         const ev = events[i];
-        this.setReadMarker(ev.getId()!, ev.getTs());
+        void this.setReadMarker(ev.getId()!, ev.getTs());
     }
 
     /* jump down to the bottom of this room, where new events are arriving
@@ -1537,7 +1537,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             });
             if (onFinished) {
                 // oxlint-disable-next-line promise/no-promise-in-callback
-                finished.then(onFinished);
+                void finished.then(onFinished);
             }
         };
 
@@ -1555,7 +1555,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         if (this.props.timelineSet.getTimelineForEvent(eventId)) {
             // if we've got an eventId, and the timeline exists, we can skip
             // the promise tick.
-            this.timelineWindow.load(eventId, INITIAL_SIZE);
+            void this.timelineWindow.load(eventId, INITIAL_SIZE);
             // in this branch this method will happen in sync time
             onLoaded();
             return;
@@ -1599,7 +1599,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         // We want the last event to be decrypted first
         const client = MatrixClientPeg.safeGet();
         for (let i = events.length - 1; i >= 0; --i) {
-            client.decryptEventIfNeeded(events[i]);
+            void client.decryptEventIfNeeded(events[i]);
         }
 
         // Hold onto the live events separately. The read receipt and read marker

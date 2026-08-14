@@ -86,7 +86,7 @@ export class ProxiedModuleApi implements ModuleApi {
             typeof initialTitleOrOptions === "string" ? { title: initialTitleOrOptions } : initialTitleOrOptions;
 
         return new Promise<{ didOkOrSubmit: boolean; model: M }>((resolve) => {
-            Modal.createDialog(
+            void Modal.createDialog(
                 ModuleUiDialog<P, C>,
                 {
                     initialOptions,
