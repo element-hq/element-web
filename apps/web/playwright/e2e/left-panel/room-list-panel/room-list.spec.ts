@@ -387,7 +387,7 @@ test.describe("Room list", () => {
                 invite: [user.userId],
                 is_direct: true,
             });
-            const invitedRoom = roomListView.getByRole("option", { name: "invited room" });
+            const invitedRoom = roomListView.getByRole("button", { name: "invited room" });
             await expect(invitedRoom).toBeVisible();
             await expect(invitedRoom).toMatchScreenshot("room-list-item-invited.png");
         });
