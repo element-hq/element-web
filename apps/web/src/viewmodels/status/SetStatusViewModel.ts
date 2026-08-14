@@ -15,6 +15,7 @@ import {
 } from "@element-hq/web-shared-components";
 
 import { clearAllUserStatus, setUserStatus } from "../../utils/userStatus";
+import * as recent from "../../emojipicker/recent";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import dis from "../../dispatcher/dispatcher";
 import { UserTab } from "../../components/views/dialogs/UserTab";
@@ -36,6 +37,10 @@ export class SetStatusViewModel
     public constructor(props: SetStatusViewModelProps) {
         super(props, {
             userStatus: props.ownProfileStore.userStatus,
+            // This is a one-time snapshot and we manually update when we add an emoji.
+            // It could have a listener for when an emoji gets added but in practice, this
+            // would be the only way a recent could possibly get added while the view is mounted.
+            recentEmojis: recent.get(),
         });
 
         this.disposables.trackListener(props.ownProfileStore, UPDATE_EVENT, this.onProfileStoreUpdate);
@@ -53,6 +58,12 @@ export class SetStatusViewModel
             this.snapshot.merge({ userStatus: oldStatus });
             logger.warn("Failed to set user status", err);
         });
+    };
+
+    public recordRecentEmoji = (unicode: string): void => {
+        recent.add(unicode);
+        // Manually update the list of recent emojis as we know we've just added one.
+        this.snapshot.merge({ recentEmojis: recent.get() });
     };
 
     public clearStatus = (): void => {
