@@ -51,7 +51,11 @@
 }
 
 /* When type=border and the user hovers/focuses the separator, we make the separator thicker */
-.separator[data-separator-type="border"]:is([data-separator="hover"], [data-separator="active"]),
+.separator[data-separator-type="border"]:is(
+        [data-separator="hover"],
+        [data-separator="active"],
+        [data-separator="focus"]
+    ),
 .separator[data-separator-type="border"]:focus-visible {
     .activeSeparatorContainer {
         .activeSeparator {

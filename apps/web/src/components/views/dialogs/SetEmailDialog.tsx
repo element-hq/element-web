@@ -71,7 +71,7 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
                     description: _t("auth|set_email|verification_pending_description"),
                     button: _t("action|continue"),
                 });
-                finished.then(([ok]) => this.onEmailDialogFinished(ok));
+                void finished.then(([ok]) => this.onEmailDialogFinished(ok));
             },
             (err) => {
                 this.setState({ emailBusy: false });
@@ -120,7 +120,7 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
                         description: message,
                         button: _t("action|continue"),
                     });
-                    finished.then(([ok]) => this.onEmailDialogFinished(ok));
+                    void finished.then(([ok]) => this.onEmailDialogFinished(ok));
                 } else {
                     logger.error("Unable to verify email address: " + err);
                     Modal.createDialog(ErrorDialog, {

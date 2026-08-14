@@ -84,7 +84,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
     }
 
     public componentDidMount(): void {
-        this.loadBackupStatus();
+        void this.loadBackupStatus();
     }
 
     private onCancel = (): void => {
@@ -109,7 +109,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
 
     private onResetRecoveryClick = (): void => {
         this.props.onFinished(false);
-        accessSecretStorage(async (): Promise<void> => {}, { forceReset: true });
+        void accessSecretStorage(async (): Promise<void> => {}, { forceReset: true });
     };
 
     /**
