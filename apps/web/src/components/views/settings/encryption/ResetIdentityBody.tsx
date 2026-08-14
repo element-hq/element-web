@@ -67,6 +67,16 @@ export function ResetIdentityBody({ onCancelClick, onReset, variant }: ResetIden
     // clicked again, and warn the user not to close the window.
     const [inProgress, setInProgress] = useState(false);
 
+    async function onClick() {
+        setInProgress(true);
+
+        await matrixClient
+            .getCrypto()
+            ?.resetEncryption((makeRequest) => uiAuthCallback(matrixClient, makeRequest));
+
+        onReset();
+    }
+
     return (
         <EncryptionCard Icon={ErrorIcon} destructive={true} title={titleForVariant(variant)}>
             <EncryptionCardEmphasisedContent>
@@ -87,13 +97,7 @@ export function ResetIdentityBody({ onCancelClick, onReset, variant }: ResetIden
                 <Button
                     destructive={true}
                     disabled={inProgress}
-                    onClick={async () => {
-                        setInProgress(true);
-                        await matrixClient
-                            .getCrypto()
-                            ?.resetEncryption((makeRequest) => uiAuthCallback(matrixClient, makeRequest));
-                        onReset();
-                    }}
+                    onClick={onClick}
                 >
                     {inProgress ? (
                         <>
