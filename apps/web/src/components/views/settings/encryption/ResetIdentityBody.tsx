@@ -86,7 +86,9 @@ export function ResetIdentityBody({ onCancelClick, onReset, onFail, variant }: R
             return;
         }
 
-        const resetEncryptionPromise = crypto.resetEncryption((makeRequest) => uiAuthCallback(matrixClient, makeRequest));
+        const resetEncryptionPromise = crypto.resetEncryption((makeRequest) =>
+            uiAuthCallback(matrixClient, makeRequest),
+        );
 
         await Promise.race([timeoutPromise, resetEncryptionPromise]).then(
             () => onReset(),
