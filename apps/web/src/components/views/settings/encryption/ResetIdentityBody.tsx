@@ -17,6 +17,7 @@ import { uiAuthCallback } from "../../../../CreateCrossSigning";
 import { EncryptionCardButtons } from "./EncryptionCardButtons";
 import { EncryptionCardEmphasisedContent } from "./EncryptionCardEmphasisedContent";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
+import {reject} from "lodash";
 
 interface ResetIdentityBodyProps {
     /**
@@ -77,7 +78,7 @@ export function ResetIdentityBody({ onCancelClick, onReset, onFail, variant }: R
 
         const timeoutPromise = new Promise((_resolve, reject) => {
             // If resetEncryption takes longer than 5 seconds, return a failure.
-            setTimeout(() => reject("Timed out"), 5000);
+            setTimeout(() => reject(new Error("Timed out")), 5000);
         });
 
         const crypto = matrixClient.getCrypto();
@@ -92,7 +93,7 @@ export function ResetIdentityBody({ onCancelClick, onReset, onFail, variant }: R
 
         await Promise.race([timeoutPromise, resetEncryptionPromise]).then(
             () => onReset(),
-            (failureReason) => onFail(failureReason),
+            (error_) => onFail(error_.toString()),
         );
     }
 
