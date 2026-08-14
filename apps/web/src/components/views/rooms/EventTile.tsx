@@ -394,7 +394,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         this.props.mxEvent.on(ThreadEvent.Update, this.updateThread);
 
-        client.decryptEventIfNeeded(this.props.mxEvent);
+        void client.decryptEventIfNeeded(this.props.mxEvent);
 
         const room = client.getRoom(this.props.mxEvent.getRoomId());
         room?.on(ThreadEvent.New, this.onNewThread);

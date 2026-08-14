@@ -254,7 +254,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
     const userId = cli.getSafeUserId();
     const [profileInfo, setProfileInfo] = useState<any>({});
     useEffect(() => {
-        cli.getProfileInfo(userId).then((info) => setProfileInfo(info));
+        void cli.getProfileInfo(userId).then((info) => setProfileInfo(info));
     }, [cli, userId]);
 
     const { type, content } = transformEvent(event, cli);

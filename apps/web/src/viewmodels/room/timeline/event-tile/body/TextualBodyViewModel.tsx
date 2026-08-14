@@ -308,7 +308,7 @@ export class TextualBodyViewModel
 
         const integrationManager = managers.getPrimaryManager();
         const scalarClient = integrationManager?.getScalarClient();
-        scalarClient?.connect().then(() => {
+        void scalarClient?.connect().then(() => {
             const completeUrl = scalarClient.getStarterLink(starterLink);
             const integrationsUrl = integrationManager!.uiUrl;
             const { finished } = Modal.createDialog(QuestionDialog, {
@@ -317,7 +317,7 @@ export class TextualBodyViewModel
                 button: _t("action|continue"),
             });
 
-            finished.then(([confirmed]) => {
+            return finished.then(([confirmed]) => {
                 if (!confirmed) {
                     return;
                 }
