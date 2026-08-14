@@ -15,6 +15,7 @@ import {
     deleteSection,
     getCustomSectionData,
     getOrderedCustomSections,
+    getOrderedReorderableSections,
     isDefaultSectionTag,
     isSectionExpanded,
     setSectionExpanded,
@@ -251,10 +252,13 @@ describe("section", () => {
 
             const orderedCall = setValueSpy.mock.calls.find(([name]) => name === "RoomList.OrderedCustomSections");
             const savedOrder = orderedCall![3] as string[];
-            expect(savedOrder[0]).toBe(existingTag);
-            expect(savedOrder[1]).toMatch(/^element\.io\.section\./);
+            // The new section is added just before CHATS_TAG, after the existing sections
+            expect(savedOrder[0]).toBe(DefaultTagID.DM);
+            expect(savedOrder[1]).toBe(existingTag);
+            expect(savedOrder[2]).toMatch(/^element\.io\.section\./);
+            expect(savedOrder[3]).toBe(CHATS_TAG);
 
-            const newTag = savedOrder[1];
+            const newTag = savedOrder[2];
             const customDataCall = setValueSpy.mock.calls.find(([name]) => name === "RoomList.CustomSectionData");
             const savedSection = (customDataCall![3] as Record<string, { tag: string; name: string; spaceId: string }>)[
                 newTag
@@ -393,11 +397,45 @@ describe("section", () => {
             await deleteSection(tag, false);
 
             const orderedCall = setValueSpy.mock.calls.find(([name]) => name === "RoomList.OrderedCustomSections");
-            // CHATS_TAG is appended because the stored order didn't include it (legacy default position).
-            expect(orderedCall![3]).toEqual([otherTag, CHATS_TAG]);
+            // The DM tag is prepended and CHATS_TAG appended because the stored order didn't
+            // include them (legacy default positions).
+            expect(orderedCall![3]).toEqual([DefaultTagID.DM, otherTag, CHATS_TAG]);
 
             const customDataCall = setValueSpy.mock.calls.find(([name]) => name === "RoomList.CustomSectionData");
             expect(customDataCall![3]).not.toHaveProperty(tag);
+        });
+    });
+
+    describe("getOrderedReorderableSections", () => {
+        const customTag = `${CUSTOM_SECTION_TAG_PREFIX}abc`;
+
+        function mockStoredOrder(orderedTags: string[]): void {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+                if (setting === "RoomList.OrderedCustomSections") return orderedTags;
+                if (setting === "RoomList.CustomSectionData") return { [customTag]: { tag: customTag, name: "A" } };
+                return null;
+            });
+        }
+
+        it.each<{ description: string; stored: string[]; expected: string[] }>([
+            {
+                description: "keeps the stored position of the People and Chats tags",
+                stored: [customTag, CHATS_TAG, DefaultTagID.DM],
+                expected: [customTag, CHATS_TAG, DefaultTagID.DM],
+            },
+            {
+                description: "prepends the People tag and appends the Chats tag when they are missing",
+                stored: [customTag],
+                expected: [DefaultTagID.DM, customTag, CHATS_TAG],
+            },
+            {
+                description: "drops unknown custom sections",
+                stored: [DefaultTagID.DM, `${CUSTOM_SECTION_TAG_PREFIX}unknown`, CHATS_TAG],
+                expected: [DefaultTagID.DM, CHATS_TAG],
+            },
+        ])("$description", ({ stored, expected }) => {
+            mockStoredOrder(stored);
+            expect(getOrderedReorderableSections()).toEqual(expected);
         });
     });
 
@@ -433,7 +471,7 @@ describe("section", () => {
                 },
                 source: customTag,
                 target: customTag2,
-                expected: [customTag2, customTag, CHATS_TAG],
+                expected: [DefaultTagID.DM, customTag2, customTag, CHATS_TAG],
             },
             {
                 description: "a custom section before another when dragging up",
@@ -444,7 +482,7 @@ describe("section", () => {
                 },
                 source: customTag,
                 target: customTag2,
-                expected: [customTag, customTag2, CHATS_TAG],
+                expected: [DefaultTagID.DM, customTag, customTag2, CHATS_TAG],
             },
             {
                 description: "a custom section past the Chats tag",
@@ -455,7 +493,7 @@ describe("section", () => {
                 },
                 source: customTag,
                 target: CHATS_TAG,
-                expected: [customTag2, CHATS_TAG, customTag],
+                expected: [DefaultTagID.DM, customTag2, CHATS_TAG, customTag],
             },
             {
                 description: "the Chats tag above a custom section",
@@ -466,7 +504,23 @@ describe("section", () => {
                 },
                 source: CHATS_TAG,
                 target: customTag,
-                expected: [CHATS_TAG, customTag, customTag2],
+                expected: [DefaultTagID.DM, CHATS_TAG, customTag, customTag2],
+            },
+            {
+                description: "the People tag past the Chats tag",
+                initial: [DefaultTagID.DM, customTag, CHATS_TAG],
+                customData: { [customTag]: { tag: customTag, name: "A" } },
+                source: DefaultTagID.DM,
+                target: CHATS_TAG,
+                expected: [customTag, CHATS_TAG, DefaultTagID.DM],
+            },
+            {
+                description: "a custom section above the People tag",
+                initial: [DefaultTagID.DM, customTag, CHATS_TAG],
+                customData: { [customTag]: { tag: customTag, name: "A" } },
+                source: customTag,
+                target: DefaultTagID.DM,
+                expected: [customTag, DefaultTagID.DM, CHATS_TAG],
             },
         ])(
             "moves $description and saves the new order at ACCOUNT level",
@@ -517,9 +571,12 @@ describe("section", () => {
     });
 
     describe("isDefaultSectionTag", () => {
-        it.each([DefaultTagID.Favourite, DefaultTagID.LowPriority, CHATS_TAG])("returns true for %s", (tag) => {
-            expect(isDefaultSectionTag(tag)).toBe(true);
-        });
+        it.each([DefaultTagID.Favourite, DefaultTagID.LowPriority, CHATS_TAG, DefaultTagID.DM])(
+            "returns true for %s",
+            (tag) => {
+                expect(isDefaultSectionTag(tag)).toBe(true);
+            },
+        );
 
         it.each([DefaultTagID.Invite, "some.random.tag"])("returns false for %s", (tag) => {
             expect(isDefaultSectionTag(tag)).toBe(false);
@@ -527,12 +584,15 @@ describe("section", () => {
     });
 
     describe("isSectionTag", () => {
-        it.each([DefaultTagID.Favourite, DefaultTagID.LowPriority, CHATS_TAG, `${CUSTOM_SECTION_TAG_PREFIX}some-uuid`])(
-            "returns true for %s",
-            (tag) => {
-                expect(isSectionTag(tag)).toBe(true);
-            },
-        );
+        it.each([
+            DefaultTagID.Favourite,
+            DefaultTagID.LowPriority,
+            CHATS_TAG,
+            DefaultTagID.DM,
+            `${CUSTOM_SECTION_TAG_PREFIX}some-uuid`,
+        ])("returns true for %s", (tag) => {
+            expect(isSectionTag(tag)).toBe(true);
+        });
 
         it.each([DefaultTagID.Invite, "some.random.tag"])("returns false for %s", (tag) => {
             expect(isSectionTag(tag)).toBe(false);

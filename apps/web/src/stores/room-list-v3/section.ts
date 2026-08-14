@@ -44,7 +44,12 @@ export function isCustomSectionTag(tag: string): tag is CustomTag {
  * @returns True if the tag is a default section tag, false otherwise.
  */
 export function isDefaultSectionTag(tagId: TagID): boolean {
-    return tagId === DefaultTagID.Favourite || tagId === DefaultTagID.LowPriority || tagId === CHATS_TAG;
+    return (
+        tagId === DefaultTagID.Favourite ||
+        tagId === DefaultTagID.LowPriority ||
+        tagId === CHATS_TAG ||
+        tagId === DefaultTagID.DM
+    );
 }
 
 /**
@@ -92,13 +97,16 @@ export type OrderedCustomSections = CustomTag[];
  * Tags that can be reordered relative to each other (everything except Favourite and LowPriority,
  * which are pinned to the top and bottom respectively).
  */
-export type ReorderableSection = CustomTag | typeof CHATS_TAG;
+export type ReorderableSection = CustomTag | typeof CHATS_TAG | DefaultTagID.DM;
 
 /**
- * Returns true if the given tag is a tag that can be reordered (custom section or the Chats tag).
+ * Returns true if the given tag is a tag that can be reordered (custom section, the Chats tag or the People tag).
+ * Favourite and LowPriority are pinned to the top and the bottom of the room list, so they are never reorderable.
+ * @param tag - The tag to check.
+ * @param customData - The custom section data, used to reject custom sections that no longer exist.
  */
-function isReorderableSection(tag: string, customData: CustomSectionsData): tag is ReorderableSection {
-    return tag === CHATS_TAG || (isCustomSectionTag(tag) && tag in customData);
+export function isReorderableSection(tag: string, customData: CustomSectionsData): tag is ReorderableSection {
+    return tag === CHATS_TAG || tag === DefaultTagID.DM || (isCustomSectionTag(tag) && tag in customData);
 }
 
 /**
@@ -176,11 +184,12 @@ export function getOrderedCustomSections(): OrderedCustomSections {
 }
 
 /**
- * Returns the ordered list of reorderable section tags (custom sections + the Chats tag).
+ * Returns the ordered list of reorderable section tags (custom sections + the Chats and People tags).
  * Favourite and LowPriority are not included — they are pinned at the top and bottom respectively.
  *
  * If `CHATS_TAG` is missing from the stored order (e.g. legacy data or a freshly created custom
- * section), it is appended at the end so that custom sections sit above Chats by default.
+ * section), it is appended at the end so that custom sections sit above Chats by default. Likewise
+ * the People tag is prepended when missing, so People sits above the other sections by default.
  */
 export function getOrderedReorderableSections(): ReorderableSection[] {
     const sectionData = getCustomSectionData();
@@ -189,6 +198,7 @@ export function getOrderedReorderableSections(): ReorderableSection[] {
 
     const result = stored.filter((tag): tag is ReorderableSection => isReorderableSection(tag, sectionData));
     if (!result.includes(CHATS_TAG)) result.push(CHATS_TAG);
+    if (!result.includes(DefaultTagID.DM)) result.unshift(DefaultTagID.DM);
     return result;
 }
 

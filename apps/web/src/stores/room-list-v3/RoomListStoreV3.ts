@@ -36,8 +36,7 @@ import { getChangedOverrideRoomMutePushRules } from "./utils";
 import { isRoomVisible } from "./isRoomVisible";
 import { RoomSkipList } from "./skip-list/RoomSkipList";
 import { getTagsForRoom } from "../../utils/room/getTagsForRoom";
-import { ExcludeTagsFilter } from "./skip-list/filters/ExcludeTagsFilter";
-import { TagFilter } from "./skip-list/filters/TagFilter";
+import { SectionFilter } from "./skip-list/filters/SectionFilter";
 import { filterBoolean } from "../../utils/arrays";
 import {
     CHATS_TAG,
@@ -109,11 +108,6 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      * Contains all the rooms in the active space
      */
     private roomSkipList?: RoomSkipList;
-
-    /**
-     * Maps section tags to their corresponding tag filters, used to determine which rooms belong in which sections.
-     */
-    private readonly filterByTag: Map<string, Filter> = new Map();
 
     /**
      * Defines the display order of sections.
@@ -483,16 +477,10 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     }
 
     /**
-     * Get the list of filters to be used in the skip list, including the tag filters for sectioning.
+     * Get the list of filters to be used in the skip list, including the section filters.
      */
     private getSkipListFilters(): Filter[] {
-        const tagsToExclude = this.sortedTags.filter((tag) => tag !== CHATS_TAG);
-        const tagFilters = this.sortedTags.map((tag) =>
-            tag === CHATS_TAG ? new ExcludeTagsFilter(tagsToExclude) : new TagFilter(tag),
-        );
-        this.sortedTags.forEach((tag, index) => this.filterByTag.set(tag, tagFilters[index]));
-
-        return [...FILTERS, ...tagFilters];
+        return [...FILTERS, ...this.sortedTags.map((tag) => new SectionFilter(tag, this.sortedTags))];
     }
 
     /**
@@ -503,7 +491,8 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     private getSections(filterKeys?: FilterKey[]): Section[] {
         return this.sortedTags
             .map((tag) => {
-                const filters = filterBoolean([this.filterByTag.get(tag)?.key, ...(filterKeys ?? [])]);
+                // The key of a section's filter is the section tag itself, see SectionFilter.
+                const filters = filterBoolean([tag, ...(filterKeys ?? [])]);
 
                 return {
                     tag,
