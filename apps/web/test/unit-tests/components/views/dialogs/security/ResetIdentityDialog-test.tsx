@@ -26,7 +26,10 @@ describe("ResetIdentityDialog", () => {
 
         const onFinished = jest.fn();
         const onReset = jest.fn();
-        const dialog = render(<ResetIdentityDialog onFinished={onFinished} onReset={onReset} variant="compromised" />);
+        const onFail = jest.fn();
+        const dialog = render(
+            <ResetIdentityDialog onFinished={onFinished} onReset={onReset} onFail={onFail} variant="compromised" />,
+        );
 
         await act(async () => dialog.getByRole("button", { name: "Continue" }).click());
 
@@ -41,7 +44,10 @@ describe("ResetIdentityDialog", () => {
 
         const onFinished = jest.fn();
         const onReset = jest.fn();
-        const dialog = render(<ResetIdentityDialog onFinished={onFinished} onReset={onReset} variant="compromised" />);
+        const onFail = jest.fn();
+        const dialog = render(
+            <ResetIdentityDialog onFinished={onFinished} onReset={onReset} onFail={onFail} variant="compromised" />,
+        );
 
         await act(async () => dialog.getByRole("button", { name: "Cancel" }).click());
 

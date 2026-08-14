@@ -25,8 +25,9 @@ describe("<ResetIdentityPanel />", () => {
         const user = userEvent.setup();
 
         const onReset = jest.fn();
+        const onFail = jest.fn();
         const { asFragment } = render(
-            <ResetIdentityPanel variant="compromised" onReset={onReset} onCancelClick={jest.fn()} />,
+            <ResetIdentityPanel variant="compromised" onReset={onReset} onFail={onFail} onCancelClick={jest.fn()} />,
             withClientContextRenderOptions(matrixClient),
         );
         expect(asFragment()).toMatchSnapshot();
@@ -48,8 +49,9 @@ describe("<ResetIdentityPanel />", () => {
 
     it("should display the 'forgot recovery key' variant correctly", async () => {
         const onReset = jest.fn();
+        const onFail = jest.fn();
         const { asFragment } = render(
-            <ResetIdentityPanel variant="forgot" onReset={onReset} onCancelClick={jest.fn()} />,
+            <ResetIdentityPanel variant="forgot" onReset={onReset} onFail={onFail} onCancelClick={jest.fn()} />,
             withClientContextRenderOptions(matrixClient),
         );
         expect(asFragment()).toMatchSnapshot();
@@ -57,8 +59,9 @@ describe("<ResetIdentityPanel />", () => {
 
     it("should display the 'sync failed' variant correctly", async () => {
         const onReset = jest.fn();
+        const onFail = jest.fn();
         const { asFragment } = render(
-            <ResetIdentityPanel variant="sync_failed" onReset={onReset} onCancelClick={jest.fn()} />,
+            <ResetIdentityPanel variant="sync_failed" onReset={onReset} onFail={onFail} onCancelClick={jest.fn()} />,
             withClientContextRenderOptions(matrixClient),
         );
         expect(asFragment()).toMatchSnapshot();

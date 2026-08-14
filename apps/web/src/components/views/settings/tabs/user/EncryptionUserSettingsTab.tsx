@@ -26,6 +26,8 @@ import { KeyStoragePanel } from "../../encryption/KeyStoragePanel";
 import { DeleteKeyStoragePanel } from "../../encryption/DeleteKeyStoragePanel";
 import { DeviceListener, CurrentDeviceEvents, type DeviceState } from "../../../../../device-listener";
 import { useKeyStoragePanelViewModel } from "../../../../viewmodels/settings/encryption/KeyStoragePanelViewModel";
+import ErrorDialog from "../../../dialogs/ErrorDialog";
+import SdkConfig from "../../../../../SdkConfig";
 
 /**
  * The state in the encryption settings tab.
@@ -143,6 +145,23 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
                     variant={findResetVariant(state)}
                     onCancelClick={() => setState("main")}
                     onReset={() => setState("main")}
+                    onFail={() => {
+                        Modal.createDialog(ErrorDialog, {
+                            title: _t("error_reset_failed"),
+                            description: _t("error_reset_failed_description", undefined, {
+                                issueLink: (label: string) => (
+                                    <a
+                                        href={SdkConfig.get().feedback.new_issue_url}
+                                        target="_blank"
+                                        rel="noreferrer noopener"
+                                    >
+                                        {label}
+                                    </a>
+                                ),
+                            }),
+                            button: _t("action|ok"),
+                        });
+                    }}
                 />
             );
             break;

@@ -29,6 +29,8 @@ import ExternalLink from "../../views/elements/ExternalLink";
 import dispatcher from "../../../dispatcher/dispatcher";
 import E2EIcon from "../../views/rooms/E2EIcon.tsx";
 import { E2EStatus } from "../../../utils/ShieldUtils.ts";
+import ErrorDialog from "../../views/dialogs/ErrorDialog.tsx";
+import SdkConfig from "../../../SdkConfig.ts";
 
 interface IProps {
     onFinished: () => void;
@@ -135,6 +137,21 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                 this.props.onFinished();
                 const store = SetupEncryptionStore.sharedInstance();
                 store.done();
+            },
+            onFail: (failureReason) => {
+                logger.error(`Failed to reset identity: ${failureReason}`);
+
+                Modal.createDialog(ErrorDialog, {
+                    title: _t("error_reset_failed"),
+                    description: _t("error_reset_failed_description", undefined, {
+                        issueLink: (label: string) => (
+                            <a href={SdkConfig.get().feedback.new_issue_url} target="_blank" rel="noreferrer noopener">
+                                {label}
+                            </a>
+                        ),
+                    }),
+                    button: _t("action|ok"),
+                });
             },
             variant: store.lostKeys() ? "no_verification_method" : "confirm",
         });

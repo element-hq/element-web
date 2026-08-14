@@ -25,6 +25,11 @@ interface ResetIdentityDialogProps {
     onReset: () => void;
 
     /**
+     * Called when the identity reset fails (before onFinished is called).
+     */
+    onFail: (failureReason: string) => void;
+
+    /**
      * Which variant of this dialog to show.
      */
     variant: ResetIdentityBodyVariant;
@@ -33,17 +38,29 @@ interface ResetIdentityDialogProps {
 /**
  * The dialog for resetting the identity of the current user.
  */
-export function ResetIdentityDialog({ onFinished, onReset, variant }: ResetIdentityDialogProps): JSX.Element {
+export function ResetIdentityDialog({ onFinished, onReset, onFail, variant }: ResetIdentityDialogProps): JSX.Element {
     const matrixClient = MatrixClientPeg.safeGet();
 
-    const onResetWrapper: () => void = () => {
+    const onResetWrapper = (): void => {
         onReset();
         // Close the dialog
         onFinished();
     };
+
+    const onFailWrapper = (reason: string): void => {
+        onFail(reason);
+        // Close the dialog
+        onFinished();
+    };
+
     return (
         <MatrixClientContext.Provider value={matrixClient}>
-            <ResetIdentityBody onReset={onResetWrapper} onCancelClick={onFinished} variant={variant} />
+            <ResetIdentityBody
+                onReset={onResetWrapper}
+                onFail={onFailWrapper}
+                onCancelClick={onFinished}
+                variant={variant}
+            />
         </MatrixClientContext.Provider>
     );
 }

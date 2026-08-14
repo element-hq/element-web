@@ -18,6 +18,11 @@ interface ResetIdentityPanelProps {
     onReset: () => void;
 
     /**
+     * Called if the identity reset fails.
+     */
+    onFail: (failureReason: string) => void;
+
+    /**
      * Called when the cancel button is clicked or when we go back in the breadcrumbs.
      */
     onCancelClick: () => void;
@@ -33,7 +38,7 @@ interface ResetIdentityPanelProps {
  *
  * A thin wrapper around {@link ResetIdentityBody}, just adding breadcrumbs.
  */
-export function ResetIdentityPanel({ onCancelClick, onReset, variant }: ResetIdentityPanelProps): JSX.Element {
+export function ResetIdentityPanel({ onCancelClick, onReset, onFail, variant }: ResetIdentityPanelProps): JSX.Element {
     return (
         <>
             <Breadcrumb
@@ -42,7 +47,7 @@ export function ResetIdentityPanel({ onCancelClick, onReset, variant }: ResetIde
                 pages={[_t("settings|encryption|title"), _t("settings|encryption|advanced|breadcrumb_page")]}
                 onPageClick={onCancelClick}
             />
-            <ResetIdentityBody onReset={onReset} onCancelClick={onCancelClick} variant={variant} />
+            <ResetIdentityBody onReset={onReset} onFail={onFail} onCancelClick={onCancelClick} variant={variant} />
         </>
     );
 }

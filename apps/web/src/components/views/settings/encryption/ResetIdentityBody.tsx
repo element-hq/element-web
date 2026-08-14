@@ -25,6 +25,11 @@ interface ResetIdentityBodyProps {
     onReset: () => void;
 
     /**
+     * Called when the identity reset fails.
+     */
+    onFail: (failureReason: string) => void;
+
+    /**
      * Called when the cancel button is clicked.
      */
     onCancelClick: () => void;
@@ -60,21 +65,29 @@ export type ResetIdentityBodyVariant = "compromised" | "forgot" | "sync_failed" 
  *
  * Used by {@link ResetIdentityPanel}.
  */
-export function ResetIdentityBody({ onCancelClick, onReset, variant }: ResetIdentityBodyProps): JSX.Element {
+export function ResetIdentityBody({ onCancelClick, onReset, onFail, variant }: ResetIdentityBodyProps): JSX.Element {
     const matrixClient = useMatrixClientContext();
 
     // After the user clicks "Continue", we disable the button so it can't be
     // clicked again, and warn the user not to close the window.
     const [inProgress, setInProgress] = useState(false);
 
-    async function onClick() {
+    async function onClick(): Promise<void> {
         setInProgress(true);
 
-        await matrixClient
+        const timeoutPromise = new Promise((_resolve, reject) => {
+            // If resetEncryption takes longer than 5 seconds, return a failure.
+            setTimeout(() => reject("Timed out"), 5000);
+        });
+
+        const resetEncryptionPromise = matrixClient
             .getCrypto()
             ?.resetEncryption((makeRequest) => uiAuthCallback(matrixClient, makeRequest));
 
-        onReset();
+        await Promise.race([timeoutPromise, resetEncryptionPromise]).then(
+            () => onReset(),
+            (failureReason) => onFail(failureReason),
+        );
     }
 
     return (
@@ -94,11 +107,7 @@ export function ResetIdentityBody({ onCancelClick, onReset, variant }: ResetIden
                 {variant === "compromised" && <span>{_t("settings|encryption|advanced|breadcrumb_warning")}</span>}
             </EncryptionCardEmphasisedContent>
             <EncryptionCardButtons>
-                <Button
-                    destructive={true}
-                    disabled={inProgress}
-                    onClick={onClick}
-                >
+                <Button destructive={true} disabled={inProgress} onClick={onClick}>
                     {inProgress ? (
                         <>
                             <InlineSpinner /> {_t("settings|encryption|advanced|reset_in_progress")}

@@ -1147,6 +1147,8 @@
         "error_loading_user_profile": "Could not load user profile",
         "forget_room_failed": "Failed to forget room %(errCode)s"
     },
+    "error_reset_failed": "Identity reset failed",
+    "error_reset_failed_description": "Something went wrong while resetting your digital identity. Please try again and <issueLink>submit a bug report</issueLink> if the problem persists.",
     "error_user_not_logged_in": "User is not logged in",
     "event_preview": {
         "m.call.answer": {
