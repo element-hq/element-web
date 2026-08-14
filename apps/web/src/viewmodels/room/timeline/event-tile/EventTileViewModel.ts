@@ -268,9 +268,9 @@ export interface EventTileRootData {
     layout?: Layout;
     /** The timeline rendering mode exposed through `data-shape`. */
     shape: TimelineRenderingType;
-    /** Whether the event belongs to the current user, exposed through `data-self`. */
+    /** Whether the event belongs to the current user, exposed through `stateOwnEvent`. */
     isOwnEvent: boolean;
-    /** Whether EventTile renders a reply chain, exposed through `data-has-reply`. */
+    /** Whether EventTile renders a reply chain, exposed through `stateHasReply`. */
     hasReply: boolean;
 }
 

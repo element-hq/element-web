@@ -27,8 +27,7 @@ export function decorateStartSendingTime(content: IContent): void {
  * @param {string} forEventId The event ID for the decorated event.
  */
 export function sendRoundTripMetric(client: MatrixClient, inRoomId: string, forEventId: string): void {
-    // noinspection JSIgnoredPromiseFromCall
-    client.sendEvent(inRoomId, "io.element.performance_metric", {
+    void client.sendEvent(inRoomId, "io.element.performance_metric", {
         "io.element.performance_metrics": {
             forEventId: forEventId,
             responseTs: Date.now(),

@@ -60,7 +60,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
     public static get instance(): WidgetLayoutStore {
         if (!this.internalInstance) {
             this.internalInstance = new WidgetLayoutStore();
-            this.internalInstance.start();
+            void this.internalInstance.start();
         }
         return this.internalInstance;
     }
@@ -472,7 +472,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
                 };
             }
         }
-        this.matrixClient?.sendStateEvent(room.roomId, WIDGET_LAYOUT_EVENT_TYPE, evContent, "");
+        void this.matrixClient?.sendStateEvent(room.roomId, WIDGET_LAYOUT_EVENT_TYPE, evContent, "");
     }
 
     private getAllWidgets(room: Room): [IApp, Container][] {

@@ -143,7 +143,7 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
     } = useViewModel(vm);
     const { translate: _t } = useI18n();
     const trigger = (
-        <button className={styles.triggerButton} aria-label={_t("menus|user_menu|title")}>
+        <button className={styles.triggerButton} aria-label={_t("menus|user_menu|title")} type="button">
             <div className={styles.avatarWrapper}>
                 <Avatar id={userId} name={displayName} type="round" size="36px" src={avatarUrl} />
                 {userStatus && (
@@ -171,13 +171,25 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
             >
                 <section className={classNames(styles.profile, styles.profilePrimary)}>
                     {showAvatar && <Avatar id={userId} name={displayName} type="round" size="64px" src={avatarUrl} />}
-                    <Text className={styles.displayname} type="body" size="lg" weight="semibold" as="span">
+                    <Text
+                        className={classNames(styles.displayname, styles.constrainedText)}
+                        type="body"
+                        size="lg"
+                        weight="semibold"
+                        as="span"
+                    >
                         {displayName}
                     </Text>
                     {showUserStatus && <SetStatusView vm={setStatusViewModel} />}
                 </section>
                 <section className={classNames(styles.profile, styles.profileSecondary)}>
-                    <Text data-testid="userId" size="md" as="span" type="body" className={styles.userId}>
+                    <Text
+                        data-testid="userId"
+                        size="md"
+                        as="span"
+                        type="body"
+                        className={classNames(styles.userId, styles.constrainedText)}
+                    >
                         {userId}
                     </Text>
                     {manageAccountHref && (
