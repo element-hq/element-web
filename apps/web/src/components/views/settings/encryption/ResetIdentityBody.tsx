@@ -80,9 +80,13 @@ export function ResetIdentityBody({ onCancelClick, onReset, onFail, variant }: R
             setTimeout(() => reject("Timed out"), 5000);
         });
 
-        const resetEncryptionPromise = matrixClient
-            .getCrypto()
-            ?.resetEncryption((makeRequest) => uiAuthCallback(matrixClient, makeRequest));
+        const crypto = matrixClient.getCrypto();
+        if (!crypto) {
+            onFail("Crypto is not set up");
+            return;
+        }
+
+        const resetEncryptionPromise = crypto.resetEncryption((makeRequest) => uiAuthCallback(matrixClient, makeRequest));
 
         await Promise.race([timeoutPromise, resetEncryptionPromise]).then(
             () => onReset(),
