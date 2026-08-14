@@ -12,6 +12,7 @@
     --event-tile-group-line-spacing-block-start: 1px;
     --event-tile-group-line-spacing-block-end: 3px;
     --event-tile-group-line-height: 22px;
+    --event-tile-group-timestamp-width: 46px;
 
     /* IRC geometry. */
     --event-tile-irc-line-height: 18px;
@@ -30,6 +31,8 @@
     --event-tile-bubble-line-max-width: 70%;
     --event-tile-bubble-line-margin-inline-start: -9px;
     --event-tile-bubble-line-margin-inline-end: -12px;
+    --event-tile-bubble-margin-inline-start: 49px;
+    --event-tile-bubble-margin-inline-end: 60px;
     --event-tile-bubble-other-background: var(--cpd-color-gray-300, #e9edf2);
     --event-tile-bubble-self-background: var(--cpd-color-green-300, #d8f5ed);
 
@@ -103,6 +106,19 @@
 
 .slotContextMenu {
     z-index: 1;
+}
+
+.slotNotificationRoomLabel {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.slotFooter {
+    display: flex;
+    align-items: center;
+    gap: var(--cpd-space-2x, 8px);
 }
 
 /* Shared structural containers. */
@@ -192,7 +208,7 @@
     .slotTimestamp {
         position: absolute;
         inset-inline-start: 0;
-        width: var(--MessageTimestamp-width, 46px);
+        width: var(--event-tile-group-timestamp-width);
         text-align: center;
     }
 
@@ -529,15 +545,15 @@
 /* Bubble layout. */
 .root.layoutBubble {
     max-width: unset;
-    margin-inline: var(--EventTile_bubble-margin-inline-start, 49px) var(--EventTile_bubble-margin-inline-end, 60px);
+    margin-inline: var(--event-tile-bubble-margin-inline-start) var(--event-tile-bubble-margin-inline-end);
     padding-top: 0;
 
     &::before {
         content: "";
         position: absolute;
         z-index: -1;
-        inset: -1px calc(-1 * var(--EventTile_bubble-margin-inline-end, 60px)) -1px
-            calc(-1 * var(--EventTile_bubble-margin-inline-start, 49px));
+        inset: -1px calc(-1 * var(--event-tile-bubble-margin-inline-end)) -1px
+            calc(-1 * var(--event-tile-bubble-margin-inline-start));
         border-radius: 4px;
         pointer-events: none;
     }
@@ -565,6 +581,7 @@
         z-index: 3;
         inset-block-end: 0;
         inset-inline-end: 0;
+        max-width: 80px;
         padding: 4px 8px;
     }
 
@@ -836,10 +853,10 @@
     /* These events span the space between the two bubble columns. */
     &.stateAlignedBetweenBubbles {
         margin-inline-start: calc(
-            var(--EventTile_bubble-margin-inline-start, 49px) + var(--event-tile-bubble-line-margin-inline-start)
+            var(--event-tile-bubble-margin-inline-start) + var(--event-tile-bubble-line-margin-inline-start)
         );
         margin-inline-end: calc(
-            var(--EventTile_bubble-margin-inline-end, 60px) + var(--event-tile-bubble-line-margin-inline-end)
+            var(--event-tile-bubble-margin-inline-end) + var(--event-tile-bubble-line-margin-inline-end)
         );
 
         .line {
