@@ -92,7 +92,7 @@ function getVisibleFilterIds(): FilterId[] {
 
 const TAG_TO_TITLE_MAP: Record<string, string> = {
     [DefaultTagID.Favourite]: _t("room_list|section|favourites"),
-    [CHATS_TAG]: _t("room_list|section|chats"),
+    [CHATS_TAG]: _t("common|rooms"),
     [DefaultTagID.LowPriority]: _t("room_list|section|low_priority"),
     [DefaultTagID.DM]: _t("common|people"),
 };

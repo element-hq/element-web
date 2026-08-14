@@ -17,7 +17,7 @@ import { isMetaSpace, MetaSpace, type SpaceKey } from "../spaces";
 import { SDKContextClass } from "../../contexts/SDKContextClass.ts";
 
 /**
- * A synthetic tag used to represent the "Chats" section, which contains
+ * A synthetic tag used to represent the "Rooms" section (known previously as Chats), which contains
  * every room that does not belong to any other explicit tag section.
  */
 export const CHATS_TAG = "chats";
