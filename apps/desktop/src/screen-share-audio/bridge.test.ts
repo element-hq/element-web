@@ -83,14 +83,20 @@ describe("screen-share audio bridge transport", () => {
         expect(processBody).not.toMatch(/\bnew\s/);
     });
 
-    it("uses file-backed bridge assets with an external script and worklet", () => {
+    it("uses an inert file-backed document and initializes the worklet directly in preload", () => {
         const documentSource = fs.readFileSync(path.join(assetsDirectory, "bridge.html"), "utf8");
-        const rendererSource = fs.readFileSync(path.join(assetsDirectory, "bridge.js"), "utf8");
+        const preloadSource = fs.readFileSync(
+            fileURLToPath(new URL("../screen-share-audio-bridge-preload.cts", import.meta.url)),
+            "utf8",
+        );
         expect(documentSource).toContain("Content-Security-Policy");
-        expect(documentSource).toContain('src="bridge.js"');
-        expect(documentSource).not.toMatch(/<script(?![^>]*\bsrc=)/);
-        expect(rendererSource).toContain('audioWorklet.addModule("./worklet.js")');
-        expect(`${documentSource}\n${rendererSource}`).not.toMatch(/\b(?:data:|Blob\b)/);
+        expect(documentSource).toContain("script-src 'self'");
+        expect(documentSource).not.toContain("<script");
+        expect(preloadSource).toContain('audioWorklet.addModule("./worklet.js")');
+        expect(preloadSource).toContain("event.ports");
+        expect(preloadSource).not.toContain("window.postMessage");
+        expect(preloadSource).not.toContain('addEventListener("message"');
+        expect(`${documentSource}\n${preloadSource}`).not.toMatch(/(?:["']data:|\bBlob\b)/);
     });
 
     it("keeps every supported active bridge failure connected to the terminal signal", () => {
