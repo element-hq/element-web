@@ -543,13 +543,35 @@ describe("ElementCall", () => {
             SettingsStore.getValue = originalGetValue;
         });
 
-        it("advertises isolated screen-share audio only when the platform supports it", () => {
+        it("does not advertise isolated screen-share audio while the Lab is disabled", () => {
+            jest.spyOn(PlatformPeg.get()!, "supportsIsolatedScreenShareAudio").mockReturnValue(true);
+            ElementCall.create(room);
+            const call = ElementCall.get(room);
+            expect(new URLSearchParams(new URL(call!.widget.url).hash.slice(1)).has("isolatedScreenShareAudio")).toBe(
+                false,
+            );
+        });
+
+        it("does not advertise isolated screen-share audio when the platform is unavailable", () => {
+            enabledSettings.add("feature_windows_screen_share_audio");
+            jest.spyOn(PlatformPeg.get()!, "supportsIsolatedScreenShareAudio").mockReturnValue(false);
+            ElementCall.create(room);
+            const call = ElementCall.get(room);
+            expect(new URLSearchParams(new URL(call!.widget.url).hash.slice(1)).has("isolatedScreenShareAudio")).toBe(
+                false,
+            );
+            enabledSettings.delete("feature_windows_screen_share_audio");
+        });
+
+        it("advertises isolated screen-share audio when the Lab and platform capability are enabled", () => {
+            enabledSettings.add("feature_windows_screen_share_audio");
             jest.spyOn(PlatformPeg.get()!, "supportsIsolatedScreenShareAudio").mockReturnValue(true);
             ElementCall.create(room);
             const call = ElementCall.get(room);
             expect(new URLSearchParams(new URL(call!.widget.url).hash.slice(1)).get("isolatedScreenShareAudio")).toBe(
                 "true",
             );
+            enabledSettings.delete("feature_windows_screen_share_audio");
         });
 
         it("finds ongoing calls that are created by the session manager", async () => {
@@ -840,6 +862,8 @@ describe("ElementCall", () => {
         beforeEach(async () => {
             jest.useFakeTimers();
             jest.setSystemTime(0);
+            enabledSettings.add("feature_windows_screen_share_audio");
+            jest.spyOn(PlatformPeg.get()!, "supportsIsolatedScreenShareAudio").mockReturnValue(true);
 
             ElementCall.create(room);
             const maybeCall = ElementCall.get(room);
@@ -849,7 +873,10 @@ describe("ElementCall", () => {
             ({ widget, messaging, widgetApi } = setUpWidget(call));
         });
 
-        afterEach(() => cleanUpCallAndWidget(call, widget));
+        afterEach(() => {
+            enabledSettings.delete("feature_windows_screen_share_audio");
+            cleanUpCallAndWidget(call, widget);
+        });
 
         // TODO refactor initial device configuration to use the EW settings.
         // Add tests for passing EW device configuration to the widget.
@@ -991,6 +1018,36 @@ describe("ElementCall", () => {
                 detail: releaseDetail,
             });
             await waitFor(() => expect(release).toHaveBeenCalledWith(call.widget.id, sessionId));
+            expect(widgetApi.transport.reply).toHaveBeenCalledWith(releaseDetail, { accepted: true });
+        });
+
+        it("rejects acquisition while the Lab is disabled but still releases existing ownership", async () => {
+            const platform = PlatformPeg.get()!;
+            const acquire = jest.spyOn(platform, "acquireIsolatedScreenShareAudio").mockResolvedValue(true);
+            const release = jest.spyOn(platform, "releaseIsolatedScreenShareAudio").mockResolvedValue();
+            await connect(call, widgetApi);
+            const ownedSession = "12345678-1234-4123-8123-123456789abc";
+            const rejectedSession = "22345678-1234-4123-8123-123456789abc";
+            const emit = (state: "acquire" | "release", sessionId: string) => {
+                const detail = { data: { version: 1, state, session_id: sessionId } };
+                widgetApi.emit(`action:${ElementWidgetActions.ScreenShareAudioSession}`, {
+                    preventDefault: jest.fn(),
+                    detail,
+                });
+                return detail;
+            };
+
+            emit("acquire", ownedSession);
+            await waitFor(() => expect(acquire).toHaveBeenCalledWith(call.widget.id, ownedSession));
+            enabledSettings.delete("feature_windows_screen_share_audio");
+            const rejectedAcquire = emit("acquire", rejectedSession);
+            await waitFor(() =>
+                expect(widgetApi.transport.reply).toHaveBeenCalledWith(rejectedAcquire, { accepted: false }),
+            );
+            expect(acquire).toHaveBeenCalledTimes(1);
+
+            const releaseDetail = emit("release", ownedSession);
+            await waitFor(() => expect(release).toHaveBeenCalledWith(call.widget.id, ownedSession));
             expect(widgetApi.transport.reply).toHaveBeenCalledWith(releaseDetail, { accepted: true });
         });
 

@@ -784,7 +784,10 @@ export class ElementCall extends Call {
             params.append("allowIceFallback", "true");
         }
 
-        if (PlatformPeg.get()?.supportsIsolatedScreenShareAudio()) {
+        if (
+            SettingsStore.getValue("feature_windows_screen_share_audio") &&
+            PlatformPeg.get()?.supportsIsolatedScreenShareAudio()
+        ) {
             params.append("isolatedScreenShareAudio", "true");
         }
 
@@ -1037,6 +1040,14 @@ export class ElementCall extends Call {
             } catch {
                 this.widgetApi?.transport.reply(ev.detail, { accepted: false });
             }
+            return;
+        }
+
+        if (
+            !SettingsStore.getValue("feature_windows_screen_share_audio") ||
+            !platform?.supportsIsolatedScreenShareAudio()
+        ) {
+            this.widgetApi?.transport.reply(ev.detail, { accepted: false });
             return;
         }
 
