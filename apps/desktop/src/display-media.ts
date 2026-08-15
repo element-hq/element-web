@@ -6,7 +6,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    app,
     BrowserWindow,
     desktopCapturer,
     webContents,
@@ -14,12 +13,8 @@ import {
     type Streams,
 } from "electron";
 
-import { ElectronScreenShareAudioBridgeFactory, getScreenShareAudioBridgeAudit } from "./screen-share-audio/bridge.js";
-import { createDevelopmentFakeProvider, getFakeScreenShareAudioAudit } from "./screen-share-audio/fake-provider.js";
-import {
-    createDevelopmentProcessLoopbackProvider,
-    getProcessLoopbackProviderAudit,
-} from "./screen-share-audio/process-loopback-provider.js";
+import { ElectronScreenShareAudioBridgeFactory } from "./screen-share-audio/bridge.js";
+import { createProcessLoopbackProvider } from "./screen-share-audio/process-loopback-provider.js";
 import {
     DisplayMediaSessionController,
     type DisplayMediaRequest,
@@ -72,11 +67,7 @@ export function observeRequester(
     };
 }
 
-const developmentFakeProvider = createDevelopmentFakeProvider();
-const developmentProcessLoopbackProvider = developmentFakeProvider
-    ? undefined
-    : createDevelopmentProcessLoopbackProvider();
-const developmentProvider = developmentFakeProvider ?? developmentProcessLoopbackProvider;
+const processLoopbackProvider = createProcessLoopbackProvider();
 
 export const displayMediaController = new DisplayMediaSessionController({
     enumerateSources: async () => desktopCapturer.getSources({ types: ["screen", "window"] }),
@@ -92,34 +83,9 @@ export const displayMediaController = new DisplayMediaSessionController({
         BrowserWindow.getAllWindows().some(
             (window) => !window.isDestroyed() && window.getMediaSourceId() === source.id,
         ),
-    provider: developmentProvider,
+    provider: processLoopbackProvider,
     bridgeFactory: new ElectronScreenShareAudioBridgeFactory(),
 });
-
-export const developmentFakeAuditProperty = "__elementScreenShareAudioFakeAudit_9f8c24f1";
-if (developmentProvider && !app.isPackaged) {
-    Object.defineProperty(app, developmentFakeAuditProperty, {
-        enumerable: false,
-        configurable: false,
-        writable: false,
-        value: () => {
-            const controller = displayMediaController.getAudit();
-            return {
-                controller: {
-                    state: controller.state,
-                    activeRequests: controller.activeRequests,
-                    activeCaptures: controller.activeCaptures,
-                    activeBridges: controller.activeBridges,
-                    completedCallbacks: controller.completedCallbacks,
-                    lastRequestId: controller.lastRequestId,
-                },
-                bridge: getScreenShareAudioBridgeAudit(),
-                fake: getFakeScreenShareAudioAudit(),
-                ...(developmentProcessLoopbackProvider && { processLoopback: getProcessLoopbackProviderAudit() }),
-            };
-        },
-    });
-}
 
 export function handleDisplayMediaRequest(
     request: DisplayMediaRequestHandlerHandlerRequest,
@@ -192,6 +158,6 @@ export function handleScreenShareAudioSessionBinding(
     return displayMediaController.bind(senderId, binding);
 }
 
-export function supportsIsolatedScreenShareAudio(): boolean {
-    return developmentProvider !== undefined && !app.isPackaged;
+export async function supportsIsolatedScreenShareAudio(): Promise<boolean> {
+    return (await processLoopbackProvider.getAvailability()) === "available";
 }

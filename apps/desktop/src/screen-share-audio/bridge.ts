@@ -19,15 +19,6 @@ import type {
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const maxPendingPackets = 20;
-const audit = {
-    bridgeWindows: 0,
-    messagePorts: 0,
-    captureObserved: false,
-    lastCaptured: null as boolean | null,
-    captureSamples: 0,
-    falseSamplesAfterObserved: 0,
-};
-const activeTimers = new Set<NodeJS.Timeout>();
 export const bridgePreparationStages = [
     "window-created",
     "document-loaded",
@@ -90,73 +81,6 @@ export function portCloseFailure(stopped: boolean): BridgePreparationFailure | n
     return stopped ? null : "port-closed";
 }
 
-export class ConsumerCaptureMonitor {
-    private observed = false;
-    private falseSamples = 0;
-    private sampleTimer?: NodeJS.Timeout;
-    private neverCapturedTimer?: NodeJS.Timeout;
-
-    public constructor(
-        private readonly isCaptured: () => boolean,
-        private readonly onConsumerStop: () => void,
-    ) {}
-
-    public start(): void {
-        this.neverCapturedTimer = this.trackTimeout(this.onConsumerStop, 5_000);
-        this.sampleTimer = setInterval(() => this.sample(), 100);
-        activeTimers.add(this.sampleTimer);
-    }
-
-    public stop(): void {
-        if (this.sampleTimer) {
-            clearInterval(this.sampleTimer);
-            activeTimers.delete(this.sampleTimer);
-        }
-        if (this.neverCapturedTimer) this.clearTrackedTimeout(this.neverCapturedTimer);
-        this.sampleTimer = undefined;
-        this.neverCapturedTimer = undefined;
-    }
-
-    private sample(): void {
-        const captured = this.isCaptured();
-        audit.captureSamples++;
-        audit.lastCaptured = captured;
-        if (captured) {
-            this.observed = true;
-            this.falseSamples = 0;
-            audit.captureObserved = true;
-            audit.falseSamplesAfterObserved = 0;
-            if (this.neverCapturedTimer) this.clearTrackedTimeout(this.neverCapturedTimer);
-            this.neverCapturedTimer = undefined;
-        } else if (this.observed) {
-            audit.falseSamplesAfterObserved = ++this.falseSamples;
-            if (this.falseSamples >= 2) this.onConsumerStop();
-        }
-    }
-
-    private trackTimeout(callback: () => void, delay: number): NodeJS.Timeout {
-        const timer = setTimeout(() => {
-            activeTimers.delete(timer);
-            callback();
-        }, delay);
-        activeTimers.add(timer);
-        return timer;
-    }
-
-    private clearTrackedTimeout(timer: NodeJS.Timeout): void {
-        clearTimeout(timer);
-        activeTimers.delete(timer);
-    }
-}
-
-export function getScreenShareAudioBridgeAudit(): Readonly<typeof audit> & {
-    timers: number;
-    lastStage: BridgePreparationStage | null;
-    lastFailure: BridgePreparationFailure | null;
-} {
-    return { ...audit, timers: activeTimers.size, lastStage, lastFailure };
-}
-
 export function validatePcmPacket(packet: PcmPacket, expectedSequence: number, expectedStartFrame: number): number {
     if (
         packet.sequence !== expectedSequence ||
@@ -172,8 +96,6 @@ export function validatePcmPacket(packet: PcmPacket, expectedSequence: number, e
 class ElectronScreenShareAudioBridge implements PreparedScreenShareAudioBridge {
     private pending = 0;
     private stopped = false;
-    private consumerMonitor?: ConsumerCaptureMonitor;
-    private readonly consumerStopped = Promise.withResolvers<void>();
     private readonly terminal = Promise.withResolvers<void>();
     private stopPromise?: Promise<void>;
     private disposeCaptureTerminal?: () => void;
@@ -184,9 +106,7 @@ class ElectronScreenShareAudioBridge implements PreparedScreenShareAudioBridge {
         public readonly port: MessagePortMain,
         private readonly rendererPort: MessagePortMain,
         private readonly capture: PreparedScreenShareAudioCapture,
-    ) {
-        audit.messagePorts += 2;
-    }
+    ) {}
 
     public get frame(): Electron.WebFrameMain {
         return this.window.webContents.mainFrame;
@@ -203,7 +123,6 @@ class ElectronScreenShareAudioBridge implements PreparedScreenShareAudioBridge {
             const error = new Error("Screen-share audio bridge terminated");
             ready.reject(error);
             prebuffered.reject(error);
-            this.consumerStopped.resolve();
         };
         this.port.on("message", ({ data }) => {
             if (
@@ -291,12 +210,7 @@ class ElectronScreenShareAudioBridge implements PreparedScreenShareAudioBridge {
             this.clearTrackedTimeout(prebufferTimeout);
         }
         recordStage("prebuffer-ready");
-        this.monitorConsumer();
         recordStage("active");
-    }
-
-    public waitForConsumerStop(): Promise<void> {
-        return this.consumerStopped.promise;
     }
 
     public waitForTerminal(): Promise<void> {
@@ -308,21 +222,8 @@ class ElectronScreenShareAudioBridge implements PreparedScreenShareAudioBridge {
         return this.stopPromise;
     }
 
-    private monitorConsumer(): void {
-        this.consumerMonitor = new ConsumerCaptureMonitor(
-            () => {
-                if (this.window.isDestroyed() || this.window.webContents.isCrashed()) return false;
-                return this.window.webContents.isBeingCaptured();
-            },
-            () => this.consumerStopped.resolve(),
-        );
-        this.consumerMonitor.start();
-    }
-
     private async stopOnce(): Promise<void> {
         this.stopped = true;
-        this.consumerMonitor?.stop();
-        this.consumerMonitor = undefined;
         this.disposeCaptureTerminal?.();
         this.disposeCaptureTerminal = undefined;
         if (this.bridgeGoneListener) {
@@ -337,24 +238,15 @@ class ElectronScreenShareAudioBridge implements PreparedScreenShareAudioBridge {
         } finally {
             this.port.close();
             if (!this.window.isDestroyed()) this.window.destroy();
-            audit.messagePorts -= 2;
-            audit.bridgeWindows--;
-            this.consumerStopped.resolve();
         }
     }
 
     private trackTimeout(callback: () => void, delay: number): NodeJS.Timeout {
-        const timer = setTimeout(() => {
-            activeTimers.delete(timer);
-            callback();
-        }, delay);
-        activeTimers.add(timer);
-        return timer;
+        return setTimeout(callback, delay);
     }
 
     private clearTrackedTimeout(timer: NodeJS.Timeout): void {
         clearTimeout(timer);
-        activeTimers.delete(timer);
     }
 
     private async withAbort<T>(signal: AbortSignal, promise: Promise<T>): Promise<T> {
@@ -383,10 +275,6 @@ export class ElectronScreenShareAudioBridgeFactory implements ScreenShareAudioBr
     ): Promise<PreparedScreenShareAudioBridge> {
         lastStage = null;
         lastFailure = null;
-        audit.captureObserved = false;
-        audit.lastCaptured = null;
-        audit.captureSamples = 0;
-        audit.falseSamplesAfterObserved = 0;
         if (signal.aborted) {
             recordFailure("aborted");
             throw new Error("Screen-share audio bridge preparation was cancelled");
@@ -408,7 +296,6 @@ export class ElectronScreenShareAudioBridgeFactory implements ScreenShareAudioBr
                 backgroundThrottling: false,
             },
         });
-        audit.bridgeWindows++;
         recordStage("window-created");
         let bridge: ElectronScreenShareAudioBridge | undefined;
         try {
@@ -437,7 +324,6 @@ export class ElectronScreenShareAudioBridgeFactory implements ScreenShareAudioBr
             await bridge?.stop().catch(() => {});
             if (!bridge) await capture.stop().catch(() => {});
             if (!window.isDestroyed()) window.destroy();
-            if (!bridge) audit.bridgeWindows--;
             throw error;
         }
     }

@@ -34,13 +34,21 @@
             "outputs": ["{projectRoot}/lib/i18n", "{projectRoot}/lib/screen-share-audio/assets"],
             "options": { "cwd": "apps/desktop" }
         },
+        "build:screen-share-audio-helper": {
+            "cache": true,
+            "command": "node native/windows-process-loopback/build.mjs",
+            "inputs": ["{projectRoot}/native/windows-process-loopback"],
+            "outputs": ["{projectRoot}/native/windows-process-loopback/build/windows-x64/windows-process-loopback.exe"],
+            "options": { "cwd": "apps/desktop" }
+        },
         "build": {
             "cache": true,
             "command": "pnpm exec electron-builder",
             "inputs": [
                 "src",
                 "{projectRoot}/.hak/hakModules",
-                "{projectRoot}/electron-builder.json",
+                "{projectRoot}/electron-builder.ts",
+                "{projectRoot}/native/windows-process-loopback",
                 "{projectRoot}/webapp.asar"
             ],
             "outputs": ["{projectRoot}/dist"],

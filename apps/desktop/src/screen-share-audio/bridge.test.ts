@@ -13,7 +13,6 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import {
     bridgePreparationFailures,
     bridgePreparationStages,
-    ConsumerCaptureMonitor,
     isBridgePreparationFailure,
     isBridgePreparationStage,
     latchBridgePreparationFailure,
@@ -102,33 +101,5 @@ describe("screen-share audio bridge transport", () => {
         expect(bridgeSource).toContain('this.capture.onTerminal(() => failPreparation("capture-terminal"))');
         expect(bridgeSource).toContain("this.terminal.resolve()");
         expect(bridgeSource).toContain('data.type === "failed"');
-    });
-
-    it("stops never-captured consumers after the existing timeout and clears its timers", () => {
-        vi.useFakeTimers();
-        const stopped = vi.fn();
-        const monitor = new ConsumerCaptureMonitor(() => false, stopped);
-        monitor.start();
-        vi.advanceTimersByTime(4_999);
-        expect(stopped).not.toHaveBeenCalled();
-        vi.advanceTimersByTime(1);
-        expect(stopped).toHaveBeenCalledOnce();
-        monitor.stop();
-        expect(vi.getTimerCount()).toBe(0);
-    });
-
-    it("requires two false samples after observation and resets them on a true sample", () => {
-        vi.useFakeTimers();
-        const captured = vi.fn().mockReturnValueOnce(true).mockReturnValueOnce(false).mockReturnValueOnce(true);
-        captured.mockReturnValueOnce(false).mockReturnValueOnce(false);
-        const stopped = vi.fn();
-        const monitor = new ConsumerCaptureMonitor(captured, stopped);
-        monitor.start();
-        vi.advanceTimersByTime(400);
-        expect(stopped).not.toHaveBeenCalled();
-        vi.advanceTimersByTime(100);
-        expect(stopped).toHaveBeenCalledOnce();
-        monitor.stop();
-        expect(vi.getTimerCount()).toBe(0);
     });
 });

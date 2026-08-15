@@ -12,16 +12,17 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
     captureTargetForSelection,
-    createDevelopmentProcessLoopbackProvider,
-    getProcessLoopbackProviderAudit,
+    isCompatibleProcessLoopbackProbe,
+    parseWindowsBuild,
     parseResolvedWindowPid,
     parseWindowSourceId,
     ProcessLoopbackScreenShareAudioProvider,
     type ProcessLoopbackProviderDependencies,
+    type ProcessLoopbackRuntime,
+    resolveProcessLoopbackExecutable,
 } from "./process-loopback-provider.js";
 
-const electronApp = vi.hoisted(() => ({ isPackaged: false }));
-vi.mock("electron", () => ({ app: electronApp }));
+vi.mock("electron", () => ({ app: { isPackaged: false, getAppPath: () => "C:\\app" } }));
 
 function framedPacket(type: number, sequence: number, startFrame: number, payload = Buffer.alloc(0)): Buffer {
     const result = Buffer.alloc(48 + payload.length);
@@ -52,26 +53,43 @@ class FakeChild extends EventEmitter {
     public readonly stderr = new PassThrough();
     public exitCode: number | null = null;
     public signalCode: NodeJS.Signals | null = null;
-    public readonly kill = vi.fn(() => {
-        this.close();
-        return true;
-    });
+    public readonly kill;
+    public readonly unref = vi.fn();
 
-    public constructor() {
+    public constructor(closeOnStop = true, closeOnKill = true) {
         super();
-        this.stdin.once("finish", () => this.close());
+        this.kill = vi.fn(() => {
+            if (closeOnKill) this.close();
+            return closeOnKill;
+        });
+        if (closeOnStop) this.stdin.once("finish", () => this.close());
     }
 
-    private close(): void {
+    public close(exitCode = 0): void {
         if (this.exitCode !== null) return;
-        this.exitCode = 0;
-        queueMicrotask(() => this.emit("close", 0, null));
+        this.exitCode = exitCode;
+        queueMicrotask(() => this.emit("close", exitCode, null));
     }
 }
 
-function dependencies(child: FakeChild): ProcessLoopbackProviderDependencies {
+const availableProbe = "protocol=1\nformat=48000,2,pcm-s16le\n";
+const baseRuntime: ProcessLoopbackRuntime = {
+    platform: "win32",
+    arch: "x64",
+    windowsBuild: 22_631,
+    isPackaged: false,
+    resourcesPath: "C:\\resources",
+    appPath: "C:\\app",
+};
+
+function dependencies(
+    child = new FakeChild(),
+    runtime: Partial<ProcessLoopbackRuntime> = {},
+): ProcessLoopbackProviderDependencies {
     return {
+        runtime: vi.fn(() => ({ ...baseRuntime, ...runtime })),
         executableAvailable: vi.fn(async () => true),
+        probe: vi.fn(async () => availableProbe),
         resolveWindowPid: vi.fn(async () => 321),
         spawnProcess: vi.fn(() => child as unknown as ChildProcessWithoutNullStreams),
         elementPid: vi.fn(() => 123),
@@ -80,24 +98,62 @@ function dependencies(child: FakeChild): ProcessLoopbackProviderDependencies {
 
 describe("process-loopback screen-share audio provider", () => {
     afterEach(() => {
-        delete process.env.ELEMENT_SCREEN_SHARE_AUDIO_PROCESS_LOOPBACK_EXECUTABLE;
-        electronApp.isPackaged = false;
+        vi.useRealTimers();
     });
 
-    it("is enabled only by an absolute executable path in unpackaged Windows development", () => {
-        process.env.ELEMENT_SCREEN_SHARE_AUDIO_PROCESS_LOOPBACK_EXECUTABLE = "helper.exe";
-        expect(createDevelopmentProcessLoopbackProvider()).toBeUndefined();
-        process.env.ELEMENT_SCREEN_SHARE_AUDIO_PROCESS_LOOPBACK_EXECUTABLE = process.execPath;
-        expect(createDevelopmentProcessLoopbackProvider()).toBeInstanceOf(ProcessLoopbackScreenShareAudioProvider);
-        electronApp.isPackaged = true;
-        expect(createDevelopmentProcessLoopbackProvider()).toBeUndefined();
+    it("resolves fixed packaged and unpackaged helper paths", () => {
+        expect(resolveProcessLoopbackExecutable(baseRuntime)).toBe(
+            "C:\\app\\native\\windows-process-loopback\\build\\windows-x64\\windows-process-loopback.exe",
+        );
+        expect(resolveProcessLoopbackExecutable({ ...baseRuntime, isPackaged: true })).toBe(
+            "C:\\resources\\screen-share-audio\\windows-process-loopback.exe",
+        );
+    });
+
+    it("extracts only a valid Windows build number", () => {
+        expect(parseWindowsBuild("10.0.22631")).toBe(22_631);
+        expect(parseWindowsBuild("not-a-windows-release")).toBe(0);
+    });
+
+    it("accepts only the exact protocol and PCM compatibility probe", () => {
+        expect(isCompatibleProcessLoopbackProbe(availableProbe)).toBe(true);
+        expect(isCompatibleProcessLoopbackProbe("protocol=2\nformat=48000,2,pcm-s16le\n")).toBe(false);
+        expect(isCompatibleProcessLoopbackProbe("protocol=1\nformat=48000,1,pcm-s16le\n")).toBe(false);
+    });
+
+    it.each([
+        [{ platform: "linux" }, "unsupported"],
+        [{ arch: "arm64" }, "unsupported"],
+        [{ arch: "ia32" }, "unsupported"],
+        [{ windowsBuild: 20_347 }, "unsupported"],
+    ] as const)("fails closed before filesystem access for unsupported runtime %j", async (runtime, expected) => {
+        const deps = dependencies(new FakeChild(), runtime);
+        const provider = new ProcessLoopbackScreenShareAudioProvider(deps);
+        await expect(provider.getAvailability()).resolves.toBe(expected);
+        expect(deps.executableAvailable).not.toHaveBeenCalled();
+        expect(deps.probe).not.toHaveBeenCalled();
+    });
+
+    it("reports missing and mismatched helpers as unavailable", async () => {
+        const missing = dependencies();
+        vi.mocked(missing.executableAvailable).mockResolvedValue(false);
+        await expect(new ProcessLoopbackScreenShareAudioProvider(missing).getAvailability()).resolves.toBe(
+            "unavailable",
+        );
+        expect(missing.probe).not.toHaveBeenCalled();
+
+        const mismatch = dependencies();
+        vi.mocked(mismatch.probe).mockResolvedValue("protocol=2\nformat=48000,2,pcm-s16le\n");
+        await expect(new ProcessLoopbackScreenShareAudioProvider(mismatch).getAvailability()).resolves.toBe(
+            "unavailable",
+        );
     });
 
     it("strictly maps window sources to INCLUDE and screens to Element-tree EXCLUDE", () => {
         expect(parseWindowSourceId("window:456:0")).toBe(456);
         expect(() => parseWindowSourceId("screen:0:0")).toThrow();
-        expect(parseResolvedWindowPid("pid=789\n")).toBe(789);
-        expect(() => parseResolvedWindowPid("pid=0\n")).toThrow();
+        expect(parseResolvedWindowPid("pid=789\r\n")).toBe(789);
+        expect(() => parseResolvedWindowPid("pid=789\nextra=unsafe\n")).toThrow();
         expect(captureTargetForSelection({ sourceId: "window:456:0", kind: "window" }, 123, 789)).toEqual({
             pid: 789,
             mode: "include",
@@ -106,56 +162,136 @@ describe("process-loopback screen-share audio provider", () => {
             pid: 123,
             mode: "exclude",
         });
-        expect(() => captureTargetForSelection({ sourceId: "screen:0:0", kind: "window" }, 123, 789)).toThrow();
     });
 
-    it("resolves a freshly validated window before constructing capture", async () => {
+    it("revalidates a window and spawns exact INCLUDE arguments", async () => {
         const child = new FakeChild();
         const deps = dependencies(child);
-        const provider = new ProcessLoopbackScreenShareAudioProvider("C:\\helper.exe", deps);
+        const provider = new ProcessLoopbackScreenShareAudioProvider(deps);
         const abort = new AbortController();
-        expect(await provider.getAvailability()).toBe("available");
-        await provider.prepare({ sourceId: "window:456:0", kind: "window" }, abort.signal);
-        expect(deps.resolveWindowPid).toHaveBeenCalledWith("C:\\helper.exe", "window:456:0", abort.signal);
+        await expect(provider.getAvailability()).resolves.toBe("available");
+        const capture = await provider.prepare({ sourceId: "window:456:0", kind: "window" }, abort.signal);
+        expect(deps.probe).toHaveBeenCalledTimes(1);
+        expect(deps.resolveWindowPid).toHaveBeenCalledWith(
+            "C:\\app\\native\\windows-process-loopback\\build\\windows-x64\\windows-process-loopback.exe",
+            "window:456:0",
+            abort.signal,
+        );
+        const started = capture.start({ pendingPackets: 0, post: vi.fn(() => true) });
+        child.stdout.write(startPacket());
+        await started;
+        expect(deps.spawnProcess).toHaveBeenCalledWith(
+            "C:\\app\\native\\windows-process-loopback\\build\\windows-x64\\windows-process-loopback.exe",
+            ["stream", "321", "include"],
+        );
+        await capture.stop();
     });
 
-    it("streams fixed PCM packets and reaps the producer on explicit release", async () => {
+    it("streams exact EXCLUDE PCM packets and reaps on explicit release", async () => {
         const child = new FakeChild();
         const deps = dependencies(child);
-        const provider = new ProcessLoopbackScreenShareAudioProvider("C:\\helper.exe", deps);
+        const provider = new ProcessLoopbackScreenShareAudioProvider(deps);
         const capture = await provider.prepare(
             { sourceId: "screen:0:0", kind: "screen" },
             new AbortController().signal,
         );
-        const post = vi.fn(() => true);
-        const start = capture.start({ pendingPackets: 0, post });
+        const post = vi.fn((_packet: unknown) => true);
+        const started = capture.start({ pendingPackets: 0, post });
         child.stdout.write(startPacket());
-        await start;
+        await started;
         child.stdout.write(framedPacket(2, 0, 0, Buffer.alloc(1_920, 1)));
-        expect(deps.spawnProcess).toHaveBeenCalledWith("C:\\helper.exe", ["stream", "123", "exclude"]);
+        expect(deps.spawnProcess).toHaveBeenCalledWith(
+            "C:\\app\\native\\windows-process-loopback\\build\\windows-x64\\windows-process-loopback.exe",
+            ["stream", "123", "exclude"],
+        );
         expect(post).toHaveBeenCalledOnce();
         expect(post.mock.calls[0][0]).toMatchObject({ sequence: 0, startFrame: 0 });
-        expect(getProcessLoopbackProviderAudit().processes).toBe(1);
         await capture.stop();
-        expect(child.stdin.readableEnded || child.stdin.writableEnded).toBe(true);
-        expect(getProcessLoopbackProviderAudit()).toEqual({ processes: 0, timers: 0 });
+        expect(child.stdin.writableEnded).toBe(true);
     });
 
-    it("surfaces malformed producer output once and still reaps it", async () => {
-        const child = new FakeChild();
-        const provider = new ProcessLoopbackScreenShareAudioProvider("C:\\helper.exe", dependencies(child));
-        const capture = await provider.prepare(
+    it("surfaces malformed transport and unexpected producer closure", async () => {
+        for (const fail of [
+            (child: FakeChild) => child.stdout.write(Buffer.alloc(48)),
+            (child: FakeChild) => child.close(3),
+        ]) {
+            const child = new FakeChild(false);
+            const capture = await new ProcessLoopbackScreenShareAudioProvider(dependencies(child)).prepare(
+                { sourceId: "screen:0:0", kind: "screen" },
+                new AbortController().signal,
+            );
+            const terminal = vi.fn();
+            capture.onTerminal(terminal);
+            const started = capture.start({ pendingPackets: 0, post: vi.fn(() => true) });
+            child.stdout.write(startPacket());
+            await started;
+            fail(child);
+            await vi.waitFor(() => expect(terminal).toHaveBeenCalledOnce());
+            child.close();
+            await capture.stop();
+        }
+    });
+
+    it("fails closed on producer startup stall and bounds forced reap", async () => {
+        vi.useFakeTimers();
+        const child = new FakeChild(false);
+        const capture = await new ProcessLoopbackScreenShareAudioProvider(dependencies(child)).prepare(
             { sourceId: "screen:0:0", kind: "screen" },
             new AbortController().signal,
         );
         const terminal = vi.fn();
         capture.onTerminal(terminal);
-        const start = capture.start({ pendingPackets: 0, post: vi.fn(() => true) });
-        child.stdout.write(startPacket());
-        await start;
-        child.stdout.write(Buffer.alloc(48));
-        await vi.waitFor(() => expect(terminal).toHaveBeenCalledOnce());
+        const started = capture.start({ pendingPackets: 0, post: vi.fn(() => true) });
+        const rejection = started.catch((error: unknown) => error);
+        await vi.advanceTimersByTimeAsync(5_000);
+        expect(await rejection).toEqual(
+            expect.objectContaining({ message: expect.stringContaining("start timed out") }),
+        );
+        expect(terminal).toHaveBeenCalledOnce();
+        await vi.advanceTimersByTimeAsync(750);
+        expect(child.kill).toHaveBeenCalledOnce();
+        expect(child.unref).toHaveBeenCalledOnce();
+        expect([child.stdin.destroyed, child.stdout.destroyed, child.stderr.destroyed]).toEqual([true, true, true]);
         await capture.stop();
-        expect(getProcessLoopbackProviderAudit()).toEqual({ processes: 0, timers: 0 });
+        expect(vi.getTimerCount()).toBe(0);
+    });
+
+    it("releases all owned resources when a producer cannot be reaped", async () => {
+        vi.useFakeTimers();
+        const child = new FakeChild(false, false);
+        const capture = await new ProcessLoopbackScreenShareAudioProvider(dependencies(child)).prepare(
+            { sourceId: "screen:0:0", kind: "screen" },
+            new AbortController().signal,
+        );
+        const terminal = vi.fn();
+        capture.onTerminal(terminal);
+        const started = capture.start({ pendingPackets: 0, post: vi.fn(() => true) });
+        child.stdout.write(startPacket());
+        await started;
+
+        const firstStop = capture.stop();
+        const repeatedStop = capture.stop();
+        expect(repeatedStop).toBe(firstStop);
+        const rejection = firstStop.catch((error: unknown) => error);
+        await vi.advanceTimersByTimeAsync(1_000);
+        expect(await rejection).toEqual(
+            expect.objectContaining({ message: "Process-loopback producer did not stop within the bounded deadline" }),
+        );
+        expect(child.kill).toHaveBeenCalledOnce();
+        expect(
+            (
+                capture as typeof capture & {
+                    getOwnershipAuditForTest(): Record<string, number>;
+                }
+            ).getOwnershipAuditForTest(),
+        ).toEqual({
+            childReferences: 0,
+            sinkReferences: 0,
+            timers: 0,
+            childListeners: 0,
+            terminalListeners: 0,
+        });
+        expect(vi.getTimerCount()).toBe(0);
+        await expect(capture.stop()).rejects.toThrow("did not stop within the bounded deadline");
     });
 });

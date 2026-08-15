@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { EventEmitter } from "node:events";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const electronApp = vi.hoisted(() => ({ isPackaged: true }));
+const electronApp = vi.hoisted(() => ({ isPackaged: true, getAppPath: vi.fn(() => "C:\\app") }));
 
 vi.mock("electron", () => ({
     app: electronApp,
@@ -21,19 +21,7 @@ vi.mock("electron", () => ({
 describe("display-media requester ownership", () => {
     beforeEach(() => {
         electronApp.isPackaged = true;
-        delete process.env.ELEMENT_SCREEN_SHARE_AUDIO_FAKE_PROVIDER;
-        delete process.env.ELEMENT_SCREEN_SHARE_AUDIO_PROCESS_LOOPBACK_EXECUTABLE;
         vi.resetModules();
-    });
-
-    it("does not install the audit seam when packaged or not explicitly enabled", async () => {
-        const packaged = await import("./display-media.js");
-        expect(Object.hasOwn(electronApp, packaged.developmentFakeAuditProperty)).toBe(false);
-
-        electronApp.isPackaged = false;
-        vi.resetModules();
-        const unpackaged = await import("./display-media.js");
-        expect(Object.hasOwn(electronApp, unpackaged.developmentFakeAuditProperty)).toBe(false);
     });
 
     it("extracts only bounded widget identities from the requesting frame URL", async () => {
@@ -76,35 +64,5 @@ describe("display-media requester ownership", () => {
         )(listener);
         contents.emit("did-start-navigation", { isSameDocument: false, frame: { frameTreeNodeId: 18 } });
         expect(listener).toHaveBeenCalledOnce();
-    });
-
-    it("installs a frozen sanitized audit only for the explicitly enabled unpackaged fake", async () => {
-        electronApp.isPackaged = false;
-        process.env.ELEMENT_SCREEN_SHARE_AUDIO_FAKE_PROVIDER = "1";
-        const { developmentFakeAuditProperty } = await import("./display-media.js");
-        const descriptor = Object.getOwnPropertyDescriptor(electronApp, developmentFakeAuditProperty);
-        expect(descriptor).toMatchObject({ enumerable: false, configurable: false, writable: false });
-        expect(descriptor?.value()).toEqual({
-            controller: {
-                state: "Idle",
-                activeRequests: 0,
-                activeCaptures: 0,
-                activeBridges: 0,
-                completedCallbacks: 0,
-                lastRequestId: 0,
-            },
-            bridge: {
-                bridgeWindows: 0,
-                messagePorts: 0,
-                timers: 0,
-                lastStage: null,
-                lastFailure: null,
-                captureObserved: false,
-                lastCaptured: null,
-                captureSamples: 0,
-                falseSamplesAfterObserved: 0,
-            },
-            fake: { captures: 0, timers: 0 },
-        });
     });
 });

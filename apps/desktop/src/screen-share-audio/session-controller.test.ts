@@ -197,7 +197,6 @@ describe("DisplayMediaSessionController", () => {
         const bridge = {
             frame: { routingId: 1 },
             port: {},
-            waitForConsumerStop: () => new Promise(() => {}),
             waitForTerminal: () => new Promise(() => {}),
             stop: vi.fn(),
         } as unknown as PreparedScreenShareAudioBridge;
@@ -340,7 +339,6 @@ describe("DisplayMediaSessionController", () => {
         const lateBridge = {
             frame: {},
             port: {},
-            waitForConsumerStop: vi.fn(),
             waitForTerminal: vi.fn(() => new Promise(() => {})),
             stop: vi.fn(),
         } as unknown as PreparedScreenShareAudioBridge;
@@ -424,7 +422,6 @@ describe("DisplayMediaSessionController", () => {
         const bridge = {
             frame: { routingId: 1 },
             port: {},
-            waitForConsumerStop: () => new Promise(() => {}),
             waitForTerminal: () => terminal.promise,
             stop: vi.fn(),
         } as unknown as PreparedScreenShareAudioBridge;
