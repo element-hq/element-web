@@ -83,6 +83,41 @@ function setBreadcrumbsTouchBar(recents: Breadcrumb[]): void {
     );
 }
 
+async function getPickleKey(store: Store, key: string): Promise<string | null | undefined> {
+    try {
+        return await store.getSecret(key);
+    } catch {
+        // An error is thrown if safeStorage cannot initialise, or if a stored secret cannot be
+        // decrypted this launch. Keep the secret so the session can recover on a later launch.
+        // See element-web#32521 / #32715.
+        return null;
+    }
+}
+
+async function createPickleKey(store: Store, key: string): Promise<string | null> {
+    try {
+        // Never turn a transient keychain failure into permanent session and encryption-key loss.
+        if (await store.isSecretUndecryptable(key)) {
+            console.warn("Refusing to overwrite an existing undecryptable pickle key; preserving it");
+            return null;
+        }
+        const pickleKey = await randomArray(32);
+        await store.setSecret(key, pickleKey);
+        return pickleKey;
+    } catch (error) {
+        console.error("Failed to create pickle key", error);
+        return null;
+    }
+}
+
+async function destroyPickleKey(store: Store, key: string): Promise<void> {
+    try {
+        await store.deleteSecret(key);
+    } catch (error) {
+        console.error("Failed to destroy pickle key", error);
+    }
+}
+
 let powerSaveBlockerId: number | null = null;
 ipcMain.on("app_onAction", function (_ev: IpcMainEvent, payload) {
     switch (payload.action) {
@@ -165,44 +200,15 @@ ipcMain.on("ipcCall", async function (ev: IpcMainEvent, payload) {
             break;
 
         case "getPickleKey":
-            try {
-                ret = await store.getSecret(`${args[0]}|${args[1]}`);
-            } catch {
-                // An error is thrown if we can't initialise safeStorage, or if a stored secret exists
-                // but can't be decrypted this launch (SafeStorageDecryptionError, e.g. the OS keychain
-                // is temporarily unavailable). In both cases return null so the default pickle key is
-                // used; we must NOT destroy the existing secret (see createPickleKey below) so the
-                // session can recover on a later launch. See element-web#32521 / #32715.
-                ret = null;
-            }
+            ret = await getPickleKey(store, `${args[0]}|${args[1]}`);
             break;
 
         case "createPickleKey":
-            try {
-                // Never overwrite a pickle key that already exists but is currently undecryptable.
-                // Overwriting it with a freshly-generated key would turn a transient keychain failure
-                // into permanent session and encryption-key loss. Preserve it so the existing session
-                // can be restored on a later launch once the keychain is readable again.
-                if (await store.isSecretUndecryptable(`${args[0]}|${args[1]}`)) {
-                    console.warn("Refusing to overwrite an existing undecryptable pickle key; preserving it");
-                    ret = null;
-                } else {
-                    const pickleKey = await randomArray(32);
-                    await store.setSecret(`${args[0]}|${args[1]}`, pickleKey);
-                    ret = pickleKey;
-                }
-            } catch (e) {
-                console.error("Failed to create pickle key", e);
-                ret = null;
-            }
+            ret = await createPickleKey(store, `${args[0]}|${args[1]}`);
             break;
 
         case "destroyPickleKey":
-            try {
-                await store.deleteSecret(`${args[0]}|${args[1]}`);
-            } catch (e) {
-                console.error("Failed to destroy pickle key", e);
-            }
+            await destroyPickleKey(store, `${args[0]}|${args[1]}`);
             break;
         case "getDesktopCapturerSources":
             ret = (await desktopCapturer.getSources(args[0])).map((source) => ({
