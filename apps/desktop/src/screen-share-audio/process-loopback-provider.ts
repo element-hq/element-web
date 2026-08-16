@@ -71,7 +71,7 @@ export function resolveProcessLoopbackExecutable(
 }
 
 export function isCompatibleProcessLoopbackProbe(output: string): boolean {
-    return output.replace(/\r\n/g, "\n").trim() === "protocol=1\nformat=48000,2,pcm-s16le";
+    return output.replaceAll("\r\n", "\n").trim() === "protocol=1\nformat=48000,2,pcm-s16le";
 }
 
 export function parseWindowSourceId(sourceId: string): number {
@@ -281,7 +281,7 @@ class ProcessLoopbackCapture implements PreparedScreenShareAudioCapture {
         try {
             this.clearTimer("startTimer");
             this.clearTimer("stallTimer");
-            if (!child || child.exitCode !== null || child.signalCode !== null) return;
+            if (child?.exitCode !== null || child?.signalCode !== null) return;
             const closed = new Promise<void>((resolve) => {
                 this.stopCloseListener = resolve;
                 child.once("close", this.stopCloseListener);

@@ -76,6 +76,19 @@ const setUpWidget = (
     return { widget, messaging, widgetApi };
 };
 
+function emitScreenShareAudioSession(
+    widgetApi: Mocked<ClientWidgetApi>,
+    state: "acquire" | "release",
+    sessionId: string,
+): { data: { version: number; state: "acquire" | "release"; session_id: string } } {
+    const detail = { data: { version: 1, state, session_id: sessionId } };
+    widgetApi.emit(`action:${ElementWidgetActions.ScreenShareAudioSession}`, {
+        preventDefault: jest.fn(),
+        detail,
+    });
+    return detail;
+}
+
 async function connect(call: Call, widgetApi: Mocked<ClientWidgetApi>, startWidget = true): Promise<void> {
     async function sessionConnect() {
         await new Promise<void>((r) => {
@@ -1028,25 +1041,16 @@ describe("ElementCall", () => {
             await connect(call, widgetApi);
             const ownedSession = "12345678-1234-4123-8123-123456789abc";
             const rejectedSession = "22345678-1234-4123-8123-123456789abc";
-            const emit = (state: "acquire" | "release", sessionId: string) => {
-                const detail = { data: { version: 1, state, session_id: sessionId } };
-                widgetApi.emit(`action:${ElementWidgetActions.ScreenShareAudioSession}`, {
-                    preventDefault: jest.fn(),
-                    detail,
-                });
-                return detail;
-            };
-
-            emit("acquire", ownedSession);
+            emitScreenShareAudioSession(widgetApi, "acquire", ownedSession);
             await waitFor(() => expect(acquire).toHaveBeenCalledWith(call.widget.id, ownedSession));
             enabledSettings.delete("feature_windows_screen_share_audio");
-            const rejectedAcquire = emit("acquire", rejectedSession);
+            const rejectedAcquire = emitScreenShareAudioSession(widgetApi, "acquire", rejectedSession);
             await waitFor(() =>
                 expect(widgetApi.transport.reply).toHaveBeenCalledWith(rejectedAcquire, { accepted: false }),
             );
             expect(acquire).toHaveBeenCalledTimes(1);
 
-            const releaseDetail = emit("release", ownedSession);
+            const releaseDetail = emitScreenShareAudioSession(widgetApi, "release", ownedSession);
             await waitFor(() => expect(release).toHaveBeenCalledWith(call.widget.id, ownedSession));
             expect(widgetApi.transport.reply).toHaveBeenCalledWith(releaseDetail, { accepted: true });
         });
@@ -1074,19 +1078,11 @@ describe("ElementCall", () => {
             await connect(call, widgetApi);
             const oldSession = "12345678-1234-4123-8123-123456789abc";
             const newSession = "22345678-1234-4123-8123-123456789abc";
-            const emit = (state: "acquire" | "release", sessionId: string) => {
-                const detail = { data: { version: 1, state, session_id: sessionId } };
-                widgetApi.emit(`action:${ElementWidgetActions.ScreenShareAudioSession}`, {
-                    preventDefault: jest.fn(),
-                    detail,
-                });
-                return detail;
-            };
-            emit("acquire", oldSession);
+            emitScreenShareAudioSession(widgetApi, "acquire", oldSession);
             await waitFor(() => expect(acquire).toHaveBeenCalledTimes(1));
-            emit("acquire", newSession);
+            emitScreenShareAudioSession(widgetApi, "acquire", newSession);
             await waitFor(() => expect(acquire).toHaveBeenCalledTimes(2));
-            const staleRelease = emit("release", oldSession);
+            const staleRelease = emitScreenShareAudioSession(widgetApi, "release", oldSession);
             await waitFor(() =>
                 expect(widgetApi.transport.reply).toHaveBeenCalledWith(staleRelease, { accepted: true }),
             );
@@ -1097,7 +1093,7 @@ describe("ElementCall", () => {
                     { accepted: true },
                 ),
             );
-            const currentRelease = emit("release", newSession);
+            const currentRelease = emitScreenShareAudioSession(widgetApi, "release", newSession);
             await waitFor(() =>
                 expect(widgetApi.transport.reply).toHaveBeenCalledWith(currentRelease, { accepted: true }),
             );

@@ -59,6 +59,11 @@ interface OwnedRequest extends DisplayMediaRequest {
     cleanup?: Promise<void>;
 }
 
+interface ValidatedSource {
+    source: DesktopCapturerSource;
+    selection: ValidatedDisplaySelection;
+}
+
 const rejectedVideo = { id: "", name: "" };
 
 export class DisplayMediaSessionController {
@@ -105,7 +110,7 @@ export class DisplayMediaSessionController {
 
     public reply(senderId: number, reply: PickerReply): void {
         const owned = this.current;
-        if (!owned || owned.id !== reply.requestId || owned.senderId !== senderId || this.state !== "Selecting") return;
+        if (owned?.id !== reply.requestId || owned.senderId !== senderId || this.state !== "Selecting") return;
         if (reply.sourceId === null) {
             this.invalidate(owned, true);
             return;
@@ -147,8 +152,7 @@ export class DisplayMediaSessionController {
     public release(senderId: number, release: ScreenShareAudioSessionRelease): Promise<void> {
         const owned = this.current;
         if (
-            !owned ||
-            owned.senderId !== senderId ||
+            owned?.senderId !== senderId ||
             owned.id !== release.requestId ||
             owned.requesterWidgetId !== release.requesterWidgetId ||
             owned.sessionId !== release.sessionId
@@ -173,70 +177,87 @@ export class DisplayMediaSessionController {
     }
 
     private async prepare(owned: OwnedRequest, sourceId: string): Promise<void> {
-        let validatedSource: DesktopCapturerSource | undefined;
+        let validated: ValidatedSource | undefined;
         try {
-            const sources = await this.raceAbort(owned, this.deps.enumerateSources());
-            if (!sources || !this.isCurrent(owned)) return;
-            const source = sources.find(({ id }) => id === sourceId);
-            const kind = source && this.sourceKind(source.id);
-            if (!source || !kind) {
-                this.invalidate(owned, true);
-                return;
-            }
-            validatedSource = source;
-
+            validated = await this.validateSource(owned, sourceId);
+            if (!validated) return;
             const provider = this.deps.provider;
             const bridgeFactory = this.deps.bridgeFactory;
-            if (
-                !owned.audioRequested ||
-                !owned.sessionId ||
-                this.deps.isElementOwnedSource(source) ||
-                !provider ||
-                !bridgeFactory
-            ) {
-                this.activateVideoOnly(owned, source);
+            if (!provider || !bridgeFactory || !this.shouldPrepareAudio(owned, validated.source)) {
+                this.activateVideoOnly(owned, validated.source);
                 return;
             }
-
-            let available = false;
-            try {
-                available = (await this.raceAbort(owned, provider.getAvailability())) === "available";
-            } catch {
-                available = false;
-            }
+            const available = await this.isProviderAvailable(owned, provider);
             if (!this.isCurrent(owned)) return;
             if (!available) {
-                this.activateVideoOnly(owned, source);
+                this.activateVideoOnly(owned, validated.source);
                 return;
             }
-
-            const selection: ValidatedDisplaySelection = { sourceId: source.id, kind };
-            const capturePromise = provider.prepare(selection, owned.abort.signal);
-            const capture = await this.raceAbort(owned, capturePromise, (late) => late.stop());
-            if (!capture || !this.isCurrent(owned)) return;
-            owned.capture = capture;
-
-            const bridgePromise = bridgeFactory.prepare(capture, owned.abort.signal);
-            const bridge = await this.raceAbort(owned, bridgePromise, (late) => late.stop());
-            if (!bridge || !this.isCurrent(owned)) return;
-            owned.bridge = bridge;
-            this.complete(owned, { video: source, audio: bridge.frame, enableLocalEcho: false });
-            this.state = "Active";
-            void bridge.waitForTerminal().then(() => this.invalidateIfCurrent(owned, false));
+            await this.prepareAudio(owned, validated, provider, bridgeFactory);
         } catch {
-            if (this.isCurrent(owned)) {
-                try {
-                    if (owned.bridge) await owned.bridge.stop();
-                    else await owned.capture?.stop();
-                } catch {
-                    // Fall back after releasing as much partial audio ownership as possible.
-                }
-                owned.bridge = undefined;
-                owned.capture = undefined;
-                if (validatedSource) this.activateVideoOnly(owned, validatedSource);
-                else this.invalidate(owned, true);
-            }
+            await this.recoverFromPreparationFailure(owned, validated?.source);
         }
+    }
+
+    private async validateSource(owned: OwnedRequest, sourceId: string): Promise<ValidatedSource | undefined> {
+        const sources = await this.raceAbort(owned, this.deps.enumerateSources());
+        if (!sources || !this.isCurrent(owned)) return undefined;
+        const source = sources.find(({ id }) => id === sourceId);
+        const kind = source && this.sourceKind(source.id);
+        if (!source || !kind) {
+            this.invalidate(owned, true);
+            return undefined;
+        }
+        return { source, selection: { sourceId: source.id, kind } };
+    }
+
+    private shouldPrepareAudio(owned: OwnedRequest, source: DesktopCapturerSource): boolean {
+        return Boolean(owned.audioRequested && owned.sessionId && !this.deps.isElementOwnedSource(source));
+    }
+
+    private async isProviderAvailable(owned: OwnedRequest, provider: ScreenShareAudioProvider): Promise<boolean> {
+        try {
+            return (await this.raceAbort(owned, provider.getAvailability())) === "available";
+        } catch {
+            return false;
+        }
+    }
+
+    private async prepareAudio(
+        owned: OwnedRequest,
+        validated: ValidatedSource,
+        provider: ScreenShareAudioProvider,
+        bridgeFactory: ScreenShareAudioBridgeFactory,
+    ): Promise<void> {
+        const capturePromise = provider.prepare(validated.selection, owned.abort.signal);
+        const capture = await this.raceAbort(owned, capturePromise, (late) => late.stop());
+        if (!capture || !this.isCurrent(owned)) return;
+        owned.capture = capture;
+
+        const bridgePromise = bridgeFactory.prepare(capture, owned.abort.signal);
+        const bridge = await this.raceAbort(owned, bridgePromise, (late) => late.stop());
+        if (!bridge || !this.isCurrent(owned)) return;
+        owned.bridge = bridge;
+        this.complete(owned, { video: validated.source, audio: bridge.frame, enableLocalEcho: false });
+        this.state = "Active";
+        void bridge.waitForTerminal().then(() => this.invalidateIfCurrent(owned, false));
+    }
+
+    private async recoverFromPreparationFailure(
+        owned: OwnedRequest,
+        validatedSource?: DesktopCapturerSource,
+    ): Promise<void> {
+        if (!this.isCurrent(owned)) return;
+        try {
+            if (owned.bridge) await owned.bridge.stop();
+            else await owned.capture?.stop();
+        } catch {
+            // Fall back after releasing as much partial audio ownership as possible.
+        }
+        owned.bridge = undefined;
+        owned.capture = undefined;
+        if (validatedSource) this.activateVideoOnly(owned, validatedSource);
+        else this.invalidate(owned, true);
     }
 
     private activateVideoOnly(owned: OwnedRequest, source: DesktopCapturerSource): void {

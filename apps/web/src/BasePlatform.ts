@@ -316,7 +316,9 @@ export default abstract class BasePlatform {
         return false;
     }
 
-    public async releaseIsolatedScreenShareAudio(_widgetId: string, _sessionId: string): Promise<void> {}
+    public releaseIsolatedScreenShareAudio(_widgetId: string, _sessionId: string): Promise<void> {
+        return Promise.resolve();
+    }
 
     public supportsJitsiScreensharing(): boolean {
         return true;

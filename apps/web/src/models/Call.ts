@@ -50,6 +50,26 @@ import PlatformPeg from "../PlatformPeg.ts";
 
 const TIMEOUT_MS = 16000;
 const logger = rootLogger.getChild("models/Call");
+const screenShareAudioSessionIdPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+function parseScreenShareAudioSessionRequest(data: unknown): IScreenShareAudioSessionApiRequest["data"] | undefined {
+    if (
+        typeof data !== "object" ||
+        data === null ||
+        Array.isArray(data) ||
+        Object.keys(data).length !== 3 ||
+        !("version" in data) ||
+        data.version !== 1 ||
+        !("state" in data) ||
+        (data.state !== "acquire" && data.state !== "release") ||
+        !("session_id" in data) ||
+        typeof data.session_id !== "string" ||
+        !screenShareAudioSessionIdPattern.test(data.session_id)
+    ) {
+        return undefined;
+    }
+    return data as IScreenShareAudioSessionApiRequest["data"];
+}
 
 // Waits until an event is emitted satisfying the given predicate
 const waitForEvent = async (
@@ -1007,50 +1027,47 @@ export class ElementCall extends Call {
 
     private readonly onScreenShareAudioSession = async (ev: CustomEvent<IWidgetApiRequest>): Promise<void> => {
         ev.preventDefault();
-        const data = ev.detail?.data;
-        const valid =
-            typeof data === "object" &&
-            data !== null &&
-            !Array.isArray(data) &&
-            Object.keys(data).length === 3 &&
-            data.version === 1 &&
-            (data.state === "acquire" || data.state === "release") &&
-            typeof data.session_id === "string" &&
-            /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(data.session_id);
-        if (!valid) {
-            this.widgetApi?.transport.reply(ev.detail, { accepted: false });
-            return;
-        }
+        const request = parseScreenShareAudioSessionRequest(ev.detail?.data);
+        const result = request ? this.handleScreenShareAudioSessionRequest(request) : false;
+        const accepted = typeof result === "boolean" ? result : await result;
+        this.widgetApi?.transport.reply(ev.detail, { accepted });
+    };
 
-        const { state, session_id: sessionId } = data as IScreenShareAudioSessionApiRequest["data"];
+    private handleScreenShareAudioSessionRequest(
+        request: IScreenShareAudioSessionApiRequest["data"],
+    ): Promise<boolean> | boolean {
+        return request.state === "release"
+            ? this.releaseScreenShareAudioSession(request.session_id)
+            : this.acquireScreenShareAudioSession(request.session_id);
+    }
+
+    private releaseScreenShareAudioSession(sessionId: string): Promise<boolean> | boolean {
+        const matchesCurrent = this.isolatedScreenShareAudioSession === sessionId;
+        const matchesPending = this.pendingIsolatedScreenShareAudioSession === sessionId;
+        if (matchesCurrent || matchesPending) this.isolatedScreenShareAudioGeneration++;
+        if (matchesCurrent) this.isolatedScreenShareAudioSession = undefined;
+        if (matchesPending) this.pendingIsolatedScreenShareAudioSession = undefined;
+        if (matchesPending && !matchesCurrent) return true;
+        return this.releaseScreenShareAudioSessionFromPlatform(sessionId);
+    }
+
+    private async releaseScreenShareAudioSessionFromPlatform(sessionId: string): Promise<boolean> {
+        try {
+            await PlatformPeg.get()?.releaseIsolatedScreenShareAudio(this.widget.id, sessionId);
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
+    private async acquireScreenShareAudioSession(sessionId: string): Promise<boolean> {
         const platform = PlatformPeg.get();
-        if (state === "release") {
-            const matchesCurrent = this.isolatedScreenShareAudioSession === sessionId;
-            const matchesPending = this.pendingIsolatedScreenShareAudioSession === sessionId;
-            if (matchesCurrent || matchesPending) this.isolatedScreenShareAudioGeneration++;
-            if (matchesCurrent) this.isolatedScreenShareAudioSession = undefined;
-            if (matchesPending) this.pendingIsolatedScreenShareAudioSession = undefined;
-            if (matchesPending && !matchesCurrent) {
-                this.widgetApi?.transport.reply(ev.detail, { accepted: true });
-                return;
-            }
-            try {
-                await platform?.releaseIsolatedScreenShareAudio(this.widget.id, sessionId);
-                this.widgetApi?.transport.reply(ev.detail, { accepted: true });
-            } catch {
-                this.widgetApi?.transport.reply(ev.detail, { accepted: false });
-            }
-            return;
-        }
-
         if (
             !SettingsStore.getValue("feature_windows_screen_share_audio") ||
             !platform?.supportsIsolatedScreenShareAudio()
         ) {
-            this.widgetApi?.transport.reply(ev.detail, { accepted: false });
-            return;
+            return false;
         }
-
         const generation = ++this.isolatedScreenShareAudioGeneration;
         this.pendingIsolatedScreenShareAudioSession = sessionId;
         const previous = this.isolatedScreenShareAudioSession;
@@ -1068,20 +1085,21 @@ export class ElementCall extends Call {
             generation !== this.isolatedScreenShareAudioGeneration ||
             this.pendingIsolatedScreenShareAudioSession !== sessionId
         ) {
-            if (accepted) {
-                try {
-                    await platform?.releaseIsolatedScreenShareAudio(this.widget.id, sessionId);
-                } catch {
-                    // The platform owns idempotent cleanup; the stale acquire remains rejected.
-                }
-            }
-            this.widgetApi?.transport.reply(ev.detail, { accepted: false });
-            return;
+            if (accepted) await this.releaseStaleScreenShareAudioSession(sessionId);
+            return false;
         }
         this.pendingIsolatedScreenShareAudioSession = undefined;
         if (accepted) this.isolatedScreenShareAudioSession = sessionId;
-        this.widgetApi?.transport.reply(ev.detail, { accepted });
-    };
+        return accepted;
+    }
+
+    private async releaseStaleScreenShareAudioSession(sessionId: string): Promise<void> {
+        try {
+            await PlatformPeg.get()?.releaseIsolatedScreenShareAudio(this.widget.id, sessionId);
+        } catch {
+            // The platform owns idempotent cleanup; the stale acquire remains rejected.
+        }
+    }
 
     private releaseOwnedScreenShareAudioSession(): void {
         this.isolatedScreenShareAudioGeneration++;
