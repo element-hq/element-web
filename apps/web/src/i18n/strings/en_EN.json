@@ -1378,8 +1378,8 @@
             "preparing": "Preparing invitations..."
         },
         "recents_section": "Recent Conversations",
-        "room_failed_partial": "We sent the others, but the below people couldn't be invited to <RoomName/>",
-        "room_failed_partial_title": "Some invites couldn't be sent",
+        "room_failed_partial_description": "We sent the others, but the following people could not be invited.",
+        "room_failed_partial_title": "Not all invites were sent",
         "room_failed_title": "Failed to invite users to %(roomName)s",
         "send_link_prompt": "Or send invite link",
         "start_conversation_name_email_mxid_prompt": "Start a conversation with someone using their name, email address or username (like <userId/>).",

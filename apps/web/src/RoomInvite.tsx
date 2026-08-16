@@ -95,15 +95,7 @@ export function showAnyInviteErrors(
             // React 16 doesn't let us use `errorList.join(<br />)` anymore, so this is our solution
             const description = (
                 <div className="mx_InviteDialog_multiInviterError">
-                    <h4>
-                        {_t(
-                            "invite|room_failed_partial",
-                            {},
-                            {
-                                RoomName: () => <strong>{room.name}</strong>,
-                            },
-                        )}
-                    </h4>
+                    <h4>{_t("invite|room_failed_partial_description")}</h4>
                     <div>
                         {failedUsers.map((addr) => {
                             const user = userMap?.get(addr) || cli.getUser(addr);
