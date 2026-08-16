@@ -96,5 +96,6 @@
 }
 
 .dragIcon {
-    cursor: pointer;
+    /* The important declaration is required to override the icon set by the library */
+    cursor: pointer !important;
 }
