@@ -15,8 +15,14 @@
 
     display: flex;
     justify-content: center;
-    height: 100%;
     cursor: ew-resize;
+}
+
+.content {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 100%;
 }
 
 /* When type=border, we just render a 1px border */
