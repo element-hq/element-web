@@ -119,6 +119,7 @@ export function EventTileView({
                 [styles.layoutIrc]: layout === "irc",
                 [styles.shapeThread]: root.shape === "Thread",
                 [styles.shapeThreadsList]: root.shape === "ThreadsList",
+                [styles.shapeCard]: root.shape === "Card",
                 [styles.shapeFile]: root.shape === "File",
                 [styles.shapeNotification]: root.shape === "Notification",
             })}
@@ -214,7 +215,7 @@ export function EventTileView({
         );
     }
 
-    // Default shape: Pinned, Room, Search
+    // Default shape: Card, Pinned, Room, Search
 
     // IRC layout: the leading metadata slots precede the line content.
     if (layout === "irc") {

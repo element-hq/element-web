@@ -882,6 +882,14 @@ export const Thread: Story = {
     },
 };
 
+export const Card: Story = {
+    tags: interactiveTags,
+    args: {
+        shape: "Card",
+        slots: defaultShapeSlots,
+    },
+};
+
 export const Notification: Story = {
     tags: interactiveTags,
     args: {

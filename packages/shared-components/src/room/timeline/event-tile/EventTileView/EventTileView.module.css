@@ -1147,6 +1147,55 @@
     }
 }
 
+/* TimelineCard layout. The card uses the room shell with a narrower gutter. */
+.root.shapeCard {
+    --event-tile-card-spacing-inline: 36px;
+    --event-tile-card-line-padding-block: 2px;
+    --event-tile-card-timestamp-width: 46px;
+    --event-tile-group-gutter: var(--event-tile-card-spacing-inline);
+    --event-tile-group-line-spacing-block-start: var(--event-tile-card-line-padding-block);
+    --event-tile-group-line-spacing-block-end: var(--event-tile-card-line-padding-block);
+    --event-tile-group-timestamp-width: var(--event-tile-card-timestamp-width);
+
+    &.layoutGroup {
+        .line {
+            padding-inline-end: var(--event-tile-group-timestamp-width);
+        }
+
+        .slotAvatar {
+            inset-inline-start: -3px;
+        }
+
+        .slotPadlock {
+            inset-inline-start: var(--cpd-space-2x, 8px);
+        }
+
+        .slotTimestamp {
+            inset-inline-start: auto;
+            inset-inline-end: 0;
+            text-align: end;
+        }
+
+        .slotThreadInfo {
+            margin-inline-end: 0;
+            max-width: min(calc(100% - var(--event-tile-group-gutter)), 600px);
+        }
+
+        .slotReceipt {
+            margin-inline-end: 0;
+            inset-block-start: -6px;
+        }
+
+        &.stateInfo .slotAvatar {
+            inset-inline-start: 18px;
+        }
+    }
+
+    &.layoutBubble::before {
+        z-index: auto;
+    }
+}
+
 /* File panel layout. The application File branch does not apply a timeline
    layout class, so explicitly reset the group-layout defaults owned by this
    shared shell. */

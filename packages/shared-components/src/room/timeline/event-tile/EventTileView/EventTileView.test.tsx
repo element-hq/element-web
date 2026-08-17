@@ -248,6 +248,20 @@ describe("EventTileView", () => {
         expect(contextMenu).toHaveAttribute("data-testid", "event-tile-slot-contextMenu");
     });
 
+    it("renders the card shape with the room slot structure", () => {
+        const { container, getByTestId } = render(
+            <EventTileView
+                {...createProps({
+                    root: { ...renderState, shape: "Card" },
+                    slots: createStylingContractSlots(),
+                })}
+            />,
+        );
+
+        expect(container.firstElementChild).toHaveClass(styles.shapeCard);
+        expect(getByTestId("styling-contract-body").closest(`#${renderState.id}`)).toBeInTheDocument();
+    });
+
     it("exposes shell state through application-neutral state classes", () => {
         const { container } = render(
             <EventTileView

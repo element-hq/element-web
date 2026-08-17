@@ -40,6 +40,7 @@ describe("EventTileViewModel", () => {
     });
 
     type EventTileViewModelPropsOverrides = {
+        shape?: EventTileViewModelProps["shape"];
         event?: Partial<NormalizedEventTileViewModelProps["event"]>;
         display?: Partial<EventTileViewModelProps["display"]>;
         interaction?: Partial<EventTileViewModelProps["interaction"]>;
@@ -50,6 +51,7 @@ describe("EventTileViewModel", () => {
 
     function makeProps(overrides: EventTileViewModelPropsOverrides = {}): NormalizedEventTileViewModelProps {
         return {
+            shape: overrides.shape,
             event: {
                 eventType: "m.room.message",
                 msgtype: "m.text",
@@ -150,6 +152,12 @@ describe("EventTileViewModel", () => {
         );
 
         expect(snapshot.root.scrollToken).toBe("$remote-event");
+    });
+
+    it("uses a host-provided EventTileView shape", () => {
+        const snapshot = EventTileViewModel.createSnapshot(makeProps({ shape: "Card" }));
+
+        expect(snapshot.root.shape).toBe("Card");
     });
 
     it("derives render-ready root and line state", () => {

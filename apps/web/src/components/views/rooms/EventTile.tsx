@@ -34,6 +34,7 @@ import {
     NotificationBadgeView,
     useCreateAutoDisposedViewModel,
     TileErrorView,
+    type EventTileRenderingMode,
 } from "@element-hq/web-shared-components";
 
 import ReplyChain from "../elements/ReplyChain";
@@ -221,6 +222,9 @@ export interface EventTileProps {
 
     /** Timeline layout used by this tile. */
     layout?: Layout;
+
+    /** The shape used by this tile. */
+    shape?: EventTileRenderingMode;
 
     /** Whether read receipts should be shown for this event. */
     showReadReceipts?: boolean;
@@ -889,6 +893,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             this.props.eventSendStatus === EventStatus.ENCRYPTING;
 
         return {
+            shape: this.props.shape,
             event: {
                 isSending,
                 ariaLive: this.props.eventSendStatus === null ? undefined : "off",

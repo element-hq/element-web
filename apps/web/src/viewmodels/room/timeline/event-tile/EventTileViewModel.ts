@@ -194,6 +194,8 @@ export interface EventTileFooterInput {
 
 /** Inputs for deriving the EventTile view model snapshot. */
 export interface EventTileViewModelProps {
+    /** Optional shared shell shape override for host-specific timeline surfaces. */
+    shape?: EventTileRenderingMode;
     /** Event-level inputs. */
     event: EventTileEventInput;
     /** Display inputs. */
@@ -210,6 +212,8 @@ export interface EventTileViewModelProps {
 
 /** Pure EventTile inputs after event and sender data has been normalized. */
 export interface NormalizedEventTileViewModelProps {
+    /** Optional shared shell shape override for host-specific timeline surfaces. */
+    shape?: EventTileRenderingMode;
     event: EventTileDerivedEventInput;
     display: EventTileDerivedDisplayInput;
     interaction: EventTileInteractionInput;
@@ -678,7 +682,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewModelRenderSt
                 ariaLive: event.ariaLive,
                 scrollToken,
                 eventId: event.eventId,
-                shape: EventTileViewModel.toEventTileViewShape(display.timelineRenderingType),
+                shape: props.shape ?? EventTileViewModel.toEventTileViewShape(display.timelineRenderingType),
                 state: rootState,
             },
             line: lineState,
