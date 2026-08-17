@@ -160,8 +160,8 @@ export function setUpClientRoomAndStores(): {
     const client = mocked<MatrixClient>(MatrixClientPeg.safeGet()) as unknown as Mocked<MatrixClient>;
     DMRoomMap.makeShared(client);
     client.cachedRtcTransports = {
-        wait: jest.fn().mockResolvedValue(undefined),
-        get: jest.fn().mockReturnValue(undefined),
+        wait: vi.fn().mockResolvedValue(undefined),
+        get: vi.fn().mockReturnValue(undefined),
     } as unknown as any;
     const room = new Room("!1:example.org", client, "@alice:example.org", {
         pendingEventOrdering: PendingEventOrdering.Detached,

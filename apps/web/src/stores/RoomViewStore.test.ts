@@ -146,7 +146,7 @@ describe("RoomViewStore", function () {
         waitForClientWellKnown: vi.fn().mockResolvedValue(undefined),
         getClientWellKnown: vi.fn().mockReturnValue({}),
         cachedRtcTransports: {
-            get: jest.fn().mockReturnValue([]),
+            get: vi.fn().mockReturnValue([]),
             wait: vi.fn().mockResolvedValue([]),
         },
         matrixRTC: new (class extends EventEmitter {
