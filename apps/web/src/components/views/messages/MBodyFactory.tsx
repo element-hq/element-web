@@ -53,6 +53,7 @@ export function FileBodyFactory(props: FileBodyProps): JSX.Element {
     return <PreviewFileBody {...props} />;
 }
 
+/// the old look for files, still used for images, videos, audio, voice messages
 function LegacyFileBody({ mxEvent, mediaEventHelper, forExport, showFileInfo }: FileBodyProps): JSX.Element {
     const { timelineRenderingType } = useContext(RoomContext);
     const refIFrame = useRef<HTMLIFrameElement>(null) as RefObject<HTMLIFrameElement>;
@@ -84,6 +85,7 @@ function LegacyFileBody({ mxEvent, mediaEventHelper, forExport, showFileInfo }: 
     return <FileBodyView vm={vm} refIFrame={refIFrame} refLink={refLink} className="mx_MFileBody" />;
 }
 
+/// the new preview file tile
 function PreviewFileBody({ mxEvent, mediaEventHelper }: FileBodyProps): JSX.Element {
     const content = mxEvent.getContent<MediaEventContent>();
     const size = content.info?.size;
@@ -98,7 +100,7 @@ function PreviewFileBody({ mxEvent, mediaEventHelper }: FileBodyProps): JSX.Elem
                         id: mxEvent.getId()!,
                         style: "text",
                         header: mediaEventHelper!.fileName,
-                        body: size === undefined ? "Size unknown" : fileSize(size),
+                        body: size === undefined ? _t("timeline|m.file|size_unknown") : fileSize(size),
                         buttons:
                             mediaEventHelper === undefined
                                 ? undefined
