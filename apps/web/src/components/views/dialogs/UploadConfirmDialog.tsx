@@ -71,6 +71,38 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
         this.props.onFinished(true, true);
     };
 
+    private static computePreviewContent({
+        mimeType,
+        objectUrl,
+    }: {
+        mimeType: string;
+        objectUrl: string;
+    }): MediaPreviewGroupEntryContent {
+        switch (mimeType.split("/")[0]) {
+            case "image":
+                return {
+                    style: "image",
+                    imageSize: "tallbanner",
+                    image: objectUrl,
+                };
+            case "video":
+                return {
+                    style: "video",
+                    videoSize: "tallbanner",
+                    video: objectUrl,
+                };
+            case "audio":
+                return {
+                    style: "audio",
+                    audio: objectUrl,
+                };
+            default:
+                return {
+                    style: "text",
+                };
+        }
+    }
+
     public render(): React.ReactNode {
         let title: string;
         if (this.props.totalFiles > 1 && this.props.currentIndex !== undefined) {
@@ -83,34 +115,7 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
         }
 
         const mimeType = this.props.file.type;
-        let previewContent: MediaPreviewGroupEntryContent;
-
-        switch (mimeType.split("/")[0]) {
-            case "image":
-                previewContent = {
-                    style: "image",
-                    imageSize: "full",
-                    image: this.state.objectUrl!,
-                };
-                break;
-            case "video":
-                previewContent = {
-                    style: "video",
-                    videoSize: "full",
-                    video: this.state.objectUrl!,
-                };
-                break;
-            case "audio":
-                previewContent = {
-                    style: "audio",
-                    audio: this.state.objectUrl!,
-                };
-                break;
-            default:
-                previewContent = {
-                    style: "text",
-                };
-        }
+        let previewContent = UploadConfirmDialog.computePreviewContent({ objectUrl: this.state.objectUrl!, mimeType });
 
         const preview: MediaPreviewGroupEntry = {
             id: this.props.file.name,
