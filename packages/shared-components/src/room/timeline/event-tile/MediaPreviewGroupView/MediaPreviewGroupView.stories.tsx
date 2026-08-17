@@ -102,6 +102,11 @@ export const SingleImage: Story = {
     args: withEntries([imageEntry]),
 };
 
+// The size used by the upload confirmation dialog.
+export const SingleTallBannerImage: Story = {
+    args: withEntries([{ ...imageEntry, imageSize: "tallbanner" }]),
+};
+
 export const SingleVideo: Story = {
     args: withEntries([videoEntry]),
 };
