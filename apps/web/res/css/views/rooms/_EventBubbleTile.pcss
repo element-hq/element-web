@@ -107,14 +107,6 @@ Please see LICENSE files in the repository root for full details.
         }
     }
 
-    .mx_EventTile_line {
-        --EventBubbleTile_line-max-width: 70%;
-
-        width: fit-content;
-        max-width: var(--EventBubbleTile_line-max-width); /* Align message bubble and displayName */
-        line-height: $font-18px; /* fixed line height to prevent emoji from being taller than text */
-    }
-
     /* inside mx_RoomView_MessageList, outside of mx_ReplyTile */
     /* (on the main panel and the chat panel with a maximized widget) */
     > .mx_DisambiguatedProfile,
@@ -258,6 +250,11 @@ Please see LICENSE files in the repository root for full details.
     }
 
     .mx_EventTile_line {
+        --EventBubbleTile_line-max-width: 70%;
+
+        width: fit-content;
+        max-width: var(--EventBubbleTile_line-max-width); /* Align message bubble and displayName */
+        line-height: $font-18px; /* fixed line height to prevent emoji from being taller than text */
         position: relative;
         display: flex;
         gap: 5px var(--EventTile_bubble_gap-inline);

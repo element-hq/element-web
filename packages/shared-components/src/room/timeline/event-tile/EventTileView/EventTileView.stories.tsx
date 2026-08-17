@@ -158,10 +158,7 @@ const StorySender = ({
     return <DisambiguatedProfileView vm={vm} className={className} />;
 };
 
-const createStorySender = (
-    isOwnEvent: boolean,
-    showSenderAndAvatar: boolean,
-): React.ReactElement | undefined => {
+const createStorySender = (isOwnEvent: boolean, showSenderAndAvatar: boolean): React.ReactElement | undefined => {
     if (!showSenderAndAvatar) return undefined;
 
     const name = isOwnEvent ? "Alice" : "Bob";
@@ -669,10 +666,7 @@ function EventTileViewStoryContent({
         const showActionBar = interaction.hovered || interaction.focused;
         const timestamp = createStoryTimestamp(layout, isLast, showActionBar);
         const showSenderAndAvatar = layout === "irc" || !tileState.continuation;
-        const sender = createStorySender(
-            isOwnEvent,
-            showSenderAndAvatar && !tileState.noSender && !tileState.info,
-        );
+        const sender = createStorySender(isOwnEvent, showSenderAndAvatar && !tileState.noSender && !tileState.info);
         const avatar = createStoryAvatar(isOwnEvent, layout, showSenderAndAvatar, tileState.info ? "14px" : undefined);
         const slots =
             shape === "Room"
