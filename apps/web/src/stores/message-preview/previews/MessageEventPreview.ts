@@ -19,6 +19,17 @@ export class MessageEventPreview implements Preview {
     public getTextFor(event: MatrixEvent, tagId?: TagID, isThread?: boolean): string | null {
         let eventContent = event.getContent();
 
+        if (event.isDecryptionFailure()) {
+            // An event which failed to decrypt is given a body describing the failure, in English
+            // and in terms only a developer would recognise. Say the same thing the timeline says
+            // instead. Returning nothing is not an option: the preview would then fall back to an
+            // older message and present it as the latest one.
+            const text = _t("timeline|decryption_failure|unable_to_decrypt");
+            const roomId = event.getRoomId();
+            if (isThread || isSelf(event) || (roomId && !shouldPrefixMessagesIn(roomId, tagId))) return text;
+            return _t("event_preview|m.text", { senderName: getSenderName(event), message: text });
+        }
+
         if (event.isRelation(RelationType.Replace)) {
             // It's an edit, generate the preview on the new text
             eventContent = event.getContent()["m.new_content"];
