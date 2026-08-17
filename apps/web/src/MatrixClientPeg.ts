@@ -199,7 +199,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
     private onUnexpectedStoreClose = async (): Promise<void> => {
         if (!this.matrixClient) return;
         this.matrixClient.stopClient(); // stop the client as the database has failed
-        this.matrixClient.store.destroy();
+        void this.matrixClient.store.destroy();
 
         if (!this.matrixClient.isGuest()) {
             // If the user is not a guest then prompt them to reload rather than doing it for them
@@ -282,7 +282,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         if (SettingsStore.getValue("feature_simplified_sliding_sync")) {
             opts.slidingSync = await SlidingSyncManager.instance.setup(this.matrixClient);
         } else {
-            SlidingSyncManager.instance.checkSupport(this.matrixClient);
+            void SlidingSyncManager.instance.checkSupport(this.matrixClient);
         }
 
         // Connect the matrix client to the dispatcher and setting handlers

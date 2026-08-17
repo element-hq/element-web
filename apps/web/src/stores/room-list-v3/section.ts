@@ -129,7 +129,37 @@ export function getCustomSectionData(): CustomSectionsData {
                     spaceId: value.spaceId && doesSpaceExist(value.spaceId) ? value.spaceId : MetaSpace.Home,
                 },
             ]),
-    ) as CustomSectionsData;
+    ) satisfies CustomSectionsData;
+}
+
+/**
+ * Persisted expanded/collapsed state of the room list sections, stored per space then per section tag.
+ */
+export type SectionExpansionState = { [spaceId: string]: { [sectionTag: string]: boolean } };
+
+/**
+ * Returns whether the section with the given tag is expanded in the given space.
+ * Defaults to expanded when no state has been persisted.
+ * @param spaceId - The id of the space.
+ * @param tag - The tag of the section.
+ */
+export function isSectionExpanded(spaceId: string, tag: string): boolean {
+    return SettingsStore.getValue("RoomList.SectionExpansionState")[spaceId]?.[tag] ?? true;
+}
+
+/**
+ * Persists the expanded/collapsed state of a section for a given space at the device level.
+ * @param spaceId - The id of the space.
+ * @param tag - The tag of the section.
+ * @param expanded - Whether the section is expanded.
+ */
+export async function setSectionExpanded(spaceId: string, tag: string, expanded: boolean): Promise<void> {
+    const state = SettingsStore.getValue("RoomList.SectionExpansionState");
+    const newState: SectionExpansionState = {
+        ...state,
+        [spaceId]: { ...state[spaceId], [tag]: expanded },
+    };
+    await SettingsStore.setValue("RoomList.SectionExpansionState", null, SettingLevel.DEVICE, newState);
 }
 
 /**

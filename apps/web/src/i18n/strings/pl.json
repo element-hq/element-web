@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Selektor emoji",
         "jump_first_invite": "Przejdź do pierwszego zaproszenia.",
         "message_composer": "Kompozytor wiadomości",
         "n_unread_messages": {
@@ -288,6 +287,8 @@
         },
         "registration_disabled": "Rejestracja została wyłączona na tym serwerze domowym.",
         "registration_msisdn_field_required_invalid": "Wprowadź numer telefonu (wymagane na tym serwerze domowym)",
+        "registration_rate_limited": "Za dużo prób w krótkim odstępie czasu. Odczekaj trochę, zanim spróbujesz ponownie.",
+        "registration_rate_limited_with_time": "Za dużo prób w krótkim odstępie czasu. Spróbuj ponownie za %(timeout)s.",
         "registration_successful": "Pomyślnie zarejestrowano",
         "registration_username_in_use": "Ktoś już ma taką nazwę użytkownika. Użyj innej lub zaloguj się poniżej, jeśli to jesteś Ty.",
         "registration_username_unable_check": "Nie można sprawdzić, czy nazwa użytkownika jest zajęta. Spróbuj ponownie później.",
@@ -300,7 +301,7 @@
             "password_not_entered": "Musisz wprowadzić nowe hasło.",
             "passwords_mismatch": "Nowe hasła muszą się zgadzać.",
             "rate_limit_error": "Za dużo prób w krótkim odstępie czasu. Odczekaj trochę, zanim spróbujesz ponownie.",
-            "rate_limit_error_with_time": "Za dużo prób w krótkim odstępie czasu. Spróbuj ponownie za%(timeout)s.",
+            "rate_limit_error_with_time": "Za dużo prób w krótkim odstępie czasu. Spróbuj ponownie za %(timeout)s.",
             "reset_successful": "Twoje hasło zostało zresetowane.",
             "return_to_login": "Wróć do ekranu logowania",
             "sign_out_other_devices": "Usuń pozostałe urządzenia"
@@ -507,7 +508,6 @@
         "message_layout": "Wygląd wiadomości",
         "message_timestamp_invalid": "Nieprawidłowy znacznik czasu",
         "microphone": "Mikrofon",
-        "model": "Model",
         "moderation_and_safety": "Moderacja i bezpieczeństwo",
         "modern": "Współczesny",
         "mute": "Wycisz",
@@ -682,7 +682,6 @@
     "create_section_dialog": {
         "create_section": "Utwórz sekcję",
         "description": "Sekcje są tylko dla Ciebie",
-        "edit_section": "Edytuj sekcję",
         "label": "Nazwa sekcji",
         "title": "Utwórz sekcję",
         "title_edition": "Edytuj sekcję"
@@ -930,22 +929,6 @@
     },
     "dialog_close_label": "Zamknij okno dialogowe",
     "download_completed": "Pobieranie zakończone",
-    "emoji": {
-        "categories": "Kategorie",
-        "category_activities": "Aktywności",
-        "category_animals_nature": "Zwierzęta i natura",
-        "category_flags": "Flagi",
-        "category_food_drink": "Żywność i napoje",
-        "category_frequently_used": "Często używane",
-        "category_objects": "Przedmioty",
-        "category_smileys_people": "Buźki i osoby",
-        "category_symbols": "Symbole",
-        "category_travel_places": "Podróże i miejsca",
-        "quick_reactions": "Szybkie reakcje"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Anuluj wyszukiwanie"
-    },
     "empty_room": "Pusty pokój",
     "empty_room_was_name": "Pusty pokój (poprzednio %(oldName)s)",
     "encryption": {
@@ -985,10 +968,10 @@
         "key_storage_out_of_sync_description": "Potwierdź klucz przywracania, aby zachować dostęp do magazynu kluczy i historii wiadomości.",
         "messages_not_secure": {
             "cause_1": "Twój serwer domowy",
-            "cause_2": "Użytkownik, którego weryfikujesz jest połączony z serwerem domowym",
+            "cause_2": "Serwer domowy użytkownika, którego weryfikujesz",
             "cause_3": "Połączenie internetowe Twoje lub innych użytkowników",
             "cause_4": "Sesja Twoja lub innych użytkowników",
-            "heading": "Jedno z wymienionych mogło zostać zdradzone:",
+            "heading": "Mogło dojść do naruszenia bezpieczeństwa na którymś z wymienionych:",
             "title": "Twoje wiadomości nie są bezpieczne"
         },
         "new_recovery_method_detected": {
@@ -1018,7 +1001,7 @@
                 "skip_verification": "Pomiń weryfikację na razie",
                 "verify_this_device": "Zweryfikuj to urządzenie"
             },
-            "cancelled_verification": "Albo upłynął limit czasu oczekiwania, żądanie zostało odrzucone, albo wystąpiła niezgodność w trakcie weryfikacji.",
+            "cancelled_verification": "Upłynął limit czasu żądania, żądanie zostało odrzucone lub wystąpił błąd weryfikacji.",
             "cancelling": "Anulowanie…",
             "cant_confirm": "Nie możesz potwierdzić?",
             "complete_action": "Zrobione",
@@ -1054,7 +1037,7 @@
             },
             "no_support_qr_emoji": "Urządzenie, które próbujesz zweryfikować nie wspiera skanowania kodu QR lub weryfikacji emoji, czyli tego co obsługuje %(brand)s. Spróbuj użyć innego klienta.",
             "now_you_can": "Teraz możesz bezpiecznie czytać i wysyłać wiadomości, a każdy z kim czatujesz również może ufać temu urządzeniu.",
-            "once_accepted_can_continue": "Po zaakceptowaniu będziesz mógł kontynuować weryfikację.",
+            "once_accepted_can_continue": "Po zaakceptowaniu rozpocznie się proces weryfikacji.",
             "other_party_cancelled": "Druga strona anulowała weryfikację.",
             "prompt_encrypted": "Zweryfikuj wszystkich użytkowników w pokoju, aby upewnić się, że jest bezpieczny.",
             "prompt_unencrypted": "W pokojach szyfrowanych, zweryfikuj wszystkich użytkowników, aby upewnić się, że są bezpieczne.",
@@ -1389,6 +1372,7 @@
         "error_permissions_room": "Nie masz uprawnień do zapraszania osób do tego pokoju.",
         "error_permissions_space": "Nie masz uprawnień do zapraszania osób do tej przestrzeni.",
         "error_profile_undisclosed": "Użytkownik może istnieć lub nie",
+        "error_rate_limited": "Wysłano zbyt wiele zaproszeń. Spróbuj ponownie później.",
         "error_transfer_multiple_target": "Połączenie może zostać przekazane tylko do pojedynczego użytkownika.",
         "error_unfederated_room": "Ten pokój jest niezrzeszony. Nie możesz zapraszać osób z serwerów zewnętrznych.",
         "error_unfederated_space": "Ta przestrzeń jest niezrzeszona. Nie możesz zapraszać osób z serwerów zewnętrznych.",
@@ -1741,7 +1725,6 @@
         "mentions_and_keywords": "Tylko @wzmianki i odpowiedzi",
         "mentions_and_keywords_description": "Otrzymuj powiadomienia tylko od wzmianek i słów kluczowych zgodnie z Twoimi <a>ustawieniami</a>",
         "mentions_keywords": "Wzmianki i słowa kluczowe",
-        "message_didnt_send": "Nie wysłano wiadomości. Kliknij po więcej informacji.",
         "mute_description": "Nie otrzymasz żadnych powiadomień"
     },
     "notifier": {
@@ -2888,7 +2871,6 @@
         "send_typing_notifications": "Wyślij powiadomienia o pisaniu",
         "sessions": {
             "best_security_note": "Dla najlepszego bezpieczeństwa zweryfikuj swoje sesje i usuń każdą, której nie rozpoznajesz lub z której już nie korzystasz.",
-            "browser": "Przeglądarka",
             "confirm_sign_out": {
                 "one": "Potwierdź usunięcie tego urządzenia",
                 "few": "Potwierdź usunięcie tych urządzeń",
@@ -2944,7 +2926,6 @@
             "no_sessions": "Nie znaleziono sesji.",
             "no_unverified_sessions": "Nie znaleziono niezweryfikowanych sesji.",
             "no_verified_sessions": "Nie znaleziono zweryfikowanych sesji.",
-            "os": "System operacyjny",
             "other_sessions_heading": "Inne sesje",
             "push_heading": "Powiadomienia push",
             "push_subheading": "Otrzymuj powiadomienia push na tej sesji.",

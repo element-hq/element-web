@@ -135,7 +135,7 @@ export function useMockedCalls() {
  * Enables the feature flags required for call tests.
  */
 export function enableCalls(): { enabledSettings: Set<string> } {
-    const enabledSettings = new Set(["feature_video_rooms", "feature_element_call_video_rooms"]);
+    const enabledSettings = new Set(["feature_video_rooms", "feature_element_call_video_rooms", "feature_user_status"]);
     jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName): any => {
         if (settingName.startsWith("feature_")) return enabledSettings.has(settingName);
         if (settingName === "activeCallRoomIds") return [];
@@ -155,7 +155,10 @@ export function setUpClientRoomAndStores(): {
     stubClient();
     const client = mocked<MatrixClient>(MatrixClientPeg.safeGet());
     DMRoomMap.makeShared(client);
-
+    client.cachedRtcTransports = {
+        wait: jest.fn().mockResolvedValue(undefined),
+        get: jest.fn().mockReturnValue(undefined),
+    } as unknown as any;
     const room = new Room("!1:example.org", client, "@alice:example.org", {
         pendingEventOrdering: PendingEventOrdering.Detached,
     });

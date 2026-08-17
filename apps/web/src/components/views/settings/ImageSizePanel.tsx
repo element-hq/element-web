@@ -15,8 +15,8 @@ import { _t } from "../../../languageHandler";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import { ImageSize } from "../../../settings/enums/ImageSize";
 import { SettingsSubsection } from "./shared/SettingsSubsection";
-import { Icon as ImgSizeNormalIcon } from "../../../../res/img/element-icons/settings/img-size-normal.svg";
-import { Icon as ImgSizeLargeIcon } from "../../../../res/img/element-icons/settings/img-size-large.svg";
+import ImgSizeNormalIcon from "../../../../res/img/element-icons/settings/img-size-normal.svg?react";
+import ImgSizeLargeIcon from "../../../../res/img/element-icons/settings/img-size-large.svg?react";
 
 interface IState {
     size: ImageSize;
@@ -35,8 +35,7 @@ export default class ImageSizePanel extends React.Component<EmptyObject, IState>
         const newSize = ev.target.value as ImageSize;
         this.setState({ size: newSize });
 
-        // noinspection JSIgnoredPromiseFromCall
-        SettingsStore.setValue("Images.size", null, SettingLevel.ACCOUNT, newSize);
+        void SettingsStore.setValue("Images.size", null, SettingLevel.ACCOUNT, newSize);
     };
 
     public render(): React.ReactNode {

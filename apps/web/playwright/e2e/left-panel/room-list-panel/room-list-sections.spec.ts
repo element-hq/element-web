@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { rejectToast } from "@element-hq/element-web-playwright-common";
+import { rejectToast, rejectToastIfExists } from "@element-hq/element-web-playwright-common";
 
 import { expect, test } from "../../../element-web-test";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
@@ -229,6 +229,63 @@ test.describe("Room list sections", () => {
         });
     });
 
+    test.describe("Section collapse state persistence", () => {
+        test.beforeEach(async ({ app }) => {
+            // A favourite room (so we get a Favourites section) and a regular room in Chats,
+            // giving us two independent sections whose expansion state we can assert.
+            const favouriteId = await app.client.createRoom({ name: "favourite room" });
+            await app.client.evaluate(async (client, roomId) => {
+                await client.setRoomTag(roomId, "m.favourite");
+            }, favouriteId);
+            await app.client.createRoom({ name: "regular room" });
+        });
+
+        test("persists the collapsed/expanded state across reloads", async ({ page }) => {
+            const roomList = getRoomList(page);
+            const favouritesHeader = getSectionHeader(page, "Favourites");
+            const chatsHeader = getSectionHeader(page, "Chats");
+            const favRoom = roomList.getByRole("row", { name: "Open room favourite room" });
+            const regularRoom = roomList.getByRole("row", { name: "Open room regular room" });
+
+            // Collapse both the Favourites and Chats sections
+            await expect(favouritesHeader).toHaveAttribute("aria-expanded", "true");
+            await favouritesHeader.click();
+            await expect(favouritesHeader).toHaveAttribute("aria-expanded", "false");
+            await expect(favRoom).not.toBeVisible();
+
+            await expect(chatsHeader).toHaveAttribute("aria-expanded", "true");
+            await chatsHeader.click();
+            await expect(chatsHeader).toHaveAttribute("aria-expanded", "false");
+            await expect(regularRoom).not.toBeVisible();
+
+            // Reload the page: the collapsed state is persisted at the device level and should survive
+            await page.reload();
+            await rejectToastIfExists(page, "Verify this device");
+            await rejectToastIfExists(page, "Notifications");
+
+            // Both sections are still collapsed and their rooms stay hidden
+            await expect(getSectionHeader(page, "Favourites")).toHaveAttribute("aria-expanded", "false");
+            await expect(getRoomList(page).getByRole("row", { name: "Open room favourite room" })).not.toBeVisible();
+            await expect(getSectionHeader(page, "Chats")).toHaveAttribute("aria-expanded", "false");
+            await expect(getRoomList(page).getByRole("row", { name: "Open room regular room" })).not.toBeVisible();
+
+            // Expand them again and reload: the expanded state is likewise persisted
+            await getSectionHeader(page, "Favourites").click();
+            await expect(getSectionHeader(page, "Favourites")).toHaveAttribute("aria-expanded", "true");
+            await getSectionHeader(page, "Chats").click();
+            await expect(getSectionHeader(page, "Chats")).toHaveAttribute("aria-expanded", "true");
+
+            await page.reload();
+            await rejectToastIfExists(page, "Verify this device");
+            await rejectToastIfExists(page, "Notifications");
+
+            await expect(getSectionHeader(page, "Favourites")).toHaveAttribute("aria-expanded", "true");
+            await expect(getRoomList(page).getByRole("row", { name: "Open room favourite room" })).toBeVisible();
+            await expect(getSectionHeader(page, "Chats")).toHaveAttribute("aria-expanded", "true");
+            await expect(getRoomList(page).getByRole("row", { name: "Open room regular room" })).toBeVisible();
+        });
+    });
+
     test.describe("Rooms placement in sections", () => {
         test("should move a room between sections when tags change", async ({ page, app }) => {
             await app.client.createRoom({ name: "my room" });
@@ -307,7 +364,7 @@ test.describe("Room list sections", () => {
             const roomList = getRoomList(page);
 
             // Invite the bot and have it send a message to generate an unread
-            await app.client.inviteUser(favouriteId, bot.credentials.userId);
+            await app.client.inviteUser(favouriteId, bot.credentials!.userId);
             await bot.joinRoom(favouriteId);
             await bot.sendMessage(favouriteId, "Hello from bot!");
 
@@ -334,7 +391,7 @@ test.describe("Room list sections", () => {
 
                 // A room with a mention, landing in the Chats section
                 const mentionId = await app.client.createRoom({ name: "mention room" });
-                await app.client.inviteUser(mentionId, bot.credentials.userId);
+                await app.client.inviteUser(mentionId, bot.credentials!.userId);
                 await bot.joinRoom(mentionId);
                 const clientBot = await bot.prepareClient();
                 await clientBot.evaluate(
@@ -407,13 +464,13 @@ test.describe("Room list sections", () => {
             await app.client.evaluate(async (client, roomId) => {
                 await client.setRoomTag(roomId, "m.favourite");
             }, favouriteId);
-            await app.client.inviteUser(favouriteId, bot.credentials.userId);
+            await app.client.inviteUser(favouriteId, bot.credentials!.userId);
             await bot.joinRoom(favouriteId);
             await bot.sendMessage(favouriteId, "Hello from favourite!");
 
             // Create a regular room with unread messages
             const regularId = await app.client.createRoom({ name: "regular with unread" });
-            await app.client.inviteUser(regularId, bot.credentials.userId);
+            await app.client.inviteUser(regularId, bot.credentials!.userId);
             await bot.joinRoom(regularId);
             await bot.sendMessage(regularId, "Hello from regular!");
 

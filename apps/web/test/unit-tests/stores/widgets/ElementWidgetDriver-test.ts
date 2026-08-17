@@ -14,6 +14,7 @@ import {
     type ITurnServer as IClientTurnServer,
     Direction,
     EventType,
+    MatrixError,
     MatrixEvent,
     MsgType,
     RelationType,
@@ -44,6 +45,7 @@ import dis from "../../../../src/dispatcher/dispatcher";
 import Modal from "../../../../src/Modal";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { WidgetType } from "../../../../src/widgets/WidgetType.ts";
+import SdkConfig from "../../../../src/SdkConfig.ts";
 
 describe("ElementWidgetDriver", () => {
     let client: MockedObject<MatrixClient>;
@@ -68,6 +70,9 @@ describe("ElementWidgetDriver", () => {
     beforeEach(() => {
         stubClient();
         client = mocked(MatrixClientPeg.safeGet());
+        client.cachedRtcTransports = {
+            wait: jest.fn(),
+        } as any;
         client.getUserId.mockReturnValue("@alice:example.org");
         client.getSafeUserId.mockReturnValue("@alice:example.org");
     });
@@ -89,6 +94,7 @@ describe("ElementWidgetDriver", () => {
         const requestedCapabilities = new Set([
             "m.always_on_screen",
             "town.robin.msc3846.turn_servers",
+            "org.matrix.msc4515.rtc_transports",
             "org.matrix.msc2762.timeline:!1:example.org",
             "org.matrix.msc2762.send.event:org.matrix.msc4075.call.notify",
             "org.matrix.msc2762.send.event:org.matrix.msc4075.rtc.notification",
@@ -420,6 +426,86 @@ describe("ElementWidgetDriver", () => {
         });
     });
 
+    describe("getRtcTransports", () => {
+        let driver: WidgetDriver;
+
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
+
+        it("gets the RTC transports from the homeserver", async () => {
+            const transports = [{ type: "livekit", livekit_service_url: "https://livekit-jwt.example.com" }];
+            client.cachedRtcTransports.wait.mockResolvedValue(transports);
+
+            await expect(driver.getRtcTransports()).resolves.toEqual({ rtc_transports: transports });
+        });
+
+        it("propagates errors from the homeserver", async () => {
+            const error = new MatrixError(
+                {
+                    errcode: "M_LIMIT_EXCEEDED",
+                    error: "Too many requests",
+                    retry_after_ms: 1_000,
+                },
+                429,
+            );
+
+            client.cachedRtcTransports.wait.mockRejectedValue(error);
+
+            await expect(driver.getRtcTransports()).rejects.toBe(error);
+        });
+
+        it("Should not fallback to well-known if config disallows and transport discovery not available", async () => {
+            const sdkConfigGet = SdkConfig.get;
+            jest.spyOn(SdkConfig, "get").mockImplementation((key?: any, altCaseName?: string): any => {
+                if (key === "enable_client_well_known_lookups") return false;
+                return sdkConfigGet(key, altCaseName);
+            });
+            client.cachedRtcTransports.wait.mockRejectedValue(
+                new MatrixError({ errcode: "M_NOT_FOUND", error: "Not found" }, 404),
+            );
+
+            await expect(driver.getRtcTransports()).rejects.toThrow();
+
+            expect(client.waitForClientWellKnown).not.toHaveBeenCalled();
+            expect(client.getClientWellKnown).not.toHaveBeenCalled();
+        });
+
+        it("Should not fallback to well-known if config disallows and homerserver advertise no transports", async () => {
+            const sdkConfigGet = SdkConfig.get;
+            jest.spyOn(SdkConfig, "get").mockImplementation((key?: any, altCaseName?: string): any => {
+                if (key === "enable_client_well_known_lookups") return false;
+                return sdkConfigGet(key, altCaseName);
+            });
+            client.cachedRtcTransports.wait.mockResolvedValue([]);
+
+            await expect(driver.getRtcTransports()).resolves.toEqual({ rtc_transports: [] });
+
+            expect(client.waitForClientWellKnown).not.toHaveBeenCalled();
+            expect(client.getClientWellKnown).not.toHaveBeenCalled();
+        });
+
+        it("Should fallback to well-known if config allows", async () => {
+            const sdkConfigGet = SdkConfig.get;
+            jest.spyOn(SdkConfig, "get").mockImplementation((key?: any, altCaseName?: string): any => {
+                if (key === "enable_client_well_known_lookups") return true;
+                return sdkConfigGet(key, altCaseName);
+            });
+            client.cachedRtcTransports.wait.mockRejectedValue(
+                new MatrixError({ errcode: "M_NOT_FOUND", error: "Not found" }, 404),
+            );
+
+            const transports = [{ type: "livekit", livekit_service_url: "https://livekit-jwt.example.com" }];
+            client.waitForClientWellKnown.mockResolvedValue({
+                "org.matrix.msc4143.rtc_foci": transports,
+            });
+
+            await expect(driver.getRtcTransports()).resolves.toEqual({ rtc_transports: transports });
+
+            expect(client.waitForClientWellKnown).toHaveBeenCalled();
+        });
+    });
+
     describe("readEventRelations", () => {
         let driver: WidgetDriver;
 
@@ -540,18 +626,12 @@ describe("ElementWidgetDriver", () => {
             driver = mkDefaultDriver();
         });
 
-        it("cannot send delayed events with missing arguments", async () => {
-            await expect(driver.sendDelayedEvent(null, null, EventType.RoomMessage, {})).rejects.toThrow(
-                "Must provide at least one of",
-            );
-        });
-
         it("sends delayed message events", async () => {
             client._unstable_sendDelayedEvent.mockResolvedValue({
                 delay_id: "id",
             });
 
-            await expect(driver.sendDelayedEvent(2000, null, EventType.RoomMessage, {})).resolves.toEqual({
+            await expect(driver.sendDelayedEvent(2000, EventType.RoomMessage, {})).resolves.toEqual({
                 roomId,
                 delayId: "id",
             });
@@ -559,25 +639,6 @@ describe("ElementWidgetDriver", () => {
             expect(client._unstable_sendDelayedEvent).toHaveBeenCalledWith(
                 roomId,
                 { delay: 2000 },
-                null,
-                EventType.RoomMessage,
-                {},
-            );
-        });
-
-        it("sends child action delayed message events", async () => {
-            client._unstable_sendDelayedEvent.mockResolvedValue({
-                delay_id: "id-child",
-            });
-
-            await expect(driver.sendDelayedEvent(null, "id-parent", EventType.RoomMessage, {})).resolves.toEqual({
-                roomId,
-                delayId: "id-child",
-            });
-
-            expect(client._unstable_sendDelayedEvent).toHaveBeenCalledWith(
-                roomId,
-                { parent_delay_id: "id-parent" },
                 null,
                 EventType.RoomMessage,
                 {},
@@ -589,7 +650,7 @@ describe("ElementWidgetDriver", () => {
                 delay_id: "id",
             });
 
-            await expect(driver.sendDelayedEvent(2000, null, EventType.RoomTopic, {}, "")).resolves.toEqual({
+            await expect(driver.sendDelayedEvent(2000, EventType.RoomTopic, {}, "")).resolves.toEqual({
                 roomId,
                 delayId: "id",
             });
@@ -597,25 +658,6 @@ describe("ElementWidgetDriver", () => {
             expect(client._unstable_sendDelayedStateEvent).toHaveBeenCalledWith(
                 roomId,
                 { delay: 2000 },
-                EventType.RoomTopic,
-                {},
-                "",
-            );
-        });
-
-        it("sends child action delayed state events", async () => {
-            client._unstable_sendDelayedStateEvent.mockResolvedValue({
-                delay_id: "id-child",
-            });
-
-            await expect(driver.sendDelayedEvent(null, "id-parent", EventType.RoomTopic, {}, "")).resolves.toEqual({
-                roomId,
-                delayId: "id-child",
-            });
-
-            expect(client._unstable_sendDelayedStateEvent).toHaveBeenCalledWith(
-                roomId,
-                { parent_delay_id: "id-parent" },
                 EventType.RoomTopic,
                 {},
                 "",
@@ -743,7 +785,7 @@ describe("ElementWidgetDriver", () => {
                 delay_id: "id",
             });
 
-            await expect(driver.sendDelayedStickyEvent(1000, null, 2000, EventType.RoomMessage, {})).resolves.toEqual({
+            await expect(driver.sendDelayedStickyEvent(1000, 2000, EventType.RoomMessage, {})).resolves.toEqual({
                 roomId,
                 delayId: "id",
             });
@@ -752,27 +794,6 @@ describe("ElementWidgetDriver", () => {
                 roomId,
                 2000,
                 { delay: 1000 },
-                null,
-                EventType.RoomMessage,
-                {},
-            );
-        });
-        it("sends child action delayed sticky message events", async () => {
-            client._unstable_sendStickyDelayedEvent.mockResolvedValue({
-                delay_id: "id-child",
-            });
-
-            await expect(
-                driver.sendDelayedStickyEvent(null, "id-parent", 2000, EventType.RoomMessage, {}),
-            ).resolves.toEqual({
-                roomId,
-                delayId: "id-child",
-            });
-
-            expect(client._unstable_sendStickyDelayedEvent).toHaveBeenCalledWith(
-                roomId,
-                2000,
-                { parent_delay_id: "id-parent" },
                 null,
                 EventType.RoomMessage,
                 {},

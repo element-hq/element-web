@@ -53,7 +53,11 @@ import InviteRulesConfigController from "./controllers/InviteRulesConfigControll
 import { type ComputedInviteConfig } from "../@types/invite-rules.ts";
 import BlockInvitesConfigController from "./controllers/BlockInvitesConfigController.ts";
 import RequiresSettingsController from "./controllers/RequiresSettingsController.ts";
-import { type ReorderableSection, type CustomSectionsData } from "../stores/room-list-v3/section.ts";
+import {
+    type ReorderableSection,
+    type CustomSectionsData,
+    type SectionExpansionState,
+} from "../stores/room-list-v3/section.ts";
 import { type NotificationSound } from "../Notifier.ts";
 import VideoRoomsBetaImage from "../../res/img/betas/video_rooms.png";
 
@@ -244,7 +248,6 @@ export interface Settings {
     "MessageComposerInput.showStickersButton": IBaseSetting<boolean>;
     "MessageComposerInput.showPollsButton": IBaseSetting<boolean>;
     "MessageComposerInput.insertTrailingColon": IBaseSetting<boolean>;
-    "Notifications.alwaysShowBadgeCounts": IBaseSetting<boolean>;
     "Notifications.showbold": IBaseSetting<boolean>;
     "Notifications.tac_only_notifications": IBaseSetting<boolean>;
     "useCompactLayout": IBaseSetting<boolean>;
@@ -364,6 +367,7 @@ export interface Settings {
     "Developer.elementCallUrl": IBaseSetting<string>;
     "RoomList.CustomSectionData": IBaseSetting<CustomSectionsData>;
     "RoomList.OrderedCustomSections": IBaseSetting<ReorderableSection[]>;
+    "RoomList.SectionExpansionState": IBaseSetting<SectionExpansionState>;
     "RoomList.showSections": IBaseSetting<boolean>;
     "composerUrlPreviewCollapsed": IBaseSetting<boolean>;
 }
@@ -683,11 +687,6 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("settings|insert_trailing_colon_mentions"),
         default: true,
-    },
-    // TODO: Wire up appropriately to UI (FTUE notifications)
-    "Notifications.alwaysShowBadgeCounts": {
-        supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
-        default: false,
     },
     // Used to be a feature, name kept for backwards compat
     "feature_hidebold": {
@@ -1353,6 +1352,14 @@ export const SETTINGS: Settings = {
     "RoomList.OrderedCustomSections": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: [],
+    },
+    /**
+     * Managed by the {@link RoomListSectionHeaderViewModel}
+     * Store the expanded/collapsed state of the room list sections, per space and per section tag
+     */
+    "RoomList.SectionExpansionState": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: {},
     },
     [UIFeature.RoomHistorySettings]: {
         supportedLevels: LEVELS_UI_FEATURE,

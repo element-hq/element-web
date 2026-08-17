@@ -134,7 +134,7 @@ export async function sendMessage(
 
     const prom = doMaybeLocalRoomAction(
         roomId,
-        (actualRoomId: string) => mxClient.sendMessage(actualRoomId, threadId, content!),
+        (actualRoomId: string) => mxClient.sendMessage(actualRoomId, threadId, content),
         mxClient,
     );
 
@@ -160,7 +160,7 @@ export async function sendMessage(
         }
     });
     if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
-        prom.then((resp) => {
+        void prom.then((resp) => {
             sendRoundTripMetric(mxClient, roomId, resp.event_id);
         });
     }

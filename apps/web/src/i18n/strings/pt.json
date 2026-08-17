@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Selecionador de emojis",
         "jump_first_invite": "Salta para o primeiro convite.",
         "message_composer": "Compositor de mensagens",
         "n_unread_messages": {
@@ -485,7 +484,6 @@
         "message_layout": "Disposição da mensagem",
         "message_timestamp_invalid": "Carimbo de data/hora inválido",
         "microphone": "Microfone",
-        "model": "Modelo",
         "modern": "Moderno",
         "mute": "Silenciar",
         "n_members": {
@@ -835,22 +833,6 @@
     },
     "dialog_close_label": "Fechar diálogo",
     "download_completed": "Download Concluído",
-    "emoji": {
-        "categories": "Categorias",
-        "category_activities": "Atividades",
-        "category_animals_nature": "Animais e Natureza",
-        "category_flags": "Bandeiras",
-        "category_food_drink": "Comida e Bebida",
-        "category_frequently_used": "Frequentemente utilizado",
-        "category_objects": "Objetos",
-        "category_smileys_people": "Carinhas Sorridentes e Pessoas",
-        "category_symbols": "Símbolos",
-        "category_travel_places": "Viagens e Locais",
-        "quick_reactions": "Reações rápidas"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Cancelar pesquisa"
-    },
     "empty_room": "Sala vazia",
     "empty_room_was_name": "Sala vazia (era %(oldName)s)",
     "encryption": {
@@ -1564,7 +1546,6 @@
         "mentions_and_keywords": "@menções e palavras-chave",
         "mentions_and_keywords_description": "Recebe notificações apenas com menções e palavras-chave, conforme definido nas tuas definições de <a></a>",
         "mentions_keywords": "Menções e palavras-chave",
-        "message_didnt_send": "A mensagem não foi enviada. Clica para obteres informações.",
         "mute_description": "Não receberás quaisquer notificações"
     },
     "notifier": {
@@ -2609,7 +2590,6 @@
         "send_typing_notifications": "Enviar notificações de digitação",
         "sessions": {
             "best_security_note": "Para maior segurança, verifica as tuas sessões e termina a sessão de qualquer sessão que já não reconheças ou utilizes.",
-            "browser": "Navegador",
             "confirm_sign_out": {
                 "one": "Confirma a saída deste dispositivo",
                 "other": "Confirma a saída destes dispositivos"
@@ -2660,7 +2640,6 @@
             "no_sessions": "Nenhuma sessão encontrada",
             "no_unverified_sessions": "Nenhuma sessão não verificada foi encontrada.",
             "no_verified_sessions": "Nenhuma sessão verificada foi encontrada.",
-            "os": "Sistema operativo",
             "other_sessions_heading": "Outras sessões",
             "push_heading": "Notificações push",
             "push_subheading": "Recebe notificações push sobre esta sessão.",

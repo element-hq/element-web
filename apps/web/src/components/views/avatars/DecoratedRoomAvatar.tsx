@@ -22,7 +22,7 @@ import { Tooltip } from "@vector-im/compound-web";
 import { PublicIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import RoomAvatar from "./RoomAvatar";
-import NotificationBadge from "../rooms/NotificationBadge";
+import { NotificationBadge } from "../rooms/NotificationBadge/NotificationBadge";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { type NotificationState } from "../../../stores/notifications/NotificationState";
 import { isPresenceEnabled } from "../../../utils/presence";
@@ -82,7 +82,7 @@ function tooltipText(variant: Icon): string | undefined {
 }
 
 /**
- * @deprecated Use {@link RoomAvatarView} instead.
+ * @deprecated Use {@link DecoratedRoomAvatarView} instead.
  */
 export default class DecoratedRoomAvatar extends React.PureComponent<IProps, IState> {
     private _dmUser: User | null = null;
@@ -196,7 +196,7 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
                 <NotificationBadge
                     notification={this.state.notificationState}
                     hideIfDot={this.props.hideIfDot}
-                    roomId={this.props.room.roomId}
+                    className="mx_DecoratedRoomAvatar_notificationBadge"
                 />
             );
         }

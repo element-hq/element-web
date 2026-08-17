@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import EventEmitter from "events";
+import EventEmitter from "node:events";
 import { type MockedObject } from "vitest";
 import {
     MatrixEvent,
@@ -321,6 +321,10 @@ export function createTestClient(): MatrixClient {
         _unstable_sendStickyEvent: vi.fn(),
         _unstable_sendStickyDelayedEvent: vi.fn(),
         _unstable_getRTCTransports: vi.fn(),
+        cachedRtcTransports: {
+            wait: vi.fn().mockResolvedValue([]),
+            get: vi.fn().mockReturnValue([]),
+        } as unknown as MockedObject<typeof client.cachedRtcTransports>,
         searchUserDirectory: vi.fn().mockResolvedValue({ limited: false, results: [] }),
         setDeviceVerified: vi.fn(),
         joinRoom: vi.fn(),
@@ -366,6 +370,7 @@ export function createTestClient(): MatrixClient {
         setRoomTag: vi.fn().mockResolvedValue({}),
         getExtendedProfileProperty: vi.fn(),
         setExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
+        doesServerSupportExtendedProfiles: vi.fn(),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);
@@ -665,9 +670,9 @@ export function mkMessage({
 
 export function mkStubRoom(
     roomId: string | null | undefined = null,
-    name?: string | undefined,
-    client?: MatrixClient | undefined,
-    state?: RoomState | undefined,
+    name?: string,
+    client?: MatrixClient,
+    state?: RoomState,
 ): Room {
     const stubTimeline = {
         getEvents: (): MatrixEvent[] => [],

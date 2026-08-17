@@ -67,14 +67,15 @@ import { checkBrowserSupport } from "./SupportedBrowser";
 import { type URLParams } from "./vector/url_utils.ts";
 import { type OnLoggedInPayload } from "./dispatcher/payloads/OnLoggedInPayload.ts";
 import { filterBoolean } from "./utils/arrays.ts";
+import { CallStatusListener } from "./CallStatusListener.ts";
+import { CallStore } from "./stores/CallStore.ts";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
 
 dis.register((payload) => {
     if (payload.action === Action.TriggerLogout) {
-        // noinspection JSIgnoredPromiseFromCall - we don't care if it fails
-        onLoggedOut();
+        void onLoggedOut();
     } else if (payload.action === Action.OverwriteLogin) {
         const typed = <OverwriteLoginPayload>payload;
         // Stop the current client before overwriting the login.
@@ -483,7 +484,7 @@ function onFailedDelegatedAuthLogin(description: string | ReactNode, tryAgain?: 
         button: _t("action|try_again"),
     });
 
-    finished.then(([shouldTryAgain]) => {
+    void finished.then(([shouldTryAgain]) => {
         // if we have a tryAgain callback, call it the primary 'try again' button was clicked in the dialog
         if (shouldTryAgain) tryAgain?.();
     });
@@ -953,8 +954,8 @@ export async function logout(): Promise<void> {
             homeserverUrl: client.getHomeserverUrl(),
             deviceId: client.getDeviceId()!,
         });
-    } catch (e) {
-        console.error("@@", e);
+    } catch {
+        // This is fine
     }
 
     PosthogAnalytics.instance.logout();
@@ -968,7 +969,7 @@ export async function logout(): Promise<void> {
     }
 
     _isLoggingOut = true;
-    PlatformPeg.get()?.destroyPickleKey(client.getSafeUserId(), client.getDeviceId() ?? "");
+    void PlatformPeg.get()?.destroyPickleKey(client.getSafeUserId(), client.getDeviceId() ?? "");
 
     doLogout(client, oauth ?? null).then(onLoggedOut, (err) => {
         // Just throwing an error here is going to be very unhelpful
@@ -979,7 +980,7 @@ export async function logout(): Promise<void> {
         // tokens expire (and if you really think you've been compromised,
         // change your password).
         logger.warn("Failed to call logout API: token will not be invalidated", err);
-        onLoggedOut();
+        return onLoggedOut();
     });
 }
 
@@ -1072,10 +1073,12 @@ async function startMatrixClient(
 
     // This needs to be started after crypto is set up
     DeviceListener.sharedInstance().start(client);
-    // Similarly, don't start sending presence updates until we've started
-    // the client
+
+    CallStatusListener.sharedInstance().start(CallStore.instance, client);
+
+    // Similarly, don't start sending presence updates until we've started the client
     if (!SettingsStore.getValue("lowBandwidth")) {
-        Presence.start();
+        void Presence.start();
     }
 
     // Now that we have a MatrixClientPeg, update the Jitsi info
@@ -1184,6 +1187,7 @@ export function stopMatrixClient(unsetClient = true): void {
     IntegrationManagers.sharedInstance().stopWatching();
     Mjolnir.sharedInstance().stop();
     DeviceListener.sharedInstance().stop();
+    CallStatusListener.sharedInstance().stop();
     DMRoomMap.shared()?.stop();
     EventIndexPeg.stop();
     const cli = MatrixClientPeg.get();
@@ -1193,8 +1197,8 @@ export function stopMatrixClient(unsetClient = true): void {
 
         if (unsetClient) {
             MatrixClientPeg.unset();
-            EventIndexPeg.unset();
-            cli.store.destroy();
+            void EventIndexPeg.unset();
+            void cli.store.destroy();
         }
     }
 }
