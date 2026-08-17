@@ -199,11 +199,12 @@ export class MemberListStore {
         const userA = memberA.user;
         const userB = memberB.user;
 
-        if (!userA && !userB) return 0;
-        if (userA && !userB) return -1;
-        if (!userA && userB) return 1;
+        // A member the client has no User for has no presence and no last-active time, but its
+        // power level and name are still known. Returning 0 for every such pair left the whole
+        // list in whatever order it was built in, which reads as random.
+        if (!!userA !== !!userB) return userA ? -1 : 1;
 
-        const showPresence = this.isPresenceEnabled();
+        const showPresence = this.isPresenceEnabled() && !!userA && !!userB;
 
         // First by presence
         if (showPresence) {
@@ -214,8 +215,8 @@ export class MemberListStore {
                 return idx === -1 ? order.length : idx; // unknown states at the end
             };
 
-            const idxA = presenceIndex(userA!.currentlyActive ? "active" : userA!.presence);
-            const idxB = presenceIndex(userB!.currentlyActive ? "active" : userB!.presence);
+            const idxA = presenceIndex(userA.currentlyActive ? "active" : userA.presence);
+            const idxB = presenceIndex(userB.currentlyActive ? "active" : userB.presence);
             if (idxA !== idxB) {
                 return idxA - idxB;
             }
@@ -227,8 +228,8 @@ export class MemberListStore {
         }
 
         // Third by last active
-        if (showPresence && userA!.getLastActiveTs() !== userB!.getLastActiveTs()) {
-            return userB!.getLastActiveTs() - userA!.getLastActiveTs();
+        if (showPresence && userA.getLastActiveTs() !== userB.getLastActiveTs()) {
+            return userB.getLastActiveTs() - userA.getLastActiveTs();
         }
 
         // Fourth by name (alphabetical)
