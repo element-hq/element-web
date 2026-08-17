@@ -24,6 +24,11 @@ interface ResetIdentityDialogProps {
      */
     onReset: () => void;
 
+    // How long to wait for an identity reset before we assume it failed.
+    //
+    // Defaults to 5000ms if omitted.
+    resetTimeoutMs?: number;
+
     /**
      * Called when the identity reset fails (before onFinished is called).
      */
@@ -38,7 +43,13 @@ interface ResetIdentityDialogProps {
 /**
  * The dialog for resetting the identity of the current user.
  */
-export function ResetIdentityDialog({ onFinished, onReset, onFail, variant }: ResetIdentityDialogProps): JSX.Element {
+export function ResetIdentityDialog({
+    onFinished,
+    onReset,
+    resetTimeoutMs,
+    onFail,
+    variant,
+}: ResetIdentityDialogProps): JSX.Element {
     const matrixClient = MatrixClientPeg.safeGet();
 
     const onResetWrapper = (): void => {
@@ -57,6 +68,7 @@ export function ResetIdentityDialog({ onFinished, onReset, onFail, variant }: Re
         <MatrixClientContext.Provider value={matrixClient}>
             <ResetIdentityBody
                 onReset={onResetWrapper}
+                resetTimeoutMs={resetTimeoutMs}
                 onFail={onFailWrapper}
                 onCancelClick={onFinished}
                 variant={variant}

@@ -17,12 +17,18 @@ import { uiAuthCallback } from "../../../../CreateCrossSigning";
 import { EncryptionCardButtons } from "./EncryptionCardButtons";
 import { EncryptionCardEmphasisedContent } from "./EncryptionCardEmphasisedContent";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
+import { timeout } from "../../../../utils/promise";
 
 interface ResetIdentityBodyProps {
     /**
      * Called when the identity is reset.
      */
     onReset: () => void;
+
+    // How long to wait for an identity reset before we assume it failed.
+    //
+    // Defaults to 5000ms if omitted.
+    resetTimeoutMs?: number;
 
     /**
      * Called when the identity reset fails.
@@ -65,7 +71,13 @@ export type ResetIdentityBodyVariant = "compromised" | "forgot" | "sync_failed" 
  *
  * Used by {@link ResetIdentityPanel}.
  */
-export function ResetIdentityBody({ onCancelClick, onReset, onFail, variant }: ResetIdentityBodyProps): JSX.Element {
+export function ResetIdentityBody({
+    onCancelClick,
+    onReset,
+    resetTimeoutMs,
+    onFail,
+    variant,
+}: ResetIdentityBodyProps): JSX.Element {
     const matrixClient = useMatrixClientContext();
 
     // After the user clicks "Continue", we disable the button so it can't be
@@ -75,25 +87,27 @@ export function ResetIdentityBody({ onCancelClick, onReset, onFail, variant }: R
     async function onClick(): Promise<void> {
         setInProgress(true);
 
-        const timeoutPromise = new Promise((_resolve, reject) => {
-            // If resetEncryption takes longer than 5 seconds, return a failure.
-            setTimeout(() => reject(new Error("Timed out")), 5000);
-        });
+        try {
+            const timedOut = "timed_out";
+            const result = await timeout(doOnClick(), timedOut, resetTimeoutMs ?? 5000);
 
+            if (result === timedOut) {
+                onFail("Timed out");
+            } else {
+                onReset();
+            }
+        } catch (e: any) {
+            onFail(e.toString());
+        }
+    }
+
+    async function doOnClick(): Promise<void> {
         const crypto = matrixClient.getCrypto();
         if (!crypto) {
-            onFail("Crypto is not set up");
-            return;
+            throw new Error("Crypto is not set up");
         }
 
-        const resetEncryptionPromise = crypto.resetEncryption((makeRequest) =>
-            uiAuthCallback(matrixClient, makeRequest),
-        );
-
-        await Promise.race([timeoutPromise, resetEncryptionPromise]).then(
-            () => onReset(),
-            (error_) => onFail(error_.toString()),
-        );
+        await crypto.resetEncryption((makeRequest) => uiAuthCallback(matrixClient, makeRequest));
     }
 
     return (

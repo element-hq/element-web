@@ -22,6 +22,10 @@ import { E2EStatus } from "../../../utils/ShieldUtils.ts";
 
 interface IProps {
     onFinished: () => void;
+
+    // How long to wait for an identity reset before we assume it failed.
+    // Default: 5000ms.
+    resetTimeoutMs?: number;
 }
 
 interface IState {
@@ -109,7 +113,11 @@ export default class CompleteSecurity extends React.Component<IProps, IState> {
                             {skipButton}
                         </h1>
                         <div className="mx_CompleteSecurity_body">
-                            <SetupEncryptionBody onFinished={this.props.onFinished} allowLogout={true} />
+                            <SetupEncryptionBody
+                                onFinished={this.props.onFinished}
+                                allowLogout={true}
+                                resetTimeoutMs={this.props.resetTimeoutMs}
+                            />
                         </div>
                     </CompleteSecurityBody>
                 </Glass>

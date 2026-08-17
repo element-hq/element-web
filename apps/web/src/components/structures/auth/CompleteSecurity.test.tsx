@@ -16,6 +16,8 @@ import { stubClient } from "test-utils";
 import CompleteSecurity from "./CompleteSecurity";
 import { Phase, SetupEncryptionStore } from "../../../stores/SetupEncryptionStore";
 import SdkConfig from "../../../SdkConfig";
+import { sleep } from "matrix-js-sdk/src/utils";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 class MockSetupEncryptionStore extends EventEmitter {
     public phase: Phase = Phase.Intro;
@@ -96,6 +98,26 @@ describe("CompleteSecurity", () => {
         // Then the reset identity dialog appears
         expect(screen.getByRole("heading", { name: "You need to reset your digital identity" })).toBeInTheDocument();
         expect(panel.getByRole("button", { name: "Continue" })).toBeInTheDocument();
+    });
+
+    it("Shows an error if reset times out", async () => {
+        const client = MatrixClientPeg.safeGet();
+
+        // Given reset will freeze forever when we do it
+        client.getCrypto()!.resetEncryption = vi.fn().mockImplementation(() => sleep(20000));
+        const store = new SetupEncryptionStore();
+        vi.spyOn(SetupEncryptionStore, "sharedInstance").mockReturnValue(store);
+        const panel = await act(() => render(<CompleteSecurity onFinished={() => {}} resetTimeoutMs={1} />));
+
+        // When we hit reset, then continue
+        await act(async () => panel.getByRole("button", { name: "Can't confirm?" }).click());
+        await act(async () => panel.getByRole("button", { name: "Continue" }).click());
+
+        // And wait more than the timeout
+        await sleep(10);
+
+        // Then an error dialog appears
+        expect(screen.getByRole("heading", { name: "Identity reset failed" })).toBeInTheDocument();
     });
 
     it("Allows verifying with another device if one is available", async () => {

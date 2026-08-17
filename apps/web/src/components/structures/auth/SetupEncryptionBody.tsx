@@ -44,6 +44,11 @@ interface IProps {
      * Defaults to `false` if omitted.
      */
     allowLogout?: boolean;
+
+    // How long to wait for an identity reset before we assume it failed.
+    //
+    // Defaults to 5000ms if omitted.
+    resetTimeoutMs?: number;
 }
 
 interface IState {
@@ -138,6 +143,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                 const store = SetupEncryptionStore.sharedInstance();
                 store.done();
             },
+            resetTimeoutMs: this.props.resetTimeoutMs,
             onFail: (failureReason) => {
                 logger.error(`Failed to reset identity: ${failureReason}`);
 
