@@ -17,6 +17,10 @@
     line-height: 1.125rem;
 }
 
+.root[data-event-layout="bubble"] {
+    max-width: 100%;
+}
+
 .text,
 .caption {
     white-space: pre-wrap;

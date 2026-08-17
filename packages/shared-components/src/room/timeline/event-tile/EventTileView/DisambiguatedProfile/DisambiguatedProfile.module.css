@@ -8,6 +8,7 @@
 .disambiguatedProfile {
     color: var(--cpd-color-text-primary);
     display: inline-block;
+    font: var(--cpd-font-body-md-regular);
     padding-block: 0;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -30,6 +31,26 @@
 
     .userStatus {
         margin-inline-start: 5px;
+    }
+}
+
+.disambiguatedProfile[data-event-layout="bubble"] {
+    width: fit-content;
+    max-width: var(--event-tile-bubble-line-max-width, 70%);
+    line-height: 18px;
+    white-space: normal;
+
+    .disambiguatedProfile_displayName {
+        white-space: nowrap;
+        margin-inline-end: 5px;
+
+        /* Preserve the legacy LTR treatment for RTL display names. */
+        unicode-bidi: embed;
+        direction: ltr;
+    }
+
+    .disambiguatedProfile_mxid {
+        margin-inline-start: 0;
     }
 }
 
