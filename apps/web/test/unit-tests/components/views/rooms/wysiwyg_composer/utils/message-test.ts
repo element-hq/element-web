@@ -159,10 +159,11 @@ describe("message", () => {
 
             // Then
             const expectedContent = {
-                body: "*__hello__ world*",
-                format: "org.matrix.custom.html",
-                formatted_body: "<i><b>hello</b> world</i>",
-                msgtype: "m.text",
+                "body": "*__hello__ world*",
+                "format": "org.matrix.custom.html",
+                "formatted_body": "<i><b>hello</b> world</i>",
+                "msgtype": "m.text",
+                "m.mentions": {},
             };
             expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", null, expectedContent);
             expect(spyDispatcher).toHaveBeenCalledWith({ action: "message_sent" });
@@ -197,6 +198,8 @@ describe("message", () => {
                 "format": "org.matrix.custom.html",
                 "formatted_body": "<i><b>hello</b> world</i>",
                 "msgtype": "m.text",
+                // Replying to someone mentions them.
+                "m.mentions": { user_ids: ["myfakeuser2"] },
                 "m.relates_to": {
                     "m.in_reply_to": {
                         event_id: mockReplyEvent.getId(),
@@ -445,11 +448,13 @@ describe("message", () => {
             const expectedContent = {
                 "body": `* ${newMessage}`,
                 "formatted_body": `* ${newMessage}`,
+                "m.mentions": {},
                 "m.new_content": {
-                    body: "Replying to this new content",
-                    format: "org.matrix.custom.html",
-                    formatted_body: "Replying to this new content",
-                    msgtype: "m.text",
+                    "body": "Replying to this new content",
+                    "format": "org.matrix.custom.html",
+                    "formatted_body": "Replying to this new content",
+                    "msgtype": "m.text",
+                    "m.mentions": {},
                 },
                 "m.relates_to": {
                     event_id: mockEvent.getId(),

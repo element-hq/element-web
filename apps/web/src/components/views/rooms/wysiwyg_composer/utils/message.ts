@@ -113,7 +113,7 @@ export async function sendMessage(
     }
 
     // if content is null, we haven't done any slash command processing, so generate some content
-    content ??= await createMessageContent(message, isHTML, params);
+    content ??= await createMessageContent(message, isHTML, { ...params, sender: mxClient.getSafeUserId() });
     attachUrlPreviews(urlPreviewSnapshot, content);
 
     // TODO replace emotion end of message ?
@@ -205,7 +205,7 @@ export async function editMessage(
         const position = this.model.positionForOffset(caret.offset, caret.atNodeEnd);
         this.editorRef.current?.replaceEmoticon(position, REGEX_EMOTICON);
     }*/
-    const editContent = await createMessageContent(html, true, { editedEvent });
+    const editContent = await createMessageContent(html, true, { editedEvent, sender: mxClient.getSafeUserId() });
     const newContent = editContent["m.new_content"]!;
 
     const shouldSend = true;

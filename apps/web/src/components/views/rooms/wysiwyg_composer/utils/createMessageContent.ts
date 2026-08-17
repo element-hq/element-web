@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { richToPlain, plainToRich } from "@vector-im/matrix-wysiwyg";
-import { type IContent, type IEventRelation, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
+import { type IContent, type IEventRelation, type IMentions, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import {
     type ReplacementEvent,
     type RoomMessageEventContent,
@@ -31,10 +31,75 @@ function attachRelation(content: IContent, relation?: IEventRelation): void {
     }
 }
 
+/**
+ * Fill in the mentions the message makes, in the form MSC3952 asks for.
+ *
+ * The composer marks its pills up with `data-mention-type`, and that markup is present in its
+ * output whether or not the message is being sent as formatted text — unlike the body, which has
+ * had the pills flattened back down to plain text by the time it is built.
+ *
+ * @param content - The event content being assembled, which is modified in place.
+ * @param message - The composer's own output for the message being sent.
+ * @param sender - The Matrix ID of the sender, who is never mentioned by their own message, if known.
+ * @param replyToEvent - The event being replied to, whose sender is mentioned, if this is a reply.
+ * @param editedEvent - The event being edited, if this is an edit.
+ */
+function attachMentions(
+    content: RoomMessageTextEventContent & ReplacementEvent<RoomMessageTextEventContent>,
+    message: string,
+    sender: string | undefined,
+    replyToEvent: MatrixEvent | undefined,
+    editedEvent: MatrixEvent | undefined,
+): void {
+    // The property is always present, even when empty, so that legacy push rules stay disabled.
+    const mentions: IMentions = (content["m.mentions"] = {});
+
+    const userMentions = new Set<string>();
+    let roomMention = false;
+
+    if (replyToEvent) {
+        userMentions.add(replyToEvent.sender!.userId);
+    }
+
+    const document = new DOMParser().parseFromString(message, "text/html");
+    for (const mention of document.querySelectorAll("a[data-mention-type]")) {
+        const mentionType = mention.getAttribute("data-mention-type");
+        if (mentionType === "at-room") {
+            roomMention = true;
+        } else if (mentionType === "user") {
+            const href = mention.getAttribute("href");
+            const userId = href && parsePermalink(href)?.userId;
+            if (userId) userMentions.add(userId);
+        }
+        // A room pill links to a room rather than mentioning anybody, so it is left alone.
+    }
+
+    if (sender) userMentions.delete(sender);
+
+    if (editedEvent) {
+        // The replacement says who the message mentions now; the fallback says who has newly been
+        // mentioned by it, so that editing does not notify everyone in it a second time.
+        const newMentions: IMentions = (content["m.new_content"]["m.mentions"] = {});
+        if (userMentions.size) newMentions.user_ids = [...userMentions];
+        if (roomMention) newMentions.room = true;
+
+        const previousMentions = editedEvent.getContent()["m.mentions"];
+        if (Array.isArray(previousMentions?.user_ids)) {
+            previousMentions.user_ids.forEach((userId: string) => userMentions.delete(userId));
+        }
+        if (previousMentions?.room) roomMention = false;
+    }
+
+    if (userMentions.size) mentions.user_ids = [...userMentions];
+    if (roomMention) mentions.room = true;
+}
+
 interface CreateMessageContentParams {
     relation?: IEventRelation;
     replyToEvent?: MatrixEvent;
     editedEvent?: MatrixEvent;
+    /** The Matrix ID of the sender, so that they are not recorded as mentioning themselves. */
+    sender?: string;
 }
 
 const isMatrixEvent = (e: MatrixEvent | undefined): e is MatrixEvent => e instanceof MatrixEvent;
@@ -42,7 +107,7 @@ const isMatrixEvent = (e: MatrixEvent | undefined): e is MatrixEvent => e instan
 export async function createMessageContent(
     message: string,
     isHTML: boolean,
-    { relation, replyToEvent, editedEvent }: CreateMessageContentParams,
+    { relation, replyToEvent, editedEvent, sender }: CreateMessageContentParams,
 ): Promise<RoomMessageEventContent> {
     const isEditing = isMatrixEvent(editedEvent);
 
@@ -92,8 +157,7 @@ export async function createMessageContent(
 
     const newRelation = isEditing ? { ...relation, rel_type: "m.replace", event_id: editedEvent.getId() } : relation;
 
-    // TODO Do we need to attach mentions here?
-    // TODO Handle editing?
+    attachMentions(content, message, sender, replyToEvent, isEditing ? editedEvent : undefined);
     attachRelation(content, newRelation);
 
     if (!isEditing && replyToEvent) {
