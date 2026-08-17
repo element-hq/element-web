@@ -19,6 +19,7 @@ import { mkStubRoom, stubClient } from "../../../../test-utils";
 import { OwnProfileStore } from "../../../../../src/stores/OwnProfileStore";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import Modal from "../../../../../src/Modal";
+import SettingsStore from "../../../../../src/settings/SettingsStore";
 
 interface MockedAvatarSettingProps {
     removeAvatar: () => void;
@@ -68,12 +69,20 @@ jest.mock("@vector-im/compound-web", () => {
     };
 });
 
-const renderProfileSettings = (toastRack: Partial<ToastRack>, client: MatrixClient) => {
+const renderProfileSettings = (
+    toastRack: Partial<ToastRack>,
+    client: MatrixClient,
+    { startCustomStatus }: { startCustomStatus?: boolean } = {},
+) => {
     return render(
         <TooltipProvider>
             <MatrixClientContext.Provider value={client}>
                 <ToastContext.Provider value={toastRack as ToastRack}>
-                    <UserProfileSettings canSetAvatar={true} canSetDisplayName={true} />
+                    <UserProfileSettings
+                        canSetAvatar={true}
+                        canSetDisplayName={true}
+                        startCustomStatus={startCustomStatus}
+                    />
                 </ToastContext.Provider>
             </MatrixClientContext.Provider>
         </TooltipProvider>,
@@ -89,6 +98,14 @@ describe("ProfileSettings", () => {
         toastRack = {
             displayToast: jest.fn().mockReturnValue(jest.fn()),
         };
+    });
+
+    it("shows the custom status editor when startCustomStatus is set", async () => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => name === "feature_user_status");
+
+        renderProfileSettings(toastRack, client, { startCustomStatus: true });
+
+        expect(await screen.findByRole("textbox", { name: "What's your status?" })).toBeInTheDocument();
     });
 
     it("removes avatar", async () => {

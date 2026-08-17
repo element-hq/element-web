@@ -813,7 +813,7 @@ describe("RoomListViewModel", () => {
             );
         });
 
-        it("should not navigate when no room is selected", async () => {
+        it("should navigate to the first room when no room is selected and delta is 1", async () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
                 spaceStore: SDKContextClass.instance.spaceStore,
@@ -832,12 +832,76 @@ describe("RoomListViewModel", () => {
             });
             dispatchSpy.mockImplementation(() => {});
 
-            await flushPromises();
+            await waitFor(() =>
+                expect(dispatchSpy).toHaveBeenCalledWith(
+                    expect.objectContaining({
+                        action: Action.ViewRoom,
+                        room_id: "!room1:server",
+                    }),
+                ),
+            );
+        });
 
-            expect(dispatchSpy).not.toHaveBeenCalledWith(
-                expect.objectContaining({
-                    action: Action.ViewRoom,
-                }),
+        it("should navigate to the last room when no room is selected and delta is -1", async () => {
+            viewModel = new RoomListViewModel({
+                client: matrixClient,
+                spaceStore: SDKContextClass.instance.spaceStore,
+                roomViewStore: SDKContextClass.instance.roomViewStore,
+            });
+
+            vi.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(null);
+
+            const dispatchSpy = vi.spyOn(dispatcher, "dispatch");
+
+            dispatcher.dispatch({
+                action: Action.ViewRoomDelta,
+                delta: -1,
+                unread: false,
+            });
+
+            await waitFor(() =>
+                expect(dispatchSpy).toHaveBeenCalledWith(
+                    expect.objectContaining({
+                        action: Action.ViewRoom,
+                        room_id: "!room3:server",
+                    }),
+                ),
+            );
+        });
+
+        it("should navigate to the first unread room when no room is selected", async () => {
+            vi.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation(
+                (room) =>
+                    ({
+                        isUnread: room.roomId === "!room2:server",
+                        on: vi.fn(),
+                        off: vi.fn(),
+                    }) as unknown as RoomNotificationState,
+            );
+
+            viewModel = new RoomListViewModel({
+                client: matrixClient,
+                spaceStore: SDKContextClass.instance.spaceStore,
+                roomViewStore: SDKContextClass.instance.roomViewStore,
+            });
+
+            vi.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(null);
+
+            const dispatchSpy = vi.spyOn(dispatcher, "dispatch");
+
+            dispatcher.dispatch({
+                action: Action.ViewRoomDelta,
+                delta: 1,
+                unread: true,
+            });
+
+            await waitFor(() =>
+                expect(dispatchSpy).toHaveBeenCalledWith(
+                    expect.objectContaining({
+                        action: Action.ViewRoom,
+                        room_id: "!room2:server",
+                    }),
+                ),
             );
         });
     });
