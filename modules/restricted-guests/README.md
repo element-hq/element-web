@@ -10,6 +10,14 @@ Supports the following configuration options under the configuration key `io.ele
 | guest_user_prefix         | string  | Prefix to apply to all guests registered via the module, defaults to `@guest-`.                                                                 |
 | skip_single_sign_on       | boolean | If true, the user will be forwarded to the login page instead of to the SSO login. This is only required if the home server has no SSO support. |
 
+In order to make the feature work, **knocking has to be enabled** via config.json
+
+```
+"features": {
+  "feature_ask_to_join": true
+}
+```
+
 ## Copyright & License
 
 Copyright (c) 2025 New Vector Ltd
