@@ -151,6 +151,28 @@ function useIsValid(check: (src: string) => Promise<boolean>, src: string): Vali
     return state;
 }
 
+function getImageClass(size: ImageSize) {
+    switch (size) {
+        case "full":
+            return styles.fullImage;
+        case "banner":
+            return styles.bannerImage;
+        case "tallbanner":
+            return styles.tallBannerImage;
+    }
+}
+
+function getVideoClass(size: ImageSize) {
+    switch (size) {
+        case "full":
+            return styles.fullVideo;
+        case "banner":
+            return styles.bannerVideo;
+        case "tallbanner":
+            return styles.tallBannerVideo;
+    }
+}
+
 export function Image({
     image,
     imageOnClick,
@@ -161,7 +183,7 @@ export function Image({
     imageSize: ImageSize;
 }): JSX.Element | null {
     const { translate: _t } = useI18n();
-    const classes = [styles.image, imageSize === "full" ? styles.fullImage : styles.bannerImage];
+    const classes = [styles.image, getImageClass(imageSize)];
 
     const { valid, src } = useIsValid(checkImage, image);
 
@@ -191,7 +213,7 @@ export function Video({
     videoSize: ImageSize;
 }): JSX.Element | null {
     const { translate: _t } = useI18n();
-    const classes = [styles.video, videoSize === "full" ? styles.fullVideo : styles.bannenrVideo];
+    const classes = [styles.video, getVideoClass(videoSize)];
 
     const { valid, src } = useIsValid(checkVideo, video);
 

@@ -92,13 +92,18 @@
 
     img {
         width: 100%;
-        object-fit: cover;
         display: block;
     }
 }
 
 .image.bannerImage img {
     max-height: 100px;
+    object-fit: cover;
+}
+
+.image.tallBannerImage img {
+    max-height: 300px;
+    object-fit: cover;
 }
 
 .image.fullImage img {
@@ -117,13 +122,18 @@
 
     video {
         width: 100%;
-        object-fit: cover;
         display: block;
     }
 }
 
 .video.bannerVideo video {
     max-height: 100px;
+    object-fit: cover;
+}
+
+.video.tallBannerVideo video {
+    max-height: 300px;
+    object-fit: cover;
 }
 
 .video.fullVideo video {
