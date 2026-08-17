@@ -6,8 +6,9 @@
  */
 
 import React, { type JSX } from "react";
-import { Tooltip, Text, Avatar, Button } from "@vector-im/compound-web";
+import { Tooltip, Text, Avatar, Button, IconButton } from "@vector-im/compound-web";
 import PlaySolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/play-solid";
+import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 import classNames from "classnames";
 
 import { useI18n } from "../../../../../core/i18n/i18nContext";
@@ -19,7 +20,7 @@ export interface LinkPreviewActions {
     onImageClick: () => void;
 }
 
-export type LinkPreviewProps = UrlPreview & LinkPreviewActions & { collapsed: boolean };
+export type LinkPreviewProps = UrlPreview & LinkPreviewActions & { collapsed: boolean; onRemoveClick?: () => void };
 
 export function LinkTitle({
     title,
@@ -104,9 +105,24 @@ function createImageClickHandler({ onImageClick, ...preview }: LinkPreviewProps)
     };
 }
 
-export function LinkPreviewCollapsed(preview: LinkPreviewProps): JSX.Element {
+function RemoveButton({ onClick }: { onClick: () => void }): JSX.Element {
     const { translate: _t } = useI18n();
+    return (
+        <IconButton
+            kind="secondary"
+            size="28px"
+            className={styles.removePreview}
+            aria-label={_t("timeline|url_preview|close")}
+            onClick={onClick}
+        >
+            <CloseIcon />
+        </IconButton>
+    );
+}
+
+export function LinkPreviewCollapsed(preview: LinkPreviewProps): JSX.Element {
     let img: JSX.Element | undefined;
+    const { translate: _t } = useI18n();
 
     if (preview.image && !preview.image.playable) {
         img = (
@@ -130,6 +146,7 @@ export function LinkPreviewCollapsed(preview: LinkPreviewProps): JSX.Element {
                 <LinkTitle title={preview.title} showTooltipOnLink={preview.showTooltipOnLink} link={preview.link} />
                 {preview.siteName && <LinkSiteName siteName={preview.siteName} />}
             </div>
+            {preview.onRemoveClick && <RemoveButton onClick={preview.onRemoveClick} />}
         </div>
     );
 }
@@ -199,6 +216,7 @@ export function LinkPreviewExpanded(preview: LinkPreviewProps): JSX.Element {
                 </LinkedText>
                 {preview.siteName && <LinkSiteName siteName={preview.siteName} siteIcon={preview.siteIcon} />}
             </div>
+            {preview.onRemoveClick && <RemoveButton onClick={preview.onRemoveClick} />}
         </div>
     );
 }

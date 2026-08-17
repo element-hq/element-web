@@ -176,6 +176,8 @@ export class UrlPreviewGroupViewModel
         }
 
         const content = this.props.mxEvent.getContent();
+        let totalPreviewCount: number;
+
         if (content.msgtype === MsgType.Text && this.props.urlPreviewBundleEnabled) {
             const messageContent = content as RoomMessageEventContent;
 
@@ -183,6 +185,7 @@ export class UrlPreviewGroupViewModel
                 previews = messageContent[BUNDLED_LINK_PREVIEWS]
                     .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
                     .map((preview) => this.fetcher.previewFromBundle(preview));
+                totalPreviewCount = messageContent[BUNDLED_LINK_PREVIEWS].length;
             }
         }
 
@@ -191,13 +194,29 @@ export class UrlPreviewGroupViewModel
                 .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
                 .map((link) => this.fetcher.fetchPreview(link, loadMedia)),
         );
+        totalPreviewCount ??= this.links.length;
 
         this.snapshot.merge({
             previews: previews.filter((p) => !!p),
-            totalPreviewCount: this.links.length,
+            totalPreviewCount,
             previewsLimited: this.limitPreviews,
-            overPreviewLimit: this.links.length > MAX_PREVIEWS_WHEN_LIMITED,
+            overPreviewLimit: totalPreviewCount > MAX_PREVIEWS_WHEN_LIMITED,
         });
+    }
+
+    /*
+     * Change whether URL bundles are used exclusively for previews
+     */
+    public setUrlBundlesEnabled(value: boolean): void {
+        this.props.urlPreviewBundleEnabled = value;
+        this.onBundleContentChanged();
+    }
+
+    /*
+     * Triggers a recalculation of snapshot, e.g. after the message is updated
+     */
+    public onBundleContentChanged(): Promise<void> {
+        return this.computeSnapshot();
     }
 
     /**
