@@ -6,7 +6,7 @@
  */
 
 import React from "react";
-import { render, screen } from "jest-matrix-react";
+import { fireEvent, render, screen } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 
 import { RoomAvatarView } from "../../../../../src/components/views/avatars/RoomAvatarView";
@@ -96,5 +96,68 @@ describe("<RoomAvatarView />", () => {
 
         expect(screen.getByLabelText(label)).toBeInTheDocument();
         expect(asFragment()).toMatchSnapshot();
+    });
+
+    describe("badge tooltip gating", () => {
+        const LABEL = "This room is public";
+
+        // A mounted tooltip renders its label as text; unmounted, the label survives only as the
+        // decoration's own accessible name.
+        const tooltip = (): HTMLElement | null => screen.queryByText(LABEL);
+        const decoration = (): HTMLElement => screen.getByLabelText(LABEL);
+        const avatar = (): HTMLElement => decoration().parentElement!;
+
+        // Captured before anything spies on it, so that repeated calls do not stack mocks.
+        const realMatchMedia = window.matchMedia;
+        let matchMediaSpy: jest.SpyInstance | undefined;
+
+        function setHoverCapability(canHover: boolean): void {
+            matchMediaSpy = jest
+                .spyOn(window, "matchMedia")
+                .mockImplementation((query) => ({ ...realMatchMedia(query), matches: canHover }) as MediaQueryList);
+        }
+
+        beforeEach(() => {
+            mocked(useRoomAvatarViewModel).mockReturnValue({
+                ...defaultValue,
+                badgeDecoration: AvatarBadgeDecoration.PublicRoom,
+            });
+            setHoverCapability(true);
+        });
+
+        afterEach(() => matchMediaSpy?.mockRestore());
+
+        it("should name the decoration while the tooltip is unmounted", () => {
+            render(<RoomAvatarView room={room} />);
+
+            expect(decoration()).toBeInTheDocument();
+            expect(tooltip()).not.toBeInTheDocument();
+        });
+
+        it("should mount the tooltip while the pointer is over the avatar", () => {
+            render(<RoomAvatarView room={room} />);
+
+            fireEvent.mouseMove(avatar());
+            expect(tooltip()).toBeInTheDocument();
+
+            fireEvent.mouseLeave(avatar());
+            expect(tooltip()).not.toBeInTheDocument();
+        });
+
+        it("should ignore an enter without movement, which a scrolling list fires per row", () => {
+            render(<RoomAvatarView room={room} />);
+
+            fireEvent.mouseEnter(avatar());
+            expect(tooltip()).not.toBeInTheDocument();
+        });
+
+        it("should keep the tooltip mounted where the pointer cannot hover", () => {
+            // Touch reaches the tooltip by long press, which Compound handles on the tooltip's own
+            // anchor, so a tooltip that mounts on hover would never be reachable at all.
+            setHoverCapability(false);
+            render(<RoomAvatarView room={room} />);
+
+            expect(tooltip()).toBeInTheDocument();
+        });
     });
 });
