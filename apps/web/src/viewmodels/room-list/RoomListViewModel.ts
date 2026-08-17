@@ -73,16 +73,16 @@ const filterKeyToIdMap: Map<FilterEnum, FilterId> = new Map([
 ]);
 
 /**
- * Filters that are redundant when sections are enabled: Favourites and Low Priority rooms
+ * Filters that are redundant when sections are enabled: Invites, Favourites and Low Priority rooms
  * already have their own sections, so these filters are only shown as chips when sectioning
  * is disabled (see {@link getVisibleFilterIds}).
  */
-const SECTION_ONLY_FILTER_IDS: ReadonlySet<FilterId> = new Set<FilterId>(["favourite", "low_priority"]);
+const SECTION_ONLY_FILTER_IDS: ReadonlySet<FilterId> = new Set<FilterId>(["favourite", "low_priority", "invites"]);
 
 /**
  * Compute the filter ids to display as primary filter chips.
- * When sections are enabled, the Favourites and Low Priority filters are hidden because those
- * rooms are surfaced as dedicated sections instead.
+ * When sections are enabled, the Invites, Favourites and Low Priority filters are hidden because
+ * those rooms are surfaced as dedicated sections instead.
  */
 function getVisibleFilterIds(): FilterId[] {
     const areSectionsEnabled = SettingsStore.getValue("RoomList.showSections");
@@ -96,6 +96,8 @@ function getVisibleFilterIds(): FilterId[] {
  */
 function getSectionTitle(tag: string): string {
     switch (tag) {
+        case DefaultTagID.Invite:
+            return _t("room_list|section|invites");
         case DefaultTagID.Favourite:
             return _t("room_list|section|favourites");
         case DefaultTagID.LowPriority:

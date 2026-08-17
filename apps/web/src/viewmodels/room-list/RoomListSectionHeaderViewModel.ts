@@ -210,6 +210,9 @@ export class RoomListSectionHeaderViewModel
             if (state.invited) invited = true;
             // Mention, notification, Mark as unread are aggregated
             if (state.isMention || state.isNotification) count += state.count || 1;
+            // An invitation reports neither a mention nor a notification, so count it as one room to
+            // make a collapsed section show how many invitations it holds
+            else if (state.invited) count += 1;
 
             // Aggregate active calls, preferring a video call over a voice call
             const call = state.room && CallStore.instance.getCall(state.room.roomId);
@@ -225,13 +228,16 @@ export class RoomListSectionHeaderViewModel
                 isMention || isNotification || isUnsentMessage || invited || Boolean(callType),
             isUnsentMessage,
             isMention,
-            isNotification,
+            // An invitation counts as a notification here so that the decoration renders the count
+            // badge, letting a collapsed Invites section report how many invitations it holds
+            isNotification: isNotification || invited,
             hasUnreadCount,
             count,
-            invited,
             callType,
-            // The activity dot and muted bell are intentionally not aggregated onto the section header
+            // The activity dot, the muted bell and the invitation icon are intentionally not
+            // aggregated onto the section header, which reports the invitations as a count instead
             isActivityNotification: false,
+            invited: false,
             muted: false,
         };
 
