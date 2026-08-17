@@ -976,6 +976,20 @@ export const RoomIrcDefault: Story = {
     args: Room.args,
 };
 
+export const CardGroupDefault: Story = {
+    name: "Card - Group - Default",
+    tags: visualTags,
+    globals: groupGlobals,
+    args: Card.args,
+};
+
+export const CardBubbleDefault: Story = {
+    name: "Card - Bubble - Default",
+    tags: visualTags,
+    globals: bubbleGlobals,
+    args: Card.args,
+};
+
 export const ThreadsListGroup: Story = {
     name: "Threads list - Group",
     tags: visualTags,
