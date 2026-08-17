@@ -1,0 +1,28 @@
+/*
+Copyright 2026 hayaksi1
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+/* The join failure dialog carries one or two sentences, so it is sized to the message rather than
+   to the shared dialog width, which left the text stranded in whitespace. */
+.mx_JoinRoomErrorDialog {
+    .mx_Dialog_fixedWidth {
+        width: 320px;
+        /* Below a ~400px viewport the dialog's own padding already claims the rest of the screen. */
+        max-width: 100%;
+    }
+
+    .mx_Dialog_content {
+        /* The shared 68px bottom margin exists to keep taller dialogs off their buttons; at this
+           width it is just a hole between the message and the button. */
+        margin-bottom: var(--cpd-space-8x);
+        color: var(--cpd-color-text-secondary);
+    }
+
+    /* One button, and nothing to weigh it against - so it spans the message it belongs to. */
+    .mx_Dialog_buttons .mx_Dialog_primary {
+        width: 100%;
+    }
+}

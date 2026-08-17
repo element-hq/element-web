@@ -499,6 +499,23 @@ describe("RoomViewStore", function () {
         // Check the modal props
         expect(mocked(Modal).createDialog.mock.calls[0][1]).toMatchSnapshot();
     });
+    it("should not blame the user for the room ID when rejoining a room they left", async () => {
+        room.getMyMembership.mockReturnValue(KnownMembership.Leave);
+        try {
+            dis.dispatch({ action: Action.ViewRoom, room_id: roomId });
+            await untilDispatch(Action.ActiveRoomChanged, dis);
+
+            roomViewStore.showJoinRoomError(new MatrixError(undefined, 404), roomId);
+
+            expect(mocked(Modal).createDialog.mock.calls[0][1]).toEqual({
+                title: "Room not found",
+                description: "The room may no longer exist or is unavailable from your server.",
+            });
+        } finally {
+            room.getMyMembership.mockReturnValue(KnownMembership.Join);
+        }
+    });
+
     // The server bob is on will affect the message we send.
     it.each(["server", "another-server"])(
         "should display an invite-specific error message when the room is unreachable",
@@ -679,7 +696,7 @@ describe("RoomViewStore", function () {
             expect(roomViewStore.promptAskToJoin()).toBe(false);
             expect(Modal.createDialog).toHaveBeenCalledWith(ErrorDialog, {
                 description: "You need an invite to access this room.",
-                title: "Failed to join",
+                title: "Failed to join room",
             });
         });
 
@@ -690,7 +707,7 @@ describe("RoomViewStore", function () {
 
             expect(Modal.createDialog).toHaveBeenCalledWith(ErrorDialog, {
                 description: error.message,
-                title: "Failed to join",
+                title: "Failed to join room",
             });
         });
     });
