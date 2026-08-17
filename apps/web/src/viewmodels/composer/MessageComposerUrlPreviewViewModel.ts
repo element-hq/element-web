@@ -91,7 +91,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
                     matched_url: link,
                 });
 
-                this.fetcher.fetchPreview(link, true).then((fetched) => {
+                void this.fetcher.fetchPreview(link, true).then((fetched) => {
                     // update cache
                     const currentEntry = this.previewCache.get(link);
                     if (fetched === null) {

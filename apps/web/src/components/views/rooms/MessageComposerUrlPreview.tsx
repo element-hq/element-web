@@ -29,7 +29,7 @@ export function MessageComposerUrlPreviewWrapper({
     const collapsed = useSettingValue("composerUrlPreviewCollapsed");
 
     const toggleCollapsed = useCallback(() => {
-        SettingsStore.setValue("composerUrlPreviewCollapsed", null, SettingLevel.DEVICE, !collapsed);
+        void SettingsStore.setValue("composerUrlPreviewCollapsed", null, SettingLevel.DEVICE, !collapsed);
     }, [collapsed]);
 
     const makeDefaultComposer = (): JSX.Element => (
