@@ -900,7 +900,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 layout: this.props.layout,
                 continuation: this.props.continuation,
                 isProbablyMedia,
-                isTwelveHour: this.props.isTwelveHour,
                 isHighlighted: shouldHighlightEventTile({
                     cli: MatrixClientPeg.safeGet(),
                     mxEvent: this.props.mxEvent,

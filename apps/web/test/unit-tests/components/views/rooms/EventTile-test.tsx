@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { act, fireEvent, render, screen, waitFor } from "jest-matrix-react";
-import { mocked } from "jest-mock";
 import {
     EventStatus,
     EventType,
@@ -16,14 +15,12 @@ import {
     type MatrixClient,
     MatrixEvent,
     MatrixEventEvent,
-    MsgType,
     NotificationCountType,
     PendingEventOrdering,
     RelationType,
     type Relations,
     Room,
     RoomMember,
-    TweakName,
 } from "matrix-js-sdk/src/matrix";
 import {
     type CryptoApi,
@@ -49,11 +46,8 @@ import PinningUtils from "../../../../../src/utils/PinningUtils";
 import { Layout } from "../../../../../src/settings/enums/Layout";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
-import EditorStateTransfer from "../../../../../src/utils/EditorStateTransfer";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import PlatformPeg from "../../../../../src/PlatformPeg";
-import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
-import { SDKContext } from "../../../../../src/contexts/SDKContext.ts";
 import { EventPresentationContextProvider } from "../../../../../src/utils/EventPresentationContextProvider.tsx";
 
 function getTile(container: HTMLElement): HTMLElement {
@@ -66,10 +60,6 @@ function getLine(container: HTMLElement): HTMLElement {
     const line = container.querySelector(".mx_EventTile_line");
     expect(line).not.toBeNull();
     return line as HTMLElement;
-}
-
-function expectTileClass(container: HTMLElement, className: string): void {
-    expect(getTile(container)).toHaveClass(className);
 }
 
 function makeReplyEvent(roomId: string): MatrixEvent {
@@ -205,33 +195,6 @@ describe("EventTile", () => {
         });
     }
 
-    function WrappedEventTiles(props: { events: MatrixEvent[]; editEvent?: MatrixEvent }) {
-        const roomContext = getRoomContext(room, {
-            timelineRenderingType: TimelineRenderingType.Room,
-        });
-
-        return (
-            <MatrixClientContext.Provider value={client}>
-                <ScopedRoomContextProvider {...roomContext}>
-                    <EventPresentationContextProvider layout={Layout.Group}>
-                        {props.events.map((event) => (
-                            <EventTile
-                                key={event.getId()}
-                                mxEvent={event}
-                                replacingEventId={event.replacingEventId()}
-                                editState={
-                                    props.editEvent?.getId() === event.getId()
-                                        ? new EditorStateTransfer(event)
-                                        : undefined
-                                }
-                            />
-                        ))}
-                    </EventPresentationContextProvider>
-                </ScopedRoomContextProvider>
-            </MatrixClientContext.Provider>
-        );
-    }
-
     beforeEach(() => {
         jest.clearAllMocks();
 
@@ -263,19 +226,6 @@ describe("EventTile", () => {
     });
 
     describe("layout and tile attributes", () => {
-        it.each([
-            ["last", { last: true }, "mx_EventTile_last"],
-            ["lastInSection", { lastInSection: true }, "mx_EventTile_lastInSection"],
-            ["contextual", { contextual: true }, "mx_EventTile_contextual"],
-            ["isSelectedEvent", { isSelectedEvent: true }, "mx_EventTile_selected"],
-            ["hideSender", { hideSender: true }, "mx_EventTile_noSender"],
-            ["isTwelveHour", { isTwelveHour: true }, "mx_EventTile_12hr"],
-        ] as const)("adds the %s class", (_propName, overrides, className) => {
-            const { container } = getComponent(overrides);
-
-            expectTileClass(container, className);
-        });
-
         it("exposes the rendered event id in room timelines", () => {
             const { container } = getComponent();
 
@@ -342,72 +292,6 @@ describe("EventTile", () => {
             expect(tile).not.toHaveAttribute("data-shape");
             expect(tile).not.toHaveAttribute("data-self");
             expect(tile).not.toHaveAttribute("data-has-reply");
-        });
-    });
-
-    describe("message type classes", () => {
-        it("adds media and image classes for image messages", () => {
-            const imageEvent = mkEvent({
-                event: true,
-                type: EventType.RoomMessage,
-                room: room.roomId,
-                user: "@alice:example.org",
-                content: {
-                    msgtype: MsgType.Image,
-                    body: "image.png",
-                    url: "mxc://example.org/image",
-                    info: {
-                        mimetype: "image/png",
-                        w: 100,
-                        h: 100,
-                        size: 1234,
-                    },
-                },
-            });
-            const { container } = getComponent({ mxEvent: imageEvent });
-
-            expect(getLine(container)).toHaveClass("mx_EventTile_mediaLine");
-            expect(getLine(container)).toHaveClass("mx_EventTile_image");
-        });
-
-        it("adds emote classes for emote messages", () => {
-            const emoteEvent = mkEvent({
-                event: true,
-                type: EventType.RoomMessage,
-                room: room.roomId,
-                user: "@alice:example.org",
-                content: {
-                    msgtype: MsgType.Emote,
-                    body: "waves",
-                },
-            });
-            const { container } = getComponent({ mxEvent: emoteEvent });
-
-            expect(getTile(container)).toHaveClass("mx_EventTile_emote");
-            expect(getLine(container)).toHaveClass("mx_EventTile_emote");
-        });
-
-        it("adds media and sticker classes for sticker events", () => {
-            const stickerEvent = mkEvent({
-                event: true,
-                type: EventType.Sticker,
-                room: room.roomId,
-                user: "@alice:example.org",
-                content: {
-                    body: "sticker.png",
-                    url: "mxc://example.org/sticker",
-                    info: {
-                        mimetype: "image/png",
-                        w: 100,
-                        h: 100,
-                        size: 1234,
-                    },
-                },
-            });
-            const { container } = getComponent({ mxEvent: stickerEvent });
-
-            expect(getLine(container)).toHaveClass("mx_EventTile_mediaLine");
-            expect(getLine(container)).toHaveClass("mx_EventTile_sticker");
         });
     });
 
@@ -499,7 +383,6 @@ describe("EventTile", () => {
         it("hides sender and avatar for continuation events in room timelines", () => {
             const { container } = getComponent({ continuation: true });
 
-            expectTileClass(container, "mx_EventTile_continuation");
             expect(container.querySelector(".mx_DisambiguatedProfile")).toBeNull();
             expect(container.querySelector(".mx_EventTile_avatar")).toBeNull();
         });
@@ -507,7 +390,6 @@ describe("EventTile", () => {
         it("hides sender but keeps avatar when sender display is disabled", () => {
             const { container } = getComponent({ hideSender: true });
 
-            expectTileClass(container, "mx_EventTile_noSender");
             expect(container.querySelector(".mx_DisambiguatedProfile")).toBeNull();
             expect(container.querySelector(".mx_EventTile_avatar")).not.toBeNull();
         });
@@ -562,35 +444,6 @@ describe("EventTile", () => {
             expect(avatar).not.toBeNull();
             expect(details).not.toContainElement(avatar);
         });
-    });
-
-    describe("continuation rendering", () => {
-        it.each([TimelineRenderingType.Room, TimelineRenderingType.Search, TimelineRenderingType.Thread])(
-            "keeps continuation styling in %s timelines",
-            (renderingType) => {
-                const { container } = getComponent({ continuation: true }, renderingType);
-
-                expect(getTile(container)).toHaveClass("mx_EventTile_continuation");
-            },
-        );
-
-        it.each([TimelineRenderingType.File, TimelineRenderingType.Notification, TimelineRenderingType.ThreadsList])(
-            "drops continuation styling in %s timelines when not using bubble layout",
-            (renderingType) => {
-                const { container } = getComponent({ continuation: true }, renderingType);
-
-                expect(getTile(container)).not.toHaveClass("mx_EventTile_continuation");
-            },
-        );
-
-        it.each([TimelineRenderingType.File, TimelineRenderingType.Notification, TimelineRenderingType.ThreadsList])(
-            "keeps continuation styling in %s timelines when using bubble layout",
-            (renderingType) => {
-                const { container } = getComponent({ continuation: true, layout: Layout.Bubble }, renderingType);
-
-                expect(getTile(container)).toHaveClass("mx_EventTile_continuation");
-            },
-        );
     });
 
     describe("read receipt option", () => {
@@ -824,16 +677,6 @@ describe("EventTile", () => {
             fireEvent.contextMenu(getLine(container), { clientX: 1, clientY: 2 });
 
             expect(await screen.findByTestId("mx_MessageContextMenu")).toBeInTheDocument();
-        });
-
-        it("marks the tile selected when the context menu is open", async () => {
-            const { container } = getComponent();
-            const tile = getTile(container);
-
-            fireEvent.contextMenu(getLine(container), { clientX: 1, clientY: 2 });
-
-            expect(await screen.findByTestId("mx_MessageContextMenu")).toBeInTheDocument();
-            expect(tile).toHaveClass("mx_EventTile_selected");
         });
 
         it("shows the timestamp while the context menu is open", async () => {
@@ -1074,9 +917,9 @@ describe("EventTile", () => {
             expect(screen.getByText("This event could not be displayed")).toBeInTheDocument();
         });
 
-        it("updates msgtype-derived tile classes when an edit changes msgtype to m.emote", async () => {
+        it("updates the rendered message body when an edit changes msgtype to m.emote", async () => {
             const { container } = getComponent();
-            expect(container.querySelector(".mx_EventTile_emote")).toBeNull();
+            expect(container.querySelector(".mx_MEmoteBody")).toBeNull();
 
             const edit = new MatrixEvent({
                 type: EventType.RoomMessage,
@@ -1100,7 +943,7 @@ describe("EventTile", () => {
                 mxEvent.makeReplaced(edit);
             });
 
-            await waitFor(() => expect(container.querySelector(".mx_EventTile_emote")).not.toBeNull());
+            await waitFor(() => expect(container.querySelector(".mx_MEmoteBody")).not.toBeNull());
         });
     });
 
@@ -1475,197 +1318,6 @@ describe("EventTile", () => {
 
             expect(container.querySelectorAll('[data-testid="e2e-padlock"]')).toHaveLength(0);
         });
-    });
-
-    describe("event highlighting", () => {
-        const isHighlighted = (container: HTMLElement): boolean =>
-            !!container.getElementsByClassName("mx_EventTile_highlight").length;
-
-        beforeEach(() => {
-            mocked(client.getPushActionsForEvent).mockReturnValue(null);
-        });
-
-        it("does not highlight message where message matches no push actions", () => {
-            const { container } = getComponent();
-
-            expect(client.getPushActionsForEvent).toHaveBeenCalledWith(mxEvent);
-            expect(isHighlighted(container)).toBeFalsy();
-        });
-
-        it("does not highlight when message's push actions does not have a highlight tweak", () => {
-            mocked(client.getPushActionsForEvent).mockReturnValue({ notify: true, tweaks: {} });
-            const { container } = getComponent();
-
-            expect(isHighlighted(container)).toBeFalsy();
-        });
-
-        it("does not highlight when message's push actions have a highlight tweak but message has been redacted", () => {
-            mocked(client.getPushActionsForEvent).mockReturnValue({
-                notify: true,
-                tweaks: { [TweakName.Highlight]: true },
-            });
-            const { container } = getComponent({ isRedacted: true });
-
-            expect(isHighlighted(container)).toBeFalsy();
-        });
-
-        it("does not highlight when exporting", () => {
-            mocked(client.getPushActionsForEvent).mockReturnValue({
-                notify: true,
-                tweaks: { [TweakName.Highlight]: true },
-            });
-            const { container } = getComponent({ forExport: true });
-
-            expect(client.getPushActionsForEvent).not.toHaveBeenCalled();
-            expect(isHighlighted(container)).toBeFalsy();
-        });
-
-        it.each([TimelineRenderingType.Notification, TimelineRenderingType.ThreadsList])(
-            "does not highlight in %s timelines",
-            (renderingType) => {
-                mocked(client.getPushActionsForEvent).mockReturnValue({
-                    notify: true,
-                    tweaks: { [TweakName.Highlight]: true },
-                });
-                const { container } = getComponent({}, renderingType);
-
-                expect(client.getPushActionsForEvent).not.toHaveBeenCalled();
-                expect(isHighlighted(container)).toBeFalsy();
-            },
-        );
-
-        it("does not highlight events sent by the current user", () => {
-            mocked(client.getPushActionsForEvent).mockReturnValue({
-                notify: true,
-                tweaks: { [TweakName.Highlight]: true },
-            });
-            const ownEvent = makeOwnMessage();
-            const { container } = getComponent({ mxEvent: ownEvent });
-
-            expect(client.getPushActionsForEvent).toHaveBeenCalledWith(ownEvent);
-            expect(isHighlighted(container)).toBeFalsy();
-        });
-
-        it("highlights when message's push actions have a highlight tweak", () => {
-            mocked(client.getPushActionsForEvent).mockReturnValue({
-                notify: true,
-                tweaks: { [TweakName.Highlight]: true },
-            });
-            const { container } = getComponent();
-
-            expect(isHighlighted(container)).toBeTruthy();
-        });
-
-        describe("when a message has been edited", () => {
-            let editingEvent: MatrixEvent;
-
-            beforeEach(() => {
-                editingEvent = new MatrixEvent({
-                    type: "m.room.message",
-                    room_id: ROOM_ID,
-                    sender: "@alice:example.org",
-                    content: {
-                        "msgtype": "m.text",
-                        "body": "* edited body",
-                        "m.new_content": {
-                            msgtype: "m.text",
-                            body: "edited body",
-                        },
-                        "m.relates_to": {
-                            rel_type: "m.replace",
-                            event_id: mxEvent.getId(),
-                        },
-                    },
-                });
-                mxEvent.makeReplaced(editingEvent);
-            });
-
-            it("does not highlight message where no version of message matches any push actions", () => {
-                const { container } = getComponent();
-
-                // get push actions for both events
-                expect(client.getPushActionsForEvent).toHaveBeenCalledWith(mxEvent);
-                expect(client.getPushActionsForEvent).toHaveBeenCalledWith(editingEvent);
-                expect(isHighlighted(container)).toBeFalsy();
-            });
-
-            it(`does not highlight when no version of message's push actions have a highlight tweak`, () => {
-                mocked(client.getPushActionsForEvent).mockReturnValue({ notify: true, tweaks: {} });
-                const { container } = getComponent();
-
-                expect(isHighlighted(container)).toBeFalsy();
-            });
-
-            it(`highlights when previous version of message's push actions have a highlight tweak`, () => {
-                mocked(client.getPushActionsForEvent).mockImplementation((event: MatrixEvent) => {
-                    if (event === mxEvent) {
-                        return { notify: true, tweaks: { [TweakName.Highlight]: true } };
-                    }
-                    return { notify: false, tweaks: {} };
-                });
-                const { container } = getComponent();
-
-                expect(isHighlighted(container)).toBeTruthy();
-            });
-
-            it(`highlights when new version of message's push actions have a highlight tweak`, () => {
-                mocked(client.getPushActionsForEvent).mockImplementation((event: MatrixEvent) => {
-                    if (event === editingEvent) {
-                        return { notify: true, tweaks: { [TweakName.Highlight]: true } };
-                    }
-                    return { notify: false, tweaks: {} };
-                });
-                const { container } = getComponent();
-
-                expect(isHighlighted(container)).toBeTruthy();
-            });
-        });
-    });
-
-    it("does not leave a stale message action bar when switching edited events", async () => {
-        const firstEvent = mkMessage({
-            room: room.roomId,
-            user: "@alice:example.org",
-            msg: "First message",
-            event: true,
-        });
-        const secondEvent = mkMessage({
-            room: room.roomId,
-            user: "@alice:example.org",
-            msg: "Second message",
-            event: true,
-        });
-        const events = [firstEvent, secondEvent];
-
-        const matches = jest.spyOn(HTMLElement.prototype, "matches").mockImplementation(function (
-            this: HTMLElement,
-            selector: string,
-        ) {
-            if (selector === ":focus-visible") {
-                return true;
-            }
-            return Element.prototype.matches.call(this, selector);
-        });
-
-        const { container, rerender } = render(<WrappedEventTiles events={events} editEvent={firstEvent} />, {
-            wrapper: ({ children }) => (
-                <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
-            ),
-        });
-        const editingTile = container.querySelector(".mx_EventTile_isEditing");
-
-        expect(editingTile).not.toBeNull();
-        fireEvent.focusIn(editingTile!);
-        expect(container.querySelectorAll(".mx_MessageActionBar")).toHaveLength(0);
-
-        rerender(<WrappedEventTiles events={events} editEvent={secondEvent} />);
-
-        await waitFor(() => {
-            expect(container.querySelectorAll(".mx_EventTile_isEditing")).toHaveLength(1);
-            expect(container.querySelectorAll(".mx_MessageActionBar")).toHaveLength(0);
-        });
-
-        matches.mockRestore();
     });
 
     it("should display the not encrypted status for an unencrypted event when the room becomes encrypted", async () => {

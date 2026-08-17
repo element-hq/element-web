@@ -137,14 +137,6 @@ describe("EventTileViewModel", () => {
                 hasReply: false,
             },
         });
-        expect(snapshot.legacy.rootData).toEqual({
-            eventId: "$event",
-            layout: Layout.Group,
-            shape: TimelineRenderingType.Room,
-            isOwnEvent: false,
-            hasReply: false,
-        });
-        expect(snapshot.legacy.rootClassState.mx_EventTile_sending).toBe(true);
     });
 
     it("derives a scroll token for non-local-echo events", () => {
@@ -174,9 +166,6 @@ describe("EventTileViewModel", () => {
         );
 
         expect(renderState.snapshot.event.isSending).toBe(true);
-        expect(renderState.legacy.root.className).toContain("mx_EventTile");
-        expect(renderState.legacy.root.className).toContain("mx_EventTile_sending");
-        expect(renderState.legacy.root.className).toContain("mx_EventTile_highlight");
         expect(renderState.root.ariaLive).toBe("off");
         expect(renderState.root.scrollToken).toBeUndefined();
         expect(renderState.root.eventId).toBe("$event");
@@ -189,14 +178,12 @@ describe("EventTileViewModel", () => {
             editing: false,
             continuation: false,
         });
-        expect(renderState.legacy.root.isRenderingNotification).toBe(false);
         expect(renderState.classNames).toMatchObject({
-            root: renderState.legacy.root.className,
-            line: renderState.legacy.line.className,
+            root: "mx_EventTile",
+            line: "mx_EventTile_line",
             slotBody: "mx_EventTile_body",
             slotSender: "mx_DisambiguatedProfile",
         });
-        expect(renderState.legacy.line.className).toContain("mx_EventTile_line");
         expect(renderState.line).toEqual({
             media: false,
             sticker: false,
@@ -338,12 +325,6 @@ describe("EventTileViewModel", () => {
             }),
         );
 
-        expect(snapshot.legacy.lineClassState).toMatchObject({
-            mx_EventTile_mediaLine: true,
-            mx_EventTile_image: true,
-            mx_EventTile_sticker: false,
-            mx_EventTile_emote: false,
-        });
         expect(snapshot.line).toEqual({
             media: true,
             sticker: false,
@@ -415,7 +396,7 @@ describe("EventTileViewModel", () => {
         });
     });
 
-    it("derives aligned-between-bubbles root class state", () => {
+    it("derives aligned-between-bubbles root state", () => {
         const snapshot = EventTileViewModel.createSnapshot(
             makeProps({
                 display: {
@@ -424,7 +405,7 @@ describe("EventTileViewModel", () => {
             }),
         );
 
-        expect(snapshot.legacy.rootClassState.mx_EventTile_alignedBetweenBubbles).toBe(true);
+        expect(snapshot.root.state.alignedBetweenBubbles).toBe(true);
     });
 
     it("derives avatar and sender profile state for thread timelines", () => {
@@ -733,7 +714,7 @@ describe("EventTileViewModel", () => {
         });
         const vm = new EventTileViewModel(makeDependencies(event), makeProps());
 
-        expect(vm.getSnapshot().snapshot.legacy.rootData.hasReply).toBe(false);
+        expect(vm.getSnapshot().snapshot.root.state.hasReply).toBe(false);
 
         vm.dispose();
     });
