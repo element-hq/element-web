@@ -55,10 +55,11 @@
 }
 
 .disambiguatedProfile[data-event-layout="irc"] {
-    width: 100%;
+    width: var(--event-tile-irc-name-width, 80px);
 
     &:hover {
         overflow: visible;
+        z-index: 10;
     }
 
     .disambiguatedProfile_displayName {
@@ -72,7 +73,7 @@
     .disambiguatedProfile_mxid {
         visibility: collapse;
         margin-inline-start: 0;
-        padding-inline: var(--cpd-space-1x);
+        padding-inline: 5px;
     }
 
     &:hover .disambiguatedProfile_displayName {

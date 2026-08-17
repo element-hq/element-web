@@ -121,29 +121,6 @@
     height: 18px;
 }
 
-/* Match the application IRC profile treatment without adding application
-   selectors to the shared EventTileView stylesheet. */
-.ircSender {
-    width: var(--event-tile-irc-name-width, 80px);
-    margin-inline-end: 0;
-    overflow: hidden;
-    text-align: start;
-}
-
-.ircSender :global(.mx_DisambiguatedProfile_displayName) {
-    display: inline-block;
-    width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: start;
-}
-
-.ircSender :global(.mx_DisambiguatedProfile_mxid) {
-    visibility: collapse;
-    margin-inline-start: 0;
-    padding-inline: 5px;
-}
-
 .replyAuthor,
 .roomLabel {
     display: inline-flex;
