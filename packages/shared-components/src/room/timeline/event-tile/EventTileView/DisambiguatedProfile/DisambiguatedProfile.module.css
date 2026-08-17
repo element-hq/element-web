@@ -6,6 +6,9 @@
  */
 
 .disambiguatedProfile {
+    color: var(--cpd-color-text-primary);
+    display: inline-block;
+    padding-block: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -27,5 +30,41 @@
 
     .userStatus {
         margin-inline-start: 5px;
+    }
+}
+
+.disambiguatedProfile[data-event-layout="irc"] {
+    width: 100%;
+
+    &:hover {
+        overflow: visible;
+    }
+
+    .disambiguatedProfile_displayName {
+        display: inline-block;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: start;
+    }
+
+    .disambiguatedProfile_mxid {
+        visibility: collapse;
+        margin-inline-start: 0;
+        padding-inline: var(--cpd-space-1x);
+    }
+
+    &:hover .disambiguatedProfile_displayName {
+        display: inline;
+        overflow: visible;
+        background-color: var(--cpd-color-bg-subtle-secondary);
+        border-radius: 8px 0 0 8px;
+        padding-inline-end: var(--cpd-space-2x);
+    }
+
+    &:hover .disambiguatedProfile_mxid {
+        visibility: visible;
+        opacity: 1;
+        background-color: var(--cpd-color-bg-subtle-secondary);
     }
 }

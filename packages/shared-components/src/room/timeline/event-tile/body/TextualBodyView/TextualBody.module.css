@@ -10,6 +10,13 @@
     overflow-x: hidden;
 }
 
+.root[data-event-layout="irc"] {
+    /* Keep the emoji line clear of the line box, as in the legacy IRC tile. */
+    padding-block: 1px;
+    display: inline-block;
+    line-height: 1.125rem;
+}
+
 .text,
 .caption {
     white-space: pre-wrap;
