@@ -80,7 +80,13 @@ export default {
             ],
         },
         "apps/desktop": {
-            entry: ["src/preload.cts!", "electron-builder.ts!", "scripts/**", "hak/**"],
+            entry: [
+                "src/preload.cts!",
+                "src/screen-share-audio/assets/worklet.js!",
+                "electron-builder.ts!",
+                "scripts/**",
+                "hak/**",
+            ],
             project: ["**/*.{js,ts,pcss}"],
             ignoreDependencies: [
                 // Brought in via hak scripts

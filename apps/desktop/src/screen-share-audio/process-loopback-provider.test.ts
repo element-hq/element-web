@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { EventEmitter } from "node:events";
+import path from "node:path";
 import { PassThrough } from "node:stream";
 import type { ChildProcessWithoutNullStreams } from "node:child_process";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -73,6 +74,14 @@ class FakeChild extends EventEmitter {
 }
 
 const availableProbe = "protocol=1\nformat=48000,2,pcm-s16le\n";
+const unpackagedExecutable = path.join(
+    "C:\\app",
+    "native",
+    "windows-process-loopback",
+    "build",
+    "windows-x64",
+    "windows-process-loopback.exe",
+);
 const baseRuntime: ProcessLoopbackRuntime = {
     platform: "win32",
     arch: "x64",
@@ -102,11 +111,9 @@ describe("process-loopback screen-share audio provider", () => {
     });
 
     it("resolves fixed packaged and unpackaged helper paths", () => {
-        expect(resolveProcessLoopbackExecutable(baseRuntime)).toBe(
-            "C:\\app\\native\\windows-process-loopback\\build\\windows-x64\\windows-process-loopback.exe",
-        );
+        expect(resolveProcessLoopbackExecutable(baseRuntime)).toBe(unpackagedExecutable);
         expect(resolveProcessLoopbackExecutable({ ...baseRuntime, isPackaged: true })).toBe(
-            "C:\\resources\\screen-share-audio\\windows-process-loopback.exe",
+            path.join("C:\\resources", "screen-share-audio", "windows-process-loopback.exe"),
         );
     });
 
@@ -172,18 +179,11 @@ describe("process-loopback screen-share audio provider", () => {
         await expect(provider.getAvailability()).resolves.toBe("available");
         const capture = await provider.prepare({ sourceId: "window:456:0", kind: "window" }, abort.signal);
         expect(deps.probe).toHaveBeenCalledTimes(1);
-        expect(deps.resolveWindowPid).toHaveBeenCalledWith(
-            "C:\\app\\native\\windows-process-loopback\\build\\windows-x64\\windows-process-loopback.exe",
-            "window:456:0",
-            abort.signal,
-        );
+        expect(deps.resolveWindowPid).toHaveBeenCalledWith(unpackagedExecutable, "window:456:0", abort.signal);
         const started = capture.start({ pendingPackets: 0, post: vi.fn(() => true) });
         child.stdout.write(startPacket());
         await started;
-        expect(deps.spawnProcess).toHaveBeenCalledWith(
-            "C:\\app\\native\\windows-process-loopback\\build\\windows-x64\\windows-process-loopback.exe",
-            ["stream", "321", "include"],
-        );
+        expect(deps.spawnProcess).toHaveBeenCalledWith(unpackagedExecutable, ["stream", "321", "include"]);
         await capture.stop();
     });
 
@@ -200,10 +200,7 @@ describe("process-loopback screen-share audio provider", () => {
         child.stdout.write(startPacket());
         await started;
         child.stdout.write(framedPacket(2, 0, 0, Buffer.alloc(1_920, 1)));
-        expect(deps.spawnProcess).toHaveBeenCalledWith(
-            "C:\\app\\native\\windows-process-loopback\\build\\windows-x64\\windows-process-loopback.exe",
-            ["stream", "123", "exclude"],
-        );
+        expect(deps.spawnProcess).toHaveBeenCalledWith(unpackagedExecutable, ["stream", "123", "exclude"]);
         expect(post).toHaveBeenCalledOnce();
         expect(post.mock.calls[0][0]).toMatchObject({ sequence: 0, startFrame: 0 });
         await capture.stop();

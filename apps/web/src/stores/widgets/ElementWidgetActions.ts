@@ -54,10 +54,6 @@ export interface IScreenShareAudioSessionApiRequest extends IWidgetApiRequest {
     };
 }
 
-export interface IScreenShareAudioSessionApiResponse {
-    accepted: boolean;
-}
-
 export interface IHangupCallApiRequest extends IWidgetApiRequest {
     data: {
         errorMessage?: string;
