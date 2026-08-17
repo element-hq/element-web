@@ -183,10 +183,20 @@
     .line {
         padding-block: var(--event-tile-group-line-spacing-block-start) var(--event-tile-group-line-spacing-block-end);
         padding-inline-start: var(--event-tile-group-gutter);
-        margin-inline-end: 80px;
         min-height: 14px;
         border-radius: 8px;
         line-height: var(--event-tile-group-line-height);
+    }
+
+    &.hasReceiptSlot .line {
+        margin-inline-end: 80px;
+    }
+
+    &.hasReceiptSlot .slotThreadInfo {
+        /* Keep the thread affordance out of the receipt interaction gutter. */
+        margin-inline-end: 80px;
+        min-height: 14px;
+        max-width: min(calc(100% - var(--event-tile-group-gutter) - 80px), 600px);
     }
 
     .slotSender {

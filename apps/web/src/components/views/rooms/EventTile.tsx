@@ -1070,7 +1070,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 <ReceiptAdapter
                     receiptState={receiptState}
                     eventSendStatus={this.props.eventSendStatus}
-                    showReadReceipts={this.props.showReadReceipts}
                     readReceipts={this.props.readReceipts}
                     readReceiptMap={this.props.readReceiptMap}
                     checkUnmounting={this.props.checkUnmounting}

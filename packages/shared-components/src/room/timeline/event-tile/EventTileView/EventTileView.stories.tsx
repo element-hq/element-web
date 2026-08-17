@@ -500,15 +500,21 @@ const StorySearchThreadInfo = (): React.ReactElement => (
         View in thread
     </a>
 );
-const StoryReceipt = (): React.ReactElement => (
+const StoryReceipt = ({ empty = false }: { empty?: boolean }): React.ReactElement => (
     <span className={styles.receipt}>
         <span className={styles.readReceiptGroup}>
-            <button type="button" className={styles.readReceiptButton} aria-label="Read by Alex and Taylor">
-                <span className={styles.readReceiptContainer} aria-hidden="true">
-                    <span className={styles.receiptAvatar}>T</span>
-                    <span className={styles.receiptAvatar}>A</span>
+            {empty ? (
+                <span className={styles.readReceiptButton} aria-hidden="true">
+                    <span className={styles.readReceiptContainer} />
                 </span>
-            </button>
+            ) : (
+                <button type="button" className={styles.readReceiptButton} aria-label="Read by Alex and Taylor">
+                    <span className={styles.readReceiptContainer} aria-hidden="true">
+                        <span className={styles.receiptAvatar}>T</span>
+                        <span className={styles.receiptAvatar}>A</span>
+                    </span>
+                </button>
+            )}
         </span>
     </span>
 );
@@ -611,7 +617,14 @@ const createRoomStorySlots = ({
     timestamp?: React.ReactNode;
     showActionBar: boolean;
 }): EventTileViewProps["slots"] => {
-    const baseSlots = isOwnEvent ? slots : { body: slots.body };
+    const baseSlots = isOwnEvent
+        ? slots
+        : {
+              body: slots.body,
+              // The application keeps an empty receipt group mounted on every event
+              // while read receipts are enabled, even when this event has no receipts.
+              receipt: slots.receipt ? <StoryReceipt empty /> : undefined,
+          };
     return {
         ...baseSlots,
         sender,

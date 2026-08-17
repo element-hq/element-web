@@ -434,6 +434,64 @@ describe("EventTileView", () => {
         );
     });
 
+    it("renders multiple slot children inside one wrapper boundary", () => {
+        const { getByTestId } = render(
+            <EventTileView
+                {...createProps({
+                    slots: {
+                        body: (
+                            <>
+                                <span data-testid="fragment-child-one">One</span>
+                                <span data-testid="fragment-child-two">Two</span>
+                            </>
+                        ),
+                    },
+                })}
+            />,
+        );
+
+        const firstChild = getByTestId("fragment-child-one");
+        const secondChild = getByTestId("fragment-child-two");
+        const wrapper = firstChild.closest('[data-testid="event-tile-slot-body"]');
+
+        expect(wrapper).not.toBeNull();
+        expect(secondChild.parentElement).toBe(wrapper);
+        expect(wrapper).toHaveClass(styles.slotBody);
+        expect(wrapper?.children).toHaveLength(2);
+    });
+
+    it.each([undefined, null, false] as const)("does not render a wrapper for an empty %s slot", (content) => {
+        const { container } = render(
+            <EventTileView
+                {...createProps({
+                    slots: {
+                        body: <span data-testid="body">Body</span>,
+                        avatar: content,
+                    },
+                })}
+            />,
+        );
+
+        expect(container.querySelector('[data-testid="event-tile-slot-avatar"]')).not.toBeInTheDocument();
+    });
+
+    it("derives receipt gutter styling from receipt slot presence", () => {
+        const withReceipt = render(
+            <EventTileView
+                {...createProps({
+                    slots: {
+                        body: <span data-testid="body">Body</span>,
+                        receipt: <span data-testid="receipt">Receipt</span>,
+                    },
+                })}
+            />,
+        );
+        const withoutReceipt = render(<EventTileView {...createProps()} />);
+
+        expect(withReceipt.container.querySelector("li")).toHaveClass(styles.hasReceiptSlot);
+        expect(withoutReceipt.container.querySelector("li")).not.toHaveClass(styles.hasReceiptSlot);
+    });
+
     it.each(["group", "bubble"] as const)("renders the %s thread layout in the original slot order", (layout) => {
         const { container, getByTestId } = render(
             <EventTileView
