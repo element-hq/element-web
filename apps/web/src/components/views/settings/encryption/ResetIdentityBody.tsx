@@ -17,7 +17,6 @@ import { uiAuthCallback } from "../../../../CreateCrossSigning";
 import { EncryptionCardButtons } from "./EncryptionCardButtons";
 import { EncryptionCardEmphasisedContent } from "./EncryptionCardEmphasisedContent";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
-import {reject} from "lodash";
 
 interface ResetIdentityBodyProps {
     /**
