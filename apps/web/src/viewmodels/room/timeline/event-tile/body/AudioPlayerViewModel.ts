@@ -83,7 +83,7 @@ export class AudioPlayerViewModel
 
         // Don't wait for the promise to complete - it will emit a progress update when it
         // is done, and it's not meant to take long anyhow.
-        this.preparePlayback();
+        void this.preparePlayback();
     }
 
     /**
@@ -113,13 +113,13 @@ export class AudioPlayerViewModel
 
         switch (action) {
             case KeyBindingAction.Space:
-                this.togglePlay();
+                void this.togglePlay();
                 break;
             case KeyBindingAction.ArrowLeft:
-                this.props.playback.skipTo(this.props.playback.timeSeconds - ARROW_SKIP_SECONDS);
+                void this.props.playback.skipTo(this.props.playback.timeSeconds - ARROW_SKIP_SECONDS);
                 break;
             case KeyBindingAction.ArrowRight:
-                this.props.playback.skipTo(this.props.playback.timeSeconds + ARROW_SKIP_SECONDS);
+                void this.props.playback.skipTo(this.props.playback.timeSeconds + ARROW_SKIP_SECONDS);
                 break;
             default:
                 handled = false;

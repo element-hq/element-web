@@ -160,7 +160,7 @@ export class SDKContextClass {
     public get spaceStore(): SpaceStore {
         if (!this._SpaceStore) {
             this._SpaceStore = new SpaceStore(defaultDispatcher, this);
-            this._SpaceStore.start();
+            void this._SpaceStore.start();
         }
         return this._SpaceStore;
     }
@@ -215,7 +215,7 @@ export class SDKContextClass {
     public get latestRtcNotificationEventStore(): LatestRtcNotificationEventStore {
         if (!this._LatestRtcNotificationEventStore) {
             this._LatestRtcNotificationEventStore = new LatestRtcNotificationEventStore(this.callStore);
-            this._LatestRtcNotificationEventStore.start();
+            void this._LatestRtcNotificationEventStore.start();
         }
         return this._LatestRtcNotificationEventStore;
     }
