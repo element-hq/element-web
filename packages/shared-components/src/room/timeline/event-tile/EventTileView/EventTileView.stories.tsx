@@ -13,7 +13,12 @@ import { Avatar } from "@vector-im/compound-web";
 import { ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { useMockedViewModel } from "../../../../core/viewmodel";
-import { useEventPresentation, type EventLayout } from "../../EventPresentation";
+import {
+    EventPresentationProvider,
+    useEventPresentation,
+    type EventDensity,
+    type EventLayout,
+} from "../../EventPresentation";
 import { withViewDocs } from "../../../../../.storybook/withViewDocs";
 import {
     NotificationBadgeView,
@@ -167,8 +172,7 @@ const createStorySender = (
 
     const name = isOwnEvent ? "Alice" : "Bob";
     const id = isOwnEvent ? "@alice:example.org" : "@bob:example.org";
-    const className = layout === "irc" ? styles.ircSender : undefined;
-    return <StorySender name={name} id={id} className={className} />;
+    return <StorySender name={name} id={id} />;
 };
 
 const createStoryAvatar = (
@@ -524,26 +528,73 @@ const StoryContextMenu = (): React.ReactElement => <span className={styles.conte
 const TimelineStoryFrame = ({
     density,
     layout,
+    shape,
+    rightPanel = false,
+    presentationNotice,
     children,
-}: React.PropsWithChildren<{ density: string; layout: string }>): React.ReactElement => (
-    <StoryDebugFrame>
-        <div className={styles.storySurface} data-story-boundary="Timeline">
-            <div className={styles.timeline} data-story-boundary="RoomView.timeline" data-event-layout={layout}>
-                <div className={styles.scrollPanel} data-story-boundary="ScrollPanel">
-                    <div className={styles.messageListWrapper} data-story-boundary="messageListWrapper">
-                        <ol
-                            className={styles.messageList}
-                            data-story-boundary="RoomView.MessageList"
-                            data-event-density={density}
-                        >
-                            {children}
-                        </ol>
+}: React.PropsWithChildren<{
+    density: string;
+    layout: string;
+    shape: EventTileViewProps["root"]["shape"];
+    rightPanel?: boolean;
+    presentationNotice?: StoryPresentationResolution["notice"];
+}>): React.ReactElement => {
+    const storyContext = !rightPanel
+        ? "RoomView"
+        : shape === "Card"
+          ? "TimelineCard"
+          : shape === "Notification"
+            ? "NotificationPanel"
+            : shape === "Pinned"
+              ? "PinnedMessagesCard"
+              : shape === "File"
+                ? "FilePanel"
+                : shape === "ThreadsList"
+                  ? "ThreadPanel"
+                  : "ThreadView";
+    const messageListBoundary = shape === "Pinned" ? "PinnedMessagesCard.wrapper" : `${storyContext}.MessageList`;
+    const storySurfaceClassName = classNames(styles.storySurface, {
+        [styles.storyRightPanel]: rightPanel,
+        [styles.storyPinnedPanel]: shape === "Pinned",
+        [styles.storyFilePanel]: shape === "File",
+        [styles.storyThreadsListPanel]: shape === "ThreadsList",
+        [styles.storyThreadPanel]: shape === "Thread",
+    });
+
+    return (
+        <StoryDebugFrame>
+            {presentationNotice && (
+                <div
+                    className={classNames(styles.presentationNotice, {
+                        [styles.presentationNoticeInvalid]: presentationNotice.invalid,
+                    })}
+                    role="status"
+                >
+                    {presentationNotice.text}
+                </div>
+            )}
+            <div className={storySurfaceClassName} data-story-boundary="Timeline">
+                <div
+                    className={styles.timeline}
+                    data-story-boundary={`${storyContext}.timeline`}
+                    data-event-layout={layout}
+                >
+                    <div className={styles.scrollPanel} data-story-boundary="ScrollPanel">
+                        <div className={styles.messageListWrapper} data-story-boundary="messageListWrapper">
+                            <ol
+                                className={styles.messageList}
+                                data-story-boundary={messageListBoundary}
+                                data-event-density={density}
+                            >
+                                {children}
+                            </ol>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </StoryDebugFrame>
-);
+        </StoryDebugFrame>
+    );
+};
 
 const baseRoot: EventTileViewProps["root"] = {
     id: "event-tile-story-line",
@@ -591,6 +642,119 @@ type EventTileStoryProps = Omit<EventTileViewProps, "root"> & {
     shape: EventTileViewProps["root"]["shape"];
     state?: Partial<EventTileViewProps["root"]["state"]>;
     roomMessages?: "boundaries" | "alice" | "bob";
+};
+
+type StoryPresentation = {
+    layout: EventLayout;
+    density: EventDensity;
+};
+
+type StoryPresentationPolicy = {
+    host: string;
+    allowedLayouts: readonly EventLayout[];
+    fixedLayout?: EventLayout;
+    fixedDensity?: EventDensity;
+    usesSharedPresentation: boolean;
+};
+
+type StoryPresentationResolution = {
+    requested: StoryPresentation;
+    effective: StoryPresentation;
+    notice?: {
+        invalid: boolean;
+        text: string;
+    };
+};
+
+const allEventLayouts: readonly EventLayout[] = ["group", "bubble", "irc"];
+
+const storyPresentationPolicies: Partial<Record<EventTileViewProps["root"]["shape"], StoryPresentationPolicy>> = {
+    Card: {
+        host: "TimelineCard",
+        allowedLayouts: ["group", "bubble"],
+        usesSharedPresentation: true,
+    },
+    Notification: {
+        host: "NotificationPanel",
+        allowedLayouts: ["group"],
+        fixedLayout: "group",
+        usesSharedPresentation: true,
+    },
+    Pinned: {
+        host: "PinnedMessagesCard",
+        allowedLayouts: ["group"],
+        fixedLayout: "group",
+        fixedDensity: "default",
+        usesSharedPresentation: false,
+    },
+    File: {
+        host: "FilePanel",
+        allowedLayouts: ["group"],
+        fixedLayout: "group",
+        usesSharedPresentation: true,
+    },
+    ThreadsList: {
+        host: "ThreadPanel",
+        allowedLayouts: ["group"],
+        fixedLayout: "group",
+        usesSharedPresentation: true,
+    },
+    Thread: {
+        host: "ThreadView",
+        allowedLayouts: ["group", "bubble"],
+        usesSharedPresentation: true,
+    },
+};
+
+const formatPresentation = ({ layout, density }: StoryPresentation): string =>
+    `${layout === "group" ? "Group" : layout === "bubble" ? "Bubble" : "IRC"} / ${
+        density === "compact" ? "Compact" : "Default"
+    }`;
+
+const resolveStoryPresentation = (
+    shape: EventTileViewProps["root"]["shape"],
+    requested: StoryPresentation,
+): StoryPresentationResolution => {
+    const policy = storyPresentationPolicies[shape] ?? {
+        host: "RoomView",
+        allowedLayouts: allEventLayouts,
+        usesSharedPresentation: true,
+    };
+    const effectiveLayout =
+        policy.fixedLayout ?? (policy.allowedLayouts.includes(requested.layout) ? requested.layout : "group");
+    const effectiveDensity =
+        policy.fixedDensity ??
+        (requested.density === "default" || effectiveLayout === "group" ? requested.density : "default");
+    const effective = { layout: effectiveLayout, density: effectiveDensity };
+    const invalid = effective.layout !== requested.layout || effective.density !== requested.density;
+    const unsupportedStory = !policy.usesSharedPresentation;
+
+    if (!invalid && !unsupportedStory) {
+        return { requested, effective };
+    }
+
+    const constraints = policy.fixedLayout
+        ? `fixes the shape to ${shape} and the layout to Group`
+        : `renders the ${shape} shape and supports ${policy.allowedLayouts.map((layout) => formatPresentation({ layout, density: "default" }).split(" /")[0]).join(" or ")} layout`;
+    const densityConstraint = policy.fixedDensity
+        ? " and Default density"
+        : "; Compact density is available only with Group layout";
+    const sourceConstraint = policy.usesSharedPresentation
+        ? ""
+        : " The application currently renders this panel with PinnedEventTile";
+    const prefix = invalid ? "Unsupported presentation." : "Unsupported story.";
+    const rendered = invalid
+        ? ` Requested: ${formatPresentation(requested)} · Rendered: ${formatPresentation(effective)}.`
+        : ` Requested and rendered: ${formatPresentation(effective)}.`;
+
+    return {
+        requested,
+        effective,
+        notice: {
+            invalid: true,
+            text: `${prefix} ${policy.host} ${constraints}${densityConstraint}.${sourceConstraint}${rendered}`,
+        },
+    };
 };
 
 const createStoryTimestamp = (
@@ -658,7 +822,9 @@ function EventTileViewStoryContent({
     roomMessages = "boundaries",
     ...props
 }: EventTileStoryProps): React.ReactElement {
-    const { layout, density } = useEventPresentation();
+    const requestedPresentation = useEventPresentation();
+    const presentation = resolveStoryPresentation(shape, requestedPresentation);
+    const { layout, density } = presentation.effective;
     const [tileInteractions, setTileInteractions] = React.useState<
         Record<string, { hovered: boolean; focused: boolean }>
     >({});
@@ -771,12 +937,28 @@ function EventTileViewStoryContent({
         );
     };
 
-    const tiles = shape === "Room" ? renderRoomTiles() : renderTile(false, "event");
+    const tiles = shape === "Pinned" ? null : shape === "Room" ? renderRoomTiles() : renderTile(false, "event");
+
+    const rightPanel =
+        shape === "Card" ||
+        shape === "Notification" ||
+        shape === "Pinned" ||
+        shape === "File" ||
+        shape === "ThreadsList" ||
+        shape === "Thread";
 
     return (
-        <TimelineStoryFrame density={density} layout={layout}>
-            {tiles}
-        </TimelineStoryFrame>
+        <EventPresentationProvider value={presentation.effective}>
+            <TimelineStoryFrame
+                density={density}
+                layout={layout}
+                shape={shape}
+                rightPanel={rightPanel}
+                presentationNotice={presentation.notice}
+            >
+                {tiles}
+            </TimelineStoryFrame>
+        </EventPresentationProvider>
     );
 }
 

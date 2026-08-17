@@ -15,6 +15,9 @@ Please see LICENSE files in the repository root for full details.
     --icon-width: 14px;
     --line-height: var(--irc-line-height);
     --right-padding: 5px;
+    /* Map application IRC geometry onto the shared EventTileView API. */
+    --event-tile-irc-name-width: var(--name-width);
+    --event-tile-irc-timestamp-width: var(--MessageTimestamp-width);
 
     line-height: var(--line-height) !important;
 
@@ -25,6 +28,15 @@ Please see LICENSE files in the repository root for full details.
     .mx_NewRoomIntro {
         > h2 {
             line-height: initial; /* Cancel var(--irc-line-height) */
+        }
+    }
+
+    .mx_EventTile_avatar {
+        > .mx_BaseAvatar,
+        > .mx_BaseAvatar > * {
+            /* Need to use important to override the js calculated values. */
+            font-size: $font-10px !important;
+            line-height: calc($font-15px - 2px) !important;
         }
     }
 

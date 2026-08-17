@@ -1,13 +1,66 @@
 /* Story-only timeline context. The hierarchy mirrors RoomView/ScrollPanel. */
 
 .storySurface {
+    box-sizing: border-box;
     width: min(100%, 680px);
     min-height: 220px;
     margin: 0;
-    padding: 24px;
+    padding: 0;
     list-style: none;
     background: var(--cpd-color-bg-canvas-default, #fff);
     color: var(--cpd-color-text-primary, #17191c);
+}
+
+.presentationNotice {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 8px 12px;
+    border-block-end: 1px solid var(--cpd-color-border-subtle, #c9ced4);
+    color: var(--cpd-color-text-secondary, #5e6670);
+    background: var(--cpd-color-bg-subtle-secondary, #f1f3f5);
+    font: var(--cpd-font-body-sm-regular, 12px/1.4 sans-serif);
+}
+
+.presentationNoticeInvalid {
+    border-block-end-color: var(--cpd-color-border-critical, #e35f5f);
+    color: var(--cpd-color-text-critical-primary, #a52b2b);
+    background: var(--cpd-color-bg-critical-subtle, #fff0f0);
+}
+
+/* Pinned, file, thread, and threads-list tiles are rendered in the 320px
+   right panel in the application. */
+.storySurface.storyRightPanel {
+    width: 320px;
+}
+
+.storySurface.storyRightPanel .messageList {
+    padding: 14px 18px;
+}
+
+.storySurface.storyRightPanel.storyThreadPanel .messageList,
+.storySurface.storyRightPanel.storyThreadsListPanel .messageList {
+    padding-inline: 8px;
+}
+
+.storySurface.storyRightPanel.storyThreadPanel .messageListWrapper {
+    width: calc(100% + 6px);
+}
+
+/* PinnedMessagesCard uses its own 16px/24px content spacing. */
+.storySurface.storyPinnedPanel .messageList {
+    gap: var(--cpd-space-6x, 24px);
+    padding: var(--cpd-space-4x, 16px);
+}
+
+/* FilePanel keeps the right-panel inset and separates file tiles by 24px. */
+.storySurface.storyFilePanel .messageList {
+    gap: var(--cpd-space-6x, 24px);
+}
+
+.storySurface.storyFilePanel .messageListWrapper {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
 .debugFrame {
@@ -119,29 +172,6 @@
 .searchThreadInfo svg {
     width: 18px;
     height: 18px;
-}
-
-/* Match the application IRC profile treatment without adding application
-   selectors to the shared EventTileView stylesheet. */
-.ircSender {
-    width: var(--event-tile-irc-name-width, 80px);
-    margin-inline-end: 0;
-    overflow: hidden;
-    text-align: start;
-}
-
-.ircSender :global(.mx_DisambiguatedProfile_displayName) {
-    display: inline-block;
-    width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: start;
-}
-
-.ircSender :global(.mx_DisambiguatedProfile_mxid) {
-    visibility: collapse;
-    margin-inline-start: 0;
-    padding-inline: 5px;
 }
 
 .replyAuthor,
