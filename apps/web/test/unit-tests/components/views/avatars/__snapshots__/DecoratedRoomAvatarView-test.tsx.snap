@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`<RoomAvatarView /> should not render a decoration 1`] = `
+exports[`<DecoratedRoomAvatarView /> should not render a decoration 1`] = `
 <DocumentFragment>
   <span
     aria-label="Avatar"
@@ -8,6 +8,7 @@ exports[`<RoomAvatarView /> should not render a decoration 1`] = `
     data-color="1"
     data-testid="avatar-img"
     data-type="round"
+    role="img"
     style="--cpd-avatar-size: 32px;"
   >
     <img
@@ -24,7 +25,7 @@ exports[`<RoomAvatarView /> should not render a decoration 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<RoomAvatarView /> should render a low priority room decoration 1`] = `
+exports[`<DecoratedRoomAvatarView /> should render a low priority room decoration 1`] = `
 <DocumentFragment>
   <div
     class="_flex_4dswl_9 mx_RoomAvatarView"
@@ -36,6 +37,7 @@ exports[`<RoomAvatarView /> should render a low priority room decoration 1`] = `
       data-color="1"
       data-testid="avatar-img"
       data-type="round"
+      role="img"
       style="--cpd-avatar-size: 32px;"
     >
       <img
@@ -68,7 +70,7 @@ exports[`<RoomAvatarView /> should render a low priority room decoration 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<RoomAvatarView /> should render a public room decoration 1`] = `
+exports[`<DecoratedRoomAvatarView /> should render a public room decoration 1`] = `
 <DocumentFragment>
   <div
     class="_flex_4dswl_9 mx_RoomAvatarView"
@@ -80,6 +82,7 @@ exports[`<RoomAvatarView /> should render a public room decoration 1`] = `
       data-color="1"
       data-testid="avatar-img"
       data-type="round"
+      role="img"
       style="--cpd-avatar-size: 32px;"
     >
       <img
@@ -112,7 +115,7 @@ exports[`<RoomAvatarView /> should render a public room decoration 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<RoomAvatarView /> should render a video room decoration 1`] = `
+exports[`<DecoratedRoomAvatarView /> should render a video room decoration 1`] = `
 <DocumentFragment>
   <div
     class="_flex_4dswl_9 mx_RoomAvatarView"
@@ -124,6 +127,7 @@ exports[`<RoomAvatarView /> should render a video room decoration 1`] = `
       data-color="1"
       data-testid="avatar-img"
       data-type="round"
+      role="img"
       style="--cpd-avatar-size: 32px;"
     >
       <img
@@ -156,7 +160,7 @@ exports[`<RoomAvatarView /> should render a video room decoration 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<RoomAvatarView /> should render the busy presence 1`] = `
+exports[`<DecoratedRoomAvatarView /> should render the busy presence 1`] = `
 <DocumentFragment>
   <div
     class="_flex_4dswl_9 mx_RoomAvatarView"
@@ -168,6 +172,7 @@ exports[`<RoomAvatarView /> should render the busy presence 1`] = `
       data-color="1"
       data-testid="avatar-img"
       data-type="round"
+      role="img"
       style="--cpd-avatar-size: 32px;"
     >
       <img
@@ -215,7 +220,7 @@ exports[`<RoomAvatarView /> should render the busy presence 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<RoomAvatarView /> should render the offline presence 1`] = `
+exports[`<DecoratedRoomAvatarView /> should render the offline presence 1`] = `
 <DocumentFragment>
   <div
     class="_flex_4dswl_9 mx_RoomAvatarView"
@@ -227,6 +232,7 @@ exports[`<RoomAvatarView /> should render the offline presence 1`] = `
       data-color="1"
       data-testid="avatar-img"
       data-type="round"
+      role="img"
       style="--cpd-avatar-size: 32px;"
     >
       <img
@@ -274,7 +280,7 @@ exports[`<RoomAvatarView /> should render the offline presence 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<RoomAvatarView /> should render the online presence 1`] = `
+exports[`<DecoratedRoomAvatarView /> should render the online presence 1`] = `
 <DocumentFragment>
   <div
     class="_flex_4dswl_9 mx_RoomAvatarView"
@@ -286,6 +292,7 @@ exports[`<RoomAvatarView /> should render the online presence 1`] = `
       data-color="1"
       data-testid="avatar-img"
       data-type="round"
+      role="img"
       style="--cpd-avatar-size: 32px;"
     >
       <img
@@ -331,7 +338,7 @@ exports[`<RoomAvatarView /> should render the online presence 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<RoomAvatarView /> should render the unavailable presence 1`] = `
+exports[`<DecoratedRoomAvatarView /> should render the unavailable presence 1`] = `
 <DocumentFragment>
   <div
     class="_flex_4dswl_9 mx_RoomAvatarView"
@@ -343,6 +350,7 @@ exports[`<RoomAvatarView /> should render the unavailable presence 1`] = `
       data-color="1"
       data-testid="avatar-img"
       data-type="round"
+      role="img"
       style="--cpd-avatar-size: 32px;"
     >
       <img

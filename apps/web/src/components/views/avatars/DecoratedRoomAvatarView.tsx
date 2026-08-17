@@ -22,7 +22,7 @@ import { AvatarBadgeDecoration, useRoomAvatarViewModel } from "../../viewmodels/
 import { _t } from "../../../languageHandler";
 import { Presence } from "./WithPresenceIndicator";
 
-interface RoomAvatarViewProps {
+interface DecoratedRoomAvatarViewProps {
     /**
      * The room to display the avatar for.
      */
@@ -33,7 +33,9 @@ interface RoomAvatarViewProps {
  * Component to display the avatar of a room.
  * Currently only 32px size is supported.
  */
-export const RoomAvatarView = memo(function RoomAvatarView({ room }: RoomAvatarViewProps): JSX.Element {
+export const DecoratedRoomAvatarView = memo(function DecoratedRoomAvatarView({
+    room,
+}: DecoratedRoomAvatarViewProps): JSX.Element {
     const vm = useRoomAvatarViewModel(room);
     // No decoration, we just show the avatar
     if (!vm.badgeDecoration) return <RoomAvatar size="32px" room={room} />;
