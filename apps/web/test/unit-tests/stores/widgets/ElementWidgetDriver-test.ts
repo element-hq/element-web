@@ -462,7 +462,7 @@ describe("ElementWidgetDriver", () => {
                 return sdkConfigGet(key, altCaseName);
             });
             client.cachedRtcTransports.wait.mockRejectedValue(
-                new MatrixError({ errcode: "M_NOT_FOUND", error: "Not found" }, 404),
+                new MatrixError({ errcode: "M_UNRECOGNIZED", error: "Not found" }, 404),
             );
 
             await expect(driver.getRtcTransports()).rejects.toThrow();
@@ -492,7 +492,7 @@ describe("ElementWidgetDriver", () => {
                 return sdkConfigGet(key, altCaseName);
             });
             client.cachedRtcTransports.wait.mockRejectedValue(
-                new MatrixError({ errcode: "M_NOT_FOUND", error: "Not found" }, 404),
+                new MatrixError({ errcode: "M_UNRECOGNIZED", error: "Not found" }, 404),
             );
 
             const transports = [{ type: "livekit", livekit_service_url: "https://livekit-jwt.example.com" }];
