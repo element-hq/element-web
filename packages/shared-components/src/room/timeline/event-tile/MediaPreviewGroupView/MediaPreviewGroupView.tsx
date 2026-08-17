@@ -21,7 +21,7 @@ export type MediaPreviewGroupEntryTextContent = {
     style: "text";
 };
 
-export type ImageSize = "full" | "banner";
+export type ImageSize = "full" | "banner" | "tallbanner";
 
 export type MediaPreviewGroupEntryImageContent = {
     style: "image";
