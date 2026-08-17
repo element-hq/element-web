@@ -52,6 +52,12 @@ export const Uncollapsed: Story = {
     },
 };
 
+export const TallBanner: Story = {
+    args: {
+        videoSize: "tallbanner",
+    },
+};
+
 export const ClickableUncollapsedVideo: Story = {
     args: {
         videoSize: "full",

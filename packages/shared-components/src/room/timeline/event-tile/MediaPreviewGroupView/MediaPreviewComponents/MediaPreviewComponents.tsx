@@ -151,7 +151,7 @@ function useIsValid(check: (src: string) => Promise<boolean>, src: string): Vali
     return state;
 }
 
-function getImageClass(size: ImageSize) {
+function getImageClass(size: ImageSize): string {
     switch (size) {
         case "full":
             return styles.fullImage;
@@ -162,7 +162,7 @@ function getImageClass(size: ImageSize) {
     }
 }
 
-function getVideoClass(size: ImageSize) {
+function getVideoClass(size: ImageSize): string {
     switch (size) {
         case "full":
             return styles.fullVideo;
