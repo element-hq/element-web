@@ -43,6 +43,30 @@ describe("ReplyTileView", () => {
         expect(container.firstElementChild).toHaveClass(styles.root, styles.inline, styles.info);
     });
 
+    it("maps the event presentation layout to the reply root", () => {
+        const { container } = render(<ReplyTileView href="#">Reply content</ReplyTileView>, {
+            presentation: { layout: "bubble" },
+        });
+
+        expect(container.firstElementChild).toHaveAttribute("data-event-layout", "bubble");
+        expect(container.firstElementChild).toHaveAttribute("data-event-density", "default");
+    });
+
+    it("keeps IRC textual previews line-clampable", () => {
+        const { container } = render(
+            <ReplyTileView href="#">
+                <div className="mx_EventTile_content">
+                    <div className="mx_MTextBody mx_EventTile_body">IRC reply content</div>
+                </div>
+            </ReplyTileView>,
+            { presentation: { layout: "irc" } },
+        );
+
+        const body = container.querySelector<HTMLElement>(".mx_MTextBody");
+        expect(body).not.toBeNull();
+        expect(getComputedStyle(body!).display).toBe("-webkit-box");
+    });
+
     it("clips production-shaped event content to the reply preview", () => {
         const { container } = render(
             <ReplyTileView href="#">

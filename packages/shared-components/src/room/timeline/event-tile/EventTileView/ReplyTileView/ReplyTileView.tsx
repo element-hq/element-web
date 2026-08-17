@@ -8,6 +8,7 @@
 import React, { type JSX, type MouseEventHandler, type ReactNode, type Ref } from "react";
 import classNames from "classnames";
 
+import { useEventPresentationAttributes } from "../../../EventPresentation/EventPresentationContext";
 import styles from "./ReplyTileView.module.css";
 
 export interface ReplyTileViewProps {
@@ -48,6 +49,8 @@ export function ReplyTileView({
     className,
     senderClassName,
 }: ReplyTileViewProps): JSX.Element {
+    const eventPresentationAttributes = useEventPresentationAttributes();
+
     return (
         <div
             className={classNames(
@@ -58,6 +61,7 @@ export function ReplyTileView({
                 },
                 className,
             )}
+            {...eventPresentationAttributes}
         >
             <a href={href} onClick={onClick} ref={ref}>
                 {sender ? <div className={classNames(styles.sender, senderClassName)}>{sender}</div> : null}

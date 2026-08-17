@@ -97,6 +97,14 @@
     gap: 4px;
 }
 
+.root[data-event-layout="irc"] {
+    :global(.mx_EventTile_content) {
+        :global(.mx_MTextBody.mx_EventTile_body) {
+            display: -webkit-box;
+        }
+    }
+}
+
 .info {
     padding-top: 0;
 }
