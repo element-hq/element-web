@@ -77,6 +77,7 @@
     "notifications": {
         "all_messages": "所有消息",
         "default_settings": "跟随系统设置",
+        "mark_all_read": "全部设为已读",
         "mentions_keywords": "提及与关键词",
         "message_didnt_send": "消息未发送。点击以获取信息。",
         "mute_room": "静默房间"
@@ -95,6 +96,8 @@
             "shared": "新成员可以看到历史",
             "world_readable": "任何人都可以看到历史"
         },
+        "jump_read_marker": "跳转到首个未读消息。",
+        "jump_to_bottom_button": "滚动到最近的消息",
         "jump_to_date": "跳转到日期",
         "jump_to_date_beginning": "房间的开头",
         "jump_to_date_prompt": "选择日期以跳转",
