@@ -101,6 +101,68 @@ function hostNameFirstChar(hostName: string): string {
     return hostName.slice(0, 1).toUpperCase();
 }
 
+function useEntryContents(entry: MessageComposerUrlPreviewSnapshotEntry): {
+    entryIcon: JSX.Element;
+    entryTitle: string;
+    showTooltipOnLink: boolean;
+} {
+    const { translate: _t } = useI18n();
+    const hostname = new URL(entry.matched_url).hostname;
+
+    switch (entry.status) {
+        case "loaded": {
+            const thumbnail = entry.preview?.image?.imageThumb !== undefined && (
+                <img src={entry.preview.image?.imageThumb} alt={entry.preview.image.alt} />
+            );
+            return {
+                entryIcon: (
+                    <div
+                        className={styles.entryIcon}
+                        style={
+                            thumbnail
+                                ? {}
+                                : {
+                                      /**
+                                       * picks a HSL colour that is
+                                       * - 100% in saturation
+                                       * - var(--icon-lightness) in lightness, which depends on light/dark theme
+                                       * - hue is selected by the hashcode function, effectly unique for each site
+                                       */
+                                      backgroundColor: `hsl(${hashCode(hostname)}, 100%, var(--icon-lightness))`,
+                                  }
+                        }
+                    >
+                        {thumbnail || hostNameFirstChar(hostname)}
+                    </div>
+                ),
+                entryTitle: entry.preview.title,
+                showTooltipOnLink: entry.preview.showTooltipOnLink,
+            };
+        }
+        case "loading":
+            return {
+                entryIcon: (
+                    <div className={styles.loadingSpinner}>
+                        <InlineSpinner />
+                    </div>
+                ),
+                entryTitle: _t("composer|url_preview|loading"),
+                showTooltipOnLink: false,
+            };
+
+        case "failed":
+            return {
+                entryIcon: (
+                    <div className={styles.failedIcon}>
+                        <ErrorIcon />
+                    </div>
+                ),
+                entryTitle: _t("composer|url_preview|failed"),
+                showTooltipOnLink: false,
+            };
+    }
+}
+
 function UrlPreviewExpandedEntry({
     entry,
     removePreview,
@@ -111,61 +173,7 @@ function UrlPreviewExpandedEntry({
     className?: string;
 }): JSX.Element {
     const { translate: _t } = useI18n();
-
-    const hostname = new URL(entry.matched_url).hostname;
-    let entryIcon: JSX.Element;
-    let entryTitle: string;
-    let showTooltipOnLink: boolean;
-
-    switch (entry.status) {
-        case "loaded":
-            const thumbnail = entry.preview?.image?.imageThumb !== undefined && (
-                <img src={entry.preview.image?.imageThumb} alt={entry.preview.image.alt} />
-            );
-            entryIcon = (
-                <div
-                    className={styles.entryIcon}
-                    style={
-                        thumbnail
-                            ? {}
-                            : {
-                                  /**
-                                   * picks a HSL colour that is
-                                   * - 100% in saturation
-                                   * - var(--icon-lightness) in lightness, which depends on light/dark theme
-                                   * - hue is selected by the hashcode function, effectly unique for each site
-                                   */
-                                  backgroundColor: `hsl(${hashCode(hostname)}, 100%, var(--icon-lightness))`,
-                              }
-                    }
-                >
-                    {thumbnail || hostNameFirstChar(hostname)}
-                </div>
-            );
-            entryTitle = entry.preview.title;
-            showTooltipOnLink = entry.preview.showTooltipOnLink;
-            break;
-
-        case "loading":
-            entryIcon = (
-                <div className={styles.loadingSpinner}>
-                    <InlineSpinner />
-                </div>
-            );
-            entryTitle = _t("composer|url_preview|loading");
-            showTooltipOnLink = false;
-            break;
-
-        case "failed":
-            entryIcon = (
-                <div className={styles.failedIcon}>
-                    <ErrorIcon />
-                </div>
-            );
-            entryTitle = _t("composer|url_preview|failed");
-            showTooltipOnLink = false;
-            break;
-    }
+    const { entryIcon, entryTitle, showTooltipOnLink } = useEntryContents(entry);
 
     const onRemovePreview = useCallback((): void => {
         removePreview?.(entry.matched_url);
@@ -182,7 +190,7 @@ function UrlPreviewExpandedEntry({
                         link={entry.matched_url}
                         classes={[styles.linkTitle]}
                     />
-                    <LinkSiteName siteName={hostname} classes={[styles.linkSiteName]} />
+                    <LinkSiteName siteName={new URL(entry.matched_url).hostname} classes={[styles.linkSiteName]} />
                 </div>
             </div>
             {removePreview ? (
@@ -190,6 +198,7 @@ function UrlPreviewExpandedEntry({
                     onClick={onRemovePreview}
                     className={classNames(styles.removePreview, styles.spanLike)}
                     aria-label={_t("composer|url_preview|remove")}
+                    type="button"
                 >
                     <CloseIcon aria-hidden={true} />
                 </button>
@@ -292,6 +301,7 @@ export function MessageComposerUrlPreviewView({
                     className={classNames(styles.collapse, styles.spanLike)}
                     onClick={toggleCollapsed}
                     aria-label={_t("composer|url_preview|collapse")}
+                    type="button"
                 >
                     <ChevronDownIcon aria-hidden={true} />
                 </button>

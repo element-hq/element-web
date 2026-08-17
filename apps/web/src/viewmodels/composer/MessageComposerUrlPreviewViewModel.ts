@@ -132,7 +132,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
                 });
             }
 
-            return this.previewCache.get(link) as MessageComposerUrlPreviewSnapshotEntry;
+            return this.previewCache.get(link)!;
         });
 
         this.snapshot.set({ entries, content });
