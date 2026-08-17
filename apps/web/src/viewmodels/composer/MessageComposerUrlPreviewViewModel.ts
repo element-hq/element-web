@@ -14,6 +14,7 @@ import {
 import { debounce } from "lodash";
 
 import { UrlPreviewFetcher } from "../../utils/UrlPreviewFetcher";
+import { linksIn } from "../../utils/UrlUtils";
 
 export const DEBOUNCE_REQUEST_TIMEOUT_MS = 500;
 
@@ -67,22 +68,13 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
         this.content = this.snapshot.current.content;
     }
 
-    public static linksIn(content: string): Set<string> {
-        return new Set(
-            content
-                .split(" ")
-                .map((w) => w.trim())
-                .filter((word) => URL.canParse(word)),
-        );
-    }
-
     private computeSnapshot(content: string): void {
         if (!this.urlPreviewVisible) {
             this.snapshot.set({ entries: [], content });
             return;
         }
 
-        const newLinks = MessageComposerUrlPreviewViewModel.linksIn(content);
+        const newLinks = linksIn(content);
         if (this.links.symmetricDifference(newLinks).size === 0) {
             // Skip if the URL set hasn't changed
             return;
