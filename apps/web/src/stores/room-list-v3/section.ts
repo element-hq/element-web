@@ -46,6 +46,7 @@ export function isCustomSectionTag(tag: string): tag is CustomTag {
  */
 export function isDefaultSectionTag(tagId: TagID): boolean {
     return (
+        tagId === DefaultTagID.Invite ||
         tagId === DefaultTagID.Favourite ||
         tagId === DefaultTagID.LowPriority ||
         tagId === CHATS_TAG ||
@@ -95,14 +96,15 @@ export type CustomSectionsData = Record<CustomTag, CustomSection>;
 export type OrderedCustomSections = CustomTag[];
 
 /**
- * Tags that can be reordered relative to each other (everything except Favourite and LowPriority,
- * which are pinned to the top and bottom respectively).
+ * Tags that can be reordered relative to each other (everything except Invite, Favourite and
+ * LowPriority, which are pinned to fixed positions).
  */
 export type ReorderableSection = CustomTag | typeof CHATS_TAG | DefaultTagID.DM;
 
 /**
  * Returns true if the given tag is a tag that can be reordered (custom section, the Chats tag or the People tag).
- * Favourite and LowPriority are pinned to the top and the bottom of the room list, so they are never reorderable.
+ * Invite and Favourite are pinned to the top of the room list, in that order, and LowPriority to the bottom,
+ * so they are never reorderable.
  * @param tag - The tag to check.
  * @param customData - The custom section data, used to reject custom sections that no longer exist.
  */
@@ -186,7 +188,8 @@ export function getOrderedCustomSections(): OrderedCustomSections {
 
 /**
  * Returns the ordered list of reorderable section tags (custom sections + the Chats and People tags).
- * Favourite and LowPriority are not included — they are pinned at the top and bottom respectively.
+ * Invite, Favourite and LowPriority are not included — the first two are pinned at the top and the last
+ * at the bottom.
  *
  * If `CHATS_TAG` is missing from the stored order (e.g. legacy data or a freshly created custom
  * section), it is appended at the end so that custom sections sit above Chats by default. Likewise
@@ -207,7 +210,7 @@ export function getOrderedReorderableSections(): ReorderableSection[] {
 }
 
 /**
- * Returns the section tags to display, in order from top to bottom. Favourite is pinned at the top
+ * Returns the section tags to display, in order from top to bottom. Invite and Favourite are pinned at the top
  * and LowPriority at the bottom, everything in between comes from {@link getOrderedReorderableSections}.
  *
  * The People section is only included when the "RoomList.showPeopleSection" setting is enabled.
@@ -217,7 +220,7 @@ export function getOrderedReorderableSections(): ReorderableSection[] {
 export function getOrderedSectionTags(): string[] {
     const showPeopleSection = SettingsStore.getValue("RoomList.showPeopleSection");
     const reorderable = getOrderedReorderableSections().filter((tag) => showPeopleSection || tag !== DefaultTagID.DM);
-    return [DefaultTagID.Favourite, ...reorderable, DefaultTagID.LowPriority];
+    return [DefaultTagID.Invite, DefaultTagID.Favourite, ...reorderable, DefaultTagID.LowPriority];
 }
 
 /**
@@ -335,8 +338,8 @@ export async function deleteSection(tag: string, isEmpty: boolean): Promise<void
 
 /**
  * Reorders sections by moving sourceTag relative to targetTag within the set of reorderable
- * sections (custom sections and the Chats tag). Favourite and LowPriority are not reorderable
- * and are rejected as either source or target.
+ * sections (custom sections and the Chats tag). Invite, Favourite and LowPriority are not
+ * reorderable and are rejected as either source or target.
  *
  * If the source was below the target, it is inserted before the target; otherwise after.
  * @param sourceTag - The tag of the section to move.

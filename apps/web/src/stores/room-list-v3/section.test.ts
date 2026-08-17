@@ -499,6 +499,17 @@ describe("section", () => {
                 stored: [DefaultTagID.DM, `${CUSTOM_SECTION_TAG_PREFIX}unknown`, CHATS_TAG],
                 expected: [DefaultTagID.DM, CHATS_TAG],
             },
+            {
+                description: "drops the pinned Invite, Favourite and LowPriority tags",
+                stored: [
+                    DefaultTagID.Invite,
+                    DefaultTagID.Favourite,
+                    DefaultTagID.DM,
+                    CHATS_TAG,
+                    DefaultTagID.LowPriority,
+                ],
+                expected: [DefaultTagID.DM, CHATS_TAG],
+            },
         ])("getOrderedReorderableSections $description", ({ stored, expected }) => {
             mockStoredOrder(stored);
             expect(getOrderedReorderableSections()).toEqual(expected);
@@ -667,20 +678,21 @@ describe("section", () => {
     });
 
     describe("isDefaultSectionTag", () => {
-        it.each([DefaultTagID.Favourite, DefaultTagID.LowPriority, CHATS_TAG, DefaultTagID.DM])(
+        it.each([DefaultTagID.Invite, DefaultTagID.Favourite, DefaultTagID.LowPriority, CHATS_TAG, DefaultTagID.DM])(
             "returns true for %s",
             (tag) => {
                 expect(isDefaultSectionTag(tag)).toBe(true);
             },
         );
 
-        it.each([DefaultTagID.Invite, "some.random.tag"])("returns false for %s", (tag) => {
+        it.each(["some.random.tag"])("returns false for %s", (tag) => {
             expect(isDefaultSectionTag(tag)).toBe(false);
         });
     });
 
     describe("isSectionTag", () => {
         it.each([
+            DefaultTagID.Invite,
             DefaultTagID.Favourite,
             DefaultTagID.LowPriority,
             CHATS_TAG,
@@ -690,7 +702,7 @@ describe("section", () => {
             expect(isSectionTag(tag)).toBe(true);
         });
 
-        it.each([DefaultTagID.Invite, "some.random.tag"])("returns false for %s", (tag) => {
+        it.each(["some.random.tag"])("returns false for %s", (tag) => {
             expect(isSectionTag(tag)).toBe(false);
         });
     });
