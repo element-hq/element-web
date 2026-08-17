@@ -47,6 +47,12 @@ export const Uncollapsed: Story = {
     },
 };
 
+export const TallBanner: Story = {
+    args: {
+        imageSize: "tallbanner",
+    },
+};
+
 export const ClickableUncollapsedImage: Story = {
     args: {
         imageSize: "full",
