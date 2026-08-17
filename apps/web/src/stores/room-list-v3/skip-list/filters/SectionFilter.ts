@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type Room } from "matrix-js-sdk/src/matrix";
+import { type Room, KnownMembership } from "matrix-js-sdk/src/matrix";
 
 import { type Filter, type FilterKey } from ".";
 import DMRoomMap from "../../../../utils/DMRoomMap";
@@ -13,9 +13,10 @@ import { CHATS_TAG } from "../../section";
 import { DefaultTagID } from "../tag";
 
 /**
- * Matches the rooms of a single section. A room belongs to exactly one section: the section of the
- * first tag it is tagged with, or, when it has none of those tags, the People section if it is a
- * direct message and the Chats section otherwise.
+ * Matches the rooms of a single section. A room belongs to exactly one section: the Invites section
+ * while the invitation is pending, otherwise the section of the first tag it is tagged with, or, when
+ * it has none of those tags, the People section if it is a direct message and the Chats section
+ * otherwise.
  *
  * The People section is optional, see the "RoomList.showPeopleSection" setting. When it is absent
  * from the section tags, direct messages go to the Chats section like any other room.
@@ -39,6 +40,11 @@ export class SectionFilter implements Filter {
     }
 
     public matches(room: Room): boolean {
+        // The invite tag comes from the membership rather than from account data, so it is not in
+        // room.tags. A pending invitation wins over every tag the user applied.
+        if (room.getMyMembership() === KnownMembership.Invite) return this.tag === DefaultTagID.Invite;
+        if (this.tag === DefaultTagID.Invite) return false;
+
         // A tag the user applied wins over being a direct message.
         const tag = this.sectionTags.find((sectionTag) => room.tags[sectionTag]);
         if (tag) return tag === this.tag;
