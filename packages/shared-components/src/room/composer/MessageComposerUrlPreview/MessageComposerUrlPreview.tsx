@@ -7,7 +7,7 @@
 
 import React, { useCallback, type JSX } from "react";
 import classNames from "classnames";
-import { InlineSpinner } from "@vector-im/compound-web";
+import { IconButton, InlineSpinner } from "@vector-im/compound-web";
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
@@ -194,14 +194,13 @@ function UrlPreviewExpandedEntry({
                 </div>
             </div>
             {removePreview ? (
-                <button
+                <IconButton
                     onClick={onRemovePreview}
                     className={classNames(styles.removePreview, styles.spanLike)}
                     aria-label={_t("composer|url_preview|remove")}
-                    type="button"
                 >
                     <CloseIcon aria-hidden={true} />
-                </button>
+                </IconButton>
             ) : null}
         </div>
     );
@@ -297,14 +296,14 @@ export function MessageComposerUrlPreviewView({
                         {_t("composer|url_preview|clear_all")}
                     </button>
                 )}
-                <button
+                <IconButton
                     className={classNames(styles.collapse, styles.spanLike)}
                     onClick={toggleCollapsed}
                     aria-label={_t("composer|url_preview|collapse")}
                     type="button"
                 >
                     <ChevronDownIcon aria-hidden={true} />
-                </button>
+                </IconButton>
             </span>
         </div>
     );

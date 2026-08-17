@@ -119,6 +119,10 @@
         cursor: pointer;
     }
 
+    .clearAll:hover {
+        color: var(--cpd-color-text-primary);
+    }
+
     .collapse {
         display: inline-block;
         width: 18px;
