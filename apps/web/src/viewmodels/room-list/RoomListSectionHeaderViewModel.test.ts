@@ -539,21 +539,35 @@ describe("RoomListSectionHeaderViewModel", () => {
                 );
             });
 
-            it("should aggregate an invitation from any room", () => {
-                vi.spyOn(notificationState, "invited", "get").mockReturnValue(true);
+            it("should report invitations as a count rather than an icon", () => {
+                const room2 = mkRoom(matrixClient, "!room2:server");
+                const notificationState2 = new RoomNotificationState(room2, false);
+                for (const state of [notificationState, notificationState2]) {
+                    // An invitation reports neither a mention nor a notification
+                    vi.spyOn(state, "invited", "get").mockReturnValue(true);
+                    vi.spyOn(state, "isMention", "get").mockReturnValue(false);
+                    vi.spyOn(state, "isNotification", "get").mockReturnValue(false);
+                }
+                vi.spyOn(RoomNotificationStateStore.instance, "getRoomState")
+                    .mockReturnValueOnce(notificationState)
+                    .mockReturnValue(notificationState2);
 
                 const vm = new RoomListSectionHeaderViewModel({
-                    tag: "m.favourite",
-                    title: "Favourites",
+                    tag: DefaultTagID.Invite,
+                    title: "Invites",
                     spaceId: "!space:server",
                     onToggleExpanded,
                 });
-                vm.setRooms([room]);
+                vm.setRooms([room, room2]);
 
                 expect(vm.getSnapshot().notification).toEqual(
                     expect.objectContaining({
                         hasAnyNotificationOrActivity: true,
-                        invited: true,
+                        // Counted as a notification so that the collapsed header renders the badge
+                        isNotification: true,
+                        count: 2,
+                        // The count is shown on its own, without the invitation icon
+                        invited: false,
                     }),
                 );
             });
