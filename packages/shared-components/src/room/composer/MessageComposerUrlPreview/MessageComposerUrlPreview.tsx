@@ -84,6 +84,11 @@ export interface MessageComposerUrlPreviewProps {
     className?: string;
 }
 
+/**
+ * Same as the Java hashCode function for strings
+ *
+ * generates a deterministic, but seemingly random number for each string
+ */
 function hashCode(str: string): number {
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
@@ -124,6 +129,12 @@ function UrlPreviewExpandedEntry({
                         thumbnail
                             ? {}
                             : {
+                                  /**
+                                   * picks a HSL colour that is
+                                   * - 100% in saturation
+                                   * - var(--icon-lightness) in lightness, which depends on light/dark theme
+                                   * - hue is selected by the hashcode function, effectly unique for each site
+                                   */
                                   backgroundColor: `hsl(${hashCode(hostname)}, 100%, var(--icon-lightness))`,
                               }
                     }
@@ -228,15 +239,16 @@ export function MessageComposerUrlPreviewView({
             <span className={styles.left}>
                 <span className={styles.icons}>
                     {links.map((entry) => {
-                        let backgroundColor: string | undefined = undefined;
+                        let backgroundColor: string | undefined;
+                        let className: string | undefined;
                         let icon: JSX.Element;
                         switch (entry.status) {
                             case "failed":
-                                backgroundColor = "var(--cpd-color-bg-critical-primary)";
+                                className = styles.summaryIconFailed;
                                 icon = <ErrorIcon />;
                                 break;
                             case "loading":
-                                backgroundColor = "var(--cpd-color-bg-subtle-primary)";
+                                className = styles.summaryIconLoading;
                                 icon = <InlineSpinner />;
                                 break;
                             case "loaded": {
@@ -258,7 +270,7 @@ export function MessageComposerUrlPreviewView({
                         return (
                             <div
                                 key={entry.matched_url}
-                                className={styles.summaryIcon}
+                                className={classNames(styles.summaryIcon, className)}
                                 style={{
                                     backgroundColor,
                                 }}
@@ -272,7 +284,7 @@ export function MessageComposerUrlPreviewView({
             </span>
             <span className={styles.right}>
                 {removePreview && (
-                    <button className={classNames(styles.clearAll, styles.spanLike)} onClick={clearAll}>
+                    <button className={classNames(styles.clearAll, styles.spanLike)} onClick={clearAll} type="button">
                         {_t("composer|url_preview|clear_all")}
                     </button>
                 )}

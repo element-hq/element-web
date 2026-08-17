@@ -98,6 +98,14 @@
         }
     }
 
+    .summaryIconFailed {
+        background-color: var(--cpd-color-bg-critical-primary);
+    }
+
+    .summaryIconLoading {
+        background-color: var(--cpd-color-bg-subtle-primary);
+    }
+
     .linkCount {
         margin-left: var(--cpd-space-3x);
         font-weight: 500;
