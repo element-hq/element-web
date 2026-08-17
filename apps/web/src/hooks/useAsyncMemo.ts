@@ -16,7 +16,7 @@ export function useAsyncMemo<T>(fn: Fn<T>, deps: DependencyList, initialValue?: 
     const [value, setValue] = useState<T | undefined>(initialValue);
     useEffect(() => {
         let discard = false;
-        fn().then((v) => {
+        void fn().then((v) => {
             if (!discard) {
                 setValue(v);
             }

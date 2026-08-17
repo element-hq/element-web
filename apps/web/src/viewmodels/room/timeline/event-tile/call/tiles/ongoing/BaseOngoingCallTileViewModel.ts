@@ -172,7 +172,7 @@ export class BaseOngoingCallViewModel<
         }
         const callType = getIntentFromEvent(this.props.mxEvent);
         const type = callType === SharedComponentsCallType.Voice ? CallType.Voice : CallType.Video;
-        placeCall(
+        void placeCall(
             this.props.legacyCallHandler,
             room,
             type,

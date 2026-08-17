@@ -45,18 +45,23 @@ exports[`<SeparatorView /> > renders Default story 1`] = `
         style="flex: 0 0 auto; touch-action: none;"
         tabindex="0"
       >
-        <svg
-          fill="currentColor"
-          height="12px"
-          transform="rotate(90)"
-          viewBox="3.999704360961914 8.999704360961914 16.000295639038086 6.000591278076172"
-          width="20px"
-          xmlns="http://www.w3.org/2000/svg"
+        <div
+          class="SeparatorView-module_content"
         >
-          <path
-            d="M5 15a.97.97 0 0 1-.713-.287A.97.97 0 0 1 4 14q0-.424.287-.713A.97.97 0 0 1 5 13h14q.424 0 .712.287.288.288.288.713 0 .424-.288.713A.97.97 0 0 1 19 15zm0-4a.97.97 0 0 1-.713-.287A.97.97 0 0 1 4 10q0-.424.287-.713A.97.97 0 0 1 5 9h14q.424 0 .712.287Q20 9.576 20 10t-.288.713A.97.97 0 0 1 19 11z"
-          />
-        </svg>
+          <svg
+            class="SeparatorView-module_dragIcon"
+            fill="currentColor"
+            height="12px"
+            transform="rotate(90)"
+            viewBox="3.999704360961914 8.999704360961914 16.000295639038086 6.000591278076172"
+            width="20px"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M5 15a.97.97 0 0 1-.713-.287A.97.97 0 0 1 4 14q0-.424.287-.713A.97.97 0 0 1 5 13h14q.424 0 .712.287.288.288.288.713 0 .424-.288.713A.97.97 0 0 1 19 15zm0-4a.97.97 0 0 1-.713-.287A.97.97 0 0 1 4 10q0-.424.287-.713A.97.97 0 0 1 5 9h14q.424 0 .712.287Q20 9.576 20 10t-.288.713A.97.97 0 0 1 19 11z"
+            />
+          </svg>
+        </div>
       </div>
       <div
         data-panel="true"
@@ -125,18 +130,23 @@ exports[`<SeparatorView /> > renders HoverWhenCollapsed story 1`] = `
         style="flex: 0 0 auto; touch-action: none;"
         tabindex="0"
       >
-        <svg
-          fill="currentColor"
-          height="12px"
-          transform="rotate(90)"
-          viewBox="3.999704360961914 8.999704360961914 16.000295639038086 6.000591278076172"
-          width="20px"
-          xmlns="http://www.w3.org/2000/svg"
+        <div
+          class="SeparatorView-module_content"
         >
-          <path
-            d="M5 15a.97.97 0 0 1-.713-.287A.97.97 0 0 1 4 14q0-.424.287-.713A.97.97 0 0 1 5 13h14q.424 0 .712.287.288.288.288.713 0 .424-.288.713A.97.97 0 0 1 19 15zm0-4a.97.97 0 0 1-.713-.287A.97.97 0 0 1 4 10q0-.424.287-.713A.97.97 0 0 1 5 9h14q.424 0 .712.287Q20 9.576 20 10t-.288.713A.97.97 0 0 1 19 11z"
-          />
-        </svg>
+          <svg
+            class="SeparatorView-module_dragIcon"
+            fill="currentColor"
+            height="12px"
+            transform="rotate(90)"
+            viewBox="3.999704360961914 8.999704360961914 16.000295639038086 6.000591278076172"
+            width="20px"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M5 15a.97.97 0 0 1-.713-.287A.97.97 0 0 1 4 14q0-.424.287-.713A.97.97 0 0 1 5 13h14q.424 0 .712.287.288.288.288.713 0 .424-.288.713A.97.97 0 0 1 19 15zm0-4a.97.97 0 0 1-.713-.287A.97.97 0 0 1 4 10q0-.424.287-.713A.97.97 0 0 1 5 9h14q.424 0 .712.287Q20 9.576 20 10t-.288.713A.97.97 0 0 1 19 11z"
+            />
+          </svg>
+        </div>
       </div>
       <div
         data-panel="true"

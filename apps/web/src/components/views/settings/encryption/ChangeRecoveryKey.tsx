@@ -366,7 +366,7 @@ function KeyForm({ onCancelClick, onSubmit, recoveryKey, submitButtonLabel }: Ke
                     return;
                 }
                 setIsKeyChangeInProgress(true);
-                onSubmit().finally(() => {
+                void onSubmit().finally(() => {
                     setIsKeyChangeInProgress(false);
                 });
             }}
