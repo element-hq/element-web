@@ -162,6 +162,7 @@ describe("RoomListSectionHeaderViewModel", () => {
 
     describe("displaySectionMenu", () => {
         it.each([
+            [DefaultTagID.Invite, false],
             [DefaultTagID.Favourite, false],
             [DefaultTagID.LowPriority, false],
             [CHATS_TAG, false],
@@ -191,6 +192,7 @@ describe("RoomListSectionHeaderViewModel", () => {
         });
 
         it.each([
+            [DefaultTagID.Invite, false],
             [DefaultTagID.Favourite, false],
             [DefaultTagID.LowPriority, false],
             [CHATS_TAG, true],
@@ -205,6 +207,25 @@ describe("RoomListSectionHeaderViewModel", () => {
                 onToggleExpanded,
             });
             expect(vm.getSnapshot().canBeReordered).toBe(expected);
+        });
+    });
+
+    describe("canAcceptRooms", () => {
+        it.each([
+            [DefaultTagID.Invite, false],
+            [DefaultTagID.Favourite, true],
+            [DefaultTagID.LowPriority, true],
+            [CHATS_TAG, true],
+            [DefaultTagID.DM, true],
+            ["element.io.section.custom", true],
+        ])("should be %s for tag %s", (tag, expected) => {
+            const vm = new RoomListSectionHeaderViewModel({
+                tag,
+                title: "Section",
+                spaceId: "!space:server",
+                onToggleExpanded,
+            });
+            expect(vm.getSnapshot().canAcceptRooms).toBe(expected);
         });
     });
 

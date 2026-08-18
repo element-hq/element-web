@@ -13,7 +13,7 @@ import {
     type Section,
     type UserStatus,
 } from "@element-hq/web-shared-components";
-import { ClientEvent, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, KnownMembership, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -384,6 +384,10 @@ export class RoomListItemViewModel
         const sections: Section[] = RoomListItemViewModel.buildSections(roomTags, availableSections);
         const areSectionsEnabled = SettingsStore.getValue("RoomList.showSections");
 
+        // A room with a pending invitation always sits in the Invites section, so it can't be moved
+        // to another one, by dragging it or through the menu entries that assign a section.
+        const canChangeSection = room.getMyMembership() !== KnownMembership.Invite;
+
         return {
             id: room.roomId,
             room,
@@ -413,6 +417,7 @@ export class RoomListItemViewModel
             roomNotifState,
             sections,
             areSectionsEnabled,
+            canChangeSection,
         };
     }
 

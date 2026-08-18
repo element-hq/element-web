@@ -19,6 +19,7 @@ import { NotificationStateEvents } from "../../stores/notifications/Notification
 import { type RoomNotificationState } from "../../stores/notifications/RoomNotificationState";
 import SettingsStore from "../../settings/SettingsStore";
 import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
+import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import {
     getCustomSectionData,
     isCustomSectionTag,
@@ -65,6 +66,8 @@ export class RoomListSectionHeaderViewModel
             isUnread: false,
             displaySectionMenu: !isDefaultSection,
             canBeReordered: isReorderableSection(props.tag, getCustomSectionData()),
+            // Membership decides what is in the Invites section, so rooms can't be moved into it
+            canAcceptRooms: props.tag !== DefaultTagID.Invite,
         });
         const sectionWatherRef = SettingsStore.watchSetting("RoomList.CustomSectionData", null, () =>
             this.onCustomSectionDataChange(),

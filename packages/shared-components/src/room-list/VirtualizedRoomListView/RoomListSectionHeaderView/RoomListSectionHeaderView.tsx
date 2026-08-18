@@ -38,6 +38,8 @@ export interface RoomListSectionHeaderViewSnapshot {
     displaySectionMenu: boolean;
     /** Whether the section can be reordered via drag-and-drop  */
     canBeReordered: boolean;
+    /** Whether rooms can be dropped into this section via drag-and-drop  */
+    canAcceptRooms: boolean;
 }
 
 /**
@@ -106,7 +108,7 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
     roomCountInSection,
 }: Readonly<RoomListSectionHeaderViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
-    const { id, title, isExpanded, isUnread, canBeReordered } = useViewModel(vm);
+    const { id, title, isExpanded, isUnread, canBeReordered, canAcceptRooms } = useViewModel(vm);
     const isLastSection = sectionIndex === sectionCount - 1;
 
     const {
@@ -125,13 +127,13 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
     const draggedData = source?.data;
     const isDraggingSectionSource = isSectionDragData(draggedData);
 
-    // Keep the droppable enabled so rooms can still be dropped on default sections
-    // (Favourite / Low Priority). Only disable it for section drags on non-reorderable
-    // headers so they can't be used as reorder targets.
+    // The two kinds of drag are gated separately. A section drag can only target a reorderable
+    // header, so Favourite and Low Priority are excluded. A room drag can only target a header that
+    // accepts rooms, which Favourite and Low Priority do.
     const { ref: droppableRef, isDropTarget } = useDroppable<SectionDragData>({
         id,
         data: { type: "section", index: sectionIndex },
-        disabled: isDragSource || (isDraggingSectionSource && !canBeReordered),
+        disabled: isDragSource || (isDraggingSectionSource ? !canBeReordered : !canAcceptRooms),
     });
 
     const isDraggingRoom = isDropTarget && draggedData?.type === "room";
