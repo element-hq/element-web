@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`dialogTermsInteractionCallback should render a dialog with the expected terms 1`] = `
+exports[`dialogTermsInteractionCallback > should render a dialog with the expected terms 1`] = `
 <div
   aria-describedby="mx_Dialog_content"
   aria-labelledby="mx_BaseDialog_title"

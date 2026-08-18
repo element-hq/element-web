@@ -4,23 +4,25 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { renderHook } from "jest-matrix-react";
-import { type Mocked, mocked } from "jest-mock";
+// @vitest-environment happy-dom
+
+import { describe, it, expect, vi, beforeEach, afterEach, type Mocked, type Mock } from "vitest";
 import { RoomMember, MatrixEvent, type Room, EventType, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { renderHook } from "test-utils-rtl";
+import { withClientContextRenderOptions } from "test-utils";
 
-import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
-import { useUserInfoPowerlevelViewModel } from "../../../../../../src/components/viewmodels/right_panel/UserInfoPowerlevelViewModel";
-import { withClientContextRenderOptions } from "../../../../../test-utils";
-import { type IRoomPermissions } from "../../../../../../src/components/views/right_panel/UserInfo";
-import Modal from "../../../../../../src/Modal";
-import { warnSelfDemote } from "../../../../../../src/components/views/right_panel/UserInfo";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { useUserInfoPowerlevelViewModel } from "./UserInfoPowerlevelViewModel";
+import { type IRoomPermissions } from "../../views/right_panel/UserInfo";
+import Modal from "../../../Modal";
+import { warnSelfDemote } from "../../views/right_panel/UserInfo";
 
-jest.mock("../../../../../../src/Modal", () => ({
-    createDialog: jest.fn(),
+vi.mock("../../../Modal", () => ({
+    default: { createDialog: vi.fn() },
 }));
 
-jest.mock("../../../../../../src/components/views/right_panel/UserInfo", () => ({
-    warnSelfDemote: jest.fn(),
+vi.mock("../../views/right_panel/UserInfo", () => ({
+    warnSelfDemote: vi.fn(),
 }));
 
 describe("UserInfoAdminPowerlevelViewModel", () => {
@@ -51,55 +53,55 @@ describe("UserInfoAdminPowerlevelViewModel", () => {
             },
         };
 
-        mockRoom = mocked({
+        mockRoom = vi.mocked({
             roomId: defaultRoomId,
-            getType: jest.fn().mockReturnValue(undefined),
-            isSpaceRoom: jest.fn().mockReturnValue(false),
-            getMember: jest.fn().mockReturnValue(undefined),
-            getMxcAvatarUrl: jest.fn().mockReturnValue("mock-avatar-url"),
+            getType: vi.fn().mockReturnValue(undefined),
+            isSpaceRoom: vi.fn().mockReturnValue(false),
+            getMember: vi.fn().mockReturnValue(undefined),
+            getMxcAvatarUrl: vi.fn().mockReturnValue("mock-avatar-url"),
             name: "test room",
-            on: jest.fn(),
-            off: jest.fn(),
+            on: vi.fn(),
+            off: vi.fn(),
             currentState: {
-                getStateEvents: jest.fn(),
-                on: jest.fn(),
-                off: jest.fn(),
+                getStateEvents: vi.fn(),
+                on: vi.fn(),
+                off: vi.fn(),
             },
-            getEventReadUpTo: jest.fn(),
+            getEventReadUpTo: vi.fn(),
         } as unknown as Room);
 
-        mockClient = mocked({
-            getUser: jest.fn(),
-            isGuest: jest.fn().mockReturnValue(false),
-            isUserIgnored: jest.fn(),
-            getIgnoredUsers: jest.fn(),
-            setIgnoredUsers: jest.fn(),
-            getUserId: jest.fn(),
-            getSafeUserId: jest.fn(),
-            getDomain: jest.fn(),
-            on: jest.fn(),
-            off: jest.fn(),
-            isSynapseAdministrator: jest.fn().mockResolvedValue(false),
-            doesServerSupportUnstableFeature: jest.fn().mockReturnValue(false),
-            doesServerSupportExtendedProfiles: jest.fn().mockResolvedValue(false),
-            getExtendedProfileProperty: jest.fn().mockRejectedValue(new Error("Not supported")),
-            mxcUrlToHttp: jest.fn().mockReturnValue("mock-mxcUrlToHttp"),
-            removeListener: jest.fn(),
+        mockClient = vi.mocked({
+            getUser: vi.fn(),
+            isGuest: vi.fn().mockReturnValue(false),
+            isUserIgnored: vi.fn(),
+            getIgnoredUsers: vi.fn(),
+            setIgnoredUsers: vi.fn(),
+            getUserId: vi.fn(),
+            getSafeUserId: vi.fn(),
+            getDomain: vi.fn(),
+            on: vi.fn(),
+            off: vi.fn(),
+            isSynapseAdministrator: vi.fn().mockResolvedValue(false),
+            doesServerSupportUnstableFeature: vi.fn().mockReturnValue(false),
+            doesServerSupportExtendedProfiles: vi.fn().mockResolvedValue(false),
+            getExtendedProfileProperty: vi.fn().mockRejectedValue(new Error("Not supported")),
+            mxcUrlToHttp: vi.fn().mockReturnValue("mock-mxcUrlToHttp"),
+            removeListener: vi.fn(),
             currentState: {
-                on: jest.fn(),
+                on: vi.fn(),
             },
-            getRoom: jest.fn(),
+            getRoom: vi.fn(),
             credentials: {},
-            setPowerLevel: jest.fn().mockResolvedValueOnce({ event_id: "123" }),
+            setPowerLevel: vi.fn().mockResolvedValueOnce({ event_id: "123" }),
         } as unknown as MatrixClient);
 
-        jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
-        jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
+        vi.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
+        vi.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
 
-        (Modal.createDialog as jest.Mock).mockImplementation(() => ({
+        (Modal.createDialog as Mock).mockImplementation(() => ({
             finished: Promise.resolve([true]),
         }));
-        (warnSelfDemote as jest.Mock).mockResolvedValue(true);
+        (warnSelfDemote as Mock).mockResolvedValue(true);
     });
 
     const renderComponentHook = (props = defaultProps, client = mockClient) => {
@@ -110,7 +112,7 @@ describe("UserInfoAdminPowerlevelViewModel", () => {
     };
 
     afterEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     it("should give default power level", () => {
@@ -119,7 +121,7 @@ describe("UserInfoAdminPowerlevelViewModel", () => {
             type: EventType.RoomPowerLevels,
             content: { users: { [defaultUserId]: defaultPowerLevel }, users_default: defaultPowerLevel },
         });
-        mockRoom.currentState.getStateEvents.mockReturnValue(powerLevelEvent);
+        vi.mocked(mockRoom.currentState.getStateEvents).mockReturnValue(powerLevelEvent);
 
         const { result } = renderComponentHook({ ...defaultProps, room: mockRoom });
 
@@ -131,7 +133,7 @@ describe("UserInfoAdminPowerlevelViewModel", () => {
             type: EventType.RoomPowerLevels,
             content: { users: { [defaultUserId]: startPowerLevel }, users_default: 1 },
         });
-        mockRoom.currentState.getStateEvents.mockReturnValue(powerLevelEvent);
+        vi.mocked(mockRoom.currentState.getStateEvents).mockReturnValue(powerLevelEvent);
         mockClient.getSafeUserId.mockReturnValueOnce(defaultUserId);
         mockClient.getUserId.mockReturnValueOnce(defaultUserId);
 
@@ -154,7 +156,7 @@ describe("UserInfoAdminPowerlevelViewModel", () => {
                 users_default: 1,
             },
         });
-        mockRoom.currentState.getStateEvents.mockReturnValue(powerLevelEvent);
+        vi.mocked(mockRoom.currentState.getStateEvents).mockReturnValue(powerLevelEvent);
         mockClient.getUserId.mockReturnValue(defaultMeId);
 
         const { result } = renderComponentHook({ ...defaultProps, room: mockRoom }, mockClient);
@@ -173,7 +175,7 @@ describe("UserInfoAdminPowerlevelViewModel", () => {
                 users_default: 1,
             },
         });
-        mockRoom.currentState.getStateEvents.mockReturnValue(powerLevelEvent);
+        vi.mocked(mockRoom.currentState.getStateEvents).mockReturnValue(powerLevelEvent);
         mockClient.getUserId.mockReturnValue(defaultMeId);
 
         const { result } = renderComponentHook({ ...defaultProps, room: mockRoom, user: selfUser }, mockClient);
@@ -185,7 +187,7 @@ describe("UserInfoAdminPowerlevelViewModel", () => {
     });
 
     it("cancels power level change when user declines warning", async () => {
-        (Modal.createDialog as jest.Mock).mockImplementation(() => ({
+        (Modal.createDialog as Mock).mockImplementation(() => ({
             finished: Promise.resolve([false]),
         }));
 
@@ -199,7 +201,7 @@ describe("UserInfoAdminPowerlevelViewModel", () => {
                 users_default: 1,
             },
         });
-        mockRoom.currentState.getStateEvents.mockReturnValue(powerLevelEvent);
+        vi.mocked(mockRoom.currentState.getStateEvents).mockReturnValue(powerLevelEvent);
         mockClient.getUserId.mockReturnValue(defaultMeId);
 
         const { result } = renderComponentHook({ ...defaultProps, room: mockRoom }, mockClient);
@@ -211,7 +213,7 @@ describe("UserInfoAdminPowerlevelViewModel", () => {
     });
 
     it("handles missing power level event", async () => {
-        mockRoom.currentState.getStateEvents.mockReturnValue(null);
+        vi.mocked(mockRoom.currentState.getStateEvents).mockReturnValue(null);
 
         const { result } = renderComponentHook({ ...defaultProps, room: mockRoom }, mockClient);
 

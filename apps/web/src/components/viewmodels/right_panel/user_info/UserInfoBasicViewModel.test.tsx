@@ -4,19 +4,23 @@ Copyright 2025 New Vector Ltd.
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
+
+// @vitest-environment happy-dom
+
 import React from "react";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { EventType, type MatrixClient, MatrixEvent, type Room, RoomMember, type User } from "matrix-js-sdk/src/matrix";
-import { renderHook, waitFor } from "jest-matrix-react";
+import { renderHook, waitFor } from "test-utils-rtl";
+import { createTestClient, mkRoom, withClientContextRenderOptions } from "test-utils";
 
-import { createTestClient, mkRoom, withClientContextRenderOptions } from "../../../../../test-utils";
-import { useUserInfoBasicViewModel } from "../../../../../../src/components/viewmodels/right_panel/user_info/UserInfoBasicViewModel";
-import DMRoomMap from "../../../../../../src/utils/DMRoomMap";
-import Modal from "../../../../../../src/Modal";
-import QuestionDialog from "../../../../../../src/components/views/dialogs/QuestionDialog";
+import { useUserInfoBasicViewModel } from "./UserInfoBasicViewModel";
+import DMRoomMap from "../../../../utils/DMRoomMap";
+import Modal from "../../../../Modal";
+import QuestionDialog from "../../../views/dialogs/QuestionDialog";
 
-jest.mock("../../../../../../src/customisations/UserIdentifier", () => {
+vi.mock("../../../../customisations/UserIdentifier", () => {
     return {
-        getDisplayUserIdentifier: jest.fn().mockReturnValue("customUserIdentifier"),
+        getDisplayUserIdentifier: vi.fn().mockReturnValue("customUserIdentifier"),
     };
 });
 
@@ -36,8 +40,8 @@ describe("useUserInfoHeaderViewModel", () => {
 
     beforeEach(() => {
         mockClient = createTestClient();
-        mockClient.isSynapseAdministrator = jest.fn().mockResolvedValue(true);
-        mockClient.deactivateSynapseUser = jest.fn().mockResolvedValue({
+        mockClient.isSynapseAdministrator = vi.fn().mockResolvedValue(true);
+        mockClient.deactivateSynapseUser = vi.fn().mockResolvedValue({
             id_server_unbind_result: "success",
         });
 
@@ -47,11 +51,11 @@ describe("useUserInfoHeaderViewModel", () => {
             room,
         };
         DMRoomMap.makeShared(mockClient);
-        jest.spyOn(mockClient, "getRoom").mockReturnValue(room);
+        vi.spyOn(mockClient, "getRoom").mockReturnValue(room);
     });
 
     afterEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     const renderUserInfoBasicViewModelHook = (
@@ -67,7 +71,7 @@ describe("useUserInfoHeaderViewModel", () => {
     };
 
     it("should set showDeactivateButton value to true", async () => {
-        jest.spyOn(mockClient, "getDomain").mockReturnValue("example.com");
+        vi.spyOn(mockClient, "getDomain").mockReturnValue("example.com");
         const { result } = renderUserInfoBasicViewModelHook();
         // checking the synpase admin is an async operation, that is why we wait for it
         await waitFor(() => {
@@ -76,7 +80,7 @@ describe("useUserInfoHeaderViewModel", () => {
     });
 
     it("should set showDeactivateButton value to false because domain is not the same", async () => {
-        jest.spyOn(mockClient, "getDomain").mockReturnValue("toto.com");
+        vi.spyOn(mockClient, "getDomain").mockReturnValue("toto.com");
         const { result } = renderUserInfoBasicViewModelHook();
 
         await waitFor(() => {
@@ -92,7 +96,7 @@ describe("useUserInfoHeaderViewModel", () => {
                 state_default: 1,
             },
         });
-        jest.spyOn(room.currentState, "getStateEvents").mockReturnValue(powerLevelEvents);
+        vi.spyOn(room.currentState, "getStateEvents").mockReturnValue(powerLevelEvents);
         const { result } = renderUserInfoBasicViewModelHook();
         expect(result.current.powerLevels).toStrictEqual({
             invite: 1,
@@ -101,13 +105,13 @@ describe("useUserInfoHeaderViewModel", () => {
     });
 
     it("should set isRoomDMForMember to true if found in dmroommap", () => {
-        jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue("id");
+        vi.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue("id");
         const { result } = renderUserInfoBasicViewModelHook();
         expect(result.current.isRoomDMForMember).toBeTruthy();
     });
 
     it("should set isRoomDMForMember to false if not found in dmroommap", () => {
-        jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(undefined);
+        vi.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(undefined);
         const { result } = renderUserInfoBasicViewModelHook();
         expect(result.current.isRoomDMForMember).toBeFalsy();
     });
@@ -120,11 +124,11 @@ describe("useUserInfoHeaderViewModel", () => {
                 state_default: 1,
             },
         });
-        jest.spyOn(room.currentState, "getStateEvents").mockReturnValue(powerLevelEvents);
-        jest.spyOn(Modal, "createDialog").mockReturnValue({
+        vi.spyOn(room.currentState, "getStateEvents").mockReturnValue(powerLevelEvents);
+        vi.spyOn(Modal, "createDialog").mockReturnValue({
             finished: Promise.resolve([true, true, false]),
-            close: jest.fn(),
-        });
+            close: vi.fn(),
+        } as any);
 
         const { result } = renderUserInfoBasicViewModelHook();
 
