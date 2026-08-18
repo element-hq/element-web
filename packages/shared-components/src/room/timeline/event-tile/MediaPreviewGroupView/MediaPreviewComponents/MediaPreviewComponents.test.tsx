@@ -89,17 +89,15 @@ describe("MediaPreviewComponents", () => {
             expect(screen.queryByRole("button")).not.toBeInTheDocument();
         });
 
-        it("renders a button which invokes iconOnClick", async () => {
+        it("renders a button which invokes onClick", async () => {
             const user = userEvent.setup();
-            const iconOnClick = vi.fn();
+            const onClick = vi.fn();
 
-            render(
-                <Icon icon={<span data-testid="icon">icon</span>} color="rgb(66, 0, 166)" iconOnClick={iconOnClick} />,
-            );
+            render(<Icon icon={<span data-testid="icon">icon</span>} color="rgb(66, 0, 166)" onClick={onClick} />);
 
             await user.click(screen.getByRole("button", { name: "View file" }));
 
-            expect(iconOnClick).toHaveBeenCalledTimes(1);
+            expect(onClick).toHaveBeenCalledTimes(1);
             expect(screen.getByTestId("icon")).toHaveStyle({ color: "rgb(66, 0, 166)" });
         });
     });
