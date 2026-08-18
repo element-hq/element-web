@@ -182,7 +182,6 @@ describe("Spotlight Dialog", () => {
     it("should not fall into a filter when the query matches nothing", async () => {
         render(<SpotlightDialog initialText="zzzznothingmatchesthis" onFinished={() => null} />);
 
-        // search is debounced
         jest.advanceTimersByTime(200);
         await flushPromisesWithFakeTimers();
 
@@ -191,6 +190,19 @@ describe("Spotlight Dialog", () => {
         fireEvent.keyDown(document.querySelector(".mx_SpotlightDialog_searchBox input")!, { key: "Enter" });
 
         expect(document.querySelector("div.mx_SpotlightDialog_filter")).not.toBeInTheDocument();
+    });
+
+    it("should not offer the enter shortcut on the no results entry", async () => {
+        render(<SpotlightDialog initialText="zzzznothingmatchesthis" onFinished={() => null} />);
+
+        jest.advanceTimersByTime(200);
+        await flushPromisesWithFakeTimers();
+
+        const noResults = document.querySelector("#mx_SpotlightDialog_button_noResults")!;
+        expect(noResults.querySelector(".mx_SpotlightDialog_enterPrompt")).not.toBeInTheDocument();
+
+        const startChat = document.querySelector("#mx_SpotlightDialog_button_startChat")!;
+        expect(startChat.querySelector(".mx_SpotlightDialog_enterPrompt")).toBeInTheDocument();
     });
 
     describe("should apply filters supplied via props", () => {
