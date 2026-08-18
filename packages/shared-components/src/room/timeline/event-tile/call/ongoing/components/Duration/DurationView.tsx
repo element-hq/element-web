@@ -39,7 +39,7 @@ export function DurationView(props: Props): React.ReactNode {
 
     return (
         <div className={classes}>
-            (<Clock seconds={duration} minutesMinLength={1} className={classes} />)
+            (<Clock seconds={duration} hoursMinLength={1} minutesMinLength={1} className={classes} />)
         </div>
     );
 }
