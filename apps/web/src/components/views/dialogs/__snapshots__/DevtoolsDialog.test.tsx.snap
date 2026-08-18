@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`DevtoolsDialog renders the devtools dialog 1`] = `
+exports[`DevtoolsDialog > renders the devtools dialog 1`] = `
 <DocumentFragment>
   <div
     data-focus-guard="true"
@@ -153,6 +153,12 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
         >
           End-to-end encryption
         </button>
+        <button
+          class="mx_DevTools_button"
+          type="button"
+        >
+          Custom themes
+        </button>
       </div>
       <form
         class="_root_1o4d9_17 mx_DevTools_toggleForm"
@@ -173,7 +179,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
             >
               <input
                 class="_input_udcm8_24"
-                id="mx_SettingsFlag_vY7Q4uEh9K38"
+                id="mx_SettingsFlag_3ayPk0Fb70IO"
                 role="switch"
                 type="checkbox"
               />
@@ -187,7 +193,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
           >
             <label
               class="_label_1o4d9_60"
-              for="mx_SettingsFlag_vY7Q4uEh9K38"
+              for="mx_SettingsFlag_3ayPk0Fb70IO"
             >
               Developer mode
             </label>
@@ -204,7 +210,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
             >
               <input
                 class="_input_udcm8_24"
-                id="mx_SettingsFlag_QgU2PomxwKpa"
+                id="mx_SettingsFlag_33Bmwjr9udBp"
                 role="switch"
                 type="checkbox"
               />
@@ -218,7 +224,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
           >
             <label
               class="_label_1o4d9_60"
-              for="mx_SettingsFlag_QgU2PomxwKpa"
+              for="mx_SettingsFlag_33Bmwjr9udBp"
             >
               Show hidden events in timeline
             </label>
@@ -235,7 +241,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
             >
               <input
                 class="_input_udcm8_24"
-                id="mx_SettingsFlag_6hpi3YEetmBG"
+                id="mx_SettingsFlag_cq1ROiefqFUL"
                 role="switch"
                 type="checkbox"
               />
@@ -249,7 +255,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
           >
             <label
               class="_label_1o4d9_60"
-              for="mx_SettingsFlag_6hpi3YEetmBG"
+              for="mx_SettingsFlag_cq1ROiefqFUL"
             >
               Enable widget screenshots on supported widgets
             </label>
@@ -266,7 +272,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
             >
               <input
                 class="_input_udcm8_24"
-                id="mx_SettingsFlag_4yVCeEefiPqp"
+                id="mx_SettingsFlag_dbUETGttOrfB"
                 role="switch"
                 type="checkbox"
               />
@@ -280,7 +286,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
           >
             <label
               class="_label_1o4d9_60"
-              for="mx_SettingsFlag_4yVCeEefiPqp"
+              for="mx_SettingsFlag_dbUETGttOrfB"
             >
               Disable bandwidth-heavy features
             </label>
