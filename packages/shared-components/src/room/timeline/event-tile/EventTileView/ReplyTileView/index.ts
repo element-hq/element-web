@@ -5,4 +5,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-export { ReplyTileView, type ReplyTileViewProps } from "./ReplyTileView";
+export {
+    ReplyTileView,
+    type ReplyTileSenderViewSnapshot,
+    type ReplyTileViewActions,
+    type ReplyTileViewModel,
+    type ReplyTileViewProps,
+    type ReplyTileViewSnapshot,
+} from "./ReplyTileView";

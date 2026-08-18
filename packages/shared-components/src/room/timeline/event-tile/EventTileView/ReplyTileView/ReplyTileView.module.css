@@ -9,100 +9,31 @@
     position: relative;
     padding: 2px 0;
     font: var(--cpd-font-body-md-regular);
-
-    > a {
-        display: grid;
-        grid-template:
-            "sender" auto
-            "message" auto
-            / 100%;
-        text-decoration: none;
-        color: var(--cpd-color-text-secondary);
-        transition: color ease 0.15s;
-        gap: 2px;
-        max-width: 100%;
-
-        &:hover {
-            color: var(--cpd-color-text-primary);
-        }
-    }
-
-    :global(.mx_RedactedBody) {
-        line-height: 1.125rem;
-    }
-
-    :global(.mx_RedactedBody),
-    :global(.mx_HiddenBody) {
-        padding: 4px 0 2px 20px;
-
-        &::before {
-            height: 13px;
-            width: 13px;
-            top: 3px;
-        }
-    }
-
-    :global(.mx_EventTile_content) {
-        grid-area: message;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-
-        :global(.mx_EventTile_body.mx_EventTile_bigEmoji) {
-            line-height: 1.375rem !important;
-            font-size: 0.875rem !important;
-        }
-
-        :global(.mx_EventTile_body) {
-            display: inline;
-        }
-
-        :global([data-textual-body-annotation-wrapper]) {
-            display: contents;
-        }
-
-        :global(.mx_EventTile_lineNumbers),
-        :global([data-textual-body-edited-marker]) {
-            display: none;
-        }
-
-        :global(.mx_EventTile_pre_container > pre) {
-            overflow-x: scroll;
-            overflow-y: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 2;
-            padding: 4px;
-        }
-
-        :global(.markdown-body blockquote),
-        :global(.markdown-body dl),
-        :global(.markdown-body ol),
-        :global(.markdown-body p),
-        :global(.markdown-body pre),
-        :global(.markdown-body table),
-        :global(.markdown-body ul) {
-            margin-bottom: 4px;
-        }
-    }
 }
 
-.inline > a {
+.link {
+    display: grid;
     grid-template:
-        "sender        message" auto
-        / max-content auto;
-    gap: 4px;
+        "sender" auto
+        "message" auto
+        / minmax(0, 100%);
+    gap: 2px;
+    max-width: 100%;
+    min-width: 0;
+    color: var(--cpd-color-text-secondary);
+    text-decoration: none;
+    transition: color ease 0.15s;
+
+    &:hover {
+        color: var(--cpd-color-text-primary);
+    }
 }
 
-.root[data-event-layout="irc"] {
-    :global(.mx_EventTile_content) {
-        :global(.mx_MTextBody.mx_EventTile_body) {
-            display: -webkit-box;
-        }
-    }
+.inline .link {
+    grid-template:
+        "sender message" auto
+        / max-content minmax(0, auto);
+    gap: 4px;
 }
 
 .info {
@@ -114,18 +45,56 @@
     display: flex;
     align-items: center;
     gap: 4px;
+    min-width: 0;
+    max-width: 100%;
+}
 
-    :global(.mx_DisambiguatedProfile) {
-        font: var(--cpd-font-body-md-regular);
-        display: inline-block;
-        padding: 0;
-        margin: 0;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
+.avatar {
+    flex-shrink: 0;
+}
 
-    :global(.mx_BaseAvatar) {
-        flex-shrink: 0;
-    }
+.senderName {
+    min-width: 0;
+    overflow: hidden;
+    color: var(--cpd-color-text-primary);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.body {
+    grid-area: message;
+    min-width: 0;
+    overflow: hidden;
+    color: var(--cpd-color-text-secondary);
+    text-overflow: ellipsis;
+    overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.body :where(a) {
+    color: inherit;
+}
+
+.body :where(button, input, select, textarea, [role="button"]) {
+    pointer-events: none;
+}
+
+.body :where(p, blockquote, dl, ol, pre, table, ul) {
+    margin-block: 0 4px;
+}
+
+.body :where(pre) {
+    max-width: 100%;
+    overflow: hidden;
+    white-space: pre-wrap;
+}
+
+.body :where([data-textual-body-annotation-wrapper]) {
+    display: contents;
+}
+
+.body :where([data-textual-body-edited-marker]) {
+    display: none;
 }

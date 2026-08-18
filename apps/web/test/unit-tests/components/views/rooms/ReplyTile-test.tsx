@@ -18,23 +18,23 @@ jest.mock("../../../../../src/events/EventTileFactory", () => {
     const actual = jest.requireActual("../../../../../src/events/EventTileFactory");
     return {
         ...actual,
-        renderReplyTile: jest.fn(() => null),
+        renderReplyTile: jest.fn(() => <span>Reply body</span>),
     };
 });
-jest.mock("../../../../../src/components/views/messages/SenderProfile", () => jest.fn(() => null));
-jest.mock("../../../../../src/components/views/avatars/MemberAvatar", () => jest.fn(() => null));
 
 describe("ReplyTile", () => {
     beforeEach(() => {
         stubClient();
-        jest.mocked(renderReplyTile).mockClear().mockReturnValue(null);
+        jest.mocked(renderReplyTile)
+            .mockClear()
+            .mockReturnValue(<span>Reply body</span>);
     });
 
     afterEach(() => {
         jest.restoreAllMocks();
     });
 
-    it("renders video replies with the video body", () => {
+    it("renders video replies with the video body without legacy ReplyTile classes", () => {
         const mxEvent = mkEvent({
             event: true,
             type: EventType.RoomMessage,
@@ -53,7 +53,7 @@ describe("ReplyTile", () => {
             },
         });
 
-        const { container } = render(<ReplyTile mxEvent={mxEvent} />);
+        const { container, getByTestId, getByText } = render(<ReplyTile mxEvent={mxEvent} />);
 
         expect(renderReplyTile).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -63,11 +63,14 @@ describe("ReplyTile", () => {
             }),
             false,
         );
-        expect(container.querySelector(".mx_ReplyTile")).toBeInTheDocument();
-        expect(container.querySelector(".mx_ReplyTile_sender")).toBeInTheDocument();
+        expect(getByTestId("reply-tile")).toBeInTheDocument();
+        expect(getByTestId("reply-tile-sender")).toBeInTheDocument();
+        expect(getByText("Reply body")).toBeInTheDocument();
+        expect(container.querySelector(".mx_ReplyTile")).not.toBeInTheDocument();
+        expect(container.querySelector(".mx_ReplyTile_sender")).not.toBeInTheDocument();
     });
 
-    it("provides the legacy inline class for emote replies", () => {
+    it("does not emit legacy inline classes for emote replies", () => {
         const mxEvent = mkEvent({
             event: true,
             type: EventType.RoomMessage,
@@ -80,8 +83,9 @@ describe("ReplyTile", () => {
             },
         });
 
-        const { container } = render(<ReplyTile mxEvent={mxEvent} />);
+        const { container, getByTestId } = render(<ReplyTile mxEvent={mxEvent} />);
 
-        expect(container.querySelector(".mx_ReplyTile")).toHaveClass("mx_ReplyTile_inline");
+        expect(getByTestId("reply-tile")).toBeInTheDocument();
+        expect(container.querySelector(".mx_ReplyTile_inline")).not.toBeInTheDocument();
     });
 });

@@ -10,84 +10,122 @@ import userEvent from "@testing-library/user-event";
 import { render, screen } from "@test-utils";
 import { describe, expect, it, vi } from "vitest";
 
-import { ReplyTileView } from "./ReplyTileView";
+import { type MemberAvatarViewSnapshot } from "../../../../../core/MemberAvatar/MemberAvatarView";
+import { MockViewModel } from "../../../../../core/viewmodel";
+import {
+    ReplyTileView,
+    type ReplyTileViewActions,
+    type ReplyTileViewModel,
+    type ReplyTileViewSnapshot,
+} from "./ReplyTileView";
 import styles from "./ReplyTileView.module.css";
 
-describe("ReplyTileView", () => {
-    it("applies host class names to the reply and sender", () => {
-        const { container } = render(
-            <ReplyTileView
-                href="/room/event"
-                sender={<span>Sender</span>}
-                className="host-root"
-                senderClassName="host-sender"
-            >
-                <span>Reply content</span>
-            </ReplyTileView>,
-        );
+class TestReplyTileViewModel extends MockViewModel<ReplyTileViewSnapshot> implements ReplyTileViewActions {
+    public onClick?: ReplyTileViewActions["onClick"];
 
-        expect(container.firstElementChild).toHaveClass("host-root");
-        expect(screen.getByText("Sender").parentElement).toHaveClass("host-sender");
+    public constructor(
+        snapshot: ReplyTileViewSnapshot,
+        onClick: ReplyTileViewActions["onClick"] = vi.fn((event) => event.preventDefault()),
+    ) {
+        super(snapshot);
+        this.onClick = onClick;
+    }
+}
+
+const avatarViewModel = new MockViewModel<MemberAvatarViewSnapshot>({
+    id: "@alice:example.org",
+    name: "Alice",
+    size: "16px",
+});
+
+function renderReplyTile(
+    snapshot: Partial<ReplyTileViewSnapshot> = {},
+    actions?: Partial<ReplyTileViewActions>,
+): ReturnType<typeof render> {
+    const vm = new TestReplyTileViewModel(
+        {
+            href: "/room/event",
+            body: <span>Reply content</span>,
+            ...snapshot,
+        },
+        actions?.onClick ?? vi.fn(),
+    ) as ReplyTileViewModel;
+
+    return render(<ReplyTileView vm={vm} />);
+}
+
+describe("ReplyTileView", () => {
+    it("renders sender and body from the view model without host classes", () => {
+        const { container } = renderReplyTile({
+            sender: {
+                displayName: "Alice",
+                avatarViewModel,
+            },
+        });
+
         expect(screen.getByRole("link")).toHaveAttribute("href", "/room/event");
-        expect(screen.getByText("Sender")).toBeInTheDocument();
+        expect(screen.getByTestId("reply-tile")).toHaveClass(styles.root);
+        expect(screen.getByTestId("reply-tile")).not.toHaveClass("mx_ReplyTile");
+        expect(screen.getByTestId("reply-tile-sender")).toHaveClass(styles.sender);
+        expect(screen.getByText("Alice")).toBeInTheDocument();
         expect(screen.getByText("Reply content")).toBeInTheDocument();
+        expect(container.querySelector(".mx_ReplyTile_sender")).not.toBeInTheDocument();
     });
 
     it("applies inline and informational modifiers", () => {
-        const { container } = render(
-            <ReplyTileView href="#" inline info>
-                Reply content
-            </ReplyTileView>,
-        );
+        renderReplyTile({ inline: true, info: true });
 
-        expect(container.firstElementChild).toHaveClass(styles.root, styles.inline, styles.info);
+        expect(screen.getByTestId("reply-tile")).toHaveClass(styles.root, styles.inline, styles.info);
     });
 
     it("maps the event presentation layout to the reply root", () => {
-        const { container } = render(<ReplyTileView href="#">Reply content</ReplyTileView>, {
+        const vm = new TestReplyTileViewModel({ href: "#", body: "Reply content" }) as ReplyTileViewModel;
+        render(<ReplyTileView vm={vm} />, {
             presentation: { layout: "bubble" },
         });
 
-        expect(container.firstElementChild).toHaveAttribute("data-event-layout", "bubble");
-        expect(container.firstElementChild).toHaveAttribute("data-event-density", "default");
+        expect(screen.getByTestId("reply-tile")).toHaveAttribute("data-event-layout", "bubble");
+        expect(screen.getByTestId("reply-tile")).toHaveAttribute("data-event-density", "default");
     });
 
-    it("keeps IRC textual previews line-clampable", () => {
-        const { container } = render(
-            <ReplyTileView href="#">
-                <div className="mx_EventTile_content">
-                    <div className="mx_MTextBody mx_EventTile_body">IRC reply content</div>
-                </div>
-            </ReplyTileView>,
-            { presentation: { layout: "irc" } },
-        );
+    it("clips body previews without relying on legacy mx classes", () => {
+        renderReplyTile({
+            body: <p>Long reply content</p>,
+        });
 
-        const body = container.querySelector<HTMLElement>(".mx_MTextBody");
+        const body = screen.getByTestId("reply-tile").querySelector<HTMLElement>(`.${styles.body}`);
         expect(body).not.toBeNull();
-        expect(getComputedStyle(body!).display).toBe("-webkit-box");
+        expect(body).toHaveClass(styles.body);
+        expect(getComputedStyle(body!).overflow).toBe("hidden");
+        expect(getComputedStyle(body!).webkitLineClamp).toBe("2");
     });
 
-    it("clips production-shaped event content to the reply preview", () => {
-        const { container } = render(
-            <ReplyTileView href="#">
-                <div className="mx_EventTile_content">Long reply content</div>
-            </ReplyTileView>,
-        );
+    it("hides edited markers inside the local body preview", () => {
+        renderReplyTile({
+            body: (
+                <span data-textual-body-annotation-wrapper>
+                    <span>Edited reply body</span>
+                    <span data-textual-body-edited-marker>Edited</span>
+                </span>
+            ),
+        });
 
-        const content = container.querySelector<HTMLElement>(".mx_EventTile_content");
-        expect(content).not.toBeNull();
-        expect(getComputedStyle(content!).overflow).toBe("hidden");
+        expect(getComputedStyle(screen.getByText("Edited")).display).toBe("none");
+    });
+
+    it("keeps nested controls inert inside the reply preview", () => {
+        renderReplyTile({
+            body: <button type="button">Nested action</button>,
+        });
+
+        expect(getComputedStyle(screen.getByRole("button", { name: "Nested action" })).pointerEvents).toBe("none");
     });
 
     it("passes clicks to the reply action", async () => {
         const user = userEvent.setup();
-        const onClick = vi.fn();
+        const onClick = vi.fn((event) => event.preventDefault());
 
-        render(
-            <ReplyTileView href="#" onClick={onClick}>
-                Reply content
-            </ReplyTileView>,
-        );
+        renderReplyTile(undefined, { onClick });
 
         await user.click(screen.getByRole("link"));
 

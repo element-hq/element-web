@@ -6,29 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef } from "react";
-import { type MatrixEvent, MatrixEventEvent, EventType, MsgType } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
-import { ReplyTileView } from "@element-hq/web-shared-components";
-import classNames from "classnames";
+import React, { useEffect } from "react";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { ReplyTileView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
-import { _t } from "../../../languageHandler";
-import dis from "../../../dispatcher/dispatcher";
-import { Action } from "../../../dispatcher/actions";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import SenderProfile from "../messages/SenderProfile";
-import MImageReplyBody from "../messages/MImageReplyBody";
-import { isVoiceMessage } from "../../../utils/EventUtils";
-import { getEventDisplayInfo } from "../../../utils/EventRenderingUtils";
-import MemberAvatar from "../avatars/MemberAvatar";
-import MVoiceMessageBody from "../messages/MVoiceMessageBody";
-import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import { renderReplyTile } from "../../../events/EventTileFactory";
 import { type GetRelationsForEvent } from "../rooms/EventTile";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { type IBodyProps } from "../messages/IBodyProps";
-import { FileBodyFactory, VideoBodyFactory, renderMBody } from "../messages/MBodyFactory";
-import { roomMemberToMemberInfo } from "../../../hooks/room/useRoomMemberProfile";
+import { ReplyTileViewModel } from "../../../viewmodels/room/timeline/event-tile/ReplyTileViewModel";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -39,146 +24,39 @@ interface IProps {
     getRelationsForEvent?: GetRelationsForEvent;
 }
 
-export default class ReplyTile extends React.PureComponent<IProps> {
-    private anchorElement = createRef<HTMLAnchorElement>();
+export default function ReplyTile({
+    mxEvent,
+    permalinkCreator,
+    highlights,
+    highlightLink,
+    toggleExpandedQuote,
+    getRelationsForEvent,
+}: IProps): React.ReactNode {
+    const cli = MatrixClientPeg.safeGet();
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new ReplyTileViewModel({
+                mxEvent,
+                permalinkCreator,
+                highlights,
+                highlightLink,
+                toggleExpandedQuote,
+                getRelationsForEvent,
+                cli,
+            }),
+    );
 
-    public componentDidMount(): void {
-        this.props.mxEvent.on(MatrixEventEvent.Decrypted, this.onDecrypted);
-        this.props.mxEvent.on(MatrixEventEvent.BeforeRedaction, this.onEventRequiresUpdate);
-        this.props.mxEvent.on(MatrixEventEvent.Replaced, this.onEventRequiresUpdate);
-    }
-
-    public componentWillUnmount(): void {
-        this.props.mxEvent.removeListener(MatrixEventEvent.Decrypted, this.onDecrypted);
-        this.props.mxEvent.removeListener(MatrixEventEvent.BeforeRedaction, this.onEventRequiresUpdate);
-        this.props.mxEvent.removeListener(MatrixEventEvent.Replaced, this.onEventRequiresUpdate);
-    }
-
-    private onDecrypted = (): void => {
-        this.forceUpdate();
-    };
-
-    private onEventRequiresUpdate = (): void => {
-        // Force update when necessary - redactions and edits
-        this.forceUpdate();
-    };
-
-    private onClick = (e: React.MouseEvent): void => {
-        const clickTarget = e.target as HTMLElement;
-        // Following a link within a reply should not dispatch the `view_room` action
-        // so that the browser can direct the user to the correct location
-        // The exception being the link wrapping the reply
-        if (
-            clickTarget.tagName.toLowerCase() !== "a" ||
-            clickTarget.closest("a") === null ||
-            clickTarget === this.anchorElement.current
-        ) {
-            // This allows the permalink to be opened in a new tab/window or copied as
-            // matrix.to, but also for it to enable routing within Riot when clicked.
-            e.preventDefault();
-            // Expand thread on shift key
-            if (this.props.toggleExpandedQuote && e.shiftKey) {
-                this.props.toggleExpandedQuote();
-            } else {
-                dis.dispatch<ViewRoomPayload>({
-                    action: Action.ViewRoom,
-                    event_id: this.props.mxEvent.getId(),
-                    highlighted: true,
-                    room_id: this.props.mxEvent.getRoomId(),
-                    metricsTrigger: undefined, // room doesn't change
-                });
-            }
-        }
-    };
-
-    public render(): React.ReactNode {
-        const mxEvent = this.props.mxEvent;
-        const msgType = mxEvent.getContent().msgtype;
-        const evType = mxEvent.getType();
-
-        const { hasRenderer, isInfoMessage, isSeeingThroughMessageHiddenForModeration } = getEventDisplayInfo(
-            MatrixClientPeg.safeGet(),
+    useEffect(() => {
+        vm.setProps({
             mxEvent,
-            false /* Replies are never hidden, so this should be fine */,
-        );
-        // This shouldn't happen: the caller should check we support this type
-        // before trying to instantiate us
-        if (!hasRenderer) {
-            const { mxEvent } = this.props;
-            logger.warn(`Event type not supported: type:${mxEvent.getType()} isState:${mxEvent.isState()}`);
-            return (
-                <div className="mx_ReplyTile mx_ReplyTile_info mx_MNoticeBody">{_t("timeline|error_no_renderer")}</div>
-            );
-        }
+            permalinkCreator,
+            highlights,
+            highlightLink,
+            toggleExpandedQuote,
+            getRelationsForEvent,
+            cli,
+        });
+    }, [cli, getRelationsForEvent, highlightLink, highlights, mxEvent, permalinkCreator, toggleExpandedQuote, vm]);
 
-        let permalink = "#";
-        if (this.props.permalinkCreator) {
-            permalink = this.props.permalinkCreator.forEvent(mxEvent.getId()!);
-        }
-
-        let sender;
-        const hasOwnSender = isInfoMessage || evType === EventType.RoomCreate;
-        if (!hasOwnSender) {
-            sender = (
-                <>
-                    <MemberAvatar member={mxEvent.sender} fallbackUserId={mxEvent.getSender()} size="16px" />
-                    <SenderProfile
-                        senderId={mxEvent.getSender() ?? undefined}
-                        member={roomMemberToMemberInfo(mxEvent.sender)}
-                        isEmote={msgType === MsgType.Emote}
-                    />
-                </>
-            );
-        }
-
-        const ReplyTileFileBody: React.ComponentType<IBodyProps> = (props) => renderMBody(props, FileBodyFactory);
-
-        const msgtypeOverrides: Record<string, React.ComponentType<IBodyProps>> = {
-            [MsgType.Image]: MImageReplyBody,
-            // Override audio body with file body. We also hide the download/decrypt button using CSS
-            [MsgType.Audio]: isVoiceMessage(mxEvent) ? MVoiceMessageBody : ReplyTileFileBody,
-            [MsgType.Video]: VideoBodyFactory,
-        };
-        const evOverrides: Record<string, React.ComponentType<IBodyProps>> = {
-            // Use MImageReplyBody so that the sticker isn't taking up a lot of space
-            [EventType.Sticker]: MImageReplyBody,
-        };
-
-        return (
-            <ReplyTileView
-                className={classNames("mx_ReplyTile", {
-                    mx_ReplyTile_inline: msgType === MsgType.Emote,
-                    mx_ReplyTile_info: isInfoMessage && !mxEvent.isRedacted(),
-                })}
-                senderClassName="mx_ReplyTile_sender"
-                href={permalink}
-                onClick={this.onClick}
-                ref={this.anchorElement}
-                inline={msgType === MsgType.Emote}
-                info={isInfoMessage && !mxEvent.isRedacted()}
-                sender={sender}
-            >
-                {renderReplyTile(
-                    {
-                        ...this.props,
-
-                        // overrides
-                        ref: undefined,
-                        showUrlPreview: false,
-                        overrideBodyTypes: msgtypeOverrides,
-                        overrideEventTypes: evOverrides,
-                        maxImageHeight: 96,
-                        isSeeingThroughMessageHiddenForModeration,
-
-                        // appease TS
-                        highlights: this.props.highlights,
-                        highlightLink: this.props.highlightLink,
-                        permalinkCreator: this.props.permalinkCreator,
-                        showHiddenEvents: false,
-                    },
-                    false /* showHiddenEvents shouldn't be relevant */,
-                )}
-            </ReplyTileView>
-        );
-    }
+    return <ReplyTileView vm={vm} />;
 }
