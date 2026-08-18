@@ -34,6 +34,33 @@ describe("BasicMessageComposer", () => {
     const userId = client.getSafeUserId();
     const room = new Room(roomId, client, userId);
 
+    const renderComposer = (model: EditorModel) =>
+        render(<BasicMessageComposer model={model} room={room} />, {
+            wrapper: ({ children }) => (
+                <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+            ),
+        });
+
+    it("should take focus when it mounts", async () => {
+        const { container } = renderComposer(new EditorModel([], pc, renderer));
+        expect(document.activeElement).toBe(container.querySelector("[contenteditable=true]"));
+    });
+
+    it("should not take focus from a text field the user is already in", async () => {
+        // e.g. emptying the room search box brings the timeline, and so the composer, back while
+        // the user is still typing in the search box.
+        const otherField = document.createElement("input");
+        document.body.appendChild(otherField);
+        otherField.focus();
+
+        try {
+            renderComposer(new EditorModel([], pc, renderer));
+            expect(document.activeElement).toBe(otherField);
+        } finally {
+            otherField.remove();
+        }
+    });
+
     it("should allow a user to paste a URL without it being mangled", async () => {
         const model = new EditorModel([], pc, renderer);
         render(<BasicMessageComposer model={model} room={room} />, {

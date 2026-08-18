@@ -776,7 +776,23 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         this.editorRef.current?.addEventListener("input", this.onInput, true);
         this.editorRef.current?.addEventListener("compositionstart", this.onCompositionStart, true);
         this.editorRef.current?.addEventListener("compositionend", this.onCompositionEnd, true);
-        this.editorRef.current?.focus();
+        if (!this.isUserTypingElsewhere()) {
+            this.editorRef.current?.focus();
+        }
+    }
+
+    /**
+     * Whether the caret is currently in some other text field.
+     *
+     * The composer takes focus when it mounts, which is right for the usual case of opening a room.
+     * It is not right when the composer appears underneath something the user is already typing in:
+     * emptying the room search box brings the timeline, and so this composer, back while the user is
+     * still in the search box thinking about their next search.
+     */
+    private isUserTypingElsewhere(): boolean {
+        const activeElement = document.activeElement;
+        if (!activeElement || activeElement === this.editorRef.current) return false;
+        return !!activeElement.closest("input, textarea, [contenteditable=true]");
     }
 
     private getInitialCaretPosition(): DocumentPosition {
