@@ -154,9 +154,9 @@ export class CustomThemesViewModel
     private async saveCustomThemes(themes: CustomTheme[]): Promise<boolean> {
         const attempt = this.writeQueue.then(() =>
             timeout(
-                this.props.settingsStore.setValue("custom_themes", null, SettingLevel.ACCOUNT, themes).then(
-                    () => true as const,
-                ),
+                this.props.settingsStore
+                    .setValue("custom_themes", null, SettingLevel.ACCOUNT, themes)
+                    .then(() => true as const),
                 false as const,
                 this.props.saveTimeoutMs ?? CustomThemesViewModel.DEFAULT_SAVE_TIMEOUT_MS,
             ),
