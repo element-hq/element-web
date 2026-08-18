@@ -107,17 +107,6 @@ Please see LICENSE files in the repository root for full details.
         }
     }
 
-    /* inside mx_RoomView_MessageList, outside of mx_ReplyTile */
-    /* (on the main panel and the chat panel with a maximized widget) */
-    > .mx_DisambiguatedProfile,
-    /* inside a thread, outside of mx_ReplyTile */
-    .mx_EventTile_senderDetails > .mx_DisambiguatedProfile {
-        position: relative;
-        top: -2px;
-        left: 2px;
-        font-size: $font-15px;
-    }
-
     .mx_MessageActionBar {
         top: -28px;
         z-index: 9; /* above the avatar */

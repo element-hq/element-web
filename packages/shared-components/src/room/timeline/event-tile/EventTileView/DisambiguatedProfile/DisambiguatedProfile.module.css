@@ -34,7 +34,15 @@
     }
 }
 
+.disambiguatedProfile[data-event-density="compact"] {
+    font-size: 13px;
+}
+
 .disambiguatedProfile[data-event-layout="bubble"] {
+    position: relative;
+    inset-block-start: -2px;
+    inset-inline-start: 2px;
+    font-size: 15px;
     width: fit-content;
     max-width: var(--event-tile-bubble-line-max-width, 70%);
     line-height: 18px;
@@ -55,7 +63,10 @@
 }
 
 .disambiguatedProfile[data-event-layout="irc"] {
+    order: 2;
+    flex-shrink: 0;
     width: var(--event-tile-irc-name-width, 80px);
+    margin-inline-end: 0;
     padding-block: 1px;
     display: inline-block;
     line-height: 1.125rem;
