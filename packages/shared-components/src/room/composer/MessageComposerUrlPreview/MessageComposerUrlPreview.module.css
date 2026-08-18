@@ -22,7 +22,7 @@
     }
 }
 
-:global(.cpd-theme-dark) .summaryIcon {
+:global(.cpd-theme-dark) {
     .summaryIcon,
     .entryIcon {
         --icon-lightness: 60%;
