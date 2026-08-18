@@ -8,7 +8,7 @@
 import React, { useCallback, type JSX } from "react";
 import classNames from "classnames";
 import { IconButton, InlineSpinner } from "@vector-im/compound-web";
-import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
+import { ErrorSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 
@@ -154,7 +154,7 @@ function useEntryContents(entry: MessageComposerUrlPreviewSnapshotEntry): {
             return {
                 entryIcon: (
                     <div className={styles.failedIcon}>
-                        <ErrorIcon />
+                        <ErrorSolidIcon />
                     </div>
                 ),
                 entryTitle: _t("composer|url_preview|failed"),
@@ -253,7 +253,7 @@ export function MessageComposerUrlPreviewView({
                         switch (entry.status) {
                             case "failed":
                                 className = styles.summaryIconFailed;
-                                icon = <ErrorIcon />;
+                                icon = <ErrorSolidIcon />;
                                 break;
                             case "loading":
                                 className = styles.summaryIconLoading;

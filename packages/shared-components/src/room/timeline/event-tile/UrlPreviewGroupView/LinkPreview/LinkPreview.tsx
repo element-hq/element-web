@@ -23,7 +23,7 @@ export interface AdditionalClasses {
     /*
      * Additional classes at add to the component
      */
-    classes?: string[];
+    className?: string;
 }
 
 export type LinkPreviewProps = UrlPreview & LinkPreviewActions & { collapsed: boolean };
@@ -32,7 +32,7 @@ export function LinkTitle({
     title,
     showTooltipOnLink,
     link,
-    classes,
+    className,
 }: Pick<LinkPreviewProps, "title" | "showTooltipOnLink" | "link"> & AdditionalClasses): JSX.Element {
     const caption = new URL(link).toString();
     const anchor = (
@@ -41,7 +41,7 @@ export function LinkTitle({
             type="body"
             weight="semibold"
             size="md"
-            className={classNames(styles.title, ...(classes ?? []))}
+            className={classNames(styles.title, className)}
             href={link}
             target="_blank"
             rel="noreferrer noopener"
@@ -55,13 +55,13 @@ export function LinkTitle({
 export function LinkSiteName({
     siteIcon,
     siteName,
-    classes,
+    className,
 }: {
     siteIcon?: string;
     siteName: string;
 } & AdditionalClasses): JSX.Element {
     return (
-        <div className={classNames(styles.siteName, ...(classes ?? []))}>
+        <div className={classNames(styles.siteName, className)}>
             {siteIcon && <Avatar size="16px" name={siteName} id={siteName} src={siteIcon} />}
             <Text as="span" size="sm" weight="regular">
                 {siteName}
