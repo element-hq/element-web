@@ -19,7 +19,8 @@ import { getUserNameColorClass } from "../../../utils/FormattingUtils";
 import { Action } from "../../../dispatcher/actions";
 import Spinner from "./Spinner";
 import ReplyTile from "../rooms/ReplyTile";
-import { Pill, PillType } from "./Pill";
+import { Pill } from "./Pill";
+import { PillType } from "./PillType";
 import AccessibleButton from "./AccessibleButton";
 import { getParentEventId, shouldDisplayReply } from "../../../utils/Reply";
 import RoomContext from "../../../contexts/RoomContext";
@@ -85,7 +86,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
 
     public componentDidMount(): void {
         this.unmounted = false;
-        this.initialize();
+        void this.initialize();
         this.trySetExpandableQuotes();
     }
 
@@ -168,7 +169,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
     };
 
     public collapse = (): void => {
-        this.initialize();
+        void this.initialize();
     };
 
     private onQuoteClick = async (): Promise<void> => {

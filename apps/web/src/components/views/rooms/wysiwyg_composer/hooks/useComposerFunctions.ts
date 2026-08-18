@@ -21,7 +21,6 @@ export function useComposerFunctions(
         () => ({
             clear: () => {
                 if (ref.current) {
-                    // eslint-disable-next-line react-compiler/react-compiler
                     ref.current.innerHTML = "";
                 }
             },
@@ -32,7 +31,7 @@ export function useComposerFunctions(
                     const content = ref.current.innerHTML;
                     const { anchorOffset, focusOffset } = selection;
                     ref.current.innerHTML = `${content.slice(0, anchorOffset)}${text}${content.slice(focusOffset)}`;
-                    setSelection({
+                    void setSelection({
                         anchorNode: ref.current.firstChild,
                         anchorOffset: anchorOffset + text.length,
                         focusNode: ref.current.firstChild,

@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { Page } from "playwright-core";
+import { type Page } from "playwright-core";
 
 /**
  * Close the release announcement with the given name.

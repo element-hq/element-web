@@ -27,6 +27,10 @@
         "yes": "Tak"
     },
     "confirm_quit": "Czy na pewno chcesz zamknąć?",
+    "download": {
+        "unable_to_open_description": "Nie można otworzyć pliku. Mógł zostać przeniesiony lub usunięty.",
+        "unable_to_open_title": "Nie można otworzyć pliku"
+    },
     "edit_menu": {
         "speech": "Mowa",
         "speech_start_speaking": "Zacznij mówić",
@@ -54,6 +58,11 @@
         "services": "Usługi",
         "unhide": "Odkryj"
     },
+    "renderer_crash": {
+        "detail": "Zamknij i uruchom ponownie aplikację, żeby kontynuować. Jeśli problem nie ustępuje, spróbuj wyczyścić pamięć podręczną i zresetować komputer.",
+        "message": "%(brand)s przestał próbować naprawić problem, który udało się ominąć lecz ciągle się ponawia.",
+        "title": "%(brand)s nie może przestać się zawieszać"
+    },
     "right_click_menu": {
         "add_to_dictionary": "Dodaj do słownika",
         "copy_email": "Kopiuj adres e-mail",
@@ -63,6 +72,10 @@
         "save_image_as": "Zapisz obraz jako...",
         "save_image_as_error_description": "Obraz nie został zapisany",
         "save_image_as_error_title": "Nie udało się zapisać obrazu"
+    },
+    "save_dialog": {
+        "all_files": "Wszystkie pliki",
+        "named_file_type": "Plik %(extension)s"
     },
     "store": {
         "error": {

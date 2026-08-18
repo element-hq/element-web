@@ -25,7 +25,6 @@ export const useNotificationState = (room: Room): [RoomNotifState | undefined, (
             setNotificationState(echoChamber.notificationVolume);
         }
     });
-    // eslint-disable-next-line react-compiler/react-compiler
     const setter = useCallback((state: RoomNotifState) => (echoChamber.notificationVolume = state), [echoChamber]);
     return [notificationState, setter];
 };

@@ -10,6 +10,12 @@ Please see LICENSE files in the repository root for full details.
  * The emoji should be a single grapheme cluster.
  */
 export interface UserStatus {
+    /**
+     * The emoji representing the user's status. This must be a single grapheme cluster.
+     */
     emoji: string;
+    /**
+     * The text representing the user's status.
+     */
     text: string;
 }

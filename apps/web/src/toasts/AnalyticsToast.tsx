@@ -38,7 +38,7 @@ const onLearnMoreNoOptIn = (): void => {
         primaryButton: _t("action|enable"),
     });
 
-    finished.then(([buttonClicked]) => {
+    void finished.then(([buttonClicked]) => {
         if (buttonClicked === ButtonClicked.Primary) {
             // user clicked "Enable"
             onAccept();
@@ -54,7 +54,7 @@ const onLearnMorePreviouslyOptedIn = (): void => {
         cancelButton: _t("action|stop"),
     });
 
-    finished.then(([buttonClicked]) => {
+    void finished.then(([buttonClicked]) => {
         if (buttonClicked === ButtonClicked.Primary) {
             // user clicked "That's fine"
             onAccept();
@@ -67,10 +67,6 @@ const onLearnMorePreviouslyOptedIn = (): void => {
 };
 
 const TOAST_KEY = "analytics";
-
-export function getPolicyUrl(): string | undefined {
-    return SdkConfig.get("privacy_policy_url");
-}
 
 export const showToast = (): void => {
     const legacyAnalyticsOptIn = SettingsStore.getValue("analyticsOptIn", null, true);

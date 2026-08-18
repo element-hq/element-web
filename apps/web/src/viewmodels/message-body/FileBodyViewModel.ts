@@ -49,8 +49,7 @@ async function cacheDownloadIcon(): Promise<string> {
 }
 
 // Cache the asset immediately
-// noinspection JSIgnoredPromiseFromCall
-cacheDownloadIcon();
+void cacheDownloadIcon();
 
 // User supplied content can contain scripts, we have to be careful that
 // we don't accidentally run those script within the same origin as the
@@ -85,7 +84,7 @@ cacheDownloadIcon();
 /**
  * Get the current CSS style for a DOMElement.
  * @param {HTMLElement} element The element to get the current style of.
- * @return {string} The CSS style encoded as a string.
+ * @returns {string} The CSS style encoded as a string.
  */
 function computedStyle(element: HTMLElement | null): string {
     if (!element) {
@@ -223,7 +222,7 @@ export class FileBodyViewModel
     private downloadFile(fileName: string, text: string): void {
         if (!this.decryptedBlob) return;
 
-        this.fileDownloader.download({
+        void this.fileDownloader.download({
             blob: this.decryptedBlob,
             name: fileName,
             autoDownload: this.userDidClick,
@@ -264,7 +263,7 @@ export class FileBodyViewModel
             return;
         }
 
-        this.fileDownloader.download({
+        await this.fileDownloader.download({
             blob: await this.props.mediaEventHelper.sourceBlob.value,
             name: this.fileName,
         });
@@ -281,7 +280,7 @@ export class FileBodyViewModel
         const fileType = this.content.info?.mimetype ?? "application/octet-stream";
         logger.log(`Downloading ${fileType} as blob (unencrypted)`);
 
-        this.props.mediaEventHelper.sourceBlob.value.then((blob) => {
+        void this.props.mediaEventHelper.sourceBlob.value.then((blob) => {
             const blobUrl = URL.createObjectURL(blob);
             const tempAnchor = document.createElement("a");
             tempAnchor.download = this.fileName;

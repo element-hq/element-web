@@ -30,6 +30,10 @@ describe("ReplyTile", () => {
         jest.mocked(renderReplyTile).mockClear().mockReturnValue(null);
     });
 
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
+
     it("renders video replies with the video body", () => {
         const mxEvent = mkEvent({
             event: true,

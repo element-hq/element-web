@@ -21,7 +21,7 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import React from "react";
 
 import ErrorDialog from "../../../../../src/components/views/dialogs/ErrorDialog";
-import { RoomSettingsTab } from "../../../../../src/components/views/dialogs/RoomSettingsDialog";
+import { RoomSettingsTab } from "../../../../../src/components/views/dialogs/RoomSettingsDialog-tab";
 import { RoomKnocksBar } from "../../../../../src/components/views/rooms/RoomKnocksBar";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import dis from "../../../../../src/dispatcher/dispatcher";

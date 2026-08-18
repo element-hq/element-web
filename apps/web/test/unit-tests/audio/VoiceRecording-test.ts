@@ -136,7 +136,7 @@ describe("VoiceRecording", () => {
             MediaDeviceHandlerMock.getAudioInput.mockReturnValue("default");
             await recording.start();
 
-            const constraints = mocked(navigator.mediaDevices.getUserMedia).mock.calls[0][0] as MediaStreamConstraints;
+            const constraints = mocked(navigator.mediaDevices.getUserMedia).mock.calls[0][0]!;
             expect(constraints.audio).toEqual(
                 expect.not.objectContaining({
                     deviceId: expect.anything(),

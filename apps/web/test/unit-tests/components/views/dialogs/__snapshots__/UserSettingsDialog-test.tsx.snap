@@ -4,6 +4,7 @@ exports[`<UserSettingsDialog /> renders tabs correctly 1`] = `
 NodeList [
   <li
     aria-controls="mx_tabpanel_USER_ACCOUNT_TAB"
+    aria-labelledby="mx_tabpanel_USER_ACCOUNT_TAB_label"
     aria-selected="true"
     class="mx_AccessibleButton mx_TabbedView_tabLabel mx_TabbedView_tabLabel_active"
     data-testid="settings-tab-USER_ACCOUNT_TAB"
@@ -36,6 +37,7 @@ NodeList [
   </li>,
   <li
     aria-controls="mx_tabpanel_USER_SESSION_MANAGER_TAB"
+    aria-labelledby="mx_tabpanel_USER_SESSION_MANAGER_TAB_label"
     aria-selected="false"
     class="mx_AccessibleButton mx_TabbedView_tabLabel"
     data-testid="settings-tab-USER_SESSION_MANAGER_TAB"
@@ -62,6 +64,7 @@ NodeList [
   </li>,
   <li
     aria-controls="mx_tabpanel_USER_APPEARANCE_TAB"
+    aria-labelledby="mx_tabpanel_USER_APPEARANCE_TAB_label"
     aria-selected="false"
     class="mx_AccessibleButton mx_TabbedView_tabLabel"
     data-testid="settings-tab-USER_APPEARANCE_TAB"
@@ -88,6 +91,7 @@ NodeList [
   </li>,
   <li
     aria-controls="mx_tabpanel_USER_NOTIFICATIONS_TAB"
+    aria-labelledby="mx_tabpanel_USER_NOTIFICATIONS_TAB_label"
     aria-selected="false"
     class="mx_AccessibleButton mx_TabbedView_tabLabel"
     data-testid="settings-tab-USER_NOTIFICATIONS_TAB"
@@ -114,6 +118,7 @@ NodeList [
   </li>,
   <li
     aria-controls="mx_tabpanel_USER_PREFERENCES_TAB"
+    aria-labelledby="mx_tabpanel_USER_PREFERENCES_TAB_label"
     aria-selected="false"
     class="mx_AccessibleButton mx_TabbedView_tabLabel"
     data-testid="settings-tab-USER_PREFERENCES_TAB"
@@ -142,6 +147,7 @@ NodeList [
   </li>,
   <li
     aria-controls="mx_tabpanel_USER_KEYBOARD_TAB"
+    aria-labelledby="mx_tabpanel_USER_KEYBOARD_TAB_label"
     aria-selected="false"
     class="mx_AccessibleButton mx_TabbedView_tabLabel"
     data-testid="settings-tab-USER_KEYBOARD_TAB"
@@ -173,6 +179,7 @@ NodeList [
   </li>,
   <li
     aria-controls="mx_tabpanel_USER_SIDEBAR_TAB"
+    aria-labelledby="mx_tabpanel_USER_SIDEBAR_TAB_label"
     aria-selected="false"
     class="mx_AccessibleButton mx_TabbedView_tabLabel"
     data-testid="settings-tab-USER_SIDEBAR_TAB"
@@ -201,6 +208,7 @@ NodeList [
   </li>,
   <li
     aria-controls="mx_tabpanel_USER_SECURITY_TAB"
+    aria-labelledby="mx_tabpanel_USER_SECURITY_TAB_label"
     aria-selected="false"
     class="mx_AccessibleButton mx_TabbedView_tabLabel"
     data-testid="settings-tab-USER_SECURITY_TAB"
@@ -227,6 +235,7 @@ NodeList [
   </li>,
   <li
     aria-controls="mx_tabpanel_USER_ENCRYPTION_TAB"
+    aria-labelledby="mx_tabpanel_USER_ENCRYPTION_TAB_label"
     aria-selected="false"
     class="mx_AccessibleButton mx_TabbedView_tabLabel"
     data-testid="settings-tab-USER_ENCRYPTION_TAB"
@@ -253,6 +262,7 @@ NodeList [
   </li>,
   <li
     aria-controls="mx_tabpanel_USER_LABS_TAB"
+    aria-labelledby="mx_tabpanel_USER_LABS_TAB_label"
     aria-selected="false"
     class="mx_AccessibleButton mx_TabbedView_tabLabel"
     data-testid="settings-tab-USER_LABS_TAB"
@@ -287,6 +297,7 @@ NodeList [
   </li>,
   <li
     aria-controls="mx_tabpanel_USER_HELP_TAB"
+    aria-labelledby="mx_tabpanel_USER_HELP_TAB_label"
     aria-selected="false"
     class="mx_AccessibleButton mx_TabbedView_tabLabel"
     data-testid="settings-tab-USER_HELP_TAB"

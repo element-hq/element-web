@@ -7,12 +7,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { env } from "node:process";
-import path, { dirname } from "node:path";
+import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import type { Config } from "jest";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const config: Config = {
     testEnvironment: "jest-fixed-jsdom",
@@ -34,6 +34,7 @@ const config: Config = {
         "\\.(css|scss|pcss)(\\?raw)?$": "<rootDir>/__mocks__/cssMock.js",
         "\\.(gif|png|ttf|woff2)$": "<rootDir>/__mocks__/imageMock.js",
         "\\.svg$": "<rootDir>/__mocks__/svg.js",
+        "\\.svg\\?react$": "<rootDir>/__mocks__/svg-react.js",
         "^matrix-js-sdk(.*)$": "<rootDir>/node_modules/matrix-js-sdk$1",
         "^react$": "<rootDir>/node_modules/react",
         "^react-dom$": "<rootDir>/node_modules/react-dom",
@@ -50,7 +51,7 @@ const config: Config = {
         "test-utils-rtl": "<rootDir>/test/test-utils/jest-matrix-react.tsx",
     },
     transformIgnorePatterns: [
-        `${path.join(__dirname, "../..")}/node_modules/.pnpm/(?!(mime|uuid|p-retry|is-network-error|react-merge-refs|is-ip|ip-regex|super-regex|function-timeout|time-span|convert-hrtime|clone-regexp|is-regexp|matrix-web-i18n|await-lock|@element-hq/web-shared-components|react-virtuoso|lodash|domutils|domhandler|domelementtype|dom-serializer|entities)).+$`,
+        `${path.join(__dirname, "../..")}/node_modules/.pnpm/(?!(matrix-js-sdk|htmlparser2|mime|uuid|p-retry|is-network-error|react-merge-refs|is-ip|ip-regex|super-regex|function-timeout|time-span|convert-hrtime|clone-regexp|is-regexp|matrix-web-i18n|await-lock|@element-hq/web-shared-components|react-virtuoso|lodash|domutils|domhandler|domelementtype|dom-serializer|entities)).+$`,
     ],
     collectCoverageFrom: [
         "<rootDir>/src/**/*.{js,ts,tsx}",
@@ -62,11 +63,14 @@ const config: Config = {
         // Ignore vitest tests
         "!<rootDir>/src/**/*.test.{ts,tsx}",
         "!<rootDir>/src/test/**",
+        // Exclude mocks
+        "!<rootDir>/src/**/*-{mock,mocks}.{ts,tsx}",
     ],
     coverageReporters: ["text-summary", ["lcov", { projectRoot: "../../" }]],
     prettierPath: null,
     moduleDirectories: ["node_modules", "test/test-utils"],
     workerIdleMemoryLimit: "512MB",
+    snapshotSerializers: ["<rootDir>/src/test/react-use-id-serializer.ts"],
 };
 
 // if we're running under GHA, enable relevant reporters

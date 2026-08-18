@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { Room } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/src/logger";
 import type { Sorter, SortingAlgorithm } from "./sorters";
 import type { Filter, FilterKey } from "./filters";
 import { RoomNode } from "./RoomNode";
@@ -115,12 +116,13 @@ export class RoomSkipList implements Iterable<Room> {
 
     /**
      * Adds a new room to the skiplist.
-     * This method will throw an error if the room is already in the skiplist.
+     * This method does nothing if the room is already in the skiplist.
      * @param room the room to add
      */
     public addNewRoom(room: Room): void {
         if (this.roomNodeMap.has(room.roomId)) {
-            throw new Error(`Can't add room to skiplist: ${room.roomId} is already in the skiplist!`);
+            logger.error(`Can't add room to skiplist: ${room.roomId} is already in the skiplist!`);
+            return;
         }
         this.insertRoom(room);
     }

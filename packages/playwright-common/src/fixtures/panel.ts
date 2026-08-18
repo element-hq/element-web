@@ -14,7 +14,7 @@ import { test as base } from "./services.js";
  */
 const LEFT_PANEL_WIDTH = "368.6875px";
 
-export const test = base.extend<{
+export type TestFixtures = {
     /**
      * Whether the left panel should have its width fixed.
      * This is done because the library that we use for rendering collapsible
@@ -25,7 +25,9 @@ export const test = base.extend<{
      * behaviour.
      */
     lockLeftPanelWidth: boolean;
-}>({
+};
+
+export const test = base.extend<TestFixtures>({
     lockLeftPanelWidth: true,
     page: async ({ lockLeftPanelWidth, page }, use) => {
         const listener = async (page: Page) => {

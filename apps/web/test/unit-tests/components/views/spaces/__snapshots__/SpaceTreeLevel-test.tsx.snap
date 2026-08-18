@@ -3,7 +3,7 @@
 exports[`SpaceButton metaspace should render notificationState if one is provided 1`] = `
 <DocumentFragment>
   <div
-    aria-label="People"
+    aria-label="Home"
     class="mx_AccessibleButton mx_SpaceButton mx_SpaceButton_active"
     data-testid="create-space-button"
     role="button"
@@ -25,23 +25,27 @@ exports[`SpaceButton metaspace should render notificationState if one is provide
         <div
           class="mx_SpacePanel_badgeContainer"
         >
-          <div
-            class="mx_AccessibleButton mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_level_notification mx_NotificationBadge_2char cpd-theme-light"
-            role="button"
+          <button
+            aria-label="Jump to first unread room."
+            class="mx_SpacePanel_notificationBadge _notificationBadge_19whq_8 _visible_19whq_16 _notification_19whq_8 _badge2Char_19whq_57 cpd-theme-light"
+            data-badge-type="badge_2char"
+            data-notification-level="notification"
+            data-testid="notification-badge"
             tabindex="-1"
+            type="button"
           >
             <span
-              class="mx_NotificationBadge_count"
+              class="_count_19whq_40"
             >
               8
             </span>
-          </div>
+          </button>
         </div>
       </div>
       <span
         class="mx_SpaceButton_name"
       >
-        People
+        Home
       </span>
     </div>
   </div>
@@ -91,13 +95,14 @@ exports[`SpaceItem should render a space with subspaces 1`] = `
             class="_avatar_va14e_8 mx_BaseAvatar"
             data-color="3"
             data-testid="avatar-img"
-            data-type="round"
+            data-type="square"
+            role="img"
             style="--cpd-avatar-size: 32px;"
           >
             <img
               alt=""
               class="_image_va14e_43"
-              data-type="round"
+              data-type="square"
               height="32px"
               loading="lazy"
               referrerpolicy="no-referrer"
@@ -180,13 +185,14 @@ exports[`SpaceItem should render a space with subspaces 2`] = `
             class="_avatar_va14e_8 mx_BaseAvatar"
             data-color="3"
             data-testid="avatar-img"
-            data-type="round"
+            data-type="square"
+            role="img"
             style="--cpd-avatar-size: 32px;"
           >
             <img
               alt=""
               class="_image_va14e_43"
-              data-type="round"
+              data-type="square"
               height="32px"
               loading="lazy"
               referrerpolicy="no-referrer"
@@ -248,13 +254,14 @@ exports[`SpaceItem should render a space with subspaces 2`] = `
                 class="_avatar_va14e_8 mx_BaseAvatar"
                 data-color="4"
                 data-testid="avatar-img"
-                data-type="round"
+                data-type="square"
+                role="img"
                 style="--cpd-avatar-size: 24px;"
               >
                 <img
                   alt=""
                   class="_image_va14e_43"
-                  data-type="round"
+                  data-type="square"
                   height="24px"
                   loading="lazy"
                   referrerpolicy="no-referrer"

@@ -12,15 +12,15 @@ import React, { type Ref, type JSX } from "react";
 
 import AccessibleButton, { type ButtonProps } from "../../components/views/elements/AccessibleButton";
 
-type Props<T extends keyof HTMLElementTagNameMap> = ButtonProps<T> & {
+type Props = Omit<ButtonProps<"div">, "element" | "ref"> & {
     label?: string;
     // whether the context menu is currently open
     isExpanded: boolean;
-    ref?: Ref<HTMLElementTagNameMap[T]>;
+    ref?: Ref<HTMLElement>;
 };
 
 // Semantic component for representing the AccessibleButton which launches a <ContextMenu />
-export const ContextMenuButton = function <T extends keyof HTMLElementTagNameMap>({
+export const ContextMenuButton = function ({
     label,
     isExpanded,
     children,
@@ -28,7 +28,7 @@ export const ContextMenuButton = function <T extends keyof HTMLElementTagNameMap
     onContextMenu,
     ref,
     ...props
-}: Props<T>): JSX.Element {
+}: Props): JSX.Element {
     return (
         <AccessibleButton
             {...props}

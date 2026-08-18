@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { TextEncoder } from "util";
-import nodeCrypto from "crypto";
+import { TextEncoder } from "node:util";
+import nodeCrypto from "node:crypto";
 import { Crypto } from "@peculiar/webcrypto";
 
 import type * as MegolmExportEncryptionExport from "../../../src/utils/MegolmExportEncryption";
@@ -57,7 +57,7 @@ const TEST_VECTORS = [
             "bWnSXS9oymiqwUIGs08sXI33ZA==\n" +
             "-----END MEGOLM SESSION DATA-----",
     ],
-];
+] as const;
 
 function stringToArray(s: string): ArrayBuffer {
     return new TextEncoder().encode(s).buffer as ArrayBuffer;
@@ -74,8 +74,7 @@ describe("MegolmExportEncryption", function () {
                 subtle: webCrypto.subtle,
             },
         });
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        MegolmExportEncryption = require("../../../src/utils/MegolmExportEncryption");
+        MegolmExportEncryption = jest.requireActual("../../../src/utils/MegolmExportEncryption");
     });
 
     describe("decrypt", function () {
@@ -120,20 +119,9 @@ cissyYBxjsfsAn
             );
         });
 
-        // TODO find a subtlecrypto shim which doesn't break this test
-        it.skip("should decrypt a range of inputs", function () {
-            function next(i: number): Promise<string | undefined> | undefined {
-                if (i >= TEST_VECTORS.length) {
-                    return;
-                }
-
-                const [plain, password, input] = TEST_VECTORS[i];
-                return MegolmExportEncryption.decryptMegolmKeyFile(stringToArray(input), password).then((decrypted) => {
-                    expect(decrypted).toEqual(plain);
-                    return next(i + 1);
-                });
-            }
-            next(0);
+        it.skip.each(TEST_VECTORS)("should decrypt a range of inputs", async (plain, password, input) => {
+            const decrypted = await MegolmExportEncryption.decryptMegolmKeyFile(stringToArray(input), password);
+            expect(decrypted).toEqual(plain);
         });
     });
 

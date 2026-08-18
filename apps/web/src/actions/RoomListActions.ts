@@ -18,6 +18,7 @@ import { type AsyncActionPayload } from "../dispatcher/payloads";
 import { DefaultTagID, type TagID } from "../stores/room-list-v3/skip-list/tag";
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";
 
+// oxlint-disable-next-line typescript/no-extraneous-class
 export default class RoomListActions {
     /**
      * Creates an action thunk that will do an asynchronous request to

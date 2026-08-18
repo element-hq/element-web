@@ -23,10 +23,10 @@ import EncryptionPanel from "./EncryptionPanel";
 import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
 import BaseCard from "./BaseCard";
 import QuestionDialog from "../dialogs/QuestionDialog";
-import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { UserInfoHeaderView } from "./user_info/UserInfoHeaderView";
 import { UserInfoBasicView } from "./user_info/UserInfoBasicView";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 export interface IDevice extends Device {
     ambiguous?: boolean;
@@ -76,11 +76,8 @@ export const Container: React.FC<{
 
 export interface IPowerLevelsContent {
     events?: Record<string, number>;
-    // eslint-disable-next-line camelcase
     users_default?: number;
-    // eslint-disable-next-line camelcase
     events_default?: number;
-    // eslint-disable-next-line camelcase
     state_default?: number;
     ban?: number;
     kick?: number;
@@ -132,7 +129,7 @@ export const useDevices = (userId: string): IDevice[] | undefined | null => {
                 setDevices(null);
             }
         }
-        downloadDeviceList();
+        void downloadDeviceList();
 
         // Handle being unmounted
         return () => {
@@ -150,11 +147,11 @@ export const useDevices = (userId: string): IDevice[] | undefined | null => {
         };
         const onDevicesUpdated = (users: string[]): void => {
             if (!users.includes(userId)) return;
-            updateDevices();
+            void updateDevices();
         };
         const onUserTrustStatusChanged = (_userId: string, trustLevel: UserVerificationStatus): void => {
             if (_userId !== userId) return;
-            updateDevices();
+            void updateDevices();
         };
         cli.on(CryptoEvent.DevicesUpdated, onDevicesUpdated);
         cli.on(CryptoEvent.UserTrustStatusChanged, onUserTrustStatusChanged);
@@ -181,31 +178,31 @@ interface IProps {
 }
 
 const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPhases.MemberInfo, ...props }) => {
-    const cli = useContext(MatrixClientContext);
+    const sdkContext = useContext(SDKContext);
 
     // fetch latest room member if we have a room, so we don't show historical information, falling back to user
     const member = useMemo(() => (room ? room.getMember(user.userId) || user : user), [room, user]);
 
-    const isRoomEncrypted = useIsEncrypted(cli, room);
+    const isRoomEncrypted = useIsEncrypted(sdkContext.client!, room);
     const devices = useDevices(user.userId) ?? [];
 
     const classes = ["mx_UserInfo"];
 
     const onEncryptionPanelClose = (): void => {
-        RightPanelStore.instance.popCard();
+        sdkContext.rightPanelStore.popCard();
     };
 
     let content: JSX.Element | undefined;
     switch (phase) {
         case RightPanelPhases.MemberInfo:
-            content = <UserInfoBasicView room={room as Room} member={member as User} />;
+            content = <UserInfoBasicView room={room!} member={member} />;
             break;
         case RightPanelPhases.EncryptionPanel:
             classes.push("mx_UserInfo_smallAvatar");
             content = (
                 <EncryptionPanel
                     {...(props as React.ComponentProps<typeof EncryptionPanel>)}
-                    member={member as User | RoomMember}
+                    member={member}
                     onClose={onEncryptionPanelClose}
                     isRoomEncrypted={Boolean(isRoomEncrypted)}
                 />
@@ -237,7 +234,7 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
             onClose={onClose}
             closeLabel={closeLabel}
             onBack={(ev: ButtonEvent) => {
-                if (RightPanelStore.instance.previousCard.phase === RightPanelPhases.MemberList) {
+                if (sdkContext.rightPanelStore.previousCard.phase === RightPanelPhases.MemberList) {
                     PosthogTrackers.trackInteraction("WebRightPanelRoomUserInfoBackButton", ev);
                 }
             }}

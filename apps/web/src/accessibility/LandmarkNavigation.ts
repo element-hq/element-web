@@ -9,7 +9,6 @@
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import { Action } from "../dispatcher/actions";
 import defaultDispatcher from "../dispatcher/dispatcher";
-import SettingsStore from "../settings/SettingsStore";
 
 export const enum Landmark {
     // This is the space/home button in the left panel.
@@ -33,6 +32,7 @@ const ORDERED_LANDMARKS = [
  * The landmarks are cycled through in the following order:
  * ACTIVE_SPACE_BUTTON <-> ROOM_SEARCH <-> ROOM_LIST <-> MESSAGE_COMPOSER/HOME <-> ACTIVE_SPACE_BUTTON
  */
+// oxlint-disable-next-line typescript/no-extraneous-class
 export class LandmarkNavigation {
     /**
      * Get the next/previous landmark that must be focused from a given landmark
@@ -73,16 +73,10 @@ export class LandmarkNavigation {
 const landmarkToDomElementMap: Record<Landmark, () => HTMLElement | null | undefined> = {
     [Landmark.ACTIVE_SPACE_BUTTON]: () => document.querySelector<HTMLElement>(".mx_SpaceButton_active"),
 
-    [Landmark.ROOM_SEARCH]: () =>
-        SettingsStore.getValue("feature_new_room_list")
-            ? document.querySelector<HTMLElement>("#room-list-search-button")
-            : document.querySelector<HTMLElement>(".mx_RoomSearch"),
+    [Landmark.ROOM_SEARCH]: () => document.querySelector<HTMLElement>("#room-list-search-button"),
     [Landmark.ROOM_LIST]: () =>
-        SettingsStore.getValue("feature_new_room_list")
-            ? document.querySelector<HTMLElement>(".mx_RoomListItemView_selected") ||
-              document.querySelector<HTMLElement>(".mx_RoomListItemView")
-            : document.querySelector<HTMLElement>(".mx_RoomTile_selected") ||
-              document.querySelector<HTMLElement>(".mx_RoomTile"),
+        document.querySelector<HTMLElement>(".mx_RoomListItemView_selected") ||
+        document.querySelector<HTMLElement>(".mx_RoomListItemView"),
 
     [Landmark.MESSAGE_COMPOSER_OR_HOME]: () => {
         const isComposerOpen = !!document.querySelector(".mx_MessageComposer");

@@ -26,12 +26,14 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { Button } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
+import { formatSeconds } from "../../../DateUtils";
 import { adminContactStrings, messageForResourceLimitError, resourceLimitStrings } from "../../../utils/ErrorUtils";
 import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
 import * as Lifecycle from "../../../Lifecycle";
-import { type IMatrixClientCreds, MatrixClientPeg } from "../../../MatrixClientPeg";
+import { type IMatrixClientCreds } from "../../../utils/createMatrixClient";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import AuthPage from "../../views/auth/AuthPage";
-import Login, { type OidcNativeFlow } from "../../../Login";
+import Login, { type OAuthNativeFlow } from "../../../Login";
 import dis from "../../../dispatcher/dispatcher";
 import SSOButtons from "../../views/elements/SSOButtons";
 import ServerPicker from "../../views/elements/ServerPicker";
@@ -45,7 +47,7 @@ import { AuthHeaderDisplay } from "./header/AuthHeaderDisplay";
 import { AuthHeaderProvider } from "./header/AuthHeaderProvider";
 import SettingsStore from "../../../settings/SettingsStore";
 import { type ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
-import { startOidcLogin } from "../../../utils/oidc/authorize";
+import { startOAuthLogin } from "../../../utils/oauth/authorize";
 
 const debuglog = (...args: any[]): void => {
     if (SettingsStore.getValue("debug_registration")) {
@@ -123,13 +125,18 @@ interface IState {
     ssoFlow?: SSOFlow;
     // the OIDC native login flow, when supported and enabled
     // if present, must be used for registration
-    oidcNativeFlow?: OidcNativeFlow;
+    oauthNativeFlow?: OAuthNativeFlow;
+    // Set while the server is rate limiting registration. Kept apart from errorText so the warning
+    // can sit next to the disabled submit button rather than above the server picker.
+    rateLimitError?: string;
 }
 
 export default class Registration extends React.Component<IProps, IState> {
     private readonly loginLogic: Login;
     // `replaceClient` tracks latest serverConfig to spot when it changes under the async method which fetches flows
     private latestServerConfig?: ValidatedServerConfig;
+    // Pending re-query for after a rate limit expires, so the form comes back on its own
+    private rateLimitTimer?: ReturnType<typeof setTimeout>;
 
     public constructor(props: IProps) {
         super(props);
@@ -156,13 +163,14 @@ export default class Registration extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
-        this.replaceClient(this.props.serverConfig);
+        void this.replaceClient(this.props.serverConfig);
         //triggers a confirmation dialog for data loss before page unloads/refreshes
         window.addEventListener("beforeunload", this.unloadCallback);
     }
 
     public componentWillUnmount(): void {
         window.removeEventListener("beforeunload", this.unloadCallback);
+        clearTimeout(this.rateLimitTimer);
     }
 
     private unloadCallback = (event: BeforeUnloadEvent): string | undefined => {
@@ -178,7 +186,7 @@ export default class Registration extends React.Component<IProps, IState> {
             prevProps.serverConfig.hsUrl !== this.props.serverConfig.hsUrl ||
             prevProps.serverConfig.isUrl !== this.props.serverConfig.isUrl
         ) {
-            this.replaceClient(this.props.serverConfig);
+            void this.replaceClient(this.props.serverConfig);
         }
     }
 
@@ -186,8 +194,12 @@ export default class Registration extends React.Component<IProps, IState> {
         this.latestServerConfig = serverConfig;
         const { hsUrl, isUrl } = serverConfig;
 
+        clearTimeout(this.rateLimitTimer);
+        this.rateLimitTimer = undefined;
+
         this.setState({
             errorText: null,
+            rateLimitError: undefined,
             serverDeadError: null,
             serverErrorIsFatal: false,
             // busy while we do live-ness check (we need to avoid trying to render
@@ -224,12 +236,12 @@ export default class Registration extends React.Component<IProps, IState> {
         this.loginLogic.setDelegatedAuthentication(serverConfig.delegatedAuthentication);
 
         let ssoFlow: SSOFlow | undefined;
-        let oidcNativeFlow: OidcNativeFlow | undefined;
+        let oauthNativeFlow: OAuthNativeFlow | undefined;
         try {
             const loginFlows = await this.loginLogic.getFlows(true);
             if (serverConfig !== this.latestServerConfig) return; // discard, serverConfig changed from under us
             ssoFlow = loginFlows.find((f) => f.type === "m.login.sso" || f.type === "m.login.cas") as SSOFlow;
-            oidcNativeFlow = loginFlows.find((f) => f.type === "oidcNativeFlow") as OidcNativeFlow;
+            oauthNativeFlow = loginFlows.find((f) => f.type === "oauthNativeFlow") as OAuthNativeFlow;
         } catch (e) {
             if (serverConfig !== this.latestServerConfig) return; // discard, serverConfig changed from under us
             logger.error("Failed to get login flows to check for SSO support", e);
@@ -240,10 +252,10 @@ export default class Registration extends React.Component<IProps, IState> {
                 ({ flows }) => ({
                     matrixClient: cli,
                     ssoFlow,
-                    oidcNativeFlow,
+                    oauthNativeFlow,
                     // if we are using oidc native we won't continue with flow discovery on HS
                     // so set an empty array to indicate flows are no longer loading
-                    flows: oidcNativeFlow ? [] : flows,
+                    flows: oauthNativeFlow ? [] : flows,
                     busy: false,
                 }),
                 resolve,
@@ -252,7 +264,7 @@ export default class Registration extends React.Component<IProps, IState> {
 
         // don't need to check with homeserver for login flows
         // since we are going to use OIDC native flow
-        if (oidcNativeFlow) {
+        if (oauthNativeFlow) {
             return;
         }
 
@@ -287,6 +299,27 @@ export default class Registration extends React.Component<IProps, IState> {
                         // add empty flows array to get rid of spinner
                         flows: [],
                     });
+                }
+            } else if (e instanceof MatrixError && e.httpStatus === 429) {
+                // The server is rate limiting us, which the generic error below does not convey.
+                const retryAfterMs = parseInt(e.data?.retry_after_ms, 10);
+                this.setState({
+                    rateLimitError: isNaN(retryAfterMs)
+                        ? _t("auth|registration_rate_limited")
+                        : _t("auth|registration_rate_limited_with_time", {
+                              timeout: formatSeconds(retryAfterMs / 1000),
+                          }),
+                    // add empty flows array to get rid of spinner
+                    flows: [],
+                });
+                // Ask again once the wait is over so the form comes back by itself, rather than
+                // leaving the user to guess when it is worth reloading.
+                if (!isNaN(retryAfterMs)) {
+                    clearTimeout(this.rateLimitTimer);
+                    this.rateLimitTimer = setTimeout(() => {
+                        this.rateLimitTimer = undefined;
+                        void this.replaceClient(this.props.serverConfig);
+                    }, retryAfterMs);
                 }
             } else {
                 logger.log("Unable to query for supported registration methods.", e);
@@ -427,7 +460,7 @@ export default class Registration extends React.Component<IProps, IState> {
                     accessToken,
                 });
 
-                this.setupPushers();
+                void this.setupPushers();
             }
         } else {
             newState.busy = false;
@@ -475,7 +508,7 @@ export default class Registration extends React.Component<IProps, IState> {
     private onGoToFormClicked = (ev: ButtonEvent): void => {
         ev.preventDefault();
         ev.stopPropagation();
-        this.replaceClient(this.props.serverConfig);
+        void this.replaceClient(this.props.serverConfig);
         this.setState({
             busy: false,
             doingUIAuth: false,
@@ -537,6 +570,18 @@ export default class Registration extends React.Component<IProps, IState> {
                     poll={true}
                 />
             );
+        } else if (this.state.rateLimitError) {
+            // Keep the warning with the submit button it is disabling, below the server picker, so it
+            // reads as "this is why you cannot continue". Both are replaced by the real form once
+            // replaceClient runs again after the wait.
+            return (
+                <Fragment>
+                    <div className="mx_Login_error mx_Registration_rateLimitError">{this.state.rateLimitError}</div>
+                    <Button className="mx_Login_fullWidthButton" kind="primary" size="md" disabled={true}>
+                        {_t("action|continue")}
+                    </Button>
+                </Fragment>
+            );
         } else if (!this.state.matrixClient && !this.state.busy) {
             return null;
         } else if (this.state.busy || !this.state.flows) {
@@ -545,16 +590,16 @@ export default class Registration extends React.Component<IProps, IState> {
                     <Spinner />
                 </div>
             );
-        } else if (this.state.matrixClient && this.state.oidcNativeFlow) {
+        } else if (this.state.matrixClient && this.state.oauthNativeFlow) {
             return (
                 <Button
                     className="mx_Login_fullWidthButton"
                     kind="primary"
                     size="md"
                     onClick={async () => {
-                        await startOidcLogin(
+                        await startOAuthLogin(
                             this.props.serverConfig.delegatedAuthentication!,
-                            this.state.oidcNativeFlow!.clientId,
+                            this.state.oauthNativeFlow!.clientId,
                             this.props.serverConfig.hsUrl,
                             this.props.serverConfig.isUrl,
                             true /* isRegistration */,

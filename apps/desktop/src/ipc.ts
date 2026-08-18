@@ -112,17 +112,29 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
             try {
                 ret = await store.getSecret(`${args[0]}|${args[1]}`);
             } catch {
-                // if an error is thrown (e.g. we can't initialise safeStorage),
-                // then return null, which means the default pickle key will be used
+                // An error is thrown if we can't initialise safeStorage, or if a stored secret exists
+                // but can't be decrypted this launch (SafeStorageDecryptionError, e.g. the OS keychain
+                // is temporarily unavailable). In both cases return null so the default pickle key is
+                // used; we must NOT destroy the existing secret (see createPickleKey below) so the
+                // session can recover on a later launch. See element-web#32521 / #32715.
                 ret = null;
             }
             break;
 
         case "createPickleKey":
             try {
-                const pickleKey = await randomArray(32);
-                await store.setSecret(`${args[0]}|${args[1]}`, pickleKey);
-                ret = pickleKey;
+                // Never overwrite a pickle key that already exists but is currently undecryptable.
+                // Overwriting it with a freshly-generated key would turn a transient keychain failure
+                // into permanent session and encryption-key loss. Preserve it so the existing session
+                // can be restored on a later launch once the keychain is readable again.
+                if (await store.isSecretUndecryptable(`${args[0]}|${args[1]}`)) {
+                    console.warn("Refusing to overwrite an existing undecryptable pickle key; preserving it");
+                    ret = null;
+                } else {
+                    const pickleKey = await randomArray(32);
+                    await store.setSecret(`${args[0]}|${args[1]}`, pickleKey);
+                    ret = pickleKey;
+                }
             } catch (e) {
                 console.error("Failed to create pickle key", e);
                 ret = null;
@@ -144,18 +156,11 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
                     thumbnailURL: source.thumbnail.toDataURL(),
                 }));
             } catch (e) {
-                // A native getSources() failure must not reject this handler: doing so would skip the
-                // terminal ipcReply below and leave the renderer's screen-share picker awaiting forever.
-                // Reply with an empty list so the picker shows no sources and can be cancelled cleanly.
-                // See element-web#32398.
                 console.error("Failed to get desktop capturer sources", e);
                 ret = [];
             }
             break;
         case "callDisplayMediaCallback":
-            // Consume-once: a duplicate or stale IPC (e.g. left over from the macOS 15+ native picker
-            // path, which never consumes the callback via the renderer) becomes a safe no-op rather
-            // than invoking a stale callback twice.
             consumeDisplayMediaCallback()?.({ video: args[0] });
             ret = null;
             break;
