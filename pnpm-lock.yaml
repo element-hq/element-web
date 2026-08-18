@@ -653,8 +653,8 @@ importers:
         specifier: ^1.0.3
         version: 1.0.3
       matrix-js-sdk:
-        specifier: 42.2.0-rc.2
-        version: 42.2.0-rc.2
+        specifier: 42.2.0
+        version: 42.2.0
       matrix-widget-api:
         specifier: ^1.18.0
         version: 1.18.0
@@ -6850,6 +6850,7 @@ packages:
   '@xmldom/xmldom@0.8.13':
     resolution: {integrity: sha512-KRYzxepc14G/CEpEGc3Yn+JKaAeT63smlDr+vjB8jRfgTBBI9wRj/nkQEO+ucV8p8I9bfKLWp37uHgFrbntPvw==}
     engines: {node: '>=10.0.0'}
+    deprecated: this version has critical issues, please update to the latest version
 
   '@xtuc/ieee754@1.2.0':
     resolution: {integrity: sha512-DX8nKgqcGwsc0eJSqYt5lwP4DH5FlHnmuWWBRy7X0NcaGR0ZtuyeESgMwTYVEtxmsNGY+qit4QYT/MIYTOTPeA==}
@@ -9832,6 +9833,7 @@ packages:
 
   jsrsasign@11.1.3:
     resolution: {integrity: sha512-nPnK5D/4lv0Dwr7TlzrKtAd8JlLZwFTqTUUB3NQCbtdobcRcohGFxjbPySDVh74iWUudcCsapYT6OxoyhJLhhA==}
+    deprecated: This package is no longer maintained.
 
   jszip@3.10.1:
     resolution: {integrity: sha512-xXDvecyTpGLrqFrvkrUSoxxfJI5AH7U8zxxtVclpsUtMCq4JQ290LY8AW5c7Ggnr/Y/oK+bQMbqK2qmtk3pN4g==}
@@ -10158,8 +10160,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@42.2.0-rc.2:
-    resolution: {integrity: sha512-BXHgczbuawDjuYbF51HJ25hipJ2lfF0ghWVYyjxV/VKvtfiQcNJWLGuXq3weqMHuYLyXlb4iJWjmzNb9nCV6+Q==}
+  matrix-js-sdk@42.2.0:
+    resolution: {integrity: sha512-XlW++tv4BvWE3WrC9K0yZE5CMfZZnKFoZQkYZPxmtb5n/F4sZo6t7G7u59Llx455xGxnrdx1FxFd3tmhkGH8Mw==}
     engines: {node: '>=22.0.0'}
 
   matrix-web-i18n@3.6.0:
@@ -23388,7 +23390,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@42.2.0-rc.2:
+  matrix-js-sdk@42.2.0:
     dependencies:
       '@babel/runtime': 8.0.0
       '@matrix-org/matrix-sdk-crypto-wasm': 18.4.0
