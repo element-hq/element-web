@@ -27,7 +27,7 @@ exports[`SpaceButton metaspace should render notificationState if one is provide
         >
           <button
             aria-label="Jump to first unread room."
-            class="mx_SpacePanel_notificationBadge _notificationBadge_kb9ny_8 _visible_kb9ny_15 _notification_kb9ny_8 _badge2Char_kb9ny_56 cpd-theme-light"
+            class="mx_SpacePanel_notificationBadge _notificationBadge_19whq_8 _visible_19whq_16 _notification_19whq_8 _badge2Char_19whq_57 cpd-theme-light"
             data-badge-type="badge_2char"
             data-notification-level="notification"
             data-testid="notification-badge"
@@ -35,7 +35,7 @@ exports[`SpaceButton metaspace should render notificationState if one is provide
             type="button"
           >
             <span
-              class="_count_kb9ny_39"
+              class="_count_19whq_40"
             >
               8
             </span>
@@ -95,13 +95,14 @@ exports[`SpaceItem should render a space with subspaces 1`] = `
             class="_avatar_va14e_8 mx_BaseAvatar"
             data-color="3"
             data-testid="avatar-img"
-            data-type="round"
+            data-type="square"
+            role="img"
             style="--cpd-avatar-size: 32px;"
           >
             <img
               alt=""
               class="_image_va14e_43"
-              data-type="round"
+              data-type="square"
               height="32px"
               loading="lazy"
               referrerpolicy="no-referrer"
@@ -184,13 +185,14 @@ exports[`SpaceItem should render a space with subspaces 2`] = `
             class="_avatar_va14e_8 mx_BaseAvatar"
             data-color="3"
             data-testid="avatar-img"
-            data-type="round"
+            data-type="square"
+            role="img"
             style="--cpd-avatar-size: 32px;"
           >
             <img
               alt=""
               class="_image_va14e_43"
-              data-type="round"
+              data-type="square"
               height="32px"
               loading="lazy"
               referrerpolicy="no-referrer"
@@ -252,13 +254,14 @@ exports[`SpaceItem should render a space with subspaces 2`] = `
                 class="_avatar_va14e_8 mx_BaseAvatar"
                 data-color="4"
                 data-testid="avatar-img"
-                data-type="round"
+                data-type="square"
+                role="img"
                 style="--cpd-avatar-size: 24px;"
               >
                 <img
                   alt=""
                   class="_image_va14e_43"
-                  data-type="round"
+                  data-type="square"
                   height="24px"
                   loading="lazy"
                   referrerpolicy="no-referrer"

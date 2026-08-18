@@ -343,7 +343,8 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
 
     const [supportsSpaceFiltering, setSupportsSpaceFiltering] = useState(true); // assume it does until we find out it doesn't
     useEffect(() => {
-        cli.isVersionSupported("v1.4")
+        void cli
+            .isVersionSupported("v1.4")
             .then((supported) => {
                 return supported || cli.doesServerSupportUnstableFeature("org.matrix.msc3827.stable");
             })
@@ -559,7 +560,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             recents.delete(room.roomId);
             recents.add(room.roomId);
 
-            SettingsStore.setValue(
+            void SettingsStore.setValue(
                 "SpotlightSearch.recentSearches",
                 null,
                 SettingLevel.ACCOUNT,
@@ -685,7 +686,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         id={`mx_SpotlightDialog_button_result_${result.member.userId}`}
                         key={`${Section[result.section]}-${result.member.userId}`}
                         onClick={() => {
-                            startDmOnFirstMessage(cli, [result.member]);
+                            void startDmOnFirstMessage(cli, [result.member]);
                             onFinished();
                         }}
                         aria-label={
@@ -901,34 +902,32 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         {_t("spotlight_dialog|other_rooms_in_space", { spaceName: activeSpace.name })}
                     </h4>
                     <div>
-                        {spaceResults.slice(0, SECTION_LIMIT).map(
-                            (room: HierarchyRoom): JSX.Element => (
-                                <Option
-                                    id={`mx_SpotlightDialog_button_result_${room.room_id}`}
-                                    key={room.room_id}
-                                    onClick={(ev) => {
-                                        viewRoom({ roomId: room.room_id }, true, ev?.type !== "click");
-                                    }}
-                                >
-                                    <BaseAvatar
-                                        name={room.name}
-                                        idName={room.room_id}
-                                        url={
-                                            room.avatar_url
-                                                ? mediaFromMxc(room.avatar_url).getSquareThumbnailHttp(
-                                                      parseInt(AVATAR_SIZE, 10),
-                                                  )
-                                                : null
-                                        }
-                                        size={AVATAR_SIZE}
-                                    />
-                                    {room.name || room.canonical_alias}
-                                    {room.name && room.canonical_alias && (
-                                        <div className="mx_SpotlightDialog_result_details">{room.canonical_alias}</div>
-                                    )}
-                                </Option>
-                            ),
-                        )}
+                        {spaceResults.slice(0, SECTION_LIMIT).map((room: HierarchyRoom): JSX.Element => (
+                            <Option
+                                id={`mx_SpotlightDialog_button_result_${room.room_id}`}
+                                key={room.room_id}
+                                onClick={(ev) => {
+                                    viewRoom({ roomId: room.room_id }, true, ev?.type !== "click");
+                                }}
+                            >
+                                <BaseAvatar
+                                    name={room.name}
+                                    idName={room.room_id}
+                                    url={
+                                        room.avatar_url
+                                            ? mediaFromMxc(room.avatar_url).getSquareThumbnailHttp(
+                                                  parseInt(AVATAR_SIZE, 10),
+                                              )
+                                            : null
+                                    }
+                                    size={AVATAR_SIZE}
+                                />
+                                {room.name || room.canonical_alias}
+                                {room.name && room.canonical_alias && (
+                                    <div className="mx_SpotlightDialog_result_details">{room.canonical_alias}</div>
+                                )}
+                            </Option>
+                        ))}
                         {spaceResultsLoading && <Spinner />}
                     </div>
                 </div>
@@ -980,7 +979,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         className="mx_SpotlightDialog_inviteLink"
                         onClick={() => {
                             setInviteLinkCopied(true);
-                            copyPlaintext(ownInviteLink);
+                            void copyPlaintext(ownInviteLink);
                         }}
                         onTooltipOpenChange={(open) => {
                             if (!open) setInviteLinkCopied(false);

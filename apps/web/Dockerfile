@@ -1,11 +1,11 @@
-# syntax=docker.io/docker/dockerfile:1.25-labs@sha256:4426b5e269e36911b94fb79cf67f1fd7155ef11b2bbc8ab23cbfcbc97130efe9
+# syntax=docker.io/docker/dockerfile:1.26-labs@sha256:63e440b412b6acba117974e793b7e7f702e58ee65e044bdff1b8d388ee0d853b
 # Context must be the root of the monorepo
 
 # PNPM source
-FROM --platform=$BUILDPLATFORM ghcr.io/pnpm/pnpm:11.10.0@sha256:9a6eb06d5f861d830fe27d85a91415e60527fa45ec45b52ee43c92a8aaf3bf8a AS pnpm
+FROM --platform=$BUILDPLATFORM ghcr.io/pnpm/pnpm:11.21.0@sha256:ff1b4619e8299734f35afb21bd2be18f51b7b6e49cd30fb14300fadeafe871da AS pnpm
 
 # Builder
-FROM --platform=$BUILDPLATFORM node:24-bullseye@sha256:f7250178a8fcdde6e7340c7f3945e0c5cbcc10bedddc6bcf61edb39ce8f390d2 AS builder
+FROM --platform=$BUILDPLATFORM node:24-bullseye@sha256:e98b72e72be9ca56f9467559af60619f738b736c0622b7a9afa39d8fc6fed2b5 AS builder
 
 COPY --from=pnpm /opt/pnpm /opt/pnpm
 RUN ln -s /opt/pnpm/pnpm /usr/local/bin/pnpm
@@ -30,7 +30,7 @@ RUN --mount=type=bind,source=.git,target=/src/.git /src/scripts/docker-package.s
 RUN cp /src/apps/web/config.sample.json /src/apps/web/webapp/config.json
 
 # App
-FROM nginxinc/nginx-unprivileged:alpine-slim@sha256:22f839c5fb4007dc24d203a170a9e03fc185d660bfefc34ac6823a7aef085cbc AS element_web
+FROM nginxinc/nginx-unprivileged:alpine-slim@sha256:ff4671e70f4f903721c5eacce1373d3e5d21b3d5f6fb03982154aabd084ed32e AS element_web
 
 # Need root user to install packages & manipulate the usr directory
 USER root
@@ -58,7 +58,7 @@ HEALTHCHECK --start-period=5s CMD wget -q --spider http://localhost:$ELEMENT_WEB
 
 # Modules are consumed as prebuilt release artifacts rather than built from source.
 # Each module is pinned to a version and the sha256 of its release archive.
-FROM --platform=$BUILDPLATFORM alpine:3.22@sha256:14358309a308569c32bdc37e2e0e9694be33a9d99e68afb0f5ff33cc1f695dce AS modules
+FROM --platform=$BUILDPLATFORM alpine:3.24@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b AS modules
 
 ARG MODULE_BANNER_VERSION=v1.0.0
 ADD --checksum=sha256:8aabd9d43d40ffb499050246f7968323a08895b6f53bd48a71d4c7f0daf96634 \

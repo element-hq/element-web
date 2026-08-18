@@ -163,6 +163,10 @@ describe("<MatrixChat />", () => {
         getThirdpartyProtocols: vi.fn().mockResolvedValue({}),
         getClientWellKnown: vi.fn().mockReturnValue({}),
         _unstable_getRTCTransports: vi.fn().mockResolvedValue([]),
+        cachedRtcTransports: {
+            wait: vi.fn().mockResolvedValue([]),
+            get: vi.fn().mockReturnValue([]),
+        },
         waitForClientWellKnown: vi.fn().mockResolvedValue({}),
         isVersionSupported: vi.fn().mockResolvedValue(false),
         initRustCrypto: vi.fn(),

@@ -1199,7 +1199,6 @@
         "mentions_and_keywords": "@mencións & palabras chave",
         "mentions_and_keywords_description": "Ter notificacións só cando te mencionan e con palabras chave que indiques nos <a>axustes</a>",
         "mentions_keywords": "Mencións e palabras chave",
-        "message_didnt_send": "Non se enviou a mensaxe. Click para info.",
         "mute_description": "Non recibirás ningunha notificación"
     },
     "notifier": {

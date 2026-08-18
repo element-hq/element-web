@@ -1651,7 +1651,6 @@
         "mentions_and_keywords": "@Erwähnungen und Schlüsselwörter",
         "mentions_and_keywords_description": "Nur bei Erwähnungen und Schlüsselwörtern benachrichtigen, die du in den <a>Einstellungen</a> konfigurieren kannst",
         "mentions_keywords": "Erwähnungen und Schlüsselwörter",
-        "message_didnt_send": "Nachricht nicht gesendet. Klicke für Details.",
         "mute_description": "Du wirst keine Benachrichtigungen erhalten"
     },
     "notifier": {

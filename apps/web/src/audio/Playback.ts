@@ -129,8 +129,7 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
     public destroy(): void {
         // Dev note: It's critical that we call stop() during cleanup to ensure that downstream callers
         // are aware of the final clock position before the user triggered an unload.
-        // noinspection JSIgnoredPromiseFromCall - not concerned about being called async here
-        this.stop();
+        void this.stop();
         this.removeAllListeners();
         this.clock.destroy();
         this.waveformObservable.close();
@@ -168,6 +167,9 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
             this.element.src = URL.createObjectURL(new Blob([this.buf]));
             await deferred.promise; // make sure the audio element is ready for us
         } else {
+            // decodeAudioData detaches the buffer it is given, so the copy the fallback needs has
+            // to be taken before we call it rather than inside the error handler.
+            const fallbackBuf = this.buf.slice(0);
             try {
                 this.audioBuf = await this.context.decodeAudioData(this.buf);
             } catch (e) {
@@ -176,7 +178,7 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
 
                 try {
                     // This error handler is largely for Safari, which doesn't support Opus/Ogg very well.
-                    const wav = await decodeOgg(this.buf);
+                    const wav = await decodeOgg(fallbackBuf);
                     this.audioBuf = await this.context.decodeAudioData(wav);
                 } catch (e) {
                     logger.error("Error decoding recording:", e);

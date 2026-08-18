@@ -11,13 +11,13 @@ import { type MockedObject } from "jest-mock";
 
 import { ElementCall } from "../../../src/models/Call";
 import { CallStore } from "../../../src/stores/CallStore";
-import SdkConfig from "../../../src/SdkConfig";
 import {
     setUpClientRoomAndStores,
     cleanUpClientRoomAndStores,
     setupAsyncStoreWithClient,
     enableCalls,
 } from "../../test-utils";
+import SdkConfig from "../../../src/SdkConfig.ts";
 
 describe("CallStore", () => {
     let client: MockedObject<MatrixClient>;
@@ -49,8 +49,8 @@ describe("CallStore", () => {
         expect(CallStore.instance.getCall(room.roomId)).not.toBe(null);
         expect(CallStore.instance.getConfiguredRTCTransports()).toHaveLength(0);
     });
-    it("calculates RTC transports with both modern and legacy endpoints", async () => {
-        client._unstable_getRTCTransports.mockResolvedValue([
+    it("delegates transport discovery to the client", async () => {
+        client.cachedRtcTransports.get.mockReturnValue([
             { type: "type-a", some_data: "value" },
             { type: "type-b", some_data: "foo" },
         ]);
@@ -64,17 +64,16 @@ describe("CallStore", () => {
         expect(CallStore.instance.getConfiguredRTCTransports()).toEqual([
             { type: "type-a", some_data: "value" },
             { type: "type-b", some_data: "foo" },
-            { type: "type-c", other_data: "bar" },
-            { type: "type-d", other_data: "baz" },
         ]);
     });
+
     it("does not fall back to client well-known when enable_client_well_known_lookups is false", async () => {
         const sdkConfigGet = SdkConfig.get;
         jest.spyOn(SdkConfig, "get").mockImplementation((key?: any, altCaseName?: string): any => {
             if (key === "enable_client_well_known_lookups") return false;
             return sdkConfigGet(key, altCaseName);
         });
-        client._unstable_getRTCTransports.mockResolvedValue([{ type: "type-a", some_data: "value" }]);
+        client.cachedRtcTransports.get.mockReturnValue([{ type: "type-a", some_data: "value" }]);
         client.getClientWellKnown.mockReturnValue({
             "org.matrix.msc4143.rtc_foci": [{ type: "type-c", other_data: "bar" }],
         });
