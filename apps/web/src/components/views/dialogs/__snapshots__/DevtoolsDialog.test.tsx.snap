@@ -179,7 +179,7 @@ exports[`DevtoolsDialog > renders the devtools dialog 1`] = `
             >
               <input
                 class="_input_udcm8_24"
-                id="mx_SettingsFlag_OPgSacnuDptX"
+                id="mx_SettingsFlag_vY7Q4uEh9K38"
                 role="switch"
                 type="checkbox"
               />
@@ -193,7 +193,7 @@ exports[`DevtoolsDialog > renders the devtools dialog 1`] = `
           >
             <label
               class="_label_1o4d9_60"
-              for="mx_SettingsFlag_OPgSacnuDptX"
+              for="mx_SettingsFlag_vY7Q4uEh9K38"
             >
               Developer mode
             </label>
@@ -210,7 +210,7 @@ exports[`DevtoolsDialog > renders the devtools dialog 1`] = `
             >
               <input
                 class="_input_udcm8_24"
-                id="mx_SettingsFlag_Nb6E37jyAyQQ"
+                id="mx_SettingsFlag_QgU2PomxwKpa"
                 role="switch"
                 type="checkbox"
               />
@@ -224,7 +224,7 @@ exports[`DevtoolsDialog > renders the devtools dialog 1`] = `
           >
             <label
               class="_label_1o4d9_60"
-              for="mx_SettingsFlag_Nb6E37jyAyQQ"
+              for="mx_SettingsFlag_QgU2PomxwKpa"
             >
               Show hidden events in timeline
             </label>
@@ -241,7 +241,7 @@ exports[`DevtoolsDialog > renders the devtools dialog 1`] = `
             >
               <input
                 class="_input_udcm8_24"
-                id="mx_SettingsFlag_ltzyywQVc0nb"
+                id="mx_SettingsFlag_6hpi3YEetmBG"
                 role="switch"
                 type="checkbox"
               />
@@ -255,7 +255,7 @@ exports[`DevtoolsDialog > renders the devtools dialog 1`] = `
           >
             <label
               class="_label_1o4d9_60"
-              for="mx_SettingsFlag_ltzyywQVc0nb"
+              for="mx_SettingsFlag_6hpi3YEetmBG"
             >
               Enable widget screenshots on supported widgets
             </label>
@@ -272,7 +272,7 @@ exports[`DevtoolsDialog > renders the devtools dialog 1`] = `
             >
               <input
                 class="_input_udcm8_24"
-                id="mx_SettingsFlag_1UCcq1CCwAfh"
+                id="mx_SettingsFlag_4yVCeEefiPqp"
                 role="switch"
                 type="checkbox"
               />
@@ -286,7 +286,7 @@ exports[`DevtoolsDialog > renders the devtools dialog 1`] = `
           >
             <label
               class="_label_1o4d9_60"
-              for="mx_SettingsFlag_1UCcq1CCwAfh"
+              for="mx_SettingsFlag_4yVCeEefiPqp"
             >
               Disable bandwidth-heavy features
             </label>
