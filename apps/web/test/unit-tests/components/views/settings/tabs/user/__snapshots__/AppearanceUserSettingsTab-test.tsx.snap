@@ -214,14 +214,14 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         tabindex="-1"
                       >
                         <div
-                          class="mx_DisambiguatedProfile _disambiguatedProfile_1v0my_8"
+                          class="mx_DisambiguatedProfile _disambiguatedProfile_1mz3i_8"
                           data-event-density="default"
                           data-event-layout="group"
                           role="button"
                           tabindex="0"
                         >
                           <span
-                            class="mx_Username_color2 _disambiguatedProfile_displayName_1v0my_18 mx_DisambiguatedProfile_displayName"
+                            class="mx_Username_color2 _disambiguatedProfile_displayName_1mz3i_18 mx_DisambiguatedProfile_displayName"
                             dir="auto"
                           >
                             @userId:matrix.org
@@ -312,14 +312,14 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         tabindex="-1"
                       >
                         <div
-                          class="mx_DisambiguatedProfile _disambiguatedProfile_1v0my_8"
+                          class="mx_DisambiguatedProfile _disambiguatedProfile_1mz3i_8"
                           data-event-density="default"
                           data-event-layout="bubble"
                           role="button"
                           tabindex="0"
                         >
                           <span
-                            class="mx_Username_color2 _disambiguatedProfile_displayName_1v0my_18 mx_DisambiguatedProfile_displayName"
+                            class="mx_Username_color2 _disambiguatedProfile_displayName_1mz3i_18 mx_DisambiguatedProfile_displayName"
                             dir="auto"
                           >
                             @userId:matrix.org
@@ -413,14 +413,14 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           class="mx_MessageTimestamp"
                         />
                         <div
-                          class="mx_DisambiguatedProfile _disambiguatedProfile_1v0my_8"
+                          class="mx_DisambiguatedProfile _disambiguatedProfile_1mz3i_8"
                           data-event-density="default"
                           data-event-layout="irc"
                           role="button"
                           tabindex="0"
                         >
                           <span
-                            class="mx_Username_color2 _disambiguatedProfile_displayName_1v0my_18 mx_DisambiguatedProfile_displayName"
+                            class="mx_Username_color2 _disambiguatedProfile_displayName_1mz3i_18 mx_DisambiguatedProfile_displayName"
                             dir="auto"
                           >
                             @userId:matrix.org
