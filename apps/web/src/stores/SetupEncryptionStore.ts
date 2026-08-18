@@ -47,6 +47,10 @@ export class SetupEncryptionStore extends EventEmitter {
     // Descriptor of the key that the secrets we want are encrypted with
     public keyInfo: SecretStorage.SecretStorageKeyDescription | null = null;
     public hasDevicesToVerifyAgainst?: boolean;
+    // Whether a default 4S key exists in account data, checked via
+    // `secretStorage.hasKey()`. Used as a fallback to show the "Use recovery
+    // key" button even when `isStored("m.cross_signing.master")` returned null.
+    public has4SKeys?: boolean;
 
     public static sharedInstance(): SetupEncryptionStore {
         if (!window.mxSetupEncryptionStore) window.mxSetupEncryptionStore = new SetupEncryptionStore();
@@ -101,6 +105,11 @@ export class SetupEncryptionStore extends EventEmitter {
             this.keyId = Object.keys(keys)[0];
             this.keyInfo = keys[this.keyId];
         }
+
+        // Check whether a default 4S key exists in account data. This is used
+        // as a fallback to show the "Use recovery key" button even when we
+        // couldn't fetch the specific key info for the cross-signing master key.
+        this.has4SKeys = await cli.secretStorage.hasKey();
 
         const ownUserId = cli.getUserId()!;
         const ownDeviceId = cli.getDeviceId()!;
@@ -228,6 +237,6 @@ export class SetupEncryptionStore extends EventEmitter {
     }
 
     public lostKeys(): boolean {
-        return !this.hasDevicesToVerifyAgainst && !this.keyInfo;
+        return !this.hasDevicesToVerifyAgainst && !this.keyInfo && !this.has4SKeys;
     }
 }

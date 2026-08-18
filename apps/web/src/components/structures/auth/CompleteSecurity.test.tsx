@@ -147,4 +147,27 @@ describe("CompleteSecurity", () => {
             screen.getByRole("heading", { name: "Are you sure you want to reset your digital identity?" }),
         ).toBeInTheDocument();
     });
+
+    it("Allows verifying with recovery key when has4SKeys is true but keyInfo is null", async () => {
+        // Regression test for #34721: when 4S exists but the cross-signing master key
+        // info couldn't be fetched (isStored returned null), the "Use recovery key"
+        // button should still be shown based on has4SKeys.
+        const store = new SetupEncryptionStore();
+        vi.spyOn(store, "fetchKeyInfo").mockImplementation(async () => {
+            store.keyInfo = null;
+            store.has4SKeys = true;
+            store.hasDevicesToVerifyAgainst = false;
+            store.phase = Phase.Intro;
+            store.emit("update");
+        });
+        vi.spyOn(SetupEncryptionStore, "sharedInstance").mockReturnValue(store);
+        await act(() => render(<CompleteSecurity onFinished={() => {}} />));
+
+        // lostKeys() should be false because has4SKeys means recovery is possible
+        expect(store.lostKeys()).toBe(false);
+        // "Use recovery key" should be shown because has4SKeys is true
+        expect(screen.getByRole("button", { name: "Use recovery key" })).toBeInTheDocument();
+        // "Use another device" should NOT be shown
+        expect(screen.queryByRole("button", { name: "Use another device" })).not.toBeInTheDocument();
+    });
 });

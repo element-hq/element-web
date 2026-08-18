@@ -180,7 +180,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
             }
 
             let useRecoveryKeyButton;
-            if (store.keyInfo) {
+            if (store.keyInfo || store.has4SKeys) {
                 useRecoveryKeyButton = (
                     <Button kind="primary" onClick={this.onUsePassphraseClick}>
                         {_t("encryption|verification|use_recovery_key")}

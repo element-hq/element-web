@@ -41,6 +41,7 @@ describe("SetupEncryptionStore", () => {
 
         mockSecretStorage = {
             isStored: jest.fn(),
+            hasKey: jest.fn().mockResolvedValue(false),
         } as unknown as Mocked<ServerSideSecretStorage>;
         Object.defineProperty(client, "secretStorage", { value: mockSecretStorage });
 
@@ -117,6 +118,42 @@ describe("SetupEncryptionStore", () => {
             setupEncryptionStore.start();
             await emitPromise(setupEncryptionStore, "update");
             expect(setupEncryptionStore.hasDevicesToVerifyAgainst).toBe(false);
+        });
+
+        it("should set has4SKeys when secret storage has keys", async () => {
+            mockSecretStorage.isStored.mockResolvedValue({ sskeyid: {} as SecretStorageKeyDescriptionAesV1 });
+            mockSecretStorage.hasKey.mockResolvedValue(true);
+            mockCrypto.getUserDeviceInfo.mockResolvedValue(new Map());
+
+            setupEncryptionStore.start();
+            await emitPromise(setupEncryptionStore, "update");
+
+            expect(setupEncryptionStore.has4SKeys).toBe(true);
+        });
+
+        it("should set has4SKeys to false when secret storage has no keys", async () => {
+            mockSecretStorage.isStored.mockResolvedValue(null);
+            mockSecretStorage.hasKey.mockResolvedValue(false);
+            mockCrypto.getUserDeviceInfo.mockResolvedValue(new Map());
+
+            setupEncryptionStore.start();
+            await emitPromise(setupEncryptionStore, "update");
+
+            expect(setupEncryptionStore.has4SKeys).toBe(false);
+        });
+
+        it("lostKeys should return false when has4SKeys is true even if keyInfo is null", async () => {
+            mockSecretStorage.isStored.mockResolvedValue(null);
+            mockSecretStorage.hasKey.mockResolvedValue(true);
+            mockCrypto.getUserDeviceInfo.mockResolvedValue(new Map());
+
+            setupEncryptionStore.start();
+            await emitPromise(setupEncryptionStore, "update");
+
+            expect(setupEncryptionStore.keyInfo).toBeNull();
+            expect(setupEncryptionStore.has4SKeys).toBe(true);
+            expect(setupEncryptionStore.hasDevicesToVerifyAgainst).toBe(false);
+            expect(setupEncryptionStore.lostKeys()).toBe(false);
         });
     });
 
