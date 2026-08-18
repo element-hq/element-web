@@ -97,7 +97,7 @@ exports[`MessageComposerUrlPreview > failed entries > renders the failed placeho
           class="MessageComposerUrlPreview-module_text"
         >
           <a
-            class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 LinkPreview-module_title MessageComposerUrlPreview-module_linkTitle"
+            class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 MessageComposerUrlPreview-module_title MessageComposerUrlPreview-module_linkTitle"
             href="https://example.com"
             rel="noreferrer noopener"
             target="_blank"
@@ -105,7 +105,7 @@ exports[`MessageComposerUrlPreview > failed entries > renders the failed placeho
             Failed to fetch preview
           </a>
           <div
-            class="LinkPreview-module_siteName MessageComposerUrlPreview-module_linkSiteName"
+            class="MessageComposerUrlPreview-module_siteName MessageComposerUrlPreview-module_linkSiteName"
           >
             <span
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
@@ -327,7 +327,7 @@ exports[`MessageComposerUrlPreview > loading entries > renders the loading place
           class="MessageComposerUrlPreview-module_text"
         >
           <a
-            class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 LinkPreview-module_title MessageComposerUrlPreview-module_linkTitle"
+            class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 MessageComposerUrlPreview-module_title MessageComposerUrlPreview-module_linkTitle"
             href="https://element.io"
             rel="noreferrer noopener"
             target="_blank"
@@ -335,7 +335,7 @@ exports[`MessageComposerUrlPreview > loading entries > renders the loading place
             Fetching preview…
           </a>
           <div
-            class="LinkPreview-module_siteName MessageComposerUrlPreview-module_linkSiteName"
+            class="MessageComposerUrlPreview-module_siteName MessageComposerUrlPreview-module_linkSiteName"
           >
             <span
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
@@ -569,7 +569,7 @@ exports[`MessageComposerUrlPreview > renders a mix of loaded, loading and failed
           class="MessageComposerUrlPreview-module_text"
         >
           <a
-            class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 LinkPreview-module_title MessageComposerUrlPreview-module_linkTitle"
+            class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 MessageComposerUrlPreview-module_title MessageComposerUrlPreview-module_linkTitle"
             href="https://matrix.org"
             rel="noreferrer noopener"
             target="_blank"
@@ -577,7 +577,7 @@ exports[`MessageComposerUrlPreview > renders a mix of loaded, loading and failed
             A simple title
           </a>
           <div
-            class="LinkPreview-module_siteName MessageComposerUrlPreview-module_linkSiteName"
+            class="MessageComposerUrlPreview-module_siteName MessageComposerUrlPreview-module_linkSiteName"
           >
             <span
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
@@ -643,7 +643,7 @@ exports[`MessageComposerUrlPreview > renders a mix of loaded, loading and failed
           class="MessageComposerUrlPreview-module_text"
         >
           <a
-            class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 LinkPreview-module_title MessageComposerUrlPreview-module_linkTitle"
+            class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 MessageComposerUrlPreview-module_title MessageComposerUrlPreview-module_linkTitle"
             href="https://element.io"
             rel="noreferrer noopener"
             target="_blank"
@@ -651,7 +651,7 @@ exports[`MessageComposerUrlPreview > renders a mix of loaded, loading and failed
             Fetching preview…
           </a>
           <div
-            class="LinkPreview-module_siteName MessageComposerUrlPreview-module_linkSiteName"
+            class="MessageComposerUrlPreview-module_siteName MessageComposerUrlPreview-module_linkSiteName"
           >
             <span
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
@@ -713,7 +713,7 @@ exports[`MessageComposerUrlPreview > renders a mix of loaded, loading and failed
           class="MessageComposerUrlPreview-module_text"
         >
           <a
-            class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 LinkPreview-module_title MessageComposerUrlPreview-module_linkTitle"
+            class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 MessageComposerUrlPreview-module_title MessageComposerUrlPreview-module_linkTitle"
             href="https://example.com"
             rel="noreferrer noopener"
             target="_blank"
@@ -721,7 +721,7 @@ exports[`MessageComposerUrlPreview > renders a mix of loaded, loading and failed
             Failed to fetch preview
           </a>
           <div
-            class="LinkPreview-module_siteName MessageComposerUrlPreview-module_linkSiteName"
+            class="MessageComposerUrlPreview-module_siteName MessageComposerUrlPreview-module_linkSiteName"
           >
             <span
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
@@ -773,20 +773,16 @@ exports[`MessageComposerUrlPreview > renders a preview 1`] = `
       <span
         class="MessageComposerUrlPreview-module_left"
       >
-        <div
-          class="MessageComposerUrlPreview-module_siteName"
-        >
-          <span
-            class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+        <span>
+          <div
+            class="MessageComposerUrlPreview-module_summaryIcon"
+            data-color="4"
           >
-            matrix.org
-          </span>
-        </div>
-        <a
-          class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 MessageComposerUrlPreview-module_title"
-          href="https://matrix.org"
-          rel="noreferrer noopener"
-          target="_blank"
+            M
+          </div>
+        </span>
+        <span
+          class="MessageComposerUrlPreview-module_linkCount"
         >
           1 link
         </span>
@@ -838,20 +834,18 @@ exports[`MessageComposerUrlPreview > renders a preview with an image 1`] = `
       <span
         class="MessageComposerUrlPreview-module_left"
       >
-        <div
-          class="MessageComposerUrlPreview-module_siteName"
-        >
-          <span
-            class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+        <span>
+          <div
+            class="MessageComposerUrlPreview-module_summaryIcon"
           >
-            matrix.org
-          </span>
-        </div>
-        <a
-          class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 MessageComposerUrlPreview-module_title"
-          href="https://matrix.org"
-          rel="noreferrer noopener"
-          target="_blank"
+            <img
+              alt="The element logo"
+              src="/static/wideImage.png"
+            />
+          </div>
+        </span>
+        <span
+          class="MessageComposerUrlPreview-module_linkCount"
         >
           1 link
         </span>
@@ -971,7 +965,7 @@ exports[`MessageComposerUrlPreview > renders the expanded previews when not coll
           class="MessageComposerUrlPreview-module_text"
         >
           <a
-            class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 LinkPreview-module_title MessageComposerUrlPreview-module_linkTitle"
+            class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 MessageComposerUrlPreview-module_title MessageComposerUrlPreview-module_linkTitle"
             href="https://matrix.org"
             rel="noreferrer noopener"
             target="_blank"
@@ -979,7 +973,7 @@ exports[`MessageComposerUrlPreview > renders the expanded previews when not coll
             A simple title
           </a>
           <div
-            class="LinkPreview-module_siteName MessageComposerUrlPreview-module_linkSiteName"
+            class="MessageComposerUrlPreview-module_siteName MessageComposerUrlPreview-module_linkSiteName"
           >
             <span
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"

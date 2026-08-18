@@ -5,11 +5,17 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX } from "react";
-import { Avatar, Text, Tooltip } from "@vector-im/compound-web";
+import React, { type JSX, useCallback } from "react";
+import {
+    Avatar,
+    IconButton,
+    InlineSpinner,
+    Text,
+    Tooltip,
+    // note: useIdColorHash is not used as a hook here
+    useIdColorHash as idColorHash,
+} from "@vector-im/compound-web";
 import classNames from "classnames";
-// note: useIdColorHash is not used as a hook here
-import { IconButton, InlineSpinner, useIdColorHash as idColorHash } from "@vector-im/compound-web";
 import { ErrorSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
@@ -57,7 +63,8 @@ function LinkTitle({
     title,
     showTooltipOnLink,
     link,
-}: Pick<UrlPreview, "title" | "showTooltipOnLink" | "link">): JSX.Element {
+    className,
+}: Pick<UrlPreview, "title" | "showTooltipOnLink" | "link"> & { className?: string }): JSX.Element {
     const caption = new URL(link).toString();
     const anchor = (
         <Text
@@ -65,7 +72,7 @@ function LinkTitle({
             type="body"
             weight="semibold"
             size="md"
-            className={styles.title}
+            className={classNames(styles.title, className)}
             href={link}
             target="_blank"
             rel="noreferrer noopener"
@@ -76,9 +83,13 @@ function LinkTitle({
     return showTooltipOnLink ? <Tooltip label={caption}>{anchor}</Tooltip> : anchor;
 }
 
-function LinkSiteName({ siteIcon, siteName }: Pick<UrlPreview, "siteIcon" | "siteName">): JSX.Element {
+function LinkSiteName({
+    siteIcon,
+    siteName,
+    className,
+}: Pick<UrlPreview, "siteIcon" | "siteName"> & { className?: string }): JSX.Element {
     return (
-        <div className={styles.siteName}>
+        <div className={classNames(styles.siteName, className)}>
             {siteIcon && <Avatar size="16px" name={siteName} id={siteName} src={siteIcon} />}
             <Text as="span" size="sm" weight="regular">
                 {siteName}
