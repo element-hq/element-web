@@ -4,6 +4,7 @@
     },
     "action": {
         "back": "Wróć",
+        "cancel": "Anuluj",
         "click": "Kliknij",
         "close": "Zamknij",
         "collapse": "Zwiń",
@@ -28,6 +29,7 @@
         "reply": "Odpowiedz",
         "reply_in_thread": "Odpowiedz w wątku",
         "retry": "Ponów",
+        "save": "Zapisz",
         "search": "Szukaj",
         "start_chat": "Rozpocznij czat",
         "unpin": "Odepnij",
@@ -43,6 +45,23 @@
     },
     "devtools": {
         "toggle_event": "przełącz zdarzenie"
+    },
+    "emoji": {
+        "categories": "Kategorie",
+        "category_activities": "Aktywności",
+        "category_animals_nature": "Zwierzęta i natura",
+        "category_flags": "Flagi",
+        "category_food_drink": "Jedzenie i napoje",
+        "category_frequently_used": "Często używane",
+        "category_objects": "Przedmioty",
+        "category_smileys_people": "Buźki i osoby",
+        "category_symbols": "Symbole",
+        "category_travel_places": "Podróże i miejsca",
+        "quick_reactions": "Szybkie reakcje"
+    },
+    "emoji_picker": {
+        "cancel_search_label": "Anuluj wyszukiwanie",
+        "emoji_picker": "Selektor emoji"
     },
     "keyboard": {
         "shift": "Shift"
@@ -64,7 +83,9 @@
     "notifications": {
         "all_messages": "Wszystkie wiadomości",
         "default_settings": "Dopasuj do ustawień domyślnych",
+        "mark_all_read": "Oznacz wszystkie jako przeczytane",
         "mentions_keywords": "Wzmianki i słowa kluczowe",
+        "message_didnt_send": "Nie wysłano wiadomości. Kliknij po więcej informacji.",
         "mute_room": "Wycisz pokój"
     },
     "release_announcement": {
@@ -81,9 +102,12 @@
             "shared": "Nowi członkowie widzą historię",
             "world_readable": "Każdy może zobaczyć historię"
         },
+        "jump_read_marker": "Skocz do pierwszej nieprzeczytanej wiadomości.",
+        "jump_to_bottom_button": "Przewiń do najnowszych wiadomości",
         "jump_to_date": "Przeskocz do daty",
         "jump_to_date_beginning": "Początek pokoju",
         "jump_to_date_prompt": "Wybierz datę, do której przeskoczyć",
+        "knock_sent": "Wysłano prośbę o dołączenie",
         "pinned_message_badge": "Przypięta wiadomość",
         "status_bar": {
             "delete_all": "Usuń wszystkie",
@@ -201,6 +225,8 @@
         "set_status": {
             "away": "Z dala od urządzenia",
             "be_right_back": "Zaraz wracam",
+            "choose_emoji": "Wybierz Emoji",
+            "custom": "Własny…",
             "focus_time": "W trakcie skupienia",
             "in_a_meeting": "Na spotkaniu",
             "on_the_road": "W trasie",

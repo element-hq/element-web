@@ -107,6 +107,8 @@ interface UserProfileSettingsProps {
     canSetDisplayName: boolean;
     // Whether the homeserver allows the user to set their avatar.
     canSetAvatar: boolean;
+    // If true, the status control starts in custom status mode, ready for the user to enter a custom status.
+    startCustomStatus?: boolean;
 }
 
 /**
@@ -116,6 +118,7 @@ const UserProfileSettings: React.FC<UserProfileSettingsProps> = ({
     externalAccountManagementUrl,
     canSetDisplayName,
     canSetAvatar,
+    startCustomStatus,
 }) => {
     const [avatarURL, setAvatarURL] = useState(OwnProfileStore.instance.avatarMxc);
     const [displayName, setDisplayName] = useState(OwnProfileStore.instance.displayName ?? "");
@@ -243,7 +246,7 @@ const UserProfileSettings: React.FC<UserProfileSettingsProps> = ({
                                 <ErrorMessage>{_t("settings|general|display_name_error")}</ErrorMessage>
                             )}
                         </EditInPlace>
-                        {userStatusEnabled && <SetStatusView vm={setStatusVM} />}
+                        {userStatusEnabled && <SetStatusView vm={setStatusVM} initialCustomMode={startCustomStatus} />}
                     </Flex>
                 </div>
                 {avatarError && (

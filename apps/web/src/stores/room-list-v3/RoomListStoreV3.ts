@@ -222,7 +222,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         const sorter = this.getSorterFromSortingAlgorithm(algorithm, this.matrixClient.getSafeUserId());
         this.roomSkipList.useNewSorter(sorter, this.getRooms());
         this.emit(LISTS_UPDATE_EVENT);
-        SettingsStore.setValue("RoomList.preferredSorting", null, SettingLevel.DEVICE, algorithm);
+        void SettingsStore.setValue("RoomList.preferredSorting", null, SettingLevel.DEVICE, algorithm);
     }
 
     /**
@@ -604,7 +604,7 @@ export default class RoomListStoreV3 {
     public static get instance(): RoomListStoreV3Class {
         if (!RoomListStoreV3.internalInstance) {
             const instance = new RoomListStoreV3Class(defaultDispatcher);
-            instance.start();
+            void instance.start();
             RoomListStoreV3.internalInstance = instance;
         }
 

@@ -45,6 +45,7 @@ import dis from "../../../../src/dispatcher/dispatcher";
 import Modal from "../../../../src/Modal";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { WidgetType } from "../../../../src/widgets/WidgetType.ts";
+import SdkConfig from "../../../../src/SdkConfig.ts";
 
 describe("ElementWidgetDriver", () => {
     let client: MockedObject<MatrixClient>;
@@ -69,6 +70,9 @@ describe("ElementWidgetDriver", () => {
     beforeEach(() => {
         stubClient();
         client = mocked(MatrixClientPeg.safeGet());
+        client.cachedRtcTransports = {
+            wait: jest.fn(),
+        } as any;
         client.getUserId.mockReturnValue("@alice:example.org");
         client.getSafeUserId.mockReturnValue("@alice:example.org");
     });
@@ -431,19 +435,74 @@ describe("ElementWidgetDriver", () => {
 
         it("gets the RTC transports from the homeserver", async () => {
             const transports = [{ type: "livekit", livekit_service_url: "https://livekit-jwt.example.com" }];
-            client._unstable_getRTCTransports.mockResolvedValue(transports);
+            client.cachedRtcTransports.wait.mockResolvedValue(transports);
 
             await expect(driver.getRtcTransports()).resolves.toEqual({ rtc_transports: transports });
-
-            expect(client._unstable_getRTCTransports).toHaveBeenCalledWith();
         });
 
         it("propagates errors from the homeserver", async () => {
-            const error = new MatrixError({ errcode: "M_NOT_FOUND", error: "Not found" }, 404);
+            const error = new MatrixError(
+                {
+                    errcode: "M_LIMIT_EXCEEDED",
+                    error: "Too many requests",
+                    retry_after_ms: 1_000,
+                },
+                429,
+            );
 
-            client._unstable_getRTCTransports.mockRejectedValue(error);
+            client.cachedRtcTransports.wait.mockRejectedValue(error);
 
             await expect(driver.getRtcTransports()).rejects.toBe(error);
+        });
+
+        it("Should not fallback to well-known if config disallows and transport discovery not available", async () => {
+            const sdkConfigGet = SdkConfig.get;
+            jest.spyOn(SdkConfig, "get").mockImplementation((key?: any, altCaseName?: string): any => {
+                if (key === "enable_client_well_known_lookups") return false;
+                return sdkConfigGet(key, altCaseName);
+            });
+            client.cachedRtcTransports.wait.mockRejectedValue(
+                new MatrixError({ errcode: "M_UNRECOGNIZED", error: "Not found" }, 404),
+            );
+
+            await expect(driver.getRtcTransports()).rejects.toThrow();
+
+            expect(client.waitForClientWellKnown).not.toHaveBeenCalled();
+            expect(client.getClientWellKnown).not.toHaveBeenCalled();
+        });
+
+        it("Should not fallback to well-known if config disallows and homerserver advertise no transports", async () => {
+            const sdkConfigGet = SdkConfig.get;
+            jest.spyOn(SdkConfig, "get").mockImplementation((key?: any, altCaseName?: string): any => {
+                if (key === "enable_client_well_known_lookups") return false;
+                return sdkConfigGet(key, altCaseName);
+            });
+            client.cachedRtcTransports.wait.mockResolvedValue([]);
+
+            await expect(driver.getRtcTransports()).resolves.toEqual({ rtc_transports: [] });
+
+            expect(client.waitForClientWellKnown).not.toHaveBeenCalled();
+            expect(client.getClientWellKnown).not.toHaveBeenCalled();
+        });
+
+        it("Should fallback to well-known if config allows", async () => {
+            const sdkConfigGet = SdkConfig.get;
+            jest.spyOn(SdkConfig, "get").mockImplementation((key?: any, altCaseName?: string): any => {
+                if (key === "enable_client_well_known_lookups") return true;
+                return sdkConfigGet(key, altCaseName);
+            });
+            client.cachedRtcTransports.wait.mockRejectedValue(
+                new MatrixError({ errcode: "M_UNRECOGNIZED", error: "Not found" }, 404),
+            );
+
+            const transports = [{ type: "livekit", livekit_service_url: "https://livekit-jwt.example.com" }];
+            client.waitForClientWellKnown.mockResolvedValue({
+                "org.matrix.msc4143.rtc_foci": transports,
+            });
+
+            await expect(driver.getRtcTransports()).resolves.toEqual({ rtc_transports: transports });
+
+            expect(client.waitForClientWellKnown).toHaveBeenCalled();
         });
     });
 

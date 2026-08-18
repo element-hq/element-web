@@ -140,6 +140,10 @@ describe("RoomViewStore", function () {
         getAccountData: jest.fn(),
         waitForClientWellKnown: jest.fn().mockResolvedValue(undefined),
         getClientWellKnown: jest.fn().mockReturnValue({}),
+        cachedRtcTransports: {
+            get: jest.fn().mockReturnValue([]),
+            wait: jest.fn().mockResolvedValue([]),
+        },
         matrixRTC: new (class extends EventEmitter {
             getRoomSession() {
                 return new (class extends EventEmitter {

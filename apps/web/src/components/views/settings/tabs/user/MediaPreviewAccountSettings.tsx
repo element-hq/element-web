@@ -19,7 +19,7 @@ export const MediaPreviewAccountSettings: React.FC<{ roomId?: string }> = ({ roo
 
     const changeSetting = useCallback(
         (newValue: MediaPreviewConfig) => {
-            SettingsStore.setValue(
+            void SettingsStore.setValue(
                 "mediaPreviewConfig",
                 roomId ?? null,
                 roomId ? SettingLevel.ROOM_ACCOUNT : SettingLevel.ACCOUNT,
