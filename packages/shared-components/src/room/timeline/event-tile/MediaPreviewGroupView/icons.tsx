@@ -10,8 +10,6 @@ import FileIcon from "@vector-im/compound-design-tokens/assets/web/icons/documen
 import LinkIcon from "@vector-im/compound-design-tokens/assets/web/icons/link";
 import React from "react";
 
-export type ThemeType = "light" | "dark";
-
 export function attachmentIcon(_mimeType?: string): MediaPreviewIcon {
     return {
         icon: <FileIcon />,

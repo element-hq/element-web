@@ -62,8 +62,8 @@ export interface MediaPreviewEntryButton {
 
 export interface MediaPreviewIcon {
     icon: JSX.Element;
+    onClick?: () => void;
     color: string;
-    iconOnClick?: () => void;
 }
 
 export type MediaPreviewGroupEntryBase = {

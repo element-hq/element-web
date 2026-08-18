@@ -43,21 +43,21 @@ export function TextContent(props: { header: string; headerUrl?: string; body: s
 
 export function Icon({
     icon,
-    iconOnClick,
+    onClick,
     color,
 }: {
     icon: JSX.Element;
-    iconOnClick?: () => void;
+    onClick?: () => void;
     color: string;
 }): JSX.Element {
     const { translate: _t } = useI18n();
 
     icon = React.cloneElement(icon, { style: { color } });
 
-    if (iconOnClick) {
+    if (onClick) {
         return (
             <div className={classNames(styles.icon, styles.iconClickable)}>
-                <button onClick={iconOnClick} type="button" aria-label={_t("timeline|url_preview|view_file")}>
+                <button onClick={onClick} type="button" aria-label={_t("timeline|url_preview|view_file")}>
                     {icon}
                 </button>
             </div>
@@ -184,7 +184,6 @@ export function Image({
 }): JSX.Element | null {
     const { translate: _t } = useI18n();
     const classes = [styles.image, getImageClass(imageSize)];
-
     const { valid, src } = useIsValid(checkImage, image);
 
     if (!valid || src !== image) return null;
@@ -214,7 +213,6 @@ export function Video({
 }): JSX.Element | null {
     const { translate: _t } = useI18n();
     const classes = [styles.video, getVideoClass(videoSize)];
-
     const { valid, src } = useIsValid(checkVideo, video);
 
     if (!valid || src !== video) return null;

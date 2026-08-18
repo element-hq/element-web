@@ -81,77 +81,37 @@
     color: var(--cpd-color-icon-primary);
 }
 
-.image {
-    button {
-        cursor: pointer;
-        background: none;
-        border: none;
-        width: 100%;
-        padding: 0;
-    }
-
-    img {
-        width: 100%;
-        display: block;
-    }
+.image button,
+.video button,
+.audio button {
+    cursor: pointer;
+    background: none;
+    border: none;
+    width: 100%;
+    padding: 0;
 }
 
+.image img,
+.video video,
+.audio audio {
+    width: 100%;
+    display: block;
+}
+
+.video.bannerVideo video,
 .image.bannerImage img {
     max-height: 100px;
     object-fit: cover;
 }
 
+.video.tallBannerVideo video,
 .image.tallBannerImage img {
     max-height: 300px;
     object-fit: cover;
 }
 
+.video.fullVideo video,
 .image.fullImage img {
     max-height: 300px;
     object-fit: contain;
-}
-
-.video {
-    button {
-        cursor: pointer;
-        background: none;
-        border: none;
-        width: 100%;
-        padding: 0;
-    }
-
-    video {
-        width: 100%;
-        display: block;
-    }
-}
-
-.video.bannerVideo video {
-    max-height: 100px;
-    object-fit: cover;
-}
-
-.video.tallBannerVideo video {
-    max-height: 300px;
-    object-fit: cover;
-}
-
-.video.fullVideo video {
-    max-height: 300px;
-    object-fit: contain;
-}
-
-.audio {
-    button {
-        cursor: pointer;
-        background: none;
-        border: none;
-        width: 100%;
-        padding: 0;
-    }
-
-    audio {
-        width: 100%;
-        display: block;
-    }
 }
