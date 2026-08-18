@@ -617,32 +617,43 @@ describe("RoomListStoreV3", () => {
                 }
             });
 
-            it("supports filtering unread rooms", async () => {
-                const { client, rooms } = getClientAndRooms();
-                // Let's choose 5 rooms to put in space
-                const { spaceRoom, roomIds } = createSpace(rooms, [6, 8, 13, 27, 75], client);
+            it.each([true, false])(
+                "supports filtering unread rooms with Notifications.activityIsUnread=%s",
+                async (activityIsUnread) => {
+                    vi.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
+                        if (name === "Notifications.activityIsUnread") return activityIsUnread;
+                        return null;
+                    });
 
-                // Let's say 8, 27 are unread
-                vi.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation((room) => {
-                    const state = {
-                        hasUnreadCount: [rooms[8], rooms[27]].includes(room),
-                    } as unknown as RoomNotificationState;
-                    return state;
-                });
+                    const { client, rooms } = getClientAndRooms();
+                    // Let's choose 5 rooms to put in space
+                    const { spaceRoom, roomIds } = createSpace(rooms, [6, 8, 13, 27, 75], client);
 
-                setupMocks(spaceRoom, roomIds);
-                const store = new RoomListStoreV3Class(dispatcher);
-                await store.start();
+                    // Let's say 8, 27 are unread
+                    vi.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation((room) => {
+                        const includeRoom = [rooms[8], rooms[27]].includes(room);
+                        const state = {
+                            hasUnreadCount: activityIsUnread ? false : includeRoom,
+                            // When activityIsUnread is true, the unread filter looks at hasAnyNotificationOrActivity instead of hasUnreadCount
+                            hasAnyNotificationOrActivity: activityIsUnread ? includeRoom : false,
+                        } as unknown as RoomNotificationState;
+                        return state;
+                    });
 
-                // Should only give us rooms at index 8 and 27
-                const result = store
-                    .getSortedRoomsInActiveSpace([FilterEnum.UnreadFilter])
-                    .sections.flatMap((s) => s.rooms);
-                expect(result).toHaveLength(2);
-                for (const i of [8, 27]) {
-                    expect(result).toContain(rooms[i]);
-                }
-            });
+                    setupMocks(spaceRoom, roomIds);
+                    const store = new RoomListStoreV3Class(dispatcher);
+                    await store.start();
+
+                    // Should only give us rooms at index 8 and 27 when Notifications.activityIsUnread=false
+                    const result = store
+                        .getSortedRoomsInActiveSpace([FilterEnum.UnreadFilter])
+                        .sections.flatMap((s) => s.rooms);
+                    expect(result).toHaveLength(2);
+                    for (const i of [8, 27]) {
+                        expect(result).toContain(rooms[i]);
+                    }
+                },
+            );
 
             it("unread filter matches rooms that are marked as unread", async () => {
                 const { client, rooms } = getClientAndRooms();
@@ -848,6 +859,40 @@ describe("RoomListStoreV3", () => {
                 expect(
                     store.getSortedRoomsInActiveSpace([FilterEnum.InvitesFilter]).sections.flatMap((s) => s.rooms),
                 ).toContain(room);
+            });
+
+            it("updates filters when Notifications.activityIsUnread setting changes", async () => {
+                // Given one room is "bold" (unread) and one has a notification
+                const { store, rooms } = await getRoomListStore();
+                vi.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation((room) => {
+                    const state = {
+                        // Only 27 has notifications
+                        hasUnreadCount: [rooms[27]].includes(room),
+                        // But both 8 and 27 have unread messages (bold)
+                        hasAnyNotificationOrActivity: [rooms[8], rooms[27]].includes(room),
+                    } as unknown as RoomNotificationState;
+                    return state;
+                });
+
+                // When showbold is set to true
+                await SettingsStore.setValue("Notifications.activityIsUnread", null, SettingLevel.DEVICE, true);
+
+                // Then both rooms are in the room list
+                const showboldRooms = store
+                    .getSortedRoomsInActiveSpace([FilterEnum.UnreadFilter])
+                    .sections.flatMap((s) => s.rooms);
+                expect(showboldRooms).toContain(rooms[27]);
+                expect(showboldRooms).toContain(rooms[8]);
+
+                // But when showbold is set to false
+                await SettingsStore.setValue("Notifications.activityIsUnread", null, SettingLevel.DEVICE, false);
+
+                // Then only the room with a notification is in the room list
+                const noShowboldRooms = store
+                    .getSortedRoomsInActiveSpace([FilterEnum.UnreadFilter])
+                    .sections.flatMap((s) => s.rooms);
+                expect(noShowboldRooms).toContain(rooms[27]);
+                expect(noShowboldRooms).not.toContain(rooms[8]);
             });
         });
 
