@@ -19,8 +19,7 @@
     --event-tile-irc-icon-width: 14px;
     --event-tile-irc-right-padding: 5px;
     --event-tile-irc-info-offset: calc(
-        var(--event-tile-irc-name-width, 80px) + var(--event-tile-irc-icon-width) +
-            var(--event-tile-irc-right-padding)
+        var(--event-tile-irc-name-width, 80px) + var(--event-tile-irc-icon-width) + var(--event-tile-irc-right-padding)
     );
 
     /* Bubble geometry. */
@@ -37,6 +36,17 @@
 
     /* Shared preview, action-bar, bubble, and interaction values. */
     --event-tile-preview-offset: 48px;
+    --event-tile-preview-margin-block: 13px;
+    --event-tile-preview-padding: 8px;
+    --event-tile-preview-separator-color: var(--cpd-color-icon-tertiary);
+    --event-tile-preview-hover-background: var(--cpd-color-bg-subtle-primary);
+    --event-tile-preview-notification-background: var(--cpd-color-icon-tertiary);
+    --event-tile-preview-highlight-background: var(--cpd-color-bg-critical-subtle);
+    --event-tile-thread-spacing-block-start: var(--cpd-space-4x);
+    --event-tile-thread-spacing-inline-end: 8px;
+    --event-tile-thread-spacing-inline-start: 56px;
+    --event-tile-file-separator-color: var(--cpd-color-gray-400);
+    --event-tile-file-separator-spacing: var(--cpd-space-6x);
     --event-tile-action-bar-size: 28px;
     --event-tile-action-bar-margin: 3px;
     --event-tile-action-bar-offset: 8px;
@@ -45,6 +55,7 @@
     --event-tile-state-selected-background: var(--cpd-color-bg-subtle-secondary);
     --event-tile-state-marker-width: 4px;
     --event-tile-state-marker-color: var(--cpd-color-bg-action-primary-rest);
+
     position: relative;
     flex-shrink: 0;
     max-width: 100%;
@@ -140,9 +151,7 @@
     position: absolute;
     z-index: 10;
     inset-block-start: calc(
-        -1 *
-            (var(--event-tile-action-bar-size) + 2 *
-                (var(--event-tile-action-bar-margin) + var(--cpd-border-width-1)))
+        -1 * (var(--event-tile-action-bar-size) + 2 * (var(--event-tile-action-bar-margin) + var(--cpd-border-width-1)))
     );
     inset-inline-end: var(--event-tile-action-bar-offset);
     user-select: none;
@@ -685,9 +694,7 @@
 
     .slotActionBar {
         inset-block-start: -28px;
-        inset-inline-start: calc(
-            100% - var(--event-tile-action-bar-size) - 2 * var(--event-tile-action-bar-margin)
-        );
+        inset-inline-start: calc(100% - var(--event-tile-action-bar-size) - 2 * var(--event-tile-action-bar-margin));
         inset-inline-end: auto;
     }
 
@@ -992,7 +999,37 @@
     width: 100%;
     padding-top: 0;
 
+    &.layoutIrc {
+        padding-block-start: var(--event-tile-thread-spacing-block-start);
+
+        .line {
+            padding-block: 2px;
+            padding-inline-start: var(--event-tile-thread-spacing-inline-start);
+            margin-inline-end: var(--event-tile-thread-spacing-inline-end);
+        }
+
+        .slotFooter {
+            margin-inline-start: var(--event-tile-thread-spacing-inline-start);
+            margin-inline-end: var(--event-tile-thread-spacing-inline-end);
+        }
+    }
+
+    &.stateContinuation.layoutGroup {
+        padding-block-start: 0;
+    }
+
+    &.stateContinuation.layoutIrc {
+        padding-block-start: 0;
+    }
+
+    .slotActionBar {
+        inset-block-start: -36px;
+        inset-inline-end: 0;
+    }
+
     &.layoutGroup {
+        padding-block-start: var(--event-tile-thread-spacing-block-start);
+
         .senderDetails {
             align-items: center;
             gap: var(--cpd-space-4x);
@@ -1014,8 +1051,8 @@
 
         .line {
             padding-block: 2px;
-            padding-inline-start: 56px;
-            margin-inline-end: 8px;
+            padding-inline-start: var(--event-tile-thread-spacing-inline-start);
+            margin-inline-end: var(--event-tile-thread-spacing-inline-end);
         }
 
         .slotTimestamp {
@@ -1025,8 +1062,8 @@
         }
 
         .slotFooter {
-            margin-inline-start: 56px;
-            margin-inline-end: 8px;
+            margin-inline-start: var(--event-tile-thread-spacing-inline-start);
+            margin-inline-end: var(--event-tile-thread-spacing-inline-end);
         }
     }
 
@@ -1063,7 +1100,7 @@
             }
 
             .line .slotBody {
-                margin-inline-start: 20px;
+                margin-inline-start: calc(var(--event-tile-irc-icon-width) + 6px);
             }
         }
 
@@ -1073,7 +1110,7 @@
             }
 
             .line .slotBody {
-                margin-inline-start: calc(56px + 14px + 6px);
+                margin-inline-start: calc(var(--event-tile-thread-spacing-inline-start) + 14px + 6px);
             }
         }
     }
@@ -1085,19 +1122,29 @@
     display: flex;
     flex-flow: row wrap;
     align-items: center;
-    margin-block: 13px;
-    padding: 8px;
+    margin-block: var(--event-tile-preview-margin-block);
+    padding: var(--event-tile-preview-padding);
     border-radius: 8px;
 
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+    }
+
     &:hover {
-            background-color: var(--cpd-color-bg-subtle-primary);
+        background-color: var(--event-tile-preview-hover-background);
     }
 
     &::after {
         content: "";
         position: absolute;
-        inset: auto -8px -13px 56px;
+        inset: auto calc(-1 * var(--event-tile-preview-padding)) calc(-1 * var(--event-tile-preview-margin-block))
+            var(--event-tile-preview-offset);
         height: 1px;
+        background-color: var(--event-tile-preview-separator-color);
+        pointer-events: none;
     }
 
     &:last-child::after {
@@ -1161,6 +1208,27 @@
         text-overflow: ellipsis;
     }
 
+    .slotTimestamp > * {
+        width: unset;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .slotNotificationBadge {
+        position: relative;
+        z-index: 1;
+        flex: 0 0 auto;
+    }
+
+    &:has(.slotNotificationBadge [data-notification-level="notification"])::before {
+        background-color: var(--event-tile-preview-notification-background);
+    }
+
+    &:has(.slotNotificationBadge [data-notification-level="highlight"])::before {
+        background-color: var(--event-tile-preview-highlight-background);
+    }
+
     &.layoutGroup:hover .line {
         background-color: inherit;
         box-shadow: none;
@@ -1189,6 +1257,12 @@
     --event-tile-group-line-spacing-block-start: var(--event-tile-card-line-padding-block);
     --event-tile-group-line-spacing-block-end: var(--event-tile-card-line-padding-block);
     --event-tile-group-timestamp-width: var(--event-tile-card-timestamp-width);
+    --event-tile-card-thread-summary-separator-color: var(--cpd-color-icon-tertiary);
+    --event-tile-card-action-bar-inset-inline-end: calc(var(--container-gap-width, 0px) + 1px);
+    --event-tile-card-receipt-inset-block-start: -6px;
+    --event-tile-card-bubble-receipt-inset-inline-end: calc(
+        -1 * var(--ReadReceiptGroup_EventBubbleTile-spacing-end, 78px) + var(--container-gap-width, 0px) + 6px
+    );
 
     &.layoutGroup {
         .line {
@@ -1207,25 +1281,83 @@
             inset-inline-start: auto;
             inset-inline-end: 0;
             text-align: end;
+            font-size: 12px;
         }
 
         .slotThreadInfo {
             margin-inline-end: 0;
             max-width: min(calc(100% - var(--event-tile-group-gutter)), 600px);
+            position: relative;
+            padding-inline-end: 11px;
+        }
+
+        .slotThreadInfo::after {
+            content: "";
+            display: block;
+            position: absolute;
+            inset-inline: 0;
+            inset-block-end: -16px;
+            height: 1px;
+            border-block-end: 1px solid var(--event-tile-card-thread-summary-separator-color);
         }
 
         .slotReceipt {
             margin-inline-end: 0;
-            inset-block-start: -6px;
+            inset-block-start: var(--event-tile-card-receipt-inset-block-start);
         }
 
         &.stateInfo .slotAvatar {
             inset-inline-start: 18px;
         }
+
+        &.stateInfo {
+            font: var(--cpd-font-body-sm-regular);
+        }
+
+        .slotFooter {
+            margin-inline-end: var(--cpd-space-2x);
+            position: relative;
+        }
+
+        .slotBody > * {
+            margin-inline-end: 0;
+        }
+
+        .slotSender {
+            max-width: calc(100% - var(--event-tile-card-spacing-inline));
+        }
+
+        .slotReplyChain .slotSender {
+            margin-inline-start: 0;
+            max-width: unset;
+        }
+    }
+
+    &.layoutIrc {
+        .slotAvatar,
+        .slotTimestamp {
+            position: absolute;
+        }
     }
 
     &.layoutBubble::before {
         z-index: auto;
+    }
+
+    &.layoutBubble.stateInfo .slotActionBar {
+        inset-inline-end: var(--event-tile-card-action-bar-inset-inline-end);
+    }
+
+    &.layoutBubble .slotFooter {
+        position: relative;
+    }
+
+    &.layoutBubble > .slotReceipt {
+        --event-tile-read-receipt-inset-inline-end: var(--event-tile-card-bubble-receipt-inset-inline-end);
+    }
+
+    &.layoutBubble.stateInfo > .slotReceipt {
+        --event-tile-read-receipt-inset-inline-end: -4px;
     }
 }
 
@@ -1235,6 +1367,11 @@
 .root.shapeFile {
     padding-top: 0;
     overflow-wrap: anywhere;
+
+    & + & {
+        border-block-start: 1px solid var(--event-tile-file-separator-color);
+        padding-block-start: var(--event-tile-file-separator-spacing);
+    }
 
     .senderDetailsLink {
         display: block;
@@ -1262,6 +1399,7 @@
         min-height: 0;
         margin-inline-start: 0;
         line-height: normal;
+        color: var(--cpd-color-text-secondary);
     }
 
     .senderDetails .slotTimestamp {
@@ -1270,6 +1408,11 @@
         width: unset;
         margin-inline-start: auto;
         text-align: initial;
+    }
+
+    .slotBody {
+        --event-tile-file-download-margin-block-start: var(--cpd-space-4x);
+        --event-tile-file-image-gap: 0;
     }
 
     .line {
