@@ -38,7 +38,12 @@ import { hasCreateRoomRights } from "./utils";
 import { keepIfSame } from "../../utils/keepIfSame";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import { RoomListSectionHeaderViewModel } from "./RoomListSectionHeaderViewModel";
-import { getCustomSectionData, isCustomSectionTag, CHATS_TAG } from "../../stores/room-list-v3/section";
+import {
+    getCustomSectionData,
+    isCustomSectionTag,
+    isSectionExpanded,
+    CHATS_TAG,
+} from "../../stores/room-list-v3/section";
 import { tagRoom } from "../../utils/room/tagRoom";
 import { getSectionTagForRoom } from "../../utils/room/getSectionTagForRoom";
 import SettingsStore from "../../settings/SettingsStore";
@@ -187,8 +192,10 @@ export class RoomListViewModel
 
         const filterIds = getVisibleFilterIds();
 
-        // By default, all sections are expanded
-        const { sections, isFlatList } = computeSections(roomsResult, (tag) => true);
+        // No section header view models exist yet, so read the persisted expansion state directly
+        const { sections, isFlatList } = computeSections(roomsResult, (tag) =>
+            isSectionExpanded(roomsResult.spaceId, tag),
+        );
         const isRoomListEmpty = roomsResult.sections.every((section) => section.rooms.length === 0);
 
         super(props, {

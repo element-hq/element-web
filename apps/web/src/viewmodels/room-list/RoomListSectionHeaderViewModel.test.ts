@@ -114,6 +114,18 @@ describe("RoomListSectionHeaderViewModel", () => {
         expect(vm.isExpanded).toBe(false);
     });
 
+    it("should start the Invites section collapsed", () => {
+        // The section appears on its own when an invitation arrives, so it must not push the list down
+        const vm = new RoomListSectionHeaderViewModel({
+            tag: DefaultTagID.Invite,
+            title: "Invites",
+            spaceId: "!space:server",
+            onToggleExpanded,
+        });
+
+        expect(vm.getSnapshot().isExpanded).toBe(false);
+    });
+
     it("should initialize expanded state from the persisted setting", () => {
         sectionExpansionState = { "!space:server": { "m.favourite": false } };
 
@@ -391,6 +403,37 @@ describe("RoomListSectionHeaderViewModel", () => {
             vm.setRooms([room]);
 
             expect(vm.getSnapshot().isUnread).toBe(true);
+        });
+
+        it("should collapse the Invites section once its invitations are gone", () => {
+            const vm = new RoomListSectionHeaderViewModel({
+                tag: DefaultTagID.Invite,
+                title: "Invites",
+                spaceId: "!space:server",
+                onToggleExpanded,
+            });
+            vm.onClick();
+            expect(vm.getSnapshot().isExpanded).toBe(true);
+
+            // The last invitation was accepted or rejected
+            vm.setRooms([]);
+
+            // Closed again, so the next invitation makes the section appear collapsed
+            expect(vm.getSnapshot().isExpanded).toBe(false);
+        });
+
+        it("should leave an expanded section expanded when it empties", () => {
+            const vm = new RoomListSectionHeaderViewModel({
+                tag: "m.favourite",
+                title: "Favourites",
+                spaceId: "!space:server",
+                onToggleExpanded,
+            });
+
+            vm.setRooms([]);
+
+            // Only the Invites section is collapsed on emptying
+            expect(vm.getSnapshot().isExpanded).toBe(true);
         });
 
         it("should subscribe to new rooms and unsubscribe from removed rooms", () => {

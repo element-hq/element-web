@@ -151,10 +151,15 @@ export type SectionExpansionState = { [spaceId: string]: { [sectionTag: string]:
 /**
  * Returns whether the section with the given tag is expanded in the given space.
  * Defaults to expanded when no state has been persisted.
+ *
+ * The Invites section is the exception: it appears on its own when an invitation arrives and is
+ * collapsed every time it does, so that it does not push the rest of the room list down. Expanding
+ * it only lasts while it is on screen, which is why nothing is persisted or read back for it.
  * @param spaceId - The id of the space.
  * @param tag - The tag of the section.
  */
 export function isSectionExpanded(spaceId: string, tag: string): boolean {
+    if (tag === DefaultTagID.Invite) return false;
     return SettingsStore.getValue("RoomList.SectionExpansionState")[spaceId]?.[tag] ?? true;
 }
 
@@ -165,6 +170,9 @@ export function isSectionExpanded(spaceId: string, tag: string): boolean {
  * @param expanded - Whether the section is expanded.
  */
 export async function setSectionExpanded(spaceId: string, tag: string, expanded: boolean): Promise<void> {
+    // The Invites section starts collapsed every time it appears, so its state is never remembered
+    if (tag === DefaultTagID.Invite) return;
+
     const state = SettingsStore.getValue("RoomList.SectionExpansionState");
     const newState: SectionExpansionState = {
         ...state,

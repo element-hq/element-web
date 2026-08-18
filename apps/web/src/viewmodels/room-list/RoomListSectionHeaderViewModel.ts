@@ -141,6 +141,12 @@ export class RoomListSectionHeaderViewModel
      * @param rooms - The rooms currently in this section
      */
     public setRooms(rooms: Room[]): void {
+        // The Invites section only exists while invitations are pending. Collapse it once they have
+        // all been handled, so that it is closed again the next time an invitation makes it appear.
+        if (this.props.tag === DefaultTagID.Invite && rooms.length === 0) {
+            this.snapshot.merge({ isExpanded: false });
+        }
+
         const newStates = new Set(rooms.map((room) => RoomNotificationStateStore.instance.getRoomState(room)));
 
         // Unsubscribe from rooms no longer in the section
