@@ -138,6 +138,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         SettingsStore.watchSetting("RoomList.OrderedCustomSections", null, () => this.onOrderedCustomSectionsChange());
         this.loadCustomSections();
 
+        SettingsStore.watchSetting("Notifications.activityIsUnread", null, () => this.onActivityIsUnreadChange());
         SettingsStore.watchSetting("RoomList.showSections", null, () => this.scheduleEmit());
     }
 
@@ -520,6 +521,17 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      */
     private onOrderedCustomSectionsChange(): void {
         this.loadCustomSections();
+        if (!this.roomSkipList) return;
+        this.roomSkipList.useNewFilters(this.getSkipListFilters());
+        this.scheduleEmit();
+    }
+
+    /**
+     * Handle changes to the "Notifications.activityIsUnread" setting.
+     * Updates the skip list filters to reflect the new setting and emits an update.
+     * Emit {@link LISTS_UPDATE_EVENT}.
+     */
+    private onActivityIsUnreadChange(): void {
         if (!this.roomSkipList) return;
         this.roomSkipList.useNewFilters(this.getSkipListFilters());
         this.scheduleEmit();
