@@ -44,6 +44,35 @@ function memberEventDiff(ev: MatrixEvent): IDiff {
 }
 
 /**
+ * Determines whether the given event is a membership change the user has asked not to see.
+ *
+ * This is kept apart from {@link shouldHideEvent} so that the timeline can honour these three
+ * preferences even while hidden events are being shown. That setting is about events which have no
+ * tile of their own, not about membership changes somebody has deliberately turned off.
+ *
+ * @param ev - The event to test.
+ * @param ctx - An optional RoomContext to pull cached settings values from to avoid hitting the
+ *     settings store.
+ * @returns True if the event is a join, leave, avatar or display name change the user has hidden.
+ */
+export function isHiddenMemberEvent(ev: MatrixEvent, ctx?: IRoomState): boolean {
+    const eventDiff = memberEventDiff(ev);
+    if (!eventDiff.isMemberEvent) return false;
+
+    // Accessing the settings store directly can be expensive if done frequently,
+    // so we should prefer using cached values if a RoomContext is available
+    const isEnabled = ctx
+        ? (name: keyof IRoomState) => ctx[name]
+        : (name: SettingKey) => SettingsStore.getValue(name, ev.getRoomId());
+
+    if ((eventDiff.isJoin || eventDiff.isPart) && !isEnabled("showJoinLeaves")) return true;
+    if (eventDiff.isAvatarChange && !isEnabled("showAvatarChanges")) return true;
+    if (eventDiff.isDisplaynameChange && !isEnabled("showDisplaynameChanges")) return true;
+
+    return false;
+}
+
+/**
  * Determines whether the given event should be hidden from timelines.
  * @param ev The event
  * @param ctx An optional RoomContext to pull cached settings values from to avoid
@@ -67,13 +96,5 @@ export default function shouldHideEvent(ev: MatrixEvent, ctx?: IRoomState): bool
     // Hide replacement events since they update the original tile (if enabled)
     if (ev.isRelation(RelationType.Replace)) return true;
 
-    const eventDiff = memberEventDiff(ev);
-
-    if (eventDiff.isMemberEvent) {
-        if ((eventDiff.isJoin || eventDiff.isPart) && !isEnabled("showJoinLeaves")) return true;
-        if (eventDiff.isAvatarChange && !isEnabled("showAvatarChanges")) return true;
-        if (eventDiff.isDisplaynameChange && !isEnabled("showDisplaynameChanges")) return true;
-    }
-
-    return false;
+    return isHiddenMemberEvent(ev, ctx);
 }
