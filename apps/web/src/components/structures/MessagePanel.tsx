@@ -1026,6 +1026,25 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         }
     }
 
+    private getMessageListAriaLabel(): string | undefined {
+        switch (this.context.timelineRenderingType) {
+            case TimelineRenderingType.Thread:
+                return _t("room|message_list_label|thread");
+            case TimelineRenderingType.ThreadsList:
+                return _t("room|message_list_label|threads_list");
+            case TimelineRenderingType.File:
+                return _t("room|message_list_label|file_panel");
+            case TimelineRenderingType.Notification:
+                return _t("room|message_list_label|notifications_panel");
+            case TimelineRenderingType.Pinned:
+                return _t("room|message_list_label|pinned_messages");
+            case TimelineRenderingType.Room:
+                return _t("room|message_list_label|room");
+            default:
+                return undefined;
+        }
+    }
+
     public render(): React.ReactNode {
         let topSpinner;
         let bottomSpinner;
@@ -1084,6 +1103,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                     style={style}
                     stickyBottom={this.props.stickyBottom}
                     fixedChildren={ircResizer}
+                    ariaLabel={this.getMessageListAriaLabel()}
                 >
                     {topSpinner}
                     {this.getEventTiles()}

@@ -193,6 +193,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent<IProps
                     onFillRequest={this.loadMoreEdits}
                     stickyBottom={false}
                     startAtBottom={false}
+                    ariaLabel={_t("message_edit_dialog_title")}
                 >
                     <ul className="mx_MessageEditHistoryDialog_edits">{this.renderEdits()}</ul>
                 </ScrollPanel>
