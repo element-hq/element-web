@@ -162,6 +162,7 @@ describe("RoomListSectionHeaderViewModel", () => {
 
     describe("displaySectionMenu", () => {
         it.each([
+            [DefaultTagID.Invite, false],
             [DefaultTagID.Favourite, false],
             [DefaultTagID.LowPriority, false],
             [CHATS_TAG, false],
@@ -191,6 +192,7 @@ describe("RoomListSectionHeaderViewModel", () => {
         });
 
         it.each([
+            [DefaultTagID.Invite, false],
             [DefaultTagID.Favourite, false],
             [DefaultTagID.LowPriority, false],
             [CHATS_TAG, true],
@@ -226,15 +228,16 @@ describe("RoomListSectionHeaderViewModel", () => {
         it.each([
             [DefaultTagID.DM, "dm"],
             [CHATS_TAG, "nonDm"],
-            [DefaultTagID.Favourite, undefined],
-            [DefaultTagID.LowPriority, undefined],
-            ["element.io.section.custom", undefined],
+            [DefaultTagID.Invite, "none"],
+            [DefaultTagID.Favourite, "any"],
+            [DefaultTagID.LowPriority, "any"],
+            ["element.io.section.custom", "any"],
         ])("should be %s for tag %s when the People section is shown", (tag, expected) => {
             expect(makeViewModel(tag).getSnapshot().acceptedRoomKind).toBe(expected);
         });
 
         it("should let the Chats section accept any room when the People section is hidden", () => {
-            expect(makeViewModel(CHATS_TAG, false).getSnapshot().acceptedRoomKind).toBeUndefined();
+            expect(makeViewModel(CHATS_TAG, false).getSnapshot().acceptedRoomKind).toBe("any");
         });
     });
 
