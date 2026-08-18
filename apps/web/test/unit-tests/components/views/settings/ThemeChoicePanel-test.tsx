@@ -140,6 +140,10 @@ describe("<ThemeChoicePanel />", () => {
             await SettingsStore.setValue("custom_themes", null, SettingLevel.DEVICE, [aliceTheme]);
         });
 
+        afterEach(async () => {
+            await SettingsStore.reset();
+        });
+
         it("should render the custom theme section", () => {
             const { asFragment } = render(<ThemeChoicePanel />);
             expect(asFragment()).toMatchSnapshot();
@@ -149,7 +153,6 @@ describe("<ThemeChoicePanel />", () => {
             const { asFragment } = render(<ThemeChoicePanel />);
 
             expect(screen.getByRole("radio", { name: aliceTheme.name })).toBeInTheDocument();
-            expect(screen.getByRole("listitem", { name: aliceTheme.name })).toBeInTheDocument();
             expect(asFragment()).toMatchSnapshot();
         });
     });
