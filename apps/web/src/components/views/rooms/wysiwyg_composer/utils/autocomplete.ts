@@ -11,6 +11,7 @@ import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 
 import { type ICompletion } from "../../../../../autocomplete/Autocompleter";
 import * as Avatar from "../../../../../Avatar";
+import { findRoomByAlias } from "../../../../../utils/room/findRoomByAlias";
 
 /**
  * Builds the query for the `<Autocomplete />` component from the rust suggestion. This
@@ -50,9 +51,7 @@ export function getRoomFromCompletion(completion: ICompletion, client: MatrixCli
     } else if (!aliasFromCompletion.startsWith("#")) {
         roomToReturn = client.getRoom(aliasFromCompletion);
     } else {
-        roomToReturn = client.getRooms().find((r) => {
-            return r.getCanonicalAlias() === aliasFromCompletion || r.getAltAliases().includes(aliasFromCompletion);
-        });
+        roomToReturn = findRoomByAlias(client, aliasFromCompletion);
     }
 
     return roomToReturn ?? null;
