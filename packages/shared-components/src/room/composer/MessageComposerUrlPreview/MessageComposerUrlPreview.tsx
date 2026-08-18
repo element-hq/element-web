@@ -188,9 +188,9 @@ function UrlPreviewExpandedEntry({
                         title={entryTitle}
                         showTooltipOnLink={showTooltipOnLink}
                         link={entry.matched_url}
-                        classes={[styles.linkTitle]}
+                        className={styles.linkTitle}
                     />
-                    <LinkSiteName siteName={new URL(entry.matched_url).hostname} classes={[styles.linkSiteName]} />
+                    <LinkSiteName siteName={new URL(entry.matched_url).hostname} className={styles.linkSiteName} />
                 </div>
             </div>
             {removePreview ? (
