@@ -115,7 +115,7 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
         }
 
         const mimeType = this.props.file.type;
-        let previewContent = UploadConfirmDialog.computePreviewContent({ objectUrl: this.state.objectUrl!, mimeType });
+        const previewContent = UploadConfirmDialog.computePreviewContent({ objectUrl: this.state.objectUrl!, mimeType });
 
         const preview: MediaPreviewGroupEntry = {
             id: this.props.file.name,
