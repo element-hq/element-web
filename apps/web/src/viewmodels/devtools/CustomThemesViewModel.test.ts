@@ -302,7 +302,7 @@ describe("CustomThemesViewModel", () => {
             await vm.refreshTheme("Bob theme");
             expect(vm.getSnapshot().themes[1].error).toBe(CustomThemeError.DownloadFailed);
 
-            fetchMock.getOnce(BOB_URL, { body: UPDATED_BOB }, { overwriteRoutes: true });
+            fetchMock.getOnce(BOB_URL, { body: UPDATED_BOB });
             await vm.refreshTheme("Bob theme");
 
             expect(vm.getSnapshot().themes[1].error).toBeNull();
