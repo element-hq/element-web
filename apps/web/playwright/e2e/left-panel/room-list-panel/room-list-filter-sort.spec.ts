@@ -11,7 +11,7 @@ import { closeReleaseAnnouncement, rejectToast } from "@element-hq/element-web-p
 
 import { expect, test } from "../../../element-web-test";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
-import { getFilterCollapseButton, getFilterExpandButton, getPrimaryFilters, getRoomOptionsMenu } from "./utils";
+import { getFilterExpandButton, getPrimaryFilters, getRoomOptionsMenu } from "./utils";
 
 test.describe("Room list filters and sort", () => {
     test.use({
@@ -168,15 +168,20 @@ test.describe("Room list filters and sort", () => {
 
             await primaryFilters.getByRole("option", { name: "Unread" }).click();
             // only one room should be visible
-            await expect(roomList.getByRole("option", { name: "unread dm" })).toBeVisible();
-            await expect(roomList.getByRole("option", { name: "unread room" })).toBeVisible();
-            await expect.poll(() => roomList.locator("role=option").count()).toBe(4);
+            await expect(roomList.getByRole("button", { name: "unread dm" })).toBeVisible();
+            await expect(roomList.getByRole("button", { name: "Open room unread room" })).toBeVisible();
+            // A pending invitation counts as unread, so the Invites section shows too, but it is
+            // collapsed so its room is not listed: 3 rooms + 2 section headers.
+            await expect.poll(() => roomList.locator("role=button").count()).toBe(5);
             await expect(primaryFilters).toMatchScreenshot("unread-primary-filters.png");
 
             await primaryFilters.getByRole("option", { name: "People" }).click();
-            await expect(roomList.getByRole("option", { name: "unread dm" })).toBeVisible();
-            await expect(roomList.getByRole("option", { name: "invited room" })).toBeVisible();
-            await expect.poll(() => roomList.locator("role=option").count()).toBe(2);
+            await expect(roomList.getByRole("button", { name: "unread dm" })).toBeVisible();
+            // The invited dm matches the People filter, but sits in the collapsed Invites section,
+            // so only its header shows: the joined dm + the People and Invites headers = 3 buttons.
+            await expect(roomList.getByRole("button", { name: "Toggle Invites section" })).toBeVisible();
+            await expect(roomList.getByRole("button", { name: "Open room invited room" })).not.toBeVisible();
+            await expect.poll(() => roomList.locator("role=button").count()).toBe(3);
 
             await primaryFilters.getByRole("option", { name: "Rooms" }).click();
             // "Open room" prefix disambiguates the room tile from the "Toggle Chats section with
@@ -190,18 +195,13 @@ test.describe("Room list filters and sort", () => {
             // header is also a button, so 5 rooms + 3 section headers = 8 buttons.
             await expect.poll(() => roomList.locator("role=button").count()).toBe(8);
 
-            await getFilterExpandButton(page).click();
-
             await primaryFilters.getByRole("option", { name: "Mentions" }).click();
             await expect(roomList.getByRole("option", { name: "room with mention" })).toBeVisible();
             await expect.poll(() => roomList.locator("role=option").count()).toBe(1);
 
-            await primaryFilters.getByRole("option", { name: "Invites" }).click();
-            await expect(roomList.getByRole("option", { name: "invited room" })).toBeVisible();
-            await expect.poll(() => roomList.locator("role=option").count()).toBe(1);
-
-            await getFilterCollapseButton(page).click();
-            await expect(primaryFilters.locator("role=option").first()).toHaveText("Invites");
+            // The Invites filter is not offered while sections are enabled: invited rooms are
+            // surfaced by the Invites section instead.
+            await expect(primaryFilters.getByRole("option", { name: "Invites" })).not.toBeVisible();
         });
 
         test.describe("Unread filter", () => {
@@ -229,9 +229,9 @@ test.describe("Room list filters and sort", () => {
                     await primaryFilters.getByRole("option", { name: "Unread" }).click();
 
                     // Unread filter should only show unread room and not unread dm!
-                    const unreadDm = roomListView.getByRole("button", { name: "Open room unread room" });
-                    await expect(unreadDm).toBeVisible();
-                    await expect(unreadDm).toMatchScreenshot("unread-dm.png");
+                    const unreadRoom = roomListView.getByRole("button", { name: "Open room unread room" });
+                    await expect(unreadRoom).toBeVisible();
+                    await expect(unreadRoom).toMatchScreenshot("unread-room.png");
                     await expect(roomListView.getByRole("button", { name: "Open room unread dm" })).not.toBeVisible();
                 },
             );
@@ -288,8 +288,10 @@ test.describe("Room list filters and sort", () => {
             await getRoomOptionsMenu(page).click();
             await page.getByRole("menuitemradio", { name: "A-Z" }).click();
 
-            // Favourite + chat section headers are buttons + favourite room
-            await expect(roomListView.getByRole("button").nth(3)).toHaveText(/empty room/);
+            // Invites + Favourites + Rooms section headers are buttons, and the favourite
+            // room and the dm come before the first room of the Rooms section. The invited room is
+            // not listed because the Invites section is collapsed.
+            await expect(roomListView.getByRole("button").nth(4)).toHaveText(/empty room/);
         });
 
         test("should move room to the top on message (chat section) when sorting by activity", async ({
@@ -300,12 +302,21 @@ test.describe("Room list filters and sort", () => {
 
             await bot.sendMessage(unReadDmId, "Hello!");
 
-            // Favourite + chat section headers are buttons + favourite room
-            await expect(roomListView.getByRole("button").nth(3)).toHaveText(/unread dm/);
+            // Invites + Favourites + People section headers are buttons, and the favourite room
+            // comes before the first room of the People section. The invited room is not listed
+            // because the Invites section is collapsed.
+            await expect(roomListView.getByRole("button").nth(4)).toHaveText(/unread dm/);
         });
     });
 
     test.describe("Empty room list", () => {
+        // Sections are turned off so that every primary filter is offered as a chip. With sections
+        // enabled, Favourites, Low Priority and Invites are surfaced as sections instead, and the
+        // remaining chips fit without an expand button.
+        test.beforeEach(async ({ app }) => {
+            await app.settings.setValue("RoomList.showSections", null, SettingLevel.ACCOUNT, false);
+        });
+
         /**
          * Get the empty state
          * @param page

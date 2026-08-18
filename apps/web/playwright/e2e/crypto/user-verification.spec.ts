@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Preset, type Visibility } from "matrix-js-sdk/src/matrix";
-import { getToast } from "@element-hq/element-web-playwright-common";
+import { getToast, rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { test, expect } from "../../element-web-test";
 import { doTwoWaySasVerification, awaitVerifier, waitForDevices } from "./utils";
@@ -26,10 +26,16 @@ test.describe("User verification", () => {
             const dmRoomId = await createDMRoom(bob, aliceCredentials.userId);
 
             // accept the DM
+            await page.getByRole("button", { name: "Toggle Invites section" }).click();
             await app.viewRoomByName("Bob");
             await page.getByRole("button", { name: "Start chatting" }).click();
             await use({ roomId: dmRoomId });
         },
+    });
+
+    test.beforeEach(async ({ page, user, app }) => {
+        await rejectToast(page, "Verify this device");
+        await rejectToast(page, "Notifications");
     });
 
     test("can receive a verification request when there is no existing DM", async ({

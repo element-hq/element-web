@@ -5,6 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { rejectToast } from "@element-hq/element-web-playwright-common";
 import { test, expect } from "../../element-web-test";
 
 test.describe("Decline and block invite dialog", function () {
@@ -12,11 +13,17 @@ test.describe("Decline and block invite dialog", function () {
         displayName: "Hanako",
     });
 
+    test.beforeEach(async ({ page, user, app }) => {
+        await rejectToast(page, "Verify this device");
+        await rejectToast(page, "Notifications");
+    });
+
     test(
         "should show decline and block dialog for a room",
         { tag: "@screenshot" },
         async ({ page, app, user, bot, axe }) => {
             await bot.createRoom({ name: "Test Room", invite: [user.userId] });
+            await page.getByRole("button", { name: "Toggle Invites section" }).click();
             await app.viewRoomByName("Test Room");
             await page.getByRole("button", { name: "Decline and block" }).click();
 
