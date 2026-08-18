@@ -23,7 +23,7 @@ const meta = {
         style: "audio",
         audio: demoAudio,
         icon: <FileIcon />,
-        iconOnClick: () => {},
+        onClick: () => {},
         color: "#4200A6",
         header: "voice-message.mp3",
         body: "1.1 MB",
