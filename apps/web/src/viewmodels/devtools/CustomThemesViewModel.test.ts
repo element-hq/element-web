@@ -35,8 +35,8 @@ describe("CustomThemesViewModel", () => {
     let dispatcher: MatrixDispatcher;
 
     /** Build a view model wired up to the fake settings store and dispatcher. */
-    function mkViewModel(): CustomThemesViewModel {
-        return new CustomThemesViewModel({ settingsStore, dispatcher });
+    function mkViewModel(saveTimeoutMs?: number): CustomThemesViewModel {
+        return new CustomThemesViewModel({ settingsStore, dispatcher, saveTimeoutMs });
     }
 
     beforeEach(() => {
@@ -395,6 +395,48 @@ describe("CustomThemesViewModel", () => {
             vm.dispose();
 
             expect(settingsStore.unwatchSetting).toHaveBeenCalledWith("watcher-ref");
+        });
+    });
+
+    describe("save timeout", () => {
+        // Simulates a `custom_themes` write whose account-data echo never arrives, which is
+        // what was observed getting the refresh button stuck disabled forever.
+        beforeEach(() => {
+            settingsStore.setValue.mockReturnValue(new Promise(() => {}));
+        });
+
+        it("reports SaveFailed and re-enables refresh if the write is never confirmed", async () => {
+            customThemes = [ALICE_THEME, STORED_BOB_THEME];
+            fetchMock.getOnce(BOB_URL, { body: BOB_THEME });
+            const vm = mkViewModel(5);
+
+            await vm.refreshTheme("Bob theme");
+
+            const bob = vm.getSnapshot().themes.find((theme) => theme.name === "Bob theme");
+            expect(bob?.isRefreshing).toBe(false);
+            expect(bob?.error).toBe(CustomThemeError.SaveFailed);
+        });
+
+        it("reports SaveFailed on the add form if the write is never confirmed", async () => {
+            fetchMock.getOnce(BOB_URL, { body: BOB_THEME });
+            const vm = mkViewModel(5);
+            vm.setUrl(BOB_URL);
+
+            await vm.addTheme();
+
+            expect(vm.getSnapshot().isDownloading).toBe(false);
+            expect(vm.getSnapshot().error).toBe(CustomThemeError.SaveFailed);
+        });
+
+        it("reports SaveFailed on the theme row if a delete is never confirmed, without marking it as refreshing", async () => {
+            customThemes = [ALICE_THEME, STORED_BOB_THEME];
+            const vm = mkViewModel(5);
+
+            await vm.removeTheme("Bob theme");
+
+            const bob = vm.getSnapshot().themes.find((theme) => theme.name === "Bob theme");
+            expect(bob?.error).toBe(CustomThemeError.SaveFailed);
+            expect(bob?.isRefreshing).toBe(false);
         });
     });
 });

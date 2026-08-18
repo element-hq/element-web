@@ -36,6 +36,8 @@ export const CustomThemeError = {
     DownloadFailed: "DownloadFailed",
     /** A theme with the same name is already installed. */
     AlreadyInstalled: "AlreadyInstalled",
+    /** A write to the settings store did not complete (or wasn't confirmed) in time. */
+    SaveFailed: "SaveFailed",
 } as const;
 export type CustomThemeError = (typeof CustomThemeError)[keyof typeof CustomThemeError];
 
@@ -43,6 +45,7 @@ const ERROR_LABELS: Record<CustomThemeError, TranslationKey> = {
     [CustomThemeError.InvalidSchema]: _td("devtools|custom_themes|error_invalid"),
     [CustomThemeError.DownloadFailed]: _td("devtools|custom_themes|error_downloading"),
     [CustomThemeError.AlreadyInstalled]: _td("devtools|custom_themes|error_already_installed"),
+    [CustomThemeError.SaveFailed]: _td("devtools|custom_themes|error_save_failed"),
 };
 
 export interface CustomThemeInfo {
@@ -160,6 +163,7 @@ export function CustomThemesView({ vm }: CustomThemesViewProps): JSX.Element {
                                     destructive={true}
                                     aria-label={_t("action|delete")}
                                     tooltip={_t("action|delete")}
+                                    disabled={theme.isRefreshing}
                                     onClick={() => void vm.removeTheme(theme.name)}
                                 >
                                     <DeleteIcon />
