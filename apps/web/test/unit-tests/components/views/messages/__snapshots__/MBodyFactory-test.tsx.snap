@@ -93,10 +93,10 @@ exports[`MBodyFactory renderMBody shows the preview tile for m.file in File 1`] 
           class="_below_1vd22_9"
         >
           <div
-            class="_leftGroup_18iaw_11"
+            class="_leftGroup_9phvk_11"
           >
             <div
-              class="_icon_18iaw_31"
+              class="_icon_9phvk_31"
             >
               <svg
                 fill="currentColor"
@@ -112,26 +112,26 @@ exports[`MBodyFactory renderMBody shows the preview tile for m.file in File 1`] 
               </svg>
             </div>
             <div
-              class="_textContent_18iaw_27"
+              class="_textContent_9phvk_27"
             >
               <div
-                class="_header_18iaw_1"
+                class="_header_9phvk_1"
               >
                 alt
               </div>
               <p
-                class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 _container_15awj_8 _body_18iaw_2"
+                class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 _container_15awj_8 _body_9phvk_2"
               >
                 Size unknown
               </p>
             </div>
           </div>
           <div
-            class="_buttonGroup_18iaw_62"
+            class="_buttonGroup_9phvk_62"
           >
             <button
               aria-label="Download"
-              class="_button_18iaw_62"
+              class="_button_9phvk_62"
               type="button"
             >
               <svg
@@ -169,10 +169,10 @@ exports[`MBodyFactory renderMBody shows the preview tile for m.file in Room 1`] 
           class="_below_1vd22_9"
         >
           <div
-            class="_leftGroup_18iaw_11"
+            class="_leftGroup_9phvk_11"
           >
             <div
-              class="_icon_18iaw_31"
+              class="_icon_9phvk_31"
             >
               <svg
                 fill="currentColor"
@@ -188,26 +188,26 @@ exports[`MBodyFactory renderMBody shows the preview tile for m.file in Room 1`] 
               </svg>
             </div>
             <div
-              class="_textContent_18iaw_27"
+              class="_textContent_9phvk_27"
             >
               <div
-                class="_header_18iaw_1"
+                class="_header_9phvk_1"
               >
                 alt
               </div>
               <p
-                class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 _container_15awj_8 _body_18iaw_2"
+                class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 _container_15awj_8 _body_9phvk_2"
               >
                 Size unknown
               </p>
             </div>
           </div>
           <div
-            class="_buttonGroup_18iaw_62"
+            class="_buttonGroup_9phvk_62"
           >
             <button
               aria-label="Download"
-              class="_button_18iaw_62"
+              class="_button_9phvk_62"
               type="button"
             >
               <svg
