@@ -12,16 +12,19 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { type MemberAvatarViewSnapshot } from "../../../../../core/MemberAvatar/MemberAvatarView";
 import { useMockedViewModel } from "../../../../../core/viewmodel";
 import { withViewDocs } from "../../../../../../.storybook/withViewDocs";
+import { type DisambiguatedProfileViewSnapshot } from "../DisambiguatedProfile";
 import { ReplyTileView, type ReplyTileViewActions, type ReplyTileViewSnapshot } from "./ReplyTileView";
 
 interface ReplyTileStoryProps extends Omit<ReplyTileViewSnapshot, "sender">, ReplyTileViewActions {
     senderName?: string;
     showAvatar?: boolean;
+    showProfile?: boolean;
 }
 
 const ReplyTileViewWrapperImpl = ({
     senderName,
     showAvatar = true,
+    showProfile = true,
     onClick,
     ...snapshot
 }: ReplyTileStoryProps): JSX.Element => {
@@ -33,13 +36,20 @@ const ReplyTileViewWrapperImpl = ({
         },
         {},
     );
+    const profileViewModel = useMockedViewModel<DisambiguatedProfileViewSnapshot, Record<string, never>>(
+        {
+            displayName: senderName ?? "Alice",
+            emphasizeDisplayName: true,
+        },
+        {},
+    );
     const vm = useMockedViewModel<ReplyTileViewSnapshot, ReplyTileViewActions>(
         {
             ...snapshot,
             sender: senderName
                 ? {
-                      displayName: senderName,
                       avatarViewModel: showAvatar ? avatarViewModel : undefined,
+                      profileViewModel: showProfile ? profileViewModel : undefined,
                   }
                 : undefined,
         },
@@ -66,6 +76,7 @@ const meta = {
         onClick: fn(),
         senderName: "Alice",
         showAvatar: true,
+        showProfile: true,
         body,
     },
 } satisfies Meta<typeof ReplyTileViewWrapper>;
@@ -90,6 +101,7 @@ export const IrcLayout: Story = {
 export const Inline: Story = {
     args: {
         inline: true,
+        showProfile: false,
         body: "Alice waves hello",
     },
 };

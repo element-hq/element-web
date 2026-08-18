@@ -53,10 +53,9 @@
     flex-shrink: 0;
 }
 
-.senderName {
+.senderProfile {
     min-width: 0;
     overflow: hidden;
-    color: var(--cpd-color-text-primary);
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -89,6 +88,9 @@
     max-width: 100%;
     overflow: hidden;
     white-space: pre-wrap;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
 }
 
 .body :where([data-textual-body-annotation-wrapper]) {
@@ -96,5 +98,9 @@
 }
 
 .body :where([data-textual-body-edited-marker]) {
+    display: none;
+}
+
+.body :where([data-event-tile-line-numbers]) {
     display: none;
 }

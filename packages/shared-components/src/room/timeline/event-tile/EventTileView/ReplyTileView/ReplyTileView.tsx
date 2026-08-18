@@ -11,13 +11,14 @@ import classNames from "classnames";
 import { MemberAvatarView, type MemberAvatarViewModel } from "../../../../../core/MemberAvatar/MemberAvatarView";
 import { type ViewModel, useViewModel } from "../../../../../core/viewmodel";
 import { useEventPresentationAttributes } from "../../../EventPresentation/EventPresentationContext";
+import { DisambiguatedProfileView, type DisambiguatedProfileViewModel } from "../DisambiguatedProfile";
 import styles from "./ReplyTileView.module.css";
 
 export interface ReplyTileSenderViewSnapshot {
-    /** Display name shown for the quoted event sender. */
-    displayName: string;
     /** Optional member avatar ViewModel for the quoted event sender. */
     avatarViewModel?: MemberAvatarViewModel;
+    /** Optional profile ViewModel for the quoted event sender. */
+    profileViewModel?: DisambiguatedProfileViewModel;
 }
 
 export interface ReplyTileViewSnapshot {
@@ -70,9 +71,9 @@ export function ReplyTileView({ vm }: ReplyTileViewProps): JSX.Element {
                         {sender.avatarViewModel ? (
                             <MemberAvatarView vm={sender.avatarViewModel} classNames={styles.avatar} />
                         ) : null}
-                        <span className={styles.senderName} dir="auto">
-                            {sender.displayName}
-                        </span>
+                        {sender.profileViewModel ? (
+                            <DisambiguatedProfileView vm={sender.profileViewModel} className={styles.senderProfile} />
+                        ) : null}
                     </div>
                 ) : null}
                 <div className={styles.body}>{body}</div>

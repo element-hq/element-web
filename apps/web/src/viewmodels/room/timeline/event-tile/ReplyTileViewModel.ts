@@ -17,6 +17,7 @@ import {
 import { logger } from "matrix-js-sdk/src/logger";
 import {
     BaseViewModel,
+    type UserStatus,
     type ReplyTileSenderViewSnapshot,
     type ReplyTileViewActions,
     type ReplyTileViewModel as ReplyTileViewModelInterface,
@@ -37,6 +38,11 @@ import MVoiceMessageBody from "../../../../components/views/messages/MVoiceMessa
 import { isVoiceMessage } from "../../../../utils/EventUtils";
 import { getEventDisplayInfo } from "../../../../utils/EventRenderingUtils";
 import { MemberAvatarViewModel as AppMemberAvatarViewModel } from "../../../../components/viewmodels/avatars/MemberAvatarViewModel";
+import {
+    DisambiguatedProfileViewModel as AppDisambiguatedProfileViewModel,
+    type MemberInfo,
+} from "./DisambiguatedProfileViewModel";
+import { roomMemberToMemberInfo } from "../../../../hooks/room/useRoomMemberProfile";
 
 export interface ReplyTileViewModelProps {
     mxEvent: MatrixEvent;
@@ -46,6 +52,7 @@ export interface ReplyTileViewModelProps {
     highlightLink?: string;
     toggleExpandedQuote?: () => void;
     getRelationsForEvent?: GetRelationsForEvent;
+    userStatus?: UserStatus;
 }
 
 export class ReplyTileViewModel
@@ -56,6 +63,7 @@ export class ReplyTileViewModel
     private senderAvatarViewModel?: AppMemberAvatarViewModel;
     private senderAvatarMember?: RoomMember;
     private senderAvatarClient?: MatrixClient;
+    private senderProfileViewModel?: AppDisambiguatedProfileViewModel;
 
     public constructor(props: ReplyTileViewModelProps) {
         super(props, ReplyTileViewModel.computeSnapshot(props, undefined));
@@ -73,6 +81,8 @@ export class ReplyTileViewModel
         this.unwatchEvent();
         this.senderAvatarViewModel?.dispose();
         this.senderAvatarViewModel = undefined;
+        this.senderProfileViewModel?.dispose();
+        this.senderProfileViewModel = undefined;
         super.dispose();
     }
 
@@ -160,11 +170,43 @@ export class ReplyTileViewModel
         const member = this.props.mxEvent.sender;
         const userId = this.props.mxEvent.getSender() ?? member?.userId;
         if (!member && !userId) return undefined;
+        const isEmote = this.props.mxEvent.getContent().msgtype === MsgType.Emote;
+
+        if (isEmote) {
+            this.clearSenderProfileViewModel();
+        }
 
         return {
-            displayName: member?.name ?? userId ?? "",
             avatarViewModel: member ? this.getSenderAvatarViewModel(member) : undefined,
+            profileViewModel: isEmote
+                ? undefined
+                : this.getSenderProfileViewModel(userId ?? "", roomMemberToMemberInfo(member)),
         };
+    }
+
+    private getSenderProfileViewModel(
+        fallbackName: string,
+        member: MemberInfo | null,
+    ): AppDisambiguatedProfileViewModel {
+        if (!this.senderProfileViewModel) {
+            this.senderProfileViewModel = new AppDisambiguatedProfileViewModel({
+                fallbackName,
+                member,
+                colored: true,
+                emphasizeDisplayName: true,
+                userStatus: this.props.userStatus,
+            });
+        } else {
+            this.senderProfileViewModel.setMember(fallbackName, member);
+            this.senderProfileViewModel.setUserStatus(this.props.userStatus);
+        }
+
+        return this.senderProfileViewModel;
+    }
+
+    private clearSenderProfileViewModel(): void {
+        this.senderProfileViewModel?.dispose();
+        this.senderProfileViewModel = undefined;
     }
 
     private getSenderAvatarViewModel(member: RoomMember): AppMemberAvatarViewModel {

@@ -14,6 +14,7 @@ import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks"
 import { type GetRelationsForEvent } from "../rooms/EventTile";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { ReplyTileViewModel } from "../../../viewmodels/room/timeline/event-tile/ReplyTileViewModel";
+import { useUserStatus } from "../../../hooks/useUserStatus";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -33,6 +34,7 @@ export default function ReplyTile({
     getRelationsForEvent,
 }: IProps): React.ReactNode {
     const cli = MatrixClientPeg.safeGet();
+    const userStatus = useUserStatus(mxEvent.getSender() ?? mxEvent.sender?.userId);
     const vm = useCreateAutoDisposedViewModel(
         () =>
             new ReplyTileViewModel({
@@ -43,6 +45,7 @@ export default function ReplyTile({
                 toggleExpandedQuote,
                 getRelationsForEvent,
                 cli,
+                userStatus,
             }),
     );
 
@@ -55,8 +58,19 @@ export default function ReplyTile({
             toggleExpandedQuote,
             getRelationsForEvent,
             cli,
+            userStatus,
         });
-    }, [cli, getRelationsForEvent, highlightLink, highlights, mxEvent, permalinkCreator, toggleExpandedQuote, vm]);
+    }, [
+        cli,
+        getRelationsForEvent,
+        highlightLink,
+        highlights,
+        mxEvent,
+        permalinkCreator,
+        toggleExpandedQuote,
+        userStatus,
+        vm,
+    ]);
 
     return <ReplyTileView vm={vm} />;
 }

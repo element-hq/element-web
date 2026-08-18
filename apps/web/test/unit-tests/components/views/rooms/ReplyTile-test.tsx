@@ -86,6 +86,7 @@ describe("ReplyTile", () => {
         const { container, getByTestId } = render(<ReplyTile mxEvent={mxEvent} />);
 
         expect(getByTestId("reply-tile")).toBeInTheDocument();
+        expect(getByTestId("reply-tile-sender")).not.toHaveTextContent("@alice:server");
         expect(container.querySelector(".mx_ReplyTile_inline")).not.toBeInTheDocument();
     });
 });

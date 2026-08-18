@@ -11,22 +11,22 @@ exports[`ReplyChain should call setQuoteExpanded if chain is longer than 2 lines
         class="mx_ReplyChain mx_ReplyChain_color2"
       >
         <div
-          class="_root_16acg_8"
+          class="_root_12cos_8"
           data-event-density="default"
           data-event-layout="group"
           data-testid="reply-tile"
         >
           <a
-            class="_link_16acg_14"
+            class="_link_12cos_14"
             href="#"
           >
             <div
-              class="_sender_16acg_43"
+              class="_sender_12cos_43"
               data-testid="reply-tile-sender"
             >
               <span
                 aria-label="@userId:matrix.org"
-                class="_avatar_va14e_8 _avatar_16acg_52 _avatar-imageless_va14e_55"
+                class="_avatar_va14e_8 _avatar_12cos_52 _avatar-imageless_va14e_55"
                 data-color="2"
                 data-type="round"
                 role="img"
@@ -34,15 +34,21 @@ exports[`ReplyChain should call setQuoteExpanded if chain is longer than 2 lines
               >
                 u
               </span>
-              <span
-                class="_senderName_16acg_56"
-                dir="auto"
+              <div
+                class="_senderProfile_12cos_56 _disambiguatedProfile_4jooo_8"
+                role="button"
+                tabindex="0"
               >
-                @userId:matrix.org
-              </span>
+                <span
+                  class="mx_Username_color2 _disambiguatedProfile_displayName_4jooo_14 mx_DisambiguatedProfile_displayName"
+                  dir="auto"
+                >
+                  @userId:matrix.org
+                </span>
+              </div>
             </div>
             <div
-              class="_body_16acg_64"
+              class="_body_12cos_63"
             >
               <div
                 class="mx_MTextBody mx_EventTile_content _root_dlp6w_8 _text_dlp6w_13"

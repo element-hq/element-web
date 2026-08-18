@@ -12,6 +12,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import { type MemberAvatarViewSnapshot } from "../../../../../core/MemberAvatar/MemberAvatarView";
 import { MockViewModel } from "../../../../../core/viewmodel";
+import { type DisambiguatedProfileViewSnapshot } from "../DisambiguatedProfile";
 import {
     ReplyTileView,
     type ReplyTileViewActions,
@@ -38,6 +39,11 @@ const avatarViewModel = new MockViewModel<MemberAvatarViewSnapshot>({
     size: "16px",
 });
 
+const profileViewModel = new MockViewModel<DisambiguatedProfileViewSnapshot>({
+    displayName: "Alice",
+    emphasizeDisplayName: true,
+});
+
 function renderReplyTile(
     snapshot: Partial<ReplyTileViewSnapshot> = {},
     actions?: Partial<ReplyTileViewActions>,
@@ -58,8 +64,8 @@ describe("ReplyTileView", () => {
     it("renders sender and body from the view model without host classes", () => {
         const { container } = renderReplyTile({
             sender: {
-                displayName: "Alice",
                 avatarViewModel,
+                profileViewModel,
             },
         });
 
@@ -111,6 +117,24 @@ describe("ReplyTileView", () => {
         });
 
         expect(getComputedStyle(screen.getByText("Edited")).display).toBe("none");
+    });
+
+    it("clips code previews and hides line numbers through semantic hooks", () => {
+        renderReplyTile({
+            body: (
+                <pre>
+                    <span data-event-tile-line-numbers>1 2 3</span>
+                    <code>{"const answer = 42;\nconsole.log(answer);\nconsole.log(answer);"}</code>
+                </pre>
+            ),
+        });
+
+        const pre = screen.getByText(/const answer/).closest("pre");
+        const lineNumbers = screen.getByText("1 2 3");
+        expect(pre).not.toBeNull();
+        expect(getComputedStyle(pre!).overflow).toBe("hidden");
+        expect(getComputedStyle(pre!).webkitLineClamp).toBe("2");
+        expect(getComputedStyle(lineNumbers).display).toBe("none");
     });
 
     it("keeps nested controls inert inside the reply preview", () => {
