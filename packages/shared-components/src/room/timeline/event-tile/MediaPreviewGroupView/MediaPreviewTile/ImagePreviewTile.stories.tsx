@@ -24,7 +24,7 @@ const meta = {
         image: demoImage,
         imageSize: "banner",
         icon: <FileIcon />,
-        iconOnClick: () => {},
+        onClick: () => {},
         color: "#4200A6",
         header: "annual-report.pdf",
         body: "2.3 MB",

@@ -28,7 +28,7 @@ const meta = {
         video: demoVideo,
         videoSize: "banner",
         icon: <FileIcon />,
-        iconOnClick: () => {},
+        onClick: () => {},
         color: "#4200A6",
         header: "holiday-clip.mp4",
         body: "12.4 MB",
