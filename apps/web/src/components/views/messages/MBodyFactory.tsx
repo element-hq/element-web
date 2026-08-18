@@ -115,11 +115,14 @@ export function VideoBodyFactory({
         vm.setOnPreviewClick((): void => setMediaVisible(true));
     }, [setMediaVisible, vm]);
 
+    // The shared-media panel shows the video on its own: the filename/download row below it is not part of that
+    // design, and the file name is already searchable from the panel's own search box.
     const showFileBody =
         !forExport &&
         timelineRenderingType !== TimelineRenderingType.Room &&
         timelineRenderingType !== TimelineRenderingType.Pinned &&
-        timelineRenderingType !== TimelineRenderingType.Search;
+        timelineRenderingType !== TimelineRenderingType.Search &&
+        timelineRenderingType !== TimelineRenderingType.File;
 
     return (
         <VideoBodyView
@@ -217,13 +220,15 @@ export function ImageBodyFactory({
         vm.setSetMediaVisible(setMediaVisible);
     }, [setMediaVisible, shouldFallbackToFileBody, vm]);
 
+    // As for video: the shared-media panel shows the image alone, with no filename/download row beneath it.
     const showFileBody =
         !forExport &&
         timelineRenderingType !== TimelineRenderingType.Room &&
         timelineRenderingType !== TimelineRenderingType.Pinned &&
         timelineRenderingType !== TimelineRenderingType.Search &&
         timelineRenderingType !== TimelineRenderingType.Thread &&
-        timelineRenderingType !== TimelineRenderingType.ThreadsList;
+        timelineRenderingType !== TimelineRenderingType.ThreadsList &&
+        timelineRenderingType !== TimelineRenderingType.File;
 
     if (shouldFallbackToFileBody) {
         return (

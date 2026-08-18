@@ -20,7 +20,16 @@ Please see LICENSE files in the repository root for full details.
 
     .mx_RoomView_MessageList {
         width: 100%;
-        gap: var(--cpd-space-6x);
+        /* Each tile carries its own padding and the rows sit flush against each other, with no divider. */
+        gap: 0;
+    }
+
+    /* A chat timeline pins the newest message to the bottom (`justify-content: flex-end` in _RoomView.pcss),
+       so a short list floats down away from the header. The shared-media list is a filtered result set and
+       has to read top-down, starting directly under the search and filter chips. The .mx_ScrollPanel
+       qualifier is needed to out-specify that rule. */
+    .mx_ScrollPanel .mx_RoomView_MessageList {
+        justify-content: flex-start;
     }
 
     /* FIXME: rather than having EventTile's default CSS be for MessagePanel,
@@ -30,19 +39,38 @@ Please see LICENSE files in the repository root for full details.
     /* Overrides for the attachment body tiles */
     .mx_EventTile {
         word-break: break-word;
-        padding-top: 0;
+        padding: var(--cpd-space-4x);
+        box-sizing: border-box;
 
-        & + .mx_EventTile {
-            border-top: 1px solid var(--cpd-color-gray-400);
-            padding-top: var(--cpd-space-6x);
+        /* The panel is only ~320px wide, so the bubble layout's default gutters (49px start / 60px end,
+           sized for a full-width timeline) leave too little room for the media. They can't go to zero
+           though: bubble layout positions the avatar *outside* the tile box (left: -36px when received,
+           right: -38px when sent), so a gutter has to stay wide enough to keep the avatar on screen —
+           but only on the side the avatar is actually on. */
+        &[data-layout="bubble"] {
+            --maxWidth: 100%;
+
+            padding-inline: var(--cpd-space-2x);
+
+            /* Default 70% is meant for a full-width timeline and would squeeze media to ~90px here. */
+            .mx_DisambiguatedProfile,
+            .mx_EventTile_line {
+                --EventBubbleTile_line-max-width: 100%;
+            }
+
+            &[data-self="false"] {
+                --EventTile_bubble-margin-inline-start: 40px;
+                --EventTile_bubble-margin-inline-end: 0;
+            }
+
+            &[data-self="true"] {
+                --EventTile_bubble-margin-inline-start: 0;
+                --EventTile_bubble-margin-inline-end: 40px;
+            }
         }
 
         .mx_EventTile_line {
             padding-inline-start: 0;
-        }
-
-        .mx_MFileBody [data-type="download"] {
-            margin-top: var(--cpd-space-4x);
         }
 
         .mx_ImageBody {
@@ -57,17 +85,8 @@ Please see LICENSE files in the repository root for full details.
 
             .mx_EventTile_senderDetails {
                 display: flex;
-                margin-top: -2px;
                 gap: var(--cpd-space-2x);
                 align-items: center;
-
-                .mx_DisambiguatedProfile {
-                    color: $event-timestamp-color; /* for ellipsis. Color of displayName and mxid is inherited */
-                }
-
-                .mx_MessageTimestamp {
-                    margin-left: auto;
-                }
             }
         }
     }

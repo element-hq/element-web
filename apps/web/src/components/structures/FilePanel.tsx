@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef } from "react";
+import React from "react";
 import {
     Filter,
     type EventTimelineSet,
@@ -25,16 +25,12 @@ import FilesIcon from "@vector-im/compound-design-tokens/assets/web/icons/files"
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import EventIndexPeg from "../../indexing/EventIndexPeg";
 import { _t } from "../../languageHandler";
-import SearchWarning, { WarningKind } from "../views/elements/SearchWarning";
 import BaseCard from "../views/right_panel/BaseCard";
-import TimelinePanel from "./TimelinePanel";
 import Spinner from "../views/elements/Spinner";
-import { Layout } from "../../settings/enums/Layout";
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
-import Measured from "../views/elements/Measured";
 import EmptyState from "../views/right_panel/EmptyState";
 import { ScopedRoomContextProvider } from "../../contexts/ScopedRoomContext.tsx";
-import { EventPresentationContextProvider } from "../../utils/EventPresentationContextProvider";
+import { RoomFilesView } from "../views/right_panel/RoomFilesView";
 
 interface IProps {
     roomId: string;
@@ -57,7 +53,6 @@ class FilePanel extends React.Component<IProps, IState> {
     // added to the timeline.
     private decryptingEvents = new Set<string>();
     public noRoom = false;
-    private card = createRef<HTMLDivElement>();
 
     public state: IState = {
         timelineSet: null,
@@ -278,27 +273,15 @@ class FilePanel extends React.Component<IProps, IState> {
                     timelineRenderingType={TimelineRenderingType.File}
                     narrow={this.state.narrow}
                 >
-                    <BaseCard
-                        className="mx_FilePanel"
+                    {/* RoomFilesView owns the card, because the file search lives in the card header. */}
+                    <RoomFilesView
+                        timelineSet={this.state.timelineSet}
+                        onPaginationRequest={this.onPaginationRequest}
+                        empty={emptyState}
                         onClose={this.props.onClose}
-                        withoutScrollContainer
-                        ref={this.card}
-                        header={_t("right_panel|files_button")}
-                    >
-                        <Measured sensor={this.card} onMeasurement={this.onMeasurement} />
-                        <SearchWarning isRoomEncrypted={isRoomEncrypted} kind={WarningKind.Files} />
-                        <EventPresentationContextProvider layout={Layout.Group}>
-                            <TimelinePanel
-                                manageReadReceipts={false}
-                                manageReadMarkers={false}
-                                timelineSet={this.state.timelineSet}
-                                showUrlPreview={false}
-                                onPaginationRequest={this.onPaginationRequest}
-                                empty={emptyState}
-                                layout={Layout.Group}
-                            />
-                        </EventPresentationContextProvider>
-                    </BaseCard>
+                        isRoomEncrypted={isRoomEncrypted}
+                        onMeasurement={this.onMeasurement}
+                    />
                 </ScopedRoomContextProvider>
             );
         } else {

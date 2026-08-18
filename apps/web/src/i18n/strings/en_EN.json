@@ -1254,8 +1254,14 @@
     "file_panel": {
         "empty_description": "Attach files from chat or just drag and drop them anywhere in a room.",
         "empty_heading": "No files visible in this room",
+        "filter_audio": "Audio",
+        "filter_documents": "Documents",
+        "filter_images": "Images",
+        "filter_videos": "Videos",
+        "filters_label": "Filter files by type",
         "guest_note": "You must <a>register</a> to use this functionality",
-        "peek_note": "You must join the room to see its files"
+        "peek_note": "You must join the room to see its files",
+        "search_placeholder": "Search files…"
     },
     "forward": {
         "filter_placeholder": "Search for rooms or people",

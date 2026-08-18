@@ -353,9 +353,11 @@ describe("EventTile", () => {
                 ["data-event-id"],
             ],
             [
+                // The shared-media panel renders in bubble layout, so the File tile has to carry data-layout
+                // and data-self — every rule in _EventBubbleTile.pcss is scoped to [data-layout="bubble"].
                 TimelineRenderingType.File,
-                ["data-scroll-tokens"],
-                ["data-layout", "data-shape", "data-self", "data-event-id", "data-has-reply"],
+                ["data-scroll-tokens", "data-layout", "data-self"],
+                ["data-shape", "data-event-id", "data-has-reply"],
             ],
         ] as const)(
             "sets root attributes for %s rendering",
@@ -622,12 +624,23 @@ describe("EventTile", () => {
             },
         );
 
-        it.each([TimelineRenderingType.File, TimelineRenderingType.Notification, TimelineRenderingType.ThreadsList])(
+        it.each([TimelineRenderingType.Notification, TimelineRenderingType.ThreadsList])(
             "keeps continuation styling in %s timelines when using bubble layout",
             (renderingType) => {
                 const { container } = getComponent({ continuation: true, layout: Layout.Bubble }, renderingType);
 
                 expect(getTile(container)).toHaveClass("mx_EventTile_continuation");
+            },
+        );
+
+        it.each([undefined, Layout.Group, Layout.Bubble])(
+            "never continues in File timelines, including bubble layout (%s)",
+            (layout) => {
+                // The shared-media panel is a filtered list, so every row keeps its own avatar and sender
+                // regardless of layout.
+                const { container } = getComponent({ continuation: true, layout }, TimelineRenderingType.File);
+
+                expect(getTile(container)).not.toHaveClass("mx_EventTile_continuation");
             },
         );
     });

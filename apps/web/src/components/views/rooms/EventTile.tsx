@@ -1191,29 +1191,40 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 );
             }
             case TimelineRenderingType.File: {
-                return React.createElement(this.props.as || "li", this.createRootAttributes(rootRenderState), [
-                    <a
-                        className="mx_EventTile_senderDetailsLink"
-                        key="mx_EventTile_senderDetailsLink"
-                        href={permalink}
-                        onClick={this.onPermalinkClicked}
-                    >
-                        <div className="mx_EventTile_senderDetails" onContextMenu={this.onTimestampContextMenu}>
-                            {avatar}
-                            {sender}
-                            {timestamp}
-                        </div>
-                    </a>,
-                    <div className={lineClasses} key="mx_EventTile_line" onContextMenu={this.onContextMenu}>
-                        {this.renderContextMenu()}
-                        {renderTile(
-                            TimelineRenderingType.File,
-                            this.createRenderTileProps({
-                                isSeeingThroughMessageHiddenForModeration,
-                            }),
-                        )}
-                    </div>,
-                ]);
+                return React.createElement(
+                    this.props.as || "li",
+                    {
+                        ...this.createRootAttributes(rootRenderState),
+                        // Without these the tile can never be styled by layout: every rule in
+                        // _EventBubbleTile.pcss is scoped to [data-layout="bubble"], and `data-self` is what
+                        // picks the sent/received bubble treatment.
+                        "data-layout": eventTileSnapshot.root.data.layout,
+                        "data-self": eventTileSnapshot.root.data.isOwnEvent,
+                    },
+                    [
+                        <a
+                            className="mx_EventTile_senderDetailsLink"
+                            key="mx_EventTile_senderDetailsLink"
+                            href={permalink}
+                            onClick={this.onPermalinkClicked}
+                        >
+                            {/* The shared-media panel shows just the avatar and the sender, with no timestamp. */}
+                            <div className="mx_EventTile_senderDetails" onContextMenu={this.onTimestampContextMenu}>
+                                {avatar}
+                                {sender}
+                            </div>
+                        </a>,
+                        <div className={lineClasses} key="mx_EventTile_line" onContextMenu={this.onContextMenu}>
+                            {this.renderContextMenu()}
+                            {renderTile(
+                                TimelineRenderingType.File,
+                                this.createRenderTileProps({
+                                    isSeeingThroughMessageHiddenForModeration,
+                                }),
+                            )}
+                        </div>,
+                    ],
+                );
             }
 
             default: {
