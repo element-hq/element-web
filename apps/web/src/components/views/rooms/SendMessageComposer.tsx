@@ -204,7 +204,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         switch (action) {
             case KeyBindingAction.SendMessage: {
                 const urlPreviewSnapshot = this.props.urlPreviewVm.getSnapshot();
-                this.sendMessage({ urlPreviewSnapshot });
+                void this.sendMessage({ urlPreviewSnapshot });
                 event.preventDefault();
                 break;
             }
@@ -323,7 +323,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                     shouldReact = !myReactionKeys.includes(reaction);
                 }
                 if (shouldReact) {
-                    MatrixClientPeg.safeGet().sendEvent(lastMessage.getRoomId()!, EventType.Reaction, {
+                    void MatrixClientPeg.safeGet().sendEvent(lastMessage.getRoomId()!, EventType.Reaction, {
                         "m.relates_to": {
                             rel_type: RelationType.Annotation,
                             event_id: lastMessage.getId()!,
@@ -488,7 +488,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                 }
             });
             if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
-                prom.then((resp) => {
+                void prom.then((resp) => {
                     sendRoundTripMetric(this.props.mxClient, roomId, resp.event_id);
                 });
             }
@@ -589,7 +589,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         // We check text/rtf instead of text/plain as when copy+pasting a file from Finder or Gnome Image Viewer
         // it puts the filename in as text/plain which we want to ignore.
         if (data.files.length && !data.types.includes("text/rtf")) {
-            this.props.uploadVm.initiateViaDataTransfer(data);
+            void this.props.uploadVm.initiateViaDataTransfer(data);
             return true; // to skip internal onPaste handler
         }
 
@@ -622,7 +622,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                             const parts = response.url.split("/");
                             const filename = parts[parts.length - 1];
                             const file = new File([imgBlob], filename + "." + ext, { type: safetype });
-                            this.props.uploadVm.initiateViaInputFiles([file]);
+                            void this.props.uploadVm.initiateViaInputFiles([file]);
                         },
                         (error) => {
                             console.log(error);

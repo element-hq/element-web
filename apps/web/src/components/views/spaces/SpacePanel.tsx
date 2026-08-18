@@ -112,7 +112,12 @@ export const HomeButtonContextMenu: React.FC<ComponentProps<typeof SpaceContextM
                     active={allRoomsInHome}
                     onClick={() => {
                         onFinished();
-                        SettingsStore.setValue("Spaces.allRoomsInHome", null, SettingLevel.ACCOUNT, !allRoomsInHome);
+                        void SettingsStore.setValue(
+                            "Spaces.allRoomsInHome",
+                            null,
+                            SettingLevel.ACCOUNT,
+                            !allRoomsInHome,
+                        );
                     }}
                 />
             </IconizedContextMenuOptionList>

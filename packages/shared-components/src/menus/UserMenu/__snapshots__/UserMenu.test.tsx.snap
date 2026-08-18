@@ -289,7 +289,7 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
         class="UserMenu-module_profile UserMenu-module_profilePrimary"
       >
         <span
-          class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 UserMenu-module_displayname"
+          class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 UserMenu-module_displayname UserMenu-module_constrainedText"
         >
           Sally Sanderson
         </span>
@@ -450,7 +450,7 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
         class="UserMenu-module_profile UserMenu-module_profileSecondary"
       >
         <span
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 UserMenu-module_userId"
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 UserMenu-module_userId UserMenu-module_constrainedText"
           data-testid="userId"
         >
           @person-name:homeserver.com
@@ -777,7 +777,7 @@ exports[`UserMenu > renders an open menu 1`] = `
           />
         </span>
         <span
-          class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 UserMenu-module_displayname"
+          class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 UserMenu-module_displayname UserMenu-module_constrainedText"
         >
           Sally Sanderson with a longer name
         </span>
@@ -938,7 +938,7 @@ exports[`UserMenu > renders an open menu 1`] = `
         class="UserMenu-module_profile UserMenu-module_profileSecondary"
       >
         <span
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 UserMenu-module_userId"
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 UserMenu-module_userId UserMenu-module_constrainedText"
           data-testid="userId"
         >
           @person-name:homeserver.com
