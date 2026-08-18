@@ -140,8 +140,8 @@ describe("<ThemeChoicePanel />", () => {
             await SettingsStore.setValue("custom_themes", null, SettingLevel.DEVICE, [aliceTheme]);
         });
 
-        afterEach(async () => {
-            await SettingsStore.reset();
+        afterEach(() => {
+            SettingsStore.reset();
         });
 
         it("should render the custom theme section", () => {
