@@ -7,7 +7,8 @@
 
 import React, { useCallback, type JSX } from "react";
 import classNames from "classnames";
-import { IconButton, InlineSpinner } from "@vector-im/compound-web";
+// note: useIdColorHash is not used as a hook here
+import { IconButton, InlineSpinner, useIdColorHash as idColorHash } from "@vector-im/compound-web";
 import { ErrorSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
@@ -84,19 +85,6 @@ export interface MessageComposerUrlPreviewProps {
     className?: string;
 }
 
-/**
- * Same as the Java hashCode function for strings
- *
- * generates a deterministic, but seemingly random number for each string
- */
-function hashCode(str: string): number {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-        hash = (Math.imul(31, hash) + str.charCodeAt(i)) | 0; // NOSONAR - Java hashcode impl
-    }
-    return hash;
-}
-
 function hostNameFirstChar(hostName: string): string {
     return hostName.slice(0, 1).toUpperCase();
 }
@@ -116,22 +104,9 @@ function useEntryContents(entry: MessageComposerUrlPreviewSnapshotEntry): {
             );
             return {
                 entryIcon: (
-                    <div
-                        className={styles.entryIcon}
-                        style={
-                            thumbnail
-                                ? {}
-                                : {
-                                      /**
-                                       * picks a HSL colour that is
-                                       * - 100% in saturation
-                                       * - var(--icon-lightness) in lightness, which depends on light/dark theme
-                                       * - hue is selected by the hashcode function, effectly unique for each site
-                                       */
-                                      backgroundColor: `hsl(${hashCode(hostname)}, 100%, var(--icon-lightness))`,
-                                  }
-                        }
-                    >
+                    // Sites without a thumbnail fall back to their initial on a decorative
+                    // background, picked by `data-color` - see the module CSS.
+                    <div className={styles.entryIcon} data-color={thumbnail ? undefined : idColorHash(hostname)}>
                         {thumbnail || hostNameFirstChar(hostname)}
                     </div>
                 ),
@@ -247,7 +222,7 @@ export function MessageComposerUrlPreviewView({
             <span className={styles.left}>
                 <span className={styles.icons}>
                     {links.map((entry) => {
-                        let backgroundColor: string | undefined;
+                        let colorHash: number | undefined;
                         let className: string | undefined;
                         let icon: JSX.Element;
                         switch (entry.status) {
@@ -270,7 +245,7 @@ export function MessageComposerUrlPreviewView({
                                     );
                                 } else {
                                     icon = <>{hostNameFirstChar(hostname)}</>;
-                                    backgroundColor = `hsl(${hashCode(hostname)}, 100%, var(--icon-lightness))`;
+                                    colorHash = idColorHash(hostname);
                                 }
                             }
                         }
@@ -279,9 +254,7 @@ export function MessageComposerUrlPreviewView({
                             <div
                                 key={entry.matched_url}
                                 className={classNames(styles.summaryIcon, className)}
-                                style={{
-                                    backgroundColor,
-                                }}
+                                data-color={colorHash}
                             >
                                 {icon}
                             </div>

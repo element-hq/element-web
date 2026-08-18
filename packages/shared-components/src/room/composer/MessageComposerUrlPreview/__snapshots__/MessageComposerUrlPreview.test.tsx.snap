@@ -470,7 +470,7 @@ exports[`MessageComposerUrlPreview > renders a mix of loaded, loading and failed
         <span>
           <div
             class="MessageComposerUrlPreview-module_summaryIcon"
-            style="background-color: hsl(-1952422089, 100%, var(--icon-lightness));"
+            data-color="4"
           >
             M
           </div>
@@ -561,7 +561,7 @@ exports[`MessageComposerUrlPreview > renders a mix of loaded, loading and failed
       >
         <div
           class="MessageComposerUrlPreview-module_entryIcon"
-          style="background-color: hsl(-1952422089, 100%, var(--icon-lightness));"
+          data-color="4"
         >
           M
         </div>
@@ -776,7 +776,7 @@ exports[`MessageComposerUrlPreview > renders a preview 1`] = `
         <span>
           <div
             class="MessageComposerUrlPreview-module_summaryIcon"
-            style="background-color: hsl(-1952422089, 100%, var(--icon-lightness));"
+            data-color="4"
           >
             M
           </div>
@@ -900,7 +900,7 @@ exports[`MessageComposerUrlPreview > renders the expanded previews when not coll
         <span>
           <div
             class="MessageComposerUrlPreview-module_summaryIcon"
-            style="background-color: hsl(-1952422089, 100%, var(--icon-lightness));"
+            data-color="4"
           >
             M
           </div>
@@ -957,7 +957,7 @@ exports[`MessageComposerUrlPreview > renders the expanded previews when not coll
       >
         <div
           class="MessageComposerUrlPreview-module_entryIcon"
-          style="background-color: hsl(-1952422089, 100%, var(--icon-lightness));"
+          data-color="4"
         >
           M
         </div>

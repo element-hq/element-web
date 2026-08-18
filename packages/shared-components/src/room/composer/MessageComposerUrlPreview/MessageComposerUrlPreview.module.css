@@ -15,20 +15,6 @@
     padding-bottom: var(--cpd-space-1x);
 }
 
-:global(.cpd-theme-light) {
-    .summaryIcon,
-    .entryIcon {
-        --icon-lightness: 40%;
-    }
-}
-
-:global(.cpd-theme-dark) {
-    .summaryIcon,
-    .entryIcon {
-        --icon-lightness: 60%;
-    }
-}
-
 .left {
     flex-grow: 1;
 }
@@ -231,4 +217,49 @@
 
 .failedIcon {
     color: var(--cpd-color-icon-critical-primary);
+}
+
+/*
+ * Sites with no thumbnail get their initial on one of six decorative colours, keyed off
+ * `data-color` (1-6, from Compound's `useIdColorHash`) so the same site always looks the
+ * same. Mirrors how Compound's Avatar colours its imageless fallback; the buckets have to
+ * be enumerated because `attr()` is not usable outside `content` in all browsers.
+ *
+ * Declared after the `.summary`-nested `.summaryIcon` rule, which it ties with on
+ * specificity and so needs to follow in source order to win.
+ */
+.summaryIcon[data-color],
+.entryIcon[data-color] {
+    background-color: var(--cpd-color-bg-decorative-1);
+    color: var(--cpd-color-text-decorative-1);
+}
+
+.summaryIcon[data-color="2"],
+.entryIcon[data-color="2"] {
+    background-color: var(--cpd-color-bg-decorative-2);
+    color: var(--cpd-color-text-decorative-2);
+}
+
+.summaryIcon[data-color="3"],
+.entryIcon[data-color="3"] {
+    background-color: var(--cpd-color-bg-decorative-3);
+    color: var(--cpd-color-text-decorative-3);
+}
+
+.summaryIcon[data-color="4"],
+.entryIcon[data-color="4"] {
+    background-color: var(--cpd-color-bg-decorative-4);
+    color: var(--cpd-color-text-decorative-4);
+}
+
+.summaryIcon[data-color="5"],
+.entryIcon[data-color="5"] {
+    background-color: var(--cpd-color-bg-decorative-5);
+    color: var(--cpd-color-text-decorative-5);
+}
+
+.summaryIcon[data-color="6"],
+.entryIcon[data-color="6"] {
+    background-color: var(--cpd-color-bg-decorative-6);
+    color: var(--cpd-color-text-decorative-6);
 }
