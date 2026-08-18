@@ -41,7 +41,7 @@ exports[`<UploadConfirmDialog /> should display image preview 1`] = `
               class="_tile_1vd22_1"
             >
               <div
-                class="_image_18iaw_84 _fullImage_18iaw_104"
+                class="_image_1sufh_84 _tallBannerImage_1sufh_104"
               >
                 <img
                   alt=""
@@ -52,10 +52,10 @@ exports[`<UploadConfirmDialog /> should display image preview 1`] = `
                 class="_below_1vd22_9"
               >
                 <div
-                  class="_leftGroup_18iaw_11"
+                  class="_leftGroup_1sufh_11"
                 >
                   <div
-                    class="_icon_18iaw_31"
+                    class="_icon_1sufh_31"
                   >
                     <svg
                       fill="currentColor"
@@ -71,15 +71,15 @@ exports[`<UploadConfirmDialog /> should display image preview 1`] = `
                     </svg>
                   </div>
                   <div
-                    class="_textContent_18iaw_27"
+                    class="_textContent_1sufh_27"
                   >
                     <div
-                      class="_header_18iaw_1"
+                      class="_header_1sufh_1"
                     >
                       image.png
                     </div>
                     <p
-                      class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 _container_15awj_8 _body_18iaw_2"
+                      class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 _container_15awj_8 _body_1sufh_2"
                     >
                       124 KB
                     </p>
