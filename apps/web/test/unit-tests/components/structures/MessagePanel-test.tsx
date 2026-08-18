@@ -691,6 +691,38 @@ describe("MessagePanel", function () {
         expect(els[0].getAttribute("data-scroll-tokens")?.split(",")).toHaveLength(3);
     });
 
+    it("should not render a message from an ignored user when hidden events are shown", () => {
+        client.isUserIgnored.mockImplementation((userId: string) => userId === "@troll:id");
+        try {
+            const events = [
+                // Starts the summary off, and is the reason the ignored message is absorbed into it.
+                TestUtilsMatrix.mkEvent({
+                    event: true,
+                    type: "m.reaction",
+                    room: "!room:id",
+                    user: "@user:id",
+                    content: {},
+                    ts: 1,
+                }),
+                TestUtilsMatrix.mkMessage({
+                    event: true,
+                    room: "!room:id",
+                    user: "@troll:id",
+                    msg: "ignored message",
+                    ts: 2,
+                }),
+            ];
+            const { container } = render(
+                getComponent({ events }, { showHiddenEvents: true }),
+                clientAndSDKContextRenderOptions(client, sdkContext),
+            );
+
+            expect(within(container).queryByText("ignored message")).toBeNull();
+        } finally {
+            client.isUserIgnored.mockReturnValue(false);
+        }
+    });
+
     it("should handle large numbers of hidden events quickly", () => {
         // Increase the length of the loop here to test performance issues with
         // rendering
