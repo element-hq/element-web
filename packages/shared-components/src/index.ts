@@ -67,7 +67,7 @@ export * from "./room/timeline/event-tile/reactions/ReactionsRow";
 export * from "./room/timeline/event-tile/reactions/ReactionsRowButton";
 export * from "./room/timeline/event-tile/reactions/ReactionsRowButtonTooltip";
 export * from "./room/timeline/event-tile/timestamp/MessageTimestampView";
-export * from "./room/timeline/event-tile/UrlPreviewGroupView";
+export type * from "./room/urlPreview.ts";
 export * from "./room/timeline/event-tile/MediaPreviewGroupView";
 export * from "./core/rich-list/RichItem";
 export * from "./core/rich-list/RichList";
