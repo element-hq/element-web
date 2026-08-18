@@ -76,7 +76,9 @@ export function ReplyTileView({ vm }: ReplyTileViewProps): JSX.Element {
                         ) : null}
                     </div>
                 ) : null}
-                <div className={styles.body}>{body}</div>
+                <div className={styles.body} data-testid="reply-tile-body">
+                    {body}
+                </div>
             </a>
         </div>
     );

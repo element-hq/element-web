@@ -73,6 +73,7 @@ describe("ReplyTileView", () => {
         expect(screen.getByTestId("reply-tile")).toHaveClass(styles.root);
         expect(screen.getByTestId("reply-tile")).not.toHaveClass("mx_ReplyTile");
         expect(screen.getByTestId("reply-tile-sender")).toHaveClass(styles.sender);
+        expect(screen.getByTestId("reply-tile-body")).toHaveClass(styles.body);
         expect(screen.getByText("Alice")).toBeInTheDocument();
         expect(screen.getByText("Reply content")).toBeInTheDocument();
         expect(container.querySelector(".mx_ReplyTile_sender")).not.toBeInTheDocument();
@@ -99,11 +100,12 @@ describe("ReplyTileView", () => {
             body: <p>Long reply content</p>,
         });
 
-        const body = screen.getByTestId("reply-tile").querySelector<HTMLElement>(`.${styles.body}`);
-        expect(body).not.toBeNull();
+        const body = screen.getByTestId("reply-tile-body");
+        const previewContent = screen.getByText("Long reply content");
         expect(body).toHaveClass(styles.body);
-        expect(getComputedStyle(body!).overflow).toBe("hidden");
-        expect(getComputedStyle(body!).webkitLineClamp).toBe("2");
+        expect(getComputedStyle(body).overflow).toBe("hidden");
+        expect(getComputedStyle(body).webkitLineClamp).toBe("2");
+        expect(getComputedStyle(previewContent).webkitLineClamp).toBe("2");
     });
 
     it("hides edited markers inside the local body preview", () => {

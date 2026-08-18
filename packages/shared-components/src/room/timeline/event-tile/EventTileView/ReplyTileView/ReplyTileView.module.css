@@ -72,6 +72,20 @@
     -webkit-line-clamp: 2;
 }
 
+.body > :where(*) {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.body > :where(*) > :where([dir="auto"]),
+.body :where([data-textual-body-annotation-wrapper]) > :where([dir="auto"]) {
+    display: inline;
+}
+
 .body :where(a) {
     color: inherit;
 }
