@@ -57,6 +57,7 @@
 .disambiguatedProfile[data-event-layout="irc"] {
     width: var(--event-tile-irc-name-width, 80px);
     padding-block: 1px;
+    display: inline-block;
     line-height: 1.125rem;
 
     &:hover {
@@ -70,7 +71,6 @@
         overflow: hidden;
         text-overflow: ellipsis;
         text-align: start;
-        line-height: 1.125rem;
     }
 
     .disambiguatedProfile_mxid {
