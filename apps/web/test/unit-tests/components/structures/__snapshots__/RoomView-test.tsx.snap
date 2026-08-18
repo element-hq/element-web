@@ -10,7 +10,6 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <span
-        aria-label="Open room settings"
         class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
         data-color="3"
         data-testid="avatar-img"
@@ -95,7 +94,6 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <span
-        aria-label="Open room settings"
         class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
         data-color="3"
         data-testid="avatar-img"
@@ -154,7 +152,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
                 class="mx_NewRoomIntro"
               >
                 <div
-                  class="_container_sq5fu_8 mx_EventTileBubble mx_cryptoEvent"
+                  class="_container_sicoi_8 mx_EventTileBubble mx_cryptoEvent"
                 >
                   <svg
                     color="var(--cpd-color-icon-critical-primary)"
@@ -169,12 +167,12 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
                     />
                   </svg>
                   <div
-                    class="_title_sq5fu_34"
+                    class="_title_sicoi_32"
                   >
                     End-to-end encryption isn't enabled
                   </div>
                   <div
-                    class="_subtitle_sq5fu_35"
+                    class="_subtitle_sicoi_33"
                   >
                     <span>
                        
@@ -292,7 +290,6 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <span
-        aria-label="Open room settings"
         class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
         data-color="3"
         data-testid="avatar-img"
@@ -351,7 +348,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
                 class="mx_NewRoomIntro"
               >
                 <div
-                  class="_container_sq5fu_8 mx_EventTileBubble mx_cryptoEvent"
+                  class="_container_sicoi_8 mx_EventTileBubble mx_cryptoEvent"
                 >
                   <svg
                     color="var(--cpd-color-icon-critical-primary)"
@@ -366,12 +363,12 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
                     />
                   </svg>
                   <div
-                    class="_title_sq5fu_34"
+                    class="_title_sicoi_32"
                   >
                     End-to-end encryption isn't enabled
                   </div>
                   <div
-                    class="_subtitle_sq5fu_35"
+                    class="_subtitle_sicoi_33"
                   >
                     <span>
                        
@@ -680,7 +677,6 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <span
-        aria-label="Open room settings"
         class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
         data-color="3"
         data-testid="avatar-img"
@@ -754,7 +750,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
               style="height: 400px;"
             >
               <div
-                class="_container_sq5fu_8 mx_EventTileBubble mx_cryptoEvent _content_ufv8a_8"
+                class="_container_sicoi_8 mx_EventTileBubble mx_cryptoEvent _content_ufv8a_8"
               >
                 <svg
                   data-state="supported"
@@ -769,12 +765,12 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
                   />
                 </svg>
                 <div
-                  class="_title_sq5fu_34"
+                  class="_title_sicoi_32"
                 >
                   Encryption enabled
                 </div>
                 <div
-                  class="_subtitle_sq5fu_35"
+                  class="_subtitle_sicoi_33"
                 >
                   Messages in this chat will be end-to-end encrypted.
                 </div>

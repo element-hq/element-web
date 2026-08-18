@@ -287,6 +287,8 @@
         },
         "registration_disabled": "Rejestracja została wyłączona na tym serwerze domowym.",
         "registration_msisdn_field_required_invalid": "Wprowadź numer telefonu (wymagane na tym serwerze domowym)",
+        "registration_rate_limited": "Za dużo prób w krótkim odstępie czasu. Odczekaj trochę, zanim spróbujesz ponownie.",
+        "registration_rate_limited_with_time": "Za dużo prób w krótkim odstępie czasu. Spróbuj ponownie za %(timeout)s.",
         "registration_successful": "Pomyślnie zarejestrowano",
         "registration_username_in_use": "Ktoś już ma taką nazwę użytkownika. Użyj innej lub zaloguj się poniżej, jeśli to jesteś Ty.",
         "registration_username_unable_check": "Nie można sprawdzić, czy nazwa użytkownika jest zajęta. Spróbuj ponownie później.",
@@ -299,7 +301,7 @@
             "password_not_entered": "Musisz wprowadzić nowe hasło.",
             "passwords_mismatch": "Nowe hasła muszą się zgadzać.",
             "rate_limit_error": "Za dużo prób w krótkim odstępie czasu. Odczekaj trochę, zanim spróbujesz ponownie.",
-            "rate_limit_error_with_time": "Za dużo prób w krótkim odstępie czasu. Spróbuj ponownie za%(timeout)s.",
+            "rate_limit_error_with_time": "Za dużo prób w krótkim odstępie czasu. Spróbuj ponownie za %(timeout)s.",
             "reset_successful": "Twoje hasło zostało zresetowane.",
             "return_to_login": "Wróć do ekranu logowania",
             "sign_out_other_devices": "Usuń pozostałe urządzenia"
@@ -1370,6 +1372,7 @@
         "error_permissions_room": "Nie masz uprawnień do zapraszania osób do tego pokoju.",
         "error_permissions_space": "Nie masz uprawnień do zapraszania osób do tej przestrzeni.",
         "error_profile_undisclosed": "Użytkownik może istnieć lub nie",
+        "error_rate_limited": "Wysłano zbyt wiele zaproszeń. Spróbuj ponownie później.",
         "error_transfer_multiple_target": "Połączenie może zostać przekazane tylko do pojedynczego użytkownika.",
         "error_unfederated_room": "Ten pokój jest niezrzeszony. Nie możesz zapraszać osób z serwerów zewnętrznych.",
         "error_unfederated_space": "Ta przestrzeń jest niezrzeszona. Nie możesz zapraszać osób z serwerów zewnętrznych.",
@@ -1722,7 +1725,6 @@
         "mentions_and_keywords": "Tylko @wzmianki i odpowiedzi",
         "mentions_and_keywords_description": "Otrzymuj powiadomienia tylko od wzmianek i słów kluczowych zgodnie z Twoimi <a>ustawieniami</a>",
         "mentions_keywords": "Wzmianki i słowa kluczowe",
-        "message_didnt_send": "Nie wysłano wiadomości. Kliknij po więcej informacji.",
         "mute_description": "Nie otrzymasz żadnych powiadomień"
     },
     "notifier": {

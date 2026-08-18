@@ -1695,7 +1695,6 @@
         "mentions_and_keywords": "@megemlítések és kulcsszavak",
         "mentions_and_keywords_description": "Értesítések fogadása csak megemlítéseknél és kulcsszavaknál, a <a>beállításokban</a> megadottak szerint",
         "mentions_keywords": "Megemlítések és kulcsszavak",
-        "message_didnt_send": "Az üzenet nincs elküldve. Kattintson az információkért.",
         "mute_description": "Nem kap semmilyen értesítést"
     },
     "notifier": {

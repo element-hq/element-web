@@ -1594,7 +1594,6 @@
         "mentions_and_keywords": "@omnämnanden och nyckelord",
         "mentions_and_keywords_description": "Bli endast aviserad om omnämnanden och nyckelord i enlighet med dina <a>inställningar</a>",
         "mentions_keywords": "Omnämnanden & nyckelord",
-        "message_didnt_send": "Meddelande skickades inte. Klicka för info.",
         "mute_description": "Du får inga aviseringar"
     },
     "notifier": {

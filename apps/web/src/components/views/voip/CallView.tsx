@@ -30,7 +30,7 @@ const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call, role, onClo
 
     useEffect(() => {
         // We'll take this opportunity to tidy up our room state
-        call.clean();
+        void call.clean();
     }, [call]);
 
     const disconnectAllOtherCalls: () => Promise<void> = useCallback(async () => {

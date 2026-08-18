@@ -1169,7 +1169,6 @@
         "mentions_and_keywords": "@ກ່າວເຖິງ & ຄໍາສໍາຄັນ",
         "mentions_and_keywords_description": "ຮັບການແຈ້ງເຕືອນພຽງແຕ່ມີການກ່າວເຖິງ ແລະ ຄໍາທີ່ກຳນົດໄວ້ໃນ<a>settings</a>ຂອງທ່ານ",
         "mentions_keywords": "ກ່າວເຖິງ & ຄໍາສໍາຄັນ",
-        "message_didnt_send": "ບໍ່ໄດ້ສົ່ງຂໍ້ຄວາມ. ກົດສຳລັບຂໍ້ມູນ.",
         "mute_description": "ທ່ານຈະບໍ່ໄດ້ຮັບການແຈ້ງເຕືອນໃດໆ"
     },
     "notifier": {

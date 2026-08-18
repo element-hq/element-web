@@ -424,7 +424,7 @@ export class PosthogAnalytics {
             "pseudonymousAnalyticsOptIn",
             null,
             (originalSettingName, changedInRoomId, atLevel, newValueAtLevel, newValue) => {
-                this.updateAnonymityFromSettings(client, !!newValue);
+                void this.updateAnonymityFromSettings(client, !!newValue);
             },
         );
     }
