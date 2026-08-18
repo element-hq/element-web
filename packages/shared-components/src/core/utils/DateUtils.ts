@@ -11,18 +11,18 @@
  */
 export function formatSeconds(
     inSeconds: number,
-    opts?: { hoursMaxLength?: number; minutesMaxLength?: number },
+    opts?: { hoursMinLength?: number; minutesMinLength?: number },
 ): string {
     const isNegative = inSeconds < 0;
     inSeconds = Math.abs(inSeconds);
 
     const hours = Math.floor(inSeconds / (60 * 60))
         .toFixed(0)
-        .padStart(opts?.hoursMaxLength ?? 2, "0");
+        .padStart(opts?.hoursMinLength ?? 2, "0");
 
     const minutes = Math.floor((inSeconds % (60 * 60)) / 60)
         .toFixed(0)
-        .padStart(opts?.minutesMaxLength ?? 2, "0");
+        .padStart(opts?.minutesMinLength ?? 2, "0");
 
     const seconds = Math.floor((inSeconds % (60 * 60)) % 60)
         .toFixed(0)
