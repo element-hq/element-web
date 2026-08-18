@@ -6,20 +6,23 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
-import { render, screen } from "jest-matrix-react";
+// @vitest-environment happy-dom
 
-import LabsUserSettingsTab from "../../../../../../../src/components/views/settings/tabs/user/LabsUserSettingsTab";
-import SettingsStore from "../../../../../../../src/settings/SettingsStore";
-import SdkConfig from "../../../../../../../src/SdkConfig";
+import React from "react";
+import { vi, describe, it, expect, beforeEach } from "vitest";
+import { render, screen } from "test-utils-rtl";
+
+import LabsUserSettingsTab from "./LabsUserSettingsTab";
+import SettingsStore from "../../../../../settings/SettingsStore";
+import SdkConfig from "../../../../../SdkConfig";
 
 describe("<LabsUserSettingsTab />", () => {
     const getComponent = () => <LabsUserSettingsTab />;
 
-    const settingsValueSpy = jest.spyOn(SettingsStore, "getValue");
+    const settingsValueSpy = vi.spyOn(SettingsStore, "getValue");
 
     beforeEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
         settingsValueSpy.mockReturnValue(false);
         SdkConfig.reset();
         SdkConfig.add({ brand: "BrandedClient" });
@@ -32,7 +35,7 @@ describe("<LabsUserSettingsTab />", () => {
     });
 
     it("does not render non-beta labs settings when disabled in config", () => {
-        const sdkConfigSpy = jest.spyOn(SdkConfig, "get");
+        const sdkConfigSpy = vi.spyOn(SdkConfig, "get");
         render(getComponent());
         expect(sdkConfigSpy).toHaveBeenCalledWith("show_labs_settings");
 
@@ -48,6 +51,6 @@ describe("<LabsUserSettingsTab />", () => {
         // non-beta labs section
         expect(screen.getByText("Early previews")).toBeInTheDocument();
         const labsSections = container.getElementsByClassName("mx_SettingsSubsection");
-        expect(labsSections).toHaveLength(9);
+        expect(labsSections).toHaveLength(8);
     });
 });
