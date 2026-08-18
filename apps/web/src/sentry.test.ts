@@ -5,23 +5,26 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
+import { describe, it, expect, afterEach, vi } from "vitest";
 import * as Sentry from "@sentry/browser";
 
-import { initSentry } from "../../src/sentry";
+import { initSentry } from "./sentry";
 
-jest.mock("@sentry/browser", () => ({
-    init: jest.fn(),
-    inboundFiltersIntegration: jest.fn().mockReturnValue({ name: "InboundFilters" }),
-    functionToStringIntegration: jest.fn().mockReturnValue({ name: "FunctionToString" }),
-    breadcrumbsIntegration: jest.fn().mockReturnValue({ name: "Breadcrumbs" }),
-    httpContextIntegration: jest.fn().mockReturnValue({ name: "HttpContext" }),
-    dedupeIntegration: jest.fn().mockReturnValue({ name: "Dedupe" }),
-    rewriteFramesIntegration: jest.fn().mockReturnValue({ name: "RewriteFrames" }),
+vi.mock("@sentry/browser", () => ({
+    init: vi.fn(),
+    inboundFiltersIntegration: vi.fn().mockReturnValue({ name: "InboundFilters" }),
+    functionToStringIntegration: vi.fn().mockReturnValue({ name: "FunctionToString" }),
+    breadcrumbsIntegration: vi.fn().mockReturnValue({ name: "Breadcrumbs" }),
+    httpContextIntegration: vi.fn().mockReturnValue({ name: "HttpContext" }),
+    dedupeIntegration: vi.fn().mockReturnValue({ name: "Dedupe" }),
+    rewriteFramesIntegration: vi.fn().mockReturnValue({ name: "RewriteFrames" }),
 }));
 
 describe("initSentry", () => {
     afterEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     it("does nothing if no sentry config is given", async () => {
@@ -40,7 +43,7 @@ describe("initSentry", () => {
             prefix: "app://",
         });
 
-        const { integrations } = jest.mocked(Sentry.init).mock.calls[0][0]!;
+        const { integrations } = vi.mocked(Sentry.init).mock.calls[0][0]!;
         expect(integrations).toEqual(expect.arrayContaining([{ name: "RewriteFrames" }]));
     });
 });
@@ -49,10 +52,10 @@ describe("rewriteFramesIntegration output", () => {
     // Uses the real Sentry SDK integration (not the mock above) to verify the actual rewritten
     // path, since it's easy to get the exact prefix/slash count wrong (e.g. `app:///` here would
     // double up with the leading slash already present in the frame, producing `app:////...`).
-    // Relies on this test file's jsdom environment providing a real `window`, which is what makes
+    // Relies on this test file's happy-dom environment providing a real `window`, which is what makes
     // the SDK's browser root/prefix substitution apply in the first place.
     it("rewrites a vector:// frame to a clean app:/// path", async () => {
-        const RealSentry = jest.requireActual<typeof Sentry>("@sentry/browser");
+        const RealSentry = await vi.importActual<typeof Sentry>("@sentry/browser");
 
         const integration = RealSentry.rewriteFramesIntegration({
             root: "vector://vector/webapp",

@@ -4,32 +4,35 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { renderHook } from "jest-matrix-react";
+// @vitest-environment happy-dom
+
+import { describe, it, expect, vi, beforeEach, afterEach, type Mock } from "vitest";
+import { renderHook } from "test-utils-rtl";
 import { act, type SyntheticEvent } from "react";
+import { createTestClient, mkStubRoom } from "test-utils";
 
-import { useRoomTopicViewModel } from "../../../../../src/components/viewmodels/right_panel/RoomSummaryCardTopicViewModel";
-import { createTestClient, mkStubRoom } from "../../../../test-utils";
-import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
-import { onRoomTopicLinkClick } from "../../../../../src/components/views/elements/RoomTopic";
+import { useRoomTopicViewModel } from "./RoomSummaryCardTopicViewModel";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
+import { onRoomTopicLinkClick } from "../../views/elements/RoomTopic";
 
-jest.mock("../../../../../src/components/views/elements/RoomTopic");
+vi.mock("../../views/elements/RoomTopic");
 
 describe("RoomSummaryCardTopicViewModel", () => {
     const client = createTestClient();
     const mockRoom = mkStubRoom("!room:example.com", "Test Room", client);
     const mockUserId = "@user:example.com";
-    const mockEvent = { preventDefault: jest.fn(), stopPropagation: jest.fn() } as unknown as SyntheticEvent;
+    const mockEvent = { preventDefault: vi.fn(), stopPropagation: vi.fn() } as unknown as SyntheticEvent;
 
     beforeEach(() => {
         // Mock room client's getSafeUserId
-        mockRoom.client.getSafeUserId = jest.fn().mockReturnValue(mockUserId);
-        jest.spyOn(defaultDispatcher, "dispatch");
+        mockRoom.client.getSafeUserId = vi.fn().mockReturnValue(mockUserId);
+        vi.spyOn(defaultDispatcher, "dispatch");
 
-        (onRoomTopicLinkClick as jest.Mock).mockReset();
+        (onRoomTopicLinkClick as Mock).mockReset();
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     function render() {
@@ -77,13 +80,13 @@ describe("RoomSummaryCardTopicViewModel", () => {
 
     describe("Topic editing permissions", () => {
         it("should allow editing when user has permission", () => {
-            mockRoom.currentState.maySendStateEvent = jest.fn().mockReturnValue(true);
+            mockRoom.currentState.maySendStateEvent = vi.fn().mockReturnValue(true);
             const { result } = render();
             expect(result.current.canEditTopic).toBe(true);
         });
 
         it("should not allow editing when user lacks permission", () => {
-            mockRoom.currentState.maySendStateEvent = jest.fn().mockReturnValue(false);
+            mockRoom.currentState.maySendStateEvent = vi.fn().mockReturnValue(false);
             const { result } = render();
             expect(result.current.canEditTopic).toBe(false);
         });

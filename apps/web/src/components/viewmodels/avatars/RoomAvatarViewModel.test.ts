@@ -5,7 +5,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { renderHook, waitFor } from "jest-matrix-react";
+// @vitest-environment happy-dom
+
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import {
     JoinRule,
     type MatrixClient,
@@ -16,18 +18,16 @@ import {
     User,
 } from "matrix-js-sdk/src/matrix";
 import { act } from "react";
+import { renderHook, waitFor } from "test-utils-rtl";
+import { createTestClient, mkStubRoom } from "test-utils";
 
-import {
-    AvatarBadgeDecoration,
-    useRoomAvatarViewModel,
-} from "../../../../../src/components/viewmodels/avatars/RoomAvatarViewModel";
-import { createTestClient, mkStubRoom } from "../../../../test-utils";
-import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import * as PresenceIndicatorModule from "../../../../../src/components/views/avatars/WithPresenceIndicator";
-import { DefaultTagID } from "../../../../../src/stores/room-list-v3/skip-list/tag";
+import { AvatarBadgeDecoration, useRoomAvatarViewModel } from "./RoomAvatarViewModel";
+import DMRoomMap from "../../../utils/DMRoomMap";
+import * as PresenceIndicatorModule from "../../views/avatars/WithPresenceIndicator";
+import { DefaultTagID } from "../../../stores/room-list-v3/skip-list/tag";
 
-jest.mock("../../../../../src/utils/room/getJoinedNonFunctionalMembers", () => ({
-    getJoinedNonFunctionalMembers: jest.fn().mockReturnValue([]),
+vi.mock("../../../utils/room/getJoinedNonFunctionalMembers", () => ({
+    getJoinedNonFunctionalMembers: vi.fn().mockReturnValue([]),
 }));
 
 describe("RoomAvatarViewModel", () => {
@@ -39,10 +39,10 @@ describe("RoomAvatarViewModel", () => {
         room = mkStubRoom("roomId", "roomName", matrixClient);
 
         DMRoomMap.makeShared(matrixClient);
-        jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(undefined);
+        vi.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(undefined);
 
-        jest.spyOn(PresenceIndicatorModule, "useDmMember").mockReturnValue(null);
-        jest.spyOn(PresenceIndicatorModule, "usePresence").mockReturnValue(null);
+        vi.spyOn(PresenceIndicatorModule, "useDmMember").mockReturnValue(null);
+        vi.spyOn(PresenceIndicatorModule, "usePresence").mockReturnValue(null);
     });
 
     it("should have badgeDecoration set to LowPriority", () => {
@@ -52,13 +52,13 @@ describe("RoomAvatarViewModel", () => {
     });
 
     it("should have badgeDecoration set to VideoRoom", () => {
-        jest.spyOn(room, "isCallRoom").mockReturnValue(true);
+        vi.spyOn(room, "isCallRoom").mockReturnValue(true);
         const { result: vm } = renderHook(() => useRoomAvatarViewModel(room));
         expect(vm.current.badgeDecoration).toBe(AvatarBadgeDecoration.VideoRoom);
     });
 
     it("should have badgeDecoration set to PublicRoom", () => {
-        jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Public);
+        vi.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Public);
         const { result: vm } = renderHook(() => useRoomAvatarViewModel(room));
         expect(vm.current.badgeDecoration).toBe(AvatarBadgeDecoration.PublicRoom);
     });
@@ -68,20 +68,20 @@ describe("RoomAvatarViewModel", () => {
         const user = User.createUser("userId", matrixClient);
         const roomMember = new RoomMember(room.roomId, "userId");
         roomMember.user = user;
-        jest.spyOn(PresenceIndicatorModule, "useDmMember").mockReturnValue(roomMember);
-        jest.spyOn(PresenceIndicatorModule, "usePresence").mockReturnValue(PresenceIndicatorModule.Presence.Online);
+        vi.spyOn(PresenceIndicatorModule, "useDmMember").mockReturnValue(roomMember);
+        vi.spyOn(PresenceIndicatorModule, "usePresence").mockReturnValue(PresenceIndicatorModule.Presence.Online);
 
         const { result: vm1 } = renderHook(() => useRoomAvatarViewModel(room));
         expect(vm1.current.badgeDecoration).toBe(AvatarBadgeDecoration.Presence);
 
         // 2. With presence and public room, presence takes precedence
-        jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Public);
+        vi.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Public);
         // Render again, it's easier than mocking the event emitter.
         const { result: vm, rerender } = renderHook(() => useRoomAvatarViewModel(room));
         expect(vm.current.badgeDecoration).toBe(AvatarBadgeDecoration.PublicRoom);
 
         // 3. With presence, public-room and video room, video room takes precedence
-        jest.spyOn(room, "isCallRoom").mockReturnValue(true);
+        vi.spyOn(room, "isCallRoom").mockReturnValue(true);
         rerender(room);
         expect(vm.current.badgeDecoration).toBe(AvatarBadgeDecoration.VideoRoom);
 
@@ -97,7 +97,7 @@ describe("RoomAvatarViewModel", () => {
         expect(vm.current.badgeDecoration).not.toBe(AvatarBadgeDecoration.PublicRoom);
 
         const publicRoom = mkStubRoom("roomId2", "roomName2", matrixClient);
-        jest.spyOn(publicRoom, "getJoinRule").mockReturnValue(JoinRule.Public);
+        vi.spyOn(publicRoom, "getJoinRule").mockReturnValue(JoinRule.Public);
         rerender(publicRoom);
 
         await waitFor(() => expect(vm.current.badgeDecoration).toBe(AvatarBadgeDecoration.PublicRoom));
@@ -107,8 +107,8 @@ describe("RoomAvatarViewModel", () => {
         const user = User.createUser("userId", matrixClient);
         const roomMember = new RoomMember(room.roomId, "userId");
         roomMember.user = user;
-        jest.spyOn(PresenceIndicatorModule, "useDmMember").mockReturnValue(roomMember);
-        jest.spyOn(PresenceIndicatorModule, "usePresence").mockReturnValue(PresenceIndicatorModule.Presence.Online);
+        vi.spyOn(PresenceIndicatorModule, "useDmMember").mockReturnValue(roomMember);
+        vi.spyOn(PresenceIndicatorModule, "usePresence").mockReturnValue(PresenceIndicatorModule.Presence.Online);
 
         const { result: vm } = renderHook(() => useRoomAvatarViewModel(room));
         expect(vm.current.presence).toBe(PresenceIndicatorModule.Presence.Online);
