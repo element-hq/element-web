@@ -851,6 +851,12 @@ $left-gutter: 64px;
         /* For correct positioning of _copyButton (See TextualBody) */
         position: relative;
 
+        /* Emoji are enlarged in prose, but a code block's line numbers are one fixed-height block
+           per line and cannot follow a line that an enlarged emoji has made taller. */
+        .mx_Emoji {
+            font-size: inherit;
+        }
+
         &:focus-within,
         &:hover {
             .mx_EventTile_button {

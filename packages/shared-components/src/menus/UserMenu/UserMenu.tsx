@@ -171,13 +171,25 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
             >
                 <section className={classNames(styles.profile, styles.profilePrimary)}>
                     {showAvatar && <Avatar id={userId} name={displayName} type="round" size="64px" src={avatarUrl} />}
-                    <Text className={styles.displayname} type="body" size="lg" weight="semibold" as="span">
+                    <Text
+                        className={classNames(styles.displayname, styles.constrainedText)}
+                        type="body"
+                        size="lg"
+                        weight="semibold"
+                        as="span"
+                    >
                         {displayName}
                     </Text>
                     {showUserStatus && <SetStatusView vm={setStatusViewModel} />}
                 </section>
                 <section className={classNames(styles.profile, styles.profileSecondary)}>
-                    <Text data-testid="userId" size="md" as="span" type="body" className={styles.userId}>
+                    <Text
+                        data-testid="userId"
+                        size="md"
+                        as="span"
+                        type="body"
+                        className={classNames(styles.userId, styles.constrainedText)}
+                    >
                         {userId}
                     </Text>
                     {manageAccountHref && (

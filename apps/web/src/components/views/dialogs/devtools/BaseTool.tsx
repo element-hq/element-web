@@ -54,7 +54,7 @@ const BaseTool: React.FC<XOR<IMinProps, IProps>> = ({
         children = message;
     } else if (onAction && actionLabel) {
         const onActionClick = (): void => {
-            onAction().then((msg) => {
+            void onAction().then((msg) => {
                 if (typeof msg === "string") {
                     setMessage(msg);
                 }

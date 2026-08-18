@@ -71,6 +71,21 @@ describe("ReadMarker", () => {
         expect(onGhostTransitionEnd).toHaveBeenCalledTimes(1);
     });
 
+    it("gives the ghost marker a transition the browser accepts", () => {
+        render(
+            <ul>
+                <ReadMarker eventId="$ghost" kind="ghost" />
+            </ul>,
+        );
+
+        // An unparseable easing drops the whole shorthand, so the ghost would vanish instantly
+        // and never fire transitionend.
+        const style = getComputedStyle(screen.getByRole("separator"));
+        expect(style.transitionProperty).toBe("width, opacity");
+        expect(style.transitionDuration).toBe("0.4s, 0.4s");
+        expect(style.transitionDelay).toBe("1s, 1s");
+    });
+
     it("wires the current marker ref", () => {
         const onCurrentMarkerRef = vi.fn();
 

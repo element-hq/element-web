@@ -198,12 +198,29 @@ export default defineConfig({
                 allowExpressions: true,
             },
         ],
+        // Require explicit handling of promises
+        "typescript/no-floating-promises": [
+            "error",
+            {
+                checkThenables: true,
+                ignoreIIFE: true,
+                ignoreVoid: true,
+            },
+        ],
 
         // Prevent invalid non-type re-exports of types, these can cause downstream build failures
         "typescript/consistent-type-exports": ["error"],
 
         // Prevent unnecessary runtime dependencies between files
         "typescript/consistent-type-imports": ["error", { fixStyle: "inline-type-imports" }],
+
+        "jsx-a11y/control-has-associated-label": [
+            "error",
+            {
+                labelAttributes: ["label", "value"],
+                depth: 3,
+            },
+        ],
 
         // Disable some perf rules
         "no-await-in-loop": "off",
@@ -212,7 +229,7 @@ export default defineConfig({
         "unicorn/switch-case-braces": "off",
         "sort-keys": "off",
         "typescript/require-array-sort-compare": "off",
-        "eslint/no-extra-boolean-cast": "off",
+        "no-extra-boolean-cast": "off",
 
         // These would be nice to enable at some point
         "unicorn/prefer-set-has": "off",
@@ -228,25 +245,20 @@ export default defineConfig({
         "typescript/no-redundant-type-constituents": "off",
         "typescript/no-useless-default-assignment": "off",
         "typescript/no-duplicate-type-constituents": "off",
-        "typescript/no-floating-promises": "off",
         "typescript/no-implied-eval": "off",
         "typescript/no-misused-spread": "off",
         "promise/valid-params": "off",
-        "no-extra-boolean-cast": "off",
         "react-perf/jsx-no-new-function-as-prop": "off",
         "react-perf/jsx-no-new-object-as-prop": "off",
         "react-perf/jsx-no-jsx-as-prop": "off",
         "jsx-a11y/prefer-tag-over-role": "off",
         "jsx-a11y/no-autofocus": "off",
         "react/no-children-prop": "off",
-        "jsx-a11y/no-noninteractive-tabindex": "off",
         "react-perf/jsx-no-new-array-as-prop": "off",
         "react/no-did-update-set-state": "off",
         "react/no-did-mount-set-state": "off",
         "jsx-a11y/no-static-element-interactions": "off",
         "jsx-a11y/no-noninteractive-element-interactions": "off",
-        "react/no-array-index-key": "off",
-        "jsx-a11y/control-has-associated-label": "off",
         "jsx-a11y/media-has-caption": "off",
         "jsx-a11y/no-noninteractive-element-to-interactive-role": "off",
         "jsx-a11y/aria-activedescendant-has-tabindex": "off",
@@ -338,6 +350,7 @@ export default defineConfig({
                 "packages/playwright-common/src/**/*",
                 "**/scripts/**/*",
                 "apps/web/module_system/**/*",
+                "apps/web/webpack.config.ts",
             ],
             rules: {
                 "no-restricted-globals": "off",
@@ -348,6 +361,8 @@ export default defineConfig({
                 "no-restricted-imports": "off",
                 // They can use process.exit
                 "unicorn/no-process-exit": "off",
+                // They can use top level await
+                "node/no-top-level-await": "off",
             },
         },
         {
@@ -519,7 +534,6 @@ export default defineConfig({
                 "typescript/no-empty-object-type": "off",
                 "typescript/unbound-method": "off",
                 "typescript/no-floating-promises": "off",
-                "typescript/no-misused-spread": "off",
                 "vitest/require-mock-type-parameters": "off",
                 "vitest/no-disabled-tests": "off",
                 "vitest/no-conditional-expect": "off",
@@ -562,6 +576,7 @@ export default defineConfig({
                 "no-new": "off",
                 "react/iframe-missing-sandbox": "off",
                 "promise/no-promise-in-callback": "off",
+
                 // This would be good to enable in the future
                 "typescript/await-thenable": "off",
                 "promise/no-callback-in-promise": "off",

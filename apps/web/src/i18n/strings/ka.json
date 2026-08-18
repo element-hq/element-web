@@ -614,19 +614,6 @@
         "view_source_decrypted_event_source_unavailable": "გაშიფრული წყარო მიუწვდომელია",
         "widget_screenshots": "ჩართეთ ვიჯეტის ეკრანის ანაბეჭდები მხარდაჭერილ ვიჯეტებზე"
     },
-    "emoji": {
-        "categories": "კატეგორიები",
-        "category_activities": "Საქმიანობის",
-        "category_animals_nature": "ცხოველები და ბუნება",
-        "category_flags": "დროშები",
-        "category_food_drink": "Საჭმელ - სასმელი",
-        "category_frequently_used": "ხშირად გამოყენებული",
-        "category_objects": "ობიექტები",
-        "category_smileys_people": "სმაილი და ხალხი",
-        "category_symbols": "სიმბოლოები",
-        "category_travel_places": "მოგზაურობა და ადგილები",
-        "quick_reactions": "სწრაფი რეაქციები"
-    },
     "empty_room": "ცარიელი ოთახი",
     "empty_room_was_name": "ცარიელი ოთახი (იყო%(oldName)s )",
     "encryption": {
@@ -1107,7 +1094,6 @@
         "mentions_and_keywords": "@ხსენებები და საკვანძო სიტყვები",
         "mentions_and_keywords_description": "მიიღეთ შეტყობინებები მხოლოდ ხსენებებითა და საკვანძო სიტყვებით, როგორც დაყენებულია თქვენსში<a> პარამეტრები</a>",
         "mentions_keywords": "ხსენებები და საკვანძო სიტყვები",
-        "message_didnt_send": "შეტყობინება არ გაიგზავნა. დააწკაპუნეთ ინფორმაციისთვის.",
         "mute_description": "თქვენ არ მიიღებთ შეტყობინებებს"
     },
     "notifier": {

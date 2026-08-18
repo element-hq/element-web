@@ -103,7 +103,7 @@ const useHandleBeaconRedaction = (
                 : undefined;
 
             relations?.getRelations()?.forEach((locationEvent) => {
-                matrixClient.redactEvent(
+                void matrixClient.redactEvent(
                     locationEvent.getRoomId()!,
                     locationEvent.getId()!,
                     undefined,
