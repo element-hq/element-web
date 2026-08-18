@@ -6,12 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventType, MatrixEvent, type Policy, SERVICE_TYPES, type Terms } from "matrix-js-sdk/src/matrix";
-import { screen, within } from "jest-matrix-react";
+// @vitest-environment happy-dom
 
-import { dialogTermsInteractionCallback, Service, startTermsFlow } from "../../src/Terms";
-import { getMockClientWithEventEmitter } from "../test-utils";
-import { MatrixClientPeg } from "../../src/MatrixClientPeg";
+import { describe, it, expect, vi, beforeEach, afterAll } from "vitest";
+import { EventType, MatrixEvent, type Policy, SERVICE_TYPES, type Terms } from "matrix-js-sdk/src/matrix";
+import { screen, within } from "test-utils-rtl";
+import { getMockClientWithEventEmitter } from "test-utils";
+
+import { dialogTermsInteractionCallback, Service, startTermsFlow } from "./Terms";
+import { MatrixClientPeg } from "./MatrixClientPeg";
 
 const POLICY_ONE = {
     version: "six",
@@ -34,21 +37,21 @@ const IM_SERVICE_TWO = new Service(SERVICE_TYPES.IM, "https://imtwo.test", "a to
 
 describe("Terms", function () {
     const mockClient = getMockClientWithEventEmitter({
-        getAccountData: jest.fn(),
-        getTerms: jest.fn(),
-        agreeToTerms: jest.fn(),
-        setAccountData: jest.fn(),
+        getAccountData: vi.fn(),
+        getTerms: vi.fn(),
+        agreeToTerms: vi.fn(),
+        setAccountData: vi.fn(),
     });
 
     beforeEach(function () {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
         mockClient.getAccountData.mockReturnValue(undefined);
         mockClient.getTerms.mockResolvedValue({ policies: {} });
         mockClient.setAccountData.mockResolvedValue({});
     });
 
     afterAll(() => {
-        jest.spyOn(MatrixClientPeg, "get").mockRestore();
+        vi.spyOn(MatrixClientPeg, "get").mockRestore();
     });
 
     it("should prompt for all terms & services if no account data", async function () {
@@ -58,7 +61,7 @@ describe("Terms", function () {
                 policy_the_first: POLICY_ONE,
             },
         });
-        const interactionCallback = jest.fn().mockResolvedValue([]);
+        const interactionCallback = vi.fn().mockResolvedValue([]);
         await startTermsFlow(mockClient, [IM_SERVICE_ONE], interactionCallback);
 
         expect(interactionCallback).toHaveBeenCalledWith(
@@ -88,7 +91,7 @@ describe("Terms", function () {
             },
         });
 
-        const interactionCallback = jest.fn();
+        const interactionCallback = vi.fn();
         await startTermsFlow(mockClient, [IM_SERVICE_ONE], interactionCallback);
 
         expect(interactionCallback).not.toHaveBeenCalled();
@@ -113,7 +116,7 @@ describe("Terms", function () {
             },
         });
 
-        const interactionCallback = jest.fn().mockResolvedValue(["http://example.com/one", "http://example.com/two"]);
+        const interactionCallback = vi.fn().mockResolvedValue(["http://example.com/one", "http://example.com/two"]);
         await startTermsFlow(mockClient, [IM_SERVICE_ONE], interactionCallback);
 
         expect(interactionCallback).toHaveBeenCalledWith(
@@ -162,7 +165,7 @@ describe("Terms", function () {
             },
         );
 
-        const interactionCallback = jest.fn().mockResolvedValue(["http://example.com/one", "http://example.com/two"]);
+        const interactionCallback = vi.fn().mockResolvedValue(["http://example.com/one", "http://example.com/two"]);
         await startTermsFlow(mockClient, [IM_SERVICE_ONE, IM_SERVICE_TWO], interactionCallback);
 
         expect(interactionCallback).toHaveBeenCalledWith(

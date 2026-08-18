@@ -6,13 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import ThemeController from "../../../../src/settings/controllers/ThemeController";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
-import SettingsStore from "../../../../src/settings/SettingsStore";
-import { DEFAULT_THEME } from "../../../../src/theme";
+import { describe, it, expect, vi } from "vitest";
+
+import SettingsStore from "../SettingsStore";
+import ThemeController from "./ThemeController";
+import { SettingLevel } from "../SettingLevel";
+import { DEFAULT_THEME } from "../../theme";
 
 describe("ThemeController", () => {
-    jest.spyOn(SettingsStore, "getValue").mockReturnValue([]);
+    vi.spyOn(SettingsStore, "getValue").mockReturnValue([]);
 
     it("returns null when calculatedValue is falsy", () => {
         const controller = new ThemeController();
