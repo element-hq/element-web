@@ -711,22 +711,6 @@
     },
     "dialog_close_label": "Mbylle dialogun",
     "download_completed": "Shkarkim i Plotësuar",
-    "emoji": {
-        "categories": "Kategori",
-        "category_activities": "Veprimtari",
-        "category_animals_nature": "Kafshë & Natyrë",
-        "category_flags": "Flamuj",
-        "category_food_drink": "Ushqim & Pije",
-        "category_frequently_used": "Përdorur Shpesh",
-        "category_objects": "Objekte",
-        "category_smileys_people": "Emotikone & Persona",
-        "category_symbols": "Simbole",
-        "category_travel_places": "Udhëtim & Vende",
-        "quick_reactions": "Reagime të Shpejta"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Anulo kërkimin"
-    },
     "empty_room": "Dhomë e zbrazët",
     "empty_room_was_name": "Dhomë e zbrazët (qe %(oldName)s)",
     "encryption": {
@@ -1335,7 +1319,6 @@
         "mentions_and_keywords": "@përmendje & fjalëkyçe",
         "mentions_and_keywords_description": "Merrni njoftime vetëm për përmendje dhe fjalëkyçe që keni ujdisur te <a>rregullimet</a> tuaja",
         "mentions_keywords": "Përmendje & fjalëkyçe",
-        "message_didnt_send": "Mesazhi s’u dërgua. Klikoni për hollësi.",
         "mute_description": "S’do të merrni ndonjë njoftim"
     },
     "notifier": {
@@ -2160,7 +2143,6 @@
         "send_read_receipts_unsupported": "Shërbyesi juaj nuk mbulon çaktivizimin e dërgimit të dëftesave të leximit.",
         "send_typing_notifications": "Dërgo njoftime shtypjesh",
         "sessions": {
-            "browser": "Shfletues",
             "confirm_sign_out": {
                 "one": "Ripohoni daljen nga kjo pajisje",
                 "other": "Ripohoni daljen nga këto pajisje"
@@ -2208,7 +2190,6 @@
             "no_sessions": "S’u gjetën sesione.",
             "no_unverified_sessions": "S’u gjetën sesione të paverifikuar.",
             "no_verified_sessions": "S’u gjetën sesione të verifikuar.",
-            "os": "Sistem operativ",
             "other_sessions_heading": "Sesione të tjerë",
             "push_heading": "Njoftime Push",
             "push_subheading": "Merrni njoftime push për këtë sesion.",

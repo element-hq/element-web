@@ -35,7 +35,7 @@ import { runSlashCommand, shouldSendAnyway } from "../../../../../editor/command
 import { Action } from "../../../../../dispatcher/actions";
 import { addReplyToMessageContent } from "../../../../../utils/Reply";
 import { attachRelation, attachUrlPreviews } from "../../../../../utils/messages";
-import { MessageComposerUrlPreviewViewModel } from "../../../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
+import { linksIn } from "../../../../../utils/UrlUtils";
 
 export interface SendMessageParams {
     mxClient: MatrixClient;
@@ -115,7 +115,7 @@ export async function sendMessage(
 
     // if content is null, we haven't done any slash command processing, so generate some content
     content ??= await createMessageContent(message, isHTML, params);
-    attachUrlPreviews(urlPreviewSnapshot, content, MessageComposerUrlPreviewViewModel.linksIn(message).size !== 0);
+    attachUrlPreviews(urlPreviewSnapshot, content, linksIn(message).size !== 0);
 
     // TODO replace emotion end of message ?
 
@@ -134,7 +134,7 @@ export async function sendMessage(
 
     const prom = doMaybeLocalRoomAction(
         roomId,
-        (actualRoomId: string) => mxClient.sendMessage(actualRoomId, threadId, content!),
+        (actualRoomId: string) => mxClient.sendMessage(actualRoomId, threadId, content),
         mxClient,
     );
 
@@ -160,7 +160,7 @@ export async function sendMessage(
         }
     });
     if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
-        prom.then((resp) => {
+        void prom.then((resp) => {
             sendRoundTripMetric(mxClient, roomId, resp.event_id);
         });
     }
@@ -183,14 +183,11 @@ interface EditMessageParams {
     mxClient: MatrixClient;
     roomContext: Pick<IRoomState, "timelineRenderingType">;
     editorStateTransfer: EditorStateTransfer;
-    attachBundles?: (content: RoomMessageEventContent, messageHasLinks: boolean) => void;
-    /** Whether the user modified the preview list; forces the edit to send even if the text is unchanged. */
-    isUrlPreviewsModified?: boolean;
 }
 
 export async function editMessage(
     html: string,
-    { roomContext, mxClient, editorStateTransfer, attachBundles, isUrlPreviewsModified }: EditMessageParams,
+    { roomContext, mxClient, editorStateTransfer }: EditMessageParams,
 ): Promise<ISendEventResponse | undefined> {
     const editedEvent = editorStateTransfer.getEvent();
 
@@ -229,9 +226,8 @@ export async function editMessage(
 
     const roomId = editedEvent.getRoomId();
 
-    // If content is modified then send an updated event into the room. Also send when only the
-    // preview list changed (isUrlPreviewsModified) so preview removals aren't silently dropped.
-    if ((isContentModified(newContent, editorStateTransfer) || isUrlPreviewsModified) && roomId) {
+    // If content is modified then send an updated event into the room
+    if (isContentModified(newContent, editorStateTransfer) && roomId) {
         // TODO Slash Commands
 
         if (shouldSend) {
@@ -239,10 +235,6 @@ export async function editMessage(
 
             const event = editorStateTransfer.getEvent();
             const threadId = event.threadRootId || null;
-
-            // Attach URL preview bundles to the new content (MSC4095), not the
-            // top-level fallback body, so edit-aware clients render the previews.
-            attachBundles?.(newContent, MessageComposerUrlPreviewViewModel.linksIn(newContent.body).size !== 0);
 
             response = mxClient.sendMessage(roomId, threadId, editContent);
             dis.dispatch({ action: "message_sent" });

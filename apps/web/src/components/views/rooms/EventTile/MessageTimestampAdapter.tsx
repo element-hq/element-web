@@ -10,7 +10,7 @@ import { MessageTimestampView } from "@element-hq/web-shared-components";
 
 import { type EventTileViewModel } from "../../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
 import { type MessageTimestampViewModelProps } from "../../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel.ts";
-import { Icon as LateIcon } from "../../../../../res/img/sensor.svg";
+import LateIcon from "../../../../../res/img/sensor.svg?react";
 
 /**
  * Props for the {@link MessageTimestampAdapter} component.

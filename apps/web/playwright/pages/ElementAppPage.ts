@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type Locator, type Page, expect } from "@playwright/test";
 import { readFile } from "node:fs/promises";
-import { basename } from "node:path";
+import path from "node:path";
 import { rejectToast, rejectToastIfExists } from "@element-hq/element-web-playwright-common";
 
 import { Settings } from "./settings";
@@ -96,6 +96,13 @@ export class ElementAppPage {
      * @param name The exact room name to find and click on/open.
      */
     public async viewRoomByName(name: string): Promise<void> {
+        // Expand the left panel if necessary
+        const separator = this.page.getByRole("separator", { name: "Click or drag to expand" });
+        const type = await separator.getAttribute("data-separator-type");
+        if (type === "bar") {
+            await separator.click();
+        }
+
         // Make sure the room list is actually present before we try closing toasts,
         // otherwise we may race with page loading
         await this.page.getByTestId("room-list").waitFor();
@@ -190,20 +197,24 @@ export class ElementAppPage {
     /**
      * Drags a "file" into the specified composer and automatically uploads it.
      * @param location Should the drop target the main room or the thread.
-     * @param path The path to the sample file so it can be read.
+     * @param samplePath The path to the sample file so it can be read.
      * @param type The mimetype of the file.
      */
-    public async composerDragAndUploadFiles(location: "room" | "thread", path: string, type: string): Promise<void> {
+    public async composerDragAndUploadFiles(
+        location: "room" | "thread",
+        samplePath: string,
+        type: string,
+    ): Promise<void> {
         // Based on https://github.com/microsoft/playwright/issues/10667#issuecomment-2742123424
         // This read a file, encodes it into base64 and then sends it along to the page to be treated
         // as a DataTransfer (the mechanism for drag and dropped files).
-        const buffer = await readFile(path);
-        const name = basename(path);
+        const buffer = await readFile(samplePath);
+        const name = path.basename(samplePath);
 
         const dataTransfer = await this.page.evaluateHandle(
             async ([buffer, name, type]) => {
                 const dt = new DataTransfer();
-                const file = new File([Uint8Array.fromBase64(buffer)], name, {
+                const file = new File([Uint8Array.fromBase64!(buffer)], name, {
                     type,
                 });
                 dt.items.add(file);
@@ -220,21 +231,25 @@ export class ElementAppPage {
     /**
      * Paste a "file" into the specified locator and automatically uploads it.
      * @param location Should the drop target the main room or the thread.
-     * @param path The path to the sample file so it can be read.
+     * @param samplePath The path to the sample file so it can be read.
      * @param type The mimetype of the file.
      */
-    public async composerDragAndPasteFile(location: "room" | "thread", path: string, type: string): Promise<void> {
+    public async composerDragAndPasteFile(
+        location: "room" | "thread",
+        samplePath: string,
+        type: string,
+    ): Promise<void> {
         // Based on https://github.com/microsoft/playwright/issues/10667#issuecomment-2742123424
         // This read a file, encodes it into base64 and then sends it along to the page to be treated
         // as a DataTransfer (the mechanism for drag and dropped files).
-        const buffer = await readFile(path);
-        const name = basename(path);
+        const buffer = await readFile(samplePath);
+        const name = path.basename(samplePath);
         const composer = this.getComposerField(location === "thread");
 
         await composer.evaluate(
             async (element, [buffer, name, type]) => {
                 const clipboardData = new DataTransfer();
-                const file = new File([Uint8Array.fromBase64(buffer)], name, {
+                const file = new File([Uint8Array.fromBase64!(buffer)], name, {
                     type,
                 });
                 clipboardData.items.add(file);
@@ -386,5 +401,23 @@ export class ElementAppPage {
         do {
             await this.page.mouse.wheel(0, 1000);
         } while (await needsScroll());
+    }
+
+    /**
+     * Resize the left panel by a given number of pixels.
+     * @param delta The number of pixels to resize by. Negative value makes the panel smaller.
+     */
+    public async resizeLeftPanel(delta: number): Promise<void> {
+        const separator = this.page.getByRole("separator", { name: "Click or drag to expand" });
+        const boundingRectangle = await separator.boundingBox();
+
+        // Place the cursor in the center of the separator
+        const centerX = boundingRectangle!.x + boundingRectangle!.width / 2;
+        await this.page.mouse.move(centerX, boundingRectangle!.y);
+
+        // Drag the cursor by delta pixels
+        await this.page.mouse.down();
+        await this.page.mouse.move(centerX + delta, boundingRectangle!.y);
+        await this.page.mouse.up();
     }
 }

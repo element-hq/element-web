@@ -146,7 +146,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         const action = getKeyBindingsManager().getMessageComposerAction(event);
         switch (action) {
             case KeyBindingAction.SendMessage:
-                this.sendEdit();
+                void this.sendEdit();
                 event.stopPropagation();
                 event.preventDefault();
                 break;
@@ -362,10 +362,10 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
                 // top-level fallback body, so edit-aware clients render the previews.
                 this.props.attachBundles?.(
                     editContent["m.new_content"]!,
-                    MessageComposerUrlPreviewViewModel.linksIn(this.model.contentPlainText).size !== 0,
+                    linksIn(this.model.contentPlainText).size !== 0,
                 );
 
-                this.props.mxClient.sendMessage(roomId, threadId, editContent);
+                void this.props.mxClient.sendMessage(roomId, threadId, editContent);
                 dis.dispatch({ action: "message_sent" });
             }
         }

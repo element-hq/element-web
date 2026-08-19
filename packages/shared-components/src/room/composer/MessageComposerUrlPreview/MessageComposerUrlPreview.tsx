@@ -5,10 +5,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX } from "react";
+import React, { useCallback, type JSX } from "react";
 import classNames from "classnames";
-import { InlineSpinner } from "@vector-im/compound-web";
-import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
+// note: useIdColorHash is not used as a hook here
+import { IconButton, InlineSpinner, useIdColorHash as idColorHash } from "@vector-im/compound-web";
+import { ErrorSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 
@@ -16,6 +17,7 @@ import { type UrlPreview } from "../../timeline/event-tile/UrlPreviewGroupView";
 import styles from "./MessageComposerUrlPreview.module.css";
 import { LinkSiteName, LinkTitle } from "../../timeline/event-tile/UrlPreviewGroupView/LinkPreview/LinkPreview";
 import { useViewModel, type ViewModel } from "../../../core/viewmodel";
+import { useI18n } from "../../../core/i18n/i18nContext";
 
 export interface MessageComposerUrlPreviewSnapshotEntryLoaded {
     status: "loaded";
@@ -39,7 +41,15 @@ export type MessageComposerUrlPreviewSnapshotEntryState =
  * An entry in the URL preview box
  */
 export type MessageComposerUrlPreviewSnapshotEntry = MessageComposerUrlPreviewSnapshotEntryState & {
+    /**
+     * default: true
+     * set to false when the preview is removed by the user
+     * so the vm remembers to not show the previews list even after another computeSnapshot
+     */
     include: boolean;
+    /**
+     * the url string that the preview is representing
+     */
     matched_url: string;
 };
 
@@ -49,8 +59,6 @@ export interface MessageComposerUrlPreviewSnapshot {
     entries: MessageComposerUrlPreviewSnapshotEntry[];
     /** Content of the composer when the snapshot is computed */
     content: string;
-    /** Whether the entries have been changed by removing it */
-    isModified: boolean;
 }
 
 /** Props for MessageComposerUrlPreviewView. */
@@ -77,16 +85,100 @@ export interface MessageComposerUrlPreviewProps {
     className?: string;
 }
 
-function hashCode(str: string): number {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-        hash = (Math.imul(31, hash) + str.charCodeAt(i)) | 0; // NOSONAR - Java hashcode impl
-    }
-    return hash;
-}
-
 function hostNameFirstChar(hostName: string): string {
     return hostName.slice(0, 1).toUpperCase();
+}
+
+function useEntryContents(entry: MessageComposerUrlPreviewSnapshotEntry): {
+    entryIcon: JSX.Element;
+    entryTitle: string;
+    showTooltipOnLink: boolean;
+} {
+    const { translate: _t } = useI18n();
+    const hostname = new URL(entry.matched_url).hostname;
+
+    switch (entry.status) {
+        case "loaded": {
+            const thumbnail = entry.preview?.image?.imageThumb !== undefined && (
+                <img src={entry.preview.image?.imageThumb} alt={entry.preview.image.alt} />
+            );
+            return {
+                entryIcon: (
+                    // Sites without a thumbnail fall back to their initial on a decorative
+                    // background, picked by `data-color` - see the module CSS.
+                    <div className={styles.entryIcon} data-color={thumbnail ? undefined : idColorHash(hostname)}>
+                        {thumbnail || hostNameFirstChar(hostname)}
+                    </div>
+                ),
+                entryTitle: entry.preview.title,
+                showTooltipOnLink: entry.preview.showTooltipOnLink,
+            };
+        }
+        case "loading":
+            return {
+                entryIcon: (
+                    <div className={styles.loadingSpinner}>
+                        <InlineSpinner />
+                    </div>
+                ),
+                entryTitle: _t("composer|url_preview|loading"),
+                showTooltipOnLink: false,
+            };
+
+        case "failed":
+            return {
+                entryIcon: (
+                    <div className={styles.failedIcon}>
+                        <ErrorSolidIcon />
+                    </div>
+                ),
+                entryTitle: _t("composer|url_preview|failed"),
+                showTooltipOnLink: false,
+            };
+    }
+}
+
+function UrlPreviewExpandedEntry({
+    entry,
+    removePreview,
+    className,
+}: {
+    entry: MessageComposerUrlPreviewSnapshotEntry;
+    removePreview?: (url: string) => void;
+    className?: string;
+}): JSX.Element {
+    const { translate: _t } = useI18n();
+    const { entryIcon, entryTitle, showTooltipOnLink } = useEntryContents(entry);
+
+    const onRemovePreview = useCallback((): void => {
+        removePreview?.(entry.matched_url);
+    }, [removePreview, entry.matched_url]);
+
+    return (
+        <div key={entry.matched_url} className={classNames(className, styles.container)}>
+            <div className={styles.left}>
+                {entryIcon}
+                <div className={styles.text}>
+                    <LinkTitle
+                        title={entryTitle}
+                        showTooltipOnLink={showTooltipOnLink}
+                        link={entry.matched_url}
+                        className={styles.linkTitle}
+                    />
+                    <LinkSiteName siteName={new URL(entry.matched_url).hostname} className={styles.linkSiteName} />
+                </div>
+            </div>
+            {removePreview ? (
+                <IconButton
+                    onClick={onRemovePreview}
+                    className={classNames(styles.removePreview, styles.spanLike)}
+                    aria-label={_t("composer|url_preview|remove")}
+                >
+                    <CloseIcon aria-hidden={true} />
+                </IconButton>
+            ) : null}
+        </div>
+    );
 }
 
 /**
@@ -99,8 +191,14 @@ export function MessageComposerUrlPreviewView({
     toggleCollapsed,
     removePreview,
 }: MessageComposerUrlPreviewProps): JSX.Element | null {
+    const { translate: _t } = useI18n();
+
     const { entries } = useViewModel(vm);
     const links = entries.filter((entry) => entry.include);
+
+    const clearAll = useCallback(() => {
+        links.forEach((entry) => removePreview?.(entry.matched_url));
+    }, [links, removePreview]);
 
     if (links.length === 0) {
         return null;
@@ -110,97 +208,30 @@ export function MessageComposerUrlPreviewView({
     // But have previews fetch all URL previews in the message text
     const previewViews = collapsed
         ? null
-        : links.map((entry) => {
-              const hostname = new URL(entry.matched_url).hostname;
-              let entryIcon: JSX.Element;
-              let entryTitle: string;
-              let showTooltipOnLink: boolean;
-
-              switch (entry.status) {
-                  case "loaded":
-                      const thumbnail = entry.preview?.image?.imageThumb !== undefined && (
-                          <img src={entry.preview.image?.imageThumb} alt={entry.preview.image.alt} />
-                      );
-                      entryIcon = (
-                          <div
-                              className={styles.entryIcon}
-                              style={
-                                  thumbnail
-                                      ? {}
-                                      : {
-                                            backgroundColor: `hsl(${hashCode(hostname)}, 100%, var(--icon-lightness))`,
-                                        }
-                              }
-                          >
-                              {thumbnail || hostNameFirstChar(hostname)}
-                          </div>
-                      );
-                      entryTitle = entry.preview.title;
-                      showTooltipOnLink = entry.preview.showTooltipOnLink;
-                      break;
-
-                  case "loading":
-                      entryIcon = (
-                          <div className={styles.loadingSpinner}>
-                              <InlineSpinner />
-                          </div>
-                      );
-                      entryTitle = "Fetching preview...";
-                      showTooltipOnLink = false;
-                      break;
-
-                  case "failed":
-                      entryIcon = (
-                          <div className={styles.failedIcon}>
-                              <ErrorIcon />
-                          </div>
-                      );
-                      entryTitle = "Failed to fetch preview";
-                      showTooltipOnLink = false;
-                      break;
-              }
-
-              return (
-                  <div key={entry.matched_url} className={classNames(className, styles.container)}>
-                      <div className={styles.left}>
-                          {entryIcon}
-                          <div className={styles.text}>
-                              <LinkTitle
-                                  title={entryTitle}
-                                  showTooltipOnLink={showTooltipOnLink}
-                                  link={entry.matched_url}
-                                  classes={[styles.linkTitle]}
-                              />
-                              <LinkSiteName siteName={hostname} classes={[styles.linkSiteName]} />
-                          </div>
-                      </div>
-                      {removePreview ? (
-                          <button
-                              type="button"
-                              onClick={() => removePreview(entry.matched_url)}
-                              className={classNames(styles.removePreview, styles.spanLike)}
-                          >
-                              <CloseIcon />
-                          </button>
-                      ) : null}
-                  </div>
-              );
-          });
+        : links.map((entry) => (
+              <UrlPreviewExpandedEntry
+                  key={entry.matched_url}
+                  entry={entry}
+                  removePreview={removePreview}
+                  className={className}
+              />
+          ));
 
     const summary = (
         <div className={styles.summary}>
             <span className={styles.left}>
                 <span className={styles.icons}>
                     {links.map((entry) => {
-                        let backgroundColor: string | undefined = undefined;
+                        let colorHash: number | undefined;
+                        let className: string | undefined;
                         let icon: JSX.Element;
                         switch (entry.status) {
                             case "failed":
-                                backgroundColor = "var(--cpd-color-bg-critical-primary)";
-                                icon = <ErrorIcon />;
+                                className = styles.summaryIconFailed;
+                                icon = <ErrorSolidIcon />;
                                 break;
                             case "loading":
-                                backgroundColor = "var(--cpd-color-bg-subtle-primary)";
+                                className = styles.summaryIconLoading;
                                 icon = <InlineSpinner />;
                                 break;
                             case "loaded": {
@@ -214,7 +245,7 @@ export function MessageComposerUrlPreviewView({
                                     );
                                 } else {
                                     icon = <>{hostNameFirstChar(hostname)}</>;
-                                    backgroundColor = `hsl(${hashCode(hostname)}, 100%, var(--icon-lightness))`;
+                                    colorHash = idColorHash(hostname);
                                 }
                             }
                         }
@@ -222,38 +253,30 @@ export function MessageComposerUrlPreviewView({
                         return (
                             <div
                                 key={entry.matched_url}
-                                className={styles.summaryIcon}
-                                style={{
-                                    backgroundColor,
-                                }}
+                                className={classNames(styles.summaryIcon, className)}
+                                data-color={colorHash}
                             >
                                 {icon}
                             </div>
                         );
                     })}
                 </span>
-                <span className={styles.linkCount}>
-                    {links.length} link{links.length <= 1 ? "" : "s"}
-                </span>
+                <span className={styles.linkCount}>{_t("composer|url_preview|n_links", { count: links.length })}</span>
             </span>
             <span className={styles.right}>
                 {removePreview && (
-                    <button
-                        type="button"
-                        className={classNames(styles.clearAll, styles.spanLike)}
-                        onClick={() => links.forEach((entry) => removePreview(entry.matched_url))}
-                    >
-                        Clear all
+                    <button className={classNames(styles.clearAll, styles.spanLike)} onClick={clearAll} type="button">
+                        {_t("composer|url_preview|clear_all")}
                     </button>
                 )}
-                <button
-                    type="button"
+                <IconButton
                     className={classNames(styles.collapse, styles.spanLike)}
                     onClick={toggleCollapsed}
-                    aria-label="Collapse URL previews"
+                    aria-label={_t("composer|url_preview|collapse")}
+                    type="button"
                 >
                     <ChevronDownIcon aria-hidden={true} />
-                </button>
+                </IconButton>
             </span>
         </div>
     );

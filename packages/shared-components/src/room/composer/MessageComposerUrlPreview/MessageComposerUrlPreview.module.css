@@ -7,7 +7,7 @@
 
 .wrapper {
     background-color: var(--cpd-color-bg-subtle-secondary);
-    padding: calc(var(--cpd-space-1x) * 0.5) var(--cpd-space-2x) var(--cpd-space-3x) var(--cpd-space-2x);
+    padding: 0 var(--cpd-space-2x) var(--cpd-space-2x) var(--cpd-space-2x);
     border-radius: 10px;
 }
 
@@ -15,26 +15,12 @@
     padding-bottom: var(--cpd-space-1x);
 }
 
-:global(.cpd-theme-light) {
-    .summaryIcon,
-    .entryIcon {
-        --icon-lightness: 40%;
-    }
-}
-
-:global(.cpd-theme-dark) .summaryIcon {
-    .summaryIcon,
-    .entryIcon {
-        --icon-lightness: 60%;
-    }
-}
-
 .left {
     flex-grow: 1;
 }
 
 .right {
-    margin-right: calc(var(--cpd-space-1x) * 1.5);
+    margin-right: var(--cpd-space-1-5x);
 }
 
 .spanLike {
@@ -57,15 +43,15 @@
         line-height: 100%;
     }
 
-    .summaryIcon:not(:first-child) {
-        margin-left: calc(-var(--cpd-space-2x));
+    /* give the icons a bit of overlap */
+    .summaryIcon:not(:first-of-type) {
+        margin-left: calc(-1 * var(--cpd-space-1x));
     }
 
     .summaryIcon {
         overflow: hidden;
         display: inline-block;
         position: relative;
-        left: calc(var(--cpd-space-1x) * 0.5);
 
         width: 18px;
         height: 18px;
@@ -92,22 +78,35 @@
         }
 
         svg {
+            /* the spinner svg has its size set to 20x20px, overriding that */
             width: 50% !important;
             height: 50% !important;
         }
     }
 
+    .summaryIconFailed {
+        background-color: var(--cpd-color-bg-critical-primary);
+    }
+
+    .summaryIconLoading {
+        background-color: var(--cpd-color-bg-subtle-primary);
+    }
+
     .linkCount {
         margin-left: var(--cpd-space-3x);
         font-weight: 500;
-        font-size: 85%;
+        font-size: var(--cpd-font-size-body-sm);
     }
 
     .clearAll {
-        font-size: 75%;
-        margin-right: calc(var(--cpd-space-1x) * 2.5);
+        font-size: var(--cpd-font-size-body-xs);
+        margin-right: var(--cpd-space-2x);
         color: var(--cpd-color-gray-900);
         cursor: pointer;
+    }
+
+    .clearAll:hover {
+        color: var(--cpd-color-text-primary);
     }
 
     .collapse {
@@ -218,4 +217,49 @@
 
 .failedIcon {
     color: var(--cpd-color-icon-critical-primary);
+}
+
+/*
+ * Sites with no thumbnail get their initial on one of six decorative colours, keyed off
+ * `data-color` (1-6, from Compound's `useIdColorHash`) so the same site always looks the
+ * same. Mirrors how Compound's Avatar colours its imageless fallback; the buckets have to
+ * be enumerated because `attr()` is not usable outside `content` in all browsers.
+ *
+ * Declared after the `.summary`-nested `.summaryIcon` rule, which it ties with on
+ * specificity and so needs to follow in source order to win.
+ */
+.summaryIcon[data-color],
+.entryIcon[data-color] {
+    background-color: var(--cpd-color-bg-decorative-1);
+    color: var(--cpd-color-text-decorative-1);
+}
+
+.summaryIcon[data-color="2"],
+.entryIcon[data-color="2"] {
+    background-color: var(--cpd-color-bg-decorative-2);
+    color: var(--cpd-color-text-decorative-2);
+}
+
+.summaryIcon[data-color="3"],
+.entryIcon[data-color="3"] {
+    background-color: var(--cpd-color-bg-decorative-3);
+    color: var(--cpd-color-text-decorative-3);
+}
+
+.summaryIcon[data-color="4"],
+.entryIcon[data-color="4"] {
+    background-color: var(--cpd-color-bg-decorative-4);
+    color: var(--cpd-color-text-decorative-4);
+}
+
+.summaryIcon[data-color="5"],
+.entryIcon[data-color="5"] {
+    background-color: var(--cpd-color-bg-decorative-5);
+    color: var(--cpd-color-text-decorative-5);
+}
+
+.summaryIcon[data-color="6"],
+.entryIcon[data-color="6"] {
+    background-color: var(--cpd-color-bg-decorative-6);
+    color: var(--cpd-color-text-decorative-6);
 }

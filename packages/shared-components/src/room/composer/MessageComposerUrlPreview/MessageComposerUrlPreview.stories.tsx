@@ -6,6 +6,7 @@
  */
 
 import React, { type JSX } from "react";
+import { fn } from "storybook/test";
 
 import type { Meta, StoryFn } from "@storybook/react-vite";
 import siteIconFile from "../../../../static/element.png";
@@ -19,9 +20,21 @@ import { useMockedViewModel } from "../../../core/viewmodel";
 import { LinkedTextContext } from "../../../core/utils/LinkedText";
 import { withViewDocs } from "../../../../.storybook/withViewDocs";
 
-type MessageComposerUrlPreviewWrapperProps = MessageComposerUrlPreviewSnapshot;
+type MessageComposerUrlPreviewWrapperProps = MessageComposerUrlPreviewSnapshot & {
+    /**
+     * Whether the previews are collapsed down to the summary row.
+     */
+    collapsed: boolean;
+    /**
+     * Set to render the remove/clear affordances, as the app does when the URL
+     * preview bundle feature is enabled.
+     */
+    removePreview?: (url: string) => void;
+};
 
 const MessageComposerUrlPreviewViewWrapperImpl = ({
+    collapsed,
+    removePreview,
     ...rest
 }: MessageComposerUrlPreviewWrapperProps): JSX.Element | null => {
     const vm = useMockedViewModel(rest, {});
@@ -29,8 +42,8 @@ const MessageComposerUrlPreviewViewWrapperImpl = ({
         <LinkedTextContext.Provider value={{}}>
             <MessageComposerUrlPreviewView
                 vm={vm}
-                collapsed={true}
-                removePreview={undefined}
+                collapsed={collapsed}
+                removePreview={removePreview}
                 toggleCollapsed={() => {}}
             />
         </LinkedTextContext.Provider>
@@ -46,7 +59,9 @@ export default {
     title: "Composer/MessageComposerUrlPreview",
     component: MessageComposerUrlPreviewViewWrapper,
     tags: ["autodocs"],
-    args: {},
+    args: {
+        collapsed: true,
+    },
     parameters: {
         design: {
             type: "figma",
@@ -147,4 +162,59 @@ WithImageAndLoadsOfText.args = {
             },
         },
     ],
+};
+
+export const Expanded = Template.bind({});
+Expanded.args = {
+    ...Default.args,
+    collapsed: false,
+};
+
+export const ExpandedWithImage = Template.bind({});
+ExpandedWithImage.args = {
+    ...WithImage.args,
+    collapsed: false,
+};
+
+export const ExpandedWithImageAndSiteIcon = Template.bind({});
+ExpandedWithImageAndSiteIcon.args = {
+    ...WithImageAndSiteIcon.args,
+    collapsed: false,
+};
+
+export const ExpandedWithImageAndLoadsOfText = Template.bind({});
+ExpandedWithImageAndLoadsOfText.args = {
+    ...WithImageAndLoadsOfText.args,
+    collapsed: false,
+};
+
+/**
+ * The loading and failed placeholders only show their text in the expanded view.
+ */
+export const ExpandedWithLoadingAndFailedEntries = Template.bind({});
+ExpandedWithLoadingAndFailedEntries.args = {
+    collapsed: false,
+    entries: [
+        Default.args.entries![0]!,
+        {
+            status: "loading",
+            matched_url: "https://element.io",
+            include: true,
+        },
+        {
+            status: "failed",
+            matched_url: "https://example.com",
+            include: true,
+        },
+    ],
+};
+
+/**
+ * The app only passes `removePreview` when the URL preview bundle feature is
+ * enabled, which adds the per-entry remove buttons and the "Clear all" button.
+ */
+export const ExpandedWithRemoveButtons = Template.bind({});
+ExpandedWithRemoveButtons.args = {
+    ...ExpandedWithLoadingAndFailedEntries.args,
+    removePreview: fn(),
 };

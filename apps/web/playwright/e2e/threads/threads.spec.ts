@@ -29,7 +29,7 @@ test.describe("Threads", () => {
 
     test("should be usable for a conversation", { tag: "@screenshot" }, async ({ page, app, bot }) => {
         const roomId = await app.client.createRoom({});
-        await app.client.inviteUser(roomId, bot.credentials.userId);
+        await app.client.inviteUser(roomId, bot.credentials!.userId);
         await bot.joinRoom(roomId);
         await page.goto("/#/room/" + roomId);
 
@@ -140,7 +140,7 @@ test.describe("Threads", () => {
         await locator.hover();
         await locator.getByRole("toolbar", { name: "Message Actions" }).getByRole("button", { name: "React" }).click();
 
-        locator = page.locator(".mx_EmojiPicker");
+        locator = page.getByLabel("Emoji picker");
         await locator.getByRole("textbox").fill("wave");
         await page.getByRole("gridcell", { name: "👋" }).click();
 
@@ -436,7 +436,7 @@ test.describe("Threads", () => {
         { tag: ["@screenshot", "@no-firefox"] },
         async ({ page, app, bot }) => {
             const roomId = await app.client.createRoom({});
-            await app.client.inviteUser(roomId, bot.credentials.userId);
+            await app.client.inviteUser(roomId, bot.credentials!.userId);
             await bot.joinRoom(roomId);
             await page.goto("/#/room/" + roomId);
 
@@ -594,5 +594,50 @@ test.describe("Threads", () => {
         await expect(
             rightPanel.locator(".mx_EventTile").getByText("Hello again Mr. User in a thread"),
         ).not.toBeVisible();
+    });
+
+    test("should have a header the same height as the pinned message banner", async ({ page, app, user }) => {
+        // Create room
+        const roomId = await app.client.createRoom({});
+        await page.goto("/#/room/" + roomId);
+
+        // Send a message and pin it, so the pinned message banner is shown
+        const roomViewBody = page.locator(".mx_RoomView_body");
+        const textbox = roomViewBody.getByRole("textbox", { name: "Send an unencrypted message…" });
+        await textbox.fill("Hello Mr. Bot");
+        await textbox.press("Enter");
+
+        const message = roomViewBody.locator(".mx_MTextBody").filter({ hasText: "Hello Mr. Bot" });
+        await message.click({ button: "right" });
+        await page.getByRole("menuitem", { name: "Pin", exact: true }).click();
+
+        const pinnedMessageBanner = page.getByTestId("pinned-message-banner");
+        await expect(pinnedMessageBanner).toBeVisible();
+
+        // Reply in a thread, so the Threads panel header (Mark all as read + Show filter) is shown
+        const messageTile = roomViewBody
+            .locator(".mx_EventTile[data-scroll-tokens]")
+            .filter({ hasText: "Hello Mr. Bot" });
+        await messageTile.hover();
+        await messageTile.getByRole("button", { name: "Reply in thread" }).click();
+        await expect(page.locator(".mx_ThreadView_timelinePanelWrapper")).toHaveCount(1);
+
+        const threadPanel = page.locator(".mx_ThreadPanel");
+        const threadTextbox = threadPanel.getByRole("textbox", { name: "Send an unencrypted message…" });
+        await threadTextbox.fill("Hello Mr. User in a thread");
+        await threadTextbox.press("Enter");
+        await expect(threadPanel.locator(".mx_EventTile_last").getByText("Hello Mr. User in a thread")).toBeVisible();
+        await threadPanel.getByTestId("base-card-close-button").click();
+
+        await page.locator(".mx_RoomHeader").getByRole("button", { name: "Threads" }).click();
+        const threadPanelHeader = page.locator(".mx_ThreadPanelHeader");
+        await expect(threadPanelHeader).toBeVisible();
+
+        // The two containers must be the same height so their bottom borders line up
+        // See https://github.com/element-hq/element-web/issues/34463
+        const pinnedBannerBox = await pinnedMessageBanner.boundingBox();
+        const threadHeaderBox = await threadPanelHeader.boundingBox();
+        expect(threadHeaderBox?.height).toBe(pinnedBannerBox?.height);
+        await expect(threadPanelHeader).toHaveCSS("height", "64px");
     });
 });

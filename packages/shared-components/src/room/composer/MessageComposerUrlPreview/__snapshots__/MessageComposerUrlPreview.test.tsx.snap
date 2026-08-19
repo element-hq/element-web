@@ -13,8 +13,7 @@ exports[`MessageComposerUrlPreview > failed entries > renders the failed placeho
       >
         <span>
           <div
-            class="MessageComposerUrlPreview-module_summaryIcon"
-            style="background-color: var(--cpd-color-bg-critical-primary);"
+            class="MessageComposerUrlPreview-module_summaryIcon MessageComposerUrlPreview-module_summaryIconFailed"
           >
             <svg
               fill="currentColor"
@@ -32,8 +31,7 @@ exports[`MessageComposerUrlPreview > failed entries > renders the failed placeho
         <span
           class="MessageComposerUrlPreview-module_linkCount"
         >
-          1
-           link
+          1 link
         </span>
       </span>
       <span
@@ -47,21 +45,30 @@ exports[`MessageComposerUrlPreview > failed entries > renders the failed placeho
         </button>
         <button
           aria-label="Collapse URL previews"
-          class="MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
+          class="_icon-button_1215g_8 MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
+          data-kind="primary"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
           type="button"
         >
-          <svg
-            aria-hidden="true"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="_indicator-icon_147l5_17"
+            style="--cpd-icon-button-size: 100%;"
           >
-            <path
-              d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
-            />
-          </svg>
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+              />
+            </svg>
+          </div>
         </button>
       </span>
     </div>
@@ -109,20 +116,30 @@ exports[`MessageComposerUrlPreview > failed entries > renders the failed placeho
         </div>
       </div>
       <button
-        class="MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
-        type="button"
+        aria-label="Remove URL preview"
+        class="_icon-button_1215g_8 MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
+        data-kind="primary"
+        role="button"
+        style="--cpd-icon-button-size: 32px;"
+        tabindex="0"
       >
-        <svg
-          fill="currentColor"
-          height="1em"
-          viewBox="0 0 24 24"
-          width="1em"
-          xmlns="http://www.w3.org/2000/svg"
+        <div
+          class="_indicator-icon_147l5_17"
+          style="--cpd-icon-button-size: 100%;"
         >
-          <path
-            d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
-          />
-        </svg>
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+            />
+          </svg>
+        </div>
       </button>
     </div>
   </div>
@@ -142,8 +159,7 @@ exports[`MessageComposerUrlPreview > failed entries > renders the failed summary
       >
         <span>
           <div
-            class="MessageComposerUrlPreview-module_summaryIcon"
-            style="background-color: var(--cpd-color-bg-critical-primary);"
+            class="MessageComposerUrlPreview-module_summaryIcon MessageComposerUrlPreview-module_summaryIconFailed"
           >
             <svg
               fill="currentColor"
@@ -161,8 +177,7 @@ exports[`MessageComposerUrlPreview > failed entries > renders the failed summary
         <span
           class="MessageComposerUrlPreview-module_linkCount"
         >
-          1
-           link
+          1 link
         </span>
       </span>
       <span
@@ -176,21 +191,30 @@ exports[`MessageComposerUrlPreview > failed entries > renders the failed summary
         </button>
         <button
           aria-label="Collapse URL previews"
-          class="MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
+          class="_icon-button_1215g_8 MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
+          data-kind="primary"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
           type="button"
         >
-          <svg
-            aria-hidden="true"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="_indicator-icon_147l5_17"
+            style="--cpd-icon-button-size: 100%;"
           >
-            <path
-              d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
-            />
-          </svg>
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+              />
+            </svg>
+          </div>
         </button>
       </span>
     </div>
@@ -211,8 +235,7 @@ exports[`MessageComposerUrlPreview > loading entries > renders the loading place
       >
         <span>
           <div
-            class="MessageComposerUrlPreview-module_summaryIcon"
-            style="background-color: var(--cpd-color-bg-subtle-primary);"
+            class="MessageComposerUrlPreview-module_summaryIcon MessageComposerUrlPreview-module_summaryIconLoading"
           >
             <svg
               class="_icon_1855a_18"
@@ -234,8 +257,7 @@ exports[`MessageComposerUrlPreview > loading entries > renders the loading place
         <span
           class="MessageComposerUrlPreview-module_linkCount"
         >
-          1
-           link
+          1 link
         </span>
       </span>
       <span
@@ -249,21 +271,30 @@ exports[`MessageComposerUrlPreview > loading entries > renders the loading place
         </button>
         <button
           aria-label="Collapse URL previews"
-          class="MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
+          class="_icon-button_1215g_8 MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
+          data-kind="primary"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
           type="button"
         >
-          <svg
-            aria-hidden="true"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="_indicator-icon_147l5_17"
+            style="--cpd-icon-button-size: 100%;"
           >
-            <path
-              d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
-            />
-          </svg>
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+              />
+            </svg>
+          </div>
         </button>
       </span>
     </div>
@@ -301,7 +332,7 @@ exports[`MessageComposerUrlPreview > loading entries > renders the loading place
             rel="noreferrer noopener"
             target="_blank"
           >
-            Fetching preview...
+            Fetching preview…
           </a>
           <div
             class="LinkPreview-module_siteName MessageComposerUrlPreview-module_linkSiteName"
@@ -315,20 +346,30 @@ exports[`MessageComposerUrlPreview > loading entries > renders the loading place
         </div>
       </div>
       <button
-        class="MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
-        type="button"
+        aria-label="Remove URL preview"
+        class="_icon-button_1215g_8 MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
+        data-kind="primary"
+        role="button"
+        style="--cpd-icon-button-size: 32px;"
+        tabindex="0"
       >
-        <svg
-          fill="currentColor"
-          height="1em"
-          viewBox="0 0 24 24"
-          width="1em"
-          xmlns="http://www.w3.org/2000/svg"
+        <div
+          class="_indicator-icon_147l5_17"
+          style="--cpd-icon-button-size: 100%;"
         >
-          <path
-            d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
-          />
-        </svg>
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+            />
+          </svg>
+        </div>
       </button>
     </div>
   </div>
@@ -348,8 +389,7 @@ exports[`MessageComposerUrlPreview > loading entries > renders the loading summa
       >
         <span>
           <div
-            class="MessageComposerUrlPreview-module_summaryIcon"
-            style="background-color: var(--cpd-color-bg-subtle-primary);"
+            class="MessageComposerUrlPreview-module_summaryIcon MessageComposerUrlPreview-module_summaryIconLoading"
           >
             <svg
               class="_icon_1855a_18"
@@ -371,8 +411,7 @@ exports[`MessageComposerUrlPreview > loading entries > renders the loading summa
         <span
           class="MessageComposerUrlPreview-module_linkCount"
         >
-          1
-           link
+          1 link
         </span>
       </span>
       <span
@@ -386,21 +425,30 @@ exports[`MessageComposerUrlPreview > loading entries > renders the loading summa
         </button>
         <button
           aria-label="Collapse URL previews"
-          class="MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
+          class="_icon-button_1215g_8 MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
+          data-kind="primary"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
           type="button"
         >
-          <svg
-            aria-hidden="true"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="_indicator-icon_147l5_17"
+            style="--cpd-icon-button-size: 100%;"
           >
-            <path
-              d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
-            />
-          </svg>
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+              />
+            </svg>
+          </div>
         </button>
       </span>
     </div>
@@ -422,13 +470,12 @@ exports[`MessageComposerUrlPreview > renders a mix of loaded, loading and failed
         <span>
           <div
             class="MessageComposerUrlPreview-module_summaryIcon"
-            style="background-color: hsl(-1952422089, 100%, var(--icon-lightness));"
+            data-color="4"
           >
             M
           </div>
           <div
-            class="MessageComposerUrlPreview-module_summaryIcon"
-            style="background-color: var(--cpd-color-bg-subtle-primary);"
+            class="MessageComposerUrlPreview-module_summaryIcon MessageComposerUrlPreview-module_summaryIconLoading"
           >
             <svg
               class="_icon_1855a_18"
@@ -447,8 +494,7 @@ exports[`MessageComposerUrlPreview > renders a mix of loaded, loading and failed
             </svg>
           </div>
           <div
-            class="MessageComposerUrlPreview-module_summaryIcon"
-            style="background-color: var(--cpd-color-bg-critical-primary);"
+            class="MessageComposerUrlPreview-module_summaryIcon MessageComposerUrlPreview-module_summaryIconFailed"
           >
             <svg
               fill="currentColor"
@@ -466,9 +512,7 @@ exports[`MessageComposerUrlPreview > renders a mix of loaded, loading and failed
         <span
           class="MessageComposerUrlPreview-module_linkCount"
         >
-          3
-           link
-          s
+          3 links
         </span>
       </span>
       <span
@@ -482,21 +526,30 @@ exports[`MessageComposerUrlPreview > renders a mix of loaded, loading and failed
         </button>
         <button
           aria-label="Collapse URL previews"
-          class="MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
+          class="_icon-button_1215g_8 MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
+          data-kind="primary"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
           type="button"
         >
-          <svg
-            aria-hidden="true"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="_indicator-icon_147l5_17"
+            style="--cpd-icon-button-size: 100%;"
           >
-            <path
-              d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
-            />
-          </svg>
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+              />
+            </svg>
+          </div>
         </button>
       </span>
     </div>
@@ -508,7 +561,7 @@ exports[`MessageComposerUrlPreview > renders a mix of loaded, loading and failed
       >
         <div
           class="MessageComposerUrlPreview-module_entryIcon"
-          style="background-color: hsl(-1952422089, 100%, var(--icon-lightness));"
+          data-color="4"
         >
           M
         </div>
@@ -535,20 +588,30 @@ exports[`MessageComposerUrlPreview > renders a mix of loaded, loading and failed
         </div>
       </div>
       <button
-        class="MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
-        type="button"
+        aria-label="Remove URL preview"
+        class="_icon-button_1215g_8 MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
+        data-kind="primary"
+        role="button"
+        style="--cpd-icon-button-size: 32px;"
+        tabindex="0"
       >
-        <svg
-          fill="currentColor"
-          height="1em"
-          viewBox="0 0 24 24"
-          width="1em"
-          xmlns="http://www.w3.org/2000/svg"
+        <div
+          class="_indicator-icon_147l5_17"
+          style="--cpd-icon-button-size: 100%;"
         >
-          <path
-            d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
-          />
-        </svg>
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+            />
+          </svg>
+        </div>
       </button>
     </div>
     <div
@@ -585,7 +648,7 @@ exports[`MessageComposerUrlPreview > renders a mix of loaded, loading and failed
             rel="noreferrer noopener"
             target="_blank"
           >
-            Fetching preview...
+            Fetching preview…
           </a>
           <div
             class="LinkPreview-module_siteName MessageComposerUrlPreview-module_linkSiteName"
@@ -599,20 +662,30 @@ exports[`MessageComposerUrlPreview > renders a mix of loaded, loading and failed
         </div>
       </div>
       <button
-        class="MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
-        type="button"
+        aria-label="Remove URL preview"
+        class="_icon-button_1215g_8 MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
+        data-kind="primary"
+        role="button"
+        style="--cpd-icon-button-size: 32px;"
+        tabindex="0"
       >
-        <svg
-          fill="currentColor"
-          height="1em"
-          viewBox="0 0 24 24"
-          width="1em"
-          xmlns="http://www.w3.org/2000/svg"
+        <div
+          class="_indicator-icon_147l5_17"
+          style="--cpd-icon-button-size: 100%;"
         >
-          <path
-            d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
-          />
-        </svg>
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+            />
+          </svg>
+        </div>
       </button>
     </div>
     <div
@@ -659,20 +732,30 @@ exports[`MessageComposerUrlPreview > renders a mix of loaded, loading and failed
         </div>
       </div>
       <button
-        class="MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
-        type="button"
+        aria-label="Remove URL preview"
+        class="_icon-button_1215g_8 MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
+        data-kind="primary"
+        role="button"
+        style="--cpd-icon-button-size: 32px;"
+        tabindex="0"
       >
-        <svg
-          fill="currentColor"
-          height="1em"
-          viewBox="0 0 24 24"
-          width="1em"
-          xmlns="http://www.w3.org/2000/svg"
+        <div
+          class="_indicator-icon_147l5_17"
+          style="--cpd-icon-button-size: 100%;"
         >
-          <path
-            d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
-          />
-        </svg>
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+            />
+          </svg>
+        </div>
       </button>
     </div>
   </div>
@@ -693,7 +776,7 @@ exports[`MessageComposerUrlPreview > renders a preview 1`] = `
         <span>
           <div
             class="MessageComposerUrlPreview-module_summaryIcon"
-            style="background-color: hsl(-1952422089, 100%, var(--icon-lightness));"
+            data-color="4"
           >
             M
           </div>
@@ -701,8 +784,7 @@ exports[`MessageComposerUrlPreview > renders a preview 1`] = `
         <span
           class="MessageComposerUrlPreview-module_linkCount"
         >
-          1
-           link
+          1 link
         </span>
       </span>
       <span
@@ -710,21 +792,30 @@ exports[`MessageComposerUrlPreview > renders a preview 1`] = `
       >
         <button
           aria-label="Collapse URL previews"
-          class="MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
+          class="_icon-button_1215g_8 MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
+          data-kind="primary"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
           type="button"
         >
-          <svg
-            aria-hidden="true"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="_indicator-icon_147l5_17"
+            style="--cpd-icon-button-size: 100%;"
           >
-            <path
-              d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
-            />
-          </svg>
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+              />
+            </svg>
+          </div>
         </button>
       </span>
     </div>
@@ -756,8 +847,7 @@ exports[`MessageComposerUrlPreview > renders a preview with an image 1`] = `
         <span
           class="MessageComposerUrlPreview-module_linkCount"
         >
-          1
-           link
+          1 link
         </span>
       </span>
       <span
@@ -765,21 +855,30 @@ exports[`MessageComposerUrlPreview > renders a preview with an image 1`] = `
       >
         <button
           aria-label="Collapse URL previews"
-          class="MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
+          class="_icon-button_1215g_8 MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
+          data-kind="primary"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
           type="button"
         >
-          <svg
-            aria-hidden="true"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="_indicator-icon_147l5_17"
+            style="--cpd-icon-button-size: 100%;"
           >
-            <path
-              d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
-            />
-          </svg>
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+              />
+            </svg>
+          </div>
         </button>
       </span>
     </div>
@@ -801,7 +900,7 @@ exports[`MessageComposerUrlPreview > renders the expanded previews when not coll
         <span>
           <div
             class="MessageComposerUrlPreview-module_summaryIcon"
-            style="background-color: hsl(-1952422089, 100%, var(--icon-lightness));"
+            data-color="4"
           >
             M
           </div>
@@ -809,8 +908,7 @@ exports[`MessageComposerUrlPreview > renders the expanded previews when not coll
         <span
           class="MessageComposerUrlPreview-module_linkCount"
         >
-          1
-           link
+          1 link
         </span>
       </span>
       <span
@@ -824,21 +922,30 @@ exports[`MessageComposerUrlPreview > renders the expanded previews when not coll
         </button>
         <button
           aria-label="Collapse URL previews"
-          class="MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
+          class="_icon-button_1215g_8 MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
+          data-kind="primary"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
           type="button"
         >
-          <svg
-            aria-hidden="true"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="_indicator-icon_147l5_17"
+            style="--cpd-icon-button-size: 100%;"
           >
-            <path
-              d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
-            />
-          </svg>
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+              />
+            </svg>
+          </div>
         </button>
       </span>
     </div>
@@ -850,7 +957,7 @@ exports[`MessageComposerUrlPreview > renders the expanded previews when not coll
       >
         <div
           class="MessageComposerUrlPreview-module_entryIcon"
-          style="background-color: hsl(-1952422089, 100%, var(--icon-lightness));"
+          data-color="4"
         >
           M
         </div>
@@ -877,20 +984,30 @@ exports[`MessageComposerUrlPreview > renders the expanded previews when not coll
         </div>
       </div>
       <button
-        class="MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
-        type="button"
+        aria-label="Remove URL preview"
+        class="_icon-button_1215g_8 MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
+        data-kind="primary"
+        role="button"
+        style="--cpd-icon-button-size: 32px;"
+        tabindex="0"
       >
-        <svg
-          fill="currentColor"
-          height="1em"
-          viewBox="0 0 24 24"
-          width="1em"
-          xmlns="http://www.w3.org/2000/svg"
+        <div
+          class="_indicator-icon_147l5_17"
+          style="--cpd-icon-button-size: 100%;"
         >
-          <path
-            d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
-          />
-        </svg>
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+            />
+          </svg>
+        </div>
       </button>
     </div>
   </div>

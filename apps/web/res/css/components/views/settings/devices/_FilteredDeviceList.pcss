@@ -15,9 +15,9 @@ Please see LICENSE files in the repository root for full details.
 .mx_FilteredDeviceList_list {
     list-style-type: none;
     display: grid;
-    gap: $spacing-16;
+    gap: var(--cpd-space-4x);
     margin: 0;
-    padding: 0 $spacing-16;
+    padding: 0 var(--cpd-space-4x);
 }
 
 .mx_FilteredDeviceList_listItem {
@@ -26,13 +26,13 @@ Please see LICENSE files in the repository root for full details.
 }
 
 .mx_FilteredDeviceList_securityCard {
-    margin-bottom: $spacing-32;
+    margin-bottom: var(--cpd-space-8x);
 }
 
 .mx_FilteredDeviceList_noResults {
     width: 100%;
     text-align: center;
-    margin-bottom: $spacing-32;
+    margin-bottom: var(--cpd-space-8x);
 }
 
 .mx_FilteredDeviceList_headerButton {
@@ -40,7 +40,7 @@ Please see LICENSE files in the repository root for full details.
     /* override inline button styling */
     display: flex !important;
     flex-direction: row;
-    gap: $spacing-8;
+    gap: var(--cpd-space-2x);
 }
 
 .mx_FilteredDeviceList_deviceDetails {

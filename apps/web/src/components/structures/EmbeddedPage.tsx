@@ -101,7 +101,7 @@ export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
         // We use fetch to inline the page into the react component
         // so that it can inherit CSS and theming easily rather than mess around
         // with iframes and trying to synchronise document.stylesheets.
-        this.fetchEmbed();
+        void this.fetchEmbed();
 
         this.dispatcherRef = dis.register(this.onAction);
     }

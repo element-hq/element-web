@@ -10,8 +10,20 @@ import { RoomNotificationStateStore } from "../../../notifications/RoomNotificat
 import { getMarkedUnreadState } from "../../../../utils/notifications";
 
 export class UnreadFilter implements Filter {
+    /**
+     * Creates a new UnreadFilter.
+     * @param activityIsUnread - If true, the filter will match rooms with any activity (including notifications). If false, it will only match rooms with unread messages.
+     */
+    public constructor(private readonly activityIsUnread: boolean) {}
+
     public matches(room: Room): boolean {
-        return RoomNotificationStateStore.instance.getRoomState(room).hasUnreadCount || !!getMarkedUnreadState(room);
+        // If the user marked this room as unread, it's unread
+        if (getMarkedUnreadState(room)) {
+            return true;
+        }
+
+        const notifState = RoomNotificationStateStore.instance.getRoomState(room);
+        return this.activityIsUnread ? notifState.hasAnyNotificationOrActivity : notifState.hasUnreadCount;
     }
 
     public get key(): FilterEnum.UnreadFilter {

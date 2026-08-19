@@ -5,12 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+// @vitest-environment happy-dom
+
 import { vi, describe, it, expect, type Mock, beforeAll, afterAll } from "vitest";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { MessageComposerUrlPreviewViewModel } from "./MessageComposerUrlPreviewViewModel";
 import { type MessageComposerUrlPreviewSnapshotEntry } from "@element-hq/web-shared-components";
-import { sleep } from "matrix-js-sdk/src/utils";
 
 const IMAGE_MXC = "mxc://example.org/abc";
 const BASIC_PREVIEW_OGDATA = {
@@ -61,7 +62,6 @@ describe("MessageComposerUrlPreviewViewModel", () => {
           {
             "content": "",
             "entries": [],
-            "isModified": false,
           }
         `);
     });
@@ -70,26 +70,46 @@ describe("MessageComposerUrlPreviewViewModel", () => {
         const { vm, client } = getViewModel();
         client.getUrlPreview.mockResolvedValueOnce(BASIC_PREVIEW_OGDATA);
         vm.updateWithText({ content: "Check out https://example.org today", debounced: false });
-        await sleep(100); // wait for update to complete
-        expect(vm.getSnapshot()).toMatchSnapshot();
+        await vi.waitFor(() => {
+            expect(vm.getSnapshot()).toEqual({
+                content: "Check out https://example.org today",
+                entries: [
+                    {
+                        include: true,
+                        matched_url: "https://example.org",
+                        preview: {
+                            description: "This is a description",
+                            link: "https://example.org",
+                            ogUrl: "https://example.org",
+                            showTooltipOnLink: false,
+                            siteName: "Example.org",
+                            title: "This is an example!",
+                        },
+                        status: "loaded",
+                    },
+                ],
+            });
+        });
     });
 
     it("should return empty list when preview is not visible", async () => {
         const { vm, client } = getViewModel({ visible: false });
         vm.updateWithText({ content: "https://example.org", debounced: false });
-        await sleep(100); // wait for update to complete
-        expect(vm.getSnapshot().entries).toHaveLength(0);
-        expect(client.getUrlPreview).not.toHaveBeenCalled();
+        await vi.waitFor(() => {
+            expect(vm.getSnapshot().entries).toHaveLength(0);
+            expect(client.getUrlPreview).not.toHaveBeenCalled();
+        });
     });
 
     it("should return list of failed previews when all URL fetches fail", async () => {
         const { vm, client } = getViewModel();
         client.getUrlPreview.mockRejectedValue(new Error("Forced test failure"));
         vm.updateWithText({ content: "https://example.org", debounced: false });
-        await sleep(100); // wait for update to complete
-        expect(vm.getSnapshot().entries.map(getEntrySummary)).toEqual([
-            { matched_url: "https://example.org", include: true, status: "failed" },
-        ]);
+        await vi.waitFor(() => {
+            expect(vm.getSnapshot().entries.map(getEntrySummary)).toEqual([
+                { matched_url: "https://example.org", include: true, status: "failed" },
+            ]);
+        });
     });
 
     it("should use all URLs with a valid preview when multiple are given", async () => {
@@ -98,19 +118,20 @@ describe("MessageComposerUrlPreviewViewModel", () => {
             .mockRejectedValueOnce(new Error("First URL failed"))
             .mockResolvedValueOnce(BASIC_PREVIEW_OGDATA);
         vm.updateWithText({ content: "https://example.org/one https://example.org/two", debounced: false });
-        await sleep(100); // wait for update to complete
-        expect(vm.getSnapshot().entries.map(getEntrySummary)).toEqual([
-            {
-                matched_url: "https://example.org/one",
-                status: "failed",
-                include: true,
-            },
-            {
-                matched_url: "https://example.org/two",
-                status: "loaded",
-                include: true,
-            },
-        ]);
+        await vi.waitFor(() => {
+            expect(vm.getSnapshot().entries.map(getEntrySummary)).toEqual([
+                {
+                    matched_url: "https://example.org/one",
+                    status: "failed",
+                    include: true,
+                },
+                {
+                    matched_url: "https://example.org/two",
+                    status: "loaded",
+                    include: true,
+                },
+            ]);
+        });
     });
 
     it("should not re-fetch when text changes but the URL set does not", async () => {
@@ -118,8 +139,9 @@ describe("MessageComposerUrlPreviewViewModel", () => {
         client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
         vm.updateWithText({ content: "https://example.org", debounced: false });
         vm.updateWithText({ content: "https://example.org some extra words", debounced: false });
-        await sleep(100); // wait for update to complete
-        expect(client.getUrlPreview).toHaveBeenCalledTimes(1);
+        await vi.waitFor(() => {
+            expect(client.getUrlPreview).toHaveBeenCalledTimes(1);
+        });
     });
 
     it("should deduplicate repeated URLs", async () => {
@@ -129,30 +151,35 @@ describe("MessageComposerUrlPreviewViewModel", () => {
             content: "https://example.org https://example.org https://example.org",
             debounced: false,
         });
-        await sleep(100); // wait for update to complete
-        expect(client.getUrlPreview).toHaveBeenCalledTimes(1);
+        await vi.waitFor(() => {
+            expect(client.getUrlPreview).toHaveBeenCalledTimes(1);
+        });
     });
 
     it("should hide preview when made invisible", async () => {
         const { vm, client } = getViewModel();
         client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
         vm.updateWithText({ content: "https://example.org", debounced: false });
-        await sleep(100); // wait for update to complete
-        expect(vm.getSnapshot().entries).not.toHaveLength(0);
+        await vi.waitFor(() => {
+            expect(vm.getSnapshot().entries).not.toHaveLength(0);
+        });
         vm.updateUrlPreviewVisible(false);
-        await sleep(100); // wait for update to complete
-        expect(vm.getSnapshot().entries).toHaveLength(0);
+        await vi.waitFor(() => {
+            expect(vm.getSnapshot().entries).toHaveLength(0);
+        });
     });
 
     it("should restore preview when made visible again", async () => {
         const { vm, client } = getViewModel({ visible: false });
         client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
         vm.updateWithText({ content: "https://example.org", debounced: false });
-        await sleep(100); // wait for update to complete
-        expect(vm.getSnapshot().entries).toHaveLength(0);
+        await vi.waitFor(() => {
+            expect(vm.getSnapshot().entries).toHaveLength(0);
+        });
         vm.updateUrlPreviewVisible(true);
-        await sleep(100); // wait for update to complete
-        expect(vm.getSnapshot().entries).not.toHaveLength(0);
+        await vi.waitFor(() => {
+            expect(vm.getSnapshot().entries).not.toHaveLength(0);
+        });
     });
 
     it("should preview a URL with media", async () => {
@@ -173,7 +200,33 @@ describe("MessageComposerUrlPreviewViewModel", () => {
             return "https://example.org/image/src";
         });
         vm.updateWithText({ content: "https://example.org", debounced: false });
-        await sleep(100); // wait for update to complete
-        expect(vm.getSnapshot()).toMatchSnapshot();
+        await vi.waitFor(() => {
+            expect(vm.getSnapshot()).toEqual({
+                content: "https://example.org",
+                entries: [
+                    {
+                        include: true,
+                        matched_url: "https://example.org",
+                        preview: {
+                            image: {
+                                fileSize: 10000,
+                                height: 128,
+                                imageFull: "https://example.org/image/src",
+                                imageThumb: "https://example.org/image/thumb",
+                                mxcImageFull: "mxc://example.org/abc",
+                                playable: false,
+                                width: 128,
+                            },
+                            link: "https://example.org",
+                            ogUrl: "https://example.org",
+                            showTooltipOnLink: false,
+                            siteName: "example.org",
+                            title: "Media example",
+                        },
+                        status: "loaded",
+                    },
+                ],
+            });
+        });
     });
 });

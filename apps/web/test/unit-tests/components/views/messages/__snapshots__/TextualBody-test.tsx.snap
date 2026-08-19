@@ -137,7 +137,9 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for an 
 exports[`<TextualBody /> renders formatted m.text correctly pills appear for event permalinks without a custom label 1`] = `
 <DocumentFragment>
   <div
-    class="mx_MTextBody mx_EventTile_content _root_dlp6w_8 _text_dlp6w_13"
+    class="mx_MTextBody mx_EventTile_content _root_j01hv_8 _text_j01hv_24"
+    data-event-density="default"
+    data-event-layout="group"
   >
     <div
       class="mx_EventTile_body markdown-body translate"
@@ -156,6 +158,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for eve
             data-color="1"
             data-testid="avatar-img"
             data-type="round"
+            role="img"
             style="--cpd-avatar-size: 16px;"
           >
             <img
@@ -184,7 +187,9 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for eve
 exports[`<TextualBody /> renders formatted m.text correctly pills appear for room links with vias 1`] = `
 <DocumentFragment>
   <div
-    class="mx_MTextBody mx_EventTile_content _root_dlp6w_8 _text_dlp6w_13"
+    class="mx_MTextBody mx_EventTile_content _root_j01hv_8 _text_j01hv_24"
+    data-event-density="default"
+    data-event-layout="group"
   >
     <div
       class="mx_EventTile_body markdown-body translate"
@@ -203,6 +208,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for roo
             data-color="1"
             data-testid="avatar-img"
             data-type="round"
+            role="img"
             style="--cpd-avatar-size: 16px;"
           >
             <img
@@ -232,7 +238,9 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for roo
 exports[`<TextualBody /> renders formatted m.text correctly pills do not appear for event permalinks with a custom label 1`] = `
 <DocumentFragment>
   <div
-    class="mx_MTextBody mx_EventTile_content _root_dlp6w_8 _text_dlp6w_13"
+    class="mx_MTextBody mx_EventTile_content _root_j01hv_8 _text_j01hv_24"
+    data-event-density="default"
+    data-event-layout="group"
   >
     <div
       class="mx_EventTile_body markdown-body translate"
@@ -541,6 +549,7 @@ exports[`<TextualBody /> renders formatted m.text correctly spoilers get injecte
   Hey 
   <button
     class="mx_EventTile_spoiler"
+    type="button"
   >
     <span
       class="mx_EventTile_spoiler_reason"
@@ -599,7 +608,7 @@ exports[`<TextualBody /> renders plain-text m.text correctly should pillify a ke
 
 exports[`<TextualBody /> renders plain-text m.text correctly should pillify a permalink to a message in the same room with the label »Message from Member« 1`] = `"Visit <bdi><a class="mx_Pill mx_EventPill" href="https://matrix.to/#/!room1:example.com/%event_id%"><span aria-label="Profile picture" aria-hidden="true" data-testid="avatar-img" data-type="round" data-color="2" class="_avatar_va14e_8 mx_BaseAvatar" style="--cpd-avatar-size: 16px;"><img loading="lazy" alt="" referrerpolicy="no-referrer" class="_image_va14e_43" data-type="round" width="16px" height="16px" src="mxc://avatar.url/image.png"></span><span class="mx_Pill_text">Message from Member</span></a></bdi>"`;
 
-exports[`<TextualBody /> renders plain-text m.text correctly should pillify a permalink to an event in another room with the label »Message in Room 2« 1`] = `"Visit <bdi><a class="mx_Pill mx_EventPill" href="https://matrix.to/#/!room2:example.com/%event_id%"><span aria-label="Avatar" aria-hidden="true" data-testid="avatar-img" data-type="round" data-color="2" class="_avatar_va14e_8 mx_BaseAvatar" style="--cpd-avatar-size: 16px;"><img loading="lazy" alt="" referrerpolicy="no-referrer" class="_image_va14e_43" data-type="round" width="16px" height="16px" src="mxc://avatar.url/room.png"></span><span class="mx_Pill_text">Message in Room 2</span></a></bdi>"`;
+exports[`<TextualBody /> renders plain-text m.text correctly should pillify a permalink to an event in another room with the label »Message in Room 2« 1`] = `"Visit <bdi><a class="mx_Pill mx_EventPill" href="https://matrix.to/#/!room2:example.com/%event_id%"><span role="img" aria-label="Avatar" aria-hidden="true" data-testid="avatar-img" data-type="round" data-color="2" class="_avatar_va14e_8 mx_BaseAvatar" style="--cpd-avatar-size: 16px;"><img loading="lazy" alt="" referrerpolicy="no-referrer" class="_image_va14e_43" data-type="round" width="16px" height="16px" src="mxc://avatar.url/room.png"></span><span class="mx_Pill_text">Message in Room 2</span></a></bdi>"`;
 
 exports[`<TextualBody /> renders plain-text m.text correctly should pillify a permalink to an unknown message in the same room with the label »Message« 1`] = `
 <div

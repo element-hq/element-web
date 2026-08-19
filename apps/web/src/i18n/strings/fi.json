@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Emoji-valitsin",
         "jump_first_invite": "Siirry ensimmäiseen kutsuun.",
         "message_composer": "Viestin kirjoitusikkuna",
         "n_unread_messages": {
@@ -476,7 +475,6 @@
         "message_layout": "Viestien asettelu",
         "message_timestamp_invalid": "Virheellinen aikaleima",
         "microphone": "Mikrofoni",
-        "model": "Malli",
         "modern": "Moderni",
         "mute": "Mykistä",
         "n_members": {
@@ -752,22 +750,6 @@
     },
     "dialog_close_label": "Sulje dialogi",
     "download_completed": "Lataus valmis",
-    "emoji": {
-        "categories": "Luokat",
-        "category_activities": "Aktiviteetit",
-        "category_animals_nature": "Eläimet ja luonto",
-        "category_flags": "Liput",
-        "category_food_drink": "Ruoka ja juoma",
-        "category_frequently_used": "Usein käytetyt",
-        "category_objects": "Esineet",
-        "category_smileys_people": "Hymiöt ja ihmiset",
-        "category_symbols": "Symbolit",
-        "category_travel_places": "Matkustaminen ja paikat",
-        "quick_reactions": "Pikareaktiot"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Peruuta haku"
-    },
     "empty_room": "Tyhjä huone",
     "empty_room_was_name": "Tyhjä huone (oli %(oldName)s)",
     "encryption": {
@@ -1381,7 +1363,6 @@
         "mentions_and_keywords": "Vain @maininnat ja vastaukset",
         "mentions_and_keywords_description": "Saat ilmoituksia vain maininnoista, vastauksista ja avainsanoista <a>asetuksissa</a> määrittämälläsi tavalla",
         "mentions_keywords": "Maininnat ja avainsanat",
-        "message_didnt_send": "Viestiä ei lähetetty. Lisätietoa napsauttamalla.",
         "mute_description": "Et saa ilmoituksia"
     },
     "notifier": {
@@ -2313,7 +2294,6 @@
         "send_typing_notifications": "Lähetä kirjoitusilmoituksia",
         "sessions": {
             "best_security_note": "Parhaan turvallisuuden takaamiseksi vahvista istuntosi ja poista istunnot, joita et tunnista tai et enää käytä.",
-            "browser": "Selain",
             "confirm_sign_out": {
                 "one": "Vahvista tämän laitteen poistaminen",
                 "other": "Vahvista näiden laitteiden poistaminen"
@@ -2360,7 +2340,6 @@
             "no_sessions": "Istuntoja ei löytynyt.",
             "no_unverified_sessions": "Vahvistamattomia istuntoja ei löytynyt.",
             "no_verified_sessions": "Vahvistettuja istuntoja ei löytynyt.",
-            "os": "Käyttöjärjestelmä",
             "other_sessions_heading": "Muut istunnot",
             "push_heading": "Push-ilmoitukset",
             "push_subheading": "Vastaanota push-ilmoituksia tässä istunnossa.",

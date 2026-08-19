@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Emoji-vælger",
         "jump_first_invite": "Gå til første invitation.",
         "message_composer": "Skriv besked",
         "n_unread_messages": {
@@ -463,7 +462,6 @@
         "message": "Besked",
         "message_layout": "Besked-layout",
         "microphone": "Mikrofon",
-        "model": "Model",
         "modern": "Moderne",
         "mute": "Sæt på lydløs",
         "n_members": {
@@ -785,22 +783,6 @@
         "widget_screenshots": "Aktivér widget-skærmbilleder på understøttede widgets"
     },
     "dialog_close_label": "Luk dialogboksen",
-    "emoji": {
-        "categories": "Kategorier",
-        "category_activities": "Aktiviteter",
-        "category_animals_nature": "Dyr og natur",
-        "category_flags": "Flag",
-        "category_food_drink": "Mad og drikke",
-        "category_frequently_used": "Ofte brugt",
-        "category_objects": "Objekter",
-        "category_smileys_people": "Smileys og mennesker",
-        "category_symbols": "Symboler",
-        "category_travel_places": "Rejser og steder",
-        "quick_reactions": "Hurtige reaktioner"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Annullér søgning"
-    },
     "empty_room": "Tom klynge",
     "empty_room_was_name": "Tomt rum (var %(oldName)s)",
     "encryption": {
@@ -1462,7 +1444,6 @@
         "mentions_and_keywords": "@omtaler og søgeord",
         "mentions_and_keywords_description": "Få kun notifikationer for omtaler og søgeord som konfigureret under <a>indstillinger</a>",
         "mentions_keywords": "Omtaler og nøgleord",
-        "message_didnt_send": "Beskeden blev ikke sendt. Klik for mere information.",
         "mute_description": "Du vil ikke modtage nogen notifikationer"
     },
     "notifier": {
@@ -2375,7 +2356,6 @@
         "send_typing_notifications": "Send indtastningsmeddelelser",
         "sessions": {
             "best_security_note": "For at opnå den bedste sikkerhed skal du bekræfte dine sessioner og logge ud fra enhver session, som du ikke genkender eller bruger længere.",
-            "browser": "Browser",
             "confirm_sign_out": {
                 "one": "Bekræft fjernelse af denne enhed",
                 "other": "Bekræft fjernelse af disse enheder"
@@ -2424,7 +2404,6 @@
             "no_sessions": "Der blev ikke fundet nogen sessioner",
             "no_unverified_sessions": "Ingen ikke-verificerede sessioner fundet.",
             "no_verified_sessions": "Ingen verificerede sessioner fundet.",
-            "os": "Operativsystem",
             "other_sessions_heading": "Andre sessioner",
             "push_heading": "Push-meddelelser",
             "push_subheading": "Modtag push-meddelelser for denne session.",
