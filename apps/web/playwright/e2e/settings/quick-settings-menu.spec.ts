@@ -17,4 +17,24 @@ test.describe("Quick settings menu", () => {
 
         await expect(axe).toHaveNoViolations();
     });
+
+    test("should show the theme options without scrolling", async ({ page, user }) => {
+        await page.getByRole("button", { name: "Quick settings" }).click();
+        await page.getByRole("button", { name: "Theme" }).click();
+
+        const menu = page.locator(".mx_QuickThemeSwitcher .mx_Dropdown_menu");
+        await expect(menu).toBeVisible();
+        // Guard: the built-in themes plus "Match system" are what makes the menu overflow, so the
+        // assertion below is meaningless if the list came up short.
+        expect(await menu.getByRole("option").count()).toBeGreaterThanOrEqual(3);
+
+        // The menu is not a scroll container: nothing is hidden above or below its visible box.
+        expect(await menu.evaluate((el) => el.scrollHeight - el.clientHeight)).toBe(0);
+
+        // ...and the taller menu still lands on screen. Quick settings sits at the bottom of the
+        // window, so simply uncapping a menu that drops downwards trades the scroll bar for an
+        // option below the fold, which is worse.
+        const menuBottom = await menu.evaluate((el) => el.getBoundingClientRect().bottom);
+        expect(menuBottom).toBeLessThanOrEqual(page.viewportSize()!.height);
+    });
 });

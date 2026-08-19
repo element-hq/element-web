@@ -288,4 +288,58 @@ describe("RolesRoomSettingsTab", () => {
             }),
         );
     });
+
+    describe("permission power levels", () => {
+        const mockPowerLevels = (content: object, myLevel: number): void => {
+            mocked(cli.getRoom).mockReturnValue(room);
+            // @ts-ignore - mocked doesn't support overloads properly
+            mocked(room.currentState.getStateEvents).mockImplementation((type, key) => {
+                if (key === undefined) return [] as MatrixEvent[];
+                if (type === "m.room.power_levels") {
+                    return new MatrixEvent({
+                        sender: "@sender:server",
+                        room_id: roomId,
+                        type: "m.room.power_levels",
+                        state_key: "",
+                        content,
+                    });
+                }
+                return null;
+            });
+            mocked(room.currentState.mayClientSendStateEvent).mockReturnValue(true);
+            mocked(room.getMember).mockReturnValue({ powerLevel: myLevel } as any);
+        };
+
+        const optionsOf = (container: HTMLElement, label: string): (string | null)[] =>
+            Array.from(container.querySelectorAll(`[placeholder="${label}"] option`)).map((o) => o.textContent);
+
+        it("does not offer a moderator power levels above their own", async () => {
+            mockPowerLevels(
+                { users: { [cli.getUserId()!]: 50 }, state_default: 50, events: { [EventType.RoomTopic]: 50 } },
+                50,
+            );
+            const { container } = await renderTab();
+
+            expect(optionsOf(container, "Change settings")).toEqual(["Default", "Moderator", "Custom level"]);
+            expect(optionsOf(container, "Change topic")).toEqual(["Default", "Moderator", "Custom level"]);
+        });
+
+        it("offers an admin every power level", async () => {
+            mockPowerLevels(
+                { users: { [cli.getUserId()!]: 100 }, state_default: 50, events: { [EventType.RoomTopic]: 50 } },
+                100,
+            );
+            const { container } = await renderTab();
+
+            expect(optionsOf(container, "Change settings")).toEqual(["Default", "Moderator", "Admin", "Custom level"]);
+        });
+
+        it("keeps showing a level above the user's own when it is already set", async () => {
+            mockPowerLevels({ users: { [cli.getUserId()!]: 50 }, state_default: 100 }, 50);
+            const { container } = await renderTab();
+
+            expect(optionsOf(container, "Change settings")).toEqual(["Default", "Moderator", "Admin", "Custom level"]);
+            expect(container.querySelector(`[placeholder="Change settings"]`)).toBeDisabled();
+        });
+    });
 });

@@ -5,10 +5,29 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { vi } from "vitest";
+import { vi, beforeEach } from "vitest";
+import { PredictableRandom } from "test-utils/predictableRandom.ts";
+import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
 import { mocks } from "../../test/setup/mocks.ts";
 import SdkConfig, { DEFAULTS } from "../SdkConfig";
+
+// Fake random strings to give a predictable snapshot for IDs
+vi.mock("matrix-js-sdk/src/randomstring");
+beforeEach(() => {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const mockRandom = new PredictableRandom();
+    // needless to say, the mock is not cryptographically secure
+    vi.mocked(secureRandomString).mockImplementation((len) => {
+        let ret = "";
+        for (let i = 0; i < len; ++i) {
+            const v = mockRandom.get() * chars.length;
+            const m = ((v % chars.length) + chars.length) % chars.length; // account for negative modulo
+            ret += chars.charAt(Math.floor(m));
+        }
+        return ret;
+    });
+});
 
 // set up AudioContext API mock
 vi.stubGlobal("AudioContext", function () {

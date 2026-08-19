@@ -8,6 +8,7 @@
 // @vitest-environment happy-dom
 
 import { vi, describe, it, expect, afterEach } from "vitest";
+import { type PointerEvent } from "react";
 
 import { waitFor } from "test-utils-rtl";
 import { type PanelImperativeHandle } from "@element-hq/web-shared-components";
@@ -16,6 +17,9 @@ import { ResizerViewModel } from "./ResizerViewModel";
 import SettingsStore from "../../settings/SettingsStore";
 import { SettingLevel } from "../../settings/SettingLevel";
 import { CallStore } from "../../stores/CallStore";
+
+/** The pointer handlers only read where the pointer is, so that is all a test has to give them. */
+const pointerAt = (x: number, y: number) => ({ clientX: x, clientY: y }) as PointerEvent;
 
 describe("LeftPanelResizerViewModel", () => {
     afterEach(() => {
@@ -67,7 +71,7 @@ describe("LeftPanelResizerViewModel", () => {
         const vm = new ResizerViewModel(CallStore.instance);
         expect(() => {
             // Click
-            vm.onPointerDown();
+            vm.onPointerDown(pointerAt(100, 100));
             vm.onPointerUp();
         }).not.toThrow();
     });
@@ -86,11 +90,47 @@ describe("LeftPanelResizerViewModel", () => {
         vm.setPanelHandle(mockHandle);
 
         // Simulate drag
-        vm.onPointerDown();
-        vm.onPointerMove();
+        vm.onPointerDown(pointerAt(100, 100));
+        vm.onPointerMove(pointerAt(160, 100));
         vm.onPointerUp();
 
         expect(mockHandle.resize).not.toHaveBeenCalledWith("34%");
+    });
+
+    it("should expand panel when a click wanders a little", () => {
+        const vm = new ResizerViewModel(CallStore.instance);
+        SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
+        const mockHandle = {
+            resize: vi.fn(),
+            isCollapsed: vi.fn().mockReturnValue(true),
+            getSize: vi.fn().mockReturnValue(0),
+        } as unknown as PanelImperativeHandle;
+        vm.setPanelHandle(mockHandle);
+
+        // A trackpad rarely holds the pointer still between press and release.
+        vm.onPointerDown(pointerAt(100, 100));
+        vm.onPointerMove(pointerAt(101, 102));
+        vm.onPointerUp();
+
+        expect(mockHandle.resize).toHaveBeenCalledWith("34%");
+    });
+
+    it("should expand panel on a click that follows moving across the separator", () => {
+        const vm = new ResizerViewModel(CallStore.instance);
+        SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
+        const mockHandle = {
+            resize: vi.fn(),
+            isCollapsed: vi.fn().mockReturnValue(true),
+            getSize: vi.fn().mockReturnValue(0),
+        } as unknown as PanelImperativeHandle;
+        vm.setPanelHandle(mockHandle);
+
+        // Pointer moves fire on hover too, with no button held.
+        vm.onPointerMove(pointerAt(300, 300));
+        vm.onPointerDown(pointerAt(100, 100));
+        vm.onPointerUp();
+
+        expect(mockHandle.resize).toHaveBeenCalledWith("34%");
     });
 
     describe("should expand panel on double click when panel is collapsed", () => {
@@ -104,7 +144,7 @@ describe("LeftPanelResizerViewModel", () => {
             } as unknown as PanelImperativeHandle;
             vm.setPanelHandle(mockHandle);
             // Simulate click
-            vm.onPointerDown();
+            vm.onPointerDown(pointerAt(100, 100));
             vm.onPointerUp();
             expect(mockHandle.resize).toHaveBeenCalledWith("34%");
         });
@@ -118,7 +158,7 @@ describe("LeftPanelResizerViewModel", () => {
             } as unknown as PanelImperativeHandle;
             vm.setPanelHandle(mockHandle);
             // Simulate click
-            vm.onPointerDown();
+            vm.onPointerDown(pointerAt(100, 100));
             vm.onPointerUp();
             expect(mockHandle.resize).toHaveBeenCalledWith("100%");
         });
