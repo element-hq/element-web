@@ -299,7 +299,12 @@ Please see LICENSE files in the repository root for full details.
 }
 
 .mx_InviteDialog_multiInviterErrorWrapper .mx_Dialog {
-    max-width: 600px;
+    width: 600px;
+    max-width: 100%;
+
+    .mx_Dialog_fixedWidth {
+        width: auto;
+    }
 }
 
 .mx_InviteDialog_multiInviterError {
