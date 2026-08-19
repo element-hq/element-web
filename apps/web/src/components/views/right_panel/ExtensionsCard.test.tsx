@@ -6,22 +6,29 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import React from "react";
-import { mocked, type Mocked } from "jest-mock";
-import { render, screen } from "jest-matrix-react";
+import { describe, it, expect, beforeEach, vi, type Mocked } from "vitest";
+import { render, screen } from "test-utils-rtl";
 import { type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import { MatrixWidgetType } from "matrix-widget-api";
 import userEvent from "@testing-library/user-event";
+import { clientAndSDKContextRenderOptions, stubClient, TestSDKContext } from "test-utils";
 
-import ExtensionsCard from "../../../../../src/components/views/right_panel/ExtensionsCard";
-import { clientAndSDKContextRenderOptions, stubClient } from "../../../../test-utils";
-import { type IApp } from "../../../../../src/stores/WidgetStore";
-import WidgetUtils, { useWidgets } from "../../../../../src/utils/WidgetUtils";
-import { WidgetLayoutStore } from "../../../../../src/stores/widgets/WidgetLayoutStore";
-import { IntegrationManagers } from "../../../../../src/integrations/IntegrationManagers";
-import { TestSDKContext } from "../../../TestSDKContext.ts";
+import ExtensionsCard from "./ExtensionsCard";
+import { type IApp } from "../../../stores/WidgetStore";
+import WidgetUtils, { useWidgets } from "../../../utils/WidgetUtils";
+import { WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
+import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 
-jest.mock("../../../../../src/utils/WidgetUtils");
+vi.mock("../../../utils/WidgetUtils");
+
+vi.mock("../../../../res/img/element-icons/room/default_app.svg", () => ({ default: "image-file-stub" }));
+vi.mock("../../../../res/img/element-icons/room/default_video.svg", () => ({ default: "image-file-stub" }));
+vi.mock("../../../../res/img/element-icons/room/default_cal.svg", () => ({ default: "image-file-stub" }));
+vi.mock("../../../../res/img/element-icons/room/default_doc.svg", () => ({ default: "image-file-stub" }));
+vi.mock("../../../../res/img/element-icons/room/default_clock.svg", () => ({ default: "image-file-stub" }));
 
 describe("<ExtensionsCard />", () => {
     let client: Mocked<MatrixClient>;
@@ -29,17 +36,17 @@ describe("<ExtensionsCard />", () => {
     let sdkContext: TestSDKContext;
 
     beforeEach(() => {
-        client = mocked(stubClient());
+        client = vi.mocked(stubClient());
         sdkContext = new TestSDKContext();
         sdkContext._client = client;
         room = new Room("!room:server", client, client.getSafeUserId());
-        mocked(WidgetUtils.getWidgetName).mockImplementation((app) => app?.name ?? "No Name");
+        vi.mocked(WidgetUtils.getWidgetName).mockImplementation((app) => app?.name ?? "No Name");
     });
 
     it("should render empty state", () => {
-        mocked(useWidgets).mockReturnValue([]);
+        vi.mocked(useWidgets).mockReturnValue([]);
         const { asFragment } = render(
-            <ExtensionsCard room={room} onClose={jest.fn()} />,
+            <ExtensionsCard room={room} onClose={vi.fn()} />,
             clientAndSDKContextRenderOptions(client, sdkContext),
         );
         expect(screen.getByText("Boost productivity with more tools, widgets and bots")).toBeInTheDocument();
@@ -47,7 +54,7 @@ describe("<ExtensionsCard />", () => {
     });
 
     it("should render widgets", async () => {
-        mocked(useWidgets).mockReturnValue([
+        vi.mocked(useWidgets).mockReturnValue([
             {
                 id: "id",
                 roomId: room.roomId,
@@ -69,7 +76,7 @@ describe("<ExtensionsCard />", () => {
         ] satisfies IApp[]);
 
         const { asFragment } = render(
-            <ExtensionsCard room={room} onClose={jest.fn()} />,
+            <ExtensionsCard room={room} onClose={vi.fn()} />,
             clientAndSDKContextRenderOptions(client, sdkContext),
         );
         expect(screen.getByText("Custom Widget")).toBeInTheDocument();
@@ -78,8 +85,8 @@ describe("<ExtensionsCard />", () => {
     });
 
     it("should show context menu on widget row", async () => {
-        jest.spyOn(WidgetUtils, "canUserModifyWidgets").mockReturnValue(true);
-        mocked(useWidgets).mockReturnValue([
+        vi.spyOn(WidgetUtils, "canUserModifyWidgets").mockReturnValue(true);
+        vi.mocked(useWidgets).mockReturnValue([
             {
                 id: "id",
                 roomId: room.roomId,
@@ -92,7 +99,7 @@ describe("<ExtensionsCard />", () => {
         ] satisfies IApp[]);
 
         const { container } = render(
-            <ExtensionsCard room={room} onClose={jest.fn()} />,
+            <ExtensionsCard room={room} onClose={vi.fn()} />,
             clientAndSDKContextRenderOptions(client, sdkContext),
         );
         await userEvent.click(container.querySelector(".mx_ExtensionsCard_app_options")!);
@@ -100,8 +107,8 @@ describe("<ExtensionsCard />", () => {
     });
 
     it("should show set room layout button", async () => {
-        jest.spyOn(WidgetLayoutStore.instance, "canCopyLayoutToRoom").mockReturnValue(true);
-        mocked(useWidgets).mockReturnValue([
+        vi.spyOn(WidgetLayoutStore.instance, "canCopyLayoutToRoom").mockReturnValue(true);
+        vi.mocked(useWidgets).mockReturnValue([
             {
                 id: "id",
                 roomId: room.roomId,
@@ -113,16 +120,13 @@ describe("<ExtensionsCard />", () => {
             },
         ] satisfies IApp[]);
 
-        render(
-            <ExtensionsCard room={room} onClose={jest.fn()} />,
-            clientAndSDKContextRenderOptions(client, sdkContext),
-        );
+        render(<ExtensionsCard room={room} onClose={vi.fn()} />, clientAndSDKContextRenderOptions(client, sdkContext));
         expect(screen.getByText("Set layout for everyone")).toBeInTheDocument();
     });
 
     it("should show widget as pinned", async () => {
-        jest.spyOn(WidgetLayoutStore.instance, "isInContainer").mockReturnValue(true);
-        mocked(useWidgets).mockReturnValue([
+        vi.spyOn(WidgetLayoutStore.instance, "isInContainer").mockReturnValue(true);
+        vi.mocked(useWidgets).mockReturnValue([
             {
                 id: "id",
                 roomId: room.roomId,
@@ -134,17 +138,14 @@ describe("<ExtensionsCard />", () => {
             },
         ] satisfies IApp[]);
 
-        render(
-            <ExtensionsCard room={room} onClose={jest.fn()} />,
-            clientAndSDKContextRenderOptions(client, sdkContext),
-        );
+        render(<ExtensionsCard room={room} onClose={vi.fn()} />, clientAndSDKContextRenderOptions(client, sdkContext));
         expect(screen.getByText("Custom Widget").closest(".mx_ExtensionsCard_Button_pinned")).toBeInTheDocument();
     });
 
     it("should show cannot pin warning", async () => {
-        jest.spyOn(WidgetLayoutStore.instance, "isInContainer").mockReturnValue(false);
-        jest.spyOn(WidgetLayoutStore.instance, "canAddToContainer").mockReturnValue(false);
-        mocked(useWidgets).mockReturnValue([
+        vi.spyOn(WidgetLayoutStore.instance, "isInContainer").mockReturnValue(false);
+        vi.spyOn(WidgetLayoutStore.instance, "canAddToContainer").mockReturnValue(false);
+        vi.mocked(useWidgets).mockReturnValue([
             {
                 id: "id",
                 roomId: room.roomId,
@@ -156,26 +157,20 @@ describe("<ExtensionsCard />", () => {
             },
         ] satisfies IApp[]);
 
-        render(
-            <ExtensionsCard room={room} onClose={jest.fn()} />,
-            clientAndSDKContextRenderOptions(client, sdkContext),
-        );
+        render(<ExtensionsCard room={room} onClose={vi.fn()} />, clientAndSDKContextRenderOptions(client, sdkContext));
         expect(screen.getByLabelText("You can only pin up to 3 widgets")).toBeInTheDocument();
     });
 
     it("should should open integration manager on click", async () => {
-        jest.spyOn(IntegrationManagers.sharedInstance(), "hasManager").mockReturnValue(false);
-        const spy = jest.spyOn(IntegrationManagers.sharedInstance(), "openNoManagerDialog");
-        render(
-            <ExtensionsCard room={room} onClose={jest.fn()} />,
-            clientAndSDKContextRenderOptions(client, sdkContext),
-        );
+        vi.spyOn(IntegrationManagers.sharedInstance(), "hasManager").mockReturnValue(false);
+        const spy = vi.spyOn(IntegrationManagers.sharedInstance(), "openNoManagerDialog");
+        render(<ExtensionsCard room={room} onClose={vi.fn()} />, clientAndSDKContextRenderOptions(client, sdkContext));
         await userEvent.click(screen.getByText("Add extensions"));
         expect(spy).toHaveBeenCalled();
     });
 
     it("should set room layout on click", async () => {
-        mocked(useWidgets).mockReturnValue([
+        vi.mocked(useWidgets).mockReturnValue([
             {
                 id: "id",
                 roomId: room.roomId,
@@ -196,11 +191,8 @@ describe("<ExtensionsCard />", () => {
             },
         ] satisfies IApp[]);
 
-        jest.spyOn(sdkContext.widgetLayoutStore, "copyLayoutToRoom");
-        render(
-            <ExtensionsCard room={room} onClose={jest.fn()} />,
-            clientAndSDKContextRenderOptions(client, sdkContext),
-        );
+        vi.spyOn(sdkContext.widgetLayoutStore, "copyLayoutToRoom");
+        render(<ExtensionsCard room={room} onClose={vi.fn()} />, clientAndSDKContextRenderOptions(client, sdkContext));
         await userEvent.click(screen.getByText("Set layout for everyone"));
         expect(sdkContext.widgetLayoutStore.copyLayoutToRoom).toHaveBeenCalledWith(room);
     });

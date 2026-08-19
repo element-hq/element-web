@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`<UserInfoHeaderVerificationView /> renders verification unavailable message 1`] = `
+exports[`<UserInfoHeaderVerificationView /> > renders verification unavailable message 1`] = `
 <div>
   <div
     class="_flex_4dswl_9 mx_UserInfo_verification"
@@ -17,7 +17,7 @@ exports[`<UserInfoHeaderVerificationView /> renders verification unavailable mes
 </div>
 `;
 
-exports[`<UserInfoHeaderVerificationView /> renders verified badge when user is verified 1`] = `
+exports[`<UserInfoHeaderVerificationView /> > renders verified badge when user is verified 1`] = `
 <div>
   <div
     class="_flex_4dswl_9 mx_UserInfo_verification"
@@ -49,7 +49,7 @@ exports[`<UserInfoHeaderVerificationView /> renders verified badge when user is 
 </div>
 `;
 
-exports[`<UserInfoHeaderVerificationView /> renders verify button 1`] = `
+exports[`<UserInfoHeaderVerificationView /> > renders verify button 1`] = `
 <div>
   <div
     class="_flex_4dswl_9 mx_UserInfo_verification"

@@ -5,17 +5,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked, type Mocked } from "jest-mock";
+// @vitest-environment happy-dom
+
+import { describe, it, expect, beforeEach, vi, type Mocked } from "vitest";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { UserVerificationStatus, type CryptoApi } from "matrix-js-sdk/src/crypto-api";
 import { Device, RoomMember } from "matrix-js-sdk/src/matrix";
-import { render, waitFor, screen } from "jest-matrix-react";
+import { render, waitFor, screen } from "test-utils-rtl";
 import React from "react";
 
-import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
-import { UserInfoHeaderVerificationView } from "../../../../../../src/components/views/right_panel/user_info/UserInfoHeaderVerificationView";
-import { clientAndSDKContextRenderOptions, createTestClient } from "../../../../../test-utils";
-import { TestSDKContext } from "../../../../TestSDKContext.ts";
+import { clientAndSDKContextRenderOptions, createTestClient, TestSDKContext } from "test-utils";
+import { MatrixClientPeg } from "../../../../MatrixClientPeg";
+import { UserInfoHeaderVerificationView } from "./UserInfoHeaderVerificationView";
 
 describe("<UserInfoHeaderVerificationView />", () => {
     const defaultRoomId = "!fkfk";
@@ -28,28 +29,28 @@ describe("<UserInfoHeaderVerificationView />", () => {
     let sdkContext: TestSDKContext;
 
     beforeEach(() => {
-        mockCrypto = mocked({
-            bootstrapSecretStorage: jest.fn(),
-            bootstrapCrossSigning: jest.fn(),
-            getCrossSigningKeyId: jest.fn(),
-            getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
-            getUserDeviceInfo: jest.fn(),
-            getDeviceVerificationStatus: jest.fn(),
-            getUserVerificationStatus: jest.fn(),
-            isDehydrationSupported: jest.fn().mockResolvedValue(false),
-            startDehydration: jest.fn(),
-            getKeyBackupInfo: jest.fn().mockResolvedValue(null),
-            userHasCrossSigningKeys: jest.fn().mockResolvedValue(false),
+        mockCrypto = vi.mocked({
+            bootstrapSecretStorage: vi.fn(),
+            bootstrapCrossSigning: vi.fn(),
+            getCrossSigningKeyId: vi.fn(),
+            getVerificationRequestsToDeviceInProgress: vi.fn().mockReturnValue([]),
+            getUserDeviceInfo: vi.fn(),
+            getDeviceVerificationStatus: vi.fn(),
+            getUserVerificationStatus: vi.fn(),
+            isDehydrationSupported: vi.fn().mockResolvedValue(false),
+            startDehydration: vi.fn(),
+            getKeyBackupInfo: vi.fn().mockResolvedValue(null),
+            userHasCrossSigningKeys: vi.fn().mockResolvedValue(false),
         } as unknown as CryptoApi);
 
         mockClient = createTestClient();
         sdkContext = new TestSDKContext();
         sdkContext._client = mockClient;
-        jest.spyOn(mockClient, "doesServerSupportUnstableFeature").mockResolvedValue(true);
-        jest.spyOn(mockClient.secretStorage, "hasKey").mockResolvedValue(true);
-        jest.spyOn(mockClient, "getCrypto").mockReturnValue(mockCrypto);
-        jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
-        jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
+        vi.spyOn(mockClient, "doesServerSupportUnstableFeature").mockResolvedValue(true);
+        vi.spyOn(mockClient.secretStorage, "hasKey").mockResolvedValue(true);
+        vi.spyOn(mockClient, "getCrypto").mockReturnValue(mockCrypto);
+        vi.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
+        vi.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
     });
 
     const renderComponent = () => {
@@ -64,7 +65,7 @@ describe("<UserInfoHeaderVerificationView />", () => {
         const userDeviceMap = new Map<string, Map<string, Device>>([[defaultUserId, devicesMap]]);
 
         mockCrypto.getUserDeviceInfo.mockResolvedValue(userDeviceMap);
-        jest.spyOn(mockClient, "doesServerSupportUnstableFeature").mockResolvedValue(true);
+        vi.spyOn(mockClient, "doesServerSupportUnstableFeature").mockResolvedValue(true);
 
         return render(
             <UserInfoHeaderVerificationView member={defaultMember} devices={[device1]} />,

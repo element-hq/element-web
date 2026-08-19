@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
+exports[`<RoomSummaryCard /> > has button to edit topic 1`] = `
 <div>
   <div
     aria-labelledby="room-summary-panel-tab"
@@ -739,7 +739,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
 </div>
 `;
 
-exports[`<RoomSummaryCard /> renders the room summary 1`] = `
+exports[`<RoomSummaryCard /> > renders the room summary 1`] = `
 <div>
   <div
     aria-labelledby="room-summary-panel-tab"
@@ -1436,7 +1436,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
 </div>
 `;
 
-exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
+exports[`<RoomSummaryCard /> > renders the room topic in the summary 1`] = `
 <div>
   <div
     aria-labelledby="room-summary-panel-tab"
