@@ -369,6 +369,7 @@ export interface Settings {
     "RoomList.OrderedCustomSections": IBaseSetting<ReorderableSection[]>;
     "RoomList.SectionExpansionState": IBaseSetting<SectionExpansionState>;
     "RoomList.showSections": IBaseSetting<boolean>;
+    "composerUrlPreviewCollapsed": IBaseSetting<boolean>;
 }
 
 export type SettingKey = keyof Settings;
@@ -1218,6 +1219,10 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: true,
         displayName: _td("settings|show_sections"),
+    },
+    "composerUrlPreviewCollapsed": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: true,
     },
     "RightPanel.phasesGlobal": {
         supportedLevels: [SettingLevel.DEVICE],

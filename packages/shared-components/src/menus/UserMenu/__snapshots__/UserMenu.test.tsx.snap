@@ -460,8 +460,10 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
           data-kind="tertiary"
           data-size="md"
           href="#"
+          rel="noreferrer noopener"
           role="link"
           tabindex="0"
+          target="_blank"
         >
           <svg
             aria-hidden="true"
@@ -948,8 +950,10 @@ exports[`UserMenu > renders an open menu 1`] = `
           data-kind="tertiary"
           data-size="md"
           href="#"
+          rel="noreferrer noopener"
           role="link"
           tabindex="0"
+          target="_blank"
         >
           <svg
             aria-hidden="true"

@@ -1359,6 +1359,7 @@
         "error_permissions_room": "你无权邀请人员进入此房间。",
         "error_permissions_space": "你无权邀请人员访问此空间。",
         "error_profile_undisclosed": "用户既有可能存在，也有可能不存在",
+        "error_rate_limited": "邀请发送过多，请稍后再试。",
         "error_transfer_multiple_target": "通话只能转接到单个用户。",
         "error_unfederated_room": "此房间为非联合房间。你不能从外部服务器邀请人员。",
         "error_unfederated_space": "此空间未联合。你无法邀请人员到外部服务器。",
