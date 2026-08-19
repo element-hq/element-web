@@ -227,20 +227,96 @@
     line-height: 1;
 }
 
-.replyChain {
-    display: grid;
-    gap: 2px;
-    max-width: 520px;
-    margin: 0;
-    padding-inline-start: 10px;
-    border-inline-start: 2px solid var(--username-color, #617b9b);
-    border-radius: 2px;
-    color: var(--cpd-color-text-secondary, #626a73);
-    font-size: 13px;
-}
-
 .replyAuthor {
     font-weight: 600;
+}
+
+/* Match the legacy user-mention pill inside a reply-chain header while using
+   the shared Pill and Avatar components. */
+.replyChainPill {
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+    max-width: 100%;
+    overflow: hidden;
+    gap: 0 !important;
+    padding: 1px 0.4em;
+    border-radius: 16px;
+    color: var(--cpd-color-text-on-solid-primary) !important;
+    background-color: var(--cpd-color-bg-action-primary-rest) !important;
+    outline: 1px solid transparent;
+    cursor: pointer;
+    font: var(--cpd-font-body-sm-regular);
+    line-height: 17px;
+    vertical-align: text-top;
+}
+
+.replyChainPill > * {
+    pointer-events: none;
+}
+
+.replyChainPill > :first-child {
+    flex-shrink: 0;
+    min-width: 16px;
+    margin-inline-start: -0.3em;
+    margin-inline-end: 0.2em;
+}
+
+.replyChainPill > :last-child {
+    min-width: 0;
+    overflow: hidden;
+    color: inherit;
+    font: inherit;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.replyChainPill:hover {
+    background-color: var(--cpd-color-bg-action-primary-hovered) !important;
+}
+
+.replyTile {
+    position: relative;
+    padding: 2px 0;
+    font: var(--cpd-font-body-md-regular);
+}
+
+.replyTileLink {
+    display: grid;
+    grid-template:
+        "sender" auto
+        "message" auto
+        / 100%;
+    gap: 2px;
+    max-width: 100%;
+    color: var(--cpd-color-text-secondary);
+    text-decoration: none;
+    transition: color ease 0.15s;
+}
+
+.replyTileLink:hover {
+    color: var(--cpd-color-text-primary);
+}
+
+.replyTileSender {
+    display: flex;
+    grid-area: sender;
+    align-items: center;
+    gap: 4px;
+}
+
+.replyTileBody {
+    display: -webkit-box;
+    grid-area: message;
+    max-width: 520px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.replyTileBody > * {
+    display: contents;
 }
 
 .storyReactions {

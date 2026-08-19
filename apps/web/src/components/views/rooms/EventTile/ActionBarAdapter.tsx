@@ -9,7 +9,7 @@ import React, { useCallback, useContext, useEffect, useState, type JSX } from "r
 import { type MatrixEvent, type Relations } from "matrix-js-sdk/src/matrix";
 import { ActionBarView } from "@element-hq/web-shared-components";
 
-import type ReplyChain from "../../elements/ReplyChain";
+import type { ReplyChainHandle } from "./ReplyChainAdapter";
 import ReactionPicker from "../../emojipicker/ReactionPicker";
 import MessageContextMenu from "../../context_menus/MessageContextMenu";
 import ContextMenu, { aboveLeftOf } from "../../../structures/ContextMenu";
@@ -52,7 +52,7 @@ interface ActionBarAdapterProps {
     /** Returns the current tile instance for event tile operations. */
     getTile: () => ActionBarEventTile | null;
     /** Returns the current reply chain for the tile, if any. */
-    getReplyChain: () => ReplyChain | null;
+    getReplyChain: () => ReplyChainHandle | null;
     /** Notifies the parent when the action bar gains or loses focus. */
     onFocusChange?: (focused: boolean) => void;
     /** Indicates whether the event quote is currently expanded. */

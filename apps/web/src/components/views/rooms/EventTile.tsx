@@ -31,7 +31,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { uniqueId } from "lodash";
 import { useCreateAutoDisposedViewModel, TileErrorView } from "@element-hq/web-shared-components";
 
-import ReplyChain from "../elements/ReplyChain";
+import { ReplyChainAdapter, type ReplyChainHandle } from "./EventTile/ReplyChainAdapter";
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import { Layout } from "../../../settings/enums/Layout";
@@ -283,7 +283,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     private suppressReadReceiptAnimation: boolean;
     private isListeningForReceipts: boolean;
     private tile = createRef<IEventTileType>();
-    private replyChain = createRef<ReplyChain>();
+    private replyChain = createRef<ReplyChainHandle>();
     private readonly viewModel: EventTileViewModel;
     private readonly e2eViewModel: EventTileE2eViewModel;
     private e2eViewModelSubscription?: () => void;
@@ -674,7 +674,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
     private readonly getTile: () => IEventTileType | null = () => this.tile.current;
 
-    private readonly getReplyChain = (): ReplyChain | null => this.replyChain.current;
+    private readonly getReplyChain = (): ReplyChainHandle | null => this.replyChain.current;
 
     private readonly getReactions = (): Relations | null => {
         return getEventTileReactionRelations({
@@ -1043,12 +1043,12 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         let replyChain: JSX.Element | undefined;
         if (eventTileSnapshot.root.data.hasReply) {
             replyChain = (
-                <ReplyChain
+                <ReplyChainAdapter
                     parentEv={this.props.mxEvent}
                     ref={this.replyChain}
+                    eventTileViewModel={this.viewModel}
                     forExport={this.props.forExport}
                     permalinkCreator={this.props.permalinkCreator}
-                    alwaysShowTimestamps={eventTileSnapshot.replyChain.alwaysShowTimestamps}
                     isQuoteExpanded={isQuoteExpanded}
                     setQuoteExpanded={this.setQuoteExpanded}
                     getRelationsForEvent={this.props.getRelationsForEvent}

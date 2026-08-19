@@ -3535,11 +3535,6 @@
             "tooltip": "Message deleted on %(date)s"
         },
         "redaction": "Message deleted by %(name)s",
-        "reply": {
-            "error_loading": "Unable to load event that was replied to; either it does not exist or you do not have permission to view it.",
-            "in_reply_to": "<a>In reply to</a> <pill>",
-            "in_reply_to_for_export": "In reply to <a>this message</a>"
-        },
         "scalar_starter_link": {
             "dialog_description": "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?",
             "dialog_title": "Add an Integration"

@@ -5,19 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-export { EventTileView } from "./EventTileView";
 export { ReplyChainView } from "./ReplyChainView";
-export type {
-    EventTileViewClassNames,
-    EventTileRenderingMode,
-    EventTileViewHandlers,
-    EventTileViewLine,
-    EventTileViewProps,
-    EventTileViewRefs,
-    EventTileViewRoot,
-    EventTileViewRootState,
-    EventTileViewSlots,
-} from "./EventTileView.types";
 export type {
     ReplyChainColor,
     ReplyChainViewActions,

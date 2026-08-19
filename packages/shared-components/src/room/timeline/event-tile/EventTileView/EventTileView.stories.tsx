@@ -19,7 +19,8 @@ import {
     NotificationBadgeView,
     type NotificationBadgeViewSnapshot,
 } from "../../../../notifications/NotificationBadgeView";
-import { EventTileView, type EventTileViewProps } from "./index";
+import { EventTileView, ReplyChainView, type EventTileViewProps, type ReplyChainViewModel } from "./index";
+import { Pill } from "../../../../core/pill-input/Pill";
 import { E2ePadlock, E2ePadlockIcon } from "./E2ePadlock";
 import { DisambiguatedProfileView } from "./DisambiguatedProfile";
 import { ActionBarAction, ActionBarView } from "../actions/ActionBarView";
@@ -315,12 +316,52 @@ const StoryEmoteBody = (): React.ReactElement => {
 
     return <TextualBodyView vm={bodyVm} body={<EventContentBodyView vm={contentVm} as="div" />} />;
 };
-const StoryReplyChain = (): React.ReactElement => (
-    <blockquote className={styles.replyChain}>
-        <span className={styles.replyAuthor}>Taylor Example</span>
-        <span>Earlier message quoted in this reply.</span>
-    </blockquote>
+const StoryReplyAvatar = (): React.ReactElement => (
+    <Avatar id="@zacksbot:example.org" name="ZacksBot" type="round" size="16px" aria-label="ZacksBot avatar" />
 );
+const StoryReplyChainPill = (): React.ReactElement => (
+    <Pill className={styles.replyChainPill} label="ZacksBot">
+        <StoryReplyAvatar />
+    </Pill>
+);
+const StoryReplyTile = ({ eventId }: { eventId: string }): React.ReactElement => (
+    <div className={styles.replyTile} data-reply-event-id={eventId}>
+        <a className={styles.replyTileLink} href={`#${eventId}`}>
+            <div className={styles.replyTileSender}>
+                <StoryReplyAvatar />
+                <StorySender name="ZacksBot" id="@zacksbot:example.org" />
+            </div>
+            <div className={styles.replyTileBody}>
+                <StoryBody />
+            </div>
+        </a>
+    </div>
+);
+const StoryReplyChain = (): React.ReactElement => {
+    const vm = Object.assign(
+        useMockedViewModel(
+            {
+                status: "ready" as const,
+                events: [{ id: "$event-1", color: 2 as const }],
+                headerEventId: "$event-1",
+                isQuoteExpanded: undefined,
+            },
+            {},
+        ),
+        {
+            onQuoteClick: fn(),
+            setQuoteExpanded: fn(),
+        },
+    ) as ReplyChainViewModel;
+
+    return (
+        <ReplyChainView
+            vm={vm}
+            renderHeaderPill={() => <StoryReplyChainPill />}
+            renderReplyTile={(event) => <StoryReplyTile eventId={event.id} />}
+        />
+    );
+};
 const StoryMediaBody = (): React.ReactElement => {
     const snapshot: ImageBodyViewSnapshot = {
         state: ImageBodyViewState.READY,
@@ -806,6 +847,8 @@ const storyHelpers = {
     StoryLinkedTimestamp,
     StoryMediaBody,
     StoryReplyChain,
+    StoryReplyChainPill,
+    StoryReplyTile,
     StoryStickerBody,
 };
 

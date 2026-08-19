@@ -283,7 +283,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             await expect(tile.getByRole("region", { name: "Audio player" })).toBeVisible();
 
             // Assert that replied audio file is rendered as file button inside ReplyChain
-            const button = tile.locator(".mx_ReplyChain_wrapper .mx_MFileBody [role='button']");
+            const button = tile.locator("[data-reply-chain-wrapper] .mx_MFileBody [role='button']");
             // Assert that the file button has file name
             await expect(button.locator("span")).toBeVisible();
 
@@ -295,7 +295,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         "should support creating a reply chain with multiple audio files",
         { tag: "@screenshot" },
         async ({ page, app, user }) => {
-            // Note: "mx_ReplyChain" element is used not only for replies which
+            // Note: the reply-chain root is used not only for replies which
             // create a reply chain, but also for a single reply without a replied
             // message. This test checks whether a reply chain which consists of
             // multiple audio file replies is rendered properly.
@@ -309,21 +309,21 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             // Assert that the audio player is rendered
             await expect(tile.getByRole("region", { name: "Audio player" })).toBeVisible();
 
-            // Assert that there are two "mx_ReplyChain" elements
-            await expect(tile.locator(".mx_ReplyChain")).toHaveCount(2);
+            // Assert that there are two reply-chain roots
+            await expect(tile.locator("[data-reply-chain]")).toHaveCount(2);
 
             // Assert that one line contains the user name
             await expect(
-                tile.locator(".mx_ReplyChain .mx_ReplyTile_sender").getByText(user.displayName!),
+                tile.locator("[data-reply-chain] .mx_ReplyTile_sender").getByText(user.displayName!),
             ).toBeVisible();
 
             // Assert that the other line contains the file button
-            await expect(tile.locator(".mx_ReplyChain .mx_MFileBody")).toBeVisible();
+            await expect(tile.locator("[data-reply-chain] .mx_MFileBody")).toBeVisible();
 
             // Click "In reply to"
-            await tile.locator(".mx_ReplyChain .mx_ReplyChain_show", { hasText: "In reply to" }).click();
+            await tile.locator("[data-reply-chain] [data-reply-chain-show]", { hasText: "In reply to" }).click();
 
-            const replyChain = tile.locator(".mx_ReplyChain:first-of-type");
+            const replyChain = tile.locator("[data-reply-chain]:first-of-type");
             // Assert that "In reply to" has disappeared
             await expect(replyChain.getByText("In reply to")).not.toBeVisible();
 

@@ -339,26 +339,7 @@ export function getTimestampDisplayState({
     };
 }
 
-/** Inputs for ReplyChain timestamp visibility derivation. */
-export interface ReplyChainTimestampInput {
-    /** Whether timestamps should always show. */
-    alwaysShowTimestamps?: boolean;
-    /** Whether the tile is currently hovered. */
-    hover: boolean;
-    /** Whether focus is currently inside the tile. */
-    focusWithin: boolean;
-}
-
-/** Whether ReplyChain should always show timestamps. */
-export function getReplyChainAlwaysShowTimestamps({
-    alwaysShowTimestamps,
-    hover,
-    focusWithin,
-}: ReplyChainTimestampInput): boolean {
-    return !!alwaysShowTimestamps || hover || focusWithin;
-}
-
-/** Inputs for EventTile footer display state derivation. */
+/** Inputs for EventTile footer display state. */
 export interface FooterDisplayStateInput {
     /** Whether a reactions row element will render. */
     hasReactionsRow: boolean;

@@ -1174,12 +1174,14 @@ test.describe("Timeline", () => {
 
             // Check the margin value of ReplyChains of EventTile at the bottom on IRC layout
             await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
-            for (const locator of await page.locator(".mx_EventTile_last[data-layout='irc'] .mx_ReplyChain").all()) {
+            for (const locator of await page
+                .locator(".mx_EventTile_last[data-layout='irc'] [data-reply-chain]")
+                .all()) {
                 await expect(locator).toHaveCSS("margin", "0px");
             }
 
             // Take a snapshot on IRC layout
-            // Note that because zero margin is applied to mx_ReplyChain, the left borders of two mx_ReplyChain
+            // Note that because zero margin is applied to the reply-chain root, the left borders of two reply chains
             // components may seem to be connected to one.
             await expect(page.locator(".mx_EventTile_last")).toMatchScreenshot(
                 "event-tile-reply-chains-irc-layout.png",
@@ -1188,7 +1190,9 @@ test.describe("Timeline", () => {
 
             // Check the margin value of ReplyChains of EventTile at the bottom on group/modern layout
             await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
-            for (const locator of await page.locator(".mx_EventTile_last[data-layout='group'] .mx_ReplyChain").all()) {
+            for (const locator of await page
+                .locator(".mx_EventTile_last[data-layout='group'] [data-reply-chain]")
+                .all()) {
                 await expect(locator).toHaveCSS("margin-bottom", "8px");
             }
 
@@ -1200,7 +1204,9 @@ test.describe("Timeline", () => {
 
             // Check the margin value of ReplyChains of EventTile at the bottom on group/modern compact layout
             await app.settings.setValue("useCompactLayout", null, SettingLevel.DEVICE, true);
-            for (const locator of await page.locator(".mx_EventTile_last[data-layout='group'] .mx_ReplyChain").all()) {
+            for (const locator of await page
+                .locator(".mx_EventTile_last[data-layout='group'] [data-reply-chain]")
+                .all()) {
                 await expect(locator).toHaveCSS("margin-bottom", "4px");
             }
 
@@ -1212,7 +1218,9 @@ test.describe("Timeline", () => {
 
             // Check the margin value of ReplyChains of EventTile at the bottom on bubble layout
             await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
-            for (const locator of await page.locator(".mx_EventTile_last[data-layout='bubble'] .mx_ReplyChain").all()) {
+            for (const locator of await page
+                .locator(".mx_EventTile_last[data-layout='bubble'] [data-reply-chain]")
+                .all()) {
                 await expect(locator).toHaveCSS("margin-bottom", "8px");
             }
 

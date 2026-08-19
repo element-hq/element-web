@@ -12,6 +12,7 @@ import layoutMeta from "./EventTileView.stories";
 
 const {
     bubbleGlobals,
+    compactGroupGlobals,
     EventTileViewStory,
     eventTileStoryDefaults,
     groupGlobals,
@@ -301,6 +302,20 @@ export const ReplyChainGroup: Story = {
     name: "Reply chain - Group - Default",
     tags: visualTags,
     globals: groupGlobals,
+    args: ReplyChain.args,
+};
+
+export const ReplyChainIrc: Story = {
+    name: "Reply chain - IRC - Default",
+    tags: visualTags,
+    globals: ircGlobals,
+    args: ReplyChain.args,
+};
+
+export const ReplyChainCompact: Story = {
+    name: "Reply chain - Group - Compact",
+    tags: visualTags,
+    globals: compactGroupGlobals,
     args: ReplyChain.args,
 };
 

@@ -916,7 +916,7 @@ describe("EventTile", () => {
             const { container } = getComponent();
 
             expect(getTile(container)).toHaveAttribute("data-has-reply", "false");
-            expect(container.querySelector(".mx_ReplyChain_wrapper")).toBeNull();
+            expect(container.querySelector("[data-reply-chain-wrapper]")).toBeNull();
         });
 
         it("marks reply events as having a reply chain", () => {
@@ -924,7 +924,7 @@ describe("EventTile", () => {
             const { container } = getComponent({ mxEvent: replyEvent });
 
             expect(getTile(container)).toHaveAttribute("data-has-reply", "true");
-            expect(container.querySelector(".mx_ReplyChain_wrapper")).not.toBeNull();
+            expect(container.querySelector("[data-reply-chain-wrapper]")).not.toBeNull();
         });
 
         it("does not render the reply chain for redacted reply events", () => {
@@ -933,7 +933,7 @@ describe("EventTile", () => {
             const { container } = getComponent({ mxEvent: replyEvent });
 
             expect(getTile(container)).toHaveAttribute("data-has-reply", "false");
-            expect(container.querySelector(".mx_ReplyChain_wrapper")).toBeNull();
+            expect(container.querySelector("[data-reply-chain-wrapper]")).toBeNull();
         });
     });
 

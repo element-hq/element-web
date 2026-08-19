@@ -430,7 +430,7 @@ Please see LICENSE files in the repository root for full details.
             flex-direction: column;
         }
 
-        .mx_ReplyChain {
+        [data-reply-chain] {
             .mx_EventTile_reply {
                 max-width: 90%;
                 padding: 0;
@@ -479,7 +479,7 @@ Please see LICENSE files in the repository root for full details.
                 / auto 1fr;
 
             .mx_UnknownBody,
-            .mx_ReplyChain_wrapper,
+            [data-reply-chain-wrapper],
             .mx_ViewSourceEvent {
                 min-width: 0; /* Prevent a grid blowout */
             }
@@ -495,7 +495,7 @@ Please see LICENSE files in the repository root for full details.
                 grid-area: body;
             }
 
-            .mx_ReplyChain_wrapper {
+            [data-reply-chain-wrapper] {
                 grid-area: reply;
             }
         }
