@@ -40,7 +40,6 @@
     --event-tile-preview-padding: 8px;
     --event-tile-preview-separator-color: var(--cpd-color-icon-tertiary);
     --event-tile-preview-hover-background: var(--cpd-color-bg-subtle-primary);
-    --event-tile-preview-notification-background: var(--cpd-color-icon-tertiary);
     --event-tile-preview-highlight-background: var(--cpd-color-bg-critical-subtle);
     --event-tile-thread-spacing-block-start: var(--cpd-space-4x);
     --event-tile-thread-spacing-inline-end: 8px;
@@ -1219,10 +1218,6 @@
         position: relative;
         z-index: 1;
         flex: 0 0 auto;
-    }
-
-    &:has(.slotNotificationBadge [data-notification-level="notification"])::before {
-        background-color: var(--event-tile-preview-notification-background);
     }
 
     &:has(.slotNotificationBadge [data-notification-level="highlight"])::before {

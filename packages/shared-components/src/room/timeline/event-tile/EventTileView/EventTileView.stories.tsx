@@ -9,10 +9,10 @@ import React from "react";
 import classNames from "classnames";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { fn } from "storybook/test";
-import { Avatar } from "@vector-im/compound-web";
 import { ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { useMockedViewModel } from "../../../../core/viewmodel";
+import { MemberAvatarView, type MemberAvatarViewSnapshot } from "../../../../core/MemberAvatar/MemberAvatarView";
 import {
     EventPresentationProvider,
     useEventPresentation,
@@ -54,6 +54,7 @@ import {
 import { EventPreviewView, type EventPreviewViewSnapshot } from "./EventPreviewView";
 import { PinnedMessageBadge } from "./PinnedMessageBadge";
 import { TextualEventView, type TextualEventViewSnapshot } from "./TextualEventView";
+import { RoomAvatarView, type RoomAvatarViewSnapshot } from "../../../avatar/RoomAvatar/RoomAvatarView";
 import styles from "./EventTileView.stories.module.css";
 import storyMediaSrc from "../../../../../static/image-body/install-spinner.png";
 
@@ -123,29 +124,40 @@ const StoryDebugFrame = ({ children }: React.PropsWithChildren): React.ReactElem
     );
 };
 
-const StoryAvatar = ({
-    room = false,
-    label = "A",
-    size = "30px",
-    className,
-}: {
-    room?: boolean;
+type StoryMemberAvatarProps = {
     label?: string;
     size?: string;
     className?: string;
-}): React.ReactElement => (
-    <Avatar
-        id={room ? "!story-room:example.org" : `@${label.toLowerCase()}:example.org`}
-        name={getStoryAvatarName(room, label)}
-        type="round"
-        size={size}
-        className={className}
-        aria-label={room ? "Story room avatar" : `${label} avatar`}
-    />
-);
+};
 
-function getStoryAvatarName(room: boolean, label: string): string {
-    if (room) return "Story room";
+const StoryMemberAvatar = ({ label = "A", size = "30px", className }: StoryMemberAvatarProps): React.ReactElement => {
+    const snapshot: MemberAvatarViewSnapshot = {
+        id: `@${label.toLowerCase()}:example.org`,
+        name: getStoryMemberAvatarName(label),
+        size,
+    };
+    const vm = useMockedViewModel(snapshot, {});
+
+    return <MemberAvatarView vm={vm} classNames={className} />;
+};
+
+const StoryRoomAvatar = ({ size = "30px", className }: StoryMemberAvatarProps): React.ReactElement => {
+    const snapshot: RoomAvatarViewSnapshot = {
+        idName: "!story-room:example.org",
+        name: "Story room",
+        size,
+        urls: [],
+        type: "round",
+        isClickable: false,
+        className,
+        altText: "Story room avatar",
+    };
+    const vm = useMockedViewModel(snapshot, { onClick: fn() });
+
+    return <RoomAvatarView vm={vm} />;
+};
+
+function getStoryMemberAvatarName(label: string): string {
     if (label === "A") return "Alice Example";
     return "Bob Example";
 }
@@ -185,7 +197,7 @@ const createStoryAvatar = (
 
     const label = isOwnEvent ? "A" : "B";
     const size = sizeOverride ?? (layout === "irc" ? "14px" : "30px");
-    return <StoryAvatar label={label} size={size} />;
+    return <StoryMemberAvatar label={label} size={size} />;
 };
 
 const StoryTimestamp = ({
@@ -608,7 +620,7 @@ const baseRoot: EventTileViewProps["root"] = {
 
 const roomSlots: EventTileViewProps["slots"] = {
     sender: <StorySender />,
-    avatar: <StoryAvatar />,
+    avatar: <StoryMemberAvatar />,
     body: <StoryBody />,
     timestamp: <StoryTimestamp />,
     padlock: <StoryPadlock />,
@@ -622,7 +634,7 @@ const roomSlots: EventTileViewProps["slots"] = {
 /** Slots for the default Room-like shapes without a context menu fixture. */
 const defaultShapeSlots: EventTileViewProps["slots"] = {
     sender: <StorySender />,
-    avatar: <StoryAvatar />,
+    avatar: <StoryMemberAvatar />,
     body: <StoryBody />,
     timestamp: <StoryLinkedTimestamp />,
     padlock: <StoryPadlock />,
@@ -634,7 +646,7 @@ const defaultShapeSlots: EventTileViewProps["slots"] = {
 
 const threadSlots: EventTileViewProps["slots"] = {
     ...defaultShapeSlots,
-    avatar: <StoryAvatar size="32px" />,
+    avatar: <StoryMemberAvatar size="32px" />,
     threadInfo: undefined,
 };
 
@@ -1046,7 +1058,7 @@ export const ThreadsList: Story = {
         shape: "ThreadsList",
         slots: {
             sender: <StorySender />,
-            avatar: <StoryAvatar size="32px" />,
+            avatar: <StoryMemberAvatar size="32px" />,
             body: <StoryPreviewBody />,
             timestamp: <StoryTimestamp />,
             notificationBadge: <StoryNotificationBadge />,
@@ -1080,7 +1092,7 @@ export const Notification: Story = {
             sender: <StorySender />,
             body: <StoryPreviewBody />,
             timestamp: <StoryTimestamp />,
-            roomAvatar: <StoryAvatar room size="28px" />,
+            roomAvatar: <StoryRoomAvatar size="28px" />,
             notificationRoomLabel: (
                 <span className={styles.roomLabel}>
                     {" in "}
@@ -1099,7 +1111,7 @@ export const File: Story = {
         shape: "File",
         slots: {
             sender: <StorySender />,
-            avatar: <StoryAvatar size="20px" />,
+            avatar: <StoryMemberAvatar size="20px" />,
             timestamp: <StoryLinkedTimestamp />,
             body: <StoryFileBody />,
         },
