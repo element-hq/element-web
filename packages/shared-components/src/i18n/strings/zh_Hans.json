@@ -43,6 +43,21 @@
         "preferences": "偏好",
         "state_encryption_enabled": "实验性的状态加密已启用"
     },
+    "composer": {
+        "url_preview": {
+            "clear_all": "全部清除",
+            "collapse": "折叠 URL 预览",
+            "failed": "预览获取失败",
+            "loading": "正在获取预览…",
+            "n_links": {
+                "other": "%(count)s 个链接"
+            },
+            "remove": "移除 URL 预览"
+        }
+    },
+    "devtools": {
+        "toggle_event": "切换事件详略显示"
+    },
     "emoji": {
         "categories": "类别",
         "category_activities": "节假日",
