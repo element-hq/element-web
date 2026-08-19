@@ -679,17 +679,17 @@ describe("RoomListStoreV3", () => {
 
             it("unread filter matches the current room even if it is read", async () => {
                 // Ensure that Notifications.showbold is off
-                jest.spyOn(SettingsStore, "getValue").mockImplementation(() => false);
+                vi.spyOn(SettingsStore, "getValue").mockImplementation(() => false);
 
                 // Given a bunch of rooms exist and some are in the space
                 const { client, rooms } = getClientAndRooms();
                 const { spaceRoom, roomIds } = createSpace(rooms, [2, 4, 6, 8, 10, 12], client);
 
                 // And we are in room number 2
-                jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(rooms[2].roomId);
+                vi.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(rooms[2].roomId);
 
                 // And 2 other rooms are unread, but the room we are in is not
-                jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation((room) => {
+                vi.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation((room) => {
                     return {
                         hasUnreadCount: [rooms[4], rooms[6]].includes(room),
                     } as unknown as RoomNotificationState;
@@ -887,24 +887,24 @@ describe("RoomListStoreV3", () => {
 
             it("updates filters when user chooses another room", async () => {
                 // Ensure that Notifications.showbold is off
-                jest.spyOn(SettingsStore, "getValue").mockImplementation(() => false);
+                vi.spyOn(SettingsStore, "getValue").mockImplementation(() => false);
 
                 // Given room 27 is unread
                 const { client, rooms } = getClientAndRooms();
                 const { spaceRoom, roomIds } = createSpace(rooms, [6, 8, 13, 27, 75], client);
 
-                jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation((room) => {
+                vi.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation((room) => {
                     const state = {
                         // Only 27 has notifications
                         hasUnreadCount: [rooms[27]].includes(room),
-                        on: jest.fn(),
-                        off: jest.fn(),
+                        on: vi.fn(),
+                        off: vi.fn(),
                     } as unknown as RoomNotificationState;
                     return state;
                 });
 
                 // And we are in room 13
-                jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(rooms[13].roomId);
+                vi.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(rooms[13].roomId);
 
                 setupMocks(spaceRoom, roomIds);
                 const store = new RoomListStoreV3Class(dispatcher);
@@ -920,7 +920,7 @@ describe("RoomListStoreV3", () => {
                 expect(showboldRooms).toHaveLength(2);
 
                 // But when the current room changes
-                jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(rooms[75].roomId);
+                vi.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(rooms[75].roomId);
                 store.emit(UPDATE_EVENT);
 
                 // Then the newly-current room is in the list and the previous one is not
