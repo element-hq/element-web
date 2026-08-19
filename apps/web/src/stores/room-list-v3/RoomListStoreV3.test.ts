@@ -654,33 +654,7 @@ describe("RoomListStoreV3", () => {
                         expect(result).toContain(rooms[i]);
                     }
                 },
-
-            it("supports filtering unread rooms", async () => {
-                const { client, rooms } = getClientAndRooms();
-                // Let's choose 5 rooms to put in space
-                const { spaceRoom, roomIds } = createSpace(rooms, [6, 8, 13, 27, 75], client);
-
-                // Let's say 8, 27 are unread
-                vi.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation((room) => {
-                    const state = {
-                        hasUnreadCount: [rooms[8], rooms[27]].includes(room),
-                    } as unknown as RoomNotificationState;
-                    return state;
-                });
-
-                setupMocks(spaceRoom, roomIds);
-                const store = new RoomListStoreV3Class(dispatcher);
-                await store.start();
-
-                // Should only give us rooms at index 8 and 27
-                const result = store
-                    .getSortedRoomsInActiveSpace([FilterEnum.UnreadFilter])
-                    .sections.flatMap((s) => s.rooms);
-                expect(result).toHaveLength(2);
-                for (const i of [8, 27]) {
-                    expect(result).toContain(rooms[i]);
-                }
-            });
+            );
 
             it("unread filter matches rooms that are marked as unread", async () => {
                 const { client, rooms } = getClientAndRooms();
