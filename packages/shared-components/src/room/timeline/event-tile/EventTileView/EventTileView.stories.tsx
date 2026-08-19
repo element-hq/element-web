@@ -75,7 +75,9 @@ const getBoundaryLabel = (boundary: StoryBoundary): string => {
 };
 
 const getBoundary = (target: EventTarget | null, root: HTMLElement): StoryBoundary | null => {
-    if (!(target instanceof HTMLElement)) return null;
+    // Padlock icons are SVG elements, so hovering their path otherwise skips
+    // the slot boundary and leaves the Storybook diagnostics blank.
+    if (!(target instanceof Element)) return null;
 
     const boundary = target.closest<StoryBoundary>(
         `[data-story-boundary], [data-testid^="${eventTileSlotTestIdPrefix}"], .storyEventTile, .storyEventLine`,
@@ -223,13 +225,7 @@ const StoryTimestamp = ({
 const StoryLinkedTimestamp = (): React.ReactElement => <StoryTimestamp linked />;
 const StoryBody = (): React.ReactElement => {
     const contentSnapshot: EventContentBodyViewSnapshot = {
-        body: [
-            <div key="first-line">
-                Here is a realistic event tile body with enough text to show the available width.
-            </div>,
-            <div key="second-line">This second line makes wrapping and vertical rhythm visible in Storybook.</div>,
-        ],
-        className: styles.body,
+        body: "Here is a realistic event tile body with enough text to show the available width.\nThis second line makes wrapping and vertical rhythm visible in Storybook.",
     };
     const contentVm = useMockedViewModel(contentSnapshot, {});
     const bodySnapshot: TextualBodyViewSnapshot = { kind: TextualBodyViewKind.TEXT };
@@ -248,12 +244,7 @@ const StoryPreviewBody = (): React.ReactElement => {
 };
 const StorySearchBody = (): React.ReactElement => {
     const contentSnapshot: EventContentBodyViewSnapshot = {
-        body: [
-            <div key="first-line">
-                Can you review the <mark>draft</mark> before the meeting?
-            </div>,
-            <div key="second-line">The highlighted term represents the matching search result.</div>,
-        ],
+        body: "Can you review the <mark>draft</mark> before the meeting?\nThe highlighted term represents the matching search result.",
         className: styles.body,
     };
     const contentVm = useMockedViewModel(contentSnapshot, {});
@@ -302,7 +293,6 @@ const StoryHighlightedBody = (): React.ReactElement => {
 const StoryEditedBody = (): React.ReactElement => {
     const contentSnapshot: EventContentBodyViewSnapshot = {
         body: "This message is currently being edited.",
-        className: styles.body,
     };
     const contentVm = useMockedViewModel(contentSnapshot, {});
     const bodyVm = useMockedViewModel(
@@ -1011,6 +1001,7 @@ const storyHelpers = {
     StoryHighlightedBody,
     StoryInformationalBody,
     StoryLinkedTimestamp,
+    StoryPadlock,
     StoryMediaBody,
     StoryReplyChain,
     StoryStickerBody,

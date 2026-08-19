@@ -124,6 +124,11 @@
     white-space: nowrap;
 }
 
+.slotAvatar {
+    cursor: pointer;
+    user-select: none;
+}
+
 .slotFooter {
     display: flex;
     align-items: center;
@@ -224,8 +229,14 @@
 
     .slotTimestamp {
         position: absolute;
+        inset-block-start: 0;
         inset-inline-start: 0;
         width: var(--event-tile-group-timestamp-width);
+        height: var(--event-tile-group-line-height);
+        margin: 1px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         text-align: center;
     }
 
@@ -235,6 +246,8 @@
         inset-inline-start: 44px;
         height: var(--event-tile-group-line-height);
         margin: 1px;
+        display: flex;
+        align-items: center;
     }
 
     .slotThreadInfo {
@@ -403,6 +416,9 @@
     padding-top: 0;
     line-height: var(--event-tile-irc-line-height);
 
+    /* Match the sender's 1px anti-zalgo padding on both sides. */
+    --event-tile-irc-slot-height: calc(var(--event-tile-irc-line-height) + 2px);
+
     &:hover .line,
     &:focus-within .line {
         background-color: var(--event-tile-state-hover-background);
@@ -451,6 +467,11 @@
         min-width: var(--event-tile-irc-timestamp-width, 48px);
         flex-shrink: 0;
         text-align: end;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        box-sizing: border-box;
+        height: var(--event-tile-irc-slot-height);
     }
 
     .slotAvatar {
@@ -459,13 +480,23 @@
         flex: 0 0 var(--event-tile-irc-icon-width);
         position: relative;
         width: var(--event-tile-irc-icon-width);
-        height: var(--event-tile-irc-line-height);
+        height: var(--event-tile-irc-slot-height);
+        box-sizing: border-box;
+    }
+
+    .slotAvatar > *,
+    .slotAvatar > * > * {
+        /* Match the compact initials rendered by the legacy IRC timeline. */
+        font-size: 10px;
+        line-height: 13px;
     }
 
     .slotSender {
         flex-shrink: 0;
         width: var(--event-tile-irc-name-width, 80px);
         margin-inline-end: 0;
+        height: var(--event-tile-irc-slot-height);
+        box-sizing: border-box;
     }
 
     .slotSender:hover {
@@ -481,8 +512,11 @@
 
     .slotPadlock {
         position: absolute;
-        height: var(--event-tile-irc-line-height);
+        box-sizing: border-box;
+        height: var(--event-tile-irc-slot-height);
         padding: 0;
+        display: flex;
+        align-items: center;
         flex-grow: 0;
         background-position: center;
     }
@@ -503,8 +537,7 @@
         border-radius: 8px;
     }
 
-    .slotBody,
-    .slotPadlock {
+    .slotBody {
         padding-block: 1px;
     }
 
@@ -688,7 +721,9 @@
 
     .slotPadlock {
         flex-shrink: 0;
-        height: calc(18px + 2px);
+        height: 18px;
+        display: flex;
+        align-items: center;
     }
 
     .slotActionBar {

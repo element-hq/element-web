@@ -23,6 +23,7 @@ const {
     StoryHighlightedBody,
     StoryInformationalBody,
     StoryLinkedTimestamp,
+    StoryPadlock,
     StoryMediaBody,
     StoryReplyChain,
     StoryStickerBody,
@@ -130,7 +131,7 @@ export const ReplyChain: Story = {
         shape: "Room",
         roomMessages: "alice",
         state: { hasReply: true },
-        slots: { ...minimalRoomSlots, replyChain: <StoryReplyChain /> },
+        slots: { ...minimalRoomSlots, padlock: <StoryPadlock />, replyChain: <StoryReplyChain /> },
     },
 };
 

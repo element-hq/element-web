@@ -43,6 +43,8 @@ export function EventTileView({
 
     const renderSlot = (slotName: EventTileSlotName, content: React.ReactNode = slots[slotName]): React.ReactNode => {
         if (!isRenderableSlot(content)) return null;
+        // The application context menu is portalled; its wrapper would become an empty flex item.
+        if (slotName === "contextMenu") return <React.Fragment key={slotName}>{content}</React.Fragment>;
 
         const slotConfig: Record<EventTileSlotName, { style: string; className: keyof EventTileViewClassNames }> = {
             avatar: { style: styles.slotAvatar, className: "slotAvatar" },

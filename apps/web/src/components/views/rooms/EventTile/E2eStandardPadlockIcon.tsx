@@ -23,13 +23,6 @@ interface E2eStandardPadlockIconProps {
  */
 export function E2eStandardPadlockIcon({ icon, title }: Readonly<E2eStandardPadlockIconProps>): JSX.Element {
     return (
-        <E2ePadlock
-            className={
-                // Timeline PCSS uses this app class as a layout hook for positioning and layout variants.
-                "mx_EventTile_e2eIcon"
-            }
-            title={title}
-            icon={icon}
-        />
+        <E2ePadlock title={title} icon={icon} />
     );
 }

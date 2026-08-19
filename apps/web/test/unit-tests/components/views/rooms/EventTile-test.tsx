@@ -356,7 +356,7 @@ describe("EventTile", () => {
             jest.spyOn(dis, "dispatch").mockImplementation(() => {});
             const permalinkCreator = new RoomPermalinkCreator(room);
             const { container } = getComponent({ alwaysShowTimestamps: true, permalinkCreator });
-            const timestamp = container.querySelector<HTMLAnchorElement>("a.mx_MessageTimestamp");
+            const timestamp = container.querySelector<HTMLAnchorElement>(".mx_MessageTimestamp a");
 
             expect(timestamp).not.toBeNull();
             fireEvent.click(timestamp!);

@@ -28,11 +28,6 @@ $left-gutter: 64px;
         color: $secondary-content;
     }
 
-    .mx_EventTile_avatar {
-        cursor: pointer;
-        user-select: none;
-    }
-
     .mx_EventTile_body {
         overflow-y: hidden;
         text-align: start;
@@ -69,14 +64,6 @@ $left-gutter: 64px;
             display: flex;
             align-items: center; /* on every layout */
         }
-    }
-
-    .mx_DisambiguatedProfile {
-        color: $primary-content;
-        font: var(--cpd-font-body-md-regular);
-        display: inline-block;
-        padding-bottom: 0px;
-        padding-top: 0px;
     }
 
     .mx_ReactionsRow {
@@ -136,18 +123,6 @@ $left-gutter: 64px;
 
         .mx_EventTile_reply {
             margin-right: 10px;
-        }
-
-        .mx_EventTile_msgOption {
-            float: right;
-            text-align: right;
-            position: relative;
-            width: 90px;
-
-            /* Hack to stop the height of this pushing the messages apart.
-               Replaces margin-top: -6px. This interacts better with a read
-               marker being in between. Content overflows. */
-            height: 1px;
         }
 
         &.mx_EventTile_highlight,
@@ -225,17 +200,6 @@ $left-gutter: 64px;
             margin: 1px;
         }
 
-        .mx_EventTile_msgOption {
-            margin-inline-end: 10px;
-
-            .mx_ReadReceiptGroup {
-                /* This aligns the avatar with the last line of the */
-                /* message. We want to move it one line up */
-                /* See .mx_EventTile[data-layout=group] .mx_EventTile_line in _EventTile.scss */
-                inset-block-start: calc(-$font-22px - 3px);
-            }
-        }
-
         .mx_MessageTimestamp {
             position: absolute;
             left: 0;
@@ -249,12 +213,6 @@ $left-gutter: 64px;
 
         .mx_EventTile_footer {
             margin: var(--cpd-space-1x) var(--EventTile_group_line-spacing-inline-start);
-        }
-
-        > .mx_DisambiguatedProfile {
-            line-height: $font-20px;
-            margin-left: $left-gutter;
-            max-width: calc(100% - $left-gutter);
         }
 
         > .mx_EventTile_avatar {
@@ -531,19 +489,6 @@ $left-gutter: 64px;
     }
 }
 
-.mx_EventTile_e2eIcon {
-    position: relative;
-    width: 14px;
-    height: 14px;
-    display: block;
-
-    svg {
-        height: inherit;
-        width: inherit;
-        display: block;
-    }
-}
-
 .mx_EventTile_body {
     a:hover {
         text-decoration: underline;
@@ -781,18 +726,6 @@ $left-gutter: 64px;
 
         .mx_EventTile_e2eIcon {
             margin: 0px;
-        }
-
-        .mx_DisambiguatedProfile {
-            font-size: $font-13px;
-        }
-
-        .mx_EventTile_msgOption {
-            .mx_ReadReceiptGroup {
-                /* This aligns the avatar with the last line of the */
-                /* message. We want to move it one line up - 2rem */
-                inset-block-start: -2rem;
-            }
         }
 
         .mx_EventTile_content .markdown-body {

@@ -283,7 +283,6 @@ const EVENT_TILE_VIEW_CLASS_NAMES: EventTileViewClassNames = {
     slotNotificationRoomLabel: "mx_EventTile_truncated",
     slotNotificationBadge: "mx_NotificationBadge",
     slotPadlock: "mx_EventTile_e2eIcon",
-    slotReceipt: "mx_ReadReceiptGroup_container",
     slotReplyChain: "mx_EventTile_reply",
     slotSender: "mx_DisambiguatedProfile",
     slotThreadInfo: "mx_ThreadSummary",
