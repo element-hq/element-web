@@ -6,8 +6,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { describe, expect, it } from "vitest";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 import { parseInfoPlistStrings, readBaseUsageDescriptions } from "./infoplist-strings.js";
+
+const desktopDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 describe("parseInfoPlistStrings", () => {
     it("reads the key/value pairs of a .strings file", () => {
@@ -53,7 +57,7 @@ describe("readBaseUsageDescriptions", () => {
     // yet, so an empty or misspelt key here would silently ship an English-only — or, under the
     // hardened runtime, a crashing — consent prompt.
     it("provides both usage descriptions macOS requires for the consent prompt", () => {
-        expect(readBaseUsageDescriptions()).toEqual({
+        expect(readBaseUsageDescriptions(desktopDir)).toEqual({
             NSCameraUsageDescription: expect.stringMatching(/\S/),
             NSMicrophoneUsageDescription: expect.stringMatching(/\S/),
         });
