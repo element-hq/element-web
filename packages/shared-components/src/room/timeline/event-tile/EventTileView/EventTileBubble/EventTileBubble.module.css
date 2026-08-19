@@ -9,9 +9,7 @@
     background-color: var(--cpd-color-bg-subtle-secondary);
     padding: var(--cpd-space-3x);
     border-radius: 8px;
-    /* Reserve space for external timestamps, but also cap the width */
-    /* Legacy variable: --MessageTimestamp-width: 46px; /* 8 + 30 (avatar) + 8 */
-    /* max-width: min(calc(100% - 2 * var(--MessageTimestamp-width)), 600px); */
+    /* Reserve space for timestamps, but also cap the width. */
     max-width: min(calc(100% - 2 * 46px), 600px);
     box-sizing: border-box;
     display: grid;

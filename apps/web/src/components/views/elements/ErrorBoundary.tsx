@@ -52,7 +52,7 @@ export default class ErrorBoundary extends React.PureComponent<Props, IState> {
         if (!PlatformPeg.get()) return;
 
         MatrixClientPeg.safeGet().stopClient();
-        MatrixClientPeg.safeGet()
+        void MatrixClientPeg.safeGet()
             .store.deleteAllData()
             .then(() => {
                 PlatformPeg.get()?.reload();

@@ -33,6 +33,12 @@ export interface AccountDataApi {
  */
 export interface ClientApi {
     /**
+     * Allows modules to modify aspects of the way the matrix-js-sdk client is created and configured.
+     * @alpha Subject to change.
+     */
+    readonly creationManagement: ClientCreationManagementApi;
+
+    /**
      * Use this to modify account data on the homeserver.
      */
     accountData: AccountDataApi;
@@ -43,4 +49,20 @@ export interface ClientApi {
      * @returns Room object from SDK
      */
     getRoom: (id: string) => Room | null;
+}
+
+/**
+ * Methods which manage aspects of the way the matrix-js-sdk Client is created and configured.
+ * @public
+ * @alpha
+ */
+export interface ClientCreationManagementApi {
+    /**
+     * Configure the crypto stack to trust user identities that are signed by particular certificate authorities.
+     *
+     * @param pem - Optional PEM-formatted string that provides CA certificates. These will be used to check
+     *     X.509 signatures on user identities. Any user identity that has a valid signature according to the supplied
+     *     CAs will be considered verified, without any manual verification taking place.
+     */
+    setUserVerificationCaCertsPem(pem: string | null): void;
 }

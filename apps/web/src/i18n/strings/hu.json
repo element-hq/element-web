@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Emodzsiválasztó",
         "jump_first_invite": "Ugrás az első meghívóhoz.",
         "message_composer": "Üzenetszerkesztő",
         "n_unread_messages": {
@@ -917,22 +916,6 @@
     },
     "dialog_close_label": "Ablak bezárása",
     "download_completed": "A letöltés befejeződött",
-    "emoji": {
-        "categories": "Kategóriák",
-        "category_activities": "Tevékenységek",
-        "category_animals_nature": "Állatok és természet",
-        "category_flags": "Zászlók",
-        "category_food_drink": "Étel és ital",
-        "category_frequently_used": "Gyakran használt",
-        "category_objects": "Tárgyak",
-        "category_smileys_people": "Mosolyok és emberek",
-        "category_symbols": "Szimbólumok",
-        "category_travel_places": "Utazás és helyek",
-        "quick_reactions": "Gyors reakciók"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Keresés megszakítása"
-    },
     "empty_room": "Üres szoba",
     "empty_room_was_name": "Üres szoba (%(oldName)s volt)",
     "encryption": {
@@ -1712,7 +1695,6 @@
         "mentions_and_keywords": "@megemlítések és kulcsszavak",
         "mentions_and_keywords_description": "Értesítések fogadása csak megemlítéseknél és kulcsszavaknál, a <a>beállításokban</a> megadottak szerint",
         "mentions_keywords": "Megemlítések és kulcsszavak",
-        "message_didnt_send": "Az üzenet nincs elküldve. Kattintson az információkért.",
         "mute_description": "Nem kap semmilyen értesítést"
     },
     "notifier": {

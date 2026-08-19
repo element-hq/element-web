@@ -216,7 +216,7 @@ async function available(): Promise<boolean> {
         if (major < 21) {
             // If the macOS version is too old for modern Electron support then disable auto update to prevent the app updating and bricking itself.
             // The oldest macOS version supported by Chromium/Electron 38 is Monterey (12.x) which started with Darwin 21.0
-            initialisePromise.then(() => {
+            await initialisePromise.then(() => {
                 ipcMain.emit("showToast", {
                     title: _t("eol|title"),
                     description: _t("eol|no_more_updates", { brand: getConfig().brand }),
@@ -227,7 +227,7 @@ async function available(): Promise<boolean> {
         } else if (major < 22) {
             // If the macOS version is EOL then show a warning message.
             // The oldest macOS version still supported by Apple is Ventura (13.x) which started with Darwin 22.0
-            initialisePromise.then(() => {
+            await initialisePromise.then(() => {
                 ipcMain.emit("showToast", {
                     title: _t("eol|title"),
                     description: _t("eol|warning", { brand: getConfig().brand }),

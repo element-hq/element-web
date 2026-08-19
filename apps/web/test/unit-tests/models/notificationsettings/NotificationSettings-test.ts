@@ -215,4 +215,29 @@ describe("NotificationSettings", () => {
         expect(pendingChanges.deleted).toHaveLength(0);
         expect(pendingChanges.updated).toHaveLength(0);
     });
+
+    it("stores a keyword that starts with a dot under an id the server will accept", async () => {
+        const pushRules = (await import("./pushrules_default.json")) as IPushRules;
+        const model = { ...DefaultNotificationSettings, keywords: ["...push complete"] };
+
+        const pendingChanges = reconcileNotificationSettings(pushRules, model, false);
+
+        expect(pendingChanges.added).toEqual([
+            expect.objectContaining({
+                kind: PushRuleKind.ContentSpecific,
+                rule_id: "push complete",
+                pattern: "...push complete",
+            }),
+        ]);
+    });
+
+    it("keeps the ids of two keywords that differ only by a leading dot apart", async () => {
+        const pushRules = (await import("./pushrules_default.json")) as IPushRules;
+        const model = { ...DefaultNotificationSettings, keywords: ["banana", ".banana"] };
+
+        const pendingChanges = reconcileNotificationSettings(pushRules, model, false);
+
+        expect(pendingChanges.added.map((rule) => rule.rule_id)).toEqual(["banana", "banana-2"]);
+        expect(pendingChanges.added.map((rule) => rule.pattern)).toEqual(["banana", ".banana"]);
+    });
 });
