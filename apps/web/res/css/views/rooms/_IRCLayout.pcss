@@ -12,6 +12,7 @@ Please see LICENSE files in the repository root for full details.
 
 .mx_IRCLayout {
     --name-width: 80px; /* cf. ircDisplayNameWidth on Settings.tsx */
+    --event-tile-irc-name-width: var(--name-width);
     --icon-width: 14px;
     --line-height: var(--irc-line-height);
     --right-padding: 5px;
@@ -34,7 +35,6 @@ Please see LICENSE files in the repository root for full details.
     .mx_ReplyChain {
         .mx_DisambiguatedProfile {
             width: unset;
-            background: transparent;
             order: unset;
             flex-shrink: unset; /* Unset flex-shrink to prevent long display name blowout */
         }

@@ -117,8 +117,8 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
         const event = this.fakeEvent(this.state);
 
         return (
-            <div className={className} role="presentation">
-                <EventPresentationContextProvider layout={this.props.layout}>
+            <EventPresentationContextProvider layout={this.props.layout}>
+                <div className={className} role="presentation">
                     <EventTile
                         mxEvent={event}
                         layout={this.props.layout}
@@ -127,8 +127,8 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
                         inhibitInteraction
                         useEventSenderSnapshot
                     />
-                </EventPresentationContextProvider>
-            </div>
+                </div>
+            </EventPresentationContextProvider>
         );
     }
 }

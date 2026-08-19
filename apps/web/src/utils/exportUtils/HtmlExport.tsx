@@ -13,7 +13,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { logger } from "matrix-js-sdk/src/logger";
 import escapeHtml from "escape-html";
 import { TooltipProvider } from "@vector-im/compound-web";
-import { DateSeparatorView, I18nContext } from "@element-hq/web-shared-components";
+import { DateSeparatorView, EventPresentationProvider, I18nContext } from "@element-hq/web-shared-components";
 
 import Exporter from "./Exporter";
 import { mediaFromMxc } from "../../customisations/Media";
@@ -32,7 +32,6 @@ import { textForEvent } from "../../TextForEvent";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
 import { SDKContext } from "../../contexts/SDKContext.ts";
 import { SDKContextClass } from "../../contexts/SDKContextClass";
-import { EventPresentationContextProvider } from "../EventPresentationContextProvider";
 import { DateSeparatorViewModel } from "../../viewmodels/room/timeline/DateSeparatorViewModel";
 import exportJS from "./exportJS.js?raw";
 
@@ -290,7 +289,7 @@ export default class HTMLExporter extends Exporter {
                     <MatrixClientContext.Provider value={this.room.client}>
                         <SDKContext.Provider value={SDKContextClass.instance}>
                             <TooltipProvider>
-                                <EventPresentationContextProvider layout={Layout.Group}>
+                                <EventPresentationProvider value={{ layout: "group", density: "default" }}>
                                     <EventTile
                                         mxEvent={mxEv}
                                         continuation={continuation}
@@ -312,7 +311,7 @@ export default class HTMLExporter extends Exporter {
                                         getRelationsForEvent={this.getRelationsForEvent}
                                         ref={ref}
                                     />
-                                </EventPresentationContextProvider>
+                                </EventPresentationProvider>
                             </TooltipProvider>
                         </SDKContext.Provider>
                     </MatrixClientContext.Provider>
