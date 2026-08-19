@@ -5,16 +5,17 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { act } from "jest-matrix-react";
+import { vi } from "vitest";
+import { act } from "test-utils-rtl";
 import { toDataURL, type QRCodeSegment, type QRCodeToDataURLOptions } from "qrcode";
 
-jest.mock("qrcode", () => ({
-    ...jest.requireActual("qrcode"),
-    toDataURL: jest.fn(),
+vi.mock("qrcode", async () => ({
+    ...(await vi.importActual("qrcode")),
+    toDataURL: vi.fn(),
 }));
 
-const realQRCode = jest.requireActual("qrcode") as { toDataURL: typeof toDataURL };
-const mockedToDataURL = jest.mocked(toDataURL);
+const realQRCode = (await vi.importActual("qrcode")) as { toDataURL: typeof toDataURL };
+const mockedToDataURL = vi.mocked(toDataURL);
 
 let qrCodeRenderPromise: Promise<string> | undefined;
 
