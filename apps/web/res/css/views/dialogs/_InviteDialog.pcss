@@ -224,13 +224,15 @@ Please see LICENSE files in the repository root for full details.
 }
 
 .mx_InviteDialog_tile {
+    --mx_InviteDialog_tile_avatarSize: 36px;
+
     cursor: pointer;
     display: grid;
     gap: var(--cpd-space-2x) var(--cpd-space-3x);
     align-items: center;
 
     &.mx_InviteDialog_tile--inviterError {
-        grid-template-columns: max-content auto; /* max-content = avatar width */
+        grid-template-columns: var(--mx_InviteDialog_tile_avatarSize) auto;
         margin-bottom: var(--cpd-space-6x);
 
         &:last-child {
@@ -252,8 +254,8 @@ Please see LICENSE files in the repository root for full details.
     }
 
     .mx_InviteDialog_tile_avatarStack {
-        width: 36px;
-        height: 36px;
+        width: var(--mx_InviteDialog_tile_avatarSize);
+        height: var(--mx_InviteDialog_tile_avatarSize);
         display: inline-block;
         position: relative;
         grid-row-start: 1;
