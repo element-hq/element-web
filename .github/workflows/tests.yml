@@ -93,7 +93,7 @@ jobs:
                       !apps/web/coverage/lcov-report
 
     vitest:
-        name: Vitest${{ case(matrix.path == '.', '', format(' {0}', matrix.path)) }}
+        name: Vitest${{ case(matrix.path == '.', '', format(' {0}', matrix.path)) }} ${{ format('{0}/{1}', matrix.runner, matrix.num-runners) }}
         strategy:
             fail-fast: false
             matrix:
@@ -170,7 +170,7 @@ jobs:
                   NAME=$(basename "$MATRIX_PATH")
                   echo "name=$NAME" >> $GITHUB_OUTPUT
               env:
-                  MATRIX_PATH: ${{ case(matrix.path == '.', 'vite', format(' {0}', matrix.path)) }}
+                  MATRIX_PATH: ${{ case(matrix.path == '.', 'vitest', format(' {0}', matrix.path)) }}
 
             - name: Upload Artifact
               if: env.ENABLE_COVERAGE == 'true'
