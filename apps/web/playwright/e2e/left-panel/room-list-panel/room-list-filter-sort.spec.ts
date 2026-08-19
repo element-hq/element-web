@@ -204,36 +204,79 @@ test.describe("Room list filters and sort", () => {
             await expect(primaryFilters.getByRole("option").first()).toHaveText("Invites");
         });
 
-        test(
-            "unread filter should only match unread rooms that have a count",
-            { tag: "@screenshot" },
-            async ({ page, app, bot }) => {
+        test.describe("Unread filter", () => {
+            test(
+                "unread filter should only match unread rooms that have a count when Notifications.showbold=off",
+                { tag: "@screenshot" },
+                async ({ page, app, bot }) => {
+                    const roomListView = getRoomList(page);
+                    const primaryFilters = getPrimaryFilters(page);
+
+                    // Let's configure unread dm room so that we only get notification for mentions and keywords
+                    await app.viewRoomById(unReadDmId);
+                    await app.settings.openRoomSettings("Notifications");
+                    await page.getByText("@mentions and replies").click();
+                    await app.settings.closeDialog();
+
+                    // Let's open a room other than unread room or unread dm
+                    await roomListView.getByRole("button", { name: "Open room favourite room" }).click();
+
+                    // Let's make the bot send a new message in both rooms
+                    await bot.sendMessage(unReadDmId, "Hello!");
+                    await bot.sendMessage(unReadRoomId, "Hello!");
+
+                    // Let's activate the unread filter now
+                    await primaryFilters.getByRole("option", { name: "Unread" }).click();
+
+                    // Unread filter should only show unread room and not unread dm!
+                    const unreadDm = roomListView.getByRole("button", { name: "Open room unread room" });
+                    await expect(unreadDm).toBeVisible();
+                    await expect(unreadDm).toMatchScreenshot("unread-dm.png");
+                    await expect(roomListView.getByRole("button", { name: "Open room unread dm" })).not.toBeVisible();
+                },
+            );
+
+            test("unread filter should only match unread rooms that have an activity when Notifications.activityIsUnread=true", async ({
+                page,
+                app,
+                bot,
+            }) => {
                 const roomListView = getRoomList(page);
                 const primaryFilters = getPrimaryFilters(page);
 
-                // Let's configure unread dm room so that we only get notification for mentions and keywords
+                // The unread DM room only notifies for mentions and keywords
                 await app.viewRoomById(unReadDmId);
                 await app.settings.openRoomSettings("Notifications");
                 await page.getByText("@mentions and replies").click();
                 await app.settings.closeDialog();
 
-                // Let's open a room other than unread room or unread dm
+                // (The unread non-DM room still notifies for all activity)
+
+                // Open some other room
                 await roomListView.getByRole("button", { name: "Open room favourite room" }).click();
 
-                // Let's make the bot send a new message in both rooms
+                // Send a message in the unread DM room and the unread non-DM room
                 await bot.sendMessage(unReadDmId, "Hello!");
                 await bot.sendMessage(unReadRoomId, "Hello!");
 
-                // Let's activate the unread filter now
-                await primaryFilters.getByRole("option", { name: "Unread" }).click();
+                // Turn the "Unreads" filter on
+                await primaryFilters.getByRole("option", { name: "Unreads" }).click();
 
-                // Unread filter should only show unread room and not unread dm!
-                const unreadDm = roomListView.getByRole("button", { name: "Open room unread room" });
+                const unreadRoom = roomListView.getByRole("button", { name: "Open room unread room" });
+                const unreadDm = roomListView.getByRole("button", { name: "Open room unread dm" });
+
+                // Only the unread room is visible. The DM room is hidden.
+                await expect(unreadRoom).toBeVisible();
+                await expect(unreadDm).not.toBeVisible();
+
+                // Now set "activityIsUnread" to on
+                await app.settings.setValue("Notifications.activityIsUnread", null, SettingLevel.DEVICE, true);
+
+                // Now both unread rooms are visible
+                await expect(unreadRoom).toBeVisible();
                 await expect(unreadDm).toBeVisible();
-                await expect(unreadDm).toMatchScreenshot("unread-dm.png");
-                await expect(roomListView.getByRole("button", { name: "Open room unread dm" })).not.toBeVisible();
-            },
-        );
+            });
+        });
 
         test("should sort the room list alphabetically", async ({ page }) => {
             const roomListView = getRoomList(page);

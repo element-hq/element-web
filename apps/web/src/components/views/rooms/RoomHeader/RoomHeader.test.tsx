@@ -123,6 +123,7 @@ describe("RoomHeader", () => {
         // Mock CallStore.instance.getCall to return null by default
         // Individual tests can override this when they need a specific Call object
         vi.spyOn(CallStore.instance, "getCall").mockReturnValue(null);
+        vi.spyOn(CallStore.instance, "getConfiguredRTCTransports").mockReturnValue([]);
 
         // Reset the mock RoomViewStore
         mockRoomViewStore.isViewingCall.mockReturnValue(false);
@@ -419,9 +420,9 @@ describe("RoomHeader", () => {
         beforeEach(async () => {
             SdkConfig.put({});
             // Enable Element Call
-            client._unstable_getRTCTransports = vi
-                .fn()
-                .mockResolvedValue([{ type: "livekit", livekit_service_url: "https://example.org" }]);
+            vi.spyOn(CallStore.instance, "getConfiguredRTCTransports").mockReturnValue([
+                { type: "livekit", livekit_service_url: "https://example.org" },
+            ]);
             // And ensure the CallStore has the transports configured.
             await setupAsyncStoreWithClient(CallStore.instance, client);
         });
@@ -809,6 +810,9 @@ describe("RoomHeader", () => {
                     getAvatarUrl: () => "mxc://avatar.url/image.png",
                     getMxcAvatarUrl: () => "mxc://avatar.url/image.png",
                 },
+            ]);
+            vi.spyOn(CallStore.instance, "getConfiguredRTCTransports").mockReturnValue([
+                { type: "livekit", livekit_service_url: "https://example.org" },
             ]);
         });
 

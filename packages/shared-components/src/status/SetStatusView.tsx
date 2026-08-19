@@ -42,11 +42,11 @@ export interface SetStatusViewSnapshot {
 
 export interface SetStatusViewActions {
     /**
-     * Called when the user clicks to start setting a status.
+     * Called when the user clicks to start setting a custom status.
      *
-     * If falsy, the default dropdown will open for the user to choose a status.
+     * If falsy, the UI will change to allow the user to choose an emoji and enter text.
      */
-    onSetStatusClick?: () => void;
+    onSetCustomStatusClick?: () => void;
 
     /**
      * Called when the user selects a preset status from the dropdown.
@@ -69,6 +69,13 @@ export type SetStatusViewModel = ViewModel<SetStatusViewSnapshot, SetStatusViewA
 
 export type SetStatusViewProps = {
     vm: SetStatusViewModel;
+
+    /**
+     * If true, the view starts in custom status mode, ready for the user to enter a custom status.
+     *
+     * Ignored if the user already has a status set, as their existing status is shown instead.
+     */
+    initialCustomMode?: boolean;
 };
 
 function StatusOption({ value }: { value: StatusValue }): React.ReactNode {
@@ -80,9 +87,9 @@ function StatusOption({ value }: { value: StatusValue }): React.ReactNode {
     );
 }
 
-export function SetStatusView({ vm }: SetStatusViewProps): JSX.Element {
+export function SetStatusView({ vm, initialCustomMode = false }: SetStatusViewProps): JSX.Element {
     const { userStatus, recentEmojis } = useViewModel(vm);
-    const [customMode, setCustomMode] = useState(false);
+    const [customMode, setCustomMode] = useState(initialCustomMode);
 
     const renderItem = useCallback((value: StatusValue | null): React.ReactNode => {
         if (value === null) return null;
@@ -129,7 +136,11 @@ export function SetStatusView({ vm }: SetStatusViewProps): JSX.Element {
 
     const onValueChange = (value: StatusValue): void => {
         if (value === "custom") {
-            setCustomMode(true);
+            if (vm.onSetCustomStatusClick) {
+                vm.onSetCustomStatusClick();
+            } else {
+                setCustomMode(true);
+            }
             return;
         }
 
@@ -145,9 +156,7 @@ export function SetStatusView({ vm }: SetStatusViewProps): JSX.Element {
         });
     };
 
-    return vm.onSetStatusClick ? (
-        renderTrigger({ onClick: vm.onSetStatusClick })
-    ) : (
+    return (
         <Dropdown<StatusValue>
             values={STATUS_KEYS}
             label={null}

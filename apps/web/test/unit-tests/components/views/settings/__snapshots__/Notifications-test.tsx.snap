@@ -88,7 +88,6 @@ exports[`<Notifications /> main notification switches renders only enable notifi
           class="_container_udcm8_10"
         >
           <input
-            checked=""
             class="_input_udcm8_24"
             id="mx_SettingsFlag_testid_1"
             role="switch"
@@ -105,6 +104,38 @@ exports[`<Notifications /> main notification switches renders only enable notifi
         <label
           class="_label_1o4d9_60"
           for="mx_SettingsFlag_testid_1"
+        >
+          Consider all new activity as an unread message
+        </label>
+      </div>
+    </div>
+    <div
+      class="_inline-field_1o4d9_33"
+    >
+      <div
+        class="_inline-field-control_1o4d9_45"
+      >
+        <div
+          class="_container_udcm8_10"
+        >
+          <input
+            checked=""
+            class="_input_udcm8_24"
+            id="mx_SettingsFlag_testid_2"
+            role="switch"
+            type="checkbox"
+          />
+          <div
+            class="_ui_udcm8_34"
+          />
+        </div>
+      </div>
+      <div
+        class="_inline-field-body_1o4d9_39"
+      >
+        <label
+          class="_label_1o4d9_60"
+          for="mx_SettingsFlag_testid_2"
         >
           Only show notifications in the thread activity centre
         </label>

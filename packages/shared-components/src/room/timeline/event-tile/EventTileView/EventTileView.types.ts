@@ -7,8 +7,6 @@
 
 import type React from "react";
 
-import type { EventLayout } from "../../EventPresentation/EventPresentation.types";
-
 /** Timeline rendering modes supported by the EventTile shell. */
 export type EventTileRenderingMode = "Room" | "Thread" | "ThreadsList" | "File" | "Notification" | "Search" | "Pinned";
 
@@ -18,6 +16,22 @@ export interface EventTileViewRootState {
     isOwnEvent: boolean;
     /** Whether EventTile renders a reply chain. */
     hasReply: boolean;
+    /** Whether the event is an informational timeline item. */
+    info?: boolean;
+    /** Whether the event uses the bubble container shell. */
+    bubbleContainer?: boolean;
+    /** Whether the bubble is aligned to the left. */
+    leftAlignedBubble?: boolean;
+    /** Whether the event is aligned between bubble columns. */
+    alignedBetweenBubbles?: boolean;
+    /** Whether bubble styling is suppressed for this event. */
+    noBubble?: boolean;
+    /** Whether sender details are hidden. */
+    noSender?: boolean;
+    /** Whether the event failed decryption. */
+    encryptionFailure?: boolean;
+    /** Whether the event body is an emote. */
+    emote?: boolean;
     /** Whether the event is highlighted by search or navigation. */
     highlighted?: boolean;
     /** Whether the event is selected. */
@@ -28,6 +42,24 @@ export interface EventTileViewRootState {
     continuation?: boolean;
     /** Whether this is the last event in a section. */
     lastInSection?: boolean;
+    /** Whether the tile is a contextual search result. */
+    contextual?: boolean;
+    /** Whether the action bar currently has focus. */
+    actionBarFocused?: boolean;
+    /** Whether the body should be clamped to a preview. */
+    previewClamped?: boolean;
+}
+
+/** Semantic state consumed by EventTileView for the event line. */
+export interface EventTileViewLine {
+    /** Whether the event body is likely to render media content. */
+    media?: boolean;
+    /** Whether the event is a sticker. */
+    sticker?: boolean;
+    /** Whether the event body is an emote. */
+    emote?: boolean;
+    /** Whether the event body is an image. */
+    image?: boolean;
 }
 
 /** Complete root state consumed by EventTileView. */
@@ -44,8 +76,6 @@ export interface EventTileViewRoot {
     permalink?: string;
     /** Optional event identifier exposed through `data-event-id`. */
     eventId?: string;
-    /** Configured tile layout. */
-    layout: EventLayout;
     /** Timeline rendering mode. */
     shape: EventTileRenderingMode;
     /** Conditional state classes and styling state. */
@@ -136,6 +166,8 @@ export interface EventTileViewHandlers {
 export interface EventTileViewProps extends EventTileViewHandlers {
     /** Pure root render state. */
     root: EventTileViewRoot;
+    /** Optional semantic state for the event line. */
+    line?: EventTileViewLine;
     /** Optional application CSS class overrides for shell-owned elements. */
     classNames?: EventTileViewClassNames;
     /** Render-ready children supplied by the application layer. Each slot is rendered inside a named shell boundary. */

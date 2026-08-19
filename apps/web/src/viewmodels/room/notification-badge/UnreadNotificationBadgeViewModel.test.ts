@@ -7,9 +7,15 @@
 
 // @vitest-environment happy-dom
 
-import { NotificationCountType, PendingEventOrdering, Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import {
+    MatrixEventEvent,
+    NotificationCountType,
+    PendingEventOrdering,
+    Room,
+    RoomEvent,
+} from "matrix-js-sdk/src/matrix";
 import { vi, describe, it, expect, beforeEach } from "vitest";
-import { stubClient } from "test-utils";
+import { mkEvent, stubClient } from "test-utils";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { UnreadNotificationBadgeViewModel } from "./UnreadNotificationBadgeViewModel";
@@ -66,6 +72,27 @@ describe("UnreadNotificationBadgeViewModel", () => {
             isHighlight: true,
             symbol: "2",
         });
+        expect(listener).toHaveBeenCalled();
+
+        vm.dispose();
+    });
+
+    it("re-evaluates the unread state when an event of the room is decrypted", () => {
+        const mkDecryptedEvent = (roomId: string) =>
+            mkEvent({ event: true, type: "m.room.message", user: "@alice:example.org", room: roomId, content: {} });
+        const vm = new UnreadNotificationBadgeViewModel({ room });
+        const listener = vi.fn();
+        vm.subscribe(listener);
+
+        client.emit(MatrixEventEvent.Decrypted, mkDecryptedEvent("!other:example.org"));
+        expect(listener).not.toHaveBeenCalled();
+
+        room.getRoomUnreadNotificationCount = vi
+            .fn()
+            .mockImplementation((type: NotificationCountType) => (type === NotificationCountType.Total ? 3 : 0));
+        client.emit(MatrixEventEvent.Decrypted, mkDecryptedEvent(room.roomId));
+
+        expect(vm.getSnapshot()).toMatchObject({ isNotification: true, symbol: "3" });
         expect(listener).toHaveBeenCalled();
 
         vm.dispose();

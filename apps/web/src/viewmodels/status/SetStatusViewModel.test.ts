@@ -215,14 +215,15 @@ describe("UserMenuSetStatusViewModel", () => {
         vi.restoreAllMocks();
     });
 
-    it("dispatches ToggleUserMenu and ViewUserSettings on onSetStatusClick", async () => {
+    it("dispatches ToggleUserMenu and ViewUserSettings on onSetCustomStatusClick", async () => {
         const vm = new UserMenuSetStatusViewModel({ client, ownProfileStore: mockOwnProfileStoreInstance });
-        vm.onSetStatusClick();
+        vm.onSetCustomStatusClick();
         await waitFor(() => {
             expect(dispatchSpy).toHaveBeenCalledWith({ action: Action.ToggleUserMenu });
             expect(dispatchSpy).toHaveBeenCalledWith({
                 action: Action.ViewUserSettings,
                 initialTabId: UserTab.Account,
+                props: { startCustomStatus: true },
             });
         });
     });

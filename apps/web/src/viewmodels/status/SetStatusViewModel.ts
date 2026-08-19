@@ -85,13 +85,14 @@ export class UserMenuSetStatusViewModel extends SetStatusViewModel {
         super(props);
     }
 
-    public onSetStatusClick = (): void => {
+    public onSetCustomStatusClick = (): void => {
         dis.dispatch({
             action: Action.ToggleUserMenu,
         });
         dis.dispatch({
             action: Action.ViewUserSettings,
             initialTabId: UserTab.Account,
+            props: { startCustomStatus: true },
         });
     };
 }

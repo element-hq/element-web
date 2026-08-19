@@ -108,27 +108,17 @@
     white-space: nowrap;
 }
 
-/* Match the application IRC profile treatment without adding application
-   selectors to the shared EventTileView stylesheet. */
-.ircSender {
-    width: var(--event-tile-irc-name-width, 80px);
-    margin-inline-end: 0;
-    overflow: hidden;
-    text-align: start;
+.searchThreadInfo {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--cpd-space-2x, 8px);
+    color: var(--cpd-color-text-secondary, #626a73);
+    font: var(--cpd-font-body-sm-regular);
 }
 
-.ircSender :global(.mx_DisambiguatedProfile_displayName) {
-    display: inline-block;
-    width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: start;
-}
-
-.ircSender :global(.mx_DisambiguatedProfile_mxid) {
-    visibility: collapse;
-    margin-inline-start: 0;
-    padding-inline: 5px;
+.searchThreadInfo svg {
+    width: 18px;
+    height: 18px;
 }
 
 .replyAuthor,
@@ -137,15 +127,6 @@
     align-items: center;
     color: var(--cpd-color-text-secondary, #626a73);
     font-size: 12px;
-}
-
-.notificationDot {
-    display: block;
-    flex: 0 0 8px;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: var(--cpd-color-icon-success-primary, #0d9f6e);
 }
 
 .receiptAvatar {
@@ -217,6 +198,12 @@
     line-height: 1.45;
 }
 
+.stickerBody {
+    padding: 0;
+    font-size: 72px;
+    line-height: 1;
+}
+
 .replyChain {
     display: grid;
     gap: 2px;
@@ -235,6 +222,12 @@
 
 .storyReactions {
     display: flex;
+}
+
+.pinnedFooter {
+    display: flex;
+    align-items: center;
+    gap: var(--cpd-space-2x, 8px);
 }
 
 .storyEventTile.storyOwnEvent.storyLayoutBubble .storyReactions {

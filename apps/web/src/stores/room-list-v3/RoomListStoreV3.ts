@@ -49,19 +49,6 @@ import {
 import { DefaultTagID, type TagID } from "./skip-list/tag";
 import { SDKContextClass } from "../../contexts/SDKContextClass.ts";
 
-/**
- * These are the filters passed to the room skip list.
- */
-const FILTERS = [
-    new FavouriteFilter(),
-    new UnreadFilter(),
-    new PeopleFilter(),
-    new RoomsFilter(),
-    new InvitesFilter(),
-    new MentionsFilter(),
-    new LowPriorityFilter(),
-];
-
 export enum RoomListStoreV3Event {
     // The event/channel which is called when the room lists have been changed.
     ListsUpdate = "lists_update",
@@ -110,6 +97,11 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     private roomSkipList?: RoomSkipList;
 
     /**
+     * These are the filters passed to the room skip list.
+     */
+    private filterByFilterKey: Map<FilterKey, Filter> = new Map();
+
+    /**
      * Defines the display order of sections.
      */
     private sortedTags: string[] = [];
@@ -124,6 +116,8 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
 
     public constructor(dispatcher: MatrixDispatcher) {
         super(dispatcher);
+        this.buildFilters();
+
         this.msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
         SDKContextClass.instance.spaceStore.on(UPDATE_SELECTED_SPACE, () => {
             this.onActiveSpaceChanged();
@@ -132,7 +126,27 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         SettingsStore.watchSetting("RoomList.OrderedCustomSections", null, () => this.onOrderedCustomSectionsChange());
         this.loadCustomSections();
 
+        SettingsStore.watchSetting("Notifications.activityIsUnread", null, (_settingsName, _roomId, _level, newValue) =>
+            this.onActivityIsUnreadChange(Boolean(newValue)),
+        );
         SettingsStore.watchSetting("RoomList.showSections", null, () => this.scheduleEmit());
+    }
+
+    /**
+     * Build the filters used in the skip list and store them in the filterByFilterKey map.
+     */
+    private buildFilters(): void {
+        const activityIsUnread = SettingsStore.getValue("Notifications.activityIsUnread");
+        const filters = [
+            new FavouriteFilter(),
+            new UnreadFilter(activityIsUnread),
+            new PeopleFilter(),
+            new RoomsFilter(),
+            new InvitesFilter(),
+            new MentionsFilter(),
+            new LowPriorityFilter(),
+        ];
+        filters.forEach((filter) => this.filterByFilterKey.set(filter.key, filter));
     }
 
     /**
@@ -480,7 +494,10 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      * Get the list of filters to be used in the skip list, including the section filters.
      */
     private getSkipListFilters(): Filter[] {
-        return [...FILTERS, ...this.sortedTags.map((tag) => new SectionFilter(tag, this.sortedTags))];
+        return [
+            ...this.filterByFilterKey.values(),
+            ...this.sortedTags.map((tag) => new SectionFilter(tag, this.sortedTags)),
+        ];
     }
 
     /**
@@ -509,6 +526,20 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      */
     private onOrderedCustomSectionsChange(): void {
         this.loadCustomSections();
+        if (!this.roomSkipList) return;
+        this.roomSkipList.useNewFilters(this.getSkipListFilters());
+        this.scheduleEmit();
+    }
+
+    /**
+     * Handle changes to the "Notifications.activityIsUnread" setting.
+     * Updates the skip list filters to reflect the new setting and emits an update.
+     * Emit {@link LISTS_UPDATE_EVENT}.
+     */
+    private onActivityIsUnreadChange(activityIsUnread: boolean): void {
+        const unreadFilter = new UnreadFilter(activityIsUnread);
+        this.filterByFilterKey.set(unreadFilter.key, unreadFilter);
+
         if (!this.roomSkipList) return;
         this.roomSkipList.useNewFilters(this.getSkipListFilters());
         this.scheduleEmit();
