@@ -411,7 +411,7 @@ describe("section", () => {
         const customTag = `${CUSTOM_SECTION_TAG_PREFIX}abc`;
 
         function mockStoredOrder(orderedTags: string[]): void {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+            vi.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
                 if (setting === "RoomList.OrderedCustomSections") return orderedTags;
                 if (setting === "RoomList.CustomSectionData") return { [customTag]: { tag: customTag, name: "A" } };
                 return null;

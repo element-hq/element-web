@@ -1011,7 +1011,7 @@ describe("RoomListStoreV3", () => {
 
         function mockDmRooms(dmRooms: Room[]): void {
             const dmRoomIds = dmRooms.map((room) => room.roomId);
-            jest.spyOn(DMRoomMap, "shared").mockImplementation((() => {
+            vi.spyOn(DMRoomMap, "shared").mockImplementation((() => {
                 return {
                     getUserIdForRoomId: (id: string) => (dmRoomIds.includes(id) ? "@myuser:matrix.org" : ""),
                 };
@@ -1189,7 +1189,7 @@ describe("RoomListStoreV3", () => {
                 mockDmRooms([rooms[3]]);
                 rooms[3].tags[tag] = {};
 
-                jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
+                vi.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
                     if (setting === "RoomList.showSections") return true;
                     if (setting === "RoomList.OrderedCustomSections") return [customTag];
                     if (setting === "RoomList.CustomSectionData")
