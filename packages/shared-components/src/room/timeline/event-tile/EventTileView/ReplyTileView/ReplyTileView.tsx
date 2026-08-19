@@ -10,7 +10,6 @@ import classNames from "classnames";
 
 import { MemberAvatarView, type MemberAvatarViewModel } from "../../../../../core/MemberAvatar/MemberAvatarView";
 import { type ViewModel, useViewModel } from "../../../../../core/viewmodel";
-import { useEventPresentationAttributes } from "../../../EventPresentation/EventPresentationContext";
 import { DisambiguatedProfileView, type DisambiguatedProfileViewModel } from "../DisambiguatedProfile";
 import styles from "./ReplyTileView.module.css";
 
@@ -54,7 +53,6 @@ export interface ReplyTileViewProps {
  */
 export function ReplyTileView({ vm }: ReplyTileViewProps): JSX.Element {
     const { href, sender, inline, info, body } = useViewModel(vm);
-    const eventPresentationAttributes = useEventPresentationAttributes();
 
     return (
         <div
@@ -63,7 +61,6 @@ export function ReplyTileView({ vm }: ReplyTileViewProps): JSX.Element {
                 [styles.info]: info,
             })}
             data-testid="reply-tile"
-            {...eventPresentationAttributes}
         >
             <a className={styles.link} href={href} onClick={vm.onClick}>
                 {sender ? (

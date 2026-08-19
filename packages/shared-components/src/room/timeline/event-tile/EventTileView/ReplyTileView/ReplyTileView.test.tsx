@@ -85,16 +85,6 @@ describe("ReplyTileView", () => {
         expect(screen.getByTestId("reply-tile")).toHaveClass(styles.root, styles.inline, styles.info);
     });
 
-    it("maps the event presentation layout to the reply root", () => {
-        const vm = new TestReplyTileViewModel({ href: "#", body: "Reply content" }) as ReplyTileViewModel;
-        render(<ReplyTileView vm={vm} />, {
-            presentation: { layout: "bubble" },
-        });
-
-        expect(screen.getByTestId("reply-tile")).toHaveAttribute("data-event-layout", "bubble");
-        expect(screen.getByTestId("reply-tile")).toHaveAttribute("data-event-density", "default");
-    });
-
     it("clips body previews without relying on legacy mx classes", () => {
         renderReplyTile({
             body: <p>Long reply content</p>,

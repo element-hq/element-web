@@ -86,18 +86,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const BubbleLayout: Story = {
-    globals: {
-        eventLayout: "bubble",
-    },
-};
-
-export const IrcLayout: Story = {
-    globals: {
-        eventLayout: "irc",
-    },
-};
-
 export const Inline: Story = {
     args: {
         inline: true,

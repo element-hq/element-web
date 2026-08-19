@@ -12,8 +12,6 @@ exports[`ReplyChain should call setQuoteExpanded if chain is longer than 2 lines
       >
         <div
           class="_root_hpj7k_8"
-          data-event-density="default"
-          data-event-layout="group"
           data-testid="reply-tile"
         >
           <a
