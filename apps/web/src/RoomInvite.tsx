@@ -128,10 +128,14 @@ export function showAnyInviteErrors(
                 </div>
             );
 
-            Modal.createDialog(ErrorDialog, {
-                title: _t("invite|room_failed_partial_title"),
-                description,
-            });
+            Modal.createDialog(
+                ErrorDialog,
+                {
+                    title: _t("invite|room_failed_partial_title"),
+                    description,
+                },
+                "mx_InviteDialog_multiInviterErrorWrapper",
+            );
             return false;
         }
     }

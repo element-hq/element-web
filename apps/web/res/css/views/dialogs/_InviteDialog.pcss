@@ -239,7 +239,8 @@ Please see LICENSE files in the repository root for full details.
 
         .mx_InviteDialog_tile--inviterError_errorText {
             grid-row-start: 2;
-            grid-column-start: 2;
+            grid-column: 1 / -1;
+            margin-top: var(--cpd-space-2x);
 
             font-size: $font-15px;
             color: $alert;
@@ -295,6 +296,10 @@ Please see LICENSE files in the repository root for full details.
             color: $muted-fg-color;
         }
     }
+}
+
+.mx_InviteDialog_multiInviterErrorWrapper .mx_Dialog {
+    max-width: 600px;
 }
 
 .mx_InviteDialog_multiInviterError {

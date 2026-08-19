@@ -443,6 +443,24 @@ describe("InviteDialog", () => {
         });
     });
 
+    describe("when the homeserver refuses an invite", () => {
+        it("should give way to the report of what was not sent", async () => {
+            room.updateMyMembership(KnownMembership.Join);
+            mockClient.invite.mockRejectedValue(
+                new MatrixError({ errcode: "M_FORBIDDEN", error: "@bob:example.org is not accepting invites" }),
+            );
+            const onFinished = vi.fn();
+
+            render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={onFinished} />);
+            await enterIntoSearchField(bobId);
+            await userEvent.click(screen.getByRole("button", { name: "Invite" }));
+
+            await expect(screen.findByText("Some invites were not sent")).resolves.toBeVisible();
+            expect(screen.getByText("They are not accepting invitations.")).toBeVisible();
+            expect(onFinished).toHaveBeenCalledWith(true);
+        });
+    });
+
     describe("when inviting a user with an unknown profile", () => {
         beforeEach(async () => {
             vi.mocked(startDmOnFirstMessage).mockClear();
