@@ -1,3 +1,52 @@
+Changes in [1.12.26](https://github.com/element-hq/element-web/releases/tag/v1.12.26) (2026-08-18)
+==================================================================================================
+## ✨ Features
+
+* Timeline MVVM 1 - Shared TimelineView and Overlay Buttons ([#34464](https://github.com/element-hq/element-web/pull/34464)). Contributed by @langleyd.
+* Tell the user when registration is being rate limited ([#34519](https://github.com/element-hq/element-web/pull/34519)). Contributed by @hayaksi1.
+* Provide element-web modules docker image ([#34657](https://github.com/element-hq/element-web/pull/34657)). Contributed by @t3chguy.
+* Show \& clear your own on-a-call status ([#34613](https://github.com/element-hq/element-web/pull/34613)). Contributed by @dbkr.
+* feat(widget): Rtc transports discovery for widgets ([#34393](https://github.com/element-hq/element-web/pull/34393)). Contributed by @BillCarsonFr.
+* Custom user status ([#34386](https://github.com/element-hq/element-web/pull/34386)). Contributed by @dbkr.
+* Add a Module API for accessing storage helper functions. ([#34284](https://github.com/element-hq/element-web/pull/34284)). Contributed by @Half-Shot.
+* Room list: persist section state (expanded/collapsed) ([#34351](https://github.com/element-hq/element-web/pull/34351)). Contributed by @florianduros.
+
+## 🐛 Bug Fixes
+
+* [Backport staging] macOS Fix: Can't change homeserver on login or press the logout button on the splash/loading srceen ([#34706](https://github.com/element-hq/element-web/pull/34706)). Contributed by @RiotRobot.
+* [Backport staging] Cachebust languages.json ([#34711](https://github.com/element-hq/element-web/pull/34711)). Contributed by @RiotRobot.
+* Fix layout of user status dropdown ([#34668](https://github.com/element-hq/element-web/pull/34668)). Contributed by @dbkr.
+* Fix notification badge sizing ([#34655](https://github.com/element-hq/element-web/pull/34655)). Contributed by @ZacksBot.
+* Keep a file's extension when it is renamed in the desktop save dialog ([#34601](https://github.com/element-hq/element-web/pull/34601)). Contributed by @hayaksi1.
+* Update the pinned message banner when a pinned message is edited ([#34631](https://github.com/element-hq/element-web/pull/34631)). Contributed by @hayaksi1.
+* Use the dark code highlighting stylesheet in the dark-custom theme ([#34491](https://github.com/element-hq/element-web/pull/34491)). Contributed by @hayaksi1.
+* Keep a copy of the audio buffer so the WAV fallback can run ([#34481](https://github.com/element-hq/element-web/pull/34481)). Contributed by @hayaksi1.
+* Update the member list invite button when power levels change ([#34475](https://github.com/element-hq/element-web/pull/34475)). Contributed by @hayaksi1.
+* Open linkified room aliases and permalinks in the app rather than the browser ([#34507](https://github.com/element-hq/element-web/pull/34507)). Contributed by @hayaksi1.
+* Stop large audio playback when the media element ends ([#34495](https://github.com/element-hq/element-web/pull/34495)). Contributed by @hayaksi1.
+* Fix spacing in user status dropdown ([#34589](https://github.com/element-hq/element-web/pull/34589)). Contributed by @dbkr.
+* Reverse a confirmed autocomplete with a single undo ([#34635](https://github.com/element-hq/element-web/pull/34635)). Contributed by @hayaksi1.
+* Allow a notification keyword to start with a dot ([#34574](https://github.com/element-hq/element-web/pull/34574)). Contributed by @hayaksi1.
+* Fix mistaken reference to element\_call.disable in docs ([#34647](https://github.com/element-hq/element-web/pull/34647)). Contributed by @robintown.
+* Round the room preview dialog like everything around it ([#34597](https://github.com/element-hq/element-web/pull/34597)). Contributed by @hayaksi1.
+* Increase Threads panel header height to 64px to match Pinned Message banner ([#34566](https://github.com/element-hq/element-web/pull/34566)). Contributed by @PrinceXDev.
+* fix: align room timeline scrollbar to viewport edge  ([#33788](https://github.com/element-hq/element-web/pull/33788)). Contributed by @Adi-Beker.
+* Let a click on the separator wander a little before it counts as a drag ([#34580](https://github.com/element-hq/element-web/pull/34580)). Contributed by @hayaksi1.
+* Surface an error when a downloaded file can't be opened instead of failing silently ([#33998](https://github.com/element-hq/element-web/pull/33998)). Contributed by @hayaksi1.
+* Keep emoji at code size inside code blocks so line numbers stay aligned ([#34497](https://github.com/element-hq/element-web/pull/34497)). Contributed by @hayaksi1.
+* Make permalinks to the same event work more than once ([#34483](https://github.com/element-hq/element-web/pull/34483)). Contributed by @hayaksi1.
+* Remove code to round panel size on resize ([#34543](https://github.com/element-hq/element-web/pull/34543)). Contributed by @MidhunSureshR.
+* Do not ask for a room address when the room already has one ([#34499](https://github.com/element-hq/element-web/pull/34499)). Contributed by @hayaksi1.
+* Show the filename in the audio player title when the event has one ([#34479](https://github.com/element-hq/element-web/pull/34479)). Contributed by @hayaksi1.
+* Treat an unset profile field as unchanged in collapsed membership summaries ([#34493](https://github.com/element-hq/element-web/pull/34493)). Contributed by @hayaksi1.
+* Open space settings when editing a space topic ([#34477](https://github.com/element-hq/element-web/pull/34477)). Contributed by @hayaksi1.
+* Show "border" type of separator when clicking on separator ([#34549](https://github.com/element-hq/element-web/pull/34549)). Contributed by @MidhunSureshR.
+* fix member list scroll bug where invited 3PID users replace joined members ([#34427](https://github.com/element-hq/element-web/pull/34427)). Contributed by @rizzler13.
+* Update Twemoji credits links ([#34461](https://github.com/element-hq/element-web/pull/34461)). Contributed by @t3chguy.
+* Fix joinRoom failing when the roomviewstore state changes. ([#34180](https://github.com/element-hq/element-web/pull/34180)). Contributed by @Half-Shot.
+* Fixed collapsed URL preview incorrect aspect ratio for chromium ([#34382](https://github.com/element-hq/element-web/pull/34382)). Contributed by @Siriusmart.
+
+
 Changes in [1.12.25](https://github.com/element-hq/element-web/releases/tag/v1.12.25) (2026-08-05)
 ==================================================================================================
 ## 🦖 Deprecations
