@@ -5,12 +5,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactNode } from "react";
+import React, { type JSX, useCallback, type ReactNode } from "react";
 import { MessageComposerUrlPreviewView, useViewModel } from "@element-hq/web-shared-components";
 
 import { type MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
 import { ModuleApi } from "../../../modules/Api";
+import { useSettingValue } from "../../../hooks/useSettings";
+import SettingsStore from "../../../settings/SettingsStore";
+import { SettingLevel } from "../../../settings/SettingLevel";
 
 export function MessageComposerUrlPreviewWrapper({
     urlPreviewVm: vm,
@@ -21,9 +24,26 @@ export function MessageComposerUrlPreviewWrapper({
 }): ReactNode | null {
     const { roomId } = useScopedRoomContext("showUrlPreview", "roomId");
     const { content } = useViewModel(vm);
-    const customComponent = moduleApi.customComponents.renderComposerPreview({ text: content, roomId: roomId! }, () => (
-        <MessageComposerUrlPreviewView vm={vm} />
-    ));
 
-    return customComponent ?? <MessageComposerUrlPreviewView vm={vm} />;
+    const urlPreviewBundlesEnabled = useSettingValue("feature_msc4095_url_preview_bundle");
+    const collapsed = useSettingValue("composerUrlPreviewCollapsed");
+
+    const toggleCollapsed = useCallback(() => {
+        void SettingsStore.setValue("composerUrlPreviewCollapsed", null, SettingLevel.DEVICE, !collapsed);
+    }, [collapsed]);
+
+    const makeDefaultComposer = (): JSX.Element => (
+        <MessageComposerUrlPreviewView
+            vm={vm}
+            collapsed={collapsed}
+            toggleCollapsed={toggleCollapsed}
+            removePreview={urlPreviewBundlesEnabled ? vm.removePreview : undefined}
+        />
+    );
+
+    const customComponent = moduleApi.customComponents.renderComposerPreview(
+        { text: content, roomId: roomId! },
+        makeDefaultComposer,
+    );
+    return customComponent ?? makeDefaultComposer();
 }

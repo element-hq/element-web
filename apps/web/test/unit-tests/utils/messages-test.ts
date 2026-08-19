@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type IContent } from "matrix-js-sdk/src/matrix";
-import { type MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
+import { type UrlPreview, type MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
 
 import { attachMentions, attachUrlPreviews } from "../../../src/utils/messages";
 import EditorModel from "../../../src/editor/model";
@@ -32,28 +32,33 @@ describe("attachUrlPreviews", () => {
         ({ msgtype: "m.text", body: "hi https://example.com" }) as RoomMessageEventContent;
 
     const snapshot = (image?: object): MessageComposerUrlPreviewSnapshot => ({
-        previews: [
+        entries: [
             {
-                link: "https://example.com",
-                showTooltipOnLink: false,
-                title: "Example",
-                siteName: "example.com",
-                description: "desc",
-                ...(image ? { image } : {}),
-            } as any,
+                status: "loaded",
+                matched_url: "https://example.com",
+                include: true,
+                preview: {
+                    link: "https://example.com",
+                    showTooltipOnLink: false,
+                    title: "Example",
+                    siteName: "example.com",
+                    description: "desc",
+                    ...(image ? { image } : {}),
+                } as UrlPreview,
+            },
         ],
         content: "https://example.com",
     });
 
     it("does nothing when there are no previews", () => {
         const content = makeContent();
-        attachUrlPreviews({ previews: [], content: "" }, content);
+        attachUrlPreviews({ entries: [], content: "" }, content, false);
         expect(content["com.beeper.linkpreviews"]).toBeUndefined();
     });
 
     it("attaches a preview with no image", () => {
         const content = makeContent();
-        attachUrlPreviews(snapshot(), content);
+        attachUrlPreviews(snapshot(), content, true);
         expect(content["com.beeper.linkpreviews"]).toEqual([
             expect.objectContaining({ "og:title": "Example", "og:image": undefined }),
         ]);
@@ -73,6 +78,7 @@ describe("attachUrlPreviews", () => {
                 playable: false,
             }),
             content,
+            true,
         );
 
         expect(content["com.beeper.linkpreviews"]![0]).toEqual(
