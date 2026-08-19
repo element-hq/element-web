@@ -248,8 +248,10 @@ describe("section", () => {
                 close: vi.fn(),
             } as any);
 
-            await createSection(MetaSpace.Home);
-            expect(createDialogSpy).toHaveBeenCalledWith(CreateSectionDialog);
+            await createSection(MetaSpace.Home, "!preselected:example.org");
+            expect(createDialogSpy).toHaveBeenCalledWith(CreateSectionDialog, {
+                preselectedRoomId: "!preselected:example.org",
+            });
         });
 
         it("tags the rooms chosen in the dialog with the new section", async () => {

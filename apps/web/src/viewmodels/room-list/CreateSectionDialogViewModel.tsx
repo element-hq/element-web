@@ -37,6 +37,11 @@ interface CreateSectionDialogViewModelProps {
         tag: string;
     };
     /**
+     * The id of a room to preselect in the picker, if any.
+     * Set when the section is created from a room, so that room ends up in it.
+     */
+    preselectedRoomId?: string;
+    /**
      * Callback called when the dialog should close.
      * @param sectionName The name of the section to create or edit, or undefined if the user gave up on it.
      * @param roomsToTag The rooms that should be added to the section
@@ -105,7 +110,7 @@ export class CreateSectionDialogViewModel
         // Only move to the next step if we're not already there and the section name is valid.
         if (this.getSnapshot().step !== "add_rooms" && this.getSnapshot().isValid) {
             this.loadRooms();
-            this.snapshot.merge({ step: "add_rooms", isValid: false });
+            this.snapshot.merge({ step: "add_rooms" });
             return;
         }
 
@@ -152,6 +157,18 @@ export class CreateSectionDialogViewModel
             }
         }
 
+        // When the section is created from a room, that room is selected by default so it lands in
+        // the section. The user is free to unselect it before confirming.
+        const preselectedRoomId = this.props.preselectedRoomId;
+        if (preselectedRoomId) {
+            const preselectedRoom = this.props.matrixClient.getRoom(preselectedRoomId);
+            if (preselectedRoom) {
+                this.selectedRoomsMap.set(preselectedRoomId, roomToViewRoom(preselectedRoom, true));
+            } else {
+                logger.warn(`Cannot preselect room ${preselectedRoomId} as it is unknown to the client`);
+            }
+        }
+
         // The store hands over the rooms unsorted, so put the most recent ones first
         this.roomsByRecency = sortRoomsByRecency(rooms, this.props.matrixClient.getSafeUserId());
 
@@ -162,7 +179,11 @@ export class CreateSectionDialogViewModel
         const selectedRooms = Array.from(this.selectedRoomsMap.values());
 
         // State is ready
-        this.snapshot.merge({ rooms: filteredRooms, selectedRooms });
+        this.snapshot.merge({
+            rooms: filteredRooms,
+            selectedRooms,
+            isValid: this.areRoomsSelectedDifferent(selectedRooms),
+        });
     }
 
     /**

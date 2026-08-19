@@ -29,6 +29,12 @@ interface CreateSectionDialogProps {
     };
 
     /**
+     * The id of a room to preselect in the room picker, if any.
+     * Used when the section is created from a room, so that room ends up in it.
+     */
+    preselectedRoomId?: string;
+
+    /**
      * Callback called when the dialog is closed.
      * @param sectionName The name of the section to create or edit, or undefined if the user gave up on it.
      * @param roomsToTag The rooms that should be added to the section.
@@ -40,12 +46,17 @@ interface CreateSectionDialogProps {
 /**
  * Dialog shown to the user to create a new  section in the room list.
  */
-export function CreateSectionDialog({ onFinished, sectionToEdit }: CreateSectionDialogProps): JSX.Element {
+export function CreateSectionDialog({
+    onFinished,
+    sectionToEdit,
+    preselectedRoomId,
+}: CreateSectionDialogProps): JSX.Element {
     const vm = useCreateAutoDisposedViewModel(
         () =>
             new CreateSectionDialogViewModel({
                 onFinished,
                 sectionToEdit,
+                preselectedRoomId,
                 matrixClient: SDKContextClass.instance.client!,
                 roomListStore: RoomListStoreV3.instance,
             }),

@@ -40,16 +40,29 @@ describe("CreateSectionDialogViewModel", () => {
         DMRoomMap.makeShared(matrixClient);
     });
 
-    function createViewModel(sectionToEdit?: { name: string; tag: string }): CreateSectionDialogViewModel {
-        return new CreateSectionDialogViewModel({ onFinished, sectionToEdit, matrixClient, roomListStore });
+    function createViewModel(
+        sectionToEdit?: { name: string; tag: string },
+        preselectedRoomId?: string,
+    ): CreateSectionDialogViewModel {
+        return new CreateSectionDialogViewModel({
+            onFinished,
+            sectionToEdit,
+            preselectedRoomId,
+            matrixClient,
+            roomListStore,
+        });
     }
 
     /**
      * Create a view model that has moved past the section name and reached the room selection step.
      * @param sectionToEdit - The section being edited, when the dialog is not creating a new one.
+     * @param preselectedRoomId - The room the section is created from, when there is one.
      */
-    function createViewModelOnRoomStep(sectionToEdit?: { name: string; tag: string }): CreateSectionDialogViewModel {
-        const vm = createViewModel(sectionToEdit);
+    function createViewModelOnRoomStep(
+        sectionToEdit?: { name: string; tag: string },
+        preselectedRoomId?: string,
+    ): CreateSectionDialogViewModel {
+        const vm = createViewModel(sectionToEdit, preselectedRoomId);
         vm.setSection(sectionToEdit?.name ?? "General");
         vm.nextStep();
         return vm;
@@ -96,6 +109,35 @@ describe("CreateSectionDialogViewModel", () => {
             vm.nextStep();
 
             expect(onFinished).toHaveBeenCalledWith("General", ["!second:matrix.org"], []);
+        });
+    });
+
+    describe("room preselected by the caller", () => {
+        const PRESELECTED = "!second:matrix.org";
+
+        it("should select the room and make the step submittable", () => {
+            const vm = createViewModelOnRoomStep(undefined, PRESELECTED);
+
+            expect(vm.getSnapshot().selectedRooms.map((room) => room.id)).toEqual([PRESELECTED]);
+            expect(vm.getSnapshot().rooms.find((room) => room.id === PRESELECTED)?.selected).toBe(true);
+            expect(vm.getSnapshot().isValid).toBe(true);
+        });
+
+        it("should report the room as a room to tag when submitted", () => {
+            const vm = createViewModelOnRoomStep(undefined, PRESELECTED);
+
+            vm.nextStep();
+
+            expect(onFinished).toHaveBeenCalledWith("General", [PRESELECTED], []);
+        });
+
+        it("should report no room when the user unselects it before submitting", () => {
+            const vm = createViewModelOnRoomStep(undefined, PRESELECTED);
+
+            vm.toggleRoom(PRESELECTED);
+            vm.nextStep();
+
+            expect(onFinished).toHaveBeenCalledWith("General", [], []);
         });
     });
 
