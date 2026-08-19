@@ -62,6 +62,7 @@ describe("MessageComposerUrlPreviewViewModel", () => {
           {
             "content": "",
             "entries": [],
+            "isModified": false,
           }
         `);
     });
@@ -73,6 +74,7 @@ describe("MessageComposerUrlPreviewViewModel", () => {
         await vi.waitFor(() => {
             expect(vm.getSnapshot()).toEqual({
                 content: "Check out https://example.org today",
+                isModified: true,
                 entries: [
                     {
                         include: true,
@@ -203,6 +205,7 @@ describe("MessageComposerUrlPreviewViewModel", () => {
         await vi.waitFor(() => {
             expect(vm.getSnapshot()).toEqual({
                 content: "https://example.org",
+                isModified: true,
                 entries: [
                     {
                         include: true,

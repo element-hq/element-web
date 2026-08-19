@@ -59,6 +59,8 @@ export interface MessageComposerUrlPreviewSnapshot {
     entries: MessageComposerUrlPreviewSnapshotEntry[];
     /** Content of the composer when the snapshot is computed */
     content: string;
+    /** Whether the entries have been changed by removing it */
+    isModified: boolean;
 }
 
 /** Props for MessageComposerUrlPreviewView. */

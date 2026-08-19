@@ -24,6 +24,11 @@ export interface MessageComposerUrlPreviewViewModelProps {
     showTooltips: boolean;
     urlPreviewBundle: boolean;
     content?: string;
+    /**
+     * Previews to seed {@link previewCache} with, used when editing an event so its existing
+     * URL preview bundle is shown without being refetched.
+     */
+    cachedEntries?: Map<string, MessageComposerUrlPreviewSnapshotEntry>;
 }
 
 export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
@@ -59,18 +64,26 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
      * - the cache is cleared when the composer is emptied: intentionally by user or by sending a message,
      *   this reloads all previews and forgets all preview.include states, causing all previously removed previews to be unremoved
      */
-    private readonly previewCache: Map<string, MessageComposerUrlPreviewSnapshotEntry> = new Map();
+    private readonly previewCache: Map<string, MessageComposerUrlPreviewSnapshotEntry>;
 
     public constructor(props: MessageComposerUrlPreviewViewModelProps) {
-        super(props, { entries: [], content: props.content ?? "" });
+        super(props, { entries: [], content: props.content ?? "", isModified: false });
         this.urlPreviewVisible = props.visible;
         this.fetcher = new UrlPreviewFetcher(props.client, Date.now(), props.showTooltips);
         this.content = this.snapshot.current.content;
+        this.previewCache = props.cachedEntries ?? new Map();
+
+        // set state with initial content
+        if (props.content) {
+            this.computeSnapshot(props.content);
+            // seeding from an existing event is not a user modification
+            this.snapshot.merge({ isModified: false });
+        }
     }
 
     private computeSnapshot(content: string): void {
         if (!this.urlPreviewVisible) {
-            this.snapshot.set({ entries: [], content });
+            this.snapshot.set({ entries: [], content, isModified: this.snapshot.current.isModified });
             return;
         }
 
@@ -120,6 +133,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
                         entries: snapshot.entries.map((entry) =>
                             entry.matched_url === updatedEntry.matched_url ? updatedEntry : entry,
                         ),
+                        isModified: snapshot.isModified,
                     });
                 });
             }
@@ -127,7 +141,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
             return this.previewCache.get(link)!;
         });
 
-        this.snapshot.set({ entries, content });
+        this.snapshot.set({ entries, content, isModified: true });
     }
 
     /**
@@ -184,6 +198,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
         this.snapshot.set({
             content: snapshot.content,
             entries: snapshot.entries.filter((entry) => entry.include),
+            isModified: true,
         });
     };
 }

@@ -44,7 +44,7 @@ import { PosthogAnalytics } from "../../../PosthogAnalytics";
 import { editorRoomKey, editorStateKey } from "../../../Editing";
 import type DocumentOffset from "../../../editor/offset";
 import { attachMentions, attachRelation } from "../../../utils/messages";
-import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
+import { linksIn } from "../../../utils/UrlUtils";
 import { filterBoolean } from "../../../utils/arrays";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 

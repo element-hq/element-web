@@ -27,6 +27,7 @@ import type EditorModel from "../../../editor/model";
 import { type RoomMessageEventContent } from "../../../../@types/url-preview";
 import { attachUrlPreviews } from "../../../utils/messages";
 import { UrlPreviewFetcher } from "../../../utils/UrlPreviewFetcher";
+import { linksIn } from "../../../utils/UrlUtils";
 
 interface IEditMessageComposerProps extends MatrixClientProps {
     showUrlPreview: boolean;
@@ -38,7 +39,7 @@ export function EditMessageComposerWrapper(props: IEditMessageComposerProps): JS
     const urlPreviewBundleEnabled = useSettingValue("feature_msc4095_url_preview_bundle");
     const content = props.editState.getEvent().getContent<RoomMessageEventContent>();
     const bundleContent = content["com.beeper.linkpreviews"];
-    const linksInMessage = MessageComposerUrlPreviewViewModel.linksIn(content.body);
+    const linksInMessage = linksIn(content.body);
     const linksInBundle = new Set(bundleContent?.map((entry) => entry.matched_url));
 
     const vm = useCreateAutoDisposedViewModel(() => {
