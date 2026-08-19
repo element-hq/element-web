@@ -71,14 +71,14 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 tabindex="-1"
               >
                 <div
-                  class="mx_DisambiguatedProfile _disambiguatedProfile_1ons0_8"
+                  class="mx_DisambiguatedProfile _disambiguatedProfile_1a1j2_8"
                   data-event-density="default"
                   data-event-layout="group"
                   role="button"
                   tabindex="0"
                 >
                   <span
-                    class="mx_Username_color2 _disambiguatedProfile_displayName_1ons0_18 mx_DisambiguatedProfile_displayName"
+                    class="mx_Username_color2 _disambiguatedProfile_displayName_1a1j2_18 mx_DisambiguatedProfile_displayName"
                     dir="auto"
                   >
                     Alice
@@ -169,14 +169,14 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 tabindex="-1"
               >
                 <div
-                  class="mx_DisambiguatedProfile _disambiguatedProfile_1ons0_8"
+                  class="mx_DisambiguatedProfile _disambiguatedProfile_1a1j2_8"
                   data-event-density="default"
                   data-event-layout="bubble"
                   role="button"
                   tabindex="0"
                 >
                   <span
-                    class="mx_Username_color2 _disambiguatedProfile_displayName_1ons0_18 mx_DisambiguatedProfile_displayName"
+                    class="mx_Username_color2 _disambiguatedProfile_displayName_1a1j2_18 mx_DisambiguatedProfile_displayName"
                     dir="auto"
                   >
                     Alice
@@ -270,14 +270,14 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   class="mx_MessageTimestamp"
                 />
                 <div
-                  class="mx_DisambiguatedProfile _disambiguatedProfile_1ons0_8"
+                  class="mx_DisambiguatedProfile _disambiguatedProfile_1a1j2_8"
                   data-event-density="default"
                   data-event-layout="irc"
                   role="button"
                   tabindex="0"
                 >
                   <span
-                    class="mx_Username_color2 _disambiguatedProfile_displayName_1ons0_18 mx_DisambiguatedProfile_displayName"
+                    class="mx_Username_color2 _disambiguatedProfile_displayName_1a1j2_18 mx_DisambiguatedProfile_displayName"
                     dir="auto"
                   >
                     Alice

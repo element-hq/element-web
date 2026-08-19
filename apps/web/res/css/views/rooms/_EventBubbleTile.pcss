@@ -107,6 +107,15 @@ Please see LICENSE files in the repository root for full details.
         }
     }
 
+    /* Position the main event sender; reply senders own their alignment. */
+    > .mx_DisambiguatedProfile,
+    .mx_EventTile_senderDetails > .mx_DisambiguatedProfile {
+        position: relative;
+        inset-block-start: -2px;
+        inset-inline-start: 2px;
+        font-size: $font-15px;
+    }
+
     .mx_MessageActionBar {
         top: -28px;
         z-index: 9; /* above the avatar */

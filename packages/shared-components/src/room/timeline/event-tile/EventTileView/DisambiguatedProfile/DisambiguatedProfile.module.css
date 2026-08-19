@@ -39,10 +39,6 @@
 }
 
 .disambiguatedProfile[data-event-layout="bubble"] {
-    position: relative;
-    inset-block-start: -2px;
-    inset-inline-start: 2px;
-    font-size: 15px;
     width: fit-content;
     max-width: var(--event-tile-bubble-line-max-width, 70%);
     line-height: 18px;
