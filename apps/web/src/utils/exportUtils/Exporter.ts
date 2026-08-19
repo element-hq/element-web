@@ -16,7 +16,6 @@ import { ExportType, type IExportOptions } from "./exportUtils";
 import { decryptFile } from "../DecryptFile";
 import { mediaFromContent } from "../../customisations/Media";
 import { formatFullDateNoDay, formatFullDateNoDayISO } from "../../DateUtils";
-import { isVoiceMessage } from "../EventUtils";
 import { _t } from "../../languageHandler";
 import SdkConfig from "../../SdkConfig";
 
@@ -258,27 +257,27 @@ export default abstract class Exporter {
     };
 
     public getFileExtension(event: MatrixEvent): string {
-        if (event.getType() === "m.sticker") return ".png";
-        if (isVoiceMessage(event)) return ".ogg";
         const content = event.getContent();
-        const msgtype = content.msgtype;
-        if (msgtype === "m.text" || msgtype === "m.notice") return ".txt";
         const mime = content.info?.mimetype;
+        // If a mimetype is available, just use that
         if (typeof mime === "string") {
             const ext = Exporter.MIME_TO_EXT[mime.toLowerCase()];
             if (ext) return ext;
         }
+        // Otherwise, text and notice are text
+        const msgtype = content.msgtype;
+        if (msgtype === "m.text" || msgtype === "m.notice") return ".txt";
+        // If those fall through, fallback to splitting on "."
         const filename = content.filename;
-        if (typeof filename === "string") {
-            // Fallback to previous method of splitting on "."
+        if (typeof filename === "string") {            
             const lastDot = filename.lastIndexOf(".");
             if (lastDot !== -1 && lastDot < filename.length - 1) {
                 const rawExt = filename.slice(lastDot + 1);
                 if (rawExt) return "." + rawExt;
             }
         }
-        // Last resort fallback to a somewhat "generic" extension but log
-        // the issue
+        // Last resort fallback to a somewhat "generic" extension
+        // and also log the issue
         console.warn("Unknown file type, defaulting to .bin", event.getType(), content);
         return ".bin";
     }
