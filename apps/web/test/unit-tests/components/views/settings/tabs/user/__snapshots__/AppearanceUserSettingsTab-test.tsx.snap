@@ -214,12 +214,14 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         tabindex="-1"
                       >
                         <div
-                          class="mx_DisambiguatedProfile _disambiguatedProfile_4jooo_8"
+                          class="mx_DisambiguatedProfile _disambiguatedProfile_1a1j2_8"
+                          data-event-density="default"
+                          data-event-layout="group"
                           role="button"
                           tabindex="0"
                         >
                           <span
-                            class="mx_Username_color2 _disambiguatedProfile_displayName_4jooo_14 mx_DisambiguatedProfile_displayName"
+                            class="mx_Username_color2 _disambiguatedProfile_displayName_1a1j2_18 mx_DisambiguatedProfile_displayName"
                             dir="auto"
                           >
                             @userId:matrix.org
@@ -245,7 +247,9 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           id="1"
                         >
                           <div
-                            class="mx_MTextBody mx_EventTile_content _root_dlp6w_8 _text_dlp6w_13"
+                            class="mx_MTextBody mx_EventTile_content _root_j01hv_8 _text_j01hv_24"
+                            data-event-density="default"
+                            data-event-layout="group"
                           >
                             <div
                               class="mx_EventTile_body translate"
@@ -308,12 +312,14 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         tabindex="-1"
                       >
                         <div
-                          class="mx_DisambiguatedProfile _disambiguatedProfile_4jooo_8"
+                          class="mx_DisambiguatedProfile _disambiguatedProfile_1a1j2_8"
+                          data-event-density="default"
+                          data-event-layout="bubble"
                           role="button"
                           tabindex="0"
                         >
                           <span
-                            class="mx_Username_color2 _disambiguatedProfile_displayName_4jooo_14 mx_DisambiguatedProfile_displayName"
+                            class="mx_Username_color2 _disambiguatedProfile_displayName_1a1j2_18 mx_DisambiguatedProfile_displayName"
                             dir="auto"
                           >
                             @userId:matrix.org
@@ -339,7 +345,9 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           id="2"
                         >
                           <div
-                            class="mx_MTextBody mx_EventTile_content _root_dlp6w_8 _text_dlp6w_13"
+                            class="mx_MTextBody mx_EventTile_content _root_j01hv_8 _text_j01hv_24"
+                            data-event-density="default"
+                            data-event-layout="bubble"
                           >
                             <div
                               class="mx_EventTile_body translate"
@@ -405,12 +413,14 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           class="mx_MessageTimestamp"
                         />
                         <div
-                          class="mx_DisambiguatedProfile _disambiguatedProfile_4jooo_8"
+                          class="mx_DisambiguatedProfile _disambiguatedProfile_1a1j2_8"
+                          data-event-density="default"
+                          data-event-layout="irc"
                           role="button"
                           tabindex="0"
                         >
                           <span
-                            class="mx_Username_color2 _disambiguatedProfile_displayName_4jooo_14 mx_DisambiguatedProfile_displayName"
+                            class="mx_Username_color2 _disambiguatedProfile_displayName_1a1j2_18 mx_DisambiguatedProfile_displayName"
                             dir="auto"
                           >
                             @userId:matrix.org
@@ -436,7 +446,9 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           id="3"
                         >
                           <div
-                            class="mx_MTextBody mx_EventTile_content _root_dlp6w_8 _text_dlp6w_13"
+                            class="mx_MTextBody mx_EventTile_content _root_j01hv_8 _text_j01hv_24"
+                            data-event-density="default"
+                            data-event-layout="irc"
                           >
                             <div
                               class="mx_EventTile_body translate"
