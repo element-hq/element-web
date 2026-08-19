@@ -6,6 +6,10 @@
  */
 
 .disambiguatedProfile {
+    color: var(--cpd-color-text-primary);
+    display: inline-block;
+    font: var(--cpd-font-body-md-regular);
+    padding-block: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -27,5 +31,71 @@
 
     .userStatus {
         margin-inline-start: 5px;
+    }
+}
+
+.disambiguatedProfile[data-event-density="compact"] {
+    font-size: 13px;
+}
+
+.disambiguatedProfile[data-event-layout="bubble"] {
+    width: fit-content;
+    max-width: var(--event-tile-bubble-line-max-width, 70%);
+    line-height: 18px;
+    white-space: normal;
+
+    .disambiguatedProfile_displayName {
+        white-space: nowrap;
+        margin-inline-end: 5px;
+
+        /* Preserve the legacy LTR treatment for RTL display names. */
+        unicode-bidi: embed;
+        direction: ltr;
+    }
+
+    .disambiguatedProfile_mxid {
+        margin-inline-start: 0;
+    }
+}
+
+.disambiguatedProfile[data-event-layout="irc"] {
+    order: 2;
+    flex-shrink: 0;
+    width: var(--event-tile-irc-name-width, 80px);
+    margin-inline-end: 0;
+    padding-block: 1px;
+    display: inline-block;
+    line-height: 1.125rem;
+
+    &:hover {
+        overflow: visible;
+        z-index: 10;
+    }
+
+    .disambiguatedProfile_displayName {
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: start;
+    }
+
+    .disambiguatedProfile_mxid {
+        visibility: collapse;
+        margin-inline-start: 0;
+        padding-inline: 5px;
+    }
+
+    &:hover .disambiguatedProfile_displayName {
+        display: inline;
+        overflow: visible;
+        background-color: var(--cpd-color-bg-subtle-secondary);
+        border-radius: 8px 0 0 8px;
+        padding-inline-end: var(--cpd-space-2x);
+    }
+
+    &:hover .disambiguatedProfile_mxid {
+        visibility: visible;
+        opacity: 1;
+        background-color: var(--cpd-color-bg-subtle-secondary);
     }
 }
