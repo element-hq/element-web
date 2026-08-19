@@ -163,6 +163,10 @@ describe("<MatrixChat />", () => {
         getThirdpartyProtocols: vi.fn().mockResolvedValue({}),
         getClientWellKnown: vi.fn().mockReturnValue({}),
         _unstable_getRTCTransports: vi.fn().mockResolvedValue([]),
+        cachedRtcTransports: {
+            wait: vi.fn().mockResolvedValue([]),
+            get: vi.fn().mockReturnValue([]),
+        },
         waitForClientWellKnown: vi.fn().mockResolvedValue({}),
         isVersionSupported: vi.fn().mockResolvedValue(false),
         initRustCrypto: vi.fn(),
@@ -329,13 +333,16 @@ describe("<MatrixChat />", () => {
         localStorage.clear();
         vi.clearAllTimers();
 
+        // RTL cleanup won't touch roots we render ourselves so clean those up manually
+        await clearAllModals();
+
         // This is a massive hack, but a lot of these tests end up completing while the login flow is still proceeding.
         // So then, we start the next test while stuff is still ongoing from the previous test, which messes up the current test.
         // There is no obvious event we could wait for which indicates that everything has completed,
         // since each test does something different. Instead, we just let real timers and microtasks drain.
         await act(() => sleep(200));
 
-        // RTL cleanup won't touch roots we render ourselves so clean those up manually
+        // Anything the drain kicked off may have opened a dialog again
         await clearAllModals();
     });
 

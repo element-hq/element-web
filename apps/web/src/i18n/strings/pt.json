@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Selecionador de emojis",
         "jump_first_invite": "Salta para o primeiro convite.",
         "message_composer": "Compositor de mensagens",
         "n_unread_messages": {
@@ -834,22 +833,6 @@
     },
     "dialog_close_label": "Fechar diálogo",
     "download_completed": "Download Concluído",
-    "emoji": {
-        "categories": "Categorias",
-        "category_activities": "Atividades",
-        "category_animals_nature": "Animais e Natureza",
-        "category_flags": "Bandeiras",
-        "category_food_drink": "Comida e Bebida",
-        "category_frequently_used": "Frequentemente utilizado",
-        "category_objects": "Objetos",
-        "category_smileys_people": "Carinhas Sorridentes e Pessoas",
-        "category_symbols": "Símbolos",
-        "category_travel_places": "Viagens e Locais",
-        "quick_reactions": "Reações rápidas"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Cancelar pesquisa"
-    },
     "empty_room": "Sala vazia",
     "empty_room_was_name": "Sala vazia (era %(oldName)s)",
     "encryption": {
@@ -1563,7 +1546,6 @@
         "mentions_and_keywords": "@menções e palavras-chave",
         "mentions_and_keywords_description": "Recebe notificações apenas com menções e palavras-chave, conforme definido nas tuas definições de <a></a>",
         "mentions_keywords": "Menções e palavras-chave",
-        "message_didnt_send": "A mensagem não foi enviada. Clica para obteres informações.",
         "mute_description": "Não receberás quaisquer notificações"
     },
     "notifier": {
