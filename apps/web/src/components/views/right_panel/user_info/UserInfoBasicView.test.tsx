@@ -5,26 +5,28 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
-import { mocked } from "jest-mock";
-import { type MatrixClient, type Room, RoomMember, type User } from "matrix-js-sdk/src/matrix";
-import { logRoles, render, screen } from "jest-matrix-react";
+// @vitest-environment happy-dom
 
-import { createTestClient, mkStubRoom } from "../../../../../test-utils";
+import React from "react";
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import { type MatrixClient, type Room, RoomMember, type User } from "matrix-js-sdk/src/matrix";
+import { logRoles, render, screen } from "test-utils-rtl";
+
+import { createTestClient, mkStubRoom } from "test-utils";
 import {
     type UserInfoBasicState,
     useUserInfoBasicViewModel,
-} from "../../../../../../src/components/viewmodels/right_panel/user_info/UserInfoBasicViewModel";
-import { UserInfoBasicView } from "../../../../../../src/components/views/right_panel/user_info/UserInfoBasicView";
-import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
+} from "../../../viewmodels/right_panel/user_info/UserInfoBasicViewModel";
+import { UserInfoBasicView } from "./UserInfoBasicView";
+import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 
 const defaultRoomPermissions = {
     canEdit: true,
     canInvite: true,
     modifyLevelMax: -1,
 };
-jest.mock("../../../../../../src/components/viewmodels/right_panel/user_info/UserInfoBasicViewModel", () => ({
-    useUserInfoBasicViewModel: jest.fn(),
+vi.mock("../../../viewmodels/right_panel/user_info/UserInfoBasicViewModel", () => ({
+    useUserInfoBasicViewModel: vi.fn(),
     useRoomPermissions: () => defaultRoomPermissions,
 }));
 
@@ -36,9 +38,9 @@ describe("<UserInfoBasic />", () => {
         isMe: false,
         isRoomDMForMember: false,
         showDeactivateButton: true,
-        onSynapseDeactivate: jest.fn(),
-        startUpdating: jest.fn(),
-        stopUpdating: jest.fn(),
+        onSynapseDeactivate: vi.fn(),
+        startUpdating: vi.fn(),
+        stopUpdating: vi.fn(),
     };
 
     const defaultRoomId = "!fkfk";
@@ -67,7 +69,7 @@ describe("<UserInfoBasic />", () => {
     });
 
     it("should display the defaut values", () => {
-        mocked(useUserInfoBasicViewModel).mockReturnValue(defaultValue);
+        vi.mocked(useUserInfoBasicViewModel).mockReturnValue(defaultValue);
         const { container } = renderComponent();
         logRoles(container);
         expect(container).toMatchSnapshot();
@@ -75,7 +77,7 @@ describe("<UserInfoBasic />", () => {
 
     it("should not show ignore button if user is me", () => {
         const state: UserInfoBasicState = { ...defaultValue, isMe: true };
-        mocked(useUserInfoBasicViewModel).mockReturnValue(state);
+        vi.mocked(useUserInfoBasicViewModel).mockReturnValue(state);
         renderComponent();
 
         const ignoreButton = screen.queryByRole("button", { name: "Ignore" });
@@ -84,7 +86,7 @@ describe("<UserInfoBasic />", () => {
 
     it("should not show deactivate button", () => {
         const state: UserInfoBasicState = { ...defaultValue, showDeactivateButton: false };
-        mocked(useUserInfoBasicViewModel).mockReturnValue(state);
+        vi.mocked(useUserInfoBasicViewModel).mockReturnValue(state);
         renderComponent();
 
         const deactivateButton = screen.queryByRole("button", { name: "Deactivate user" });
@@ -93,7 +95,7 @@ describe("<UserInfoBasic />", () => {
 
     it("should not show powerlevels selector for dm", () => {
         const state: UserInfoBasicState = { ...defaultValue, isRoomDMForMember: true };
-        mocked(useUserInfoBasicViewModel).mockReturnValue(state);
+        vi.mocked(useUserInfoBasicViewModel).mockReturnValue(state);
         const { container } = renderComponent();
 
         logRoles(container);
@@ -103,7 +105,7 @@ describe("<UserInfoBasic />", () => {
 
     it("should show spinner if pending update is > 0", () => {
         const state: UserInfoBasicState = { ...defaultValue, pendingUpdateCount: 2 };
-        mocked(useUserInfoBasicViewModel).mockReturnValue(state);
+        vi.mocked(useUserInfoBasicViewModel).mockReturnValue(state);
         renderComponent();
 
         const spinner = screen.getByTestId("spinner");

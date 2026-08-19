@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`<ExtensionsCard /> should render empty state 1`] = `
+exports[`<ExtensionsCard /> > should render empty state 1`] = `
 <DocumentFragment>
   <div
     class="mx_BaseCard mx_ExtensionsCard"
@@ -102,7 +102,7 @@ exports[`<ExtensionsCard /> should render empty state 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<ExtensionsCard /> should render widgets 1`] = `
+exports[`<ExtensionsCard /> > should render widgets 1`] = `
 <DocumentFragment>
   <div
     class="mx_BaseCard mx_ExtensionsCard"
@@ -298,4 +298,4 @@ exports[`<ExtensionsCard /> should render widgets 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<ExtensionsCard /> should show context menu on widget row 1`] = `null`;
+exports[`<ExtensionsCard /> > should show context menu on widget row 1`] = `null`;

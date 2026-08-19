@@ -6,10 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { act, render, waitFor } from "jest-matrix-react";
+// @vitest-environment happy-dom
+
+import { describe, it, expect, beforeEach, vi, type Mocked } from "vitest";
+import { act, render } from "test-utils-rtl";
 import React, { type ComponentProps } from "react";
 import { User, TypedEventEmitter, Device, type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { mocked, type Mocked } from "jest-mock";
 import {
     type EmojiMapping,
     type ShowSasCallbacks,
@@ -21,8 +23,8 @@ import {
     type VerifierEventHandlerMap,
 } from "matrix-js-sdk/src/crypto-api";
 
-import VerificationPanel from "../../../../../src/components/views/right_panel/VerificationPanel";
-import { flushPromises, stubClient } from "../../../../test-utils";
+import { flushPromises, stubClient } from "test-utils";
+import VerificationPanel from "./VerificationPanel";
 
 describe("<VerificationPanel />", () => {
     let client: MatrixClient;
@@ -39,7 +41,7 @@ describe("<VerificationPanel />", () => {
                 }),
                 layout: "dialog",
             });
-            container.getByRole("button", { name: "Start" });
+            expect(container.getByRole("button", { name: "Start" })).toBeVisible();
         });
 
         it("should show a QR code if the other side can scan and QR bytes are calculated", async () => {
@@ -53,9 +55,7 @@ describe("<VerificationPanel />", () => {
             });
             container.getByText("Scan this unique code");
             // it shows a spinner at first; wait for the update which makes it show the QR code
-            await waitFor(() => {
-                container.getByAltText("QR Code");
-            });
+            await expect(container.findByAltText("QR Code")).resolves.toBeVisible();
         });
     });
 
@@ -64,7 +64,7 @@ describe("<VerificationPanel />", () => {
             const container = renderComponent({
                 request: makeMockVerificationRequest({ phase: Phase.Ready }),
             });
-            container.getByRole("button", { name: "Verify by emoji" });
+            expect(container.getByRole("button", { name: "Verify by emoji" })).toBeVisible();
         });
 
         it("should show a QR code if the other side can scan and QR bytes are calculated", async () => {
@@ -78,9 +78,7 @@ describe("<VerificationPanel />", () => {
             });
             container.getByText("Ask @other:user to scan your code:");
             // it shows a spinner at first; wait for the update which makes it show the QR code
-            await waitFor(() => {
-                container.getByAltText("QR Code");
-            });
+            await expect(container.findByAltText("QR Code")).resolves.toBeVisible();
         });
     });
 
@@ -134,7 +132,7 @@ describe("<VerificationPanel />", () => {
                     displayName: "my other device",
                 });
 
-                mocked(client.getCrypto()!).getUserDeviceInfo.mockResolvedValue(
+                vi.mocked(client.getCrypto()!).getUserDeviceInfo.mockResolvedValue(
                     new Map([[client.getSafeUserId(), new Map([["other_device", otherDeviceDetails]])]]),
                 );
             });
@@ -183,9 +181,9 @@ function renderComponent(props: Partial<ComponentProps<typeof VerificationPanel>
 function makeMockVerificationRequest(props: Partial<VerificationRequest> = {}): Mocked<VerificationRequest> {
     const request = new TypedEventEmitter<VerificationRequestEvent, any>();
     Object.assign(request, {
-        cancel: jest.fn(),
-        otherPartySupportsMethod: jest.fn().mockReturnValue(true),
-        generateQRCode: jest.fn().mockResolvedValue(undefined),
+        cancel: vi.fn(),
+        otherPartySupportsMethod: vi.fn().mockReturnValue(true),
+        generateQRCode: vi.fn().mockResolvedValue(undefined),
         ...props,
     });
     return request as unknown as Mocked<VerificationRequest>;
@@ -194,10 +192,10 @@ function makeMockVerificationRequest(props: Partial<VerificationRequest> = {}): 
 function makeMockVerifier(): Mocked<Verifier> {
     const verifier = new TypedEventEmitter<VerifierEvent, VerifierEventHandlerMap>();
     Object.assign(verifier, {
-        cancel: jest.fn(),
-        verify: jest.fn(),
-        getShowSasCallbacks: jest.fn(),
-        getReciprocateQrCodeCallbacks: jest.fn(),
+        cancel: vi.fn(),
+        verify: vi.fn(),
+        getShowSasCallbacks: vi.fn(),
+        getReciprocateQrCodeCallbacks: vi.fn(),
     });
     return verifier as unknown as Mocked<Verifier>;
 }
@@ -208,8 +206,8 @@ function makeMockSasCallbacks(): ShowSasCallbacks {
         sas: {
             emoji: Array.from<EmojiMapping>({ length: 7 }).map(() => unicorn),
         },
-        cancel: jest.fn(),
-        confirm: jest.fn(),
-        mismatch: jest.fn(),
+        cancel: vi.fn(),
+        confirm: vi.fn(),
+        mismatch: vi.fn(),
     };
 }

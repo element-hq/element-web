@@ -5,23 +5,24 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked, type Mocked } from "jest-mock";
+// @vitest-environment happy-dom
+
+import { describe, it, expect, beforeEach, vi, type Mocked } from "vitest";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
 import { Device, RoomMember } from "matrix-js-sdk/src/matrix";
-import { fireEvent, render, screen } from "jest-matrix-react";
+import { fireEvent, render, screen } from "test-utils-rtl";
 import React from "react";
 
-import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
-import { UserInfoHeaderView } from "../../../../../../src/components/views/right_panel/user_info/UserInfoHeaderView";
-import { clientAndSDKContextRenderOptions, createTestClient } from "../../../../../test-utils";
-import { useUserfoHeaderViewModel } from "../../../../../../src/components/viewmodels/right_panel/user_info/UserInfoHeaderViewModel";
-import { TestSDKContext } from "../../../../TestSDKContext.ts";
+import { clientAndSDKContextRenderOptions, createTestClient, TestSDKContext } from "test-utils";
+import { MatrixClientPeg } from "../../../../MatrixClientPeg";
+import { UserInfoHeaderView } from "./UserInfoHeaderView";
+import { useUserfoHeaderViewModel } from "../../../viewmodels/right_panel/user_info/UserInfoHeaderViewModel";
 
 // Mock the viewmodel hooks
-jest.mock("../../../../../../src/components/viewmodels/right_panel/user_info/UserInfoHeaderViewModel", () => ({
-    useUserfoHeaderViewModel: jest.fn().mockReturnValue({
-        onMemberAvatarClick: jest.fn(),
+vi.mock("../../../viewmodels/right_panel/user_info/UserInfoHeaderViewModel", () => ({
+    useUserfoHeaderViewModel: vi.fn().mockReturnValue({
+        onMemberAvatarClick: vi.fn(),
         precenseInfo: {
             lastActiveAgo: undefined,
             currentlyActive: undefined,
@@ -48,18 +49,18 @@ describe("<UserInfoHeaderView />", () => {
     let sdkContext: TestSDKContext;
 
     beforeEach(() => {
-        mockCrypto = mocked({
-            bootstrapSecretStorage: jest.fn(),
-            bootstrapCrossSigning: jest.fn(),
-            getCrossSigningKeyId: jest.fn(),
-            getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
-            getUserDeviceInfo: jest.fn(),
-            getDeviceVerificationStatus: jest.fn(),
-            getUserVerificationStatus: jest.fn(),
-            isDehydrationSupported: jest.fn().mockResolvedValue(false),
-            startDehydration: jest.fn(),
-            getKeyBackupInfo: jest.fn().mockResolvedValue(null),
-            userHasCrossSigningKeys: jest.fn().mockResolvedValue(false),
+        mockCrypto = vi.mocked({
+            bootstrapSecretStorage: vi.fn(),
+            bootstrapCrossSigning: vi.fn(),
+            getCrossSigningKeyId: vi.fn(),
+            getVerificationRequestsToDeviceInProgress: vi.fn().mockReturnValue([]),
+            getUserDeviceInfo: vi.fn(),
+            getDeviceVerificationStatus: vi.fn(),
+            getUserVerificationStatus: vi.fn(),
+            isDehydrationSupported: vi.fn().mockResolvedValue(false),
+            startDehydration: vi.fn(),
+            getKeyBackupInfo: vi.fn().mockResolvedValue(null),
+            userHasCrossSigningKeys: vi.fn().mockResolvedValue(false),
         } as unknown as CryptoApi);
 
         mockClient = createTestClient();
@@ -67,12 +68,12 @@ describe("<UserInfoHeaderView />", () => {
         sdkContext = new TestSDKContext();
         sdkContext._client = mockClient;
 
-        jest.spyOn(mockClient, "doesServerSupportUnstableFeature").mockResolvedValue(true);
-        jest.spyOn(mockClient.secretStorage, "hasKey").mockResolvedValue(true);
-        jest.spyOn(mockClient, "getCrypto").mockReturnValue(mockCrypto);
-        jest.spyOn(mockClient, "doesServerSupportUnstableFeature").mockResolvedValue(true);
-        jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
-        jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
+        vi.spyOn(mockClient, "doesServerSupportUnstableFeature").mockResolvedValue(true);
+        vi.spyOn(mockClient.secretStorage, "hasKey").mockResolvedValue(true);
+        vi.spyOn(mockClient, "getCrypto").mockReturnValue(mockCrypto);
+        vi.spyOn(mockClient, "doesServerSupportUnstableFeature").mockResolvedValue(true);
+        vi.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
+        vi.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
     });
 
     const renderComponent = (
@@ -111,8 +112,8 @@ describe("<UserInfoHeaderView />", () => {
     });
 
     it("should not render verification view if hideVerificationSection is true", () => {
-        mocked(useUserfoHeaderViewModel).mockReturnValue({
-            onMemberAvatarClick: jest.fn(),
+        vi.mocked(useUserfoHeaderViewModel).mockReturnValue({
+            onMemberAvatarClick: vi.fn(),
             precenseInfo: {
                 lastActiveAgo: undefined,
                 currentlyActive: undefined,
@@ -130,8 +131,8 @@ describe("<UserInfoHeaderView />", () => {
     });
 
     it("should render timezone if it exist", () => {
-        mocked(useUserfoHeaderViewModel).mockReturnValue({
-            onMemberAvatarClick: jest.fn(),
+        vi.mocked(useUserfoHeaderViewModel).mockReturnValue({
+            onMemberAvatarClick: vi.fn(),
             precenseInfo: {
                 lastActiveAgo: undefined,
                 currentlyActive: undefined,
@@ -150,8 +151,8 @@ describe("<UserInfoHeaderView />", () => {
     });
 
     it("should render correct presence label", () => {
-        mocked(useUserfoHeaderViewModel).mockReturnValue({
-            onMemberAvatarClick: jest.fn(),
+        vi.mocked(useUserfoHeaderViewModel).mockReturnValue({
+            onMemberAvatarClick: vi.fn(),
             precenseInfo: {
                 lastActiveAgo: 0,
                 currentlyActive: true,
@@ -167,8 +168,8 @@ describe("<UserInfoHeaderView />", () => {
     });
 
     it("should be able to click on member avatar", () => {
-        const onMemberAvatarClick = jest.fn();
-        mocked(useUserfoHeaderViewModel).mockReturnValue({
+        const onMemberAvatarClick = vi.fn();
+        vi.mocked(useUserfoHeaderViewModel).mockReturnValue({
             onMemberAvatarClick,
             precenseInfo: {
                 lastActiveAgo: undefined,

@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`<UserInfoHeaderView /> renders custom user identifiers in the header 1`] = `
+exports[`<UserInfoHeaderView /> > renders custom user identifiers in the header 1`] = `
 <div>
   <div
     class="mx_UserInfo_avatar"

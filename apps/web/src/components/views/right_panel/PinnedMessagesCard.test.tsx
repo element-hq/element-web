@@ -6,9 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import React from "react";
-import { render, act, type RenderResult, waitForElementToBeRemoved, screen, waitFor } from "jest-matrix-react";
-import { mocked, type MockedObject } from "jest-mock";
+import { describe, it, expect, beforeEach, vi, type MockedObject } from "vitest";
+import { render, act, type RenderResult, waitForElementToBeRemoved, screen, waitFor } from "test-utils-rtl";
 import {
     MatrixEvent,
     RoomStateEvent,
@@ -26,26 +28,20 @@ import { PollResponseEvent } from "matrix-js-sdk/src/extensible_events_v1/PollRe
 import { PollEndEvent } from "matrix-js-sdk/src/extensible_events_v1/PollEndEvent";
 import { sleep } from "matrix-js-sdk/src/utils";
 import userEvent from "@testing-library/user-event";
+import { stubClient, mkEvent, mkMessage, flushPromises, clientAndSDKContextRenderOptions } from "test-utils";
 
-import {
-    stubClient,
-    mkEvent,
-    mkMessage,
-    flushPromises,
-    clientAndSDKContextRenderOptions,
-} from "../../../../test-utils";
-import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import { PinnedMessagesCard } from "../../../../../src/components/views/right_panel/PinnedMessagesCard";
-import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
-import Modal from "../../../../../src/Modal";
-import { UnpinAllDialog } from "../../../../../src/components/views/dialogs/UnpinAllDialog";
-import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { PinnedMessagesCard } from "./PinnedMessagesCard";
+import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import Modal from "../../../Modal";
+import { UnpinAllDialog } from "../dialogs/UnpinAllDialog";
+import { SDKContextClass } from "../../../contexts/SDKContextClass";
 
 describe("<PinnedMessagesCard />", () => {
     let cli: MockedObject<MatrixClient>;
     beforeEach(() => {
         stubClient();
-        cli = mocked(MatrixClientPeg.safeGet());
+        cli = vi.mocked(MatrixClientPeg.safeGet());
         cli.getUserId.mockReturnValue("@alice:example.org");
         cli.setRoomAccountData.mockResolvedValue({});
         cli.relations.mockResolvedValue({ originalEvent: {} as unknown as MatrixEvent, events: [] });
@@ -57,7 +53,7 @@ describe("<PinnedMessagesCard />", () => {
         const pins = () => [...localPins, ...nonLocalPins];
 
         // Insert pin IDs into room state
-        jest.spyOn(room.getLiveTimeline().getState(EventTimeline.FORWARDS)!, "getStateEvents").mockImplementation(
+        vi.spyOn(room.getLiveTimeline().getState(EventTimeline.FORWARDS)!, "getStateEvents").mockImplementation(
             (): any =>
                 mkEvent({
                     event: true,
@@ -70,14 +66,13 @@ describe("<PinnedMessagesCard />", () => {
                 }),
         );
 
-        jest.spyOn(room.getLiveTimeline().getState(EventTimeline.FORWARDS)!, "mayClientSendStateEvent").mockReturnValue(
+        vi.spyOn(room.getLiveTimeline().getState(EventTimeline.FORWARDS)!, "mayClientSendStateEvent").mockReturnValue(
             true,
         );
         // poll end event validates against this
-        jest.spyOn(
-            room.getLiveTimeline().getState(EventTimeline.FORWARDS)!,
-            "maySendRedactionForEvent",
-        ).mockReturnValue(true);
+        vi.spyOn(room.getLiveTimeline().getState(EventTimeline.FORWARDS)!, "maySendRedactionForEvent").mockReturnValue(
+            true,
+        );
 
         // Return all pins over fetchRoomEvent
         cli.fetchRoomEvent.mockImplementation((roomId, eventId) => {
@@ -94,7 +89,7 @@ describe("<PinnedMessagesCard />", () => {
         const renderResult = render(
             <PinnedMessagesCard
                 room={room}
-                onClose={jest.fn()}
+                onClose={vi.fn()}
                 permalinkCreator={new RoomPermalinkCreator(room, room.roomId)}
             />,
             clientAndSDKContextRenderOptions(cli, SDKContextClass.instance),
@@ -177,13 +172,14 @@ describe("<PinnedMessagesCard />", () => {
         render(
             <PinnedMessagesCard
                 room={room}
-                onClose={jest.fn()}
+                onClose={vi.fn()}
                 permalinkCreator={new RoomPermalinkCreator(room, room.roomId)}
             />,
             clientAndSDKContextRenderOptions(cli, SDKContextClass.instance),
         );
 
         await waitForElementToBeRemoved(() => screen.queryAllByRole("progressbar"));
+        expect(screen.queryByRole("progressbar")).toBeNull();
     });
 
     it("should show the empty state when there are no pins", async () => {
@@ -320,7 +316,7 @@ describe("<PinnedMessagesCard />", () => {
     describe("unpin all", () => {
         it("should not allow to unpinall", async () => {
             const room = mkRoom([pin1], [pin2]);
-            jest.spyOn(
+            vi.spyOn(
                 room.getLiveTimeline().getState(EventTimeline.FORWARDS)!,
                 "mayClientSendStateEvent",
             ).mockReturnValue(false);
@@ -328,7 +324,7 @@ describe("<PinnedMessagesCard />", () => {
             const { asFragment } = render(
                 <PinnedMessagesCard
                     room={room}
-                    onClose={jest.fn()}
+                    onClose={vi.fn()}
                     permalinkCreator={new RoomPermalinkCreator(room, room.roomId)}
                 />,
                 clientAndSDKContextRenderOptions(cli, SDKContextClass.instance),
@@ -342,7 +338,7 @@ describe("<PinnedMessagesCard />", () => {
         });
 
         it("should allow unpinning all messages", async () => {
-            jest.spyOn(Modal, "createDialog");
+            vi.spyOn(Modal, "createDialog");
 
             const { room } = await initPinnedMessagesCard([pin1], [pin2]);
             expect(screen.getByText("Unpin all messages")).toBeInTheDocument();
