@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`<LoginWithQRFlow /> login.reciprocate errors renders authorization_expired 1`] = `
+exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders authorization_expired 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -54,7 +54,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders authorization_expi
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.reciprocate errors renders check_code_mismatch 1`] = `
+exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders check_code_mismatch 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -108,7 +108,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders check_code_mismatc
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.reciprocate errors renders device_already_exists 1`] = `
+exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders device_already_exists 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -162,7 +162,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders device_already_exi
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.reciprocate errors renders device_not_found 1`] = `
+exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders device_not_found 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -216,7 +216,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders device_not_found 1
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.reciprocate errors renders etag_missing 1`] = `
+exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders etag_missing 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -270,7 +270,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders etag_missing 1`] =
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.reciprocate errors renders expired 1`] = `
+exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders expired 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -324,7 +324,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders expired 1`] = `
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.reciprocate errors renders homeserver_lacks_support 1`] = `
+exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders homeserver_lacks_support 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -416,7 +416,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders homeserver_lacks_s
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.reciprocate errors renders insecure_channel_detected 1`] = `
+exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders insecure_channel_detected 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -483,7 +483,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders insecure_channel_d
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.reciprocate errors renders invalid_code 1`] = `
+exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders invalid_code 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -537,7 +537,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders invalid_code 1`] =
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.reciprocate errors renders other_device_already_signed_in 1`] = `
+exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders other_device_already_signed_in 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -591,7 +591,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders other_device_alrea
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.reciprocate errors renders other_device_not_signed_in 1`] = `
+exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders other_device_not_signed_in 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -645,7 +645,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders other_device_not_s
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.reciprocate errors renders rate_limited 1`] = `
+exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders rate_limited 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -699,7 +699,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders rate_limited 1`] =
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.reciprocate errors renders unexpected_message_received 1`] = `
+exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders unexpected_message_received 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -753,7 +753,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders unexpected_message
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.reciprocate errors renders unknown 1`] = `
+exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders unknown 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -807,7 +807,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders unknown 1`] = `
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.reciprocate errors renders unsupported_protocol 1`] = `
+exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders unsupported_protocol 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -861,7 +861,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders unsupported_protoc
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.reciprocate errors renders user_cancelled 1`] = `
+exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders user_cancelled 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -915,7 +915,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders user_cancelled 1`]
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.reciprocate errors renders user_declined 1`] = `
+exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders user_declined 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -969,7 +969,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders user_declined 1`] 
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.reciprocate renders QR code 1`] = `
+exports[`<LoginWithQRFlow /> > login.reciprocate > renders QR code 1`] = `
 <div>
   <div
     class="mx_LoginWithQR"
@@ -1054,7 +1054,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate renders QR code 1`] = `
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.reciprocate renders check code confirmation 1`] = `
+exports[`<LoginWithQRFlow /> > login.reciprocate > renders check code confirmation 1`] = `
 <div>
   <div
     class="mx_LoginWithQR"
@@ -1132,7 +1132,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate renders check code confirmation 1
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.reciprocate renders spinner while loading 1`] = `
+exports[`<LoginWithQRFlow /> > login.reciprocate > renders spinner while loading 1`] = `
 <div>
   <div
     class="mx_LoginWithQR"
@@ -1207,7 +1207,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate renders spinner while loading 1`]
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.reciprocate renders spinner while signing in 1`] = `
+exports[`<LoginWithQRFlow /> > login.reciprocate > renders spinner while signing in 1`] = `
 <div>
   <div
     class="mx_LoginWithQR"
@@ -1296,7 +1296,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate renders spinner while signing in 
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.reciprocate renders spinner while verifying 1`] = `
+exports[`<LoginWithQRFlow /> > login.reciprocate > renders spinner while verifying 1`] = `
 <div>
   <div
     class="mx_LoginWithQR"
@@ -1374,7 +1374,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate renders spinner while verifying 1
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.reciprocate renders spinner whilst QR generating 1`] = `
+exports[`<LoginWithQRFlow /> > login.reciprocate > renders spinner whilst QR generating 1`] = `
 <div>
   <div
     class="mx_LoginWithQR"
@@ -1472,7 +1472,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate renders spinner whilst QR generat
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.start errors renders authorization_expired 1`] = `
+exports[`<LoginWithQRFlow /> > login.start > errors > renders authorization_expired 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -1526,7 +1526,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders authorization_expired 1`
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.start errors renders check_code_mismatch 1`] = `
+exports[`<LoginWithQRFlow /> > login.start > errors > renders check_code_mismatch 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -1580,7 +1580,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders check_code_mismatch 1`] 
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.start errors renders device_already_exists 1`] = `
+exports[`<LoginWithQRFlow /> > login.start > errors > renders device_already_exists 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -1634,7 +1634,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders device_already_exists 1`
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.start errors renders device_not_found 1`] = `
+exports[`<LoginWithQRFlow /> > login.start > errors > renders device_not_found 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -1688,7 +1688,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders device_not_found 1`] = `
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.start errors renders etag_missing 1`] = `
+exports[`<LoginWithQRFlow /> > login.start > errors > renders etag_missing 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -1742,7 +1742,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders etag_missing 1`] = `
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.start errors renders expired 1`] = `
+exports[`<LoginWithQRFlow /> > login.start > errors > renders expired 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -1796,7 +1796,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders expired 1`] = `
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.start errors renders homeserver_lacks_support 1`] = `
+exports[`<LoginWithQRFlow /> > login.start > errors > renders homeserver_lacks_support 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -1859,7 +1859,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders homeserver_lacks_support
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.start errors renders insecure_channel_detected 1`] = `
+exports[`<LoginWithQRFlow /> > login.start > errors > renders insecure_channel_detected 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -1926,7 +1926,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders insecure_channel_detecte
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.start errors renders invalid_code 1`] = `
+exports[`<LoginWithQRFlow /> > login.start > errors > renders invalid_code 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -1980,7 +1980,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders invalid_code 1`] = `
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.start errors renders other_device_already_signed_in 1`] = `
+exports[`<LoginWithQRFlow /> > login.start > errors > renders other_device_already_signed_in 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -2034,7 +2034,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders other_device_already_sig
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.start errors renders other_device_not_signed_in 1`] = `
+exports[`<LoginWithQRFlow /> > login.start > errors > renders other_device_not_signed_in 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -2088,7 +2088,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders other_device_not_signed_
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.start errors renders rate_limited 1`] = `
+exports[`<LoginWithQRFlow /> > login.start > errors > renders rate_limited 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -2142,7 +2142,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders rate_limited 1`] = `
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.start errors renders unexpected_message_received 1`] = `
+exports[`<LoginWithQRFlow /> > login.start > errors > renders unexpected_message_received 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -2196,7 +2196,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders unexpected_message_recei
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.start errors renders unknown 1`] = `
+exports[`<LoginWithQRFlow /> > login.start > errors > renders unknown 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -2250,7 +2250,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders unknown 1`] = `
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.start errors renders unsupported_protocol 1`] = `
+exports[`<LoginWithQRFlow /> > login.start > errors > renders unsupported_protocol 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -2304,7 +2304,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders unsupported_protocol 1`]
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.start errors renders user_cancelled 1`] = `
+exports[`<LoginWithQRFlow /> > login.start > errors > renders user_cancelled 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -2359,7 +2359,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders user_cancelled 1`] = `
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.start errors renders user_declined 1`] = `
+exports[`<LoginWithQRFlow /> > login.start > errors > renders user_declined 1`] = `
 <div>
   <div
     class="mx_LoginWithQR mx_LoginWithQR_error"
@@ -2414,7 +2414,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders user_declined 1`] = `
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.start renders QR code 1`] = `
+exports[`<LoginWithQRFlow /> > login.start > renders QR code 1`] = `
 <div>
   <div
     class="mx_LoginWithQR"
@@ -2484,7 +2484,7 @@ exports[`<LoginWithQRFlow /> login.start renders QR code 1`] = `
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.start renders check code confirmation 1`] = `
+exports[`<LoginWithQRFlow /> > login.start > renders check code confirmation 1`] = `
 <div>
   <div
     class="mx_LoginWithQR"
@@ -2579,7 +2579,7 @@ exports[`<LoginWithQRFlow /> login.start renders check code confirmation 1`] = `
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.start renders spinner while loading 1`] = `
+exports[`<LoginWithQRFlow /> > login.start > renders spinner while loading 1`] = `
 <div>
   <div
     class="mx_LoginWithQR"
@@ -2624,7 +2624,7 @@ exports[`<LoginWithQRFlow /> login.start renders spinner while loading 1`] = `
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.start renders spinner while signing in 1`] = `
+exports[`<LoginWithQRFlow /> > login.start > renders spinner while signing in 1`] = `
 <div>
   <div
     class="mx_LoginWithQR"
@@ -2748,7 +2748,7 @@ exports[`<LoginWithQRFlow /> login.start renders spinner while signing in 1`] = 
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.start renders spinner while verifying 1`] = `
+exports[`<LoginWithQRFlow /> > login.start > renders spinner while verifying 1`] = `
 <div>
   <div
     class="mx_LoginWithQR"
@@ -2796,7 +2796,7 @@ exports[`<LoginWithQRFlow /> login.start renders spinner while verifying 1`] = `
 </div>
 `;
 
-exports[`<LoginWithQRFlow /> login.start renders spinner whilst QR generating 1`] = `
+exports[`<LoginWithQRFlow /> > login.start > renders spinner whilst QR generating 1`] = `
 <div>
   <div
     class="mx_LoginWithQR"

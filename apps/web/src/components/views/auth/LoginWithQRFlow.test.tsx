@@ -6,17 +6,20 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { cleanup, fireEvent, render, screen } from "jest-matrix-react";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, afterEach } from "vitest";
+import { cleanup, fireEvent, render, screen } from "test-utils-rtl";
 import React from "react";
 import { ClientRendezvousFailureReason, MSC4108FailureReason, RendezvousIntent } from "matrix-js-sdk/src/rendezvous";
+import { mockQRCodeRender, resetQRCodeMock, waitForQRCodeRender } from "test-utils/qrcode";
 
-import { mockQRCodeRender, resetQRCodeMock, waitForQRCodeRender } from "../../../../../test-utils/qrcode";
-import LoginWithQRFlow from "../../../../../../src/components/views/auth/LoginWithQRFlow";
-import { type FailureReason, LoginWithQRFailureReason } from "../../../../../../src/components/views/auth/LoginWithQR";
-import { Click, Phase } from "../../../../../../src/components/views/auth/LoginWithQR-types";
+import LoginWithQRFlow from "./LoginWithQRFlow";
+import { type FailureReason, LoginWithQRFailureReason } from "./LoginWithQR";
+import { Click, Phase } from "./LoginWithQR-types";
 
 describe("<LoginWithQRFlow />", () => {
-    const onClick = jest.fn();
+    const onClick = vi.fn();
 
     const defaultProps = {
         onClick,
