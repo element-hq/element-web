@@ -137,11 +137,11 @@ export const expect = baseExpect.extend<Expectations>({
                 background: var(--cpd-color-fuchsia-1200) !important;
                 color: white !important;
             }
-            .mx_ReplyChain {
+            [data-reply-chain] {
                 border-left-color: var(--cpd-color-blue-1200) !important;
             }
             /* Avoid flakiness from hover styling */
-            .mx_ReplyChain_show {
+            [data-reply-chain-show] {
                 color: var(--cpd-color-text-secondary) !important;
             }
             /* Use monospace font for timestamp for consistent mask width */

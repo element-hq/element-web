@@ -1,0 +1,91 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.root {
+    min-width: 0;
+}
+
+.headerContainer,
+.events {
+    min-width: 0;
+}
+
+.header,
+.quote {
+    --reply-chain-border-color: var(--cpd-color-text-secondary, #737d86);
+
+    margin: 0;
+    padding-inline-start: 10px;
+    border-inline-start: 2px solid var(--reply-chain-border-color);
+    border-radius: 2px;
+}
+
+.header {
+    color: var(--cpd-color-text-secondary, #737d86);
+}
+
+.error {
+    --reply-chain-border-color: var(--cpd-color-text-secondary, #737d86);
+}
+
+.show {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--cpd-color-text-secondary, #737d86);
+    cursor: pointer;
+    transition: color ease 0.15s;
+    font: inherit;
+    font-weight: var(--cpd-font-weight-regular);
+    text-decoration: inherit;
+    white-space: nowrap;
+}
+
+.show:hover {
+    color: var(--cpd-color-text-primary, #2e3338);
+}
+
+.export {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+.exportAnchor {
+    color: inherit;
+}
+
+.color1 {
+    --reply-chain-border-color: var(--cpd-color-text-decorative-1);
+}
+
+.color2 {
+    --reply-chain-border-color: var(--cpd-color-text-decorative-2);
+}
+
+.color3 {
+    --reply-chain-border-color: var(--cpd-color-text-decorative-3);
+}
+
+.color4 {
+    --reply-chain-border-color: var(--cpd-color-text-decorative-4);
+}
+
+.color5 {
+    --reply-chain-border-color: var(--cpd-color-text-decorative-5);
+}
+
+.color6 {
+    --reply-chain-border-color: var(--cpd-color-text-decorative-6);
+}
+
+.expanded {
+    --reply-chain-quote-state: expanded;
+}
+
+.collapsed {
+    --reply-chain-quote-state: collapsed;
+}

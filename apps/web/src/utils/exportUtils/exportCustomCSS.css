@@ -133,7 +133,7 @@ a.mx_reply_anchor {
     gap: var(--cpd-space-3x);
 }
 
-.mx_ReplyChain_Export {
+[data-reply-chain-export] {
     margin-top: 0;
     margin-bottom: 5px;
 }

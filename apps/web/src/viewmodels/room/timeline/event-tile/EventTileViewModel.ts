@@ -18,7 +18,6 @@ import {
     getEventTileTimestamp,
     getFooterDisplayState,
     getIsContinuation,
-    getReplyChainAlwaysShowTimestamps,
     getScrollToken,
     getSenderProfileMode,
     getShouldShowMessageActionBar,
@@ -44,6 +43,7 @@ import {
 } from "./E2eMessageSharedIconViewModel";
 import { EventPreviewViewModel, type EventPreviewViewModelProps } from "./EventPreviewViewModel";
 import { getEventTileReplyChainState } from "./EventTileReplyChainState";
+import { ReplyChainViewModel, type ReplyChainViewModelProps } from "./ReplyChainViewModel";
 import { getEventDisplayInfo } from "../../../../utils/EventRenderingUtils";
 import { haveRendererForEvent } from "../../../../events/EventTileFactory";
 import {
@@ -326,12 +326,6 @@ export interface EventTileTimestampSnapshot {
     displayState: TimestampDisplayState;
 }
 
-/** Reply chain state derived for the EventTile snapshot. */
-export interface EventTileReplyChainSnapshot {
-    /** Whether ReplyChain should always show timestamps. */
-    alwaysShowTimestamps: boolean;
-}
-
 /** Footer state derived for the EventTile snapshot. */
 export type EventTileFooterSnapshot = FooterDisplayState;
 
@@ -349,8 +343,7 @@ export interface EventTileViewModelSnapshot {
     actionBar: EventTileActionBarSnapshot;
     /** Timestamp derived state. */
     timestamp: EventTileTimestampSnapshot;
-    /** Reply chain derived state. */
-    replyChain: EventTileReplyChainSnapshot;
+
     /** Footer derived state. */
     footer: EventTileFooterSnapshot;
 }
@@ -415,6 +408,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
     private threadListActionBarViewModel?: ThreadListActionBarViewModel;
     private e2eMessageSharedIconViewModel?: E2eMessageSharedIconViewModel;
     private eventPreviewViewModel?: EventPreviewViewModel;
+    private replyChainViewModel?: ReplyChainViewModel;
     private actionBarViewModel?: EventTileActionBarViewModel;
     private reactionsRowViewModel?: ReactionsRowViewModel;
 
@@ -440,6 +434,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
         this.threadListActionBarViewModel?.dispose();
         this.e2eMessageSharedIconViewModel?.dispose();
         this.eventPreviewViewModel?.dispose();
+        this.replyChainViewModel?.dispose();
         this.actionBarViewModel?.dispose();
         this.reactionsRowViewModel?.dispose();
         super.dispose();
@@ -509,6 +504,18 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
     public releaseEventPreviewViewModel(): void {
         this.eventPreviewViewModel?.dispose();
         this.eventPreviewViewModel = undefined;
+    }
+
+    /** Lazily creates and returns the reply-chain child view model. */
+    public getReplyChainViewModel(props: ReplyChainViewModelProps): ReplyChainViewModel {
+        this.replyChainViewModel ??= new ReplyChainViewModel(props);
+        return this.replyChainViewModel;
+    }
+
+    /** Releases the reply-chain child view model when its adapter unmounts. */
+    public releaseReplyChainViewModel(): void {
+        this.replyChainViewModel?.dispose();
+        this.replyChainViewModel = undefined;
     }
 
     /** Lazily creates and returns the event action bar child view model. */
@@ -744,13 +751,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
                     hideTimestamp: timestamp.hideTimestamp,
                 }),
             },
-            replyChain: {
-                alwaysShowTimestamps: getReplyChainAlwaysShowTimestamps({
-                    alwaysShowTimestamps: timestamp.alwaysShowTimestamps,
-                    hover: interaction.hover,
-                    focusWithin: interaction.focusWithin,
-                }),
-            },
+
             footer: getFooterDisplayState({
                 hasReactionsRow: footer.hasReactionsRow,
                 hasReactions: footer.hasReactions,
