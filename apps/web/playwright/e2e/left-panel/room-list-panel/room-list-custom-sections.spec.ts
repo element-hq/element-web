@@ -39,10 +39,12 @@ test.describe("Room list custom sections", () => {
         await page.getByRole("menuitem", { name: "New section" }).click();
 
         // Fill in the section name in the dialog
-        const dialog = page.getByRole("dialog", { name: "Create a section" });
+        let dialog = page.getByRole("dialog", { name: "Create a section" });
         await expect(dialog).toBeVisible();
         await dialog.getByRole("textbox", { name: "Section name" }).fill(sectionName);
         await dialog.getByRole("button", { name: "Create section" }).click();
+        dialog = page.getByRole("dialog", { name: `Add chats to ${sectionName}` });
+        await dialog.getByRole("button", { name: "Skip" }).click();
 
         // Wait for the dialog to close
         await expect(dialog).not.toBeVisible();
@@ -99,10 +101,12 @@ test.describe("Room list custom sections", () => {
             await page.getByRole("menuitem", { name: "New section" }).click();
 
             // Fill in the section name in the dialog
-            const dialog = page.getByRole("dialog", { name: "Create a section" });
+            let dialog = page.getByRole("dialog", { name: "Create a section" });
             await expect(dialog).toBeVisible();
             await dialog.getByRole("textbox", { name: "Section name" }).fill("Projects");
             await dialog.getByRole("button", { name: "Create section" }).click();
+            dialog = page.getByRole("dialog", { name: "Add chats to Projects" });
+            await dialog.getByRole("button", { name: "Skip" }).click();
 
             // Wait for the dialog to close
             await expect(dialog).not.toBeVisible();
@@ -205,13 +209,15 @@ test.describe("Room list custom sections", () => {
             await page.getByRole("menuitem", { name: "Edit section" }).click();
 
             // The edit dialog should appear pre-filled with the current name
-            const dialog = page.getByRole("dialog", { name: "Edit a section" });
+            let dialog = page.getByRole("dialog", { name: "Edit a section" });
             await expect(dialog).toBeVisible();
             await expect(dialog.getByRole("textbox", { name: "Section name" })).toHaveValue("Work");
 
             // Change the name and confirm
             await dialog.getByRole("textbox", { name: "Section name" }).fill("Personal");
             await dialog.getByRole("button", { name: "Save" }).click();
+            dialog = page.getByRole("dialog", { name: "Add chats to Personal" });
+            await dialog.getByRole("button", { name: "Skip" }).click();
 
             // Dialog should close
             await expect(dialog).not.toBeVisible();
