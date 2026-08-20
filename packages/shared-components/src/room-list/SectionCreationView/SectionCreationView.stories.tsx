@@ -107,13 +107,13 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 /**
- * Edition mode: the field is pre-filled with the existing section name and the
+ * Editing mode: the field is pre-filled with the existing section name and the
  * description is hidden.
  */
 export const Edition: Story = {
     args: {
         value: "My section",
-        step: "edition",
+        step: "editing",
     },
 };
 

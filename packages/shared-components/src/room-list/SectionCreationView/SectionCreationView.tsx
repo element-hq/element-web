@@ -22,7 +22,7 @@ interface SectionCreationViewProps {
 
 /**
  * A form component to create a new room list section or edit an existing one.
- * In creation mode it shows an explanatory descrption; in edition mode it is pre-filled
+ * In creation mode it shows an explanatory description; in editing mode it is pre-filled
  * with the current section name.
  *
  * @example
@@ -35,7 +35,7 @@ export function SectionCreationView({ vm }: Readonly<SectionCreationViewProps>):
 
     return (
         <>
-            {(step === "creation" || step === "edition") && <SectionFormView vm={vm} className={styles.container} />}
+            {(step === "creation" || step === "editing") && <SectionFormView vm={vm} className={styles.container} />}
             {step === "add_rooms" && <RoomPickerView vm={vm} className={styles.container} />}
         </>
     );

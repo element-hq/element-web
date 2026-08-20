@@ -147,7 +147,7 @@ describe("CreateSectionDialogViewModel", () => {
         it("should initialize the snapshot from the section name", () => {
             const vm = createViewModel(sectionToEdit);
 
-            expect(vm.getSnapshot()).toMatchObject({ value: "My section", step: "edition", isValid: true });
+            expect(vm.getSnapshot()).toMatchObject({ value: "My section", step: "editing", isValid: true });
         });
 
         it("should preselect the rooms that are already in the section", () => {

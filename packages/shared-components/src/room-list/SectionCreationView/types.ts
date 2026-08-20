@@ -16,7 +16,7 @@ export interface SectionCreationViewSnapshot extends RoomPickerViewSnapshot {
     /**
      * The current step of the section creation process.
      */
-    step: "creation" | "edition" | "add_rooms";
+    step: "creation" | "editing" | "add_rooms";
 }
 
 export interface SectionCreationViewActions extends RoomPickerViewActions {

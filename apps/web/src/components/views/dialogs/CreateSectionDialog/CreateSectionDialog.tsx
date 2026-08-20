@@ -106,7 +106,7 @@ function getTitle(snapshot: SectionCreationViewSnapshot): string {
     switch (snapshot.step) {
         case "creation":
             return _t("create_section_dialog|title");
-        case "edition":
+        case "editing":
             return _t("create_section_dialog|title_edition");
         case "add_rooms":
             return _t("create_section_dialog|title_add_rooms", { section: snapshot.value });
@@ -117,7 +117,7 @@ function getPrimaryButtonText(snapshot: SectionCreationViewSnapshot): string {
     switch (snapshot.step) {
         case "creation":
             return _t("create_section_dialog|create_section");
-        case "edition":
+        case "editing":
             return _t("common|save");
         case "add_rooms":
             return _t("create_section_dialog|add_rooms");
@@ -127,7 +127,7 @@ function getPrimaryButtonText(snapshot: SectionCreationViewSnapshot): string {
 function getCancelButtonText(snapshot: SectionCreationViewSnapshot): string {
     switch (snapshot.step) {
         case "creation":
-        case "edition":
+        case "editing":
             return _t("common|cancel");
         case "add_rooms":
             return _t("common|skip");

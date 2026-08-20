@@ -78,7 +78,7 @@ export class CreateSectionDialogViewModel
         const value = props.sectionToEdit?.name ?? "";
         super(props, {
             value,
-            step: Boolean(props.sectionToEdit) ? "edition" : "creation",
+            step: Boolean(props.sectionToEdit) ? "editing" : "creation",
             isValid: value.trim().length > 0,
             rooms: [],
             selectedRooms: [],
