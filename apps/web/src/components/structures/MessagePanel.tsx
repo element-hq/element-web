@@ -474,6 +474,18 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         }
     }
 
+    /* move keyboard focus to the last rendered message, if there is one */
+    public focusLastMessage(): void {
+        const events = this.props.events;
+        for (let i = events.length - 1; i >= 0; i--) {
+            const node = this.getNodeForEventId(events[i].getId()!);
+            if (node) {
+                node.focus();
+                return;
+            }
+        }
+    }
+
     private isUnmounting = (): boolean => {
         return this.unmounted;
     };
