@@ -7,8 +7,9 @@ Please see LICENSE in the repository root for full details.
 
 import * as os from "node:os";
 import * as fs from "node:fs";
+import * as fsp from "node:fs/promises";
 import path from "node:path";
-import { type Configuration as BaseConfiguration, log } from "electron-builder";
+import { type Configuration as BaseConfiguration, type BeforeBuildContext, log } from "electron-builder";
 import { LogMessageByKey } from "app-builder-lib/out/node-module-collector/moduleManager.js";
 
 /**
@@ -195,6 +196,19 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
     nativeRebuilder: "sequential",
     nodeGypRebuild: false,
     npmRebuild: true,
+    beforeBuild: async (context: BeforeBuildContext) => {
+        // Assert that the webapp.asar file exists
+        try {
+            await fsp.access(path.join(context.appDir, "webapp.asar"), fs.constants.F_OK);
+        } catch (err) {
+            console.error(err);
+            console.error("The webapp.asar archive is missing. Building without a webapp is fruitless.");
+            console.log(
+                "RTFM https://github.com/element-hq/element-web/blob/develop/apps/desktop/README.md#fetching-element.",
+            );
+            process.exit(1);
+        }
+    },
 };
 
 /**
