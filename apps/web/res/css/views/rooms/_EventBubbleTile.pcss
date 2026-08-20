@@ -243,13 +243,6 @@ Please see LICENSE files in the repository root for full details.
 }
 
 .mx_GenericEventListSummary[data-layout="bubble"] {
-    .mx_EventTile.mx_EventTile_info .mx_EventTile_line {
-        /* Avoid overflow of event info by cancelling width settings */
-        width: 100%;
-        min-width: 0;
-        max-width: 100%;
-    }
-
     /* increase margin between ELS and the next Event to not have our user avatar overlap the expand/collapse button */
     &[data-expanded="false"] + .mx_EventTile[data-layout="bubble"][data-self="true"] {
         margin-top: 20px;

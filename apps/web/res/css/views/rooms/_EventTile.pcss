@@ -23,6 +23,7 @@ $left-gutter: 64px;
     padding-top: 18px;
     position: relative;
 
+    /* Retained for legacy error/fallback markup that does not use EventTileView. */
     &.mx_EventTile_info {
         font-size: var(--cpd-font-size-body-sm);
         color: $secondary-content;
@@ -86,19 +87,8 @@ $left-gutter: 64px;
         }
     }
 
-    .mx_RoomView_searchResultsPanel & {
-        &.mx_EventTile_contextual {
-            opacity: 0.4;
-        }
-    }
-
     &[data-layout="irc"],
     &[data-layout="group"] {
-        --selected-message-border-width: 4px;
-
-        /* TODO: adjust the values for IRC layout */
-        --EventTile-box-shadow-offset-x: calc(50px + var(--selected-message-border-width));
-        --EventTile-box-shadow-spread-radius: -50px;
         .mx_ImageBody {
             .mx_ImageBody_container {
                 justify-content: flex-start;
@@ -140,8 +130,9 @@ $left-gutter: 64px;
     }
 
     &[data-layout="group"] {
-        .mx_EventTile_line {
-            padding-left: $left-gutter;
+        /* The collapsed summary has a legacy line outside EventTileView. */
+        > .mx_EventTile_line {
+            padding-inline-start: $left-gutter;
         }
 
         .mx_GenericEventListSummary_unstyledList > .mx_EventTile_info .mx_EventTile_avatar ~ .mx_EventTile_line {
@@ -501,73 +492,9 @@ $left-gutter: 64px;
     }
 }
 
-/* Cascading - compact modern layout on the main timeline and the right panel */
+/* Body-only compact markdown spacing remains application-owned. */
 .mx_MatrixChat_useCompactLayout {
     .mx_EventTile[data-layout="group"] {
-        --MatrixChat_useCompactLayout_group-padding-top: var(--cpd-space-1x);
-        --MatrixChat_useCompactLayout-top-avatar: 2px;
-        --MatrixChat_useCompactLayout_line-spacing-block: 0px;
-
-        padding-top: var(--MatrixChat_useCompactLayout_group-padding-top);
-
-        .mx_EventTile_line,
-        .mx_EventTile_reply {
-            padding-block: var(--MatrixChat_useCompactLayout_line-spacing-block);
-        }
-
-        .mx_ReplyChain {
-            margin-bottom: var(--cpd-space-1x);
-        }
-
-        &.mx_EventTile_info {
-            padding-top: 0; /* same as the padding for non-compact .mx_EventTile.mx_EventTile_info */
-            font-size: $font-13px;
-
-            .mx_EventTile_e2eIcon,
-            .mx_EventTile_avatar {
-                top: 0;
-                margin-block: var(--MatrixChat_useCompactLayout_line-spacing-block);
-            }
-
-            .mx_EventTile_line,
-            .mx_EventTile_reply {
-                line-height: $font-20px;
-            }
-        }
-
-        &.mx_EventTile_emote {
-            padding-top: var(--cpd-space-2x); /* add a bit more space for emotes so that avatars don't collide */
-
-            .mx_EventTile_avatar {
-                top: var(--MatrixChat_useCompactLayout-top-avatar);
-            }
-
-            .mx_EventTile_line,
-            .mx_EventTile_reply {
-                padding-bottom: 1px;
-            }
-
-            &.mx_EventTile_continuation {
-                .mx_EventTile_line,
-                .mx_EventTile_reply {
-                    padding-bottom: var(--MatrixChat_useCompactLayout_line-spacing-block);
-                }
-            }
-        }
-
-        /* Cascading - apply zero padding to every element including mx_EventTile_emote */
-        &.mx_EventTile_continuation {
-            padding-top: var(--MatrixChat_useCompactLayout_line-spacing-block);
-        }
-
-        .mx_EventTile_avatar {
-            top: var(--MatrixChat_useCompactLayout-top-avatar);
-        }
-
-        .mx_EventTile_e2eIcon {
-            margin: 0px;
-        }
-
         .mx_EventTile_content .markdown-body {
             p,
             ul,
