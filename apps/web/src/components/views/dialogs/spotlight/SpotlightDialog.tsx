@@ -107,6 +107,24 @@ interface IProps {
     onFinished(this: void): void;
 }
 
+/**
+ * How many results a page up or down should move by, worked out from how many results of the size of
+ * the current one fit in the visible list.
+ *
+ * Results differ in height — a public room with its details is taller than a person — so this measures
+ * the one the selection is on rather than assuming an average, and falls back to a single step while
+ * nothing has been laid out.
+ *
+ * @param container - The scrolling list of results.
+ * @param result - The result the selection is currently on.
+ * @returns How many results to move by, never fewer than one.
+ */
+function resultsPerPage(container: HTMLElement | null, result: HTMLElement): number {
+    const resultHeight = result.offsetHeight;
+    if (!container || !resultHeight) return 1;
+    return Math.max(1, Math.floor(container.clientHeight / resultHeight));
+}
+
 function nodeIsForRecentlyViewed(node?: HTMLElement): boolean {
     return node?.id?.startsWith("mx_SpotlightDialog_button_recentlyViewed_") === true;
 }
@@ -1150,6 +1168,26 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         );
     }
 
+    /**
+     * The options the up and down keys move between. Everything is a stop, except that the recently
+     * viewed row counts as a single one until the selection is actually inside it.
+     *
+     * @param activeNode - The option the selection is currently on.
+     * @returns The options to move between, in the order they appear.
+     */
+    const verticalNodes = (activeNode: HTMLElement): HTMLElement[] => {
+        const nodes = rovingContext.state.nodes;
+        if (query || filter !== null) return nodes;
+
+        // If the current selection is not in the recently viewed row then only include the
+        // first recently viewed so that is the target when the user is switching into recently viewed.
+        const keptRecentlyViewedRef = nodeIsForRecentlyViewed(activeNode)
+            ? activeNode
+            : nodes.find(nodeIsForRecentlyViewed);
+        // exclude all other recently viewed items from the list so up/down arrows skip them
+        return nodes.filter((ref) => ref === keptRecentlyViewedRef || !nodeIsForRecentlyViewed(ref));
+    };
+
     const onDialogKeyDown = (ev: KeyboardEvent | React.KeyboardEvent): void => {
         const navigationAction = getKeyBindingsManager().getNavigationAction(ev);
         switch (navigationAction) {
@@ -1174,22 +1212,31 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                 ev.preventDefault();
 
                 if (rovingContext.state.activeNode && rovingContext.state.nodes.length > 0) {
-                    let nodes = rovingContext.state.nodes;
-                    if (!query && filter === null) {
-                        // If the current selection is not in the recently viewed row then only include the
-                        // first recently viewed so that is the target when the user is switching into recently viewed.
-                        const keptRecentlyViewedRef = nodeIsForRecentlyViewed(rovingContext.state.activeNode)
-                            ? rovingContext.state.activeNode
-                            : nodes.find(nodeIsForRecentlyViewed);
-                        // exclude all other recently viewed items from the list so up/down arrows skip them
-                        nodes = nodes.filter((ref) => ref === keptRecentlyViewedRef || !nodeIsForRecentlyViewed(ref));
-                    }
-
+                    const nodes = verticalNodes(rovingContext.state.activeNode);
                     const idx = nodes.indexOf(rovingContext.state.activeNode);
                     node = findNextSiblingElement(
                         nodes,
                         idx + (accessibilityAction === KeyBindingAction.ArrowUp ? -1 : 1),
                     );
+                }
+                break;
+
+            case KeyBindingAction.PageUp:
+            case KeyBindingAction.PageDown:
+                ev.stopPropagation();
+                ev.preventDefault();
+
+                if (rovingContext.state.activeNode && rovingContext.state.nodes.length > 0) {
+                    const nodes = verticalNodes(rovingContext.state.activeNode);
+                    const idx = nodes.indexOf(rovingContext.state.activeNode);
+                    const page = resultsPerPage(scrollContainerRef.current, rovingContext.state.activeNode);
+                    // Clamped to the ends, so a page which overshoots still lands on the last result
+                    // rather than on nothing at all.
+                    const target =
+                        accessibilityAction === KeyBindingAction.PageUp
+                            ? Math.max(0, idx - page)
+                            : Math.min(nodes.length - 1, idx + page);
+                    node = findNextSiblingElement(nodes, target);
                 }
                 break;
 
