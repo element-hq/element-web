@@ -19,6 +19,7 @@
     --reply-chain-border-color: var(--cpd-color-text-secondary, #737d86);
 
     margin: 0;
+    margin-bottom: 8px;
     padding-inline-start: 10px;
     border-inline-start: 2px solid var(--reply-chain-border-color);
     border-radius: 2px;
