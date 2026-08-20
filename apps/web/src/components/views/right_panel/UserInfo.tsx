@@ -11,7 +11,15 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type ReactNode, useContext, useEffect, useMemo, useState } from "react";
 import classNames from "classnames";
-import { type MatrixClient, type RoomMember, type Room, type User, type Device } from "matrix-js-sdk/src/matrix";
+import {
+    type MatrixClient,
+    RoomMember,
+    type Room,
+    type User,
+    type Device,
+    MatrixEvent,
+    EventType,
+} from "matrix-js-sdk/src/matrix";
 import { type UserVerificationStatus, type VerificationRequest, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 
 import Modal from "../../../Modal";
@@ -168,6 +176,51 @@ export const useDevices = (userId: string): IDevice[] | undefined | null => {
 
 export type Member = User | RoomMember;
 
+/**
+ * Fetch the profile of a member we were handed nothing but an ID for.
+ *
+ * The panel is usually opened from a room's member list, where the member already carries a display
+ * name and an avatar. It can also be opened by following a link to a user who is not in the room, and
+ * then all that is known about them is their ID, which leaves the header with nothing to render. The
+ * fetched profile is shaped into a RoomMember because that is the API the views below read it
+ * through. No membership is put on it, so nothing beyond the name and the avatar changes.
+ *
+ * @param member - The member the panel was opened for.
+ * @returns The member to render: the one that was passed in, or a profile-backed stand-in for it.
+ */
+const useMemberProfile = (member: Member): Member => {
+    const { userProfilesStore } = useContext(SDKContext);
+    const [profileMember, setProfileMember] = useState<RoomMember>();
+
+    // Anyone who came out of a room's state arrives with their profile already on them. A User does
+    // not: it is constructed from an ID alone and only filled in by a presence event, so it can be
+    // carrying nothing but the ID it was named after.
+    const needsProfile = !(member instanceof RoomMember) && (!member.avatarUrl || member.displayName === member.userId);
+    const { userId } = member;
+
+    useEffect(() => {
+        if (!needsProfile) return;
+
+        let cancelled = false;
+        userProfilesStore.getOrFetchProfile(userId).then((profile) => {
+            if (cancelled || !profile) return;
+
+            const memberWithProfile = new RoomMember("", userId);
+            memberWithProfile.setMembershipEvent(new MatrixEvent({ type: EventType.RoomMember, content: profile }));
+            setProfileMember(memberWithProfile);
+        });
+
+        return () => {
+            cancelled = true;
+        };
+    }, [needsProfile, userId, userProfilesStore]);
+
+    // The panel can be pointed at somebody else while a fetch is still in flight, so only a profile
+    // belonging to the member being rendered is used.
+    if (needsProfile && profileMember && profileMember.userId === userId) return profileMember;
+    return member;
+};
+
 interface IProps {
     user: Member;
     room?: Room;
@@ -181,7 +234,8 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
     const sdkContext = useContext(SDKContext);
 
     // fetch latest room member if we have a room, so we don't show historical information, falling back to user
-    const member = useMemo(() => (room ? room.getMember(user.userId) || user : user), [room, user]);
+    const roomMember = useMemo(() => (room ? room.getMember(user.userId) || user : user), [room, user]);
+    const member = useMemberProfile(roomMember);
 
     const isRoomEncrypted = useIsEncrypted(sdkContext.client!, room);
     const devices = useDevices(user.userId) ?? [];
