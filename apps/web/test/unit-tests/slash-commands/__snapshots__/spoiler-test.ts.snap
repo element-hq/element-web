@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`/spoiler should wrap the message in a spoiler span 1`] = `"<span data-mx-spoiler>this is a test message</span>"`;
