@@ -19,6 +19,7 @@ import {
     type MenuItemConstructorOptions,
     type IpcMainEvent,
     type Event,
+    BrowserWindow,
 } from "electron";
 import url from "node:url";
 import path from "node:path";
@@ -26,6 +27,7 @@ import path from "node:path";
 import { _t } from "./language-helper.js";
 import { saveImageToFile } from "./save-image.js";
 import { getConfig } from "./config.js";
+import { isTranslationAvailable, showTranslation } from "./translation.js";
 
 const MAILTO_PREFIX = "mailto:";
 
@@ -240,8 +242,47 @@ function cutCopyPasteSelectContextMenus(
     return options;
 }
 
+function translateContextMenuItem(params: ContextMenuParams, webContents: WebContents): MenuItemConstructorOptions[] {
+    if (!params.selectionText || !isTranslationAvailable()) return [];
+    const win = BrowserWindow.fromWebContents(webContents);
+    if (!win) return [];
+
+    return [
+        { type: "separator" },
+        {
+            label: _t("action|translate"),
+            click: async (): Promise<void> => {
+                // Anchor at the selected text's bounding rect (matching the in-message behaviour)
+                // rather than the mouse position. Electron's context-menu params don't expose a
+                // selection rect, so read it from the renderer; fall back to the click point (a 1x1
+                // rect, since NSPopover treats an empty rect as "anchor to the whole view").
+                let rect = { x: params.x, y: params.y, width: 1, height: 1 };
+                try {
+                    const selRect = await webContents.executeJavaScript(
+                        `(() => {
+                            const s = window.getSelection();
+                            if (!s || s.rangeCount === 0) return null;
+                            const r = s.getRangeAt(0).getBoundingClientRect();
+                            return { x: r.x, y: r.y, width: r.width, height: r.height };
+                        })()`,
+                    );
+                    if (selRect && selRect.width > 0 && selRect.height > 0) {
+                        rect = selRect;
+                    }
+                } catch {
+                    // ignore — fall back to the click point
+                }
+                showTranslation(win, params.selectionText, rect);
+            },
+        },
+    ];
+}
+
 function onSelectedContextMenu(ev: Event, params: ContextMenuParams, webContents: WebContents): void {
-    const items = cutCopyPasteSelectContextMenus(params, webContents);
+    const items = [
+        ...cutCopyPasteSelectContextMenus(params, webContents),
+        ...translateContextMenuItem(params, webContents),
+    ];
     const popupMenu = Menu.buildFromTemplate(items);
 
     // popup() requires an options object even for no options

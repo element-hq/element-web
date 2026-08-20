@@ -17,6 +17,7 @@ import {
     Beacon,
     getBeaconInfoIdentifier,
     EventType,
+    MsgType,
     FeatureSupport,
     Thread,
     M_POLL_KIND_DISCLOSED,
@@ -31,7 +32,14 @@ import { type RoomContextType, TimelineRenderingType } from "../../../../../src/
 import { canEditContent } from "../../../../../src/utils/EventUtils";
 import { copyPlaintext, getSelectedText } from "../../../../../src/utils/strings";
 import MessageContextMenu from "../../../../../src/components/views/context_menus/MessageContextMenu";
-import { makeBeaconEvent, makeBeaconInfoEvent, makeLocationEvent, stubClient } from "../../../../test-utils";
+import {
+    makeBeaconEvent,
+    makeBeaconInfoEvent,
+    makeLocationEvent,
+    mockPlatformPeg,
+    stubClient,
+    unmockPlatformPeg,
+} from "../../../../test-utils";
 import dispatcher from "../../../../../src/dispatcher/dispatcher";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { ReadPinsEventId } from "../../../../../src/components/views/right_panel/types";
@@ -431,6 +439,64 @@ describe("MessageContextMenu", () => {
             expect(quoteButton).toBeFalsy();
 
             isSelectionWithinSingleTextBody.mockRestore();
+        });
+    });
+
+    describe("translate button", () => {
+        beforeEach(() => {
+            jest.clearAllMocks();
+        });
+
+        afterEach(() => {
+            unmockPlatformPeg();
+        });
+
+        const queryTranslateButton = (): Element | null => document.querySelector('li[aria-label="Translate"]');
+
+        it("shows translate button when there is a selection and the platform supports native translation", () => {
+            mockPlatformPeg({ supportsNativeTranslation: () => true });
+            mocked(getSelectedText).mockReturnValue("hello");
+            createRightClickMenuWithContent(createMessageEventContent("hello world"));
+            expect(queryTranslateButton()).toBeTruthy();
+        });
+
+        it("does not show translate button when there is no selection", () => {
+            mockPlatformPeg({ supportsNativeTranslation: () => true });
+            mocked(getSelectedText).mockReturnValue("");
+            createRightClickMenuWithContent(createMessageEventContent("hello world"));
+            expect(queryTranslateButton()).toBeFalsy();
+        });
+
+        it("does not show translate button when the platform does not support native translation", () => {
+            mockPlatformPeg({ supportsNativeTranslation: () => false });
+            mocked(getSelectedText).mockReturnValue("hello");
+            createRightClickMenuWithContent(createMessageEventContent("hello world"));
+            expect(queryTranslateButton()).toBeFalsy();
+        });
+
+        it("shows translate button for any message type when there is a selection", () => {
+            mockPlatformPeg({ supportsNativeTranslation: () => true });
+            mocked(getSelectedText).mockReturnValue("selected words");
+            // Not a text message (e.g. an image), but with a selection it should still be offered.
+            createRightClickMenuWithContent({ msgtype: MsgType.Image, body: "image.png" });
+            expect(queryTranslateButton()).toBeTruthy();
+        });
+
+        it("translates the selected text, anchored at the selection", () => {
+            const platform = mockPlatformPeg({ supportsNativeTranslation: () => true, translate: jest.fn() });
+            mocked(getSelectedText).mockReturnValue("just this");
+            const mockRange = { getBoundingClientRect: () => new DOMRect(1, 2, 3, 4) } as unknown as Range;
+            const getSelectionSpy = jest.spyOn(window, "getSelection").mockReturnValue({
+                rangeCount: 1,
+                getRangeAt: () => mockRange,
+            } as unknown as Selection);
+
+            createRightClickMenuWithContent(createMessageEventContent("hello world"));
+            fireEvent.mouseDown(queryTranslateButton()!);
+
+            expect(platform.translate).toHaveBeenCalledWith("just this", expect.anything());
+
+            getSelectionSpy.mockRestore();
         });
     });
 
