@@ -10,6 +10,10 @@ import classNames from "classnames";
 
 import { MemberAvatarView, type MemberAvatarViewModel } from "../../../../../core/MemberAvatar/MemberAvatarView";
 import { type ViewModel, useViewModel } from "../../../../../core/viewmodel";
+import {
+    DEFAULT_EVENT_PRESENTATION,
+    EventPresentationProvider,
+} from "../../../EventPresentation/EventPresentationContext";
 import { DisambiguatedProfileView, type DisambiguatedProfileViewModel } from "../DisambiguatedProfile";
 import styles from "./ReplyTileView.module.css";
 
@@ -55,28 +59,35 @@ export function ReplyTileView({ vm }: ReplyTileViewProps): JSX.Element {
     const { href, sender, inline, info, body } = useViewModel(vm);
 
     return (
-        <div
-            className={classNames(styles.root, {
-                [styles.inline]: inline,
-                [styles.info]: info,
-            })}
-            data-testid="reply-tile"
-        >
-            <a className={styles.link} href={href} onClick={vm.onClick}>
-                {sender ? (
-                    <div className={styles.sender} data-testid="reply-tile-sender">
-                        {sender.avatarViewModel ? (
-                            <MemberAvatarView vm={sender.avatarViewModel} classNames={styles.avatar} />
-                        ) : null}
-                        {sender.profileViewModel ? (
-                            <DisambiguatedProfileView vm={sender.profileViewModel} className={styles.senderProfile} />
-                        ) : null}
+        // A reply preview renders the same way whatever layout the timeline uses, so shared
+        // components nested here must not pick up the surrounding tile's presentation.
+        <EventPresentationProvider value={DEFAULT_EVENT_PRESENTATION}>
+            <div
+                className={classNames(styles.root, {
+                    [styles.inline]: inline,
+                    [styles.info]: info,
+                })}
+                data-testid="reply-tile"
+            >
+                <a className={styles.link} href={href} onClick={vm.onClick}>
+                    {sender ? (
+                        <div className={styles.sender} data-testid="reply-tile-sender">
+                            {sender.avatarViewModel ? (
+                                <MemberAvatarView vm={sender.avatarViewModel} classNames={styles.avatar} />
+                            ) : null}
+                            {sender.profileViewModel ? (
+                                <DisambiguatedProfileView
+                                    vm={sender.profileViewModel}
+                                    className={styles.senderProfile}
+                                />
+                            ) : null}
+                        </div>
+                    ) : null}
+                    <div className={styles.body} data-testid="reply-tile-body">
+                        {body}
                     </div>
-                ) : null}
-                <div className={styles.body} data-testid="reply-tile-body">
-                    {body}
-                </div>
-            </a>
-        </div>
+                </a>
+            </div>
+        </EventPresentationProvider>
     );
 }

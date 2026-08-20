@@ -109,6 +109,18 @@ describe("UserInfoAdminPowerlevelViewModel", () => {
         );
     };
 
+    /**
+     * Make `room.getMember` resolve levels the way the SDK does: an explicit `users` entry when there
+     * is one, otherwise `users_default`. Without this the room reports no members at all.
+     */
+    const mockMembersFrom = (content: { users?: Record<string, number>; users_default?: number }): void => {
+        mockRoom.getMember.mockImplementation((userId: string) => {
+            const member = new RoomMember(defaultRoomId, userId);
+            member.powerLevel = content.users?.[userId] ?? content.users_default ?? 0;
+            return member;
+        });
+    };
+
     afterEach(() => {
         jest.clearAllMocks();
     });
@@ -144,17 +156,16 @@ describe("UserInfoAdminPowerlevelViewModel", () => {
     });
 
     it("shows warning when promoting user to higher power level", async () => {
-        const powerLevelEvent = new MatrixEvent({
-            type: EventType.RoomPowerLevels,
-            content: {
-                users: {
-                    [defaultUserId]: startPowerLevel,
-                    [defaultMeId]: startPowerLevel,
-                },
-                users_default: 1,
+        const content = {
+            users: {
+                [defaultUserId]: startPowerLevel,
+                [defaultMeId]: startPowerLevel,
             },
-        });
+            users_default: 1,
+        };
+        const powerLevelEvent = new MatrixEvent({ type: EventType.RoomPowerLevels, content });
         mockRoom.currentState.getStateEvents.mockReturnValue(powerLevelEvent);
+        mockMembersFrom(content);
         mockClient.getUserId.mockReturnValue(defaultMeId);
 
         const { result } = renderComponentHook({ ...defaultProps, room: mockRoom }, mockClient);
@@ -166,14 +177,13 @@ describe("UserInfoAdminPowerlevelViewModel", () => {
     });
 
     it("shows warning when self-demoting", async () => {
-        const powerLevelEvent = new MatrixEvent({
-            type: EventType.RoomPowerLevels,
-            content: {
-                users: { [defaultMeId]: changedPowerLevel },
-                users_default: 1,
-            },
-        });
+        const content = {
+            users: { [defaultMeId]: changedPowerLevel },
+            users_default: 1,
+        };
+        const powerLevelEvent = new MatrixEvent({ type: EventType.RoomPowerLevels, content });
         mockRoom.currentState.getStateEvents.mockReturnValue(powerLevelEvent);
+        mockMembersFrom(content);
         mockClient.getUserId.mockReturnValue(defaultMeId);
 
         const { result } = renderComponentHook({ ...defaultProps, room: mockRoom, user: selfUser }, mockClient);
@@ -189,17 +199,16 @@ describe("UserInfoAdminPowerlevelViewModel", () => {
             finished: Promise.resolve([false]),
         }));
 
-        const powerLevelEvent = new MatrixEvent({
-            type: EventType.RoomPowerLevels,
-            content: {
-                users: {
-                    [defaultUserId]: startPowerLevel,
-                    "@me:example.com": startPowerLevel,
-                },
-                users_default: 1,
+        const content = {
+            users: {
+                [defaultUserId]: startPowerLevel,
+                "@me:example.com": startPowerLevel,
             },
-        });
+            users_default: 1,
+        };
+        const powerLevelEvent = new MatrixEvent({ type: EventType.RoomPowerLevels, content });
         mockRoom.currentState.getStateEvents.mockReturnValue(powerLevelEvent);
+        mockMembersFrom(content);
         mockClient.getUserId.mockReturnValue(defaultMeId);
 
         const { result } = renderComponentHook({ ...defaultProps, room: mockRoom }, mockClient);
@@ -208,6 +217,42 @@ describe("UserInfoAdminPowerlevelViewModel", () => {
 
         expect(Modal.createDialog).toHaveBeenCalled();
         expect(mockClient.setPowerLevel).not.toHaveBeenCalled();
+    });
+
+    it("shows warning when our own level comes from users_default", async () => {
+        // Nobody is listed in `users`, so both of us sit on `users_default`.
+        const content = { users: {}, users_default: startPowerLevel };
+        const powerLevelEvent = new MatrixEvent({ type: EventType.RoomPowerLevels, content });
+        mockRoom.currentState.getStateEvents.mockReturnValue(powerLevelEvent);
+        mockMembersFrom(content);
+        mockClient.getUserId.mockReturnValue(defaultMeId);
+
+        const { result } = renderComponentHook({ ...defaultProps, room: mockRoom }, mockClient);
+
+        await result.current.onPowerChange(startPowerLevel);
+
+        expect(Modal.createDialog).toHaveBeenCalled();
+        expect(mockClient.setPowerLevel).toHaveBeenCalled();
+    });
+
+    it("does not warn when we outrank the new level as a room creator", async () => {
+        const content = { users: { [defaultUserId]: startPowerLevel }, users_default: 1 };
+        const powerLevelEvent = new MatrixEvent({ type: EventType.RoomPowerLevels, content });
+        mockRoom.currentState.getStateEvents.mockReturnValue(powerLevelEvent);
+        mockRoom.getMember.mockImplementation((userId: string) => {
+            const member = new RoomMember(defaultRoomId, userId);
+            // Creators outrank every assignable level, so promoting to 100 cannot match us.
+            member.powerLevel = userId === defaultMeId ? Infinity : startPowerLevel;
+            return member;
+        });
+        mockClient.getUserId.mockReturnValue(defaultMeId);
+
+        const { result } = renderComponentHook({ ...defaultProps, room: mockRoom }, mockClient);
+
+        await result.current.onPowerChange(changedPowerLevel);
+
+        expect(Modal.createDialog).not.toHaveBeenCalled();
+        expect(mockClient.setPowerLevel).toHaveBeenCalled();
     });
 
     it("handles missing power level event", async () => {

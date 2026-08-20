@@ -79,6 +79,21 @@ describe("ReplyTileView", () => {
         expect(container.querySelector(".mx_ReplyTile_sender")).not.toBeInTheDocument();
     });
 
+    it("neutralises the surrounding event presentation for nested components", () => {
+        const vm = new TestReplyTileViewModel({
+            href: "#",
+            body: "Reply content",
+            sender: { profileViewModel },
+        }) as ReplyTileViewModel;
+        render(<ReplyTileView vm={vm} />, {
+            presentation: { layout: "irc", density: "compact" },
+        });
+
+        const profile = screen.getByText("Alice").parentElement;
+        expect(profile).toHaveAttribute("data-event-layout", "group");
+        expect(profile).toHaveAttribute("data-event-density", "default");
+    });
+
     it("applies inline and informational modifiers", () => {
         renderReplyTile({ inline: true, info: true });
 

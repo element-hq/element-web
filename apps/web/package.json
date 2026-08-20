@@ -193,7 +193,7 @@
         "postcss-loader": "8.2.1",
         "postcss-mixins": "12.1.2",
         "postcss-nested": "8.0.1",
-        "postcss-preset-env": "11.3.2",
+        "postcss-preset-env": "11.4.0",
         "postcss-scss": "4.0.9",
         "postcss-simple-vars": "7.0.1",
         "process": "^0.11.10",
