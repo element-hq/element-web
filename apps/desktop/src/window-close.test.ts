@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, type Mock, vi } from "vitest";
 import { app } from "electron";
 import type { BrowserWindow, Event } from "electron";
 
@@ -35,6 +35,11 @@ function mockWindow(overrides: Partial<Record<keyof BrowserWindow, unknown>> = {
 
 function mockEvent(): Event {
     return { preventDefault: vi.fn() } as unknown as Event;
+}
+
+function leaveFullScreen(window: BrowserWindow): void {
+    const once = window.once as unknown as Mock<(event: string, listener: () => void) => void>;
+    once.mock.calls[0][1]();
 }
 
 function usePlatform(platform: NodeJS.Platform): void {
@@ -150,7 +155,7 @@ describe("handleWindowClose", () => {
         expect(window.setFullScreen).toHaveBeenCalledWith(false);
         expect(window.once).toHaveBeenCalledWith("leave-full-screen", expect.any(Function));
 
-        vi.mocked(window.once).mock.calls[0][1]();
+        leaveFullScreen(window);
         expect(app.hide).toHaveBeenCalled();
     });
 
@@ -163,7 +168,7 @@ describe("handleWindowClose", () => {
         expect(window.hide).not.toHaveBeenCalled();
         expect(window.setFullScreen).toHaveBeenCalledWith(false);
 
-        vi.mocked(window.once).mock.calls[0][1]();
+        leaveFullScreen(window);
         expect(window.hide).toHaveBeenCalled();
     });
 
