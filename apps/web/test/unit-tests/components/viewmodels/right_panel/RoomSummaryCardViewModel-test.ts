@@ -237,6 +237,20 @@ describe("useRoomSummaryCardViewModel", () => {
                 expect(result.current.isDirectMessage).toBe(false);
             });
         });
+
+        it("should handle malformed m.direct account data without crashing", async () => {
+            const directRoomsList = {
+                "@user:domain.com": "!not-an-array:domain.com" as any,
+                "@other:domain.com": null as any,
+            };
+            jest.spyOn(hooks, "useAccountData").mockReturnValue(directRoomsList);
+
+            const { result } = render();
+
+            await waitFor(() => {
+                expect(result.current.isDirectMessage).toBe(false);
+            });
+        });
     });
 
     describe("search input", () => {
