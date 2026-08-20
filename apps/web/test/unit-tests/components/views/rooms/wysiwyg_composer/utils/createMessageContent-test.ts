@@ -42,6 +42,20 @@ describe("createMessageContent", () => {
             });
         });
 
+        it("Should name a mention in the body rather than repeat its markup", async () => {
+            // When
+            const mention = '<a href="https://matrix.to/#/@alice:example.org">Alice</a> hello';
+            const content = await createMessageContent(mention, true, {});
+
+            // Then
+            expect(content).toEqual({
+                body: "Alice hello",
+                format: "org.matrix.custom.html",
+                formatted_body: mention,
+                msgtype: "m.text",
+            });
+        });
+
         it("Should add relation to message", async () => {
             // When
             const relation = {
