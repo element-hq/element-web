@@ -33,6 +33,7 @@
     --event-tile-bubble-margin-inline-end: 60px;
     --event-tile-bubble-other-background: var(--cpd-color-gray-300);
     --event-tile-bubble-self-background: var(--cpd-color-green-300);
+    --event-tile-content-inline-end: 34px;
 
     /* Shared preview, action-bar, bubble, and interaction values. */
     --event-tile-preview-offset: 48px;
@@ -76,6 +77,7 @@
 }
 
 .root.stateInfo {
+    padding-top: 0;
     font-size: var(--cpd-font-size-body-sm);
     color: var(--cpd-color-text-secondary);
 }
@@ -92,6 +94,11 @@
     line-clamp: 2;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.root.layoutGroup .slotBody > *,
+.root.layoutIrc .slotBody > * {
+    margin-inline-end: var(--event-tile-content-inline-end);
 }
 
 /* Slot wrappers are the public styling boundary. The supplied content may be
@@ -269,22 +276,7 @@
 
     .slotReplyChain {
         margin-inline-start: 0;
-        margin-inline-end: 10px;
-        padding-block: var(--event-tile-group-line-spacing-block-start) var(--event-tile-group-line-spacing-block-end);
-        padding-inline-start: var(--event-tile-group-gutter);
-        line-height: var(--event-tile-group-line-height);
-    }
-
-    .line,
-    .slotReplyChain {
-        position: relative;
-        border-radius: 8px;
-    }
-
-    /* Reply-chain spacing belongs to the group shell; nested reply content
-       remains application-owned. */
-    &.stateHasReply .slotReplyChain {
-        margin-block-end: var(--cpd-space-2x);
+        margin-bottom: var(--cpd-space-2x);
     }
 
     .slotFooter {
@@ -549,12 +541,29 @@
         background-position: center;
     }
 
+    /* Reply tiles are IRC rows too, but their metadata must participate in
+       the nested row's flex layout instead of using the outer row's absolute
+       positioning. */
+    .slotReplyChain .root.layoutIrc .slotTimestamp {
+        width: initial;
+        min-width: initial;
+    }
+
+    .slotReplyChain .root.layoutIrc .slotPadlock {
+        position: relative;
+        order: -1;
+    }
+
+    .slotReplyChain .root.layoutIrc.stateEmote > .slotAvatar {
+        margin-inline-start: initial;
+    }
+
     .line {
         display: flex;
         flex-direction: column;
         flex-grow: 1;
         flex-shrink: 1;
-        padding-block: 1px;
+        padding-block: 0;
         position: relative;
         border-radius: 8px;
     }
@@ -566,6 +575,12 @@
     }
 
     .slotBody {
+        display: contents;
+        padding-block: 0;
+    }
+
+    .line:not(.lineMedia) .slotBody > * {
+        display: inline-block;
         padding-block: 1px;
     }
 
@@ -637,6 +652,7 @@
 /* Bubble layout. */
 .root.layoutBubble {
     max-width: unset;
+    --event-tile-content-inline-end: 0;
     margin-inline: var(--event-tile-bubble-margin-inline-start) var(--event-tile-bubble-margin-inline-end);
     margin-block-start: calc(var(--event-tile-bubble-gutter) / 2);
     padding-top: 0;
@@ -674,17 +690,17 @@
     }
 
     .slotTimestamp {
+        display: contents;
+    }
+
+    .slotTimestamp > * {
         position: absolute;
         z-index: 3;
         inset-block-end: 0;
         inset-inline-end: 0;
         max-width: 80px;
         padding: 4px 8px;
-    }
-
-    .slotTimestamp > * {
         width: unset;
-        max-width: 80px;
     }
 
     /* Media bodies provide their own appearance and dimensions. The shell
@@ -735,9 +751,20 @@
         white-space: normal;
     }
 
-    /* The body slot owns the bubble's usable width, including application body wrappers. */
-    .slotBody > * {
-        margin-inline-end: 0;
+    .slotSender > * {
+        max-width: 100%;
+    }
+
+    /* Keep the bubble body content as a direct flex item, matching the
+       legacy line geometry while retaining the slot boundary in the DOM. */
+    .slotBody {
+        display: contents;
+    }
+
+    /* Match the legacy text-bubble anti-zalgo padding. Media lines provide
+       their own dimensions and are intentionally excluded. */
+    .line:not(.lineMedia) .slotBody > * {
+        padding: 1px;
     }
 
     > .slotReceipt {
@@ -780,11 +807,27 @@
     /* Reply-chain spacing belongs to the bubble shell; nested reply content
        remains application-owned. */
     &.stateHasReply .slotReplyChain {
+        padding: 0;
         margin-block-end: var(--cpd-space-2x);
     }
 
     &.stateHasReply .line {
         flex-direction: column;
+    }
+
+    /* A reply is another EventTileView. Keep its root geometry at the shared
+       boundary so the slot wrapper does not change the bubble layout. */
+    &.stateHasReply .slotReplyChain .root {
+        display: flex;
+        gap: var(--event-tile-bubble-gutter);
+    }
+
+    &.stateHasReply .slotReplyChain .root .slotAvatar {
+        position: static;
+    }
+
+    &.stateHasReply .slotReplyChain .root .slotSender {
+        display: none;
     }
 
     /* Own-event modifiers. */
@@ -984,7 +1027,9 @@
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        padding-block: 5px;
+        margin-block: 0;
+        margin-inline-end: 0;
+        padding-block: 0;
 
         .slotAvatar {
             position: static;
@@ -992,6 +1037,7 @@
             display: inline-flex;
             margin-inline-end: var(--event-tile-bubble-gap);
             border: 0;
+            flex-shrink: 0;
         }
 
         .line {
@@ -999,7 +1045,12 @@
             min-width: 100%;
             max-width: 100%;
             margin: 0;
+            padding: 0;
             background: transparent;
+
+            .slotBody > * {
+                padding: 0;
+            }
         }
 
         .slotTimestamp {

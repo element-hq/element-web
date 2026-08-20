@@ -286,7 +286,6 @@ const EVENT_TILE_VIEW_CLASS_NAMES: EventTileViewClassNames = {
     slotReplyChain: "mx_EventTile_reply",
     slotSender: "mx_DisambiguatedProfile",
     slotThreadInfo: "mx_ThreadSummary",
-    slotTimestamp: "mx_MessageTimestamp",
 };
 
 /** Sender state derived for the EventTile snapshot. */

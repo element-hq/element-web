@@ -1012,7 +1012,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 <EventTileAvatarAdapter avatarMember={avatarMember} senderSnapshot={eventTileSnapshot.sender} />
             ) : undefined;
         const sender =
-            eventTileSnapshot.sender.profileMode !== "hidden" ? (
+            eventTileSnapshot.sender.profileMode !== "hidden" && !eventTileSnapshot.sender.isEmote ? (
                 <EventTileSenderAdapter
                     sender={eventTileSnapshot.sender}
                     onSenderProfileClick={this.onSenderProfileClick}
@@ -1065,6 +1065,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         ) : undefined;
         const timestamp =
             eventTileRenderState.root.shape === "File" || this.isPreview ? plainTimestamp : linkedTimestamp;
+        const timestampSlot =
+            timestamp ??
+            (eventTileRenderState.timestamp.displayState.useIRCLayout ? <span aria-hidden="true" /> : undefined);
 
         // Receipt slots.
         const receiptState = this.receiptState;
@@ -1183,7 +1186,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                     avatar,
                     sender,
                     body,
-                    timestamp,
+                    timestamp: timestampSlot,
                     padlock,
                     replyChain,
                     actionBar,

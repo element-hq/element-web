@@ -56,14 +56,14 @@ Please see LICENSE files in the repository root for full details.
                     margin-right: 0;
                 }
 
-                &[data-layout="group"] {
+                &:has([data-event-layout="group"]) {
                     margin-top: calc(var(--cpd-space-3x) * -1);
                 }
 
                 /**
                  * Add margin to center the bubble
                  */
-                &[data-layout="bubble"] {
+                &:has([data-event-layout="bubble"]) {
                     /**
                      * Add the layout margin and the margin to vertically center the bubble
                      */
@@ -72,7 +72,7 @@ Please see LICENSE files in the repository root for full details.
                     flex-shrink: 1;
                 }
 
-                &[data-layout="irc"] .mx_MessageTimestamp {
+                &:has([data-event-layout="irc"]) .mx_MessageTimestamp {
                     display: none; /* hide the container used for spacing consistency */
                 }
 

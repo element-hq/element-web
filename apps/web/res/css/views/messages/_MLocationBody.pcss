@@ -26,12 +26,8 @@ Please see LICENSE files in the repository root for full details.
     width: 100%;
 }
 
-.mx_EventTile[data-layout="bubble"] .mx_EventTile_line .mx_MLocationBody .mx_MLocationBody_map {
-    max-width: 100%;
-    width: 450px;
-}
-
-.mx_DisambiguatedProfile ~ .mx_MLocationBody {
+/* EventTileView places the sender and body in separate slot boundaries. */
+.mx_EventTile > .mx_DisambiguatedProfile ~ .mx_EventTile_line .mx_MLocationBody {
     margin-top: 6px; /* See: https://github.com/matrix-org/matrix-react-sdk/pull/8442 */
 }
 

@@ -10,7 +10,6 @@ Please see LICENSE files in the repository root for full details.
 $left-gutter: 64px;
 
 .mx_EventTile {
-    --EventTile_content-margin-inline-end: 34px;
     --EventTile_group_line-spacing-block-start: 1px;
     --EventTile_group_line-spacing-block-end: 3px;
     --EventTile_group_line-spacing-inline-start: $left-gutter;
@@ -20,7 +19,6 @@ $left-gutter: 64px;
     flex-shrink: 0;
     max-width: 100%;
     clear: both; /* TODO: check if this is necessary */
-    padding-top: 18px;
     position: relative;
 
     /* Retained for legacy error/fallback markup that does not use EventTileView. */
@@ -87,27 +85,6 @@ $left-gutter: 64px;
         }
     }
 
-    &[data-layout="irc"],
-    &[data-layout="group"] {
-        .mx_ImageBody {
-            .mx_ImageBody_container {
-                justify-content: flex-start;
-                min-height: $font-44px;
-                min-width: $font-44px;
-            }
-        }
-
-    }
-
-    &[data-layout="group"] {
-        .mx_EventTileBubble {
-            margin-inline: auto;
-        }
-
-        .mx_ReplyChain {
-            margin-bottom: var(--cpd-space-2x);
-        }
-    }
 }
 
 .mx_GenericEventListSummary {
@@ -152,8 +129,6 @@ $left-gutter: 64px;
     */
     overflow-y: hidden;
     overflow-x: hidden;
-    margin-right: var(--EventTile_content-margin-inline-end);
-
     .markdown-body {
         font: var(--cpd-font-body-md-regular) !important;
         letter-spacing: var(--cpd-font-letter-spacing-body-md);
@@ -441,24 +416,6 @@ $left-gutter: 64px;
     visibility: visible;
 }
 
-.mx_EventTile[data-shape="ThreadsList"] {
-    .mx_ThreadPanel_replies {
-        margin-top: var(--cpd-space-2x);
-        display: flex;
-        align-items: center;
-        position: relative;
-        font: var(--cpd-font-body-sm-regular);
-
-        > svg {
-            @mixin ThreadSummaryIcon;
-        }
-
-        .mx_ThreadPanel_replies_amount {
-            @mixin ThreadRepliesAmount;
-        }
-    }
-}
-
 .mx_ThreadSummary_icon {
     display: inline-block;
     margin-top: var(--cpd-space-2x);
@@ -494,7 +451,7 @@ $left-gutter: 64px;
 
 /* Body-only compact markdown spacing remains application-owned. */
 .mx_MatrixChat_useCompactLayout {
-    .mx_EventTile[data-layout="group"] {
+    .mx_EventTile {
         .mx_EventTile_content .markdown-body {
             p,
             ul,
