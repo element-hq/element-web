@@ -136,6 +136,9 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
             this.onActivityIsUnreadChange(Boolean(newValue)),
         );
         SettingsStore.watchSetting("RoomList.showSections", null, () => this.scheduleEmit());
+        SettingsStore.watchSetting("Spaces.showPeopleInSpace", null, (_settingName, roomId) => {
+            if (roomId === SDKContextClass.instance.spaceStore.activeSpace) this.onActiveSpaceChanged();
+        });
     }
 
     /**
