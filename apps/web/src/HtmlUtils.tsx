@@ -379,7 +379,12 @@ function analyseEvent(content: IContent, highlights?: string[], opts: EventRende
             let unsafeBody = formattedBody!;
 
             if (opts.linkify) {
-                unsafeBody = linkifyHtml(unsafeBody);
+                // linkify decodes entities while tokenising but only puts < and > back, so a body
+                // comes out of it one level of ampersand escaping short: `&amp;amp;` returns as
+                // `&amp;`, and a code block reading `&gtk::Label` renders as `>k::Label`. The plain
+                // text branch below escapes its body before linkifying it for exactly this reason;
+                // a formatted body is already escaped, so top the level back up first.
+                unsafeBody = linkifyHtml(unsafeBody.replace(/&/g, "&amp;"));
             }
 
             safeBody = sanitizeHtml(unsafeBody, sanitizeParams);
