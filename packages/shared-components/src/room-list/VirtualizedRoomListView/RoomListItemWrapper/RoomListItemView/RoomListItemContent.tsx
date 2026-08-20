@@ -50,10 +50,22 @@ export const RoomListItemContent = memo(function RoomListItemContent({
         >
             {renderAvatar(item.room)}
             <Flex className={styles.content} gap="var(--cpd-space-2x)" align="center" justify="space-between">
-                {/* We truncate the room name when too long. Title here is to show the full name on hover */}
+                {/*
+                    The room name and message preview are truncated when too long, so the full text
+                    is offered on hover. These must be rendered tooltips rather than native `title`
+                    attributes: on Element Desktop for macOS, `title` tooltips fire on the first
+                    hover and then only intermittently, so the text is effectively unreachable.
+                        https://github.com/element-hq/element-web/issues/34049
+                        https://github.com/electron/electron/issues/49843
+                    This follows EventPreviewView, which moved off `title` for the same reason.
+                    The name tooltip wraps only the name text, not the whole cell, so that hovering
+                    the user status emoji shows its own tooltip rather than both at once.
+                */}
                 <div className={styles.ellipsis}>
-                    <div className={styles.roomName} title={item.name} data-testid="room-name">
-                        {item.name}
+                    <div className={styles.roomName}>
+                        <Tooltip description={item.name}>
+                            <span data-testid="room-name">{item.name}</span>
+                        </Tooltip>
                         {item.userStatus && (
                             <Tooltip description={item.userStatus.text}>
                                 <Text as="span" className={styles.userStatusEmoji}>
@@ -64,9 +76,11 @@ export const RoomListItemContent = memo(function RoomListItemContent({
                     </div>
 
                     {item.messagePreview && (
-                        <Text as="div" size="sm" className={styles.ellipsis} title={item.messagePreview}>
-                            {item.messagePreview}
-                        </Text>
+                        <Tooltip description={item.messagePreview}>
+                            <Text as="div" size="sm" className={styles.ellipsis}>
+                                {item.messagePreview}
+                            </Text>
+                        </Tooltip>
                     )}
                 </div>
                 {!isDragging && (item.showMoreOptionsMenu || item.showNotificationMenu) && (

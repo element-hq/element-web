@@ -112,14 +112,15 @@ exports[`<RoomListView /> > renders Default story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="General"
                         >
-                          General
+                          <span
+                            data-testid="room-name"
+                          >
+                            General
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in General"
                         >
                           Last message in General
                         </div>
@@ -261,10 +262,12 @@ exports[`<RoomListView /> > renders Default story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Random"
                         >
-                          Random
+                          <span
+                            data-testid="room-name"
+                          >
+                            Random
+                          </span>
                         </div>
                       </div>
                       <div
@@ -383,14 +386,15 @@ exports[`<RoomListView /> > renders Default story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Engineering"
                         >
-                          Engineering
+                          <span
+                            data-testid="room-name"
+                          >
+                            Engineering
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Engineering"
                         >
                           Last message in Engineering
                         </div>
@@ -511,10 +515,12 @@ exports[`<RoomListView /> > renders Default story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Design"
                         >
-                          Design
+                          <span
+                            data-testid="room-name"
+                          >
+                            Design
+                          </span>
                         </div>
                       </div>
                       <div
@@ -633,14 +639,15 @@ exports[`<RoomListView /> > renders Default story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Product"
                         >
-                          Product
+                          <span
+                            data-testid="room-name"
+                          >
+                            Product
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Product"
                         >
                           Last message in Product
                         </div>
@@ -761,10 +768,12 @@ exports[`<RoomListView /> > renders Default story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Marketing"
                         >
-                          Marketing
+                          <span
+                            data-testid="room-name"
+                          >
+                            Marketing
+                          </span>
                         </div>
                       </div>
                       <div
@@ -906,14 +915,15 @@ exports[`<RoomListView /> > renders Default story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Sales"
                         >
-                          Sales
+                          <span
+                            data-testid="room-name"
+                          >
+                            Sales
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Sales"
                         >
                           Last message in Sales
                         </div>
@@ -1034,10 +1044,12 @@ exports[`<RoomListView /> > renders Default story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Support"
                         >
-                          Support
+                          <span
+                            data-testid="room-name"
+                          >
+                            Support
+                          </span>
                         </div>
                       </div>
                       <div
@@ -1156,14 +1168,15 @@ exports[`<RoomListView /> > renders Default story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Announcements"
                         >
-                          Announcements
+                          <span
+                            data-testid="room-name"
+                          >
+                            Announcements
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Announcements"
                         >
                           Last message in Announcements
                         </div>
@@ -1284,10 +1297,12 @@ exports[`<RoomListView /> > renders Default story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Off-topic"
                         >
-                          Off-topic
+                          <span
+                            data-testid="room-name"
+                          >
+                            Off-topic
+                          </span>
                         </div>
                       </div>
                       <div
@@ -1406,14 +1421,15 @@ exports[`<RoomListView /> > renders Default story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Team Alpha"
                         >
-                          Team Alpha
+                          <span
+                            data-testid="room-name"
+                          >
+                            Team Alpha
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Team Alpha"
                         >
                           Last message in Team Alpha
                         </div>
@@ -1557,10 +1573,12 @@ exports[`<RoomListView /> > renders Default story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Team Beta"
                         >
-                          Team Beta
+                          <span
+                            data-testid="room-name"
+                          >
+                            Team Beta
+                          </span>
                         </div>
                       </div>
                       <div
@@ -1679,14 +1697,15 @@ exports[`<RoomListView /> > renders Default story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Project X"
                         >
-                          Project X
+                          <span
+                            data-testid="room-name"
+                          >
+                            Project X
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Project X"
                         >
                           Last message in Project X
                         </div>
@@ -1807,10 +1826,12 @@ exports[`<RoomListView /> > renders Default story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Project Y"
                         >
-                          Project Y
+                          <span
+                            data-testid="room-name"
+                          >
+                            Project Y
+                          </span>
                         </div>
                       </div>
                       <div
@@ -1929,14 +1950,15 @@ exports[`<RoomListView /> > renders Default story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Water Cooler"
                         >
-                          Water Cooler
+                          <span
+                            data-testid="room-name"
+                          >
+                            Water Cooler
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Water Cooler"
                         >
                           Last message in Water Cooler
                         </div>
@@ -2057,10 +2079,12 @@ exports[`<RoomListView /> > renders Default story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Feedback"
                         >
-                          Feedback
+                          <span
+                            data-testid="room-name"
+                          >
+                            Feedback
+                          </span>
                         </div>
                       </div>
                       <div
@@ -2202,14 +2226,15 @@ exports[`<RoomListView /> > renders Default story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Ideas"
                         >
-                          Ideas
+                          <span
+                            data-testid="room-name"
+                          >
+                            Ideas
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Ideas"
                         >
                           Last message in Ideas
                         </div>
@@ -2330,10 +2355,12 @@ exports[`<RoomListView /> > renders Default story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Bugs"
                         >
-                          Bugs
+                          <span
+                            data-testid="room-name"
+                          >
+                            Bugs
+                          </span>
                         </div>
                       </div>
                       <div
@@ -2452,14 +2479,15 @@ exports[`<RoomListView /> > renders Default story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Features"
                         >
-                          Features
+                          <span
+                            data-testid="room-name"
+                          >
+                            Features
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Features"
                         >
                           Last message in Features
                         </div>
@@ -2580,10 +2608,12 @@ exports[`<RoomListView /> > renders Default story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Releases"
                         >
-                          Releases
+                          <span
+                            data-testid="room-name"
+                          >
+                            Releases
+                          </span>
                         </div>
                       </div>
                       <div
@@ -3370,14 +3400,15 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="General"
                         >
-                          General
+                          <span
+                            data-testid="room-name"
+                          >
+                            General
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in General"
                         >
                           Last message in General
                         </div>
@@ -3519,10 +3550,12 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Random"
                         >
-                          Random
+                          <span
+                            data-testid="room-name"
+                          >
+                            Random
+                          </span>
                         </div>
                       </div>
                       <div
@@ -3641,14 +3674,15 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Engineering"
                         >
-                          Engineering
+                          <span
+                            data-testid="room-name"
+                          >
+                            Engineering
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Engineering"
                         >
                           Last message in Engineering
                         </div>
@@ -3769,10 +3803,12 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Design"
                         >
-                          Design
+                          <span
+                            data-testid="room-name"
+                          >
+                            Design
+                          </span>
                         </div>
                       </div>
                       <div
@@ -3891,14 +3927,15 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Product"
                         >
-                          Product
+                          <span
+                            data-testid="room-name"
+                          >
+                            Product
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Product"
                         >
                           Last message in Product
                         </div>
@@ -4019,10 +4056,12 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Marketing"
                         >
-                          Marketing
+                          <span
+                            data-testid="room-name"
+                          >
+                            Marketing
+                          </span>
                         </div>
                       </div>
                       <div
@@ -4164,14 +4203,15 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Sales"
                         >
-                          Sales
+                          <span
+                            data-testid="room-name"
+                          >
+                            Sales
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Sales"
                         >
                           Last message in Sales
                         </div>
@@ -4292,10 +4332,12 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Support"
                         >
-                          Support
+                          <span
+                            data-testid="room-name"
+                          >
+                            Support
+                          </span>
                         </div>
                       </div>
                       <div
@@ -4414,14 +4456,15 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Announcements"
                         >
-                          Announcements
+                          <span
+                            data-testid="room-name"
+                          >
+                            Announcements
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Announcements"
                         >
                           Last message in Announcements
                         </div>
@@ -4542,10 +4585,12 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Off-topic"
                         >
-                          Off-topic
+                          <span
+                            data-testid="room-name"
+                          >
+                            Off-topic
+                          </span>
                         </div>
                       </div>
                       <div
@@ -4664,14 +4709,15 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Team Alpha"
                         >
-                          Team Alpha
+                          <span
+                            data-testid="room-name"
+                          >
+                            Team Alpha
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Team Alpha"
                         >
                           Last message in Team Alpha
                         </div>
@@ -4815,10 +4861,12 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Team Beta"
                         >
-                          Team Beta
+                          <span
+                            data-testid="room-name"
+                          >
+                            Team Beta
+                          </span>
                         </div>
                       </div>
                       <div
@@ -4937,14 +4985,15 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Project X"
                         >
-                          Project X
+                          <span
+                            data-testid="room-name"
+                          >
+                            Project X
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Project X"
                         >
                           Last message in Project X
                         </div>
@@ -5065,10 +5114,12 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Project Y"
                         >
-                          Project Y
+                          <span
+                            data-testid="room-name"
+                          >
+                            Project Y
+                          </span>
                         </div>
                       </div>
                       <div
@@ -5187,14 +5238,15 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Water Cooler"
                         >
-                          Water Cooler
+                          <span
+                            data-testid="room-name"
+                          >
+                            Water Cooler
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Water Cooler"
                         >
                           Last message in Water Cooler
                         </div>
@@ -5315,10 +5367,12 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Feedback"
                         >
-                          Feedback
+                          <span
+                            data-testid="room-name"
+                          >
+                            Feedback
+                          </span>
                         </div>
                       </div>
                       <div
@@ -5460,14 +5514,15 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Ideas"
                         >
-                          Ideas
+                          <span
+                            data-testid="room-name"
+                          >
+                            Ideas
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Ideas"
                         >
                           Last message in Ideas
                         </div>
@@ -5588,10 +5643,12 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Bugs"
                         >
-                          Bugs
+                          <span
+                            data-testid="room-name"
+                          >
+                            Bugs
+                          </span>
                         </div>
                       </div>
                       <div
@@ -5710,14 +5767,15 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Features"
                         >
-                          Features
+                          <span
+                            data-testid="room-name"
+                          >
+                            Features
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Features"
                         >
                           Last message in Features
                         </div>
@@ -5838,10 +5896,12 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Releases"
                         >
-                          Releases
+                          <span
+                            data-testid="room-name"
+                          >
+                            Releases
+                          </span>
                         </div>
                       </div>
                       <div
@@ -5960,14 +6020,15 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="General"
                         >
-                          General
+                          <span
+                            data-testid="room-name"
+                          >
+                            General
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in General"
                         >
                           Last message in General
                         </div>
@@ -6111,10 +6172,12 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Random"
                         >
-                          Random
+                          <span
+                            data-testid="room-name"
+                          >
+                            Random
+                          </span>
                         </div>
                       </div>
                       <div
@@ -6233,14 +6296,15 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Engineering"
                         >
-                          Engineering
+                          <span
+                            data-testid="room-name"
+                          >
+                            Engineering
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Engineering"
                         >
                           Last message in Engineering
                         </div>
@@ -6361,10 +6425,12 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Design"
                         >
-                          Design
+                          <span
+                            data-testid="room-name"
+                          >
+                            Design
+                          </span>
                         </div>
                       </div>
                       <div
@@ -6483,14 +6549,15 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Product"
                         >
-                          Product
+                          <span
+                            data-testid="room-name"
+                          >
+                            Product
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Product"
                         >
                           Last message in Product
                         </div>
@@ -6611,10 +6678,12 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Marketing"
                         >
-                          Marketing
+                          <span
+                            data-testid="room-name"
+                          >
+                            Marketing
+                          </span>
                         </div>
                       </div>
                       <div
@@ -6756,14 +6825,15 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Sales"
                         >
-                          Sales
+                          <span
+                            data-testid="room-name"
+                          >
+                            Sales
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Sales"
                         >
                           Last message in Sales
                         </div>
@@ -6884,10 +6954,12 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Support"
                         >
-                          Support
+                          <span
+                            data-testid="room-name"
+                          >
+                            Support
+                          </span>
                         </div>
                       </div>
                       <div
@@ -7006,14 +7078,15 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Announcements"
                         >
-                          Announcements
+                          <span
+                            data-testid="room-name"
+                          >
+                            Announcements
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Announcements"
                         >
                           Last message in Announcements
                         </div>
@@ -7134,10 +7207,12 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Off-topic"
                         >
-                          Off-topic
+                          <span
+                            data-testid="room-name"
+                          >
+                            Off-topic
+                          </span>
                         </div>
                       </div>
                       <div
@@ -7256,14 +7331,15 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Team Alpha"
                         >
-                          Team Alpha
+                          <span
+                            data-testid="room-name"
+                          >
+                            Team Alpha
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Team Alpha"
                         >
                           Last message in Team Alpha
                         </div>
@@ -7407,10 +7483,12 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Team Beta"
                         >
-                          Team Beta
+                          <span
+                            data-testid="room-name"
+                          >
+                            Team Beta
+                          </span>
                         </div>
                       </div>
                       <div
@@ -7529,14 +7607,15 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Project X"
                         >
-                          Project X
+                          <span
+                            data-testid="room-name"
+                          >
+                            Project X
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Project X"
                         >
                           Last message in Project X
                         </div>
@@ -7657,10 +7736,12 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Project Y"
                         >
-                          Project Y
+                          <span
+                            data-testid="room-name"
+                          >
+                            Project Y
+                          </span>
                         </div>
                       </div>
                       <div
@@ -7779,14 +7860,15 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Water Cooler"
                         >
-                          Water Cooler
+                          <span
+                            data-testid="room-name"
+                          >
+                            Water Cooler
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Water Cooler"
                         >
                           Last message in Water Cooler
                         </div>
@@ -7907,10 +7989,12 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Feedback"
                         >
-                          Feedback
+                          <span
+                            data-testid="room-name"
+                          >
+                            Feedback
+                          </span>
                         </div>
                       </div>
                       <div
@@ -8052,14 +8136,15 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Ideas"
                         >
-                          Ideas
+                          <span
+                            data-testid="room-name"
+                          >
+                            Ideas
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Ideas"
                         >
                           Last message in Ideas
                         </div>
@@ -8377,14 +8462,15 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="General"
                               >
-                                General
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  General
+                                </span>
                               </div>
                               <div
                                 class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                                title="Last message in General"
                               >
                                 Last message in General
                               </div>
@@ -8535,10 +8621,12 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Random"
                               >
-                                Random
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Random
+                                </span>
                               </div>
                             </div>
                             <div
@@ -8666,14 +8754,15 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Engineering"
                               >
-                                Engineering
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Engineering
+                                </span>
                               </div>
                               <div
                                 class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                                title="Last message in Engineering"
                               >
                                 Last message in Engineering
                               </div>
@@ -8803,10 +8892,12 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Design"
                               >
-                                Design
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Design
+                                </span>
                               </div>
                             </div>
                             <div
@@ -8934,14 +9025,15 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Product"
                               >
-                                Product
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Product
+                                </span>
                               </div>
                               <div
                                 class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                                title="Last message in Product"
                               >
                                 Last message in Product
                               </div>
@@ -9071,10 +9163,12 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Marketing"
                               >
-                                Marketing
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Marketing
+                                </span>
                               </div>
                             </div>
                             <div
@@ -9225,14 +9319,15 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Sales"
                               >
-                                Sales
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Sales
+                                </span>
                               </div>
                               <div
                                 class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                                title="Last message in Sales"
                               >
                                 Last message in Sales
                               </div>
@@ -9362,10 +9457,12 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Support"
                               >
-                                Support
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Support
+                                </span>
                               </div>
                             </div>
                             <div
@@ -9493,14 +9590,15 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Announcements"
                               >
-                                Announcements
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Announcements
+                                </span>
                               </div>
                               <div
                                 class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                                title="Last message in Announcements"
                               >
                                 Last message in Announcements
                               </div>
@@ -9630,10 +9728,12 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Off-topic"
                               >
-                                Off-topic
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Off-topic
+                                </span>
                               </div>
                             </div>
                             <div
@@ -9761,14 +9861,15 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Team Alpha"
                               >
-                                Team Alpha
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Team Alpha
+                                </span>
                               </div>
                               <div
                                 class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                                title="Last message in Team Alpha"
                               >
                                 Last message in Team Alpha
                               </div>
@@ -9921,10 +10022,12 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Team Beta"
                               >
-                                Team Beta
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Team Beta
+                                </span>
                               </div>
                             </div>
                             <div
@@ -10052,14 +10155,15 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Project X"
                               >
-                                Project X
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Project X
+                                </span>
                               </div>
                               <div
                                 class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                                title="Last message in Project X"
                               >
                                 Last message in Project X
                               </div>
@@ -10189,10 +10293,12 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Project Y"
                               >
-                                Project Y
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Project Y
+                                </span>
                               </div>
                             </div>
                             <div
@@ -10320,14 +10426,15 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Water Cooler"
                               >
-                                Water Cooler
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Water Cooler
+                                </span>
                               </div>
                               <div
                                 class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                                title="Last message in Water Cooler"
                               >
                                 Last message in Water Cooler
                               </div>
@@ -10457,10 +10564,12 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Feedback"
                               >
-                                Feedback
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Feedback
+                                </span>
                               </div>
                             </div>
                             <div
@@ -10611,14 +10720,15 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Ideas"
                               >
-                                Ideas
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Ideas
+                                </span>
                               </div>
                               <div
                                 class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                                title="Last message in Ideas"
                               >
                                 Last message in Ideas
                               </div>
@@ -10748,10 +10858,12 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Bugs"
                               >
-                                Bugs
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Bugs
+                                </span>
                               </div>
                             </div>
                             <div
@@ -10879,14 +10991,15 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Features"
                               >
-                                Features
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Features
+                                </span>
                               </div>
                               <div
                                 class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                                title="Last message in Features"
                               >
                                 Last message in Features
                               </div>
@@ -11016,10 +11129,12 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Releases"
                               >
-                                Releases
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Releases
+                                </span>
                               </div>
                             </div>
                             <div
@@ -11147,14 +11262,15 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="General"
                               >
-                                General
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  General
+                                </span>
                               </div>
                               <div
                                 class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                                title="Last message in General"
                               >
                                 Last message in General
                               </div>
@@ -11307,10 +11423,12 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Random"
                               >
-                                Random
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Random
+                                </span>
                               </div>
                             </div>
                             <div
@@ -11438,14 +11556,15 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Engineering"
                               >
-                                Engineering
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Engineering
+                                </span>
                               </div>
                               <div
                                 class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                                title="Last message in Engineering"
                               >
                                 Last message in Engineering
                               </div>
@@ -11633,10 +11752,12 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Design"
                               >
-                                Design
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Design
+                                </span>
                               </div>
                             </div>
                             <div
@@ -11764,14 +11885,15 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Product"
                               >
-                                Product
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Product
+                                </span>
                               </div>
                               <div
                                 class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                                title="Last message in Product"
                               >
                                 Last message in Product
                               </div>
@@ -11901,10 +12023,12 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Marketing"
                               >
-                                Marketing
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Marketing
+                                </span>
                               </div>
                             </div>
                             <div
@@ -12055,14 +12179,15 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Sales"
                               >
-                                Sales
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Sales
+                                </span>
                               </div>
                               <div
                                 class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                                title="Last message in Sales"
                               >
                                 Last message in Sales
                               </div>
@@ -12192,10 +12317,12 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Support"
                               >
-                                Support
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Support
+                                </span>
                               </div>
                             </div>
                             <div
@@ -12323,14 +12450,15 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Announcements"
                               >
-                                Announcements
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Announcements
+                                </span>
                               </div>
                               <div
                                 class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                                title="Last message in Announcements"
                               >
                                 Last message in Announcements
                               </div>
@@ -12460,10 +12588,12 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Off-topic"
                               >
-                                Off-topic
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Off-topic
+                                </span>
                               </div>
                             </div>
                             <div
@@ -12591,14 +12721,15 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Team Alpha"
                               >
-                                Team Alpha
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Team Alpha
+                                </span>
                               </div>
                               <div
                                 class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                                title="Last message in Team Alpha"
                               >
                                 Last message in Team Alpha
                               </div>
@@ -12751,10 +12882,12 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Team Beta"
                               >
-                                Team Beta
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Team Beta
+                                </span>
                               </div>
                             </div>
                             <div
@@ -12882,14 +13015,15 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Project X"
                               >
-                                Project X
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Project X
+                                </span>
                               </div>
                               <div
                                 class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                                title="Last message in Project X"
                               >
                                 Last message in Project X
                               </div>
@@ -13019,10 +13153,12 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Project Y"
                               >
-                                Project Y
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Project Y
+                                </span>
                               </div>
                             </div>
                             <div
@@ -13150,14 +13286,15 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Water Cooler"
                               >
-                                Water Cooler
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Water Cooler
+                                </span>
                               </div>
                               <div
                                 class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                                title="Last message in Water Cooler"
                               >
                                 Last message in Water Cooler
                               </div>
@@ -13428,14 +13565,15 @@ exports[`<RoomListView /> > renders SmallFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="General"
                         >
-                          General
+                          <span
+                            data-testid="room-name"
+                          >
+                            General
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in General"
                         >
                           Last message in General
                         </div>
@@ -13577,10 +13715,12 @@ exports[`<RoomListView /> > renders SmallFlatList story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Random"
                         >
-                          Random
+                          <span
+                            data-testid="room-name"
+                          >
+                            Random
+                          </span>
                         </div>
                       </div>
                       <div
@@ -13896,14 +14036,15 @@ exports[`<RoomListView /> > renders SmallSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="General"
                               >
-                                General
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  General
+                                </span>
                               </div>
                               <div
                                 class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                                title="Last message in General"
                               >
                                 Last message in General
                               </div>
@@ -14054,10 +14195,12 @@ exports[`<RoomListView /> > renders SmallSectionList story 1`] = `
                             >
                               <div
                                 class="RoomListItemView-module_roomName"
-                                data-testid="room-name"
-                                title="Random"
                               >
-                                Random
+                                <span
+                                  data-testid="room-name"
+                                >
+                                  Random
+                                </span>
                               </div>
                             </div>
                             <div
@@ -14319,14 +14462,15 @@ exports[`<RoomListView /> > renders Toast story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="General"
                         >
-                          General
+                          <span
+                            data-testid="room-name"
+                          >
+                            General
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in General"
                         >
                           Last message in General
                         </div>
@@ -14468,10 +14612,12 @@ exports[`<RoomListView /> > renders Toast story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Random"
                         >
-                          Random
+                          <span
+                            data-testid="room-name"
+                          >
+                            Random
+                          </span>
                         </div>
                       </div>
                       <div
@@ -14590,14 +14736,15 @@ exports[`<RoomListView /> > renders Toast story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Engineering"
                         >
-                          Engineering
+                          <span
+                            data-testid="room-name"
+                          >
+                            Engineering
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Engineering"
                         >
                           Last message in Engineering
                         </div>
@@ -14718,10 +14865,12 @@ exports[`<RoomListView /> > renders Toast story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Design"
                         >
-                          Design
+                          <span
+                            data-testid="room-name"
+                          >
+                            Design
+                          </span>
                         </div>
                       </div>
                       <div
@@ -14840,14 +14989,15 @@ exports[`<RoomListView /> > renders Toast story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Product"
                         >
-                          Product
+                          <span
+                            data-testid="room-name"
+                          >
+                            Product
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Product"
                         >
                           Last message in Product
                         </div>
@@ -14968,10 +15118,12 @@ exports[`<RoomListView /> > renders Toast story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Marketing"
                         >
-                          Marketing
+                          <span
+                            data-testid="room-name"
+                          >
+                            Marketing
+                          </span>
                         </div>
                       </div>
                       <div
@@ -15113,14 +15265,15 @@ exports[`<RoomListView /> > renders Toast story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Sales"
                         >
-                          Sales
+                          <span
+                            data-testid="room-name"
+                          >
+                            Sales
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Sales"
                         >
                           Last message in Sales
                         </div>
@@ -15241,10 +15394,12 @@ exports[`<RoomListView /> > renders Toast story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Support"
                         >
-                          Support
+                          <span
+                            data-testid="room-name"
+                          >
+                            Support
+                          </span>
                         </div>
                       </div>
                       <div
@@ -15363,14 +15518,15 @@ exports[`<RoomListView /> > renders Toast story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Announcements"
                         >
-                          Announcements
+                          <span
+                            data-testid="room-name"
+                          >
+                            Announcements
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Announcements"
                         >
                           Last message in Announcements
                         </div>
@@ -15491,10 +15647,12 @@ exports[`<RoomListView /> > renders Toast story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Off-topic"
                         >
-                          Off-topic
+                          <span
+                            data-testid="room-name"
+                          >
+                            Off-topic
+                          </span>
                         </div>
                       </div>
                       <div
@@ -15613,14 +15771,15 @@ exports[`<RoomListView /> > renders Toast story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Team Alpha"
                         >
-                          Team Alpha
+                          <span
+                            data-testid="room-name"
+                          >
+                            Team Alpha
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Team Alpha"
                         >
                           Last message in Team Alpha
                         </div>
@@ -15764,10 +15923,12 @@ exports[`<RoomListView /> > renders Toast story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Team Beta"
                         >
-                          Team Beta
+                          <span
+                            data-testid="room-name"
+                          >
+                            Team Beta
+                          </span>
                         </div>
                       </div>
                       <div
@@ -15886,14 +16047,15 @@ exports[`<RoomListView /> > renders Toast story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Project X"
                         >
-                          Project X
+                          <span
+                            data-testid="room-name"
+                          >
+                            Project X
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Project X"
                         >
                           Last message in Project X
                         </div>
@@ -16014,10 +16176,12 @@ exports[`<RoomListView /> > renders Toast story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Project Y"
                         >
-                          Project Y
+                          <span
+                            data-testid="room-name"
+                          >
+                            Project Y
+                          </span>
                         </div>
                       </div>
                       <div
@@ -16136,14 +16300,15 @@ exports[`<RoomListView /> > renders Toast story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Water Cooler"
                         >
-                          Water Cooler
+                          <span
+                            data-testid="room-name"
+                          >
+                            Water Cooler
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Water Cooler"
                         >
                           Last message in Water Cooler
                         </div>
@@ -16264,10 +16429,12 @@ exports[`<RoomListView /> > renders Toast story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Feedback"
                         >
-                          Feedback
+                          <span
+                            data-testid="room-name"
+                          >
+                            Feedback
+                          </span>
                         </div>
                       </div>
                       <div
@@ -16409,14 +16576,15 @@ exports[`<RoomListView /> > renders Toast story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Ideas"
                         >
-                          Ideas
+                          <span
+                            data-testid="room-name"
+                          >
+                            Ideas
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Ideas"
                         >
                           Last message in Ideas
                         </div>
@@ -16537,10 +16705,12 @@ exports[`<RoomListView /> > renders Toast story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Bugs"
                         >
-                          Bugs
+                          <span
+                            data-testid="room-name"
+                          >
+                            Bugs
+                          </span>
                         </div>
                       </div>
                       <div
@@ -16659,14 +16829,15 @@ exports[`<RoomListView /> > renders Toast story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Features"
                         >
-                          Features
+                          <span
+                            data-testid="room-name"
+                          >
+                            Features
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Features"
                         >
                           Last message in Features
                         </div>
@@ -16787,10 +16958,12 @@ exports[`<RoomListView /> > renders Toast story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Releases"
                         >
-                          Releases
+                          <span
+                            data-testid="room-name"
+                          >
+                            Releases
+                          </span>
                         </div>
                       </div>
                       <div
@@ -17025,14 +17198,15 @@ exports[`<RoomListView /> > renders WithActiveFilter story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="General"
                         >
-                          General
+                          <span
+                            data-testid="room-name"
+                          >
+                            General
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in General"
                         >
                           Last message in General
                         </div>
@@ -17174,10 +17348,12 @@ exports[`<RoomListView /> > renders WithActiveFilter story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Random"
                         >
-                          Random
+                          <span
+                            data-testid="room-name"
+                          >
+                            Random
+                          </span>
                         </div>
                       </div>
                       <div
@@ -17296,14 +17472,15 @@ exports[`<RoomListView /> > renders WithActiveFilter story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Engineering"
                         >
-                          Engineering
+                          <span
+                            data-testid="room-name"
+                          >
+                            Engineering
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Engineering"
                         >
                           Last message in Engineering
                         </div>
@@ -17424,10 +17601,12 @@ exports[`<RoomListView /> > renders WithActiveFilter story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Design"
                         >
-                          Design
+                          <span
+                            data-testid="room-name"
+                          >
+                            Design
+                          </span>
                         </div>
                       </div>
                       <div
@@ -17546,14 +17725,15 @@ exports[`<RoomListView /> > renders WithActiveFilter story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Product"
                         >
-                          Product
+                          <span
+                            data-testid="room-name"
+                          >
+                            Product
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Product"
                         >
                           Last message in Product
                         </div>
@@ -17674,10 +17854,12 @@ exports[`<RoomListView /> > renders WithActiveFilter story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Marketing"
                         >
-                          Marketing
+                          <span
+                            data-testid="room-name"
+                          >
+                            Marketing
+                          </span>
                         </div>
                       </div>
                       <div
@@ -17819,14 +18001,15 @@ exports[`<RoomListView /> > renders WithActiveFilter story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Sales"
                         >
-                          Sales
+                          <span
+                            data-testid="room-name"
+                          >
+                            Sales
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Sales"
                         >
                           Last message in Sales
                         </div>
@@ -17947,10 +18130,12 @@ exports[`<RoomListView /> > renders WithActiveFilter story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Support"
                         >
-                          Support
+                          <span
+                            data-testid="room-name"
+                          >
+                            Support
+                          </span>
                         </div>
                       </div>
                       <div
@@ -18069,14 +18254,15 @@ exports[`<RoomListView /> > renders WithActiveFilter story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Announcements"
                         >
-                          Announcements
+                          <span
+                            data-testid="room-name"
+                          >
+                            Announcements
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Announcements"
                         >
                           Last message in Announcements
                         </div>
@@ -18197,10 +18383,12 @@ exports[`<RoomListView /> > renders WithActiveFilter story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Off-topic"
                         >
-                          Off-topic
+                          <span
+                            data-testid="room-name"
+                          >
+                            Off-topic
+                          </span>
                         </div>
                       </div>
                       <div
@@ -18319,14 +18507,15 @@ exports[`<RoomListView /> > renders WithActiveFilter story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Team Alpha"
                         >
-                          Team Alpha
+                          <span
+                            data-testid="room-name"
+                          >
+                            Team Alpha
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Team Alpha"
                         >
                           Last message in Team Alpha
                         </div>
@@ -18470,10 +18659,12 @@ exports[`<RoomListView /> > renders WithActiveFilter story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Team Beta"
                         >
-                          Team Beta
+                          <span
+                            data-testid="room-name"
+                          >
+                            Team Beta
+                          </span>
                         </div>
                       </div>
                       <div
@@ -18592,14 +18783,15 @@ exports[`<RoomListView /> > renders WithActiveFilter story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Project X"
                         >
-                          Project X
+                          <span
+                            data-testid="room-name"
+                          >
+                            Project X
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Project X"
                         >
                           Last message in Project X
                         </div>
@@ -18720,10 +18912,12 @@ exports[`<RoomListView /> > renders WithActiveFilter story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Project Y"
                         >
-                          Project Y
+                          <span
+                            data-testid="room-name"
+                          >
+                            Project Y
+                          </span>
                         </div>
                       </div>
                       <div
@@ -18842,14 +19036,15 @@ exports[`<RoomListView /> > renders WithActiveFilter story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Water Cooler"
                         >
-                          Water Cooler
+                          <span
+                            data-testid="room-name"
+                          >
+                            Water Cooler
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Water Cooler"
                         >
                           Last message in Water Cooler
                         </div>
@@ -18970,10 +19165,12 @@ exports[`<RoomListView /> > renders WithActiveFilter story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Feedback"
                         >
-                          Feedback
+                          <span
+                            data-testid="room-name"
+                          >
+                            Feedback
+                          </span>
                         </div>
                       </div>
                       <div
@@ -19115,14 +19312,15 @@ exports[`<RoomListView /> > renders WithActiveFilter story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Ideas"
                         >
-                          Ideas
+                          <span
+                            data-testid="room-name"
+                          >
+                            Ideas
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Ideas"
                         >
                           Last message in Ideas
                         </div>
@@ -19243,10 +19441,12 @@ exports[`<RoomListView /> > renders WithActiveFilter story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Bugs"
                         >
-                          Bugs
+                          <span
+                            data-testid="room-name"
+                          >
+                            Bugs
+                          </span>
                         </div>
                       </div>
                       <div
@@ -19365,14 +19565,15 @@ exports[`<RoomListView /> > renders WithActiveFilter story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Features"
                         >
-                          Features
+                          <span
+                            data-testid="room-name"
+                          >
+                            Features
+                          </span>
                         </div>
                         <div
                           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-                          title="Last message in Features"
                         >
                           Last message in Features
                         </div>
@@ -19493,10 +19694,12 @@ exports[`<RoomListView /> > renders WithActiveFilter story 1`] = `
                       >
                         <div
                           class="RoomListItemView-module_roomName"
-                          data-testid="room-name"
-                          title="Releases"
                         >
-                          Releases
+                          <span
+                            data-testid="room-name"
+                          >
+                            Releases
+                          </span>
                         </div>
                       </div>
                       <div
