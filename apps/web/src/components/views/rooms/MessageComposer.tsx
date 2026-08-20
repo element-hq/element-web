@@ -716,6 +716,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                                     isStickerPickerOpen={this.state.isStickerPickerOpen}
                                     menuPosition={menuPosition}
                                     relation={this.props.relation}
+                                    replyToEvent={this.props.replyToEvent}
                                     onRecordStartEndClick={this.onRecordStartEndClick}
                                     setStickerPickerOpen={this.setStickerPickerOpen}
                                     showLocationButton={
