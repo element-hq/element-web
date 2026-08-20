@@ -229,10 +229,10 @@ test.describe("Room list filters and sort", () => {
                     await primaryFilters.getByRole("option", { name: "Unread" }).click();
 
                     // Unread filter should only show unread room and not unread dm!
-                    const unreadDm = roomListView.getByRole("option", { name: "Open room unread room" });
+                    const unreadDm = roomListView.getByRole("button", { name: "Open room unread room" });
                     await expect(unreadDm).toBeVisible();
                     await expect(unreadDm).toMatchScreenshot("unread-dm.png");
-                    await expect(roomListView.getByRole("option", { name: "Open room unread dm" })).not.toBeVisible();
+                    await expect(roomListView.getByRole("button", { name: "Open room unread dm" })).not.toBeVisible();
                 },
             );
 
@@ -262,8 +262,8 @@ test.describe("Room list filters and sort", () => {
                 // Turn the "Unreads" filter on
                 await primaryFilters.getByRole("option", { name: "Unreads" }).click();
 
-                const unreadRoom = roomListView.getByRole("option", { name: "Open room unread room" });
-                const unreadDm = roomListView.getByRole("option", { name: "Open room unread dm" });
+                const unreadRoom = roomListView.getByRole("button", { name: "Open room unread room" });
+                const unreadDm = roomListView.getByRole("button", { name: "Open room unread dm" });
 
                 // Only the unread room is visible. The DM room is hidden.
                 await expect(unreadRoom).toBeVisible();
@@ -275,6 +275,10 @@ test.describe("Room list filters and sort", () => {
                 // Now both unread rooms are visible
                 await expect(unreadRoom).toBeVisible();
                 await expect(unreadDm).toBeVisible();
+
+                // Even though favourite room is read (because we have it open), it is still shown because it is
+                // the current room.
+                expect(roomListView.getByRole("button", { name: "Open room favourite room" })).toBeVisible();
             });
         });
 
