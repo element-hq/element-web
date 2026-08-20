@@ -86,6 +86,8 @@ export function PinnedMessagesCard({ room, onClose, permalinkCreator }: PinnedMe
             header={_t("right_panel|pinned_messages|header", { count: pinnedEventIds.length })}
             className="mx_PinnedMessagesCard"
             onClose={onClose}
+            role="region"
+            ariaLabel={_t("right_panel|pinned_messages_button")}
         >
             <ScopedRoomContextProvider {...roomContext} timelineRenderingType={TimelineRenderingType.Pinned}>
                 {content}
