@@ -446,8 +446,8 @@ describe("InviteDialog", () => {
     describe("when the homeserver refuses an invite", () => {
         const daveId = "@dave:example.org";
         const erinId = "@erin:example.org";
-        const refused = "They are not accepting invitations.";
-        const alreadyInvited = "User is already invited to the room";
+        const refused = "Not accepting invites.";
+        const alreadyInvited = "Already invited to the room.";
 
         const report = () => within(document.querySelector<HTMLElement>(".mx_InviteDialog_multiInviterError")!);
         const groups = () =>

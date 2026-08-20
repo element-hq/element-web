@@ -251,7 +251,7 @@ describe("MultiInviter", () => {
 
             await inviter.invite([MXID1, MXID2]);
 
-            expect(inviter.getErrorText(MXID1)).toMatchInlineSnapshot(`"They are not accepting invitations."`);
+            expect(inviter.getErrorText(MXID1)).toMatchInlineSnapshot(`"Not accepting invites."`);
             // The server's own wording is untranslated, so it must not reach the user.
             expect(inviter.getErrorText(MXID1)).not.toContain("Serverrichtlinie");
             // The refusal was about one invitee, so the rest of the batch is still worth trying.
