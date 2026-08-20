@@ -234,7 +234,7 @@ describe("MultiInviter", () => {
 
             await inviter.invite(["@user:other_server"]);
             expect(inviter.getErrorText("@user:other_server")).toMatchInlineSnapshot(
-                `"This room is unfederated. You cannot invite people from external servers."`,
+                `"This room is unfederated. You cannot invite people from external servers"`,
             );
         });
 
@@ -251,7 +251,7 @@ describe("MultiInviter", () => {
 
             await inviter.invite([MXID1, MXID2]);
 
-            expect(inviter.getErrorText(MXID1)).toMatchInlineSnapshot(`"Not accepting invites."`);
+            expect(inviter.getErrorText(MXID1)).toMatchInlineSnapshot(`"Not accepting invites"`);
             // The server's own wording is untranslated, so it must not reach the user.
             expect(inviter.getErrorText(MXID1)).not.toContain("Serverrichtlinie");
             // The refusal was about one invitee, so the rest of the batch is still worth trying.
@@ -284,7 +284,7 @@ describe("MultiInviter", () => {
             await inviter.invite([MXID1, MXID2]);
 
             expect(inviter.getErrorText(MXID1)).toMatchInlineSnapshot(
-                `"You do not have permission to invite people to this room."`,
+                `"You do not have permission to invite people to this room"`,
             );
             // That will hold for everyone else too, so nothing further is attempted.
             expect(client.invite).toHaveBeenCalledTimes(1);
@@ -312,7 +312,7 @@ describe("MultiInviter", () => {
 
             await inviter.invite(["@user:other_server"]);
             expect(inviter.getErrorText("@user:other_server")).toMatchInlineSnapshot(
-                `"This space is unfederated. You cannot invite people from external servers."`,
+                `"This space is unfederated. You cannot invite people from external servers"`,
             );
         });
     });

@@ -100,6 +100,11 @@ export function showAnyInviteErrors(
                     <h4>{_t("invite|room_failed_partial_description")}</h4>
                     {Array.from(failuresByReason, ([reason, addrs]) => (
                         <div key={reason} className="mx_InviteDialog_multiInviterError_group">
+                            {reason && (
+                                <div className="mx_InviteDialog_multiInviterError_reason">
+                                    {_t("invite|room_failed_partial_reason", { reason })}
+                                </div>
+                            )}
                             {addrs.map((addr) => {
                                 const user = userMap?.get(addr) || cli.getUser(addr);
                                 const name = (user as Member).name || (user as User).rawDisplayName;
@@ -126,7 +131,6 @@ export function showAnyInviteErrors(
                                     </div>
                                 );
                             })}
-                            {reason && <div className="mx_InviteDialog_multiInviterError_reason">{reason}</div>}
                         </div>
                     ))}
                 </div>

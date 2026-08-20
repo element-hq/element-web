@@ -446,8 +446,8 @@ describe("InviteDialog", () => {
     describe("when the homeserver refuses an invite", () => {
         const daveId = "@dave:example.org";
         const erinId = "@erin:example.org";
-        const refused = "Not accepting invites.";
-        const alreadyInvited = "Already invited to the room.";
+        const refused = "Not accepting invites:";
+        const alreadyInvited = "Already invited to the room:";
 
         const report = () => within(document.querySelector<HTMLElement>(".mx_InviteDialog_multiInviterError")!);
         const groups = () =>
@@ -489,7 +489,7 @@ describe("InviteDialog", () => {
             expect(report().getAllByText(refused)).toHaveLength(1);
         });
 
-        it("should put each reason below only the people it applies to", async () => {
+        it("should put each reason above only the people it applies to", async () => {
             mockClient.invite.mockImplementation((_roomId: string, userId: string) =>
                 Promise.reject(
                     new MatrixError(
@@ -512,9 +512,9 @@ describe("InviteDialog", () => {
             const [first, second] = groups();
             expect(within(first).getAllByText(daveId).length).toBeGreaterThan(0);
             expect(within(first).queryByText(erinId)).toBeNull();
-            expect(first.textContent?.endsWith(refused)).toBe(true);
+            expect(first.textContent?.startsWith(refused)).toBe(true);
             expect(within(second).getAllByText(erinId).length).toBeGreaterThan(0);
-            expect(second.textContent?.endsWith(alreadyInvited)).toBe(true);
+            expect(second.textContent?.startsWith(alreadyInvited)).toBe(true);
         });
     });
 
