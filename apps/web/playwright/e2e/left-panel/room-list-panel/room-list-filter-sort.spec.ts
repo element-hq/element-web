@@ -160,7 +160,7 @@ test.describe("Room list filters and sort", () => {
             const roomList = getRoomList(page);
             const primaryFilters = getPrimaryFilters(page);
 
-            const allFilters = await primaryFilters.getByRole("option").all();
+            const allFilters = await primaryFilters.locator("option").all();
             for (const filter of allFilters) {
                 expect(await filter.getAttribute("aria-selected")).toBe("false");
             }
@@ -168,18 +168,18 @@ test.describe("Room list filters and sort", () => {
 
             await primaryFilters.getByRole("option", { name: "Unread" }).click();
             // only one room should be visible
-            await expect(roomList.getByRole("button", { name: "unread dm" })).toBeVisible();
-            await expect(roomList.getByRole("button", { name: "Open room unread room" })).toBeVisible();
-            await expect.poll(() => roomList.locator("role=button").count()).toBe(6);
+            await expect(roomList.getByRole("option", { name: "unread dm" })).toBeVisible();
+            await expect(roomList.getByRole("option", { name: "unread room" })).toBeVisible();
+            await expect.poll(() => roomList.locator("role=option").count()).toBe(4);
             await expect(primaryFilters).toMatchScreenshot("unread-primary-filters.png");
 
             await primaryFilters.getByRole("option", { name: "People" }).click();
-            await expect(roomList.getByRole("button", { name: "unread dm" })).toBeVisible();
-            await expect(roomList.getByRole("button", { name: "invited room" })).toBeVisible();
-            await expect.poll(() => roomList.locator("role=button").count()).toBe(3);
+            await expect(roomList.getByRole("option", { name: "unread dm" })).toBeVisible();
+            await expect(roomList.getByRole("option", { name: "invited room" })).toBeVisible();
+            await expect.poll(() => roomList.locator("role=option").count()).toBe(2);
 
             await primaryFilters.getByRole("option", { name: "Rooms" }).click();
-            // "Open room" prefix disambiguates the room tile from the "Toggle Rooms section with
+            // "Open room" prefix disambiguates the room tile from the "Toggle Chats section with
             // unread rooms" section header button, which also matches the "unread room" substring.
             await expect(roomList.getByRole("button", { name: "Open room unread room" })).toBeVisible();
             await expect(roomList.getByRole("button", { name: "favourite room" })).toBeVisible();
@@ -197,11 +197,11 @@ test.describe("Room list filters and sort", () => {
             await expect.poll(() => roomList.locator("role=option").count()).toBe(1);
 
             await primaryFilters.getByRole("option", { name: "Invites" }).click();
-            await expect(roomList.getByRole("button", { name: "invited room" })).toBeVisible();
-            await expect.poll(() => roomList.locator("role=button").count()).toBe(2);
+            await expect(roomList.getByRole("option", { name: "invited room" })).toBeVisible();
+            await expect.poll(() => roomList.locator("role=option").count()).toBe(1);
 
             await getFilterCollapseButton(page).click();
-            await expect(primaryFilters.getByRole("option").first()).toHaveText("Invites");
+            await expect(primaryFilters.locator("role=option").first()).toHaveText("Invites");
         });
 
         test.describe("Unread filter", () => {
@@ -229,10 +229,10 @@ test.describe("Room list filters and sort", () => {
                     await primaryFilters.getByRole("option", { name: "Unread" }).click();
 
                     // Unread filter should only show unread room and not unread dm!
-                    const unreadDm = roomListView.getByRole("button", { name: "Open room unread room" });
+                    const unreadDm = roomListView.getByRole("option", { name: "Open room unread room" });
                     await expect(unreadDm).toBeVisible();
                     await expect(unreadDm).toMatchScreenshot("unread-dm.png");
-                    await expect(roomListView.getByRole("button", { name: "Open room unread dm" })).not.toBeVisible();
+                    await expect(roomListView.getByRole("option", { name: "Open room unread dm" })).not.toBeVisible();
                 },
             );
 
@@ -262,8 +262,8 @@ test.describe("Room list filters and sort", () => {
                 // Turn the "Unreads" filter on
                 await primaryFilters.getByRole("option", { name: "Unreads" }).click();
 
-                const unreadRoom = roomListView.getByRole("button", { name: "Open room unread room" });
-                const unreadDm = roomListView.getByRole("button", { name: "Open room unread dm" });
+                const unreadRoom = roomListView.getByRole("option", { name: "Open room unread room" });
+                const unreadDm = roomListView.getByRole("option", { name: "Open room unread dm" });
 
                 // Only the unread room is visible. The DM room is hidden.
                 await expect(unreadRoom).toBeVisible();
@@ -284,8 +284,8 @@ test.describe("Room list filters and sort", () => {
             await getRoomOptionsMenu(page).click();
             await page.getByRole("menuitemradio", { name: "A-Z" }).click();
 
-            // Favourite + chat section headers are buttons + favourite room + people headers + dm
-            await expect(roomListView.getByRole("button").nth(6)).toHaveText(/empty room/);
+            // Favourite + chat section headers are buttons + favourite room
+            await expect(roomListView.getByRole("button").nth(3)).toHaveText(/empty room/);
         });
 
         test("should move room to the top on message (chat section) when sorting by activity", async ({
