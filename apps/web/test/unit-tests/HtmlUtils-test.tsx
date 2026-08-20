@@ -257,6 +257,29 @@ describe("bodyToNode", () => {
         expect(asFragment()).toMatchSnapshot();
     });
 
+    it("should generate big emoji for an emoji-only message wrapped in HTML", () => {
+        const { className } = bodyToNode({
+            body: "🥰",
+            format: "org.matrix.custom.html",
+            // What a bridge, or /html, sends for a message with nothing in it but an emoji.
+            formatted_body: "<p>🥰</p>",
+            msgtype: "m.text",
+        });
+
+        expect(className).toContain("mx_EventTile_bigEmoji");
+    });
+
+    it("should not generate big emoji for a pill named with an emoji", () => {
+        const { className } = bodyToNode({
+            body: "Yay",
+            format: "org.matrix.custom.html",
+            formatted_body: '<a href="https://matrix.to/#/@yay:example.org">🥰</a>',
+            msgtype: "m.text",
+        });
+
+        expect(className).not.toContain("mx_EventTile_bigEmoji");
+    });
+
     it("should generate big emoji for an emoji-only reply to a message", () => {
         const { className, formattedBody } = bodyToNode(
             {
