@@ -1,0 +1,102 @@
+/*
+Copyright 2025 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+/* Prominent, Slack-huddle-style full-screen incoming-call surface, rendered by
+   {@link IncomingCallPopup} using the bespoke {@link IncomingCallView}. */
+.mx_IncomingCallPopup {
+    position: fixed;
+    inset: 0;
+    /* Above the corner toasts (101) and the PiP. */
+    z-index: 4000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(0, 0, 0, 0.72);
+    backdrop-filter: blur(6px);
+
+    .mx_IncomingCallPopup_card {
+        box-sizing: border-box;
+        min-width: 360px;
+        max-width: min(92vw, 440px);
+        padding: var(--cpd-space-12x) var(--cpd-space-10x);
+        background-color: var(--cpd-color-bg-canvas-default);
+        border-radius: var(--cpd-space-8x);
+        box-shadow: 0 12px 48px rgb(0, 0, 0, 0.55);
+    }
+}
+
+.mx_IncomingCallView {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--cpd-space-4x);
+
+    .mx_IncomingCallView_title {
+        margin: 0;
+        font: var(--cpd-font-heading-md-semibold);
+        color: var(--cpd-color-text-primary);
+    }
+
+    .mx_IncomingCallView_subtitle {
+        margin-top: calc(-1 * var(--cpd-space-2x));
+        font: var(--cpd-font-body-md-regular);
+        color: var(--cpd-color-text-secondary);
+    }
+
+    .mx_IncomingCallView_videoToggle {
+        display: flex;
+        justify-content: center;
+    }
+
+    .mx_IncomingCallView_buttons {
+        display: flex;
+        gap: var(--cpd-space-16x);
+        margin-top: var(--cpd-space-4x);
+    }
+
+    /* Large round icon-only accept/decline buttons, Slack-style. */
+    .mx_IncomingCallView_button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        transition: filter 0.15s;
+
+        svg {
+            width: 28px;
+            height: 28px;
+            color: var(--cpd-color-icon-on-solid-primary);
+        }
+
+        &:hover {
+            filter: brightness(1.08);
+        }
+    }
+
+    .mx_IncomingCallView_button_decline {
+        background-color: var(--cpd-color-bg-critical-primary);
+    }
+
+    .mx_IncomingCallView_button_accept {
+        background-color: var(--cpd-color-bg-accent-rest);
+    }
+
+    .mx_IncomingCallView_button_silence {
+        background-color: var(--cpd-color-bg-subtle-secondary);
+
+        svg {
+            color: var(--cpd-color-icon-primary);
+        }
+
+        &[aria-disabled="true"] {
+            opacity: 0.5;
+        }
+    }
+}

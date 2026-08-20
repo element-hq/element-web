@@ -246,6 +246,21 @@ export default abstract class BasePlatform {
     public loudNotification(ev: MatrixEvent, room: Room): void {}
 
     /**
+     * Bring the application window to the foreground, restoring it from a
+     * minimized/tray state if necessary. No-op on platforms (e.g. browser)
+     * that cannot control their own window.
+     */
+    public focusWindow(): void {}
+
+    /**
+     * Whether {@link focusWindow} can actually bring the app window to the
+     * foreground. False on platforms (e.g. browser) where it is a no-op.
+     */
+    public supportsWindowFocus(): boolean {
+        return false;
+    }
+
+    /**
      * Returns true if the platform requires URL previews in tooltips, otherwise false.
      * @returns {boolean} whether the platform requires URL previews in tooltips
      */
