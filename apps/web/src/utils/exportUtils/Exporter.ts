@@ -19,6 +19,7 @@ import { formatFullDateNoDay, formatFullDateNoDayISO } from "../../DateUtils";
 import { isVoiceMessage } from "../EventUtils";
 import { _t } from "../../languageHandler";
 import SdkConfig from "../../SdkConfig";
+import { haveRendererForEvent } from "../../events/EventTileFactory";
 
 type BlobFile = {
     name: string;
@@ -137,6 +138,27 @@ export default abstract class Exporter {
         return limit;
     }
 
+    /**
+     * Whether an event will appear in the export at all.
+     *
+     * Every exporter skips the events it has no renderer for — reactions, edits and redacted state
+     * events among them — so those cannot count towards the number of messages that was asked for.
+     *
+     * @param event - The event about to be exported.
+     * @returns Whether the export will contain it.
+     */
+    protected isRenderable(event: MatrixEvent): boolean {
+        return haveRendererForEvent(event, this.room.client, false);
+    }
+
+    private async decryptEvents(events: MatrixEvent[]): Promise<void> {
+        await Promise.all(
+            events
+                .filter((event) => event.isEncrypted())
+                .map((event) => this.room.client.decryptEventIfNeeded(event, { emit: false })),
+        );
+    }
+
     protected async getRequiredEvents(): Promise<MatrixEvent[]> {
         const eventMapper = this.room.client.getEventMapper();
 
@@ -145,10 +167,15 @@ export default abstract class Exporter {
         let events: MatrixEvent[] = [];
         if (this.exportType === ExportType.Timeline) {
             events = this.room.getLiveTimeline().getEvents();
+            await this.decryptEvents(events);
         } else {
-            let limit = this.getLimit();
-            while (limit) {
-                const eventsPerCrawl = Math.min(limit, 1000);
+            const limit = this.getLimit();
+            // Counted in events that will actually be written out rather than in events the server
+            // returns: asking for the last five messages of a room whose five most recent events are
+            // all reactions used to hand back an export with nothing in it.
+            let found = 0;
+            while (found < limit) {
+                const eventsPerCrawl = Math.min(limit - found, 1000);
                 const res = await this.room.client.createMessagesRequest(
                     this.room.roomId,
                     prevToken,
@@ -163,9 +190,10 @@ export default abstract class Exporter {
 
                 if (res.chunk.length === 0) break;
 
-                limit -= res.chunk.length;
-
                 const matrixEvents: MatrixEvent[] = res.chunk.map(eventMapper);
+                // Whether an encrypted event is one of the kinds that get skipped is only knowable
+                // once it has been decrypted, so this cannot wait until the crawl has finished.
+                await this.decryptEvents(matrixEvents);
 
                 for (const mxEv of matrixEvents) {
                     // if (this.exportOptions.startDate && mxEv.getTs() < this.exportOptions.startDate) {
@@ -173,13 +201,14 @@ export default abstract class Exporter {
                     //     limit = 0;
                     //     break;
                     // }
+                    if (this.isRenderable(mxEv)) found++;
                     events.push(mxEv);
                 }
 
                 if (this.exportType === ExportType.LastNMessages) {
                     this.updateProgress(
                         _t("export_chat|fetched_n_events_with_total", {
-                            count: events.length,
+                            count: found,
                             total: this.exportOptions.numberOfMessages,
                         }),
                     );
@@ -192,19 +221,13 @@ export default abstract class Exporter {
                 }
 
                 prevToken = res.end ?? null;
+                // With no token to carry on from, there is nothing older to ask for, and asking again
+                // from the start would hand back the newest events a second time.
+                if (prevToken === null) break;
             }
             // Reverse the events so that we preserve the order
             events.reverse();
         }
-
-        const decryptionPromises = events
-            .filter((event) => event.isEncrypted())
-            .map((event) => {
-                return this.room.client.decryptEventIfNeeded(event, { emit: false });
-            });
-
-        // Wait for all the events to get decrypted.
-        await Promise.all(decryptionPromises);
 
         for (let i = 0; i < events.length; i++) this.setEventMetadata(events[i]);
 
