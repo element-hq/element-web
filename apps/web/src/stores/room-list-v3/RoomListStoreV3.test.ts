@@ -554,6 +554,57 @@ describe("RoomListStoreV3", () => {
                     expect(result2).toContain(id);
                 }
             });
+
+            it("recomputes the rooms in the active space when Spaces.showPeopleInSpace changes", async () => {
+                const { client, rooms } = getClientAndRooms();
+                const { spaceRoom, roomIds } = createSpace(rooms, [6, 8, 13, 27, 75], client);
+                // Room 8 is a DM with a member of the space, the others are regular children.
+                const dmRoomId = rooms[8].roomId;
+
+                let showPeopleInSpace = true;
+                // Mirrors SpaceStore.isRoomInSpace: the DM only belongs to the space while the setting is on.
+                vi.spyOn(SDKContextClass.instance.spaceStore, "isRoomInSpace").mockImplementation((space, id) => {
+                    if (space !== spaceRoom.roomId || !roomIds.includes(id)) return false;
+                    return id !== dmRoomId || showPeopleInSpace;
+                });
+                vi.spyOn(SDKContextClass.instance.spaceStore, "activeSpace", "get").mockImplementation(
+                    () => spaceRoom.roomId,
+                );
+
+                let settingsWatcher: (settingName: string, roomId: string | null) => void = () => {};
+                vi.spyOn(SettingsStore, "watchSetting").mockImplementation((settingName, _roomId, callback) => {
+                    if (settingName === "Spaces.showPeopleInSpace") {
+                        settingsWatcher = callback as typeof settingsWatcher;
+                    }
+                    return "watcher-id";
+                });
+
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+                const fn = vi.fn();
+                store.on(LISTS_UPDATE_EVENT, fn);
+
+                const roomIdsInActiveSpace = (): string[] =>
+                    store
+                        .getSortedRoomsInActiveSpace()
+                        .sections.flatMap((s) => s.rooms)
+                        .map((r) => r.roomId);
+
+                expect(roomIdsInActiveSpace()).toContain(dmRoomId);
+
+                // Turning the setting off for the active space removes the DM without a space change
+                showPeopleInSpace = false;
+                settingsWatcher("Spaces.showPeopleInSpace", spaceRoom.roomId);
+                expect(fn).toHaveBeenCalled();
+                expect(roomIdsInActiveSpace()).not.toContain(dmRoomId);
+
+                // A change in another space is ignored
+                fn.mockClear();
+                showPeopleInSpace = true;
+                settingsWatcher("Spaces.showPeopleInSpace", "!space2:matrix.org");
+                expect(fn).not.toHaveBeenCalled();
+                expect(roomIdsInActiveSpace()).not.toContain(dmRoomId);
+            });
         });
 
         describe("Filters", () => {
