@@ -19,7 +19,8 @@ import {
     UserEvent,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { MatrixRTCSessionEvent } from "matrix-js-sdk/src/matrixrtc";
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { throttle } from "lodash";
 
 import { type RoomMember } from "../../../models/rooms/RoomMember";
@@ -37,7 +38,7 @@ import { canInviteTo } from "../../../utils/room/canInviteTo";
 import { isValid3pidInvite } from "../../../RoomInvite";
 import { type ThreePIDInvite } from "../../../models/rooms/ThreePIDInvite";
 import { type XOR } from "../../../@types/common";
-import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
+import { useTypedEventEmitter, useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
 import { useRoomMemberCount } from "../../../hooks/useRoomMembers";
 
 type Member = XOR<{ member: RoomMember }, { threePidInvite: ThreePIDInvite }>;
@@ -101,11 +102,22 @@ export function sdkRoomMemberToRoomMember(member: SdkRoomMember): Member {
 }
 
 export const SEPARATOR = "SEPARATOR";
-export type MemberWithSeparator = Member | typeof SEPARATOR;
+interface MemberListSeparator {
+    type: typeof SEPARATOR;
+    key: string;
+}
+export type MemberWithSeparator = Member | MemberListSeparator;
+
+/** Returns whether a member-list item is a non-focusable separator. */
+export function isMemberListSeparator(item: MemberWithSeparator): item is MemberListSeparator {
+    return "type" in item && item.type === SEPARATOR;
+}
 
 export interface MemberListViewState {
     members: MemberWithSeparator[];
     memberCount: number;
+    /** Matrix user IDs of members currently participating in this room's call. */
+    callParticipantUserIds: ReadonlySet<string>;
     search: (searchQuery: string) => void;
     isPresenceEnabled: boolean;
     shouldShowInvite: boolean;
@@ -122,6 +134,17 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
         throw new Error(`Room with id ${roomId} does not exist!`);
     }
 
+    const roomSession = useMemo(() => cli.matrixRTC.getRoomSession(room), [cli, room]);
+    const getCallParticipantUserIds = useCallback(
+        (): ReadonlySet<string> => new Set(roomSession.memberships.map((membership) => membership.userId)),
+        [roomSession],
+    );
+    const callParticipantUserIds = useTypedEventEmitterState(
+        roomSession,
+        MatrixRTCSessionEvent.MembershipsChanged,
+        getCallParticipantUserIds,
+    );
+
     const sdkContext = useContext(SDKContext);
     const [memberMap, setMemberMap] = useState<Map<string, MemberWithSeparator>>(new Map());
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -136,28 +159,50 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
      * in the room when the search functionality is used.
      */
     const [memberCount, setMemberCount] = useState(0);
+    // Preserve the active filter when call-participant changes recreate loadMembers.
+    const searchQueryRef = useRef<string | undefined>(undefined);
+    const loadRequestIdRef = useRef(0);
 
     const loadMembers = useMemo(
         () =>
             throttle(
                 async (searchQuery?: string): Promise<void> => {
+                    const loadRequestId = ++loadRequestIdRef.current;
                     const { joined: joinedSdk, invited: invitedSdk } = await sdkContext.memberListStore.loadMemberList(
                         roomId,
                         searchQuery,
                     );
+                    if (loadRequestId !== loadRequestIdRef.current) return;
                     const threePidInvited = getPending3PidInvites(room, searchQuery);
 
                     const newMemberMap = new Map<string, MemberWithSeparator>();
+                    const joinedMembers = joinedSdk.map(sdkRoomMemberToRoomMember);
+                    const callParticipants: Member[] = [];
+                    const otherJoinedMembers: Member[] = [];
+                    for (const item of joinedMembers) {
+                        const target = callParticipantUserIds.has(item.member!.userId)
+                            ? callParticipants
+                            : otherJoinedMembers;
+                        target.push(item);
+                    }
 
-                    // First add the joined room members
-                    for (const member of joinedSdk) {
-                        const roomMember = sdkRoomMemberToRoomMember(member);
-                        newMemberMap.set(member.userId, roomMember);
+                    // First add call participants, followed by the other joined room members.
+                    for (const item of callParticipants) {
+                        newMemberMap.set(item.member!.userId, item);
+                    }
+                    if (callParticipants.length > 0 && otherJoinedMembers.length > 0) {
+                        const key = "call-participant-separator";
+                        newMemberMap.set(key, { type: SEPARATOR, key });
+                    }
+                    for (const item of otherJoinedMembers) {
+                        newMemberMap.set(item.member!.userId, item);
                     }
 
                     // Then a separator if needed
-                    if (joinedSdk.length > 0 && (invitedSdk.length > 0 || threePidInvited.length > 0))
-                        newMemberMap.set(SEPARATOR, SEPARATOR);
+                    if (joinedSdk.length > 0 && (invitedSdk.length > 0 || threePidInvited.length > 0)) {
+                        const key = "invite-separator";
+                        newMemberMap.set(key, { type: SEPARATOR, key });
+                    }
 
                     // Then add the invited room members
                     for (const member of invitedSdk) {
@@ -178,13 +223,27 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
                          * Since searching for members only gives you the relevant
                          * members matching the query, do not update the totalMemberCount!
                          **/
-                        setTotalMemberCount(newMemberMap.size);
+                        setTotalMemberCount(memberCountWithout3Pid + threePidInvited.length);
                     }
+                    /**
+                     * isLoading is used to render a spinner on initial call.
+                     * Further calls need not mutate this state since it's perfectly fine to
+                     * show the existing memberlist until the new one loads.
+                     */
+                    setIsLoading(false);
                 },
                 500,
                 { leading: true, trailing: true },
             ),
-        [sdkContext.memberListStore, roomId, room, memberCountWithout3Pid],
+        [callParticipantUserIds, sdkContext.memberListStore, roomId, room, memberCountWithout3Pid],
+    );
+
+    const search = useCallback(
+        (searchQuery: string): void => {
+            searchQueryRef.current = searchQuery;
+            loadMembers(searchQuery);
+        },
+        [loadMembers],
     );
 
     const isPresenceEnabled = useMemo(
@@ -257,21 +316,18 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
 
     // Initial load of the memberlist
     useEffect(() => {
-        (async () => {
-            await loadMembers();
-            /**
-             * isLoading is used to render a spinner on initial call.
-             * Further calls need not mutate this state since it's perfectly fine to
-             * show the existing memberlist until the new one loads.
-             */
-            setIsLoading(false);
-        })();
+        loadMembers(searchQueryRef.current);
+        return () => {
+            loadRequestIdRef.current += 1;
+            loadMembers.cancel();
+        };
     }, [loadMembers]);
 
     return {
         members: Array.from(memberMap.values()),
         memberCount,
-        search: loadMembers,
+        callParticipantUserIds,
+        search,
         shouldShowInvite,
         isPresenceEnabled,
         isLoading,

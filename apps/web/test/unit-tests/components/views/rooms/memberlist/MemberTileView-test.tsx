@@ -40,7 +40,7 @@ describe("MemberTileView", () => {
 
         it("should not display an E2EIcon when the e2E status = normal", () => {
             const { container } = render(
-                <RoomMemberTileView item={item} member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+                <RoomMemberTileView item={item} member={member} memberIndex={0} memberCount={1} onFocus={jest.fn()} />,
             );
             const e2eIcon = container.querySelector(".mx_E2EIconView");
             expect(e2eIcon).toBeNull();
@@ -54,7 +54,7 @@ describe("MemberTileView", () => {
             } as unknown as UserVerificationStatus);
 
             const { container } = render(
-                <RoomMemberTileView item={item} member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+                <RoomMemberTileView item={item} member={member} memberIndex={0} memberCount={1} onFocus={jest.fn()} />,
             );
             await waitFor(async () => {
                 await userEvent.hover(container.querySelector(".mx_E2EIcon")!);
@@ -77,7 +77,7 @@ describe("MemberTileView", () => {
             } as DeviceVerificationStatus);
 
             const { container } = render(
-                <RoomMemberTileView item={item} member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+                <RoomMemberTileView item={item} member={member} memberIndex={0} memberCount={1} onFocus={jest.fn()} />,
             );
 
             await waitFor(async () => {
@@ -92,33 +92,96 @@ describe("MemberTileView", () => {
         it("renders user labels correctly", async () => {
             member.powerLevel = 50;
             const { container: container1 } = render(
-                <RoomMemberTileView item={item} member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+                <RoomMemberTileView item={item} member={member} memberIndex={0} memberCount={1} onFocus={jest.fn()} />,
             );
             expect(container1).toHaveTextContent("Moderator");
 
             member.powerLevel = 100;
             const { container: container2 } = render(
-                <RoomMemberTileView item={item} member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+                <RoomMemberTileView item={item} member={member} memberIndex={0} memberCount={1} onFocus={jest.fn()} />,
             );
             expect(container2).toHaveTextContent("Admin");
 
             member.powerLevel = Infinity;
             const { container: container3 } = render(
-                <RoomMemberTileView item={item} member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+                <RoomMemberTileView item={item} member={member} memberIndex={0} memberCount={1} onFocus={jest.fn()} />,
             );
             expect(container3).toHaveTextContent("Owner");
 
             member.isInvite = true;
             const { container: container4 } = render(
-                <RoomMemberTileView item={item} member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+                <RoomMemberTileView item={item} member={member} memberIndex={0} memberCount={1} onFocus={jest.fn()} />,
             );
             expect(container4).toHaveTextContent("Invited");
+        });
+
+        it("should render a call icon alongside the member role", () => {
+            member.powerLevel = 100;
+            const { container } = render(
+                <RoomMemberTileView
+                    item={item}
+                    member={member}
+                    isCallParticipant
+                    memberIndex={0}
+                    memberCount={1}
+                    onFocus={jest.fn()}
+                />,
+            );
+
+            expect(container).toHaveTextContent("Admin");
+            expect(container.querySelector(".mx_RoomMemberTileView_callIcon")).toHaveAttribute("width", "16px");
+            expect(container.querySelector(".mx_RoomMemberTileView_callIcon")).toHaveAttribute("height", "16px");
+            expect(container.querySelector(".mx_RoomMemberTileView_callIcon")).toHaveAttribute(
+                "fill",
+                "var(--cpd-color-icon-accent-primary)",
+            );
+            expect(screen.getByRole("option")).toHaveAccessibleName(`${member.name}, in a call`);
+        });
+
+        it("should render the call icon alongside the E2E status", async () => {
+            mocked(matrixClient.getCrypto()!.getUserVerificationStatus).mockResolvedValue({
+                isCrossSigningVerified: jest.fn().mockReturnValue(false),
+                wasCrossSigningVerified: jest.fn().mockReturnValue(true),
+            } as unknown as UserVerificationStatus);
+
+            const { container } = render(
+                <RoomMemberTileView
+                    item={item}
+                    member={member}
+                    isCallParticipant
+                    memberIndex={0}
+                    memberCount={1}
+                    onFocus={jest.fn()}
+                />,
+            );
+
+            await waitFor(() => expect(container.querySelector(".mx_E2EIconView")).not.toBeNull());
+            expect(container.querySelector(".mx_RoomMemberTileView_callIcon")).not.toBeNull();
+        });
+
+        it("should not render a call icon for an invited member", () => {
+            member.isInvite = true;
+            const { container } = render(
+                <RoomMemberTileView
+                    item={item}
+                    member={member}
+                    isCallParticipant
+                    memberIndex={0}
+                    memberCount={1}
+                    onFocus={jest.fn()}
+                />,
+            );
+
+            expect(container.querySelector(".mx_InvitedIconView")).not.toBeNull();
+            expect(container.querySelector(".mx_RoomMemberTileView_callIcon")).toBeNull();
         });
 
         it("should call onFocus handler when focused", async () => {
             const user = userEvent.setup();
             const onFocus = jest.fn();
-            render(<RoomMemberTileView item={item} member={member} index={0} memberCount={1} onFocus={onFocus} />);
+            render(
+                <RoomMemberTileView item={item} member={member} memberIndex={0} memberCount={1} onFocus={onFocus} />,
+            );
 
             const button = screen.getByRole("option", { name: member.userId });
             await user.click(button);
