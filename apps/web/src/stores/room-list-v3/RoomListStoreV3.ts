@@ -556,9 +556,10 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     /**
      * Create a new section.
      * Emits {@link SECTION_CREATED_EVENT} if the section was successfully created.
+     * @param preselectedRoomId The id of a room to preselect in the room picker of the dialog.
      */
-    public async createSection(): Promise<string | undefined> {
-        const tag = await createSection(SDKContextClass.instance.spaceStore.activeSpace);
+    public async createSection(preselectedRoomId?: string): Promise<string | undefined> {
+        const tag = await createSection(SDKContextClass.instance.spaceStore.activeSpace, preselectedRoomId);
         if (!tag) return;
         this.emit(SECTION_CREATED_EVENT, tag);
         return tag;
