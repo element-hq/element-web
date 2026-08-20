@@ -209,11 +209,19 @@ export class UrlPreviewFetcher {
     }
 
     /**
-     * Convert an MSC4095 URL preview bundle item to a UrlPreview
+     * Convert an MSC4095 URL preview bundle item to a UrlPreview.
+     * This will load previews via the server if `single` only contains `matched_url`.
+     *
      * @param single A single preview.
      * @param body The message text body. `matched_url` must appear within it.
+     * @param loadMedia Whether to include the preview image WHEN falling back to loading
+     *                  from the server. Pass false when media is hidden.
      */
-    public previewFromBundle(single: UnstableBundledUrlPreviewSingle, body: string): UrlPreview | null {
+    public async previewFromBundle(
+        single: UnstableBundledUrlPreviewSingle,
+        body: string,
+        loadMedia = false,
+    ): Promise<UrlPreview | null> {
         if (!URL.canParse(single.matched_url)) {
             return null;
         }
@@ -225,6 +233,11 @@ export class UrlPreviewFetcher {
 
         if (!body.includes(single.matched_url)) {
             return null;
+        }
+
+        if (Object.keys(single).length === 1) {
+            // We ONLY have the matched_url, so request a preview.
+            return await this.fetchPreview(single.matched_url, loadMedia);
         }
 
         const preview: UrlPreview = {
