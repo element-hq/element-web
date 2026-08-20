@@ -289,7 +289,10 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
             return null;
         }
 
-        const pollEvent = poll.pollEvent;
+        // A Poll parses its start event once, when the room first hears about it, and holds on to the
+        // result. An edit which lands after that point never reaches the copy it is holding, so read
+        // the question and the answers from the event itself, which does follow its replacement.
+        const pollEvent = (this.props.mxEvent.unstableExtensibleEvent as PollStartEvent | undefined) ?? poll.pollEvent;
 
         const pollId = this.props.mxEvent.getId()!;
         const isFetchingResponses = !pollInitialised || poll.isFetchingResponses;
