@@ -212,6 +212,10 @@
         },
         "room_options": "Room Options",
         "section_created": "Section created",
+        "section_creation": {
+            "description": "Sections are only for you",
+            "label": "Section name"
+        },
         "section_header": {
             "edit_section": "Edit section",
             "more_options": "More options",
