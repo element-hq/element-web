@@ -1717,7 +1717,8 @@
         "mute_description": "You won't get any notifications"
     },
     "notifier": {
-        "m.key.verification.request": "%(name)s is requesting verification"
+        "m.key.verification.request": "%(name)s is requesting verification",
+        "m.reaction": "Reacted with %(reaction)s"
     },
     "onboarding": {
         "create_room": "Create a Group Chat",
