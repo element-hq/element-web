@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 
-import { createTestClient, mkStubRoom, REPEATABLE_DATE } from "../../../test-utils";
+import { createTestClient, mkEvent, mkStubRoom, REPEATABLE_DATE } from "../../../test-utils";
 import { ExportType, type IExportOptions } from "../../../../src/utils/exportUtils/exportUtils";
 import PlainTextExporter from "../../../../src/utils/exportUtils/PlainTextExport";
 import SettingsStore from "../../../../src/settings/SettingsStore";
@@ -16,6 +16,10 @@ import SettingsStore from "../../../../src/settings/SettingsStore";
 class TestablePlainTextExporter extends PlainTextExporter {
     public async testCreateOutput(events: MatrixEvent[]): Promise<string> {
         return this.createOutput(events);
+    }
+
+    public async testGetRequiredEvents(): Promise<MatrixEvent[]> {
+        return this.getRequiredEvents();
     }
 }
 
@@ -32,6 +36,38 @@ describe("PlainTextExport", () => {
             maxSize: 50000000,
         };
         stubRoom = mkStubRoom("!myroom:example.org", roomName, client);
+    });
+
+    it("should export thread replies alongside the main timeline", async () => {
+        const mkMsg = (id: string, body: string, ts: number): MatrixEvent =>
+            mkEvent({
+                event: true,
+                id,
+                type: "m.room.message",
+                user: "@alice:example.org",
+                room: stubRoom.roomId,
+                content: { msgtype: "m.text", body },
+                ts,
+            });
+
+        const message = mkMsg("$message", "in the room", 1);
+        const threadRoot = mkMsg("$root", "thread root", 2);
+        const threadReply = mkMsg("$reply", "thread reply", 3);
+
+        stubRoom.currentState = {
+            getSentinelMember: () => null,
+        } as unknown as typeof stubRoom.currentState;
+        stubRoom.getLiveTimeline = jest.fn().mockReturnValue({ getEvents: () => [message, threadRoot] });
+        stubRoom.getThreads = jest.fn().mockReturnValue([
+            {
+                liveTimeline: { getEvents: () => [threadRoot, threadReply] },
+            },
+        ]);
+
+        const exporter = new TestablePlainTextExporter(stubRoom, ExportType.Timeline, stubOptions, () => {});
+        const events = await exporter.testGetRequiredEvents();
+
+        expect(events.map((e) => e.getId())).toEqual(["$message", "$root", "$reply"]);
     });
 
     it("should have an Element-branded destination file name", () => {
