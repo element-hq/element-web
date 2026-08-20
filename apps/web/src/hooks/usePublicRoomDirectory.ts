@@ -161,7 +161,11 @@ export const usePublicRoomDirectory = (): {
         }
 
         setReady(true);
-        setConfigInternal({ roomServer, instanceId });
+        // Only INITIALISE from the saved values: the protocols fetch resolves
+        // asynchronously, and unconditionally setting config here would clobber a
+        // selection the user has already made in the meantime (e.g. a bridged
+        // network on another server, which this restore path cannot represent).
+        setConfigInternal((prev) => prev ?? { roomServer, instanceId });
     }, [protocols]);
 
     useEffect(() => {

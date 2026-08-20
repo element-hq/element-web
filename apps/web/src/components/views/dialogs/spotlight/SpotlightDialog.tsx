@@ -11,12 +11,14 @@ import { capitalize, sum } from "lodash";
 import {
     type HierarchyRoom,
     type IPublicRoomsChunkRoom,
+    type IThirdPartyLocation,
     JoinRule,
     type MatrixClient,
     type Room,
     RoomMember,
     RoomType,
 } from "matrix-js-sdk/src/matrix";
+import { type QueryDict } from "matrix-js-sdk/src/utils";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { normalize } from "matrix-js-sdk/src/utils";
 import React, {
@@ -56,6 +58,7 @@ import { useDebouncedCallback } from "../../../../hooks/spotlight/useDebouncedCa
 import { useRecentSearches } from "../../../../hooks/spotlight/useRecentSearches";
 import { useProfileInfo } from "../../../../hooks/useProfileInfo";
 import { usePublicRoomDirectory } from "../../../../hooks/usePublicRoomDirectory";
+import { findProtocolForInstance, useThirdPartyProtocols } from "../../../../hooks/useThirdPartyProtocols";
 import { useSpaceResults } from "../../../../hooks/useSpaceResults";
 import { useUserDirectory } from "../../../../hooks/useUserDirectory";
 import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
@@ -80,7 +83,7 @@ import { copyPlaintext } from "../../../../utils/strings";
 import BaseAvatar from "../../avatars/BaseAvatar";
 import DecoratedRoomAvatar from "../../avatars/DecoratedRoomAvatar";
 import { SearchResultAvatar } from "../../avatars/SearchResultAvatar";
-import { NetworkDropdown } from "../../directory/NetworkDropdown";
+import { NetworkDropdown, useServers } from "../../directory/NetworkDropdown";
 import AccessibleButton, { type ButtonEvent } from "../../elements/AccessibleButton";
 import Spinner from "../../elements/Spinner";
 import { NotificationBadge } from "../../rooms/NotificationBadge/NotificationBadge";
@@ -356,12 +359,13 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
     const {
         loading: publicRoomsLoading,
         publicRooms,
-        protocols,
         config,
         setConfig,
         search: searchPublicRooms,
         error: publicRoomsError,
     } = usePublicRoomDirectory();
+    const { allServers } = useServers();
+    const protocolsByServer = useThirdPartyProtocols(filter === Filter.PublicRooms ? allServers : []);
     const { loading: peopleLoading, users: userDirectorySearchResults, search: searchPeople } = useUserDirectory();
     const { loading: profileLoading, profile, search: searchProfileInfo } = useProfileInfo();
     const searchParams: [IDirectoryOpts] = useMemo(
@@ -379,6 +383,53 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         searchPublicRooms,
         searchParams,
     );
+
+    // When a bridged network is selected, also try resolving the query as a
+    // third-party location (e.g. an XMPP room@server address) so the portal
+    // room can be offered as a join option above the directory results.
+    const [thirdPartyLocations, setThirdPartyLocations] = useState<IThirdPartyLocation[]>([]);
+    const selectedInstance = useMemo(
+        () =>
+            filter === Filter.PublicRooms && config?.instanceId
+                ? findProtocolForInstance(protocolsByServer[config.roomServer], config.instanceId)
+                : undefined,
+        [filter, config, protocolsByServer],
+    );
+    // Bumped whenever a lookup starts or the selection changes, so a response
+    // from a superseded request (or the previous server/network) is discarded
+    // instead of clobbering fresher results.
+    const thirdPartyLookupGeneration = useRef(0);
+    useEffect(() => {
+        // The server/network selection changed: any displayed or in-flight
+        // results are for the old selection, so drop them immediately (the
+        // debounced re-query below repopulates for the new selection).
+        thirdPartyLookupGeneration.current += 1;
+        setThirdPartyLocations([]);
+    }, [selectedInstance]);
+    const searchThirdPartyLocations = useCallback(
+        async ({ query }: IDirectoryOpts): Promise<void> => {
+            const generation = ++thirdPartyLookupGeneration.current;
+            const locationField = selectedInstance?.protocol.location_fields?.[0];
+            if (!locationField || !query) {
+                setThirdPartyLocations([]);
+                return;
+            }
+            const params: QueryDict = { [locationField]: query };
+            if (config && config.roomServer !== cli.getDomain()) {
+                params.server = config.roomServer;
+            }
+            try {
+                const locations = await cli.getThirdpartyLocation(selectedInstance.protocolKey, params);
+                if (generation !== thirdPartyLookupGeneration.current) return;
+                setThirdPartyLocations(locations);
+            } catch {
+                if (generation !== thirdPartyLookupGeneration.current) return;
+                setThirdPartyLocations([]);
+            }
+        },
+        [cli, config, selectedInstance],
+    );
+    useDebouncedCallback(!!selectedInstance, searchThirdPartyLocations, searchParams);
     useDebouncedCallback(filter === Filter.People, searchPeople, searchParams);
     useDebouncedCallback(filter === Filter.People, searchProfileInfo, searchParams);
 
@@ -861,16 +912,52 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         let publicRoomsSection: JSX.Element | undefined;
         if (filter === Filter.PublicRooms || filter === Filter.PublicSpaces) {
             let content: JSX.Element | JSX.Element[];
+            const locationOptions =
+                selectedInstance && thirdPartyLocations.length
+                    ? thirdPartyLocations.map(
+                          (location): JSX.Element => (
+                              <Option
+                                  id={`mx_SpotlightDialog_button_result_${location.alias}`}
+                                  key={location.alias}
+                                  onClick={(ev) => {
+                                      defaultDispatcher.dispatch<ViewRoomPayload>({
+                                          action: Action.ViewRoom,
+                                          room_alias: location.alias,
+                                          auto_join: true,
+                                          via_servers: config ? [config.roomServer] : undefined,
+                                          metricsTrigger: "WebUnifiedSearch",
+                                          metricsViaKeyboard: ev?.type !== "click",
+                                      });
+                                      onFinished();
+                                  }}
+                              >
+                                  <RoomIcon />
+                                  {_t("spotlight_dialog|join_button_text", {
+                                      roomAddress: location.alias,
+                                  })}
+                              </Option>
+                          ),
+                      )
+                    : [];
             if (publicRoomsError) {
-                content = (
-                    <div className="mx_SpotlightDialog_otherSearches_messageSearchText">
+                // A third-party location hit is independent of the room list; keep
+                // offering it even when the directory query failed.
+                content = [
+                    ...locationOptions,
+                    <div
+                        key="mx_SpotlightDialog_publicRoomsError"
+                        className="mx_SpotlightDialog_otherSearches_messageSearchText"
+                    >
                         {filter === Filter.PublicRooms
                             ? _t("spotlight_dialog|failed_querying_public_rooms")
                             : _t("spotlight_dialog|failed_querying_public_spaces")}
-                    </div>
-                );
+                    </div>,
+                ];
             } else {
-                content = results[Section.PublicRoomsAndSpaces].slice(0, SECTION_LIMIT).map(resultMapper);
+                content = [
+                    ...locationOptions,
+                    ...results[Section.PublicRoomsAndSpaces].slice(0, SECTION_LIMIT).map(resultMapper),
+                ];
             }
 
             publicRoomsSection = (
@@ -882,7 +969,11 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                     <div className="mx_SpotlightDialog_sectionHeader">
                         <h4 id="mx_SpotlightDialog_section_publicRooms">{_t("common|suggestions")}</h4>
                         <div className="mx_SpotlightDialog_options">
-                            <NetworkDropdown protocols={protocols} config={config ?? null} setConfig={setConfig} />
+                            <NetworkDropdown
+                                protocolsByServer={protocolsByServer}
+                                config={config ?? null}
+                                setConfig={setConfig}
+                            />
                         </div>
                     </div>
                     <div>{content}</div>
