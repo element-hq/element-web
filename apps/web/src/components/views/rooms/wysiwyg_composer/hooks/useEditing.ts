@@ -19,7 +19,7 @@ import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.
 export function useEditing(
     editorStateTransfer: EditorStateTransfer,
     initialContent?: string,
-    attachBundles?: (content: RoomMessageEventContent, messageHasLinks: boolean) => void,
+    attachBundles?: (content: RoomMessageEventContent) => void,
     updateUrlPreviews?: (content: string) => void,
     isUrlPreviewsModified?: boolean,
 ): {

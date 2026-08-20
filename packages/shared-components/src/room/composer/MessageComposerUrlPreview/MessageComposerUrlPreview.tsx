@@ -59,6 +59,8 @@ export interface MessageComposerUrlPreviewSnapshot {
     entries: MessageComposerUrlPreviewSnapshotEntry[];
     /** Content of the composer when the snapshot is computed */
     content: string;
+    /** The links that are in the message body, including the ones that are removed */
+    contentLinks: Set<string>;
     /** Whether the entries have been changed by removing it */
     isModified: boolean;
 }

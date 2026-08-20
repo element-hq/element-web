@@ -67,7 +67,12 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
     private readonly previewCache: Map<string, MessageComposerUrlPreviewSnapshotEntry>;
 
     public constructor(props: MessageComposerUrlPreviewViewModelProps) {
-        super(props, { entries: [], content: props.content ?? "", isModified: false });
+        super(props, {
+            entries: [],
+            content: props.content ?? "",
+            contentLinks: linksIn(props.content ?? ""),
+            isModified: false,
+        });
         this.urlPreviewVisible = props.visible;
         this.fetcher = new UrlPreviewFetcher(props.client, Date.now(), props.showTooltips);
         this.content = this.snapshot.current.content;
@@ -82,12 +87,18 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
     }
 
     private computeSnapshot(content: string): void {
+        const newLinks = linksIn(content);
+
         if (!this.urlPreviewVisible) {
-            this.snapshot.set({ entries: [], content, isModified: this.snapshot.current.isModified });
+            this.snapshot.set({
+                entries: [],
+                content,
+                contentLinks: newLinks,
+                isModified: this.snapshot.current.isModified,
+            });
             return;
         }
 
-        const newLinks = linksIn(content);
         if (this.links.symmetricDifference(newLinks).size === 0) {
             // Skip if the URL set hasn't changed
             return;
@@ -130,6 +141,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
 
                     this.snapshot.set({
                         content: snapshot.content,
+                        contentLinks: snapshot.contentLinks,
                         entries: snapshot.entries.map((entry) =>
                             entry.matched_url === updatedEntry.matched_url ? updatedEntry : entry,
                         ),
@@ -141,7 +153,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
             return this.previewCache.get(link)!;
         });
 
-        this.snapshot.set({ entries, content, isModified: true });
+        this.snapshot.set({ entries, content, contentLinks: newLinks, isModified: true });
     }
 
     /**
@@ -197,6 +209,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
 
         this.snapshot.set({
             content: snapshot.content,
+            contentLinks: snapshot.contentLinks,
             entries: snapshot.entries.filter((entry) => entry.include),
             isModified: true,
         });

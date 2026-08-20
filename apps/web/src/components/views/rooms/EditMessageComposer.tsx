@@ -44,7 +44,6 @@ import { PosthogAnalytics } from "../../../PosthogAnalytics";
 import { editorRoomKey, editorStateKey } from "../../../Editing";
 import type DocumentOffset from "../../../editor/offset";
 import { attachMentions, attachRelation } from "../../../utils/messages";
-import { linksIn } from "../../../utils/UrlUtils";
 import { filterBoolean } from "../../../utils/arrays";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
@@ -89,12 +88,16 @@ export function createEditContent(
 
 interface IEditMessageComposerProps extends MatrixClientProps {
     editState: EditorStateTransfer;
-    updateUrlPreviews?: (model: EditorModel) => void;
-    /** Attaches URL preview bundles (MSC4095) to the new content before it is sent. */
-    attachBundles?: (content: RoomMessageEventContent, messageHasLinks: boolean) => void;
     /**
-     * Whether the user has modified the preview list (e.g. removed a preview). When true the edit is
-     * treated as modified even if the text is unchanged: the Save button is enabled and the edit is sent.
+     * Function to update the URL preview view model
+     */
+    updateUrlPreviews?: (model: EditorModel) => void;
+    /**
+     * Function to attach URL preview bundles, this should be from attachUrlPreviews
+     */
+    attachBundles?: (content: RoomMessageEventContent) => void;
+    /**
+     * Whether the list of URL has been modified, even if the text content has not been changed
      */
     isUrlPreviewsModified?: boolean;
     className?: string;
@@ -317,8 +320,8 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
             return;
         }
 
-        // If content is modified then send an updated event into the room. Also send when only the
-        // preview list changed (isUrlPreviewsModified) so preview removals aren't silently dropped.
+        // If content is modified then send an updated event into the room
+        // either text content or list of URL previews modified counts
         if (this.isContentModified(newContent) || this.props.isUrlPreviewsModified) {
             const roomId = editedEvent.getRoomId()!;
             if (!containsEmote(this.model) && isSlashCommand(this.model)) {
@@ -358,12 +361,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
                 const event = this.props.editState.getEvent();
                 const threadId = event.threadRootId || null;
 
-                // Attach URL preview bundles to the new content (MSC4095), not the
-                // top-level fallback body, so edit-aware clients render the previews.
-                this.props.attachBundles?.(
-                    editContent["m.new_content"]!,
-                    linksIn(this.model.contentPlainText).size !== 0,
-                );
+                this.props.attachBundles?.(editContent["m.new_content"]!);
 
                 void this.props.mxClient.sendMessage(roomId, threadId, editContent);
                 dis.dispatch({ action: "message_sent" });

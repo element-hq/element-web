@@ -34,7 +34,7 @@ interface EditWysiwygComposerProps {
     disabled?: boolean;
     updateUrlPreviews?: (content: string) => void;
     /** Attaches URL preview bundles (MSC4095) to the new content before it is sent. */
-    attachBundles?: (content: RoomMessageEventContent, messageHasLinks: boolean) => void;
+    attachBundles?: (content: RoomMessageEventContent) => void;
     /**
      * Whether the user has modified the preview list (e.g. removed a preview). When true the edit is
      * treated as modified even if the text is unchanged: the Save button is enabled and the edit is sent.

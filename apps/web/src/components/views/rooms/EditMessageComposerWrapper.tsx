@@ -87,8 +87,8 @@ export function EditMessageComposerWrapper(props: IEditMessageComposerProps): JS
         vm.updateWithText({ content: model.contentPlainText, debounced: true });
     };
 
-    const attachBundles = (newContent: RoomMessageEventContent, messageHasLinks: boolean): void => {
-        attachUrlPreviews(vm.getSnapshot(), newContent, messageHasLinks);
+    const attachBundles = (newContent: RoomMessageEventContent): void => {
+        attachUrlPreviews(vm.getSnapshot(), newContent);
     };
 
     // function attachBundles(event: MatrixEv)

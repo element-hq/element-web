@@ -35,7 +35,6 @@ import { runSlashCommand, shouldSendAnyway } from "../../../../../editor/command
 import { Action } from "../../../../../dispatcher/actions";
 import { addReplyToMessageContent } from "../../../../../utils/Reply";
 import { attachRelation, attachUrlPreviews } from "../../../../../utils/messages";
-import { linksIn } from "../../../../../utils/UrlUtils";
 
 export interface SendMessageParams {
     mxClient: MatrixClient;
@@ -115,7 +114,7 @@ export async function sendMessage(
 
     // if content is null, we haven't done any slash command processing, so generate some content
     content ??= await createMessageContent(message, isHTML, params);
-    attachUrlPreviews(urlPreviewSnapshot, content, linksIn(message).size !== 0);
+    attachUrlPreviews(urlPreviewSnapshot, content);
 
     // TODO replace emotion end of message ?
 
@@ -183,8 +182,13 @@ interface EditMessageParams {
     mxClient: MatrixClient;
     roomContext: Pick<IRoomState, "timelineRenderingType">;
     editorStateTransfer: EditorStateTransfer;
-    attachBundles?: (content: RoomMessageEventContent, messageHasLinks: boolean) => void;
-    /** Whether the user modified the preview list; forces the edit to send even if the text is unchanged. */
+    /**
+     * Function to attach bundles of current URL previews
+     */
+    attachBundles?: (content: RoomMessageEventContent) => void;
+    /**
+     * whether the list of previews to attach has changed even if the text body is unchanged
+     */
     isUrlPreviewsModified?: boolean;
 }
 
@@ -229,8 +233,8 @@ export async function editMessage(
 
     const roomId = editedEvent.getRoomId();
 
-    // If content is modified then send an updated event into the room. Also send when only the
-    // preview list changed (isUrlPreviewsModified) so preview removals aren't silently dropped.
+    // If content is modified then send an updated event into the room
+    // either text content or list of URL previews modified counts
     if ((isContentModified(newContent, editorStateTransfer) || isUrlPreviewsModified) && roomId) {
         // TODO Slash Commands
 
@@ -240,9 +244,7 @@ export async function editMessage(
             const event = editorStateTransfer.getEvent();
             const threadId = event.threadRootId || null;
 
-            // Attach URL preview bundles to the new content (MSC4095), not the
-            // top-level fallback body, so edit-aware clients render the previews.
-            attachBundles?.(newContent, linksIn(newContent.body).size !== 0);
+            attachBundles?.(newContent);
 
             response = mxClient.sendMessage(roomId, threadId, editContent);
             dis.dispatch({ action: "message_sent" });

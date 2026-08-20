@@ -24,6 +24,7 @@ const { Default, WithImage } = composeStories(stories);
 function renderView(entries: MessageComposerUrlPreviewSnapshotEntry[], collapsed: boolean): ReturnType<typeof render> {
     const snapshot: MessageComposerUrlPreviewSnapshot = {
         content: entries.map((entry) => entry.matched_url).join(" "),
+        contentLinks: new Set(entries.map((entry) => entry.matched_url)),
         entries,
         isModified: false,
     };
@@ -55,6 +56,7 @@ describe("MessageComposerUrlPreview", () => {
         // setting being false with the URL preview bundle feature enabled).
         const snapshot: MessageComposerUrlPreviewSnapshot = {
             content: "https://matrix.org",
+            contentLinks: new Set(["https://matrix.org"]),
             entries: Default.args.entries!,
             isModified: false,
         };
