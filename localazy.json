@@ -32,6 +32,12 @@
                 "lang": "${autodetectLang}"
             },
             {
+                "type": "ios-strings",
+                "pattern": "apps/desktop/src/i18n/InfoPlist/en.lproj/InfoPlist.strings",
+                "file": "InfoPlist.strings",
+                "lang": "inherited"
+            },
+            {
                 "pattern": "packages/shared-components/src/i18n/strings/en_EN.json",
                 "file": "shared-components.json",
                 "lang": "inherited"
@@ -59,6 +65,14 @@
             {
                 "conditions": "equals: ${file}, shared-components.json",
                 "output": "packages/shared-components/src/i18n/strings/${langLsrUnderscore}.json"
+            },
+            {
+                "conditions": "equals: ${file}, InfoPlist.strings | equals: ${languageCode}, en",
+                "output": "apps/desktop/src/i18n/InfoPlist/en.lproj/InfoPlist.strings"
+            },
+            {
+                "conditions": "equals: ${file}, InfoPlist.strings",
+                "output": "apps/desktop/src/i18n/InfoPlist/${iosLprojFolder}/InfoPlist.strings"
             }
         ],
         "includeSourceLang": "${includeSourceLang|false}",

@@ -1,0 +1,5 @@
+/* Shown by macOS in the system prompt that asks whether Element may use the camera. */
+"NSCameraUsageDescription" = "The camera is used for video calls.";
+
+/* Shown by macOS in the system prompt that asks whether Element may use the microphone. */
+"NSMicrophoneUsageDescription" = "The microphone is used for voice and video calls.";
