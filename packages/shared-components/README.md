@@ -379,4 +379,4 @@ pnpm i18n
 
 ## Publish a new version
 
-To carry out a release, see the documentation at [../RELEASING.md].
+To carry out a release, see the documentation at [`../RELEASING.md`](../RELEASING.md).

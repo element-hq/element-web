@@ -56,7 +56,7 @@ class ExampleModule implements Module {
 
 The API is versioned using semver, with the major version incremented for breaking changes.
 
-To carry out a release, see the documentation at [../RELEASING.md].
+To carry out a release, see the documentation at [`../RELEASING.md`](../RELEASING.md).
 
 ## Copyright & License
 
