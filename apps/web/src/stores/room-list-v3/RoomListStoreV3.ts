@@ -38,14 +38,7 @@ import { RoomSkipList } from "./skip-list/RoomSkipList";
 import { getTagsForRoom } from "../../utils/room/getTagsForRoom";
 import { SectionFilter } from "./skip-list/filters/SectionFilter";
 import { filterBoolean } from "../../utils/arrays";
-import {
-    CHATS_TAG,
-    createSection,
-    deleteSection,
-    editSection,
-    getOrderedReorderableSections,
-    reorderSection,
-} from "./section";
+import { CHATS_TAG, createSection, deleteSection, editSection, getOrderedSectionTags, reorderSection } from "./section";
 import { DefaultTagID, type TagID } from "./skip-list/tag";
 import { SDKContextClass } from "../../contexts/SDKContextClass.ts";
 
@@ -123,13 +116,16 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
             this.onActiveSpaceChanged();
         });
         SDKContextClass.instance.spaceStore.on(UPDATE_HOME_BEHAVIOUR, () => this.onActiveSpaceChanged());
-        SettingsStore.watchSetting("RoomList.OrderedCustomSections", null, () => this.onOrderedCustomSectionsChange());
-        this.loadCustomSections();
+        SettingsStore.watchSetting("RoomList.OrderedCustomSections", null, () => this.onSectionsChange());
+        this.loadSections();
 
         SettingsStore.watchSetting("Notifications.activityIsUnread", null, (_settingsName, _roomId, _level, newValue) =>
             this.onActivityIsUnreadChange(Boolean(newValue)),
         );
-        SettingsStore.watchSetting("RoomList.showSections", null, () => this.scheduleEmit());
+        // Both settings change which sections exist: disabling sections altogether also forces
+        // "RoomList.showPeopleSection" off, see its RequiresSettingsController.
+        SettingsStore.watchSetting("RoomList.showSections", null, () => this.onSectionsChange());
+        SettingsStore.watchSetting("RoomList.showPeopleSection", null, () => this.onSectionsChange());
     }
 
     /**
@@ -520,12 +516,12 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     }
 
     /**
-     * Handle changes to the order of custom sections.
-     * Reloads the custom sections, updates the skip list filters to reflect the new order and emits an update.
+     * Handle changes to which sections are displayed or to the order they are displayed in.
+     * Reloads the sections, updates the skip list filters to reflect the new sections and emits an update.
      * Emit {@link LISTS_UPDATE_EVENT}.
      */
-    private onOrderedCustomSectionsChange(): void {
-        this.loadCustomSections();
+    private onSectionsChange(): void {
+        this.loadSections();
         if (!this.roomSkipList) return;
         this.roomSkipList.useNewFilters(this.getSkipListFilters());
         this.scheduleEmit();
@@ -592,13 +588,10 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     }
 
     /**
-     * Load the custom sections from the settings store and update the sorted tags.
+     * Load the sections to display from the settings store and update the sorted tags.
      */
-    private loadCustomSections(): void {
-        // Favourite is pinned to the top and LowPriority to the bottom. Everything in between
-        // (custom sections + Chats) is user-reorderable.
-        const reorderable = getOrderedReorderableSections();
-        this.sortedTags = [DefaultTagID.Favourite, ...reorderable, DefaultTagID.LowPriority];
+    private loadSections(): void {
+        this.sortedTags = getOrderedSectionTags();
     }
 }
 

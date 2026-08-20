@@ -2119,6 +2119,7 @@
         },
         "notification_options": "Notification options",
         "section": {
+            "chats": "Chats",
             "favourites": "Favourites",
             "low_priority": "Low Priority"
         },

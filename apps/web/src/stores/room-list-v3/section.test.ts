@@ -19,6 +19,7 @@ import {
     getCustomSectionData,
     getOrderedCustomSections,
     getOrderedReorderableSections,
+    getOrderedSectionTags,
     isDefaultSectionTag,
     isSectionExpanded,
     setSectionExpanded,
@@ -407,13 +408,14 @@ describe("section", () => {
         });
     });
 
-    describe("getOrderedReorderableSections", () => {
+    describe("ordered sections", () => {
         const customTag = `${CUSTOM_SECTION_TAG_PREFIX}abc`;
 
-        function mockStoredOrder(orderedTags: string[]): void {
+        function mockStoredOrder(orderedTags: string[], showPeopleSection = false): void {
             vi.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
                 if (setting === "RoomList.OrderedCustomSections") return orderedTags;
                 if (setting === "RoomList.CustomSectionData") return { [customTag]: { tag: customTag, name: "A" } };
+                if (setting === "RoomList.showPeopleSection") return showPeopleSection;
                 return null;
             });
         }
@@ -434,9 +436,39 @@ describe("section", () => {
                 stored: [DefaultTagID.DM, `${CUSTOM_SECTION_TAG_PREFIX}unknown`, CHATS_TAG],
                 expected: [DefaultTagID.DM, CHATS_TAG],
             },
-        ])("$description", ({ stored, expected }) => {
+        ])("getOrderedReorderableSections $description", ({ stored, expected }) => {
             mockStoredOrder(stored);
             expect(getOrderedReorderableSections()).toEqual(expected);
+        });
+
+        it.each<{ description: string; stored: string[]; showPeopleSection: boolean; expected: string[] }>([
+            {
+                description: "pins Favourite at the top and LowPriority at the bottom",
+                stored: [customTag, CHATS_TAG],
+                showPeopleSection: false,
+                expected: [DefaultTagID.Favourite, customTag, CHATS_TAG, DefaultTagID.LowPriority],
+            },
+            {
+                description: "includes the People tag when the setting is enabled",
+                stored: [customTag, CHATS_TAG],
+                showPeopleSection: true,
+                expected: [DefaultTagID.Favourite, DefaultTagID.DM, customTag, CHATS_TAG, DefaultTagID.LowPriority],
+            },
+            {
+                description: "drops the People tag when the setting is disabled, keeping the other sections in order",
+                stored: [customTag, CHATS_TAG, DefaultTagID.DM],
+                showPeopleSection: false,
+                expected: [DefaultTagID.Favourite, customTag, CHATS_TAG, DefaultTagID.LowPriority],
+            },
+            {
+                description: "keeps the stored position of the People tag when the setting is enabled",
+                stored: [customTag, CHATS_TAG, DefaultTagID.DM],
+                showPeopleSection: true,
+                expected: [DefaultTagID.Favourite, customTag, CHATS_TAG, DefaultTagID.DM, DefaultTagID.LowPriority],
+            },
+        ])("getOrderedSectionTags $description", ({ stored, showPeopleSection, expected }) => {
+            mockStoredOrder(stored, showPeopleSection);
+            expect(getOrderedSectionTags()).toEqual(expected);
         });
     });
 

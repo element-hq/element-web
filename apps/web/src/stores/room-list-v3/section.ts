@@ -190,6 +190,9 @@ export function getOrderedCustomSections(): OrderedCustomSections {
  * If `CHATS_TAG` is missing from the stored order (e.g. legacy data or a freshly created custom
  * section), it is appended at the end so that custom sections sit above Chats by default. Likewise
  * the People tag is prepended when missing, so People sits above the other sections by default.
+ *
+ * This is the persisted order: it always carries a position for the People tag, whether or not the
+ * section is displayed. Use {@link getOrderedSectionTags} to get the sections to display.
  */
 export function getOrderedReorderableSections(): ReorderableSection[] {
     const sectionData = getCustomSectionData();
@@ -200,6 +203,20 @@ export function getOrderedReorderableSections(): ReorderableSection[] {
     if (!result.includes(CHATS_TAG)) result.push(CHATS_TAG);
     if (!result.includes(DefaultTagID.DM)) result.unshift(DefaultTagID.DM);
     return result;
+}
+
+/**
+ * Returns the section tags to display, in order from top to bottom. Favourite is pinned at the top
+ * and LowPriority at the bottom, everything in between comes from {@link getOrderedReorderableSections}.
+ *
+ * The People section is only included when the "RoomList.showPeopleSection" setting is enabled.
+ * Its position is kept in the stored order either way, so turning the setting off and on again
+ * restores the section where the user left it.
+ */
+export function getOrderedSectionTags(): string[] {
+    const showPeopleSection = SettingsStore.getValue("RoomList.showPeopleSection");
+    const reorderable = getOrderedReorderableSections().filter((tag) => showPeopleSection || tag !== DefaultTagID.DM);
+    return [DefaultTagID.Favourite, ...reorderable, DefaultTagID.LowPriority];
 }
 
 /**
