@@ -540,6 +540,21 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     }
 
     /**
+     * Update the room skip list because the list of rooms has changed e.g.
+     * because we have entered a different room.
+     *
+     * Called by RoomListViewModel.updateRoomListData, not triggered by
+     * listening for an event, because this needs to happen after
+     * updateRoomListData has done its job - otherwise the room list will
+     * shuffle around when we change room.
+     *
+     * Does not emit an event.
+     */
+    public updateRoomSkipList(): void {
+        this.roomSkipList?.useNewFilters(this.getSkipListFilters());
+    }
+
+    /**
      * Handle changes to the "Notifications.activityIsUnread" setting.
      * Updates the skip list filters to reflect the new setting and emits an update.
      * Emit {@link LISTS_UPDATE_EVENT}.
