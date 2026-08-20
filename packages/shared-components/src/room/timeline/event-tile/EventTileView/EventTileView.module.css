@@ -39,7 +39,7 @@
     --event-tile-preview-offset: 48px;
     --event-tile-preview-margin-block: 13px;
     --event-tile-preview-padding: 8px;
-    --event-tile-preview-separator-color: var(--cpd-color-icon-tertiary);
+    --event-tile-preview-separator-color: var(--cpd-color-gray-400);
     --event-tile-preview-hover-background: var(--cpd-color-bg-subtle-primary);
     --event-tile-preview-highlight-background: var(--cpd-color-bg-critical-subtle);
     --event-tile-thread-spacing-block-start: var(--cpd-space-4x);
@@ -86,8 +86,7 @@
     opacity: 0.4;
 }
 
-.root.statePreviewClamped .slotBody,
-.root.statePreviewClamped .slotBody > * {
+.root.statePreviewClamped .slotBody {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
@@ -1237,7 +1236,8 @@
     display: flex;
     flex-flow: row wrap;
     align-items: center;
-    margin-block: var(--event-tile-preview-margin-block);
+    margin-block-start: var(--event-tile-preview-margin-block);
+    margin-block-end: calc(var(--event-tile-preview-margin-block) - 1px);
     padding: var(--event-tile-preview-padding);
     border-radius: 8px;
 
@@ -1283,6 +1283,10 @@
     .slotSender {
         /* In preview tiles the sender is a metadata-row profile, not the
            group-layout sender above the event line. */
+        display: contents;
+    }
+
+    .slotSender > * {
         display: inline-flex;
         align-items: center;
         flex: 1;
@@ -1307,33 +1311,34 @@
     .slotThreadInfo {
         /* The preview is inside the padded line in this mode; it does not use
            the group-layout thread-summary gutter. */
+        display: contents;
         margin-inline-start: 0;
     }
 
     .slotTimestamp {
-        display: block;
-        font-size: 12px;
-        overflow: hidden;
-        margin-inline-start: auto;
-        align-self: flex-start;
-        position: initial;
-        inset: auto;
-        width: unset;
-        text-align: initial;
-        text-overflow: ellipsis;
+        display: contents;
     }
 
     .slotTimestamp > * {
+        display: block;
         width: unset;
         max-width: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
+        font-size: 12px;
+        margin-inline-start: auto;
     }
 
     .slotNotificationBadge {
         position: relative;
         z-index: 1;
         flex: 0 0 auto;
+        display: contents;
+    }
+
+    .slotNotificationBadge > * {
+        position: relative;
+        z-index: 1;
     }
 
     &:has(.slotNotificationBadge [data-notification-level="highlight"])::before {
@@ -1349,6 +1354,11 @@
 /* ThreadsList-only action-bar behavior. */
 .root.shapeThreadsList {
     .slotActionBar {
+        /* The wrapper must not establish a second positioning context. The
+           supplied thread action bar retains the legacy tile-relative
+           geometry while remaining inside the slot boundary. */
+        display: contents;
+        position: static;
         visibility: hidden;
     }
 

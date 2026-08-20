@@ -416,6 +416,24 @@ $left-gutter: 64px;
     visibility: visible;
 }
 
+/* Thread-list reply summaries retain the legacy application styling while
+   remaining independent of the EventTileView root DOM contract. */
+.mx_EventTile .mx_ThreadPanel_replies {
+    margin-top: var(--cpd-space-2x);
+    display: flex;
+    align-items: center;
+    position: relative;
+    font: var(--cpd-font-body-sm-regular);
+
+    > svg {
+        @mixin ThreadSummaryIcon;
+    }
+
+    .mx_ThreadPanel_replies_amount {
+        @mixin ThreadRepliesAmount;
+    }
+}
+
 .mx_ThreadSummary_icon {
     display: inline-block;
     margin-top: var(--cpd-space-2x);
