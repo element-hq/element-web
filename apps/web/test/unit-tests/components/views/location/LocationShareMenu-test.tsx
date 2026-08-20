@@ -140,7 +140,7 @@ describe("<LocationShareMenu />", () => {
         const [, onGeolocateCallback] = mocked(mockGeolocate.on).mock.calls.find(([event]) => event === "geolocate")!;
 
         // set the location
-        act(() => onGeolocateCallback(position));
+        act(() => onGeolocateCallback(position as any));
     };
 
     const setLocationClick = () => {

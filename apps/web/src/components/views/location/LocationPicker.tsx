@@ -7,7 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type SyntheticEvent } from "react";
-import maplibregl, { type MapMouseEvent } from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
+import { type MapMouseEvent, type GeolocateErrorEvent, type GeolocatePositionEvent } from "maplibre-gl";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type RoomMember, ClientEvent, type IClientWellKnown } from "matrix-js-sdk/src/matrix";
 
@@ -145,7 +146,7 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
         }
     };
 
-    private onGeolocate = (position: GeolocationPosition): void => {
+    private onGeolocate = (position: GeolocatePositionEvent): void => {
         if (!this.marker) {
             this.addMarkerToMap();
         }
@@ -167,7 +168,7 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
         });
     };
 
-    private onGeolocateError = (e: GeolocationPositionError): void => {
+    private onGeolocateError = (e: GeolocateErrorEvent): void => {
         logger.error("Could not fetch location", e);
         // close the dialog and show an error when trying to share own location
         // pin drop location without permissions is ok
