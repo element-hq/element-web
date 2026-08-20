@@ -23,5 +23,15 @@ Please see LICENSE files in the repository root for full details.
         /* in all themes. */
         background-color: #17191c;
         color: #fff;
+
+        /* Inline links inherit `--cpd-color-text-primary` from
+         * `_AccessibleButton.pcss`, which is theme-dependent — on light
+         * theme that is a dark colour, which is invisible against this
+         * container's hard-coded dark background. Pin the link colour to
+         * white so it stays readable in both themes, matching the
+         * container's intentional theme-independence noted above. */
+        .mx_AccessibleButton.mx_AccessibleButton_kind_link_inline {
+            color: #fff;
+        }
     }
 }
