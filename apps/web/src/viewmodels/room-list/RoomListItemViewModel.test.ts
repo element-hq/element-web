@@ -18,7 +18,6 @@ import {
     type RoomMember,
 } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
-import { waitFor } from "test-utils-rtl";
 import { createTestClient, flushPromises } from "test-utils";
 
 import { RoomNotificationState } from "../../stores/notifications/RoomNotificationState";
@@ -584,17 +583,18 @@ describe("RoomListItemViewModel", () => {
             });
         });
 
-        it("should call createSection on RoomListStoreV3 when onCreateSection is called", async () => {
+        it("should call createSection on RoomListStoreV3 with the room preselected when onCreateSection is called", async () => {
             const createSectionSpy = vi
                 .spyOn(RoomListStoreV3.instance, "createSection")
                 .mockResolvedValue("element.io.section.work");
             const tagRoomSpy = vi.spyOn(tagRoomModule, "tagRoom").mockImplementation(() => {});
 
             viewModel = new RoomListItemViewModel({ room, client: matrixClient });
-            viewModel.onCreateSection();
-            expect(createSectionSpy).toHaveBeenCalled();
+            await viewModel.onCreateSection();
 
-            await waitFor(() => expect(tagRoomSpy).toHaveBeenCalledWith(room, "element.io.section.work"));
+            expect(createSectionSpy).toHaveBeenCalledWith(room.roomId);
+            // The dialog tags the preselected room itself, tagging it again here would toggle it back off.
+            expect(tagRoomSpy).not.toHaveBeenCalled();
         });
 
         it("should call tagRoom when onToggleSection is called", () => {
