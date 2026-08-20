@@ -161,6 +161,19 @@
     user-select: none;
 }
 
+/* Keep the pointer path from the event line into the action bar inside this
+   shell boundary. The action-bar contents own their controls and tooltips. */
+.slotActionBar::before {
+    content: "";
+    position: absolute;
+    width: calc(10px + 48px + 100% + 8px);
+    height: calc(20px + 100%);
+    inset-block-start: -12px;
+    inset-inline-start: -58px;
+    z-index: -1;
+    cursor: initial;
+}
+
 /* Group layout. */
 .root.layoutGroup {
     &:hover .line,
@@ -257,6 +270,9 @@
     .slotReplyChain {
         margin-inline-start: 0;
         margin-inline-end: 10px;
+        padding-block: var(--event-tile-group-line-spacing-block-start) var(--event-tile-group-line-spacing-block-end);
+        padding-inline-start: var(--event-tile-group-gutter);
+        line-height: var(--event-tile-group-line-height);
     }
 
     .line,
@@ -352,6 +368,10 @@
             padding-block: 0;
         }
 
+        .slotReplyChain {
+            padding-block: 0;
+        }
+
         .slotAvatar {
             inset-block-start: var(--cpd-space-0-5x);
         }
@@ -390,7 +410,15 @@
                 padding-bottom: 1px;
             }
 
+            .slotReplyChain {
+                padding-bottom: 1px;
+            }
+
             &.stateContinuation .line {
+                padding-bottom: 0;
+            }
+
+            &.stateContinuation .slotReplyChain {
                 padding-bottom: 0;
             }
         }

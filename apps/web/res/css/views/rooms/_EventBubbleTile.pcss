@@ -111,27 +111,9 @@ Please see LICENSE files in the repository root for full details.
                 /* allow the event to be collapsed, this causes the waveform to get cropped */
                 min-width: 0;
             }
-
-            /* we put the timestamps for media (other than stickers) atop the media */
-            &.mx_EventTile_image {
-                .mx_MessageTimestamp {
-                    border-radius: var(--MBody-border-radius);
-                    /* Hardcoded colours because it's the same on all themes */
-                    background-color: rgb(0, 0, 0, 0.6);
-                    color: #ffffff;
-                    padding: 0px 4px 0px 4px;
-                }
-            }
         }
 
         &.mx_EventTile_sticker {
-            > a, /* linked timestamp element */
-            .mx_MessageActionBar + .mx_MessageTimestamp {
-                /* position timestamps for stickers to the right of the un-bubbled sticker */
-                right: unset;
-                left: 100%;
-            }
-
             .mx_MStickerBody_wrapper {
                 padding: 0;
             }
@@ -276,12 +258,6 @@ Please see LICENSE files in the repository root for full details.
     &[data-expanded="true"] .mx_EventTile_info {
         padding: 2px 0;
         margin-right: 0;
-
-        .mx_MessageActionBar {
-            /* Reset .mx_EventTile[data-layout="bubble"][data-self="false"] .mx_MessageActionBar */
-            inset-inline-start: initial;
-            inset-inline-end: 48px; /* align with that of right-column bubbles */
-        }
 
         .mx_ReadReceiptGroup {
             /* match alignment to RRs of chat bubbles */
