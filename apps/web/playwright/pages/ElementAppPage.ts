@@ -132,6 +132,11 @@ export class ElementAppPage {
         for (let attemptsLeft = 10; attemptsLeft > 0; attemptsLeft--) {
             try {
                 await roomTile.click({ timeout: 500 });
+                // Move the pointer off the tile. It would otherwise stay parked there and, ~300ms
+                // later, open the tile's name/preview tooltip over the rows below it - and a
+                // visible Compound tooltip has no `pointer-events: none`, so it can swallow a
+                // later click aimed at the room list.
+                await this.page.mouse.move(0, 0);
                 return;
             } catch (e) {
                 if (attemptsLeft === 1) throw e;
