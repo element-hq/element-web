@@ -230,6 +230,8 @@ describe("UrlPreviewFetcher", () => {
             "og:url": "https://example.org/canonical",
         };
 
+        const BASIC_BODY = "Check out https://example.org/page";
+
         const IMAGE_BUNDLE: UnstableBundledUrlPreviewSingle = {
             ...BASIC_BUNDLE,
             "og:image": IMAGE_MXC,
@@ -250,7 +252,7 @@ describe("UrlPreviewFetcher", () => {
 
         it("should map basic bundle fields without an image", () => {
             const { fetcher, client } = getFetcher();
-            const preview = fetcher.previewFromBundle(BASIC_BUNDLE);
+            const preview = fetcher.previewFromBundle(BASIC_BUNDLE, BASIC_BODY);
             expect(preview).toEqual({
                 link: "https://example.org/page",
                 title: "Bundled title",
@@ -265,7 +267,7 @@ describe("UrlPreviewFetcher", () => {
 
         it("should fall back to the matched_url when there is no title", () => {
             const { fetcher } = getFetcher();
-            const preview = fetcher.previewFromBundle({ matched_url: "https://example.org/page" });
+            const preview = fetcher.previewFromBundle({ matched_url: "https://example.org/page" }, BASIC_BODY);
             expect(preview!.title).toEqual("https://example.org/page");
             expect(preview!.showTooltipOnLink).toBe(false);
         });
@@ -273,7 +275,7 @@ describe("UrlPreviewFetcher", () => {
         it("should set showTooltipOnLink when tooltips are enabled and title differs from the URL", () => {
             const { client } = getFetcher();
             const fetcher = new UrlPreviewFetcher(client as unknown as MatrixClient, 0, true);
-            const preview = fetcher.previewFromBundle(BASIC_BUNDLE);
+            const preview = fetcher.previewFromBundle(BASIC_BUNDLE, BASIC_BODY);
             expect(preview!.showTooltipOnLink).toBe(true);
         });
 
@@ -283,24 +285,27 @@ describe("UrlPreviewFetcher", () => {
         it("should set showTooltipOnLink when tooltips are enabled and og:title is absent", () => {
             const { client } = getFetcher();
             const fetcher = new UrlPreviewFetcher(client as unknown as MatrixClient, 0, true);
-            const preview = fetcher.previewFromBundle({ matched_url: "https://example.org/page" });
+            const preview = fetcher.previewFromBundle({ matched_url: "https://example.org/page" }, BASIC_BODY);
             expect(preview!.showTooltipOnLink).toBe(true);
         });
 
         it("should not set showTooltipOnLink when tooltips are enabled but og:title equals the URL", () => {
             const { client } = getFetcher();
             const fetcher = new UrlPreviewFetcher(client as unknown as MatrixClient, 0, true);
-            const preview = fetcher.previewFromBundle({
-                "matched_url": "https://example.org/page",
-                "og:title": "https://example.org/page",
-            });
+            const preview = fetcher.previewFromBundle(
+                {
+                    "matched_url": "https://example.org/page",
+                    "og:title": "https://example.org/page",
+                },
+                BASIC_BODY,
+            );
             expect(preview!.showTooltipOnLink).toBe(false);
         });
 
         it("should include the image when all image fields are present", () => {
             const { fetcher, client } = getFetcher();
             mockMedia(client);
-            const preview = fetcher.previewFromBundle(IMAGE_BUNDLE);
+            const preview = fetcher.previewFromBundle(IMAGE_BUNDLE, BASIC_BODY);
             expect(preview!.image).toEqual({
                 imageThumb: "https://example.org/image/thumb",
                 imageFull: "https://example.org/image/src",
@@ -322,7 +327,7 @@ describe("UrlPreviewFetcher", () => {
         ])("should omit the image when image metadata is incomplete %s", (override) => {
             const { fetcher, client } = getFetcher();
             mockMedia(client);
-            const preview = fetcher.previewFromBundle({ ...IMAGE_BUNDLE, ...override });
+            const preview = fetcher.previewFromBundle({ ...IMAGE_BUNDLE, ...override }, BASIC_BODY);
             expect(preview!.image).toBeUndefined();
         });
 
@@ -331,7 +336,7 @@ describe("UrlPreviewFetcher", () => {
             // A malformed/unresolvable mxc yields no HTTP URL.
             // eslint-disable-next-line no-restricted-properties
             client.mxcUrlToHttp.mockReturnValue(null);
-            const preview = fetcher.previewFromBundle(IMAGE_BUNDLE);
+            const preview = fetcher.previewFromBundle(IMAGE_BUNDLE, BASIC_BODY);
             expect(preview!.image).toBeUndefined();
             // The rest of the preview is still returned.
             expect(preview?.title).toEqual("Bundled title");
@@ -339,10 +344,13 @@ describe("UrlPreviewFetcher", () => {
 
         it("should compute the siteName from the matched_url hostname", () => {
             const { fetcher } = getFetcher();
-            const preview = fetcher.previewFromBundle({
-                ...BASIC_BUNDLE,
-                matched_url: "https://sub.example.com:8443/some/path?q=1",
-            });
+            const preview = fetcher.previewFromBundle(
+                {
+                    ...BASIC_BUNDLE,
+                    matched_url: "https://sub.example.com:8443/some/path?q=1",
+                },
+                "Check out https://sub.example.com:8443/some/path?q=1",
+            );
             expect(preview?.siteName).toEqual("sub.example.com");
         });
 
@@ -358,11 +366,20 @@ describe("UrlPreviewFetcher", () => {
             "htttps://still-not-real",
         ])("should reject '%s'", (url) => {
             const { fetcher } = getFetcher();
-            const preview = fetcher.previewFromBundle({
-                ...BASIC_BUNDLE,
-                "og:url": url as string,
-                "matched_url": url as string,
-            });
+            const preview = fetcher.previewFromBundle(
+                {
+                    ...BASIC_BUNDLE,
+                    "og:url": url as string,
+                    "matched_url": url as string,
+                },
+                "Check out " + url,
+            );
+            expect(preview).toBeNull();
+        });
+
+        it("should reject urls not present in the event body", () => {
+            const { fetcher } = getFetcher();
+            const preview = fetcher.previewFromBundle(BASIC_BUNDLE, "No urls in here");
             expect(preview).toBeNull();
         });
     });

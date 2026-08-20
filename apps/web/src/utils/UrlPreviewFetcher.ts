@@ -208,14 +208,29 @@ export class UrlPreviewFetcher {
         return result;
     }
 
-    /*
+    /**
      * Convert an MSC4095 URL preview bundle item to a UrlPreview
+     * @param single A single preview.
+     * @param body The message text body. `matched_url` must appear within it.
      */
-    public previewFromBundle(single: UnstableBundledUrlPreviewSingle): UrlPreview {
+    public previewFromBundle(single: UnstableBundledUrlPreviewSingle, body: string): UrlPreview | null {
+        if (!URL.canParse(single.matched_url)) {
+            return null;
+        }
+        const url = new URL(single.matched_url);
+        if (url.protocol !== "http:" && url.protocol !== "https:") {
+            // Invalid protocol, skip.
+            return null;
+        }
+
+        if (!body.includes(single.matched_url)) {
+            return null;
+        }
+
         const preview: UrlPreview = {
             link: single.matched_url,
             title: single["og:title"] ?? single.matched_url,
-            siteName: new URL(single.matched_url).hostname,
+            siteName: url.hostname,
             showTooltipOnLink: !!(single.matched_url !== single["og:title"] && this.showTooltips),
             description: single["og:description"],
             ogUrl: single["og:url"],
