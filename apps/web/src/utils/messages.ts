@@ -15,6 +15,28 @@ import type EditorModel from "../editor/model";
 import { Type } from "../editor/parts";
 import { type RoomMessageEventContent } from "../../@types/url-preview";
 import SettingsStore from "../settings/SettingsStore";
+import { parsePermalink } from "./permalinks/Permalinks";
+
+/**
+ * Collect the users which the message being sent actually links to.
+ *
+ * @param content - The event content, whose formatted body has already been built.
+ * @returns The Matrix IDs of every user the message links to, or null when there is no formatted
+ *     body to read and so nothing can be said about who it links to.
+ */
+function usersLinkedFrom(content: IContent): Set<string> | null {
+    // An edit carries the real message under m.new_content; the top level body is only the fallback.
+    const formattedBody = content["m.new_content"]?.formatted_body ?? content.formatted_body;
+    if (typeof formattedBody !== "string") return null;
+
+    const users = new Set<string>();
+    const parsed = new DOMParser().parseFromString(formattedBody, "text/html");
+    for (const anchor of parsed.querySelectorAll("a[href]")) {
+        const userId = parsePermalink(anchor.getAttribute("href")!)?.userId;
+        if (userId) users.add(userId);
+    }
+    return users;
+}
 
 /**
  * Build the mentions information based on the editor model (and any related events):
@@ -53,10 +75,21 @@ export function attachMentions(
 
     // If user provided content is available, check to see if any users are mentioned.
     if (model) {
+        // A pill only reaches the reader as a mention if the message which was built actually links
+        // to that user. Markdown does not linkify inside a code block, and /spoiler flattens its
+        // argument to plain text, so in both of those the pill is gone from what is being sent and
+        // notifying the person would be a mention nobody can see. With Markdown turned off nothing
+        // is ever linkified and there is no signal to read, so the pills are taken at face value.
+        const linkedUsers = SettingsStore.getValue("MessageComposerInput.useMarkdown")
+            ? usersLinkedFrom(content)
+            : null;
+
         // Add any mentioned users in the current content.
         for (const part of model.parts) {
             if (part.type === Type.UserPill) {
-                userMentions.add(part.resourceId);
+                if (!linkedUsers || linkedUsers.has(part.resourceId)) {
+                    userMentions.add(part.resourceId);
+                }
             } else if (part.type === Type.AtRoomPill) {
                 roomMention = true;
             }
