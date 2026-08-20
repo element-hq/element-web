@@ -386,6 +386,38 @@ describe("RoomView", () => {
                 expect.objectContaining({ action: Action.ViewRoom, room_id: otherRoom.roomId, event_id: "$there" }),
             );
         });
+
+        it("keeps the stepper on the view mounted for the room a match was stepped into", async () => {
+            room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+
+            const otherRoom = new Room("!other:example.org", cli, "@alice:example.org");
+            rooms.set(otherRoom.roomId, otherRoom);
+
+            act(() => {
+                SearchSessionStore.instance.start({
+                    searchId: 1,
+                    roomId: undefined,
+                    term: "match",
+                    scope: SearchScope.All,
+                    promise: Promise.resolve({ results: [], highlights: [], count: 2 }),
+                    abortController: new AbortController(),
+                });
+                SearchSessionStore.instance.updateResults({
+                    inProgress: false,
+                    matches: [
+                        { roomId: room.roomId, eventId: "$here" },
+                        { roomId: otherRoom.roomId, eventId: "$there" },
+                    ],
+                    highlights: [],
+                    count: 2,
+                });
+                SearchSessionStore.instance.setCurrentMatchIndex(1);
+            });
+
+            await mountRoomView();
+
+            expect(await screen.findByText("2 of 2", { exact: false })).toBeInTheDocument();
+        });
     });
 
     it("gets a room view store from MultiRoomViewStore when given a room ID", async () => {
