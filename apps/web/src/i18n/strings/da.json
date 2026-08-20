@@ -1444,7 +1444,6 @@
         "mentions_and_keywords": "@omtaler og søgeord",
         "mentions_and_keywords_description": "Få kun notifikationer for omtaler og søgeord som konfigureret under <a>indstillinger</a>",
         "mentions_keywords": "Omtaler og nøgleord",
-        "message_didnt_send": "Beskeden blev ikke sendt. Klik for mere information.",
         "mute_description": "Du vil ikke modtage nogen notifikationer"
     },
     "notifier": {

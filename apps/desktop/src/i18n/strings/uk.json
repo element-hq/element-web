@@ -73,6 +73,10 @@
         "save_image_as_error_description": "Не вдалося зберегти зображення",
         "save_image_as_error_title": "Не вдалося зберегти зображення"
     },
+    "save_dialog": {
+        "all_files": "Усі файли",
+        "named_file_type": "Файл %(extension)s"
+    },
     "store": {
         "error": {
             "backend_changed": "Очистити дані та перезавантажити?",

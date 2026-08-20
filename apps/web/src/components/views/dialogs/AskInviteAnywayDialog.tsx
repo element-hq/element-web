@@ -46,7 +46,7 @@ export default function AskInviteAnywayDialog({
     }, [onInviteAnyways, onFinished]);
 
     const onInviteNeverWarnClicked = useCallback((): void => {
-        SettingsStore.setValue("promptBeforeInviteUnknownUsers", null, SettingLevel.ACCOUNT, false);
+        void SettingsStore.setValue("promptBeforeInviteUnknownUsers", null, SettingLevel.ACCOUNT, false);
         onInviteAnyways();
         onFinished(true);
     }, [onInviteAnyways, onFinished]);

@@ -43,6 +43,19 @@
         "preferences": "Preferences",
         "state_encryption_enabled": "Experimental state encryption enabled"
     },
+    "composer": {
+        "url_preview": {
+            "clear_all": "Clear all",
+            "collapse": "Collapse URL previews",
+            "failed": "Failed to fetch preview",
+            "loading": "Fetching preview…",
+            "n_links": {
+                "one": "%(count)s link",
+                "other": "%(count)s links"
+            },
+            "remove": "Remove URL preview"
+        }
+    },
     "devtools": {
         "toggle_event": "toggle event"
     },
@@ -83,6 +96,7 @@
     "notifications": {
         "all_messages": "All messages",
         "default_settings": "Match default settings",
+        "mark_all_read": "Mark all as read",
         "mentions_keywords": "Mentions and keywords",
         "message_didnt_send": "Message didn't send. Click for info.",
         "mute_room": "Mute room"
@@ -101,6 +115,8 @@
             "shared": "New members see history",
             "world_readable": "Anyone can see history"
         },
+        "jump_read_marker": "Jump to first unread message.",
+        "jump_to_bottom_button": "Scroll to most recent messages",
         "jump_to_date": "Jump to date",
         "jump_to_date_beginning": "The beginning of the room",
         "jump_to_date_prompt": "Pick a date to jump to",

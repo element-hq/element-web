@@ -281,14 +281,14 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
         this.emit(UPDATE_SUGGESTED_ROOMS, (this._suggestedRooms = []));
 
         if (cliSpace) {
-            this.loadSuggestedRooms(cliSpace);
+            void this.loadSuggestedRooms(cliSpace);
 
             // Load all members for the selected space and its subspaces,
             // so we can correctly show DMs we have with members of this space.
             this.traverseSpace(
                 space,
                 (roomId) => {
-                    this.matrixClient?.getRoom(roomId)?.loadMembersIfNeeded();
+                    void this.matrixClient?.getRoom(roomId)?.loadMembersIfNeeded();
                 },
                 false,
             );
@@ -994,7 +994,7 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
                     target?.getMyMembership() !== KnownMembership.Join && // target not joined
                     ev.getPrevContent().suggested !== ev.getContent().suggested // suggested flag changed
                 ) {
-                    this.loadSuggestedRooms(room);
+                    void this.loadSuggestedRooms(room);
                 }
 
                 break;
@@ -1345,7 +1345,7 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
         const changes = reorderLexicographically(currentOrders, fromIndex, toIndex);
 
         changes.forEach(({ index, order }) => {
-            this.setRootSpaceOrder(this.rootSpaces[index], order);
+            void this.setRootSpaceOrder(this.rootSpaces[index], order);
         });
 
         this.notifyIfOrderChanged();

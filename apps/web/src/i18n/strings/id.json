@@ -1649,7 +1649,6 @@
         "mentions_and_keywords": "@sebutan & kata kunci",
         "mentions_and_keywords_description": "Dapatkan notifikasi hanya dengan sebutan dan kata kunci yang diatur di <a>pengaturan</a> Anda",
         "mentions_keywords": "Sebutan dan kata kunci",
-        "message_didnt_send": "Pesan tidak terkirim. Klik untuk informasi.",
         "mute_description": "Anda tidak akan mendapatkan notifikasi apa pun"
     },
     "notifier": {

@@ -18,6 +18,7 @@ import classNames from "classnames";
 import { Tooltip } from "@vector-im/compound-web";
 
 import { type ViewModel, useViewModel } from "../../../../../core/viewmodel";
+import { useEventPresentationAttributes } from "../../../EventPresentation/EventPresentationContext";
 import styles from "./TextualBody.module.css";
 
 export const enum TextualBodyViewKind {
@@ -161,6 +162,7 @@ export function TextualBodyView({
     urlPreviews,
     className,
 }: Readonly<TextualBodyViewProps>): JSX.Element {
+    const eventPresentationAttributes = useEventPresentationAttributes();
     const {
         id,
         kind,
@@ -273,7 +275,13 @@ export function TextualBodyView({
 
     if (kind === TextualBodyViewKind.EMOTE) {
         return (
-            <div id={id} className={rootClasses} onClickCapture={vm.onRootClick} dir="auto">
+            <div
+                id={id}
+                className={rootClasses}
+                onClickCapture={vm.onRootClick}
+                dir="auto"
+                {...eventPresentationAttributes}
+            >
                 *&nbsp;
                 <button type="button" className={styles.emoteSender} onClick={vm.onEmoteSenderClick}>
                     {emoteSenderName}
@@ -286,7 +294,7 @@ export function TextualBodyView({
     }
 
     return (
-        <div id={id} className={rootClasses} onClickCapture={vm.onRootClick}>
+        <div id={id} className={rootClasses} onClickCapture={vm.onRootClick} {...eventPresentationAttributes}>
             {renderedBody}
             {urlPreviews}
         </div>
