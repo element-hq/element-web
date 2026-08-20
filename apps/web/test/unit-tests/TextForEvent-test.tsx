@@ -88,14 +88,26 @@ describe("TextForEvent", () => {
             expect(component.container).toHaveTextContent(expectedText);
         });
 
-        it("mentions message when a single message was unpinned, with a single message previously pinned", () => {
+        it("does not offer the pinned list when the last pinned message was unpinned", () => {
             const event = mockPinnedEvent([], ["message-1"]);
             const plainText = textForEvent(event, mockClient);
             const component = render(textForEvent(event, mockClient, true) as ReactElement);
 
-            const expectedText = "@foo:example.com unpinned a message from this room. See all pinned messages.";
+            const expectedText = "@foo:example.com unpinned a message from this room.";
             expect(plainText).toBe(expectedText);
             expect(component.container).toHaveTextContent(expectedText);
+            expect(component.container).not.toHaveTextContent("pinned messages");
+        });
+
+        it("does not offer the pinned list when every pinned message was unpinned at once", () => {
+            const event = mockPinnedEvent([], ["message-1", "message-2"]);
+            const plainText = textForEvent(event, mockClient);
+            const component = render(textForEvent(event, mockClient, true) as ReactElement);
+
+            const expectedText = "@foo:example.com unpinned all messages from this room.";
+            expect(plainText).toBe(expectedText);
+            expect(component.container).toHaveTextContent(expectedText);
+            expect(component.container).not.toHaveTextContent("pinned messages");
         });
 
         it("mentions message when a single message was unpinned, with multiple previously pinned messages", () => {
