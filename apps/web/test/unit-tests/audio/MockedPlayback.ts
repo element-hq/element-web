@@ -55,5 +55,6 @@ export class MockedPlayback extends EventEmitter {
     public prepare = vi.fn().mockResolvedValue(undefined);
     public skipTo = vi.fn();
     public toggle = vi.fn();
+    public play = vi.fn().mockResolvedValue(undefined);
     public destroy = vi.fn().mockResolvedValue(undefined);
 }

@@ -68,7 +68,12 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
 
     protected onMount(playback: Playback): void {}
 
+    protected onUnmount(): void {}
+
     public componentWillUnmount(): void {
+        // Before the destroy, so that anything still holding this playback can let go of it while it
+        // is in one piece.
+        this.onUnmount();
         this.state.playback?.destroy();
     }
 

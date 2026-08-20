@@ -21,9 +21,24 @@ describe("PlaybackQueue", () => {
     beforeEach(() => {
         mockRoom = {
             getMember: jest.fn(),
+            // Reached for when a message finishes and the queue looks for the next voice message to
+            // continue with; an empty timeline means there is nothing to continue to.
+            getLiveTimeline: jest.fn().mockReturnValue({ getEvents: () => [] }),
         } as unknown as Mocked<Room>;
         playbackQueue = new PlaybackQueue(mockRoom, SDKContextClass.instance.roomViewStore);
     });
+
+    /**
+     * Enqueue a playback for an event id and hand back both, ready to be driven through states.
+     */
+    const enqueue = (eventId: string): { mxEvent: Mocked<MatrixEvent>; playback: MockedPlayback } => {
+        const mxEvent = {
+            getId: jest.fn().mockReturnValue(eventId),
+        } as unknown as Mocked<MatrixEvent>;
+        const playback = new MockedPlayback(PlaybackState.Stopped, 0, 0);
+        playbackQueue.unsortedEnqueue(mxEvent, playback as unknown as Mocked<Playback>);
+        return { mxEvent, playback };
+    };
 
     it.each([
         [PlaybackState.Playing, true],
@@ -64,6 +79,34 @@ describe("PlaybackQueue", () => {
         mockPlayback.emit(UPDATE_EVENT as any, PlaybackState.Stopped);
 
         expect(mockPlayback.skipTo).toHaveBeenCalledWith(1);
+    });
+
+    it("does not play a message which has been dequeued when the one after it finishes", () => {
+        const deleted = enqueue("$deleted:bar");
+        const other = enqueue("$other:bar");
+
+        // The deleted message plays, then the user starts another one, which leaves the deleted one
+        // sitting in the queue as the message to fall back to.
+        deleted.playback.emit(UPDATE_EVENT as any, PlaybackState.Playing);
+        other.playback.emit(UPDATE_EVENT as any, PlaybackState.Playing);
+
+        // Redaction unmounts the tile, which lets the queue go before destroying the playback.
+        playbackQueue.dequeue(deleted.mxEvent);
+
+        other.playback.emit(UPDATE_EVENT as any, PlaybackState.Stopped);
+
+        expect(deleted.playback.play).not.toHaveBeenCalled();
+    });
+
+    it("plays the message before it when the one after finishes", () => {
+        const first = enqueue("$first:bar");
+        const second = enqueue("$second:bar");
+
+        first.playback.emit(UPDATE_EVENT as any, PlaybackState.Playing);
+        second.playback.emit(UPDATE_EVENT as any, PlaybackState.Playing);
+        second.playback.emit(UPDATE_EVENT as any, PlaybackState.Stopped);
+
+        expect(first.playback.play).toHaveBeenCalled();
     });
 
     it("should ignore the nullish clock state when loading", () => {
