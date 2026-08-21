@@ -16,7 +16,7 @@ import {
     RoomMember,
     type ISendEventResponse,
 } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+import { KnownMembership, type RoomPowerLevelsEventContent } from "matrix-js-sdk/src/types";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 
@@ -269,6 +269,49 @@ describe("RolesRoomSettingsTab", () => {
                 }),
             }),
         );
+    });
+
+    it("should not modify the power levels event when rendering or changing a power level", async () => {
+        const plEvent = new MatrixEvent({
+            sender: "@sender:server",
+            room_id: roomId,
+            type: EventType.RoomPowerLevels,
+            state_key: "",
+            content: {
+                users: { [cli.getUserId()!]: 100 },
+                events: { [EventType.RoomTopic]: 50 },
+                notifications: { room: 50 },
+                state_default: 50,
+                events_default: 0,
+            },
+        });
+        // Copy the content before rendering: the component would otherwise have mutated the very
+        // object we are comparing against, and the assertions would pass for the wrong reason.
+        const powerLevels = (): RoomPowerLevelsEventContent => plEvent.getContent<RoomPowerLevelsEventContent>();
+        const originalContent = structuredClone(powerLevels());
+
+        mocked(cli.sendStateEvent).mockResolvedValue({ event_id: "$eventId" });
+        mocked(cli.getRoom).mockReturnValue(room);
+        // @ts-ignore - mocked doesn't support overloads properly
+        mocked(room.currentState.getStateEvents).mockImplementation((type, key) => {
+            if (key === undefined) return [] as MatrixEvent[];
+            if (type === EventType.RoomPowerLevels) return plEvent;
+            return null;
+        });
+        mocked(room.currentState.mayClientSendStateEvent).mockReturnValue(true);
+        mocked(room.getMember).mockReturnValue({ powerLevel: 100 } as any);
+
+        await renderTab();
+        expect(powerLevels()).toEqual(originalContent);
+
+        fireEvent.change(screen.getByRole("combobox", { name: "Change topic" }), { target: { value: "0" } });
+        expect(powerLevels()).toEqual(originalContent);
+
+        // Only the level the user actually changed is sent, rather than every default we displayed
+        expect(cli.sendStateEvent).toHaveBeenCalledWith(roomId, EventType.RoomPowerLevels, {
+            ...originalContent,
+            events: { [EventType.RoomTopic]: 0 },
+        });
     });
 
     it("should allow changing top level power levels", async () => {
