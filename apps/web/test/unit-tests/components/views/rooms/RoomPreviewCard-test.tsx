@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { mocked, type Mocked } from "jest-mock";
 import { render, screen, act } from "jest-matrix-react";
-import { PendingEventOrdering, Room, RoomStateEvent, RoomType } from "matrix-js-sdk/src/matrix";
+import { JoinRule, PendingEventOrdering, Room, RoomStateEvent, RoomType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import type { MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
@@ -86,5 +86,25 @@ describe("RoomPreviewCard", () => {
 
         await renderPreview();
         expect(screen.queryByRole("button", { name: /beta/i })).toBeNull();
+    });
+
+    it("prompts the user to join in case of leaving a restricted room", async () => {
+        jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Leave);
+        jest.spyOn(room.currentState, "getJoinRule").mockReturnValue(JoinRule.Restricted);
+
+        await renderPreview();
+
+        expect(screen.getByRole("button", { name: "Join" })).not.toHaveAttribute("aria-disabled");
+        expect(screen.queryByText(/you need an invite/)).toBeNull();
+    });
+
+    it("does not prompt the user to join if the room is invite-only", async () => {
+        jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Leave);
+        jest.spyOn(room.currentState, "getJoinRule").mockReturnValue(JoinRule.Invite);
+
+        await renderPreview();
+
+        expect(screen.getByRole("button", { name: "Join" })).toHaveAttribute("aria-disabled", "true");
+        expect(screen.getByText(/you need an invite/)).toBeInTheDocument();
     });
 });
