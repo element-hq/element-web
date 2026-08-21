@@ -145,7 +145,7 @@ import { EventPresentationContextProvider } from "../../utils/EventPresentationC
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
-let debuglog = function (msg: string): void {};
+let debuglog = function(msg: string): void { };
 
 const BROWSER_SUPPORTS_SANDBOX = "sandbox" in document.createElement("iframe");
 
@@ -669,7 +669,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         ) {
             // The main split shows the main timeline, so hide the right panel timeline
             this.context.rightPanelStore.setCard({ phase: RightPanelPhases.RoomSummary });
-            this.context.rightPanelStore.togglePanel(this.state.roomId ?? null);
+            // toggle ROOM panel because timeline is always a ROOM panel (never global)
+            this.context.rightPanelStore.toggleRoomPanel(this.state.roomId ?? null);
             newState.showRightPanel = false;
         }
 
