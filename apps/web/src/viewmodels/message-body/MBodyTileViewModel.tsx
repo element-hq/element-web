@@ -20,6 +20,8 @@ import { type MediaEventContent } from "matrix-js-sdk/src/types";
 import { FileDownloader } from "../../utils/FileDownloader";
 import { fileSize } from "../../utils/FileUtils";
 import { isPdfEvent, openPdfViewer } from "../../utils/pdfViewer";
+import RightPanelStore from "../../stores/right-panel/RightPanelStore";
+import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
 
 export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
     private readonly mxEvent: MatrixEvent;
@@ -57,7 +59,7 @@ export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
                 additionalButtons.push({
                     label: "Open in file viewer", // TODO: translation
                     icon: <ExpandIcon />,
-                    onClick: () => {},
+                    onClick: () => RightPanelStore.instance.setGlobalCard({ phase: RightPanelPhases.FileViewer }),
                 });
         }
 
