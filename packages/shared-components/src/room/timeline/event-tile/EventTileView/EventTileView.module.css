@@ -938,7 +938,7 @@
     }
 
     &.stateLastInSection.stateOwnEvent .line {
-        border-end-start-radius: 0;
+        border-end-start-radius: var(--event-tile-bubble-corner-radius);
         border-end-end-radius: var(--event-tile-bubble-corner-radius);
     }
 
