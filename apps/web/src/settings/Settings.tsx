@@ -42,7 +42,10 @@ import { WatchManager } from "./WatchManager";
 import { type CustomTheme } from "../theme";
 import AnalyticsController from "./controllers/AnalyticsController";
 import FallbackIceServerController from "./controllers/FallbackIceServerController";
-import { type IRightPanelForRoomStored } from "../stores/right-panel/RightPanelStoreIPanelState.ts";
+import {
+    type RightPanelCardType,
+    type IRightPanelForRoomStored,
+} from "../stores/right-panel/RightPanelStoreIPanelState.ts";
 import { type ILayoutSettings } from "../stores/widgets/WidgetLayoutStore.ts";
 import { type ReleaseAnnouncementData } from "../stores/ReleaseAnnouncementStore.ts";
 import { type RecentEmojiData } from "../emojipicker/recent.ts";
@@ -334,6 +337,7 @@ export interface Settings {
     "RoomList.isPanelCollapsed": IBaseSetting<boolean>;
     "RoomList.showMessagePreview": IBaseSetting<boolean>;
     "RightPanel.phasesGlobal": IBaseSetting<IRightPanelForRoomStored | null>;
+    "RightPanel.focusedCardType": IBaseSetting<RightPanelCardType>;
     "RightPanel.phases": IBaseSetting<IRightPanelForRoomStored | null>;
     "enableEventIndexing": IBaseSetting<boolean>;
     "crawlerSleepTime": IBaseSetting<number>;
@@ -1234,6 +1238,10 @@ export const SETTINGS: Settings = {
     "RightPanel.phasesGlobal": {
         supportedLevels: [SettingLevel.DEVICE],
         default: null,
+    },
+    "RightPanel.focusedCardType": {
+        supportedLevels: [SettingLevel.DEVICE],
+        default: "room",
     },
     "RightPanel.phases": {
         supportedLevels: [SettingLevel.ROOM_DEVICE],

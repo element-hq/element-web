@@ -8,12 +8,18 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
-import { FilesIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import { fileSize } from "../../../utils/FileUtils";
+import {
+    attachmentIcon,
+    type MediaPreviewGroupEntry,
+    type MediaPreviewGroupEntryContent,
+    MediaPreviewGroupPreview,
+} from "@element-hq/web-shared-components";
+import { MediaPreviewGroupViewModel } from "../../../viewmodels/message-body/MediaPreviewGroupViewModel";
 
 interface IProps {
     file: File;
@@ -39,7 +45,7 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
     }
 
     public componentDidMount(): void {
-        if (this.props.file.type.startsWith("image/") || this.props.file.type.startsWith("video/")) {
+        if (["video", "audio", "image"].includes(this.props.file.type.split("/")[0])) {
             this.setState({
                 // We do not filter the mimetype using getBlobSafeMimeType here as if the user is uploading the file
                 // themselves they should be trusting it enough to open/load it, and it will be rendered into a hidden
@@ -65,6 +71,38 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
         this.props.onFinished(true, true);
     };
 
+    private static computePreviewContent({
+        mimeType,
+        objectUrl,
+    }: {
+        mimeType: string;
+        objectUrl: string;
+    }): MediaPreviewGroupEntryContent {
+        switch (mimeType.split("/")[0]) {
+            case "image":
+                return {
+                    style: "image",
+                    imageSize: "tallbanner",
+                    image: objectUrl,
+                };
+            case "video":
+                return {
+                    style: "video",
+                    videoSize: "tallbanner",
+                    video: objectUrl,
+                };
+            case "audio":
+                return {
+                    style: "audio",
+                    audio: objectUrl,
+                };
+            default:
+                return {
+                    style: "text",
+                };
+        }
+    }
+
     public render(): React.ReactNode {
         let title: string;
         if (this.props.totalFiles > 1 && this.props.currentIndex !== undefined) {
@@ -76,31 +114,19 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
             title = _t("upload_file|title");
         }
 
-        const fileId = `mx-uploadconfirmdialog-${this.props.file.name}`;
         const mimeType = this.props.file.type;
+        const previewContent = UploadConfirmDialog.computePreviewContent({
+            objectUrl: this.state.objectUrl!,
+            mimeType,
+        });
 
-        let preview: JSX.Element | undefined;
-        let placeholder: JSX.Element | undefined;
-        if (mimeType.startsWith("image/")) {
-            preview = (
-                <img
-                    className="mx_UploadConfirmDialog_imagePreview"
-                    src={this.state.objectUrl}
-                    aria-labelledby={fileId}
-                />
-            );
-        } else if (mimeType.startsWith("video/")) {
-            preview = (
-                <video
-                    className="mx_UploadConfirmDialog_imagePreview"
-                    src={this.state.objectUrl}
-                    playsInline
-                    controls={false}
-                />
-            );
-        } else {
-            placeholder = <FilesIcon className="mx_UploadConfirmDialog_fileIcon" height="18px" width="18px" />;
-        }
+        const preview: MediaPreviewGroupEntry = {
+            id: this.props.file.name,
+            header: this.props.file.name,
+            body: fileSize(this.props.file.size),
+            ...attachmentIcon(mimeType),
+            ...previewContent,
+        };
 
         let uploadAllButton: JSX.Element | undefined;
         if (this.props.currentIndex + 1 < this.props.totalFiles) {
@@ -110,6 +136,8 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
                 </button>
             );
         }
+
+        const vm = new MediaPreviewGroupViewModel({ entries: [preview] });
 
         return (
             <BaseDialog
@@ -122,11 +150,7 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
                 <div id="mx_Dialog_content">
                     <div className="mx_UploadConfirmDialog_previewOuter">
                         <div className="mx_UploadConfirmDialog_previewInner">
-                            {preview && <div>{preview}</div>}
-                            <div id={fileId}>
-                                {placeholder}
-                                {this.props.file.name} ({fileSize(this.props.file.size)})
-                            </div>
+                            <MediaPreviewGroupPreview vm={vm} />
                         </div>
                     </div>
                 </div>

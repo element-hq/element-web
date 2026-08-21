@@ -57,7 +57,7 @@ const BaseCard: React.FC<IProps> = ({
     const sdkContext = useContext(SDKContext);
 
     let backButton;
-    const cardHistory = sdkContext.rightPanelStore.roomPhaseHistory;
+    const cardHistory = sdkContext.rightPanelStore.currentCardPhaseHistory;
     if (cardHistory.length > 1 && !hideHeaderButtons) {
         const prevCard = cardHistory[cardHistory.length - 2];
         const onBackClick = (ev: MouseEvent<HTMLButtonElement>): void => {

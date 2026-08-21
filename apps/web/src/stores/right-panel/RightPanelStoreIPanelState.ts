@@ -11,6 +11,8 @@ import { type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 
 import { type RightPanelPhases } from "./RightPanelStorePhases";
 
+export type RightPanelCardType = "room" | "global";
+
 export interface IRightPanelCardState {
     member?: RoomMember | User;
     verificationRequest?: VerificationRequest;

@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render } from "jest-matrix-react";
 import { EventType, getHttpUriForMxc, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { LinkedTextContext } from "@element-hq/web-shared-components";
 
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import {
@@ -151,35 +152,72 @@ describe("MBodyFactory", () => {
         });
     });
 
-    it.each(["m.file", "m.audio"])(
-        "renderMBody fallback shows %s generic placeholder when showFileInfo is true",
-        async (msgtype) => {
+    it("renderMBody fallback shows m.audio generic placeholder when showFileInfo is true", async () => {
+        const mediaEvent = new MatrixEvent({
+            room_id: "!room:server",
+            sender: userId,
+            type: EventType.RoomMessage,
+            content: {
+                body: "alt",
+                msgtype: "m.audio",
+                url: "mxc://server/image",
+            },
+        });
+
+        const { container, getByRole, getByText } = render(
+            <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.File } as any)}>
+                {renderMBody(
+                    {
+                        ...props,
+                        mxEvent: mediaEvent,
+                        mediaEventHelper: new MediaEventHelper(mediaEvent),
+                        showFileInfo: true,
+                    },
+                    FileBodyFactory,
+                )}
+            </ScopedRoomContextProvider>,
+        );
+
+        expect(getByText("alt")).toBeInTheDocument();
+        // Only m.file gets the preview tile; everything else keeps the legacy file body,
+        // where the filename itself is the button. See FileBodyFactory.
+        expect(getByRole("button", { name: "alt" })).toBeInTheDocument();
+        expect(container).toMatchSnapshot();
+    });
+
+    it.each([TimelineRenderingType.Room, TimelineRenderingType.File])(
+        "renderMBody shows the preview tile for m.file in %s",
+        async (timelineRenderingType) => {
             const mediaEvent = new MatrixEvent({
                 room_id: "!room:server",
                 sender: userId,
                 type: EventType.RoomMessage,
                 content: {
                     body: "alt",
-                    msgtype,
+                    msgtype: "m.file",
                     url: "mxc://server/image",
                 },
             });
 
-            const { container, getByRole } = render(
-                <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.File } as any)}>
-                    {renderMBody(
-                        {
-                            ...props,
-                            mxEvent: mediaEvent,
-                            mediaEventHelper: new MediaEventHelper(mediaEvent),
-                            showFileInfo: true,
-                        },
-                        FileBodyFactory,
-                    )}
-                </ScopedRoomContextProvider>,
+            const { container, getByRole, getByText } = render(
+                <LinkedTextContext.Provider value={{}}>
+                    <ScopedRoomContextProvider {...({ timelineRenderingType } as any)}>
+                        {renderMBody(
+                            {
+                                ...props,
+                                mxEvent: mediaEvent,
+                                mediaEventHelper: new MediaEventHelper(mediaEvent),
+                                showFileInfo: true,
+                            },
+                            FileBodyFactory,
+                        )}
+                    </ScopedRoomContextProvider>
+                </LinkedTextContext.Provider>,
             );
 
-            expect(getByRole("button", { name: "alt" })).toBeInTheDocument();
+            // The preview tile leaves the filename as plain text and gives the download its own button.
+            expect(getByText("alt")).toBeInTheDocument();
+            expect(getByRole("button", { name: "Download" })).toBeInTheDocument();
             expect(container).toMatchSnapshot();
         },
     );
