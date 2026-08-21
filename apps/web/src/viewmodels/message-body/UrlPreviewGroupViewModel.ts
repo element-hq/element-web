@@ -186,19 +186,52 @@ export class UrlPreviewGroupViewModel
             }
         }
 
-        // Resolve every link, including the ones the limit would hide: a link the server
-        // cannot preview renders nothing at all, so counting links rather than previews
-        // offers to expand a group whose hidden entries do not exist.
-        previews ??= (await Promise.all(this.links.map((link) => this.fetcher.fetchPreview(link, loadMedia)))).filter(
-            (p) => !!p,
-        );
+        let unresolvedLinkCount = 0;
+        if (previews === undefined) {
+            if (this.limitPreviews) {
+                ({ previews, unresolvedLinkCount } = await this.fetchPreviewsUpToLimit(loadMedia));
+            } else {
+                previews = (
+                    await Promise.all(this.links.map((link) => this.fetcher.fetchPreview(link, loadMedia)))
+                ).filter((p) => !!p);
+            }
+        }
 
+        const totalPreviewCount = previews.length + unresolvedLinkCount;
         this.snapshot.merge({
             previews: this.limitPreviews ? previews.slice(0, MAX_PREVIEWS_WHEN_LIMITED) : previews,
-            totalPreviewCount: previews.length,
+            totalPreviewCount,
             previewsLimited: this.limitPreviews,
-            overPreviewLimit: previews.length > MAX_PREVIEWS_WHEN_LIMITED,
+            overPreviewLimit: totalPreviewCount > MAX_PREVIEWS_WHEN_LIMITED,
         });
+    }
+
+    /**
+     * Resolve links in order until enough of them have previews to fill the limited view,
+     * leaving the rest untouched. A link the server cannot preview renders nothing, so the
+     * limit has to be counted in previews rather than in links, but only the links needed to
+     * reach it are worth a request until the user asks to see more.
+     *
+     * @param loadMedia - whether the previews should carry their media.
+     * @returns the previews that resolved, and how many links were left unasked about.
+     */
+    private async fetchPreviewsUpToLimit(
+        loadMedia: boolean,
+    ): Promise<{ previews: UrlPreview[]; unresolvedLinkCount: number }> {
+        const previews: UrlPreview[] = [];
+        let requestedLinkCount = 0;
+
+        while (previews.length < MAX_PREVIEWS_WHEN_LIMITED && requestedLinkCount < this.links.length) {
+            const batch = this.links.slice(
+                requestedLinkCount,
+                requestedLinkCount + MAX_PREVIEWS_WHEN_LIMITED - previews.length,
+            );
+            requestedLinkCount += batch.length;
+            const resolved = await Promise.all(batch.map((link) => this.fetcher.fetchPreview(link, loadMedia)));
+            previews.push(...resolved.filter((p) => !!p));
+        }
+
+        return { previews, unresolvedLinkCount: this.links.length - requestedLinkCount };
     }
 
     /**
