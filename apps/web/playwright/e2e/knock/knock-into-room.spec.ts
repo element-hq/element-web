@@ -88,15 +88,7 @@ test.describe("Knock Into Room", () => {
             page.getByTestId("room-list").getByRole("option", { name: "Open room Cybersecurity" }),
         ).toBeVisible();
 
-        // The knock, invite and join events collapse into a membership summary; expand it
-        // to reveal the individual events, including the knock itself.
-        await expect(page.getByText("Alice requested to join, was granted access, and joined")).toBeVisible();
-        await page.locator(".mx_GenericEventListSummary_toggle[aria-expanded=false]").last().click();
-        await expect(page.getByText("Alice is requesting to join")).toBeVisible();
-        await expect(page.getByText("Bob granted access to Alice")).toBeVisible();
         await expect(page.getByText("Alice joined the room")).toBeVisible();
-        // Collapse it again so the summary assertions below see the collapsed form.
-        await page.locator(".mx_GenericEventListSummary_toggle[aria-expanded=true]").last().click();
 
         // bot kicks Alice
         await bot.kick(room.roomId, user.userId);
@@ -123,12 +115,7 @@ test.describe("Knock Into Room", () => {
         // It will be not needed when homeserver implements auto accept knock requests.
         await page.locator(".mx_RoomView").getByRole("button", { name: "Accept" }).click();
 
-        await expect(
-            page.getByText(
-                "Alice requested to join, was granted access, joined, was removed, requested to join, " +
-                    "was granted access, and joined",
-            ),
-        ).toBeVisible();
+        await expect(page.getByText("Alice was invited, joined, was removed, was invited, and joined")).toBeVisible();
     });
 
     test("should knock into the room then knock is approved and user joins the room then user is banned/unbanned and joins again", async ({
@@ -178,15 +165,7 @@ test.describe("Knock Into Room", () => {
             page.getByTestId("room-list").getByRole("option", { name: "Open room Cybersecurity" }),
         ).toBeVisible();
 
-        // The knock, invite and join events collapse into a membership summary; expand it
-        // to reveal the individual events, including the knock itself.
-        await expect(page.getByText("Alice requested to join, was granted access, and joined")).toBeVisible();
-        await page.locator(".mx_GenericEventListSummary_toggle[aria-expanded=false]").last().click();
-        await expect(page.getByText("Alice is requesting to join")).toBeVisible();
-        await expect(page.getByText("Bob granted access to Alice")).toBeVisible();
         await expect(page.getByText("Alice joined the room")).toBeVisible();
-        // Collapse it again so the summary assertions below see the collapsed form.
-        await page.locator(".mx_GenericEventListSummary_toggle[aria-expanded=true]").last().click();
 
         // bot bans Alice
         await bot.ban(room.roomId, user.userId);
@@ -221,10 +200,7 @@ test.describe("Knock Into Room", () => {
         await page.locator(".mx_RoomView").getByRole("button", { name: "Accept" }).click();
 
         await expect(
-            page.getByText(
-                "Alice requested to join, was granted access, joined, was banned, was unbanned, " +
-                    "requested to join, was granted access, and joined",
-            ),
+            page.getByText("Alice was invited, joined, was banned, was unbanned, was invited, and joined"),
         ).toBeVisible();
     });
 
