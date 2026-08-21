@@ -55,7 +55,5 @@ export function E2eMessageSharedIconAdapter({
         vm.setKeyForwardingUserId(keyForwardingUserId);
     }, [keyForwardingUserId, vm]);
 
-    return (
-        <E2eMessageSharedIconView vm={vm} />
-    );
+    return <E2eMessageSharedIconView vm={vm} />;
 }
