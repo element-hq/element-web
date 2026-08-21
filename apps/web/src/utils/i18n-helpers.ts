@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Room } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { _t } from "../languageHandler";
 import DMRoomMap from "./DMRoomMap";
@@ -18,11 +19,16 @@ export interface RoomContextDetails {
     ariaLabel?: string;
 }
 
+function isStillInRoom(room: Room, userId: string): boolean {
+    const membership = room.getMember(userId)?.membership;
+    return membership === KnownMembership.Join || membership === KnownMembership.Invite;
+}
+
 export function roomContextDetails(room: Room): RoomContextDetails | null {
     const dmPartner = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
     // if we’ve got more than 2 users, don’t treat it like a regular DM
     const isGroupDm = room.getMembers().length > 2;
-    if (!room.isSpaceRoom() && dmPartner && !isGroupDm) {
+    if (!room.isSpaceRoom() && dmPartner && !isGroupDm && isStillInRoom(room, dmPartner)) {
         return { details: dmPartner };
     }
 
