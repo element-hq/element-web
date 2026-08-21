@@ -15,6 +15,7 @@ import { shouldPolyfill as shouldPolyFillIntlSegmenter } from "@formatjs/intl-se
 
 // These are things that can run before the skin loads - be careful not to reference the react-sdk though.
 import { parseAppUrl } from "./url_utils";
+import { shouldRedirectToMobileGuide } from "./mobile_guide/shouldRedirectToMobileGuide";
 import "./modernizr.cjs";
 import { polyfillTouchEvent } from "../@types/polyfill";
 
@@ -140,28 +141,26 @@ async function start(): Promise<void> {
 
         const parsedUrl = parseAppUrl(window.location);
 
-        // don't try to redirect to the native apps if we're
-        // verifying a 3pid (but after we've loaded the config)
-        // or if the user is following a deep link
-        // (https://github.com/element-hq/element-web/issues/7378)
-        const preventRedirect = !!parsedUrl.params.threepid || parsedUrl.location.length > 0;
-
-        if (!preventRedirect) {
-            const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-            const isAndroid = /Android/.test(navigator.userAgent);
-            if (isIos || isAndroid) {
-                if (sessionStorage.getItem("skip_mobile_redirect") !== "true") {
-                    window.location.href = "mobile_guide/";
-                    return;
-                }
-            }
-        }
-
         // set the platform for react sdk
         preparePlatform();
         // load config requires the platform to be ready
         const loadConfigPromise = loadConfig();
         await settled(loadConfigPromise); // wait for it to settle
+
+        const { default: SdkConfig } = await import(/* webpackChunkName: "init" */ "../SdkConfig");
+        if (
+            shouldRedirectToMobileGuide({
+                userAgent: navigator.userAgent,
+                hasMSStream: !!window.MSStream,
+                parsedUrl,
+                hasSkippedRedirect: sessionStorage.getItem("skip_mobile_redirect") === "true",
+                mobileGuideToast: SdkConfig.get("mobile_guide_toast"),
+            })
+        ) {
+            window.location.href = "mobile_guide/";
+            return;
+        }
+
         // keep initialising so that we can show any possible error with as many features (theme, i18n) as possible
 
         // now that the config is ready, try to persist logs
