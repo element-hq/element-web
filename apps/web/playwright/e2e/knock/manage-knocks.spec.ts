@@ -48,10 +48,11 @@ test.describe("Manage Knocks", () => {
 
         await expect(roomKnocksBar).not.toBeVisible();
 
-        // The knock and invite may collapse into a membership summary depending on what
-        // precedes them; expand it to reveal the individual events.
-        const collapsedSummary = page.locator(".mx_GenericEventListSummary_toggle[aria-expanded=false]");
-        if ((await collapsedSummary.count()) > 0) await collapsedSummary.last().click();
+        // Approving invites Bob, who auto-accepts, so the knock, the invite and the join together
+        // reach the threshold at which they collapse into a membership summary. Expand the last
+        // summary in the timeline once it grows a toggle, rather than whichever summary happens to
+        // be collapsed at this instant: until the join lands that is the room creation one.
+        await page.locator(".mx_GenericEventListSummary").last().getByRole("button", { name: "Expand" }).click();
         await expect(page.getByText("Bob is requesting to join")).toBeVisible();
         await expect(page.getByText("Alice granted access to Bob")).toBeVisible();
     });
@@ -96,10 +97,8 @@ test.describe("Manage Knocks", () => {
         await expect(settingsGroup.getByText(/^Bob/)).not.toBeVisible();
         await app.settings.closeDialog();
 
-        // The knock and invite may collapse into a membership summary depending on what
-        // precedes them; expand it to reveal the individual events.
-        const collapsedSummary = page.locator(".mx_GenericEventListSummary_toggle[aria-expanded=false]");
-        if ((await collapsedSummary.count()) > 0) await collapsedSummary.last().click();
+        // As above, the knock, the invite and Bob's join collapse into a membership summary.
+        await page.locator(".mx_GenericEventListSummary").last().getByRole("button", { name: "Expand" }).click();
         await expect(page.getByText("Bob is requesting to join: Hello, can I join?")).toBeVisible();
         await expect(page.getByText("Alice granted access to Bob")).toBeVisible();
     });

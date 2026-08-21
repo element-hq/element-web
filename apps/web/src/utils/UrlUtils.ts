@@ -57,7 +57,7 @@ export function unabbreviateUrl(u?: string): string {
 export function linksIn(content: string): Set<string> {
     return new Set(
         content
-            .split(" ")
+            .split(/\s+/)
             .map((w) => w.trim())
             .filter(linkPreviewable),
     );
