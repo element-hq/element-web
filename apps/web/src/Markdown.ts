@@ -302,10 +302,13 @@ export default class Markdown {
             // 'inline', rather than unnecessarily wrapped in its own
             // p tag. If, however, we have multiple nodes, each gets
             // its own p tag to keep them as separate paragraphs.
-            // However, if it's a blockquote, adds a p tag anyway
-            // in order to avoid deviation to commonmark and unexpected
-            // results when parsing the formatted HTML.
-            if (node.parent?.type === "block_quote" || isMultiLine(node)) {
+            // Paragraphs nested inside another block — a blockquote or a
+            // list item — always go through commonmark, both to avoid
+            // deviating from it when the formatted HTML is parsed back, and
+            // because dropping them collapses the separate paragraphs of a
+            // loose list item into one. commonmark omits the p tags for
+            // tight lists itself, so those are unaffected.
+            if (node.parent?.type !== "document" || isMultiLine(node)) {
                 realParagraph.call(this, node, entering);
             }
         };
