@@ -48,7 +48,12 @@ test.describe("Manage Knocks", () => {
 
         await expect(roomKnocksBar).not.toBeVisible();
 
-        await expect(page.getByText("Alice invited Bob")).toBeVisible();
+        // The knock and invite may collapse into a membership summary depending on what
+        // precedes them; expand it to reveal the individual events.
+        const collapsedSummary = page.locator(".mx_GenericEventListSummary_toggle[aria-expanded=false]");
+        if ((await collapsedSummary.count()) > 0) await collapsedSummary.last().click();
+        await expect(page.getByText("Bob is requesting to join")).toBeVisible();
+        await expect(page.getByText("Alice granted access to Bob")).toBeVisible();
     });
 
     test("should deny knock using bar", async ({ page, app, bot, room }) => {
@@ -71,6 +76,12 @@ test.describe("Manage Knocks", () => {
                     e.getContent()?.displayname === "Bob",
             );
         });
+
+        // The knock and its denial may collapse into a membership summary depending on what
+        // precedes them; expand it to reveal the individual events.
+        const collapsedSummary = page.locator(".mx_GenericEventListSummary_toggle[aria-expanded=false]");
+        if ((await collapsedSummary.count()) > 0) await collapsedSummary.last().click();
+        await expect(page.getByText("Alice rejected Bob's request to join")).toBeVisible();
     });
 
     test("should approve knock using people tab", async ({ page, app, bot, room }) => {
@@ -83,8 +94,14 @@ test.describe("Manage Knocks", () => {
         await expect(settingsGroup.getByText("Hello, can I join?")).toBeVisible();
         await settingsGroup.getByRole("button", { name: "Approve" }).click();
         await expect(settingsGroup.getByText(/^Bob/)).not.toBeVisible();
+        await app.settings.closeDialog();
 
-        await expect(page.getByText("Alice invited Bob")).toBeVisible();
+        // The knock and invite may collapse into a membership summary depending on what
+        // precedes them; expand it to reveal the individual events.
+        const collapsedSummary = page.locator(".mx_GenericEventListSummary_toggle[aria-expanded=false]");
+        if ((await collapsedSummary.count()) > 0) await collapsedSummary.last().click();
+        await expect(page.getByText("Bob is requesting to join: Hello, can I join?")).toBeVisible();
+        await expect(page.getByText("Alice granted access to Bob")).toBeVisible();
     });
 
     test("should deny knock using people tab", async ({ page, app, bot, room }) => {
@@ -108,5 +125,12 @@ test.describe("Manage Knocks", () => {
                     e.getContent()?.displayname === "Bob",
             );
         });
+        await app.settings.closeDialog();
+
+        // The knock and its denial may collapse into a membership summary depending on what
+        // precedes them; expand it to reveal the individual events.
+        const collapsedSummary = page.locator(".mx_GenericEventListSummary_toggle[aria-expanded=false]");
+        if ((await collapsedSummary.count()) > 0) await collapsedSummary.last().click();
+        await expect(page.getByText("Alice rejected Bob's request to join")).toBeVisible();
     });
 });

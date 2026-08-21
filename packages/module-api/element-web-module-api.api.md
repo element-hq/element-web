@@ -96,7 +96,14 @@ export interface ChatExportCustomisations<ExportFormat, ExportType> {
 // @public
 export interface ClientApi {
     accountData: AccountDataApi;
+    // @alpha
+    readonly creationManagement: ClientCreationManagementApi;
     getRoom: (id: string) => Room | null;
+}
+
+// @public
+export interface ClientCreationManagementApi {
+    setUserVerificationCaCertsPem(pem: string | null): void;
 }
 
 // @alpha @deprecated (undocumented)

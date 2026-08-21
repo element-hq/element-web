@@ -249,6 +249,7 @@ export interface Settings {
     "MessageComposerInput.showPollsButton": IBaseSetting<boolean>;
     "MessageComposerInput.insertTrailingColon": IBaseSetting<boolean>;
     "Notifications.showbold": IBaseSetting<boolean>;
+    "Notifications.activityIsUnread": IBaseSetting<boolean>;
     "Notifications.tac_only_notifications": IBaseSetting<boolean>;
     "useCompactLayout": IBaseSetting<boolean>;
     "showRedactions": IBaseSetting<boolean>;
@@ -369,6 +370,7 @@ export interface Settings {
     "RoomList.OrderedCustomSections": IBaseSetting<ReorderableSection[]>;
     "RoomList.SectionExpansionState": IBaseSetting<SectionExpansionState>;
     "RoomList.showSections": IBaseSetting<boolean>;
+    "composerUrlPreviewCollapsed": IBaseSetting<boolean>;
 }
 
 export type SettingKey = keyof Settings;
@@ -699,6 +701,12 @@ export const SETTINGS: Settings = {
         default: false,
         invertedSettingName: "feature_hidebold",
         controller: new AnalyticsController("WebSettingsNotificationsShowBoldToggle"),
+    },
+    "Notifications.activityIsUnread": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
+        displayName: _td("settings|activityIsUnread"),
+        default: false,
+        controller: new RequiresSettingsController(["Notifications.showbold"]),
     },
     "Notifications.tac_only_notifications": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
@@ -1218,6 +1226,10 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: true,
         displayName: _td("settings|show_sections"),
+    },
+    "composerUrlPreviewCollapsed": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: true,
     },
     "RightPanel.phasesGlobal": {
         supportedLevels: [SettingLevel.DEVICE],
