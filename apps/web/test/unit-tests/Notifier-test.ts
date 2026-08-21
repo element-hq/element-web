@@ -18,6 +18,7 @@ import {
     SyncState,
     type AccountDataEvents,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { waitFor } from "jest-matrix-react";
 import { CallMembership, type SessionMembershipData, type MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 import { randomUUID } from "node:crypto";
@@ -409,6 +410,60 @@ describe("Notifier", () => {
                 testRoom,
                 spoilerEvent,
             );
+        });
+
+        describe("knocks", () => {
+            let getValueSpy: jest.SpyInstance;
+
+            const mkKnockEvent = (reason?: string): MatrixEvent =>
+                mkEvent({
+                    event: true,
+                    type: EventType.RoomMember,
+                    user: "@alice:example.org",
+                    room: roomId,
+                    skey: "@alice:example.org",
+                    content: { membership: KnownMembership.Knock, reason },
+                });
+
+            beforeEach(() => {
+                getValueSpy = jest
+                    .spyOn(SettingsStore, "getValue")
+                    .mockImplementation((name): any => name === "feature_ask_to_join");
+            });
+
+            afterEach(() => {
+                getValueSpy.mockRestore();
+            });
+
+            it("should display a notification for a knock", () => {
+                const knockEvent = mkKnockEvent();
+                notifier.displayPopupNotification(knockEvent, testRoom);
+                expect(MockPlatform.displayNotification).toHaveBeenCalledWith(
+                    testRoom.name,
+                    "@alice:example.org is requesting to join",
+                    expect.any(String),
+                    testRoom,
+                    knockEvent,
+                );
+            });
+
+            it("should include the knock reason in the notification", () => {
+                const knockEvent = mkKnockEvent("Let me in please!");
+                notifier.displayPopupNotification(knockEvent, testRoom);
+                expect(MockPlatform.displayNotification).toHaveBeenCalledWith(
+                    testRoom.name,
+                    "@alice:example.org is requesting to join: Let me in please!",
+                    expect.any(String),
+                    testRoom,
+                    knockEvent,
+                );
+            });
+
+            it("should not display a notification for a knock when the ask to join labs flag is disabled", () => {
+                getValueSpy.mockReturnValue(false);
+                notifier.displayPopupNotification(mkKnockEvent(), testRoom);
+                expect(MockPlatform.displayNotification).not.toHaveBeenCalled();
+            });
         });
     });
 

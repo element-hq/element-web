@@ -8,6 +8,7 @@ import type { Room } from "matrix-js-sdk/src/matrix";
 import { type Filter, FilterEnum } from ".";
 import { RoomNotificationStateStore } from "../../../notifications/RoomNotificationStateStore";
 import { getMarkedUnreadState } from "../../../../utils/notifications";
+import { SDKContextClass } from "../../../../contexts/SDKContextClass";
 
 export class UnreadFilter implements Filter {
     /**
@@ -22,6 +23,13 @@ export class UnreadFilter implements Filter {
             return true;
         }
 
+        // The current room is always visible, whether it's read or not
+        const currentRoomId = SDKContextClass.instance.roomViewStore.getRoomId();
+        if (room.roomId === currentRoomId) {
+            return true;
+        }
+
+        // Otherwise, the room is unread if it has activity or an unread count
         const notifState = RoomNotificationStateStore.instance.getRoomState(room);
         return this.activityIsUnread ? notifState.hasAnyNotificationOrActivity : notifState.hasUnreadCount;
     }
