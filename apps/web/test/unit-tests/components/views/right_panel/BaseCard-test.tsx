@@ -16,7 +16,7 @@ import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts"
 jest.mock("../../../../../src/stores/right-panel/RightPanelStore", () => ({
     instance: {
         popCard: jest.fn(),
-        roomPhaseHistory: [],
+        currentCardPhaseHistory: [],
     },
 }));
 

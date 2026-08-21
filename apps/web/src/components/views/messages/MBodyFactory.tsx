@@ -38,6 +38,8 @@ import { fileSize } from "../../../utils/FileUtils";
 import DownloadIcon from "@vector-im/compound-design-tokens/assets/web/icons/download";
 import { FileDownloader } from "../../../utils/FileDownloader";
 import { ExpandIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
+import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 
 type MBodyComponent = React.ComponentType<IBodyProps>;
 
@@ -103,7 +105,7 @@ function PreviewFileBody({ mxEvent, mediaEventHelper }: FileBodyProps): JSX.Elem
                     additionalButtons.push({
                         label: "Open in file viewer", // TODO: translation
                         icon: <ExpandIcon />,
-                        onClick: () => { }
+                        onClick: () => RightPanelStore.instance.setGlobalCard({ phase: RightPanelPhases.FileViewer })
                     })
             }
 

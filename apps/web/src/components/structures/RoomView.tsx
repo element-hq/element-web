@@ -661,11 +661,13 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             viewRoomOpts: viewRoomOpts,
         };
 
+        // Deliberately reads the ROOM stack throughout: a focused global card must not mask the
+        // room's own timeline card, or the duplicate would survive until the global card closes.
+        const roomPhaseHistory = this.context.rightPanelStore.roomPhaseHistory;
         if (
             newState.mainSplitContentType === MainSplitContentType.Timeline &&
-            this.context.rightPanelStore.isOpen &&
-            this.context.rightPanelStore.currentCard.phase === RightPanelPhases.Timeline &&
-            this.context.rightPanelStore.roomPhaseHistory.some((card) => card.phase === RightPanelPhases.Timeline)
+            this.context.rightPanelStore.isRoomPanelOpen &&
+            roomPhaseHistory[roomPhaseHistory.length - 1]?.phase === RightPanelPhases.Timeline
         ) {
             // The main split shows the main timeline, so hide the right panel timeline
             this.context.rightPanelStore.setCard({ phase: RightPanelPhases.RoomSummary });
