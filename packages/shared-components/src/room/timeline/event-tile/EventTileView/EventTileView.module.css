@@ -214,7 +214,7 @@
         line-height: var(--event-tile-group-line-height);
     }
 
-    .line:not(.lineMedia) .slotBody > * {
+    &:not(.shapeCard) .line:not(.lineMedia) .slotBody > * {
         margin-inline-end: var(--event-tile-content-inline-end);
     }
 
@@ -1387,10 +1387,16 @@
     --event-tile-card-bubble-receipt-inset-inline-end: calc(
         -1 * var(--ReadReceiptGroup_EventBubbleTile-spacing-end, 78px) + var(--container-gap-width, 0px) + 6px
     );
+    padding-top: 0;
 
     &.layoutGroup {
         .line {
+            margin-inline-end: 0;
             padding-inline-end: var(--event-tile-group-timestamp-width);
+        }
+
+        &.stateBubbleContainer .line {
+            padding: 0;
         }
 
         .slotAvatar {
@@ -1404,7 +1410,13 @@
         .slotTimestamp {
             inset-inline-start: auto;
             inset-inline-end: 0;
+            height: auto;
+            margin: 0;
             text-align: end;
+            font-size: 12px;
+        }
+
+        .slotTimestamp > * {
             font-size: 12px;
         }
 
@@ -1427,7 +1439,7 @@
 
         .slotReceipt {
             margin-inline-end: 0;
-            inset-block-start: var(--event-tile-card-receipt-inset-block-start);
+            inset-block-start: -2rem;
         }
 
         &.stateInfo .slotAvatar {
@@ -1441,10 +1453,6 @@
         .slotFooter {
             margin-inline-end: var(--cpd-space-2x);
             position: relative;
-        }
-
-        .slotBody > * {
-            margin-inline-end: 0;
         }
 
         .slotSender {
