@@ -231,19 +231,6 @@ Please see LICENSE files in the repository root for full details.
 
     &.mx_InviteDialog_tile--inviterError {
         grid-template-columns: max-content auto; /* max-content = avatar width */
-        margin-bottom: var(--cpd-space-6x);
-
-        &:last-child {
-            margin-bottom: 0;
-        }
-
-        .mx_InviteDialog_tile--inviterError_errorText {
-            grid-row-start: 2;
-            grid-column-start: 2;
-
-            font-size: $font-15px;
-            color: $alert;
-        }
     }
 
     * {
@@ -297,12 +284,39 @@ Please see LICENSE files in the repository root for full details.
     }
 }
 
+.mx_InviteDialog_multiInviterErrorWrapper .mx_Dialog {
+    width: 600px;
+    max-width: 100%;
+
+    .mx_Dialog_fixedWidth {
+        width: auto;
+    }
+}
+
 .mx_InviteDialog_multiInviterError {
     > h4 {
         font-size: $font-15px;
         line-height: $font-24px;
         color: $secondary-content;
         font-weight: normal;
+    }
+
+    .mx_InviteDialog_multiInviterError_group {
+        display: flex;
+        flex-direction: column;
+        gap: var(--cpd-space-2x);
+        margin-bottom: var(--cpd-space-6x);
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    .mx_InviteDialog_multiInviterError_reason {
+        margin-bottom: var(--cpd-space-2x);
+
+        font-size: $font-15px;
+        color: $alert;
     }
 }
 
