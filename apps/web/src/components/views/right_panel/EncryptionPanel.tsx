@@ -135,7 +135,7 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
                 state: { member, verificationRequest: verificationRequest_ },
             });
         }
-        if (!sdkContext.rightPanelStore.isOpen) sdkContext.rightPanelStore.togglePanel(null);
+        sdkContext.rightPanelStore.showRoomPanel(null);
     }, [sdkContext.client, sdkContext.rightPanelStore, member]);
 
     const requested: boolean =
