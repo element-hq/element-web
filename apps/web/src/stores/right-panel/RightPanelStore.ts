@@ -19,6 +19,7 @@ import { ReadyWatchingStore } from "../ReadyWatchingStore";
 import {
     convertToStatePanel,
     convertToStorePanel,
+    RightPanelCardType,
     type IRightPanelCard,
     type IRightPanelCardState,
     type IRightPanelForRoom,
@@ -63,13 +64,22 @@ export default class RightPanelStore extends ReadyWatchingStore {
      *   i.e. inserting a global card makes a room card temporarily hidden until the global card
      *        is closed, or a new room card is inserted
      */
-    private focusedCardType: "room" | "global" = "room";
+    private internalFocusedCardType: RightPanelCardType = "room";
     private byRoom: { [roomId: string]: IRightPanelForRoom } = {};
     private viewedRoomId: string | null = null;
 
+    private get focusedCardType() {
+        return this.internalFocusedCardType;
+    }
+
+    private set focusedCardType(cardType: RightPanelCardType) {
+        this.internalFocusedCardType = cardType;
+        void SettingsStore.setValue("RightPanel.focusedCardType", null, SettingLevel.DEVICE, this.focusedCardType);
+    }
+
     private constructor() {
         super(defaultDispatcher);
-        this.reset();
+        this.reset(SettingsStore.getValue("RightPanel.focusedCardType"));
     }
 
     /**
@@ -83,9 +93,9 @@ export default class RightPanelStore extends ReadyWatchingStore {
     /**
      * Resets the store. Intended for test usage only.
      */
-    public reset(): void {
+    public reset(focusedCardType: RightPanelCardType = "room"): void {
         this.global = undefined;
-        this.focusedCardType = "room";
+        this.focusedCardType = focusedCardType;
         this.byRoom = {};
         this.viewedRoomId = null;
     }
