@@ -8,13 +8,11 @@ Please see LICENSE files in the repository root for full details.
 
 import { type Config } from "@element-hq/element-web-module-api";
 
-import { test as base } from "./fixtures/index.js";
-import { routeConfigJson } from "./utils/config_json.js";
-
 export * from "./utils/config_json.js";
 export * from "./utils/context.js";
 export * from "./utils/release_accouncement.js";
 export * from "./utils/toasts.js";
+export { test } from "./fixtures/index.js";
 
 export { populateLocalStorageWithCredentials } from "./fixtures/user.js";
 
@@ -43,26 +41,5 @@ export const CONFIG_JSON: Partial<Config> = {
         feature_release_announcement: false,
     },
 };
-
-export interface TestFixtures {
-    /**
-     * The contents of the config.json to send when the client requests it.
-     */
-    config: Partial<typeof CONFIG_JSON>;
-
-    labsFlags: string[];
-    disablePresence: boolean;
-}
-
-export const test = base.extend<TestFixtures>({
-    // We merge this atop the default CONFIG_JSON in the page fixture to make extending it easier
-    config: async ({}, use) => use({}),
-    labsFlags: async ({}, use) => use([]),
-    disablePresence: async ({}, use) => use(false),
-    page: async ({ homeserver, context, page, config, labsFlags, disablePresence }, use) => {
-        await routeConfigJson(context, homeserver.baseUrl, config, labsFlags, disablePresence);
-        await use(page);
-    },
-});
 
 export { expect, type ToMatchScreenshotOptions } from "./expect/index.js";
