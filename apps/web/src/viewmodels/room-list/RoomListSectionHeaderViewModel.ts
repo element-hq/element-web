@@ -20,10 +20,10 @@ import { type RoomNotificationState } from "../../stores/notifications/RoomNotif
 import SettingsStore from "../../settings/SettingsStore";
 import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import {
-    CHATS_TAG,
     getCustomSectionData,
     isCustomSectionTag,
     isDefaultSectionTag,
+    isReorderableSection,
     isSectionExpanded,
     setSectionExpanded,
 } from "../../stores/room-list-v3/section";
@@ -64,7 +64,7 @@ export class RoomListSectionHeaderViewModel
             isExpanded: isSectionExpanded(props.spaceId, props.tag),
             isUnread: false,
             displaySectionMenu: !isDefaultSection,
-            canBeReordered: !isDefaultSection || props.tag === CHATS_TAG,
+            canBeReordered: isReorderableSection(props.tag, getCustomSectionData()),
         });
         const sectionWatherRef = SettingsStore.watchSetting("RoomList.CustomSectionData", null, () =>
             this.onCustomSectionDataChange(),

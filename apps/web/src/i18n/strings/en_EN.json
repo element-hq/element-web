@@ -2944,6 +2944,7 @@
         "show_join_leave": "Show join/leave messages (invites/removes/bans unaffected)",
         "show_message_previews": "Show message previews",
         "show_nsfw_content": "Show NSFW content",
+        "show_people_sections": "Show People as a section",
         "show_read_receipts": "Show read receipts sent by other users",
         "show_redaction_placeholder": "Show a placeholder for removed messages",
         "show_sections": "Show sections",

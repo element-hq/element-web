@@ -165,6 +165,7 @@ describe("RoomListSectionHeaderViewModel", () => {
             [DefaultTagID.Favourite, false],
             [DefaultTagID.LowPriority, false],
             [CHATS_TAG, false],
+            [DefaultTagID.DM, false],
             ["element.io.section.custom", true],
         ])("should be %s for tag %s", (tag, expected) => {
             const vm = new RoomListSectionHeaderViewModel({
@@ -178,11 +179,24 @@ describe("RoomListSectionHeaderViewModel", () => {
     });
 
     describe("canBeReordered", () => {
+        const customTag = "element.io.section.custom";
+
+        beforeEach(() => {
+            // A header is only rendered for a custom section that exists in the settings
+            vi.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+                if (setting === "RoomList.CustomSectionData") return { [customTag]: { tag: customTag, name: "A" } };
+                if (setting === "RoomList.SectionExpansionState") return sectionExpansionState;
+                return null;
+            });
+        });
+
         it.each([
             [DefaultTagID.Favourite, false],
             [DefaultTagID.LowPriority, false],
             [CHATS_TAG, true],
-            ["element.io.section.custom", true],
+            [DefaultTagID.DM, true],
+            [customTag, true],
+            ["element.io.section.deleted", false],
         ])("should be %s for tag %s", (tag, expected) => {
             const vm = new RoomListSectionHeaderViewModel({
                 tag,

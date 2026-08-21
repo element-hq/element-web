@@ -9,7 +9,15 @@ import { rejectToast, rejectToastIfExists } from "@element-hq/element-web-playwr
 
 import { expect, test } from "../../../element-web-test";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
-import { assertRoomInSection, dragRoomToSection, getPrimaryFilters, getRoomList, getSectionHeader } from "./utils";
+import {
+    assertRoomInSection,
+    assertSectionsOrder,
+    dragRoomToSection,
+    dragSectionToSection,
+    getPrimaryFilters,
+    getRoomList,
+    getSectionHeader,
+} from "./utils";
 
 test.describe("Room list sections", () => {
     test.use({
@@ -126,6 +134,54 @@ test.describe("Room list sections", () => {
             await expect(getSectionHeader(page, "Favourites")).toBeVisible();
             await expect(getSectionHeader(page, "Chats")).toBeVisible();
             await expect(roomList.getByRole("row", { name: "Open room favourite room" })).toBeVisible();
+        });
+    });
+
+    test.describe("Show people section setting", () => {
+        test.beforeEach(async ({ app, bot, user }) => {
+            const dmId = await bot.createRoom({ name: "my dm", invite: [user.userId], is_direct: true });
+            await app.client.joinRoom(dmId);
+            await app.client.createRoom({ name: "regular room" });
+            // A favourite room so there is always more than one section and the list never goes flat,
+            // which is what makes the section headers render.
+            const favouriteId = await app.client.createRoom({ name: "favourite room" });
+            await app.client.evaluate(async (client, roomId) => {
+                await client.setRoomTag(roomId, "m.favourite");
+            }, favouriteId);
+        });
+
+        test("keeps the direct messages in the Chats section by default", async ({ page }) => {
+            // The People section is opt-in, so the Chats section holds the direct messages too
+            await expect(getSectionHeader(page, "People")).not.toBeVisible();
+            await expect(getSectionHeader(page, "Rooms")).not.toBeVisible();
+            await assertRoomInSection(page, "Chats", "my dm");
+            await assertRoomInSection(page, "Chats", "regular room");
+        });
+
+        test("moves the direct messages to their own section when enabled", async ({ page, app }) => {
+            await app.settings.setValue("RoomList.showPeopleSection", null, SettingLevel.ACCOUNT, true);
+
+            // The direct message moves out of the catch-all section, which is renamed accordingly
+            await expect(getSectionHeader(page, "Chats")).not.toBeVisible();
+            await assertRoomInSection(page, "People", "my dm");
+            await assertRoomInSection(page, "Rooms", "regular room");
+            // People sits above the other sections by default
+            await assertSectionsOrder(page, ["People", "Rooms"]);
+
+            // Disabling the setting merges the direct messages back into the Chats section
+            await app.settings.setValue("RoomList.showPeopleSection", null, SettingLevel.ACCOUNT, false);
+
+            await expect(getSectionHeader(page, "People")).not.toBeVisible();
+            await assertRoomInSection(page, "Chats", "my dm");
+            await assertRoomInSection(page, "Chats", "regular room");
+        });
+
+        test("can move the People section below the Rooms section", async ({ page, app }) => {
+            await app.settings.setValue("RoomList.showPeopleSection", null, SettingLevel.ACCOUNT, true);
+            await assertSectionsOrder(page, ["People", "Rooms"]);
+
+            await dragSectionToSection(page, "People", "Rooms");
+            await assertSectionsOrder(page, ["Rooms", "People"]);
         });
     });
 
