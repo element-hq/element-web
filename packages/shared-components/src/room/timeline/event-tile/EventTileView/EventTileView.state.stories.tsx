@@ -319,7 +319,7 @@ export const SelectedRoomGroup: Story = {
 
 export const ContextualSearchGroup: Story = {
     name: "Contextual search - Group - Default",
-    tags: visualTags,
+    tags: ["!dev", "!autodocs", "snapshot", "skip-test"],
     globals: groupGlobals,
     args: ContextualSearch.args,
 };

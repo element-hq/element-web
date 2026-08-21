@@ -62,30 +62,33 @@ exports[`<LayoutSwitcher /> should render 1`] = `
               <div
                 aria-atomic="true"
                 aria-live="off"
-                class="mx_EventTile"
+                class="_root_pq1p8_9 mx_EventTile _stateOwnEvent_pq1p8_836 _layoutGroup_pq1p8_179"
                 data-event-id="$9999999999999999999999999999999999999999999"
-                data-has-reply="false"
-                data-layout="group"
                 data-scroll-tokens="$9999999999999999999999999999999999999999999"
-                data-self="true"
                 tabindex="-1"
               >
                 <div
-                  class="mx_DisambiguatedProfile _disambiguatedProfile_36406_8"
-                  data-event-density="default"
-                  data-event-layout="group"
-                  role="button"
-                  tabindex="0"
+                  class="_slotSender_pq1p8_111 mx_DisambiguatedProfile"
+                  data-testid="event-tile-slot-sender"
                 >
-                  <span
-                    class="mx_Username_color2 _disambiguatedProfile_displayName_36406_18 mx_DisambiguatedProfile_displayName"
-                    dir="auto"
+                  <div
+                    class="mx_DisambiguatedProfile _disambiguatedProfile_36406_8"
+                    data-event-density="default"
+                    data-event-layout="group"
+                    role="button"
+                    tabindex="0"
                   >
-                    Alice
-                  </span>
+                    <span
+                      class="mx_Username_color2 _disambiguatedProfile_displayName_36406_18 mx_DisambiguatedProfile_displayName"
+                      dir="auto"
+                    >
+                      Alice
+                    </span>
+                  </div>
                 </div>
                 <div
-                  class="mx_EventTile_avatar"
+                  class="_slotAvatar_pq1p8_102 mx_EventTile_avatar"
+                  data-testid="event-tile-slot-avatar"
                 >
                   <span
                     class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
@@ -100,19 +103,24 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   </span>
                 </div>
                 <div
-                  class="mx_EventTile_line"
+                  class="_line_pq1p8_74 mx_EventTile_line"
                   id="1"
                 >
                   <div
-                    class="mx_MTextBody mx_EventTile_content _root_j01hv_8 _text_j01hv_24"
-                    data-event-density="default"
-                    data-event-layout="group"
+                    class="_slotBody_pq1p8_89 mx_EventTile_body"
+                    data-testid="event-tile-slot-body"
                   >
                     <div
-                      class="mx_EventTile_body translate"
-                      dir="auto"
+                      class="mx_MTextBody mx_EventTile_content _root_j01hv_8 _text_j01hv_24"
+                      data-event-density="default"
+                      data-event-layout="group"
                     >
-                      Hey you. You're the best!
+                      <div
+                        class="mx_EventTile_body translate"
+                        dir="auto"
+                      >
+                        Hey you. You're the best!
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -160,30 +168,33 @@ exports[`<LayoutSwitcher /> should render 1`] = `
               <div
                 aria-atomic="true"
                 aria-live="off"
-                class="mx_EventTile"
+                class="_root_pq1p8_9 mx_EventTile _stateOwnEvent_pq1p8_836 _layoutBubble_pq1p8_655"
                 data-event-id="$9999999999999999999999999999999999999999999"
-                data-has-reply="false"
-                data-layout="bubble"
                 data-scroll-tokens="$9999999999999999999999999999999999999999999"
-                data-self="true"
                 tabindex="-1"
               >
                 <div
-                  class="mx_DisambiguatedProfile _disambiguatedProfile_36406_8"
-                  data-event-density="default"
-                  data-event-layout="bubble"
-                  role="button"
-                  tabindex="0"
+                  class="_slotSender_pq1p8_111 mx_DisambiguatedProfile"
+                  data-testid="event-tile-slot-sender"
                 >
-                  <span
-                    class="mx_Username_color2 _disambiguatedProfile_displayName_36406_18 mx_DisambiguatedProfile_displayName"
-                    dir="auto"
+                  <div
+                    class="mx_DisambiguatedProfile _disambiguatedProfile_36406_8"
+                    data-event-density="default"
+                    data-event-layout="bubble"
+                    role="button"
+                    tabindex="0"
                   >
-                    Alice
-                  </span>
+                    <span
+                      class="mx_Username_color2 _disambiguatedProfile_displayName_36406_18 mx_DisambiguatedProfile_displayName"
+                      dir="auto"
+                    >
+                      Alice
+                    </span>
+                  </div>
                 </div>
                 <div
-                  class="mx_EventTile_avatar"
+                  class="_slotAvatar_pq1p8_102 mx_EventTile_avatar"
+                  data-testid="event-tile-slot-avatar"
                 >
                   <span
                     class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
@@ -198,19 +209,24 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   </span>
                 </div>
                 <div
-                  class="mx_EventTile_line"
+                  class="_line_pq1p8_74 mx_EventTile_line"
                   id="2"
                 >
                   <div
-                    class="mx_MTextBody mx_EventTile_content _root_j01hv_8 _text_j01hv_24"
-                    data-event-density="default"
-                    data-event-layout="bubble"
+                    class="_slotBody_pq1p8_89 mx_EventTile_body"
+                    data-testid="event-tile-slot-body"
                   >
                     <div
-                      class="mx_EventTile_body translate"
-                      dir="auto"
+                      class="mx_MTextBody mx_EventTile_content _root_j01hv_8 _text_j01hv_24"
+                      data-event-density="default"
+                      data-event-layout="bubble"
                     >
-                      Hey you. You're the best!
+                      <div
+                        class="mx_EventTile_body translate"
+                        dir="auto"
+                      >
+                        Hey you. You're the best!
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -258,33 +274,22 @@ exports[`<LayoutSwitcher /> should render 1`] = `
               <div
                 aria-atomic="true"
                 aria-live="off"
-                class="mx_EventTile"
+                class="_root_pq1p8_9 mx_EventTile _stateOwnEvent_pq1p8_836 _layoutIrc_pq1p8_431"
                 data-event-id="$9999999999999999999999999999999999999999999"
-                data-has-reply="false"
-                data-layout="irc"
                 data-scroll-tokens="$9999999999999999999999999999999999999999999"
-                data-self="true"
                 tabindex="-1"
               >
-                <span
-                  class="mx_MessageTimestamp"
-                />
                 <div
-                  class="mx_DisambiguatedProfile _disambiguatedProfile_36406_8"
-                  data-event-density="default"
-                  data-event-layout="irc"
-                  role="button"
-                  tabindex="0"
+                  class="_slotTimestamp_pq1p8_69"
+                  data-testid="event-tile-slot-timestamp"
                 >
                   <span
-                    class="mx_Username_color2 _disambiguatedProfile_displayName_36406_18 mx_DisambiguatedProfile_displayName"
-                    dir="auto"
-                  >
-                    Alice
-                  </span>
+                    aria-hidden="true"
+                  />
                 </div>
                 <div
-                  class="mx_EventTile_avatar"
+                  class="_slotAvatar_pq1p8_102 mx_EventTile_avatar"
+                  data-testid="event-tile-slot-avatar"
                 >
                   <span
                     class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
@@ -299,19 +304,43 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   </span>
                 </div>
                 <div
-                  class="mx_EventTile_line"
+                  class="_slotSender_pq1p8_111 mx_DisambiguatedProfile"
+                  data-testid="event-tile-slot-sender"
+                >
+                  <div
+                    class="mx_DisambiguatedProfile _disambiguatedProfile_36406_8"
+                    data-event-density="default"
+                    data-event-layout="irc"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <span
+                      class="mx_Username_color2 _disambiguatedProfile_displayName_36406_18 mx_DisambiguatedProfile_displayName"
+                      dir="auto"
+                    >
+                      Alice
+                    </span>
+                  </div>
+                </div>
+                <div
+                  class="_line_pq1p8_74 mx_EventTile_line"
                   id="3"
                 >
                   <div
-                    class="mx_MTextBody mx_EventTile_content _root_j01hv_8 _text_j01hv_24"
-                    data-event-density="default"
-                    data-event-layout="irc"
+                    class="_slotBody_pq1p8_89 mx_EventTile_body"
+                    data-testid="event-tile-slot-body"
                   >
                     <div
-                      class="mx_EventTile_body translate"
-                      dir="auto"
+                      class="mx_MTextBody mx_EventTile_content _root_j01hv_8 _text_j01hv_24"
+                      data-event-density="default"
+                      data-event-layout="irc"
                     >
-                      Hey you. You're the best!
+                      <div
+                        class="mx_EventTile_body translate"
+                        dir="auto"
+                      >
+                        Hey you. You're the best!
+                      </div>
                     </div>
                   </div>
                 </div>
