@@ -31,6 +31,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { uniqueId } from "lodash";
 import {
     EventTileView,
+    NotificationBadgeView,
     useCreateAutoDisposedViewModel,
     TileErrorView,
     type EventTileRenderingMode,
@@ -61,7 +62,6 @@ import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPaylo
 import PosthogTrackers from "../../../PosthogTrackers";
 import { isMessageEvent, renderTile, type EventTileTypeProps } from "../../../events/EventTileFactory";
 import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
-import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationBadge";
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
 import PinningUtils from "../../../utils/PinningUtils";
 import { ActionBarAdapter } from "./EventTile/ActionBarAdapter";
@@ -113,6 +113,7 @@ import { resolveRoomMemberProfile, roomMemberToMemberInfo } from "../../../hooks
 import { EventTileE2eViewModel } from "../../../viewmodels/room/timeline/event-tile/EventTileE2eViewModel";
 import { shouldHighlightEventTile } from "../../../viewmodels/room/timeline/event-tile/EventTileHighlightState";
 import { shouldHideEventTile } from "../../../viewmodels/room/timeline/event-tile/EventTileVisibilityState";
+import { UnreadNotificationBadgeViewModel } from "../../../viewmodels/room/notification-badge/UnreadNotificationBadgeViewModel";
 
 /** Relation lookup type retained for EventTile consumers. */
 export type { GetRelationsForEvent } from "../../../viewmodels/room/timeline/event-tile/reactions/EventTileReactionState";
@@ -293,7 +294,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     private replyChain = createRef<ReplyChain>();
     private readonly viewModel: EventTileViewModel;
     private readonly e2eViewModel: EventTileE2eViewModel;
+    private readonly unreadNotificationBadgeViewModel?: UnreadNotificationBadgeViewModel;
     private e2eViewModelSubscription?: () => void;
+    private unreadNotificationBadgeViewModelSubscription?: () => void;
 
     public readonly ref = createRef<HTMLElement>();
 
@@ -335,6 +338,14 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             enableListeners: !this.props.forExport,
         });
 
+        if (this.isPreview) {
+            this.unreadNotificationBadgeViewModel = new UnreadNotificationBadgeViewModel({
+                room: this.getPreviewRoom(),
+                threadId: this.props.mxEvent.getId() ?? undefined,
+                forceDot: true,
+            });
+        }
+
         // don't do RR animations until we are mounted
         this.suppressReadReceiptAnimation = true;
 
@@ -366,6 +377,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             this.forceUpdate();
         });
         this.e2eViewModel.start();
+        this.unreadNotificationBadgeViewModelSubscription = this.unreadNotificationBadgeViewModel?.subscribe(() => {
+            this.forceUpdate();
+        });
 
         const client = MatrixClientPeg.safeGet();
         if (!this.props.forExport) {
@@ -420,6 +434,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.e2eViewModelSubscription?.();
         this.e2eViewModelSubscription = undefined;
         this.e2eViewModel.dispose();
+        this.unreadNotificationBadgeViewModelSubscription?.();
+        this.unreadNotificationBadgeViewModelSubscription = undefined;
+        this.unreadNotificationBadgeViewModel?.dispose();
         this.viewModel.dispose();
         if (this.props.resizeObserver && this.ref.current) this.props.resizeObserver.unobserve(this.ref.current);
     }
@@ -444,6 +461,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             eventSendStatus: this.props.eventSendStatus,
             enableListeners: !this.props.forExport,
         });
+        this.unreadNotificationBadgeViewModel?.setRoom(this.getPreviewRoom());
+        this.unreadNotificationBadgeViewModel?.setThreadId(this.props.mxEvent.getId() ?? undefined);
         if (this.props.resizeObserver && this.ref.current) this.props.resizeObserver.observe(this.ref.current);
 
         // Moving between edited messages can remount the editor without a reliable blur event.
@@ -1144,12 +1163,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 : undefined;
 
         // Notification and room slots.
-        const notificationBadge = this.isPreview ? (
-            <UnreadNotificationBadge
-                room={this.getPreviewRoom()}
-                threadId={eventTileSnapshot.event.eventId}
-                forceDot={true}
-            />
+        const notificationBadge = this.unreadNotificationBadgeViewModel?.getSnapshot().shouldRender ? (
+            <NotificationBadgeView vm={this.unreadNotificationBadgeViewModel} />
         ) : undefined;
         const roomAvatar = isRenderingNotification && room ? <RoomAvatar room={room} size="28px" /> : undefined;
         const notificationRoomLabel =
