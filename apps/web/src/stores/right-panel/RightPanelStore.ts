@@ -81,13 +81,6 @@ export default class RightPanelStore extends ReadyWatchingStore {
     }
 
     /**
-     * Get currently active global card
-     */
-    private get globalHistory(): Array<IRightPanelCard> {
-        return this.global?.history ?? [];
-    }
-
-    /**
      * Resets the store. Intended for test usage only.
      */
     public reset(): void {
@@ -150,8 +143,24 @@ export default class RightPanelStore extends ReadyWatchingStore {
         return this.byRoom[roomId]?.isOpen ?? false;
     }
 
+    public get currentCardPhaseHistory(): Array<IRightPanelCard> {
+        switch (this.focusedCardType) {
+            case "room":
+                return this.roomPhaseHistory;
+            case "global":
+                return this.globalPhaseHistory;
+        }
+    }
+
     public get roomPhaseHistory(): Array<IRightPanelCard> {
         return this.byRoom[this.viewedRoomId ?? ""]?.history ?? [];
+    }
+
+    /**
+     * History of globalCard
+     */
+    private get globalPhaseHistory(): Array<IRightPanelCard> {
+        return this.global?.history ?? [];
     }
 
     /**
@@ -191,20 +200,10 @@ export default class RightPanelStore extends ReadyWatchingStore {
     }
 
     public get previousCard(): IRightPanelCard {
-        const roomHist = this.roomPhaseHistory;
-        const globalHist = this.globalHistory;
-
-        const roomCard: IRightPanelCard | undefined = roomHist[roomHist.length - 2];
-        const globalCard: IRightPanelCard | undefined = globalHist[globalHist.length - 2];
-
-        const empty = { state: {}, phase: null };
-
-        switch (this.focusedCardType) {
-            case "room":
-                return roomCard ?? globalCard ?? empty;
-            case "global":
-                return globalCard ?? roomCard ?? empty;
-        }
+        // Deliberately does not fall back to the other card type's history: the previous card
+        // has to come from the same stack as the current one, or "back" would navigate sideways.
+        const hist = this.currentCardPhaseHistory;
+        return hist[hist.length - 2] ?? { state: {}, phase: null };
     }
 
     public closeCurrentCard(roomId: string | null): void {

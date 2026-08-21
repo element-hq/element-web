@@ -19,6 +19,8 @@ import { DownloadIcon, ExpandIcon } from "@vector-im/compound-design-tokens/asse
 import { type MediaEventContent } from "matrix-js-sdk/src/types";
 import { FileDownloader } from "../../utils/FileDownloader";
 import { fileSize } from "../../utils/FileUtils";
+import RightPanelStore from "../../stores/right-panel/RightPanelStore";
+import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
 
 export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
     public constructor(mxEvent: MatrixEvent, mediaEventHelper: MediaEventHelper) {
@@ -33,7 +35,7 @@ export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
                 additionalButtons.push({
                     label: "Open in file viewer", // TODO: translation
                     icon: <ExpandIcon />,
-                    onClick: () => {},
+                    onClick: () => RightPanelStore.instance.setGlobalCard({ phase: RightPanelPhases.FileViewer }),
                 });
         }
 
