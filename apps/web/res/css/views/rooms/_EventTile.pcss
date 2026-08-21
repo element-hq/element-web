@@ -94,13 +94,11 @@ $left-gutter: 64px;
 
     .mx_ReplyChain--expanded {
         .mx_EventTile_body {
-            /* !important needed to override .mx_ReplyTile .mx_EventTile_content .mx_EventTile_body */
             display: block !important;
             overflow-y: scroll;
         }
 
         .mx_EventTile_collapsedCodeBlock {
-            /* !important needed due to .mx_ReplyTile .mx_EventTile_content .mx_EventTile_pre_container > pre */
             display: block !important;
         }
     }
@@ -292,12 +290,6 @@ $left-gutter: 64px;
                 padding: var(--EventTile_irc_line-padding-block) 0;
                 display: inline-block;
             }
-
-            .mx_ReplyTile {
-                .mx_MTextBody {
-                    display: -webkit-box; /* Enable -webkit-line-clamp */
-                }
-            }
         }
 
         .mx_EventTile_line,
@@ -337,10 +329,6 @@ $left-gutter: 64px;
             &.mx_cryptoEvent {
                 left: unset;
             }
-        }
-
-        .mx_ReplyTile .mx_EventTileBubble {
-            left: unset; /* Cancel the value specified above for the tile inside ReplyTile */
         }
 
         &.mx_EventTile_isEditing > .mx_EventTile_line {

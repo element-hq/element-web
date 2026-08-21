@@ -7,9 +7,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX } from "react";
+import React, { useEffect, type JSX } from "react";
 import classNames from "classnames";
 import { type MatrixEvent, type Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { ReplyTileView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
@@ -18,7 +19,6 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { getUserNameColorClass } from "../../../utils/FormattingUtils";
 import { Action } from "../../../dispatcher/actions";
 import Spinner from "./Spinner";
-import ReplyTile from "../rooms/ReplyTile";
 import { Pill } from "./Pill";
 import { PillType } from "./PillType";
 import AccessibleButton from "./AccessibleButton";
@@ -26,6 +26,8 @@ import { getParentEventId, shouldDisplayReply } from "../../../utils/Reply";
 import RoomContext from "../../../contexts/RoomContext";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { type GetRelationsForEvent } from "../rooms/EventTile";
+import { ReplyTileViewModel } from "../../../viewmodels/room/timeline/event-tile/ReplyTileViewModel";
+import { useUserStatus } from "../../../hooks/useUserStatus";
 
 /**
  * This number is based on the previous behavior - if we have message of height
@@ -54,6 +56,47 @@ interface IState {
     loading: boolean;
     // Whether as error was encountered fetching a replied to event.
     err: boolean;
+}
+
+interface ReplyTileProps {
+    mxEvent: MatrixEvent;
+    permalinkCreator?: RoomPermalinkCreator;
+    toggleExpandedQuote?: () => void;
+    getRelationsForEvent?: GetRelationsForEvent;
+}
+
+function ReplyTile({
+    mxEvent,
+    permalinkCreator,
+    toggleExpandedQuote,
+    getRelationsForEvent,
+}: ReplyTileProps): JSX.Element {
+    const cli = MatrixClientPeg.safeGet();
+    const userStatus = useUserStatus(mxEvent.getSender() ?? mxEvent.sender?.userId);
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new ReplyTileViewModel({
+                mxEvent,
+                permalinkCreator,
+                toggleExpandedQuote,
+                getRelationsForEvent,
+                cli,
+                userStatus,
+            }),
+    );
+
+    useEffect(() => {
+        vm.setProps({
+            mxEvent,
+            permalinkCreator,
+            toggleExpandedQuote,
+            getRelationsForEvent,
+            cli,
+            userStatus,
+        });
+    }, [cli, getRelationsForEvent, mxEvent, permalinkCreator, toggleExpandedQuote, userStatus, vm]);
+
+    return <ReplyTileView vm={vm} />;
 }
 
 // This component does no cycle detection, simply because the only way to make such a cycle would be to

@@ -11,27 +11,29 @@ exports[`ReplyChain should call setQuoteExpanded if chain is longer than 2 lines
         class="mx_ReplyChain mx_ReplyChain_color2"
       >
         <div
-          class="mx_ReplyTile"
+          class="_root_hpj7k_8"
+          data-testid="reply-tile"
         >
           <a
+            class="_link_hpj7k_14"
             href="#"
           >
             <div
-              class="mx_ReplyTile_sender"
+              class="_sender_hpj7k_43"
+              data-testid="reply-tile-sender"
             >
               <span
-                class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
+                aria-label="@userId:matrix.org"
+                class="_avatar_va14e_8 _avatar_hpj7k_52 _avatar-imageless_va14e_55"
                 data-color="2"
-                data-testid="avatar-img"
                 data-type="round"
-                role="presentation"
+                role="img"
                 style="--cpd-avatar-size: 16px;"
-                title="@userId:matrix.org"
               >
                 u
               </span>
               <div
-                class="mx_DisambiguatedProfile _disambiguatedProfile_1a1j2_8"
+                class="_senderProfile_hpj7k_56 _disambiguatedProfile_1a1j2_8"
                 data-event-density="default"
                 data-event-layout="group"
                 role="button"
@@ -46,17 +48,22 @@ exports[`ReplyChain should call setQuoteExpanded if chain is longer than 2 lines
               </div>
             </div>
             <div
-              class="mx_MTextBody mx_EventTile_content _root_j01hv_8 _text_j01hv_24"
-              data-event-density="default"
-              data-event-layout="group"
+              class="_body_hpj7k_63"
+              data-testid="reply-tile-body"
             >
               <div
-                class="mx_EventTile_body translate"
-                dir="auto"
+                class="mx_MTextBody mx_EventTile_content _root_j01hv_8 _text_j01hv_24"
+                data-event-density="default"
+                data-event-layout="group"
               >
-                A
+                <div
+                  class="mx_EventTile_body translate"
+                  dir="auto"
+                >
+                  A
 B
 C
+                </div>
               </div>
             </div>
           </a>
