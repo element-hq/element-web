@@ -49,18 +49,21 @@ export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
         const downloader = new FileDownloader();
         const content = mxEvent.getContent<MediaEventContent>();
         const size = content.info?.size;
+
+        const additionalButtons: MediaPreviewEntryButton[] = [];
+
+        switch (content.info?.mimetype) {
+            case "application/pdf":
+                additionalButtons.push({
+                    label: "Open in file viewer", // TODO: translation
+                    icon: <ExpandIcon />,
+                    onClick: () => {},
+                });
+        }
+
         // includes the download buttonn if mediaEventHelper is not undefined
         const buttons: MediaPreviewEntryButton[] | undefined = mediaEventHelper && [
-            // Behind the same lab as the legacy file body's viewer, and only for PDFs.
-            ...(pdfViewerEnabled && isPdfEvent(mxEvent)
-                ? [
-                      {
-                          label: _t("pdf_viewer|open"),
-                          icon: <ExpandIcon />,
-                          onClick: () => openPdfViewer(mxEvent),
-                      },
-                  ]
-                : []),
+            ...additionalButtons,
             {
                 label: _t("action|download"),
                 icon: <DownloadIcon />,
@@ -71,6 +74,16 @@ export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
                     });
                 },
             },
+            // Behind the same lab as the legacy file body's viewer, and only for PDFs.
+            ...(pdfViewerEnabled && isPdfEvent(mxEvent)
+                ? [
+                      {
+                          label: _t("pdf_viewer|open"),
+                          icon: <ExpandIcon />,
+                          onClick: () => openPdfViewer(mxEvent),
+                      },
+                  ]
+                : []),
         ];
 
         return {
