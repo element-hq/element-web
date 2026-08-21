@@ -70,6 +70,7 @@ export function createPartCreator(completions: PillPart[] = []) {
     const room = new MockRoom() as unknown as Room;
     const client = {
         getRooms: vi.fn().mockReturnValue([]),
+        getVisibleRooms: vi.fn().mockReturnValue([]),
         getRoom: vi.fn().mockReturnValue(null),
     } as unknown as MatrixClient;
     return new PartCreator(room, client, autoCompleteCreator);
