@@ -1669,7 +1669,6 @@
         "mentions_and_keywords": "@멘션(언급) & 키워드",
         "mentions_and_keywords_description": "<a>설정</a>에서 지정한 멘션과 키워드인 경우에만 알림을 받습니다",
         "mentions_keywords": "멘션 및 키워드",
-        "message_didnt_send": "메시지가 전송되지 않았습니다. 자세한 내용은 클릭하세요.",
         "mute_description": "어떤 알람도 받지 않습니다"
     },
     "notifier": {

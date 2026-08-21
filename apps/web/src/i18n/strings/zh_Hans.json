@@ -285,6 +285,8 @@
         },
         "registration_disabled": "此主服务器已禁用注册。",
         "registration_msisdn_field_required_invalid": "输入电话号码（在此主服务器为必需）",
+        "registration_rate_limited": "短时间内尝试次数过多。请稍后再试。",
+        "registration_rate_limited_with_time": "短时间内尝试次数过多。请于 %(timeout)s 秒后重试。",
         "registration_successful": "注册成功",
         "registration_username_in_use": "该用户名已被使用。请尝试其它用户名，如果是你本人，请在下方登录。",
         "registration_username_unable_check": "无法检查用户名是否被占用。稍后再试。",
@@ -1357,6 +1359,7 @@
         "error_permissions_room": "你无权邀请人员进入此房间。",
         "error_permissions_space": "你无权邀请人员访问此空间。",
         "error_profile_undisclosed": "用户既有可能存在，也有可能不存在",
+        "error_rate_limited": "邀请发送过多，请稍后再试。",
         "error_transfer_multiple_target": "通话只能转接到单个用户。",
         "error_unfederated_room": "此房间为非联合房间。你不能从外部服务器邀请人员。",
         "error_unfederated_space": "此空间未联合。你无法邀请人员到外部服务器。",
@@ -1706,7 +1709,6 @@
         "mentions_and_keywords": "仅限提及（@）与回复",
         "mentions_and_keywords_description": "仅为在<a>设置</a>中针对提及与关键词的配置获取通知",
         "mentions_keywords": "提及与关键词",
-        "message_didnt_send": "消息未发送。点击以获取信息。",
         "mute_description": "你不会收到任何通知"
     },
     "notifier": {

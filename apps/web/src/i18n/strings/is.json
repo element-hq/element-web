@@ -1156,7 +1156,6 @@
         "mark_all_read": "Merkja allt sem lesið",
         "mentions_and_keywords": "@minnst á og stikkorð",
         "mentions_keywords": "Tilvísanir og stikkorð",
-        "message_didnt_send": "Mistókst að senda skilaboð. Smelltu til að fá nánari upplýsingar.",
         "mute_description": "Þú munt ekki fá neinar tilkynningar"
     },
     "notifier": {

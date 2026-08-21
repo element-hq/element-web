@@ -12,7 +12,7 @@ import { CheckCircleIcon, CircleIcon } from "@vector-im/compound-design-tokens/a
 
 import { _t } from "../../../../languageHandler";
 import { StaticNotificationState } from "../../../../stores/notifications/StaticNotificationState";
-import NotificationBadge from "../NotificationBadge";
+import { NotificationBadge } from "../NotificationBadge/NotificationBadge";
 import { ReadReceiptGroup } from "../ReadReceiptGroup";
 import { type IReadReceiptPosition } from "../ReadReceiptMarker";
 import { type EventTileReceiptState } from "../../../../viewmodels/room/timeline/event-tile/EventTileReceiptState";

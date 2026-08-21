@@ -1395,7 +1395,6 @@
         "mentions_and_keywords": "@menciones y palabras clave",
         "mentions_and_keywords_description": "Recibir notificaciones solo cuando me mencionen o escriban una palabra vigilada configurada en los <a>ajustes</a>",
         "mentions_keywords": "Menciones y palabras clave",
-        "message_didnt_send": "Mensaje no enviado. Haz clic para más info.",
         "mute_description": "No recibirás ninguna notificación"
     },
     "notifier": {

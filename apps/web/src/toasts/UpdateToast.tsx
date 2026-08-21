@@ -37,7 +37,7 @@ export const showToast = (version: string, newVersion: string, releaseNotes?: st
                 description: <pre>{releaseNotes}</pre>,
                 button: _t("action|update"),
             });
-            finished.then(([update]) => {
+            void finished.then(([update]) => {
                 if (update && PlatformPeg.get()) {
                     PlatformPeg.get()!.installUpdate();
                 }
@@ -49,7 +49,7 @@ export const showToast = (version: string, newVersion: string, releaseNotes?: st
                 version,
                 newVersion,
             });
-            finished.then(([update]) => {
+            void finished.then(([update]) => {
                 if (update && PlatformPeg.get()) {
                     PlatformPeg.get()!.installUpdate();
                 }

@@ -20,6 +20,7 @@ import {
 } from "../../../../test-utils";
 import EventListSummary from "../../../../../src/components/views/elements/EventListSummary";
 import { Layout } from "../../../../../src/settings/enums/Layout";
+import SettingsStore from "../../../../../src/settings/SettingsStore";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import * as languageSettings from "../../../../../src/i18n/settings";
 
@@ -476,6 +477,8 @@ describe("EventListSummary", function () {
         const events = generateEvents([
             // invited
             { userId: "@user_1:some.domain", membership: KnownMembership.Invite },
+            // knocked
+            { userId: "@user_1:some.domain", membership: KnownMembership.Knock },
             // banned
             { userId: "@user_1:some.domain", membership: KnownMembership.Ban },
             // joined
@@ -535,10 +538,114 @@ describe("EventListSummary", function () {
         const { container } = renderComponent(props);
         const summary = container.querySelector(".mx_GenericEventListSummary_summary");
         expect(summary).toHaveTextContent(
-            "user_1 was invited, was banned, joined, rejected their invitation, left, " +
+            "user_1 was invited, requested to join, was banned, joined, rejected their invitation, left, " +
                 "had their invitation withdrawn, was unbanned, was removed, left and was removed",
         );
         expect(summary).toMatchSnapshot();
+    });
+
+    describe("knocks (ask to join enabled)", () => {
+        let getValueSpy: jest.SpyInstance;
+
+        beforeEach(() => {
+            getValueSpy = jest
+                .spyOn(SettingsStore, "getValue")
+                .mockImplementation((name): any => name === "feature_ask_to_join");
+        });
+
+        afterEach(() => {
+            getValueSpy.mockRestore();
+        });
+
+        it("summarises a knock that is accepted and joined", function () {
+            const events = generateEvents([
+                { userId: "@user_1:some.domain", membership: KnownMembership.Knock },
+                {
+                    userId: "@user_1:some.domain",
+                    prevMembership: KnownMembership.Knock,
+                    membership: KnownMembership.Invite,
+                    senderId: "@some_other_user:some.domain",
+                },
+                {
+                    userId: "@user_1:some.domain",
+                    prevMembership: KnownMembership.Invite,
+                    membership: KnownMembership.Join,
+                },
+            ]);
+            const props = {
+                events: events,
+                children: generateTiles(events),
+                summaryLength: 1,
+                avatarsMaxLength: 5,
+                threshold: 3,
+            };
+
+            const { container } = renderComponent(props);
+            const summary = container.querySelector(".mx_GenericEventListSummary_summary");
+            expect(summary).toHaveTextContent("user_1 requested to join, was granted access and joined");
+            expect(summary).toMatchSnapshot();
+        });
+
+        it("summarises a knock that is retracted and one that is denied", function () {
+            const events = generateEvents([
+                { userId: "@user_1:some.domain", membership: KnownMembership.Knock },
+                {
+                    userId: "@user_1:some.domain",
+                    prevMembership: KnownMembership.Knock,
+                    membership: KnownMembership.Leave,
+                    senderId: "@user_1:some.domain",
+                },
+                { userId: "@user_1:some.domain", membership: KnownMembership.Knock },
+                {
+                    userId: "@user_1:some.domain",
+                    prevMembership: KnownMembership.Knock,
+                    membership: KnownMembership.Leave,
+                    senderId: "@some_other_user:some.domain",
+                },
+            ]);
+            const props = {
+                events: events,
+                children: generateTiles(events),
+                summaryLength: 1,
+                avatarsMaxLength: 5,
+                threshold: 3,
+            };
+
+            const { container } = renderComponent(props);
+            const summary = container.querySelector(".mx_GenericEventListSummary_summary");
+            expect(summary).toHaveTextContent(
+                "user_1 requested to join, cancelled their request to join, requested to join and had their request to join rejected",
+            );
+            expect(summary).toMatchSnapshot();
+        });
+
+        it("falls back to invited when the ask to join labs flag is disabled", function () {
+            getValueSpy.mockReturnValue(false);
+            const events = generateEvents([
+                {
+                    userId: "@user_1:some.domain",
+                    prevMembership: KnownMembership.Knock,
+                    membership: KnownMembership.Invite,
+                    senderId: "@some_other_user:some.domain",
+                },
+                {
+                    userId: "@user_1:some.domain",
+                    prevMembership: KnownMembership.Invite,
+                    membership: KnownMembership.Join,
+                },
+            ]);
+            const props = {
+                events: events,
+                children: generateTiles(events),
+                summaryLength: 1,
+                avatarsMaxLength: 5,
+                threshold: 2,
+            };
+
+            const { container } = renderComponent(props);
+            const summary = container.querySelector(".mx_GenericEventListSummary_summary");
+            expect(summary).toHaveTextContent("user_1 was invited and joined");
+        });
     });
 
     it("handles invitation plurals correctly when there are multiple users", function () {
