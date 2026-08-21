@@ -379,7 +379,7 @@ test.describe("Threads", () => {
 
             await expect(page.locator(".mx_ThreadView_timelinePanelWrapper")).toHaveCount(1);
             await app.composerUploadFiles("thread", getSampleFilePath("riot.png"));
-            await expect(page.locator(".mx_ThreadView .mx_EventTile_image")).toHaveCount(1);
+            await expect(page.locator(".mx_ThreadView .mx_ImageBody")).toHaveCount(1);
         });
         test("can send files via drag&drop", async ({ page, app, user }) => {
             // Increase right-panel size, so that files fit
@@ -401,7 +401,7 @@ test.describe("Threads", () => {
 
             await expect(page.locator(".mx_ThreadView_timelinePanelWrapper")).toHaveCount(1);
             await app.composerDragAndUploadFiles("thread", getSampleFilePath("riot.png"), "image/png");
-            await expect(page.locator(".mx_ThreadView .mx_EventTile_image")).toHaveCount(1);
+            await expect(page.locator(".mx_ThreadView .mx_ImageBody")).toHaveCount(1);
         });
         test("can send files via paste", async ({ page, app, user }) => {
             // Increase right-panel size, so that files fit
@@ -423,7 +423,7 @@ test.describe("Threads", () => {
 
             await expect(page.locator(".mx_ThreadView_timelinePanelWrapper")).toHaveCount(1);
             await app.composerDragAndPasteFile("thread", getSampleFilePath("riot.png"), "image/png");
-            await expect(page.locator(".mx_ThreadView .mx_EventTile_image")).toHaveCount(1);
+            await expect(page.locator(".mx_ThreadView .mx_ImageBody")).toHaveCount(1);
         });
     });
 
