@@ -141,25 +141,18 @@ async function start(): Promise<void> {
 
         const parsedUrl = parseAppUrl(window.location);
 
-        // we're verifying a 3pid, or the user is following a deep link
-        // (https://github.com/element-hq/element-web/issues/7378)
-        const isDeepLink = !!parsedUrl.params.threepid || parsedUrl.location.length > 0;
-
         // set the platform for react sdk
         preparePlatform();
         // load config requires the platform to be ready
         const loadConfigPromise = loadConfig();
         await settled(loadConfigPromise); // wait for it to settle
 
-        // Only now that the config is loaded can we tell whether the deployment wants mobile
-        // browsers redirected to the native apps at all.
-        // (https://github.com/element-hq/element-web/issues/21616)
-        const { default: SdkConfig } = await import("../SdkConfig");
+        const { default: SdkConfig } = await import(/* webpackChunkName: "init" */ "../SdkConfig");
         if (
             shouldRedirectToMobileGuide({
                 userAgent: navigator.userAgent,
                 hasMSStream: !!window.MSStream,
-                isDeepLink,
+                parsedUrl,
                 hasSkippedRedirect: sessionStorage.getItem("skip_mobile_redirect") === "true",
                 mobileGuideToast: SdkConfig.get("mobile_guide_toast"),
             })

@@ -5,6 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { type parseAppUrl } from "../url_utils";
+
 export interface MobileGuideRedirectOptions {
     /**
      * The browser's user agent string.
@@ -16,10 +18,11 @@ export interface MobileGuideRedirectOptions {
      */
     hasMSStream: boolean;
     /**
-     * Whether the URL says the user is in the middle of something the mobile guide would interrupt,
-     * such as verifying a 3pid or following a deep link.
+     * The app's URL, as returned by {@link parseAppUrl}. A 3pid verification or a deep link means
+     * the user is part way through something the mobile guide would interrupt.
+     * See https://github.com/element-hq/element-web/issues/7378.
      */
-    isDeepLink: boolean;
+    parsedUrl: ReturnType<typeof parseAppUrl>;
     /**
      * Whether the user has already chosen to carry on in the browser during this session.
      */
@@ -39,16 +42,13 @@ export interface MobileGuideRedirectOptions {
 export function shouldRedirectToMobileGuide({
     userAgent,
     hasMSStream,
-    isDeepLink,
+    parsedUrl,
     hasSkippedRedirect,
     mobileGuideToast,
 }: MobileGuideRedirectOptions): boolean {
-    // The deployment has turned the mobile guide off.
     if (mobileGuideToast === false) return false;
 
-    // Don't interrupt a 3pid verification or a deep link.
-    // (https://github.com/element-hq/element-web/issues/7378)
-    if (isDeepLink) return false;
+    if (parsedUrl.params.threepid || parsedUrl.location.length > 0) return false;
 
     if (hasSkippedRedirect) return false;
 
