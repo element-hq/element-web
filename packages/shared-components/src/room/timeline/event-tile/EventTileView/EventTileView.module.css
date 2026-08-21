@@ -231,11 +231,15 @@
 
     .slotSender {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         max-width: calc(100% - var(--event-tile-group-gutter));
         margin-inline-start: var(--event-tile-group-gutter);
-        min-height: 26px;
+        min-height: 20px;
         line-height: 20px;
+    }
+
+    &:has(> .slotSender) .line {
+        margin-block-start: 6px;
     }
 
     .slotAvatar {

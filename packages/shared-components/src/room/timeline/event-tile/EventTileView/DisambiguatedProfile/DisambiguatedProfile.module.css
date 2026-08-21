@@ -38,6 +38,10 @@
     font-size: var(--cpd-font-size-body-sm);
 }
 
+.disambiguatedProfile[data-event-layout="group"] {
+    line-height: 20px;
+}
+
 .disambiguatedProfile[data-event-layout="bubble"] {
     width: fit-content;
     max-width: var(--event-tile-bubble-line-max-width, 70%);
