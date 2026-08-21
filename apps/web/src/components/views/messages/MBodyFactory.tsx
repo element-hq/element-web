@@ -12,6 +12,7 @@ import {
     DecryptionFailureBodyView,
     FileBodyView,
     ImageBodyView,
+    MediaPreviewEntryButton,
     MediaPreviewGroupPreview,
     RedactedBodyView,
     VideoBodyView,
@@ -36,6 +37,7 @@ import { MediaPreviewGroupViewModel } from "../../../viewmodels/message-body/Med
 import { fileSize } from "../../../utils/FileUtils";
 import DownloadIcon from "@vector-im/compound-design-tokens/assets/web/icons/download";
 import { FileDownloader } from "../../../utils/FileDownloader";
+import { ExpandIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 type MBodyComponent = React.ComponentType<IBodyProps>;
 
@@ -93,8 +95,19 @@ function PreviewFileBody({ mxEvent, mediaEventHelper }: FileBodyProps): JSX.Elem
     const downloader = new FileDownloader();
 
     const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new MediaPreviewGroupViewModel({
+        () => {
+            let additionalButtons: MediaPreviewEntryButton[] = [];
+
+            switch (content.info?.mimetype) {
+                case "application/pdf":
+                    additionalButtons.push({
+                        label: "Open in file viewer", // TODO: translation
+                        icon: <ExpandIcon />,
+                        onClick: () => { }
+                    })
+            }
+
+            return new MediaPreviewGroupViewModel({
                 entries: [
                     {
                         id: mxEvent.getId()!,
@@ -105,21 +118,23 @@ function PreviewFileBody({ mxEvent, mediaEventHelper }: FileBodyProps): JSX.Elem
                             mediaEventHelper === undefined
                                 ? undefined
                                 : [
-                                      {
-                                          label: _t("action|download"),
-                                          icon: <DownloadIcon />,
-                                          onClick: async () => {
-                                              await downloader.download({
-                                                  blob: await mediaEventHelper.sourceBlob.value, // decrypts transparently if E2EE
-                                                  name: mediaEventHelper.fileName || _t("common|attachment"),
-                                              });
-                                          },
-                                      },
-                                  ],
+                                    ...additionalButtons,
+                                    {
+                                        label: _t("action|download"),
+                                        icon: <DownloadIcon />,
+                                        onClick: async () => {
+                                            await downloader.download({
+                                                blob: await mediaEventHelper.sourceBlob.value, // decrypts transparently if E2EE
+                                                name: mediaEventHelper.fileName || _t("common|attachment"),
+                                            });
+                                        },
+                                    },
+                                ],
                         ...attachmentIcon(content.info?.mimetype),
                     },
                 ],
-            }),
+            })
+        }
     );
 
     return (
