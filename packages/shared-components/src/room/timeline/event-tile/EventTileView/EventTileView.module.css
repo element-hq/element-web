@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-/* Shared root and slot-boundary baseline. */
+/* Shared root constants. */
 .root {
     /* Group geometry. */
     --event-tile-group-gutter: 64px;
@@ -61,43 +61,32 @@
     max-width: 100%;
     clear: both;
     padding-top: 18px;
-
-    &.stateContinuation {
-        padding-top: 0;
-    }
-
-    &.stateEditing .slotTimestamp {
-        visibility: hidden;
-    }
 }
 
+/* Line. */
 .line {
     position: relative;
     min-width: 0;
 }
 
-.root.stateInfo {
-    padding-top: 0;
-    font-size: var(--cpd-font-size-body-sm);
-    color: var(--cpd-color-text-secondary);
+/* Sender. */
+.senderDetails {
+    display: flex;
+    align-items: flex-start;
 }
 
-.root.stateContextual {
-    opacity: 0.4;
+/* Shared structural containers. */
+.details {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--cpd-space-2x);
 }
 
-.root.statePreviewClamped .slotBody {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-/* Slot wrappers are the public styling boundary. The supplied content may be
-   a component, fragment, or multiple elements and does not need to forward
-   layout props. */
+/* Slots. Slot wrappers are the public styling boundary. The supplied content
+   may be a component, fragment, or multiple elements and does not need to
+   forward layout props. */
 .slotActionBar,
 .slotAvatar,
 .slotBody,
@@ -136,22 +125,9 @@
     gap: var(--cpd-space-2x);
 }
 
-/* Shared structural containers. */
-.senderDetails {
-    display: flex;
-    align-items: flex-start;
-}
-
-.details {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--cpd-space-2x);
-}
-
-/* The shell owns the action-bar boundary. The action-bar contents own their controls.
-   Presence of the slot is the render/show signal supplied by the host. */
+/* The shell owns the action-bar boundary. The action-bar contents own their
+   controls. Presence of the slot is the render/show signal supplied by the
+   host. */
 .slotActionBar {
     position: absolute;
     z-index: 10;
@@ -175,37 +151,39 @@
     cursor: initial;
 }
 
+/* Root states. */
+.root.stateContinuation {
+    padding-top: 0;
+}
+
+.root.stateEditing .slotTimestamp {
+    visibility: hidden;
+}
+
+.root.stateInfo {
+    padding-top: 0;
+    font-size: var(--cpd-font-size-body-sm);
+    color: var(--cpd-color-text-secondary);
+}
+
+.root.stateContextual {
+    opacity: 0.4;
+}
+
+.root.statePreviewClamped .slotBody {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 /* Group layout. */
 .root.layoutGroup {
-    &:hover .line,
-    &:focus-within .line {
-        background-color: var(--event-tile-state-hover-background);
-    }
+    /* Root. */
 
-    &.stateHighlighted .line {
-        background-color: var(--event-tile-state-highlight-background);
-    }
-
-    &.stateSelected .line,
-    &.stateEditing .line,
-    &.stateActionBarFocused .line {
-        background-color: var(--event-tile-state-selected-background);
-    }
-
-    &.stateSelected .line::before,
-    &.stateEditing .line::before {
-        content: "";
-        position: absolute;
-        z-index: 0;
-        inset-block: 0;
-        inset-inline-start: 0;
-        width: var(--event-tile-state-marker-width);
-        border-start-start-radius: inherit;
-        border-end-start-radius: inherit;
-        background: var(--event-tile-state-marker-color);
-        pointer-events: none;
-    }
-
+    /* Line. */
     .line {
         padding-block: var(--event-tile-group-line-spacing-block-start) var(--event-tile-group-line-spacing-block-end);
         padding-inline-start: var(--event-tile-group-gutter);
@@ -218,17 +196,7 @@
         margin-inline-end: var(--event-tile-content-inline-end);
     }
 
-    &.hasReceiptSlot .line {
-        margin-inline-end: 80px;
-    }
-
-    &.hasReceiptSlot .slotThreadInfo {
-        /* Keep the thread affordance out of the receipt interaction gutter. */
-        margin-inline-end: 80px;
-        min-height: 14px;
-        max-width: min(calc(100% - var(--event-tile-group-gutter) - 80px), 600px);
-    }
-
+    /* Sender. */
     .slotSender {
         display: flex;
         align-items: flex-start;
@@ -238,10 +206,7 @@
         line-height: 20px;
     }
 
-    &:has(> .slotSender) .line {
-        margin-block-start: 6px;
-    }
-
+    /* Slots. */
     .slotAvatar {
         position: absolute;
         z-index: 9;
@@ -294,6 +259,53 @@
         height: 1px;
         text-align: end;
         overflow: visible;
+    }
+
+    /* Interaction states. */
+    &:hover .line,
+    &:focus-within .line {
+        background-color: var(--event-tile-state-hover-background);
+    }
+
+    &.stateHighlighted .line {
+        background-color: var(--event-tile-state-highlight-background);
+    }
+
+    &.stateSelected .line,
+    &.stateEditing .line,
+    &.stateActionBarFocused .line {
+        background-color: var(--event-tile-state-selected-background);
+    }
+
+    &.stateSelected .line::before,
+    &.stateEditing .line::before {
+        content: "";
+        position: absolute;
+        z-index: 0;
+        inset-block: 0;
+        inset-inline-start: 0;
+        width: var(--event-tile-state-marker-width);
+        border-start-start-radius: inherit;
+        border-end-start-radius: inherit;
+        background: var(--event-tile-state-marker-color);
+        pointer-events: none;
+    }
+
+    &.hasReceiptSlot .line {
+        margin-inline-end: 80px;
+    }
+
+    &.hasReceiptSlot .slotThreadInfo {
+        /* Keep the thread affordance out of the receipt interaction gutter. */
+        margin-inline-end: 80px;
+        min-height: 14px;
+        max-width: min(calc(100% - var(--event-tile-group-gutter) - 80px), 600px);
+    }
+
+    /* This direct-child check distinguishes the default group branch from
+       nested sender-details layouts. */
+    &:has(> .slotSender) .line {
+        margin-block-start: 6px;
     }
 
     /* Informational events use a smaller metadata row while retaining the
@@ -433,41 +445,50 @@
 
 /* IRC layout. */
 .root.layoutIrc {
+    /* Constants. */
+    /* Match the sender's 1px anti-zalgo padding on both sides. */
+    --event-tile-irc-slot-height: calc(var(--event-tile-irc-line-height) + 2px);
+
+    /* Root. */
     display: flex;
     align-items: flex-start;
     padding-top: 0;
     line-height: var(--event-tile-irc-line-height);
 
-    /* Match the sender's 1px anti-zalgo padding on both sides. */
-    --event-tile-irc-slot-height: calc(var(--event-tile-irc-line-height) + 2px);
-
-    &:hover .line,
-    &:focus-within .line {
-        background-color: var(--event-tile-state-hover-background);
+    /* Line. */
+    .line {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        flex-shrink: 1;
+        padding-block: 0;
+        position: relative;
+        border-radius: 8px;
     }
 
-    &.stateHighlighted .line {
-        background-color: var(--event-tile-state-highlight-background);
+    .line:not(.lineMedia) .slotBody > * {
+        margin-inline-end: var(--event-tile-content-inline-end);
     }
 
-    &.stateSelected .line,
-    &.stateEditing .line,
-    &.stateActionBarFocused .line {
-        background-color: var(--event-tile-state-selected-background);
+    .line:not(.lineMedia) .slotBody > * {
+        display: inline-block;
+        padding-block: 1px;
     }
 
-    &.stateSelected .line::before,
-    &.stateEditing .line::before {
-        content: "";
-        position: absolute;
-        z-index: 0;
-        inset-block: 0;
-        inset-inline-start: 0;
-        width: var(--event-tile-state-marker-width);
-        background: var(--event-tile-state-marker-color);
-        pointer-events: none;
+    /* Sender. */
+    .slotSender {
+        flex-shrink: 0;
+        width: var(--event-tile-irc-name-width, 80px);
+        margin-inline-end: 0;
+        height: var(--event-tile-irc-slot-height);
+        box-sizing: border-box;
     }
 
+    .slotSender:hover {
+        z-index: 10;
+    }
+
+    /* Slots. */
     > .slotActionBar,
     > .slotAvatar,
     > .slotBody,
@@ -513,18 +534,6 @@
         line-height: 13px;
     }
 
-    .slotSender {
-        flex-shrink: 0;
-        width: var(--event-tile-irc-name-width, 80px);
-        margin-inline-end: 0;
-        height: var(--event-tile-irc-slot-height);
-        box-sizing: border-box;
-    }
-
-    .slotSender:hover {
-        z-index: 10;
-    }
-
     .slotPadlock,
     .slotFooter,
     .slotThreadInfo,
@@ -560,20 +569,6 @@
         margin-inline-start: initial;
     }
 
-    .line {
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-        flex-shrink: 1;
-        padding-block: 0;
-        position: relative;
-        border-radius: 8px;
-    }
-
-    .line:not(.lineMedia) .slotBody > * {
-        margin-inline-end: var(--event-tile-content-inline-end);
-    }
-
     .slotReplyChain {
         position: relative;
         margin: 0;
@@ -583,11 +578,6 @@
     .slotBody {
         display: contents;
         padding-block: 0;
-    }
-
-    .line:not(.lineMedia) .slotBody > * {
-        display: inline-block;
-        padding-block: 1px;
     }
 
     .slotReceipt {
@@ -602,6 +592,34 @@
 
     .slotFooter {
         margin-block: var(--cpd-space-1-5x);
+    }
+
+    /* States. */
+    &:hover .line,
+    &:focus-within .line {
+        background-color: var(--event-tile-state-hover-background);
+    }
+
+    &.stateHighlighted .line {
+        background-color: var(--event-tile-state-highlight-background);
+    }
+
+    &.stateSelected .line,
+    &.stateEditing .line,
+    &.stateActionBarFocused .line {
+        background-color: var(--event-tile-state-selected-background);
+    }
+
+    &.stateSelected .line::before,
+    &.stateEditing .line::before {
+        content: "";
+        position: absolute;
+        z-index: 0;
+        inset-block: 0;
+        inset-inline-start: 0;
+        width: var(--event-tile-state-marker-width);
+        background: var(--event-tile-state-marker-color);
+        pointer-events: none;
     }
 
     &.stateBubbleContainer {
@@ -657,8 +675,11 @@
 
 /* Bubble layout. */
 .root.layoutBubble {
-    max-width: unset;
+    /* Constants. */
     --event-tile-content-inline-end: 0;
+
+    /* Root. */
+    max-width: unset;
     margin-inline: var(--event-tile-bubble-margin-inline-start) var(--event-tile-bubble-margin-inline-end);
     margin-block-start: calc(var(--event-tile-bubble-gutter) / 2);
     padding-top: 0;
@@ -695,20 +716,6 @@
         border-end-end-radius: var(--event-tile-bubble-corner-radius);
     }
 
-    .slotTimestamp {
-        display: contents;
-    }
-
-    .slotTimestamp > * {
-        position: absolute;
-        z-index: 3;
-        inset-block-end: 0;
-        inset-inline-end: 0;
-        max-width: 80px;
-        padding: 4px 8px;
-        width: unset;
-    }
-
     /* Media bodies provide their own appearance and dimensions. The shell
        removes message padding while retaining the normal bubble width. */
     .lineMedia {
@@ -731,21 +738,13 @@
         inset-inline-end: auto;
     }
 
-    .slotAvatar {
-        position: absolute;
-        z-index: 9;
-        inset-block-start: 6px;
-        inset-inline-start: -36px;
-        line-height: 0;
-        border: 4px solid var(--cpd-color-bg-canvas-default);
-        border-radius: 50%;
+    /* Text-bubble body spacing belongs to the line. Media lines provide
+       their own dimensions and are intentionally excluded. */
+    .line:not(.lineMedia) .slotBody > * {
+        padding: 1px;
     }
 
-    .slotAvatar > * {
-        border-radius: 50%;
-        box-shadow: 0 0 0 3px var(--cpd-color-bg-canvas-default);
-    }
-
+    /* Sender. */
     .slotSender {
         width: fit-content;
         max-width: var(--event-tile-bubble-line-max-width);
@@ -761,16 +760,39 @@
         max-width: 100%;
     }
 
-    /* Keep the bubble body content as a direct flex item, matching the
+    /* Slots. Keep the bubble body content as a direct flex item, matching the
        legacy line geometry while retaining the slot boundary in the DOM. */
     .slotBody {
         display: contents;
     }
 
-    /* Match the legacy text-bubble anti-zalgo padding. Media lines provide
-       their own dimensions and are intentionally excluded. */
-    .line:not(.lineMedia) .slotBody > * {
-        padding: 1px;
+    .slotTimestamp {
+        display: contents;
+    }
+
+    .slotTimestamp > * {
+        position: absolute;
+        z-index: 3;
+        inset-block-end: 0;
+        inset-inline-end: 0;
+        max-width: 80px;
+        padding: 4px 8px;
+        width: unset;
+    }
+
+    .slotAvatar {
+        position: absolute;
+        z-index: 9;
+        inset-block-start: 6px;
+        inset-inline-start: -36px;
+        line-height: 0;
+        border: 4px solid var(--cpd-color-bg-canvas-default);
+        border-radius: 50%;
+    }
+
+    .slotAvatar > * {
+        border-radius: 50%;
+        box-shadow: 0 0 0 3px var(--cpd-color-bg-canvas-default);
     }
 
     > .slotReceipt {
@@ -810,6 +832,7 @@
         clear: both;
     }
 
+    /* States. */
     /* Reply-chain spacing belongs to the bubble shell; nested reply content
        remains application-owned. */
     &.stateHasReply .slotReplyChain {
@@ -1115,11 +1138,13 @@
 
 /* ThreadView adds a narrower group timeline around EventTile. */
 .root.shapeThread {
+    /* Root. */
     display: flex;
     flex-direction: column;
     width: 100%;
     padding-top: 0;
 
+    /* Line. */
     &.layoutIrc {
         padding-block-start: var(--event-tile-thread-spacing-block-start);
 
@@ -1128,39 +1153,24 @@
             padding-inline-start: var(--event-tile-thread-spacing-inline-start);
             margin-inline-end: var(--event-tile-thread-spacing-inline-end);
         }
-
-        .slotFooter {
-            margin-inline-start: var(--event-tile-thread-spacing-inline-start);
-            margin-inline-end: var(--event-tile-thread-spacing-inline-end);
-        }
-    }
-
-    &.stateContinuation.layoutGroup {
-        padding-block-start: 0;
-    }
-
-    &.stateContinuation.layoutIrc {
-        padding-block-start: 0;
-    }
-
-    .slotActionBar {
-        inset-block-start: -36px;
-        inset-inline-end: 0;
     }
 
     &.layoutGroup {
         padding-block-start: var(--event-tile-thread-spacing-block-start);
 
+        .line {
+            padding-block: 2px;
+            padding-inline-start: var(--event-tile-thread-spacing-inline-start);
+            margin-inline-end: var(--event-tile-thread-spacing-inline-end);
+        }
+    }
+
+    /* Sender. */
+    &.layoutGroup {
         .senderDetails {
             align-items: center;
             gap: var(--cpd-space-4x);
             padding-inline-start: var(--cpd-space-2x);
-        }
-
-        .senderDetails .slotAvatar {
-            /* ThreadView keeps the avatar in the sender-details flex row. */
-            position: relative;
-            inset: auto;
         }
 
         .senderDetails .slotSender {
@@ -1169,11 +1179,26 @@
             min-height: 0;
             line-height: normal;
         }
+    }
 
-        .line {
-            padding-block: 2px;
-            padding-inline-start: var(--event-tile-thread-spacing-inline-start);
+    /* Slots. */
+    .slotActionBar {
+        inset-block-start: -36px;
+        inset-inline-end: 0;
+    }
+
+    &.layoutIrc {
+        .slotFooter {
+            margin-inline-start: var(--event-tile-thread-spacing-inline-start);
             margin-inline-end: var(--event-tile-thread-spacing-inline-end);
+        }
+    }
+
+    &.layoutGroup {
+        .senderDetails .slotAvatar {
+            /* ThreadView keeps the avatar in the sender-details flex row. */
+            position: relative;
+            inset: auto;
         }
 
         .slotTimestamp {
@@ -1186,6 +1211,15 @@
             margin-inline-start: var(--event-tile-thread-spacing-inline-start);
             margin-inline-end: var(--event-tile-thread-spacing-inline-end);
         }
+    }
+
+    /* States. */
+    &.stateContinuation.layoutGroup {
+        padding-block-start: 0;
+    }
+
+    &.stateContinuation.layoutIrc {
+        padding-block-start: 0;
     }
 
     &.stateInfo {
@@ -1255,32 +1289,15 @@
         pointer-events: none;
     }
 
-    &:hover {
-        background-color: var(--event-tile-preview-hover-background);
+    /* Line. */
+    .line {
+        width: 100%;
+        box-sizing: border-box;
+        padding-inline-start: var(--event-tile-preview-offset);
+        padding-bottom: 0;
     }
 
-    &::after {
-        content: "";
-        position: absolute;
-        inset: auto calc(-1 * var(--event-tile-preview-padding)) calc(-1 * var(--event-tile-preview-margin-block))
-            var(--event-tile-preview-offset);
-        height: 1px;
-        background-color: var(--event-tile-preview-separator-color);
-        pointer-events: none;
-    }
-
-    &:last-child::after {
-        content: unset;
-    }
-
-    &:first-child {
-        margin-top: 0;
-    }
-
-    &:last-child {
-        margin-bottom: 0;
-    }
-
+    /* Sender. */
     .details {
         width: calc(100% - var(--event-tile-preview-offset));
         margin-inline-start: var(--event-tile-preview-offset);
@@ -1308,13 +1325,7 @@
         inset: 8px auto auto 8px;
     }
 
-    .line {
-        width: 100%;
-        box-sizing: border-box;
-        padding-inline-start: var(--event-tile-preview-offset);
-        padding-bottom: 0;
-    }
-
+    /* Slots. */
     .slotThreadInfo {
         /* The preview is inside the padded line in this mode; it does not use
            the group-layout thread-summary gutter. */
@@ -1348,6 +1359,33 @@
         z-index: 1;
     }
 
+    /* States. */
+    &:hover {
+        background-color: var(--event-tile-preview-hover-background);
+    }
+
+    &::after {
+        content: "";
+        position: absolute;
+        inset: auto calc(-1 * var(--event-tile-preview-padding)) calc(-1 * var(--event-tile-preview-margin-block))
+            var(--event-tile-preview-offset);
+        height: 1px;
+        background-color: var(--event-tile-preview-separator-color);
+        pointer-events: none;
+    }
+
+    &:last-child::after {
+        content: unset;
+    }
+
+    &:first-child {
+        margin-top: 0;
+    }
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
     &:has(.slotNotificationBadge [data-notification-level="highlight"])::before {
         background-color: var(--event-tile-preview-highlight-background);
     }
@@ -1360,6 +1398,7 @@
 
 /* ThreadsList-only action-bar behavior. */
 .root.shapeThreadsList {
+    /* Slots. */
     .slotActionBar {
         /* The wrapper must not establish a second positioning context. The
            supplied thread action bar retains the legacy tile-relative
@@ -1369,6 +1408,7 @@
         visibility: hidden;
     }
 
+    /* States. */
     &:hover .slotActionBar,
     &:focus-within .slotActionBar,
     &.stateActionBarFocused .slotActionBar {
@@ -1378,6 +1418,9 @@
 
 /* TimelineCard layout. The card uses the room shell with a narrower gutter. */
 .root.shapeCard {
+    /* Constants. */
+    --event-tile-card-edge-gap: 8px;
+    --event-tile-card-read-receipt-spacing-end: 78px;
     --event-tile-card-spacing-inline: 36px;
     --event-tile-card-line-padding-block: 2px;
     --event-tile-card-timestamp-width: 46px;
@@ -1386,23 +1429,33 @@
     --event-tile-group-line-spacing-block-end: var(--event-tile-card-line-padding-block);
     --event-tile-group-timestamp-width: var(--event-tile-card-timestamp-width);
     --event-tile-card-thread-summary-separator-color: var(--cpd-color-icon-tertiary);
-    --event-tile-card-action-bar-inset-inline-end: calc(var(--container-gap-width, 0px) + 1px);
+    --event-tile-card-action-bar-inset-inline-end: calc(var(--event-tile-card-edge-gap) + 1px);
     --event-tile-card-receipt-inset-block-start: -6px;
     --event-tile-card-bubble-receipt-inset-inline-end: calc(
-        -1 * var(--ReadReceiptGroup_EventBubbleTile-spacing-end, 78px) + var(--container-gap-width, 0px) + 6px
+        -1 * var(--event-tile-card-read-receipt-spacing-end) + var(--event-tile-card-edge-gap) + 6px
     );
+
+    /* Root. */
     padding-top: 0;
 
     &.layoutGroup {
+        /* Line. */
         .line {
             margin-inline-end: 0;
             padding-inline-end: var(--event-tile-group-timestamp-width);
         }
 
-        &.stateBubbleContainer .line {
-            padding: 0;
+        /* Sender. */
+        .slotSender {
+            max-width: calc(100% - var(--event-tile-card-spacing-inline));
         }
 
+        .slotReplyChain .slotSender {
+            margin-inline-start: 0;
+            max-width: unset;
+        }
+
+        /* Slots. */
         .slotAvatar {
             inset-inline-start: -3px;
         }
@@ -1446,6 +1499,16 @@
             inset-block-start: -2rem;
         }
 
+        .slotFooter {
+            margin-inline-end: var(--cpd-space-2x);
+            position: relative;
+        }
+
+        /* States. */
+        &.stateBubbleContainer .line {
+            padding: 0;
+        }
+
         &.stateInfo .slotAvatar {
             inset-inline-start: 18px;
         }
@@ -1453,22 +1516,9 @@
         &.stateInfo {
             font: var(--cpd-font-body-sm-regular);
         }
-
-        .slotFooter {
-            margin-inline-end: var(--cpd-space-2x);
-            position: relative;
-        }
-
-        .slotSender {
-            max-width: calc(100% - var(--event-tile-card-spacing-inline));
-        }
-
-        .slotReplyChain .slotSender {
-            margin-inline-start: 0;
-            max-width: unset;
-        }
     }
 
+    /* Layout-specific states. */
     &.layoutIrc {
         .slotAvatar,
         .slotTimestamp {
@@ -1501,19 +1551,18 @@
    layout class, so explicitly reset the group-layout defaults owned by this
    shared shell. */
 .root.shapeFile {
+    /* Root. */
     padding-top: 0;
     overflow-wrap: anywhere;
 
-    &:hover .line,
-    &:focus-within .line {
-        background-color: transparent;
+    /* Line. */
+    .line {
+        margin-inline-end: 0;
+        padding: 0;
+        border-radius: 0;
     }
 
-    & + & {
-        border-block-start: 1px solid var(--event-tile-file-separator-color);
-        padding-block-start: var(--event-tile-file-separator-spacing);
-    }
-
+    /* Sender. */
     .senderDetailsLink {
         display: block;
         margin-bottom: var(--cpd-space-1x);
@@ -1551,14 +1600,20 @@
         text-align: initial;
     }
 
+    /* Slots. */
     .slotBody {
         --event-tile-file-download-margin-block-start: var(--cpd-space-4x);
         --event-tile-file-image-gap: 0;
     }
 
-    .line {
-        margin-inline-end: 0;
-        padding: 0;
-        border-radius: 0;
+    /* States. */
+    &:hover .line,
+    &:focus-within .line {
+        background-color: transparent;
+    }
+
+    & + & {
+        border-block-start: 1px solid var(--event-tile-file-separator-color);
+        padding-block-start: var(--event-tile-file-separator-spacing);
     }
 }
