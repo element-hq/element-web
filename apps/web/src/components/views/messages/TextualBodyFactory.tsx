@@ -9,13 +9,17 @@ import React, { type JSX, useContext, useEffect, useRef } from "react";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { MsgType } from "matrix-js-sdk/src/matrix";
 import {
+    _t,
     EventContentBodyView,
     TextualBodyView,
     type TextualBodyContentElement,
     type UrlPreview,
-    UrlPreviewGroupView,
     useCreateAutoDisposedViewModel,
+    MediaPreviewGroupPreview,
     useViewModel,
+    linkIcon,
+    type MediaPreviewGroupEntry,
+    type MediaPreviewGroupEntryContent,
 } from "@element-hq/web-shared-components";
 
 import { type IBodyProps } from "./IBodyProps";
@@ -34,6 +38,8 @@ import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
 import { UrlPreviewGroupViewModel } from "../../../viewmodels/message-body/UrlPreviewGroupViewModel";
 import PlatformPeg from "../../../PlatformPeg";
 import { useSettingValue } from "../../../hooks/useSettings";
+import { MediaPreviewGroupViewModel } from "../../../viewmodels/message-body/MediaPreviewGroupViewModel";
+import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 
 const logger = rootLogger.getChild("TextualBodyFactory");
 
@@ -127,7 +133,74 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
             }),
     );
 
-    const { previews } = useViewModel(urlPreviewVm);
+    const { previews, totalPreviewCount, previewsLimited, overPreviewLimit } = useViewModel(urlPreviewVm);
+
+    const collapse = overPreviewLimit
+        ? {
+              collapsed: previewsLimited,
+              hiddenCount: totalPreviewCount - previews.length,
+              onToggle: () => void urlPreviewVm.onTogglePreviewLimit(),
+          }
+        : undefined;
+
+    const previewToEntry = (preview: UrlPreview): MediaPreviewGroupEntry => {
+        let content: MediaPreviewGroupEntryContent;
+        if (preview.image === undefined) {
+            content = {
+                style: "text",
+            };
+        } else {
+            content = {
+                style: "image",
+                image: preview.image.imageFull,
+                imageSize: "banner",
+                imageOnClick: () => {
+                    Modal.createDialog(
+                        ImageView,
+                        {
+                            src: preview.image!.imageFull, // full-res URL
+                            name: `Thumbnail of ${preview.title}`,
+                            width: preview.image?.width,
+                            height: preview.image?.height,
+                            fileSize: preview.image?.fileSize,
+                        },
+                        "mx_Dialog_lightbox",
+                        undefined,
+                        true,
+                    );
+                },
+            };
+        }
+
+        let body: string;
+        if (preview.description === undefined || preview.description.trim().length === 0) body = preview.siteName;
+        else body = preview.description!;
+
+        return {
+            id: preview.link,
+            header: preview.title,
+            headerUrl: preview.link,
+            body,
+            buttons: [
+                {
+                    label: _t("timeline|url_preview|open_link"),
+                    icon: <PopOutIcon />,
+                    onClick: async () => {
+                        window.open(preview.link, "_blank", "noreferrer");
+                    },
+                },
+            ],
+            ...linkIcon(),
+            ...content,
+        };
+    };
+
+    const mediaPreviewVm = useCreateAutoDisposedViewModel(
+        () =>
+            new MediaPreviewGroupViewModel({
+                entries: previews.map(previewToEntry),
+            }),
+    );
 
     useEffect(() => {
         textualBodyVm.setId(props.id);
@@ -199,6 +272,12 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
     }, [mediaVisible, urlPreviewVm]);
 
     useEffect(() => {
+        mediaPreviewVm.replace({
+            entries: previews.map(previewToEntry),
+        });
+    }, [previews, mediaPreviewVm]);
+
+    useEffect(() => {
         if (previews.length === 0) {
             return;
         }
@@ -221,7 +300,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
             vm={textualBodyVm}
             body={<EventContentBodyView vm={eventContentBodyVm} as={willHaveWrapper ? "span" : "div"} />}
             bodyRef={contentRef}
-            urlPreviews={<UrlPreviewGroupView vm={urlPreviewVm} className="mx_TextualBody_urlPreviews" />}
+            urlPreviews={<MediaPreviewGroupPreview vm={mediaPreviewVm} collapse={collapse} />}
             className={getTextualBodyClassName(content.msgtype as MsgType | undefined)}
         />
     );

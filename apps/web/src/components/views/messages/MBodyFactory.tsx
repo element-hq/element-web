@@ -7,13 +7,16 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type RefObject, useContext, useEffect, useRef } from "react";
 import { MsgType } from "matrix-js-sdk/src/matrix";
-import { type ImageContent } from "matrix-js-sdk/src/types";
+import { type MediaEventContent, type ImageContent } from "matrix-js-sdk/src/types";
 import {
     DecryptionFailureBodyView,
     FileBodyView,
     ImageBodyView,
+    MediaPreviewGroupPreview,
     RedactedBodyView,
     VideoBodyView,
+    _t,
+    attachmentIcon,
     useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
 
@@ -29,15 +32,29 @@ import { RedactedBodyViewModel } from "../../../viewmodels/message-body/Redacted
 import { getRedactedBodyViewModelProps } from "../../../viewmodels/room/timeline/event-tile/EventTileRedactedBodyState";
 import { VideoBodyViewModel } from "../../../viewmodels/message-body/VideoBodyViewModel";
 import { isMimeTypeAllowed } from "../../../utils/blobs";
+import { MediaPreviewGroupViewModel } from "../../../viewmodels/message-body/MediaPreviewGroupViewModel";
+import { fileSize } from "../../../utils/FileUtils";
+import DownloadIcon from "@vector-im/compound-design-tokens/assets/web/icons/download";
+import { FileDownloader } from "../../../utils/FileDownloader";
 
 type MBodyComponent = React.ComponentType<IBodyProps>;
 
-export function FileBodyFactory({
-    mxEvent,
-    mediaEventHelper,
-    forExport,
-    showFileInfo,
-}: Pick<IBodyProps, "mxEvent" | "mediaEventHelper" | "forExport" | "showFileInfo">): JSX.Element {
+type FileBodyProps = Pick<IBodyProps, "mxEvent" | "mediaEventHelper" | "forExport" | "showFileInfo">;
+
+export function FileBodyFactory(props: FileBodyProps): JSX.Element {
+    // Only the standalone m.file body uses the preview tile. Image/video/audio bodies embed this as a
+    // fallback for media they cannot render themselves — sometimes download-only (`showFileInfo: false`)
+    // in the panels which don't render the media, e.g. the files and notification panels — and those,
+    // like exports, keep the classic file body.
+    if (props.forExport || props.showFileInfo === false || props.mxEvent.getContent().msgtype !== MsgType.File) {
+        return <LegacyFileBody {...props} />;
+    }
+
+    return <PreviewFileBody {...props} />;
+}
+
+/// the old look for files, still used for images, videos, audio, voice messages
+function LegacyFileBody({ mxEvent, mediaEventHelper, forExport, showFileInfo }: FileBodyProps): JSX.Element {
     const { timelineRenderingType } = useContext(RoomContext);
     const refIFrame = useRef<HTMLIFrameElement>(null) as RefObject<HTMLIFrameElement>;
     const refLink = useRef<HTMLAnchorElement>(null) as RefObject<HTMLAnchorElement>;
@@ -66,6 +83,50 @@ export function FileBodyFactory({
     }, [mxEvent, mediaEventHelper, forExport, showFileInfo, timelineRenderingType, vm]);
 
     return <FileBodyView vm={vm} refIFrame={refIFrame} refLink={refLink} className="mx_MFileBody" />;
+}
+
+/// the new preview file tile
+function PreviewFileBody({ mxEvent, mediaEventHelper }: FileBodyProps): JSX.Element {
+    const content = mxEvent.getContent<MediaEventContent>();
+    const size = content.info?.size;
+
+    const downloader = new FileDownloader();
+
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new MediaPreviewGroupViewModel({
+                entries: [
+                    {
+                        id: mxEvent.getId()!,
+                        style: "text",
+                        header: mediaEventHelper!.fileName,
+                        body: size === undefined ? _t("timeline|m.file|size_unknown") : fileSize(size),
+                        buttons:
+                            mediaEventHelper === undefined
+                                ? undefined
+                                : [
+                                      {
+                                          label: _t("action|download"),
+                                          icon: <DownloadIcon />,
+                                          onClick: async () => {
+                                              await downloader.download({
+                                                  blob: await mediaEventHelper.sourceBlob.value, // decrypts transparently if E2EE
+                                                  name: mediaEventHelper.fileName || _t("common|attachment"),
+                                              });
+                                          },
+                                      },
+                                  ],
+                        ...attachmentIcon(content.info?.mimetype),
+                    },
+                ],
+            }),
+    );
+
+    return (
+        <div className="mx_EventTile_content">
+            <MediaPreviewGroupPreview vm={vm} />
+        </div>
+    );
 }
 
 export function VideoBodyFactory({
