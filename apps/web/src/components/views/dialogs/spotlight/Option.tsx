@@ -20,11 +20,12 @@ interface OptionProps {
     children?: ReactNode;
 }
 
-export const Option: React.FC<OptionProps> = ({ children, endAdornment, className, ...props }) => {
+export const Option: React.FC<OptionProps> = ({ children, endAdornment, className, onClick, ...props }) => {
     const [onFocus, isActive, ref] = useRovingTabIndex<HTMLLIElement>();
     return (
         <AccessibleButton
             {...props}
+            onClick={onClick}
             className={classNames(className, "mx_SpotlightDialog_option")}
             onFocus={onFocus}
             ref={ref}
@@ -35,9 +36,11 @@ export const Option: React.FC<OptionProps> = ({ children, endAdornment, classNam
         >
             {children}
             <div className="mx_SpotlightDialog_option--endAdornment">
-                <kbd className="mx_SpotlightDialog_enterPrompt" aria-hidden>
-                    ↵
-                </kbd>
+                {onClick && (
+                    <kbd className="mx_SpotlightDialog_enterPrompt" aria-hidden>
+                        ↵
+                    </kbd>
+                )}
                 {endAdornment}
             </div>
         </AccessibleButton>

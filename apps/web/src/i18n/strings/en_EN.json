@@ -3213,6 +3213,7 @@
         "join_button_text": "Join %(roomAddress)s",
         "keyboard_scroll_hint": "Use <arrows/> to scroll",
         "messages_label": "Messages",
+        "no_results": "No results found",
         "other_rooms_in_space": "Other rooms in %(spaceName)s",
         "public_rooms_label": "Public rooms",
         "public_spaces_label": "Public spaces",
