@@ -143,7 +143,8 @@ test.describe("Other people's devices section in Encryption tab", () => {
         await aliceElementApp.inviteUserToCurrentRoom(bobCredentials.userId);
 
         // Bob accepts the invite.
-        await bobPage.getByRole("option", { name: "TestRoom2" }).click();
+        await bobPage.getByRole("button", { name: "Toggle Invites section" }).click();
+        await bobPage.getByRole("button", { name: "TestRoom2" }).click();
         await bobPage.getByRole("button", { name: "Accept" }).click();
 
         // Alice sends a message in the new room, which Bob should be able to decrypt.
@@ -192,7 +193,8 @@ test.describe("Other people's devices section in Encryption tab", () => {
         await aliceElementApp.inviteUserToCurrentRoom(bobCredentials.userId);
 
         // Bob accepts the invite.
-        await bobPage.getByRole("option", { name: "TestRoom2" }).click();
+        await bobPage.getByRole("button", { name: "Toggle Invites section" }).click();
+        await bobPage.getByRole("button", { name: "TestRoom2" }).click();
         await bobPage.getByRole("button", { name: "Accept" }).click();
 
         // Alice sends a message in the new room, which Bob should not be able to decrypt.
@@ -213,7 +215,8 @@ async function inviteBobToNewRoom(
 ) {
     await createRoom(alicePage, "TestRoom", true);
     await aliceElementApp.inviteUserToCurrentRoom(bobCredentials.userId, { confirmUnknownUser: true });
-    await bobPage.getByRole("option", { name: "TestRoom" }).click();
+    await bobPage.getByRole("button", { name: "Toggle Invites section" }).click();
+    await bobPage.getByRole("button", { name: "TestRoom" }).click();
     await bobPage.getByRole("button", { name: "Accept" }).click();
 }
 

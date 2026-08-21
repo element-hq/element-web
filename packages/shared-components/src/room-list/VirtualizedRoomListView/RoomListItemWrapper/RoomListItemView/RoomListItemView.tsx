@@ -99,6 +99,11 @@ export interface RoomListItemViewSnapshot {
     sections: Section[];
     /** Whether sections are enabled in the room list */
     areSectionsEnabled: boolean;
+    /**
+     * Whether the room can be moved to another section, by dragging it or through the menu entries
+     * that assign a section (Favourited, Low priority and "Move to").
+     */
+    canChangeSection: boolean;
 }
 
 /**

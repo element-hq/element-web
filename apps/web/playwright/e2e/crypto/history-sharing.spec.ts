@@ -58,7 +58,8 @@ test.describe("History sharing", function () {
             await aliceElementApp.inviteUserToCurrentRoom(bobCredentials.userId, { confirmUnknownUser: true });
 
             // Bob accepts the invite
-            await bobPage.getByRole("option", { name: "TestRoom" }).click();
+            await bobPage.getByRole("button", { name: "Toggle Invites section" }).click();
+            await bobPage.getByRole("button", { name: "TestRoom" }).click();
             await bobPage.getByRole("button", { name: "Accept" }).click();
 
             // Bob should now be able to decrypt the event
@@ -123,7 +124,8 @@ test.describe("History sharing", function () {
         // Alice invites Bob, and Bob accepts
         const roomId = await aliceElementApp.getCurrentRoomIdFromUrl();
         await aliceElementApp.inviteUserToCurrentRoom(bobCredentials.userId, { confirmUnknownUser: true });
-        await bobPage.getByRole("option", { name: "TestRoom" }).click();
+        await bobPage.getByRole("button", { name: "Toggle Invites section" }).click();
+        await bobPage.getByRole("button", { name: "TestRoom" }).click();
         await bobPage.getByRole("button", { name: "Accept" }).click();
 
         // The room now defaults to "invited" history visibility, so we need to set it to "shared" first
@@ -161,7 +163,8 @@ test.describe("History sharing", function () {
 
         // Alice now invites Charlie
         await aliceElementApp.inviteUserToCurrentRoom(charlieCredentials.userId, { confirmUnknownUser: true });
-        await charliePage.getByRole("option", { name: "TestRoom" }).click();
+        await charliePage.getByRole("button", { name: "Toggle Invites section" }).click();
+        await charliePage.getByRole("button", { name: "TestRoom" }).click();
         await charliePage.getByRole("button", { name: "Accept" }).click();
 
         // Message1 should be visible

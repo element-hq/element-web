@@ -165,7 +165,8 @@ test.describe("Cryptography", function () {
                 );
 
                 // Alice accepts the invite
-                await page.getByRole("option", { name: "Test room" }).click();
+                await page.getByRole("button", { name: "Toggle Invites section" }).click();
+                await page.getByRole("button", { name: "Test room" }).click();
                 await page.locator(".mx_RoomView").getByRole("button", { name: "Accept" }).click();
 
                 // Bob sends an encrypted event and an undecryptable event

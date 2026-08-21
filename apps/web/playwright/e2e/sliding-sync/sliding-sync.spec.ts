@@ -59,10 +59,6 @@ test.describe("Sliding Sync", () => {
         return page.getByRole("button", { name: "Room Options" });
     }
 
-    function getFilterExpandButton(page: Page): Locator {
-        return getPrimaryFilters(page).getByRole("button", { name: "Expand filter list" });
-    }
-
     test.use({
         config: {
             features: {
@@ -246,29 +242,28 @@ test.describe("Sliding Sync", () => {
             { roomNames, clientUserId },
         );
 
-        await getFilterExpandButton(page).click();
-        const primaryFilters = getPrimaryFilters(page);
-        await primaryFilters.getByRole("option", { name: "Invites" }).click();
-
-        await expect(page.getByTestId("room-list").getByRole("option")).toHaveCount(3);
+        await page.getByRole("button", { name: "Toggle Invites section" }).click();
+        // Invite + chats section headers + 3 invites + Test Room = 6
+        await expect(page.getByTestId("room-list").getByRole("button")).toHaveCount(6);
 
         // Select the room to join
-        await page.getByRole("option", { name: "Open room Room to Join" }).click();
+        await page.getByRole("button", { name: "Open room Room to Join" }).click();
 
         // Accept the invite
         await page.locator(".mx_RoomView").getByRole("button", { name: "Accept" }).click();
 
-        await checkOrder(["Room to Rescind", "Room to Reject"], page);
+        await checkOrder(["Room to Rescind", "Room to Reject", "Room to Join", "Test Room"], page);
 
         // Select the room to reject
-        await page.getByRole("option", { name: "Open room Room to Reject" }).click();
+        await page.getByRole("button", { name: "Open room Room to Reject" }).click();
 
         // Decline the invite
         await page.locator(".mx_RoomView").getByRole("button", { name: "Decline", exact: true }).click();
 
-        await expect(page.getByTestId("room-list").getByRole("option")).toHaveCount(1);
+        // Invite + chats section headers + 1 invites + Test Room + Room to Join = 5
+        await expect(page.getByTestId("room-list").getByRole("button")).toHaveCount(5);
 
-        await expect(page.getByRole("option", { name: "Open room Room to Rescind" })).toBeVisible();
+        await expect(page.getByRole("button", { name: "Open room Room to Rescind" })).toBeVisible();
 
         // now rescind the invite
         await bot.evaluate(
@@ -278,10 +273,7 @@ test.describe("Sliding Sync", () => {
             { roomRescind, clientUserId },
         );
 
-        // toggle the invites filter off again so we see all the rooms again
-        await primaryFilters.getByRole("option", { name: "Invites" }).click();
-
-        await page.getByRole("option", { name: "Open room Room to Rescind" }).click();
+        await page.getByRole("button", { name: "Open room Room to Rescind" }).click();
 
         await page.locator(".mx_RoomView").getByRole("button", { name: "Forget this room", exact: true }).click();
 

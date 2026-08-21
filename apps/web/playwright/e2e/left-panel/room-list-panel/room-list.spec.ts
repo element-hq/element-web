@@ -11,7 +11,7 @@ import { closeReleaseAnnouncement, rejectToast } from "@element-hq/element-web-p
 import { expect, test } from "../../../element-web-test";
 import { type Bot } from "../../../pages/bot";
 import { type ElementAppPage } from "../../../pages/ElementAppPage";
-import { getRoomList } from "./utils";
+import { getRoomList, getSectionHeader } from "./utils";
 
 test.describe("Room list", () => {
     test.use({
@@ -387,7 +387,13 @@ test.describe("Room list", () => {
                 invite: [user.userId],
                 is_direct: true,
             });
-            const invitedRoom = roomListView.getByRole("option", { name: "invited room" });
+
+            // The Invites section starts collapsed, so expand it to reach the room tile
+            const invitesHeader = getSectionHeader(page, "Invites");
+            await expect(invitesHeader).toBeVisible();
+            await invitesHeader.click();
+
+            const invitedRoom = roomListView.getByRole("button", { name: "Open room invited room" });
             await expect(invitedRoom).toBeVisible();
             await expect(invitedRoom).toMatchScreenshot("room-list-item-invited.png");
         });

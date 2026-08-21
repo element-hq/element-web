@@ -554,6 +554,7 @@ export const verifyApp = async (
 
     // Navigate to the DM created by Alice and accept the invite
     const oldRoomId = await bobElementApp.getCurrentRoomIdFromUrl();
+    await bobElementApp.page.getByRole("button", { name: "Toggle Invites section" }).click();
     await bobElementApp.viewRoomByName(aliceDisplayName);
     await bobElementApp.page.getByRole("button", { name: "Start chatting" }).click();
 

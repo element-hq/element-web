@@ -19,6 +19,7 @@ import { NotificationStateEvents } from "../../stores/notifications/Notification
 import { type RoomNotificationState } from "../../stores/notifications/RoomNotificationState";
 import SettingsStore from "../../settings/SettingsStore";
 import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
+import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import {
     getCustomSectionData,
     isCustomSectionTag,
@@ -65,6 +66,8 @@ export class RoomListSectionHeaderViewModel
             isUnread: false,
             displaySectionMenu: !isDefaultSection,
             canBeReordered: isReorderableSection(props.tag, getCustomSectionData()),
+            // Membership decides what is in the Invites section, so rooms can't be moved into it
+            canAcceptRooms: props.tag !== DefaultTagID.Invite,
         });
         const sectionWatherRef = SettingsStore.watchSetting("RoomList.CustomSectionData", null, () =>
             this.onCustomSectionDataChange(),
@@ -119,6 +122,12 @@ export class RoomListSectionHeaderViewModel
      * @param rooms - The rooms currently in this section
      */
     public setRooms(rooms: Room[]): void {
+        // The Invites section only exists while invitations are pending. Collapse it once they have
+        // all been handled, so that it is closed again the next time an invitation makes it appear.
+        if (this.props.tag === DefaultTagID.Invite && rooms.length === 0) {
+            this.snapshot.merge({ isExpanded: false });
+        }
+
         const newStates = new Set(rooms.map((room) => RoomNotificationStateStore.instance.getRoomState(room)));
 
         // Unsubscribe from rooms no longer in the section
@@ -210,6 +219,9 @@ export class RoomListSectionHeaderViewModel
             if (state.invited) invited = true;
             // Mention, notification, Mark as unread are aggregated
             if (state.isMention || state.isNotification) count += state.count || 1;
+            // An invitation reports neither a mention nor a notification, so count it as one room to
+            // make a collapsed section show how many invitations it holds
+            else if (state.invited) count += 1;
 
             // Aggregate active calls, preferring a video call over a voice call
             const call = state.room && CallStore.instance.getCall(state.room.roomId);
@@ -225,13 +237,16 @@ export class RoomListSectionHeaderViewModel
                 isMention || isNotification || isUnsentMessage || invited || Boolean(callType),
             isUnsentMessage,
             isMention,
-            isNotification,
+            // An invitation counts as a notification here so that the decoration renders the count
+            // badge, letting a collapsed Invites section report how many invitations it holds
+            isNotification: isNotification || invited,
             hasUnreadCount,
             count,
-            invited,
             callType,
-            // The activity dot and muted bell are intentionally not aggregated onto the section header
+            // The activity dot, the muted bell and the invitation icon are intentionally not
+            // aggregated onto the section header, which reports the invitations as a count instead
             isActivityNotification: false,
+            invited: false,
             muted: false,
         };
 

@@ -51,6 +51,7 @@ const meta = {
         isUnread: false,
         displaySectionMenu: true,
         canBeReordered: true,
+        canAcceptRooms: true,
         onClick: fn(),
         editSection: fn(),
         removeSection: fn(),

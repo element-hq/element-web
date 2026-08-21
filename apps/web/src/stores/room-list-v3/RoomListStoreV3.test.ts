@@ -1119,6 +1119,7 @@ describe("RoomListStoreV3", () => {
 
             const result = store.getSortedRoomsInActiveSpace();
             expect(result.sections.map((s) => s.tag)).toEqual([
+                DefaultTagID.Invite,
                 DefaultTagID.Favourite,
                 CHATS_TAG,
                 DefaultTagID.LowPriority,
@@ -1165,6 +1166,7 @@ describe("RoomListStoreV3", () => {
 
                 const { sections } = store.getSortedRoomsInActiveSpace();
                 expect(sections.map((section) => section.tag)).toEqual([
+                    DefaultTagID.Invite,
                     DefaultTagID.Favourite,
                     DefaultTagID.DM,
                     CHATS_TAG,
@@ -1321,6 +1323,8 @@ describe("RoomListStoreV3", () => {
             });
             // Room 5 is both a favourite and a DM, and room 8 is only a DM
             mockDmRooms([rooms[5], rooms[8]]);
+            // Room 2 is a favourite with a pending invitation
+            vi.spyOn(rooms[2], "getMyMembership").mockReturnValue(KnownMembership.Invite);
 
             const store = new RoomListStoreV3Class(dispatcher);
             await store.start();
@@ -1333,6 +1337,30 @@ describe("RoomListStoreV3", () => {
             // Without a People section, the untagged DM sits in the Chats section
             expect(findSection(sections, DefaultTagID.DM)).toBeUndefined();
             expect(findSection(sections, CHATS_TAG)!.rooms).toContain(rooms[8]);
+        });
+
+        it("places rooms with a pending invitation only in the Invites section", async () => {
+            enableSections();
+            const { rooms } = getClientAndRooms();
+
+            // Room 3 is only invited, room 7 is invited while also being a favourite DM
+            vi.spyOn(rooms[3], "getMyMembership").mockReturnValue(KnownMembership.Invite);
+            vi.spyOn(rooms[7], "getMyMembership").mockReturnValue(KnownMembership.Invite);
+            rooms[7].tags[DefaultTagID.Favourite] = {};
+            mockDmRooms([rooms[7]]);
+
+            const store = new RoomListStoreV3Class(dispatcher);
+            await store.start();
+
+            const { sections } = store.getSortedRoomsInActiveSpace();
+            const invitesSection = findSection(sections, DefaultTagID.Invite)!;
+
+            expect(invitesSection.rooms).toHaveLength(2);
+            for (const i of [3, 7]) {
+                expect(invitesSection.rooms).toContain(rooms[i]);
+                expect(findSection(sections, DefaultTagID.Favourite)!.rooms).not.toContain(rooms[i]);
+                expect(findSection(sections, CHATS_TAG)!.rooms).not.toContain(rooms[i]);
+            }
         });
 
         it("applies additional filter keys within each section", async () => {
@@ -1394,8 +1422,9 @@ describe("RoomListStoreV3", () => {
             await store.start();
 
             const { sections } = store.getSortedRoomsInActiveSpace();
-            // All three sections should be present even though Favourite/LowPriority are empty
-            expect(sections).toHaveLength(3);
+            // All the sections should be present even though Invite/Favourite/LowPriority are empty
+            expect(sections).toHaveLength(4);
+            expect(findSection(sections, DefaultTagID.Invite)!.rooms).toHaveLength(0);
             expect(findSection(sections, DefaultTagID.Favourite)!.rooms).toHaveLength(0);
             expect(findSection(sections, DefaultTagID.LowPriority)!.rooms).toHaveLength(0);
         });
@@ -1525,8 +1554,8 @@ describe("RoomListStoreV3", () => {
             const store = new RoomListStoreV3Class(dispatcher);
             await store.start();
 
-            // Initial state: 3 sections (Favourite, Chats, LowPriority)
-            expect(store.getSortedRoomsInActiveSpace().sections).toHaveLength(3);
+            // Initial state: 5 sections (Invite, Favourite, Chats, LowPriority)
+            expect(store.getSortedRoomsInActiveSpace().sections).toHaveLength(4);
 
             // Mark a room with the custom tag and update the settings
             rooms[0].tags = { [customTag]: { order: 0 } };
@@ -1541,8 +1570,8 @@ describe("RoomListStoreV3", () => {
             // Trigger the settings watcher
             await Promise.resolve(settingsWatcher("RoomList.OrderedCustomSections"));
 
-            // Now there should be 4 sections (Favourite, custom, Chats, LowPriority)
-            expect(store.getSortedRoomsInActiveSpace().sections).toHaveLength(4);
+            // Now there should be 6 sections (Invite, Favourite, custom, Chats, LowPriority)
+            expect(store.getSortedRoomsInActiveSpace().sections).toHaveLength(5);
             const customSection = findSection(store.getSortedRoomsInActiveSpace().sections, customTag)!;
             expect(customSection.rooms).toContain(rooms[0]);
         });
