@@ -369,7 +369,10 @@
                 "one": "Show %(count)s other preview",
                 "other": "Show %(count)s other previews"
             },
-            "view_image": "View image"
+            "view_audio": "View audio",
+            "view_file": "View file",
+            "view_image": "View image",
+            "view_video": "View video"
         }
     },
     "user_menu": {
