@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Direction, type MatrixEvent, type Relations, type Room } from "matrix-js-sdk/src/matrix";
+import { Direction, type MatrixEvent, MsgType, type Relations, type Room } from "matrix-js-sdk/src/matrix";
 import { type EventType, type MediaEventContent, type RelationType } from "matrix-js-sdk/src/types";
 import { saveAs } from "file-saver";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -241,6 +241,12 @@ export default abstract class Exporter {
         return blob;
     }
 
+    private static readonly MSGTYPES_TO_EXT: Record<string,string> = {
+        [MsgType.Text]: ".txt",
+        [MsgType.Notice]: ".txt",
+        [MsgType.Emote]: ".txt",
+    };
+
     private static readonly MIME_TO_EXT: Record<string, string> = {
         "application/pdf": ".pdf",
         "audio/ogg": ".ogg",
@@ -258,16 +264,16 @@ export default abstract class Exporter {
 
     public getFileExtension(event: MatrixEvent): string {
         const content = event.getContent();
-        const mime = content.info?.mimetype;
-        // If a mimetype is available, just use that
-        if (typeof mime === "string") {
-            const ext = Exporter.MIME_TO_EXT[mime.toLowerCase()];
-            if (ext) return ext;
-        }
-        // Otherwise, text and notice are text
         const msgtype = content.msgtype;
-        if (msgtype === "m.text" || msgtype === "m.notice") return ".txt";
-        // If those fall through, fallback to splitting on "."
+        if (msgtype) {
+            const msgtypeExt = Exporter.MSGTYPES_TO_EXT[msgtype.toLowerCase()];
+            if (msgtypeExt) return msgtypeExt;
+        }
+        const mime = content.info?.mimetype;
+        if (typeof mime === "string") {
+            const mimeExt = Exporter.MIME_TO_EXT[mime.toLowerCase()];
+            if (mimeExt) return mimeExt;
+        }
         const filename = content.filename;
         if (typeof filename === "string") {            
             const lastDot = filename.lastIndexOf(".");
@@ -276,9 +282,7 @@ export default abstract class Exporter {
                 if (rawExt) return "." + rawExt;
             }
         }
-        // Last resort fallback to a somewhat "generic" extension
-        // and also log the issue
-        console.warn("Unknown file type, defaulting to .bin", event.getType(), content);
+        console.warn("Unknown file type, extension set to .bin by default:", content);
         return ".bin";
     }
 
