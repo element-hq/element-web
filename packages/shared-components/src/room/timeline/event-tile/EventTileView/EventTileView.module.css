@@ -95,11 +95,6 @@
     text-overflow: ellipsis;
 }
 
-.root.layoutGroup .slotBody > *,
-.root.layoutIrc .slotBody > * {
-    margin-inline-end: var(--event-tile-content-inline-end);
-}
-
 /* Slot wrappers are the public styling boundary. The supplied content may be
    a component, fragment, or multiple elements and does not need to forward
    layout props. */
@@ -217,6 +212,10 @@
         min-height: 14px;
         border-radius: 8px;
         line-height: var(--event-tile-group-line-height);
+    }
+
+    .line:not(.lineMedia) .slotBody > * {
+        margin-inline-end: var(--event-tile-content-inline-end);
     }
 
     &.hasReceiptSlot .line {
@@ -565,6 +564,10 @@
         padding-block: 0;
         position: relative;
         border-radius: 8px;
+    }
+
+    .line:not(.lineMedia) .slotBody > * {
+        margin-inline-end: var(--event-tile-content-inline-end);
     }
 
     .slotReplyChain {
@@ -1488,6 +1491,11 @@
 .root.shapeFile {
     padding-top: 0;
     overflow-wrap: anywhere;
+
+    &:hover .line,
+    &:focus-within .line {
+        background-color: transparent;
+    }
 
     & + & {
         border-block-start: 1px solid var(--event-tile-file-separator-color);

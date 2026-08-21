@@ -1051,10 +1051,12 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         // Receipt slots.
         const receiptState = this.receiptState;
+        const isFileShape = eventTileRenderState.root.shape === "File";
         const receipt =
-            this.props.showReadReceipts ||
-            receiptState.shouldShowSentReceipt ||
-            receiptState.shouldShowSendingReceipt ? (
+            !isFileShape &&
+            (this.props.showReadReceipts ||
+                receiptState.shouldShowSentReceipt ||
+                receiptState.shouldShowSendingReceipt) ? (
                 <ReceiptAdapter
                     receiptState={receiptState}
                     eventSendStatus={this.props.eventSendStatus}
