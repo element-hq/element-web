@@ -5,11 +5,12 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { Button, InlineSpinner, VisualList, VisualListItem } from "@vector-im/compound-web";
+import { Button, ErrorMessage, InlineSpinner, VisualList, VisualListItem } from "@vector-im/compound-web";
 import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 import InfoIcon from "@vector-im/compound-design-tokens/assets/web/icons/info";
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
-import React, { type JSX, useState } from "react";
+import React, { type JSX, useCallback, useState } from "react";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../languageHandler";
 import { EncryptionCard } from "./EncryptionCard";
@@ -66,6 +67,24 @@ export function ResetIdentityBody({ onCancelClick, onReset, variant }: ResetIden
     // After the user clicks "Continue", we disable the button so it can't be
     // clicked again, and warn the user not to close the window.
     const [inProgress, setInProgress] = useState(false);
+    const [failed, setFailed] = useState(false);
+
+    const onContinueClick = useCallback(async (): Promise<void> => {
+        setFailed(false);
+        setInProgress(true);
+        try {
+            await matrixClient
+                .getCrypto()
+                ?.resetEncryption((makeRequest) => uiAuthCallback(matrixClient, makeRequest));
+        } catch (error) {
+            logger.error("ResetIdentityBody: failed to reset the cryptographic identity", error);
+            setFailed(true);
+            return;
+        } finally {
+            setInProgress(false);
+        }
+        onReset();
+    }, [matrixClient, onReset]);
 
     return (
         <EncryptionCard Icon={ErrorIcon} destructive={true} title={titleForVariant(variant)}>
@@ -82,19 +101,10 @@ export function ResetIdentityBody({ onCancelClick, onReset, variant }: ResetIden
                     </VisualListItem>
                 </VisualList>
                 {variant === "compromised" && <span>{_t("settings|encryption|advanced|breadcrumb_warning")}</span>}
+                {failed && <ErrorMessage>{_t("settings|encryption|advanced|reset_failed")}</ErrorMessage>}
             </EncryptionCardEmphasisedContent>
             <EncryptionCardButtons>
-                <Button
-                    destructive={true}
-                    disabled={inProgress}
-                    onClick={async () => {
-                        setInProgress(true);
-                        await matrixClient
-                            .getCrypto()
-                            ?.resetEncryption((makeRequest) => uiAuthCallback(matrixClient, makeRequest));
-                        onReset();
-                    }}
-                >
+                <Button destructive={true} disabled={inProgress} onClick={onContinueClick}>
                     {inProgress ? (
                         <>
                             <InlineSpinner /> {_t("settings|encryption|advanced|reset_in_progress")}
