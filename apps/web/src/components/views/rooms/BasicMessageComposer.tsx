@@ -11,7 +11,7 @@ import React, { type JSX, createRef, type ClipboardEvent, type SyntheticEvent } 
 import { type Room, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import EMOTICON_REGEX from "emojibase-regex/emoticon";
 import { logger } from "matrix-js-sdk/src/logger";
-import { EMOTICON_TO_EMOJI } from "@matrix-org/emojibase-bindings";
+import { EMOJI, EMOTICON_TO_EMOJI, type Emoji } from "@matrix-org/emojibase-bindings";
 import { isLinkable } from "@element-hq/web-shared-components";
 
 import type EditorModel from "../../../editor/model";
@@ -47,6 +47,16 @@ import { SDKContext } from "../../../contexts/SDKContext.ts";
 // matches emoticons which follow the start of a line or whitespace
 const REGEX_EMOTICON_WHITESPACE = new RegExp("(?:^|\\s)(" + EMOTICON_REGEX.source + ")\\s|:^$");
 export const REGEX_EMOTICON = new RegExp("(?:^|\\s)(" + EMOTICON_REGEX.source + ")$");
+
+const REGEX_SHORTCODE = /(?:^|[^\w:])(:[+\-\w]+:)$/;
+const SHORTCODE_TO_EMOJI = new Map<string, Emoji>();
+for (const emoji of EMOJI) {
+    for (const shortcode of emoji.shortcodes) {
+        if (!SHORTCODE_TO_EMOJI.has(`:${shortcode}:`)) SHORTCODE_TO_EMOJI.set(`:${shortcode}:`, emoji);
+    }
+}
+const EMOTICON_LOOKBACK = 9;
+const SHORTCODE_LOOKBACK = 64;
 
 const SURROUND_WITH_CHARACTERS = ['"', "_", "`", "'", "*", "~", "$"];
 const SURROUND_WITH_DOUBLE_CHARACTERS = new Map([
@@ -167,11 +177,24 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     }
 
     public replaceEmoticon(caretPosition: DocumentPosition, regex: RegExp): number | undefined {
+        return this.replaceWithEmoji(caretPosition, regex, EMOTICON_TO_EMOJI, EMOTICON_LOOKBACK);
+    }
+
+    public replaceShortcode(caretPosition: DocumentPosition): number | undefined {
+        return this.replaceWithEmoji(caretPosition, REGEX_SHORTCODE, SHORTCODE_TO_EMOJI, SHORTCODE_LOOKBACK);
+    }
+
+    private replaceWithEmoji(
+        caretPosition: DocumentPosition,
+        regex: RegExp,
+        emojiByText: Map<string, Emoji>,
+        lookback: number,
+    ): number | undefined {
         const { model } = this.props;
         const range = model.startRange(caretPosition);
-        // expand range max 9 characters backwards from caretPosition,
+        // expand range max `lookback` characters backwards from caretPosition,
         // as a space to look for an emoticon
-        let n = 9;
+        let n = lookback;
         range.expandBackwardsWhile((index, offset) => {
             const part = model.parts[index];
             n -= 1;
@@ -184,12 +207,12 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         if (emoticonMatch && (n >= 0 || emoticonMatch.index !== 0)) {
             const query = emoticonMatch[1];
             // variations of plaintext emoitcons(E.g. :P vs :p vs :-P) are handled upstream by the emojibase-bindings library
-            const data = EMOTICON_TO_EMOJI.get(query);
+            const data = emojiByText.get(query);
 
             if (data) {
                 const { partCreator } = model;
                 const firstMatch = emoticonMatch[0];
-                const moveStart = firstMatch[0] === " " ? 1 : 0;
+                const moveStart = firstMatch.indexOf(query);
 
                 // we need the range to only comprise of the emoticon
                 // because we'll replace the whole range with an emoji,
@@ -720,7 +743,10 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
     private transform = (documentPosition: DocumentPosition): void => {
         const shouldReplace = SettingsStore.getValue("MessageComposerInput.autoReplaceEmoji");
-        if (shouldReplace) this.replaceEmoticon(documentPosition, REGEX_EMOTICON_WHITESPACE);
+        if (!shouldReplace) return;
+        if (this.replaceEmoticon(documentPosition, REGEX_EMOTICON_WHITESPACE) === undefined) {
+            this.replaceShortcode(documentPosition);
+        }
     };
 
     public componentWillUnmount(): void {
