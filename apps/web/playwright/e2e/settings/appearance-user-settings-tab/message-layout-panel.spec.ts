@@ -7,10 +7,48 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { expect, test } from ".";
+import { SettingLevel } from "../../../../src/settings/SettingLevel";
+import { Layout } from "../../../../src/settings/enums/Layout";
 
 test.describe("Appearance user settings tab", () => {
     test.use({
         displayName: "Hanako",
+    });
+
+    /**
+     * The bubble layout must use the same width as the modern layout.
+     *
+     * This needs a viewport wide enough that `.mx_RoomView_body` itself exceeds 1200px, which is roughly 1650px once
+     * the room list is accounted for. At the default 1280px viewport the body is far narrower than that, so a
+     * regression here is invisible and this test would pass against it.
+     */
+    test.describe("Wide window", () => {
+        test.use({ viewport: { width: 1800, height: 900 } });
+
+        test("should use the same width for the bubble layout as for the modern layout", async ({
+            page,
+            app,
+            user,
+            util,
+        }) => {
+            await util.createAndDisplayRoom();
+            const timeline = page.locator(".mx_RoomView_timeline");
+            const composer = page.locator(".mx_MessageComposer");
+
+            await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
+            await util.assertModernLayout();
+            const modernTimeline = await timeline.boundingBox();
+            const modernComposer = await composer.boundingBox();
+
+            // Guard the premise: the room body must be wide enough for a width cap to be observable at all.
+            const body = await page.locator(".mx_RoomView_body").boundingBox();
+            expect(body!.width).toBeGreaterThan(1200);
+
+            await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
+            await util.assertBubbleLayout();
+            expect(await timeline.boundingBox()).toEqual(modernTimeline);
+            expect(await composer.boundingBox()).toEqual(modernComposer);
+        });
     });
 
     test.describe("Message Layout Panel", () => {
