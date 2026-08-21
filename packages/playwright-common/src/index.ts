@@ -12,7 +12,7 @@ export * from "./utils/config_json.js";
 export * from "./utils/context.js";
 export * from "./utils/release_accouncement.js";
 export * from "./utils/toasts.js";
-export { test } from "./fixtures/index.js";
+export { test, type CombinedTestFixtures, type TestFixtures, type WorkerArgs } from "./fixtures/index.js";
 
 export { populateLocalStorageWithCredentials } from "./fixtures/user.js";
 
