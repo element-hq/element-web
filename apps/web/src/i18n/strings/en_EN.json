@@ -2734,6 +2734,7 @@
             "invites": "Invited to a room",
             "keywords": "Show a badge <badge/> when keywords are used in a room.",
             "keywords_prompt": "Enter keywords here, or use for spelling variations or nicknames",
+            "labs_notice_error": "Your notification settings could not be updated",
             "labs_notice_prompt": "<strong>Update:</strong>We’ve simplified Notifications Settings to make options easier to find. Some custom settings you’ve chosen in the past are not shown here, but they’re still active. If you proceed, some of your settings may change. <a>Learn more</a>",
             "mentions_keywords": "Mentions and Keywords",
             "mentions_keywords_only": "Mentions and Keywords only",
