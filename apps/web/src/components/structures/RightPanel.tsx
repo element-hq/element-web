@@ -141,7 +141,7 @@ export default class RightPanel extends React.Component<Props, IState> {
             // When the user clicks close on the encryption panel cancel the pending request first if any
             void this.state.cardState.verificationRequest.cancel();
         } else {
-            RightPanelStore.instance.togglePanel(this.props.room?.roomId ?? null);
+            RightPanelStore.instance.closeCurrentCard(this.props.room?.roomId ?? null);
         }
     };
 

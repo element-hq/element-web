@@ -56,6 +56,14 @@ export default class RightPanelStore extends ReadyWatchingStore {
     private static internalInstance: RightPanelStore;
 
     private global?: IRightPanelForRoom;
+    /**
+     * Focus behaviour:
+     * - If a room/global card is newly inserted, switch focus to that.
+     * - That card simply has priority, does not destroy the card type with lower priority
+     *   i.e. inserting a global card makes a room card temporarily hidden until the global card
+     *        is closed, or a new room card is inserted
+     */
+    private focusedCardType: "room" | "global" = "room";
     private byRoom: { [roomId: string]: IRightPanelForRoom } = {};
     private viewedRoomId: string | null = null;
 
@@ -65,10 +73,26 @@ export default class RightPanelStore extends ReadyWatchingStore {
     }
 
     /**
+     * Get currently active global card
+     */
+    private get globalCard(): IRightPanelCard | undefined {
+        if (!this.global?.isOpen) return undefined;
+        return this.global.history[this.global.history.length - 1];
+    }
+
+    /**
+     * Get currently active global card
+     */
+    private get globalHistory(): Array<IRightPanelCard> {
+        return this.global?.history ?? [];
+    }
+
+    /**
      * Resets the store. Intended for test usage only.
      */
     public reset(): void {
         this.global = undefined;
+        this.focusedCardType = "room";
         this.byRoom = {};
         this.viewedRoomId = null;
     }
@@ -96,7 +120,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
                 if (this.currentCard.phase !== RightPanelPhases.RoomSummary) {
                     this.setCard({ phase: RightPanelPhases.RoomSummary, state: { focusRoomSearch: true } });
                 }
-                this.show(null);
+                this.showRoomPanel(null);
             }
         }
     }
@@ -109,10 +133,20 @@ export default class RightPanelStore extends ReadyWatchingStore {
      * during room changes.
      */
     public get isOpen(): boolean {
+        if (this.globalCard) return true;
         return this.byRoom[this.viewedRoomId ?? ""]?.isOpen ?? false;
     }
 
     public isOpenForRoom(roomId: string): boolean {
+        if (this.globalCard) return true;
+        return this.byRoom[roomId]?.isOpen ?? false;
+    }
+
+    public get isRoomPanelOpen(): boolean {
+        return this.byRoom[this.viewedRoomId ?? ""]?.isOpen ?? false;
+    }
+
+    public isRoomPanelOpenForRoom(roomId: string): boolean {
         return this.byRoom[roomId]?.isOpen ?? false;
     }
 
@@ -127,27 +161,58 @@ export default class RightPanelStore extends ReadyWatchingStore {
      * during room changes.
      */
     public get currentCard(): IRightPanelCard {
-        const hist = this.roomPhaseHistory;
-        if (hist.length >= 1) {
-            return hist[hist.length - 1];
+        const globalCard = this.globalCard;
+        const empty = { state: {}, phase: null };
+
+        const roomHist = this.roomPhaseHistory;
+        const roomCard: IRightPanelCard | undefined = roomHist[roomHist.length - 1];
+
+        switch (this.focusedCardType) {
+            case "room":
+                return roomCard ?? globalCard ?? empty;
+            case "global":
+                return globalCard ?? roomCard ?? empty;
         }
-        return { state: {}, phase: null };
     }
 
     public currentCardForRoom(roomId: string): IRightPanelCard {
-        const hist = this.byRoom[roomId]?.history ?? [];
-        if (hist.length > 0) {
-            return hist[hist.length - 1];
+        const globalCard = this.globalCard;
+        const empty = { state: {}, phase: null };
+
+        const roomHist = this.byRoom[roomId]?.history ?? [];
+        const roomCard: IRightPanelCard | undefined = roomHist[roomHist.length - 1];
+
+        switch (this.focusedCardType) {
+            case "room":
+                return roomCard ?? globalCard ?? empty;
+            case "global":
+                return globalCard ?? roomCard ?? empty;
         }
-        return { state: {}, phase: null };
     }
 
     public get previousCard(): IRightPanelCard {
-        const hist = this.roomPhaseHistory;
-        if (hist?.length >= 2) {
-            return hist[hist.length - 2];
+        const roomHist = this.roomPhaseHistory;
+        const globalHist = this.globalHistory;
+
+        const roomCard: IRightPanelCard | undefined = roomHist[roomHist.length - 2];
+        const globalCard: IRightPanelCard | undefined = globalHist[globalHist.length - 2];
+
+        const empty = { state: {}, phase: null };
+
+        switch (this.focusedCardType) {
+            case "room":
+                return roomCard ?? globalCard ?? empty;
+            case "global":
+                return globalCard ?? roomCard ?? empty;
         }
-        return { state: {}, phase: null };
+    }
+
+    public closeCurrentCard(roomId: string | null): void {
+        if (this.focusedCardType === "global" && this.globalCard) {
+            this.closeGlobalCard()
+        } else {
+            this.hideRoomPanel(roomId)
+        }
     }
 
     /**
@@ -168,6 +233,8 @@ export default class RightPanelStore extends ReadyWatchingStore {
         // Checks for wrong SetRightPanelPhase requests
         if (!this.isPhaseValid(targetPhase, Boolean(rId))) return;
 
+        this.focusedCardType = "room";
+
         if (targetPhase === this.currentCardForRoom(rId)?.phase && !!cardState) {
             // Update state: set right panel with a new state but keep the phase (don't know it this is ever needed...)
             const hist = this.byRoom[rId]?.history ?? [];
@@ -179,7 +246,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
             this.byRoom[rId] = { history, isOpen: true };
             this.emitAndUpdateSettings();
         } else {
-            this.show(rId);
+            this.showRoomPanel(rId);
             this.emitAndUpdateSettings();
         }
     }
@@ -189,7 +256,8 @@ export default class RightPanelStore extends ReadyWatchingStore {
         const rId = roomId ?? this.viewedRoomId ?? "";
         const history = cards.map((c) => ({ phase: c.phase, state: c.state ?? {} }));
         this.byRoom[rId] = { history, isOpen: true };
-        this.show(rId);
+        this.focusedCardType = "room";
+        this.showRoomPanel(rId);
         this.emitAndUpdateSettings();
     }
 
@@ -216,7 +284,8 @@ export default class RightPanelStore extends ReadyWatchingStore {
                 isOpen: !allowClose,
             };
         }
-        this.show(rId);
+        this.focusedCardType = "room";
+        this.showRoomPanel(rId);
         this.emitAndUpdateSettings();
     }
 
@@ -225,11 +294,27 @@ export default class RightPanelStore extends ReadyWatchingStore {
         if (!this.byRoom[rId]) return;
 
         const removedCard = this.byRoom[rId].history.pop();
+        if (this.byRoom[rId].history.length === 0)
+            this.focusedCardType = "global";
         this.emitAndUpdateSettings();
         return removedCard;
     }
 
-    public togglePanel(roomId: string | null): void {
+    public setGlobalCard(card: IRightPanelCard) {
+        this.global = { history: [card], isOpen: true };
+        this.focusedCardType = "global";
+        this.emitAndUpdateSettings();
+    }
+
+    public closeGlobalCard() {
+        this.global = undefined;
+        this.focusedCardType = "room";
+        this.emitAndUpdateSettings();
+    }
+
+    // TODO: push and pop global card
+
+    public toggleRoomPanel(roomId: string | null): void {
         const rId = roomId ?? this.viewedRoomId ?? "";
         if (!this.byRoom[rId]) return;
 
@@ -237,15 +322,15 @@ export default class RightPanelStore extends ReadyWatchingStore {
         this.emitAndUpdateSettings();
     }
 
-    public show(roomId: string | null): void {
-        if (!this.isOpenForRoom(roomId ?? this.viewedRoomId ?? "")) {
-            this.togglePanel(roomId);
+    public showRoomPanel(roomId: string | null): void {
+        if (!this.isRoomPanelOpenForRoom(roomId ?? this.viewedRoomId ?? "")) {
+            this.toggleRoomPanel(roomId);
         }
     }
 
-    public hide(roomId: string | null): void {
-        if (this.isOpenForRoom(roomId ?? this.viewedRoomId ?? "")) {
-            this.togglePanel(roomId);
+    public hideRoomPanel(roomId: string | null): void {
+        if (this.isRoomPanelOpenForRoom(roomId ?? this.viewedRoomId ?? "")) {
+            this.toggleRoomPanel(roomId);
         }
     }
 
@@ -259,11 +344,11 @@ export default class RightPanelStore extends ReadyWatchingStore {
      * @param cardState The state within the phase.
      */
     public showOrHidePhase(phase: RightPanelPhases, cardState?: Partial<IRightPanelCardState>): void {
-        if (this.currentCard.phase === phase && !cardState && this.isOpen) {
-            this.togglePanel(null);
+        if (this.currentCard.phase === phase && !cardState && this.isRoomPanelOpen) {
+            this.hideRoomPanel(null);
         } else {
             this.setCard({ phase, state: cardState });
-            if (!this.isOpen) this.togglePanel(null);
+            this.showRoomPanel(null);
         }
     }
 
@@ -400,7 +485,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
         if (!isViewingRoom) {
             logger.warn(
                 `Tried to switch right panel to a room phase: ${targetPhase}, ` +
-                    `but we are currently not viewing a room`,
+                `but we are currently not viewing a room`,
             );
             return false;
         }
