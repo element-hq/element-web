@@ -294,8 +294,6 @@ export default class RightPanelStore extends ReadyWatchingStore {
         if (!this.byRoom[rId]) return;
 
         const removedCard = this.byRoom[rId].history.pop();
-        if (this.byRoom[rId].history.length === 0)
-            this.focusedCardType = "global";
         this.emitAndUpdateSettings();
         return removedCard;
     }
@@ -319,6 +317,9 @@ export default class RightPanelStore extends ReadyWatchingStore {
         if (!this.byRoom[rId]) return;
 
         this.byRoom[rId].isOpen = !this.byRoom[rId].isOpen;
+        // A closed room panel must not keep focus, otherwise it would keep masking a live
+        // global card and the panel would never visually close.
+        this.focusedCardType = this.byRoom[rId].isOpen || !this.globalCard ? "room" : "global";
         this.emitAndUpdateSettings();
     }
 

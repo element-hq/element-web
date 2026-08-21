@@ -563,8 +563,8 @@ describe("<LoggedInView />", () => {
 
     it("should handle KeyBindingAction.ToggleRoomSidePanel", async () => {
         getComponent({ page_type: "room_view" });
-        vi.spyOn(mockSdkContext.rightPanelStore, "togglePanel");
+        vi.spyOn(mockSdkContext.rightPanelStore, "toggleRoomPanel");
         fireEvent.keyDown(document.body, { key: ".", code: "Period", ctrlKey: true, keyCode: 190 });
-        expect(mockSdkContext.rightPanelStore.togglePanel).toHaveBeenCalledWith(null);
+        expect(mockSdkContext.rightPanelStore.toggleRoomPanel).toHaveBeenCalledWith(null);
     });
 });
