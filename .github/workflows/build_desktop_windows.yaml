@@ -183,12 +183,6 @@ jobs:
                   rm webapp.asar
                   pnpm asar pack config-edit/ webapp.asar
 
-            - name: Set up sqlcipher macros
-              if: steps.cache.outputs.cache-hit != 'true' && contains(inputs.arch, 'arm')
-              shell: pwsh
-              run: |
-                  echo "NCC=${{ github.workspace }}\scripts\cl.bat" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-
             - name: Set up build tools
               if: steps.cache.outputs.cache-hit != 'true'
               uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
