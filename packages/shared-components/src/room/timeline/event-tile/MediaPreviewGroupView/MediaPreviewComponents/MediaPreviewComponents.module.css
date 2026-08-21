@@ -26,6 +26,7 @@
 
 .textContent {
     display: inline-block;
+    min-width: 0;
 }
 
 .icon {
