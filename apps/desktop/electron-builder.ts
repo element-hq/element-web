@@ -128,7 +128,18 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
         },
         "lib/**",
     ],
-    extraResources: ["build/icon.*", "webapp.asar"],
+    extraResources: [
+        "build/icon.*",
+        "webapp.asar",
+        ...(os.platform() === "win32" && !process.argv.includes("--arm64") && !process.argv.includes("--ia32")
+            ? [
+                  {
+                      from: "native/windows-process-loopback/build/windows-x64/windows-process-loopback.exe",
+                      to: "screen-share-audio/windows-process-loopback.exe",
+                  },
+              ]
+            : []),
+    ],
     extraMetadata: {
         name: variant.name,
         productName: variant.productName,

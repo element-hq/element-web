@@ -43,6 +43,15 @@ export enum ElementWidgetActions {
     // NOTE: this is currently unused. Its only here to make EW aware
     // of this action so it does not throw errors.
     DeviceMute = "io.element.device_mute",
+    ScreenShareAudioSession = "io.element.screen_share_audio_session",
+}
+
+export interface IScreenShareAudioSessionApiRequest extends IWidgetApiRequest {
+    data: {
+        version: 1;
+        state: "acquire" | "release";
+        session_id: string;
+    };
 }
 
 export interface IHangupCallApiRequest extends IWidgetApiRequest {

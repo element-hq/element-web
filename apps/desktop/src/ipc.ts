@@ -9,7 +9,12 @@ import { app, autoUpdater, desktopCapturer, ipcMain, powerSaveBlocker, TouchBar,
 
 import IpcMainEvent = Electron.IpcMainEvent;
 import { randomArray } from "./utils.js";
-import { getDisplayMediaCallback, setDisplayMediaCallback } from "./displayMediaCallback.js";
+import {
+    handleDisplayMediaPickerReply,
+    handleScreenShareAudioSessionBinding,
+    handleScreenShareAudioSessionRelease,
+    supportsIsolatedScreenShareAudio,
+} from "./display-media.js";
 import Store, { clearDataAndRelaunch } from "./store.js";
 import { getConfig } from "./config.js";
 
@@ -26,6 +31,92 @@ ipcMain.on("loudNotification", function (): void {
         }
     }
 });
+
+ipcMain.handle("supportsIsolatedScreenShareAudio", () => supportsIsolatedScreenShareAudio());
+
+interface Breadcrumb {
+    roomId: string;
+    avatarUrl: string | null;
+    initial: string;
+}
+
+function setBreadcrumbsTouchBar(recents: Breadcrumb[]): void {
+    if (process.platform !== "darwin") return;
+    const { TouchBarPopover, TouchBarButton } = TouchBar;
+    const recentsBar = new TouchBar({
+        items: recents.map((recent) => {
+            const defaultColors = ["#0DBD8B", "#368bd6", "#ac3ba8"];
+            const total = recent.roomId.split("").reduce((sum, character) => sum + character.codePointAt(0)!, 0);
+            const button = new TouchBarButton({
+                label: recent.initial,
+                backgroundColor: defaultColors[total % defaultColors.length],
+                click: (): void => {
+                    void global.mainWindow?.loadURL(`vector://vector/webapp/#/room/${recent.roomId}`);
+                },
+            });
+            if (recent.avatarUrl) {
+                void fetch(recent.avatarUrl)
+                    .then((response) => {
+                        if (!response.ok) return;
+                        return response.arrayBuffer();
+                    })
+                    .then((arrayBuffer) => {
+                        if (!arrayBuffer) return;
+                        button.icon = nativeImage.createFromBuffer(Buffer.from(arrayBuffer));
+                        button.label = "";
+                        button.backgroundColor = "";
+                    });
+            }
+            return button;
+        }),
+    });
+    global.mainWindow?.setTouchBar(
+        new TouchBar({
+            items: [
+                new TouchBarPopover({
+                    label: "Recents",
+                    showCloseButton: true,
+                    items: recentsBar,
+                }),
+            ],
+        }),
+    );
+}
+
+async function getPickleKey(store: Store, key: string): Promise<string | null | undefined> {
+    try {
+        return await store.getSecret(key);
+    } catch {
+        // An error is thrown if safeStorage cannot initialise, or if a stored secret cannot be
+        // decrypted this launch. Keep the secret so the session can recover on a later launch.
+        // See element-web#32521 / #32715.
+        return null;
+    }
+}
+
+async function createPickleKey(store: Store, key: string): Promise<string | null> {
+    try {
+        // Never turn a transient keychain failure into permanent session and encryption-key loss.
+        if (await store.isSecretUndecryptable(key)) {
+            console.warn("Refusing to overwrite an existing undecryptable pickle key; preserving it");
+            return null;
+        }
+        const pickleKey = await randomArray(32);
+        await store.setSecret(key, pickleKey);
+        return pickleKey;
+    } catch (error) {
+        console.error("Failed to create pickle key", error);
+        return null;
+    }
+}
+
+async function destroyPickleKey(store: Store, key: string): Promise<void> {
+    try {
+        await store.deleteSecret(key);
+    } catch (error) {
+        console.error("Failed to destroy pickle key", error);
+    }
+}
 
 let powerSaveBlockerId: number | null = null;
 ipcMain.on("app_onAction", function (_ev: IpcMainEvent, payload) {
@@ -46,7 +137,7 @@ ipcMain.on("app_onAction", function (_ev: IpcMainEvent, payload) {
     }
 });
 
-ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
+ipcMain.on("ipcCall", async function (ev: IpcMainEvent, payload) {
     const store = Store.instance;
     if (!global.mainWindow || !store) return;
 
@@ -109,44 +200,15 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
             break;
 
         case "getPickleKey":
-            try {
-                ret = await store.getSecret(`${args[0]}|${args[1]}`);
-            } catch {
-                // An error is thrown if we can't initialise safeStorage, or if a stored secret exists
-                // but can't be decrypted this launch (SafeStorageDecryptionError, e.g. the OS keychain
-                // is temporarily unavailable). In both cases return null so the default pickle key is
-                // used; we must NOT destroy the existing secret (see createPickleKey below) so the
-                // session can recover on a later launch. See element-web#32521 / #32715.
-                ret = null;
-            }
+            ret = await getPickleKey(store, `${args[0]}|${args[1]}`);
             break;
 
         case "createPickleKey":
-            try {
-                // Never overwrite a pickle key that already exists but is currently undecryptable.
-                // Overwriting it with a freshly-generated key would turn a transient keychain failure
-                // into permanent session and encryption-key loss. Preserve it so the existing session
-                // can be restored on a later launch once the keychain is readable again.
-                if (await store.isSecretUndecryptable(`${args[0]}|${args[1]}`)) {
-                    console.warn("Refusing to overwrite an existing undecryptable pickle key; preserving it");
-                    ret = null;
-                } else {
-                    const pickleKey = await randomArray(32);
-                    await store.setSecret(`${args[0]}|${args[1]}`, pickleKey);
-                    ret = pickleKey;
-                }
-            } catch (e) {
-                console.error("Failed to create pickle key", e);
-                ret = null;
-            }
+            ret = await createPickleKey(store, `${args[0]}|${args[1]}`);
             break;
 
         case "destroyPickleKey":
-            try {
-                await store.deleteSecret(`${args[0]}|${args[1]}`);
-            } catch (e) {
-                console.error("Failed to destroy pickle key", e);
-            }
+            await destroyPickleKey(store, `${args[0]}|${args[1]}`);
             break;
         case "getDesktopCapturerSources":
             ret = (await desktopCapturer.getSources(args[0])).map((source) => ({
@@ -156,9 +218,15 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
             }));
             break;
         case "callDisplayMediaCallback":
-            getDisplayMediaCallback()?.({ video: args[0] });
-            setDisplayMediaCallback(null);
+            handleDisplayMediaPickerReply(ev.sender.id, args[0]);
             ret = null;
+            break;
+        case "releaseScreenShareAudioSession":
+            handleScreenShareAudioSessionRelease(ev.sender.id, args[0]);
+            ret = null;
+            break;
+        case "bindScreenShareAudioSession":
+            ret = handleScreenShareAudioSessionBinding(ev.sender.id, args[0]);
             break;
 
         case "clearStorage":
@@ -166,53 +234,7 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
             return; // the app is about to stop, we don't need to reply to the IPC
 
         case "breadcrumbs": {
-            if (process.platform === "darwin") {
-                const { TouchBarPopover, TouchBarButton } = TouchBar;
-
-                const recentsBar = new TouchBar({
-                    items: args[0].map((r: { roomId: string; avatarUrl: string | null; initial: string }) => {
-                        const defaultColors = ["#0DBD8B", "#368bd6", "#ac3ba8"];
-                        let total = 0;
-                        for (let i = 0; i < r.roomId.length; ++i) {
-                            total += r.roomId.charCodeAt(i);
-                        }
-
-                        const button = new TouchBarButton({
-                            label: r.initial,
-                            backgroundColor: defaultColors[total % defaultColors.length],
-                            click: (): void => {
-                                void global.mainWindow?.loadURL(`vector://vector/webapp/#/room/${r.roomId}`);
-                            },
-                        });
-                        if (r.avatarUrl) {
-                            void fetch(r.avatarUrl)
-                                .then((resp) => {
-                                    if (!resp.ok) return;
-                                    return resp.arrayBuffer();
-                                })
-                                .then((arrayBuffer) => {
-                                    if (!arrayBuffer) return;
-                                    const buffer = Buffer.from(arrayBuffer);
-                                    button.icon = nativeImage.createFromBuffer(buffer);
-                                    button.label = "";
-                                    button.backgroundColor = "";
-                                });
-                        }
-                        return button;
-                    }),
-                });
-
-                const touchBar = new TouchBar({
-                    items: [
-                        new TouchBarPopover({
-                            label: "Recents",
-                            showCloseButton: true,
-                            items: recentsBar,
-                        }),
-                    ],
-                });
-                global.mainWindow.setTouchBar(touchBar);
-            }
+            setBreadcrumbsTouchBar(args[0]);
             break;
         }
 

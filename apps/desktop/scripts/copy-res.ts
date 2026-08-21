@@ -86,3 +86,16 @@ INCLUDE_LANGS.forEach((file): void => {
 if (watch) {
     INCLUDE_LANGS.forEach((file) => watchLanguage(I18N_BASE_PATH + file, I18N_DEST));
 }
+
+const SCREEN_SHARE_AUDIO_ASSETS = "src/screen-share-audio/assets";
+const SCREEN_SHARE_AUDIO_DEST = "lib/screen-share-audio/assets";
+const copyScreenShareAudioAssets = (): void => {
+    fs.cpSync(SCREEN_SHARE_AUDIO_ASSETS, SCREEN_SHARE_AUDIO_DEST, { recursive: true });
+};
+copyScreenShareAudioAssets();
+if (watch) {
+    chokidar
+        .watch(SCREEN_SHARE_AUDIO_ASSETS)
+        .on("add", copyScreenShareAudioAssets)
+        .on("change", copyScreenShareAudioAssets);
+}
