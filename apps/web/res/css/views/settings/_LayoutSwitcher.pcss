@@ -44,6 +44,13 @@ Please see LICENSE files in the repository root for full details.
             .mx_EventTile {
                 margin: 0;
 
+                /*
+                 * EventTileView applies the content gutter through this
+                 * variable on the shell. Keep the preview's content width
+                 * consistent with the legacy preview override below.
+                 */
+                --event-tile-content-inline-end: 0;
+
                 /**
                  * Hide the message options and message action bar in the preview
                  */
@@ -54,6 +61,7 @@ Please see LICENSE files in the repository root for full details.
 
                 .mx_EventTile_content {
                     margin-right: 0;
+                    margin-inline-end: 0;
                 }
 
                 &:has([data-event-layout="group"]) {
@@ -72,8 +80,16 @@ Please see LICENSE files in the repository root for full details.
                     flex-shrink: 1;
                 }
 
-                &:has([data-event-layout="irc"]) .mx_MessageTimestamp {
-                    display: none; /* hide the container used for spacing consistency */
+                &:has([data-event-layout="irc"]) {
+                    /*
+                     * The migrated tile keeps an empty timestamp slot for
+                     * IRC alignment. The preview must hide that slot as the
+                     * legacy preview hid its timestamp element.
+                     */
+                    .mx_MessageTimestamp,
+                    [data-testid="event-tile-slot-timestamp"] {
+                        display: none;
+                    }
                 }
 
                 .mx_EventTile_line {
