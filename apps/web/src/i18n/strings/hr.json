@@ -679,8 +679,6 @@
     },
     "create_section_dialog": {
         "create_section": "Izradi odjeljak",
-        "description": "Odjeljci su samo za vas",
-        "label": "Naziv odjeljka",
         "title": "Izradi odjeljak",
         "title_edition": "Uredi odjeljak"
     },

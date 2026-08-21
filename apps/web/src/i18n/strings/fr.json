@@ -676,8 +676,6 @@
     },
     "create_section_dialog": {
         "create_section": "Créer une section",
-        "description": "Ces sections sont réservées à vous.",
-        "label": "Nom de la section",
         "title": "Créer une section",
         "title_edition": "Modifier une section"
     },

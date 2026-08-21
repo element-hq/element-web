@@ -661,7 +661,6 @@
     },
     "create_section_dialog": {
         "create_section": "Новый раздел",
-        "label": "Название раздела",
         "title": "Новый раздел",
         "title_edition": "Редактировать раздел"
     },
