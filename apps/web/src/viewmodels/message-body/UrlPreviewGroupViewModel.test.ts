@@ -11,7 +11,7 @@ import { MsgType, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { vi, describe, it, expect, type Mock, type MockedObject } from "vitest";
 
 import { BUNDLED_LINK_PREVIEWS, MAX_PREVIEWS_WHEN_LIMITED, UrlPreviewGroupViewModel } from "./UrlPreviewGroupViewModel";
-import type { UrlPreview } from "@element-hq/web-shared-components";
+import type { UrlPreview } from "shared-types";
 import { getMockClientWithEventEmitter, mkEvent } from "test-utils";
 
 const IMAGE_MXC = "mxc://example.org/abc";

@@ -12,11 +12,11 @@ import {
     EventContentBodyView,
     TextualBodyView,
     type TextualBodyContentElement,
-    type UrlPreview,
     UrlPreviewGroupView,
     useCreateAutoDisposedViewModel,
     useViewModel,
 } from "@element-hq/web-shared-components";
+import { type UrlPreview } from "shared-types";
 
 import { type IBodyProps } from "./IBodyProps";
 import RoomContext from "../../../contexts/RoomContext";

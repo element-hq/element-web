@@ -7,7 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type IContent } from "matrix-js-sdk/src/matrix";
-import { type UrlPreview, type MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
+import { type MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
+import { type UrlPreview } from "shared-types";
 
 import { attachMentions, attachUrlPreviews } from "../../../src/utils/messages";
 import EditorModel from "../../../src/editor/model";

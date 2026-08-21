@@ -39,3 +39,4 @@ export type * from "./api/storage-helper";
 export type * from "./api/settings";
 export * from "./api/watchable";
 export type * from "./utils";
+export type * from "./api/urlpreview";

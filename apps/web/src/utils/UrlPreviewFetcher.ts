@@ -9,10 +9,11 @@ import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { type IPreviewUrlResponse, type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 import { decode } from "html-entities";
 
-import type { UrlPreview } from "@element-hq/web-shared-components";
+import type { UrlPreview } from "shared-types";
 import { mediaFromMxc } from "../customisations/Media";
 import { thumbHeight } from "../ImageUtils";
 import { type UnstableBundledUrlPreviewSingle } from "../../@types/url-preview";
+import { type UrlPreviewApi as ModuleUrlPreviewApi } from "../modules/UrlPreviewApi";
 
 const logger = rootLogger.getChild("UrlPreviewFetcher");
 
@@ -33,6 +34,7 @@ export class UrlPreviewFetcher {
         private readonly client: MatrixClient,
         private readonly previewRequestTs: number,
         private readonly showTooltips: boolean,
+        private readonly previewModuleApi: ModuleUrlPreviewApi
     ) {}
 
     public clearCache(): void {
@@ -134,6 +136,11 @@ export class UrlPreviewFetcher {
      * @param loadMedia Whether to include the preview image. Pass false when media is hidden.
      */
     public async fetchPreview(link: string, loadMedia: boolean): Promise<UrlPreview | null> {
+        const moduleResponse = this.previewModuleApi.getPreview(link);
+        if (moduleResponse) {
+            return moduleResponse;
+        }
+
         const cached = this.cache.get(link);
         if (cached) return cached;
 

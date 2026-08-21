@@ -8,10 +8,10 @@
 import { MsgType, type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import {
     BaseViewModel,
-    type UrlPreview,
     type UrlPreviewGroupViewActions,
     type UrlPreviewGroupViewSnapshot,
 } from "@element-hq/web-shared-components";
+import { type UrlPreview } from "shared-types";
 import { type UrlPreviewVisibilityChanged } from "@matrix-org/analytics-events/types/typescript/UrlPreviewVisibilityChanged";
 
 import { PosthogAnalytics } from "../../PosthogAnalytics";

@@ -544,6 +544,16 @@ export const enum UIComponent {
     RoomOptionsMenu = "UIComponent.roomOptionsMenu"
 }
 
+// @alpha
+export interface UrlPreviewApi {
+    registerPreviewHandler(regex: RegExp, handler: UrlPreviewHandler): void;
+}
+
+// Warning: (ae-forgotten-export) The symbol "UrlPreview" needs to be exported by the entry point index.d.ts
+//
+// @alpha
+export type UrlPreviewHandler = (url: string) => UrlPreview | null;
+
 // @alpha @deprecated (undocumented)
 export interface UserIdentifierCustomisations {
     getDisplayUserIdentifier(userId: string, opts: {
