@@ -155,6 +155,7 @@ export function createClientWithCreds(creds: IMatrixClientCreds, oauth?: OAuth2)
         cryptoCallbacks: { ...crossSigningCallbacks },
         enableEncryptedStateEvents: SettingsStore.getValue("feature_msc4362_encrypted_state_events"),
         unstableMSC1763Retention: SettingsStore.getValue("feature_retention"),
+        unstableMSC4509KeyBundleClaim: SettingsStore.getValue("feature_share_history_on_autojoin"),
         roomNameGenerator,
     };
 
