@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ChangeEvent } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
+import { HelpMessage, InlineField, Label, RadioControl, Root } from "@vector-im/compound-web";
 
 import { _t } from "../../../../languageHandler";
 import SdkConfig from "../../../../SdkConfig";
@@ -20,6 +21,7 @@ import Field from "../../../../components/views/elements/Field";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 import DialogButtons from "../../../../components/views/elements/DialogButtons";
 import { type IIndexStats } from "../../../../indexing/BaseEventIndexManager";
+import { TokenizerMode } from "../../../../settings/enums/TokenizerMode";
 
 interface IProps {
     onFinished(): void;
@@ -46,6 +48,12 @@ interface IState {
 
     /** Time to sleep between crawlwer passes, in milliseconds. */
     crawlerSleepTime: number;
+
+    /** Tokenizer mode for search indexing. */
+    tokenizerMode: TokenizerMode;
+
+    /** Initial tokenizer mode when dialog was opened. */
+    initialTokenizerMode: TokenizerMode;
 }
 
 /*
@@ -55,6 +63,7 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
     public constructor(props: IProps) {
         super(props);
 
+        const initialTokenizerMode = SettingsStore.getValueAt(SettingLevel.DEVICE, "tokenizerMode") as TokenizerMode;
         this.state = {
             eventIndexSize: 0,
             eventCount: 0,
@@ -63,6 +72,8 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
             roomCount: 0,
             currentRoom: null,
             crawlerSleepTime: SettingsStore.getValueAt(SettingLevel.DEVICE, "crawlerSleepTime"),
+            tokenizerMode: initialTokenizerMode,
+            initialTokenizerMode: initialTokenizerMode,
         };
     }
 
@@ -125,6 +136,48 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
         void SettingsStore.setValue("crawlerSleepTime", null, SettingLevel.DEVICE, e.target.valueAsNumber);
     };
 
+    private readonly onTokenizerModeChange = (e: ChangeEvent<HTMLInputElement>): void => {
+        this.setState({ tokenizerMode: e.target.value as TokenizerMode });
+        // Don't save to settings yet - wait for Done button
+    };
+
+    private readonly onDone = async (): Promise<void> => {
+        // Check if tokenizer mode has changed
+        if (this.state.tokenizerMode !== this.state.initialTokenizerMode) {
+            // Show confirmation dialog
+            const ConfirmTokenizerChangeDialog = (await import("./ConfirmTokenizerChangeDialog")).default;
+            const { finished } = Modal.createDialog(
+                ConfirmTokenizerChangeDialog,
+                {},
+                undefined,
+                /* priority = */ false,
+                /* static = */ true,
+            );
+
+            const [confirmed] = await finished;
+
+            if (confirmed) {
+                // Save the tokenizer mode setting
+                await SettingsStore.setValue("tokenizerMode", null, SettingLevel.DEVICE, this.state.tokenizerMode);
+                await EventIndexPeg.initEventIndex();
+            } else {
+                // User cancelled - revert tokenizer mode to initial value
+                this.setState((prevState) => ({ tokenizerMode: prevState.initialTokenizerMode }));
+                await SettingsStore.setValue(
+                    "tokenizerMode",
+                    null,
+                    SettingLevel.DEVICE,
+                    this.state.initialTokenizerMode,
+                );
+            }
+
+            this.props.onFinished();
+        } else {
+            // No change, just close the dialog
+            this.props.onFinished();
+        }
+    };
+
     public render(): React.ReactNode {
         const brand = SdkConfig.get().brand;
 
@@ -165,6 +218,37 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
                         value={this.state.crawlerSleepTime.toString()}
                         onChange={this.onCrawlerSleepTimeChange}
                     />
+                    <h3>{_t("settings|security|tokenizer_mode")}</h3>
+                    <Root>
+                        <InlineField
+                            name="tokenizerMode"
+                            control={
+                                <RadioControl
+                                    name="tokenizerMode"
+                                    value={TokenizerMode.Ngram}
+                                    checked={this.state.tokenizerMode === TokenizerMode.Ngram}
+                                    onChange={this.onTokenizerModeChange}
+                                />
+                            }
+                        >
+                            <Label>{_t("settings|security|tokenizer_mode_ngram")}</Label>
+                            <HelpMessage>{_t("settings|security|tokenizer_mode_ngram_description")}</HelpMessage>
+                        </InlineField>
+                        <InlineField
+                            name="tokenizerMode"
+                            control={
+                                <RadioControl
+                                    name="tokenizerMode"
+                                    value={TokenizerMode.Language}
+                                    checked={this.state.tokenizerMode === TokenizerMode.Language}
+                                    onChange={this.onTokenizerModeChange}
+                                />
+                            }
+                        >
+                            <Label>{_t("settings|security|tokenizer_mode_language")}</Label>
+                            <HelpMessage>{_t("settings|security|tokenizer_mode_language_description")}</HelpMessage>
+                        </InlineField>
+                    </Root>
                 </div>
             </div>
         );
@@ -178,7 +262,7 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
                 {eventIndexingSettings}
                 <DialogButtons
                     primaryButton={_t("action|done")}
-                    onPrimaryButtonClick={this.props.onFinished}
+                    onPrimaryButtonClick={this.onDone}
                     primaryButtonClass="primary"
                     cancelButton={_t("action|disable")}
                     onCancel={this.onDisable}
