@@ -19,7 +19,7 @@ import { ReadyWatchingStore } from "../ReadyWatchingStore";
 import {
     convertToStatePanel,
     convertToStorePanel,
-    RightPanelCardType,
+    type RightPanelCardType,
     type IRightPanelCard,
     type IRightPanelCardState,
     type IRightPanelForRoom,
@@ -68,7 +68,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
     private byRoom: { [roomId: string]: IRightPanelForRoom } = {};
     private viewedRoomId: string | null = null;
 
-    private get focusedCardType() {
+    private get focusedCardType(): RightPanelCardType {
         return this.internalFocusedCardType;
     }
 
@@ -218,9 +218,9 @@ export default class RightPanelStore extends ReadyWatchingStore {
 
     public closeCurrentCard(roomId: string | null): void {
         if (this.focusedCardType === "global" && this.globalCard) {
-            this.closeGlobalCard()
+            this.closeGlobalCard();
         } else {
-            this.hideRoomPanel(roomId)
+            this.hideRoomPanel(roomId);
         }
     }
 
@@ -307,13 +307,13 @@ export default class RightPanelStore extends ReadyWatchingStore {
         return removedCard;
     }
 
-    public setGlobalCard(card: IRightPanelCard) {
+    public setGlobalCard(card: IRightPanelCard): void {
         this.global = { history: [card], isOpen: true };
         this.focusedCardType = "global";
         this.emitAndUpdateSettings();
     }
 
-    public closeGlobalCard() {
+    public closeGlobalCard(): void {
         this.global = undefined;
         this.focusedCardType = "room";
         this.emitAndUpdateSettings();
@@ -495,7 +495,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
         if (!isViewingRoom) {
             logger.warn(
                 `Tried to switch right panel to a room phase: ${targetPhase}, ` +
-                `but we are currently not viewing a room`,
+                    `but we are currently not viewing a room`,
             );
             return false;
         }

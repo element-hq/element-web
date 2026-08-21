@@ -42,7 +42,10 @@ import { WatchManager } from "./WatchManager";
 import { type CustomTheme } from "../theme";
 import AnalyticsController from "./controllers/AnalyticsController";
 import FallbackIceServerController from "./controllers/FallbackIceServerController";
-import { RightPanelCardType, type IRightPanelForRoomStored } from "../stores/right-panel/RightPanelStoreIPanelState.ts";
+import {
+    type RightPanelCardType,
+    type IRightPanelForRoomStored,
+} from "../stores/right-panel/RightPanelStoreIPanelState.ts";
 import { type ILayoutSettings } from "../stores/widgets/WidgetLayoutStore.ts";
 import { type ReleaseAnnouncementData } from "../stores/ReleaseAnnouncementStore.ts";
 import { type RecentEmojiData } from "../emojipicker/recent.ts";
@@ -133,10 +136,10 @@ export interface IBaseSetting<T extends SettingValueType = SettingValueType> {
     // Display names are strongly recommended for clarity.
     // Display name can also be an object for different levels.
     displayName?:
-    | TranslationKey
-    | Partial<{
-        [level in SettingLevel]: TranslationKey;
-    }>;
+        | TranslationKey
+        | Partial<{
+              [level in SettingLevel]: TranslationKey;
+          }>;
 
     // Optional description which will be shown as microCopy under SettingsFlags
     description?: TranslationKey | (() => ReactNode);

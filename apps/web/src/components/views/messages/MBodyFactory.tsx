@@ -12,7 +12,7 @@ import {
     DecryptionFailureBodyView,
     FileBodyView,
     ImageBodyView,
-    MediaPreviewEntryButton,
+    type MediaPreviewEntryButton,
     MediaPreviewGroupPreview,
     RedactedBodyView,
     VideoBodyView,
@@ -96,48 +96,46 @@ function PreviewFileBody({ mxEvent, mediaEventHelper }: FileBodyProps): JSX.Elem
 
     const downloader = new FileDownloader();
 
-    const vm = useCreateAutoDisposedViewModel(
-        () => {
-            let additionalButtons: MediaPreviewEntryButton[] = [];
+    const vm = useCreateAutoDisposedViewModel(() => {
+        const additionalButtons: MediaPreviewEntryButton[] = [];
 
-            switch (content.info?.mimetype) {
-                case "application/pdf":
-                    additionalButtons.push({
-                        label: "Open in file viewer", // TODO: translation
-                        icon: <ExpandIcon />,
-                        onClick: () => RightPanelStore.instance.setGlobalCard({ phase: RightPanelPhases.FileViewer })
-                    })
-            }
-
-            return new MediaPreviewGroupViewModel({
-                entries: [
-                    {
-                        id: mxEvent.getId()!,
-                        style: "text",
-                        header: mediaEventHelper!.fileName,
-                        body: size === undefined ? _t("timeline|m.file|size_unknown") : fileSize(size),
-                        buttons:
-                            mediaEventHelper === undefined
-                                ? undefined
-                                : [
-                                    ...additionalButtons,
-                                    {
-                                        label: _t("action|download"),
-                                        icon: <DownloadIcon />,
-                                        onClick: async () => {
-                                            await downloader.download({
-                                                blob: await mediaEventHelper.sourceBlob.value, // decrypts transparently if E2EE
-                                                name: mediaEventHelper.fileName || _t("common|attachment"),
-                                            });
-                                        },
-                                    },
-                                ],
-                        ...attachmentIcon(content.info?.mimetype),
-                    },
-                ],
-            })
+        switch (content.info?.mimetype) {
+            case "application/pdf":
+                additionalButtons.push({
+                    label: "Open in file viewer", // TODO: translation
+                    icon: <ExpandIcon />,
+                    onClick: () => RightPanelStore.instance.setGlobalCard({ phase: RightPanelPhases.FileViewer }),
+                });
         }
-    );
+
+        return new MediaPreviewGroupViewModel({
+            entries: [
+                {
+                    id: mxEvent.getId()!,
+                    style: "text",
+                    header: mediaEventHelper!.fileName,
+                    body: size === undefined ? _t("timeline|m.file|size_unknown") : fileSize(size),
+                    buttons:
+                        mediaEventHelper === undefined
+                            ? undefined
+                            : [
+                                  ...additionalButtons,
+                                  {
+                                      label: _t("action|download"),
+                                      icon: <DownloadIcon />,
+                                      onClick: async () => {
+                                          await downloader.download({
+                                              blob: await mediaEventHelper.sourceBlob.value, // decrypts transparently if E2EE
+                                              name: mediaEventHelper.fileName || _t("common|attachment"),
+                                          });
+                                      },
+                                  },
+                              ],
+                    ...attachmentIcon(content.info?.mimetype),
+                },
+            ],
+        });
+    });
 
     return (
         <div className="mx_EventTile_content">

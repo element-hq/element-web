@@ -280,9 +280,11 @@ export default class RightPanel extends React.Component<Props, IState> {
                 break;
 
             case RightPanelPhases.FileViewer:
-                card = <BaseCard header="File Viewer" onClose={this.onClose}>
-                    <div>Boop</div>
-                </BaseCard>
+                card = (
+                    <BaseCard header="File Viewer" onClose={this.onClose}>
+                        <div>Boop</div>
+                    </BaseCard>
+                );
                 break;
         }
 
