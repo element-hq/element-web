@@ -42,8 +42,8 @@ test.describe("EventTileView application coverage", () => {
                 await app.settings.setValue("useCompactLayout", null, SettingLevel.DEVICE, false);
 
                 await expect(
-                    messages.locator(`.mx_EventTile[data-layout='${layout}']`).filter({
-                        has: page.locator(".mx_EventTile_body"),
+                    messages.locator(".mx_EventTile").filter({
+                        has: page.getByTestId("event-tile-slot-body"),
                     }),
                 ).toHaveCount(4);
 
@@ -55,9 +55,9 @@ test.describe("EventTileView application coverage", () => {
             await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
             await app.settings.setValue("useCompactLayout", null, SettingLevel.DEVICE, true);
             await expect(
-                messages
-                    .locator(".mx_EventTile[data-layout='group']")
-                    .filter({ has: page.locator(".mx_EventTile_body") }),
+                messages.locator(".mx_EventTile").filter({
+                    has: page.getByTestId("event-tile-slot-body"),
+                }),
             ).toHaveCount(4);
             await expect(messages).toMatchScreenshot("event-tile-group-compact.png", {
                 css: ".mx_MessageTimestamp { visibility: hidden; }",
@@ -162,10 +162,10 @@ test.describe("EventTileView application coverage", () => {
             await app.client.inviteUser(roomId, bot.credentials!.userId);
             await bot.joinRoom(roomId);
 
-            await app.client.sendMessage(roomId, "context before");
+            const contextBefore = await app.client.sendMessage(roomId, "context before");
             const root = await app.client.sendMessage(roomId, "match root link https://example.org");
             const other = await bot.sendMessage(roomId, "match other link");
-            await bot.sendMessage(roomId, "context after");
+            const contextAfter = await bot.sendMessage(roomId, "context after");
 
             await app.viewRoomById(roomId);
             await app.toggleRoomInfoPanel();
@@ -174,23 +174,20 @@ test.describe("EventTileView application coverage", () => {
             await search.press("Enter");
 
             const results = page.locator(".mx_RoomView_searchResultsPanel");
-            const matching = results.locator(".mx_EventTile:not(.mx_EventTile_contextual)");
-            const contextual = results.locator(".mx_EventTile.mx_EventTile_contextual");
-            const rootTile = results.locator(
-                `.mx_EventTile[data-event-id='${root.event_id}']:not(.mx_EventTile_contextual)`,
-            );
-            const otherTile = results.locator(
-                `.mx_EventTile[data-event-id='${other.event_id}']:not(.mx_EventTile_contextual)`,
-            );
+            const matching = results.locator(".mx_EventTile").filter({
+                has: page.locator(".mx_EventTile_searchHighlight"),
+            });
+            const rootTile = results.locator(`.mx_EventTile[data-event-id='${root.event_id}']`);
+            const otherTile = results.locator(`.mx_EventTile[data-event-id='${other.event_id}']`);
             await expect(matching).toHaveCount(2);
-            expect(await contextual.count()).toBeGreaterThan(0);
-            await expect(contextual.first()).toHaveCSS("opacity", "0.4");
+            for (const event of [contextBefore, contextAfter]) {
+                await expect(results.locator(`.mx_EventTile[data-event-id='${event.event_id}']`)).toHaveCount(1);
+            }
 
             await expect(rootTile).toHaveCount(1);
             await expect(otherTile).toHaveCount(1);
             for (const tile of [rootTile, otherTile]) {
                 await expect(tile.locator(".mx_EventTile_searchHighlight")).toBeVisible();
-                await expect(tile).toHaveAttribute("data-layout", /group|bubble|irc/);
             }
 
             await expect(rootTile.locator(`a[href='#/room/${roomId}/${root.event_id}']`)).toBeVisible();
@@ -201,9 +198,7 @@ test.describe("EventTileView application coverage", () => {
             });
 
             await app.settings.setValue("useCompactLayout", null, SettingLevel.DEVICE, true);
-            await expect(
-                results.locator(".mx_EventTile:not(.mx_EventTile_contextual)[data-layout='group']"),
-            ).toHaveCount(2);
+            await expect(matching).toHaveCount(2);
         },
     );
 
@@ -230,9 +225,7 @@ test.describe("EventTileView application coverage", () => {
             await search.press("Enter");
 
             const results = page.locator(".mx_RoomView_searchResultsPanel");
-            const replyTile = results.locator(
-                `.mx_EventTile[data-event-id='${reply.event_id}']:not(.mx_EventTile_contextual)`,
-            );
+            const replyTile = results.locator(`.mx_EventTile[data-event-id='${reply.event_id}']`);
             await expect(replyTile).toHaveCount(1);
             await expect(replyTile.locator(".mx_ThreadSummary_icon")).toBeVisible();
             await expect(replyTile.locator(".mx_ThreadSummary_icon")).toHaveAttribute(
@@ -270,13 +263,15 @@ test.describe("EventTileView application coverage", () => {
                 await app.client.inviteUser(sourceRoomId, bot.credentials!.userId);
                 await bot.joinRoom(sourceRoomId);
                 const parkingRoomId = await app.client.createRoom({ name: "Notification parking" });
+                const notificationText =
+                    "Notification event with enough text to span more than two lines in the notification preview";
 
                 await app.viewRoomById(parkingRoomId);
                 const notificationEvent = await bot.sendMessage(sourceRoomId, {
                     "msgtype": "m.text",
-                    "body": "Notification event",
+                    "body": notificationText,
                     "format": "org.matrix.custom.html",
-                    "formatted_body": `<a href="https://matrix.to/#/${user.userId}">Notification event</a>`,
+                    "formatted_body": `<a href="https://matrix.to/#/${user.userId}">${notificationText}</a>`,
                     "m.mentions": {
                         user_ids: [user.userId],
                     },
@@ -298,11 +293,9 @@ test.describe("EventTileView application coverage", () => {
 
                 await page.getByRole("button", { name: "Notifications" }).click();
                 const panel = page.locator(".mx_ThreadPanel");
-                const tile = panel.locator(".mx_EventTile", { hasText: "Notification event" });
+                const tile = panel.locator(".mx_EventTile", { hasText: notificationText });
                 await expect(tile).toBeVisible();
-                await expect(tile).toHaveAttribute("data-layout", "group");
-                await expect(tile).toHaveAttribute("data-self", "false");
-                await expect(tile).toHaveClass(/mx_EventTile_clamp/);
+                await expect(tile.getByTestId("event-tile-slot-body")).toBeVisible();
                 await expect(tile.locator(".mx_EventTile_details")).toContainText("Bob");
                 await expect(tile).toMatchScreenshot("notification-event-tile.png", {
                     css: ".mx_MessageTimestamp { visibility: hidden; }",

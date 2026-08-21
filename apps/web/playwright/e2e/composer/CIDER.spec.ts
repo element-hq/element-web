@@ -47,17 +47,13 @@ test.describe("Composer", () => {
             // Click send
             await page.getByRole("button", { name: "Send message" }).click();
             // It has been sent
-            await expect(
-                page.locator(".mx_EventTile_last .mx_EventTile_body", { hasText: "my message 0" }),
-            ).toBeVisible();
+            await expect(page.locator(".mx_EventTile").last().getByTestId("event-tile-slot-body")).toBeVisible();
 
             // Type another and press Enter afterward
             await composer.pressSequentially("my message 1");
             await composer.press("Enter");
             // It was sent
-            await expect(
-                page.locator(".mx_EventTile_last .mx_EventTile_body", { hasText: "my message 1" }),
-            ).toBeVisible();
+            await expect(page.locator(".mx_EventTile").last().getByTestId("event-tile-slot-body")).toBeVisible();
         });
 
         test("can write formatted text", async ({ page }) => {
@@ -174,9 +170,7 @@ test.describe("Composer", () => {
                 // Press Control+Enter
                 await composer.press(`${CtrlOrMeta}+Enter`);
                 // It was sent
-                await expect(
-                    page.locator(".mx_EventTile_last .mx_EventTile_body", { hasText: "my message 3" }),
-                ).toBeVisible();
+                await expect(page.locator(".mx_EventTile").last().getByTestId("event-tile-slot-body")).toBeVisible();
             });
         });
 

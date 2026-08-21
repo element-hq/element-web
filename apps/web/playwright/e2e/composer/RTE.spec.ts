@@ -161,14 +161,18 @@ test.describe("Composer", () => {
             // Click send
             await page.getByRole("button", { name: "Send message" }).click();
             // It has been sent
-            await expect(page.locator(".mx_EventTile_last .mx_EventTile_body").getByText("my message 0")).toBeVisible();
+            await expect(
+                page.locator(".mx_EventTile").last().getByTestId("event-tile-slot-body").getByText("my message 0"),
+            ).toBeVisible();
 
             // Type another
             await page.locator("div[contenteditable=true]").pressSequentially("my message 1");
             // Send message
             await page.locator("div[contenteditable=true]").press("Enter");
             // It was sent
-            await expect(page.locator(".mx_EventTile_last .mx_EventTile_body").getByText("my message 1")).toBeVisible();
+            await expect(
+                page.locator(".mx_EventTile").last().getByTestId("event-tile-slot-body").getByText("my message 1"),
+            ).toBeVisible();
         });
 
         test("sends only one message when you press Enter multiple times", async ({ page }) => {
@@ -182,8 +186,10 @@ test.describe("Composer", () => {
             await page.locator("div[contenteditable=true]").press("Enter");
             await page.locator("div[contenteditable=true]").press("Enter");
             // It has been sent
-            await expect(page.locator(".mx_EventTile_last .mx_EventTile_body").getByText("my message 0")).toBeVisible();
-            await expect(page.locator(".mx_EventTile_last .mx_EventTile_body")).toHaveCount(1);
+            await expect(
+                page.locator(".mx_EventTile").last().getByTestId("event-tile-slot-body").getByText("my message 0"),
+            ).toBeVisible();
+            await expect(page.locator(".mx_EventTile").last().getByTestId("event-tile-slot-body")).toHaveCount(1);
         });
 
         test("can write formatted text", async ({ page }) => {
@@ -208,7 +214,7 @@ test.describe("Composer", () => {
             await page.getByRole("button", { name: "Send message" }).click();
 
             // Click reply
-            const tile = page.locator(".mx_EventTile_last");
+            const tile = page.locator(".mx_EventTile").last();
             await tile.hover();
             await tile.getByRole("button", { name: "Reply in thread" }).click();
 
@@ -247,7 +253,7 @@ test.describe("Composer", () => {
                 await page.locator("div[contenteditable=true]").press("Control+Enter");
                 // It was sent
                 await expect(
-                    page.locator(".mx_EventTile_last .mx_EventTile_body").getByText("my message 3"),
+                    page.locator(".mx_EventTile").last().getByTestId("event-tile-slot-body").getByText("my message 3"),
                 ).toBeVisible();
             });
         });
@@ -311,7 +317,9 @@ test.describe("Composer", () => {
 
                 // Send the message and assert the message
                 await page.getByRole("button", { name: "Send message" }).click();
-                await expect(page.locator(".mx_EventTile_last .mx_EventTile_body").getByText("my bold")).toBeVisible();
+                await expect(
+                    page.locator(".mx_EventTile").last().getByTestId("event-tile-slot-body").getByText("my bold"),
+                ).toBeVisible();
             });
 
             test("draft with replies", async ({ page, app }) => {
@@ -329,7 +337,7 @@ test.describe("Composer", () => {
                 await page.getByRole("button", { name: "Send message" }).click();
 
                 // Click reply
-                const tile = page.locator(".mx_EventTile_last");
+                const tile = page.locator(".mx_EventTile").last();
                 await tile.hover();
                 await tile.getByRole("button", { name: "Reply", exact: true }).click();
 
@@ -360,7 +368,7 @@ test.describe("Composer", () => {
                 await page.getByRole("button", { name: "Send message" }).click();
 
                 // Click reply
-                const tile = page.locator(".mx_EventTile_last");
+                const tile = page.locator(".mx_EventTile").last();
                 await tile.hover();
                 await tile.getByRole("button", { name: "Reply in thread" }).click();
 

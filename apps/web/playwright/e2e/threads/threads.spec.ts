@@ -69,7 +69,7 @@ test.describe("Threads", () => {
         await locator.click();
 
         // Wait until the both messages are read
-        locator = page.locator(".mx_ThreadView .mx_EventTile_last[data-layout=group]");
+        locator = page.locator(".mx_ThreadView .mx_EventTile").filter({ hasText: MessageLong });
         await expect(locator.locator(".mx_EventTile_line .mx_MTextBody").getByText(MessageLong)).toBeAttached();
         await expect(locator.locator(".mx_ReadReceiptGroup .mx_BaseAvatar")).toBeVisible();
         // Make sure the CSS style for spacing is applied to mx_EventTile_line on group/modern layout
@@ -84,7 +84,7 @@ test.describe("Threads", () => {
             css,
         });
         await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
-        await expect(page.locator(".mx_ThreadView .mx_EventTile[data-layout='bubble']")).toHaveCount(2);
+        await expect(page.locator(".mx_ThreadView .mx_EventTile")).toHaveCount(2);
 
         await expect(page.locator(".mx_ThreadView")).toMatchScreenshot("Initial_ThreadView_on_bubble_layout.png", {
             mask,
@@ -94,7 +94,7 @@ test.describe("Threads", () => {
         // Set the group layout
         await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
 
-        locator = page.locator(".mx_ThreadView .mx_EventTile[data-layout='group'].mx_EventTile_last");
+        locator = page.locator(".mx_ThreadView .mx_EventTile").last();
         // Wait until the messages are rendered
         await expect(locator.locator(".mx_EventTile_line .mx_MTextBody").getByText(MessageLong)).toBeAttached();
         // Make sure the avatar inside ReadReceiptGroup is visible on the group layout
@@ -103,7 +103,7 @@ test.describe("Threads", () => {
         // Enable the bubble layout
         await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
 
-        locator = page.locator(".mx_ThreadView .mx_EventTile[data-layout='bubble'].mx_EventTile_last");
+        locator = page.locator(".mx_ThreadView .mx_EventTile").last();
         // TODO: remove this after fixing the issue of ReadReceiptGroup being hidden on the bubble layout
         // See: https://github.com/vector-im/element-web/issues/23569
         await expect(locator.locator(".mx_ReadReceiptGroup .mx_BaseAvatar")).toBeAttached();
@@ -146,17 +146,15 @@ test.describe("Threads", () => {
 
         locator = page.locator(".mx_ThreadView");
         // Make sure the CSS style for spacing is applied to mx_EventTile_footer on group/modern layout
-        await expect(locator.locator(".mx_EventTile[data-layout=group] .mx_EventTile_footer")).toHaveCSS(
+        await expect(locator.getByTestId("event-tile-slot-footer")).toHaveCSS(
             "margin-inline-start",
             ThreadViewGroupSpacingStart,
         );
         // Make sure the CSS style for spacing is applied to the hidden event on group/modern layout
-        await expect(
-            locator.locator(
-                ".mx_GenericEventListSummary[data-layout=group] .mx_EventTile_info.mx_EventTile_last " +
-                    ".mx_EventTile_line",
-            ),
-        ).toHaveCSS("padding-inline-start", ThreadViewGroupSpacingStart);
+        await expect(locator.locator(".mx_GenericEventListSummary .mx_EventTile")).toHaveCSS(
+            "padding-inline-start",
+            ThreadViewGroupSpacingStart,
+        );
 
         // Take snapshot of group layout (IRC layout is not available on ThreadView)
         await expect(page.locator(".mx_ThreadView")).toMatchScreenshot(
@@ -171,10 +169,8 @@ test.describe("Threads", () => {
         await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
 
         // Make sure the CSS style for spacing is applied to the hidden event on bubble layout
-        locator = page.locator(
-            ".mx_ThreadView .mx_GenericEventListSummary[data-layout=bubble] .mx_EventTile_info.mx_EventTile_last",
-        );
-        await expect(locator.locator(".mx_EventTile_line .mx_EventTile_content"))
+        locator = page.locator(".mx_ThreadView .mx_GenericEventListSummary .mx_EventTile").last();
+        await expect(locator.getByTestId("event-tile-slot-body"))
             // 76px: ThreadViewGroupSpacingStart + 14px + 6px
             // 14px: avatar width
             // See: _EventTile.pcss
@@ -215,12 +211,12 @@ test.describe("Threads", () => {
         // Wait until the response is redacted
         // XXX: one would expect this redaction to be shown in the thread the message was in, but due to redactions
         // stripping the thread_id, it is instead shown in the main timeline
-        await expect(page.locator(".mx_MainSplit_timeline").locator(".mx_EventTile_last")).toContainText(
+        await expect(page.locator(".mx_MainSplit_timeline").locator(".mx_EventTile").last()).toContainText(
             "Message deleted",
         );
 
         // Take snapshots in group layout and bubble layout (IRC layout is not available on ThreadView)
-        await expect(page.locator(".mx_ThreadView .mx_EventTile[data-layout='group']")).toHaveCount(2);
+        await expect(page.locator(".mx_ThreadView .mx_EventTile")).toHaveCount(2);
         await expect(page.locator(".mx_ThreadView")).toMatchScreenshot(
             "ThreadView_with_redacted_messages_on_group_layout.png",
             {
@@ -229,7 +225,7 @@ test.describe("Threads", () => {
             },
         );
         await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
-        await expect(page.locator(".mx_ThreadView .mx_EventTile[data-layout='bubble']")).toHaveCount(2);
+        await expect(page.locator(".mx_ThreadView .mx_EventTile")).toHaveCount(2);
         await expect(page.locator(".mx_ThreadView")).toMatchScreenshot(
             "ThreadView_with_redacted_messages_on_bubble_layout.png",
             {
@@ -263,7 +259,7 @@ test.describe("Threads", () => {
         await locator.click(); // User opens thread list
 
         // User asserts thread with correct root & latest events & unread dot
-        locator = page.locator(".mx_ThreadPanel .mx_EventTile_last");
+        locator = page.locator(".mx_ThreadPanel .mx_EventTile").last();
         await expect(locator.locator(".mx_EventTile_body").getByText("Hello Mr. Bot")).toBeAttached();
         await expect(locator.getByText("How are things?")).toBeAttached();
         // Check the number of the replies
@@ -285,7 +281,7 @@ test.describe("Threads", () => {
         await expect(locator.getByText("Great!")).toBeAttached();
 
         // User edits & asserts
-        locator = page.locator(".mx_ThreadView .mx_EventTile_last");
+        locator = page.locator(".mx_ThreadView .mx_EventTile").last();
         await expect(locator.getByText("Great!")).toBeAttached();
         await locator.locator(".mx_EventTile_line").hover();
         await locator.locator(".mx_EventTile_line").getByRole("button", { name: "Edit" }).click();
@@ -467,19 +463,25 @@ test.describe("Threads", () => {
             await page.getByTestId(`share-location-option-Pin`).click();
             await page.locator("#mx_LocationPicker_map").click();
             await page.getByRole("button", { name: "Share location" }).click();
-            await expect(page.locator(".mx_ThreadView .mx_EventTile_last .mx_MLocationBody")).toBeAttached({
+            await expect(
+                page
+                    .locator(".mx_ThreadView .mx_EventTile")
+                    .last()
+                    .getByTestId("event-tile-slot-body")
+                    .locator(".mx_MLocationBody"),
+            ).toBeAttached({
                 timeout: 10000,
             });
 
             // User replies to the location
             locator = page.locator(".mx_ThreadView");
-            await locator.locator(".mx_EventTile_last").hover();
-            await locator.locator(".mx_EventTile_last").getByRole("button", { name: "Reply" }).click();
+            await locator.locator(".mx_EventTile").last().hover();
+            await locator.locator(".mx_EventTile").last().getByRole("button", { name: "Reply" }).click();
             textbox = locator.getByRole("textbox", { name: "Reply to unencrypted thread…" });
             await textbox.fill("Please come here");
             await textbox.press("Enter");
             // Wait until the reply is sent
-            await expect(locator.locator(".mx_EventTile_last").getByRole("status")).toHaveAccessibleName(
+            await expect(locator.locator(".mx_EventTile").last().getByRole("status")).toHaveAccessibleName(
                 "Your message was sent",
             );
 
@@ -510,7 +512,7 @@ test.describe("Threads", () => {
         textbox = locator.getByRole("textbox", { name: "Send an unencrypted message…" });
         await textbox.fill("Hello Mr. User");
         await textbox.press("Enter");
-        await expect(locator.locator(".mx_EventTile_last").getByText("Hello Mr. User")).toBeVisible();
+        await expect(locator.locator(".mx_EventTile").last().getByText("Hello Mr. User")).toBeVisible();
         // Close thread
         await locator.getByTestId("base-card-close-button").click();
 
@@ -563,7 +565,7 @@ test.describe("Threads", () => {
             const textbox = threadPanel.getByRole("textbox", { name: "Send an unencrypted message…" });
             await textbox.fill(threadMessage);
             await textbox.press("Enter");
-            await expect(threadPanel.locator(".mx_EventTile_last").getByText(threadMessage)).toBeVisible();
+            await expect(threadPanel.locator(".mx_EventTile").last().getByText(threadMessage)).toBeVisible();
             // Close thread
             await threadPanel.getByTestId("base-card-close-button").click();
         };
@@ -577,7 +579,7 @@ test.describe("Threads", () => {
         await page.locator(".mx_RoomHeader").getByRole("button", { name: "Threads" }).click();
         const threadPanel = page.locator(".mx_ThreadPanel");
         await expect(
-            threadPanel.locator(".mx_EventTile_last").getByText("Hello again Mr. User in a thread"),
+            threadPanel.locator(".mx_EventTile").last().getByText("Hello again Mr. User in a thread"),
         ).toBeVisible();
         await expect(threadPanel).toMatchScreenshot("thread-panel.png", {
             css: ".mx_MessageTimestamp { visibility: hidden !important; }",
@@ -626,7 +628,7 @@ test.describe("Threads", () => {
         const threadTextbox = threadPanel.getByRole("textbox", { name: "Send an unencrypted message…" });
         await threadTextbox.fill("Hello Mr. User in a thread");
         await threadTextbox.press("Enter");
-        await expect(threadPanel.locator(".mx_EventTile_last").getByText("Hello Mr. User in a thread")).toBeVisible();
+        await expect(threadPanel.locator(".mx_EventTile").last().getByText("Hello Mr. User in a thread")).toBeVisible();
         await threadPanel.getByTestId("base-card-close-button").click();
 
         await page.locator(".mx_RoomHeader").getByRole("button", { name: "Threads" }).click();
