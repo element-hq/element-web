@@ -15,7 +15,7 @@ import {
 import { MediaPreviewGroupViewModel } from "./MediaPreviewGroupViewModel";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { type MediaEventHelper } from "../../utils/MediaEventHelper";
-import { DownloadIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { DownloadIcon, ExpandIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { type MediaEventContent } from "matrix-js-sdk/src/types";
 import { FileDownloader } from "../../utils/FileDownloader";
 import { fileSize } from "../../utils/FileUtils";
@@ -25,8 +25,21 @@ export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
         const downloader = new FileDownloader();
         const content = mxEvent.getContent<MediaEventContent>();
         const size = content.info?.size;
+
+        const additionalButtons: MediaPreviewEntryButton[] = [];
+
+        switch (content.info?.mimetype) {
+            case "application/pdf":
+                additionalButtons.push({
+                    label: "Open in file viewer", // TODO: translation
+                    icon: <ExpandIcon />,
+                    onClick: () => {},
+                });
+        }
+
         // includes the download buttonn if mediaEventHelper is not undefined
         const buttons: MediaPreviewEntryButton[] | undefined = mediaEventHelper && [
+            ...additionalButtons,
             {
                 label: _t("action|download"),
                 icon: <DownloadIcon />,
