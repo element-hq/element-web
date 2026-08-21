@@ -84,10 +84,10 @@ const getBoundary = (target: EventTarget | null, root: HTMLElement): StoryBounda
     return boundary && root.contains(boundary) ? boundary : null;
 };
 
-const StoryDebugFrame = React.forwardRef<HTMLDivElement, React.PropsWithChildren>(function StoryDebugFrame(
-    { children },
+const StoryDebugFrame = ({
+    children,
     ref,
-): React.ReactElement {
+}: React.PropsWithChildren<{ ref?: React.Ref<HTMLDivElement> }>): React.ReactElement => {
     const frameRef = React.useRef<HTMLDivElement>(null);
     const activeBoundaryRef = React.useRef<StoryBoundary | null>(null);
     const [activeBoundary, setActiveBoundary] = React.useState<StoryBoundary | null>(null);
@@ -115,13 +115,15 @@ const StoryDebugFrame = React.forwardRef<HTMLDivElement, React.PropsWithChildren
         return () => activeBoundaryRef.current?.removeAttribute("data-story-hovered");
     }, []);
 
+    const setFrameRef = (element: HTMLDivElement | null): void => {
+        frameRef.current = element;
+        if (typeof ref === "function") ref(element);
+        else if (ref) ref.current = element;
+    };
+
     return (
         <div
-            ref={(element) => {
-                frameRef.current = element;
-                if (typeof ref === "function") ref(element);
-                else if (ref) ref.current = element;
-            }}
+            ref={setFrameRef}
             className={styles.debugFrame}
             onPointerMove={updateActiveBoundary}
             onPointerLeave={clearActiveBoundary}
@@ -130,7 +132,7 @@ const StoryDebugFrame = React.forwardRef<HTMLDivElement, React.PropsWithChildren
             {activeBoundary && <output className={styles.debugTooltip}>{getBoundaryLabel(activeBoundary)}</output>}
         </div>
     );
-});
+};
 
 type StoryMemberAvatarProps = {
     label?: string;
