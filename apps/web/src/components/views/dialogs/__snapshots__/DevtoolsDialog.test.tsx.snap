@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`DevtoolsDialog renders the devtools dialog 1`] = `
+exports[`DevtoolsDialog > renders the devtools dialog 1`] = `
 <DocumentFragment>
   <div
     data-focus-guard="true"
@@ -152,6 +152,12 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
           type="button"
         >
           End-to-end encryption
+        </button>
+        <button
+          class="mx_DevTools_button"
+          type="button"
+        >
+          Custom themes
         </button>
       </div>
       <form
