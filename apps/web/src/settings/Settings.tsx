@@ -214,6 +214,7 @@ export interface Settings {
     [Features.NotificationSettings2]: IFeature;
     "feature_msc3531_hide_messages_pending_moderation": IFeature;
     "feature_latex_maths": IFeature;
+    "feature_web_event_index": IFeature;
     "feature_wysiwyg_composer": IFeature;
     "feature_mjolnir": IFeature;
     "feature_custom_themes": IFeature;
@@ -472,6 +473,15 @@ export const SETTINGS: Settings = {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
         displayName: _td("labs|latex_maths"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        default: false,
+    },
+    "feature_web_event_index": {
+        isFeature: true,
+        labsGroup: LabGroup.Encryption,
+        displayName: _td("labs|web_event_index"),
+        description: _td("labs|web_event_index_description"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         default: false,

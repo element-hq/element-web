@@ -1542,6 +1542,8 @@
         "jump_to_date": "Jump to date (adds /jumptodate and jump to date headers)",
         "jump_to_date_msc_support": "Requires your server to support MSC3030",
         "latex_maths": "Render LaTeX maths in messages",
+        "web_event_index": "Encrypted message search in the browser",
+        "web_event_index_description": "Build a client-side encrypted index so Search works in E2EE rooms without Element Desktop. Off by default. The index never leaves this device.",
         "leave_beta": "Leave the beta",
         "leave_beta_reload": "Leaving the beta will reload %(brand)s.",
         "location_share_live": "Live Location Sharing",
@@ -2088,7 +2090,8 @@
                 "one": "1 result found for “<query/>”",
                 "other": "%(count)s results found for “<query/>”"
             },
-            "this_room_button": "Search this room"
+            "this_room_button": "Search this room",
+            "still_indexing": "Some rooms are still being indexed. Older messages may not appear yet."
         },
         "unknown_status_code_for_timeline_jump": "unknown status code",
         "unread_notifications_predecessor": {
