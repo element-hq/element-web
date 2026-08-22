@@ -313,11 +313,11 @@
         "reset_password_title": "重置密码",
         "server_picker_custom": "其它主服务器",
         "server_picker_description": "你可以使用自定义服务器选项，通过指定不同的主服务器网址登录其它 Matrix 服务器。这样你就可以通过现有的 Matrix 账户在其它主服务器上使用 %(brand)s。",
-        "server_picker_description_matrix.org": "免费加入数百万人规模，最大的公共服务器",
+        "server_picker_description_matrix.org": "免费加入拥有数百万用户规模的最大公共服务器",
         "server_picker_dialog_title": "决定你的账户托管在哪里",
         "server_picker_explainer": "如果有首选的 Matrix 主服务器，请使用它，或托管自己的服务器。",
         "server_picker_failed_validate_homeserver": "无法验证主服务器",
-        "server_picker_intro": "我们将可以托管账户的地方称为 “主服务器”。",
+        "server_picker_intro": "托管账户的地方被称为 “主服务器”。",
         "server_picker_invalid_url": "无效 URL",
         "server_picker_learn_more": "关于主服务器",
         "server_picker_matrix.org": "Matrix.org 是世界上最大的公共主服务器，因此对许多人来说都是一个不错的选择。",
@@ -555,6 +555,7 @@
         "settings": "设置",
         "setup_secure_messages": "设置安全消息传递",
         "show_more": "显示更多",
+        "skip": "跳过",
         "someone": "某人",
         "space": "空间",
         "spaces": "空间",
@@ -675,10 +676,13 @@
         "unsupported_version": "服务器不支持指定的房间版本。"
     },
     "create_section_dialog": {
+        "add_rooms": "添加聊天",
         "create_section": "创建区域",
-        "description": "区域仅对你可见",
-        "label": "区域名称",
+        "empty_list_text": "未找到房间",
+        "list_title": "建议",
+        "placeholder": "搜索人员或房间",
         "title": "创建区域",
+        "title_add_rooms": "将聊天添加到 %(section)s",
         "title_edition": "编辑区域"
     },
     "create_space": {
@@ -911,7 +915,7 @@
         "value_in_this_room": "在此房间的值",
         "value_this_room_colon": "此房间中的值：",
         "values_explicit": "显式值",
-        "values_explicit_colon": "显式值:",
+        "values_explicit_colon": "显式值：",
         "values_explicit_room": "此房间中的显式值",
         "values_explicit_this_room_colon": "此房间中的显式值：",
         "view_servers_in_room": "在房间中查看服务器",
@@ -1086,7 +1090,7 @@
         "verification_requested_toast_title": "请求验证",
         "verified_identity_changed": "%(displayName)s (<b>%(userId)s</b>) 的数字身份已重置。<a>了解更多</a>",
         "verified_identity_changed_no_displayname": "<b>%(userId)s</b>的数字身份已重置。<a>了解更多</a>",
-        "verify_toast_description": "可能不受其他用户信任",
+        "verify_toast_description": "自 2026 年 10 月起，未经验证的设备将无法发送与接收消息。<a>了解更多</a>",
         "verify_toast_title": "验证此设备",
         "withdraw_verification_action": "撤消验证"
     },
@@ -1580,7 +1584,7 @@
         "explainer_1": "在此处添加要忽略的用户与服务器。使用“*”可让 %(brand)s 匹配任何字符。例如 <code>@bot:*</code> 将忽略任何服务器上名称为“bot”的所有用户。",
         "explainer_2": "忽略人员是通过“封禁列表”完成的，封禁列表包含谁被封禁的规则。订阅封禁列表意味着位于该列表的用户/服务器将对你隐藏。",
         "lists": "你当前已订阅：",
-        "lists_description_1": "你订阅封禁列表意味着此列表将作为房间加入！",
+        "lists_description_1": "你订阅封禁列表意味着该列表将作为一个房间加入！",
         "lists_description_2": "如果这不是你想要的，请使用其它工具忽略用户。",
         "lists_heading": "已订阅的列表",
         "lists_new_label": "封禁列表中的房间 ID 或地址",
@@ -1607,7 +1611,7 @@
         "leave_room_question": "你确定要离开房间“%(roomName)s”？",
         "leave_space_question": "你确定要离开空间“%(spaceName)s”？",
         "room_leave_admin_warning": "你是此房间的唯一管理员。如果你离开，任何人都将无法更改房间设置或执行其它重要操作。",
-        "room_leave_mod_warning": "你是此房间的唯一管理员。如果你离开，任何人都将无法更改房间设置或执行其它重要操作。",
+        "room_leave_mod_warning": "你是此房间的唯一协管员。如果你离开，任何人都将无法更改房间设置或执行其它重要操作。",
         "room_rejoin_warning": "此房间非公共房间。你无法在未被邀请的情况下重新加入。",
         "space_rejoin_warning": "此空间非公开。未经邀请，你将无法重新加入。"
     },
@@ -1637,7 +1641,7 @@
         "failed_timeout": "尝试获取位置超时。请稍后再试。",
         "failed_unknown": "获取位置时出现未知错误。请稍后再试。",
         "find_my_location": "查找我的位置",
-        "live_description": "%(displayName)s 的事实位置",
+        "live_description": "%(displayName)s 的实时位置",
         "live_enable_description": "请注意：这是一项使用临时实施方案的实验室功能。这意味着你将无法删除你的位置记录，即使你停止与此房间共享实时位置，高级用户仍然可以看到你的位置记录。",
         "live_enable_heading": "分享实时位置",
         "live_location_active": "你正在分享实时位置",
@@ -1748,8 +1752,7 @@
         "notes": "结果仅在结束投票时显示",
         "option_label": "选项 %(number)s，%(answer)s",
         "option_label_winning_with_total": {
-            "one": "选项 %(number)，%(answer)s，领先，%(count)s 票",
-            "other": "选项 %(number)，%(answer)s，领先，%(count)s 票"
+            "other": "选项 %(number)s，%(answer)s，目前处于领先，%(count)s 票"
         },
         "option_label_with_total": {
             "one": "选项 %(number)，%(answer)s，%(count)s 票",
@@ -2197,7 +2200,7 @@
             "error_updating_canonical_alias_title": "更新主要地址时出错",
             "leave_space": "离开空间",
             "local_alias_field_label": "本地地址",
-            "local_aliases_explainer_room": "为此房间设置地址，以便用户通过主服务器找到此房间。",
+            "local_aliases_explainer_room": "为此房间设置地址，以便用户通过主服务器找到此房间（%(localDomain)s）。",
             "local_aliases_explainer_space": "设置此空间的地址以便用户可以通过主服务器（%(localDomain)s）找到此空间",
             "local_aliases_section": "本地地址",
             "name_field_label": "房间名称",
@@ -2438,6 +2441,7 @@
             "dialog_title": "<strong>设置：</strong>账户",
             "title": "账户"
         },
+        "activityIsUnread": "将所有新增活动视为未读消息",
         "all_rooms_home": "在主页显示所有房间",
         "all_rooms_home_description": "你加入的所有房间都将显示在主页。",
         "always_show_message_timestamps": "始终显示消息时间戳",
@@ -2979,7 +2983,7 @@
             "dialog_title": "<strong>设置：</strong>语音与视频",
             "echo_cancellation": "回声消除",
             "echo_cancellation_description": "在通话期间移除回声。此设置亦将应用于 Element Call。",
-            "enable_fallback_ice_server": "允许备选的通话辅助服务器",
+            "enable_fallback_ice_server": "允许备选的通话辅助服务器（%(server)s）",
             "enable_fallback_ice_server_description": "仅用于你所在的主服务器不提供时。你的 IP 地址会在通话期间被分享。",
             "enable_legacy_calls": "启用旧版语音视频通话",
             "enable_legacy_calls_description": "适用于 Jitsi 与一对一 WebRTC 通话",
@@ -3437,6 +3441,11 @@
             "join": "%(targetName)s 已加入房间",
             "kick": "%(senderName)s 已移除 %(targetName)s",
             "kick_reason": "%(senderName)s 已移除 %(targetName)s： %(reason)s",
+            "knock": "%(senderName)s 正在申请加入",
+            "knock_accepted": "%(senderName)s 已授予 %(targetName)s 访问",
+            "knock_denied": "%(senderName)s已拒绝 %(targetName)s的加入申请",
+            "knock_reason": "%(senderName)s 正在申请加入：%(reason)s",
+            "knock_retracted": "%(targetName)s 不再意向加入",
             "left": "%(targetName)s 离开了房间",
             "left_reason": "%(targetName)s 离开了房间：%(reason)s",
             "no_change": "%(senderName)s 未产生任何更改",
@@ -3509,7 +3518,7 @@
             "removed_rule_servers": "%(senderName)s 已移除与 %(glob)s 匹配的服务器封禁规则",
             "removed_rule_users": "%(senderName)s 已移除匹配 %(glob)s 的用户封禁规则。",
             "updated_invalid_rule": "%(senderName)s 更新了无效的封禁规则",
-            "updated_rule": "%(senderName)s 已更新一条与 %(glob)s 匹配的封禁规则",
+            "updated_rule": "%(senderName)s 已更新一条与 %(glob)s 匹配的封禁规则，原因：%(reason)s",
             "updated_rule_rooms": "%(senderName)s 已更新一条与 %(glob)s 匹配的房间封禁规则，原因：%(reason)s",
             "updated_rule_servers": "%(senderName)s 已更新与 %(glob)s 匹配的服务器封禁规则，原因：%(reason)s。",
             "updated_rule_users": "%(senderName)s 已更新一条与 %(glob)s 匹配的用户封禁规则，原因：%(reason)s"
@@ -3620,6 +3629,30 @@
             "kicked_multiple": {
                 "other": "已被移除 %(count)s 次"
             },
+            "knock_accepted": {
+                "other": "已获得访问权 %(count)s 次"
+            },
+            "knock_accepted_multiple": {
+                "other": "被授予访问权 %(count)s 次"
+            },
+            "knock_denied": {
+                "other": "其加入请求已被拒绝 %(count)s 次"
+            },
+            "knock_denied_multiple": {
+                "other": "其他人的加入申请已被拒绝 %(count)s次"
+            },
+            "knock_retracted": {
+                "other": "%(oneUser)s 已取消其加入申请 %(count)s 次"
+            },
+            "knock_retracted_multiple": {
+                "other": "%(severalUsers)s已取消其加入申请 %(count)s 次"
+            },
+            "knocked": {
+                "other": "%(oneUser)s 已申请加入 %(count)s 次"
+            },
+            "knocked_multiple": {
+                "other": "%(severalUsers)s 已申请加入 %(count)s 次"
+            },
             "left": {
                 "one": "%(oneUser)s 已离开",
                 "other": "%(oneUser)s 离开 %(count)s 次"
@@ -3639,8 +3672,7 @@
                 "other": "%(oneUser)s 已更改房间内的<a>已置顶消息</a> %(count)s 次"
             },
             "pinned_events_multiple": {
-                "one": "%(severalUsers)s 已更改房间的 <a>已置顶消息</a>",
-                "other": "%(severalUsers) 已更改该房间的<a>已置顶消息</a> %(count)s 次。"
+                "other": "%(severalUsers)s 已更改该房间的<a>已置顶消息</a> %(count)s 次。"
             },
             "redacted": {
                 "one": "%(oneUser)s 已移除一个消息",
@@ -3810,7 +3842,7 @@
     },
     "voip": {
         "already_in_call": "已在通话中",
-        "already_in_call_person": "你已正在与此人通话。",
+        "already_in_call_person": "你已与此人处于通话。",
         "answered_elsewhere": "已在别处接听",
         "answered_elsewhere_description": "通话已在其它设备上接听。",
         "call_failed": "通话失败",

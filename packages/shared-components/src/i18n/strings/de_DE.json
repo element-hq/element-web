@@ -27,6 +27,7 @@
     },
     "notifications": {
         "all_messages": "All Nachrichten",
+        "default_settings": "Standardeinstellungen übernehmen",
         "mentions_keywords": "Erwähnungen und Schlüsselwörter",
         "mute_room": "Chat stummschalten"
     },
