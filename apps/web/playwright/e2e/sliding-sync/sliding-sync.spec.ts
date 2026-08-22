@@ -321,7 +321,7 @@ test.describe("Sliding Sync", () => {
         await expect(page.locator(".mx_ReplyPreview")).not.toBeAttached();
 
         // click reply-to on the Hello World message
-        const locator = page.locator(".mx_EventTile_last");
+        const locator = page.locator(".mx_EventTile").last();
         await locator.getByText("Hello world").hover();
         await locator.getByRole("button", { name: "Reply", exact: true }).click({});
 

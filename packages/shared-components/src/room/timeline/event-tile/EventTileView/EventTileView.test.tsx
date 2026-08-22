@@ -72,7 +72,6 @@ const applicationStylingClasses = {
     slotActionBar: "mx_MessageActionBar",
     slotFooter: "mx_EventTile_footer",
     slotThreadInfo: "mx_ThreadSummary",
-    slotReceipt: "mx_ReadReceiptGroup_container",
 } satisfies Partial<EventTileViewClassNames>;
 
 const applicationSlotClassNames: Record<string, keyof typeof applicationStylingClasses> = {
@@ -85,7 +84,6 @@ const applicationSlotClassNames: Record<string, keyof typeof applicationStylingC
     actionBar: "slotActionBar",
     footer: "slotFooter",
     threadInfo: "slotThreadInfo",
-    receipt: "slotReceipt",
 };
 
 const slotClasses: Record<string, string> = {
@@ -159,7 +157,7 @@ const lineStateMatrix = [
 }>;
 
 const groupLineSlotOrder = [
-    "event-tile-slot-contextMenu",
+    "styling-contract-contextMenu",
     "event-tile-slot-timestamp",
     "event-tile-slot-padlock",
     "event-tile-slot-replyChain",
@@ -177,7 +175,7 @@ const groupRootSlotOrder = [
 ];
 
 const ircLineSlotOrder = [
-    "event-tile-slot-contextMenu",
+    "styling-contract-contextMenu",
     "event-tile-slot-replyChain",
     "event-tile-slot-body",
     "event-tile-slot-actionBar",
@@ -232,7 +230,7 @@ describe("EventTileView", () => {
         const { container, getByTestId } = render(<EventTileView {...createProps()} />);
         const root = container.firstElementChild;
         const line = getByTestId("body").closest(".custom-line");
-        const contextMenu = getByTestId("context-menu").parentElement;
+        const contextMenu = getByTestId("context-menu");
 
         expect(root).toHaveClass("custom-root");
         expect(root).toHaveAttribute("aria-live", "off");
@@ -244,8 +242,22 @@ describe("EventTileView", () => {
         expect(line).toHaveClass("custom-line");
         expect(line).toHaveAttribute("id", "event-line-1");
         expect(getByTestId("context-menu")).toBeInTheDocument();
-        expect(contextMenu).toHaveClass("custom-context-menu");
-        expect(contextMenu).toHaveAttribute("data-testid", "event-tile-slot-contextMenu");
+        expect(contextMenu.parentElement).toBe(line);
+        expect(contextMenu).not.toHaveAttribute("data-testid", "event-tile-slot-contextMenu");
+    });
+
+    it("renders the card shape with the room slot structure", () => {
+        const { container, getByTestId } = render(
+            <EventTileView
+                {...createProps({
+                    root: { ...renderState, shape: "Card" },
+                    slots: createStylingContractSlots(),
+                })}
+            />,
+        );
+
+        expect(container.firstElementChild).toHaveClass(styles.shapeCard);
+        expect(getByTestId("styling-contract-body").closest(`#${renderState.id}`)).toBeInTheDocument();
     });
 
     it("exposes shell state through application-neutral state classes", () => {
@@ -340,8 +352,8 @@ describe("EventTileView", () => {
 
             const containedLineSlots =
                 layout === "irc"
-                    ? ["contextMenu", "replyChain", "body", "actionBar", "footer", "threadInfo"]
-                    : ["contextMenu", "timestamp", "padlock", "replyChain", "body", "actionBar"];
+                    ? ["replyChain", "body", "actionBar", "footer", "threadInfo"]
+                    : ["timestamp", "padlock", "replyChain", "body", "actionBar"];
             for (const slotName of containedLineSlots) {
                 expect(root.querySelector(`[data-testid="event-tile-slot-${slotName}"]`)?.parentElement).toBe(line);
             }
@@ -374,7 +386,6 @@ describe("EventTileView", () => {
             "actionBar",
             "footer",
             "threadInfo",
-            "receipt",
         ]) {
             expect(
                 group.getByTestId(`styling-contract-${slot}`).closest('[data-testid^="event-tile-slot-"]'),
@@ -432,6 +443,64 @@ describe("EventTileView", () => {
         expect(file.container.querySelector(".mx_EventTile_senderDetailsLink")).toHaveClass(
             applicationStylingClasses.senderDetailsLink,
         );
+    });
+
+    it("renders multiple slot children inside one wrapper boundary", () => {
+        const { getByTestId } = render(
+            <EventTileView
+                {...createProps({
+                    slots: {
+                        body: (
+                            <>
+                                <span data-testid="fragment-child-one">One</span>
+                                <span data-testid="fragment-child-two">Two</span>
+                            </>
+                        ),
+                    },
+                })}
+            />,
+        );
+
+        const firstChild = getByTestId("fragment-child-one");
+        const secondChild = getByTestId("fragment-child-two");
+        const wrapper = firstChild.closest('[data-testid="event-tile-slot-body"]');
+
+        expect(wrapper).not.toBeNull();
+        expect(secondChild.parentElement).toBe(wrapper);
+        expect(wrapper).toHaveClass(styles.slotBody);
+        expect(wrapper?.children).toHaveLength(2);
+    });
+
+    it.each([undefined, null, false] as const)("does not render a wrapper for an empty %s slot", (content) => {
+        const { container } = render(
+            <EventTileView
+                {...createProps({
+                    slots: {
+                        body: <span data-testid="body">Body</span>,
+                        avatar: content,
+                    },
+                })}
+            />,
+        );
+
+        expect(container.querySelector('[data-testid="event-tile-slot-avatar"]')).not.toBeInTheDocument();
+    });
+
+    it("derives receipt gutter styling from receipt slot presence", () => {
+        const withReceipt = render(
+            <EventTileView
+                {...createProps({
+                    slots: {
+                        body: <span data-testid="body">Body</span>,
+                        receipt: <span data-testid="receipt">Receipt</span>,
+                    },
+                })}
+            />,
+        );
+        const withoutReceipt = render(<EventTileView {...createProps()} />);
+
+        expect(withReceipt.container.querySelector("li")).toHaveClass(styles.hasReceiptSlot);
+        expect(withoutReceipt.container.querySelector("li")).not.toHaveClass(styles.hasReceiptSlot);
     });
 
     it.each(["group", "bubble"] as const)("renders the %s thread layout in the original slot order", (layout) => {

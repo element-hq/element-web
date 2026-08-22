@@ -36,7 +36,7 @@ test.describe("Editing", () => {
 
     // Edit "Message"
     const editLastMessage = async (page: Page, edit: string) => {
-        const eventTile = page.locator(".mx_RoomView_MessageList .mx_EventTile_last");
+        const eventTile = page.locator(".mx_RoomView_MessageList .mx_EventTile").last();
         await eventTile.hover();
         await eventTile.getByRole("button", { name: "Edit", exact: true }).click();
 
@@ -193,7 +193,9 @@ test.describe("Editing", () => {
             await expect(
                 page
                     .locator(".mx_RoomView_MessageList")
-                    .locator(".mx_EventTile_last .mx_RedactedBody", { hasText: "Message deleted" }),
+                    .locator(".mx_EventTile", { has: page.locator(".mx_RedactedBody") })
+                    .last()
+                    .locator(".mx_RedactedBody", { hasText: "Message deleted" }),
             ).toBeVisible();
         },
     );

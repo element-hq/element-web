@@ -64,7 +64,7 @@ test.describe("Cryptography", function () {
                     ciphertext: "the bird is in the hand",
                 });
 
-                const last = page.locator(".mx_EventTile_last");
+                const last = page.locator(".mx_EventTile").last();
                 await expect(last).toContainText("Unable to decrypt message");
                 const lastE2eIcon = last.locator(".mx_EventTile_e2eIcon");
                 await expect(lastE2eIcon).toHaveAccessibleName("This message could not be decrypted");
@@ -94,7 +94,7 @@ test.describe("Cryptography", function () {
                 await bob.sendMessage(testRoomId, "test encrypted 1");
 
                 // the message should appear, decrypted, with no warning, but also no "verified"
-                const lastTile = page.locator(".mx_EventTile_last");
+                const lastTile = page.locator(".mx_EventTile").last();
                 const lastTileE2eIcon = lastTile.locator(".mx_EventTile_e2eIcon");
                 await expect(lastTile).toContainText("test encrypted 1");
                 // no e2e icon
@@ -150,7 +150,7 @@ test.describe("Cryptography", function () {
                 // bob sends a valid event
                 await bob.sendMessage(testRoomId, "test encrypted 1");
 
-                const lastTile = page.locator(".mx_EventTile_last");
+                const lastTile = page.locator(".mx_EventTile").last();
                 const lastTileE2eIcon = lastTile.locator(".mx_EventTile_e2eIcon");
                 await expect(lastTile).toContainText("test encrypted 1");
                 // no e2e icon
@@ -266,7 +266,7 @@ test.describe("Cryptography", function () {
                 await app.client.network.goOnline();
 
                 // Wait for the messages to arrive. It can take quite a while for the sync to wake up.
-                const last = page.locator(".mx_EventTile_last");
+                const last = page.locator(".mx_EventTile").last();
                 await expect(last).toContainText("test encrypted from unverified", { timeout: 20000 });
                 const lastE2eIcon = last.locator(".mx_EventTile_e2eIcon");
                 await expect(lastE2eIcon).toHaveAccessibleName("Encrypted by a device not verified by its owner.");
@@ -290,7 +290,7 @@ test.describe("Cryptography", function () {
 
                 /* should show an error for a message from a previously verified device */
                 await bobSecondDevice.sendMessage(testRoomId, "test encrypted from user that was previously verified");
-                const last = page.locator(".mx_EventTile_last");
+                const last = page.locator(".mx_EventTile").last();
                 await expect(last).toContainText("test encrypted from user that was previously verified");
                 const lastE2eIcon = last.locator(".mx_EventTile_e2eIcon");
                 await expect(lastE2eIcon).toHaveAccessibleName("Sender's verified digital identity was reset");

@@ -38,9 +38,13 @@ export function EventTileView({
 }: Readonly<EventTileViewProps>): JSX.Element {
     const Root = root.as ?? "li";
     const { layout, density } = useEventPresentation();
+    const isRenderableSlot = (content: React.ReactNode): boolean =>
+        content !== null && content !== undefined && typeof content !== "boolean";
 
     const renderSlot = (slotName: EventTileSlotName, content: React.ReactNode = slots[slotName]): React.ReactNode => {
-        if (content === null || content === undefined || typeof content === "boolean") return null;
+        if (!isRenderableSlot(content)) return null;
+        // The application context menu is portalled; its wrapper would become an empty flex item.
+        if (slotName === "contextMenu") return <React.Fragment key={slotName}>{content}</React.Fragment>;
 
         const slotConfig: Record<EventTileSlotName, { style: string; className: keyof EventTileViewClassNames }> = {
             avatar: { style: styles.slotAvatar, className: "slotAvatar" },
@@ -75,6 +79,8 @@ export function EventTileView({
     const renderSlots = (...slotNames: EventTileSlotName[]): React.ReactNode =>
         slotNames.map((slotName) => renderSlot(slotName));
 
+    const hasReceiptSlot = isRenderableSlot(slots.receipt);
+
     const lineClassName = classNames(styles.line, classNameOverrides?.line, {
         [styles.lineMedia]: lineState?.media,
         [styles.lineSticker]: lineState?.sticker,
@@ -91,6 +97,7 @@ export function EventTileView({
             ref={refs?.root}
             className={classNames(styles.root, classNameOverrides?.root, {
                 [styles.stateOwnEvent]: root.state.isOwnEvent,
+                [styles.hasReceiptSlot]: hasReceiptSlot,
                 [styles.stateInfo]: root.state?.info,
                 [styles.stateBubbleContainer]: root.state?.bubbleContainer,
                 [styles.stateLeftAlignedBubble]: root.state?.leftAlignedBubble,
@@ -114,6 +121,7 @@ export function EventTileView({
                 [styles.layoutIrc]: layout === "irc",
                 [styles.shapeThread]: root.shape === "Thread",
                 [styles.shapeThreadsList]: root.shape === "ThreadsList",
+                [styles.shapeCard]: root.shape === "Card",
                 [styles.shapeFile]: root.shape === "File",
                 [styles.shapeNotification]: root.shape === "Notification",
             })}
@@ -209,7 +217,7 @@ export function EventTileView({
         );
     }
 
-    // Default shape: Pinned, Room, Search
+    // Default shape: Card, Pinned, Room, Search
 
     // IRC layout: the leading metadata slots precede the line content.
     if (layout === "irc") {

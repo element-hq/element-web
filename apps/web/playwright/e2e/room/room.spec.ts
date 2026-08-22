@@ -73,7 +73,7 @@ test.describe("Room Directory", () => {
 
         // Wait for all the messages to be displayed
         await expect(
-            page.locator(".mx_EventTile_last .mx_MTextBody .mx_EventTile_body").getByText("test49"),
+            page.locator(".mx_EventTile").last().getByTestId("event-tile-slot-body").getByText("test49"),
         ).toBeVisible();
 
         // Display the first message
