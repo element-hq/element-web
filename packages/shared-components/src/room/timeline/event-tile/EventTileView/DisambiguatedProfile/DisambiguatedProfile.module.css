@@ -39,13 +39,13 @@
 }
 
 .disambiguatedProfile[data-event-layout="group"] {
-    line-height: 20px;
+    line-height: var(--cpd-font-size-heading-sm);
 }
 
 .disambiguatedProfile[data-event-layout="bubble"] {
     width: fit-content;
     max-width: var(--event-tile-bubble-line-max-width, 70%);
-    line-height: 18px;
+    line-height: var(--event-tile-bubble-line-height, 1.125rem);
     white-space: normal;
 
     .disambiguatedProfile_displayName {

@@ -11,11 +11,11 @@
     --event-tile-group-gutter: 64px;
     --event-tile-group-line-spacing-block-start: 1px;
     --event-tile-group-line-spacing-block-end: 3px;
-    --event-tile-group-line-height: 22px;
+    --event-tile-group-line-height: 1.375rem;
     --event-tile-group-timestamp-width: 46px;
 
     /* IRC geometry. */
-    --event-tile-irc-line-height: 18px;
+    --event-tile-irc-line-height: 1.125rem;
     --event-tile-irc-icon-width: 14px;
     --event-tile-irc-right-padding: 5px;
     --event-tile-irc-info-offset: calc(
@@ -26,6 +26,7 @@
     --event-tile-bubble-corner-radius: 12px;
     --event-tile-bubble-gap: 5px;
     --event-tile-bubble-gutter: 11px;
+    --event-tile-bubble-line-height: 1.125rem;
     --event-tile-bubble-line-max-width: 70%;
     --event-tile-bubble-line-margin-inline-start: -9px;
     --event-tile-bubble-line-margin-inline-end: -12px;
@@ -197,13 +198,19 @@
     }
 
     /* Sender. */
-    .slotSender {
-        display: flex;
-        align-items: flex-start;
+    > .slotSender {
+        /* The legacy group profile was a direct inline-block child of the
+           tile. Keep the slot wrapper in the DOM without making it a flex
+           formatting context, so the anonymous line box between the profile
+           and the block line remains scalable with the font size. */
+        display: contents;
+    }
+
+    > .slotSender > * {
         max-width: calc(100% - var(--event-tile-group-gutter));
         margin-inline-start: var(--event-tile-group-gutter);
-        min-height: 20px;
-        line-height: 20px;
+        min-height: var(--cpd-font-size-heading-sm);
+        line-height: var(--cpd-font-size-heading-sm);
     }
 
     /* Slots. */
@@ -241,8 +248,14 @@
         margin-inline-start: var(--event-tile-group-gutter);
     }
 
-    .slotReplyChain {
-        margin-inline-start: 0;
+    /* The legacy group line contained the reply-chain wrapper directly. Keep
+       the slot boundary in the DOM without adding another block box between
+       the reply and the event body. */
+    .line > .slotReplyChain {
+        display: contents;
+    }
+
+    .line > .slotReplyChain > * {
         margin-bottom: var(--cpd-space-2x);
     }
 
@@ -300,12 +313,6 @@
         margin-inline-end: 80px;
         min-height: 14px;
         max-width: min(calc(100% - var(--event-tile-group-gutter) - 80px), 600px);
-    }
-
-    /* This direct-child check distinguishes the default group branch from
-       nested sender-details layouts. */
-    &:has(> .slotSender) .line {
-        margin-block-start: 6px;
     }
 
     /* Informational events use a smaller metadata row while retaining the
@@ -374,7 +381,7 @@
             padding-block: 0;
         }
 
-        .slotReplyChain {
+        .line > .slotReplyChain > * {
             padding-block: 0;
         }
 
@@ -387,12 +394,12 @@
         }
 
         .slotSender {
-            font-size: 13px;
+            font-size: var(--cpd-font-size-body-sm);
         }
 
         &.stateInfo {
             padding-top: 0;
-            font-size: 13px;
+            font-size: var(--cpd-font-size-body-sm);
 
             .slotAvatar,
             .slotPadlock {
@@ -401,7 +408,7 @@
             }
 
             .line {
-                line-height: 20px;
+                line-height: var(--cpd-font-size-heading-sm);
             }
         }
 
@@ -416,7 +423,7 @@
                 padding-bottom: 1px;
             }
 
-            .slotReplyChain {
+            .line > .slotReplyChain > * {
                 padding-bottom: 1px;
             }
 
@@ -424,7 +431,7 @@
                 padding-bottom: 0;
             }
 
-            &.stateContinuation .slotReplyChain {
+            &.stateContinuation .line > .slotReplyChain > * {
                 padding-bottom: 0;
             }
         }
@@ -433,7 +440,7 @@
             padding-top: 0;
         }
 
-        .slotReplyChain {
+        .line > .slotReplyChain > * {
             margin-block-end: var(--cpd-space-1x);
         }
 
@@ -529,9 +536,8 @@
 
     .slotAvatar > *,
     .slotAvatar > * > * {
-        /* Match the compact initials rendered by the legacy IRC timeline. */
-        font-size: 10px;
-        line-height: 13px;
+        font-size: 0.625rem;
+        line-height: calc(var(--cpd-font-size-body-md) - 2px);
     }
 
     .slotPadlock,
@@ -663,11 +669,11 @@
 
         .line {
             margin-inline-start: var(--event-tile-irc-info-offset);
-            line-height: 12px;
+            line-height: 0.75rem;
 
             .slotBody {
                 width: auto;
-                font-size: 12px;
+                font-size: 0.75rem;
             }
         }
     }
@@ -708,7 +714,7 @@
         margin-block: 0;
         margin-inline: var(--event-tile-bubble-line-margin-inline-start) var(--event-tile-bubble-line-margin-inline-end);
         border-radius: var(--event-tile-bubble-corner-radius) var(--event-tile-bubble-corner-radius) 0 0;
-        line-height: 18px;
+        line-height: var(--event-tile-bubble-line-height);
         position: relative;
         padding: calc(var(--event-tile-bubble-gutter) - 1px);
         padding-inline-end: 60px;
@@ -748,11 +754,11 @@
     .slotSender {
         width: fit-content;
         max-width: var(--event-tile-bubble-line-max-width);
-        line-height: 18px;
+        line-height: var(--event-tile-bubble-line-height);
         position: relative;
         inset-block-start: -2px;
         inset-inline-start: 2px;
-        font-size: 15px;
+        font-size: var(--cpd-font-size-body-md);
         white-space: normal;
     }
 
@@ -804,7 +810,7 @@
 
     .slotPadlock {
         flex-shrink: 0;
-        height: 18px;
+        height: var(--event-tile-bubble-line-height);
         display: flex;
         align-items: center;
     }
@@ -833,10 +839,14 @@
     }
 
     /* States. */
-    /* Reply-chain spacing belongs to the bubble shell; nested reply content
-       remains application-owned. */
-    &.stateHasReply .slotReplyChain {
-        padding: 0;
+    /* The legacy bubble line contained the reply-chain wrapper directly, and
+       its spacing belonged to the quoted mx_ReplyChain blockquote. Flatten
+       the slot boundary and restore that margin at the same element. */
+    &.stateHasReply .line > .slotReplyChain {
+        display: contents;
+    }
+
+    &.stateHasReply .line > .slotReplyChain > * :global(.mx_ReplyChain) {
         margin-block-end: var(--cpd-space-2x);
     }
 
@@ -1233,11 +1243,11 @@
 
         .line {
             padding-inline-start: 0;
-            line-height: 12px;
+            line-height: 0.75rem;
 
             .slotBody {
                 width: auto;
-                font-size: 12px;
+                font-size: 0.75rem;
             }
         }
 
@@ -1343,7 +1353,7 @@
         max-width: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
-        font-size: 12px;
+        font-size: 0.75rem;
         margin-inline-start: auto;
     }
 
@@ -1470,11 +1480,11 @@
             height: auto;
             margin: 0;
             text-align: end;
-            font-size: 12px;
+            font-size: 0.75rem;
         }
 
         .slotTimestamp > * {
-            font-size: 12px;
+            font-size: 0.75rem;
         }
 
         .slotThreadInfo {
