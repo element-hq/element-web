@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { EventEmitter } from "node:events";
-import { type MatrixEvent, Room, RoomMember, type Thread, ReceiptType } from "matrix-js-sdk/src/matrix";
+import { EventType, type MatrixEvent, Room, RoomMember, type Thread, ReceiptType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { render, within } from "jest-matrix-react";
 
@@ -313,6 +313,28 @@ describe("MessagePanel", function () {
         ];
     }
 
+    function mkHreArchivedCommandEvent(): MatrixEvent {
+        const event = TestUtilsMatrix.mkMessage({
+            event: true,
+            room: "!OWGgBUxkmnSBvCqIBO:ashram.home",
+            user: "@alice:ashram.home",
+            msg: "!hre status",
+        });
+
+        jest.spyOn(event, "isRedacted").mockReturnValue(true);
+        jest.spyOn(event, "getUnsigned").mockReturnValue({
+            redacted_because: {
+                type: EventType.RoomRedaction,
+                sender: "@hre-bot:ashram.home",
+                content: {
+                    reason: "Archived to HRE Commands",
+                },
+            },
+        } as any);
+
+        return event;
+    }
+
     function isReadMarkerVisible(rmContainer?: Element) {
         return !!rmContainer?.children.length;
     }
@@ -323,6 +345,44 @@ describe("MessagePanel", function () {
         // just check we have the right number of tiles for now
         const tiles = container.getElementsByClassName("mx_EventTile");
         expect(tiles.length).toEqual(10);
+    });
+
+    it("hard-filters HRE archived commands when hidden events are shown", function () {
+        const event = mkHreArchivedCommandEvent();
+
+        const { container } = render(
+            getComponent(
+                {
+                    events: [event],
+                    readMarkerEventId: event.getId(),
+                    readMarkerVisible: true,
+                },
+                {
+                    showHiddenEvents: true,
+                    showRedactions: true,
+                },
+            ),
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
+
+        expect(container.getElementsByClassName("mx_EventTile")).toHaveLength(0);
+        expect(container.getElementsByClassName("mx_TimelineSeparator")).toHaveLength(0);
+        expect(container.getElementsByClassName("mx_MessagePanel_myReadMarker")).toHaveLength(0);
+    });
+
+    it("hard-filters HRE archived commands when the event is highlighted", function () {
+        const event = mkHreArchivedCommandEvent();
+
+        const { container } = render(
+            getComponent({
+                events: [event],
+                highlightedEventId: event.getId(),
+            }),
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
+
+        expect(container.getElementsByClassName("mx_EventTile")).toHaveLength(0);
+        expect(container.getElementsByClassName("mx_TimelineSeparator")).toHaveLength(0);
     });
 
     it("should collapse adjacent member events", function () {

@@ -25,7 +25,7 @@ import {
     useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
 
-import shouldHideEvent from "../../shouldHideEvent";
+import shouldHideEvent, { isHreArchivedCommandRedaction } from "../../shouldHideEvent";
 import { formatDate, wantsDateSeparator } from "../../DateUtils";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import SettingsStore from "../../settings/SettingsStore";
@@ -631,9 +631,11 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         // we also need to figure out which is the last event we show which isn't
         // a local echo, to manage the read-marker.
         let lastShownEvent: MatrixEvent | undefined;
-        const events: WrappedEvent[] = this.props.events.map((event) => {
-            return { event, shouldShow: this.shouldShowEvent(event) };
-        });
+        const events: WrappedEvent[] = this.props.events
+            .filter((event) => !isHreArchivedCommandRedaction(event))
+            .map((event) => {
+                return { event, shouldShow: this.shouldShowEvent(event) };
+            });
 
         const userId = MatrixClientPeg.safeGet().getSafeUserId();
 

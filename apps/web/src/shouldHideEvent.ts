@@ -13,6 +13,36 @@ import SettingsStore from "./settings/SettingsStore";
 import { type IRoomState } from "./components/structures/RoomView";
 import { type SettingKey } from "./settings/Settings.tsx";
 
+const HRE_BOT_USER_ID = "@hre-bot:ashram.home";
+const HRE_ARCHIVE_REDACTION_REASON = "Archived to HRE Commands";
+const HRE_COMMAND_SOURCE_ROOM_IDS = new Set([
+    "!OWGgBUxkmnSBvCqIBO:ashram.home", // HRE Current State
+    "!RRmMmMOSQqNEMHrCEd:ashram.home", // HRE Alerts
+]);
+
+/**
+ * Ashram Element housekeeping rule.
+ *
+ * HRE archives commands before redacting their original source events. Only
+ * those exact bot redactions in the two HRE command source rooms should vanish
+ * completely from the client. All other redactions retain normal Element
+ * behaviour.
+ */
+export function isHreArchivedCommandRedaction(ev: MatrixEvent): boolean {
+    if (!ev.isRedacted() || ev.getType() !== EventType.RoomMessage) return false;
+
+    const roomId = ev.getRoomId();
+    if (!roomId || !HRE_COMMAND_SOURCE_ROOM_IDS.has(roomId)) return false;
+
+    const redaction = ev.getUnsigned().redacted_because;
+
+    return (
+        redaction?.type === EventType.RoomRedaction &&
+        redaction.sender === HRE_BOT_USER_ID &&
+        redaction.content?.reason === HRE_ARCHIVE_REDACTION_REASON
+    );
+}
+
 interface IDiff {
     isMemberEvent: boolean;
     isJoin?: boolean;
@@ -50,6 +80,8 @@ function memberEventDiff(ev: MatrixEvent): IDiff {
  *     hitting the settings store
  */
 export default function shouldHideEvent(ev: MatrixEvent, ctx?: IRoomState): boolean {
+    if (isHreArchivedCommandRedaction(ev)) return true;
+
     // Hide all poll end events
     if (M_POLL_END.matches(ev.getType())) return true;
 
