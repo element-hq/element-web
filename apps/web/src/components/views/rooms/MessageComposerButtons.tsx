@@ -39,6 +39,7 @@ import IconizedContextMenu, {
     IconizedContextMenuOptionList,
 } from "../context_menus/IconizedContextMenu";
 import { EmojiButton } from "./EmojiButton";
+import { type StickerPickerMode } from "./Stickerpicker";
 import { filterBoolean } from "../../../utils/arrays";
 import { useSettingValue } from "../../../hooks/useSettings";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
@@ -54,6 +55,7 @@ interface IProps {
     onRecordStartEndClick: () => void;
     relation?: IEventRelation;
     setStickerPickerOpen: (isStickerPickerOpen: boolean) => void;
+    openStickerPickerMode: (mode: StickerPickerMode) => void;
     showLocationButton: boolean;
     showPollsButton: boolean;
     showStickersButton: boolean;
@@ -87,6 +89,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             ) : (
                 emojiButton(props)
             ),
+            showStickersButton(props),
         ];
         moreButtons = [
             // This a textual list of buttons, so we can't use the UploadButton here.
@@ -98,7 +101,6 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
                     key={type}
                 />
             )),
-            showStickersButton(props),
             voiceRecordingButton(props, narrow),
             props.showPollsButton ? pollButton(room, props.relation) : null,
             showLocationButton(props, room, matrixClient),
@@ -114,10 +116,10 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             ) : (
                 emojiButton(props)
             ),
+            showStickersButton(props),
             <UploadButton key="upload" vm={roomUploadVM} />,
         ];
         moreButtons = [
-            showStickersButton(props),
             voiceRecordingButton(props, narrow),
             props.showPollsButton ? pollButton(room, props.relation) : null,
             showLocationButton(props, room, matrixClient),
@@ -168,6 +170,7 @@ function emojiButton(props: IProps): ReactElement {
             addEmoji={props.addEmoji}
             menuPosition={props.menuPosition}
             className="mx_MessageComposer_button"
+            openStickerPickerMode={props.openStickerPickerMode}
         />
     );
 }

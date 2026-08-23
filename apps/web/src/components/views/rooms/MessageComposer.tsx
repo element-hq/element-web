@@ -25,7 +25,7 @@ import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
 import { type ActionPayload } from "../../../dispatcher/payloads";
-import Stickerpicker from "./Stickerpicker";
+import Stickerpicker, { type StickerPickerMode } from "./Stickerpicker";
 import { makeRoomPermalink, type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import E2EIcon from "./E2EIcon";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -107,6 +107,7 @@ interface IState {
     me?: RoomMember;
     isMenuOpen: boolean;
     isStickerPickerOpen: boolean;
+    stickerPickerMode: StickerPickerMode;
     showStickersButton: boolean;
     showPollsButton: boolean;
     isWysiwygLabEnabled: boolean;
@@ -157,6 +158,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
             recordingTimeLeftSeconds: undefined, // when set to a number, shows a toast
             isMenuOpen: false,
             isStickerPickerOpen: false,
+            stickerPickerMode: "stickers",
             showStickersButton: SettingsStore.getValue("MessageComposerInput.showStickersButton"),
             showPollsButton: SettingsStore.getValue("MessageComposerInput.showPollsButton"),
             isWysiwygLabEnabled: isWysiwygLabEnabled,
@@ -510,6 +512,26 @@ export class MessageComposer extends React.Component<IProps, IState> {
         this.setStickerPickerOpen(!this.state.isStickerPickerOpen);
     };
 
+    private openStickerPickerMode = (stickerPickerMode: StickerPickerMode): void => {
+        this.setState({
+            stickerPickerMode,
+            isStickerPickerOpen: true,
+            isMenuOpen: false,
+        });
+    };
+
+    private openEmojiPickerFromStickerPicker = (): void => {
+        this.setState(
+            {
+                isStickerPickerOpen: false,
+                isMenuOpen: false,
+            },
+            () => {
+                window.setTimeout(() => document.getElementById("emojiButton")?.click(), 0);
+            },
+        );
+    };
+
     private toggleButtonMenu = (): void => {
         this.setState({
             isMenuOpen: !this.state.isMenuOpen,
@@ -680,6 +702,9 @@ export class MessageComposer extends React.Component<IProps, IState> {
                 threadId={threadId}
                 isStickerPickerOpen={this.state.isStickerPickerOpen}
                 setStickerPickerOpen={this.setStickerPickerOpen}
+                stickerPickerMode={this.state.stickerPickerMode}
+                setStickerPickerMode={this.openStickerPickerMode}
+                openEmojiPicker={this.openEmojiPickerFromStickerPicker}
                 menuPosition={menuPosition}
                 key="stickers"
             />,
@@ -718,6 +743,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                                     relation={this.props.relation}
                                     onRecordStartEndClick={this.onRecordStartEndClick}
                                     setStickerPickerOpen={this.setStickerPickerOpen}
+                                    openStickerPickerMode={this.openStickerPickerMode}
                                     showLocationButton={
                                         !window.electron && SettingsStore.getValue(UIFeature.LocationSharing)
                                     }

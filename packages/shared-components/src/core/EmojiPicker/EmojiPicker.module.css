@@ -7,8 +7,8 @@
  */
 
 .picker {
-    width: 340px;
-    height: min(450px, 80vh);
+    width: var(--emoji-picker-width, 340px);
+    height: min(var(--emoji-picker-height, 450px), 80vh);
     max-height: 80vh;
 
     border-radius: 4px;
@@ -20,6 +20,8 @@
 .body {
     margin-left: var(--cpd-space-1-5x);
     flex: 1;
+    min-width: 0;
+    min-height: 0;
     overflow-y: scroll;
 }
 
@@ -120,7 +122,7 @@
 }
 
 .categoryLabel {
-    width: 304px;
+    width: var(--emoji-picker-content-width, 304px);
     font: var(--cpd-font-heading-sm-semibold);
 }
 
@@ -132,14 +134,14 @@
 /* A single row of emoji within the grid. Fixed to the width of EMOJIS_PER_ROW
    cells so the row never wraps, offset to align with the category headers. */
 .row {
-    width: 304px;
+    width: var(--emoji-picker-row-width, 304px);
     margin: 0 var(--cpd-space-3x);
 }
 
 .itemWrapper {
     display: inline-block;
     list-style: none;
-    width: 38px;
+    width: var(--emoji-picker-cell-width, 38px);
     cursor: pointer;
 
     &:focus-within {
@@ -153,8 +155,8 @@
 
 .item {
     display: inline-block;
-    font-size: var(--cpd-font-size-heading-sm);
-    padding: 5px;
+    font-size: var(--emoji-picker-glyph-size, var(--cpd-font-size-heading-sm));
+    padding: var(--emoji-picker-cell-padding, 5px);
     width: 100%;
     height: 100%;
     box-sizing: border-box;
@@ -181,24 +183,117 @@
 
 .footer {
     border-top: 1px solid var(--cpd-color-gray-400);
-    min-height: 72px;
-    max-height: 72px;
+    min-height: var(--emoji-picker-footer-height, 72px);
+    max-height: var(--emoji-picker-footer-height, 72px);
 
     display: flex;
     align-items: center;
 }
 
 .previewEmoji {
-    font-size: var(--cpd-font-size-heading-xl);
-    padding: var(--cpd-space-2x) var(--cpd-space-4x);
+    font-size: var(--emoji-picker-preview-glyph-size, var(--cpd-font-size-heading-xl));
+    padding: var(--emoji-picker-preview-emoji-padding, var(--cpd-space-2x) var(--cpd-space-4x));
+}
+
+.pickerVertical {
+    width: min(var(--emoji-picker-width, 340px), calc(100vw - 20px));
+    display: grid;
+    grid-template-columns: var(--emoji-picker-category-rail-width, 44px) minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+
+    .header {
+        grid-column: 1;
+        grid-row: 1 / -1;
+        min-height: 0;
+        padding: var(--cpd-space-2x) 0;
+        border-right: 1px solid var(--cpd-color-gray-400);
+        border-bottom: none;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--cpd-space-1x);
+        overflow-x: hidden;
+        overflow-y: auto;
+        scrollbar-width: thin;
+
+        &::-webkit-scrollbar {
+            width: 6px;
+        }
+    }
+
+    .anchor {
+        box-sizing: border-box;
+        flex-shrink: 0;
+        padding: 0;
+        border-bottom-color: transparent;
+        border-left: 2px solid transparent;
+        border-radius: 0 4px 4px 0;
+        display: block;
+
+        &:not(:disabled):hover {
+            border-bottom-color: transparent;
+            border-left-color: var(--cpd-color-text-action-accent);
+        }
+    }
+
+    .anchorSelected {
+        border-bottom-color: transparent;
+        border-left-color: var(--cpd-color-text-action-accent);
+    }
+
+    .search,
+    .body,
+    .footer {
+        grid-column: 2;
+    }
+
+    .search {
+        grid-row: 1;
+    }
+
+    .body {
+        grid-row: 2;
+        margin-left: 0;
+        overflow-x: auto;
+    }
+
+    .row {
+        line-height: 0;
+    }
+
+    .itemWrapper {
+        box-sizing: border-box;
+        height: var(--emoji-picker-cell-height, auto);
+        vertical-align: top;
+
+        > [role="button"],
+        > [role="checkbox"] {
+            height: 100%;
+        }
+    }
+
+    .item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+    }
+
+    .itemSelected {
+        padding: var(--emoji-picker-cell-padding, 5px);
+    }
+
+    .footer {
+        grid-row: 3;
+        box-sizing: border-box;
+    }
 }
 
 .previewText {
     display: flex;
     flex: 1;
     overflow: hidden;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
+    padding-block: var(--emoji-picker-preview-text-padding-block, 1rem);
     flex-direction: column;
 }
 

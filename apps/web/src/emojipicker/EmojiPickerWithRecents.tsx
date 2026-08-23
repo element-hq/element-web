@@ -6,34 +6,52 @@
  */
 
 import React, { useMemo } from "react";
+import { getEmojiFromUnicode } from "@matrix-org/emojibase-bindings";
 import { EmojiPicker, type EmojiPickerProps } from "@element-hq/web-shared-components";
 import * as recent from "./recent";
 import { getWebRovingAction } from "../accessibility/RovingTabIndex";
+
+type HostOwnedEmojiPickerProp =
+    | "recentEmojis"
+    | "onRecordRecent"
+    | "getAction"
+    | "showQuickReactions"
+    | "emojisPerRow"
+    | "emojiRowHeight"
+    | "categoryOrientation"
+    | "previewFallbackEmoji"
+    | "className";
+
+type EmojiPickerWithRecentsProps = Omit<EmojiPickerProps, HostOwnedEmojiPickerProp>;
 
 /**
  * Wrapped version of the shared-components emoji picker that passes in
  * the recent emojis from the web app's local storage (also passes in the
  * web roving actions).
  */
-export function EmojiPickerWithRecents({
-    selectedEmojis,
-    onChoose,
-    onFinished,
-    isEmojiDisabled,
-}: Omit<EmojiPickerProps, "recentEmojis" | "onRecordRecent" | "getAction">): React.ReactNode {
+export function EmojiPickerWithRecents(props: EmojiPickerWithRecentsProps): React.ReactNode {
     // There isn't anything for us to key the memoisation off here. This will just
     // update when the component mounts which is probably good enough.
-    const recentEmojis = useMemo(() => recent.get(), []);
+    const { recentEmojis, previewFallbackEmoji } = useMemo(() => {
+        const recentEmojis = recent.get();
+        return {
+            recentEmojis,
+            previewFallbackEmoji: recentEmojis.find((emoji) => getEmojiFromUnicode(emoji)) ?? "😀",
+        };
+    }, []);
 
     return (
         <EmojiPicker
-            selectedEmojis={selectedEmojis}
-            onChoose={onChoose}
-            onFinished={onFinished}
-            isEmojiDisabled={isEmojiDisabled}
+            {...props}
+            className="mx_EmojiPickerWithRecents"
             getAction={getWebRovingAction}
             recentEmojis={recentEmojis}
             onRecordRecent={recent.add}
+            showQuickReactions
+            emojisPerRow={11}
+            emojiRowHeight={52}
+            categoryOrientation="vertical"
+            previewFallbackEmoji={previewFallbackEmoji}
         />
     );
 }

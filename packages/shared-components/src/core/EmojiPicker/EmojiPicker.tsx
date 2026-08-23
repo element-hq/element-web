@@ -127,6 +127,28 @@ export interface EmojiPickerProps {
      * Previews of emoji are displayed in the same bar as will also be hidden when this is false.
      */
     showQuickReactions?: boolean;
+    /**
+     * Number of emoji rendered in each virtualized grid row. Defaults to 8.
+     */
+    emojisPerRow?: number;
+    /**
+     * Estimated height of each virtualized emoji row in pixels. Defaults to 35.
+     */
+    emojiRowHeight?: number;
+    /**
+     * Orientation of the category tabs. Defaults to horizontal.
+     */
+    categoryOrientation?: "horizontal" | "vertical";
+    /**
+     * Additional class name applied to the picker root.
+     */
+    className?: string;
+    /**
+     * Emoji to preview when no grid emoji is hovered.
+     *
+     * When omitted or unknown, the stock Quick Reactions footer is shown.
+     */
+    previewFallbackEmoji?: string;
 }
 
 /** Convert recent emoji characters to emoji data, removing unknowns and duplicates */
@@ -199,6 +221,11 @@ export function EmojiPicker({
     onRecordRecent,
     getAction,
     showQuickReactions = true,
+    emojisPerRow = EMOJIS_PER_ROW,
+    emojiRowHeight = EMOJI_HEIGHT,
+    categoryOrientation = "horizontal",
+    className,
+    previewFallbackEmoji,
 }: EmojiPickerProps): React.ReactNode {
     const [filter, setFilter] = useState("");
     const [previewEmoji, setPreviewEmoji] = useState<IEmoji | undefined>(undefined);
@@ -212,6 +239,14 @@ export function EmojiPicker({
     const virtuosoRef = useRef<VirtuosoHandle>(null);
 
     const recentlyUsed = useMemo(() => resolveRecentEmojis(recentEmojis), [recentEmojis]);
+    const resolvedEmojisPerRow =
+        Number.isFinite(emojisPerRow) && emojisPerRow > 0 ? Math.max(1, Math.floor(emojisPerRow)) : EMOJIS_PER_ROW;
+    const resolvedEmojiRowHeight =
+        Number.isFinite(emojiRowHeight) && emojiRowHeight > 0 ? emojiRowHeight : EMOJI_HEIGHT;
+    const resolvedPreviewFallbackEmoji = useMemo(
+        () => (previewFallbackEmoji ? getEmojiFromUnicode(previewFallbackEmoji) : undefined),
+        [previewFallbackEmoji],
+    );
 
     const lcFilter = filter.toLowerCase().trim(); // filter is case insensitive
 
@@ -247,12 +282,16 @@ export function EmojiPicker({
             const emojis = dataByCategory[cat.id];
             if (emojis.length === 0) continue;
             flat.push({ type: "header", category: cat });
-            for (let i = 0; i < emojis.length; i += EMOJIS_PER_ROW) {
-                flat.push({ type: "row", emojis: emojis.slice(i, i + EMOJIS_PER_ROW), categoryId: cat.id });
+            for (let i = 0; i < emojis.length; i += resolvedEmojisPerRow) {
+                flat.push({
+                    type: "row",
+                    emojis: emojis.slice(i, i + resolvedEmojisPerRow),
+                    categoryId: cat.id,
+                });
             }
         }
         return flat;
-    }, [dataByCategory]);
+    }, [dataByCategory, resolvedEmojisPerRow]);
 
     const onRangeChanged = useCallback(
         (range: ListRange): void => {
@@ -323,13 +362,12 @@ export function EmojiPicker({
 
     const onGridNavigation = useCallback(
         (_ev: React.KeyboardEvent, focusNode: HTMLElement, state: RovingState): void => {
-            if (getRow(state.activeNode) !== getRow(focusNode)) {
-                focusNode.scrollIntoView({
-                    behavior: "auto",
-                    block: "center",
-                    inline: "center",
-                });
-            }
+            const rowChanged = getRow(state.activeNode) !== getRow(focusNode);
+            focusNode.scrollIntoView({
+                behavior: "auto",
+                block: rowChanged ? "center" : "nearest",
+                inline: rowChanged ? "center" : "nearest",
+            });
         },
         [getRow],
     );
@@ -388,6 +426,7 @@ export function EmojiPicker({
     // (generate a single unique ID and then suffix because hooks can't be called in
     // a loop).
     const emojiIdBase = useId();
+    const footerPreviewEmoji = previewEmoji ?? resolvedPreviewFallbackEmoji;
 
     const renderItem = useCallback(
         (_index: number, item: ListItem): React.ReactNode => {
@@ -435,7 +474,9 @@ export function EmojiPicker({
         >
             {({ onKeyDownHandler }) => (
                 <section
-                    className={styles.picker}
+                    className={classNames(styles.picker, className, {
+                        [styles.pickerVertical]: categoryOrientation === "vertical",
+                    })}
                     onKeyDown={onKeyDownHandler}
                     aria-label={_t("emoji_picker|emoji_picker")}
                 >
@@ -446,6 +487,7 @@ export function EmojiPicker({
                         onAnchorClick={scrollToCategory}
                         pickerBodyId={pickerBodyId}
                         getAction={getAction}
+                        orientation={categoryOrientation}
                     />
                     <Search
                         query={filter}
@@ -467,7 +509,7 @@ export function EmojiPicker({
                                 ref={virtuosoRef}
                                 customScrollParent={scrollElement}
                                 data={items}
-                                defaultItemHeight={EMOJI_HEIGHT}
+                                defaultItemHeight={resolvedEmojiRowHeight}
                                 components={gridComponents}
                                 itemContent={renderItem}
                                 rangeChanged={onRangeChanged}
@@ -475,8 +517,8 @@ export function EmojiPicker({
                         )}
                     </AutoHideScrollbar>
                     {showQuickReactions &&
-                        (previewEmoji ? (
-                            <Preview emoji={previewEmoji} />
+                        (footerPreviewEmoji ? (
+                            <Preview emoji={footerPreviewEmoji} />
                         ) : (
                             <QuickReactions
                                 onClick={onClickEmoji}

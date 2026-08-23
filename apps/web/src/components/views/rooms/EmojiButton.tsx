@@ -14,14 +14,21 @@ import { _t } from "../../../languageHandler";
 import ContextMenu, { aboveLeftOf, type MenuProps, useContextMenu } from "../../structures/ContextMenu";
 import { CollapsibleButton, OverflowMenuContext } from "./CollapsibleButton";
 import { EmojiPickerWithRecents } from "../../../emojipicker/EmojiPickerWithRecents";
+import { type StickerPickerMode } from "./Stickerpicker";
 
 interface IEmojiButtonProps {
     addEmoji: (unicode: string) => boolean;
     menuPosition?: MenuProps;
     className?: string;
+    openStickerPickerMode: (mode: StickerPickerMode) => void;
 }
 
-export function EmojiButton({ addEmoji, menuPosition, className }: IEmojiButtonProps): JSX.Element {
+export function EmojiButton({
+    addEmoji,
+    menuPosition,
+    className,
+    openStickerPickerMode,
+}: IEmojiButtonProps): JSX.Element {
     const overflowMenuCloser = useContext(OverflowMenuContext);
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
 
@@ -33,9 +40,44 @@ export function EmojiButton({ addEmoji, menuPosition, className }: IEmojiButtonP
             overflowMenuCloser?.();
         };
 
+        const switchToStickerPicker = (mode: StickerPickerMode): void => {
+            onFinished();
+            window.setTimeout(() => openStickerPickerMode(mode), 0);
+        };
+
         contextMenu = (
             <ContextMenu {...position} onFinished={onFinished} managed={false} focusLock>
-                <EmojiPickerWithRecents onChoose={addEmoji} onFinished={onFinished} />
+                <div className="mx_AshramPickerFrame">
+                    <div className="mx_AshramPickerTabs" role="tablist" aria-label="Composer picker">
+                        <button
+                            type="button"
+                            className="mx_AshramPickerTab mx_AshramPickerTab_active"
+                            role="tab"
+                            aria-selected="true"
+                        >
+                            Emoji
+                        </button>
+                        <button
+                            type="button"
+                            className="mx_AshramPickerTab"
+                            role="tab"
+                            aria-selected="false"
+                            onClick={() => switchToStickerPicker("stickers")}
+                        >
+                            Stickers
+                        </button>
+                        <button
+                            type="button"
+                            className="mx_AshramPickerTab"
+                            role="tab"
+                            aria-selected="false"
+                            onClick={() => switchToStickerPicker("gifs")}
+                        >
+                            GIFs
+                        </button>
+                    </div>
+                    <EmojiPickerWithRecents onChoose={addEmoji} onFinished={onFinished} />
+                </div>
             </ContextMenu>
         );
     }
@@ -49,6 +91,7 @@ export function EmojiButton({ addEmoji, menuPosition, className }: IEmojiButtonP
     return (
         <>
             <CollapsibleButton
+                id="emojiButton"
                 className={computedClassName}
                 onClick={openMenu}
                 title={_t("common|emoji")}

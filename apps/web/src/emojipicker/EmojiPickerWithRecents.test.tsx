@@ -8,29 +8,52 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import React from "react";
-import { describe, it, expect, vi } from "vitest";
-import { render, screen } from "test-utils-rtl";
-import userEvent from "@testing-library/user-event";
+import { afterEach, beforeEach, describe, it, expect, vi } from "vitest";
+import { render, screen, waitFor } from "test-utils-rtl";
 
 import { EmojiPickerWithRecents } from "./EmojiPickerWithRecents";
-import { getKeyBindingsManager } from "../KeyBindingsManager";
+import * as recent from "./recent";
 
 describe("EmojiPickerWithRecents", () => {
-    it("passes the selected emoji through to the picker", () => {
-        render(<EmojiPickerWithRecents onChoose={() => true} onFinished={vi.fn()} selectedEmojis={new Set(["🎉"])} />);
-
-        expect(screen.getByRole("checkbox", { name: "🎉" })).toHaveAttribute("aria-checked", "true");
-        expect(screen.getByRole("checkbox", { name: "🚀" })).toHaveAttribute("aria-checked", "false");
+    beforeEach(() => {
+        vi.spyOn(recent, "get").mockReturnValue([]);
     });
 
-    it("resolves keyboard actions using the app's keybindings", async () => {
-        const getAccessibilityAction = vi.spyOn(getKeyBindingsManager(), "getAccessibilityAction");
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
+
+    it("uses the first resolvable ordered recent emoji as the persistent Preview fallback", async () => {
+        vi.mocked(recent.get).mockReturnValue(["<unsupported>", "🎉", "😀"]);
         render(<EmojiPickerWithRecents onChoose={() => true} onFinished={vi.fn()} />);
 
-        screen.getByRole("button", { name: "🎉" }).focus();
-        await userEvent.keyboard("[ArrowRight]");
+        const picker = screen.getByLabelText("Emoji picker");
+        await waitFor(() => expect(picker.lastElementChild).toHaveTextContent("🎉"));
+        expect(screen.queryByRole("toolbar", { name: "Quick Reactions" })).not.toBeInTheDocument();
+    });
 
-        expect(getAccessibilityAction).toHaveBeenCalled();
-        expect(screen.getByRole("button", { name: "😕" })).toHaveFocus();
+    it("uses the grinning face Preview fallback when every recent emoji is unsupported", async () => {
+        vi.mocked(recent.get).mockReturnValue(["<unsupported>"]);
+        render(<EmojiPickerWithRecents onChoose={() => true} onFinished={vi.fn()} />);
+
+        const picker = screen.getByLabelText("Emoji picker");
+        await waitFor(() => expect(picker.lastElementChild).toHaveTextContent("😀"));
+        expect(screen.queryByRole("toolbar", { name: "Quick Reactions" })).not.toBeInTheDocument();
+    });
+
+    it("uses the grinning face Preview fallback when recents are empty", async () => {
+        render(<EmojiPickerWithRecents onChoose={() => true} onFinished={vi.fn()} />);
+
+        const picker = screen.getByLabelText("Emoji picker");
+        await waitFor(() => expect(picker.lastElementChild).toHaveTextContent("😀"));
+        expect(screen.queryByRole("toolbar", { name: "Quick Reactions" })).not.toBeInTheDocument();
+    });
+
+    it("applies the stable Ashram host class and vertical orientation", () => {
+        render(<EmojiPickerWithRecents onChoose={() => true} onFinished={vi.fn()} />);
+
+        const picker = screen.getByLabelText("Emoji picker");
+        expect(picker).toHaveClass("mx_EmojiPickerWithRecents");
+        expect(screen.getByRole("tablist", { name: "Categories" })).toHaveAttribute("aria-orientation", "vertical");
     });
 });

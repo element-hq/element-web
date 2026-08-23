@@ -95,9 +95,12 @@ test.describe("Composer", () => {
             test.use({ viewport: { width: 1280, height: 720 } });
             test("render emoji picker", { tag: "@screenshot" }, async ({ page, app }) => {
                 await app.getComposer(false).getByRole("button", { name: "Emoji" }).click();
+                const emojiPicker = page.getByLabel("Emoji picker");
+                await expect(emojiPicker).toHaveCSS("width", "700px");
+                await expect(emojiPicker).toHaveCSS("height", "520px");
                 // Mask the background of the screenshot to avoid failing the test just because some
                 // other component have changed its rendering.
-                await expect(page.getByLabel("Emoji picker")).toMatchScreenshot("emoji-picker.png", {
+                await expect(emojiPicker).toMatchScreenshot("emoji-picker.png", {
                     css: `
                         .mx_ContextualMenu_background {
                             background-color: magenta !important;
@@ -111,9 +114,16 @@ test.describe("Composer", () => {
             test.use({ viewport: { width: 1280, height: 360 } });
             test("render emoji picker", { tag: "@screenshot" }, async ({ page, app }) => {
                 await app.getComposer(false).getByRole("button", { name: "Emoji" }).click();
+                const emojiPicker = page.getByLabel("Emoji picker");
+                const bounds = await emojiPicker.boundingBox();
+                expect(bounds).not.toBeNull();
+                if (!bounds) throw new Error("Emoji picker has no layout bounds");
+                expect(bounds.height).toBeLessThanOrEqual(360 * 0.8);
+                expect(bounds.y).toBeGreaterThanOrEqual(0);
+                expect(bounds.y + bounds.height).toBeLessThanOrEqual(360);
                 // Mask the background of the screenshot to avoid failing the test just because some
                 // other component have changed its rendering.
-                await expect(page.getByLabel("Emoji picker")).toMatchScreenshot("emoji-picker-small.png", {
+                await expect(emojiPicker).toMatchScreenshot("emoji-picker-small.png", {
                     css: `
                         .mx_ContextualMenu_background {
                             background-color: magenta !important;

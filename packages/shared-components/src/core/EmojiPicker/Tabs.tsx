@@ -45,14 +45,25 @@ interface Props {
      * When omitted, a default mapping based on `KeyboardEvent.key` is used.
      */
     getAction?: RovingTabIndexProviderProps["getAction"];
+    /**
+     * Orientation of the category tabs.
+     */
+    orientation: "horizontal" | "vertical";
 }
 
-const getDefaultAction = (ev: React.KeyboardEvent): RovingAction | undefined => {
+const getDefaultAction = (
+    ev: React.KeyboardEvent,
+    orientation: "horizontal" | "vertical",
+): RovingAction | undefined => {
     switch (ev.key) {
         case "ArrowLeft":
             return RovingAction.ArrowLeft;
         case "ArrowRight":
             return RovingAction.ArrowRight;
+        case "ArrowUp":
+            return orientation === "vertical" ? RovingAction.ArrowUp : undefined;
+        case "ArrowDown":
+            return orientation === "vertical" ? RovingAction.ArrowDown : undefined;
         case "Home":
             return RovingAction.Home;
         case "End":
@@ -72,6 +83,7 @@ export const Tabs: React.FC<Props> = ({
     onAnchorClick,
     pickerBodyId,
     getAction,
+    orientation,
 }) => {
     const findNearestEnabled = useCallback(
         (index: number, delta: number): number | undefined => {
@@ -112,10 +124,24 @@ export const Tabs: React.FC<Props> = ({
         (ev: React.KeyboardEvent): void => {
             let handled = true;
 
-            const action = getAction?.(ev) ?? getDefaultAction(ev);
+            const action = getAction?.(ev) ?? getDefaultAction(ev, orientation);
             switch (action) {
+                case RovingAction.ArrowUp:
+                    if (orientation !== "vertical") {
+                        handled = false;
+                        break;
+                    }
+                    changeCategoryRelative(-1);
+                    break;
                 case RovingAction.ArrowLeft:
                     changeCategoryRelative(-1);
+                    break;
+                case RovingAction.ArrowDown:
+                    if (orientation !== "vertical") {
+                        handled = false;
+                        break;
+                    }
+                    changeCategoryRelative(1);
                     break;
                 case RovingAction.ArrowRight:
                     changeCategoryRelative(1);
@@ -136,7 +162,7 @@ export const Tabs: React.FC<Props> = ({
                 ev.stopPropagation();
             }
         },
-        [getAction, changeCategoryRelative, changeCategoryAbsolute, categories.length],
+        [getAction, orientation, changeCategoryRelative, changeCategoryAbsolute, categories.length],
     );
 
     const tabRefs = useRef({} as Record<CategoryKey, React.RefObject<HTMLButtonElement | null>>);
@@ -147,7 +173,13 @@ export const Tabs: React.FC<Props> = ({
     }
 
     return (
-        <nav className={styles.header} role="tablist" aria-label={_t("emoji|categories")} onKeyDown={onKeyDown}>
+        <nav
+            className={styles.header}
+            role="tablist"
+            aria-label={_t("emoji|categories")}
+            aria-orientation={orientation === "vertical" ? "vertical" : undefined}
+            onKeyDown={onKeyDown}
+        >
             {categories.map((category) => {
                 const classes = classNames(styles.anchor, {
                     [styles.anchorSelected]: category.id === selectedCategory,

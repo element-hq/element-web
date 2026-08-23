@@ -11,6 +11,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { type IWidget } from "matrix-widget-api";
 
 import { _t, _td } from "../../../languageHandler";
+import ThemeWatcher from "../../../settings/watchers/ThemeWatcher";
 import AppTile from "../elements/AppTile";
 import dis from "../../../dispatcher/dispatcher";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -34,12 +35,17 @@ const STICKERPICKER_Z_INDEX = 3500;
 // Key to store the widget's AppTile under in PersistedElement
 const PERSISTED_ELEMENT_KEY = "stickerPicker";
 
+export type StickerPickerMode = "stickers" | "gifs";
+
 interface IProps {
     room: Room;
     threadId?: string | null;
     isStickerPickerOpen: boolean;
+    stickerPickerMode: StickerPickerMode;
     menuPosition?: any;
     setStickerPickerOpen: (isStickerPickerOpen: boolean) => void;
+    setStickerPickerMode: (mode: StickerPickerMode) => void;
+    openEmojiPicker: () => void;
 }
 
 interface IState {
@@ -62,8 +68,9 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
 
     private prevSentVisibility?: boolean;
 
-    private popoverWidth = 300;
-    private popoverHeight = 300;
+    private popoverWidth = 700;
+    private popoverHeight = 560;
+    private pickerContentHeight = 520;
     // This is loaded by _acquireScalarClient on an as-needed basis.
     private scalarClient: ScalarAuthClient | null = null;
 
@@ -146,7 +153,13 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         dis.unregister(this.dispatcherRef);
     }
 
-    public componentDidUpdate(): void {
+    public componentDidUpdate(prevProps: IProps): void {
+        if (prevProps.stickerPickerMode !== this.props.stickerPickerMode) {
+            PersistedElement.destroyElement(PERSISTED_ELEMENT_KEY);
+            this.forceUpdate();
+            return;
+        }
+
         this.sendVisibilityToWidget(this.props.isStickerPickerOpen);
     }
 
@@ -232,6 +245,54 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         }
     }
 
+    private stickerPickerUrl(baseUrl: string): string {
+        const url = new URL(baseUrl, window.location.href);
+        const theme = new ThemeWatcher().getEffectiveTheme();
+        url.searchParams.set("theme", theme.includes("dark") ? "dark" : "light");
+
+        if (this.props.stickerPickerMode === "gifs") {
+            url.searchParams.set("mode", "gifs");
+        } else {
+            url.searchParams.delete("mode");
+        }
+
+        return url.toString();
+    }
+
+    private renderPickerTabs(): JSX.Element {
+        const stickerActive = this.props.stickerPickerMode === "stickers";
+        const gifActive = this.props.stickerPickerMode === "gifs";
+
+        return (
+            <div className="mx_AshramPickerTabs" role="tablist" aria-label="Composer picker">
+                <AccessibleButton
+                    className="mx_AshramPickerTab"
+                    onClick={this.props.openEmojiPicker}
+                    role="tab"
+                    aria-selected={false}
+                >
+                    Emoji
+                </AccessibleButton>
+                <AccessibleButton
+                    className={`mx_AshramPickerTab ${stickerActive ? "mx_AshramPickerTab_active" : ""}`}
+                    onClick={() => this.props.setStickerPickerMode("stickers")}
+                    role="tab"
+                    aria-selected={stickerActive}
+                >
+                    Stickers
+                </AccessibleButton>
+                <AccessibleButton
+                    className={`mx_AshramPickerTab ${gifActive ? "mx_AshramPickerTab_active" : ""}`}
+                    onClick={() => this.props.setStickerPickerMode("gifs")}
+                    role="tab"
+                    aria-selected={gifActive}
+                >
+                    GIFs
+                </AccessibleButton>
+            </div>
+        );
+    }
+
     public getStickerpickerContent(): JSX.Element {
         // Handle integration manager errors
         if (this.state.imError) {
@@ -257,7 +318,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
             // FIXME: could this use the same code as other apps?
             const stickerApp: IWidget = {
                 id: stickerpickerWidget.id,
-                url: stickerpickerWidget.content.url,
+                url: this.stickerPickerUrl(stickerpickerWidget.content.url),
                 name: stickerpickerWidget.content.name,
                 type: stickerpickerWidget.content.type,
                 data: stickerpickerWidget.content.data,
@@ -265,37 +326,42 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
             };
 
             stickersContent = (
-                <div className="mx_Stickers_content_container">
-                    <div
-                        id="stickersContent"
-                        className="mx_Stickers_content"
-                        style={{
-                            border: "none",
-                            height: this.popoverHeight,
-                            width: this.popoverWidth,
-                        }}
-                    >
-                        <PersistedElement persistKey={PERSISTED_ELEMENT_KEY} zIndex={STICKERPICKER_Z_INDEX}>
-                            <AppTile
-                                app={stickerApp}
-                                room={this.props.room}
-                                threadId={this.props.threadId}
-                                fullWidth={true}
-                                userId={this.context.client?.credentials.userId ?? undefined}
-                                creatorUserId={
-                                    stickerpickerWidget.sender || this.context.client?.credentials.userId || undefined
-                                }
-                                waitForIframeLoad={true}
-                                showMenubar={true}
-                                onEditClick={this.launchManageIntegrations}
-                                onDeleteClick={this.removeStickerpickerWidgets}
-                                showTitle={false}
-                                showPopout={false}
-                                handleMinimisePointerEvents={true}
-                                userWidget={true}
-                                showLayoutButtons={false}
-                            />
-                        </PersistedElement>
+                <div className="mx_AshramPickerFrame">
+                    {this.renderPickerTabs()}
+                    <div className="mx_Stickers_content_container">
+                        <div
+                            id="stickersContent"
+                            className="mx_Stickers_content"
+                            style={{
+                                border: "none",
+                                height: this.pickerContentHeight,
+                                width: this.popoverWidth,
+                            }}
+                        >
+                            <PersistedElement persistKey={PERSISTED_ELEMENT_KEY} zIndex={STICKERPICKER_Z_INDEX}>
+                                <AppTile
+                                    app={stickerApp}
+                                    room={this.props.room}
+                                    threadId={this.props.threadId}
+                                    fullWidth={true}
+                                    userId={this.context.client?.credentials.userId ?? undefined}
+                                    creatorUserId={
+                                        stickerpickerWidget.sender ||
+                                        this.context.client?.credentials.userId ||
+                                        undefined
+                                    }
+                                    waitForIframeLoad={true}
+                                    showMenubar={true}
+                                    onEditClick={this.launchManageIntegrations}
+                                    onDeleteClick={this.removeStickerpickerWidgets}
+                                    showTitle={false}
+                                    showPopout={false}
+                                    handleMinimisePointerEvents={true}
+                                    userWidget={true}
+                                    showLayoutButtons={false}
+                                />
+                            </PersistedElement>
+                        </div>
                     </div>
                 </div>
             );

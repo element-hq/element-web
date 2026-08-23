@@ -1,19 +1,64 @@
+.mx_AshramPickerFrame {
+    width: 700px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.mx_AshramPickerTabs {
+    flex: 0 0 40px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    box-sizing: border-box;
+    border-bottom: 1px solid $message-action-bar-border-color;
+    background-color: $background;
+}
+
+.mx_AshramPickerTab {
+    border: none;
+    border-radius: 4px;
+    background-color: transparent;
+    color: $primary-content;
+    cursor: pointer;
+    padding: 7px 14px;
+    font: var(--cpd-font-body-md-semibold);
+}
+
+.mx_AshramPickerTab:hover,
+.mx_AshramPickerTab_active {
+    background-color: $focus-bg-color;
+    color: $accent;
+}
+
 .mx_Stickers_content {
     overflow: hidden;
 }
 
-.mx_Stickers_content_container {
-    overflow: hidden;
-    height: 300px;
+.mx_Stickers_content > div {
+    width: 100%;
+    height: 100%;
 }
 
-#mx_persistedElement_stickerPicker {
+.mx_Stickers_content_container {
+    overflow: hidden;
+    height: 520px;
+}
+
+[id^="mx_persistedElement_stickerPicker"] {
     .mx_AppTileFullWidth {
-        height: unset;
+        width: 700px;
+        height: 520px;
         box-sizing: border-box;
         border-left: none;
         border-right: none;
         border-bottom: none;
+    }
+
+    .mx_AppTileBody--large {
+        width: 700px;
+        height: 503px;
     }
 
     .mx_AppTileMenuBar {
@@ -21,8 +66,9 @@
     }
 
     iframe {
-        /* Sticker picker depends on the fixed height previously used for all tiles */
-        height: 283px; /* height of the popout minus the AppTile menu bar */
+        /* Ashram: match the larger sticker picker popover height minus AppTile menu bar */
+        width: 700px;
+        height: 503px;
     }
 }
 

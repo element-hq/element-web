@@ -22,6 +22,11 @@ describe("EmojiPicker", function () {
     const getActiveEmojiText = (container: HTMLElement): string =>
         container.querySelector('[role="gridcell"] [tabindex="0"]')?.textContent || "";
 
+    const getEmojiRows = (container: HTMLElement): Element[] =>
+        Array.from(container.querySelectorAll('[role="row"]')).filter((row) =>
+            Array.from(row.children).some((cell) => cell.querySelector('[role="button"], [role="checkbox"]')),
+        );
+
     it("should disable the recent category when no recent emojis", () => {
         render(<EmojiPicker onChoose={() => false} onFinished={vi.fn()} />);
 
@@ -42,6 +47,26 @@ describe("EmojiPicker", function () {
         const recentTab = screen.getByRole("tab", { name: "🕒" });
         expect(recentTab).toBeEnabled();
         expect(recentTab).toHaveAttribute("aria-selected", "true");
+    });
+
+    it("groups emoji using the configured column count", async () => {
+        const { container } = render(<EmojiPicker emojisPerRow={11} onChoose={() => false} onFinished={vi.fn()} />);
+
+        await waitFor(() => expect(getEmojiRows(container).length).toBeGreaterThanOrEqual(2));
+
+        const [firstRow, secondRow] = getEmojiRows(container);
+        expect(firstRow.children).toHaveLength(11);
+        expect(Array.from(firstRow.children, (cell) => cell.textContent)).toEqual(
+            DATA_BY_CATEGORY.people.slice(0, 11).map((emoji) => emoji.unicode),
+        );
+        expect(secondRow.children[0]).toHaveTextContent(DATA_BY_CATEGORY.people[11].unicode);
+    });
+
+    it("falls back to the stock column count for invalid configuration", async () => {
+        const { container } = render(<EmojiPicker emojisPerRow={0} onChoose={() => false} onFinished={vi.fn()} />);
+
+        await waitFor(() => expect(getEmojiRows(container)[0]).toBeDefined());
+        expect(getEmojiRows(container)[0].children).toHaveLength(8);
     });
 
     it("should record recent emoji when onChoose does not return false", async () => {
@@ -171,6 +196,53 @@ describe("EmojiPicker", function () {
 
         expect(onChoose).toHaveBeenCalledWith("📫️");
         expect(onFinished).toHaveBeenCalled();
+    });
+
+    it("keeps same-row keyboard targets horizontally visible without moving search focus", async () => {
+        const { container } = render(<EmojiPicker onChoose={() => false} onFinished={vi.fn()} />);
+        const input = container.querySelector("input")!;
+
+        await waitFor(() => expect(getEmojiRows(container)[0]?.children).toHaveLength(8));
+        await waitFor(() => expect(input).toHaveFocus());
+        const secondEmoji = getEmojiRows(container)[0].children[1].querySelector<HTMLElement>('[role="button"]')!;
+        const scrollIntoView = vi.spyOn(secondEmoji, "scrollIntoView");
+
+        await userEvent.keyboard("[ArrowDown]");
+        await userEvent.keyboard("[ArrowRight]");
+
+        expect(input).toHaveFocus();
+        expect(scrollIntoView).toHaveBeenCalledWith({
+            behavior: "auto",
+            block: "nearest",
+            inline: "nearest",
+        });
+    });
+
+    it("moves Up and Down by the configured 11-column row geometry", async () => {
+        const { container } = render(<EmojiPicker emojisPerRow={11} onChoose={() => false} onFinished={vi.fn()} />);
+
+        await waitFor(() => expect(getActiveEmojiText(container)).toEqual(DATA_BY_CATEGORY.people[0].unicode));
+        await userEvent.keyboard("[ArrowDown]");
+        await userEvent.keyboard("[ArrowDown]");
+        expect(getActiveEmojiText(container)).toEqual(DATA_BY_CATEGORY.people[11].unicode);
+
+        await userEvent.keyboard("[ArrowUp]");
+        expect(getActiveEmojiText(container)).toEqual(DATA_BY_CATEGORY.people[0].unicode);
+    });
+
+    it("clamps 11-column navigation to the end of a ragged row", async () => {
+        const recentEmojis = DATA_BY_CATEGORY.people.slice(0, 13).map((emoji) => emoji.unicode);
+        const { container } = render(
+            <EmojiPicker emojisPerRow={11} recentEmojis={recentEmojis} onChoose={() => false} onFinished={vi.fn()} />,
+        );
+
+        await waitFor(() => expect(getActiveEmojiText(container)).toEqual(recentEmojis[0]));
+        await userEvent.keyboard("[ArrowDown]");
+        await userEvent.keyboard("[ArrowRight]".repeat(10));
+        expect(getActiveEmojiText(container)).toEqual(recentEmojis[10]);
+
+        await userEvent.keyboard("[ArrowDown]");
+        expect(getActiveEmojiText(container)).toEqual(recentEmojis[12]);
     });
 
     it("should move actual focus when navigating between emojis after Tab", async () => {
@@ -343,6 +415,62 @@ describe("EmojiPicker", function () {
         expect(getActiveEmoji().id).not.toEqual(activeId);
     });
 
+    describe("Preview fallback", () => {
+        const getFooter = (): HTMLElement => screen.getByLabelText("Emoji picker").lastElementChild as HTMLElement;
+
+        it("shows a supplied grinning-face fallback instead of Quick Reactions", async () => {
+            render(<EmojiPicker previewFallbackEmoji="😀" onChoose={() => false} onFinished={vi.fn()} />);
+
+            await waitFor(() => expect(getFooter()).toHaveTextContent("😀"));
+            expect(screen.queryByRole("toolbar", { name: "Quick Reactions" })).not.toBeInTheDocument();
+        });
+
+        it("shows a supplied ordered-recent fallback", async () => {
+            render(
+                <EmojiPicker
+                    recentEmojis={["🎉", "😀"]}
+                    previewFallbackEmoji="🎉"
+                    onChoose={() => false}
+                    onFinished={vi.fn()}
+                />,
+            );
+
+            await waitFor(() => expect(getFooter()).toHaveTextContent("🎉"));
+        });
+
+        it("gives hover Preview precedence and restores the fallback on mouse leave", async () => {
+            const { container } = render(
+                <EmojiPicker previewFallbackEmoji="😀" onChoose={() => false} onFinished={vi.fn()} />,
+            );
+
+            await waitFor(() => expect(getEmojiRows(container)[0]).toBeDefined());
+            const hoveredEmoji = DATA_BY_CATEGORY.people[1].unicode;
+            const hoveredButton = getEmojiRows(container)[0].children[1].querySelector<HTMLElement>('[role="button"]')!;
+
+            await userEvent.hover(hoveredButton);
+            expect(getFooter()).toHaveTextContent(hoveredEmoji);
+            expect(getFooter()).not.toHaveTextContent("😀");
+
+            await userEvent.unhover(hoveredButton);
+            expect(getFooter()).toHaveTextContent("😀");
+        });
+
+        it("keeps the stock footerless behavior when Quick Reactions are disabled", async () => {
+            render(
+                <EmojiPicker
+                    showQuickReactions={false}
+                    previewFallbackEmoji="😀"
+                    onChoose={() => false}
+                    onFinished={vi.fn()}
+                />,
+            );
+
+            const picker = screen.getByLabelText("Emoji picker");
+            await waitFor(() => expect(picker.querySelector('[role="gridcell"]')).toBeInTheDocument());
+            expect(picker.children).toHaveLength(3);
+        });
+    });
+
     describe("Category keyboard selection", () => {
         it("check tabindex for the first category when no recent emojis", async () => {
             const { container } = render(<EmojiPicker onChoose={vi.fn()} onFinished={vi.fn()} />);
@@ -427,6 +555,60 @@ describe("EmojiPicker", function () {
                 expect(focusedTab?.getAttribute("role")).toBe("tab");
                 expect(focusedTab).not.toBe(peopleTab);
             });
+        });
+
+        it("exposes vertical orientation and navigates categories with Down", async () => {
+            const { container } = render(
+                <EmojiPicker categoryOrientation="vertical" onChoose={vi.fn()} onFinished={vi.fn()} />,
+            );
+
+            const tablist = screen.getByRole("tablist", { name: "Categories" });
+            expect(tablist).toHaveAttribute("aria-orientation", "vertical");
+
+            const peopleTab = container.querySelector<HTMLButtonElement>('[title*="Smileys"]')!;
+            const natureTab = container.querySelector<HTMLButtonElement>('[title*="Animals"]')!;
+            peopleTab.focus();
+
+            await userEvent.keyboard("[ArrowDown]");
+            expect(natureTab).toHaveFocus();
+        });
+
+        it("retains Left and Right aliases in vertical orientation", async () => {
+            const { container, unmount } = render(
+                <EmojiPicker categoryOrientation="vertical" onChoose={vi.fn()} onFinished={vi.fn()} />,
+            );
+
+            const peopleTab = container.querySelector<HTMLButtonElement>('[title*="Smileys"]')!;
+            const natureTab = container.querySelector<HTMLButtonElement>('[title*="Animals"]')!;
+            peopleTab.focus();
+
+            await userEvent.keyboard("[ArrowRight]");
+            expect(natureTab).toHaveFocus();
+
+            unmount();
+            const secondRender = render(
+                <EmojiPicker categoryOrientation="vertical" onChoose={vi.fn()} onFinished={vi.fn()} />,
+            );
+            const secondPeopleTab = secondRender.container.querySelector<HTMLButtonElement>('[title*="Smileys"]')!;
+            const flagsTab = secondRender.container.querySelector<HTMLButtonElement>('[title*="Flags"]')!;
+            secondPeopleTab.focus();
+
+            await userEvent.keyboard("[ArrowLeft]");
+            expect(flagsTab).toHaveFocus();
+        });
+
+        it("skips the disabled Recent category when wrapping vertically", async () => {
+            const { container } = render(
+                <EmojiPicker categoryOrientation="vertical" onChoose={vi.fn()} onFinished={vi.fn()} />,
+            );
+
+            const peopleTab = container.querySelector<HTMLButtonElement>('[title*="Smileys"]')!;
+            const flagsTab = container.querySelector<HTMLButtonElement>('[title*="Flags"]')!;
+            expect(screen.getByRole("tab", { name: "🕒" })).toBeDisabled();
+            peopleTab.focus();
+
+            await userEvent.keyboard("[ArrowUp]");
+            expect(flagsTab).toHaveFocus();
         });
 
         it("should navigate to first/last category using Home/End keys", async () => {
