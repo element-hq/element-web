@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import { vi, describe, it, expect, afterAll, beforeEach } from "vitest";
 import { getMockClientWithEventEmitter } from "test-utils/client";
 
-import { type EventEmitter } from "events";
+import { type EventEmitter } from "node:events";
 import { Room, RoomMember, EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
@@ -437,7 +437,7 @@ describe("Permalinks", function () {
 
         it("should correctly parse event permalink via arguments", () => {
             const result = parsePermalink(
-                "https://matrix.to/#/!room_id:server/$event_id/some_thing_here/foobar" + "?via=m1.org&via=m2.org",
+                "https://matrix.to/#/!room_id:server/$event_id/some_thing_here/foobar?via=m1.org&via=m2.org",
             );
             expect(result?.eventId).toBe("$event_id/some_thing_here/foobar");
             expect(result?.roomIdOrAlias).toBe("!room_id:server");

@@ -43,6 +43,11 @@ jobs:
                     - name: Rethemendex Check
                       command: "rethemendex"
                       assert-diff: true
+                    - name: Module API Docs Check
+                      command: "build"
+                      install: normal
+                      project: "@element-hq/element-web-module-api"
+                      assert-diff: true
                     - name: Docs
                       install: layered
                       command: "docs:build"
@@ -56,7 +61,7 @@ jobs:
               with:
                   persist-credentials: false
 
-            - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+            - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
             - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
               if: matrix.install != ''
               with:
@@ -74,6 +79,15 @@ jobs:
               run: pnpm nx run-many -t "$CMD" -p
               env:
                   CMD: ${{ matrix.command }}
+              if: matrix.project == ''
+
+            - name: Run ${{ matrix.command }} on ${{ matrix.project }}
+              run: pnpm nx run -t "$CMD" -p "$PROJECT"
+              env:
+                  CMD: ${{ matrix.command }}
+                  PROJECT: ${{ matrix.project }}
+
+              if: matrix.project
 
             - name: Assert no changes
               run: git diff --exit-code
@@ -90,7 +104,7 @@ jobs:
                   persist-credentials: false
 
             - name: Run zizmor
-              uses: zizmorcore/zizmor-action@6fc4b006235f201fdab3722e17240ab420d580e5 # v0.6.1
+              uses: zizmorcore/zizmor-action@3dc1ecc9bcb9e94e9b2c709687979e1298497054 # v0.6.2
 
     i18n:
         strategy:

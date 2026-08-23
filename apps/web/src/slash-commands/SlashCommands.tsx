@@ -608,7 +608,7 @@ export const Commands = [
 
                     return success(
                         finished.then(([confirmed]) => {
-                            if (confirmed) manuallyVerifyDevice(cli, deviceId, fingerprint);
+                            if (confirmed) void manuallyVerifyDevice(cli, deviceId, fingerprint);
                         }),
                     );
                 }
@@ -624,7 +624,7 @@ export const Commands = [
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId) {
             try {
-                cli.getCrypto()?.forceDiscardSession(roomId);
+                void cli.getCrypto()?.forceDiscardSession(roomId);
             } catch (e) {
                 return reject(e instanceof Error ? e.message : e);
             }
@@ -755,7 +755,7 @@ export const Commands = [
                                     metricsViaKeyboard: true,
                                 });
                                 if (msg) {
-                                    cli.sendTextMessage(roomId, msg);
+                                    void cli.sendTextMessage(roomId, msg);
                                 }
                             })(),
                         );

@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Emoji 選擇器",
         "jump_first_invite": "跳到第一個邀請。",
         "n_unread_messages": {
             "other": "%(count)s 則未讀訊息。",
@@ -747,22 +746,6 @@
     },
     "dialog_close_label": "關閉對話框",
     "download_completed": "下載完成",
-    "emoji": {
-        "categories": "分類",
-        "category_activities": "活動",
-        "category_animals_nature": "動物與自然",
-        "category_flags": "旗幟",
-        "category_food_drink": "食物與飲料",
-        "category_frequently_used": "經常使用",
-        "category_objects": "物件",
-        "category_smileys_people": "笑臉與人",
-        "category_symbols": "符號",
-        "category_travel_places": "旅遊與景點",
-        "quick_reactions": "快速反應"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "取消搜尋"
-    },
     "empty_room": "空聊天室",
     "empty_room_was_name": "空的聊天室（曾為 %(oldName)s）",
     "encryption": {
@@ -1407,7 +1390,6 @@
         "mentions_and_keywords": "@提及與關鍵字",
         "mentions_and_keywords_description": "僅在提及您與您在<a>設定</a>中列出的關鍵字時收到通知",
         "mentions_keywords": "提及與關鍵字",
-        "message_didnt_send": "訊息未傳送。點擊以取得更多資訊。",
         "mute_description": "不會收到任何通知"
     },
     "notifier": {

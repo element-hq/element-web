@@ -28,9 +28,9 @@ export class Timeline {
     }
 
     // Find the event tile matching the given sender & body
-    async findEventTile(sender: string, body: string): Promise<Locator> {
+    async findEventTile(sender: string, body: string): Promise<Locator | undefined> {
         const locators = await this.page.locator(".mx_RoomView_MessageList .mx_EventTile").all();
-        let latestSender: string;
+        let latestSender: string | undefined;
         for (const locator of locators) {
             const displayName = locator.locator(".mx_DisambiguatedProfile_displayName");
             if (await displayName.count()) {

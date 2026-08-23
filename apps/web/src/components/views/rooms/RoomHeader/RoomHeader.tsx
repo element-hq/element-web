@@ -36,7 +36,7 @@ import { useEncryptionStatus } from "../../../../hooks/useEncryptionStatus.ts";
 import { E2EStatus } from "../../../../utils/ShieldUtils.ts";
 import FacePile from "../../elements/FacePile.tsx";
 import { useRoomState } from "../../../../hooks/useRoomState.ts";
-import RoomAvatar from "../../avatars/RoomAvatar.tsx";
+import RoomAvatar from "../../avatars/RoomAvatar";
 import { formatCount } from "../../../../utils/FormattingUtils.ts";
 import PosthogTrackers from "../../../../PosthogTrackers.ts";
 import { VideoRoomChatButton } from "./VideoRoomChatButton.tsx";
@@ -472,7 +472,7 @@ export default function RoomHeader({
                         oobData={oobData}
                         onClick={room instanceof LocalRoom ? undefined : onAvatarClick}
                         tabIndex={-1}
-                        aria-label={_t("room|header_avatar_open_settings_label")}
+                        altText={_t("room|header_avatar_open_settings_label")}
                     />
                 </WithPresenceIndicator>
                 {/* Disable on-click actions until the room is created */}
@@ -485,6 +485,7 @@ export default function RoomHeader({
                             : () => sdkContext.rightPanelStore.showOrHidePhase(RightPanelPhases.RoomSummary)
                     }
                     className="mx_RoomHeader_infoWrapper"
+                    type="button"
                 >
                     <Box flex="1" className="mx_RoomHeader_info">
                         <Text

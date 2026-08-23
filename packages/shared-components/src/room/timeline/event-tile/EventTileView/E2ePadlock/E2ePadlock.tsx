@@ -69,6 +69,8 @@ export function E2ePadlock({ icon, title, className }: Readonly<E2ePadlockProps>
                 data-testid="e2e-padlock"
                 className={classNames(styles.e2ePadlock, iconClasses[icon], className)}
                 role="img"
+                // This is only tab indexed to act as a tooltip trigger
+                // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex
                 tabIndex={0}
                 aria-label={_t("timeline|e2e_state")}
             >

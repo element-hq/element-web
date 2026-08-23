@@ -6,6 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// oxlint-disable-next-line no-restricted-imports
 import EventEmitter from "events";
 import {
     type KeyBackupInfo,
@@ -68,10 +69,10 @@ export class SetupEncryptionStore extends EventEmitter {
             // If there are multiple, we take the most recent. Equally if the user sends another request from
             // another device after this screen has been shown, we'll switch to the new one, so this
             // generally doesn't support multiple requests.
-            this.setActiveVerificationRequest(requestsInProgress[requestsInProgress.length - 1]);
+            void this.setActiveVerificationRequest(requestsInProgress[requestsInProgress.length - 1]);
         }
 
-        this.fetchKeyInfo();
+        void this.fetchKeyInfo();
     }
 
     public stop(): void {
@@ -173,7 +174,7 @@ export class SetupEncryptionStore extends EventEmitter {
     };
 
     public onVerificationRequest = (request: VerificationRequest): void => {
-        this.setActiveVerificationRequest(request);
+        void this.setActiveVerificationRequest(request);
     };
 
     public onVerificationRequestChange = async (): Promise<void> => {

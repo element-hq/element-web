@@ -32,10 +32,8 @@ export const getChangedOverrideRoomMutePushRules = (actionPayload: ActionPayload
         return undefined;
     }
 
-    const roomPushRules = (event.getContent() as IPushRules)?.global?.override?.filter(isRuleMaybeRoomMuteRule);
-    const prevRoomPushRules = (prevEvent?.getContent() as IPushRules)?.global?.override?.filter(
-        isRuleMaybeRoomMuteRule,
-    );
+    const roomPushRules = event.getContent<IPushRules>()?.global?.override?.filter(isRuleMaybeRoomMuteRule);
+    const prevRoomPushRules = prevEvent?.getContent<IPushRules>()?.global?.override?.filter(isRuleMaybeRoomMuteRule);
 
     const { added, removed } = arrayDiff(
         prevRoomPushRules?.map((rule) => rule.rule_id) || [],

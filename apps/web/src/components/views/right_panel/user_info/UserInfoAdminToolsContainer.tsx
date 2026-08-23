@@ -53,7 +53,7 @@ export const RoomKickButton = ({
             role="button"
             onSelect={async (ev) => {
                 ev.preventDefault();
-                vm.onKickClick();
+                void vm.onKickClick();
             }}
             disabled={isUpdating}
             label={vm.kickLabel}
@@ -94,7 +94,7 @@ export const BanToggleButton = ({
             role="button"
             onSelect={async (ev) => {
                 ev.preventDefault();
-                vm.onBanOrUnbanClick();
+                void vm.onBanOrUnbanClick();
             }}
             disabled={isUpdating}
             label={vm.banLabel}
@@ -128,7 +128,7 @@ const MuteToggleButton: React.FC<IBaseRoomProps> = ({
             role="button"
             onSelect={async (ev) => {
                 ev.preventDefault();
-                vm.onMuteButtonClick();
+                void vm.onMuteButtonClick();
             }}
             disabled={isUpdating}
             label={vm.muteLabel}
