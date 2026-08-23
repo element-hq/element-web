@@ -46,6 +46,7 @@
     --event-tile-thread-spacing-block-start: var(--cpd-space-4x);
     --event-tile-thread-spacing-inline-end: 8px;
     --event-tile-thread-spacing-inline-start: 56px;
+    --event-tile-thread-margin-inline: 36px;
     --event-tile-file-separator-color: var(--cpd-color-gray-400);
     --event-tile-file-separator-spacing: var(--cpd-space-6x);
     --event-tile-action-bar-size: 28px;
@@ -200,7 +201,7 @@
         line-height: var(--event-tile-group-line-height);
     }
 
-    &:not(.shapeCard) .line:not(.lineMedia) .slotBody > * {
+    &:not(.shapeCard) .line:not(.lineMedia) .slotBody > *:not(fieldset) {
         margin-inline-end: var(--event-tile-content-inline-end);
     }
 
@@ -480,17 +481,19 @@
         border-radius: 8px;
     }
 
-    .line:not(.lineMedia) .slotBody > * {
+    .line:not(.lineMedia) .slotBody > *:not(fieldset) {
         margin-inline-end: var(--event-tile-content-inline-end);
     }
 
-    .line:not(.lineMedia) .slotBody > * {
+    .line:not(.lineMedia) .slotBody > *:not(fieldset) {
         display: inline-block;
         padding-block: 1px;
     }
 
     /* Sender. */
     .slotSender {
+        display: flex;
+        align-items: flex-start;
         flex-shrink: 0;
         width: var(--event-tile-irc-name-width, 80px);
         margin-inline-end: 0;
@@ -513,7 +516,6 @@
     > .slotPadlock,
     > .slotReceipt,
     > .slotReplyChain,
-    > .slotSender,
     > .slotThreadInfo,
     > .slotTimestamp,
     > .line {
@@ -751,9 +753,9 @@
         inset-inline-end: auto;
     }
 
-    /* Text-bubble body spacing belongs to the line. Media lines provide
-       their own dimensions and are intentionally excluded. */
-    .line:not(.lineMedia) .slotBody > * {
+    /* Text-bubble body spacing belongs to the line. Media lines and
+       structured fieldset bodies provide their own dimensions. */
+    .line:not(.lineMedia) .slotBody > *:not(fieldset) {
         padding: 1px;
     }
 
@@ -836,6 +838,9 @@
     }
 
     .slotThreadInfo {
+        display: flex;
+        width: fit-content;
+        max-width: 100%;
         margin-inline-start: -11px;
         margin-inline-end: auto;
     }
@@ -1160,6 +1165,31 @@
     flex-direction: column;
     width: 100%;
     padding-top: 0;
+
+    /* ThreadView uses the narrower BaseCard gutter for bubble tiles. The
+       regular room bubble margins would overflow the thread card because the
+       thread shell is otherwise full-width. */
+    &.layoutBubble {
+        width: auto;
+        margin-inline: var(--event-tile-thread-margin-inline);
+
+        &::before {
+            inset-inline: calc(-1 * var(--event-tile-thread-margin-inline));
+            z-index: auto;
+        }
+
+        &.stateOwnEvent {
+            align-items: flex-end;
+        }
+
+        /* Thread tiles render the receipt slot inside the line. */
+        .line > .slotReceipt {
+            position: absolute;
+            z-index: 1;
+            inset-block-end: -3px;
+            inset-inline-end: -78px;
+        }
+    }
 
     /* Line. */
     &.layoutIrc {
