@@ -263,10 +263,6 @@
         display: contents;
     }
 
-    .line > .slotReplyChain > * {
-        margin-bottom: var(--cpd-space-2x);
-    }
-
     .slotFooter {
         margin: var(--cpd-space-1x) 0 var(--cpd-space-1x) var(--event-tile-group-gutter);
     }
@@ -545,7 +541,9 @@
     .slotAvatar > *,
     .slotAvatar > * > * {
         font-size: 0.625rem;
-        line-height: calc(var(--cpd-font-size-body-md) - 2px);
+        /* Compound Avatar applies its own line-height to imageless fallbacks.
+           Keep the initial vertically centred in the IRC avatar slot. */
+        line-height: calc(var(--cpd-font-size-body-md) - 2px) !important;
     }
 
     .slotPadlock,
@@ -856,15 +854,9 @@
     }
 
     /* States. */
-    /* The legacy bubble line contained the reply-chain wrapper directly, and
-       its spacing belonged to the quoted mx_ReplyChain blockquote. Flatten
-       the slot boundary and restore that margin at the same element. */
+    /* The legacy bubble line contained the reply-chain wrapper directly. */
     &.stateHasReply .line > .slotReplyChain {
         display: contents;
-    }
-
-    &.stateHasReply .line > .slotReplyChain > * :global(.mx_ReplyChain) {
-        margin-block-end: var(--cpd-space-2x);
     }
 
     &.stateHasReply .line {
@@ -1198,6 +1190,26 @@
         width: auto;
         margin-inline: var(--event-tile-thread-margin-inline);
 
+        /* Keep the legacy inline gap between the body and receipt slot. */
+        .line {
+            gap: 5px var(--event-tile-bubble-gap);
+
+            &:has(> .slotReceipt)::after {
+                content: "";
+                flex: 0 0 var(--event-tile-bubble-gap);
+            }
+
+            > .slotReceipt {
+                position: absolute;
+                z-index: 1;
+                inset-block-end: -3px;
+                inset-inline-start: calc(100% + var(--event-tile-bubble-gap));
+                inset-inline-end: auto;
+                width: auto;
+                height: auto;
+            }
+        }
+
         &::before {
             inset-inline: calc(-1 * var(--event-tile-thread-margin-inline));
             z-index: auto;
@@ -1207,13 +1219,6 @@
             align-items: flex-end;
         }
 
-        /* Thread tiles render the receipt slot inside the line. */
-        .line > .slotReceipt {
-            position: absolute;
-            z-index: 1;
-            inset-block-end: -3px;
-            inset-inline-end: -78px;
-        }
     }
 
     /* Line. */

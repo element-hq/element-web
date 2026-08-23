@@ -97,7 +97,6 @@ test.describe("Cryptography", function () {
                 // the message should appear, decrypted, with no warning, but also no "verified"
                 const lastTile = page.locator(".mx_EventTile").last();
                 const lastTileE2eIcon = lastTile.getByTestId("e2e-padlock");
-                const lastTileE2eIconSlot = lastTile.getByTestId("event-tile-slot-padlock");
                 await expect(lastTile).toContainText("test encrypted 1");
                 // no e2e icon
                 await expect(lastTileE2eIcon).not.toBeVisible();
@@ -154,6 +153,7 @@ test.describe("Cryptography", function () {
 
                 const lastTile = page.locator(".mx_EventTile").last();
                 const lastTileE2eIcon = lastTile.getByTestId("e2e-padlock");
+                const lastTileE2eIconSlot = lastTile.getByTestId("event-tile-slot-padlock");
                 await expect(lastTile).toContainText("test encrypted 1");
                 // no e2e icon
                 await expect(lastTileE2eIcon).not.toBeVisible();

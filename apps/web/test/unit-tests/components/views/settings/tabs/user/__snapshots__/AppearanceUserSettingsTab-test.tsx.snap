@@ -215,14 +215,14 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           data-testid="event-tile-slot-sender"
                         >
                           <div
-                            class="mx_DisambiguatedProfile _disambiguatedProfile_36406_8"
+                            class="mx_DisambiguatedProfile _disambiguatedProfile_1q5ax_8"
                             data-event-density="default"
                             data-event-layout="group"
                             role="button"
                             tabindex="0"
                           >
                             <span
-                              class="mx_Username_color2 _disambiguatedProfile_displayName_36406_18 mx_DisambiguatedProfile_displayName"
+                              class="mx_Username_color2 _disambiguatedProfile_displayName_1q5ax_18 mx_DisambiguatedProfile_displayName"
                               dir="auto"
                             >
                               @userId:matrix.org
@@ -321,14 +321,14 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           data-testid="event-tile-slot-sender"
                         >
                           <div
-                            class="mx_DisambiguatedProfile _disambiguatedProfile_36406_8"
+                            class="mx_DisambiguatedProfile _disambiguatedProfile_1q5ax_8"
                             data-event-density="default"
                             data-event-layout="bubble"
                             role="button"
                             tabindex="0"
                           >
                             <span
-                              class="mx_Username_color2 _disambiguatedProfile_displayName_36406_18 mx_DisambiguatedProfile_displayName"
+                              class="mx_Username_color2 _disambiguatedProfile_displayName_1q5ax_18 mx_DisambiguatedProfile_displayName"
                               dir="auto"
                             >
                               @userId:matrix.org
@@ -451,14 +451,14 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           data-testid="event-tile-slot-sender"
                         >
                           <div
-                            class="mx_DisambiguatedProfile _disambiguatedProfile_36406_8"
+                            class="mx_DisambiguatedProfile _disambiguatedProfile_1q5ax_8"
                             data-event-density="default"
                             data-event-layout="irc"
                             role="button"
                             tabindex="0"
                           >
                             <span
-                              class="mx_Username_color2 _disambiguatedProfile_displayName_36406_18 mx_DisambiguatedProfile_displayName"
+                              class="mx_Username_color2 _disambiguatedProfile_displayName_1q5ax_18 mx_DisambiguatedProfile_displayName"
                               dir="auto"
                             >
                               @userId:matrix.org

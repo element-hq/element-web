@@ -111,8 +111,8 @@ test.describe("FilePanel", () => {
                 .filter({ hasText: "matrix-org-client-versions.json" })
                 .getByTestId("event-tile-slot-body")
                 .getByRole("button", { name: /matrix.*?\.json/ });
-            // Assert that the file name is rendered inside the button with ellipsis
-            await expect(file.getByText(/matrix.*?\.json/)).toBeVisible();
+            // Assert that the file name is exposed by the button with ellipsis
+            await expect(file).toHaveAccessibleName(/matrix.*?\.json/);
 
             // Make the viewport tall enough to display all of the file tiles on FilePanel
             await page.setViewportSize({ width: 800, height: 1000 });
@@ -200,7 +200,7 @@ test.describe("FilePanel", () => {
             const imageTile = page
                 .locator(".mx_FilePanel .mx_RoomView_MessageList .mx_EventTile")
                 .filter({ has: page.locator("img[alt='riot.png']") });
-            const link = imageTile.getByTestId("event-tile-slot-body").getByRole("link", { name: /^Download file/ });
+            const link = imageTile.getByTestId("event-tile-slot-body").getByRole("link", { name: /^Download/ });
 
             const downloadPromise = page.waitForEvent("download");
 

@@ -122,11 +122,9 @@ test.describe("Editing", () => {
                 const tile = dialog.locator("li:nth-child(2) .mx_EventTile");
                 // Assert that the edited message body consists of both deleted character and inserted character
                 // Above the first "e" of "Message" was replaced with "a"
-                await expect(tile.getByTestId("event-tile-slot-body")).toHaveText("Meassage");
+                await expect(tile.locator(".mx_EventTile_content")).toHaveText("Meassage");
 
-                const body = tile
-                    .getByTestId("event-tile-slot-body")
-                    .locator(".mx_EventTile_content .mx_EventTile_body");
+                const body = tile.locator(".mx_EventTile_content .mx_EventTile_body");
                 await expect(body.locator(".mx_EditHistoryMessage_deletion").getByText("e")).toBeVisible();
                 await expect(body.locator(".mx_EditHistoryMessage_insertion").getByText("a")).toBeVisible();
             }
@@ -135,7 +133,6 @@ test.describe("Editing", () => {
             await expect(
                 dialog
                     .locator("li:nth-child(3) .mx_EventTile")
-                    .getByTestId("event-tile-slot-body")
                     .locator(".mx_EventTile_content .mx_EventTile_body", { hasText: "Message" }),
             ).toBeVisible();
 
@@ -150,7 +147,7 @@ test.describe("Editing", () => {
 
             {
                 const tile = dialog.locator("li:nth-child(2) .mx_EventTile");
-                await expect(tile.getByTestId("event-tile-slot-body")).toHaveText("Meassage");
+                await expect(tile.locator(".mx_EventTile_content")).toHaveText("Meassage");
                 // Click the "Remove" button again
                 await clickButtonRemove(tile);
             }
@@ -161,7 +158,7 @@ test.describe("Editing", () => {
             {
                 // Assert that the message edit history dialog is rendered again after it was closed
                 const tile = dialog.locator("li:nth-child(2) .mx_EventTile");
-                await expect(tile.getByTestId("event-tile-slot-body")).toHaveText("Meassage");
+                await expect(tile.locator(".mx_EventTile_content")).toHaveText("Meassage");
                 // Click the "Remove" button again
                 await clickButtonRemove(tile);
             }
@@ -182,15 +179,12 @@ test.describe("Editing", () => {
             await expect(
                 messageEditHistoryDialog
                     .locator("li:nth-child(2) .mx_EventTile")
-                    .getByTestId("event-tile-slot-body")
                     .locator(".mx_EventTile_content .mx_EventTile_body", { hasText: "Message" }),
             ).toBeVisible();
 
             // Assert that the edited message is gone
             await expect(
-                messageEditHistoryDialog
-                    .getByTestId("event-tile-slot-body")
-                    .locator(".mx_EventTile_content .mx_EventTile_body", { hasText: "Meassage" }),
+                messageEditHistoryDialog.locator(".mx_EventTile_content .mx_EventTile_body", { hasText: "Meassage" }),
             ).not.toBeVisible();
 
             await app.closeDialog();

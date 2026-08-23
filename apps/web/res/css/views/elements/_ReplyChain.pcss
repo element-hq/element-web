@@ -7,7 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 .mx_ReplyChain {
-    margin: 0; /* Reset default blockquote margin */
+    /* Match the spacing used by reply chains in group and bubble timelines. */
+    margin-block: 0 var(--cpd-space-2x);
+    margin-inline: 0;
     padding-left: 10px;
     border-left: 2px solid var(--username-color);
     border-radius: 2px;
