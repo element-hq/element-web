@@ -115,6 +115,13 @@
     white-space: nowrap;
 }
 
+/* The shell controls the body-slot surface. Body components own their
+   internal content styling. */
+.slotBody > * {
+    overflow-y: hidden;
+    text-align: start;
+}
+
 .slotAvatar {
     cursor: pointer;
     user-select: none;

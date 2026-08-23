@@ -260,7 +260,7 @@ test.describe("Threads", () => {
 
         // User asserts thread with correct root & latest events & unread dot
         locator = page.locator(".mx_ThreadPanel .mx_EventTile").last();
-        await expect(locator.locator(".mx_EventTile_body").getByText("Hello Mr. Bot")).toBeAttached();
+        await expect(locator.getByTestId("event-tile-slot-body").getByText("Hello Mr. Bot")).toBeAttached();
         await expect(locator.getByText("How are things?")).toBeAttached();
         // Check the number of the replies
         await expect(locator.locator(".mx_ThreadPanel_replies_amount").getByText("2")).toBeAttached();

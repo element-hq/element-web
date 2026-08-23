@@ -269,11 +269,10 @@ export interface EventTileEventSnapshot {
 /** Root state derived for the EventTile snapshot, aligned with EventTileView. */
 export type EventTileRootSnapshot = Omit<EventTileViewRoot, "id" | "as" | "permalink">;
 
-/** Fixed application class names for the shared EventTileView shell and its slot boundaries. */
+/** Fixed application class names for the shared EventTileView shell. */
 const EVENT_TILE_VIEW_CLASS_NAMES: EventTileViewClassNames = {
     root: "mx_EventTile",
     line: "mx_EventTile_line",
-    slotBody: "mx_EventTile_body",
 };
 
 /** Sender state derived for the EventTile snapshot. */

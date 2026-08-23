@@ -156,7 +156,9 @@ test.describe("Composer", () => {
             // Type a message
             await page.locator("div[contenteditable=true]").pressSequentially("my message 0");
             // It has not been sent yet
-            await expect(page.locator(".mx_EventTile_body", { hasText: "my message 0" })).not.toBeVisible();
+            await expect(
+                page.getByTestId("event-tile-slot-body").filter({ hasText: "my message 0" }),
+            ).not.toBeVisible();
 
             // Click send
             await page.getByRole("button", { name: "Send message" }).click();
@@ -179,7 +181,9 @@ test.describe("Composer", () => {
             // Type a message
             await page.locator("div[contenteditable=true]").pressSequentially("my message 0");
             // It has not been sent yet
-            await expect(page.locator(".mx_EventTile_body", { hasText: "my message 0" })).not.toBeVisible();
+            await expect(
+                page.getByTestId("event-tile-slot-body").filter({ hasText: "my message 0" }),
+            ).not.toBeVisible();
 
             // Click send
             await page.locator("div[contenteditable=true]").press("Enter");
@@ -199,7 +203,7 @@ test.describe("Composer", () => {
             await page.locator("div[contenteditable=true]").press(`${CtrlOrMeta}+KeyB`);
             await page.locator("div[contenteditable=true]").pressSequentially(" message");
             await page.getByRole("button", { name: "Send message" }).click();
-            await expect(page.locator(".mx_EventTile_body strong").getByText("bold")).toBeVisible();
+            await expect(page.getByTestId("event-tile-slot-body").locator("strong").getByText("bold")).toBeVisible();
         });
 
         test("can paste a file", async ({ page, bot, app }) => {
@@ -247,7 +251,9 @@ test.describe("Composer", () => {
                 await page.locator("div[contenteditable=true]").pressSequentially("my message 3");
                 await page.locator("div[contenteditable=true]").press("Enter");
                 // It has not been sent yet
-                await expect(page.locator(".mx_EventTile_body", { hasText: "my message 3" })).not.toBeVisible();
+                await expect(
+                    page.getByTestId("event-tile-slot-body").filter({ hasText: "my message 3" }),
+                ).not.toBeVisible();
 
                 // Press Control+Enter
                 await page.locator("div[contenteditable=true]").press("Control+Enter");
@@ -274,8 +280,10 @@ test.describe("Composer", () => {
                 await page.getByRole("button", { name: "Send message" }).click();
 
                 // It was sent
-                await expect(page.locator(".mx_EventTile_body a").getByText("my message 0")).toBeVisible();
-                await expect(page.locator(".mx_EventTile_body a")).toHaveAttribute(
+                await expect(
+                    page.getByTestId("event-tile-slot-body").locator("a").getByText("my message 0"),
+                ).toBeVisible();
+                await expect(page.getByTestId("event-tile-slot-body").locator("a")).toHaveAttribute(
                     "href",
                     new RegExp("https://matrix.org/"),
                 );

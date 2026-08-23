@@ -27,11 +27,6 @@ $left-gutter: 64px;
         color: $secondary-content;
     }
 
-    .mx_EventTile_body {
-        overflow-y: hidden;
-        text-align: start;
-    }
-
     .mx_EventTile_content {
         &.mx_EditMessageComposer,
         &.mx_EditWysiwygComposer {
@@ -73,8 +68,8 @@ $left-gutter: 64px;
     }
 
     .mx_ReplyChain--expanded {
-        .mx_EventTile_body {
-            /* !important needed to override .mx_ReplyTile .mx_EventTile_content .mx_EventTile_body */
+        .mx_EventTile_content .mx_EventTile_body {
+            /* !important needed to override the reply-tile content clamp. */
             display: block !important;
             overflow-y: scroll;
         }

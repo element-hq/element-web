@@ -58,12 +58,10 @@ function createProps(overrides: Partial<EventTileViewProps> = {}): EventTileView
 const applicationStylingClasses = {
     root: "mx_EventTile",
     line: "mx_EventTile_line",
-    slotBody: "mx_EventTile_body",
     slotTimestamp: "mx_MessageTimestamp",
 } satisfies Partial<EventTileViewClassNames>;
 
 const applicationSlotClassNames: Record<string, keyof typeof applicationStylingClasses> = {
-    body: "slotBody",
     timestamp: "slotTimestamp",
 };
 
@@ -149,7 +147,7 @@ const groupLineSlotOrder = [
 const groupRootSlotOrder = [
     "event-tile-slot-sender",
     "event-tile-slot-avatar",
-    "event-line-1",
+    "event-tile-line",
     "event-tile-slot-footer",
     "event-tile-slot-threadInfo",
     "event-tile-slot-receipt",
@@ -169,7 +167,7 @@ const ircRootSlotOrder = [
     "event-tile-slot-padlock",
     "event-tile-slot-avatar",
     "event-tile-slot-sender",
-    "event-line-1",
+    "event-tile-line",
     "event-tile-slot-receipt",
 ];
 
@@ -357,7 +355,7 @@ describe("EventTileView", () => {
             group.getByTestId("styling-contract-body").closest(`.${applicationStylingClasses.line}`),
         ).toBeInTheDocument();
 
-        for (const slot of ["body", "timestamp"]) {
+        for (const slot of ["timestamp"]) {
             expect(
                 group.getByTestId(`styling-contract-${slot}`).closest('[data-testid^="event-tile-slot-"]'),
             ).toHaveClass(applicationStylingClasses[applicationSlotClassNames[slot]]);
