@@ -27,7 +27,7 @@ Please see LICENSE files in the repository root for full details.
 }
 
 /* EventTileView places the sender and body in separate slot boundaries. */
-.mx_EventTile > .mx_DisambiguatedProfile ~ .mx_EventTile_line .mx_MLocationBody {
+.mx_EventTile > :has(> .mx_DisambiguatedProfile) ~ .mx_EventTile_line .mx_MLocationBody {
     margin-top: 6px; /* See: https://github.com/matrix-org/matrix-react-sdk/pull/8442 */
 }
 

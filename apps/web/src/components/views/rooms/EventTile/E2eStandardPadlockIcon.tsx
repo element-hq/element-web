@@ -22,5 +22,5 @@ interface E2eStandardPadlockIconProps {
  * Renders the standard end-to-end encryption padlock icon.
  */
 export function E2eStandardPadlockIcon({ icon, title }: Readonly<E2eStandardPadlockIconProps>): JSX.Element {
-    return <E2ePadlock title={title} icon={icon} />;
+    return <E2ePadlock title={title} icon={icon} className="mx_E2ePadlock" />;
 }

@@ -71,7 +71,7 @@ describe("EventTileAvatarAdapter", () => {
             <EventTileAvatarAdapter avatarMember={null} senderSnapshot={makeSenderSnapshot()} />,
         );
 
-        expect(container.querySelector(".mx_EventTile_avatar")).toBeNull();
+        expect(container.querySelector('[data-testid="member-avatar"]')).toBeNull();
         expect(mockedMemberAvatar).not.toHaveBeenCalled();
     });
 });

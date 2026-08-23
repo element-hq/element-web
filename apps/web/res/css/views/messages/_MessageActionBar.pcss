@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 /* EventTileView owns the generic action-bar geometry. These are application
    context exceptions and intentionally target only the outer slot wrapper. */
-.mx_EventTile_line > .mx_MessageActionBar::before {
+.mx_EventTile_line > :has(> .mx_MessageActionBar)::before {
     /* Improve clickability of the first event below a collapsed bubble summary. */
     .mx_GenericEventListSummary[data-layout="bubble"]
         .mx_GenericEventListSummary_toggle
@@ -33,7 +33,7 @@ Please see LICENSE files in the repository root for full details.
     .mx_GenericEventListSummary_unstyledList
     .mx_EventTile:first-of-type
     .mx_EventTile_line
-    > .mx_MessageActionBar {
+    > :has(> .mx_MessageActionBar) {
     inset-inline-start: initial;
     inset-inline-end: 48px;
 }

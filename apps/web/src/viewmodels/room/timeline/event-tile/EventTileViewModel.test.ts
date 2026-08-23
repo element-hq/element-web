@@ -190,7 +190,6 @@ describe("EventTileViewModel", () => {
             root: "mx_EventTile",
             line: "mx_EventTile_line",
             slotBody: "mx_EventTile_body",
-            slotSender: "mx_DisambiguatedProfile",
         });
         expect(renderState.line).toEqual({
             media: false,

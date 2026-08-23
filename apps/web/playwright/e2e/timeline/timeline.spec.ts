@@ -420,7 +420,10 @@ test.describe("Timeline", () => {
                     await expect(locator).toHaveCSS("margin-inline-end", "0px");
                 }
                 // --icon-width should be applied
-                for (const locator of await page.locator(".mx_EventTile .mx_EventTile_avatar > .mx_BaseAvatar").all()) {
+                for (const locator of await page
+                    .getByTestId("event-tile-slot-avatar")
+                    .locator(".mx_BaseAvatar")
+                    .all()) {
                     await expect(locator).toHaveCSS("width", "14px");
                 }
                 // var(--MessageTimestamp-width) should be applied

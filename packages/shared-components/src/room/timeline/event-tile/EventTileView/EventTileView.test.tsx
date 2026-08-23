@@ -58,32 +58,13 @@ function createProps(overrides: Partial<EventTileViewProps> = {}): EventTileView
 const applicationStylingClasses = {
     root: "mx_EventTile",
     line: "mx_EventTile_line",
-    details: "mx_EventTile_details",
-    slotAvatar: "mx_EventTile_avatar",
-    senderDetails: "mx_EventTile_senderDetails",
-    senderDetailsLink: "mx_EventTile_senderDetailsLink",
     slotBody: "mx_EventTile_body",
-    slotNotificationRoomLabel: "mx_EventTile_truncated",
-    slotNotificationBadge: "mx_NotificationBadge",
-    slotSender: "mx_DisambiguatedProfile",
     slotTimestamp: "mx_MessageTimestamp",
-    slotPadlock: "mx_EventTile_e2eIcon",
-    slotReplyChain: "mx_EventTile_reply",
-    slotActionBar: "mx_MessageActionBar",
-    slotFooter: "mx_EventTile_footer",
-    slotThreadInfo: "mx_ThreadSummary",
 } satisfies Partial<EventTileViewClassNames>;
 
 const applicationSlotClassNames: Record<string, keyof typeof applicationStylingClasses> = {
-    avatar: "slotAvatar",
-    sender: "slotSender",
     body: "slotBody",
     timestamp: "slotTimestamp",
-    padlock: "slotPadlock",
-    replyChain: "slotReplyChain",
-    actionBar: "slotActionBar",
-    footer: "slotFooter",
-    threadInfo: "slotThreadInfo",
 };
 
 const slotClasses: Record<string, string> = {
@@ -376,17 +357,7 @@ describe("EventTileView", () => {
             group.getByTestId("styling-contract-body").closest(`.${applicationStylingClasses.line}`),
         ).toBeInTheDocument();
 
-        for (const slot of [
-            "sender",
-            "avatar",
-            "body",
-            "timestamp",
-            "padlock",
-            "replyChain",
-            "actionBar",
-            "footer",
-            "threadInfo",
-        ]) {
+        for (const slot of ["body", "timestamp"]) {
             expect(
                 group.getByTestId(`styling-contract-${slot}`).closest('[data-testid^="event-tile-slot-"]'),
             ).toHaveClass(applicationStylingClasses[applicationSlotClassNames[slot]]);
@@ -398,19 +369,6 @@ describe("EventTileView", () => {
             ).toHaveAttribute("data-testid", `event-tile-slot-${slot}`);
         }
 
-        const thread = render(
-            <EventTileView
-                {...createProps({
-                    classNames: applicationStylingClasses,
-                    root: { ...renderState, shape: "Thread" },
-                    slots: createStylingContractSlots(),
-                })}
-            />,
-        );
-        expect(thread.container.querySelector(".mx_EventTile_senderDetails")).toHaveClass(
-            applicationStylingClasses.senderDetails,
-        );
-
         const preview = render(
             <EventTileView
                 {...createProps({
@@ -420,29 +378,13 @@ describe("EventTileView", () => {
                 })}
             />,
         );
-        expect(preview.container.querySelector(".mx_EventTile_details")).toHaveClass(applicationStylingClasses.details);
         expect(preview.getByTestId("styling-contract-notificationRoomLabel").parentElement).toHaveClass(
-            applicationStylingClasses.slotNotificationRoomLabel,
+            slotClasses.notificationRoomLabel,
         );
         expect(preview.getByTestId("styling-contract-notificationBadge").parentElement).toHaveClass(
-            applicationStylingClasses.slotNotificationBadge,
+            slotClasses.notificationBadge,
         );
-        expect(preview.getByTestId("styling-contract-room-avatar").parentElement).toHaveClass(
-            applicationStylingClasses.slotAvatar,
-        );
-
-        const file = render(
-            <EventTileView
-                {...createProps({
-                    classNames: applicationStylingClasses,
-                    root: { ...renderState, shape: "File" },
-                    slots: createStylingContractSlots(),
-                })}
-            />,
-        );
-        expect(file.container.querySelector(".mx_EventTile_senderDetailsLink")).toHaveClass(
-            applicationStylingClasses.senderDetailsLink,
-        );
+        expect(preview.getByTestId("styling-contract-room-avatar").parentElement).toHaveClass(slotClasses.avatar);
     });
 
     it("renders multiple slot children inside one wrapper boundary", () => {

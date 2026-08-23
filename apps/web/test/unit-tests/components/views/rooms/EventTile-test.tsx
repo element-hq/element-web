@@ -377,21 +377,21 @@ describe("EventTile", () => {
             const { container } = getComponent();
 
             expect(container.querySelector(".mx_DisambiguatedProfile")).not.toBeNull();
-            expect(container.querySelector(".mx_EventTile_avatar")).not.toBeNull();
+            expect(container.querySelector('[data-testid="event-tile-slot-avatar"]')).not.toBeNull();
         });
 
         it("hides sender and avatar for continuation events in room timelines", () => {
             const { container } = getComponent({ continuation: true });
 
             expect(container.querySelector(".mx_DisambiguatedProfile")).toBeNull();
-            expect(container.querySelector(".mx_EventTile_avatar")).toBeNull();
+            expect(container.querySelector('[data-testid="event-tile-slot-avatar"]')).toBeNull();
         });
 
         it("hides sender but keeps avatar when sender display is disabled", () => {
             const { container } = getComponent({ hideSender: true });
 
             expect(container.querySelector(".mx_DisambiguatedProfile")).toBeNull();
-            expect(container.querySelector(".mx_EventTile_avatar")).not.toBeNull();
+            expect(container.querySelector('[data-testid="event-tile-slot-avatar"]')).not.toBeNull();
         });
 
         it("renders sender details as a permalink in file timelines", () => {
@@ -400,7 +400,9 @@ describe("EventTile", () => {
 
             expect(senderDetailsLink).not.toBeNull();
             expect(senderDetailsLink).toContainElement(container.querySelector(".mx_DisambiguatedProfile"));
-            expect(senderDetailsLink).toContainElement(container.querySelector(".mx_EventTile_avatar"));
+            expect(senderDetailsLink).toContainElement(
+                container.querySelector('[data-testid="event-tile-slot-avatar"]'),
+            );
         });
 
         it("renders sender details in thread timelines", () => {
@@ -409,14 +411,14 @@ describe("EventTile", () => {
 
             expect(senderDetails).not.toBeNull();
             expect(senderDetails).toContainElement(container.querySelector(".mx_DisambiguatedProfile"));
-            expect(senderDetails).toContainElement(container.querySelector(".mx_EventTile_avatar"));
+            expect(senderDetails).toContainElement(container.querySelector('[data-testid="event-tile-slot-avatar"]'));
         });
 
         it("keeps sender and avatar when only the layout prop is set to bubble", () => {
             const { container } = getComponent({ layout: Layout.Bubble });
 
             expect(container.querySelector(".mx_DisambiguatedProfile")).not.toBeNull();
-            expect(container.querySelector(".mx_EventTile_avatar")).not.toBeNull();
+            expect(container.querySelector('[data-testid="event-tile-slot-avatar"]')).not.toBeNull();
         });
 
         it("hides the sender but keeps the info-message avatar for room create events", () => {
@@ -432,13 +434,13 @@ describe("EventTile", () => {
             });
 
             expect(container.querySelector(".mx_DisambiguatedProfile")).toBeNull();
-            expect(container.querySelector(".mx_EventTile_avatar")).not.toBeNull();
+            expect(container.querySelector('[data-testid="event-tile-slot-avatar"]')).not.toBeNull();
         });
 
         it("renders the notification avatar independently from the sender details", () => {
             const { container } = getComponent({}, TimelineRenderingType.Notification);
             const details = container.querySelector<HTMLElement>(".mx_EventTile_details");
-            const avatar = container.querySelector<HTMLElement>(".mx_EventTile_avatar");
+            const avatar = container.querySelector<HTMLElement>('[data-testid="event-tile-slot-avatar"]');
 
             expect(details).not.toBeNull();
             expect(avatar).not.toBeNull();

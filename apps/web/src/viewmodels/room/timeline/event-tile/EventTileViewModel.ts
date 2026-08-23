@@ -273,19 +273,7 @@ export type EventTileRootSnapshot = Omit<EventTileViewRoot, "id" | "as" | "perma
 const EVENT_TILE_VIEW_CLASS_NAMES: EventTileViewClassNames = {
     root: "mx_EventTile",
     line: "mx_EventTile_line",
-    details: "mx_EventTile_details",
-    senderDetails: "mx_EventTile_senderDetails",
-    senderDetailsLink: "mx_EventTile_senderDetailsLink",
-    slotActionBar: "mx_MessageActionBar",
-    slotAvatar: "mx_EventTile_avatar",
     slotBody: "mx_EventTile_body",
-    slotFooter: "mx_EventTile_footer",
-    slotNotificationRoomLabel: "mx_EventTile_truncated",
-    slotNotificationBadge: "mx_NotificationBadge",
-    slotPadlock: "mx_EventTile_e2eIcon",
-    slotReplyChain: "mx_EventTile_reply",
-    slotSender: "mx_DisambiguatedProfile",
-    slotThreadInfo: "mx_ThreadSummary",
 };
 
 /** Sender state derived for the EventTile snapshot. */

@@ -111,7 +111,7 @@ $left-gutter: 64px;
             padding-inline-start: $left-gutter;
         }
 
-        .mx_GenericEventListSummary_unstyledList > .mx_EventTile_info .mx_EventTile_avatar ~ .mx_EventTile_line {
+        .mx_GenericEventListSummary_unstyledList > .mx_EventTile > :has(> .mx_BaseAvatar) ~ .mx_EventTile_line {
             /* override padding-left $left-gutter */
             padding-inline-start: calc(var(--EventTile_group_line-spacing-inline-start) + 20px);
         }
