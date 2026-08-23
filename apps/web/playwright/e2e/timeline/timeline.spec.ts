@@ -805,8 +805,10 @@ test.describe("Timeline", () => {
                 "should highlight search result words regardless of formatting",
                 { tag: "@screenshot" },
                 async ({ page, app, room }) => {
-                    await sendEvent(app.client, room.roomId);
-                    await sendEvent(app.client, room.roomId, true);
+                    const events = [
+                        await sendEvent(app.client, room.roomId),
+                        await sendEvent(app.client, room.roomId, true),
+                    ];
                     await page.goto(`/#/room/${room.roomId}`);
                     await rejectToast(page, "Verify this device");
 
@@ -817,10 +819,13 @@ test.describe("Timeline", () => {
 
                     await expect(page.locator(".mx_RoomSearchAuxPanel")).toMatchScreenshot("search-aux-panel.png");
 
-                    for (const locator of await page
-                        .locator(".mx_EventTile:not(.mx_EventTile_contextual) .mx_EventTile_searchHighlight")
-                        .all()) {
-                        await expect(locator).toBeVisible();
+                    for (const event of events) {
+                        await expect(
+                            page
+                                .locator(`.mx_EventTile[data-event-id='${event.event_id}']`)
+                                .getByTestId("event-tile-slot-body")
+                                .locator(".mx_EventTile_searchHighlight"),
+                        ).toBeVisible();
                     }
                     await expect(page.locator(".mx_RoomView_searchResultsPanel")).toMatchScreenshot(
                         "highlighted-search-results.png",
@@ -858,7 +863,10 @@ test.describe("Timeline", () => {
                 // On search results panel
                 const resultsPanel = page.locator(".mx_RoomView_searchResultsPanel");
                 // Assert that contextual event tiles are translucent
-                for (const locator of await resultsPanel.locator(".mx_EventTile.mx_EventTile_contextual").all()) {
+                for (const locator of await resultsPanel
+                    .getByTestId("event-tile")
+                    .filter({ hasNot: page.locator(".mx_EventTile_searchHighlight") })
+                    .all()) {
                     await expect(locator).toHaveCSS("opacity", "0.4");
                 }
                 // Assert that the TextualEvent is fully opaque (visually solid).

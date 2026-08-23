@@ -129,7 +129,7 @@ Please see LICENSE files in the repository root for full details.
     }
 }
 
-.mx_EventTile_leftAlignedBubble {
+.mx_EventTile:has(> [data-testid="event-tile-line"] > [data-testid="event-tile-slot-body"] .mx_LegacyCallEvent) {
     .mx_LegacyCallEvent_wrapper {
         .mx_LegacyCallEvent {
             &.mx_LegacyCallEvent_narrow {
