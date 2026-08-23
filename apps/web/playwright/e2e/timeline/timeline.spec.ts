@@ -32,7 +32,9 @@ const NEW_NAME = "Alan (away)";
 const VIDEO_FILE = readSampleFileSync("5secvid.webm", null);
 
 const getEventTilesWithBodies = (page: Page): Locator => {
-    return page.locator(".mx_EventTile").filter({ has: page.getByTestId("event-tile-slot-body") });
+    return page
+        .locator(".mx_EventTile")
+        .filter({ has: page.getByTestId("event-tile-slot-body").locator(".mx_MTextBody") });
 };
 
 const expectDisplayName = async (e: Locator, displayName: string): Promise<void> => {

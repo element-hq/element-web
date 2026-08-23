@@ -29,10 +29,26 @@ Please see LICENSE files in the repository root for full details.
     margin-inline-start: var(--EventTile_bubble-margin-inline-start);
     margin-inline-end: var(--EventTile_bubble-margin-inline-end);
 
-    /* increase margin between ELS and the next Event to not have our user avatar overlap the expand/collapse button */
-    &[data-expanded="true"] .mx_EventTile_info {
-        padding: 2px 0;
-        margin-right: 0;
+    /* Keep the following event clear of the expand/collapse control when the
+       summary is collapsed. */
+    &[data-expanded="false"] + .mx_EventTile {
+        margin-block-start: 20px;
+    }
+
+    /* Keep expanded textual rows aligned with the legacy summary layout. */
+    &[data-expanded="true"] .mx_EventTile:has(> .mx_EventTile_line .mx_TextualEvent) {
+        padding-block: 2px;
+        margin-inline-end: 0;
+
+        /* Informational rows should follow the configured font metrics rather
+           than the fixed bubble line-height. */
+        > .mx_EventTile_line {
+            line-height: normal;
+        }
+
+        > .mx_EventTile_line .mx_TextualEvent {
+            padding-block: 0;
+        }
 
         .mx_ReadReceiptGroup {
             /* match alignment to RRs of chat bubbles */

@@ -481,13 +481,12 @@
         border-radius: 8px;
     }
 
-    .line:not(.lineMedia) .slotBody > *:not(fieldset) {
-        margin-inline-end: var(--event-tile-content-inline-end);
-    }
-
-    .line:not(.lineMedia) .slotBody > *:not(fieldset) {
-        display: inline-block;
-        padding-block: 1px;
+    &:where(:not(.stateBubbleContainer)) {
+        .line:not(.lineMedia) .slotBody > *:not(fieldset) {
+            margin-inline-end: var(--event-tile-content-inline-end);
+            display: inline-block;
+            padding-block: 1px;
+        }
     }
 
     /* Sender. */
@@ -539,7 +538,7 @@
         flex: 0 0 var(--event-tile-irc-icon-width);
         position: relative;
         width: var(--event-tile-irc-icon-width);
-        height: var(--event-tile-irc-slot-height);
+        height: var(--event-tile-irc-line-height);
         box-sizing: border-box;
     }
 
@@ -667,8 +666,7 @@
             inset-block-start: 0;
             inset-inline-start: var(--event-tile-irc-info-offset);
             margin-inline-end: var(--event-tile-irc-right-padding);
-            transform: translateY(-50%);
-            margin-block-start: -2px;
+            height: var(--event-tile-irc-slot-height);
             padding-block: 1px;
         }
 
@@ -683,6 +681,13 @@
             .slotBody {
                 width: auto;
                 font-size: 0.75rem;
+            }
+
+            /* Informational rows use TextualEventView rather than the normal
+               message-content surface, so they do not need the 34px body
+               gutter used by regular IRC messages. */
+            .slotBody > *:not(fieldset) {
+                margin-inline-end: 0;
             }
         }
     }
@@ -756,7 +761,7 @@
     /* Text-bubble body spacing belongs to the line. Media lines and
        structured fieldset bodies provide their own dimensions. */
     .line:not(.lineMedia) .slotBody > *:not(fieldset) {
-        padding: 1px;
+        padding: var(--event-tile-body-padding, 1px);
     }
 
     /* Sender. */
@@ -1055,6 +1060,11 @@
         }
     }
 
+    /* Bubble-container events are legacy shells rather than message bubbles. */
+    &.stateBubbleContainer {
+        margin-block: 0;
+    }
+
     /* These events span the space between the two bubble columns. */
     &.stateAlignedBetweenBubbles {
         margin-inline-start: calc(
@@ -1082,6 +1092,10 @@
         margin-inline-end: 0;
         padding-block: 0;
 
+        &.stateContinuation {
+            margin-block-start: 2px;
+        }
+
         .slotAvatar {
             position: static;
             order: -1;
@@ -1089,6 +1103,11 @@
             margin-inline-end: var(--event-tile-bubble-gap);
             border: 0;
             flex-shrink: 0;
+        }
+
+        .slotAvatar > * {
+            border-radius: 0;
+            box-shadow: none;
         }
 
         .line {
@@ -1105,6 +1124,12 @@
         }
 
         .slotTimestamp {
+            inset-block: auto;
+            inset-inline: -77px auto;
+            align-self: center;
+        }
+
+        .slotTimestamp > * {
             inset-block: auto;
             inset-inline: -77px auto;
             align-self: center;

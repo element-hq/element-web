@@ -67,8 +67,9 @@ test.describe("Cryptography", function () {
                 const last = page.locator(".mx_EventTile").last();
                 await expect(last).toContainText("Unable to decrypt message");
                 const lastE2eIcon = last.getByTestId("e2e-padlock");
+                const lastE2eIconSlot = last.getByTestId("event-tile-slot-padlock");
                 await expect(lastE2eIcon).toHaveAccessibleName("This message could not be decrypted");
-                await expect(lastE2eIcon).toMatchScreenshot("event-shield-utd.png");
+                await expect(lastE2eIconSlot).toMatchScreenshot("event-shield-utd.png");
 
                 /* Should show a red padlock for an unencrypted message in an e2e room */
                 await bob.evaluate(
@@ -87,7 +88,7 @@ test.describe("Cryptography", function () {
 
                 await expect(last).toContainText("test unencrypted");
                 await expect(lastE2eIcon).toHaveAccessibleName("Not encrypted");
-                await expect(lastE2eIcon).toMatchScreenshot("event-shield-warning.png");
+                await expect(lastE2eIconSlot).toMatchScreenshot("event-shield-warning.png");
 
                 /* Should show no padlock for an unverified user */
                 // bob sends a valid event
@@ -96,6 +97,7 @@ test.describe("Cryptography", function () {
                 // the message should appear, decrypted, with no warning, but also no "verified"
                 const lastTile = page.locator(".mx_EventTile").last();
                 const lastTileE2eIcon = lastTile.getByTestId("e2e-padlock");
+                const lastTileE2eIconSlot = lastTile.getByTestId("event-tile-slot-padlock");
                 await expect(lastTile).toContainText("test encrypted 1");
                 // no e2e icon
                 await expect(lastTileE2eIcon).not.toBeVisible();
@@ -119,7 +121,7 @@ test.describe("Cryptography", function () {
                 await bobSecondDevice.sendMessage(testRoomId, "test encrypted from unverified");
                 await expect(lastTile).toContainText("test encrypted from unverified");
                 await expect(lastTileE2eIcon).toHaveAccessibleName("Encrypted by a device not verified by its owner.");
-                await expect(lastE2eIcon).toMatchScreenshot("event-shield-not-verified.png");
+                await expect(lastE2eIconSlot).toMatchScreenshot("event-shield-not-verified.png");
 
                 /* Should show a red padlock for a message from an unverified device.
                  * Rust crypto remembers the verification state of the sending device, so it will know that the device was
@@ -136,7 +138,7 @@ test.describe("Cryptography", function () {
 
                 await expect(last).toContainText("test encrypted from unverified");
                 await expect(lastE2eIcon).toHaveAccessibleName("Encrypted by a device not verified by its owner.");
-                await expect(lastE2eIcon).toMatchScreenshot("event-shield-not-verified.png");
+                await expect(lastE2eIconSlot).toMatchScreenshot("event-shield-not-verified.png");
             },
         );
 
@@ -185,7 +187,7 @@ test.describe("Cryptography", function () {
                 await expect(lastTileE2eIcon).toHaveAccessibleName(
                     "The authenticity of this encrypted message can't be guaranteed on this device.",
                 );
-                await expect(lastTileE2eIcon).toMatchScreenshot("event-shield-authenticity.png");
+                await expect(lastTileE2eIconSlot).toMatchScreenshot("event-shield-authenticity.png");
             },
         );
 
@@ -267,8 +269,9 @@ test.describe("Cryptography", function () {
                 const last = page.locator(".mx_EventTile").last();
                 await expect(last).toContainText("test encrypted from unverified", { timeout: 20000 });
                 const lastE2eIcon = last.getByTestId("e2e-padlock");
+                const lastE2eIconSlot = last.getByTestId("event-tile-slot-padlock");
                 await expect(lastE2eIcon).toHaveAccessibleName("Encrypted by a device not verified by its owner.");
-                await expect(lastE2eIcon).toMatchScreenshot("event-shield-not-verified.png");
+                await expect(lastE2eIconSlot).toMatchScreenshot("event-shield-not-verified.png");
 
                 const penultimate = page.locator(".mx_EventTile").filter({ hasText: "test encrypted from verified" });
                 await assertNoE2EIcon(penultimate, app);
@@ -291,8 +294,9 @@ test.describe("Cryptography", function () {
                 const last = page.locator(".mx_EventTile").last();
                 await expect(last).toContainText("test encrypted from user that was previously verified");
                 const lastE2eIcon = last.getByTestId("e2e-padlock");
+                const lastE2eIconSlot = last.getByTestId("event-tile-slot-padlock");
                 await expect(lastE2eIcon).toHaveAccessibleName("Sender's verified digital identity was reset");
-                await expect(lastE2eIcon).toMatchScreenshot("event-shield-identity-reset.png");
+                await expect(lastE2eIconSlot).toMatchScreenshot("event-shield-identity-reset.png");
             },
         );
     });
