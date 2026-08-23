@@ -80,6 +80,8 @@ import UserSettingsDialog from "../../components/views/dialogs/UserSettingsDialo
 import { SDKContextClass } from "../../contexts/SDKContextClass";
 import { type QrLoginCredentials } from "../../components/views/auth/LoginWithQR.tsx";
 import { storeAuthContext } from "../../utils/oauth/persistOAuthSettings.ts";
+import RightPanelStore from "../../stores/right-panel/RightPanelStore";
+import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
 
 // Stub out ThemeWatcher as the necessary bits for themes are done in element-web's index.html and thus are lacking here,
 // plus JSDOM's implementation of CSSStyleDeclaration has a bunch of differences to real browsers which cause issues.
@@ -851,6 +853,101 @@ describe("<MatrixChat />", () => {
         describe("onAction()", () => {
             afterEach(() => {
                 vi.restoreAllMocks();
+            });
+
+            describe("ShowThread", () => {
+                const roomId = "!thread-room:server.org";
+                let room: Room;
+                let rootEvent: MatrixEvent;
+
+                const setFullSizeView = (enabled: boolean): void => {
+                    const getValue = SettingsStore.getValue.bind(SettingsStore);
+                    vi.spyOn(SettingsStore, "getValue").mockImplementation(((
+                        settingName: string,
+                        targetRoomId?: string | null,
+                        excludeDefault?: boolean,
+                    ) => {
+                        if (settingName === "Threads.fullSizeView") return enabled;
+                        return getValue(settingName as any, targetRoomId, excludeDefault as false);
+                    }) as typeof SettingsStore.getValue);
+                };
+
+                const prepareRoom = async (fullSizeView: boolean): Promise<void> => {
+                    await getComponentAndWaitForReady();
+                    room = new Room(roomId, mockClient, userId);
+                    rootEvent = new MatrixEvent({
+                        event_id: "$thread-root",
+                        room_id: roomId,
+                        sender: userId,
+                        type: "m.room.message",
+                        content: { msgtype: "m.text", body: "Thread root" },
+                    });
+                    mockClient.getRoom.mockImplementation((id) => (id === roomId ? room : null));
+                    RightPanelStore.instance.reset();
+                    defaultDispatcher.dispatch(
+                        { action: Action.ActiveRoomChanged, oldRoomId: null, newRoomId: roomId },
+                        true,
+                    );
+                    setFullSizeView(fullSizeView);
+                };
+
+                const showThread = (push?: boolean): void => {
+                    act(() => {
+                        defaultDispatcher.dispatch({ action: Action.ShowThread, rootEvent, push }, true);
+                    });
+                };
+
+                it("opens a full-size thread without disturbing the right panel", async () => {
+                    await prepareRoom(true);
+                    RightPanelStore.instance.setCard({ phase: RightPanelPhases.MemberList }, true, roomId);
+
+                    showThread();
+
+                    expect(RightPanelStore.instance.getFullSizeThreadForRoom(roomId)?.state?.threadHeadEvent).toBe(
+                        rootEvent,
+                    );
+                    expect(RightPanelStore.instance.currentCardForRoom(roomId).phase).toBe(RightPanelPhases.MemberList);
+                });
+
+                it("opens a video-room thread in the right panel", async () => {
+                    await prepareRoom(true);
+                    vi.spyOn(room, "isElementVideoRoom").mockReturnValue(true);
+
+                    showThread();
+
+                    expect(RightPanelStore.instance.getFullSizeThreadForRoom(roomId)).toBeUndefined();
+                    expect(RightPanelStore.instance.currentCardForRoom(roomId).phase).toBe(RightPanelPhases.ThreadView);
+                });
+
+                it("opens a thread in the right panel when a widget is maximised", async () => {
+                    await prepareRoom(true);
+                    vi.spyOn(SDKContextClass.instance.widgetLayoutStore, "hasMaximisedWidget").mockReturnValue(true);
+
+                    showThread();
+
+                    expect(RightPanelStore.instance.getFullSizeThreadForRoom(roomId)).toBeUndefined();
+                    expect(RightPanelStore.instance.currentCardForRoom(roomId).phase).toBe(RightPanelPhases.ThreadView);
+                });
+
+                it.each([
+                    { push: true, previousPhase: RightPanelPhases.MemberList },
+                    { push: false, previousPhase: RightPanelPhases.ThreadPanel },
+                ])(
+                    "uses the existing card behaviour when full-size view is off and push is $push",
+                    async (testCase) => {
+                        await prepareRoom(false);
+                        RightPanelStore.instance.setCard({ phase: RightPanelPhases.MemberList }, true, roomId);
+
+                        showThread(testCase.push);
+
+                        expect(RightPanelStore.instance.getFullSizeThreadForRoom(roomId)).toBeUndefined();
+                        expect(RightPanelStore.instance.currentCardForRoom(roomId).phase).toBe(
+                            RightPanelPhases.ThreadView,
+                        );
+                        RightPanelStore.instance.popCard(roomId);
+                        expect(RightPanelStore.instance.currentCardForRoom(roomId).phase).toBe(testCase.previousPhase);
+                    },
+                );
             });
 
             it("ViewUserDeviceSettings should open user device settings", async () => {

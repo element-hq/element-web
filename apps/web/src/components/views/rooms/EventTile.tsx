@@ -476,6 +476,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             action: Action.ViewRoom,
             event_id: this.props.mxEvent.getId(),
             highlighted: true,
+            view_in_room: true,
             room_id: this.props.mxEvent.getRoomId(),
             metricsTrigger: undefined, // room doesn't change
         });
@@ -869,6 +870,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             display: {
                 timelineRenderingType: this.context.timelineRenderingType,
                 layout: this.props.layout,
+                fullSizeThreadView: this.context.fullSizeThreadViewEnabled,
                 continuation: this.props.continuation,
                 isProbablyMedia,
                 isTwelveHour: this.props.isTwelveHour,
@@ -1060,6 +1062,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         switch (this.context.timelineRenderingType) {
             case TimelineRenderingType.Thread: {
+                const fullSizeThread = this.context.fullSizeThreadViewEnabled;
                 return React.createElement(
                     this.props.as || "li",
                     {
@@ -1092,7 +1095,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             )}
                             {actionBar}
                             {linkedTimestamp}
-                            {msgOption}
+                            {!fullSizeThread && msgOption}
                         </div>,
                         <EventTileFooter
                             key="mx_EventTile_footer"
@@ -1107,6 +1110,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             showMainPinnedMessageBadge={showMainPinnedMessageBadge}
                             showBubblePinnedMessageBadge={showBubblePinnedMessageBadge}
                         />,
+                        fullSizeThread ? (
+                            <React.Fragment key="mx_EventTile_msgOption">{msgOption}</React.Fragment>
+                        ) : null,
                     ],
                 );
             }

@@ -1,0 +1,69 @@
+/*
+Copyright 2026 hayaksi1
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_ThreadView.mx_ThreadView_fullSize {
+    --ThreadView_group_spacing-start: 64px;
+    --ThreadView_group_spacing-end: 0px;
+    --BaseCard_EventTile_line-padding-block: 1px 3px;
+    --event-tile-thread-gutter: 64px;
+    --event-tile-thread-line-margin-inline-end: 0px;
+    --event-tile-thread-line-spacing-block: 1px 3px;
+    --event-tile-thread-sender-gutter: var(--cpd-space-4x);
+
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+
+    .mx_ThreadView_timelinePanelWrapper {
+        min-height: 0;
+    }
+
+    .mx_RoomView_timeline_rr_enabled {
+        --ThreadView_group_spacing-end: 80px;
+        --event-tile-thread-line-margin-inline-end: 80px;
+    }
+
+    .mx_RoomView_messagePanelSpinner {
+        flex: 1;
+        min-height: 0;
+    }
+
+    .mx_EventTile_line {
+        padding-block: var(--EventTile_group_line-spacing-block-start) var(--EventTile_group_line-spacing-block-end);
+        margin-inline-end: var(--ThreadView_group_spacing-end);
+        line-height: var(--EventTile_group_line-line-height);
+    }
+
+    .mx_EventTile[data-layout="group"]:not(.mx_EventTile_continuation) {
+        padding-block-start: 18px;
+    }
+
+    .mx_EventTile[data-layout="group"] .mx_EventTile_msgOption {
+        align-self: flex-end;
+    }
+
+    .mx_EventTile[data-layout="group"] .mx_EventTile_senderDetails {
+        padding-inline-start: var(--cpd-space-2x);
+        gap: 0;
+
+        .mx_EventTile_avatar {
+            flex: 0 0 calc(var(--ThreadView_group_spacing-start) - var(--cpd-space-2x));
+        }
+    }
+
+    .mx_EventTile[data-layout="bubble"] {
+        margin-inline: var(--EventTile_bubble-margin-inline-start) var(--EventTile_bubble-margin-inline-end);
+
+        &::before {
+            inset-inline: calc(-1 * var(--EventTile_bubble-margin-inline-start))
+                calc(-1 * var(--EventTile_bubble-margin-inline-end));
+            z-index: -1;
+        }
+    }
+}

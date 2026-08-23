@@ -45,6 +45,7 @@ const RoomContext = createContext<RoomContextType>({
     showApps: false,
     isPeeking: false,
     showRightPanel: true,
+    fullSizeThreadViewEnabled: false,
     joining: false,
     showTopUnreadMessagesBar: false,
     statusBarVisible: false,

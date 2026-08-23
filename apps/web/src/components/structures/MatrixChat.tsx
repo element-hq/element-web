@@ -47,6 +47,7 @@ import PageType from "../../PageTypes";
 import createRoom, { type IOpts } from "../../createRoom";
 import { _t, _td } from "../../languageHandler";
 import SettingsStore from "../../settings/SettingsStore";
+import { isVideoRoom } from "../../utils/video-rooms";
 import { startAnyRegistrationFlow } from "../../Registration";
 import AutoDiscoveryUtils from "../../utils/AutoDiscoveryUtils";
 import { calculateRoomVia, makeRoomPermalink } from "../../utils/permalinks/Permalinks";
@@ -918,7 +919,17 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                         initialEventScrollIntoView: scrollIntoView,
                     },
                 };
-                if (push ?? false) {
+                const threadRoomId = rootEvent.getRoomId();
+                const threadRoom = threadRoomId ? MatrixClientPeg.safeGet().getRoom(threadRoomId) : null;
+                const mainSplitIsTimeline =
+                    !!threadRoom &&
+                    !this.stores.roomViewStore.isViewingCall() &&
+                    !isVideoRoom(threadRoom) &&
+                    !this.stores.widgetLayoutStore.hasMaximisedWidget(threadRoom);
+
+                if (SettingsStore.getValue("Threads.fullSizeView") && mainSplitIsTimeline) {
+                    RightPanelStore.instance.setFullSizeThread(threadViewCard, threadRoom.roomId);
+                } else if (push ?? false) {
                     RightPanelStore.instance.pushCard(threadViewCard);
                 } else {
                     RightPanelStore.instance.setCards([{ phase: RightPanelPhases.ThreadPanel }, threadViewCard]);

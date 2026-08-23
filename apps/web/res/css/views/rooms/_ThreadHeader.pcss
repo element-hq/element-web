@@ -1,0 +1,26 @@
+/*
+Copyright 2026 hayaksi1
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_ThreadHeader {
+    flex-shrink: 0;
+    height: 64px;
+    box-sizing: border-box;
+    padding: 0 var(--cpd-space-3x) 0 calc(var(--cpd-space-3x) + var(--cpd-space-1-5x));
+    border-bottom: 1px solid $separator;
+    background-color: $background;
+
+    .mx_ThreadHeader_info {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+    .mx_ThreadHeader_roomName {
+        color: var(--cpd-color-text-secondary);
+    }
+}

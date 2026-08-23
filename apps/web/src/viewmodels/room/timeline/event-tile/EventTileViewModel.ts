@@ -103,6 +103,8 @@ export interface EventTileDisplayInput {
     timelineRenderingType: TimelineRenderingType;
     /** The current timeline layout. */
     layout?: Layout;
+    /** Whether the thread is rendering full-size in the room's main split rather than as a card. */
+    fullSizeThreadView?: boolean;
     /** Whether the tile is a continuation of the previous event. */
     continuation?: boolean;
     /** Whether the event body is likely to render media content. */
@@ -652,6 +654,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
             eventType: event.eventType,
             isBubbleMessage: display.isBubbleMessage,
             layout: display.layout,
+            fullSizeThreadView: display.fullSizeThreadView,
             isRoomCreate: event.isRoomCreate,
             isCallInvite: event.isCallInvite,
             isRtcNotification: event.isRtcNotification,

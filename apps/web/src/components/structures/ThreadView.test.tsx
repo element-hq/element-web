@@ -37,6 +37,8 @@ import { ScopedRoomContextProvider } from "../../contexts/ScopedRoomContext.tsx"
 import { TimelineRenderingType } from "../../contexts/RoomContext.ts";
 import { type ComposerInsertPayload, ComposerType } from "../../dispatcher/payloads/ComposerInsertPayload.ts";
 import { SDKContext } from "../../contexts/SDKContext.ts";
+import RightPanelStore from "../../stores/right-panel/RightPanelStore.ts";
+import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases.ts";
 
 describe("ThreadView", () => {
     const ROOM_ID = "!roomId:example.org";
@@ -47,24 +49,28 @@ describe("ThreadView", () => {
     let rootEvent: MatrixEvent;
 
     let changeEvent: (event: MatrixEvent) => void;
+    let changeRoom: (room: Room) => void;
 
-    function TestThreadView({ initialEvent }: { initialEvent?: MatrixEvent }) {
+    function TestThreadView({ initialEvent, fullSize = false }: { initialEvent?: MatrixEvent; fullSize?: boolean }) {
         const [event, setEvent] = useState(rootEvent);
+        const [currentRoom, setCurrentRoom] = useState(room);
         changeEvent = setEvent;
+        changeRoom = setCurrentRoom;
 
         return (
             <MatrixClientContext.Provider value={mockClient}>
                 <ScopedRoomContextProvider
-                    {...getRoomContext(room, {
+                    {...getRoomContext(currentRoom, {
                         canSendMessages: true,
                     })}
                 >
                     <ThreadView
-                        room={room}
+                        room={currentRoom}
                         onClose={vi.fn()}
                         mxEvent={event}
                         initialEvent={initialEvent}
                         resizeNotifier={new ResizeNotifier()}
+                        fullSize={fullSize}
                     />
                 </ScopedRoomContextProvider>
                 ,
@@ -72,8 +78,8 @@ describe("ThreadView", () => {
         );
     }
 
-    async function getComponent(initialEvent?: MatrixEvent): Promise<RenderResult> {
-        const renderResult = render(<TestThreadView initialEvent={initialEvent} />, {
+    async function getComponent(initialEvent?: MatrixEvent, fullSize = false): Promise<RenderResult> {
+        const renderResult = render(<TestThreadView initialEvent={initialEvent} fullSize={fullSize} />, {
             wrapper: ({ children }) => (
                 <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
             ),
@@ -117,6 +123,7 @@ describe("ThreadView", () => {
 
     beforeEach(() => {
         vi.clearAllMocks();
+        RightPanelStore.instance.reset();
 
         stubClient();
         mockPlatformPeg();
@@ -193,15 +200,59 @@ describe("ThreadView", () => {
         );
     });
 
-    it("sets the correct thread in the room view store", async () => {
-        // expect(SDKContextClass.instance.roomViewStore.getThreadId()).toBeNull();
-        const { unmount } = await getComponent();
-        waitFor(() => {
+    it.each([
+        { fullSize: false, presentation: "right-panel" },
+        { fullSize: true, presentation: "full-size" },
+    ])("sets the correct thread in the room view store in the $presentation presentation", async ({ fullSize }) => {
+        const { unmount } = await getComponent(undefined, fullSize);
+        await waitFor(() => {
             expect(SDKContextClass.instance.roomViewStore.getThreadId()).toBe(rootEvent.getId());
         });
 
         unmount();
         await waitFor(() => expect(SDKContextClass.instance.roomViewStore.getThreadId()).toBeNull());
+    });
+
+    it("renders the right-panel card presentation", async () => {
+        RightPanelStore.instance.setCards([
+            { phase: RightPanelPhases.ThreadPanel },
+            { phase: RightPanelPhases.ThreadView, state: { threadHeadEvent: rootEvent } },
+        ]);
+
+        const { container } = await getComponent();
+        const threadView = container.querySelector(".mx_ThreadView");
+        const composer = getByTestId(container, "basicmessagecomposer").closest(".mx_MessageComposer");
+
+        expect(threadView).toBeInTheDocument();
+        expect(getByTestId(container, "base-card-close-button")).toBeInTheDocument();
+        expect(getByTestId(container, "base-card-back-button")).toBeInTheDocument();
+        expect(getByTestId(container, "threadlist-dropdown-button")).toBeInTheDocument();
+        expect(composer).toHaveClass("mx_MessageComposer--compact");
+    });
+
+    it("renders the full-size presentation without right-panel card controls", async () => {
+        const { container } = await getComponent(undefined, true);
+        const threadView = container.querySelector(".mx_ThreadView");
+        const composer = getByTestId(container, "basicmessagecomposer").closest(".mx_MessageComposer");
+
+        expect(threadView).toBeInTheDocument();
+        expect(threadView).toHaveClass("mx_ThreadView_fullSize");
+        expect(container.querySelector('[data-testid="base-card-close-button"]')).not.toBeInTheDocument();
+        expect(container.querySelector('[data-testid="base-card-back-button"]')).not.toBeInTheDocument();
+        expect(container.querySelector('[data-testid="threadlist-dropdown-button"]')).not.toBeInTheDocument();
+        expect(composer).toBeInTheDocument();
+        expect(composer).not.toHaveClass("mx_MessageComposer--compact");
+    });
+
+    it("does not replace the right-panel card when the room changes in full-size presentation", async () => {
+        const setCard = vi.spyOn(RightPanelStore.instance, "setCard");
+        await getComponent(undefined, true);
+        setCard.mockClear();
+        const nextRoom = new Room("!next-room:example.org", mockClient, mockClient.getUserId() ?? "");
+
+        act(() => changeRoom(nextRoom));
+
+        expect(setCard).not.toHaveBeenCalled();
     });
 
     it("clears highlight message in the room view store", async () => {

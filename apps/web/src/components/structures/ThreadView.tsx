@@ -63,6 +63,16 @@ interface IProps {
     initialEvent?: MatrixEvent;
     isInitialEventHighlighted?: boolean;
     initialEventScrollIntoView?: boolean;
+    /**
+     * Render the thread full-size in the room's main split instead of as a right-panel card: the
+     * surrounding card chrome is dropped and the caller supplies the header.
+     */
+    fullSize?: boolean;
+    /**
+     * Content to render between the timeline and the composer. The room puts its status and preview
+     * bars there, and full-size threads own the composer, so the caller has to hand them over.
+     */
+    aboveComposer?: React.ReactNode;
 }
 
 interface IState {
@@ -149,7 +159,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
             this.setupThread(this.props.mxEvent);
         }
 
-        if (prevProps.room !== this.props.room) {
+        if (prevProps.room !== this.props.room && !this.props.fullSize) {
             RightPanelStore.instance.setCard({ phase: RightPanelPhases.RoomSummary });
         }
     }
@@ -413,47 +423,75 @@ export default class ThreadView extends React.Component<IProps, IState> {
             );
         }
 
+        const body = (
+            <>
+                <Measured breakpoint={400} sensor={this.card} onMeasurement={this.onMeasurement} />
+                <div
+                    className={classNames("mx_ThreadView_timelinePanelWrapper", {
+                        mx_RoomView_timeline: this.props.fullSize,
+                        mx_RoomView_timeline_rr_enabled: this.props.fullSize && this.context.showReadReceipts,
+                    })}
+                >
+                    {timeline}
+                </div>
+
+                {ContentMessages.sharedInstance().getCurrentUploads(threadRelation).length > 0 && (
+                    <UploadBar room={this.props.room} relation={threadRelation} />
+                )}
+
+                {this.props.aboveComposer}
+
+                {this.state.thread?.timelineSet && (
+                    <MessageComposer
+                        room={this.props.room}
+                        resizeNotifier={this.props.resizeNotifier}
+                        relation={threadRelation}
+                        replyToEvent={this.state.replyToEvent}
+                        permalinkCreator={this.props.permalinkCreator}
+                        e2eStatus={this.props.e2eStatus}
+                        compact={!this.props.fullSize}
+                    />
+                )}
+            </>
+        );
+
         return (
             <ScopedRoomContextProvider
                 {...this.context}
                 timelineRenderingType={TimelineRenderingType.Thread}
+                fullSizeThreadViewEnabled={!!this.props.fullSize}
                 threadId={this.state.thread?.id}
                 liveTimeline={this.state?.thread?.timelineSet?.getLiveTimeline()}
                 narrow={this.state.narrow}
             >
                 <RoomUploadContextProvider threadRelation={this.threadRelation}>
-                    <BaseCard
-                        className={classNames("mx_ThreadView mx_ThreadPanel", {
-                            mx_ThreadView_narrow: this.state.narrow,
-                        })}
-                        onClose={this.props.onClose}
-                        withoutScrollContainer={true}
-                        header={this.renderThreadViewHeader()}
-                        ref={this.card}
-                        onKeyDown={this.onKeyDown}
-                        onBack={(ev: ButtonEvent) => {
-                            PosthogTrackers.trackInteraction("WebThreadViewBackButton", ev);
-                        }}
-                    >
-                        <Measured breakpoint={400} sensor={this.card} onMeasurement={this.onMeasurement} />
-                        <div className="mx_ThreadView_timelinePanelWrapper">{timeline}</div>
-
-                        {ContentMessages.sharedInstance().getCurrentUploads(threadRelation).length > 0 && (
-                            <UploadBar room={this.props.room} relation={threadRelation} />
-                        )}
-
-                        {this.state.thread?.timelineSet && (
-                            <MessageComposer
-                                room={this.props.room}
-                                resizeNotifier={this.props.resizeNotifier}
-                                relation={threadRelation}
-                                replyToEvent={this.state.replyToEvent}
-                                permalinkCreator={this.props.permalinkCreator}
-                                e2eStatus={this.props.e2eStatus}
-                                compact={true}
-                            />
-                        )}
-                    </BaseCard>
+                    {this.props.fullSize ? (
+                        <div
+                            className={classNames("mx_ThreadView mx_ThreadView_fullSize", {
+                                mx_ThreadView_narrow: this.state.narrow,
+                            })}
+                            ref={this.card}
+                            onKeyDown={this.onKeyDown}
+                        >
+                            {body}
+                        </div>
+                    ) : (
+                        <BaseCard
+                            className={classNames("mx_ThreadView mx_ThreadPanel", {
+                                mx_ThreadView_narrow: this.state.narrow,
+                            })}
+                            onClose={this.props.onClose}
+                            withoutScrollContainer={true}
+                            header={this.renderThreadViewHeader()}
+                            ref={this.card}
+                            onKeyDown={this.onKeyDown}
+                            onBack={(ev: ButtonEvent) => {
+                                PosthogTrackers.trackInteraction("WebThreadViewBackButton", ev);
+                            }}
+                        >
+                            {body}
+                        </BaseCard>
+                    )}
                 </RoomUploadContextProvider>
             </ScopedRoomContextProvider>
         );

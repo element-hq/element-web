@@ -27,7 +27,17 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { type CryptoApi, CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { act, cleanup, fireEvent, render, type RenderResult, screen, waitFor, findByRole } from "test-utils-rtl";
+import {
+    act,
+    cleanup,
+    fireEvent,
+    render,
+    type RenderResult,
+    screen,
+    waitFor,
+    findByRole,
+    within,
+} from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
 import {
     createTestClient,
@@ -77,6 +87,8 @@ import { TimelineRenderingType } from "../../contexts/RoomContext";
 import { ModuleApi } from "../../modules/Api";
 import MatrixClientBackedController from "../../settings/controllers/MatrixClientBackedController.ts";
 import { type ComposerInsertPayload, ComposerType } from "../../dispatcher/payloads/ComposerInsertPayload.ts";
+import { mkThread } from "../../../test/test-utils/threads";
+import { WIDGET_LAYOUT_EVENT_TYPE } from "../../stores/widgets/WidgetLayoutStore";
 
 // Used by group calls
 vi.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
@@ -302,6 +314,122 @@ describe("RoomView", () => {
         // Check that the right panel is not rendered
         await expect(screen.findByTestId("right-panel")).rejects.toThrow();
         expect(asFragment()).toMatchSnapshot();
+    });
+
+    describe("full-size thread view", () => {
+        let rootEvent: MatrixEvent;
+
+        beforeEach(async () => {
+            vi.spyOn(cli, "supportsThreads").mockReturnValue(true);
+            vi.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
+            vi.spyOn(room, "maySendMessage").mockReturnValue(true);
+            await SettingsStore.setValue("Threads.fullSizeView", null, SettingLevel.DEVICE, true);
+            rootEvent = mkThread({
+                room,
+                client: cli,
+                authorId: cli.getSafeUserId(),
+                participantUserIds: [cli.getSafeUserId()],
+            }).rootEvent;
+        });
+
+        const setFullSizeThread = (): void => {
+            act(() => {
+                stores.rightPanelStore.setFullSizeThread(
+                    {
+                        phase: RightPanelPhases.ThreadView,
+                        state: { threadHeadEvent: rootEvent },
+                    },
+                    room.roomId,
+                );
+            });
+        };
+
+        it("keeps the member list open alongside the full-size thread", async () => {
+            const { container } = await mountRoomView();
+            expect(screen.getByTestId("timeline")).toBeInTheDocument();
+
+            act(() => {
+                stores.rightPanelStore.setCard({ phase: RightPanelPhases.MemberList }, true, room.roomId);
+            });
+            const rightPanel = await screen.findByTestId("right-panel");
+            expect(within(rightPanel).getByRole("heading", { name: "People" })).toBeInTheDocument();
+
+            setFullSizeThread();
+
+            await waitFor(() => expect(container.querySelector(".mx_ThreadView")).toBeInTheDocument());
+            expect(screen.queryByTestId("timeline")).not.toBeInTheDocument();
+            expect(await screen.findByTestId("basicmessagecomposer")).toBeInTheDocument();
+            expect(within(rightPanel).getByRole("heading", { name: "People" })).toBeInTheDocument();
+            expect(stores.rightPanelStore.currentCardForRoom(room.roomId).phase).toBe(RightPanelPhases.MemberList);
+        });
+
+        it("replaces the room header and restores the timeline when Back is activated", async () => {
+            const { container } = await mountRoomView();
+            expect(container.querySelector(".mx_RoomHeader")).toBeInTheDocument();
+
+            setFullSizeThread();
+
+            await waitFor(() => expect(container.querySelector(".mx_ThreadHeader")).toBeInTheDocument());
+            expect(container.querySelector(".mx_RoomHeader")).not.toBeInTheDocument();
+            expect(within(container).getByRole("heading", { name: /^Thread in / })).toBeInTheDocument();
+
+            fireEvent.click(within(container).getByRole("button", { name: "Back" }));
+
+            await waitFor(() => expect(screen.getByTestId("timeline")).toBeInTheDocument());
+            expect(container.querySelector(".mx_ThreadView")).not.toBeInTheDocument();
+            expect(container.querySelector(".mx_ThreadHeader")).not.toBeInTheDocument();
+            expect(container.querySelector(".mx_RoomHeader")).toBeInTheDocument();
+        });
+
+        it("renders the room timeline when the setting is off despite a stored thread", async () => {
+            setFullSizeThread();
+            const getValue = SettingsStore.getValue.bind(SettingsStore);
+            const settingSpy = vi.spyOn(SettingsStore, "getValue").mockImplementation(((
+                settingName: string,
+                targetRoomId?: string | null,
+                excludeDefault?: boolean,
+            ) => {
+                if (settingName === "Threads.fullSizeView") return false;
+                return getValue(settingName as any, targetRoomId, excludeDefault as false);
+            }) as typeof SettingsStore.getValue);
+
+            const { container } = await mountRoomView();
+            settingSpy.mockRestore();
+
+            expect(screen.getByTestId("timeline")).toBeInTheDocument();
+            expect(container.querySelector(".mx_ThreadView")).not.toBeInTheDocument();
+            expect(stores.rightPanelStore.getFullSizeThreadForRoom(room.roomId)).toBeDefined();
+        });
+
+        it("renders a maximised widget instead of a stored thread", async () => {
+            const widget = WidgetStore.instance.addVirtualWidget(
+                {
+                    id: "full-size-thread-widget",
+                    creatorUserId: cli.getSafeUserId(),
+                    type: WidgetType.CUSTOM.preferred,
+                    url: "https://example.org/widget",
+                    name: "Example widget",
+                },
+                room.roomId,
+            );
+            room.currentState.setStateEvents([
+                new MatrixEvent({
+                    event_id: "$widget-layout",
+                    room_id: room.roomId,
+                    sender: cli.getSafeUserId(),
+                    state_key: "",
+                    type: WIDGET_LAYOUT_EVENT_TYPE,
+                    content: { widgets: { [widget.id]: { container: "center" } } },
+                }),
+            ]);
+            stores.widgetLayoutStore.recalculateRoom(room);
+            setFullSizeThread();
+
+            const { container } = await mountRoomView();
+
+            expect(container.querySelector(".mx_AppsDrawer--maximised")).toBeInTheDocument();
+            expect(container.querySelector(".mx_ThreadView")).not.toBeInTheDocument();
+        });
     });
 
     it("should hide the pinned message banner when hidePinnedMessageBanner=true", async () => {

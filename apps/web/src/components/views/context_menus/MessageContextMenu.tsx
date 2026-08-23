@@ -399,6 +399,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             action: Action.ViewRoom,
             event_id: this.props.mxEvent.getId(),
             highlighted: true,
+            view_in_room: true,
             room_id: this.props.mxEvent.getRoomId(),
             metricsTrigger: undefined, // room doesn't change
         });

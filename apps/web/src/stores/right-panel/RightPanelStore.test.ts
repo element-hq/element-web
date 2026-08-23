@@ -178,6 +178,91 @@ describe("RightPanelStore", () => {
         });
     });
 
+    describe("full-size thread", () => {
+        const roomId = "!1:example.org";
+        const threadCard = (id: string) => ({
+            phase: RightPanelPhases.ThreadView,
+            state: { threadHeadEvent: { getId: () => id } as any },
+        });
+
+        it("shows a thread without opening the right panel", () => {
+            store.setFullSizeThread(threadCard("$root"), roomId);
+
+            expect(store.getFullSizeThreadForRoom(roomId)?.state?.threadHeadEvent?.getId()).toEqual("$root");
+            expect(store.isOpenForRoom(roomId)).toEqual(false);
+            expect(store.currentCardForRoom(roomId).phase).toEqual(null);
+        });
+
+        it("leaves the thread showing when the right panel is used afterwards", () => {
+            store.setFullSizeThread(threadCard("$root"), roomId);
+
+            store.setCard({ phase: RightPanelPhases.MemberList }, true, roomId);
+            expect(store.getFullSizeThreadForRoom(roomId)).toBeDefined();
+
+            store.setCards([{ phase: RightPanelPhases.RoomSummary }], true, roomId);
+            expect(store.getFullSizeThreadForRoom(roomId)).toBeDefined();
+            expect(store.currentCardForRoom(roomId).phase).toEqual(RightPanelPhases.RoomSummary);
+        });
+
+        it("never leaves the same thread mounted in both presentations", () => {
+            store.setCards([{ phase: RightPanelPhases.ThreadPanel }, threadCard("$root")], true, roomId);
+            expect(store.isOpenForRoom(roomId)).toEqual(true);
+
+            store.setFullSizeThread(threadCard("$root"), roomId);
+
+            expect(store.roomPhaseHistory.some((card) => card.phase === RightPanelPhases.ThreadView)).toEqual(false);
+        });
+
+        it("restores the room timeline when cleared, without disturbing the panel", () => {
+            store.setCard({ phase: RightPanelPhases.MemberList }, true, roomId);
+            store.setFullSizeThread(threadCard("$root"), roomId);
+
+            store.clearFullSizeThread(roomId);
+
+            expect(store.getFullSizeThreadForRoom(roomId)).toBeUndefined();
+            expect(store.isOpenForRoom(roomId)).toEqual(true);
+            expect(store.currentCardForRoom(roomId).phase).toEqual(RightPanelPhases.MemberList);
+        });
+
+        it("does not persist anything when clearing a room that has no thread showing", () => {
+            const setValue = vi.mocked(SettingsStore.setValue);
+            setValue.mockClear();
+
+            store.clearFullSizeThread(roomId);
+
+            expect(setValue).not.toHaveBeenCalled();
+        });
+
+        it("keeps each room's thread separate", () => {
+            store.setFullSizeThread(threadCard("$one"), "!1:example.org");
+            store.setFullSizeThread(threadCard("$two"), "!2:example.org");
+
+            expect(store.getFullSizeThreadForRoom("!1:example.org")?.state?.threadHeadEvent?.getId()).toEqual("$one");
+            expect(store.getFullSizeThreadForRoom("!2:example.org")?.state?.threadHeadEvent?.getId()).toEqual("$two");
+        });
+
+        it("does not re-enter a thread permalink when the room is revisited", async () => {
+            store.setFullSizeThread(
+                {
+                    phase: RightPanelPhases.ThreadView,
+                    state: {
+                        threadHeadEvent: { getId: () => "$root" } as any,
+                        initialEvent: { getId: () => "$reply" } as any,
+                        isInitialEventHighlighted: true,
+                    },
+                },
+                roomId,
+            );
+
+            await viewRoom(roomId);
+
+            const state = store.getFullSizeThreadForRoom(roomId)?.state;
+            expect(state?.threadHeadEvent).toBeDefined();
+            expect(state?.initialEvent).toBeUndefined();
+            expect(state?.isInitialEventHighlighted).toBeUndefined();
+        });
+    });
+
     describe("togglePanel", () => {
         it("does nothing if the room has no phase to open to", () => {
             expect(store.isOpenForRoom("!1:example.org")).toEqual(false);

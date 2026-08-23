@@ -24,6 +24,8 @@ test.describe("Threads", () => {
     test.beforeEach(async ({ page }) => {
         await page.addInitScript(() => {
             window.localStorage.setItem("mx_lhs_size", "0"); // Collapse left panel for these tests
+            // These tests assert the right-panel thread card, not the full-size thread view
+            window.localStorage.setItem("mx_local_settings", JSON.stringify({ "Threads.fullSizeView": false }));
         });
     });
 

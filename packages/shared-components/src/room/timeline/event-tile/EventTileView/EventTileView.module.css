@@ -953,7 +953,7 @@
         .senderDetails {
             align-items: center;
             gap: var(--cpd-space-4x, 16px);
-            padding-inline-start: var(--cpd-space-2x, 8px);
+            padding-inline-start: var(--event-tile-thread-sender-gutter, var(--cpd-space-2x, 8px));
         }
 
         .senderDetails .slotAvatar {
@@ -970,9 +970,9 @@
         }
 
         .line {
-            padding-block: 2px;
-            padding-inline-start: 56px;
-            margin-inline-end: 8px;
+            padding-block: var(--event-tile-thread-line-spacing-block, 2px);
+            padding-inline-start: var(--event-tile-thread-gutter, 56px);
+            margin-inline-end: var(--event-tile-thread-line-margin-inline-end, 8px);
         }
 
         .slotTimestamp {
@@ -982,8 +982,8 @@
         }
 
         .slotFooter {
-            margin-inline-start: 56px;
-            margin-inline-end: 8px;
+            margin-inline-start: var(--event-tile-thread-gutter, 56px);
+            margin-inline-end: var(--event-tile-thread-line-margin-inline-end, 8px);
         }
     }
 

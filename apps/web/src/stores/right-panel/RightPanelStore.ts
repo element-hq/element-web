@@ -26,6 +26,7 @@ import {
 import { type ActionPayload } from "../../dispatcher/payloads";
 import { Action } from "../../dispatcher/actions";
 import { type ActiveRoomChangedPayload } from "../../dispatcher/payloads/ActiveRoomChangedPayload";
+import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { SDKContextClass } from "../../contexts/SDKContextClass";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 
@@ -89,6 +90,14 @@ export default class RightPanelStore extends ReadyWatchingStore {
             case Action.ActiveRoomChanged: {
                 const changePayload = <ActiveRoomChangedPayload>payload;
                 this.handleViewedRoomChange(changePayload.oldRoomId, changePayload.newRoomId);
+                break;
+            }
+
+            case Action.ViewRoom: {
+                const viewRoomPayload = <ViewRoomPayload>payload;
+                if (viewRoomPayload.view_in_room && viewRoomPayload.room_id) {
+                    this.clearFullSizeThread(viewRoomPayload.room_id);
+                }
                 break;
             }
 
@@ -176,7 +185,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
         } else if (targetPhase !== this.currentCardForRoom(rId)?.phase || !this.byRoom[rId]) {
             // Set right panel and initialize/erase history
             const history = this.generateHistoryForPhase(targetPhase, cardState ?? {});
-            this.byRoom[rId] = { history, isOpen: true };
+            this.byRoom[rId] = { ...this.byRoom[rId], history, isOpen: true };
             this.emitAndUpdateSettings();
         } else {
             this.show(rId);
@@ -188,7 +197,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
         // This function sets the history of the right panel and shows the right panel if not already visible.
         const rId = roomId ?? this.viewedRoomId ?? "";
         const history = cards.map((c) => ({ phase: c.phase, state: c.state ?? {} }));
-        this.byRoom[rId] = { history, isOpen: true };
+        this.byRoom[rId] = { ...this.byRoom[rId], history, isOpen: true };
         this.show(rId);
         this.emitAndUpdateSettings();
     }
@@ -227,6 +236,36 @@ export default class RightPanelStore extends ReadyWatchingStore {
         const removedCard = this.byRoom[rId].history.pop();
         this.emitAndUpdateSettings();
         return removedCard;
+    }
+
+    /**
+     * The thread being shown full-size in the given room's main split, if any.
+     */
+    public getFullSizeThreadForRoom(roomId: string): IRightPanelCard | undefined {
+        return this.byRoom[roomId]?.fullSizeThread;
+    }
+
+    /**
+     * Show a thread full-size in the given room's main split, leaving the right panel's own card
+     * stack untouched. Any thread card already in that stack is dropped, so a room never has the
+     * same thread mounted in both presentations at once.
+     */
+    public setFullSizeThread(card: IRightPanelCard, roomId: string): void {
+        const room = (this.byRoom[roomId] ??= { history: [], isOpen: false });
+        room.fullSizeThread = card;
+        room.history = room.history.filter((c) => c.phase !== RightPanelPhases.ThreadView);
+        if (!room.history.length) room.isOpen = false;
+        this.emitAndUpdateSettings();
+    }
+
+    /**
+     * Stop showing a thread full-size in the given room, restoring its timeline. A no-op when no
+     * thread is showing, so callers on the right-panel path do not trigger a needless update.
+     */
+    public clearFullSizeThread(roomId: string): void {
+        if (!this.byRoom[roomId]?.fullSizeThread) return;
+        this.byRoom[roomId].fullSizeThread = undefined;
+        this.emitAndUpdateSettings();
     }
 
     public togglePanel(roomId: string | null): void {
@@ -332,7 +371,11 @@ export default class RightPanelStore extends ReadyWatchingStore {
     }
 
     private filterValidCards(rightPanelForRoom?: IRightPanelForRoom): void {
-        if (!rightPanelForRoom?.history) return;
+        if (!rightPanelForRoom) return;
+        if (rightPanelForRoom.fullSizeThread && !this.isCardStateValid(rightPanelForRoom.fullSizeThread)) {
+            rightPanelForRoom.fullSizeThread = undefined;
+        }
+        if (!rightPanelForRoom.history) return;
         rightPanelForRoom.history = rightPanelForRoom.history.filter((card) => this.isCardStateValid(card));
         if (!rightPanelForRoom.history.length) {
             rightPanelForRoom.isOpen = false;
@@ -441,6 +484,13 @@ export default class RightPanelStore extends ReadyWatchingStore {
             this.currentCard.state.initialEvent = undefined;
             this.currentCard.state.isInitialEventHighlighted = undefined;
             this.currentCard.state.initialEventScrollIntoView = undefined;
+        }
+
+        const arrivingFullSizeThreadState = this.byRoom[this.viewedRoomId ?? ""]?.fullSizeThread?.state;
+        if (arrivingFullSizeThreadState) {
+            arrivingFullSizeThreadState.initialEvent = undefined;
+            arrivingFullSizeThreadState.isInitialEventHighlighted = undefined;
+            arrivingFullSizeThreadState.initialEventScrollIntoView = undefined;
         }
 
         this.emitAndUpdateSettings();

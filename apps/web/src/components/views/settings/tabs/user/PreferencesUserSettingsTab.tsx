@@ -357,6 +357,10 @@ export default class PreferencesUserSettingsTab extends React.Component<EmptyObj
                         {this.renderGroup(PreferencesUserSettingsTab.IMAGES_AND_VIDEOS_SETTINGS)}
                     </SettingsSubsection>
 
+                    <SettingsSubsection heading={_t("common|threads")} formWrap>
+                        <SettingsFlag name="Threads.fullSizeView" level={SettingLevel.ACCOUNT} />
+                    </SettingsSubsection>
+
                     <SettingsSubsection heading={_t("common|timeline")} formWrap>
                         {this.renderGroup(PreferencesUserSettingsTab.TIMELINE_SETTINGS)}
                     </SettingsSubsection>

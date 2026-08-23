@@ -2090,6 +2090,7 @@
             },
             "this_room_button": "Search this room"
         },
+        "thread_header_a11y_label": "Thread in %(roomName)s",
         "unknown_status_code_for_timeline_jump": "unknown status code",
         "unread_notifications_predecessor": {
             "one": "You have %(count)s unread notification in a prior version of this room.",
@@ -2794,6 +2795,8 @@
             "show_polls_button": "Show polls button",
             "startup_window_behaviour_label": "Start-up and window behaviour",
             "surround_text": "Surround selected text when typing special characters",
+            "threads_full_size_view": "Show threads in the main chat area",
+            "threads_full_size_view_description": "Opening a thread replaces the conversation instead of opening the right-hand panel.",
             "time_heading": "Displaying time",
             "user_timezone": "Set timezone"
         },

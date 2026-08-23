@@ -36,6 +36,7 @@ interface BaseViewRoomPayload extends Pick<ActionPayload, "action"> {
     forceTimeline?: boolean; // Whether to override default behaviour to end up at a timeline
     show_room_tile?: boolean; // Whether to ensure that the room tile is visible in the room list
     clear_search?: boolean; // Whether to clear the room list search
+    view_in_room?: boolean; // Whether the user explicitly asked to leave a thread and see `event_id` in the room timeline
     view_call?: boolean; // Whether to view the call or call lobby for the room
     skipLobby?: boolean; // Whether to skip the call lobby when showing the call (only supported for element calls)
     voiceOnly?: boolean; // Whether the call is voice only (only supported for element calls)

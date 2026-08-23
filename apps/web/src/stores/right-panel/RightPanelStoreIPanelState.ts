@@ -53,23 +53,38 @@ export interface IRightPanelCardStored {
 export interface IRightPanelForRoom {
     isOpen: boolean;
     history: Array<IRightPanelCard>;
+    /**
+     * The thread shown full-size in the room's main split, orthogonal to the visible card stack.
+     * Its `phase` is always {@link RightPanelPhases.ThreadView}.
+     */
+    fullSizeThread?: IRightPanelCard;
 }
 
 export type IRightPanelForRoomStored = {
     isOpen: boolean;
     history: Array<IRightPanelCardStored>;
+    /** Stored form of {@link IRightPanelForRoom.fullSizeThread}. */
+    fullSizeThread?: IRightPanelCardStored;
 };
 
 export function convertToStorePanel(cacheRoom?: IRightPanelForRoom): IRightPanelForRoomStored | null {
     if (!cacheRoom) return null;
     const storeHistory = [...cacheRoom.history].map((panelState) => convertCardToStore(panelState));
-    return { isOpen: cacheRoom.isOpen, history: storeHistory };
+    return {
+        isOpen: cacheRoom.isOpen,
+        history: storeHistory,
+        fullSizeThread: cacheRoom.fullSizeThread ? convertCardToStore(cacheRoom.fullSizeThread) : undefined,
+    };
 }
 
 export function convertToStatePanel(storeRoom: IRightPanelForRoomStored | null, room: Room): IRightPanelForRoom | null {
     if (!storeRoom) return storeRoom;
     const stateHistory = [...storeRoom.history].map((panelStateStore) => convertStoreToCard(panelStateStore, room));
-    return { history: stateHistory, isOpen: storeRoom.isOpen };
+    return {
+        history: stateHistory,
+        isOpen: storeRoom.isOpen,
+        fullSizeThread: storeRoom.fullSizeThread ? convertStoreToCard(storeRoom.fullSizeThread, room) : undefined,
+    };
 }
 
 export function convertCardToStore(panelState: IRightPanelCard): IRightPanelCardStored {
