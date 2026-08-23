@@ -29,7 +29,7 @@ test.describe("share from URL", () => {
         await app.viewRoomByName("A test room");
         const lastMessage = page.locator(".mx_RoomView_MessageList .mx_EventTile").last();
         await expect(lastMessage).toBeVisible();
-        const lastMessageText = await lastMessage.locator(".mx_EventTile_body").innerText();
+        const lastMessageText = await lastMessage.getByTestId("event-tile-slot-body").innerText();
         expect(lastMessageText).toBe("Hello world");
     });
 });

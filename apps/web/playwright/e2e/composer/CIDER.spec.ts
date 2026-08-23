@@ -198,7 +198,7 @@ test.describe("Composer", () => {
             await expect(composer.getByText("Bob")).toBeVisible();
             await expect(composer).toMatchScreenshot("mention.png");
             await composer.press("Enter");
-            await expect(page.getByTestId("event-tile-slot-body").filter({ hasText: "Bob" })).toBeVisible();
+            await expect(page.locator(".mx_EventTile").last().getByTestId("event-tile-slot-body")).toContainText("Bob");
         });
 
         test("renders emoji autocomplete", { tag: "@screenshot" }, async ({ page }) => {

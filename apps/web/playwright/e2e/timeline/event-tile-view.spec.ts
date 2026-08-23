@@ -36,16 +36,16 @@ test.describe("EventTileView application coverage", () => {
 
             await app.viewRoomById(roomId);
             const messages = roomMessageList(page);
+            const messageTiles = messages.locator(".mx_EventTile").filter({
+                has: page.getByTestId("event-tile-slot-body"),
+                hasText: /Alice first|Alice continuation|Bob first|Bob continuation/,
+            });
 
             for (const layout of [Layout.Group, Layout.Bubble, Layout.IRC]) {
                 await app.settings.setValue("layout", null, SettingLevel.DEVICE, layout);
                 await app.settings.setValue("useCompactLayout", null, SettingLevel.DEVICE, false);
 
-                await expect(
-                    messages.locator(".mx_EventTile").filter({
-                        has: page.getByTestId("event-tile-slot-body"),
-                    }),
-                ).toHaveCount(4);
+                await expect(messageTiles).toHaveCount(4);
 
                 await expect(messages).toMatchScreenshot(`event-tile-${layout}.png`, {
                     css: ".mx_MessageTimestamp { visibility: hidden; }",
@@ -54,11 +54,7 @@ test.describe("EventTileView application coverage", () => {
 
             await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
             await app.settings.setValue("useCompactLayout", null, SettingLevel.DEVICE, true);
-            await expect(
-                messages.locator(".mx_EventTile").filter({
-                    has: page.getByTestId("event-tile-slot-body"),
-                }),
-            ).toHaveCount(4);
+            await expect(messageTiles).toHaveCount(4);
             await expect(messages).toMatchScreenshot("event-tile-group-compact.png", {
                 css: ".mx_MessageTimestamp { visibility: hidden; }",
             });
@@ -78,7 +74,9 @@ test.describe("EventTileView application coverage", () => {
 
             const tile = page.locator(`.mx_RoomView_MessageList .mx_EventTile[data-event-id='${event.event_id}']`);
             const line = tile.locator(".mx_EventTile_line");
-            const actionBar = tile.locator(".mx_MessageActionBar");
+            const actionBar = tile
+                .getByTestId("event-tile-slot-actionBar")
+                .getByRole("toolbar", { name: "Message Actions" });
 
             await line.hover();
             await expect(actionBar).toBeVisible();
@@ -177,8 +175,12 @@ test.describe("EventTileView application coverage", () => {
             const matching = results.locator(".mx_EventTile").filter({
                 has: page.locator(".mx_EventTile_searchHighlight"),
             });
-            const rootTile = results.locator(`.mx_EventTile[data-event-id='${root.event_id}']`);
-            const otherTile = results.locator(`.mx_EventTile[data-event-id='${other.event_id}']`);
+            const rootTile = results
+                .locator(`.mx_EventTile[data-event-id='${root.event_id}']`)
+                .filter({ has: page.locator(".mx_EventTile_searchHighlight") });
+            const otherTile = results
+                .locator(`.mx_EventTile[data-event-id='${other.event_id}']`)
+                .filter({ has: page.locator(".mx_EventTile_searchHighlight") });
             await expect(matching).toHaveCount(2);
             for (const event of [contextBefore, contextAfter]) {
                 await expect(results.locator(`.mx_EventTile[data-event-id='${event.event_id}']`)).toHaveCount(1);
@@ -225,7 +227,9 @@ test.describe("EventTileView application coverage", () => {
             await search.press("Enter");
 
             const results = page.locator(".mx_RoomView_searchResultsPanel");
-            const replyTile = results.locator(`.mx_EventTile[data-event-id='${reply.event_id}']`);
+            const replyTile = results
+                .locator(`.mx_EventTile[data-event-id='${reply.event_id}']`)
+                .filter({ has: page.locator(".mx_EventTile_searchHighlight") });
             await expect(replyTile).toHaveCount(1);
             await expect(replyTile.locator(".mx_ThreadSummary_icon")).toBeVisible();
             await expect(replyTile.locator(".mx_ThreadSummary_icon")).toHaveAttribute(
@@ -296,7 +300,7 @@ test.describe("EventTileView application coverage", () => {
                 const tile = panel.locator(".mx_EventTile", { hasText: notificationText });
                 await expect(tile).toBeVisible();
                 await expect(tile.getByTestId("event-tile-slot-body")).toBeVisible();
-                await expect(tile.locator(".mx_EventTile_details")).toContainText("Bob");
+                await expect(tile.getByTestId("event-tile-slot-sender")).toContainText("Bob");
                 await expect(tile).toMatchScreenshot("notification-event-tile.png", {
                     css: ".mx_MessageTimestamp { visibility: hidden; }",
                 });

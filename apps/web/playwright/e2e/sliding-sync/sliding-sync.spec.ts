@@ -366,7 +366,12 @@ test.describe("Sliding Sync", () => {
         await tile.locator("a").dispatchEvent("click");
 
         // make sure it is now selected with the little green |
-        await expect(page.locator(".mx_EventTile_selected").filter({ hasText: "Permalink me" })).toBeVisible();
+        await expect(tile).toBeVisible();
+        await expect
+            .poll(() =>
+                tile.locator(".mx_EventTile_line").evaluate((line) => getComputedStyle(line, "::before").content),
+            )
+            .toBe('""');
 
         // ensure the reply-to does not disappear
         await expect(page.locator(".mx_ReplyPreview")).toBeVisible();

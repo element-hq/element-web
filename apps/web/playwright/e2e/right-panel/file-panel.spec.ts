@@ -91,7 +91,10 @@ test.describe("FilePanel", () => {
             await expect(filePanelMessageList.getByText(NAME)).toHaveCount(3);
 
             // Detect the image file
-            const image = filePanelMessageList.locator(".mx_EventTile_mediaLine.mx_EventTile_image .mx_ImageBody");
+            const image = filePanelMessageList
+                .locator(".mx_EventTile")
+                .filter({ has: page.locator("img[alt='riot.png']") })
+                .getByTestId("event-tile-slot-body");
             // Assert that the image is specified as thumbnail and has the alt string
             await expect(image.locator("img.mx_ImageBody_image")).toBeVisible();
             await expect(image.locator("img[alt='riot.png']")).toBeVisible();
@@ -103,7 +106,11 @@ test.describe("FilePanel", () => {
 
             // Detect the JSON file
             // Assert that the tile is rendered as a button
-            const file = filePanelMessageList.locator(".mx_EventTile_mediaLine .mx_MFileBody [role='button']");
+            const file = filePanelMessageList
+                .locator(".mx_EventTile")
+                .filter({ hasText: "matrix-org-client-versions.json" })
+                .getByTestId("event-tile-slot-body")
+                .getByRole("button", { name: /matrix.*?\.json/ });
             // Assert that the file name is rendered inside the button with ellipsis
             await expect(file.getByText(/matrix.*?\.json/)).toBeVisible();
 
@@ -190,11 +197,10 @@ test.describe("FilePanel", () => {
             await uploadFile(app, "riot.png");
 
             // Detect the image file on the panel
-            const imageBody = page.locator(
-                ".mx_FilePanel .mx_RoomView_MessageList .mx_EventTile_mediaLine.mx_EventTile_image .mx_ImageBody",
-            );
-
-            const link = imageBody.locator(".mx_MFileBody a");
+            const imageTile = page
+                .locator(".mx_FilePanel .mx_RoomView_MessageList .mx_EventTile")
+                .filter({ has: page.locator("img[alt='riot.png']") });
+            const link = imageTile.getByTestId("event-tile-slot-body").getByRole("link", { name: /^Download file/ });
 
             const downloadPromise = page.waitForEvent("download");
 

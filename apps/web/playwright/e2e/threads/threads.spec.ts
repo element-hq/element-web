@@ -63,7 +63,7 @@ test.describe("Threads", () => {
         await bot.sendMessage(roomId, MessageLong, threadId);
 
         // User asserts timeline thread summary visible & clicks it
-        let locator = page.locator(".mx_RoomView_body .mx_ThreadSummary");
+        let locator = page.locator(".mx_RoomView_body").getByTestId("thread-summary");
         await expect(locator.getByText("BotBob")).toBeAttached();
         await expect(locator.getByText(MessageLong)).toBeAttached();
         await locator.click();
@@ -121,7 +121,7 @@ test.describe("Threads", () => {
         await locator.press("Enter");
 
         // User asserts summary was updated correctly
-        locator = page.locator(".mx_RoomView_body .mx_ThreadSummary");
+        locator = page.locator(".mx_RoomView_body").getByTestId("thread-summary");
         await expect(locator.getByText("Tom")).toBeAttached();
         await expect(locator.getByText("Test")).toBeAttached();
 
@@ -145,7 +145,7 @@ test.describe("Threads", () => {
         await page.getByRole("gridcell", { name: "👋" }).click();
 
         locator = page.locator(".mx_ThreadView");
-        // Make sure the CSS style for spacing is applied to mx_EventTile_footer on group/modern layout
+        // Make sure the CSS style for spacing is applied to the footer slot on group/modern layout
         await expect(locator.getByTestId("event-tile-slot-footer")).toHaveCSS(
             "margin-inline-start",
             ThreadViewGroupSpacingStart,
@@ -238,7 +238,7 @@ test.describe("Threads", () => {
         await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
 
         // User asserts summary was updated correctly
-        locator = page.locator(".mx_RoomView_body .mx_ThreadSummary");
+        locator = page.locator(".mx_RoomView_body").getByTestId("thread-summary");
         await expect(locator.getByText("BotBob")).toBeAttached();
         await expect(locator.getByText(MessageLong)).toBeAttached();
 
@@ -250,7 +250,7 @@ test.describe("Threads", () => {
         // Bot responds to thread
         await bot.sendMessage(roomId, "How are things?", threadId);
 
-        locator = page.locator(".mx_RoomView_body .mx_ThreadSummary");
+        locator = page.locator(".mx_RoomView_body").getByTestId("thread-summary");
         await expect(locator.getByText("BotBob")).toBeAttached();
         await expect(locator.getByText("How are things?")).toBeAttached();
 
@@ -276,7 +276,7 @@ test.describe("Threads", () => {
         await locator.fill("Great!");
         await locator.press("Enter");
 
-        locator = page.locator(".mx_RoomView_body .mx_ThreadSummary");
+        locator = page.locator(".mx_RoomView_body").getByTestId("thread-summary");
         await expect(locator.getByText("Tom")).toBeAttached();
         await expect(locator.getByText("Great!")).toBeAttached();
 
@@ -288,7 +288,7 @@ test.describe("Threads", () => {
         await locator.getByRole("textbox").pressSequentially(" How about yourself?"); // fill would overwrite the original text
         await locator.getByRole("textbox").press("Enter");
 
-        locator = page.locator(".mx_RoomView_body .mx_ThreadSummary");
+        locator = page.locator(".mx_RoomView_body").getByTestId("thread-summary");
         await expect(locator.getByText("Tom")).toBeAttached();
         await expect(locator).toContainText("Great! How about yourself?");
 
@@ -299,7 +299,7 @@ test.describe("Threads", () => {
         const { event_id: eventId } = await bot.sendMessage(roomId, "I'm very good thanks", threadId);
 
         // User asserts
-        locator = page.locator(".mx_RoomView_body .mx_ThreadSummary");
+        locator = page.locator(".mx_RoomView_body").getByTestId("thread-summary");
         await expect(locator.getByText("BotBob")).toBeAttached();
         await expect(locator.getByText("I'm very good thanks")).toBeAttached();
 
@@ -318,7 +318,7 @@ test.describe("Threads", () => {
         });
 
         // User asserts
-        locator = page.locator(".mx_RoomView_body .mx_ThreadSummary");
+        locator = page.locator(".mx_RoomView_body").getByTestId("thread-summary");
         await expect(locator.getByText("BotBob")).toBeAttached();
         await expect(locator.getByText("I'm very good thanks :)")).toBeAttached();
     });
@@ -455,7 +455,7 @@ test.describe("Threads", () => {
             await bot.sendMessage(roomId, "Hello there", threadId);
 
             // User clicks thread summary
-            await page.locator(".mx_RoomView_body .mx_ThreadSummary").click();
+            await page.locator(".mx_RoomView_body").getByTestId("thread-summary").click();
 
             // User sends location on ThreadView
             await expect(page.locator(".mx_ThreadView")).toBeAttached();
