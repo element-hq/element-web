@@ -17,7 +17,6 @@ import { AttachmentIcon } from "@vector-im/compound-design-tokens/assets/web/ico
 import React, {
     type ChangeEventHandler,
     createContext,
-    EventHandler,
     type ReactNode,
     useCallback,
     useContext,
@@ -48,7 +47,7 @@ import { useDispatcher } from "../../hooks/useDispatcher";
 import type { ActionPayload } from "../../dispatcher/payloads";
 import { type AttachmentOpen } from "@matrix-org/analytics-events/types/typescript/AttachmentOpen";
 import { PosthogAnalytics } from "../../PosthogAnalytics";
-import { AttachmentCancel } from "@matrix-org/analytics-events/types/typescript/AttachmentCancel";
+import type { AttachmentCancel } from "@matrix-org/analytics-events/types/typescript/AttachmentCancel";
 
 const logger = rootLogger.getChild("RoomUploadViewModel");
 
@@ -294,10 +293,11 @@ export function RoomUploadContextProvider({
     );
 
     useEffect(() => {
-        if (!uploadInput.current) {
+        const input = uploadInput.current;
+        if (!input) {
             return;
         }
-        const fn = () => {
+        const fn = (): void => {
             PosthogAnalytics.instance.trackEvent<AttachmentCancel>({
                 eventName: "AttachmentCancel",
                 stage: "Picker",
@@ -306,8 +306,8 @@ export function RoomUploadContextProvider({
                 kind: "local",
             });
         };
-        uploadInput.current.addEventListener("cancel", fn);
-        return () => uploadInput.current?.removeEventListener("cancel", fn);
+        input.addEventListener("cancel", fn);
+        return () => input.removeEventListener("cancel", fn);
     });
 
     useDispatcher(defaultDispatcher, (payload: ActionPayload) => {
