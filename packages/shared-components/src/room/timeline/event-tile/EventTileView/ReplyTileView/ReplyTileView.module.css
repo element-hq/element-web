@@ -1,0 +1,120 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.root {
+    position: relative;
+    padding: 2px 0;
+    font: var(--cpd-font-body-md-regular);
+}
+
+.link {
+    display: grid;
+    grid-template:
+        "sender" auto
+        "message" auto
+        / minmax(0, 100%);
+    gap: 2px;
+    max-width: 100%;
+    min-width: 0;
+    color: var(--cpd-color-text-secondary);
+    text-decoration: none;
+    transition: color ease 0.15s;
+
+    &:hover {
+        color: var(--cpd-color-text-primary);
+    }
+}
+
+.inline .link {
+    grid-template:
+        "sender message" auto
+        / max-content minmax(0, auto);
+    gap: 4px;
+}
+
+.info {
+    padding-top: 0;
+}
+
+.sender {
+    grid-area: sender;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.avatar {
+    flex-shrink: 0;
+}
+
+.senderProfile {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.body {
+    grid-area: message;
+    min-width: 0;
+    overflow: hidden;
+    color: var(--cpd-color-text-secondary);
+    text-overflow: ellipsis;
+    overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.body > :where(*) {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.body > :where(*) > :where([dir="auto"]),
+.body :where([data-textual-body-annotation-wrapper]) > :where([dir="auto"]) {
+    display: inline;
+}
+
+.body :where(a) {
+    color: inherit;
+}
+
+.body :where(button, input, select, textarea, [role="button"]) {
+    pointer-events: none;
+}
+
+.body :where(p, blockquote, dl, ol, pre, table, ul) {
+    margin-block: 0 4px;
+}
+
+.body :where(pre) {
+    max-width: 100%;
+    overflow: hidden;
+    white-space: pre-wrap;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.body :where([data-textual-body-annotation-wrapper]) {
+    display: contents;
+}
+
+.body :where([data-textual-body-edited-marker]) {
+    display: none;
+}
+
+.body :where([data-event-tile-line-numbers]) {
+    display: none;
+}

@@ -45,6 +45,7 @@ exports[`<TextualBody /> renders formatted m.text correctly linkification is not
     >
       <span
         class="mx_EventTile_lineNumbers"
+        data-event-tile-line-numbers="true"
       >
         <span>
           1
@@ -279,6 +280,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills do not appear 
     >
       <span
         class="mx_EventTile_lineNumbers"
+        data-event-tile-line-numbers="true"
       >
         <span>
           1
@@ -390,6 +392,7 @@ exports[`<TextualBody /> renders formatted m.text correctly should syntax highli
     >
       <span
         class="mx_EventTile_lineNumbers"
+        data-event-tile-line-numbers="true"
       >
         <span>
           1

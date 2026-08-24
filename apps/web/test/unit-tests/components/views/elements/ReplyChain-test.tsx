@@ -51,12 +51,15 @@ describe("ReplyChain", () => {
             },
         });
         const setQuoteExpanded = jest.fn();
-        const { asFragment } = render(
+        const { asFragment, container, getByTestId } = render(
             <ReplyChain parentEv={parentEv} setQuoteExpanded={setQuoteExpanded} />,
             withClientContextRenderOptions(cli),
         );
 
         await waitFor(() => expect(setQuoteExpanded).toHaveBeenCalledWith(false));
+        expect(getByTestId("reply-tile")).toBeInTheDocument();
+        expect(container.querySelector(".mx_ReplyTile")).not.toBeInTheDocument();
+        expect(container.querySelector(".mx_ReplyTile_sender")).not.toBeInTheDocument();
         expect(asFragment()).toMatchSnapshot();
     });
 
@@ -126,7 +129,7 @@ describe("ReplyChain", () => {
         await waitFor(() => expect(setQuoteExpanded).toHaveBeenCalledWith(false));
         await waitFor(() => expect(container).toHaveTextContent(editedLongBody));
 
-        const replyTile = container.querySelector(".mx_ReplyTile");
+        const replyTile = container.querySelector("blockquote > div");
         expect(replyTile).not.toBeNull();
         const annotationWrapper = replyTile!.querySelector("[data-textual-body-annotation-wrapper]");
         expect(annotationWrapper).not.toBeNull();
