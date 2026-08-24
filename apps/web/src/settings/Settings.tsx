@@ -98,7 +98,6 @@ export enum LabGroup {
     Threads,
     VoiceAndVideo,
     Moderation,
-    Themes,
     Encryption,
     Experimental,
     Developer,
@@ -118,7 +117,6 @@ export const labGroupNames: Record<LabGroup, TranslationKey> = {
     [LabGroup.Threads]: _td("labs|group_threads"),
     [LabGroup.VoiceAndVideo]: _td("labs|group_voip"),
     [LabGroup.Moderation]: _td("labs|group_moderation"),
-    [LabGroup.Themes]: _td("labs|group_themes"),
     [LabGroup.Encryption]: _td("labs|group_encryption"),
     [LabGroup.Experimental]: _td("labs|group_experimental"),
     [LabGroup.Developer]: _td("labs|group_developer"),
@@ -216,7 +214,6 @@ export interface Settings {
     "feature_latex_maths": IFeature;
     "feature_wysiwyg_composer": IFeature;
     "feature_mjolnir": IFeature;
-    "feature_custom_themes": IFeature;
     "feature_exclude_insecure_devices": IFeature;
     "feature_bridge_state": IFeature;
     "feature_jump_to_date": IFeature;
@@ -249,6 +246,7 @@ export interface Settings {
     "MessageComposerInput.showPollsButton": IBaseSetting<boolean>;
     "MessageComposerInput.insertTrailingColon": IBaseSetting<boolean>;
     "Notifications.showbold": IBaseSetting<boolean>;
+    "Notifications.activityIsUnread": IBaseSetting<boolean>;
     "Notifications.tac_only_notifications": IBaseSetting<boolean>;
     "useCompactLayout": IBaseSetting<boolean>;
     "showRedactions": IBaseSetting<boolean>;
@@ -493,14 +491,6 @@ export const SETTINGS: Settings = {
         supportedLevelsAreOrdered: true,
         default: false,
     },
-    "feature_custom_themes": {
-        isFeature: true,
-        labsGroup: LabGroup.Themes,
-        displayName: _td("labs|custom_themes"),
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        default: false,
-    },
     "feature_exclude_insecure_devices": {
         isFeature: true,
         labsGroup: LabGroup.Encryption,
@@ -700,6 +690,12 @@ export const SETTINGS: Settings = {
         default: false,
         invertedSettingName: "feature_hidebold",
         controller: new AnalyticsController("WebSettingsNotificationsShowBoldToggle"),
+    },
+    "Notifications.activityIsUnread": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
+        displayName: _td("settings|activityIsUnread"),
+        default: false,
+        controller: new RequiresSettingsController(["Notifications.showbold"]),
     },
     "Notifications.tac_only_notifications": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
