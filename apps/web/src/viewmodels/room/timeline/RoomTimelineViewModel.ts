@@ -33,6 +33,13 @@ import shouldHideEvent from "../../../shouldHideEvent";
 import SettingsStore from "../../../settings/SettingsStore";
 import { clearRoomNotification } from "../../../utils/notifications";
 
+const DEBUG_TIMELINE = false;
+
+/** Emits a trace line only when {@link DEBUG_TIMELINE} is on. */
+const debug = (message: string): void => {
+    if (DEBUG_TIMELINE) logger.debug(message);
+};
+
 /** How long after the last scroll event to wait before sending a read receipt (ms). */
 const READ_RECEIPT_DEBOUNCE_MS = 500;
 
@@ -375,7 +382,7 @@ export class RoomTimelineViewModel
         if (toStartOfTimeline || removed || data.liveEvent !== true) return;
         if (this.isDisposed) return;
 
-        logger.debug(`[TimelineVM][onRoomTimeline] live event ${event.getId()} (${event.getType()})`);
+        debug(`[TimelineVM][onRoomTimeline] live event ${event.getId()} (${event.getType()})`);
         // Extend the window by one so the new message is inside it, then rebuild.
         this.timelineWindow.paginate(Direction.Forward, 1, false).then(() => {
             if (this.isDisposed) return;
@@ -555,11 +562,11 @@ export class RoomTimelineViewModel
         } else {
             this.frozenMarkerEventId = this.readMarkerEventId;
         }
-        logger.debug(`[TimelineVM] freezeReadMarkerForSession — frozen=${this.frozenMarkerEventId}`);
+        debug(`[TimelineVM] freezeReadMarkerForSession — frozen=${this.frozenMarkerEventId}`);
     }
 
     private async load(target: LoadTarget): Promise<void> {
-        logger.debug(
+        debug(
             `[TimelineVM] load() start — kind=${target.kind}${target.kind !== "live" ? ` eventId=${target.eventId}` : ""}`,
         );
         const sdkLoadTarget = target.kind !== "live" ? target.eventId : undefined;
@@ -572,13 +579,13 @@ export class RoomTimelineViewModel
             await this.fillInitialWindow(target.kind === "permalink" ? sdkLoadTarget : undefined);
             if (this.isDisposed) return;
             const windowEvents = this.timelineWindow.getEvents();
-            logger.debug(
+            debug(
                 `[TimelineVM] load() window — ${windowEvents.length} events in window, ` +
                     `canPaginate(Backward)=${this.timelineWindow.canPaginate(Direction.Backward)}, ` +
                     `canPaginate(Forward)=${this.timelineWindow.canPaginate(Direction.Forward)}`,
             );
             if (windowEvents.length > 0) {
-                logger.debug(
+                debug(
                     `[TimelineVM] load() window first=${windowEvents[0].getId()} (${windowEvents[0].getType()}), ` +
                         `last=${windowEvents[windowEvents.length - 1].getId()} (${windowEvents[windowEvents.length - 1].getType()})`,
                 );
@@ -587,9 +594,7 @@ export class RoomTimelineViewModel
             // BEFORE buildItems so it sees the frozen value.
             this.freezeReadMarkerForSession();
             const items = this.buildItems();
-            logger.debug(
-                `[TimelineVM] load() done — ${windowEvents.length} events → ${items.length} items after filtering`,
-            );
+            debug(`[TimelineVM] load() done — ${windowEvents.length} events → ${items.length} items after filtering`);
 
             let pendingAnchor: NavigationAnchor | null = null;
 
@@ -601,7 +606,7 @@ export class RoomTimelineViewModel
                 if (items.some((i) => i.key === target.eventId)) {
                     pendingAnchor = { targetKey: target.eventId, align: "center" };
                 } else {
-                    logger.debug(
+                    debug(
                         `[TimelineVM] load() — permalink target ${target.eventId} not in items, falling back to live end`,
                     );
                 }
@@ -611,7 +616,7 @@ export class RoomTimelineViewModel
                 } else {
                     // Saved event was filtered/redacted and can't be displayed.
                     // Clear the stale position so next visit doesn't loop back here.
-                    logger.debug(
+                    debug(
                         `[TimelineVM] load() — restore target ${target.eventId} not in items, clearing saved position and falling back to live end`,
                     );
                     RoomTimelineViewModel.saveScrollTarget(this.opts.room.roomId, null);
@@ -622,7 +627,7 @@ export class RoomTimelineViewModel
             if (!pendingAnchor && items.length > 0 && !this.timelineWindow.canPaginate(Direction.Forward)) {
                 // Live-end: anchor to the last item so the view lands at the bottom.
                 pendingAnchor = { targetKey: items[items.length - 1].key, align: "end" };
-                logger.debug(`[TimelineVM] load() — live-end anchor key=${pendingAnchor.targetKey}`);
+                debug(`[TimelineVM] load() — live-end anchor key=${pendingAnchor.targetKey}`);
             }
 
             this.baseItems = items;
@@ -639,9 +644,7 @@ export class RoomTimelineViewModel
             // content exists ahead, the view won't fire onEndReached on an empty list.
             // Proactively forward-paginate to find visible events.
             if (items.length === 0 && this.timelineWindow.canPaginate(Direction.Forward)) {
-                logger.debug(
-                    `[TimelineVM] load() — items empty with more content ahead, auto-triggering forward paginate`,
-                );
+                debug(`[TimelineVM] load() — items empty with more content ahead, auto-triggering forward paginate`);
                 this.triggerForwardPaginate();
             }
         } catch (e) {
@@ -688,7 +691,7 @@ export class RoomTimelineViewModel
                 const before = this.timelineWindow.getEvents().length;
                 await this.timelineWindow.paginate(direction, PAGINATE_SIZE);
                 if (this.isDisposed) return;
-                logger.debug(
+                debug(
                     `[TimelineVM] fillInitialWindow — paginate(${direction === Direction.Backward ? "backward" : "forward"}) ` +
                         `window: ${before}→${this.timelineWindow.getEvents().length}, ` +
                         `renderable(side)=${this.renderableEventCount(centreOn, direction)}`,
@@ -727,12 +730,12 @@ export class RoomTimelineViewModel
     // ── TimelineViewActions ──────────────────────────────────────────
 
     public onStartReached = (): void => {
-        logger.debug(`[TimelineVM] onStartReached — items=${this.snapshot.current.items.length}`);
+        debug(`[TimelineVM] onStartReached — items=${this.snapshot.current.items.length}`);
         this.triggerBackwardPaginate();
     };
 
     public onEndReached = (): void => {
-        logger.debug("[TimelineVM] onEndReached");
+        debug("[TimelineVM] onEndReached");
         this.triggerForwardPaginate();
     };
 
@@ -744,7 +747,7 @@ export class RoomTimelineViewModel
      */
     public onAnchorReached = (): void => {
         if (this.snapshot.current.pendingAnchor === null) return;
-        logger.debug(`[TimelineVM] onAnchorReached — placement settled, clearing pendingAnchor`);
+        debug(`[TimelineVM] onAnchorReached — placement settled, clearing pendingAnchor`);
         this.mergeSnapshot({ pendingAnchor: null }, "anchor-settled");
     };
 
@@ -839,7 +842,7 @@ export class RoomTimelineViewModel
             ? ReceiptType.Read
             : ReceiptType.ReadPrivate;
 
-        logger.debug(`[TimelineVM] sendAutoReadReceipt — sending receipt for ${eventId} (${receiptType})`);
+        debug(`[TimelineVM] sendAutoReadReceipt — sending receipt for ${eventId} (${receiptType})`);
         this.opts.client.sendReadReceipt(event, receiptType).catch((err) => {
             this.lastSentReceiptEventId = null; // allow retry
             logger.warn(`[TimelineVM] sendAutoReadReceipt — sendReadReceipt failed`, err);
@@ -851,7 +854,7 @@ export class RoomTimelineViewModel
     public onJumpToReadMarker = (scrollNow: ImmediateScroll): void => {
         const items = this.snapshot.current.items;
         const rmIdx = items.findIndex((item) => item.kind === "read-marker");
-        logger.debug(
+        debug(
             `[TimelineVM] onJumpToReadMarker — frozenMarkerEventId=${this.frozenMarkerEventId}, ` +
                 `rmIdx=${rmIdx}, items=${items.length}, ` +
                 `visibleStartArrayIndex=${this.visibleStartArrayIndex}, ` +
@@ -861,16 +864,14 @@ export class RoomTimelineViewModel
         if (rmIdx !== -1) {
             // Marker is in the loaded window — scroll to it imperatively.
             const readMarkerKey = items[rmIdx].key;
-            logger.debug(
+            debug(
                 `[TimelineVM] onJumpToReadMarker — marker in window at index ${rmIdx}, scrolling now key=${readMarkerKey}`,
             );
             scrollNow({ targetKey: readMarkerKey, align: "center" });
         } else if (this.frozenMarkerEventId && this.timelineWindow.canPaginate(Direction.Backward)) {
             // Frozen marker is not in the current window — reload at it.
             // pendingAnchor gets set inside load() and drives the post-load scroll.
-            logger.debug(
-                `[TimelineVM] onJumpToReadMarker — marker not in window, reloading at ${this.frozenMarkerEventId}`,
-            );
+            debug(`[TimelineVM] onJumpToReadMarker — marker not in window, reloading at ${this.frozenMarkerEventId}`);
             this.load({ kind: "permalink", eventId: this.frozenMarkerEventId });
         } else {
             logger.warn(
@@ -897,7 +898,7 @@ export class RoomTimelineViewModel
     };
 
     public onJumpToLive = (scrollNow: ImmediateScroll): void => {
-        logger.debug(`[TimelineVM] onJumpToLive — atLiveEnd=${this.snapshot.current.atLiveEnd}`);
+        debug(`[TimelineVM] onJumpToLive — atLiveEnd=${this.snapshot.current.atLiveEnd}`);
         this.unreadMessageCount = 0;
         if (!this.snapshot.current.atLiveEnd) {
             // The newest messages are not loaded, so fetch them first. load() sets
@@ -908,7 +909,7 @@ export class RoomTimelineViewModel
             const items = this.snapshot.current.items;
             if (items.length > 0) {
                 const targetKey = items[items.length - 1].key;
-                logger.debug(`[TimelineVM] onJumpToLive — scrolling now to targetKey=${targetKey}`);
+                debug(`[TimelineVM] onJumpToLive — scrolling now to targetKey=${targetKey}`);
                 this.mergeSnapshot({ numUnreadMessages: 0, hasHighlights: false }, "jump-to-live");
                 scrollNow({ targetKey, align: "end" });
             } else {
@@ -977,23 +978,23 @@ export class RoomTimelineViewModel
             this.decryptDebounceTimer = null;
         }
         if (!this.lastBottomEventId) {
-            logger.debug(`[TimelineVM] dispose() — no visible range recorded, preserving saved position`);
+            debug(`[TimelineVM] dispose() — no visible range recorded, preserving saved position`);
             super.dispose();
             return;
         }
 
         if (this.isAtBottom) {
-            logger.debug(`[TimelineVM] dispose() — clearing saved scroll position (at visual bottom)`);
+            debug(`[TimelineVM] dispose() — clearing saved scroll position (at visual bottom)`);
             RoomTimelineViewModel.saveScrollTarget(this.opts.room.roomId, null);
         } else {
-            logger.debug(`[TimelineVM] dispose() — saving scroll position eventId=${this.lastBottomEventId}`);
+            debug(`[TimelineVM] dispose() — saving scroll position eventId=${this.lastBottomEventId}`);
             RoomTimelineViewModel.saveScrollTarget(this.opts.room.roomId, this.lastBottomEventId);
         }
 
         // Advance the FullyRead marker to the last bottommost event we saw.
         // Skip if it already matches what we last advanced to (avoids redundant network calls).
         if (this.lastBottomEventId !== this.readMarkerEventId) {
-            logger.debug(`[TimelineVM] dispose() — advancing FullyRead marker to ${this.lastBottomEventId}`);
+            debug(`[TimelineVM] dispose() — advancing FullyRead marker to ${this.lastBottomEventId}`);
             this.opts.client.setRoomReadMarkers(this.opts.room.roomId, this.lastBottomEventId).catch((err) => {
                 logger.warn(`[TimelineVM] dispose() — setRoomReadMarkers failed`, err);
             });
@@ -1011,7 +1012,7 @@ export class RoomTimelineViewModel
      */
     private triggerBackwardPaginate(): void {
         if (this.backwardPaginateChain) {
-            logger.debug(`[TimelineVM] paginate(backward) coalesced — chain in flight`);
+            debug(`[TimelineVM] paginate(backward) coalesced — chain in flight`);
             return;
         }
 
@@ -1020,12 +1021,12 @@ export class RoomTimelineViewModel
         // ask for more history it does not need — which also disturbs the placement. Once the
         // anchor settles the view clears pendingAnchor, and the reader's own scrolling asks again.
         if (this.snapshot.current.pendingAnchor !== null) {
-            logger.debug(`[TimelineVM] paginate(backward) skipped — anchor placement pending`);
+            debug(`[TimelineVM] paginate(backward) skipped — anchor placement pending`);
             return;
         }
 
         if (!this.timelineWindow.canPaginate(Direction.Backward)) {
-            logger.debug(`[TimelineVM] paginate(backward) skipped — canPaginate=false`);
+            debug(`[TimelineVM] paginate(backward) skipped — canPaginate=false`);
             return;
         }
 
@@ -1040,26 +1041,26 @@ export class RoomTimelineViewModel
      */
     private triggerForwardPaginate(): void {
         if (this.forwardPaginateChain) {
-            logger.debug(`[TimelineVM] paginate(forward) coalesced — chain in flight`);
+            debug(`[TimelineVM] paginate(forward) coalesced — chain in flight`);
             return;
         }
 
         // Don't paginate while still placing the initial anchor — see
         // triggerBackwardPaginate for why.
         if (this.snapshot.current.pendingAnchor !== null) {
-            logger.debug(`[TimelineVM] paginate(forward) skipped — anchor placement pending`);
+            debug(`[TimelineVM] paginate(forward) skipped — anchor placement pending`);
             return;
         }
 
-        logger.debug(
+        debug(
             `[TimelineVM] paginate(forward) check — canPaginate=${this.timelineWindow.canPaginate(Direction.Forward)}, ` +
                 `atLiveEnd=${this.snapshot.current.atLiveEnd}, items=${this.snapshot.current.items.length}`,
         );
 
         if (!this.timelineWindow.canPaginate(Direction.Forward)) {
-            logger.debug(`[TimelineVM] paginate(forward) skipped — canPaginate=false`);
+            debug(`[TimelineVM] paginate(forward) skipped — canPaginate=false`);
             if (!this.snapshot.current.atLiveEnd) {
-                logger.debug(`[TimelineVM] paginate(forward) — setting atLiveEnd=true`);
+                debug(`[TimelineVM] paginate(forward) — setting atLiveEnd=true`);
                 this.mergeSnapshot({ atLiveEnd: true }, "paginate(forward)-at-live-end");
             }
             return;
@@ -1161,7 +1162,7 @@ export class RoomTimelineViewModel
         }
 
         const newlyShown = this.commitItems(this.buildItems());
-        logger.debug(
+        debug(
             `[TimelineVM] paginate(${dirLabel}) pre-trim — unpaginated=${toTrim} ` +
                 `(window→${this.timelineWindow.getEvents().length}), newlyShown=${newlyShown}`,
         );
@@ -1219,7 +1220,7 @@ export class RoomTimelineViewModel
 
             while (emptyBatches <= MAX_EMPTY_RETRIES) {
                 if (!this.timelineWindow.canPaginate(direction)) {
-                    logger.debug(`[TimelineVM] paginate(${dirLabel}) chain end — canPaginate=false`);
+                    debug(`[TimelineVM] paginate(${dirLabel}) chain end — canPaginate=false`);
                     break;
                 }
 
@@ -1250,7 +1251,7 @@ export class RoomTimelineViewModel
                 // trimming at its limit the array length alone says nothing, so this is the only
                 // reliable signal that the batch made progress.
                 const newlyShown = this.commitItems(rebuilt);
-                logger.debug(`[TimelineVM] paginate(${dirLabel}) batch — newlyShown=${newlyShown}, hasMore=${hasMore}`);
+                debug(`[TimelineVM] paginate(${dirLabel}) batch — newlyShown=${newlyShown}, hasMore=${hasMore}`);
 
                 if (isBackward) {
                     this.republish("paginate(backward)-batch", {
@@ -1392,7 +1393,7 @@ export class RoomTimelineViewModel
             eventItems[i].lastInSection = i === eventItems.length - 1 || !eventItems[i + 1].continuation;
         }
 
-        logger.debug(
+        debug(
             `[TimelineVM][buildItems] emitted ${items.length} items from ${events.length} window events, ` +
                 `filtered=${filteredCount}`,
         );
@@ -1503,7 +1504,7 @@ export class RoomTimelineViewModel
             changes.push(formatSnapshotChange(k, oldV, v));
         }
         if (changes.length === 0) return;
-        logger.debug(`[VM-merge] reason=${reason} changes=[${changes.join(", ")}]`);
+        debug(`[VM-merge] reason=${reason} changes=[${changes.join(", ")}]`);
         this.snapshot.merge(partial);
     }
 }
