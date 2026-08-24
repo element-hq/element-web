@@ -7,6 +7,7 @@
 import { ComponentType } from 'react';
 import { IWidget } from 'matrix-widget-api';
 import { JSX } from 'react';
+import { JSX as JSX_2 } from 'react/jsx-runtime';
 import { ModuleApi } from '@matrix-org/react-sdk-module-api';
 import { ReactNode } from 'react';
 import { Root } from 'react-dom/client';
@@ -58,6 +59,8 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
     readonly customisations: CustomisationsApi;
     // @alpha
     readonly extras: ExtrasApi;
+    // @alpha
+    readonly fileViewer: FileViewerApi;
     readonly i18n: I18nApi;
     readonly navigation: NavigationApi;
     readonly rootNode: HTMLElement;
@@ -289,6 +292,32 @@ export interface ExtrasApi {
     setSpacePanelItem(spaceKey: string, props: SpacePanelItemProps): void;
 }
 
+// @public (undocumented)
+export interface FileViewerApi {
+    // (undocumented)
+    registerFileViewer(match: FileViewerMatcher, renderer: FileViewerRenderFunction, opts: FileViewerOptions): void;
+}
+
+// @public
+export type FileViewerMatcher = (media: MediaHandle) => boolean;
+
+// @public (undocumented)
+export interface FileViewerOptions {
+    id: string;
+    label: string;
+}
+
+// @public (undocumented)
+export interface FileViewerProps {
+    // (undocumented)
+    media: MediaHandle;
+    // (undocumented)
+    onclose: () => void;
+}
+
+// @public (undocumented)
+export type FileViewerRenderFunction = (props: FileViewerProps) => JSX_2.Element;
+
 // @public
 export interface I18nApi {
     humanizeTime(this: void, timeMillis: number): string;
@@ -399,6 +428,9 @@ export interface MediaCustomisations<Content, Client, PreparedMedia> {
 }
 
 // @public
+export type MediaHandle = RemoteMedia | UploadedMedia;
+
+// @public
 export interface Module {
     // (undocumented)
     load(): Promise<void>;
@@ -462,6 +494,16 @@ export interface Profile {
 // @public
 export interface ProfileApiExtension {
     readonly profile: Watchable<Profile>;
+}
+
+// @public
+export interface RemoteMedia {
+    // (undocumented)
+    bundle?: Record<string, any>;
+    // (undocumented)
+    type: "remote";
+    // (undocumented)
+    url: string;
 }
 
 // @public
@@ -589,6 +631,18 @@ export interface UnstableBundledUrlPreviewSingle {
     "og:url"?: string;
     // (undocumented)
     "matched_url": string;
+}
+
+// @public
+export interface UploadedMedia {
+    // (undocumented)
+    blob?(): Promise<Blob>;
+    // (undocumented)
+    mimetype: string;
+    // (undocumented)
+    name: string;
+    // (undocumented)
+    type: "uploaded";
 }
 
 // @alpha @deprecated (undocumented)

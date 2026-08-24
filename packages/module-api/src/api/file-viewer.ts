@@ -1,5 +1,11 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE in the repository root for full details.
+*/
+
 import { JSX } from "react/jsx-runtime";
-import { MatrixEvent } from "../models/event";
 
 /**
  * the media content given to the component for rendering
@@ -9,7 +15,7 @@ export type MediaHandle = RemoteMedia | UploadedMedia;
 /**
  * predicate for whether the file viewer supports that media
  */
-export type FileViewerMatcher = (event: MatrixEvent) => boolean;
+export type FileViewerMatcher = (media: MediaHandle) => boolean;
 
 /**
  * a file that is given only by a URL, e.g. a PDF file uploaded to a 3rd party site
@@ -17,7 +23,7 @@ export type FileViewerMatcher = (event: MatrixEvent) => boolean;
 export interface RemoteMedia {
     type: "remote";
     url: string;
-    bundle: Record<string, any>;
+    bundle?: Record<string, any>;
 }
 
 /**
@@ -31,7 +37,7 @@ export interface UploadedMedia {
 }
 
 export interface FileViewerProps {
-    media: MediaHandle,
+    media: MediaHandle;
     onclose: () => void;
 }
 
@@ -49,9 +55,5 @@ export interface FileViewerOptions {
 export type FileViewerRenderFunction = (props: FileViewerProps) => JSX.Element;
 
 export interface FileViewerApi {
-    registerFileViewer(
-        match: FileViewerMatcher,
-        renderer: FileViewerRenderFunction,
-        opts: FileViewerOptions,
-    ): void;
+    registerFileViewer(match: FileViewerMatcher, renderer: FileViewerRenderFunction, opts: FileViewerOptions): void;
 }
