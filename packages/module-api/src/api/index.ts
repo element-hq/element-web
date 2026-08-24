@@ -46,7 +46,7 @@ const moduleSignature: Record<keyof Module, Type> = {
  */
 export interface ModuleFactory {
     readonly moduleApiVersion: string;
-    new(api: Api): Module;
+    new (api: Api): Module;
     readonly prototype: Module;
 }
 
@@ -87,11 +87,11 @@ export function isModule(module: unknown): module is ModuleExport {
  */
 export interface Api
     extends
-    LegacyModuleApiExtension,
-    LegacyCustomisationsApiExtension,
-    DialogApiExtension,
-    AccountAuthApiExtension,
-    ProfileApiExtension {
+        LegacyModuleApiExtension,
+        LegacyCustomisationsApiExtension,
+        DialogApiExtension,
+        AccountAuthApiExtension,
+        ProfileApiExtension {
     /**
      * The API to read config.json values.
      * Keys should be scoped to the module in reverse domain name notation.
