@@ -337,7 +337,7 @@ export class RoomTimelineViewModel
             loadTarget = savedEventId ? { kind: "restore", eventId: savedEventId } : { kind: "live" };
         }
 
-        this.load(loadTarget);
+        void this.load(loadTarget);
 
         // Listen for new events so live messages appear.
         this.disposables.trackListener(
@@ -384,23 +384,28 @@ export class RoomTimelineViewModel
 
         debug(`[TimelineVM][onRoomTimeline] live event ${event.getId()} (${event.getType()})`);
         // Extend the window by one so the new message is inside it, then rebuild.
-        this.timelineWindow.paginate(Direction.Forward, 1, false).then(() => {
-            if (this.isDisposed) return;
-            const items = this.buildItems();
+        void this.timelineWindow
+            .paginate(Direction.Forward, 1, false)
+            .then(() => {
+                if (this.isDisposed) return;
+                const items = this.buildItems();
 
-            const atLiveEnd = !this.timelineWindow.canPaginate(Direction.Forward);
-            // Accumulate unread count only for messages from other users.
-            if (!this.isAtBottom && event.getSender() !== this.opts.client.getSafeUserId()) {
-                this.unreadMessageCount++;
-            }
-            this.baseItems = items;
-            this.republish("live-event", {
-                atLiveEnd,
-                numUnreadMessages: this.isAtBottom ? 0 : this.unreadMessageCount,
-                hasHighlights: this.opts.room.getUnreadNotificationCount(NotificationCountType.Highlight) > 0,
-                canJumpToReadMarker: this.computeCanJumpToReadMarker(items),
+                const atLiveEnd = !this.timelineWindow.canPaginate(Direction.Forward);
+                // Accumulate unread count only for messages from other users.
+                if (!this.isAtBottom && event.getSender() !== this.opts.client.getSafeUserId()) {
+                    this.unreadMessageCount++;
+                }
+                this.baseItems = items;
+                this.republish("live-event", {
+                    atLiveEnd,
+                    numUnreadMessages: this.isAtBottom ? 0 : this.unreadMessageCount,
+                    hasHighlights: this.opts.room.getUnreadNotificationCount(NotificationCountType.Highlight) > 0,
+                    canJumpToReadMarker: this.computeCanJumpToReadMarker(items),
+                });
+            })
+            .catch((err) => {
+                logger.warn(`[TimelineVM][onRoomTimeline] forward paginate failed`, err);
             });
-        });
     };
 
     /**
@@ -872,7 +877,7 @@ export class RoomTimelineViewModel
             // Frozen marker is not in the current window — reload at it.
             // pendingAnchor gets set inside load() and drives the post-load scroll.
             debug(`[TimelineVM] onJumpToReadMarker — marker not in window, reloading at ${this.frozenMarkerEventId}`);
-            this.load({ kind: "permalink", eventId: this.frozenMarkerEventId });
+            void this.load({ kind: "permalink", eventId: this.frozenMarkerEventId });
         } else {
             logger.warn(
                 `[TimelineVM] onJumpToReadMarker — no action taken: marker not in window (rmIdx=${rmIdx}) ` +
@@ -903,7 +908,7 @@ export class RoomTimelineViewModel
         if (!this.snapshot.current.atLiveEnd) {
             // The newest messages are not loaded, so fetch them first. load() sets
             // pendingAnchor, which is what makes the view scroll there once they arrive.
-            this.load({ kind: "live" });
+            void this.load({ kind: "live" });
         } else {
             // Already have the latest events — scroll to the last item now.
             const items = this.snapshot.current.items;
