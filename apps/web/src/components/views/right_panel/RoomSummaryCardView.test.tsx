@@ -6,29 +6,31 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import React from "react";
-import { render, fireEvent, screen } from "jest-matrix-react";
+import { describe, it, expect, beforeEach, afterEach, vi, type MockedObject } from "vitest";
+import { render, fireEvent, screen } from "test-utils-rtl";
 import { Room, type MatrixClient, JoinRule, MatrixEvent, HistoryVisibility } from "matrix-js-sdk/src/matrix";
-import { mocked, type MockedObject } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 import { LinkedTextContext } from "@element-hq/web-shared-components";
+import { flushPromises, stubClient } from "test-utils";
 
-import RoomSummaryCardView from "../../../../../src/components/views/right_panel/RoomSummaryCardView";
-import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import { flushPromises, stubClient } from "../../../../test-utils";
-import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
-import { _t } from "../../../../../src/languageHandler";
+import RoomSummaryCardView from "./RoomSummaryCardView";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import { _t } from "../../../languageHandler";
 import {
     type RoomSummaryCardState,
     useRoomSummaryCardViewModel,
-} from "../../../../../src/components/viewmodels/right_panel/RoomSummaryCardViewModel";
-import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import { SDKContext } from "../../../../../src/contexts/SDKContext.ts";
-import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
+} from "../../viewmodels/right_panel/RoomSummaryCardViewModel";
+import DMRoomMap from "../../../utils/DMRoomMap";
+import { SDKContext } from "../../../contexts/SDKContext";
+import { SDKContextClass } from "../../../contexts/SDKContextClass";
 
 // Mock the viewmodel hooks
-jest.mock("../../../../../src/components/viewmodels/right_panel/RoomSummaryCardViewModel", () => ({
-    useRoomSummaryCardViewModel: jest.fn(),
+vi.mock("../../viewmodels/right_panel/RoomSummaryCardViewModel", () => ({
+    useRoomSummaryCardViewModel: vi.fn(),
 }));
 
 describe("<RoomSummaryCard />", () => {
@@ -41,7 +43,7 @@ describe("<RoomSummaryCard />", () => {
     const getComponent = (props = {}) => {
         const defaultProps = {
             room,
-            onClose: jest.fn(),
+            onClose: vi.fn(),
             permalinkCreator: new RoomPermalinkCreator(room),
         };
 
@@ -70,33 +72,33 @@ describe("<RoomSummaryCard />", () => {
         canInviteToState: true,
         pinCount: 0,
         searchInputRef: { current: null },
-        onUpdateSearchInput: jest.fn(),
-        onRoomMembersClick: jest.fn(),
-        onRoomThreadsClick: jest.fn(),
-        onRoomFilesClick: jest.fn(),
-        onRoomExtensionsClick: jest.fn(),
-        onRoomPinsClick: jest.fn(),
-        onRoomSettingsClick: jest.fn(),
-        onLeaveRoomClick: jest.fn(),
-        onShareRoomClick: jest.fn(),
-        onRoomExportClick: jest.fn(),
-        onRoomPollHistoryClick: jest.fn(),
-        onReportRoomClick: jest.fn(),
-        onFavoriteToggleClick: jest.fn(),
-        onInviteToRoomClick: jest.fn(),
+        onUpdateSearchInput: vi.fn(),
+        onRoomMembersClick: vi.fn(),
+        onRoomThreadsClick: vi.fn(),
+        onRoomFilesClick: vi.fn(),
+        onRoomExtensionsClick: vi.fn(),
+        onRoomPinsClick: vi.fn(),
+        onRoomSettingsClick: vi.fn(),
+        onLeaveRoomClick: vi.fn(),
+        onShareRoomClick: vi.fn(),
+        onRoomExportClick: vi.fn(),
+        onRoomPollHistoryClick: vi.fn(),
+        onReportRoomClick: vi.fn(),
+        onFavoriteToggleClick: vi.fn(),
+        onInviteToRoomClick: vi.fn(),
     };
 
     beforeEach(() => {
-        mockClient = mocked(stubClient());
+        mockClient = vi.mocked(stubClient());
         room = new Room(roomId, mockClient, userId);
-        mocked(useRoomSummaryCardViewModel).mockReturnValue(vmDefaultValues);
+        vi.mocked(useRoomSummaryCardViewModel).mockReturnValue(vmDefaultValues);
         DMRoomMap.makeShared(mockClient);
 
         mockClient.getRoom.mockReturnValue(room);
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     it("renders the room summary", () => {
@@ -139,7 +141,7 @@ describe("<RoomSummaryCard />", () => {
 
     describe("search", () => {
         it("has the search field", async () => {
-            const onSearchChange = jest.fn();
+            const onSearchChange = vi.fn();
             const { getByPlaceholderText } = getComponent({
                 onSearchChange,
             });
@@ -147,7 +149,7 @@ describe("<RoomSummaryCard />", () => {
         });
 
         it("should focus the search field if focusRoomSearch=true", () => {
-            const onSearchChange = jest.fn();
+            const onSearchChange = vi.fn();
             const { getByPlaceholderText } = getComponent({
                 onSearchChange,
                 focusRoomSearch: true,
@@ -156,8 +158,8 @@ describe("<RoomSummaryCard />", () => {
         });
 
         it("should cancel search on escape", () => {
-            const onSearchChange = jest.fn();
-            const onSearchCancel = jest.fn();
+            const onSearchChange = vi.fn();
+            const onSearchCancel = vi.fn();
 
             const { getByPlaceholderText } = getComponent({
                 onSearchChange,
@@ -172,7 +174,7 @@ describe("<RoomSummaryCard />", () => {
         it("should update the search field value correctly", async () => {
             const user = userEvent.setup();
 
-            const onSearchChange = jest.fn();
+            const onSearchChange = vi.fn();
             const { getByPlaceholderText } = getComponent({
                 onSearchChange,
             });
@@ -258,7 +260,7 @@ describe("<RoomSummaryCard />", () => {
     });
 
     it("does not render irrelevant options if video room", () => {
-        mocked(useRoomSummaryCardViewModel).mockReturnValue({
+        vi.mocked(useRoomSummaryCardViewModel).mockReturnValue({
             ...vmDefaultValues,
             isVideoRoom: true,
         });
@@ -297,7 +299,7 @@ describe("<RoomSummaryCard />", () => {
 
     describe("public room label", () => {
         it("does not show public room label for a DM", async () => {
-            mocked(useRoomSummaryCardViewModel).mockReturnValue({
+            vi.mocked(useRoomSummaryCardViewModel).mockReturnValue({
                 ...vmDefaultValues,
                 isDirectMessage: true,
             });
@@ -310,7 +312,7 @@ describe("<RoomSummaryCard />", () => {
         });
 
         it("does not show public room label for non public room", async () => {
-            mocked(useRoomSummaryCardViewModel).mockReturnValue({
+            vi.mocked(useRoomSummaryCardViewModel).mockReturnValue({
                 ...vmDefaultValues,
                 isDirectMessage: false,
                 roomJoinRule: JoinRule.Invite,
@@ -333,7 +335,7 @@ describe("<RoomSummaryCard />", () => {
 
     describe("user status", () => {
         it("shows the other user's status when set", () => {
-            mocked(useRoomSummaryCardViewModel).mockReturnValue({
+            vi.mocked(useRoomSummaryCardViewModel).mockReturnValue({
                 ...vmDefaultValues,
                 isDirectMessage: true,
                 userStatus: { emoji: "💬", text: "In a meeting" },
@@ -346,7 +348,7 @@ describe("<RoomSummaryCard />", () => {
         });
 
         it("does not show a status when there is none", () => {
-            mocked(useRoomSummaryCardViewModel).mockReturnValue({
+            vi.mocked(useRoomSummaryCardViewModel).mockReturnValue({
                 ...vmDefaultValues,
                 isDirectMessage: true,
                 userStatus: undefined,

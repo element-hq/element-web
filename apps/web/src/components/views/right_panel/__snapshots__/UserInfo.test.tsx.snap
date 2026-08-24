@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
+exports[`<UserInfo /> > with crypto enabled > renders <BasicUserInfo /> 1`] = `
 <div>
   <div
     class="mx_BaseCard mx_UserInfo"
@@ -310,7 +310,7 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
 </div>
 `;
 
-exports[`<UserInfo /> with crypto enabled should render a deactivate button for users of the same server if we are a server admin 1`] = `
+exports[`<UserInfo /> > with crypto enabled > should render a deactivate button for users of the same server if we are a server admin 1`] = `
 <div>
   <div
     class="mx_BaseCard mx_UserInfo"

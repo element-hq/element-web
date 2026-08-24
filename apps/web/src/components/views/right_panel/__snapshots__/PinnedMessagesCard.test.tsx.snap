@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`<PinnedMessagesCard /> should show the empty state when there are no pins 1`] = `
+exports[`<PinnedMessagesCard /> > should show the empty state when there are no pins 1`] = `
 <DocumentFragment>
   <div
     class="mx_BaseCard mx_PinnedMessagesCard"
@@ -83,7 +83,7 @@ exports[`<PinnedMessagesCard /> should show the empty state when there are no pi
 </DocumentFragment>
 `;
 
-exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
+exports[`<PinnedMessagesCard /> > should show two pinned messages 1`] = `
 <DocumentFragment>
   <div
     class="mx_BaseCard mx_PinnedMessagesCard"
@@ -316,7 +316,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
+exports[`<PinnedMessagesCard /> > unpin all > should not allow to unpinall 1`] = `
 <DocumentFragment>
   <div
     class="mx_BaseCard mx_PinnedMessagesCard"

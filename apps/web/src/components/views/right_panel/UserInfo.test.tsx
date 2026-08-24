@@ -6,10 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import React from "react";
-import { render, screen, act, waitForElementToBeRemoved } from "jest-matrix-react";
+import { describe, it, expect, beforeEach, afterEach, vi, type Mocked } from "vitest";
+import { render, screen, act, waitForElementToBeRemoved } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
-import { type Mocked, mocked } from "jest-mock";
 import {
     type Room,
     User,
@@ -27,47 +29,52 @@ import {
     VerificationRequestEvent,
     type CryptoApi,
 } from "matrix-js-sdk/src/crypto-api";
+import { clearAllModals, clientAndSDKContextRenderOptions, flushPromises, TestSDKContext } from "test-utils";
 
-import UserInfo, { disambiguateDevices } from "../../../../../src/components/views/right_panel/UserInfo";
-import { getPowerLevels } from "../../../../../src/components/viewmodels/right_panel/user_info/UserInfoBasicViewModel";
-import { RightPanelPhases } from "../../../../../src/stores/right-panel/RightPanelStorePhases";
-import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import Modal from "../../../../../src/Modal";
-import { clearAllModals, clientAndSDKContextRenderOptions, flushPromises } from "../../../../test-utils";
-import ErrorDialog from "../../../../../src/components/views/dialogs/ErrorDialog";
-import { shouldShowComponent } from "../../../../../src/customisations/helpers/UIComponents";
-import { UIComponent } from "../../../../../src/settings/UIFeature";
-import { TestSDKContext } from "../../../TestSDKContext.ts";
+import UserInfo, { disambiguateDevices } from "./UserInfo";
+import { getPowerLevels } from "../../viewmodels/right_panel/user_info/UserInfoBasicViewModel";
+import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import Modal from "../../../Modal";
+import ErrorDialog from "../dialogs/ErrorDialog";
+import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../../settings/UIFeature";
 
-jest.mock("../../../../../src/utils/direct-messages", () => ({
-    ...jest.requireActual("../../../../../src/utils/direct-messages"),
-    startDmOnFirstMessage: jest.fn(),
+vi.mock("../../../utils/direct-messages", async () => ({
+    ...(await vi.importActual("../../../utils/direct-messages")),
+    startDmOnFirstMessage: vi.fn(),
 }));
 
-jest.mock("../../../../../src/dispatcher/dispatcher");
+vi.mock("../../../dispatcher/dispatcher");
 
-jest.mock("../../../../../src/customisations/UserIdentifier", () => {
+vi.mock("../../../customisations/UserIdentifier", () => {
     return {
-        getDisplayUserIdentifier: jest.fn().mockReturnValue("customUserIdentifier"),
+        default: {
+            getDisplayUserIdentifier: vi.fn().mockReturnValue("customUserIdentifier"),
+        },
     };
 });
 
-jest.mock("../../../../../src/utils/DMRoomMap", () => {
+vi.mock("../../../utils/DMRoomMap", () => {
     const mock = {
-        getUserIdForRoomId: jest.fn(),
-        getDMRoomsForUserId: jest.fn(),
+        getUserIdForRoomId: vi.fn(),
+        getDMRoomsForUserId: vi.fn(),
     };
 
     return {
-        shared: jest.fn().mockReturnValue(mock),
-        sharedInstance: mock,
+        default: {
+            shared: vi.fn().mockReturnValue(mock),
+            sharedInstance: mock,
+        },
     };
 });
 
-jest.mock("../../../../../src/customisations/helpers/UIComponents", () => {
-    const original = jest.requireActual("../../../../../src/customisations/helpers/UIComponents");
+vi.mock("../../../customisations/helpers/UIComponents", async () => {
+    const original = await vi.importActual<typeof import("../../../customisations/helpers/UIComponents")>(
+        "../../../customisations/helpers/UIComponents",
+    );
     return {
-        shouldShowComponent: jest.fn().mockImplementation(original.shouldShowComponent),
+        shouldShowComponent: vi.fn().mockImplementation(original.shouldShowComponent),
     };
 });
 
@@ -82,61 +89,61 @@ let sdkContext: TestSDKContext;
 const origDate = global.Date.prototype.toLocaleString;
 
 beforeEach(() => {
-    mockRoom = mocked({
+    mockRoom = vi.mocked({
         roomId: defaultRoomId,
-        getType: jest.fn().mockReturnValue(undefined),
-        isSpaceRoom: jest.fn().mockReturnValue(false),
-        getMember: jest.fn().mockReturnValue(undefined),
-        getMxcAvatarUrl: jest.fn().mockReturnValue("mock-avatar-url"),
+        getType: vi.fn().mockReturnValue(undefined),
+        isSpaceRoom: vi.fn().mockReturnValue(false),
+        getMember: vi.fn().mockReturnValue(undefined),
+        getMxcAvatarUrl: vi.fn().mockReturnValue("mock-avatar-url"),
         name: "test room",
-        on: jest.fn(),
-        off: jest.fn(),
+        on: vi.fn(),
+        off: vi.fn(),
         currentState: {
-            getStateEvents: jest.fn(),
-            on: jest.fn(),
-            off: jest.fn(),
+            getStateEvents: vi.fn(),
+            on: vi.fn(),
+            off: vi.fn(),
         },
-        getEventReadUpTo: jest.fn(),
+        getEventReadUpTo: vi.fn(),
     } as unknown as Room);
 
-    mockCrypto = mocked({
-        getDeviceVerificationStatus: jest.fn(),
-        getUserDeviceInfo: jest.fn(),
-        userHasCrossSigningKeys: jest.fn().mockResolvedValue(false),
-        getUserVerificationStatus: jest.fn(),
-        isEncryptionEnabledInRoom: jest.fn().mockResolvedValue(false),
+    mockCrypto = vi.mocked({
+        getDeviceVerificationStatus: vi.fn(),
+        getUserDeviceInfo: vi.fn(),
+        userHasCrossSigningKeys: vi.fn().mockResolvedValue(false),
+        getUserVerificationStatus: vi.fn(),
+        isEncryptionEnabledInRoom: vi.fn().mockResolvedValue(false),
     } as unknown as CryptoApi);
 
-    mockClient = mocked({
-        getUser: jest.fn(),
-        isGuest: jest.fn().mockReturnValue(false),
-        isUserIgnored: jest.fn(),
-        getIgnoredUsers: jest.fn(),
-        setIgnoredUsers: jest.fn(),
-        getUserId: jest.fn(),
-        getSafeUserId: jest.fn(),
-        getDomain: jest.fn(),
-        on: jest.fn(),
-        off: jest.fn(),
-        isSynapseAdministrator: jest.fn().mockResolvedValue(false),
-        doesServerSupportUnstableFeature: jest.fn().mockReturnValue(false),
-        doesServerSupportExtendedProfiles: jest.fn().mockResolvedValue(false),
-        getExtendedProfile: jest.fn().mockRejectedValue(new Error("Not supported")),
-        mxcUrlToHttp: jest.fn().mockReturnValue("mock-mxcUrlToHttp"),
-        removeListener: jest.fn(),
+    mockClient = vi.mocked({
+        getUser: vi.fn(),
+        isGuest: vi.fn().mockReturnValue(false),
+        isUserIgnored: vi.fn(),
+        getIgnoredUsers: vi.fn(),
+        setIgnoredUsers: vi.fn(),
+        getUserId: vi.fn(),
+        getSafeUserId: vi.fn(),
+        getDomain: vi.fn(),
+        on: vi.fn(),
+        off: vi.fn(),
+        isSynapseAdministrator: vi.fn().mockResolvedValue(false),
+        doesServerSupportUnstableFeature: vi.fn().mockReturnValue(false),
+        doesServerSupportExtendedProfiles: vi.fn().mockResolvedValue(false),
+        getExtendedProfile: vi.fn().mockRejectedValue(new Error("Not supported")),
+        mxcUrlToHttp: vi.fn().mockReturnValue("mock-mxcUrlToHttp"),
+        removeListener: vi.fn(),
         currentState: {
-            on: jest.fn(),
+            on: vi.fn(),
         },
-        getRoom: jest.fn(),
+        getRoom: vi.fn(),
         credentials: {},
-        setPowerLevel: jest.fn(),
-        getCrypto: jest.fn().mockReturnValue(mockCrypto),
+        setPowerLevel: vi.fn(),
+        getCrypto: vi.fn().mockReturnValue(mockCrypto),
     } as unknown as MatrixClient);
     sdkContext = new TestSDKContext();
     sdkContext._client = mockClient;
 
-    jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
-    jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
+    vi.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
+    vi.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
 });
 
 describe("<UserInfo />", () => {
@@ -149,8 +156,8 @@ describe("<UserInfo />", () => {
             super();
             Object.assign(this, {
                 channel: { transactionId: 1 },
-                otherPartySupportsMethod: jest.fn(),
-                generateQRCode: jest.fn().mockReturnValue(new Promise(() => {})),
+                otherPartySupportsMethod: vi.fn(),
+                generateQRCode: vi.fn().mockReturnValue(new Promise(() => {})),
                 ...opts,
             });
         }
@@ -161,7 +168,7 @@ describe("<UserInfo />", () => {
         user: defaultUser,
         // idk what is wrong with this type
         phase: RightPanelPhases.MemberInfo as RightPanelPhases.MemberInfo,
-        onClose: jest.fn(),
+        onClose: vi.fn(),
     };
 
     const renderComponent = (props = {}) => {
@@ -177,7 +184,7 @@ describe("<UserInfo />", () => {
 
     afterEach(async () => {
         await clearAllModals();
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     it("closes on close button click", async () => {
@@ -202,7 +209,7 @@ describe("<UserInfo />", () => {
         describe.each([[ProfileKeyTimezone], [ProfileKeyMSC4175Timezone]])("timezone rendering (%s)", (profileKey) => {
             it("renders user timezone if set", async () => {
                 // For timezone, force a consistent locale.
-                jest.spyOn(global.Date.prototype, "toLocaleString").mockImplementation(
+                vi.spyOn(global.Date.prototype, "toLocaleString").mockImplementation(
                     function (this: Date, _locale, opts) {
                         return origDate.call(this, "en-US", {
                             ...opts,
@@ -241,7 +248,7 @@ describe("<UserInfo />", () => {
         it("should show error modal when the verification request is cancelled with a mismatch", () => {
             renderComponent({ phase: RightPanelPhases.EncryptionPanel, verificationRequest });
 
-            const spy = jest.spyOn(Modal, "createDialog");
+            const spy = vi.spyOn(Modal, "createDialog");
             act(() => {
                 verificationRequest.phase = Phase.Cancelled;
                 verificationRequest.cancellationCode = "m.key_mismatch";
@@ -256,7 +263,7 @@ describe("<UserInfo />", () => {
         it("should not show error modal when the verification request is changed for some other reason", () => {
             renderComponent({ phase: RightPanelPhases.EncryptionPanel, verificationRequest });
 
-            const spy = jest.spyOn(Modal, "createDialog");
+            const spy = vi.spyOn(Modal, "createDialog");
 
             // change to "started"
             act(() => {
@@ -309,11 +316,11 @@ describe("<UserInfo />", () => {
         it("renders the message button", () => {
             render(<UserInfo {...defaultProps} />, clientAndSDKContextRenderOptions(mockClient, sdkContext));
 
-            screen.getByRole("button", { name: "Send message" });
+            expect(screen.getByRole("button", { name: "Send message" })).toBeVisible();
         });
 
         it("hides the message button if the visibility customisation hides all create room features", () => {
-            mocked(shouldShowComponent).withImplementation(
+            vi.mocked(shouldShowComponent).withImplementation(
                 (component) => {
                     return component !== UIComponent.CreateRooms;
                 },
@@ -337,7 +344,7 @@ describe("<UserInfo />", () => {
 
             it("shows a modal before ignoring the user", async () => {
                 const originalCreateDialog = Modal.createDialog;
-                const modalSpy = (Modal.createDialog = jest.fn().mockReturnValue({
+                const modalSpy = (Modal.createDialog = vi.fn().mockReturnValue({
                     finished: Promise.resolve([true]),
                     close: () => {},
                 }));
@@ -356,7 +363,7 @@ describe("<UserInfo />", () => {
 
             it("cancels ignoring the user", async () => {
                 const originalCreateDialog = Modal.createDialog;
-                const modalSpy = (Modal.createDialog = jest.fn().mockReturnValue({
+                const modalSpy = (Modal.createDialog = vi.fn().mockReturnValue({
                     finished: Promise.resolve([false]),
                     close: () => {},
                 }));
@@ -472,7 +479,7 @@ describe("disambiguateDevices", () => {
 
 describe("getPowerLevels", () => {
     it("returns an empty object when room.currentState.getStateEvents return null", () => {
-        mockRoom.currentState.getStateEvents.mockReturnValueOnce(null);
+        vi.mocked(mockRoom.currentState.getStateEvents).mockReturnValueOnce(null);
         expect(getPowerLevels(mockRoom)).toEqual({});
     });
 });

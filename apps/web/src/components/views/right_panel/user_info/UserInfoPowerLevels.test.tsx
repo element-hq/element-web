@@ -4,16 +4,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import React from "react";
+import { describe, it, expect, beforeEach, afterAll, vi, type Mocked } from "vitest";
 import userEvent from "@testing-library/user-event";
-import { fireEvent, render, screen } from "jest-matrix-react";
-import { type Mocked, mocked } from "jest-mock";
+import { fireEvent, render, screen } from "test-utils-rtl";
 import { MatrixEvent, type MatrixClient, RoomMember, type Room, EventType } from "matrix-js-sdk/src/matrix";
 
-import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
-import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
-import { type IRoomPermissions } from "../../../../../../src/components/views/right_panel/UserInfo";
-import { PowerLevelSection } from "../../../../../../src/components/views/right_panel/user_info/UserInfoPowerLevels";
+import MatrixClientContext from "../../../../contexts/MatrixClientContext";
+import { MatrixClientPeg } from "../../../../MatrixClientPeg";
+import { type IRoomPermissions } from "../UserInfo";
+import { PowerLevelSection } from "./UserInfoPowerLevels";
 
 describe("<PowerLevelEditor />", () => {
     const defaultRoomId = "!fkfk";
@@ -39,50 +41,50 @@ describe("<PowerLevelEditor />", () => {
             },
         };
 
-        mockRoom = mocked({
+        mockRoom = vi.mocked({
             roomId: defaultRoomId,
-            getType: jest.fn().mockReturnValue(undefined),
-            isSpaceRoom: jest.fn().mockReturnValue(false),
-            getMember: jest.fn().mockReturnValue(undefined),
-            getMxcAvatarUrl: jest.fn().mockReturnValue("mock-avatar-url"),
+            getType: vi.fn().mockReturnValue(undefined),
+            isSpaceRoom: vi.fn().mockReturnValue(false),
+            getMember: vi.fn().mockReturnValue(undefined),
+            getMxcAvatarUrl: vi.fn().mockReturnValue("mock-avatar-url"),
             name: "test room",
-            on: jest.fn(),
-            off: jest.fn(),
+            on: vi.fn(),
+            off: vi.fn(),
             currentState: {
-                getStateEvents: jest.fn(),
-                on: jest.fn(),
-                off: jest.fn(),
+                getStateEvents: vi.fn(),
+                on: vi.fn(),
+                off: vi.fn(),
             },
-            getEventReadUpTo: jest.fn(),
+            getEventReadUpTo: vi.fn(),
         } as unknown as Room);
 
-        mockClient = mocked({
-            getUser: jest.fn(),
-            isGuest: jest.fn().mockReturnValue(false),
-            isUserIgnored: jest.fn(),
-            getIgnoredUsers: jest.fn(),
-            setIgnoredUsers: jest.fn(),
-            getUserId: jest.fn(),
-            getSafeUserId: jest.fn(),
-            getDomain: jest.fn(),
-            on: jest.fn(),
-            off: jest.fn(),
-            isSynapseAdministrator: jest.fn().mockResolvedValue(false),
-            doesServerSupportUnstableFeature: jest.fn().mockReturnValue(false),
-            doesServerSupportExtendedProfiles: jest.fn().mockResolvedValue(false),
-            getExtendedProfileProperty: jest.fn().mockRejectedValue(new Error("Not supported")),
-            mxcUrlToHttp: jest.fn().mockReturnValue("mock-mxcUrlToHttp"),
-            removeListener: jest.fn(),
+        mockClient = vi.mocked({
+            getUser: vi.fn(),
+            isGuest: vi.fn().mockReturnValue(false),
+            isUserIgnored: vi.fn(),
+            getIgnoredUsers: vi.fn(),
+            setIgnoredUsers: vi.fn(),
+            getUserId: vi.fn(),
+            getSafeUserId: vi.fn(),
+            getDomain: vi.fn(),
+            on: vi.fn(),
+            off: vi.fn(),
+            isSynapseAdministrator: vi.fn().mockResolvedValue(false),
+            doesServerSupportUnstableFeature: vi.fn().mockReturnValue(false),
+            doesServerSupportExtendedProfiles: vi.fn().mockResolvedValue(false),
+            getExtendedProfileProperty: vi.fn().mockRejectedValue(new Error("Not supported")),
+            mxcUrlToHttp: vi.fn().mockReturnValue("mock-mxcUrlToHttp"),
+            removeListener: vi.fn(),
             currentState: {
-                on: jest.fn(),
+                on: vi.fn(),
             },
-            getRoom: jest.fn(),
+            getRoom: vi.fn(),
             credentials: {},
-            setPowerLevel: jest.fn().mockResolvedValueOnce({ event_id: "123" }),
+            setPowerLevel: vi.fn().mockResolvedValueOnce({ event_id: "123" }),
         } as unknown as MatrixClient);
 
-        jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
-        jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
+        vi.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
+        vi.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
     });
 
     afterAll(() => {
@@ -95,7 +97,7 @@ describe("<PowerLevelEditor />", () => {
                 canInvite: false,
             },
         };
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     const renderComponent = (props = defaultProps) => {
@@ -114,7 +116,7 @@ describe("<PowerLevelEditor />", () => {
             type: EventType.RoomPowerLevels,
             content: { users: { [defaultUserId]: startPowerLevel }, users_default: 1 },
         });
-        mockRoom.currentState.getStateEvents.mockReturnValue(powerLevelEvent);
+        vi.spyOn(mockRoom.currentState, "getStateEvents").mockReturnValue(powerLevelEvent);
 
         renderComponent({
             ...defaultProps,
@@ -141,7 +143,7 @@ describe("<PowerLevelEditor />", () => {
         });
         const self = new RoomMember(defaultRoomId, defaultUserId);
         self.powerLevel = startPowerLevel;
-        mockRoom.currentState.getStateEvents.mockReturnValue(powerLevelEvent);
+        vi.spyOn(mockRoom.currentState, "getStateEvents").mockReturnValue(powerLevelEvent);
         mockRoom.getMember.mockReturnValue(self);
         mockClient.getSafeUserId.mockReturnValueOnce(defaultUserId);
         mockClient.getUserId.mockReturnValueOnce(defaultUserId);
@@ -154,7 +156,7 @@ describe("<PowerLevelEditor />", () => {
         const changedPowerLevel = 100;
 
         fireEvent.change(screen.getByRole("combobox", { name: "Power level" }), {
-            target: { value: changedPowerLevel },
+            target: { value: String(changedPowerLevel) },
         });
 
         await screen.findByText("Demote", { exact: true });
