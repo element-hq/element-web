@@ -490,7 +490,7 @@ export default class ContentMessages {
         // Promise to complete before sending next file into room, used for synchronisation of file-sending
         // to match the order the files were specified in
         let promBefore: Promise<any> = Promise.resolve();
-        let sentFileTypes = [];
+        const sentFileTypes: string[] = [];
         for (let i = 0; i < okFiles.length; ++i) {
             const file = okFiles[i];
             const loopPromiseBefore = promBefore;
@@ -526,7 +526,7 @@ export default class ContentMessages {
         if (sentFileTypes.length) {
             // Find the most common type.
             const [type] = sentFileTypes.sort(
-                (a, b) => sentFileTypes.filter((v) => v === a).length - sentFileTypes.filter((v) => v === b).length,
+                (a, b) => sentFileTypes.filter((v) => v === b).length - sentFileTypes.filter((v) => v === a).length,
             );
             PosthogAnalytics.instance.trackEvent<AttachmentSend>({
                 eventName: "AttachmentSend",
