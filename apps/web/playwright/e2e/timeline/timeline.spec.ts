@@ -481,6 +481,14 @@ test.describe("Timeline", () => {
                 await expect(
                     page.locator(".mx_GenericEventListSummary .mx_EventTile").last().locator(".mx_RedactedBody"),
                 ).toBeVisible();
+                const redactedBody = page
+                    .locator(".mx_GenericEventListSummary .mx_EventTile")
+                    .last()
+                    .locator(".mx_RedactedBody");
+                await expect(redactedBody).toHaveCSS("display", "inline-flex");
+                await expect(redactedBody).toHaveCSS("align-items", "center");
+                await expect(redactedBody).toHaveCSS("padding-top", "0px");
+                await expect(redactedBody).toHaveCSS("padding-bottom", "0px");
                 await expect(
                     page.locator(".mx_GenericEventListSummary .mx_EventTile").last().getByRole("status"),
                 ).toHaveAccessibleName("Your message was sent");
@@ -686,7 +694,7 @@ test.describe("Timeline", () => {
 
                 // should add inline start padding to a hidden event line on modern layout
                 await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
-                // calc(var(--EventTile_group_line-spacing-inline-start) + 20px) = 64 + 20 = 84px
+                // EventTileView adds the informational-row offset to the group line gutter: 64px + 20px = 84px.
                 await expect(
                     page.locator(".mx_GenericEventListSummary .mx_EventTile").first().locator(".mx_EventTile_line"),
                 ).toHaveCSS("padding-inline-start", "84px");

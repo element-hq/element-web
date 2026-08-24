@@ -43,6 +43,12 @@ Please see LICENSE files in the repository root for full details.
         /* Informational rows should follow the configured font metrics rather
            than the fixed bubble line-height. */
         > .mx_EventTile_line {
+            /* EventTileView keeps the state-info line at min-width: 100% for
+               ordinary bubble rows. Expanded summaries must be allowed to
+               shrink around the sender avatar, as in the legacy tile. */
+            width: 100%;
+            min-width: 0;
+            max-width: 100%;
             line-height: normal;
         }
 

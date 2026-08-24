@@ -190,12 +190,14 @@
 
 /* Group layout. */
 .root.layoutGroup {
+    --event-tile-group-line-padding-inline-start: var(--event-tile-group-gutter);
+
     /* Root. */
 
     /* Line. */
     .line {
         padding-block: var(--event-tile-group-line-spacing-block-start) var(--event-tile-group-line-spacing-block-end);
-        padding-inline-start: var(--event-tile-group-gutter);
+        padding-inline-start: var(--event-tile-group-line-padding-inline-start);
         min-height: 14px;
         border-radius: 8px;
         line-height: var(--event-tile-group-line-height);
@@ -235,7 +237,8 @@
         inset-inline-start: 0;
         width: var(--event-tile-group-timestamp-width);
         height: var(--event-tile-group-line-height);
-        margin: 1px;
+        margin-block: 1px;
+        margin-inline: 0;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -294,18 +297,10 @@
         background-color: var(--event-tile-state-selected-background);
     }
 
-    &.stateSelected .line::before,
-    &.stateEditing .line::before {
-        content: "";
-        position: absolute;
-        z-index: 0;
-        inset-block: 0;
-        inset-inline-start: 0;
-        width: var(--event-tile-state-marker-width);
-        border-start-start-radius: inherit;
-        border-end-start-radius: inherit;
-        background: var(--event-tile-state-marker-color);
-        pointer-events: none;
+    &.stateSelected .line,
+    &.stateEditing .line {
+        box-shadow: inset calc(50px + var(--event-tile-state-marker-width)) 0 0 -50px
+            var(--event-tile-state-marker-color);
     }
 
     &.hasReceiptSlot .line {
@@ -322,6 +317,8 @@
     /* Informational events use a smaller metadata row while retaining the
        normal group slot order. */
     &.stateInfo {
+        --event-tile-group-line-padding-inline-start: calc(var(--event-tile-group-gutter) + 20px);
+
         padding-top: 0;
 
         .slotAvatar,
@@ -338,7 +335,6 @@
 
         .line {
             padding-block: 3px 2px;
-            padding-inline-start: calc(var(--event-tile-group-gutter) + 20px);
         }
 
         .slotTimestamp,
@@ -477,11 +473,12 @@
         border-radius: 8px;
     }
 
+    /* Keep the IRC gutter on the body surface, but let body views own their
+       display, line-height, and vertical padding. In particular, the
+       redacted body uses inline-flex to align its icon and text. */
     &:where(:not(.stateBubbleContainer)) {
         .line:not(.lineMedia) .slotBody > *:not(fieldset) {
             margin-inline-end: var(--event-tile-content-inline-end);
-            display: inline-block;
-            padding-block: 1px;
         }
     }
 
@@ -622,16 +619,10 @@
         background-color: var(--event-tile-state-selected-background);
     }
 
-    &.stateSelected .line::before,
-    &.stateEditing .line::before {
-        content: "";
-        position: absolute;
-        z-index: 0;
-        inset-block: 0;
-        inset-inline-start: 0;
-        width: var(--event-tile-state-marker-width);
-        background: var(--event-tile-state-marker-color);
-        pointer-events: none;
+    &.stateSelected .line,
+    &.stateEditing .line {
+        box-shadow: inset calc(50px + var(--event-tile-state-marker-width)) 0 0 -50px
+            var(--event-tile-state-marker-color);
     }
 
     &.stateBubbleContainer {
@@ -921,20 +912,6 @@
         margin-inline-end: -11px;
     }
 
-    /* Interaction state. */
-    &.stateSelected .line::before {
-        content: "";
-        position: absolute;
-        z-index: 0;
-        inset-block: 0;
-        inset-inline-start: 0;
-        width: var(--event-tile-state-marker-width);
-        border-start-start-radius: inherit;
-        border-end-start-radius: inherit;
-        background: var(--event-tile-state-marker-color);
-        pointer-events: none;
-    }
-
     &:hover::before,
     &.stateSelected::before {
         background: var(--event-tile-state-hover-background);
@@ -1098,7 +1075,6 @@
         }
 
         .slotAvatar > * {
-            border-radius: 0;
             box-shadow: none;
         }
 
@@ -1218,7 +1194,6 @@
         &.stateOwnEvent {
             align-items: flex-end;
         }
-
     }
 
     /* Line. */
