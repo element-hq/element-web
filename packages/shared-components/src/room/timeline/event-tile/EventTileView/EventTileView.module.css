@@ -731,6 +731,15 @@
         padding: 0;
         background: transparent;
         max-width: var(--event-tile-bubble-line-max-width);
+
+        /* Media surfaces own their background and dimensions. Keep room for
+           the timestamp which is positioned over the lower-right corner. */
+        :global(.mx_MediaBody) {
+            padding-inline-end: 48px !important;
+            border-radius: 0;
+            border-start-start-radius: var(--event-tile-bubble-corner-radius);
+            border-start-end-radius: var(--event-tile-bubble-corner-radius);
+        }
     }
 
     .lineMedia.lineImage .slotTimestamp {
@@ -883,8 +892,13 @@
 
     &.stateOwnEvent .lineMedia {
         margin-block: 0;
-        margin-inline: 0 var(--event-tile-bubble-line-margin-inline-end);
+        margin-inline: auto var(--event-tile-bubble-line-margin-inline-end);
         background: transparent;
+
+        :global(.mx_MediaBody) {
+            background: var(--event-tile-bubble-self-background);
+            border-end-start-radius: var(--event-tile-bubble-corner-radius);
+        }
     }
 
     &.stateOwnEvent .lineSticker {
@@ -962,6 +976,10 @@
 
     &.stateLastInSection.stateOwnEvent .line {
         border-end-start-radius: var(--event-tile-bubble-corner-radius);
+        border-end-end-radius: var(--event-tile-bubble-corner-radius);
+    }
+
+    &.stateLastInSection.stateOwnEvent .lineMedia :global(.mx_MediaBody) {
         border-end-end-radius: var(--event-tile-bubble-corner-radius);
     }
 
@@ -1054,6 +1072,8 @@
 
     /* Informational bubble rows are metadata rows, not message bubbles. */
     &.stateInfo {
+        --event-tile-body-padding: 0;
+
         display: flex;
         align-items: center;
         justify-content: flex-start;
@@ -1069,12 +1089,21 @@
             position: static;
             order: -1;
             display: inline-flex;
+            align-items: center;
+            width: 14px;
+            height: 14px;
+            margin-block: 3px 2px;
             margin-inline-end: var(--event-tile-bubble-gap);
             border: 0;
             flex-shrink: 0;
+            line-height: 1;
         }
 
-        .slotAvatar > * {
+        .slotAvatar > *,
+        .slotAvatar > * > * {
+            /* Compound Avatar sets its own fallback line-height; override it
+               so initials remain vertically centred in the 14px avatar. */
+            line-height: 1 !important;
             box-shadow: none;
         }
 
@@ -1085,10 +1114,6 @@
             margin: 0;
             padding: 0;
             background: transparent;
-
-            .slotBody > * {
-                padding: 0;
-            }
         }
 
         .slotTimestamp {

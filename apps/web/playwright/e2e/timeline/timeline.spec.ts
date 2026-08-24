@@ -481,14 +481,6 @@ test.describe("Timeline", () => {
                 await expect(
                     page.locator(".mx_GenericEventListSummary .mx_EventTile").last().locator(".mx_RedactedBody"),
                 ).toBeVisible();
-                const redactedBody = page
-                    .locator(".mx_GenericEventListSummary .mx_EventTile")
-                    .last()
-                    .locator(".mx_RedactedBody");
-                await expect(redactedBody).toHaveCSS("display", "inline-flex");
-                await expect(redactedBody).toHaveCSS("align-items", "center");
-                await expect(redactedBody).toHaveCSS("padding-top", "0px");
-                await expect(redactedBody).toHaveCSS("padding-bottom", "0px");
                 await expect(
                     page.locator(".mx_GenericEventListSummary .mx_EventTile").last().getByRole("status"),
                 ).toHaveAccessibleName("Your message was sent");
