@@ -19,28 +19,22 @@
     }
 }
 
-.infoRow {
-    display: flex;
-    align-items: center;
-    gap: var(--cpd-space-2x);
-    min-width: 0;
-}
-
-.infoRow [data-type="preview"] {
-    flex: none;
-}
-
 .content [data-type="info"] {
     display: inline-flex;
     align-items: center;
     flex-grow: 1;
+    gap: var(--cpd-space-2x);
 
-    & button {
+    /* The preview control is a button too, so the filename's styling is scoped away from it. */
+    & button:not(.preview) {
         display: flex;
         margin: 0;
         padding: 0;
         border: none;
-        width: 100%;
+        /* flex rather than width:100%, so the filename yields room to the preview button
+           instead of overflowing the pill when one is present. */
+        flex: 1;
+        min-width: 0;
         min-block-size: unset;
         color: inherit;
         background-color: inherit;
@@ -66,6 +60,18 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+    }
+}
+
+.content [data-type="info"] .preview {
+    flex: none;
+    /* Sits on the pill's own background, so it takes none of the filename icon's chip treatment. */
+    background: none;
+    color: var(--cpd-color-icon-secondary);
+
+    & svg {
+        width: 20px;
+        height: 20px;
     }
 }
 

@@ -305,7 +305,11 @@ describe("FileBodyView", () => {
             );
             renderWithI18n(<FileBodyView vm={vm} />);
 
-            fireEvent.click(screen.getByRole("button", { name: "Preview" }));
+            const button = screen.getByRole("button", { name: "Preview" });
+            // The control lives inside the file pill, not alongside it.
+            expect(button.closest(".mx_MediaBody")).not.toBeNull();
+
+            fireEvent.click(button);
 
             expect(onPreviewClick).toHaveBeenCalled();
             expect(onInfoClick).not.toHaveBeenCalled();

@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render } from "jest-matrix-react";
+import { fireEvent, render } from "jest-matrix-react";
 import { EventType, getHttpUriForMxc, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
@@ -30,6 +30,8 @@ import {
 import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext.ts";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 import { useMediaVisible } from "../../../../../src/hooks/useMediaVisible";
+import Modal from "../../../../../src/Modal";
+import MediaPreviewDialog from "../../../../../src/components/views/elements/MediaPreview/MediaPreviewDialog";
 
 jest.mock("matrix-encrypt-attachment", () => ({
     decryptAttachment: jest.fn(),
@@ -338,5 +340,65 @@ describe("MBodyFactory", () => {
         const { container } = render(<DecryptionFailureBodyFactory mxEvent={mediaEvent} />);
 
         expect(container.querySelector(".mx_DecryptionFailureBody")).not.toBeNull();
+    });
+
+    describe("file preview button", () => {
+        const mkFileEvent = (body: string, mimetype: string): MatrixEvent =>
+            new MatrixEvent({
+                room_id: "!room:server",
+                sender: userId,
+                type: EventType.RoomMessage,
+                content: { body, msgtype: "m.file", url: "mxc://server/file", info: { mimetype } },
+            });
+
+        const renderFileBody = (mediaEvent: MatrixEvent) =>
+            render(
+                <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.Room } as any)}>
+                    {renderMBody(
+                        { ...props, mxEvent: mediaEvent, mediaEventHelper: new MediaEventHelper(mediaEvent) },
+                        FileBodyFactory,
+                    )}
+                </ScopedRoomContextProvider>,
+            );
+
+        const withPreviewEnabled = (enabled: boolean): void => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation(
+                (name) => (name === "feature_file_preview" ? enabled : undefined) as any,
+            );
+        };
+
+        it("is absent while the labs flag is off", () => {
+            withPreviewEnabled(false);
+            const { queryByRole } = renderFileBody(mkFileEvent("spec.pdf", "application/pdf"));
+
+            expect(queryByRole("button", { name: "Preview" })).not.toBeInTheDocument();
+        });
+
+        it("is absent for a format we cannot render", () => {
+            withPreviewEnabled(true);
+            const { queryByRole } = renderFileBody(mkFileEvent("archive.zip", "application/zip"));
+
+            expect(queryByRole("button", { name: "Preview" })).not.toBeInTheDocument();
+        });
+
+        it("renders inside the file pill and opens the preview", () => {
+            withPreviewEnabled(true);
+            const createDialog = jest.spyOn(Modal, "createDialog").mockReturnValue({} as any);
+
+            const { getByRole } = renderFileBody(mkFileEvent("spec.pdf", "application/pdf"));
+
+            const button = getByRole("button", { name: "Preview" });
+            // The control belongs to the file body itself, not a wrapper beside it.
+            expect(button.closest(".mx_MediaBody")).not.toBeNull();
+
+            fireEvent.click(button);
+            expect(createDialog).toHaveBeenCalledWith(
+                MediaPreviewDialog,
+                expect.objectContaining({ mxEvent: expect.anything() }),
+                "mx_Dialog_lightbox",
+                undefined,
+                true,
+            );
+        });
     });
 });
