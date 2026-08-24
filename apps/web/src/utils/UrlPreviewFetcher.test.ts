@@ -8,8 +8,8 @@
 import { vi, describe, it, expect, beforeAll, afterAll, type Mock } from "vitest";
 
 import type { IPreviewUrlResponse, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type UnstableBundledUrlPreviewSingle } from "@element-hq/element-web-module-api";
 import { UrlPreviewFetcher } from "./UrlPreviewFetcher";
-import { type UnstableBundledUrlPreviewSingle } from "../../@types/url-preview";
 
 const IMAGE_MXC = "mxc://example.org/abc";
 const BASIC_PREVIEW_OGDATA = {
