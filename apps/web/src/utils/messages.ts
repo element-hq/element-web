@@ -24,7 +24,8 @@ import { type UrlPreview } from "shared-types";
 
 import type EditorModel from "../editor/model";
 import { Type } from "../editor/parts";
-import { type UnstableBundledUrlPreviewSingle, type RoomMessageEventContent } from "../../@types/url-preview";
+import { type UnstableBundledUrlPreviewSingle } from "@element-hq/element-web-module-api";
+import { type RoomMessageEventContent } from "../../@types/url-preview";
 import SettingsStore from "../settings/SettingsStore";
 import { uploadFile } from "../ContentMessages";
 import { mediaFromMxc } from "../customisations/Media";
