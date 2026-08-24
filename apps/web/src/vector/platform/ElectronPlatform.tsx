@@ -97,6 +97,7 @@ export default class ElectronPlatform extends BasePlatform {
     private badgeOverlayRenderer?: BadgeOverlayRenderer;
     private config!: IConfigOptions;
     private supportedSettings?: Record<string, boolean>;
+    private nativeTranslationAvailable = false;
     private clientStartedPromiseWithResolvers = Promise.withResolvers<void>();
 
     public constructor() {
@@ -233,6 +234,17 @@ export default class ElectronPlatform extends BasePlatform {
         if (supportsBadgeOverlay) {
             this.badgeOverlayRenderer = new BadgeOverlayRenderer();
         }
+        // Probe translation availability in the background: the result is only needed once a context
+        // menu is opened, so we must not block startup on the IPC reply.
+        void this.refreshTranslationAvailability();
+    }
+
+    private async refreshTranslationAvailability(): Promise<void> {
+        try {
+            this.nativeTranslationAvailable = !!(await this.ipc.call("getTranslationAvailable"));
+        } catch {
+            this.nativeTranslationAvailable = false;
+        }
     }
 
     public async getConfig(): Promise<IConfigOptions | undefined> {
@@ -278,6 +290,17 @@ export default class ElectronPlatform extends BasePlatform {
 
     public allowOverridingNativeContextMenus(): boolean {
         return true;
+    }
+
+    public supportsNativeTranslation(): boolean {
+        return this.nativeTranslationAvailable;
+    }
+
+    public translate(text: string, rect: DOMRectReadOnly): void {
+        void this.ipc.call("showTranslation", {
+            text,
+            rect: { x: rect.x, y: rect.y, width: rect.width, height: rect.height },
+        });
     }
 
     public setNotificationCount(count: number): void {

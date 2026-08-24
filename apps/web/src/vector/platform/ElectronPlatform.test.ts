@@ -327,6 +327,51 @@ describe("ElectronPlatform", () => {
         });
     });
 
+    describe("native translation", () => {
+        it("makes correct ipc call to show translation", () => {
+            const platform = new ElectronPlatform();
+            mockElectron.send.mockClear();
+            platform.translate("bonjour", {
+                x: 10,
+                y: 20,
+                width: 30,
+                height: 40,
+            } as DOMRectReadOnly);
+
+            const [, { name, args }] = mockElectron.send.mock.calls[0];
+            expect(name).toEqual("showTranslation");
+            expect(args).toEqual([
+                {
+                    text: "bonjour",
+                    rect: { x: 10, y: 20, width: 30, height: 40 },
+                },
+            ]);
+        });
+
+        it("reports translation as unavailable until the availability probe resolves", () => {
+            const platform = new ElectronPlatform();
+            expect(platform.supportsNativeTranslation()).toBe(false);
+        });
+
+        it("reports translation as available when the availability probe resolves positively", async () => {
+            const platform = new ElectronPlatform();
+            // @ts-ignore private
+            jest.spyOn(platform.ipc, "call").mockResolvedValue(true);
+            // @ts-ignore private
+            await platform.refreshTranslationAvailability();
+            expect(platform.supportsNativeTranslation()).toBe(true);
+        });
+
+        it("reports translation as unavailable when the availability probe rejects", async () => {
+            const platform = new ElectronPlatform();
+            // @ts-ignore private
+            jest.spyOn(platform.ipc, "call").mockRejectedValue(new Error("no ipc"));
+            // @ts-ignore private
+            await platform.refreshTranslationAvailability();
+            expect(platform.supportsNativeTranslation()).toBe(false);
+        });
+    });
+
     describe("versions", () => {
         it("calls install update", () => {
             const platform = new ElectronPlatform();

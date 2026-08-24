@@ -175,6 +175,21 @@ export default abstract class BasePlatform {
     }
 
     /**
+     * Returns true if the platform can show a native translation UI for arbitrary text
+     * (e.g. the macOS system translation popover on desktop).
+     */
+    public supportsNativeTranslation(): boolean {
+        return false;
+    }
+
+    /**
+     * Show a native translation UI for the given text, anchored at the given rect.
+     * @param text the text to translate
+     * @param rect the anchor rectangle, in CSS pixels relative to the top-left of the viewport
+     */
+    public translate(text: string, rect: DOMRectReadOnly): void {}
+
+    /**
      * Returns true if the platform supports displaying
      * notifications, otherwise false.
      * @returns {boolean} whether the platform supports displaying notifications
