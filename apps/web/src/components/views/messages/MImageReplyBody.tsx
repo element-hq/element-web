@@ -23,7 +23,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import Spinner from "../elements/Spinner";
 import { type Media, mediaFromContent } from "../../../customisations/Media";
 import { BLURHASH_FIELD, createThumbnail } from "../../../utils/image-media";
-import ImageView from "../elements/ImageView";
+import MediaPreviewDialog from "../elements/MediaPreview/MediaPreviewDialog";
 import { type IBodyProps } from "./IBodyProps";
 import { suggestedSize as suggestedImageSize } from "../../../settings/enums/ImageSize";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -102,7 +102,7 @@ export class ImageBodyBaseInner extends React.Component<ImageBodyBaseProps, ISta
             }
 
             if (!httpUrl) return;
-            const params: Omit<ComponentProps<typeof ImageView>, "onFinished"> = {
+            const params: Omit<ComponentProps<typeof MediaPreviewDialog>, "onFinished"> = {
                 src: httpUrl,
                 name: content.body && content.body.length > 0 ? content.body : _t("common|attachment"),
                 mxEvent: this.props.mxEvent,
@@ -126,7 +126,7 @@ export class ImageBodyBaseInner extends React.Component<ImageBodyBaseProps, ISta
                 };
             }
 
-            Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", undefined, true);
+            Modal.createDialog(MediaPreviewDialog, params, "mx_Dialog_lightbox", undefined, true);
         }
     };
 

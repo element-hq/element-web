@@ -28,7 +28,7 @@ import { getParentEventId } from "../../../utils/Reply";
 import Modal from "../../../Modal";
 import SettingsStore from "../../../settings/SettingsStore";
 import PosthogTrackers from "../../../PosthogTrackers";
-import ImageView from "../elements/ImageView";
+import MediaPreviewDialog from "../elements/MediaPreview/MediaPreviewDialog";
 import EditMessageComposer from "../rooms/EditMessageComposer";
 import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
 import { UrlPreviewGroupViewModel } from "../../../viewmodels/message-body/UrlPreviewGroupViewModel";
@@ -107,7 +107,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
                     }
 
                     Modal.createDialog(
-                        ImageView,
+                        MediaPreviewDialog,
                         {
                             src: preview.image.imageFull,
                             width: preview.image.width,

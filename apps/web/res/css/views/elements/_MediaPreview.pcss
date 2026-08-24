@@ -1,33 +1,41 @@
 /*
 Copyright 2026 New Vector Ltd.
+Copyright 2015, 2016 OpenMarket Ltd
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-$fp-button-size: 32px;
+$button-size: 32px;
+$button-gap: var(--cpd-space-3x);
 
 :root {
-    --file-preview-panel-height: 68px;
+    --media-preview-panel-height: 68px;
 }
 
-.mx_FilePreviewDialog {
+/* ---------------------------------------------------------------------------
+   Shared chrome. Every previewer renders inside this.
+   --------------------------------------------------------------------------- */
+
+.mx_MediaPreview {
     display: flex;
     width: 100%;
     height: 100%;
     flex-direction: column;
 }
 
-.mx_FilePreviewDialog_panel {
+.mx_MediaPreview_panel {
     width: 100%;
-    height: var(--file-preview-panel-height);
+    height: var(--media-preview-panel-height);
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-shrink: 0;
+    animation-name: mx_MediaPreview_panel_keyframes;
+    animation-duration: 300ms;
 }
 
-.mx_FilePreviewDialog_info_wrapper {
+.mx_MediaPreview_info_wrapper {
     pointer-events: initial;
     padding-left: 32px;
     display: flex;
@@ -38,17 +46,17 @@ $fp-button-size: 32px;
     flex-basis: 0;
 }
 
-.mx_FilePreviewDialog_info {
+.mx_MediaPreview_info {
     padding-left: 12px;
     display: flex;
     flex-direction: column;
 }
 
-.mx_FilePreviewDialog_info_sender {
+.mx_MediaPreview_info_sender {
     font-weight: bold;
 }
 
-.mx_FilePreviewDialog_title {
+.mx_MediaPreview_title {
     color: $lightbox-fg-color;
     font-size: $font-12px;
     flex-grow: 1;
@@ -61,7 +69,7 @@ $fp-button-size: 32px;
     padding: 0 var(--cpd-space-3x);
 }
 
-.mx_FilePreviewDialog_toolbar {
+.mx_MediaPreview_toolbar {
     --icon-size: 24px;
 
     padding-right: 16px;
@@ -71,10 +79,10 @@ $fp-button-size: 32px;
     flex-grow: 1;
     flex-basis: 0;
     justify-content: flex-end;
-    gap: var(--cpd-space-3x);
+    gap: $button-gap;
 }
 
-.mx_FilePreviewDialog_pageCount {
+.mx_MediaPreview_pageCount {
     color: $lightbox-fg-color;
     font-size: $font-12px;
     min-width: 4em;
@@ -82,8 +90,8 @@ $fp-button-size: 32px;
     font-variant-numeric: tabular-nums;
 }
 
-.mx_FilePreviewDialog_button {
-    padding: calc(($fp-button-size - var(--icon-size)) / 2);
+.mx_MediaPreview_button {
+    padding: calc(($button-size - var(--icon-size)) / 2);
     width: var(--icon-size);
     height: var(--icon-size);
     display: block;
@@ -101,28 +109,29 @@ $fp-button-size: 32px;
     }
 }
 
-.mx_FilePreviewDialog_button_more {
+.mx_MediaPreview_button_more {
     --icon-size: 28px;
 }
 
-.mx_FilePreviewDialog_button_close {
+.mx_MediaPreview_button_close {
     border-radius: 100%;
     background: #21262c; /* same on all themes */
 }
 
-.mx_FilePreviewDialog_content {
+.mx_MediaPreview_content {
     pointer-events: initial;
     flex-grow: 1;
     min-height: 0;
     display: flex;
     justify-content: center;
-    /* Documents are read top-down, so pin to the top and scroll rather than centring. */
+    /* Documents are read top-down, so pin to the top and scroll. Previewers that want their
+       content centred instead (the image viewer) override this below. */
     align-items: flex-start;
     overflow: auto;
     padding: var(--cpd-space-4x);
 }
 
-.mx_FilePreviewDialog_error {
+.mx_MediaPreview_error {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -136,7 +145,43 @@ $fp-button-size: 32px;
     }
 }
 
-/* Rendered PDF page */
+/* ---------------------------------------------------------------------------
+   Image previewer
+   --------------------------------------------------------------------------- */
+
+.mx_ImagePreview_wrapper {
+    /* The image is positioned by transform and must not be clipped or scrolled. */
+    align-items: center;
+    overflow: hidden;
+    padding: 0;
+}
+
+.mx_ImagePreview_image {
+    flex-shrink: 0;
+
+    &.mx_ImagePreview_image_animating {
+        transition: transform 200ms ease 0s;
+    }
+
+    &.mx_ImagePreview_image_animatingLoading {
+        transition: transform 300ms ease 0s;
+    }
+}
+
+@media (prefers-reduced-motion) {
+    .mx_ImagePreview_image_animating {
+        transition: none !important;
+    }
+
+    .mx_ImagePreview_image_animatingLoading {
+        transition: none !important;
+    }
+}
+
+/* ---------------------------------------------------------------------------
+   PDF previewer
+   --------------------------------------------------------------------------- */
+
 .mx_PdfPreview {
     display: flex;
     justify-content: center;
@@ -149,7 +194,10 @@ $fp-button-size: 32px;
     max-width: 100%;
 }
 
-/* Converted Word document */
+/* ---------------------------------------------------------------------------
+   Word previewer
+   --------------------------------------------------------------------------- */
+
 .mx_DocxPreview {
     display: flex;
     justify-content: center;

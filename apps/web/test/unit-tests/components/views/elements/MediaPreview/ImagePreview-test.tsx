@@ -12,28 +12,28 @@ import { render, fireEvent, waitFor } from "jest-matrix-react";
 import fetchMock from "@fetch-mock/jest";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import ImageView from "../../../../../src/components/views/elements/ImageView";
-import { FileDownloader } from "../../../../../src/utils/FileDownloader";
-import Modal from "../../../../../src/Modal";
-import ErrorDialog from "../../../../../src/components/views/dialogs/ErrorDialog";
-import { stubClient } from "../../../../test-utils";
+import ImagePreview from "../../../../../../src/components/views/elements/MediaPreview/ImagePreview";
+import { FileDownloader } from "../../../../../../src/utils/FileDownloader";
+import Modal from "../../../../../../src/Modal";
+import ErrorDialog from "../../../../../../src/components/views/dialogs/ErrorDialog";
+import { stubClient } from "../../../../../test-utils";
 
-jest.mock("../../../../../src/utils/FileDownloader");
+jest.mock("../../../../../../src/utils/FileDownloader");
 
-describe("<ImageView />", () => {
+describe("<ImagePreview />", () => {
     beforeEach(() => {
         jest.resetAllMocks();
     });
 
     it("renders correctly", () => {
-        const { container } = render(<ImageView src="https://example.com/image.png" onFinished={jest.fn()} />);
+        const { container } = render(<ImagePreview src="https://example.com/image.png" onFinished={jest.fn()} />);
         expect(container).toMatchSnapshot();
     });
 
     it("should download on click", async () => {
         fetchMock.get("https://example.com/image.png", "TESTFILE");
         const { getByRole } = render(
-            <ImageView src="https://example.com/image.png" name="filename.png" onFinished={jest.fn()} />,
+            <ImagePreview src="https://example.com/image.png" name="filename.png" onFinished={jest.fn()} />,
         );
         fireEvent.click(getByRole("button", { name: "Download" }));
         await waitFor(() =>
@@ -61,7 +61,7 @@ describe("<ImageView />", () => {
 
         fetchMock.get("http://this.is.a.url/test.dummy/fromEvent.png", "TESTFILE");
         const { getByRole } = render(
-            <ImageView
+            <ImagePreview
                 src="https://test.dummy/fromSrc.png"
                 name="fromName.png"
                 onFinished={jest.fn()}
@@ -82,7 +82,7 @@ describe("<ImageView />", () => {
         fetchMock.get("https://example.com/image.png", "TESTFILE");
 
         const { container } = render(
-            <ImageView src="https://example.com/image.png" name="filename.png" onFinished={jest.fn()} />,
+            <ImagePreview src="https://example.com/image.png" name="filename.png" onFinished={jest.fn()} />,
         );
 
         const dialog = container.querySelector<HTMLElement>('[role="dialog"]')!;
@@ -104,7 +104,7 @@ describe("<ImageView />", () => {
         const modalSpy = jest.spyOn(Modal, "createDialog");
         fetchMock.get("https://example.com/image.png", { status: 500 });
         const { getByRole } = render(
-            <ImageView src="https://example.com/image.png" name="filename.png" onFinished={jest.fn()} />,
+            <ImagePreview src="https://example.com/image.png" name="filename.png" onFinished={jest.fn()} />,
         );
         fireEvent.click(getByRole("button", { name: "Download" }));
         await waitFor(() =>

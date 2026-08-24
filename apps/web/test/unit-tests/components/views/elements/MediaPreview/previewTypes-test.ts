@@ -12,7 +12,9 @@ import {
     canPreviewFile,
     FilePreviewKind,
     getFilePreviewKind,
-} from "../../../../../../src/components/views/elements/FilePreview/previewTypes";
+    getPreviewKind,
+    PreviewKind,
+} from "../../../../../../src/components/views/elements/MediaPreview/previewTypes";
 
 const mkContent = (content: Partial<MediaEventContent>): MediaEventContent =>
     ({
@@ -87,5 +89,28 @@ describe("canPreviewFile", () => {
         const event = mkEvent({ body: "spec.pdf" });
         jest.spyOn(event, "isRedacted").mockReturnValue(true);
         expect(canPreviewFile(event)).toBe(false);
+    });
+});
+
+describe("getPreviewKind", () => {
+    it("defaults to the image viewer when there is no event", () => {
+        // Avatars and URL previews open the dialog with a bare src and nothing else.
+        expect(getPreviewKind(undefined)).toBe(PreviewKind.Image);
+    });
+
+    it("keeps image messages on the image viewer", () => {
+        expect(getPreviewKind(mkEvent({ msgtype: MsgType.Image, body: "cat.png" }))).toBe(PreviewKind.Image);
+    });
+
+    it("routes a PDF file to the pdf previewer", () => {
+        expect(getPreviewKind(mkEvent({ body: "spec.pdf" }))).toBe(PreviewKind.Pdf);
+    });
+
+    it("routes a docx file to the Word previewer", () => {
+        expect(getPreviewKind(mkEvent({ body: "notes.docx" }))).toBe(PreviewKind.Docx);
+    });
+
+    it("marks a file we cannot render as unsupported", () => {
+        expect(getPreviewKind(mkEvent({ body: "archive.zip" }))).toBe(PreviewKind.Unsupported);
     });
 });

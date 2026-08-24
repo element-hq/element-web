@@ -28,7 +28,8 @@ import { FileDownloader } from "../../utils/FileDownloader";
 import { type MediaEventHelper } from "../../utils/MediaEventHelper";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
-import { canPreviewFile } from "../../components/views/elements/FilePreview/previewTypes";
+import MediaPreviewDialog from "../../components/views/elements/MediaPreview/MediaPreviewDialog";
+import { canPreviewFile } from "../../components/views/elements/MediaPreview/previewTypes";
 import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 
 export interface FileBodyViewModelProps {
@@ -265,19 +266,15 @@ export class FileBodyViewModel
     /**
      * Open the file in the full-screen preview dialog.
      *
-     * The dialog is loaded on demand: it drags in pdf.js and mammoth, which together are far too
-     * large to sit in the main bundle for a feature most clicks will never reach.
+     * pdf.js and mammoth are dynamically imported by the previewers themselves, so nothing heavy
+     * is pulled in until someone actually opens a document.
      */
-    private async openPreview(): Promise<void> {
-        const { default: FilePreviewDialog } = await import(
-            /* webpackChunkName: "file-preview" */ "../../components/views/elements/FilePreview/FilePreviewDialog"
-        );
-
-        const params: Omit<ComponentProps<typeof FilePreviewDialog>, "onFinished"> = {
+    private openPreview(): void {
+        const params: Omit<ComponentProps<typeof MediaPreviewDialog>, "onFinished"> = {
             mxEvent: this.props.mxEvent,
             permalinkCreator: this.props.permalinkCreator,
         };
-        Modal.createDialog(FilePreviewDialog, params, "mx_Dialog_lightbox", undefined, true);
+        Modal.createDialog(MediaPreviewDialog, params, "mx_Dialog_lightbox", undefined, true);
     }
 
     public onInfoClick = async (): Promise<void> => {
@@ -286,7 +283,7 @@ export class FileBodyViewModel
         }
 
         if (this.canPreview) {
-            await this.openPreview();
+            this.openPreview();
             return;
         }
 

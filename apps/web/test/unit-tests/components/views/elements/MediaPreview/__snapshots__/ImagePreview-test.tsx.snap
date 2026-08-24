@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`<ImageView /> renders correctly 1`] = `
+exports[`<ImagePreview /> renders correctly 1`] = `
 <div>
   <div
     data-focus-guard="true"
@@ -9,21 +9,22 @@ exports[`<ImageView /> renders correctly 1`] = `
   />
   <div
     aria-label="Image view"
-    class="mx_ImageView"
+    class="mx_MediaPreview"
     data-focus-lock-disabled="false"
     role="dialog"
   >
     <div
-      class="mx_ImageView_panel"
+      class="mx_MediaPreview_panel"
     >
       <div />
+      <div />
       <div
-        class="mx_ImageView_toolbar"
+        class="mx_MediaPreview_toolbar"
       >
         <div
           aria-describedby="react-use-id-1"
           aria-label="Zoom out"
-          class="mx_AccessibleButton mx_ImageView_button"
+          class="mx_AccessibleButton mx_MediaPreview_button"
           role="button"
           tabindex="0"
         >
@@ -46,7 +47,7 @@ exports[`<ImageView /> renders correctly 1`] = `
         </div>
         <div
           aria-label="Zoom in"
-          class="mx_AccessibleButton mx_ImageView_button"
+          class="mx_AccessibleButton mx_MediaPreview_button"
           role="button"
           tabindex="0"
         >
@@ -88,7 +89,7 @@ exports[`<ImageView /> renders correctly 1`] = `
         </div>
         <div
           aria-label="Rotate Left"
-          class="mx_AccessibleButton mx_ImageView_button"
+          class="mx_AccessibleButton mx_MediaPreview_button"
           role="button"
           tabindex="0"
         >
@@ -106,7 +107,7 @@ exports[`<ImageView /> renders correctly 1`] = `
         </div>
         <div
           aria-label="Rotate Right"
-          class="mx_AccessibleButton mx_ImageView_button"
+          class="mx_AccessibleButton mx_MediaPreview_button"
           role="button"
           tabindex="0"
         >
@@ -137,7 +138,7 @@ exports[`<ImageView /> renders correctly 1`] = `
         </div>
         <div
           aria-label="Download"
-          class="mx_AccessibleButton mx_ImageView_button"
+          class="mx_AccessibleButton mx_MediaPreview_button"
           role="button"
           tabindex="0"
         >
@@ -155,7 +156,7 @@ exports[`<ImageView /> renders correctly 1`] = `
         </div>
         <div
           aria-label="Close"
-          class="mx_AccessibleButton mx_ImageView_button mx_ImageView_button_close"
+          class="mx_AccessibleButton mx_MediaPreview_button mx_MediaPreview_button_close"
           role="button"
           tabindex="0"
         >
@@ -174,10 +175,10 @@ exports[`<ImageView /> renders correctly 1`] = `
       </div>
     </div>
     <div
-      class="mx_ImageView_image_wrapper"
+      class="mx_MediaPreview_content mx_ImagePreview_wrapper"
     >
       <img
-        class="mx_ImageView_image "
+        class="mx_ImagePreview_image "
         draggable="true"
         src="https://example.com/image.png"
         style="transform: translateX(0px)

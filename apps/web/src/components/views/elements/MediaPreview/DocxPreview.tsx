@@ -7,18 +7,18 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, useEffect, useState } from "react";
 import sanitizeHtml, { type IOptions } from "sanitize-html";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type MediaEventContent } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
+import { _t } from "../../../../languageHandler";
 import Spinner from "../Spinner";
-
-interface Props {
-    /** The raw file contents, already decrypted where applicable. */
-    data: ArrayBuffer;
-    /** Scale multiplier applied to the rendered document. */
-    zoom: number;
-    /** Called when the document could not be converted at all. */
-    onError: (error: unknown) => void;
-}
+import { type RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
+import { presentableTextForFile } from "../../../../utils/FileUtils";
+import MediaPreviewShell from "./MediaPreviewShell";
+import { PreviewError } from "./PreviewError";
+import { ZoomControls, MAX_ZOOM, MIN_ZOOM, useZoom } from "./ZoomControls";
+import { useMediaBytes } from "./useMediaBytes";
 
 /**
  * mammoth emits a small, predictable subset of HTML, so rather than reusing the message
@@ -76,7 +76,6 @@ const SANITIZE_OPTIONS: IOptions = {
         img: ["data"],
     },
     allowedSchemesAppliedToAttributes: ["href", "src"],
-    // Disallow anything that could smuggle script or layout in via attributes.
     allowProtocolRelative: false,
     transformTags: {
         a: (tagName, attribs) => {
@@ -86,17 +85,27 @@ const SANITIZE_OPTIONS: IOptions = {
     },
 };
 
+interface Props {
+    mxEvent: MatrixEvent;
+    permalinkCreator?: RoomPermalinkCreator;
+    onFinished: () => void;
+}
+
 /**
- * Renders a Word (.docx) document by converting it to HTML with mammoth.
+ * Previews a Word (.docx) document by converting it to HTML with mammoth.
  *
  * This is a best-effort text-and-structure view rather than a faithful reproduction of Word's
  * layout: mammoth maps styles onto semantic HTML, so headings, lists, tables and inline images
  * survive while precise positioning, columns and headers/footers do not.
  */
-export function DocxPreview({ data, zoom, onError }: Props): JSX.Element {
+export default function DocxPreview({ mxEvent, permalinkCreator, onFinished }: Props): JSX.Element {
+    const { data, error: fetchError, helper } = useMediaBytes(mxEvent);
+    const { zoom, zoomIn, zoomOut } = useZoom();
     const [html, setHtml] = useState<string | null>(null);
+    const [convertError, setConvertError] = useState<unknown>(null);
 
     useEffect(() => {
+        if (!data) return;
         let cancelled = false;
 
         // mammoth pulls in a zip reader and an XML parser, so keep it out of the main bundle.
@@ -112,21 +121,42 @@ export function DocxPreview({ data, zoom, onError }: Props): JSX.Element {
             .catch((err) => {
                 if (cancelled) return;
                 logger.error("Failed to convert docx for preview", err);
-                onError(err);
+                setConvertError(err);
             });
 
         return () => {
             cancelled = true;
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
 
-    if (html === null) return <Spinner />;
+    const error = fetchError ?? convertError;
+
+    let body: JSX.Element;
+    if (error) {
+        body = <PreviewError />;
+    } else if (html === null) {
+        body = <Spinner />;
+    } else {
+        body = (
+            <div className="mx_DocxPreview" style={{ fontSize: `${zoom}rem` }}>
+                {/* The HTML has been through the allowlist above and contains no scriptable content. */}
+                <div className="mx_DocxPreview_page" dangerouslySetInnerHTML={{ __html: html }} />
+            </div>
+        );
+    }
 
     return (
-        <div className="mx_DocxPreview" style={{ fontSize: `${zoom}rem` }}>
-            {/* The HTML has been through the allowlist above and contains no scriptable content. */}
-            <div className="mx_DocxPreview_page" dangerouslySetInnerHTML={{ __html: html }} />
-        </div>
+        <MediaPreviewShell
+            label={_t("file_preview|title")}
+            mxEvent={mxEvent}
+            permalinkCreator={permalinkCreator}
+            title={presentableTextForFile(mxEvent.getContent<MediaEventContent>(), _t("common|attachment"), true)}
+            downloadUrl={helper.media.srcHttp ?? ""}
+            downloadName={helper.fileName}
+            toolbar={<ZoomControls zoom={zoom} zoomIn={zoomIn} zoomOut={zoomOut} min={MIN_ZOOM} max={MAX_ZOOM} />}
+            onFinished={onFinished}
+        >
+            {body}
+        </MediaPreviewShell>
     );
 }

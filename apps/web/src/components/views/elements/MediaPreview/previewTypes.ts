@@ -9,7 +9,7 @@ import { type MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import { type MediaEventContent } from "matrix-js-sdk/src/types";
 
 /**
- * The document types we know how to render inside the file preview dialog.
+ * The document types we know how to render inside the media preview dialog.
  *
  * Anything not listed here has no in-app preview and keeps the existing
  * download-only behaviour.
@@ -19,6 +19,21 @@ export enum FilePreviewKind {
     Pdf = "pdf",
     /** Converted to sanitised HTML with mammoth. Only OOXML (.docx), not legacy .doc. */
     Docx = "docx",
+}
+
+/**
+ * Which previewer the media preview dialog should mount.
+ *
+ * This is the superset of {@link FilePreviewKind} plus the image viewer, which predates the
+ * document previewers and reaches the dialog by a different route: avatars and URL previews pass
+ * a bare `src` with no event at all.
+ */
+export enum PreviewKind {
+    Image = "image",
+    Pdf = "pdf",
+    Docx = "docx",
+    /** We have nothing that can render this; offer the chrome and a download button. */
+    Unsupported = "unsupported",
 }
 
 const MIMETYPES: Record<string, FilePreviewKind> = {
@@ -71,4 +86,29 @@ export function canPreviewFile(mxEvent: MatrixEvent): boolean {
     if (content.msgtype !== MsgType.File) return false;
 
     return getFilePreviewKind(content) !== null;
+}
+
+/**
+ * Choose the previewer for a dialog opened on the given event.
+ *
+ * Callers that pass no event at all — avatars, URL previews — are always showing an image, so
+ * that is the default. Only `m.file` consults the document previewers; anything else keeps the
+ * image viewer it has always used.
+ *
+ * @param mxEvent - the event being previewed, if the preview came from a timeline message
+ */
+export function getPreviewKind(mxEvent?: MatrixEvent): PreviewKind {
+    if (!mxEvent) return PreviewKind.Image;
+
+    const content = mxEvent.getContent<MediaEventContent>();
+    if (content.msgtype !== MsgType.File) return PreviewKind.Image;
+
+    switch (getFilePreviewKind(content)) {
+        case FilePreviewKind.Pdf:
+            return PreviewKind.Pdf;
+        case FilePreviewKind.Docx:
+            return PreviewKind.Docx;
+        default:
+            return PreviewKind.Unsupported;
+    }
 }

@@ -16,7 +16,7 @@ import {
 import { mediaFromMxc } from "../../../../customisations/Media";
 import { _t } from "../../../../languageHandler";
 import Modal from "../../../../Modal";
-import ImageView from "../../../../components/views/elements/ImageView";
+import MediaPreviewDialog from "../../../../components/views/elements/MediaPreview/MediaPreviewDialog";
 
 export interface RoomAvatarEventViewModelProps {
     /**
@@ -53,7 +53,7 @@ export class RoomAvatarEventViewModel
         if (!httpUrl) return;
 
         Modal.createDialog(
-            ImageView,
+            MediaPreviewDialog,
             {
                 src: httpUrl,
                 name: RoomAvatarEventViewModel.computeLightboxLabel(this.props),

@@ -25,7 +25,7 @@ import {
 
 import * as Avatar from "../../Avatar";
 import Modal from "../../Modal";
-import ImageView from "../../components/views/elements/ImageView";
+import MediaPreviewDialog from "../../components/views/elements/MediaPreview/MediaPreviewDialog";
 import { mediaFromMxc } from "../../customisations/Media";
 import { LocalRoom } from "../../models/LocalRoom";
 import { type IOOBData } from "../../stores/ThreepidInviteStore";
@@ -148,7 +148,7 @@ export class RoomAvatarViewModel
             if (!avatarUrl) return;
 
             Modal.createDialog(
-                ImageView,
+                MediaPreviewDialog,
                 {
                     src: avatarUrl,
                     name: this.props.room?.name,

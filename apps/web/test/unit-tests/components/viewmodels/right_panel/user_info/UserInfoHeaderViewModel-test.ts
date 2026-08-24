@@ -16,7 +16,7 @@ import { useUserfoHeaderViewModel } from "../../../../../../src/components/viewm
 import * as UseTimezone from "../../../../../../src/hooks/useUserTimezone";
 import SdkConfig from "../../../../../../src/SdkConfig";
 import Modal from "../../../../../../src/Modal";
-import ImageView from "../../../../../../src/components/views/elements/ImageView";
+import MediaPreviewDialog from "../../../../../../src/components/views/elements/MediaPreview/MediaPreviewDialog";
 import * as Media from "../../../../../../src/customisations/Media";
 import { type IConfigOptions } from "../../../../../../src/IConfigOptions";
 
@@ -133,7 +133,7 @@ describe("useUserInfoHeaderViewModel", () => {
         result.current.onMemberAvatarClick();
 
         expect(spyModale).toHaveBeenCalledWith(
-            ImageView,
+            MediaPreviewDialog,
             {
                 src: mockAvatarUrl,
                 name: defaultMember.name,

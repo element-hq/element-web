@@ -32,7 +32,7 @@ import { createReconnectedListener } from "../../utils/connection";
 import { DecryptError, DownloadError } from "../../utils/DecryptFile";
 import { BLURHASH_FIELD, createThumbnail } from "../../utils/image-media";
 import { isMimeTypeAllowed } from "../../utils/blobs";
-import ImageView from "../../components/views/elements/ImageView";
+import MediaPreviewDialog from "../../components/views/elements/MediaPreview/MediaPreviewDialog";
 
 export interface ImageBodyViewModelProps {
     /**
@@ -476,7 +476,7 @@ export class ImageBodyViewModel
             return;
         }
 
-        const params: Omit<ComponentProps<typeof ImageView>, "onFinished"> = {
+        const params: Omit<ComponentProps<typeof MediaPreviewDialog>, "onFinished"> = {
             src: httpUrl,
             name: content.body && content.body.length > 0 ? content.body : _t("common|attachment"),
             mxEvent: this.props.mxEvent,
@@ -499,7 +499,7 @@ export class ImageBodyViewModel
             };
         }
 
-        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", undefined, true);
+        Modal.createDialog(MediaPreviewDialog, params, "mx_Dialog_lightbox", undefined, true);
     }
 
     public onLinkClick = (event: MouseEvent<HTMLAnchorElement>): void => {

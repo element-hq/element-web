@@ -8,41 +8,23 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, createRef, type CSSProperties, useEffect } from "react";
-import FocusLock from "react-focus-lock";
+import React, { createRef, type CSSProperties } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type MediaEventContent } from "matrix-js-sdk/src/types";
 import {
-    CloseIcon,
-    DownloadIcon,
-    OverflowHorizontalIcon,
     RotateLeftIcon,
     RotateRightIcon,
     ZoomInIcon,
     ZoomOutIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { useCreateAutoDisposedViewModel, MessageTimestampView } from "@element-hq/web-shared-components";
 
-import { _t } from "../../../languageHandler";
-import MemberAvatar from "../avatars/MemberAvatar";
-import { ContextMenuTooltipButton } from "../../../accessibility/context_menu/ContextMenuTooltipButton";
-import MessageContextMenu from "../context_menus/MessageContextMenu";
-import { aboveLeftOf } from "../../structures/ContextMenu";
-import SettingsStore from "../../../settings/SettingsStore";
-import dis from "../../../dispatcher/dispatcher";
-import { Action } from "../../../dispatcher/actions";
-import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import { normalizeWheelEvent } from "../../../utils/Mouse";
-import UIStore from "../../../stores/UIStore";
-import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
-import { getKeyBindingsManager } from "../../../KeyBindingsManager";
-import { presentableTextForFile } from "../../../utils/FileUtils";
-import AccessibleButton from "./AccessibleButton";
-import { useDownloadMedia } from "../../../hooks/useDownloadMedia.ts";
-import {
-    MessageTimestampViewModel,
-    type MessageTimestampViewModelProps,
-} from "../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel.ts";
+import { _t } from "../../../../languageHandler";
+import AccessibleButton from "../AccessibleButton";
+import { type RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
+import { normalizeWheelEvent } from "../../../../utils/Mouse";
+import UIStore from "../../../../stores/UIStore";
+import { presentableTextForFile } from "../../../../utils/FileUtils";
+import MediaPreviewShell from "./MediaPreviewShell";
 
 // Max scale to keep gaps around the image
 const MAX_SCALE = 0.95;
@@ -53,14 +35,14 @@ const ZOOM_COEFFICIENT = 0.0025;
 // If we have moved only this much we can zoom
 const ZOOM_DISTANCE = 10;
 
-// Height of mx_ImageView_panel
+// Height of mx_MediaPreview_panel
 const getPanelHeight = (): number => {
-    const value = getComputedStyle(document.documentElement).getPropertyValue("--image-view-panel-height");
+    const value = getComputedStyle(document.documentElement).getPropertyValue("--media-preview-panel-height");
     // Return the value as a number without the unit
     return parseInt(value.slice(0, value.length - 2));
 };
 
-interface IProps {
+export interface ImagePreviewProps {
     src: string; // the source of the image being displayed
     name?: string; // the main title ('name') for the image
     link?: string; // the link (if any) applied to the name of the image
@@ -81,7 +63,7 @@ interface IProps {
         width: number;
         height: number;
     };
-    onFinished(): void;
+    onFinished: () => void;
 }
 
 interface IState {
@@ -92,11 +74,16 @@ interface IState {
     translationX: number;
     translationY: number;
     moving: boolean;
-    contextMenuDisplayed: boolean;
 }
 
-export default class ImageView extends React.Component<IProps, IState> {
-    public constructor(props: IProps) {
+/**
+ * The image previewer: a pannable, zoomable, rotatable image inside the shared preview chrome.
+ *
+ * All of the gesture and zoom state below is local to this component — the shell knows nothing
+ * about it, and contributes only the sender block, filename, download, message options and close.
+ */
+export default class ImagePreview extends React.Component<ImagePreviewProps, IState> {
+    public constructor(props: ImagePreviewProps) {
         super(props);
 
         const { thumbnailInfo } = this.props;
@@ -120,17 +107,13 @@ export default class ImageView extends React.Component<IProps, IState> {
             translationX,
             translationY,
             moving: false,
-            contextMenuDisplayed: false,
         };
     }
 
     // XXX: Refs to functional components
-    private contextMenuButton = createRef<any>();
     private focusLock = createRef<any>();
     private imageWrapper = createRef<HTMLDivElement>();
     private image = createRef<HTMLImageElement>();
-
-    private downloadFunction?: () => Promise<void>;
 
     private initX = 0;
     private initY = 0;
@@ -303,24 +286,6 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.zoomDelta(-ZOOM_STEP);
     };
 
-    private onKeyDown = (ev: KeyboardEvent): void => {
-        const action = getKeyBindingsManager().getAccessibilityAction(ev);
-        switch (action) {
-            case KeyBindingAction.Escape:
-                ev.stopPropagation();
-                ev.preventDefault();
-                this.props.onFinished();
-                break;
-            case KeyBindingAction.Save:
-                ev.preventDefault();
-                ev.stopPropagation();
-                if (this.downloadFunction) {
-                    void this.downloadFunction();
-                }
-                break;
-        }
-    };
-
     private onRotateCounterClockwiseClick = (): void => {
         const cur = this.state.rotation;
         this.setZoomAndRotation(cur - 90);
@@ -329,36 +294,6 @@ export default class ImageView extends React.Component<IProps, IState> {
     private onRotateClockwiseClick = (): void => {
         const cur = this.state.rotation;
         this.setZoomAndRotation(cur + 90);
-    };
-
-    private onOpenContextMenu = (): void => {
-        this.setState({
-            contextMenuDisplayed: true,
-        });
-    };
-
-    private onCloseContextMenu = (): void => {
-        this.setState({
-            contextMenuDisplayed: false,
-        });
-    };
-
-    private onDownloadFunctionReady = (download: () => Promise<void>): void => {
-        this.downloadFunction = download;
-    };
-
-    private onPermalinkClicked = (ev: React.MouseEvent): void => {
-        // This allows the permalink to be opened in a new tab/window or copied as
-        // matrix.to, but also for it to enable routing within Element when clicked.
-        ev.preventDefault();
-        dis.dispatch<ViewRoomPayload>({
-            action: Action.ViewRoom,
-            event_id: this.props.mxEvent?.getId(),
-            highlighted: true,
-            room_id: this.props.mxEvent?.getRoomId(),
-            metricsTrigger: undefined, // room doesn't change
-        });
-        this.props.onFinished();
     };
 
     private onStartMoving = (ev: React.MouseEvent): void => {
@@ -413,30 +348,11 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.setState({ moving: false });
     };
 
-    private renderContextMenu(): JSX.Element {
-        let contextMenu: JSX.Element | undefined;
-        if (this.state.contextMenuDisplayed && this.props.mxEvent) {
-            contextMenu = (
-                <MessageContextMenu
-                    {...aboveLeftOf(this.contextMenuButton.current.getBoundingClientRect())}
-                    mxEvent={this.props.mxEvent}
-                    permalinkCreator={this.props.permalinkCreator}
-                    onFinished={this.onCloseContextMenu}
-                    onCloseDialog={this.props.onFinished}
-                />
-            );
-        }
-
-        return <React.Fragment>{contextMenu}</React.Fragment>;
-    }
-
     public render(): React.ReactNode {
-        const showEventMeta = !!this.props.mxEvent;
-
         let transitionClassName;
-        if (this.animatingLoading) transitionClassName = "mx_ImageView_image_animatingLoading";
+        if (this.animatingLoading) transitionClassName = "mx_ImagePreview_image_animatingLoading";
         else if (this.state.moving || !this.imageIsLoaded) transitionClassName = "";
-        else transitionClassName = "mx_ImageView_image_animating";
+        else transitionClassName = "mx_ImagePreview_image_animating";
 
         const rotationDegrees = this.state.rotation + "deg";
         const zoom = this.state.zoom;
@@ -457,197 +373,72 @@ export default class ImageView extends React.Component<IProps, IState> {
         else if (this.state.zoom === this.state.minZoom) style.cursor = "zoom-in";
         else style.cursor = "zoom-out";
 
-        let info: JSX.Element | undefined;
-        if (showEventMeta) {
-            const mxEvent = this.props.mxEvent;
-            const showTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
-            let permalink = "#";
-            if (this.props.permalinkCreator) {
-                permalink = this.props.permalinkCreator.forEvent(mxEvent.getId()!);
-            }
+        const content = this.props.mxEvent?.getContent<MediaEventContent>();
+        const title = content ? presentableTextForFile(content, _t("common|image"), true) : undefined;
 
-            const senderName = mxEvent.sender?.name ?? mxEvent.getSender();
-            const sender = <div className="mx_ImageView_info_sender">{senderName}</div>;
-            const messageTimestamp = (
-                <MessageTimestampWrapper
-                    href={permalink}
-                    onClick={this.onPermalinkClicked}
-                    showFullDate={true}
-                    showTwelveHour={showTwelveHour}
-                    ts={mxEvent.getTs()}
-                    showSeconds={false}
-                    inhibitTooltip
-                />
-            );
-            const avatar = (
-                <MemberAvatar
-                    member={mxEvent.sender}
-                    fallbackUserId={mxEvent.getSender()}
-                    size="32px"
-                    viewUserOnClick={true}
-                    className="mx_Dialog_nonDialogButton"
-                />
-            );
-
-            info = (
-                <div className="mx_ImageView_info_wrapper">
-                    {avatar}
-                    <div className="mx_ImageView_info">
-                        {sender}
-                        {messageTimestamp}
-                    </div>
-                </div>
-            );
-        } else {
-            // If there is no event - we're viewing an avatar, we set
-            // an empty div here, since the panel uses space-between
-            // and we want the same placement of elements
-            info = <div />;
-        }
-
-        let contextMenuButton: JSX.Element | undefined;
-        if (this.props.mxEvent) {
-            contextMenuButton = (
-                <ContextMenuTooltipButton
-                    className="mx_ImageView_button mx_ImageView_button_more"
-                    title={_t("common|options")}
-                    onClick={this.onOpenContextMenu}
-                    ref={this.contextMenuButton}
-                    isExpanded={this.state.contextMenuDisplayed}
+        const toolbar = (
+            <>
+                <AccessibleButton
+                    className="mx_MediaPreview_button"
+                    title={_t("action|zoom_out")}
+                    onClick={this.onZoomOutClick}
                 >
-                    <OverflowHorizontalIcon />
-                </ContextMenuTooltipButton>
-            );
-        }
-
-        let title: JSX.Element | undefined;
-        if (this.props.mxEvent?.getContent()) {
-            title = (
-                <div className="mx_ImageView_title">
-                    {presentableTextForFile(this.props.mxEvent?.getContent(), _t("common|image"), true)}
-                </div>
-            );
-        }
+                    <ZoomOutIcon />
+                </AccessibleButton>
+                <AccessibleButton
+                    className="mx_MediaPreview_button"
+                    title={_t("action|zoom_in")}
+                    onClick={this.onZoomInClick}
+                >
+                    <ZoomInIcon />
+                </AccessibleButton>
+                <AccessibleButton
+                    className="mx_MediaPreview_button"
+                    title={_t("lightbox|rotate_left")}
+                    onClick={this.onRotateCounterClockwiseClick}
+                >
+                    <RotateLeftIcon />
+                </AccessibleButton>
+                <AccessibleButton
+                    className="mx_MediaPreview_button"
+                    title={_t("lightbox|rotate_right")}
+                    onClick={this.onRotateClockwiseClick}
+                >
+                    <RotateRightIcon />
+                </AccessibleButton>
+            </>
+        );
 
         return (
-            <FocusLock
-                returnFocus={true}
-                lockProps={{
-                    "onKeyDown": this.onKeyDown,
-                    "role": "dialog",
-                    "aria-label": _t("lightbox|title"),
+            <MediaPreviewShell
+                label={_t("lightbox|title")}
+                mxEvent={this.props.mxEvent}
+                permalinkCreator={this.props.permalinkCreator}
+                title={title}
+                downloadUrl={this.props.src}
+                downloadName={this.props.name}
+                toolbar={toolbar}
+                lockRef={this.focusLock}
+                contentClassName="mx_ImagePreview_wrapper"
+                contentRef={this.imageWrapper}
+                contentProps={{
+                    onMouseDown: this.props.onFinished,
+                    onMouseMove: this.onMoving,
+                    onMouseUp: this.onEndMoving,
+                    onMouseLeave: this.onEndMoving,
                 }}
-                className="mx_ImageView"
-                ref={this.focusLock}
+                onFinished={this.props.onFinished}
             >
-                <div className="mx_ImageView_panel">
-                    {info}
-                    {title}
-                    <div className="mx_ImageView_toolbar">
-                        <AccessibleButton
-                            className="mx_ImageView_button"
-                            title={_t("action|zoom_out")}
-                            onClick={this.onZoomOutClick}
-                        >
-                            <ZoomOutIcon />
-                        </AccessibleButton>
-                        <AccessibleButton
-                            className="mx_ImageView_button"
-                            title={_t("action|zoom_in")}
-                            onClick={this.onZoomInClick}
-                        >
-                            <ZoomInIcon />
-                        </AccessibleButton>
-                        <AccessibleButton
-                            className="mx_ImageView_button"
-                            title={_t("lightbox|rotate_left")}
-                            onClick={this.onRotateCounterClockwiseClick}
-                        >
-                            <RotateLeftIcon />
-                        </AccessibleButton>
-                        <AccessibleButton
-                            className="mx_ImageView_button"
-                            title={_t("lightbox|rotate_right")}
-                            onClick={this.onRotateClockwiseClick}
-                        >
-                            <RotateRightIcon />
-                        </AccessibleButton>
-                        <DownloadButton
-                            url={this.props.src}
-                            fileName={this.props.name}
-                            mxEvent={this.props.mxEvent}
-                            onDownloadReady={this.onDownloadFunctionReady}
-                        />
-                        {contextMenuButton}
-                        <AccessibleButton
-                            className="mx_ImageView_button mx_ImageView_button_close"
-                            title={_t("action|close")}
-                            onClick={this.props.onFinished}
-                        >
-                            <CloseIcon />
-                        </AccessibleButton>
-                        {this.renderContextMenu()}
-                    </div>
-                </div>
-                <div
-                    className="mx_ImageView_image_wrapper"
-                    ref={this.imageWrapper}
-                    onMouseDown={this.props.onFinished}
-                    onMouseMove={this.onMoving}
-                    onMouseUp={this.onEndMoving}
-                    onMouseLeave={this.onEndMoving}
-                >
-                    <img
-                        src={this.props.src}
-                        style={style}
-                        alt={this.props.name}
-                        ref={this.image}
-                        className={`mx_ImageView_image ${transitionClassName}`}
-                        draggable={true}
-                        onMouseDown={this.onStartMoving}
-                    />
-                </div>
-            </FocusLock>
+                <img
+                    src={this.props.src}
+                    style={style}
+                    alt={this.props.name}
+                    ref={this.image}
+                    className={`mx_ImagePreview_image ${transitionClassName}`}
+                    draggable={true}
+                    onMouseDown={this.onStartMoving}
+                />
+            </MediaPreviewShell>
         );
     }
-}
-
-interface DownloadButtonProps {
-    url: string;
-    fileName?: string;
-    mxEvent?: MatrixEvent;
-    onDownloadReady?: (download: () => Promise<void>) => void;
-}
-
-export const DownloadButton: React.FC<DownloadButtonProps> = ({ url, fileName, mxEvent, onDownloadReady }) => {
-    const { download, loading, canDownload } = useDownloadMedia(url, fileName, mxEvent);
-
-    useEffect(() => {
-        if (onDownloadReady) onDownloadReady(download);
-    }, [download, onDownloadReady]);
-
-    if (!canDownload) return null;
-
-    return (
-        <AccessibleButton
-            className="mx_ImageView_button"
-            title={loading ? _t("timeline|download_action_downloading") : _t("action|download")}
-            onClick={download}
-            disabled={loading}
-        >
-            <DownloadIcon />
-        </AccessibleButton>
-    );
-};
-
-/**
- * Wraps MessageTimestampView with a view model synced to the provided props.
- * This wrapper can be removed after ImageView has been changed to a function component.
- */
-function MessageTimestampWrapper(props: MessageTimestampViewModelProps): JSX.Element {
-    const vm = useCreateAutoDisposedViewModel(() => new MessageTimestampViewModel(props));
-    useEffect(() => {
-        vm.setProps(props);
-    }, [vm, props]);
-    return <MessageTimestampView vm={vm} className="mx_MessageTimestamp" />;
 }
