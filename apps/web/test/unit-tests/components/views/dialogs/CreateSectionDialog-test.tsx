@@ -8,18 +8,50 @@
 import { render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
+import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 
 import { CreateSectionDialog } from "../../../../../src/components/views/dialogs/CreateSectionDialog";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
+import RoomListStoreV3 from "../../../../../src/stores/room-list-v3/RoomListStoreV3";
+import DMRoomMap from "../../../../../src/utils/DMRoomMap";
+import { mkStubRoom, stubClient } from "../../../../test-utils";
+
+const SECTION_TAG = "element.io.section.abc";
 
 describe("CreateSectionDialog", () => {
     const onFinished: jest.Mock = jest.fn();
+    let client: MatrixClient;
+    let rooms: Room[];
 
     beforeEach(() => {
         jest.resetAllMocks();
+
+        client = stubClient();
+        rooms = [
+            mkStubRoom("!first:example.org", "First room", client),
+            mkStubRoom("!second:example.org", "Second room", client),
+        ];
+        rooms.forEach((room) => (room.tags = {}));
+        jest.spyOn(client, "getRoom").mockImplementation(
+            (roomId) => rooms.find((room) => room.roomId === roomId) ?? null,
+        );
+        // The dialog builds its view model from these two globals.
+        jest.spyOn(SDKContextClass.instance, "client", "get").mockReturnValue(client);
+        jest.spyOn(RoomListStoreV3.instance, "getRooms").mockReturnValue(rooms);
+        DMRoomMap.makeShared(client);
     });
 
     function renderComponent(): void {
         render(<CreateSectionDialog onFinished={onFinished} />);
+    }
+
+    /**
+     * Name the section and submit it, which takes the dialog to the room selection step.
+     * @param name - The name to give to the section.
+     */
+    async function goToRoomStep(name = "My section"): Promise<void> {
+        await userEvent.type(screen.getByRole("textbox"), name);
+        await userEvent.click(screen.getByRole("button", { name: "Create section" }));
     }
 
     it("renders the dialog", () => {
@@ -33,33 +65,52 @@ describe("CreateSectionDialog", () => {
         expect(createButton).toBeDisabled();
     });
 
-    it("calls onFinished with true and the section name when create section is clicked", async () => {
+    it("moves to the room selection step when create section is clicked", async () => {
         renderComponent();
-        const input = screen.getByRole("textbox");
-        await userEvent.type(input, "My section");
-        const createButton = screen.getByRole("button", { name: "Create section" });
-        await userEvent.click(createButton);
-        expect(onFinished).toHaveBeenCalledWith(true, "My section");
+        await goToRoomStep();
+
+        expect(screen.getByRole("heading", { name: "Add chats to My section" })).toBeInTheDocument();
+        expect(onFinished).not.toHaveBeenCalled();
     });
 
-    it("calls onFinished with false when the dialog is cancelled", async () => {
+    it("moves to the room selection step when the form is submitted", async () => {
         renderComponent();
-        const cancelButton = screen.getByRole("button", { name: "Cancel" });
-        await userEvent.click(cancelButton);
-        expect(onFinished).toHaveBeenCalledWith(false, "");
-    });
-
-    it("calls onFinished with true and the section name when the form is submitted", async () => {
-        renderComponent();
-        const input = screen.getByRole("textbox");
-        await userEvent.type(input, "My section");
+        await userEvent.type(screen.getByRole("textbox"), "My section");
         await userEvent.keyboard("{Enter}");
-        expect(onFinished).toHaveBeenCalledWith(true, "My section");
+
+        expect(screen.getByRole("heading", { name: "Add chats to My section" })).toBeInTheDocument();
+        expect(onFinished).not.toHaveBeenCalled();
+    });
+
+    it("calls onFinished without a section when the dialog is cancelled", async () => {
+        renderComponent();
+        await userEvent.click(screen.getByRole("button", { name: "Cancel" }));
+
+        expect(onFinished).toHaveBeenCalledWith(undefined, undefined);
+    });
+
+    it("calls onFinished with the rooms picked in the room selection step", async () => {
+        renderComponent();
+        await goToRoomStep();
+        await userEvent.click(screen.getByRole("option", { name: /First room/ }));
+        await userEvent.click(screen.getByRole("button", { name: "Add chats" }));
+
+        expect(onFinished).toHaveBeenCalledWith("My section", ["!first:example.org"], []);
+    });
+
+    it("keeps the section but no room when the room selection step is skipped", async () => {
+        renderComponent();
+        await goToRoomStep();
+        await userEvent.click(screen.getByRole("button", { name: "Skip" }));
+
+        expect(onFinished).toHaveBeenCalledWith("My section", undefined);
     });
 
     describe("editing mode", () => {
+        const sectionToEdit = { name: "Existing Section", tag: SECTION_TAG };
+
         function renderEditComponent(): void {
-            render(<CreateSectionDialog onFinished={onFinished} sectionToEdit="Existing Section" />);
+            render(<CreateSectionDialog onFinished={onFinished} sectionToEdit={sectionToEdit} />);
         }
 
         it("pre-fills the input with the existing section name", () => {
@@ -74,13 +125,28 @@ describe("CreateSectionDialog", () => {
             expect(screen.queryByRole("button", { name: "Create section" })).not.toBeInTheDocument();
         });
 
-        it("calls onFinished with the updated name when save is clicked", async () => {
+        it("moves to the room selection step when save is clicked", async () => {
             renderEditComponent();
             const input = screen.getByRole("textbox");
             await userEvent.clear(input);
             await userEvent.type(input, "Updated Section");
             await userEvent.click(screen.getByRole("button", { name: "Save" }));
-            expect(onFinished).toHaveBeenCalledWith(true, "Updated Section");
+
+            expect(screen.getByRole("heading", { name: "Add chats to Updated Section" })).toBeInTheDocument();
+            expect(onFinished).not.toHaveBeenCalled();
+        });
+
+        it("preselects the rooms of the section and reports the ones removed from it", async () => {
+            // Both rooms start in the section: one is removed, the other keeps it submittable.
+            rooms.forEach((room) => (room.tags = { [SECTION_TAG]: {} }));
+            renderEditComponent();
+            await userEvent.click(screen.getByRole("button", { name: "Save" }));
+
+            // The room is preselected, so clicking it takes it out of the section
+            await userEvent.click(screen.getByRole("option", { name: /First room/ }));
+            await userEvent.click(screen.getByRole("button", { name: "Add chats" }));
+
+            expect(onFinished).toHaveBeenCalledWith("Existing Section", [], ["!first:example.org"]);
         });
 
         it("has the save button disabled when the input is empty", async () => {

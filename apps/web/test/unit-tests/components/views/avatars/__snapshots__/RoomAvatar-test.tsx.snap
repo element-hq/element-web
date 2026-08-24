@@ -23,6 +23,7 @@ exports[`RoomAvatar should render an avatar for a room the user is invited to 1`
     data-color="6"
     data-testid="avatar-img"
     data-type="round"
+    role="img"
     style="--cpd-avatar-size: 36px;"
   >
     <img

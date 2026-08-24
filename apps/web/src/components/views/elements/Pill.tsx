@@ -30,7 +30,7 @@ const PillRoomAvatar: React.FC<{
     }
 
     if (room) {
-        return <RoomAvatar room={room} size="16px" aria-hidden="true" />;
+        return <RoomAvatar room={room} size="16px" aria-hidden={true} />;
     }
     return linkIcon;
 };

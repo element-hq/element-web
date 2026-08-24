@@ -117,7 +117,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         this.recoveryKey = {
             privateKey: keyFromCustomisations,
         };
-        this.bootstrapSecretStorage();
+        void this.bootstrapSecretStorage();
     }
 
     private onKeyPassphraseChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -268,11 +268,11 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
     };
 
     private onLoadRetryClick = (): void => {
-        this.bootstrapSecretStorage();
+        void this.bootstrapSecretStorage();
     };
 
     private onShowKeyContinueClick = (): void => {
-        this.bootstrapSecretStorage();
+        void this.bootstrapSecretStorage();
     };
 
     private onCancelClick = (): void => {
@@ -290,7 +290,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         await this.passphraseField.current.validate({ allowEmpty: false });
         if (!this.passphraseField.current.state.valid) {
             this.passphraseField.current.focus();
-            this.passphraseField.current.validate({ allowEmpty: false, focused: true });
+            void this.passphraseField.current.validate({ allowEmpty: false, focused: true });
             return;
         }
 

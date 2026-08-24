@@ -19,13 +19,21 @@ export interface LinkPreviewActions {
     onImageClick: () => void;
 }
 
+export interface AdditionalClasses {
+    /*
+     * Additional classes at add to the component
+     */
+    className?: string;
+}
+
 export type LinkPreviewProps = UrlPreview & LinkPreviewActions & { collapsed: boolean };
 
 export function LinkTitle({
     title,
     showTooltipOnLink,
     link,
-}: Pick<LinkPreviewProps, "title" | "showTooltipOnLink" | "link">): JSX.Element {
+    className,
+}: Pick<LinkPreviewProps, "title" | "showTooltipOnLink" | "link"> & AdditionalClasses): JSX.Element {
     const caption = new URL(link).toString();
     const anchor = (
         <Text
@@ -33,7 +41,7 @@ export function LinkTitle({
             type="body"
             weight="semibold"
             size="md"
-            className={styles.title}
+            className={classNames(styles.title, className)}
             href={link}
             target="_blank"
             rel="noreferrer noopener"
@@ -44,9 +52,16 @@ export function LinkTitle({
     return showTooltipOnLink ? <Tooltip label={caption}>{anchor}</Tooltip> : anchor;
 }
 
-export function LinkSiteName({ siteIcon, siteName }: { siteIcon?: string; siteName: string }): JSX.Element {
+export function LinkSiteName({
+    siteIcon,
+    siteName,
+    className,
+}: {
+    siteIcon?: string;
+    siteName: string;
+} & AdditionalClasses): JSX.Element {
     return (
-        <div className={styles.siteName}>
+        <div className={classNames(styles.siteName, className)}>
             {siteIcon && <Avatar size="16px" name={siteName} id={siteName} src={siteIcon} />}
             <Text as="span" size="sm" weight="regular">
                 {siteName}
@@ -178,6 +193,7 @@ export function LinkPreviewExpanded(preview: LinkPreviewProps): JSX.Element {
                     className={styles.preview}
                     onClick={createImageClickHandler(preview)}
                     aria-label={_t("timeline|url_preview|view_image")}
+                    type="button"
                 />
             );
         }
