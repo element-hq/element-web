@@ -7,15 +7,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { sleep } from "matrix-js-sdk/src/utils";
-import { waitFor } from "jest-matrix-react";
+// @vitest-environment happy-dom
 
-import SettingsStore from "../../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
-import { FontWatcher } from "../../../../src/settings/watchers/FontWatcher";
-import { Action } from "../../../../src/dispatcher/actions";
-import { untilDispatch } from "../../../test-utils";
-import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { sleep } from "matrix-js-sdk/src/utils";
+import { waitFor } from "test-utils-rtl";
+import { untilDispatch } from "test-utils";
+
+import SettingsStore from "../SettingsStore";
+import { SettingLevel } from "../SettingLevel";
+import { FontWatcher } from "./FontWatcher";
+import { Action } from "../../dispatcher/actions";
+import defaultDispatcher from "../../dispatcher/dispatcher";
 
 async function setSystemFont(font: string | false): Promise<void> {
     await SettingsStore.setValue("systemFont", null, SettingLevel.DEVICE, font || "");
@@ -113,6 +116,18 @@ describe("FontWatcher", function () {
     });
 
     it("should update root font size with positive delta", async () => {
+        // happy-dom's CSSStyleDeclaration validation regex for `calc()` doesn't support the nested
+        // parentheses used by `var(...)` inside `calc(...)`, so it silently drops the value set by FontWatcher.
+        const root = document.querySelector<HTMLElement>(":root")!;
+        let fontSize = "";
+        Object.defineProperty(root.style, "fontSize", {
+            configurable: true,
+            get: () => fontSize,
+            set: (value: string) => {
+                fontSize = value;
+            },
+        });
+
         await new FontWatcher().start();
 
         defaultDispatcher.dispatch({
@@ -121,8 +136,7 @@ describe("FontWatcher", function () {
         });
 
         await waitFor(() => {
-            const rootFontSize = document.querySelector<HTMLElement>(":root")!.style.fontSize;
-            expect(rootFontSize).toContain("2px");
+            expect(root.style.fontSize).toContain("2px");
         });
     });
 });

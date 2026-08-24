@@ -6,28 +6,40 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked } from "jest-mock";
+// @vitest-environment happy-dom
+
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { act } from "react";
 import { Crypto } from "@peculiar/webcrypto";
 import { type CryptoApi, deriveRecoveryKeyFromPassphrase } from "matrix-js-sdk/src/crypto-api";
 import { SecretStorage } from "matrix-js-sdk/src/matrix";
+import { filterConsole, stubClient } from "test-utils";
+// oxlint-disable-next-line no-restricted-imports
+import type * as ReactImport from "react";
 
-import { accessSecretStorage, crossSigningCallbacks } from "../../src/SecurityManager";
-import { filterConsole, stubClient } from "../test-utils";
-import Modal from "../../src/Modal.tsx";
+import { accessSecretStorage, crossSigningCallbacks } from "./SecurityManager";
+import Modal from "./Modal.tsx";
 import {
     default as AccessSecretStorageDialog,
     type KeyParams,
-} from "../../src/components/views/dialogs/security/AccessSecretStorageDialog.tsx";
+} from "./components/views/dialogs/security/AccessSecretStorageDialog.tsx";
 
-jest.mock("react", () => {
-    const React = jest.requireActual("react");
-    React.lazy = (children: any) => children(); // stub out lazy for dialog test
-    return React;
+vi.mock("react", async () => {
+    const React = await vi.importActual<typeof ReactImport>("react");
+    return {
+        ...React,
+        lazy: (children: any) => children(), // stub out lazy for dialog test
+    };
 });
 
+vi.mock("./async-components/views/dialogs/security/CreateSecretStorageDialog", () => ({
+    __test: true,
+    __esModule: true,
+    default: () => vi.fn(),
+}));
+
 afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
 });
 
 describe("SecurityManager", () => {
@@ -41,11 +53,11 @@ describe("SecurityManager", () => {
                 bootstrapSecretStorage: () => {},
             } as unknown as CryptoApi;
             const client = stubClient();
-            client.secretStorage.hasKey = jest.fn().mockResolvedValue(true);
-            mocked(client.getCrypto).mockReturnValue(crypto);
+            client.secretStorage.hasKey = vi.fn().mockResolvedValue(true);
+            vi.mocked(client.getCrypto).mockReturnValue(crypto);
 
             // When I run accessSecretStorage
-            const func = jest.fn();
+            const func = vi.fn();
             await accessSecretStorage(func);
 
             // Then we call the passed-in function
@@ -58,13 +70,13 @@ describe("SecurityManager", () => {
             it("throws if crypto is unavailable", async () => {
                 // Given a client with no crypto
                 const client = stubClient();
-                client.secretStorage.hasKey = jest.fn().mockResolvedValue(true);
-                mocked(client.getCrypto).mockReturnValue(undefined);
+                client.secretStorage.hasKey = vi.fn().mockResolvedValue(true);
+                vi.mocked(client.getCrypto).mockReturnValue(undefined);
 
                 // When I run accessSecretStorage
                 // Then we throw an error
                 await expect(async () => {
-                    await accessSecretStorage(jest.fn());
+                    await accessSecretStorage(vi.fn());
                 }).rejects.toThrow("End-to-end encryption is disabled - unable to access secret storage");
             });
 
@@ -75,21 +87,16 @@ describe("SecurityManager", () => {
                 // When I run accessSecretStorage
                 // Then we throw an error
                 await expect(async () => {
-                    await accessSecretStorage(jest.fn());
+                    await accessSecretStorage(vi.fn());
                 }).rejects.toThrow("Secret storage has not been created yet");
             });
         });
 
         it("should show CreateSecretStorageDialog if forceReset=true", async () => {
-            jest.mock("../../src/async-components/views/dialogs/security/CreateSecretStorageDialog", () => ({
-                __test: true,
-                __esModule: true,
-                default: () => jest.fn(),
-            }));
-            const spy = jest.spyOn(Modal, "createDialog");
+            const spy = vi.spyOn(Modal, "createDialog");
             stubClient();
 
-            const func = jest.fn();
+            const func = vi.fn();
             accessSecretStorage(func, { forceReset: true });
 
             expect(spy).toHaveBeenCalledTimes(1);
@@ -100,7 +107,7 @@ describe("SecurityManager", () => {
     describe("getSecretStorageKey", () => {
         const { getSecretStorageKey } = crossSigningCallbacks;
 
-        /** Polyfill crypto.subtle, which is unavailable in jsdom */
+        /** Polyfill crypto.subtle, which is unavailable in happy-dom */
         function polyFillSubtleCrypto() {
             Object.defineProperty(globalThis.crypto, "subtle", { value: new Crypto().subtle });
         }
@@ -109,12 +116,12 @@ describe("SecurityManager", () => {
             polyFillSubtleCrypto();
 
             const client = stubClient();
-            mocked(client.secretStorage.getDefaultKeyId).mockResolvedValue("my_default_key");
+            vi.mocked(client.secretStorage.getDefaultKeyId).mockResolvedValue("my_default_key");
 
             const passphrase = "s3cret";
             const { recoveryKey, keyInfo } = await deriveKeyFromPassphrase(passphrase);
 
-            jest.spyOn(Modal, "createDialog").mockImplementation((component) => {
+            vi.spyOn(Modal, "createDialog").mockImplementation((component) => {
                 expect(component).toBe(AccessSecretStorageDialog);
 
                 const modalFunc = async () => [{ passphrase }] as [KeyParams];
@@ -133,8 +140,8 @@ describe("SecurityManager", () => {
 
         it("should not prompt the user if the requested key is not the default", async () => {
             const client = stubClient();
-            mocked(client.secretStorage.getDefaultKeyId).mockResolvedValue("my_default_key");
-            const createDialogSpy = jest.spyOn(Modal, "createDialog");
+            vi.mocked(client.secretStorage.getDefaultKeyId).mockResolvedValue("my_default_key");
+            const createDialogSpy = vi.spyOn(Modal, "createDialog");
 
             await expect(
                 act(() =>

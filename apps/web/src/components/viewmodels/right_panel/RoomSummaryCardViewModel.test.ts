@@ -5,34 +5,37 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { act, renderHook, waitFor } from "jest-matrix-react";
+// @vitest-environment happy-dom
+
+import { describe, it, expect, vi, beforeEach, afterEach, type Mock } from "vitest";
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
+import { act, renderHook, waitFor } from "test-utils-rtl";
+import { mkStubRoom, stubClient, withClientContextRenderOptions } from "test-utils";
 
-import { useRoomSummaryCardViewModel } from "../../../../../src/components/viewmodels/right_panel/RoomSummaryCardViewModel";
-import { mkStubRoom, stubClient, withClientContextRenderOptions } from "../../../../test-utils";
-import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
-import { DefaultTagID } from "../../../../../src/stores/room-list-v3/skip-list/tag";
-import RightPanelStore from "../../../../../src/stores/right-panel/RightPanelStore";
-import { RightPanelPhases } from "../../../../../src/stores/right-panel/RightPanelStorePhases";
-import Modal from "../../../../../src/Modal";
-import { ShareDialog } from "../../../../../src/components/views/dialogs/ShareDialog";
-import ExportDialog from "../../../../../src/components/views/dialogs/ExportDialog";
-import { PollHistoryDialog } from "../../../../../src/components/views/dialogs/PollHistoryDialog";
-import { ReportRoomDialog } from "../../../../../src/components/views/dialogs/ReportRoomDialog";
-import { inviteToRoom } from "../../../../../src/utils/room/inviteToRoom";
-import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import * as hooks from "../../../../../src/hooks/useAccountData";
-import * as getTagsForRoomUtils from "../../../../../src/utils/room/getTagsForRoom";
+import { useRoomSummaryCardViewModel } from "./RoomSummaryCardViewModel";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
+import { DefaultTagID } from "../../../stores/room-list-v3/skip-list/tag";
+import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
+import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
+import Modal from "../../../Modal";
+import { ShareDialog } from "../../views/dialogs/ShareDialog";
+import ExportDialog from "../../views/dialogs/ExportDialog";
+import { PollHistoryDialog } from "../../views/dialogs/PollHistoryDialog";
+import { ReportRoomDialog } from "../../views/dialogs/ReportRoomDialog";
+import { inviteToRoom } from "../../../utils/room/inviteToRoom";
+import DMRoomMap from "../../../utils/DMRoomMap";
+import * as hooks from "../../../hooks/useAccountData";
+import * as getTagsForRoomUtils from "../../../utils/room/getTagsForRoom";
 
-jest.mock("../../../../../src/utils/room/inviteToRoom", () => ({
-    inviteToRoom: jest.fn(),
+vi.mock("../../../utils/room/inviteToRoom", () => ({
+    inviteToRoom: vi.fn(),
 }));
 
 describe("useRoomSummaryCardViewModel", () => {
     let matrixClient: MatrixClient;
     let room: Room;
     let permalinkCreator: any;
-    const onSearchCancel = jest.fn();
+    const onSearchCancel = vi.fn();
 
     beforeEach(() => {
         matrixClient = stubClient();
@@ -40,14 +43,14 @@ describe("useRoomSummaryCardViewModel", () => {
         permalinkCreator = {};
 
         DMRoomMap.setShared({
-            getUserIdForRoomId: jest.fn(),
+            getUserIdForRoomId: vi.fn(),
         } as unknown as DMRoomMap);
 
-        jest.spyOn(getTagsForRoomUtils, "getTagsForRoom").mockReturnValue([]);
+        vi.spyOn(getTagsForRoomUtils, "getTagsForRoom").mockReturnValue([]);
     });
 
     afterEach(() => {
-        jest.resetAllMocks();
+        vi.resetAllMocks();
     });
 
     function render() {
@@ -69,7 +72,7 @@ describe("useRoomSummaryCardViewModel", () => {
     });
 
     it("should handle room members click", () => {
-        const spy = jest.spyOn(RightPanelStore.instance, "pushCard");
+        const spy = vi.spyOn(RightPanelStore.instance, "pushCard");
         const { result } = render();
 
         result.current.onRoomMembersClick();
@@ -77,7 +80,7 @@ describe("useRoomSummaryCardViewModel", () => {
     });
 
     it("should handle room settings click", () => {
-        const spy = jest.spyOn(defaultDispatcher, "dispatch");
+        const spy = vi.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
         const { result } = render();
 
         result.current.onRoomSettingsClick(new Event("click"));
@@ -85,7 +88,7 @@ describe("useRoomSummaryCardViewModel", () => {
     });
 
     it("should handle leave room click", () => {
-        const spy = jest.spyOn(defaultDispatcher, "dispatch");
+        const spy = vi.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
         const { result } = render();
 
         result.current.onLeaveRoomClick();
@@ -96,7 +99,7 @@ describe("useRoomSummaryCardViewModel", () => {
     });
 
     it("should handle room threads click", () => {
-        const spy = jest.spyOn(RightPanelStore.instance, "pushCard");
+        const spy = vi.spyOn(RightPanelStore.instance, "pushCard");
         const { result } = render();
 
         result.current.onRoomThreadsClick();
@@ -104,7 +107,7 @@ describe("useRoomSummaryCardViewModel", () => {
     });
 
     it("should handle room files click", () => {
-        const spy = jest.spyOn(RightPanelStore.instance, "pushCard");
+        const spy = vi.spyOn(RightPanelStore.instance, "pushCard");
         const { result } = render();
 
         result.current.onRoomFilesClick();
@@ -112,7 +115,7 @@ describe("useRoomSummaryCardViewModel", () => {
     });
 
     it("should handle room extensions click", () => {
-        const spy = jest.spyOn(RightPanelStore.instance, "pushCard");
+        const spy = vi.spyOn(RightPanelStore.instance, "pushCard");
         const { result } = render();
 
         result.current.onRoomExtensionsClick();
@@ -120,7 +123,7 @@ describe("useRoomSummaryCardViewModel", () => {
     });
 
     it("should handle room pins click", () => {
-        const spy = jest.spyOn(RightPanelStore.instance, "pushCard");
+        const spy = vi.spyOn(RightPanelStore.instance, "pushCard");
         const { result } = render();
 
         result.current.onRoomPinsClick();
@@ -135,13 +138,16 @@ describe("useRoomSummaryCardViewModel", () => {
     });
 
     describe("action that trigger a dialog", () => {
-        let createDialogSpy: jest.SpyInstance;
+        let createDialogSpy: Mock;
 
         beforeEach(() => {
-            createDialogSpy = jest.spyOn(Modal, "createDialog").mockImplementation(() => ({
-                finished: Promise.resolve([false]),
-                close: jest.fn(),
-            }));
+            createDialogSpy = vi.spyOn(Modal, "createDialog").mockImplementation(
+                () =>
+                    ({
+                        finished: Promise.resolve([false]),
+                        close: vi.fn(),
+                    }) as any,
+            ) as unknown as Mock;
         });
 
         afterEach(() => {
@@ -195,14 +201,14 @@ describe("useRoomSummaryCardViewModel", () => {
 
     describe("favorite room state", () => {
         it("should identify favorite rooms", () => {
-            jest.spyOn(getTagsForRoomUtils, "getTagsForRoom").mockReturnValue([DefaultTagID.Favourite]);
+            vi.spyOn(getTagsForRoomUtils, "getTagsForRoom").mockReturnValue([DefaultTagID.Favourite]);
             const { result } = render();
 
             expect(result.current.isFavorite).toBe(true);
         });
 
         it("should identify non-favorite rooms", () => {
-            jest.spyOn(getTagsForRoomUtils, "getTagsForRoom").mockReturnValue([]);
+            vi.spyOn(getTagsForRoomUtils, "getTagsForRoom").mockReturnValue([]);
             const { result } = render();
 
             expect(result.current.isFavorite).toBe(false);
@@ -216,7 +222,7 @@ describe("useRoomSummaryCardViewModel", () => {
                 "@user:domain.com": [room.roomId],
             };
             // Mock the useAccountData hook result
-            jest.spyOn(hooks, "useAccountData").mockReturnValue(directRoomsList);
+            vi.spyOn(hooks, "useAccountData").mockReturnValue(directRoomsList);
 
             const { result } = render();
 
@@ -229,7 +235,7 @@ describe("useRoomSummaryCardViewModel", () => {
             // Mock the direct rooms account data
             const directRoomsList = {};
             // Mock the useAccountData hook result
-            jest.spyOn(hooks, "useAccountData").mockReturnValue(directRoomsList);
+            vi.spyOn(hooks, "useAccountData").mockReturnValue(directRoomsList);
 
             const { result } = render();
 
@@ -242,7 +248,7 @@ describe("useRoomSummaryCardViewModel", () => {
     describe("search input", () => {
         it("should handle search input escape key", () => {
             const directRoomsList = {};
-            jest.spyOn(hooks, "useAccountData").mockReturnValue(directRoomsList);
+            vi.spyOn(hooks, "useAccountData").mockReturnValue(directRoomsList);
             const { result } = render();
             // Create a mock input element and set it as the current ref value
             const mockInputElement = document.createElement("input");
@@ -252,8 +258,8 @@ describe("useRoomSummaryCardViewModel", () => {
 
             const event = {
                 key: "Escape",
-                preventDefault: jest.fn(),
-                stopPropagation: jest.fn(),
+                preventDefault: vi.fn(),
+                stopPropagation: vi.fn(),
             };
 
             result.current.onUpdateSearchInput(event as any);

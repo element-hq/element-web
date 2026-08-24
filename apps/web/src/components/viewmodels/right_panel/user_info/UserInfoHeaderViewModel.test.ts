@@ -5,24 +5,28 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
+import { describe, it, expect, vi, beforeEach, afterEach, type Mocked } from "vitest";
 import { type MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
-import { mocked, type Mocked } from "jest-mock";
 import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
-import { renderHook } from "jest-matrix-react";
+import { renderHook } from "test-utils-rtl";
+import { withClientContextRenderOptions } from "test-utils";
 
-import { withClientContextRenderOptions } from "../../../../../test-utils";
-import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
-import { useUserfoHeaderViewModel } from "../../../../../../src/components/viewmodels/right_panel/user_info/UserInfoHeaderViewModel";
-import * as UseTimezone from "../../../../../../src/hooks/useUserTimezone";
-import SdkConfig from "../../../../../../src/SdkConfig";
-import Modal from "../../../../../../src/Modal";
-import ImageView from "../../../../../../src/components/views/elements/ImageView";
-import * as Media from "../../../../../../src/customisations/Media";
-import { type IConfigOptions } from "../../../../../../src/IConfigOptions";
+import { MatrixClientPeg } from "../../../../MatrixClientPeg";
+import { useUserfoHeaderViewModel } from "./UserInfoHeaderViewModel";
+import * as UseTimezone from "../../../../hooks/useUserTimezone";
+import SdkConfig from "../../../../SdkConfig";
+import Modal from "../../../../Modal";
+import ImageView from "../../../views/elements/ImageView";
+import * as Media from "../../../../customisations/Media";
+import { type IConfigOptions } from "../../../../IConfigOptions";
 
-jest.mock("../../../../../../src/customisations/UserIdentifier", () => {
+vi.mock("../../../../customisations/UserIdentifier", () => {
     return {
-        getDisplayUserIdentifier: jest.fn().mockReturnValue("customUserIdentifier"),
+        default: {
+            getDisplayUserIdentifier: vi.fn().mockReturnValue("customUserIdentifier"),
+        },
     };
 });
 
@@ -44,47 +48,47 @@ describe("useUserInfoHeaderViewModel", () => {
     const oldGet = SdkConfig.get;
 
     beforeEach(() => {
-        mockCrypto = mocked({
-            getDeviceVerificationStatus: jest.fn(),
-            getUserDeviceInfo: jest.fn(),
-            userHasCrossSigningKeys: jest.fn().mockResolvedValue(false),
-            getUserVerificationStatus: jest.fn(),
-            isEncryptionEnabledInRoom: jest.fn().mockResolvedValue(false),
+        mockCrypto = vi.mocked({
+            getDeviceVerificationStatus: vi.fn(),
+            getUserDeviceInfo: vi.fn(),
+            userHasCrossSigningKeys: vi.fn().mockResolvedValue(false),
+            getUserVerificationStatus: vi.fn(),
+            isEncryptionEnabledInRoom: vi.fn().mockResolvedValue(false),
         } as unknown as CryptoApi);
 
-        mockClient = mocked({
-            getUser: jest.fn(),
-            isGuest: jest.fn().mockReturnValue(false),
-            isUserIgnored: jest.fn(),
-            getIgnoredUsers: jest.fn(),
-            setIgnoredUsers: jest.fn(),
-            getUserId: jest.fn(),
-            getSafeUserId: jest.fn(),
-            getDomain: jest.fn(),
-            on: jest.fn(),
-            off: jest.fn(),
-            isSynapseAdministrator: jest.fn().mockResolvedValue(false),
-            doesServerSupportUnstableFeature: jest.fn().mockReturnValue(false),
-            doesServerSupportExtendedProfiles: jest.fn().mockResolvedValue(false),
-            getExtendedProfileProperty: jest.fn().mockRejectedValue(new Error("Not supported")),
-            mxcUrlToHttp: jest.fn().mockReturnValue(mockAvatarUrl),
-            removeListener: jest.fn(),
+        mockClient = vi.mocked({
+            getUser: vi.fn(),
+            isGuest: vi.fn().mockReturnValue(false),
+            isUserIgnored: vi.fn(),
+            getIgnoredUsers: vi.fn(),
+            setIgnoredUsers: vi.fn(),
+            getUserId: vi.fn(),
+            getSafeUserId: vi.fn(),
+            getDomain: vi.fn(),
+            on: vi.fn(),
+            off: vi.fn(),
+            isSynapseAdministrator: vi.fn().mockResolvedValue(false),
+            doesServerSupportUnstableFeature: vi.fn().mockReturnValue(false),
+            doesServerSupportExtendedProfiles: vi.fn().mockResolvedValue(false),
+            getExtendedProfileProperty: vi.fn().mockRejectedValue(new Error("Not supported")),
+            mxcUrlToHttp: vi.fn().mockReturnValue(mockAvatarUrl),
+            removeListener: vi.fn(),
             currentState: {
-                on: jest.fn(),
+                on: vi.fn(),
             },
-            getRoom: jest.fn(),
+            getRoom: vi.fn(),
             credentials: {},
-            setPowerLevel: jest.fn(),
-            getCrypto: jest.fn().mockReturnValue(mockCrypto),
+            setPowerLevel: vi.fn(),
+            getCrypto: vi.fn().mockReturnValue(mockCrypto),
             baseUrl: "homeserver.url",
         } as unknown as MatrixClient);
 
-        jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
-        jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
+        vi.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
+        vi.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     const renderUserInfoHeaderViewModelHook = (props = defaultProps) => {
@@ -92,7 +96,7 @@ describe("useUserInfoHeaderViewModel", () => {
     };
     it("should give user timezone info", () => {
         const defaultTZ = { timezone: "FR", friendly: "fr" };
-        jest.spyOn(UseTimezone, "useUserTimezone").mockReturnValue(defaultTZ);
+        vi.spyOn(UseTimezone, "useUserTimezone").mockReturnValue(defaultTZ);
 
         const { result } = renderUserInfoHeaderViewModelHook();
         const timezone = result.current.timezoneInfo;
@@ -102,7 +106,7 @@ describe("useUserInfoHeaderViewModel", () => {
     });
 
     it("should give correct showPresence value based on enablePresenceByHsUrl", () => {
-        jest.spyOn(SdkConfig, "get").mockImplementation((key: string) => {
+        vi.spyOn(SdkConfig, "get").mockImplementation((key: string) => {
             if (key === "enable_presence_by_hs_url") {
                 return {
                     [mockClient.baseUrl]: false,
@@ -116,7 +120,7 @@ describe("useUserInfoHeaderViewModel", () => {
     });
 
     it("should have default value true for showPresence", () => {
-        jest.spyOn(SdkConfig, "get").mockImplementation(() => false);
+        vi.spyOn(SdkConfig, "get").mockImplementation(() => false);
         const { result } = renderUserInfoHeaderViewModelHook();
         const showPresence = result.current.showPresence;
         expect(showPresence).toBeTruthy();
@@ -124,9 +128,9 @@ describe("useUserInfoHeaderViewModel", () => {
 
     it("should open image dialog when avatar is clicked", () => {
         const props = Object.assign({}, defaultProps);
-        const spyModale = jest.spyOn(Modal, "createDialog");
-        const spyMedia = jest.spyOn(Media, "mediaFromMxc");
-        jest.spyOn(props.member, "getMxcAvatarUrl").mockReturnValue(mockAvatarUrl);
+        const spyModale = vi.spyOn(Modal, "createDialog");
+        const spyMedia = vi.spyOn(Media, "mediaFromMxc");
+        vi.spyOn(props.member, "getMxcAvatarUrl").mockReturnValue(mockAvatarUrl);
 
         const { result } = renderUserInfoHeaderViewModelHook(props);
 
@@ -147,9 +151,9 @@ describe("useUserInfoHeaderViewModel", () => {
 
     it("should not open image dialog when avatar url is null", () => {
         const props = Object.assign({}, defaultProps);
-        const spyModale = jest.spyOn(Modal, "createDialog");
-        jest.spyOn(props.member, "getMxcAvatarUrl").mockReturnValue(mockAvatarUrl);
-        jest.spyOn(Media, "mediaFromMxc").mockReturnValue({
+        const spyModale = vi.spyOn(Modal, "createDialog");
+        vi.spyOn(props.member, "getMxcAvatarUrl").mockReturnValue(mockAvatarUrl);
+        vi.spyOn(Media, "mediaFromMxc").mockReturnValue({
             srcHttp: null,
             isEncrypted: false,
             srcMxc: "",

@@ -5,8 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { renderHook } from "jest-matrix-react";
-import { type Mocked, mocked } from "jest-mock";
+// @vitest-environment happy-dom
+
+import { describe, it, expect, vi, beforeEach, afterEach, type Mocked } from "vitest";
 import {
     type Room,
     type MatrixClient,
@@ -15,11 +16,12 @@ import {
     type ISendEventResponse,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import { renderHook } from "test-utils-rtl";
+import { withClientContextRenderOptions } from "test-utils";
 
-import { MatrixClientPeg } from "../../../../../../../src/MatrixClientPeg";
-import { type RoomAdminToolsProps } from "../../../../../../../src/components/viewmodels/right_panel/user_info/admin/UserInfoAdminToolsContainerViewModel";
-import { useMuteButtonViewModel } from "../../../../../../../src/components/viewmodels/right_panel/user_info/admin/UserInfoMuteButtonViewModel";
-import { withClientContextRenderOptions } from "../../../../../../test-utils";
+import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
+import { type RoomAdminToolsProps } from "./UserInfoAdminToolsContainerViewModel";
+import { useMuteButtonViewModel } from "./UserInfoMuteButtonViewModel";
 
 describe("useMuteButtonViewModel", () => {
     const defaultRoomId = "!fkfk";
@@ -33,63 +35,63 @@ describe("useMuteButtonViewModel", () => {
     let defaultAdminToolsProps: RoomAdminToolsProps;
 
     beforeEach(() => {
-        mockRoom = mocked({
+        mockRoom = vi.mocked({
             roomId: defaultRoomId,
-            getType: jest.fn().mockReturnValue(undefined),
-            isSpaceRoom: jest.fn().mockReturnValue(false),
-            getMember: jest.fn().mockReturnValue(undefined),
-            getMxcAvatarUrl: jest.fn().mockReturnValue("mock-avatar-url"),
+            getType: vi.fn().mockReturnValue(undefined),
+            isSpaceRoom: vi.fn().mockReturnValue(false),
+            getMember: vi.fn().mockReturnValue(undefined),
+            getMxcAvatarUrl: vi.fn().mockReturnValue("mock-avatar-url"),
             name: "test room",
-            on: jest.fn(),
-            off: jest.fn(),
+            on: vi.fn(),
+            off: vi.fn(),
             currentState: {
-                getStateEvents: jest.fn(),
-                on: jest.fn(),
-                off: jest.fn(),
+                getStateEvents: vi.fn(),
+                on: vi.fn(),
+                off: vi.fn(),
             },
-            getEventReadUpTo: jest.fn(),
+            getEventReadUpTo: vi.fn(),
         } as unknown as Room);
 
         defaultAdminToolsProps = {
             room: mockRoom,
             member: defaultMember,
             isUpdating: false,
-            startUpdating: jest.fn(),
-            stopUpdating: jest.fn(),
+            startUpdating: vi.fn(),
+            stopUpdating: vi.fn(),
         };
 
-        mockClient = mocked({
-            getUser: jest.fn(),
-            isGuest: jest.fn().mockReturnValue(false),
-            isUserIgnored: jest.fn(),
-            getIgnoredUsers: jest.fn(),
-            setIgnoredUsers: jest.fn(),
-            getUserId: jest.fn().mockReturnValue(defaultUserId),
-            getSafeUserId: jest.fn(),
-            getDomain: jest.fn(),
-            on: jest.fn(),
-            off: jest.fn(),
-            isSynapseAdministrator: jest.fn().mockResolvedValue(false),
-            doesServerSupportUnstableFeature: jest.fn().mockReturnValue(false),
-            doesServerSupportExtendedProfiles: jest.fn().mockResolvedValue(false),
-            getExtendedProfileProperty: jest.fn().mockRejectedValue(new Error("Not supported")),
-            mxcUrlToHttp: jest.fn().mockReturnValue("mock-mxcUrlToHttp"),
-            removeListener: jest.fn(),
+        mockClient = vi.mocked({
+            getUser: vi.fn(),
+            isGuest: vi.fn().mockReturnValue(false),
+            isUserIgnored: vi.fn(),
+            getIgnoredUsers: vi.fn(),
+            setIgnoredUsers: vi.fn(),
+            getUserId: vi.fn().mockReturnValue(defaultUserId),
+            getSafeUserId: vi.fn(),
+            getDomain: vi.fn(),
+            on: vi.fn(),
+            off: vi.fn(),
+            isSynapseAdministrator: vi.fn().mockResolvedValue(false),
+            doesServerSupportUnstableFeature: vi.fn().mockReturnValue(false),
+            doesServerSupportExtendedProfiles: vi.fn().mockResolvedValue(false),
+            getExtendedProfileProperty: vi.fn().mockRejectedValue(new Error("Not supported")),
+            mxcUrlToHttp: vi.fn().mockReturnValue("mock-mxcUrlToHttp"),
+            removeListener: vi.fn(),
             currentState: {
-                on: jest.fn(),
+                on: vi.fn(),
             },
-            getRoom: jest.fn(),
+            getRoom: vi.fn(),
             credentials: {},
-            setPowerLevel: jest.fn(),
+            setPowerLevel: vi.fn(),
         } as unknown as MatrixClient);
 
-        jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
-        jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
+        vi.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
+        vi.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
 
         mockClient.setPowerLevel.mockImplementation(() => Promise.resolve({} as ISendEventResponse));
 
-        mockRoom.currentState.getStateEvents.mockReturnValueOnce({
-            getContent: jest.fn().mockReturnValue({
+        vi.mocked(mockRoom.currentState.getStateEvents).mockReturnValueOnce({
+            getContent: vi.fn().mockReturnValue({
                 events: {
                     "m.room.message": 0,
                 },
@@ -97,9 +99,9 @@ describe("useMuteButtonViewModel", () => {
             }),
         } as unknown as MatrixEvent);
 
-        jest.spyOn(mockClient, "setPowerLevel").mockImplementation(() => Promise.resolve({} as ISendEventResponse));
-        jest.spyOn(mockRoom.currentState, "getStateEvents").mockReturnValue({
-            getContent: jest.fn().mockReturnValue({
+        vi.spyOn(mockClient, "setPowerLevel").mockImplementation(() => Promise.resolve({} as ISendEventResponse));
+        vi.spyOn(mockRoom.currentState, "getStateEvents").mockReturnValue({
+            getContent: vi.fn().mockReturnValue({
                 events: {
                     "m.room.message": 0,
                 },
@@ -109,7 +111,7 @@ describe("useMuteButtonViewModel", () => {
     });
 
     afterEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     const renderMuteButtonHook = (props = defaultAdminToolsProps) => {
@@ -141,8 +143,8 @@ describe("useMuteButtonViewModel", () => {
             isUpdating: false,
         });
 
-        jest.spyOn(mockRoom.currentState, "getStateEvents").mockReturnValueOnce({
-            getContent: jest.fn().mockReturnValue({
+        vi.spyOn(mockRoom.currentState, "getStateEvents").mockReturnValueOnce({
+            getContent: vi.fn().mockReturnValue({
                 events: {
                     "m.room.message": NaN,
                 },

@@ -5,15 +5,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Device, type MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
-import { type Mocked } from "jest-mock";
-import { UserVerificationStatus, type CryptoApi } from "matrix-js-sdk/src/crypto-api";
-import { renderHook, waitFor } from "jest-matrix-react";
+// @vitest-environment happy-dom
 
-import { clientAndSDKContextRenderOptions, createTestClient } from "../../../../../test-utils";
-import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
-import { useUserInfoVerificationViewModel } from "../../../../../../src/components/viewmodels/right_panel/user_info/UserInfoHeaderVerificationViewModel";
-import { TestSDKContext } from "../../../../TestSDKContext.ts";
+import { describe, it, expect, vi, beforeEach, afterEach, type Mocked } from "vitest";
+import { Device, type MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
+import { UserVerificationStatus, type CryptoApi } from "matrix-js-sdk/src/crypto-api";
+import { renderHook, waitFor } from "test-utils-rtl";
+import { clientAndSDKContextRenderOptions, createTestClient, TestSDKContext } from "test-utils";
+
+import { MatrixClientPeg } from "../../../../MatrixClientPeg";
+import { useUserInfoVerificationViewModel } from "./UserInfoHeaderVerificationViewModel";
 
 describe("useUserInfoVerificationHeaderViewModel", () => {
     const defaultRoomId = "!fkfk";
@@ -31,32 +32,32 @@ describe("useUserInfoVerificationHeaderViewModel", () => {
 
     beforeEach(() => {
         mockCrypto = {
-            bootstrapSecretStorage: jest.fn(),
-            bootstrapCrossSigning: jest.fn(),
-            getCrossSigningKeyId: jest.fn(),
-            getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
-            getUserDeviceInfo: jest.fn(),
-            getDeviceVerificationStatus: jest.fn(),
-            getUserVerificationStatus: jest.fn(),
-            isDehydrationSupported: jest.fn().mockResolvedValue(false),
-            startDehydration: jest.fn(),
-            getKeyBackupInfo: jest.fn().mockResolvedValue(null),
-            userHasCrossSigningKeys: jest.fn().mockResolvedValue(false),
+            bootstrapSecretStorage: vi.fn(),
+            bootstrapCrossSigning: vi.fn(),
+            getCrossSigningKeyId: vi.fn(),
+            getVerificationRequestsToDeviceInProgress: vi.fn().mockReturnValue([]),
+            getUserDeviceInfo: vi.fn(),
+            getDeviceVerificationStatus: vi.fn(),
+            getUserVerificationStatus: vi.fn(),
+            isDehydrationSupported: vi.fn().mockResolvedValue(false),
+            startDehydration: vi.fn(),
+            getKeyBackupInfo: vi.fn().mockResolvedValue(null),
+            userHasCrossSigningKeys: vi.fn().mockResolvedValue(false),
         } as unknown as Mocked<CryptoApi>;
 
         mockClient = createTestClient();
         sdkContext = new TestSDKContext();
         sdkContext._client = mockClient;
 
-        jest.spyOn(mockClient, "doesServerSupportUnstableFeature").mockResolvedValue(true);
-        jest.spyOn(mockClient.secretStorage, "hasKey").mockResolvedValue(true);
-        jest.spyOn(mockClient, "getCrypto").mockReturnValue(mockCrypto);
-        jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
-        jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
+        vi.spyOn(mockClient, "doesServerSupportUnstableFeature").mockResolvedValue(true);
+        vi.spyOn(mockClient.secretStorage, "hasKey").mockResolvedValue(true);
+        vi.spyOn(mockClient, "getCrypto").mockReturnValue(mockCrypto);
+        vi.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
+        vi.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     const renderUserInfoHeaderVerificationHook = (props = defaultProps) => {
@@ -78,11 +79,11 @@ describe("useUserInfoVerificationHeaderViewModel", () => {
         });
 
         // mock the user as not verified
-        jest.spyOn(mockCrypto, "getUserVerificationStatus").mockResolvedValue(
+        vi.spyOn(mockCrypto, "getUserVerificationStatus").mockResolvedValue(
             new UserVerificationStatus(false, false, false),
         );
 
-        jest.spyOn(mockClient, "getUserId").mockReturnValue(defaultMember.userId);
+        vi.spyOn(mockClient, "getUserId").mockReturnValue(defaultMember.userId);
 
         // the selected user is not the default user, so he can make user verification
         const { result } = renderUserInfoHeaderVerificationHook({ member: notMetMember, devices: [device1] });
@@ -103,11 +104,11 @@ describe("useUserInfoVerificationHeaderViewModel", () => {
         });
 
         // mock the user as not verified
-        jest.spyOn(mockCrypto, "getUserVerificationStatus").mockResolvedValue(
+        vi.spyOn(mockCrypto, "getUserVerificationStatus").mockResolvedValue(
             new UserVerificationStatus(false, false, false),
         );
 
-        jest.spyOn(mockClient, "getUserId").mockReturnValue(defaultMember.userId);
+        vi.spyOn(mockClient, "getUserId").mockReturnValue(defaultMember.userId);
 
         const { result } = renderUserInfoHeaderVerificationHook({ member: defaultMember, devices: [device1] });
         await waitFor(() => {
@@ -131,11 +132,11 @@ describe("useUserInfoVerificationHeaderViewModel", () => {
         });
 
         // mock the user as already verified
-        jest.spyOn(mockCrypto, "getUserVerificationStatus").mockResolvedValue(
+        vi.spyOn(mockCrypto, "getUserVerificationStatus").mockResolvedValue(
             new UserVerificationStatus(true, true, false),
         );
 
-        jest.spyOn(mockClient, "getUserId").mockReturnValue(defaultMember.userId);
+        vi.spyOn(mockClient, "getUserId").mockReturnValue(defaultMember.userId);
 
         // the selected user is not the default user, so he can make user verification
         const { result } = renderUserInfoHeaderVerificationHook({ member: notMetMember, devices: [device1] });
@@ -153,11 +154,11 @@ describe("useUserInfoVerificationHeaderViewModel", () => {
         const notMetMember = new RoomMember(defaultRoomId, notMeId);
 
         // mock the user as not verified
-        jest.spyOn(mockCrypto, "getUserVerificationStatus").mockResolvedValue(
+        vi.spyOn(mockCrypto, "getUserVerificationStatus").mockResolvedValue(
             new UserVerificationStatus(false, false, false),
         );
 
-        jest.spyOn(mockClient, "getUserId").mockReturnValue(defaultMember.userId);
+        vi.spyOn(mockClient, "getUserId").mockReturnValue(defaultMember.userId);
 
         // the selected user is not the default user, so he can make user verification
         const { result } = renderUserInfoHeaderVerificationHook({ member: notMetMember, devices: [] });
@@ -182,13 +183,13 @@ describe("useUserInfoVerificationHeaderViewModel", () => {
         });
 
         // mock the user as not verified
-        jest.spyOn(mockCrypto, "getUserVerificationStatus").mockResolvedValue(
+        vi.spyOn(mockCrypto, "getUserVerificationStatus").mockResolvedValue(
             new UserVerificationStatus(false, false, false),
         );
 
-        jest.spyOn(mockClient, "getUserId").mockReturnValue(defaultMember.userId);
+        vi.spyOn(mockClient, "getUserId").mockReturnValue(defaultMember.userId);
 
-        jest.spyOn(mockCrypto, "userHasCrossSigningKeys").mockResolvedValue(true);
+        vi.spyOn(mockCrypto, "userHasCrossSigningKeys").mockResolvedValue(true);
         const { result } = renderUserInfoHeaderVerificationHook({ member: notMetMember, devices: [device1] });
         await waitFor(() => {
             const hasCrossSigningKeys = result.current.hasCrossSigningKeys;

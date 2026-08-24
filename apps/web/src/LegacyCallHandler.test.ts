@@ -6,6 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import {
     type IProtocol,
     LOCAL_NOTIFICATION_SETTINGS_PREFIX,
@@ -18,55 +21,56 @@ import {
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { CallEvent, CallState, CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import EventEmitter from "node:events";
-import { mocked } from "jest-mock";
 import { CallEventHandlerEvent } from "matrix-js-sdk/src/webrtc/callEventHandler";
-import fetchMock from "@fetch-mock/jest";
-import { waitFor } from "jest-matrix-react";
+import fetchMock from "@fetch-mock/vitest";
+import { waitFor } from "test-utils-rtl";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
+import { mkStubRoom, stubClient, untilDispatch, TestSDKContext } from "test-utils";
 
 import LegacyCallHandler, {
     AudioID,
     LegacyCallHandlerEvent,
     PROTOCOL_PSTN,
     PROTOCOL_PSTN_PREFIXED,
-} from "../../src/LegacyCallHandler";
-import { mkStubRoom, stubClient, untilDispatch } from "../test-utils";
-import { MatrixClientPeg } from "../../src/MatrixClientPeg";
-import DMRoomMap from "../../src/utils/DMRoomMap";
-import SdkConfig from "../../src/SdkConfig";
-import { Action } from "../../src/dispatcher/actions";
-import { getFunctionalMembers } from "../../src/utils/room/getFunctionalMembers";
-import SettingsStore from "../../src/settings/SettingsStore";
-import { UIFeature } from "../../src/settings/UIFeature";
-import { createAudioContext } from "../../src/audio/compat";
-import * as ManagedHybrid from "../../src/widgets/ManagedHybrid";
-import { TestSDKContext } from "./TestSDKContext.ts";
+} from "./LegacyCallHandler";
+import { MatrixClientPeg } from "./MatrixClientPeg";
+import DMRoomMap from "./utils/DMRoomMap";
+import SdkConfig from "./SdkConfig";
+import { Action } from "./dispatcher/actions";
+import { getFunctionalMembers } from "./utils/room/getFunctionalMembers";
+import SettingsStore from "./settings/SettingsStore";
+import { UIFeature } from "./settings/UIFeature";
+import { createAudioContext } from "./audio/compat";
+import * as ManagedHybrid from "./widgets/ManagedHybrid";
+import type * as audioCompat from "./audio/compat";
 
-jest.mock("../../src/Modal");
+vi.mock("./Modal");
 
 // mock VoiceRecording because it contains all the audio APIs
-jest.mock("../../src/audio/VoiceRecording", () => ({
-    VoiceRecording: jest.fn().mockReturnValue({
-        disableMaxLength: jest.fn(),
-        liveData: {
-            onUpdate: jest.fn(),
-        },
-        off: jest.fn(),
-        on: jest.fn(),
-        start: jest.fn(),
-        stop: jest.fn(),
-        destroy: jest.fn(),
-        contentType: "audio/ogg",
+vi.mock("./audio/VoiceRecording", () => ({
+    VoiceRecording: vi.fn().mockImplementation(function () {
+        return {
+            disableMaxLength: vi.fn(),
+            liveData: {
+                onUpdate: vi.fn(),
+            },
+            off: vi.fn(),
+            on: vi.fn(),
+            start: vi.fn(),
+            stop: vi.fn(),
+            destroy: vi.fn(),
+            contentType: "audio/ogg",
+        };
     }),
 }));
 
-jest.mock("../../src/utils/room/getFunctionalMembers", () => ({
-    getFunctionalMembers: jest.fn(),
+vi.mock("./utils/room/getFunctionalMembers", () => ({
+    getFunctionalMembers: vi.fn(),
 }));
 
-jest.mock("../../src/audio/compat", () => ({
-    ...jest.requireActual("../../src/audio/compat"),
-    createAudioContext: jest.fn(),
+vi.mock("./audio/compat", async () => ({
+    ...(await vi.importActual<typeof audioCompat>("./audio/compat")),
+    createAudioContext: vi.fn(),
 }));
 
 // The Matrix IDs that the user sees when talking to Alice & Bob
@@ -87,7 +91,7 @@ const BOB_PHONE_NUMBER = "01818118181";
 
 function mkStubDM(roomId: string, userId: string) {
     const room = mkStubRoom(roomId, "room", MatrixClientPeg.safeGet());
-    room.getJoinedMembers = jest.fn().mockReturnValue([
+    room.getJoinedMembers = vi.fn().mockReturnValue([
         {
             userId: "@me:example.org",
             name: "Member",
@@ -169,7 +173,7 @@ describe("LegacyCallHandler", () => {
         callHandler = new LegacyCallHandler(new TestSDKContext());
         callHandler.start();
 
-        mocked(getFunctionalMembers).mockReturnValue([FUNCTIONAL_USER]);
+        vi.mocked(getFunctionalMembers).mockReturnValue([FUNCTIONAL_USER]);
 
         const nativeRoomAlice = mkStubDM(NATIVE_ROOM_ALICE, NATIVE_ALICE);
         const nativeRoomBob = mkStubDM(NATIVE_ROOM_BOB, NATIVE_BOB);
@@ -243,7 +247,7 @@ describe("LegacyCallHandler", () => {
 
         document.body.removeChild(audioElement);
         SdkConfig.reset();
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     it("should look up the correct user and start a call in the room when a phone number is dialled", async () => {
@@ -296,7 +300,7 @@ describe("LegacyCallHandler", () => {
         // Now emit an asserted identity for Bob: this should be ignored
         // because we haven't set the config option to obey asserted identity
         expect(fakeCall).not.toBeNull();
-        fakeCall!.getRemoteAssertedIdentity = jest.fn().mockReturnValue({
+        fakeCall!.getRemoteAssertedIdentity = vi.fn().mockReturnValue({
             id: NATIVE_BOB,
         });
         fakeCall!.emit(CallEvent.AssertedIdentityChanged, fakeCall!);
@@ -309,7 +313,7 @@ describe("LegacyCallHandler", () => {
         });
 
         // ...and send another asserted identity event for a different user
-        fakeCall!.getRemoteAssertedIdentity = jest.fn().mockReturnValue({
+        fakeCall!.getRemoteAssertedIdentity = vi.fn().mockReturnValue({
             id: NATIVE_CHARLIE,
         });
         fakeCall!.emit(CallEvent.AssertedIdentityChanged, fakeCall!);
@@ -329,8 +333,8 @@ describe("LegacyCallHandler", () => {
     });
 
     it("should place calls using managed hybrid widget if enabled", async () => {
-        const spy = jest.spyOn(ManagedHybrid, "addManagedHybridWidget");
-        jest.spyOn(ManagedHybrid, "isManagedHybridWidgetEnabled").mockReturnValue(true);
+        const spy = vi.spyOn(ManagedHybrid, "addManagedHybridWidget");
+        vi.spyOn(ManagedHybrid, "isManagedHybridWidgetEnabled").mockReturnValue(true);
         await callHandler.placeCall(NATIVE_ROOM_ALICE, CallType.Voice);
         expect(spy).toHaveBeenCalledWith(MatrixClientPeg.safeGet().getRoom(NATIVE_ROOM_ALICE));
     });
@@ -343,20 +347,24 @@ describe("LegacyCallHandler without third party protocols", () => {
     let fakeCall: MatrixCall | null;
 
     const mockAudioBufferSourceNode = {
-        addEventListener: jest.fn(),
-        connect: jest.fn(),
-        start: jest.fn(),
-        stop: jest.fn(),
+        addEventListener: vi.fn(),
+        connect: vi.fn(),
+        start: vi.fn(),
+        stop: vi.fn(),
     };
     const mockAudioContext = {
-        decodeAudioData: jest.fn().mockResolvedValue({}),
-        suspend: jest.fn(),
-        resume: jest.fn(),
-        createBufferSource: jest.fn().mockReturnValue(mockAudioBufferSourceNode),
+        decodeAudioData: vi.fn().mockResolvedValue({}),
+        suspend: vi.fn(),
+        resume: vi.fn(),
+        createBufferSource: vi.fn().mockReturnValue(mockAudioBufferSourceNode),
         currentTime: 1337,
     };
 
     beforeEach(() => {
+        vi.spyOn(HTMLAudioElement.prototype, "canPlayType").mockImplementation((format) =>
+            format === "audio/mpeg" ? "probably" : "",
+        );
+
         stubClient();
         fakeCall = null;
         MatrixClientPeg.safeGet().createCall = (roomId) => {
@@ -371,7 +379,7 @@ describe("LegacyCallHandler without third party protocols", () => {
             throw new Error("Endpoint unsupported.");
         };
 
-        mocked(createAudioContext).mockReturnValue(mockAudioContext as unknown as AudioContext);
+        vi.mocked(createAudioContext).mockReturnValue(mockAudioContext as unknown as AudioContext);
         callHandler = new LegacyCallHandler(new TestSDKContext());
         callHandler.start();
 
@@ -457,12 +465,12 @@ describe("LegacyCallHandler without third party protocols", () => {
         const roomId = "test-room-id";
 
         beforeEach(() => {
-            jest.clearAllMocks();
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => setting === UIFeature.Voip);
+            vi.clearAllMocks();
+            vi.spyOn(SettingsStore, "getValue").mockImplementation((setting) => setting === UIFeature.Voip);
 
-            jest.spyOn(MatrixClientPeg.safeGet(), "supportsVoip").mockReturnValue(true);
+            vi.spyOn(MatrixClientPeg.safeGet(), "supportsVoip").mockReturnValue(true);
 
-            MatrixClientPeg.safeGet().isFallbackICEServerAllowed = jest.fn();
+            MatrixClientPeg.safeGet().isFallbackICEServerAllowed = vi.fn();
 
             MatrixClientPeg.safeGet().pushRules = {
                 global: {
@@ -483,7 +491,7 @@ describe("LegacyCallHandler without third party protocols", () => {
             };
 
             // silence local notifications by default
-            jest.spyOn(MatrixClientPeg.safeGet(), "getAccountData").mockImplementation((eventType) => {
+            vi.spyOn(MatrixClientPeg.safeGet(), "getAccountData").mockImplementation((eventType) => {
                 if (eventType.includes(LOCAL_NOTIFICATION_SETTINGS_PREFIX.name)) {
                     return new MatrixEvent({
                         type: eventType,
@@ -510,7 +518,7 @@ describe("LegacyCallHandler without third party protocols", () => {
 
         it("rings when incoming call state is ringing and notifications set to ring", async () => {
             // remove local notification silencing mock for this test
-            jest.spyOn(MatrixClientPeg.safeGet(), "getAccountData").mockReturnValue(undefined);
+            vi.spyOn(MatrixClientPeg.safeGet(), "getAccountData").mockReturnValue(undefined);
             const call = new MatrixCall({
                 client: MatrixClientPeg.safeGet(),
                 roomId,
@@ -564,7 +572,7 @@ describe("LegacyCallHandler without third party protocols", () => {
                 roomId,
             });
             const cli = MatrixClientPeg.safeGet();
-            const callHandlerEmitSpy = jest.spyOn(callHandler, "emit");
+            const callHandlerEmitSpy = vi.spyOn(callHandler, "emit");
 
             cli.emit(CallEventHandlerEvent.Incoming, call);
             // reset emit call count

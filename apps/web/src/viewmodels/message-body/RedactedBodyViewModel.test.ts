@@ -5,7 +5,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { RedactedBodyViewModel } from "../../../../../src/viewmodels/message-body/RedactedBodyViewModel";
+import { describe, it, expect, vi } from "vitest";
+
+import { RedactedBodyViewModel } from "./RedactedBodyViewModel";
 
 describe("RedactedBodyViewModel", () => {
     it("exposes the supplied render snapshot", () => {
@@ -32,7 +34,7 @@ describe("RedactedBodyViewModel", () => {
     it("does not notify for unchanged props", () => {
         const props = { text: "Message deleted" };
         const vm = new RedactedBodyViewModel(props);
-        const listener = jest.fn();
+        const listener = vi.fn();
 
         vm.subscribe(listener);
         vm.setProps(props);
