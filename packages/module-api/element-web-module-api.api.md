@@ -261,6 +261,23 @@ export interface DirectoryCustomisations {
 }
 
 // @alpha
+export interface EncryptedFile {
+    hashes: {
+        [alg: string]: string;
+    };
+    iv: string;
+    key: {
+        alg: string;
+        key_ops: string[];
+        kty: string;
+        k: string;
+        ext: boolean;
+    };
+    url: string;
+    v: string;
+}
+
+// @alpha
 export type ExtendablePropsRenderFunction<BaseProps> = <P extends BaseProps>(
 props: P,
 originalComponent: (props: P) => JSX.Element) => JSX.Element;
@@ -542,6 +559,36 @@ export const enum UIComponent {
     FilterContainer = "UIComponent.filterContainer",
     InviteUsers = "UIComponent.sendInvites",
     RoomOptionsMenu = "UIComponent.roomOptionsMenu"
+}
+
+// @alpha
+export interface UnstableBundledUrlPreviews {
+    // (undocumented)
+    "com.beeper.linkpreviews"?: UnstableBundledUrlPreviewSingle[];
+}
+
+// @alpha
+export interface UnstableBundledUrlPreviewSingle {
+    // (undocumented)
+    "beeper:image:encryption"?: EncryptedFile;
+    // (undocumented)
+    "matrix:image:size"?: number;
+    // (undocumented)
+    "og:description"?: string;
+    // (undocumented)
+    "og:image"?: string;
+    // (undocumented)
+    "og:image:height"?: number;
+    // (undocumented)
+    "og:image:type"?: string;
+    // (undocumented)
+    "og:image:width"?: number;
+    // (undocumented)
+    "og:title"?: string;
+    // (undocumented)
+    "og:url"?: string;
+    // (undocumented)
+    "matched_url": string;
 }
 
 // @alpha @deprecated (undocumented)
