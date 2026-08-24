@@ -26,6 +26,7 @@ import { type CustomisationsApi } from "./customisations.ts";
 import { type ComposerApi } from "./composer.ts";
 import { type StorageHelperApi } from "./storage-helper.ts";
 import { type SettingsApi } from "./settings.ts";
+import { FileViewerApi } from "./file-viewer.ts";
 
 /**
  * Module interface for modules to implement.
@@ -45,7 +46,7 @@ const moduleSignature: Record<keyof Module, Type> = {
  */
 export interface ModuleFactory {
     readonly moduleApiVersion: string;
-    new (api: Api): Module;
+    new(api: Api): Module;
     readonly prototype: Module;
 }
 
@@ -86,11 +87,11 @@ export function isModule(module: unknown): module is ModuleExport {
  */
 export interface Api
     extends
-        LegacyModuleApiExtension,
-        LegacyCustomisationsApiExtension,
-        DialogApiExtension,
-        AccountAuthApiExtension,
-        ProfileApiExtension {
+    LegacyModuleApiExtension,
+    LegacyCustomisationsApiExtension,
+    DialogApiExtension,
+    AccountAuthApiExtension,
+    ProfileApiExtension {
     /**
      * The API to read config.json values.
      * Keys should be scoped to the module in reverse domain name notation.
@@ -178,6 +179,12 @@ export interface Api
      * @alpha Subject to change.
      */
     readonly settings: SettingsApi;
+
+    /**
+     * Register new file viewer
+     * @alpha Subject to change.
+     */
+    readonly fileViewer: FileViewerApi;
 
     /**
      * Create a ReactDOM root for rendering React components.
