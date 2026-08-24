@@ -85,8 +85,8 @@ test.describe("Threads", () => {
         });
         await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
         await expect(page.locator(".mx_ThreadView .mx_EventTile")).toHaveCount(2);
-        // Wait for the ThreadViewBubbleSpacingStart
-        await expect(locator.locator(".mx_EventTile_line")).toHaveCSS("padding-inline-start", "4px");
+        // Wait for the ThreadViewBubbleSpacingStart - 10px to be applied to mx_EventTile_line on bubble layout
+        await expect(locator.locator(".mx_EventTile_line")).toHaveCSS("padding-inline-start", "10px");
 
         await expect(page.locator(".mx_ThreadView")).toMatchScreenshot("Initial_ThreadView_on_bubble_layout.png", {
             mask,

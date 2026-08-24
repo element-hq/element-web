@@ -370,7 +370,9 @@ test.describe("Editing", () => {
         expect(timeline).toBeNull();
 
         // nevertheless, the event should be updated
-        await expect(messageTile.getByTestId("event-tile-slot-body")).toHaveText("Edited body");
+        await expect(messageTile.getByTestId("event-tile-slot-body").locator(".mx_MTextBody")).toHaveText(
+            "Edited body",
+        );
         await expect(messageTile.getByRole("button", { name: /Edited at .*? Click to view edits\./ })).toBeVisible();
     });
 });

@@ -20,7 +20,7 @@ Please see LICENSE files in the repository root for full details.
     }
 
     /* Remove the vertical safe area for view-source events. */
-    .mx_EventTile:has(> .mx_EventTile_line > :has(> .mx_ViewSourceEvent)) & {
+    .mx_EventTile:has(> .mx_EventTile_line .mx_ViewSourceEvent) & {
         width: 100%;
         height: 100%;
         inset: 0;

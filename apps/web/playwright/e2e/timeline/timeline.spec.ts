@@ -274,9 +274,10 @@ test.describe("Timeline", () => {
                 );
 
                 // Click "collapse" link button on the first hovered info event line
-                const firstTile = gels.locator(
-                    ".mx_GenericEventListSummary_unstyledList .mx_EventTile_info:first-of-type",
-                );
+                const firstTile = gels
+                    .locator(".mx_GenericEventListSummary_unstyledList")
+                    .getByTestId("event-tile")
+                    .first();
                 await firstTile.hover();
                 await expect(firstTile.getByRole("toolbar", { name: "Message Actions" })).toBeVisible();
                 await gels.getByRole("button", { name: "Collapse" }).click();
@@ -596,7 +597,7 @@ test.describe("Timeline", () => {
                 // Click timestamp to highlight hidden event line
                 const timestamp = page
                     .locator(".mx_RoomView_body .mx_EventTile:has([data-testid='event-tile-slot-timestamp'])")
-                    .first()
+                    .last()
                     .getByTestId("event-tile-slot-timestamp");
                 // wait for the remote echo otherwise we get an error modal due to a 404 on the /event/ API
                 await expect(timestamp).not.toHaveAttribute("href", /~!/);
@@ -958,17 +959,21 @@ test.describe("Timeline", () => {
             await composer.press("Enter");
 
             // Reply to the message
-            const lastTile = page.locator(".mx_EventTile").last();
+            const lastTile = getEventTilesWithBodies(page).last();
             await expect(lastTile.getByText(MESSAGE)).toBeVisible();
-            await lastTile.hover();
-            await lastTile.getByRole("button", { name: "Reply", exact: true }).click();
+            await lastTile.getByTestId("event-tile-slot-body").hover();
+            const replyButton = lastTile.getByRole("button", { name: "Reply", exact: true });
+            await expect(replyButton).toBeVisible();
+            await replyButton.click();
         };
 
         // For clicking the reply button on the last line
         const clickButtonReply = async (page: Page): Promise<void> => {
-            const lastTile = page.locator(".mx_RoomView_MessageList .mx_EventTile").last();
-            await lastTile.hover();
-            await lastTile.getByRole("button", { name: "Reply", exact: true }).click();
+            const lastTile = getEventTilesWithBodies(page).last();
+            await lastTile.getByTestId("event-tile-slot-body").hover();
+            const replyButton = lastTile.getByRole("button", { name: "Reply", exact: true });
+            await expect(replyButton).toBeVisible();
+            await replyButton.click();
         };
 
         test("can reply with a text message", async ({ page, app, room }) => {

@@ -234,7 +234,7 @@
 
     .slotTimestamp {
         position: absolute;
-        inset-block-start: 0;
+        inset-block-start: var(--event-tile-group-line-spacing-block-start);
         inset-inline-start: 0;
         width: var(--event-tile-group-timestamp-width);
         height: var(--event-tile-group-line-height);
@@ -265,6 +265,12 @@
        the reply and the event body. */
     .line > .slotReplyChain {
         display: contents;
+    }
+
+    /* The slot boundary owns the spacing between the reply chain and body.
+       The supplied reply-chain component remains application-owned. */
+    .line > .slotReplyChain > * {
+        margin-block-end: var(--cpd-space-2x);
     }
 
     .slotFooter {
@@ -359,7 +365,10 @@
             grid-column: 1 / 3;
             margin-inline-end: 0;
             padding: 0;
-            padding-inline-start: var(--event-tile-group-gutter);
+        }
+
+        &.hasReceiptSlot .line {
+            margin-inline-end: 80px;
         }
 
         > .slotReceipt {

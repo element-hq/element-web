@@ -6,6 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 import { test, expect } from "../../element-web-test";
+import { closeReleaseAnnouncementIfExists } from "@element-hq/element-web-playwright-common";
 import { viewRoomSummaryByName } from "./utils";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 import { getSampleFilePath } from "../../sample-files";
@@ -30,6 +31,7 @@ test.describe("FilePanel", () => {
     });
 
     test.beforeEach(async ({ page, user, app }) => {
+        await closeReleaseAnnouncementIfExists(page, "Introducing Sections");
         await app.client.createRoom({ name: ROOM_NAME });
 
         // Open the file panel
@@ -108,7 +110,7 @@ test.describe("FilePanel", () => {
             // Assert that the tile is rendered as a button
             const file = filePanelMessageList
                 .locator(".mx_EventTile")
-                .filter({ hasText: "matrix-org-client-versions.json" })
+                .filter({ has: page.locator(".mx_MFileBody", { hasText: ".json" }) })
                 .getByTestId("event-tile-slot-body")
                 .getByRole("button", { name: /matrix.*?\.json/ });
             // Assert that the file name is exposed by the button with ellipsis
