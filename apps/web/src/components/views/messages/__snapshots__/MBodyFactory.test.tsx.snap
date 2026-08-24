@@ -3,7 +3,7 @@
 exports[`MBodyFactory > renderMBody > renders download button for m.file in file rendering type 1`] = `
 <div>
   <span
-    class="_content_bibip_8 mx_MFileBody"
+    class="_content_p4b0p_8 mx_MFileBody"
   >
     <div
       data-type="download"

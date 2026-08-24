@@ -373,7 +373,7 @@ test.describe("Editing", () => {
         await expect(
             messageTile
                 .getByTestId("event-tile-slot-body")
-                .locator(".mx_MTextBody [data-textual-body-annotation-wrapper] > div"),
+                .locator(".mx_MTextBody [data-textual-body-annotation-wrapper] > :first-child"),
         ).toHaveText("Edited body");
         await expect(messageTile.getByRole("button", { name: /Edited at .*? Click to view edits\./ })).toBeVisible();
     });

@@ -409,7 +409,7 @@ describe("EventTile", () => {
         it("renders sender details in thread timelines", () => {
             const { container } = getComponent({}, TimelineRenderingType.Thread);
             const senderSlot = container.querySelector('[data-testid="event-tile-slot-sender"]');
-            const avatarSlot = container.querySelector('[data-testid="event-tile-slot-avatar"]');
+            const avatarSlot = container.querySelector<HTMLElement>('[data-testid="event-tile-slot-avatar"]');
             const senderDetails = senderSlot?.parentElement;
 
             expect(senderDetails).not.toBeNull();

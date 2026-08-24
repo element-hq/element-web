@@ -22,7 +22,7 @@ exports[`<RoomPredecessorTile /> > Renders as expected 1`] = `
       This room is a continuation of another conversation.
     </div>
     <div
-      class="_subtitle_69wqt_33"
+      class="_subtitle_69wqt_34"
     >
       <a
         href="https://matrix.to/#/old_room_id/$tombstone_event_id"

@@ -172,7 +172,7 @@ exports[`RoomView > for a local room > in state ERROR > should match the snapsho
                     End-to-end encryption isn't enabled
                   </div>
                   <div
-                    class="_subtitle_69wqt_33"
+                    class="_subtitle_69wqt_34"
                   >
                     <span>
                        
@@ -368,7 +368,7 @@ exports[`RoomView > for a local room > in state NEW > should match the snapshot 
                     End-to-end encryption isn't enabled
                   </div>
                   <div
-                    class="_subtitle_69wqt_33"
+                    class="_subtitle_69wqt_34"
                   >
                     <span>
                        
@@ -770,7 +770,7 @@ exports[`RoomView > for a local room > in state NEW > that is encrypted > should
                   Encryption enabled
                 </div>
                 <div
-                  class="_subtitle_69wqt_33"
+                  class="_subtitle_69wqt_34"
                 >
                   Messages in this chat will be end-to-end encrypted.
                 </div>
