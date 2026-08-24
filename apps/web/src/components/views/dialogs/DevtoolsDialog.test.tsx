@@ -1,4 +1,5 @@
 /*
+Copyright 2026 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
@@ -6,15 +7,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import React from "react";
-import { render, screen } from "jest-matrix-react";
+import { vi, describe, it, expect, afterAll, beforeEach } from "vitest";
+import { render, screen } from "test-utils-rtl";
 import { Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
 
-import { stubClient } from "../../../../test-utils";
-import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import DevtoolsDialog from "../../../../../src/components/views/dialogs/DevtoolsDialog";
+import { stubClient } from "../../../../test/test-utils";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import DevtoolsDialog from "./DevtoolsDialog";
 
 describe("DevtoolsDialog", () => {
     let cli: MatrixClient;
@@ -33,11 +37,11 @@ describe("DevtoolsDialog", () => {
         cli = MatrixClientPeg.safeGet();
         room = new Room("!id", cli, "@alice:matrix.org");
 
-        jest.spyOn(cli, "getRoom").mockReturnValue(room);
+        vi.spyOn(cli, "getRoom").mockReturnValue(room);
     });
 
     afterAll(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     it("renders the devtools dialog", () => {
@@ -47,7 +51,7 @@ describe("DevtoolsDialog", () => {
 
     it("copies the roomid", async () => {
         const user = userEvent.setup();
-        jest.spyOn(navigator.clipboard, "writeText");
+        vi.spyOn(navigator.clipboard, "writeText");
 
         getComponent(room.roomId);
 
@@ -61,7 +65,7 @@ describe("DevtoolsDialog", () => {
 
     it("copies the thread root id when provided", async () => {
         const user = userEvent.setup();
-        jest.spyOn(navigator.clipboard, "writeText");
+        vi.spyOn(navigator.clipboard, "writeText");
 
         const threadRootId = "$test_event_id_goes_here";
         getComponent(room.roomId, threadRootId);

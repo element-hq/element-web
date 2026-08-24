@@ -208,14 +208,42 @@ export class UrlPreviewFetcher {
         return result;
     }
 
-    /*
-     * Convert an MSC4095 URL preview bundle item to a UrlPreview
+    /**
+     * Convert an MSC4095 URL preview bundle item to a UrlPreview.
+     * This will load previews via the server if `single` only contains `matched_url`.
+     *
+     * @param single A single preview.
+     * @param body The message text body. `matched_url` must appear within it.
+     * @param loadMedia Whether to include the preview image WHEN falling back to loading
+     *                  from the server. Pass false when media is hidden.
      */
-    public previewFromBundle(single: UnstableBundledUrlPreviewSingle): UrlPreview {
+    public async previewFromBundle(
+        single: UnstableBundledUrlPreviewSingle,
+        body: string,
+        loadMedia = false,
+    ): Promise<UrlPreview | null> {
+        if (!URL.canParse(single.matched_url)) {
+            return null;
+        }
+        const url = new URL(single.matched_url);
+        if (url.protocol !== "http:" && url.protocol !== "https:") {
+            // Invalid protocol, skip.
+            return null;
+        }
+
+        if (!body.includes(single.matched_url)) {
+            return null;
+        }
+
+        if (Object.keys(single).length === 1) {
+            // We ONLY have the matched_url, so request a preview.
+            return await this.fetchPreview(single.matched_url, loadMedia);
+        }
+
         const preview: UrlPreview = {
             link: single.matched_url,
             title: single["og:title"] ?? single.matched_url,
-            siteName: new URL(single.matched_url).hostname,
+            siteName: url.hostname,
             showTooltipOnLink: !!(single.matched_url !== single["og:title"] && this.showTooltips),
             description: single["og:description"],
             ogUrl: single["og:url"],

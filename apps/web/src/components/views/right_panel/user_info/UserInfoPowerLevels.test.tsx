@@ -141,7 +141,10 @@ describe("<PowerLevelEditor />", () => {
             type: EventType.RoomPowerLevels,
             content: { users: { [defaultUserId]: startPowerLevel }, users_default: 1 },
         });
+        const self = new RoomMember(defaultRoomId, defaultUserId);
+        self.powerLevel = startPowerLevel;
         vi.spyOn(mockRoom.currentState, "getStateEvents").mockReturnValue(powerLevelEvent);
+        mockRoom.getMember.mockReturnValue(self);
         mockClient.getSafeUserId.mockReturnValueOnce(defaultUserId);
         mockClient.getUserId.mockReturnValueOnce(defaultUserId);
         renderComponent({

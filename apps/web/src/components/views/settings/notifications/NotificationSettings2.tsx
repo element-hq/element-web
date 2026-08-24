@@ -350,6 +350,11 @@ export default function NotificationSettings2(): JSX.Element {
 
                     <Form.Root onSubmit={onSubmitPreventDefault}>
                         <SettingsFlag name="Notifications.showbold" level={SettingLevel.DEVICE} />
+                        <SettingsFlag
+                            name="Notifications.activityIsUnread"
+                            level={SettingLevel.DEVICE}
+                            requires={["Notifications.showbold"]}
+                        />
                         <SettingsFlag name="Notifications.tac_only_notifications" level={SettingLevel.DEVICE} />
                     </Form.Root>
                 </SettingsSubsection>

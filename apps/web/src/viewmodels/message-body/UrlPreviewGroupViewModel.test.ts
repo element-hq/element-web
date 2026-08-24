@@ -266,6 +266,7 @@ describe("UrlPreviewGroupViewModel", () => {
                 urlPreviewBundleEnabled: true,
                 content: {
                     msgtype: MsgType.Text,
+                    body: `${BUNDLE_PREVIEW_ONE.matched_url} ${BUNDLE_PREVIEW_TWO.matched_url}`,
                     [BUNDLED_LINK_PREVIEWS]: [BUNDLE_PREVIEW_ONE, BUNDLE_PREVIEW_TWO],
                 },
             });
@@ -298,6 +299,7 @@ describe("UrlPreviewGroupViewModel", () => {
                 urlPreviewBundleEnabled: true,
                 content: {
                     msgtype: MsgType.Text,
+                    body: BUNDLE_PREVIEW_WITH_IMAGE.matched_url,
                     [BUNDLED_LINK_PREVIEWS]: [BUNDLE_PREVIEW_WITH_IMAGE],
                 },
             });
@@ -322,6 +324,7 @@ describe("UrlPreviewGroupViewModel", () => {
                 urlPreviewBundleEnabled: true,
                 content: {
                     msgtype: MsgType.Text,
+                    body: `${BUNDLE_PREVIEW_ONE.matched_url} ${BUNDLE_PREVIEW_TWO.matched_url} ${BUNDLE_PREVIEW_THREE.matched_url}`,
                     [BUNDLED_LINK_PREVIEWS]: [BUNDLE_PREVIEW_ONE, BUNDLE_PREVIEW_TWO, BUNDLE_PREVIEW_THREE],
                 },
             });
