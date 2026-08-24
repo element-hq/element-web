@@ -174,7 +174,7 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
                     button: _t("action|try_again"),
                     cancelButton: _t("action|cancel"),
                 });
-                finished.then(([tryAgain]) => {
+                void finished.then(([tryAgain]) => {
                     if (!tryAgain) {
                         this.cancel();
                     } else {
