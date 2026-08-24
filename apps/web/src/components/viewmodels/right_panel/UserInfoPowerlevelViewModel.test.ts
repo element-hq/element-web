@@ -225,7 +225,7 @@ describe("UserInfoAdminPowerlevelViewModel", () => {
         // Nobody is listed in `users`, so both of us sit on `users_default`.
         const content = { users: {}, users_default: startPowerLevel };
         const powerLevelEvent = new MatrixEvent({ type: EventType.RoomPowerLevels, content });
-        mockRoom.currentState.getStateEvents.mockReturnValue(powerLevelEvent);
+        vi.mocked(mockRoom.currentState.getStateEvents).mockReturnValue(powerLevelEvent);
         mockMembersFrom(content);
         mockClient.getUserId.mockReturnValue(defaultMeId);
 
@@ -240,7 +240,7 @@ describe("UserInfoAdminPowerlevelViewModel", () => {
     it("does not warn when we outrank the new level as a room creator", async () => {
         const content = { users: { [defaultUserId]: startPowerLevel }, users_default: 1 };
         const powerLevelEvent = new MatrixEvent({ type: EventType.RoomPowerLevels, content });
-        mockRoom.currentState.getStateEvents.mockReturnValue(powerLevelEvent);
+        vi.mocked(mockRoom.currentState.getStateEvents).mockReturnValue(powerLevelEvent);
         mockRoom.getMember.mockImplementation((userId: string) => {
             const member = new RoomMember(defaultRoomId, userId);
             // Creators outrank every assignable level, so promoting to 100 cannot match us.
