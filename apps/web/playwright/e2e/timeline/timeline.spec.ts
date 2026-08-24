@@ -791,8 +791,6 @@ test.describe("Timeline", () => {
                 await page.locator(".mx_RoomSummaryCard_search").getByRole("searchbox").fill(stringToSearch);
                 await page.locator(".mx_RoomSummaryCard_search").getByRole("searchbox").press("Enter");
 
-                // On search results panel
-                const resultsPanel = page.locator(".mx_RoomView_searchResultsPanel");
                 await expect(page.locator(".mx_RoomView_searchResultsPanel")).toMatchScreenshot(
                     "search-results-with-TextualEvent.png",
                 );

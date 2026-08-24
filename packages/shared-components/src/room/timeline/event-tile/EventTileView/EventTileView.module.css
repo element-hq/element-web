@@ -205,7 +205,7 @@
     }
 
     &:not(.shapeCard) .line:not(.lineMedia) .slotBody > *:not(fieldset) {
-        margin-inline-end: var(--event-tile-content-inline-end);
+        margin-right: var(--event-tile-content-inline-end);
     }
 
     /* Sender. */
@@ -479,7 +479,7 @@
        redacted body uses inline-flex to align its icon and text. */
     &:where(:not(.stateBubbleContainer)) {
         .line:not(.lineMedia) .slotBody > *:not(fieldset) {
-            margin-inline-end: var(--event-tile-content-inline-end);
+            margin-right: var(--event-tile-content-inline-end);
         }
     }
 
@@ -1191,23 +1191,20 @@
         width: auto;
         margin-inline: var(--event-tile-thread-margin-inline);
 
-        /* Keep the legacy inline gap between the body and receipt slot. */
         .line {
-            gap: 5px var(--event-tile-bubble-gap);
-
+            /* Reserve the legacy body-to-receipt gap even though the receipt
+               itself is positioned in the outer Thread gutter. */
             &:has(> .slotReceipt)::after {
                 content: "";
-                flex: 0 0 var(--event-tile-bubble-gap);
+                /* The line's existing gap supplies the 5px spacing. */
+                flex: 0 0 0;
             }
 
             > .slotReceipt {
                 position: absolute;
                 z-index: 1;
                 inset-block-end: -3px;
-                inset-inline-start: calc(100% + var(--event-tile-bubble-gap));
-                inset-inline-end: auto;
-                width: auto;
-                height: auto;
+                inset-inline-end: -78px;
             }
         }
 

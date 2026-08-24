@@ -27,12 +27,12 @@ Please see LICENSE files in the repository root for full details.
     }
 }
 
-/* Align the first event's action bar with right-column bubbles in an expanded
-   bubble summary. */
+/* Align event action bars with right-column bubbles in an expanded bubble
+   summary. */
 .mx_GenericEventListSummary[data-layout="bubble"][data-expanded="true"]
-    .mx_GenericEventListSummary_unstyledList
-    .mx_EventTile:first-of-type
-    .mx_EventTile_line
+    > .mx_GenericEventListSummary_unstyledList
+    > .mx_EventTile
+    > .mx_EventTile_line
     > :has(> .mx_MessageActionBar) {
     inset-inline-start: initial;
     inset-inline-end: 48px;
