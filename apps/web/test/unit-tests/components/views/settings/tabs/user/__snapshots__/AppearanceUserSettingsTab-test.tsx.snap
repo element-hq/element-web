@@ -205,13 +205,14 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       <div
                         aria-atomic="true"
                         aria-live="off"
-                        class="_root_pq1p8_9 mx_EventTile _stateOwnEvent_pq1p8_836 _layoutGroup_pq1p8_179"
+                        class="_root_197br_9 mx_EventTile _stateOwnEvent_197br_896 _layoutGroup_197br_193"
                         data-event-id="$9999999999999999999999999999999999999999999"
                         data-scroll-tokens="$9999999999999999999999999999999999999999999"
+                        data-testid="event-tile"
                         tabindex="-1"
                       >
                         <div
-                          class="_slotSender_pq1p8_111 mx_DisambiguatedProfile"
+                          class="_slotSender_197br_103"
                           data-testid="event-tile-slot-sender"
                         >
                           <div
@@ -230,7 +231,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           </div>
                         </div>
                         <div
-                          class="_slotAvatar_pq1p8_102 mx_EventTile_avatar"
+                          class="_slotAvatar_197br_94"
                           data-testid="event-tile-slot-avatar"
                         >
                           <span
@@ -246,11 +247,12 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           </span>
                         </div>
                         <div
-                          class="_line_pq1p8_74 mx_EventTile_line"
+                          class="_line_197br_70 mx_EventTile_line"
+                          data-testid="event-tile-line"
                           id="1"
                         >
                           <div
-                            class="_slotBody_pq1p8_89 mx_EventTile_body"
+                            class="_slotBody_197br_95"
                             data-testid="event-tile-slot-body"
                           >
                             <div
@@ -311,13 +313,14 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       <div
                         aria-atomic="true"
                         aria-live="off"
-                        class="_root_pq1p8_9 mx_EventTile _stateOwnEvent_pq1p8_836 _layoutBubble_pq1p8_655"
+                        class="_root_197br_9 mx_EventTile _stateOwnEvent_197br_896 _layoutBubble_197br_700"
                         data-event-id="$9999999999999999999999999999999999999999999"
                         data-scroll-tokens="$9999999999999999999999999999999999999999999"
+                        data-testid="event-tile"
                         tabindex="-1"
                       >
                         <div
-                          class="_slotSender_pq1p8_111 mx_DisambiguatedProfile"
+                          class="_slotSender_197br_103"
                           data-testid="event-tile-slot-sender"
                         >
                           <div
@@ -336,7 +339,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           </div>
                         </div>
                         <div
-                          class="_slotAvatar_pq1p8_102 mx_EventTile_avatar"
+                          class="_slotAvatar_197br_94"
                           data-testid="event-tile-slot-avatar"
                         >
                           <span
@@ -352,11 +355,12 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           </span>
                         </div>
                         <div
-                          class="_line_pq1p8_74 mx_EventTile_line"
+                          class="_line_197br_70 mx_EventTile_line"
+                          data-testid="event-tile-line"
                           id="2"
                         >
                           <div
-                            class="_slotBody_pq1p8_89 mx_EventTile_body"
+                            class="_slotBody_197br_95"
                             data-testid="event-tile-slot-body"
                           >
                             <div
@@ -417,13 +421,14 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       <div
                         aria-atomic="true"
                         aria-live="off"
-                        class="_root_pq1p8_9 mx_EventTile _stateOwnEvent_pq1p8_836 _layoutIrc_pq1p8_431"
+                        class="_root_197br_9 mx_EventTile _stateOwnEvent_197br_896 _layoutIrc_197br_468"
                         data-event-id="$9999999999999999999999999999999999999999999"
                         data-scroll-tokens="$9999999999999999999999999999999999999999999"
+                        data-testid="event-tile"
                         tabindex="-1"
                       >
                         <div
-                          class="_slotTimestamp_pq1p8_69"
+                          class="_slotTimestamp_197br_105"
                           data-testid="event-tile-slot-timestamp"
                         >
                           <span
@@ -431,7 +436,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           />
                         </div>
                         <div
-                          class="_slotAvatar_pq1p8_102 mx_EventTile_avatar"
+                          class="_slotAvatar_197br_94"
                           data-testid="event-tile-slot-avatar"
                         >
                           <span
@@ -447,7 +452,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           </span>
                         </div>
                         <div
-                          class="_slotSender_pq1p8_111 mx_DisambiguatedProfile"
+                          class="_slotSender_197br_103"
                           data-testid="event-tile-slot-sender"
                         >
                           <div
@@ -466,11 +471,12 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           </div>
                         </div>
                         <div
-                          class="_line_pq1p8_74 mx_EventTile_line"
+                          class="_line_197br_70 mx_EventTile_line"
+                          data-testid="event-tile-line"
                           id="3"
                         >
                           <div
-                            class="_slotBody_pq1p8_89 mx_EventTile_body"
+                            class="_slotBody_197br_95"
                             data-testid="event-tile-slot-body"
                           >
                             <div
