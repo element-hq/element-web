@@ -73,4 +73,25 @@ describe("CustomStatusView", () => {
 
         expect(onSave).toHaveBeenCalledWith({ emoji: "😇", text: "Angelic" });
     });
+
+    it("offers the recently used emoji in the picker", async () => {
+        render(<CustomStatusView onSave={vi.fn()} onCancel={vi.fn()} recentEmojis={["😇"]} />);
+
+        await userEvent.click(screen.getByRole("button", { name: "Choose Emoji" }));
+        await waitFor(() => expect(screen.getByLabelText("Emoji picker")).toBeInTheDocument());
+
+        expect(await screen.findByRole("heading", { name: "Frequently Used" })).toBeInTheDocument();
+    });
+
+    it("records the chosen emoji as recently used", async () => {
+        const onRecordRecentEmoji = vi.fn();
+        render(<CustomStatusView onSave={vi.fn()} onCancel={vi.fn()} onRecordRecentEmoji={onRecordRecentEmoji} />);
+
+        await userEvent.click(screen.getByRole("button", { name: "Choose Emoji" }));
+        await waitFor(() => expect(screen.getByLabelText("Emoji picker")).toBeInTheDocument());
+
+        await userEvent.click(await screen.findByText("😇"));
+
+        expect(onRecordRecentEmoji).toHaveBeenCalledWith("😇");
+    });
 });

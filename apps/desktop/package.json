@@ -3,7 +3,7 @@
     "productName": "Element",
     "main": "lib/electron-main.js",
     "exports": "./lib/electron-main.js",
-    "version": "1.12.25",
+    "version": "1.12.26",
     "description": "Element: the future of secure communication",
     "author": {
         "name": "Element",
@@ -82,7 +82,7 @@
         "app-builder-lib": "26.15.3",
         "chokidar": "^5.0.0",
         "detect-libc": "^2.0.0",
-        "electron": "43.3.0",
+        "electron": "43.4.0",
         "electron-builder": "26.15.3",
         "electron-builder-squirrel-windows": "26.15.3",
         "electron-devtools-installer": "^4.0.0",

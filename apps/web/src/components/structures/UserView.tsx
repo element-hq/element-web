@@ -43,7 +43,7 @@ export default class UserView extends React.Component<IProps, IState> {
 
     public componentDidMount(): void {
         if (this.props.userId) {
-            this.loadProfileInfo();
+            void this.loadProfileInfo();
         }
     }
 
@@ -52,7 +52,7 @@ export default class UserView extends React.Component<IProps, IState> {
         // it as optional and MatrixChat sometimes fires in a way which results
         // in an NPE when we try to update the profile info.
         if (prevProps.userId !== this.props.userId && this.props.userId) {
-            this.loadProfileInfo();
+            void this.loadProfileInfo();
         }
     }
 
