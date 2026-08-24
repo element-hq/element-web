@@ -2091,6 +2091,8 @@
             "this_room_button": "Search this room"
         },
         "thread_header_a11y_label": "Thread in %(roomName)s",
+        "thread_header_a11y_label_with_message": "Thread in %(roomName)s: %(message)s",
+        "thread_header_back_label": "Back to %(roomName)s",
         "unknown_status_code_for_timeline_jump": "unknown status code",
         "unread_notifications_predecessor": {
             "one": "You have %(count)s unread notification in a prior version of this room.",

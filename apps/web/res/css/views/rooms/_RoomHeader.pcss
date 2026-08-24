@@ -67,7 +67,8 @@ Please see LICENSE files in the repository root for full details.
     flex-shrink: 0;
 }
 
-.mx_RoomHeader .mx_FacePile {
+.mx_RoomHeader .mx_FacePile,
+.mx_ThreadHeader .mx_FacePile {
     color: $secondary-content;
     background: $background;
     display: flex;
@@ -100,7 +101,8 @@ Please see LICENSE files in the repository root for full details.
     }
 }
 
-.mx_RoomHeader .mx_BaseAvatar {
+.mx_RoomHeader .mx_BaseAvatar,
+.mx_ThreadHeader .mx_BaseAvatar {
     flex-shrink: 0;
 }
 
@@ -109,6 +111,7 @@ Please see LICENSE files in the repository root for full details.
     min-width: 240px;
 }
 
-.mx_RoomHeader .mx_RoomHeader_toggled {
+.mx_RoomHeader .mx_RoomHeader_toggled,
+.mx_ThreadHeader .mx_RoomHeader_toggled {
     fill: var(--cpd-color-icon-accent-primary);
 }

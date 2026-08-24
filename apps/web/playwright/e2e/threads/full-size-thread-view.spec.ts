@@ -142,7 +142,10 @@ test.describe("Full-size thread view", () => {
         await summary.click();
         await expect(page.locator(".mx_ThreadView_fullSize").getByText("Reply from the bot")).toBeVisible();
 
-        await page.locator(".mx_ThreadHeader").getByRole("button", { name: "Back" }).click();
+        await page
+            .locator(".mx_ThreadHeader")
+            .getByRole("button", { name: /^Back to / })
+            .click();
         await expect(summary).toBeVisible();
         await expect(rootTile).toBeInViewport();
 

@@ -13,6 +13,10 @@ Please see LICENSE files in the repository root for full details.
     border-bottom: 1px solid $separator;
     background-color: $background;
 
+    button:has(svg.mx_RoomHeader_toggled) {
+        outline: 1px solid transparent;
+    }
+
     .mx_ThreadHeader_info {
         display: flex;
         flex: 1;
@@ -20,7 +24,7 @@ Please see LICENSE files in the repository root for full details.
         min-width: 0;
     }
 
-    .mx_ThreadHeader_roomName {
+    .mx_ThreadHeader_root {
         color: var(--cpd-color-text-secondary);
     }
 }

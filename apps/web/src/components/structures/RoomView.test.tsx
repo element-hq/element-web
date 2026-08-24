@@ -373,7 +373,7 @@ describe("RoomView", () => {
             expect(container.querySelector(".mx_RoomHeader")).not.toBeInTheDocument();
             expect(within(container).getByRole("heading", { name: /^Thread in / })).toBeInTheDocument();
 
-            fireEvent.click(within(container).getByRole("button", { name: "Back" }));
+            fireEvent.click(within(container).getByRole("button", { name: /^Back to / }));
 
             await waitFor(() => expect(screen.getByTestId("timeline")).toBeInTheDocument());
             expect(container.querySelector(".mx_ThreadView")).not.toBeInTheDocument();
