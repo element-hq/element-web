@@ -1,6 +1,33 @@
 #!/bin/bash
-
+#
+# Wrapper script for playwright, to be used when updating screenshots. It is installed as `node_modules/.bin/playwright-screenshots`.
+#
+# Starts playwright-server in a docker container, and then runs the rest of the
+# commandline with the `PW_TEST_CONNECT_WS_ENDPOINT` environment variable set
+# to the location of the playwright server.
+#
+# For this to be useful, your playwright config should contain:
+#
+# ```
+# {
+#   use: {
+#     connectOptions: process.env.PW_TEST_CONNECT_WS_ENDPOINT ?
+#       { wsEndpoint: process.env.PW_TEST_CONNECT_WS_ENDPOINT,
+#         exposeNetwork: "<loopback>" }
+#       : undefined,
+#   },
+#   snapshotPathTemplate: `{snapshotDir}/{testFilePath}/{arg}-${process.env.PW_TEST_CONNECT_WS_ENDPOINT ? "linux" : "{platform}"}{ext}`,
+# }
+# ```
+#
+# Usage: playwright-screenshots playwright test --update-snapshots --grep @screenshot ...
+#
 set -e
+
+if [ $# -lt 1 -o "$1" = '-h' ]; then
+    echo >&2 "Usage: playwright-screenshots playwright test --update-snapshots --grep @screenshot ..."
+    exit 1
+fi
 
 # Handle symlinks here as we tend to be executed as an npm binary
 SCRIPT_PATH=$(readlink -f "$0")
