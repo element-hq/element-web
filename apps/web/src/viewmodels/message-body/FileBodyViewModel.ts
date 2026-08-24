@@ -158,6 +158,7 @@ export class FileBodyViewModel
             ? presentableTextForFile(content, _t("common|attachment"), true)
             : undefined;
         const fileInfoIcon = showFileInfo ? FileBodyViewModel.getInfoIcon(content) : undefined;
+        const showPreview = FileBodyViewModel.canPreview(props);
         const downloadLabel = showDownload ? downloadLabelForFile(content, true) : undefined;
         const downloadTitle = showDownload
             ? presentableTextForFile(content, _t("common|attachment"), true, true)
@@ -183,6 +184,7 @@ export class FileBodyViewModel
                 infoLabel: fileInfoLabel,
                 infoTooltip: fileInfoTooltip,
                 infoIcon: fileInfoIcon,
+                showPreview,
                 showDownload,
                 downloadLabel,
                 downloadTitle: downloadTitle,
@@ -196,6 +198,7 @@ export class FileBodyViewModel
                 infoLabel: fileInfoLabel,
                 infoTooltip: fileInfoTooltip,
                 infoIcon: fileInfoIcon,
+                showPreview,
                 showDownload,
                 downloadLabel,
                 downloadTitle: downloadTitle,
@@ -258,9 +261,10 @@ export class FileBodyViewModel
         }
     };
 
-    /** Whether clicking the file should open the preview dialog rather than downloading it. */
-    private get canPreview(): boolean {
-        return SettingsStore.getValue("feature_file_preview") && canPreviewFile(this.props.mxEvent);
+    /** Whether to offer the preview button beside the filename. */
+    private static canPreview(props: FileBodyViewModelProps): boolean {
+        if (props.forExport || !(props.showFileInfo ?? true)) return false;
+        return SettingsStore.getValue("feature_file_preview") && canPreviewFile(props.mxEvent);
     }
 
     /**
@@ -277,13 +281,13 @@ export class FileBodyViewModel
         Modal.createDialog(MediaPreviewDialog, params, "mx_Dialog_lightbox", undefined, true);
     }
 
+    public onPreviewClick = (): void => {
+        if (!FileBodyViewModel.canPreview(this.props)) return;
+        this.openPreview();
+    };
+
     public onInfoClick = async (): Promise<void> => {
         if (this.props.forExport || !(this.props.showFileInfo ?? true) || !this.props.mediaEventHelper) {
-            return;
-        }
-
-        if (this.canPreview) {
-            this.openPreview();
             return;
         }
 

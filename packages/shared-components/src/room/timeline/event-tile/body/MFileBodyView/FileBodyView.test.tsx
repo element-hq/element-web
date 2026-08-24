@@ -41,6 +41,7 @@ const defaultSnapshot: FileBodyViewSnapshot = {
 
 class TestViewModel extends MockViewModel<FileBodyViewSnapshot> implements FileBodyViewActions {
     public onInfoClick?: () => void;
+    public onPreviewClick?: () => void;
     public onDownloadClick?: () => void;
     public onDownloadLinkClick?: (event: MouseEvent<HTMLAnchorElement>) => void;
     public onDownloadIframeLoad?: () => void;
@@ -48,6 +49,7 @@ class TestViewModel extends MockViewModel<FileBodyViewSnapshot> implements FileB
     public constructor(snapshot: FileBodyViewSnapshot, actions: FileBodyViewActions = {}) {
         super(snapshot);
         this.onInfoClick = actions.onInfoClick;
+        this.onPreviewClick = actions.onPreviewClick;
         this.onDownloadClick = actions.onDownloadClick;
         this.onDownloadLinkClick = actions.onDownloadLinkClick;
         this.onDownloadIframeLoad = actions.onDownloadIframeLoad;
@@ -284,5 +286,44 @@ describe("FileBodyView", () => {
 
         const { container } = renderWithI18n(<FileBodyView vm={vm} className="custom-file-body another-class" />);
         expect(container.firstElementChild).toHaveClass("custom-file-body", "another-class");
+    });
+
+    describe("preview button", () => {
+        it("is absent unless the file can be previewed", () => {
+            const vm = new TestViewModel({ ...defaultSnapshot, infoLabel: "spec.pdf" });
+            renderWithI18n(<FileBodyView vm={vm} />);
+
+            expect(screen.queryByRole("button", { name: "Preview" })).toBeNull();
+        });
+
+        it("opens the preview without triggering the download", () => {
+            const onPreviewClick = vi.fn();
+            const onInfoClick = vi.fn();
+            const vm = new TestViewModel(
+                { ...defaultSnapshot, infoLabel: "spec.pdf", showPreview: true },
+                { onPreviewClick, onInfoClick },
+            );
+            renderWithI18n(<FileBodyView vm={vm} />);
+
+            fireEvent.click(screen.getByRole("button", { name: "Preview" }));
+
+            expect(onPreviewClick).toHaveBeenCalled();
+            expect(onInfoClick).not.toHaveBeenCalled();
+        });
+
+        it("leaves the filename downloading as before", () => {
+            const onPreviewClick = vi.fn();
+            const onInfoClick = vi.fn();
+            const vm = new TestViewModel(
+                { ...defaultSnapshot, infoLabel: "spec.pdf", showPreview: true },
+                { onPreviewClick, onInfoClick },
+            );
+            renderWithI18n(<FileBodyView vm={vm} />);
+
+            fireEvent.click(screen.getByRole("button", { name: "spec.pdf" }));
+
+            expect(onInfoClick).toHaveBeenCalled();
+            expect(onPreviewClick).not.toHaveBeenCalled();
+        });
     });
 });

@@ -20,7 +20,12 @@ import React, {
 import FocusLock from "react-focus-lock";
 import classNames from "classnames";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { CloseIcon, DownloadIcon, OverflowHorizontalIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import {
+    ChatIcon,
+    CloseIcon,
+    DownloadIcon,
+    OverflowHorizontalIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 import { useCreateAutoDisposedViewModel, MessageTimestampView } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../../languageHandler";
@@ -37,6 +42,7 @@ import { type RoomPermalinkCreator } from "../../../../utils/permalinks/Permalin
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
 import { useDownloadMedia } from "../../../../hooks/useDownloadMedia";
+import { type PreviewChat } from "./usePreviewChat";
 import {
     MessageTimestampViewModel,
     type MessageTimestampViewModelProps,
@@ -63,6 +69,12 @@ export interface MediaPreviewShellProps {
 
     /** Previewer-specific controls, rendered ahead of the shared download/menu/close buttons. */
     toolbar?: ReactNode;
+
+    /**
+     * Chat controls from {@link usePreviewChat}. When given, a toggle for the room's chat panel
+     * is added to the toolbar; when omitted, there is no chat button at all.
+     */
+    chat?: PreviewChat;
 
     /**
      * Assigned to the focus lock's DOM node, for previewers that need to attach native listeners
@@ -103,6 +115,7 @@ export default function MediaPreviewShell({
     downloadUrl,
     downloadName,
     toolbar,
+    chat,
     lockRef,
     contentClassName,
     contentRef,
@@ -190,6 +203,9 @@ export default function MediaPreviewShell({
     return (
         <FocusLock
             returnFocus={true}
+            // The chat panel lives outside this dialog, in the app's right panel. While it is
+            // open the trap has to let go, or focus is yanked back out of the composer.
+            disabled={chat?.open}
             lockProps={{
                 "onKeyDown": onKeyDown,
                 "role": "dialog",
@@ -203,6 +219,18 @@ export default function MediaPreviewShell({
                 {title ? <div className="mx_MediaPreview_title">{title}</div> : <div />}
                 <div className="mx_MediaPreview_toolbar">
                     {toolbar}
+                    {chat && (
+                        <AccessibleButton
+                            className={classNames("mx_MediaPreview_button", {
+                                mx_MediaPreview_button_active: chat.open,
+                            })}
+                            title={_t("media_preview|chat")}
+                            aria-pressed={chat.open}
+                            onClick={chat.toggle}
+                        >
+                            <ChatIcon />
+                        </AccessibleButton>
+                    )}
                     {canDownload && (
                         <AccessibleButton
                             className="mx_MediaPreview_button"

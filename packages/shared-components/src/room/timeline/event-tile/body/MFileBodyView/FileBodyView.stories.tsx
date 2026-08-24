@@ -23,6 +23,7 @@ type FileBodyViewProps = FileBodyViewSnapshot & FileBodyViewActions;
 
 const FileBodyViewWrapperImpl = ({
     onInfoClick,
+    onPreviewClick,
     onDownloadClick,
     onDownloadLinkClick,
     onDownloadIframeLoad,
@@ -31,6 +32,7 @@ const FileBodyViewWrapperImpl = ({
 }: FileBodyViewProps & { className?: string }): ReactNode => {
     const vm = useMockedViewModel(snapshotProps, {
         onInfoClick,
+        onPreviewClick,
         onDownloadClick,
         onDownloadLinkClick,
         onDownloadIframeLoad,
@@ -59,6 +61,7 @@ const meta = {
             control: { type: "select" },
         },
         showInfo: { control: "boolean" },
+        showPreview: { control: "boolean" },
         showDownload: { control: "boolean" },
         className: { control: "text" },
     },
@@ -69,6 +72,7 @@ const meta = {
         infoTooltip: "spec.pdf (22 KB)",
         infoIcon: FileBodyViewInfoIcon.ATTACHMENT,
         infoHref: "https://example.org/spec.pdf",
+        showPreview: false,
         showDownload: true,
         downloadLabel: "Download file",
         downloadTitle: "Download title",
@@ -152,5 +156,20 @@ export const LongFilenameDownload: Story = {
         showInfo: false,
         showDownload: true,
         downloadLabel: "a very long filename that show no ellipsis.pdf",
+    },
+};
+
+/**
+ * A previewable document: the filename still downloads, and the button beside it opens the
+ * full-screen preview.
+ */
+export const PreviewableInfo: Story = {
+    args: {
+        state: FileBodyViewState.UNENCRYPTED,
+        showInfo: true,
+        showPreview: true,
+        showDownload: false,
+        infoLabel: "spec.pdf",
+        infoTooltip: "spec.pdf (22 KB)",
     },
 };

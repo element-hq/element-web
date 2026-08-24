@@ -18,7 +18,7 @@ export function PreviewError(): JSX.Element {
     return (
         <div className="mx_MediaPreview_error">
             <FileErrorIcon width="48px" height="48px" />
-            <span>{_t("file_preview|error_unavailable")}</span>
+            <span>{_t("media_preview|error_unavailable")}</span>
         </div>
     );
 }

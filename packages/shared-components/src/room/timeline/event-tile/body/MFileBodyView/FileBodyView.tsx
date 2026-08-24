@@ -7,10 +7,11 @@
 
 import React, { type ComponentType, type JSX, type MouseEvent } from "react";
 import classNames from "classnames";
-import { Button, Tooltip } from "@vector-im/compound-web";
+import { Button, IconButton, Tooltip } from "@vector-im/compound-web";
 import {
     AttachmentIcon,
     DownloadIcon,
+    ExpandIcon,
     VideoCallSolidIcon,
     VolumeOnSolidIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
@@ -74,6 +75,14 @@ export interface FileBodyViewSnapshot {
      */
     infoHref?: string;
     /**
+     * Whether to render the button that opens the file in the full-screen preview.
+     */
+    showPreview?: boolean;
+    /**
+     * Optional label for the preview button. Defaults to 'Preview'.
+     */
+    previewLabel?: string;
+    /**
      * Whether to render download controls for the current rendering branch.
      */
     showDownload?: boolean;
@@ -97,6 +106,10 @@ export interface FileBodyViewActions {
      * Click handler for the info row.
      */
     onInfoClick?: () => void;
+    /**
+     * Click handler for the preview button.
+     */
+    onPreviewClick?: () => void;
     /**
      * Click handler for a download button.
      */
@@ -190,6 +203,8 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
         infoTooltip,
         infoIcon,
         infoHref,
+        showPreview,
+        previewLabel,
         showDownload,
         downloadLabel,
         downloadTitle,
@@ -217,6 +232,29 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
         </Tooltip>
     ) : null;
 
+    const resolvedPreviewLabel = previewLabel ?? _t("action|preview");
+
+    // Sits beside the filename rather than inside it: the pill is itself a button, and the
+    // preview is a separate action from the download that clicking the pill performs.
+    const preview = showPreview ? (
+        <Tooltip label={resolvedPreviewLabel}>
+            <IconButton size="24px" aria-label={resolvedPreviewLabel} onClick={vm.onPreviewClick} data-type="preview">
+                <ExpandIcon />
+            </IconButton>
+        </Tooltip>
+    ) : null;
+
+    // Only introduce the row wrapper when there is something to sit alongside the filename, so
+    // that file bodies without a preview render exactly the markup they always have.
+    const infoRow = preview ? (
+        <div className={styles.infoRow}>
+            {info}
+            {preview}
+        </div>
+    ) : (
+        info
+    );
+
     const classes = classNames(styles.content, className);
 
     const resolvedDownloadLabel = downloadLabel ?? _t("action|download");
@@ -233,7 +271,7 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
         case FileBodyViewState.DECRYPTION_PENDING:
             return (
                 <span className={classes}>
-                    {info}
+                    {infoRow}
                     {showDownload && (
                         <div data-type="download">
                             {/* Decrypt/download is triggered by the view model action, not by an anchor `href`. */}
@@ -248,7 +286,7 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
         case FileBodyViewState.ENCRYPTED:
             return (
                 <span className={classes}>
-                    {info}
+                    {infoRow}
                     {showDownload && (
                         <div data-type="download">
                             <div aria-hidden style={{ display: "none" }}>
@@ -283,7 +321,7 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
         case FileBodyViewState.UNENCRYPTED:
             return (
                 <span className={classes}>
-                    {info}
+                    {infoRow}
                     {showDownload && (
                         <div data-type="download">
                             {/* Unencrypted media uses an anchor element with VM-controlled click behavior. */}
@@ -308,7 +346,7 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
         default:
             return (
                 <>
-                    <span className={classes}>{info}</span>
+                    <span className={classes}>{infoRow}</span>
                     <span className={classNames(classes, styles.invalid)}>{_t("timeline|m.file|error_invalid")}</span>
                 </>
             );

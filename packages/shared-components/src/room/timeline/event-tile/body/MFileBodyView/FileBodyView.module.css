@@ -19,6 +19,17 @@
     }
 }
 
+.infoRow {
+    display: flex;
+    align-items: center;
+    gap: var(--cpd-space-2x);
+    min-width: 0;
+}
+
+.infoRow [data-type="preview"] {
+    flex: none;
+}
+
 .content [data-type="info"] {
     display: inline-flex;
     align-items: center;

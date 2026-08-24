@@ -19,6 +19,7 @@ import MediaPreviewShell from "./MediaPreviewShell";
 import { PreviewError } from "./PreviewError";
 import { ZoomControls, MAX_ZOOM, MIN_ZOOM, useZoom } from "./ZoomControls";
 import { useMediaBytes } from "./useMediaBytes";
+import { usePreviewChat } from "./usePreviewChat";
 
 /**
  * mammoth emits a small, predictable subset of HTML, so rather than reusing the message
@@ -101,6 +102,7 @@ interface Props {
 export default function DocxPreview({ mxEvent, permalinkCreator, onFinished }: Props): JSX.Element {
     const { data, error: fetchError, helper } = useMediaBytes(mxEvent);
     const { zoom, zoomIn, zoomOut } = useZoom();
+    const chat = usePreviewChat(mxEvent);
     const [html, setHtml] = useState<string | null>(null);
     const [convertError, setConvertError] = useState<unknown>(null);
 
@@ -147,13 +149,14 @@ export default function DocxPreview({ mxEvent, permalinkCreator, onFinished }: P
 
     return (
         <MediaPreviewShell
-            label={_t("file_preview|title")}
+            label={_t("media_preview|title")}
             mxEvent={mxEvent}
             permalinkCreator={permalinkCreator}
             title={presentableTextForFile(mxEvent.getContent<MediaEventContent>(), _t("common|attachment"), true)}
             downloadUrl={helper.media.srcHttp ?? ""}
             downloadName={helper.fileName}
             toolbar={<ZoomControls zoom={zoom} zoomIn={zoomIn} zoomOut={zoomOut} min={MIN_ZOOM} max={MAX_ZOOM} />}
+            chat={chat}
             onFinished={onFinished}
         >
             {body}

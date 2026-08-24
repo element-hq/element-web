@@ -109,6 +109,23 @@ $button-gap: var(--cpd-space-3x);
     }
 }
 
+.mx_MediaPreview_button_active svg {
+    color: $accent;
+}
+
+/*
+ * When the chat panel is open the preview steps aside for it, rather than covering it — the same
+ * relationship a video call has with the chat. The overlay and its backdrop are both fixed and
+ * full-width, so we narrow both; the width is written to --media-preview-chat-inset by
+ * usePreviewChat, which tracks the panel as the user resizes it.
+ */
+body.mx_MediaPreview_withChat {
+    .mx_Dialog_lightbox,
+    .mx_Dialog_lightbox .mx_Dialog_background {
+        width: calc(100% - var(--media-preview-chat-inset, 320px));
+    }
+}
+
 .mx_MediaPreview_button_more {
     --icon-size: 28px;
 }

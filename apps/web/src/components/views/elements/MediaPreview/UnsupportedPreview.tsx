@@ -33,7 +33,7 @@ export default function UnsupportedPreview({ mxEvent, permalinkCreator, onFinish
 
     return (
         <MediaPreviewShell
-            label={_t("file_preview|title")}
+            label={_t("media_preview|title")}
             mxEvent={mxEvent}
             permalinkCreator={permalinkCreator}
             title={content ? presentableTextForFile(content, _t("common|attachment"), true) : undefined}

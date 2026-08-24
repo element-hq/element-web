@@ -21,6 +21,7 @@ import MediaPreviewShell from "./MediaPreviewShell";
 import { PreviewError } from "./PreviewError";
 import { ZoomControls, MAX_ZOOM, MIN_ZOOM, useZoom } from "./ZoomControls";
 import { useMediaBytes } from "./useMediaBytes";
+import { usePreviewChat } from "./usePreviewChat";
 import { loadPdfDocument } from "./pdfjs";
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
 
@@ -40,6 +41,7 @@ interface Props {
 export default function PdfPreview({ mxEvent, permalinkCreator, onFinished }: Props): JSX.Element {
     const { data, error: fetchError, helper } = useMediaBytes(mxEvent);
     const { zoom, zoomIn, zoomOut } = useZoom();
+    const chat = usePreviewChat(mxEvent);
 
     const [document, setDocument] = useState<PDFDocumentProxy | null>(null);
     const [pageCount, setPageCount] = useState(0);
@@ -165,7 +167,7 @@ export default function PdfPreview({ mxEvent, permalinkCreator, onFinished }: Pr
                     ref={canvasRef}
                     className="mx_PdfPreview_canvas"
                     hidden={rendering}
-                    aria-label={_t("file_preview|pdf_page_label", { pageNumber: page })}
+                    aria-label={_t("media_preview|pdf_page_label", { pageNumber: page })}
                 />
             </div>
         );
@@ -177,18 +179,18 @@ export default function PdfPreview({ mxEvent, permalinkCreator, onFinished }: Pr
                 <>
                     <AccessibleButton
                         className="mx_MediaPreview_button"
-                        title={_t("file_preview|previous_page")}
+                        title={_t("media_preview|previous_page")}
                         onClick={previousPage}
                         disabled={page <= 1}
                     >
                         <ChevronLeftIcon />
                     </AccessibleButton>
                     <span className="mx_MediaPreview_pageCount" aria-live="polite">
-                        {_t("file_preview|page_of", { page, pageCount })}
+                        {_t("media_preview|page_of", { page, pageCount })}
                     </span>
                     <AccessibleButton
                         className="mx_MediaPreview_button"
-                        title={_t("file_preview|next_page")}
+                        title={_t("media_preview|next_page")}
                         onClick={nextPage}
                         disabled={page >= pageCount}
                     >
@@ -202,13 +204,14 @@ export default function PdfPreview({ mxEvent, permalinkCreator, onFinished }: Pr
 
     return (
         <MediaPreviewShell
-            label={_t("file_preview|title")}
+            label={_t("media_preview|title")}
             mxEvent={mxEvent}
             permalinkCreator={permalinkCreator}
             title={presentableTextForFile(mxEvent.getContent<MediaEventContent>(), _t("common|attachment"), true)}
             downloadUrl={helper.media.srcHttp ?? ""}
             downloadName={helper.fileName}
             toolbar={toolbar}
+            chat={chat}
             onAction={onAction}
             onFinished={onFinished}
         >
