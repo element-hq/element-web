@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 import { type Locator, type Page } from "@playwright/test";
 
 import type { EventType, IContent, ISendEventResponse, MsgType, Visibility } from "matrix-js-sdk/src/matrix";
-import { closeReleaseAnnouncement } from "@element-hq/element-web-playwright-common";
 import { expect, test } from "../../element-web-test";
 import { type ElementAppPage } from "../../pages/ElementAppPage";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
@@ -34,10 +33,6 @@ function mkPadding(n: number): IContent {
 
 test.describe("Editing", () => {
     test.skip(isDendrite, "due to a Dendrite bug https://github.com/element-hq/dendrite/issues/3488");
-
-    test.beforeEach(async ({ page }) => {
-        await closeReleaseAnnouncement(page, "Introducing Sections");
-    });
 
     // Edit "Message"
     const editLastMessage = async (page: Page, edit: string) => {

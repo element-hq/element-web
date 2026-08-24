@@ -6,7 +6,7 @@
  */
 
 import { type Page } from "@playwright/test";
-import { closeReleaseAnnouncement, rejectToast } from "@element-hq/element-web-playwright-common";
+import { rejectToast } from "@element-hq/element-web-playwright-common";
 
 import type { AccountDataEvents } from "matrix-js-sdk/src/matrix";
 import { expect, test } from "../../../element-web-test";
@@ -26,9 +26,6 @@ test.describe("Room list", () => {
         // The toasts are displayed above the search section
         await rejectToast(page, "Verify this device");
         await rejectToast(page, "Notifications");
-
-        // Close the release announcement about the new room list sections
-        await closeReleaseAnnouncement(page, "Introducing Sections");
 
         // focus the user menu to avoid to have hover decoration
         await page.getByRole("button", { name: "User menu" }).focus();
