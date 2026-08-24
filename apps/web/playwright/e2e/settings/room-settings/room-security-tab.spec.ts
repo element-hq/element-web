@@ -6,7 +6,7 @@
  */
 
 import { type Locator } from "@playwright/test";
-import { rejectToast } from "@element-hq/element-web-playwright-common";
+import { closeReleaseAnnouncementIfExists, rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { test, expect } from "../../../element-web-test";
 
@@ -22,6 +22,8 @@ test.describe("Roles & Permissions room settings tab", () => {
     test.beforeEach(async ({ user, app, page }) => {
         await rejectToast(page, "Verify this device");
         await rejectToast(page, "Notifications");
+        // Close the release announcement about the new room list sections
+        await closeReleaseAnnouncementIfExists(page, "Introducing Sections");
 
         await app.client.createRoom({
             name: roomName,
