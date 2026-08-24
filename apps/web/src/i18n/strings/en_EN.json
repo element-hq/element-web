@@ -1261,6 +1261,14 @@
         "guest_note": "You must <a>register</a> to use this functionality",
         "peek_note": "You must join the room to see its files"
     },
+    "file_preview": {
+        "error_unavailable": "This file can't be previewed. Download it to open it in another app.",
+        "next_page": "Next page",
+        "page_of": "%(page)s of %(pageCount)s",
+        "pdf_page_label": "Page %(pageNumber)s",
+        "previous_page": "Previous page",
+        "title": "File preview"
+    },
     "forward": {
         "filter_placeholder": "Search for rooms or people",
         "message_preview_heading": "Message preview",
@@ -1523,6 +1531,8 @@
             "required_msc_support": "Requires MSC4429 (Profile Updates for Legacy Sync)"
         },
         "feature_wysiwyg_composer_description": "Use rich text instead of Markdown in the message composer.",
+        "file_preview": "Preview PDF and Word documents",
+        "file_preview_description": "Open supported attachments in a full-screen preview instead of downloading them straight away.",
         "group_developer": "Developer",
         "group_encryption": "Encryption",
         "group_experimental": "Experimental",

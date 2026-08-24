@@ -1,0 +1,195 @@
+/*
+Copyright 2026 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+$fp-button-size: 32px;
+
+:root {
+    --file-preview-panel-height: 68px;
+}
+
+.mx_FilePreviewDialog {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+}
+
+.mx_FilePreviewDialog_panel {
+    width: 100%;
+    height: var(--file-preview-panel-height);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.mx_FilePreviewDialog_info_wrapper {
+    pointer-events: initial;
+    padding-left: 32px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: $lightbox-fg-color;
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+.mx_FilePreviewDialog_info {
+    padding-left: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.mx_FilePreviewDialog_info_sender {
+    font-weight: bold;
+}
+
+.mx_FilePreviewDialog_title {
+    color: $lightbox-fg-color;
+    font-size: $font-12px;
+    flex-grow: 1;
+    flex-basis: 0;
+    text-align: center;
+    /* Long filenames must not push the toolbar off the edge. */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0 var(--cpd-space-3x);
+}
+
+.mx_FilePreviewDialog_toolbar {
+    --icon-size: 24px;
+
+    padding-right: 16px;
+    pointer-events: initial;
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    flex-basis: 0;
+    justify-content: flex-end;
+    gap: var(--cpd-space-3x);
+}
+
+.mx_FilePreviewDialog_pageCount {
+    color: $lightbox-fg-color;
+    font-size: $font-12px;
+    min-width: 4em;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+.mx_FilePreviewDialog_button {
+    padding: calc(($fp-button-size - var(--icon-size)) / 2);
+    width: var(--icon-size);
+    height: var(--icon-size);
+    display: block;
+
+    svg {
+        height: inherit;
+        width: inherit;
+        display: block;
+        color: $icon-button-color;
+    }
+
+    &[aria-disabled="true"] {
+        opacity: 0.4;
+        cursor: default;
+    }
+}
+
+.mx_FilePreviewDialog_button_more {
+    --icon-size: 28px;
+}
+
+.mx_FilePreviewDialog_button_close {
+    border-radius: 100%;
+    background: #21262c; /* same on all themes */
+}
+
+.mx_FilePreviewDialog_content {
+    pointer-events: initial;
+    flex-grow: 1;
+    min-height: 0;
+    display: flex;
+    justify-content: center;
+    /* Documents are read top-down, so pin to the top and scroll rather than centring. */
+    align-items: flex-start;
+    overflow: auto;
+    padding: var(--cpd-space-4x);
+}
+
+.mx_FilePreviewDialog_error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--cpd-space-4x);
+    margin: auto;
+    color: $lightbox-fg-color;
+
+    svg {
+        color: $lightbox-fg-color;
+    }
+}
+
+/* Rendered PDF page */
+.mx_PdfPreview {
+    display: flex;
+    justify-content: center;
+    margin: auto 0;
+}
+
+.mx_PdfPreview_canvas {
+    background-color: #fff; /* Pages are paper; keep them white in every theme. */
+    box-shadow: 0 2px 12px rgb(0 0 0 / 40%);
+    max-width: 100%;
+}
+
+/* Converted Word document */
+.mx_DocxPreview {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.mx_DocxPreview_page {
+    background-color: #fff;
+    color: #000; /* The document supplies no colours of its own; keep it readable on paper. */
+    box-shadow: 0 2px 12px rgb(0 0 0 / 40%);
+    width: 100%;
+    max-width: 50em;
+    padding: 4em;
+    box-sizing: border-box;
+    line-height: 1.5;
+    overflow-wrap: break-word;
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    table {
+        border-collapse: collapse;
+        max-width: 100%;
+
+        td,
+        th {
+            border: 1px solid #ccc;
+            padding: 0.25em 0.5em;
+        }
+    }
+
+    a {
+        color: #0b5cff;
+    }
+
+    /* Tables and pre blocks can be wider than the page; let them scroll rather than
+       forcing the whole dialog to scroll horizontally. */
+    pre {
+        overflow-x: auto;
+    }
+}

@@ -726,6 +726,14 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                         context: path.resolve(__dirname, "src/vector/mobile_guide"),
                         to: "mobile_guide",
                     },
+                    // Support files that pdf.js fetches at runtime when previewing a PDF:
+                    // CMaps for CJK encodings, the 14 standard fonts for documents that do not
+                    // embed them, and the wasm/ICC helpers used by its image decoders.
+                    {
+                        from: "{cmaps,standard_fonts,wasm,iccs}/**",
+                        context: getPackageRoot("pdfjs-dist"),
+                        to: "pdfjs",
+                    },
                 ],
             }),
 

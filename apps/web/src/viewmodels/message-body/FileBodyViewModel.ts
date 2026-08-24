@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type MouseEvent, type RefObject } from "react";
+import { type ComponentProps, type MouseEvent, type RefObject } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { MsgType, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { type MediaEventContent } from "matrix-js-sdk/src/types";
@@ -20,6 +20,7 @@ import {
 import DownloadSvg from "@vector-im/compound-design-tokens/icons/download.svg";
 
 import Modal from "../../Modal";
+import SettingsStore from "../../settings/SettingsStore";
 import { _t } from "../../languageHandler";
 import { mediaFromContent } from "../../customisations/Media";
 import { downloadLabelForFile, presentableTextForFile } from "../../utils/FileUtils";
@@ -27,6 +28,8 @@ import { FileDownloader } from "../../utils/FileDownloader";
 import { type MediaEventHelper } from "../../utils/MediaEventHelper";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
+import { canPreviewFile } from "../../components/views/elements/FilePreview/previewTypes";
+import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 
 export interface FileBodyViewModelProps {
     mxEvent: MatrixEvent;
@@ -34,6 +37,8 @@ export interface FileBodyViewModelProps {
     forExport?: boolean;
     showFileInfo?: boolean;
     timelineRenderingType: TimelineRenderingType;
+    /** Used to build the permalink behind the timestamp in the file preview dialog. */
+    permalinkCreator?: RoomPermalinkCreator;
     refIFrame: RefObject<HTMLIFrameElement>;
     refLink: RefObject<HTMLAnchorElement>;
 }
@@ -252,8 +257,36 @@ export class FileBodyViewModel
         }
     };
 
+    /** Whether clicking the file should open the preview dialog rather than downloading it. */
+    private get canPreview(): boolean {
+        return SettingsStore.getValue("feature_file_preview") && canPreviewFile(this.props.mxEvent);
+    }
+
+    /**
+     * Open the file in the full-screen preview dialog.
+     *
+     * The dialog is loaded on demand: it drags in pdf.js and mammoth, which together are far too
+     * large to sit in the main bundle for a feature most clicks will never reach.
+     */
+    private async openPreview(): Promise<void> {
+        const { default: FilePreviewDialog } = await import(
+            /* webpackChunkName: "file-preview" */ "../../components/views/elements/FilePreview/FilePreviewDialog"
+        );
+
+        const params: Omit<ComponentProps<typeof FilePreviewDialog>, "onFinished"> = {
+            mxEvent: this.props.mxEvent,
+            permalinkCreator: this.props.permalinkCreator,
+        };
+        Modal.createDialog(FilePreviewDialog, params, "mx_Dialog_lightbox", undefined, true);
+    }
+
     public onInfoClick = async (): Promise<void> => {
         if (this.props.forExport || !(this.props.showFileInfo ?? true) || !this.props.mediaEventHelper) {
+            return;
+        }
+
+        if (this.canPreview) {
+            await this.openPreview();
             return;
         }
 

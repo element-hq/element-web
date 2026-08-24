@@ -226,6 +226,7 @@ export interface Settings {
     "feature_disable_call_per_sender_encryption": IFeature;
     "feature_location_share_live": IFeature;
     "feature_dynamic_room_predecessors": IFeature;
+    "feature_file_preview": IFeature;
     "feature_render_reaction_images": IFeature;
     "feature_retention": IFeature;
     "feature_ask_to_join": IFeature;
@@ -625,6 +626,15 @@ export const SETTINGS: Settings = {
         displayName: _td("labs|dynamic_room_predecessors"),
         description: _td("labs|dynamic_room_predecessors_description"),
         shouldWarn: true,
+        default: false,
+    },
+    "feature_file_preview": {
+        isFeature: true,
+        labsGroup: LabGroup.Messaging,
+        displayName: _td("labs|file_preview"),
+        description: _td("labs|file_preview_description"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
         default: false,
     },
     "feature_render_reaction_images": {

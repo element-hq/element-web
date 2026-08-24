@@ -37,7 +37,8 @@ export function FileBodyFactory({
     mediaEventHelper,
     forExport,
     showFileInfo,
-}: Pick<IBodyProps, "mxEvent" | "mediaEventHelper" | "forExport" | "showFileInfo">): JSX.Element {
+    permalinkCreator,
+}: Pick<IBodyProps, "mxEvent" | "mediaEventHelper" | "forExport" | "showFileInfo" | "permalinkCreator">): JSX.Element {
     const { timelineRenderingType } = useContext(RoomContext);
     const refIFrame = useRef<HTMLIFrameElement>(null) as RefObject<HTMLIFrameElement>;
     const refLink = useRef<HTMLAnchorElement>(null) as RefObject<HTMLAnchorElement>;
@@ -50,6 +51,7 @@ export function FileBodyFactory({
                 forExport,
                 showFileInfo,
                 timelineRenderingType,
+                permalinkCreator,
                 refIFrame,
                 refLink,
             }),
@@ -62,8 +64,9 @@ export function FileBodyFactory({
             forExport,
             showFileInfo,
             timelineRenderingType,
+            permalinkCreator,
         });
-    }, [mxEvent, mediaEventHelper, forExport, showFileInfo, timelineRenderingType, vm]);
+    }, [mxEvent, mediaEventHelper, forExport, showFileInfo, timelineRenderingType, permalinkCreator, vm]);
 
     return <FileBodyView vm={vm} refIFrame={refIFrame} refLink={refLink} className="mx_MFileBody" />;
 }
