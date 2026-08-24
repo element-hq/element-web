@@ -193,6 +193,10 @@
 .root.layoutGroup {
     --event-tile-group-line-padding-inline-start: var(--event-tile-group-gutter);
 
+    &.stateInfo {
+        --event-tile-content-inline-end: 0;
+    }
+
     /* Root. */
 
     /* Line. */
@@ -267,10 +271,10 @@
         display: contents;
     }
 
-    /* The slot boundary owns the spacing between the reply chain and body.
-       The supplied reply-chain component remains application-owned. */
-    .line > .slotReplyChain > * {
-        margin-block-end: var(--cpd-space-2x);
+    /* The shell owns the spacing between the reply-chain slot and the body.
+       The supplied reply-chain component owns spacing between its replies. */
+    &.stateHasReply .line > .slotBody {
+        margin-block-start: var(--cpd-space-2x);
     }
 
     .slotFooter {
@@ -450,8 +454,8 @@
             padding-top: 0;
         }
 
-        .line > .slotReplyChain > * {
-            margin-block-end: var(--cpd-space-1x);
+        &.stateHasReply .line > .slotBody {
+            margin-block-start: var(--cpd-space-1x);
         }
 
         .slotReceipt {
@@ -1121,7 +1125,8 @@
             min-width: 100%;
             max-width: 100%;
             margin: 0;
-            padding: 0;
+            padding-block: 0;
+            padding-inline: 0 60px;
             background: transparent;
         }
 
@@ -1249,6 +1254,28 @@
     }
 
     /* Sender. */
+    &.layoutBubble {
+        /* Preserve the legacy thread-bubble sender flow. The profile used to
+           be a direct child of the sender-details block; slotSender is only
+           a structural boundary and must not add its own flex line box. */
+        .senderDetails {
+            display: block;
+        }
+
+        .senderDetails .slotSender {
+            display: contents;
+        }
+
+        .senderDetails .slotSender > * {
+            position: relative;
+            inset-block-start: -2px;
+            inset-inline-start: 2px;
+            font-size: var(--cpd-font-size-body-md);
+            line-height: var(--event-tile-bubble-line-height);
+            max-width: var(--event-tile-bubble-line-max-width);
+        }
+    }
+
     &.layoutGroup {
         .senderDetails {
             align-items: center;

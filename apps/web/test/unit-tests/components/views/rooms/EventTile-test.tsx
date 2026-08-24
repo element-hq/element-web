@@ -396,7 +396,8 @@ describe("EventTile", () => {
 
         it("renders sender details as a permalink in file timelines", () => {
             const { container } = getComponent({}, TimelineRenderingType.File);
-            const senderDetailsLink = container.querySelector(".mx_EventTile_senderDetailsLink");
+            const senderSlot = container.querySelector('[data-testid="event-tile-slot-sender"]');
+            const senderDetailsLink = senderSlot?.closest("a");
 
             expect(senderDetailsLink).not.toBeNull();
             expect(senderDetailsLink).toContainElement(container.querySelector(".mx_DisambiguatedProfile"));
@@ -407,11 +408,13 @@ describe("EventTile", () => {
 
         it("renders sender details in thread timelines", () => {
             const { container } = getComponent({}, TimelineRenderingType.Thread);
-            const senderDetails = container.querySelector(".mx_EventTile_senderDetails");
+            const senderSlot = container.querySelector('[data-testid="event-tile-slot-sender"]');
+            const avatarSlot = container.querySelector('[data-testid="event-tile-slot-avatar"]');
+            const senderDetails = senderSlot?.parentElement;
 
             expect(senderDetails).not.toBeNull();
             expect(senderDetails).toContainElement(container.querySelector(".mx_DisambiguatedProfile"));
-            expect(senderDetails).toContainElement(container.querySelector('[data-testid="event-tile-slot-avatar"]'));
+            expect(senderDetails).toContainElement(avatarSlot);
         });
 
         it("keeps sender and avatar when only the layout prop is set to bubble", () => {
@@ -439,8 +442,8 @@ describe("EventTile", () => {
 
         it("renders the notification avatar independently from the sender details", () => {
             const { container } = getComponent({}, TimelineRenderingType.Notification);
-            const details = container.querySelector<HTMLElement>(".mx_EventTile_details");
-            const avatar = container.querySelector<HTMLElement>('[data-testid="event-tile-slot-avatar"]');
+            const details = container.querySelector('[data-testid="event-tile-slot-sender"]')?.parentElement;
+            const avatar = container.querySelector<HTMLElement>('[data-testid="event-tile-slot-roomAvatar"]');
 
             expect(details).not.toBeNull();
             expect(avatar).not.toBeNull();
@@ -550,7 +553,7 @@ describe("EventTile", () => {
             jest.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
             const { container } = getComponent();
 
-            expect(container.querySelector(".mx_EventTile_footer")).not.toBeNull();
+            expect(container.querySelector('[data-testid="event-tile-slot-footer"]')).not.toBeNull();
             expect(screen.getByText("Pinned message")).toBeInTheDocument();
         });
 
@@ -558,15 +561,15 @@ describe("EventTile", () => {
             jest.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
             const { container } = getComponent({ layout: Layout.IRC });
 
-            expect(getLine(container).querySelector(".mx_EventTile_footer")).not.toBeNull();
-            expect(getTile(container).querySelector(":scope > .mx_EventTile_footer")).toBeNull();
+            expect(getLine(container).querySelector('[data-testid="event-tile-slot-footer"]')).not.toBeNull();
+            expect(getTile(container).querySelector(':scope > [data-testid="event-tile-slot-footer"]')).toBeNull();
         });
 
         it("renders a bubble footer for an own pinned message", () => {
             jest.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
             const ownEvent = makeOwnMessage();
             const { container } = getComponent({ mxEvent: ownEvent, layout: Layout.Bubble });
-            const footer = container.querySelector(".mx_EventTile_footer");
+            const footer = container.querySelector('[data-testid="event-tile-slot-footer"]');
 
             expect(footer).not.toBeNull();
             expect(footer).toHaveTextContent("Pinned message");
@@ -958,14 +961,14 @@ describe("EventTile", () => {
 
         it("renders the room name for notifications", () => {
             const { container } = getComponent({}, TimelineRenderingType.Notification);
-            expect(container.getElementsByClassName("mx_EventTile_details")[0]).toHaveTextContent(
-                "@alice:example.org in !roomId:example.org",
-            );
+            const details = container.querySelector('[data-testid="event-tile-slot-sender"]')?.parentElement;
+            expect(details).toHaveTextContent("@alice:example.org in !roomId:example.org");
         });
 
         it("renders the sender for the thread list", () => {
             const { container } = getComponent({}, TimelineRenderingType.ThreadsList);
-            expect(container.getElementsByClassName("mx_EventTile_details")[0]).toHaveTextContent("@alice:example.org");
+            const details = container.querySelector('[data-testid="event-tile-slot-sender"]')?.parentElement;
+            expect(details).toHaveTextContent("@alice:example.org");
         });
 
         it("renders the shared redacted body for thread previews", () => {
