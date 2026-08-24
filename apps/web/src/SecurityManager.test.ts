@@ -93,11 +93,14 @@ describe("SecurityManager", () => {
         });
 
         it("should show CreateSecretStorageDialog if forceReset=true", async () => {
-            const spy = vi.spyOn(Modal, "createDialog");
+            const spy = vi.spyOn(Modal, "createDialog").mockReturnValue({
+                finished: Promise.resolve([true]),
+                close: () => {},
+            });
             stubClient();
 
             const func = vi.fn();
-            accessSecretStorage(func, { forceReset: true });
+            await accessSecretStorage(func, { forceReset: true });
 
             expect(spy).toHaveBeenCalledTimes(1);
             await expect(spy.mock.lastCall![0]).resolves.toEqual(expect.objectContaining({ __test: true }));
