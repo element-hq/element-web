@@ -351,7 +351,7 @@ export default class ElectronPlatform extends BasePlatform {
         const handler = notification.onclick as () => void;
         notification.onclick = (): void => {
             handler?.();
-            void this.ipc.call("focusWindow");
+            this.focusWindow();
         };
 
         return notification;
@@ -359,6 +359,14 @@ export default class ElectronPlatform extends BasePlatform {
 
     public loudNotification(ev: MatrixEvent, room: Room): void {
         this.electron.send("loudNotification");
+    }
+
+    public focusWindow(): void {
+        void this.ipc.call("focusWindow");
+    }
+
+    public supportsWindowFocus(): boolean {
+        return true;
     }
 
     public needsUrlTooltips(): boolean {

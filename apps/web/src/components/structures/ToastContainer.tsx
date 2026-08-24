@@ -14,6 +14,8 @@ import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import ToastStore, { type IToast } from "../../stores/ToastStore";
 import { _t } from "../../languageHandler";
+import SettingsStore from "../../settings/SettingsStore";
+import { isIncomingCallToast } from "../../toasts/incomingCallToasts";
 
 interface IState {
     toasts: IToast<any>[];
@@ -43,12 +45,20 @@ export default class ToastContainer extends React.Component<EmptyObject, IState>
     };
 
     public render(): React.ReactNode {
-        const totalCount = this.state.toasts.length;
+        // Read the setting directly (rather than caching it in state via a
+        // watcher) so this container and {@link IncomingCallPopup} always agree
+        // on who owns incoming-call toasts within a render pass — avoids a
+        // split-brain window where the call could render in both or neither.
+        const popupEnabled = SettingsStore.getValue("fullScreenCallNotification");
+        const visibleToasts = popupEnabled
+            ? this.state.toasts.filter((t) => !isIncomingCallToast(t))
+            : this.state.toasts;
+        const totalCount = visibleToasts.length;
         const isStacked = totalCount > 1;
         let toast;
         let containerClasses;
         if (totalCount !== 0) {
-            const topToast = this.state.toasts[0];
+            const topToast = visibleToasts[0];
             const { title, icon, key, component, className, bodyClassName, onCloseButtonClicked, props } = topToast;
             const bodyClasses = classNames("mx_Toast_body", bodyClassName);
             const toastClasses = classNames("mx_Toast_toast", className, {

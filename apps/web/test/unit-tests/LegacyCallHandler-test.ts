@@ -31,6 +31,7 @@ import LegacyCallHandler, {
     PROTOCOL_PSTN_PREFIXED,
 } from "../../src/LegacyCallHandler";
 import { mkStubRoom, stubClient, untilDispatch } from "../test-utils";
+import { mockPlatformPeg } from "../test-utils/platform";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import DMRoomMap from "../../src/utils/DMRoomMap";
 import SdkConfig from "../../src/SdkConfig";
@@ -525,6 +526,47 @@ describe("LegacyCallHandler without third party protocols", () => {
 
             // ringer audio started
             await waitFor(() => expect(mockAudioBufferSourceNode.start).toHaveBeenCalled());
+        });
+
+        it("brings the window to the front on an incoming ringing call when raiseWindowOnCall is enabled", () => {
+            // remove local notification silencing mock so the call isn't force-silenced
+            jest.spyOn(MatrixClientPeg.safeGet(), "getAccountData").mockReturnValue(undefined);
+            jest.spyOn(SettingsStore, "getValue").mockImplementation(
+                (setting) => setting === UIFeature.Voip || setting === "raiseWindowOnCall",
+            );
+            const platform = mockPlatformPeg();
+            const focusWindow = jest.spyOn(platform, "focusWindow");
+            const call = new MatrixCall({ client: MatrixClientPeg.safeGet(), roomId });
+            MatrixClientPeg.safeGet().emit(CallEventHandlerEvent.Incoming, call);
+            call.emit(CallEvent.State, CallState.Ringing, CallState.Connected, fakeCall!);
+
+            expect(focusWindow).toHaveBeenCalled();
+        });
+
+        it("does not bring the window to the front when local notifications are silenced", () => {
+            // beforeEach mocks getAccountData to a silenced state, so the call is
+            // force-silenced and the window must not be yanked to the foreground.
+            jest.spyOn(SettingsStore, "getValue").mockImplementation(
+                (setting) => setting === UIFeature.Voip || setting === "raiseWindowOnCall",
+            );
+            const platform = mockPlatformPeg();
+            const focusWindow = jest.spyOn(platform, "focusWindow");
+            const call = new MatrixCall({ client: MatrixClientPeg.safeGet(), roomId });
+            MatrixClientPeg.safeGet().emit(CallEventHandlerEvent.Incoming, call);
+            call.emit(CallEvent.State, CallState.Ringing, CallState.Connected, fakeCall!);
+
+            expect(focusWindow).not.toHaveBeenCalled();
+        });
+
+        it("does not bring the window to the front when raiseWindowOnCall is disabled", () => {
+            // beforeEach only enables UIFeature.Voip, so raiseWindowOnCall is false
+            const platform = mockPlatformPeg();
+            const focusWindow = jest.spyOn(platform, "focusWindow");
+            const call = new MatrixCall({ client: MatrixClientPeg.safeGet(), roomId });
+            MatrixClientPeg.safeGet().emit(CallEventHandlerEvent.Incoming, call);
+            call.emit(CallEvent.State, CallState.Ringing, CallState.Connected, fakeCall!);
+
+            expect(focusWindow).not.toHaveBeenCalled();
         });
 
         it("does not ring when incoming call state is ringing but local notifications are silenced", () => {
