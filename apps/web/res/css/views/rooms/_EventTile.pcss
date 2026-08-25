@@ -446,6 +446,13 @@ $left-gutter: 64px;
             }
         }
     }
+
+    /* ViewSourceEvent explicitly uses Compound's 11px body-xs token. Legacy
+       thread info tiles applied their 12px size directly to event content;
+       keep that override on the body component after its slot boundary. */
+    .mx_EventTile .mx_EventTile_line .mx_ViewSourceEvent {
+        font-size: $font-12px;
+    }
 }
 
 /* Body-only compact markdown spacing remains application-owned. */
