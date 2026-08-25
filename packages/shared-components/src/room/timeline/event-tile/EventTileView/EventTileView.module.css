@@ -1397,6 +1397,14 @@
             .line .slotBody {
                 margin-inline-start: calc(var(--event-tile-thread-spacing-inline-start) + 14px + 6px);
             }
+
+            /* Bubble body slots are display: contents, so their margin is not
+               rendered. Apply the legacy content offset to the flex item as
+               well, preserving the slot margin as a styling contract. */
+            .line .slotBody > * {
+                width: auto;
+                margin-inline-start: calc(var(--event-tile-thread-spacing-inline-start) + 14px + 6px);
+            }
         }
     }
 }
