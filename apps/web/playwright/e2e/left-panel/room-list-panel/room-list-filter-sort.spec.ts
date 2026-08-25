@@ -7,7 +7,7 @@
 
 import { type Visibility } from "matrix-js-sdk/src/matrix";
 import { type Page } from "@playwright/test";
-import { closeReleaseAnnouncement, rejectToast } from "@element-hq/element-web-playwright-common";
+import { closeReleaseAnnouncementIfExists, rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { expect, test } from "../../../element-web-test";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
@@ -36,7 +36,7 @@ test.describe("Room list filters and sort", () => {
         await rejectToast(page, "Notifications");
 
         // Close the release announcement about the new room list sections
-        await closeReleaseAnnouncement(page, "Introducing Sections");
+        await closeReleaseAnnouncementIfExists(page, "Introducing Sections");
     });
 
     test("Tombstoned rooms are not shown even when they receive updates", async ({ page, app, bot }) => {
@@ -229,10 +229,10 @@ test.describe("Room list filters and sort", () => {
                     await primaryFilters.getByRole("option", { name: "Unread" }).click();
 
                     // Unread filter should only show unread room and not unread dm!
-                    const unreadDm = roomListView.getByRole("option", { name: "Open room unread room" });
+                    const unreadDm = roomListView.getByRole("button", { name: "Open room unread room" });
                     await expect(unreadDm).toBeVisible();
                     await expect(unreadDm).toMatchScreenshot("unread-dm.png");
-                    await expect(roomListView.getByRole("option", { name: "Open room unread dm" })).not.toBeVisible();
+                    await expect(roomListView.getByRole("button", { name: "Open room unread dm" })).not.toBeVisible();
                 },
             );
 
@@ -262,8 +262,8 @@ test.describe("Room list filters and sort", () => {
                 // Turn the "Unreads" filter on
                 await primaryFilters.getByRole("option", { name: "Unreads" }).click();
 
-                const unreadRoom = roomListView.getByRole("option", { name: "Open room unread room" });
-                const unreadDm = roomListView.getByRole("option", { name: "Open room unread dm" });
+                const unreadRoom = roomListView.getByRole("button", { name: "Open room unread room" });
+                const unreadDm = roomListView.getByRole("button", { name: "Open room unread dm" });
 
                 // Only the unread room is visible. The DM room is hidden.
                 await expect(unreadRoom).toBeVisible();
@@ -275,6 +275,10 @@ test.describe("Room list filters and sort", () => {
                 // Now both unread rooms are visible
                 await expect(unreadRoom).toBeVisible();
                 await expect(unreadDm).toBeVisible();
+
+                // Even though favourite room is read (because we have it open), it is still shown because it is
+                // the current room.
+                expect(roomListView.getByRole("button", { name: "Open room favourite room" })).toBeVisible();
             });
         });
 

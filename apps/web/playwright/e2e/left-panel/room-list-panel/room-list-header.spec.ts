@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { closeReleaseAnnouncement, rejectToast } from "@element-hq/element-web-playwright-common";
+import { closeReleaseAnnouncementIfExists, rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { test, expect } from "../../../element-web-test";
 import { getHeaderSection } from "./utils";
@@ -17,7 +17,7 @@ test.describe("Header section of the room list", () => {
         await rejectToast(page, "Notifications");
 
         // Close the release announcement about the new room list sections
-        await closeReleaseAnnouncement(page, "Introducing Sections");
+        await closeReleaseAnnouncementIfExists(page, "Introducing Sections");
     });
 
     test("should render the header section", { tag: "@screenshot" }, async ({ page, app, user }) => {
