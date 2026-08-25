@@ -241,7 +241,7 @@ export default abstract class Exporter {
         return blob;
     }
 
-    private static readonly MSGTYPES_TO_EXT: Record<string,string> = {
+    private static readonly MSGTYPES_TO_EXT: Record<string, string> = {
         [MsgType.Text]: ".txt",
         [MsgType.Notice]: ".txt",
         [MsgType.Emote]: ".txt",
@@ -275,7 +275,7 @@ export default abstract class Exporter {
             if (mimeExt) return mimeExt;
         }
         const filename = content.filename;
-        if (typeof filename === "string") {            
+        if (typeof filename === "string") {
             const lastDot = filename.lastIndexOf(".");
             if (lastDot !== -1 && lastDot < filename.length - 1) {
                 const rawExt = filename.slice(lastDot + 1);
