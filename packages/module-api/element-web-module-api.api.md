@@ -303,8 +303,10 @@ export type FileViewerMatcher = (media: MediaHandle) => boolean;
 
 // @public (undocumented)
 export interface FileViewerOptions {
+    buttonText: string;
+    // (undocumented)
+    cardHeader: string;
     id: string;
-    label: string;
 }
 
 // @public (undocumented)
@@ -312,7 +314,7 @@ export interface FileViewerProps {
     // (undocumented)
     media: MediaHandle;
     // (undocumented)
-    onclose: () => void;
+    onClose: () => void;
 }
 
 // @public (undocumented)
@@ -497,14 +499,10 @@ export interface ProfileApiExtension {
 }
 
 // @public
-export interface RemoteMedia {
-    // (undocumented)
-    bundle?: Record<string, any>;
-    // (undocumented)
+export type RemoteMedia = {
     type: "remote";
-    // (undocumented)
-    url: string;
-}
+    bundle: UnstableBundledUrlPreviewSingle;
+};
 
 // @public
 export interface RichVariables {
@@ -610,35 +608,25 @@ export interface UnstableBundledUrlPreviews {
 }
 
 // @alpha
-export interface UnstableBundledUrlPreviewSingle {
-    // (undocumented)
-    "beeper:image:encryption"?: EncryptedFile;
-    // (undocumented)
-    "matrix:image:size"?: number;
-    // (undocumented)
-    "og:description"?: string;
-    // (undocumented)
-    "og:image"?: string;
-    // (undocumented)
-    "og:image:height"?: number;
-    // (undocumented)
-    "og:image:type"?: string;
-    // (undocumented)
-    "og:image:width"?: number;
-    // (undocumented)
-    "og:title"?: string;
-    // (undocumented)
-    "og:url"?: string;
-    // (undocumented)
+export type UnstableBundledUrlPreviewSingle = {
     "matched_url": string;
-}
+    "beeper:image:encryption"?: EncryptedFile;
+    "matrix:image:size"?: number;
+    "og:image"?: string;
+    "og:url"?: string;
+    "og:image:width"?: number;
+    "og:image:height"?: number;
+    "og:image:type"?: string;
+    "og:title"?: string;
+    "og:description"?: string;
+} & Record<string, any>;
 
 // @public
 export interface UploadedMedia {
     // (undocumented)
-    blob?(): Promise<Blob>;
+    blob(): Promise<Blob>;
     // (undocumented)
-    mimetype: string;
+    mimetype?: string;
     // (undocumented)
     name: string;
     // (undocumented)
@@ -720,6 +708,10 @@ export interface WidgetVariablesCustomisations {
         baseUrl?: string;
     };
 }
+
+// Warnings were encountered during analysis:
+//
+// src/api/file-viewer.ts:26:5 - (ae-incompatible-release-tags) The symbol "bundle" is marked as @public, but its signature references "UnstableBundledUrlPreviewSingle" which is marked as @alpha
 
 // (No @packageDocumentation comment for this package)
 
