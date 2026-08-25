@@ -11,7 +11,13 @@ import type {
     FileViewerApi as IFileViewerApi,
     FileViewerMatcher,
     MediaHandle,
+    UploadedMedia,
+    RemoteMedia,
 } from "@element-hq/element-web-module-api";
+import { MediaEventHelper } from "../utils/MediaEventHelper";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { MediaEventContent } from "matrix-js-sdk/src/types";
+import { RoomMessageEventContent } from "../../@types/url-preview";
 
 export type RegisteredFileViewer = {
     render: FileViewerRenderFunction;
@@ -45,4 +51,25 @@ export class FileViewerApi implements IFileViewerApi {
     public getViewerById(id: string): RegisteredFileViewer | undefined {
         return this.viewers.get(id);
     }
+}
+
+export function uploadedMediaForEvent(mxEvent: MatrixEvent, helper: MediaEventHelper): UploadedMedia {
+    return {
+        type: "uploaded",
+        mimetype: mxEvent.getContent<MediaEventContent>().info?.mimetype,
+        name: helper.fileName,
+        blob: () => helper.sourceBlob.value,
+    };
+}
+
+export function remoteMediaForBundle(mxEvent: MatrixEvent, url: string): RemoteMedia | null {
+    const content = mxEvent.getContent<RoomMessageEventContent>();
+    const foundBundle = (content["com.beeper.linkpreviews"] ?? []).find((bundle) => bundle.matched_url === url);
+
+    if (foundBundle === undefined) return null;
+
+    return {
+        type: "remote",
+        bundle: foundBundle,
+    };
 }

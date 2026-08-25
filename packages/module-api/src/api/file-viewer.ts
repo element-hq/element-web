@@ -6,6 +6,7 @@ Please see LICENSE in the repository root for full details.
 */
 
 import { JSX } from "react/jsx-runtime";
+import { UnstableBundledUrlPreviewSingle } from "../models/url-preview";
 
 /**
  * the media content given to the component for rendering
@@ -20,25 +21,24 @@ export type FileViewerMatcher = (media: MediaHandle) => boolean;
 /**
  * a file that is given only by a URL, e.g. a PDF file uploaded to a 3rd party site
  */
-export interface RemoteMedia {
+export type RemoteMedia = {
     type: "remote";
-    url: string;
-    bundle?: Record<string, any>;
-}
+    bundle: UnstableBundledUrlPreviewSingle;
+};
 
 /**
  * a file that is uploaded to matrix
  */
 export interface UploadedMedia {
     type: "uploaded";
-    mimetype: string;
+    mimetype?: string;
     name: string;
-    blob?(): Promise<Blob>;
+    blob(): Promise<Blob>;
 }
 
 export interface FileViewerProps {
     media: MediaHandle;
-    onclose: () => void;
+    onClose: () => void;
 }
 
 export interface FileViewerOptions {
@@ -46,10 +46,11 @@ export interface FileViewerOptions {
      * uniquely identifies the file viewer
      */
     id: string;
+    cardHeader: string;
     /**
-     * tab title displayed for the viewer
+     * tooltip/text for the "open" button in the file/url preview tile
      */
-    label: string;
+    buttonText: string;
 }
 
 export type FileViewerRenderFunction = (props: FileViewerProps) => JSX.Element;
