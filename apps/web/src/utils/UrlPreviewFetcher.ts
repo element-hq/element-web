@@ -219,6 +219,8 @@ export class UrlPreviewFetcher {
             showTooltipOnLink: !!(single.matched_url !== single["og:title"] && this.showTooltips),
             description: single["og:description"],
             ogUrl: single["og:url"],
+
+            srcBundle: single,
         };
 
         // missing fields from the bundle because backend does provide it:

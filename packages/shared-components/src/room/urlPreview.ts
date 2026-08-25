@@ -5,6 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { UnstableBundledUrlPreviewSingle } from "@element-hq/element-web-module-api";
+
 export interface UrlPreview {
     /**
      * The URL for the preview.
@@ -81,6 +83,11 @@ export interface UrlPreview {
      * Author of the content, if specified.
      */
     author?: string;
+
+    /**
+     * The URL bundle (MSC4095) that the UrlPreview is constructed from (if it is constructed from a URL preview)
+     */
+    srcBundle?: UnstableBundledUrlPreviewSingle;
 }
 
 /** Snapshot data for the URL previews attached to an event. */
