@@ -81,13 +81,13 @@ describe("getRoomFromCompletion", () => {
         expect(mockClient.getRoom).toHaveBeenCalledWith(testCompletion);
     });
 
-    it("calls getRooms if no completionId is present and completion starts with #", () => {
+    it("searches the visible rooms if no completionId is present and completion starts with #", () => {
         const completionWithId = createMockRoomCompletion({ completion: "#hash" });
 
         const result = getRoomFromCompletion(completionWithId, mockClient);
 
         expect(mockClient.getRoom).not.toHaveBeenCalled();
-        expect(mockClient.getRooms).toHaveBeenCalled();
+        expect(mockClient.getVisibleRooms).toHaveBeenCalled();
 
         // in this case, because the mock client returns an empty array of rooms
         // from the call to get rooms, we'd expect the result to be null

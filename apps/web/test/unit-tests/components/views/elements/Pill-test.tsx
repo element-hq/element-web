@@ -111,6 +111,7 @@ describe("<Pill>", () => {
         space1.name = "Space 1";
 
         client.getRooms.mockReturnValue([room1, room2, space1]);
+        client.getVisibleRooms.mockReturnValue([room1, room2, space1]);
         client.getRoom.mockImplementation((roomId: string) => {
             if (roomId === room1.roomId) return room1;
             if (roomId === room2.roomId) return room2;
@@ -184,6 +185,18 @@ describe("<Pill>", () => {
             url: permalinkPrefix + room1Alias,
         });
         expect(renderResult.asFragment()).toMatchSnapshot();
+    });
+
+    it("should resolve a room alias to the upgraded room rather than its predecessor", () => {
+        const oldRoom = new Room("!old:example.com", client, user1Id);
+        oldRoom.name = "Old Room";
+        oldRoom.currentState.setStateEvents([mkRoomCanonicalAliasEvent(user1Id, oldRoom.roomId, room1Alias)]);
+        client.getRooms.mockReturnValue([oldRoom, room1, room2, space1]);
+        client.getVisibleRooms.mockReturnValue([room1, room2, space1]);
+        renderPill({
+            url: permalinkPrefix + room1Alias,
+        });
+        expect(screen.getByText("Room 1")).toBeInTheDocument();
     });
 
     it("should render the expected pill for @room", () => {

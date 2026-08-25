@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { PillType } from "../components/views/elements/PillType";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { type PermalinkParts } from "../utils/permalinks/PermalinkConstructor";
+import { findRoomByAlias } from "../utils/room/findRoomByAlias";
 
 /**
  * Tries to determine the initial room.
@@ -53,11 +54,7 @@ const determineInitialRoom = (
 const findRoom = (roomIdOrAlias: string): Room | null => {
     const client = MatrixClientPeg.safeGet();
 
-    return roomIdOrAlias[0] === "#"
-        ? (client.getRooms().find((r) => {
-              return r.getCanonicalAlias() === roomIdOrAlias || r.getAltAliases().includes(roomIdOrAlias);
-          }) ?? null)
-        : client.getRoom(roomIdOrAlias);
+    return roomIdOrAlias[0] === "#" ? findRoomByAlias(client, roomIdOrAlias) : client.getRoom(roomIdOrAlias);
 };
 
 /**

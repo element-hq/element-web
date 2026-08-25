@@ -19,6 +19,7 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
 import SettingsStore from "../settings/SettingsStore";
 import { getFirstGrapheme, graphemeSegmenter } from "../utils/strings";
+import { findRoomByAlias } from "../utils/room/findRoomByAlias";
 
 const REGIONAL_EMOJI_SEPARATOR = String.fromCodePoint(0x200b);
 
@@ -630,9 +631,7 @@ export class PartCreator {
         if (roomId || alias[0] !== "#") {
             room = this.client.getRoom(roomId || alias) ?? undefined;
         } else {
-            room = this.client.getRooms().find((r) => {
-                return r.getCanonicalAlias() === alias || r.getAltAliases().includes(alias);
-            });
+            room = findRoomByAlias(this.client, alias) ?? undefined;
         }
         return new RoomPillPart(alias, room ? room.name : alias, room);
     }
