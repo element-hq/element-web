@@ -37,11 +37,9 @@ import { MediaPreviewGroupViewModel } from "../../../viewmodels/message-body/Med
 import { fileSize } from "../../../utils/FileUtils";
 import DownloadIcon from "@vector-im/compound-design-tokens/assets/web/icons/download";
 import { FileDownloader } from "../../../utils/FileDownloader";
-import { ExpandIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
-import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
-import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import { ModuleApi } from "../../../modules/Api";
 import { uploadedMediaForEvent } from "../../../modules/FileViewerApi";
+import { fileViewerOpenButton } from "../right_panel/FileViewerCard";
 
 type MBodyComponent = React.ComponentType<IBodyProps>;
 
@@ -101,19 +99,9 @@ function PreviewFileBody({ mxEvent, mediaEventHelper }: FileBodyProps): JSX.Elem
     const vm = useCreateAutoDisposedViewModel(() => {
         const mediaHandle = mediaEventHelper && uploadedMediaForEvent(mxEvent, mediaEventHelper);
         const fileViewers = mediaHandle ? ModuleApi.instance.fileViewer.getViewersFor(mediaHandle) : [];
-        const additionalButtons: MediaPreviewEntryButton[] = fileViewers.map((viewer) => ({
-            label: viewer.options.buttonText,
-            icon: <ExpandIcon />,
-            onClick: () =>
-                RightPanelStore.instance.setGlobalCard({
-                    phase: RightPanelPhases.FileViewer,
-                    state: {
-                        fileViewer: viewer,
-                        fileViewerMedia: mediaHandle,
-                        fileViewerSourceEvent: mxEvent,
-                    },
-                }),
-        }));
+        const fileViewerButtons: MediaPreviewEntryButton[] = mediaHandle
+            ? fileViewers.map((viewer) => fileViewerOpenButton({ viewer, media: mediaHandle, mxEvent }))
+            : [];
 
         return new MediaPreviewGroupViewModel({
             entries: [
@@ -126,7 +114,7 @@ function PreviewFileBody({ mxEvent, mediaEventHelper }: FileBodyProps): JSX.Elem
                         mediaEventHelper === undefined
                             ? undefined
                             : [
-                                  ...additionalButtons,
+                                  ...fileViewerButtons,
                                   {
                                       label: _t("action|download"),
                                       icon: <DownloadIcon />,

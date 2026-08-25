@@ -18,6 +18,8 @@ import { MediaEventHelper } from "../utils/MediaEventHelper";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { MediaEventContent } from "matrix-js-sdk/src/types";
 import { RoomMessageEventContent } from "../../@types/url-preview";
+import { RightPanelPhases } from "../stores/right-panel/RightPanelStorePhases";
+import RightPanelStore from "../stores/right-panel/RightPanelStore";
 
 export type RegisteredFileViewer = {
     render: FileViewerRenderFunction;
