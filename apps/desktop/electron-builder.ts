@@ -207,6 +207,7 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
             );
             throw err;
         }
+        return true; // Continue build
     },
 };
 
