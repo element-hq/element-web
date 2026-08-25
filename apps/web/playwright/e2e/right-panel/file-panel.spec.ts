@@ -127,11 +127,13 @@ test.describe("FilePanel", () => {
             await expect(filePanelMessageList.locator(".mx_MAudioBody")).toBeVisible(); // middle
             const timestampedTile = filePanelMessageList
                 .locator(".mx_EventTile")
-                .filter({ has: page.locator(".mx_MessageTimestamp") })
+                .filter({ has: page.getByTestId("event-tile-slot-timestamp") })
                 .last();
             const senderDetails = timestampedTile.getByTestId("event-tile-slot-sender");
             await expect(senderDetails.locator(".mx_DisambiguatedProfile")).toBeVisible();
-            await expect(senderDetails.locator(".mx_MessageTimestamp")).toBeVisible();
+            await expect(
+                timestampedTile.getByTestId("event-tile-slot-timestamp").locator(".mx_MessageTimestamp"),
+            ).toBeVisible();
 
             // Take a snapshot of file tiles list on FilePanel
             await expect(filePanelMessageList).toMatchScreenshot("file-tiles-list.png", {

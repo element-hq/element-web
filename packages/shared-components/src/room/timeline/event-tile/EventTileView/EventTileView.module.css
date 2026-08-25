@@ -1513,8 +1513,16 @@
 /* Search tiles retain the read-receipt gutter even when the search result
    does not render a receipt slot. */
 .root.shapeSearch {
-    &.layoutGroup .line {
-        margin-inline-end: 80px;
+    &.layoutGroup {
+        .line {
+            margin-inline-end: 80px;
+        }
+
+        .slotThreadInfo {
+            margin-inline-end: 80px;
+            min-height: 14px;
+            max-width: min(calc(100% - var(--event-tile-group-gutter) - 80px), 600px);
+        }
     }
 }
 

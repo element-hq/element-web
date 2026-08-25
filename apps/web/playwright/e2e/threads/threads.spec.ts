@@ -153,7 +153,7 @@ test.describe("Threads", () => {
             ThreadViewGroupSpacingStart,
         );
         // Make sure the CSS style for spacing is applied to the hidden event on group/modern layout
-        await expect(locator.locator(".mx_GenericEventListSummary .mx_EventTile")).toHaveCSS(
+        await expect(locator.locator(".mx_GenericEventListSummary .mx_EventTile .mx_EventTile_line")).toHaveCSS(
             "padding-inline-start",
             ThreadViewGroupSpacingStart,
         );
