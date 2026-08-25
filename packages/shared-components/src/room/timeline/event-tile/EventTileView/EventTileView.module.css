@@ -1370,8 +1370,13 @@
                 padding-inline-start: var(--event-tile-thread-spacing-inline-start);
             }
 
-            .senderDetails .slotAvatar {
-                inset-inline-start: calc(var(--event-tile-irc-timestamp-width) + 14px - 4px);
+            &.layoutGroup .senderDetails .slotAvatar {
+                inset-inline-start: calc(var(--event-tile-group-timestamp-width) + 14px - 4px);
+                z-index: 9;
+            }
+
+            &.layoutIrc .senderDetails .slotAvatar {
+                inset-inline-start: calc(var(--event-tile-irc-timestamp-width, 48px) + 14px - 4px);
                 z-index: 9;
             }
 
