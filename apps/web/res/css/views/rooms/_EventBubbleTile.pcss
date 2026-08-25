@@ -36,8 +36,7 @@ Please see LICENSE files in the repository root for full details.
     }
 
     /* Keep expanded informational rows aligned with the legacy summary layout. */
-    &[data-expanded="true"]
-        .mx_EventTile:has(> .mx_EventTile_line :is(.mx_TextualEvent, .mx_ViewSourceEvent)) {
+    &[data-expanded="true"] .mx_EventTile:has(> .mx_EventTile_line :is(.mx_TextualEvent, .mx_ViewSourceEvent)) {
         padding-block: 2px;
         margin-inline-end: 0;
 
