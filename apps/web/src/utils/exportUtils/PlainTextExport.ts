@@ -14,7 +14,6 @@ import Exporter from "./Exporter";
 import { _t } from "../../languageHandler";
 import { type ExportType, type IExportOptions } from "./exportUtils";
 import { textForEvent } from "../../TextForEvent";
-import { haveRendererForEvent } from "../../events/EventTileFactory";
 import SettingsStore from "../../settings/SettingsStore";
 import { formatFullDate } from "../../DateUtils";
 
@@ -113,7 +112,7 @@ export default class PlainTextExporter extends Exporter {
                 true,
             );
             if (this.cancelled) return this.cleanUp();
-            if (!haveRendererForEvent(event, this.room.client, false)) continue;
+            if (!this.isRenderable(event)) continue;
             const textForEvent = await this.plainTextForEvent(event);
             content +=
                 textForEvent &&

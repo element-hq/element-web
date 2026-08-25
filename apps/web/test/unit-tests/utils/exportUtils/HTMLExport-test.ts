@@ -145,7 +145,7 @@ describe("HTMLExport", () => {
     function mockMessages(...events: IRoomEvent[]): void {
         client.createMessagesRequest.mockImplementation((_roomId, fromStr, limit = 30) => {
             const from = fromStr === null ? 0 : parseInt(fromStr);
-            const chunk = events.slice(from, limit);
+            const chunk = events.slice(from, from + limit);
             return Promise.resolve({
                 chunk,
                 start: from.toString(),
@@ -787,5 +787,44 @@ describe("HTMLExport", () => {
 
         const file = getMessageFile(exporter);
         expect(file).not.toBeUndefined();
+    });
+
+    it("should keep looking when the newest events are ones it cannot render", async () => {
+        // The three most recent events in the room are reactions, which no exporter writes out.
+        const reactions = [...Array(3)].map<IRoomEvent>((_, i) => ({
+            event_id: `$reaction${i}`,
+            type: EventType.Reaction,
+            sender: "@bob:example.com",
+            origin_server_ts: 10_000 + i * 1000,
+            content: {
+                "m.relates_to": { rel_type: RelationType.Annotation, event_id: "$message0", key: "🙂" },
+            },
+        }));
+        const messages = [...Array(3)].map<IRoomEvent>((_, i) => ({
+            event_id: `$message${i}`,
+            type: EventType.RoomMessage,
+            sender: "@bob:example.com",
+            origin_server_ts: 5_000 + i * 1000,
+            content: { msgtype: "m.text", body: `Message #${i}` },
+        }));
+        mockMessages(...reactions, ...messages);
+
+        const exporter = new HTMLExporter(
+            room,
+            ExportType.LastNMessages,
+            {
+                attachmentsIncluded: false,
+                maxSize: 1_024 * 1_024,
+                numberOfMessages: 3,
+            },
+            () => {},
+        );
+
+        await exporter.export();
+
+        const file = await getMessageFile(exporter).text();
+        expect(file).toContain("Message #0");
+        expect(file).toContain("Message #1");
+        expect(file).toContain("Message #2");
     });
 });

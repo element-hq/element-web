@@ -13,7 +13,6 @@ import Exporter from "./Exporter";
 import { formatFullDateNoDayNoTime } from "../../DateUtils";
 import { type ExportType, type IExportOptions } from "./exportUtils";
 import { _t } from "../../languageHandler";
-import { haveRendererForEvent } from "../../events/EventTileFactory";
 
 export default class JSONExporter extends Exporter {
     protected totalSize = 0;
@@ -81,7 +80,7 @@ export default class JSONExporter extends Exporter {
                 true,
             );
             if (this.cancelled) return this.cleanUp();
-            if (!haveRendererForEvent(event, this.room.client, false)) continue;
+            if (!this.isRenderable(event)) continue;
             this.messages.push(await this.getJSONString(event));
         }
         return this.createJSONString();
