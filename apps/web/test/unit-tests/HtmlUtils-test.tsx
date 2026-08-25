@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ReactElement } from "react";
 import { render, screen } from "jest-matrix-react";
 import parse from "html-react-parser";
+import { type IContent } from "matrix-js-sdk/src/matrix";
 
 import { bodyToHtml, bodyToNode, formatEmojis, sanitizedHtmlNode, topicToHtml } from "../../src/HtmlUtils";
 import SettingsStore from "../../src/settings/SettingsStore";
@@ -215,6 +216,42 @@ describe("bodyToHtml", () => {
                 [],
             );
             expect(html).toMatchSnapshot();
+        });
+    });
+
+    describe("escaped entities in a formatted body", () => {
+        function formatted(formattedBody: string): IContent {
+            return {
+                body: "irrelevant",
+                msgtype: "m.text",
+                formatted_body: formattedBody,
+                format: "org.matrix.custom.html",
+            };
+        }
+
+        // Rendering the result is what shows the bug: the browser decodes the string one more time,
+        // so a body which is short of a level of escaping loses characters on screen.
+        function renderedText(formattedBody: string): string {
+            const el = document.createElement("div");
+            el.innerHTML = bodyToHtml(formatted(formattedBody), [], { linkify: true });
+            return el.textContent!;
+        }
+
+        it("keeps an escaped ampersand which is itself the start of an entity", () => {
+            expect(renderedText("literal &amp;amp; <code>&amp;amp;</code>")).toEqual("literal &amp; &amp;");
+        });
+
+        it("does not turn an ampersand in a code block into the character it could have started", () => {
+            expect(renderedText("<pre><code>&amp;gtk::Label</code></pre>")).toEqual("&gtk::Label");
+        });
+
+        it("leaves a numeric character reference alone", () => {
+            expect(renderedText("<p>&#38;lt;</p>")).toEqual("&lt;");
+        });
+
+        it("still linkifies a URL whose query string contains an escaped ampersand", () => {
+            const html = bodyToHtml(formatted("<p>https://example.org/?a=1&amp;b=2</p>"), [], { linkify: true });
+            expect(html).toContain('href="https://example.org/?a=1&amp;b=2"');
         });
     });
 });
