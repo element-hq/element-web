@@ -1274,6 +1274,10 @@
             line-height: var(--event-tile-bubble-line-height);
             max-width: var(--event-tile-bubble-line-max-width);
         }
+
+        &.stateOwnEvent .senderDetails .slotSender {
+            display: none;
+        }
     }
 
     &.layoutGroup {
