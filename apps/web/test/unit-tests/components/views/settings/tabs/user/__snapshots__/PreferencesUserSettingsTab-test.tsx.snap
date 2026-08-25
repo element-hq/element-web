@@ -160,6 +160,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       class="_container_udcm8_10"
                     >
                       <input
+                        checked=""
                         class="_input_udcm8_24"
                         disabled=""
                         id="mx_SettingsFlag_6hpi3YEetmBG"
