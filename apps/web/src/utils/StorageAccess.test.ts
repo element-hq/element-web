@@ -6,9 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import "fake-indexeddb/auto";
 
-import { idbDelete, idbLoad, idbSave } from "../../../src/utils/StorageAccess";
+import { describe, it, expect } from "vitest";
+
+import { idbDelete, idbLoad, idbSave } from "./StorageAccess";
 
 const NONEXISTENT_TABLE = "this_is_not_a_table_we_use_ever_and_so_we_can_use_it_in_tests";
 const KNOWN_TABLES = ["account", "pickleKey"];

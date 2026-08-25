@@ -6,7 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { render } from "jest-matrix-react";
+// @vitest-environment happy-dom
+
 import {
     type IContent,
     type MatrixClient,
@@ -18,13 +19,14 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { type JSX } from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { render } from "test-utils-rtl";
+import { mkEvent, mkMembership, mkMessage, stubClient } from "test-utils";
 
-import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
-import { type IExportOptions, ExportType, ExportFormat } from "../../../src/utils/exportUtils/exportUtils";
-import PlainTextExporter from "../../../src/utils/exportUtils/PlainTextExport";
-import HTMLExporter from "../../../src/utils/exportUtils/HtmlExport";
-import * as TestUtilsMatrix from "../../test-utils";
-import { stubClient } from "../../test-utils";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
+import { type IExportOptions, ExportType, ExportFormat } from "./exportUtils";
+import PlainTextExporter from "./PlainTextExport";
+import HTMLExporter from "./HtmlExport";
 
 let client: MatrixClient;
 
@@ -39,7 +41,7 @@ interface ITestContent extends IContent {
 }
 
 describe("export", function () {
-    const setProgressText = jest.fn();
+    const setProgressText = vi.fn();
 
     let mockExportOptions: IExportOptions;
     let mockRoom: Room;
@@ -65,7 +67,7 @@ describe("export", function () {
         mockRoom = createRoom();
         ts0 = Date.now();
         events = mkEvents();
-        jest.spyOn(client, "getRoom").mockReturnValue(mockRoom);
+        vi.spyOn(client, "getRoom").mockReturnValue(mockRoom);
     });
 
     function mkRedactedEvent(i = 0) {
@@ -147,7 +149,7 @@ describe("export", function () {
         // plain text
         for (i = 0; i < 10; i++) {
             matrixEvents.push(
-                TestUtilsMatrix.mkMessage({
+                mkMessage({
                     event: true,
                     room: "!room:id",
                     user: "@user:id",
@@ -159,7 +161,7 @@ describe("export", function () {
         for (i = 0; i < 10; i++) {
             const eventId = "$" + Math.random() + "-" + Math.random();
             matrixEvents.push(
-                TestUtilsMatrix.mkEvent({
+                mkEvent({
                     content: {
                         "body": "> <@me:here> Hi\n\nTest",
                         "format": "org.matrix.custom.html",
@@ -182,7 +184,7 @@ describe("export", function () {
         // membership events
         for (i = 0; i < 10; i++) {
             matrixEvents.push(
-                TestUtilsMatrix.mkMembership({
+                mkMembership({
                     event: true,
                     room: "!room:id",
                     user: "@user:id",
@@ -203,7 +205,7 @@ describe("export", function () {
         }
         // emote
         matrixEvents.push(
-            TestUtilsMatrix.mkEvent({
+            mkEvent({
                 content: {
                     body: "waves",
                     msgtype: "m.emote",
