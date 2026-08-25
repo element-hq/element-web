@@ -40,8 +40,7 @@ Please see LICENSE files in the repository root for full details.
         padding-block: 2px;
         margin-inline-end: 0;
 
-        /* Informational rows should follow the configured font metrics rather
-           than the fixed bubble line-height. */
+        /* EventTileView owns the line-height for informational rows. */
         > .mx_EventTile_line {
             /* EventTileView keeps the state-info line at min-width: 100% for
                ordinary bubble rows. Expanded summaries must be allowed to
@@ -49,11 +48,6 @@ Please see LICENSE files in the repository root for full details.
             width: 100%;
             min-width: 0;
             max-width: 100%;
-            line-height: normal;
-        }
-
-        > .mx_EventTile_line :is(.mx_TextualEvent, .mx_ViewSourceEvent) {
-            padding-block: 0;
         }
 
         .mx_ReadReceiptGroup {
