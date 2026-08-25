@@ -58,15 +58,6 @@ present in the room. The Bridge info tab pulls information from the `m.bridge` s
 bridges are not expected to be compatible, and users should not rely on this
 tab as the single source of truth just yet.
 
-## Custom themes (`feature_custom_themes`)
-
-Custom themes are possible through Element's [theme support](./theming.md), though
-normally these themes need to be defined in the config for Element. This labs flag
-adds an ability for end users to add themes themselves by using a URL to the JSON
-theme definition.
-
-For some sample themes, check out [aaronraimist/element-themes](https://github.com/aaronraimist/element-themes).
-
 ## Live location sharing (`feature_location_share_live`) [In Development]
 
 Enables sharing your current location to the timeline, with live updates.

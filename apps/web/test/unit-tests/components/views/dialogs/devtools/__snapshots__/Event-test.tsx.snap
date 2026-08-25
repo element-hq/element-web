@@ -51,10 +51,14 @@ exports[`<EventEditor /> should render 1`] = `
   <div
     class="mx_Dialog_buttons"
   >
-    <button>
+    <button
+      type="button"
+    >
       Back
     </button>
-    <button>
+    <button
+      type="button"
+    >
       Send
     </button>
   </div>
@@ -115,10 +119,14 @@ exports[`<EventEditor /> thread context should pre-populate a thread relationshi
   <div
     class="mx_Dialog_buttons"
   >
-    <button>
+    <button
+      type="button"
+    >
       Back
     </button>
-    <button>
+    <button
+      type="button"
+    >
       Send
     </button>
   </div>

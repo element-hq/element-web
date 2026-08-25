@@ -493,13 +493,10 @@ export class RoomListItemViewModel
     };
 
     public onCreateSection = async (): Promise<void> => {
-        const newTag = await RoomListStoreV3.instance.createSection();
+        // The room the menu was opened on is preselected in the dialog, which takes care of
+        // adding it to the new section.
+        await RoomListStoreV3.instance.createSection(this.props.room.roomId);
         PosthogTrackers.trackSectionCreation("RoomListItemOverflowMenu");
-
-        // Add the room to the section
-        if (newTag) {
-            tagRoom(this.props.room, newTag);
-        }
     };
 
     public onToggleSection = (tag: string): void => {

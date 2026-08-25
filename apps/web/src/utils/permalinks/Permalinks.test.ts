@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import { vi, describe, it, expect, afterAll, beforeEach } from "vitest";
 import { getMockClientWithEventEmitter } from "test-utils/client";
 
-import { type EventEmitter } from "events";
+import { type EventEmitter } from "node:events";
 import { Room, RoomMember, EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 

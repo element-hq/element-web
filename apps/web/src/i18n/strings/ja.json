@@ -707,22 +707,6 @@
     },
     "dialog_close_label": "ダイアログを閉じる",
     "download_completed": "ダウンロードが完了しました",
-    "emoji": {
-        "categories": "カテゴリー",
-        "category_activities": "アクティビティー",
-        "category_animals_nature": "動物と自然",
-        "category_flags": "旗",
-        "category_food_drink": "食べ物と飲み物",
-        "category_frequently_used": "使用頻度の高いリアクション",
-        "category_objects": "物体",
-        "category_smileys_people": "表情と人々",
-        "category_symbols": "シンボル",
-        "category_travel_places": "旅行と場所",
-        "quick_reactions": "一般的なリアクション"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "検索をキャンセル"
-    },
     "empty_room": "空のルーム",
     "empty_room_was_name": "空のルーム（以前の名前は%(oldName)s）",
     "encryption": {
@@ -1327,7 +1311,6 @@
         "mentions_and_keywords": "メンションとキーワード",
         "mentions_and_keywords_description": "メンションと、<a>設定</a>したキーワードのみを通知",
         "mentions_keywords": "メンションとキーワード",
-        "message_didnt_send": "メッセージが送信されませんでした。クリックすると詳細を表示します。",
         "mute_description": "通知を送信しません"
     },
     "notifier": {

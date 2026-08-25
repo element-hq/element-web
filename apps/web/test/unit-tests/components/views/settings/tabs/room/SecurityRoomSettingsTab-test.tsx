@@ -581,4 +581,60 @@ describe("<SecurityRoomSettingsTab />", () => {
             });
         });
     });
+
+    describe("public room address warning", () => {
+        const warning = "To link to this room, please add an address.";
+
+        const setCanonicalAlias = (room: Room, content: object): void => {
+            room.currentState.setStateEvents([
+                new MatrixEvent({
+                    type: EventType.RoomCanonicalAlias,
+                    content,
+                    sender: userId,
+                    state_key: "",
+                    room_id: room.roomId,
+                }),
+            ]);
+        };
+
+        const renderPublicRoom = async (configure?: (room: Room) => void): Promise<void> => {
+            const room = new Room(roomId, client, userId);
+            setRoomStateEvents(room, JoinRule.Public);
+            configure?.(room);
+            getComponent(room);
+            await flushPromises();
+        };
+
+        it("warns when the room has no address anywhere", async () => {
+            client.getLocalAliases.mockResolvedValue({ aliases: [] });
+
+            await renderPublicRoom();
+
+            expect(screen.getByText(warning)).toBeInTheDocument();
+        });
+
+        it("does not warn when the room's main address is on another server", async () => {
+            client.getLocalAliases.mockResolvedValue({ aliases: [] });
+
+            await renderPublicRoom((room) => setCanonicalAlias(room, { alias: "#room:other.server.org" }));
+
+            expect(screen.queryByText(warning)).not.toBeInTheDocument();
+        });
+
+        it("does not warn when the room only has alternative addresses", async () => {
+            client.getLocalAliases.mockResolvedValue({ aliases: [] });
+
+            await renderPublicRoom((room) => setCanonicalAlias(room, { alt_aliases: ["#room:other.server.org"] }));
+
+            expect(screen.queryByText(warning)).not.toBeInTheDocument();
+        });
+
+        it("does not warn when the local server has an address for the room", async () => {
+            client.getLocalAliases.mockResolvedValue({ aliases: ["#room:server.org"] });
+
+            await renderPublicRoom();
+
+            expect(screen.queryByText(warning)).not.toBeInTheDocument();
+        });
+    });
 });
