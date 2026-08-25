@@ -1363,6 +1363,13 @@
         &.layoutIrc {
             padding-top: 0;
 
+            /* The generic thread gutter follows the state-specific reset above.
+               Restore it for grouped timelines; bubble info events intentionally
+               retain the zero line padding. */
+            .line {
+                padding-inline-start: var(--event-tile-thread-spacing-inline-start);
+            }
+
             .senderDetails .slotAvatar {
                 inset-inline-start: calc(var(--event-tile-irc-timestamp-width) + 14px - 4px);
                 z-index: 9;
