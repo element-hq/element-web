@@ -37,7 +37,7 @@ async function startDM(app: ElementAppPage, page: Page, name: string): Promise<v
     await locator.press("Enter");
     // The DM room is created at this point, this can take a little bit of time
     await expect(page.locator(".mx_EventTile_body").getByText("Hey!")).toBeAttached({ timeout: 3000 });
-    await expect(page.getByTestId("room-list").getByRole("option", { name: `Open room ${name}` })).toBeVisible();
+    await expect(page.getByTestId("room-list").getByRole("button", { name: `Open room ${name}` })).toBeVisible();
 }
 
 type RoomRef = { name: string; roomId: string };
@@ -266,7 +266,7 @@ test.describe("Spotlight", () => {
         // Assert DM exists by checking for the first message and the room being in the room list
         await expect(page.locator(".mx_EventTile_body").filter({ hasText: "Hey!" })).toBeAttached({ timeout: 3000 });
         await expect(
-            page.getByTestId("room-list").getByRole("option", { name: `Open room ${bot2.credentials!.displayName}` }),
+            page.getByTestId("room-list").getByRole("button", { name: `Open room ${bot2.credentials!.displayName}` }),
         ).toBeVisible();
 
         // Invite BotBob into existing DM with ByteBot
