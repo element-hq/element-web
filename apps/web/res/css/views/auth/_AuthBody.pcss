@@ -79,6 +79,14 @@ Please see LICENSE files in the repository root for full details.
         color: $authpage-primary-color;
     }
 
+    input[type="password"] {
+        background-color: transparent;
+        &:focus {
+            outline: none;
+            box-shadow: none;
+        }
+    }
+
     .mx_Field label {
         color: $authpage-secondary-color;
     }
