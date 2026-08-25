@@ -17,6 +17,8 @@ import {
     type EmptyObject,
     EventType,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
+import { logger } from "matrix-js-sdk/src/logger";
 import { type IndicatorIcon } from "@vector-im/compound-web";
 
 import SettingsStore from "../settings/SettingsStore";
@@ -83,6 +85,47 @@ export function localNotificationsAreSilenced(cli: MatrixClient): boolean {
 }
 
 /**
+ * Mark the room this one was upgraded from as read, if there is one.
+ *
+ * A room's badge folds in the highlight count of its predecessor (see
+ * `RoomNotifs.getUnreadNotificationCount`), so clearing only this room would leave behind a count
+ * the user has no way to reach: the predecessor is normally hidden from the room list once it has
+ * been replaced, and it comes back on the next sync anyway unless a receipt reaches the server.
+ *
+ * This is supplementary to marking the room itself as read, so a failure here is logged rather than
+ * propagated — the caller has already been told the room is read.
+ *
+ * @param room - the room whose predecessor should be marked as read
+ * @param client - the client to send the receipt with
+ */
+async function clearPredecessorNotification(room: Room, client: MatrixClient): Promise<void> {
+    const predecessor = room.findPredecessor(SettingsStore.getValue("feature_dynamic_room_predecessors"));
+    const oldRoom = predecessor?.roomId ? client.getRoom(predecessor.roomId) : null;
+    if (!oldRoom) return;
+
+    const lastEvent = oldRoom.getLastLiveEvent();
+    // A room we have left will not be sent to us with notification counts again, so zeroing them
+    // locally is enough; one we are still in needs a receipt or the server will re-send them.
+    if (lastEvent && oldRoom.getMyMembership() === KnownMembership.Join) {
+        const receiptType = SettingsStore.getValue("sendReadReceipts", oldRoom.roomId)
+            ? ReceiptType.Read
+            : ReceiptType.ReadPrivate;
+        try {
+            await client.sendReadReceipt(lastEvent, receiptType, true);
+        } catch (error) {
+            logger.warn("Failed to mark the predecessor room as read", { roomId: oldRoom.roomId, error });
+        }
+    }
+
+    oldRoom.setUnreadNotificationCount(NotificationCountType.Highlight, 0);
+    oldRoom.setUnreadNotificationCount(NotificationCountType.Total, 0);
+    for (const thread of oldRoom.getThreads()) {
+        oldRoom.setThreadUnreadNotificationCount(thread.id, NotificationCountType.Highlight, 0);
+        oldRoom.setThreadUnreadNotificationCount(thread.id, NotificationCountType.Total, 0);
+    }
+}
+
+/**
  * Mark a room as read
  * @param room
  * @param client
@@ -92,6 +135,7 @@ export async function clearRoomNotification(room: Room, client: MatrixClient): P
     const lastEvent = room.getLastLiveEvent();
 
     await setMarkedUnreadState(room, client, false);
+    await clearPredecessorNotification(room, client);
 
     try {
         if (lastEvent) {

@@ -14,6 +14,7 @@ import {
     ReceiptType,
     type AccountDataEvents,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { type Mocked, mocked } from "jest-mock-vitest-adapter";
 
 import {
@@ -162,6 +163,58 @@ describe("notifications", () => {
                 await clearRoomNotification(room, client);
             }).rejects.toEqual({ error: 42 });
             expect(room.getUnreadNotificationCount(NotificationCountType.Total)).toBe(0);
+        });
+
+        describe("when the room replaces an older one", () => {
+            const OLD_ROOM_ID = "!old:example.org";
+            let oldRoom: Room;
+            let oldMessage: MatrixEvent;
+
+            beforeEach(() => {
+                oldRoom = new Room(OLD_ROOM_ID, client, USER_ID);
+                oldMessage = mkMessage({
+                    event: true,
+                    room: OLD_ROOM_ID,
+                    user: USER_ID,
+                    msg: "Older",
+                });
+                oldRoom.addLiveEvents([oldMessage], { addToState: true });
+                // The predecessor's highlights are folded into this room's badge, so they have to be
+                // cleared from here or the user is left with a count they cannot reach
+                oldRoom.setUnreadNotificationCount(NotificationCountType.Highlight, 3);
+                jest.spyOn(room, "findPredecessor").mockReturnValue({ roomId: OLD_ROOM_ID });
+                jest.spyOn(client, "getRoom").mockImplementation((roomId) => (roomId === OLD_ROOM_ID ? oldRoom : null));
+            });
+
+            it("marks the replaced room as read too", async () => {
+                oldRoom.updateMyMembership(KnownMembership.Join);
+
+                await clearRoomNotification(room, client);
+
+                expect(sendReadReceiptSpy).toHaveBeenCalledWith(oldMessage, ReceiptType.Read, true);
+                expect(oldRoom.getUnreadNotificationCount(NotificationCountType.Highlight)).toBe(0);
+            });
+
+            it("clears the counts without a receipt when the replaced room has been left", async () => {
+                oldRoom.updateMyMembership(KnownMembership.Leave);
+
+                await clearRoomNotification(room, client);
+
+                expect(sendReadReceiptSpy).not.toHaveBeenCalledWith(oldMessage, ReceiptType.Read, true);
+                expect(oldRoom.getUnreadNotificationCount(NotificationCountType.Highlight)).toBe(0);
+            });
+
+            it("still marks this room as read when the replaced room cannot be", async () => {
+                oldRoom.updateMyMembership(KnownMembership.Join);
+                sendReadReceiptSpy.mockImplementation(async (event: MatrixEvent) => {
+                    if (event === oldMessage) throw new Error("no receipt for you");
+                    return {};
+                });
+
+                await clearRoomNotification(room, client);
+
+                expect(sendReadReceiptSpy).toHaveBeenCalledWith(message, ReceiptType.Read, true);
+            });
         });
 
         describe("when sendReadReceipts setting is disabled", () => {
