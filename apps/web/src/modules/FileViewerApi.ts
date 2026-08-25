@@ -13,6 +13,7 @@ import type {
     MediaHandle,
     UploadedMedia,
     RemoteMedia,
+    UnstableBundledUrlPreviewSingle,
 } from "@element-hq/element-web-module-api";
 import { MediaEventHelper } from "../utils/MediaEventHelper";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
@@ -64,7 +65,14 @@ export function uploadedMediaForEvent(mxEvent: MatrixEvent, helper: MediaEventHe
     };
 }
 
-export function remoteMediaForBundle(mxEvent: MatrixEvent, url: string): RemoteMedia | null {
+export function remoteMediaForBundle(bundle: UnstableBundledUrlPreviewSingle): RemoteMedia {
+    return {
+        type: "remote",
+        bundle,
+    };
+}
+
+export function remoteMediaForEvent(mxEvent: MatrixEvent, url: string): RemoteMedia | null {
     const content = mxEvent.getContent<RoomMessageEventContent>();
     const foundBundle = (content["com.beeper.linkpreviews"] ?? []).find((bundle) => bundle.matched_url === url);
 
