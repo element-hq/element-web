@@ -201,12 +201,11 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
         try {
             await fsp.access(path.join(context.appDir, "webapp.asar"), fs.constants.F_OK);
         } catch (err) {
-            console.error(err);
             console.error("The webapp.asar archive is missing. Building without a webapp is fruitless.");
             console.log(
                 "RTFM https://github.com/element-hq/element-web/blob/develop/apps/desktop/README.md#fetching-element.",
             );
-            process.exit(1);
+            throw err;
         }
     },
 };
