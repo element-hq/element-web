@@ -109,9 +109,7 @@ test.describe("FilePanel", () => {
                 .locator(".mx_EventTile")
                 .filter({ has: page.locator(".mx_MFileBody", { hasText: ".json" }) });
             // Assert that the tile is rendered as a button
-            const file = jsonTile
-                .getByTestId("event-tile-slot-body")
-                .getByRole("button", { name: /matrix.*?\.json/ });
+            const file = jsonTile.getByTestId("event-tile-slot-body").getByRole("button", { name: /matrix.*?\.json/ });
             // Assert that the file name is exposed by the button with ellipsis
             await expect(file).toHaveAccessibleName(/matrix.*?\.json/);
 
@@ -127,7 +125,11 @@ test.describe("FilePanel", () => {
             // Assert that all of the file tiles are visible before taking a snapshot
             await expect(filePanelMessageList.locator(".mx_ImageBody")).toBeVisible(); // top
             await expect(filePanelMessageList.locator(".mx_MAudioBody")).toBeVisible(); // middle
-            const senderDetails = jsonTile.getByTestId("event-tile-slot-sender");
+            const timestampedTile = filePanelMessageList
+                .locator(".mx_EventTile")
+                .filter({ has: page.locator(".mx_MessageTimestamp") })
+                .last();
+            const senderDetails = timestampedTile.getByTestId("event-tile-slot-sender");
             await expect(senderDetails.locator(".mx_DisambiguatedProfile")).toBeVisible();
             await expect(senderDetails.locator(".mx_MessageTimestamp")).toBeVisible();
 

@@ -239,6 +239,19 @@ describe("EventTileView", () => {
         expect(getByTestId("styling-contract-body").closest(`#${renderState.id}`)).toBeInTheDocument();
     });
 
+    it("exposes the Search shape styling hook", () => {
+        const { container } = render(
+            <EventTileView
+                {...createProps({
+                    root: { ...renderState, shape: "Search" },
+                    slots: createStylingContractSlots(),
+                })}
+            />,
+        );
+
+        expect(container.firstElementChild).toHaveClass(styles.shapeSearch);
+    });
+
     it("exposes shell state through application-neutral state classes", () => {
         const { container } = render(
             <EventTileView

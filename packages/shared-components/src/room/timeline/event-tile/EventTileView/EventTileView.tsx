@@ -122,6 +122,7 @@ export function EventTileView({
                 [styles.shapeThread]: root.shape === "Thread",
                 [styles.shapeThreadsList]: root.shape === "ThreadsList",
                 [styles.shapeCard]: root.shape === "Card",
+                [styles.shapeSearch]: root.shape === "Search",
                 [styles.shapeFile]: root.shape === "File",
                 [styles.shapeNotification]: root.shape === "Notification",
             })}
