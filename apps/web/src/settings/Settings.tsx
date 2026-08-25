@@ -1219,7 +1219,7 @@ export const SETTINGS: Settings = {
     },
     "RoomList.showPeopleSection": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        default: false,
+        default: true,
         displayName: _td("settings|show_people_sections"),
         controller: new RequiresSettingsController(["RoomList.showSections"]),
     },
