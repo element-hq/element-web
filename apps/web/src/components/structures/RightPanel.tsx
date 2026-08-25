@@ -280,7 +280,7 @@ export default class RightPanel extends React.Component<Props, IState> {
                 break;
 
             case RightPanelPhases.FileViewer:
-                if (!!cardState?.fileViewer && !!cardState.fileViewerMedia) {
+                if (!!cardState?.fileViewer && !!cardState.fileViewerMedia && !!cardState.fileViewerSourceEvent) {
                     card = (
                         <FileViewerCard
                             viewer={cardState.fileViewer}

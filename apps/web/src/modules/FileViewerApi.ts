@@ -19,8 +19,6 @@ import { MediaEventHelper } from "../utils/MediaEventHelper";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { MediaEventContent } from "matrix-js-sdk/src/types";
 import { RoomMessageEventContent } from "../../@types/url-preview";
-import { RightPanelPhases } from "../stores/right-panel/RightPanelStorePhases";
-import RightPanelStore from "../stores/right-panel/RightPanelStore";
 
 export type RegisteredFileViewer = {
     render: FileViewerRenderFunction;
@@ -56,7 +54,13 @@ export class FileViewerApi implements IFileViewerApi {
     }
 }
 
-export function uploadedMediaForEvent(mxEvent: MatrixEvent, helper: MediaEventHelper): UploadedMedia {
+export function uploadedMediaForEvent(mxEvent: MatrixEvent, helper?: MediaEventHelper): UploadedMedia | undefined {
+    if (!helper) {
+        if (!MediaEventHelper.isEligible(mxEvent)) return;
+
+        helper = new MediaEventHelper(mxEvent);
+    }
+
     return {
         type: "uploaded",
         mimetype: mxEvent.getContent<MediaEventContent>().info?.mimetype,
@@ -72,11 +76,11 @@ export function remoteMediaForBundle(bundle: UnstableBundledUrlPreviewSingle): R
     };
 }
 
-export function remoteMediaForEvent(mxEvent: MatrixEvent, url: string): RemoteMedia | null {
+export function remoteMediaForEvent(mxEvent: MatrixEvent, url: string): RemoteMedia | undefined {
     const content = mxEvent.getContent<RoomMessageEventContent>();
     const foundBundle = (content["com.beeper.linkpreviews"] ?? []).find((bundle) => bundle.matched_url === url);
 
-    if (foundBundle === undefined) return null;
+    if (foundBundle === undefined) return;
 
     return {
         type: "remote",
