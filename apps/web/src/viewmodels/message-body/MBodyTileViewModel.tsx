@@ -20,10 +20,9 @@ import { type MediaEventContent } from "matrix-js-sdk/src/types";
 import { FileDownloader } from "../../utils/FileDownloader";
 import { fileSize } from "../../utils/FileUtils";
 import { isPdfEvent, openPdfViewer } from "../../utils/pdfViewer";
-import RightPanelStore from "../../stores/right-panel/RightPanelStore";
-import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
 import { ModuleApi } from "../../modules/Api";
 import { uploadedMediaForEvent } from "../../modules/FileViewerApi";
+import { fileViewerOpenButton } from "../../components/views/right_panel/FileViewerCard";
 
 export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
     private readonly mxEvent: MatrixEvent;
@@ -56,23 +55,13 @@ export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
 
         const mediaHandle = uploadedMediaForEvent(mxEvent, mediaEventHelper);
         const fileViewers = mediaHandle ? ModuleApi.instance.fileViewer.getViewersFor(mediaHandle) : [];
-        const additionalButtons: MediaPreviewEntryButton[] = fileViewers.map((viewer) => ({
-            label: viewer.options.buttonText,
-            icon: <ExpandIcon />,
-            onClick: () =>
-                RightPanelStore.instance.setGlobalCard({
-                    phase: RightPanelPhases.FileViewer,
-                    state: {
-                        fileViewer: viewer,
-                        fileViewerMedia: mediaHandle,
-                        fileViewerSourceEvent: mxEvent,
-                    },
-                }),
-        }));
+        const fileViewerButtons: MediaPreviewEntryButton[] = mediaHandle
+            ? fileViewers.map((viewer) => fileViewerOpenButton({ viewer, media: mediaHandle, mxEvent }))
+            : [];
 
         // includes the download buttonn if mediaEventHelper is not undefined
         const buttons: MediaPreviewEntryButton[] | undefined = mediaEventHelper && [
-            ...additionalButtons,
+            ...fileViewerButtons,
             {
                 label: _t("action|download"),
                 icon: <DownloadIcon />,

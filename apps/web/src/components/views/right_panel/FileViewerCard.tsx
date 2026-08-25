@@ -10,6 +10,11 @@ import { MediaHandle } from "@element-hq/element-web-module-api";
 import BaseCard from "./BaseCard";
 import ErrorBoundary from "../elements/ErrorBoundary";
 import { RegisteredFileViewer } from "../../../modules/FileViewerApi";
+import { ExpandIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
+import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
+import { MediaPreviewEntryButton } from "@element-hq/web-shared-components";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 export interface FileViewerCardState {
     viewer: RegisteredFileViewer;
@@ -22,4 +27,28 @@ export function FileViewerCard({ viewer, media, onClose }: FileViewerCardState &
             <ErrorBoundary>{viewer && viewer.render({ media, onClose })}</ErrorBoundary>
         </BaseCard>
     );
+}
+
+export function fileViewerOpenButton({
+    viewer,
+    media,
+    mxEvent,
+}: {
+    viewer: RegisteredFileViewer;
+    media: MediaHandle;
+    mxEvent: MatrixEvent;
+}): MediaPreviewEntryButton {
+    return {
+        label: viewer.options.buttonText,
+        icon: <ExpandIcon />,
+        onClick: () =>
+            RightPanelStore.instance.setGlobalCard({
+                phase: RightPanelPhases.FileViewer,
+                state: {
+                    fileViewer: viewer,
+                    fileViewerMedia: media,
+                    fileViewerSourceEvent: mxEvent,
+                },
+            }),
+    };
 }
