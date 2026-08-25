@@ -45,6 +45,9 @@ import { Action } from "../../dispatcher/actions";
 import type { ComposerInsertFilesPayload } from "../../dispatcher/payloads/ComposerInsertFilePayload";
 import { useDispatcher } from "../../hooks/useDispatcher";
 import type { ActionPayload } from "../../dispatcher/payloads";
+import { type AttachmentOpen } from "@matrix-org/analytics-events/types/typescript/AttachmentOpen";
+import { PosthogAnalytics } from "../../PosthogAnalytics";
+import type { AttachmentCancel } from "@matrix-org/analytics-events/types/typescript/AttachmentCancel";
 
 const logger = rootLogger.getChild("RoomUploadViewModel");
 
@@ -143,7 +146,6 @@ export class RoomUploadViewModel
         const { roomId } = this.room;
         logger.info("initiateViaInputFiles for", roomId);
         if (!files?.length) return;
-
         try {
             await ContentMessages.sharedInstance().sendContentListToRoom(
                 Array.from(files),
@@ -190,6 +192,12 @@ export class RoomUploadViewModel
         if (![TimelineRenderingType.Room, TimelineRenderingType.Thread].includes(this.timelineRenderingType)) {
             throw new Error("TimelineRenderingType must be Room or Thread");
         }
+        PosthogAnalytics.instance.trackEvent<AttachmentOpen>({
+            eventName: "AttachmentOpen",
+            isReply: !!this.replyToEvent,
+            inThread: !!this.threadRelation,
+            kind: type,
+        });
         void fn(
             this.room.roomId,
             {
@@ -283,6 +291,24 @@ export function RoomUploadContextProvider({
         },
         [vm],
     );
+
+    useEffect(() => {
+        const input = uploadInput.current;
+        if (!input) {
+            return;
+        }
+        const fn = (): void => {
+            PosthogAnalytics.instance.trackEvent<AttachmentCancel>({
+                eventName: "AttachmentCancel",
+                stage: "Picker",
+                isReply: !!replyToEvent,
+                inThread: !!threadRelation,
+                kind: "local",
+            });
+        };
+        input.addEventListener("cancel", fn);
+        return () => input.removeEventListener("cancel", fn);
+    });
 
     useDispatcher(defaultDispatcher, (payload: ActionPayload) => {
         if (payload.action !== Action.ComposerFileInsert) {
