@@ -21,6 +21,7 @@ import { TestSDKContext } from "../../../TestSDKContext.ts";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { type SpaceNotificationState } from "../../../../../src/stores/notifications/SpaceNotificationState";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
+import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 import UnwrappedSpacePanel from "../../../../../src/components/views/spaces/SpacePanel";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
@@ -208,6 +209,61 @@ describe("<SpacePanel />", () => {
         await waitFor(() => {
             // Menu exists outside the component due to Portals, so select it manually.
             expect(baseElement.querySelector("div[aria-label='User menu']")).toBeInTheDocument();
+        });
+    });
+
+    describe("remembering whether the panel was expanded", () => {
+        // The toggle button carries the expanded class only while the panel is open, which is the
+        // same thing the chevron's direction is driven from.
+        const isExpanded = (container: HTMLElement): boolean =>
+            !!container.querySelector(".mx_SpacePanel_toggleCollapse.expanded");
+
+        // Restore only these spies: the suite mocks MatrixClientPeg once in beforeAll, so a blanket
+        // restoreAllMocks here would log the following tests out.
+        let spies: jest.SpyInstance[] = [];
+
+        function mockCollapsedSetting(collapsed: boolean): void {
+            const originalGetValue = SettingsStore.getValue;
+            spies.push(
+                jest
+                    .spyOn(SettingsStore, "getValue")
+                    .mockImplementation((setting, ...args) =>
+                        setting === "Spaces.isPanelCollapsed" ? collapsed : originalGetValue(setting, ...args),
+                    ),
+            );
+        }
+
+        afterEach(() => {
+            spies.forEach((spy) => spy.mockRestore());
+            spies = [];
+        });
+
+        it("starts expanded when it was left expanded", () => {
+            mockCollapsedSetting(false);
+
+            const { container } = render(<SpacePanel />);
+
+            expect(isExpanded(container)).toBe(true);
+        });
+
+        it("starts collapsed when it was left collapsed", () => {
+            mockCollapsedSetting(true);
+
+            const { container } = render(<SpacePanel />);
+
+            expect(isExpanded(container)).toBe(false);
+        });
+
+        it("stores the new state when the panel is toggled", () => {
+            mockCollapsedSetting(true);
+            const setValue = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+            spies.push(setValue);
+            const { container } = render(<SpacePanel />);
+
+            fireEvent.click(container.querySelector(".mx_SpacePanel_toggleCollapse")!);
+
+            expect(isExpanded(container)).toBe(true);
+            expect(setValue).toHaveBeenCalledWith("Spaces.isPanelCollapsed", null, SettingLevel.DEVICE, false);
         });
     });
 });
