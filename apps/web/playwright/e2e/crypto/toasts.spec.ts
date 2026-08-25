@@ -78,7 +78,7 @@ test.describe("'Turn on key storage' toast", () => {
         // We won't be prompted for crypto setup unless we have an e2e room, so make one
         await page
             .getByRole("navigation", { name: "Room list" })
-            .getByRole("button", { name: "New conversation" })
+            .getByRole("button", { name: "New", exact: true })
             .click();
         await page.getByRole("menuitem", { name: "New room" }).click();
         await page.getByRole("textbox", { name: "Name" }).fill("Test room");

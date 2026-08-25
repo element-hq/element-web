@@ -351,14 +351,14 @@ describe("TextForEvent", () => {
                 "added an alt alias",
                 {
                     altAliases: ["canteloupe"],
-                    result: "@a added alternative address canteloupe for this room.",
+                    result: "@a added alternative address canteloupe for this chat.",
                 },
             ],
             [
                 "added multiple alt aliases",
                 {
                     altAliases: ["canteloupe", "date"],
-                    result: "@a added the alternative addresses canteloupe, date for this room.",
+                    result: "@a added the alternative addresses canteloupe, date for this chat.",
                 },
             ],
             [
@@ -621,7 +621,7 @@ describe("TextForEvent", () => {
                         }),
                         mockClient,
                     ),
-                ).toMatchInlineSnapshot(`"Member is no longer interested in joining"`);
+                ).toMatchInlineSnapshot(`"Member withdrew their request to join"`);
             });
 
             it("should handle a denied knock", () => {
@@ -636,7 +636,7 @@ describe("TextForEvent", () => {
                         }),
                         mockClient,
                     ),
-                ).toMatchInlineSnapshot(`"Member rejected Member's request to join"`);
+                ).toMatchInlineSnapshot(`"Member rejected the request to join from Member"`);
             });
 
             it("should fall back to the plain invite copy when the ask to join labs flag is disabled", () => {

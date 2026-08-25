@@ -13,7 +13,7 @@ exports[`<DeviceTile /> renders a device with no metadata 1`] = `
         class="mx_DeviceTypeIcon_deviceIconWrapper"
       >
         <svg
-          aria-label="Unknown session type"
+          aria-label="Unknown client"
           class="mx_DeviceTypeIcon_deviceIcon"
           fill="currentColor"
           height="1em"
@@ -86,7 +86,7 @@ exports[`<DeviceTile /> renders a verified device with no metadata 1`] = `
         class="mx_DeviceTypeIcon_deviceIconWrapper"
       >
         <svg
-          aria-label="Unknown session type"
+          aria-label="Unknown client"
           class="mx_DeviceTypeIcon_deviceIcon"
           fill="currentColor"
           height="1em"
@@ -159,7 +159,7 @@ exports[`<DeviceTile /> renders display name with a tooltip 1`] = `
         class="mx_DeviceTypeIcon_deviceIconWrapper"
       >
         <svg
-          aria-label="Unknown session type"
+          aria-label="Unknown client"
           class="mx_DeviceTypeIcon_deviceIcon"
           fill="currentColor"
           height="1em"
@@ -232,7 +232,7 @@ exports[`<DeviceTile /> separates metadata with a dot 1`] = `
         class="mx_DeviceTypeIcon_deviceIconWrapper"
       >
         <svg
-          aria-label="Unknown session type"
+          aria-label="Unknown client"
           class="mx_DeviceTypeIcon_deviceIcon"
           fill="currentColor"
           height="1em"

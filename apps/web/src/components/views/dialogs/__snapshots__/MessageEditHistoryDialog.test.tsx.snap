@@ -88,7 +88,7 @@ exports[`<MessageEditHistory /> > should match the snapshot 1`] = `
                     </span>
                   </div>
                   <div
-                    aria-label="Message Actions"
+                    aria-label="Message actions"
                     aria-live="off"
                     class="_flex_4dswl_9 mx_ThreadActionBar mx_HistoryActionBar _toolbar_1ksun_8"
                     role="toolbar"
@@ -236,7 +236,7 @@ exports[`<MessageEditHistory /> > should support events with 1`] = `
                     </span>
                   </div>
                   <div
-                    aria-label="Message Actions"
+                    aria-label="Message actions"
                     aria-live="off"
                     class="_flex_4dswl_9 mx_ThreadActionBar mx_HistoryActionBar _toolbar_1ksun_8"
                     role="toolbar"
@@ -299,7 +299,7 @@ exports[`<MessageEditHistory /> > should support events with 1`] = `
                     </span>
                   </div>
                   <div
-                    aria-label="Message Actions"
+                    aria-label="Message actions"
                     aria-live="off"
                     class="_flex_4dswl_9 mx_ThreadActionBar mx_HistoryActionBar _toolbar_1ksun_8"
                     role="toolbar"
@@ -344,7 +344,7 @@ exports[`<MessageEditHistory /> > should support events with 1`] = `
                     </span>
                   </div>
                   <div
-                    aria-label="Message Actions"
+                    aria-label="Message actions"
                     aria-live="off"
                     class="_flex_4dswl_9 mx_ThreadActionBar mx_HistoryActionBar _toolbar_1ksun_8"
                     role="toolbar"

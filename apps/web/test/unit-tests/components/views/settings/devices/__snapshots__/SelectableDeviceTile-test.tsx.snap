@@ -69,7 +69,7 @@ exports[`<SelectableDeviceTile /> renders unselected device tile with checkbox 1
                   class="mx_DeviceTypeIcon_deviceIconWrapper"
                 >
                   <svg
-                    aria-label="Unknown session type"
+                    aria-label="Unknown client"
                     class="mx_DeviceTypeIcon_deviceIcon"
                     fill="currentColor"
                     height="1em"

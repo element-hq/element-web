@@ -335,7 +335,7 @@ describe("SendWysiwygComposer", () => {
         ({ isRichTextEnabled }) => {
             it.each([
                 [E2EStatus.Verified, "Everyone in this room is verified"],
-                [E2EStatus.Warning, "Someone is using an unknown session"],
+                [E2EStatus.Warning, "Someone is using an unknown device"],
                 [undefined, undefined],
             ])("Should render left icon when e2eStatus is %s", async (e2eStatus, expectedLabel) => {
                 // When

@@ -54,7 +54,9 @@ test.describe("Presence tests", () => {
             await app.toggleRoomInfoPanel();
             await page.locator(".mx_RightPanel").getByText("People").click();
             await expect(page.locator(".mx_EntityTile_unreachable")).toContainText("Bob");
-            await expect(page.locator(".mx_EntityTile_unreachable")).toContainText("User's server unreachable");
+            await expect(page.locator(".mx_EntityTile_unreachable")).toContainText(
+                "Account provider of the user is unreachable",
+            );
         });
     });
 });

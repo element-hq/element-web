@@ -24,21 +24,21 @@ test.describe("Device manager", () => {
     });
 
     test("should display sessions", async ({ page, app, axe }) => {
-        await app.settings.openUserSettings("Sessions");
+        await app.settings.openUserSettings("Devices");
         const tab = page.locator(".mx_SettingsTab");
 
-        await expect(tab.getByText("Current session", { exact: true })).toBeVisible();
+        await expect(tab.getByText("Current device", { exact: true })).toBeVisible();
 
         const currentSessionSection = tab.getByTestId("current-session-section");
-        await expect(currentSessionSection.getByText("Unverified session")).toBeVisible();
+        await expect(currentSessionSection.getByText("Unverified device")).toBeVisible();
 
         // current session details opened
         await currentSessionSection.getByRole("button", { name: "Show details" }).click();
-        await expect(currentSessionSection.getByText("Session details")).toBeVisible();
+        await expect(currentSessionSection.getByText("Device details")).toBeVisible();
 
         // close current session details
         await currentSessionSection.getByRole("button", { name: "Hide details" }).click();
-        await expect(currentSessionSection.getByText("Session details")).not.toBeVisible();
+        await expect(currentSessionSection.getByText("Device details")).not.toBeVisible();
 
         const securityRecommendationsSection = tab.getByTestId("security-recommendations-section");
         await expect(securityRecommendationsSection.getByText("Security recommendations")).toBeVisible();
@@ -47,7 +47,7 @@ test.describe("Device manager", () => {
         /**
          * Other sessions section
          */
-        await expect(tab.getByText("Other sessions")).toBeVisible();
+        await expect(tab.getByText("Other devices")).toBeVisible();
         // filter applied after clicking through from security recommendations
         await expect(tab.getByLabel("Filter devices")).toHaveText("Show: Unverified");
         const filteredDeviceListItems = tab.locator(".mx_FilteredDeviceList_listItem");
@@ -72,7 +72,7 @@ test.describe("Device manager", () => {
         const firstSession = filteredDeviceListItems.first();
         await firstSession.getByRole("button", { name: "Show details" }).click();
 
-        await expect(firstSession.getByText("Session details")).toBeVisible();
+        await expect(firstSession.getByText("Device details")).toBeVisible();
 
         await firstSession.getByRole("button", { name: "Rename" }).click();
         await firstSession.getByTestId("device-rename-input").type(sessionName);
@@ -94,7 +94,7 @@ test.describe("Device manager", () => {
         await page.getByRole("dialog").getByTestId("dialog-primary-button").click();
 
         // no other sessions or security recommendations sections when only one session
-        await expect(tab.getByText("Other sessions")).not.toBeVisible();
+        await expect(tab.getByText("Other devices")).not.toBeVisible();
         await expect(tab.getByTestId("security-recommendations-section")).not.toBeVisible();
 
         await expect(axe).toHaveNoViolations();

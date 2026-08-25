@@ -75,7 +75,7 @@ test.describe("Invite dialog", function () {
 
         // Expect a confirmation dialog, screenshot, and dismiss
         await expect(
-            page.locator(".mx_Dialog").getByRole("heading", { name: "Invite new contacts to this room?" }),
+            page.locator(".mx_Dialog").getByRole("heading", { name: "Invite new contacts to this chat?" }),
         ).toBeVisible();
         await expect(page.locator(".mx_Dialog")).toMatchScreenshot("confirm-invite-new-contact.png", {
             css: UNKNOWN_IDENTITY_USERS_DIALOG_HIDE_MXID_CSS,
@@ -96,7 +96,7 @@ test.describe("Invite dialog", function () {
             await rejectToast(page, "Verify this device");
             await page
                 .getByRole("navigation", { name: "Room list" })
-                .getByRole("button", { name: "New conversation" })
+                .getByRole("button", { name: "New", exact: true })
                 .click();
             await page.getByRole("menuitem", { name: "Start chat" }).click();
 

@@ -91,7 +91,7 @@ describe("LocationPicker", () => {
             expect(getByTestId("map-rendering-error")).toBeInTheDocument();
             expect(
                 getByText(
-                    "This homeserver is not configured correctly to display maps, " +
+                    "This account provider has not configured the display of maps correctly, " +
                         "or the configured map server may be unreachable.",
                 ),
             ).toBeInTheDocument();
@@ -106,7 +106,7 @@ describe("LocationPicker", () => {
 
             const { getByText } = getComponent();
 
-            expect(getByText("This homeserver is not configured to display maps.")).toBeInTheDocument();
+            expect(getByText("This account provider has not enabled maps.")).toBeInTheDocument();
         });
 
         it("displays error when WebGl is not enabled", () => {
@@ -136,7 +136,7 @@ describe("LocationPicker", () => {
 
             expect(
                 getByText(
-                    "This homeserver is not configured correctly to display maps, " +
+                    "This account provider has not configured the display of maps correctly, " +
                         "or the configured map server may be unreachable.",
                 ),
             ).toBeInTheDocument();

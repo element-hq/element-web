@@ -157,13 +157,13 @@ describe("<RoomTopic/>", () => {
         const topic = "room topic";
         renderRoom(topic);
         await userEvent.hover(screen.getByText(topic));
-        await waitFor(() => expect(screen.getByRole("tooltip", { name: "Click to read topic" })).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByRole("tooltip", { name: "Read the full topic" })).toBeInTheDocument());
     });
 
     it("should not open the tooltip when hovering a link", async () => {
         const topic = "https://matrix.org";
         renderRoom(topic);
         await userEvent.hover(screen.getByText(topic));
-        await waitFor(() => expect(screen.queryByRole("tooltip", { name: "Click to read topic" })).toBeNull());
+        await waitFor(() => expect(screen.queryByRole("tooltip", { name: "Read the full topic" })).toBeNull());
     });
 });

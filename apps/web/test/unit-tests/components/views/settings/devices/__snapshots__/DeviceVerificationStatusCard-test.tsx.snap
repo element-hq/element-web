@@ -28,12 +28,12 @@ exports[`<DeviceVerificationStatusCard /> renders a verified device 1`] = `
       <p
         class="mx_DeviceSecurityCard_heading"
       >
-        Verified session
+        Verified device
       </p>
       <p
         class="mx_DeviceSecurityCard_description"
       >
-        This session is ready for secure messaging.
+        This device is ready for secure messaging.
         <button
           class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
           role="button"
@@ -73,12 +73,12 @@ exports[`<DeviceVerificationStatusCard /> renders an unverifiable device 1`] = `
       <p
         class="mx_DeviceSecurityCard_heading"
       >
-        Unverified session
+        Unverified device
       </p>
       <p
         class="mx_DeviceSecurityCard_description"
       >
-        This session doesn't support encryption and thus can't be verified.
+        This device doesn't support encryption and thus can't be verified.
         <button
           class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
           role="button"
@@ -118,12 +118,12 @@ exports[`<DeviceVerificationStatusCard /> renders an unverified device 1`] = `
       <p
         class="mx_DeviceSecurityCard_heading"
       >
-        Unverified session
+        Unverified device
       </p>
       <p
         class="mx_DeviceSecurityCard_description"
       >
-        Verify or remove this session for best security and reliability.
+        Verify this device, or remove it if you don't recognise it.
         <button
           class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
           role="button"
@@ -141,7 +141,7 @@ exports[`<DeviceVerificationStatusCard /> renders an unverified device 1`] = `
           role="button"
           tabindex="0"
         >
-          Verify session
+          Verify device
         </div>
       </div>
     </div>

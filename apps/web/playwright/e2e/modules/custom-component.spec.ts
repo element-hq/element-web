@@ -87,7 +87,7 @@ test.describe("Custom Component API", () => {
             await app.client.sendMessage(room.roomId, "Do not show edits");
             await page.getByText("Do not show edits").hover();
             await expect(
-                page.getByRole("toolbar", { name: "Message Actions" }).getByRole("button", { name: "Edit" }),
+                page.getByRole("toolbar", { name: "Message actions" }).getByRole("button", { name: "Edit" }),
             ).not.toBeVisible();
         });
         test("should disallow downloading media when the allowDownloading hint is set to false", async ({

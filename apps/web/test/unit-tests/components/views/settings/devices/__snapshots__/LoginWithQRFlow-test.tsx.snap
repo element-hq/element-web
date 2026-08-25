@@ -355,7 +355,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders homeserver_lacks_s
       <div
         class="mx_LoginWithQR_breadcrumbs"
       >
-        Sessions
+        Devices
          / 
         Link new device
       </div>
@@ -944,12 +944,12 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders user_declined 1`] 
       <h1
         class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
       >
-        Sign in declined
+        Sign-in declined
       </h1>
       <p
         data-testid="cancellation-message"
       >
-        You or the account provider declined the sign in request.
+        You or the account provider declined the sign-in request.
       </p>
     </div>
     <div
@@ -1000,7 +1000,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate renders QR code 1`] = `
       <div
         class="mx_LoginWithQR_breadcrumbs"
       >
-        Sessions
+        Devices
          / 
         Link new device
       </div>
@@ -1163,7 +1163,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate renders spinner while loading 1`]
       <div
         class="mx_LoginWithQR_breadcrumbs"
       >
-        Sessions
+        Devices
          / 
         Link new device
       </div>
@@ -1238,7 +1238,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate renders spinner while signing in 
       <div
         class="mx_LoginWithQR_breadcrumbs"
       >
-        Sessions
+        Devices
          / 
         Link new device
       </div>
@@ -1327,7 +1327,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate renders spinner while verifying 1
       <div
         class="mx_LoginWithQR_breadcrumbs"
       >
-        Sessions
+        Devices
          / 
         Link new device
       </div>
@@ -1405,7 +1405,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate renders spinner whilst QR generat
       <div
         class="mx_LoginWithQR_breadcrumbs"
       >
-        Sessions
+        Devices
          / 
         Link new device
       </div>
@@ -2388,12 +2388,12 @@ exports[`<LoginWithQRFlow /> login.start errors renders user_declined 1`] = `
       <h1
         class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
       >
-        Sign in declined
+        Sign-in declined
       </h1>
       <p
         data-testid="cancellation-message"
       >
-        You or the account provider declined the sign in request.
+        You or the account provider declined the sign-in request.
       </p>
     </div>
     <div
@@ -2653,12 +2653,12 @@ exports[`<LoginWithQRFlow /> login.start renders spinner while signing in 1`] = 
       <h1
         class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
       >
-        Your verification code
+        Your confirmation code
       </h1>
       <p
         class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
       >
-        Your account provider may ask for the following code to verify the sign in.
+        Your account provider may ask for the following code to confirm the sign-in.
       </p>
       <div
         class="_container_17qhw_10 mx_LoginWithQR_checkCode_input mx_no_textinput"

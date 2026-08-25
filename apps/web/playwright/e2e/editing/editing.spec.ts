@@ -56,8 +56,8 @@ test.describe("Editing", () => {
     const clickButtonViewSource = async (locator: Locator) => {
         const eventTile = locator.locator(".mx_EventTile_line");
         await eventTile.hover();
-        // Assert that "View Source" button is rendered and click it
-        await eventTile.getByRole("button", { name: "View Source" }).click();
+        // Assert that "View source" button is rendered and click it
+        await eventTile.getByRole("button", { name: "View source" }).click();
     };
 
     test.use({
@@ -198,7 +198,7 @@ test.describe("Editing", () => {
         },
     );
 
-    test("should render 'View Source' button in developer mode on the message edit history dialog", async ({
+    test("should render 'View source' button in developer mode on the message edit history dialog", async ({
         page,
         user,
         app,
@@ -221,10 +221,10 @@ test.describe("Editing", () => {
             const dialog = page.getByRole("dialog");
             // Assert that the original message is rendered
             const li = dialog.locator("li:nth-child(3)");
-            // Assert that "View Source" is not rendered
+            // Assert that "View source" is not rendered
             const eventLine = li.locator(".mx_EventTile_line");
             await eventLine.hover();
-            await expect(eventLine.getByRole("button", { name: "View Source" })).not.toBeVisible();
+            await expect(eventLine.getByRole("button", { name: "View source" })).not.toBeVisible();
         }
 
         await app.closeDialog();

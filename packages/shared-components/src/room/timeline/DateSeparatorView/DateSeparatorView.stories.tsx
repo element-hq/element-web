@@ -81,7 +81,9 @@ export const WithJumpToDatePicker: Story = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
         await userEvent.click(canvas.getByText("Today"));
-        await expect(within(canvasElement.ownerDocument.body).findByText("Jump to date")).resolves.toBeInTheDocument();
+        await expect(
+            within(canvasElement.ownerDocument.body).findByText("Scroll to date"),
+        ).resolves.toBeInTheDocument();
     },
 };
 

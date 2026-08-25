@@ -138,7 +138,7 @@ test.describe("Threads", () => {
             .locator(".mx_EventTile .mx_EventTile_line")
             .filter({ hasText: "Hello there" });
         await locator.hover();
-        await locator.getByRole("toolbar", { name: "Message Actions" }).getByRole("button", { name: "React" }).click();
+        await locator.getByRole("toolbar", { name: "Message actions" }).getByRole("button", { name: "React" }).click();
 
         locator = page.getByLabel("Emoji picker");
         await locator.getByRole("textbox").fill("wave");

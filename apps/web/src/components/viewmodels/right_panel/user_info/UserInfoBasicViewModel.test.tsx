@@ -140,9 +140,8 @@ describe("useUserInfoHeaderViewModel", () => {
                 danger: true,
                 description: (
                     <div>
-                        Deactivating this user will remove their devices and prevent them from logging back in.
-                        Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you
-                        sure you want to deactivate this user?
+                        Deactivating this user will remove their devices and prevent them from signing back in. They
+                        will also be removed from all their chats. This cannot be undone.
                     </div>
                 ),
                 title: "Deactivate user?",

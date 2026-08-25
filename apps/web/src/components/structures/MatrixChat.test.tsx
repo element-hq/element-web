@@ -655,7 +655,7 @@ describe("<MatrixChat />", () => {
                 );
 
                 await expectOAuthError(
-                    "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.",
+                    "We asked the browser to remember which account provider you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.",
                 );
             });
 
@@ -1631,7 +1631,7 @@ describe("<MatrixChat />", () => {
             // warning dialog
             expect(
                 within(dialog).getByText(
-                    "We asked the browser to remember which homeserver you use to let you sign in, " +
+                    "We asked the browser to remember which account provider you use to let you sign in, " +
                         "but unfortunately your browser has forgotten it. Go to the sign in page and try again.",
                 ),
             ).toBeInTheDocument();
@@ -1666,11 +1666,7 @@ describe("<MatrixChat />", () => {
                 const dialog = await screen.findByRole("dialog");
 
                 // warning dialog
-                expect(
-                    within(dialog).getByText(
-                        "There was a problem communicating with the homeserver, please try again later.",
-                    ),
-                ).toBeInTheDocument();
+                expect(within(dialog).getByText("Something went wrong. Please try again later.")).toBeInTheDocument();
             });
 
             it("should not clear storage", async () => {

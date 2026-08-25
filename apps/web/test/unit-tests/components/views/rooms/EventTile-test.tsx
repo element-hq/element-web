@@ -1262,7 +1262,7 @@ describe("EventTile", () => {
                 EventShieldReason.AUTHENTICITY_NOT_GUARANTEED,
                 "The authenticity of this encrypted message can't be guaranteed on this device.",
             ],
-            [EventShieldReason.MISMATCHED_SENDER_KEY, "Encrypted by an unverified session"],
+            [EventShieldReason.MISMATCHED_SENDER_KEY, "Encrypted by an unverified device"],
             [EventShieldReason.SENT_IN_CLEAR, "Not encrypted"],
             [EventShieldReason.VERIFICATION_VIOLATION, "Sender's verified digital identity was reset"],
             [

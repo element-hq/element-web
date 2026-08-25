@@ -10,7 +10,7 @@ exports[`deleteDevices() opens interactive auth dialog when delete fails with 40
       "title": "Use Single Sign On to continue",
     },
     "2": {
-      "body": "Click the button below to confirm removing these devices.",
+      "body": "Select the button below to confirm removing these devices.",
       "continueKind": "danger",
       "continueText": "Remove devices",
       "title": "Confirm removing these devices",
@@ -24,7 +24,7 @@ exports[`deleteDevices() opens interactive auth dialog when delete fails with 40
       "title": "Use Single Sign On to continue",
     },
     "2": {
-      "body": "Click the button below to confirm removing these devices.",
+      "body": "Select the button below to confirm removing these devices.",
       "continueKind": "danger",
       "continueText": "Remove devices",
       "title": "Confirm removing these devices",

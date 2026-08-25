@@ -36,30 +36,30 @@ describe("<DeviceTypeIcon />", () => {
 
     it("renders an unknown device icon when no device type given", () => {
         const { getByLabelText } = render(getComponent());
-        expect(getByLabelText("Unknown session type")).toBeTruthy();
+        expect(getByLabelText("Unknown client")).toBeTruthy();
     });
 
     it("renders a desktop device type", () => {
         const deviceType = DeviceType.Desktop;
         const { getByLabelText } = render(getComponent({ deviceType }));
-        expect(getByLabelText("Desktop session")).toBeTruthy();
+        expect(getByLabelText("Desktop app")).toBeTruthy();
     });
 
     it("renders a web device type", () => {
         const deviceType = DeviceType.Web;
         const { getByLabelText } = render(getComponent({ deviceType }));
-        expect(getByLabelText("Web session")).toBeTruthy();
+        expect(getByLabelText("Browser")).toBeTruthy();
     });
 
     it("renders a mobile device type", () => {
         const deviceType = DeviceType.Mobile;
         const { getByLabelText } = render(getComponent({ deviceType }));
-        expect(getByLabelText("Mobile session")).toBeTruthy();
+        expect(getByLabelText("Mobile app")).toBeTruthy();
     });
 
     it("renders an unknown device type", () => {
         const deviceType = DeviceType.Unknown;
         const { getByLabelText } = render(getComponent({ deviceType }));
-        expect(getByLabelText("Unknown session type")).toBeTruthy();
+        expect(getByLabelText("Unknown client")).toBeTruthy();
     });
 });
