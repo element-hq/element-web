@@ -76,6 +76,7 @@ describe("BasicMessageComposer", () => {
             { before: ":D", after: "😄" },
             { before: ":3", after: "😽" },
             { before: "=-]", after: "🙂" },
+            { before: "line{shift>}{enter}{/shift}:)", after: "line\n🙂" },
         ];
         const input = screen.getByRole("textbox");
 
@@ -86,6 +87,55 @@ describe("BasicMessageComposer", () => {
             const transformedText = model.parts.map((part) => part.text).join("");
             expect(transformedText).toBe(after + " ");
         }
+    });
+
+    it("should resolve emoji shortcodes once they are closed", async () => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
+            return settingName === "MessageComposerInput.autoReplaceEmoji";
+        });
+        userEvent.setup();
+        const model = new EditorModel([], pc, renderer);
+        render(<BasicMessageComposer model={model} room={room} />, {
+            wrapper: ({ children }) => (
+                <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+            ),
+        });
+
+        const transformations = [
+            { before: ":eyes:", after: "👀" },
+            { before: "hello :tada:", after: "hello 🎉" },
+            { before: "(:eyes:)", after: "(👀)" },
+            { before: ":smiling_face_with_smiling_eyes_and_hand_covering_mouth:", after: "🤭" },
+            { before: ":eyes: and :tada:", after: "👀 and 🎉" },
+            { before: "line{shift>}{enter}{/shift}:eyes:", after: "line\n👀" },
+
+            { before: ":notanemoji:", after: ":notanemoji:" },
+            { before: "10:30:", after: "10:30:" },
+            { before: "foo:eyes:", after: "foo:eyes:" },
+            { before: ":eyes", after: ":eyes" },
+        ];
+        const input = screen.getByRole("textbox");
+
+        for (const { before, after } of transformations) {
+            await userEvent.clear(input);
+            await userEvent.type(input, before);
+            const transformedText = model.parts.map((part) => part.text).join("");
+            expect(transformedText).toBe(after);
+        }
+    });
+
+    it("should leave emoji shortcodes alone when replacement is switched off", async () => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation(() => false);
+        userEvent.setup();
+        const model = new EditorModel([], pc, renderer);
+        render(<BasicMessageComposer model={model} room={room} />, {
+            wrapper: ({ children }) => (
+                <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+            ),
+        });
+
+        await userEvent.type(screen.getByRole("textbox"), ":eyes:");
+        expect(model.parts.map((part) => part.text).join("")).toBe(":eyes:");
     });
 
     it("should not mangle shift-enter when the autocomplete is open", async () => {
