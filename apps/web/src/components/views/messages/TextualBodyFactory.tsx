@@ -151,6 +151,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
 
     const previewToEntry = (preview: UrlPreview): MediaPreviewGroupEntry => {
         let content: MediaPreviewGroupEntryContent;
+
         if (preview.image === undefined) {
             content = {
                 type: "text",
