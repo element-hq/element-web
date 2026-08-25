@@ -281,7 +281,7 @@ test.describe("Spotlight", () => {
         await app.client.inviteUser(dmRooms[0], bot1.credentials!.userId);
         await expect(roomHeaderName(page).first()).toContainText(groupDmName);
         await expect(
-            page.getByTestId("room-list").getByRole("option", { name: `Open room ${groupDmName}` }),
+            page.getByTestId("room-list").getByRole("button", { name: `Open room ${groupDmName}` }),
         ).toBeVisible();
 
         // Search for BotBob by id, should return group DM and user
