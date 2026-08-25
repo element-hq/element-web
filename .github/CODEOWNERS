@@ -35,9 +35,11 @@
 /apps/web/src/i18n/strings
 /apps/desktop/src/i18n/strings
 /packages/shared-components/src/i18n/strings
-/apps/web/src/i18n/strings/en_EN.json                    @element-hq/element-web-reviewers
-/apps/desktop/src/i18n/strings/en_EN.json                @element-hq/element-web-reviewers
-/packages/shared-components/src/i18n/strings/en_EN.json  @element-hq/element-web-reviewers
+/apps/desktop/src/i18n/InfoPlist
+/apps/web/src/i18n/strings/en_EN.json                        @element-hq/element-web-reviewers
+/apps/desktop/src/i18n/strings/en_EN.json                    @element-hq/element-web-reviewers
+/packages/shared-components/src/i18n/strings/en_EN.json      @element-hq/element-web-reviewers
+/apps/desktop/src/i18n/InfoPlist/en.lproj/InfoPlist.strings  @element-hq/element-web-reviewers
 
 # Ignore the synapse & mas plugins as this is updated by GHA for docker image updating
 /apps/web/playwright/testcontainers/synapse.ts
