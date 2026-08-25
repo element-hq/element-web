@@ -1390,19 +1390,19 @@
         }
 
         &.layoutBubble {
+            /* Legacy informational bubble rows are horizontal flex rows. The
+               thread shell otherwise uses a column layout for sender details
+               and the event line. */
+            flex-direction: row;
+
             .senderDetails .slotAvatar {
-                inset-inline-start: 0;
+                position: static;
+                inset: auto;
+                transform: none;
+                margin-block: 0;
             }
 
             .line .slotBody {
-                margin-inline-start: calc(var(--event-tile-thread-spacing-inline-start) + 14px + 6px);
-            }
-
-            /* Bubble body slots are display: contents, so their margin is not
-               rendered. Apply the legacy content offset to the flex item as
-               well, preserving the slot margin as a styling contract. */
-            .line .slotBody > * {
-                width: auto;
                 margin-inline-start: calc(var(--event-tile-thread-spacing-inline-start) + 14px + 6px);
             }
         }
