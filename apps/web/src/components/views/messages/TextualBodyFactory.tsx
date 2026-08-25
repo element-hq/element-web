@@ -19,8 +19,10 @@ import {
     linkIcon,
     type MediaPreviewGroupEntry,
     type MediaPreviewGroupEntryContent,
+    MediaPreviewEntryButton,
 } from "@element-hq/web-shared-components";
 import { type UrlPreview } from "shared-types";
+import { type UnstableBundledUrlPreviewSingle } from "@element-hq/element-web-module-api";
 
 import { type IBodyProps } from "./IBodyProps";
 import RoomContext from "../../../contexts/RoomContext";
@@ -42,8 +44,23 @@ import { MediaPreviewGroupViewModel } from "../../../viewmodels/message-body/Med
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 import { EditMessageComposerWrapper } from "../rooms/EditMessageComposerWrapper";
 import { ModuleApi } from "../../../modules/Api";
+import { remoteMediaForBundle } from "../../../modules/FileViewerApi";
+import { fileViewerOpenButton } from "../right_panel/FileViewerCard";
 
 const logger = rootLogger.getChild("TextualBodyFactory");
+
+/**
+ * Recover the MSC4095 bundle a preview was built from, if it was built from one.
+ * The fetcher stashes the whole bundle in `additionalBundleContent`, and `link` is
+ * its `matched_url`, which is the one key `additionalBundleContent` is not typed to carry.
+ */
+function bundleForPreview(preview: UrlPreview): UnstableBundledUrlPreviewSingle | undefined {
+    if (!preview.additionalBundleContent) return undefined;
+    return {
+        ...preview.additionalBundleContent,
+        matched_url: preview.link,
+    };
+}
 
 function getTextualBodyClassName(msgtype: MsgType | undefined): string {
     if (msgtype === MsgType.Notice) {
@@ -162,6 +179,13 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
 
     const previewToEntry = (preview: UrlPreview): MediaPreviewGroupEntry => {
         let content: MediaPreviewGroupEntryContent;
+        // file opening buttons will only apply to links with bundles
+        const bundle = bundleForPreview(preview);
+        const mediaHandle = bundle && remoteMediaForBundle(bundle);
+        const fileViewers = mediaHandle ? ModuleApi.instance.fileViewer.getViewersFor(mediaHandle) : [];
+        const fileViewerButtons: MediaPreviewEntryButton[] = mediaHandle
+            ? fileViewers.map((viewer) => fileViewerOpenButton({ viewer, media: mediaHandle, mxEvent: props.mxEvent }))
+            : [];
 
         if (preview.image === undefined) {
             content = {
@@ -201,6 +225,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
             headerUrl: preview.link,
             body,
             buttons: [
+                ...fileViewerButtons,
                 {
                     label: _t("timeline|url_preview|open_link"),
                     icon: <PopOutIcon />,
