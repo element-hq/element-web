@@ -46,7 +46,7 @@ export interface EncryptedFile {
  * @alpha Subject to change.
  * @see https://github.com/matrix-org/matrix-spec-proposals/pull/4095
  */
-export interface UnstableBundledUrlPreviewSingle {
+export type UnstableBundledUrlPreviewSingle = {
     "matched_url": string;
     "beeper:image:encryption"?: EncryptedFile;
     "matrix:image:size"?: number;
@@ -57,7 +57,7 @@ export interface UnstableBundledUrlPreviewSingle {
     "og:image:type"?: string;
     "og:title"?: string;
     "og:description"?: string;
-}
+} & Record<string, any>;
 
 /**
  * Bundled URL previews in MSC-4095

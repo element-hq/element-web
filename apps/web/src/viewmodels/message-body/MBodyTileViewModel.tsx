@@ -22,6 +22,8 @@ import { fileSize } from "../../utils/FileUtils";
 import { isPdfEvent, openPdfViewer } from "../../utils/pdfViewer";
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
+import { ModuleApi } from "../../modules/Api";
+import { uploadedMediaForEvent } from "../../modules/FileViewerApi";
 
 export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
     private readonly mxEvent: MatrixEvent;
@@ -52,16 +54,21 @@ export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
         const content = mxEvent.getContent<MediaEventContent>();
         const size = content.info?.size;
 
-        const additionalButtons: MediaPreviewEntryButton[] = [];
-
-        switch (content.info?.mimetype) {
-            case "application/pdf":
-                additionalButtons.push({
-                    label: "Open in file viewer", // TODO: translation
-                    icon: <ExpandIcon />,
-                    onClick: () => RightPanelStore.instance.setGlobalCard({ phase: RightPanelPhases.FileViewer }),
-                });
-        }
+        const mediaHandle = uploadedMediaForEvent(mxEvent, mediaEventHelper);
+        const fileViewers = mediaHandle ? ModuleApi.instance.fileViewer.getViewersFor(mediaHandle) : [];
+        const additionalButtons: MediaPreviewEntryButton[] = fileViewers.map((viewer) => ({
+            label: viewer.options.buttonText,
+            icon: <ExpandIcon />,
+            onClick: () =>
+                RightPanelStore.instance.setGlobalCard({
+                    phase: RightPanelPhases.FileViewer,
+                    state: {
+                        fileViewer: viewer,
+                        fileViewerMedia: mediaHandle,
+                        fileViewerSourceEvent: mxEvent,
+                    },
+                }),
+        }));
 
         // includes the download buttonn if mediaEventHelper is not undefined
         const buttons: MediaPreviewEntryButton[] | undefined = mediaEventHelper && [

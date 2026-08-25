@@ -10,6 +10,8 @@ import { type MatrixEvent, type Room, type RoomMember, type User } from "matrix-
 import { type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 
 import { type RightPanelPhases } from "./RightPanelStorePhases";
+import { MediaHandle } from "@element-hq/element-web-module-api";
+import { RegisteredFileViewer } from "../../modules/FileViewerApi";
 
 export type RightPanelCardType = "room" | "global";
 
@@ -29,6 +31,10 @@ export interface IRightPanelCardState {
     focusRoomSearch?: boolean;
     // pdf viewer: the m.file event whose attachment is being read
     pdfViewerEvent?: MatrixEvent;
+    // file viewer
+    fileViewer?: RegisteredFileViewer;
+    fileViewerSourceEvent?: MatrixEvent;
+    fileViewerMedia?: MediaHandle;
 }
 
 export interface IRightPanelCardStateStored {
