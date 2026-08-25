@@ -23,13 +23,19 @@ export default class MVoiceMessageBody extends MAudioBody {
     public static contextType = RoomContext;
     declare public context: React.ContextType<typeof RoomContext>;
 
+    private playbackQueue?: PlaybackQueue;
+
     protected onMount(playback: Playback): void {
         if (isVoiceMessage(this.props.mxEvent)) {
-            PlaybackQueue.forRoom(this.props.mxEvent.getRoomId()!, this.context.roomViewStore).unsortedEnqueue(
-                this.props.mxEvent,
-                playback,
-            );
+            this.playbackQueue = PlaybackQueue.forRoom(this.props.mxEvent.getRoomId()!, this.context.roomViewStore);
+            this.playbackQueue.unsortedEnqueue(this.props.mxEvent, playback);
         }
+    }
+
+    protected onUnmount(): void {
+        // The queue is the one kept from onMount rather than looked up again: unmounting can happen on
+        // the way out of the session, and forRoom() reaches for a client which may already be gone.
+        this.playbackQueue?.dequeue(this.props.mxEvent);
     }
 
     // A voice message is an audio file but rendered in a special way.
