@@ -10,6 +10,7 @@ import classNames from "classnames";
 import { Text, Tooltip } from "@vector-im/compound-web";
 
 import { type ViewModel, useViewModel } from "../../../../../core/viewmodel";
+import { useEventPresentationAttributes } from "../../../EventPresentation/EventPresentationContext";
 import styles from "./DisambiguatedProfile.module.css";
 
 /**
@@ -89,6 +90,7 @@ interface DisambiguatedProfileViewProps {
  * ```
  */
 export function DisambiguatedProfileView({ vm, className }: Readonly<DisambiguatedProfileViewProps>): JSX.Element {
+    const eventPresentationAttributes = useEventPresentationAttributes();
     const { displayName, colorClass, displayIdentifier, title, emphasizeDisplayName, userStatus } = useViewModel(vm);
 
     const userStatusEmoji = userStatus && userStatus.emoji;
@@ -116,6 +118,7 @@ export function DisambiguatedProfileView({ vm, className }: Readonly<Disambiguat
             onKeyDown={handleKeyDown}
             role={vm.onClick ? "button" : undefined}
             tabIndex={vm.onClick ? 0 : undefined}
+            {...eventPresentationAttributes}
         >
             <span className={displayNameClasses} dir="auto">
                 {displayName}

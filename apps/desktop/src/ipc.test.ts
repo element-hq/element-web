@@ -5,9 +5,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { expect, describe, it, beforeEach, vi } from "vitest";
+import { expect, describe, it, beforeEach, afterEach, vi } from "vitest";
+import { desktopCapturer } from "electron";
 
 import { getConfig } from "./config.js";
+import {
+    handleDisplayMediaPickerReply,
+    handleScreenShareAudioSessionBinding,
+    handleScreenShareAudioSessionRelease,
+} from "./display-media.js";
 
 const { ipcHandlers, mockStore, send, randomArray } = vi.hoisted(() => ({
     ipcHandlers: {} as Record<string, (...args: unknown[]) => unknown>,
@@ -61,8 +67,8 @@ await import("./ipc.js");
 
 const ARGS = ["@alice:example.org", "DEVICEID"];
 
-async function callIpc(name: string, id = 1): Promise<void> {
-    await ipcHandlers["ipcCall"]({}, { id, name, args: ARGS });
+async function callIpc(name: string, id = 1, args: unknown[] = ARGS): Promise<void> {
+    await ipcHandlers["ipcCall"]({ sender: { id: 23 } }, { id, name, args });
 }
 
 describe("ipc pickle key handling", () => {
@@ -124,5 +130,68 @@ describe("getConfig", () => {
 
         expect(handler({})).toStrictEqual(config);
         expect(getConfig).toHaveBeenCalled();
+    });
+});
+
+describe("ipcCall: getDesktopCapturerSources", () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+        vi.mocked(desktopCapturer.getSources).mockReset();
+        vi.spyOn(console, "error").mockImplementation(() => {});
+        (global as unknown as { mainWindow: unknown }).mainWindow = { webContents: { send } };
+    });
+
+    afterEach(() => {
+        vi.mocked(console.error).mockRestore();
+    });
+
+    it("maps the native sources to id/name/thumbnailURL", async () => {
+        vi.mocked(desktopCapturer.getSources).mockResolvedValue([
+            { id: "screen:1", name: "Screen 1", thumbnail: { toDataURL: (): string => "data:thumb" } },
+        ] as never);
+
+        await callIpc("getDesktopCapturerSources", 11, [{ types: ["screen"] }]);
+
+        expect(send).toHaveBeenCalledWith("ipcReply", {
+            id: 11,
+            reply: [{ id: "screen:1", name: "Screen 1", thumbnailURL: "data:thumb" }],
+        });
+    });
+
+    it("replies with an empty list rather than leaving the picker awaiting when getSources rejects", async () => {
+        vi.mocked(desktopCapturer.getSources).mockRejectedValue(new Error("native failure"));
+
+        await callIpc("getDesktopCapturerSources", 12, [{}]);
+
+        expect(send).toHaveBeenCalledWith("ipcReply", { id: 12, reply: [] });
+    });
+});
+
+describe("ipcCall: callDisplayMediaCallback", () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+        (global as unknown as { mainWindow: unknown }).mainWindow = { webContents: { send } };
+    });
+
+    it("forwards the picker response with the requesting sender identity", async () => {
+        await callIpc("callDisplayMediaCallback", 13, [{ id: "screen:1" }]);
+
+        expect(handleDisplayMediaPickerReply).toHaveBeenCalledWith(23, { id: "screen:1" });
+        expect(send).toHaveBeenCalledWith("ipcReply", { id: 13, reply: null });
+    });
+
+    it("forwards session binding and release through the request-aware controller", async () => {
+        vi.mocked(handleScreenShareAudioSessionBinding).mockReturnValue(true);
+
+        await callIpc("bindScreenShareAudioSession", 14, [{ requestId: "request", sessionId: "session" }]);
+        await callIpc("releaseScreenShareAudioSession", 15, [{ sessionId: "session" }]);
+
+        expect(handleScreenShareAudioSessionBinding).toHaveBeenCalledWith(23, {
+            requestId: "request",
+            sessionId: "session",
+        });
+        expect(handleScreenShareAudioSessionRelease).toHaveBeenCalledWith(23, { sessionId: "session" });
+        expect(send).toHaveBeenCalledWith("ipcReply", { id: 14, reply: true });
+        expect(send).toHaveBeenCalledWith("ipcReply", { id: 15, reply: null });
     });
 });

@@ -758,7 +758,7 @@ export class ElementWidgetDriver extends WidgetDriver {
             // If the homeserver does not support the API, fall back to legacy well-known lookup.
             if (
                 e instanceof MatrixError &&
-                e.errcode === "M_NOT_FOUND" &&
+                e.errcode === "M_UNRECOGNIZED" &&
                 SdkConfig.get("enable_client_well_known_lookups")
             ) {
                 const wellKnown = await client.waitForClientWellKnown();

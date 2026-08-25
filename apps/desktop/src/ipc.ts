@@ -211,11 +211,16 @@ ipcMain.on("ipcCall", async function (ev: IpcMainEvent, payload) {
             await destroyPickleKey(store, `${args[0]}|${args[1]}`);
             break;
         case "getDesktopCapturerSources":
-            ret = (await desktopCapturer.getSources(args[0])).map((source) => ({
-                id: source.id,
-                name: source.name,
-                thumbnailURL: source.thumbnail.toDataURL(),
-            }));
+            try {
+                ret = (await desktopCapturer.getSources(args[0])).map((source) => ({
+                    id: source.id,
+                    name: source.name,
+                    thumbnailURL: source.thumbnail.toDataURL(),
+                }));
+            } catch (e) {
+                console.error("Failed to get desktop capturer sources", e);
+                ret = [];
+            }
             break;
         case "callDisplayMediaCallback":
             handleDisplayMediaPickerReply(ev.sender.id, args[0]);

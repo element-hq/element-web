@@ -170,6 +170,37 @@ test.describe("Cryptography", function () {
         expect(await keyStorageToggle.isChecked()).toBe(true);
     });
 
+    // When resetting identity is interrupted, it can be retried.
+    // ref: https://github.com/element-hq/element-web/issues/34642
+    test("Can reset identity if previous reset was interrupted", async ({ page, app, user: aliceCredentials }) => {
+        await app.client.bootstrapCrossSigning(aliceCredentials);
+
+        await enableKeyBackup(app);
+
+        // Wait for the cross signing keys to be uploaded
+        // Waiting for "Change the recovery key" button ensure that all the secrets are uploaded and cached locally
+        const encryptionTab = await app.settings.openUserSettings("Encryption");
+        await expect(encryptionTab.getByRole("button", { name: "Change recovery key" })).toBeVisible();
+
+        // Emulate a previous reset having been interrupted by setting the
+        // default 4S key to be empty
+        await app.client.setAccountData("m.secret_storage.default_key", {} as unknown as { key: string });
+
+        // Find "the Reset cryptographic identity" button
+        await encryptionTab.getByRole("button", { name: "Reset cryptographic identity" }).click();
+
+        // Confirm
+        await encryptionTab.getByRole("button", { name: "Continue" }).click();
+
+        // Enter the password.
+        await page.getByPlaceholder("Password").fill(aliceCredentials.password!);
+        await page.getByRole("button", { name: "Continue" }).click();
+
+        // We should be back to the main encryption tab, and it should indicate
+        // that there is no existing recovery key.
+        await expect(encryptionTab.getByRole("button", { name: "Get recovery key" })).toBeVisible();
+    });
+
     test(
         "creating a DM should work, being e2e-encrypted / user verification",
         { tag: "@screenshot" },

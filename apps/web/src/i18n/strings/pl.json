@@ -509,7 +509,7 @@
         "message_timestamp_invalid": "Nieprawidłowy znacznik czasu",
         "microphone": "Mikrofon",
         "moderation_and_safety": "Moderacja i bezpieczeństwo",
-        "modern": "Współczesny",
+        "modern": "Nowoczesny",
         "mute": "Wycisz",
         "n_members": {
             "one": "%(count)s członek",
@@ -717,7 +717,7 @@
         "private_space_description": "Prywatna przestrzeń dla Ciebie i Twoich kolegów z drużyny",
         "public_description": "Każdy może dołączyć, zalecane dla społeczności",
         "public_heading": "Twoja publiczna przestrzeń",
-        "search_public_button": "Szukaj przestrzeni publicznych",
+        "search_public_button": "Przeglądaj przestrzenie publiczne",
         "setup_rooms_community_description": "Na początek stwórzmy kilka pokoi.",
         "setup_rooms_community_heading": "O jakich rzeczach będziesz chciał dyskutować w %(spaceName)s?",
         "setup_rooms_description": "Później możesz dodać do przestrzeni więcej pomieszczeń, włączając w to już istniejące.",
