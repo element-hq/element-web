@@ -11,7 +11,8 @@ import { type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 
 import { type RightPanelPhases } from "./RightPanelStorePhases";
 import { MediaHandle } from "@element-hq/element-web-module-api";
-import { RegisteredFileViewer } from "../../modules/FileViewerApi";
+import { RegisteredFileViewer, remoteMediaForEvent, uploadedMediaForEvent } from "../../modules/FileViewerApi";
+import { ModuleApi } from "../../modules/Api";
 
 export type RightPanelCardType = "room" | "global";
 
@@ -50,6 +51,15 @@ export interface IRightPanelCardStateStored {
     initialEventScrollIntoView?: boolean;
     // pdf viewer
     pdfViewerEventId?: string;
+    // file viewer
+    fileViewerId?: string;
+    fileViewerSourceEventId?: string;
+    /**
+     * where is that event from
+     */
+    fileViewerSourceRoomId?: string;
+    // only present if file viewer is viewing remote content (from a URL bundle)
+    fileViewerUrl?: string;
 }
 
 export interface IRightPanelCard {
@@ -95,6 +105,10 @@ export function convertCardToStore(panelState: IRightPanelCard): IRightPanelCard
         initialEventId: !!state?.initialEvent?.getId() ? state.initialEvent.getId() : undefined,
         memberId: !!state?.member?.userId ? state.member.userId : undefined,
         pdfViewerEventId: state?.pdfViewerEvent?.getId(),
+        fileViewerId: state?.fileViewer?.options.id,
+        fileViewerSourceEventId: state?.fileViewerSourceEvent?.getId(),
+        fileViewerSourceRoomId: state?.fileViewerSourceEvent?.getRoomId(),
+        fileViewerUrl: state?.fileViewerMedia?.type === "remote" ? state.fileViewerMedia.bundle.matched_url : undefined,
     };
 
     return { state: stateStored, phase: panelState.phase };
@@ -115,7 +129,22 @@ function convertStoreToCard(panelStateStore: IRightPanelCardStored, room: Room):
         initialEvent: !!stateStored?.initialEventId ? room.findEventById(stateStored.initialEventId) : undefined,
         member: (!!stateStored?.memberId && room.getMember(stateStored.memberId)) || undefined,
         pdfViewerEvent: !!stateStored?.pdfViewerEventId ? room.findEventById(stateStored.pdfViewerEventId) : undefined,
+        fileViewer: stateStored?.fileViewerId
+            ? ModuleApi.instance.fileViewer.getViewerById(stateStored.fileViewerId)
+            : undefined,
     };
+
+    if (stateStored?.fileViewerSourceRoomId && stateStored.fileViewerSourceEventId) {
+        state.fileViewerSourceEvent = room.client
+            .getRoom(stateStored.fileViewerSourceRoomId)
+            ?.findEventById(stateStored.fileViewerSourceEventId);
+
+        if (state.fileViewerSourceEvent) {
+            if (stateStored.fileViewerUrl)
+                state.fileViewerMedia = remoteMediaForEvent(state.fileViewerSourceEvent, stateStored.fileViewerUrl);
+            else state.fileViewerMedia = uploadedMediaForEvent(state.fileViewerSourceEvent);
+        }
+    }
 
     return { state: state, phase: panelStateStore.phase };
 }
