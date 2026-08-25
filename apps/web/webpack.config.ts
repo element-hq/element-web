@@ -726,6 +726,14 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                         context: path.resolve(__dirname, "src/vector/mobile_guide"),
                         to: "mobile_guide",
                     },
+                    // Data which pdf.js fetches at runtime for PDFs which need it: predefined CMaps,
+                    // the standard 14 fonts, ICC profiles and the wasm-based image decoders.
+                    // See `assetUrl` in src/components/views/file_viewer/PdfViewer.tsx.
+                    ...["cmaps", "standard_fonts", "iccs", "wasm"].map((dir) => ({
+                        from: "**",
+                        context: path.join(getPackageRoot("pdfjs-dist"), dir),
+                        to: path.join(__dirname, "webapp", "pdfjs", dir),
+                    })),
                 ],
             }),
 

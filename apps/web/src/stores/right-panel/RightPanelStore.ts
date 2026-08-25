@@ -463,6 +463,11 @@ export default class RightPanelStore extends ReadyWatchingStore {
                     logger.warn("removed card from right panel because of missing widgetId in card state");
                 }
                 return !!card.state?.widgetId;
+            case RightPanelPhases.FileViewer:
+                if (!card.state?.media) {
+                    logger.warn("removed card from right panel because of missing media in card state");
+                }
+                return !!card.state?.media;
         }
         return true;
     }

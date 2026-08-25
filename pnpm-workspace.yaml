@@ -68,6 +68,11 @@ packageExtensions:
         peerDependencies:
             vite: "^8.0.0"
 
+ignoredOptionalDependencies:
+    # pdfjs-dist pulls this in to render PDFs under node; we only ever render in the browser,
+    # and it is 30MB+ of native binaries.
+    - "@napi-rs/canvas"
+
 allowBuilds:
     # Needed to make the git dependency in layered.sh happy
     matrix-js-sdk: true

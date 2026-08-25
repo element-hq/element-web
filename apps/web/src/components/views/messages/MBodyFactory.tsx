@@ -104,7 +104,19 @@ function PreviewFileBody({ mxEvent, mediaEventHelper }: FileBodyProps): JSX.Elem
                 additionalButtons.push({
                     label: "Open in file viewer", // TODO: translation
                     icon: <ExpandIcon />,
-                    onClick: () => RightPanelStore.instance.setGlobalCard({ phase: RightPanelPhases.FileViewer }),
+                    onClick: () =>
+                        RightPanelStore.instance.setGlobalCard({
+                            phase: RightPanelPhases.FileViewer,
+                            state: {
+                                media: {
+                                    type: "uploaded",
+                                    mimetype: "application/pdf",
+                                    name: mediaEventHelper!.fileName,
+                                    // decrypts transparently if E2EE
+                                    blob: () => mediaEventHelper!.sourceBlob.value,
+                                },
+                            },
+                        }),
                 });
         }
 

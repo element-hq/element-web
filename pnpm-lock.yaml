@@ -670,6 +670,9 @@ importers:
       pako:
         specifier: ^3.0.0
         version: 3.0.1
+      pdfjs-dist:
+        specifier: ^6.2.108
+        version: 6.2.108
       png-chunks-extract:
         specifier: ^1.0.0
         version: 1.0.0
@@ -10865,6 +10868,10 @@ packages:
     resolution: {integrity: sha512-Q3CG/cYvCO1ye4QKkuH7EXxs3VC/rI1/trd+qX2+PolbaKG0H+bgcZzrTt96mMyRtejk+JMCiLUn3y29W8qmFQ==}
     engines: {node: '>= 0.10'}
 
+  pdfjs-dist@6.2.108:
+    resolution: {integrity: sha512-YxFb+SQcodN2rnX9Tn3dHYlqfb7NjlzzfONPpJd+AKoKtUjEdevTfbC07d5TcczzOK6261auRkP/M8OBHs9vFQ==}
+    engines: {node: '>=22.13.0 || >=24'}
+
   pe-library@0.4.1:
     resolution: {integrity: sha512-eRWB5LBz7PpDu4PUlwT0PhnQfTQJlDDdPa35urV4Osrm0t0AqQFGn+UIkU3klZvwJ8KPO3VbBFsXquA6p6kqZw==}
     engines: {node: '>=12', npm: '>=6'}
@@ -13535,6 +13542,9 @@ packages:
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
+
+ignoredOptionalDependencies:
+  - '@napi-rs/canvas'
 
 snapshots:
 
@@ -24403,6 +24413,8 @@ snapshots:
       safe-buffer: 5.2.1
       sha.js: 2.4.12
       to-buffer: 1.2.2
+
+  pdfjs-dist@6.2.108: {}
 
   pe-library@0.4.1: {}
 

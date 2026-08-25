@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type MatrixEvent, type Room, type RoomMember, type User } from "matrix-js-sdk/src/matrix";
 import { type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
+import { type MediaHandle } from "@element-hq/element-web-module-api";
 
 import { type RightPanelPhases } from "./RightPanelStorePhases";
 
@@ -27,6 +28,8 @@ export interface IRightPanelCardState {
     initialEventScrollIntoView?: boolean;
     // room summary
     focusRoomSearch?: boolean;
+    // file viewer. Not persisted: the file has to be opened again after a reload.
+    media?: MediaHandle;
 }
 
 export interface IRightPanelCardStateStored {
