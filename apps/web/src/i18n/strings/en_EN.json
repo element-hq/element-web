@@ -3469,6 +3469,9 @@
             "pinned": "%(senderName)s pinned a message to this room. See all pinned messages.",
             "pinned_link": "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.",
             "unpinned": "%(senderName)s unpinned a message from this room. See all pinned messages.",
+            "unpinned_all": "%(senderName)s unpinned all messages from this room.",
+            "unpinned_last": "%(senderName)s unpinned a message from this room.",
+            "unpinned_last_link": "%(senderName)s unpinned <a>a message</a> from this room.",
             "unpinned_link": "%(senderName)s unpinned <a>a message</a> from this room. See all <b>pinned messages</b>."
         },
         "m.room.power_levels": {
