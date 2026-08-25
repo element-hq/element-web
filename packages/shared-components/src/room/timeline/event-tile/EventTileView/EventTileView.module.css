@@ -1086,6 +1086,8 @@
 
     /* Informational bubble rows are metadata rows, not message bubbles. */
     &.stateInfo {
+        --event-tile-body-padding: 0;
+
         display: flex;
         align-items: center;
         justify-content: flex-start;
@@ -1143,6 +1145,11 @@
         .slotPadlock {
             margin-inline-start: 0;
             align-self: center;
+        }
+
+        /* ThreadView's hidden-event rows retain the legacy bubble body inset. */
+        &.shapeThread {
+            --event-tile-body-padding: 1px;
         }
     }
 

@@ -60,3 +60,17 @@ Please see LICENSE files in the repository root for full details.
         }
     }
 }
+
+/* Preserve the legacy expanded-summary metrics in RoomView. ThreadView owns
+   its informational row metrics through EventTileView. */
+.mx_RoomView_timeline .mx_GenericEventListSummary[data-layout="bubble"] {
+    &[data-expanded="true"] .mx_EventTile:has(> .mx_EventTile_line :is(.mx_TextualEvent, .mx_ViewSourceEvent)) {
+        > .mx_EventTile_line {
+            line-height: normal;
+        }
+
+        > .mx_EventTile_line :is(.mx_TextualEvent, .mx_ViewSourceEvent) {
+            padding-block: 0;
+        }
+    }
+}
