@@ -26,7 +26,8 @@ import { type CustomisationsApi } from "./customisations.ts";
 import { type ComposerApi } from "./composer.ts";
 import { type StorageHelperApi } from "./storage-helper.ts";
 import { type SettingsApi } from "./settings.ts";
-import { FileViewerApi } from "./file-viewer.ts";
+import { type FileViewerApi } from "./file-viewer.ts";
+import { type CustomPreviewTileApi } from "./custom-preview-tile.ts";
 
 /**
  * Module interface for modules to implement.
@@ -185,6 +186,8 @@ export interface Api
      * @alpha Subject to change.
      */
     readonly fileViewer: FileViewerApi;
+
+    readonly customPreview: CustomPreviewTileApi;
 
     /**
      * Create a ReactDOM root for rendering React components.

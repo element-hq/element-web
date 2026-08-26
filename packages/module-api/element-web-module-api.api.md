@@ -57,6 +57,8 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
     readonly customComponents: CustomComponentsApi;
     // @alpha
     readonly customisations: CustomisationsApi;
+    // (undocumented)
+    readonly customPreview: CustomPreviewTileApi;
     // @alpha
     readonly extras: ExtrasApi;
     // @alpha
@@ -220,6 +222,39 @@ export type CustomMessageRenderHints = {
     allowEditingEvent?: boolean;
     allowDownloadingMedia?: (mxEvent: MatrixEvent) => Promise<boolean>;
 };
+
+// @public (undocumented)
+export interface CustomPreviewTileApi {
+    // (undocumented)
+    registerCustomPreviewTilePatcher(patcher: CustomPreviewTilePatcher, opts: CustomPreviewTileOptions): void;
+}
+
+// @public (undocumented)
+export interface CustomPreviewTileIcon {
+    // (undocumented)
+    color: string;
+    // (undocumented)
+    svg: JSX_2.Element;
+}
+
+// @public (undocumented)
+export interface CustomPreviewTileOptions {
+    // (undocumented)
+    id: string;
+}
+
+// @public (undocumented)
+export interface CustomPreviewTilePatch {
+    // (undocumented)
+    header?: string;
+    // (undocumented)
+    icon?: CustomPreviewTileIcon;
+    // (undocumented)
+    subtext?: string;
+}
+
+// @public (undocumented)
+export type CustomPreviewTilePatcher = (media: MediaHandle) => Promise<CustomPreviewTilePatch | null>;
 
 // @alpha
 export type CustomRoomPreviewBarComponentProps = {
