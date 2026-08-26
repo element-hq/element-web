@@ -195,16 +195,6 @@ export const mock10RoomsSections = [
     { id: "low-priority", roomIds: mock10RoomsIds.slice(4) },
 ];
 
-/**
- * A list with a People section, which holds direct messages only, above a Chats section holding the rest.
- */
-export const mock10RoomsPeopleSections = [
-    { id: "favourites", roomIds: mock10RoomsIds.slice(0, 3) },
-    { id: "people", roomIds: mock10RoomsIds.slice(3, 6) },
-    { id: "chats", roomIds: mock10RoomsIds.slice(6) },
-];
-export const mock10RoomsDmIds = mock10RoomsIds.slice(3, 6);
-
 export const mockRoomIds = Array.from({ length: 20 }, (_, i) => `!room${i}:server`);
 export const mockSections = [
     { id: "favourites", roomIds: mockRoomIds.slice(0, 5) },
