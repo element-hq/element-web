@@ -107,6 +107,7 @@ test.describe("EventTileView application coverage", () => {
             await page.keyboard.press("Escape");
             await expect(tile).toMatchScreenshot("event-tile-context-menu-closed.png", {
                 css: ".mx_MessageTimestamp { visibility: hidden; }",
+                hideJumpToBottomButton: true,
             });
 
             const highlightedEvent = await bot.sendMessage(roomId, {
