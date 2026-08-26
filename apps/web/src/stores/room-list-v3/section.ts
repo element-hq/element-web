@@ -18,7 +18,7 @@ import { SDKContextClass } from "../../contexts/SDKContextClass.ts";
 import { tagRoom } from "../../utils/room/tagRoom.ts";
 
 /**
- * A synthetic tag used to represent the "Rooms" section (known previously as Chats), which contains
+ * A synthetic tag used to represent the "Rooms" or "Chats" section, which contains
  * every room that does not belong to any other explicit tag section.
  */
 export const CHATS_TAG = "chats";
