@@ -26,6 +26,7 @@ import { type StorageHelperApi } from "./storage-helper.ts";
 import { type SettingsApi } from "./settings.ts";
 import { type UrlPreviewApi } from "./urlpreview.ts";
 import { type FileViewerApi } from "./file-viewer.ts";
+import { type CustomPreviewTileApi } from "./custom-preview-tile.ts";
 
 /**
  * Module interface for modules to implement.
@@ -183,6 +184,8 @@ export interface Api extends DialogApiExtension, AccountAuthApiExtension, Profil
      * @alpha Subject to change.
      */
     readonly fileViewer: FileViewerApi;
+
+    readonly customPreview: CustomPreviewTileApi;
 
     /**
      * Create a ReactDOM root for rendering React components.

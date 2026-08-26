@@ -37,6 +37,7 @@ export { UIComponent } from "./api/customisations";
 export type * from "./api/storage-helper";
 export type * from "./api/settings";
 export type * from "./api/file-viewer";
+export type * from "./api/custom-preview-tile";
 export * from "./api/watchable";
 export type * from "./utils";
 export type * from "./api/urlpreview";
