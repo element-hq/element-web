@@ -21,6 +21,8 @@ import {
     mock10RoomsIds,
     createGetSectionHeaderViewModel,
     mock10RoomsSections,
+    mock10RoomsPeopleSections,
+    mock10RoomsDmIds,
 } from "../story-mocks";
 
 type RoomListStoryProps = RoomListViewSnapshot &
@@ -130,5 +132,16 @@ export const Default: Story = {};
 export const Sections: Story = {
     args: {
         isFlatList: false,
+    },
+};
+
+export const PeopleSection: Story = {
+    args: {
+        isFlatList: false,
+        sections: mock10RoomsPeopleSections,
+        getRoomItemViewModel: createGetRoomItemViewModel(mock10RoomsIds, mock10RoomsDmIds),
+        getSectionHeaderViewModel: createGetSectionHeaderViewModel(
+            mock10RoomsPeopleSections.map((section) => section.id),
+        ),
     },
 };

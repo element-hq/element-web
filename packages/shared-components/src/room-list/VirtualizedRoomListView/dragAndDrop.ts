@@ -8,7 +8,7 @@
 /** Drag payload for a section header. */
 export type SectionDragData = { type: "section"; index: number };
 /** Drag payload for a room item. */
-export type RoomDragData = { type: "room" };
+export type RoomDragData = { type: "room"; isDm: boolean };
 /** Discriminated union of all drag payloads in the room list. */
 export type RoomListDragData = SectionDragData | RoomDragData;
 
@@ -17,4 +17,11 @@ export type RoomListDragData = SectionDragData | RoomDragData;
  */
 export function isSectionDragData(data: RoomListDragData | undefined): data is SectionDragData {
     return data?.type === "section";
+}
+
+/**
+ * Type guard: true when the drag source is a room item. Narrows to {@link RoomDragData}.
+ */
+export function isRoomDragData(data: RoomListDragData | undefined): data is RoomDragData {
+    return data?.type === "room";
 }

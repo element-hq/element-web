@@ -180,6 +180,24 @@ test.describe("Room list sections", () => {
             await assertRoomInSection(page, "Rooms", "regular room");
         });
 
+        test("only accepts direct messages in the People section", async ({ page, app }) => {
+            await app.settings.setValue("RoomList.showPeopleSection", null, SettingLevel.ACCOUNT, true);
+            await assertRoomInSection(page, "People", "my dm");
+            await assertRoomInSection(page, "Rooms", "regular room");
+
+            // A room is in the People section because it is a direct message, not because it carries
+            // a tag, so neither section accepts the other's rooms.
+            await dragRoomToSection(page, "regular room", "People");
+            await assertRoomInSection(page, "Rooms", "regular room");
+
+            await dragRoomToSection(page, "my dm", "Rooms");
+            await assertRoomInSection(page, "People", "my dm");
+
+            // A section that takes any room still accepts the direct message
+            await dragRoomToSection(page, "my dm", "Favourites");
+            await assertRoomInSection(page, "Favourites", "my dm");
+        });
+
         test("can move the People section below the Rooms section", async ({ page }) => {
             await assertSectionsOrder(page, ["People", "Rooms"]);
 

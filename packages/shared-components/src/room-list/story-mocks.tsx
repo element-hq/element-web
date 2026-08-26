@@ -78,7 +78,12 @@ const roomNames = [
 /**
  * Create a mock room item snapshot for stories
  */
-export const createMockRoomSnapshot = (id: string, name: string, index: number): RoomListItemViewSnapshot => ({
+export const createMockRoomSnapshot = (
+    id: string,
+    name: string,
+    index: number,
+    isDm = false,
+): RoomListItemViewSnapshot => ({
     id,
     room: { name },
     name,
@@ -99,6 +104,7 @@ export const createMockRoomSnapshot = (id: string, name: string, index: number):
     showNotificationMenu: true,
     isFavourite: false,
     isLowPriority: false,
+    isDm,
     canInvite: true,
     canCopyRoomLink: true,
     canMarkAsRead: false,
@@ -108,8 +114,13 @@ export const createMockRoomSnapshot = (id: string, name: string, index: number):
     areSectionsEnabled: true,
 });
 
-export function createMockRoomItemViewModel(roomId: string, name: string, index: number): RoomListItemViewModel {
-    const snapshot = createMockRoomSnapshot(roomId, name, index);
+export function createMockRoomItemViewModel(
+    roomId: string,
+    name: string,
+    index: number,
+    isDm = false,
+): RoomListItemViewModel {
+    const snapshot = createMockRoomSnapshot(roomId, name, index, isDm);
     return {
         getSnapshot: () => snapshot,
         subscribe: fn(),
@@ -130,12 +141,17 @@ export function createMockRoomItemViewModel(roomId: string, name: string, index:
 
 /**
  * Create a mock getRoomItemViewModel function for stories
+ * @param dmRoomIds The rooms to mark as direct messages
  */
-export const createGetRoomItemViewModel = (roomIds: string[]): ((roomId: string) => RoomListItemViewModel) => {
+export const createGetRoomItemViewModel = (
+    roomIds: string[],
+    dmRoomIds: string[] = [],
+): ((roomId: string) => RoomListItemViewModel) => {
+    const dmRoomIdSet = new Set(dmRoomIds);
     const viewModels = new Map<string, RoomListItemViewModel>();
     roomIds.forEach((roomId, index) => {
         const name = roomNames[index % roomNames.length];
-        viewModels.set(roomId, createMockRoomItemViewModel(roomId, name, index));
+        viewModels.set(roomId, createMockRoomItemViewModel(roomId, name, index, dmRoomIdSet.has(roomId)));
     });
 
     return (roomId: string) => viewModels.get(roomId)!;
@@ -153,6 +169,9 @@ export const createGetSectionHeaderViewModel = (
             isUnread: false,
             displaySectionMenu: false,
             canBeReordered: true,
+            // Mirrors the real view model: People takes direct messages only, Chats takes the rest
+            acceptedRoomKind:
+                sectionId === "people" ? ("dm" as const) : sectionId === "chats" ? ("nonDm" as const) : undefined,
         };
         const vm = new MockViewModel(snapshot) as unknown as RoomListSectionHeaderViewModel;
         Object.assign(vm, {
@@ -175,6 +194,16 @@ export const mock10RoomsSections = [
     { id: "chats", roomIds: mock10RoomsIds.slice(3, 4) },
     { id: "low-priority", roomIds: mock10RoomsIds.slice(4) },
 ];
+
+/**
+ * A list with a People section, which holds direct messages only, above a Chats section holding the rest.
+ */
+export const mock10RoomsPeopleSections = [
+    { id: "favourites", roomIds: mock10RoomsIds.slice(0, 3) },
+    { id: "people", roomIds: mock10RoomsIds.slice(3, 6) },
+    { id: "chats", roomIds: mock10RoomsIds.slice(6) },
+];
+export const mock10RoomsDmIds = mock10RoomsIds.slice(3, 6);
 
 export const mockRoomIds = Array.from({ length: 20 }, (_, i) => `!room${i}:server`);
 export const mockSections = [

@@ -208,6 +208,36 @@ describe("RoomListSectionHeaderViewModel", () => {
         });
     });
 
+    describe("acceptedRoomKind", () => {
+        function makeViewModel(tag: string, showPeopleSection = true): RoomListSectionHeaderViewModel {
+            vi.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+                if (setting === "RoomList.showPeopleSection") return showPeopleSection;
+                if (setting === "RoomList.SectionExpansionState") return sectionExpansionState;
+                return null;
+            });
+            return new RoomListSectionHeaderViewModel({
+                tag,
+                title: "Section",
+                spaceId: "!space:server",
+                onToggleExpanded,
+            });
+        }
+
+        it.each([
+            [DefaultTagID.DM, "dm"],
+            [CHATS_TAG, "nonDm"],
+            [DefaultTagID.Favourite, undefined],
+            [DefaultTagID.LowPriority, undefined],
+            ["element.io.section.custom", undefined],
+        ])("should be %s for tag %s when the People section is shown", (tag, expected) => {
+            expect(makeViewModel(tag).getSnapshot().acceptedRoomKind).toBe(expected);
+        });
+
+        it("should let the Chats section accept any room when the People section is hidden", () => {
+            expect(makeViewModel(CHATS_TAG, false).getSnapshot().acceptedRoomKind).toBeUndefined();
+        });
+    });
+
     describe("onCustomSectionDataChange", () => {
         let watchCallback: () => void;
 

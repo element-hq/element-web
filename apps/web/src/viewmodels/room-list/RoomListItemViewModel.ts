@@ -406,6 +406,7 @@ export class RoomListItemViewModel
             showNotificationMenu,
             isFavourite,
             isLowPriority,
+            isDm,
             canInvite,
             canCopyRoomLink,
             canMarkAsRead,
