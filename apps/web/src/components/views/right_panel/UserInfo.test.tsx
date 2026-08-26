@@ -433,6 +433,9 @@ describe("<UserInfo />", () => {
             if (screen.queryAllByRole("progressbar").length) {
                 await act(() => waitForElementToBeRemoved(() => screen.queryAllByRole("progressbar")));
             }
+            await expect(
+                screen.findByText("User verification unavailable", { exact: false }),
+            ).resolves.toBeInTheDocument();
             expect(container).toMatchSnapshot();
         });
     });
