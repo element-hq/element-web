@@ -1,0 +1,80 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+// @vitest-environment happy-dom
+
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
+import { createTestClient, mkStubRoom, REPEATABLE_DATE } from "test-utils";
+
+import { ExportType, type IExportOptions } from "./exportUtils";
+import PlainTextExporter from "./PlainTextExport";
+import SettingsStore from "../../settings/SettingsStore";
+
+// Under vitest's worker-threads pool, `Intl.DateTimeFormat`'s *default* (unspecified) timeZone is
+// baked in at worker creation from the real OS timezone and can never be changed at runtime via
+// `process.env.TZ`/`vi.stubEnv` (a Node/V8 worker-thread limitation) — unlike Jest, which runs each
+// test file in a genuinely separate process that picks up `TZ=UTC` fresh at startup. `formatFullDate`
+// (used below via `PlainTextExporter`) formats with `getUserTimezone()`'s value, which defaults to
+// `undefined` (i.e. "use the default/browser timezone") when unset. Force it to the explicit "UTC"
+// zone (which *is* honoured correctly inside a worker thread, unlike the default) so this test's
+// expected wall-clock strings don't depend on the machine's real local timezone.
+vi.mock("../../TimezoneHandler", async (importOriginal) => ({
+    ...(await importOriginal<typeof import("../../TimezoneHandler")>()),
+    getUserTimezone: () => "UTC",
+}));
+
+class TestablePlainTextExporter extends PlainTextExporter {
+    public async testCreateOutput(events: MatrixEvent[]): Promise<string> {
+        return this.createOutput(events);
+    }
+}
+
+describe("PlainTextExport", () => {
+    let stubOptions: IExportOptions;
+    let stubRoom: Room;
+    beforeEach(() => {
+        vi.useFakeTimers();
+        vi.setSystemTime(REPEATABLE_DATE);
+        const roomName = "My / Test / Room: Welcome";
+        const client = createTestClient();
+        stubOptions = {
+            attachmentsIncluded: false,
+            maxSize: 50000000,
+        };
+        stubRoom = mkStubRoom("!myroom:example.org", roomName, client);
+    });
+
+    it("should have an Element-branded destination file name", () => {
+        const exporter = new PlainTextExporter(stubRoom, ExportType.Timeline, stubOptions, () => {});
+
+        expect(exporter.destinationFileName).toMatchSnapshot();
+    });
+
+    it.each([
+        [24, false, "Fri, Apr 16, 2021, 17:20:00 - @alice:example.com: Hello, world!\n"],
+        [12, true, "Fri, Apr 16, 2021, 5:20:00 PM - @alice:example.com: Hello, world!\n"],
+    ])("should return text with %i hr time format", async (hour: number, setting: boolean, expectedMessage: string) => {
+        vi.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string): any =>
+            settingName === "showTwelveHourTimestamps" ? setting : undefined,
+        );
+        const events: MatrixEvent[] = [
+            new MatrixEvent({
+                type: "m.room.message",
+                content: {
+                    body: "Hello, world!",
+                },
+                sender: "@alice:example.com",
+                origin_server_ts: 1618593600000,
+            }),
+        ];
+        const exporter = new TestablePlainTextExporter(stubRoom, ExportType.Timeline, stubOptions, () => {});
+        const output = await exporter.testCreateOutput(events);
+        expect(output).toBe(expectedMessage);
+    });
+});

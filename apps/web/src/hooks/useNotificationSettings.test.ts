@@ -65,6 +65,64 @@ describe("useNotificationSettings", () => {
         expect(result.current.hasPendingChanges).toBeFalsy();
     });
 
+    it("reports a failed reconciliation and still runs the next one", async () => {
+        const setPushRuleEnabled = vi.fn(cli.setPushRuleEnabled).mockRejectedValue(new Error("server said no"));
+        cli.setPushRuleEnabled = setPushRuleEnabled;
+        cli.deletePushRule = vi.fn(cli.deletePushRule).mockResolvedValue({});
+        cli.addPushRule = vi.fn(cli.addPushRule).mockResolvedValue({});
+        cli.setPushRuleActions = vi.fn(cli.setPushRuleActions).mockResolvedValue({});
+
+        const { result } = renderHook(() => useNotificationSettings(cli));
+        await waitFor(() => expect(result.current.model).toEqual(expectedModel));
+
+        await result.current.reconcile(DefaultNotificationSettings);
+        await waitFor(() => expect(result.current.reconciliationError).not.toEqual(null));
+        expect(setPushRuleEnabled).toHaveBeenCalledTimes(6);
+
+        setPushRuleEnabled.mockResolvedValue({});
+        await result.current.reconcile(DefaultNotificationSettings);
+        await waitFor(() => expect(result.current.reconciliationError).toEqual(null));
+        // The retry reached the server rather than inheriting the earlier rejection.
+        expect(setPushRuleEnabled).toHaveBeenCalledTimes(12);
+    });
+
+    it("re-reads the rules after a failure so a retry finishes the outstanding work", async () => {
+        // The server honours the deletions and then refuses the rest of the diff, and answers a
+        // repeated delete with M_NOT_FOUND — as Synapse does. A retry has to pick up where the
+        // first attempt stopped rather than replaying work the server has already applied.
+        const deletedRuleIds = new Set<string>();
+        const deletePushRule = vi.fn(async (_scope: string, _kind: PushRuleKind, ruleId: string) => {
+            if (deletedRuleIds.has(ruleId)) throw new Error("M_NOT_FOUND");
+            deletedRuleIds.add(ruleId);
+            return {};
+        });
+        cli.deletePushRule = deletePushRule as unknown as MatrixClient["deletePushRule"];
+        cli.getPushRules = vi.fn(async () => ({
+            ...pushRules,
+            global: {
+                ...pushRules.global,
+                content: pushRules.global.content?.filter((rule) => !deletedRuleIds.has(rule.rule_id)),
+            },
+        })) as unknown as MatrixClient["getPushRules"];
+        const setPushRuleEnabled = vi.fn(cli.setPushRuleEnabled).mockRejectedValue(new Error("server said no"));
+        cli.setPushRuleEnabled = setPushRuleEnabled;
+        cli.addPushRule = vi.fn(cli.addPushRule).mockResolvedValue({});
+        cli.setPushRuleActions = vi.fn(cli.setPushRuleActions).mockResolvedValue({});
+
+        const { result } = renderHook(() => useNotificationSettings(cli));
+        await waitFor(() => expect(result.current.model).toEqual(expectedModel));
+
+        await result.current.reconcile(DefaultNotificationSettings);
+        await waitFor(() => expect(result.current.reconciliationError).not.toEqual(null));
+        expect(deletePushRule).toHaveBeenCalledTimes(9);
+
+        setPushRuleEnabled.mockResolvedValue({});
+        await result.current.reconcile(DefaultNotificationSettings);
+        await waitFor(() => expect(result.current.reconciliationError).toEqual(null));
+        expect(deletePushRule).toHaveBeenCalledTimes(9);
+        expect(setPushRuleEnabled).toHaveBeenCalledTimes(12);
+    });
+
     it("correctly generates change calls", async () => {
         const addPushRule = vi.fn(cli.addPushRule);
         cli.addPushRule = addPushRule;

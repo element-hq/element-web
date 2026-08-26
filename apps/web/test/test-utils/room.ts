@@ -6,7 +6,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MockedObject } from "jest-mock-vitest-adapter";
 import { type EventTimeline, EventType, type MatrixClient, type MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
@@ -14,6 +13,7 @@ import { MainSplitContentType, type RoomContextType, TimelineRenderingType } fro
 import { Layout } from "../../src/settings/enums/Layout";
 import { mkEvent } from "./test-utils";
 import { SDKContextClass } from "../../src/contexts/SDKContextClass";
+import { vi, type MockedObject } from "../setup/adapter";
 
 export const makeMembershipEvent = (roomId: string, userId: string, membership = KnownMembership.Join) =>
     mkEvent({
@@ -93,9 +93,9 @@ export function getRoomContext(room: Room, override: Partial<RoomContextType>): 
 
 export const setupRoomWithEventsTimeline = (room: Room, events: MatrixEvent[] = []): void => {
     const timelineSet = room.getUnfilteredTimelineSet();
-    const getTimelineForEventSpy = jest.spyOn(timelineSet, "getTimelineForEvent");
+    const getTimelineForEventSpy = vi.spyOn(timelineSet, "getTimelineForEvent");
     const eventTimeline = {
-        getEvents: jest.fn().mockReturnValue(events),
+        getEvents: vi.fn().mockReturnValue(events),
     } as unknown as EventTimeline;
     getTimelineForEventSpy.mockReturnValue(eventTimeline);
 };

@@ -170,8 +170,7 @@ a:where(:not([data-kind]):not(.mx_MessageTimestamp)):visited {
 }
 
 :not(.mx_no_textinput):not(.mx_textinput):not(.mx_Field) > input[type="text"],
-:not(.mx_no_textinput):not(.mx_textinput):not(.mx_Field) > input[type="search"],
-:not(.mx_no_textinput):not(.mx_textinput):not(.mx_Field) > input[type="password"] {
+:not(.mx_no_textinput):not(.mx_textinput):not(.mx_Field) > input[type="search"] {
     padding: 9px;
     font: var(--cpd-font-body-md-semibold);
     font-weight: var(--cpd-font-weight-semibold);
@@ -207,7 +206,6 @@ textarea::placeholder {
 }
 
 input[type="text"],
-input[type="password"],
 textarea {
     background-color: transparent;
     color: $primary-content;
@@ -219,7 +217,6 @@ textarea {
 }
 
 input[type="text"]:focus,
-input[type="password"]:focus,
 textarea:focus {
     outline: none;
     box-shadow: none;
@@ -233,23 +230,8 @@ textarea:focus {
     outline: none;
 }
 
-/* override defaults */
-fieldset {
-    display: inline-block;
-    margin-inline: unset;
-    padding-block: unset;
-    padding-inline: unset;
-    min-inline-size: unset;
-    border: none;
-}
-
 summary {
     cursor: pointer;
-}
-
-legend {
-    padding-inline: unset;
-    border: none;
 }
 
 /* .mx_textinput is a container for a text input */

@@ -5,7 +5,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { closeReleaseAnnouncement, createNewInstance, rejectToast } from "@element-hq/element-web-playwright-common";
+import {
+    closeReleaseAnnouncementIfExists,
+    createNewInstance,
+    rejectToast,
+} from "@element-hq/element-web-playwright-common";
 
 import { expect, test } from "../../element-web-test";
 import { ElementAppPage } from "../../pages/ElementAppPage";
@@ -33,7 +37,7 @@ test.describe("History sharing", function () {
             await rejectToast(alicePage, "Notifications");
 
             // Close the release announcement about the new room list sections
-            await closeReleaseAnnouncement(alicePage, "Introducing Sections");
+            await closeReleaseAnnouncementIfExists(alicePage, "Introducing Sections");
 
             // Register a second user, and open it in a second instance of the app
             const bobCredentials = await homeserver.registerUser(`user_${testInfo.testId}_bob`, "password", "Bob");
