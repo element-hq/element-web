@@ -559,14 +559,15 @@ summary {
     }
 }
 
-/* XXX: Our button styles are a mess; this is opt-in styling for legacy raw <button>s in dialogs.
- * Search `mx_LegacyDialogButton` in the JSX for the buttons still relying on it.
- * Keep the `.mx_Dialog`/`.mx_Dialog_buttons` ancestor + `button` type selector alongside the marker
- * class: they preserve the specificity of the old selectors, which some per-dialog CSS overrides
- * (e.g. width tweaks) rely on losing to.
+/* XXX: Our button styles are a mess; this is opt-in styling for legacy raw <button>s and
+ * <input type="submit">s in dialogs. Search `mx_LegacyDialogButton` in the JSX for the elements
+ * still relying on it.
+ * Keep the `.mx_Dialog`/`.mx_Dialog_buttons` ancestor + `button`/`input[type="submit"]` type
+ * selector alongside the marker class: they preserve the specificity of the old selectors, which
+ * some per-dialog CSS overrides (e.g. width tweaks) rely on losing to.
  */
 .mx_Dialog button.mx_LegacyDialogButton,
-.mx_Dialog input[type="submit"] {
+.mx_Dialog input.mx_LegacyDialogButton[type="submit"] {
     @mixin mx_DialogButton;
     margin-left: 0px;
     margin-right: var(--buttons-dialog-gap-column);
@@ -585,7 +586,7 @@ summary {
 }
 
 .mx_Dialog button.mx_LegacyDialogButton:focus,
-.mx_Dialog input[type="submit"]:focus {
+.mx_Dialog input.mx_LegacyDialogButton[type="submit"]:focus {
     filter: brightness($focus-brightness);
 }
 
@@ -594,7 +595,7 @@ summary {
  * same-specificity, later-in-source rule; disabled overrides everyone the same way.
  */
 .mx_Dialog button.mx_LegacyDialogButton.mx_Dialog_primary,
-.mx_Dialog input[type="submit"].mx_Dialog_primary,
+.mx_Dialog input.mx_LegacyDialogButton[type="submit"].mx_Dialog_primary,
 .mx_Dialog_buttons button.mx_LegacyDialogButton:not(.cancel) {
     color: var(--cpd-color-text-on-solid-primary);
     background-color: var(--cpd-color-bg-action-primary-rest);
@@ -603,16 +604,14 @@ summary {
 }
 
 .mx_Dialog button.mx_LegacyDialogButton.danger,
-.mx_Dialog_buttons button.mx_LegacyDialogButton.danger,
-.mx_Dialog input[type="submit"].danger {
+.mx_Dialog input.mx_LegacyDialogButton[type="submit"].danger {
     background-color: var(--cpd-color-bg-critical-primary);
     border: solid 1px var(--cpd-color-bg-critical-primary);
     color: var(--cpd-color-text-on-solid-primary);
 }
 
 .mx_Dialog button.mx_LegacyDialogButton.warning,
-.mx_Dialog_buttons button.mx_LegacyDialogButton.warning,
-.mx_Dialog input[type="submit"].warning {
+.mx_Dialog input.mx_LegacyDialogButton[type="submit"].warning {
     border: solid 1px var(--cpd-color-border-critical-subtle);
     color: var(--cpd-color-text-critical-primary);
 }
@@ -625,8 +624,7 @@ summary {
 }
 
 .mx_Dialog button.mx_LegacyDialogButton:disabled,
-.mx_Dialog_buttons button.mx_LegacyDialogButton:disabled,
-.mx_Dialog input[type="submit"]:disabled {
+.mx_Dialog input.mx_LegacyDialogButton[type="submit"]:disabled {
     background-color: $light-fg-color;
     border: solid 1px $light-fg-color;
     opacity: 0.7;
