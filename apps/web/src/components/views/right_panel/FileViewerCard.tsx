@@ -10,7 +10,6 @@ import { MediaHandle } from "@element-hq/element-web-module-api";
 import BaseCard from "./BaseCard";
 import ErrorBoundary from "../elements/ErrorBoundary";
 import { RegisteredFileViewer } from "../../../modules/FileViewerApi";
-import { ExpandIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import { MediaPreviewEntryButton } from "@element-hq/web-shared-components";
@@ -40,7 +39,7 @@ export function fileViewerOpenButton({
 }): MediaPreviewEntryButton {
     return {
         label: viewer.options.buttonText,
-        icon: <ExpandIcon />,
+        icon: viewer.options.buttonIcon,
         onClick: () =>
             RightPanelStore.instance.setGlobalCard({
                 phase: RightPanelPhases.FileViewer,

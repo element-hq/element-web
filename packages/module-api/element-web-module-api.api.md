@@ -303,8 +303,8 @@ export type FileViewerMatcher = (media: MediaHandle) => boolean;
 
 // @public (undocumented)
 export interface FileViewerOptions {
+    buttonIcon: JSX_2.Element;
     buttonText: string;
-    // (undocumented)
     cardHeader: string;
     id: string;
 }
