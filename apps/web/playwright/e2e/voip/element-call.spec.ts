@@ -199,7 +199,7 @@ test.describe("Element Call", () => {
                 await expect(button).toBeInViewport({ timeout: 5000 });
                 // Room list should show that a call is ongoing
                 await expect(
-                    page.getByRole("option", { name: `Open room TestRoom with a ${callType} call.` }),
+                    page.getByRole("option", { name: `Open room TestRoom, ${callType} call in progress.` }),
                 ).toBeVisible();
                 // And test joining
                 await button.click();

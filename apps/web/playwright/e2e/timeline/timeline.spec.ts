@@ -359,7 +359,7 @@ test.describe("Timeline", () => {
             // Regex patterns due to the edited date
             await expect(
                 page.locator(".mx_EventTile .mx_EventTile_line", { hasText: "MessageEdit" }).getByRole("button", {
-                    name: /Edited at .*? Click to view edits./,
+                    name: /Edited at .*? Select to view edit history./,
                 }),
             ).toBeVisible();
         };

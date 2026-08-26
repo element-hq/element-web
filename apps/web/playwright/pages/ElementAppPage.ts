@@ -9,7 +9,11 @@ Please see LICENSE files in the repository root for full details.
 import { type Locator, type Page, expect } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { rejectToast, rejectToastIfExists } from "@element-hq/element-web-playwright-common";
+import {
+    closeReleaseAnnouncementIfExists,
+    rejectToast,
+    rejectToastIfExists,
+} from "@element-hq/element-web-playwright-common";
 
 import { Settings } from "./settings";
 import { Client } from "./client";
@@ -56,6 +60,8 @@ export class ElementAppPage {
      */
 
     public async openCreateRoomDialog(roomKindname: "New room" | "New video room" = "New room"): Promise<Locator> {
+        // The release announcement wraps the compose button and swallows its menu while shown
+        await closeReleaseAnnouncementIfExists(this.page, "Introducing Sections");
         await this.page
             .getByRole("navigation", { name: "Room list" })
             .getByRole("button", { name: "New", exact: true })

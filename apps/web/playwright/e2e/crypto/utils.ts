@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { expect, type JSHandle, type Page } from "@playwright/test";
+import { closeReleaseAnnouncementIfExists } from "@element-hq/element-web-playwright-common";
 import { type ICreateRoomOpts, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import type {
@@ -469,6 +470,8 @@ export async function sendMessageInCurrentRoom(page: Page, message: string): Pro
  * @param isEncrypted - Whether the room should be encrypted
  */
 export async function createRoom(page: Page, roomName: string, isEncrypted: boolean): Promise<void> {
+    // The release announcement wraps the compose button and swallows its menu while shown
+    await closeReleaseAnnouncementIfExists(page, "Introducing Sections");
     await page.getByRole("navigation", { name: "Room list" }).getByRole("button", { name: "New", exact: true }).click();
     await page.getByRole("menuitem", { name: "New room" }).click();
 

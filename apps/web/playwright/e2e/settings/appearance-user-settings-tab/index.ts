@@ -7,6 +7,7 @@
  */
 
 import { type Locator, type Page } from "@playwright/test";
+import { closeReleaseAnnouncementIfExists } from "@element-hq/element-web-playwright-common";
 
 import { type ElementAppPage } from "../../../pages/ElementAppPage";
 import { test as base, expect } from "../../../element-web-test";
@@ -141,6 +142,8 @@ class Helpers {
      * order to render its tool list, and that no other dialog is currently open.
      */
     private async openCustomThemesDevtool(): Promise<Locator> {
+        // The release announcement can overlay the app and swallow the composer interaction
+        await closeReleaseAnnouncementIfExists(this.page, "Introducing Sections");
         const composer = this.app.getComposer().locator("[contenteditable]");
         await composer.fill("/devtools");
         await composer.press("Enter");
@@ -163,6 +166,9 @@ class Helpers {
         );
         await dialog.getByRole("textbox", { name: "Custom theme URL" }).fill(this.CUSTOM_THEME_URL);
         await dialog.getByRole("button", { name: "Add custom theme" }).click();
+        // Wait for the theme to be fetched and listed before removing the route,
+        // otherwise the fetch can race the unroute and silently fail
+        await expect(dialog.getByRole("listitem", { name: this.CUSTOM_THEME.name })).toBeVisible();
         await this.page.unroute(this.CUSTOM_THEME_URL);
 
         await this.app.closeDialog();
