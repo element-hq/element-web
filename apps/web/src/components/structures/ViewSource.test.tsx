@@ -72,6 +72,7 @@ describe("ViewSource", () => {
             user: MatrixClientPeg.get()!.getSafeUserId(),
             room: ROOM_ID,
             event: true,
+            id: "$event2:example.org",
         });
         const { getByRole, asFragment } = render(<ViewSource mxEvent={event} onFinished={() => {}} />);
         const editButton = getByRole("button", { name: "Edit" });

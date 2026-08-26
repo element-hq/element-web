@@ -63,7 +63,7 @@ exports[`ViewSource > should be able to edit a message 1`] = `
       <span
         class="mx_CopyableText"
       >
-        Event ID: $0.3489593811169033-0.9457090711759738
+        Event ID: $event2:example.org
         <button
           aria-labelledby="react-use-id-2"
           class="_icon-button_1215g_8 mx_CopyableText_copyButton"
@@ -138,7 +138,7 @@ exports[`ViewSource > should be able to edit a message 1`] = `
   },
   "m.relates_to": {
     "rel_type": "m.replace",
-    "event_id": "$0.3489593811169033-0.9457090711759738"
+    "event_id": "$event2:example.org"
   }
 }
         </textarea>
