@@ -6,9 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import fetchMock from "@fetch-mock/jest";
+// @vitest-environment happy-dom
+// @vitest-environment-options {"settings": {"disableCSSFileLoading": true, "handleDisabledFileLoadingAsSuccess": true}}
 
-import getExportCSS from "../../../../src/utils/exportUtils/exportCSS";
+import fetchMock from "@fetch-mock/vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import getExportCSS from "./exportCSS";
+
+vi.mock("./exportCustomCSS.css?raw", () => ({ default: "css-file-stub" }));
 
 describe("exportCSS", () => {
     describe("getExportCSS", () => {

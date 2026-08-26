@@ -5,17 +5,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import React from "react";
-import { act, render, screen, waitFor } from "jest-matrix-react";
+import { describe, it, expect, beforeEach } from "vitest";
+import { act, render, screen, waitFor } from "test-utils-rtl";
 import { useEventPresentation } from "@element-hq/web-shared-components";
 
-import { Layout } from "../../../src/settings/enums/Layout";
-import {
-    EventPresentationContextProvider,
-    getEventPresentation,
-} from "../../../src/utils/EventPresentationContextProvider";
-import SettingsStore from "../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../src/settings/SettingLevel";
+import { Layout } from "../settings/enums/Layout";
+import { EventPresentationContextProvider, getEventPresentation } from "./EventPresentationContextProvider";
+import SettingsStore from "../settings/SettingsStore";
+import { SettingLevel } from "../settings/SettingLevel";
 
 const PresentationProbe: React.FC = () => {
     const { layout, density } = useEventPresentation();

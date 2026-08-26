@@ -6,6 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+// @vitest-environment-options {"settings": {"disableCSSFileLoading": true, "handleDisabledFileLoadingAsSuccess": true}}
+
 import {
     EventTimeline,
     type EventTimelineSet,
@@ -21,23 +24,22 @@ import {
     RoomMember,
     RoomState,
 } from "matrix-js-sdk/src/matrix";
-import fetchMock from "@fetch-mock/jest";
+import fetchMock from "@fetch-mock/vitest";
 import escapeHtml from "escape-html";
 import { type RelationsContainer } from "matrix-js-sdk/src/models/relations-container";
-import { mocked } from "jest-mock";
+import { beforeEach, describe, expect, it, vi, type Mocked } from "vitest";
+import { filterConsole, mkReaction, mkStubRoom, REPEATABLE_DATE, stubClient, TestSDKContext } from "test-utils";
 
-import { filterConsole, mkReaction, mkStubRoom, REPEATABLE_DATE, stubClient } from "../../../test-utils";
-import { ExportType, type IExportOptions } from "../../../../src/utils/exportUtils/exportUtils";
-import SdkConfig from "../../../../src/SdkConfig";
-import HTMLExporter from "../../../../src/utils/exportUtils/HtmlExport";
-import DMRoomMap from "../../../../src/utils/DMRoomMap";
-import { mediaFromMxc } from "../../../../src/customisations/Media";
-import SettingsStore from "../../../../src/settings/SettingsStore";
-import { SDKContextClass } from "../../../../src/contexts/SDKContextClass";
-import { TestSDKContext } from "../../TestSDKContext.ts";
+import { ExportType, type IExportOptions } from "./exportUtils";
+import SdkConfig from "../../SdkConfig";
+import HTMLExporter from "./HtmlExport";
+import DMRoomMap from "../DMRoomMap";
+import { mediaFromMxc } from "../../customisations/Media";
+import SettingsStore from "../../settings/SettingsStore";
+import { SDKContextClass } from "../../contexts/SDKContextClass";
 
-jest.mock("jszip");
-jest.mock("../../../../src/settings/SettingsStore");
+vi.mock("jszip");
+vi.mock("../../settings/SettingsStore");
 
 const EVENT_MESSAGE: IRoomEvent = {
     event_id: "$1",
@@ -104,7 +106,7 @@ const EVENT_MENTION: IRoomEvent = {
 };
 
 describe("HTMLExport", () => {
-    let client: jest.Mocked<MatrixClient>;
+    let client: Mocked<MatrixClient>;
     let room: Room;
     let sdkContext: TestSDKContext;
 
@@ -119,12 +121,18 @@ describe("HTMLExport", () => {
         "Cleaning up",
     );
 
-    beforeEach(() => {
-        jest.clearAllMocks();
-        jest.useFakeTimers();
-        jest.setSystemTime(REPEATABLE_DATE);
+    beforeEach(async () => {
+        vi.clearAllMocks();
+        vi.useFakeTimers();
+        vi.setSystemTime(REPEATABLE_DATE);
 
-        client = stubClient() as jest.Mocked<MatrixClient>;
+        // jsdom had a global stub for these; happy-dom does not, and the automocked "jszip" module
+        // makes `zip.generateAsync()` resolve to `undefined`, which `file-saver`'s `saveAs` then
+        // passes straight to `URL.createObjectURL`.
+        vi.spyOn(URL, "createObjectURL").mockReturnValue("blob:mock");
+        vi.spyOn(URL, "revokeObjectURL").mockImplementation(() => {});
+
+        client = stubClient() as Mocked<MatrixClient>;
         sdkContext = new TestSDKContext();
         // @ts-ignore HTMLExport uses SDKContext in the constructor
         SDKContextClass.instance = sdkContext;
@@ -135,8 +143,10 @@ describe("HTMLExport", () => {
         client.getRoom.mockReturnValue(room);
 
         // Set up a default mock that uses the actual SettingsStore implementation
-        const actualSettingsStore = jest.requireActual("../../../../src/settings/SettingsStore").default;
-        mocked(SettingsStore).getValue.mockImplementation((name: any, roomId?: any, excludeDefault?: any): any => {
+        const actualSettingsStore = (
+            await vi.importActual<typeof import("../../settings/SettingsStore")>("../../settings/SettingsStore")
+        ).default;
+        vi.mocked(SettingsStore).getValue.mockImplementation((name: any, roomId?: any, excludeDefault?: any): any => {
             // Default to the real implementation
             return actualSettingsStore.getValue(name, roomId, excludeDefault);
         });
@@ -177,12 +187,12 @@ describe("HTMLExport", () => {
         const reaction = mkReaction(firstMessage);
 
         const relationsContainer = {
-            getRelations: jest.fn(),
-            getChildEventsForEvent: jest.fn(),
+            getRelations: vi.fn(),
+            getChildEventsForEvent: vi.fn(),
         } as unknown as RelationsContainer;
         const relations = new Relations(RelationType.Annotation, EventType.Reaction, client);
         relations.addEvent(reaction);
-        relationsContainer.getChildEventsForEvent = jest
+        relationsContainer.getChildEventsForEvent = vi
             .fn()
             .mockImplementation(
                 (eventId: string, relationType: RelationType | string, eventType: EventType | string) => {
@@ -197,7 +207,7 @@ describe("HTMLExport", () => {
             getLiveTimeline: () => timeline,
         } as unknown as EventTimelineSet;
         const timeline = new EventTimeline(timelineSet);
-        room.getUnfilteredTimelineSet = jest.fn().mockReturnValue(timelineSet);
+        room.getUnfilteredTimelineSet = vi.fn().mockReturnValue(timelineSet);
         return reaction;
     }
 
@@ -270,7 +280,7 @@ describe("HTMLExport", () => {
 
         const mxc = "mxc://www.example.com/avatars/nice-room.jpeg";
         const avatar = "011011000110111101101100";
-        jest.spyOn(room, "getMxcAvatarUrl").mockReturnValue(mxc);
+        vi.spyOn(room, "getMxcAvatarUrl").mockReturnValue(mxc);
         mockMxc(mxc, avatar);
 
         const exporter = new HTMLExporter(
@@ -355,7 +365,7 @@ describe("HTMLExport", () => {
     it("should include avatars", async () => {
         mockMessages(EVENT_MESSAGE);
 
-        jest.spyOn(RoomMember.prototype, "getMxcAvatarUrl").mockReturnValue("mxc://example.org/avatar.bmp");
+        vi.spyOn(RoomMember.prototype, "getMxcAvatarUrl").mockReturnValue("mxc://example.org/avatar.bmp");
 
         const avatarContent = "this is a bitmap all the pixels are red :^-)";
         mockMxc("mxc://example.org/avatar.bmp", avatarContent);
@@ -415,7 +425,7 @@ describe("HTMLExport", () => {
     it("should handle when events sender cannot be found in room state", async () => {
         mockMessages(EVENT_MESSAGE);
 
-        jest.spyOn(RoomState.prototype, "getSentinelMember").mockReturnValue(null);
+        vi.spyOn(RoomState.prototype, "getSentinelMember").mockReturnValue(null);
 
         const exporter = new HTMLExporter(
             room,
@@ -532,7 +542,7 @@ describe("HTMLExport", () => {
 
         mockMxc("mxc://example.org/test-id", attachmentBody);
 
-        jest.spyOn(client, "mxcUrlToHttp").mockReturnValue(null);
+        vi.spyOn(client, "mxcUrlToHttp").mockReturnValue(null);
 
         const exporter = new HTMLExporter(
             room,
@@ -722,9 +732,9 @@ describe("HTMLExport", () => {
 
     it("should not crash when jump to date flag is enabled", async () => {
         // Override just the feature flag for this specific test
-        const originalMock = mocked(SettingsStore).getValue.getMockImplementation();
+        const originalMock = vi.mocked(SettingsStore).getValue.getMockImplementation();
 
-        mocked(SettingsStore).getValue.mockImplementation((name: any, roomId?: any, excludeDefault?: any): any => {
+        vi.mocked(SettingsStore).getValue.mockImplementation((name: any, roomId?: any, excludeDefault?: any): any => {
             if (name === "feature_jump_to_date") {
                 return true;
             }

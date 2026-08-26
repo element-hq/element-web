@@ -7,14 +7,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mockPlatformPeg, unmockPlatformPeg } from "../../test-utils";
+// @vitest-environment happy-dom
 
-const PATH_TO_KEYBOARD_SHORTCUTS = "../../../src/accessibility/KeyboardShortcuts";
-const PATH_TO_KEYBOARD_SHORTCUT_UTILS = "../../../src/accessibility/KeyboardShortcutUtils";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import { mockPlatformPeg, unmockPlatformPeg } from "test-utils";
+
+const PATH_TO_KEYBOARD_SHORTCUTS = "./KeyboardShortcuts";
+const PATH_TO_KEYBOARD_SHORTCUT_UTILS = "./KeyboardShortcutUtils";
 
 const mockKeyboardShortcuts = (override: Record<string, any>) => {
-    jest.doMock(PATH_TO_KEYBOARD_SHORTCUTS, () => {
-        const original = jest.requireActual(PATH_TO_KEYBOARD_SHORTCUTS);
+    vi.doMock(PATH_TO_KEYBOARD_SHORTCUTS, async () => {
+        const original = await vi.importActual(PATH_TO_KEYBOARD_SHORTCUTS);
         return {
             ...original,
             ...override,
@@ -27,7 +31,7 @@ const getUtils = async () => await import(PATH_TO_KEYBOARD_SHORTCUT_UTILS);
 describe("KeyboardShortcutUtils", () => {
     beforeEach(() => {
         unmockPlatformPeg();
-        jest.resetModules();
+        vi.resetModules();
     });
 
     it("doesn't change KEYBOARD_SHORTCUTS when getting shortcuts", async () => {
@@ -39,7 +43,7 @@ describe("KeyboardShortcutUtils", () => {
             MAC_ONLY_SHORTCUTS: ["Keybind1"],
             DESKTOP_SHORTCUTS: ["Keybind2"],
         });
-        mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
+        mockPlatformPeg({ overrideBrowserShortcuts: vi.fn().mockReturnValue(false) });
         const utils = await getUtils();
         const file = await getFile();
         const copyKeyboardShortcuts = Object.assign({}, file.KEYBOARD_SHORTCUTS);
@@ -62,7 +66,7 @@ describe("KeyboardShortcutUtils", () => {
                 MAC_ONLY_SHORTCUTS: ["Keybind1"],
                 DESKTOP_SHORTCUTS: ["Keybind2"],
             });
-            mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
+            mockPlatformPeg({ overrideBrowserShortcuts: vi.fn().mockReturnValue(false) });
             expect((await getUtils()).getKeyboardShortcuts()).toEqual({ Keybind4: {} });
         });
 
@@ -75,7 +79,7 @@ describe("KeyboardShortcutUtils", () => {
                 MAC_ONLY_SHORTCUTS: [],
                 DESKTOP_SHORTCUTS: ["Keybind2"],
             });
-            mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(true) });
+            mockPlatformPeg({ overrideBrowserShortcuts: vi.fn().mockReturnValue(true) });
             expect((await getUtils()).getKeyboardShortcuts()).toEqual({ Keybind1: {}, Keybind2: {} });
         });
     });

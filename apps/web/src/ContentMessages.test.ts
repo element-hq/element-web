@@ -6,7 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked } from "jest-mock";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach } from "vitest";
+import "vitest-canvas-mock";
 import {
     type ISendEventResponse,
     type MatrixClient,
@@ -16,30 +19,32 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { type ImageInfo } from "matrix-js-sdk/src/types";
 import encrypt, { type IEncryptedFile } from "matrix-encrypt-attachment";
+import { createTestClient, flushPromises, mkEvent } from "test-utils";
 
-import ContentMessages, { UploadCanceledError, uploadFile } from "../../src/ContentMessages";
-import { doMaybeLocalRoomAction } from "../../src/utils/local-room";
-import { createTestClient, flushPromises, mkEvent } from "../test-utils";
-import { BlurhashEncoder } from "../../src/BlurhashEncoder";
-import Modal from "../../src/Modal";
-import ErrorDialog from "../../src/components/views/dialogs/ErrorDialog";
-import { _t } from "../../src/languageHandler";
+import ContentMessages, { UploadCanceledError, uploadFile } from "./ContentMessages";
+import { doMaybeLocalRoomAction } from "./utils/local-room";
+import { BlurhashEncoder } from "./BlurhashEncoder";
+import Modal from "./Modal";
+import ErrorDialog from "./components/views/dialogs/ErrorDialog";
+import { _t } from "./languageHandler";
 
-jest.mock("matrix-encrypt-attachment", () => ({ encryptAttachment: jest.fn().mockResolvedValue({}) }));
+vi.mock("matrix-encrypt-attachment", () => ({ default: { encryptAttachment: vi.fn().mockResolvedValue({}) } }));
 
-jest.mock("../../src/BlurhashEncoder", () => ({
+vi.mock("./BlurhashEncoder", () => ({
     BlurhashEncoder: {
         instance: {
-            getBlurhash: jest.fn(),
+            getBlurhash: vi.fn(),
         },
     },
 }));
 
-jest.mock("../../src/utils/local-room", () => ({
-    doMaybeLocalRoomAction: jest.fn(),
+vi.mock("./utils/local-room", () => ({
+    doMaybeLocalRoomAction: vi.fn(),
 }));
 
 const createElement = document.createElement.bind(document);
+
+vi.stubGlobal("OffscreenCanvas", undefined);
 
 describe("ContentMessages", () => {
     const stickerUrl = "https://example.com/sticker";
@@ -58,8 +63,8 @@ describe("ContentMessages", () => {
 
     describe("sendStickerContentToRoom", () => {
         beforeEach(() => {
-            mocked(client.sendStickerMessage).mockReturnValue(prom);
-            mocked(doMaybeLocalRoomAction).mockImplementation(
+            vi.mocked(client.sendStickerMessage).mockReturnValue(prom);
+            vi.mocked(doMaybeLocalRoomAction).mockImplementation(
                 <T>(roomId: string, fn: (actualRoomId: string) => Promise<T>, client?: MatrixClient) => {
                     return fn(roomId);
                 },
@@ -77,28 +82,31 @@ describe("ContentMessages", () => {
         beforeEach(() => {
             Object.defineProperty(global.Image.prototype, "src", {
                 // Define the property setter
+                configurable: true,
                 set(src) {
                     window.setTimeout(() => this.onload());
                 },
             });
             Object.defineProperty(global.Image.prototype, "height", {
+                configurable: true,
                 get() {
                     return 600;
                 },
             });
             Object.defineProperty(global.Image.prototype, "width", {
+                configurable: true,
                 get() {
                     return 800;
                 },
             });
-            mocked(doMaybeLocalRoomAction).mockImplementation(
+            vi.mocked(doMaybeLocalRoomAction).mockImplementation(
                 <T>(roomId: string, fn: (actualRoomId: string) => Promise<T>) => fn(roomId),
             );
-            mocked(BlurhashEncoder.instance.getBlurhash).mockResolvedValue("blurhashstring");
+            vi.mocked(BlurhashEncoder.instance.getBlurhash).mockResolvedValue("blurhashstring");
         });
 
         it("should use m.image for image files", async () => {
-            mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
+            vi.mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
             const file = new File([], "fileName", { type: "image/jpeg" });
             await contentMessages.sendContentToRoom(file, roomId, undefined, client, undefined);
             expect(client.sendMessage).toHaveBeenCalledWith(
@@ -112,7 +120,7 @@ describe("ContentMessages", () => {
         });
 
         it("should use m.image for PNG files which cannot be parsed but successfully thumbnail", async () => {
-            mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
+            vi.mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
             const file = new File([], "fileName", { type: "image/png" });
             await contentMessages.sendContentToRoom(file, roomId, undefined, client, undefined);
             expect(client.sendMessage).toHaveBeenCalledWith(
@@ -126,9 +134,9 @@ describe("ContentMessages", () => {
         });
 
         it("should fall back to m.file for invalid image files", async () => {
-            mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
+            vi.mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
             const file = new File([], "fileName", { type: "image/jpeg" });
-            mocked(BlurhashEncoder.instance.getBlurhash).mockRejectedValue("NOT_AN_IMAGE");
+            vi.mocked(BlurhashEncoder.instance.getBlurhash).mockRejectedValue("NOT_AN_IMAGE");
             await contentMessages.sendContentToRoom(file, roomId, undefined, client, undefined);
             expect(client.sendMessage).toHaveBeenCalledWith(
                 roomId,
@@ -141,12 +149,12 @@ describe("ContentMessages", () => {
         });
 
         it("should use m.video for video files", async () => {
-            jest.spyOn(document, "createElement").mockImplementation((tagName) => {
+            vi.spyOn(document, "createElement").mockImplementation((tagName) => {
                 const element = createElement(tagName);
                 if (tagName === "video") {
-                    (<HTMLVideoElement>element).load = jest.fn();
+                    (<HTMLVideoElement>element).load = vi.fn();
                     (<HTMLVideoElement>element).play = () => element.onloadeddata!(new Event("loadeddata"));
-                    (<HTMLVideoElement>element).pause = jest.fn();
+                    (<HTMLVideoElement>element).pause = vi.fn();
                     Object.defineProperty(element, "videoHeight", {
                         get() {
                             return 600;
@@ -166,7 +174,7 @@ describe("ContentMessages", () => {
                 return element;
             });
 
-            mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
+            vi.mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
             const file = new File([], "fileName", { type: "video/mp4" });
             await contentMessages.sendContentToRoom(file, roomId, undefined, client, undefined);
             expect(client.sendMessage).toHaveBeenCalledWith(
@@ -183,7 +191,7 @@ describe("ContentMessages", () => {
         });
 
         it("should use m.audio for audio files", async () => {
-            jest.spyOn(document, "createElement").mockImplementation((tagName) => {
+            vi.spyOn(document, "createElement").mockImplementation((tagName) => {
                 const element = createElement(tagName);
                 if (tagName === "audio") {
                     Object.defineProperty(element, "duration", {
@@ -200,7 +208,7 @@ describe("ContentMessages", () => {
                 return element;
             });
 
-            mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
+            vi.mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
             const file = new File([], "fileName", { type: "audio/mp3" });
             await contentMessages.sendContentToRoom(file, roomId, undefined, client, undefined);
             expect(client.sendMessage).toHaveBeenCalledWith(
@@ -217,7 +225,7 @@ describe("ContentMessages", () => {
         });
 
         it("should fall back to m.file for invalid audio files", async () => {
-            jest.spyOn(document, "createElement").mockImplementation((tagName) => {
+            vi.spyOn(document, "createElement").mockImplementation((tagName) => {
                 const element = createElement(tagName);
                 if (tagName === "audio") {
                     Object.defineProperty(element, "src", {
@@ -228,7 +236,7 @@ describe("ContentMessages", () => {
                 }
                 return element;
             });
-            mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
+            vi.mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
             const file = new File([], "fileName", { type: "audio/mp3" });
             await contentMessages.sendContentToRoom(file, roomId, undefined, client, undefined);
             expect(client.sendMessage).toHaveBeenCalledWith(
@@ -242,7 +250,7 @@ describe("ContentMessages", () => {
         });
 
         it("should default to name 'Attachment' if file doesn't have a name", async () => {
-            mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
+            vi.mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
             const file = new File([], "", { type: "text/plain" });
             await contentMessages.sendContentToRoom(file, roomId, undefined, client, undefined);
             expect(client.sendMessage).toHaveBeenCalledWith(
@@ -257,7 +265,7 @@ describe("ContentMessages", () => {
         });
 
         it("should keep RoomUpload's total and loaded values up to date", async () => {
-            mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
+            vi.mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
             const file = new File([], "", { type: "text/plain" });
             const prom = contentMessages.sendContentToRoom(file, roomId, undefined, client, undefined);
             const [upload] = contentMessages.getCurrentUploads();
@@ -265,7 +273,7 @@ describe("ContentMessages", () => {
             expect(upload.loaded).toBe(0);
             expect(upload.total).toBe(file.size);
             await flushPromises();
-            const { progressHandler } = mocked(client.uploadContent).mock.calls[0][1]!;
+            const { progressHandler } = vi.mocked(client.uploadContent).mock.calls[0][1]!;
             progressHandler!({ loaded: 123, total: 1234 });
             expect(upload.loaded).toBe(123);
             expect(upload.total).toBe(1234);
@@ -273,7 +281,7 @@ describe("ContentMessages", () => {
         });
 
         it("properly handles replies", async () => {
-            mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
+            vi.mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
             const file = new File([], "fileName", { type: "image/jpeg" });
             const replyToEvent = mkEvent({
                 type: "m.room.message",
@@ -297,7 +305,7 @@ describe("ContentMessages", () => {
         });
 
         it("handles 413 error", async () => {
-            mocked(client.uploadContent).mockRejectedValue(
+            vi.mocked(client.uploadContent).mockRejectedValue(
                 new MatrixError(
                     {
                         errcode: "M_TOO_LARGE",
@@ -307,7 +315,7 @@ describe("ContentMessages", () => {
                 ),
             );
             const file = new File([], "fileName", { type: "image/jpeg" });
-            const dialogSpy = jest.spyOn(Modal, "createDialog");
+            const dialogSpy = vi.spyOn(Modal, "createDialog");
             await contentMessages.sendContentToRoom(file, roomId, undefined, client, undefined);
             expect(dialogSpy).toHaveBeenCalledWith(
                 ErrorDialog,
@@ -325,7 +333,7 @@ describe("ContentMessages", () => {
         const roomId = "!roomId:server";
 
         beforeEach(() => {
-            mocked(doMaybeLocalRoomAction).mockImplementation(
+            vi.mocked(doMaybeLocalRoomAction).mockImplementation(
                 <T>(roomId: string, fn: (actualRoomId: string) => Promise<T>) => fn(roomId),
             );
         });
@@ -364,11 +372,11 @@ describe("ContentMessages", () => {
     describe("cancelUpload", () => {
         it("should cancel in-flight upload", async () => {
             const deferred = Promise.withResolvers<UploadResponse>();
-            mocked(client.uploadContent).mockReturnValue(deferred.promise);
+            vi.mocked(client.uploadContent).mockReturnValue(deferred.promise);
             const file1 = new File([], "file1");
             const prom = contentMessages.sendContentToRoom(file1, roomId, undefined, client, undefined);
             await flushPromises();
-            const { abortController } = mocked(client.uploadContent).mock.calls[0][1]!;
+            const { abortController } = vi.mocked(client.uploadContent).mock.calls[0][1]!;
             expect(abortController!.signal.aborted).toBeFalsy();
             const [upload] = contentMessages.getCurrentUploads();
             contentMessages.cancelUpload(upload);
@@ -383,13 +391,13 @@ describe("uploadFile", () => {
     let client: MatrixClient;
 
     beforeEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
         client = createTestClient();
     });
 
     it("should not encrypt the file if the room isn't encrypted", async () => {
-        mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
-        const progressHandler = jest.fn();
+        vi.mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
+        const progressHandler = vi.fn();
         const file = new Blob([]);
 
         const res = await uploadFile(client, "!roomId:server", file, progressHandler);
@@ -401,13 +409,13 @@ describe("uploadFile", () => {
     });
 
     it("should encrypt the file if the room is encrypted", async () => {
-        jest.spyOn(client.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
-        mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
-        mocked(encrypt.encryptAttachment).mockResolvedValue({
+        vi.spyOn(client.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
+        vi.mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
+        vi.mocked(encrypt.encryptAttachment).mockResolvedValue({
             data: new ArrayBuffer(123),
             info: {} as IEncryptedFile,
         });
-        const progressHandler = jest.fn();
+        const progressHandler = vi.fn();
         const file = new Blob(["123"]);
 
         const res = await uploadFile(client, "!roomId:server", file, progressHandler);
@@ -427,11 +435,11 @@ describe("uploadFile", () => {
                 type: "application/octet-stream",
             }),
         );
-        expect(mocked(client.uploadContent).mock.calls[0][0]).not.toBe(file);
+        expect(vi.mocked(client.uploadContent).mock.calls[0][0]).not.toBe(file);
     });
 
     it("should throw UploadCanceledError upon aborting the upload", async () => {
-        mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://foo/bar" });
+        vi.mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://foo/bar" });
         const file = new Blob([]);
         const controller = new AbortController();
         controller.abort();

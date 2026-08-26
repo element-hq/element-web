@@ -6,6 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import {
     MatrixEvent,
     NotificationCountType,
@@ -14,7 +16,9 @@ import {
     ReceiptType,
     type AccountDataEvents,
 } from "matrix-js-sdk/src/matrix";
-import { type Mocked, mocked } from "jest-mock-vitest-adapter";
+import { describe, it, expect, beforeEach, afterEach, vi, type Mocked, type MockInstance } from "vitest";
+import { getMockClientWithEventEmitter, mockClientMethodsServer } from "test-utils/client";
+import { mkMessage, stubClient } from "test-utils/test-utils";
 
 import {
     localNotificationsAreSilenced,
@@ -27,14 +31,12 @@ import {
     getThreadNotificationLevel,
     getMarkedUnreadState,
     setMarkedUnreadState,
-} from "../../../src/utils/notifications";
-import { getMockClientWithEventEmitter, mockClientMethodsServer } from "../../test-utils/client";
-import { mkMessage, stubClient } from "../../test-utils/test-utils";
-import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
-import { NotificationLevel } from "../../../src/stores/notifications/NotificationLevel";
-import { SettingLevel } from "../../../src/settings/SettingLevel";
-import MatrixClientBackedController from "../../../src/settings/controllers/MatrixClientBackedController";
-import SettingsStore from "../../../src/settings/SettingsStore";
+} from "./notifications";
+import { MatrixClientPeg } from "../MatrixClientPeg";
+import { NotificationLevel } from "../stores/notifications/NotificationLevel";
+import { SettingLevel } from "../settings/SettingLevel";
+import MatrixClientBackedController from "../settings/controllers/MatrixClientBackedController";
+import SettingsStore from "../settings/SettingsStore";
 
 describe("notifications", () => {
     let accountDataStore: Record<string, MatrixEvent> = {};
@@ -42,18 +44,18 @@ describe("notifications", () => {
     let accountDataEventKey: keyof AccountDataEvents;
 
     beforeEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
         mockClient = getMockClientWithEventEmitter({
             ...mockClientMethodsServer(),
-            isGuest: jest.fn().mockReturnValue(false),
-            getAccountData: jest.fn().mockImplementation((eventType) => accountDataStore[eventType]),
-            setAccountData: jest.fn().mockImplementation((eventType, content) => {
+            isGuest: vi.fn().mockReturnValue(false),
+            getAccountData: vi.fn().mockImplementation((eventType) => accountDataStore[eventType]),
+            setAccountData: vi.fn().mockImplementation((eventType, content) => {
                 accountDataStore[eventType] = new MatrixEvent({
                     type: eventType,
                     content,
                 });
             }),
-            isVersionSupported: jest.fn().mockImplementation(async (v) => v === "v1.4"),
+            isVersionSupported: vi.fn().mockImplementation(async (v) => v === "v1.4"),
         });
 
         // Ensure unstable settings are supported, otherwise it will use the default value.
@@ -65,7 +67,7 @@ describe("notifications", () => {
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
         SettingsStore.reset();
     });
 
@@ -89,7 +91,7 @@ describe("notifications", () => {
                 // We need to spy `getValue` because setting these keys requires mocking
                 // the platform to support notifications, which is out of scope for this test.
                 const origFn = SettingsStore.getValue;
-                jest.spyOn(SettingsStore, "getValue").mockImplementation((name, ...args) => {
+                vi.spyOn(SettingsStore, "getValue").mockImplementation((name, ...args) => {
                     if (name === settingKey) {
                         return true;
                     }
@@ -128,14 +130,14 @@ describe("notifications", () => {
     describe("clearRoomNotification", () => {
         let client: MatrixClient;
         let room: Room;
-        let sendReadReceiptSpy: jest.SpyInstance;
+        let sendReadReceiptSpy: MockInstance;
         const ROOM_ID = "123";
         const USER_ID = "@bob:example.org";
         let message: MatrixEvent;
 
         beforeEach(() => {
             stubClient();
-            client = mocked(MatrixClientPeg.safeGet());
+            client = vi.mocked(MatrixClientPeg.safeGet());
             room = new Room(ROOM_ID, client, USER_ID);
             message = mkMessage({
                 event: true,
@@ -144,8 +146,8 @@ describe("notifications", () => {
                 msg: "Hello",
             });
             room.addLiveEvents([message], { addToState: true });
-            sendReadReceiptSpy = jest.spyOn(client, "sendReadReceipt").mockResolvedValue({});
-            jest.spyOn(client, "getRooms").mockReturnValue([room]);
+            sendReadReceiptSpy = vi.spyOn(client, "sendReadReceipt").mockResolvedValue({});
+            vi.spyOn(client, "getRooms").mockReturnValue([room]);
             SettingsStore.setValue("sendReadReceipts", null, SettingLevel.DEVICE, true);
         });
 
@@ -156,7 +158,7 @@ describe("notifications", () => {
 
         it("marks the room as read even if the receipt failed", async () => {
             room.setUnreadNotificationCount(NotificationCountType.Total, 5);
-            sendReadReceiptSpy = jest.spyOn(client, "sendReadReceipt").mockReset().mockRejectedValue({ error: 42 });
+            sendReadReceiptSpy = vi.spyOn(client, "sendReadReceipt").mockReset().mockRejectedValue({ error: 42 });
 
             await expect(async () => {
                 await clearRoomNotification(room, client);
@@ -176,17 +178,17 @@ describe("notifications", () => {
     describe("clearAllNotifications", () => {
         let client: MatrixClient;
         let room: Room;
-        let sendReadReceiptSpy: jest.SpyInstance;
+        let sendReadReceiptSpy: MockInstance;
 
         const ROOM_ID = "123";
         const USER_ID = "@bob:example.org";
 
         beforeEach(() => {
             stubClient();
-            client = mocked(MatrixClientPeg.safeGet());
+            client = vi.mocked(MatrixClientPeg.safeGet());
             room = new Room(ROOM_ID, client, USER_ID);
-            sendReadReceiptSpy = jest.spyOn(client, "sendReadReceipt").mockResolvedValue({});
-            jest.spyOn(client, "getRooms").mockReturnValue([room]);
+            sendReadReceiptSpy = vi.spyOn(client, "sendReadReceipt").mockResolvedValue({});
+            vi.spyOn(client, "getRooms").mockReturnValue([room]);
             SettingsStore.setValue("sendReadReceipts", null, SettingLevel.DEVICE, true);
         });
 
@@ -237,14 +239,14 @@ describe("notifications", () => {
 
         beforeEach(() => {
             stubClient();
-            client = mocked(MatrixClientPeg.safeGet());
+            client = vi.mocked(MatrixClientPeg.safeGet());
             room = new Room(ROOM_ID, client, USER_ID);
         });
 
         it("reads from stable prefix", async () => {
-            room.getAccountData = jest.fn().mockImplementation((eventType: string) => {
+            room.getAccountData = vi.fn().mockImplementation((eventType: string) => {
                 if (eventType === "m.marked_unread") {
-                    return { getContent: jest.fn().mockReturnValue({ unread: true }) };
+                    return { getContent: vi.fn().mockReturnValue({ unread: true }) };
                 }
                 return null;
             });
@@ -252,9 +254,9 @@ describe("notifications", () => {
         });
 
         it("reads from unstable prefix", async () => {
-            room.getAccountData = jest.fn().mockImplementation((eventType: string) => {
+            room.getAccountData = vi.fn().mockImplementation((eventType: string) => {
                 if (eventType === "com.famedly.marked_unread") {
-                    return { getContent: jest.fn().mockReturnValue({ unread: true }) };
+                    return { getContent: vi.fn().mockReturnValue({ unread: true }) };
                 }
                 return null;
             });
@@ -262,7 +264,7 @@ describe("notifications", () => {
         });
 
         it("returns undefined if neither prefix is present", async () => {
-            room.getAccountData = jest.fn().mockImplementation((eventType: string) => {
+            room.getAccountData = vi.fn().mockImplementation((eventType: string) => {
                 return null;
             });
             expect(getMarkedUnreadState(room)).toBe(undefined);
@@ -278,7 +280,7 @@ describe("notifications", () => {
 
         beforeEach(() => {
             stubClient();
-            client = mocked(MatrixClientPeg.safeGet());
+            client = vi.mocked(MatrixClientPeg.safeGet());
             room = new Room(ROOM_ID, client, USER_ID);
         });
 
@@ -298,9 +300,7 @@ describe("notifications", () => {
 
         // set true, existing event = false
         it("sets unread flag to if existing event is false", async () => {
-            room.getAccountData = jest
-                .fn()
-                .mockReturnValue({ getContent: jest.fn().mockReturnValue({ unread: false }) });
+            room.getAccountData = vi.fn().mockReturnValue({ getContent: vi.fn().mockReturnValue({ unread: false }) });
             await setMarkedUnreadState(room, client, true);
             expect(client.setRoomAccountData).toHaveBeenCalledWith(ROOM_ID, "m.marked_unread", {
                 unread: true,
@@ -309,27 +309,21 @@ describe("notifications", () => {
 
         // set false, existing event = false
         it("does nothing if set false and existing event is false", async () => {
-            room.getAccountData = jest
-                .fn()
-                .mockReturnValue({ getContent: jest.fn().mockReturnValue({ unread: false }) });
+            room.getAccountData = vi.fn().mockReturnValue({ getContent: vi.fn().mockReturnValue({ unread: false }) });
             await setMarkedUnreadState(room, client, false);
             expect(client.setRoomAccountData).not.toHaveBeenCalled();
         });
 
         // set true, existing event = true
         it("does nothing if setting true and existing event is true", async () => {
-            room.getAccountData = jest
-                .fn()
-                .mockReturnValue({ getContent: jest.fn().mockReturnValue({ unread: true }) });
+            room.getAccountData = vi.fn().mockReturnValue({ getContent: vi.fn().mockReturnValue({ unread: true }) });
             await setMarkedUnreadState(room, client, true);
             expect(client.setRoomAccountData).not.toHaveBeenCalled();
         });
 
         // set false, existing event = true
         it("sets flag if setting false and existing event is true", async () => {
-            room.getAccountData = jest
-                .fn()
-                .mockReturnValue({ getContent: jest.fn().mockReturnValue({ unread: true }) });
+            room.getAccountData = vi.fn().mockReturnValue({ getContent: vi.fn().mockReturnValue({ unread: true }) });
             await setMarkedUnreadState(room, client, false);
             expect(client.setRoomAccountData).toHaveBeenCalledWith(ROOM_ID, "m.marked_unread", {
                 unread: false,
@@ -372,7 +366,7 @@ describe("notifications", () => {
         ])(
             "returns NotificationLevel $expected when notificationCountType is $expected",
             ({ notificationCountType, expected }) => {
-                jest.spyOn(room, "threadsAggregateNotificationType", "get").mockReturnValue(notificationCountType);
+                vi.spyOn(room, "threadsAggregateNotificationType", "get").mockReturnValue(notificationCountType);
                 expect(getThreadNotificationLevel(room)).toEqual(expected);
             },
         );

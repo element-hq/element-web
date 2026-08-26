@@ -6,12 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked } from "jest-mock";
-import { logger } from "matrix-js-sdk/src/logger";
-import { screen } from "jest-matrix-react";
+// @vitest-environment happy-dom
 
-import { requestMediaPermissions } from "../../../../src/utils/media/requestMediaPermissions";
-import { flushPromises, useMockMediaDevices } from "../../../test-utils";
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import { logger } from "matrix-js-sdk/src/logger";
+import { screen } from "test-utils-rtl";
+import { flushPromises, useMockMediaDevices } from "test-utils";
+
+import { requestMediaPermissions } from "./requestMediaPermissions";
 
 describe("requestMediaPermissions", () => {
     let error: Error;
@@ -28,13 +30,13 @@ describe("requestMediaPermissions", () => {
     beforeEach(() => {
         useMockMediaDevices();
         error = new Error();
-        jest.spyOn(logger, "log");
+        vi.spyOn(logger, "log");
     });
 
     describe("when an audio and video device is available", () => {
         beforeEach(() => {
-            mocked(navigator.mediaDevices.getUserMedia).mockImplementation(
-                async ({ audio, video }: MediaStreamConstraints): Promise<MediaStream> => {
+            vi.mocked(navigator.mediaDevices.getUserMedia).mockImplementation(
+                async ({ audio, video }: MediaStreamConstraints = {}): Promise<MediaStream> => {
                     if (audio && video) return audioVideoStream;
                     return audioStream;
                 },
@@ -48,8 +50,8 @@ describe("requestMediaPermissions", () => {
 
     describe("when calling with video = false and an audio device is available", () => {
         beforeEach(() => {
-            mocked(navigator.mediaDevices.getUserMedia).mockImplementation(
-                async ({ audio, video }: MediaStreamConstraints): Promise<MediaStream> => {
+            vi.mocked(navigator.mediaDevices.getUserMedia).mockImplementation(
+                async ({ audio, video }: MediaStreamConstraints = {}): Promise<MediaStream> => {
                     if (audio && !video) return audioStream;
                     return audioVideoStream;
                 },
@@ -64,8 +66,8 @@ describe("requestMediaPermissions", () => {
     describe("when only an audio stream is available", () => {
         beforeEach(() => {
             error.name = "NotFoundError";
-            mocked(navigator.mediaDevices.getUserMedia).mockImplementation(
-                async ({ audio, video }: MediaStreamConstraints): Promise<MediaStream> => {
+            vi.mocked(navigator.mediaDevices.getUserMedia).mockImplementation(
+                async ({ audio, video }: MediaStreamConstraints = {}): Promise<MediaStream> => {
                     if (audio && video) throw error;
                     if (audio) return audioStream;
                     return audioVideoStream;
@@ -81,7 +83,7 @@ describe("requestMediaPermissions", () => {
     describe("when no device is available", () => {
         beforeEach(async () => {
             error.name = "NotFoundError";
-            mocked(navigator.mediaDevices.getUserMedia).mockImplementation(async (): Promise<MediaStream> => {
+            vi.mocked(navigator.mediaDevices.getUserMedia).mockImplementation(async (): Promise<MediaStream> => {
                 throw error;
             });
             await requestMediaPermissions();
@@ -95,8 +97,8 @@ describe("requestMediaPermissions", () => {
 
     describe("when an Error is raised", () => {
         beforeEach(async () => {
-            mocked(navigator.mediaDevices.getUserMedia).mockImplementation(
-                async ({ audio, video }: MediaStreamConstraints): Promise<MediaStream> => {
+            vi.mocked(navigator.mediaDevices.getUserMedia).mockImplementation(
+                async ({ audio, video }: MediaStreamConstraints = {}): Promise<MediaStream> => {
                     if (audio && video) throw error;
                     return audioVideoStream;
                 },
