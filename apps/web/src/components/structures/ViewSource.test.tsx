@@ -63,4 +63,16 @@ describe("ViewSource", () => {
         const { getByRole } = render(<ViewSource mxEvent={event} onFinished={() => {}} />);
         expect(getByRole("button", { name: "Edit" })).toBeInTheDocument();
     });
+
+    it("should render", () => {
+        const event = mkMessage({
+            msg: "hello",
+            user: SENDER,
+            room: ROOM_ID,
+            event: true,
+            id: "$event1:example.org",
+        });
+        const { asFragment } = render(<ViewSource mxEvent={event} onFinished={() => {}} />);
+        expect(asFragment()).toMatchSnapshot();
+    });
 });
