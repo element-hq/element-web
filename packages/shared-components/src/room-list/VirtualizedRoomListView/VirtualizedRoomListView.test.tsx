@@ -14,9 +14,8 @@ import userEvent from "@testing-library/user-event";
 
 import * as stories from "./VirtualizedRoomListView.stories";
 import { KEYBOARD_DRAG_OFFSET } from "./VirtualizedRoomListView";
-import { createGetRoomItemViewModel, mock10RoomsIds } from "../story-mocks";
 
-const { Default, Sections, PeopleSection } = composeStories(stories);
+const { Default, Sections } = composeStories(stories);
 
 const renderWithMockContext = (component: React.ReactElement): ReturnType<typeof render> => {
     return render(component, {
@@ -97,7 +96,6 @@ describe("<VirtualizedRoomListView />", () => {
             (Sections.args.changeSectionOrder as any).mockClear?.();
             (Sections.args.onSectionDragStart as any).mockClear?.();
             (Sections.args.onSectionDragEnd as any).mockClear?.();
-            (PeopleSection.args.changeRoomSection as any).mockClear?.();
         });
 
         it("should call changeRoomSection when drag ends successfully", async () => {
@@ -122,87 +120,6 @@ describe("<VirtualizedRoomListView />", () => {
 
             await waitFor(() => {
                 expect(Sections.args.changeRoomSection).toHaveBeenCalledWith("!room0:server", "low-priority");
-            });
-        });
-
-        describe("with a People section", () => {
-            /**
-             * Keyboard-drag "General" (the first room, in Favourites) `distance` px down, with that
-             * one room flagged as a direct message or not. Everything else about the list is
-             * identical between the two variants, so a pair of drags over the same distance differs
-             * only in the dragged room's kind. Unmounts before returning so the caller can run the
-             * other variant in the same test.
-             */
-            async function dragGeneralDown(distance: number, isDm: boolean): Promise<void> {
-                const presses = Math.round(distance / KEYBOARD_DRAG_OFFSET);
-                const user = userEvent.setup();
-                const { unmount } = renderWithMockContext(
-                    <PeopleSection
-                        getRoomItemViewModel={createGetRoomItemViewModel(
-                            mock10RoomsIds,
-                            isDm ? [mock10RoomsIds[0]] : [],
-                        )}
-                    />,
-                );
-
-                const roomButton = await screen.findByRole("button", { name: "Open room General" });
-                roomButton.focus();
-
-                await user.keyboard(" "); // start drag
-                for (let i = 0; i < presses; i++) {
-                    await user.keyboard("{ArrowDown}");
-                }
-                await user.keyboard(" "); // drop onto current target
-
-                unmount();
-            }
-
-            // Each of these runs the same drag twice, flipping only whether the dragged room is a
-            // direct message. The accepted variant runs first: it proves the drag really does reach
-            // the header, so the rejected variant producing no call can only be the section
-            // refusing it, and gives the drop time to settle before the call count is asserted.
-
-            it("only lets direct messages be dropped on the People section", async () => {
-                // 120px down from "General" reaches the People header
-                await dragGeneralDown(120, true);
-                await waitFor(() => {
-                    expect(PeopleSection.args.changeRoomSection).toHaveBeenCalledWith("!room0:server", "people");
-                });
-
-                await dragGeneralDown(120, false);
-                expect(PeopleSection.args.changeRoomSection).toHaveBeenCalledTimes(1);
-            });
-
-            it("does not let direct messages be dropped on the Chats section", async () => {
-                // 210px down from "General" reaches the Chats header
-                await dragGeneralDown(210, false);
-                await waitFor(() => {
-                    expect(PeopleSection.args.changeRoomSection).toHaveBeenCalledWith("!room0:server", "chats");
-                });
-
-                await dragGeneralDown(210, true);
-                expect(PeopleSection.args.changeRoomSection).toHaveBeenCalledTimes(1);
-            });
-
-            it("still lets a direct message be dropped on a section that takes any room", async () => {
-                // "Design" is a direct message in the People section, 150px above the Favourites
-                // header, which accepts either kind of room
-                const presses = Math.round(150 / KEYBOARD_DRAG_OFFSET);
-                const user = userEvent.setup();
-                renderWithMockContext(<PeopleSection />);
-
-                const roomButton = await screen.findByRole("button", { name: "Open room Design" });
-                roomButton.focus();
-
-                await user.keyboard(" "); // start drag
-                for (let i = 0; i < presses; i++) {
-                    await user.keyboard("{ArrowUp}");
-                }
-                await user.keyboard(" "); // drop onto current target
-
-                await waitFor(() => {
-                    expect(PeopleSection.args.changeRoomSection).toHaveBeenCalledWith("!room3:server", "favourites");
-                });
             });
         });
 

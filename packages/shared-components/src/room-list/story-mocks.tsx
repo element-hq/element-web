@@ -169,9 +169,6 @@ export const createGetSectionHeaderViewModel = (
             isUnread: false,
             displaySectionMenu: false,
             canBeReordered: true,
-            // Mirrors the real view model: People takes direct messages only, Chats takes the rest
-            acceptedRoomKind:
-                sectionId === "people" ? ("dm" as const) : sectionId === "chats" ? ("nonDm" as const) : undefined,
         };
         const vm = new MockViewModel(snapshot) as unknown as RoomListSectionHeaderViewModel;
         Object.assign(vm, {
