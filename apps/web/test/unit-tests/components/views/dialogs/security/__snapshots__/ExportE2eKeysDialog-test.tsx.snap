@@ -93,6 +93,7 @@ exports[`ExportE2eKeysDialog renders 1`] = `
           value="Export"
         />
         <button
+          class="mx_LegacyDialogButton"
           type="button"
         >
           Cancel
