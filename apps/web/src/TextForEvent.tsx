@@ -33,7 +33,7 @@ import { ALL_RULE_TYPES, ROOM_RULE_TYPES, SERVER_RULE_TYPES, USER_RULE_TYPES } f
 import { WIDGET_LAYOUT_EVENT_TYPE } from "./stores/widgets/WidgetLayoutStore";
 import { RightPanelPhases } from "./stores/right-panel/RightPanelStorePhases";
 import defaultDispatcher from "./dispatcher/dispatcher";
-import { RoomSettingsTab } from "./components/views/dialogs/RoomSettingsDialog";
+import { RoomSettingsTab } from "./components/views/dialogs/RoomSettingsDialog-tab";
 import AccessibleButton from "./components/views/elements/AccessibleButton";
 import RightPanelStore from "./stores/right-panel/RightPanelStore";
 import { highlightEvent, isLocationEvent } from "./utils/EventUtils";
@@ -49,7 +49,7 @@ function getRoomMemberDisplayname(client: MatrixClient, event: MatrixEvent, user
 }
 
 function textForCallEvent(event: MatrixEvent, client: MatrixClient): () => string {
-    const roomName = client.getRoom(event.getRoomId()!)?.name;
+    const roomName = client.getRoom(event.getRoomId())?.name;
     const isSupported = client.supportsVoip();
 
     return isSupported
@@ -151,10 +151,20 @@ function textForMemberEvent(
                 } else {
                     return () => _t("timeline|m.room.member|accepted_invite", { targetName });
                 }
+            } else if (
+                prevContent.membership === KnownMembership.Knock &&
+                SettingsStore.getValue("feature_ask_to_join")
+            ) {
+                return () => _t("timeline|m.room.member|knock_accepted", { senderName, targetName });
             } else {
                 return () => _t("timeline|m.room.member|invite", { senderName, targetName });
             }
         }
+        case KnownMembership.Knock:
+            if (!SettingsStore.getValue("feature_ask_to_join")) return null;
+            return reason
+                ? () => _t("timeline|m.room.member|knock_reason", { senderName, reason })
+                : () => _t("timeline|m.room.member|knock", { senderName });
         case KnownMembership.Ban:
             if (allowJSX) {
                 return reason
@@ -234,6 +244,11 @@ function textForMemberEvent(
                         reason
                             ? _t("timeline|m.room.member|reject_invite_reason", { targetName, reason })
                             : _t("timeline|m.room.member|reject_invite", { targetName });
+                } else if (
+                    prevContent.membership === KnownMembership.Knock &&
+                    SettingsStore.getValue("feature_ask_to_join")
+                ) {
+                    return () => _t("timeline|m.room.member|knock_retracted", { targetName });
                 } else {
                     return () =>
                         reason
@@ -260,6 +275,11 @@ function textForMemberEvent(
                               reason,
                           })
                         : _t("timeline|m.room.member|kick", { senderName, targetName });
+            } else if (
+                prevContent.membership === KnownMembership.Knock &&
+                SettingsStore.getValue("feature_ask_to_join")
+            ) {
+                return () => _t("timeline|m.room.member|knock_denied", { senderName, targetName });
             } else {
                 return null;
             }

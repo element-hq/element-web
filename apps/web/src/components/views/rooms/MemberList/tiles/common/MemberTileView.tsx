@@ -46,6 +46,7 @@ export function MemberTileView(props: Props): JSX.Element {
                 aria-label={props?.ariaLabel}
                 tabIndex={props.tabIndex}
                 role="option"
+                aria-selected={props.tabIndex === 0}
                 aria-posinset={props.memberIndex + 1}
                 aria-setsize={props.memberCount}
             >

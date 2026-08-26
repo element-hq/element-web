@@ -11,6 +11,7 @@ import {
     type EventTimelineSet,
     EventType,
     type IRoomEvent,
+    type IStateEvent,
     type MatrixClient,
     MatrixEvent,
     MsgType,
@@ -32,7 +33,8 @@ import HTMLExporter from "../../../../src/utils/exportUtils/HtmlExport";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { mediaFromMxc } from "../../../../src/customisations/Media";
 import SettingsStore from "../../../../src/settings/SettingsStore";
-import { SdkContextClass } from "../../../../src/contexts/SDKContext.ts";
+import { SDKContextClass } from "../../../../src/contexts/SDKContextClass";
+import { TestSDKContext } from "../../TestSDKContext.ts";
 
 jest.mock("jszip");
 jest.mock("../../../../src/settings/SettingsStore");
@@ -46,6 +48,17 @@ const EVENT_MESSAGE: IRoomEvent = {
         msgtype: "m.text",
         body: "Message",
         avatar_url: "mxc://example.org/avatar.bmp",
+    },
+};
+
+const EVENT_JOIN_RULES: IStateEvent = {
+    event_id: "$3",
+    type: EventType.RoomJoinRules,
+    sender: "@bob:example.com",
+    origin_server_ts: 0,
+    state_key: "",
+    content: {
+        join_rule: "restricted",
     },
 };
 
@@ -93,6 +106,7 @@ const EVENT_MENTION: IRoomEvent = {
 describe("HTMLExport", () => {
     let client: jest.Mocked<MatrixClient>;
     let room: Room;
+    let sdkContext: TestSDKContext;
 
     filterConsole(
         "Starting export",
@@ -111,7 +125,10 @@ describe("HTMLExport", () => {
         jest.setSystemTime(REPEATABLE_DATE);
 
         client = stubClient() as jest.Mocked<MatrixClient>;
-        SdkContextClass.instance.client = client;
+        sdkContext = new TestSDKContext();
+        // @ts-ignore HTMLExport uses SDKContext in the constructor
+        SDKContextClass.instance = sdkContext;
+        sdkContext._client = client;
         DMRoomMap.makeShared(client);
 
         room = new Room("!myroom:example.org", client, "@me:example.org");
@@ -642,9 +659,9 @@ describe("HTMLExport", () => {
         await exporter.export();
         const html = await getMessageFile(exporter).text();
 
-        expect(html).not.toContain(`${name}`);
-        expect(html).toContain(`${escapeHtml(name)}`);
-        expect(html).not.toContain(`${topic}`);
+        expect(html).not.toContain(name);
+        expect(html).toContain(escapeHtml(name));
+        expect(html).not.toContain(topic);
         expect(html).toContain(`Topic: ${escapeHtml(topic)}`);
     });
 
@@ -731,6 +748,26 @@ describe("HTMLExport", () => {
 
         const file = getMessageFile(exporter);
         expect(file).not.toBeUndefined();
+    });
+
+    it("should not offer to view settings that an export cannot show", async () => {
+        mockMessages(EVENT_MESSAGE, EVENT_JOIN_RULES);
+        const exporter = new HTMLExporter(
+            room,
+            ExportType.LastNMessages,
+            {
+                attachmentsIncluded: false,
+                maxSize: 1_024 * 1_024,
+                numberOfMessages: 40,
+            },
+            () => {},
+        );
+
+        await exporter.export();
+
+        const html = await getMessageFile(exporter).text();
+        expect(html).toContain("changed who can join this room.");
+        expect(html).not.toContain("View settings");
     });
 
     it("should not crash when exporting mentions", async () => {

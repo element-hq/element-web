@@ -53,7 +53,12 @@ const WidgetExplorer: React.FC<IDevtoolsProps> = ({ onBack }) => {
         <BaseTool onBack={onBack}>
             <FilteredList query={query} onChange={setQuery}>
                 {widgets.map((w) => (
-                    <button className="mx_DevTools_button" key={w.url + w.eventId} onClick={() => setWidget(w)}>
+                    <button
+                        className="mx_DevTools_button"
+                        key={w.url + w.eventId}
+                        onClick={() => setWidget(w)}
+                        type="button"
+                    >
                         {w.url}
                     </button>
                 ))}

@@ -39,7 +39,7 @@ const SpacePreferencesAppearanceTab: React.FC<Pick<IProps, "space">> = ({ space 
                     <StyledCheckbox
                         checked={!!showPeople}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                            SettingsStore.setValue(
+                            void SettingsStore.setValue(
                                 "Spaces.showPeopleInSpace",
                                 space.roomId,
                                 SettingLevel.ROOM_ACCOUNT,
@@ -65,8 +65,8 @@ const SpacePreferencesDialog: React.FC<IProps> = ({ space, onFinished }) => {
         new Tab(
             SpacePreferenceTab.Appearance,
             _td("common|appearance"),
-            <VisibilityOnIcon />,
-            <SpacePreferencesAppearanceTab space={space} />,
+            <VisibilityOnIcon key={SpacePreferenceTab.Appearance} />,
+            <SpacePreferencesAppearanceTab key={SpacePreferenceTab.Appearance} space={space} />,
         ),
     ];
 

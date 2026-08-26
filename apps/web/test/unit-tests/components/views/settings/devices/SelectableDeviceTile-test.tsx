@@ -10,15 +10,14 @@ import { act, fireEvent, render } from "jest-matrix-react";
 import React from "react";
 
 import SelectableDeviceTile from "../../../../../../src/components/views/settings/devices/SelectableDeviceTile";
-import { DeviceType } from "../../../../../../src/utils/device/parseUserAgent";
+import type { ExtendedDevice } from "../../../../../../src/components/views/settings/devices/types.ts";
 
 describe("<SelectableDeviceTile />", () => {
-    const device = {
+    const device: ExtendedDevice = {
         display_name: "My Device",
         device_id: "my-device",
         last_seen_ip: "123.456.789",
         isVerified: false,
-        deviceType: DeviceType.Unknown,
     };
     const defaultProps = {
         onSelect: jest.fn(),
@@ -55,7 +54,7 @@ describe("<SelectableDeviceTile />", () => {
         const { getByText } = render(getComponent({ onClick }));
 
         act(() => {
-            fireEvent.click(getByText(device.display_name));
+            fireEvent.click(getByText(device.display_name!));
         });
 
         expect(onClick).toHaveBeenCalled();

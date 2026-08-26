@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import path, { dirname } from "node:path";
+import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import HakEnv from "./hakEnv.ts";
@@ -28,7 +28,7 @@ const METACOMMANDS: Record<string, string[]> = {
 // Scripts valid in a hak.json 'scripts' section
 const HAKSCRIPTS = ["check", "fetch", "build"];
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 async function main(): Promise<void> {
     const prefix = path.join(__dirname, "..", "..");
@@ -38,7 +38,6 @@ async function main(): Promise<void> {
     // Can be specified multiple times for the copy command to bundle
     // multiple arches into a single universal output module)
     for (;;) {
-        // eslint-disable-line no-constant-condition
         const targetIndex = process.argv.indexOf("--target");
         if (targetIndex === -1) break;
 
@@ -132,7 +131,7 @@ async function main(): Promise<void> {
         for (const mod of modules) {
             const depInfo = deps[mod];
             if (depInfo === undefined) {
-                console.log("Module " + mod + " not found - is it in hakDependencies " + "in your package.json?");
+                console.log(`Module ${mod} not found - is it in hakDependencies in your package.json?`);
                 process.exit(1);
             }
             console.log("hak " + cmd + ": " + mod);

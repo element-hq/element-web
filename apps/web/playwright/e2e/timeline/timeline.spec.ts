@@ -48,7 +48,7 @@ const expectAvatar = async (cli: Client, e: Locator, avatarUrl: string): Promise
         },
         { avatarUrl, size, resizeMethod: AVATAR_RESIZE_METHOD },
     );
-    await expect(e.locator(".mx_BaseAvatar img")).toHaveAttribute("src", url);
+    await expect(e.locator(".mx_BaseAvatar img")).toHaveAttribute("src", url!);
 };
 
 const sendEvent = async (client: Client, roomId: string, html = false): Promise<ISendEventResponse> => {
@@ -71,7 +71,7 @@ const sendImage = async (
 ): Promise<ISendEventResponse> => {
     const upload = await client.uploadContent(pngBytes, { name: "image.png", type: "image/png" });
     return client.sendEvent(roomId, null, "m.room.message" as EventType, {
-        ...(additionalContent ?? {}),
+        ...additionalContent,
 
         msgtype: "m.image" as MsgType,
         body: "image.png",
@@ -909,6 +909,30 @@ test.describe("Timeline", () => {
             });
         });
 
+        test("should not enlarge emoji inside a code block", async ({ page, app, room }) => {
+            await page.goto(`/#/room/${room.roomId}`);
+
+            const composer = app.getComposerField();
+            await composer.fill("```\nconst waving = '👋';\n```");
+            await composer.press("Enter");
+            await composer.fill("👋 hello");
+            await composer.press("Enter");
+
+            const codeBlock = page.locator(".mx_EventTile_pre_container").first();
+            await expect(codeBlock).toBeVisible();
+
+            const fontSize = (locator: Locator): Promise<string> =>
+                locator.evaluate((node) => window.getComputedStyle(node).fontSize);
+
+            // Inside a code block the emoji must not be any larger than the code around it,
+            // otherwise the line it sits on grows and the line numbers stop lining up
+            expect(await fontSize(codeBlock.locator(".mx_Emoji"))).toEqual(await fontSize(codeBlock.locator("code")));
+
+            // ...but emoji in an ordinary message are still enlarged
+            const message = page.locator(".mx_EventTile_last .mx_EventTile_body");
+            expect(await fontSize(message.locator(".mx_Emoji"))).not.toEqual(await fontSize(message));
+        });
+
         test(
             "should be able to hide an image",
             { tag: "@screenshot" },
@@ -917,7 +941,7 @@ test.describe("Timeline", () => {
 
                 const bot = new Bot(page, homeserver, {});
                 await bot.prepareClient();
-                await app.client.inviteUser(room.roomId, bot.credentials.userId);
+                await app.client.inviteUser(room.roomId, bot.credentials!.userId);
 
                 await sendImage(bot, room.roomId, NEW_AVATAR);
                 await app.timeline.scrollToBottom();
@@ -936,7 +960,7 @@ test.describe("Timeline", () => {
 
             const bot = new Bot(page, homeserver, {});
             await bot.prepareClient();
-            await app.client.inviteUser(room.roomId, bot.credentials.userId);
+            await app.client.inviteUser(room.roomId, bot.credentials!.userId);
 
             const upload = await bot.uploadContent(VIDEO_FILE, { name: "bbb.webm", type: "video/webm" });
             await bot.sendEvent(room.roomId, null, "m.room.message" as EventType, {
@@ -970,7 +994,7 @@ test.describe("Timeline", () => {
                 autoAcceptInvites: false,
             });
             await bot.prepareClient();
-            await app.client.inviteUser(room.roomId, bot.credentials.userId);
+            await app.client.inviteUser(room.roomId, bot.credentials!.userId);
             await bot.joinRoom(room.roomId);
             await bot.sendMessage(room.roomId, messageFromSender);
 
@@ -1100,7 +1124,7 @@ test.describe("Timeline", () => {
                 autoAcceptInvites: false,
             });
             await bot.prepareClient();
-            await app.client.inviteUser(room.roomId, bot.credentials.userId);
+            await app.client.inviteUser(room.roomId, bot.credentials!.userId);
             await bot.joinRoom(room.roomId);
 
             // Make sure the bot joined the room
@@ -1228,7 +1252,7 @@ test.describe("Timeline", () => {
 
                 // Create another room with a long name, invite the bot, and open the room
                 const testRoomId = await app.client.createRoom({ name: LONG_STRING });
-                await app.client.inviteUser(testRoomId, bot.credentials.userId);
+                await app.client.inviteUser(testRoomId, bot.credentials!.userId);
                 await bot.joinRoom(testRoomId);
                 await page.goto(`/#/room/${testRoomId}`);
 

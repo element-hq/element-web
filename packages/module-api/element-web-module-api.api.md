@@ -50,6 +50,10 @@ export interface Api extends DialogApiExtension, AccountAuthApiExtension, Profil
     readonly i18n: I18nApi;
     readonly navigation: NavigationApi;
     readonly rootNode: HTMLElement;
+    // @alpha
+    readonly settings: SettingsApi;
+    // @alpha
+    readonly storageHelper: StorageHelperApi;
     readonly stores: StoresApi;
     // @alpha
     readonly widget: WidgetApi;
@@ -70,7 +74,14 @@ export type CapabilitiesApprover = (widget: WidgetDescriptor, requestedCapabilit
 // @public
 export interface ClientApi {
     accountData: AccountDataApi;
+    // @alpha
+    readonly creationManagement: ClientCreationManagementApi;
     getRoom: (id: string) => Room | null;
+}
+
+// @public
+export interface ClientCreationManagementApi {
+    setUserVerificationCaCertsPem(pem: string | null): void;
 }
 
 // @alpha
@@ -98,8 +109,10 @@ export type ComposerApiTarget = {
     view: "thread";
 };
 
+// Warning: (ae-forgotten-export) The symbol "WebConfigJson" needs to be exported by the entry point index.d.ts
+//
 // @public
-export interface Config {
+export interface Config extends WebConfigJson {
     // (undocumented)
     brand: string;
 }
@@ -119,10 +132,25 @@ export type Container = "top" | "right" | "center";
 
 // @alpha
 export interface CustomComponentsApi {
+    registerComposerPreview(filterFn: (composerText: string, roomId: string) => boolean, renderer: CustomComposerPreviewRenderFunction): void;
     registerLoginComponent(renderer: CustomLoginRenderFunction): void;
     registerMessageRenderer(eventTypeOrFilter: string | ((mxEvent: MatrixEvent) => boolean), renderer: CustomMessageRenderFunction, hints?: CustomMessageRenderHints): void;
     registerRoomPreviewBar(renderer: CustomRoomPreviewBarRenderFunction): void;
 }
+
+// @alpha
+export type CustomComposerPreviewComponentProps = {
+    text: string;
+    roomId: string;
+    target?: ComposerApiTarget;
+    relation?: {
+        inReplyToEventId?: string;
+        relType?: string;
+    };
+};
+
+// @alpha
+export type CustomComposerPreviewRenderFunction = ExtendablePropsRenderFunction<CustomComposerPreviewComponentProps>;
 
 // @alpha
 export interface CustomisationsApi {
@@ -134,8 +162,8 @@ export type CustomLoginComponentProps = {
     serverConfig: CustomLoginComponentPropsServerConfig;
     fragmentAfterLogin?: string;
     children?: ReactNode;
-    onLoggedIn(data: AccountAuthInfo): void;
-    onServerConfigChange(config: CustomLoginComponentPropsServerConfig): void;
+    onLoggedIn(this: void, data: AccountAuthInfo): void;
+    onServerConfigChange(this: void, config: CustomLoginComponentPropsServerConfig): void;
 };
 
 // @alpha
@@ -185,7 +213,7 @@ export type DialogHandle<M> = {
         ok: boolean;
         model: M | null;
     }>;
-    close(): void;
+    close(this: void): void;
 };
 
 // @public
@@ -195,8 +223,8 @@ export interface DialogOptions {
 
 // @public
 export type DialogProps<M> = {
-    onSubmit(model: M): void;
-    onCancel(): void;
+    onSubmit(this: void, model: M): void;
+    onCancel(this: void): void;
 };
 
 // @alpha
@@ -342,6 +370,11 @@ export interface RoomViewProps {
 }
 
 // @alpha
+export interface SettingsApi {
+    getValue<T = any>(settingName: string, roomId?: string | null, excludeDefault?: boolean): T | undefined;
+}
+
+// @alpha
 export interface SpacePanelItemProps {
     className?: string;
     icon?: JSX.Element;
@@ -349,6 +382,11 @@ export interface SpacePanelItemProps {
     onSelected: () => void;
     style?: React.CSSProperties;
     tooltip?: string;
+}
+
+// @alpha
+export interface StorageHelperApi {
+    getPickleKey(userId: string, deviceId: string): Promise<string | null>;
 }
 
 // @public

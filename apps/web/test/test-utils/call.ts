@@ -19,7 +19,7 @@ import {
     type IContent,
 } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
-import { mocked, type Mocked } from "jest-mock";
+import { type Mocked } from "jest-mock";
 import { type MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 
 import { mkEvent, mkRoomMember, setupAsyncStoreWithClient, stubClient } from "./test-utils";
@@ -31,6 +31,7 @@ import { MockEventEmitter } from "./client";
 import WidgetStore from "../../src/stores/WidgetStore";
 import { WidgetMessagingStore } from "../../src/stores/widgets/WidgetMessagingStore";
 import SettingsStore from "../../src/settings/SettingsStore";
+import { vi, mocked } from "../setup/adapter.ts";
 
 export class MockedCall extends Call {
     public static readonly EVENT_TYPE = "org.example.mocked_call";
@@ -135,8 +136,8 @@ export function useMockedCalls() {
  * Enables the feature flags required for call tests.
  */
 export function enableCalls(): { enabledSettings: Set<string> } {
-    const enabledSettings = new Set(["feature_group_calls", "feature_video_rooms", "feature_element_call_video_rooms"]);
-    jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName): any => {
+    const enabledSettings = new Set(["feature_video_rooms", "feature_element_call_video_rooms", "feature_user_status"]);
+    vi.spyOn(SettingsStore, "getValue").mockImplementation((settingName): any => {
         if (settingName.startsWith("feature_")) return enabledSettings.has(settingName);
         if (settingName === "activeCallRoomIds") return [];
         return undefined;
@@ -153,9 +154,15 @@ export function setUpClientRoomAndStores(): {
     roomSession: Mocked<MatrixRTCSession>;
 } {
     stubClient();
-    const client = mocked<MatrixClient>(MatrixClientPeg.safeGet());
+    // Cast at this vitest/jest-mock type-system boundary: `mocked()` produces a vitest-shaped mock type at
+    // compile time, but this helper is still consumed by not-yet-migrated jest tests that expect jest-mock's
+    // (structurally different, but runtime-equivalent) `Mocked<T>` shape.
+    const client = mocked<MatrixClient>(MatrixClientPeg.safeGet()) as unknown as Mocked<MatrixClient>;
     DMRoomMap.makeShared(client);
-
+    client.cachedRtcTransports = {
+        wait: vi.fn().mockResolvedValue(undefined),
+        get: vi.fn().mockReturnValue(undefined),
+    } as unknown as any;
     const room = new Room("!1:example.org", client, "@alice:example.org", {
         pendingEventOrdering: PendingEventOrdering.Detached,
     });
@@ -163,7 +170,7 @@ export function setUpClientRoomAndStores(): {
     const alice = mkRoomMember(room.roomId, "@alice:example.org");
     const bob = mkRoomMember(room.roomId, "@bob:example.org");
     const carol = mkRoomMember(room.roomId, "@carol:example.org");
-    jest.spyOn(room, "getMember").mockImplementation((userId) => {
+    vi.spyOn(room, "getMember").mockImplementation((userId) => {
         switch (userId) {
             case alice.userId:
                 return alice;
@@ -176,16 +183,16 @@ export function setUpClientRoomAndStores(): {
         }
     });
 
-    jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
+    vi.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
 
     client.getRoom.mockImplementation((roomId) => (roomId === room.roomId ? room : null));
 
     const roomSession = new MockEventEmitter({
         memberships: [],
-        getOldestMembership: jest.fn().mockReturnValue(undefined),
-        getConsensusCallIntent: jest.fn().mockReturnValue(undefined),
+        getOldestMembership: vi.fn().mockReturnValue(undefined),
+        getConsensusCallIntent: vi.fn().mockReturnValue(undefined),
         room,
-    }) as Mocked<MatrixRTCSession>;
+    }) as unknown as Mocked<MatrixRTCSession>;
 
     client.matrixRTC.getRoomSession.mockReturnValue(roomSession);
     client.getRooms.mockReturnValue([room]);

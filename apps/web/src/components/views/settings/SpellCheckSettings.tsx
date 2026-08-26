@@ -10,7 +10,8 @@ import React from "react";
 
 import SpellCheckLanguagesDropdown from "../../../components/views/elements/SpellCheckLanguagesDropdown";
 import AccessibleButton, { type ButtonEvent } from "../../../components/views/elements/AccessibleButton";
-import { _t, getUserLanguage } from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
+import { getUserLanguage } from "../../../i18n/settings";
 
 interface ExistingSpellCheckLanguageIProps {
     language: string;

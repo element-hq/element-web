@@ -19,7 +19,10 @@
     padding: var(--cpd-space-1x) 0;
 
     &:hover,
-    &:focus-visible,
+    /* keyboardActive is toggled in JS for keyboard focus only (see RoomListSectionHeaderView), and
+       kept while focus is on the menu button so it stays reachable by Tab — without revealing the
+       menu on a mouse-focused header the way :focus-within would */
+    &.keyboardActive,
     &:has(button[data-state="open"]) {
         color: var(--cpd-color-text-primary);
 
@@ -58,6 +61,12 @@
         }
     }
 
+    /* A focused header can be scrolled flush to the scroller's top edge (where it pins), so the
+       default outline would be clipped by overflow:auto. Inset it so the focus ring stays visible. */
+    &:focus-visible {
+        outline-offset: -2px;
+    }
+
     &.unread {
         font: var(--cpd-font-body-sm-semibold);
         color: var(--cpd-color-text-primary);
@@ -65,6 +74,7 @@
 }
 
 .container {
+    position: relative;
     margin: 0 var(--cpd-space-3x);
     padding: var(--cpd-space-1-5x) var(--cpd-space-2x) var(--cpd-space-1-5x) var(--cpd-space-1x);
     border-radius: 8px;
@@ -87,22 +97,73 @@
 
 .firstHeader {
     padding-top: 0;
-
-    /* The first item sits flush with the scroller's top edge, so the default outline
-       would be clipped by overflow:auto. Inset it so it stays inside the button. */
-    &:focus-visible {
-        outline-offset: -2px;
-    }
 }
 
 .lastHeader {
     padding-bottom: 0;
 }
 
-.dropTarget {
+.dropTarget .container {
     box-shadow: inset 0 0 0 2px var(--cpd-color-border-accent-primary);
+}
+
+.dropTargetBottom .container::after,
+.dropTargetTop .container::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: var(--cpd-color-border-accent-primary);
+}
+
+.dropTargetBottom .container::after {
+    bottom: 0;
+}
+
+.dropTargetTop .container::before {
+    top: 0;
 }
 
 .menu {
     display: none;
+}
+
+.dragging {
+    outline: 1px solid var(--cpd-color-border-interactive-hovered);
+    background-color: color-mix(in srgb, var(--cpd-color-bg-action-tertiary-hovered) 95%, transparent);
+    color: var(--cpd-color-text-primary);
+}
+
+.dragSource .container {
+    opacity: 0.6;
+}
+
+/*
+Opaque backing for the pinned "current section" overlay header. The list rows scroll underneath it,
+so it must obscure them. The header button stays full width (so its pill aligns with the real header
+rows), while the opaque fill is painted by the pseudo-element below.
+*/
+.stickyBackground {
+    position: relative;
+    width: 100%;
+}
+
+/*
+The opaque fill. It stops short of the inline-end edge by the same gutter the room/header pills
+already leave clear (--cpd-space-3x), so the scroller's scrollbar — which floats in that gutter —
+stays visible instead of being covered by the pinned overlay. It's a separate inset layer (rather
+than a plain `background` on .stickyBackground) precisely so it can stop short of that gutter.
+
+An absolutely-positioned element paints ABOVE its statically-positioned siblings by default, so
+`z-index: -1` is needed to drop this fill behind the header's text/chevron/menu. It still covers the
+scrolling rows beneath because the overlay wrapper (.stickyHeader) owns the stacking context.
+*/
+.stickyBackground::before {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    inset-inline: 0 var(--cpd-space-3x);
+    z-index: -1;
+    background: var(--cpd-color-bg-canvas-default);
 }

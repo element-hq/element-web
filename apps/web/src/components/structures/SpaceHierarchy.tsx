@@ -62,7 +62,6 @@ import { Action } from "../../dispatcher/actions";
 import { type IState, RovingTabIndexProvider, useRovingTabIndex } from "../../accessibility/RovingTabIndex";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { useTypedEventEmitterState } from "../../hooks/useEventEmitter";
-import { type IOOBData } from "../../stores/ThreepidInviteStore";
 import { awaitRoomDownSync } from "../../utils/RoomUpgrade";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { type JoinRoomReadyPayload } from "../../dispatcher/payloads/JoinRoomReadyPayload";
@@ -180,7 +179,6 @@ const Tile: React.FC<ITileProps> = ({
         if (hasPermissions) {
             checkbox = (
                 <StyledCheckbox
-                    role="presentation"
                     aria-labelledby={checkboxLabelId}
                     checked={!!selected}
                     tabIndex={-1}
@@ -198,12 +196,7 @@ const Tile: React.FC<ITileProps> = ({
                         ev.stopPropagation();
                     }}
                 >
-                    <StyledCheckbox
-                        role="presentation"
-                        aria-labelledby={checkboxLabelId}
-                        disabled={true}
-                        tabIndex={-1}
-                    />
+                    <StyledCheckbox aria-labelledby={checkboxLabelId} disabled={true} tabIndex={-1} />
                 </TextWithTooltip>
             );
         }
@@ -287,8 +280,9 @@ const Tile: React.FC<ITileProps> = ({
     let childSection: JSX.Element | undefined;
     let onKeyDown: KeyboardEventHandler | undefined;
     if (children) {
-        // the chevron is purposefully a div rather than a button as it should be ignored for a11y
         childToggle = (
+            // the chevron is purposefully a div rather than a button as it should be ignored for a11y
+            // oxlint-disable-next-line jsx-a11y/click-events-have-key-events
             <div
                 className={classNames("mx_SpaceHierarchy_subspace_toggle", {
                     mx_SpaceHierarchy_subspace_toggle_shown: showChildren,
@@ -405,7 +399,7 @@ export const showRoom = (cli: MatrixClient, hierarchy: RoomHierarchy, roomId: st
             // XXX: This logic is duplicated from the JS SDK which would normally decide what the name is.
             name: room?.name || roomAlias || _t("common|unnamed_room"),
             roomType,
-        } as IOOBData,
+        },
         metricsTrigger: "RoomDirectory",
     });
 };
@@ -798,7 +792,7 @@ const SpaceHierarchy: React.FC<IProps> = ({ space, initialText = "", showRoom, a
 
         // Walk back up the tree to find all parents of the direct matches to show their place in the hierarchy
         const visited = new Set<string>();
-        const queue = [...directMatches.map((r) => r.room_id)];
+        const queue = directMatches.map((r) => r.room_id);
         while (queue.length) {
             const roomId = queue.pop()!;
             visited.add(roomId);
@@ -863,25 +857,23 @@ const SpaceHierarchy: React.FC<IProps> = ({ space, initialText = "", showRoom, a
                     let results: JSX.Element | undefined;
                     if (filteredRoomSet.size && root) {
                         results = (
-                            <>
-                                <HierarchyLevel
-                                    root={root}
-                                    roomSet={filteredRoomSet}
-                                    hierarchy={hierarchy}
-                                    parents={new Set()}
-                                    selectedMap={selected}
-                                    onToggleClick={hasPermissions ? onToggleClick : undefined}
-                                    onViewRoomClick={(roomId, roomType) => showRoom(cli, hierarchy, roomId, roomType)}
-                                    onJoinRoomClick={async (roomId, parents) => {
-                                        for (const parent of parents) {
-                                            if (cli.getRoom(parent)?.getMyMembership() !== KnownMembership.Join) {
-                                                await joinRoom(cli, roomContext.roomViewStore, hierarchy, parent);
-                                            }
+                            <HierarchyLevel
+                                root={root}
+                                roomSet={filteredRoomSet}
+                                hierarchy={hierarchy}
+                                parents={new Set()}
+                                selectedMap={selected}
+                                onToggleClick={hasPermissions ? onToggleClick : undefined}
+                                onViewRoomClick={(roomId, roomType) => showRoom(cli, hierarchy, roomId, roomType)}
+                                onJoinRoomClick={async (roomId, parents) => {
+                                    for (const parent of parents) {
+                                        if (cli.getRoom(parent)?.getMyMembership() !== KnownMembership.Join) {
+                                            await joinRoom(cli, roomContext.roomViewStore, hierarchy, parent);
                                         }
-                                        await joinRoom(cli, roomContext.roomViewStore, hierarchy, roomId);
-                                    }}
-                                />
-                            </>
+                                    }
+                                    await joinRoom(cli, roomContext.roomViewStore, hierarchy, roomId);
+                                }}
+                            />
                         );
                     } else if (!hierarchy.canLoadMore) {
                         results = (

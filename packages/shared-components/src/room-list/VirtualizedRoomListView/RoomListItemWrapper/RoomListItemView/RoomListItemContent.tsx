@@ -6,7 +6,7 @@
  */
 
 import React, { type JSX, memo, type ReactNode } from "react";
-import { Text } from "@vector-im/compound-web";
+import { Text, Tooltip } from "@vector-im/compound-web";
 import classNames from "classnames";
 
 import { Flex } from "../../../../core/utils/Flex";
@@ -54,7 +54,15 @@ export const RoomListItemContent = memo(function RoomListItemContent({
                 <div className={styles.ellipsis}>
                     <div className={styles.roomName} title={item.name} data-testid="room-name">
                         {item.name}
+                        {item.userStatus && (
+                            <Tooltip description={item.userStatus.text}>
+                                <Text as="span" className={styles.userStatusEmoji}>
+                                    {item.userStatus.emoji}
+                                </Text>
+                            </Tooltip>
+                        )}
                     </div>
+
                     {item.messagePreview && (
                         <Text as="div" size="sm" className={styles.ellipsis} title={item.messagePreview}>
                             {item.messagePreview}

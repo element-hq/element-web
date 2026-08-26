@@ -26,6 +26,7 @@ import {
     type IWidgetApiErrorResponseDataDetails,
     type ISearchUserDirectoryResult,
     type IGetMediaConfigResult,
+    type IRtcTransportsResult,
 } from "matrix-widget-api";
 import {
     ClientEvent,
@@ -39,7 +40,6 @@ import {
     type StateEvents,
     type TimelineEvents,
     type Room,
-    type SendDelayedEventRequestOpts,
     type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -56,11 +56,12 @@ import { containsEmoji } from "../../effects/utils";
 import dis from "../../dispatcher/dispatcher";
 import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
 import { navigateToPermalink } from "../../utils/permalinks/navigator";
-import { SdkContextClass } from "../../contexts/SDKContext";
+import { SDKContextClass } from "../../contexts/SDKContextClass";
 import { ModuleApi } from "../../modules/Api";
 import { toWidgetDescriptor } from "../../modules/WidgetLifecycleApi";
 import SettingsStore from "../../settings/SettingsStore";
 import { mediaFromMxc } from "../../customisations/Media";
+import SdkConfig from "../../SdkConfig.ts";
 
 function getRememberedCapabilitiesForWidget(widget: Widget): Capability[] {
     return JSON.parse(localStorage.getItem(`widget_${widget.id}_approved_caps`) || "[]");
@@ -116,6 +117,7 @@ export class ElementWidgetDriver extends WidgetDriver {
             // This is a trusted Element Call widget that we control
             this.allowedCapabilities.add(MatrixCapabilities.AlwaysOnScreen);
             this.allowedCapabilities.add(MatrixCapabilities.MSC3846TurnServers);
+            this.allowedCapabilities.add(MatrixCapabilities.MSC4515RtcTransports);
             this.allowedCapabilities.add(`org.matrix.msc2762.timeline:${inRoomId}`);
             this.allowedCapabilities.add(MatrixCapabilities.MSC4157SendDelayedEvent);
             this.allowedCapabilities.add(MatrixCapabilities.MSC4157UpdateDelayedEvent);
@@ -131,6 +133,9 @@ export class ElementWidgetDriver extends WidgetDriver {
             );
             this.allowedCapabilities.add(
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, "org.matrix.msc3401.call").raw,
+            );
+            this.allowedCapabilities.add(
+                WidgetEventCapability.forStateEvent(EventDirection.Receive, "org.matrix.msc4143.rtc.slot").raw,
             );
             this.allowedCapabilities.add(
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, EventType.RoomEncryption).raw,
@@ -225,7 +230,7 @@ export class ElementWidgetDriver extends WidgetDriver {
             }
 
             // To always allow OIDC requests for element call, the widgetPermissionStore is used:
-            SdkContextClass.instance.widgetPermissionStore.setOIDCState(
+            SDKContextClass.instance.widgetPermissionStore.setOIDCState(
                 forWidget,
                 forWidgetKind,
                 inRoomId,
@@ -264,7 +269,6 @@ export class ElementWidgetDriver extends WidgetDriver {
             try {
                 const [result] = await Modal.createDialog(WidgetCapabilitiesPromptDialog, {
                     requestedCapabilities: missing,
-                    widget: this.forWidget,
                     widgetKind: this.forWidgetKind,
                 }).finished;
                 result?.approved?.forEach((cap) => allowedSoFar.add(cap));
@@ -287,7 +291,7 @@ export class ElementWidgetDriver extends WidgetDriver {
 
     private getSendEventTarget(roomId: string | null = null): { client: MatrixClient; roomId: string } {
         const client = MatrixClientPeg.safeGet();
-        roomId = roomId || SdkContextClass.instance.roomViewStore.getRoomId() || null;
+        roomId = roomId || SDKContextClass.instance.roomViewStore.getRoomId() || null;
         if (!roomId) throw new Error("No room specified and no room in RoomViewStore focus.");
         return { client, roomId };
     }
@@ -318,7 +322,7 @@ export class ElementWidgetDriver extends WidgetDriver {
             r = await client.sendStateEvent(
                 roomId,
                 eventType as keyof StateEvents,
-                content as StateEvents[keyof StateEvents],
+                content satisfies StateEvents[keyof StateEvents],
                 stateKey,
             );
         } else if (eventType === EventType.RoomRedaction) {
@@ -386,27 +390,12 @@ export class ElementWidgetDriver extends WidgetDriver {
         return stickyEvents;
     }
 
-    private getSendDelayedEventOpts(delay: number | null, parentDelayId: string | null): SendDelayedEventRequestOpts {
-        if (delay !== null) {
-            return {
-                delay,
-                ...(parentDelayId !== null && { parent_delay_id: parentDelayId }),
-            };
-        } else if (parentDelayId !== null) {
-            return {
-                parent_delay_id: parentDelayId,
-            };
-        }
-        throw new Error("Must provide at least one of delay or parentDelayId");
-    }
-
     /**
      * @experimental Part of MSC4140 & MSC4157
      * @see {@link WidgetDriver#sendDelayedEvent}
      */
     public async sendDelayedEvent<K extends keyof StateEvents>(
-        delay: number | null,
-        parentDelayId: string | null,
+        delay: number,
         eventType: K,
         content: StateEvents[K],
         stateKey: string | null,
@@ -416,23 +405,21 @@ export class ElementWidgetDriver extends WidgetDriver {
      * @experimental Part of MSC4140 & MSC4157
      */
     public async sendDelayedEvent<K extends keyof TimelineEvents>(
-        delay: number | null,
-        parentDelayId: string | null,
+        delay: number,
         eventType: K,
         content: TimelineEvents[K],
         stateKey: null,
         targetRoomId: string | null,
     ): Promise<ISendDelayedEventDetails>;
     public async sendDelayedEvent(
-        delay: number | null,
-        parentDelayId: string | null,
+        delay: number,
         eventType: string,
         content: IContent,
         stateKey: string | null = null,
         targetRoomId: string | null = null,
     ): Promise<ISendDelayedEventDetails> {
         const { client, roomId } = this.getSendEventTarget(targetRoomId);
-        const delayOpts = this.getSendDelayedEventOpts(delay, parentDelayId);
+        const delayOpts = { delay };
 
         let r: SendDelayedEventResponse | null;
         if (stateKey !== null) {
@@ -441,7 +428,7 @@ export class ElementWidgetDriver extends WidgetDriver {
                 roomId,
                 delayOpts,
                 eventType as keyof StateEvents,
-                content as StateEvents[keyof StateEvents],
+                content satisfies StateEvents[keyof StateEvents],
                 stateKey,
             );
         } else {
@@ -466,20 +453,17 @@ export class ElementWidgetDriver extends WidgetDriver {
      * @see {@link WidgetDriver#sendStickyEvent}
      */
     public async sendDelayedStickyEvent(
-        delay: number | null,
-        parentDelayId: string | null,
+        delay: number,
         stickyDurationMs: number,
         eventType: string,
         content: unknown,
         targetRoomId?: string | null,
     ): Promise<ISendDelayedEventDetails> {
         const { client, roomId } = this.getSendEventTarget(targetRoomId);
-        const delayOpts = this.getSendDelayedEventOpts(delay, parentDelayId);
-
         const r = await client._unstable_sendStickyDelayedEvent(
             roomId,
             stickyDurationMs,
-            delayOpts,
+            { delay },
             null,
             eventType as keyof TimelineEvents,
             content as TimelineEvents[keyof TimelineEvents] & { msc4354_sticky_key: string },
@@ -584,6 +568,7 @@ export class ElementWidgetDriver extends WidgetDriver {
      * Otherwise, the event ID at which only subsequent events will be returned, as many as specified
      * in "limit".
      * @returns A generator that emits events.
+     * @yields IRoomEvents from the room timeline
      */
     private *readRoomTimelineIterator(
         room: Room,
@@ -668,7 +653,7 @@ export class ElementWidgetDriver extends WidgetDriver {
             });
         }
 
-        const oidcState = SdkContextClass.instance.widgetPermissionStore.getOIDCState(
+        const oidcState = SDKContextClass.instance.widgetPermissionStore.getOIDCState(
             this.forWidget,
             this.forWidgetKind,
             this.inRoomId,
@@ -738,6 +723,32 @@ export class ElementWidgetDriver extends WidgetDriver {
         }
     }
 
+    public async getRtcTransports(): Promise<IRtcTransportsResult> {
+        const client = MatrixClientPeg.safeGet();
+        try {
+            // Delegate to the authenticated CS endpoint (MSC4519). The js-sdk Transport and
+            // widget-api IRtcTransport types are structurally identical.
+            const transports = await client.cachedRtcTransports.wait();
+            return { rtc_transports: transports ?? [] };
+        } catch (e) {
+            // If the homeserver does not support the API, fall back to legacy well-known lookup.
+            if (
+                e instanceof MatrixError &&
+                e.errcode === "M_UNRECOGNIZED" &&
+                SdkConfig.get("enable_client_well_known_lookups")
+            ) {
+                const wellKnown = await client.waitForClientWellKnown();
+                const foci = wellKnown?.["org.matrix.msc4143.rtc_foci"];
+                if (foci !== undefined) {
+                    if (Array.isArray(foci)) return { rtc_transports: foci };
+                    else logger.warn(`org.matrix.msc4143.rtc_foci is not an array in .well-known`);
+                }
+            }
+            // Re-throw to turn the error into a widget error response
+            throw e;
+        }
+    }
+
     public async readEventRelations(
         eventId: string,
         roomId?: string,
@@ -750,7 +761,7 @@ export class ElementWidgetDriver extends WidgetDriver {
     ): Promise<IReadEventRelationsResult> {
         const client = MatrixClientPeg.safeGet();
         const dir = direction as Direction;
-        roomId = roomId ?? SdkContextClass.instance.roomViewStore.getRoomId() ?? undefined;
+        roomId = roomId ?? SDKContextClass.instance.roomViewStore.getRoomId() ?? undefined;
 
         if (typeof roomId !== "string") {
             throw new Error("Error while reading the current room");

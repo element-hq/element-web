@@ -19,7 +19,6 @@ import { onSubmitPreventDefault } from "../../../utils/form.ts";
 
 interface IProps {
     roomId: string;
-    label?: string;
     canSetCanonicalAlias?: boolean;
 }
 
@@ -66,7 +65,7 @@ export default class RoomPublishSetting extends React.PureComponent<IProps, ISta
 
     public componentDidMount(): void {
         const client = MatrixClientPeg.safeGet();
-        client.getRoomDirectoryVisibility(this.props.roomId).then((result) => {
+        void client.getRoomDirectoryVisibility(this.props.roomId).then((result) => {
             this.setState({ isRoomPublished: result.visibility === "public" });
         });
     }

@@ -12,12 +12,7 @@ import { GroupIcon, VideoCallSolidIcon } from "@vector-im/compound-design-tokens
 
 import { _t } from "../../../languageHandler";
 
-export enum LiveContentType {
-    Video,
-}
-
 interface Props {
-    type: LiveContentType;
     text: string;
     active: boolean;
     participantCount: number;

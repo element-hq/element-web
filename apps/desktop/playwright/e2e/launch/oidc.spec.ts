@@ -9,7 +9,7 @@ import { test, expect } from "../../element-desktop-test.js";
 
 declare global {
     interface ElectronPlatform {
-        getOidcCallbackUrl(): URL;
+        getOAuthCallbackUrl(): URL;
     }
 
     interface Window {
@@ -29,7 +29,7 @@ test.describe("OIDC Native", () => {
     test("should use OIDC callback URL without authority component", async ({ page }) => {
         await expect(
             page.evaluate<string>(() => {
-                return window.mxPlatformPeg.get().getOidcCallbackUrl().toString();
+                return window.mxPlatformPeg.get().getOAuthCallbackUrl().toString();
             }),
         ).resolves.toMatch(/io\.element\.(desktop|nightly):\/vector\/webapp\//);
     });

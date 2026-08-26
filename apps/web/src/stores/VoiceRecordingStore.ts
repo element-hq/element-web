@@ -29,7 +29,7 @@ export class VoiceRecordingStore extends AsyncStoreWithClient<IState> {
     public static get instance(): VoiceRecordingStore {
         if (!this.internalInstance) {
             this.internalInstance = new VoiceRecordingStore();
-            this.internalInstance.start();
+            void this.internalInstance.start();
         }
         return this.internalInstance;
     }
@@ -70,8 +70,7 @@ export class VoiceRecordingStore extends AsyncStoreWithClient<IState> {
 
         const recording = createVoiceMessageRecording(this.matrixClient);
 
-        // noinspection JSIgnoredPromiseFromCall - we can safely run this async
-        this.updateState({ ...this.state, [voiceRecordingId]: recording });
+        void this.updateState({ ...this.state, [voiceRecordingId]: recording });
 
         return recording;
     }
@@ -84,11 +83,7 @@ export class VoiceRecordingStore extends AsyncStoreWithClient<IState> {
     public disposeRecording(voiceRecordingId: string): Promise<void> {
         this.state[voiceRecordingId]?.destroy(); // stops internally
 
-        const {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            [voiceRecordingId]: _toDelete,
-            ...newState
-        } = this.state;
+        const { [voiceRecordingId]: _toDelete, ...newState } = this.state;
         // unexpectedly AsyncStore.updateState merges state
         // AsyncStore.reset actually just *sets*
         return this.reset(newState);

@@ -6,9 +6,15 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type MatrixEvent, type IContent, type IMentions, type IEventRelation } from "matrix-js-sdk/src/matrix";
+import {
+    type MessageComposerUrlPreviewSnapshotEntryLoaded,
+    type MessageComposerUrlPreviewSnapshot,
+} from "@element-hq/web-shared-components";
 
 import type EditorModel from "../editor/model";
 import { Type } from "../editor/parts";
+import { type RoomMessageEventContent } from "../../@types/url-preview";
+import SettingsStore from "../settings/SettingsStore";
 
 /**
  * Build the mentions information based on the editor model (and any related events):
@@ -80,7 +86,7 @@ export function attachMentions(
         // mentioned users.
         const prevMentions = editedContent["m.mentions"];
         if (Array.isArray(prevMentions?.user_ids)) {
-            prevMentions!.user_ids.forEach((userId) => userMentions.delete(userId));
+            prevMentions.user_ids.forEach((userId) => userMentions.delete(userId));
         }
 
         // If the original event mentioned the room, nothing to do here.
@@ -102,8 +108,38 @@ export function attachMentions(
 export function attachRelation(content: IContent, relation?: IEventRelation): void {
     if (relation) {
         content["m.relates_to"] = {
-            ...(content["m.relates_to"] || {}),
+            ...content["m.relates_to"],
             ...relation,
         };
+    }
+}
+
+// Attaches URL preview bundle to message event (MSC4095)
+export function attachUrlPreviews(
+    urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot,
+    content: RoomMessageEventContent,
+    messageHasLinks: boolean,
+): void {
+    if (!SettingsStore.getValue("feature_msc4095_url_preview_bundle")) return;
+
+    const bundle = urlPreviewSnapshot.entries
+        .filter((entry) => entry.include && entry.status === "loaded")
+        .map((entry) => (entry as MessageComposerUrlPreviewSnapshotEntryLoaded).preview)
+        .map((preview) => {
+            return {
+                "matched_url": preview.link,
+                "og:url": preview.ogUrl,
+                "og:title": preview.title,
+                "og:description": preview.description,
+                "og:image": preview.image?.mxcImageFull,
+                "og:image:width": preview.image?.width,
+                "og:image:height": preview.image?.height,
+                "og:image:type": preview.image?.imageType,
+                "matrix:image:size": preview.image?.fileSize,
+            };
+        });
+
+    if (messageHasLinks) {
+        content["com.beeper.linkpreviews"] = bundle;
     }
 }

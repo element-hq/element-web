@@ -16,18 +16,20 @@ import { shouldPolyfill as shouldPolyFillIntlSegmenter } from "@formatjs/intl-se
 // These are things that can run before the skin loads - be careful not to reference the react-sdk though.
 import { parseAppUrl } from "./url_utils";
 import "./modernizr.cjs";
+import { polyfillTouchEvent } from "../@types/polyfill";
 
-// Import shared components CSS
-import "@element-hq/web-shared-components/dist/element-web-shared-components.css";
-
+import "../../res/css/_index.pcss";
 // Require common CSS here; this will make webpack process it into bundle.css.
 // Our own CSS (which is themed) is imported via separate webpack entry points
 // in webpack.config.js
-// eslint-disable-next-line @typescript-eslint/no-require-imports
+// eslint-disable-next-line @typescript-eslint/no-require-imports,import/no-commonjs,unicorn/prefer-module
 require("katex/dist/katex.css");
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
+// eslint-disable-next-line @typescript-eslint/no-require-imports,import/no-commonjs,unicorn/prefer-module
 require("./localstorage-fix");
+
+// Patch a fake window.TouchEvent for re-resizable's unguarded `instanceof TouchEvent`.
+polyfillTouchEvent();
 
 async function settled(...promises: Array<Promise<any>>): Promise<void> {
     for (const prom of promises) {
@@ -82,7 +84,7 @@ function checkBrowserFeatures(): boolean {
     for (const feature of featureList) {
         if (window.Modernizr[feature] === undefined) {
             logger.error(
-                "Looked for feature '%s' but Modernizr has no results for this. " + "Has it been configured correctly?",
+                "Looked for feature '%s' but Modernizr has no results for this. Has it been configured correctly?",
                 feature,
             );
             return false;
@@ -147,7 +149,7 @@ async function start(): Promise<void> {
             const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
             const isAndroid = /Android/.test(navigator.userAgent);
             if (isIos || isAndroid) {
-                if (document.cookie.indexOf("element_mobile_redirect_to_guide=false") === -1) {
+                if (sessionStorage.getItem("skip_mobile_redirect") !== "true") {
                     window.location.href = "mobile_guide/";
                     return;
                 }
@@ -249,7 +251,6 @@ start().catch((err) => {
     // with some basic styling to make the iframe full page
     document.body.style.removeProperty("height");
     const iframe = document.createElement("iframe");
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore - typescript seems to only like the IE syntax for iframe sandboxing
     iframe["sandbox"] = "";
     iframe.src = supportedBrowser ? "static/unable-to-load.html" : "static/incompatible-browser.html";

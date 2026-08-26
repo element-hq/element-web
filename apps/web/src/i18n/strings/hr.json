@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Birač emotikona",
         "jump_first_invite": "Skoči na prvu pozivnicu.",
         "message_composer": "Sastavljač poruka",
         "n_unread_messages": {
@@ -13,8 +12,6 @@
             "few": "%(count)s nepročitane poruke, uključujući spominjanja.",
             "other": "%(count)s nepročitanih poruka, uključujući spominjanja."
         },
-        "recent_rooms": "Nedavne sobe",
-        "room_name": "Soba %(name)s",
         "room_status_bar": "Traka statusa sobe",
         "seek_bar_label": "Traka za traženje zvuka",
         "unread_messages": "Nepročitane poruke."
@@ -24,7 +21,6 @@
         "accept": "Prihvati",
         "add": "Dodaj",
         "add_existing_room": "Dodaj postojeću sobu",
-        "add_people": "Dodaj osobe",
         "apply": "Primijeni",
         "approve": "Odobri",
         "ask_to_join": "Zatraži pridruživanje",
@@ -59,7 +55,6 @@
         "enter_fullscreen": "Otvori prikaz preko cijelog zaslona",
         "exit_fullscreeen": "Iziđi iz prikaza preko cijelog zaslona",
         "expand": "Proširi",
-        "explore_public_rooms": "Pretražuj javne sobe",
         "explore_rooms": "Pretražuj sobe",
         "export": "Izvoz",
         "forward": "Proslijedi",
@@ -71,8 +66,6 @@
         "ignore": "Ignoriraj",
         "import": "Uvezi",
         "invite": "Pozovi",
-        "invite_to_space": "Pozovi u prostor",
-        "invites_list": "Pozivnice",
         "join": "Pridruži se",
         "learn_more": "Saznajte više",
         "leave": "Napusti",
@@ -115,11 +108,9 @@
         "show_advanced": "Prikaži napredno",
         "show_all": "Pokaži sve",
         "sign_in": "Prijava",
-        "sign_out": "Odjava",
+        "sign_out": "Ukloni ovaj uređaj",
         "skip": "Preskoči",
         "start": "Započni",
-        "start_chat": "Započni razgovor",
-        "start_new_chat": "Započni novi razgovor",
         "stop": "Zaustavi",
         "submit": "Pošalji",
         "subscribe": "Pretplati se",
@@ -219,9 +210,10 @@
         "incorrect_password": "Pogrešna zaporka",
         "log_in_new_account": "<a>Prijavite se</a> na svoj novi račun.",
         "logout_dialog": {
-            "description": "Jeste li sigurni da se želite odjaviti?",
-            "setup_key_backup_title": "Izgubit ćete pristup svojim šifriranim porukama",
-            "skip_key_backup": "Ne želim svoje šifrirane poruke"
+            "description": "Jeste li sigurni da želite ukloniti ovaj uređaj?",
+            "setup_key_backup_title": "Izgubit ćete pristup svojim šifriranim razgovorima",
+            "setup_secure_backup_description": "Ovo je vaš jedini uređaj. Ako ga uklonite, trebat će vam ključ za oporavak kako biste potvrdili svoj digitalni identitet i vratili šifrirane razgovore sljedeći put kada se prijavite.",
+            "skip_key_backup": "Svejedno ukloni ovaj uređaj"
         },
         "misconfigured_body": "Upitajte svog administratora za %(brand)s da provjeri ima li u <a>vašoj konfiguraciji</a> netočnih ili dupliciranih unosa.",
         "misconfigured_title": "Tvoj %(brand)s pogrešno je konfiguriran",
@@ -247,7 +239,9 @@
             "check_code_heading": "Unesite broj prikazan na vašem drugom uređaju",
             "check_code_input_label": "Dvoznamenkasti kod",
             "check_code_mismatch": "Brojevi se ne podudaraju",
+            "choose_desktop_computer": "Odaberite „%(desktopComputer)s”",
             "completing_setup": "Dovršavanje postavljanja vašeg novog uređaja",
+            "desktop_computer": "Stolno računalo",
             "error_etag_missing": "Došlo je do neočekivane pogreške. To može biti zbog proširenja preglednika, proxy poslužitelja ili pogrešne konfiguracije poslužitelja.",
             "error_expired": "Prijava je istekla. Pokušajte ponovno.",
             "error_expired_title": "Prijava nije dovršena na vrijeme",
@@ -268,15 +262,22 @@
             "error_user_declined": "Vi ili davatelj usluge računa odbili ste zahtjev za prijavu.",
             "error_user_declined_title": "Prijava je odbijena",
             "follow_remaining_instructions": "Pridržavajte se preostalih uputa",
+            "open_element_mobile_device": "Otvorite %(brand)s na svom mobilnom uređaju",
             "open_element_other_device": "Otvorite %(brand)s na drugom uređaju",
             "point_the_camera": "Skenirajte QR kod koji je ovdje prikazan",
-            "scan_code_instruction": "Skenirajte QR kod drugim uređajem",
+            "ready_to_scan": "Spremno za skeniranje",
+            "scan_code_instruction": "Skeniraj QR kod",
+            "scan_code_instruction_reciprocate": "Skenirajte QR kod drugim uređajem",
             "scan_qr_code": "Prijavi se pomoću QR koda",
-            "security_code_prompt": "Ako se to od vas zatraži, unesite ispod navedeni kod na drugi uređaj.",
+            "security_code_prompt": "Davatelj usluge računa može zatražiti sljedeći kod za potvrdu prijave.",
+            "security_code_title": "Vaš verifikacijski kod",
             "select_qr_code": "Odaberite „%(scanQRCode)s”",
+            "select_ready_to_scan": "Odaberite „%(readyToScan)s” i skenirajte ovdje prikazani QR kod",
+            "start_over": "Počni ispočetka",
+            "tap_avatar_link_new_device": "Dodirnite svoj avatar i odaberite „%(linkNewDevice)s”",
             "unsupported_explainer": "Vaš davatelj usluga računa ne podržava prijavu na novi uređaj pomoću QR koda.",
             "unsupported_heading": "QR kod nije podržan",
-            "waiting_for_device": "Čekanje na to da se uređaj prijavi"
+            "waiting_for_device": "Čekanje na vaš drugi uređaj"
         },
         "register_action": "Izradi račun",
         "registration": {
@@ -292,16 +293,16 @@
         "registration_username_validation": "Upotrijebite samo mala slova, brojeve, crtice i podcrte",
         "reset_password": {
             "confirm_new_password": "Potvrdi novu zaporku",
-            "devices_logout_success": "Odjavljeni ste sa svih uređaja i više nećete primati push obavijesti. Da biste ponovno omogućili obavijesti, ponovno se prijavite na svakom uređaju.",
-            "other_devices_logout_warning_1": "Odjavom s uređaja izbrisat ćete ključeve za šifriranje poruka pohranjene na njima, što će šifriranu povijest razgovora učiniti nečitljivom.",
-            "other_devices_logout_warning_2": "Ako želite zadržati pristup svojoj povijesti razgovora u šifriranim sobama, postavite sigurnosnu kopiju ključa ili izvezite ključeve poruka s jednog od svojih drugih uređaja prije nego što nastavite.",
+            "devices_logout_success": "Svi su vaši uređaji oklonjeni i više nećete primati push obavijesti. Da biste ponovno omogućili obavijesti, ponovno se prijavite na svakom uređaju.",
+            "other_devices_logout_warning_1": "Uklanjanjem svojih uređaja izbrisat ćete ključeve za šifriranje poruka pohranjene na njima, što će šifriranu povijest razgovora učiniti nečitljivom.",
+            "other_devices_logout_warning_2": "Ako želite zadržati pristup svojoj povijesti razgovora u šifriranim sobama, nabavite ključ za oporavak ili izvezite ključeve poruka s jednog od svojih uređaja prije nego što nastavite.",
             "password_not_entered": "Mora se unijeti nova zaporka.",
             "passwords_mismatch": "Nove zaporke moraju se međusobno podudarati.",
             "rate_limit_error": "Previše pokušaja u kratkom vremenu. Pričekajte neko vrijeme prije ponovnog pokušaja.",
             "rate_limit_error_with_time": "Previše pokušaja u kratkom vremenu. Pokušajte ponovno nakon %(timeout)s.",
             "reset_successful": "Zaporka je poništena.",
             "return_to_login": "Povratak na zaslon za prijavu",
-            "sign_out_other_devices": "Odjava sa svih uređaja"
+            "sign_out_other_devices": "Ukloni druge uređaje"
         },
         "reset_password_action": "Poništi zaporku",
         "reset_password_button": "Zaboravili ste zaporku?",
@@ -324,8 +325,8 @@
         "server_picker_title": "Prijavite se na svoj matični poslužitelj",
         "server_picker_title_default": "Mogućnosti poslužitelja",
         "server_picker_title_registration": "Račun na",
-        "session_logged_out_description": "Ova je sesija odjavljena iz sigurnosnih razloga. Ponovno se prijavite.",
-        "session_logged_out_title": "Odjavljeni ste",
+        "session_logged_out_description": "Ova je sesija uklonjena iz sigurnosnih razloga. Ponovno se prijavite.",
+        "session_logged_out_title": "Sesija je uklonjena",
         "set_email": {
             "description": "To će vam omogućiti da poništite zaporku i primate obavijesti.",
             "verification_pending_description": "Provjerite svoju e-poštu i kliknite na poveznicu koja se u njoj nalazi. Nakon što to učinite, kliknite gumb za nastavak.",
@@ -335,8 +336,10 @@
         "sign_in_description": "Za nastavak upotrijebite svoj račun.",
         "sign_in_instead": "Prijavite se umjesto toga",
         "sign_in_instead_prompt": "Već imate račun? <a>Prijavi se ovdje</a>",
+        "sign_in_manually": "Prijavi se ručno",
         "sign_in_or_register": "Prijavite se ili izradite račun",
         "sign_in_or_register_description": "Za nastavak upotrijebite svoj račun ili izradite novi.",
+        "sign_in_with_qr": "Prijavi se pomoću QR koda",
         "sign_in_with_sso": "Prijavite se pomoću jedinstvene prijave (SSO)",
         "signing_in": "U tijeku je prijava…",
         "soft_logout": {
@@ -364,8 +367,8 @@
             "email_resent": "Ponovno poslano!",
             "fallback_button": "Započni provjeru autentičnosti",
             "mas_cross_signing_reset_cta": "Nastavi na račun",
-            "mas_cross_signing_reset_description": "Spremate se otići na %(serverName)s račun kako biste poništili svoj identitet. Nakon što dovršite poništavanje svog računa, vratite se ovdje i kliknite Pokušaj ponovno.",
-            "mas_cross_signing_reset_title": "Idite na svoj račun kako biste poništili svoj identitet",
+            "mas_cross_signing_reset_description": "Spremate se otići na svoj račun na poslužitelju %(serverName)s kako biste poništili svoj digitalni identitet. Nakon što dovršite poništavanje na svom računu, vratite se ovdje i kliknite Pokušaj ponovno.",
+            "mas_cross_signing_reset_title": "Idite na svoj račun kako biste poništili svoj digitalni identitet",
             "msisdn": "Poslana je tekstna poruka na broj %(msisdn)s",
             "msisdn_token_incorrect": "Token je netočan",
             "msisdn_token_prompt": "Unesite kod koji sadrži:",
@@ -472,13 +475,13 @@
         "description": "Opis",
         "deselect_all": "Poništi sve odabire",
         "device": "Uređaj",
+        "disabled_by_homeserver": "Onemogućio matični poslužitelj",
         "edited": "uređeno",
         "email_address": "E-adresa",
         "emoji": "Emotikon",
         "encrypted": "Šifrirano",
         "error": "Geška",
         "faq": "Česta pitanja",
-        "favourites": "Favoriti",
         "feedback": "Povratne informacije",
         "filter_results": "Filtriraj rezultate",
         "forward_message": "Proslijedi poruku",
@@ -486,7 +489,6 @@
         "go_to_settings": "Idi na postavke",
         "guest": "Gost",
         "help": "Pomoć",
-        "historical": "Povijest",
         "home": "Početna stranica",
         "homeserver": "Matični poslužitelj",
         "identity_server": "Poslužitelj identiteta",
@@ -494,17 +496,16 @@
         "integration_manager": "Upravitelj integracijama",
         "joined": "Pridružio/la se",
         "labs": "Laboratoriji",
+        "legacy_voice_and_video_settings": "Matrixovi pozivi jedan na jedan (naslijeđeni)",
         "legal": "Pravne napomene",
         "light": "Svijetlo",
         "loading": "Učitavanje…",
         "location": "Lokacija",
-        "low_priority": "Niski prioritet",
         "matrix": "Matrix",
         "message": "Poruka",
         "message_layout": "Izgled poruke",
         "message_timestamp_invalid": "Vremenska oznaka nije valjana",
         "microphone": "Mikrofon",
-        "model": "Model",
         "moderation_and_safety": "Moderiranje i sigurnost",
         "modern": "Suvremeni",
         "mute": "Isključi zvuk",
@@ -566,7 +567,6 @@
         "success": "Uspjeh",
         "suggestions": "Prijedlozi",
         "support": "Podrška",
-        "system_alerts": "Upozorenja sustava",
         "theme": "Tema",
         "thread": "Nit",
         "threads": "Niti",
@@ -583,7 +583,6 @@
         "username": "Korisničko ime",
         "verified": "Potvrđeno",
         "version": "Inačica",
-        "video": "Videozapis",
         "video_room": "Videosoba",
         "view_message": "Prikaži poruku",
         "warning": "Upozorenje"
@@ -663,8 +662,8 @@
         "join_rule_knock_label": "Svatko može zatražiti pridruživanje, ali administratori ili moderatori moraju odobriti pristup. To možete poslije promijeniti.",
         "join_rule_public_label": "Svatko će moći pronaći ovu sobu i pridružiti joj se.",
         "join_rule_public_parent_space_label": "Svatko će moći pronaći ovu sobu i pridružiti joj se, ne samo članovi prostora <SpaceName/>.",
-        "join_rule_restricted": "Vidljivo članovima prostora",
-        "join_rule_restricted_label": "Svi u prostoru <SpaceName/> moći će pronaći ovu sobu i pridružiti joj se.",
+        "join_rule_restricted": "Standardno",
+        "join_rule_restricted_label": "Svatko u prostoru <SpaceName/> može se pridružiti.",
         "name_validation_required": "Unesite naziv sobe",
         "room_visibility_label": "Vidljivost sobe",
         "state_encrypted_warning": "Omogućuje eksperimentalnu podršku za šifriranje događaja stanja, čime se od poslužitelja skrivaju metapodatci, poput naziva soba i tema. Ti metapodatci bit će skriveni i od osoba koje se poslije pridruže sobama i od onih čiji klijenti ne podržavaju MSC4362.",
@@ -678,6 +677,13 @@
         "unfederated_label_default_on": "Ovo možete onemogućiti ako će se soba upotrebljavati za suradnju s vanjskim timovima koji imaju vlastiti matični poslužitelj. To se poslije ne može promijeniti.",
         "unsupported_version": "Poslužitelj ne podržava navedenu verziju sobe."
     },
+    "create_section_dialog": {
+        "create_section": "Izradi odjeljak",
+        "description": "Odjeljci su samo za vas",
+        "label": "Naziv odjeljka",
+        "title": "Izradi odjeljak",
+        "title_edition": "Uredi odjeljak"
+    },
     "create_space": {
         "add_details_prompt": "Dodajte neke pojedinosti kako biste ljudima pomogli da ga prepoznaju.",
         "add_details_prompt_2": "Možete ih promijeniti u bilo kojem trenutku.",
@@ -689,7 +695,7 @@
         "creating_rooms": "U tijeku je izrada soba…",
         "done_action": "Idi u moj prostor",
         "done_action_first_room": "Idi u moju prvu sobu",
-        "explainer": "Prostori su nov način grupiranja soba i ljudi. Kakav prostor želite stvoriti? To možete poslije promijeniti.",
+        "explainer": "Prostori služe za organiziranje i otkrivanje soba. Kakav prostor želite izraditi?",
         "failed_create_initial_rooms": "Nije uspjelo stvaranje početnih soba u prostoru",
         "failed_invite_users": "Nije uspjelo pozivanje sljedećih korisnika u vaš prostor: %(csvUsers)s",
         "invite_teammates_by_username": "Pozovi po korisničkom imenu",
@@ -700,20 +706,20 @@
         "name_required": "Unesite naziv prostora",
         "personal_space": "Samo ja",
         "personal_space_description": "Privatni prostor za organizaciju vaših soba",
-        "private_description": "Samo s pozivnicom, najbolje za vas ili timove",
+        "private_description": "Samo s pozivnicom, osobno ili za vaš tim",
         "private_heading": "Vaš privatni prostor",
         "private_only_heading": "Vaš prostor",
         "private_personal_description": "Pobrinite se da prave osobe imaju pristup %(name)s",
         "private_personal_heading": "S kim radite?",
         "private_space": "Ja i članovi mog tima",
         "private_space_description": "Privatni prostor za vas i članove vašeg tima",
-        "public_description": "Otvoreni prostor za svakoga, najbolji za zajednice",
+        "public_description": "Svatko se može pridružiti, najbolje za zajednice",
         "public_heading": "Vaš javni prostor",
         "search_public_button": "Pretražite javne prostore",
-        "setup_rooms_community_description": "Stvorimo sobu za svakog od njih.",
+        "setup_rooms_community_description": "Za početak stvorimo nekoliko soba.",
         "setup_rooms_community_heading": "O čemu želite razgovarati u prostoru %(spaceName)s?",
-        "setup_rooms_description": "Poslije možete dodati još, uključujući i već postojeće.",
-        "setup_rooms_private_description": "Napravit ćemo sobe za svakog od njih.",
+        "setup_rooms_description": "Poslije možete dodati još soba u prostor, uključujući i postojeće.",
+        "setup_rooms_private_description": "Za početak izradimo nekoliko soba.",
         "setup_rooms_private_heading": "Na kojim projektima radi vaš tim?",
         "share_description": "Trenutačno ste samo vi, a s drugima će biti još bolje.",
         "share_heading": "Podijeli %(name)s",
@@ -726,7 +732,7 @@
         "subspace_join_rule_invite_only": "Privatni prostor (samo uz pozivnicu)",
         "subspace_join_rule_label": "Vidljivost prostora",
         "subspace_join_rule_public_description": "Svatko će moći pronaći ovaj prostor i pridružiti mu se, a ne samo članovi prostora <SpaceName/>.",
-        "subspace_join_rule_restricted_description": "Svatko u prostoru <SpaceName/> moći će pronaći i pridružiti se."
+        "subspace_join_rule_restricted_description": "Svatko u prostoru <SpaceName/> može se pridružiti."
     },
     "credits": {
         "default_cover_photo": "Na <photo>zadanu naslovnu fotografiju</photo> autorsko pravo polaže <author>Jesús Roncero</author>, a upotrebljava se u skladu s uvjetima licencije <terms>CC-BY-SA 4.0</terms>.",
@@ -746,6 +752,7 @@
         "category_other": "Ostalo",
         "category_room": "Soba",
         "caution_colon": "Oprez:",
+        "checking_sticky_events_support": "Provjera podrške za sticky događaje...",
         "client_versions": "Inačice klijenta",
         "crypto": {
             "4s_public_key_in_account_data": "u podatcima računa",
@@ -768,7 +775,7 @@
             "cross_signing_public_keys_on_device_status": "Unakrsno potpisivanje javnih ključeva:",
             "cross_signing_ready": "Unakrsno potpisivanje spremno je za upotrebu.",
             "cross_signing_status": "Status unakrsnog potpisivanja:",
-            "cross_signing_untrusted": "Vaš račun ima identitet za unakrsno potpisivanje u tajnoj pohrani, ali mu ova sesija još ne vjeruje.",
+            "cross_signing_untrusted": "Vaš račun ima digitalni identitet u tajnoj pohrani, ali mu ova sesija još ne vjeruje.",
             "crypto_not_available": "Modul za šifriranje nije dostupan",
             "device_id": "ID uređaja",
             "key_backup_active_version": "Aktivna inačica sigurnosne kopije:",
@@ -804,13 +811,18 @@
         "edit_setting": "Uredi postavku",
         "edit_values": "Uredi vrijednosti",
         "empty_string": "<empty string>",
+        "error_sticky_duration_must_be_a_number": "stickyDuration mora biti broj",
+        "error_sticky_duration_out_of_range": "stickyDuration mora biti između 0 i 36 000 milisekunda (1 sat)",
         "event_content": "Sadržaj događaja",
         "event_id": "ID događaja: %(eventId)s",
         "event_sent": "Događaj je poslan!",
         "event_type": "Vrsta događaja",
+        "expired": "Isteklo",
+        "expires_in": "Istječe za",
         "explore_account_data": "Istraži podatke računa",
         "explore_room_account_data": "Istraži podatke računa sobe",
         "explore_room_state": "Istraži stanje sobe",
+        "explore_sticky_state": "Istraži stanje sticky događaja",
         "failed_to_find_widget": "Došlo je do pogreške prilikom pronalaženja ovog widgeta.",
         "failed_to_load": "Učitavanje nije uspjelo.",
         "failed_to_save": "Spremanje postavki nije uspjelo.",
@@ -819,11 +831,12 @@
         "invalid_device_key_id": "Nevažeći ID ključa uređaja",
         "invalid_json": "Ne izgleda kao valjani JSON.",
         "level": "Razina",
-        "low_bandwidth_mode": "Način rada niske propusnosti",
-        "low_bandwidth_mode_description": "Zahtijeva kompatibilan matični poslužitelj.",
+        "low_bandwidth_mode": "Onemogući značajke koje zahtijevaju puno propusnosti",
+        "low_bandwidth_mode_description": "Onemogućuje šifriranje, prisutnost, avatare, potvrde o čitanju i obavijesti o tipkanju",
         "main_timeline": "Glavna vremenska traka",
         "manual_device_verification": "Ručna potvrda uređaja",
         "no_receipt_found": "Nije pronađen račun",
+        "no_sticky_events": "U ovoj sobi nema sticky događaja.",
         "notification_state": "Stanje obavijesti je <strong>%(notificationState)s</strong>",
         "notifications_debug": "Otklanjanje pogrešaka u obavijestima",
         "number_of_users": "Broj korisnika",
@@ -851,6 +864,7 @@
         "send_custom_account_data_event": "Pošalji prilagođeni događaj podataka o računu",
         "send_custom_room_account_data_event": "Pošalji prilagođeni događaj podataka o računu sobe",
         "send_custom_state_event": "Pošalji prilagođeni događaj stanja",
+        "send_custom_sticky_event": "Pošalji prilagođeni sticky događaj",
         "send_custom_timeline_event": "Pošalji prilagođeni događaj vremenske trake",
         "server_info": "Informacije o poslužitelju",
         "server_versions": "Inačice poslužitelja",
@@ -871,6 +885,9 @@
             "other": "<%(count)s mjesta>"
         },
         "state_key": "Ključ stanja",
+        "sticky_duration": "Trajanje sticky događaja (ms)",
+        "sticky_events_not_supported": "Vaš matični poslužitelj još ne podržava sticky događaje.",
+        "sticky_key": "Ključ za sticky događaj",
         "thread_root_id": "ID korijena niti: %(threadRootId)s",
         "threads_timeline": "Vremenska traka niti",
         "title": "Alati za razvojne inženjere",
@@ -879,6 +896,8 @@
         "user_avatar": "Avatar: %(avatar)s",
         "user_displayname": "Ime za prikaz: %(displayname)s",
         "user_id": "ID korisnika: %(userId)s",
+        "user_identity": "Kriptografski identitet",
+        "user_identity_unknown": "Nepoznato",
         "user_no_avatar": "Avatar: <i>Nema</i>",
         "user_no_displayname": "Ime za prikaz: <i>Nema</i>",
         "user_read_up_to": "Korisnik je pročitao do: ",
@@ -887,10 +906,10 @@
         "user_read_up_to_private_ignore_synthetic": "Korisnik je pročitao do (m.read.private;ignoreSynthetic): ",
         "user_room_membership": "Članstvo: %(membership)s",
         "user_verification_status": {
-            "identity_changed": "Status provjere: <E2EIcon /> Nepotvrđen, a identitet promijenjen",
+            "identity_changed": "Status provjere: <E2EIcon /> Nepotvrđen, a digitalni identitet je promijenjen",
             "unverified": "Status provjere: <E2EIcon /> Nepotvrđen",
             "verified": "Status provjere: <E2EIcon /> Potvrđen",
-            "was_verified": "Status provjere: <E2EIcon /> Bio je potvrđen, ali je identitet promijenjen"
+            "was_verified": "Status provjere: <E2EIcon /> Bio je potvrđen, ali je digitalni identitet promijenjen"
         },
         "users": "Korisnici",
         "value": "Vrijednost",
@@ -908,22 +927,6 @@
     },
     "dialog_close_label": "Zatvori dijaloški okvir",
     "download_completed": "Preuzimanje je dovršeno",
-    "emoji": {
-        "categories": "Kategorije",
-        "category_activities": "Aktivnosti",
-        "category_animals_nature": "Životinje i priroda",
-        "category_flags": "Zastave",
-        "category_food_drink": "Hrana i piće",
-        "category_frequently_used": "Često korišteno",
-        "category_objects": "Predmeti",
-        "category_smileys_people": "Smješkići i ljudi",
-        "category_symbols": "Simboli",
-        "category_travel_places": "Putovanje i mjesta",
-        "quick_reactions": "Brze reakcije"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Otkaži pretraživanje"
-    },
     "empty_room": "Prazna soba",
     "empty_room_was_name": "Prazna soba (bila je %(oldName)s)",
     "encryption": {
@@ -956,7 +959,7 @@
         "event_shield_reason_unverified_identity": "Šifrirao neprovjereni korisnik.",
         "export_unsupported": "Vaš preglednik ne podržava potrebna proširenja za šifriranje",
         "forgot_recovery_key": "Zaboravili ste ključ za oporavak?",
-        "identity_needs_reset_description": "Morate poništiti svoj identitet šifriranja kako biste osigurali pristup povijesti poruka",
+        "identity_needs_reset_description": "Morate poništiti svoj digitalni identitet kako biste osigurali pristup povijesti poruka",
         "import_invalid_keyfile": "Nevažeća %(brand)s datoteka s ključem za šifriranje",
         "import_invalid_passphrase": "Provjera autentičnosti nije uspjela: netočna zaporka?",
         "key_storage_out_of_sync": "Vaša pohrana ključeva nije sinkronizirana.",
@@ -975,19 +978,19 @@
             "title": "Nov način oporavka",
             "warning": "Ako niste postavili nov način oporavka, napadač možda pokušava pristupiti vašem računu. Odmah u postavkama promijenite zaporku računa i postavite nov način oporavka."
         },
-        "pinned_identity_changed": "Identitet %(displayName)s (<b>%(userId)s</b>) je poništen. <a>Saznajte više</a>",
-        "pinned_identity_changed_no_displayname": "Identitet <b>%(userId)s</b> je poništen. <a>Saznajte više</a>",
+        "pinned_identity_changed": "Poništen je digitalni identitet %(displayName)s (<b>%(userId)s</b>). <a>Saznajte više</a>",
+        "pinned_identity_changed_no_displayname": "Poništen je digitalni identitet korisnika <b>%(userId)s</b>. <a>Saznajte više</a>",
         "recovery_method_removed": {
             "description_1": "Ova je sesija otkrila da su vaš sigurnosni izraz i ključ za zaštićene poruke uklonjeni.",
             "description_2": "Ako ste to učinili slučajno, možete postaviti zaštićene poruke u ovoj sesiji koje će ponovno šifrirati povijest poruka ove sesije novim načinom oporavka.",
             "title": "Način oporavka je uklonjen",
             "warning": "Ako niste uklonili način oporavka, napadač možda pokušava pristupiti vašem računu. Odmah u postavkama promijenite zaporku računa i postavite nov način oporavka."
         },
-        "set_up_recovery": "Postavljanje oporavka",
-        "set_up_recovery_toast_description": "Generirajte ključ za oporavak koji se može upotrijebiti za vraćanje vaše šifrirane povijesti poruka u slučaju da izgubite pristup svojim uređajima.",
+        "set_up_recovery": "Napravite sigurnosnu kopiju svojih razgovora",
+        "set_up_recovery_toast_description": "Vaši se razgovori automatski sigurnosno kopiraju sveobuhvatnim šifriranjem. Kako biste vratili ovu sigurnosnu kopiju i zadržali svoj digitalni identitet kada izgubite pristup svim svojim uređajima, trebat će vam ključ za oporavak.",
         "set_up_toast_title": "Postavljanje zaštićene sigurnosne kopije",
         "turn_on_key_storage": "Uključi pohranu ključeva",
-        "turn_on_key_storage_description": "Sigurno pohranite svoj identitet šifriranja i ključeve poruka na poslužitelju. To će vam omogućiti pregled povijesti poruka na svim novim uređajima.",
+        "turn_on_key_storage_description": "To će vam omogućiti pregled povijesti razgovora na bilo kojem novom uređaju i potrebno je za sigurnosno kopiranje razgovora i digitalnog identiteta.",
         "unable_to_setup_keys_error": "Nije moguće postaviti ključeve",
         "verification": {
             "accepting": "U tijeku je prihvaćanje…",
@@ -1003,7 +1006,7 @@
             "complete_description": "Uspješno ste provjerili ovog korisnika.",
             "complete_title": "Provjereno!",
             "confirm_identity_description": "Potvrdite ovaj uređaj kako biste postavili sigurnu razmjenu poruka",
-            "confirm_identity_title": "Potvrdite svoj identitet",
+            "confirm_identity_title": "Potvrdite svoj digitalni identitet",
             "confirm_the_emojis": "Potvrdite da se emotikoni u nastavku podudaraju s onima prikazanima na vašem drugom uređaju.",
             "error_starting_description": "Nismo uspjeli pokrenuti razgovor s drugim korisnikom.",
             "error_starting_title": "Pogreška pri pokretanju provjere",
@@ -1087,10 +1090,10 @@
             "waiting_other_user": "Čeka se da %(displayName)s provjeri…"
         },
         "verification_requested_toast_title": "Zatražena je provjera",
-        "verified_identity_changed": "Identitet %(displayName)s (<b>%(userId)s</b>) je poništen. <a>Saznajte više</a>",
-        "verified_identity_changed_no_displayname": "Identitet <b>%(userId)s</b> je poništen. <a>Saznajte više</a>",
-        "verify_toast_description": "Drugi korisnici možda vam neće vjerovati",
-        "verify_toast_title": "Potvrdi ovu sesiju",
+        "verified_identity_changed": "Poništen je digitalni identitet %(displayName)s (<b>%(userId)s</b>). <a>Saznajte više</a>",
+        "verified_identity_changed_no_displayname": "Poništen je digitalni identitet korisnika <b>%(userId)s</b>. <a>Saznajte više</a>",
+        "verify_toast_description": "Od kraja listopada 2026. neprovjereni uređaji neće moći slati i primati poruke. <a>Saznajte više</a>",
+        "verify_toast_title": "Potvrdi ovaj uređaj",
         "withdraw_verification_action": "Povuci provjeru"
     },
     "error": {
@@ -1115,15 +1118,15 @@
         "non_urgent_echo_failure_toast": "Vaš poslužitelj ne odgovara na neke <a>zahtjeve</a>.",
         "resource_limits": "Ovaj je matični poslužitelj premašio jedno od svojih ograničenja resursa.",
         "session_restore": {
-            "clear_storage_button": "Ukloni pohranu i odjavi se",
-            "clear_storage_description": "Želite li se odjaviti i ukloniti ključeve za šifriranje?",
-            "description_1": "Došlo je do pogreške prilikom pokušaja vraćanja vaše prethodne sesije.",
+            "clear_storage_button": "Ukloni ovaj uređaj",
+            "clear_storage_description": "Želite li ukloniti ovaj uređaj i njegove ključeve za šifriranje?",
+            "description_1": "Došlo je do pogreške prilikom pokušaja vraćanja vaše sesije.",
             "description_2": "Ako ste prethodno upotrebljavali noviju inačicu %(brand)s, vaša sesija možda nije kompatibilna s ovom inačicom. Zatvorite ovaj prozor i vratite se na noviju inačicu.",
-            "description_3": "Brisanjem memorije preglednika možete riješiti problem, ali time ćete se odjaviti i sva će šifrirana povijest razgovora postati nečitljiva.",
+            "description_3": "Brisanjem pohrane preglednika možete riješiti problem, ali time ćete ukloniti ovaj uređaj i sva će šifrirana povijest razgovora postati nečitljiva.",
             "title": "Nije moguće vratiti sesiju"
         },
         "something_went_wrong": "Nešto je pošlo po zlu!",
-        "storage_evicted_description_1": "Nedostaju neki podatci o sesiji, uključujući šifrirane ključeve poruka. Odjavite se i prijavite kako biste to ispravili vraćanjem ključeva iz sigurnosne kopije.",
+        "storage_evicted_description_1": "Nedostaju neki podatci o sesiji, uključujući ključeve za šifriranje poruka. Uklonite ovaj uređaj i ponovno se prijavite kako biste to ispravili vraćanjem ključeva iz sigurnosne kopije.",
         "storage_evicted_description_2": "Vaš je preglednik vjerojatno uklonio ove podatke kada mu je ponestalo prostora na disku.",
         "storage_evicted_title": "Nedostaju podatci o sesiji",
         "sync": "Nije moguće povezivanje s matičnim poslužiteljem. U tijeku je ponovni pokušaj…",
@@ -1342,6 +1345,14 @@
         "impossible_dialog_title": "Integracije nisu dopuštene"
     },
     "invite": {
+        "confirm_unknown_users": {
+            "invite_subtitle": "Trenutačno nemate razgovora s ovim kontaktima. Potvrdite da ih želite pozvati u ovu sobu prije nego što nastavite.",
+            "invite_title": "Želite li pozvati nove kontakte u ovu sobu?",
+            "start_chat_subtitle_multiple_users": "Trenutačno nemate razgovora s ovim osobama. Potvrdite da ih želite pozvati prije nego što nastavite.",
+            "start_chat_subtitle_one_user": "Trenutačno nemate razgovora s ovom osobom. Potvrdite da je želite pozvati prije nego što nastavite.",
+            "start_chat_title_multiple_users": "Želite li započeti razgovor s ovim novim kontaktima?",
+            "start_chat_title_one_user": "Želite li započeti razgovor s ovim novim kontaktom?"
+        },
         "email_caption": "Pozovi e-poštom",
         "email_limit_one": "Pozivnice koje se šalju e-poštom mogu se slati samo jedna po jedna",
         "email_use_default_is": "Upotrebljavate poslužitelj identiteta za slanje pozivnica e-poštom. <default>Upotrijebite zadani (%(defaultIdentityServerName)s)</default> ili ga promijenite u odjeljku <settings>Postavke</settings>.",
@@ -1494,6 +1505,7 @@
         "bridge_state_manager": "Ovim mostom upravlja <user />.",
         "bridge_state_workspace": "Radni prostor: <networkLink/>",
         "click_for_info": "Kliknite za više informacija",
+        "config_only": "Može se omogućiti samo putem config.json.",
         "currently_experimental": "Trenutačno u eksperimentalnoj fazi.",
         "custom_themes": "Podrška za dodavanje prilagođenih tema",
         "dynamic_room_predecessors": "Dinamički prethodnici soba",
@@ -1507,8 +1519,17 @@
         "experimental_section": "Rani pregledi",
         "extended_profiles_msc_support": "Zahtijeva da vaš poslužitelj podržava MSC4133",
         "feature_disable_call_per_sender_encryption": "Onemogući šifriranje po pošiljatelju za Element Call",
+        "feature_retention": {
+            "description": "Automatski uklonite poruke iz sobe kada istekne konfigurirano razdoblje čuvanja. Trenutačno podržava samo postavke čitanja.",
+            "disabled_sliding_sync": "Čuvanje se ne može omogućiti kada je omogućen Sliding Sync.",
+            "display_name": "Čuvanje poruka"
+        },
+        "feature_user_status": {
+            "description": "Omogućuje pregled i postavljanje trenutačnog statusa.",
+            "display_name": "Status korisnika",
+            "required_msc_support": "Zahtijeva MSC4429 (ažuriranja profila za naslijeđeni Sync)"
+        },
         "feature_wysiwyg_composer_description": "Upotrebljavaj obogaćeni tekst umjesto Markdowna u sastavljaču poruka.",
-        "group_calls": "Novo iskustvo grupnih poziva",
         "group_developer": "Razvojni inženjer",
         "group_encryption": "Šifriranje",
         "group_experimental": "Eksperimentalno",
@@ -1523,7 +1544,6 @@
         "group_voip": "Glas i videozapis",
         "group_widgets": "Widgeti",
         "hidebold": "Sakrij indikator obavijesti (prikaži samo brojčane oznake)",
-        "html_topic": "Prikaži HTML prikaz tema soba",
         "join_beta": "Pridruži se beta inačici",
         "join_beta_reload": "Pridruživanjem beta inačici ponovno će se pokrenuti %(brand)s.",
         "jump_to_date": "Skoči na datum (dodaje zaglavlja /jumptodate i skok na datum)",
@@ -1533,9 +1553,9 @@
         "leave_beta_reload": "Napuštanjem beta inačice ponovno će se pokrenuti %(brand)s.",
         "location_share_live": "Dijeljenje lokacije uživo",
         "location_share_live_description": "Privremena implementacija. Lokacije ostaju u povijesti sobe.",
+        "login_with_qr": "Prijavi se pomoću QR koda",
         "mjolnir": "Novi načini ignoriranja osoba",
         "msc3531_hide_messages_pending_moderation": "Dopusti moderatorima da sakriju poruke koje čekaju moderiranje.",
-        "new_room_list": "Omogući novi popis soba",
         "notification_settings": "Nove postavke obavijesti",
         "notification_settings_beta_caption": "Predstavljamo jednostavniji način promjene postavki obavijesti. Prilagodite svoj %(brand)s tako da bude po vašoj mjeri.",
         "notification_settings_beta_title": "Postavke obavijesti",
@@ -1544,10 +1564,11 @@
         "render_reaction_images_description": "Ponekad se nazivaju „prilagođeni emotikoni”",
         "sliding_sync": "Način rada Sliding Sync",
         "sliding_sync_description": "Značajka je u razvoju, ne može se onemogućiti. Trenutačno nije kompatibilna s Element Callom.",
-        "sliding_sync_disabled_notice": "Odjavite se i ponovno prijavite da biste onemogućili",
+        "sliding_sync_disabled_notice": "Ponovno se prijavite da biste onemogućili",
         "sliding_sync_server_no_support": "Vaš poslužitelj nema podršku",
-        "under_active_development": "Trenutačno je u razvoju.",
         "unrealiable_e2e": "Nepouzdano u šifriranim sobama",
+        "url_preview_bundle": "Paket za pretpregled URL-ova (MSC4095)",
+        "url_preview_bundle_description": "Pošaljite pretpreglede URL-ova u poruci uz sadržaj poruke",
         "video_rooms": "Videosobe",
         "video_rooms_a_new_way_to_chat": "Nov način razgovora putem glasa i videa u %(brand)s.",
         "video_rooms_always_on_voip_channels": "Videosobe su VoIP kanali koji su uvijek uključeni i ugrađeni u sobu u %(brand)s.",
@@ -1601,9 +1622,6 @@
         "room_leave_mod_warning": "Vi ste jedini moderator u ovoj sobi. Ako odete, nitko neće moći mijenjati postavke sobe ili poduzimati druge važne radnje.",
         "room_rejoin_warning": "Ova soba nije javna. Nećete se moći ponovno pridružiti bez pozivnice.",
         "space_rejoin_warning": "Ovaj prostor nije javan. Nećete se moći ponovno pridružiti bez pozivnice."
-    },
-    "left_panel": {
-        "open_dial_pad": "Otvori brojčanik"
     },
     "lightbox": {
         "rotate_left": "Zakreni ulijevo",
@@ -1701,10 +1719,9 @@
         "level_notification": "Obavijest",
         "level_unsent": "Nije poslano",
         "mark_all_read": "Označi sve kao pročitano",
-        "mentions_and_keywords": "@spominjanja i ključne riječi",
-        "mentions_and_keywords_description": "Primajte obavijesti samo o spominjanjima i ključnim riječima kako je postavljeno u vašim <a>postavkama</a>",
+        "mentions_and_keywords": "samo @spominjanja i odgovori",
+        "mentions_and_keywords_description": "Primajte obavijesti samo o spominjanjima, odgovorima i ključnim riječima kako je postavljeno u vašim <a>postavkama</a>",
         "mentions_keywords": "Spominjanja i ključne riječi",
-        "message_didnt_send": "Poruka nije poslana. Kliknite za informacije.",
         "mute_description": "Nećete primati nikakve obavijesti"
     },
     "notifier": {
@@ -1806,7 +1823,6 @@
     },
     "quick_settings": {
         "all_settings": "Sve postavke",
-        "metaspace_section": "Prikvači na bočnu traku",
         "sidebar_settings": "Više mogućnosti",
         "title": "Brze postavke"
     },
@@ -1821,6 +1837,12 @@
         "error": "Ne možete izbrisati ovu poruku. (%(code)s)",
         "ongoing": "U tijeku je uklanjanje…",
         "reason_label": "Razlog (neobavezno)"
+    },
+    "remove_section_dialog": {
+        "confirmation": "Sigurno želite ukloniti ovaj odjeljak?",
+        "description": "Razgovori u ovom odjeljku i dalje će biti dostupni na vašem popisu razgovora.",
+        "remove_section": "Ukloni odjeljak",
+        "title": "Želite li ukloniti odjeljak?"
     },
     "report_content": {
         "description": "Prijavljivanjem ove poruke administratoru matičnog poslužitelja poslat će se njezin jedinstveni ID događaja. Ako su poruke u ovoj sobi šifrirane, administrator matičnog poslužitelja neće moći pročitati tekst poruke niti pregledati datoteke ili slike.",
@@ -1964,6 +1986,7 @@
         "error_join_incompatible_version_1": "Žao nam je, vaš je matični poslužitelj prestar da bi ovdje sudjelovao.",
         "error_join_incompatible_version_2": "Kontaktirajte s administratorom svog matičnog poslužitelja.",
         "error_join_title": "Pridruživanje nije uspjelo",
+        "error_join_unknown": "Došlo je do nepoznate pogreške.",
         "error_jump_to_date": "Poslužitelj je prikazao %(statusCode)s s kodom pogreške %(errorCode)s",
         "error_jump_to_date_connection": "Došlo je do mrežne pogreške prilikom pokušaja pronalaženja zadanog datuma i prelaska na njega. Vaš matični poslužitelj možda ne radi ili je samo došlo do kratkog prekida internetske veze. Pokušajte ponovno. Ako se ovo ponovi, obratite se administratoru svog matičnog poslužitelja.",
         "error_jump_to_date_details": "Pojedinosti o pogrešci",
@@ -1994,7 +2017,9 @@
                 "few": "%(count)s osobe traže da se pridruže",
                 "other": "%(count)s osoba traži da se pridruži"
             },
-            "room_is_public": "Ova je soba javna"
+            "room_is_public": "Ova je soba javna",
+            "shared_history_tooltip": "Novi članovi vide povijest",
+            "world_readable_history_tooltip": "Svatko može vidjeti povijest"
         },
         "header_avatar_open_settings_label": "Otvori postavke sobe",
         "header_face_pile_tooltip": "Osobe",
@@ -2111,44 +2136,21 @@
         "waiting_for_join_title": "Čeka se da se korisnici pridruže %(brand)s"
     },
     "room_list": {
-        "add_room_label": "Dodaj sobu",
         "add_space_label": "Dodaj prostor",
-        "breadcrumbs_empty": "Nema nedavno posjećenih soba",
-        "breadcrumbs_label": "Nedavno posjećene sobe",
         "failed_add_tag": "Nije uspjelo dodavanje oznake %(tagName)s na sobu",
         "failed_remove_tag": "Nije uspjelo uklanjanje oznake %(tagName)s sa sobe",
         "failed_set_dm_tag": "Nije uspjelo postavljanje oznake za izravnu poruku",
-        "home_menu_label": "Mogućnosti početne stranice",
-        "join_public_room_label": "Pridruži se javnoj sobi",
-        "joining_rooms_status": {
-            "one": "Trenutačno se pridružuje %(count)s sobi",
-            "few": "Trenutačno se pridružuje %(count)s sobe",
-            "other": "Trenutačno se pridružuje %(count)s soba"
-        },
         "list_title": "Popis soba",
         "more_options": {
             "leave_room": "Napusti sobu"
         },
         "notification_options": "Mogućnosti obavijesti",
-        "redacting_messages_status": {
-            "one": "Trenutačno se uklanjaju poruke u %(count)s sobi",
-            "few": "Trenutačno se uklanjaju poruke u %(count)s sobe",
-            "other": "Trenutačno se uklanjaju poruke u %(count)s soba"
+        "section": {
+            "chats": "Razgovori",
+            "favourites": "Favoriti",
+            "low_priority": "Niski prioritet"
         },
-        "show_less": "Prikaži manje",
-        "show_n_more": {
-            "one": "Prikaži još %(count)s",
-            "few": "Prikaži još %(count)s",
-            "other": "Prikaži još %(count)s"
-        },
-        "show_previews": "Prikaži preglede poruka",
-        "sort_by": "Poredaj po",
-        "sort_by_activity": "Aktivnost",
-        "sort_by_alphabet": "A – Z",
-        "sort_unread_first": "Prvo prikaži sobe s nepročitanim porukama",
-        "space_menu_label": "Izbornik za %(spaceName)s",
-        "sublist_options": "Mogućnosti popisa",
-        "suggested_rooms_heading": "Predložene sobe"
+        "show_less": "Prikaži manje"
     },
     "room_settings": {
         "access": {
@@ -2327,36 +2329,37 @@
             "history_visibility_legend": "Tko može čitati povijest?",
             "history_visibility_shared": "Članovi (cjelokupna povijest)",
             "history_visibility_warning": "Promjene neće utjecati na prethodne poruke, samo na nove. <a>Saznajte više</a>",
-            "history_visibility_world_readable": "Svatko (povijest je javna)\n",
+            "history_visibility_world_readable": "Svatko (povijest je javna)",
             "join_rule_description": "Odlučite tko se može pridružiti sobi %(roomName)s.",
-            "join_rule_invite": "Privatno (samo uz pozivnicu)",
+            "join_rule_invite": "Samo s pozivnicom",
             "join_rule_invite_description": "Samo pozvane osobe mogu se pridružiti.",
             "join_rule_knock": "Zatraži pridruživanje",
             "join_rule_knock_description": "Osobe se ne mogu pridružiti osim ako im nije odobren pristup.",
-            "join_rule_public_description": "Svatko može pronaći i pridružiti se.",
+            "join_rule_public": "Bilo tko",
+            "join_rule_public_description": "Svatko se može pridružiti.",
             "join_rule_restricted": "Članovi prostora",
-            "join_rule_restricted_description": "Svatko u prostoru može pronaći i pridružiti se. <a>Uredite kojim je prostorima ovdje omogućen pristup.</a>",
-            "join_rule_restricted_description_active_space": "Svatko u <spaceName/> možete pronaći i pridružiti se. Možete odabrati i druge prostore.",
-            "join_rule_restricted_description_prompt": "Svatko u prostoru može pronaći i pridružiti se. Možete odabrati više prostora.",
-            "join_rule_restricted_description_spaces": "Prostori s pristupom",
-            "join_rule_restricted_dialog_description": "Odlučite koji prostori mogu pristupiti ovoj sobi. Ako se prostor odabere, njegovi članovi mogu ga pronaći i pridružiti se sobi <RoomName/>.",
-            "join_rule_restricted_dialog_empty_warning": "Uklonit ćete sve prostore. Pristup će zadano biti samo uz pozivnicu",
+            "join_rule_restricted_description": "Svatko u ovlaštenim prostorima može se pridružiti bez pozivnice. <a>Upravljanje prostorom</a>",
+            "join_rule_restricted_description_active_space": "Svatko u prostoru <spaceName/> može se pridružiti.",
+            "join_rule_restricted_description_prompt": "Svatko u prostoru može se pridružiti.",
+            "join_rule_restricted_description_spaces": "Ovlašteni prostori",
+            "join_rule_restricted_dialog_description": "Prostori u kojima se članovi mogu pridružiti sobi <RoomName/> bez pozivnice.",
+            "join_rule_restricted_dialog_empty_warning": "Uklonit ćete sve ovlaštene prostore. Pristup će zadano biti samo uz pozivnicu",
             "join_rule_restricted_dialog_filter_placeholder": "Pretraži prostore",
-            "join_rule_restricted_dialog_heading_known": "Drugi prostori koje poznajete",
-            "join_rule_restricted_dialog_heading_other": "Drugi prostori ili sobe koje možda ne poznajete",
-            "join_rule_restricted_dialog_heading_room": "Prostori koje poznajete, a koji sadrže ovu sobu",
+            "join_rule_restricted_dialog_heading_known": "Vaši prostori koji ne sadrže ovu sobu",
+            "join_rule_restricted_dialog_heading_other": "Drugi prostori kojih niste član",
+            "join_rule_restricted_dialog_heading_room": "Vaši prostori koji sadrže ovu sobu",
             "join_rule_restricted_dialog_heading_space": "Prostori koje poznajete, a koji sadrže ovaj prostor",
             "join_rule_restricted_dialog_heading_unknown": "Odnosi se vjerojatno na one u kojima sudjeluju i drugi administratori soba.",
-            "join_rule_restricted_dialog_title": "Odaberi prostore",
+            "join_rule_restricted_dialog_title": "Upravljaj prostorima",
             "join_rule_restricted_n_more": {
                 "one": "i još %(count)s",
                 "few": "i još %(count)s",
                 "other": "i još %(count)s"
             },
             "join_rule_restricted_summary": {
-                "one": "Trenutačno prostor ima pristup",
-                "few": "Trenutačno %(count)s prostora imaju pristup",
-                "other": "Trenutačno %(count)s prostora ima pristup"
+                "one": "Trenutačno je jedan prostor ovlašten",
+                "few": "Trenutačno su %(count)s prostora ovlaštena",
+                "other": "Trenutačno je %(count)s prostora ovlašteno"
             },
             "join_rule_restricted_upgrade_description": "Ova će nadogradnja omogućiti članovima odabranih prostora pristup ovoj sobi bez pozivnice.",
             "join_rule_restricted_upgrade_warning": "Ova se soba nalazi u nekim prostorima čiji niste administrator. U tim će se prostorima i dalje prikazivati ​​stara soba, ali će se od osoba tražiti da se pridruže novoj.",
@@ -2384,17 +2387,17 @@
         "upload_avatar_label": "Prenesi avatar",
         "visibility": {
             "alias_section": "Adresa",
-            "error_failed_save": "Nije uspjelo ažuriranje vidljivosti ovog prostora",
+            "error_failed_save": "Nije uspjelo ažuriranje postavki ovog prostora",
             "error_update_guest_access": "Nije uspjelo ažuriranje pristupa za goste ovog prostora",
             "error_update_history_visibility": "Nije uspjelo ažuriranje povijesti vidljivosti ovog prostora",
             "guest_access_disabled": "Nemate dopuštenje za promjenu pristupa za goste.",
             "guest_access_explainer": "Gosti se mogu pridružiti prostoru bez računa. To može biti korisno za javne prostore.",
             "guest_access_label": "Omogući pristup gostima",
-            "history_visibility_anyone_space": "Pregled prostora",
+            "history_visibility_anyone_space": "Pretpregled prostora",
             "history_visibility_anyone_space_description": "Omogućite osobama da pregledaju vaš prostor prije nego što se pridruže.",
             "history_visibility_anyone_space_disabled": "Nemate dopuštenje za promjenu vidljivosti povijesti.",
             "history_visibility_anyone_space_recommendation": "Preporučuje se za javne prostore.",
-            "title": "Vidljivost"
+            "title": "Sigurnost i privatnost"
         },
         "voip": {
             "call_type_section": "Vrsta poziva",
@@ -2445,7 +2448,8 @@
         "warning_kind_files": "Ova inačica %(brand)s ne podržava pregled nekih šifriranih datoteka",
         "warning_kind_files_app": "Upotrijebite <a>aplikaciju za stolna računala</a> kako biste vidjeli sve šifrirane datoteke",
         "warning_kind_search": "Ova inačica %(brand)s ne podržava pretraživanje šifriranih poruka",
-        "warning_kind_search_app": "Upotrijebite <a>aplikaciju za stolna računala</a> kako biste pretražili šifrirane poruke"
+        "warning_kind_search_app": "Upotrijebite <a>aplikaciju za stolna računala</a> kako biste pretražili šifrirane poruke",
+        "warning_kind_search_partial": "Rezultati mogu biti nepotpuni jer se vaš indeks pretraživanja još uvijek izrađuje."
     },
     "setting": {
         "help_about": {
@@ -2512,10 +2516,10 @@
                 "breadcrumb_page": "Poništi šifriranje",
                 "breadcrumb_second_description": "Izgubit ćete svu povijest poruka koja je pohranjena samo na poslužitelju",
                 "breadcrumb_third_description": "Morat ćete ponovno potvrditi sve svoje postojeće uređaje i kontakte",
-                "breadcrumb_title": "Jeste li sigurni da želite poništiti svoj identitet?",
-                "breadcrumb_title_cant_confirm": "Morate poništiti svoj identitet",
-                "breadcrumb_title_forgot": "Zaboravili ste ključ za oporavak? Morat ćete poništiti svoj identitet.",
-                "breadcrumb_title_sync_failed": "Sinkronizacija pohrane ključeva nije uspjela. Morate poništiti svoj identitet.",
+                "breadcrumb_title": "Sigurno želite poništiti svoj digitalni identitet?",
+                "breadcrumb_title_cant_confirm": "Morate poništiti svoj digitalni identitet",
+                "breadcrumb_title_forgot": "Zaboravili ste ključ za oporavak? Morat ćete poništiti svoj digitalni identitet.",
+                "breadcrumb_title_sync_failed": "Sinkronizacija pohrane ključeva nije uspjela. Trebate poništiti svoj digitalni identitet.",
                 "breadcrumb_warning": "Učinite to samo ako smatrate da je vaš račun kompromitiran.",
                 "details_title": "Pojedinosti o šifriranju",
                 "do_not_close_warning": "Ne zatvarajte ovaj prozor dok se poništavanje promjena ne dovrši",
@@ -2531,13 +2535,13 @@
                 "title": "Napredno"
             },
             "confirm_key_storage_off": "Jeste li sigurni da želite da pohrana ključeva ostane isključena?",
-            "confirm_key_storage_off_description": "Ako se odjavite sa svih svojih uređaja, izgubit ćete povijest poruka i morat ćete ponovno potvrditi sve postojeće kontakte. <a>Saznajte više</a>",
+            "confirm_key_storage_off_description": "Ako uklonite sve svoje uređaje, izgubit ćete povijest poruka i trebat ćete ponovno potvrditi sve svoje postojeće kontakte. <a>Saznajte više</a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Brisanje pohrane ključeva",
                 "confirm": "Brisanje pohrane ključeva",
                 "description": "Brisanjem pohrane ključeva uklonit ćete svoj kriptografski identitet i ključeve poruka s poslužitelja te isključiti sljedeće sigurnosne značajke:",
                 "list_first": "Na novim uređajima nećete imati šifriranu povijest poruka",
-                "list_second": "Ako se svugdje odjavite iz %(brand)s, izgubit ćete pristup svojim šifriranim porukama.",
+                "list_second": "Izgubit ćete pristup svojim šifriranim porukama ako niste prijavljeni ni na jedan uređaj",
                 "title": "Jeste li sigurni da želite isključiti pohranu ključeva i izbrisati je?"
             },
             "device_not_verified_button": "Potvrdi ovaj uređaj",
@@ -2546,7 +2550,7 @@
             "dialog_title": "<strong>Postavke:</strong> Šifriranje",
             "key_storage": {
                 "allow_key_storage": "Dopusti pohranu ključeva",
-                "description": "Sigurno pohranite svoj identitet šifriranja i ključeve poruka na poslužitelju. To će vam omogućiti pregled povijesti poruka na svim novim uređajima. <a>Saznajte više</a>",
+                "description": "To će vam omogućiti pregled povijesti razgovora na svakom novom uređaju i potrebno je za sigurnosno kopiranje razgovora i digitalnog identiteta. <a>Saznajte više</a>",
                 "title": "Pohrana ključeva"
             },
             "recovery": {
@@ -2556,14 +2560,14 @@
                 "change_recovery_key": "Promjena ključa za oporavak",
                 "change_recovery_key_description": "Zapišite ovaj novi ključ za oporavak i čuvajte na sigurnom mjestu. Zatim kliknite gumb za nastavak kako biste potvrdili promjenu.",
                 "change_recovery_key_title": "Želite li promijeniti ključ za oporavak?",
-                "description": "Ako ste izgubili sve postojeće uređaje, oporavite svoj kriptografski identitet i povijest poruka pomoću ključa za oporavak.",
+                "description": "Vaši se razgovori automatski sigurnosno kopiraju sveobuhvatnim šifriranjem. Kako biste vratili ovu sigurnosnu kopiju i zadržali svoj digitalni identitet kada izgubite pristup svim svojim uređajima, trebat će vam ključ za oporavak.",
                 "enter_key_error": "Ključ za oporavak koji ste unijeli nije ispravan.",
                 "enter_recovery_key": "Unesi ključ za oporavak",
                 "forgot_recovery_key": "Zaboravili ste ključ za oporavak?",
                 "key_storage_warning": "Vaša pohrana ključeva nije sinkronizirana. Kliknite jedan od donjih gumba da biste riješili problem.",
                 "save_key_description": "Ne dijelite ovo ni s kim!",
                 "save_key_title": "Ključ za oporavak",
-                "set_up_recovery": "Postavljanje oporavka",
+                "set_up_recovery": "Nabavite ključ za oporavak",
                 "set_up_recovery_confirm_button": "Završi postavljanje",
                 "set_up_recovery_confirm_description": "Unesite ključ za oporavak prikazan na prethodnom zaslonu kako biste dovršili postavljanje oporavka.",
                 "set_up_recovery_confirm_title": "Unesite svoj ključ za oporavak kako biste potvrdili",
@@ -2571,7 +2575,7 @@
                 "set_up_recovery_save_key_description": "Zapišite ovaj ključ za oporavak i čuvajte ga na sigurnom mjestu, poput upravitelja zaporki, šifrirane bilješke ili fizičkog sefa.",
                 "set_up_recovery_save_key_title": "Spremite svoj ključ za oporavak na sigurno mjesto",
                 "set_up_recovery_secondary_description": "Nakon što kliknete gumb za nastavak, generirat ćemo vam ključ za oporavak.",
-                "title": "Oporavak"
+                "title": "Sigurnosna kopija"
             },
             "title": "Šifriranje"
         },
@@ -2664,7 +2668,8 @@
             "unable_to_load_msisdns": "Nije moguće učitati telefonske brojeve",
             "username": "Korisničko ime"
         },
-        "inline_url_previews_default": "Zadano omogući umetnute pretpreglede URL-ova",
+        "inline_url_previews_default": "Omogući pretpreglede",
+        "inline_url_previews_encrypted": "Omogući pretpreglede u šifriranim sobama",
         "insert_trailing_colon_mentions": "Umetni dvotočku nakon što spominjanja korisnika na početku poruke",
         "invite_controls": {
             "default_label": "Dopustite korisnicima da vas pozovu u sobe"
@@ -2775,13 +2780,13 @@
             "room_activity": "Pojavljuju se nove aktivnosti u sobi, nadogradnje i poruke o statusu",
             "rule_call": "Pozivnica za poziv",
             "rule_contains_display_name": "Poruke koje sadrže moje ime za prikaz",
-            "rule_contains_user_name": "Poruke koje sadrže moje korisničko ime",
+            "rule_contains_user_name": "@spominjanja i odgovori",
             "rule_encrypted": "Šifrirane poruke u grupnim razgovorima",
             "rule_encrypted_room_one_to_one": "Šifrirane poruke u razgovorima jedan na jedan",
             "rule_invite_for_me": "Kad me pozovu u sobu",
             "rule_message": "Poruke u grupnim razgovorima",
             "rule_room_one_to_one": "Poruke u razgovorima jedan na jedan",
-            "rule_roomnotif": "Poruke koje sadrže @soba",
+            "rule_roomnotif": "@spominjanja u sobi",
             "rule_suppress_notices": "Poruke koje je poslao bot",
             "rule_tombstone": "Kada se sobe nadograde",
             "show_message_desktop_notification": "Prikaži poruku u obavijestima na radnoj površini",
@@ -2802,6 +2807,8 @@
             "enable_tray_icon": "Prikaži ikonu u traci sustava i minimiziraj prozor na nju prilikom zatvaranja",
             "keyboard_heading": "Prečaci na tipkovnici",
             "keyboard_view_shortcuts_button": "Za pregled svih prečaca na tipkovnici <a>kliknite ovdje</a>.",
+            "link_previews_description": "Prikazuje informacije o poveznicama ispod poruka",
+            "link_previews_heading": "Pretpregledi poveznica",
             "media_heading": "Slike, GIF-ovi i videozapisi",
             "presence_description": "Podijelite svoju aktivnost i status s drugima.",
             "publish_timezone": "Objavi vremensku zonu na javnom profilu",
@@ -2860,32 +2867,31 @@
         "send_read_receipts_unsupported": "Vaš poslužitelj ne podržava onemogućavanje slanja potvrde o čitanju.",
         "send_typing_notifications": "Pošalji obavijesti o tipkanju",
         "sessions": {
-            "best_security_note": "Za najveću sigurnost provjerite svoje sesije i odjavite se iz bilo koje sesije koju više ne prepoznajete ili je ne upotrebljavate.",
-            "browser": "Preglednik",
+            "best_security_note": "Za najveću sigurnost provjerite svoje sesije i uklonite bilo koju sesiju koju više ne prepoznajete ili upotrebljavate.",
             "confirm_sign_out": {
-                "one": "Potvrdite odjavu s ovog uređaja",
-                "few": "Potvrdite odjavu s ovih uređaja",
-                "other": "Potvrdite odjavu s ovih uređaja"
+                "one": "Potvrdite uklanjanje ovog uređaja",
+                "few": "Potvrdite uklanjanje ovih uređaja",
+                "other": "Potvrdite uklanjanje ovih uređaja"
             },
             "confirm_sign_out_body": {
-                "one": "Kliknite ispod navedeni gumb kako biste potvrdili odjavu s ovog uređaja.",
-                "few": "Kliknite ispod navedeni gumb kako biste potvrdili odjavu s ovih uređaja.",
-                "other": "Kliknite ispod navedeni gumb kako biste potvrdili odjavu s ovih uređaja."
+                "one": "Kliknite ispod navedeni gumb kako biste potvrdili uklanjanje ovog uređaja.",
+                "few": "Kliknite ispod navedeni gumb kako biste potvrdili uklanjanje ovih uređaja.",
+                "other": "Kliknite ispod navedeni gumb kako biste potvrdili uklanjanje ovih uređaja."
             },
             "confirm_sign_out_continue": {
-                "one": "Odjava s uređaja",
-                "few": "Odjava s uređaja",
-                "other": "Odjava s uređaja"
+                "one": "Ukloni uređaj",
+                "few": "Ukloni uređaje",
+                "other": "Ukloni uređaje"
             },
             "confirm_sign_out_sso": {
-                "one": "Potvrdite odjavu s ovog uređaja koristeći jedinstvenu prijavu (SSO) kako biste dokazali svoj identitet.",
-                "few": "Potvrdite odjavu s ovih uređaja koristeći jedinstvenu prijavu (SSO) kako biste dokazali svoj identitet.",
-                "other": "Potvrdite odjavu s ovih uređaja koristeći jedinstvenu prijavu (SSO) kako biste dokazali svoj identitet."
+                "one": "Potvrdite uklanjanje ovog uređaja koristeći jedinstvenu prijavu (SSO) kako biste dokazali svoj identitet.",
+                "few": "Potvrdite uklanjanje ovih uređaja koristeći jedinstvenu prijavu (SSO) kako biste dokazali svoj identitet.",
+                "other": "Potvrdite uklanjanje ovih uređaja koristeći jedinstvenu prijavu (SSO) kako biste dokazali svoj identitet."
             },
             "current_session": "Trenutačna sesija",
             "desktop_session": "Sesija na stolnom računalu",
             "details_heading": "Pojedinosti o sesiji",
-            "device_unverified_description": "Kako biste postigli najveću sigurnost i pouzdanost, potvrdite ovu sesiju ili se odjavite iz nje.",
+            "device_unverified_description": "Kako biste postigli najveću sigurnost i pouzdanost, potvrdite ili uklonite ovu sesiju.",
             "device_unverified_description_current": "Potvrdite svoju trenutačnu sesiju kako bi se poboljšala sigurna razmjena poruka.",
             "device_verified_description": "Ova sesija spremna je za sigurnu razmjenu poruka.",
             "device_verified_description_current": "Vaša trenutačna sesija spremna je za sigurnu razmjenu poruka.",
@@ -2903,7 +2909,7 @@
             "inactive_sessions": "Neaktivne sesije",
             "inactive_sessions_explainer_1": "Neaktivne sesije su one koje niste upotrebljavali neko vrijeme, ali i dalje primaju ključeve za šifriranje.",
             "inactive_sessions_explainer_2": "Uklanjanje neaktivnih sesija poboljšava sigurnost i performanse te vam olakšava da prepoznate je li nova sesija sumnjiva.",
-            "inactive_sessions_list_description": "Razmislite o odjavi sa starih sesija (%(inactiveAgeDays)s dana ili starije) koje više ne upotrebljavate.",
+            "inactive_sessions_list_description": "Razmislite o uklanjanju starih sesija (%(inactiveAgeDays)s dana ili starije) koje više ne upotrebljavate.",
             "ip": "IP adresa",
             "last_activity": "Posljednja aktivnost",
             "manage": "Upravljaj ovom sesijom",
@@ -2917,7 +2923,6 @@
             "no_sessions": "Nije pronađena nijedna sesija.",
             "no_unverified_sessions": "Nema nepotvrđenih sesija.",
             "no_verified_sessions": "Nema potvrđenih sesija.",
-            "os": "Operativni sustav",
             "other_sessions_heading": "Ostale sesije",
             "push_heading": "Push obavijesti",
             "push_subheading": "Primajte push obavijesti za ovu sesiju",
@@ -2935,17 +2940,17 @@
             "sign_in_with_qr_button": "Prikaži QR kod",
             "sign_in_with_qr_description": "Upotrijebite QR kod za prijavu na drugi uređaj i postavljanje sigurne razmjene poruka.",
             "sign_in_with_qr_unsupported": "Ne podržava davatelj usluge računa",
-            "sign_out": "Odjavi se iz ove sesije",
-            "sign_out_all_other_sessions": "Odjavi se iz svih ostalih sesija (%(otherSessionsCount)s)",
+            "sign_out": "Ukloni ovu sesiju",
+            "sign_out_all_other_sessions": "Ukloni sve ostale sesije (%(otherSessionsCount)s)",
             "sign_out_confirm_description": {
-                "one": "Jeste li sigurni da se želite odjaviti iz %(count)s sesije?",
-                "few": "Jeste li sigurni da se želite odjaviti iz %(count)s sesije?",
-                "other": "Jeste li sigurni da se želite odjaviti iz %(count)s sesija?"
+                "one": "Sigurno želite ukloniti %(count)s sesiju?",
+                "few": "Sigurno želite ukloniti %(count)s sesije?",
+                "other": "Sigurno želite ukloniti %(count)s sesija?"
             },
             "sign_out_n_sessions": {
-                "one": "Odjava iz %(count)s sesije",
-                "few": "Odjava iz %(count)s sesije",
-                "other": "Odjava iz %(count)s sesija"
+                "one": "Ukloni %(count)s sesiju",
+                "few": "Ukloni %(count)s sesije",
+                "other": "Ukloni %(count)s sesija"
             },
             "title": "Sesije",
             "unknown_session": "Nepoznata vrsta sesije",
@@ -2954,15 +2959,15 @@
             "unverified_session_explainer_2": "Nećete moći sudjelovati u sobama u kojima je omogućeno šifriranje dok upotrebljavate ovu sesiju.",
             "unverified_session_explainer_3": "Za najbolju sigurnost i privatnost preporučuje se korištenje Matrixovih klijenata koji podržavaju šifriranje.",
             "unverified_sessions": "Nepotvrđene sesije",
-            "unverified_sessions_explainer_1": "Nepotvrđene sesije su one u kojima ste prijavljeni s vašim vjerodajnicama, ali nisu provjerene među uređajima.",
+            "unverified_sessions_explainer_1": "Nepotvrđene sesije su one u kojima ste prijavljeni sa svojim vjerodajnicama, ali koje nisu potvrđene vašim digitalnim identitetom.",
             "unverified_sessions_explainer_2": "Posebno biste trebali biti sigurni da prepoznajete ove sesije jer bi mogle predstavljati neovlaštenu upotrebu vašeg računa.",
-            "unverified_sessions_list_description": "Potvrdite svoje sesije kako biste poboljšali sigurnu razmjenu poruka ili se odjavite s onih koje više ne prepoznajete ili ne upotrebljavate.",
+            "unverified_sessions_list_description": "Potvrdite svoje sesije kako biste poboljšali sigurnu razmjenu poruka ili uklonite one koje više ne prepoznajete ili ne upotrebljavate.",
             "url": "URL",
             "verified_session": "Potvrđena sesija",
             "verified_sessions": "Potvrđene sesije",
-            "verified_sessions_explainer_1": "Potvrđene sesije su sva mjesta na kojima upotrebljavate ovaj račun nakon unosa zaporke ili potvrde identiteta drugom potvrđenom sesijom.",
+            "verified_sessions_explainer_1": "Potvrđene sesije potvrdile su vaš digitalni identitet.",
             "verified_sessions_explainer_2": "To znači da imate sve ključeve potrebne za otključavanje šifriranih poruka i potvrđujete drugim korisnicima da vjerujete ovoj sesiji.",
-            "verified_sessions_list_description": "Kako biste postigli najveću sigurnost, odjavite se iz svake sesije koju više ne prepoznajete ili ne upotrebljavate.",
+            "verified_sessions_list_description": "Kako biste postigli najveću sigurnost, uklonite svaku sesiju koju više ne prepoznajete ili ne upotrebljavate.",
             "verify_session": "Potvrdi sesiju",
             "web_session": "Mrežna sesija"
         },
@@ -2975,18 +2980,17 @@
         "show_nsfw_content": "Prikaži neprimjeren sadržaj",
         "show_read_receipts": "Prikaži potvrde o čitanju koje su poslali drugi korisnici",
         "show_redaction_placeholder": "Prikaži zamjenski tekst za uklonjene poruke",
+        "show_sections": "Prikaži odjeljke",
         "show_stickers_button": "Gumb za prikaz naljepnica",
         "show_typing_notifications": "Prikaži obavijesti o tipkanju",
         "showbold": "Prikaži sve aktivnosti na popisu soba (točke ili broj nepročitanih poruka)",
         "sidebar": {
             "dialog_title": "<strong>Postavke:</strong> Bočna traka",
-            "metaspaces_favourites_description": "Grupirajte sve svoje omiljene sobe i osobe na jednom mjestu.",
             "metaspaces_home_all_rooms": "Prikaži sve sobe",
             "metaspaces_home_all_rooms_description": "Prikažite sve svoje sobe na početnoj stranici, čak i ako se nalaze u prostoru.",
             "metaspaces_home_description": "Početna stranica je korisna jer vam omogućuje pregled svih aktivnosti.",
             "metaspaces_orphans": "Sobe izvan prostora",
             "metaspaces_orphans_description": "Grupirajte sve sobe koje nisu dio prostora na jednom mjestu.",
-            "metaspaces_people_description": "Grupirajte sve osobe na jednom mjestu.",
             "metaspaces_subsection": "Prostori za prikaz",
             "metaspaces_video_rooms": "Videosobe i konferencijski pozivi",
             "metaspaces_video_rooms_description": "Grupirajte sve privatne videosobe i konferencijske pozive.",
@@ -3013,19 +3017,25 @@
             "audio_output": "Izlaz zvuka",
             "audio_output_empty": "Nisu otkriveni izlazi zvuka",
             "auto_gain_control": "Automatska kontrola pojačanja",
-            "connection_section": "Veza",
             "dialog_title": "<strong>Postavke:</strong> Glas i videozapis",
             "echo_cancellation": "Poništavanje jeke",
+            "echo_cancellation_description": "Uklanja jeku iz mikrofona tijekom poziva. Ova postavka vrijedi i za Element Call.",
             "enable_fallback_ice_server": "Dopusti pričuvni poslužitelj za pomoć pri pozivu (%(server)s)",
             "enable_fallback_ice_server_description": "Primjenjuje se samo ako vaš matični poslužitelj ne nudi jednu. Vaša IP adresa bi se dijelila tijekom poziva.",
+            "enable_legacy_calls": "Omogući naslijeđene glasovne pozive / videopozive",
+            "enable_legacy_calls_description": "Vrijedi za Jitsi i WebRTC pozive jedan na jedan",
             "mirror_local_feed": "Zrcali lokalni videoprikaz",
-            "missing_permissions_prompt": "Nedostaju dopuštenja za medije; kliknite ispod navedeni gumb kako biste ih zatražili.",
+            "missing_permissions_prompt": "Kako biste mogli sudjelovati u pozivima, dajte %(brand)s dopuštenje za pristup vašem audiouređaju i videouređaju.",
             "noise_suppression": "Prigušivanje buke",
-            "request_permissions": "Zatraži dopuštenja za medije",
+            "noise_suppression_description": "Smanjuje pozadinsku buku u mikrofonu tijekom poziva. Ova postavka vrijedi i za Element Call.",
+            "permissions": "Dopusti pristup mikrofonu i kameri",
+            "request_permissions": "Zahtjev",
             "title": "Glas i videozapis",
             "video_input_empty": "Nije otkrivena nijedna mrežna kamera",
             "video_section": "Postavke videozapisa",
             "voice_agc": "Automatski podesi glasnoću mikrofona",
+            "voice_input_description": "Ovdje konfigurirani audioulaz upotrebljava se za glasovne poruke i pozive (naslijeđene / jedan na jedan).",
+            "voice_input_section": "Audioulaz",
             "voice_processing": "Obrada glasa",
             "voice_section": "Postavke glasa"
         },
@@ -3107,6 +3117,14 @@
         "server_error_detail": "Poslužitelj nije dostupan, preopterećen je ili je nešto drugo pošlo po zlu.",
         "shrug": "Dodaje ¯\\_(ツ)_/¯ na početak poruke s običnim tekstom",
         "spoiler": "Šalje zadanu poruku kao spojler",
+        "status": {
+            "description": "Postavi svoj trenutačni status",
+            "no_args": "Nisu navedeni argumenti. Trebali biste navesti emoji i opcijsku tekstnu komponentu.",
+            "no_emoji": "Niste naveli emoji",
+            "no_text": "Niste naveli nikakav tekst statusa",
+            "too_long_emoji": "Prvi argument mora biti emoji",
+            "too_long_text": "Tekst koji ste naveli bio je predugačak."
+        },
         "tableflip": "Dodaje (╯°□°）╯︵ ┻━┻ na početak poruke s običnim tekstom",
         "topic": "Dohvaća ili postavlja temu sobe",
         "topic_none": "Ova soba nema temu.",
@@ -3129,7 +3147,7 @@
         "view": "Pregledava sobu s navedenom adresom",
         "whois": "Prikazuje informacije o korisniku"
     },
-    "sliding_sync_legacy_no_longer_supported": "Klasični sliding sync više nije podržan: odjavite se i ponovno prijavite kako biste omogućili novu sliding sync oznaku",
+    "sliding_sync_legacy_no_longer_supported": "Naslijeđeni sliding sync više nije podržan: ponovno se prijavite kako biste omogućili novu sliding sync oznaku",
     "space": {
         "add_existing_room_space": {
             "create": "Želite li umjesto toga dodati novu sobu?",
@@ -3196,12 +3214,6 @@
     },
     "space_settings": {
         "title": "Postavke – %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "Nemate dopuštenja za dodavanje soba u ovaj prostor",
-        "error_no_permission_add_space": "Nemate dopuštenja za dodavanje prostora u ovaj prostor",
-        "error_no_permission_create_room": "Nemate dopuštenja za izradu novih soba u ovom prostoru",
-        "error_no_permission_invite": "Nemate dopuštenja za pozivanje korisnika u ovaj prostor"
     },
     "spotlight": {
         "public_rooms": {
@@ -3324,7 +3336,7 @@
         "creation_summary_dm": "%(creator)s izradio/la je ovu izravnu poruku.",
         "creation_summary_room": "%(creator)s izradio/la je i konfigurirao/la sobu.",
         "decryption_failure": {
-            "sender_identity_previously_verified": "Pošiljateljev potvrđeni identitet je poništen",
+            "sender_identity_previously_verified": "Pošiljateljev potvrđeni digitalni identitet je poništen",
             "unable_to_decrypt": "Nije moguće dešifrirati poruku"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
@@ -3461,8 +3473,10 @@
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s prihvatio/la je poziv za %(displayName)s",
             "accepted_invite": "%(targetName)s prihvatio/la je poziv",
-            "ban": "%(senderName)s zabranio/la je %(targetName)s",
-            "ban_reason": "%(senderName)s zabranjeno/la je %(targetName)s: %(reason)s",
+            "ban": "%(senderName)s zabranio/la je pristup korisniku",
+            "ban_reason": "%(senderName)s zabranio/la je pristup korisniku: %(reason)s",
+            "ban_reason_spoiler": "%(senderName)s je zabranio/la pristup korisniku <user/>: %(reason)s",
+            "ban_spoiler": "%(senderName)s je zabranio/la pristup korisniku <user/>",
             "change_avatar": "%(senderName)s promijenio/la je svoju profilnu sliku",
             "change_name": "%(oldDisplayName)s promijenio/la je svoje ime za prikaz u %(displayName)s",
             "change_name_avatar": "%(oldDisplayName)s promijenio/la je svoje ime za prikaz i profilnu sliku",
@@ -3816,7 +3830,7 @@
         "ban_space_everything": "Zabrani im pristup svemu za što imam ovlasti",
         "ban_space_specific": "Zabrani im pristup određenim stvarima za koje imam ovlasti",
         "deactivate_confirm_action": "Deaktiviraj korisnika",
-        "deactivate_confirm_description": "Deaktiviranjem ovog korisnika odjavit ćete ga i spriječiti da se ponovno prijavi. Osim toga, napustit će sve sobe u kojima se nalazi. Ta se radnja ne može poništiti. Jeste li sigurni da želite deaktivirati tog korisnika?",
+        "deactivate_confirm_description": "Deaktiviranjem ovog korisnika uklonit ćete njegove uređaje i spriječiti da se ponovno prijavi. Osim toga, napustit će sve sobe u kojima se nalazi. Ta se radnja ne može poništiti. Sigurno želite deaktivirati tog korisnika?",
         "deactivate_confirm_title": "Želite li deaktivirati korisnika?",
         "demote_button": "Degradiraj",
         "demote_self_confirm_description_space": "Nećete moći poništiti ovu promjenu jer sami sebe degradirate. Ako ste posljednji privilegirani korisnik u prostoru, nećete moći ponovno dobiti privilegije.",
@@ -3880,6 +3894,9 @@
         "verify_button": "Potvrdi korisnika",
         "verify_explainer": "Radi dodatne sigurnosti potvrdite ovog korisnika provjerom jednokratnog koda na oba uređaja."
     },
+    "user_status": {
+        "on_a_call": "U pozivu"
+    },
     "voip": {
         "already_in_call": "Već u pozivu",
         "already_in_call_person": "Već ste u pozivu sa tom osobom.",
@@ -3895,6 +3912,18 @@
         "call_held": "%(peerName)s je stavio/la poziv na čekanje",
         "call_held_resume": "Stavili ste poziv na <a>Nastavi</a>",
         "call_held_switch": "Stavili ste poziv <a>na čekanje</a>",
+        "call_members": {
+            "exhaustive": {
+                "one": "<avatars/> je u pozivu",
+                "few": "<avatars/> su u pozivu",
+                "other": "<avatars/> su u pozivu"
+            },
+            "overflow": {
+                "one": "<avatars/> + %(overflowCount)s je u pozivu",
+                "few": "<avatars/> + %(overflowCount)s su u pozivu",
+                "other": "<avatars/> + %(overflowCount)s su u pozivu"
+            }
+        },
         "call_toast_unknown_room": "Nepoznata soba",
         "camera_disabled": "Vaša kamera je isključena",
         "camera_enabled": "Vaša kamera nije omogućena",
@@ -3917,10 +3946,12 @@
         "enable_microphone": "Uključi mikrofon",
         "expand": "Vrati se u poziv",
         "get_call_link": "Podijeli poveznicu na poziv",
+        "group_call_started": "Grupni poziv je započeo",
         "hangup": "Prekini poziv",
         "hide_sidebar_button": "Sakrij bočnu traku",
         "input_devices": "Ulazni uređaji",
         "jitsi_call": "Konferencija na Jitsiju",
+        "join_with_video": "Pridruži se putem videoveze",
         "legacy_call": "Klasični poziv",
         "maximise": "Ispuni zaslon",
         "maximise_call": "Maksimiziraj poziv",
@@ -3983,6 +4014,11 @@
         "you_are_presenting": "Dijelite zaslon"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",
+    "welcome": {
+        "tagline_element": "Maksimalno unaprijeđen za brzinu i jednostavnost.",
+        "title_element": "Budi u elementu",
+        "title_generic": "Dobro došli u %(brand)s"
+    },
     "widget": {
         "added_by": "Widget je dodao/la",
         "capabilities_dialog": {
@@ -4004,6 +4040,7 @@
             "change_name_this_room": "Promijeni naziv ove sobe",
             "change_topic_active_room": "Promijeni temu svoje aktivne sobe",
             "change_topic_this_room": "Promijeni temu ove sobe",
+            "download_file": "Preuzmi datoteke iz repozitorija medija",
             "receive_membership_active_room": "Vidite kada se osobe pridruže vašoj aktivnoj sobi, napuste je ili budu pozvane u nju",
             "receive_membership_this_room": "Vidite kada se osobe pridruže ovoj sobi, napuste je ili budu pozvane u nju",
             "remove_ban_invite_leave_active_room": "Uklanja osobe iz sobe, zabranjuje im pristup ili ih poziva u aktivnu sobu i omogućuje vam da je napustite",

@@ -101,7 +101,7 @@ export const EventEditor: React.FC<IEventEditorProps> = ({ fieldDefs, defaultCon
 
         if (!valid) {
             contentField.current?.focus();
-            contentField.current?.validate({ focused: true });
+            void contentField.current?.validate({ focused: true });
             return;
         }
 
@@ -199,6 +199,9 @@ export const TimelineEventEditor: React.FC<IEditorProps> = ({ mxEvent, onBack })
                 rel_type: "m.replace",
                 event_id: getBaseEventId(mxEvent),
             },
+            ...("com.beeper.linkpreviews" in originalContent
+                ? { "com.beeper.linkpreviews": originalContent["com.beeper.linkpreviews"] }
+                : {}),
         };
 
         defaultContent = stringify(newContent);

@@ -12,8 +12,8 @@ import { type Member, type ThreepidMember } from "../../../../utils/direct-messa
 import type { ButtonEvent } from "../../elements/AccessibleButton.tsx";
 import BaseAvatar from "../../avatars/BaseAvatar.tsx";
 import { mediaFromMxc } from "../../../../customisations/Media.ts";
-import { _t } from "../../../../languageHandler.tsx";
-import { Icon as EmailPillAvatarIcon } from "../../../../../res/img/icon-email-pill-avatar.svg";
+import { _t } from "../../../../languageHandler";
+import EmailPillAvatarIcon from "../../../../../res/img/icon-email-pill-avatar.svg?react";
 
 interface IDMRoomTileProps {
     member: Member;
@@ -40,7 +40,7 @@ export class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             <BaseAvatar
                 url={
                     this.props.member.getMxcAvatarUrl()
-                        ? mediaFromMxc(this.props.member.getMxcAvatarUrl()!).getSquareThumbnailHttp(
+                        ? mediaFromMxc(this.props.member.getMxcAvatarUrl()).getSquareThumbnailHttp(
                               parseInt(avatarSize, 10),
                           )
                         : null

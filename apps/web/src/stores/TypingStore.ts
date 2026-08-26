@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type SdkContextClass } from "../contexts/SDKContext";
+import { type SDKContextClass } from "../contexts/SDKContextClass";
 import SettingsStore from "../settings/SettingsStore";
 import { isLocalRoom } from "../utils/localRoom/isLocalRoom";
 import Timer from "../utils/Timer";
@@ -26,7 +26,7 @@ export default class TypingStore {
         };
     } = {};
 
-    public constructor(private readonly context: SdkContextClass) {
+    public constructor(private readonly context: SDKContextClass) {
         this.reset();
     }
 
@@ -77,7 +77,7 @@ export default class TypingStore {
 
         if (isTyping) {
             if (!currentTyping.serverTimer.isRunning()) {
-                currentTyping.serverTimer
+                void currentTyping.serverTimer
                     .restart()
                     .finished()
                     .then(() => {
@@ -90,7 +90,7 @@ export default class TypingStore {
             } else currentTyping.serverTimer.restart();
 
             if (!currentTyping.userTimer.isRunning()) {
-                currentTyping.userTimer
+                void currentTyping.userTimer
                     .restart()
                     .finished()
                     .then(() => {
@@ -99,6 +99,6 @@ export default class TypingStore {
             } else currentTyping.userTimer.restart();
         }
 
-        this.context.client?.sendTyping(roomId, isTyping, TYPING_SERVER_TIMEOUT);
+        void this.context.client?.sendTyping(roomId, isTyping, TYPING_SERVER_TIMEOUT);
     }
 }

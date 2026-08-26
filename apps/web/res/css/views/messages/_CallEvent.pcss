@@ -21,7 +21,7 @@ Please see LICENSE files in the repository root for full details.
     border-radius: 8px;
 
     display: flex;
-    gap: $spacing-8;
+    gap: var(--cpd-space-2x);
 
     > .mx_BaseAvatar,
     > .mx_Icon {
@@ -30,7 +30,7 @@ Please see LICENSE files in the repository root for full details.
 
     > .mx_Icon {
         padding: 0;
-        margin: $spacing-4 0;
+        margin: var(--cpd-space-1x) 0;
         color: $secondary-content;
     }
 
@@ -52,7 +52,7 @@ Please see LICENSE files in the repository root for full details.
     color: $secondary-content;
     width: 16px;
     height: 16px;
-    margin-right: $spacing-8;
+    margin-right: var(--cpd-space-2x);
 }
 
 .mx_CallEvent_active .mx_CallEvent_title {
@@ -62,7 +62,7 @@ Please see LICENSE files in the repository root for full details.
 .mx_CallEvent_columns {
     flex-grow: 1;
     display: flex;
-    gap: $spacing-12;
+    gap: var(--cpd-space-3x);
     align-items: center;
     justify-content: space-between;
 }
@@ -70,7 +70,7 @@ Please see LICENSE files in the repository root for full details.
 .mx_TimelineCard .mx_CallEvent_columns {
     flex-direction: column;
     align-items: flex-start;
-    gap: $spacing-8;
+    gap: var(--cpd-space-2x);
 }
 
 .mx_CallEvent_details {

@@ -11,7 +11,8 @@ import { type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
-import { Pill, PillType } from "../elements/Pill";
+import { Pill } from "../elements/Pill";
+import { PillType } from "../elements/PillType";
 import { makeUserPermalink } from "../../../utils/permalinks/Permalinks";
 import BaseAvatar from "../avatars/BaseAvatar";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -32,25 +33,19 @@ interface IBridgeStateEvent {
     protocol: {
         id: string;
         displayname?: string;
-        // eslint-disable-next-line camelcase
         avatar_url?: string;
-        // eslint-disable-next-line camelcase
         external_url?: string;
     };
     network?: {
         id: string;
         displayname?: string;
-        // eslint-disable-next-line camelcase
         avatar_url?: string;
-        // eslint-disable-next-line camelcase
         external_url?: string;
     };
     channel: {
         id: string;
         displayname?: string;
-        // eslint-disable-next-line camelcase
         avatar_url?: string;
-        // eslint-disable-next-line camelcase
         external_url?: string;
     };
 }

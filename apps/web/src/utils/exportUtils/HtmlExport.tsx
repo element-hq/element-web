@@ -13,7 +13,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { logger } from "matrix-js-sdk/src/logger";
 import escapeHtml from "escape-html";
 import { TooltipProvider } from "@vector-im/compound-web";
-import { DateSeparatorView, I18nContext } from "@element-hq/web-shared-components";
+import { DateSeparatorView, EventPresentationProvider, I18nContext } from "@element-hq/web-shared-components";
 
 import Exporter from "./Exporter";
 import { mediaFromMxc } from "../../customisations/Media";
@@ -30,7 +30,8 @@ import MatrixClientContext from "../../contexts/MatrixClientContext";
 import getExportCSS from "./exportCSS";
 import { textForEvent } from "../../TextForEvent";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
-import { SDKContext, SdkContextClass } from "../../contexts/SDKContext.ts";
+import { SDKContext } from "../../contexts/SDKContext.ts";
+import { SDKContextClass } from "../../contexts/SDKContextClass";
 import { DateSeparatorViewModel } from "../../viewmodels/room/timeline/DateSeparatorViewModel";
 import exportJS from "./exportJS.js?raw";
 
@@ -261,6 +262,7 @@ export default class HTMLExporter extends Exporter {
             roomId: event.getRoomId()!,
             ts,
             forExport: true,
+            roomViewStore: SDKContextClass.instance.roomViewStore,
         });
         try {
             const dateSeparator = (
@@ -285,29 +287,31 @@ export default class HTMLExporter extends Exporter {
                 {/* Export rendering uses an isolated root, so provide I18nContext explicitly. */}
                 <I18nContext.Provider value={window.mxModuleApi.i18n}>
                     <MatrixClientContext.Provider value={this.room.client}>
-                        <SDKContext.Provider value={SdkContextClass.instance}>
+                        <SDKContext.Provider value={SDKContextClass.instance}>
                             <TooltipProvider>
-                                <EventTile
-                                    mxEvent={mxEv}
-                                    continuation={continuation}
-                                    isRedacted={mxEv.isRedacted()}
-                                    replacingEventId={mxEv.replacingEventId()}
-                                    forExport={true}
-                                    alwaysShowTimestamps={true}
-                                    showUrlPreview={false}
-                                    checkUnmounting={() => false}
-                                    isTwelveHour={false}
-                                    last={false}
-                                    lastInSection={false}
-                                    permalinkCreator={this.permalinkCreator}
-                                    lastSuccessful={false}
-                                    isSelectedEvent={false}
-                                    showReactions={true}
-                                    layout={Layout.Group}
-                                    showReadReceipts={false}
-                                    getRelationsForEvent={this.getRelationsForEvent}
-                                    ref={ref}
-                                />
+                                <EventPresentationProvider value={{ layout: "group", density: "default" }}>
+                                    <EventTile
+                                        mxEvent={mxEv}
+                                        continuation={continuation}
+                                        isRedacted={mxEv.isRedacted()}
+                                        replacingEventId={mxEv.replacingEventId()}
+                                        forExport={true}
+                                        alwaysShowTimestamps={true}
+                                        showUrlPreview={false}
+                                        checkUnmounting={() => false}
+                                        isTwelveHour={false}
+                                        last={false}
+                                        lastInSection={false}
+                                        permalinkCreator={this.permalinkCreator}
+                                        lastSuccessful={false}
+                                        isSelectedEvent={false}
+                                        showReactions={true}
+                                        layout={Layout.Group}
+                                        showReadReceipts={false}
+                                        getRelationsForEvent={this.getRelationsForEvent}
+                                        ref={ref}
+                                    />
+                                </EventPresentationProvider>
                             </TooltipProvider>
                         </SDKContext.Provider>
                     </MatrixClientContext.Provider>
@@ -360,9 +364,9 @@ export default class HTMLExporter extends Exporter {
     protected createModifiedEvent(text: string, mxEv: MatrixEvent, italic = true): MatrixEvent {
         const modifiedContent = {
             msgtype: MsgType.Text,
-            body: `${text}`,
+            body: text,
             format: "org.matrix.custom.html",
-            formatted_body: `${text}`,
+            formatted_body: text,
         };
         if (italic) {
             modifiedContent.formatted_body = "<em>" + modifiedContent.formatted_body + "</em>";

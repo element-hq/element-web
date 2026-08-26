@@ -1,4 +1,11 @@
-import { KnipConfig } from "knip";
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE in the repository root for full details.
+*/
+
+import { type KnipConfig } from "knip";
 
 // Specify this as knip loads config files which may conditionally load plugins
 process.env.GITHUB_ACTIONS = "1";
@@ -8,7 +15,7 @@ export default {
         "packages/shared-components": {
             entry: ["src/index.ts!", "scripts/**"],
             project: [
-                "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}!",
+                "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,mdx,pcss}!",
                 "!scripts/**!",
                 "!src/test/**!",
                 "!src/**/test-*!",
@@ -18,7 +25,7 @@ export default {
         "packages/playwright-common": {
             entry: ["src/fixtures/index.ts!", "src/testcontainers/index.ts!"],
             project: [
-                "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}!",
+                "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!",
                 "!src/flaky-reporter.ts!",
                 "!src/stale-screenshot-reporter.ts!",
             ],
@@ -40,7 +47,7 @@ export default {
                 "test/**",
                 "res/decoder-ring/**",
                 "res/jitsi_external_api.min.js",
-                "res/themes/*/css/*.pcss",
+                "res/themes/*/css/*.pcss!",
                 "I18nWebpackPlugin.ts!",
                 // Keep for now
                 "src/hooks/useLocalStorageState.ts!",
@@ -50,19 +57,21 @@ export default {
                 "src/utils/EventPresentationContextProvider.tsx!",
                 // This is just an awful side-effect import
                 "src/stores/LifecycleStore.ts!",
+                // New timeline: only its own tests import this so far, and --strict does not
+                // count tests as entry points. NewTimelinePanel picks it up in a follow-up PR,
+                // at which point this line can go.
+                "src/viewmodels/room/timeline/RoomTimelineViewModel.ts!",
             ],
             project: [
-                "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}!",
+                "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!",
                 "!scripts/**!",
                 "!src/test/**!",
                 "!recorder-worklet-loader.cjs!",
+                "!src/**/*-{mock,mocks,snapshot,actions}.*!",
             ],
             ignoreDependencies: [
                 // False positive
                 "sw.js",
-                // Used by webpack
-                "process",
-                "util",
                 // Embedded into webapp
                 "@element-hq/element-call-embedded",
 
@@ -75,13 +84,12 @@ export default {
         },
         "apps/desktop": {
             entry: ["src/preload.cts!", "electron-builder.ts!", "scripts/**", "hak/**"],
-            project: ["**/*.{js,ts}"],
+            project: ["**/*.{js,ts,pcss}"],
             ignoreDependencies: [
                 // Brought in via hak scripts
                 "matrix-seshat",
             ],
             ignoreBinaries: [
-                "scripts/in-docker.sh",
                 // Used to build seshat (optional)
                 "rustc",
                 // Used by the fetch-package script (optional)
@@ -91,11 +99,11 @@ export default {
             ],
         },
         "modules": {
-            project: ["**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}!", "!playwright/**!"],
+            project: ["**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!", "!playwright/**!"],
         },
         "modules/*": {
             entry: ["src/index.ts{x,}!"],
-            project: ["**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}!", "!src/tests/**!", "!e2e/**!"],
+            project: ["**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!", "!src/tests/**!", "!e2e/**!"],
         },
         ".": {
             entry: ["scripts/**", "docs/**"],
@@ -104,6 +112,8 @@ export default {
     ignoreDependencies: [
         // Used by multiple packages, raises a false positive for some reason
         "events",
+        // Used as a workaround for api-extractor not supporting typescript 7.0
+        "@typescript/old",
     ],
     ignoreExportsUsedInFile: true,
     ignoreBinaries: [

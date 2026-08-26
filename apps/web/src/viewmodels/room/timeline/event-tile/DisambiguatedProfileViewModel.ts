@@ -19,7 +19,7 @@ import { getUserNameColorClass } from "../../../../utils/FormattingUtils";
 /**
  * Information about a member for disambiguation purposes.
  */
-interface MemberInfo {
+export interface MemberInfo {
     /**
      * The user's Matrix ID.
      */

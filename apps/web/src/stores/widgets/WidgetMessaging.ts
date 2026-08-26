@@ -25,9 +25,7 @@ import {
     type IStickyActionRequest,
     type ITemplateParams,
     type IWidget,
-    type IWidgetApiErrorResponseData,
     type IWidgetApiRequest,
-    type IWidgetApiRequestEmptyData,
     type IWidgetData,
     MatrixCapabilities,
     runTemplate,
@@ -37,7 +35,8 @@ import {
 } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t, getUserLanguage } from "../../languageHandler";
+import { _t } from "../../languageHandler";
+import { getUserLanguage } from "../../i18n/settings";
 import { ElementWidgetDriver } from "./ElementWidgetDriver";
 import { WidgetMessagingStore } from "./WidgetMessagingStore";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
@@ -59,7 +58,7 @@ import { arrayFastClone } from "../../utils/arrays";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import Modal from "../../Modal";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
-import { SdkContextClass } from "../../contexts/SDKContext";
+import { SDKContextClass } from "../../contexts/SDKContextClass";
 import { UPDATE_EVENT } from "../AsyncStore";
 
 // TODO: Purge this code of its overgrown hacks and compatibility shims.
@@ -270,7 +269,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
     }
 
     private onThemeChange = (theme: string): void => {
-        this.widgetApi?.updateTheme({ name: theme });
+        void this.widgetApi?.updateTheme({ name: theme });
     };
 
     private onOpenModal = async (ev: CustomEvent<IModalWidgetOpenRequest>): Promise<void> => {
@@ -290,7 +289,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
     // This listener is only active for account widgets, which may follow the
     // user to different rooms
     private onRoomViewStoreUpdate = (): void => {
-        const roomId = SdkContextClass.instance.roomViewStore.getRoomId() ?? null;
+        const roomId = SDKContextClass.instance.roomViewStore.getRoomId() ?? null;
         if (roomId !== this.viewedRoomId) {
             this.widgetApi!.setViewedRoomId(roomId);
             this.viewedRoomId = roomId;
@@ -320,8 +319,8 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
         // receiving events for the right room
         if (this.roomId === undefined) {
             // Account widgets listen to the currently active room
-            this.widgetApi.setViewedRoomId(SdkContextClass.instance.roomViewStore.getRoomId() ?? null);
-            SdkContextClass.instance.roomViewStore.on(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+            this.widgetApi.setViewedRoomId(SDKContextClass.instance.roomViewStore.getRoomId() ?? null);
+            SDKContextClass.instance.roomViewStore.on(UPDATE_EVENT, this.onRoomViewStoreUpdate);
         } else {
             // Room widgets get locked to the room they were added in
             this.widgetApi.setViewedRoomId(this.roomId);
@@ -334,14 +333,14 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
             // Check up front if this is even a valid request
             const targetRoomId = (ev.detail.data || {}).room_id;
             if (!targetRoomId) {
-                return this.widgetApi?.transport.reply(ev.detail, <IWidgetApiErrorResponseData>{
+                return this.widgetApi?.transport.reply(ev.detail, {
                     error: { message: "Room ID not supplied." },
                 });
             }
 
             // Check the widget's permission
             if (!this.widgetApi?.hasCapability(ElementWidgetCapabilities.CanChangeViewedRoom)) {
-                return this.widgetApi?.transport.reply(ev.detail, <IWidgetApiErrorResponseData>{
+                return this.widgetApi?.transport.reply(ev.detail, {
                     error: { message: "This widget does not have permission for this action (denied)." },
                 });
             }
@@ -354,7 +353,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
             });
 
             // acknowledge so the widget doesn't freak out
-            this.widgetApi.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
+            this.widgetApi.transport.reply(ev.detail, {});
         });
 
         // Populate the map of "read up to" events for this widget with the current event in every room.
@@ -390,7 +389,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
                         ev.detail.data.value,
                     );
                     // Send the ack after the widget actually has become sticky.
-                    this.widgetApi.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
+                    this.widgetApi.transport.reply(ev.detail, {});
                 }
             },
         );
@@ -403,7 +402,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
                 if (this.widgetApi?.hasCapability(MatrixCapabilities.StickerSending)) {
                     // Acknowledge first
                     ev.preventDefault();
-                    this.widgetApi.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
+                    this.widgetApi.transport.reply(ev.detail, {});
 
                     // Send the sticker
                     defaultDispatcher.dispatch({
@@ -421,7 +420,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
                 (ev: CustomEvent<IWidgetApiRequest>) => {
                     // Acknowledge first
                     ev.preventDefault();
-                    this.widgetApi?.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
+                    this.widgetApi?.transport.reply(ev.detail, {});
 
                     // First close the stickerpicker
                     defaultDispatcher.dispatch({ action: "stickerpicker_close" });
@@ -432,12 +431,13 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
                     const integType = data?.integType as string;
                     const integId = <string>data?.integId;
 
-                    const roomId = SdkContextClass.instance.roomViewStore.getRoomId();
+                    const roomId = SDKContextClass.instance.roomViewStore.getRoomId();
                     const room = roomId ? this.client.getRoom(roomId) : undefined;
                     if (!room) return;
 
-                    // noinspection JSIgnoredPromiseFromCall
-                    IntegrationManagers.sharedInstance()?.getPrimaryManager()?.open(room, `type_${integType}`, integId);
+                    void IntegrationManagers.sharedInstance()
+                        ?.getPrimaryManager()
+                        ?.open(room, `type_${integType}`, integId);
                 },
             );
         }
@@ -453,7 +453,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
                         }),
                     });
                 }
-                this.widgetApi?.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
+                this.widgetApi?.transport.reply(ev.detail, {});
             });
         }
 
@@ -496,7 +496,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
             // optimized out by a browser. Instead, we'll just point the iframe
             // at a page that is reasonably safe to use in the event the iframe
             // doesn't wink away.
-            this.iframe!.src = "about:blank";
+            this.iframe.src = "about:blank";
         } else if (ActiveWidgetStore.instance.getWidgetPersistence(this.widget.id, this.roomId ?? null)) {
             logger.log("Skipping destroy - persistent widget");
             return;
@@ -510,7 +510,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
         this.iframe = null;
         WidgetMessagingStore.instance.stopMessaging(this.widget, this.roomId);
 
-        SdkContextClass.instance.roomViewStore.off(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+        SDKContextClass.instance.roomViewStore.off(UPDATE_EVENT, this.onRoomViewStoreUpdate);
 
         this.client.off(ClientEvent.Event, this.onEvent);
         this.client.off(MatrixEventEvent.Decrypted, this.onEventDecrypted);
@@ -519,7 +519,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
     }
 
     private onEvent = (ev: MatrixEvent): void => {
-        this.client.decryptEventIfNeeded(ev);
+        void this.client.decryptEventIfNeeded(ev);
         this.feedEvent(ev);
     };
 
