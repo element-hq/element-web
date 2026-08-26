@@ -27,8 +27,8 @@ jobs:
             id-token: write # needed for signing the images with GitHub OIDC Token
             packages: write # publish to ghcr.io
         env:
-            TEST_TAG: ${{ env.IMAGE_PREFIX }}/element-web:test
-            TEST_TAG_MODULES: ${{ env.IMAGE_PREFIX }}/element-web/modules:test
+            TEST_TAG: ghcr.io/${{ github.repository_owner }}/element-web:test
+            TEST_TAG_MODULES: ghcr.io/${{ github.repository_owner }}/element-web/modules:test
         steps:
             - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
               with:
