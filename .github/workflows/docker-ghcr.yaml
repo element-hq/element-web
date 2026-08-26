@@ -36,7 +36,7 @@ jobs:
                   persist-credentials: false
 
             - name: Install Cosign
-              uses: sigstore/cosign-installer@faadde0282f980f804201a6a71c5e12d86732f16 # v4
+              uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
 
             - name: Set up QEMU
               uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392 # v3
@@ -45,7 +45,7 @@ jobs:
               uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3
 
             - name: Build and load
-              uses: docker/bake-action@v6
+              uses: docker/bake-action@5be5f02ff8819ecd3092ea6b2e6261c31774f2b4 # v6
               with:
                   source: .
                   files: ./docker-bake.hcl
@@ -127,7 +127,7 @@ jobs:
 
             - name: Docker meta
               id: meta
-              uses: docker/metadata-action@v5
+              uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5
               if: github.event_name != 'pull_request'
               with:
                   images: |
@@ -141,7 +141,7 @@ jobs:
 
             - name: Docker meta (modules)
               id: meta-modules
-              uses: docker/metadata-action@v5
+              uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5
               if: github.event_name != 'pull_request'
               with:
                   images: ${{ env.IMAGE_PREFIX }}/element-web/modules
@@ -153,7 +153,7 @@ jobs:
                   bake-target: docker-metadata-action-modules
 
             - name: Login to GitHub Container Registry
-              uses: docker/login-action@v3
+              uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
               if: github.event_name != 'pull_request'
               with:
                   registry: ghcr.io
@@ -163,7 +163,7 @@ jobs:
             # Both targets are built in a single bake so that the app is only compiled once.
             - name: Build and push
               id: build-and-push
-              uses: docker/bake-action@v6
+              uses: docker/bake-action@5be5f02ff8819ecd3092ea6b2e6261c31774f2b4 # v6
               if: github.event_name != 'pull_request'
               with:
                   source: .
