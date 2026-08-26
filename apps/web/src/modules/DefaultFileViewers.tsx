@@ -16,6 +16,7 @@ import type {
 
 import { ModuleApi } from "./Api.ts";
 import { _t } from "../languageHandler";
+import { WebBrowserIcon, EditIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 const PDF_MIMETYPE = "application/pdf";
 
@@ -126,11 +127,13 @@ export function registerDefaultFileViewers(): void {
         // TODO: these need i18n keys of their own adding to en_EN.json
         cardHeader: "PDF",
         buttonText: "Open PDF",
+        buttonIcon: <EditIcon />
     });
 
     ModuleApi.instance.fileViewer.registerFileViewer(isRemoteMedia, renderLinkFileViewer, {
         id: LINK_FILE_VIEWER_ID,
         cardHeader: "Link",
         buttonText: "Open link",
+        buttonIcon: <WebBrowserIcon />
     });
 }
