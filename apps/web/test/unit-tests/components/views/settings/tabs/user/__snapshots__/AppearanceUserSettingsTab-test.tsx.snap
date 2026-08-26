@@ -205,14 +205,14 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       <div
                         aria-atomic="true"
                         aria-live="off"
-                        class="_root_8wqiu_9 mx_EventTile _stateOwnEvent_8wqiu_896 _layoutGroup_8wqiu_193"
+                        class="_root_11l0i_9 mx_EventTile _stateOwnEvent_11l0i_896 _layoutGroup_11l0i_193"
                         data-event-id="$9999999999999999999999999999999999999999999"
                         data-scroll-tokens="$9999999999999999999999999999999999999999999"
                         data-testid="event-tile"
                         tabindex="-1"
                       >
                         <div
-                          class="_slotSender_8wqiu_103"
+                          class="_slotSender_11l0i_103"
                           data-testid="event-tile-slot-sender"
                         >
                           <div
@@ -231,7 +231,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           </div>
                         </div>
                         <div
-                          class="_slotAvatar_8wqiu_94"
+                          class="_slotAvatar_11l0i_94"
                           data-testid="event-tile-slot-avatar"
                         >
                           <span
@@ -247,12 +247,12 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           </span>
                         </div>
                         <div
-                          class="_line_8wqiu_70 mx_EventTile_line"
+                          class="_line_11l0i_70 mx_EventTile_line"
                           data-testid="event-tile-line"
                           id="1"
                         >
                           <div
-                            class="_slotBody_8wqiu_95"
+                            class="_slotBody_11l0i_95"
                             data-testid="event-tile-slot-body"
                           >
                             <div
@@ -313,14 +313,14 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       <div
                         aria-atomic="true"
                         aria-live="off"
-                        class="_root_8wqiu_9 mx_EventTile _stateOwnEvent_8wqiu_896 _layoutBubble_8wqiu_700"
+                        class="_root_11l0i_9 mx_EventTile _stateOwnEvent_11l0i_896 _layoutBubble_11l0i_700"
                         data-event-id="$9999999999999999999999999999999999999999999"
                         data-scroll-tokens="$9999999999999999999999999999999999999999999"
                         data-testid="event-tile"
                         tabindex="-1"
                       >
                         <div
-                          class="_slotSender_8wqiu_103"
+                          class="_slotSender_11l0i_103"
                           data-testid="event-tile-slot-sender"
                         >
                           <div
@@ -339,7 +339,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           </div>
                         </div>
                         <div
-                          class="_slotAvatar_8wqiu_94"
+                          class="_slotAvatar_11l0i_94"
                           data-testid="event-tile-slot-avatar"
                         >
                           <span
@@ -355,12 +355,12 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           </span>
                         </div>
                         <div
-                          class="_line_8wqiu_70 mx_EventTile_line"
+                          class="_line_11l0i_70 mx_EventTile_line"
                           data-testid="event-tile-line"
                           id="2"
                         >
                           <div
-                            class="_slotBody_8wqiu_95"
+                            class="_slotBody_11l0i_95"
                             data-testid="event-tile-slot-body"
                           >
                             <div
@@ -421,14 +421,14 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       <div
                         aria-atomic="true"
                         aria-live="off"
-                        class="_root_8wqiu_9 mx_EventTile _stateOwnEvent_8wqiu_896 _layoutIrc_8wqiu_468"
+                        class="_root_11l0i_9 mx_EventTile _stateOwnEvent_11l0i_896 _layoutIrc_11l0i_468"
                         data-event-id="$9999999999999999999999999999999999999999999"
                         data-scroll-tokens="$9999999999999999999999999999999999999999999"
                         data-testid="event-tile"
                         tabindex="-1"
                       >
                         <div
-                          class="_slotTimestamp_8wqiu_105"
+                          class="_slotTimestamp_11l0i_105"
                           data-testid="event-tile-slot-timestamp"
                         >
                           <span
@@ -436,7 +436,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           />
                         </div>
                         <div
-                          class="_slotAvatar_8wqiu_94"
+                          class="_slotAvatar_11l0i_94"
                           data-testid="event-tile-slot-avatar"
                         >
                           <span
@@ -452,7 +452,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           </span>
                         </div>
                         <div
-                          class="_slotSender_8wqiu_103"
+                          class="_slotSender_11l0i_103"
                           data-testid="event-tile-slot-sender"
                         >
                           <div
@@ -471,12 +471,12 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           </div>
                         </div>
                         <div
-                          class="_line_8wqiu_70 mx_EventTile_line"
+                          class="_line_11l0i_70 mx_EventTile_line"
                           data-testid="event-tile-line"
                           id="3"
                         >
                           <div
-                            class="_slotBody_8wqiu_95"
+                            class="_slotBody_11l0i_95"
                             data-testid="event-tile-slot-body"
                           >
                             <div
