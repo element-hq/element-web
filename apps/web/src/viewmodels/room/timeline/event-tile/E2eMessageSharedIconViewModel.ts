@@ -33,6 +33,14 @@ export class E2eMessageSharedIconViewModel
         this.disposables.track(() => this.teardownRoomStateListener());
     }
 
+    public setClient(client: MatrixClient): void {
+        if (this.props.client === client) return;
+
+        this.props = { ...this.props, client };
+        this.setupRoomStateListener();
+        this.updateSnapshotFromProps();
+    }
+
     public setRoomId(roomId: string): void {
         if (this.props.roomId === roomId) return;
 

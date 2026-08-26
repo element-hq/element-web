@@ -13,11 +13,6 @@ import WidgetCapabilitiesPromptDialog from "../../../../../src/components/views/
 import { stubClient } from "../../../../test-utils";
 
 describe("WidgetCapabilitiesPromptDialog", () => {
-    const mockWidget = {
-        id: "test-widget",
-        name: "Test Widget",
-    } as any;
-
     const onFinished = jest.fn();
 
     beforeEach(() => {
@@ -39,7 +34,6 @@ describe("WidgetCapabilitiesPromptDialog", () => {
             const { container } = render(
                 <WidgetCapabilitiesPromptDialog
                     requestedCapabilities={capabilities}
-                    widget={mockWidget}
                     widgetKind={WidgetKind.Room}
                     onFinished={onFinished}
                 />,
@@ -65,7 +59,6 @@ describe("WidgetCapabilitiesPromptDialog", () => {
             render(
                 <WidgetCapabilitiesPromptDialog
                     requestedCapabilities={capabilities}
-                    widget={mockWidget}
                     widgetKind={WidgetKind.Room}
                     onFinished={onFinished}
                 />,
@@ -85,7 +78,6 @@ describe("WidgetCapabilitiesPromptDialog", () => {
             const { container } = render(
                 <WidgetCapabilitiesPromptDialog
                     requestedCapabilities={capabilities}
-                    widget={mockWidget}
                     widgetKind={WidgetKind.Room}
                     onFinished={onFinished}
                 />,
@@ -104,7 +96,6 @@ describe("WidgetCapabilitiesPromptDialog", () => {
             const { container } = render(
                 <WidgetCapabilitiesPromptDialog
                     requestedCapabilities={capabilities}
-                    widget={mockWidget}
                     widgetKind={WidgetKind.Room}
                     onFinished={onFinished}
                 />,
@@ -120,7 +111,6 @@ describe("WidgetCapabilitiesPromptDialog", () => {
             const { container } = render(
                 <WidgetCapabilitiesPromptDialog
                     requestedCapabilities={capabilities}
-                    widget={mockWidget}
                     widgetKind={WidgetKind.Room}
                     onFinished={onFinished}
                 />,

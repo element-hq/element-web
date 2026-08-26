@@ -51,7 +51,7 @@ export async function createBot(
     botClient.setCredentials(credentials);
     // Backup is prepared in the background. Poll until it is ready.
     const botClientHandle = await botClient.prepareClient();
-    let expectedBackupVersion: string;
+    let expectedBackupVersion: string | null;
     await expect
         .poll(async () => {
             expectedBackupVersion = await botClientHandle.evaluate((cli) =>
@@ -63,7 +63,7 @@ export async function createBot(
 
     const recoveryKey = await botClient.getRecoveryKey();
 
-    return { botClient, recoveryKey, expectedBackupVersion };
+    return { botClient, recoveryKey, expectedBackupVersion: expectedBackupVersion! };
 }
 
 /**
@@ -98,13 +98,15 @@ export async function waitForVerificationRequest(client: Client): Promise<JSHand
 export function handleSasVerification(verifier: JSHandle<Verifier>): Promise<EmojiMapping[]> {
     return verifier.evaluate((verifier) => {
         const event = verifier.getShowSasCallbacks();
-        if (event) return event.sas.emoji;
+        if (event) {
+            return event.sas.emoji!;
+        }
 
         return new Promise<EmojiMapping[]>((resolve) => {
             const onShowSas = (event: ShowSasCallbacks) => {
                 verifier.off("show_sas" as VerifierEvent, onShowSas);
                 void event.confirm();
-                resolve(event.sas.emoji);
+                resolve(event.sas.emoji!);
             };
 
             verifier.on("show_sas" as VerifierEvent, onShowSas);
@@ -117,24 +119,24 @@ export function handleSasVerification(verifier: JSHandle<Verifier>): Promise<Emo
  */
 export async function checkDeviceIsCrossSigned(app: ElementAppPage): Promise<void> {
     const { userId, deviceId, keys } = await app.client.evaluate(async (cli: MatrixClient) => {
-        const deviceId = cli.getDeviceId();
-        const userId = cli.getUserId();
+        const deviceId = cli.getDeviceId()!;
+        const userId = cli.getSafeUserId();
         const keys = await cli.downloadKeysForUsers([userId]);
 
         return { userId, deviceId, keys };
     });
 
     // there should be three cross-signing keys
-    expect(keys.master_keys[userId]).toHaveProperty("keys");
-    expect(keys.self_signing_keys[userId]).toHaveProperty("keys");
-    expect(keys.user_signing_keys[userId]).toHaveProperty("keys");
+    expect(keys.master_keys![userId]).toHaveProperty("keys");
+    expect(keys.self_signing_keys![userId]).toHaveProperty("keys");
+    expect(keys.user_signing_keys![userId]).toHaveProperty("keys");
 
     // and the device should be signed by the self-signing key
-    const selfSigningKeyId = Object.keys(keys.self_signing_keys[userId].keys)[0];
+    const selfSigningKeyId = Object.keys(keys.self_signing_keys![userId].keys)[0];
 
     expect(keys.device_keys[userId][deviceId]).toBeDefined();
 
-    const myDeviceSignatures = keys.device_keys[userId][deviceId].signatures[userId];
+    const myDeviceSignatures = keys.device_keys[userId][deviceId].signatures![userId];
     expect(myDeviceSignatures[selfSigningKeyId]).toBeDefined();
 }
 
@@ -190,7 +192,7 @@ export async function checkDeviceIsConnectedKeyBackup(
     // We have a key backup
     expect(backupInfo).toBeDefined();
     // The key backup version is as expected
-    expect(backupInfo.version).toBe(expectedBackupVersion);
+    expect(backupInfo!.version).toBe(expectedBackupVersion);
     // The active backup version is as expected
     expect(activeBackupVersion).toBe(expectedBackupVersion);
     // The backup key is stored in 4S
@@ -211,19 +213,19 @@ export async function logIntoElement(page: Page, credentials: Credentials) {
     await page.goto("/#/login");
 
     await page.getByRole("textbox", { name: "Username" }).fill(credentials.userId);
-    await page.getByPlaceholder("Password").fill(credentials.password);
+    await page.getByPlaceholder("Password").fill(credentials.password!);
     await page.getByRole("button", { name: "Sign in" }).click();
 }
 
 /**
- * Fill in the login form in Element with the given creds, and then complete the `CompleteSecurity` step, using the
- * given recovery key. (Normally this will verify the new device using the secrets from 4S.)
+ * Complete the `CompleteSecurity` step that happens after login, using the given recovery key.
+ * (Normally this will verify the new device using the secrets from 4S.)
  *
  * Afterwards, waits for the application to redirect to the home page.
+ *
+ * This is normally useful after a call to {@link logIntoElement} or {@link logInAccountMas}.
  */
-export async function logIntoElementAndVerify(page: Page, credentials: Credentials, recoveryKey: string) {
-    await logIntoElement(page, credentials);
-
+export async function verifyAfterLogin(page: Page, recoveryKey: string) {
     await page.locator(".mx_AuthPage").getByRole("button", { name: "Use recovery key" }).click();
 
     const useSecurityKey = page.locator(".mx_Dialog").getByRole("button", { name: "Use recovery key" });
@@ -248,7 +250,7 @@ export async function logIntoElementAndVerify(page: Page, credentials: Credentia
  * Click the "sign out" option in Element, and wait for the welcome page to load
  *
  * @param page - Playwright `Page` object.
- * @param discardKeys - if true, expect a "You'll lose access to your encrypted messages" dialog, and dismiss it.
+ * @param discardKeys - if true, expect a "You're about to lose access to your encrypted chats" dialog, and dismiss it.
  */
 export async function logOutOfElement(page: Page, discardKeys: boolean = false) {
     await page.getByRole("button", { name: "User menu" }).click();
@@ -256,7 +258,7 @@ export async function logOutOfElement(page: Page, discardKeys: boolean = false) 
     await page.getByRole("menu", { name: "User menu" }).getByRole("menuitem", { name: "All settings" }).click();
     await page.getByRole("button", { name: "Remove this device" }).click();
     if (discardKeys) {
-        await page.getByRole("button", { name: "I don't want my encrypted messages" }).click();
+        await page.getByRole("button", { name: "Remove this device anyway" }).click();
     } else {
         await page.locator(".mx_Dialog .mx_QuestionDialog").getByRole("button", { name: "Remove this device" }).click();
     }
@@ -379,7 +381,7 @@ export async function completeCreateSecretStorageDialog(
     // the step is quite quick, and playwright can miss it, so we can't test for it.
     if (opts && Object.hasOwn(opts, "accountPassword")) {
         await expect(currentDialogLocator.getByRole("heading", { name: "Setting up keys" })).toBeVisible();
-        await page.getByPlaceholder("Password").fill(opts!.accountPassword);
+        await page.getByPlaceholder("Password").fill(opts!.accountPassword!);
         await currentDialogLocator.getByRole("button", { name: "Continue" }).click();
     }
 
@@ -406,6 +408,7 @@ export async function copyAndContinue(page: Page) {
  * @param opts - other options for the createRoom call
  *
  * @returns a promise which resolves to the room ID
+ * @see createSharedEncryptedRoomWithUser
  */
 export async function createSharedRoomWithUser(
     app: ElementAppPage,
@@ -421,6 +424,32 @@ export async function createSharedRoomWithUser(
     await expect(app.page.getByText(" joined the room", { exact: false })).toBeVisible();
 
     return roomId;
+}
+
+/**
+ * Create a shared, encrypted room with the given user, and wait for them to join
+ *
+ * @param other - UserID of the other user
+ * @param opts - other options for the createRoom call
+ *
+ * @returns a promise which resolves to the room ID
+ * @see createSharedRoomWithUser
+ */
+export async function createSharedEncryptedRoomWithUser(
+    app: ElementAppPage,
+    other: string,
+    opts: Omit<ICreateRoomOpts, "invite"> = { name: "TestRoom" },
+): Promise<string> {
+    opts = structuredClone(opts);
+    opts.initial_state ??= [];
+    opts.initial_state.push({
+        type: "m.room.encryption",
+        state_key: "",
+        content: {
+            algorithm: "m.megolm.v1.aes-sha2",
+        },
+    });
+    return createSharedRoomWithUser(app, other, opts);
 }
 
 /**
@@ -568,7 +597,7 @@ export async function createSecondBotDevice(page: Page, homeserver: HomeserverIn
         bootstrapSecretStorage: false,
         bootstrapCrossSigning: false,
     });
-    bobSecondDevice.setCredentials(await homeserver.loginUser(bob.credentials.userId, bob.credentials.password));
+    bobSecondDevice.setCredentials(await homeserver.loginUser(bob.credentials!.userId, bob.credentials!.password!));
     await bobSecondDevice.prepareClient();
     return bobSecondDevice;
 }
@@ -611,7 +640,7 @@ export async function waitForDevices(
             for (let i = 0; i < 10; ++i) {
                 const userDeviceMap = await cli.getCrypto()?.getUserDeviceInfo([userId], true);
                 const deviceMap = userDeviceMap?.get(userId);
-                if (deviceMap.size === expectedNumberOfDevices) return true;
+                if (deviceMap?.size === expectedNumberOfDevices) return true;
                 await new Promise((r) => setTimeout(r, 500));
             }
             return false;

@@ -15,7 +15,7 @@ import {
     THREAD_RELATION_TYPE,
     M_POLL_START,
 } from "matrix-js-sdk/src/matrix";
-import React, { type JSX, createContext, type ReactElement, type ReactNode, useContext } from "react";
+import React, { type JSX, type ReactElement, type ReactNode, useContext } from "react";
 import {
     MicOnIcon,
     OverflowHorizontalIcon,
@@ -26,7 +26,7 @@ import {
 import { UploadButton, useViewModel } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
-import { CollapsibleButton } from "./CollapsibleButton";
+import { CollapsibleButton, OverflowMenuContext } from "./CollapsibleButton";
 import { type MenuProps } from "../../structures/ContextMenu";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import { LocationButton } from "../location";
@@ -61,9 +61,6 @@ interface IProps {
     isRichTextEnabled: boolean;
     onComposerModeClick: () => void;
 }
-
-type OverflowMenuCloser = () => void;
-export const OverflowMenuContext = createContext<OverflowMenuCloser | null>(null);
 
 const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
     const matrixClient = useContext(MatrixClientContext);

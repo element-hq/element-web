@@ -98,7 +98,7 @@ export class DeviceListener {
         );
         this.dispatcherRef = dis.register(this.onAction);
         this.recheck();
-        this.updateClientInformation();
+        void this.updateClientInformation();
     }
 
     public stop(): void {
@@ -149,7 +149,8 @@ export class DeviceListener {
     }
 
     /**
-     * Set the account data "m.org.matrix.custom.backup_disabled" to { "disabled": true }.
+     * Set the account data indicate that the user has chosen to disable key
+     * backup.
      */
     public async recordKeyBackupDisabled(): Promise<void> {
         await this.currentDevice?.recordKeyBackupDisabled();
@@ -226,7 +227,7 @@ export class DeviceListener {
     private onAction = ({ action }: ActionPayload): void => {
         if (action !== Action.OnLoggedIn) return;
         this.recheck();
-        this.updateClientInformation();
+        void this.updateClientInformation();
     };
 
     public recheck(): void {
@@ -352,7 +353,7 @@ export class DeviceListener {
         this.shouldRecordClientInformation = !!newValue;
 
         if (this.shouldRecordClientInformation !== prevValue) {
-            this.updateClientInformation();
+            void this.updateClientInformation();
         }
     };
 

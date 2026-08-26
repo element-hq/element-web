@@ -19,13 +19,13 @@ exports[`<LocationShareMenu /> with live location disabled goes to labs flag scr
     Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.
   </p>
   <form
-    class="_root_19upo_16"
+    class="_root_1o4d9_17"
   >
     <div
-      class="_inline-field_19upo_32"
+      class="_inline-field_1o4d9_33"
     >
       <div
-        class="_inline-field-control_19upo_44"
+        class="_inline-field-control_1o4d9_45"
       >
         <div
           class="_container_udcm8_10"
@@ -42,10 +42,10 @@ exports[`<LocationShareMenu /> with live location disabled goes to labs flag scr
         </div>
       </div>
       <div
-        class="_inline-field-body_19upo_38"
+        class="_inline-field-body_1o4d9_39"
       >
         <label
-          class="_label_19upo_59"
+          class="_label_1o4d9_60"
           for="react-use-id-1"
         >
           Enable live location sharing

@@ -17,6 +17,7 @@
         "invite": "Kutsu",
         "new_conversation": "Uus vestlus",
         "new_room": "Uus jututuba",
+        "new_section": "Uus jaotis",
         "new_video_room": "Uus videotuba",
         "open_menu": "Ava menüü",
         "pause": "Peata",
@@ -40,12 +41,36 @@
         "preferences": "Eelistused",
         "state_encryption_enabled": "Katseline olekusündmuste krüptimine on kasutusel"
     },
+    "devtools": {
+        "toggle_event": "lülita sündmus sisse/välja"
+    },
+    "emoji": {
+        "categories": "Kategooriad",
+        "category_activities": "Tegevused",
+        "category_animals_nature": "Loomad ja loodus",
+        "category_flags": "Lipud",
+        "category_food_drink": "Toit ja jook",
+        "category_frequently_used": "Enamkasutatud",
+        "category_objects": "Esemed",
+        "category_smileys_people": "Vigurnäod ja inimesed",
+        "category_symbols": "Sümbolid",
+        "category_travel_places": "Reisimine ja kohad",
+        "quick_reactions": "Reageeri lennult"
+    },
+    "emoji_picker": {
+        "cancel_search_label": "Katkesta otsing",
+        "emoji_picker": "Emojide valija"
+    },
+    "keyboard": {
+        "shift": "Shift"
+    },
     "left_panel": {
         "open_dial_pad": "Ava numbriklahvistik",
         "separator_label": "Laiendamiseks klõpsa või lohista"
     },
     "menus": {
         "user_menu": {
+            "clear_status": "Tühjenda",
             "create_an_account": "Loo kasutajakonto",
             "got_an_account": "Kas sul on kasutajakonto juba olemas?",
             "manage_account": "Halda kasutajakontot",
@@ -58,6 +83,11 @@
         "default_settings": "Sobita vaikimisi seadistustega",
         "mentions_keywords": "Mainimised ja märksõnad",
         "mute_room": "Summuta jututuba"
+    },
+    "release_announcement": {
+        "room_list_section_close": "Sobib",
+        "room_list_section_description": "Võid omi vestlusi grupeerida jaotiste kaupa ning saad hoida vestlused korrastatuna ja hõlpsasti leitavatena.",
+        "room_list_section_title": "Võtame kasutusele jaotised"
     },
     "room": {
         "context_menu": {
@@ -90,6 +120,17 @@
     "room_list": {
         "a11y": {
             "default": "Ava jututuba: %(roomName)s",
+            "drag_cancelled": "Lohistamine on katkestatud",
+            "drag_end": "„%(source)s“ lohistati asukohta „%(target)s“",
+            "drag_end_after": "„%(source)s“ lohistati „%(target)s“ asukoha taha",
+            "drag_end_before": "„%(source)s“ lohistati „%(target)s“ asukoha ette",
+            "drag_end_original": "„%(source)s“ lohistati algsesse asukohta",
+            "drag_instructions": "Tühikuklahviga saad alustada lohistamist ja lõpetada seda. Nooleklahvid liigutavad kirjet ja Escape-nupp tühistab kogu tegevuse.",
+            "drag_over": "„%(source)s“ asub „%(target)s“ asukoha kohal",
+            "drag_over_after": "„%(source)s“ lohistatakse „%(target)s“ asukoha taha",
+            "drag_over_before": "„%(source)s“ lohistatakse „%(target)s“ asukoha ette",
+            "drag_over_original": "„%(source)s“ lohistatakse algsesse asukohta",
+            "drag_start": "Lohistan: %(source)s",
             "invitation": "Ava %(roomName)s jututoa kutse.",
             "mention": {
                 "one": "Ava %(roomName)s jututuba ühe lugemata mainimisega.",
@@ -105,15 +146,13 @@
         },
         "appearance": "Välimus",
         "chat_moved": "Vestlus on tõstetud mujale",
+        "collapse_all_sections": "Ahenda kõik jaotised",
         "collapse_filters": "Ahenda filtriloendit",
         "empty": {
             "no_chats": "Vestlusi veel ei leidu",
             "no_chats_description": "Alusta sellest, et leia mõni vestluspartner või loo oma jututuba",
             "no_chats_description_no_room_rights": "Alusta sellest, et leia mõni vestluspartner",
-            "no_favourites": "Sa pole veel ühtegi vestlust märkinud lemmikuks",
-            "no_favourites_description": "Vestluse saad märkida lemmikuks tema seadistustest",
             "no_invites": "Sul pole lugemata kutseid",
-            "no_lowpriority": "Sul pole ühtegi vähetähtsat jututuba",
             "no_mentions": "Sul pole lugemata mainimisi",
             "no_people": "Sul pole veel ühtegi otsevestlust kellegagi",
             "no_people_description": "Kõikide oma muude vestluste nägemiseks eemalda otsingufiltrid",
@@ -123,6 +162,7 @@
             "show_activity": "Vaata kõiki tegevusi",
             "show_chats": "Näita kõiki vestlusi"
         },
+        "expand_all_sections": "Laienda kõiki jaotisi",
         "expand_filters": "Laienda filtriloendit",
         "filters": {
             "favourite": "Lemmikud",
@@ -140,7 +180,9 @@
             "leave_room": "Lahku jututoast",
             "low_priority": "Vähetähtis",
             "mark_read": "Märgi loetuks",
-            "mark_unread": "Märgi mitteloetuks"
+            "mark_unread": "Märgi mitteloetuks",
+            "move_to_section": "Tõsta teise jaotisse",
+            "remove_from_section": "Eemalda jaotisest"
         },
         "notification_options": "Teavituste eelistused",
         "open_space_menu": "Ava kogukonna menüü",
@@ -149,8 +191,13 @@
             "more_options": "Täiendavad seadistused"
         },
         "room_options": "Jututoa valikud",
+        "section_created": "Jaotis on loodud",
         "section_header": {
-            "more_options": "Täiendavad valikud"
+            "edit_section": "Muuda jaotist",
+            "more_options": "Täiendavad valikud",
+            "remove_section": "Eemalda jaotis",
+            "toggle": "Lülita %(section)s jaotis sisse/välja",
+            "toggle_unread": "Lülita lugemata jututubadega %(section)s jaotis sisse/välja"
         },
         "show_message_previews": "Näita sõnumite eelvaateid",
         "sort": "Järjesta",
@@ -162,10 +209,24 @@
         "space_menu": {
             "home": "Kogukonna avaleht",
             "space_settings": "Kogukonna seadistused"
+        },
+        "unread_messages": "Lugemata sõnumid"
+    },
+    "status": {
+        "set_status": {
+            "away": "Eemal",
+            "be_right_back": "Tulen kohe tagasi",
+            "focus_time": "Keskendumisaeg",
+            "in_a_meeting": "Koosolekul",
+            "on_the_road": "Olen liikumises",
+            "set_status_prompt": "Mis on sinu olek võrgus?"
         }
     },
     "terms": {
         "tac_button": "Vaata üle kasutustingimused"
+    },
+    "threads": {
+        "error_start_thread_existing_relation": "Jutulõnga ei saa luua sõnumist, mis juba on jutulõnga osa"
     },
     "time": {
         "about_day_ago": "umbes päev tagasi",
@@ -188,6 +249,28 @@
             "declined": {
                 "call_declined": "Osapool jättis kõnele vastamata",
                 "call_declined_by_us": "Sa jätsid kõne vastamata"
+            },
+            "ongoing": {
+                "common": {
+                    "call_started_by": "%(startedByDisplayName)s helistas",
+                    "join_button": "Liitu"
+                },
+                "dm": {
+                    "call_started": "Kõne algas",
+                    "title": "Kõne on pooleli"
+                },
+                "room": {
+                    "join_count": {
+                        "one": "%(count)s liituja",
+                        "other": "%(count)s liitujat"
+                    },
+                    "title": "Rühmakõne on pooleli"
+                }
+            },
+            "tombstone": {
+                "room": {
+                    "title": "Grupikõne on lõppenud"
+                }
             },
             "video_call_title": "Videokõne",
             "voice_call_title": "Häälkõne"
@@ -233,6 +316,7 @@
             "label": "Tegevused sõnumitega",
             "view_in_room": "Vaata jututoas"
         },
+        "message_shared_by": "Kuna sa polnud sõnumi saatmise ajal jututoas, siis %(displayName)s (%(userId)s) jagas seda sõnumit sinuga.",
         "message_timestamp_received_at": "Saabumise aeg: %(dateTime)s",
         "message_timestamp_sent_at": "Saatmise aeg: %(dateTime)s",
         "mjolnir": {

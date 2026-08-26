@@ -12,7 +12,7 @@ import { describe, it, expect } from "vitest";
 
 import * as stories from "./Clock.stories.tsx";
 
-const { Default, LotOfSeconds } = composeStories(stories);
+const { Default, LotOfSeconds, SingleDigitMinutes } = composeStories(stories);
 
 describe("Clock", () => {
     it("renders the clock", () => {
@@ -22,6 +22,11 @@ describe("Clock", () => {
 
     it("renders the clock with a lot of seconds", () => {
         const { container } = render(<LotOfSeconds />);
+        expect(container).toMatchSnapshot();
+    });
+
+    it("renders the clock with single digit minute", () => {
+        const { container } = render(<SingleDigitMinutes />);
         expect(container).toMatchSnapshot();
     });
 });

@@ -12,25 +12,32 @@ exports[`<Users /> should render a single device - signed by owner 1`] = `
         >
           User ID: @alice:example.com
           <button
-            aria-label="Copy"
-            class="mx_AccessibleButton mx_CopyableText_copyButton"
+            aria-labelledby="react-use-id-1"
+            class="_icon-button_1215g_8 mx_CopyableText_copyButton"
+            data-kind="primary"
             role="button"
+            style="--cpd-icon-button-size: 28px; padding: 4px;"
             tabindex="0"
           >
-            <svg
-              fill="currentColor"
-              height="1em"
-              viewBox="0 0 24 24"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
+            <div
+              class="_indicator-icon_147l5_17"
+              style="--cpd-icon-button-size: 100%;"
             >
-              <path
-                d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
-              />
-              <path
-                d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
-              />
-            </svg>
+              <svg
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
+                />
+                <path
+                  d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
+                />
+              </svg>
+            </div>
           </button>
         </span>
       </li>
@@ -40,25 +47,32 @@ exports[`<Users /> should render a single device - signed by owner 1`] = `
         >
           Device ID: SIGNED
           <button
-            aria-label="Copy"
-            class="mx_AccessibleButton mx_CopyableText_copyButton"
+            aria-labelledby="react-use-id-2"
+            class="_icon-button_1215g_8 mx_CopyableText_copyButton"
+            data-kind="primary"
             role="button"
+            style="--cpd-icon-button-size: 28px; padding: 4px;"
             tabindex="0"
           >
-            <svg
-              fill="currentColor"
-              height="1em"
-              viewBox="0 0 24 24"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
+            <div
+              class="_indicator-icon_147l5_17"
+              style="--cpd-icon-button-size: 100%;"
             >
-              <path
-                d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
-              />
-              <path
-                d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
-              />
-            </svg>
+              <svg
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
+                />
+                <path
+                  d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
+                />
+              </svg>
+            </div>
           </button>
         </span>
       </li>
@@ -100,25 +114,32 @@ exports[`<Users /> should render a single device - signed by owner 1`] = `
             >
               ed25519: an_ed25519_public_key
               <button
-                aria-label="Copy"
-                class="mx_AccessibleButton mx_CopyableText_copyButton"
+                aria-labelledby="react-use-id-3"
+                class="_icon-button_1215g_8 mx_CopyableText_copyButton"
+                data-kind="primary"
                 role="button"
+                style="--cpd-icon-button-size: 28px; padding: 4px;"
                 tabindex="0"
               >
-                <svg
-                  fill="currentColor"
-                  height="1em"
-                  viewBox="0 0 24 24"
-                  width="1em"
-                  xmlns="http://www.w3.org/2000/svg"
+                <div
+                  class="_indicator-icon_147l5_17"
+                  style="--cpd-icon-button-size: 100%;"
                 >
-                  <path
-                    d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
-                  />
-                  <path
-                    d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
-                  />
-                </svg>
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
+                    />
+                    <path
+                      d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
+                    />
+                  </svg>
+                </div>
               </button>
             </span>
           </li>
@@ -128,25 +149,32 @@ exports[`<Users /> should render a single device - signed by owner 1`] = `
             >
               curve25519: a_curve25519_public_key
               <button
-                aria-label="Copy"
-                class="mx_AccessibleButton mx_CopyableText_copyButton"
+                aria-labelledby="react-use-id-4"
+                class="_icon-button_1215g_8 mx_CopyableText_copyButton"
+                data-kind="primary"
                 role="button"
+                style="--cpd-icon-button-size: 28px; padding: 4px;"
                 tabindex="0"
               >
-                <svg
-                  fill="currentColor"
-                  height="1em"
-                  viewBox="0 0 24 24"
-                  width="1em"
-                  xmlns="http://www.w3.org/2000/svg"
+                <div
+                  class="_indicator-icon_147l5_17"
+                  style="--cpd-icon-button-size: 100%;"
                 >
-                  <path
-                    d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
-                  />
-                  <path
-                    d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
-                  />
-                </svg>
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
+                    />
+                    <path
+                      d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
+                    />
+                  </svg>
+                </div>
               </button>
             </span>
           </li>
@@ -157,7 +185,9 @@ exports[`<Users /> should render a single device - signed by owner 1`] = `
   <div
     class="mx_Dialog_buttons"
   >
-    <button>
+    <button
+      type="button"
+    >
       Back
     </button>
   </div>
@@ -176,25 +206,32 @@ exports[`<Users /> should render a single device - unsigned 1`] = `
         >
           User ID: @alice:example.com
           <button
-            aria-label="Copy"
-            class="mx_AccessibleButton mx_CopyableText_copyButton"
+            aria-labelledby="react-use-id-1"
+            class="_icon-button_1215g_8 mx_CopyableText_copyButton"
+            data-kind="primary"
             role="button"
+            style="--cpd-icon-button-size: 28px; padding: 4px;"
             tabindex="0"
           >
-            <svg
-              fill="currentColor"
-              height="1em"
-              viewBox="0 0 24 24"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
+            <div
+              class="_indicator-icon_147l5_17"
+              style="--cpd-icon-button-size: 100%;"
             >
-              <path
-                d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
-              />
-              <path
-                d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
-              />
-            </svg>
+              <svg
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
+                />
+                <path
+                  d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
+                />
+              </svg>
+            </div>
           </button>
         </span>
       </li>
@@ -204,25 +241,32 @@ exports[`<Users /> should render a single device - unsigned 1`] = `
         >
           Device ID: UNSIGNED
           <button
-            aria-label="Copy"
-            class="mx_AccessibleButton mx_CopyableText_copyButton"
+            aria-labelledby="react-use-id-2"
+            class="_icon-button_1215g_8 mx_CopyableText_copyButton"
+            data-kind="primary"
             role="button"
+            style="--cpd-icon-button-size: 28px; padding: 4px;"
             tabindex="0"
           >
-            <svg
-              fill="currentColor"
-              height="1em"
-              viewBox="0 0 24 24"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
+            <div
+              class="_indicator-icon_147l5_17"
+              style="--cpd-icon-button-size: 100%;"
             >
-              <path
-                d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
-              />
-              <path
-                d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
-              />
-            </svg>
+              <svg
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
+                />
+                <path
+                  d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
+                />
+              </svg>
+            </div>
           </button>
         </span>
       </li>
@@ -264,25 +308,32 @@ exports[`<Users /> should render a single device - unsigned 1`] = `
             >
               ed25519: an_ed25519_public_key
               <button
-                aria-label="Copy"
-                class="mx_AccessibleButton mx_CopyableText_copyButton"
+                aria-labelledby="react-use-id-3"
+                class="_icon-button_1215g_8 mx_CopyableText_copyButton"
+                data-kind="primary"
                 role="button"
+                style="--cpd-icon-button-size: 28px; padding: 4px;"
                 tabindex="0"
               >
-                <svg
-                  fill="currentColor"
-                  height="1em"
-                  viewBox="0 0 24 24"
-                  width="1em"
-                  xmlns="http://www.w3.org/2000/svg"
+                <div
+                  class="_indicator-icon_147l5_17"
+                  style="--cpd-icon-button-size: 100%;"
                 >
-                  <path
-                    d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
-                  />
-                  <path
-                    d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
-                  />
-                </svg>
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
+                    />
+                    <path
+                      d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
+                    />
+                  </svg>
+                </div>
               </button>
             </span>
           </li>
@@ -292,25 +343,32 @@ exports[`<Users /> should render a single device - unsigned 1`] = `
             >
               curve25519: a_curve25519_public_key
               <button
-                aria-label="Copy"
-                class="mx_AccessibleButton mx_CopyableText_copyButton"
+                aria-labelledby="react-use-id-4"
+                class="_icon-button_1215g_8 mx_CopyableText_copyButton"
+                data-kind="primary"
                 role="button"
+                style="--cpd-icon-button-size: 28px; padding: 4px;"
                 tabindex="0"
               >
-                <svg
-                  fill="currentColor"
-                  height="1em"
-                  viewBox="0 0 24 24"
-                  width="1em"
-                  xmlns="http://www.w3.org/2000/svg"
+                <div
+                  class="_indicator-icon_147l5_17"
+                  style="--cpd-icon-button-size: 100%;"
                 >
-                  <path
-                    d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
-                  />
-                  <path
-                    d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
-                  />
-                </svg>
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
+                    />
+                    <path
+                      d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
+                    />
+                  </svg>
+                </div>
               </button>
             </span>
           </li>
@@ -321,7 +379,9 @@ exports[`<Users /> should render a single device - unsigned 1`] = `
   <div
     class="mx_Dialog_buttons"
   >
-    <button>
+    <button
+      type="button"
+    >
       Back
     </button>
   </div>
@@ -340,25 +400,32 @@ exports[`<Users /> should render a single device - verified by cross-signing 1`]
         >
           User ID: @alice:example.com
           <button
-            aria-label="Copy"
-            class="mx_AccessibleButton mx_CopyableText_copyButton"
+            aria-labelledby="react-use-id-1"
+            class="_icon-button_1215g_8 mx_CopyableText_copyButton"
+            data-kind="primary"
             role="button"
+            style="--cpd-icon-button-size: 28px; padding: 4px;"
             tabindex="0"
           >
-            <svg
-              fill="currentColor"
-              height="1em"
-              viewBox="0 0 24 24"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
+            <div
+              class="_indicator-icon_147l5_17"
+              style="--cpd-icon-button-size: 100%;"
             >
-              <path
-                d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
-              />
-              <path
-                d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
-              />
-            </svg>
+              <svg
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
+                />
+                <path
+                  d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
+                />
+              </svg>
+            </div>
           </button>
         </span>
       </li>
@@ -368,25 +435,32 @@ exports[`<Users /> should render a single device - verified by cross-signing 1`]
         >
           Device ID: VERIFIED
           <button
-            aria-label="Copy"
-            class="mx_AccessibleButton mx_CopyableText_copyButton"
+            aria-labelledby="react-use-id-2"
+            class="_icon-button_1215g_8 mx_CopyableText_copyButton"
+            data-kind="primary"
             role="button"
+            style="--cpd-icon-button-size: 28px; padding: 4px;"
             tabindex="0"
           >
-            <svg
-              fill="currentColor"
-              height="1em"
-              viewBox="0 0 24 24"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
+            <div
+              class="_indicator-icon_147l5_17"
+              style="--cpd-icon-button-size: 100%;"
             >
-              <path
-                d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
-              />
-              <path
-                d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
-              />
-            </svg>
+              <svg
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
+                />
+                <path
+                  d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
+                />
+              </svg>
+            </div>
           </button>
         </span>
       </li>
@@ -430,25 +504,32 @@ exports[`<Users /> should render a single device - verified by cross-signing 1`]
             >
               ed25519: an_ed25519_public_key
               <button
-                aria-label="Copy"
-                class="mx_AccessibleButton mx_CopyableText_copyButton"
+                aria-labelledby="react-use-id-3"
+                class="_icon-button_1215g_8 mx_CopyableText_copyButton"
+                data-kind="primary"
                 role="button"
+                style="--cpd-icon-button-size: 28px; padding: 4px;"
                 tabindex="0"
               >
-                <svg
-                  fill="currentColor"
-                  height="1em"
-                  viewBox="0 0 24 24"
-                  width="1em"
-                  xmlns="http://www.w3.org/2000/svg"
+                <div
+                  class="_indicator-icon_147l5_17"
+                  style="--cpd-icon-button-size: 100%;"
                 >
-                  <path
-                    d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
-                  />
-                  <path
-                    d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
-                  />
-                </svg>
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
+                    />
+                    <path
+                      d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
+                    />
+                  </svg>
+                </div>
               </button>
             </span>
           </li>
@@ -458,25 +539,32 @@ exports[`<Users /> should render a single device - verified by cross-signing 1`]
             >
               curve25519: a_curve25519_public_key
               <button
-                aria-label="Copy"
-                class="mx_AccessibleButton mx_CopyableText_copyButton"
+                aria-labelledby="react-use-id-4"
+                class="_icon-button_1215g_8 mx_CopyableText_copyButton"
+                data-kind="primary"
                 role="button"
+                style="--cpd-icon-button-size: 28px; padding: 4px;"
                 tabindex="0"
               >
-                <svg
-                  fill="currentColor"
-                  height="1em"
-                  viewBox="0 0 24 24"
-                  width="1em"
-                  xmlns="http://www.w3.org/2000/svg"
+                <div
+                  class="_indicator-icon_147l5_17"
+                  style="--cpd-icon-button-size: 100%;"
                 >
-                  <path
-                    d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
-                  />
-                  <path
-                    d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
-                  />
-                </svg>
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
+                    />
+                    <path
+                      d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
+                    />
+                  </svg>
+                </div>
               </button>
             </span>
           </li>
@@ -487,7 +575,9 @@ exports[`<Users /> should render a single device - verified by cross-signing 1`]
   <div
     class="mx_Dialog_buttons"
   >
-    <button>
+    <button
+      type="button"
+    >
       Back
     </button>
   </div>
@@ -506,25 +596,32 @@ exports[`<Users /> should render a single user 1`] = `
         >
           User ID: @alice:example.com
           <button
-            aria-label="Copy"
-            class="mx_AccessibleButton mx_CopyableText_copyButton"
+            aria-labelledby="react-use-id-1"
+            class="_icon-button_1215g_8 mx_CopyableText_copyButton"
+            data-kind="primary"
             role="button"
+            style="--cpd-icon-button-size: 28px; padding: 4px;"
             tabindex="0"
           >
-            <svg
-              fill="currentColor"
-              height="1em"
-              viewBox="0 0 24 24"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
+            <div
+              class="_indicator-icon_147l5_17"
+              style="--cpd-icon-button-size: 100%;"
             >
-              <path
-                d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
-              />
-              <path
-                d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
-              />
-            </svg>
+              <svg
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
+                />
+                <path
+                  d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
+                />
+              </svg>
+            </div>
           </button>
         </span>
       </li>
@@ -581,6 +678,7 @@ exports[`<Users /> should render a single user 1`] = `
         <li>
           <button
             class="mx_DevTools_button"
+            type="button"
           >
             <div
               class="mx_E2EIcon mx_E2EIcon_inline"
@@ -607,6 +705,7 @@ exports[`<Users /> should render a single user 1`] = `
         <li>
           <button
             class="mx_DevTools_button"
+            type="button"
           >
             <div
               class="mx_E2EIcon mx_E2EIcon_inline"
@@ -631,6 +730,7 @@ exports[`<Users /> should render a single user 1`] = `
         <li>
           <button
             class="mx_DevTools_button"
+            type="button"
           >
             <div
               class="mx_E2EIcon mx_E2EIcon_inline"
@@ -654,11 +754,21 @@ exports[`<Users /> should render a single user 1`] = `
         </li>
       </ul>
     </section>
+    <section>
+      <h2>
+        Cryptographic identity
+      </h2>
+      <i>
+        Unknown
+      </i>
+    </section>
   </div>
   <div
     class="mx_Dialog_buttons"
   >
-    <button>
+    <button
+      type="button"
+    >
       Back
     </button>
   </div>
@@ -690,13 +800,13 @@ exports[`<Users /> should render a user list 1`] = `
     </div>
     No results found
     <form
-      class="_root_19upo_16"
+      class="_root_1o4d9_17"
     >
       <div
-        class="_inline-field_19upo_32"
+        class="_inline-field_1o4d9_33"
       >
         <div
-          class="_inline-field-control_19upo_44"
+          class="_inline-field-control_1o4d9_45"
         >
           <div
             class="_container_udcm8_10"
@@ -714,10 +824,10 @@ exports[`<Users /> should render a user list 1`] = `
           </div>
         </div>
         <div
-          class="_inline-field-body_19upo_38"
+          class="_inline-field-body_1o4d9_39"
         >
           <label
-            class="_label_19upo_59"
+            class="_label_1o4d9_60"
             for="react-use-id-1"
           >
             Only joined users
@@ -729,7 +839,9 @@ exports[`<Users /> should render a user list 1`] = `
   <div
     class="mx_Dialog_buttons"
   >
-    <button>
+    <button
+      type="button"
+    >
       Back
     </button>
   </div>

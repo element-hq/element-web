@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Mocked } from "jest-mock";
+import { type Mocked } from "jest-mock-vitest-adapter";
 import {
     type MatrixClient,
     MatrixEvent,
@@ -20,6 +20,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
+import { vi } from "../setup/adapter.ts";
 import { flushPromises } from "./utilities";
 
 type Options = {
@@ -129,7 +130,7 @@ export const setupRoomWithPollEvents = async (
 
     // set redaction allowed for current user only
     // poll end events are validated against this
-    jest.spyOn(room.currentState, "maySendRedactionForEvent").mockImplementation((_evt: MatrixEvent, id: string) => {
+    vi.spyOn(room.currentState, "maySendRedactionForEvent").mockImplementation((_evt: MatrixEvent, id: string) => {
         return id === mockClient.getSafeUserId();
     });
 

@@ -26,6 +26,10 @@ permissions: {}
 jobs:
     deploy:
         name: "Deploy to Cloudflare Pages"
+        # Run if it's NOT a release, OR if it is a release and does NOT start with 'module/'
+        if: |
+            github.event_name != 'release' ||
+            !startsWith(github.event.release.tag_name, 'module/')
         runs-on: ubuntu-24.04
         environment: ${{ inputs.site || 'staging.element.io' }}
         permissions:
@@ -34,9 +38,15 @@ jobs:
         env:
             SITE: ${{ inputs.site || 'staging.element.io' }}
         steps:
-            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   persist-credentials: false
+
+            - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+              with:
+                  cache: "pnpm"
+                  node-version-file: package.json
 
             - name: Load GPG key
               run: |
@@ -91,11 +101,9 @@ jobs:
                   check-regexp: ^((?!SonarCloud|SonarQube|issue|board|label|Release|prepare|GitHub Pages).)*$
 
             - name: Deploy to Cloudflare Pages
-              uses: cloudflare/pages-action@f0a1cd58cd66095dee69bfa18fa5efd1dde93bca # v1
+              uses: cloudflare/wrangler-action@ebbaa1584979971c8614a24965b4405ff95890e0 # v4.0.0
               with:
                   apiToken: ${{ secrets.CF_PAGES_TOKEN }}
                   accountId: ${{ secrets.CF_PAGES_ACCOUNT_ID }}
-                  projectName: ${{ env.SITE == 'staging.element.io' && 'element-web-staging' || 'element-web' }}
-                  directory: _deploy
+                  command: pages deploy _deploy --project-name ${{ env.SITE == 'staging.element.io' && 'element-web-staging' || 'element-web' }} --branch main
                   gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-                  branch: main

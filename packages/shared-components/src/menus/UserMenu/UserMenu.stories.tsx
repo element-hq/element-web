@@ -11,8 +11,14 @@ import { fn } from "storybook/test";
 
 import { UserMenuView, type UserMenuViewSnapshot, type UserMenuViewActions } from "./UserMenu";
 import avatarUrl from "../../../static/element.png";
-import { useMockedViewModel } from "../../core/viewmodel";
+import { MockViewModel, useMockedViewModel } from "../../core/viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
+import { type SetStatusViewSnapshot } from "../..";
+
+class MockSetStatusViewModel extends MockViewModel<SetStatusViewSnapshot> {
+    public setStatus = fn();
+    public clearStatus = fn();
+}
 
 const UserMenuWrapperImpl = (snapshot: UserMenuViewSnapshot): JSX.Element => {
     const vm = useMockedViewModel<UserMenuViewSnapshot, UserMenuViewActions>(snapshot, {
@@ -24,7 +30,9 @@ const UserMenuWrapperImpl = (snapshot: UserMenuViewSnapshot): JSX.Element => {
         openHomePage: fn(),
         openSecurity: fn(),
         openSettings: fn(),
+        clearStatus: fn(),
     });
+
     return <UserMenuView vm={vm} />;
 };
 
@@ -59,13 +67,33 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+    args: {
+        setStatusViewModel: new MockSetStatusViewModel({}),
+    },
+};
 
 export const LongerName: Story = {
     args: {
         displayName: "Sally Sanderson with a longer name",
+        setStatusViewModel: new MockSetStatusViewModel({}),
     },
 };
+
+// Rules needed for any story where the menu is open, for the reasons
+// given in each rule.
+const MENU_OPEN_A11Y_RULES = [
+    {
+        // Menu contains a header which is invalid
+        id: "aria-required-children",
+        enabled: false,
+    },
+    {
+        // Menu pops open by default
+        id: "aria-hidden-focus",
+        enabled: false,
+    },
+];
 
 export const Open: Story = {
     args: {
@@ -74,6 +102,7 @@ export const Open: Story = {
         userId: "@person-name:homeserver.com",
         expanded: true,
         showAvatar: true,
+        setStatusViewModel: new MockSetStatusViewModel({}),
     },
     parameters: {
         a11y: {
@@ -83,18 +112,28 @@ export const Open: Story = {
              * to learn more.
              */
             config: {
-                rules: [
-                    {
-                        // Menu contains a header which is invalid
-                        id: "aria-required-children",
-                        enabled: false,
-                    },
-                    {
-                        // Menu pops open by default
-                        id: "aria-hidden-focus",
-                        enabled: false,
-                    },
-                ],
+                rules: MENU_OPEN_A11Y_RULES,
+            },
+        },
+    },
+    // Only used for playwright tests for the menu.
+    // Steals focus if actually opened on the storybook page
+    tags: ["!dev", "!autodocs"],
+};
+
+export const OpenVeryLongName: Story = {
+    args: {
+        open: true,
+        displayName: "Sally Sanderandersonanonanonabibblybobblywooblywobblynobblynom with a name with a very long word",
+        userId: "@person-whose-username-some-might-consider-to-be-a-little-overly-long-although-thats-their-choice-and-we-must-respect-it:homeserver.com",
+        expanded: true,
+        showAvatar: true,
+        setStatusViewModel: new MockSetStatusViewModel({}),
+    },
+    parameters: {
+        a11y: {
+            config: {
+                rules: MENU_OPEN_A11Y_RULES,
             },
         },
     },
@@ -107,6 +146,7 @@ export const Condensed: Story = {
     args: {
         displayName: "Sally Sanderson with a longer name",
         expanded: false,
+        setStatusViewModel: new MockSetStatusViewModel({}),
     },
 };
 
@@ -117,6 +157,7 @@ export const NoAvatar: Story = {
         expanded: true,
         open: true,
         showAvatar: false,
+        setStatusViewModel: new MockSetStatusViewModel({}),
     },
     parameters: Open.parameters,
 };
@@ -127,6 +168,8 @@ export const Guest: Story = {
         userId: "@guest:attendees.example.org",
         manageAccountHref: undefined,
         showAvatar: false,
+        setStatusViewModel: new MockSetStatusViewModel({}),
+        showUserStatus: false,
         actions: {
             createAccount: true,
             signIn: true,
@@ -150,18 +193,7 @@ export const GuestOpen: Story = {
              * to learn more.
              */
             config: {
-                rules: [
-                    {
-                        // Menu contains a header which is invalid
-                        id: "aria-required-children",
-                        enabled: false,
-                    },
-                    {
-                        // Menu pops open by default
-                        id: "aria-hidden-focus",
-                        enabled: false,
-                    },
-                ],
+                rules: MENU_OPEN_A11Y_RULES,
             },
         },
     },
@@ -170,20 +202,35 @@ export const GuestOpen: Story = {
     tags: ["!dev", "!autodocs"],
 };
 
-export const AllOptions: Story = {
+export const WithStatus: Story = {
     args: {
-        displayName: "Alice",
-        userId: "@alice:example.org",
-        manageAccountHref: "#",
-        showAvatar: true,
-        actions: {
-            createAccount: true,
-            signIn: true,
-            linkNewDevice: true,
-            openSecurity: true,
-            openHomePage: true,
-            openFeedback: true,
-            openSettings: true,
-        } satisfies Record<keyof UserMenuViewSnapshot["actions"], true>,
+        userStatus: {
+            emoji: "🐹",
+            text: "On the wheel",
+        },
+        setStatusViewModel: new MockSetStatusViewModel({}),
+    },
+};
+
+export const WithStatusOpen: Story = {
+    args: {
+        open: true,
+        userStatus: {
+            emoji: "🐹",
+            text: "On the wheel",
+        },
+        setStatusViewModel: new MockSetStatusViewModel({
+            userStatus: {
+                emoji: "🐹",
+                text: "On the wheel",
+            },
+        }),
+    },
+    parameters: {
+        a11y: {
+            config: {
+                rules: MENU_OPEN_A11Y_RULES,
+            },
+        },
     },
 };

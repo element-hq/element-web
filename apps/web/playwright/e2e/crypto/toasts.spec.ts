@@ -8,8 +8,8 @@
 import { type GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
 import { assertNoToasts, getToast, rejectToast } from "@element-hq/element-web-playwright-common";
 
-import { test, expect } from "../../element-web-test";
-import { createBot, deleteCachedSecrets, disableKeyBackup, logIntoElement, logIntoElementAndVerify } from "./utils";
+import { expect, test } from "../../element-web-test";
+import { createBot, deleteCachedSecrets, disableKeyBackup, logIntoElement, verifyAfterLogin } from "./utils";
 import { type Bot } from "../../pages/bot";
 
 // Mask the background of the screenshot to avoid failing the test just because some
@@ -29,7 +29,8 @@ test.describe("Key storage out of sync toast", () => {
         const res = await createBot(page, homeserver, credentials);
         recoveryKey = res.recoveryKey;
 
-        await logIntoElementAndVerify(page, credentials, recoveryKey.encodedPrivateKey);
+        await logIntoElement(page, credentials);
+        await verifyAfterLogin(page, recoveryKey.encodedPrivateKey!);
 
         await deleteCachedSecrets(page);
     });
@@ -42,7 +43,7 @@ test.describe("Key storage out of sync toast", () => {
 
         await page.getByRole("button", { name: "Enter recovery key" }).click();
 
-        await page.getByRole("textbox", { name: "Recovery Key" }).fill(recoveryKey.encodedPrivateKey);
+        await page.getByRole("textbox", { name: "Recovery Key" }).fill(recoveryKey.encodedPrivateKey!);
         await page.getByRole("button", { name: "Continue" }).click();
 
         await expect(page.getByRole("button", { name: "Enter recovery key" })).not.toBeVisible();
@@ -62,7 +63,7 @@ test.describe("Key storage out of sync toast", () => {
 });
 
 test.describe("'Turn on key storage' toast", () => {
-    let botClient: Bot | undefined;
+    let botClient: Bot;
 
     test.beforeEach(async ({ page, homeserver, credentials }) => {
         // Set up all crypto stuff. Key storage defaults to on.
@@ -71,7 +72,8 @@ test.describe("'Turn on key storage' toast", () => {
         const recoveryKey = res.recoveryKey;
         botClient = res.botClient;
 
-        await logIntoElementAndVerify(page, credentials, recoveryKey.encodedPrivateKey);
+        await logIntoElement(page, credentials);
+        await verifyAfterLogin(page, recoveryKey.encodedPrivateKey!);
 
         // We won't be prompted for crypto setup unless we have an e2e room, so make one
         await page
@@ -120,7 +122,8 @@ test.describe("'Turn on key storage' toast", () => {
     test("should show toast if key storage is off but account data is missing", async ({ app, page }) => {
         // Given the backup is disabled but we didn't set account data saying that is expected
         await disableKeyBackup(app);
-        await botClient.setAccountData("m.org.matrix.custom.backup_disabled", { disabled: false });
+        await botClient.setAccountData("m.org.matrix.custom.backup_disabled", {} as any as { disabled: boolean });
+        await botClient.setAccountData("m.key_backup", {} as any as { enabled: boolean });
 
         // Wait for the account data setting to stick
         await new Promise((resolve) => setTimeout(resolve, 2000));

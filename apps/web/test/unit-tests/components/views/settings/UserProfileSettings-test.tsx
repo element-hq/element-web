@@ -12,14 +12,14 @@ import { type MatrixClient, type UploadResponse } from "matrix-js-sdk/src/matrix
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 import { TooltipProvider } from "@vector-im/compound-web";
+import { ToastContext, type ToastRack } from "@element-hq/web-shared-components";
 
 import UserProfileSettings from "../../../../../src/components/views/settings/UserProfileSettings";
 import { mkStubRoom, stubClient } from "../../../../test-utils";
-import { ToastContext, type ToastRack } from "../../../../../src/contexts/ToastContext";
 import { OwnProfileStore } from "../../../../../src/stores/OwnProfileStore";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import dis from "../../../../../src/dispatcher/dispatcher";
 import Modal from "../../../../../src/Modal";
+import SettingsStore from "../../../../../src/settings/SettingsStore";
 
 interface MockedAvatarSettingProps {
     removeAvatar: () => void;
@@ -69,12 +69,20 @@ jest.mock("@vector-im/compound-web", () => {
     };
 });
 
-const renderProfileSettings = (toastRack: Partial<ToastRack>, client: MatrixClient) => {
+const renderProfileSettings = (
+    toastRack: Partial<ToastRack>,
+    client: MatrixClient,
+    { startCustomStatus }: { startCustomStatus?: boolean } = {},
+) => {
     return render(
         <TooltipProvider>
             <MatrixClientContext.Provider value={client}>
-                <ToastContext.Provider value={toastRack}>
-                    <UserProfileSettings canSetAvatar={true} canSetDisplayName={true} />
+                <ToastContext.Provider value={toastRack as ToastRack}>
+                    <UserProfileSettings
+                        canSetAvatar={true}
+                        canSetDisplayName={true}
+                        startCustomStatus={startCustomStatus}
+                    />
                 </ToastContext.Provider>
             </MatrixClientContext.Provider>
         </TooltipProvider>,
@@ -90,6 +98,14 @@ describe("ProfileSettings", () => {
         toastRack = {
             displayToast: jest.fn().mockReturnValue(jest.fn()),
         };
+    });
+
+    it("shows the custom status editor when startCustomStatus is set", async () => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => name === "feature_user_status");
+
+        renderProfileSettings(toastRack, client, { startCustomStatus: true });
+
+        expect(await screen.findByRole("textbox", { name: "What's your status?" })).toBeInTheDocument();
     });
 
     it("removes avatar", async () => {
@@ -218,13 +234,15 @@ describe("ProfileSettings", () => {
         expect(await screen.findByText("Mocked EditInPlace: Alice")).toBeInTheDocument();
     });
 
-    it("signs out directly if no rooms are encrypted", async () => {
+    it("displays confirmation dialog if no rooms are encrypted", async () => {
+        jest.spyOn(Modal, "createDialog");
+
         renderProfileSettings(toastRack, client);
 
         const signOutButton = await screen.findByText("Remove this device");
         await userEvent.click(signOutButton);
 
-        expect(dis.dispatch).toHaveBeenCalledWith({ action: "logout" });
+        expect(Modal.createDialog).toHaveBeenCalled();
     });
 
     it("displays confirmation dialog if rooms are encrypted", async () => {
@@ -234,6 +252,7 @@ describe("ProfileSettings", () => {
         client.getRooms = jest.fn().mockReturnValue([mockRoom]);
         client.getCrypto = jest.fn().mockReturnValue({
             isEncryptionEnabledInRoom: jest.fn().mockReturnValue(true),
+            getUserDeviceInfo: jest.fn().mockResolvedValue(new Map()),
         });
 
         renderProfileSettings(toastRack, client);

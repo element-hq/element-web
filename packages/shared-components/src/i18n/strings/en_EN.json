@@ -4,6 +4,7 @@
     },
     "action": {
         "back": "Back",
+        "cancel": "Cancel",
         "click": "Click",
         "close": "Close",
         "collapse": "Collapse",
@@ -28,6 +29,7 @@
         "reply": "Reply",
         "reply_in_thread": "Reply in thread",
         "retry": "Retry",
+        "save": "Save",
         "search": "Search",
         "start_chat": "Start chat",
         "unpin": "Unpin",
@@ -41,8 +43,50 @@
         "preferences": "Preferences",
         "state_encryption_enabled": "Experimental state encryption enabled"
     },
+    "composer": {
+        "url_preview": {
+            "clear_all": "Clear all",
+            "collapse": "Collapse URL previews",
+            "failed": "Failed to fetch preview",
+            "loading": "Fetching preview…",
+            "n_links": {
+                "one": "%(count)s link",
+                "other": "%(count)s links"
+            },
+            "remove": "Remove URL preview"
+        }
+    },
     "devtools": {
+        "custom_themes": {
+            "add": "Add custom theme",
+            "downloading": "Downloading custom theme…",
+            "error_already_installed": "A theme with that name is already installed.",
+            "error_downloading": "Error downloading theme",
+            "error_invalid": "Invalid theme schema.",
+            "error_save_failed": "Failed to save the change. It may still complete in the background.",
+            "help": "Enter the URL of a custom theme you want to apply.",
+            "installed_heading": "Installed custom themes",
+            "refresh": "Re-download theme",
+            "url_label": "Custom theme URL"
+        },
         "toggle_event": "toggle event"
+    },
+    "emoji": {
+        "categories": "Categories",
+        "category_activities": "Activities",
+        "category_animals_nature": "Animals & Nature",
+        "category_flags": "Flags",
+        "category_food_drink": "Food & Drink",
+        "category_frequently_used": "Frequently Used",
+        "category_objects": "Objects",
+        "category_smileys_people": "Smileys & People",
+        "category_symbols": "Symbols",
+        "category_travel_places": "Travel & Places",
+        "quick_reactions": "Quick Reactions"
+    },
+    "emoji_picker": {
+        "cancel_search_label": "Cancel search",
+        "emoji_picker": "Emoji picker"
     },
     "keyboard": {
         "shift": "Shift"
@@ -53,6 +97,7 @@
     },
     "menus": {
         "user_menu": {
+            "clear_status": "Clear",
             "create_an_account": "Create an account",
             "got_an_account": "Got an account?",
             "manage_account": "Manage account",
@@ -63,8 +108,15 @@
     "notifications": {
         "all_messages": "All messages",
         "default_settings": "Match default settings",
+        "mark_all_read": "Mark all as read",
         "mentions_keywords": "Mentions and keywords",
+        "message_didnt_send": "Message didn't send. Click for info.",
         "mute_room": "Mute room"
+    },
+    "release_announcement": {
+        "room_list_section_close": "Ok",
+        "room_list_section_description": " Group your chats into sections to keep conversations organised and easy to navigate.",
+        "room_list_section_title": "Introducing Sections"
     },
     "room": {
         "context_menu": {
@@ -75,9 +127,12 @@
             "shared": "New members see history",
             "world_readable": "Anyone can see history"
         },
+        "jump_read_marker": "Jump to first unread message.",
+        "jump_to_bottom_button": "Scroll to most recent messages",
         "jump_to_date": "Jump to date",
         "jump_to_date_beginning": "The beginning of the room",
         "jump_to_date_prompt": "Pick a date to jump to",
+        "knock_sent": "Request to join sent",
         "pinned_message_badge": "Pinned message",
         "status_bar": {
             "delete_all": "Delete all",
@@ -97,6 +152,17 @@
     "room_list": {
         "a11y": {
             "default": "Open room %(roomName)s",
+            "drag_cancelled": "Dragging cancelled",
+            "drag_end": "%(source)s was dropped on %(target)s",
+            "drag_end_after": "%(source)s was dropped after %(target)s",
+            "drag_end_before": "%(source)s was dropped before %(target)s",
+            "drag_end_original": "%(source)s returned to its original position",
+            "drag_instructions": "Press space to start or to stop dragging, arrow keys to move, and escape to cancel.",
+            "drag_over": "%(source)s is over %(target)s",
+            "drag_over_after": "%(source)s will be dropped after %(target)s",
+            "drag_over_before": "%(source)s will be dropped before %(target)s",
+            "drag_over_original": "%(source)s will return to its original position",
+            "drag_start": "Dragging %(source)s",
             "invitation": "Open room %(roomName)s invitation.",
             "mention": {
                 "one": "Open room %(roomName)s with 1 unread mention.",
@@ -118,10 +184,7 @@
             "no_chats": "No chats yet",
             "no_chats_description": "Get started by messaging someone or by creating a room",
             "no_chats_description_no_room_rights": "Get started by messaging someone",
-            "no_favourites": "You don't have favourite chats yet",
-            "no_favourites_description": "You can add a chat to your favourites in the chat settings",
             "no_invites": "You don't have any unread invites",
-            "no_lowpriority": "You don't have any low priority rooms",
             "no_mentions": "You don't have any unread mentions",
             "no_people": "You don’t have direct chats with anyone yet",
             "no_people_description": "You can deselect filters in order to see your other chats",
@@ -150,7 +213,8 @@
             "low_priority": "Low priority",
             "mark_read": "Mark as read",
             "mark_unread": "Mark as unread",
-            "move_to_section": "Move to"
+            "move_to_section": "Move to",
+            "remove_from_section": "Remove from section"
         },
         "notification_options": "Notification options",
         "open_space_menu": "Open space menu",
@@ -160,12 +224,16 @@
         },
         "room_options": "Room Options",
         "section_created": "Section created",
+        "section_creation": {
+            "description": "Sections are only for you",
+            "label": "Section name"
+        },
         "section_header": {
             "edit_section": "Edit section",
             "more_options": "More options",
             "remove_section": "Remove section",
             "toggle": "Toggle %(section)s section",
-            "toggle_unread": "Toggle %(section)s section with unread room(s)"
+            "toggle_unread": "Toggle %(section)s section with unread rooms"
         },
         "show_message_previews": "Show message previews",
         "sort": "Sort",
@@ -177,6 +245,19 @@
         "space_menu": {
             "home": "Space home",
             "space_settings": "Space settings"
+        },
+        "unread_messages": "Unread messages"
+    },
+    "status": {
+        "set_status": {
+            "away": "Away",
+            "be_right_back": "Be right back",
+            "choose_emoji": "Choose Emoji",
+            "custom": "Custom…",
+            "focus_time": "Focus Time",
+            "in_a_meeting": "In a meeting",
+            "on_the_road": "On the road",
+            "set_status_prompt": "What's your status?"
         }
     },
     "terms": {
@@ -206,6 +287,28 @@
             "declined": {
                 "call_declined": "Call declined",
                 "call_declined_by_us": "You declined a call"
+            },
+            "ongoing": {
+                "common": {
+                    "call_started_by": "%(startedByDisplayName)s started a call",
+                    "join_button": "Join"
+                },
+                "dm": {
+                    "call_started": "Call started",
+                    "title": "Call in progress"
+                },
+                "room": {
+                    "join_count": {
+                        "one": "%(count)s joined",
+                        "other": "%(count)s joined"
+                    },
+                    "title": "Group call in progress"
+                }
+            },
+            "tombstone": {
+                "room": {
+                    "title": "Group call ended"
+                }
             },
             "video_call_title": "Video call",
             "voice_call_title": "Voice call"

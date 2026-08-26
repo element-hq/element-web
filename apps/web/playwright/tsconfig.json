@@ -8,14 +8,15 @@
         "moduleResolution": "bundler",
         "module": "ESNext",
         "allowImportingTsExtensions": true,
-        "strictNullChecks": false,
-        "noImplicitAny": false,
-        "types": ["node"]
+        "strict": true,
+        "noUnusedLocals": true,
+        "types": ["node"],
+        "noEmit": true
     },
     "include": [
         "**/*.ts",
         "../src/@types/matrix-js-sdk.d.ts",
-        "../../../node_modules/matrix-js-sdk/src/@types/*.d.ts",
-        "../../../node_modules/matrix-js-sdk/node_modules/@matrix-org/olm/index.d.ts"
+        "../node_modules/matrix-js-sdk/src/@types/*.d.ts",
+        "../node_modules/matrix-js-sdk/node_modules/@matrix-org/olm/index.d.ts"
     ]
 }

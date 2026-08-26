@@ -1,0 +1,24 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`EventPreviewView > renders a prefixed event preview 1`] = `
+<div>
+  <span
+    class="mx_EventPreview EventPreviewView-module_eventPreview"
+  >
+    <strong>
+      Image:
+    </strong>
+     city-map.png
+  </span>
+</div>
+`;
+
+exports[`EventPreviewView > renders the default event preview 1`] = `
+<div>
+  <span
+    class="mx_EventPreview EventPreviewView-module_eventPreview"
+  >
+    A short text message preview
+  </span>
+</div>
+`;

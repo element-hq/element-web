@@ -5,16 +5,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
+import { type WebConfigJson } from "shared-types";
+
 /**
  * The configuration for the application.
  * Should be extended via declaration merging.
  * @public
  */
-export interface Config {
+export interface Config extends WebConfigJson {
     // The branding name of the application
     brand: string;
-    // Other config options are available but not specified in the types as that would make it difficult to change for element-web
-    // they are accessible at runtime all the same, see list at https://github.com/element-hq/element-web/blob/develop/docs/config.md
 }
 
 /**

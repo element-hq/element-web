@@ -17,7 +17,9 @@ const getValue = <T>(key: string, initialValue: T): T => {
     }
 };
 
-// Hook behaving like useState but persisting the value to localStorage. Returns same as useState
+/**
+ * Hook behaving like useState but persisting the value to localStorage. Returns same as useState
+ */
 export const useLocalStorageState = <T>(key: string, initialValue: T): [T, Dispatch<T>] => {
     const lsKey = "mx_" + key;
 

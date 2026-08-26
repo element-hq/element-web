@@ -3,13 +3,13 @@
 exports[`<SettingsField /> should render with the default label 1`] = `
 <DocumentFragment>
   <form
-    class="_root_19upo_16"
+    class="_root_1o4d9_17"
   >
     <div
-      class="_field_19upo_26"
+      class="_field_1o4d9_27"
     >
       <label
-        class="_label_19upo_59"
+        class="_label_1o4d9_60"
         for="radix-react-use-id-1"
       >
         Element Call URL

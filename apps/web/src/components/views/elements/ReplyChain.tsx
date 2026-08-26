@@ -15,12 +15,12 @@ import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import { makeUserPermalink, type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import SettingsStore from "../../../settings/SettingsStore";
-import { type Layout } from "../../../settings/enums/Layout";
 import { getUserNameColorClass } from "../../../utils/FormattingUtils";
 import { Action } from "../../../dispatcher/actions";
 import Spinner from "./Spinner";
 import ReplyTile from "../rooms/ReplyTile";
-import { Pill, PillType } from "./Pill";
+import { Pill } from "./Pill";
+import { PillType } from "./PillType";
 import AccessibleButton from "./AccessibleButton";
 import { getParentEventId, shouldDisplayReply } from "../../../utils/Reply";
 import RoomContext from "../../../contexts/RoomContext";
@@ -37,8 +37,6 @@ interface IProps {
     // the latest event in this chain of replies
     parentEv: MatrixEvent;
     permalinkCreator?: RoomPermalinkCreator;
-    // Specifies which layout to use.
-    layout?: Layout;
     // Whether to always show a timestamp
     alwaysShowTimestamps?: boolean;
     forExport?: boolean;
@@ -88,7 +86,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
 
     public componentDidMount(): void {
         this.unmounted = false;
-        this.initialize();
+        void this.initialize();
         this.trySetExpandableQuotes();
     }
 
@@ -171,7 +169,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
     };
 
     public collapse = (): void => {
-        this.initialize();
+        void this.initialize();
     };
 
     private onQuoteClick = async (): Promise<void> => {

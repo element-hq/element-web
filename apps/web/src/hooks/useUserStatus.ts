@@ -6,46 +6,35 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useEffect, useState } from "react";
-import { ClientEvent, MatrixError } from "matrix-js-sdk/src/matrix";
+import { ClientEvent } from "matrix-js-sdk/src/matrix";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
+import { type UserStatus } from "@element-hq/web-shared-components";
 
 import { useMatrixClientContext } from "../contexts/MatrixClientContext";
 import { useTypedEventEmitter } from "./useEventEmitter";
 import { useFeatureEnabled } from "./useSettings";
+import { fetchUserStatus } from "../utils/userStatus";
 
 const logger = rootLogger.getChild("useUserStatus");
-
-export interface UserStatus {
-    emoji: string;
-    text: string;
-}
-
-const MAX_STATUS_TEXT_BYTES = 256;
-
-export function userStatusTextWithinMaxLength(text: string): boolean {
-    const textEncoder = new TextEncoder();
-    return textEncoder.encode(text).length <= MAX_STATUS_TEXT_BYTES;
-}
 
 /**
  * Hook to get the MSC4426 user status for a given user ID. Returns undefined if the feature is disabled,
  * the user does not have a status, or if there was an error fetching the status.
  *
- * @param userId The ID of the user whose status is being fetched.
+ * @param userId The ID of the user whose status is being fetched or undefined to do nothing (since hooks cannot be called conditionally)
  * @returns The user's status, or undefined if not available.
  */
-export function useUserStatus(userId: string | undefined): UserStatus | undefined {
+export function useUserStatus(userId?: string): UserStatus | undefined {
     const isEnabled = useFeatureEnabled("feature_user_status");
     const matrixClient = useMatrixClientContext();
-    const [rawUserStatus, setRawUserStatus] = useState<unknown>();
+    const [userStatus, setUserStatus] = useState<UserStatus | undefined>();
 
-    useTypedEventEmitter(matrixClient, ClientEvent.UserProfileUpdate, (syncedUserId, syncProfile) => {
-        if (syncedUserId !== userId) {
+    useTypedEventEmitter(matrixClient, ClientEvent.UserProfileUpdate, async (syncedUserId, syncProfile) => {
+        if (!userId || syncedUserId !== userId) {
             return;
         }
-        if (syncProfile["org.matrix.msc4426.status"]) {
-            setRawUserStatus(syncProfile["org.matrix.msc4426.status"]);
-        }
+
+        setUserStatus(await fetchUserStatus(matrixClient, userId));
     });
     useEffect(() => {
         (async () => {
@@ -53,22 +42,18 @@ export function useUserStatus(userId: string | undefined): UserStatus | undefine
                 return;
             }
             if (!userId) {
-                setRawUserStatus(undefined);
+                setUserStatus(undefined);
                 return;
             }
             if ((await matrixClient.doesServerSupportExtendedProfiles()) === false) {
-                setRawUserStatus(undefined);
+                setUserStatus(undefined);
                 return;
             }
             try {
-                const result = await matrixClient.getExtendedProfileProperty(userId, "org.matrix.msc4426.status");
-                setRawUserStatus(result);
+                const result = await fetchUserStatus(matrixClient, userId);
+                setUserStatus(result);
             } catch (ex) {
-                if (ex instanceof MatrixError && ex.errcode === "M_NOT_FOUND") {
-                    setRawUserStatus(undefined);
-                } else {
-                    logger.warn(`Failed to get userStatus for ${userId}`, ex);
-                }
+                logger.warn(`Failed to get userStatus for ${userId}`, ex);
             }
         })();
     }, [isEnabled, userId, matrixClient]);
@@ -76,23 +61,5 @@ export function useUserStatus(userId: string | undefined): UserStatus | undefine
         return;
     }
 
-    if (typeof rawUserStatus !== "object" || rawUserStatus === null) {
-        logger.warn(`value of "org.matrix.msc4426.status" was not an object for ${userId}`);
-        return;
-    }
-    if ("emoji" in rawUserStatus === false || typeof rawUserStatus.emoji !== "string" || !rawUserStatus.emoji) {
-        logger.warn(`"emoji" property was not a valid string for ${userId}`);
-        return;
-    }
-    if ("text" in rawUserStatus === false || typeof rawUserStatus.text !== "string" || !rawUserStatus.text) {
-        logger.warn(`"text" property was not a valid string for ${userId}`);
-        return;
-    }
-
-    return {
-        emoji: rawUserStatus.emoji,
-        text: userStatusTextWithinMaxLength(rawUserStatus.text)
-            ? rawUserStatus.text
-            : `${rawUserStatus.text.slice(0, MAX_STATUS_TEXT_BYTES)}…`,
-    };
+    return userStatus;
 }

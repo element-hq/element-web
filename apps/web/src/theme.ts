@@ -47,7 +47,13 @@ interface CompoundTheme {
 
 export type CustomTheme = {
     name: string;
-    is_dark?: boolean; // eslint-disable-line camelcase
+    is_dark?: boolean;
+    /**
+     * The URL this theme was downloaded from, recorded when it is added via the developer tools so
+     * that it can be re-downloaded later. Absent for themes defined in config, and for themes that
+     * were added before we started recording this.
+     */
+    source_url?: string;
     colors?: {
         [key: string]: string;
     };

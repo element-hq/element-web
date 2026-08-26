@@ -18,7 +18,7 @@ import ToggleSwitch from "../../elements/ToggleSwitch";
 import { DeviceDetailHeading } from "./DeviceDetailHeading";
 import { DeviceVerificationStatusCard } from "./DeviceVerificationStatusCard";
 import { type ExtendedDevice } from "./types";
-import { getManageDeviceUrl } from "../../../../utils/oidc/urls.ts";
+import { getManageDeviceUrl } from "../../../../utils/oauth/urls.ts";
 
 interface Props {
     device: ExtendedDevice;
@@ -96,12 +96,7 @@ const DeviceDetails: React.FC<Props> = ({
         {
             id: "device",
             heading: _t("common|device"),
-            values: [
-                { label: _t("common|model"), value: device.deviceModel },
-                { label: _t("settings|sessions|os"), value: device.deviceOperatingSystem },
-                { label: _t("settings|sessions|browser"), value: device.client },
-                { label: _t("settings|sessions|ip"), value: device.last_seen_ip },
-            ],
+            values: [{ label: _t("settings|sessions|ip"), value: device.last_seen_ip }],
         },
     ]
         .map((section) =>
@@ -129,10 +124,10 @@ const DeviceDetails: React.FC<Props> = ({
             {!accountManagementEndpoint && (
                 <section className="mx_DeviceDetails_section">
                     <p className="mx_DeviceDetails_sectionHeading">{_t("settings|sessions|details_heading")}</p>
-                    {metadata.map(({ heading, values, id }, index) => (
+                    {metadata.map(({ heading, values, id }) => (
                         <table
                             className="mx_DeviceDetails_metadataTable"
-                            key={index}
+                            key={id}
                             data-testid={`device-detail-metadata-${id}`}
                         >
                             {heading && (

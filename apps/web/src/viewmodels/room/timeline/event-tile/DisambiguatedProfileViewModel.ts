@@ -9,18 +9,18 @@ import {
     type DisambiguatedProfileViewActions,
     type DisambiguatedProfileViewSnapshot,
     type DisambiguatedProfileViewModel as DisambiguatedProfileViewModelInterface,
+    type UserStatus,
 } from "@element-hq/web-shared-components";
 import { type MouseEvent } from "react";
 
 import { _t } from "../../../../languageHandler";
 import { getUserNameColorClass } from "../../../../utils/FormattingUtils";
 import UserIdentifier from "../../../../customisations/UserIdentifier";
-import type { UserStatus } from "../../../../hooks/useUserStatus";
 
 /**
  * Information about a member for disambiguation purposes.
  */
-interface MemberInfo {
+export interface MemberInfo {
     /**
      * The user's Matrix ID.
      */

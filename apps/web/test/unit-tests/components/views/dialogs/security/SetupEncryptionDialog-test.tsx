@@ -79,10 +79,12 @@ function mockClient() {
     } as unknown as Mocked<CryptoApi>;
 
     const userId = "@user:server";
+    const deviceId = "ADEVICE";
 
     getMockClientWithEventEmitter({
         getCrypto: jest.fn().mockReturnValue(mockCrypto),
         getUserId: jest.fn().mockReturnValue(userId),
+        getDeviceId: jest.fn().mockReturnValue(deviceId),
         secretStorage: { isStored: jest.fn().mockReturnValue({}) },
     });
 }

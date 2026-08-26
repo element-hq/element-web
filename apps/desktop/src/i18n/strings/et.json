@@ -27,6 +27,10 @@
         "yes": "Jah"
     },
     "confirm_quit": "Kas sa kindlasti soovid rakendusest väljuda?",
+    "download": {
+        "unable_to_open_description": "Faili avamine ei õnnestunud. See võib olla tõstetud mujale või kustutatud.",
+        "unable_to_open_title": "Faili avamine ei õnnestu"
+    },
     "edit_menu": {
         "speech": "Kõne",
         "speech_start_speaking": "Alusta rääkimist",
@@ -52,6 +56,11 @@
         "hide_others": "Peida muud",
         "services": "Teenused",
         "unhide": "Näita uuesti"
+    },
+    "renderer_crash": {
+        "detail": "Jätkamiseks sulge rakendus ja ava see uuesti. Kui probleem kordub, võib aidata arvuti uuesti käivitamine või rakenduse vahemälu tühjendamine.",
+        "message": "%(brand)s on mitu korda probleemist taastunud, kuid viga kordub ikka ja jälle ning rakendus on edasise proovimise lõpetanud.",
+        "title": "%(brand)s jookseb ühtevalu kokku"
     },
     "right_click_menu": {
         "add_to_dictionary": "Lisa sõnastikku",

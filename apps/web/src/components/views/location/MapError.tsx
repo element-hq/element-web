@@ -24,6 +24,8 @@ export interface MapErrorProps {
 }
 
 export const MapError: React.FC<MapErrorProps> = ({ error, isMinimised, className, onFinished, onClick }) => (
+    // We break the rule here as this is a mouse-only interaction
+    // oxlint-disable-next-line jsx-a11y/click-events-have-key-events
     <div
         data-testid="map-rendering-error"
         className={classNames("mx_MapError", className, { mx_MapError_isMinimised: isMinimised })}

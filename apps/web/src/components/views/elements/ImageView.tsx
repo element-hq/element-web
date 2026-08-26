@@ -315,7 +315,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                 ev.preventDefault();
                 ev.stopPropagation();
                 if (this.downloadFunction) {
-                    this.downloadFunction();
+                    void this.downloadFunction();
                 }
                 break;
         }
@@ -459,7 +459,7 @@ export default class ImageView extends React.Component<IProps, IState> {
 
         let info: JSX.Element | undefined;
         if (showEventMeta) {
-            const mxEvent = this.props.mxEvent!;
+            const mxEvent = this.props.mxEvent;
             const showTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
             let permalink = "#";
             if (this.props.permalinkCreator) {
@@ -647,15 +647,7 @@ export const DownloadButton: React.FC<DownloadButtonProps> = ({ url, fileName, m
 function MessageTimestampWrapper(props: MessageTimestampViewModelProps): JSX.Element {
     const vm = useCreateAutoDisposedViewModel(() => new MessageTimestampViewModel(props));
     useEffect(() => {
-        vm.setTimestamp(props.ts);
-        vm.setDisplayOptions({
-            showTwelveHour: props.showTwelveHour,
-            showFullDate: props.showFullDate,
-            showSeconds: props.showSeconds,
-        });
-        vm.setTooltipInhibited(props.inhibitTooltip);
-        vm.setHref(props.href);
-        vm.setHandlers({ onClick: props.onClick });
+        vm.setProps(props);
     }, [vm, props]);
     return <MessageTimestampView vm={vm} className="mx_MessageTimestamp" />;
 }

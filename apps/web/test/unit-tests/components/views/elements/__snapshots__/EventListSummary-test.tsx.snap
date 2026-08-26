@@ -7,6 +7,7 @@ exports[`EventListSummary correctly identifies transitions 1`] = `
   <span>
     <button
       class="mx_EventTile_spoiler"
+      type="button"
     >
        
       <span
@@ -16,7 +17,7 @@ exports[`EventListSummary correctly identifies transitions 1`] = `
       </span>
     </button>
      
-    was invited, was banned, joined, rejected their invitation, left, had their invitation withdrawn, was unbanned, was removed, left and was removed
+    was invited, requested to join, was banned, joined, rejected their invitation, left, had their invitation withdrawn, was unbanned, was removed, left and was removed
   </span>
 </span>
 `;
@@ -34,6 +35,7 @@ exports[`EventListSummary correctly orders sequences of transitions by the order
   <span>
     <button
       class="mx_EventTile_spoiler"
+      type="button"
     >
        
       <span
@@ -131,6 +133,7 @@ exports[`EventListSummary handles many users following the same sequence of memb
     <span>
       <button
         class="mx_EventTile_spoiler"
+        type="button"
       >
          
         <span
@@ -155,6 +158,7 @@ exports[`EventListSummary handles multiple users following the same sequence of 
     <span>
       <button
         class="mx_EventTile_spoiler"
+        type="button"
       >
          
         <span
@@ -167,6 +171,30 @@ exports[`EventListSummary handles multiple users following the same sequence of 
     </span>
      
     were unbanned, joined and left 2 times and were banned
+  </span>
+</span>
+`;
+
+exports[`EventListSummary knocks (ask to join enabled) summarises a knock that is accepted and joined 1`] = `
+<span
+  class="mx_TextualEvent mx_GenericEventListSummary_summary"
+>
+  <span>
+    user_1
+     
+    requested to join, was granted access and joined
+  </span>
+</span>
+`;
+
+exports[`EventListSummary knocks (ask to join enabled) summarises a knock that is retracted and one that is denied 1`] = `
+<span
+  class="mx_TextualEvent mx_GenericEventListSummary_summary"
+>
+  <span>
+    user_1
+     
+    requested to join, cancelled their request to join, requested to join and had their request to join rejected
   </span>
 </span>
 `;
@@ -257,6 +285,7 @@ exports[`EventListSummary truncates multiple sequences of repetitions with other
   <span>
     <button
       class="mx_EventTile_spoiler"
+      type="button"
     >
        
       <span

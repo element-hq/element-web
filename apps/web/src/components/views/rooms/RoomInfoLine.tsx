@@ -6,25 +6,27 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type FC } from "react";
+import React, { type JSX, type FC, useContext } from "react";
 import { type Room, JoinRule, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { LockSolidIcon, VideoCallSolidIcon, PublicIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
-import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
 import { useRoomState } from "../../../hooks/useRoomState";
 import { useRoomMemberCount, useMyRoomMembership } from "../../../hooks/useRoomMembers";
 import AccessibleButton from "../elements/AccessibleButton";
 import { isVideoRoom as calcIsVideoRoom } from "../../../utils/video-rooms";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 interface IProps {
     room: Room;
 }
 
 const RoomInfoLine: FC<IProps> = ({ room }) => {
+    const sdkContext = useContext(SDKContext);
+
     // summary will begin as undefined whilst loading and go null if it fails to load or we are not invited.
     const summary = useAsyncMemo(async (): Promise<Awaited<ReturnType<MatrixClient["getRoomSummary"]>> | null> => {
         if (room.getMyMembership() !== KnownMembership.Invite) return null;
@@ -64,7 +66,7 @@ const RoomInfoLine: FC<IProps> = ({ room }) => {
     } else if (memberCount && summary !== undefined) {
         // summary is not still loading
         const viewMembers = (): void =>
-            RightPanelStore.instance.setCard({
+            sdkContext.rightPanelStore.setCard({
                 phase: RightPanelPhases.MemberList,
             });
 

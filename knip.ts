@@ -1,13 +1,34 @@
-import { KnipConfig } from "knip";
+/*
+Copyright 2026 Element Creations Ltd.
 
-// Specify this as knip loads config files which may conditionally add reporters, e.g. `@casualbot/jest-sonar-reporter'
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE in the repository root for full details.
+*/
+
+import { type KnipConfig } from "knip";
+
+// Specify this as knip loads config files which may conditionally load plugins
 process.env.GITHUB_ACTIONS = "1";
 
 export default {
     workspaces: {
-        "packages/shared-components": {},
+        "packages/shared-components": {
+            entry: ["src/index.ts!", "scripts/**"],
+            project: [
+                "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,mdx,pcss}!",
+                "!scripts/**!",
+                "!src/test/**!",
+                "!src/**/test-*!",
+                "!src/**/*-{mock,mocks,snapshot,actions}.*!",
+            ],
+        },
         "packages/playwright-common": {
-            entry: ["src/fixtures/index.ts", "src/testcontainers/index.ts"],
+            entry: ["src/fixtures/index.ts!", "src/testcontainers/index.ts!"],
+            project: [
+                "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!",
+                "!src/flaky-reporter.ts!",
+                "!src/stale-screenshot-reporter.ts!",
+            ],
             ignoreDependencies: [
                 // Used in playwright-screenshots.sh
                 "wait-on",
@@ -17,27 +38,41 @@ export default {
         "packages/module-api": {},
         "apps/web": {
             entry: [
-                "src/serviceworker/index.ts",
-                "src/workers/*.worker.ts",
-                "src/utils/exportUtils/exportJS.js",
-                "src/vector/localstorage-fix.ts",
+                "src/serviceworker/index.ts!",
+                "src/workers/*.worker.ts!",
+                "src/utils/exportUtils/exportJS.js!",
+                "src/vector/localstorage-fix.ts!",
                 "scripts/**",
                 "playwright/**",
                 "test/**",
                 "res/decoder-ring/**",
                 "res/jitsi_external_api.min.js",
-                "res/themes/*/css/*.pcss",
-            ],
-            ignore: [
+                "res/themes/*/css/*.pcss!",
+                "I18nWebpackPlugin.ts!",
+                "module_system/**!",
                 // Keep for now
-                "src/hooks/useLocalStorageState.ts",
+                "src/hooks/useLocalStorageState.ts!",
+                "src/hooks/useIsReleaseAnnouncementOpen.ts!",
+                "src/components/structures/ReleaseAnnouncement.tsx!",
+                "src/utils/arrays.ts!",
+                "src/utils/EventPresentationContextProvider.tsx!",
+                // This is just an awful side-effect import
+                "src/stores/LifecycleStore.ts!",
+                // New timeline: only its own tests import this so far, and --strict does not
+                // count tests as entry points. NewTimelinePanel picks it up in a follow-up PR,
+                // at which point this line can go.
+                "src/viewmodels/room/timeline/RoomTimelineViewModel.ts!",
+            ],
+            project: [
+                "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!",
+                "!scripts/**!",
+                "!src/test/**!",
+                "!recorder-worklet-loader.cjs!",
+                "!src/**/*-{mock,mocks,snapshot,actions}.*!",
             ],
             ignoreDependencies: [
                 // False positive
                 "sw.js",
-                // Used by webpack
-                "process",
-                "util",
                 // Embedded into webapp
                 "@element-hq/element-call-embedded",
 
@@ -45,24 +80,47 @@ export default {
                 // dependency so that // we can run `tsc` (since we import the typescript
                 // source of js-sdk, rather than the transpiled and annotated JS like you
                 // would with a normal library).
-                "@types/content-type",
                 "@types/sdp-transform",
             ],
         },
         "apps/desktop": {
-            entry: ["src/preload.cts", "electron-builder.ts", "scripts/**", "hak/**"],
-            project: ["**/*.{js,ts}"],
+            entry: ["src/preload.cts!", "electron-builder.ts!", "scripts/**", "hak/**"],
+            project: ["**/*.{js,ts,pcss}"],
             ignoreDependencies: [
                 // Brought in via hak scripts
                 "matrix-seshat",
             ],
-            ignoreBinaries: ["scripts/in-docker.sh"],
+            ignoreBinaries: [
+                // Used to build seshat (optional)
+                "rustc",
+                // Used by the fetch-package script (optional)
+                "gpg",
+                // Used for the macOS universal builds
+                "lipo",
+            ],
+        },
+        "modules": {
+            project: ["**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!", "!playwright/**!"],
+        },
+        "modules/*": {
+            entry: ["src/index.ts{x,}!"],
+            project: ["**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!", "!src/tests/**!", "!e2e/**!"],
         },
         ".": {
             entry: ["scripts/**", "docs/**"],
         },
     },
+    ignoreDependencies: [
+        // Used by multiple packages, raises a false positive for some reason
+        "events",
+        // Used as a workaround for api-extractor not supporting typescript 7.0
+        "@typescript/old",
+    ],
     ignoreExportsUsedInFile: true,
+    ignoreBinaries: [
+        // Optional for coverage:diff development script
+        "diff-cover",
+    ],
     compilers: {
         pcss: (text: string) =>
             [...text.matchAll(/@import\s+(?:url\()?["']([^"']+)["']\)?[^;]*;/g)]
@@ -76,4 +134,6 @@ export default {
         config: ["playwright.config.ts", "playwright-merge.config.ts"],
     },
     tags: ["-knipignore"],
+    treatConfigHintsAsErrors: true,
+    treatTagHintsAsErrors: true,
 } satisfies KnipConfig;

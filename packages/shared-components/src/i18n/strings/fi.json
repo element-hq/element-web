@@ -34,5 +34,8 @@
             "error_downloading_audio": "Virhe ääntä ladattaessa",
             "unnamed_audio": "Nimetön ääni"
         }
+    },
+    "user_menu": {
+        "link_new_device": "Yhdistä uusi laite"
     }
 }

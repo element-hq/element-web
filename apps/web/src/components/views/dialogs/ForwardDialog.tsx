@@ -24,6 +24,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { CheckCircleIcon, CircleIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { AutoHideScrollbar } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
@@ -34,11 +35,10 @@ import { avatarUrlForUser } from "../../../Avatar";
 import EventTile from "../rooms/EventTile";
 import SearchBox from "../../structures/SearchBox";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
-import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
-import NotificationBadge from "../rooms/NotificationBadge";
+import { NotificationBadge } from "../rooms/NotificationBadge/NotificationBadge";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import { sortRooms } from "../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
+import { sortRoomsByRecency } from "../../../utils/room/sortRoomsByRecency";
 import QueryMatcher from "../../../autocomplete/QueryMatcher";
 import TruncatedList from "../elements/TruncatedList";
 import { Action } from "../../../dispatcher/actions";
@@ -138,7 +138,12 @@ const Entry: React.FC<IEntryProps<any>> = ({ room, type, content, matrixClient: 
         className = "mx_ForwardList_sendFailed";
         disabled = true;
         title = _t("timeline|send_state_failed");
-        icon = <NotificationBadge notification={StaticNotificationState.RED_EXCLAMATION} />;
+        icon = (
+            <NotificationBadge
+                notification={StaticNotificationState.RED_EXCLAMATION}
+                className="mx_ForwardDialog_notificationBadge"
+            />
+        );
     }
 
     const id = `mx_ForwardDialog_entry_${room.roomId}`;
@@ -197,7 +202,6 @@ const Entry: React.FC<IEntryProps<any>> = ({ room, type, content, matrixClient: 
  */
 const transformEvent = (event: MatrixEvent, cli: MatrixClient): { type: string; content: IContent } => {
     const {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         "m.relates_to": _, // strip relations - in future we will attach a relation pointing at the original event
         // We're taking a shallow copy here to avoid https://github.com/vector-im/element-web/issues/10924
         ...content
@@ -249,7 +253,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
     const userId = cli.getSafeUserId();
     const [profileInfo, setProfileInfo] = useState<any>({});
     useEffect(() => {
-        cli.getProfileInfo(userId).then((info) => setProfileInfo(info));
+        void cli.getProfileInfo(userId).then((info) => setProfileInfo(info));
     }, [cli, userId]);
 
     const { type, content } = transformEvent(event, cli);
@@ -284,10 +288,11 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
 
     let rooms = useMemo(
         () =>
-            sortRooms(
+            sortRoomsByRecency(
                 cli
                     .getVisibleRooms(msc3946DynamicRoomPredecessors)
                     .filter((room) => room.getMyMembership() === KnownMembership.Join && !room.isSpaceRoom()),
+                cli.getSafeUserId(),
             ),
         [cli, msc3946DynamicRoomPredecessors],
     );
@@ -384,7 +389,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
                                 />
                             )}
                         </RovingTabIndexContext.Consumer>
-                        <AutoHideScrollbar className="mx_ForwardList_content">
+                        <AutoHideScrollbar className="mx_AutoHideScrollbar mx_ForwardList_content">
                             {rooms.length > 0 ? (
                                 <div className="mx_ForwardList_results">
                                     <TruncatedList

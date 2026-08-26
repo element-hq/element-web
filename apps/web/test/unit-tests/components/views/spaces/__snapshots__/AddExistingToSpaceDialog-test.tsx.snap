@@ -31,6 +31,7 @@ exports[`<AddExistingToSpaceDialog /> looks as expected 1`] = `
             data-color="2"
             data-testid="avatar-img"
             data-type="square"
+            role="img"
             style="--cpd-avatar-size: 40px;"
           >
             <img
@@ -90,7 +91,7 @@ exports[`<AddExistingToSpaceDialog /> looks as expected 1`] = `
         </div>
       </div>
       <div
-        class="mx_AutoHideScrollbar mx_AddExistingToSpace_content"
+        class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_AddExistingToSpace_content"
         tabindex="-1"
       >
         <span

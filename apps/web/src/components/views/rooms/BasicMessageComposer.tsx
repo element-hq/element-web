@@ -41,9 +41,8 @@ import { type ICompletion } from "../../../autocomplete/Autocompleter";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { ALTERNATE_KEY_NAME, KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { _t } from "../../../languageHandler";
-import { SdkContextClass } from "../../../contexts/SDKContext";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { Landmark, LandmarkNavigation } from "../../../accessibility/LandmarkNavigation";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 // matches emoticons which follow the start of a line or whitespace
 const REGEX_EMOTICON_WHITESPACE = new RegExp("(?:^|\\s)(" + EMOTICON_REGEX.source + ")\\s|:^$");
@@ -115,6 +114,9 @@ interface IState {
 }
 
 export default class BasicMessageEditor extends React.Component<IProps, IState> {
+    public static contextType = SDKContext;
+    declare public context: React.ContextType<typeof SDKContext>;
+
     public readonly editorRef = createRef<HTMLDivElement>();
     private autocompleteRef = createRef<Autocomplete>();
     private formatBarRef = createRef<MessageComposerFormatBar>();
@@ -245,17 +247,13 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             const { cmd } = parseCommandString(this.props.model.parts[0].text);
             const command = CommandMap.get(cmd!);
             if (
-                !command?.isEnabled(MatrixClientPeg.get(), this.props.room.roomId) ||
+                !command?.isEnabled(this.context.client!, this.props.room.roomId) ||
                 command.category !== CommandCategories.messages
             ) {
                 isTyping = false;
             }
         }
-        SdkContextClass.instance.typingStore.setSelfTyping(
-            this.props.room.roomId,
-            this.props.threadId ?? null,
-            isTyping,
-        );
+        this.context.typingStore.setSelfTyping(this.props.room.roomId, this.props.threadId ?? null, isTyping);
 
         this.props.onChange?.(selection, inputType, diff);
     };
@@ -290,7 +288,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         if (this.isSafari) {
             this.onInput({ inputType: "insertCompositionText" });
         } else {
-            Promise.resolve().then(() => {
+            void Promise.resolve().then(() => {
                 this.onInput({ inputType: "insertCompositionText" });
             });
         }
@@ -388,17 +386,31 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         this.modifiedFlag = true;
         const sel = document.getSelection()!;
         const { caret, text } = getCaretOffsetAndText(this.editorRef.current, sel);
-        this.props.model.update(text, event.inputType, caret);
+        void this.props.model.update(text, event.inputType, caret);
     };
 
     private insertText(textToInsert: string, inputType = "insertText"): void {
         if (!this.editorRef.current) return;
         const sel = document.getSelection()!;
+
+        if (!sel.isCollapsed) {
+            // A caret offset cannot describe a selected range, so splicing at it would leave the
+            // selected text in place. Replace the range instead, as onPaste does.
+            const model = this.props.model;
+            const range = getRangeForSelection(this.editorRef.current, model, sel);
+            this.modifiedFlag = true;
+            replaceRangeAndMoveCaret(
+                range,
+                parsePlainTextMessage(textToInsert, model.partCreator, { shouldEscape: false }),
+            );
+            return;
+        }
+
         const { caret, text } = getCaretOffsetAndText(this.editorRef.current, sel);
         const newText = text.slice(0, caret.offset) + textToInsert + text.slice(caret.offset);
         caret.offset += textToInsert.length;
         this.modifiedFlag = true;
-        this.props.model.update(newText, inputType, caret);
+        void this.props.model.update(newText, inputType, caret);
     }
 
     // this is used later to see if we need to recalculate the caret
@@ -553,7 +565,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             }
         } else if (autocompleteAction === KeyBindingAction.ForceCompleteAutocomplete && !this.state.showVisualBell) {
             // there is no current autocomplete window, try to open it
-            this.tabCompleteName();
+            void this.tabCompleteName();
             handled = true;
         } else if ([KeyBindingAction.Delete, KeyBindingAction.Backspace].includes(accessibilityAction!)) {
             this.formatBarRef.current?.hide();
@@ -859,6 +871,8 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                     aria-multiline="true"
                     aria-autocomplete="list"
                     aria-haspopup="listbox"
+                    // This is not strictly speaking a supported role, we should investigate the impact of this in the future
+                    // oxlint-disable-next-line jsx-a11y/role-supports-aria-props
                     aria-expanded={hasAutocomplete ? !this.autocompleteRef.current?.state.hide : undefined}
                     aria-owns={hasAutocomplete ? "mx_Autocomplete" : undefined}
                     aria-activedescendant={activeDescendant}
@@ -885,7 +899,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
         // Insert suffix only if the caret is at the start of the composer
         const parts = partCreator.createMentionParts(caret.offset === 0, displayName, userId);
-        model.transform(() => {
+        void model.transform(() => {
             const addedLen = model.insert(parts, position);
             return model.positionForOffset(caret.offset + addedLen, true);
         });
@@ -901,7 +915,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         // add two newlines
         quoteParts.push(partCreator.newline());
         quoteParts.push(partCreator.newline());
-        model.transform(() => {
+        void model.transform(() => {
             const addedLen = model.insert(quoteParts, model.positionForOffset(0));
             return model.positionForOffset(addedLen, true);
         });
@@ -915,7 +929,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         const { partCreator } = model;
         const caret = this.getCaret();
         const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
-        model.transform(() => {
+        void model.transform(() => {
             const addedLen = model.insert(partCreator.plainWithEmoji(text), position);
             return model.positionForOffset(caret.offset + addedLen, true);
         });

@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { expect, test } from "../../element-web-test";
-import { autoJoin, createSecondBotDevice, createSharedRoomWithUser, verify } from "./utils";
+import { autoJoin, createSecondBotDevice, createSharedEncryptedRoomWithUser, verify } from "./utils";
 import { bootstrapCrossSigningForClient } from "../../pages/client.ts";
 
 /** Tests for the "invisible crypto" behaviour -- i.e., when the "exclude insecure devices" setting is enabled */
@@ -29,25 +29,14 @@ test.describe("Invisible cryptography", () => {
         await autoJoin(bob);
 
         // create an encrypted room
-        const testRoomId = await createSharedRoomWithUser(app, bob.credentials.userId, {
-            name: "TestRoom",
-            initial_state: [
-                {
-                    type: "m.room.encryption",
-                    state_key: "",
-                    content: {
-                        algorithm: "m.megolm.v1.aes-sha2",
-                    },
-                },
-            ],
-        });
+        const testRoomId = await createSharedEncryptedRoomWithUser(app, bob.credentials!.userId);
 
         // Verify Bob
         await verify(app, bob);
 
         // Bob logs in a new device and resets cross-signing
         const bobSecondDevice = await createSecondBotDevice(page, homeserver, bob);
-        await bootstrapCrossSigningForClient(await bobSecondDevice.prepareClient(), bob.credentials, true);
+        await bootstrapCrossSigningForClient(await bobSecondDevice.prepareClient(), bob.credentials!, true);
 
         /* should show an error for a message from a previously verified device */
         await bobSecondDevice.sendMessage(testRoomId, "test encrypted from user that was previously verified");

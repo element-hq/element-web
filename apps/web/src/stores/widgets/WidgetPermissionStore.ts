@@ -10,7 +10,7 @@ import { type Widget, WidgetKind } from "matrix-widget-api";
 
 import SettingsStore from "../../settings/SettingsStore";
 import { SettingLevel } from "../../settings/SettingLevel";
-import { type SdkContextClass } from "../../contexts/SDKContext";
+import { type SDKContextClass } from "../../contexts/SDKContextClass";
 
 export enum OIDCState {
     Allowed, // user has set the remembered value as allowed
@@ -19,7 +19,7 @@ export enum OIDCState {
 }
 
 export class WidgetPermissionStore {
-    public constructor(private readonly context: SdkContextClass) {}
+    public constructor(private readonly context: SDKContextClass) {}
 
     // TODO (all functions here): Merge widgetKind with the widget definition
 
@@ -69,6 +69,6 @@ export class WidgetPermissionStore {
             currentValues.deny = currentValues.deny.filter((c) => c !== settingsKey);
         }
 
-        SettingsStore.setValue("widgetOpenIDPermissions", null, SettingLevel.DEVICE, currentValues);
+        void SettingsStore.setValue("widgetOpenIDPermissions", null, SettingLevel.DEVICE, currentValues);
     }
 }

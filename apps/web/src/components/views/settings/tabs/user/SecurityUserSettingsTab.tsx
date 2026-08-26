@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type ReactNode } from "react";
 import { sleep } from "matrix-js-sdk/src/utils";
-import { type Room, RoomEvent, type IServerVersions } from "matrix-js-sdk/src/matrix";
+import { type Room, RoomEvent, type EmptyObject } from "matrix-js-sdk/src/matrix";
 import { KnownMembership, type Membership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { WarningIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
@@ -80,22 +80,17 @@ export class IgnoredUser extends React.Component<IIgnoredUserProps> {
     }
 }
 
-interface IProps {
-    closeSettingsFn: () => void;
-}
-
 interface IState {
     ignoredUserIds: string[];
     waitingUnignored: string[];
     managingInvites: boolean;
     invitedRoomIds: Set<string>;
-    versions?: IServerVersions;
 }
 
-export default class SecurityUserSettingsTab extends React.Component<IProps, IState> {
+export default class SecurityUserSettingsTab extends React.Component<EmptyObject, IState> {
     private dispatcherRef?: string;
 
-    public constructor(props: IProps) {
+    public constructor(props: EmptyObject) {
         super(props);
 
         // Get rooms we're invited to
@@ -120,9 +115,6 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
     public componentDidMount(): void {
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.safeGet().on(RoomEvent.MyMembership, this.onMyMembership);
-        MatrixClientPeg.safeGet()
-            .getVersions()
-            .then((versions) => this.setState({ versions }));
     }
 
     public componentWillUnmount(): void {
@@ -168,7 +160,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         if (index !== -1) {
             currentlyIgnoredUserIds.splice(index, 1);
             this.setState(({ waitingUnignored }) => ({ waitingUnignored: [...waitingUnignored, userId] }));
-            MatrixClientPeg.safeGet().setIgnoredUsers(currentlyIgnoredUserIds);
+            await MatrixClientPeg.safeGet().setIgnoredUsers(currentlyIgnoredUserIds);
         }
     };
 
@@ -223,11 +215,11 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
     };
 
     private onAcceptAllInvitesClicked = (): void => {
-        this.manageInvites(true);
+        void this.manageInvites(true);
     };
 
     private onRejectAllInvitesClicked = (): void => {
-        this.manageInvites(false);
+        void this.manageInvites(false);
     };
 
     private renderIgnoredUsers(): JSX.Element {

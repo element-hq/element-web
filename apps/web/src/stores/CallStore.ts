@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { type MatrixRTCSession, MatrixRTCSessionManagerEvents, type Transport } from "matrix-js-sdk/src/matrixrtc";
-import { MatrixError, type EmptyObject, type Room } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, type EmptyObject, type Room } from "matrix-js-sdk/src/matrix";
 
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { UPDATE_EVENT } from "./AsyncStore";
@@ -17,11 +17,15 @@ import WidgetStore from "./WidgetStore";
 import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
 import { Call, CallEvent, ConnectionState } from "../models/Call";
+import SdkConfig from "../SdkConfig.ts";
 
 export enum CallStoreEvent {
     // Signals a change in the call associated with a given room
     Call = "call",
     // Signals a change in the active calls
+    // Parameters:
+    // - Set<Call> The set of calls the user is currently connected to
+    // - Set<Call> The set of calls the user was connected to before this event
     ConnectedCalls = "connected_calls",
     // Signals a change in the configured RTC transports.
     TransportsUpdated = "transports_updated",
@@ -32,12 +36,10 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
     public static get instance(): CallStore {
         if (!this._instance) {
             this._instance = new CallStore();
-            this._instance.start();
+            void this._instance.start();
         }
         return this._instance;
     }
-
-    private readonly configuredMatrixRTCTransports = new Set<Transport>();
 
     private constructor() {
         super(defaultDispatcher);
@@ -48,38 +50,15 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         // nothing to do
     }
 
-    /**
-     * Fetch transports used by MatrixRTC services, such as Element Call.
-     * This function is called once during Store startup which means we don't refetch
-     * transports every time we need to check for Element Call support.
-     */
-    protected async fetchTransports(): Promise<void> {
-        if (!this.matrixClient) return;
-        this.configuredMatrixRTCTransports.clear();
-        // Prefer checking the proper endpoint for transports.
-        try {
-            const transports = await this.matrixClient._unstable_getRTCTransports();
-            transports.forEach((t) => this.configuredMatrixRTCTransports.add(t));
-        } catch (ex) {
-            // Expected, MSC not implemented.
-            if (ex instanceof MatrixError === false || ex.errcode !== "M_NOT_FOUND") {
-                logger.warn("Unexpected error when trying to fetch RTC transports", ex);
-            }
-        }
-        // See https://github.com/matrix-org/matrix-spec-proposals/blob/d61969a9a3696b6c54d7987b1643b5bc03670927/proposals/4143-matrix-rtc.md#discovery-of-foci-using-well-knownmatrixclient
-        // This well-known option has since been removed from the spec but is still widely deployed.
-        await this.matrixClient.waitForClientWellKnown();
-        const foci = this.matrixClient.getClientWellKnown()?.["org.matrix.msc4143.rtc_foci"];
-        if (Array.isArray(foci)) {
-            foci.forEach((foci) => this.configuredMatrixRTCTransports.add(foci));
-        }
-        this.emit(CallStoreEvent.TransportsUpdated);
-    }
-
     protected async onReady(): Promise<any> {
         if (!this.matrixClient) return;
         // Fetch transports, but don't await the result.
-        void this.fetchTransports();
+        this.matrixClient.cachedRtcTransports.wait().catch(() => {
+            if (SdkConfig.get("enable_client_well_known_lookups")) {
+                void this.matrixClient?.waitForClientWellKnown();
+            }
+        });
+
         // We assume that the calls present in a room are a function of room
         // widgets and group calls, so we initialize the room map here and then
         // update it whenever those change
@@ -88,6 +67,8 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         }
         this.matrixClient.matrixRTC.on(MatrixRTCSessionManagerEvents.SessionStarted, this.onRTCSessionStart);
         WidgetStore.instance.on(UPDATE_EVENT, this.onWidgets);
+
+        this.matrixClient.on(ClientEvent.RtcTransportsUpdated, this.onRTCTransportsUpdated);
 
         // If the room ID of a previously connected call is still in settings at
         // this time, that's a sign that we failed to disconnect from it
@@ -115,9 +96,9 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         this.callListeners.clear();
         this.calls.clear();
         this._connectedCalls.clear();
-        this.configuredMatrixRTCTransports.clear();
 
         this.matrixClient?.matrixRTC.off(MatrixRTCSessionManagerEvents.SessionStarted, this.onRTCSessionStart);
+        this.matrixClient?.off(ClientEvent.RtcTransportsUpdated, this.onRTCTransportsUpdated);
         WidgetStore.instance.off(UPDATE_EVENT, this.onWidgets);
     }
 
@@ -128,12 +109,14 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
     public get connectedCalls(): Set<Call> {
         return this._connectedCalls;
     }
+
     private set connectedCalls(value: Set<Call>) {
+        const prevValue = this._connectedCalls;
         this._connectedCalls = value;
-        this.emit(CallStoreEvent.ConnectedCalls, value);
+        this.emit(CallStoreEvent.ConnectedCalls, value, prevValue);
 
         // The room IDs are persisted to settings so we can detect unclean disconnects
-        SettingsStore.setValue(
+        void SettingsStore.setValue(
             "activeCallRoomIds",
             null,
             SettingLevel.DEVICE,
@@ -145,6 +128,7 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
     private callListeners = new Map<Call, Map<CallEvent, (...args: unknown[]) => unknown>>();
 
     private inUpdateRoom = false;
+
     private updateRoom(room: Room): void {
         // XXX: This method is guarded with the flag this.inUpdateRoom because
         // we need to block this method from calling itself recursively. That
@@ -207,6 +191,14 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         return call !== null && this.connectedCalls.has(call) ? call : null;
     }
 
+    /**
+     * Get all the ongoing calls
+     * @returns Map from room-id to the ongoing call in that room
+     */
+    public getAllCalls(): Map<string, Call> {
+        return this.calls;
+    }
+
     private onWidgets = (roomId: string | null): void => {
         if (!this.matrixClient) return;
         if (roomId === null) {
@@ -223,10 +215,26 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
     };
 
     public getConfiguredRTCTransports(): Transport[] {
-        return [...this.configuredMatrixRTCTransports];
+        const rtcTransports = this.matrixClient?.cachedRtcTransports.get();
+        const enableClientWellKnownLookups = SdkConfig.get("enable_client_well_known_lookups");
+        if (rtcTransports || !enableClientWellKnownLookups) {
+            return rtcTransports ?? [];
+        }
+        const wellKnown = this.matrixClient?.getClientWellKnown();
+        const foci = wellKnown?.["org.matrix.msc4143.rtc_foci"];
+        if (foci !== undefined) {
+            if (Array.isArray(foci))
+                return foci; // Contents assumed to be valid Transports
+            else logger.warn(`org.matrix.msc4143.rtc_foci is not an array in .well-known`);
+        }
+        return [];
     }
 
     private onRTCSessionStart = (roomId: string, session: MatrixRTCSession): void => {
         this.updateRoom(session.room);
+    };
+
+    private onRTCTransportsUpdated = (transports: Transport[]): void => {
+        this.emit(CallStoreEvent.TransportsUpdated, transports);
     };
 }

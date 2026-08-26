@@ -4,6 +4,8 @@ exports[`DisambiguatedProfileView > renders the default state 1`] = `
 <div>
   <div
     class="DisambiguatedProfile-module_disambiguatedProfile"
+    data-event-density="default"
+    data-event-layout="group"
     role="button"
     tabindex="0"
   >
@@ -21,6 +23,8 @@ exports[`DisambiguatedProfileView > renders the full example 1`] = `
 <div>
   <div
     class="DisambiguatedProfile-module_disambiguatedProfile"
+    data-event-density="default"
+    data-event-layout="group"
     role="button"
     tabindex="0"
     title="Eve (@eve:matrix.org)"
@@ -32,14 +36,14 @@ exports[`DisambiguatedProfileView > renders the full example 1`] = `
       Eve
     </span>
     <span
+      class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 mx_DisambiguatedProfile_userStatus DisambiguatedProfile-module_userStatus"
+    >
+      🏝️
+    </span>
+    <span
       class="mx_DisambiguatedProfile_mxid DisambiguatedProfile-module_disambiguatedProfile_mxid"
     >
       @eve:matrix.org
-    </span>
-    <span
-      class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 DisambiguatedProfile-module_userStatus"
-    >
-      🏝️
     </span>
   </div>
 </div>
@@ -49,6 +53,8 @@ exports[`DisambiguatedProfileView > renders with MXID for disambiguation 1`] = `
 <div>
   <div
     class="DisambiguatedProfile-module_disambiguatedProfile"
+    data-event-density="default"
+    data-event-layout="group"
     role="button"
     tabindex="0"
   >
@@ -71,6 +77,8 @@ exports[`DisambiguatedProfileView > renders with color class 1`] = `
 <div>
   <div
     class="DisambiguatedProfile-module_disambiguatedProfile"
+    data-event-density="default"
+    data-event-layout="group"
     role="button"
     tabindex="0"
   >
@@ -88,6 +96,8 @@ exports[`DisambiguatedProfileView > renders with emphasized display name 1`] = `
 <div>
   <div
     class="DisambiguatedProfile-module_disambiguatedProfile"
+    data-event-density="default"
+    data-event-layout="group"
     role="button"
     tabindex="0"
   >
@@ -105,6 +115,8 @@ exports[`DisambiguatedProfileView > renders with tooltip 1`] = `
 <div>
   <div
     class="DisambiguatedProfile-module_disambiguatedProfile"
+    data-event-density="default"
+    data-event-layout="group"
     role="button"
     tabindex="0"
     title="Diana (@diana:example.org)"

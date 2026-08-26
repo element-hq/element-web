@@ -6,6 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// oxlint-disable-next-line no-restricted-imports
 import EventEmitter from "events";
 import { base32 } from "rfc4648";
 import { type RoomType } from "matrix-js-sdk/src/matrix";
@@ -15,13 +16,13 @@ import { type RoomType } from "matrix-js-sdk/src/matrix";
 export interface IThreepidInviteWireFormat {
     email: string;
     signurl: string;
-    room_name: string; // eslint-disable-line camelcase
-    room_avatar_url: string; // eslint-disable-line camelcase
-    inviter_name: string; // eslint-disable-line camelcase
+    room_name: string;
+    room_avatar_url: string;
+    inviter_name: string;
 
     // TODO: Figure out if these are ever populated
-    guest_access_token?: string; // eslint-disable-line camelcase
-    guest_user_id?: string; // eslint-disable-line camelcase
+    guest_access_token?: string;
+    guest_user_id?: string;
 }
 
 interface IPersistedThreepidInvite extends IThreepidInviteWireFormat {
@@ -46,7 +47,6 @@ export interface IOOBData {
     name?: string; // The room's name
     avatarUrl?: string; // The mxc:// avatar URL for the room
     inviterName?: string; // The display name of the person who invited us to the room
-    // eslint-disable-next-line camelcase
     room_name?: string; // The name of the room, to be used until we are told better by the server
     roomType?: RoomType | string; // The type of the room, to be used until we are told better by the server
 }
@@ -64,7 +64,7 @@ export default class ThreepidInviteStore extends EventEmitter {
     }
 
     public storeInvite(roomId: string, wireInvite: IThreepidInviteWireFormat): IThreepidInvite {
-        const invite = <IPersistedThreepidInvite>{ roomId, ...wireInvite };
+        const invite: IPersistedThreepidInvite = { roomId, ...wireInvite };
         const id = this.generateIdOf(invite);
         localStorage.setItem(`${STORAGE_PREFIX}${id}`, JSON.stringify(invite));
         return this.translateInvite(invite);

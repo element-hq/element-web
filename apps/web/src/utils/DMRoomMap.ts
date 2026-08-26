@@ -162,11 +162,11 @@ export default class DMRoomMap {
             commonRooms = commonRooms.filter((r) => userRooms.includes(r));
         }
 
-        const joinedRooms = commonRooms
-            .map((r) => this.matrixClient.getRoom(r))
-            .filter((r) => r && r.getMyMembership() === KnownMembership.Join);
-
-        return joinedRooms[0];
+        return (
+            commonRooms
+                .map((r) => this.matrixClient.getRoom(r))
+                .find((r) => r && r.getMyMembership() === KnownMembership.Join) ?? null
+        );
     }
 
     public getUserIdForRoomId(roomId: string): string | undefined {
@@ -231,7 +231,7 @@ export default class DMRoomMap {
                 logger.warn(`Invalid m.direct account data detected (self-chats that shouldn't be), patching it up.`);
                 if (neededPatching && !this.hasSentOutPatchDirectAccountDataPatch) {
                     this.hasSentOutPatchDirectAccountDataPatch = true;
-                    this.matrixClient.setAccountData(EventType.Direct, userToRooms);
+                    void this.matrixClient.setAccountData(EventType.Direct, userToRooms);
                 }
             }
             this.userToRooms = userToRooms;

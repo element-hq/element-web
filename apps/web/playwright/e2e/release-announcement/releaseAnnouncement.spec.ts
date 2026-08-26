@@ -6,15 +6,12 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { test, expect } from "./";
+import { rejectToast } from "@element-hq/element-web-playwright-common";
+
+import { test } from "./";
 
 test.describe("Release announcement", () => {
     test.use({
-        config: {
-            features: {
-                feature_release_announcement: true,
-            },
-        },
         room: async ({ app, user }, use) => {
             const roomId = await app.client.createRoom({
                 name: "Test room",
@@ -22,37 +19,31 @@ test.describe("Release announcement", () => {
             await app.viewRoomById(roomId);
             await use({ roomId });
         },
-        labsFlags: ["feature_new_room_list"],
+        labsFlags: ["feature_room_list_sections"],
+    });
+
+    test.beforeEach(async ({ page, app, user }) => {
+        // The toasts are displayed above the search section
+        await rejectToast(page, "Verify this device");
+        await rejectToast(page, "Notifications");
     });
 
     // There is no release announcement currently live
-    test.skip(
-        "should display the new room list release announcement",
+    test(
+        "should display the room list section release announcement",
         { tag: "@screenshot" },
         async ({ page, app, room, util }) => {
-            // dismiss the toast so the announcement appears
-            await page.getByRole("button", { name: "Dismiss" }).click();
+            const sectionName = "Introducing Sections";
+            // The section release announcement should be displayed
+            await util.assertReleaseAnnouncementIsVisible(sectionName);
+            // Hide the section release announcement
+            const dialog = util.getReleaseAnnouncement(sectionName);
+            await dialog.getByRole("button", { name: "Ok" }).click();
 
-            const newSoundsName = "We’ve refreshed your sounds";
-            // The new sounds release announcement should be displayed
-            await util.assertReleaseAnnouncementIsVisible(newSoundsName);
-            // Hide the new sounds release announcement
-            const newSoundsDialog = util.getReleaseAnnouncement(newSoundsName);
-            await newSoundsDialog.getByRole("button", { name: "OK" }).click();
-
-            const newRoomListName = "Chats has a new look!";
-            // The new room list release announcement should be displayed
-            await util.assertReleaseAnnouncementIsVisible(newRoomListName);
-            // Hide the new room list release announcement
-            const dialog = util.getReleaseAnnouncement(newRoomListName);
-            await dialog.getByRole("button", { name: "Next" }).click();
-
-            await util.assertReleaseAnnouncementIsNotVisible(newRoomListName);
+            await util.assertReleaseAnnouncementIsNotVisible(sectionName);
 
             await page.reload();
-            await expect(page.getByRole("button", { name: "Room options" })).toBeVisible();
-            // Check that once the release announcements has been marked as viewed, it does not appear again
-            await util.assertReleaseAnnouncementIsNotVisible(newRoomListName);
+            await util.assertReleaseAnnouncementIsNotVisible(sectionName);
         },
     );
 });

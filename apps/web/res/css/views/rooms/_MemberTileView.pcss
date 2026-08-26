@@ -28,6 +28,10 @@ Please see LICENSE files in the repository root for full details.
     .mx_MemberTileView_name {
         font: var(--cpd-font-body-md-medium);
         min-width: 0;
+
+        .mx_DisambiguatedProfile {
+            font: inherit;
+        }
     }
 
     .mx_MemberTileView_userLabel {
@@ -40,5 +44,11 @@ Please see LICENSE files in the repository root for full details.
         position: relative;
         height: 32px;
         width: 32px;
+    }
+
+    .mx_MemberTileView_presence {
+        position: absolute;
+        right: -2px;
+        bottom: 2px;
     }
 }

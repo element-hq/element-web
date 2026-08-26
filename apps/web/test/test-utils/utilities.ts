@@ -6,13 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { act } from "jest-matrix-react";
+import { act } from "test-utils-rtl";
 
-import type EventEmitter from "events";
+import type EventEmitter from "node:events";
 import { type ActionPayload } from "../../src/dispatcher/payloads";
 import defaultDispatcher from "../../src/dispatcher/dispatcher";
 import { type DispatcherAction } from "../../src/dispatcher/actions";
 import Modal from "../../src/Modal";
+import { vi, beforeEach, afterEach } from "../setup/adapter.ts";
 
 export const emitPromise = (e: EventEmitter, k: string | symbol) => new Promise((r) => e.once(k, r));
 
@@ -30,13 +31,12 @@ export function untilDispatch(
     timeout = 1000,
 ): Promise<ActionPayload> {
     const callerLine = new Error().stack!.toString().split("\n")[2];
-    if (typeof waitForAction === "string") {
-        const action = waitForAction;
-        waitForAction = (payload) => {
-            return payload.action === action;
-        };
-    }
-    const callback = waitForAction as (payload: ActionPayload) => boolean;
+    const callback =
+        typeof waitForAction === "string"
+            ? (payload: ActionPayload) => {
+                  return payload.action === waitForAction;
+              }
+            : waitForAction;
     return new Promise((resolve, reject) => {
         let fulfilled = false;
         let timeoutId: number;
@@ -44,7 +44,11 @@ export function untilDispatch(
         if (timeout > 0) {
             timeoutId = window.setTimeout(() => {
                 if (!fulfilled) {
-                    reject(new Error(`untilDispatch: timed out at ${callerLine}`));
+                    reject(
+                        new Error(
+                            `untilDispatch: timed out (waiting for: ${typeof waitForAction === "function" ? "fn" : waitForAction}) at ${callerLine}`,
+                        ),
+                    );
                     fulfilled = true;
                 }
             }, timeout);
@@ -128,7 +132,7 @@ export const flushPromises = () => act(async () => await new Promise<void>((reso
 // https://gist.github.com/apieceofbart/e6dea8d884d29cf88cdb54ef14ddbcc4?permalink_comment_id=4018174#gistcomment-4018174
 export const flushPromisesWithFakeTimers = async (): Promise<void> => {
     const promise = new Promise((resolve) => process.nextTick(resolve));
-    jest.advanceTimersByTime(1);
+    vi.advanceTimersByTime(1);
     await promise;
 };
 
@@ -165,8 +169,8 @@ export function waitForUpdate(inst: React.Component, updates = 1): Promise<void>
  * that also checks timestamps
  */
 export const advanceDateAndTime = (ms: number) => {
-    jest.spyOn(global.Date, "now").mockReturnValue(Date.now() + ms);
-    jest.advanceTimersByTime(ms);
+    vi.spyOn(global.Date, "now").mockReturnValue(Date.now() + ms);
+    vi.advanceTimersByTime(ms);
 };
 
 /**
@@ -199,8 +203,8 @@ export const clearAllModals = async (): Promise<void> => {
 export function useMockMediaDevices(): void {
     // @ts-ignore assignment of a thing that isn't a `MediaDevices` to read-only property
     navigator["mediaDevices"] = {
-        enumerateDevices: jest.fn().mockResolvedValue([]),
-        getUserMedia: jest.fn(),
+        enumerateDevices: vi.fn().mockResolvedValue([]),
+        getUserMedia: vi.fn(),
     };
 }
 
@@ -234,7 +238,7 @@ export function resetJsDomAfterEach(): void {
 
         // intercept setTimeout and setInterval, and clear them at the end.
         //
-        // *Don't* use jest.spyOn for this because it makes the DOM testing library think we are using fake timers.
+        // *Don't* use vi.spyOn for this because it makes the DOM testing library think we are using fake timers.
         //
         ["setTimeout", "setInterval"].forEach((name) => {
             const originalFn = window[name as keyof Window];

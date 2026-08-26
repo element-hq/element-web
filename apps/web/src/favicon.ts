@@ -207,6 +207,7 @@ export class BadgeOverlayRenderer extends IconRenderer {
                 (blob) => {
                     if (blob) {
                         resolve(blob.arrayBuffer());
+                        return;
                     }
                     reject(new Error("Could not render badge overlay as blob"));
                 },

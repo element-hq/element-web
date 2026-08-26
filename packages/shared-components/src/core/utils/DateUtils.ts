@@ -9,23 +9,27 @@
  * Formats a number of seconds into a human-readable string.
  * @param inSeconds
  */
-export function formatSeconds(inSeconds: number): string {
+export function formatSeconds(
+    inSeconds: number,
+    opts?: { hoursMinLength?: number; minutesMinLength?: number },
+): string {
     const isNegative = inSeconds < 0;
     inSeconds = Math.abs(inSeconds);
 
-    const hours = Math.floor(inSeconds / (60 * 60))
-        .toFixed(0)
-        .padStart(2, "0");
-    const minutes = Math.floor((inSeconds % (60 * 60)) / 60)
-        .toFixed(0)
-        .padStart(2, "0");
-    const seconds = Math.floor((inSeconds % (60 * 60)) % 60)
-        .toFixed(0)
-        .padStart(2, "0");
+    const hoursMinLength = opts?.hoursMinLength ?? 2;
+    const hours = Math.floor(inSeconds / (60 * 60));
+    const hoursText = hours.toFixed(0).padStart(hoursMinLength, "0");
+
+    const minutesMinLength = hours > 0 ? 2 : (opts?.minutesMinLength ?? 2);
+    const minutes = Math.floor((inSeconds % (60 * 60)) / 60);
+    const minutesText = minutes.toFixed(0).padStart(minutesMinLength, "0");
+
+    const seconds = Math.floor((inSeconds % (60 * 60)) % 60);
+    const secondsText = seconds.toFixed(0).padStart(2, "0");
 
     let output = "";
-    if (hours !== "00") output += `${hours}:`;
-    output += `${minutes}:${seconds}`;
+    if (hours > 0) output += `${hoursText}:`;
+    output += `${minutesText}:${secondsText}`;
 
     if (isNegative) {
         output = "-" + output;

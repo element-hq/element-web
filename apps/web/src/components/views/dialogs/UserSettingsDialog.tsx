@@ -23,6 +23,7 @@ import LockIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock";
 import LabsIcon from "@vector-im/compound-design-tokens/assets/web/icons/labs";
 import BlockIcon from "@vector-im/compound-design-tokens/assets/web/icons/block";
 import HelpIcon from "@vector-im/compound-design-tokens/assets/web/icons/help";
+import { ToastContext, useActiveToast } from "@element-hq/web-shared-components";
 
 import TabbedView, { Tab, useActiveTabWithDefault } from "../../structures/TabbedView";
 import { _t, _td } from "../../../languageHandler";
@@ -43,21 +44,26 @@ import KeyboardUserSettingsTab from "../settings/tabs/user/KeyboardUserSettingsT
 import SessionManagerTab from "../settings/tabs/user/SessionManagerTab";
 import { UserTab } from "./UserTab";
 import { type NonEmptyArray } from "../../../@types/common";
-import { SDKContext, type SdkContextClass } from "../../../contexts/SDKContext";
+import { SDKContext } from "../../../contexts/SDKContext";
+import { type SDKContextClass } from "../../../contexts/SDKContextClass";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { NoChange, useEventEmitterAsyncState, type AsyncStateCallbackResult } from "../../../hooks/useEventEmitter";
-import { ToastContext, useActiveToast } from "../../../contexts/ToastContext";
 import { EncryptionUserSettingsTab, type State } from "../settings/tabs/user/EncryptionUserSettingsTab";
 
 interface IProps {
     initialTabId?: UserTab;
     showMsc4108QrCode?: boolean;
     /*
+     * If true, the Account tab's status control starts in custom status mode,
+     * ready for the user to enter a custom status.
+     */
+    startCustomStatus?: boolean;
+    /*
      * The initial state of the Encryption tab.
      * If undefined, the default state is used ("loading").
      */
     initialEncryptionState?: State;
-    sdkContext: SdkContextClass;
+    sdkContext: SDKContextClass;
     onFinished(this: void): void;
 }
 
@@ -101,6 +107,7 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
     // store these props in state as changing tabs back and forth should clear them
     const [showMsc4108QrCode, setShowMsc4108QrCode] = useState(props.showMsc4108QrCode);
     const [initialEncryptionState, setInitialEncryptionState] = useState(props.initialEncryptionState);
+    const [startCustomStatus, setStartCustomStatus] = useState(props.startCustomStatus);
 
     // If the user doesn't have Recovery set up (no default Secret Storage key),
     // we show an indicator on the Encryption tab.
@@ -130,7 +137,7 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                 UserTab.Account,
                 _td("settings|account|title"),
                 <UserProfileIcon />,
-                <AccountUserSettingsTab closeSettingsFn={props.onFinished} />,
+                <AccountUserSettingsTab closeSettingsFn={props.onFinished} startCustomStatus={startCustomStatus} />,
                 "UserSettingsGeneral",
             ),
         );
@@ -166,7 +173,7 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                 UserTab.Preferences,
                 _td("common|preferences"),
                 <PreferencesIcon />,
-                <PreferencesUserSettingsTab closeSettingsFn={props.onFinished} />,
+                <PreferencesUserSettingsTab />,
                 "UserSettingsPreferences",
             ),
         );
@@ -206,7 +213,7 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                 UserTab.Security,
                 _td("room_settings|security|title"),
                 <LockIcon />,
-                <SecurityUserSettingsTab closeSettingsFn={props.onFinished} />,
+                <SecurityUserSettingsTab />,
                 "UserSettingsSecurityPrivacy",
             ),
         );
@@ -257,6 +264,7 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
         // Clear these so switching away from the tab and back to it will not show the QR code again
         setShowMsc4108QrCode(false);
         setInitialEncryptionState(undefined);
+        setStartCustomStatus(false);
     };
 
     const [activeToast, toastRack] = useActiveToast();

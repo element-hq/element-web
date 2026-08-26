@@ -140,6 +140,10 @@ These are located in `/spec/` in `matrix-js-sdk` or `/test/` in `element-web`.
 When writing unit tests, please aim for a high level of test coverage
 for new code - 80% or greater. If you cannot achieve that, please document
 why it's not possible in your PR.
+CI will validate that the coverage reached on your change is sufficient,
+you can also assert this locally by installing https://github.com/Bachmann1234/diff_cover,
+running the entire test suite in coverage mode `pnpm coverage` then running
+`pnpm coverage:diff` to see the coverage of the diff between your HEAD and `develop`.
 
 Some sections of code are not sensible to add coverage for, such as those
 which explicitly inhibit noisy logging for tests. Which can be hidden using

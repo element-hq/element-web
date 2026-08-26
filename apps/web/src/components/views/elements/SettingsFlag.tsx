@@ -15,17 +15,17 @@ import { logger } from "matrix-js-sdk/src/logger";
 import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";
 import { type SettingLevel } from "../../../settings/SettingLevel";
-import { type BooleanSettingKey, defaultWatchManager } from "../../../settings/Settings";
+import { type NullableBooleanSettingKey } from "../../../settings/Settings";
 
 interface IProps {
     // The setting must be a boolean
-    name: BooleanSettingKey;
+    name: NullableBooleanSettingKey;
     level: SettingLevel;
     roomId?: string; // for per-room settings
     label?: string;
     isExplicit?: boolean;
     hideIfCannotSet?: boolean;
-    requires?: BooleanSettingKey[];
+    requires?: NullableBooleanSettingKey[];
     onChange?(checked: boolean): void;
 }
 
@@ -35,6 +35,8 @@ interface IState {
 
 export default class SettingsFlag extends React.Component<IProps, IState> {
     private readonly id = `mx_SettingsFlag_${secureRandomString(12)}`;
+    /** References to the watchers registered with SettingsStore, so that we can unwatch them when the component unmounts. */
+    private watcherRefs: string[] = [];
 
     public constructor(props: IProps) {
         super(props);
@@ -45,23 +47,33 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
-        defaultWatchManager.watchSetting(this.props.name, this.props.roomId ?? null, this.onSettingChange);
+        // Watch via SettingsStore rather than the watch manager directly, so that settings stored under
+        // a different name (`invertedSettingName`) are subscribed to under the name updates are published as.
+        this.watcherRefs.push(
+            SettingsStore.watchSetting(this.props.name, this.props.roomId ?? null, this.onSettingChange),
+        );
         if (this.props.requires) {
             // If we have any dependencies for this feature, also watch those features to ensure we catch the disabled state.
             for (const flag of this.props.requires) {
-                defaultWatchManager.watchSetting(flag, this.props.roomId ?? null, this.onSettingChange);
+                this.watcherRefs.push(
+                    SettingsStore.watchSetting(flag, this.props.roomId ?? null, this.onSettingChange),
+                );
             }
         }
     }
 
     public componentWillUnmount(): void {
-        defaultWatchManager.unwatchSetting(this.onSettingChange);
+        for (const ref of this.watcherRefs) {
+            SettingsStore.unwatchSetting(ref);
+        }
+        this.watcherRefs = [];
     }
 
     private getSettingValue(): boolean {
-        // If a level defined in props is overridden by a level at a high presedence, it gets disabled
-        // and we should show the overridding value.
+        // If a level defined in props is overridden by a level at a high precedence,
+        // or the setting lacks support for the desired level, it gets disabled and we should show the overriding value.
         if (
+            !SettingsStore.doesSettingSupportLevel(this.props.name, this.props.level) ||
             SettingsStore.settingIsOveriddenAtConfigLevel(this.props.name, this.props.roomId ?? null, this.props.level)
         ) {
             return !!SettingsStore.getValue(this.props.name);

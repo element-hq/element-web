@@ -38,7 +38,7 @@ adjacent to.
 
 Unless otherwise specified, the following applies to all code:
 
-1. Files must be formatted with Prettier.
+1. Files must be formatted with Oxfmt.
 2. 120 character limit per line. Match existing code in the file if it is using a lower guide.
 3. A tab/indentation is 4 spaces.
 4. Newlines are Unix.
@@ -301,8 +301,7 @@ Inheriting all the rules of TypeScript, the following additionally apply:
     - Note: These are deprecated. Prefer Compound typography tokens like `var(--cpd-font-body-md-regular)` for new code.
 7. Use theme color variables like `$primary-content`, `$secondary-content`, `$accent`, `$alert` for colors.
     - Prefer Compound color tokens like `var(--cpd-color-text-primary)` for new code.
-8. Use spacing variables like `$spacing-8`, `$spacing-12`, `$spacing-16` where available.
-    - Prefer Compound spacing tokens like `var(--cpd-space-2x)` for new code.
+8. Use spacing variables like `var(--cpd-space-2x)`, `var(--cpd-space-3x)`, `var(--cpd-space-4x)`.
 
 #### Syntax and formatting
 

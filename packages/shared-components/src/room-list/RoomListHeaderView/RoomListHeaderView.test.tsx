@@ -12,7 +12,7 @@ import React from "react";
 
 import * as stories from "./RoomListHeaderView.stories";
 
-const { Default, NoComposeMenu, NoSpaceMenu, CollapseSections } = composeStories(stories);
+const { Default, NoSpaceMenu, CollapseSections, ExpandSections } = composeStories(stories);
 
 describe("RoomListHeaderView", () => {
     it("renders the default state", () => {
@@ -20,13 +20,18 @@ describe("RoomListHeaderView", () => {
         expect(container).toMatchSnapshot();
     });
 
-    it("renders without compose menu", () => {
-        const { container } = render(<NoComposeMenu />);
+    it("renders without space menu", () => {
+        const { container } = render(<NoSpaceMenu />);
         expect(container).toMatchSnapshot();
     });
 
-    it("renders without space menu", () => {
-        const { container } = render(<NoSpaceMenu />);
+    it("renders collapse button", () => {
+        const { container } = render(<CollapseSections />);
+        expect(container).toMatchSnapshot();
+    });
+
+    it("renders expand button", () => {
+        const { container } = render(<ExpandSections />);
         expect(container).toMatchSnapshot();
     });
 

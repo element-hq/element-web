@@ -56,7 +56,7 @@ export default abstract class Exporter {
     }
 
     public get destinationFileName(): string {
-        return this.makeFileNameNoExtension(SdkConfig.get().brand) + ".zip";
+        return this.makeFileNameNoExtension() + ".zip";
     }
 
     protected onBeforeUnload(this: void, e: BeforeUnloadEvent): string {
@@ -77,12 +77,12 @@ export default abstract class Exporter {
         this.files.push(file);
     }
 
-    protected makeFileNameNoExtension(brand = "matrix"): string {
+    protected makeFileNameNoExtension(): string {
         // First try to use the real name of the room, then a translated copy of a generic name,
         // then finally hardcoded default to guarantee we'll have a name.
         const safeRoomName = sanitizeFilename(this.room.name ?? _t("common|unnamed_room")).trim() || "Unnamed Room";
         const safeDate = formatFullDateNoDayISO(new Date()).replace(/:/g, "-"); // ISO format automatically removes a lot of stuff for us
-        const safeBrand = sanitizeFilename(brand);
+        const safeBrand = sanitizeFilename(SdkConfig.get().brand);
         return `${safeBrand} - ${safeRoomName} - Chat Export - ${safeDate}`;
     }
 

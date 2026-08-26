@@ -107,42 +107,12 @@ Please see LICENSE files in the repository root for full details.
         }
     }
 
-    .mx_DisambiguatedProfile,
-    .mx_EventTile_line {
-        --EventBubbleTile_line-max-width: 70%;
-
-        width: fit-content;
-        max-width: var(--EventBubbleTile_line-max-width); /* Align message bubble and displayName */
-        line-height: $font-18px; /* fixed line height to prevent emoji from being taller than text */
-    }
-
-    /* other users profile on bubble layout */
-    > .mx_DisambiguatedProfile {
-        white-space: normal; /* display mxid */
-
-        .mx_DisambiguatedProfile_displayName {
-            white-space: nowrap; /* truncate long display names */
-            margin-inline-end: 5px;
-
-            /* For RTL displayName */
-            unicode-bidi: embed;
-            direction: ltr;
-        }
-
-        .mx_DisambiguatedProfile_mxid {
-            margin-inline-start: 0; /* Align mxid with truncated displayName
-                inside mx_EventTile[data-layout="bubble"] */
-        }
-    }
-
-    /* inside mx_RoomView_MessageList, outside of mx_ReplyTile */
-    /* (on the main panel and the chat panel with a maximized widget) */
+    /* Position the main event sender; reply senders own their alignment. */
     > .mx_DisambiguatedProfile,
-    /* inside a thread, outside of mx_ReplyTile */
     .mx_EventTile_senderDetails > .mx_DisambiguatedProfile {
         position: relative;
-        top: -2px;
-        left: 2px;
+        inset-block-start: -2px;
+        inset-inline-start: 2px;
         font-size: $font-15px;
     }
 
@@ -278,6 +248,11 @@ Please see LICENSE files in the repository root for full details.
     }
 
     .mx_EventTile_line {
+        --EventBubbleTile_line-max-width: 70%;
+
+        width: fit-content;
+        max-width: var(--EventBubbleTile_line-max-width); /* Align message bubble and displayName */
+        line-height: $font-18px; /* fixed line height to prevent emoji from being taller than text */
         position: relative;
         display: flex;
         gap: 5px var(--EventTile_bubble_gap-inline);
@@ -288,7 +263,7 @@ Please see LICENSE files in the repository root for full details.
 
         /* the selector here is quite weird because timestamps can appear linked & unlinked and in different places */
         /* in the DOM depending on the specific rendering context */
-        > a, /* timestamp wrapper anchor */
+        > a, /* linked timestamp element */
         .mx_MessageActionBar + .mx_MessageTimestamp {
             position: absolute;
             padding: 4px 8px;
@@ -322,7 +297,7 @@ Please see LICENSE files in the repository root for full details.
         }
 
         &.mx_EventTile_sticker {
-            > a, /* timestamp wrapper anchor */
+            > a, /* linked timestamp element */
             .mx_MessageActionBar + .mx_MessageTimestamp {
                 /* position timestamps for stickers to the right of the un-bubbled sticker */
                 right: unset;
@@ -434,7 +409,7 @@ Please see LICENSE files in the repository root for full details.
             .mx_EventTile_reply {
                 max-width: 90%;
                 padding: 0;
-                > a, /* timestamp wrapper anchor */
+                > a, /* linked timestamp element */
                 .mx_MessageActionBar + .mx_MessageTimestamp {
                     display: none !important;
                 }
@@ -516,10 +491,6 @@ Please see LICENSE files in the repository root for full details.
         }
     }
 
-    .mx_MTextBody {
-        max-width: 100%;
-    }
-
     .mx_LegacyCallEvent_wrapper,
     .mx_CallEvent_wrapper {
         justify-content: center;
@@ -549,7 +520,7 @@ Please see LICENSE files in the repository root for full details.
         font-style: italic;
 
         > a {
-            /* timestamp anchor wrapper */
+            /* linked timestamp element */
             align-self: center;
             bottom: unset;
             top: unset;
@@ -606,7 +577,7 @@ Please see LICENSE files in the repository root for full details.
     }
 
     .mx_EventTile_line {
-        > a, /* timestamp wrapper anchor */
+        > a, /* linked timestamp element */
         .mx_MessageActionBar + .mx_MessageTimestamp {
             right: auto;
             left: -77px;

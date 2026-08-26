@@ -6,6 +6,7 @@ exports[`<DeleteKeyStoragePanel /> should match snapshot 1`] = `
     class="_breadcrumb_t96w3_8"
   >
     <button
+      aria-disabled="false"
       aria-label="Back"
       class="_icon-button_1215g_8"
       data-kind="secondary"
@@ -35,7 +36,7 @@ exports[`<DeleteKeyStoragePanel /> should match snapshot 1`] = `
     >
       <li>
         <a
-          class="_link_k9ljz_8"
+          class="_link_13esb_8"
           data-kind="primary"
           data-size="sm"
           rel="noreferrer noopener"

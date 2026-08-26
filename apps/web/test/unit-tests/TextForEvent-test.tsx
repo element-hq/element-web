@@ -564,6 +564,103 @@ describe("TextForEvent", () => {
             ).toMatchInlineSnapshot(`"Andy changed their display name and profile picture"`);
         });
 
+        describe("knocks", () => {
+            const knockEvent = (reason?: string): MatrixEvent =>
+                new MatrixEvent({
+                    type: "m.room.member",
+                    sender: "@a:foo",
+                    content: {
+                        membership: KnownMembership.Knock,
+                        reason,
+                    },
+                    state_key: "@a:foo",
+                });
+
+            beforeEach(() => {
+                (SettingsStore.getValue as jest.Mock).mockImplementation((name) => name === "feature_ask_to_join");
+            });
+
+            afterEach(() => {
+                (SettingsStore.getValue as jest.Mock).mockReturnValue(true);
+            });
+
+            it("should handle knocks", () => {
+                expect(textForEvent(knockEvent(), mockClient)).toMatchInlineSnapshot(`"Member is requesting to join"`);
+            });
+
+            it("should handle knocks with a reason", () => {
+                expect(textForEvent(knockEvent("Let me in please!"), mockClient)).toMatchInlineSnapshot(
+                    `"Member is requesting to join: Let me in please!"`,
+                );
+            });
+
+            it("should handle an accepted knock", () => {
+                expect(
+                    textForEvent(
+                        new MatrixEvent({
+                            type: "m.room.member",
+                            sender: "@b:foo",
+                            content: { membership: KnownMembership.Invite },
+                            unsigned: { prev_content: { membership: KnownMembership.Knock } },
+                            state_key: "@a:foo",
+                        }),
+                        mockClient,
+                    ),
+                ).toMatchInlineSnapshot(`"Member granted access to Member"`);
+            });
+
+            it("should handle a retracted knock", () => {
+                expect(
+                    textForEvent(
+                        new MatrixEvent({
+                            type: "m.room.member",
+                            sender: "@a:foo",
+                            content: { membership: KnownMembership.Leave },
+                            unsigned: { prev_content: { membership: KnownMembership.Knock } },
+                            state_key: "@a:foo",
+                        }),
+                        mockClient,
+                    ),
+                ).toMatchInlineSnapshot(`"Member is no longer interested in joining"`);
+            });
+
+            it("should handle a denied knock", () => {
+                expect(
+                    textForEvent(
+                        new MatrixEvent({
+                            type: "m.room.member",
+                            sender: "@b:foo",
+                            content: { membership: KnownMembership.Leave },
+                            unsigned: { prev_content: { membership: KnownMembership.Knock } },
+                            state_key: "@a:foo",
+                        }),
+                        mockClient,
+                    ),
+                ).toMatchInlineSnapshot(`"Member rejected Member's request to join"`);
+            });
+
+            it("should fall back to the plain invite copy when the ask to join labs flag is disabled", () => {
+                (SettingsStore.getValue as jest.Mock).mockReturnValue(false);
+                expect(
+                    textForEvent(
+                        new MatrixEvent({
+                            type: "m.room.member",
+                            sender: "@b:foo",
+                            content: { membership: KnownMembership.Invite },
+                            unsigned: { prev_content: { membership: KnownMembership.Knock } },
+                            state_key: "@a:foo",
+                        }),
+                        mockClient,
+                    ),
+                ).toMatchInlineSnapshot(`"Member invited Member"`);
+            });
+
+            it("should hide knocks when the ask to join labs flag is disabled", () => {
+                (SettingsStore.getValue as jest.Mock).mockReturnValue(false);
+                expect(textForEvent(knockEvent(), mockClient)).toEqual("");
+            });
+        });
+
         it("should handle rejected invites", () => {
             expect(
                 textForEvent(

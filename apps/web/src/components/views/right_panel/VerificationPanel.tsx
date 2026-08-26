@@ -37,7 +37,6 @@ interface IProps {
     phase?: Phase;
     onClose: () => void;
     isRoomEncrypted: boolean;
-    inDialog: boolean;
 }
 
 interface IState {
@@ -327,7 +326,6 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
                                 sas={this.state.sasEvent.sas}
                                 onCancel={this.onSasMismatchesClick}
                                 onDone={this.onSasMatchesClick}
-                                inDialog={this.props.inDialog}
                                 isSelf={request.isSelfVerification}
                             />
                         ) : (
@@ -353,7 +351,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
     };
 
     private onSasMatchesClick = (): void => {
-        this.state.sasEvent?.confirm();
+        void this.state.sasEvent?.confirm();
     };
 
     private onSasMismatchesClick = (): void => {
@@ -374,7 +372,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         const { request } = this.props;
 
         // if we have a device ID and did not have one before, fetch the device's details
-        this.maybeGetOtherDevice();
+        void this.maybeGetOtherDevice();
 
         // if we have had a reply from the other side (ie, the phase is "ready") and we have not
         // yet done so, fetch the QR code
@@ -413,7 +411,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
             const reciprocateQREvent = request.verifier.getReciprocateQrCodeCallbacks();
             this.setState({ sasEvent, reciprocateQREvent });
         }
-        this.onRequestChange();
+        void this.onRequestChange();
     }
 
     public componentWillUnmount(): void {

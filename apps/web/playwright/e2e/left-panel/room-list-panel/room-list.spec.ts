@@ -6,8 +6,9 @@
  */
 
 import { type Page } from "@playwright/test";
-import { rejectToast } from "@element-hq/element-web-playwright-common";
+import { closeReleaseAnnouncementIfExists, rejectToast } from "@element-hq/element-web-playwright-common";
 
+import type { AccountDataEvents } from "matrix-js-sdk/src/matrix";
 import { expect, test } from "../../../element-web-test";
 import { type Bot } from "../../../pages/bot";
 import { type ElementAppPage } from "../../../pages/ElementAppPage";
@@ -16,7 +17,6 @@ import { getRoomList } from "./utils";
 test.describe("Room list", () => {
     test.use({
         displayName: "Alice",
-        labsFlags: ["feature_new_room_list"],
         botCreateOpts: {
             displayName: "BotBob",
         },
@@ -26,6 +26,9 @@ test.describe("Room list", () => {
         // The toasts are displayed above the search section
         await rejectToast(page, "Verify this device");
         await rejectToast(page, "Notifications");
+
+        // Close the release announcement about the new room list sections
+        await closeReleaseAnnouncementIfExists(page, "Introducing Sections");
 
         // focus the user menu to avoid to have hover decoration
         await page.getByRole("button", { name: "User menu" }).focus();
@@ -71,11 +74,11 @@ test.describe("Room list", () => {
 
         test("should open the more options menu", { tag: "@screenshot" }, async ({ page, app, user }) => {
             const roomListView = getRoomList(page);
-            const roomItem = roomListView.getByRole("option", { name: "Open room room29" });
+            let roomItem = roomListView.getByRole("option", { name: "Open room room29" });
             await roomItem.hover();
 
             await expect(roomItem).toMatchScreenshot("room-list-item-hover.png");
-            const roomItemMenu = roomItem.getByRole("button", { name: "More Options" });
+            let roomItemMenu = roomItem.getByRole("button", { name: "More Options" });
             await roomItemMenu.click();
             await expect(page).toMatchScreenshot("room-list-item-open-more-options.png");
 
@@ -83,7 +86,9 @@ test.describe("Room list", () => {
             await page.getByRole("menuitemcheckbox", { name: "Favourited" }).click();
 
             // Check that the room is favourited
+            roomItem = roomListView.getByRole("gridcell", { name: "Open room room29" });
             await roomItem.hover();
+            roomItemMenu = roomItem.getByRole("button", { name: "More Options" });
             await roomItemMenu.click();
             await expect(page.getByRole("menuitemcheckbox", { name: "Favourited" })).toBeChecked();
             // It should show the invite dialog
@@ -188,7 +193,7 @@ test.describe("Room list", () => {
                 const roomListView = getRoomList(page);
 
                 const roomId = await app.client.createRoom({ name: "1 notification" });
-                await app.client.inviteUser(roomId, bot.credentials.userId);
+                await app.client.inviteUser(roomId, bot.credentials!.userId);
                 await bot.joinRoom(roomId);
                 await bot.sendMessage(roomId, "I am a robot. Beep.");
 
@@ -253,6 +258,40 @@ test.describe("Room list", () => {
                 await expect(notificationButton).toBeFocused();
             });
 
+            test("should reveal the options menu when a room is focused with the keyboard", async ({
+                page,
+                app,
+                user,
+            }) => {
+                // Regression test: navigating the room list with the keyboard must reveal a room's hover
+                // menu so the "More options" button is reachable by Tab, rather than focus escaping to
+                // <body>. The reveal must depend on keyboard focus alone, so we move focus with the
+                // keyboard to an adjacent room the pointer is NOT over — otherwise :hover would reveal
+                // the menu and mask the behaviour (which is why the other keyboard tests don't catch it).
+                const roomListView = getRoomList(page);
+                const room29 = roomListView.getByRole("option", { name: "Open room room29" });
+                const room28 = roomListView.getByRole("option", { name: "Open room room28" });
+                const moreButton = room28.getByRole("button", { name: "More options" });
+
+                // Open the room, then put focus back on the room list item.
+                await room29.click();
+                await room29.click();
+                await expect(room29).toBeFocused();
+
+                // Keyboard-focus the adjacent room (the pointer is still over room29, not room28), so the
+                // menu's visibility depends purely on keyboard focus and not on :hover.
+                await page.keyboard.press("ArrowDown");
+                await expect(room28).toBeFocused();
+
+                // The "More options" button must be revealed and reachable by Tab.
+                await page.keyboard.press("Tab");
+                await expect(moreButton).toBeFocused();
+
+                // TODO: once menu-close focus restoration is fixed, extend this to open the menu
+                // (Enter) and assert that Escape returns focus to a room list item rather than <body>.
+                // Today that focus restoration is broken, so it isn't asserted here.
+            });
+
             test("should navigate to the top and then bottom of the room list", async ({ page, app, user }) => {
                 const roomListView = getRoomList(page);
 
@@ -276,7 +315,7 @@ test.describe("Room list", () => {
     });
 
     test.describe("Avatar decoration", () => {
-        test.use({ labsFlags: ["feature_video_rooms", "feature_new_room_list"] });
+        test.use({ labsFlags: ["feature_video_rooms"] });
 
         test("should be a public room", { tag: "@screenshot" }, async ({ page, app, user }) => {
             // @ts-ignore Visibility enum is not accessible
@@ -296,13 +335,14 @@ test.describe("Room list", () => {
             // @ts-ignore Visibility enum is not accessible
             await app.client.createRoom({ name: "low priority room", visibility: "public" });
             const roomListView = getRoomList(page);
-            const publicRoom = roomListView.getByRole("option", { name: "low priority room" });
+            let publicRoom = roomListView.getByRole("option", { name: "low priority room" });
 
             // Make room low priority
             await publicRoom.click({ button: "right" });
             await page.getByRole("menuitemcheckbox", { name: "Low priority" }).click();
 
             // Should have low priority decoration
+            publicRoom = roomListView.getByRole("gridcell", { name: "low priority room" });
             await expect(publicRoom.locator(".mx_RoomAvatarView_icon")).toHaveAccessibleName(
                 "This is a low priority room",
             );
@@ -357,7 +397,7 @@ test.describe("Room list", () => {
             const roomListView = getRoomList(page);
 
             const roomId = await app.client.createRoom({ name: "2 notifications" });
-            await app.client.inviteUser(roomId, bot.credentials.userId);
+            await app.client.inviteUser(roomId, bot.credentials!.userId);
             await bot.joinRoom(roomId);
 
             await bot.sendMessage(roomId, "I am a robot. Beep.");
@@ -373,7 +413,7 @@ test.describe("Room list", () => {
             const roomListView = getRoomList(page);
 
             const roomId = await app.client.createRoom({ name: "mention" });
-            await app.client.inviteUser(roomId, bot.credentials.userId);
+            await app.client.inviteUser(roomId, bot.credentials!.userId);
             await bot.joinRoom(roomId);
 
             const clientBot = await bot.prepareClient();
@@ -406,7 +446,7 @@ test.describe("Room list", () => {
             // focus the user menu to avoid to have hover decoration
             await page.getByRole("button", { name: "User menu" }).focus();
 
-            await app.client.inviteUser(roomId, bot.credentials.userId);
+            await app.client.inviteUser(roomId, bot.credentials!.userId);
             await bot.joinRoom(roomId);
             await bot.sendMessage(roomId, "I am a robot. Beep.");
 
@@ -444,12 +484,12 @@ test.describe("Room list", () => {
             const otherRoomId = await app.client.createRoom({ name: "other room" });
 
             const roomId = await app.client.createRoom({ name: "activity" });
-            await app.client.inviteUser(roomId, bot.credentials.userId);
+            await app.client.inviteUser(roomId, bot.credentials!.userId);
             await bot.joinRoom(roomId);
 
             await app.viewRoomById(roomId);
             await app.settings.openRoomSettings("Notifications");
-            await page.getByText("@mentions & keywords").click();
+            await page.getByText("@mentions and replies only").click();
             await app.settings.closeDialog();
 
             await app.settings.openUserSettings("Notifications");
@@ -471,7 +511,7 @@ test.describe("Room list", () => {
             const roomListView = getRoomList(page);
 
             const roomId = await app.client.createRoom({ name: "mark as unread" });
-            await app.client.inviteUser(roomId, bot.credentials.userId);
+            await app.client.inviteUser(roomId, bot.credentials!.userId);
             await bot.joinRoom(roomId);
 
             const room = roomListView.getByRole("option", { name: "mark as unread" });
@@ -488,17 +528,79 @@ test.describe("Room list", () => {
             const roomListView = getRoomList(page);
 
             const roomId = await app.client.createRoom({ name: "silent" });
-            await app.client.inviteUser(roomId, bot.credentials.userId);
+            await app.client.inviteUser(roomId, bot.credentials!.userId);
             await bot.joinRoom(roomId);
 
             await app.viewRoomById(roomId);
             await app.settings.openRoomSettings("Notifications");
-            await page.getByText("Off").click();
+            await page.getByText("Mute").click();
             await app.settings.closeDialog();
 
             const room = roomListView.getByRole("option", { name: "silent" });
             await expect(room.getByTestId("notification-decoration")).toBeVisible();
             await expect(room).toMatchScreenshot("room-list-item-silent.png");
+        });
+    });
+
+    test.describe("Show people in space", () => {
+        const SPACE_NAME = "My space";
+
+        /**
+         * Toggle the "People" checkbox in the preferences of the given space.
+         */
+        async function togglePeopleInSpace(page: Page, app: ElementAppPage, spaceName: string): Promise<void> {
+            const spaceButton = await app.getSpacePanelButton(spaceName);
+            await spaceButton.click({ button: "right" });
+            await page.getByRole("menuitem", { name: "Preferences" }).click();
+
+            const dialog = page.getByRole("dialog");
+            await dialog.getByRole("checkbox", { name: "People" }).click();
+            await app.settings.closeDialog();
+        }
+
+        test("should hide and show the DMs of a space when the People preference is toggled", async ({
+            page,
+            app,
+            user,
+            bot,
+        }) => {
+            const botUserId = bot.credentials!.userId;
+
+            const roomId = await app.client.createRoom({ name: "Space room" });
+            const spaceId = await app.client.createSpace({
+                name: SPACE_NAME,
+                initial_state: [
+                    {
+                        type: "m.space.child",
+                        state_key: roomId,
+                        content: { via: [user.homeServer] },
+                    },
+                ],
+            });
+            // A DM only shows up in a space when the other user is a member of the space itself.
+            await app.client.inviteUser(spaceId, botUserId);
+
+            await app.client.evaluate(async (cli, botUserId) => {
+                const { room_id: dmRoomId } = await cli.createRoom({ is_direct: true, invite: [botUserId] });
+                await cli.setAccountData("m.direct" as keyof AccountDataEvents, { [botUserId]: [dmRoomId] });
+            }, botUserId);
+
+            await app.viewSpaceByName(SPACE_NAME);
+
+            const roomListView = getRoomList(page);
+            const dm = roomListView.getByRole("option", { name: "Open room BotBob" });
+            const room = roomListView.getByRole("option", { name: "Open room Space room" });
+            await expect(dm).toBeVisible();
+            await expect(room).toBeVisible();
+
+            // Turning the preference off hides the DM straight away, without switching space
+            await togglePeopleInSpace(page, app, SPACE_NAME);
+            await expect(dm).not.toBeVisible();
+            await expect(room).toBeVisible();
+
+            // Turning it back on brings the DM back
+            await togglePeopleInSpace(page, app, SPACE_NAME);
+            await expect(dm).toBeVisible();
         });
     });
 });

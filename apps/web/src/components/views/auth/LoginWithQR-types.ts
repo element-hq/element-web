@@ -26,10 +26,24 @@ export enum Phase {
     Error,
 }
 
+/**
+ * Enum representing the click actions (transitions) a user can take during the login with QR flow
+ */
 export enum Click {
+    /**
+     * Cancel the flow
+     */
     Cancel,
+    /**
+     * A specific case of cancellation when the existing device declines the login
+     */
     Decline,
+    /**
+     * Approve the login from the existing device
+     */
     Approve,
-    Back,
+    /**
+     * Initialise the flow & show QR code
+     */
     ShowQr,
 }

@@ -11,7 +11,6 @@ declare module "matrix-seshat" {
         passphrase?: string;
     }
 
-    /* eslint-disable camelcase */
     interface IMatrixEvent {
         event_id: string;
         sender: string;
@@ -49,7 +48,6 @@ declare module "matrix-seshat" {
             context: ISearchContext;
         }>;
     }
-    /* eslint-enable camelcase */
 
     interface ICheckpoint {
         roomId: string;
