@@ -1,18 +1,21 @@
 /*
-Copyright 2025 New Vector Ltd.
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Mocked } from "jest-mock";
+// @vitest-environment happy-dom
+
+import { describe, it, expect, vi, beforeEach, type Mocked } from "vitest";
 import { type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 
-import { PlaybackQueue } from "../../../src/audio/PlaybackQueue";
-import { type Playback, PlaybackState } from "../../../src/audio/Playback";
-import { UPDATE_EVENT } from "../../../src/stores/AsyncStore";
-import { MockedPlayback } from "./MockedPlayback";
-import { SDKContextClass } from "../../../src/contexts/SDKContextClass";
+import { PlaybackQueue } from "./PlaybackQueue";
+import { type Playback, PlaybackState } from "./Playback";
+import { UPDATE_EVENT } from "../stores/AsyncStore";
+import { MockedPlayback } from "./__mocks__";
+import { SDKContextClass } from "../contexts/SDKContextClass";
 
 describe("PlaybackQueue", () => {
     let playbackQueue: PlaybackQueue;
@@ -20,7 +23,7 @@ describe("PlaybackQueue", () => {
 
     beforeEach(() => {
         mockRoom = {
-            getMember: jest.fn(),
+            getMember: vi.fn(),
         } as unknown as Mocked<Room>;
         playbackQueue = new PlaybackQueue(mockRoom, SDKContextClass.instance.roomViewStore);
     });
@@ -33,7 +36,7 @@ describe("PlaybackQueue", () => {
         [PlaybackState.Stopped, false],
     ])("should save (or not) the clock PlayBackState=%s expected=%s", (playbackState, expected) => {
         const mockEvent = {
-            getId: jest.fn().mockReturnValue("$foo:bar"),
+            getId: vi.fn().mockReturnValue("$foo:bar"),
         } as unknown as Mocked<MatrixEvent>;
         const mockPlayback = new MockedPlayback(playbackState, 0, 0) as unknown as Mocked<Playback>;
 
@@ -49,7 +52,7 @@ describe("PlaybackQueue", () => {
 
     it("does call skipTo on playback if clock advances to 1s", () => {
         const mockEvent = {
-            getId: jest.fn().mockReturnValue("$foo:bar"),
+            getId: vi.fn().mockReturnValue("$foo:bar"),
         } as unknown as Mocked<MatrixEvent>;
         const mockPlayback = new MockedPlayback(PlaybackState.Playing, 0, 0) as unknown as Mocked<Playback>;
 

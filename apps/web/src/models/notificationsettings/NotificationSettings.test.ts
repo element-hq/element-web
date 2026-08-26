@@ -6,20 +6,20 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
+import { describe, it, expect } from "vitest";
 import { type IPushRules, PushRuleKind, RuleId } from "matrix-js-sdk/src/matrix";
 
-import {
-    DefaultNotificationSettings,
-    type NotificationSettings,
-} from "../../../../src/models/notificationsettings/NotificationSettings";
-import { reconcileNotificationSettings } from "../../../../src/models/notificationsettings/reconcileNotificationSettings";
-import { toNotificationSettings } from "../../../../src/models/notificationsettings/toNotificationSettings";
-import { StandardActions } from "../../../../src/notifications/StandardActions";
-import { RoomNotifState } from "../../../../src/RoomNotifs";
+import { DefaultNotificationSettings, type NotificationSettings } from "./NotificationSettings";
+import { reconcileNotificationSettings } from "./reconcileNotificationSettings";
+import { toNotificationSettings } from "./toNotificationSettings";
+import { StandardActions } from "../../notifications/StandardActions";
+import { RoomNotifState } from "../../RoomNotifs";
 
 describe("NotificationSettings", () => {
     it("parses a typical pushrules setup correctly", async () => {
-        const pushRules = (await import("./pushrules_sample.json")) as IPushRules;
+        const pushRules = (await import("./__mocks__/pushrules_sample.json")) as IPushRules;
         const model = toNotificationSettings(pushRules, false);
         const pendingChanges = reconcileNotificationSettings(pushRules, model, false);
         const expectedModel: NotificationSettings = {
@@ -52,7 +52,7 @@ describe("NotificationSettings", () => {
     });
 
     it("generates correct mutations for a changed model", async () => {
-        const pushRules = (await import("./pushrules_sample.json")) as IPushRules;
+        const pushRules = (await import("./__mocks__/pushrules_sample.json")) as IPushRules;
         const pendingChanges = reconcileNotificationSettings(pushRules, DefaultNotificationSettings, false);
         expect(pendingChanges.added).toHaveLength(0);
         expect(pendingChanges.deleted).toEqual([
@@ -107,8 +107,8 @@ describe("NotificationSettings", () => {
     });
 
     it("correctly migrates old settings to the new model", async () => {
-        const pushRules = (await import("./pushrules_default.json")) as IPushRules;
-        const newPushRules = (await import("./pushrules_default_new.json")) as IPushRules;
+        const pushRules = (await import("./__mocks__/pushrules_default.json")) as IPushRules;
+        const newPushRules = (await import("./__mocks__/pushrules_default_new.json")) as IPushRules;
         const model = toNotificationSettings(pushRules, false);
         const expectedModel: NotificationSettings = {
             globalMute: false,
@@ -151,7 +151,7 @@ describe("NotificationSettings", () => {
     });
 
     it("handles the bot notice inversion correctly", async () => {
-        const pushRules = (await import("./pushrules_bug_botnotices.json")) as IPushRules;
+        const pushRules = (await import("./__mocks__/pushrules_bug_botnotices.json")) as IPushRules;
         const model = toNotificationSettings(pushRules, false);
         const pendingChanges = reconcileNotificationSettings(pushRules, model, false);
         const expectedModel: NotificationSettings = {
@@ -184,7 +184,7 @@ describe("NotificationSettings", () => {
     });
 
     it("correctly handles audible keywords without mentions settings", async () => {
-        const pushRules = (await import("./pushrules_bug_keyword_only.json")) as IPushRules;
+        const pushRules = (await import("./__mocks__/pushrules_bug_keyword_only.json")) as IPushRules;
         const model = toNotificationSettings(pushRules, false);
         const pendingChanges = reconcileNotificationSettings(pushRules, model, false);
         const expectedModel: NotificationSettings = {
@@ -217,7 +217,7 @@ describe("NotificationSettings", () => {
     });
 
     it("stores a keyword that starts with a dot under an id the server will accept", async () => {
-        const pushRules = (await import("./pushrules_default.json")) as IPushRules;
+        const pushRules = (await import("./__mocks__/pushrules_default.json")) as IPushRules;
         const model = { ...DefaultNotificationSettings, keywords: ["...push complete"] };
 
         const pendingChanges = reconcileNotificationSettings(pushRules, model, false);
@@ -232,7 +232,7 @@ describe("NotificationSettings", () => {
     });
 
     it("keeps the ids of two keywords that differ only by a leading dot apart", async () => {
-        const pushRules = (await import("./pushrules_default.json")) as IPushRules;
+        const pushRules = (await import("./__mocks__/pushrules_default.json")) as IPushRules;
         const model = { ...DefaultNotificationSettings, keywords: ["banana", ".banana"] };
 
         const pendingChanges = reconcileNotificationSettings(pushRules, model, false);

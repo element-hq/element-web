@@ -1,28 +1,30 @@
 /*
 Copyright 2024 New Vector Ltd.
-Copyright 2022 The Matrix.org Foundation C.I.C.
+Copyright 2022-2023 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked } from "jest-mock";
+// @vitest-environment happy-dom
+
+import { describe, it, expect, beforeEach, beforeAll, vi } from "vitest";
 import { MatrixEvent, EventType, MsgType, Room, ReceiptType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { makeBeaconEvent, mkEvent, stubClient } from "test-utils";
+import { makeThreadEvents, mkThread, populateThread } from "test-utils/threads";
 
-import { haveRendererForEvent } from "../../src/events/EventTileFactory";
-import { makeBeaconEvent, mkEvent, stubClient } from "../test-utils";
-import { makeThreadEvents, mkThread, populateThread } from "../test-utils/threads";
+import { haveRendererForEvent } from "./events/EventTileFactory";
 import {
     doesRoomHaveUnreadMessages,
     doesRoomHaveUnreadThreads,
     doesRoomOrThreadHaveUnreadMessages,
     eventTriggersUnreadCount,
-} from "../../src/Unread";
-import { MatrixClientPeg } from "../../src/MatrixClientPeg";
+} from "./Unread";
+import { MatrixClientPeg } from "./MatrixClientPeg";
 
-jest.mock("../../src/events/EventTileFactory", () => ({
-    haveRendererForEvent: jest.fn(),
+vi.mock("./events/EventTileFactory", () => ({
+    haveRendererForEvent: vi.fn(),
 }));
 
 describe("Unread", () => {
@@ -58,8 +60,8 @@ describe("Unread", () => {
         redactedEvent.makeRedacted(redactedEvent, new Room(redactedEvent.getRoomId()!, client, aliceId));
 
         beforeEach(() => {
-            jest.clearAllMocks();
-            mocked(haveRendererForEvent).mockClear().mockReturnValue(false);
+            vi.clearAllMocks();
+            vi.mocked(haveRendererForEvent).mockClear().mockReturnValue(false);
         });
 
         it("returns false when the event was sent by the current user", () => {
@@ -75,13 +77,13 @@ describe("Unread", () => {
         });
 
         it("returns false for an event without a renderer", () => {
-            mocked(haveRendererForEvent).mockReturnValue(false);
+            vi.mocked(haveRendererForEvent).mockReturnValue(false);
             expect(eventTriggersUnreadCount(client, alicesMessage)).toBe(false);
             expect(haveRendererForEvent).toHaveBeenCalledWith(alicesMessage, client, false);
         });
 
         it("returns true for an event with a renderer", () => {
-            mocked(haveRendererForEvent).mockReturnValue(true);
+            vi.mocked(haveRendererForEvent).mockReturnValue(true);
             expect(eventTriggersUnreadCount(client, alicesMessage)).toBe(true);
             expect(haveRendererForEvent).toHaveBeenCalledWith(alicesMessage, client, false);
         });
@@ -126,7 +128,7 @@ describe("Unread", () => {
 
         beforeEach(() => {
             room = new Room(roomId, client, myId);
-            jest.spyOn(logger, "warn");
+            vi.spyOn(logger, "warn");
         });
 
         describe("when there is an initial event in the room", () => {
@@ -141,7 +143,7 @@ describe("Unread", () => {
                 room.addLiveEvents([event], { addToState: true });
 
                 // Don't care about the code path of hidden events.
-                mocked(haveRendererForEvent).mockClear().mockReturnValue(true);
+                vi.mocked(haveRendererForEvent).mockClear().mockReturnValue(true);
             });
 
             it("returns true for a room with no receipts", () => {
@@ -416,7 +418,7 @@ describe("Unread", () => {
         });
 
         it("returns false for space", () => {
-            jest.spyOn(room, "isSpaceRoom").mockReturnValue(true);
+            vi.spyOn(room, "isSpaceRoom").mockReturnValue(true);
             expect(doesRoomHaveUnreadMessages(room, false)).toBe(false);
         });
     });
@@ -433,10 +435,10 @@ describe("Unread", () => {
 
         beforeEach(() => {
             room = new Room(roomId, client, myId);
-            jest.spyOn(logger, "warn");
+            vi.spyOn(logger, "warn");
 
             // Don't care about the code path of hidden events.
-            mocked(haveRendererForEvent).mockClear().mockReturnValue(true);
+            vi.mocked(haveRendererForEvent).mockClear().mockReturnValue(true);
         });
 
         describe("with a single event on the main timeline", () => {
@@ -538,10 +540,10 @@ describe("Unread", () => {
 
         beforeEach(async () => {
             room = new Room(roomId, client, myId);
-            jest.spyOn(logger, "warn");
+            vi.spyOn(logger, "warn");
 
             // Don't care about the code path of hidden events.
-            mocked(haveRendererForEvent).mockClear().mockReturnValue(true);
+            vi.mocked(haveRendererForEvent).mockClear().mockReturnValue(true);
         });
 
         it("returns false when no threads", () => {
