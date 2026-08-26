@@ -46,11 +46,18 @@ export interface FileViewerOptions {
      * uniquely identifies the file viewer
      */
     id: string;
+    /**
+     * top bar title of the card
+     */
     cardHeader: string;
     /**
      * tooltip/text for the "open" button in the file/url preview tile
      */
     buttonText: string;
+    /**
+     * icon for the button
+     */
+    buttonIcon: JSX.Element;
 }
 
 export type FileViewerRenderFunction = (props: FileViewerProps) => JSX.Element;
