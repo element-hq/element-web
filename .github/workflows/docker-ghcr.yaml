@@ -45,7 +45,7 @@ jobs:
               uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3
 
             - name: Build and load
-              uses: docker/bake-action@5be5f02ff8819ecd3092ea6b2e6261c31774f2b4 # v6
+              uses: docker/bake-action@d3418bd7d0e9324001bca92fa8ba175ea7e6dc9b # v7
               with:
                   source: .
                   files: ./docker-bake.hcl
@@ -163,7 +163,7 @@ jobs:
             # Both targets are built in a single bake so that the app is only compiled once.
             - name: Build and push
               id: build-and-push
-              uses: docker/bake-action@5be5f02ff8819ecd3092ea6b2e6261c31774f2b4 # v6
+              uses: docker/bake-action@d3418bd7d0e9324001bca92fa8ba175ea7e6dc9b # v7
               if: github.event_name != 'pull_request'
               with:
                   source: .
@@ -183,8 +183,12 @@ jobs:
               if: github.event_name != 'pull_request'
               run: |
                   images=""
-                  for tag in $TAGS $TAGS_MODULES; do
-                      digest=$(echo "$METADATA" | jq -er --arg t "$(basename ${tag%:*})" '.[$t]."containerimage.digest"')
-                      images+="${tag}@${digest} "
-                  done
+                  sign_target() {
+                      digest=$(echo "$METADATA" | jq -er --arg t "$1" '.[$t]."containerimage.digest"')
+                      for tag in $2; do
+                          images+="${tag}@${digest} "
+                      done
+                  }
+                  sign_target element-web "$TAGS"
+                  sign_target element-web-modules "$TAGS_MODULES"
                   cosign sign --yes ${images}
