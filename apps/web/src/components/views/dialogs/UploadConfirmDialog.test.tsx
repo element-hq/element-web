@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render, waitFor } from "test-utils-rtl";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
-import { vi, describe, it, expect } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 
 import UploadConfirmDialog from "./UploadConfirmDialog.tsx";
 
