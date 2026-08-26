@@ -6,26 +6,29 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import { type IContent } from "matrix-js-sdk/src/matrix";
 import { type UrlPreview, type MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { mkEvent } from "test-utils";
 
-import { attachMentions, attachUrlPreviews } from "../../../src/utils/messages";
-import EditorModel from "../../../src/editor/model";
-import { mkEvent } from "../../test-utils";
-import { createPartCreator } from "../editor/mock";
-import { type RoomMessageEventContent } from "../../../@types/url-preview";
-import SettingsStore from "../../../src/settings/SettingsStore";
+import { attachMentions, attachUrlPreviews } from "./messages";
+import EditorModel from "../editor/model";
+import { createPartCreator } from "../editor/__mocks__";
+import { type RoomMessageEventContent } from "../../@types/url-preview";
+import SettingsStore from "../settings/SettingsStore";
 
 describe("attachUrlPreviews", () => {
     beforeEach(() => {
         const original = SettingsStore.getValue;
-        jest.spyOn(SettingsStore, "getValue").mockImplementation(
+        vi.spyOn(SettingsStore, "getValue").mockImplementation(
             (setting) => setting === "feature_msc4095_url_preview_bundle" || original(setting),
         );
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     const makeContent = (): RoomMessageEventContent =>

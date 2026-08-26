@@ -5,33 +5,36 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import React from "react";
-import { render } from "jest-matrix-react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { RovingAction, type RovingTabIndexProviderProps } from "@element-hq/web-shared-components";
+import { render } from "test-utils-rtl";
 
-import * as KeyBindingsManagerModule from "../../../src/KeyBindingsManager";
-import { KeyBindingAction } from "../../../src/accessibility/KeyboardShortcuts";
-import { RovingTabIndexProvider } from "../../../src/accessibility/RovingTabIndex";
+import * as KeyBindingsManagerModule from "../KeyBindingsManager";
+import { KeyBindingAction } from "./KeyboardShortcuts";
+import { RovingTabIndexProvider } from "./RovingTabIndex";
 
-jest.mock("@element-hq/web-shared-components", () => {
-    const actual = jest.requireActual("@element-hq/web-shared-components");
-    const mockSharedRovingTabIndexProvider = jest.fn(({ children }: RovingTabIndexProviderProps) => {
-        return <>{children({ onDragEndHandler: jest.fn(), onKeyDownHandler: jest.fn() })}</>;
+const { mockSharedRovingTabIndexProvider } = vi.hoisted(() => ({
+    mockSharedRovingTabIndexProvider: vi.fn(),
+}));
+
+vi.mock("@element-hq/web-shared-components", async () => {
+    const actual = await vi.importActual<typeof import("@element-hq/web-shared-components")>(
+        "@element-hq/web-shared-components",
+    );
+    mockSharedRovingTabIndexProvider.mockImplementation(({ children }: RovingTabIndexProviderProps) => {
+        return <>{children({ onDragEndHandler: vi.fn(), onKeyDownHandler: vi.fn() })}</>;
     });
 
     return {
-        __mockSharedRovingTabIndexProvider: mockSharedRovingTabIndexProvider,
         ...actual,
         RovingTabIndexProvider: mockSharedRovingTabIndexProvider,
     };
 });
 
-const getMockSharedRovingTabIndexProvider = (): jest.Mock => {
-    return jest.requireMock("@element-hq/web-shared-components").__mockSharedRovingTabIndexProvider as jest.Mock;
-};
-
 const getInjectedGetAction = (): NonNullable<RovingTabIndexProviderProps["getAction"]> => {
-    const mockSharedRovingTabIndexProvider = getMockSharedRovingTabIndexProvider();
     expect(mockSharedRovingTabIndexProvider).toHaveBeenCalled();
     const getAction = (mockSharedRovingTabIndexProvider.mock.calls.at(-1)![0] as RovingTabIndexProviderProps).getAction;
     expect(getAction).toBeDefined();
@@ -40,9 +43,8 @@ const getInjectedGetAction = (): NonNullable<RovingTabIndexProviderProps["getAct
 
 describe("RovingTabIndex adapter", () => {
     beforeEach(() => {
-        const mockSharedRovingTabIndexProvider = getMockSharedRovingTabIndexProvider();
         mockSharedRovingTabIndexProvider.mockClear();
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     it.each([
@@ -55,8 +57,8 @@ describe("RovingTabIndex adapter", () => {
         [KeyBindingAction.Tab, RovingAction.Tab],
     ])("maps %s to %s", (accessibilityAction, expectedRovingAction) => {
         const manager = new KeyBindingsManagerModule.KeyBindingsManager();
-        jest.spyOn(KeyBindingsManagerModule, "getKeyBindingsManager").mockReturnValue(manager);
-        jest.spyOn(manager, "getAccessibilityAction").mockReturnValue(accessibilityAction);
+        vi.spyOn(KeyBindingsManagerModule, "getKeyBindingsManager").mockReturnValue(manager);
+        vi.spyOn(manager, "getAccessibilityAction").mockReturnValue(accessibilityAction);
 
         render(<RovingTabIndexProvider>{() => null}</RovingTabIndexProvider>);
 
@@ -66,8 +68,8 @@ describe("RovingTabIndex adapter", () => {
 
     it("returns undefined when there is no matching accessibility action", () => {
         const manager = new KeyBindingsManagerModule.KeyBindingsManager();
-        jest.spyOn(KeyBindingsManagerModule, "getKeyBindingsManager").mockReturnValue(manager);
-        jest.spyOn(manager, "getAccessibilityAction").mockReturnValue(undefined);
+        vi.spyOn(KeyBindingsManagerModule, "getKeyBindingsManager").mockReturnValue(manager);
+        vi.spyOn(manager, "getAccessibilityAction").mockReturnValue(undefined);
 
         render(<RovingTabIndexProvider>{() => null}</RovingTabIndexProvider>);
 
@@ -76,7 +78,7 @@ describe("RovingTabIndex adapter", () => {
     });
 
     it("forwards provider props to shared-components", () => {
-        const onKeyDown = jest.fn();
+        const onKeyDown = vi.fn();
 
         render(
             <RovingTabIndexProvider handleHomeEnd handleLoop handleUpDown onKeyDown={onKeyDown} scrollIntoView>
@@ -84,7 +86,6 @@ describe("RovingTabIndex adapter", () => {
             </RovingTabIndexProvider>,
         );
 
-        const mockSharedRovingTabIndexProvider = getMockSharedRovingTabIndexProvider();
         const props = mockSharedRovingTabIndexProvider.mock.calls.at(-1)![0] as RovingTabIndexProviderProps;
         expect(props.handleHomeEnd).toBe(true);
         expect(props.handleLoop).toBe(true);
