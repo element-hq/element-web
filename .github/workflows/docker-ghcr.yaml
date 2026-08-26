@@ -1,0 +1,190 @@
+name: Docker GHCR
+
+# Publishes the fork's Element Web images to GHCR under this account.
+# Kept separate from the upstream `Docker` workflow so upstream changes to
+# docker.yaml/docker-bake.hcl keep merging cleanly; that workflow's registry
+# steps (DockerHub, oci.element.io, Vault, Tailscale) can never run here, and
+# its cron would otherwise burn Actions minutes building images nothing pulls.
+
+on:
+    workflow_dispatch: {}
+    push:
+        branches: [develop]
+    pull_request: {}
+
+concurrency: ${{ github.workflow }}-${{ github.ref_name }}
+permissions: {}
+
+env:
+    REGISTRY: ghcr.io
+    IMAGE_PREFIX: ghcr.io/${{ github.repository_owner }}
+
+jobs:
+    buildx:
+        name: Docker Buildx (GHCR)
+        runs-on: ubuntu-24.04
+        permissions:
+            id-token: write # needed for signing the images with GitHub OIDC Token
+            packages: write # publish to ghcr.io
+        env:
+            TEST_TAG: ${{ env.IMAGE_PREFIX }}/element-web:test
+            TEST_TAG_MODULES: ${{ env.IMAGE_PREFIX }}/element-web/modules:test
+        steps:
+            - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+              with:
+                  fetch-depth: 0 # needed for docker-package to be able to calculate the version
+                  persist-credentials: false
+
+            - name: Install Cosign
+              uses: sigstore/cosign-installer@faadde0282f980f804201a6a71c5e12d86732f16 # v4
+
+            - name: Set up QEMU
+              uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392 # v3
+
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3
+
+            - name: Build and load
+              uses: docker/bake-action@v6
+              with:
+                  source: .
+                  files: ./docker-bake.hcl
+                  load: true
+                  set: |
+                      element-web.tags=${{ env.TEST_TAG }}
+                      element-web-modules.tags=${{ env.TEST_TAG_MODULES }}
+
+            - name: Test the image
+              env:
+                  IMAGE: ${{ env.TEST_TAG }}
+              timeout-minutes: 2
+              run: |
+                  set -x
+
+                  # Make a fake module to test the image
+                  MODULE_PATH="module_name/index.js"
+                  mkdir -p $(dirname test_modules/$MODULE_PATH)
+                  echo 'alert("Testing");' > test_modules/$MODULE_PATH
+
+                  # Spin up a version of the image with our test module
+                  ELEMENT_WEB_PORT=8181
+                  CONTAINER_ID=$(
+                      docker run \
+                          --rm \
+                          -e "ELEMENT_WEB_PORT=$ELEMENT_WEB_PORT" \
+                          -dp "$ELEMENT_WEB_PORT:$ELEMENT_WEB_PORT" \
+                          -v $(pwd)/test_modules:/modules \
+                          "$IMAGE"
+                  )
+
+                  # Run some smoke tests
+                  wget --retry-connrefused --tries=5 -q --wait=3 --spider "http://localhost:$ELEMENT_WEB_PORT/modules/module_name/index.js"
+                  MODULE_0=$(curl "http://localhost:$ELEMENT_WEB_PORT/config.json" | jq -r .modules[0])
+                  test "$MODULE_0" = "/modules/${MODULE_PATH}"
+
+                  # Check healthcheck
+                  until test "$(docker inspect -f {{.State.Health.Status}} $CONTAINER_ID)" == "healthy"; do
+                      sleep 1
+                  done
+
+                  # Clean up
+                  docker stop "$CONTAINER_ID"
+
+            - name: Test the modules image
+              env:
+                IMAGE: ${{ env.TEST_TAG_MODULES }}
+              timeout-minutes: 2
+              run: |
+                  set -x
+
+                  ELEMENT_WEB_PORT=8182
+                  CONTAINER_ID=$(
+                      docker run \
+                          --rm \
+                          -e "ELEMENT_WEB_PORT=$ELEMENT_WEB_PORT" \
+                          -dp "$ELEMENT_WEB_PORT:$ELEMENT_WEB_PORT" \
+                          "$IMAGE"
+                  )
+
+                  # Every module pinned in the Dockerfile should be listed in the config and served
+                  MODULES=$(grep -oE '^ARG MODULE_[A-Z0-9_]+_VERSION=' apps/web/Dockerfile |
+                      sed -E 's/^ARG MODULE_(.*)_VERSION=$/\1/' | tr '[:upper:]_' '[:lower]-')
+                  test -n "$MODULES"
+
+                  CONFIG=$(wget --retry-connrefused --tries=5 -q --wait=3 -O - "http://localhost:$ELEMENT_WEB_PORT/config.json")
+                  for MODULE in $MODULES; do
+                      echo "$CONFIG" | jq -e --arg m "/modules/$MODULE/index.js" '.modules | index($m)'
+                      wget -q --spider "http://localhost:$ELEMENT_WEB_PORT/modules/$MODULE/index.js"
+                  done
+
+                  # Check healthcheck
+                  until test "$(docker inspect -f '{{.State.Health.Status}}' "$CONTAINER_ID")" == "healthy"; do
+                      sleep 1
+                  done
+
+                  # Clean up
+                  docker stop "$CONTAINER_ID"
+
+            - name: Docker meta
+              id: meta
+              uses: docker/metadata-action@v5
+              if: github.event_name != 'pull_request'
+              with:
+                  images: |
+                      ${{ env.IMAGE_PREFIX }}/element-web
+                  tags: |
+                      type=ref,event=branch
+                      type=ref,event=tag
+                  flavor: |
+                      latest=${{ contains(github.ref_name, '-rc.') && 'false' || 'auto' }}
+                  bake-target: docker-metadata-action
+
+            - name: Docker meta (modules)
+              id: meta-modules
+              uses: docker/metadata-action@v5
+              if: github.event_name != 'pull_request'
+              with:
+                  images: ${{ env.IMAGE_PREFIX }}/element-web/modules
+                  tags: |
+                      type=ref,event=branch
+                      type=ref,event=tag
+                  flavor: |
+                      latest=${{ contains(github.ref_name, '-rc.') && 'false' || 'auto' }}
+                  bake-target: docker-metadata-action-modules
+
+            - name: Login to GitHub Container Registry
+              uses: docker/login-action@v3
+              if: github.event_name != 'pull_request'
+              with:
+                  registry: ghcr.io
+                  username: ${{ github.repository_owner }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
+
+            # Both targets are built in a single bake so that the app is only compiled once.
+            - name: Build and push
+              id: build-and-push
+              uses: docker/bake-action@v6
+              if: github.event_name != 'pull_request'
+              with:
+                  source: .
+                  files: |
+                      ./docker-bake.hcl
+                      ${{ steps.meta.outputs.bake-file }}
+                      ${{ steps.meta-modules.outputs.bake-file }}
+                  push: true
+                  vars: |
+                      PLATFORMS=linux/amd64,linux/arm64
+
+            - name: Sign the images with GitHub OIDC Token
+              env:
+                  METADATA: ${{ steps.build-and-push.outputs.metadata }}
+                  TAGS: ${{ steps.meta.outputs.tags }}
+                  TAGS_MODULES: ${{ steps.meta-modules.outputs.tags }}
+              if: github.event_name != 'pull_request'
+              run: |
+                  images=""
+                  for tag in $TAGS $TAGS_MODULES; do
+                      digest=$(echo "$METADATA" | jq -er --arg t "$(basename ${tag%:*})" '.[$t]."containerimage.digest"')
+                      images+="${tag}@${digest} "
+                  done
+                  cosign sign --yes ${images}
