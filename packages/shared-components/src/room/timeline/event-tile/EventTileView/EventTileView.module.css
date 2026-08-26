@@ -554,7 +554,7 @@
         font-size: 0.625rem;
         /* Compound Avatar applies its own line-height to imageless fallbacks.
            Keep the initial vertically centred in the IRC avatar slot. */
-        line-height: calc(var(--cpd-font-size-body-md) - 2px);
+        line-height: calc(var(--cpd-font-size-body-md) - 2px) !important;
     }
 
     .slotPadlock,
@@ -749,7 +749,7 @@
         /* Media surfaces own their background and dimensions. Keep room for
            the timestamp which is positioned over the lower-right corner. */
         :global(.mx_MediaBody) {
-            padding-inline-end: 48px;
+            padding-inline-end: 48px !important;
             border-radius: 0;
             border-start-start-radius: var(--event-tile-bubble-corner-radius);
             border-start-end-radius: var(--event-tile-bubble-corner-radius);
@@ -1116,7 +1116,7 @@
         .slotAvatar > * > * {
             /* Compound Avatar sets its own fallback line-height; override it
                so initials remain vertically centred in the 14px avatar. */
-            line-height: 1;
+            line-height: 1 !important;
             box-shadow: none;
         }
 
