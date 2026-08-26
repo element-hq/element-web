@@ -108,7 +108,7 @@ jobs:
 
                   # Every module pinned in the Dockerfile should be listed in the config and served
                   MODULES=$(grep -oE '^ARG MODULE_[A-Z0-9_]+_VERSION=' apps/web/Dockerfile |
-                      sed -E 's/^ARG MODULE_(.*)_VERSION=$/\1/' | tr '[:upper:]_' '[:lower]-')
+                      sed -E 's/^ARG MODULE_(.*)_VERSION=$/\1/' | tr '[:upper:]_' '[:lower:]-')
                   test -n "$MODULES"
 
                   CONFIG=$(wget --retry-connrefused --tries=5 -q --wait=3 -O - "http://localhost:$ELEMENT_WEB_PORT/config.json")
