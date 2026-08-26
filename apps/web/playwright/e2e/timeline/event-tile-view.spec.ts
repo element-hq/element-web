@@ -83,6 +83,7 @@ test.describe("EventTileView application coverage", () => {
             await expect(tile.locator(".mx_MessageTimestamp")).toBeVisible();
             await expect(tile).toMatchScreenshot("event-tile-hovered.png", {
                 css: ".mx_MessageTimestamp { visibility: hidden; }",
+                hideJumpToBottomButton: true,
             });
 
             // Move the pointer away so the following assertions exercise keyboard focus rather than hover.
@@ -103,6 +104,7 @@ test.describe("EventTileView application coverage", () => {
             // The context menu is rendered in a portal above the tile, so capturing the tile alone clips its menu.
             await expect(page).toMatchScreenshot("event-tile-context-menu-selected.png", {
                 css: ".mx_MessageTimestamp { visibility: hidden; }",
+                hideJumpToBottomButton: true,
             });
             await page.keyboard.press("Escape");
             await expect(tile).toMatchScreenshot("event-tile-context-menu-closed.png", {
@@ -123,6 +125,7 @@ test.describe("EventTileView application coverage", () => {
                 const highlightedTile = page.locator(`.mx_EventTile[data-event-id='${highlightedEvent.event_id}']`);
                 await expect(highlightedTile).toMatchScreenshot("event-tile-highlighted.png", {
                     css: ".mx_MessageTimestamp { visibility: hidden; }",
+                    hideJumpToBottomButton: true,
                 });
             }
 
@@ -130,6 +133,7 @@ test.describe("EventTileView application coverage", () => {
             const selectedTile = page.locator(`.mx_EventTile[data-event-id='${event.event_id}']`);
             await expect(selectedTile).toMatchScreenshot("event-tile-permalink-selected.png", {
                 css: ".mx_MessageTimestamp { visibility: hidden; }",
+                hideJumpToBottomButton: true,
             });
 
             await selectedTile.locator(".mx_EventTile_line").hover();
@@ -138,6 +142,7 @@ test.describe("EventTileView application coverage", () => {
             await editButton.click();
             await expect(selectedTile).toMatchScreenshot("event-tile-editing.png", {
                 css: ".mx_MessageTimestamp { visibility: hidden; }",
+                hideJumpToBottomButton: true,
             });
             await expect(page.getByRole("textbox", { name: "Edit message" })).toBeVisible();
             await page.getByRole("textbox", { name: "Edit message" }).fill("Interaction target edited");
