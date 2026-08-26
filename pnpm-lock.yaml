@@ -225,8 +225,8 @@ catalogs:
       specifier: 10.0.1
       version: 10.0.1
     '@vitejs/plugin-react':
-      specifier: 6.0.5
-      version: 6.0.5
+      specifier: 6.1.0
+      version: 6.1.0
     '@vitest/browser-playwright':
       specifier: 4.1.10
       version: 4.1.10
@@ -1106,7 +1106,7 @@ importers:
         version: 19.2.3(@types/react@19.2.18)
       '@vitejs/plugin-react':
         specifier: 'catalog:'
-        version: 6.0.5(vite@8.2.1)
+        version: 6.1.0(vite@8.2.1)
       matrix-web-i18n:
         specifier: ^3.6.0
         version: 3.6.0(supports-color@10.2.2)
@@ -1158,7 +1158,7 @@ importers:
         version: 19.2.18
       '@vitejs/plugin-react':
         specifier: 'catalog:'
-        version: 6.0.5(vite@8.2.1)
+        version: 6.1.0(vite@8.2.1)
       react:
         specifier: 'catalog:'
         version: 19.2.8
@@ -1238,7 +1238,7 @@ importers:
         version: 19.2.18
       '@vitejs/plugin-react':
         specifier: 'catalog:'
-        version: 6.0.5(vite@8.2.1)
+        version: 6.1.0(vite@8.2.1)
       '@vitest/browser-playwright':
         specifier: 'catalog:'
         version: 4.1.10(playwright@1.61.1)(vite@8.2.1)(vitest@4.1.10)
@@ -1383,8 +1383,8 @@ importers:
         specifier: ^1.7.0
         version: 1.16.0
       '@tanstack/react-virtual':
-        specifier: 3.14.9
-        version: 3.14.9(react-dom@19.2.8)(react@19.2.8)
+        specifier: 3.14.10
+        version: 3.14.10(react-dom@19.2.8)(react@19.2.8)
       '@vector-im/compound-design-tokens':
         specifier: 'catalog:'
         version: 10.2.1(@types/react@19.2.18)(react@19.2.8)
@@ -1505,7 +1505,7 @@ importers:
         version: 10.0.1(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.3.0)(@types/react-dom@19.2.3)(@types/react@19.2.18)(@vector-im/compound-design-tokens@10.2.1)(react-dom@19.2.8)(react@19.2.8)
       '@vitejs/plugin-react':
         specifier: 'catalog:'
-        version: 6.0.5(vite@8.2.1)
+        version: 6.1.0(vite@8.2.1)
       '@vitest/browser-playwright':
         specifier: 'catalog:'
         version: 4.1.10(playwright@1.61.1)(vite@8.2.1)(vitest@4.1.10)
@@ -5822,14 +5822,14 @@ packages:
     resolution: {integrity: sha512-4BAffykYOgO+5nzBWYwE3W90sBgLJoUPRWWcL8wlyiM8IB8ipJz3UMJ9KXQd1RKQXpKp8Tutn80HZtWsu2u76w==}
     engines: {node: '>=10'}
 
-  '@tanstack/react-virtual@3.14.9':
-    resolution: {integrity: sha512-qZyr0FZDP8rDC4WBhsryIZmAd9bveJvFGUJJtskWaew6/0dTRS6wZxnR6VQ5bY2KwL3LjerrHqQLk3a0GKcPXQ==}
+  '@tanstack/react-virtual@3.14.10':
+    resolution: {integrity: sha512-SRyoUbdFMRHuYXMijV5H4ZarQWpXkj3iANq8OFre+pybeVap8ZJjZ3Nz9bVjx4d8PfobVUQUdKyyyHYk3E+djw==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
-  '@tanstack/virtual-core@3.17.7':
-    resolution: {integrity: sha512-bp+v10y65sp2H7WpWfIMyxTNfl8ZVfxFTLRjPIFRryi6FV/J33z4IS53WO4pTk36KlvJ4iLiQz+oaydDC1xbcA==}
+  '@tanstack/virtual-core@3.17.8':
+    resolution: {integrity: sha512-BfEvehNpOT75r5Ksc5xW6NZuXujTfb7nlSEyVu4XHG3gdxNg1KqXruWbDewXOUaUYIo4oRbSfkjIajz4MAT8tA==}
 
   '@testcontainers/postgresql@12.1.0':
     resolution: {integrity: sha512-Pjf2VSVNirEPfz36nidyrVAnZvc2YhajOznY4VgyEsvfTd5qiMNOuPq96drREvxAUtXl5SFLX7vXj7sSq4aTcA==}
@@ -6612,17 +6612,20 @@ packages:
     bundledDependencies:
       - '@vector-im/matrix-wysiwyg-wasm'
 
-  '@vitejs/plugin-react@6.0.5':
-    resolution: {integrity: sha512-BOVzne/NL162sMdResB25mUv+vWMF5NoAjNf09TeGlE7ZpszZWSD3winycicLJw72yeVsoCn/2kOhEuCvEShMA==}
+  '@vitejs/plugin-react@6.1.0':
+    resolution: {integrity: sha512-qd2BzUBehkov86WFhg0JkEFEYyCLG9uPCe6qWTY/kRlss9OvJrOF2UbIWT7p+8IzZHkEu0DNGHc4HSv+JdDLsw==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
       '@rolldown/plugin-babel': ^0.1.7 || ^0.2.0
       babel-plugin-react-compiler: ^1.0.0
+      oxc-transform-react: ^0.145.0
       vite: ^8.0.0
     peerDependenciesMeta:
       '@rolldown/plugin-babel':
         optional: true
       babel-plugin-react-compiler:
+        optional: true
+      oxc-transform-react:
         optional: true
 
   '@vitejs/plugin-vue@5.2.4':
@@ -18399,13 +18402,13 @@ snapshots:
     dependencies:
       defer-to-connect: 2.0.1
 
-  '@tanstack/react-virtual@3.14.9(react-dom@19.2.8)(react@19.2.8)':
+  '@tanstack/react-virtual@3.14.10(react-dom@19.2.8)(react@19.2.8)':
     dependencies:
-      '@tanstack/virtual-core': 3.17.7(patch_hash=9db9d80c4fe7a7a9911643522aef9bc9359075570c38f3d847ff75ed635d921c)
+      '@tanstack/virtual-core': 3.17.8(patch_hash=9db9d80c4fe7a7a9911643522aef9bc9359075570c38f3d847ff75ed635d921c)
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
 
-  '@tanstack/virtual-core@3.17.7(patch_hash=9db9d80c4fe7a7a9911643522aef9bc9359075570c38f3d847ff75ed635d921c)': {}
+  '@tanstack/virtual-core@3.17.8(patch_hash=9db9d80c4fe7a7a9911643522aef9bc9359075570c38f3d847ff75ed635d921c)': {}
 
   '@testcontainers/postgresql@12.1.0(supports-color@10.2.2)':
     dependencies:
@@ -19176,7 +19179,7 @@ snapshots:
     dependencies:
       react: 19.2.8
 
-  '@vitejs/plugin-react@6.0.5(vite@8.2.1)':
+  '@vitejs/plugin-react@6.1.0(vite@8.2.1)':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
       vite: 8.2.1(@types/node@25.9.3)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1)(terser@5.49.0)(yaml@2.9.0)

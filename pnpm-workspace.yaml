@@ -42,7 +42,7 @@ catalog:
     "@vitest/spy": 4.1.10
     "@vitest/coverage-v8": 4.1.10
     "@vitest/browser-playwright": 4.1.10
-    "@vitejs/plugin-react": 6.0.5
+    "@vitejs/plugin-react": 6.1.0
     unplugin-dts: 1.0.1
     # nx
     nx: 23.1.1
