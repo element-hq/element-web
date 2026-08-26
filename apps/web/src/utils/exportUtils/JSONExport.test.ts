@@ -6,14 +6,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import JSONExporter from "../../../../src/utils/exportUtils/JSONExport";
-import { createTestClient, mkStubRoom, REPEATABLE_DATE } from "../../../test-utils";
-import { ExportType, type IExportOptions } from "../../../../src/utils/exportUtils/exportUtils";
+// @vitest-environment happy-dom
+
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { createTestClient, mkStubRoom, REPEATABLE_DATE } from "test-utils";
+
+import { ExportType, type IExportOptions } from "./exportUtils";
+import JSONExporter from "./JSONExport";
 
 describe("JSONExport", () => {
     beforeEach(() => {
-        jest.useFakeTimers();
-        jest.setSystemTime(REPEATABLE_DATE);
+        vi.useFakeTimers();
+        vi.setSystemTime(REPEATABLE_DATE);
     });
 
     it("should have an Element-branded destination file name", () => {

@@ -41,6 +41,7 @@ const labelMentionUser = "Notify when someone mentions using @displayname or @mx
 const labelMentionRoom = "Notify when someone mentions using @room";
 const labelMentionKeyword = "Notify when someone uses a keyword";
 const labelResetDefault = "Reset to default settings";
+const errorMessage = "Your notification settings could not be updated";
 
 const keywords = ["justjann3", "justj4nn3", "justj4nne", "Janne", "J4nne", "Jann3", "jann3", "j4nne", "janne"];
 
@@ -158,6 +159,57 @@ describe("<Notifications />", () => {
         expect(cli.setPushRuleEnabled).not.toHaveBeenCalled();
         expect(cli.addPushRule).not.toHaveBeenCalled();
         expect(cli.deletePushRule).not.toHaveBeenCalled();
+    });
+
+    it("shows an error when the settings could not be saved", async () => {
+        (cli.setPushRuleEnabled as Mock).mockRejectedValue(new Error("server said no"));
+
+        const user = userEvent.setup();
+        const screen = render(
+            <MatrixClientContext.Provider value={cli}>
+                <NotificationSettings2 />
+            </MatrixClientContext.Provider>,
+        );
+        await act(waitForUpdate);
+
+        // Guard: nothing has gone wrong yet.
+        expect(screen.queryByText(errorMessage)).toBeNull();
+
+        await act(async () => {
+            await user.click(screen.getByLabelText(labelGlobalMute));
+            await waitForUpdate();
+        });
+
+        expect(screen.getByText(errorMessage)).toBeInTheDocument();
+    });
+
+    it("resends the failed change when the user asks to try again", async () => {
+        const setPushRuleEnabled = cli.setPushRuleEnabled as Mock;
+        setPushRuleEnabled.mockRejectedValue(new Error("server said no"));
+
+        const user = userEvent.setup();
+        const screen = render(
+            <MatrixClientContext.Provider value={cli}>
+                <NotificationSettings2 />
+            </MatrixClientContext.Provider>,
+        );
+        await act(waitForUpdate);
+
+        await act(async () => {
+            await user.click(screen.getByLabelText(labelGlobalMute));
+            await waitForUpdate();
+        });
+        const attemptsBeforeRetry = setPushRuleEnabled.mock.calls.length;
+        expect(attemptsBeforeRetry).toBeGreaterThan(0);
+
+        setPushRuleEnabled.mockResolvedValue({});
+        await act(async () => {
+            await user.click(screen.getByRole("button", { name: "Try again" }));
+            await waitForUpdate();
+        });
+
+        expect(setPushRuleEnabled.mock.calls.length).toBeGreaterThan(attemptsBeforeRetry);
+        expect(screen.queryByText(errorMessage)).toBeNull();
     });
 
     describe("form elements actually toggle the model value", () => {

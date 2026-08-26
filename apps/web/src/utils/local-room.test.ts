@@ -6,18 +6,20 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked } from "jest-mock";
+// @vitest-environment happy-dom
+
+import { describe, it, expect, beforeEach, vi, type Mock } from "vitest";
 import { type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import { createTestClient } from "test-utils";
 
-import { LocalRoom, LocalRoomState, LOCAL_ROOM_ID_PREFIX } from "../../../src/models/LocalRoom";
-import * as localRoomModule from "../../../src/utils/local-room";
-import defaultDispatcher from "../../../src/dispatcher/dispatcher";
-import { createTestClient } from "../../test-utils";
-import { isRoomReady } from "../../../src/utils/localRoom/isRoomReady";
+import { LocalRoom, LocalRoomState, LOCAL_ROOM_ID_PREFIX } from "../models/LocalRoom";
+import * as localRoomModule from "./local-room";
+import defaultDispatcher from "../dispatcher/dispatcher";
+import { isRoomReady } from "./localRoom/isRoomReady";
 
-jest.mock("../../../src/utils/localRoom/isRoomReady", () => ({
-    isRoomReady: jest.fn(),
+vi.mock("./localRoom/isRoomReady", () => ({
+    isRoomReady: vi.fn(),
 }));
 
 describe("local-room", () => {
@@ -31,7 +33,7 @@ describe("local-room", () => {
         room1 = new Room("!room1:example.com", client, userId1);
         room1.getMyMembership = () => KnownMembership.Join;
         localRoom = new LocalRoom(LOCAL_ROOM_ID_PREFIX + "test", client, "@test:example.com");
-        mocked(client.getRoom).mockImplementation((roomId: string) => {
+        vi.mocked(client.getRoom).mockImplementation((roomId: string | undefined) => {
             if (roomId === localRoom.roomId) {
                 return localRoom;
             }
@@ -40,10 +42,10 @@ describe("local-room", () => {
     });
 
     describe("doMaybeLocalRoomAction", () => {
-        let callback: jest.Mock;
+        let callback: Mock;
 
         beforeEach(() => {
-            callback = jest.fn();
+            callback = vi.fn();
             callback.mockReturnValue(Promise.resolve());
             localRoom.actualRoomId = "@new:example.com";
         });
@@ -63,7 +65,7 @@ describe("local-room", () => {
             let prom: Promise<unknown>;
 
             beforeEach(() => {
-                jest.spyOn(defaultDispatcher, "dispatch");
+                vi.spyOn(defaultDispatcher, "dispatch");
                 prom = localRoomModule.doMaybeLocalRoomAction(localRoom.roomId, callback, client);
             });
 
@@ -78,7 +80,7 @@ describe("local-room", () => {
                 localRoom.afterCreateCallbacks.forEach((callback) => {
                     callback(localRoom.actualRoomId!);
                 });
-                await prom;
+                await expect(prom).resolves.toBeUndefined();
             });
         });
     });
@@ -92,12 +94,12 @@ describe("local-room", () => {
                 localRoomCallbackRoomId = roomId;
                 return Promise.resolve();
             });
-            jest.useFakeTimers();
+            vi.useFakeTimers();
         });
 
         describe("for an immediate ready room", () => {
             beforeEach(() => {
-                mocked(isRoomReady).mockReturnValue(true);
+                vi.mocked(isRoomReady).mockReturnValue(true);
             });
 
             it("should invoke the callbacks, set the room state to created and return the actual room id", async () => {
@@ -114,7 +116,7 @@ describe("local-room", () => {
 
         describe("for a room running into the create timeout", () => {
             beforeEach(() => {
-                mocked(isRoomReady).mockReturnValue(false);
+                vi.mocked(isRoomReady).mockReturnValue(false);
             });
 
             it("should invoke the callbacks, set the room state to created and return the actual room id", async () => {
@@ -123,18 +125,18 @@ describe("local-room", () => {
                     localRoom,
                     room1.roomId,
                 );
-                jest.advanceTimersByTime(5000);
+                vi.advanceTimersByTime(5000);
                 const roomId = await prom;
                 expect(localRoom.state).toBe(LocalRoomState.CREATED);
                 expect(localRoomCallbackRoomId).toBe(room1.roomId);
                 expect(roomId).toBe(room1.roomId);
-                expect(jest.getTimerCount()).toBe(0);
+                expect(vi.getTimerCount()).toBe(0);
             });
         });
 
         describe("for a room that is ready after a while", () => {
             beforeEach(() => {
-                mocked(isRoomReady).mockReturnValue(false);
+                vi.mocked(isRoomReady).mockReturnValue(false);
             });
 
             it("should invoke the callbacks, set the room state to created and return the actual room id", async () => {
@@ -143,13 +145,13 @@ describe("local-room", () => {
                     localRoom,
                     room1.roomId,
                 );
-                mocked(isRoomReady).mockReturnValue(true);
-                jest.advanceTimersByTime(500);
+                vi.mocked(isRoomReady).mockReturnValue(true);
+                vi.advanceTimersByTime(500);
                 const roomId = await prom;
                 expect(localRoom.state).toBe(LocalRoomState.CREATED);
                 expect(localRoomCallbackRoomId).toBe(room1.roomId);
                 expect(roomId).toBe(room1.roomId);
-                expect(jest.getTimerCount()).toBe(0);
+                expect(vi.getTimerCount()).toBe(0);
             });
         });
     });
