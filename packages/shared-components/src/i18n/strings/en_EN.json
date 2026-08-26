@@ -58,6 +58,18 @@
         }
     },
     "devtools": {
+        "custom_themes": {
+            "add": "Add custom theme",
+            "downloading": "Downloading custom theme…",
+            "error_already_installed": "A theme with that name is already installed.",
+            "error_downloading": "Error downloading theme",
+            "error_invalid": "Invalid theme schema.",
+            "error_save_failed": "Failed to save the change. It may still complete in the background.",
+            "help": "Enter the URL of a custom theme you want to apply.",
+            "installed_heading": "Installed custom themes",
+            "refresh": "Re-download theme",
+            "url_label": "Custom theme URL"
+        },
         "toggle_event": "toggle event"
     },
     "emoji": {

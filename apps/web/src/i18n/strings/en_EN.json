@@ -796,6 +796,9 @@
             "title": "End-to-end encryption",
             "user_signing_private_key_cached_status": "User signing private key:"
         },
+        "custom_themes": {
+            "title": "Custom themes"
+        },
         "developer_mode": "Developer mode",
         "developer_tools": "Developer Tools",
         "device_dehydrated_no": "Dehydrated: No",
@@ -1500,7 +1503,6 @@
         "click_for_info": "Click for more info",
         "config_only": "Can only be enabled via config.json.",
         "currently_experimental": "Currently experimental.",
-        "custom_themes": "Support adding custom themes",
         "dynamic_room_predecessors": "Dynamic room predecessors",
         "dynamic_room_predecessors_description": "Enable MSC3946 (to support late-arriving room archives)",
         "element_call_video_rooms": "Element Call video rooms",
@@ -1533,7 +1535,6 @@
         "group_profile": "Profile",
         "group_rooms": "Rooms",
         "group_spaces": "Spaces",
-        "group_themes": "Themes",
         "group_threads": "Threads",
         "group_ui": "User interface",
         "group_voip": "Voice & Video",
@@ -2462,11 +2463,6 @@
             "custom_font_description": "Set the name of a font installed on your system & %(brand)s will attempt to use it.",
             "custom_font_name": "System font name",
             "custom_font_size": "Use custom size",
-            "custom_theme_add": "Add custom theme",
-            "custom_theme_downloading": "Downloading custom theme…",
-            "custom_theme_error_downloading": "Error downloading theme",
-            "custom_theme_help": "Enter the URL of a custom theme you want to apply.",
-            "custom_theme_invalid": "Invalid theme schema.",
             "dialog_title": "<strong>Settings:</strong> Appearance",
             "font_size": "Font size",
             "font_size_default": "%(fontSize)s (default)",

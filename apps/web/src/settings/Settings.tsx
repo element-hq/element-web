@@ -98,7 +98,6 @@ export enum LabGroup {
     Threads,
     VoiceAndVideo,
     Moderation,
-    Themes,
     Encryption,
     Experimental,
     Developer,
@@ -118,7 +117,6 @@ export const labGroupNames: Record<LabGroup, TranslationKey> = {
     [LabGroup.Threads]: _td("labs|group_threads"),
     [LabGroup.VoiceAndVideo]: _td("labs|group_voip"),
     [LabGroup.Moderation]: _td("labs|group_moderation"),
-    [LabGroup.Themes]: _td("labs|group_themes"),
     [LabGroup.Encryption]: _td("labs|group_encryption"),
     [LabGroup.Experimental]: _td("labs|group_experimental"),
     [LabGroup.Developer]: _td("labs|group_developer"),
@@ -216,7 +214,6 @@ export interface Settings {
     "feature_latex_maths": IFeature;
     "feature_wysiwyg_composer": IFeature;
     "feature_mjolnir": IFeature;
-    "feature_custom_themes": IFeature;
     "feature_exclude_insecure_devices": IFeature;
     "feature_bridge_state": IFeature;
     "feature_jump_to_date": IFeature;
@@ -491,14 +488,6 @@ export const SETTINGS: Settings = {
         labsGroup: LabGroup.Moderation,
         displayName: _td("labs|mjolnir"),
         description: _td("labs|currently_experimental"),
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        default: false,
-    },
-    "feature_custom_themes": {
-        isFeature: true,
-        labsGroup: LabGroup.Themes,
-        displayName: _td("labs|custom_themes"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         default: false,

@@ -11,6 +11,7 @@ import {
     type EventTimelineSet,
     EventType,
     type IRoomEvent,
+    type IStateEvent,
     type MatrixClient,
     MatrixEvent,
     MsgType,
@@ -47,6 +48,17 @@ const EVENT_MESSAGE: IRoomEvent = {
         msgtype: "m.text",
         body: "Message",
         avatar_url: "mxc://example.org/avatar.bmp",
+    },
+};
+
+const EVENT_JOIN_RULES: IStateEvent = {
+    event_id: "$3",
+    type: EventType.RoomJoinRules,
+    sender: "@bob:example.com",
+    origin_server_ts: 0,
+    state_key: "",
+    content: {
+        join_rule: "restricted",
     },
 };
 
@@ -736,6 +748,26 @@ describe("HTMLExport", () => {
 
         const file = getMessageFile(exporter);
         expect(file).not.toBeUndefined();
+    });
+
+    it("should not offer to view settings that an export cannot show", async () => {
+        mockMessages(EVENT_MESSAGE, EVENT_JOIN_RULES);
+        const exporter = new HTMLExporter(
+            room,
+            ExportType.LastNMessages,
+            {
+                attachmentsIncluded: false,
+                maxSize: 1_024 * 1_024,
+                numberOfMessages: 40,
+            },
+            () => {},
+        );
+
+        await exporter.export();
+
+        const html = await getMessageFile(exporter).text();
+        expect(html).toContain("changed who can join this room.");
+        expect(html).not.toContain("View settings");
     });
 
     it("should not crash when exporting mentions", async () => {
