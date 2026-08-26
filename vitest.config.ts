@@ -46,6 +46,10 @@ export default defineConfig({
     test: {
         projects: [
             "{apps,modules,packages}/*/vitest.config.ts",
+            // Browser-mode tests for element-web. Kept as a separate project rather than
+            // enabling browser mode on apps/web/vitest.config.ts, so that only the handful
+            // of tests which need a real browser pay for one.
+            "apps/web/vitest.browser.config.ts",
             // We run shared-components separately for now as vitest lacks support for nested projects
             // https://github.com/vitest-dev/vitest/issues/8544
             "!packages/shared-components",

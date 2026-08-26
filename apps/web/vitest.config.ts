@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { fileURLToPath } from "node:url";
-import { defineProject } from "vitest/config";
+import { defaultExclude, defineProject } from "vitest/config";
 import svgr from "vite-plugin-svgr";
 
 function resolve(specifier: string): string {
@@ -49,6 +49,8 @@ export default defineProject({
     },
     test: {
         include: ["src/**/*.test.{ts,tsx}"],
+        // `*.browser.test.*` runs in a real browser instead — see vitest.browser.config.ts
+        exclude: [...defaultExclude, "src/**/*.browser.test.{ts,tsx}"],
         environment: "node",
         pool: "threads",
         globals: false,

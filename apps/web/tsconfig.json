@@ -16,7 +16,7 @@
         "jsx": "react",
         "lib": ["es2022", "es2024.promise", "dom", "dom.iterable", "ESNext.Collection"],
         "strict": true,
-        "types": ["node", "modernizr"],
+        "types": ["node", "modernizr", "@vitest/browser/matchers"],
         "paths": {
             "jest-matrix-react": ["./test/test-utils/jest-matrix-react"],
             "test-utils-rtl": ["./test/test-utils/jest-matrix-react"],

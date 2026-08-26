@@ -42,6 +42,7 @@ catalog:
     "@vitest/spy": 4.1.11
     "@vitest/coverage-v8": 4.1.11
     "@vitest/browser-playwright": 4.1.11
+    "@vitest/browser": 4.1.11
     "@vitejs/plugin-react": 6.1.0
     unplugin-dts: 1.0.1
     # nx
