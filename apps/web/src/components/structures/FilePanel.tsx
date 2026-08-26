@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { createRef } from "react";
 import {
-    Filter,
     type EventTimelineSet,
     type IRoomTimelineData,
     type Direction,
@@ -23,6 +22,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import FilesIcon from "@vector-im/compound-design-tokens/assets/web/icons/files";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
+import { getFileTimelineSet } from "../../utils/roomFiles";
 import EventIndexPeg from "../../indexing/EventIndexPeg";
 import { _t } from "../../languageHandler";
 import SearchWarning, { WarningKind } from "../views/elements/SearchWarning";
@@ -146,20 +146,7 @@ class FilePanel extends React.Component<IProps, IState> {
     }
 
     public async fetchFileEventsServer(room: Room): Promise<EventTimelineSet> {
-        const client = MatrixClientPeg.safeGet();
-
-        const filter = new Filter(client.getSafeUserId());
-        filter.setDefinition({
-            room: {
-                timeline: {
-                    contains_url: true,
-                    types: ["m.room.message"],
-                },
-            },
-        });
-
-        filter.filterId = await client.getOrCreateFilter("FILTER_FILES_" + client.credentials.userId, filter);
-        return room.getOrCreateFilteredTimelineSet(filter);
+        return getFileTimelineSet(MatrixClientPeg.safeGet(), room);
     }
 
     private onPaginationRequest = (

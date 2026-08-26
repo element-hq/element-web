@@ -1,0 +1,113 @@
+/*
+Copyright 2026 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_PanelTabs {
+    display: flex;
+    align-items: center;
+    gap: var(--cpd-space-1x);
+}
+
+.mx_PanelTabs_tab {
+    appearance: none;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: var(--cpd-space-1x) var(--cpd-space-3x);
+    border-radius: 99px;
+    color: var(--cpd-color-text-secondary);
+    font: var(--cpd-font-body-md-medium);
+
+    &:hover {
+        background-color: var(--cpd-color-bg-subtle-secondary);
+    }
+}
+
+.mx_PanelTabs_tab_selected {
+    color: var(--cpd-color-text-primary);
+    background-color: var(--cpd-color-bg-subtle-primary);
+
+    &:hover {
+        background-color: var(--cpd-color-bg-subtle-primary);
+    }
+}
+
+.mx_FileBrowserCard_tree {
+    display: flex;
+    flex-direction: column;
+    padding: var(--cpd-space-2x) var(--cpd-space-1x);
+}
+
+.mx_FileBrowserCard_row {
+    appearance: none;
+    border: none;
+    background: transparent;
+    text-align: start;
+    width: 100%;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    gap: var(--cpd-space-2x);
+    padding: var(--cpd-space-1-5x) var(--cpd-space-2x);
+    border-radius: 8px;
+    color: var(--cpd-color-text-primary);
+    font: var(--cpd-font-body-md-regular);
+}
+
+/* Only the expandable rows respond to the pointer; file rows are inert placeholders. */
+button.mx_FileBrowserCard_row {
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--cpd-color-bg-subtle-secondary);
+    }
+}
+
+.mx_FileBrowserCard_row_depth1 {
+    padding-inline-start: var(--cpd-space-6x);
+}
+
+.mx_FileBrowserCard_row_depth2 {
+    padding-inline-start: var(--cpd-space-10x);
+    color: var(--cpd-color-text-secondary);
+}
+
+.mx_FileBrowserCard_status {
+    display: flex;
+    align-items: center;
+    padding: var(--cpd-space-2x) var(--cpd-space-2x) var(--cpd-space-2x) var(--cpd-space-10x);
+    color: var(--cpd-color-text-secondary);
+    font: var(--cpd-font-body-sm-regular);
+}
+
+.mx_FileBrowserCard_twisty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 16px;
+
+    & svg {
+        width: 16px;
+        height: 16px;
+        color: var(--cpd-color-icon-tertiary);
+    }
+}
+
+.mx_FileBrowserCard_icon {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    color: var(--cpd-color-icon-secondary);
+}
+
+.mx_FileBrowserCard_label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

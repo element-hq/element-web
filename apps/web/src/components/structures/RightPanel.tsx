@@ -28,6 +28,7 @@ import { PinnedMessagesCard } from "../views/right_panel/PinnedMessagesCard";
 import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import { type E2EStatus } from "../../utils/ShieldUtils";
 import TimelineCard from "../views/right_panel/TimelineCard";
+import FileBrowserCard from "../views/right_panel/FileBrowserCard";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { type IRightPanelCard, type IRightPanelCardState } from "../../stores/right-panel/RightPanelStoreIPanelState";
 import { Action } from "../../dispatcher/actions";
@@ -213,6 +214,10 @@ export default class RightPanel extends React.Component<Props, IState> {
                     );
                 }
                 break;
+            case RightPanelPhases.FileBrowser:
+                card = <FileBrowserCard roomId={roomId} onClose={this.onClose} />;
+                break;
+
             case RightPanelPhases.FilePanel:
                 if (!!roomId) {
                     card = <FilePanel roomId={roomId} onClose={this.onClose} />;

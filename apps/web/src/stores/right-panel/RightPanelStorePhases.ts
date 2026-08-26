@@ -24,6 +24,8 @@ export enum RightPanelPhases {
     PinnedMessages = "PinnedMessages",
     Timeline = "Timeline",
     Extensions = "Extensions",
+    /** Prototype: browses files across the room and connected storage providers. */
+    FileBrowser = "FileBrowser",
 
     // Thread stuff
     ThreadView = "ThreadView",

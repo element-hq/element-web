@@ -61,8 +61,9 @@ describe("<MediaPreviewDialog />", () => {
         render(<SDKContext.Provider value={sdkContext}>{ui}</SDKContext.Provider>);
 
     /** Flip the right panel to the given state and let subscribers hear about it. */
-    const setChatOpen = (open: boolean): void => {
+    const setPanelOpen = (open: boolean, phase = RightPanelPhases.Timeline): void => {
         rightPanelStore.isOpenForRoom.mockReturnValue(open);
+        rightPanelStore.currentCardForRoom.mockReturnValue({ phase });
         act(() => {
             rightPanelStore.emit(UPDATE_EVENT);
         });
@@ -189,7 +190,7 @@ describe("<MediaPreviewDialog />", () => {
 
             expect(document.body).not.toHaveClass("mx_MediaPreview_withChat");
 
-            setChatOpen(true);
+            setPanelOpen(true);
 
             expect(await screen.findByRole("button", { name: "Chat" })).toHaveAttribute("aria-pressed", "true");
             expect(document.body).toHaveClass("mx_MediaPreview_withChat");
@@ -198,7 +199,7 @@ describe("<MediaPreviewDialog />", () => {
         it("stops insetting the overlay once the preview closes", async () => {
             const { unmount } = renderPreview(<MediaPreviewDialog mxEvent={mkEvent()} onFinished={jest.fn()} />);
             await screen.findByRole("button", { name: "Chat" });
-            setChatOpen(true);
+            setPanelOpen(true);
             expect(document.body).toHaveClass("mx_MediaPreview_withChat");
 
             unmount();
@@ -217,6 +218,19 @@ describe("<MediaPreviewDialog />", () => {
             renderPreview(<MediaPreviewDialog src="https://example.com/image.png" onFinished={jest.fn()} />);
 
             expect(screen.queryByRole("button", { name: "Chat" })).not.toBeInTheDocument();
+        });
+
+        it("stays stepped aside when the panel switches to the file browser", async () => {
+            renderPreview(<MediaPreviewDialog mxEvent={mkEvent()} onFinished={jest.fn()} />);
+            await screen.findByRole("button", { name: "Chat" });
+
+            setPanelOpen(true, RightPanelPhases.Timeline);
+            expect(document.body).toHaveClass("mx_MediaPreview_withChat");
+
+            // The file browser is a sibling tab, so the overlay must not expand back over it.
+            setPanelOpen(true, RightPanelPhases.FileBrowser);
+            expect(document.body).toHaveClass("mx_MediaPreview_withChat");
+            expect(screen.getByRole("button", { name: "Chat" })).toHaveAttribute("aria-pressed", "false");
         });
     });
 });

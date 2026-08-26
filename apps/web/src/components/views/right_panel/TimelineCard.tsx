@@ -18,6 +18,8 @@ import {
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import BaseCard from "./BaseCard";
+import { PanelTabs } from "./PanelTabs";
+import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import type ResizeNotifier from "../../../utils/ResizeNotifier";
 import MessageComposer from "../rooms/MessageComposer";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
@@ -212,7 +214,15 @@ export default class TimelineCard extends React.Component<IProps, IState> {
                     className={this.props.classNames}
                     onClose={this.props.onClose}
                     withoutScrollContainer={true}
-                    header={_t("right_panel|video_room_chat|title")}
+                    header={
+                        // With the file browser prototype enabled the title becomes a pair of
+                        // tabs, so chat and files read as two views of one panel.
+                        SettingsStore.getValue("feature_file_preview") ? (
+                            <PanelTabs active={RightPanelPhases.Timeline} />
+                        ) : (
+                            _t("right_panel|video_room_chat|title")
+                        )
+                    }
                     ref={this.card}
                 >
                     <RoomUploadContextProvider>

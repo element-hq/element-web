@@ -203,9 +203,9 @@ export default function MediaPreviewShell({
     return (
         <FocusLock
             returnFocus={true}
-            // The chat panel lives outside this dialog, in the app's right panel. While it is
+            // The side panel lives outside this dialog, in the app's right panel. While it is
             // open the trap has to let go, or focus is yanked back out of the composer.
-            disabled={chat?.open}
+            disabled={chat?.panelOpen}
             lockProps={{
                 "onKeyDown": onKeyDown,
                 "role": "dialog",

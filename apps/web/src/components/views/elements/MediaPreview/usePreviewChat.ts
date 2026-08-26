@@ -21,8 +21,14 @@ const INSET_PROPERTY = "--media-preview-chat-inset";
 const DEFAULT_PANEL_WIDTH = 320;
 
 export interface PreviewChat {
-    /** Whether the room's chat panel is currently showing. */
+    /** Whether the chat tab specifically is showing; drives the toolbar button's pressed state. */
     open: boolean;
+    /**
+     * Whether any of the side panels is showing beside the preview. The file browser is a sibling
+     * tab of the chat, so switching to it must keep the overlay stepped aside and the focus trap
+     * released, even though the chat button is no longer active.
+     */
+    panelOpen: boolean;
     /** Show the chat panel, or hide it if it is already showing. */
     toggle: () => void;
 }
@@ -47,21 +53,21 @@ export function usePreviewChat(mxEvent: MatrixEvent): PreviewChat | undefined {
     // somewhere else there is nothing behind the overlay to reveal, so we offer no button.
     const available = !!roomId && sdkContext.roomViewStore.getRoomId() === roomId;
 
-    const open = useEventEmitterState(
-        sdkContext.rightPanelStore,
-        UPDATE_EVENT,
-        () =>
-            !!roomId &&
-            sdkContext.rightPanelStore.isOpenForRoom(roomId) &&
-            sdkContext.rightPanelStore.currentCardForRoom(roomId).phase === RightPanelPhases.Timeline,
+    const phase = useEventEmitterState(sdkContext.rightPanelStore, UPDATE_EVENT, () =>
+        !!roomId && sdkContext.rightPanelStore.isOpenForRoom(roomId)
+            ? sdkContext.rightPanelStore.currentCardForRoom(roomId).phase
+            : null,
     );
+
+    const open = phase === RightPanelPhases.Timeline;
+    const panelOpen = open || phase === RightPanelPhases.FileBrowser;
 
     const toggle = useCallback(
         () => sdkContext.rightPanelStore.showOrHidePhase(RightPanelPhases.Timeline),
         [sdkContext],
     );
 
-    const inset = available && open;
+    const inset = available && panelOpen;
 
     useEffect(() => {
         if (!inset) return;
@@ -87,5 +93,5 @@ export function usePreviewChat(mxEvent: MatrixEvent): PreviewChat | undefined {
     }, [inset]);
 
     if (!available) return undefined;
-    return { open, toggle };
+    return { open, panelOpen, toggle };
 }
