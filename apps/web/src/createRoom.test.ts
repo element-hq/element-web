@@ -7,7 +7,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked, type Mocked } from "jest-mock";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach, beforeAll, afterEach, type Mocked } from "vitest";
 import {
     type MatrixClient,
     type Device,
@@ -18,28 +20,28 @@ import {
     RoomVersionStability,
 } from "matrix-js-sdk/src/matrix";
 import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
-import { act } from "jest-matrix-react";
-
+import { act } from "test-utils-rtl";
 import {
     stubClient,
     setupAsyncStoreWithClient,
     mockPlatformPeg,
     getMockClientWithEventEmitter,
     mkRoom,
-} from "../test-utils";
-import { MatrixClientPeg } from "../../src/MatrixClientPeg";
-import WidgetStore from "../../src/stores/WidgetStore";
-import WidgetUtils from "../../src/utils/WidgetUtils";
-import { JitsiCall, ElementCall } from "../../src/models/Call";
+} from "test-utils";
+
+import { MatrixClientPeg } from "./MatrixClientPeg";
+import WidgetStore from "./stores/WidgetStore";
+import WidgetUtils from "./utils/WidgetUtils";
+import { JitsiCall, ElementCall } from "./models/Call";
 import createRoom, {
     checkUserIsAllowedToChangeEncryption,
     canEncryptToAllUsers,
     waitForRoomEncryption,
-} from "../../src/createRoom";
-import { ElementCallMemberEventType } from "../../src/call-types";
-import DMRoomMap from "../../src/utils/DMRoomMap";
-import { PreferredRoomVersions } from "../../src/utils/PreferredRoomVersions";
-import SdkConfig from "../../src/SdkConfig";
+} from "./createRoom";
+import { ElementCallMemberEventType } from "./call-types";
+import DMRoomMap from "./utils/DMRoomMap";
+import { PreferredRoomVersions } from "./utils/PreferredRoomVersions";
+import SdkConfig from "./SdkConfig";
 
 /**
  * This should be the same as
@@ -66,12 +68,12 @@ describe("createRoom", () => {
     let client: Mocked<MatrixClient>;
     beforeEach(() => {
         stubClient();
-        client = mocked(MatrixClientPeg.safeGet());
+        client = vi.mocked(MatrixClientPeg.safeGet());
         DMRoomMap.makeShared(client);
     });
 
     afterEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
         SdkConfig.reset();
     });
 
@@ -231,9 +233,9 @@ describe("createRoom", () => {
         // Create a mock room that provides the needed methods
         const { room_id: roomId } = await client.createRoom({});
         const room = client.getRoom(roomId)!;
-        room.getLiveTimeline = jest
+        room.getLiveTimeline = vi
             .fn()
-            .mockReturnValue({ getState: jest.fn().mockReturnValue({ on: jest.fn(), off: jest.fn() }) });
+            .mockReturnValue({ getState: vi.fn().mockReturnValue({ on: vi.fn(), off: vi.fn() }) });
 
         // Call waitForRoomEncryption with a small timeout ans expect an error
         const error = new Error("Timed out while waiting for room to enable encryption");
@@ -302,8 +304,8 @@ describe("createRoom", () => {
 
     it("sets up Jitsi video rooms correctly", async () => {
         setupAsyncStoreWithClient(WidgetStore.instance, client);
-        jest.spyOn(WidgetUtils, "waitForRoomWidget").mockResolvedValue();
-        const createCallSpy = jest.spyOn(JitsiCall, "create");
+        vi.spyOn(WidgetUtils, "waitForRoomWidget").mockResolvedValue();
+        const createCallSpy = vi.spyOn(JitsiCall, "create");
 
         await createRoom(client, { roomType: RoomType.ElementVideo });
 
@@ -330,7 +332,7 @@ describe("createRoom", () => {
     });
 
     it("sets up Element video rooms correctly", async () => {
-        const createCallSpy = jest.spyOn(ElementCall, "create");
+        const createCallSpy = vi.spyOn(ElementCall, "create");
 
         await createRoom(client, { roomType: RoomType.UnstableCall });
 
@@ -345,8 +347,8 @@ describe("createRoom", () => {
     });
 
     it("doesn't create calls in non-video-rooms", async () => {
-        const createJitsiCallSpy = jest.spyOn(JitsiCall, "create");
-        const createElementCallSpy = jest.spyOn(ElementCall, "create");
+        const createJitsiCallSpy = vi.spyOn(JitsiCall, "create");
+        const createElementCallSpy = vi.spyOn(ElementCall, "create");
 
         await createRoom(client, {});
 
@@ -417,7 +419,7 @@ describe("createRoom", () => {
 
     describe("room versions", () => {
         afterEach(() => {
-            jest.clearAllMocks();
+            vi.clearAllMocks();
         });
         it("should use the correct room version for knocking when default does not support it", async () => {
             client.getCapabilities.mockResolvedValue({
@@ -503,8 +505,8 @@ describe("canEncryptToAllUsers", () => {
     let cryptoApi: Mocked<CryptoApi>;
 
     beforeAll(() => {
-        client = mocked(stubClient());
-        cryptoApi = mocked(client.getCrypto()!);
+        client = vi.mocked(stubClient());
+        cryptoApi = vi.mocked(client.getCrypto()!);
     });
 
     it("should return true if userIds is empty", async () => {
@@ -555,8 +557,8 @@ describe("canEncryptToAllUsers", () => {
 
 describe("checkUserIsAllowedToChangeEncryption()", () => {
     const mockClient = getMockClientWithEventEmitter({
-        doesServerForceEncryptionForPreset: jest.fn(),
-        getClientWellKnown: jest.fn().mockReturnValue({}),
+        doesServerForceEncryptionForPreset: vi.fn(),
+        getClientWellKnown: vi.fn().mockReturnValue({}),
     });
     beforeEach(() => {
         mockClient.doesServerForceEncryptionForPreset.mockClear().mockResolvedValue(false);

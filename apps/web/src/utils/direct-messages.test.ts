@@ -6,57 +6,59 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked } from "jest-mock";
+// @vitest-environment happy-dom
+
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { ClientEvent, type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
+import { createTestClient } from "test-utils";
 
-import DMRoomMap from "../../../src/utils/DMRoomMap";
-import { createTestClient } from "../../test-utils";
-import { LocalRoom, LocalRoomState, LOCAL_ROOM_ID_PREFIX } from "../../../src/models/LocalRoom";
-import * as dmModule from "../../../src/utils/direct-messages";
-import dis from "../../../src/dispatcher/dispatcher";
-import { Action } from "../../../src/dispatcher/actions";
-import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
-import { waitForRoomReadyAndApplyAfterCreateCallbacks } from "../../../src/utils/local-room";
-import { findDMRoom } from "../../../src/utils/dm/findDMRoom";
-import { createDmLocalRoom } from "../../../src/utils/dm/createDmLocalRoom";
-import { startDm } from "../../../src/utils/dm/startDm";
-import { type Member } from "../../../src/utils/direct-messages";
-import { resolveThreePids } from "../../../src/utils/threepids";
+import DMRoomMap from "./DMRoomMap";
+import { LocalRoom, LocalRoomState, LOCAL_ROOM_ID_PREFIX } from "../models/LocalRoom";
+import * as dmModule from "./direct-messages";
+import dis from "../dispatcher/dispatcher";
+import { Action } from "../dispatcher/actions";
+import { MatrixClientPeg } from "../MatrixClientPeg";
+import { waitForRoomReadyAndApplyAfterCreateCallbacks } from "./local-room";
+import { findDMRoom } from "./dm/findDMRoom";
+import { createDmLocalRoom } from "./dm/createDmLocalRoom";
+import { startDm } from "./dm/startDm";
+import { type Member } from "./direct-messages";
+import { resolveThreePids } from "./threepids";
 
-jest.mock("../../../src/utils/rooms", () => ({
-    ...(jest.requireActual("../../../src/utils/rooms") as object),
-    privateShouldBeEncrypted: jest.fn(),
+vi.mock("./rooms", async () => ({
+    ...(await vi.importActual("./rooms")),
+    privateShouldBeEncrypted: vi.fn(),
 }));
 
-jest.mock("../../../src/createRoom", () => ({
-    ...(jest.requireActual("../../../src/createRoom") as object),
-    canEncryptToAllUsers: jest.fn(),
+vi.mock("../createRoom", async () => ({
+    ...(await vi.importActual("../createRoom")),
+    canEncryptToAllUsers: vi.fn(),
 }));
 
-jest.mock("../../../src/utils/local-room", () => ({
-    waitForRoomReadyAndApplyAfterCreateCallbacks: jest.fn(),
+vi.mock("./local-room", () => ({
+    waitForRoomReadyAndApplyAfterCreateCallbacks: vi.fn(),
 }));
 
-jest.mock("../../../src/utils/dm/findDMForUser", () => ({
-    findDMForUser: jest.fn(),
+vi.mock("./dm/findDMForUser", () => ({
+    findDMForUser: vi.fn(),
 }));
 
-jest.mock("../../../src/utils/dm/findDMRoom", () => ({
-    findDMRoom: jest.fn(),
+vi.mock("./dm/findDMRoom", () => ({
+    findDMRoom: vi.fn(),
 }));
 
-jest.mock("../../../src/utils/dm/createDmLocalRoom", () => ({
-    createDmLocalRoom: jest.fn(),
+vi.mock("./dm/createDmLocalRoom", () => ({
+    createDmLocalRoom: vi.fn(),
 }));
 
-jest.mock("../../../src/utils/dm/startDm", () => ({
-    startDm: jest.fn(),
+vi.mock("./dm/startDm", () => ({
+    startDm: vi.fn(),
 }));
 
-jest.mock("../../../src/utils/threepids", () => ({
-    resolveThreePids: jest.fn().mockImplementation(async (members: Member[]) => {
+vi.mock("./threepids", () => ({
+    resolveThreePids: vi.fn().mockImplementation(async (members: Member[]) => {
         return members;
     }),
 }));
@@ -72,7 +74,7 @@ describe("direct-messages", () => {
 
     beforeEach(() => {
         mockClient = createTestClient();
-        jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
+        vi.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
         roomEvents = [];
         mockClient.on(ClientEvent.Room, (room: Room) => {
             roomEvents.push(room);
@@ -84,30 +86,30 @@ describe("direct-messages", () => {
         localRoom = new LocalRoom(LOCAL_ROOM_ID_PREFIX + "test", mockClient, userId1);
 
         dmRoomMap = {
-            getDMRoomForIdentifiers: jest.fn(),
-            getDMRoomsForUserId: jest.fn(),
+            getDMRoomForIdentifiers: vi.fn(),
+            getDMRoomsForUserId: vi.fn(),
         } as unknown as DMRoomMap;
-        jest.spyOn(DMRoomMap, "shared").mockReturnValue(dmRoomMap);
-        jest.spyOn(dis, "dispatch");
-        jest.spyOn(logger, "warn");
+        vi.spyOn(DMRoomMap, "shared").mockReturnValue(dmRoomMap);
+        vi.spyOn(dis, "dispatch");
+        vi.spyOn(logger, "warn");
 
-        jest.useFakeTimers();
-        jest.setSystemTime(new Date(2022, 7, 4, 11, 12, 30, 42));
+        vi.useFakeTimers();
+        vi.setSystemTime(new Date(2022, 7, 4, 11, 12, 30, 42));
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
-        jest.useRealTimers();
+        vi.restoreAllMocks();
+        vi.useRealTimers();
     });
 
     describe("startDmOnFirstMessage", () => {
         describe("if no room exists", () => {
             beforeEach(() => {
-                mocked(findDMRoom).mockReturnValue(null);
+                vi.mocked(findDMRoom).mockReturnValue(null);
             });
 
             it("should create a local room and dispatch a view room event", async () => {
-                mocked(createDmLocalRoom).mockResolvedValue(localRoom);
+                vi.mocked(createDmLocalRoom).mockResolvedValue(localRoom);
                 const members = [member1];
                 const roomId = await dmModule.startDmOnFirstMessage(mockClient, members);
                 expect(roomId).toBe(localRoom.roomId);
@@ -124,9 +126,9 @@ describe("direct-messages", () => {
 
             it("should work when resolveThreePids raises an error", async () => {
                 const error = new Error("error 4711");
-                mocked(resolveThreePids).mockRejectedValue(error);
+                vi.mocked(resolveThreePids).mockRejectedValue(error);
 
-                mocked(createDmLocalRoom).mockResolvedValue(localRoom);
+                vi.mocked(createDmLocalRoom).mockResolvedValue(localRoom);
                 const members = [member1];
                 const roomId = await dmModule.startDmOnFirstMessage(mockClient, members);
                 expect(roomId).toBe(localRoom.roomId);
@@ -141,7 +143,7 @@ describe("direct-messages", () => {
 
         describe("if a room exists", () => {
             beforeEach(() => {
-                mocked(findDMRoom).mockReturnValue(room1);
+                vi.mocked(findDMRoom).mockReturnValue(room1);
             });
 
             it("should return the room and dispatch a view room event", async () => {
@@ -170,7 +172,7 @@ describe("direct-messages", () => {
 
         describe("on startDm error", () => {
             beforeEach(() => {
-                mocked(startDm).mockRejectedValue(true);
+                vi.mocked(startDm).mockRejectedValue(true);
             });
 
             it("should set the room state to error", async () => {
@@ -181,8 +183,8 @@ describe("direct-messages", () => {
 
         describe("on startDm success", () => {
             beforeEach(() => {
-                mocked(waitForRoomReadyAndApplyAfterCreateCallbacks).mockResolvedValue(room1.roomId);
-                mocked(startDm).mockResolvedValue(room1.roomId);
+                vi.mocked(waitForRoomReadyAndApplyAfterCreateCallbacks).mockResolvedValue(room1.roomId);
+                vi.mocked(startDm).mockResolvedValue(room1.roomId);
             });
 
             it("should set the room into creating state and call waitForRoomReadyAndApplyAfterCreateCallbacks", async () => {

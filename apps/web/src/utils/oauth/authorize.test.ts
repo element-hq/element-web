@@ -6,18 +6,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
+import { describe, it, expect, beforeEach, afterAll, vi } from "vitest";
 import { OAuth2, type BearerTokenResponse } from "matrix-js-sdk/src/matrix";
-import * as randomStringUtils from "matrix-js-sdk/src/randomstring";
 import { Crypto } from "@peculiar/webcrypto";
 import { getRandomValues } from "node:crypto";
+import { makeDelegatedAuthMetadata } from "test-utils/auth";
+import { mockPlatformPeg } from "test-utils";
 
-import { completeOAuthLogin, startOAuthLogin } from "../../../../src/utils/oauth/authorize";
-import { makeDelegatedAuthMetadata } from "../../../test-utils/auth";
-import { OAuthClientError } from "../../../../src/utils/oauth/error";
-import { mockPlatformPeg } from "../../../test-utils";
-import { storeAuthContext } from "../../../../src/utils/oauth/persistOAuthSettings.ts";
-
-jest.unmock("matrix-js-sdk/src/randomstring");
+import { completeOAuthLogin, startOAuthLogin } from "./authorize";
+import { OAuthClientError } from "./error";
+import { storeAuthContext } from "./persistOAuthSettings.ts";
 
 const webCrypto = new Crypto();
 
@@ -42,14 +42,14 @@ describe("OAuth2 authorization", () => {
             origin: baseUrl,
         };
 
-        jest.spyOn(randomStringUtils, "secureRandomString").mockRestore();
         mockPlatformPeg();
         Object.defineProperty(window, "crypto", {
             value: {
                 getRandomValues,
-                randomUUID: jest.fn().mockReturnValue("not-random-uuid"),
+                randomUUID: vi.fn().mockReturnValue("not-random-uuid"),
                 subtle: webCrypto.subtle,
             },
+            configurable: true,
         });
     });
 
@@ -111,7 +111,7 @@ describe("OAuth2 authorization", () => {
         };
 
         beforeEach(() => {
-            jest.spyOn(OAuth2.prototype, "completeAuthorizationCodeGrant").mockResolvedValue(tokenResponse);
+            vi.spyOn(OAuth2.prototype, "completeAuthorizationCodeGrant").mockResolvedValue(tokenResponse);
             storeAuthContext({
                 state,
                 homeserverUrl,

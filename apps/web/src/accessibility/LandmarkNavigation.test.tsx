@@ -6,11 +6,14 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { render, screen, waitFor } from "jest-matrix-react";
-import React from "react";
+// @vitest-environment happy-dom
 
-import { Landmark, LandmarkNavigation } from "../../../src/accessibility/LandmarkNavigation";
-import defaultDispatcher from "../../../src/dispatcher/dispatcher";
+import React from "react";
+import { describe, expect, it, vi } from "vitest";
+import { render, screen, waitFor } from "test-utils-rtl";
+
+import { Landmark, LandmarkNavigation } from "./LandmarkNavigation";
+import defaultDispatcher from "../dispatcher/dispatcher";
 
 describe("KeyboardLandmarkUtils", () => {
     it("Landmarks are cycled through correctly without an opened room", () => {
@@ -65,7 +68,7 @@ describe("KeyboardLandmarkUtils", () => {
     });
 
     it("Landmarks are cycled through correctly with an opened room", async () => {
-        const callback = jest.fn();
+        const callback = vi.fn();
         defaultDispatcher.register(callback);
         render(
             <div>
