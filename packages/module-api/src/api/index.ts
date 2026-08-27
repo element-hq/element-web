@@ -187,7 +187,7 @@ export interface Api
      */
     readonly fileViewer: FileViewerApi;
 
-    readonly customPreview: CustomPreviewTileApi;
+    readonly customPreviewTile: CustomPreviewTileApi;
 
     /**
      * Create a ReactDOM root for rendering React components.
