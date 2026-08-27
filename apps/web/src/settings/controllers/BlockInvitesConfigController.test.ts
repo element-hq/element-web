@@ -14,6 +14,7 @@ import { stubClient } from "test-utils";
 
 import { SETTINGS } from "../Settings";
 import MatrixClientBackedController from "./MatrixClientBackedController";
+import type SettingController from "./SettingController.ts";
 import { SettingLevel } from "../SettingLevel.ts";
 
 describe("BlockInvitesConfigController", () => {
@@ -26,7 +27,7 @@ describe("BlockInvitesConfigController", () => {
         });
 
         it("settingDisabled() should give a message", () => {
-            const controller = SETTINGS.blockInvites.controller!;
+            const controller = SETTINGS.blockInvites.controller as SettingController;
             expect(controller.settingDisabled).toEqual("Your server does not implement this feature.");
         });
     });
@@ -42,20 +43,20 @@ describe("BlockInvitesConfigController", () => {
         });
 
         it("settingDisabled() should be false", () => {
-            const controller = SETTINGS.blockInvites.controller!;
+            const controller = SETTINGS.blockInvites.controller as SettingController;
             expect(controller.settingDisabled).toEqual(false);
         });
 
         describe("getValueOverride()", () => {
             it("should return true when invites are blocked", async () => {
-                const controller = SETTINGS.blockInvites.controller!;
+                const controller = SETTINGS.blockInvites.controller as SettingController;
 
                 mockAccountData(cli, { default_action: "block" });
                 expect(controller.getValueOverride(SettingLevel.DEVICE, null, null, null)).toEqual(true);
             });
 
             it("should return false when invites are not blocked", async () => {
-                const controller = SETTINGS.blockInvites.controller!;
+                const controller = SETTINGS.blockInvites.controller as SettingController;
 
                 mockAccountData(cli, { default_action: {} });
                 expect(controller.getValueOverride(SettingLevel.DEVICE, null, null, null)).toEqual(false);
@@ -64,7 +65,7 @@ describe("BlockInvitesConfigController", () => {
 
         describe("beforeChange()", () => {
             it("should set the account data when the value is enabled", async () => {
-                const controller = SETTINGS.blockInvites.controller!;
+                const controller = SETTINGS.blockInvites.controller as SettingController;
                 await controller.beforeChange(SettingLevel.DEVICE, null, true);
                 expect(cli.setAccountData).toHaveBeenCalledTimes(1);
                 expect(cli.setAccountData).toHaveBeenCalledWith("m.invite_permission_config", {
@@ -73,7 +74,7 @@ describe("BlockInvitesConfigController", () => {
             });
 
             it("should set the account data when the value is disabled", async () => {
-                const controller = SETTINGS.blockInvites.controller!;
+                const controller = SETTINGS.blockInvites.controller as SettingController;
                 await controller.beforeChange(SettingLevel.DEVICE, null, false);
                 expect(cli.setAccountData).toHaveBeenCalledTimes(1);
                 expect(cli.setAccountData).toHaveBeenCalledWith("m.invite_permission_config", {});
