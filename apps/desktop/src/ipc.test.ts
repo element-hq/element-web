@@ -5,9 +5,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { expect, describe, it, beforeEach, vi } from "vitest";
+import { expect, describe, it, beforeEach, afterEach, vi } from "vitest";
+import { desktopCapturer } from "electron";
 
 import { getConfig } from "./config.js";
+import { consumeDisplayMediaCallback } from "./displayMediaCallback.js";
 
 const { ipcHandlers, mockStore, send, randomArray } = vi.hoisted(() => ({
     ipcHandlers: {} as Record<string, (...args: unknown[]) => unknown>,
@@ -50,8 +52,7 @@ vi.mock("./store.js", () => ({
 }));
 vi.mock("./utils.js", () => ({ randomArray }));
 vi.mock("./displayMediaCallback.js", () => ({
-    getDisplayMediaCallback: vi.fn(),
-    setDisplayMediaCallback: vi.fn(),
+    consumeDisplayMediaCallback: vi.fn(),
 }));
 vi.mock("./config.js");
 
@@ -59,8 +60,8 @@ await import("./ipc.js");
 
 const ARGS = ["@alice:example.org", "DEVICEID"];
 
-async function callIpc(name: string, id = 1): Promise<void> {
-    await ipcHandlers["ipcCall"]({}, { id, name, args: ARGS });
+async function callIpc(name: string, id = 1, args: unknown[] = ARGS): Promise<void> {
+    await ipcHandlers["ipcCall"]({}, { id, name, args });
 }
 
 describe("ipc pickle key handling", () => {
@@ -122,5 +123,66 @@ describe("getConfig", () => {
 
         expect(handler({})).toStrictEqual(config);
         expect(getConfig).toHaveBeenCalled();
+    });
+});
+
+describe("ipcCall: getDesktopCapturerSources", () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+        vi.mocked(desktopCapturer.getSources).mockReset();
+        vi.spyOn(console, "error").mockImplementation(() => {});
+        (global as unknown as { mainWindow: unknown }).mainWindow = { webContents: { send } };
+    });
+
+    afterEach(() => {
+        vi.mocked(console.error).mockRestore();
+    });
+
+    it("maps the native sources to id/name/thumbnailURL", async () => {
+        vi.mocked(desktopCapturer.getSources).mockResolvedValue([
+            { id: "screen:1", name: "Screen 1", thumbnail: { toDataURL: (): string => "data:thumb" } },
+        ] as never);
+
+        await callIpc("getDesktopCapturerSources", 11, [{ types: ["screen"] }]);
+
+        expect(send).toHaveBeenCalledWith("ipcReply", {
+            id: 11,
+            reply: [{ id: "screen:1", name: "Screen 1", thumbnailURL: "data:thumb" }],
+        });
+    });
+
+    it("replies with an empty list rather than leaving the picker awaiting when getSources rejects", async () => {
+        vi.mocked(desktopCapturer.getSources).mockRejectedValue(new Error("native failure"));
+
+        await callIpc("getDesktopCapturerSources", 12, [{}]);
+
+        expect(send).toHaveBeenCalledWith("ipcReply", { id: 12, reply: [] });
+    });
+});
+
+describe("ipcCall: callDisplayMediaCallback", () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+        vi.mocked(consumeDisplayMediaCallback).mockReset();
+        (global as unknown as { mainWindow: unknown }).mainWindow = { webContents: { send } };
+    });
+
+    it("invokes the consumed callback once with the chosen video source", async () => {
+        const callback = vi.fn();
+        vi.mocked(consumeDisplayMediaCallback).mockReturnValue(callback);
+
+        await callIpc("callDisplayMediaCallback", 13, [{ id: "screen:1" }]);
+
+        expect(consumeDisplayMediaCallback).toHaveBeenCalledTimes(1);
+        expect(callback).toHaveBeenCalledWith({ video: { id: "screen:1" } });
+        expect(send).toHaveBeenCalledWith("ipcReply", { id: 13, reply: null });
+    });
+
+    it("is a safe no-op when a stale or duplicate IPC finds no pending callback", async () => {
+        vi.mocked(consumeDisplayMediaCallback).mockReturnValue(null);
+
+        await callIpc("callDisplayMediaCallback", 14, [{}]);
+
+        expect(send).toHaveBeenCalledWith("ipcReply", { id: 14, reply: null });
     });
 });

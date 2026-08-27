@@ -1,0 +1,231 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`MBodyFactory > renderMBody > renders download button for m.file in file rendering type 1`] = `
+<div>
+  <span
+    class="_content_bibip_8 mx_MFileBody"
+  >
+    <div
+      data-type="download"
+    >
+      <a
+        class="_button_1nw83_8 _has-icon_1nw83_60"
+        data-kind="secondary"
+        data-size="md"
+        href="https://server/_matrix/media/v3/download/server/file"
+        rel="noreferrer noopener"
+        role="link"
+        tabindex="0"
+        target="_blank"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 15.575q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-3.6-3.6a.95.95 0 0 1-.275-.7q0-.425.275-.7.274-.275.712-.288t.713.263L11 12.15V5q0-.424.287-.713A.97.97 0 0 1 12 4q.424 0 .713.287Q13 4.576 13 5v7.15l1.875-1.875q.274-.274.713-.263.437.014.712.288a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-3.6 3.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063M6 20q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 18v-2q0-.424.287-.713A.97.97 0 0 1 5 15q.424 0 .713.287Q6 15.576 6 16v2h12v-2q0-.424.288-.713A.97.97 0 0 1 19 15q.424 0 .712.287.288.288.288.713v2q0 .824-.587 1.413A1.93 1.93 0 0 1 18 20z"
+          />
+        </svg>
+        Download
+      </a>
+    </div>
+  </span>
+</div>
+`;
+
+exports[`MBodyFactory > renderMBody fallback shows m.audio generic placeholder when showFileInfo is true 1`] = `
+<div>
+  <span
+    class="_content_bibip_8 mx_MFileBody"
+  >
+    <div
+      class="mx_MediaBody _mediaBody_9mib0_8"
+      data-type="info"
+    >
+      <button
+        aria-label="alt"
+        class="_button_1nw83_8 _has-icon_1nw83_60"
+        data-kind="secondary"
+        data-size="md"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 14v-4a2 2 0 0 1 2-2h2l3.293-3.293c.63-.63 1.707-.184 1.707.707v13.172c0 .89-1.077 1.337-1.707.707L7 16H5a2 2 0 0 1-2-2m11.122-5.536a1 1 0 0 1 1.414 0A5 5 0 0 1 17 12c0 1.38-.56 2.632-1.464 3.536a1 1 0 0 1-1.415-1.415 3 3 0 0 0 .88-2.121c0-.829-.335-1.577-.88-2.121a1 1 0 0 1 0-1.415"
+          />
+          <path
+            d="M16.95 5.636a1 1 0 0 1 1.414 0A8.98 8.98 0 0 1 21 12a8.98 8.98 0 0 1-2.636 6.364 1 1 0 0 1-1.414-1.414A6.98 6.98 0 0 0 19 12a6.98 6.98 0 0 0-2.05-4.95 1 1 0 0 1 0-1.414"
+          />
+        </svg>
+        <span>
+          alt
+        </span>
+      </button>
+    </div>
+  </span>
+</div>
+`;
+
+exports[`MBodyFactory > renderMBody shows the preview tile for m.file in File 1`] = `
+<div>
+  <div
+    class="mx_EventTile_content"
+  >
+    <div
+      class="_container_1q45w_1"
+    >
+      <div
+        class="_tile_1vd22_1"
+      >
+        <div
+          class="_below_1vd22_9"
+        >
+          <div
+            class="_leftGroup_i2lr8_11"
+          >
+            <div
+              class="_icon_i2lr8_33"
+            >
+              <svg
+                fill="currentColor"
+                height="1em"
+                style="color: var(--cpd-color-text-decorative-4);"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M9 18h6q.424 0 .713-.288A.97.97 0 0 0 16 17a.97.97 0 0 0-.287-.712A.97.97 0 0 0 15 16H9a.97.97 0 0 0-.713.288A.97.97 0 0 0 8 17q0 .424.287.712Q8.576 18 9 18m0-4h6q.424 0 .713-.287A.97.97 0 0 0 16 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 15 12H9a.97.97 0 0 0-.713.287A.97.97 0 0 0 8 13q0 .424.287.713Q8.576 14 9 14m-3 8q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 20V4q0-.824.588-1.412A1.93 1.93 0 0 1 6 2h7.175a1.98 1.98 0 0 1 1.4.575l4.85 4.85q.275.275.425.638.15.361.15.762V20q0 .824-.587 1.413A1.93 1.93 0 0 1 18 22zm7-14V4H6v16h12V9h-4a.97.97 0 0 1-.713-.287A.97.97 0 0 1 13 8"
+                />
+              </svg>
+            </div>
+            <div
+              class="_textContent_i2lr8_28"
+            >
+              <div
+                class="_header_i2lr8_1"
+              >
+                alt
+              </div>
+              <p
+                class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 _container_15awj_8 _body_i2lr8_2"
+              >
+                Size unknown
+              </p>
+            </div>
+          </div>
+          <div
+            class="_buttonGroup_i2lr8_64"
+          >
+            <button
+              aria-label="Download"
+              class="_button_i2lr8_64"
+              type="button"
+            >
+              <svg
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 15.575q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-3.6-3.6a.95.95 0 0 1-.275-.7q0-.425.275-.7.274-.275.712-.288t.713.263L11 12.15V5q0-.424.287-.713A.97.97 0 0 1 12 4q.424 0 .713.287Q13 4.576 13 5v7.15l1.875-1.875q.274-.274.713-.263.437.014.712.288a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-3.6 3.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063M6 20q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 18v-2q0-.424.287-.713A.97.97 0 0 1 5 15q.424 0 .713.287Q6 15.576 6 16v2h12v-2q0-.424.288-.713A.97.97 0 0 1 19 15q.424 0 .712.287.288.288.288.713v2q0 .824-.587 1.413A1.93 1.93 0 0 1 18 20z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`MBodyFactory > renderMBody shows the preview tile for m.file in Room 1`] = `
+<div>
+  <div
+    class="mx_EventTile_content"
+  >
+    <div
+      class="_container_1q45w_1"
+    >
+      <div
+        class="_tile_1vd22_1"
+      >
+        <div
+          class="_below_1vd22_9"
+        >
+          <div
+            class="_leftGroup_i2lr8_11"
+          >
+            <div
+              class="_icon_i2lr8_33"
+            >
+              <svg
+                fill="currentColor"
+                height="1em"
+                style="color: var(--cpd-color-text-decorative-4);"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M9 18h6q.424 0 .713-.288A.97.97 0 0 0 16 17a.97.97 0 0 0-.287-.712A.97.97 0 0 0 15 16H9a.97.97 0 0 0-.713.288A.97.97 0 0 0 8 17q0 .424.287.712Q8.576 18 9 18m0-4h6q.424 0 .713-.287A.97.97 0 0 0 16 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 15 12H9a.97.97 0 0 0-.713.287A.97.97 0 0 0 8 13q0 .424.287.713Q8.576 14 9 14m-3 8q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 20V4q0-.824.588-1.412A1.93 1.93 0 0 1 6 2h7.175a1.98 1.98 0 0 1 1.4.575l4.85 4.85q.275.275.425.638.15.361.15.762V20q0 .824-.587 1.413A1.93 1.93 0 0 1 18 22zm7-14V4H6v16h12V9h-4a.97.97 0 0 1-.713-.287A.97.97 0 0 1 13 8"
+                />
+              </svg>
+            </div>
+            <div
+              class="_textContent_i2lr8_28"
+            >
+              <div
+                class="_header_i2lr8_1"
+              >
+                alt
+              </div>
+              <p
+                class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 _container_15awj_8 _body_i2lr8_2"
+              >
+                Size unknown
+              </p>
+            </div>
+          </div>
+          <div
+            class="_buttonGroup_i2lr8_64"
+          >
+            <button
+              aria-label="Download"
+              class="_button_i2lr8_64"
+              type="button"
+            >
+              <svg
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 15.575q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-3.6-3.6a.95.95 0 0 1-.275-.7q0-.425.275-.7.274-.275.712-.288t.713.263L11 12.15V5q0-.424.287-.713A.97.97 0 0 1 12 4q.424 0 .713.287Q13 4.576 13 5v7.15l1.875-1.875q.274-.274.713-.263.437.014.712.288a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-3.6 3.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063M6 20q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 18v-2q0-.424.287-.713A.97.97 0 0 1 5 15q.424 0 .713.287Q6 15.576 6 16v2h12v-2q0-.424.288-.713A.97.97 0 0 1 19 15q.424 0 .712.287.288.288.288.713v2q0 .824-.587 1.413A1.93 1.93 0 0 1 18 20z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
