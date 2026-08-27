@@ -6,46 +6,31 @@ Please see LICENSE files in the repository root for full details.
 */
 
 .viewer {
-    min-height: 100%;
+    min-height: 0;
+    height: 100%;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
     color: var(--cpd-color-text-primary);
     background: var(--cpd-color-bg-subtle-secondary);
 }
 
-.toolbar {
-    position: sticky;
-    top: 0;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--cpd-space-2x);
-    padding: var(--cpd-space-2x) var(--cpd-space-4x);
-    border-bottom: var(--cpd-border-width-1) solid var(--cpd-color-border-interactive-secondary);
-    background: var(--cpd-color-bg-canvas-default);
-}
-
-.zoomValue {
-    min-width: 4.5em;
-    text-align: center;
-    color: var(--cpd-color-text-secondary);
-    font: var(--cpd-font-body-sm-medium);
-}
-
 .pages {
+    min-height: 0;
     display: flex;
     flex: 1;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     gap: var(--cpd-space-6x);
+    overflow: auto;
     padding: var(--cpd-space-4x);
+    box-sizing: border-box;
 }
 
 .page {
     position: relative;
     flex: none;
-    max-width: 100%;
+    margin-inline: auto;
     overflow: visible;
     border: var(--cpd-border-width-1) solid var(--cpd-color-border-interactive-secondary);
     background: white;
@@ -53,6 +38,42 @@ Please see LICENSE files in the repository root for full details.
 
     --scale-round-x: 1px;
     --scale-round-y: 1px;
+
+    /* Geometry of the raster currently on screen, published by the page once it commits. */
+    --pdf-page-width: 0px;
+    --pdf-page-height: 0px;
+    --pdf-page-zoom: 1;
+
+    /*
+     * How far the committed raster has to be stretched to match the zoom the user has asked for.
+     * `--pdf-display-zoom` lives on the scroll container, so a zoom step is a single style write
+     * rather than a React render of every page.
+     */
+    --pdf-preview-scale: calc(var(--pdf-display-zoom, 1) / var(--pdf-page-zoom));
+}
+
+.pageSized {
+    width: calc(var(--pdf-page-width) * var(--pdf-preview-scale));
+    height: calc(var(--pdf-page-height) * var(--pdf-preview-scale));
+}
+
+.renderLayer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    pointer-events: none;
+    transform-origin: 0 0;
+    transform: scale(var(--pdf-preview-scale));
+}
+
+/*
+ * No cross-fade: the outgoing buffer holds a stretched raster of the same content, so fading between
+ * the two reads as a flicker rather than as the page sharpening.
+ */
+.renderLayerVisible {
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .canvas {

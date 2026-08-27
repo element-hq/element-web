@@ -5,24 +5,24 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE in the repository root for full details.
 */
 
-import React from "react";
-import { MediaHandle } from "@element-hq/element-web-module-api";
+import React, { type JSX } from "react";
+import type { MediaHandle } from "@element-hq/element-web-module-api";
 import BaseCard from "./BaseCard";
 import ErrorBoundary from "../elements/ErrorBoundary";
-import { RegisteredFileViewer } from "../../../modules/FileViewerApi";
+import type { RegisteredFileViewer } from "../../../modules/FileViewerApi";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
-import { MediaPreviewEntryButton } from "@element-hq/web-shared-components";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import type { MediaPreviewEntryButton } from "@element-hq/web-shared-components";
+import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 export interface FileViewerCardState {
     viewer: RegisteredFileViewer;
     media: MediaHandle;
 }
 
-export function FileViewerCard({ viewer, media, onClose }: FileViewerCardState & { onClose: () => void }) {
+export function FileViewerCard({ viewer, media, onClose }: FileViewerCardState & { onClose: () => void }): JSX.Element {
     return (
-        <BaseCard onClose={onClose} header={viewer.options.cardHeader}>
+        <BaseCard onClose={onClose} header={viewer.options.cardHeader} withoutScrollContainer>
             <ErrorBoundary>{viewer && viewer.render({ media, onClose })}</ErrorBoundary>
         </BaseCard>
     );

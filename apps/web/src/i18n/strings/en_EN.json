@@ -1740,8 +1740,7 @@
         "loading_page": "Loading page %(page)s…",
         "open": "Open PDF",
         "page_label": "Page %(page)s of %(total)s",
-        "title": "PDF",
-        "toolbar_label": "PDF controls"
+        "title": "PDF"
     },
     "pill": {
         "permalink_other_room": "Message in %(room)s",
