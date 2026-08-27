@@ -24,3 +24,36 @@ Please see LICENSE files in the repository root for full details.
     border-radius: 4px;
     border: 1px solid $dialog-close-fg-color;
 }
+
+.mx_UploadConfirmDialog_caption {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cpd-space-1x);
+    margin-top: var(--cpd-space-4x);
+    text-align: left;
+
+    label {
+        color: var(--cpd-color-text-primary);
+    }
+
+    textarea {
+        box-sizing: border-box;
+        width: 100%;
+        font: var(--cpd-font-body-md-regular);
+        color: var(--cpd-color-text-primary);
+        background: var(--cpd-color-bg-canvas-default);
+        border: var(--cpd-border-width-1) solid var(--cpd-color-border-interactive-primary);
+        border-radius: 0.5rem;
+        padding: var(--cpd-space-3x) var(--cpd-space-4x);
+        resize: vertical;
+    }
+
+    textarea::placeholder {
+        color: var(--cpd-color-text-secondary);
+    }
+
+    textarea:focus-visible {
+        outline: var(--cpd-border-width-2) solid var(--cpd-color-border-focused);
+        outline-offset: var(--cpd-border-width-1);
+    }
+}

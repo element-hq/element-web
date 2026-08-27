@@ -14,6 +14,7 @@ import {
     type ISendEventResponse,
     type MatrixClient,
     MatrixError,
+    MsgType,
     RelationType,
     type UploadResponse,
 } from "matrix-js-sdk/src/matrix";
@@ -26,7 +27,9 @@ import { doMaybeLocalRoomAction } from "./utils/local-room";
 import { BlurhashEncoder } from "./BlurhashEncoder";
 import Modal from "./Modal";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
+import UploadConfirmDialog from "./components/views/dialogs/UploadConfirmDialog";
 import { _t } from "./languageHandler";
+import SettingsStore from "./settings/SettingsStore";
 
 vi.mock("matrix-encrypt-attachment", () => ({ default: { encryptAttachment: vi.fn().mockResolvedValue({}) } }));
 
@@ -117,6 +120,62 @@ describe("ContentMessages", () => {
                     msgtype: "m.image",
                 }),
             );
+        });
+
+        it("should send an image caption while preserving the filename", async () => {
+            vi.mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
+            const file = new File([], "photo.jpg", { type: "image/jpeg" });
+            await contentMessages.sendContentToRoom(
+                file,
+                roomId,
+                undefined,
+                client,
+                undefined,
+                undefined,
+                "  A photo from the trip  ",
+            );
+
+            expect(client.sendMessage).toHaveBeenCalledWith(
+                roomId,
+                null,
+                expect.objectContaining({
+                    body: "A photo from the trip",
+                    filename: "photo.jpg",
+                    msgtype: MsgType.Image,
+                }),
+            );
+        });
+
+        it("should send formatted markdown for an image caption when enabled", async () => {
+            vi.mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
+            const settingsSpy = vi
+                .spyOn(SettingsStore, "getValue")
+                .mockImplementation((setting) => setting === "MessageComposerInput.useMarkdown");
+            const file = new File([], "photo.jpg", { type: "image/jpeg" });
+
+            await contentMessages.sendContentToRoom(
+                file,
+                roomId,
+                undefined,
+                client,
+                undefined,
+                undefined,
+                "**A photo**",
+            );
+
+            expect(client.sendMessage).toHaveBeenCalledWith(
+                roomId,
+                null,
+                expect.objectContaining({
+                    body: "**A photo**",
+                    filename: "photo.jpg",
+                    format: "org.matrix.custom.html",
+                    formatted_body: "<strong>A photo</strong>",
+                    msgtype: MsgType.Image,
+                }),
+            );
+
+            settingsSpy.mockRestore();
         });
 
         it("should use m.image for PNG files which cannot be parsed but successfully thumbnail", async () => {
@@ -324,6 +383,47 @@ describe("ContentMessages", () => {
                 }),
             );
             dialogSpy.mockRestore();
+        });
+    });
+
+    describe("sendContentListToRoom", () => {
+        const roomId = "!roomId:server";
+
+        beforeEach(() => {
+            (contentMessages as unknown as { mediaConfig: Record<string, never> }).mediaConfig = {};
+            vi.mocked(doMaybeLocalRoomAction).mockImplementation(
+                <T>(roomId: string, fn: (actualRoomId: string) => Promise<T>) => fn(roomId),
+            );
+        });
+
+        it("forwards a caption from the image confirmation dialog", async () => {
+            const file = new File([], "photo.jpg", { type: "image/jpeg" });
+            const sendSpy = vi.spyOn(contentMessages, "sendContentToRoom").mockResolvedValue();
+            const dialogSpy = vi.spyOn(Modal, "createDialog").mockReturnValue({
+                finished: Promise.resolve([true, false, "A caption"]),
+                close: vi.fn(),
+            } as any);
+
+            await contentMessages.sendContentListToRoom([file], roomId, undefined, undefined, client);
+
+            expect(dialogSpy).toHaveBeenCalledWith(UploadConfirmDialog, {
+                file,
+                currentIndex: 0,
+                totalFiles: 1,
+                allowCaption: true,
+            });
+            expect(sendSpy).toHaveBeenCalledWith(
+                file,
+                roomId,
+                undefined,
+                client,
+                undefined,
+                expect.any(Promise),
+                "A caption",
+            );
+
+            dialogSpy.mockRestore();
+            sendSpy.mockRestore();
         });
     });
 

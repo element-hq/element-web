@@ -8,6 +8,7 @@ on:
 permissions: {} # No permissions needed
 jobs:
     upload:
+        if: github.repository == 'element-hq/element-web'
         environment: Localazy
         runs-on: ubuntu-latest
         steps:

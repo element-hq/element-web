@@ -3772,6 +3772,8 @@
     "upload_failed_title": "Upload Failed",
     "upload_file": {
         "cancel_all_button": "Cancel All",
+        "caption_label": "Caption",
+        "caption_placeholder": "Add a caption or context",
         "error_file_too_large": "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.",
         "error_files_too_large": "These files are <b>too large</b> to upload. The file size limit is %(limit)s.",
         "error_some_files_too_large": "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.",

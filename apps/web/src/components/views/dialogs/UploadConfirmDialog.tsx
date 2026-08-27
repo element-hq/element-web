@@ -19,23 +19,31 @@ interface IProps {
     file: File;
     currentIndex: number;
     totalFiles: number;
-    onFinished: (uploadConfirmed: boolean, uploadAll?: boolean) => void;
+    /** Keep caption collection opt-in for callers that do not expose it yet. */
+    allowCaption?: boolean;
+    onFinished: (uploadConfirmed: boolean, uploadAll?: boolean, caption?: string) => void;
 }
 
 interface IState {
     objectUrl?: string;
+    caption: string;
 }
 
 export default class UploadConfirmDialog extends React.Component<IProps, IState> {
     public static defaultProps: Partial<IProps> = {
         totalFiles: 1,
         currentIndex: 0,
+        allowCaption: false,
     };
+
+    private readonly captionInput = React.createRef<HTMLTextAreaElement>();
 
     public constructor(props: IProps) {
         super(props);
 
-        this.state = {};
+        this.state = {
+            caption: "",
+        };
     }
 
     public componentDidMount(): void {
@@ -46,6 +54,10 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
                 // canvas for thumbnail generation anyway
                 objectUrl: URL.createObjectURL(this.props.file),
             });
+        }
+
+        if (this.shouldShowCaptionField()) {
+            this.captionInput.current?.focus();
         }
     }
 
@@ -58,12 +70,31 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
     };
 
     private onUploadClick = (): void => {
+        if (this.shouldShowCaptionField()) {
+            this.props.onFinished(true, false, this.state.caption.trim());
+            return;
+        }
+
         this.props.onFinished(true);
     };
 
     private onUploadAllClick = (): void => {
+        if (this.shouldShowCaptionField()) {
+            const caption = this.state.caption.trim();
+            this.props.onFinished(true, true, caption || undefined);
+            return;
+        }
+
         this.props.onFinished(true, true);
     };
+
+    private onCaptionChange = (ev: React.ChangeEvent<HTMLTextAreaElement>): void => {
+        this.setState({ caption: ev.target.value });
+    };
+
+    private shouldShowCaptionField(): boolean {
+        return this.props.allowCaption === true && this.props.file.type.startsWith("image/");
+    }
 
     public render(): React.ReactNode {
         let title: string;
@@ -111,6 +142,23 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
             );
         }
 
+        const showCaptionField = this.shouldShowCaptionField();
+        const captionField = showCaptionField ? (
+            <div className="mx_UploadConfirmDialog_caption">
+                <label htmlFor="mx_UploadConfirmDialog_captionInput">{_t("upload_file|caption_label")}</label>
+                <textarea
+                    id="mx_UploadConfirmDialog_captionInput"
+                    name="caption"
+                    ref={this.captionInput}
+                    autoFocus
+                    value={this.state.caption}
+                    onChange={this.onCaptionChange}
+                    placeholder={_t("upload_file|caption_placeholder")}
+                    rows={3}
+                />
+            </div>
+        ) : null;
+
         return (
             <BaseDialog
                 className="mx_UploadConfirmDialog"
@@ -129,13 +177,14 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
                             </div>
                         </div>
                     </div>
+                    {captionField}
                 </div>
 
                 <DialogButtons
                     primaryButton={_t("action|upload")}
                     hasCancel={false}
                     onPrimaryButtonClick={this.onUploadClick}
-                    focus={true}
+                    focus={!showCaptionField}
                 >
                     {uploadAllButton}
                 </DialogButtons>

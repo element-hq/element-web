@@ -13,7 +13,8 @@ if [[ $BRANCH != HEAD && ! $BRANCH =~ heads/v.+ ]]
 then
     DIST_VERSION=$("$DIR"/get-version-from-git.sh)
 else
-    DIST_VERSION=$(git describe --abbrev=0 --tags)
+    # Forks and pull request merge refs may not carry upstream tags, so use the checked-out commit as the build version.
+    DIST_VERSION=$(git describe --abbrev=0 --tags 2>/dev/null || git rev-parse --short=12 HEAD)
 fi
 
 DIST_VERSION=$("$DIR"/normalize-version.sh "$DIST_VERSION")

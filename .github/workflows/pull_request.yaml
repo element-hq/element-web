@@ -9,6 +9,8 @@ on:
 permissions: {}
 jobs:
     action:
+        # The upstream triage workflow requires Element's labels and organization secret.
+        if: github.repository == 'element-hq/element-web'
         uses: matrix-org/matrix-js-sdk/.github/workflows/pull_request.yaml@develop # zizmor: ignore[unpinned-uses]
         permissions:
             pull-requests: write

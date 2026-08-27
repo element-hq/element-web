@@ -12,6 +12,7 @@ permissions: {}
 jobs:
     buildx:
         name: Docker Buildx
+        if: github.repository == 'element-hq/element-web'
         runs-on: ubuntu-24.04
         environment: ${{ github.event_name != 'pull_request' && 'dockerhub' || '' }}
         permissions:

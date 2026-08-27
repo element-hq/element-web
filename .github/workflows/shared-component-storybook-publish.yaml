@@ -16,6 +16,7 @@ jobs:
 
     publish:
         name: Publish storybook
+        if: github.repository == 'element-hq/element-web'
         runs-on: ubuntu-latest
         needs: build
         environment: SharedComponents

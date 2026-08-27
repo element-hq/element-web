@@ -56,6 +56,7 @@ import { createThumbnail } from "./utils/image-media";
 import { attachMentions, attachRelation } from "./utils/messages.ts";
 import { doMaybeLocalRoomAction } from "./utils/local-room";
 import { blobIsAnimated } from "./utils/Image.ts";
+import { htmlSerializeFromMdIfNeeded } from "./editor/serialize";
 
 // scraped out of a macOS hidpi (5660ppm) screenshot png
 //                  5669 px (x-axis)      , 5669 px (y-axis)      , per metre
@@ -490,18 +491,21 @@ export default class ContentMessages {
         for (let i = 0; i < okFiles.length; ++i) {
             const file = okFiles[i];
             const loopPromiseBefore = promBefore;
+            let caption: string | undefined;
 
             if (!uploadAll) {
                 const { finished } = Modal.createDialog(UploadConfirmDialog, {
                     file,
                     currentIndex: i,
                     totalFiles: okFiles.length,
+                    allowCaption: true,
                 });
-                const [shouldContinue, shouldUploadAll] = await finished;
+                const [shouldContinue, shouldUploadAll, uploadCaption] = await finished;
                 if (!shouldContinue) break;
                 if (shouldUploadAll) {
                     uploadAll = true;
                 }
+                caption = uploadCaption;
             }
 
             promBefore = doMaybeLocalRoomAction(
@@ -514,6 +518,7 @@ export default class ContentMessages {
                         matrixClient,
                         replyToEvent ?? undefined,
                         loopPromiseBefore,
+                        caption,
                     ),
                 matrixClient,
             );
@@ -560,15 +565,29 @@ export default class ContentMessages {
         matrixClient: MatrixClient,
         replyToEvent: MatrixEvent | undefined,
         promBefore?: Promise<any>,
+        caption?: string,
     ): Promise<void> {
         const fileName = file.name || _t("common|attachment");
+        const trimmedCaption = caption?.trim();
         const content: Omit<MediaEventContent, "info"> & { info: Partial<MediaEventInfo> } = {
-            body: fileName,
+            body: trimmedCaption || fileName,
             info: {
                 size: file.size,
             },
             msgtype: MsgType.File, // set more specifically later
         };
+
+        if (trimmedCaption) {
+            content.filename = fileName;
+
+            if (SettingsStore.getValue("MessageComposerInput.useMarkdown")) {
+                const formattedCaption = htmlSerializeFromMdIfNeeded(trimmedCaption);
+                if (formattedCaption) {
+                    content.format = "org.matrix.custom.html";
+                    content.formatted_body = formattedCaption;
+                }
+            }
+        }
 
         // Attach mentions, which really only applies if there's a replyToEvent.
         attachMentions(matrixClient.getSafeUserId(), content, null, replyToEvent);
