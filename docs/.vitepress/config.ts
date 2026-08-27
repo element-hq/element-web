@@ -5,7 +5,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE in the repository root for full details.
 */
 
+import { existsSync } from "node:fs";
+import { join, posix } from "node:path";
+import { fileURLToPath } from "node:url";
 import { withMermaid } from "vitepress-plugin-mermaid";
+
+const docsDir = fileURLToPath(new URL("..", import.meta.url));
 
 function customPathResolver(href: string, currentPath: string): string {
     const [link, fragment] = href.split("#", 2);
@@ -25,8 +30,14 @@ function customPathResolver(href: string, currentPath: string): string {
         case "../README.md":
             return `../docs/index.md#${fragment}`;
 
-        default:
+        default: {
+            // Relative links between pages within docs/ are resolved by VitePress natively
+            const resolved = posix.normalize(posix.join(posix.dirname(currentPath), link));
+            if (!resolved.startsWith("..") && existsSync(join(docsDir, resolved))) {
+                return href;
+            }
             return `https://github.com/element-hq/element-web/blob/develop/${href.split("/").pop()}`;
+        }
     }
 }
 
