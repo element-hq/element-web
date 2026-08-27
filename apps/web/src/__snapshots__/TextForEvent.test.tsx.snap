@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`TextForEvent textForJoinRulesEvent() returns correct JSX message when room join rule changed to restricted 1`] = `
+exports[`TextForEvent > textForJoinRulesEvent() > returns correct JSX message when room join rule changed to restricted 1`] = `
 <span>
   <span>
     @a changed who can join this room. 

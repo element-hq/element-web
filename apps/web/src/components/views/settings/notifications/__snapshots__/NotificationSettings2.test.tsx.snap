@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
+exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = `
 <div>
   <div
     class="mx_NotificationSettings2"
@@ -1059,7 +1059,7 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
 </div>
 `;
 
-exports[`<Notifications /> matches the snapshot 1`] = `
+exports[`<Notifications /> > matches the snapshot 1`] = `
 <div>
   <div
     class="mx_NotificationSettings2"

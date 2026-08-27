@@ -6,7 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { act, findByRole, getByRole, queryByRole, render, waitFor } from "jest-matrix-react";
+// @vitest-environment happy-dom
+
+import { describe, it, expect, vi, beforeAll, beforeEach, type Mock } from "vitest";
+import { act, findByRole, getByRole, queryByRole, render, waitFor } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
 import {
     ThreepidMedium,
@@ -17,14 +20,13 @@ import {
     Room,
     RuleId,
 } from "matrix-js-sdk/src/matrix";
+import { mkMessage, stubClient } from "test-utils";
 import React from "react";
 
-import NotificationSettings2 from "../../../../../../src/components/views/settings/notifications/NotificationSettings2";
-import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
-import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
-import { StandardActions } from "../../../../../../src/notifications/StandardActions";
-import { mkMessage, stubClient } from "../../../../../test-utils";
-import Mock = jest.Mock;
+import NotificationSettings2 from "./NotificationSettings2";
+import MatrixClientContext from "../../../../contexts/MatrixClientContext";
+import { MatrixClientPeg } from "../../../../MatrixClientPeg";
+import { StandardActions } from "../../../../notifications/StandardActions";
 
 const waitForUpdate = (): Promise<void> => new Promise((resolve) => setTimeout(resolve));
 
@@ -50,24 +52,25 @@ describe("<Notifications />", () => {
     let pushRules: IPushRules;
 
     beforeAll(async () => {
-        pushRules = (await import("../../../../models/notificationsettings/pushrules_sample.json")) as IPushRules;
+        pushRules =
+            (await import("../../../../models/notificationsettings/__mocks__/pushrules_sample.json")) as IPushRules;
     });
 
     beforeEach(() => {
         stubClient();
         cli = MatrixClientPeg.safeGet();
-        cli.getPushRules = jest.fn(cli.getPushRules).mockResolvedValue(pushRules);
-        cli.supportsIntentionalMentions = jest.fn(cli.supportsIntentionalMentions).mockReturnValue(false);
-        cli.setPushRuleEnabled = jest.fn(cli.setPushRuleEnabled);
-        cli.setPushRuleActions = jest.fn(cli.setPushRuleActions);
-        cli.addPushRule = jest.fn(cli.addPushRule).mockResolvedValue({});
-        cli.deletePushRule = jest.fn(cli.deletePushRule).mockResolvedValue({});
-        cli.removePusher = jest.fn(cli.removePusher).mockResolvedValue({});
-        cli.setPusher = jest.fn(cli.setPusher).mockResolvedValue({});
+        cli.getPushRules = vi.fn(cli.getPushRules).mockResolvedValue(pushRules);
+        cli.supportsIntentionalMentions = vi.fn(cli.supportsIntentionalMentions).mockReturnValue(false);
+        cli.setPushRuleEnabled = vi.fn(cli.setPushRuleEnabled);
+        cli.setPushRuleActions = vi.fn(cli.setPushRuleActions);
+        cli.addPushRule = vi.fn(cli.addPushRule).mockResolvedValue({});
+        cli.deletePushRule = vi.fn(cli.deletePushRule).mockResolvedValue({});
+        cli.removePusher = vi.fn(cli.removePusher).mockResolvedValue({});
+        cli.setPusher = vi.fn(cli.setPusher).mockResolvedValue({});
     });
 
     it("matches the snapshot", async () => {
-        cli.getPushers = jest.fn(cli.getPushers).mockResolvedValue({
+        cli.getPushers = vi.fn(cli.getPushers).mockResolvedValue({
             pushers: [
                 {
                     app_display_name: "Element",
@@ -81,7 +84,7 @@ describe("<Notifications />", () => {
                 },
             ],
         });
-        cli.getThreePids = jest.fn(cli.getThreePids).mockResolvedValue({
+        cli.getThreePids = vi.fn(cli.getThreePids).mockResolvedValue({
             threepids: [
                 {
                     medium: ThreepidMedium.Email,
@@ -638,7 +641,7 @@ describe("<Notifications />", () => {
 
     describe("pusher settings", () => {
         it("can create email pushers", async () => {
-            cli.getPushers = jest.fn(cli.getPushers).mockResolvedValue({
+            cli.getPushers = vi.fn(cli.getPushers).mockResolvedValue({
                 pushers: [
                     {
                         app_display_name: "Element",
@@ -652,7 +655,7 @@ describe("<Notifications />", () => {
                     },
                 ],
             });
-            cli.getThreePids = jest.fn(cli.getThreePids).mockResolvedValue({
+            cli.getThreePids = vi.fn(cli.getThreePids).mockResolvedValue({
                 threepids: [
                     {
                         medium: ThreepidMedium.Email,
@@ -689,7 +692,7 @@ describe("<Notifications />", () => {
         });
 
         it("can remove email pushers", async () => {
-            cli.getPushers = jest.fn(cli.getPushers).mockResolvedValue({
+            cli.getPushers = vi.fn(cli.getPushers).mockResolvedValue({
                 pushers: [
                     {
                         app_display_name: "Element",
@@ -711,7 +714,7 @@ describe("<Notifications />", () => {
                     },
                 ],
             });
-            cli.getThreePids = jest.fn(cli.getThreePids).mockResolvedValue({
+            cli.getThreePids = vi.fn(cli.getThreePids).mockResolvedValue({
                 threepids: [
                     {
                         medium: ThreepidMedium.Email,
@@ -742,7 +745,7 @@ describe("<Notifications />", () => {
     describe("clear all notifications", () => {
         it("is hidden when no notifications exist", async () => {
             const room = new Room("room123", cli, "@alice:example.org");
-            cli.getRooms = jest.fn(cli.getRooms).mockReturnValue([room]);
+            cli.getRooms = vi.fn(cli.getRooms).mockReturnValue([room]);
 
             const { container } = render(
                 <MatrixClientContext.Provider value={cli}>
@@ -759,7 +762,7 @@ describe("<Notifications />", () => {
 
         it("clears all notifications", async () => {
             const room = new Room("room123", cli, "@alice:example.org");
-            cli.getRooms = jest.fn(cli.getRooms).mockReturnValue([room]);
+            cli.getRooms = vi.fn(cli.getRooms).mockReturnValue([room]);
 
             const message = mkMessage({
                 event: true,

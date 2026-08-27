@@ -7,9 +7,9 @@
 
 import EventEmitter from "node:events";
 import { SimpleObservable } from "matrix-widget-api";
+import { vi } from "vitest";
 
-import { PlaybackState } from "../../../src/audio/Playback";
-import { vi } from "../../setup/adapter.ts";
+import { PlaybackState } from "../Playback";
 
 /**
  * A mocked playback implementation for testing purposes.

@@ -5,10 +5,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { describe, it, expect, vi } from "vitest";
 import { RoomMember } from "matrix-js-sdk/src/matrix";
 
-import { resolveRoomMemberProfile, roomMemberToMemberInfo } from "../../../../src/hooks/room/useRoomMemberProfile";
-import { TimelineRenderingType } from "../../../../src/contexts/RoomContext";
+import { resolveRoomMemberProfile, roomMemberToMemberInfo } from "./useRoomMemberProfile";
+import { TimelineRenderingType } from "../../contexts/RoomContext";
 
 describe("resolveRoomMemberProfile", () => {
     it("prefers the current room member when current profiles are enabled", () => {
@@ -21,7 +22,7 @@ describe("resolveRoomMemberProfile", () => {
         historicalMember.rawDisplayName = "Alan";
         historicalMember.disambiguate = false;
         const room = {
-            getMember: jest.fn().mockReturnValue(currentMember),
+            getMember: vi.fn().mockReturnValue(currentMember),
         };
 
         const resolved = resolveRoomMemberProfile({
@@ -44,7 +45,7 @@ describe("resolveRoomMemberProfile", () => {
 
         const resolved = resolveRoomMemberProfile({
             room: {
-                getMember: jest.fn(),
+                getMember: vi.fn(),
             },
             userId,
             member: historicalMember,

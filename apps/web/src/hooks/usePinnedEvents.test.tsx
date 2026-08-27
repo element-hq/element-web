@@ -5,13 +5,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type PropsWithChildren } from "react";
-import { act, renderHook, waitFor } from "jest-matrix-react";
-import { EventType, type MatrixClient, MatrixEvent, RelationType, Room } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import { useFetchedPinnedEvents } from "../../../src/hooks/usePinnedEvents";
-import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
-import { stubClient } from "../../test-utils";
+import React, { type PropsWithChildren } from "react";
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import { act, renderHook, waitFor } from "test-utils-rtl";
+import { EventType, type MatrixClient, MatrixEvent, RelationType, Room } from "matrix-js-sdk/src/matrix";
+import { stubClient } from "test-utils";
+
+import { useFetchedPinnedEvents } from "./usePinnedEvents";
+import MatrixClientContext from "../contexts/MatrixClientContext";
 
 describe("useFetchedPinnedEvents", () => {
     const roomId = "!room:server";
@@ -51,10 +54,10 @@ describe("useFetchedPinnedEvents", () => {
         room = new Room(roomId, client, userId);
         // The pinned event is deliberately not in the local timeline, so the hook holds a copy of
         // its own that nothing else keeps up to date.
-        jest.spyOn(client, "fetchRoomEvent").mockResolvedValue(
+        vi.spyOn(client, "fetchRoomEvent").mockResolvedValue(
             makeEvent(pinnedEventId, { msgtype: "m.text", body: "original" }).event as never,
         );
-        jest.spyOn(client, "relations").mockResolvedValue({ events: [] });
+        vi.spyOn(client, "relations").mockResolvedValue({ events: [] });
     });
 
     it("gives the edited content for a pinned event that is edited", async () => {
