@@ -56,15 +56,8 @@ describe("<PollListItemEnded />", () => {
     const getComponent = (props: { event: MatrixEvent; poll: Poll }) =>
         render(<PollListItemEnded {...props} onClick={vi.fn()} />);
 
-    beforeAll(() => {
-        // mock default locale to en-GB and set timezone
-        // so these tests run the same everywhere
-        mockIntlDateTimeFormat();
-    });
-
-    afterAll(() => {
-        unmockIntlDateTimeFormat();
-    });
+    beforeAll(mockIntlDateTimeFormat);
+    afterAll(unmockIntlDateTimeFormat);
 
     it("renders a poll with no responses", async () => {
         await setupRoomWithPollEvents([pollStartEvent], [], [pollEndEvent], mockClient, room);

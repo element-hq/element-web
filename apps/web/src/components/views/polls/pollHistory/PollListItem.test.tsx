@@ -21,15 +21,8 @@ describe("<PollListItem />", () => {
     const defaultProps = { event, onClick: vi.fn() };
     const getComponent = (props = {}) => render(<PollListItem {...defaultProps} {...props} />);
 
-    beforeAll(() => {
-        // mock default locale to en-GB and set timezone
-        // so these tests run the same everywhere
-        mockIntlDateTimeFormat();
-    });
-
-    afterAll(() => {
-        unmockIntlDateTimeFormat();
-    });
+    beforeAll(mockIntlDateTimeFormat);
+    afterAll(unmockIntlDateTimeFormat);
 
     it("renders a poll", () => {
         const { container } = getComponent();

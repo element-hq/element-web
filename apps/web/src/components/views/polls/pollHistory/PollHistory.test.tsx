@@ -67,9 +67,8 @@ describe("<PollHistory />", () => {
             ),
         });
 
-    beforeAll(() => {
-        mockIntlDateTimeFormat();
-    });
+    beforeAll(mockIntlDateTimeFormat);
+    afterAll(unmockIntlDateTimeFormat);
 
     beforeEach(() => {
         room = new Room(roomId, mockClient, userId);
@@ -87,10 +86,6 @@ describe("<PollHistory />", () => {
         mockClient.paginateEventTimeline.mockReset().mockResolvedValue(false);
 
         vi.spyOn(Date, "now").mockReturnValue(now);
-    });
-
-    afterAll(() => {
-        unmockIntlDateTimeFormat();
     });
 
     it("throws when room is not found", () => {
