@@ -15,7 +15,6 @@ import {
     WidgetContextMenuView,
     type WidgetContextMenuViewModel as WidgetContextMenuViewModelInterface,
 } from "@element-hq/web-shared-components";
-import { type ApprovalOpts, WidgetLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 
 import ErrorDialog from "../../../components/views/dialogs/ErrorDialog";
 import QuestionDialog from "../../../components/views/dialogs/QuestionDialog";
@@ -30,8 +29,7 @@ import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingSto
 import { isAppWidget } from "../../../stores/WidgetStore";
 import WidgetUtils from "../../../utils/WidgetUtils";
 import { WidgetType } from "../../../widgets/WidgetType";
-import { ModuleRunner } from "../../../modules/ModuleRunner";
-import { ElementWidget, type WidgetMessaging } from "../../../stores/widgets/WidgetMessaging";
+import { type WidgetMessaging } from "../../../stores/widgets/WidgetMessaging";
 import dis from "../../../dispatcher/dispatcher";
 
 const checkRevokeButtonState = (
@@ -40,19 +38,14 @@ const checkRevokeButtonState = (
     app: IWidget,
     userWidget: boolean | undefined,
 ): boolean => {
-    const opts: ApprovalOpts = { approved: undefined };
-    ModuleRunner.instance.invoke(WidgetLifecycle.PreLoadRequest, opts, new ElementWidget(app));
-    if (!opts.approved) {
-        const isAllowedWidget =
-            (isAppWidget(app) &&
-                app.eventId !== undefined &&
-                (SettingsStore.getValue("allowedWidgets", roomId)[app.eventId] ?? false)) ||
-            app.creatorUserId === cli?.getUserId();
+    const isAllowedWidget =
+        (isAppWidget(app) &&
+            app.eventId !== undefined &&
+            (SettingsStore.getValue("allowedWidgets", roomId)[app.eventId] ?? false)) ||
+        app.creatorUserId === cli?.getUserId();
 
-        const isLocalWidget = WidgetType.JITSI.matches(app.type);
-        return !userWidget && !isLocalWidget && isAllowedWidget;
-    }
-    return false;
+    const isLocalWidget = WidgetType.JITSI.matches(app.type);
+    return !userWidget && !isLocalWidget && isAllowedWidget;
 };
 
 export class WidgetContextMenuViewModel

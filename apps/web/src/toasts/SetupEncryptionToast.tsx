@@ -21,8 +21,6 @@ import SetupEncryptionDialog from "../components/views/dialogs/security/SetupEnc
 import { AccessCancelledError, accessSecretStorage } from "../SecurityManager";
 import ToastStore, { type IToast } from "../stores/ToastStore";
 import GenericToast from "../components/views/toasts/GenericToast";
-import { ModuleRunner } from "../modules/ModuleRunner";
-import { SetupEncryptionStore } from "../stores/SetupEncryptionStore";
 import Spinner from "../components/views/elements/Spinner";
 import { type OpenToTabPayload } from "../dispatcher/payloads/OpenToTabPayload";
 import { Action } from "../dispatcher/actions";
@@ -156,14 +154,6 @@ const getDescription = (state: DeviceStateForToast): string | React.ReactNode =>
  */
 export const showToast = (state: DeviceStateForToast): void => {
     const myLogger = logger.getChild(`SetupEncryptionToast[${state}]:`);
-    if (
-        ModuleRunner.instance.extensions.cryptoSetup.setupEncryptionNeeded({
-            kind: state as any,
-            storeProvider: { getInstance: () => SetupEncryptionStore.sharedInstance() },
-        })
-    ) {
-        return;
-    }
 
     const onPrimaryClick = async (): Promise<void> => {
         switch (state) {

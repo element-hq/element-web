@@ -84,7 +84,6 @@ describe("<SendMessageComposer/>", () => {
         msc3946ProcessDynamicPredecessor: false,
         canAskToJoin: false,
         promptAskToJoin: false,
-        viewRoomOpts: { buttons: [] },
         isRoomEncrypted: false,
     };
     describe("createMessageContent", () => {

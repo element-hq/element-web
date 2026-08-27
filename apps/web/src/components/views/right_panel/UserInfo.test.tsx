@@ -47,14 +47,6 @@ vi.mock("../../../utils/direct-messages", async () => ({
 
 vi.mock("../../../dispatcher/dispatcher");
 
-vi.mock("../../../customisations/UserIdentifier", () => {
-    return {
-        default: {
-            getDisplayUserIdentifier: vi.fn().mockReturnValue("customUserIdentifier"),
-        },
-    };
-});
-
 vi.mock("../../../utils/DMRoomMap", () => {
     const mock = {
         getUserIdForRoomId: vi.fn(),

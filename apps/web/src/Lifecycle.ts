@@ -15,7 +15,6 @@ import { type AESEncryptedSecretStoragePayload } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg, type MatrixClientPegAssignOpts } from "./MatrixClientPeg";
-import { ModuleRunner } from "./modules/ModuleRunner";
 import EventIndexPeg from "./indexing/EventIndexPeg";
 import { createMatrixClient, createClientWithCreds, type IMatrixClientCreds } from "./utils/createMatrixClient";
 import UserActivity from "./UserActivity";
@@ -38,7 +37,6 @@ import { Jitsi } from "./widgets/Jitsi";
 import { SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY, SSO_IDP_ID_KEY } from "./BasePlatform";
 import ThreepidInviteStore from "./stores/ThreepidInviteStore";
 import { PosthogAnalytics } from "./PosthogAnalytics";
-import LifecycleCustomisations from "./customisations/Lifecycle";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import { _t } from "./languageHandler";
 import SessionRestoreErrorDialog from "./components/views/dialogs/SessionRestoreErrorDialog";
@@ -913,8 +911,6 @@ async function persistCredentials(credentials: IMatrixClientCreds): Promise<void
         localStorage.setItem("mx_device_id", credentials.deviceId);
     }
 
-    ModuleRunner.instance.extensions.cryptoSetup?.persistCredentials(credentials);
-
     logger.log(`Session persisted for ${credentials.userId}`);
 }
 
@@ -1109,7 +1105,6 @@ export async function onLoggedOut(): Promise<void> {
     dis.fire(Action.OnLoggedOut, true);
     stopMatrixClient();
     await clearStorage({ deleteEverything: true });
-    LifecycleCustomisations.onLoggedOutAndStorageCleared?.();
     await PlatformPeg.get()?.clearStorage();
     SettingsStore.reset();
 

@@ -2,13 +2,6 @@
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "projectType": "application",
     "targets": {
-        "prebuild:module_system": {
-            "cache": true,
-            "command": "node module_system/scripts/install.ts",
-            "inputs": ["{projectRoot}/build_config.yaml"],
-            "outputs": ["{projectRoot}/src/modules.js", "{projectRoot}/package.json", "{workspaceRoot}/pnpm-lock.yaml"],
-            "options": { "cwd": "apps/web" }
-        },
         "prebuild:rethemendex": {
             "cache": true,
             "executor": "nx:run-script",
@@ -26,7 +19,7 @@
         },
         "start": {
             "command": "webpack-dev-server --output-path webapp --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js --mode development",
-            "dependsOn": ["prebuild:module_system", "prebuild:rethemendex", "^start"],
+            "dependsOn": ["prebuild:rethemendex", "^start"],
             "continuous": true,
             "options": { "cwd": "apps/web" }
         },
@@ -35,9 +28,7 @@
             "options": {
                 "commands": [
                     // We indirect via `pnpm exec` to stop knip interpreting the
-                    // commandline and declaring `playwright` and `./tsconfig.module_system.json`
-                    // as unlisted dependencies.
-                    "pnpm exec tsc --noEmit --project ./tsconfig.module_system.json",
+                    // commandline and declaring `playwright` as unlisted dependency.
                     "pnpm exec tsc --noEmit",
                     "pnpm exec tsc --noEmit --project playwright"
                 ],

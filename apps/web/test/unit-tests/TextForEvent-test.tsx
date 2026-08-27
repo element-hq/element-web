@@ -26,15 +26,11 @@ import { hasText, textForEvent } from "../../src/TextForEvent";
 import SettingsStore from "../../src/settings/SettingsStore";
 import { createTestClient, stubClient } from "../test-utils";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
-import UserIdentifierCustomisations from "../../src/customisations/UserIdentifier";
 import { getSenderName } from "../../src/utils/event/getSenderName";
 import { ElementCallEventType } from "../../src/call-types";
 import Spoiler from "../../src/components/views/elements/Spoiler";
 
 jest.mock("../../src/settings/SettingsStore");
-jest.mock("../../src/customisations/UserIdentifier", () => ({
-    getDisplayUserIdentifier: jest.fn().mockImplementation((userId) => userId),
-}));
 
 function mockPinnedEvent(pinnedMessageIds?: string[], prevPinnedMessageIds?: string[]): MatrixEvent {
     return new MatrixEvent({
@@ -195,12 +191,6 @@ describe("TextForEvent", () => {
                 .mockClear()
                 .mockImplementation((userId) => [userA, userB, userC].find((u) => u.userId === userId) || null);
             (SettingsStore.getValue as jest.Mock).mockReturnValue(true);
-        });
-
-        beforeEach(() => {
-            (UserIdentifierCustomisations.getDisplayUserIdentifier as jest.Mock)
-                .mockClear()
-                .mockImplementation((userId) => userId);
         });
 
         it("returns falsy when no users have changed power level", () => {
