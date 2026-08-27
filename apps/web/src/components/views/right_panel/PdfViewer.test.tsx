@@ -7,9 +7,10 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import React from "react";
+import React, { act } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen, waitFor } from "test-utils-rtl";
+import userEvent from "@testing-library/user-event";
 import type { PDFDocumentLoadingTask, PDFDocumentProxy } from "pdfjs-dist";
 import type { UploadedMedia } from "@element-hq/element-web-module-api";
 
@@ -45,6 +46,7 @@ const viewerMock = vi.hoisted(() => {
         public static instances: MockPDFViewer[] = [];
 
         public currentScaleValue = "";
+        public pagesCount = 100;
         public readonly setDocument = vi.fn();
         public readonly cleanup = vi.fn();
         public readonly update = vi.fn();
@@ -57,6 +59,18 @@ const viewerMock = vi.hoisted(() => {
         public get eventBus(): MockEventBus {
             return this.options.eventBus;
         }
+
+        // Assigning this scrolls pdf.js to the page, which then reports back via `pagechanging`.
+        public set currentPageNumber(pageNumber: number) {
+            this.#currentPageNumber = pageNumber;
+            this.options.eventBus.dispatch("pagechanging", { pageNumber });
+        }
+
+        public get currentPageNumber(): number {
+            return this.#currentPageNumber;
+        }
+
+        #currentPageNumber = 1;
     }
 
     class MockPDFLinkService {
@@ -110,7 +124,12 @@ function activeViewer(): InstanceType<typeof viewerMock.MockPDFViewer> {
 /** pdf.js signals that pages are laid out and measurable via this event. */
 async function emitPagesInit(): Promise<void> {
     await waitFor(() => expect(activeViewer().setDocument).toHaveBeenCalled());
-    activeViewer().eventBus.dispatch("pagesinit");
+    act(() => activeViewer().eventBus.dispatch("pagesinit"));
+}
+
+/** pdf.js re-reports the current page as the document scrolls. */
+function emitPageChanging(pageNumber: number): void {
+    act(() => activeViewer().eventBus.dispatch("pagechanging", { pageNumber }));
 }
 
 function mockResizeObserver(): { trigger: (element: Element) => void } {
@@ -260,6 +279,102 @@ describe("PdfViewer", () => {
 
         expect(activeViewer().currentScaleValue).toBe("1.75");
         expect(activeViewer().update).toHaveBeenCalled();
+    });
+
+    it("shows the current page and total, and follows the document as it is scrolled", async () => {
+        mockDocument();
+
+        render(<PdfViewer media={media()} />);
+        await emitPagesInit();
+
+        expect(screen.getByTestId("pdf-page-input")).toHaveValue("1");
+        expect(screen.getByTestId("pdf-page-total")).toHaveTextContent("100");
+
+        // pdf.js reports the page it works out from the visible pages as the document scrolls.
+        emitPageChanging(5);
+
+        await waitFor(() => expect(screen.getByTestId("pdf-page-input")).toHaveValue("5"));
+        expect(screen.getByRole("group")).toHaveAccessibleName("Page 5 of 100");
+    });
+
+    it("hides the page selector until the document is ready", () => {
+        mockDocument();
+
+        render(<PdfViewer media={media()} />);
+
+        expect(screen.queryByTestId("pdf-page-input")).not.toBeInTheDocument();
+    });
+
+    it("jumps to a page typed into the selector", async () => {
+        const user = userEvent.setup();
+        mockDocument();
+
+        render(<PdfViewer media={media()} />);
+        await emitPagesInit();
+
+        const input = screen.getByTestId("pdf-page-input");
+        await user.clear(input);
+        await user.type(input, "42{Enter}");
+
+        expect(activeViewer().currentPageNumber).toBe(42);
+        await waitFor(() => expect(input).toHaveValue("42"));
+    });
+
+    it("reverts an out-of-range or unparseable page instead of jumping", async () => {
+        const user = userEvent.setup();
+        mockDocument();
+
+        render(<PdfViewer media={media()} />);
+        await emitPagesInit();
+
+        const input = screen.getByTestId("pdf-page-input");
+        emitPageChanging(7);
+        await waitFor(() => expect(input).toHaveValue("7"));
+
+        await user.clear(input);
+        await user.type(input, "500{Enter}");
+        await waitFor(() => expect(input).toHaveValue("7"));
+
+        await user.clear(input);
+        await user.type(input, "abc{Enter}");
+        await waitFor(() => expect(input).toHaveValue("7"));
+
+        expect(activeViewer().currentPageNumber).toBe(1);
+    });
+
+    it("does not overwrite the box while it is being edited", async () => {
+        const user = userEvent.setup();
+        mockDocument();
+
+        render(<PdfViewer media={media()} />);
+        await emitPagesInit();
+
+        const input = screen.getByTestId("pdf-page-input");
+        await user.clear(input);
+        await user.type(input, "12");
+
+        // Scrolling continues to report pages, but must not clobber a half-typed entry.
+        emitPageChanging(3);
+
+        expect(input).toHaveValue("12");
+    });
+
+    it("abandons an edit on Escape", async () => {
+        const user = userEvent.setup();
+        mockDocument();
+
+        render(<PdfViewer media={media()} />);
+        await emitPagesInit();
+
+        const input = screen.getByTestId("pdf-page-input");
+        emitPageChanging(9);
+        await waitFor(() => expect(input).toHaveValue("9"));
+
+        await user.clear(input);
+        await user.type(input, "40{Escape}");
+
+        await waitFor(() => expect(input).toHaveValue("9"));
+        expect(activeViewer().currentPageNumber).toBe(1);
     });
 
     it("restores the scroll position when the same PDF is reopened", async () => {

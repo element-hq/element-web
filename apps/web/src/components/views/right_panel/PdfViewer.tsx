@@ -5,7 +5,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+    type ChangeEvent,
+    type FormEvent,
+    type JSX,
+    type KeyboardEvent,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
@@ -119,7 +129,21 @@ export function PdfViewer({ media }: { media: UploadedMedia }): JSX.Element {
     const viewerElementRef = useRef<HTMLDivElement>(null);
     const pdfViewerRef = useRef<PdfJsViewer | undefined>(undefined);
     const [status, setStatus] = useState<ViewerStatus>("loading");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageCount, setPageCount] = useState(0);
+    const [pageInput, setPageInput] = useState("1");
+    // While the box has focus the viewer must not overwrite what is being typed, even though
+    // scrolling keeps reporting new pages underneath.
+    const isEditingPageRef = useRef(false);
+    // Escape blurs the box, and blur commits — so the cancellation has to survive into the blur.
+    const isPageEditCancelledRef = useRef(false);
     const scrollPositionKey = useMemo(() => getMediaScrollKey(media), [media]);
+
+    useEffect(() => {
+        if (isEditingPageRef.current) return;
+
+        setPageInput(String(currentPage));
+    }, [currentPage]);
 
     useEffect(() => {
         const container = containerRef.current;
@@ -128,6 +152,8 @@ export function PdfViewer({ media }: { media: UploadedMedia }): JSX.Element {
 
         configurePdfWorker();
         setStatus("loading");
+        setCurrentPage(1);
+        setPageCount(0);
 
         let disposed = false;
         let loadingTask: PDFDocumentLoadingTask | undefined;
@@ -147,8 +173,14 @@ export function PdfViewer({ media }: { media: UploadedMedia }): JSX.Element {
         linkService.setViewer(pdfViewer);
         pdfViewerRef.current = pdfViewer;
 
+        // pdf.js works out which page is current from the pages it can see, and re-reports it as the
+        // document scrolls, so the indicator never has to measure anything itself.
+        const onPageChanging = ({ pageNumber }: { pageNumber: number }): void => setCurrentPage(pageNumber);
+
         const onPagesInit = (): void => {
             pdfViewer.currentScaleValue = FIT_TO_WIDTH;
+            setPageCount(pdfViewer.pagesCount);
+            setCurrentPage(pdfViewer.currentPageNumber);
 
             // pdf.js sizes every page from the document up front, so the scroll height is already
             // correct here and a restored offset lands where it did before.
@@ -162,6 +194,7 @@ export function PdfViewer({ media }: { media: UploadedMedia }): JSX.Element {
         };
 
         eventBus.on("pagesinit", onPagesInit);
+        eventBus.on("pagechanging", onPageChanging);
 
         const loadDocument = async (): Promise<void> => {
             const blob = await media.blob();
@@ -190,6 +223,7 @@ export function PdfViewer({ media }: { media: UploadedMedia }): JSX.Element {
         return () => {
             disposed = true;
             eventBus.off("pagesinit", onPagesInit);
+            eventBus.off("pagechanging", onPageChanging);
 
             rememberScrollPosition(scrollPositionKey, {
                 left: container.scrollLeft,
@@ -214,6 +248,59 @@ export function PdfViewer({ media }: { media: UploadedMedia }): JSX.Element {
         // `origin` fixed while it re-anchors the scroll position.
         pdfViewerRef.current?.updateScale({ scaleFactor: factor, origin, drawingDelay: ZOOM_DRAWING_DELAY });
     }, []);
+
+    const commitPageInput = useCallback((): void => {
+        const pdfViewer = pdfViewerRef.current;
+        const requestedPage = Number.parseInt(pageInput, 10);
+
+        if (pdfViewer && Number.isInteger(requestedPage) && requestedPage >= 1 && requestedPage <= pageCount) {
+            // Assigning this scrolls the page into view; pdf.js then reports it back via `pagechanging`.
+            pdfViewer.currentPageNumber = requestedPage;
+        } else {
+            setPageInput(String(currentPage));
+        }
+    }, [currentPage, pageCount, pageInput]);
+
+    const onPageInputChange = useCallback((event: ChangeEvent<HTMLInputElement>): void => {
+        setPageInput(event.target.value);
+    }, []);
+
+    const onPageInputFocus = useCallback((): void => {
+        isEditingPageRef.current = true;
+        isPageEditCancelledRef.current = false;
+    }, []);
+
+    const onPageInputBlur = useCallback((): void => {
+        isEditingPageRef.current = false;
+
+        if (isPageEditCancelledRef.current) {
+            isPageEditCancelledRef.current = false;
+            setPageInput(String(currentPage));
+            return;
+        }
+
+        commitPageInput();
+    }, [commitPageInput, currentPage]);
+
+    const onPageInputKeyDown = useCallback(
+        (event: KeyboardEvent<HTMLInputElement>): void => {
+            if (event.key !== "Escape") return;
+
+            // Abandon the edit and snap back to wherever the document actually is.
+            isPageEditCancelledRef.current = true;
+            setPageInput(String(currentPage));
+            event.currentTarget.blur();
+        },
+        [currentPage],
+    );
+
+    const onPageFormSubmit = useCallback(
+        (event: FormEvent<HTMLFormElement>): void => {
+            event.preventDefault();
+            commitPageInput();
+        },
+        [commitPageInput],
+    );
 
     useEffect(() => {
         const container = containerRef.current;
@@ -312,19 +399,48 @@ export function PdfViewer({ media }: { media: UploadedMedia }): JSX.Element {
 
     return (
         <div className={styles.viewer} data-testid="pdf-viewer">
-            <div className={styles.container} data-testid="pdf-container" ref={containerRef}>
-                <div className="pdfViewer" ref={viewerElementRef} />
+            {pageCount > 0 ? (
+                <div
+                    className={styles.toolbar}
+                    role="group"
+                    aria-label={_t("pdf_viewer|page_label", { page: currentPage, total: pageCount })}
+                >
+                    <form className={styles.pageForm} onSubmit={onPageFormSubmit}>
+                        <input
+                            aria-label={_t("pdf_viewer|page_number")}
+                            className={styles.pageInput}
+                            data-testid="pdf-page-input"
+                            inputMode="numeric"
+                            onBlur={onPageInputBlur}
+                            onChange={onPageInputChange}
+                            onFocus={onPageInputFocus}
+                            onKeyDown={onPageInputKeyDown}
+                            value={pageInput}
+                        />
+                        <span aria-hidden="true" className={styles.pageSeparator}>
+                            |
+                        </span>
+                        <span className={styles.pageTotal} data-testid="pdf-page-total">
+                            {pageCount}
+                        </span>
+                    </form>
+                </div>
+            ) : null}
+            <div className={styles.body}>
+                <div className={styles.container} data-testid="pdf-container" ref={containerRef}>
+                    <div className="pdfViewer" ref={viewerElementRef} />
+                </div>
+                {status === "loading" ? (
+                    <div className={styles.message} role="status" aria-live="polite">
+                        {_t("pdf_viewer|loading")}
+                    </div>
+                ) : null}
+                {status === "error" ? (
+                    <div className={classNames(styles.message, styles.error)} role="alert">
+                        {_t("pdf_viewer|error_load")}
+                    </div>
+                ) : null}
             </div>
-            {status === "loading" ? (
-                <div className={styles.message} role="status" aria-live="polite">
-                    {_t("pdf_viewer|loading")}
-                </div>
-            ) : null}
-            {status === "error" ? (
-                <div className={classNames(styles.message, styles.error)} role="alert">
-                    {_t("pdf_viewer|error_load")}
-                </div>
-            ) : null}
         </div>
     );
 }

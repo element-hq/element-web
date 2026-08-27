@@ -1740,6 +1740,7 @@
         "loading_page": "Loading page %(page)s…",
         "open": "Open PDF",
         "page_label": "Page %(page)s of %(total)s",
+        "page_number": "Page number",
         "title": "PDF"
     },
     "pill": {
