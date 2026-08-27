@@ -6,11 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import { TextEncoder } from "node:util";
 import nodeCrypto from "node:crypto";
 import { Crypto } from "@peculiar/webcrypto";
 
-import type * as MegolmExportEncryptionExport from "../../../src/utils/MegolmExportEncryption";
+import type * as MegolmExportEncryptionExport from "./MegolmExportEncryption";
 
 const webCrypto = new Crypto();
 
@@ -66,15 +69,16 @@ function stringToArray(s: string): ArrayBuffer {
 describe("MegolmExportEncryption", function () {
     let MegolmExportEncryption: typeof MegolmExportEncryptionExport;
 
-    beforeEach(() => {
+    beforeEach(async () => {
         Object.defineProperty(window, "crypto", {
             value: {
                 getRandomValues,
-                randomUUID: jest.fn().mockReturnValue("not-random-uuid"),
+                randomUUID: vi.fn().mockReturnValue("not-random-uuid"),
                 subtle: webCrypto.subtle,
             },
+            configurable: true,
         });
-        MegolmExportEncryption = jest.requireActual("../../../src/utils/MegolmExportEncryption");
+        MegolmExportEncryption = await import("./MegolmExportEncryption");
     });
 
     describe("decrypt", function () {

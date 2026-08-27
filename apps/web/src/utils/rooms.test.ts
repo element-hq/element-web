@@ -6,12 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { privateShouldBeEncrypted } from "../../../src/utils/rooms";
-import { getMockClientWithEventEmitter } from "../../test-utils";
+// @vitest-environment happy-dom
+
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import { getMockClientWithEventEmitter } from "test-utils";
+
+import { privateShouldBeEncrypted } from "./rooms";
 
 describe("privateShouldBeEncrypted()", () => {
     const mockClient = getMockClientWithEventEmitter({
-        getClientWellKnown: jest.fn(),
+        getClientWellKnown: vi.fn(),
     });
 
     beforeEach(() => {

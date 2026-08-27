@@ -6,13 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import fetchMock from "@fetch-mock/jest";
-import { OAuth2Error } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import { getOAuthClientId } from "../../../../src/utils/oauth/registerClient";
-import { mockPlatformPeg } from "../../../test-utils";
-import PlatformPeg from "../../../../src/PlatformPeg";
-import { makeDelegatedAuthMetadata } from "../../../test-utils/auth";
+import { describe, it, expect, beforeEach } from "vitest";
+import fetchMock from "@fetch-mock/vitest";
+import { OAuth2Error } from "matrix-js-sdk/src/matrix";
+import { mockPlatformPeg } from "test-utils";
+import { makeDelegatedAuthMetadata } from "test-utils/auth";
+
+import { getOAuthClientId } from "./registerClient";
+import PlatformPeg from "../../PlatformPeg";
 
 describe("getOAuthClientId()", () => {
     const issuer = "https://auth.com/";
