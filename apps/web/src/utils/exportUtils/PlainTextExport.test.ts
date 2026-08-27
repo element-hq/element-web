@@ -10,11 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
-import {
-    createTestClient,
-    mkStubRoom,
-    REPEATABLE_DATE,
-} from "test-utils";
+import { createTestClient, mkStubRoom, REPEATABLE_DATE } from "test-utils";
 
 import { ExportType, type IExportOptions } from "./exportUtils";
 import PlainTextExporter from "./PlainTextExport";

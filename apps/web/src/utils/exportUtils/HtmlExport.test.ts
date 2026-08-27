@@ -28,14 +28,7 @@ import fetchMock from "@fetch-mock/vitest";
 import escapeHtml from "escape-html";
 import { type RelationsContainer } from "matrix-js-sdk/src/models/relations-container";
 import { beforeEach, describe, expect, it, vi, type Mocked } from "vitest";
-import {
-    filterConsole,
-    mkReaction,
-    mkStubRoom,
-    REPEATABLE_DATE,
-    stubClient,
-    TestSDKContext,
-} from "test-utils";
+import { filterConsole, mkReaction, mkStubRoom, REPEATABLE_DATE, stubClient, TestSDKContext } from "test-utils";
 
 import { ExportType, type IExportOptions } from "./exportUtils";
 import SdkConfig from "../../SdkConfig";
