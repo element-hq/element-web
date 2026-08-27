@@ -370,7 +370,7 @@ describe("RoomView", () => {
             instance.messagePanel = {
                 sendReadReceipts: sendReadReceiptsSpy,
                 updateReadMarker: updateReadMarkerSpy,
-                getScrollState: jest.fn(),
+                getScrollState: vi.fn(),
             };
 
             // Find the main RoomView div and trigger focus
