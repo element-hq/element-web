@@ -38,8 +38,7 @@ export type Arch = "arm64" | "ia32" | "x64" | "ppc64" | "universal";
 
 // Values are expected to match those used by Visual Studio's `vcvarsall.bat`.
 // See https://docs.microsoft.com/cpp/build/building-on-the-command-line?view=msvc-160#vcvarsall-syntax
-// 32-bit x86 is no longer supported by Electron
-export type VcVarsArch = "amd64" | "arm64";
+export type VcVarsArch = "amd64" | "arm64" | "x86";
 
 export type Target = {
     id: TargetId;
@@ -79,6 +78,13 @@ const universalAppleDarwin: UniversalTarget = {
     platform: "darwin",
     arch: "universal",
     subtargets: [aarch64AppleDarwin, x8664AppleDarwin],
+};
+
+const i686PcWindowsMsvc: WindowsTarget = {
+    id: "i686-pc-windows-msvc",
+    platform: "win32",
+    arch: "ia32",
+    vcVarsArch: "x86",
 };
 
 const x8664PcWindowsMsvc: WindowsTarget = {
