@@ -92,7 +92,7 @@ jobs:
 
             - name: Test the modules image
               env:
-                IMAGE: ${{ env.TEST_TAG_MODULES }}
+                  IMAGE: ${{ env.TEST_TAG_MODULES }}
               timeout-minutes: 2
               run: |
                   set -x
