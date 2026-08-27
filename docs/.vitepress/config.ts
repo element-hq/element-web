@@ -6,7 +6,7 @@ Please see LICENSE in the repository root for full details.
 */
 
 import { existsSync } from "node:fs";
-import { join, posix } from "node:path";
+import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { withMermaid } from "vitepress-plugin-mermaid";
 
@@ -32,8 +32,8 @@ function customPathResolver(href: string, currentPath: string): string {
 
         default: {
             // Relative links between pages within docs/ are resolved by VitePress natively
-            const resolved = posix.normalize(posix.join(posix.dirname(currentPath), link));
-            if (!resolved.startsWith("..") && existsSync(join(docsDir, resolved))) {
+            const resolved = path.posix.normalize(path.posix.join(path.posix.dirname(currentPath), link));
+            if (!resolved.startsWith("..") && existsSync(path.join(docsDir, resolved))) {
                 return href;
             }
             return `https://github.com/element-hq/element-web/blob/develop/${href.split("/").pop()}`;
