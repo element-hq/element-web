@@ -9,7 +9,11 @@ import { expect, describe, it, beforeEach, afterEach, vi } from "vitest";
 import { desktopCapturer } from "electron";
 
 import { getConfig } from "./config.js";
-import { consumeDisplayMediaCallback } from "./displayMediaCallback.js";
+import {
+    handleDisplayMediaPickerReply,
+    handleScreenShareAudioSessionBinding,
+    handleScreenShareAudioSessionRelease,
+} from "./display-media.js";
 
 const { ipcHandlers, mockStore, send, randomArray } = vi.hoisted(() => ({
     ipcHandlers: {} as Record<string, (...args: unknown[]) => unknown>,
@@ -26,7 +30,7 @@ const { ipcHandlers, mockStore, send, randomArray } = vi.hoisted(() => ({
 }));
 
 vi.mock("electron", () => ({
-    app: { getVersion: vi.fn(() => "1.0.0") },
+    app: { getVersion: vi.fn(() => "1.0.0"), isPackaged: true },
     autoUpdater: { getFeedURL: vi.fn() },
     desktopCapturer: { getSources: vi.fn() },
     ipcMain: {
@@ -51,8 +55,11 @@ vi.mock("./store.js", () => ({
     SafeStorageDecryptionError: class SafeStorageDecryptionError extends Error {},
 }));
 vi.mock("./utils.js", () => ({ randomArray }));
-vi.mock("./displayMediaCallback.js", () => ({
-    consumeDisplayMediaCallback: vi.fn(),
+vi.mock("./display-media.js", () => ({
+    handleDisplayMediaPickerReply: vi.fn(),
+    handleScreenShareAudioSessionBinding: vi.fn(),
+    handleScreenShareAudioSessionRelease: vi.fn(),
+    supportsIsolatedScreenShareAudio: vi.fn().mockResolvedValue(false),
 }));
 vi.mock("./config.js");
 
@@ -61,7 +68,7 @@ await import("./ipc.js");
 const ARGS = ["@alice:example.org", "DEVICEID"];
 
 async function callIpc(name: string, id = 1, args: unknown[] = ARGS): Promise<void> {
-    await ipcHandlers["ipcCall"]({}, { id, name, args });
+    await ipcHandlers["ipcCall"]({ sender: { id: 23 } }, { id, name, args });
 }
 
 describe("ipc pickle key handling", () => {
@@ -163,26 +170,28 @@ describe("ipcCall: getDesktopCapturerSources", () => {
 describe("ipcCall: callDisplayMediaCallback", () => {
     beforeEach(() => {
         vi.clearAllMocks();
-        vi.mocked(consumeDisplayMediaCallback).mockReset();
         (global as unknown as { mainWindow: unknown }).mainWindow = { webContents: { send } };
     });
 
-    it("invokes the consumed callback once with the chosen video source", async () => {
-        const callback = vi.fn();
-        vi.mocked(consumeDisplayMediaCallback).mockReturnValue(callback);
-
+    it("forwards the picker response with the requesting sender identity", async () => {
         await callIpc("callDisplayMediaCallback", 13, [{ id: "screen:1" }]);
 
-        expect(consumeDisplayMediaCallback).toHaveBeenCalledTimes(1);
-        expect(callback).toHaveBeenCalledWith({ video: { id: "screen:1" } });
+        expect(handleDisplayMediaPickerReply).toHaveBeenCalledWith(23, { id: "screen:1" });
         expect(send).toHaveBeenCalledWith("ipcReply", { id: 13, reply: null });
     });
 
-    it("is a safe no-op when a stale or duplicate IPC finds no pending callback", async () => {
-        vi.mocked(consumeDisplayMediaCallback).mockReturnValue(null);
+    it("forwards session binding and release through the request-aware controller", async () => {
+        vi.mocked(handleScreenShareAudioSessionBinding).mockReturnValue(true);
 
-        await callIpc("callDisplayMediaCallback", 14, [{}]);
+        await callIpc("bindScreenShareAudioSession", 14, [{ requestId: "request", sessionId: "session" }]);
+        await callIpc("releaseScreenShareAudioSession", 15, [{ sessionId: "session" }]);
 
-        expect(send).toHaveBeenCalledWith("ipcReply", { id: 14, reply: null });
+        expect(handleScreenShareAudioSessionBinding).toHaveBeenCalledWith(23, {
+            requestId: "request",
+            sessionId: "session",
+        });
+        expect(handleScreenShareAudioSessionRelease).toHaveBeenCalledWith(23, { sessionId: "session" });
+        expect(send).toHaveBeenCalledWith("ipcReply", { id: 14, reply: true });
+        expect(send).toHaveBeenCalledWith("ipcReply", { id: 15, reply: null });
     });
 });

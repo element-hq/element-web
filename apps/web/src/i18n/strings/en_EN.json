@@ -1574,6 +1574,8 @@
         "video_rooms_faq2_answer": "Yes, the chat timeline is displayed alongside the video.",
         "video_rooms_faq2_question": "Can I use text chat alongside the video call?",
         "video_rooms_feedbackSubheading": "Thank you for trying the beta, please go into as much detail as you can so we can improve it.",
+        "windows_screen_share_audio": "Share application audio on Windows",
+        "windows_screen_share_audio_description": "Share isolated application audio or system audio while keeping call audio separate when screen sharing on supported Windows devices.",
         "wysiwyg_composer": "Rich text editor"
     },
     "labs_mjolnir": {

@@ -19,6 +19,7 @@ import SettingsStore from "./SettingsStore";
 import { mkStubRoom, mockPlatformPeg, stubClient } from "../../test/test-utils";
 import { SETTINGS, type SettingKey } from "./Settings.tsx";
 import MatrixClientBackedController from "./controllers/MatrixClientBackedController.ts";
+import ReloadOnChangeController from "./controllers/ReloadOnChangeController.ts";
 
 const TEST_DATA = [
     {
@@ -59,6 +60,14 @@ describe("SettingsStore", () => {
     beforeEach(() => {
         SdkConfig.reset();
         SettingsStore.reset();
+    });
+
+    it("defines Windows screen-share audio as a default-off reload-on-change Lab", () => {
+        const setting = SETTINGS.feature_windows_screen_share_audio;
+        expect(setting.default).toBe(false);
+        expect(setting.isFeature).toBe(true);
+        expect(setting.supportedLevelsAreOrdered).toBe(true);
+        expect(setting.controller).toBeInstanceOf(ReloadOnChangeController);
     });
 
     describe("getValueAt", () => {

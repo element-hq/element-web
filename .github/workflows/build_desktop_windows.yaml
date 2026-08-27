@@ -264,6 +264,20 @@ jobs:
                   BUILD_ARGS: ${{ steps.config.outputs.build-args }}
                   TARGETS: ${{ inputs.targets }}
 
+            - name: Assert screen-share audio helper is packaged once
+              if: inputs.arch == 'x64'
+              working-directory: apps/desktop
+              run: |
+                  Set-StrictMode -Version 'Latest'
+                  $Helpers = @(Get-ChildItem -File -Recurse dist -Filter windows-process-loopback.exe)
+                  if ($Helpers.Count -ne 1) {
+                      throw "Expected exactly one packaged screen-share audio helper, found $($Helpers.Count)."
+                  }
+                  $ExpectedSuffix = [IO.Path]::Combine("resources", "screen-share-audio", "windows-process-loopback.exe")
+                  if (-not $Helpers[0].FullName.EndsWith($ExpectedSuffix, [StringComparison]::OrdinalIgnoreCase)) {
+                      throw "Screen-share audio helper is not at the fixed resources path."
+                  }
+
             - name: Trust eSigner sandbox cert
               if: inputs.sign == ''
               run: |
