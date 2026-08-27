@@ -1805,6 +1805,16 @@
         "unknown_for": "Unknown for %(duration)s",
         "unreachable": "User's server unreachable"
     },
+    "pdf_viewer": {
+        "error_load": "Unable to load PDF.",
+        "error_render": "Unable to render PDF.",
+        "loading": "Loading PDF…",
+        "loading_page": "Loading page %(page)s…",
+        "open": "Open PDF",
+        "page_label": "Page %(page)s of %(total)s",
+        "title": "PDF",
+        "toolbar_label": "PDF controls"
+    },
     "quick_settings": {
         "all_settings": "All settings",
         "sidebar_settings": "More options",
