@@ -47,7 +47,7 @@
         "mermaid": "^11.13.0",
         "minimist": "^1.2.6",
         "nx": "catalog:",
-        "oxfmt": "0.63.0",
+        "oxfmt": "0.64.0",
         "oxlint": "^1.70.0",
         "oxlint-tsgolint": "^7.0.0",
         "typescript": "catalog:ts6",
