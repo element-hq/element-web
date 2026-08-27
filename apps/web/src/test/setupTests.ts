@@ -12,7 +12,7 @@ import fetchMock from "@fetch-mock/vitest";
 import SdkConfig, { DEFAULTS } from "../SdkConfig";
 import "./setupGlobals.ts";
 import { setupLanguageMock } from "./setupLanguage.ts";
-import { mockIntlDateTimeFormat } from "../../test/test-utils/date";
+import { mockIntlDateTimeFormat } from "./intlDateTimeFormatMock";
 
 declare global {
     var IS_REACT_ACT_ENVIRONMENT: boolean;
