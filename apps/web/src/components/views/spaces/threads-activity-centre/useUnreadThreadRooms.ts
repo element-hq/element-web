@@ -14,6 +14,7 @@ import {
     NotificationCountType,
     type Room,
     type Thread,
+    THREAD_RELATION_TYPE,
 } from "matrix-js-sdk/src/matrix";
 import { throttle } from "lodash";
 
@@ -94,10 +95,12 @@ export function useUnreadThreadRooms(forceComputation: boolean): Result {
  * Compute the list of unread threads, split into "my threads" (relevant to the user)
  * and "other threads" (everything else), along with notification levels.
  *
- * Categorisation (mutually exclusive) — server-driven:
+ * Categorisation (mutually exclusive):
  * - "My threads": {@link Thread.hasCurrentUserParticipated} (from the server's
- *   `current_user_participated` field in bundled `m.thread` relations) OR
- *   the thread has a server highlight count > 0 (a mention/keyword for the user).
+ *   `current_user_participated` field in bundled `m.thread` relations) OR the current
+ *   user has sent a message in the thread's local timeline (catches replies the server
+ *   bundle hasn't caught up with yet, see {@link hasCurrentUserSentInThread}) OR the
+ *   thread has a server highlight count > 0 (a mention/keyword for the user).
  * - "Other threads": every other unread thread.
  *
  * The `settingTACOnlyNotifs` setting (`Notifications.tac_only_notifications`) is
@@ -243,8 +246,33 @@ function evaluateThreadUnread(client: MatrixClient, room: Room, thread: Thread):
     return {
         notificationLevel,
         hasServerNotifs,
-        isRelevantToMe: thread.hasCurrentUserParticipated || highlight > 0,
+        isRelevantToMe:
+            thread.hasCurrentUserParticipated || highlight > 0 || hasCurrentUserSentInThread(client, thread),
     };
+}
+
+/**
+ * Whether the current user has sent a reply in the thread's local timeline.
+ *
+ * {@link Thread.hasCurrentUserParticipated} is derived solely from the homeserver's
+ * bundled `current_user_participated` flag, which is only refreshed when the server
+ * re-sends the root event's aggregated relation. Immediately after the user replies
+ * (e.g. Bob answering in a thread Alice started) that flag is still stale (`false`),
+ * so the thread would wrongly land in "Other threads". We complement it by inspecting
+ * the local timeline: if we've sent a reply in the thread, it's ours.
+ *
+ * We only count successfully-sent `m.thread` replies (not reactions, edits, or
+ * failed/pending local echoes) to match the server's `current_user_participated`
+ * semantics — the same `isRelation(THREAD_RELATION_TYPE.name) && !status` test the
+ * rest of the app uses to identify a real thread reply.
+ *
+ * @returns true if the current user authored a reply in the thread.
+ */
+function hasCurrentUserSentInThread(client: MatrixClient, thread: Thread): boolean {
+    const myUserId = client.getSafeUserId();
+    return thread.events.some(
+        (event) => event.getSender() === myUserId && event.isRelation(THREAD_RELATION_TYPE.name) && !event.status,
+    );
 }
 
 /**
