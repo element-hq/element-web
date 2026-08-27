@@ -5,8 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { beforeAll, vi, describe, it, expect, afterEach } from "vitest";
-import { mockIntlDateTimeFormat } from "test-utils/date";
+import { vi, describe, it, expect, afterEach } from "vitest";
 
 import * as DateUtils from "../../../../../DateUtils";
 import { MessageTimestampViewModel } from "./MessageTimestampViewModel";
@@ -19,11 +18,8 @@ describe("MessageTimestampViewModel", () => {
     const HOUR_MS = 3600000;
     const DAY_MS = HOUR_MS * 24;
 
-    beforeAll(mockIntlDateTimeFormat);
-
     afterEach(() => {
         vi.restoreAllMocks();
-        mockIntlDateTimeFormat();
     });
 
     it("should return the snapshot", () => {

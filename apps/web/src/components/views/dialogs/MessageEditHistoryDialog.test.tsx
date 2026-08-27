@@ -10,17 +10,14 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render, type RenderResult, waitForElementToBeRemoved } from "test-utils-rtl";
-import { flushPromises, mkMessage, mockIntlDateTimeFormat, stubClient, unmockIntlDateTimeFormat } from "test-utils";
+import { flushPromises, mkMessage, stubClient } from "test-utils";
 import { EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { vi, describe, it, expect, beforeAll, beforeEach, afterAll, type Mocked } from "vitest";
+import { vi, describe, it, expect, beforeEach, type Mocked } from "vitest";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import MessageEditHistoryDialog from "./MessageEditHistoryDialog";
 import { SDKContext } from "../../../contexts/SDKContext";
 import { SDKContextClass } from "../../../contexts/SDKContextClass";
-
-beforeAll(mockIntlDateTimeFormat);
-afterAll(unmockIntlDateTimeFormat);
 
 describe("<MessageEditHistory />", () => {
     const roomId = "!aroom:example.com";

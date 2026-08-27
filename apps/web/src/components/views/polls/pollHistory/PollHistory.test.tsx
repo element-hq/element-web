@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeAll, beforeEach, afterAll } from "vitest";
+import { vi, describe, it, expect, beforeEach } from "vitest";
 import React from "react";
 import { fireEvent, render } from "test-utils-rtl";
 import { Filter, EventTimeline, Room, type MatrixEvent, M_POLL_START } from "matrix-js-sdk/src/matrix";
@@ -19,9 +19,7 @@ import {
     makePollStartEvent,
     mockClientMethodsRooms,
     mockClientMethodsUser,
-    mockIntlDateTimeFormat,
     setupRoomWithPollEvents,
-    unmockIntlDateTimeFormat,
 } from "test-utils";
 
 import { PollHistory } from "./PollHistory";
@@ -66,9 +64,6 @@ describe("<PollHistory />", () => {
                 <MatrixClientContext.Provider value={mockClient}>{children}</MatrixClientContext.Provider>
             ),
         });
-
-    beforeAll(mockIntlDateTimeFormat);
-    afterAll(unmockIntlDateTimeFormat);
 
     beforeEach(() => {
         room = new Room(roomId, mockClient, userId);

@@ -29,11 +29,8 @@ import {
     MINUTE_MS,
     DAY_MS,
 } from "./DateUtils";
-import { REPEATABLE_DATE, mockIntlDateTimeFormat, unmockIntlDateTimeFormat } from "../test/test-utils";
+import { REPEATABLE_DATE } from "../test/test-utils";
 import * as languageSettings from "./i18n/settings";
-
-beforeAll(mockIntlDateTimeFormat);
-afterAll(unmockIntlDateTimeFormat);
 
 describe("getDaysArray", () => {
     it("should return Sunday-Saturday in long mode", () => {

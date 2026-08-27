@@ -8,22 +8,17 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 import {
     createTestClient,
     mkStubRoom,
     REPEATABLE_DATE,
-    mockIntlDateTimeFormat,
-    unmockIntlDateTimeFormat,
 } from "test-utils";
 
 import { ExportType, type IExportOptions } from "./exportUtils";
 import PlainTextExporter from "./PlainTextExport";
 import SettingsStore from "../../settings/SettingsStore";
-
-beforeAll(mockIntlDateTimeFormat);
-afterAll(unmockIntlDateTimeFormat);
 
 class TestablePlainTextExporter extends PlainTextExporter {
     public async testCreateOutput(events: MatrixEvent[]): Promise<string> {
