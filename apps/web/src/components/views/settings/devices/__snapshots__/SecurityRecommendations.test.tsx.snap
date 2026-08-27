@@ -1,0 +1,427 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`<SecurityRecommendations /> > renders both cards when user has both unverified and inactive devices 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection"
+    data-testid="security-recommendations-section"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h2
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+      >
+        Security recommendations
+      </h2>
+    </div>
+    <div
+      class="mx_SettingsSubsection_description"
+    >
+      <div
+        class="mx_SettingsSubsection_text"
+      >
+        Improve your account security by following these recommendations.
+      </div>
+    </div>
+    <div
+      class="mx_SettingsSubsection_content"
+    >
+      <div
+        class="mx_DeviceSecurityCard"
+      >
+        <div
+          class="mx_DeviceSecurityCard_icon Unverified"
+        >
+          <svg
+            fill="currentColor"
+            height="16"
+            viewBox="0 0 24 24"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+            />
+          </svg>
+        </div>
+        <div
+          class="mx_DeviceSecurityCard_content"
+        >
+          <p
+            class="mx_DeviceSecurityCard_heading"
+          >
+            Unverified sessions
+          </p>
+          <p
+            class="mx_DeviceSecurityCard_description"
+          >
+            Verify your sessions for enhanced secure messaging or remove from those you don't recognize or use anymore.
+            <button
+              class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              role="button"
+              tabindex="0"
+            >
+              Learn more
+            </button>
+          </p>
+          <div
+            class="mx_DeviceSecurityCard_actions"
+          >
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              data-testid="unverified-devices-cta"
+              role="button"
+              tabindex="0"
+            >
+              View all (1)
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_SecurityRecommendations_spacing"
+      />
+      <div
+        class="mx_DeviceSecurityCard"
+      >
+        <div
+          class="mx_DeviceSecurityCard_icon Inactive"
+        >
+          <svg
+            aria-hidden="true"
+            fill="none"
+            height="16"
+            role="presentation"
+            viewBox="0 0 8 14"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M1.33333 0.333008C0.6 0.333008 0 0.933008 0 1.66634L0.00666682 3.78634C0.00666682 4.13967 0.146667 4.47301 0.393333 4.72634L2.66667 6.99967L0.393333 9.28634C0.146667 9.53301 0.00666682 9.87301 0.00666682 10.2263L0 12.333C0 13.0663 0.6 13.6663 1.33333 13.6663H6.66667C7.4 13.6663 8 13.0663 8 12.333V10.2263C8 9.87301 7.86 9.53301 7.61333 9.28634L5.33333 6.99967L7.60667 4.73301C7.86 4.47967 8 4.13967 8 3.78634V1.66634C8 0.933008 7.4 0.333008 6.66667 0.333008H1.33333ZM6.66667 10.273V11.6663C6.66667 12.033 6.36667 12.333 6 12.333H2C1.63333 12.333 1.33333 12.033 1.33333 11.6663V10.273C1.33333 10.093 1.40667 9.92634 1.52667 9.79967L4 7.33301L6.47333 9.80634C6.59333 9.92634 6.66667 10.0997 6.66667 10.273Z"
+              fill="currentColor"
+            />
+          </svg>
+        </div>
+        <div
+          class="mx_DeviceSecurityCard_content"
+        >
+          <p
+            class="mx_DeviceSecurityCard_heading"
+          >
+            Inactive sessions
+          </p>
+          <p
+            class="mx_DeviceSecurityCard_description"
+          >
+            Consider removing old sessions (90 days or older) you don't use anymore.
+            <button
+              class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              role="button"
+              tabindex="0"
+            >
+              Learn more
+            </button>
+          </p>
+          <div
+            class="mx_DeviceSecurityCard_actions"
+          >
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              data-testid="inactive-devices-cta"
+              role="button"
+              tabindex="0"
+            >
+              View all (1)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<SecurityRecommendations /> > renders inactive devices section when user has inactive devices 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection"
+    data-testid="security-recommendations-section"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h2
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+      >
+        Security recommendations
+      </h2>
+    </div>
+    <div
+      class="mx_SettingsSubsection_description"
+    >
+      <div
+        class="mx_SettingsSubsection_text"
+      >
+        Improve your account security by following these recommendations.
+      </div>
+    </div>
+    <div
+      class="mx_SettingsSubsection_content"
+    >
+      <div
+        class="mx_DeviceSecurityCard"
+      >
+        <div
+          class="mx_DeviceSecurityCard_icon Unverified"
+        >
+          <svg
+            fill="currentColor"
+            height="16"
+            viewBox="0 0 24 24"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+            />
+          </svg>
+        </div>
+        <div
+          class="mx_DeviceSecurityCard_content"
+        >
+          <p
+            class="mx_DeviceSecurityCard_heading"
+          >
+            Unverified sessions
+          </p>
+          <p
+            class="mx_DeviceSecurityCard_description"
+          >
+            Verify your sessions for enhanced secure messaging or remove from those you don't recognize or use anymore.
+            <button
+              class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              role="button"
+              tabindex="0"
+            >
+              Learn more
+            </button>
+          </p>
+          <div
+            class="mx_DeviceSecurityCard_actions"
+          >
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              data-testid="unverified-devices-cta"
+              role="button"
+              tabindex="0"
+            >
+              View all (1)
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_SecurityRecommendations_spacing"
+      />
+      <div
+        class="mx_DeviceSecurityCard"
+      >
+        <div
+          class="mx_DeviceSecurityCard_icon Inactive"
+        >
+          <svg
+            aria-hidden="true"
+            fill="none"
+            height="16"
+            role="presentation"
+            viewBox="0 0 8 14"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M1.33333 0.333008C0.6 0.333008 0 0.933008 0 1.66634L0.00666682 3.78634C0.00666682 4.13967 0.146667 4.47301 0.393333 4.72634L2.66667 6.99967L0.393333 9.28634C0.146667 9.53301 0.00666682 9.87301 0.00666682 10.2263L0 12.333C0 13.0663 0.6 13.6663 1.33333 13.6663H6.66667C7.4 13.6663 8 13.0663 8 12.333V10.2263C8 9.87301 7.86 9.53301 7.61333 9.28634L5.33333 6.99967L7.60667 4.73301C7.86 4.47967 8 4.13967 8 3.78634V1.66634C8 0.933008 7.4 0.333008 6.66667 0.333008H1.33333ZM6.66667 10.273V11.6663C6.66667 12.033 6.36667 12.333 6 12.333H2C1.63333 12.333 1.33333 12.033 1.33333 11.6663V10.273C1.33333 10.093 1.40667 9.92634 1.52667 9.79967L4 7.33301L6.47333 9.80634C6.59333 9.92634 6.66667 10.0997 6.66667 10.273Z"
+              fill="currentColor"
+            />
+          </svg>
+        </div>
+        <div
+          class="mx_DeviceSecurityCard_content"
+        >
+          <p
+            class="mx_DeviceSecurityCard_heading"
+          >
+            Inactive sessions
+          </p>
+          <p
+            class="mx_DeviceSecurityCard_description"
+          >
+            Consider removing old sessions (90 days or older) you don't use anymore.
+            <button
+              class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              role="button"
+              tabindex="0"
+            >
+              Learn more
+            </button>
+          </p>
+          <div
+            class="mx_DeviceSecurityCard_actions"
+          >
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              data-testid="inactive-devices-cta"
+              role="button"
+              tabindex="0"
+            >
+              View all (1)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<SecurityRecommendations /> > renders unverified devices section when user has unverified devices 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection"
+    data-testid="security-recommendations-section"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h2
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+      >
+        Security recommendations
+      </h2>
+    </div>
+    <div
+      class="mx_SettingsSubsection_description"
+    >
+      <div
+        class="mx_SettingsSubsection_text"
+      >
+        Improve your account security by following these recommendations.
+      </div>
+    </div>
+    <div
+      class="mx_SettingsSubsection_content"
+    >
+      <div
+        class="mx_DeviceSecurityCard"
+      >
+        <div
+          class="mx_DeviceSecurityCard_icon Unverified"
+        >
+          <svg
+            fill="currentColor"
+            height="16"
+            viewBox="0 0 24 24"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+            />
+          </svg>
+        </div>
+        <div
+          class="mx_DeviceSecurityCard_content"
+        >
+          <p
+            class="mx_DeviceSecurityCard_heading"
+          >
+            Unverified sessions
+          </p>
+          <p
+            class="mx_DeviceSecurityCard_description"
+          >
+            Verify your sessions for enhanced secure messaging or remove from those you don't recognize or use anymore.
+            <button
+              class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              role="button"
+              tabindex="0"
+            >
+              Learn more
+            </button>
+          </p>
+          <div
+            class="mx_DeviceSecurityCard_actions"
+          >
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              data-testid="unverified-devices-cta"
+              role="button"
+              tabindex="0"
+            >
+              View all (2)
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_SecurityRecommendations_spacing"
+      />
+      <div
+        class="mx_DeviceSecurityCard"
+      >
+        <div
+          class="mx_DeviceSecurityCard_icon Inactive"
+        >
+          <svg
+            aria-hidden="true"
+            fill="none"
+            height="16"
+            role="presentation"
+            viewBox="0 0 8 14"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M1.33333 0.333008C0.6 0.333008 0 0.933008 0 1.66634L0.00666682 3.78634C0.00666682 4.13967 0.146667 4.47301 0.393333 4.72634L2.66667 6.99967L0.393333 9.28634C0.146667 9.53301 0.00666682 9.87301 0.00666682 10.2263L0 12.333C0 13.0663 0.6 13.6663 1.33333 13.6663H6.66667C7.4 13.6663 8 13.0663 8 12.333V10.2263C8 9.87301 7.86 9.53301 7.61333 9.28634L5.33333 6.99967L7.60667 4.73301C7.86 4.47967 8 4.13967 8 3.78634V1.66634C8 0.933008 7.4 0.333008 6.66667 0.333008H1.33333ZM6.66667 10.273V11.6663C6.66667 12.033 6.36667 12.333 6 12.333H2C1.63333 12.333 1.33333 12.033 1.33333 11.6663V10.273C1.33333 10.093 1.40667 9.92634 1.52667 9.79967L4 7.33301L6.47333 9.80634C6.59333 9.92634 6.66667 10.0997 6.66667 10.273Z"
+              fill="currentColor"
+            />
+          </svg>
+        </div>
+        <div
+          class="mx_DeviceSecurityCard_content"
+        >
+          <p
+            class="mx_DeviceSecurityCard_heading"
+          >
+            Inactive sessions
+          </p>
+          <p
+            class="mx_DeviceSecurityCard_description"
+          >
+            Consider removing old sessions (90 days or older) you don't use anymore.
+            <button
+              class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              role="button"
+              tabindex="0"
+            >
+              Learn more
+            </button>
+          </p>
+          <div
+            class="mx_DeviceSecurityCard_actions"
+          >
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              data-testid="inactive-devices-cta"
+              role="button"
+              tabindex="0"
+            >
+              View all (1)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
