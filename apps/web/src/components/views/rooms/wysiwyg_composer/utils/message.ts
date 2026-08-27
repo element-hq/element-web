@@ -37,6 +37,7 @@ import { addReplyToMessageContent } from "../../../../../utils/Reply";
 import { attachRelation, attachUrlPreviews } from "../../../../../utils/messages";
 import { getCustomEmotesForRoom } from "../../../../../custom-emotes";
 import { maybeShowCustomEmoteE2EEWarning } from "../../../../../toasts/CustomEmoteWarningToast";
+import { linksIn } from "../../../../../utils/UrlUtils";
 
 export interface SendMessageParams {
     mxClient: MatrixClient;

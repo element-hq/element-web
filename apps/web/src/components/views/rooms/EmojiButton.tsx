@@ -13,8 +13,8 @@ import { ReactionIcon } from "@vector-im/compound-design-tokens/assets/web/icons
 import { _t } from "../../../languageHandler";
 import ContextMenu, { aboveLeftOf, type MenuProps, useContextMenu } from "../../structures/ContextMenu";
 import { CollapsibleButton, OverflowMenuContext } from "./CollapsibleButton";
-+import { EmojiPickerWithRecents } from "../../../emojipicker/EmojiPickerWithRecents";
-+import { type CustomEmote } from "../../../custom-emotes";
+import { EmojiPickerWithRecents } from "../../../emojipicker/EmojiPickerWithRecents";
+import { type CustomEmote } from "../../../custom-emotes";
 
 interface IEmojiButtonProps {
     addEmoji: (unicode: string) => boolean;
@@ -44,12 +44,12 @@ export function EmojiButton({
 
         contextMenu = (
             <ContextMenu {...position} onFinished={onFinished} managed={false} focusLock>
-+                <EmojiPickerWithRecents
-+                    onChoose={addEmoji}
-+                    customEmotes={customEmotes}
-+                    onChooseCustomEmote={addCustomEmote}
-+                    onFinished={onFinished}
-+                />
+                <EmojiPickerWithRecents
+                    onChoose={addEmoji}
+                    customEmotes={customEmotes}
+                    onChooseCustomEmote={addCustomEmote}
+                    onFinished={onFinished}
+                />
             </ContextMenu>
         );
     }

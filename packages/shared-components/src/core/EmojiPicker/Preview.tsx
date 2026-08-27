@@ -13,17 +13,48 @@ import classNames from "classnames";
 
 import styles from "./EmojiPicker.module.css";
 
-interface IProps {
-    /**
-     * The emoji to preview.
-     */
-    emoji: Emoji;
-}
+type IProps =
+    | {
+          /**
+           * The emoji to preview.
+           */
+          emoji: Emoji;
+          custom?: never;
+      }
+    | {
+          emoji?: never;
+          /**
+           * The custom emote to preview, rendered as an image rather than a character.
+           */
+          custom: {
+              url: string;
+              label: string;
+              shortcode: string;
+              packDisplayName: string;
+          };
+      };
 
 /**
  * A preview of the selected emoji, showing the emoji itself, its name, and its shortcode.
  */
-export const Preview: React.FC<IProps> = ({ emoji }) => {
+export const Preview: React.FC<IProps> = ({ emoji, custom }) => {
+    if (custom) {
+        return (
+            <div className={styles.footer}>
+                <img
+                    className={classNames(styles.previewEmoji, styles.previewCustomEmote)}
+                    src={custom.url}
+                    alt={custom.label}
+                />
+                <div className={styles.previewText}>
+                    <div className={classNames(styles.name, styles.previewName)}>{custom.label}</div>
+                    <div className={styles.shortcode}>{custom.shortcode}</div>
+                    <div className={styles.packName}>{custom.packDisplayName}</div>
+                </div>
+            </div>
+        );
+    }
+
     const {
         unicode,
         label,

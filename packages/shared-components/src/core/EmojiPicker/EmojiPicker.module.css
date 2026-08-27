@@ -225,3 +225,24 @@
 .quickHeader .name {
     margin-right: var(--cpd-space-1x);
 }
+
+.customEmote {
+    object-fit: contain;
+}
+
+.packLabel {
+    font: var(--cpd-font-body-sm-medium);
+    color: var(--cpd-color-text-secondary);
+}
+
+.previewCustomEmote {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    font-size: inherit;
+}
+
+.packName {
+    color: var(--cpd-color-text-secondary);
+    font: var(--cpd-font-body-md-regular);
+}

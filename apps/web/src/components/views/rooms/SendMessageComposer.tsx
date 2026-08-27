@@ -458,8 +458,8 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
             // don't bother sending an empty message
             if (!content.body.trim()) return;
 
-+            attachUrlPreviews(urlPreviewSnapshot, content, linksIn(this.model.contentPlainText).size !== 0);
-+            maybeShowCustomEmoteE2EEWarning(this.props.room, content);
+            attachUrlPreviews(urlPreviewSnapshot, content, linksIn(this.model.contentPlainText).size !== 0);
+            maybeShowCustomEmoteE2EEWarning(this.props.room, content);
 
             // clear composer first so the user doesn't actually see the delay of attach URL preview image files
             clearComposerAndPushHistory();

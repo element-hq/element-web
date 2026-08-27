@@ -27,13 +27,17 @@ import { Search } from "./Search";
 import { Preview } from "./Preview";
 import { QuickReactions } from "./QuickReactions";
 import { Emoji } from "./Emoji";
-import { type ButtonEvent } from "./RovingButton";
+import { RovingButton, type ButtonEvent } from "./RovingButton";
 import styles from "./EmojiPicker.module.css";
 
 const ZERO_WIDTH_JOINER = "\u200D";
 
 export const EMOJI_HEIGHT = 35;
 export const EMOJIS_PER_ROW = 8;
+
+// Custom emotes sort ahead of the built-in categories, so this is kept separate
+// and only prepended when the app supplies emotes.
+const CUSTOM_CATEGORY: Category = { id: "custom", untranslatedName: _td("emoji|category_custom"), emoji: "😻" };
 
 const CATEGORY_CONFIG: Category[] = [
     { id: "recent", untranslatedName: _td("emoji|category_frequently_used"), emoji: "🕒" },
@@ -47,7 +51,26 @@ const CATEGORY_CONFIG: Category[] = [
     { id: "flags", untranslatedName: _td("emoji|category_flags"), emoji: "🏁" },
 ];
 
-export type CategoryKey = keyof typeof DATA_BY_CATEGORY | "recent";
+/**
+ * Structural type for the custom emotes the app passes in. Kept minimal so
+ * any image-pack implementation can satisfy it without a dependency.
+ */
+export interface PickerCustomEmote {
+    shortcode: string;
+    url: string;
+    body?: string;
+    packDisplayName: string;
+}
+
+/**
+ * Callback invoked when a custom emote cell is activated.
+ */
+export type ChooseCustomEmote = (emote: PickerCustomEmote) => boolean;
+
+/** Whatever the footer is currently previewing, tagged so the two shapes stay apart. */
+type PreviewTarget = { kind: "emoji"; emoji: IEmoji } | { kind: "custom"; emote: PickerCustomEmote };
+
+export type CategoryKey = keyof typeof DATA_BY_CATEGORY | "recent" | "custom";
 
 export interface Category {
     id: CategoryKey;
@@ -63,18 +86,28 @@ export interface Category {
  */
 type ListItem = { type: "header"; category: Category } | { type: "row"; emojis: IEmoji[]; categoryId: CategoryKey };
 
+/**
+ * A custom-emote entry in the flat virtual list: a pack header or a row of
+ * emotes belonging to one pack.
+ */
+type CustomListItem =
+    | { type: "custom-pack-header"; name: string }
+    | { type: "custom-row"; emotes: PickerCustomEmote[] };
+
 // Stable component identities so Virtuoso does not remount its internals on re-render.
 // The single Virtuoso renders a flat list that mixes category headers and emoji rows.
 // The Item wrapper picks its semantics per entry: a plain block for headers, a grid
 // row for emoji rows.
-const GridList: Components<ListItem>["List"] = ({ ref, ...props }) => {
+type FlatItem = ListItem | CustomListItem;
+
+const GridList: Components<FlatItem>["List"] = ({ ref, ...props }) => {
     return <div {...props} ref={ref} className={styles.list} role="grid" aria-multiselectable />;
 };
 
-const GridItem: Components<ListItem>["Item"] = ({ item, ...props }) => {
+const GridItem: Components<FlatItem>["Item"] = ({ item, ...props }) => {
     // Headers are interleaved with emoji rows as direct children of the role="grid"
     // list, so they must also be grid rows: a grid may only own rows/rowgroups.
-    if (item.type === "header") {
+    if (item.type === "header" || item.type === "custom-pack-header") {
         return <div {...props} role="row" />;
     }
     return <div {...props} role="row" className={styles.row} />;
@@ -127,6 +160,17 @@ export interface EmojiPickerProps {
      * Previews of emoji are displayed in the same bar as will also be hidden when this is false.
      */
     showQuickReactions?: boolean;
+    /**
+     * Custom emotes to show in a dedicated "Custom emotes" category, grouped by
+     * pack. The category is hidden when empty or omitted.
+     */
+    customEmotes?: PickerCustomEmote[];
+    /**
+     * Called when the user chooses a custom emote.
+     *
+     * Return `false` to prevent the picker from closing on Enter-activation.
+     */
+    onChooseCustomEmote?: ChooseCustomEmote;
 }
 
 /** Convert recent emoji characters to emoji data, removing unknowns and duplicates */
@@ -199,10 +243,11 @@ export function EmojiPicker({
     onRecordRecent,
     getAction,
     showQuickReactions = true,
+    customEmotes,
+    onChooseCustomEmote,
 }: EmojiPickerProps): React.ReactNode {
     const [filter, setFilter] = useState("");
-    const [previewEmoji, setPreviewEmoji] = useState<IEmoji | undefined>(undefined);
-    // Track if user has interacted with arrow keys or search
+    const [preview, setPreview] = useState<PreviewTarget | undefined>(undefined);
     const [showHighlight, setShowHighlight] = useState(false);
     // The scroll container of the picker body, once mounted. The Virtuoso windows
     // its rows against this shared scroll parent.
@@ -212,13 +257,39 @@ export function EmojiPicker({
     const virtuosoRef = useRef<VirtuosoHandle>(null);
 
     const recentlyUsed = useMemo(() => resolveRecentEmojis(recentEmojis), [recentEmojis]);
+    const [selectedCategory, setSelectedCategory] = useState<CategoryKey>(
+        recentlyUsed.length > 0 ? "recent" : "people",
+    );
+
+    const collectScrollElement = useCallback((ref: HTMLDivElement | null): void => {
+        setScrollElement(ref);
+    }, []);
 
     const lcFilter = filter.toLowerCase().trim(); // filter is case insensitive
+
+    // Group the custom emotes by pack and filter them, then surface the category
+    // when any emote survives the filter.
+    const customEmoteGroups = useMemo(() => {
+        if (!customEmotes?.length) return [];
+        const filtered = lcFilter
+            ? customEmotes.filter(
+                  (emote) =>
+                      emote.shortcode.toLowerCase().includes(lcFilter) ||
+                      emote.body?.toLowerCase().includes(lcFilter) ||
+                      emote.packDisplayName.toLowerCase().includes(lcFilter),
+              )
+            : customEmotes;
+        const groups = new Map<string, PickerCustomEmote[]>();
+        for (const emote of filtered) {
+            groups.set(emote.packDisplayName, [...(groups.get(emote.packDisplayName) ?? []), emote]);
+        }
+        return [...groups.entries()];
+    }, [customEmotes, lcFilter]);
 
     // Compute emoji to show in each category and which categories are enabled
     // (ie. non-empty) from the recently used list and the filter.
     const { dataByCategory, enabledCategories } = useMemo(() => {
-        const dataByCategory = {} as Record<CategoryKey, IEmoji[]>;
+        const dataByCategory = {} as Record<Exclude<CategoryKey, "custom">, IEmoji[]>;
         const enabledCategories: CategoryKey[] = [];
 
         for (const cat of CATEGORY_CONFIG) {
@@ -228,21 +299,31 @@ export function EmojiPicker({
                 enabledCategories.push(cat.id);
             }
         }
+        if (customEmoteGroups.length > 0) {
+            enabledCategories.unshift("custom");
+        }
 
         return { dataByCategory, enabledCategories };
-    }, [lcFilter, recentlyUsed]);
+    }, [lcFilter, recentlyUsed, customEmoteGroups]);
 
-    const [selectedCategory, setSelectedCategory] = useState<CategoryKey>(
-        recentlyUsed.length > 0 ? "recent" : "people",
+    const hasCustomEmotes = customEmotes !== undefined && customEmotes.length > 0;
+    // The custom tab stays visible (but disabled) while a filter excludes every
+    // emote, so the tab bar doesn't reflow as the user types.
+    const categories = useMemo(
+        () => (hasCustomEmotes ? [CUSTOM_CATEGORY, ...CATEGORY_CONFIG] : CATEGORY_CONFIG),
+        [hasCustomEmotes],
     );
 
-    const collectScrollElement = useCallback((ref: HTMLDivElement | null): void => {
-        setScrollElement(ref);
-    }, []);
-
-    // Flatten into a list for virtuoso.
-    const items = useMemo<ListItem[]>(() => {
-        const flat: ListItem[] = [];
+    // Flatten into a list for virtuoso. Custom emote packs come first, matching
+    // the tab order.
+    const items = useMemo<FlatItem[]>(() => {
+        const flat: FlatItem[] = [];
+        for (const [packName, emotes] of customEmoteGroups) {
+            flat.push({ type: "custom-pack-header", name: packName });
+            for (let i = 0; i < emotes.length; i += EMOJIS_PER_ROW) {
+                flat.push({ type: "custom-row", emotes: emotes.slice(i, i + EMOJIS_PER_ROW) });
+            }
+        }
         for (const cat of CATEGORY_CONFIG) {
             const emojis = dataByCategory[cat.id];
             if (emojis.length === 0) continue;
@@ -252,7 +333,7 @@ export function EmojiPicker({
             }
         }
         return flat;
-    }, [dataByCategory]);
+    }, [dataByCategory, customEmoteGroups]);
 
     const onRangeChanged = useCallback(
         (range: ListRange): void => {
@@ -264,12 +345,14 @@ export function EmojiPicker({
             for (let i = range.startIndex; i <= range.endIndex; i++) {
                 const item = items[i];
                 if (!item) continue;
-                visibleCategoryIds.add(item.type === "header" ? item.category.id : item.categoryId);
+                if (item.type === "header") visibleCategoryIds.add(item.category.id);
+                else if (item.type === "row") visibleCategoryIds.add(item.categoryId);
+                else visibleCategoryIds.add("custom");
             }
 
-            setSelectedCategory(CATEGORY_CONFIG.find((cat) => visibleCategoryIds.has(cat.id))?.id ?? "people");
+            setSelectedCategory(categories.find((cat) => visibleCategoryIds.has(cat.id))?.id ?? "people");
         },
-        [items],
+        [items, categories],
     );
 
     // Given a roving emoji button returns the role=gridcell element containing it
@@ -337,7 +420,11 @@ export function EmojiPicker({
     const scrollToCategory = useCallback(
         (category: string): void => {
             // Find the flat index of the category's header and scroll it to the top.
-            const index = items.findIndex((item) => item.type === "header" && item.category.id === category);
+            const index = items.findIndex(
+                (item) =>
+                    (item.type === "header" && item.category.id === category) ||
+                    (item.type === "custom-pack-header" && category === "custom"),
+            );
             if (index >= 0) {
                 virtuosoRef.current?.scrollToIndex({ index, align: "start" });
             }
@@ -362,12 +449,26 @@ export function EmojiPicker({
     }, [showHighlight, scrollElement, onFinished]);
 
     const onHoverEmoji = useCallback((emoji: IEmoji): void => {
-        setPreviewEmoji(emoji);
+        setPreview({ kind: "emoji", emoji });
+    }, []);
+
+    const onHoverCustomEmote = useCallback((emote: PickerCustomEmote): void => {
+        setPreview({ kind: "custom", emote });
     }, []);
 
     const onHoverEmojiEnd = useCallback((): void => {
-        setPreviewEmoji(undefined);
+        setPreview(undefined);
     }, []);
+
+    const onClickCustomEmote = useCallback(
+        (ev: ButtonEvent, emote: PickerCustomEmote): void => {
+            const chosen = onChooseCustomEmote?.(emote);
+            if ((ev as React.KeyboardEvent).key === "Enter" && chosen !== false) {
+                onFinished();
+            }
+        },
+        [onChooseCustomEmote, onFinished],
+    );
 
     const onClickEmoji = useCallback(
         (ev: ButtonEvent, emoji: IEmoji): void => {
@@ -390,7 +491,7 @@ export function EmojiPicker({
     const emojiIdBase = useId();
 
     const renderItem = useCallback(
-        (_index: number, item: ListItem): React.ReactNode => {
+        (_index: number, item: FlatItem): React.ReactNode => {
             if (item.type === "header") {
                 const category = item.category;
                 return (
@@ -400,6 +501,36 @@ export function EmojiPicker({
                         </Heading>
                     </div>
                 );
+            }
+            if (item.type === "custom-pack-header") {
+                return (
+                    <div className={styles.category} data-category-id="custom" role="gridcell">
+                        <Heading as="h3" className={classNames(styles.categoryLabel, styles.packLabel)}>
+                            {item.name}
+                        </Heading>
+                    </div>
+                );
+            }
+            if (item.type === "custom-row") {
+                return item.emotes.map((emote) => (
+                    <div
+                        role="gridcell"
+                        className={styles.itemWrapper}
+                        key={`${emote.packDisplayName}\u0000${emote.shortcode}`}
+                    >
+                        <RovingButton
+                            id={`${emojiIdBase}-custom-${emote.packDisplayName}-${emote.shortcode}`}
+                            className={styles.item}
+                            aria-label={`:${emote.shortcode}: — ${emote.packDisplayName}`}
+                            focusOnMouseOver
+                            onClick={(ev) => onClickCustomEmote(ev, emote)}
+                            onMouseEnter={() => onHoverCustomEmote(emote)}
+                            onMouseLeave={onHoverEmojiEnd}
+                        >
+                            <img className={styles.customEmote} src={emote.url} alt={emote.body || emote.shortcode} />
+                        </RovingButton>
+                    </div>
+                ));
             }
             return item.emojis.map((emoji) => (
                 <div role="gridcell" className={styles.itemWrapper} key={emoji.hexcode}>
@@ -417,7 +548,16 @@ export function EmojiPicker({
                 </div>
             ));
         },
-        [selectedEmojis, onClickEmoji, onHoverEmoji, onHoverEmojiEnd, isEmojiDisabled, emojiIdBase],
+        [
+            selectedEmojis,
+            onClickCustomEmote,
+            onClickEmoji,
+            onHoverEmoji,
+            onHoverCustomEmote,
+            onHoverEmojiEnd,
+            isEmojiDisabled,
+            emojiIdBase,
+        ],
     );
 
     const pickerBodyId = useId();
@@ -440,7 +580,7 @@ export function EmojiPicker({
                     aria-label={_t("emoji_picker|emoji_picker")}
                 >
                     <Tabs
-                        categories={CATEGORY_CONFIG}
+                        categories={categories}
                         enabledCategories={enabledCategories}
                         selectedCategory={selectedCategory}
                         onAnchorClick={scrollToCategory}
@@ -475,8 +615,19 @@ export function EmojiPicker({
                         )}
                     </AutoHideScrollbar>
                     {showQuickReactions &&
-                        (previewEmoji ? (
-                            <Preview emoji={previewEmoji} />
+                        (preview ? (
+                            preview.kind === "custom" ? (
+                                <Preview
+                                    custom={{
+                                        url: preview.emote.url,
+                                        label: preview.emote.body || preview.emote.shortcode,
+                                        shortcode: preview.emote.shortcode,
+                                        packDisplayName: preview.emote.packDisplayName,
+                                    }}
+                                />
+                            ) : (
+                                <Preview emoji={preview.emoji} />
+                            )
                         ) : (
                             <QuickReactions
                                 onClick={onClickEmoji}

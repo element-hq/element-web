@@ -12,7 +12,7 @@ import userEvent from "@testing-library/user-event";
 import { render, waitFor, screen } from "@test-utils";
 import { describe, expect, it, vi } from "vitest";
 
-import { EmojiPicker, filterEmojis } from "./EmojiPicker";
+import { EmojiPicker, filterEmojis, type PickerCustomEmote } from "./EmojiPicker";
 
 describe("EmojiPicker", function () {
     // Recent emojis as they would be provided by the app, most used first
@@ -454,6 +454,89 @@ describe("EmojiPicker", function () {
             await waitFor(() => {
                 expect(peopleTab).toHaveFocus();
             });
+        });
+    });
+
+    describe("custom emotes", () => {
+        const customEmotes: PickerCustomEmote[] = [
+            {
+                shortcode: "neofox_sad",
+                url: "https://example.org/sad",
+                body: "Sad neofox",
+                packDisplayName: "Neofox",
+            },
+            {
+                shortcode: "party_blob",
+                url: "https://example.org/party",
+                body: "Party blob",
+                packDisplayName: "Party pack",
+            },
+        ];
+
+        const renderPicker = (
+            props: Partial<React.ComponentProps<typeof EmojiPicker>> = {},
+        ): ReturnType<typeof render> =>
+            render(
+                <EmojiPicker
+                    customEmotes={customEmotes}
+                    onChooseCustomEmote={() => true}
+                    onChoose={() => true}
+                    onFinished={vi.fn()}
+                    {...props}
+                />,
+            );
+
+        it("should not show the custom category when no emotes are supplied", () => {
+            render(<EmojiPicker onChoose={() => false} onFinished={vi.fn()} />);
+
+            expect(screen.queryByRole("tab", { name: "😻" })).not.toBeInTheDocument();
+        });
+
+        it("should enable the custom category and group emotes by pack", async () => {
+            renderPicker();
+
+            expect(screen.getByRole("tab", { name: "😻" })).toBeEnabled();
+            await waitFor(() => {
+                expect(screen.getByRole("heading", { name: "Neofox" })).toBeInTheDocument();
+            });
+            expect(screen.getByRole("heading", { name: "Party pack" })).toBeInTheDocument();
+        });
+
+        it("should preview a custom emote on hover", async () => {
+            const user = userEvent.setup();
+            renderPicker();
+
+            const sadEmote = await screen.findByRole("button", { name: ":neofox_sad: — Neofox" });
+            await user.hover(sadEmote);
+
+            // The pack name also appears as a grid heading, so assert on the
+            // shortcode, which only the preview renders as text.
+            expect(screen.getByText("Sad neofox")).toBeInTheDocument();
+            expect(screen.getByText("neofox_sad")).toBeInTheDocument();
+        });
+
+        it("should pass the chosen emote back to the app", async () => {
+            const user = userEvent.setup();
+            const onChooseCustomEmote = vi.fn(() => true);
+            renderPicker({ onChooseCustomEmote });
+
+            await user.click(await screen.findByRole("button", { name: ":neofox_sad: — Neofox" }));
+
+            expect(onChooseCustomEmote).toHaveBeenCalledWith(customEmotes[0]);
+        });
+
+        it("should filter custom emotes by shortcode, body and pack name", async () => {
+            const user = userEvent.setup();
+            const { container } = renderPicker();
+
+            await screen.findByRole("button", { name: ":neofox_sad: — Neofox" });
+
+            await user.type(container.querySelector("input")!, "party");
+
+            await waitFor(() => {
+                expect(screen.queryByRole("button", { name: ":neofox_sad: — Neofox" })).not.toBeInTheDocument();
+            });
+            expect(screen.getByRole("button", { name: ":party_blob: — Party pack" })).toBeInTheDocument();
         });
     });
 });

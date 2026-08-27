@@ -5,4 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-export { EmojiPicker, type EmojiPickerProps } from "./EmojiPicker";
+export {
+    EmojiPicker,
+    EMOJI_HEIGHT,
+    EMOJIS_PER_ROW,
+    filterEmojis,
+    type ChooseCustomEmote,
+    type PickerCustomEmote,
+    type CategoryKey,
+    type EmojiPickerProps,
+} from "./EmojiPicker";

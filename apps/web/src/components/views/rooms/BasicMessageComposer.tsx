@@ -941,7 +941,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         const { model } = this.props;
         const caret = this.getCaret();
         const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
-        model.transform(() => {
+        void model.transform(() => {
             const addedLen = model.insert(
                 [model.partCreator.customEmote(emote.shortcode, emote.url, emote.body, emote.sendToken)],
                 position,

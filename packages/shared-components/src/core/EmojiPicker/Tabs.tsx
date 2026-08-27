@@ -140,10 +140,10 @@ export const Tabs: React.FC<Props> = ({
     );
 
     const tabRefs = useRef({} as Record<CategoryKey, React.RefObject<HTMLButtonElement | null>>);
-    if (!tabRefs.current.recent) {
-        for (const category of categories) {
-            tabRefs.current[category.id] = React.createRef<HTMLButtonElement>();
-        }
+    // Checked per category rather than once, since the custom emote tab only
+    // appears once the app has loaded the user's packs.
+    for (const category of categories) {
+        tabRefs.current[category.id] ??= React.createRef<HTMLButtonElement>();
     }
 
     return (
