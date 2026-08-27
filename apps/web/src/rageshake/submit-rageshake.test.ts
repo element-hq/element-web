@@ -6,7 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Mocked, mocked } from "jest-mock-vitest-adapter";
+// @vitest-environment happy-dom
+
+import { describe, it, expect, beforeEach, afterEach, vi, type Mocked, type MockInstance } from "vitest";
 import {
     type HttpApiEvent,
     type HttpApiEventHandlerMap,
@@ -16,18 +18,18 @@ import {
     MatrixHttpApi,
 } from "matrix-js-sdk/src/matrix";
 import { CrossSigningKey } from "matrix-js-sdk/src/crypto-api";
-import fetchMock from "@fetch-mock/jest";
+import fetchMock from "@fetch-mock/vitest";
+import { getMockClientWithEventEmitter, mockClientMethodsCrypto, mockPlatformPeg } from "test-utils";
 
-import { getMockClientWithEventEmitter, mockClientMethodsCrypto, mockPlatformPeg } from "../test-utils";
-import { collectBugReport, downloadBugReport, submitFeedback } from "../../src/rageshake/submit-rageshake";
-import SettingsStore from "../../src/settings/SettingsStore";
-import { type ConsoleLogger } from "../../src/rageshake/rageshake";
-import { type FeatureSettingKey, type SettingKey } from "../../src/settings/Settings.tsx";
-import { SettingLevel } from "../../src/settings/SettingLevel.ts";
-import SdkConfig from "../../src/SdkConfig.ts";
-import { BugReportEndpointURLLocal } from "../../src/IConfigOptions.ts";
-import { MatrixClientPeg } from "../../src/MatrixClientPeg.ts";
-import { SDKContextClass } from "../../src/contexts/SDKContextClass.ts";
+import { collectBugReport, downloadBugReport, submitFeedback } from "./submit-rageshake";
+import SettingsStore from "../settings/SettingsStore";
+import { type ConsoleLogger } from "./rageshake";
+import { type FeatureSettingKey, type SettingKey } from "../settings/Settings.tsx";
+import { SettingLevel } from "../settings/SettingLevel.ts";
+import SdkConfig from "../SdkConfig.ts";
+import { BugReportEndpointURLLocal } from "../IConfigOptions.ts";
+import { MatrixClientPeg } from "../MatrixClientPeg.ts";
+import { SDKContextClass } from "../contexts/SDKContextClass.ts";
 
 describe("Rageshakes", () => {
     let mockClient: Mocked<MatrixClient>;
@@ -45,26 +47,26 @@ describe("Rageshakes", () => {
             credentials: { userId: "@test:example.com" },
             deviceId: "AAAAAAAAAA",
             baseUrl: "https://alice-server.com",
-            getHomeserverUrl: jest.fn().mockReturnValue("https://alice-server.com"),
-            getDomain: jest.fn().mockReturnValue("alice-server.com"),
+            getHomeserverUrl: vi.fn().mockReturnValue("https://alice-server.com"),
+            getDomain: vi.fn().mockReturnValue("alice-server.com"),
             ...mockClientMethodsCrypto(),
             http: mockHttpAPI,
         });
-        mocked(mockClient.getCrypto()!.getOwnDeviceKeys).mockResolvedValue({
+        vi.mocked(mockClient.getCrypto()!.getOwnDeviceKeys).mockResolvedValue({
             ed25519: "",
             curve25519: "",
         });
 
-        jest.spyOn(window, "matchMedia").mockReturnValue({ matches: false } as any);
+        vi.spyOn(window, "matchMedia").mockReturnValue({ matches: false } as any);
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     describe("Basic Information", () => {
         it("should include app version", async () => {
-            mockPlatformPeg({ getAppVersion: jest.fn().mockReturnValue("1.11.58") });
+            mockPlatformPeg({ getAppVersion: vi.fn().mockReturnValue("1.11.58") });
 
             const formData = await collectBugReport();
 
@@ -74,7 +76,7 @@ describe("Rageshakes", () => {
         });
 
         it("should put unknown app version if on dev", async () => {
-            mockPlatformPeg({ getAppVersion: jest.fn().mockRejectedValue(undefined) });
+            mockPlatformPeg({ getAppVersion: vi.fn().mockRejectedValue(undefined) });
 
             const formData = await collectBugReport();
 
@@ -91,7 +93,7 @@ describe("Rageshakes", () => {
         ];
 
         it.each(mediaQueryTests)("should collect %s", async (_, query, label, matches) => {
-            mocked(window.matchMedia).mockImplementation((q): MediaQueryList => {
+            vi.mocked(window.matchMedia).mockImplementation((q): MediaQueryList => {
                 if (q === query) {
                     return { matches: matches } as unknown as MediaQueryList;
                 }
@@ -133,13 +135,13 @@ describe("Rageshakes", () => {
         });
 
         it("should collect user agent", async () => {
-            jest.spyOn(window.navigator, "userAgent", "get").mockReturnValue("jest navigator");
+            vi.spyOn(window.navigator, "userAgent", "get").mockReturnValue("vitest navigator");
             const formData = await collectBugReport();
             const userAgent = formData.get("user_agent");
-            expect(userAgent).toBe("jest navigator");
+            expect(userAgent).toBe("vitest navigator");
 
             // @ts-ignore - Need to force navigator to be undefined for test
-            jest.spyOn(window.navigator, "userAgent", "get").mockReturnValue(undefined);
+            vi.spyOn(window.navigator, "userAgent", "get").mockReturnValue(undefined);
             const formDataWithoutNav = await collectBugReport();
             expect(formDataWithoutNav.get("user_agent")).toBe("UNKNOWN");
         });
@@ -160,7 +162,7 @@ describe("Rageshakes", () => {
 
     describe("Crypto info", () => {
         it("should collect crypto version", async () => {
-            mocked(mockClient.getCrypto()!.getVersion).mockReturnValue("0.0.0");
+            vi.mocked(mockClient.getCrypto()!.getVersion).mockReturnValue("0.0.0");
             const formData = await collectBugReport();
 
             expect(formData.get("crypto_version")).toBe("0.0.0");
@@ -172,7 +174,7 @@ describe("Rageshakes", () => {
                 ed25519: "ed25519b64",
             };
 
-            mocked(mockClient.getCrypto()!.getOwnDeviceKeys).mockResolvedValue(ownDeviceKeys);
+            vi.mocked(mockClient.getCrypto()!.getOwnDeviceKeys).mockResolvedValue(ownDeviceKeys);
 
             const keys = [`curve25519:${ownDeviceKeys.curve25519}`, `ed25519:${ownDeviceKeys.ed25519}`].join(", ");
 
@@ -183,7 +185,7 @@ describe("Rageshakes", () => {
 
         describe("Cross-Signing", () => {
             it.each([true, false])("should collect cross-signing ready %s", async (ready) => {
-                mocked(mockClient.getCrypto()!.isCrossSigningReady).mockResolvedValue(ready);
+                vi.mocked(mockClient.getCrypto()!.isCrossSigningReady).mockResolvedValue(ready);
 
                 const formData = await collectBugReport();
 
@@ -192,7 +194,7 @@ describe("Rageshakes", () => {
 
             it("should collect cross-signing pub key if set", async () => {
                 const crossSigningPubKey = "crossSigningPubKey";
-                mocked(mockClient.getCrypto()!.getCrossSigningKeyId).mockImplementation(
+                vi.mocked(mockClient.getCrypto()!.getCrossSigningKeyId).mockImplementation(
                     async (type): Promise<string | null> => {
                         if (!type || type === CrossSigningKey.Master) {
                             return crossSigningPubKey;
@@ -207,7 +209,7 @@ describe("Rageshakes", () => {
             });
 
             it("should not collect cross-signing pub key if not set", async () => {
-                mocked(mockClient.getCrypto()!.getCrossSigningKeyId).mockResolvedValue(null);
+                vi.mocked(mockClient.getCrypto()!.getCrossSigningKeyId).mockResolvedValue(null);
                 expect((await collectBugReport()).get("cross_signing_key")).toBe("n/a");
             });
 
@@ -226,7 +228,7 @@ describe("Rageshakes", () => {
                 };
 
                 it.each([true, false])("should collect if key cached locally %s", async (cached) => {
-                    mocked(mockClient.getCrypto()!.getCrossSigningStatus).mockResolvedValue({
+                    vi.mocked(mockClient.getCrypto()!.getCrossSigningStatus).mockResolvedValue({
                         ...baseStatus,
                         privateKeysInSecretStorage: cached,
                     });
@@ -244,7 +246,7 @@ describe("Rageshakes", () => {
                 ];
                 describe.each(detailsTests)("Cached locally %s", (_, objectKey, label) => {
                     it.each([true, false])("should collect if cached locally %s", async (cached) => {
-                        mocked(mockClient.getCrypto()!.getCrossSigningStatus).mockResolvedValue({
+                        vi.mocked(mockClient.getCrypto()!.getCrossSigningStatus).mockResolvedValue({
                             ...baseStatus,
                             privateKeysCachedLocally: {
                                 ...baseDetails,
@@ -261,7 +263,7 @@ describe("Rageshakes", () => {
 
             describe("Secret Storage and backup", () => {
                 it.each([true, false])("should collect secret storage ready %s", async (ready) => {
-                    mocked(mockClient.getCrypto()!.isSecretStorageReady).mockResolvedValue(ready);
+                    vi.mocked(mockClient.getCrypto()!.isSecretStorageReady).mockResolvedValue(ready);
 
                     const formData = await collectBugReport();
 
@@ -269,19 +271,19 @@ describe("Rageshakes", () => {
                 });
 
                 it.each([true, false])("should collect secret storage key in account %s", async (stored) => {
-                    mocked(mockClient.secretStorage.hasKey).mockResolvedValue(stored);
+                    vi.mocked(mockClient.secretStorage.hasKey).mockResolvedValue(stored);
                     const formData = await collectBugReport();
                     expect(formData.get("secret_storage_key_in_account")).toBe(String(stored));
                 });
 
                 it("should collect backup version", async () => {
-                    mocked(mockClient.isKeyBackupKeyStored).mockResolvedValue({});
+                    vi.mocked(mockClient.isKeyBackupKeyStored).mockResolvedValue({});
 
                     const formData = await collectBugReport();
                     expect(formData.get("session_backup_key_in_secret_storage")).toBe(String(true));
 
                     {
-                        mocked(mockClient.isKeyBackupKeyStored).mockResolvedValue(null);
+                        vi.mocked(mockClient.isKeyBackupKeyStored).mockResolvedValue(null);
 
                         const formData = await collectBugReport();
                         expect(formData.get("session_backup_key_in_secret_storage")).toBe(String(false));
@@ -289,7 +291,7 @@ describe("Rageshakes", () => {
                 });
 
                 it("should collect backup key cached", async () => {
-                    mocked(mockClient.getCrypto()!.getSessionBackupPrivateKey).mockResolvedValue(
+                    vi.mocked(mockClient.getCrypto()!.getSessionBackupPrivateKey).mockResolvedValue(
                         new Uint8Array([0, 0]),
                     );
 
@@ -360,11 +362,11 @@ describe("Rageshakes", () => {
 
     describe("Settings Store", () => {
         beforeEach(() => {
-            jest.spyOn(SDKContextClass.instance.notifier, "isPossible").mockReturnValue(true);
+            vi.spyOn(SDKContextClass.instance.notifier, "isPossible").mockReturnValue(true);
         });
 
         afterEach(() => {
-            jest.restoreAllMocks();
+            vi.restoreAllMocks();
         });
 
         it("should collect labs from settings store", async () => {
@@ -373,8 +375,8 @@ describe("Rageshakes", () => {
                 "feature_notification_settings2",
             ] as unknown[] as FeatureSettingKey[];
             const enabledFeatures: SettingKey[] = ["feature_video_rooms"];
-            jest.spyOn(SettingsStore, "getFeatureSettingNames").mockReturnValue(someFeatures);
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName): any => {
+            vi.spyOn(SettingsStore, "getFeatureSettingNames").mockReturnValue(someFeatures);
+            vi.spyOn(SettingsStore, "getValue").mockImplementation((settingName): any => {
                 return enabledFeatures.includes(settingName);
             });
 
@@ -383,7 +385,7 @@ describe("Rageshakes", () => {
         });
 
         it("should collect low bandWidth enabled", async () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName): any => {
+            vi.spyOn(SettingsStore, "getValue").mockImplementation((settingName): any => {
                 if (settingName == "lowBandwidth") {
                     return true;
                 }
@@ -393,7 +395,7 @@ describe("Rageshakes", () => {
             expect(formData.get("lowBandwidth")).toBe("enabled");
         });
         it("should collect low bandWidth disabled", async () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName): any => {
+            vi.spyOn(SettingsStore, "getValue").mockImplementation((settingName): any => {
                 if (settingName == "lowBandwidth") {
                     return false;
                 }
@@ -404,9 +406,9 @@ describe("Rageshakes", () => {
         });
 
         it("should handle settings throwing when logged out", async () => {
-            jest.mocked(MatrixClientPeg.get).mockRestore();
-            jest.mocked(MatrixClientPeg.safeGet).mockRestore();
-            jest.spyOn(SDKContextClass.instance.notifier, "isPossible").mockImplementation(() => {
+            vi.mocked(MatrixClientPeg.get).mockRestore();
+            vi.mocked(MatrixClientPeg.safeGet).mockRestore();
+            vi.spyOn(SDKContextClass.instance.notifier, "isPossible").mockImplementation(() => {
                 throw new Error("Test");
             });
 
@@ -417,9 +419,9 @@ describe("Rageshakes", () => {
         });
 
         it("should handle reading notification settings when logged out", async () => {
-            jest.mocked(MatrixClientPeg.get).mockRestore();
-            jest.mocked(MatrixClientPeg.safeGet).mockRestore();
-            jest.spyOn(SDKContextClass.instance.notifier, "isPossible").mockReturnValue(true);
+            vi.mocked(MatrixClientPeg.get).mockRestore();
+            vi.mocked(MatrixClientPeg.safeGet).mockRestore();
+            vi.spyOn(SDKContextClass.instance.notifier, "isPossible").mockReturnValue(true);
 
             const formData = await collectBugReport();
             expect(JSON.parse(formData.get("mx_local_settings") as string)["notificationsEnabled"]).toBe(false);
@@ -428,17 +430,17 @@ describe("Rageshakes", () => {
 
     describe("Navigator Storage", () => {
         let mockNavigator: Mocked<Navigator>;
-        let navigatorSpy: jest.SpyInstance;
+        let navigatorSpy: MockInstance;
 
         beforeEach(() => {
             mockNavigator = {
                 storage: {
-                    estimate: jest.fn(),
-                    persisted: jest.fn(),
+                    estimate: vi.fn(),
+                    persisted: vi.fn(),
                 },
             } as unknown as Mocked<Navigator>;
             // @ts-ignore - We just need partial mock
-            navigatorSpy = jest.spyOn(global, "navigator", "get").mockReturnValue(mockNavigator);
+            navigatorSpy = vi.spyOn(global, "navigator", "get").mockReturnValue(mockNavigator);
         });
 
         afterEach(() => {
@@ -447,18 +449,18 @@ describe("Rageshakes", () => {
         });
 
         it("should collect navigator storage persisted", async () => {
-            mocked(mockNavigator.storage.persisted).mockResolvedValue(true);
+            vi.mocked(mockNavigator.storage.persisted).mockResolvedValue(true);
             const formData = await collectBugReport();
             expect(formData.get("storageManager_persisted")).toBe("true");
         });
 
         it("should collect navigator storage safari", async () => {
-            mocked(mockNavigator.storage.persisted).mockResolvedValue(true);
+            vi.mocked(mockNavigator.storage.persisted).mockResolvedValue(true);
             // @ts-ignore - Need to mock the safari
-            jest.replaceProperty(mockNavigator, "storage", undefined);
+            mockNavigator.storage = undefined as any;
 
-            const spy = jest.spyOn(global, "document", "get").mockReturnValue({
-                hasStorageAccess: jest.fn().mockReturnValue(true),
+            const spy = vi.spyOn(global, "document", "get").mockReturnValue({
+                hasStorageAccess: vi.fn().mockReturnValue(true),
             } as any);
 
             const formData = await collectBugReport();
@@ -476,7 +478,7 @@ describe("Rageshakes", () => {
                     serviceWorkerRegistrations: 42,
                 },
             };
-            mocked(mockNavigator.storage.estimate).mockResolvedValue(estimate);
+            vi.mocked(mockNavigator.storage.estimate).mockResolvedValue(estimate);
 
             const formData = await collectBugReport();
             expect(formData.get("storageManager_quota")).toEqual(estimate.quota.toString());
@@ -499,8 +501,8 @@ describe("Rageshakes", () => {
             crypto: true,
         };
         const disabledFeatures = ["cssanimations", "d0", "d1"];
-        const windowSpy = jest.spyOn(global, "window", "get").mockReturnValue({
-            matchMedia: jest.fn().mockReturnValue({ matches: false }),
+        const windowSpy = vi.spyOn(global, "window", "get").mockReturnValue({
+            matchMedia: vi.fn().mockReturnValue({ matches: false }),
             Modernizr: {
                 ...allFeatures,
             },
@@ -528,9 +530,9 @@ describe("Rageshakes", () => {
 
     it("should collect logs for collectBugReport", async () => {
         const mockConsoleLogger = {
-            flush: jest.fn(),
-            consume: jest.fn(),
-            warn: jest.fn(),
+            flush: vi.fn(),
+            consume: vi.fn(),
+            warn: vi.fn(),
         } as unknown as Mocked<ConsoleLogger>;
         mockConsoleLogger.flush.mockReturnValue("line 1\nline 2\n");
 
@@ -546,9 +548,9 @@ describe("Rageshakes", () => {
 
     it("should collect logs for downloadBugReport", async () => {
         const mockConsoleLogger = {
-            flush: jest.fn(),
-            consume: jest.fn(),
-            warn: jest.fn(),
+            flush: vi.fn(),
+            consume: vi.fn(),
+            warn: vi.fn(),
         } as unknown as Mocked<ConsoleLogger>;
         mockConsoleLogger.flush.mockReturnValue("line 1\nline 2\n");
 
@@ -557,12 +559,12 @@ describe("Rageshakes", () => {
         const mockElement = {
             href: "",
             download: "",
-            click: jest.fn(),
+            click: vi.fn(),
         };
-        jest.spyOn(document, "createElement").mockReturnValue(mockElement as any);
-        jest.spyOn(document, "body", "get").mockReturnValue({
-            appendChild: jest.fn(),
-            removeChild: jest.fn(),
+        vi.spyOn(document, "createElement").mockReturnValue(mockElement as any);
+        vi.spyOn(document, "body", "get").mockReturnValue({
+            appendChild: vi.fn(),
+            removeChild: vi.fn(),
         } as any);
         try {
             await downloadBugReport({ sendLogs: true });
@@ -576,7 +578,7 @@ describe("Rageshakes", () => {
     });
 
     it("should notify progress", () => {
-        const progressCallback = jest.fn();
+        const progressCallback = vi.fn();
 
         collectBugReport({ progressCallback });
 

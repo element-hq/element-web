@@ -1,6 +1,5 @@
 linkWorkspacePackages: true
 cleanupUnusedCatalogs: true
-ignorePatchFailures: false
 ignoreWorkspaceRootCheck: true
 minimumReleaseAgeStrict: true
 dedupePeerDependents: true

@@ -6,60 +6,64 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked } from "jest-mock";
+// @vitest-environment happy-dom
+
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { createAudioContext, decodeOgg } from "../../../src/audio/compat";
-import { Playback, PlaybackState } from "../../../src/audio/Playback";
+import { createAudioContext, decodeOgg } from "./compat";
+import { Playback, PlaybackState } from "./Playback";
 
-jest.mock("../../../src/WorkerManager", () => ({
-    WorkerManager: jest.fn(() => ({
-        call: jest.fn().mockResolvedValue({ waveform: [0, 0, 1, 1] }),
-    })),
+vi.mock("../WorkerManager", () => ({
+    WorkerManager: vi.fn(function () {
+        return {
+            call: vi.fn().mockResolvedValue({ waveform: [0, 0, 1, 1] }),
+        };
+    }),
 }));
 
-jest.mock("../../../src/audio/compat", () => ({
-    createAudioContext: jest.fn(),
-    decodeOgg: jest.fn(),
+vi.mock("./compat", () => ({
+    createAudioContext: vi.fn(),
+    decodeOgg: vi.fn(),
 }));
 
 describe("Playback", () => {
     const mockAudioBufferSourceNode = {
-        addEventListener: jest.fn(),
-        connect: jest.fn(),
-        start: jest.fn(),
+        addEventListener: vi.fn(),
+        connect: vi.fn(),
+        start: vi.fn(),
     };
     const mockMediaElementSourceNode = {
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
-        connect: jest.fn(),
-        disconnect: jest.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        connect: vi.fn(),
+        disconnect: vi.fn(),
     };
     const mockAudioContext = {
-        decodeAudioData: jest.fn(),
-        suspend: jest.fn(),
-        resume: jest.fn(),
-        createBufferSource: jest.fn().mockReturnValue(mockAudioBufferSourceNode),
-        createMediaElementSource: jest.fn().mockReturnValue(mockMediaElementSourceNode),
+        decodeAudioData: vi.fn(),
+        suspend: vi.fn(),
+        resume: vi.fn(),
+        createBufferSource: vi.fn().mockReturnValue(mockAudioBufferSourceNode),
+        createMediaElementSource: vi.fn().mockReturnValue(mockMediaElementSourceNode),
         currentTime: 1337,
     };
 
     const mockAudioBuffer = {
         duration: 99,
-        getChannelData: jest.fn(),
+        getChannelData: vi.fn(),
     };
 
     const mockChannelData = new Float32Array();
 
     beforeEach(() => {
-        jest.spyOn(logger, "error").mockRestore();
+        vi.spyOn(logger, "error").mockRestore();
         mockAudioBufferSourceNode.addEventListener.mockClear();
         mockAudioBuffer.getChannelData.mockClear().mockReturnValue(mockChannelData);
         mockAudioContext.decodeAudioData.mockReset().mockResolvedValue(mockAudioBuffer);
         mockAudioContext.resume.mockClear().mockResolvedValue(undefined);
         mockAudioContext.suspend.mockClear().mockResolvedValue(undefined);
-        mocked(decodeOgg).mockClear().mockResolvedValue(new ArrayBuffer(1));
-        mocked(createAudioContext).mockReturnValue(mockAudioContext as unknown as AudioContext);
+        vi.mocked(decodeOgg).mockClear().mockResolvedValue(new ArrayBuffer(1));
+        vi.mocked(createAudioContext).mockReturnValue(mockAudioContext as unknown as AudioContext);
     });
 
     it("initialises correctly", () => {
@@ -122,7 +126,7 @@ describe("Playback", () => {
         // Simulate the audio source ending by calling the 'ended' event listener
         const endedListener = mockAudioBufferSourceNode.addEventListener.mock.calls.find(
             (call) => call[0] === "ended",
-        )[1];
+        )![1];
         await endedListener();
 
         // AudioContext should be suspended
@@ -153,8 +157,8 @@ describe("Playback", () => {
 
         it("tries to decode ogg when decodeAudioData fails", async () => {
             // stub logger to keep console clean from expected error
-            jest.spyOn(logger, "error").mockReturnValue(undefined);
-            jest.spyOn(logger, "warn").mockReturnValue(undefined);
+            vi.spyOn(logger, "error").mockReturnValue(undefined);
+            vi.spyOn(logger, "warn").mockReturnValue(undefined);
 
             const buffer = new ArrayBuffer(8);
             const decodingError = new Error("test");
@@ -178,8 +182,8 @@ describe("Playback", () => {
 
         it("hands the ogg fallback a buffer which decodeAudioData has not detached", async () => {
             // stub logger to keep console clean from expected error
-            jest.spyOn(logger, "error").mockReturnValue(undefined);
-            jest.spyOn(logger, "warn").mockReturnValue(undefined);
+            vi.spyOn(logger, "error").mockReturnValue(undefined);
+            vi.spyOn(logger, "warn").mockReturnValue(undefined);
 
             const buffer = new ArrayBuffer(8);
             mockAudioContext.decodeAudioData
@@ -190,7 +194,7 @@ describe("Playback", () => {
                 })
                 .mockResolvedValueOnce(mockAudioBuffer);
             // Constructing a view over a detached buffer throws, which is what decodeOgg does first.
-            mocked(decodeOgg).mockImplementationOnce(async (audioBuffer: ArrayBuffer) => {
+            vi.mocked(decodeOgg).mockImplementationOnce(async (audioBuffer: ArrayBuffer) => {
                 expect(() => new Uint8Array(audioBuffer)).not.toThrow();
                 return new ArrayBuffer(1);
             });
@@ -234,14 +238,14 @@ describe("Playback", () => {
                 currentTime: 0,
                 onloadeddata: undefined as undefined | (() => void),
                 onerror: undefined as undefined | (() => void),
-                play: jest.fn().mockResolvedValue(undefined),
-                pause: jest.fn(),
-                remove: jest.fn(),
-                addEventListener: jest.fn((type: string, cb: () => void) => {
+                play: vi.fn().mockResolvedValue(undefined),
+                pause: vi.fn(),
+                remove: vi.fn(),
+                addEventListener: vi.fn((type: string, cb: () => void) => {
                     if (!listeners.has(type)) listeners.set(type, new Set());
                     listeners.get(type)!.add(cb);
                 }),
-                removeEventListener: jest.fn((type: string, cb: () => void) => {
+                removeEventListener: vi.fn((type: string, cb: () => void) => {
                     listeners.get(type)?.delete(cb);
                 }),
                 listenerCount: (type: string): number => listeners.get(type)?.size ?? 0,
@@ -259,15 +263,15 @@ describe("Playback", () => {
 
         beforeEach(() => {
             element = mockAudioElement();
-            jest.spyOn(document, "createElement").mockReturnValue(element as unknown as HTMLElement);
-            global.URL.createObjectURL = jest.fn().mockReturnValue("blob:audio");
-            global.URL.revokeObjectURL = jest.fn();
+            vi.spyOn(document, "createElement").mockReturnValue(element as unknown as HTMLElement);
+            global.URL.createObjectURL = vi.fn().mockReturnValue("blob:audio");
+            global.URL.revokeObjectURL = vi.fn();
             mockAudioContext.createMediaElementSource.mockClear().mockReturnValue(mockMediaElementSourceNode);
             mockMediaElementSourceNode.connect.mockClear();
         });
 
         afterEach(() => {
-            mocked(document.createElement).mockRestore();
+            vi.mocked(document.createElement).mockRestore();
         });
 
         it("stops when the media element ends", async () => {

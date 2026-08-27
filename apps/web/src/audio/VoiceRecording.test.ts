@@ -6,25 +6,27 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked } from "jest-mock";
+// @vitest-environment happy-dom
+
+import { describe, it, expect, vi, beforeEach, afterEach, type MockInstance } from "vitest";
 // @ts-ignore
 import Recorder from "opus-recorder/dist/recorder.min.js";
+import { useMockMediaDevices } from "test-utils";
 
-import { VoiceRecording, voiceRecorderOptions, highQualityRecorderOptions } from "../../../src/audio/VoiceRecording";
-import { createAudioContext } from "../../..//src/audio/compat";
-import MediaDeviceHandler from "../../../src/MediaDeviceHandler";
-import { useMockMediaDevices } from "../../test-utils";
+import { VoiceRecording, voiceRecorderOptions, highQualityRecorderOptions } from "./VoiceRecording";
+import { createAudioContext } from "./compat";
+import MediaDeviceHandler from "../MediaDeviceHandler";
 
-jest.mock("opus-recorder/dist/recorder.min.js");
-const RecorderMock = mocked(Recorder);
+vi.mock("opus-recorder/dist/recorder.min.js");
+const RecorderMock = vi.mocked(Recorder);
 
-jest.mock("../../../src/audio/compat", () => ({
-    createAudioContext: jest.fn(),
+vi.mock("./compat", () => ({
+    createAudioContext: vi.fn(),
 }));
-const createAudioContextMock = mocked(createAudioContext);
+const createAudioContextMock = vi.mocked(createAudioContext);
 
-jest.mock("../../../src/MediaDeviceHandler");
-const MediaDeviceHandlerMock = mocked(MediaDeviceHandler);
+vi.mock("../MediaDeviceHandler");
+const MediaDeviceHandlerMock = vi.mocked(MediaDeviceHandler);
 
 /**
  * The tests here are heavily using access to private props.
@@ -32,7 +34,7 @@ const MediaDeviceHandlerMock = mocked(MediaDeviceHandler);
  */
 describe("VoiceRecording", () => {
     let recording: VoiceRecording;
-    let recorderSecondsSpy: jest.SpyInstance;
+    let recorderSecondsSpy: MockInstance;
 
     const itShouldNotCallStop = () => {
         it("should not call stop", () => {
@@ -53,32 +55,32 @@ describe("VoiceRecording", () => {
         recording = new VoiceRecording();
         // @ts-ignore
         recording.observable = {
-            update: jest.fn(),
-            close: jest.fn(),
+            update: vi.fn(),
+            close: vi.fn(),
         };
-        jest.spyOn(recording, "stop").mockImplementation();
-        recorderSecondsSpy = jest.spyOn(recording, "recorderSeconds", "get");
+        vi.spyOn(recording, "stop").mockImplementation(() => Promise.resolve());
+        recorderSecondsSpy = vi.spyOn(recording, "recorderSeconds", "get");
     });
 
     afterEach(() => {
-        jest.resetAllMocks();
+        vi.resetAllMocks();
     });
 
     describe("when starting a recording", () => {
         beforeEach(() => {
             const mockAudioContext = {
-                createMediaStreamSource: jest.fn().mockReturnValue({
-                    connect: jest.fn(),
-                    disconnect: jest.fn(),
+                createMediaStreamSource: vi.fn().mockReturnValue({
+                    connect: vi.fn(),
+                    disconnect: vi.fn(),
                 }),
-                createScriptProcessor: jest.fn().mockReturnValue({
-                    connect: jest.fn(),
-                    disconnect: jest.fn(),
-                    addEventListener: jest.fn(),
-                    removeEventListener: jest.fn(),
+                createScriptProcessor: vi.fn().mockReturnValue({
+                    connect: vi.fn(),
+                    disconnect: vi.fn(),
+                    addEventListener: vi.fn(),
+                    removeEventListener: vi.fn(),
                 }),
                 destination: {},
-                close: jest.fn(),
+                close: vi.fn(),
             };
             createAudioContextMock.mockReturnValue(mockAudioContext as unknown as AudioContext);
         });
@@ -136,7 +138,7 @@ describe("VoiceRecording", () => {
             MediaDeviceHandlerMock.getAudioInput.mockReturnValue("default");
             await recording.start();
 
-            const constraints = mocked(navigator.mediaDevices.getUserMedia).mock.calls[0][0]!;
+            const constraints = vi.mocked(navigator.mediaDevices.getUserMedia).mock.calls[0][0]!;
             expect(constraints.audio).toEqual(
                 expect.not.objectContaining({
                     deviceId: expect.anything(),

@@ -6,22 +6,24 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked } from "jest-mock";
+// @vitest-environment happy-dom
+
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { type UploadOpts, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { type EncryptedFile } from "matrix-js-sdk/src/types";
+import { stubClient } from "test-utils";
 
-import { createVoiceMessageRecording, VoiceMessageRecording } from "../../../src/audio/VoiceMessageRecording";
-import { RecordingState, type VoiceRecording } from "../../../src/audio/VoiceRecording";
-import { uploadFile } from "../../../src/ContentMessages";
-import { stubClient } from "../../test-utils";
-import { Playback } from "../../../src/audio/Playback";
+import { createVoiceMessageRecording, VoiceMessageRecording } from "./VoiceMessageRecording";
+import { RecordingState, type VoiceRecording } from "./VoiceRecording";
+import { uploadFile } from "../ContentMessages";
+import { Playback } from "./Playback";
 
-jest.mock("../../../src/ContentMessages", () => ({
-    uploadFile: jest.fn(),
+vi.mock("../ContentMessages", () => ({
+    uploadFile: vi.fn(),
 }));
 
-jest.mock("../../../src/audio/Playback", () => ({
-    Playback: jest.fn(),
+vi.mock("./Playback", () => ({
+    Playback: vi.fn(),
 }));
 
 describe("VoiceMessageRecording", () => {
@@ -40,14 +42,14 @@ describe("VoiceMessageRecording", () => {
         voiceRecording = {
             contentType,
             durationSeconds,
-            start: jest.fn().mockResolvedValue(undefined),
-            stop: jest.fn().mockResolvedValue(undefined),
-            on: jest.fn(),
-            off: jest.fn(),
-            emit: jest.fn(),
+            start: vi.fn().mockResolvedValue(undefined),
+            stop: vi.fn().mockResolvedValue(undefined),
+            on: vi.fn(),
+            off: vi.fn(),
+            emit: vi.fn(),
             isRecording: true,
             isSupported: true,
-            liveData: jest.fn(),
+            liveData: vi.fn(),
             amplitudes: testAmplitudes,
         } as unknown as VoiceRecording;
         voiceMessageRecording = new VoiceMessageRecording(client, voiceRecording);
@@ -145,7 +147,7 @@ describe("VoiceMessageRecording", () => {
                 uploadFileRoomId = null;
                 uploadBlob = null;
 
-                mocked(uploadFile).mockImplementation(
+                vi.mocked(uploadFile).mockImplementation(
                     (
                         matrixClient: MatrixClient,
                         roomId: string,
@@ -172,7 +174,7 @@ describe("VoiceMessageRecording", () => {
                 expect(result.mxc).toBe(uploadUrl);
                 expect(result.encrypted).toBe(encryptedFile);
 
-                expect(mocked(uploadFile)).toHaveBeenCalled();
+                expect(vi.mocked(uploadFile)).toHaveBeenCalled();
                 expect(uploadFileClient).toBe(client);
                 expect(uploadFileRoomId).toBe(roomId);
                 expect(uploadBlob?.type).toBe(contentType);
@@ -189,7 +191,7 @@ describe("VoiceMessageRecording", () => {
 
         describe("getPlayback", () => {
             beforeEach(() => {
-                mocked(Playback).mockImplementation((buf: ArrayBuffer, seedWaveform): any => {
+                vi.mocked(Playback).mockImplementation(function (buf: ArrayBuffer, seedWaveform): any {
                     expect(new Uint8Array(buf)).toEqual(testBuf);
                     expect(seedWaveform).toEqual(testAmplitudes);
                     return {} as Playback;
@@ -198,7 +200,7 @@ describe("VoiceMessageRecording", () => {
 
             it("should return a Playback with the data", () => {
                 voiceMessageRecording.getPlayback();
-                expect(mocked(Playback)).toHaveBeenCalled();
+                expect(vi.mocked(Playback)).toHaveBeenCalled();
             });
 
             it("should reuse the result", () => {

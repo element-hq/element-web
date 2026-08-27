@@ -7,18 +7,21 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
-import fetchMock from "@fetch-mock/jest";
-import { render, type RenderResult, screen } from "jest-matrix-react";
-import { WrapperLifecycle, type WrapperOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WrapperLifecycle";
+// @vitest-environment happy-dom
 
-import SdkConfig from "../../src/SdkConfig";
-import PlatformPeg from "../../src/PlatformPeg";
-import { ModuleRunner } from "../../src/modules/ModuleRunner";
-import MatrixChat from "../../src/components/structures/MatrixChat";
-import WebPlatform from "../../src/vector/platform/WebPlatform";
-import { loadApp } from "../../src/vector/app";
-import { waitForLoadingSpinner, waitForWelcomeComponent } from "../test-utils";
+import React from "react";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import fetchMock from "@fetch-mock/vitest";
+import { render, type RenderResult, screen } from "test-utils-rtl";
+import { WrapperLifecycle, type WrapperOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WrapperLifecycle";
+import { waitForLoadingSpinner, waitForWelcomeComponent } from "test-utils";
+
+import SdkConfig from "../SdkConfig";
+import PlatformPeg from "../PlatformPeg";
+import { ModuleRunner } from "../modules/ModuleRunner";
+import MatrixChat from "../components/structures/MatrixChat";
+import WebPlatform from "./platform/WebPlatform";
+import { loadApp } from "./app";
 
 /** The matrix versions our mock server claims to support */
 const SERVER_SUPPORTED_MATRIX_VERSIONS = ["v1.1", "v1.5", "v1.6", "v1.8", "v1.9"];
@@ -48,7 +51,7 @@ describe("Wrapper", () => {
             },
         });
 
-        jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts) => {
+        vi.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts) => {
             if (lifecycleEvent === WrapperLifecycle.Wrapper) {
                 (opts as WrapperOpts).Wrapper = ({ children }) => {
                     return (

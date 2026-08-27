@@ -6,12 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import fetchMock from "@fetch-mock/jest";
+// @vitest-environment happy-dom
 
-import SdkConfig from "../../src/SdkConfig";
-import PlatformPeg from "../../src/PlatformPeg";
-import { loadApp } from "../../src/vector/app";
-import WebPlatform from "../../src/vector/platform/WebPlatform";
+import { describe, it, expect, beforeEach } from "vitest";
+import fetchMock from "@fetch-mock/vitest";
+
+import SdkConfig from "../SdkConfig";
+import PlatformPeg from "../PlatformPeg";
+import { loadApp } from "./app";
+import WebPlatform from "./platform/WebPlatform";
 
 /** The matrix versions our mock server claims to support */
 const SERVER_SUPPORTED_MATRIX_VERSIONS = ["v1.1", "v1.5", "v1.6", "v1.8", "v1.9"];

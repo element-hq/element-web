@@ -28,7 +28,7 @@ vi.mock("react", async () => {
     const React = await vi.importActual<typeof ReactImport>("react");
     return {
         ...React,
-        lazy: (children: any) => children(), // stub out lazy for dialog test
+        lazy: (loader: any) => loader,
     };
 });
 
@@ -103,7 +103,9 @@ describe("SecurityManager", () => {
             await accessSecretStorage(func, { forceReset: true });
 
             expect(spy).toHaveBeenCalledTimes(1);
-            await expect(spy.mock.lastCall![0]).resolves.toEqual(expect.objectContaining({ __test: true }));
+            await expect((spy.mock.lastCall![0] as () => Promise<unknown>)()).resolves.toEqual(
+                expect.objectContaining({ __test: true }),
+            );
         });
     });
 
