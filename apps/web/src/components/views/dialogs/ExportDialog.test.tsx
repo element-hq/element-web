@@ -31,8 +31,8 @@ const plainTextExporterInstance = {
 vi.mock("../../../utils/exportUtils/HtmlExport", () => ({ default: vi.fn() }));
 vi.mock("../../../utils/exportUtils/PlainTextExport", () => ({ default: vi.fn() }));
 
-const HTMLExporterMock = mocked(HTMLExporter);
-const PlainTextExporterMock = mocked(PlainTextExporter);
+const HTMLExporterMock = vi.mocked(HTMLExporter);
+const PlainTextExporterMock = vi.mocked(PlainTextExporter);
 
 describe("<ExportDialog />", () => {
     const mockClient = createTestClient();
