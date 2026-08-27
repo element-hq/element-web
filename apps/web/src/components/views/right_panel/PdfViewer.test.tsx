@@ -175,6 +175,43 @@ function mockIntersectionObserver(): IntersectionControl {
     };
 }
 
+/** A controllable ResizeObserver so tests can simulate the right panel being resized. */
+function mockResizeObserver(): { trigger: (element: Element) => void } {
+    interface Registration {
+        callback: ResizeObserverCallback;
+        elements: Set<Element>;
+    }
+
+    const registrations: Registration[] = [];
+
+    vi.stubGlobal(
+        "ResizeObserver",
+        vi.fn(function (callback: ResizeObserverCallback) {
+            const registration: Registration = { callback, elements: new Set() };
+            registrations.push(registration);
+
+            return {
+                observe: (element: Element) => registration.elements.add(element),
+                unobserve: (element: Element) => registration.elements.delete(element),
+                disconnect: () => {
+                    registration.elements.clear();
+                    registrations.splice(registrations.indexOf(registration), 1);
+                },
+            };
+        }) as unknown as typeof ResizeObserver,
+    );
+
+    return {
+        trigger: (element) => {
+            const matches = registrations.filter((registration) => registration.elements.has(element));
+
+            for (const registration of matches) {
+                registration.callback([{ target: element } as ResizeObserverEntry], {} as ResizeObserver);
+            }
+        },
+    };
+}
+
 function mockElementRect(element: Element, rect: Partial<DOMRect>): void {
     element.getBoundingClientRect = vi.fn(
         () =>
@@ -494,6 +531,69 @@ describe("PdfViewer", () => {
         expect(zoomRatio).toBeGreaterThan(1);
         expect(pagesContainer.scrollLeft).toBeCloseTo((20 + 200) * zoomRatio - 200);
         expect(pagesContainer.scrollTop).toBeCloseTo((400 + 250) * zoomRatio - 250);
+    });
+
+    it("keeps the visible position anchored when the panel is resized", async () => {
+        let panelWidth = 800;
+        vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockImplementation(function (this: HTMLElement) {
+            return this.dataset.testid === "pdf-pages" ? panelWidth : 0;
+        });
+        const resize = mockResizeObserver();
+        const { pages } = mockDocument(10);
+
+        render(<PdfViewer media={media()} />);
+
+        await waitFor(() => expect(pages[0].render).toHaveBeenCalledTimes(1));
+
+        const container = screen.getByTestId("pdf-pages");
+        Object.defineProperty(container, "clientHeight", { configurable: true, value: 500 });
+        mockElementRect(container, { height: 500, left: 0, top: 0, width: panelWidth });
+        container.scrollTop = 4000;
+
+        const zoomBefore = getDisplayZoom();
+        panelWidth = 400;
+        act(() => resize.trigger(container));
+        const zoomAfter = getDisplayZoom();
+
+        // Fit-to-width halves, so every page halves in height: the same content must stay under the
+        // viewport centre instead of the raw scrollTop pointing somewhere else in the document.
+        expect(zoomAfter).toBeCloseTo(zoomBefore / 2);
+        expect(container.scrollTop).toBeCloseTo((4000 + 250) * (zoomAfter / zoomBefore) - 250);
+    });
+
+    it("does not re-rasterise on every tick of a panel resize", async () => {
+        let panelWidth = 800;
+        vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockImplementation(function (this: HTMLElement) {
+            return this.dataset.testid === "pdf-pages" ? panelWidth : 0;
+        });
+        const resize = mockResizeObserver();
+        const { pages } = mockDocument(1);
+
+        render(<PdfViewer media={media()} />);
+
+        await waitFor(() => expect(pages[0].render).toHaveBeenCalledTimes(1));
+        const container = screen.getByTestId("pdf-pages");
+        Object.defineProperty(container, "clientHeight", { configurable: true, value: 500 });
+        mockElementRect(container, { height: 500, left: 0, top: 0, width: panelWidth });
+
+        vi.useFakeTimers();
+
+        // Dragging the splitter fires a burst of resize notifications.
+        for (let step = 0; step < 10; step++) {
+            panelWidth -= 20;
+            act(() => resize.trigger(container));
+        }
+
+        expect(pages[0].render).toHaveBeenCalledTimes(1);
+
+        await act(async () => {
+            vi.advanceTimersByTime(PDF_VIEWER_ZOOM_RENDER_DEBOUNCE_MS);
+            await flushPromises();
+        });
+
+        // One raster for the whole drag, at the width it ended on.
+        expect(pages[0].render).toHaveBeenCalledTimes(2);
+        expect(pages[0].getViewport).toHaveBeenLastCalledWith({ scale: (600 / 816) * (96 / 72) });
     });
 
     it("zooms around the pointer rather than the centre", async () => {

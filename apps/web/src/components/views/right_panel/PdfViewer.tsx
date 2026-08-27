@@ -553,12 +553,13 @@ export function PdfViewer({ media }: { media: UploadedMedia }): JSX.Element {
     const pendingZoomRef = useRef<{ factor: number; anchorPoint?: { x: number; y: number } } | undefined>(undefined);
     const zoomFrameRef = useRef<number | undefined>(undefined);
     const pendingScrollAnchorRef = useRef<ScrollAnchor | undefined>(undefined);
+    const hasFitZoomRef = useRef(false);
     const scheduledInitialPrefetchRef = useRef(false);
     const scheduledInitialPrefetchTaskRef = useRef<ScheduledCallback | undefined>(undefined);
     const restoredScrollPositionRef = useRef(false);
     const scrollPositionKey = useMemo(() => getMediaScrollKey(media), [media]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         displayZoomRef.current = displayZoom;
     }, [displayZoom]);
 
@@ -571,6 +572,7 @@ export function PdfViewer({ media }: { media: UploadedMedia }): JSX.Element {
             scheduledInitialPrefetchTaskRef.current = undefined;
         }
 
+        hasFitZoomRef.current = false;
         scheduledInitialPrefetchRef.current = false;
         restoredScrollPositionRef.current = false;
         setEagerPageNumbers(new Set([1]));
@@ -642,16 +644,27 @@ export function PdfViewer({ media }: { media: UploadedMedia }): JSX.Element {
 
         const updateFitZoom = (): void => {
             const nextFitZoom = calculateFitZoom(pages, documentState.pageWidth);
-            const minZoom = getMinimumZoom(nextFitZoom);
+            const currentZoom = displayZoomRef.current;
+            const nextZoom = zoomMode === "fit" ? nextFitZoom : clampZoom(currentZoom, getMinimumZoom(nextFitZoom));
+            const isFirstLayout = !hasFitZoomRef.current;
+            hasFitZoomRef.current = true;
 
             setFitZoom(nextFitZoom);
-            if (zoomMode === "fit") {
-                setDisplayZoom(nextFitZoom);
-                setRenderZoom(nextFitZoom);
+            if (nextZoom === currentZoom) return;
+
+            if (isFirstLayout) {
+                // Nothing is on screen to hold still yet, and the cached scroll position is about to be
+                // restored. Rasterise straight at the fit zoom rather than at the default and again after.
+                setRenderZoom(nextZoom);
             } else {
-                setDisplayZoom((currentZoom) => clampZoom(currentZoom, minZoom));
-                setRenderZoom((currentZoom) => clampZoom(currentZoom, minZoom));
+                // Resizing the panel changes fit zoom, and with it every page's height. Without an anchor
+                // the untouched scrollTop would point at a different part of the document than before.
+                // Re-rastering is left to the debounce, so dragging the splitter scales the existing
+                // raster and rasterises once when the drag settles.
+                pendingScrollAnchorRef.current = captureScrollAnchor(pages, currentZoom);
             }
+
+            setDisplayZoom(nextZoom);
         };
 
         updateFitZoom();
