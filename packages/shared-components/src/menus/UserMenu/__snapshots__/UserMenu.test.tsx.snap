@@ -273,7 +273,7 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
       aria-label="User menu"
       aria-labelledby="radix-react-use-id-2"
       aria-orientation="vertical"
-      class="UserMenu-module_container _menu_1kl3y_8"
+      class="UserMenu-module_container _menu_so651_8"
       data-align="start"
       data-orientation="vertical"
       data-radix-menu-content=""
@@ -289,7 +289,7 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
         class="UserMenu-module_profile UserMenu-module_profilePrimary"
       >
         <span
-          class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 UserMenu-module_displayname"
+          class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 UserMenu-module_displayname UserMenu-module_constrainedText"
         >
           Sally Sanderson
         </span>
@@ -345,7 +345,16 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
                 role="option"
                 tabindex="0"
               >
-                💬 In a meeting
+                <span>
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    💬
+                  </span>
+                  <span>
+                    In a meeting
+                  </span>
+                </span>
                  
               </li>
               <li
@@ -353,7 +362,16 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
                 role="option"
                 tabindex="0"
               >
-                💡 Focus Time
+                <span>
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    💡
+                  </span>
+                  <span>
+                    Focus Time
+                  </span>
+                </span>
                  
               </li>
               <li
@@ -361,7 +379,16 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
                 role="option"
                 tabindex="0"
               >
-                🚙 On the road
+                <span>
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    🚙
+                  </span>
+                  <span>
+                    On the road
+                  </span>
+                </span>
                  
               </li>
               <li
@@ -369,7 +396,16 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
                 role="option"
                 tabindex="0"
               >
-                ☕️ Be right back
+                <span>
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    ☕️
+                  </span>
+                  <span>
+                    Be right back
+                  </span>
+                </span>
                  
               </li>
               <li
@@ -377,7 +413,33 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
                 role="option"
                 tabindex="0"
               >
-                🌴 Away
+                <span>
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    🌴
+                  </span>
+                  <span>
+                    Away
+                  </span>
+                </span>
+                 
+              </li>
+              <li
+                aria-selected="false"
+                role="option"
+                tabindex="0"
+              >
+                <span>
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    ✍️
+                  </span>
+                  <span>
+                    Custom…
+                  </span>
+                </span>
                  
               </li>
             </ul>
@@ -388,7 +450,7 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
         class="UserMenu-module_profile UserMenu-module_profileSecondary"
       >
         <span
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 UserMenu-module_userId"
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 UserMenu-module_userId UserMenu-module_constrainedText"
           data-testid="userId"
         >
           @person-name:homeserver.com
@@ -398,8 +460,10 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
           data-kind="tertiary"
           data-size="md"
           href="#"
+          rel="noreferrer noopener"
           role="link"
           tabindex="0"
+          target="_blank"
         >
           <svg
             aria-hidden="true"
@@ -680,7 +744,7 @@ exports[`UserMenu > renders an open menu 1`] = `
       aria-label="User menu"
       aria-labelledby="radix-react-use-id-2"
       aria-orientation="vertical"
-      class="UserMenu-module_container _menu_1kl3y_8"
+      class="UserMenu-module_container _menu_so651_8"
       data-align="start"
       data-orientation="vertical"
       data-radix-menu-content=""
@@ -715,7 +779,7 @@ exports[`UserMenu > renders an open menu 1`] = `
           />
         </span>
         <span
-          class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 UserMenu-module_displayname"
+          class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 UserMenu-module_displayname UserMenu-module_constrainedText"
         >
           Sally Sanderson with a longer name
         </span>
@@ -771,7 +835,16 @@ exports[`UserMenu > renders an open menu 1`] = `
                 role="option"
                 tabindex="0"
               >
-                💬 In a meeting
+                <span>
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    💬
+                  </span>
+                  <span>
+                    In a meeting
+                  </span>
+                </span>
                  
               </li>
               <li
@@ -779,7 +852,16 @@ exports[`UserMenu > renders an open menu 1`] = `
                 role="option"
                 tabindex="0"
               >
-                💡 Focus Time
+                <span>
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    💡
+                  </span>
+                  <span>
+                    Focus Time
+                  </span>
+                </span>
                  
               </li>
               <li
@@ -787,7 +869,16 @@ exports[`UserMenu > renders an open menu 1`] = `
                 role="option"
                 tabindex="0"
               >
-                🚙 On the road
+                <span>
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    🚙
+                  </span>
+                  <span>
+                    On the road
+                  </span>
+                </span>
                  
               </li>
               <li
@@ -795,7 +886,16 @@ exports[`UserMenu > renders an open menu 1`] = `
                 role="option"
                 tabindex="0"
               >
-                ☕️ Be right back
+                <span>
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    ☕️
+                  </span>
+                  <span>
+                    Be right back
+                  </span>
+                </span>
                  
               </li>
               <li
@@ -803,7 +903,33 @@ exports[`UserMenu > renders an open menu 1`] = `
                 role="option"
                 tabindex="0"
               >
-                🌴 Away
+                <span>
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    🌴
+                  </span>
+                  <span>
+                    Away
+                  </span>
+                </span>
+                 
+              </li>
+              <li
+                aria-selected="false"
+                role="option"
+                tabindex="0"
+              >
+                <span>
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    ✍️
+                  </span>
+                  <span>
+                    Custom…
+                  </span>
+                </span>
                  
               </li>
             </ul>
@@ -814,7 +940,7 @@ exports[`UserMenu > renders an open menu 1`] = `
         class="UserMenu-module_profile UserMenu-module_profileSecondary"
       >
         <span
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 UserMenu-module_userId"
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 UserMenu-module_userId UserMenu-module_constrainedText"
           data-testid="userId"
         >
           @person-name:homeserver.com
@@ -824,8 +950,10 @@ exports[`UserMenu > renders an open menu 1`] = `
           data-kind="tertiary"
           data-size="md"
           href="#"
+          rel="noreferrer noopener"
           role="link"
           tabindex="0"
+          target="_blank"
         >
           <svg
             aria-hidden="true"

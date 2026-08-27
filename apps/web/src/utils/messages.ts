@@ -98,7 +98,7 @@ export function attachMentions(
         // mentioned users.
         const prevMentions = editedContent["m.mentions"];
         if (Array.isArray(prevMentions?.user_ids)) {
-            prevMentions!.user_ids.forEach((userId) => userMentions.delete(userId));
+            prevMentions.user_ids.forEach((userId) => userMentions.delete(userId));
         }
 
         // If the original event mentioned the room, nothing to do here.
@@ -137,6 +137,7 @@ export async function attachUrlPreviews(
     room: Room,
     urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot,
     content: RoomMessageEventContent,
+    messageHasLinks: boolean,
 ): Promise<boolean> {
     if (!SettingsStore.getValue("feature_msc4095_url_preview_bundle")) return false;
 
@@ -188,7 +189,7 @@ export async function attachUrlPreviews(
                 if (isRoomEncrypted) {
                     try {
                         // image url from homeserver assumed to not be malformed
-                        const httpUrl = mediaFromMxc(preview.image.mxcImageFull).srcHttp as string;
+                        const httpUrl = mediaFromMxc(preview.image.mxcImageFull).srcHttp!;
                         const blob = await (await fetch(httpUrl, { signal: abortController.signal })).blob();
                         const { file, url } = await uploadFile(client, room.roomId, blob, undefined, abortController);
 
@@ -214,7 +215,7 @@ export async function attachUrlPreviews(
         }),
     );
 
-    if (urlPreviewSnapshot.entries.length !== 0) {
+    if (messageHasLinks) {
         content["com.beeper.linkpreviews"] = bundle;
     }
 

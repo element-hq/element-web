@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Sélecteur d'emoji",
         "jump_first_invite": "Aller à la première invitation.",
         "message_composer": "Rédaction des messages",
         "n_unread_messages": {
@@ -286,6 +285,8 @@
         },
         "registration_disabled": "L’inscription a été désactivée sur ce serveur d’accueil.",
         "registration_msisdn_field_required_invalid": "Saisir le numéro de téléphone (obligatoire sur ce serveur d’accueil)",
+        "registration_rate_limited": "Trop de tentatives consécutives. Attendez un peu avant de réessayer.",
+        "registration_rate_limited_with_time": "Trop de tentatives consécutives. Réessayez après %(timeout)s.",
         "registration_successful": "Inscription réussie",
         "registration_username_in_use": "Quelqu’un d’autre a déjà ce nom d’utilisateur. Essayez-en un autre ou bien, si c’est vous, connecter vous ci-dessous.",
         "registration_username_unable_check": "Impossible de vérifier si le nom d’utilisateur est déjà utilisé. Veuillez réessayer plus tard.",
@@ -504,7 +505,6 @@
         "message_layout": "Mise en page des messages",
         "message_timestamp_invalid": "Horodatage non valide",
         "microphone": "Micro",
-        "model": "Modèle",
         "moderation_and_safety": "Modération et sécurité",
         "modern": "Moderne",
         "mute": "Mettre en sourdine",
@@ -922,22 +922,6 @@
     },
     "dialog_close_label": "Fermer la boîte de dialogue",
     "download_completed": "Téléchargement terminé",
-    "emoji": {
-        "categories": "Catégories",
-        "category_activities": "Activités",
-        "category_animals_nature": "Animaux et nature",
-        "category_flags": "Drapeaux",
-        "category_food_drink": "Nourriture et boisson",
-        "category_frequently_used": "Utilisé fréquemment",
-        "category_objects": "Objets",
-        "category_smileys_people": "Visages et personnes",
-        "category_symbols": "Symboles",
-        "category_travel_places": "Voyages et lieux",
-        "quick_reactions": "Réactions rapides"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Annuler la recherche"
-    },
     "empty_room": "Salon vide",
     "empty_room_was_name": "Salon vide (précédemment %(oldName)s)",
     "encryption": {
@@ -1725,7 +1709,6 @@
         "mentions_and_keywords": "@mentions et réponses uniquement",
         "mentions_and_keywords_description": "Recevoir des notifications uniquement pour les mentions, les réponses et mot-clés comme défini dans vos <a>paramètres</a>",
         "mentions_keywords": "Mentions et mots-clés",
-        "message_didnt_send": "Le message n’a pas été envoyé. Cliquer pour plus d’info.",
         "mute_description": "Vous n’aurez aucune notification"
     },
     "notifier": {
@@ -2851,7 +2834,6 @@
         "send_typing_notifications": "Envoyer des notifications de saisie",
         "sessions": {
             "best_security_note": "Pour une sécurité optimale, vérifiez vos sessions et supprimez toutes sessions que vous ne reconnaissez pas ou que vous n’utilisez plus.",
-            "browser": "Navigateur",
             "confirm_sign_out": {
                 "one": "Confirmer la suppression de cet appareil",
                 "other": "Confirmer la suppression de ces appareils"
@@ -2902,7 +2884,6 @@
             "no_sessions": "Aucune session n’a été trouvée.",
             "no_unverified_sessions": "Aucune session non vérifiée n’a été trouvée.",
             "no_verified_sessions": "Aucune session vérifiée n’a été trouvée.",
-            "os": "Système d’exploitation",
             "other_sessions_heading": "Autres sessions",
             "push_heading": "Notifications push",
             "push_subheading": "Recevoir les notifications push sur cette session.",

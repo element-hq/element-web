@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Выбор эмодзи",
         "jump_first_invite": "Перейти к первому приглашению.",
         "message_composer": "Автор сообщения",
         "n_unread_messages": {
@@ -491,7 +490,6 @@
         "message_layout": "Макет сообщения",
         "message_timestamp_invalid": "Недопустимая метка времени",
         "microphone": "Микрофон",
-        "model": "Модель",
         "moderation_and_safety": "Модерация и безопасность",
         "modern": "Современный",
         "mute": "Приглушить",
@@ -897,22 +895,6 @@
     },
     "dialog_close_label": "Закрыть диалог",
     "download_completed": "Скачивание завершено",
-    "emoji": {
-        "categories": "Категории",
-        "category_activities": "Действия",
-        "category_animals_nature": "Животные и природа",
-        "category_flags": "Флаги",
-        "category_food_drink": "Еда и напитки",
-        "category_frequently_used": "Часто используемые",
-        "category_objects": "Объекты",
-        "category_smileys_people": "Смайлики и люди",
-        "category_symbols": "Символы",
-        "category_travel_places": "Путешествия и места",
-        "quick_reactions": "Быстрая реакция"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Отменить поиск"
-    },
     "empty_room": "Пустая комната",
     "empty_room_was_name": "Пустая комната (без %(oldName)s)",
     "encryption": {
@@ -1678,7 +1660,6 @@
         "mentions_and_keywords": "@упоминания и ключевые слова",
         "mentions_and_keywords_description": "Получать уведомления только по упоминаниям и ключевым словам, установленным в ваших <a>настройках</a>",
         "mentions_keywords": "Упоминания и ключевые слова",
-        "message_didnt_send": "Сообщение не отправлено. Нажмите для получения информации.",
         "mute_description": "Вы не будете получать никаких уведомлений"
     },
     "notifier": {
@@ -2802,7 +2783,6 @@
         "send_typing_notifications": "Уведомлять о наборе текста",
         "sessions": {
             "best_security_note": "Для обеспечения максимальной безопасности проверяйте свои сеансы и выходите из любого сеанса, который вы больше не знаете или не используете.",
-            "browser": "Браузер",
             "confirm_sign_out": {
                 "one": "Подтвердите выход из этого устройства",
                 "few": "Подтвердите выход из этих устройств",
@@ -2858,7 +2838,6 @@
             "no_sessions": "Сеансов не найдено.",
             "no_unverified_sessions": "Незаверенных сеансов не обнаружено.",
             "no_verified_sessions": "Заверенных сеансов не обнаружено.",
-            "os": "Операционная система",
             "other_sessions_heading": "Другие сеансы",
             "push_heading": "Уведомления",
             "push_subheading": "Получать push-уведомления в этом сеансе.",

@@ -14,6 +14,7 @@ import {
 import { debounce } from "lodash";
 
 import { UrlPreviewFetcher } from "../../utils/UrlPreviewFetcher";
+import { linksIn } from "../../utils/UrlUtils";
 
 export const DEBOUNCE_REQUEST_TIMEOUT_MS = 500;
 
@@ -48,6 +49,15 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
      */
     private content: string;
 
+    /**
+     * The list of all previews that are currently loading, loaded or failed to load
+     * - loading entries are immediately added when computeSnapshot detects new link in the composer
+     * - loaded/failed to load entries replaces the loading entry when it resolves
+     * - not all previews in cache are displayed: the preview only selects the previews which link is in the composer,
+     *   and preview.include is true where the preview has not been removed
+     * - the cache is cleared when the composer is emptied: intentionally by user or by sending a message,
+     *   this reloads all previews and forgets all preview.include states, causing all previously removed previews to be unremoved
+     */
     private readonly previewCache: Map<string, MessageComposerUrlPreviewSnapshotEntry> = new Map();
 
     public constructor(props: MessageComposerUrlPreviewViewModelProps) {
@@ -63,11 +73,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
             return;
         }
 
-        const newLinksOrdered = content
-            .split(" ")
-            .map((w) => w.trim())
-            .filter((word) => URL.canParse(word));
-        const newLinks = new Set(newLinksOrdered);
+        const newLinks = linksIn(content);
         if (this.links.symmetricDifference(newLinks).size === 0) {
             // Skip if the URL set hasn't changed
             return;
@@ -84,21 +90,8 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
                     matched_url: link,
                 });
 
-                const insertToSnapshot = (): void => {
-                    const updatedEntry = this.previewCache.get(link);
-                    if (updatedEntry === undefined) return;
-
-                    const snapshot = this.snapshot.current;
-
-                    this.snapshot.set({
-                        content: snapshot.content,
-                        entries: snapshot.entries.map((entry) =>
-                            entry.matched_url === updatedEntry.matched_url ? updatedEntry : entry,
-                        ),
-                    });
-                };
-
-                this.fetcher.fetchPreview(link, true).then((fetched) => {
+                void this.fetcher.fetchPreview(link, true).then((fetched) => {
+                    // update cache
                     const currentEntry = this.previewCache.get(link);
                     if (fetched === null) {
                         this.previewCache.set(link, {
@@ -115,11 +108,22 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
                         });
                     }
 
-                    insertToSnapshot();
+                    // insert to snapshot
+                    const updatedEntry = this.previewCache.get(link);
+                    if (updatedEntry === undefined) return;
+
+                    const snapshot = this.snapshot.current;
+
+                    this.snapshot.set({
+                        content: snapshot.content,
+                        entries: snapshot.entries.map((entry) =>
+                            entry.matched_url === updatedEntry.matched_url ? updatedEntry : entry,
+                        ),
+                    });
                 });
             }
 
-            return this.previewCache.get(link) as MessageComposerUrlPreviewSnapshotEntry;
+            return this.previewCache.get(link)!;
         });
 
         this.snapshot.set({ entries, content });
@@ -136,12 +140,14 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
 
         if (content === "") {
             this.previewCache.clear();
+            this.computeSnapshotDebounced.cancel();
             return this.computeSnapshot("");
         }
 
         if (debounced) {
             return this.computeSnapshotDebounced(this.content);
         } else {
+            this.computeSnapshotDebounced.cancel();
             return this.computeSnapshot(this.content);
         }
     }
@@ -163,6 +169,10 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
         return this.computeSnapshot(this.content);
     };
 
+    /**
+     * Remove a preview of a URL and remembers it until cache is cleared
+     * @param url A URL that has been previously requested since the last time composer is empty
+     */
     public readonly removePreview = (url: string): void => {
         const entry = this.previewCache.get(url);
         if (entry === undefined) return;

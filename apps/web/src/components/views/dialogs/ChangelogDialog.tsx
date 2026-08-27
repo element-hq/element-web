@@ -84,7 +84,7 @@ export default class ChangelogDialog extends React.Component<IProps, State> {
         const newCommits = parseVersion(this.props.newVersion)!;
 
         for (const repo of REPOS) {
-            this.fetchChanges(repo, commits[repo], newCommits[repo]);
+            void this.fetchChanges(repo, commits[repo], newCommits[repo]);
         }
     }
 
@@ -108,7 +108,7 @@ export default class ChangelogDialog extends React.Component<IProps, State> {
                     msg: this.state[repo],
                 });
             } else {
-                content = (this.state[repo] as Commit[]).map(this.elementsForCommit);
+                content = this.state[repo].map(this.elementsForCommit);
             }
             return (
                 <div key={repo}>

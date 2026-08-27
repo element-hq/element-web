@@ -948,18 +948,16 @@ describe("<SessionManagerTab />", () => {
                 toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
 
                 const deviceDetails = getByTestId(`device-detail-${alicesMobileDevice.device_id}`);
-                const signOutButton = deviceDetails.querySelector(
-                    '[data-testid="device-detail-sign-out-cta"]',
-                ) as Element;
+                const signOutButton = deviceDetails.querySelector('[data-testid="device-detail-sign-out-cta"]')!;
                 fireEvent.click(signOutButton);
 
                 await confirmSignout(getByTestId, false);
 
                 // doesnt enter loading state
                 expect(
-                    (deviceDetails.querySelector('[data-testid="device-detail-sign-out-cta"]') as Element).getAttribute(
-                        "aria-disabled",
-                    ),
+                    deviceDetails
+                        .querySelector('[data-testid="device-detail-sign-out-cta"]')!
+                        .getAttribute("aria-disabled"),
                 ).toEqual(null);
                 // delete not called
                 expect(mockClient.deleteMultipleDevices).not.toHaveBeenCalled();
@@ -991,9 +989,7 @@ describe("<SessionManagerTab />", () => {
                 toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
 
                 const deviceDetails = getByTestId(`device-detail-${alicesMobileDevice.device_id}`);
-                const signOutButton = deviceDetails.querySelector(
-                    '[data-testid="device-detail-sign-out-cta"]',
-                ) as Element;
+                const signOutButton = deviceDetails.querySelector('[data-testid="device-detail-sign-out-cta"]')!;
                 fireEvent.click(signOutButton);
                 await confirmSignout(getByTestId);
 
@@ -1052,17 +1048,15 @@ describe("<SessionManagerTab />", () => {
                 toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
 
                 const deviceDetails = getByTestId(`device-detail-${alicesMobileDevice.device_id}`);
-                const signOutButton = deviceDetails.querySelector(
-                    '[data-testid="device-detail-sign-out-cta"]',
-                ) as Element;
+                const signOutButton = deviceDetails.querySelector('[data-testid="device-detail-sign-out-cta"]')!;
                 fireEvent.click(signOutButton);
                 await confirmSignout(getByTestId);
 
                 // button is loading
                 expect(
-                    (deviceDetails.querySelector('[data-testid="device-detail-sign-out-cta"]') as Element).getAttribute(
-                        "aria-disabled",
-                    ),
+                    deviceDetails
+                        .querySelector('[data-testid="device-detail-sign-out-cta"]')!
+                        .getAttribute("aria-disabled"),
                 ).toEqual("true");
 
                 await flushPromises();
@@ -1094,9 +1088,9 @@ describe("<SessionManagerTab />", () => {
 
                 // loading state cleared
                 expect(
-                    (deviceDetails.querySelector('[data-testid="device-detail-sign-out-cta"]') as Element).getAttribute(
-                        "aria-disabled",
-                    ),
+                    deviceDetails
+                        .querySelector('[data-testid="device-detail-sign-out-cta"]')!
+                        .getAttribute("aria-disabled"),
                 ).toEqual(null);
             });
 
@@ -1241,7 +1235,7 @@ describe("<SessionManagerTab />", () => {
                     const deviceDetails = getByTestId(`device-detail-${alicesMobileDevice.device_id}`);
                     const manageDeviceButton = deviceDetails.querySelector(
                         '[data-testid="device-detail-sign-out-cta"]',
-                    ) as Element;
+                    )!;
                     expect(manageDeviceButton).toHaveAttribute(
                         "href",
                         `https://issuer.org/account?action=org.matrix.session_view&device_id=${alicesMobileDevice.device_id}`,

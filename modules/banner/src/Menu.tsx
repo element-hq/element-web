@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type FC, type JSX, useState } from "react";
+import { type ComponentProps, type FC, type JSX, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import * as Dialog from "@radix-ui/react-dialog";
 import styled, { useTheme } from "styled-components";
@@ -179,7 +179,10 @@ const Menu: FC<Props> = ({ api, config, fallbackLogoUrl }) => {
     const [open, setOpen] = useState(false);
 
     let content: JSX.Element;
-    let logoUrl = fallbackLogoUrl;
+    const logoProps: Omit<ComponentProps<typeof Logo>, "api"> = {
+        src: fallbackLogoUrl,
+    };
+
     if (config instanceof Error) {
         content = <CentredContainer>{api.i18n.translate("univention_error")}</CentredContainer>;
     } else if (config) {
@@ -191,8 +194,10 @@ const Menu: FC<Props> = ({ api, config, fallbackLogoUrl }) => {
             </>
         );
         if (config.logo_url) {
-            logoUrl = config.logo_url;
+            logoProps.src = config.logo_url;
         }
+        logoProps.height = config.logo_height !== undefined ? `${config.logo_height}px` : undefined;
+        logoProps.href = config.logo_href;
     } else {
         content = (
             <CentredContainer>
@@ -231,7 +236,7 @@ const Menu: FC<Props> = ({ api, config, fallbackLogoUrl }) => {
                             >
                                 <Dialog.Title>
                                     <SidebarHeading>
-                                        <Logo api={api} src={logoUrl} />
+                                        <Logo {...logoProps} api={api} />
                                         <Dialog.Close asChild>
                                             <CloseButton
                                                 aria-label={api.i18n.translate("close_label")}

@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Selettore di emoji",
         "jump_first_invite": "Salta al primo invito.",
         "message_composer": "Compositore di messaggi",
         "n_unread_messages": {
@@ -441,7 +440,6 @@
         "message": "Messaggio",
         "message_layout": "Disposizione del messaggio",
         "microphone": "Microfono",
-        "model": "Modello",
         "modern": "Moderno",
         "mute": "Silenzia",
         "n_members": {
@@ -748,22 +746,6 @@
     },
     "dialog_close_label": "Chiudi finestra",
     "download_completed": "Scaricamento completato",
-    "emoji": {
-        "categories": "Categorie",
-        "category_activities": "Attività",
-        "category_animals_nature": "Animali e Natura",
-        "category_flags": "Bandiere",
-        "category_food_drink": "Cibo e Bevande",
-        "category_frequently_used": "Usati di frequente",
-        "category_objects": "Oggetti",
-        "category_smileys_people": "Faccine e Persone",
-        "category_symbols": "Simboli",
-        "category_travel_places": "Viaggi e Luoghi",
-        "quick_reactions": "Reazioni rapide"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Annulla ricerca"
-    },
     "empty_room": "Stanza vuota",
     "empty_room_was_name": "Stanza vuota (era %(oldName)s)",
     "encryption": {
@@ -1428,7 +1410,6 @@
         "mentions_and_keywords": "@citazioni e parole chiave",
         "mentions_and_keywords_description": "Ricevi notifiche solo per citazioni e parole chiave come configurato nelle tue <a>impostazioni</a>",
         "mentions_keywords": "Citazioni e parole chiave",
-        "message_didnt_send": "Il messaggio non è stato inviato. Clicca per informazioni.",
         "mute_description": "Non riceverai alcuna notifica"
     },
     "notifier": {
@@ -2323,7 +2304,6 @@
         "send_typing_notifications": "Invia notifiche di scrittura",
         "sessions": {
             "best_security_note": "Per una maggiore sicurezza, verifica le tue sessioni ed esci da quelle che non riconosci o non usi più.",
-            "browser": "Browser",
             "confirm_sign_out": {
                 "one": "Conferma la disconnessione da questo dispositivo",
                 "other": "Conferma la disconnessione da questi dispositivi"
@@ -2372,7 +2352,6 @@
             "no_sessions": "Nessuna sessione trovata.",
             "no_unverified_sessions": "Nessuna sessione non verificata trovata.",
             "no_verified_sessions": "Nessuna sessione verificata trovata.",
-            "os": "Sistema operativo",
             "other_sessions_heading": "Altre sessioni",
             "push_heading": "Notifiche push",
             "push_subheading": "Ricevi notifiche push in questa sessione.",

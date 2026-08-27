@@ -222,67 +222,129 @@ export class UrlPreviewFetcher {
         return result;
     }
 
-    /*
-     * Convert an MSC4095 URL preview bundle item to a UrlPreview
+    /**
+     * Convert an MSC4095 URL preview bundle item to a UrlPreview.
+     * This will load previews via the server if `single` only contains `matched_url`.
+     *
+     * @param single A single preview.
+     * @param body The message text body. `matched_url` must appear within it.
+     * @param loadMedia Whether to include the preview image. Pass false when media is hidden.
+     * @param allowServerFallback Whether an entry carrying only `matched_url` may be resolved by
+     *                            asking the server. Pass false in encrypted rooms where the user
+     *                            opted into bundled previews only, so no URL is leaked to it.
      */
-    public async previewFromBundle(single: UnstableBundledUrlPreviewSingle): Promise<UrlPreview> {
-        // missing fields from the bundle because backend does provide it:
-        // - siteName (can be computed)
-        // - favicon
-        // - media is a video or audio?
-        const hasEncryptedImage = typeof single["beeper:image:encryption"] === "object";
-        const hasImage = hasEncryptedImage || typeof single["og:image"] === "string";
+    public async previewFromBundle(
+        single: UnstableBundledUrlPreviewSingle,
+        body: string,
+        loadMedia = false,
+        allowServerFallback = true,
+    ): Promise<UrlPreview | null> {
+        if (!URL.canParse(single.matched_url)) {
+            return null;
+        }
+        const url = new URL(single.matched_url);
+        if (url.protocol !== "http:" && url.protocol !== "https:") {
+            // Invalid protocol, skip.
+            return null;
+        }
+
+        if (!body.includes(single.matched_url)) {
+            return null;
+        }
+
+        if (Object.keys(single).length === 1) {
+            // We ONLY have the matched_url, so request a preview.
+            if (!allowServerFallback) {
+                return null;
+            }
+            return await this.fetchPreview(single.matched_url, loadMedia);
+        }
 
         const preview: UrlPreview = {
             link: single.matched_url,
             title: single["og:title"] ?? single.matched_url,
-            siteName: new URL(single.matched_url).hostname,
+            siteName: url.hostname,
             showTooltipOnLink: !!(single.matched_url !== single["og:title"] && this.showTooltips),
             description: single["og:description"],
             ogUrl: single["og:url"],
         };
 
-        if (hasImage) {
-            let imageThumb: string | null = null,
-                imageFull: string | null = null;
-
-            if (hasEncryptedImage) {
-                const encryptedFile = single["beeper:image:encryption"] as EncryptedFile;
-                const cachedObjectUrl = this.decryptedObjectUrls.get(encryptedFile.url);
-                if (cachedObjectUrl) {
-                    imageThumb = imageFull = cachedObjectUrl;
-                } else {
-                    try {
-                        const blob = await decryptFile(encryptedFile);
-                        imageThumb = imageFull = URL.createObjectURL(blob);
-                        this.decryptedObjectUrls.set(encryptedFile.url, imageFull);
-                    } catch (e) {
-                        console.error("failed to preview encrypted message in URL previews", e);
-                    }
-                }
-            } else {
-                const media = mediaFromMxc(single["og:image"], this.client);
-                // cannot rule out the mxc:// url is malformed because
-                // the sender can specify anything
-                imageFull = media.srcHttp;
-                imageThumb = media.getThumbnailOfSourceHttp(PREVIEW_WIDTH_PX, PREVIEW_HEIGHT_PX, "scale") ?? imageFull;
+        // missing fields from the bundle because backend does provide it:
+        // - siteName (can be computed)
+        // - favicon
+        // - media is a video or audio?
+        const encryptedImage = single["beeper:image:encryption"];
+        if (
+            typeof encryptedImage === "object" &&
+            typeof single["og:image:type"] === "string" &&
+            typeof single["og:image:width"] === "number" &&
+            typeof single["og:image:height"] === "number"
+        ) {
+            // Decrypting downloads the media eagerly, so only do it when media is visible.
+            if (!loadMedia) {
+                return preview;
             }
 
-            if (imageFull === null || imageThumb === null) {
+            const objectUrl = await this.decryptBundledImage(encryptedImage);
+            if (objectUrl === null) {
                 return preview;
             }
 
             preview.image = {
-                imageThumb,
-                imageFull,
-                imageType: single["og:image:type"] as string | undefined,
-                mxcImageFull: single["og:image"] as string,
-                width: single["og:image:width"] as number | undefined,
-                height: single["og:image:height"] as number | undefined,
+                imageThumb: objectUrl,
+                imageFull: objectUrl,
+                imageType: single["og:image:type"],
+                mxcImageFull: encryptedImage.url,
+                width: single["og:image:width"],
+                height: single["og:image:height"],
+                playable: false, // TODO: do we know?
+            };
+        } else if (
+            typeof single["og:image"] === "string" &&
+            typeof single["og:image:type"] === "string" &&
+            typeof single["og:image:width"] === "number" &&
+            typeof single["og:image:height"] === "number"
+        ) {
+            const media = mediaFromMxc(single["og:image"], this.client);
+            const thumb = media.getThumbnailOfSourceHttp(PREVIEW_WIDTH_PX, PREVIEW_HEIGHT_PX, "scale");
+
+            // cannot rule out the mxc:// url is malformed because
+            // the sender can specify anything
+            if (media.srcHttp === null || thumb === null) {
+                return preview;
+            }
+
+            preview.image = {
+                imageThumb: thumb,
+                imageFull: media.srcHttp,
+                imageType: single["og:image:type"],
+                mxcImageFull: single["og:image"],
+                width: single["og:image:width"],
+                height: single["og:image:height"],
                 playable: false, // TODO: do we know?
             };
         }
 
         return preview;
+    }
+
+    /**
+     * Decrypt a bundled preview image, reusing the object URL of a previous decryption where possible.
+     * @param encryptedFile The encrypted file from the bundle.
+     * @returns The object URL of the decrypted image, or null if it could not be decrypted.
+     */
+    private async decryptBundledImage(encryptedFile: EncryptedFile): Promise<string | null> {
+        const cached = this.decryptedObjectUrls.get(encryptedFile.url);
+        if (cached) return cached;
+
+        try {
+            const blob = await decryptFile(encryptedFile);
+            const objectUrl = URL.createObjectURL(blob);
+            this.decryptedObjectUrls.set(encryptedFile.url, objectUrl);
+            return objectUrl;
+        } catch (e) {
+            logger.error("Failed to decrypt bundled URL preview image: ", e);
+            return null;
+        }
     }
 }

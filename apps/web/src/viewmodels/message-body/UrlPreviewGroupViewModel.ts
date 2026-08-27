@@ -185,13 +185,22 @@ export class UrlPreviewGroupViewModel
             (urlPreviewKind === "bundledonly" || urlPreviewKind === "preferbundled")
         ) {
             const messageContent = content as RoomMessageEventContent;
+            const bundledPreviews = messageContent[BUNDLED_LINK_PREVIEWS];
 
-            if (messageContent[BUNDLED_LINK_PREVIEWS] !== undefined) {
-                previews = await Promise.all(
-                    messageContent[BUNDLED_LINK_PREVIEWS]
-                        .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
-                        .map((preview) => this.fetcher.previewFromBundle(preview)),
-                );
+            if (bundledPreviews && Array.isArray(bundledPreviews)) {
+                // In "bundledonly" the user has asked that nothing about this encrypted message
+                // reaches the homeserver, so entries carrying only a matched_url are dropped
+                // rather than resolved via /preview_url.
+                const allowServerFallback = urlPreviewKind !== "bundledonly";
+                previews = (
+                    await Promise.all(
+                        bundledPreviews
+                            .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
+                            .map((preview) =>
+                                this.fetcher.previewFromBundle(preview, content.body, loadMedia, allowServerFallback),
+                            ),
+                    )
+                ).filter((p) => !!p);
             }
         }
 

@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Trình chọn biểu tượng cảm xúc",
         "jump_first_invite": "Chuyển đến lời mời đầu tiên.",
         "message_composer": "Trình soạn tin nhắn",
         "n_unread_messages": {
@@ -405,7 +404,6 @@
         "message": "Tin nhắn",
         "message_layout": "Bố cục tin nhắn",
         "microphone": "Micrô",
-        "model": "Mẫu mã",
         "modern": "Hiện đại",
         "mute": "Im lặng",
         "n_members": {
@@ -699,22 +697,6 @@
     },
     "dialog_close_label": "Đóng hộp thoại",
     "download_completed": "Tải xuống hoàn tất",
-    "emoji": {
-        "categories": "Hạng mục",
-        "category_activities": "Các hoạt động",
-        "category_animals_nature": "Động vật & Thiên nhiên",
-        "category_flags": "Cờ",
-        "category_food_drink": "Đồ ăn thức uống",
-        "category_frequently_used": "Thường xuyên sử dụng",
-        "category_objects": "Các đối tượng",
-        "category_smileys_people": "Biểu tượng mặt cười và con người",
-        "category_symbols": "Ký hiệu",
-        "category_travel_places": "Du lịch & Địa điểm",
-        "quick_reactions": "Phản ứng nhanh"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Hủy tìm kiếm"
-    },
     "empty_room": "Phòng trống",
     "empty_room_was_name": "Phòng trống (trước kia là %(oldName)s)",
     "encryption": {
@@ -1309,7 +1291,6 @@
         "mentions_and_keywords": "@đề cập & từ khóa",
         "mentions_and_keywords_description": "Chỉ nhận thông báo với các đề cập và từ khóa được thiết lập trong <a>cài đặt</a> của bạn",
         "mentions_keywords": "Đề cập & từ khóa",
-        "message_didnt_send": "Tin nhắn chưa gửi. Nhấn để biết thông tin.",
         "mute_description": "Bạn sẽ không nhận bất kỳ thông báo nào"
     },
     "notifier": {
@@ -2113,7 +2094,6 @@
         "send_read_receipts_unsupported": "Máy chủ của bạn không hỗ trợ tắt gửi thông báo đã học.",
         "send_typing_notifications": "Gửi thông báo đang gõ tin nhắn",
         "sessions": {
-            "browser": "Trình duyệt",
             "confirm_sign_out": {
                 "one": "Xác nhận đăng xuất khỏi thiết bị này",
                 "other": "Xác nhận đăng xuất khỏi các thiết bị này"
@@ -2160,7 +2140,6 @@
             "no_sessions": "Không thấy phiên nào.",
             "no_unverified_sessions": "Không thấy phiên chưa xác thực nào.",
             "no_verified_sessions": "Không thấy phiên được xác thực nào.",
-            "os": "Hệ điều hành",
             "other_sessions_heading": "Các phiên khác",
             "push_heading": "Thông báo đẩy",
             "push_subheading": "Nhận thông báo đẩy trong phiên này.",

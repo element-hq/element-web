@@ -21,8 +21,8 @@ export const showToast = (notifier: Notifier, fromMessageSend: boolean): void =>
     const onAccept = async (): Promise<void> => {
         await SettingsStore.setValue("notificationsEnabled", null, SettingLevel.DEVICE, true);
         const cli = MatrixClientPeg.safeGet();
-        const eventType = getLocalNotificationAccountDataEventType(cli.deviceId!);
-        cli.setAccountData(eventType, {
+        const eventType = getLocalNotificationAccountDataEventType(cli.deviceId);
+        await cli.setAccountData(eventType, {
             is_silenced: false,
         });
     };

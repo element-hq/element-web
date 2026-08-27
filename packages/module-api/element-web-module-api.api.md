@@ -63,6 +63,8 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
     readonly rootNode: HTMLElement;
     // @alpha
     readonly settings: SettingsApi;
+    // @alpha
+    readonly storageHelper: StorageHelperApi;
     readonly stores: StoresApi;
     // @alpha
     readonly widget: WidgetApi;
@@ -94,7 +96,14 @@ export interface ChatExportCustomisations<ExportFormat, ExportType> {
 // @public
 export interface ClientApi {
     accountData: AccountDataApi;
+    // @alpha
+    readonly creationManagement: ClientCreationManagementApi;
     getRoom: (id: string) => Room | null;
+}
+
+// @public
+export interface ClientCreationManagementApi {
+    setUserVerificationCaCertsPem(pem: string | null): void;
 }
 
 // @alpha @deprecated (undocumented)
@@ -180,8 +189,8 @@ export type CustomLoginComponentProps = {
     serverConfig: CustomLoginComponentPropsServerConfig;
     fragmentAfterLogin?: string;
     children?: ReactNode;
-    onLoggedIn(data: AccountAuthInfo): void;
-    onServerConfigChange(config: CustomLoginComponentPropsServerConfig): void;
+    onLoggedIn(this: void, data: AccountAuthInfo): void;
+    onServerConfigChange(this: void, config: CustomLoginComponentPropsServerConfig): void;
 };
 
 // @alpha
@@ -231,7 +240,7 @@ export type DialogHandle<M> = {
         ok: boolean;
         model: M | null;
     }>;
-    close(): void;
+    close(this: void): void;
 };
 
 // @public
@@ -241,8 +250,8 @@ export interface DialogOptions {
 
 // @public
 export type DialogProps<M> = {
-    onSubmit(model: M): void;
-    onCancel(): void;
+    onSubmit(this: void, model: M): void;
+    onCancel(this: void): void;
 };
 
 // @alpha @deprecated (undocumented)
@@ -493,6 +502,11 @@ export interface SpacePanelItemProps {
     onSelected: () => void;
     style?: React.CSSProperties;
     tooltip?: string;
+}
+
+// @alpha
+export interface StorageHelperApi {
+    getPickleKey(userId: string, deviceId: string): Promise<string | null>;
 }
 
 // @public

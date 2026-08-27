@@ -559,22 +559,6 @@
     },
     "dialog_close_label": "Fermi interagujon",
     "download_completed": "Elŝuto finiĝis",
-    "emoji": {
-        "categories": "Kategorioj",
-        "category_activities": "Agadoj",
-        "category_animals_nature": "Bestoj kaj naturo",
-        "category_flags": "Flagoj",
-        "category_food_drink": "Manĝaĵoj kaj trinkaĵoj",
-        "category_frequently_used": "Ofte uzataj",
-        "category_objects": "Aĵoj",
-        "category_smileys_people": "Mienoj kaj homoj",
-        "category_symbols": "Simboloj",
-        "category_travel_places": "Lokoj kaj vojaĝado",
-        "quick_reactions": "Rapidaj reagoj"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Nuligi serĉon"
-    },
     "empty_room": "Malplena ĉambro",
     "empty_room_was_name": "Malplena ĉambro (estis %(oldName)s)",
     "encryption": {
@@ -1068,8 +1052,7 @@
         "level_activity": "Aktiveco",
         "level_none": "Neniu",
         "mark_all_read": "Marki ĉion legita",
-        "mentions_keywords": "Mencioj kaj ĉefvortoj",
-        "message_didnt_send": "Mesaĝo ne sendiĝis. Klaku por akiri informojn."
+        "mentions_keywords": "Mencioj kaj ĉefvortoj"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s petas kontrolon"
@@ -1707,7 +1690,6 @@
         "send_read_receipts": "Sendi legitajn kvitanojn",
         "send_typing_notifications": "Sendi sciigojn pri tajpado",
         "sessions": {
-            "browser": "Retumilo",
             "hide_details": "Kaŝi detalojn",
             "inactive_sessions": "Neaktivaj salutaĵoj",
             "inactive_sessions_explainer_1": "Neaktivaj salutaĵoj estas salutaĵoj, kiujn vi ne uzis dum kelka tempo, sed ili daŭre ricevas ĉifrajn ŝlosilojn.",
