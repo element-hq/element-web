@@ -145,7 +145,7 @@ test.describe("Room Status Bar", () => {
                 await rejectToast(page, "Verify this device");
                 await page
                     .getByRole("navigation", { name: "Room list" })
-                    .getByRole("button", { name: "New conversation" })
+                    .getByRole("button", { name: "New", exact: true })
                     .click();
                 await page.getByRole("menuitem", { name: "Start chat" }).click();
 

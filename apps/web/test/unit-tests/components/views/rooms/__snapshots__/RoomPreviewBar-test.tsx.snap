@@ -9,7 +9,7 @@ exports[`<RoomPreviewBar /> message case AskToJoin renders the corresponding act
     role="button"
     tabindex="0"
   >
-    Request access
+    Request to join
   </div>
 </div>
 `;

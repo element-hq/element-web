@@ -73,7 +73,7 @@ exports[`<MatrixChat /> > Multi-tab lockout > waits for other tab to stop during
       class="mx_ConfirmSessionLockTheftView_body"
     >
       <p>
-        Test is open in another window. Click "Continue" to use Test here and disconnect the other window.
+        Test is open in another window. Select "Continue" to use Test here and disconnect the other window.
       </p>
       <div
         class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"

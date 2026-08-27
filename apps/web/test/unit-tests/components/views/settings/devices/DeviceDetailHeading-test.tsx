@@ -127,7 +127,7 @@ describe("<DeviceDetailHeading />", () => {
         await flushPromisesWithFakeTimers();
 
         // error message displayed
-        await expect(findByText("Failed to set session name")).resolves.toBeTruthy();
+        await expect(findByText("Failed to set device name")).resolves.toBeTruthy();
         // spinner removed
         expect(container.getElementsByClassName("mx_Spinner").length).toBeFalsy();
 

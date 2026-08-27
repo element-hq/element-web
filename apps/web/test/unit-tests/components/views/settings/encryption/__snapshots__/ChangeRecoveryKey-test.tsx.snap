@@ -85,7 +85,7 @@ exports[`<ChangeRecoveryKey /> flow to change the recovery key should display th
         Change recovery key?
       </h2>
       <span>
-        Write down this new recovery key somewhere safe. Then click Continue to confirm the change.
+        Write down this new recovery key somewhere safe. Then select Continue to confirm the change.
       </span>
     </div>
     <div
@@ -599,7 +599,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display info
     <span
       class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 mx_InformationPanel_description"
     >
-      After clicking continue, we’ll generate a recovery key for you.
+      After selecting Continue, we'll generate a recovery key for you.
     </span>
     <div
       class="mx_EncryptionCard_buttons"

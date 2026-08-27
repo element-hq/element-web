@@ -1,19 +1,19 @@
 {
     "register_dialog_register_username_label": {
         "en": "Username",
-        "de": "Benutzername"
+        "de": "Nutzername"
     },
     "register_dialog_title": {
-        "en": "Request access",
-        "de": "Zugriff anfordern"
+        "en": "Request to join",
+        "de": "Beitrittsanfrage stellen"
     },
     "register_dialog_busy": {
-        "en": "Creating your account...",
-        "de": "Erstelle dein Konto..."
+        "en": "Creating your account…",
+        "de": "Konto wird erstellt …"
     },
     "register_dialog_continue_label": {
         "en": "Continue as guest",
-        "de": "Als Gast fortfahren"
+        "de": "Weiter als Gast"
     },
     "register_dialog_field_label": {
         "en": "Name",
@@ -21,15 +21,15 @@
     },
     "register_dialog_existing_account": {
         "en": "I already have an account.",
-        "de": "Ich habe bereits einen Account."
+        "de": "Ich habe bereits ein Konto."
     },
     "register_dialog_error": {
         "en": "The account creation failed.",
-        "de": "Die Anmeldung als Gastnutzer ist fehlgeschlagen."
+        "de": "Die Kontoerstellung ist fehlgeschlagen."
     },
     "join_message": {
-        "en": "Join the room to participate",
-        "de": "Treten Sie dem Raum bei, um teilzunehmen"
+        "en": "Join the chat to participate",
+        "de": "Tritt dem Chat bei, um teilzunehmen"
     },
     "join_cta": {
         "en": "Join as guest",

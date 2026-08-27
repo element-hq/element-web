@@ -64,7 +64,7 @@ test.describe("Room list custom sections", () => {
      * skipped when none is given.
      */
     async function createCustomSection(page: Page, sectionName: string, roomNames: string[] = []): Promise<void> {
-        const composeMenu = getRoomListHeader(page).getByRole("button", { name: "New conversation" });
+        const composeMenu = getRoomListHeader(page).getByRole("button", { name: "New", exact: true });
         await composeMenu.click();
         await page.getByRole("menuitem", { name: "New section" }).click();
 
@@ -211,7 +211,7 @@ test.describe("Room list custom sections", () => {
         test("should cancel section creation when dialog is dismissed", async ({ page, app }) => {
             await app.client.createRoom({ name: "my room" });
 
-            const composeMenu = getRoomListHeader(page).getByRole("button", { name: "New conversation" });
+            const composeMenu = getRoomListHeader(page).getByRole("button", { name: "New", exact: true });
             await composeMenu.click();
             await page.getByRole("menuitem", { name: "New section" }).click();
 
@@ -246,7 +246,7 @@ test.describe("Room list custom sections", () => {
         test("should add the selected rooms to the new section", async ({ page, app }) => {
             await createRooms(app, page, ["alpha room", "beta room", "gamma room"]);
 
-            const composeMenu = getRoomListHeader(page).getByRole("button", { name: "New conversation" });
+            const composeMenu = getRoomListHeader(page).getByRole("button", { name: "New", exact: true });
             await composeMenu.click();
             await page.getByRole("menuitem", { name: "New section" }).click();
             const dialog = page.getByRole("dialog", { name: "Create a section" });

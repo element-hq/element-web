@@ -27,7 +27,7 @@ describe("BlockInvitesConfigController", () => {
 
         it("settingDisabled() should give a message", () => {
             const controller = SETTINGS.blockInvites.controller!;
-            expect(controller.settingDisabled).toEqual("Your server does not implement this feature.");
+            expect(controller.settingDisabled).toEqual("Your account provider does not offer this feature.");
         });
     });
 

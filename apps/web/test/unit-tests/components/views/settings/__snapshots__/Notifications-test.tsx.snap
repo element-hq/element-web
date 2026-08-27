@@ -38,7 +38,7 @@ exports[`<Notifications /> main notification switches renders only enable notifi
           class="_message_1o4d9_86 _help-message_1o4d9_92"
           id="radix-react-use-id-2"
         >
-          Turn off to disable notifications on all your devices and sessions
+          Turn off to disable notifications on all your devices
         </span>
       </div>
     </div>

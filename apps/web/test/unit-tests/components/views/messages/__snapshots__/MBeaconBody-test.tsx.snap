@@ -25,7 +25,7 @@ exports[`<MBeaconBody /> when map display is not configured renders maps unavail
   <p
     class="mx_MapError_message"
   >
-    This homeserver is not configured to display maps.
+    This account provider has not enabled maps.
   </p>
 </div>
 `;

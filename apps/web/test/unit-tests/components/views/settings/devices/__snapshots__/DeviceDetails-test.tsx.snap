@@ -53,12 +53,12 @@ exports[`<DeviceDetails /> renders a verified device 1`] = `
           <p
             class="mx_DeviceSecurityCard_heading"
           >
-            Verified session
+            Verified device
           </p>
           <p
             class="mx_DeviceSecurityCard_description"
           >
-            This session is ready for secure messaging.
+            This device is ready for secure messaging.
             <button
               class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
               role="button"
@@ -76,7 +76,7 @@ exports[`<DeviceDetails /> renders a verified device 1`] = `
       <p
         class="mx_DeviceDetails_sectionHeading"
       >
-        Session details
+        Device details
       </p>
       <table
         class="mx_DeviceDetails_metadataTable"
@@ -87,7 +87,7 @@ exports[`<DeviceDetails /> renders a verified device 1`] = `
             <td
               class="mxDeviceDetails_metadataLabel"
             >
-              Session ID
+              Device ID
             </td>
             <td
               class="mxDeviceDetails_metadataValue"
@@ -169,12 +169,12 @@ exports[`<DeviceDetails /> renders device with metadata 1`] = `
           <p
             class="mx_DeviceSecurityCard_heading"
           >
-            Unverified session
+            Unverified device
           </p>
           <p
             class="mx_DeviceSecurityCard_description"
           >
-            Verify or remove this session for best security and reliability.
+            Verify this device, or remove it if you don't recognise it.
             <button
               class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
               role="button"
@@ -192,7 +192,7 @@ exports[`<DeviceDetails /> renders device with metadata 1`] = `
       <p
         class="mx_DeviceDetails_sectionHeading"
       >
-        Session details
+        Device details
       </p>
       <table
         class="mx_DeviceDetails_metadataTable"
@@ -203,7 +203,7 @@ exports[`<DeviceDetails /> renders device with metadata 1`] = `
             <td
               class="mxDeviceDetails_metadataLabel"
             >
-              Session ID
+              Device ID
             </td>
             <td
               class="mxDeviceDetails_metadataValue"
@@ -349,12 +349,12 @@ exports[`<DeviceDetails /> renders device without metadata 1`] = `
           <p
             class="mx_DeviceSecurityCard_heading"
           >
-            Unverified session
+            Unverified device
           </p>
           <p
             class="mx_DeviceSecurityCard_description"
           >
-            Verify or remove this session for best security and reliability.
+            Verify this device, or remove it if you don't recognise it.
             <button
               class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
               role="button"
@@ -372,7 +372,7 @@ exports[`<DeviceDetails /> renders device without metadata 1`] = `
       <p
         class="mx_DeviceDetails_sectionHeading"
       >
-        Session details
+        Device details
       </p>
       <table
         class="mx_DeviceDetails_metadataTable"
@@ -383,7 +383,7 @@ exports[`<DeviceDetails /> renders device without metadata 1`] = `
             <td
               class="mxDeviceDetails_metadataLabel"
             >
-              Session ID
+              Device ID
             </td>
             <td
               class="mxDeviceDetails_metadataValue"

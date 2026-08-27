@@ -9,7 +9,7 @@ exports[`<DeviceTypeIcon /> renders a verified device 1`] = `
       class="mx_DeviceTypeIcon_deviceIconWrapper"
     >
       <svg
-        aria-label="Unknown session type"
+        aria-label="Unknown client"
         class="mx_DeviceTypeIcon_deviceIcon"
         fill="currentColor"
         height="1em"
@@ -52,7 +52,7 @@ exports[`<DeviceTypeIcon /> renders an unverified device 1`] = `
       class="mx_DeviceTypeIcon_deviceIconWrapper"
     >
       <svg
-        aria-label="Unknown session type"
+        aria-label="Unknown client"
         class="mx_DeviceTypeIcon_deviceIcon"
         fill="currentColor"
         height="1em"
@@ -93,7 +93,7 @@ exports[`<DeviceTypeIcon /> renders correctly when selected 1`] = `
       class="mx_DeviceTypeIcon_deviceIconWrapper"
     >
       <svg
-        aria-label="Unknown session type"
+        aria-label="Unknown client"
         class="mx_DeviceTypeIcon_deviceIcon"
         fill="currentColor"
         height="1em"

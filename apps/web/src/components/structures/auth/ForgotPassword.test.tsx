@@ -147,7 +147,7 @@ describe("<ForgotPassword>", () => {
             it("should show an info about that", async () => {
                 await expect(
                     screen.findByText(
-                        "Cannot reach homeserver: Ensure you have a stable internet connection, or get in touch with the server admin",
+                        "Can't connect: Ensure you have a stable internet connection, or get in touch with your account provider",
                     ),
                 ).resolves.toBeInTheDocument();
             });

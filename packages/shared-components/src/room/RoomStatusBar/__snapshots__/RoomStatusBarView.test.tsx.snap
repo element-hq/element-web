@@ -205,12 +205,12 @@ exports[`RoomStatusBarView > renders resource limit error 1`] = `
           class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 RoomStatusBarView-module_title"
           id="react-use-id-1"
         >
-          Your message wasn't sent because this homeserver has been blocked by its administrator.
+          Your message wasn't sent because this service has been blocked by account provider.
         </p>
         <p
           class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 RoomStatusBarView-module_description"
         >
-          Please contact your service administrator to continue using the service.
+          Please contact your account provider to continue using the service.
         </p>
       </div>
     </div>

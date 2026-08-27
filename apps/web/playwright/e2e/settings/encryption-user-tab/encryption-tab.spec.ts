@@ -126,9 +126,7 @@ test.describe("Encryption tab", () => {
 
             await page.getByRole("switch", { name: "Allow key storage" }).click();
 
-            await expect(
-                page.getByRole("heading", { name: "Are you sure you want to turn off key storage and delete it?" }),
-            ).toBeVisible();
+            await expect(page.getByRole("heading", { name: "Turn off and delete key storage?" })).toBeVisible();
 
             await expect(util.getEncryptionTabContent()).toMatchScreenshot("delete-key-storage-confirm.png");
 

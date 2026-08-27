@@ -46,7 +46,7 @@ exports[`ReportRoomDialog displays admin message 1`] = `
           class="_message_1o4d9_86 _help-message_1o4d9_92"
           id="radix-react-use-id-1"
         >
-          Report this room to your account provider. If the messages are encrypted, your admin will not be able to read them.
+          Report this chat to your account provider. If the messages are encrypted, your account provider will not be able to read them.
         </span>
       </div>
       <p>

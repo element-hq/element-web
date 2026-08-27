@@ -91,7 +91,7 @@ test.describe("Manage Knocks", () => {
 
         // The knock and its denial are only two events, so they are shown individually rather
         // than collapsed into a membership summary.
-        await expect(page.getByText("Alice rejected Bob's request to join")).toBeVisible();
+        await expect(page.getByText("Alice rejected the request to join from Bob")).toBeVisible();
     });
 
     test("should approve knock using people tab", async ({ page, app, bot, room }) => {
@@ -138,6 +138,6 @@ test.describe("Manage Knocks", () => {
 
         // The knock and its denial are only two events, so they are shown individually rather
         // than collapsed into a membership summary.
-        await expect(page.getByText("Alice rejected Bob's request to join")).toBeVisible();
+        await expect(page.getByText("Alice rejected the request to join from Bob")).toBeVisible();
     });
 });

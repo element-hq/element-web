@@ -74,7 +74,7 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                 class="_label_1o4d9_60"
                 for="mx_SettingsFlag_vY7Q4uEh9K38"
               >
-                Enable desktop notifications for this session
+                Enable desktop notifications for this device
               </label>
             </div>
           </div>
@@ -137,7 +137,7 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                 class="_label_1o4d9_60"
                 for="mx_SettingsFlag_6hpi3YEetmBG"
               >
-                Enable audible notifications for this session
+                Enable audible notifications for this device
               </label>
             </div>
           </div>
@@ -1132,7 +1132,7 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                 class="_label_1o4d9_60"
                 for="mx_SettingsFlag_vY7Q4uEh9K38"
               >
-                Enable desktop notifications for this session
+                Enable desktop notifications for this device
               </label>
             </div>
           </div>
@@ -1195,7 +1195,7 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                 class="_label_1o4d9_60"
                 for="mx_SettingsFlag_6hpi3YEetmBG"
               >
-                Enable audible notifications for this session
+                Enable audible notifications for this device
               </label>
             </div>
           </div>

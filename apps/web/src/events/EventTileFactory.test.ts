@@ -407,7 +407,7 @@ describe("renderTile", () => {
         if (!tile) throw new Error("Expected a room avatar event tile");
         const { getByText, getByRole } = render(tile, withClientContextRenderOptions(client));
 
-        expect(getByText("Alice changed the room avatar to")).toBeInTheDocument();
+        expect(getByText("Alice changed the chat avatar to")).toBeInTheDocument();
         expect(getByRole("button", { name: "Alice changed the avatar for General" })).toBeInTheDocument();
     });
 });

@@ -30,7 +30,7 @@ describe("/status", () => {
         const result = run(undefined);
         expect(result.error).toBeInstanceOf(UserFriendlyError);
         expect((result.error as UserFriendlyError).message).toBe(
-            "No arguments provided. You should supply an emoij and an optional text component.",
+            "No arguments provided. Supply an emoji and optionally some text.",
         );
     });
 

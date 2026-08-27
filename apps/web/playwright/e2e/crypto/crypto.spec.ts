@@ -23,7 +23,7 @@ const checkDMRoom = async (page: Page) => {
 };
 
 const startDMWithBob = async (page: Page, bob: Bot) => {
-    await page.getByRole("navigation", { name: "Room list" }).getByRole("button", { name: "New conversation" }).click();
+    await page.getByRole("navigation", { name: "Room list" }).getByRole("button", { name: "New", exact: true }).click();
     await page.getByRole("menuitem", { name: "Start chat" }).click();
     await page.getByTestId("invite-dialog-input").fill(bob.credentials!.userId);
     await page.getByRole("option", { name: bob.credentials!.displayName! }).click();
@@ -132,7 +132,7 @@ test.describe("Cryptography", function () {
 
         // Find "the Reset cryptographic identity" button
         const encryptionTab = await app.settings.openUserSettings("Encryption");
-        await encryptionTab.getByRole("button", { name: "Reset cryptographic identity" }).click();
+        await encryptionTab.getByRole("button", { name: "Reset digital identity" }).click();
 
         // Confirm
         await encryptionTab.getByRole("button", { name: "Continue" }).click();
@@ -157,7 +157,7 @@ test.describe("Cryptography", function () {
         // Check that key storage starts off as disabled
         expect(await keyStorageToggle.isChecked()).toBe(false);
         // Find "the Reset cryptographic identity" button
-        await encryptionTab.getByRole("button", { name: "Reset cryptographic identity" }).click();
+        await encryptionTab.getByRole("button", { name: "Reset digital identity" }).click();
 
         // Confirm
         await encryptionTab.getByRole("button", { name: "Continue" }).click();
@@ -187,7 +187,7 @@ test.describe("Cryptography", function () {
         await app.client.setAccountData("m.secret_storage.default_key", {} as unknown as { key: string });
 
         // Find "the Reset cryptographic identity" button
-        await encryptionTab.getByRole("button", { name: "Reset cryptographic identity" }).click();
+        await encryptionTab.getByRole("button", { name: "Reset digital identity" }).click();
 
         // Confirm
         await encryptionTab.getByRole("button", { name: "Continue" }).click();

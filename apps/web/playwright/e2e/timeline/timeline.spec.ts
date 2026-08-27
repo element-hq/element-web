@@ -276,7 +276,7 @@ test.describe("Timeline", () => {
                     ".mx_GenericEventListSummary_unstyledList .mx_EventTile_info:first-of-type",
                 );
                 await firstTile.hover();
-                await expect(firstTile.getByRole("toolbar", { name: "Message Actions" })).toBeVisible();
+                await expect(firstTile.getByRole("toolbar", { name: "Message actions" })).toBeVisible();
                 await gels.getByRole("button", { name: "Collapse" }).click();
 
                 // Assert that "collapse" link button worked
@@ -351,7 +351,7 @@ test.describe("Timeline", () => {
         const messageEdit = async (page: Page) => {
             const line = page.locator(".mx_EventTile .mx_EventTile_line", { hasText: "Message" });
             await line.hover();
-            await line.getByRole("toolbar", { name: "Message Actions" }).getByRole("button", { name: "Edit" }).click();
+            await line.getByRole("toolbar", { name: "Message actions" }).getByRole("button", { name: "Edit" }).click();
             await page.getByRole("textbox", { name: "Edit message" }).pressSequentially("Edit");
             await page.getByRole("textbox", { name: "Edit message" }).press("Enter");
 
@@ -359,7 +359,7 @@ test.describe("Timeline", () => {
             // Regex patterns due to the edited date
             await expect(
                 page.locator(".mx_EventTile .mx_EventTile_line", { hasText: "MessageEdit" }).getByRole("button", {
-                    name: /Edited at .*? Click to view edits./,
+                    name: /Edited at .*? Select to view edit history./,
                 }),
             ).toBeVisible();
         };
@@ -722,7 +722,7 @@ test.describe("Timeline", () => {
             const viewSourceEventGroup = page.locator(".mx_EventTile_last[data-layout=group] .mx_ViewSourceEvent");
             await viewSourceEventGroup.hover();
             await viewSourceEventGroup
-                .getByRole("button", { name: "toggle event" })
+                .getByRole("button", { name: "Event source" })
                 .click({ position: { x: 0, y: 0 } });
 
             // Make sure the expand toggle works
@@ -730,7 +730,7 @@ test.describe("Timeline", () => {
                 ".mx_EventTile_last[data-layout=group] .mx_ViewSourceEvent_expanded",
             );
             await viewSourceEventExpanded.hover();
-            const toggleEventButton = viewSourceEventExpanded.getByRole("button", { name: "toggle event" });
+            const toggleEventButton = viewSourceEventExpanded.getByRole("button", { name: "Event source" });
             // Check size and position of toggle on expanded view source event
             // See: ViewSourceEventView.module.css
             await expect(toggleEventButton).toHaveCSS("height", "16px"); // --ViewSourceEvent_toggle-size
@@ -759,7 +759,7 @@ test.describe("Timeline", () => {
             );
 
             // Click view source event toggle
-            await viewSourceEventIrc.getByRole("button", { name: "toggle event" }).click({ position: { x: 8, y: 8 } });
+            await viewSourceEventIrc.getByRole("button", { name: "Event source" }).click({ position: { x: 8, y: 8 } });
 
             // Make sure the expand toggle worked
             await expect(page.locator(".mx_EventTile[data-layout=irc] .mx_ViewSourceEvent_expanded")).toBeVisible();
@@ -889,7 +889,7 @@ test.describe("Timeline", () => {
 
             // Edit a code block and assert the edited code block has been correctly rendered
             await tile.hover();
-            await page.getByRole("toolbar", { name: "Message Actions" }).getByRole("button", { name: "Edit" }).click();
+            await page.getByRole("toolbar", { name: "Message actions" }).getByRole("button", { name: "Edit" }).click();
             await page
                 .getByRole("textbox", { name: "Edit message" })
                 .fill("```\nconsole.log('Edited: Hello, world!');\n```");

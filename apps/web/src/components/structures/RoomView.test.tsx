@@ -878,7 +878,7 @@ describe("RoomView", () => {
             vi.spyOn(client, "knockRoom").mockResolvedValue({ room_id: room.roomId });
 
             await mountRoomView();
-            fireEvent.click(screen.getByRole("button", { name: "Request access" }));
+            fireEvent.click(screen.getByRole("button", { name: "Request to join" }));
             await untilDispatch(Action.SubmitAskToJoin, defaultDispatcher);
 
             expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({

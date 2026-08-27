@@ -28,13 +28,13 @@ describe("<PresenceLabel/>", () => {
     it("should render 'Unreachable' for presence=unreachable", () => {
         const { asFragment } = render(<PresenceLabel presenceState="io.element.unreachable" />);
         expect(asFragment()).toMatchInlineSnapshot(`
-            <DocumentFragment>
-              <div
-                class="mx_PresenceLabel"
-              >
-                User's server unreachable
-              </div>
-            </DocumentFragment>
-        `);
+<DocumentFragment>
+  <div
+    class="mx_PresenceLabel"
+  >
+    Account provider of the user is unreachable
+  </div>
+</DocumentFragment>
+`);
     });
 });

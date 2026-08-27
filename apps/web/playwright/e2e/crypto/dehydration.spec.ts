@@ -58,7 +58,7 @@ test.describe("Dehydration", () => {
         // the dehydrated device gets created with the name "Dehydrated
         // device".  We want to make sure that it is not visible as a normal
         // device.
-        const sessionsTab = await app.settings.openUserSettings("Sessions");
+        const sessionsTab = await app.settings.openUserSettings("Devices");
         await expect(sessionsTab.getByText("Dehydrated device")).not.toBeVisible();
     });
 
@@ -103,7 +103,7 @@ test.describe("Dehydration", () => {
         await expectDehydratedDeviceEnabled(app);
     });
 
-    test("'Reset cryptographic identity' removes dehydrated device", async ({ page, homeserver, app, credentials }) => {
+    test("'Reset digital identity' removes dehydrated device", async ({ page, homeserver, app, credentials }) => {
         await logIntoElement(page, credentials);
 
         // Create a dehydrated device by setting up recovery (see "'Set up
@@ -114,7 +114,7 @@ test.describe("Dehydration", () => {
         // After recovery is set up, we reset our cryptographic identity, which
         // should drop the dehydrated device.
         const settingsDialogLocator = await app.settings.openUserSettings("Encryption");
-        await settingsDialogLocator.getByRole("button", { name: "Reset cryptographic identity" }).click();
+        await settingsDialogLocator.getByRole("button", { name: "Reset digital identity" }).click();
         await settingsDialogLocator.getByRole("button", { name: "Continue" }).click();
 
         await expectDehydratedDeviceDisabled(app);

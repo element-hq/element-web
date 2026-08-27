@@ -54,7 +54,7 @@ test.describe("Create Room", () => {
     test("should allow us to start a chat and show encryption state", async ({ page, user, app }) => {
         await rejectToast(page, "Verify this device");
 
-        await page.getByRole("button", { name: "New conversation", exact: true }).click();
+        await page.getByRole("button", { name: "New", exact: true }).click();
         await page.getByRole("menuitem", { name: "Start chat" }).click();
 
         await page.getByTestId("invite-dialog-input").fill(user.userId);
@@ -138,7 +138,7 @@ test.describe("Create Room", () => {
             await rejectToast(page, "Verify this device");
 
             // When we start to create a room
-            await page.getByRole("button", { name: "New conversation", exact: true }).click();
+            await page.getByRole("button", { name: "New", exact: true }).click();
             await page.getByRole("menuitem", { name: "New room" }).click();
             await page.getByRole("textbox", { name: "Name" }).fill(name);
 
@@ -169,7 +169,7 @@ test.describe("Create Room", () => {
                 await rejectToast(page, "Verify this device");
 
                 // Given we check the Encrypted State checkbox
-                await page.getByRole("button", { name: "New conversation", exact: true }).click();
+                await page.getByRole("button", { name: "New", exact: true }).click();
                 await page.getByRole("menuitem", { name: "New room" }).click();
                 await expect(page.getByRole("switch", { name: "Enable end-to-end encryption" })).toBeChecked();
                 await page.getByRole("switch", { name: "Encrypt state events" }).click();
@@ -198,7 +198,7 @@ test.describe("Create Room", () => {
                 await rejectToast(page, "Verify this device");
 
                 // Given we did not check the Encrypted State checkbox
-                await page.getByRole("button", { name: "New conversation", exact: true }).click();
+                await page.getByRole("button", { name: "New", exact: true }).click();
                 await page.getByRole("menuitem", { name: "New room" }).click();
                 await expect(page.getByRole("switch", { name: "Enable end-to-end encryption" })).toBeChecked();
 

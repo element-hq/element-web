@@ -7,7 +7,7 @@ exports[`MLocationBody <MLocationBody> with error displays correct fallback cont
   <span
     class="mx_EventTile_tileError"
   >
-    Unable to load map: This homeserver is not configured correctly to display maps, or the configured map server may be unreachable.
+    Unable to load map: This account provider has not configured the display of maps correctly, or the configured map server may be unreachable.
   </span>
   <br />
   Shared a location: Found at geo:51.5076,-0.1276 at 2021-12-21T12:22+0000
@@ -21,7 +21,7 @@ exports[`MLocationBody <MLocationBody> with error displays correct fallback cont
   <span
     class=""
   >
-    Unable to load map: This homeserver is not configured to display maps.
+    Unable to load map: This account provider has not enabled maps.
   </span>
   <br />
   Shared a location: Found at geo:51.5076,-0.1276 at 2021-12-21T12:22+0000

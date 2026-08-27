@@ -70,7 +70,7 @@ describe("CreateSecretStorageDialog", () => {
         await userEvent.click(screen.getByRole("button", { name: "Copy" }));
         await userEvent.click(screen.getByRole("button", { name: "Continue" }));
 
-        await screen.findByText("Unable to set up secret storage");
+        await screen.findByText("Unable to set up key storage");
     });
 
     describe("when there is an error fetching the backup version", () => {
@@ -88,7 +88,7 @@ describe("CreateSecretStorageDialog", () => {
             await userEvent.click(screen.getByRole("button", { name: "Continue" }));
 
             // XXX the error message is... misleading.
-            await screen.findByText("Unable to query secret storage status");
+            await screen.findByText("Unable to check key storage status");
             expect(result.container).toMatchSnapshot();
 
             // Now we can get the backup and we retry

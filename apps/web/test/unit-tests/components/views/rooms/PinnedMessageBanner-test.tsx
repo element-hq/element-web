@@ -110,7 +110,7 @@ describe("<PinnedMessageBanner />", () => {
         const { asFragment } = renderBanner();
 
         await expect(screen.findByText("Second pinned message")).resolves.toBeVisible();
-        expect(screen.getByTestId("banner-counter")).toHaveTextContent("2 of 2 Pinned messages");
+        expect(screen.getByTestId("banner-counter")).toHaveTextContent("2 of 2 pinned messages");
         expect(screen.getAllByTestId("banner-indicator")).toHaveLength(2);
         expect(screen.queryByRole("button", { name: "View all" })).toBeVisible();
         expect(asFragment()).toMatchSnapshot();
@@ -128,7 +128,7 @@ describe("<PinnedMessageBanner />", () => {
         const { asFragment } = renderBanner();
 
         await expect(screen.findByText("Fourth pinned message")).resolves.toBeVisible();
-        expect(screen.getByTestId("banner-counter")).toHaveTextContent("4 of 4 Pinned messages");
+        expect(screen.getByTestId("banner-counter")).toHaveTextContent("4 of 4 pinned messages");
         expect(screen.getAllByTestId("banner-indicator")).toHaveLength(3);
         expect(screen.queryByRole("button", { name: "View all" })).toBeVisible();
         expect(asFragment()).toMatchSnapshot();
@@ -171,7 +171,7 @@ describe("<PinnedMessageBanner />", () => {
             }),
         );
         expect(screen.getByText("First pinned message")).toBeVisible();
-        expect(screen.getByTestId("banner-counter")).toHaveTextContent("1 of 2 Pinned messages");
+        expect(screen.getByTestId("banner-counter")).toHaveTextContent("1 of 2 pinned messages");
         expect(dis.dispatch).toHaveBeenCalledWith({
             action: Action.ViewRoom,
             event_id: event2.getId(),
@@ -186,7 +186,7 @@ describe("<PinnedMessageBanner />", () => {
             }),
         );
         expect(screen.getByText("Second pinned message")).toBeVisible();
-        expect(screen.getByTestId("banner-counter")).toHaveTextContent("2 of 2 Pinned messages");
+        expect(screen.getByTestId("banner-counter")).toHaveTextContent("2 of 2 pinned messages");
         expect(dis.dispatch).toHaveBeenCalledWith({
             action: Action.ViewRoom,
             event_id: event1.getId(),

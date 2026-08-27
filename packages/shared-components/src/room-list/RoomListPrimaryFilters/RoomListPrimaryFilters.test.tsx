@@ -71,7 +71,7 @@ describe("<RoomListPrimaryFilters /> stories", () => {
         function mockFiltersNotWrapping(): void {
             vi.spyOn(screen.getByText("People"), "offsetLeft", "get").mockReturnValue(0);
             vi.spyOn(screen.getByText("Rooms"), "offsetLeft", "get").mockReturnValue(30);
-            vi.spyOn(screen.getByText("Unreads"), "offsetLeft", "get").mockReturnValue(60);
+            vi.spyOn(screen.getByText("Unread"), "offsetLeft", "get").mockReturnValue(60);
 
             const listbox = screen.getByRole("listbox", { name: "Room list filters" });
             act(() => resizeCallback([{ target: listbox } as any], {} as ResizeObserver));
@@ -80,7 +80,7 @@ describe("<RoomListPrimaryFilters /> stories", () => {
         function mockUnreadWrapping(): void {
             vi.spyOn(screen.getByText("People"), "offsetLeft", "get").mockReturnValue(0);
             vi.spyOn(screen.getByText("Rooms"), "offsetLeft", "get").mockReturnValue(30);
-            vi.spyOn(screen.getByText("Unreads"), "offsetLeft", "get").mockReturnValue(0);
+            vi.spyOn(screen.getByText("Unread"), "offsetLeft", "get").mockReturnValue(0);
 
             const listbox = screen.getByRole("listbox", { name: "Room list filters" });
             act(() => resizeCallback([{ target: listbox } as any], {} as ResizeObserver));
@@ -90,7 +90,7 @@ describe("<RoomListPrimaryFilters /> stories", () => {
             render(<NarrowContainer />);
             mockUnreadWrapping();
 
-            expect(screen.queryByRole("option", { name: "Unreads" })).toBeNull();
+            expect(screen.queryByRole("option", { name: "Unread" })).toBeNull();
             expect(screen.getByRole("button", { name: "Expand filter list" })).toBeInTheDocument();
         });
 
@@ -99,13 +99,13 @@ describe("<RoomListPrimaryFilters /> stories", () => {
             render(<NarrowContainer />);
             mockUnreadWrapping();
 
-            expect(screen.queryByRole("option", { name: "Unreads" })).toBeNull();
+            expect(screen.queryByRole("option", { name: "Unread" })).toBeNull();
 
             await user.click(screen.getByRole("button", { name: "Expand filter list" }));
-            expect(screen.getByRole("option", { name: "Unreads" })).toBeVisible();
+            expect(screen.getByRole("option", { name: "Unread" })).toBeVisible();
 
             await user.click(screen.getByRole("button", { name: "Collapse filter list" }));
-            expect(screen.queryByRole("option", { name: "Unreads" })).toBeNull();
+            expect(screen.queryByRole("option", { name: "Unread" })).toBeNull();
         });
 
         it("should move active filter to front when collapsed and wrapping", () => {
@@ -113,7 +113,7 @@ describe("<RoomListPrimaryFilters /> stories", () => {
             mockUnreadWrapping();
 
             const listbox = screen.getByRole("listbox", { name: "Room list filters" });
-            expect(listbox.children[0]).toBe(screen.getByRole("option", { name: "Unreads" }));
+            expect(listbox.children[0]).toBe(screen.getByRole("option", { name: "Unread" }));
         });
 
         it("should restore original filter order when expanded", async () => {

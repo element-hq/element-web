@@ -130,7 +130,7 @@ describe("<UserSettingsDialog />", () => {
     it("renders with session manager tab selected", () => {
         const { getByTestId } = render(getComponent({ initialTabId: UserTab.SessionManager }));
         expect(getByTestId(`settings-tab-${UserTab.SessionManager}`)).toBeTruthy();
-        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Settings: Sessions");
+        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Settings: Devices");
     });
 
     it("renders with appearance tab selected", () => {

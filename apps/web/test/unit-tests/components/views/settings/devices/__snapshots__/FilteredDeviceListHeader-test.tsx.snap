@@ -57,7 +57,7 @@ exports[`<FilteredDeviceListHeader /> renders correctly when all devices are sel
     <span
       class="mx_FilteredDeviceListHeader_label"
     >
-      Sessions
+      Devices
     </span>
     <div>
       test
@@ -122,7 +122,7 @@ exports[`<FilteredDeviceListHeader /> renders correctly when no devices are sele
     <span
       class="mx_FilteredDeviceListHeader_label"
     >
-      Sessions
+      Devices
     </span>
     <div>
       test

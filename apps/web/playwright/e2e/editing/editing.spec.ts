@@ -50,14 +50,14 @@ test.describe("Editing", () => {
         const eventTile = page.locator(".mx_EventTile", { hasText: edited });
         await expect(eventTile).toBeVisible();
         // Click to display the message edit history dialog
-        await eventTile.getByRole("button", { name: /Edited at .*? Click to view edits\./ }).click();
+        await eventTile.getByRole("button", { name: /Edited at .*? Select to view edit history\./ }).click();
     };
 
     const clickButtonViewSource = async (locator: Locator) => {
         const eventTile = locator.locator(".mx_EventTile_line");
         await eventTile.hover();
-        // Assert that "View Source" button is rendered and click it
-        await eventTile.getByRole("button", { name: "View Source" }).click();
+        // Assert that "View source" button is rendered and click it
+        await eventTile.getByRole("button", { name: "View source" }).click();
     };
 
     test.use({
@@ -89,7 +89,9 @@ test.describe("Editing", () => {
             await editLastMessage(page, "Massage");
 
             // Assert that the edit label is visible
-            await expect(page.getByRole("button", { name: /Edited at .*? Click to view edits\./ })).toBeVisible();
+            await expect(
+                page.getByRole("button", { name: /Edited at .*? Select to view edit history\./ }),
+            ).toBeVisible();
 
             await clickEditedMessage(page, "Massage");
 
@@ -198,7 +200,7 @@ test.describe("Editing", () => {
         },
     );
 
-    test("should render 'View Source' button in developer mode on the message edit history dialog", async ({
+    test("should render 'View source' button in developer mode on the message edit history dialog", async ({
         page,
         user,
         app,
@@ -213,7 +215,7 @@ test.describe("Editing", () => {
         await editLastMessage(page, "Massage");
 
         // Assert that the edit label is visible
-        await expect(page.getByRole("button", { name: /Edited at .*? Click to view edits\./ })).toBeVisible();
+        await expect(page.getByRole("button", { name: /Edited at .*? Select to view edit history\./ })).toBeVisible();
 
         await clickEditedMessage(page, "Massage");
 
@@ -221,10 +223,10 @@ test.describe("Editing", () => {
             const dialog = page.getByRole("dialog");
             // Assert that the original message is rendered
             const li = dialog.locator("li:nth-child(3)");
-            // Assert that "View Source" is not rendered
+            // Assert that "View source" is not rendered
             const eventLine = li.locator(".mx_EventTile_line");
             await eventLine.hover();
-            await expect(eventLine.getByRole("button", { name: "View Source" })).not.toBeVisible();
+            await expect(eventLine.getByRole("button", { name: "View source" })).not.toBeVisible();
         }
 
         await app.closeDialog();
@@ -369,6 +371,8 @@ test.describe("Editing", () => {
 
         // nevertheless, the event should be updated
         await expect(messageTile.locator(".mx_EventTile_body")).toHaveText("Edited body");
-        await expect(messageTile.getByRole("button", { name: /Edited at .*? Click to view edits\./ })).toBeVisible();
+        await expect(
+            messageTile.getByRole("button", { name: /Edited at .*? Select to view edit history\./ }),
+        ).toBeVisible();
     });
 });
