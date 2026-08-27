@@ -515,6 +515,19 @@ describe("EmojiPicker", function () {
             expect(screen.getByText("neofox_sad")).toBeInTheDocument();
         });
 
+        it("should constrain the emote image so it cannot drive the cell size", async () => {
+            renderPicker();
+
+            const img = (await screen.findByRole("button", { name: ":neofox_sad: — Neofox" })).querySelector("img")!;
+            const { height } = getComputedStyle(img);
+
+            // Emote art is far larger than a grid cell; without a fixed height the
+            // image's intrinsic size expands the row and breaks the grid.
+            expect(height).not.toEqual("auto");
+            expect(Number.parseFloat(height)).toBeGreaterThan(0);
+            expect(Number.parseFloat(height)).toBeLessThanOrEqual(40);
+        });
+
         it("should pass the chosen emote back to the app", async () => {
             const user = userEvent.setup();
             const onChooseCustomEmote = vi.fn(() => true);

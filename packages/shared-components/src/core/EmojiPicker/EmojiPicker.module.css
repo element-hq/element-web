@@ -26,6 +26,9 @@
 .header {
     padding: var(--cpd-space-1x) var(--cpd-space-2x) 0;
     border-bottom: 1px solid var(--cpd-color-gray-400);
+    /* The built-in tabs fill the row exactly at their natural width; flex lets the
+       extra custom emote tab shrink them to fit rather than wrapping to a second row. */
+    display: flex;
 }
 
 .anchor {
@@ -227,6 +230,11 @@
 }
 
 .customEmote {
+    display: block;
+    width: 100%;
+    /* Match the glyph box of a real emoji, otherwise the image's intrinsic size
+       drives the cell height and blows the grid apart. */
+    height: var(--cpd-font-size-heading-sm, 24px);
     object-fit: contain;
 }
 
