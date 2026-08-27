@@ -192,10 +192,10 @@ function addPack(packs: ResolvedImagePack[], seen: Set<string>, pack: ResolvedIm
 export function getImagePacksForRoom(
     client: MatrixClient,
     room: Room,
-    getCanonicalParent = (roomId: string): Room | null => {
-        if (typeof client.getVisibleRooms !== "function") return null;
-        return SDKContextClass.instance.spaceStore.getCanonicalParent(roomId);
-    },
+    // Pack inheritance from parent spaces is best-effort: never start the space
+    // store just to resolve it, since this runs while rendering the composer.
+    getCanonicalParent = (roomId: string): Room | null =>
+        SDKContextClass.instance.spaceStoreIfInitialised?.getCanonicalParent(roomId) ?? null,
 ): ResolvedImagePack[] {
     const packs: ResolvedImagePack[] = [];
     const seen = new Set<string>();

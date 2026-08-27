@@ -164,6 +164,13 @@ export class SDKContextClass {
         }
         return this._SpaceStore;
     }
+    /**
+     * The space store, but only if something has already created it. For callers that
+     * merely enrich UI and so must not start the store as a side effect of rendering.
+     */
+    public get spaceStoreIfInitialised(): SpaceStore | undefined {
+        return this._SpaceStore;
+    }
     public get typingStore(): TypingStore {
         if (!this._TypingStore) {
             this._TypingStore = new TypingStore(this);
