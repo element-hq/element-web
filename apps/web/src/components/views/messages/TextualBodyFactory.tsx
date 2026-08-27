@@ -44,6 +44,7 @@ import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-o
 import { remoteMediaForBundle } from "../../../modules/FileViewerApi";
 import { ModuleApi } from "../../../modules/Api";
 import { fileViewerOpenButton } from "../right_panel/FileViewerCard";
+import { CustomPreviewTileApi } from "../../../modules/CustomPreviewTileApi";
 
 const logger = rootLogger.getChild("TextualBodyFactory");
 
@@ -161,6 +162,9 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
         const fileViewerButtons: MediaPreviewEntryButton[] = mediaHandle
             ? fileViewers.map((viewer) => fileViewerOpenButton({ viewer, media: mediaHandle, mxEvent: props.mxEvent }))
             : [];
+        const patches = mediaHandle
+            ? ModuleApi.instance.customPreviewTile.applyPatchers(mediaHandle)
+            : CustomPreviewTileApi.emptyBatch;
 
         if (preview.image === undefined) {
             content = {
@@ -196,9 +200,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
 
         return {
             id: preview.link,
-            header: preview.title,
             headerUrl: preview.link,
-            body,
             buttons: [
                 ...fileViewerButtons,
                 {
@@ -209,7 +211,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
                     },
                 },
             ],
-            ...linkIcon(),
+            ...CustomPreviewTileApi.previewPatchToVmProps(patches, { header: preview.title, body, ...linkIcon() }),
             ...content,
         };
     };

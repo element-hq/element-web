@@ -58,7 +58,7 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
     // @alpha
     readonly customisations: CustomisationsApi;
     // (undocumented)
-    readonly customPreview: CustomPreviewTileApi;
+    readonly customPreviewTile: CustomPreviewTileApi;
     // @alpha
     readonly extras: ExtrasApi;
     // @alpha
@@ -234,7 +234,7 @@ export interface CustomPreviewTileIcon {
     // (undocumented)
     color: string;
     // (undocumented)
-    svg: JSX_2.Element;
+    icon: JSX_2.Element;
 }
 
 // @public (undocumented)
@@ -253,8 +253,8 @@ export interface CustomPreviewTilePatch {
     subtext?: string;
 }
 
-// @public (undocumented)
-export type CustomPreviewTilePatcher = (media: MediaHandle) => Promise<CustomPreviewTilePatch | null>;
+// @public
+export type CustomPreviewTilePatcher = (media: MediaHandle) => CustomPreviewTilePatch | null;
 
 // @alpha
 export type CustomRoomPreviewBarComponentProps = {

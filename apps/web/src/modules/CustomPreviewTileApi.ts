@@ -1,4 +1,21 @@
-import { CustomPreviewTileIcon, CustomPreviewTileOptions, CustomPreviewTilePatcher, CustomPreviewTileApi as ICustomPreviewTileApi, MediaHandle } from "@element-hq/element-web-module-api"
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE in the repository root for full details.
+*/
+
+import type {
+    CustomPreviewTileIcon,
+    CustomPreviewTileOptions,
+    CustomPreviewTilePatcher,
+    CustomPreviewTileApi as ICustomPreviewTileApi,
+    MediaHandle,
+} from "@element-hq/element-web-module-api";
+import type { MediaPreviewIcon } from "@element-hq/web-shared-components";
+import { logger as rootLogger } from "matrix-js-sdk/src/logger";
+
+const logger = rootLogger.getChild("CustomPreviewTileApi");
 
 export interface RegisteredCustomPreviewTilePatcher {
     patcher: CustomPreviewTilePatcher;
@@ -15,36 +32,59 @@ export class CustomPreviewTileApi implements ICustomPreviewTileApi {
     private readonly patchers: Map<string, RegisteredCustomPreviewTilePatcher> = new Map();
     private sortedPatchers: RegisteredCustomPreviewTilePatcher[] = [];
 
-    registerCustomPreviewTilePatcher(patcher: CustomPreviewTilePatcher, options: CustomPreviewTileOptions): void {
+    public registerCustomPreviewTilePatcher(
+        patcher: CustomPreviewTilePatcher,
+        options: CustomPreviewTileOptions,
+    ): void {
         if (this.patchers.has(options.id))
-            throw new Error(`A custom previeiw tile patcher with ID ${options.id} has already been registered`);
+            throw new Error(`A custom preview tile patcher with ID ${options.id} has already been registered`);
 
         const regPatcher: RegisteredCustomPreviewTilePatcher = {
             patcher,
-            options
+            options,
         };
         this.patchers.set(options.id, regPatcher);
         this.sortedPatchers.push(regPatcher);
-        this.sortedPatchers.sort();
+        this.sortedPatchers.sort((a, b) => a.options.id.localeCompare(b.options.id));
     }
 
-    async applyPatchers(media: MediaHandle): Promise<CustomPreviewTilePatchBatch> {
-        const patches = (await Promise.all(this.sortedPatchers.map(async regPatcher => await regPatcher.patcher(media)))).filter(p => p !== null);
-        const batch: CustomPreviewTilePatchBatch = {
-            icons: [],
-            headers: [],
-            subtexts: []
-        };
+    public applyPatchers(media: MediaHandle): CustomPreviewTilePatchBatch {
+        const batch = CustomPreviewTileApi.emptyBatch;
 
-        patches.forEach(patch => {
-            if (patch.icon)
-                batch.icons.push(patch.icon);
-            if (patch.header)
-                batch.headers.push(patch.header);
-            if (patch.subtext)
-                batch.subtexts.push(patch.subtext);
-        });
+        for (const { patcher, options } of this.sortedPatchers) {
+            let patch;
+            try {
+                patch = patcher(media);
+            } catch (e) {
+                logger.error(`Custom preview tile patcher ${options.id} threw, skipping it`, e);
+                continue;
+            }
+            if (!patch) continue;
+
+            if (patch.icon) batch.icons.push(patch.icon);
+            if (patch.header) batch.headers.push(patch.header);
+            if (patch.subtext) batch.subtexts.push(patch.subtext);
+        }
 
         return batch;
+    }
+
+    public static previewPatchToVmProps(
+        patches: CustomPreviewTilePatchBatch,
+        { header, body, icon, onClick, color }: { header: string; body: string } & MediaPreviewIcon,
+    ): { header: string; body: string } & MediaPreviewIcon {
+        return {
+            header: patches.headers.length ? patches.headers.join(" • ") : header,
+            body: patches.subtexts.length ? patches.subtexts.join(" • ") : body,
+            ...(patches.icons[patches.icons.length - 1] ?? { icon, onClick, color }),
+        };
+    }
+
+    public static get emptyBatch(): CustomPreviewTilePatchBatch {
+        return {
+            icons: [],
+            headers: [],
+            subtexts: [],
+        };
     }
 }
