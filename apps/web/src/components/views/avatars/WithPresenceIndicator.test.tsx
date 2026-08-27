@@ -208,6 +208,35 @@ describe("usePresence", () => {
         await waitFor(() => expect(result.current).toBe(Presence.Offline));
     });
 
+    it("uses the canonical client user when the room member has a stale user reference", () => {
+        const staleUser = new User(DM_USER_ID);
+        staleUser.presence = "offline";
+        member.user = staleUser;
+        user.presence = "online";
+        vi.mocked(mockClient.getUser).mockReturnValue(user);
+
+        const { result } = renderHook(() => usePresence(room, member));
+
+        expect(result.current).toBe(Presence.Online);
+    });
+
+    it("updates via client-level UserEvent.CurrentlyActive when member.user is not yet linked", async () => {
+        member.user = undefined;
+        vi.mocked(mockClient.getUser).mockImplementation((userId) => (userId === DM_USER_ID ? user : null));
+        user.presence = "offline";
+        user.currentlyActive = false;
+
+        const { result } = renderHook(() => usePresence(room, member));
+        expect(result.current).toBe(Presence.Offline);
+
+        act(() => {
+            user.currentlyActive = true;
+            mockClient.emit(UserEvent.CurrentlyActive, null as any, user);
+        });
+
+        await waitFor(() => expect(result.current).toBe(Presence.Online));
+    });
+
     it("does not update when client emits UserEvent.Presence for a different user", async () => {
         user.presence = "online";
         const { result } = renderHook(() => usePresence(room, member));

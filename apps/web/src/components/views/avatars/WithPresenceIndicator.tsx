@@ -78,9 +78,25 @@ function getPresenceFromUser(user: User | null | undefined): Presence | null {
     return null;
 }
 
+function hasPresenceData(user: User): boolean {
+    return (
+        Boolean(user.events?.presence) ||
+        user.currentlyActive === true ||
+        (user.lastPresenceTs ?? 0) > 0 ||
+        (user.presence !== undefined && user.presence !== "offline")
+    );
+}
+
+function getPresenceUser(room: Room, member: RoomMember | null): User | null {
+    if (!member) return null;
+
+    // Presence events update the client-wide User instance, so prefer it over a room member's stale reference.
+    const clientUser = room.client.getUser(member.userId);
+    return (clientUser && hasPresenceData(clientUser) ? clientUser : member.user) ?? clientUser ?? null;
+}
+
 function getPresence(room: Room, member: RoomMember | null): Presence | null {
-    // Fall back to client.getUser() when member.user is not yet linked during initial sync
-    const user = member?.user ?? (member ? room.client.getUser(member.userId) : null);
+    const user = getPresenceUser(room, member);
     return getPresenceFromUser(user);
 }
 
@@ -92,8 +108,11 @@ export const usePresence = (room: Room, member: RoomMember | null): Presence | n
 
     useEventEmitter(member?.user, UserEvent.Presence, updatePresence);
     useEventEmitter(member?.user, UserEvent.CurrentlyActive, updatePresence);
-    // Also listen at client level to catch presence events when member.user is not yet linked
+    // Listen at client level because room members may not be linked to the canonical User yet.
     useEventEmitter(room.client, UserEvent.Presence, (_event: unknown, user: User) => {
+        if (user?.userId === member?.userId) updatePresence();
+    });
+    useEventEmitter(room.client, UserEvent.CurrentlyActive, (_event: unknown, user: User) => {
         if (user?.userId === member?.userId) updatePresence();
     });
     useEffect(updatePresence, [room, member]);
