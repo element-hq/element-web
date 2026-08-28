@@ -1,0 +1,53 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+/*
+ * The new timeline's reply-preview rules — the loading skeleton and the row
+ * heights that keep it height-neutral — live alongside the reply components in
+ * _ReplyChain.pcss / _ReplyTile.pcss.
+ */
+.mx_NewTimelinePanel {
+    /* The virtualized timeline renders its rows as an <ol role="list"> of <li>
+       tiles (mx_TimelineView_list / mx_TimelineView_tile in TimelineView; the <ol>
+       and <li> reset their own list markers inline). Inset the tile content to
+       match the legacy mx_RoomView_MessageList padding so messages don't sit flush
+       against the panel edges.
+
+       The inset goes on the tiles rather than the <ol>: the rows are absolutely
+       positioned, so their containing block is the <ol>'s padding box and padding
+       there would not inset them. box-sizing + padding-inline on each row does,
+       and — being horizontal only — leaves the virtualizer's measured row heights
+       and vertical offsets untouched. */
+    .mx_TimelineView_tile {
+        box-sizing: border-box;
+        padding-inline: var(--RoomView_MessageList-padding);
+    }
+
+    /* ImageBodyView reserves the media box with a definite width, which needs the
+       `width: fit-content` link wrapper it sits in to be clamped, so the frame's
+       own `max-width: 100%` can resolve in narrow panes. */
+    .mx_ImageBody > a {
+        max-width: 100%;
+    }
+
+    /* An image that fails to load replaces its reserved media box with a short
+       error message, which would otherwise pull every row below it upwards. Hold
+       the row at the height of the box being replaced — ImageBodyView passes it
+       as --mx-image-reserved-height, and only for images whose event declared
+       dimensions; anything else reserved no box, so it gets no minimum.
+
+       The error state sets `display: block`, so laying the message out needs flex
+       re-asserting here; the root's `flex-direction: column` then means the cross
+       axis is horizontal, and centring in the box is align-items (horizontally)
+       plus justify-content (vertically). */
+    span.mx_ImageBody {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: var(--mx-image-reserved-height, 0);
+    }
+}

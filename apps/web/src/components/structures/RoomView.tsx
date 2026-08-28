@@ -76,6 +76,7 @@ import { type IMatrixClientCreds } from "../../utils/createMatrixClient";
 import { useMatrixClientContext } from "../../contexts/MatrixClientContext";
 import ScrollPanel from "./ScrollPanel";
 import TimelinePanel from "./TimelinePanel";
+import { NewTimelinePanel } from "./NewTimelinePanel";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
 import RoomPreviewBar from "../views/rooms/RoomPreviewBar";
 import RoomPreviewCard from "../views/rooms/RoomPreviewCard";
@@ -2548,7 +2549,26 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
 
         let messagePanel: JSX.Element | undefined;
-        if (!isRoomEncryptionLoading) {
+        if (!isRoomEncryptionLoading && SettingsStore.getValue("feature_new_timeline")) {
+            // New MVVM timeline behind the Labs flag. It manages its own scrolling, read
+            // receipts and read marker, so none of TimelinePanel's plumbing is mounted.
+            // The `messagePanel` ref stays null; every RoomView use of it is null-guarded.
+            messagePanel = (
+                <EventPresentationContextProvider layout={this.state.layout}>
+                    <NewTimelinePanel
+                        key={this.state.room.roomId}
+                        room={this.state.room}
+                        hidden={hideMessagePanel}
+                        highlightedEventId={highlightedEventId}
+                        layout={this.state.layout}
+                        permalinkCreator={this.permalinkCreator}
+                        showUrlPreview={this.state.showUrlPreview}
+                        showReactions={true}
+                        editState={this.state.editState}
+                    />
+                </EventPresentationContextProvider>
+            );
+        } else if (!isRoomEncryptionLoading) {
             messagePanel = (
                 <EventPresentationContextProvider layout={this.state.layout}>
                     <TimelinePanel
