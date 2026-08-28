@@ -31,6 +31,11 @@ import { SDKContext } from "../../../../../src/contexts/SDKContext";
 import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg.ts";
 import { TestSDKContext } from "../../../TestSDKContext.ts";
+import { useUserStatus } from "../../../../../src/hooks/useUserStatus.ts";
+
+jest.mock("../../../../../src/hooks/useUserStatus.ts", () => ({
+    useUserStatus: jest.fn(),
+}));
 
 describe("<Pill>", () => {
     let client: Mocked<MatrixClient>;
@@ -122,6 +127,8 @@ describe("<Pill>", () => {
             if (userId === user2Id) return { displayname: "User 2" };
             throw new Error(`Unknown user ${userId}`);
         });
+
+        mocked(useUserStatus).mockReturnValue(undefined);
 
         jest.spyOn(dis, "dispatch");
         pillParentClickHandler = jest.fn();
@@ -220,6 +227,36 @@ describe("<Pill>", () => {
                 expect(pillParentClickHandler).not.toHaveBeenCalled();
             });
         });
+    });
+
+    it("should render the status emoji for a user with a status", () => {
+        // The real hook only returns a status when given a user ID
+        mocked(useUserStatus).mockImplementation((userId) =>
+            userId ? { emoji: "💡", text: "Bright idea" } : undefined,
+        );
+        renderPill({
+            room: room1,
+            url: permalinkPrefix + user1Id,
+        });
+
+        expect(useUserStatus).toHaveBeenCalledWith(user1Id);
+        expect(screen.getByText("💡")).toBeInTheDocument();
+        expect(renderResult.container.querySelector(".mx_Pill_withStatus")).toBeInTheDocument();
+        expect(renderResult.asFragment()).toMatchSnapshot();
+    });
+
+    it("should not render a status for a pill which is not a user mention", () => {
+        // The real hook only returns a status when given a user ID
+        mocked(useUserStatus).mockImplementation((userId) =>
+            userId ? { emoji: "💡", text: "Bright idea" } : undefined,
+        );
+        renderPill({
+            url: permalinkPrefix + room1Id,
+        });
+
+        expect(useUserStatus).toHaveBeenCalledWith(undefined);
+        expect(screen.queryByText("💡")).not.toBeInTheDocument();
+        expect(renderResult.container.querySelector(".mx_Pill_withStatus")).not.toBeInTheDocument();
     });
 
     it("should render the expected pill for a known user not in the room", async () => {
