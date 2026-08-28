@@ -179,6 +179,47 @@ describe("Spotlight Dialog", () => {
         mocked(mockedClient.getVisibleRooms).mockReturnValue([testRoom, testLocalRoom, testDM]);
     });
 
+    it("should not fall into a filter when the query matches nothing", async () => {
+        render(<SpotlightDialog initialText="zzzznothingmatchesthis" onFinished={() => null} />);
+
+        jest.advanceTimersByTime(200);
+        await flushPromisesWithFakeTimers();
+
+        expect(screen.getByText("No results found")).toBeInTheDocument();
+
+        fireEvent.keyDown(document.querySelector(".mx_SpotlightDialog_searchBox input")!, { key: "Enter" });
+
+        expect(document.querySelector("div.mx_SpotlightDialog_filter")).not.toBeInTheDocument();
+    });
+
+    it("should not offer the enter shortcut on the no results entry", async () => {
+        render(<SpotlightDialog initialText="zzzznothingmatchesthis" onFinished={() => null} />);
+
+        jest.advanceTimersByTime(200);
+        await flushPromisesWithFakeTimers();
+
+        const noResults = document.querySelector("#mx_SpotlightDialog_button_noResults")!;
+        expect(noResults.querySelector(".mx_SpotlightDialog_enterPrompt")).not.toBeInTheDocument();
+
+        const startChat = document.querySelector("#mx_SpotlightDialog_button_startChat")!;
+        expect(startChat.querySelector(".mx_SpotlightDialog_enterPrompt")).toBeInTheDocument();
+    });
+
+    it("should expose the no results entry as an unavailable option rather than a button", async () => {
+        render(<SpotlightDialog initialText="zzzznothingmatchesthis" onFinished={() => null} />);
+
+        jest.advanceTimersByTime(200);
+        await flushPromisesWithFakeTimers();
+
+        const noResults = document.querySelector("#mx_SpotlightDialog_button_noResults")!;
+        expect(noResults).toHaveAttribute("aria-disabled", "true");
+        expect(noResults).not.toHaveClass("mx_AccessibleButton");
+
+        const startChat = document.querySelector("#mx_SpotlightDialog_button_startChat")!;
+        expect(startChat).not.toHaveAttribute("aria-disabled");
+        expect(startChat).toHaveClass("mx_AccessibleButton");
+    });
+
     describe("should apply filters supplied via props", () => {
         it("without filter", async () => {
             render(<SpotlightDialog onFinished={() => null} />);

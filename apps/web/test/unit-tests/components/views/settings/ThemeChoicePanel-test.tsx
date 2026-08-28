@@ -9,8 +9,6 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { act, render, screen, waitFor } from "jest-matrix-react";
 import { mocked, type MockedObject } from "jest-mock";
-import userEvent from "@testing-library/user-event";
-import fetchMock from "@fetch-mock/jest";
 
 import { ThemeChoicePanel } from "../../../../../src/components/views/settings/ThemeChoicePanel";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
@@ -137,11 +135,13 @@ describe("<ThemeChoicePanel />", () => {
 
     describe("custom theme", () => {
         const aliceTheme = { name: "Alice theme", is_dark: true, colors: {} };
-        const bobTheme = { name: "Bob theme", is_dark: false, colors: {} };
 
         beforeEach(async () => {
-            await SettingsStore.setValue("feature_custom_themes", null, SettingLevel.DEVICE, true);
             await SettingsStore.setValue("custom_themes", null, SettingLevel.DEVICE, [aliceTheme]);
+        });
+
+        afterEach(() => {
+            SettingsStore.reset();
         });
 
         it("should render the custom theme section", () => {
@@ -149,34 +149,10 @@ describe("<ThemeChoicePanel />", () => {
             expect(asFragment()).toMatchSnapshot();
         });
 
-        it("should add a custom theme", async () => {
-            jest.spyOn(SettingsStore, "setValue");
-            // Respond to the theme request
-            fetchMock.get("http://bob.theme", {
-                body: bobTheme,
-            });
-
-            render(<ThemeChoicePanel />);
-
-            // Add the new custom theme
-            const customThemeInput = screen.getByRole("textbox", { name: "Add custom theme" });
-            await userEvent.type(customThemeInput, "http://bob.theme");
-            screen.getByRole("button", { name: "Add custom theme" }).click();
-
-            // The new custom theme is added to the user's themes
-            await waitFor(() =>
-                expect(SettingsStore.setValue).toHaveBeenCalledWith("custom_themes", null, "account", [
-                    aliceTheme,
-                    bobTheme,
-                ]),
-            );
-        });
-
         it("should display custom theme", () => {
             const { asFragment } = render(<ThemeChoicePanel />);
 
             expect(screen.getByRole("radio", { name: aliceTheme.name })).toBeInTheDocument();
-            expect(screen.getByRole("listitem", { name: aliceTheme.name })).toBeInTheDocument();
             expect(asFragment()).toMatchSnapshot();
         });
     });

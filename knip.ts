@@ -58,6 +58,10 @@ export default {
                 "src/utils/EventPresentationContextProvider.tsx!",
                 // This is just an awful side-effect import
                 "src/stores/LifecycleStore.ts!",
+                // New timeline: only its own tests import this so far, and --strict does not
+                // count tests as entry points. NewTimelinePanel picks it up in a follow-up PR,
+                // at which point this line can go.
+                "src/viewmodels/room/timeline/RoomTimelineViewModel.ts!",
             ],
             project: [
                 "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!",
