@@ -1,0 +1,18 @@
+.container {
+    max-width: var(--MediaPreview-width);
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--cpd-space-1x);
+
+    margin-top: calc(0.5 * var(--cpd-space-1x));
+    margin-bottom: calc(0.5 * var(--cpd-space-1x));
+
+    .toggleButton[data-kind="tertiary"] {
+        margin-left: auto;
+        margin-right: auto;
+        text-decoration: none;
+        color: var(--cpd-color-icon-accent-primary);
+        font-weight: var(--cpd-font-weight-regular);
+    }
+}

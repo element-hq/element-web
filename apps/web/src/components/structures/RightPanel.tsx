@@ -34,6 +34,7 @@ import { Action } from "../../dispatcher/actions";
 import { type XOR } from "../../@types/common";
 import ExtensionsCard from "../views/right_panel/ExtensionsCard";
 import MemberListView from "../views/rooms/MemberList/MemberListView";
+import { FileViewerCard } from "../views/right_panel/FileViewerCard";
 
 interface BaseProps {
     overwriteCard?: IRightPanelCard; // used to display a custom card and ignoring the RightPanelStore (used for UserView)
@@ -141,7 +142,7 @@ export default class RightPanel extends React.Component<Props, IState> {
             // When the user clicks close on the encryption panel cancel the pending request first if any
             void this.state.cardState.verificationRequest.cancel();
         } else {
-            RightPanelStore.instance.togglePanel(this.props.room?.roomId ?? null);
+            RightPanelStore.instance.closeCurrentCard(this.props.room?.roomId ?? null);
         }
     };
 
@@ -275,6 +276,18 @@ export default class RightPanel extends React.Component<Props, IState> {
             case RightPanelPhases.Widget:
                 if (!!this.props.room && !!cardState?.widgetId) {
                     card = <WidgetCard room={this.props.room} widgetId={cardState.widgetId} onClose={this.onClose} />;
+                }
+                break;
+
+            case RightPanelPhases.FileViewer:
+                if (!!cardState?.fileViewer && !!cardState.fileViewerMedia && !!cardState.fileViewerSourceEvent) {
+                    card = (
+                        <FileViewerCard
+                            viewer={cardState.fileViewer}
+                            media={cardState.fileViewerMedia}
+                            onClose={this.onClose}
+                        ></FileViewerCard>
+                    );
                 }
                 break;
         }

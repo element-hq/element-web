@@ -118,6 +118,10 @@ export default defineConfig({
             "vite-plugin-node-polyfills/shims/buffer",
             "vite-plugin-node-polyfills/shims/process",
             "@vector-im/compound-design-tokens/assets/web/icons",
+            // Icons imported by their own subpath rather than through the barrel above: without these
+            // the optimizer re-bundles part way through a run and reloads the page under the tests.
+            "@vector-im/compound-design-tokens/assets/web/icons/download",
+            "@vector-im/compound-design-tokens/assets/web/icons/expand",
             "storybook/preview-api",
             // The room-list view pulls in a heavy dnd-kit + react-virtuoso graph. If these are left to
             // runtime discovery, the browser-mode dep optimizer can re-bundle mid-run and reload the page,

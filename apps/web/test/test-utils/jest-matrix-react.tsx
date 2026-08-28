@@ -10,14 +10,17 @@ import React, { type ReactElement } from "react";
 // eslint-disable-next-line no-restricted-imports
 import { render, type RenderOptions } from "@testing-library/react";
 import { TooltipProvider } from "@vector-im/compound-web";
-import { I18nApi, I18nContext } from "@element-hq/web-shared-components";
+import { I18nApi, I18nContext, LinkedTextContext } from "@element-hq/web-shared-components";
 
 const i18nApi = new I18nApi();
+// Hoisted so every render shares one identity rather than a fresh object per render.
+const linkedTextConfiguration = {};
 
 /**
  * Wraps the provided components in:
  *  * A TooltipProvider
  *  * An I18nContext.Provider
+ *  * A LinkedTextContext.Provider
  *
  * ...plus any wrapper provided in the options.
  * @param Wrapper Additional wrapper to include
@@ -25,21 +28,18 @@ const i18nApi = new I18nApi();
  */
 const wrapWithStandardContexts = (Wrapper: RenderOptions["wrapper"]) => {
     return ({ children }: { children: React.ReactNode }) => {
+        const wrapped = (
+            <I18nContext.Provider value={i18nApi}>
+                <LinkedTextContext.Provider value={linkedTextConfiguration}>
+                    <TooltipProvider>{children}</TooltipProvider>
+                </LinkedTextContext.Provider>
+            </I18nContext.Provider>
+        );
+
         if (Wrapper) {
-            return (
-                <Wrapper>
-                    <I18nContext.Provider value={i18nApi}>
-                        <TooltipProvider>{children}</TooltipProvider>
-                    </I18nContext.Provider>
-                </Wrapper>
-            );
-        } else {
-            return (
-                <TooltipProvider>
-                    <I18nContext.Provider value={i18nApi}>{children}</I18nContext.Provider>
-                </TooltipProvider>
-            );
+            return <Wrapper>{wrapped}</Wrapper>;
         }
+        return wrapped;
     };
 };
 
