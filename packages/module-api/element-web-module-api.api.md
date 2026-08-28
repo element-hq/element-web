@@ -253,7 +253,7 @@ export interface CustomPreviewTilePatch {
     subtext?: string;
 }
 
-// @public
+// @public (undocumented)
 export type CustomPreviewTilePatcher = (media: MediaHandle) => CustomPreviewTilePatch | null;
 
 // @alpha
