@@ -40,6 +40,7 @@ import { FileDownloader } from "../../../utils/FileDownloader";
 import { ModuleApi } from "../../../modules/Api";
 import { uploadedMediaForEvent } from "../../../modules/FileViewerApi";
 import { fileViewerOpenButton } from "../right_panel/FileViewerCard";
+import { CustomPreviewTileApi } from "../../../modules/CustomPreviewTileApi";
 
 type MBodyComponent = React.ComponentType<IBodyProps>;
 
@@ -102,14 +103,15 @@ function PreviewFileBody({ mxEvent, mediaEventHelper }: FileBodyProps): JSX.Elem
         const fileViewerButtons: MediaPreviewEntryButton[] = mediaHandle
             ? fileViewers.map((viewer) => fileViewerOpenButton({ viewer, media: mediaHandle, mxEvent }))
             : [];
+        const patches = mediaHandle
+            ? ModuleApi.instance.customPreviewTile.applyPatchers(mediaHandle)
+            : CustomPreviewTileApi.emptyBatch;
 
         return new MediaPreviewGroupViewModel({
             entries: [
                 {
                     id: mxEvent.getId()!,
                     style: "text",
-                    header: mediaEventHelper!.fileName,
-                    body: size === undefined ? _t("timeline|m.file|size_unknown") : fileSize(size),
                     buttons:
                         mediaEventHelper === undefined
                             ? undefined
@@ -126,7 +128,11 @@ function PreviewFileBody({ mxEvent, mediaEventHelper }: FileBodyProps): JSX.Elem
                                       },
                                   },
                               ],
-                    ...attachmentIcon(content.info?.mimetype),
+                    ...CustomPreviewTileApi.previewPatchToVmProps(patches, {
+                        header: mediaEventHelper!.fileName,
+                        body: size === undefined ? _t("timeline|m.file|size_unknown") : fileSize(size),
+                        ...attachmentIcon(content.info?.mimetype),
+                    }),
                 },
             ],
         });
