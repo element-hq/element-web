@@ -27,6 +27,7 @@ import { type MatrixDispatcher } from "../../dispatcher/dispatcher.ts";
 import SettingsStore from "../../settings/SettingsStore";
 import DMRoomMap from "../../utils/DMRoomMap";
 import { SpaceNotificationState } from "../notifications/SpaceNotificationState";
+import { type RoomNotificationState } from "../notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../notifications/RoomNotificationStateStore";
 import { EnhancedMap, mapDiff } from "../../utils/maps";
 import { setDiff, setHasDiff } from "../../utils/sets";
@@ -196,15 +197,13 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
 
         let roomId: string | undefined;
         if (space === MetaSpace.Home && this.allRoomsInHome) {
-            const hasMentions = RoomNotificationStateStore.instance.globalState.hasMentions;
             const rooms = this.sdkContext.roomListStore.getSortedRoomsInActiveSpace().sections.flatMap((s) => s.rooms);
-            for (const room of rooms) {
-                const state = RoomNotificationStateStore.instance.getRoomState(room);
-                if (hasMentions ? state.hasMentions : state.isUnread) {
-                    roomId = room.roomId;
-                    break;
-                }
-            }
+            const findRoom = (predicate: (state: RoomNotificationState) => boolean): Room | undefined =>
+                rooms.find((room) => predicate(RoomNotificationStateStore.instance.getRoomState(room)));
+            // Prefer a room with a mention and fall back to any unread one. The summarised state
+            // the badge renders from may lag behind the per-room states, so letting its hasMentions
+            // choose a single scan can leave the click doing nothing at all.
+            roomId = (findRoom((state) => state.hasMentions) ?? findRoom((state) => state.isUnread))?.roomId;
         } else {
             roomId = this.getNotificationState(space).getFirstRoomWithNotifications();
         }
@@ -281,14 +280,14 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
         this.emit(UPDATE_SUGGESTED_ROOMS, (this._suggestedRooms = []));
 
         if (cliSpace) {
-            this.loadSuggestedRooms(cliSpace);
+            void this.loadSuggestedRooms(cliSpace);
 
             // Load all members for the selected space and its subspaces,
             // so we can correctly show DMs we have with members of this space.
             this.traverseSpace(
                 space,
                 (roomId) => {
-                    this.matrixClient?.getRoom(roomId)?.loadMembersIfNeeded();
+                    void this.matrixClient?.getRoom(roomId)?.loadMembersIfNeeded();
                 },
                 false,
             );
@@ -994,7 +993,7 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
                     target?.getMyMembership() !== KnownMembership.Join && // target not joined
                     ev.getPrevContent().suggested !== ev.getContent().suggested // suggested flag changed
                 ) {
-                    this.loadSuggestedRooms(room);
+                    void this.loadSuggestedRooms(room);
                 }
 
                 break;
@@ -1345,7 +1344,7 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
         const changes = reorderLexicographically(currentOrders, fromIndex, toIndex);
 
         changes.forEach(({ index, order }) => {
-            this.setRootSpaceOrder(this.rootSpaces[index], order);
+            void this.setRootSpaceOrder(this.rootSpaces[index], order);
         });
 
         this.notifyIfOrderChanged();

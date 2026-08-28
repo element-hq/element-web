@@ -15,6 +15,7 @@ import { RemoveSectionDialog } from "../../components/views/dialogs/RemoveSectio
 import { DefaultTagID, type TagID } from "./skip-list/tag";
 import { isMetaSpace, MetaSpace, type SpaceKey } from "../spaces";
 import { SDKContextClass } from "../../contexts/SDKContextClass.ts";
+import { tagRoom } from "../../utils/room/tagRoom.ts";
 
 /**
  * A synthetic tag used to represent the "Chats" section, which contains
@@ -133,6 +134,36 @@ export function getCustomSectionData(): CustomSectionsData {
 }
 
 /**
+ * Persisted expanded/collapsed state of the room list sections, stored per space then per section tag.
+ */
+export type SectionExpansionState = { [spaceId: string]: { [sectionTag: string]: boolean } };
+
+/**
+ * Returns whether the section with the given tag is expanded in the given space.
+ * Defaults to expanded when no state has been persisted.
+ * @param spaceId - The id of the space.
+ * @param tag - The tag of the section.
+ */
+export function isSectionExpanded(spaceId: string, tag: string): boolean {
+    return SettingsStore.getValue("RoomList.SectionExpansionState")[spaceId]?.[tag] ?? true;
+}
+
+/**
+ * Persists the expanded/collapsed state of a section for a given space at the device level.
+ * @param spaceId - The id of the space.
+ * @param tag - The tag of the section.
+ * @param expanded - Whether the section is expanded.
+ */
+export async function setSectionExpanded(spaceId: string, tag: string, expanded: boolean): Promise<void> {
+    const state = SettingsStore.getValue("RoomList.SectionExpansionState");
+    const newState: SectionExpansionState = {
+        ...state,
+        [spaceId]: { ...state[spaceId], [tag]: expanded },
+    };
+    await SettingsStore.setValue("RoomList.SectionExpansionState", null, SettingLevel.DEVICE, newState);
+}
+
+/**
  * Retrieves the ordered list of custom section tags from the settings.
  * If the settings contain tags that are not present in the custom section data, they will be filtered out and the settings will be updated to remove the unknown tags.
  *
@@ -163,17 +194,37 @@ export function getOrderedReorderableSections(): ReorderableSection[] {
 }
 
 /**
+ * Adds rooms to a section and removes others from it, as chosen by the user in the section dialog.
+ *
+ * {@link tagRoom} toggles the tag, so the rooms to add and the rooms to remove are handled by the
+ * same call: the dialog only reports the rooms whose membership of the section has changed.
+ * @param tag - The tag of the section.
+ * @param roomsToTag - The ids of the rooms to add to the section.
+ * @param roomsToUntag - The ids of the rooms to remove from the section.
+ */
+function updateSectionRooms(tag: CustomTag, roomsToTag: string[] = [], roomsToUntag: string[] = []): void {
+    const client = SDKContextClass.instance.client;
+    if (!client) return;
+
+    for (const roomId of [...roomsToTag, ...roomsToUntag]) {
+        const room = client.getRoom(roomId);
+        if (room) tagRoom(room, tag);
+    }
+}
+
+/**
  * Creates a new custom section by showing a dialog to the user to enter the section name.
  * If the user confirms, it generates a unique tag for the section, saves the section data in the settings, and updates the ordered list of sections.
  *
  * @param spaceId The space in which the section is being created. Used to control visibility of the empty section.
+ * @param preselectedRoomId The id of a room to preselect in the room picker of the dialog.
  * @returns A promise that resolves to the new section tag if created, or undefined if cancelled.
  */
-export async function createSection(spaceId: SpaceKey): Promise<string | undefined> {
-    const modal = Modal.createDialog(CreateSectionDialog);
+export async function createSection(spaceId: SpaceKey, preselectedRoomId?: string): Promise<string | undefined> {
+    const modal = Modal.createDialog(CreateSectionDialog, { preselectedRoomId });
 
-    const [shouldCreateSection, sectionName] = await modal.finished;
-    if (!shouldCreateSection || !sectionName) return undefined;
+    const [sectionName, roomsToTag] = await modal.finished;
+    if (!sectionName) return undefined;
 
     const tag: CustomTag = `${CUSTOM_SECTION_TAG_PREFIX}${window.crypto.randomUUID()}`;
     const newSection: CustomSection = { tag, name: sectionName, spaceId };
@@ -189,6 +240,8 @@ export async function createSection(spaceId: SpaceKey): Promise<string | undefin
     const chatsIndex = reorderable.indexOf(CHATS_TAG);
     reorderable.splice(chatsIndex === -1 ? reorderable.length : chatsIndex, 0, tag);
     await SettingsStore.setValue("RoomList.OrderedCustomSections", null, SettingLevel.ACCOUNT, reorderable);
+
+    updateSectionRooms(tag, roomsToTag);
     return tag;
 }
 
@@ -208,11 +261,16 @@ export async function editSection(tag: string): Promise<void> {
         return;
     }
 
-    const modal = Modal.createDialog(CreateSectionDialog, { sectionToEdit: section.name });
+    const modal = Modal.createDialog(CreateSectionDialog, { sectionToEdit: section });
 
-    const [shouldEditSection, newName] = await modal.finished;
-    const isSameName = newName === section.name;
-    if (!shouldEditSection || !newName || isSameName) return;
+    const [newName, roomsToTag, roomsToUntag] = await modal.finished;
+    // The user closed the dialog before naming the section: nothing to do.
+    if (!newName) return;
+
+    updateSectionRooms(tag, roomsToTag, roomsToUntag);
+
+    // The name is the only thing stored in the settings, so stop here when it hasn't changed.
+    if (newName === section.name) return;
 
     // Save the new name
     sectionData[tag].name = newName;

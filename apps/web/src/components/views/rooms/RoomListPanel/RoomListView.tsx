@@ -13,7 +13,7 @@ import {
 } from "@element-hq/web-shared-components";
 import { type Room } from "matrix-js-sdk/src/matrix";
 
-import { RoomAvatarView } from "../../avatars/RoomAvatarView";
+import { DecoratedRoomAvatarView } from "../../avatars/DecoratedRoomAvatarView";
 import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
 import { Landmark, LandmarkNavigation } from "../../../../accessibility/LandmarkNavigation";
@@ -39,7 +39,7 @@ export function RoomListView(): JSX.Element {
 
     // Render avatar for each room - memoized to prevent re-renders
     const renderAvatar = useCallback((room: SharedRoom): ReactNode => {
-        return <RoomAvatarView room={room as Room} />;
+        return <DecoratedRoomAvatarView room={room as Room} />;
     }, []);
 
     // Handle keyboard navigation for landmarks

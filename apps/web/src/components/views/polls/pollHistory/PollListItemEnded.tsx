@@ -69,7 +69,7 @@ const usePollVotes = (poll: Poll): Partial<EndedPollState> => {
             setResults(getWinningAnswers(poll, responseRelations));
         poll.on(PollEvent.Responses, onPollResponses);
 
-        getResponses();
+        void getResponses();
 
         return () => {
             poll.off(PollEvent.Responses, onPollResponses);

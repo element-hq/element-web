@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { vi, describe, it, expect, beforeAll, beforeEach, afterEach } from "vitest";
-import { type EventEmitter } from "events";
+import { type EventEmitter } from "node:events";
 import {
     EventType,
     RoomMember,
@@ -41,6 +41,7 @@ import { Action } from "../../dispatcher/actions";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { DefaultTagID } from "../room-list-v3/skip-list/tag";
 import { RoomNotificationStateStore } from "../notifications/RoomNotificationStateStore";
+import { type SummarizedNotificationState } from "../notifications/SummarizedNotificationState";
 import { NotificationLevel } from "../notifications/NotificationLevel";
 import { storeRoomAliasInCache } from "../../RoomAliasCache.ts";
 import { TestSDKContext } from "../../../test/unit-tests/TestSDKContext.ts";
@@ -1475,6 +1476,83 @@ describe("SpaceStore", () => {
                     room_id: room.roomId,
                 }),
             );
+        });
+
+        it("should fall back to an unread room when the summary claims a mention no room has", async () => {
+            const room = mkRoom(room1);
+            const state = RoomNotificationStateStore.instance.getRoomState(room);
+            // @ts-ignore
+            state._level = NotificationLevel.Notification;
+            vi.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+                spaceId: MetaSpace.Home,
+                sections: [{ tag: DefaultTagID.Untagged, rooms: [room] }],
+            });
+            // The summary the badge renders from lags behind the per-room states, so it can still
+            // claim a mention which no room state backs up any more.
+            vi.spyOn(RoomNotificationStateStore.instance, "globalState", "get").mockReturnValue({
+                hasMentions: true,
+            } as unknown as SummarizedNotificationState);
+
+            // init the store
+            await run();
+            await setShowAllRooms(true);
+            spyDispatcher.mockClear();
+
+            store.setActiveRoomInSpace(MetaSpace.Home);
+
+            expect(spyDispatcher).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    action: "view_room",
+                    room_id: room.roomId,
+                }),
+            );
+        });
+
+        it("should prefer a room with a mention over an earlier merely-unread room", async () => {
+            const unread = mkRoom(room1);
+            // @ts-ignore
+            RoomNotificationStateStore.instance.getRoomState(unread)._level = NotificationLevel.Notification;
+            const mentioned = mkRoom(room2);
+            // @ts-ignore
+            RoomNotificationStateStore.instance.getRoomState(mentioned)._level = NotificationLevel.Highlight;
+            vi.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+                spaceId: MetaSpace.Home,
+                sections: [{ tag: DefaultTagID.Untagged, rooms: [unread, mentioned] }],
+            });
+
+            // init the store
+            await run();
+            await setShowAllRooms(true);
+            spyDispatcher.mockClear();
+
+            store.setActiveRoomInSpace(MetaSpace.Home);
+
+            expect(spyDispatcher).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    action: "view_room",
+                    room_id: mentioned.roomId,
+                }),
+            );
+        });
+
+        it("should do nothing when no room is unread", async () => {
+            const room = mkRoom(room1);
+            const state = RoomNotificationStateStore.instance.getRoomState(room);
+            // @ts-ignore
+            state._level = NotificationLevel.None;
+            vi.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+                spaceId: MetaSpace.Home,
+                sections: [{ tag: DefaultTagID.Untagged, rooms: [room] }],
+            });
+
+            // init the store
+            await run();
+            await setShowAllRooms(true);
+            spyDispatcher.mockClear();
+
+            store.setActiveRoomInSpace(MetaSpace.Home);
+
+            expect(spyDispatcher).not.toHaveBeenCalledWith(expect.objectContaining({ action: "view_room" }));
         });
     });
 });

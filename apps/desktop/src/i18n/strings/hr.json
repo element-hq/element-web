@@ -54,6 +54,11 @@
         "services": "Usluge",
         "unhide": "Otkrij"
     },
+    "renderer_crash": {
+        "detail": "Zatvorite i ponovno otvorite aplikaciju kako biste nastavili. Ako se to nastavi događati, moglo bi pomoći ponovno pokretanje računala ili brisanje predmemorije aplikacije.",
+        "message": "%(brand)s se nekoliko puta oporavio od problema, ali se problem i dalje javlja, pa je prestao pokušavati.",
+        "title": "%(brand)s se stalno ruši"
+    },
     "right_click_menu": {
         "add_to_dictionary": "Dodaj u rječnik",
         "copy_email": "Kopiraj e-adresu",
