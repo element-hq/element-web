@@ -6,18 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import EventEmitter from "node:events";
-import { mocked } from "jest-mock";
-import { waitFor } from "jest-matrix-react";
-import {
-    RoomType,
-    type Room,
-    RoomEvent,
-    MatrixEvent,
-    type MatrixClient,
-    type IMyDevice,
-    type RoomMember,
-} from "matrix-js-sdk/src/matrix";
+import { RoomType, type Room, RoomEvent, MatrixEvent, type IMyDevice, type RoomMember } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { Widget } from "matrix-widget-api";
 import {
@@ -27,8 +19,10 @@ import {
     MatrixRTCSessionEvent,
 } from "matrix-js-sdk/src/matrixrtc";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
+import { describe, it, expect, vi, beforeEach, afterEach, type Mocked, type MockInstance } from "vitest";
+import { waitFor } from "test-utils-rtl";
+import { cleanUpClientRoomAndStores, enableCalls, mockPlatformPeg, setUpClientRoomAndStores } from "test-utils";
 
-import type { Mocked } from "jest-mock";
 import type { ClientWidgetApi } from "matrix-widget-api";
 import {
     type JitsiCallMemberContent,
@@ -38,19 +32,18 @@ import {
     JitsiCall,
     ElementCall,
     ElementCallIntent,
-} from "../../../src/models/Call";
-import { cleanUpClientRoomAndStores, enableCalls, mockPlatformPeg, setUpClientRoomAndStores } from "../../test-utils";
-import WidgetStore from "../../../src/stores/WidgetStore";
-import { WidgetMessagingStore } from "../../../src/stores/widgets/WidgetMessagingStore";
-import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../../../src/stores/ActiveWidgetStore";
-import { ElementWidgetActions } from "../../../src/stores/widgets/ElementWidgetActions";
-import SettingsStore from "../../../src/settings/SettingsStore";
-import { Anonymity, PosthogAnalytics } from "../../../src/PosthogAnalytics";
-import { type SettingKey } from "../../../src/settings/Settings.tsx";
-import SdkConfig from "../../../src/SdkConfig.ts";
-import DMRoomMap from "../../../src/utils/DMRoomMap.ts";
-import { WidgetMessagingEvent, type WidgetMessaging } from "../../../src/stores/widgets/WidgetMessaging.ts";
-import { BugReportEndpointURLLocal } from "../../../src/IConfigOptions.ts";
+} from "./Call";
+import WidgetStore from "../stores/WidgetStore";
+import { WidgetMessagingStore } from "../stores/widgets/WidgetMessagingStore";
+import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../stores/ActiveWidgetStore";
+import { ElementWidgetActions } from "../stores/widgets/ElementWidgetActions";
+import SettingsStore from "../settings/SettingsStore";
+import { Anonymity, PosthogAnalytics } from "../PosthogAnalytics";
+import { type SettingKey } from "../settings/Settings.tsx";
+import SdkConfig from "../SdkConfig.ts";
+import DMRoomMap from "../utils/DMRoomMap.ts";
+import { WidgetMessagingEvent, type WidgetMessaging } from "../stores/widgets/WidgetMessaging.ts";
+import { BugReportEndpointURLLocal } from "../IConfigOptions.ts";
 
 const { enabledSettings } = enableCalls();
 
@@ -62,12 +55,12 @@ const setUpWidget = (
 
     const widgetApi = new (class extends EventEmitter {
         transport = {
-            send: jest.fn(),
-            reply: jest.fn(),
+            send: vi.fn(),
+            reply: vi.fn(),
         };
     })() as unknown as Mocked<ClientWidgetApi>;
     const messaging = new (class extends EventEmitter {
-        stop = jest.fn();
+        stop = vi.fn();
         widgetApi = widgetApi;
     })() as unknown as Mocked<WidgetMessaging>;
     WidgetMessagingStore.instance.storeMessaging(widget, call.roomId, messaging);
@@ -83,8 +76,8 @@ async function connect(call: Call, widgetApi: Mocked<ClientWidgetApi>, startWidg
         widgetApi.emit(`action:${ElementWidgetActions.JoinCall}`, new CustomEvent("widgetapirequest", {}));
     }
     async function runTimers() {
-        jest.advanceTimersByTime(500);
-        jest.advanceTimersByTime(500);
+        vi.advanceTimersByTime(500);
+        vi.advanceTimersByTime(500);
     }
     sessionConnect();
     await Promise.all([...(startWidget ? [call.start()] : []), runTimers()]);
@@ -98,8 +91,8 @@ async function disconnect(call: Call, widgetApi: Mocked<ClientWidgetApi>): Promi
         widgetApi.emit(`action:${ElementWidgetActions.HangupCall}`, new CustomEvent("widgetapirequest", {}));
     }
     async function runTimers() {
-        jest.advanceTimersByTime(500);
-        jest.advanceTimersByTime(500);
+        vi.advanceTimersByTime(500);
+        vi.advanceTimersByTime(500);
     }
     sessionDisconnect();
     const promise = call.disconnect();
@@ -109,14 +102,14 @@ async function disconnect(call: Call, widgetApi: Mocked<ClientWidgetApi>): Promi
 
 const cleanUpCallAndWidget = (call: Call, widget: Widget) => {
     call.destroy();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     WidgetMessagingStore.instance.stopMessaging(widget, call.roomId);
 };
 
 describe("JitsiCall", () => {
     mockPlatformPeg({ supportsJitsiScreensharing: () => true });
 
-    let client: Mocked<MatrixClient>;
+    let client: ReturnType<typeof setUpClientRoomAndStores>["client"];
     let room: Room;
     let alice: RoomMember;
     let bob: RoomMember;
@@ -124,7 +117,7 @@ describe("JitsiCall", () => {
 
     beforeEach(() => {
         ({ client, room, alice, bob, carol } = setUpClientRoomAndStores());
-        jest.spyOn(room, "getType").mockReturnValue(RoomType.ElementVideo);
+        vi.spyOn(room, "getType").mockReturnValue(RoomType.ElementVideo);
     });
 
     afterEach(() => cleanUpClientRoomAndStores(client, room));
@@ -157,8 +150,8 @@ describe("JitsiCall", () => {
         let widgetApi: Mocked<ClientWidgetApi>;
 
         beforeEach(async () => {
-            jest.useFakeTimers();
-            jest.setSystemTime(0);
+            vi.useFakeTimers({ shouldAdvanceTime: true });
+            vi.setSystemTime(0);
 
             await JitsiCall.create(room);
             const maybeCall = JitsiCall.get(room);
@@ -167,7 +160,7 @@ describe("JitsiCall", () => {
 
             ({ widget, messaging, widgetApi } = setUpWidget(call));
 
-            mocked(widgetApi.transport).send.mockImplementation(async (action, data): Promise<any> => {
+            vi.mocked(widgetApi.transport).send.mockImplementation(async (action, data): Promise<any> => {
                 if (action === ElementWidgetActions.JoinCall) {
                     widgetApi.emit(
                         `action:${ElementWidgetActions.JoinCall}`,
@@ -206,7 +199,7 @@ describe("JitsiCall", () => {
 
         it("fails to disconnect if the widget returns an error", async () => {
             await connect(call, widgetApi);
-            mocked(widgetApi.transport).send.mockRejectedValue(new Error("never!"));
+            vi.mocked(widgetApi.transport).send.mockRejectedValue(new Error("never!"));
             await expect(call.disconnect()).rejects.toBeDefined();
         });
 
@@ -216,7 +209,7 @@ describe("JitsiCall", () => {
             await connect(call, widgetApi);
             expect(call.connectionState).toBe(ConnectionState.Connected);
 
-            const callback = jest.fn();
+            const callback = vi.fn();
 
             call.on(CallEvent.ConnectionState, callback);
 
@@ -332,7 +325,7 @@ describe("JitsiCall", () => {
             );
 
             client.sendStateEvent.mockClear();
-            jest.advanceTimersByTime(call.STUCK_DEVICE_TIMEOUT_MS);
+            vi.advanceTimersByTime(call.STUCK_DEVICE_TIMEOUT_MS);
             await waitFor(
                 () =>
                     expect(client.sendStateEvent).toHaveBeenLastCalledWith(
@@ -346,7 +339,7 @@ describe("JitsiCall", () => {
         });
 
         it("emits events when connection state changes", async () => {
-            const onConnectionState = jest.fn();
+            const onConnectionState = vi.fn();
             call.on(CallEvent.ConnectionState, onConnectionState);
 
             await connect(call, widgetApi);
@@ -361,7 +354,7 @@ describe("JitsiCall", () => {
         });
 
         it("emits events when participants change", async () => {
-            const onParticipants = jest.fn();
+            const onParticipants = vi.fn();
             call.on(CallEvent.Participants, onParticipants);
 
             await connect(call, widgetApi);
@@ -478,12 +471,12 @@ describe("JitsiCall", () => {
 });
 
 describe("ElementCall", () => {
-    let client: Mocked<MatrixClient>;
+    let client: ReturnType<typeof setUpClientRoomAndStores>["client"];
     let room: Room;
     let alice: RoomMember;
-    let roomSession: Mocked<MatrixRTCSession>;
+    let roomSession: ReturnType<typeof setUpClientRoomAndStores>["roomSession"];
     function setRoomMembers(memberIds: string[]) {
-        jest.spyOn(room, "getJoinedMembers").mockReturnValue(
+        vi.spyOn(room, "getJoinedMembers").mockReturnValue(
             memberIds.map(
                 (id) =>
                     ({
@@ -494,22 +487,22 @@ describe("ElementCall", () => {
     }
 
     beforeEach(() => {
-        jest.useFakeTimers();
+        vi.useFakeTimers({ shouldAdvanceTime: true });
         ({ client, room, alice, roomSession } = setUpClientRoomAndStores());
     });
 
     afterEach(() => {
-        jest.runOnlyPendingTimers();
-        jest.useRealTimers();
+        vi.runOnlyPendingTimers();
+        vi.useRealTimers();
         SdkConfig.reset();
         cleanUpClientRoomAndStores(client, room);
     });
 
     describe("get", () => {
-        let getUserIdForRoomIdSpy: jest.SpyInstance;
+        let getUserIdForRoomIdSpy: MockInstance;
 
         beforeEach(() => {
-            getUserIdForRoomIdSpy = jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId");
+            getUserIdForRoomIdSpy = vi.spyOn(DMRoomMap.shared(), "getUserIdForRoomId");
         });
 
         afterEach(() => {
@@ -546,7 +539,7 @@ describe("ElementCall", () => {
             // There is an existing session created by another user in this room.
             roomSession.memberships.push({} as CallMembership);
             const call = Call.get(room);
-            if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
+            expect(call).toBeInstanceOf(ElementCall);
         });
 
         it("passes font settings through widget URL", async () => {
@@ -726,7 +719,7 @@ describe("ElementCall", () => {
                     project_api_key: "DEADBEEF",
                 },
             });
-            jest.spyOn(PosthogAnalytics.instance, "getAnonymity").mockReturnValue(Anonymity.Pseudonymous);
+            vi.spyOn(PosthogAnalytics.instance, "getAnonymity").mockReturnValue(Anonymity.Pseudonymous);
             client.getAccountData.mockImplementation((eventType: string) => {
                 if (eventType === PosthogAnalytics.ANALYTICS_EVENT_TYPE) {
                     return new MatrixEvent({ content: { id: "123456789987654321", pseudonymousAnalyticsOptIn: true } });
@@ -828,8 +821,8 @@ describe("ElementCall", () => {
         let widgetApi: Mocked<ClientWidgetApi>;
 
         beforeEach(async () => {
-            jest.useFakeTimers();
-            jest.setSystemTime(0);
+            vi.useFakeTimers({ shouldAdvanceTime: true });
+            vi.setSystemTime(0);
 
             ElementCall.create(room);
             const maybeCall = ElementCall.get(room);
@@ -905,7 +898,7 @@ describe("ElementCall", () => {
 
         it("fails to disconnect if the widget returns an error", async () => {
             await connect(call, widgetApi);
-            mocked(widgetApi.transport).send.mockRejectedValue(new Error("never!!1! >:("));
+            vi.mocked(widgetApi.transport).send.mockRejectedValue(new Error("never!!1! >:("));
             await expect(call.disconnect()).rejects.toBeDefined();
         });
 
@@ -951,7 +944,7 @@ describe("ElementCall", () => {
 
         it("acknowledges mute_device widget action", async () => {
             await connect(call, widgetApi);
-            const preventDefault = jest.fn();
+            const preventDefault = vi.fn();
             const mockEv = {
                 preventDefault,
                 detail: { video_enabled: false },
@@ -962,8 +955,8 @@ describe("ElementCall", () => {
         });
 
         it("emits events when connection state changes", async () => {
-            // const wait = jest.spyOn(CallModule, "waitForEvent");
-            const onConnectionState = jest.fn();
+            // const wait = vi.spyOn(CallModule, "waitForEvent");
+            const onConnectionState = vi.fn();
             call.on(CallEvent.ConnectionState, onConnectionState);
 
             await connect(call, widgetApi);
@@ -978,7 +971,7 @@ describe("ElementCall", () => {
         });
 
         it("emits events when participants change", async () => {
-            const onParticipants = jest.fn();
+            const onParticipants = vi.fn();
             call.session.memberships = [{ sender: alice.userId, deviceId: "alices_device" } as CallMembership];
             call.on(CallEvent.Participants, onParticipants);
             call.session.emit(MatrixRTCSessionEvent.MembershipsChanged, [], []);
@@ -989,15 +982,15 @@ describe("ElementCall", () => {
         });
 
         it("emits events when call type changes", async () => {
-            const onCallTypeChanged = jest.fn();
+            const onCallTypeChanged = vi.fn();
             call.on(CallEvent.CallTypeChanged, onCallTypeChanged);
             // Should default to video when unknown
             expect(call.callType).toBe(CallType.Video);
 
             // Change call type to voice
             roomSession.memberships = [
-                { sender: alice.userId, deviceId: "alices_device", callIntent: "audio" } as Mocked<CallMembership>,
-            ];
+                { sender: alice.userId, deviceId: "alices_device", callIntent: "audio" },
+            ] as unknown as typeof roomSession.memberships;
             roomSession.getConsensusCallIntent.mockReturnValue("audio");
             roomSession.emit(MatrixRTCSessionEvent.MembershipsChanged, [], []);
 
@@ -1006,8 +999,8 @@ describe("ElementCall", () => {
 
             // Change call type back to video
             roomSession.memberships = [
-                { sender: alice.userId, deviceId: "alices_device", callIntent: "video" } as Mocked<CallMembership>,
-            ];
+                { sender: alice.userId, deviceId: "alices_device", callIntent: "video" },
+            ] as unknown as typeof roomSession.memberships;
             roomSession.getConsensusCallIntent.mockReturnValue("video");
             roomSession.emit(MatrixRTCSessionEvent.MembershipsChanged, [], []);
 
@@ -1019,7 +1012,7 @@ describe("ElementCall", () => {
 
         it("ends the call immediately if the session ended", async () => {
             await connect(call, widgetApi);
-            const onDestroy = jest.fn();
+            const onDestroy = vi.fn();
             call.on(CallEvent.Destroy, onDestroy);
             await disconnect(call, widgetApi);
             // this will be called automatically
@@ -1034,7 +1027,7 @@ describe("ElementCall", () => {
         });
 
         it("clears widget persistence when destroyed", async () => {
-            const destroyPersistentWidgetSpy = jest.spyOn(ActiveWidgetStore.instance, "destroyPersistentWidget");
+            const destroyPersistentWidgetSpy = vi.spyOn(ActiveWidgetStore.instance, "destroyPersistentWidget");
             call.destroy();
             expect(destroyPersistentWidgetSpy).toHaveBeenCalled();
         });
@@ -1042,9 +1035,9 @@ describe("ElementCall", () => {
         it("the perParticipantE2EE url flag is used in encrypted rooms while respecting the feature_disable_call_per_sender_encryption flag", async () => {
             // We destroy the call created in beforeEach because we test the call creation process.
             call.destroy();
-            const addWidgetSpy = jest.spyOn(WidgetStore.instance, "addVirtualWidget");
+            const addWidgetSpy = vi.spyOn(WidgetStore.instance, "addVirtualWidget");
             // If a room is not encrypted we will never add the perParticipantE2EE flag.
-            const roomSpy = jest.spyOn(room, "hasEncryptionStateEvent").mockReturnValue(true);
+            const roomSpy = vi.spyOn(room, "hasEncryptionStateEvent").mockReturnValue(true);
 
             // should create call with perParticipantE2EE flag
             ElementCall.create(room);
@@ -1065,10 +1058,10 @@ describe("ElementCall", () => {
         let widgetApi: Mocked<ClientWidgetApi>;
 
         beforeEach(async () => {
-            jest.useFakeTimers();
-            jest.setSystemTime(0);
+            vi.useFakeTimers({ shouldAdvanceTime: true });
+            vi.setSystemTime(0);
 
-            jest.spyOn(room, "getType").mockReturnValue(RoomType.UnstableCall);
+            vi.spyOn(room, "getType").mockReturnValue(RoomType.UnstableCall);
 
             ElementCall.create(room);
             const maybeCall = ElementCall.get(room);
@@ -1082,7 +1075,7 @@ describe("ElementCall", () => {
 
         it("doesn't end the call when the last participant leaves", async () => {
             await connect(call, widgetApi);
-            const onDestroy = jest.fn();
+            const onDestroy = vi.fn();
             call.on(CallEvent.Destroy, onDestroy);
             await disconnect(call, widgetApi);
             expect(onDestroy).not.toHaveBeenCalled();
@@ -1106,10 +1099,10 @@ describe("ElementCall", () => {
             setRoomMembers(["@user:example.com", "@user2:example.com", "@user4:example.com"]);
         });
         it("don't sent notify event if there are existing room call members", async () => {
-            jest.spyOn(MatrixRTCSession, "sessionMembershipsForSlot").mockResolvedValue([
-                { application: "m.call", callId: "" } as unknown as CallMembership,
+            vi.spyOn(MatrixRTCSession, "sessionMembershipsForSlot").mockResolvedValue([
+                { application: "m.call", callId: "" } as unknown as Mocked<CallMembership>,
             ]);
-            const sendEventSpy = jest.spyOn(room.client, "sendEvent");
+            const sendEventSpy = vi.spyOn(room.client, "sendEvent");
             ElementCall.create(room);
             expect(sendEventSpy).not.toHaveBeenCalled();
         });
