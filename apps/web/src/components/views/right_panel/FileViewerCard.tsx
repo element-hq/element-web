@@ -41,7 +41,7 @@ export function fileViewerOpenButton({
         label: viewer.options.buttonText,
         icon: viewer.options.buttonIcon,
         onClick: () =>
-            RightPanelStore.instance.setGlobalCard({
+            RightPanelStore.instance.setCard({
                 phase: RightPanelPhases.FileViewer,
                 state: {
                     fileViewer: viewer,
