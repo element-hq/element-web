@@ -152,6 +152,25 @@ export function useImagePacks(opts: UseImagePacksOptions): UseImagePacksResult {
         void refresh();
     }, [refresh]);
 
+    useEffect(() => {
+        if (!client.subscribeToChanges) return;
+
+        let refreshTimer: ReturnType<typeof setTimeout> | undefined;
+        const scheduleRefresh = (): void => {
+            if (refreshTimer !== undefined) return;
+            refreshTimer = setTimeout(() => {
+                refreshTimer = undefined;
+                void refresh();
+            }, 0);
+        };
+        const unsubscribe = client.subscribeToChanges(scheduleRefresh);
+
+        return () => {
+            if (refreshTimer !== undefined) clearTimeout(refreshTimer);
+            unsubscribe();
+        };
+    }, [client, refresh]);
+
     const wrap = useCallback(
         async <T>(fn: () => Promise<T>): Promise<T> => {
             try {

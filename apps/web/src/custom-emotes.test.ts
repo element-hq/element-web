@@ -7,7 +7,14 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { type MatrixClient, type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
+import {
+    ClientEvent,
+    RoomStateEvent,
+    type MatrixClient,
+    type MatrixEvent,
+    type Room,
+    type RoomState,
+} from "matrix-js-sdk/src/matrix";
 import { describe, expect, it, vi } from "vitest";
 import { mkEvent, mkStubRoom, mockStateEventImplementation } from "test-utils";
 
@@ -35,6 +42,7 @@ import {
     resolveCustomEmoteToken,
     reorderRoomImagePacks,
     runAccountDataTransaction,
+    subscribeToImagePackChanges,
     updateRoomImagePackMetadata,
     replaceUserImagePack,
     upsertRoomPackEmote,
@@ -261,6 +269,38 @@ describe("custom emotes", () => {
                 sendToken: ":wave/edited-1:",
             },
         ]);
+    });
+});
+
+describe("image pack change subscriptions", () => {
+    it("filters unrelated Matrix cache events", () => {
+        const client = {
+            on: vi.fn(),
+            removeListener: vi.fn(),
+        } as unknown as MatrixClient;
+        const listener = vi.fn();
+        const unsubscribe = subscribeToImagePackChanges(client, listener, "!room:example.org");
+        const accountDataListener = vi
+            .mocked(client.on)
+            .mock.calls.find(([event]) => event === ClientEvent.AccountData)![1] as (event: MatrixEvent) => void;
+        const roomStateListener = vi
+            .mocked(client.on)
+            .mock.calls.find(([event]) => event === RoomStateEvent.Events)![1] as (
+            event: MatrixEvent,
+            state: RoomState,
+        ) => void;
+
+        accountDataListener(accountDataEvent("m.other", {}));
+        roomStateListener(packEvent("!other:example.org", "pack", {}), { roomId: "!other:example.org" } as RoomState);
+        expect(listener).not.toHaveBeenCalled();
+
+        accountDataListener(accountDataEvent(LEGACY_USER_IMAGE_PACK_EVENT_TYPE, {}));
+        roomStateListener(packEvent("!room:example.org", "pack", {}), { roomId: "!room:example.org" } as RoomState);
+        expect(listener).toHaveBeenCalledTimes(2);
+
+        unsubscribe();
+        expect(client.removeListener).toHaveBeenCalledWith(ClientEvent.AccountData, accountDataListener);
+        expect(client.removeListener).toHaveBeenCalledWith(RoomStateEvent.Events, roomStateListener);
     });
 });
 

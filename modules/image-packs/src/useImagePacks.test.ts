@@ -15,6 +15,7 @@ import type { PackStoreClient, PackWriters } from "./store.ts";
 import type { ResolverClient, ResolverRoom } from "./resolver.ts";
 import {
     IMAGE_PACK_EVENT_TYPE,
+    LEGACY_USER_IMAGE_PACK_EVENT_TYPE,
     type DiscoverySource,
     type EmoteDefinition,
     type ImagePackDefinition,
@@ -180,5 +181,38 @@ describe("useImagePacks", () => {
             await result.current.refresh();
         });
         expect(result.current.error).toBe("read failed");
+    });
+
+    it("refreshes when the host reports a Matrix cache update", async () => {
+        const client = mockClient();
+        let accountData: Record<string, unknown> | null = null;
+        let notifyChange: (() => void) | undefined;
+        const unsubscribe = vi.fn();
+        const accountDataEvent = { getContent: () => accountData };
+        (client.getAccountData as ReturnType<typeof vi.fn>).mockImplementation((eventType: string) =>
+            eventType === LEGACY_USER_IMAGE_PACK_EVENT_TYPE && accountData ? accountDataEvent : null,
+        );
+        client.subscribeToChanges = (listener) => {
+            notifyChange = listener;
+            return unsubscribe;
+        };
+
+        const rendered = renderHook(() => useImagePacks({ client, writers: mockWriters() }));
+        await waitFor(() => expect(rendered.result.current.loading).toBe(false));
+        expect(rendered.result.current.packs).toEqual([]);
+
+        accountData = {
+            images: { wave: { url: emote.url } },
+            pack: { display_name: "Updated" },
+        };
+        act(() => notifyChange?.());
+        await waitFor(() =>
+            expect(rendered.result.current.packs).toMatchObject([
+                { kind: "personal", displayName: "Updated", pack: { images: { wave: { url: emote.url } } } },
+            ]),
+        );
+
+        rendered.unmount();
+        expect(unsubscribe).toHaveBeenCalledOnce();
     });
 });

@@ -48,6 +48,8 @@ export interface PackStoreClient {
     getAccountDataFromServer?(eventType: string): Promise<unknown | null>;
     setAccountData(eventType: string, content: unknown): Promise<unknown>;
     runAccountDataTransaction?<T>(callback: AccountDataTransactionCallback<T>): Promise<T>;
+    /** Lets the settings UI react when sync updates the cache after a write or in another session. */
+    subscribeToChanges?(listener: () => void): () => void;
 }
 
 export interface RoomPackDraft {

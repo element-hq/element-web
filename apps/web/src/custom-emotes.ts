@@ -6,7 +6,15 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import escapeHtml from "escape-html";
-import { KnownMembership, type MatrixClient, type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
+import {
+    ClientEvent,
+    KnownMembership,
+    RoomStateEvent,
+    type MatrixClient,
+    type MatrixEvent,
+    type Room,
+    type RoomState,
+} from "matrix-js-sdk/src/matrix";
 import { type RoomMessageEventContent, type RoomMessageTextEventContent } from "matrix-js-sdk/src/types";
 
 import type {
@@ -34,6 +42,41 @@ interface AccountDataTransactionState {
 }
 
 const accountDataTransactions = new WeakMap<MatrixClient, AccountDataTransactionState>();
+
+const IMAGE_PACK_ACCOUNT_DATA_EVENT_TYPES = new Set([
+    IMAGE_PACK_ROOMS_EVENT_TYPE,
+    LEGACY_IMAGE_PACK_ROOMS_EVENT_TYPE,
+    LEGACY_USER_IMAGE_PACK_EVENT_TYPE,
+    ROOM_IMAGE_PACK_ORDER_EVENT_TYPE,
+    "org.element.image_pack_servers",
+    "org.element.image_pack_servers.unstable",
+    "im.ponies.image_pack_servers",
+    "org.matrix.msc2654.image_pack_servers",
+]);
+const IMAGE_PACK_ROOM_STATE_EVENT_TYPES = new Set([IMAGE_PACK_EVENT_TYPE, LEGACY_IMAGE_PACK_EVENT_TYPE]);
+
+/** Subscribe settings surfaces to Matrix cache updates that can change image packs. */
+export function subscribeToImagePackChanges(client: MatrixClient, listener: () => void, roomId?: string): () => void {
+    const onAccountData = (event: MatrixEvent): void => {
+        if (IMAGE_PACK_ACCOUNT_DATA_EVENT_TYPES.has(event.getType())) listener();
+    };
+    const onRoomState = (event: MatrixEvent, state: RoomState): void => {
+        if (
+            (roomId === undefined || state.roomId === roomId) &&
+            IMAGE_PACK_ROOM_STATE_EVENT_TYPES.has(event.getType())
+        ) {
+            listener();
+        }
+    };
+
+    client.on(ClientEvent.AccountData, onAccountData);
+    client.on(RoomStateEvent.Events, onRoomState);
+
+    return () => {
+        client.removeListener(ClientEvent.AccountData, onAccountData);
+        client.removeListener(RoomStateEvent.Events, onRoomState);
+    };
+}
 
 /** Serialize read-modify-write account-data operations for one Matrix client. */
 export async function runAccountDataTransaction<T>(

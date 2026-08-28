@@ -30,7 +30,12 @@ import {
     useImagePacks,
     type UseImagePacksOptions,
 } from "@element-hq/element-web-module-image-packs";
-import { createWritersFromClient, runAccountDataTransaction, uploadImageFromClient } from "../../../custom-emotes";
+import {
+    createWritersFromClient,
+    runAccountDataTransaction,
+    subscribeToImagePackChanges,
+    uploadImageFromClient,
+} from "../../../custom-emotes";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { ModuleApi } from "../../../modules/Api";
 import { _t, _td } from "../../../languageHandler";
@@ -132,6 +137,7 @@ function ImagePacksUserSettingsTab({ sdkContext }: { sdkContext: SDKContextClass
             },
             setAccountData: (type: string, content: unknown) => cli.setAccountData(type as never, content as never),
             runAccountDataTransaction: (callback) => runAccountDataTransaction(cli, callback),
+            subscribeToChanges: (listener) => subscribeToImagePackChanges(cli, listener),
         },
         getImageUrl: (mxcUrl, width, height) =>
             mediaFromMxc(mxcUrl, cli).getThumbnailOfSourceHttp(width, height, "scale") ?? undefined,
