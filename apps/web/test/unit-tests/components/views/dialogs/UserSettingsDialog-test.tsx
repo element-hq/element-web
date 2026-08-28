@@ -30,6 +30,15 @@ import { TestSDKContext } from "../../../TestSDKContext.ts";
 import { type FeatureSettingKey } from "../../../../../src/settings/Settings.tsx";
 import { makeDelegatedAuthMetadata } from "../../../../test-utils/auth.ts";
 
+jest.mock("@element-hq/element-web-module-image-packs", () => {
+    const React = jest.requireActual<typeof import("react")>("react");
+    return {
+        ImagePacksSettings: ({ roomId }: { roomId?: string }) =>
+            React.createElement("div", { "data-testid": "image-packs-tab" }, roomId ?? "user"),
+        useImagePacks: jest.fn(() => ({})),
+    };
+});
+
 mockPlatformPeg({
     supportsSpellCheckSettings: jest.fn().mockReturnValue(false),
     getAppVersion: jest.fn().mockResolvedValue("1"),
@@ -113,6 +122,13 @@ describe("<UserSettingsDialog />", () => {
         });
         const { container } = render(getComponent());
         expect(container.querySelectorAll(".mx_TabbedView_tabLabel")).toMatchSnapshot();
+    });
+
+    it("renders image packs tab", () => {
+        const { container } = render(getComponent({ initialTabId: UserTab.ImagePacks }));
+
+        expect(getActiveTabLabel(container)).toEqual("Image packs");
+        expect(screen.getByTestId("image-packs-tab")).toBeInTheDocument();
     });
 
     it("renders ignored users tab when feature_mjolnir is enabled", () => {

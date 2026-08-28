@@ -181,6 +181,7 @@ export type CustomComposerPreviewRenderFunction = ExtendablePropsRenderFunction<
 
 // @alpha
 export interface CustomisationsApi {
+    registerImagePacksMount?(mount: (options: unknown) => ReactNode): void;
     registerShouldShowComponent(fn: (this: void, component: UIComponent) => boolean | void): void;
 }
 

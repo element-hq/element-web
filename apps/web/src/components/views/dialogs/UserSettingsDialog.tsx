@@ -23,10 +23,19 @@ import LockIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock";
 import LabsIcon from "@vector-im/compound-design-tokens/assets/web/icons/labs";
 import BlockIcon from "@vector-im/compound-design-tokens/assets/web/icons/block";
 import HelpIcon from "@vector-im/compound-design-tokens/assets/web/icons/help";
+import ImagePackIcon from "@vector-im/compound-design-tokens/assets/web/icons/image";
 import { ToastContext, useActiveToast } from "@element-hq/web-shared-components";
-
-import TabbedView, { Tab, useActiveTabWithDefault } from "../../structures/TabbedView";
+import {
+    ImagePacksSettings,
+    useImagePacks,
+    type UseImagePacksOptions,
+} from "@element-hq/element-web-module-image-packs";
+import { createWritersFromClient, runAccountDataTransaction, uploadImageFromClient } from "../../../custom-emotes";
+import { mediaFromMxc } from "../../../customisations/Media";
+import { ModuleApi } from "../../../modules/Api";
 import { _t, _td } from "../../../languageHandler";
+import SettingsTab from "../settings/tabs/SettingsTab";
+import TabbedView, { Tab, useActiveTabWithDefault } from "../../structures/TabbedView";
 import AccountUserSettingsTab from "../settings/tabs/user/AccountUserSettingsTab";
 import SettingsStore from "../../../settings/SettingsStore";
 import LabsUserSettingsTab, { showLabsFlags } from "../settings/tabs/user/LabsUserSettingsTab";
@@ -98,7 +107,46 @@ function titleForTabID(tabId: UserTab): React.ReactNode {
             return _t("settings|labs_mjolnir|dialog_title", undefined, subs);
         case UserTab.Help:
             return _t("setting|help_about|dialog_title", undefined, subs);
+        case UserTab.ImagePacks:
+            return _t("settings|image_packs|tab_title", undefined, subs);
     }
+}
+
+/**
+ * User-settings tab that hosts the image-packs module. The module exports
+ * the body component and the data hook; we wire the live `MatrixClient` to
+ * the module's `PackWriters` contract here via `createWritersFromClient`
+ * (defined in `custom-emotes.ts`).
+ */
+function ImagePacksUserSettingsTab({ sdkContext }: { sdkContext: SDKContextClass }): React.ReactElement {
+    // Tab registration in `getTabs` only renders this when a client is
+    // available, so we can safely assert the client here.
+    const cli = sdkContext.client!;
+    const options: UseImagePacksOptions = {
+        client: {
+            getUserId: () => cli.getUserId(),
+            getRoom: (id: string) => cli.getRoom(id),
+            getAccountData: (type: string) => {
+                const ev = cli.getAccountData(type as never);
+                return ev ? { getContent: () => ev.getContent() } : null;
+            },
+            setAccountData: (type: string, content: unknown) => cli.setAccountData(type as never, content as never),
+            runAccountDataTransaction: (callback) => runAccountDataTransaction(cli, callback),
+        },
+        getImageUrl: (mxcUrl, width, height) =>
+            mediaFromMxc(mxcUrl, cli).getThumbnailOfSourceHttp(width, height, "scale") ?? undefined,
+        uploadImage: (file) => uploadImageFromClient(cli, file),
+        writers: createWritersFromClient(cli),
+    };
+    const mount = ModuleApi.instance.customisations.imagePacksMount;
+    return (
+        <SettingsTab>{mount ? <>{mount(options)}</> : <DirectImagePacksUserSettings options={options} />}</SettingsTab>
+    );
+}
+
+function DirectImagePacksUserSettings({ options }: { options: UseImagePacksOptions }): React.ReactElement {
+    const hook = useImagePacks(options);
+    return <ImagePacksSettings api={hook} />;
 }
 
 export default function UserSettingsDialog(props: IProps): JSX.Element {
@@ -195,7 +243,17 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                 "UserSettingsSidebar",
             ),
         );
-
+        if (props.sdkContext.client) {
+            tabs.push(
+                new Tab(
+                    UserTab.ImagePacks,
+                    _td("settings|image_packs|tab_title"),
+                    <ImagePackIcon />,
+                    <ImagePacksUserSettingsTab sdkContext={props.sdkContext} />,
+                    undefined,
+                ),
+            );
+        }
         if (voipEnabled) {
             tabs.push(
                 new Tab(

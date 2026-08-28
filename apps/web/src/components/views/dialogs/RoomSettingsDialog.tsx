@@ -10,6 +10,14 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { RoomEvent, type Room, RoomStateEvent, type MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
+import ImagePackIcon from "@vector-im/compound-design-tokens/assets/web/icons/image";
+import {
+    ImagePacksSettings,
+    useImagePacks,
+    type UseImagePacksOptions,
+} from "@element-hq/element-web-module-image-packs";
+import { createWritersFromClient, runAccountDataTransaction, uploadImageFromClient } from "../../../custom-emotes";
+import { mediaFromMxc } from "../../../customisations/Media";
 import {
     AdminIcon,
     GroupIcon,
@@ -46,6 +54,7 @@ import { SDKContext } from "../../../contexts/SDKContext";
 import { type SDKContextClass } from "../../../contexts/SDKContextClass";
 import { RoomSettingsTab } from "./RoomSettingsDialog-tab.ts";
 import SdkConfig from "../../../SdkConfig";
+import { ModuleApi } from "../../../modules/Api";
 
 interface IProps {
     roomId: string;
@@ -57,6 +66,49 @@ interface IProps {
 interface IState {
     room: Room;
     activeTabId: RoomSettingsTab;
+}
+
+/**
+ * Room-scoped image packs section. The module exports the body component
+ * and the data hook; we wire the live `MatrixClient` to the `PackWriters`
+ * contract here via `createWritersFromClient` (defined in `custom-emotes.ts`).
+ */
+function ImagePacksRoomSettingsTab({ room }: { room: Room }): React.ReactElement {
+    const cli = MatrixClientPeg.safeGet();
+    const options: UseImagePacksOptions = {
+        client: {
+            getUserId: () => cli.getUserId(),
+            getRoom: (id: string) => cli.getRoom(id),
+            getAccountData: (type: string) => {
+                const ev = cli.getAccountData(type as never);
+                return ev ? { getContent: () => ev.getContent() } : null;
+            },
+            setAccountData: (type: string, content: unknown) => cli.setAccountData(type as never, content as never),
+            runAccountDataTransaction: (callback) => runAccountDataTransaction(cli, callback),
+        },
+        getImageUrl: (mxcUrl, width, height) =>
+            mediaFromMxc(mxcUrl, cli).getThumbnailOfSourceHttp(width, height, "scale") ?? undefined,
+        uploadImage: (file) => uploadImageFromClient(cli, file),
+        writers: createWritersFromClient(cli),
+        room,
+    };
+    const mount = ModuleApi.instance.customisations.imagePacksMount;
+    return mount ? (
+        <>{mount({ ...options, roomId: room.roomId })}</>
+    ) : (
+        <DirectImagePacksRoomSettings options={options} roomId={room.roomId} />
+    );
+}
+
+function DirectImagePacksRoomSettings({
+    options,
+    roomId,
+}: {
+    options: UseImagePacksOptions;
+    roomId: string;
+}): React.ReactElement {
+    const hook = useImagePacks(options);
+    return <ImagePacksSettings api={hook} roomId={roomId} />;
 }
 
 class RoomSettingsDialog extends React.Component<IProps, IState> {
@@ -207,6 +259,15 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
                 _td("right_panel|polls_button"),
                 <PollsIcon />,
                 <PollHistoryTab room={this.state.room} onFinished={() => this.props.onFinished(true)} />,
+            ),
+        );
+
+        tabs.push(
+            new Tab(
+                RoomSettingsTab.ImagePacks,
+                _td("settings|image_packs|tab_title"),
+                <ImagePackIcon />,
+                <ImagePacksRoomSettingsTab room={this.state.room} />,
             ),
         );
 

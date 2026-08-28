@@ -5,6 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
+import type { ReactNode } from "react";
+
 /**
  * Enum of UI components which can have their behaviour tweaked
  * @alpha
@@ -62,4 +64,7 @@ export interface CustomisationsApi {
      *   If undefined will defer to next callback, ultimately falling through to `true` if none return false.
      */
     registerShouldShowComponent(fn: (this: void, component: UIComponent) => boolean | void): void;
+
+    /** Register the image-pack settings renderer used by Element Web. */
+    registerImagePacksMount?(mount: (options: unknown) => ReactNode): void;
 }

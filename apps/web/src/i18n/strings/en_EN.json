@@ -2643,6 +2643,9 @@
             "unable_to_load_msisdns": "Unable to load phone numbers",
             "username": "Username"
         },
+        "image_packs": {
+            "tab_title": "Image packs"
+        },
         "inline_url_previews_default": "Enable previews",
         "inline_url_previews_encrypted": "Enable previews in encrypted rooms",
         "insert_trailing_colon_mentions": "Insert a trailing colon after user mentions at the start of a message",

@@ -26,6 +26,15 @@ import { UIFeature } from "../../../../../src/settings/UIFeature";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { TestSDKContext } from "../../../TestSDKContext.ts";
 
+jest.mock("@element-hq/element-web-module-image-packs", () => {
+    const React = jest.requireActual<typeof import("react")>("react");
+    return {
+        ImagePacksSettings: ({ roomId }: { roomId?: string }) =>
+            React.createElement("div", { "data-testid": "image-packs-tab" }, roomId ?? "user"),
+        useImagePacks: jest.fn(() => ({})),
+    };
+});
+
 describe("<RoomSettingsDialog />", () => {
     const userId = "@alice:server.org";
     const mockClient = getMockClientWithEventEmitter({
@@ -94,6 +103,14 @@ describe("<RoomSettingsDialog />", () => {
         it("renders default tabs correctly", () => {
             const { container } = getComponent();
             expect(container.querySelectorAll(".mx_TabbedView_tabLabel")).toMatchSnapshot();
+        });
+
+        it("renders image packs tab", () => {
+            getComponent();
+
+            fireEvent.click(screen.getByText("Image packs"));
+
+            expect(screen.getByTestId("image-packs-tab")).toBeInTheDocument();
         });
 
         describe("people settings tab", () => {

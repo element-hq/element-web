@@ -207,6 +207,36 @@ NodeList [
     </span>
   </li>,
   <li
+    aria-controls="mx_tabpanel_USER_IMAGE_PACKS_TAB"
+    aria-labelledby="mx_tabpanel_USER_IMAGE_PACKS_TAB_label"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel"
+    data-testid="settings-tab-USER_IMAGE_PACKS_TAB"
+    role="tab"
+    tabindex="-1"
+  >
+    <svg
+      fill="currentColor"
+      height="1em"
+      viewBox="0 0 24 24"
+      width="1em"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M17 9a2 2 0 1 1-4 0 2 2 0 0 1 4 0"
+      />
+      <path
+        d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm14 2v14H5v-3.172l4-4L16.172 19H19l-8.586-8.586a2 2 0 0 0-2.828 0L5 13V5z"
+      />
+    </svg>
+    <span
+      class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_USER_IMAGE_PACKS_TAB_label"
+    >
+      Image packs
+    </span>
+  </li>,
+  <li
     aria-controls="mx_tabpanel_USER_SECURITY_TAB"
     aria-labelledby="mx_tabpanel_USER_SECURITY_TAB_label"
     aria-selected="false"

@@ -18,4 +18,5 @@ export const enum RoomSettingsTab {
     Bridges = "ROOM_BRIDGES_TAB",
     Advanced = "ROOM_ADVANCED_TAB",
     PollHistory = "ROOM_POLL_HISTORY_TAB",
+    ImagePacks = "ROOM_IMAGE_PACKS_TAB",
 }

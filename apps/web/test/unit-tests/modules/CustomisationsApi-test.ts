@@ -21,4 +21,10 @@ describe("CustomisationsApi", () => {
         expect(api.shouldShowComponent(UIComponent.CreateRooms)).toBe(true);
         expect(shouldShowComponent).toHaveBeenCalledWith("UIComponent.roomCreation");
     });
+
+    it("should expose the registered image-pack mount", () => {
+        const mount = jest.fn();
+        api.registerImagePacksMount(mount);
+        expect(api.imagePacksMount).toBe(mount);
+    });
 });

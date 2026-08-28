@@ -6,9 +6,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { UIComponent, CustomisationsApi as ICustomisationsApi } from "@element-hq/element-web-module-api";
+import type { ReactNode } from "react";
 
 export class CustomisationsApi implements ICustomisationsApi {
     private shouldShowComponentFunctions = new Set<(component: UIComponent) => boolean | void>();
+    private _imagePacksMount?: (options: unknown) => ReactNode;
 
     /**
      * Method to register a callback which can affect whether a given component is drawn or not.
@@ -18,6 +20,14 @@ export class CustomisationsApi implements ICustomisationsApi {
      */
     public registerShouldShowComponent(fn: (this: void, component: UIComponent) => boolean | void): void {
         this.shouldShowComponentFunctions.add(fn);
+    }
+
+    public registerImagePacksMount(mount: (options: unknown) => ReactNode): void {
+        this._imagePacksMount = mount;
+    }
+
+    public get imagePacksMount(): ((options: unknown) => ReactNode) | undefined {
+        return this._imagePacksMount;
     }
 
     /**
