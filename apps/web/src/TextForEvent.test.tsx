@@ -6,6 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import {
     EventType,
     HistoryVisibility,
@@ -17,23 +19,25 @@ import {
     type RoomMember,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { render } from "jest-matrix-react";
+import { render } from "test-utils-rtl";
 import { type ReactElement } from "react";
-import { type Mocked, mocked } from "jest-mock";
+import { describe, it, expect, beforeAll, beforeEach, afterEach, vi, type Mocked } from "vitest";
 import React from "react";
 
-import { hasText, textForEvent } from "../../src/TextForEvent";
-import SettingsStore from "../../src/settings/SettingsStore";
-import { createTestClient, stubClient } from "../test-utils";
-import { MatrixClientPeg } from "../../src/MatrixClientPeg";
-import UserIdentifierCustomisations from "../../src/customisations/UserIdentifier";
-import { getSenderName } from "../../src/utils/event/getSenderName";
-import { ElementCallEventType } from "../../src/call-types";
-import Spoiler from "../../src/components/views/elements/Spoiler";
+import { createTestClient, stubClient } from "test-utils";
+import { hasText, textForEvent } from "./TextForEvent";
+import SettingsStore from "./settings/SettingsStore";
+import { MatrixClientPeg } from "./MatrixClientPeg";
+import UserIdentifierCustomisations from "./customisations/UserIdentifier";
+import { getSenderName } from "./utils/event/getSenderName";
+import { ElementCallEventType } from "./call-types";
+import Spoiler from "./components/views/elements/Spoiler";
 
-jest.mock("../../src/settings/SettingsStore");
-jest.mock("../../src/customisations/UserIdentifier", () => ({
-    getDisplayUserIdentifier: jest.fn().mockImplementation((userId) => userId),
+vi.mock("./settings/SettingsStore");
+vi.mock("./customisations/UserIdentifier", () => ({
+    default: {
+        getDisplayUserIdentifier: vi.fn().mockImplementation((userId) => userId),
+    },
 }));
 
 function mockPinnedEvent(pinnedMessageIds?: string[], prevPinnedMessageIds?: string[]): MatrixEvent {
@@ -142,7 +146,7 @@ describe("TextForEvent", () => {
     describe("textForPowerEvent()", () => {
         let mockClient: Mocked<MatrixClient>;
         const mockRoom = {
-            getMember: jest.fn(),
+            getMember: vi.fn(),
         } as unknown as Mocked<Room>;
 
         const userA = {
@@ -194,11 +198,11 @@ describe("TextForEvent", () => {
             mockRoom.getMember
                 .mockClear()
                 .mockImplementation((userId) => [userA, userB, userC].find((u) => u.userId === userId) || null);
-            (SettingsStore.getValue as jest.Mock).mockReturnValue(true);
+            vi.mocked(SettingsStore.getValue).mockReturnValue(true);
         });
 
         beforeEach(() => {
-            (UserIdentifierCustomisations.getDisplayUserIdentifier as jest.Mock)
+            vi.mocked(UserIdentifierCustomisations.getDisplayUserIdentifier)
                 .mockClear()
                 .mockImplementation((userId) => userId);
         });
@@ -462,20 +466,20 @@ describe("TextForEvent", () => {
             stubClient();
             mockClient = MatrixClientPeg.safeGet();
 
-            mocked(mockClient.getRoom).mockReturnValue({
+            vi.mocked(mockClient.getRoom).mockReturnValue({
                 name: "Test room",
             } as unknown as Room);
 
             callEvent = {
-                getRoomId: jest.fn(),
-                getType: jest.fn(),
-                isState: jest.fn().mockReturnValue(true),
+                getRoomId: vi.fn(),
+                getType: vi.fn(),
+                isState: vi.fn().mockReturnValue(true),
             } as unknown as MatrixEvent;
         });
 
         describe.each(ElementCallEventType.names)("eventType=%s", (eventType: string) => {
             beforeEach(() => {
-                mocked(callEvent).getType.mockReturnValue(eventType);
+                vi.mocked(callEvent).getType.mockReturnValue(eventType);
             });
 
             it("returns correct message for call event when supported", () => {
@@ -483,7 +487,7 @@ describe("TextForEvent", () => {
             });
 
             it("returns correct message for call event when not supported", () => {
-                mocked(mockClient).supportsVoip.mockReturnValue(false);
+                vi.mocked(mockClient).supportsVoip.mockReturnValue(false);
 
                 expect(textForEvent(callEvent, mockClient)).toEqual(
                     "Video call started in Test room. (not supported by this browser)",
@@ -500,36 +504,36 @@ describe("TextForEvent", () => {
             stubClient();
             mockClient = MatrixClientPeg.safeGet();
 
-            mocked(mockClient.supportsVoip).mockReturnValue(true);
+            vi.mocked(mockClient.supportsVoip).mockReturnValue(true);
 
             callInviteEvent = {
-                getSender: jest.fn().mockReturnValue("@alice:matrix.org"),
+                getSender: vi.fn().mockReturnValue("@alice:matrix.org"),
                 sender: { name: "Alice" },
-                getContent: jest.fn().mockReturnValue({}),
-                getType: jest.fn().mockReturnValue(EventType.CallInvite),
-                isState: jest.fn().mockReturnValue(false),
+                getContent: vi.fn().mockReturnValue({}),
+                getType: vi.fn().mockReturnValue(EventType.CallInvite),
+                isState: vi.fn().mockReturnValue(false),
             } as unknown as MatrixEvent;
         });
 
         it("returns correct message for legacy voice call invite", () => {
-            mocked(callInviteEvent).getContent.mockReturnValue({ offer: { sdp: "m=audio" } });
+            vi.mocked(callInviteEvent).getContent.mockReturnValue({ offer: { sdp: "m=audio" } });
             expect(textForEvent(callInviteEvent, mockClient)).toEqual("Alice placed a voice call.");
         });
 
         it("returns correct message for legacy video call invite", () => {
-            mocked(callInviteEvent).getContent.mockReturnValue({ offer: { sdp: "m=video" } });
+            vi.mocked(callInviteEvent).getContent.mockReturnValue({ offer: { sdp: "m=video" } });
             expect(textForEvent(callInviteEvent, mockClient)).toEqual("Alice placed a video call.");
         });
 
         it("returns correct message for MSC4075 voice call", () => {
-            mocked(callInviteEvent).getType.mockReturnValue(EventType.RTCNotification);
-            mocked(callInviteEvent).getContent.mockReturnValue({ "m.call.intent": "audio" });
+            vi.mocked(callInviteEvent).getType.mockReturnValue(EventType.RTCNotification);
+            vi.mocked(callInviteEvent).getContent.mockReturnValue({ "m.call.intent": "audio" });
             expect(textForEvent(callInviteEvent, mockClient)).toEqual("Alice placed a voice call.");
         });
 
         it("returns correct message for MSC4075 video call", () => {
-            mocked(callInviteEvent).getType.mockReturnValue(EventType.RTCNotification);
-            mocked(callInviteEvent).getContent.mockReturnValue({ "m.call.intent": "video" });
+            vi.mocked(callInviteEvent).getType.mockReturnValue(EventType.RTCNotification);
+            vi.mocked(callInviteEvent).getContent.mockReturnValue({ "m.call.intent": "video" });
             expect(textForEvent(callInviteEvent, mockClient)).toEqual("Alice placed a video call.");
         });
     });
@@ -577,11 +581,11 @@ describe("TextForEvent", () => {
                 });
 
             beforeEach(() => {
-                (SettingsStore.getValue as jest.Mock).mockImplementation((name) => name === "feature_ask_to_join");
+                vi.mocked(SettingsStore.getValue).mockImplementation((name) => name === "feature_ask_to_join");
             });
 
             afterEach(() => {
-                (SettingsStore.getValue as jest.Mock).mockReturnValue(true);
+                vi.mocked(SettingsStore.getValue).mockReturnValue(true);
             });
 
             it("should handle knocks", () => {
@@ -640,7 +644,7 @@ describe("TextForEvent", () => {
             });
 
             it("should fall back to the plain invite copy when the ask to join labs flag is disabled", () => {
-                (SettingsStore.getValue as jest.Mock).mockReturnValue(false);
+                vi.mocked(SettingsStore.getValue).mockReturnValue(false);
                 expect(
                     textForEvent(
                         new MatrixEvent({
@@ -656,7 +660,7 @@ describe("TextForEvent", () => {
             });
 
             it("should hide knocks when the ask to join labs flag is disabled", () => {
-                (SettingsStore.getValue as jest.Mock).mockReturnValue(false);
+                vi.mocked(SettingsStore.getValue).mockReturnValue(false);
                 expect(textForEvent(knockEvent(), mockClient)).toEqual("");
             });
         });
@@ -705,8 +709,8 @@ describe("TextForEvent", () => {
         });
 
         it("shows single-user bans with a spoiler on display name", () => {
-            mocked(mockClient.getRoom).mockReturnValue({
-                getMember: jest.fn().mockImplementation((userId) => {
+            vi.mocked(mockClient.getRoom).mockReturnValue({
+                getMember: vi.fn().mockImplementation((userId) => {
                     return { rawDisplayName: userId === "@admin:example.com" ? "Admin" : "Bad User" };
                 }),
             } as unknown as Mocked<Room>);
@@ -719,8 +723,8 @@ describe("TextForEvent", () => {
         });
 
         it("hides user name for single-user bans with reason when JSX is not allowed", () => {
-            mocked(mockClient.getRoom).mockReturnValue({
-                getMember: jest.fn().mockImplementation((userId) => {
+            vi.mocked(mockClient.getRoom).mockReturnValue({
+                getMember: vi.fn().mockImplementation((userId) => {
                     return { rawDisplayName: userId === "@admin:example.com" ? "Admin" : "Bad User" };
                 }),
             } as unknown as Mocked<Room>);
@@ -729,8 +733,8 @@ describe("TextForEvent", () => {
         });
 
         it("shows single-user bans with a spoiler on user ID", () => {
-            mocked(mockClient.getRoom).mockReturnValue({
-                getMember: jest.fn().mockReturnValue({ rawDisplayName: undefined }),
+            vi.mocked(mockClient.getRoom).mockReturnValue({
+                getMember: vi.fn().mockReturnValue({ rawDisplayName: undefined }),
             } as unknown as Mocked<Room>);
 
             expect(textForEvent(banEvent(), mockClient, true)).toEqual(
@@ -741,8 +745,8 @@ describe("TextForEvent", () => {
         });
 
         it("hides user name for single-user bans when JSX is not allowed", () => {
-            mocked(mockClient.getRoom).mockReturnValue({
-                getMember: jest.fn().mockReturnValue({ rawDisplayName: undefined }),
+            vi.mocked(mockClient.getRoom).mockReturnValue({
+                getMember: vi.fn().mockReturnValue({ rawDisplayName: undefined }),
             } as unknown as Mocked<Room>);
 
             expect(textForEvent(banEvent(), mockClient)).toEqual("@admin:example.com banned a user");

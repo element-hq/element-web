@@ -6,15 +6,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactElement } from "react";
-import { render, screen } from "jest-matrix-react";
-import parse from "html-react-parser";
+// @vitest-environment happy-dom
 
-import { bodyToHtml, bodyToNode, formatEmojis, sanitizedHtmlNode, topicToHtml } from "../../src/HtmlUtils";
-import SettingsStore from "../../src/settings/SettingsStore";
-import { getMockClientWithEventEmitter } from "../test-utils";
-import { SettingLevel } from "../../src/settings/SettingLevel";
-import SdkConfig from "../../src/SdkConfig";
+import React, { type ReactElement } from "react";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { render, screen } from "test-utils-rtl";
+import parse from "html-react-parser";
+import { getMockClientWithEventEmitter } from "test-utils";
+
+import { bodyToHtml, bodyToNode, formatEmojis, sanitizedHtmlNode, topicToHtml } from "./HtmlUtils";
+import SettingsStore from "./settings/SettingsStore";
+import { SettingLevel } from "./settings/SettingLevel";
+import SdkConfig from "./SdkConfig";
 
 describe("topicToHtml", () => {
     function getContent() {
@@ -286,7 +289,7 @@ describe("bodyToNode", () => {
 
     it.each([[true], [false]])("should handle inline media when mediaIsVisible is %s", (mediaIsVisible) => {
         const cli = getMockClientWithEventEmitter({
-            mxcUrlToHttp: jest.fn().mockReturnValue("https://example.org/img"),
+            mxcUrlToHttp: vi.fn().mockReturnValue("https://example.org/img"),
         });
         const { className, formattedBody } = bodyToNode(
             {
@@ -316,7 +319,7 @@ describe("bodyToNode", () => {
     });
 
     afterEach(() => {
-        jest.resetAllMocks();
+        vi.resetAllMocks();
     });
 });
 

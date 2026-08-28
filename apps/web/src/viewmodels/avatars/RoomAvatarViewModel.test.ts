@@ -5,19 +5,22 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+// @vitest-environment happy-dom
+
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { type MatrixClient, RoomEvent, RoomMember } from "matrix-js-sdk/src/matrix";
 import { act } from "react";
+import { createTestClient, mkStubRoom } from "test-utils";
 
-import { RoomAvatarViewModel } from "../../../src/viewmodels/avatars/RoomAvatarViewModel";
-import { LocalRoom } from "../../../src/models/LocalRoom";
-import { createTestClient, mkStubRoom } from "../../test-utils";
-import DMRoomMap from "../../../src/utils/DMRoomMap";
-import { DirectoryMember } from "../../../src/utils/direct-messages";
+import { RoomAvatarViewModel } from "./RoomAvatarViewModel";
+import { LocalRoom } from "../../models/LocalRoom";
+import DMRoomMap from "../../utils/DMRoomMap";
+import { DirectoryMember } from "../../utils/direct-messages";
 
-jest.mock("../../../src/customisations/Media", () => ({
-    mediaFromMxc: jest.fn(() => ({
+vi.mock("../../customisations/Media", () => ({
+    mediaFromMxc: vi.fn(() => ({
         srcHttp: "https://example.org/avatar.png",
-        getThumbnailOfSourceHttp: jest.fn(() => "https://example.org/avatar-thumbnail.png"),
+        getThumbnailOfSourceHttp: vi.fn(() => "https://example.org/avatar-thumbnail.png"),
     })),
 }));
 
@@ -27,12 +30,12 @@ describe("RoomAvatarViewModel", () => {
     beforeEach(() => {
         client = createTestClient();
         DMRoomMap.setShared({
-            getUserIdForRoomId: jest.fn().mockReturnValue(undefined),
+            getUserIdForRoomId: vi.fn().mockReturnValue(undefined),
         } as unknown as DMRoomMap);
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     it("uses the room data in the initial snapshot", () => {
@@ -54,7 +57,7 @@ describe("RoomAvatarViewModel", () => {
         room.name = "Room name";
 
         const vm = new RoomAvatarViewModel({ room, size: "36px" });
-        const listener = jest.fn();
+        const listener = vi.fn();
         vm.subscribe(listener);
 
         room.name = "Updated room name";
@@ -72,7 +75,7 @@ describe("RoomAvatarViewModel", () => {
         room.name = "Room name";
 
         const vm = new RoomAvatarViewModel({ room, size: "36px" });
-        const listener = jest.fn();
+        const listener = vi.fn();
         vm.subscribe(listener);
 
         vm.setViewProps({ size: "36px" });
@@ -86,9 +89,9 @@ describe("RoomAvatarViewModel", () => {
     it("derives a DM identity name when available", () => {
         const room = mkStubRoom("!room:example.com", "DM room", client);
         const userId = "@dm_user:example.com";
-        jest.spyOn(room, "getMember").mockReturnValue(new RoomMember(room.roomId, userId));
+        vi.spyOn(room, "getMember").mockReturnValue(new RoomMember(room.roomId, userId));
 
-        jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(userId);
+        vi.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(userId);
         const vm = new RoomAvatarViewModel({ room, size: "36px" });
 
         expect(vm.getSnapshot().idName).toBe(userId);
@@ -106,7 +109,7 @@ describe("RoomAvatarViewModel", () => {
     it("invokes the supplied click handler when avatar lightbox is disabled", () => {
         const room = mkStubRoom("!room:example.com", "Room name", client);
         room.name = "Room name";
-        const onClick = jest.fn();
+        const onClick = vi.fn();
         const vm = new RoomAvatarViewModel({ room, size: "36px", onClick });
 
         vm.onClick();
@@ -126,7 +129,7 @@ describe("RoomAvatarViewModel", () => {
         const room = mkStubRoom("!room:example.com", "Room name", client);
 
         const vm = new RoomAvatarViewModel({ room, size: "36px", type: "square" });
-        const listener = jest.fn();
+        const listener = vi.fn();
         vm.subscribe(listener);
 
         vm.setType("square");
