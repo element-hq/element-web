@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useEffect, useMemo, type JSX, type ReactNode } from "react";
+import React, { useCallback, useEffect, type JSX, type ReactNode } from "react";
 import {
     TimelineView,
     useCreateAutoDisposedViewModel,
@@ -21,6 +21,7 @@ import type { EventType, MatrixClient, MatrixEvent, RelationType, Relations, Roo
 import { RoomTimelineViewModel } from "../../viewmodels/room/timeline/RoomTimelineViewModel";
 import { useMatrixClientContext } from "../../contexts/MatrixClientContext";
 import { LegacyEventTileAdapter } from "../views/rooms/LegacyEventTileAdapter";
+import type { GetRelationsForEvent } from "../views/rooms/EventTile";
 import { Layout } from "../../settings/enums/Layout";
 import { useSettingValue } from "../../hooks/useSettings";
 import { _t } from "../../languageHandler";
@@ -66,6 +67,84 @@ interface NewTimelinePanelProps {
     editState?: EditorStateTransfer;
 }
 
+/** Everything a timeline row needs from the panel to draw itself. */
+interface RenderItemContext {
+    room: Room;
+    highlightedId: string | null;
+    effectiveLayout: Layout;
+    permalinkCreator?: RoomPermalinkCreator;
+    showUrlPreview?: boolean;
+    showReactions?: boolean;
+    isTwelveHour: boolean;
+    alwaysShowTimestamps: boolean;
+    editState?: EditorStateTransfer;
+    getRelationsForEvent: GetRelationsForEvent;
+}
+
+/** Draws one timeline row. Kept outside the component so it isn't redefined per render. */
+function renderTimelineItem(item: TimelineItem, ctx: RenderItemContext): ReactNode {
+    switch (item.kind) {
+        case "date-separator": {
+            const separatorVm = new StaticDateSeparatorViewModel(item.label ?? item.key);
+            return <DateSeparatorView key={item.key} vm={separatorVm} />;
+        }
+        case "read-marker":
+            // Rendered as a div because the timeline already puts each row in
+            // its own list item.
+            return (
+                <ReadMarker
+                    key={item.key}
+                    eventId={item.key}
+                    kind="current"
+                    as="div"
+                    label={_t("timeline|read_marker_new")}
+                />
+            );
+        case "loading":
+            return (
+                <div
+                    key={item.key}
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        height: 32,
+                        overflow: "hidden",
+                    }}
+                >
+                    <InlineSpinner size={32} />
+                </div>
+            );
+        case "gap":
+            return <div key={item.key}>Gap</div>;
+        case "event":
+            // For now, all events go through the legacy adapter.
+            // As tiles are migrated to MVVM, this switch will
+            // send migrated types to their shared views instead.
+            return (
+                <LegacyEventTileAdapter
+                    key={item.key}
+                    mxEvent={findEventById(ctx.room, item.key)!}
+                    continuation={item.continuation}
+                    lastInSection={item.lastInSection}
+                    layout={ctx.effectiveLayout}
+                    isSelectedEvent={ctx.highlightedId !== null && item.key === ctx.highlightedId}
+                    // A tile treats any edit state it is given as its own, so
+                    // only the message being edited may receive it.
+                    editState={ctx.editState?.getEvent().getId() === item.key ? ctx.editState : undefined}
+                    getRelationsForEvent={ctx.getRelationsForEvent}
+                    permalinkCreator={ctx.permalinkCreator}
+                    showUrlPreview={ctx.showUrlPreview}
+                    showReactions={ctx.showReactions}
+                    isTwelveHour={ctx.isTwelveHour}
+                    alwaysShowTimestamps={ctx.alwaysShowTimestamps}
+                />
+            );
+        default:
+            return null;
+    }
+}
+
 /**
  * New MVVM-based timeline panel, rendered behind the `feature_new_timeline` Labs flag.
  * Uses the shared TimelineView from shared-components with a RoomTimelineViewModel.
@@ -79,7 +158,7 @@ export function NewTimelinePanel({
     showUrlPreview,
     showReactions,
     editState,
-}: NewTimelinePanelProps): JSX.Element {
+}: Readonly<NewTimelinePanelProps>): JSX.Element {
     const client: MatrixClient = useMatrixClientContext();
 
     // Read here rather than passed in, so changing either setting redraws the tiles.
@@ -88,8 +167,7 @@ export function NewTimelinePanel({
 
     // Modern and Message Bubbles are fully supported. IRC layout is not yet: it
     // needs the draggable name column the old timeline provides, so fall back to
-    // Modern for now.
-    // TODO: support IRC layout.
+    // Modern for now (a known follow-up, listed on the tracking issue).
     const effectiveLayout = layout === Layout.IRC ? Layout.Group : (layout ?? Layout.Group);
 
     // Creating the view model does nothing on its own — it starts listening only
@@ -128,70 +206,20 @@ export function NewTimelinePanel({
     const snapshot = useViewModel(vm);
     const { highlightedEventId: highlightedId } = snapshot;
 
-    const renderItem = useMemo(
-        () =>
-            (item: TimelineItem): ReactNode => {
-                switch (item.kind) {
-                    case "date-separator": {
-                        const separatorVm = new StaticDateSeparatorViewModel(item.label ?? item.key);
-                        return <DateSeparatorView key={item.key} vm={separatorVm} />;
-                    }
-                    case "read-marker":
-                        // Rendered as a div because the timeline already puts each row in
-                        // its own list item.
-                        return (
-                            <ReadMarker
-                                key={item.key}
-                                eventId={item.key}
-                                kind="current"
-                                as="div"
-                                label={_t("timeline|read_marker_new")}
-                            />
-                        );
-                    case "loading":
-                        return (
-                            <div
-                                key={item.key}
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    height: 32,
-                                    overflow: "hidden",
-                                }}
-                            >
-                                <InlineSpinner size={32} />
-                            </div>
-                        );
-                    case "gap":
-                        return <div key={item.key}>Gap</div>;
-                    case "event":
-                        // For now, all events go through the legacy adapter.
-                        // As tiles are migrated to MVVM, this switch will
-                        // send migrated types to their shared views instead.
-                        return (
-                            <LegacyEventTileAdapter
-                                key={item.key}
-                                mxEvent={findEventById(room, item.key)!}
-                                continuation={item.continuation}
-                                lastInSection={item.lastInSection}
-                                layout={effectiveLayout}
-                                isSelectedEvent={highlightedId !== null && item.key === highlightedId}
-                                // A tile treats any edit state it is given as its own, so
-                                // only the message being edited may receive it.
-                                editState={editState?.getEvent().getId() === item.key ? editState : undefined}
-                                getRelationsForEvent={getRelationsForEvent}
-                                permalinkCreator={permalinkCreator}
-                                showUrlPreview={showUrlPreview}
-                                showReactions={showReactions}
-                                isTwelveHour={isTwelveHour}
-                                alwaysShowTimestamps={alwaysShowTimestamps}
-                            />
-                        );
-                    default:
-                        return null;
-                }
-            },
+    const renderItem = useCallback(
+        (item: TimelineItem): ReactNode =>
+            renderTimelineItem(item, {
+                room,
+                highlightedId,
+                effectiveLayout,
+                permalinkCreator,
+                showUrlPreview,
+                showReactions,
+                isTwelveHour,
+                alwaysShowTimestamps,
+                editState,
+                getRelationsForEvent,
+            }),
         [
             room,
             highlightedId,

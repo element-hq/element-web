@@ -62,7 +62,7 @@ export interface LegacyEventTileAdapterProps {
  * For items that are not yet migrated to MVVM, the web-side
  * renderItem implementation returns `<LegacyEventTileAdapter {...rowProps} />`.
  */
-export function LegacyEventTileAdapter(props: LegacyEventTileAdapterProps): JSX.Element {
+export function LegacyEventTileAdapter(props: Readonly<LegacyEventTileAdapterProps>): JSX.Element {
     return (
         <EventTile
             // The shared TimelineView wraps each row in its own semantic <li>, so

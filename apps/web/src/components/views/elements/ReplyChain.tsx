@@ -111,7 +111,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
         } else if (this.state.events.length > 0) {
             // The constructor already found the quoted message, so only the
             // "In reply to" header above it is left to fetch.
-            void this.loadHeaderEvent();
+            void this.loadHeaderEvent(this.state.events[0]);
         }
         this.trySetExpandableQuotes();
     }
@@ -121,8 +121,8 @@ export default class ReplyChain extends React.Component<IProps, IState> {
      * "In reply to" header above the preview. Usually it is already loaded and
      * the header appears a frame after the preview, before the row is on screen.
      */
-    private async loadHeaderEvent(): Promise<void> {
-        const loadedEv = await this.getNextEvent(this.state.events[0]);
+    private async loadHeaderEvent(quotedEvent: MatrixEvent): Promise<void> {
+        const loadedEv = await this.getNextEvent(quotedEvent);
         if (this.unmounted || !loadedEv) return;
         this.setState({ loadedEv });
     }
