@@ -27,11 +27,14 @@ Please see LICENSE files in the repository root for full details.
         padding-inline: var(--RoomView_MessageList-padding);
     }
 
-    /* ImageBodyView reserves the media box with a definite width, which needs the
-       `width: fit-content` link wrapper it sits in to be clamped, so the frame's
-       own `max-width: 100%` can resolve in narrow panes. */
-    .mx_ImageBody > a {
-        max-width: 100%;
+    /* The row holding the spinner shown while more history is fetched. Its height is
+       fixed so the row always measures the same. */
+    .mx_NewTimelinePanel_loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 32px;
+        overflow: hidden;
     }
 
     /* An image that fails to load replaces its reserved media box with a short
