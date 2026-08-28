@@ -53,6 +53,13 @@ export const HiddenCurrent: Story = {
     },
 };
 
+/** The labelled style: a line with the label at its right-hand end. */
+export const Labelled: Story = {
+    args: {
+        label: "New",
+    },
+};
+
 export const Ghost: Story = {
     args: {
         kind: "ghost",

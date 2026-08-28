@@ -40,3 +40,26 @@ exports[`ReadMarker > renders the hidden current read marker without a line 1`] 
   </ul>
 </div>
 `;
+
+exports[`ReadMarker > renders the labelled read marker 1`] = `
+<div>
+  <ul>
+    <li
+      class="ReadMarker-module_readMarker ReadMarker-module_labelledMarker"
+      data-scroll-tokens="$event"
+    >
+      <div
+        aria-label="New"
+        class="ReadMarker-module_labelledLine"
+        role="separator"
+      >
+        <span
+          class="ReadMarker-module_label"
+        >
+          New
+        </span>
+      </div>
+    </li>
+  </ul>
+</div>
+`;

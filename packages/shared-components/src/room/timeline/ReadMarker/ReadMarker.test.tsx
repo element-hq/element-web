@@ -13,7 +13,7 @@ import { describe, expect, it, vi } from "vitest";
 import { ReadMarker } from "./ReadMarker";
 import * as stories from "./ReadMarker.stories";
 
-const { Current, HiddenCurrent, Ghost } = composeStories(stories);
+const { Current, HiddenCurrent, Ghost, Labelled } = composeStories(stories);
 
 describe("ReadMarker", () => {
     it("renders the current read marker", () => {
@@ -30,6 +30,33 @@ describe("ReadMarker", () => {
     it("renders the ghost read marker", () => {
         const { container } = render(<Ghost />);
         expect(container).toMatchSnapshot();
+    });
+
+    it("renders the labelled read marker", () => {
+        const { container } = render(<Labelled />);
+        expect(container).toMatchSnapshot();
+        expect(screen.getByText("New")).toBeInTheDocument();
+        // The line is drawn as the label box's border, so there is no separate <hr>.
+        expect(container.querySelector("hr")).toBeNull();
+    });
+
+    it("ignores a label on a marker that is fading out", () => {
+        render(
+            <ul>
+                <ReadMarker eventId="$ghost" kind="ghost" label="New" />
+            </ul>,
+        );
+
+        expect(screen.queryByText("New")).toBeNull();
+        expect(screen.getByRole("separator").tagName).toBe("HR");
+    });
+
+    it("renders as a div so callers that supply their own list item stay valid", () => {
+        const { container } = render(<ReadMarker eventId="$event" kind="current" as="div" label="New" />);
+
+        expect(container.querySelector("li")).toBeNull();
+        expect(container.firstElementChild?.tagName).toBe("DIV");
+        expect(container.firstElementChild).toHaveAttribute("data-scroll-tokens", "$event");
     });
 
     it("applies custom className to the list item", () => {
