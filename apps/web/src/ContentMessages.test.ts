@@ -22,7 +22,7 @@ import encrypt, { type IEncryptedFile } from "matrix-encrypt-attachment";
 import { createTestClient, flushPromises, mkEvent } from "test-utils";
 
 import ContentMessages, { UploadCanceledError, uploadFile } from "./ContentMessages";
-import { clearUploadedMedia, getUploadedMedia } from "./utils/UploadedMediaCache";
+import { clearUploadedMediaCache, queryUploadedMediaCache } from "./utils/UploadedMediaCache";
 import { doMaybeLocalRoomAction } from "./utils/local-room";
 import { BlurhashEncoder } from "./BlurhashEncoder";
 import Modal from "./Modal";
@@ -440,17 +440,17 @@ describe("uploadFile", () => {
     });
 
     it("should keep the uploaded file so it does not have to be downloaded again", async () => {
-        clearUploadedMedia();
+        clearUploadedMediaCache();
         vi.mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/plain" });
         const file = new Blob(["hello"]);
 
         await uploadFile(client, "!roomId:server", file);
 
-        expect(getUploadedMedia("mxc://server/plain")).toBe(file);
+        expect(queryUploadedMediaCache("mxc://server/plain")).toBe(file);
     });
 
     it("should keep the plaintext of an encrypted upload rather than the ciphertext", async () => {
-        clearUploadedMedia();
+        clearUploadedMediaCache();
         vi.spyOn(client.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
         vi.mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/encrypted" });
         vi.mocked(encrypt.encryptAttachment).mockResolvedValue({
@@ -461,7 +461,7 @@ describe("uploadFile", () => {
 
         await uploadFile(client, "!roomId:server", file);
 
-        expect(getUploadedMedia("mxc://server/encrypted")).toBe(file);
+        expect(queryUploadedMediaCache("mxc://server/encrypted")).toBe(file);
     });
 
     it("should throw UploadCanceledError upon aborting the upload", async () => {

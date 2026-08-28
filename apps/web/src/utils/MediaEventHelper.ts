@@ -15,7 +15,7 @@ import { type Media, mediaFromContent } from "../customisations/Media";
 import { decryptFile } from "./DecryptFile";
 import { type IDestroyable } from "./IDestroyable";
 import { getBlobSafeMimeType } from "./blobs.ts";
-import { getUploadedMedia } from "./UploadedMediaCache";
+import { queryUploadedMediaCache } from "./UploadedMediaCache";
 
 // TODO: We should consider caching the blobs. https://github.com/vector-im/element-web/issues/17192
 
@@ -52,7 +52,7 @@ export class MediaEventHelper implements IDestroyable {
      * case its bytes are served from memory rather than downloaded again.
      */
     public get isFromLocalUpload(): boolean {
-        return getUploadedMedia(this.media.srcMxc) !== undefined;
+        return queryUploadedMediaCache(this.media.srcMxc) !== undefined;
     }
 
     public destroy(): void {
@@ -70,7 +70,7 @@ export class MediaEventHelper implements IDestroyable {
     };
 
     private prepareThumbnailUrl = async (): Promise<string | null> => {
-        if (this.media.isEncrypted || getUploadedMedia(this.media.thumbnailMxc)) {
+        if (this.media.isEncrypted || queryUploadedMediaCache(this.media.thumbnailMxc)) {
             const blob = await this.thumbnailBlob.value;
             if (blob === null) return null;
             return URL.createObjectURL(blob);
@@ -81,7 +81,7 @@ export class MediaEventHelper implements IDestroyable {
 
     private fetchSource = (): Promise<Blob> => {
         const content = this.event.getContent<MediaEventContent>();
-        const uploaded = getUploadedMedia(this.media.srcMxc);
+        const uploaded = queryUploadedMediaCache(this.media.srcMxc);
         if (uploaded) {
             return Promise.resolve(
                 uploaded.slice(0, uploaded.size, getBlobSafeMimeType(content.info?.mimetype ?? uploaded.type)),
@@ -104,7 +104,7 @@ export class MediaEventHelper implements IDestroyable {
         if (!this.media.hasThumbnail) return Promise.resolve(null);
 
         const content = this.event.getContent<ImageContent>();
-        const uploaded = getUploadedMedia(this.media.thumbnailMxc);
+        const uploaded = queryUploadedMediaCache(this.media.thumbnailMxc);
         if (uploaded) {
             return Promise.resolve(
                 uploaded.slice(

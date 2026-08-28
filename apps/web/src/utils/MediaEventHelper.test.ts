@@ -13,7 +13,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { stubClient } from "test-utils";
 
 import { MediaEventHelper } from "./MediaEventHelper.ts";
-import { clearUploadedMedia, rememberUploadedMedia } from "./UploadedMediaCache.ts";
+import { cacheUploadedMedia, clearUploadedMediaCache } from "./UploadedMediaCache.ts";
 import * as DecryptFile from "./DecryptFile.ts";
 
 describe("MediaEventHelper", () => {
@@ -49,15 +49,15 @@ describe("MediaEventHelper", () => {
         const thumbnail = new Blob(["thumbnail bytes"], { type: "image/jpeg" });
 
         afterEach(() => {
-            clearUploadedMedia();
+            clearUploadedMediaCache();
             vi.restoreAllMocks();
         });
 
         it("serves an encrypted source and thumbnail from memory instead of downloading and decrypting", async () => {
             stubClient();
             const decrypt = vi.spyOn(DecryptFile, "decryptFile");
-            rememberUploadedMedia("mxc://matrix.org/source", uploaded);
-            rememberUploadedMedia("mxc://matrix.org/thumbnail", thumbnail);
+            cacheUploadedMedia("mxc://matrix.org/source", uploaded);
+            cacheUploadedMedia("mxc://matrix.org/thumbnail", thumbnail);
             const event = new MatrixEvent({
                 type: "m.room.message",
                 content: {
@@ -82,7 +82,7 @@ describe("MediaEventHelper", () => {
         it("hands out an object URL for an unencrypted upload and revokes it on destroy", async () => {
             stubClient();
             const revoke = vi.spyOn(URL, "revokeObjectURL");
-            rememberUploadedMedia("mxc://matrix.org/source", uploaded);
+            cacheUploadedMedia("mxc://matrix.org/source", uploaded);
             const event = new MatrixEvent({
                 type: "m.room.message",
                 content: { msgtype: "m.image", body: "image.png", url: "mxc://matrix.org/source" },
