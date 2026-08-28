@@ -169,10 +169,11 @@ export class RoomTimelineViewModel
      * In-flight backward pagination chain, or null when idle.
      *
      * A single `Promise<void>` is created for the first `onStartReached` call.
-     * Any further `onStartReached` calls while the chain is running simply
-     * return early — they point at the same in-flight work rather than
-     * starting a parallel one. When the chain settles this is set back to null,
-     * and the next `onStartReached` creates a fresh chain.
+     * Any further `onStartReached` calls while the chain is running set
+     * {@link backwardRerunRequested} instead of starting a parallel chain.
+     * When the chain settles this is set back to null (running one follow-up
+     * chain if a request arrived meanwhile), and the next `onStartReached`
+     * creates a fresh chain.
      *
      * Using a stored promise as the guard ensures coalescing survives the async
      * gap between when the chain finishes and when the next `onStartReached` fires.
@@ -181,6 +182,21 @@ export class RoomTimelineViewModel
 
     /** Mirror of {@link backwardPaginateChain} for the forward direction. */
     private forwardPaginateChain: Promise<void> | null = null;
+
+    /**
+     * Set when the view asks for more history while a fetch is already running, and
+     * acted on by running one more fetch once that one finishes.
+     *
+     * Coalescing must not *lose* the request: the view de-duplicates edge reports, and its
+     * dedup key can collide across a chain boundary (observed: the spinner row's removal
+     * exactly cancelling out one new event, leaving the same item count at the same scroll
+     * index). When that happens the view never re-fires, and without this flag the timeline
+     * sits stalled at the edge with more history available until the user jiggles the scroll.
+     */
+    private backwardRerunRequested = false;
+
+    /** Mirror of {@link backwardRerunRequested} for the forward direction. */
+    private forwardRerunRequested = false;
 
     /**
      * The real timeline content: messages, date separators and the unread marker, with no
@@ -1011,13 +1027,15 @@ export class RoomTimelineViewModel
     // ── Pagination ───────────────────────────────────────────────────
 
     /**
-     * Entry point for backward pagination. Coalesces concurrent calls behind a
-     * single in-flight chain; the view will re-fire `onStartReached` naturally
-     * if more items are needed after the chain settles.
+     * Asks for older messages. Only one fetch runs at a time; a request that arrives
+     * while one is running is remembered and run afterwards — see
+     * {@link backwardRerunRequested} for why it cannot just be dropped.
      */
     private triggerBackwardPaginate(): void {
         if (this.backwardPaginateChain) {
-            debug(`[TimelineVM] paginate(backward) coalesced — chain in flight`);
+            // Remember it rather than dropping it; see backwardRerunRequested.
+            this.backwardRerunRequested = true;
+            debug(`[TimelineVM] paginate(backward) coalesced — chain in flight, rerun queued`);
             return;
         }
 
@@ -1037,6 +1055,11 @@ export class RoomTimelineViewModel
 
         this.backwardPaginateChain = this.runPaginateChain(Direction.Backward).finally(() => {
             this.backwardPaginateChain = null;
+            if (this.backwardRerunRequested && !this.isDisposed) {
+                this.backwardRerunRequested = false;
+                debug(`[TimelineVM] paginate(backward) — running queued rerun`);
+                this.triggerBackwardPaginate();
+            }
         });
     }
 
@@ -1046,12 +1069,13 @@ export class RoomTimelineViewModel
      */
     private triggerForwardPaginate(): void {
         if (this.forwardPaginateChain) {
-            debug(`[TimelineVM] paginate(forward) coalesced — chain in flight`);
+            // Remember it rather than dropping it; see backwardRerunRequested.
+            this.forwardRerunRequested = true;
+            debug(`[TimelineVM] paginate(forward) coalesced — chain in flight, rerun queued`);
             return;
         }
 
-        // Don't paginate while still placing the initial anchor — see
-        // triggerBackwardPaginate for why.
+        // Wait until the first messages have been positioned; see triggerBackwardPaginate.
         if (this.snapshot.current.pendingAnchor !== null) {
             debug(`[TimelineVM] paginate(forward) skipped — anchor placement pending`);
             return;
@@ -1073,6 +1097,11 @@ export class RoomTimelineViewModel
 
         this.forwardPaginateChain = this.runPaginateChain(Direction.Forward).finally(() => {
             this.forwardPaginateChain = null;
+            if (this.forwardRerunRequested && !this.isDisposed) {
+                this.forwardRerunRequested = false;
+                debug(`[TimelineVM] paginate(forward) — running queued rerun`);
+                this.triggerForwardPaginate();
+            }
         });
     }
 
