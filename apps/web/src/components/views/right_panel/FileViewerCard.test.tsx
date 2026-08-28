@@ -22,8 +22,8 @@ describe("fileViewerOpenButton", () => {
         vi.restoreAllMocks();
     });
 
-    it("opens the selected file in the global right-panel file viewer card", () => {
-        const setGlobalCard = vi.spyOn(RightPanelStore.instance, "setGlobalCard").mockImplementation(() => {});
+    it("opens the selected file in the right-panel file viewer card for the room", () => {
+        const setCard = vi.spyOn(RightPanelStore.instance, "setCard").mockImplementation(() => {});
         const media = {
             type: "uploaded",
             mimetype: "application/pdf",
@@ -44,7 +44,7 @@ describe("fileViewerOpenButton", () => {
 
         fileViewerOpenButton({ viewer, media, mxEvent }).onClick();
 
-        expect(setGlobalCard).toHaveBeenCalledWith({
+        expect(setCard).toHaveBeenCalledWith({
             phase: RightPanelPhases.FileViewer,
             state: {
                 fileViewer: viewer,
