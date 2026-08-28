@@ -10,9 +10,9 @@ import { type IPreviewUrlResponse, type MatrixClient, MatrixError } from "matrix
 import { decode } from "html-entities";
 
 import type { UrlPreview } from "@element-hq/web-shared-components";
+import { type UnstableBundledUrlPreviewSingle } from "@element-hq/element-web-module-api";
 import { mediaFromMxc } from "../customisations/Media";
 import { thumbHeight } from "../ImageUtils";
-import { type UnstableBundledUrlPreviewSingle } from "../../@types/url-preview";
 
 const logger = rootLogger.getChild("UrlPreviewFetcher");
 
@@ -247,6 +247,8 @@ export class UrlPreviewFetcher {
             showTooltipOnLink: !!(single.matched_url !== single["og:title"] && this.showTooltips),
             description: single["og:description"],
             ogUrl: single["og:url"],
+
+            srcBundle: single,
         };
 
         // missing fields from the bundle because backend does provide it:

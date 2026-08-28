@@ -5,17 +5,23 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { useCallback, type JSX } from "react";
+import React, { type JSX, useCallback } from "react";
+import {
+    Avatar,
+    IconButton,
+    InlineSpinner,
+    Text,
+    Tooltip,
+    // note: useIdColorHash is not used as a hook here
+    useIdColorHash as idColorHash,
+} from "@vector-im/compound-web";
 import classNames from "classnames";
-// note: useIdColorHash is not used as a hook here
-import { IconButton, InlineSpinner, useIdColorHash as idColorHash } from "@vector-im/compound-web";
 import { ErrorSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 
-import { type UrlPreview } from "../../timeline/event-tile/UrlPreviewGroupView";
+import { type UrlPreview } from "../../urlPreview";
 import styles from "./MessageComposerUrlPreview.module.css";
-import { LinkSiteName, LinkTitle } from "../../timeline/event-tile/UrlPreviewGroupView/LinkPreview/LinkPreview";
 import { useViewModel, type ViewModel } from "../../../core/viewmodel";
 import { useI18n } from "../../../core/i18n/i18nContext";
 
@@ -52,6 +58,45 @@ export type MessageComposerUrlPreviewSnapshotEntry = MessageComposerUrlPreviewSn
      */
     matched_url: string;
 };
+
+function LinkTitle({
+    title,
+    showTooltipOnLink,
+    link,
+    className,
+}: Pick<UrlPreview, "title" | "showTooltipOnLink" | "link"> & { className?: string }): JSX.Element {
+    const caption = new URL(link).toString();
+    const anchor = (
+        <Text
+            as="a"
+            type="body"
+            weight="semibold"
+            size="md"
+            className={classNames(styles.title, className)}
+            href={link}
+            target="_blank"
+            rel="noreferrer noopener"
+        >
+            {title}
+        </Text>
+    );
+    return showTooltipOnLink ? <Tooltip label={caption}>{anchor}</Tooltip> : anchor;
+}
+
+function LinkSiteName({
+    siteIcon,
+    siteName,
+    className,
+}: Pick<UrlPreview, "siteIcon" | "siteName"> & { className?: string }): JSX.Element {
+    return (
+        <div className={classNames(styles.siteName, className)}>
+            {siteIcon && <Avatar size="16px" name={siteName} id={siteName} src={siteIcon} />}
+            <Text as="span" size="sm" weight="regular">
+                {siteName}
+            </Text>
+        </div>
+    );
+}
 
 /** Snapshot data for rendering a URL preview attached to the composer. */
 export interface MessageComposerUrlPreviewSnapshot {
