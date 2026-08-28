@@ -9,7 +9,7 @@ import { app, autoUpdater, desktopCapturer, ipcMain, powerSaveBlocker, TouchBar,
 
 import IpcMainEvent = Electron.IpcMainEvent;
 import { randomArray } from "./utils.js";
-import { getDisplayMediaCallback, setDisplayMediaCallback } from "./displayMediaCallback.js";
+import { consumeDisplayMediaCallback } from "./displayMediaCallback.js";
 import Store, { clearDataAndRelaunch } from "./store.js";
 import { getConfig } from "./config.js";
 
@@ -149,15 +149,19 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
             }
             break;
         case "getDesktopCapturerSources":
-            ret = (await desktopCapturer.getSources(args[0])).map((source) => ({
-                id: source.id,
-                name: source.name,
-                thumbnailURL: source.thumbnail.toDataURL(),
-            }));
+            try {
+                ret = (await desktopCapturer.getSources(args[0])).map((source) => ({
+                    id: source.id,
+                    name: source.name,
+                    thumbnailURL: source.thumbnail.toDataURL(),
+                }));
+            } catch (e) {
+                console.error("Failed to get desktop capturer sources", e);
+                ret = [];
+            }
             break;
         case "callDisplayMediaCallback":
-            getDisplayMediaCallback()?.({ video: args[0] });
-            setDisplayMediaCallback(null);
+            consumeDisplayMediaCallback()?.({ video: args[0] });
             ret = null;
             break;
 

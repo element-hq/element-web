@@ -259,7 +259,7 @@ jobs:
         if: needs.prepare.outputs.run-all-desktop == 'true'
         strategy:
             matrix:
-                arch: [x64, ia32, arm64]
+                arch: [x64, arm64]
         with:
             arch: ${{ matrix.arch }}
             blob_report: true
