@@ -20,6 +20,7 @@ import GenericEventListSummary from "./GenericEventListSummary";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import { jsxJoin } from "../../../utils/ReactUtils";
 import { Layout } from "../../../settings/enums/Layout";
+import SettingsStore from "../../../settings/SettingsStore";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import AccessibleButton from "./AccessibleButton";
 import RoomContext from "../../../contexts/RoomContext";
@@ -32,6 +33,18 @@ const onPinnedMessagesClick = (): void => {
 };
 
 const TARGET_AS_DISPLAY_NAME_EVENTS = [EventType.RoomMember];
+
+/**
+ * Whether a profile field on a membership event actually changed.
+ *
+ * An absent field, an explicit `null` and an empty string all mean "unset", so none of them is a
+ * change from any of the others. This mirrors `getModification` in `TextForEvent`, which labels the
+ * same event when it is rendered on its own — without it a collapsed summary can contradict the
+ * events it summarises.
+ */
+function profileFieldChanged(prev?: string | null, value?: string | null): boolean {
+    return (prev || undefined) !== (value || undefined);
+}
 
 interface IProps extends Omit<ComponentProps<typeof GenericEventListSummary>, "summaryText" | "summaryMembers"> {
     // The maximum number of names to show in either each summary e.g. 2 would result "A, B and 234 others left"
@@ -59,6 +72,10 @@ enum TransitionType {
     InviteReject = "invite_reject",
     InviteWithdrawal = "invite_withdrawal",
     Invited = "invited",
+    Knocked = "knocked",
+    KnockAccepted = "knock_accepted",
+    KnockRetracted = "knock_retracted",
+    KnockDenied = "knock_denied",
     Banned = "banned",
     Unbanned = "unbanned",
     Kicked = "kicked",
@@ -414,6 +431,30 @@ export default class EventListSummary extends React.Component<Props, State> {
                         ? _t("timeline|summary|invited_multiple", { count })
                         : _t("timeline|summary|invited", { count });
                 break;
+            case TransitionType.Knocked:
+                res =
+                    userCount > 1
+                        ? _t("timeline|summary|knocked_multiple", { severalUsers: "", count })
+                        : _t("timeline|summary|knocked", { oneUser: "", count });
+                break;
+            case TransitionType.KnockAccepted:
+                res =
+                    userCount > 1
+                        ? _t("timeline|summary|knock_accepted_multiple", { count })
+                        : _t("timeline|summary|knock_accepted", { count });
+                break;
+            case TransitionType.KnockRetracted:
+                res =
+                    userCount > 1
+                        ? _t("timeline|summary|knock_retracted_multiple", { severalUsers: "", count })
+                        : _t("timeline|summary|knock_retracted", { oneUser: "", count });
+                break;
+            case TransitionType.KnockDenied:
+                res =
+                    userCount > 1
+                        ? _t("timeline|summary|knock_denied_multiple", { count })
+                        : _t("timeline|summary|knock_denied", { count });
+                break;
             case TransitionType.Banned:
                 res =
                     userCount > 1
@@ -527,14 +568,24 @@ export default class EventListSummary extends React.Component<Props, State> {
             case EventType.RoomMember:
                 switch (e.mxEvent.getContent().membership) {
                     case KnownMembership.Invite:
+                        if (
+                            e.mxEvent.getPrevContent().membership === KnownMembership.Knock &&
+                            SettingsStore.getValue("feature_ask_to_join")
+                        ) {
+                            return TransitionType.KnockAccepted;
+                        }
                         return TransitionType.Invited;
+                    case KnownMembership.Knock:
+                        return TransitionType.Knocked;
                     case KnownMembership.Ban:
                         return TransitionType.Banned;
                     case KnownMembership.Join:
                         if (e.mxEvent.getPrevContent().membership === KnownMembership.Join) {
-                            if (e.mxEvent.getContent().displayname !== e.mxEvent.getPrevContent().displayname) {
+                            const content = e.mxEvent.getContent();
+                            const prevContent = e.mxEvent.getPrevContent();
+                            if (profileFieldChanged(prevContent.displayname, content.displayname)) {
                                 return TransitionType.ChangedName;
-                            } else if (e.mxEvent.getContent().avatar_url !== e.mxEvent.getPrevContent().avatar_url) {
+                            } else if (profileFieldChanged(prevContent.avatar_url, content.avatar_url)) {
                                 return TransitionType.ChangedAvatar;
                             }
                             return TransitionType.NoChange;
@@ -546,6 +597,12 @@ export default class EventListSummary extends React.Component<Props, State> {
                             if (e.mxEvent.getPrevContent().membership === KnownMembership.Invite) {
                                 return TransitionType.InviteReject;
                             }
+                            if (
+                                e.mxEvent.getPrevContent().membership === KnownMembership.Knock &&
+                                SettingsStore.getValue("feature_ask_to_join")
+                            ) {
+                                return TransitionType.KnockRetracted;
+                            }
                             return TransitionType.Left;
                         }
                         switch (e.mxEvent.getPrevContent().membership) {
@@ -553,6 +610,11 @@ export default class EventListSummary extends React.Component<Props, State> {
                                 return TransitionType.InviteWithdrawal;
                             case KnownMembership.Ban:
                                 return TransitionType.Unbanned;
+                            case KnownMembership.Knock:
+                                if (SettingsStore.getValue("feature_ask_to_join")) {
+                                    return TransitionType.KnockDenied;
+                                }
+                                return TransitionType.Kicked;
                             // sender is not target and made the target leave, if not from invite/ban then this is a kick
                             default:
                                 return TransitionType.Kicked;

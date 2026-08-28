@@ -1,8 +1,9 @@
 linkWorkspacePackages: true
 cleanupUnusedCatalogs: true
-ignorePatchFailures: false
 ignoreWorkspaceRootCheck: true
 minimumReleaseAgeStrict: true
+dedupePeerDependents: true
+dedupePeers: true
 
 packages:
     - "apps/*"
@@ -25,21 +26,25 @@ catalog:
     "playwright-core": 1.62.0
     # Compound
     "@vector-im/compound-design-tokens": 10.2.1
-    "@vector-im/compound-web": 9.9.0
+    "@vector-im/compound-web": 10.0.1
     # i18n
     matrix-web-i18n: 3.6.0
+    # emojibase
+    "@matrix-org/emojibase-bindings": 1.5.0
     # fonts
     "@fontsource/inter": 5.3.0
     # vite
-    vite: 8.1.5
+    vite: 8.2.2
     vite-plugin-node-polyfills: 0.28.0
     vite-plugin-svgr: 5.2.0
-    vitest: 4.1.10
-    "@vitest/spy": 4.1.10
-    "@vitest/coverage-v8": 4.1.10
-    "@vitest/browser-playwright": 4.1.10
-    "@vitejs/plugin-react": 6.0.3
+    vitest: 4.1.11
+    "@vitest/spy": 4.1.11
+    "@vitest/coverage-v8": 4.1.11
+    "@vitest/browser-playwright": 4.1.11
+    "@vitejs/plugin-react": 6.1.0
     unplugin-dts: 1.0.1
+    # nx
+    nx: 23.1.1
 
 catalogs:
     ts6:
@@ -55,10 +60,17 @@ packageExtensions:
         peerDependencies:
             # Silence warning
             vite: "^8.0.0"
+    "@vitest/mocker":
+        peerDependencies:
+            vite: "^8.0.0"
+    vitest:
+        peerDependencies:
+            vite: "^8.0.0"
 
 allowBuilds:
     # Needed to make the git dependency in layered.sh happy
     matrix-js-sdk: true
+    "matrix-js-sdk@git+https://github.com/matrix-org/matrix-js-sdk.git": true
     # Installs the CLI, which we do not need
     "@sentry/cli": false
     # Installs nx cloud client, which we do not need
@@ -106,38 +118,55 @@ patchedDependencies:
     plist: patches/plist.patch
     # Workaround for type fails
     "@arcmantle/vite-plugin-import-css-sheet": patches/@arcmantle__vite-plugin-import-css-sheet.patch
+    # Workaround for scroll anchoring landing on transient placeholder rows (pending upstream)
+    "@tanstack/virtual-core@3": patches/@tanstack__virtual-core@3.patch
 
 peerDependencyRules:
     allowedVersions:
         react: "19"
         react-dom: "19"
         eslint: "8"
+        vite: "8"
 
 allowedDeprecatedVersions:
     eslint: "8"
     react-beautiful-dnd: "13"
 
 overrides:
-    pretty-format@30>react-is: 19.2.7
+    pretty-format@30>react-is: 19.2.8
     "@types/react": "catalog:"
     "@types/react-dom": "catalog:"
     caniuse-lite: 1.0.30001806
-    matrix-widget-api: "^1.17.0"
+    matrix-widget-api: "^1.18.0"
     "@types/node": 25.9.3
     config-file-ts: 0.2.8-rc1
     node-abi: 4.33.0
-    "@types/pg-pool": 2.0.7
+
     # https://github.com/advisories/GHSA-6v5v-wf23-fmfq
     markdown-it: ^14.3.0
     axios@>1.0.0 <=1.16.1: ^1.16.1
     # https://github.com/advisories/GHSA-g7r4-m6w7-qqqr
     esbuild@<=0.27.4: 0.27.4
-    brace-expansion@>=5 <=5.0.5: ^5.0.6
-    ip-address@>=10 <10.1.1: ^10.1.1
+    # https://github.com/advisories/GHSA-3jxr-9vmj-r5cp
+    # https://github.com/advisories/GHSA-mh99-v99m-4gvg
+    # https://github.com/advisories/GHSA-rgw5-rvv9-x895
+    brace-expansion@>=1 <1.1.18: ^1.1.18
+    # https://github.com/advisories/GHSA-rgw5-rvv9-x895
+    # https://github.com/advisories/GHSA-mh99-v99m-4gvg
+    brace-expansion@>=2 <2.1.4: ^2.1.4
+    # https://github.com/advisories/GHSA-rgw5-rvv9-x895
+    brace-expansion@>=5 <=5.0.5: ^5.0.9
+    # https://github.com/advisories/GHSA-mwp4-54f8-5fhr
+    ip-address@>=10 <10.1.1: ^10.3.1
     yaml@>=2 <2.8.3: ^2.8.4
     # https://github.com/advisories/GHSA-f38q-mgvj-vph7
-    protobufjs@7 <7.5.8: ^7.6.3
+    # https://github.com/advisories/GHSA-j3f2-48v5-ccww
+    protobufjs@7 <7.5.8: ^7.6.5
     "@protobufjs/utf8@1 <1.1.1": ^1.1.1
+    # https://github.com/advisories/GHSA-v3r7-h72x-cjcm
+    # https://github.com/advisories/GHSA-m8rv-5g2x-5cg5
+    # https://github.com/advisories/GHSA-8xcm-r25x-g524
+    undici@6 <6.28.0: ^6.28.0
     # https://github.com/advisories/GHSA-vmh5-mc38-953g
     # https://github.com/advisories/GHSA-vxpw-j846-p89q
     # https://github.com/advisories/GHSA-hm92-r4w5-c3mj
@@ -145,14 +174,32 @@ overrides:
     # https://github.com/advisories/GHSA-pr7r-676h-xcf6
     # https://github.com/advisories/GHSA-35p6-xmwp-9g52
     # https://github.com/advisories/GHSA-g8m3-5g58-fq7m
-    undici@7 <7.28.0: ^7.28.0
+    # https://github.com/advisories/GHSA-m8rv-5g2x-5cg5
+    undici@7 <7.28.0: ^7.29.0
+    # https://github.com/advisories/GHSA-m8rv-5g2x-5cg5
+    # https://github.com/advisories/GHSA-8xcm-r25x-g524
+    # https://github.com/advisories/GHSA-4cwx-7wf7-3272
+    undici@8 <8.9.0: ^8.9.0
     # https://github.com/advisories/GHSA-fx2h-pf6j-xcff
     # https://github.com/advisories/GHSA-4w7w-66w2-5vf9
     # https://github.com/advisories/GHSA-v6wh-96g9-6wx3
-    vite@5: ^6.4.3
-    vite@6 <6.4.3: ^6.4.3
-    # Workaround for https://github.com/electron/electron/issues/51619
-    yauzl: "^3.3.1"
+    # vitepress is the only consumer of vite <8; pin it to a patched vite 6 (it does not support vite 8).
+    vitepress>vite: ^6.4.3
+    # https://github.com/advisories/GHSA-c2j3-45gr-mqc4
+    dompurify@3 <=3.4.11: ^3.4.12
+    # https://github.com/advisories/GHSA-v422-hmwv-36x6
+    body-parser@2 <2.3.0: ^2.3.0
+    # https://github.com/advisories/GHSA-g2r8-wvmj-jf5w
+    nx: "catalog:"
+    # https://github.com/advisories/GHSA-r292-9mhp-454m
+    tar@7 <=7.5.20: ^7.5.21
+    # https://github.com/advisories/GHSA-2p49-hgcm-8545
+    svgo@3 <3.3.4: ^3.3.4
+    # https://github.com/advisories/GHSA-2p49-hgcm-8545
+    svgo@4 <4.0.2: ^4.0.2
+    # https://github.com/advisories/GHSA-7p8r-x3mc-p8w7
+    fast-uri@3 <3.1.5: ^3.1.5
+
     # Convince api-extractor to use a newer Typescript version
     "unplugin-dts>typescript": "catalog:ts6"
     "@microsoft/api-extractor>typescript": "catalog:ts6"
@@ -168,3 +215,7 @@ minimumReleaseAgeExclude:
     # Temporary for testing purposes
     - "@typescript/*"
     - typescript@7.0.2
+    # New timeline: 3.14.8/3.17.6 carry the upstream end-anchored-prepend fix
+    # (#1237); they were freshly published so are still inside the release-age
+    # window. Revisit once the release has aged past the cutoff.
+    - "@tanstack/*"

@@ -17,6 +17,9 @@ import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import RoomTopic from "../../../../../src/components/views/elements/RoomTopic";
 import dis from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
+import Modal from "../../../../../src/Modal";
+import { type ActionPayload } from "../../../../../src/dispatcher/payloads";
+import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 
 jest.mock("../../../../../src/dispatcher/dispatcher");
 
@@ -92,6 +95,62 @@ describe("<RoomTopic/>", () => {
         runClickTest(topic, topic);
         expect(window.location.href).toEqual(expectedHref);
         expect(dis.fire).toHaveBeenCalledWith(Action.ShowRoomTopic);
+    });
+
+    describe("the edit topic button in the topic dialog", () => {
+        /**
+         * Render the topic, open the topic dialog and render its contents, so the
+         * "Edit topic" button can be clicked.
+         * @param isSpaceRoom whether the room should report itself as a space
+         */
+        function renderTopicDialog(isSpaceRoom: boolean) {
+            const room = createRoom("a topic");
+            jest.spyOn(room, "isSpaceRoom").mockReturnValue(isSpaceRoom);
+            jest.spyOn(room.currentState, "maySendStateEvent").mockReturnValue(true);
+
+            const createDialog = jest
+                .spyOn(Modal, "createDialog")
+                .mockReturnValue({ close: jest.fn() } as unknown as ReturnType<typeof Modal.createDialog>);
+
+            render(<RoomTopic room={room} />, {
+                wrapper: ({ children }) => (
+                    <MatrixClientContext.Provider value={MatrixClientPeg.safeGet()}>
+                        <LinkedTextContext.Provider value={{}}>{children}</LinkedTextContext.Provider>
+                    </MatrixClientContext.Provider>
+                ),
+            });
+
+            // The dispatcher is mocked for this suite, so drive the registered handler directly
+            // instead of firing Action.ShowRoomTopic through it.
+            const handler = jest.mocked(dis.register).mock.calls.at(-1)![0] as (payload: ActionPayload) => void;
+            handler({ action: Action.ShowRoomTopic });
+
+            const { description } = createDialog.mock.calls.at(-1)![1] as { description: React.ReactNode };
+            render(
+                <LinkedTextContext.Provider value={{}}>
+                    <>{description}</>
+                </LinkedTextContext.Provider>,
+            );
+
+            return room;
+        }
+
+        it("opens space settings for a space", () => {
+            const room = renderTopicDialog(true);
+
+            fireEvent.click(screen.getByRole("button", { name: "Edit topic" }));
+
+            expect(dis.dispatch).toHaveBeenCalledWith({ action: Action.OpenSpaceSettings, space: room });
+            expect(dis.dispatch).not.toHaveBeenCalledWith({ action: "open_room_settings" });
+        });
+
+        it("opens room settings for a room", () => {
+            renderTopicDialog(false);
+
+            fireEvent.click(screen.getByRole("button", { name: "Edit topic" }));
+
+            expect(dis.dispatch).toHaveBeenCalledWith({ action: "open_room_settings" });
+        });
     });
 
     it("should open the tooltip when hovering a text", async () => {

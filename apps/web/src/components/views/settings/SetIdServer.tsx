@@ -124,7 +124,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
 
     private saveIdServer = (fullUrl: string): void => {
         // Account data change will update localstorage, client, etc through dispatcher
-        MatrixClientPeg.safeGet().setAccountData("m.identity_server", {
+        void MatrixClientPeg.safeGet().setAccountData("m.identity_server", {
             base_url: fullUrl,
         });
         this.setState({
@@ -311,7 +311,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
 
     private disconnectIdServer = (): void => {
         // Account data change will update localstorage, client, etc through dispatcher
-        MatrixClientPeg.safeGet().setAccountData("m.identity_server", {
+        void MatrixClientPeg.safeGet().setAccountData("m.identity_server", {
             base_url: null, // clear
         });
 
