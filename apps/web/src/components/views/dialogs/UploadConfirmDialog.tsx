@@ -92,6 +92,14 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
         this.setState({ caption: ev.target.value });
     };
 
+    private onCaptionKeyDown = (ev: React.KeyboardEvent<HTMLTextAreaElement>): void => {
+        // Plain Enter inserts a newline in the textarea, so Ctrl/Cmd+Enter is the submit shortcut.
+        if (ev.key === "Enter" && (ev.ctrlKey || ev.metaKey)) {
+            ev.preventDefault();
+            this.onUploadClick();
+        }
+    };
+
     private shouldShowCaptionField(): boolean {
         return this.props.allowCaption === true && this.props.file.type.startsWith("image/");
     }
@@ -153,6 +161,7 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
                     autoFocus
                     value={this.state.caption}
                     onChange={this.onCaptionChange}
+                    onKeyDown={this.onCaptionKeyDown}
                     placeholder={_t("upload_file|caption_placeholder")}
                     rows={3}
                 />

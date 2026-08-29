@@ -44,6 +44,22 @@ describe("<UploadConfirmDialog />", () => {
         expect(onFinished).toHaveBeenCalledWith(true, false, "A useful description");
     });
 
+    it("should upload with the caption on Ctrl+Enter", async () => {
+        vi.spyOn(URL, "createObjectURL").mockReturnValue("blob:null/1234-5678-9101-1121");
+        const onFinished = vi.fn();
+        const file = new File([secureRandomString(1024)], "image.png", { type: "image/png" });
+        const { getByLabelText } = render(
+            <UploadConfirmDialog file={file} currentIndex={0} totalFiles={1} allowCaption onFinished={onFinished} />,
+        );
+
+        const caption = getByLabelText("Caption");
+        await userEvent.type(caption, "A useful description{Enter}");
+        expect(onFinished).not.toHaveBeenCalled();
+
+        await userEvent.type(caption, "{Control>}{Enter}{/Control}");
+        expect(onFinished).toHaveBeenCalledWith(true, false, "A useful description");
+    });
+
     it("should include an optional caption when uploading all images", async () => {
         vi.spyOn(URL, "createObjectURL").mockReturnValue("blob:null/1234-5678-9101-1121");
         const onFinished = vi.fn();
