@@ -155,6 +155,7 @@ export const sanitizeHtmlParams: IOptions = {
         "blockquote",
         "p",
         "a",
+        "img",
         "ul",
         "ol",
         "sup",
@@ -193,7 +194,7 @@ export const sanitizeHtmlParams: IOptions = {
         div: ["data-mx-maths"],
         a: ["href", "name", "target", "rel"], // remote target: custom to matrix
         // img tags also accept width/height, we just map those to max-width & max-height during transformation
-        img: ["src", "alt", "title", "style"],
+        img: ["src", "alt", "title", "style", "data-mx-emoticon"],
         ol: ["start"],
         code: ["class"], // We don't actually allow all classes, we filter them in transformTags
     },

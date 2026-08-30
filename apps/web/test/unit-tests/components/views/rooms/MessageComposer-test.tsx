@@ -74,7 +74,6 @@ describe("MessageComposer", () => {
         act(() => {
             (
                 [
-                    "MessageComposerInput.showStickersButton",
                     "MessageComposerInput.showPollsButton",
                     "feature_wysiwyg_composer",
                 ] as const
@@ -195,10 +194,6 @@ describe("MessageComposer", () => {
 
         // test button display depending on settings
         [
-            {
-                setting: "MessageComposerInput.showStickersButton" as const,
-                buttonLabel: "Sticker",
-            },
             {
                 setting: "MessageComposerInput.showPollsButton" as const,
                 buttonLabel: "Poll",
