@@ -775,6 +775,28 @@ describe("Lifecycle", () => {
                 expect(localStorage.getItem("mx_refresh_token_fallback")).toBeNull();
             });
 
+            it("should discard an unreachable plaintext token left at the primary key by an older version", async () => {
+                // Older versions wrote their fallback to the primary key rather than the fallback
+                // key, and never cleared it on a later successful write. We cannot tell whether it
+                // is newer or older than the idb copy, so it must not be used - but it must not be
+                // left sitting in localStorage in the clear either.
+                initIdbMock(idbStorageSession);
+                for (const key in localStorageSession) {
+                    localStorage.setItem(key, localStorageSession[key]);
+                }
+                localStorage.setItem("mx_access_token", "old-plaintext-token");
+
+                expect(await restoreSessionFromStorage()).toEqual(true);
+
+                // the idb token wins...
+                expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
+                    expect.objectContaining({ accessToken }),
+                    undefined,
+                );
+                // ...and the unreachable plaintext copy is swept up
+                expect(localStorage.getItem("mx_access_token")).toBeNull();
+            });
+
             it("should remove any access token from storage when there is none in credentials and idb save fails", async () => {
                 // dont fail for pickle key persist
                 vi.spyOn(StorageAccess, "idbSave").mockImplementation(async (table: string, key: string | string[]) => {

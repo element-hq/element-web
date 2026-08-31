@@ -584,6 +584,22 @@ async function getStoredToken(storageKey: string): Promise<string | undefined> {
                 logger.error(`migration of token ${storageKey} to IndexedDB failed`, e);
             }
         }
+    } else if (localStorage.getItem(storageKey) !== null) {
+        // We got a token from IndexedDB, but there is *also* one at the primary key in
+        // localStorage. That is residue from an older version of persistTokenInStorage, whose
+        // fallback wrote here rather than to the fallback key above.
+        //
+        // We must not start preferring it: that version did not clear it after a later
+        // successful write, so it may well be older than the IndexedDB copy, and using it could
+        // demote a working session to a dead token.
+        //
+        // But it is a token in plain text, which is what the pickle key exists to avoid, and
+        // nothing reads it any more, so don't leave it lying around either.
+        logger.warn(
+            `Discarding unreachable plaintext ${storageKey} from localStorage: ` +
+                `this session previously hit a failed IndexedDB write`,
+        );
+        localStorage.removeItem(storageKey);
     }
     return token;
 }
