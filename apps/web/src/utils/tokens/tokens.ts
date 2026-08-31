@@ -188,15 +188,15 @@ async function persistTokenInStorage(
             localStorage.removeItem(fallbackStorageKey);
         }
 
-        // Whatever is in IndexedDB is now stale. Remove it, so that a client which does not know
-        // about the fallback key (eg after a downgrade) reads "no token" rather than an outdated
-        // one. This is best-effort: getStoredToken prefers the fallback regardless, so a failure
-        // here is not fatal.
-        try {
-            await StorageAccess.idbDelete("account", storageKey);
-        } catch (e2) {
-            logger.error(`Failed to remove stale ${tokenName} from IndexedDB after a failed write`, e2);
-        }
+        // Deliberately leave whatever IndexedDB holds alone, even though it is now stale. The
+        // service worker reads the access token from IndexedDB *only* — it cannot reach
+        // localStorage, see apps/web/src/serviceworker/index.ts — so removing it would leave that
+        // reader with no token at all and send every media request out unauthenticated for the
+        // rest of the session. A stale token is no worse than none for it, and after a failure
+        // like this it is usually the very token we were trying to write.
+        //
+        // This client is unaffected either way: getStoredToken prefers the fallback key, and the
+        // next write to succeed overwrites IndexedDB and clears the fallback again.
     }
 }
 

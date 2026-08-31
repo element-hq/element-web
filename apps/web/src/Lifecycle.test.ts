@@ -275,9 +275,9 @@ describe("Lifecycle", () => {
                     // put accessToken in localstorage at the fallback key, which takes precedence
                     // over anything left in indexeddb
                     expect(localStorage.getItem("mx_access_token_fallback")).toEqual(accessToken);
-                    // and clear the stale indexeddb entry so a client which does not know about the
-                    // fallback key cannot read an outdated token
-                    expect(StorageAccess.idbDelete).toHaveBeenCalledWith("account", "mx_access_token");
+                    // but leave the indexeddb entry alone: the service worker can only read the
+                    // token from there, so removing it would break authenticated media
+                    await expect(StorageAccess.idbLoad("account", "mx_access_token")).resolves.toEqual(accessToken);
                 });
 
                 it("should create and start new matrix client with credentials", async () => {
@@ -661,6 +661,7 @@ describe("Lifecycle", () => {
 
                 expect(localStorage.getItem("mx_has_access_token")).toBeFalsy();
                 expect(localStorage.getItem("mx_access_token")).toBeFalsy();
+                expect(localStorage.getItem("mx_access_token_fallback")).toBeFalsy();
             });
 
             it("should clear stores", async () => {
@@ -812,6 +813,7 @@ describe("Lifecycle", () => {
 
                 expect(localStorage.getItem("mx_has_access_token")).toBeFalsy();
                 expect(localStorage.getItem("mx_access_token")).toBeFalsy();
+                expect(localStorage.getItem("mx_access_token_fallback")).toBeFalsy();
             });
 
             it("should create new matrix client with credentials", async () => {
