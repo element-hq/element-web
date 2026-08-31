@@ -89,11 +89,14 @@ describe("Lifecycle", () => {
         vi.resetAllMocks();
     });
 
-    const initIdbMock = (initialStore: Record<string, Record<string, unknown>> = {}): void => {
-        // Take a copy: the mocks below mutate the store, and several tests pass in the same
-        // shared fixture object (eg `idbStorageSession`). Without this, a write or delete in one
-        // test leaks into every test that runs after it.
-        const mockStore: Record<string, Record<string, unknown>> = structuredClone(initialStore);
+    /**
+     * Install the IndexedDB mocks, backed by `mockStore`.
+     *
+     * The mocks mutate the store, so each test must supply its own. Seed data is provided by
+     * factories (eg `idbStorageSession()`) rather than shared objects for exactly that reason:
+     * otherwise a write in one test leaks into every test that runs after it.
+     */
+    const initIdbMock = (mockStore: Record<string, Record<string, unknown>> = {}): void => {
         vi.spyOn(StorageAccess, "idbLoad")
             .mockClear()
             .mockImplementation(
@@ -129,11 +132,13 @@ describe("Lifecycle", () => {
         mx_user_id: userId,
         mx_device_id: deviceId,
     };
-    const idbStorageSession = {
+    // A factory, not a shared object: initIdbMock takes ownership of what it is given and the
+    // mocks write into it, so every test needs its own.
+    const idbStorageSession = (): Record<string, Record<string, unknown>> => ({
         account: {
             mx_access_token: accessToken,
         },
-    };
+    });
     const credentials = {
         homeserverUrl,
         identityServerUrl,
@@ -224,7 +229,7 @@ describe("Lifecycle", () => {
                     for (const key in localStorageSession) {
                         localStorage.setItem(key, localStorageSession[key]);
                     }
-                    initIdbMock(idbStorageSession);
+                    initIdbMock(idbStorageSession());
                 });
 
                 it("should ignore guest accounts when ignoreGuest is true", async () => {
@@ -251,7 +256,7 @@ describe("Lifecycle", () => {
                     for (const key in localStorageSession) {
                         localStorage.setItem(key, localStorageSession[key]);
                     }
-                    initIdbMock(idbStorageSession);
+                    initIdbMock(idbStorageSession());
                 });
 
                 it("should persist credentials", async () => {
@@ -319,7 +324,7 @@ describe("Lifecycle", () => {
                         for (const key in localStorageSession) {
                             localStorage.setItem(key, localStorageSession[key]);
                         }
-                        initIdbMock(idbStorageSession);
+                        initIdbMock(idbStorageSession());
                     });
 
                     it("should persist credentials", async () => {
@@ -531,7 +536,7 @@ describe("Lifecycle", () => {
                 for (const key in localStorageSession) {
                     localStorage.setItem(key, localStorageSession[key]);
                 }
-                initIdbMock(idbStorageSession);
+                initIdbMock(idbStorageSession());
                 mockClient.isVersionSupported.mockRejectedValue(new Error("Oh, noes, the server is down!"));
 
                 expect(await restoreSessionFromStorage()).toEqual(true);
@@ -808,7 +813,7 @@ describe("Lifecycle", () => {
                 // key, and never cleared it on a later successful write. We cannot tell whether it
                 // is newer or older than the idb copy, so it must not be used - but it must not be
                 // left sitting in localStorage in the clear either.
-                initIdbMock(idbStorageSession);
+                initIdbMock(idbStorageSession());
                 for (const key in localStorageSession) {
                     localStorage.setItem(key, localStorageSession[key]);
                 }
