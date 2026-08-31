@@ -58,6 +58,15 @@ export const Labelled: Story = {
     args: {
         label: "New",
     },
+    // The timeline insets its rows, so the label sits in from the edge there. Repeat
+    // that here, otherwise the label renders flush against the edge and is clipped.
+    decorators: [
+        (Story): JSX.Element => (
+            <div style={{ paddingInline: "18px" }}>
+                <Story />
+            </div>
+        ),
+    ],
 };
 
 export const Ghost: Story = {
