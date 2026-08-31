@@ -192,8 +192,8 @@ async function persistTokenInStorage(
             e,
         );
 
-        // Write the fallback *before* touching IndexedDB below, so that there is never a moment
-        // where neither store holds a token.
+        // Mirror the requested state at the fallback key: the token to fall back to, or nothing
+        // at all if the caller asked for it to be cleared.
         if (token) {
             localStorage.setItem(fallbackStorageKey, token);
         } else {
