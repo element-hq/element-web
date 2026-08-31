@@ -14,6 +14,7 @@
     --event-tile-group-line-height: 1.375rem;
     --event-tile-group-timestamp-width: 46px;
     --event-tile-thread-summary-line-height: 24px;
+    --event-tile-content-inline-end: 34px;
 
     /* IRC geometry. */
     --event-tile-irc-line-height: 1.125rem;
@@ -35,7 +36,7 @@
     --event-tile-bubble-margin-inline-end: 60px;
     --event-tile-bubble-other-background: var(--cpd-color-gray-300);
     --event-tile-bubble-self-background: var(--cpd-color-green-300);
-    --event-tile-content-inline-end: 34px;
+    --event-tile-bubble-hover-background: var(--cpd-color-bg-subtle-secondary);
 
     /* Shared preview, action-bar, bubble, and interaction values. */
     --event-tile-preview-offset: 48px;
@@ -948,7 +949,7 @@
 
     &:hover::before,
     &.stateSelected::before {
-        background: var(--event-tile-state-hover-background);
+        background: var(--event-tile-bubble-hover-background);
     }
 
     &.stateHighlighted::before {
@@ -956,7 +957,7 @@
     }
 
     &:hover .slotAvatar {
-        border-color: var(--event-tile-state-hover-background);
+        border-color: var(--event-tile-bubble-hover-background);
     }
 
     &.stateHighlighted .slotAvatar {
@@ -965,7 +966,7 @@
 
     &:hover .slotAvatar > *,
     &.stateSelected .slotAvatar > * {
-        box-shadow: 0 0 0 3px var(--event-tile-state-hover-background);
+        box-shadow: 0 0 0 3px var(--event-tile-bubble-hover-background);
     }
 
     &.stateHighlighted .slotAvatar > * {
