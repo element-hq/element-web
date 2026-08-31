@@ -61,6 +61,7 @@ export default defineConfig({
             exclude: [
                 // Exclude test files
                 "**/*.{stories,test}.{ts,tsx}",
+                "**/*.test.browser.{ts,tsx}",
                 // Exclude test utilities
                 "**/src/test/**",
                 // Exclude mocks
