@@ -27,7 +27,7 @@ const browserPlatform = canCompareScreenshots ? "linux" : platform;
 export default defineProject({
     test: {
         name: "web-browser",
-        include: ["src/**/*.browser.test.{ts,tsx}"],
+        include: ["src/**/*.test.browser.{ts,tsx}"],
         provide: { canCompareScreenshots },
         browser: {
             enabled: true,
