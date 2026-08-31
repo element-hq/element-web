@@ -358,19 +358,31 @@ const StoryReplyChain = (): React.ReactElement => (
         <span>Earlier message quoted in this reply.</span>
     </blockquote>
 );
-const StoryMediaBody = (): React.ReactElement => {
+const StoryMediaImage = ({
+    label,
+    maxWidth,
+    maxHeight,
+    aspectRatio,
+}: Pick<ImageBodyViewSnapshot, "maxWidth" | "maxHeight" | "aspectRatio"> & { label: string }): React.ReactElement => {
     const snapshot: ImageBodyViewSnapshot = {
         state: ImageBodyViewState.READY,
-        alt: "Example media",
+        alt: `${label} example media`,
         src: storyMediaSrc,
         thumbnailSrc: storyMediaSrc,
-        maxWidth: 320,
-        maxHeight: 180,
-        aspectRatio: "16 / 9",
+        maxWidth,
+        maxHeight,
+        aspectRatio,
     };
     const vm = useMockedViewModel(snapshot, {});
     return <ImageBodyView vm={vm} />;
 };
+const StoryMediaBody = (): React.ReactElement => (
+    <>
+        <StoryMediaImage label="Small" maxWidth={1} maxHeight={1} aspectRatio="1 / 1" />
+        <StoryMediaImage label="Medium" maxWidth={320} maxHeight={180} aspectRatio="16 / 9" />
+        <StoryMediaImage label="Large" maxWidth={800} maxHeight={600} aspectRatio="4 / 3" />
+    </>
+);
 const StoryStickerBody = (): React.ReactElement => (
     <div className={styles.stickerBody} role="img" aria-label="Example sticker">
         🌈

@@ -478,6 +478,20 @@ export const MediaBubble: Story = {
     args: Media.args,
 };
 
+export const MediaGroup: Story = {
+    name: "Media - Group - Default",
+    tags: visualTags,
+    globals: groupGlobals,
+    args: Media.args,
+};
+
+export const MediaIrc: Story = {
+    name: "Media - IRC - Default",
+    tags: visualTags,
+    globals: ircGlobals,
+    args: Media.args,
+};
+
 export const StickerBubble: Story = {
     name: "Sticker - Bubble - Default",
     tags: visualTags,
