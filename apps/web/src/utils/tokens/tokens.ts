@@ -36,6 +36,22 @@ export const HAS_ACCESS_TOKEN_STORAGE_KEY = "mx_has_access_token";
 export const HAS_REFRESH_TOKEN_STORAGE_KEY = "mx_has_refresh_token";
 
 /**
+ * Derive the localStorage key used to hold a token when writing it to IndexedDB fails.
+ *
+ * This is deliberately distinct from `storageKey` itself. Very old sessions may still have a
+ * plain token sitting at `storageKey` in localStorage, from before tokens were moved into
+ * IndexedDB, and those are *not* authoritative — IndexedDB may well hold a newer value. A token
+ * at the fallback key, by contrast, is only ever written by {@link persistTokenInStorage} when
+ * the IndexedDB write failed, and is cleared again as soon as one succeeds, so it is always at
+ * least as new as anything in IndexedDB.
+ *
+ * @param storageKey - the primary storage key, eg {@link ACCESS_TOKEN_STORAGE_KEY}
+ */
+export function getFallbackStorageKey(storageKey: string): string {
+    return `${storageKey}_fallback`;
+}
+
+/**
  * The pickle key is a string of unspecified length and format.  For AES, we need a 256-bit Uint8Array. So we HKDF the pickle key to generate the AES key.  The AES key should be zeroed after it is used.
  * @param pickleKey
  * @returns AES key
@@ -131,44 +147,55 @@ async function persistTokenInStorage(
         localStorage.removeItem(hasTokenStorageKey);
     }
 
-    if (pickleKey) {
-        let encryptedToken: AESEncryptedSecretStoragePayload | undefined;
+    let valueToStore: AESEncryptedSecretStoragePayload | string | undefined = token;
+    if (pickleKey && token) {
+        try {
+            // try to encrypt the access token using the pickle key
+            const encrKey = await pickleKeyToAesKey(pickleKey);
+            valueToStore = await encryptAESSecretStorageItem(token, encrKey, tokenName);
+            encrKey.fill(0);
+        } catch (e) {
+            // This is likely due to the browser not having WebCrypto or somesuch.
+            // Warn about it, but fall back to storing the unencrypted token.
+            logger.warn(`Could not encrypt token for ${tokenName}`, e);
+        }
+    }
+
+    const fallbackStorageKey = getFallbackStorageKey(storageKey);
+
+    try {
+        // Save either the encrypted token, or the plain token if there is no token or we were
+        // unable to encrypt (e.g. if the browser doesn't have WebCrypto).
+        await StorageAccess.idbSave("account", storageKey, valueToStore);
+        // IndexedDB is now authoritative, so drop any fallback left behind by an earlier failed
+        // write. If we left it in place, getStoredToken would keep preferring it over the value
+        // we have just written.
+        localStorage.removeItem(fallbackStorageKey);
+    } catch (e) {
+        // We could not save to IndexedDB, so fall back to localStorage. We store the token
+        // unencrypted since localStorage only saves strings.
+        logger.error(
+            `Failed to write ${tokenName} to IndexedDB; falling back to localStorage. ` +
+                `If this token is rotated and the fallback is not read back, the session will be lost.`,
+            e,
+        );
+
+        // Write the fallback *before* touching IndexedDB below, so that there is never a moment
+        // where neither store holds a token.
         if (token) {
-            try {
-                // try to encrypt the access token using the pickle key
-                const encrKey = await pickleKeyToAesKey(pickleKey);
-                encryptedToken = await encryptAESSecretStorageItem(token, encrKey, tokenName);
-                encrKey.fill(0);
-            } catch (e) {
-                // This is likely due to the browser not having WebCrypto or somesuch.
-                // Warn about it, but fall back to storing the unencrypted token.
-                logger.warn(`Could not encrypt token for ${tokenName}`, e);
-            }
+            localStorage.setItem(fallbackStorageKey, token);
+        } else {
+            localStorage.removeItem(fallbackStorageKey);
         }
+
+        // Whatever is in IndexedDB is now stale. Remove it, so that a client which does not know
+        // about the fallback key (eg after a downgrade) reads "no token" rather than an outdated
+        // one. This is best-effort: getStoredToken prefers the fallback regardless, so a failure
+        // here is not fatal.
         try {
-            // Save either the encrypted access token, or the plain access
-            // token if there is no token or we were unable to encrypt (e.g. if the browser doesn't
-            // have WebCrypto).
-            await StorageAccess.idbSave("account", storageKey, encryptedToken || token);
-        } catch {
-            // if we couldn't save to indexedDB, fall back to localStorage.  We
-            // store the access token unencrypted since localStorage only saves
-            // strings.
-            if (!!token) {
-                localStorage.setItem(storageKey, token);
-            } else {
-                localStorage.removeItem(storageKey);
-            }
-        }
-    } else {
-        try {
-            await StorageAccess.idbSave("account", storageKey, token);
-        } catch {
-            if (!!token) {
-                localStorage.setItem(storageKey, token);
-            } else {
-                localStorage.removeItem(storageKey);
-            }
+            await StorageAccess.idbDelete("account", storageKey);
+        } catch (e2) {
+            logger.error(`Failed to remove stale ${tokenName} from IndexedDB after a failed write`, e2);
         }
     }
 }

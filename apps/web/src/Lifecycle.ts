@@ -56,6 +56,7 @@ import { getOAuthParams, getStoredOAuthClientId, persistOAuthClientId } from "./
 import {
     ACCESS_TOKEN_IV,
     ACCESS_TOKEN_STORAGE_KEY,
+    getFallbackStorageKey,
     HAS_ACCESS_TOKEN_STORAGE_KEY,
     HAS_REFRESH_TOKEN_STORAGE_KEY,
     persistTokens,
@@ -547,6 +548,24 @@ export interface IStoredSession {
  * @returns Promise that resolves to token or undefined
  */
 async function getStoredToken(storageKey: string): Promise<string | undefined> {
+    // A token at the fallback key was written because an IndexedDB write failed, and is cleared
+    // again as soon as one succeeds. It is therefore always at least as new as whatever
+    // IndexedDB holds, and must take precedence — otherwise a stale IndexedDB value shadows it
+    // forever, and a rotated refresh token is silently lost.
+    const fallbackStorageKey = getFallbackStorageKey(storageKey);
+    const fallbackToken = localStorage.getItem(fallbackStorageKey) ?? undefined;
+    if (fallbackToken) {
+        logger.warn(`Using localStorage fallback for ${storageKey}; a previous IndexedDB write failed`);
+        try {
+            // try to move the token back into IndexedDB now that it may be writable again
+            await StorageAccess.idbSave("account", storageKey, fallbackToken);
+            localStorage.removeItem(fallbackStorageKey);
+        } catch (e) {
+            logger.error(`Recovery of token ${storageKey} into IndexedDB failed`, e);
+        }
+        return fallbackToken;
+    }
+
     let token: string | undefined;
     try {
         token = await StorageAccess.idbLoad("account", storageKey);
@@ -554,6 +573,7 @@ async function getStoredToken(storageKey: string): Promise<string | undefined> {
         logger.error(`StorageManager.idbLoad failed for account:${storageKey}`, e);
     }
     if (!token) {
+        // Legacy location, from before tokens were moved into IndexedDB.
         token = localStorage.getItem(storageKey) ?? undefined;
         if (token) {
             try {

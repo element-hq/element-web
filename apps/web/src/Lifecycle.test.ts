@@ -89,7 +89,11 @@ describe("Lifecycle", () => {
         vi.resetAllMocks();
     });
 
-    const initIdbMock = (mockStore: Record<string, Record<string, unknown>> = {}): void => {
+    const initIdbMock = (initialStore: Record<string, Record<string, unknown>> = {}): void => {
+        // Take a copy: the mocks below mutate the store, and several tests pass in the same
+        // shared fixture object (eg `idbStorageSession`). Without this, a write or delete in one
+        // test leaks into every test that runs after it.
+        const mockStore: Record<string, Record<string, unknown>> = structuredClone(initialStore);
         vi.spyOn(StorageAccess, "idbLoad")
             .mockClear()
             .mockImplementation(
@@ -268,8 +272,12 @@ describe("Lifecycle", () => {
                     expect(await restoreSessionFromStorage()).toEqual(true);
 
                     expect(StorageAccess.idbSave).toHaveBeenCalledWith("account", "mx_access_token", accessToken);
-                    // put accessToken in localstorage as fallback
-                    expect(localStorage.getItem("mx_access_token")).toEqual(accessToken);
+                    // put accessToken in localstorage at the fallback key, which takes precedence
+                    // over anything left in indexeddb
+                    expect(localStorage.getItem("mx_access_token_fallback")).toEqual(accessToken);
+                    // and clear the stale indexeddb entry so a client which does not know about the
+                    // fallback key cannot read an outdated token
+                    expect(StorageAccess.idbDelete).toHaveBeenCalledWith("account", "mx_access_token");
                 });
 
                 it("should create and start new matrix client with credentials", async () => {
@@ -393,8 +401,9 @@ describe("Lifecycle", () => {
                         "mx_access_token",
                         encryptedTokenShapedObject,
                     );
-                    // put accessToken in localstorage as fallback
-                    expect(localStorage.getItem("mx_access_token")).toEqual(accessToken);
+                    // put accessToken in localstorage at the fallback key. Note this is the plain
+                    // token: localStorage can only hold strings.
+                    expect(localStorage.getItem("mx_access_token_fallback")).toEqual(accessToken);
                 });
 
                 it("should create and start new matrix client with credentials", async () => {
@@ -735,8 +744,35 @@ describe("Lifecycle", () => {
                 });
                 await setLoggedIn(credentials);
 
-                // put plain accessToken in localstorage when we dont have idb
-                expect(localStorage.getItem("mx_access_token")).toEqual(accessToken);
+                // put plain accessToken in localstorage at the fallback key when we dont have idb
+                expect(localStorage.getItem("mx_access_token_fallback")).toEqual(accessToken);
+            });
+
+            it("should prefer the localStorage fallback over a stale token in idb", async () => {
+                // A previous write failed, leaving the new token in localStorage and an outdated
+                // one behind in idb. Reading must return the fallback, not the stale value:
+                // otherwise a rotated refresh token is lost and the session dies on next start.
+                initIdbMock({ account: { mx_refresh_token: "stale-refresh-token" } });
+                localStorage.setItem("mx_refresh_token_fallback", "fresh-refresh-token");
+                for (const key in localStorageSession) {
+                    localStorage.setItem(key, localStorageSession[key]);
+                }
+                localStorage.setItem("mx_has_access_token", "true");
+                await idbSave("account", "mx_access_token", accessToken);
+
+                expect(await restoreSessionFromStorage()).toEqual(true);
+
+                expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
+                    expect.objectContaining({ refreshToken: "fresh-refresh-token" }),
+                    undefined,
+                );
+                // having recovered it, the fallback is migrated back into idb and cleared
+                expect(StorageAccess.idbSave).toHaveBeenCalledWith(
+                    "account",
+                    "mx_refresh_token",
+                    "fresh-refresh-token",
+                );
+                expect(localStorage.getItem("mx_refresh_token_fallback")).toBeNull();
             });
 
             it("should remove any access token from storage when there is none in credentials and idb save fails", async () => {
