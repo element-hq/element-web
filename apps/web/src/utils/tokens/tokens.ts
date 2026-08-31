@@ -171,6 +171,18 @@ async function persistTokenInStorage(
         // write. If we left it in place, getStoredToken would keep preferring it over the value
         // we have just written.
         localStorage.removeItem(fallbackStorageKey);
+
+        // An older version of this function wrote its fallback to the primary key rather than to
+        // the fallback key. Nothing reads that any more, so it is just a plaintext token sitting
+        // in localStorage — exactly what the pickle key exists to avoid. Sweep it up.
+        //
+        // This has to happen here rather than on the read path: only a successful write proves we
+        // have a good token in IndexedDB, so only here can we be sure we are discarding a spare
+        // copy rather than the last recoverable one.
+        if (localStorage.getItem(storageKey) !== null) {
+            logger.warn(`Discarding unreachable plaintext ${tokenName} from localStorage`);
+            localStorage.removeItem(storageKey);
+        }
     } catch (e) {
         // We could not save to IndexedDB, so fall back to localStorage. We store the token
         // unencrypted since localStorage only saves strings.

@@ -555,6 +555,33 @@ describe("Lifecycle", () => {
                     "Error decrypting secret access_token: no pickle key found.",
                 );
             });
+
+            it("should keep a plaintext token in localStorage when the idb token cannot be decrypted", async () => {
+                // When the pickle key has gone missing, a plaintext copy left at the primary key by
+                // an older version is the only way back into the account, so nothing on the read
+                // path may throw it away.
+                for (const key in localStorageSession) {
+                    localStorage.setItem(key, localStorageSession[key]);
+                }
+                initIdbMock({});
+
+                // Create a pickle key, and store the token encrypted with it.
+                const pickleKey = (await PlatformPeg.get()!.createPickleKey(credentials.userId, credentials.deviceId))!;
+                localStorage.setItem("mx_has_pickle_key", "true");
+                await persistTokens(pickleKey, credentials);
+
+                // Residue at the primary key, left behind by an older version's fallback.
+                localStorage.setItem("mx_access_token", "old-plaintext-token");
+
+                // Now destroy the pickle key, making the idb token undecryptable.
+                await PlatformPeg.get()!.destroyPickleKey(credentials.userId, credentials.deviceId);
+
+                await expect(restoreSessionFromStorage()).rejects.toThrow(
+                    "Error decrypting secret access_token: no pickle key found.",
+                );
+
+                expect(localStorage.getItem("mx_access_token")).toEqual("old-plaintext-token");
+            });
         });
     });
 
@@ -794,7 +821,8 @@ describe("Lifecycle", () => {
                     expect.objectContaining({ accessToken }),
                     undefined,
                 );
-                // ...and the unreachable plaintext copy is swept up
+                // ...and the unreachable plaintext copy is swept up, once the restore has
+                // written a token of its own to idb and thereby proved the copy is spare
                 expect(localStorage.getItem("mx_access_token")).toBeNull();
             });
 
