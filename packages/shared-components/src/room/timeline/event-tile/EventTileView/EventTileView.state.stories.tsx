@@ -271,7 +271,7 @@ export const Media: Story = {
     tags: interactiveTags,
     args: {
         shape: "Room",
-        roomMessages: "bob",
+        roomMessages: "media",
         line: { media: true, image: true },
         state: { hasReply: false },
         slots: { ...minimalRoomSlots, body: <StoryMediaBody /> },
@@ -475,6 +475,20 @@ export const MediaBubble: Story = {
     name: "Media - Bubble - Default",
     tags: visualTags,
     globals: bubbleGlobals,
+    args: Media.args,
+};
+
+export const MediaGroup: Story = {
+    name: "Media - Group - Default",
+    tags: visualTags,
+    globals: groupGlobals,
+    args: Media.args,
+};
+
+export const MediaIrc: Story = {
+    name: "Media - IRC - Default",
+    tags: visualTags,
+    globals: ircGlobals,
     args: Media.args,
 };
 
