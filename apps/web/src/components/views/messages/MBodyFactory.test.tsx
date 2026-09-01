@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import React from "react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render } from "test-utils-rtl";
+import { describe, it, expect, vi, beforeEach, type MockInstance } from "vitest";
+import { fireEvent, render, waitFor } from "test-utils-rtl";
 import { EventType, getHttpUriForMxc, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { LinkedTextContext } from "@element-hq/web-shared-components";
 
@@ -34,6 +34,7 @@ import {
 import { TimelineRenderingType } from "../../../contexts/RoomContext.ts";
 import { ScopedRoomContextProvider } from "../../../contexts/ScopedRoomContext.tsx";
 import { useMediaVisible } from "../../../hooks/useMediaVisible";
+import { FileDownloader } from "../../../utils/FileDownloader";
 
 vi.mock("matrix-encrypt-attachment", () => ({
     default: {
@@ -88,9 +89,12 @@ describe("MBodyFactory", () => {
             },
         });
 
+    let mockDownload: MockInstance<FileDownloader["download"]>;
+
     beforeEach(() => {
         vi.spyOn(SettingsStore, "getValue").mockRestore();
         vi.mocked(useMediaVisible).mockReturnValue([true, vi.fn()]);
+        mockDownload = vi.spyOn(FileDownloader.prototype, "download").mockResolvedValue(undefined);
     });
 
     const encryptedImageHelper = (): MediaEventHelper =>
@@ -226,6 +230,64 @@ describe("MBodyFactory", () => {
             expect(container).toMatchSnapshot();
         },
     );
+
+    describe("PreviewFileBody", () => {
+        // A real MediaEventHelper never yields an empty file name, so stub it to exercise the
+        // preview tile's own fallbacks.
+        const mkFileHelper = (fileName: string, blob: Blob): MediaEventHelper =>
+            ({
+                fileName,
+                media: { isEncrypted: false },
+                sourceBlob: { value: Promise.resolve(blob) },
+            }) as unknown as MediaEventHelper;
+
+        const renderPreview = (mediaEvent: MatrixEvent, mediaEventHelper: MediaEventHelper) =>
+            render(
+                <LinkedTextContext.Provider value={{}}>
+                    <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.Room } as any)}>
+                        <FileBodyFactory mxEvent={mediaEvent} mediaEventHelper={mediaEventHelper} showFileInfo={true} />
+                    </ScopedRoomContextProvider>
+                </LinkedTextContext.Provider>,
+            );
+
+        it("shows the file size as the tile body when the event declares one", () => {
+            const mediaEvent = mkEvent("m.file", { info: { size: 2048, mimetype: "application/pdf" } });
+
+            const { getByText } = renderPreview(mediaEvent, mkFileHelper("report.pdf", new Blob(["pdf"])));
+
+            expect(getByText("report.pdf")).toBeInTheDocument();
+            expect(getByText("2 KB")).toBeInTheDocument();
+        });
+
+        it("shows a placeholder as the tile body when the event declares no size", () => {
+            const mediaEvent = mkEvent("m.file");
+
+            const { getByText } = renderPreview(mediaEvent, mkFileHelper("report.pdf", new Blob(["pdf"])));
+
+            expect(getByText("Size unknown")).toBeInTheDocument();
+        });
+
+        it("downloads the source blob under the file name when the download button is clicked", async () => {
+            const blob = new Blob(["pdf"], { type: "application/pdf" });
+            const mediaEvent = mkEvent("m.file");
+
+            const { getByRole } = renderPreview(mediaEvent, mkFileHelper("report.pdf", blob));
+            fireEvent.click(getByRole("button", { name: "Download" }));
+
+            await waitFor(() => expect(mockDownload).toHaveBeenCalledWith({ blob, name: "report.pdf" }));
+        });
+
+        it("downloads under a generic name when the file has none", async () => {
+            const mediaEvent = mkEvent("m.file");
+
+            const { getByRole } = renderPreview(mediaEvent, mkFileHelper("", new Blob(["pdf"])));
+            fireEvent.click(getByRole("button", { name: "Download" }));
+
+            await waitFor(() =>
+                expect(mockDownload).toHaveBeenCalledWith(expect.objectContaining({ name: "Attachment" })),
+            );
+        });
+    });
 
     describe("ImageBodyFactory", () => {
         const imageContent = {
