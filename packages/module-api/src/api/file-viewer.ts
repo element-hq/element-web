@@ -31,6 +31,12 @@ export type RemoteMedia = {
  */
 export interface UploadedMedia {
     type: "uploaded";
+    /**
+     * The MXC URI the file lives at. Identifies the file itself rather than any one event
+     * referencing it, and is stable across sessions, so viewers can use it as a key for state
+     * they want to remember about a file — a reading position, say.
+     */
+    uri: string;
     mimetype?: string;
     name: string;
     blob(): Promise<Blob>;

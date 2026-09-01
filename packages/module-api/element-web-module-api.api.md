@@ -666,6 +666,7 @@ export interface UploadedMedia {
     name: string;
     // (undocumented)
     type: "uploaded";
+    uri: string;
 }
 
 // @alpha @deprecated (undocumented)

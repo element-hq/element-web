@@ -26,6 +26,7 @@ describe("fileViewerOpenButton", () => {
         const setCard = vi.spyOn(RightPanelStore.instance, "setCard").mockImplementation(() => {});
         const media = {
             type: "uploaded",
+            uri: "mxc://example.org/spec",
             mimetype: "application/pdf",
             name: "spec.pdf",
             blob: vi.fn(),

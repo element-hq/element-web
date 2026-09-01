@@ -15,6 +15,9 @@ import type { PDFDocumentLoadingTask, PDFDocumentProxy } from "pdfjs-dist";
 import type { UploadedMedia } from "@element-hq/element-web-module-api";
 
 import { PdfViewer } from "./PdfViewer";
+import SettingsStore from "../../../settings/SettingsStore";
+import { SettingLevel } from "../../../settings/SettingLevel";
+import { flushPdfViewerState } from "../../../utils/pdfViewerState";
 
 const pdfjsMock = vi.hoisted(() => ({
     getDocument: vi.fn(),
@@ -51,6 +54,7 @@ const viewerMock = vi.hoisted(() => {
         public readonly cleanup = vi.fn();
         public readonly update = vi.fn();
         public readonly updateScale = vi.fn();
+        public readonly scrollPageIntoView = vi.fn();
 
         public constructor(public readonly options: { eventBus: MockEventBus; container: HTMLElement }) {
             MockPDFViewer.instances.push(this);
@@ -95,9 +99,10 @@ vi.mock("pdfjs-dist/web/pdf_viewer.mjs", () => ({
     PDFViewer: viewerMock.MockPDFViewer,
 }));
 
-function media(name = "spec.pdf", body = "%PDF-1.7\n"): UploadedMedia {
+function media(name = "spec.pdf", body = "%PDF-1.7\n", uri = `mxc://example.org/${name}`): UploadedMedia {
     return {
         type: "uploaded",
+        uri,
         mimetype: "application/pdf",
         name,
         blob: vi.fn(async () => new Blob([body], { type: "application/pdf" })),
@@ -130,6 +135,11 @@ async function emitPagesInit(): Promise<void> {
 /** pdf.js re-reports the current page as the document scrolls. */
 function emitPageChanging(pageNumber: number): void {
     act(() => activeViewer().eventBus.dispatch("pagechanging", { pageNumber }));
+}
+
+/** pdf.js reports the whole view position — page, zoom and offsets into that page — as it moves. */
+function emitUpdateViewArea(location: { pageNumber: number; scale: number | string; left: number; top: number }): void {
+    act(() => activeViewer().eventBus.dispatch("updateviewarea", { location }));
 }
 
 function mockResizeObserver(): { trigger: (element: Element) => void } {
@@ -168,6 +178,11 @@ function mockResizeObserver(): { trigger: (element: Element) => void } {
     };
 }
 
+/** Positions are written out on unmount, but the setting write itself resolves a tick later. */
+async function waitForStateWritten(name = "spec.pdf"): Promise<void> {
+    await waitFor(() => expect(SettingsStore.getValue("pdfViewerState")[`mxc://example.org/${name}`]).toBeDefined());
+}
+
 function fireZoomWheel(deltaY: number, point: { x: number; y: number } = { x: 0, y: 0 }): void {
     const event = new Event("wheel", { bubbles: true, cancelable: true }) as WheelEvent;
     Object.defineProperties(event, {
@@ -182,10 +197,13 @@ function fireZoomWheel(deltaY: number, point: { x: number; y: number } = { x: 0,
 }
 
 describe("PdfViewer", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
         pdfjsMock.getDocument.mockReset();
         pdfjsMock.GlobalWorkerOptions.workerSrc = undefined;
         viewerMock.MockPDFViewer.instances = [];
+
+        flushPdfViewerState();
+        await SettingsStore.setValue("pdfViewerState", null, SettingLevel.DEVICE, {});
     });
 
     afterEach(() => {
@@ -377,43 +395,102 @@ describe("PdfViewer", () => {
         expect(activeViewer().currentPageNumber).toBe(1);
     });
 
-    it("restores the scroll position when the same PDF is reopened", async () => {
-        const selectedMedia = media();
+    it("restores the reading position when the same PDF is reopened", async () => {
         mockDocument();
-        const { unmount } = render(<PdfViewer media={selectedMedia} />);
+        const { unmount } = render(<PdfViewer media={media()} />);
         await emitPagesInit();
 
-        const container = screen.getByTestId("pdf-container");
-        container.scrollLeft = 30;
-        container.scrollTop = 420;
-        fireEvent.scroll(container);
+        emitUpdateViewArea({ pageNumber: 12, scale: 150, left: 40, top: 260 });
         unmount();
+        await waitForStateWritten();
 
+        // Switching rooms rebuilds the media handle from the event, so the viewer is handed a fresh
+        // object for the same file — the position has to be keyed on the MXC URI, not the object.
         mockDocument();
-        render(<PdfViewer media={selectedMedia} />);
+        render(<PdfViewer media={media()} />);
         await emitPagesInit();
 
-        const reopened = screen.getByTestId("pdf-container");
-        expect(reopened.scrollLeft).toBe(30);
-        expect(reopened.scrollTop).toBe(420);
+        expect(activeViewer().scrollPageIntoView).toHaveBeenCalledWith({
+            pageNumber: 12,
+            // pdf.js reports the zoom as a percentage but takes it back as a factor.
+            destArray: [null, { name: "XYZ" }, 40, 260, 1.5],
+            allowNegativeOffset: true,
+        });
     });
 
-    it("keeps scroll positions separate for different attachments", async () => {
-        const first = media("first.pdf");
+    it("restores a fit-to-panel zoom by name, so it is recomputed for the new panel", async () => {
         mockDocument();
-        const { unmount } = render(<PdfViewer media={first} />);
+        const { unmount } = render(<PdfViewer media={media()} />);
         await emitPagesInit();
 
-        const container = screen.getByTestId("pdf-container");
-        container.scrollTop = 900;
-        fireEvent.scroll(container);
+        emitUpdateViewArea({ pageNumber: 3, scale: "page-width", left: 0, top: 80 });
         unmount();
+        await waitForStateWritten();
+
+        mockDocument();
+        render(<PdfViewer media={media()} />);
+        await emitPagesInit();
+
+        expect(activeViewer().scrollPageIntoView).toHaveBeenCalledWith(
+            expect.objectContaining({ destArray: [null, { name: "XYZ" }, 0, 80, "page-width"] }),
+        );
+    });
+
+    it("keeps reading positions separate for different attachments", async () => {
+        mockDocument();
+        const { unmount } = render(<PdfViewer media={media("first.pdf")} />);
+        await emitPagesInit();
+
+        emitUpdateViewArea({ pageNumber: 30, scale: 100, left: 0, top: 900 });
+        unmount();
+        await waitForStateWritten("first.pdf");
 
         mockDocument();
         render(<PdfViewer media={media("second.pdf")} />);
         await emitPagesInit();
 
-        expect(screen.getByTestId("pdf-container").scrollTop).toBe(0);
+        expect(activeViewer().scrollPageIntoView).not.toHaveBeenCalled();
+    });
+
+    it("ignores a saved page that the document no longer has", async () => {
+        mockDocument();
+        const { unmount } = render(<PdfViewer media={media()} />);
+        await emitPagesInit();
+
+        emitUpdateViewArea({ pageNumber: 500, scale: 100, left: 0, top: 0 });
+        unmount();
+        await waitForStateWritten();
+
+        mockDocument();
+        render(<PdfViewer media={media()} />);
+        // The mock viewer reports 100 pages, so page 500 cannot be scrolled to.
+        await emitPagesInit();
+
+        expect(activeViewer().scrollPageIntoView).not.toHaveBeenCalled();
+    });
+
+    it("does not record the layout position pdf.js reports before the saved one is applied", async () => {
+        mockDocument();
+        const { unmount } = render(<PdfViewer media={media()} />);
+        await emitPagesInit();
+
+        emitUpdateViewArea({ pageNumber: 12, scale: 150, left: 40, top: 260 });
+        unmount();
+        await waitForStateWritten();
+
+        mockDocument();
+        const reopened = render(<PdfViewer media={media()} />);
+        // A fresh layout reports page 1 before `pagesinit` restores anything; that must not win.
+        emitUpdateViewArea({ pageNumber: 1, scale: "page-width", left: 0, top: 0 });
+        await emitPagesInit();
+        reopened.unmount();
+        await waitForStateWritten();
+
+        mockDocument();
+        render(<PdfViewer media={media()} />);
+        await emitPagesInit();
+
+        expect(activeViewer().scrollPageIntoView).toHaveBeenCalledWith(expect.objectContaining({ pageNumber: 12 }));
     });
 
     it("releases pdf.js resources on unmount", async () => {

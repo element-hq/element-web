@@ -16,12 +16,14 @@ describe("default file viewer routing", () => {
     it("matches uploaded PDF attachments only", () => {
         const uploadedPdf = {
             type: "uploaded",
+            uri: "mxc://example.org/spec",
             mimetype: "application/pdf; charset=binary",
             name: "spec.pdf",
             blob: vi.fn(),
         } satisfies MediaHandle;
         const uploadedText = {
             type: "uploaded",
+            uri: "mxc://example.org/notes",
             mimetype: "text/plain",
             name: "notes.txt",
             blob: vi.fn(),

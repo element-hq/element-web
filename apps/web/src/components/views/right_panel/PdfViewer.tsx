@@ -12,7 +12,6 @@ import React, {
     type KeyboardEvent,
     useCallback,
     useEffect,
-    useMemo,
     useRef,
     useState,
 } from "react";
@@ -32,11 +31,11 @@ import type { UploadedMedia } from "@element-hq/element-web-module-api";
 
 import { _t } from "../../../languageHandler";
 import styles from "./PdfViewer.module.css";
+import { flushPdfViewerState, getPdfViewerState, setPdfViewerState } from "../../../utils/pdfViewerState";
 
 const loggerPdf = logger.getChild("PdfViewer");
 
 const WORKER_SRC = new URL("pdfjs-dist/build/pdf.worker.mjs", import.meta.url).toString();
-const PDF_SCROLL_POSITION_CACHE_LIMIT = 100;
 
 /** Scale value that makes pdf.js keep every page fitted to the width of the panel. */
 const FIT_TO_WIDTH = "page-width";
@@ -55,7 +54,13 @@ const MAX_WHEEL_ZOOM_FACTOR = 1.5;
 
 type ViewerStatus = "loading" | "ready" | "error";
 
-interface ScrollPosition {
+/**
+ * The view position pdf.js reports on `updateviewarea`. `left`/`top` are in PDF user-space units on
+ * `pageNumber`, and `scale` is either a percentage or one of pdf.js's named scales.
+ */
+interface PdfLocation {
+    pageNumber: number;
+    scale: number | string;
     left: number;
     top: number;
 }
@@ -66,10 +71,6 @@ interface GestureEvent extends Event {
     readonly clientY: number;
     readonly scale: number;
 }
-
-const mediaScrollKeys = new WeakMap<UploadedMedia, string>();
-const scrollPositionCache = new Map<string, ScrollPosition>();
-let nextMediaScrollKey = 0;
 
 function configurePdfWorker(): void {
     if (!GlobalWorkerOptions.workerSrc) {
@@ -82,25 +83,6 @@ function isCancellationError(error: unknown): boolean {
         error instanceof RenderingCancelledException ||
         (error instanceof Error && ["AbortException", "RenderingCancelledException"].includes(error.name))
     );
-}
-
-function getMediaScrollKey(media: UploadedMedia): string {
-    const existingKey = mediaScrollKeys.get(media);
-    if (existingKey) return existingKey;
-
-    const key = `${media.name}:${++nextMediaScrollKey}`;
-    mediaScrollKeys.set(media, key);
-    return key;
-}
-
-function rememberScrollPosition(key: string, position: ScrollPosition): void {
-    scrollPositionCache.delete(key);
-    scrollPositionCache.set(key, position);
-
-    if (scrollPositionCache.size > PDF_SCROLL_POSITION_CACHE_LIMIT) {
-        const oldestKey = scrollPositionCache.keys().next().value;
-        if (oldestKey) scrollPositionCache.delete(oldestKey);
-    }
 }
 
 /**
@@ -121,8 +103,9 @@ function getWheelZoomFactor(delta: number, deltaMode: number): number {
  * Page layout, lazy rendering, the rendering queue (which renders one page at a time, prioritised by
  * visibility and scroll direction, and pauses rather than discards partial work), the bounded page
  * cache, and transform-previewed zoom all come from {@link PdfJsViewer}. What lives here is the glue:
- * loading the attachment, driving zoom from wheel and pinch input, and remembering the scroll position
- * so reopening the file — or coming back to it after switching rooms — lands where you left off.
+ * loading the attachment, driving zoom from wheel and pinch input, and persisting the reading position
+ * against the file's MXC URI so reopening it — after switching rooms, or in a later session — lands
+ * where you left off, at the zoom you were reading at.
  */
 export function PdfViewer({ media }: { media: UploadedMedia }): JSX.Element {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -137,7 +120,6 @@ export function PdfViewer({ media }: { media: UploadedMedia }): JSX.Element {
     const isEditingPageRef = useRef(false);
     // Escape blurs the box, and blur commits — so the cancellation has to survive into the blur.
     const isPageEditCancelledRef = useRef(false);
-    const scrollPositionKey = useMemo(() => getMediaScrollKey(media), [media]);
 
     useEffect(() => {
         if (isEditingPageRef.current) return;
@@ -177,24 +159,49 @@ export function PdfViewer({ media }: { media: UploadedMedia }): JSX.Element {
         // document scrolls, so the indicator never has to measure anything itself.
         const onPageChanging = ({ pageNumber }: { pageNumber: number }): void => setCurrentPage(pageNumber);
 
+        // Until the saved position has been applied, the positions pdf.js reports are those of a
+        // freshly laid-out document — recording them would overwrite the very state being restored.
+        let isRestored = false;
+
         const onPagesInit = (): void => {
             pdfViewer.currentScaleValue = FIT_TO_WIDTH;
             setPageCount(pdfViewer.pagesCount);
-            setCurrentPage(pdfViewer.currentPageNumber);
 
-            // pdf.js sizes every page from the document up front, so the scroll height is already
-            // correct here and a restored offset lands where it did before.
-            const scrollPosition = scrollPositionCache.get(scrollPositionKey);
-            if (scrollPosition) {
-                container.scrollLeft = scrollPosition.left;
-                container.scrollTop = scrollPosition.top;
+            // pdf.js sizes every page from the document up front, so it can already scroll to an
+            // arbitrary page here, and it takes the saved position back in the same `XYZ` destination
+            // form it handed out — including the named scales, which it re-derives for this panel.
+            const savedState = getPdfViewerState(media.uri);
+            if (savedState && savedState.page >= 1 && savedState.page <= pdfViewer.pagesCount) {
+                const scale = typeof savedState.scale === "number" ? savedState.scale / 100 : savedState.scale;
+                pdfViewer.scrollPageIntoView({
+                    pageNumber: savedState.page,
+                    destArray: [null, { name: "XYZ" }, savedState.left, savedState.top, scale],
+                    allowNegativeOffset: true,
+                });
             }
 
+            isRestored = true;
+            setCurrentPage(pdfViewer.currentPageNumber);
             setStatus("ready");
+        };
+
+        // pdf.js recomputes this whenever the view moves — scrolling, zooming, jumping to a page — so
+        // it is the whole of the reading position, and it is already expressed in units that survive a
+        // different panel width or a different device.
+        const onUpdateViewArea = ({ location }: { location?: PdfLocation | null }): void => {
+            if (!isRestored || !location) return;
+
+            setPdfViewerState(media.uri, {
+                page: location.pageNumber,
+                scale: location.scale,
+                left: location.left,
+                top: location.top,
+            });
         };
 
         eventBus.on("pagesinit", onPagesInit);
         eventBus.on("pagechanging", onPageChanging);
+        eventBus.on("updateviewarea", onUpdateViewArea);
 
         const loadDocument = async (): Promise<void> => {
             const blob = await media.blob();
@@ -224,11 +231,11 @@ export function PdfViewer({ media }: { media: UploadedMedia }): JSX.Element {
             disposed = true;
             eventBus.off("pagesinit", onPagesInit);
             eventBus.off("pagechanging", onPageChanging);
+            eventBus.off("updateviewarea", onUpdateViewArea);
 
-            rememberScrollPosition(scrollPositionKey, {
-                left: container.scrollLeft,
-                top: container.scrollTop,
-            });
+            // The position recorded as the panel closed is the one worth keeping, so it must not be
+            // left sitting in the debounce.
+            flushPdfViewerState();
 
             pdfViewerRef.current = undefined;
             pdfViewer.cleanup();
@@ -241,7 +248,7 @@ export function PdfViewer({ media }: { media: UploadedMedia }): JSX.Element {
                 }
             });
         };
-    }, [media, scrollPositionKey]);
+    }, [media]);
 
     const zoomBy = useCallback((factor: number, origin: [number, number]): void => {
         // pdf.js clamps to its own scale bounds, coalesces the gesture, and keeps the point under
@@ -380,22 +387,6 @@ export function PdfViewer({ media }: { media: UploadedMedia }): JSX.Element {
 
         return () => observer.disconnect();
     }, []);
-
-    useEffect(() => {
-        const container = containerRef.current;
-        if (!container) return;
-
-        const updateScrollPosition = (): void => {
-            rememberScrollPosition(scrollPositionKey, {
-                left: container.scrollLeft,
-                top: container.scrollTop,
-            });
-        };
-
-        container.addEventListener("scroll", updateScrollPosition, { passive: true });
-
-        return () => container.removeEventListener("scroll", updateScrollPosition);
-    }, [scrollPositionKey]);
 
     return (
         <div className={styles.viewer} data-testid="pdf-viewer">

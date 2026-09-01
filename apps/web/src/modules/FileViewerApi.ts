@@ -63,6 +63,7 @@ export function uploadedMediaForEvent(mxEvent: MatrixEvent, helper?: MediaEventH
 
     return {
         type: "uploaded",
+        uri: helper.media.srcMxc,
         mimetype: mxEvent.getContent<MediaEventContent>().info?.mimetype,
         name: helper.fileName,
         blob: () => helper.sourceBlob.value,
