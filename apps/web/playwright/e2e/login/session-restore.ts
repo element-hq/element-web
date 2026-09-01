@@ -34,10 +34,7 @@ test.describe("session restore", () => {
         // The app should still be on the pre-sync splash screen while /sync is delayed.
         await expect(page.getByTestId("spinner")).toBeVisible();
 
-        // `not.toBeVisible()` resolves as soon as the element is absent *at that instant* — it does not
-        // wait around to see whether the element appears later. So we deliberately wait well into the
-        // artificial /sync delay (but comfortably before it elapses) before checking, to give a buggy
-        // premature transition every chance to have already happened.
+        // Wait *some* time* to check that the spinner doesn't insta-resolve.
         await page.waitForTimeout(2000);
         await expect(page.locator(".mx_MatrixChat")).not.toBeVisible();
 
