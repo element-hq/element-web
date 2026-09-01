@@ -78,6 +78,7 @@ exports[`<DeviceDetailHeading /> renders device name 1`] = `
       data-testid="device-detail-heading"
     >
       <h4
+        aria-live="polite"
         class="mx_Heading_h4"
       >
         My device
