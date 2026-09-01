@@ -53,6 +53,7 @@ import {
 } from "./ThreadSummary/ThreadSummaryView";
 import { EventPreviewView, type EventPreviewViewSnapshot } from "./EventPreviewView";
 import { TextualEventView, type TextualEventViewSnapshot } from "./TextualEventView";
+import bodyStyles from "../body/EventContentBodyView/EventContentBody.module.css";
 import { RoomAvatarView, type RoomAvatarViewSnapshot } from "../../../avatar/RoomAvatar/RoomAvatarView";
 import styles from "./EventTileView.stories.module.css";
 import storyMediaSrc from "../../../../../static/image-body/install-spinner.png";
@@ -257,10 +258,16 @@ const StoryPreviewBody = (): React.ReactElement => {
 };
 const StorySearchBody = (): React.ReactElement => {
     const contentSnapshot: EventContentBodyViewSnapshot = {
-        body: "Can you review the <mark>draft</mark> before the meeting?\nThe highlighted term represents the matching search result.",
+        body: "Can you review the draft before the meeting?\nThe highlighted term represents the matching search result.",
+        formattedBody: `Can you review the <span class="${bodyStyles.EventTile_searchHighlight}">draft</span> before the meeting?\nThe highlighted term represents the matching search result.`,
         className: styles.body,
     };
     const contentVm = useMockedViewModel(contentSnapshot, {});
+    const bodyVm = useMockedViewModel({ kind: TextualBodyViewKind.TEXT } satisfies TextualBodyViewSnapshot, {});
+    return <TextualBodyView vm={bodyVm} body={<EventContentBodyView vm={contentVm} as="div" />} />;
+};
+const StorySearchContextBody = ({ body }: { body: string }): React.ReactElement => {
+    const contentVm = useMockedViewModel({ body, className: styles.body } satisfies EventContentBodyViewSnapshot, {});
     const bodyVm = useMockedViewModel({ kind: TextualBodyViewKind.TEXT } satisfies TextualBodyViewSnapshot, {});
     return <TextualBodyView vm={bodyVm} body={<EventContentBodyView vm={contentVm} as="div" />} />;
 };
@@ -687,21 +694,39 @@ const baseRoot: EventTileViewProps["root"] = {
     state: { isOwnEvent: false, hasReply: false },
 };
 
+/**
+ * Slots used by an ordinary room-timeline event. Optional slots are only
+ * supplied by the focused state stories below, matching the application
+ * where they are derived from the event and interaction state.
+ */
 const roomSlots: EventTileViewProps["slots"] = {
     sender: <StorySender />,
     avatar: <StoryMemberAvatar />,
     body: <StoryBody />,
     timestamp: <StoryTimestamp />,
-    padlock: <StoryPadlock />,
     actionBar: <StoryActionBar />,
-    footer: <StoryFooter />,
-    threadInfo: <StoryThreadInfo />,
     receipt: <StoryReceipt />,
     contextMenu: <StoryContextMenu />,
 };
 
-/** Slots for the default Room-like shapes without a context menu fixture. */
-const defaultShapeSlots: EventTileViewProps["slots"] = {
+/** A valid Room event with the optional slots that can coexist on a timeline tile. */
+const richRoomSlots: EventTileViewProps["slots"] = {
+    ...roomSlots,
+    padlock: <StoryPadlock />,
+    replyChain: <StoryReplyChain />,
+    footer: <StoryFooter />,
+    threadInfo: <StoryThreadInfo />,
+    receipt: <StoryReceipt empty />,
+};
+
+const richOwnRoomSlots: EventTileViewProps["slots"] = {
+    ...richRoomSlots,
+    replyChain: undefined,
+    receipt: <StoryReceipt />,
+};
+
+/** Slots available to message-shaped surfaces such as Card and Thread. */
+const cardSlots: EventTileViewProps["slots"] = {
     sender: <StorySender />,
     avatar: <StoryMemberAvatar />,
     body: <StoryBody />,
@@ -714,9 +739,34 @@ const defaultShapeSlots: EventTileViewProps["slots"] = {
 };
 
 const threadSlots: EventTileViewProps["slots"] = {
-    ...defaultShapeSlots,
+    ...cardSlots,
     avatar: <StoryMemberAvatar size="32px" />,
     threadInfo: undefined,
+};
+
+const threadsListSlots: EventTileViewProps["slots"] = {
+    sender: <StorySender />,
+    avatar: <StoryMemberAvatar size="32px" />,
+    body: <StoryPreviewBody />,
+    timestamp: <StoryTimestamp />,
+    notificationBadge: <StoryNotificationBadge />,
+    threadInfo: <StoryThreadListInfo />,
+    actionBar: <StoryThreadListActionBar />,
+};
+
+const notificationSlots: EventTileViewProps["slots"] = {
+    sender: <StorySender />,
+    body: <StoryPreviewBody />,
+    timestamp: <StoryTimestamp />,
+    roomAvatar: <StoryRoomAvatar size="28px" />,
+    notificationRoomLabel: (
+        <span className={styles.roomLabel}>
+            {" in "}
+            <strong>Example room</strong>
+        </span>
+    ),
+    notificationBadge: <StoryNotificationBadge />,
+    threadInfo: <StoryThreadListInfo />,
 };
 
 type EventTileStoryProps = Omit<EventTileViewProps, "root"> & {
@@ -726,7 +776,8 @@ type EventTileStoryProps = Omit<EventTileViewProps, "root"> & {
     /** Whether the story should render the EventTileView-level sender and avatar slots. */
     showSenderAndAvatar?: boolean;
     state?: Partial<EventTileViewProps["root"]["state"]>;
-    roomMessages?: "boundaries" | "alice" | "bob" | "threeEach" | "informational" | "alignedBetween";
+    roomMessages?: "boundaries" | "alice" | "bob" | "threeEach" | "informational" | "alignedBetween" | "rich";
+    searchMessages?: "result";
 };
 
 type StoryPresentation = {
@@ -869,7 +920,7 @@ const createRoomStorySlots = ({
     const baseSlots = isOwnEvent
         ? slots
         : {
-              body: slots.body,
+              ...slots,
               // The application keeps an empty receipt group mounted on every event
               // while read receipts are enabled, even when this event has no receipts.
               receipt: slots.receipt ? <StoryReceipt empty /> : undefined,
@@ -907,6 +958,7 @@ function EventTileViewStoryContent({
     showSenderAndAvatar: showSenderAndAvatarStoryOverride,
     state,
     roomMessages = "boundaries",
+    searchMessages,
     ...props
 }: EventTileStoryProps): React.ReactElement {
     const requestedPresentation = useEventPresentation();
@@ -933,6 +985,7 @@ function EventTileViewStoryContent({
         isLast = false,
         bodyOverride?: React.ReactNode,
         showSenderAndAvatarOverride?: boolean,
+        slotsOverride?: EventTileViewProps["slots"],
     ): React.ReactElement => {
         const tileState = {
             previewClamped: shape === "ThreadsList" || shape === "Notification",
@@ -949,7 +1002,10 @@ function EventTileViewStoryContent({
             (layout === "irc" || !tileState.continuation);
         const sender = createStorySender(isOwnEvent, showSenderAndAvatar && !tileState.noSender && !tileState.info);
         const avatar = createStoryAvatar(isOwnEvent, layout, showSenderAndAvatar, tileState.info ? "14px" : undefined);
-        const tileSlots = bodyOverride === undefined ? props.slots : { ...props.slots, body: bodyOverride };
+        const tileSlots = {
+            ...(slotsOverride ?? props.slots),
+            ...(bodyOverride === undefined ? {} : { body: bodyOverride }),
+        };
         const slots =
             shape === "Room"
                 ? createRoomStorySlots({
@@ -960,7 +1016,7 @@ function EventTileViewStoryContent({
                       timestamp,
                       showActionBar,
                   })
-                : createPreviewStorySlots({ shape, slots: props.slots, showActionBar });
+                : createPreviewStorySlots({ shape, slots: tileSlots, showActionBar });
 
         return (
             <EventTileView
@@ -1013,6 +1069,40 @@ function EventTileViewStoryContent({
     };
 
     const renderRoomTiles = (): React.ReactNode => {
+        if (roomMessages === "rich") {
+            return (
+                <>
+                    {renderTile(
+                        false,
+                        "rich-bob-first",
+                        { continuation: false, lastInSection: false, hasReply: true },
+                        false,
+                        undefined,
+                        undefined,
+                        richRoomSlots,
+                    )}
+                    {renderTile(
+                        false,
+                        "rich-bob-continuation",
+                        { continuation: true, lastInSection: false },
+                        false,
+                        <StoryShortBody />,
+                        undefined,
+                        { body: <StoryShortBody />, receipt: <StoryReceipt empty /> },
+                    )}
+                    {renderTile(
+                        true,
+                        "rich-alice-last",
+                        { continuation: false, lastInSection: true },
+                        true,
+                        <StoryEditedMessageBody />,
+                        undefined,
+                        richOwnRoomSlots,
+                    )}
+                </>
+            );
+        }
+
         if (roomMessages === "alice") {
             return renderTile(true, "alice-single", { continuation: false, lastInSection: true }, true);
         }
@@ -1111,10 +1201,43 @@ function EventTileViewStoryContent({
         );
     };
 
+    const renderSearchTiles = (): React.ReactNode => (
+        <>
+            {renderTile(
+                false,
+                "search-context-before",
+                { contextual: true, continuation: false, lastInSection: false },
+                false,
+                <StorySearchContextBody body="Earlier context message in the room." />,
+            )}
+            {renderTile(
+                false,
+                "search-result",
+                { contextual: false, continuation: true, lastInSection: false },
+                false,
+                <StorySearchBody />,
+            )}
+            {renderTile(
+                false,
+                "search-context-after",
+                { contextual: true, continuation: true, lastInSection: true },
+                true,
+                <StorySearchContextBody body="Later context message in the room." />,
+            )}
+        </>
+    );
+
     // PinnedMessagesCard is still rendered by the legacy PinnedEventTile in the
     // application. Keep this story as a presentation diagnostic rather than
     // rendering an EventTileView that does not represent the real panel.
-    const tiles = shape === "Pinned" ? null : shape === "Room" ? renderRoomTiles() : renderTile(false, "event");
+    const tiles =
+        shape === "Pinned"
+            ? null
+            : shape === "Room"
+              ? renderRoomTiles()
+              : shape === "Search" && searchMessages === "result"
+                ? renderSearchTiles()
+                : renderTile(false, "event");
 
     const rightPanel =
         shape === "Card" ||
@@ -1163,6 +1286,29 @@ const bubbleGlobals = {
 const ircGlobals = { eventLayout: "irc", eventDensity: "default" } as const;
 const compactGroupGlobals = { eventLayout: "group", eventDensity: "compact" } as const;
 
+const shapeDescriptions = {
+    Room: "Application slot contract: sender, avatar, body, timestamp, and optional padlock, replyChain, footer, threadInfo, receipt, actionBar, and contextMenu slots. Optional slots depend on the event and interaction state.",
+    Thread: "Application slot contract: sender, avatar, body, timestamp, and optional padlock, footer, receipt, and actionBar slots. The threadInfo slot is omitted because this shape is already rendered in a thread view.",
+    Notification:
+        "Application slot contract: sender, body, timestamp, roomAvatar, notificationRoomLabel, notificationBadge, and threadInfo slots. Member avatar, footer, receipt, padlock, and actionBar slots are omitted.",
+    ThreadsList:
+        "Application slot contract: sender, avatar, preview body, timestamp, notificationBadge, threadInfo, and actionBar slots. Footer, receipt, padlock, and contextMenu slots are omitted.",
+    File: "Application slot contract: sender, avatar, plain timestamp, and file body slots. Footer, receipt, threadInfo, and actionBar slots are omitted; the FilePanel host is not reproduced here.",
+    Card: "Application slot contract: sender, avatar, body, timestamp, padlock, footer, threadInfo, receipt, and optional actionBar slots. This shape is used by message cards and has no contextMenu slot.",
+    Search: "Application slot contract: sender, avatar, body, timestamp, and threadInfo slots. Search results omit footer and receipt slots; contextual events are dimmed while the matching formatted body remains undimmed and highlighted.",
+    Pinned: "The application currently renders PinnedEventTile for pinned messages, so this story is not an application EventTileView example and has no application slot contract.",
+} as const;
+
+const shapeDescriptionParameters = (shape: keyof typeof shapeDescriptions, note?: string) => ({
+    parameters: {
+        docs: {
+            description: {
+                story: note ? `${shapeDescriptions[shape]} ${note}` : shapeDescriptions[shape],
+            },
+        },
+    },
+});
+
 const storyHelpers = {
     EventTileViewStory,
     eventTileStoryDefaults,
@@ -1187,6 +1333,7 @@ const storyHelpers = {
     StoryStickerBody,
     StoryThreadListActionBar,
     StoryThreadListInfo,
+    shapeDescriptionParameters,
 };
 
 const meta = {
@@ -1199,13 +1346,14 @@ const meta = {
             table: { disable: true },
         },
         containerWidth: {
-            control: false,
-            description:
-                "Initial width in pixels. Use the visible range control in the story: RoomView is 50%–100% of the host; right-panel shapes are 320px–50% of MainSplit.",
-            table: { category: "Story host" },
+            table: { disable: true },
         },
         showSenderAndAvatar: { table: { disable: true } },
         classNames: { table: { disable: true } },
+        state: { table: { disable: true } },
+        roomMessages: { table: { disable: true } },
+        searchMessages: { table: { disable: true } },
+        line: { table: { disable: true } },
         onMouseEnter: { table: { disable: true } },
         onMouseLeave: { table: { disable: true } },
         onFocus: { table: { disable: true } },
@@ -1230,26 +1378,27 @@ type Story = StoryObj<typeof meta>;
 const interactiveTags = ["skip-test", "!snapshot"];
 const visualTags = ["!dev", "!autodocs", "snapshot"];
 
-export const Room: Story = { tags: interactiveTags };
+export const Room: Story = {
+    tags: interactiveTags,
+    ...shapeDescriptionParameters("Room"),
+    args: {
+        roomMessages: "rich",
+        slots: richRoomSlots,
+    },
+};
 
 export const ThreadsList: Story = {
     tags: interactiveTags,
+    ...shapeDescriptionParameters("ThreadsList"),
     args: {
         shape: "ThreadsList",
-        slots: {
-            sender: <StorySender />,
-            avatar: <StoryMemberAvatar size="32px" />,
-            body: <StoryPreviewBody />,
-            timestamp: <StoryTimestamp />,
-            notificationBadge: <StoryNotificationBadge />,
-            threadInfo: <StoryThreadListInfo />,
-            actionBar: <StoryThreadListActionBar />,
-        },
+        slots: threadsListSlots,
     },
 };
 
 export const Thread: Story = {
     tags: interactiveTags,
+    ...shapeDescriptionParameters("Thread"),
     args: {
         shape: "Thread",
         slots: threadSlots,
@@ -1258,41 +1407,31 @@ export const Thread: Story = {
 
 export const Card: Story = {
     tags: interactiveTags,
+    ...shapeDescriptionParameters("Card"),
     args: {
         shape: "Card",
-        slots: defaultShapeSlots,
+        slots: cardSlots,
     },
 };
 
 export const Notification: Story = {
     tags: interactiveTags,
+    ...shapeDescriptionParameters("Notification"),
     args: {
         shape: "Notification",
-        slots: {
-            sender: <StorySender />,
-            body: <StoryPreviewBody />,
-            timestamp: <StoryTimestamp />,
-            roomAvatar: <StoryRoomAvatar size="28px" />,
-            notificationRoomLabel: (
-                <span className={styles.roomLabel}>
-                    {" in "}
-                    <strong>Example room</strong>
-                </span>
-            ),
-            notificationBadge: <StoryNotificationBadge />,
-            threadInfo: <StoryThreadListInfo />,
-        },
+        slots: notificationSlots,
     },
 };
 
 export const File: Story = {
     tags: interactiveTags,
+    ...shapeDescriptionParameters("File"),
     args: {
         shape: "File",
         slots: {
             sender: <StorySender />,
             avatar: <StoryMemberAvatar size="20px" />,
-            timestamp: <StoryLinkedTimestamp />,
+            timestamp: <StoryTimestamp />,
             body: <StoryFileBody />,
         },
     },
@@ -1300,11 +1439,17 @@ export const File: Story = {
 
 export const Search: Story = {
     tags: interactiveTags,
+    ...shapeDescriptionParameters("Search"),
     args: {
         shape: "Search",
+        // Search results include contextual events around the undimmed matching event.
+        searchMessages: "result",
+        state: {},
         slots: {
-            ...defaultShapeSlots,
+            sender: <StorySender />,
+            avatar: <StoryMemberAvatar />,
             body: <StorySearchBody />,
+            timestamp: <StoryLinkedTimestamp />,
             threadInfo: <StorySearchThreadInfo />,
         },
     },
@@ -1312,6 +1457,7 @@ export const Search: Story = {
 
 export const Pinned: Story = {
     tags: interactiveTags,
+    ...shapeDescriptionParameters("Pinned"),
     args: {
         shape: "Pinned",
     },
