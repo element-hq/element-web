@@ -245,9 +245,21 @@ export default class RightPanelStore extends ReadyWatchingStore {
         this.focusedCardType = "room";
 
         if (targetPhase === this.currentCardForRoom(rId)?.phase && !!cardState) {
-            // Update state: set right panel with a new state but keep the phase (don't know it this is ever needed...)
-            const hist = this.byRoom[rId]?.history ?? [];
-            hist[hist.length - 1].state = cardState;
+            // Update state: set right panel with a new state but keep the phase.
+            const panel = this.byRoom[rId];
+
+            if (!panel?.history.length) {
+                // The matching phase came from the global card, so this room has no history to update.
+                // Give it one rather than writing through an empty array.
+                const history = this.generateHistoryForPhase(targetPhase, cardState);
+                this.byRoom[rId] = { history, isOpen: true };
+            } else {
+                panel.history[panel.history.length - 1].state = cardState;
+                // Setting a card shows it. Without this, re-selecting the phase that is already at the
+                // top of a closed panel would silently swap the state behind a panel that stays hidden.
+                panel.isOpen = true;
+            }
+
             this.emitAndUpdateSettings();
         } else if (targetPhase !== this.currentCardForRoom(rId)?.phase || !this.byRoom[rId]) {
             // Set right panel and initialize/erase history
