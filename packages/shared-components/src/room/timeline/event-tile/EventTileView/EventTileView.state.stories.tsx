@@ -18,14 +18,21 @@ const {
     ircGlobals,
     StoryDecryptionFailureBody,
     StoryDecryptionFailurePadlock,
-    StoryEditedBody,
+    StoryMessageComposer,
+    StoryEditedMessageBody,
     StoryEmoteBody,
     StoryHighlightedBody,
     StoryInformationalBody,
     StoryLinkedTimestamp,
+    StoryPadlock,
     StoryMediaBody,
+    StoryNotificationBadge,
+    StoryPreviewBody,
+    StoryShortBody,
     StoryReplyChain,
     StoryStickerBody,
+    StoryThreadListActionBar,
+    StoryThreadListInfo,
 } = layoutMeta.storyHelpers;
 
 const meta = {
@@ -35,6 +42,13 @@ const meta = {
     render: (args) => <EventTileViewStory {...args} />,
     argTypes: {
         shape: { table: { disable: true } },
+        containerWidth: {
+            control: false,
+            description:
+                "Initial width in pixels. Use the visible range control in the story: RoomView is 50%–100% of the host; right-panel shapes are 320px–50% of MainSplit.",
+            table: { category: "Story host" },
+        },
+        showSenderAndAvatar: { table: { disable: true } },
         classNames: { table: { disable: true } },
         state: { table: { disable: true } },
         line: { table: { disable: true } },
@@ -72,7 +86,7 @@ const searchStateSlots = {
     timestamp: <StoryLinkedTimestamp />,
 };
 
-export const Highlighted: Story = {
+export const HighlightedThread: Story = {
     tags: interactiveTags,
     args: { shape: "Thread", state: { highlighted: true }, slots: threadStateSlots },
 };
@@ -86,7 +100,7 @@ export const HighlightedSearch: Story = {
     },
 };
 
-export const Selected: Story = {
+export const SelectedThread: Story = {
     tags: interactiveTags,
     args: { shape: "Thread", state: { selected: true }, slots: threadStateSlots },
 };
@@ -97,7 +111,49 @@ export const SelectedRoom: Story = {
         shape: "Room",
         roomMessages: "alice",
         state: { selected: true, hasReply: false },
-        slots: minimalRoomSlots,
+        slots: { ...minimalRoomSlots, body: <StoryEditedMessageBody /> },
+    },
+};
+
+export const ContextualSearch: Story = {
+    tags: interactiveTags,
+    args: {
+        shape: "Search",
+        state: { contextual: true, hasReply: false },
+        slots: searchStateSlots,
+    },
+};
+
+export const ActionBarFocused: Story = {
+    tags: interactiveTags,
+    args: {
+        shape: "Room",
+        roomMessages: "alice",
+        state: { actionBarFocused: true, hasReply: false },
+        slots: {
+            sender: eventTileStoryDefaults.slots.sender,
+            avatar: eventTileStoryDefaults.slots.avatar,
+            body: eventTileStoryDefaults.slots.body,
+            timestamp: eventTileStoryDefaults.slots.timestamp,
+            actionBar: eventTileStoryDefaults.slots.actionBar,
+        },
+    },
+};
+
+export const PreviewClamped: Story = {
+    tags: interactiveTags,
+    args: {
+        shape: "ThreadsList",
+        state: { previewClamped: true },
+        slots: {
+            sender: eventTileStoryDefaults.slots.sender,
+            avatar: eventTileStoryDefaults.slots.avatar,
+            body: <StoryPreviewBody />,
+            timestamp: <StoryLinkedTimestamp />,
+            notificationBadge: <StoryNotificationBadge />,
+            threadInfo: <StoryThreadListInfo />,
+            actionBar: <StoryThreadListActionBar />,
+        },
     },
 };
 
@@ -105,8 +161,8 @@ export const Informational: Story = {
     tags: interactiveTags,
     args: {
         shape: "Room",
-        roomMessages: "bob",
-        state: { info: true, hasReply: false },
+        roomMessages: "informational",
+        state: { hasReply: false },
         slots: { body: <StoryInformationalBody /> },
     },
 };
@@ -130,47 +186,53 @@ export const ReplyChain: Story = {
         shape: "Room",
         roomMessages: "alice",
         state: { hasReply: true },
-        slots: { ...minimalRoomSlots, replyChain: <StoryReplyChain /> },
+        slots: { ...minimalRoomSlots, padlock: <StoryPadlock />, replyChain: <StoryReplyChain /> },
     },
 };
 
 export const BubbleContainer: Story = {
     tags: interactiveTags,
+    globals: bubbleGlobals,
     args: {
         shape: "Room",
         roomMessages: "bob",
+        showSenderAndAvatar: false,
         state: { bubbleContainer: true, hasReply: false },
-        slots: minimalRoomSlots,
+        slots: { body: <StoryInformationalBody>Security verification event.</StoryInformationalBody> },
+    },
+};
+
+export const BubbleBoundaries: Story = {
+    tags: interactiveTags,
+    globals: bubbleGlobals,
+    args: {
+        shape: "Room",
+        roomMessages: "threeEach",
+        state: { hasReply: false },
+        slots: { body: <StoryShortBody /> },
     },
 };
 
 export const LeftAlignedBubble: Story = {
     tags: interactiveTags,
+    globals: bubbleGlobals,
     args: {
         shape: "Room",
         roomMessages: "bob",
+        showSenderAndAvatar: false,
         state: { leftAlignedBubble: true, hasReply: false },
-        slots: minimalRoomSlots,
+        slots: { body: <StoryInformationalBody>Alex started a voice call.</StoryInformationalBody> },
     },
 };
 
 export const AlignedBetweenBubbles: Story = {
     tags: interactiveTags,
+    globals: bubbleGlobals,
     args: {
         shape: "Room",
-        roomMessages: "bob",
-        state: { alignedBetweenBubbles: true, hasReply: false },
-        slots: minimalRoomSlots,
-    },
-};
-
-export const NoBubble: Story = {
-    tags: interactiveTags,
-    args: {
-        shape: "Room",
-        roomMessages: "bob",
-        state: { noBubble: true, hasReply: false },
-        slots: minimalRoomSlots,
+        roomMessages: "alignedBetween",
+        state: { hasReply: false },
+        slots: { body: <StoryShortBody /> },
     },
 };
 
@@ -188,9 +250,9 @@ export const Editing: Story = {
     tags: interactiveTags,
     args: {
         shape: "Room",
-        roomMessages: "bob",
+        roomMessages: "alice",
         state: { editing: true, hasReply: false },
-        slots: { ...minimalRoomSlots, body: <StoryEditedBody /> },
+        slots: { ...minimalRoomSlots, body: <StoryMessageComposer /> },
     },
 };
 
@@ -209,8 +271,8 @@ export const Media: Story = {
     tags: interactiveTags,
     args: {
         shape: "Room",
-        roomMessages: "bob",
-        line: { media: true },
+        roomMessages: "media",
+        line: { media: true, image: true },
         state: { hasReply: false },
         slots: { ...minimalRoomSlots, body: <StoryMediaBody /> },
     },
@@ -227,18 +289,18 @@ export const Sticker: Story = {
     },
 };
 
-export const HighlightedGroup: Story = {
-    name: "Highlighted - Group - Default",
+export const HighlightedThreadGroup: Story = {
+    name: "Highlighted thread - Group - Default",
     tags: visualTags,
     globals: groupGlobals,
-    args: Highlighted.args,
+    args: HighlightedThread.args,
 };
 
-export const SelectedGroup: Story = {
-    name: "Selected - Group - Default",
+export const SelectedThreadGroup: Story = {
+    name: "Selected thread - Group - Default",
     tags: visualTags,
     globals: groupGlobals,
-    args: Selected.args,
+    args: SelectedThread.args,
 };
 
 export const HighlightedSearchGroup: Story = {
@@ -253,6 +315,27 @@ export const SelectedRoomGroup: Story = {
     tags: visualTags,
     globals: groupGlobals,
     args: SelectedRoom.args,
+};
+
+export const ContextualSearchGroup: Story = {
+    name: "Contextual search - Group - Default",
+    tags: ["!dev", "!autodocs", "snapshot", "skip-test"],
+    globals: groupGlobals,
+    args: ContextualSearch.args,
+};
+
+export const ActionBarFocusedGroup: Story = {
+    name: "Action bar focused - Group - Default",
+    tags: visualTags,
+    globals: groupGlobals,
+    args: ActionBarFocused.args,
+};
+
+export const PreviewClampedGroup: Story = {
+    name: "Preview clamped - Group",
+    tags: visualTags,
+    globals: groupGlobals,
+    args: PreviewClamped.args,
 };
 
 export const InformationalBubble: Story = {
@@ -311,6 +394,13 @@ export const BubbleContainerBubble: Story = {
     args: BubbleContainer.args,
 };
 
+export const BubbleBoundariesBubble: Story = {
+    name: "Bubble boundaries - Bubble - Default",
+    tags: visualTags,
+    globals: bubbleGlobals,
+    args: BubbleBoundaries.args,
+};
+
 export const BubbleContainerGroup: Story = {
     name: "Bubble container - Group - Default",
     tags: visualTags,
@@ -337,13 +427,6 @@ export const AlignedBetweenBubblesVisual: Story = {
     tags: visualTags,
     globals: bubbleGlobals,
     args: AlignedBetweenBubbles.args,
-};
-
-export const NoBubbleVisual: Story = {
-    name: "No bubble - Bubble - Default",
-    tags: visualTags,
-    globals: bubbleGlobals,
-    args: NoBubble.args,
 };
 
 export const NoSenderVisual: Story = {
@@ -392,6 +475,20 @@ export const MediaBubble: Story = {
     name: "Media - Bubble - Default",
     tags: visualTags,
     globals: bubbleGlobals,
+    args: Media.args,
+};
+
+export const MediaGroup: Story = {
+    name: "Media - Group - Default",
+    tags: visualTags,
+    globals: groupGlobals,
+    args: Media.args,
+};
+
+export const MediaIrc: Story = {
+    name: "Media - IRC - Default",
+    tags: visualTags,
+    globals: ircGlobals,
     args: Media.args,
 };
 

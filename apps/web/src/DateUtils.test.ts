@@ -29,10 +29,8 @@ import {
     MINUTE_MS,
     DAY_MS,
 } from "./DateUtils";
-import { REPEATABLE_DATE, mockIntlDateTimeFormat, unmockIntlDateTimeFormat } from "../test/test-utils";
+import { REPEATABLE_DATE } from "../test/test-utils";
 import * as languageSettings from "./i18n/settings";
-
-vi.mock("./TimezoneHandler", () => ({ getUserTimezone: () => "UTC" }));
 
 describe("getDaysArray", () => {
     it("should return Sunday-Saturday in long mode", () => {
@@ -179,18 +177,18 @@ describe("formatRelativeTime", () => {
 
     it("returns hour format for events created in the same day", () => {
         // Tuesday, 2 November 2021 11:01:00 UTC
-        const date = new Date(2021, 10, 2, 11, 1, 23, 0);
+        const date = new Date(Date.UTC(2021, 10, 2, 11, 1, 23, 0));
         expect(formatRelativeTime(date)).toBe("11:01");
     });
 
     it("returns month and day for events created less than 24h ago but on a different day", () => {
-        // Monday, 1 November 2021 23:01:00 UTC
-        const date = new Date(2021, 10, 1, 23, 1, 23, 0);
+        // Monday, 1 November 2021 11:18:04 UTC, 23h 59m 59s before the frozen current time
+        const date = new Date(Date.UTC(2021, 10, 1, 11, 18, 4, 0));
         expect(formatRelativeTime(date)).toBe("Nov 1");
     });
 
     it("honours the hour format setting", () => {
-        const date = new Date(2021, 10, 2, 11, 1, 23, 0);
+        const date = new Date(Date.UTC(2021, 10, 2, 11, 1, 23, 0));
         expect(formatRelativeTime(date)).toBe("11:01");
         expect(formatRelativeTime(date, false)).toBe("11:01");
         expect(formatRelativeTime(date, true)).toBe("11:01 AM");
@@ -212,19 +210,19 @@ describe("formatRelativeTime", () => {
     });
 
     it("orders the month and day to suit the locale", () => {
-        const date = new Date(2021, 9, 25, 11, 1, 23, 0);
+        const date = new Date(Date.UTC(2021, 9, 25, 11, 1, 23, 0));
         expect(formatRelativeTime(date, false, "en-GB")).toBe("25 Oct");
         expect(formatRelativeTime(date, false, "ja")).toBe("10月25日");
     });
 
     it("appends the year in the position the locale expects", () => {
-        const date = new Date(2020, 9, 31, 11, 1, 23, 0);
+        const date = new Date(Date.UTC(2020, 9, 31, 11, 1, 23, 0));
         expect(formatRelativeTime(date, false, "en-GB")).toBe("31 Oct 2020");
         expect(formatRelativeTime(date, false, "ja")).toBe("2020年10月31日");
     });
 
     it("passes the locale through to the time format", () => {
-        const date = new Date(2021, 10, 2, 11, 1, 23, 0);
+        const date = new Date(Date.UTC(2021, 10, 2, 11, 1, 23, 0));
         expect(formatRelativeTime(date, true, "en-GB")).toBe("11:01 am");
     });
 });
@@ -293,13 +291,9 @@ describe("formatTimeLeft", () => {
 });
 
 describe("formatLocalDateShort()", () => {
-    afterAll(() => {
-        unmockIntlDateTimeFormat();
-    });
     const timestamp = new Date("Fri Dec 17 2021 09:09:00 GMT+0100 (Central European Standard Time)").getTime();
     it("formats date correctly by locale", () => {
         const locale = vi.spyOn(languageSettings, "getUserLanguage");
-        mockIntlDateTimeFormat();
 
         // format is DD/MM/YY
         locale.mockReturnValue("en-GB");
