@@ -8,12 +8,12 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
+import { describe, it, expect, vi } from "vitest";
 import { render } from "test-utils-rtl";
+import { mkRoom, mkRoomMember, stubClient, withClientContextRenderOptions } from "test-utils";
 import React from "react";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { describe, it, expect, vi } from "vitest";
 
-import { mkRoom, mkRoomMember, stubClient, withClientContextRenderOptions } from "test-utils";
 import RoomFacePile from "./RoomFacePile";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";

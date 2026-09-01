@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { render } from "test-utils-rtl";
 import React, { type ComponentProps } from "react";
 import userEvent from "@testing-library/user-event";
-import { describe, it, expect, vi, afterEach } from "vitest";
 
 import { BugReportDialogButton } from "./BugReportDialogButton";
 import SdkConfig from "../../../SdkConfig";

@@ -7,13 +7,13 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
+import { describe, it, expect, vi } from "vitest";
 import React from "react";
 import { render, screen, waitFor } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
-import { describe, it, expect, vi } from "vitest";
 
 import SettingsField from "./SettingsField";
-import { SettingLevel } from "../../../settings/SettingLevel.ts";
+import { SettingLevel } from "../../../settings/SettingLevel";
 
 describe("<SettingsField />", () => {
     it("should render with the default label", () => {

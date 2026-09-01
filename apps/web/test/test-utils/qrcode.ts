@@ -9,12 +9,10 @@ import { vi } from "vitest";
 import { act } from "test-utils-rtl";
 import { toDataURL, type QRCodeSegment, type QRCodeToDataURLOptions } from "qrcode";
 
-vi.mock("qrcode", async () => ({
-    ...(await vi.importActual("qrcode")),
-    toDataURL: vi.fn(),
-}));
-
-const realQRCode = (await vi.importActual("qrcode")) as { toDataURL: typeof toDataURL };
+// Callers must call `vi.mock("qrcode", async () => ({ ...(await vi.importActual("qrcode")), toDataURL: vi.fn() }))`
+// themselves at their own top level — vitest's mock hoisting is per-file, so a `vi.mock` living only here
+// would not catch the "qrcode" import from the component under test.
+const realQRCode = await vi.importActual<{ toDataURL: typeof toDataURL }>("qrcode");
 const mockedToDataURL = vi.mocked(toDataURL);
 
 let qrCodeRenderPromise: Promise<string> | undefined;

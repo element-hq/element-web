@@ -9,10 +9,10 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
+import { describe, it, expect, afterEach, beforeEach } from "vitest";
 import { act, render } from "test-utils-rtl";
 import React from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
-import { describe, it, expect, afterEach, beforeEach } from "vitest";
 
 import SdkConfig from "../../../SdkConfig";
 import SearchWarning, { WarningKind } from "./SearchWarning";

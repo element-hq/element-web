@@ -10,8 +10,8 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render, waitFor } from "test-utils-rtl";
 import { describe, it, expect, vi } from "vitest";
-
 import { mkEvent, stubClient, withClientContextRenderOptions } from "test-utils";
+
 import ReplyChain from "./ReplyChain";
 
 describe("ReplyChain", () => {

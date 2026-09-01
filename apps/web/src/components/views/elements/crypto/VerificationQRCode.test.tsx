@@ -8,12 +8,17 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
+import { describe, it, expect, afterEach, vi } from "vitest";
 import { cleanup, render } from "test-utils-rtl";
-import React from "react";
-import { describe, it, expect, afterEach } from "vitest";
 import { mockQRCodeRender, resetQRCodeMock, waitForQRCodeRender } from "test-utils/qrcode";
+import React from "react";
 
 import VerificationQRCode from "./VerificationQRCode";
+
+vi.mock("qrcode", async () => ({
+    ...(await vi.importActual("qrcode")),
+    toDataURL: vi.fn(),
+}));
 
 describe("<VerificationQRCode />", () => {
     afterEach(() => {

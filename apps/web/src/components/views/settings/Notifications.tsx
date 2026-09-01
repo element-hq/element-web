@@ -200,6 +200,11 @@ const NotificationActivitySettings = (): JSX.Element => {
             }}
         >
             <SettingsFlag name="Notifications.showbold" level={SettingLevel.DEVICE} />
+            <SettingsFlag
+                name="Notifications.activityIsUnread"
+                level={SettingLevel.DEVICE}
+                requires={["Notifications.showbold"]}
+            />
             <SettingsFlag name="Notifications.tac_only_notifications" level={SettingLevel.DEVICE} />
         </Form.Root>
     );

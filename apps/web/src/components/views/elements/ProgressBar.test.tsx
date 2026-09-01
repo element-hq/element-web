@@ -8,13 +8,15 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
+import { describe, it, expect, vi, beforeAll } from "vitest";
 import React from "react";
 import { act, render } from "test-utils-rtl";
-import { describe, it, expect, vi } from "vitest";
 
 import ProgressBar from "./ProgressBar";
 
-vi.useFakeTimers();
+beforeAll(() => {
+    vi.useFakeTimers();
+});
 
 describe("<ProgressBar/>", () => {
     it("works when animated", () => {

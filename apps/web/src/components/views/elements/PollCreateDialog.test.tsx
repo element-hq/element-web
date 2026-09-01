@@ -21,8 +21,8 @@ import {
 import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 import { type ReplacementEvent } from "matrix-js-sdk/src/types";
 import { describe, it, expect, vi, beforeEach, afterAll } from "vitest";
-
 import { getMockClientWithEventEmitter } from "test-utils";
+
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import PollCreateDialog from "./PollCreateDialog";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";

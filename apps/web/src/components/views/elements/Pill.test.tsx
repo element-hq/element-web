@@ -13,7 +13,6 @@ import { render, type RenderResult, screen } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
 import { type MatrixClient, type MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { describe, it, expect, vi, beforeEach, afterEach, type Mocked } from "vitest";
-
 import {
     filterConsole,
     flushPromises,
@@ -24,6 +23,7 @@ import {
     withClientContextRenderOptions,
     TestSDKContext,
 } from "test-utils";
+
 import dis from "../../../dispatcher/dispatcher";
 import { Pill, type PillProps } from "./Pill";
 import { PillType } from "./PillType";
@@ -32,7 +32,12 @@ import { Action } from "../../../dispatcher/actions";
 import { type ButtonEvent } from "./AccessibleButton";
 import { SDKContext } from "../../../contexts/SDKContext";
 import { SDKContextClass } from "../../../contexts/SDKContextClass";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../../MatrixClientPeg.ts";
+import { useUserStatus } from "../../../hooks/useUserStatus.ts";
+
+vi.mock("../../../hooks/useUserStatus.ts", () => ({
+    useUserStatus: vi.fn(),
+}));
 
 describe("<Pill>", () => {
     let client: Mocked<MatrixClient>;
@@ -125,7 +130,9 @@ describe("<Pill>", () => {
             throw new Error(`Unknown user ${userId}`);
         });
 
-        vi.spyOn(dis, "dispatch").mockImplementation(() => {});
+        vi.mocked(useUserStatus).mockReturnValue(undefined);
+
+        vi.spyOn(dis, "dispatch");
         pillParentClickHandler = vi.fn();
 
         vi.spyOn(global.Math, "random").mockReturnValue(0.123456);
@@ -222,6 +229,36 @@ describe("<Pill>", () => {
                 expect(pillParentClickHandler).not.toHaveBeenCalled();
             });
         });
+    });
+
+    it("should render the status emoji for a user with a status", () => {
+        // The real hook only returns a status when given a user ID
+        vi.mocked(useUserStatus).mockImplementation((userId) =>
+            userId ? { emoji: "💡", text: "Bright idea" } : undefined,
+        );
+        renderPill({
+            room: room1,
+            url: permalinkPrefix + user1Id,
+        });
+
+        expect(useUserStatus).toHaveBeenCalledWith(user1Id);
+        expect(screen.getByText("💡")).toBeInTheDocument();
+        expect(renderResult.container.querySelector(".mx_Pill_withStatus")).toBeInTheDocument();
+        expect(renderResult.asFragment()).toMatchSnapshot();
+    });
+
+    it("should not render a status for a pill which is not a user mention", () => {
+        // The real hook only returns a status when given a user ID
+        vi.mocked(useUserStatus).mockImplementation((userId) =>
+            userId ? { emoji: "💡", text: "Bright idea" } : undefined,
+        );
+        renderPill({
+            url: permalinkPrefix + room1Id,
+        });
+
+        expect(useUserStatus).toHaveBeenCalledWith(undefined);
+        expect(screen.queryByText("💡")).not.toBeInTheDocument();
+        expect(renderResult.container.querySelector(".mx_Pill_withStatus")).not.toBeInTheDocument();
     });
 
     it("should render the expected pill for a known user not in the room", async () => {

@@ -7,12 +7,12 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
+import { describe, it, expect, vi } from "vitest";
 import React from "react";
 import { render } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
-import { describe, it, expect, vi } from "vitest";
-
 import { stubClient, withClientContextRenderOptions } from "test-utils";
+
 import MiniAvatarUploader from "./MiniAvatarUploader";
 
 const BASE64_GIF = "R0lGODlhAQABAAAAACw=";

@@ -8,13 +8,13 @@
 
 // @vitest-environment happy-dom
 
+import { describe, it, expect, vi, afterEach } from "vitest";
 import React from "react";
 import { render, fireEvent, waitFor } from "test-utils-rtl";
 import fetchMock from "@fetch-mock/vitest";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { describe, it, expect, vi, beforeEach } from "vitest";
-
 import { stubClient } from "test-utils";
+
 import ImageView from "./ImageView";
 import { FileDownloader } from "../../../utils/FileDownloader";
 import Modal from "../../../Modal";
@@ -23,7 +23,7 @@ import ErrorDialog from "../dialogs/ErrorDialog";
 vi.mock("../../../utils/FileDownloader");
 
 describe("<ImageView />", () => {
-    beforeEach(() => {
+    afterEach(() => {
         vi.resetAllMocks();
     });
 

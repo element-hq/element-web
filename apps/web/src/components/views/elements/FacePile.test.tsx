@@ -12,8 +12,8 @@ import { render } from "test-utils-rtl";
 import React from "react";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { describe, it, expect } from "vitest";
-
 import { mkRoomMember } from "test-utils";
+
 import FacePile from "./FacePile";
 
 describe("<FacePile />", () => {

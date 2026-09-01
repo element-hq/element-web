@@ -1,6 +1,5 @@
 linkWorkspacePackages: true
 cleanupUnusedCatalogs: true
-ignorePatchFailures: false
 ignoreWorkspaceRootCheck: true
 minimumReleaseAgeStrict: true
 dedupePeerDependents: true
@@ -35,14 +34,14 @@ catalog:
     # fonts
     "@fontsource/inter": 5.3.0
     # vite
-    vite: 8.2.1
+    vite: 8.2.2
     vite-plugin-node-polyfills: 0.28.0
     vite-plugin-svgr: 5.2.0
-    vitest: 4.1.10
-    "@vitest/spy": 4.1.10
-    "@vitest/coverage-v8": 4.1.10
-    "@vitest/browser-playwright": 4.1.10
-    "@vitejs/plugin-react": 6.0.5
+    vitest: 4.1.11
+    "@vitest/spy": 4.1.11
+    "@vitest/coverage-v8": 4.1.11
+    "@vitest/browser-playwright": 4.1.11
+    "@vitejs/plugin-react": 6.1.0
     unplugin-dts: 1.0.1
     # nx
     nx: 23.1.1
@@ -120,7 +119,7 @@ patchedDependencies:
     # Workaround for type fails
     "@arcmantle/vite-plugin-import-css-sheet": patches/@arcmantle__vite-plugin-import-css-sheet.patch
     # Workaround for scroll anchoring landing on transient placeholder rows (pending upstream)
-    "@tanstack/virtual-core@3.17.6": patches/@tanstack__virtual-core@3.17.6.patch
+    "@tanstack/virtual-core@3": patches/@tanstack__virtual-core@3.patch
 
 peerDependencyRules:
     allowedVersions:

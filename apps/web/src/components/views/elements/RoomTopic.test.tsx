@@ -8,14 +8,14 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
+import { describe, it, expect, vi, afterEach } from "vitest";
 import React from "react";
 import { Room } from "matrix-js-sdk/src/matrix";
 import { fireEvent, render, screen, waitFor } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
 import { LinkedTextContext } from "@element-hq/web-shared-components";
-import { describe, it, expect, afterEach, vi } from "vitest";
-
 import { mkEvent, stubClient } from "test-utils";
+
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import RoomTopic from "./RoomTopic";
 import dis from "../../../dispatcher/dispatcher";

@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
+import { describe, it, expect, vi, beforeEach, afterAll } from "vitest";
 import { fireEvent, getByText, render } from "test-utils-rtl";
 import React from "react";
-import { describe, it, expect, vi, beforeEach, afterAll } from "vitest";
 import { mockPlatformPeg, unmockPlatformPeg } from "test-utils";
 
 import AccessibleButton from "./AccessibleButton";

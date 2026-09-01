@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
+import { describe, it, expect, beforeAll, afterAll, beforeEach, afterEach, vi, type MockInstance } from "vitest";
 import React from "react";
 import { Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { type IWidget, MatrixWidgetType } from "matrix-widget-api";
@@ -18,8 +19,7 @@ import {
     type WidgetInfo,
     WidgetLifecycle,
 } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
-import { describe, it, expect, vi, beforeAll, afterAll, beforeEach, afterEach, type MockInstance } from "vitest";
-import { clientAndSDKContextRenderOptions, stubClient } from "test-utils";
+import { clientAndSDKContextRenderOptions, stubClient, TestSDKContext } from "test-utils";
 
 import RightPanel from "../../structures/RightPanel";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -41,7 +41,12 @@ import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingSto
 import { ModuleRunner } from "../../../modules/ModuleRunner";
 import { ModuleApi } from "../../../modules/Api";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import { TestSDKContext } from "../../../../test/unit-tests/TestSDKContext.ts";
+
+vi.mock("../../../../res/img/element-icons/room/default_app.svg", () => ({ default: "image-file-stub" }));
+vi.mock("../../../../res/img/element-icons/room/default_video.svg", () => ({ default: "image-file-stub" }));
+vi.mock("../../../../res/img/element-icons/room/default_cal.svg", () => ({ default: "image-file-stub" }));
+vi.mock("../../../../res/img/element-icons/room/default_doc.svg", () => ({ default: "image-file-stub" }));
+vi.mock("../../../../res/img/element-icons/room/default_clock.svg", () => ({ default: "image-file-stub" }));
 
 vi.mock("../../../stores/OwnProfileStore", () => ({
     OwnProfileStore: {
@@ -53,12 +58,6 @@ vi.mock("../../../stores/OwnProfileStore", () => ({
         },
     },
 }));
-
-vi.mock("../../../../res/img/element-icons/room/default_app.svg", () => ({ default: "image-file-stub" }));
-vi.mock("../../../../res/img/element-icons/room/default_video.svg", () => ({ default: "image-file-stub" }));
-vi.mock("../../../../res/img/element-icons/room/default_cal.svg", () => ({ default: "image-file-stub" }));
-vi.mock("../../../../res/img/element-icons/room/default_doc.svg", () => ({ default: "image-file-stub" }));
-vi.mock("../../../../res/img/element-icons/room/default_clock.svg", () => ({ default: "image-file-stub" }));
 
 const realGetValue = SettingsStore.getValue;
 

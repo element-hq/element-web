@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import React from "react";
 import { render, screen } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
 import DesktopCapturerSourcePicker from "./DesktopCapturerSourcePicker";
 import PlatformPeg from "../../../PlatformPeg";

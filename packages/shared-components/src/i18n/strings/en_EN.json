@@ -43,7 +43,32 @@
         "preferences": "Preferences",
         "state_encryption_enabled": "Experimental state encryption enabled"
     },
+    "composer": {
+        "url_preview": {
+            "clear_all": "Clear all",
+            "collapse": "Collapse URL previews",
+            "failed": "Failed to fetch preview",
+            "loading": "Fetching preview…",
+            "n_links": {
+                "one": "%(count)s link",
+                "other": "%(count)s links"
+            },
+            "remove": "Remove URL preview"
+        }
+    },
     "devtools": {
+        "custom_themes": {
+            "add": "Add custom theme",
+            "downloading": "Downloading custom theme…",
+            "error_already_installed": "A theme with that name is already installed.",
+            "error_downloading": "Error downloading theme",
+            "error_invalid": "Invalid theme schema.",
+            "error_save_failed": "Failed to save the change. It may still complete in the background.",
+            "help": "Enter the URL of a custom theme you want to apply.",
+            "installed_heading": "Installed custom themes",
+            "refresh": "Re-download theme",
+            "url_label": "Custom theme URL"
+        },
         "toggle_event": "toggle event"
     },
     "emoji": {
@@ -199,6 +224,10 @@
         },
         "room_options": "Room Options",
         "section_created": "Section created",
+        "section_creation": {
+            "description": "Sections are only for you",
+            "label": "Section name"
+        },
         "section_header": {
             "edit_section": "Edit section",
             "more_options": "More options",

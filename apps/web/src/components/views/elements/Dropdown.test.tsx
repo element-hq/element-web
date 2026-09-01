@@ -7,10 +7,10 @@
 
 // @vitest-environment happy-dom
 
+import { describe, it, expect, vi, afterEach } from "vitest";
 import React, { type ReactElement } from "react";
 import { render, screen, fireEvent } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
-import { describe, it, expect, vi, afterEach } from "vitest";
 
 import Dropdown from "./Dropdown";
 import type { NonEmptyArray } from "../../../@types/common";

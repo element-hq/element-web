@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
+import { describe, it, expect, vi } from "vitest";
 import React from "react";
 import { render, screen, waitForElementToBeRemoved } from "test-utils-rtl";
-import { describe, it, expect, vi } from "vitest";
 
 import SpellCheckLanguagesDropdown from "./SpellCheckLanguagesDropdown";
 import PlatformPeg from "../../../PlatformPeg";

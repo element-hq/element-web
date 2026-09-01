@@ -8,15 +8,20 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, afterEach } from "vitest";
+import { describe, it, expect, afterEach, vi } from "vitest";
 import { cleanup, fireEvent, render, screen } from "test-utils-rtl";
+import { mockQRCodeRender, resetQRCodeMock, waitForQRCodeRender } from "test-utils/qrcode";
 import React from "react";
 import { ClientRendezvousFailureReason, MSC4108FailureReason, RendezvousIntent } from "matrix-js-sdk/src/rendezvous";
-import { mockQRCodeRender, resetQRCodeMock, waitForQRCodeRender } from "test-utils/qrcode";
 
 import LoginWithQRFlow from "./LoginWithQRFlow";
 import { type FailureReason, LoginWithQRFailureReason } from "./LoginWithQR";
 import { Click, Phase } from "./LoginWithQR-types";
+
+vi.mock("qrcode", async () => ({
+    ...(await vi.importActual("qrcode")),
+    toDataURL: vi.fn(),
+}));
 
 describe("<LoginWithQRFlow />", () => {
     const onClick = vi.fn();

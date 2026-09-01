@@ -6,10 +6,10 @@
 
 // @vitest-environment happy-dom
 
+import { describe, it, expect, vi } from "vitest";
 import { render, waitFor } from "test-utils-rtl";
 import hljs, { type HighlightOptions } from "highlight.js";
 import React from "react";
-import { describe, it, expect, vi } from "vitest";
 
 import SyntaxHighlight from "./SyntaxHighlight";
 

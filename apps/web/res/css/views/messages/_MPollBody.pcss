@@ -14,8 +14,11 @@ $poll-max-width: 550px;
     width: 100%; /* Ensure fieldset takes full available width */
     border: none; /* Remove default fieldset border */
     padding: 0; /* Remove default fieldset padding */
+    margin-inline: unset; /* Remove default fieldset margin */
+    display: inline-block; /* Preserve the fieldset display value we used to set globally */
 
     legend {
+        padding-inline: unset; /* Remove default legend padding */
         font-weight: var(--cpd-font-weight-semibold);
         font-size: $font-15px;
         line-height: $font-24px;
@@ -48,6 +51,16 @@ $poll-max-width: 550px;
         .mx_Spinner {
             flex: 0;
             margin-left: var(--cpd-space-2x);
+        }
+    }
+
+    &.mx_MPollBody_bubble {
+        width: 550px; /* to prevent timestamp overlapping summary text */
+        max-width: 100%; /* prevent overflowing a reply tile */
+
+        .mx_MPollBody_totalVotes {
+            /* align summary text with corner timestamp */
+            padding: 4px 0;
         }
     }
 }

@@ -44,26 +44,34 @@ Please see LICENSE files in the repository root for full details.
             .mx_EventTile {
                 margin: 0;
 
+                /*
+                 * EventTileView applies the content gutter through this
+                 * variable on the shell. Keep the preview's content width
+                 * consistent with the legacy preview override below.
+                 */
+                --event-tile-content-inline-end: 0;
+
                 /**
                  * Hide the message options and message action bar in the preview
                  */
-                .mx_EventTile_msgOption,
+                .mx_ReadReceiptGroup,
                 .mx_MessageActionBar {
                     display: none;
                 }
 
                 .mx_EventTile_content {
                     margin-right: 0;
+                    margin-inline-end: 0;
                 }
 
-                &[data-layout="group"] {
+                &:has([data-event-layout="group"]) {
                     margin-top: calc(var(--cpd-space-3x) * -1);
                 }
 
                 /**
                  * Add margin to center the bubble
                  */
-                &[data-layout="bubble"] {
+                &:has([data-event-layout="bubble"]) {
                     /**
                      * Add the layout margin and the margin to vertically center the bubble
                      */
@@ -72,8 +80,16 @@ Please see LICENSE files in the repository root for full details.
                     flex-shrink: 1;
                 }
 
-                &[data-layout="irc"] .mx_MessageTimestamp {
-                    display: none; /* hide the container used for spacing consistency */
+                &:has([data-event-layout="irc"]) {
+                    /*
+                     * The migrated tile keeps an empty timestamp slot for
+                     * IRC alignment. The preview must hide that slot as the
+                     * legacy preview hid its timestamp element.
+                     */
+                    .mx_MessageTimestamp,
+                    [data-testid="event-tile-slot-timestamp"] {
+                        display: none;
+                    }
                 }
 
                 .mx_EventTile_line {

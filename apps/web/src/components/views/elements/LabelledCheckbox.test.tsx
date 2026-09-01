@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
+import { describe, it, expect, vi } from "vitest";
 import { fireEvent, render, screen } from "test-utils-rtl";
 import React from "react";
-import { describe, it, expect, vi } from "vitest";
 
 import LabelledCheckbox from "./LabelledCheckbox";
 

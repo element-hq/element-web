@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
+import { describe, it, expect, vi } from "vitest";
 import { render } from "test-utils-rtl";
 import React from "react";
-import { describe, it, expect, vi } from "vitest";
 
 import ExternalLink from "./ExternalLink";
 

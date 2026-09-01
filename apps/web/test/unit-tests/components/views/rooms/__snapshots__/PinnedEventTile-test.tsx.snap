@@ -64,7 +64,9 @@ exports[`<PinnedEventTile /> should render pinned event 1`] = `
         </button>
       </div>
       <div
-        class="mx_MTextBody mx_EventTile_content _root_dlp6w_8 _text_dlp6w_13"
+        class="mx_MTextBody mx_EventTile_content _root_5gwiw_8 _text_5gwiw_25"
+        data-event-density="default"
+        data-event-layout="group"
         id="react-use-id-2"
       >
         <div
@@ -143,7 +145,9 @@ exports[`<PinnedEventTile /> should render pinned event with thread info 1`] = `
         </button>
       </div>
       <div
-        class="mx_MTextBody mx_EventTile_content _root_dlp6w_8 _text_dlp6w_13"
+        class="mx_MTextBody mx_EventTile_content _root_5gwiw_8 _text_5gwiw_25"
+        data-event-density="default"
+        data-event-layout="group"
         id="react-use-id-2"
       >
         <div

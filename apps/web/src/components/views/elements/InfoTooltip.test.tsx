@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
+import { describe, it, expect } from "vitest";
 import React from "react";
 import userEvent from "@testing-library/user-event";
 import { render, waitFor } from "test-utils-rtl";
-import { describe, it, expect } from "vitest";
 
 import InfoTooltip from "./InfoTooltip";
 
