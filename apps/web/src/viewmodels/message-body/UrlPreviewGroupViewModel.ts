@@ -18,6 +18,7 @@ import { PosthogAnalytics } from "../../PosthogAnalytics";
 import { isPermalinkHost } from "../../utils/permalinks/Permalinks";
 import { UrlPreviewFetcher } from "../../utils/UrlPreviewFetcher";
 import { type RoomMessageEventContent } from "../../../@types/url-preview";
+import { UrlPreviewApi } from "../../modules/UrlPreviewApi";
 
 // From https://github.com/matrix-org/matrix-spec-proposals/pull/4095
 export const BUNDLED_LINK_PREVIEWS = "com.beeper.linkpreviews";
@@ -43,6 +44,7 @@ export interface UrlPreviewGroupViewModelProps {
     showTooltips: boolean;
     onImageClicked: (preview: UrlPreview) => void;
     urlPreviewBundleEnabled: boolean;
+    moduleUrlPreviewApi: UrlPreviewApi,
 }
 
 export class UrlPreviewGroupViewModel
@@ -134,7 +136,7 @@ export class UrlPreviewGroupViewModel
         this.urlPreviewVisible = props.visible;
         this.mediaVisible = props.mediaVisible;
         this.urlPreviewEnabledByUser = globalThis.localStorage.getItem(this.storageKey) !== "1";
-        this.fetcher = new UrlPreviewFetcher(props.client, props.mxEvent.getTs(), props.showTooltips);
+        this.fetcher = new UrlPreviewFetcher(props.client, props.mxEvent.getTs(), props.showTooltips, props.moduleUrlPreviewApi);
     }
 
     /**

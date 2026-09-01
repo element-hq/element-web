@@ -34,6 +34,7 @@ import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
 import { UrlPreviewGroupViewModel } from "../../../viewmodels/message-body/UrlPreviewGroupViewModel";
 import PlatformPeg from "../../../PlatformPeg";
 import { useSettingValue } from "../../../hooks/useSettings";
+import { ModuleApi } from "../../../modules/Api";
 
 const logger = rootLogger.getChild("TextualBodyFactory");
 
@@ -101,6 +102,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
                 client,
                 mxEvent: props.mxEvent,
                 mediaVisible,
+                moduleUrlPreviewApi: ModuleApi.instance.urlPreviews,
                 onImageClicked: (preview: UrlPreview): void => {
                     if (!preview.image?.imageFull) {
                         return;

@@ -5,7 +5,7 @@ import type { UrlPreview } from "shared-types";
  * @returns A preview, or null if no preview should be visible.
  * @alpha Subject to change.
  */
-export type UrlPreviewHandler = (url: string) => UrlPreview|null;
+export type UrlPreviewHandler = (url: string) => Promise<UrlPreview|null>;
 
 /**
  * API for changing the way URL previews are handled.

@@ -6,11 +6,12 @@ export class UrlPreviewApi implements IUrlPreviewApi {
     public registerPreviewHandler(regex: RegExp, handler: UrlPreviewHandler) {
         this.handlers.set(regex, handler);
     };
-    public getPreview(url: string): UrlPreview|null {
+    public async getPreview(url: string): Promise<UrlPreview|null> {
         for (const [regex, handler] of this.handlers) {
             // If the regex matches, we skip other handler regardless of the outcome.
+            console.log("Requesting preview for", regex, url, regex.test(url.toString()));
             if (regex.test(url.toString())) {
-                return handler(url);
+                return await handler(url);
             }
         }
         return null;

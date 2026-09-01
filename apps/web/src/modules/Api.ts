@@ -101,7 +101,7 @@ export class ModuleApi implements Api {
     public readonly composer = new ComposerApi(defaultDispatcher);
     public readonly storageHelper = new StorageHelperApi();
     public readonly settings = new SettingsApi();
-    public readonly urlPreview = new UrlPreviewApi();
+    public readonly urlPreviews = new UrlPreviewApi();
 
     public createRoot(element: Element): Root {
         return createRoot(element);

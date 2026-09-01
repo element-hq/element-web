@@ -67,6 +67,8 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
     readonly storageHelper: StorageHelperApi;
     readonly stores: StoresApi;
     // @alpha
+    readonly urlPreviews: UrlPreviewApi;
+    // @alpha
     readonly widget: WidgetApi;
     // @alpha
     readonly widgetLifecycle: WidgetLifecycleApi;
@@ -552,7 +554,7 @@ export interface UrlPreviewApi {
 // Warning: (ae-forgotten-export) The symbol "UrlPreview" needs to be exported by the entry point index.d.ts
 //
 // @alpha
-export type UrlPreviewHandler = (url: string) => UrlPreview | null;
+export type UrlPreviewHandler = (url: string) => Promise<UrlPreview | null>;
 
 // @alpha @deprecated (undocumented)
 export interface UserIdentifierCustomisations {

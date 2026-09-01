@@ -136,7 +136,7 @@ export class UrlPreviewFetcher {
      * @param loadMedia Whether to include the preview image. Pass false when media is hidden.
      */
     public async fetchPreview(link: string, loadMedia: boolean): Promise<UrlPreview | null> {
-        const moduleResponse = this.previewModuleApi.getPreview(link);
+        const moduleResponse = await this.previewModuleApi.getPreview(link);
         if (moduleResponse) {
             return moduleResponse;
         }
