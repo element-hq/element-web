@@ -178,27 +178,27 @@ describe("RightPanelStore", () => {
         });
     });
 
-    describe("toggleRoomPanel", () => {
+    describe("togglePanel", () => {
         it("does nothing if the room has no phase to open to", () => {
             expect(store.isOpenForRoom("!1:example.org")).toEqual(false);
-            store.toggleRoomPanel("!1:example.org");
+            store.togglePanel("!1:example.org");
             expect(store.isOpenForRoom("!1:example.org")).toEqual(false);
         });
         it("works if a room is specified", () => {
             store.setCard({ phase: RightPanelPhases.RoomSummary }, true, "!1:example.org");
             expect(store.isOpenForRoom("!1:example.org")).toEqual(true);
-            store.toggleRoomPanel("!1:example.org");
+            store.togglePanel("!1:example.org");
             expect(store.isOpenForRoom("!1:example.org")).toEqual(false);
-            store.toggleRoomPanel("!1:example.org");
+            store.togglePanel("!1:example.org");
             expect(store.isOpenForRoom("!1:example.org")).toEqual(true);
         });
         it("operates on the current room if no room is specified", async () => {
             await viewRoom("!1:example.org");
             store.setCard({ phase: RightPanelPhases.RoomSummary }, true);
             expect(store.isOpen).toEqual(true);
-            store.toggleRoomPanel(null);
+            store.togglePanel(null);
             expect(store.isOpen).toEqual(false);
-            store.toggleRoomPanel(null);
+            store.togglePanel(null);
             expect(store.isOpen).toEqual(true);
         });
     });
