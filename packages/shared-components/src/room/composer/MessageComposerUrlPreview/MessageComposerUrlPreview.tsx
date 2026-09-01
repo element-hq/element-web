@@ -7,7 +7,6 @@
 
 import React, { type JSX, useCallback } from "react";
 import {
-    Avatar,
     IconButton,
     InlineSpinner,
     Text,
@@ -83,14 +82,9 @@ function LinkTitle({
     return showTooltipOnLink ? <Tooltip label={caption}>{anchor}</Tooltip> : anchor;
 }
 
-function LinkSiteName({
-    siteIcon,
-    siteName,
-    className,
-}: Pick<UrlPreview, "siteIcon" | "siteName"> & { className?: string }): JSX.Element {
+function LinkSiteName({ siteName, className }: Pick<UrlPreview, "siteName"> & { className?: string }): JSX.Element {
     return (
         <div className={classNames(styles.siteName, className)}>
-            {siteIcon && <Avatar size="16px" name={siteName} id={siteName} src={siteIcon} />}
             <Text as="span" size="sm" weight="regular">
                 {siteName}
             </Text>
