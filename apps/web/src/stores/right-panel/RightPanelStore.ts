@@ -55,7 +55,6 @@ function getPhasesForPhase(phase: IRightPanelCard["phase"]): RightPanelPhases[] 
 export default class RightPanelStore extends ReadyWatchingStore {
     private static internalInstance: RightPanelStore;
 
-    private global?: IRightPanelForRoom;
     private byRoom: { [roomId: string]: IRightPanelForRoom } = {};
     private viewedRoomId: string | null = null;
 
@@ -68,7 +67,6 @@ export default class RightPanelStore extends ReadyWatchingStore {
      * Resets the store. Intended for test usage only.
      */
     public reset(): void {
-        this.global = undefined;
         this.byRoom = {};
         this.viewedRoomId = null;
     }
@@ -169,15 +167,11 @@ export default class RightPanelStore extends ReadyWatchingStore {
         if (!this.isPhaseValid(targetPhase, Boolean(rId))) return;
 
         if (targetPhase === this.currentCardForRoom(rId)?.phase && !!cardState) {
-            // Update state: set right panel with a new state but keep the phase.
+            // Update state: set right panel with a new state but keep the phase. A matching phase can
+            // only have come from this room's own history, so the panel is always present here.
             const panel = this.byRoom[rId];
 
-            if (!panel?.history.length) {
-                // The matching phase came from the global card, so this room has no history to update.
-                // Give it one rather than writing through an empty array.
-                const history = this.generateHistoryForPhase(targetPhase, cardState);
-                this.byRoom[rId] = { history, isOpen: true };
-            } else {
+            if (panel?.history.length) {
                 panel.history[panel.history.length - 1].state = cardState;
                 // Setting a card shows it. Without this, re-selecting the phase that is already at the
                 // top of a closed panel would silently swap the state behind a panel that stays hidden.
@@ -308,10 +302,6 @@ export default class RightPanelStore extends ReadyWatchingStore {
         if (this.viewedRoomId) {
             const room = this.mxClient?.getRoom(this.viewedRoomId);
             if (!!room) {
-                this.global =
-                    this.global ??
-                    convertToStatePanel(SettingsStore.getValue("RightPanel.phasesGlobal"), room) ??
-                    undefined;
                 this.byRoom[this.viewedRoomId] =
                     this.byRoom[this.viewedRoomId] ??
                     convertToStatePanel(SettingsStore.getValue("RightPanel.phases", this.viewedRoomId), room) ??
@@ -325,10 +315,6 @@ export default class RightPanelStore extends ReadyWatchingStore {
     }
 
     private emitAndUpdateSettings(): void {
-        this.filterValidCards(this.global);
-        const storePanelGlobal = convertToStorePanel(this.global);
-        void SettingsStore.setValue("RightPanel.phasesGlobal", null, SettingLevel.DEVICE, storePanelGlobal);
-
         if (!!this.viewedRoomId) {
             const panelThisRoom = this.byRoom[this.viewedRoomId];
             this.filterValidCards(panelThisRoom);

@@ -135,7 +135,7 @@ describe("RightPanelStore", () => {
             store.setCard(cardForEvent("$one"), true, "!1:example.org");
             expect(store.isOpenForRoom("!1:example.org")).toEqual(true);
 
-            store.closeCurrentCard("!1:example.org");
+            store.hide("!1:example.org");
             expect(store.isOpenForRoom("!1:example.org")).toEqual(false);
 
             // Same phase, different state: the panel has to come back, not just swap state behind a
@@ -143,20 +143,6 @@ describe("RightPanelStore", () => {
             store.setCard(cardForEvent("$two"), true, "!1:example.org");
             expect(store.isOpenForRoom("!1:example.org")).toEqual(true);
             expect(store.currentCardForRoom("!1:example.org").state?.initialEvent?.getId()).toEqual("$two");
-        });
-        it("gives the room its own history when the matching phase came from the global card", () => {
-            store.setGlobalCard({ phase: RightPanelPhases.Timeline, state: {} });
-            store.setCard(
-                {
-                    phase: RightPanelPhases.Timeline,
-                    state: { initialEvent: { getId: () => "$one" } as unknown as MatrixEvent },
-                },
-                true,
-                "!1:example.org",
-            );
-
-            expect(store.isOpenForRoom("!1:example.org")).toEqual(true);
-            expect(store.currentCardForRoom("!1:example.org").state?.initialEvent?.getId()).toEqual("$one");
         });
     });
 

@@ -25,12 +25,11 @@ export enum RightPanelPhases {
     Timeline = "Timeline",
     Extensions = "Extensions",
 
+    FileViewer = "FileViewer",
+
     // Thread stuff
     ThreadView = "ThreadView",
     ThreadPanel = "ThreadPanel",
-
-    // Global cards
-    FileViewer = "FileViewer",
 }
 
 export function backLabelForPhase(phase: RightPanelPhases | null): string | null {

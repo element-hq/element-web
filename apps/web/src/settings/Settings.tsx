@@ -332,7 +332,6 @@ export interface Settings {
     "RoomList.panelSize": IBaseSetting<number | null>;
     "RoomList.isPanelCollapsed": IBaseSetting<boolean>;
     "RoomList.showMessagePreview": IBaseSetting<boolean>;
-    "RightPanel.phasesGlobal": IBaseSetting<IRightPanelForRoomStored | null>;
     "RightPanel.phases": IBaseSetting<IRightPanelForRoomStored | null>;
     "enableEventIndexing": IBaseSetting<boolean>;
     "crawlerSleepTime": IBaseSetting<number>;
@@ -1221,10 +1220,6 @@ export const SETTINGS: Settings = {
     "composerUrlPreviewCollapsed": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: true,
-    },
-    "RightPanel.phasesGlobal": {
-        supportedLevels: [SettingLevel.DEVICE],
-        default: null,
     },
     "RightPanel.phases": {
         supportedLevels: [SettingLevel.ROOM_DEVICE],
