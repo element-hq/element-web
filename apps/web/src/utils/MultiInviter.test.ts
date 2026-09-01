@@ -84,7 +84,6 @@ describe("MultiInviter", () => {
     let inviter: MultiInviter;
 
     beforeEach(() => {
-        vi.resetAllMocks();
         vi.mocked(Modal.createDialog).mockReturnValue({ close: vi.fn(), finished: new Promise(() => {}) });
 
         TestUtilsMatrix.stubClient();
@@ -102,6 +101,10 @@ describe("MultiInviter", () => {
         client.unban = vi.fn();
 
         inviter = new MultiInviter(client, ROOMID);
+    });
+
+    afterEach(() => {
+        vi.resetAllMocks();
     });
 
     describe("invite", () => {
