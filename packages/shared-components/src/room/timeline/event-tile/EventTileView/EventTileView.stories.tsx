@@ -60,6 +60,8 @@ import storyMediaSrc from "../../../../../static/image-body/install-spinner.png"
 
 type StoryBoundary = HTMLElement;
 const eventTileSlotTestIdPrefix = "event-tile-slot-";
+const boundarySelector = `[data-story-boundary], [data-testid^="${eventTileSlotTestIdPrefix}"], .storyEventTile, .storyEventLine`;
+const slotBoundarySelector = `[data-testid^="${eventTileSlotTestIdPrefix}"]`;
 
 const getBoundaryLabel = (boundary: StoryBoundary): string => {
     const storyBoundary = boundary.dataset.storyBoundary;
@@ -74,15 +76,55 @@ const getBoundaryLabel = (boundary: StoryBoundary): string => {
     return "EventTileView.line";
 };
 
-const getBoundary = (target: EventTarget | null, root: HTMLElement): StoryBoundary | null => {
+const getBoundaryDepth = (boundary: StoryBoundary, root: HTMLElement): number => {
+    let depth = 0;
+    let current: Element | null = boundary;
+    while (current && current !== root) {
+        depth += 1;
+        current = current.parentElement;
+    }
+    return depth;
+};
+
+const containsPoint = (boundary: StoryBoundary, clientX: number, clientY: number): boolean => {
+    const elements = [boundary, ...boundary.querySelectorAll("*")];
+    return elements.some((element) =>
+        Array.from(element.getClientRects()).some(
+            (rect) => clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom,
+        ),
+    );
+};
+
+const getBoundary = (
+    target: EventTarget | null,
+    root: HTMLElement,
+    clientX?: number,
+    clientY?: number,
+): StoryBoundary | null => {
     // Padlock icons are SVG elements, so hovering their path otherwise skips
     // the slot boundary and leaves the Storybook diagnostics blank.
     if (!(target instanceof Element)) return null;
 
-    const boundary = target.closest<StoryBoundary>(
-        `[data-story-boundary], [data-testid^="${eventTileSlotTestIdPrefix}"], .storyEventTile, .storyEventLine`,
-    );
-    return boundary && root.contains(boundary) ? boundary : null;
+    const directBoundary = target.closest<StoryBoundary>(boundarySelector);
+    if (!directBoundary || !root.contains(directBoundary)) return null;
+
+    // Prefer the slot under the pointer over a structural parent. This keeps
+    // the diagnostics useful when a line overlaps a slot or when a slot uses
+    // display: contents and the browser reports the line as the target.
+    if (clientX !== undefined && clientY !== undefined) {
+        const pointElements = root.ownerDocument.elementsFromPoint(clientX, clientY);
+        for (const element of pointElements) {
+            const boundary = element.closest<StoryBoundary>(slotBoundarySelector);
+            if (boundary && root.contains(boundary)) return boundary;
+        }
+
+        const slotBoundary = Array.from(root.querySelectorAll<StoryBoundary>(slotBoundarySelector))
+            .filter((boundary) => containsPoint(boundary, clientX, clientY))
+            .sort((a, b) => getBoundaryDepth(b, root) - getBoundaryDepth(a, root))[0];
+        if (slotBoundary) return slotBoundary;
+    }
+
+    return directBoundary;
 };
 
 const StoryDebugFrame = ({
@@ -95,6 +137,7 @@ const StoryDebugFrame = ({
 
     const clearActiveBoundary = (): void => {
         activeBoundaryRef.current?.removeAttribute("data-story-hovered");
+        activeBoundaryRef.current?.removeAttribute("data-story-hovered-contents");
         activeBoundaryRef.current = null;
         setActiveBoundary(null);
     };
@@ -103,17 +146,24 @@ const StoryDebugFrame = ({
         const frame = frameRef.current;
         if (!frame) return;
 
-        const boundary = getBoundary(event.target, frame);
+        const boundary = getBoundary(event.target, frame, event.clientX, event.clientY);
         if (boundary === activeBoundaryRef.current) return;
 
         activeBoundaryRef.current?.removeAttribute("data-story-hovered");
+        activeBoundaryRef.current?.removeAttribute("data-story-hovered-contents");
         boundary?.setAttribute("data-story-hovered", "true");
+        if (boundary && boundary.getClientRects().length === 0) {
+            boundary.setAttribute("data-story-hovered-contents", "true");
+        }
         activeBoundaryRef.current = boundary;
         setActiveBoundary(boundary);
     };
 
     React.useEffect(() => {
-        return () => activeBoundaryRef.current?.removeAttribute("data-story-hovered");
+        return () => {
+            activeBoundaryRef.current?.removeAttribute("data-story-hovered");
+            activeBoundaryRef.current?.removeAttribute("data-story-hovered-contents");
+        };
     }, []);
 
     const setFrameRef = (element: HTMLDivElement | null): void => {
