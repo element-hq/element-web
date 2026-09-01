@@ -122,7 +122,7 @@ exports[`<SecurityRoomSettingsTab /> join rule handles error when updating join 
     class="mx_Dialog_buttons"
   >
     <button
-      class="mx_Dialog_primary"
+      class="mx_LegacyDialogButton mx_Dialog_primary"
       type="button"
     >
       OK
@@ -209,14 +209,14 @@ exports[`<SecurityRoomSettingsTab /> join rule warns when trying to make an encr
       class="mx_Dialog_buttons_row"
     >
       <button
-        class="cancel"
+        class="mx_LegacyDialogButton cancel"
         data-testid="dialog-cancel-button"
         type="button"
       >
         Cancel
       </button>
       <button
-        class="mx_Dialog_primary"
+        class="mx_LegacyDialogButton mx_Dialog_primary"
         data-testid="dialog-primary-button"
         type="button"
       >

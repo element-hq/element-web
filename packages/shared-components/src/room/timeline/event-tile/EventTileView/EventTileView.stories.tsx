@@ -9,11 +9,16 @@ import React from "react";
 import classNames from "classnames";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { fn } from "storybook/test";
-import { Avatar } from "@vector-im/compound-web";
 import { ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { useMockedViewModel } from "../../../../core/viewmodel";
-import { useEventPresentation, type EventLayout } from "../../EventPresentation";
+import { MemberAvatarView, type MemberAvatarViewSnapshot } from "../../../../core/MemberAvatar/MemberAvatarView";
+import {
+    EventPresentationProvider,
+    useEventPresentation,
+    type EventDensity,
+    type EventLayout,
+} from "../../EventPresentation";
 import { withViewDocs } from "../../../../../.storybook/withViewDocs";
 import {
     NotificationBadgeView,
@@ -47,8 +52,8 @@ import {
     type ThreadMessagePreviewViewSnapshot,
 } from "./ThreadSummary/ThreadSummaryView";
 import { EventPreviewView, type EventPreviewViewSnapshot } from "./EventPreviewView";
-import { PinnedMessageBadge } from "./PinnedMessageBadge";
 import { TextualEventView, type TextualEventViewSnapshot } from "./TextualEventView";
+import { RoomAvatarView, type RoomAvatarViewSnapshot } from "../../../avatar/RoomAvatar/RoomAvatarView";
 import styles from "./EventTileView.stories.module.css";
 import storyMediaSrc from "../../../../../static/image-body/install-spinner.png";
 
@@ -69,7 +74,9 @@ const getBoundaryLabel = (boundary: StoryBoundary): string => {
 };
 
 const getBoundary = (target: EventTarget | null, root: HTMLElement): StoryBoundary | null => {
-    if (!(target instanceof HTMLElement)) return null;
+    // Padlock icons are SVG elements, so hovering their path otherwise skips
+    // the slot boundary and leaves the Storybook diagnostics blank.
+    if (!(target instanceof Element)) return null;
 
     const boundary = target.closest<StoryBoundary>(
         `[data-story-boundary], [data-testid^="${eventTileSlotTestIdPrefix}"], .storyEventTile, .storyEventLine`,
@@ -77,7 +84,10 @@ const getBoundary = (target: EventTarget | null, root: HTMLElement): StoryBounda
     return boundary && root.contains(boundary) ? boundary : null;
 };
 
-const StoryDebugFrame = ({ children }: React.PropsWithChildren): React.ReactElement => {
+const StoryDebugFrame = ({
+    children,
+    ref,
+}: React.PropsWithChildren<{ ref?: React.Ref<HTMLDivElement> }>): React.ReactElement => {
     const frameRef = React.useRef<HTMLDivElement>(null);
     const activeBoundaryRef = React.useRef<StoryBoundary | null>(null);
     const [activeBoundary, setActiveBoundary] = React.useState<StoryBoundary | null>(null);
@@ -105,9 +115,15 @@ const StoryDebugFrame = ({ children }: React.PropsWithChildren): React.ReactElem
         return () => activeBoundaryRef.current?.removeAttribute("data-story-hovered");
     }, []);
 
+    const setFrameRef = (element: HTMLDivElement | null): void => {
+        frameRef.current = element;
+        if (typeof ref === "function") ref(element);
+        else if (ref) ref.current = element;
+    };
+
     return (
         <div
-            ref={frameRef}
+            ref={setFrameRef}
             className={styles.debugFrame}
             onPointerMove={updateActiveBoundary}
             onPointerLeave={clearActiveBoundary}
@@ -118,30 +134,42 @@ const StoryDebugFrame = ({ children }: React.PropsWithChildren): React.ReactElem
     );
 };
 
-const StoryAvatar = ({
-    room = false,
-    label = "A",
-    size = "30px",
-    className,
-}: {
-    room?: boolean;
+type StoryMemberAvatarProps = {
     label?: string;
     size?: string;
     className?: string;
-}): React.ReactElement => (
-    <Avatar
-        id={room ? "!story-room:example.org" : `@${label.toLowerCase()}:example.org`}
-        name={getStoryAvatarName(room, label)}
-        type="round"
-        size={size}
-        className={className}
-        aria-label={room ? "Story room avatar" : `${label} avatar`}
-    />
-);
+};
 
-function getStoryAvatarName(room: boolean, label: string): string {
-    if (room) return "Story room";
+const StoryMemberAvatar = ({ label = "A", size = "30px", className }: StoryMemberAvatarProps): React.ReactElement => {
+    const snapshot: MemberAvatarViewSnapshot = {
+        id: `@${label.toLowerCase()}:example.org`,
+        name: getStoryMemberAvatarName(label),
+        size,
+    };
+    const vm = useMockedViewModel(snapshot, {});
+
+    return <MemberAvatarView vm={vm} classNames={className} />;
+};
+
+const StoryRoomAvatar = ({ size = "30px", className }: StoryMemberAvatarProps): React.ReactElement => {
+    const snapshot: RoomAvatarViewSnapshot = {
+        idName: "!story-room:example.org",
+        name: "Story room",
+        size,
+        urls: [],
+        type: "round",
+        isClickable: false,
+        className,
+        altText: "Story room avatar",
+    };
+    const vm = useMockedViewModel(snapshot, { onClick: fn() });
+
+    return <RoomAvatarView vm={vm} />;
+};
+
+function getStoryMemberAvatarName(label: string): string {
     if (label === "A") return "Alice Example";
+    if (label === "T") return "Taylor Example";
     return "Bob Example";
 }
 
@@ -176,7 +204,7 @@ const createStoryAvatar = (
 
     const label = isOwnEvent ? "A" : "B";
     const size = sizeOverride ?? (layout === "irc" ? "14px" : "30px");
-    return <StoryAvatar label={label} size={size} />;
+    return <StoryMemberAvatar label={label} size={size} />;
 };
 
 const StoryTimestamp = ({
@@ -202,13 +230,7 @@ const StoryTimestamp = ({
 const StoryLinkedTimestamp = (): React.ReactElement => <StoryTimestamp linked />;
 const StoryBody = (): React.ReactElement => {
     const contentSnapshot: EventContentBodyViewSnapshot = {
-        body: [
-            <div key="first-line">
-                Here is a realistic event tile body with enough text to show the available width.
-            </div>,
-            <div key="second-line">This second line makes wrapping and vertical rhythm visible in Storybook.</div>,
-        ],
-        className: styles.body,
+        body: "Here is a realistic event tile body with enough text to show the available width.\nThis second line makes wrapping and vertical rhythm visible in Storybook.",
     };
     const contentVm = useMockedViewModel(contentSnapshot, {});
     const bodySnapshot: TextualBodyViewSnapshot = { kind: TextualBodyViewKind.TEXT };
@@ -216,23 +238,26 @@ const StoryBody = (): React.ReactElement => {
 
     return <TextualBodyView vm={bodyVm} body={<EventContentBodyView vm={contentVm} as="div" />} />;
 };
+const StoryShortBody = (): React.ReactElement => {
+    const contentVm = useMockedViewModel({ body: "Short text message." } satisfies EventContentBodyViewSnapshot, {});
+    const bodyVm = useMockedViewModel({ kind: TextualBodyViewKind.TEXT } satisfies TextualBodyViewSnapshot, {});
+
+    return <TextualBodyView vm={bodyVm} body={<EventContentBodyView vm={contentVm} as="div" />} />;
+};
 const StoryPreviewBody = (): React.ReactElement => {
     const snapshot: EventPreviewViewSnapshot = {
         isVisible: true,
-        previewContent: "Can you review the draft?",
-        previewTooltip: "Can you review the draft?",
+        previewContent:
+            "This is a deliberately long preview message with enough content to demonstrate the two-line clamp styling.",
+        previewTooltip:
+            "This is a deliberately long preview message with enough content to demonstrate the two-line clamp styling.",
     };
     const vm = useMockedViewModel(snapshot, {});
     return <EventPreviewView vm={vm} />;
 };
 const StorySearchBody = (): React.ReactElement => {
     const contentSnapshot: EventContentBodyViewSnapshot = {
-        body: [
-            <div key="first-line">
-                Can you review the <mark>draft</mark> before the meeting?
-            </div>,
-            <div key="second-line">The highlighted term represents the matching search result.</div>,
-        ],
+        body: "Can you review the <mark>draft</mark> before the meeting?\nThe highlighted term represents the matching search result.",
         className: styles.body,
     };
     const contentVm = useMockedViewModel(contentSnapshot, {});
@@ -255,18 +280,18 @@ const StoryFileBody = (): React.ReactElement => {
     const vm = useMockedViewModel(snapshot, {});
     return <FileBodyView vm={vm} />;
 };
-const StoryInformationalBody = (): React.ReactElement => {
+const StoryInformationalBody = ({
+    children = "Alex changed the room name.",
+}: React.PropsWithChildren): React.ReactElement => {
     const snapshot: TextualEventViewSnapshot = {
-        content: (
-            <>
-                <div>Alex changed the room name to Example room.</div>
-                <div>This informational event demonstrates the shared textual event styling.</div>
-            </>
-        ),
+        content: <div>{children}</div>,
     };
     const vm = useMockedViewModel(snapshot, {});
     return <TextualEventView vm={vm} />;
 };
+const StoryCallStartedBody = (): React.ReactElement => (
+    <StoryInformationalBody>Alex started a voice call.</StoryInformationalBody>
+);
 const StoryHighlightedBody = (): React.ReactElement => {
     const contentSnapshot: EventContentBodyViewSnapshot = {
         body: "Message with a highlighted word.",
@@ -278,10 +303,27 @@ const StoryHighlightedBody = (): React.ReactElement => {
 
     return <TextualBodyView vm={bodyVm} body={<EventContentBodyView vm={contentVm} as="div" />} />;
 };
-const StoryEditedBody = (): React.ReactElement => {
+const StoryMessageComposer = (): React.ReactElement => (
+    <div className={styles.messageComposer} role="group" aria-label="Message composer">
+        <div
+            className={styles.messageComposerInput}
+            role="textbox"
+            aria-label="Edit message"
+            contentEditable
+            suppressContentEditableWarning
+        >
+            This message is currently being edited.
+        </div>
+        <div className={styles.messageComposerActions}>
+            <span>Editing message</span>
+            <button type="button">Save</button>
+            <button type="button">Cancel</button>
+        </div>
+    </div>
+);
+const StoryEditedMessageBody = (): React.ReactElement => {
     const contentSnapshot: EventContentBodyViewSnapshot = {
-        body: "This message is currently being edited.",
-        className: styles.body,
+        body: "This message was edited.",
     };
     const contentVm = useMockedViewModel(contentSnapshot, {});
     const bodyVm = useMockedViewModel(
@@ -316,32 +358,40 @@ const StoryReplyChain = (): React.ReactElement => (
         <span>Earlier message quoted in this reply.</span>
     </blockquote>
 );
-const StoryMediaBody = (): React.ReactElement => {
+const storyMediaSizes = {
+    small: { label: "Small", maxWidth: 1, maxHeight: 1, aspectRatio: "1 / 1" },
+    medium: { label: "Medium", maxWidth: 320, maxHeight: 180, aspectRatio: "16 / 9" },
+    large: { label: "Large", maxWidth: 800, maxHeight: 600, aspectRatio: "4 / 3" },
+} as const;
+
+type StoryMediaSize = keyof typeof storyMediaSizes;
+
+const StoryMediaImage = ({
+    label,
+    maxWidth,
+    maxHeight,
+    aspectRatio,
+}: Pick<ImageBodyViewSnapshot, "maxWidth" | "maxHeight" | "aspectRatio"> & { label: string }): React.ReactElement => {
     const snapshot: ImageBodyViewSnapshot = {
         state: ImageBodyViewState.READY,
-        alt: "Example media",
+        alt: `${label} example media`,
         src: storyMediaSrc,
         thumbnailSrc: storyMediaSrc,
-        maxWidth: 320,
-        maxHeight: 180,
-        aspectRatio: "16 / 9",
+        maxWidth,
+        maxHeight,
+        aspectRatio,
     };
     const vm = useMockedViewModel(snapshot, {});
     return <ImageBodyView vm={vm} />;
 };
-const StoryStickerBody = (): React.ReactElement => {
-    const snapshot: ImageBodyViewSnapshot = {
-        state: ImageBodyViewState.READY,
-        alt: "Example sticker",
-        src: storyMediaSrc,
-        thumbnailSrc: storyMediaSrc,
-        maxWidth: 240,
-        maxHeight: 240,
-        aspectRatio: "1 / 1",
-    };
-    const vm = useMockedViewModel(snapshot, {});
-    return <ImageBodyView vm={vm} />;
-};
+const StoryMediaBody = ({ size = "medium" }: { size?: StoryMediaSize }): React.ReactElement => (
+    <StoryMediaImage {...storyMediaSizes[size]} />
+);
+const StoryStickerBody = (): React.ReactElement => (
+    <div className={styles.stickerBody} role="img" aria-label="Example sticker">
+        🌈
+    </div>
+);
 const StoryDecryptionFailureBody = (): React.ReactElement => {
     const snapshot: DecryptionFailureBodyViewSnapshot = {
         decryptionFailureReason: DecryptionFailureReason.UNABLE_TO_DECRYPT,
@@ -383,7 +433,6 @@ const StoryActionBar = ({ isPinned = false }: { isPinned?: boolean } = {}): Reac
     );
     return <ActionBarView vm={vm} />;
 };
-const StoryPinnedActionBar = (): React.ReactElement => <StoryActionBar isPinned />;
 const StoryThreadListActionBar = (): React.ReactElement => {
     const vm = useMockedViewModel(
         {
@@ -441,12 +490,6 @@ const StoryFooter = (): React.ReactElement => {
         </ReactionsRowView>
     );
 };
-const StoryPinnedFooter = (): React.ReactElement => (
-    <div className={styles.pinnedFooter}>
-        <PinnedMessageBadge />
-        <StoryFooter />
-    </div>
-);
 const storyThreadPreview: ThreadMessagePreviewViewSnapshot = {
     isVisible: true,
     avatar: {
@@ -495,15 +538,25 @@ const StorySearchThreadInfo = (): React.ReactElement => (
         View in thread
     </a>
 );
-const StoryReceipt = (): React.ReactElement => (
+const StoryReceipt = ({ empty = false }: { empty?: boolean }): React.ReactElement => (
     <span className={styles.receipt}>
         <span className={styles.readReceiptGroup}>
-            <button type="button" className={styles.readReceiptButton} aria-label="Read by Alex and Taylor">
-                <span className={styles.readReceiptContainer} aria-hidden="true">
-                    <span className={styles.receiptAvatar}>T</span>
-                    <span className={styles.receiptAvatar}>A</span>
+            {empty ? (
+                <span className={styles.readReceiptButton} aria-hidden="true">
+                    <span className={styles.readReceiptContainer} />
                 </span>
-            </button>
+            ) : (
+                <button type="button" className={styles.readReceiptButton} aria-label="Read by Alex and Taylor">
+                    <span className={styles.readReceiptContainer} aria-hidden="true">
+                        <span className={styles.receiptAvatar}>
+                            <StoryMemberAvatar label="T" size="14px" />
+                        </span>
+                        <span className={styles.receiptAvatar}>
+                            <StoryMemberAvatar label="A" size="14px" />
+                        </span>
+                    </span>
+                </button>
+            )}
         </span>
     </span>
 );
@@ -513,26 +566,132 @@ const StoryContextMenu = (): React.ReactElement => <span className={styles.conte
 const TimelineStoryFrame = ({
     density,
     layout,
+    shape,
+    containerWidth,
+    rightPanel = false,
+    presentationNotice,
     children,
-}: React.PropsWithChildren<{ density: string; layout: string }>): React.ReactElement => (
-    <StoryDebugFrame>
-        <div className={styles.storySurface} data-story-boundary="Timeline">
-            <div className={styles.timeline} data-story-boundary="RoomView.timeline" data-event-layout={layout}>
-                <div className={styles.scrollPanel} data-story-boundary="ScrollPanel">
-                    <div className={styles.messageListWrapper} data-story-boundary="messageListWrapper">
-                        <ol
-                            className={styles.messageList}
-                            data-story-boundary="RoomView.MessageList"
-                            data-event-density={density}
-                        >
-                            {children}
-                        </ol>
+}: React.PropsWithChildren<{
+    density: string;
+    layout: string;
+    shape: EventTileViewProps["root"]["shape"];
+    containerWidth?: number;
+    rightPanel?: boolean;
+    presentationNotice?: StoryPresentationResolution["notice"];
+}>): React.ReactElement => {
+    const frameRef = React.useRef<HTMLDivElement>(null);
+    const [availableWidth, setAvailableWidth] = React.useState(0);
+    const defaultContainerWidth = rightPanel ? 320 : 680;
+
+    React.useLayoutEffect(() => {
+        const frame = frameRef.current;
+        if (!frame) return;
+
+        const updateAvailableWidth = (): void => setAvailableWidth(frame.clientWidth);
+        updateAvailableWidth();
+
+        if (typeof ResizeObserver === "undefined") return;
+        const observer = new ResizeObserver(updateAvailableWidth);
+        observer.observe(frame);
+        return () => observer.disconnect();
+    }, []);
+
+    const minContainerWidth = rightPanel ? 320 : availableWidth > 0 ? Math.floor(availableWidth / 2) : 500;
+    // MainSplit uses maxWidth="50%" for its resizable right panel. RoomView's
+    // timeline has no narrower width constraint than its available flex width.
+    const maxContainerWidth = Math.max(
+        minContainerWidth,
+        availableWidth > 0 ? (rightPanel ? Math.floor(availableWidth / 2) : availableWidth) : rightPanel ? 640 : 1000,
+    );
+    const [selectedContainerWidth, setSelectedContainerWidth] = React.useState(containerWidth ?? defaultContainerWidth);
+
+    React.useEffect(() => {
+        setSelectedContainerWidth(containerWidth ?? defaultContainerWidth);
+    }, [containerWidth, defaultContainerWidth]);
+
+    const effectiveContainerWidth = Math.min(maxContainerWidth, Math.max(minContainerWidth, selectedContainerWidth));
+    const applicationContainerLabel = rightPanel ? "320px min - 50% max" : "50% min - 100% max";
+
+    const storyContext = !rightPanel
+        ? "RoomView"
+        : shape === "Card"
+          ? "TimelineCard"
+          : shape === "Notification"
+            ? "NotificationPanel"
+            : shape === "Pinned"
+              ? "PinnedMessagesCard"
+              : shape === "File"
+                ? "FilePanel"
+                : shape === "ThreadsList"
+                  ? "ThreadPanel"
+                  : "ThreadView";
+    const messageListBoundary = shape === "Pinned" ? "PinnedMessagesCard.wrapper" : `${storyContext}.MessageList`;
+    const storySurfaceClassName = classNames(styles.storySurface, {
+        [styles.storyRightPanel]: rightPanel,
+        [styles.storyPinnedPanel]: shape === "Pinned",
+        [styles.storyFilePanel]: shape === "File",
+        [styles.storyThreadsListPanel]: shape === "ThreadsList",
+        [styles.storyThreadPanel]: shape === "Thread",
+    });
+    return (
+        <StoryDebugFrame ref={frameRef}>
+            {presentationNotice && (
+                <div
+                    className={classNames(styles.presentationNotice, {
+                        [styles.presentationNoticeInvalid]: presentationNotice.invalid,
+                    })}
+                    role="status"
+                >
+                    {presentationNotice.text}
+                </div>
+            )}
+            <div
+                className={classNames(styles.storyContainer, {
+                    [styles.storyRightPanelContainer]: rightPanel,
+                })}
+                style={{ width: `${effectiveContainerWidth}px` }}
+                data-story-boundary="EventTileView.container"
+            >
+                <div className={styles.storyContainerLabel} data-story-boundary="EventTileView.containerLabel">
+                    EventTileView host · width: {applicationContainerLabel}
+                </div>
+                <div className={styles.storyContainerControls}>
+                    <label htmlFor="event-tile-story-container-width">{effectiveContainerWidth}px</label>
+                    <input
+                        id="event-tile-story-container-width"
+                        type="range"
+                        min={minContainerWidth}
+                        max={maxContainerWidth}
+                        step="8"
+                        value={effectiveContainerWidth}
+                        aria-label="Story host container width"
+                        onChange={(event) => setSelectedContainerWidth(Number(event.target.value))}
+                    />
+                    <output>{`${minContainerWidth}–${maxContainerWidth}px`}</output>
+                </div>
+                <div className={storySurfaceClassName} data-story-boundary="Timeline">
+                    <div
+                        className={styles.timeline}
+                        data-story-boundary={`${storyContext}.timeline`}
+                        data-event-layout={layout}
+                    >
+                        <div className={styles.scrollPanel} data-story-boundary="ScrollPanel">
+                            <div className={styles.messageListWrapper} data-story-boundary="messageListWrapper">
+                                <ol
+                                    className={styles.messageList}
+                                    data-story-boundary={messageListBoundary}
+                                    data-event-density={density}
+                                >
+                                    {children}
+                                </ol>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </StoryDebugFrame>
-);
+        </StoryDebugFrame>
+    );
+};
 
 const baseRoot: EventTileViewProps["root"] = {
     id: "event-tile-story-line",
@@ -546,7 +705,7 @@ const baseRoot: EventTileViewProps["root"] = {
 
 const roomSlots: EventTileViewProps["slots"] = {
     sender: <StorySender />,
-    avatar: <StoryAvatar />,
+    avatar: <StoryMemberAvatar />,
     body: <StoryBody />,
     timestamp: <StoryTimestamp />,
     padlock: <StoryPadlock />,
@@ -560,7 +719,7 @@ const roomSlots: EventTileViewProps["slots"] = {
 /** Slots for the default Room-like shapes without a context menu fixture. */
 const defaultShapeSlots: EventTileViewProps["slots"] = {
     sender: <StorySender />,
-    avatar: <StoryAvatar />,
+    avatar: <StoryMemberAvatar />,
     body: <StoryBody />,
     timestamp: <StoryLinkedTimestamp />,
     padlock: <StoryPadlock />,
@@ -572,14 +731,131 @@ const defaultShapeSlots: EventTileViewProps["slots"] = {
 
 const threadSlots: EventTileViewProps["slots"] = {
     ...defaultShapeSlots,
-    avatar: <StoryAvatar size="32px" />,
+    avatar: <StoryMemberAvatar size="32px" />,
     threadInfo: undefined,
 };
 
 type EventTileStoryProps = Omit<EventTileViewProps, "root"> & {
     shape: EventTileViewProps["root"]["shape"];
+    /** Width of the Storybook host container around the tile, in pixels. */
+    containerWidth?: number;
+    /** Whether the story should render the EventTileView-level sender and avatar slots. */
+    showSenderAndAvatar?: boolean;
     state?: Partial<EventTileViewProps["root"]["state"]>;
-    roomMessages?: "boundaries" | "alice" | "bob";
+    roomMessages?: "boundaries" | "alice" | "bob" | "media" | "threeEach" | "informational" | "alignedBetween";
+};
+
+type StoryPresentation = {
+    layout: EventLayout;
+    density: EventDensity;
+};
+
+type StoryPresentationPolicy = {
+    host: string;
+    allowedLayouts: readonly EventLayout[];
+    fixedLayout?: EventLayout;
+    fixedDensity?: EventDensity;
+    usesSharedPresentation: boolean;
+};
+
+type StoryPresentationResolution = {
+    requested: StoryPresentation;
+    effective: StoryPresentation;
+    notice?: {
+        invalid: boolean;
+        text: string;
+    };
+};
+
+const allEventLayouts: readonly EventLayout[] = ["group", "bubble", "irc"];
+
+const storyPresentationPolicies: Partial<Record<EventTileViewProps["root"]["shape"], StoryPresentationPolicy>> = {
+    Card: {
+        host: "TimelineCard",
+        allowedLayouts: ["group", "bubble"],
+        usesSharedPresentation: true,
+    },
+    Notification: {
+        host: "NotificationPanel",
+        allowedLayouts: ["group"],
+        fixedLayout: "group",
+        usesSharedPresentation: true,
+    },
+    Pinned: {
+        host: "PinnedMessagesCard",
+        allowedLayouts: ["group"],
+        fixedLayout: "group",
+        fixedDensity: "default",
+        usesSharedPresentation: false,
+    },
+    File: {
+        host: "FilePanel",
+        allowedLayouts: ["group"],
+        fixedLayout: "group",
+        usesSharedPresentation: true,
+    },
+    ThreadsList: {
+        host: "ThreadPanel",
+        allowedLayouts: ["group"],
+        fixedLayout: "group",
+        usesSharedPresentation: true,
+    },
+    Thread: {
+        host: "ThreadView",
+        allowedLayouts: ["group", "bubble"],
+        usesSharedPresentation: true,
+    },
+};
+
+const formatPresentation = ({ layout, density }: StoryPresentation): string =>
+    `${layout === "group" ? "Group" : layout === "bubble" ? "Bubble" : "IRC"} / ${
+        density === "compact" ? "Compact" : "Default"
+    }`;
+
+const resolveStoryPresentation = (
+    shape: EventTileViewProps["root"]["shape"],
+    requested: StoryPresentation,
+): StoryPresentationResolution => {
+    const policy = storyPresentationPolicies[shape] ?? {
+        host: "RoomView",
+        allowedLayouts: allEventLayouts,
+        usesSharedPresentation: true,
+    };
+    const effectiveLayout =
+        policy.fixedLayout ?? (policy.allowedLayouts.includes(requested.layout) ? requested.layout : "group");
+    const effectiveDensity =
+        policy.fixedDensity ??
+        (requested.density === "default" || effectiveLayout === "group" ? requested.density : "default");
+    const effective = { layout: effectiveLayout, density: effectiveDensity };
+    const invalid = effective.layout !== requested.layout || effective.density !== requested.density;
+    const unsupportedStory = !policy.usesSharedPresentation;
+
+    if (!invalid && !unsupportedStory) {
+        return { requested, effective };
+    }
+
+    const constraints = policy.fixedLayout
+        ? `fixes the shape to ${shape} and the layout to Group`
+        : `renders the ${shape} shape and supports ${policy.allowedLayouts.map((layout) => formatPresentation({ layout, density: "default" }).split(" /")[0]).join(" or ")} layout`;
+    const densityConstraint = policy.fixedDensity
+        ? " and Default density"
+        : "; Compact density is available only with Group layout";
+    const sourceConstraint = policy.usesSharedPresentation
+        ? ""
+        : " The application currently renders this panel with PinnedEventTile";
+    const prefix = invalid ? "Unsupported presentation." : "Unsupported story.";
+    const rendered = invalid
+        ? ` Requested: ${formatPresentation(requested)} · Rendered: ${formatPresentation(effective)}.`
+        : ` Requested and rendered: ${formatPresentation(effective)}.`;
+
+    return {
+        requested,
+        effective,
+        notice: {
+            invalid: true,
+            text: `${prefix} ${policy.host} ${constraints}${densityConstraint}.${sourceConstraint}${rendered}`,
+        },
+    };
 };
 
 const createStoryTimestamp = (
@@ -606,7 +882,14 @@ const createRoomStorySlots = ({
     timestamp?: React.ReactNode;
     showActionBar: boolean;
 }): EventTileViewProps["slots"] => {
-    const baseSlots = isOwnEvent ? slots : { body: slots.body };
+    const baseSlots = isOwnEvent
+        ? slots
+        : {
+              body: slots.body,
+              // The application keeps an empty receipt group mounted on every event
+              // while read receipts are enabled, even when this event has no receipts.
+              receipt: slots.receipt ? <StoryReceipt empty /> : undefined,
+          };
     return {
         ...baseSlots,
         sender,
@@ -636,11 +919,15 @@ const createPreviewStorySlots = ({
 
 function EventTileViewStoryContent({
     shape,
+    containerWidth,
+    showSenderAndAvatar: showSenderAndAvatarStoryOverride,
     state,
     roomMessages = "boundaries",
     ...props
 }: EventTileStoryProps): React.ReactElement {
-    const { layout, density } = useEventPresentation();
+    const requestedPresentation = useEventPresentation();
+    const presentation = resolveStoryPresentation(shape, requestedPresentation);
+    const { layout, density } = presentation.effective;
     const [tileInteractions, setTileInteractions] = React.useState<
         Record<string, { hovered: boolean; focused: boolean }>
     >({});
@@ -660,19 +947,30 @@ function EventTileViewStoryContent({
         suffix: string,
         boundaryState: Partial<EventTileViewProps["root"]["state"]> = {},
         isLast = false,
+        bodyOverride?: React.ReactNode,
+        showSenderAndAvatarOverride?: boolean,
     ): React.ReactElement => {
-        const tileState = { ...boundaryState, ...state };
+        const tileState = {
+            previewClamped: shape === "ThreadsList" || shape === "Notification",
+            ...boundaryState,
+            ...state,
+        };
         const interaction = tileInteractions[suffix] ?? { hovered: false, focused: false };
-        const showActionBar = interaction.hovered || interaction.focused;
+        const showActionBar =
+            shape === "ThreadsList" || tileState.actionBarFocused || interaction.hovered || interaction.focused;
         const timestamp = createStoryTimestamp(layout, isLast, showActionBar);
-        const showSenderAndAvatar = layout === "irc" || !tileState.continuation;
+        const showSenderAndAvatar =
+            showSenderAndAvatarOverride ??
+            showSenderAndAvatarStoryOverride ??
+            (layout === "irc" || !tileState.continuation);
         const sender = createStorySender(isOwnEvent, showSenderAndAvatar && !tileState.noSender && !tileState.info);
         const avatar = createStoryAvatar(isOwnEvent, layout, showSenderAndAvatar, tileState.info ? "14px" : undefined);
+        const tileSlots = bodyOverride === undefined ? props.slots : { ...props.slots, body: bodyOverride };
         const slots =
             shape === "Room"
                 ? createRoomStorySlots({
                       isOwnEvent,
-                      slots: props.slots,
+                      slots: tileSlots,
                       sender,
                       avatar,
                       timestamp,
@@ -731,6 +1029,34 @@ function EventTileViewStoryContent({
     };
 
     const renderRoomTiles = (): React.ReactNode => {
+        if (roomMessages === "media") {
+            return (
+                <>
+                    {renderTile(
+                        false,
+                        "media-small",
+                        { continuation: false, lastInSection: false },
+                        false,
+                        <StoryMediaBody size="small" />,
+                    )}
+                    {renderTile(
+                        false,
+                        "media-medium",
+                        { continuation: true, lastInSection: false },
+                        false,
+                        <StoryMediaBody size="medium" />,
+                    )}
+                    {renderTile(
+                        false,
+                        "media-large",
+                        { continuation: true, lastInSection: true },
+                        true,
+                        <StoryMediaBody size="large" />,
+                    )}
+                </>
+            );
+        }
+
         if (roomMessages === "alice") {
             return renderTile(true, "alice-single", { continuation: false, lastInSection: true }, true);
         }
@@ -739,22 +1065,122 @@ function EventTileViewStoryContent({
             return renderTile(false, "bob-single", { continuation: false, lastInSection: true }, true);
         }
 
+        if (roomMessages === "threeEach") {
+            return (
+                <>
+                    {renderTile(false, "bob-first", { continuation: false, lastInSection: false })}
+                    {renderTile(false, "bob-middle", { continuation: true, lastInSection: false })}
+                    {renderTile(false, "bob-last", { continuation: true, lastInSection: true }, true)}
+                    {renderTile(true, "alice-first", { continuation: false, lastInSection: false })}
+                    {renderTile(true, "alice-middle", { continuation: true, lastInSection: false })}
+                    {renderTile(true, "alice-last", { continuation: true, lastInSection: true }, true)}
+                </>
+            );
+        }
+
+        if (roomMessages === "informational") {
+            return (
+                <>
+                    {renderTile(
+                        false,
+                        "informational-first",
+                        { info: true, continuation: false, lastInSection: false },
+                        false,
+                        <StoryInformationalBody>Alex changed the room name.</StoryInformationalBody>,
+                    )}
+                    {renderTile(
+                        false,
+                        "informational-second",
+                        { info: true, continuation: false, lastInSection: false },
+                        false,
+                        <StoryInformationalBody>Notifications are enabled.</StoryInformationalBody>,
+                    )}
+                    {renderTile(
+                        false,
+                        "informational-last",
+                        { info: true, continuation: false, lastInSection: true },
+                        true,
+                        <StoryInformationalBody>
+                            This longer informational event demonstrates how shared textual event styling handles a
+                            detailed message that wraps across two rows in the timeline.
+                        </StoryInformationalBody>,
+                    )}
+                </>
+            );
+        }
+
+        if (roomMessages === "alignedBetween") {
+            // The application uses this placement for MatrixRTC m.rtc.notification events.
+            return (
+                <>
+                    {renderTile(
+                        false,
+                        "aligned-before",
+                        { continuation: false, lastInSection: true },
+                        false,
+                        <StoryShortBody />,
+                    )}
+                    {renderTile(
+                        false,
+                        "aligned-event",
+                        { alignedBetweenBubbles: true, continuation: false, lastInSection: true },
+                        false,
+                        <StoryCallStartedBody />,
+                        false,
+                    )}
+                    {renderTile(
+                        true,
+                        "aligned-after",
+                        { continuation: false, lastInSection: true },
+                        true,
+                        <StoryShortBody />,
+                    )}
+                </>
+            );
+        }
+
         return (
             <>
                 {renderTile(false, "bob-first", { continuation: false, lastInSection: false })}
                 {renderTile(false, "bob-middle", { continuation: true, lastInSection: false })}
                 {renderTile(false, "bob-last", { continuation: true, lastInSection: true })}
-                {renderTile(true, "alice-single", { continuation: false, lastInSection: true }, true)}
+                {renderTile(
+                    true,
+                    "alice-single",
+                    { continuation: false, lastInSection: true },
+                    true,
+                    <StoryEditedMessageBody />,
+                )}
             </>
         );
     };
 
-    const tiles = shape === "Room" ? renderRoomTiles() : renderTile(false, "event");
+    // PinnedMessagesCard is still rendered by the legacy PinnedEventTile in the
+    // application. Keep this story as a presentation diagnostic rather than
+    // rendering an EventTileView that does not represent the real panel.
+    const tiles = shape === "Pinned" ? null : shape === "Room" ? renderRoomTiles() : renderTile(false, "event");
+
+    const rightPanel =
+        shape === "Card" ||
+        shape === "Notification" ||
+        shape === "Pinned" ||
+        shape === "File" ||
+        shape === "ThreadsList" ||
+        shape === "Thread";
 
     return (
-        <TimelineStoryFrame density={density} layout={layout}>
-            {tiles}
-        </TimelineStoryFrame>
+        <EventPresentationProvider value={presentation.effective}>
+            <TimelineStoryFrame
+                density={density}
+                layout={layout}
+                shape={shape}
+                containerWidth={containerWidth}
+                rightPanel={rightPanel}
+                presentationNotice={presentation.notice}
+            >
+                {tiles}
+            </TimelineStoryFrame>
+        </EventPresentationProvider>
     );
 }
 
@@ -790,14 +1216,21 @@ const storyHelpers = {
     compactGroupGlobals,
     StoryDecryptionFailureBody,
     StoryDecryptionFailurePadlock,
-    StoryEditedBody,
+    StoryEditedMessageBody,
+    StoryMessageComposer,
     StoryEmoteBody,
     StoryHighlightedBody,
     StoryInformationalBody,
     StoryLinkedTimestamp,
+    StoryPadlock,
     StoryMediaBody,
+    StoryNotificationBadge,
+    StoryPreviewBody,
+    StoryShortBody,
     StoryReplyChain,
     StoryStickerBody,
+    StoryThreadListActionBar,
+    StoryThreadListInfo,
 };
 
 const meta = {
@@ -809,6 +1242,13 @@ const meta = {
         shape: {
             table: { disable: true },
         },
+        containerWidth: {
+            control: false,
+            description:
+                "Initial width in pixels. Use the visible range control in the story: RoomView is 50%–100% of the host; right-panel shapes are 320px–50% of MainSplit.",
+            table: { category: "Story host" },
+        },
+        showSenderAndAvatar: { table: { disable: true } },
         classNames: { table: { disable: true } },
         onMouseEnter: { table: { disable: true } },
         onMouseLeave: { table: { disable: true } },
@@ -842,7 +1282,7 @@ export const ThreadsList: Story = {
         shape: "ThreadsList",
         slots: {
             sender: <StorySender />,
-            avatar: <StoryAvatar size="32px" />,
+            avatar: <StoryMemberAvatar size="32px" />,
             body: <StoryPreviewBody />,
             timestamp: <StoryTimestamp />,
             notificationBadge: <StoryNotificationBadge />,
@@ -860,6 +1300,14 @@ export const Thread: Story = {
     },
 };
 
+export const Card: Story = {
+    tags: interactiveTags,
+    args: {
+        shape: "Card",
+        slots: defaultShapeSlots,
+    },
+};
+
 export const Notification: Story = {
     tags: interactiveTags,
     args: {
@@ -868,7 +1316,7 @@ export const Notification: Story = {
             sender: <StorySender />,
             body: <StoryPreviewBody />,
             timestamp: <StoryTimestamp />,
-            roomAvatar: <StoryAvatar room size="28px" />,
+            roomAvatar: <StoryRoomAvatar size="28px" />,
             notificationRoomLabel: (
                 <span className={styles.roomLabel}>
                     {" in "}
@@ -887,7 +1335,7 @@ export const File: Story = {
         shape: "File",
         slots: {
             sender: <StorySender />,
-            avatar: <StoryAvatar size="20px" />,
+            avatar: <StoryMemberAvatar size="20px" />,
             timestamp: <StoryLinkedTimestamp />,
             body: <StoryFileBody />,
         },
@@ -910,11 +1358,6 @@ export const Pinned: Story = {
     tags: interactiveTags,
     args: {
         shape: "Pinned",
-        slots: {
-            ...defaultShapeSlots,
-            actionBar: <StoryPinnedActionBar />,
-            footer: <StoryPinnedFooter />,
-        },
     },
 };
 
@@ -944,6 +1387,20 @@ export const RoomIrcDefault: Story = {
     tags: visualTags,
     globals: ircGlobals,
     args: Room.args,
+};
+
+export const CardGroupDefault: Story = {
+    name: "Card - Group - Default",
+    tags: visualTags,
+    globals: groupGlobals,
+    args: Card.args,
+};
+
+export const CardBubbleDefault: Story = {
+    name: "Card - Bubble - Default",
+    tags: visualTags,
+    globals: bubbleGlobals,
+    args: Card.args,
 };
 
 export const ThreadsListGroup: Story = {

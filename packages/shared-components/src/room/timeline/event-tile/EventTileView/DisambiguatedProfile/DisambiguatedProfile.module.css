@@ -35,20 +35,18 @@
 }
 
 .disambiguatedProfile[data-event-density="compact"] {
-    font-size: 13px;
+    font-size: var(--cpd-font-size-body-sm);
 }
 
 .disambiguatedProfile[data-event-layout="bubble"] {
     width: fit-content;
     max-width: var(--event-tile-bubble-line-max-width, 70%);
-    line-height: 18px;
+    line-height: var(--event-tile-bubble-line-height, 1.125rem);
     white-space: normal;
 
     .disambiguatedProfile_displayName {
         white-space: nowrap;
         margin-inline-end: 5px;
-
-        /* Preserve the legacy LTR treatment for RTL display names. */
         unicode-bidi: embed;
         direction: ltr;
     }

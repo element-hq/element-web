@@ -657,8 +657,6 @@
     },
     "create_section_dialog": {
         "create_section": "섹션 생성",
-        "description": "이 섹션은 당신만을 위한 공간입니다.",
-        "label": "섹션 이름",
         "title": "섹션 만들기",
         "title_edition": "섹션을 편집하세요"
     },
@@ -850,7 +848,7 @@
         "setting_definition": "설정 정의:",
         "setting_id": "Setting ID",
         "settings": {
-            "elementCallUrl": "엘리먼트 통화 URL"
+            "elementCallUrl": "Element 통화 URL"
         },
         "settings_explorer": "설정 탐색기",
         "show_empty_content_events": "빈 콘텐츠가 있는 이벤트 표시",
@@ -1351,7 +1349,6 @@
             "preparing": "초대장 준비 중..."
         },
         "recents_section": "최근 대화 목록",
-        "room_failed_partial": "사용자들은 초대했지만, 아래의 사용자들은 **<RoomName/>**에 초대할 수 없었습니다.",
         "room_failed_partial_title": "일부 초대장이 발송되지 못했습니다",
         "room_failed_title": "%(roomName)s에 사용자를 초대하지 못했습니다",
         "send_link_prompt": "또는 초대 링크 보내기",
@@ -1464,7 +1461,6 @@
         "bridge_state_workspace": "작업 공간:<networkLink/>",
         "click_for_info": "자세한 내용을 보려면 클릭하세요",
         "currently_experimental": "현재 실험 중입니다.",
-        "custom_themes": "사용자 정의 테마 추가 지원",
         "dynamic_room_predecessors": "동적 채팅방 이전 항목",
         "dynamic_room_predecessors_description": "MSC3946 활성화 (지연 도착 채팅방 아카이브 지원)",
         "element_call_video_rooms": "Element Call 영상 채팅방",
@@ -1490,7 +1486,6 @@
         "group_profile": "프로필",
         "group_rooms": "방",
         "group_spaces": "스페이스",
-        "group_themes": "테마",
         "group_threads": "스레드",
         "group_ui": "사용자 인터페이스",
         "group_voip": "음성 & 영상",
@@ -2376,11 +2371,6 @@
             "custom_font_description": "시스템에 설치된 글꼴의 이름을 설정하면 %(brand)s 에서 해당 글꼴을 사용하려고 시도합니다.",
             "custom_font_name": "시스템 글꼴 이름",
             "custom_font_size": "사용자 정의 크기 사용",
-            "custom_theme_add": "사용자 지정 테마 추가",
-            "custom_theme_downloading": "사용자 지정 테마 다운로드 중…",
-            "custom_theme_error_downloading": "테마 다운로드 중 오류 발생",
-            "custom_theme_help": "적용하려는 사용자 정의 테마의 URL을 입력하세요.",
-            "custom_theme_invalid": "유효하지 않은 테마 스키마입니다.",
             "dialog_title": "<strong>설정:</strong> 화면 설정",
             "font_size": "글자 크기",
             "font_size_default": "%(fontSize)s (기본값)",
@@ -3718,7 +3708,7 @@
         "disabled_no_perms_start_video_call": "영상 통화를 시작할 권한이 없습니다.",
         "disabled_no_perms_start_voice_call": "음성 통화를 시작할 권한이 없습니다.",
         "disabled_ongoing_call": "통화 중",
-        "element_call": "엘리먼트 통화",
+        "element_call": "Element 통화",
         "enable_camera": "카메라 켜기",
         "enable_microphone": "마이크 음소거 해제",
         "expand": "통화로 돌아가기",
@@ -3790,7 +3780,7 @@
     "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
     "welcome": {
         "tagline_element": "압도적인 속도와 간결함.",
-        "title_element": "가장 나다운 공간, 엘리먼트에서",
+        "title_element": "가장 나다운 공간, Element에서",
         "title_generic": "%(brand)s에 오신 것을 환영합니다"
     },
     "widget": {

@@ -28,10 +28,13 @@ describe("RoomNotificationStateStore", function () {
     beforeEach(() => {
         client = createTestClient();
         dis = new MatrixDispatcher();
-        vi.resetAllMocks();
         store = RoomNotificationStateStore.testInstance(dis);
         store.emit = vi.fn();
         setupAsyncStoreWithClient(store, client);
+    });
+
+    afterEach(() => {
+        vi.resetAllMocks();
     });
 
     it("Emits no event when a room has no unreads", async () => {

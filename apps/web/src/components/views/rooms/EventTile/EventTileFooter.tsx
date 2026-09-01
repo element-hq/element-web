@@ -56,18 +56,18 @@ export function EventTileFooter({
 
     if (placement === "irc") {
         return (
-            <div className="mx_EventTile_footer">
+            <>
                 {pinnedMessageBadge}
                 {reactionsRow}
-            </div>
+            </>
         );
     }
 
     return (
-        <div className="mx_EventTile_footer">
+        <>
             {showMainPinnedMessageBadge && pinnedMessageBadge}
             {reactionsRow}
             {showBubblePinnedMessageBadge && pinnedMessageBadge}
-        </div>
+        </>
     );
 }
