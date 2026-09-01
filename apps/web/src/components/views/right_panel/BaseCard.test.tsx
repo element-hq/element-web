@@ -20,7 +20,7 @@ vi.mock("../../../stores/right-panel/RightPanelStore", () => ({
     default: {
         instance: {
             popCard: vi.fn(),
-            currentCardPhaseHistory: [],
+            roomPhaseHistory: [],
         },
     },
 }));
