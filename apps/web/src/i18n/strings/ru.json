@@ -661,7 +661,6 @@
     },
     "create_section_dialog": {
         "create_section": "Новый раздел",
-        "label": "Название раздела",
         "title": "Новый раздел",
         "title_edition": "Редактировать раздел"
     },
@@ -1344,7 +1343,6 @@
             "preparing": "Подготовка приглашений..."
         },
         "recents_section": "Недавние Диалоги",
-        "room_failed_partial": "Мы отправили остальных, но нижеперечисленные люди не могут быть приглашены в <RoomName/>",
         "room_failed_partial_title": "Некоторые приглашения не могут быть отправлены",
         "room_failed_title": "Не удалось пригласить пользователей в %(roomName)s",
         "send_link_prompt": "Или отправьте ссылку на приглашение",
@@ -1460,7 +1458,6 @@
         "bridge_state_workspace": "Рабочая область: <networkLink/>",
         "click_for_info": "Нажмите, чтобы узнать больше",
         "currently_experimental": "На данный момент экспериментальный.",
-        "custom_themes": "Поддержка сторонних тем",
         "dynamic_room_predecessors": "Родитель динамической комнаты",
         "dynamic_room_predecessors_description": "Включите MSC3946 (для поддержки архивных комнат)",
         "element_call_video_rooms": "Видеокомнаты Element Call",
@@ -1479,7 +1476,6 @@
         "group_profile": "Профиль",
         "group_rooms": "Комнаты",
         "group_spaces": "Пространства",
-        "group_themes": "Темы",
         "group_threads": "Обсуждения",
         "group_ui": "Пользовательский интерфейс",
         "group_voip": "Голос и видео",
@@ -2399,11 +2395,6 @@
             "custom_font_description": "Установите имя шрифта, установленного в вашей системе, и %(brand)s попытается его использовать.",
             "custom_font_name": "Название системного шрифта",
             "custom_font_size": "Использовать другой размер",
-            "custom_theme_add": "Добавить пользовательскую тему",
-            "custom_theme_downloading": "Скачивание пользовательской темы…",
-            "custom_theme_error_downloading": "Ошибка при скачивании темы",
-            "custom_theme_help": "Введите URL-адрес пользовательской темы, которую вы хотите применить.",
-            "custom_theme_invalid": "Неверная схема темы.",
             "dialog_title": "<strong>Настройки:</strong> Внешний вид",
             "font_size": "Размер шрифта",
             "font_size_default": "%(fontSize)s (по умолчанию)",
