@@ -33,6 +33,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { debounce } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
+import type { EventTileRenderingMode } from "@element-hq/web-shared-components";
 
 import SettingsStore from "../../settings/SettingsStore";
 import { type Layout } from "../../settings/enums/Layout";
@@ -119,6 +120,9 @@ interface IProps {
 
     // which layout to use
     layout?: Layout;
+
+    // which shape to use
+    shape?: EventTileRenderingMode;
 
     // whether to always show timestamps for an event
     alwaysShowTimestamps?: boolean;
@@ -1887,6 +1891,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 editState={this.props.editState}
                 showReactions={this.props.showReactions}
                 layout={this.props.layout}
+                shape={this.props.shape}
                 hideThreadedMessages={this.props.hideThreadedMessages}
                 disableGrouping={this.props.disableGrouping}
                 callEventGroupers={this.callEventGroupers}
