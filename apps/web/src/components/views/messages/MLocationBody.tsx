@@ -7,9 +7,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useMemo } from "react";
+import classNames from "classnames";
 import { type MatrixEvent, ClientEvent, type ClientEventHandlerMap } from "matrix-js-sdk/src/matrix";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { Tooltip } from "@vector-im/compound-web";
+import { useEventPresentation } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
@@ -131,6 +133,8 @@ export const LocationBodyContent: React.FC<LocationBodyContentProps> = ({
     onError,
     onClick,
 }) => {
+    const { layout } = useEventPresentation();
+
     // Find the message panel boundary so the tooltip hides when it would overlap the composer
     const boundaryEl = useMemo(() => document.querySelector<HTMLElement>(".mx_RoomView_messagePanel") ?? undefined, []);
 
@@ -152,7 +156,7 @@ export const LocationBodyContent: React.FC<LocationBodyContentProps> = ({
     );
 
     return (
-        <div className="mx_MLocationBody">
+        <div className={classNames("mx_MLocationBody", { mx_MLocationBody_bubble: layout === "bubble" })}>
             <Tooltip label={tooltip} boundary={boundaryEl}>
                 <div className="mx_MLocationBody_map">{mapElement}</div>
             </Tooltip>

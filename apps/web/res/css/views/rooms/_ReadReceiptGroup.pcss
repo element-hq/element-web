@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
     --ReadReceiptGroup_EventBubbleTile-spacing-end: 78px;
 
     position: relative;
+    inset-inline-end: var(--event-tile-read-receipt-inset-inline-end, auto);
     display: inline-block;
     user-select: none;
     z-index: 1;
@@ -39,6 +40,13 @@ Please see LICENSE files in the repository root for full details.
         position: relative;
         display: block;
         height: 100%;
+
+        svg {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            color: var(--cpd-color-icon-tertiary);
+        }
 
         .mx_BaseAvatar {
             /* Compound uses a border on default avatars but no border on actual images, we want a border in all cases */

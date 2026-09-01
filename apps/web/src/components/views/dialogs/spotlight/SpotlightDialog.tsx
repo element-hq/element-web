@@ -1040,8 +1040,32 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             );
         }
 
+        // The shortcuts below the results are options in their own right, so with nothing above them
+        // the first one is selected by default and enter drops the user into a filter they never
+        // asked for. Saying there are no results gives that default selection somewhere harmless to
+        // land, and the shortcuts are still an arrow key away.
+        let noResultsSection: JSX.Element | undefined;
+        const hasResults =
+            !!results[Section.People].length ||
+            (filter === Filter.People && !!results[Section.Suggestions].length) ||
+            !!results[Section.Rooms].length ||
+            !!results[Section.Spaces].length ||
+            !!results[Section.PublicRoomsAndSpaces].length ||
+            !!spaceResults.length ||
+            !!joinRoomSection;
+        if (trimmedQuery && !hasResults) {
+            noResultsSection = (
+                <div className="mx_SpotlightDialog_section mx_SpotlightDialog_results" role="group">
+                    <Option id="mx_SpotlightDialog_button_noResults" onClick={null}>
+                        {_t("spotlight_dialog|no_results")}
+                    </Option>
+                </div>
+            );
+        }
+
         content = (
             <>
+                {noResultsSection}
                 {peopleSection}
                 {suggestionsSection}
                 {roomsSection}

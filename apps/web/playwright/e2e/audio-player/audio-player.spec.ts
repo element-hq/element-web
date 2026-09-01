@@ -39,7 +39,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
 
         // Wait until the file is sent
         await expect(app.page.locator(".mx_RoomView_statusArea_expanded")).not.toBeVisible();
-        await expect(app.page.locator(".mx_EventTile.mx_EventTile_last").getByRole("status")).toHaveAccessibleName(
+        await expect(app.page.locator(".mx_EventTile").last().getByRole("status")).toHaveAccessibleName(
             "Your message was sent",
         );
         // wait for the tile to finish loading
@@ -71,7 +71,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
 
         const { event_id: eventId } = await app.client.sendEvent(roomId, null, "m.room.message", content);
         await expect(
-            app.page.locator(".mx_EventTile_last").getByRole("region", { name: "Audio player" }),
+            app.page.locator(".mx_EventTile").last().getByRole("region", { name: "Audio player" }),
         ).toBeVisible();
         await expect(app.page.getByTestId("audio-player-name").last()).toHaveText(sampleFile);
         return eventId;
@@ -83,7 +83,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
     };
 
     /**
-     * Take snapshots of mx_EventTile_last on each layout, outputting log for reference/debugging.
+     * Take snapshots of the selected EventTile on each layout, outputting log for reference/debugging.
      * @param detail The snapshot name. Used for outputting logs too.
      * @param monospace This changes the font used to render the UI from a default one to Fira Code. Set to false by default.
      */
@@ -118,7 +118,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         // Enable IRC layout
         await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
 
-        const ircTile = page.locator(".mx_EventTile_last[data-layout='irc']");
+        const ircTile = page.locator(".mx_EventTile").last();
         // Click the event timestamp to highlight EventTile in case it is not visible
         await ircTile.locator(".mx_MessageTimestamp").click();
         // Assert that rendering of the player settled and the play button is visible before taking a snapshot
@@ -149,26 +149,26 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             hideJumpToBottomButton: true,
         };
 
-        // Take a snapshot of mx_EventTile_last on IRC layout
-        screenshotOptions.clip = (await page.locator(".mx_EventTile_last").boundingBox()) ?? undefined;
+        // Take a snapshot of the selected EventTile on IRC layout
+        screenshotOptions.clip = (await ircTile.boundingBox()) ?? undefined;
         await scrollToBottomOfTimeline(page);
         await expect(page).toMatchScreenshot(`${detail.replaceAll(" ", "-")}-irc-layout.png`, screenshotOptions);
 
         // Take a snapshot on modern/group layout
         await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
-        const groupTile = page.locator(".mx_EventTile_last[data-layout='group']");
+        const groupTile = page.locator(".mx_EventTile").last();
         await groupTile.locator(".mx_MessageTimestamp").click();
         await checkPlayerVisibility(groupTile);
-        screenshotOptions.clip = (await page.locator(".mx_EventTile_last").boundingBox()) ?? undefined;
+        screenshotOptions.clip = (await groupTile.boundingBox()) ?? undefined;
         await scrollToBottomOfTimeline(page);
         await expect(page).toMatchScreenshot(`${detail.replaceAll(" ", "-")}-group-layout.png`, screenshotOptions);
 
         // Take a snapshot on bubble layout
         await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
-        const bubbleTile = page.locator(".mx_EventTile_last[data-layout='bubble']");
+        const bubbleTile = page.locator(".mx_EventTile").last();
         await bubbleTile.locator(".mx_MessageTimestamp").click();
         await checkPlayerVisibility(bubbleTile);
-        screenshotOptions.clip = (await page.locator(".mx_EventTile_last").boundingBox()) ?? undefined;
+        screenshotOptions.clip = (await bubbleTile.boundingBox()) ?? undefined;
         await scrollToBottomOfTimeline(page);
         await expect(page).toMatchScreenshot(`${detail.replaceAll(" ", "-")}-bubble-layout.png`, screenshotOptions);
     };
@@ -230,7 +230,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         await uploadFile(app, "1sec.ogg");
 
         // Assert that the audio player is rendered
-        const container = page.locator(".mx_EventTile_last").getByRole("region", { name: "Audio player" });
+        const container = page.locator(".mx_EventTile").last().getByRole("region", { name: "Audio player" });
         // Assert that the counter is zero before clicking the play button
         await expect(container.getByRole("timer")).toHaveText("00:00");
 
@@ -254,7 +254,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         const downloadPromise = page.waitForEvent("download");
 
         // Find and click "Download" button on MessageActionBar
-        const tile = page.locator(".mx_EventTile_last");
+        const tile = page.locator(".mx_EventTile").last();
         await tile.hover();
         await tile.getByRole("button", { name: "Download" }).click();
 
@@ -273,7 +273,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             await expect(page.getByRole("region", { name: "Audio player" })).toBeVisible();
 
             // Find and click "Reply" button on MessageActionBar
-            const tile = page.locator(".mx_EventTile_last");
+            const tile = page.locator(".mx_EventTile").last();
             await clickButtonReply(tile);
 
             // Reply to the player with another audio file
@@ -300,7 +300,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             // message. This test checks whether a reply chain which consists of
             // multiple audio file replies is rendered properly.
 
-            const tile = page.locator(".mx_EventTile_last");
+            const tile = page.locator(".mx_EventTile").last();
 
             const firstEventId = await sendAudioFile(app, "upload-first.ogg");
             const secondEventId = await sendAudioFile(app, "upload-second.ogg", firstEventId);
@@ -344,15 +344,15 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         const messageList = page.locator(".mx_RoomView_MessageList");
         // Assert the audio player is rendered
         await expect(
-            messageList.locator(".mx_EventTile_last").getByRole("region", { name: "Audio player" }),
+            messageList.locator(".mx_EventTile").last().getByRole("region", { name: "Audio player" }),
         ).toBeVisible();
         // Find and click "Reply in thread" button
-        await messageList.locator(".mx_EventTile_last").hover();
-        await messageList.locator(".mx_EventTile_last").getByRole("button", { name: "Reply in thread" }).click();
+        await messageList.locator(".mx_EventTile").last().hover();
+        await messageList.locator(".mx_EventTile").last().getByRole("button", { name: "Reply in thread" }).click();
 
         // On a thread
         const thread = page.locator(".mx_ThreadView");
-        const threadTile = thread.locator(".mx_EventTile_last");
+        const threadTile = thread.locator(".mx_EventTile").last();
         const audioPlayer = threadTile.getByRole("region", { name: "Audio player" });
 
         // Assert that the counter is zero before clicking the play button
