@@ -193,6 +193,8 @@
 /* Group layout. */
 .root.layoutGroup {
     --event-tile-group-line-padding-inline-start: var(--event-tile-group-gutter);
+    --image-body-min-width: 44px;
+    --image-body-min-height: 44px;
 
     &.stateInfo {
         --event-tile-content-inline-end: 0;
@@ -470,6 +472,8 @@
     /* Constants. */
     /* Match the sender's 1px anti-zalgo padding on both sides. */
     --event-tile-irc-slot-height: calc(var(--event-tile-irc-line-height) + 2px);
+    --image-body-min-width: 44px;
+    --image-body-min-height: 44px;
 
     /* Root. */
     display: flex;
@@ -701,6 +705,8 @@
 .root.layoutBubble {
     /* Constants. */
     --event-tile-content-inline-end: 0;
+    --image-body-min-width: calc(1.8rem + 2 * var(--event-tile-bubble-gutter));
+    --image-body-min-height: calc(1.8rem + 2 * var(--event-tile-bubble-gutter));
 
     /* Root. */
     max-width: unset;
@@ -1763,7 +1769,7 @@
     /* Slots. */
     .slotBody {
         --event-tile-file-download-margin-block-start: var(--cpd-space-4x);
-        --event-tile-file-image-gap: 0;
+        --image-body-content-gap: 0;
     }
 
     /* States. */
