@@ -14,6 +14,9 @@ function resolve(specifier: string): string {
 }
 
 export default defineProject({
+    oxc: {
+        jsx: { runtime: "automatic" },
+    },
     resolve: {
         alias: [
             { find: "test-utils-rtl", replacement: resolve("./test/test-utils/vitest-matrix-react") },
