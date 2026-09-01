@@ -105,6 +105,34 @@ describe("<SearchWarning />", () => {
         });
     });
 
+    describe("with seshat installed but message search turned off", () => {
+        beforeEach(() => {
+            EventIndexPeg.index = null;
+            jest.spyOn(EventIndexPeg, "supportIsInstalled").mockReturnValue(true);
+            // Available by default, and the very config that produced the wrong advice on desktop.
+            SdkConfig.put({
+                brand: "Element",
+                desktop_builds: { available: true, logo: "https://logo", url: "https://url" },
+            });
+        });
+
+        afterEach(() => {
+            jest.restoreAllMocks();
+        });
+
+        it("points at the setting rather than the desktop app when searching", () => {
+            const { container } = render(<SearchWarning isRoomEncrypted={true} kind={WarningKind.Search} />);
+
+            expect(container.textContent).toEqual("Turn on message search to search encrypted messages");
+        });
+
+        it("points at the setting rather than the desktop app for files", () => {
+            const { container } = render(<SearchWarning isRoomEncrypted={true} kind={WarningKind.Files} />);
+
+            expect(container.textContent).toEqual("Turn on message search to see all encrypted files");
+        });
+    });
+
     describe("with the event index present", () => {
         const setIndex = (index: FakeEventIndex): void => {
             EventIndexPeg.index = index as unknown as EventIndex;
