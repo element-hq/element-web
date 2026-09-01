@@ -1,0 +1,900 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+// @vitest-environment happy-dom
+
+import { describe, it, expect, beforeEach, afterEach, afterAll, vi, type MockInstance } from "vitest";
+import React, { type ComponentProps } from "react";
+import { render, type RenderResult } from "test-utils-rtl";
+import { type MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
+import { KnownMembership, type Membership } from "matrix-js-sdk/src/types";
+import {
+    getMockClientWithEventEmitter,
+    mkEvent,
+    mkMembership,
+    mockClientMethodsUser,
+    unmockClientPeg,
+} from "test-utils";
+
+import EventListSummary from "./EventListSummary";
+import { Layout } from "../../../settings/enums/Layout";
+import SettingsStore from "../../../settings/SettingsStore";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import * as languageSettings from "../../../i18n/settings";
+
+describe("EventListSummary", function () {
+    const roomId = "!room:server.org";
+    // Generate dummy event tiles for use in simulating an expanded MELS
+    const generateTiles = (events: MatrixEvent[]) => {
+        return events.map((e) => {
+            return (
+                <div key={e.getId()} className="event_tile">
+                    Expanded membership
+                </div>
+            );
+        });
+    };
+
+    /**
+     * Generates a membership event with the target of the event set as a mocked
+     * RoomMember based on `parameters.userId`.
+     * @param {string} eventId the ID of the event.
+     * @param {object} parameters the parameters to use to create the event.
+     * @param {string} parameters.membership the membership to assign to
+     * `content.membership`
+     * @param {string} parameters.userId the state key and target userId of the event. If
+     * `parameters.senderId` is not specified, this is also used as the event sender.
+     * @param {string} parameters.prevMembership the membership to assign to
+     * `prev_content.membership`.
+     * @param {string} parameters.senderId the user ID of the sender of the event.
+     * Optional. Defaults to `parameters.userId`.
+     * @returns {MatrixEvent} the event created.
+     */
+    interface MembershipEventParams {
+        senderId?: string;
+        userId?: string;
+        membership: Membership;
+        prevMembership?: Membership;
+    }
+    const generateMembershipEvent = (
+        eventId: string,
+        { senderId, userId, membership, prevMembership }: MembershipEventParams & { userId: string },
+    ): MatrixEvent => {
+        const member = new RoomMember(roomId, userId);
+        // Use localpart as display name;
+        member.name = userId.match(/@([^:]*):/)![1];
+        vi.spyOn(member, "getAvatarUrl").mockReturnValue("avatar.jpeg");
+        vi.spyOn(member, "getMxcAvatarUrl").mockReturnValue("mxc://avatar.url/image.png");
+        const e = mkMembership({
+            event: true,
+            room: roomId,
+            user: senderId || userId,
+            skey: userId,
+            mship: membership,
+            prevMship: prevMembership,
+            target: member,
+        });
+        // Override random event ID to allow for equality tests against tiles from
+        // generateTiles
+        e.event.event_id = eventId;
+        return e;
+    };
+
+    // Generate mock MatrixEvents from the array of parameters
+    const generateEvents = (parameters: Array<MembershipEventParams & { userId: string }>) => {
+        const res: MatrixEvent[] = [];
+        for (let i = 0; i < parameters.length; i++) {
+            res.push(generateMembershipEvent(`event${i}`, parameters[i]));
+        }
+        return res;
+    };
+
+    // Generate the same sequence of `events` for `n` users, where each user ID
+    // is created by replacing the first "$" in userIdTemplate with `i` for
+    // `i = 0 .. n`.
+    const generateEventsForUsers = (userIdTemplate: string, n: number, events: MembershipEventParams[]) => {
+        let eventsForUsers: MatrixEvent[] = [];
+        let userId = "";
+        for (let i = 0; i < n; i++) {
+            userId = userIdTemplate.replace("$", String(i));
+            events.forEach((e) => {
+                e.userId = userId;
+            });
+            eventsForUsers = eventsForUsers.concat(
+                generateEvents(events as Array<MembershipEventParams & { userId: string }>),
+            );
+        }
+        return eventsForUsers;
+    };
+
+    const mockClient = getMockClientWithEventEmitter({
+        ...mockClientMethodsUser(),
+    });
+
+    const defaultProps: Omit<
+        ComponentProps<typeof EventListSummary>,
+        "summaryLength" | "threshold" | "avatarsMaxLength"
+    > = {
+        layout: Layout.Bubble,
+        events: [],
+        children: [],
+    };
+    const renderComponent = (props = {}): RenderResult => {
+        return render(
+            <MatrixClientContext.Provider value={mockClient}>
+                <EventListSummary {...defaultProps} {...props} />
+            </MatrixClientContext.Provider>,
+        );
+    };
+
+    beforeEach(function () {
+        vi.clearAllMocks();
+        vi.spyOn(languageSettings, "getUserLanguage").mockReturnValue("en-GB");
+    });
+
+    afterAll(() => {
+        unmockClientPeg();
+    });
+
+    it("renders expanded events if there are less than props.threshold", function () {
+        const events = generateEvents([
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+        ]);
+        const props = {
+            events: events,
+            children: generateTiles(events),
+            summaryLength: 1,
+            avatarsMaxLength: 5,
+            threshold: 3,
+        };
+
+        const { container } = renderComponent(props); // matrix cli context wrapper
+
+        const children = container.querySelector(".mx_GenericEventListSummary_unstyledList")!.children;
+        expect(children).toHaveLength(1);
+        expect(children[0]).toHaveTextContent("Expanded membership");
+        expect(children).toMatchSnapshot();
+    });
+
+    it("renders expanded events if there are less than props.threshold for join and leave", function () {
+        const events = generateEvents([
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+        ]);
+        const props = {
+            events: events,
+            children: generateTiles(events),
+            summaryLength: 1,
+            avatarsMaxLength: 5,
+            threshold: 3,
+        };
+
+        const { container } = renderComponent(props); // matrix cli context wrapper
+
+        const children = container.querySelector(".mx_GenericEventListSummary_unstyledList")!.children;
+        expect(children).toHaveLength(2);
+        expect(children[0]).toHaveTextContent("Expanded membership");
+        expect(children[1]).toHaveTextContent("Expanded membership");
+        expect(children).toMatchSnapshot();
+    });
+
+    it("renders collapsed events if events.length = props.threshold", function () {
+        const events = generateEvents([
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+        ]);
+        const props = {
+            events: events,
+            children: generateTiles(events),
+            summaryLength: 1,
+            avatarsMaxLength: 5,
+            threshold: 3,
+        };
+
+        const { container } = renderComponent(props);
+        const summary = container.querySelector(".mx_GenericEventListSummary_summary");
+        expect(summary).toHaveTextContent("user_1 joined and left and joined");
+        expect(summary).toMatchSnapshot();
+    });
+
+    it("truncates long join,leave repetitions", function () {
+        const events = generateEvents([
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+        ]);
+        const props = {
+            events: events,
+            children: generateTiles(events),
+            summaryLength: 1,
+            avatarsMaxLength: 5,
+            threshold: 3,
+        };
+
+        const { container } = renderComponent(props);
+        const summary = container.querySelector(".mx_GenericEventListSummary_summary");
+        expect(summary).toHaveTextContent("user_1 joined and left 7 times");
+        expect(summary).toMatchSnapshot();
+    });
+
+    it("truncates long join,leave repetitions between other events", function () {
+        const events = generateEvents([
+            {
+                userId: "@user_1:some.domain",
+                prevMembership: KnownMembership.Ban,
+                membership: KnownMembership.Leave,
+                senderId: "@some_other_user:some.domain",
+            },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            {
+                userId: "@user_1:some.domain",
+                prevMembership: KnownMembership.Leave,
+                membership: KnownMembership.Invite,
+                senderId: "@some_other_user:some.domain",
+            },
+        ]);
+        const props = {
+            events: events,
+            children: generateTiles(events),
+            summaryLength: 1,
+            avatarsMaxLength: 5,
+            threshold: 3,
+        };
+
+        const { container } = renderComponent(props);
+        const summary = container.querySelector(".mx_GenericEventListSummary_summary");
+
+        // The sequence was summarised correctly
+        expect(summary).toHaveTextContent("user_1 was unbanned, joined and left 7 times and was invited");
+
+        // And there is no spoiler on the user's name since they were not banned
+        expect(summary).not.toContainHTML("mx_EventTile_spoiler_content");
+        expect(summary).toMatchSnapshot();
+    });
+
+    it("truncates multiple sequences of repetitions with other events between", function () {
+        const events = generateEvents([
+            {
+                userId: "@user_1:some.domain",
+                prevMembership: KnownMembership.Ban,
+                membership: KnownMembership.Leave,
+                senderId: "@some_other_user:some.domain",
+            },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            {
+                userId: "@user_1:some.domain",
+                prevMembership: KnownMembership.Leave,
+                membership: KnownMembership.Ban,
+                senderId: "@some_other_user:some.domain",
+            },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Ban, membership: KnownMembership.Join },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            {
+                userId: "@user_1:some.domain",
+                prevMembership: KnownMembership.Leave,
+                membership: KnownMembership.Invite,
+                senderId: "@some_other_user:some.domain",
+            },
+        ]);
+        const props = {
+            events: events,
+            children: generateTiles(events),
+            summaryLength: 1,
+            avatarsMaxLength: 5,
+            threshold: 3,
+        };
+
+        const { container } = renderComponent(props);
+        const summary = container.querySelector(".mx_GenericEventListSummary_summary");
+
+        // The sequence was summarised correctly
+        expect(summary).toHaveTextContent(
+            "user_1 was unbanned, joined and left 2 times, was banned, joined and left 3 times and was invited",
+        );
+
+        // And the banned user's name is hidden within a spoiler
+        expect(summary).toContainHTML('<span class="mx_EventTile_spoiler_content">user_1</span>');
+        expect(summary).toMatchSnapshot();
+    });
+
+    it("handles multiple users following the same sequence of memberships", function () {
+        const events = generateEvents([
+            // user_1
+            {
+                userId: "@user_1:some.domain",
+                prevMembership: KnownMembership.Ban,
+                membership: KnownMembership.Leave,
+                senderId: "@some_other_user:some.domain",
+            },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            {
+                userId: "@user_1:some.domain",
+                prevMembership: KnownMembership.Leave,
+                membership: KnownMembership.Ban,
+                senderId: "@some_other_user:some.domain",
+            },
+            // user_2
+            {
+                userId: "@user_2:some.domain",
+                prevMembership: KnownMembership.Ban,
+                membership: KnownMembership.Leave,
+                senderId: "@some_other_user:some.domain",
+            },
+            { userId: "@user_2:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { userId: "@user_2:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            { userId: "@user_2:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { userId: "@user_2:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            {
+                userId: "@user_2:some.domain",
+                prevMembership: KnownMembership.Leave,
+                membership: KnownMembership.Ban,
+                senderId: "@some_other_user:some.domain",
+            },
+        ]);
+        const props = {
+            events: events,
+            children: generateTiles(events),
+            summaryLength: 1,
+            avatarsMaxLength: 5,
+            threshold: 3,
+        };
+
+        const { container } = renderComponent(props);
+        const summary = container.querySelector(".mx_GenericEventListSummary_summary");
+
+        // The sequence was summarised correctly
+        expect(summary).toHaveTextContent(
+            "user_1 and one other were unbanned, joined and left 2 times and were banned",
+        );
+
+        // And the banned user's name is hidden within a spoiler
+        expect(summary).toContainHTML('<span class="mx_EventTile_spoiler_content">user_1</span>');
+        expect(summary).toMatchSnapshot();
+    });
+
+    it("handles many users following the same sequence of memberships", function () {
+        const events = generateEventsForUsers("@user_$:some.domain", 20, [
+            {
+                prevMembership: KnownMembership.Ban,
+                membership: KnownMembership.Leave,
+                senderId: "@some_other_user:some.domain",
+            },
+            { prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            { prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            {
+                prevMembership: KnownMembership.Leave,
+                membership: KnownMembership.Ban,
+                senderId: "@some_other_user:some.domain",
+            },
+        ]);
+        const props = {
+            events: events,
+            children: generateTiles(events),
+            summaryLength: 1,
+            avatarsMaxLength: 5,
+            threshold: 3,
+        };
+
+        const { container } = renderComponent(props);
+        const summary = container.querySelector(".mx_GenericEventListSummary_summary");
+
+        // The sequence was summarised correctly
+        expect(summary).toHaveTextContent(
+            "user_0 and 19 others were unbanned, joined and left 2 times and were banned",
+        );
+
+        // And the banned user's name is hidden within a spoiler
+        expect(summary).toContainHTML('<span class="mx_EventTile_spoiler_content">user_0</span>');
+        expect(summary).toMatchSnapshot();
+    });
+
+    it("correctly orders sequences of transitions by the order of their first event", function () {
+        const events = generateEvents([
+            {
+                userId: "@user_2:some.domain",
+                prevMembership: KnownMembership.Ban,
+                membership: KnownMembership.Leave,
+                senderId: "@some_other_user:some.domain",
+            },
+            {
+                userId: "@user_1:some.domain",
+                prevMembership: KnownMembership.Ban,
+                membership: KnownMembership.Leave,
+                senderId: "@some_other_user:some.domain",
+            },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            {
+                userId: "@user_1:some.domain",
+                prevMembership: KnownMembership.Leave,
+                membership: KnownMembership.Ban,
+                senderId: "@some_other_user:some.domain",
+            },
+            { userId: "@user_2:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { userId: "@user_2:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            { userId: "@user_2:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
+            { userId: "@user_2:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+        ]);
+        const props = {
+            events: events,
+            children: generateTiles(events),
+            summaryLength: 1,
+            avatarsMaxLength: 5,
+            threshold: 3,
+        };
+
+        const { container } = renderComponent(props);
+        const summary = container.querySelector(".mx_GenericEventListSummary_summary");
+        expect(summary).toHaveTextContent(
+            "user_2 was unbanned and joined and left 2 times, user_1 was unbanned, " +
+                "joined and left 2 times and was banned",
+        );
+        expect(summary).toMatchSnapshot();
+    });
+
+    it("correctly identifies transitions", function () {
+        const events = generateEvents([
+            // invited
+            { userId: "@user_1:some.domain", membership: KnownMembership.Invite },
+            // knocked
+            { userId: "@user_1:some.domain", membership: KnownMembership.Knock },
+            // banned
+            { userId: "@user_1:some.domain", membership: KnownMembership.Ban },
+            // joined
+            { userId: "@user_1:some.domain", membership: KnownMembership.Join },
+            // invite_reject
+            {
+                userId: "@user_1:some.domain",
+                prevMembership: KnownMembership.Invite,
+                membership: KnownMembership.Leave,
+            },
+            // left
+            { userId: "@user_1:some.domain", prevMembership: KnownMembership.Join, membership: KnownMembership.Leave },
+            // invite_withdrawal
+            {
+                userId: "@user_1:some.domain",
+                prevMembership: KnownMembership.Invite,
+                membership: KnownMembership.Leave,
+                senderId: "@some_other_user:some.domain",
+            },
+            // unbanned
+            {
+                userId: "@user_1:some.domain",
+                prevMembership: KnownMembership.Ban,
+                membership: KnownMembership.Leave,
+                senderId: "@some_other_user:some.domain",
+            },
+            // kicked
+            {
+                userId: "@user_1:some.domain",
+                prevMembership: KnownMembership.Join,
+                membership: KnownMembership.Leave,
+                senderId: "@some_other_user:some.domain",
+            },
+            // default for sender=target (leave)
+            {
+                userId: "@user_1:some.domain",
+                prevMembership: "????" as Membership,
+                membership: KnownMembership.Leave,
+                senderId: "@user_1:some.domain",
+            },
+            // default for sender<>target (kicked)
+            {
+                userId: "@user_1:some.domain",
+                prevMembership: "????" as Membership,
+                membership: KnownMembership.Leave,
+                senderId: "@some_other_user:some.domain",
+            },
+        ]);
+        const props = {
+            events: events,
+            children: generateTiles(events),
+            summaryLength: 1,
+            avatarsMaxLength: 5,
+            threshold: 3,
+        };
+
+        const { container } = renderComponent(props);
+        const summary = container.querySelector(".mx_GenericEventListSummary_summary");
+        expect(summary).toHaveTextContent(
+            "user_1 was invited, requested to join, was banned, joined, rejected their invitation, left, " +
+                "had their invitation withdrawn, was unbanned, was removed, left and was removed",
+        );
+        expect(summary).toMatchSnapshot();
+    });
+
+    describe("knocks (ask to join enabled)", () => {
+        let getValueSpy: MockInstance;
+
+        beforeEach(() => {
+            getValueSpy = vi
+                .spyOn(SettingsStore, "getValue")
+                .mockImplementation((name): any => name === "feature_ask_to_join");
+        });
+
+        afterEach(() => {
+            getValueSpy.mockRestore();
+        });
+
+        it("summarises a knock that is accepted and joined", function () {
+            const events = generateEvents([
+                { userId: "@user_1:some.domain", membership: KnownMembership.Knock },
+                {
+                    userId: "@user_1:some.domain",
+                    prevMembership: KnownMembership.Knock,
+                    membership: KnownMembership.Invite,
+                    senderId: "@some_other_user:some.domain",
+                },
+                {
+                    userId: "@user_1:some.domain",
+                    prevMembership: KnownMembership.Invite,
+                    membership: KnownMembership.Join,
+                },
+            ]);
+            const props = {
+                events: events,
+                children: generateTiles(events),
+                summaryLength: 1,
+                avatarsMaxLength: 5,
+                threshold: 3,
+            };
+
+            const { container } = renderComponent(props);
+            const summary = container.querySelector(".mx_GenericEventListSummary_summary");
+            expect(summary).toHaveTextContent("user_1 requested to join, was granted access and joined");
+            expect(summary).toMatchSnapshot();
+        });
+
+        it("summarises a knock that is retracted and one that is denied", function () {
+            const events = generateEvents([
+                { userId: "@user_1:some.domain", membership: KnownMembership.Knock },
+                {
+                    userId: "@user_1:some.domain",
+                    prevMembership: KnownMembership.Knock,
+                    membership: KnownMembership.Leave,
+                    senderId: "@user_1:some.domain",
+                },
+                { userId: "@user_1:some.domain", membership: KnownMembership.Knock },
+                {
+                    userId: "@user_1:some.domain",
+                    prevMembership: KnownMembership.Knock,
+                    membership: KnownMembership.Leave,
+                    senderId: "@some_other_user:some.domain",
+                },
+            ]);
+            const props = {
+                events: events,
+                children: generateTiles(events),
+                summaryLength: 1,
+                avatarsMaxLength: 5,
+                threshold: 3,
+            };
+
+            const { container } = renderComponent(props);
+            const summary = container.querySelector(".mx_GenericEventListSummary_summary");
+            expect(summary).toHaveTextContent(
+                "user_1 requested to join, cancelled their request to join, requested to join and had their request to join rejected",
+            );
+            expect(summary).toMatchSnapshot();
+        });
+
+        it("falls back to invited when the ask to join labs flag is disabled", function () {
+            getValueSpy.mockReturnValue(false);
+            const events = generateEvents([
+                {
+                    userId: "@user_1:some.domain",
+                    prevMembership: KnownMembership.Knock,
+                    membership: KnownMembership.Invite,
+                    senderId: "@some_other_user:some.domain",
+                },
+                {
+                    userId: "@user_1:some.domain",
+                    prevMembership: KnownMembership.Invite,
+                    membership: KnownMembership.Join,
+                },
+            ]);
+            const props = {
+                events: events,
+                children: generateTiles(events),
+                summaryLength: 1,
+                avatarsMaxLength: 5,
+                threshold: 2,
+            };
+
+            const { container } = renderComponent(props);
+            const summary = container.querySelector(".mx_GenericEventListSummary_summary");
+            expect(summary).toHaveTextContent("user_1 was invited and joined");
+        });
+    });
+
+    it("handles invitation plurals correctly when there are multiple users", function () {
+        const events = generateEvents([
+            {
+                userId: "@user_1:some.domain",
+                prevMembership: KnownMembership.Invite,
+                membership: KnownMembership.Leave,
+            },
+            {
+                userId: "@user_1:some.domain",
+                prevMembership: KnownMembership.Invite,
+                membership: KnownMembership.Leave,
+                senderId: "@some_other_user:some.domain",
+            },
+            {
+                userId: "@user_2:some.domain",
+                prevMembership: KnownMembership.Invite,
+                membership: KnownMembership.Leave,
+            },
+            {
+                userId: "@user_2:some.domain",
+                prevMembership: KnownMembership.Invite,
+                membership: KnownMembership.Leave,
+                senderId: "@some_other_user:some.domain",
+            },
+        ]);
+        const props = {
+            events: events,
+            children: generateTiles(events),
+            summaryLength: 1,
+            avatarsMaxLength: 5,
+            threshold: 3,
+        };
+
+        const { container } = renderComponent(props);
+        const summary = container.querySelector(".mx_GenericEventListSummary_summary");
+        expect(summary).toHaveTextContent(
+            "user_1 and one other rejected their invitations and had their invitations withdrawn",
+        );
+        expect(summary).toMatchSnapshot();
+    });
+
+    it("handles invitation plurals correctly when there are multiple invites", function () {
+        const events = generateEvents([
+            {
+                userId: "@user_1:some.domain",
+                prevMembership: KnownMembership.Invite,
+                membership: KnownMembership.Leave,
+            },
+            {
+                userId: "@user_1:some.domain",
+                prevMembership: KnownMembership.Invite,
+                membership: KnownMembership.Leave,
+            },
+        ]);
+        const props = {
+            events: events,
+            children: generateTiles(events),
+            summaryLength: 1,
+            avatarsMaxLength: 5,
+            threshold: 1, // threshold = 1 to force collapse
+        };
+
+        const { container } = renderComponent(props);
+        const summary = container.querySelector(".mx_GenericEventListSummary_summary");
+        expect(summary).toHaveTextContent("user_1 rejected their invitation 2 times");
+        expect(summary).toMatchSnapshot();
+    });
+
+    it('handles a summary length = 2, with no "others"', function () {
+        const events = generateEvents([
+            { userId: "@user_1:some.domain", membership: KnownMembership.Join },
+            { userId: "@user_1:some.domain", membership: KnownMembership.Join },
+            { userId: "@user_2:some.domain", membership: KnownMembership.Join },
+            { userId: "@user_2:some.domain", membership: KnownMembership.Join },
+        ]);
+        const props = {
+            events: events,
+            children: generateTiles(events),
+            summaryLength: 2,
+            avatarsMaxLength: 5,
+            threshold: 3,
+        };
+
+        const { container } = renderComponent(props);
+        const summary = container.querySelector(".mx_GenericEventListSummary_summary");
+        expect(summary).toHaveTextContent("user_1 and user_2 joined 2 times");
+        expect(summary).toMatchSnapshot();
+    });
+
+    it('handles a summary length = 2, with 1 "other"', function () {
+        const events = generateEvents([
+            { userId: "@user_1:some.domain", membership: KnownMembership.Join },
+            { userId: "@user_2:some.domain", membership: KnownMembership.Join },
+            { userId: "@user_3:some.domain", membership: KnownMembership.Join },
+        ]);
+        const props = {
+            events: events,
+            children: generateTiles(events),
+            summaryLength: 2,
+            avatarsMaxLength: 5,
+            threshold: 3,
+        };
+
+        const { container } = renderComponent(props);
+        const summary = container.querySelector(".mx_GenericEventListSummary_summary");
+        expect(summary).toHaveTextContent("user_1, user_2 and one other joined");
+        expect(summary).toMatchSnapshot();
+    });
+
+    it('handles a summary length = 2, with many "others"', function () {
+        const events = generateEventsForUsers("@user_$:some.domain", 20, [{ membership: KnownMembership.Join }]);
+        const props = {
+            events: events,
+            children: generateTiles(events),
+            summaryLength: 2,
+            avatarsMaxLength: 5,
+            threshold: 3,
+        };
+
+        const { container } = renderComponent(props);
+        const summary = container.querySelector(".mx_GenericEventListSummary_summary");
+        expect(summary).toHaveTextContent("user_0, user_1 and 18 others joined");
+        expect(summary).toMatchSnapshot();
+    });
+
+    it("should not blindly group 3pid invites and treat them as distinct users instead", () => {
+        const events = [
+            mkEvent({
+                event: true,
+                skey: "randomstring1",
+                user: "@user1:server",
+                type: "m.room.third_party_invite",
+                content: {
+                    display_name: "n...@d...",
+                    key_validity_url: "https://blah",
+                    public_key: "public_key",
+                },
+            }),
+            mkEvent({
+                event: true,
+                skey: "randomstring2",
+                user: "@user1:server",
+                type: "m.room.third_party_invite",
+                content: {
+                    display_name: "n...@d...",
+                    key_validity_url: "https://blah",
+                    public_key: "public_key",
+                },
+            }),
+            mkEvent({
+                event: true,
+                skey: "randomstring3",
+                user: "@user1:server",
+                type: "m.room.third_party_invite",
+                content: {
+                    display_name: "d...@w...",
+                    key_validity_url: "https://blah",
+                    public_key: "public_key",
+                },
+            }),
+        ];
+
+        const props = {
+            events: events,
+            children: generateTiles(events),
+            summaryLength: 2,
+            avatarsMaxLength: 5,
+            threshold: 3,
+        };
+
+        const { container } = renderComponent(props);
+        const summary = container.querySelector(".mx_GenericEventListSummary_summary");
+        expect(summary).toHaveTextContent("n...@d... was invited 2 times, d...@w... was invited");
+        expect(summary).toMatchSnapshot();
+    });
+
+    describe("profile changes", () => {
+        /**
+         * Generates a join -> join membership event with the given profile fields spliced into
+         * `content` and `prev_content`, so that the null-versus-absent cases can be exercised.
+         */
+        const generateProfileEvent = (
+            userId: string,
+            prevProfile: Record<string, string | null>,
+            profile: Record<string, string | null>,
+        ): MatrixEvent => {
+            const member = new RoomMember(roomId, userId);
+            member.name = userId.match(/@([^:]*):/)![1];
+            const e = mkEvent({
+                event: true,
+                type: "m.room.member",
+                room: roomId,
+                user: userId,
+                skey: userId,
+                content: { membership: KnownMembership.Join, ...profile },
+                prev_content: { membership: KnownMembership.Join, ...prevProfile },
+            });
+            e.event.event_id = "event0";
+            e.target = member;
+            return e;
+        };
+
+        const summaryFor = (event: MatrixEvent): string => {
+            const { container } = renderComponent({
+                events: [event],
+                children: generateTiles([event]),
+                summaryLength: 1,
+                avatarsMaxLength: 5,
+                threshold: 1,
+            });
+            return container.querySelector(".mx_GenericEventListSummary_summary")!.textContent!;
+        };
+
+        it("treats an explicit null avatar_url the same as an absent one", () => {
+            const event = generateProfileEvent("@user_1:some.domain", {}, { avatar_url: null });
+            expect(summaryFor(event)).toBe("user_1 made no changes");
+        });
+
+        it("treats an explicit null displayname the same as an absent one", () => {
+            const event = generateProfileEvent("@user_1:some.domain", {}, { displayname: null });
+            expect(summaryFor(event)).toBe("user_1 made no changes");
+        });
+
+        it("still reports a real avatar change", () => {
+            const event = generateProfileEvent(
+                "@user_1:some.domain",
+                { avatar_url: "mxc://server/old" },
+                { avatar_url: "mxc://server/new" },
+            );
+            expect(summaryFor(event)).toBe("user_1 changed their profile picture");
+        });
+
+        it("still reports a real name change", () => {
+            const event = generateProfileEvent("@user_1:some.domain", { displayname: "Old" }, { displayname: "New" });
+            expect(summaryFor(event)).toBe("user_1 changed their name");
+        });
+
+        it("still reports an avatar being removed", () => {
+            const event = generateProfileEvent(
+                "@user_1:some.domain",
+                { avatar_url: "mxc://server/old" },
+                { avatar_url: null },
+            );
+            expect(summaryFor(event)).toBe("user_1 changed their profile picture");
+        });
+    });
+});

@@ -186,6 +186,7 @@ exports[`<Users /> should render a single device - signed by owner 1`] = `
     class="mx_Dialog_buttons"
   >
     <button
+      class="mx_LegacyDialogButton"
       type="button"
     >
       Back
@@ -380,6 +381,7 @@ exports[`<Users /> should render a single device - unsigned 1`] = `
     class="mx_Dialog_buttons"
   >
     <button
+      class="mx_LegacyDialogButton"
       type="button"
     >
       Back
@@ -576,6 +578,7 @@ exports[`<Users /> should render a single device - verified by cross-signing 1`]
     class="mx_Dialog_buttons"
   >
     <button
+      class="mx_LegacyDialogButton"
       type="button"
     >
       Back
@@ -677,7 +680,7 @@ exports[`<Users /> should render a single user 1`] = `
       <ul>
         <li>
           <button
-            class="mx_DevTools_button"
+            class="mx_LegacyDialogButton mx_DevTools_button"
             type="button"
           >
             <div
@@ -704,7 +707,7 @@ exports[`<Users /> should render a single user 1`] = `
         </li>
         <li>
           <button
-            class="mx_DevTools_button"
+            class="mx_LegacyDialogButton mx_DevTools_button"
             type="button"
           >
             <div
@@ -729,7 +732,7 @@ exports[`<Users /> should render a single user 1`] = `
         </li>
         <li>
           <button
-            class="mx_DevTools_button"
+            class="mx_LegacyDialogButton mx_DevTools_button"
             type="button"
           >
             <div
@@ -767,6 +770,7 @@ exports[`<Users /> should render a single user 1`] = `
     class="mx_Dialog_buttons"
   >
     <button
+      class="mx_LegacyDialogButton"
       type="button"
     >
       Back
@@ -840,6 +844,7 @@ exports[`<Users /> should render a user list 1`] = `
     class="mx_Dialog_buttons"
   >
     <button
+      class="mx_LegacyDialogButton"
       type="button"
     >
       Back

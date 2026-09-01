@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 import classNames from "classnames";
 import { type MatrixEvent, type Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { useEventPresentation } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
@@ -32,6 +33,20 @@ import { type GetRelationsForEvent } from "../rooms/EventTile";
  * over 60px then we want to show button that will allow to expand it.
  */
 const SHOW_EXPAND_QUOTE_PIXELS = 60;
+
+function ReplyChainPresentationWrapper({ children }: Readonly<{ children: React.ReactNode }>): JSX.Element {
+    const { density } = useEventPresentation();
+
+    return (
+        <div
+            className={classNames("mx_ReplyChain_wrapper", {
+                mx_ReplyChain_compact: density === "compact",
+            })}
+        >
+            {children}
+        </div>
+    );
+}
 
 interface IProps {
     // the latest event in this chain of replies
@@ -276,10 +291,10 @@ export default class ReplyChain extends React.Component<IProps, IState> {
         });
 
         return (
-            <div className="mx_ReplyChain_wrapper">
+            <ReplyChainPresentationWrapper>
                 <div>{header}</div>
                 <div>{evTiles}</div>
-            </div>
+            </ReplyChainPresentationWrapper>
         );
     }
 }
