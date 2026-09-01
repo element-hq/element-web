@@ -39,7 +39,6 @@ import SettingsStore from "../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../settings/SettingLevel";
 import { Action } from "../../dispatcher/actions";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import RoomListStoreV3 from "../room-list-v3/RoomListStoreV3";
 import { DefaultTagID } from "../room-list-v3/skip-list/tag";
 import { RoomNotificationStateStore } from "../notifications/RoomNotificationStateStore";
 import { type SummarizedNotificationState } from "../notifications/SummarizedNotificationState";
@@ -1460,7 +1459,7 @@ describe("SpaceStore", () => {
             const state = RoomNotificationStateStore.instance.getRoomState(room);
             // @ts-ignore
             state._level = NotificationLevel.Notification;
-            vi.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+            vi.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                 spaceId: MetaSpace.Home,
                 sections: [{ tag: DefaultTagID.Untagged, rooms: [room] }],
             });
@@ -1484,7 +1483,7 @@ describe("SpaceStore", () => {
             const state = RoomNotificationStateStore.instance.getRoomState(room);
             // @ts-ignore
             state._level = NotificationLevel.Notification;
-            vi.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+            vi.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                 spaceId: MetaSpace.Home,
                 sections: [{ tag: DefaultTagID.Untagged, rooms: [room] }],
             });
@@ -1516,7 +1515,7 @@ describe("SpaceStore", () => {
             const mentioned = mkRoom(room2);
             // @ts-ignore
             RoomNotificationStateStore.instance.getRoomState(mentioned)._level = NotificationLevel.Highlight;
-            vi.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+            vi.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                 spaceId: MetaSpace.Home,
                 sections: [{ tag: DefaultTagID.Untagged, rooms: [unread, mentioned] }],
             });
@@ -1541,7 +1540,7 @@ describe("SpaceStore", () => {
             const state = RoomNotificationStateStore.instance.getRoomState(room);
             // @ts-ignore
             state._level = NotificationLevel.None;
-            vi.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+            vi.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                 spaceId: MetaSpace.Home,
                 sections: [{ tag: DefaultTagID.Untagged, rooms: [room] }],
             });

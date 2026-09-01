@@ -12,7 +12,7 @@ import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { createTestClient, mkStubRoom } from "test-utils";
 
 import { CreateSectionDialogViewModel } from "./CreateSectionDialogViewModel";
-import { type RoomListStoreV3Class } from "../../stores/room-list-v3/RoomListStoreV3";
+import type RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import DMRoomMap from "../../utils/DMRoomMap";
 
 const SECTION_TAG = "element.io.section.abc";
@@ -20,7 +20,7 @@ const SECTION_TAG = "element.io.section.abc";
 describe("CreateSectionDialogViewModel", () => {
     let onFinished: Mock<(sectionName?: string, roomsToTag?: string[], roomsToUntag?: string[]) => void>;
     let matrixClient: MatrixClient;
-    let roomListStore: RoomListStoreV3Class;
+    let roomListStore: RoomListStoreV3;
     let rooms: Room[];
 
     beforeEach(() => {
@@ -36,7 +36,7 @@ describe("CreateSectionDialogViewModel", () => {
         vi.mocked(matrixClient.getRoom).mockImplementation(
             (roomId) => rooms.find((room) => room.roomId === roomId) ?? null,
         );
-        roomListStore = { getRooms: () => rooms } as unknown as RoomListStoreV3Class;
+        roomListStore = { getRooms: () => rooms } as unknown as RoomListStoreV3;
         DMRoomMap.makeShared(matrixClient);
     });
 

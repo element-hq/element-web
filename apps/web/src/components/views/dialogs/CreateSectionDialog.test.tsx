@@ -16,7 +16,6 @@ import { mkStubRoom, stubClient } from "test-utils";
 
 import { CreateSectionDialog } from "./CreateSectionDialog";
 import { SDKContextClass } from "../../../contexts/SDKContextClass";
-import RoomListStoreV3 from "../../../stores/room-list-v3/RoomListStoreV3";
 import DMRoomMap from "../../../utils/DMRoomMap";
 
 const SECTION_TAG = "element.io.section.abc";
@@ -40,7 +39,7 @@ describe("CreateSectionDialog", () => {
         );
         // The dialog builds its view model from these two globals.
         vi.spyOn(SDKContextClass.instance, "client", "get").mockReturnValue(client);
-        vi.spyOn(RoomListStoreV3.instance, "getRooms").mockReturnValue(rooms);
+        vi.spyOn(SDKContextClass.instance.roomListStore, "getRooms").mockReturnValue(rooms);
         DMRoomMap.makeShared(client);
     });
 

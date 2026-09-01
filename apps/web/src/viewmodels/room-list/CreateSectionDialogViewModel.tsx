@@ -12,7 +12,7 @@ import {
     type CreateSectionDialogViewSnapshot,
 } from "../../components/views/dialogs/CreateSectionDialog/types";
 import { _t } from "../../i18n";
-import { type RoomListStoreV3Class } from "../../stores/room-list-v3/RoomListStoreV3";
+import type RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import throttle from "lodash/throttle";
 import RoomAvatar from "../../components/views/avatars/RoomAvatar";
@@ -24,7 +24,7 @@ interface CreateSectionDialogViewModelProps {
     /**
      * The store providing the rooms that the user can add to the section.
      */
-    roomListStore: RoomListStoreV3Class;
+    roomListStore: RoomListStoreV3;
     /**
      * The client used to look up the rooms shown in the picker.
      */

@@ -18,7 +18,7 @@ import {
     type RoomMember,
 } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
-import { createTestClient, flushPromises } from "test-utils";
+import { createTestClient, flushPromises, TestSDKContext } from "test-utils";
 
 import { RoomNotificationState } from "../../stores/notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
@@ -32,9 +32,9 @@ import { Action } from "../../dispatcher/actions";
 import { CallStore } from "../../stores/CallStore";
 import { CallEvent, type Call } from "../../models/Call";
 import { RoomListItemViewModel } from "./RoomListItemViewModel";
-import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import * as tagRoomModule from "../../utils/room/tagRoom";
 import { CHATS_TAG } from "../../stores/room-list-v3/section";
+import { SDKContextClass } from "../../contexts/SDKContextClass.ts";
 
 vi.mock("./utils", () => ({
     hasAccessToOptionsMenu: vi.fn().mockReturnValue(true),
@@ -61,6 +61,7 @@ describe("RoomListItemViewModel", () => {
     let room: Room;
     let notificationState: RoomNotificationState;
     let viewModel: RoomListItemViewModel;
+    const sdkContext = new TestSDKContext();
 
     beforeEach(() => {
         matrixClient = createTestClient();
@@ -90,7 +91,7 @@ describe("RoomListItemViewModel", () => {
 
         vi.spyOn(MessagePreviewStore.instance, "getPreviewForRoom").mockResolvedValue(null);
         vi.spyOn(CallStore.instance, "getCall").mockReturnValue(null);
-        vi.spyOn(RoomListStoreV3.instance, "orderedSectionTags", "get").mockReturnValue([]);
+        vi.spyOn(SDKContextClass.instance.roomListStore, "orderedSectionTags", "get").mockReturnValue([]);
     });
 
     afterEach(() => {
@@ -100,7 +101,11 @@ describe("RoomListItemViewModel", () => {
 
     describe("Initialization", () => {
         it("should initialize with room data", async () => {
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
 
             // Wait for async initialization
             await flushPromises();
@@ -116,7 +121,11 @@ describe("RoomListItemViewModel", () => {
                 text: "Hello world!",
             } as MessagePreview);
 
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
 
             // Wait for async message preview load
             await flushPromises();
@@ -127,7 +136,11 @@ describe("RoomListItemViewModel", () => {
         it("should not load message preview when disabled", async () => {
             vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
 
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
 
             await flushPromises();
 
@@ -140,7 +153,11 @@ describe("RoomListItemViewModel", () => {
             vi.spyOn(notificationState, "hasAnyNotificationOrActivity", "get").mockReturnValue(true);
             vi.spyOn(notificationState, "count", "get").mockReturnValue(5);
 
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
 
             await flushPromises();
 
@@ -150,7 +167,11 @@ describe("RoomListItemViewModel", () => {
         });
 
         it("should update when notification state changes", async () => {
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
 
             await flushPromises();
             expect(viewModel.getSnapshot().notification.count).toBe(0);
@@ -165,7 +186,11 @@ describe("RoomListItemViewModel", () => {
         it("should show bold text when has notifications", async () => {
             vi.spyOn(notificationState, "hasAnyNotificationOrActivity", "get").mockReturnValue(true);
 
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
 
             await flushPromises();
 
@@ -175,7 +200,11 @@ describe("RoomListItemViewModel", () => {
         it("should show mention badge", async () => {
             vi.spyOn(notificationState, "isMention", "get").mockReturnValue(true);
 
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
 
             await flushPromises();
 
@@ -185,7 +214,11 @@ describe("RoomListItemViewModel", () => {
         it("should show invitation state", async () => {
             vi.spyOn(notificationState, "invited", "get").mockReturnValue(true);
 
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
 
             await flushPromises();
 
@@ -200,7 +233,11 @@ describe("RoomListItemViewModel", () => {
                 text: "Initial message",
             } as MessagePreview);
 
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
 
             await flushPromises();
             expect(viewModel.getSnapshot().messagePreview).toBe("Initial message");
@@ -229,7 +266,11 @@ describe("RoomListItemViewModel", () => {
                 text: "Test message",
             } as MessagePreview);
 
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
 
             await flushPromises();
             expect(viewModel.getSnapshot().messagePreview).toBeUndefined();
@@ -247,7 +288,11 @@ describe("RoomListItemViewModel", () => {
         it("should reflect favorite tag", async () => {
             room.tags = { [DefaultTagID.Favourite]: { order: 0 } };
 
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
 
             await flushPromises();
 
@@ -257,7 +302,11 @@ describe("RoomListItemViewModel", () => {
         it("should reflect low priority tag", async () => {
             room.tags = { [DefaultTagID.LowPriority]: { order: 0 } };
 
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
 
             await flushPromises();
 
@@ -266,7 +315,11 @@ describe("RoomListItemViewModel", () => {
 
         it("should update when room tags change", async () => {
             room.tags = {};
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
 
             await flushPromises();
             expect(viewModel.getSnapshot().isFavourite).toBe(false);
@@ -293,7 +346,11 @@ describe("RoomListItemViewModel", () => {
 
             vi.spyOn(CallStore.instance, "getCall").mockReturnValue(mockCall);
 
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
 
             await flushPromises();
 
@@ -310,7 +367,11 @@ describe("RoomListItemViewModel", () => {
 
             vi.spyOn(CallStore.instance, "getCall").mockReturnValue(mockCall);
 
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
 
             await flushPromises();
 
@@ -327,7 +388,11 @@ describe("RoomListItemViewModel", () => {
 
             vi.spyOn(CallStore.instance, "getCall").mockReturnValue(mockCall);
 
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
 
             await flushPromises();
 
@@ -343,7 +408,11 @@ describe("RoomListItemViewModel", () => {
             };
             vi.spyOn(CallStore.instance, "getCall").mockReturnValue(mockCall as unknown as Call);
 
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
             expect(viewModel.getSnapshot().notification.callType).toBeUndefined();
 
             // Get the callback registered for call state changes
@@ -370,7 +439,11 @@ describe("RoomListItemViewModel", () => {
             };
             vi.spyOn(CallStore.instance, "getCall").mockReturnValue(mockCall as unknown as Call);
 
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
 
             // Trigger onCallStateChanged so the call is tracked and the participant listener is registered
             const mockCalls = (CallStore.instance.on as Mock).mock.calls;
@@ -400,7 +473,11 @@ describe("RoomListItemViewModel", () => {
             };
             vi.spyOn(CallStore.instance, "getCall").mockReturnValue(mockCall as unknown as Call);
 
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
             expect(viewModel.getSnapshot().notification.callType).toBeUndefined();
 
             // Simulate participant joining
@@ -428,7 +505,11 @@ describe("RoomListItemViewModel", () => {
             };
 
             vi.spyOn(CallStore.instance, "getCall").mockReturnValue(firstCall as unknown as Call);
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
 
             // Trigger onCallStateChanged to register the first call
             const mockCalls = (CallStore.instance.on as Mock).mock.calls;
@@ -459,7 +540,11 @@ describe("RoomListItemViewModel", () => {
             })() as unknown as Call;
             vi.spyOn(CallStore.instance, "getCall").mockReturnValue(mockCall);
 
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
             await flushPromises();
 
             expect(viewModel.getSnapshot().notification.callType).toBe("voice");
@@ -473,7 +558,11 @@ describe("RoomListItemViewModel", () => {
 
     describe("Room name updates", () => {
         it("should update when room name changes", async () => {
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
 
             await flushPromises();
             expect(viewModel.getSnapshot().name).toBe("Test Room");
@@ -491,7 +580,11 @@ describe("RoomListItemViewModel", () => {
             const dmRoomMap = DMRoomMap.shared();
             vi.spyOn(dmRoomMap, "getUserIdForRoomId").mockReturnValue("@user:server");
 
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
 
             await flushPromises();
 
@@ -503,7 +596,11 @@ describe("RoomListItemViewModel", () => {
             const dmRoomMap = DMRoomMap.shared();
             vi.spyOn(dmRoomMap, "getUserIdForRoomId").mockReturnValue(undefined);
 
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
 
             await flushPromises();
 
@@ -513,7 +610,11 @@ describe("RoomListItemViewModel", () => {
 
     describe("Actions", () => {
         it("should dispatch view room action on openRoom", () => {
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
 
             const dispatchSpy = vi.spyOn(dispatcher, "dispatch");
 
@@ -527,13 +628,21 @@ describe("RoomListItemViewModel", () => {
         });
 
         it("should return room object", () => {
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
 
             expect(viewModel.getSnapshot().room).toBe(room);
         });
 
         it("should dispatch view_invite action when onInvite is called", () => {
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
             const dispatchSpy = vi.spyOn(dispatcher, "dispatch");
 
             viewModel.onInvite();
@@ -545,7 +654,11 @@ describe("RoomListItemViewModel", () => {
         });
 
         it("should dispatch copy_room action when onCopyRoomLink is called", () => {
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
             const dispatchSpy = vi.spyOn(dispatcher, "dispatch");
 
             viewModel.onCopyRoomLink();
@@ -558,7 +671,11 @@ describe("RoomListItemViewModel", () => {
 
         it("should dispatch leave_room action when onLeaveRoom is called for normal room", () => {
             room.tags = {};
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
             const dispatchSpy = vi.spyOn(dispatcher, "dispatch");
 
             viewModel.onLeaveRoom();
@@ -572,7 +689,11 @@ describe("RoomListItemViewModel", () => {
         it("should dispatch forget_room action when onLeaveRoom is called for archived room", () => {
             room.tags = { [DefaultTagID.Archived]: { order: 0 } };
 
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
             const dispatchSpy = vi.spyOn(dispatcher, "dispatch");
 
             viewModel.onLeaveRoom();
@@ -585,11 +706,15 @@ describe("RoomListItemViewModel", () => {
 
         it("should call createSection on RoomListStoreV3 with the room preselected when onCreateSection is called", async () => {
             const createSectionSpy = vi
-                .spyOn(RoomListStoreV3.instance, "createSection")
+                .spyOn(SDKContextClass.instance.roomListStore, "createSection")
                 .mockResolvedValue("element.io.section.work");
             const tagRoomSpy = vi.spyOn(tagRoomModule, "tagRoom").mockImplementation(() => {});
 
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
             await viewModel.onCreateSection();
 
             expect(createSectionSpy).toHaveBeenCalledWith(room.roomId);
@@ -599,7 +724,11 @@ describe("RoomListItemViewModel", () => {
 
         it("should call tagRoom when onToggleSection is called", () => {
             const tagRoomSpy = vi.spyOn(tagRoomModule, "tagRoom").mockImplementation(() => {});
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
 
             viewModel.onToggleSection(DefaultTagID.Favourite);
 
@@ -611,7 +740,7 @@ describe("RoomListItemViewModel", () => {
         const customTag = "element.io.section.custom1";
 
         beforeEach(() => {
-            vi.spyOn(RoomListStoreV3.instance, "orderedSectionTags", "get").mockReturnValue([
+            vi.spyOn(SDKContextClass.instance.roomListStore, "orderedSectionTags", "get").mockReturnValue([
                 DefaultTagID.Favourite,
                 customTag,
                 CHATS_TAG,
@@ -620,7 +749,11 @@ describe("RoomListItemViewModel", () => {
         });
 
         it("should include sections from orderedSectionTags excluding CHATS_TAG, favourite, and low priority", () => {
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
 
             const sections = viewModel.getSnapshot().sections;
             expect(sections.map((s) => s.tag)).toEqual([customTag]);
@@ -629,7 +762,11 @@ describe("RoomListItemViewModel", () => {
         it("should mark the room current section as selected", () => {
             room.tags = { [customTag]: { order: 0 } };
 
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
 
             const sections = viewModel.getSnapshot().sections;
             expect(sections.find((s) => s.tag === customTag)?.isSelected).toBe(true);
@@ -641,7 +778,11 @@ describe("RoomListItemViewModel", () => {
                     return { [customTag]: { name: "My Custom Section", tag: customTag } };
                 return false;
             });
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
 
             const section = viewModel.getSnapshot().sections.find((s) => s.tag === customTag);
             expect(section?.name).toBe("My Custom Section");
@@ -654,11 +795,15 @@ describe("RoomListItemViewModel", () => {
                 return "watcher-id";
             });
 
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
             expect(viewModel.getSnapshot().sections).toHaveLength(1);
 
             // Simulate reordering: custom section removed
-            vi.spyOn(RoomListStoreV3.instance, "orderedSectionTags", "get").mockReturnValue([
+            vi.spyOn(SDKContextClass.instance.roomListStore, "orderedSectionTags", "get").mockReturnValue([
                 DefaultTagID.Favourite,
                 CHATS_TAG,
                 DefaultTagID.LowPriority,
@@ -674,7 +819,11 @@ describe("RoomListItemViewModel", () => {
                 return false;
             });
 
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: sdkContext.roomListStore,
+            });
             expect(viewModel.getSnapshot().areSectionsEnabled).toBe(true);
         });
 
@@ -685,7 +834,11 @@ describe("RoomListItemViewModel", () => {
                 return "watcher-id";
             });
 
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: sdkContext.roomListStore,
+            });
             expect(viewModel.getSnapshot().areSectionsEnabled).toBe(false);
 
             // Enable sections
@@ -701,7 +854,11 @@ describe("RoomListItemViewModel", () => {
 
     describe("Cleanup", () => {
         it("should unsubscribe from all events on dispose", () => {
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: SDKContextClass.instance.roomListStore,
+            });
 
             const offSpy = vi.spyOn(notificationState, "off");
 

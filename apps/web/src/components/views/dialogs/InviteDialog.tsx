@@ -26,7 +26,6 @@ import { abbreviateUrl } from "../../../utils/UrlUtils";
 import IdentityAuthClient from "../../../IdentityAuthClient";
 import { showAnyInviteErrors } from "../../../RoomInvite";
 import { Action } from "../../../dispatcher/actions";
-import RoomListStoreV3 from "../../../stores/room-list-v3/RoomListStoreV3";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import { SearchResultAvatar } from "../avatars/SearchResultAvatar";
@@ -279,7 +278,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
         // Also pull in all the rooms that the room list tags as DMs so we don't miss anything: sometimes
         // a room is absent from getUniqueRoomsWithIndividuals() above but is still tagged as a DM.
-        const dmTaggedRooms = RoomListStoreV3.instance.getDmRooms();
+        const dmTaggedRooms = SDKContextClass.instance.roomListStore.getDmRooms();
         const myUserId = MatrixClientPeg.safeGet().getUserId();
         for (const dmRoom of dmTaggedRooms) {
             const otherMembers = dmRoom.getJoinedMembers().filter((u) => u.userId !== myUserId);

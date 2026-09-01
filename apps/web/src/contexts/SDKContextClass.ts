@@ -32,6 +32,7 @@ import Notifier from "../Notifier.ts";
 import SettingController from "../settings/controllers/SettingController.ts";
 import { CallStore } from "../stores/CallStore";
 import { LatestRtcNotificationEventStore } from "../stores/LatestRtcNotificationEventStore";
+import RoomListStoreV3 from "../stores/room-list-v3/RoomListStoreV3.ts";
 
 /**
  * A class which (mostly) lazily initialises stores as and when they are requested, ensuring they remain
@@ -73,6 +74,7 @@ export class SDKContextClass {
     protected _UserProfilesStore?: UserProfilesStore;
     protected _ResizeNotifier?: ResizeNotifier;
     protected _MultiRoomViewStore?: MultiRoomViewStore;
+    protected _RoomListStore?: RoomListStoreV3;
     protected _Notifier?: Notifier;
     protected _CallStore?: CallStore;
     protected _LatestRtcNotificationEventStore?: LatestRtcNotificationEventStore;
@@ -198,6 +200,14 @@ export class SDKContextClass {
             this._MultiRoomViewStore = new MultiRoomViewStore(defaultDispatcher, this);
         }
         return this._MultiRoomViewStore;
+    }
+
+    public get roomListStore(): RoomListStoreV3 {
+        if (!this._RoomListStore) {
+            this._RoomListStore = new RoomListStoreV3(defaultDispatcher, this);
+            void this._RoomListStore.start();
+        }
+        return this._RoomListStore;
     }
 
     public get notifier(): Notifier {

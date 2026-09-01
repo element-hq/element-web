@@ -16,7 +16,6 @@ import BaseDialog from "../BaseDialog";
 import DialogButtons from "../../elements/DialogButtons";
 import { _t } from "../../../../languageHandler";
 import { CreateSectionDialogViewModel } from "../../../../viewmodels/room-list/CreateSectionDialogViewModel";
-import RoomListStoreV3 from "../../../../stores/room-list-v3/RoomListStoreV3";
 import { SDKContextClass } from "../../../../contexts/SDKContextClass";
 
 interface CreateSectionDialogProps {
@@ -58,7 +57,7 @@ export function CreateSectionDialog({
                 sectionToEdit,
                 preselectedRoomId,
                 matrixClient: SDKContextClass.instance.client!,
-                roomListStore: RoomListStoreV3.instance,
+                roomListStore: SDKContextClass.instance.roomListStore,
             }),
     );
     return <CreateSectionView vm={vm} />;

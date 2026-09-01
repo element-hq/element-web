@@ -40,7 +40,7 @@ import { Action } from "../../dispatcher/actions";
 import type { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import PosthogTrackers from "../../PosthogTrackers";
 import { type Call, CallEvent } from "../../models/Call";
-import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
+import type RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import { getCustomSectionData, isDefaultSectionTag } from "../../stores/room-list-v3/section";
 import { _t } from "../../languageHandler";
 import { fetchUserStatus } from "../../utils/userStatus";
@@ -53,6 +53,7 @@ type Sections = Array<Omit<Section, "isSelected">>;
 interface RoomItemProps {
     room: Room;
     client: MatrixClient;
+    roomListStore: RoomListStoreV3;
 }
 
 /**
@@ -86,7 +87,7 @@ export class RoomListItemViewModel
     public constructor(props: RoomItemProps) {
         // Get notification state first so we can generate a complete initial snapshot
         const notifState = RoomNotificationStateStore.instance.getRoomState(props.room);
-        const availableSections = RoomListItemViewModel.computeAvailableSections();
+        const availableSections = RoomListItemViewModel.computeAvailableSections(props.roomListStore);
         const initialItem = RoomListItemViewModel.generateItemSync(
             props.room,
             props.client,
@@ -492,7 +493,7 @@ export class RoomListItemViewModel
     public onCreateSection = async (): Promise<void> => {
         // The room the menu was opened on is preselected in the dialog, which takes care of
         // adding it to the new section.
-        await RoomListStoreV3.instance.createSection(this.props.room.roomId);
+        await this.props.roomListStore.createSection(this.props.room.roomId);
         PosthogTrackers.trackSectionCreation("RoomListItemOverflowMenu");
     };
 
@@ -502,7 +503,7 @@ export class RoomListItemViewModel
 
     public onRemoveFromSection = (): void => {
         const roomTags = this.props.room.tags;
-        const sectionTag = RoomListStoreV3.instance.orderedSectionTags.find((tag) => Boolean(roomTags[tag]));
+        const sectionTag = this.props.roomListStore.orderedSectionTags.find((tag) => Boolean(roomTags[tag]));
         if (sectionTag) {
             tagRoom(this.props.room, sectionTag);
         }
@@ -510,7 +511,7 @@ export class RoomListItemViewModel
 
     private onCustomSectionsChange = (): void => {
         // Rebuild the available sections and the sections list to reflect the new settings
-        this.availableSections = RoomListItemViewModel.computeAvailableSections();
+        this.availableSections = RoomListItemViewModel.computeAvailableSections(this.props.roomListStore);
         const sections = RoomListItemViewModel.buildSections(this.props.room.tags, this.availableSections);
         this.snapshot.merge({ sections: keepIfSame(this.snapshot.current.sections, sections) });
     };
@@ -521,11 +522,11 @@ export class RoomListItemViewModel
      * Reads the custom section settings, so callers should cache the result and recompute only
      * when those settings change.
      */
-    private static computeAvailableSections(): Sections {
+    private static computeAvailableSections(roomListStore: RoomListStoreV3): Sections {
         const customSectionData = getCustomSectionData();
 
         return (
-            RoomListStoreV3.instance.orderedSectionTags
+            roomListStore.orderedSectionTags
                 // Exclude the Chats because the user toggle the other sections to move rooms in and out of the Chats section.
                 // Also exclude the default sections because they are available as toggles in the main context menu, and we don't want them to be duplicated in the "Move to section" submenu.
                 .filter((tag) => !isDefaultSectionTag(tag))
