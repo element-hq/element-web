@@ -12,7 +12,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { render, screen, act } from "test-utils-rtl";
 
-import { MockedPlayback } from "../../../../test/unit-tests/audio/MockedPlayback";
+import { MockedPlayback } from "../../../audio/__mocks__";
 import { type Playback, PlaybackState } from "../../../audio/Playback";
 import MAudioBody from "./MAudioBody";
 import { PlaybackManager } from "../../../audio/PlaybackManager";

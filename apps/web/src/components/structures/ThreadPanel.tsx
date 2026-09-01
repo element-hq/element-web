@@ -30,6 +30,7 @@ import Spinner from "../views/elements/Spinner";
 import { clearRoomNotification } from "../../utils/notifications";
 import EmptyState from "../views/right_panel/EmptyState";
 import { ScopedRoomContextProvider, useScopedRoomContext } from "../../contexts/ScopedRoomContext.tsx";
+import { EventPresentationContextProvider } from "../../utils/EventPresentationContextProvider";
 
 interface IProps {
     roomId: string;
@@ -206,34 +207,36 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
                 {hasThreads && <ThreadPanelHeader filterOption={filterOption} setFilterOption={setFilterOption} />}
                 <Measured sensor={card} onMeasurement={setNarrow} />
                 {timelineSet ? (
-                    <TimelinePanel
-                        key={filterOption + ":" + (timelineSet.getFilter()?.filterId ?? roomId)}
-                        ref={timelinePanel}
-                        showReadReceipts={false} // No RR support in thread's list
-                        manageReadReceipts={false} // No RR support in thread's list
-                        manageReadMarkers={false} // No RM support in thread's list
-                        sendReadReceiptOnLoad={false} // No RR support in thread's list
-                        timelineSet={timelineSet}
-                        showUrlPreview={false} // No URL previews at the threads list level
-                        empty={
-                            <EmptyState
-                                Icon={ThreadsIcon}
-                                title={_t("threads|empty_title")}
-                                description={_t("threads|empty_description", {
-                                    replyInThread: _t("action|reply_in_thread"),
-                                })}
-                            />
-                        }
-                        alwaysShowTimestamps={true}
-                        layout={Layout.Group}
-                        hideThreadedMessages={false}
-                        hidden={false}
-                        showReactions={false}
-                        className="mx_RoomView_messagePanel"
-                        membersLoaded={true}
-                        permalinkCreator={permalinkCreator}
-                        disableGrouping={true}
-                    />
+                    <EventPresentationContextProvider layout={Layout.Group}>
+                        <TimelinePanel
+                            key={filterOption + ":" + (timelineSet.getFilter()?.filterId ?? roomId)}
+                            ref={timelinePanel}
+                            showReadReceipts={false} // No RR support in thread's list
+                            manageReadReceipts={false} // No RR support in thread's list
+                            manageReadMarkers={false} // No RM support in thread's list
+                            sendReadReceiptOnLoad={false} // No RR support in thread's list
+                            timelineSet={timelineSet}
+                            showUrlPreview={false} // No URL previews at the threads list level
+                            empty={
+                                <EmptyState
+                                    Icon={ThreadsIcon}
+                                    title={_t("threads|empty_title")}
+                                    description={_t("threads|empty_description", {
+                                        replyInThread: _t("action|reply_in_thread"),
+                                    })}
+                                />
+                            }
+                            alwaysShowTimestamps={true}
+                            layout={Layout.Group}
+                            hideThreadedMessages={false}
+                            hidden={false}
+                            showReactions={false}
+                            className="mx_RoomView_messagePanel"
+                            membersLoaded={true}
+                            permalinkCreator={permalinkCreator}
+                            disableGrouping={true}
+                        />
+                    </EventPresentationContextProvider>
                 ) : (
                     <div className="mx_AutoHideScrollbar">
                         <Spinner />

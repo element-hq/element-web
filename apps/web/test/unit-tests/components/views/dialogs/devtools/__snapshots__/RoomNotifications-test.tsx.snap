@@ -65,6 +65,7 @@ exports[`<RoomNotifications /> should render 1`] = `
     class="mx_Dialog_buttons"
   >
     <button
+      class="mx_LegacyDialogButton"
       type="button"
     >
       Back

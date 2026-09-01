@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import { render } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
 import React from "react";
-import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+import { vi, describe, it, expect, afterEach } from "vitest";
 
 import SdkConfig from "../../../SdkConfig";
 import { DeclineAndBlockInviteDialog } from "./DeclineAndBlockInviteDialog";
@@ -20,11 +20,8 @@ describe("ConfirmRejectInviteDialog", () => {
 
     const MY_ROOM_NAME = "foo";
 
-    beforeEach(() => {
-        vi.resetAllMocks();
-    });
-
     afterEach(() => {
+        vi.resetAllMocks();
         SdkConfig.reset();
     });
 
