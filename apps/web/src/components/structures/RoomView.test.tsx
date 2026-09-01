@@ -691,7 +691,7 @@ describe("RoomView", () => {
             // Right panel should be gone
             expect(screen.queryByRole("complementary")).toBe(null);
             // Opening the right panel again should just show the room summary
-            act(() => stores.rightPanelStore.showRoomPanel(room.roomId));
+            act(() => stores.rightPanelStore.show(room.roomId));
             await findByRole(await screen.findByRole("complementary"), "heading", { name: room.roomId });
         });
 
