@@ -85,5 +85,15 @@ describe("<LayoutSwitcher />", () => {
             await renderLayoutSwitcher();
             expect(screen.getByRole("switch", { name: "Show compact text and messages" })).toBeDisabled();
         });
+
+        it("should keep layout previews at the default density", async () => {
+            await SettingsStore.setValue("useCompactLayout", null, SettingLevel.DEVICE, true);
+            const { container } = await renderLayoutSwitcher();
+
+            const groupPreviewSender = container.querySelector(
+                '[data-testid="event-tile-slot-sender"] [data-event-layout="group"]',
+            );
+            expect(groupPreviewSender).toHaveAttribute("data-event-density", "default");
+        });
     });
 });
