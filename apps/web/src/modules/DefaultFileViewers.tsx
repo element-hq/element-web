@@ -127,13 +127,13 @@ export function registerDefaultFileViewers(): void {
         // TODO: these need i18n keys of their own adding to en_EN.json
         cardHeader: "PDF",
         buttonText: "Open PDF",
-        buttonIcon: <EditIcon />
+        buttonIcon: <EditIcon />,
     });
 
     ModuleApi.instance.fileViewer.registerFileViewer(isRemoteMedia, renderLinkFileViewer, {
         id: LINK_FILE_VIEWER_ID,
         cardHeader: "Link",
         buttonText: "Open link",
-        buttonIcon: <WebBrowserIcon />
+        buttonIcon: <WebBrowserIcon />,
     });
 }
