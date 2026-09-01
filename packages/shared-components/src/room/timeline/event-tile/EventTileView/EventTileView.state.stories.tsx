@@ -298,7 +298,7 @@ export const Media: Story = {
     ...shapeDescriptionParameters("Room", "State variant: the body renders an image event."),
     args: {
         shape: "Room",
-        roomMessages: "bob",
+        roomMessages: "media",
         line: { media: true, image: true },
         state: { hasReply: false },
         slots: { ...minimalRoomSlots, body: <StoryMediaBody /> },
@@ -522,6 +522,20 @@ export const MediaBubble: Story = {
     tags: visualTags,
     globals: bubbleGlobals,
     parameters: Media.parameters,
+    args: Media.args,
+};
+
+export const MediaGroup: Story = {
+    name: "Media - Group - Default",
+    tags: visualTags,
+    globals: groupGlobals,
+    args: Media.args,
+};
+
+export const MediaIrc: Story = {
+    name: "Media - IRC - Default",
+    tags: visualTags,
+    globals: ircGlobals,
     args: Media.args,
 };
 

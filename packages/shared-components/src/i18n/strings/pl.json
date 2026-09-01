@@ -16,7 +16,7 @@
         "go": "Przejdź",
         "hide": "Ukryj",
         "invite": "Zaproś",
-        "new_conversation": "Nowa rozmowa",
+        "new_conversation": "Nowy",
         "new_room": "Nowy pokój",
         "new_section": "Nowa sekcja",
         "new_video_room": "Nowy pokój wideo",
@@ -43,8 +43,34 @@
         "preferences": "Preferencje",
         "state_encryption_enabled": "Eksperymentalne szyfrowanie włączone"
     },
+    "composer": {
+        "url_preview": {
+            "clear_all": "Wyczyść wszystko",
+            "collapse": "Zwiń podglądy adresów URL",
+            "failed": "Nie udało się pobrać podglądu",
+            "loading": "Wczytywanie podglądu…",
+            "n_links": {
+                "one": "%(count)s link",
+                "few": "%(count)s linki",
+                "many": "%(count)s linków"
+            },
+            "remove": "Usuń podgląd adresu URL"
+        }
+    },
     "devtools": {
-        "toggle_event": "przełącz zdarzenie"
+        "custom_themes": {
+            "add": "Dodaj własny motyw",
+            "downloading": "Pobieranie własnego motywu...",
+            "error_already_installed": "Motyw o tej nazwie jest już zainstalowany.",
+            "error_downloading": "Wystąpił błąd podczas pobierania motywu.",
+            "error_invalid": "Nieprawidłowy schemat motywu.",
+            "error_save_failed": "Nie udało się zapisać zmian. Zmiana może dokończy się w tle.",
+            "help": "Wprowadź adres URL motywu, który chcesz nałożyć.",
+            "installed_heading": "Zainstalowane własne motywy",
+            "refresh": "Pobierz ponownie motyw",
+            "url_label": "Adres URL własnego motywu"
+        },
+        "toggle_event": "Źródło zdarzenia"
     },
     "emoji": {
         "categories": "Kategorie",
@@ -72,7 +98,7 @@
     },
     "menus": {
         "user_menu": {
-            "clear_status": "Wyczyść",
+            "clear_status": "Wyczyść status",
             "create_an_account": "Utwórz konto",
             "got_an_account": "Masz już konto?",
             "manage_account": "Zarządzaj kontem",
@@ -85,7 +111,7 @@
         "default_settings": "Dopasuj do ustawień domyślnych",
         "mark_all_read": "Oznacz wszystkie jako przeczytane",
         "mentions_keywords": "Wzmianki i słowa kluczowe",
-        "message_didnt_send": "Nie wysłano wiadomości. Kliknij po więcej informacji.",
+        "message_didnt_send": "Wiadomość nie została wysłana. Kliknij po więcej informacji.",
         "mute_room": "Wycisz pokój"
     },
     "release_announcement": {
@@ -102,20 +128,20 @@
             "shared": "Nowi członkowie widzą historię",
             "world_readable": "Każdy może zobaczyć historię"
         },
-        "jump_read_marker": "Skocz do pierwszej nieprzeczytanej wiadomości.",
+        "jump_read_marker": "Przewiń do pierwszej nieprzeczytanej wiadomości.",
         "jump_to_bottom_button": "Przewiń do najnowszych wiadomości",
-        "jump_to_date": "Przeskocz do daty",
+        "jump_to_date": "Przewiń do daty",
         "jump_to_date_beginning": "Początek pokoju",
-        "jump_to_date_prompt": "Wybierz datę, do której przeskoczyć",
+        "jump_to_date_prompt": "Wybierz datę, do której przewinąć",
         "knock_sent": "Wysłano prośbę o dołączenie",
         "pinned_message_badge": "Przypięta wiadomość",
         "status_bar": {
             "delete_all": "Usuń wszystkie",
-            "exceeded_resource_limit_description": "Skontaktuj się ze swoim administratorem, aby móc dalej korzystać z usługi.",
-            "exceeded_resource_limit_title": "Wiadomość nie została wysłana, ponieważ serwer domowy przekroczył swój limit zasobów.",
+            "exceeded_resource_limit_description": "Skontaktuj się ze swoim dostawcą konta, aby móc dalej korzystać z usługi.",
+            "exceeded_resource_limit_title": "Wiadomość nie została wysłana, ponieważ usługa przekroczyła swój limit zasobów.",
             "failed_to_create_room_title": "Nie udało się rozpocząć czatu z tym użytkownikiem",
-            "homeserver_blocked_title": "Wiadomość nie została wysłana, ponieważ serwer domowy został zablokowany przez swojego administratora.",
-            "monthly_user_limit_reached_title": "Wiadomość nie została wysłana, ponieważ serwer domowy osiągnął miesięczny limit aktywnych użytkowników.",
+            "homeserver_blocked_title": "Wiadomość nie została wysłana, ponieważ usługa została zablokowana przez dostawcę konta.",
+            "monthly_user_limit_reached_title": "Wiadomość nie została wysłana, ponieważ usługa osiągnęła miesięczny limit aktywnych użytkowników.",
             "requires_consent_agreement_title": "Nie możesz wysłać żadnej wiadomości, dopóki nie zapoznasz się oraz nie zaakceptujesz naszych obowiązujących zasad.",
             "retry_all": "Ponów wszystkie",
             "select_messages_to_retry": "Zaznacz wszystkie lub pojedyncze wiadomości do ponowienia lub usunięcia",
@@ -150,8 +176,8 @@
                 "many": "Otwórz pokój %(roomName)s z %(count)s nieprzeczytanymi wiadomościami."
             },
             "unsent_message": "Otwórz pokój %(roomName)s z niewysłaną wiadomością.",
-            "video_call": "Otwórz pokój %(roomName)s za pomocą połączenia wideo.",
-            "voice_call": "Otwórz pokój %(roomName)s za pomocą połączenia głosowego."
+            "video_call": "Otwórz pokój %(roomName)s, rozmowa wideo w trakcie.",
+            "voice_call": "Otwórz pokój %(roomName)s, połączenie głosowe w trakcie."
         },
         "appearance": "Wygląd",
         "chat_moved": "Czat przeniesiony",
@@ -184,7 +210,7 @@
         },
         "list_title": "Lista pokojów",
         "more_options": {
-            "copy_link": "Kopiuj link do pokoju",
+            "copy_link": "Kopiuj link",
             "favourited": "Ulubione",
             "leave_room": "Opuść pokój",
             "low_priority": "Niski priorytet",
@@ -201,6 +227,10 @@
         },
         "room_options": "Opcje pokoju",
         "section_created": "Sekcja utworzona",
+        "section_creation": {
+            "description": "Sekcje są tylko dla Ciebie",
+            "label": "Nazwa sekcji"
+        },
         "section_header": {
             "edit_section": "Edytuj sekcję",
             "more_options": "Więcej opcji",
@@ -237,7 +267,7 @@
         "tac_button": "Przejrzyj warunki użytkowania"
     },
     "threads": {
-        "error_start_thread_existing_relation": "Nie można utworzyć wątku z wydarzenia z istniejącą relacją"
+        "error_start_thread_existing_relation": "Nie można utworzyć wątku z tej wiadomości"
     },
     "time": {
         "about_day_ago": "około dzień temu",
@@ -308,14 +338,14 @@
             "error_invalid": "Nieprawidłowy plik"
         },
         "m.room.avatar": {
-            "changed_img": "%(senderDisplayName)s zmienił awatar pokoju na <img/>",
+            "changed_img": "%(senderDisplayName)s zmienił awatar czatu na <img/>",
             "removed": "%(senderDisplayName)s usunął awatar pokoju."
         },
         "m.room.encryption": {
             "disable_attempt": "Zignorowano próbę wyłączenia szyfrowania",
             "disabled": "Nie włączono szyfrowania",
             "enabled": "Wiadomości w tym pokoju są szyfrowane end-to-end. Możesz zweryfikować osoby, które dołączą klikając na ich zdjęcie profilowe.",
-            "enabled_dm": "Wiadomości tutaj są szyfrowane end-to-end. Aby zweryfikować profil %(displayName)s - kliknij na zdjęcie profilowe.",
+            "enabled_dm": "Wiadomości tutaj są szyfrowane end-to-end. Sprawdź %(displayName)s na ich profilu — klikając na zdjęcie profilowe.",
             "enabled_local": "Wiadomości na tym czacie będą szyfrowane end-to-end.",
             "parameters_changed": "Niektóre parametry szyfrowania zostały zmienione.",
             "state_enabled": "Wiadomości i zdarzenia stanowe w tym pokoju są szyfrowane end-to-end. Gdy ktoś dołączy, możesz go zweryfikować klikając na jego zdjęcie profilowe.",
@@ -325,7 +355,7 @@
             "collapse_reply_chain": "Zwiń cytaty",
             "copy_link_thread": "Kopiuj link do wątku",
             "expand_reply_chain": "Rozwiń cytaty",
-            "label": "Działania na wiadomościach",
+            "label": "Akcje wiadomości",
             "view_in_room": "Wyświetl w pokoju"
         },
         "message_shared_by": "%(displayName)s (%(userId)s) udostępnił tę wiadomość, kiedy nie było Cię w pokoju, gdy została wysłana.",

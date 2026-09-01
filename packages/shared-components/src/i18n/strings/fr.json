@@ -5,7 +5,7 @@
     "action": {
         "back": "Retour",
         "cancel": "Annuler",
-        "click": "Clic",
+        "click": "Sélectionner",
         "close": "Fermer",
         "collapse": "Réduire",
         "delete": "Supprimer",
@@ -16,7 +16,7 @@
         "go": "C’est parti",
         "hide": "Masquer",
         "invite": "Inviter",
-        "new_conversation": "Nouvelle conversation",
+        "new_conversation": "Nouveau",
         "new_room": "Nouveau salon",
         "new_section": "Nouvelle section",
         "new_video_room": "Nouveau salon visio",
@@ -43,8 +43,33 @@
         "preferences": "Préférences",
         "state_encryption_enabled": "Chiffrement expérimental de l'état activé"
     },
+    "composer": {
+        "url_preview": {
+            "clear_all": "Tout effacer",
+            "collapse": "Masquer les aperçus des URL",
+            "failed": "Impossible de récupérer l'aperçu",
+            "loading": "Récupération de l'aperçu…",
+            "n_links": {
+                "one": "%(count)s lien",
+                "other": "%(count)s liens"
+            },
+            "remove": "Supprimer l'aperçu de l'URL"
+        }
+    },
     "devtools": {
-        "toggle_event": "afficher/masquer l’évènement"
+        "custom_themes": {
+            "add": "Ajouter un thème personnalisé",
+            "downloading": "Téléchargement du thème personnalisé…",
+            "error_already_installed": "Un thème portant ce nom est déjà installé.",
+            "error_downloading": "Erreur lors du téléchargement du thème",
+            "error_invalid": "Forma du thème invalide.",
+            "error_save_failed": "Impossible d'enregistrer la modification. L'opération peut encore se terminer en arrière-plan.",
+            "help": "Saisir l'URL du thème personnalisé que vous souhaitez appliquer.",
+            "installed_heading": "Thèmes personnalisés installés",
+            "refresh": "Télécharger à nouveau le thème",
+            "url_label": "URL du thème personnalisé"
+        },
+        "toggle_event": "Source de l'événement"
     },
     "emoji": {
         "categories": "Catégories",
@@ -72,7 +97,7 @@
     },
     "menus": {
         "user_menu": {
-            "clear_status": "Effacer",
+            "clear_status": "Effacer le statut",
             "create_an_account": "Créer un compte",
             "got_an_account": "Tu as un compte ?",
             "manage_account": "Gérer le compte",
@@ -83,8 +108,9 @@
     "notifications": {
         "all_messages": "Tous les messages",
         "default_settings": "Correspondre aux paramètres par défaut",
+        "mark_all_read": "Tout marquer comme lu",
         "mentions_keywords": "Mentions et mots-clés",
-        "message_didnt_send": "Le message n’a pas été envoyé. Cliquer pour plus d’info.",
+        "message_didnt_send": "Le message n'a pas été envoyé. Cliquez pour plus d'informations",
         "mute_room": "Rendre le salon muet"
     },
     "release_announcement": {
@@ -101,7 +127,9 @@
             "shared": "Les nouveaux membres voient l'historique",
             "world_readable": "Tout le monde voit l'historique"
         },
-        "jump_to_date": "Aller à la date",
+        "jump_read_marker": "Aller au premier message non lu.",
+        "jump_to_bottom_button": "Sauter aux messages les plus récents",
+        "jump_to_date": "Défilez jusqu'à la date",
         "jump_to_date_beginning": "Le début du salon",
         "jump_to_date_prompt": "Choisissez vers quelle date aller",
         "knock_sent": "Demande d’accès envoyée",
@@ -109,10 +137,10 @@
         "status_bar": {
             "delete_all": "Tout supprimer",
             "exceeded_resource_limit_description": "Veuillez contacter votre administrateur pour continuer à utiliser le service.",
-            "exceeded_resource_limit_title": "Votre message n'a pas pu être envoyé car ce serveur d'accueil a dépassé sa limite de ressources.",
+            "exceeded_resource_limit_title": "Votre message n'a pas pu être envoyé car ce service a dépassé sa limite de ressources.",
             "failed_to_create_room_title": "Impossible de démarrer une discussion avec cet utilisateur",
-            "homeserver_blocked_title": "Votre message n'a pas pu être envoyé car ce serveur d'accueil a été bloqué par son administrateur.",
-            "monthly_user_limit_reached_title": "Votre message n'a pas pu être envoyé car ce serveur d'accueil a atteint sa limite mensuelle d'utilisateurs actifs.",
+            "homeserver_blocked_title": "Votre message n'a pas pu être envoyé car ce service a été bloqué par votre fournisseur de compte.",
+            "monthly_user_limit_reached_title": "Votre message n'a pas pu être envoyé car ce service a atteint sa limite mensuelle d'utilisateurs actifs.",
             "requires_consent_agreement_title": "Vous ne pouvez envoyer aucun message tant que vous n'aurez pas consulté et accepté nos conditions générales.",
             "retry_all": "Tout réessayer",
             "select_messages_to_retry": "Vous pouvez choisir de renvoyer ou supprimer tous les messages ou seulement certains",
@@ -146,7 +174,7 @@
             },
             "unsent_message": "Ouvrir le salon %(roomName)s avec un message non envoyé.",
             "video_call": "Ouvrir le salon %(roomName)s contenant un appel vidéo",
-            "voice_call": "Ouvrir le salon %(roomName)s contenant un appel vocal."
+            "voice_call": "Ouvrir le salon %(roomName)s, appel vocal en cours."
         },
         "appearance": "Apparence",
         "chat_moved": "La conversation a été déplacée",
@@ -179,7 +207,7 @@
         },
         "list_title": "Liste de salons",
         "more_options": {
-            "copy_link": "Copier le lien du salon",
+            "copy_link": "Copier le lien",
             "favourited": "Ajouté aux favoris",
             "leave_room": "Quitter le salon",
             "low_priority": "Priorité basse",
@@ -196,6 +224,10 @@
         },
         "room_options": "Options du salon",
         "section_created": "Section créée",
+        "section_creation": {
+            "description": "Les sections sont uniquement pour vous.",
+            "label": "Nom de la section"
+        },
         "section_header": {
             "edit_section": "Modifier la section",
             "more_options": "Plus d’options",
@@ -232,7 +264,7 @@
         "tac_button": "Voir les conditions générales"
     },
     "threads": {
-        "error_start_thread_existing_relation": "Impossible de créer un fil de discussion à partir d’un événement avec une relation existante"
+        "error_start_thread_existing_relation": "Vous ne pouvez pas créer de nouveau fil de discussion à partir de ce message."
     },
     "time": {
         "about_day_ago": "il y a environ un jour",
@@ -302,24 +334,24 @@
             "error_invalid": "Fichier invalide"
         },
         "m.room.avatar": {
-            "changed_img": "%(senderDisplayName)s a changé l'avatar du salon en <img/>",
+            "changed_img": "%(senderDisplayName)s a changé l'avatar de la discussion en <img/>",
             "removed": "%(senderDisplayName)s a supprimé l'avatar du salon."
         },
         "m.room.encryption": {
             "disable_attempt": "Essai de désactiver le chiffrement ignoré",
             "disabled": "Chiffrement désactivé",
-            "enabled": "Les messages ici sont chiffrés de bout en bout. Quand les gens viennent, vous pouvez les vérifier dans leur profil, tapez simplement sur leur image de profil.",
-            "enabled_dm": "Les messages ici sont chiffrés de bout en bout. Vérifiez %(displayName)s dans son profil - cliquez sur son image de profil.",
+            "enabled": "Les messages dans ce salon sont chiffrés de bout en bout. Lorsque des personnes rejoignent la salle, vous pouvez les vérifier en sélectionnant leur photo de profil.",
+            "enabled_dm": "Les messages sont chiffrés de bout en bout. Vérifiez %(displayName)s dans leur profil — cliquer sur leur photo de profil.",
             "enabled_local": "Les messages de cette discussion seront chiffrés de bout en bout.",
             "parameters_changed": "Certains paramètres de chiffrement ont été changés.",
-            "state_enabled": "Les messages et les événements de ce salon sont chiffrés de bout en bout. Lorsque des personnes rejoignent le salon, vous pouvez les vérifier dans leur profil en cliquant sur leur photo de profil.",
+            "state_enabled": "Les messages et les événements de ce salon sont chiffrés de bout en bout. Lorsque des personnes rejoignent le salon, vous pouvez les vérifier en cliquant sur leur photo de profil.",
             "unsupported": "Le chiffrement utilisé par ce salon n’est pas pris en charge."
         },
         "mab": {
             "collapse_reply_chain": "Réduire les citations",
             "copy_link_thread": "Copier le lien du fil de discussion",
             "expand_reply_chain": "Étendre les citations",
-            "label": "Actions de message",
+            "label": "Actions sur le message",
             "view_in_room": "Voir dans le salon"
         },
         "message_shared_by": "%(displayName)s(%(userId)s ) a partagé ce message car vous n'étiez pas dans le salon lors de son envoi.",

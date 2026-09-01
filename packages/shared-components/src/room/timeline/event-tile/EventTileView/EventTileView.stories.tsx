@@ -365,19 +365,35 @@ const StoryReplyChain = (): React.ReactElement => (
         <span>Earlier message quoted in this reply.</span>
     </blockquote>
 );
-const StoryMediaBody = (): React.ReactElement => {
+const storyMediaSizes = {
+    small: { label: "Small", maxWidth: 1, maxHeight: 1, aspectRatio: "1 / 1" },
+    medium: { label: "Medium", maxWidth: 320, maxHeight: 180, aspectRatio: "16 / 9" },
+    large: { label: "Large", maxWidth: 800, maxHeight: 600, aspectRatio: "4 / 3" },
+} as const;
+
+type StoryMediaSize = keyof typeof storyMediaSizes;
+
+const StoryMediaImage = ({
+    label,
+    maxWidth,
+    maxHeight,
+    aspectRatio,
+}: Pick<ImageBodyViewSnapshot, "maxWidth" | "maxHeight" | "aspectRatio"> & { label: string }): React.ReactElement => {
     const snapshot: ImageBodyViewSnapshot = {
         state: ImageBodyViewState.READY,
-        alt: "Example media",
+        alt: `${label} example media`,
         src: storyMediaSrc,
         thumbnailSrc: storyMediaSrc,
-        maxWidth: 320,
-        maxHeight: 180,
-        aspectRatio: "16 / 9",
+        maxWidth,
+        maxHeight,
+        aspectRatio,
     };
     const vm = useMockedViewModel(snapshot, {});
     return <ImageBodyView vm={vm} />;
 };
+const StoryMediaBody = ({ size = "medium" }: { size?: StoryMediaSize }): React.ReactElement => (
+    <StoryMediaImage {...storyMediaSizes[size]} />
+);
 const StoryStickerBody = (): React.ReactElement => (
     <div className={styles.stickerBody} role="img" aria-label="Example sticker">
         🌈
@@ -776,7 +792,7 @@ type EventTileStoryProps = Omit<EventTileViewProps, "root"> & {
     /** Whether the story should render the EventTileView-level sender and avatar slots. */
     showSenderAndAvatar?: boolean;
     state?: Partial<EventTileViewProps["root"]["state"]>;
-    roomMessages?: "boundaries" | "alice" | "bob" | "threeEach" | "informational" | "alignedBetween" | "rich";
+    roomMessages?: "boundaries" | "alice" | "bob" | "media" | "threeEach" | "informational" | "alignedBetween" | "rich";
     searchMessages?: "result";
 };
 
@@ -1069,6 +1085,34 @@ function EventTileViewStoryContent({
     };
 
     const renderRoomTiles = (): React.ReactNode => {
+        if (roomMessages === "media") {
+            return (
+                <>
+                    {renderTile(
+                        false,
+                        "media-small",
+                        { continuation: false, lastInSection: false },
+                        false,
+                        <StoryMediaBody size="small" />,
+                    )}
+                    {renderTile(
+                        false,
+                        "media-medium",
+                        { continuation: true, lastInSection: false },
+                        false,
+                        <StoryMediaBody size="medium" />,
+                    )}
+                    {renderTile(
+                        false,
+                        "media-large",
+                        { continuation: true, lastInSection: true },
+                        true,
+                        <StoryMediaBody size="large" />,
+                    )}
+                </>
+            );
+        }
+
         if (roomMessages === "rich") {
             return (
                 <>
