@@ -653,8 +653,8 @@ importers:
         specifier: ^1.0.3
         version: 1.0.3
       matrix-js-sdk:
-        specifier: 42.3.0
-        version: 42.3.0
+        specifier: github:matrix-org/matrix-js-sdk#develop
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/07e433b63c80f025ff832f9bc90ddec3d1f115d4
       matrix-widget-api:
         specifier: ^1.18.0
         version: 1.18.0
@@ -3509,8 +3509,8 @@ packages:
   '@matrix-org/emojibase-bindings@1.5.0':
     resolution: {integrity: sha512-+W9/ow2Z3iQa7ZOF698PBhwNcgGkn36B5Sr8VDPx8N8CH7+Uw+7TrtbtKPZVdgf4m/THmgmfX40jS5YDBsLaYg==}
 
-  '@matrix-org/matrix-sdk-crypto-wasm@18.4.0':
-    resolution: {integrity: sha512-osxkU1DQ+05+anGHapjWyvZqdHUb94Id37gy54mCKn1Cq/D7iGT5oEUEhjp4oTnCLo4TOtI6ULJ/LHsapaIptQ==}
+  '@matrix-org/matrix-sdk-crypto-wasm@18.7.0':
+    resolution: {integrity: sha512-IiO8YrahwBN23iii4OBS6AUIEDZePa72bK7WN/DBjOXPc6g/wt891vn0vxmlopTahqFFOz/LErcHisdmzKVTsg==}
     engines: {node: '>= 18'}
 
   '@matrix-org/react-sdk-module-api@2.5.0':
@@ -7724,6 +7724,10 @@ packages:
     resolution: {integrity: sha512-j/O/d7GcZCyNl7/hwZAb606rzqkyvaDctLmckbxLzHvFBzTJHuGEdodATcP3yIRoDrLHkIATJuvzbFlp/ki2cQ==}
     engines: {node: '>=18'}
 
+  content-type@3.0.0:
+    resolution: {integrity: sha512-AIi5H6p0xk5uknXcN3/rmhP8jgp69OfSe/JuKiQAFprJ7UGw7mwj7m4XcmDzlrnJDG+cGpphAINGdU3g3g7kDw==}
+    engines: {node: '>=22'}
+
   convert-hrtime@5.0.0:
     resolution: {integrity: sha512-lOETlkIeYSJWcbbcvjRKGxVMXJR+8+OQb/mTPbA4ObPMytYIsUbuOE0Jzy60hjARYszq1id0j8KgVhC+WGZVTg==}
     engines: {node: '>=12'}
@@ -10164,8 +10168,9 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@42.3.0:
-    resolution: {integrity: sha512-jXXFLlaA25zQ2oxXCgbAEubGC8KpF8OabSf387W0RXfkwqhNXEbU+veeUaZMT+bCbyE5nDxkN3iBy038VbntQg==}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/07e433b63c80f025ff832f9bc90ddec3d1f115d4:
+    resolution: {gitHosted: true, integrity: sha512-umwgm4jhQ14W3n+0YELI9ZMFD9Wq+LR2lFIt458H5SERD4snN4sJIdQS+LFZDCNae0HPkoTgiuNeZ6aGwzWVfA==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/07e433b63c80f025ff832f9bc90ddec3d1f115d4}
+    version: 42.3.0
     engines: {node: '>=22.0.0'}
 
   matrix-web-i18n@3.6.0:
@@ -16331,7 +16336,7 @@ snapshots:
       emojibase: 17.0.0
       emojibase-data: 17.0.0(emojibase@17.0.0)
 
-  '@matrix-org/matrix-sdk-crypto-wasm@18.4.0': {}
+  '@matrix-org/matrix-sdk-crypto-wasm@18.7.0': {}
 
   '@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.8)':
     dependencies:
@@ -20555,6 +20560,8 @@ snapshots:
 
   content-type@2.0.0: {}
 
+  content-type@3.0.0: {}
+
   convert-hrtime@5.0.0: {}
 
   convert-source-map@2.0.0: {}
@@ -23390,13 +23397,13 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@42.3.0:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/07e433b63c80f025ff832f9bc90ddec3d1f115d4:
     dependencies:
       '@babel/runtime': 8.0.0
-      '@matrix-org/matrix-sdk-crypto-wasm': 18.4.0
+      '@matrix-org/matrix-sdk-crypto-wasm': 18.7.0
       another-json: 0.2.0
       bs58: 6.0.0
-      content-type: 2.0.0
+      content-type: 3.0.0
       loglevel: 1.9.2
       matrix-events-sdk: 0.0.1
       matrix-widget-api: 1.18.0
