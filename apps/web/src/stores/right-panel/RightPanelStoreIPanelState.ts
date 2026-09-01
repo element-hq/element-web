@@ -14,8 +14,6 @@ import { MediaHandle } from "@element-hq/element-web-module-api";
 import { RegisteredFileViewer, remoteMediaForEvent, uploadedMediaForEvent } from "../../modules/FileViewerApi";
 import { ModuleApi } from "../../modules/Api";
 
-export type RightPanelCardType = "room" | "global";
-
 export interface IRightPanelCardState {
     member?: RoomMember | User;
     verificationRequest?: VerificationRequest;
