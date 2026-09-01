@@ -46,6 +46,31 @@ describe("<ResetIdentityPanel />", () => {
         expect(onReset).toHaveBeenCalled();
     });
 
+    it("should re-enable the continue button and show an error if the reset fails", async () => {
+        const user = userEvent.setup();
+
+        const onReset = jest.fn();
+        render(
+            <ResetIdentityPanel variant="compromised" onReset={onReset} onCancelClick={jest.fn()} />,
+            withClientContextRenderOptions(matrixClient),
+        );
+
+        const { promise: resetEncryptionPromise, reject: rejectResetEncryption } = Promise.withResolvers<void>();
+        jest.spyOn(matrixClient.getCrypto()!, "resetEncryption").mockReturnValue(resetEncryptionPromise);
+
+        await user.click(screen.getByRole("button", { name: "Continue" }));
+        rejectResetEncryption!(new Error("Cross-signing key upload auth canceled"));
+
+        expect(
+            await screen.findByText(
+                "Something went wrong and your cryptographic identity could not be reset. Please try again.",
+            ),
+        ).toBeInTheDocument();
+        expect(onReset).not.toHaveBeenCalled();
+        expect(screen.getByRole("button", { name: "Continue" })).not.toBeDisabled();
+        expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument();
+    });
+
     it("should display the 'forgot recovery key' variant correctly", async () => {
         const onReset = jest.fn();
         const { asFragment } = render(
