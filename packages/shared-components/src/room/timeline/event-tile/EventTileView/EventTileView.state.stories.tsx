@@ -271,7 +271,7 @@ export const Media: Story = {
     tags: interactiveTags,
     args: {
         shape: "Room",
-        roomMessages: "bob",
+        roomMessages: "media",
         line: { media: true, image: true },
         state: { hasReply: false },
         slots: { ...minimalRoomSlots, body: <StoryMediaBody /> },
