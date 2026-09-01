@@ -88,12 +88,13 @@ exports[`ImportE2eKeysDialog renders 1`] = `
         class="mx_Dialog_buttons"
       >
         <input
-          class="mx_Dialog_primary"
+          class="mx_LegacyDialogButton mx_Dialog_primary"
           disabled=""
           type="submit"
           value="Import"
         />
         <button
+          class="mx_LegacyDialogButton"
           type="button"
         >
           Cancel
