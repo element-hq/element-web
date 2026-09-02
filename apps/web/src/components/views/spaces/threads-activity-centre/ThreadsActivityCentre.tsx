@@ -17,7 +17,7 @@ import defaultDispatcher from "../../../../dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../../../../dispatcher/payloads/ViewRoomPayload";
 import RightPanelStore from "../../../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../stores/right-panel/RightPanelStorePhases";
-import { type ThreadData, useUnreadThreadRooms } from "./useUnreadThreadRooms";
+import { type ThreadData, type UnreadThreadRooms, useUnreadThreadRooms } from "./useUnreadThreadRooms";
 import { StatelessNotificationBadge } from "../../rooms/NotificationBadge/StatelessNotificationBadge";
 import { MessagePreviewStore } from "../../../../stores/message-preview/MessagePreviewStore";
 import { getSenderName } from "../../../../stores/message-preview/previews/utils";
@@ -35,9 +35,28 @@ interface ThreadsActivityCentreProps {
 /**
  * The two views available in the Threads Activity Centre popup.
  */
-enum TACView {
-    MyThreads = "my_threads",
-    OtherThreads = "other_threads",
+type TACView = "my_threads" | "other_threads";
+
+/**
+ * Get the threads to display for the active tab, and the caption shown when that tab is empty.
+ * @param view - the active tab
+ * @param unreadThreadRooms - the unread threads, as returned by {@link useUnreadThreadRooms}
+ */
+function getActiveTabContent(
+    view: TACView,
+    unreadThreadRooms: UnreadThreadRooms,
+): { threads: ThreadData[]; emptyCaption: string } {
+    if (view === "my_threads") {
+        return {
+            threads: unreadThreadRooms.participatingThreads,
+            emptyCaption: _t("threads_activity_centre|no_participating_threads_unread"),
+        };
+    }
+
+    return {
+        threads: unreadThreadRooms.otherThreads,
+        emptyCaption: _t("threads_activity_centre|no_other_unread_threads"),
+    };
 }
 
 /**
@@ -46,17 +65,13 @@ enum TACView {
  */
 export function ThreadsActivityCentre({ displayButtonLabel }: ThreadsActivityCentreProps): JSX.Element {
     const [open, setOpen] = useState(false);
-    const [view, setView] = useState<TACView>(TACView.MyThreads);
+    const [view, setView] = useState<TACView>("my_threads");
     const roomsAndNotifications = useUnreadThreadRooms(open);
 
-    // The active tab selects which thread list and empty-state caption to render.
-    const [activeThreads, activeEmptyCaption] =
-        view === TACView.MyThreads
-            ? [
-                  roomsAndNotifications.participatingThreads,
-                  _t("threads_activity_centre|no_participating_threads_unread"),
-              ]
-            : [roomsAndNotifications.otherThreads, _t("threads_activity_centre|no_other_unread_threads")];
+    const { threads: activeThreads, emptyCaption: activeEmptyCaption } = getActiveTabContent(
+        view,
+        roomsAndNotifications,
+    );
 
     return (
         <div
@@ -101,15 +116,15 @@ export function ThreadsActivityCentre({ displayButtonLabel }: ThreadsActivityCen
                 >
                     <NavItem
                         aria-controls="mx_ThreadsActivityCentre_panel"
-                        active={view === TACView.MyThreads}
-                        onClick={() => setView(TACView.MyThreads)}
+                        active={view === "my_threads"}
+                        onClick={() => setView("my_threads")}
                     >
                         {_t("threads_activity_centre|my_threads_tab")}
                     </NavItem>
                     <NavItem
                         aria-controls="mx_ThreadsActivityCentre_panel"
-                        active={view === TACView.OtherThreads}
-                        onClick={() => setView(TACView.OtherThreads)}
+                        active={view === "other_threads"}
+                        onClick={() => setView("other_threads")}
                     >
                         {_t("threads_activity_centre|other_threads_tab")}
                     </NavItem>
@@ -124,7 +139,9 @@ export function ThreadsActivityCentre({ displayButtonLabel }: ThreadsActivityCen
                         />
                     ))}
                     {activeThreads.length === 0 && (
-                        <div className="mx_ThreadsActivityCentre_emptyCaption">{activeEmptyCaption}</div>
+                        <Text as="div" size="sm" weight="regular" className="mx_ThreadsActivityCentre_emptyCaption">
+                            {activeEmptyCaption}
+                        </Text>
                     )}
                 </div>
             </Menu>
@@ -158,9 +175,11 @@ function ThreadsActivityCentreThreadRow({ threadData, onClick }: ThreadsActivity
 
     return (
         <MenuItem
-            className="mx_ThreadsActivityCentreRow mx_ThreadsActivityCentreThreadRow"
+            className="mx_ThreadsActivityCentreThreadRow"
             // label={null} renders no label span; aria-label provides the accessible name.
             label={null}
+            // The design uses the notification dot as the only trailing affordance.
+            hideChevron
             aria-label={senderName ? `${room.name}: ${senderName}: ${previewText}` : room.name}
             Icon={<DecoratedRoomAvatar room={room} size="40px" />}
             onSelect={(event: Event) => {
