@@ -7,9 +7,7 @@
 
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import FileIcon from "@vector-im/compound-design-tokens/assets/web/icons/document";
-import ExpandIcon from "@vector-im/compound-design-tokens/assets/web/icons/expand";
-import DownloadIcon from "@vector-im/compound-design-tokens/assets/web/icons/download";
+import { DocumentIcon, ExpandIcon, DownloadIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { VideoPreviewTile } from "./MediaPreviewTile";
 // Inlined as a data URI, and short enough to be buffered in full the moment it is decoded: the native
@@ -27,7 +25,7 @@ const meta = {
         style: "video",
         video: demoVideo,
         videoSize: "banner",
-        icon: <FileIcon />,
+        icon: <DocumentIcon />,
         onClick: () => {},
         color: "#4200A6",
         header: "holiday-clip.mp4",
@@ -38,6 +36,12 @@ const meta = {
         ],
     },
     play: ({ canvasElement }) => prepareVideosForSnapshot(canvasElement),
+    parameters: {
+        design: {
+            type: "figma",
+            url: "https://www.figma.com/design/sI9A2kV2K4xeiyqJsL7Ey3/Links-and-Files?node-id=728-8112",
+        },
+    },
 } satisfies Meta<typeof VideoPreviewTile>;
 
 export default meta;

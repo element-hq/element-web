@@ -6,8 +6,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type RefObject, useContext, useEffect, useRef } from "react";
-import { MsgType } from "matrix-js-sdk/src/matrix";
-import { type MediaEventContent, type ImageContent } from "matrix-js-sdk/src/types";
+import { type MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
+import { type ImageContent } from "matrix-js-sdk/src/types";
 import {
     DecryptionFailureBodyView,
     FileBodyView,
@@ -15,8 +15,6 @@ import {
     MediaPreviewGroupPreview,
     RedactedBodyView,
     VideoBodyView,
-    _t,
-    attachmentIcon,
     useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
 
@@ -32,10 +30,8 @@ import { RedactedBodyViewModel } from "../../../viewmodels/message-body/Redacted
 import { getRedactedBodyViewModelProps } from "../../../viewmodels/room/timeline/event-tile/EventTileRedactedBodyState";
 import { VideoBodyViewModel } from "../../../viewmodels/message-body/VideoBodyViewModel";
 import { isMimeTypeAllowed } from "../../../utils/blobs";
-import { MediaPreviewGroupViewModel } from "../../../viewmodels/message-body/MediaPreviewGroupViewModel";
-import { fileSize } from "../../../utils/FileUtils";
-import DownloadIcon from "@vector-im/compound-design-tokens/assets/web/icons/download";
-import { FileDownloader } from "../../../utils/FileDownloader";
+import { type MediaEventHelper } from "../../../utils/MediaEventHelper";
+import { MBodyTileViewModel } from "../../../viewmodels/message-body/MBodyTileViewModel";
 
 type MBodyComponent = React.ComponentType<IBodyProps>;
 
@@ -50,7 +46,12 @@ export function FileBodyFactory(props: FileBodyProps): JSX.Element {
         return <LegacyFileBody {...props} />;
     }
 
-    return <PreviewFileBody {...props} />;
+    // preview file body can't handle this, let the legacy file body handle it
+    if (props.mediaEventHelper === undefined) {
+        return <LegacyFileBody {...props} />;
+    }
+
+    return <PreviewFileBody mediaEventHelper={props.mediaEventHelper} mxEvent={props.mxEvent} />;
 }
 
 /// the old look for files, still used for images, videos, audio, voice messages
@@ -85,42 +86,14 @@ function LegacyFileBody({ mxEvent, mediaEventHelper, forExport, showFileInfo }: 
     return <FileBodyView vm={vm} refIFrame={refIFrame} refLink={refLink} className="mx_MFileBody" />;
 }
 
+interface PreviewFileBodyProps {
+    mxEvent: MatrixEvent;
+    mediaEventHelper: MediaEventHelper;
+}
+
 /// the new preview file tile
-function PreviewFileBody({ mxEvent, mediaEventHelper }: FileBodyProps): JSX.Element {
-    const content = mxEvent.getContent<MediaEventContent>();
-    const size = content.info?.size;
-
-    const downloader = new FileDownloader();
-
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new MediaPreviewGroupViewModel({
-                entries: [
-                    {
-                        id: mxEvent.getId()!,
-                        style: "text",
-                        header: mediaEventHelper!.fileName,
-                        body: size === undefined ? _t("timeline|m.file|size_unknown") : fileSize(size),
-                        buttons:
-                            mediaEventHelper === undefined
-                                ? undefined
-                                : [
-                                      {
-                                          label: _t("action|download"),
-                                          icon: <DownloadIcon />,
-                                          onClick: async () => {
-                                              await downloader.download({
-                                                  blob: await mediaEventHelper.sourceBlob.value, // decrypts transparently if E2EE
-                                                  name: mediaEventHelper.fileName || _t("common|attachment"),
-                                              });
-                                          },
-                                      },
-                                  ],
-                        ...attachmentIcon(content.info?.mimetype),
-                    },
-                ],
-            }),
-    );
+function PreviewFileBody({ mxEvent, mediaEventHelper }: PreviewFileBodyProps): JSX.Element {
+    const vm = useCreateAutoDisposedViewModel(() => new MBodyTileViewModel(mxEvent, mediaEventHelper));
 
     return (
         <div className="mx_EventTile_content">
