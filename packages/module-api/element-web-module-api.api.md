@@ -105,7 +105,7 @@ export interface ClientApi {
 
 // @public
 export interface ClientCreationManagementApi {
-    setUserVerificationCaCertsPem(pem: string | null): void;
+    setX509ClientInitOpts(opts: X509ClientInitOpts): void;
 }
 
 // @alpha @deprecated (undocumented)
@@ -630,6 +630,17 @@ export interface WidgetVariablesCustomisations {
         deviceId?: string;
         baseUrl?: string;
     };
+}
+
+// @public
+export interface X509ClientInitOpts {
+    signer?: (item: Uint8Array) => Promise<{
+        signature_bytes: Uint8Array;
+        certificate_chain: string;
+        signature_scheme: "RsaPssSha512";
+    }>;
+    userVerificationCaCertsPem?: string;
+    validity?: () => number;
 }
 
 // (No @packageDocumentation comment for this package)
