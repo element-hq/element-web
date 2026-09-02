@@ -9,9 +9,9 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { Room, UNSTABLE_ELEMENT_FUNCTIONAL_USERS } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { mkMembership, stubClient } from "test-utils";
+import { mkEvent, mkMembership, stubClient } from "test-utils";
 
 import { roomContextDetails } from "./i18n-helpers";
 import DMRoomMap from "./DMRoomMap";
@@ -102,6 +102,33 @@ describe("roomContextDetails", () => {
                 vi.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(parted);
                 expect(roomContextDetails(lazyDm)!.details).not.toBe(parted);
             });
+        });
+
+        describe("with a service member ahead of the partner in the room summary", () => {
+            const bot = "@bot:server";
+            const botDm = new Room("!bot:server", client, me);
+            botDm.setSummary({ "m.heroes": [bot, partner], "m.joined_member_count": 3 });
+            botDm.currentState.setStateEvents([
+                mkEvent({
+                    event: true,
+                    type: UNSTABLE_ELEMENT_FUNCTIONAL_USERS.name,
+                    user: me,
+                    room: botDm.roomId,
+                    skey: "",
+                    content: { service_members: [bot] },
+                }),
+            ]);
+
+            it("should show the partner's user ID rather than take the service member for them", () => {
+                vi.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(partner);
+                expect(roomContextDetails(botDm)!.details).toBe(partner);
+            });
+        });
+
+        it("should show the partner's user ID when nothing about the room has loaded", () => {
+            const unknownDm = new Room("!unknown:server", client, me);
+            vi.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(partner);
+            expect(roomContextDetails(unknownDm)!.details).toBe(partner);
         });
     });
 });
