@@ -83,7 +83,7 @@ describe("MBodyFactory", () => {
             sender: userId,
             type: EventType.RoomMessage,
             content: {
-                body: "alt",
+                body: "test-file.txt",
                 ...(msgtype ? { msgtype } : {}),
                 url: "mxc://server/file",
                 ...content,
@@ -172,7 +172,7 @@ describe("MBodyFactory", () => {
                 ),
                 TimelineRenderingType.File,
             );
-            expect(getByRole("button", { name: "alt" })).toBeInTheDocument();
+            expect(getByRole("button", { name: "test-file.txt" })).toBeInTheDocument();
         });
     });
 
@@ -182,7 +182,7 @@ describe("MBodyFactory", () => {
             sender: userId,
             type: EventType.RoomMessage,
             content: {
-                body: "alt",
+                body: "test-file.txt",
                 msgtype: "m.audio",
                 url: "mxc://server/image",
             },
@@ -201,10 +201,10 @@ describe("MBodyFactory", () => {
             TimelineRenderingType.File,
         );
 
-        expect(getByText("alt")).toBeInTheDocument();
+        expect(getByText("test-file.txt")).toBeInTheDocument();
         // Only m.file gets the preview tile; everything else keeps the legacy file body,
         // where the filename itself is the button. See FileBodyFactory.
-        expect(getByRole("button", { name: "alt" })).toBeInTheDocument();
+        expect(getByRole("button", { name: "test-file.txt" })).toBeInTheDocument();
         expect(container).toMatchSnapshot();
     });
 
@@ -216,7 +216,7 @@ describe("MBodyFactory", () => {
                 sender: userId,
                 type: EventType.RoomMessage,
                 content: {
-                    body: "alt",
+                    body: "test-file.txt",
                     msgtype: "m.file",
                     url: "mxc://server/image",
                 },
@@ -236,7 +236,7 @@ describe("MBodyFactory", () => {
             );
 
             // The preview tile leaves the filename as plain text and gives the download its own button.
-            expect(getByText("alt")).toBeInTheDocument();
+            expect(getByText("test-file.txt")).toBeInTheDocument();
             expect(getByRole("button", { name: "Download" })).toBeInTheDocument();
             expect(container).toMatchSnapshot();
         },
@@ -360,7 +360,7 @@ describe("MBodyFactory", () => {
 
             expect(container.querySelector(".mx_ImageBody")).toBeNull();
             expect(container.querySelector(".mx_MFileBody")).not.toBeNull();
-            expect(getByRole("button", { name: "alt" })).toBeInTheDocument();
+            expect(getByRole("button", { name: "test-file.txt" })).toBeInTheDocument();
         });
 
         it("keeps the image body for encrypted unsafe images when a thumbnail is available", () => {
