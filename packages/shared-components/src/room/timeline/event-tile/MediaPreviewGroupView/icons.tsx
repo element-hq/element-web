@@ -6,13 +6,12 @@ Please see LICENSE in the repository root for full details.
 */
 
 import { type MediaPreviewIcon } from "./MediaPreviewGroupView";
-import FileIcon from "@vector-im/compound-design-tokens/assets/web/icons/document";
-import LinkIcon from "@vector-im/compound-design-tokens/assets/web/icons/link";
+import { DocumentIcon, LinkIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import React from "react";
 
 export function attachmentIcon(_mimeType?: string): MediaPreviewIcon {
     return {
-        icon: <FileIcon />,
+        icon: <DocumentIcon />,
         color: "var(--cpd-color-text-decorative-4)",
     };
 }

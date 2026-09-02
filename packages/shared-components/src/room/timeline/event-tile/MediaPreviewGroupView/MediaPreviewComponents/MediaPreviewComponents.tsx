@@ -5,38 +5,53 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE in the repository root for full details.
 */
 
-import React, { type JSX, useEffect, useState } from "react";
+import React, { type JSX, useEffect, useState, ReactNode } from "react";
 import styles from "./MediaPreviewComponents.module.css";
 import classNames from "classnames";
 import { type ImageSize, type MediaPreviewEntryButton } from "../MediaPreviewGroupView";
 import { useI18n } from "../../../../../core/i18n/i18nContext";
 import { LinkedText } from "../../../../../core/utils/LinkedText";
 
-export function Header({ header, headerUrl }: { header: string; headerUrl?: string }): JSX.Element {
-    if (headerUrl === undefined) return <div className={classNames(styles.textHeader, styles.header)}>{header}</div>;
-    else
-        return (
-            <div className={classNames(styles.linkHeader, styles.header)}>
-                <a href={headerUrl} target="_blank">
-                    {header}
-                </a>
-            </div>
-        );
+export function Header({ children }: { children: ReactNode }): JSX.Element {
+    return <div className={styles.header}>{children}</div>;
 }
 
-export function Body({ body }: { body: string }): JSX.Element {
+export function Body({ children }: { children: ReactNode }): JSX.Element {
     return (
         <LinkedText type="body" size="md" className={styles.body}>
-            {body}
+            {children}
         </LinkedText>
     );
 }
 
-export function TextContent(props: { header: string; headerUrl?: string; body: string }): JSX.Element {
+export interface TextContentProps {
+    /**
+     * header text
+     */
+    header: string;
+    /**
+     * header URL (optional)
+     */
+    headerUrl?: string;
+    /**
+     * body text
+     */
+    body: string;
+}
+
+export function TextContent({ header, headerUrl, body }: TextContentProps): JSX.Element {
     return (
         <div className={styles.textContent}>
-            <Header {...props} />
-            <Body {...props} />
+            <Header>
+                {headerUrl ? (
+                    header
+                ) : (
+                    <a href={headerUrl} target="_blank">
+                        {header}
+                    </a>
+                )}
+            </Header>
+            <Body>{body}</Body>
         </div>
     );
 }
