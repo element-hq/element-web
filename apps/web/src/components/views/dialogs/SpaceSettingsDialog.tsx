@@ -12,6 +12,7 @@ import {
     AdminIcon,
     AdvancedSettingsIcon,
     SettingsSolidIcon,
+    StickerIcon,
     VisibilityOnIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
@@ -22,6 +23,7 @@ import { useDispatcher } from "../../../hooks/useDispatcher";
 import TabbedView, { Tab } from "../../structures/TabbedView";
 import SpaceSettingsGeneralTab from "../spaces/SpaceSettingsGeneralTab";
 import SpaceSettingsVisibilityTab from "../spaces/SpaceSettingsVisibilityTab";
+import SpaceSettingsStickersTab from "../spaces/SpaceSettingsStickersTab";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import AdvancedRoomSettingsTab from "../settings/tabs/room/AdvancedRoomSettingsTab";
@@ -33,6 +35,7 @@ export enum SpaceSettingsTab {
     General = "SPACE_GENERAL_TAB",
     Visibility = "SPACE_VISIBILITY_TAB",
     Roles = "SPACE_ROLES_TAB",
+    Stickers = "SPACE_STICKERS_TAB",
     Advanced = "SPACE_ADVANCED_TAB",
 }
 
@@ -73,6 +76,12 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
                 _td("room_settings|permissions|title"),
                 <AdminIcon key={SpaceSettingsTab.Roles} />,
                 <RolesRoomSettingsTab key={SpaceSettingsTab.Roles} room={space} />,
+            ),
+            new Tab(
+                SpaceSettingsTab.Stickers,
+                _td("Stickers & Emotes" as any),
+                <StickerIcon key={SpaceSettingsTab.Stickers} />,
+                <SpaceSettingsStickersTab key={SpaceSettingsTab.Stickers} matrixClient={cli} space={space} />,
             ),
             SettingsStore.getValue(UIFeature.AdvancedSettings)
                 ? new Tab(

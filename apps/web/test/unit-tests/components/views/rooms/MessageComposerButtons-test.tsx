@@ -23,10 +23,8 @@ describe("MessageComposerButtons", () => {
     const mockProps: React.ComponentProps<typeof MessageComposerButtons> = {
         addEmoji: () => false,
         haveRecording: false,
-        isStickerPickerOpen: false,
         menuPosition: undefined,
         onRecordStartEndClick: () => {},
-        setStickerPickerOpen: () => {},
         toggleButtonMenu: () => {},
     };
 
@@ -69,12 +67,11 @@ describe("MessageComposerButtons", () => {
                 isMenuOpen={false}
                 showLocationButton={true}
                 showPollsButton={true}
-                showStickersButton={true}
             />,
             false,
         );
 
-        expect(getButtonLabels()).toEqual(["Emoji", "Attachment", "More options"]);
+        expect(getButtonLabels()).toEqual(["Emoji", "Send sticker", "Attachment", "More options"]);
     });
 
     it("Renders other buttons in menu in wide mode", async () => {
@@ -84,7 +81,6 @@ describe("MessageComposerButtons", () => {
                 isMenuOpen={true}
                 showLocationButton={true}
                 showPollsButton={true}
-                showStickersButton={true}
             />,
             false,
         );
@@ -94,9 +90,10 @@ describe("MessageComposerButtons", () => {
         await waitFor(() => {
             expect(getButtonLabels()).toEqual([
                 "Emoji",
+                "Send sticker",
                 "Attachment",
                 "More options",
-                ["Sticker", "Voice Message", "Poll", "Location"],
+                ["Voice Message", "Poll", "Location"],
             ]);
         });
     });
@@ -108,7 +105,6 @@ describe("MessageComposerButtons", () => {
                 isMenuOpen={false}
                 showLocationButton={true}
                 showPollsButton={true}
-                showStickersButton={true}
             />,
             true,
         );
@@ -123,12 +119,11 @@ describe("MessageComposerButtons", () => {
                 isMenuOpen={true}
                 showLocationButton={true}
                 showPollsButton={true}
-                showStickersButton={true}
             />,
             true,
         );
 
-        expect(getButtonLabels()).toEqual(["Emoji", "More options", ["Attachment", "Sticker", "Poll", "Location"]]);
+        expect(getButtonLabels()).toEqual(["Emoji", "More options", ["Attachment", "Poll", "Location"]]);
     });
 
     describe("polls button", () => {
@@ -139,12 +134,11 @@ describe("MessageComposerButtons", () => {
                     isMenuOpen={true}
                     showLocationButton={true}
                     showPollsButton={true}
-                    showStickersButton={true}
                 />,
                 true,
             );
 
-            expect(getButtonLabels()).toEqual(["Emoji", "More options", ["Attachment", "Sticker", "Poll", "Location"]]);
+            expect(getButtonLabels()).toEqual(["Emoji", "More options", ["Attachment", "Poll", "Location"]]);
         });
 
         it("should not render when asked not to", () => {
@@ -154,7 +148,6 @@ describe("MessageComposerButtons", () => {
                     isMenuOpen={true}
                     showLocationButton={true}
                     showPollsButton={false} // !! the change from the alternate test
-                    showStickersButton={true}
                 />,
                 true,
             );
@@ -164,8 +157,6 @@ describe("MessageComposerButtons", () => {
                 "More options",
                 [
                     "Attachment",
-                    "Sticker",
-                    // "Poll", // should be hidden
                     "Location",
                 ],
             ]);

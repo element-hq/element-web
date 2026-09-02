@@ -20,7 +20,6 @@ import {
     MicOnIcon,
     OverflowHorizontalIcon,
     PollsIcon,
-    StickerIcon,
     TextFormattingIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { UploadButton, useViewModel } from "@element-hq/web-shared-components";
@@ -44,19 +43,17 @@ import { useSettingValue } from "../../../hooks/useSettings";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 import { useRoomUploadViewModel } from "../../../viewmodels/room/RoomUploadViewModel.tsx";
+import { ImagePacksButton } from "./ImagePacksButton";
 
 interface IProps {
     addEmoji: (emoji: string) => boolean;
     haveRecording: boolean;
     isMenuOpen: boolean;
-    isStickerPickerOpen: boolean;
     menuPosition?: MenuProps;
     onRecordStartEndClick: () => void;
     relation?: IEventRelation;
-    setStickerPickerOpen: (isStickerPickerOpen: boolean) => void;
     showLocationButton: boolean;
     showPollsButton: boolean;
-    showStickersButton: boolean;
     toggleButtonMenu: () => void;
     isRichTextEnabled: boolean;
     onComposerModeClick: () => void;
@@ -87,6 +84,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             ) : (
                 emojiButton(props)
             ),
+            <ImagePacksButton key="image_packs" menuPosition={props.menuPosition} />,
         ];
         moreButtons = [
             // This a textual list of buttons, so we can't use the UploadButton here.
@@ -98,7 +96,6 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
                     key={type}
                 />
             )),
-            showStickersButton(props),
             voiceRecordingButton(props, narrow),
             props.showPollsButton ? pollButton(room, props.relation) : null,
             showLocationButton(props, room, matrixClient),
@@ -114,10 +111,10 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             ) : (
                 emojiButton(props)
             ),
+            <ImagePacksButton key="image_packs" menuPosition={props.menuPosition} />,
             <UploadButton key="upload" vm={roomUploadVM} />,
         ];
         moreButtons = [
-            showStickersButton(props),
             voiceRecordingButton(props, narrow),
             props.showPollsButton ? pollButton(room, props.relation) : null,
             showLocationButton(props, room, matrixClient),
@@ -170,20 +167,6 @@ function emojiButton(props: IProps): ReactElement {
             className="mx_MessageComposer_button"
         />
     );
-}
-
-function showStickersButton(props: IProps): ReactElement | null {
-    return props.showStickersButton ? (
-        <CollapsibleButton
-            id="stickersButton"
-            key="controls_stickers"
-            className="mx_MessageComposer_button"
-            onClick={() => props.setStickerPickerOpen(!props.isStickerPickerOpen)}
-            title={props.isStickerPickerOpen ? _t("composer|close_sticker_picker") : _t("common|sticker")}
-        >
-            <StickerIcon />
-        </CollapsibleButton>
-    ) : null;
 }
 
 function voiceRecordingButton(props: IProps, narrow: boolean): ReactElement | null {
