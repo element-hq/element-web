@@ -73,8 +73,11 @@ const audioEntry: MediaPreviewGroupEntry = {
     buttons,
 };
 
-const withEntries = (entries: Array<MediaPreviewGroupEntry>): { vm: MockViewModel<MediaPreviewGroupSnapshot> } => ({
-    vm: new MockViewModel<MediaPreviewGroupSnapshot>({ entries }),
+const withEntries = (
+    entries: Array<MediaPreviewGroupEntry>,
+    collapse?: MediaPreviewGroupSnapshot["collapse"],
+): { vm: MockViewModel<MediaPreviewGroupSnapshot> } => ({
+    vm: new MockViewModel<MediaPreviewGroupSnapshot>({ entries, collapse }),
 });
 
 const meta = {
@@ -120,15 +123,13 @@ export const SingleAudio: Story = {
 };
 
 export const Collapsed: Story = {
-    args: {
-        ...withEntries([textEntry, imageEntry]),
-        collapse: { collapsed: true, hiddenCount: 3, onToggle: () => ({}) },
-    },
+    args: withEntries([textEntry, imageEntry], { collapsed: true, hiddenCount: 3, onToggle: () => ({}) }),
 };
 
 export const Expanded: Story = {
-    args: {
-        ...withEntries([textEntry, imageEntry, videoEntry, audioEntry]),
-        collapse: { collapsed: false, hiddenCount: 0, onToggle: () => ({}) },
-    },
+    args: withEntries([textEntry, imageEntry, videoEntry, audioEntry], {
+        collapsed: false,
+        hiddenCount: 0,
+        onToggle: () => ({}),
+    }),
 };

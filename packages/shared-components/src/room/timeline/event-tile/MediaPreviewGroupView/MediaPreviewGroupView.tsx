@@ -135,12 +135,6 @@ export type MediaPreviewGroupEntry =
     | MediaPreviewGroupAudioEntry
     | MediaPreviewGroupTextEntry;
 
-export interface MediaPreviewGroupSnapshot {
-    entries: Array<MediaPreviewGroupEntry>;
-}
-
-export type MediaPreviewGroupViewModel = ViewModel<MediaPreviewGroupSnapshot>;
-
 export interface MediaPreviewGroupCollapse {
     /** Whether the group is currently collapsed, i.e. only showing a subset of the entries. */
     collapsed: boolean;
@@ -150,13 +144,22 @@ export interface MediaPreviewGroupCollapse {
     onToggle: () => void;
 }
 
-export interface MediaPreviewGroupPreviewProps {
-    vm: MediaPreviewGroupViewModel;
+export interface MediaPreviewGroupSnapshot {
     /**
-     * When set, a toggle is rendered underneath the entries to collapse or expand the group.
-     * Omit for groups that are never collapsible, e.g. a single attachment.
+     * tiles in the media preview group
+     */
+    entries: Array<MediaPreviewGroupEntry>;
+    /**
+     * collapse settings for the VM
+     * omit is not collapsible
      */
     collapse?: MediaPreviewGroupCollapse;
+}
+
+export type MediaPreviewGroupViewModel = ViewModel<MediaPreviewGroupSnapshot>;
+
+export interface MediaPreviewGroupPreviewProps {
+    vm: MediaPreviewGroupViewModel;
 }
 
 function CollapseToggle({ collapsed, hiddenCount, onToggle }: MediaPreviewGroupCollapse): JSX.Element {
@@ -169,8 +172,8 @@ function CollapseToggle({ collapsed, hiddenCount, onToggle }: MediaPreviewGroupC
     );
 }
 
-export function MediaPreviewGroupPreview({ vm, collapse }: MediaPreviewGroupPreviewProps): JSX.Element | null {
-    const { entries } = useViewModel(vm);
+export function MediaPreviewGroupPreview({ vm }: MediaPreviewGroupPreviewProps): JSX.Element | null {
+    const { entries, collapse } = useViewModel(vm);
 
     if (entries.length === 0) return null;
 

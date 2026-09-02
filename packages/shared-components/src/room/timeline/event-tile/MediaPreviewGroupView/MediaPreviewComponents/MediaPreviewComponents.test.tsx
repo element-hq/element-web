@@ -41,34 +41,40 @@ function waitForMedia(container: HTMLElement, selector: "video" | "audio"): Prom
 }
 
 describe("MediaPreviewComponents", () => {
-    describe("Header", () => {
+    it("renders the header children", () => {
+        render(<Header>annual-report.pdf</Header>);
+
+        expect(screen.getByText("annual-report.pdf")).toBeInTheDocument();
+    });
+
+    it("renders the body", () => {
+        render(<Body>2.3 MB</Body>);
+
+        expect(screen.getByText("2.3 MB")).toBeInTheDocument();
+    });
+
+    describe("TextContent", () => {
         it("renders plain text when there is no headerUrl", () => {
-            render(<Header header="annual-report.pdf" />);
+            render(<TextContent header="annual-report.pdf" body="2.3 MB" />);
 
             expect(screen.getByText("annual-report.pdf")).toBeInTheDocument();
             expect(screen.queryByRole("link")).not.toBeInTheDocument();
         });
 
-        it("renders a link opening in a new tab when there is a headerUrl", () => {
-            render(<Header header="example.com" headerUrl="https://example.com/page" />);
+        it("renders the header as a link opening in a new tab when there is a headerUrl", () => {
+            render(<TextContent header="example.com" headerUrl="https://example.com/page" body="A page" />);
 
             const link = screen.getByRole("link", { name: "example.com" });
             expect(link).toHaveAttribute("href", "https://example.com/page");
             expect(link).toHaveAttribute("target", "_blank");
         });
-    });
 
-    it("renders the body", () => {
-        render(<Body body="2.3 MB" />);
+        it("renders the header and body together as text content", () => {
+            render(<TextContent header="example.com" headerUrl="https://example.com/page" body="A page" />);
 
-        expect(screen.getByText("2.3 MB")).toBeInTheDocument();
-    });
-
-    it("renders the header and body together as text content", () => {
-        render(<TextContent header="example.com" headerUrl="https://example.com/page" body="A page" />);
-
-        expect(screen.getByRole("link", { name: "example.com" })).toBeInTheDocument();
-        expect(screen.getByText("A page")).toBeInTheDocument();
+            expect(screen.getByRole("link", { name: "example.com" })).toBeInTheDocument();
+            expect(screen.getByText("A page")).toBeInTheDocument();
+        });
     });
 
     it("renders its children in a left group", () => {
