@@ -32,6 +32,7 @@ import {
     ambiguousLinkTooltipRenderer,
     codeBlockRenderer,
     spoilerRenderer,
+    customEmoteRenderer,
 } from "../../renderer";
 import { filterBoolean } from "../../utils/arrays";
 import SettingsStore from "../../settings/SettingsStore";
@@ -65,6 +66,11 @@ export interface ReplacerOptions {
      * @default false
      */
     renderTooltipsForAmbiguousLinks?: boolean;
+    /**
+     * Whether inbound custom emotes should open their information card.
+     * @default false
+     */
+    renderCustomEmotes?: boolean;
 }
 
 /**
@@ -157,6 +163,7 @@ const createReplacer = (props: EventContentBodyViewModelProps): Replacer => {
             : undefined,
         options.renderSpoilers ? spoilerRenderer : undefined,
         options.renderCodeBlocks ? codeBlockRenderer : undefined,
+        options.renderCustomEmotes && props.mediaIsVisible !== false ? customEmoteRenderer : undefined,
     ]);
 
     return combineRenderers(...replacers)({
@@ -230,6 +237,7 @@ export class EventContentBodyViewModel
             renderSpoilers: props.renderSpoilers ?? false,
             renderCodeBlocks: props.renderCodeBlocks ?? false,
             renderTooltipsForAmbiguousLinks: props.renderTooltipsForAmbiguousLinks ?? false,
+            renderCustomEmotes: props.renderCustomEmotes ?? false,
             enableBigEmoji: props.enableBigEmoji ?? SettingsStore.getValue("TextualBody.enableBigEmoji"),
             shouldShowPillAvatar: props.shouldShowPillAvatar ?? SettingsStore.getValue("Pill.shouldShowPillAvatar"),
         };

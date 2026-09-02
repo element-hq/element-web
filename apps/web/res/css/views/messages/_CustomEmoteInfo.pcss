@@ -1,0 +1,148 @@
+.mx_CustomEmoteInfo_trigger {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    color: inherit;
+    cursor: pointer;
+    display: inline;
+    font: inherit;
+    line-height: inherit;
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
+}
+
+.mx_CustomEmoteInfo_trigger > img {
+    font: inherit;
+    line-height: inherit;
+    vertical-align: middle;
+}
+
+.mx_ContextualMenu.mx_CustomEmoteInfo {
+    box-sizing: border-box;
+    max-width: min(360px, calc(100vw - 20px));
+    min-width: min(220px, calc(100vw - 20px));
+    overflow: hidden;
+    padding: 12px;
+    width: min(320px, calc(100vw - 20px));
+}
+
+.mx_CustomEmoteInfo_content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 100%;
+}
+
+.mx_CustomEmoteInfo_focusTarget {
+    height: 0;
+    outline: none;
+    width: 0;
+}
+
+.mx_CustomEmoteInfo_preview {
+    align-self: center;
+    object-fit: contain;
+}
+
+.mx_CustomEmoteInfo_shortcode {
+    font-weight: 600;
+    overflow-wrap: anywhere;
+    text-align: center;
+}
+
+.mx_CustomEmoteInfo_description,
+.mx_CustomEmoteInfo_attribution,
+.mx_CustomEmoteInfo_packName {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mx_CustomEmoteInfo_pack {
+    align-items: center;
+    display: flex;
+    gap: 8px;
+    min-width: 0;
+}
+
+.mx_CustomEmoteInfo_packAvatar,
+.mx_CustomEmoteInfo_packAvatarPlaceholder {
+    border-radius: 50%;
+    flex: 0 0 32px;
+    height: 32px;
+    object-fit: cover;
+    width: 32px;
+}
+
+.mx_CustomEmoteInfo_packAvatarPlaceholder {
+    align-items: center;
+    background: var(--cpd-color-bg-subtle-primary);
+    display: flex;
+    justify-content: center;
+}
+
+.mx_CustomEmoteInfo_packDetails {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.mx_CustomEmoteInfo_packScope,
+.mx_CustomEmoteInfo_status,
+.mx_CustomEmoteInfo_unknown,
+.mx_CustomEmoteInfo_error {
+    color: $secondary-content;
+    font-size: 0.9em;
+}
+
+.mx_CustomEmoteInfo_error {
+    color: $alert;
+}
+
+.mx_CustomEmoteInfo_personalPack {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.mx_CustomEmoteInfo_shortcodeLabel {
+    font-size: 0.9em;
+}
+
+.mx_CustomEmoteInfo_actions {
+    display: flex;
+    gap: 8px;
+}
+
+.mx_CustomEmoteInfo_actions button,
+.mx_CustomEmoteInfo_done,
+.mx_CustomEmoteInfo_content > button {
+    cursor: pointer;
+}
+
+.mx_CustomEmoteInfo_actions button:disabled {
+    cursor: default;
+}
+
+.mx_ImagePacksUserSettingsTab_list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.mx_ImagePacksUserSettingsTab_item {
+    align-items: center;
+    display: flex;
+    gap: 8px;
+
+    img {
+        height: 32px;
+        object-fit: contain;
+        width: 32px;
+    }
+
+    button {
+        margin-inline-start: auto;
+    }
+}

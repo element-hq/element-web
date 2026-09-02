@@ -34,7 +34,8 @@ export const ROOM_IMAGE_PACK_ORDER_EVENT_TYPE = "org.element.image_pack_order";
 export const LEGACY_ROOM_IMAGE_PACK_ORDER_STATE_KEY = "_order";
 
 const MAX_CANONICAL_SPACE_DEPTH = 20;
-const SHORTCODE_PATTERN = "[A-Za-z0-9_-]{1,100}";
+export const SHORTCODE_PATTERN = "[A-Za-z0-9_-]{1,100}";
+export const SHORTCODE_REGEX = new RegExp(`^${SHORTCODE_PATTERN}$`);
 const CUSTOM_EMOTE_TOKEN = new RegExp(`:(${SHORTCODE_PATTERN})(?:/(${SHORTCODE_PATTERN}))?:`, "g");
 
 interface AccountDataTransactionState {
@@ -847,6 +848,20 @@ function readRoomsContent(content: unknown): Record<string, Record<string, objec
 }
 
 /**
+ * Whether the given pack is already referenced for global use in either the
+ * stable or legacy account-data keys.
+ */
+export function isGlobalPackEnabled(client: MatrixClient, reference: GlobalPackReference): boolean {
+    for (const eventType of [IMAGE_PACK_ROOMS_EVENT_TYPE, LEGACY_IMAGE_PACK_ROOMS_EVENT_TYPE]) {
+        const content = client.getAccountData(eventType as never)?.getContent();
+        if (!isRecord(content) || !isRecord(content.rooms)) continue;
+        const packs = content.rooms[reference.roomId];
+        if (isRecord(packs) && reference.stateKey in packs) return true;
+    }
+    return false;
+}
+
+/**
  * Add (or update) a reference from the user's `m.image_pack.rooms` account
  * data so the referenced pack becomes globally available. Writes the
  * stable key and mirrors into the legacy `im.ponies.emote_rooms` key for
@@ -962,6 +977,8 @@ export async function deleteUserImagePack(client: MatrixClient): Promise<void> {
  * Add or update a single emote in the user's personal image pack.
  */
 export async function upsertUserPackEmote(client: MatrixClient, emote: EmoteEdit): Promise<void> {
+    if (!SHORTCODE_REGEX.test(emote.shortcode)) throw new Error("Invalid custom emote shortcode");
+    if (!emote.url.startsWith("mxc://")) throw new Error("Invalid custom emote media URL");
     await runAccountDataTransaction(client, async (transaction) => {
         await transaction.set(LEGACY_USER_IMAGE_PACK_EVENT_TYPE, (existingContent) => {
             const hasPack =
@@ -973,6 +990,12 @@ export async function upsertUserPackEmote(client: MatrixClient, emote: EmoteEdit
             );
         });
     });
+}
+
+/** Check the synchronized personal pack before allowing a shortcode collision. */
+export function hasUserPackEmote(client: MatrixClient, shortcode: string): boolean {
+    const content = client.getAccountData(LEGACY_USER_IMAGE_PACK_EVENT_TYPE as never)?.getContent();
+    return Boolean(readUserPackContent(content).images[shortcode]);
 }
 
 /**

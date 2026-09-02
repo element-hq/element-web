@@ -503,6 +503,7 @@ export function renderReplyTile(
         getRelationsForEvent,
         isSeeingThroughMessageHiddenForModeration,
         permalinkCreator,
+        inhibitInteraction,
     } = props;
 
     return ModuleApi.instance.customComponents.renderMessage(
@@ -522,6 +523,7 @@ export function renderReplyTile(
                 getRelationsForEvent,
                 isSeeingThroughMessageHiddenForModeration,
                 permalinkCreator,
+                inhibitInteraction,
                 showHiddenEvents,
             }),
     );

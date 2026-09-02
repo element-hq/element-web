@@ -21,6 +21,7 @@ import {
     ambiguousLinkTooltipRenderer,
     spoilerRenderer,
     codeBlockRenderer,
+    customEmoteRenderer,
 } from "../../renderer";
 import PlatformPeg from "../../PlatformPeg";
 import type BasePlatform from "../../BasePlatform";
@@ -38,6 +39,7 @@ vi.mock("../../renderer", () => ({
     ambiguousLinkTooltipRenderer: vi.fn(),
     codeBlockRenderer: vi.fn(),
     spoilerRenderer: vi.fn(),
+    customEmoteRenderer: { img: vi.fn() },
 }));
 
 vi.mock("../../PlatformPeg", () => ({
@@ -52,6 +54,7 @@ vi.mock("../../PlatformPeg", () => ({
 const mockedBodyToNode = vi.mocked(bodyToNode);
 const mockedCombineRenderers = vi.mocked(combineRenderers);
 const mockedPlatformPeg = vi.mocked(PlatformPeg);
+const mockedCustomEmoteRenderer = vi.mocked(customEmoteRenderer);
 
 describe("EventContentBodyViewModel", () => {
     const defaultContent = {
@@ -64,6 +67,7 @@ describe("EventContentBodyViewModel", () => {
         content: defaultContent,
         linkify: false,
         as: "span",
+        renderCustomEmotes: false,
         ...overrides,
     });
 
@@ -103,6 +107,24 @@ describe("EventContentBodyViewModel", () => {
         expect(snapshot.body).toBe("Hello world");
         expect(snapshot.replacer).toBe(replacer);
         expect(snapshot.className).toContain("mx_EventTile_body");
+    });
+
+    it("only adds the custom-emote renderer when interaction and media are enabled", () => {
+        const replacer = vi.fn();
+        mockedCombineRenderers.mockReturnValue(() => replacer);
+        mockedBodyToNode.mockReturnValue({
+            strippedBody: "Hello world",
+            formattedBody: undefined,
+            emojiBodyElements: undefined,
+            className: "mx_EventTile_body",
+        });
+
+        new EventContentBodyViewModel(defaultProps({ renderCustomEmotes: true, mediaIsVisible: true }));
+        expect(mockedCombineRenderers).toHaveBeenCalledWith(mockedCustomEmoteRenderer);
+
+        mockedCombineRenderers.mockClear();
+        new EventContentBodyViewModel(defaultProps({ renderCustomEmotes: true, mediaIsVisible: false }));
+        expect(mockedCombineRenderers).toHaveBeenCalledWith();
     });
 
     it("initializes setting-backed options from SettingsStore when omitted", () => {

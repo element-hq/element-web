@@ -19,7 +19,7 @@ import {
 } from "@element-hq/web-shared-components";
 
 import { type IBodyProps } from "./IBodyProps";
-import RoomContext from "../../../contexts/RoomContext";
+import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useMediaVisible } from "../../../hooks/useMediaVisible";
 import { TextualBodyViewModel } from "../../../viewmodels/room/timeline/event-tile/body/TextualBodyViewModel";
@@ -59,6 +59,12 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
     const [mediaVisible] = useMediaVisible(props.mxEvent);
     const content = props.mxEvent.getContent();
     const isEmote = content.msgtype === MsgType.Emote;
+    const renderCustomEmotes =
+        !props.inhibitInteraction &&
+        !props.forExport &&
+        mediaVisible !== false &&
+        (roomContext.timelineRenderingType === TimelineRenderingType.Room ||
+            roomContext.timelineRenderingType === TimelineRenderingType.Thread);
     const willHaveWrapper = !!props.replacingEventId || !!props.isSeeingThroughMessageHiddenForModeration || isEmote;
     const stripReply = !props.mxEvent.replacingEvent() && !!getParentEventId(props.mxEvent);
     const contentRef = useRef<TextualBodyContentElement>(null);
@@ -91,6 +97,8 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
                 renderMentionPills: true,
                 renderCodeBlocks: true,
                 renderSpoilers: true,
+                renderCustomEmotes,
+                mediaIsVisible: mediaVisible,
                 client: roomContext.room?.client ?? client ?? null,
             }),
     );

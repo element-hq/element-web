@@ -9,4 +9,5 @@ export { ambiguousLinkTooltipRenderer } from "./link-tooltip";
 export { keywordPillRenderer, mentionPillRenderer } from "./pill";
 export { spoilerRenderer } from "./spoiler";
 export { codeBlockRenderer } from "./code-block";
+export { customEmoteRenderer } from "./emote";
 export { combineRenderers, type RendererMap, type Replacer } from "./utils";

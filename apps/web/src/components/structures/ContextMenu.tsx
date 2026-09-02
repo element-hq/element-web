@@ -117,7 +117,7 @@ interface IState {
 // all options inside the menu should be of role=menuitem/menuitemcheckbox/menuitemradiobutton and have tabIndex={-1}
 // this will allow the ContextMenu to manage its own focus using arrow keys as per the ARIA guidelines.
 export default class ContextMenu extends React.PureComponent<React.PropsWithChildren<IProps>, IState> {
-    private readonly initialFocus: HTMLElement;
+    private readonly initialFocus: HTMLElement | null;
 
     public static defaultProps = {
         hasBackground: true,
@@ -130,7 +130,7 @@ export default class ContextMenu extends React.PureComponent<React.PropsWithChil
         this.state = {};
 
         // persist what had focus when we got initialized so we can return it after
-        this.initialFocus = document.activeElement as HTMLElement;
+        this.initialFocus = document.activeElement as HTMLElement | null;
     }
 
     public componentDidMount(): void {
@@ -140,7 +140,7 @@ export default class ContextMenu extends React.PureComponent<React.PropsWithChil
     public componentWillUnmount(): void {
         Modal.off(ModalManagerEvent.Opened, this.onModalOpen);
         // return focus to the thing which had it before us
-        this.initialFocus.focus();
+        if (this.initialFocus?.isConnected) this.initialFocus.focus();
     }
 
     private onModalOpen = (): void => {
