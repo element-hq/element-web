@@ -10,6 +10,17 @@ Please see LICENSE files in the repository root for full details.
 $left-gutter: 64px;
 
 .mx_EventTile {
+    /* Pass the application/theme-specific highlight colour to the shared
+       EventTileView interaction styles. */
+    --event-tile-state-highlight-background: $event-highlight-bg-color;
+    --event-tile-state-hover-background: $event-selected-color;
+    --event-tile-state-selected-background: $event-selected-color;
+    --event-tile-bubble-hover-background: $eventbubble-bg-hover;
+    --event-tile-bubble-other-background: $eventbubble-others-bg;
+    --event-tile-bubble-self-background: $eventbubble-self-bg;
+    --event-tile-preview-hover-background: $panels;
+    --event-tile-preview-highlight-background: $alert;
+    --event-tile-preview-separator-color: $quinary-content;
     --EventTile_group_line-spacing-block-start: 1px;
     --EventTile_group_line-spacing-block-end: 3px;
     --EventTile_group_line-spacing-inline-start: $left-gutter;

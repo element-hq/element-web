@@ -1,5 +1,5 @@
 /*
-Copyright 2026 Element Creations Ltd.
+Copyright 2025 Element Creations Ltd.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
@@ -9,102 +9,287 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render, screen, waitFor } from "test-utils-rtl";
-import { describe, expect, it, vi, beforeEach } from "vitest";
-import { type MatrixClient, type MatrixEvent, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
+import { describe, it, expect, vi } from "vitest";
+import { type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { mkEvent, stubClient, withClientContextRenderOptions } from "test-utils";
 
 import ReplyChain from "./ReplyChain";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { mkMessage, stubClient } from "../../../../test/test-utils";
 
-// The quoted message is drawn by ReplyTile, which pulls in the whole tile tree;
-// these tests are about which of the three states the chain chooses.
-vi.mock("../rooms/ReplyTile", () => ({
-    default: ({ mxEvent }: { mxEvent: MatrixEvent }) => <div data-testid="reply-tile">{mxEvent.getId()}</div>,
-}));
+describe("ReplyChain", () => {
+    it("should call setQuoteExpanded if chain is longer than 2 lines", async () => {
+        // Jest/JSDOM won't set clientHeight/scrollHeight for us so we have to synthesise it
+        vi.spyOn(HTMLElement.prototype, "clientHeight", "get").mockReturnValue(100);
+        vi.spyOn(HTMLElement.prototype, "scrollHeight", "get").mockReturnValue(150);
 
-// The header's user pill reaches for profile stores this test has no need of.
-vi.mock("./Pill", () => ({
-    Pill: ({ url }: { url: string }) => <span data-testid="user-pill">{url}</span>,
-}));
+        const cli = stubClient();
+        const { room_id: roomId } = await cli.createRoom({});
+        const room = cli.getRoom(roomId)!;
 
-describe("<ReplyChain />", () => {
-    const ROOM_ID = "!room:example.org";
-    const USER_ID = "@alice:example.org";
-    let client: MatrixClient;
-    let room: Room;
+        const targetEv = mkEvent({
+            event: true,
+            type: "m.room.message",
+            user: cli.getUserId()!,
+            room: roomId,
+            id: "$event1",
+            content: {
+                body: "A\nB\nC",
+                msgtype: "m.text",
+            },
+        });
+        vi.spyOn(room, "findEventById").mockReturnValue(targetEv);
 
-    /** A message that replies to `target`. */
-    const mkReplyTo = (id: string, targetId: string): MatrixEvent => {
-        const event = mkMessage({ room: ROOM_ID, user: USER_ID, msg: "a reply", event: true, id });
-        event.getContent()["m.relates_to"] = { "m.in_reply_to": { event_id: targetId } };
-        return event;
-    };
+        const parentEv = mkEvent({
+            event: true,
+            type: "m.room.message",
+            user: cli.getUserId()!,
+            room: roomId,
+            id: "$event2",
+            content: {
+                "body": "Reply",
+                "msgtype": "m.text",
+                "m.relates_to": {
+                    "m.in_reply_to": {
+                        event_id: "$event1",
+                    },
+                },
+            },
+        });
+        const setQuoteExpanded = vi.fn();
+        const { asFragment } = render(
+            <ReplyChain parentEv={parentEv} setQuoteExpanded={setQuoteExpanded} />,
+            withClientContextRenderOptions(cli),
+        );
 
-    const renderChain = (parentEv: MatrixEvent, compactPreview?: boolean) =>
-        render(<ReplyChain parentEv={parentEv} setQuoteExpanded={vi.fn()} compactPreview={compactPreview} />);
-
-    beforeEach(() => {
-        client = stubClient();
-        room = new Room(ROOM_ID, client, USER_ID, { pendingEventOrdering: PendingEventOrdering.Detached });
-        vi.spyOn(client, "getRoom").mockReturnValue(room);
-        vi.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(client);
+        await waitFor(() => expect(setQuoteExpanded).toHaveBeenCalledWith(false));
+        expect(asFragment()).toMatchSnapshot();
     });
 
-    it("shows the quoted message straight away when the room already has it", () => {
-        const quoted = mkMessage({ room: ROOM_ID, user: USER_ID, msg: "quoted", event: true, id: "$quoted" });
-        room.getUnfilteredTimelineSet().addLiveEvent(quoted, { addToState: false });
-        const reply = mkReplyTo("$reply", "$quoted");
+    it("keeps long edited reply quotes collapsible", async () => {
+        // Jest/JSDOM won't set clientHeight/scrollHeight for us so we have to synthesise it
+        vi.spyOn(HTMLElement.prototype, "clientHeight", "get").mockReturnValue(100);
+        vi.spyOn(HTMLElement.prototype, "scrollHeight", "get").mockReturnValue(150);
 
-        renderChain(reply, true);
+        const cli = stubClient();
+        const { room_id: roomId } = await cli.createRoom({});
+        const room = cli.getRoom(roomId)!;
+        const longBody = Array.from({ length: 80 }, (_, index) => `word${index}`).join(" ");
+        const editedLongBody = `${longBody} edited`;
 
-        // Present on the very first render, with no loading state in between.
-        expect(screen.getByTestId("reply-tile")).toHaveTextContent("$quoted");
-        expect(document.querySelector(".mx_ReplyChain_placeholder")).toBeNull();
+        const targetEv = mkEvent({
+            event: true,
+            type: "m.room.message",
+            user: cli.getUserId()!,
+            room: roomId,
+            id: "$event1",
+            content: {
+                body: longBody,
+                msgtype: "m.text",
+            },
+        });
+        const editEv = mkEvent({
+            event: true,
+            type: "m.room.message",
+            user: cli.getUserId()!,
+            room: roomId,
+            id: "$event1-edit",
+            content: {
+                "body": `* ${editedLongBody}`,
+                "msgtype": "m.text",
+                "m.new_content": {
+                    body: editedLongBody,
+                    msgtype: "m.text",
+                },
+            },
+        });
+        vi.spyOn(targetEv, "replacingEventDate").mockReturnValue(new Date(1993, 7, 3));
+        targetEv.makeReplaced(editEv);
+        vi.spyOn(room, "findEventById").mockReturnValue(targetEv);
+
+        const parentEv = mkEvent({
+            event: true,
+            type: "m.room.message",
+            user: cli.getUserId()!,
+            room: roomId,
+            id: "$event2",
+            content: {
+                "body": "Reply",
+                "msgtype": "m.text",
+                "m.relates_to": {
+                    "m.in_reply_to": {
+                        event_id: "$event1",
+                    },
+                },
+            },
+        });
+        const setQuoteExpanded = vi.fn();
+        const { container } = render(
+            <ReplyChain parentEv={parentEv} setQuoteExpanded={setQuoteExpanded} />,
+            withClientContextRenderOptions(cli),
+        );
+
+        await waitFor(() => expect(setQuoteExpanded).toHaveBeenCalledWith(false));
+        await waitFor(() => expect(container).toHaveTextContent(editedLongBody));
+
+        const replyTile = container.querySelector(".mx_ReplyTile");
+        expect(replyTile).not.toBeNull();
+        const annotationWrapper = replyTile!.querySelector("[data-textual-body-annotation-wrapper]");
+        expect(annotationWrapper).not.toBeNull();
+        expect(annotationWrapper).toContainElement(replyTile!.querySelector(".mx_EventTile_body"));
+        expect(annotationWrapper).toContainElement(replyTile!.querySelector("[data-textual-body-edited-marker]"));
     });
 
-    it("holds a fixed-height skeleton while the quoted message is fetched", () => {
-        const reply = mkReplyTo("$reply", "$missing");
-        // Never resolves, so the chain stays in its loading state.
-        vi.spyOn(client, "getEventTimeline").mockReturnValue(new Promise(() => {}) as never);
+    describe("compact preview", () => {
+        /** A message replying to `targetId`, with `target` resolvable in the room. */
+        const setUp = async (target: MatrixEvent | null): Promise<{ cli: MatrixClient; parentEv: MatrixEvent }> => {
+            const cli = stubClient();
+            const { room_id: roomId } = await cli.createRoom({});
+            const room = cli.getRoom(roomId)!;
+            vi.spyOn(room, "findEventById").mockImplementation((id) =>
+                target && id === target.getId() ? target : undefined,
+            );
 
-        renderChain(reply, true);
+            const parentEv = mkEvent({
+                event: true,
+                type: "m.room.message",
+                user: cli.getUserId()!,
+                room: roomId,
+                id: "$reply",
+                content: {
+                    "body": "Reply",
+                    "msgtype": "m.text",
+                    "m.relates_to": { "m.in_reply_to": { event_id: "$quoted" } },
+                },
+            });
+            return { cli, parentEv };
+        };
 
-        const placeholder = document.querySelector(".mx_ReplyChain_placeholder");
-        expect(placeholder).not.toBeNull();
-        // Two rows: one standing in for the sender, one for the message.
-        expect(placeholder!.querySelectorAll(".mx_ReplyChain_placeholderRow")).toHaveLength(2);
-    });
+        const mkQuoted = (cli: MatrixClient, roomId: string): MatrixEvent =>
+            mkEvent({
+                event: true,
+                type: "m.room.message",
+                user: cli.getUserId()!,
+                room: roomId,
+                id: "$quoted",
+                content: { body: "Quoted", msgtype: "m.text" },
+            });
 
-    it("uses a spinner rather than the skeleton outside the new timeline", () => {
-        const reply = mkReplyTo("$reply", "$missing");
-        vi.spyOn(client, "getEventTimeline").mockReturnValue(new Promise(() => {}) as never);
+        it("shows the quoted message immediately when the room already has it", async () => {
+            const cli = stubClient();
+            const { room_id: roomId } = await cli.createRoom({});
+            const room = cli.getRoom(roomId)!;
+            const quoted = mkQuoted(cli, roomId);
+            vi.spyOn(room, "findEventById").mockReturnValue(quoted);
+            const parentEv = mkEvent({
+                event: true,
+                type: "m.room.message",
+                user: cli.getUserId()!,
+                room: roomId,
+                id: "$reply",
+                content: {
+                    "body": "Reply",
+                    "msgtype": "m.text",
+                    "m.relates_to": { "m.in_reply_to": { event_id: "$quoted" } },
+                },
+            });
 
-        renderChain(reply);
+            const { container } = render(
+                <ReplyChain parentEv={parentEv} setQuoteExpanded={vi.fn()} compactPreview={true} />,
+                withClientContextRenderOptions(cli),
+            );
 
-        expect(document.querySelector(".mx_ReplyChain_placeholder")).toBeNull();
-        expect(document.querySelector(".mx_Spinner")).not.toBeNull();
-    });
+            // Drawn on the first render, with no loading state in between.
+            expect(container.querySelector(".mx_ReplyTile")).not.toBeNull();
+            expect(container.querySelector(".mx_ReplyChain_placeholder")).toBeNull();
+        });
 
-    it("reports an error when the quoted message cannot be fetched", async () => {
-        const reply = mkReplyTo("$reply", "$missing");
-        vi.spyOn(client, "getEventTimeline").mockRejectedValue(new Error("no such event"));
+        it("holds a fixed-height skeleton while the quoted message is fetched", async () => {
+            const { cli, parentEv } = await setUp(null);
+            // Never settles, so the chain stays in its loading state.
+            vi.spyOn(cli, "getEventTimeline").mockReturnValue(new Promise(() => {}) as never);
 
-        renderChain(reply, true);
+            const { container } = render(
+                <ReplyChain parentEv={parentEv} setQuoteExpanded={vi.fn()} compactPreview={true} />,
+                withClientContextRenderOptions(cli),
+            );
 
-        await waitFor(() => expect(document.querySelector(".mx_ReplyChain_error")).not.toBeNull());
-    });
+            const placeholder = container.querySelector(".mx_ReplyChain_placeholder");
+            expect(placeholder).not.toBeNull();
+            // Two rows: one standing in for the sender, one for the message.
+            expect(placeholder!.querySelectorAll(".mx_ReplyChain_placeholderRow")).toHaveLength(2);
+        });
 
-    it("fetches the header event so nested replies still show who was replied to", async () => {
-        // The quoted message is itself a reply, so a header above the preview names
-        // whoever it answered.
-        const grandparent = mkMessage({ room: ROOM_ID, user: USER_ID, msg: "first", event: true, id: "$grandparent" });
-        const quoted = mkReplyTo("$quoted", "$grandparent");
-        room.getUnfilteredTimelineSet().addLiveEvent(grandparent, { addToState: false });
-        room.getUnfilteredTimelineSet().addLiveEvent(quoted, { addToState: false });
-        const reply = mkReplyTo("$reply", "$quoted");
+        it("uses a spinner rather than the skeleton outside the new timeline", async () => {
+            const { cli, parentEv } = await setUp(null);
+            vi.spyOn(cli, "getEventTimeline").mockReturnValue(new Promise(() => {}) as never);
 
-        renderChain(reply, true);
+            const { container } = render(
+                <ReplyChain parentEv={parentEv} setQuoteExpanded={vi.fn()} />,
+                withClientContextRenderOptions(cli),
+            );
 
-        await waitFor(() => expect(screen.getByText("In reply to", { exact: false })).toBeInTheDocument());
+            expect(container.querySelector(".mx_ReplyChain_placeholder")).toBeNull();
+            expect(container.querySelector(".mx_Spinner")).not.toBeNull();
+        });
+
+        it("reports an error when the quoted message cannot be fetched", async () => {
+            const { cli, parentEv } = await setUp(null);
+            vi.spyOn(cli, "getEventTimeline").mockRejectedValue(new Error("no such event"));
+
+            const { container } = render(
+                <ReplyChain parentEv={parentEv} setQuoteExpanded={vi.fn()} compactPreview={true} />,
+                withClientContextRenderOptions(cli),
+            );
+
+            await waitFor(() => expect(container.querySelector(".mx_ReplyChain_error")).not.toBeNull());
+        });
+
+        it("still shows who a nested reply was answering", async () => {
+            const cli = stubClient();
+            const { room_id: roomId } = await cli.createRoom({});
+            const room = cli.getRoom(roomId)!;
+            // The quoted message is itself a reply, so a header names whoever it answered.
+            const grandparent = mkEvent({
+                event: true,
+                type: "m.room.message",
+                user: cli.getUserId()!,
+                room: roomId,
+                id: "$grandparent",
+                content: { body: "First", msgtype: "m.text" },
+            });
+            const quoted = mkEvent({
+                event: true,
+                type: "m.room.message",
+                user: cli.getUserId()!,
+                room: roomId,
+                id: "$quoted",
+                content: {
+                    "body": "Quoted",
+                    "msgtype": "m.text",
+                    "m.relates_to": { "m.in_reply_to": { event_id: "$grandparent" } },
+                },
+            });
+            vi.spyOn(room, "findEventById").mockImplementation((id) =>
+                id === "$quoted" ? quoted : id === "$grandparent" ? grandparent : undefined,
+            );
+            const parentEv = mkEvent({
+                event: true,
+                type: "m.room.message",
+                user: cli.getUserId()!,
+                room: roomId,
+                id: "$reply",
+                content: {
+                    "body": "Reply",
+                    "msgtype": "m.text",
+                    "m.relates_to": { "m.in_reply_to": { event_id: "$quoted" } },
+                },
+            });
+
+            render(
+                <ReplyChain parentEv={parentEv} setQuoteExpanded={vi.fn()} compactPreview={true} />,
+                withClientContextRenderOptions(cli),
+            );
+
+            await waitFor(() => expect(screen.getByText("In reply to", { exact: false })).toBeInTheDocument());
+        });
     });
 });
