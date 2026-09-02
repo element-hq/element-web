@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE in the repository root for full details.
 */
 
-import React, { type JSX, useEffect, useState, ReactNode } from "react";
+import React, { type JSX, useEffect, useState, type ReactNode } from "react";
 import styles from "./MediaPreviewComponents.module.css";
 import classNames from "classnames";
 import { type ImageSize, type MediaPreviewEntryButton } from "../MediaPreviewGroupView";
@@ -44,11 +44,11 @@ export function TextContent({ header, headerUrl, body }: TextContentProps): JSX.
         <div className={styles.textContent}>
             <Header>
                 {headerUrl ? (
-                    header
-                ) : (
                     <a href={headerUrl} target="_blank">
                         {header}
                     </a>
+                ) : (
+                    header
                 )}
             </Header>
             <Body>{body}</Body>
