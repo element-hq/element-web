@@ -9,7 +9,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactNode } from "react";
 import { describe, it, expect, vi, beforeEach, type MockInstance } from "vitest";
-import { fireEvent, render, type RenderResult, waitFor } from "test-utils-rtl";
+import { render, type RenderResult, waitFor } from "test-utils-rtl";
+import userEvent from "@testing-library/user-event";
 import { EventType, getHttpUriForMxc, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { LinkedTextContext } from "@element-hq/web-shared-components";
 
@@ -279,7 +280,7 @@ describe("MBodyFactory", () => {
             const mediaEvent = mkEvent("m.file");
 
             const { getByRole } = renderPreview(mediaEvent, mkFileHelper("report.pdf", blob));
-            fireEvent.click(getByRole("button", { name: "Download" }));
+            await userEvent.click(getByRole("button", { name: "Download" }));
 
             await waitFor(() => expect(mockDownload).toHaveBeenCalledWith({ blob, name: "report.pdf" }));
         });
@@ -288,7 +289,7 @@ describe("MBodyFactory", () => {
             const mediaEvent = mkEvent("m.file");
 
             const { getByRole } = renderPreview(mediaEvent, mkFileHelper("", new Blob(["pdf"])));
-            fireEvent.click(getByRole("button", { name: "Download" }));
+            await userEvent.click(getByRole("button", { name: "Download" }));
 
             await waitFor(() =>
                 expect(mockDownload).toHaveBeenCalledWith(expect.objectContaining({ name: "Attachment" })),
