@@ -88,5 +88,20 @@ describe("roomContextDetails", () => {
             vi.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(parted);
             expect(roomContextDetails(dm)!.details).not.toBe(parted);
         });
+
+        describe("with only the room summary loaded", () => {
+            const lazyDm = new Room("!lazy:server", client, me);
+            lazyDm.setSummary({ "m.heroes": [partner], "m.joined_member_count": 2 });
+
+            it("should show the user ID of the partner the summary names", () => {
+                vi.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(partner);
+                expect(roomContextDetails(lazyDm)!.details).toBe(partner);
+            });
+
+            it("should not show the user ID of a partner the summary leaves out", () => {
+                vi.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(parted);
+                expect(roomContextDetails(lazyDm)!.details).not.toBe(parted);
+            });
+        });
     });
 });
