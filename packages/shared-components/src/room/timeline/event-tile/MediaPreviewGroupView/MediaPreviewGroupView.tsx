@@ -30,21 +30,45 @@ export type ImageSize = "full" | "banner" | "tallbanner";
 
 export type MediaPreviewGroupEntryImageContent = {
     style: "image";
+    /**
+     * url of the image
+     */
     image: string;
+    /**
+     * optional: what happens when the image is clicked
+     */
     imageOnClick?: () => void;
+    /**
+     * height of the image
+     */
     imageSize: ImageSize;
 };
 
 export type MediaPreviewGroupEntryVideoContent = {
     style: "video";
+    /**
+     * url of the video
+     */
     video: string;
+    /**
+     * optional: what happens when the video is clicked
+     */
     videoOnClick?: () => void;
+    /**
+     * height of the video
+     */
     videoSize: ImageSize;
 };
 
 export type MediaPreviewGroupEntryAudioContent = {
     style: "audio";
+    /**
+     * url of the audio
+     */
     audio: string;
+    /**
+     * optional: what happens when the audio is clicked
+     */
     audioOnClick?: () => void;
 };
 
@@ -61,8 +85,17 @@ export interface MediaPreviewEntryButton {
 }
 
 export interface MediaPreviewIcon {
+    /**
+     * left icon of the tile
+     */
     icon: JSX.Element;
+    /**
+     * what happens when the icon is clicked
+     */
     onClick?: () => void;
+    /**
+     * fill colour of the icon
+     */
     color: string;
 }
 
@@ -72,11 +105,23 @@ export type MediaPreviewGroupEntryBase = {
      * and unique within the group: the previewed link for URL previews, the event ID for attachments.
      */
     id: string;
+    /**
+     * header content
+     */
     header: string;
+    /**
+     * optional: header link url
+     */
     headerUrl?: string;
+    /**
+     * body content
+     */
     body: string;
 
-    buttons?: Array<MediaPreviewEntryButton>;
+    /**
+     * buttons to add to the right of the tile
+     */
+    buttons?: MediaPreviewEntryButton[];
 } & MediaPreviewIcon;
 
 export type MediaPreviewGroupTextEntry = MediaPreviewGroupEntryBase & MediaPreviewGroupEntryTextContent;
