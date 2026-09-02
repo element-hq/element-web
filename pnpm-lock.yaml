@@ -427,9 +427,15 @@ importers:
       electron-window-state:
         specifier: ^5.0.3
         version: 5.0.3
+      graphene-pk11:
+        specifier: ^2.3.6
+        version: 2.3.6
       minimist:
         specifier: ^1.2.6
         version: 1.2.8
+      pkcs11js:
+        specifier: ^2.1.6
+        version: 2.1.7
       png-to-ico:
         specifier: ^3.0.0
         version: 3.0.2
@@ -9394,6 +9400,10 @@ packages:
   graphemer@1.4.0:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
 
+  graphene-pk11@2.3.6:
+    resolution: {integrity: sha512-ol9Pf7XDv5UTjh1DPqtmQVZQqUheiXBzQVXQWRCLWq78+brKQB0Kum/s0NGEcsd/5NQQG8MFA2U/KNujEoC1fQ==}
+    engines: {node: '>=18.0.0'}
+
   hachure-fill@0.5.2:
     resolution: {integrity: sha512-3GKBOn+m2LX9iq+JC1064cSFprJY4jL1jCXTcpnfER5HYE2l/4EfWSGzkPa/ZDBmYI0ZOEj5VHV/eKnPGkHuOg==}
 
@@ -11309,6 +11319,10 @@ packages:
   pixelmatch@7.2.0:
     resolution: {integrity: sha512-xhcb4yHu9sM/G7foGzoLtXYcC0zHEaOXXjRKhGup0fw78Nf2Tkiapv4EQyMzrbcmQPsllAI7DbFY2UT7PlI9Pg==}
     hasBin: true
+
+  pkcs11js@2.1.7:
+    resolution: {integrity: sha512-hstUuhkFoISF8BmTVRtaZzbF09WjE39K3gzZzUrI8WtRu4cYl4gakkd06I4Kq36kR/mkwVw2T2y3kHXk6JvuHQ==}
+    engines: {node: '>=18.0.0'}
 
   pkg-dir@4.2.0:
     resolution: {integrity: sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==}
@@ -22762,6 +22776,11 @@ snapshots:
 
   graphemer@1.4.0: {}
 
+  graphene-pk11@2.3.6:
+    dependencies:
+      pkcs11js: 2.1.7
+      tslib: 2.8.1
+
   hachure-fill@0.5.2: {}
 
   handlebars@4.7.9:
@@ -25238,6 +25257,8 @@ snapshots:
   pixelmatch@7.2.0:
     dependencies:
       pngjs: 7.0.0
+
+  pkcs11js@2.1.7: {}
 
   pkg-dir@4.2.0:
     dependencies:
