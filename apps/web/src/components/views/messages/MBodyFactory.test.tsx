@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactNode } from "react";
 import { describe, it, expect, vi, beforeEach, type MockInstance } from "vitest";
-import { render, type RenderResult, waitFor } from "test-utils-rtl";
+import { render, screen, type RenderResult, waitFor } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
 import { EventType, getHttpUriForMxc, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { LinkedTextContext } from "@element-hq/web-shared-components";
@@ -129,7 +129,7 @@ describe("MBodyFactory", () => {
         it("renders download button for m.file in file rendering type", () => {
             const mediaEvent = mkEvent("m.file");
 
-            const { container, getByRole } = renderInRoomContext(
+            const { container } = renderInRoomContext(
                 renderMBody({
                     ...props,
                     mxEvent: mediaEvent,
@@ -139,7 +139,7 @@ describe("MBodyFactory", () => {
                 TimelineRenderingType.File,
             );
 
-            expect(getByRole("link", { name: "Download" })).toBeInTheDocument();
+            expect(screen.getByRole("link", { name: "Download" })).toBeInTheDocument();
             expect(container).toMatchSnapshot();
         });
 
@@ -161,7 +161,7 @@ describe("MBodyFactory", () => {
 
         it("falls back to file body for unsupported msgtypes", () => {
             const mediaEvent = mkEvent("m.audio");
-            const { getByRole } = renderInRoomContext(
+            renderInRoomContext(
                 renderMBody(
                     {
                         ...props,
@@ -172,7 +172,7 @@ describe("MBodyFactory", () => {
                 ),
                 TimelineRenderingType.File,
             );
-            expect(getByRole("button", { name: "test-file.txt" })).toBeInTheDocument();
+            expect(screen.getByRole("button", { name: "test-file.txt" })).toBeInTheDocument();
         });
     });
 
@@ -188,7 +188,7 @@ describe("MBodyFactory", () => {
             },
         });
 
-        const { container, getByRole, getByText } = renderInRoomContext(
+        const { container } = renderInRoomContext(
             renderMBody(
                 {
                     ...props,
@@ -201,10 +201,10 @@ describe("MBodyFactory", () => {
             TimelineRenderingType.File,
         );
 
-        expect(getByText("test-file.txt")).toBeInTheDocument();
+        expect(screen.getByText("test-file.txt")).toBeInTheDocument();
         // Only m.file gets the preview tile; everything else keeps the legacy file body,
         // where the filename itself is the button. See FileBodyFactory.
-        expect(getByRole("button", { name: "test-file.txt" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "test-file.txt" })).toBeInTheDocument();
         expect(container).toMatchSnapshot();
     });
 
@@ -222,7 +222,7 @@ describe("MBodyFactory", () => {
                 },
             });
 
-            const { container, getByRole, getByText } = renderInRoomContext(
+            const { container } = renderInRoomContext(
                 renderMBody(
                     {
                         ...props,
@@ -236,8 +236,8 @@ describe("MBodyFactory", () => {
             );
 
             // The preview tile leaves the filename as plain text and gives the download its own button.
-            expect(getByText("test-file.txt")).toBeInTheDocument();
-            expect(getByRole("button", { name: "Download" })).toBeInTheDocument();
+            expect(screen.getByText("test-file.txt")).toBeInTheDocument();
+            expect(screen.getByRole("button", { name: "Download" })).toBeInTheDocument();
             expect(container).toMatchSnapshot();
         },
     );
@@ -261,26 +261,26 @@ describe("MBodyFactory", () => {
         it("shows the file size as the tile body when the event declares one", () => {
             const mediaEvent = mkEvent("m.file", { info: { size: 2048, mimetype: "application/pdf" } });
 
-            const { getByText } = renderPreview(mediaEvent, mkFileHelper("report.pdf", new Blob(["pdf"])));
+            renderPreview(mediaEvent, mkFileHelper("report.pdf", new Blob(["pdf"])));
 
-            expect(getByText("report.pdf")).toBeInTheDocument();
-            expect(getByText("2 KB")).toBeInTheDocument();
+            expect(screen.getByText("report.pdf")).toBeInTheDocument();
+            expect(screen.getByText("2 KB")).toBeInTheDocument();
         });
 
         it("shows a placeholder as the tile body when the event declares no size", () => {
             const mediaEvent = mkEvent("m.file");
 
-            const { getByText } = renderPreview(mediaEvent, mkFileHelper("report.pdf", new Blob(["pdf"])));
+            renderPreview(mediaEvent, mkFileHelper("report.pdf", new Blob(["pdf"])));
 
-            expect(getByText("Size unknown")).toBeInTheDocument();
+            expect(screen.getByText("Size unknown")).toBeInTheDocument();
         });
 
         it("downloads the source blob under the file name when the download button is clicked", async () => {
             const blob = new Blob(["pdf"], { type: "application/pdf" });
             const mediaEvent = mkEvent("m.file");
 
-            const { getByRole } = renderPreview(mediaEvent, mkFileHelper("report.pdf", blob));
-            await userEvent.click(getByRole("button", { name: "Download" }));
+            renderPreview(mediaEvent, mkFileHelper("report.pdf", blob));
+            await userEvent.click(screen.getByRole("button", { name: "Download" }));
 
             await waitFor(() => expect(mockDownload).toHaveBeenCalledWith({ blob, name: "report.pdf" }));
         });
@@ -288,8 +288,8 @@ describe("MBodyFactory", () => {
         it("downloads under a generic name when the file has none", async () => {
             const mediaEvent = mkEvent("m.file");
 
-            const { getByRole } = renderPreview(mediaEvent, mkFileHelper("", new Blob(["pdf"])));
-            await userEvent.click(getByRole("button", { name: "Download" }));
+            renderPreview(mediaEvent, mkFileHelper("", new Blob(["pdf"])));
+            await userEvent.click(screen.getByRole("button", { name: "Download" }));
 
             await waitFor(() =>
                 expect(mockDownload).toHaveBeenCalledWith(expect.objectContaining({ name: "Attachment" })),
@@ -326,7 +326,7 @@ describe("MBodyFactory", () => {
         it("renders the file fallback child in notification timelines", () => {
             const mediaEvent = mkEvent("m.image", imageContent);
 
-            const { container, getByRole } = renderInRoomContext(
+            const { container } = renderInRoomContext(
                 <ImageBodyFactory
                     {...props}
                     mxEvent={mediaEvent}
@@ -337,7 +337,7 @@ describe("MBodyFactory", () => {
 
             expect(container.querySelector(".mx_ImageBody")).not.toBeNull();
             expect(container.querySelector(".mx_MFileBody")).not.toBeNull();
-            expect(getByRole("link", { name: /Download/ })).toBeInTheDocument();
+            expect(screen.getByRole("link", { name: /Download/ })).toBeInTheDocument();
         });
 
         it("renders only a file body for encrypted unsafe images without thumbnails", () => {
@@ -349,7 +349,7 @@ describe("MBodyFactory", () => {
                 },
             });
 
-            const { container, getByRole } = renderInRoomContext(
+            const { container } = renderInRoomContext(
                 <ImageBodyFactory
                     {...props}
                     mxEvent={mediaEvent}
@@ -360,7 +360,7 @@ describe("MBodyFactory", () => {
 
             expect(container.querySelector(".mx_ImageBody")).toBeNull();
             expect(container.querySelector(".mx_MFileBody")).not.toBeNull();
-            expect(getByRole("button", { name: "test-file.txt" })).toBeInTheDocument();
+            expect(screen.getByRole("button", { name: "test-file.txt" })).toBeInTheDocument();
         });
 
         it("keeps the image body for encrypted unsafe images when a thumbnail is available", () => {
@@ -412,7 +412,7 @@ describe("MBodyFactory", () => {
         it("renders the file fallback child outside room timelines", () => {
             const mediaEvent = mkEvent("m.video", videoContent);
 
-            const { container, getByRole } = renderInRoomContext(
+            const { container } = renderInRoomContext(
                 <VideoBodyFactory
                     mxEvent={mediaEvent}
                     mediaEventHelper={new MediaEventHelper(mediaEvent)}
@@ -423,7 +423,7 @@ describe("MBodyFactory", () => {
 
             expect(container.querySelector(".mx_MVideoBody")).not.toBeNull();
             expect(container.querySelector(".mx_MFileBody")).not.toBeNull();
-            expect(getByRole("link", { name: /Download/ })).toBeInTheDocument();
+            expect(screen.getByRole("link", { name: /Download/ })).toBeInTheDocument();
         });
     });
 
