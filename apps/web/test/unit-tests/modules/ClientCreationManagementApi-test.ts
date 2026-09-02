@@ -10,7 +10,15 @@ import { ClientCreationManagementApi } from "../../../src/modules/ClientCreation
 describe("ClientCreationManagementApi", () => {
     it("should allow setting the CaCertsPem", () => {
         const api = new ClientCreationManagementApi();
-        api.setUserVerificationCaCertsPem("test");
-        expect(api.userVerificationCaCertsPem).toEqual("test");
+        api.setX509ClientInitOpts({ userVerificationCaCertsPem: "test" });
+        expect(api.x509?.userVerificationCaCertsPem).toEqual("test");
+    });
+
+    it("should merge successive calls", () => {
+        const api = new ClientCreationManagementApi();
+        const validity = (): number => 0;
+        api.setX509ClientInitOpts({ userVerificationCaCertsPem: "test" });
+        api.setX509ClientInitOpts({ validity });
+        expect(api.x509).toEqual({ userVerificationCaCertsPem: "test", validity });
     });
 });

@@ -12,6 +12,7 @@ Please see LICENSE files in the repository root for full details.
 import { type IStartClientOpts, type MatrixClient, MemoryStore, PendingEventOrdering } from "matrix-js-sdk/src/matrix";
 import * as utils from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
+import type { X509ClientInitOpts } from "@element-hq/element-web-module-api";
 
 import SettingsStore from "./settings/SettingsStore";
 import MatrixActionCreators from "./actions/MatrixActionCreators";
@@ -48,11 +49,9 @@ export interface MatrixClientPegAssignOpts {
     rustCryptoStorePassword?: string;
 
     /**
-     * Optional PEM-formatted string that provides CA certificates. These will be used to check
-     * X.509 signatures on user identities. Any user identity that has a valid signature according to the supplied
-     * CAs will be considered verified, without any manual verification taking place.
+     * Options for X.509 signing.
      */
-    userVerificationCaCertsPem?: string;
+    x509?: X509ClientInitOpts;
 }
 
 /**
@@ -315,7 +314,9 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         await this.matrixClient.initRustCrypto({
             storageKey: opts.rustCryptoStoreKey,
             storagePassword: opts.rustCryptoStorePassword,
-            caCertsPem: opts.userVerificationCaCertsPem,
+            caCertsPem: opts.x509?.userVerificationCaCertsPem,
+            x509Signer: opts.x509?.signer,
+            x509Validity: opts.x509?.validity,
         });
 
         StorageManager.setCryptoInitialised(true);
