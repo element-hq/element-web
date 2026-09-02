@@ -37,6 +37,8 @@ interface IProps {
     onRejectButtonClicked: () => void;
 }
 
+const JOINABLE_WITHOUT_INVITE: JoinRule[] = [JoinRule.Public, JoinRule.Restricted];
+
 // XXX This component is currently only used for spaces and video rooms, though
 // surely we should expand its use to all rooms for consistency? This already
 // handles the text room case, though we would need to add support for ignoring
@@ -54,8 +56,12 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
     const [busy, setBusy] = useState(false);
 
     const joinRule = useRoomState(room, (state) => state.getJoinRule());
+    // Join rules under which a join can succeed without an invite. Restricted rooms admit members
+    // of the allowed spaces, so we must not refuse up front — a join that does turn out to be
+    // disallowed already surfaces through the Action.JoinRoomError handler above.
     const cannotJoin =
-        getEffectiveMembership(myMembership) === EffectiveMembership.Leave && joinRule !== JoinRule.Public;
+        getEffectiveMembership(myMembership) === EffectiveMembership.Leave &&
+        !JOINABLE_WITHOUT_INVITE.includes(joinRule);
     const name = useRoomName(room);
 
     const viewLabs = (): void =>
