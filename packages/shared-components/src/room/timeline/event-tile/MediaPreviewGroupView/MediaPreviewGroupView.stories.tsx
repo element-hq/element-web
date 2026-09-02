@@ -7,9 +7,7 @@
 
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import FileIcon from "@vector-im/compound-design-tokens/assets/web/icons/document";
-import ExpandIcon from "@vector-im/compound-design-tokens/assets/web/icons/expand";
-import DownloadIcon from "@vector-im/compound-design-tokens/assets/web/icons/download";
+import { DocumentIcon, ExpandIcon, DownloadIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import {
     MediaPreviewGroupPreview,
@@ -33,7 +31,7 @@ const buttons = [
 const textEntry: MediaPreviewGroupEntry = {
     id: "annual-report.pdf",
     style: "text",
-    icon: <FileIcon />,
+    icon: <DocumentIcon />,
     color: "#4200A6",
     header: "annual-report.pdf",
     body: "2.3 MB",
@@ -45,7 +43,7 @@ const imageEntry: MediaPreviewGroupEntry = {
     style: "image",
     image: demoImage,
     imageSize: "banner",
-    icon: <FileIcon />,
+    icon: <DocumentIcon />,
     color: "#4200A6",
     header: "screenshot.png",
     body: "820 KB",
@@ -57,7 +55,7 @@ const videoEntry: MediaPreviewGroupEntry = {
     style: "video",
     video: demoVideo,
     videoSize: "banner",
-    icon: <FileIcon />,
+    icon: <DocumentIcon />,
     color: "#4200A6",
     header: "holiday-clip.mp4",
     body: "12.4 MB",
@@ -68,7 +66,7 @@ const audioEntry: MediaPreviewGroupEntry = {
     id: "voice-message.mp3",
     style: "audio",
     audio: demoAudio,
-    icon: <FileIcon />,
+    icon: <DocumentIcon />,
     color: "#4200A6",
     header: "voice-message.mp3",
     body: "1.1 MB",
@@ -84,6 +82,12 @@ const meta = {
     component: MediaPreviewGroupPreview,
     tags: ["autodocs"],
     play: ({ canvasElement }) => prepareVideosForSnapshot(canvasElement),
+    parameters: {
+        design: {
+            type: "figma",
+            url: "https://www.figma.com/design/sI9A2kV2K4xeiyqJsL7Ey3/Links-and-Files?node-id=728-8112",
+        },
+    },
 } satisfies Meta<typeof MediaPreviewGroupPreview>;
 
 export default meta;
