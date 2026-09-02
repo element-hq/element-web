@@ -96,6 +96,8 @@ allowBuilds:
     workerd: true
     # Optionally builds itself from source if a specific environment variable is present, which we do not need
     "@parcel/watcher": false
+    # X.509 support
+    pkcs11js: true
 
 patchedDependencies:
     # Workaround for missing types export
