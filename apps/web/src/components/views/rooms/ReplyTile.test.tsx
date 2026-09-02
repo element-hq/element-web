@@ -5,33 +5,36 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import React from "react";
-import { render } from "jest-matrix-react";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { render } from "test-utils-rtl";
 import { EventType, MsgType } from "matrix-js-sdk/src/matrix";
+import { mkEvent, stubClient } from "test-utils";
 
-import ReplyTile from "../../../../../src/components/views/rooms/ReplyTile";
-import { renderReplyTile } from "../../../../../src/events/EventTileFactory";
-import { VideoBodyFactory } from "../../../../../src/components/views/messages/MBodyFactory";
-import { mkEvent, stubClient } from "../../../../test-utils";
+import ReplyTile from "./ReplyTile";
+import { renderReplyTile } from "../../../events/EventTileFactory";
+import { VideoBodyFactory } from "../messages/MBodyFactory";
 
-jest.mock("../../../../../src/events/EventTileFactory", () => {
-    const actual = jest.requireActual("../../../../../src/events/EventTileFactory");
+vi.mock("../../../events/EventTileFactory", async () => {
+    const actual = await vi.importActual("../../../events/EventTileFactory");
     return {
         ...actual,
-        renderReplyTile: jest.fn(() => null),
+        renderReplyTile: vi.fn(() => null),
     };
 });
-jest.mock("../../../../../src/components/views/messages/SenderProfile", () => jest.fn(() => null));
-jest.mock("../../../../../src/components/views/avatars/MemberAvatar", () => jest.fn(() => null));
+vi.mock("../messages/SenderProfile", () => ({ default: vi.fn(() => null) }));
+vi.mock("../avatars/MemberAvatar", () => ({ default: vi.fn(() => null) }));
 
 describe("ReplyTile", () => {
     beforeEach(() => {
         stubClient();
-        jest.mocked(renderReplyTile).mockClear().mockReturnValue(null);
+        vi.mocked(renderReplyTile).mockClear().mockReturnValue(null);
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     it("renders video replies with the video body", () => {

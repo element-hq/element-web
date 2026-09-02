@@ -5,7 +5,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import React from "react";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { sleep } from "matrix-js-sdk/src/utils";
 import {
     EventType,
@@ -17,21 +20,21 @@ import {
     type RoomMember,
 } from "matrix-js-sdk/src/matrix";
 import { CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
-import { act, render, screen, waitFor } from "jest-matrix-react";
+import { act, render, screen, waitFor } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
+import { stubClient } from "test-utils";
 
-import { stubClient } from "../../../../test-utils";
-import { UserIdentityWarning } from "../../../../../src/components/views/rooms/UserIdentityWarning";
-import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
+import { UserIdentityWarning } from "./UserIdentityWarning";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 const ROOM_ID = "!room:id";
 
 function mockRoom(): Room {
     const room = {
-        getEncryptionTargetMembers: jest.fn(async () => []),
-        getMember: jest.fn((userId) => {}),
+        getEncryptionTargetMembers: vi.fn(async () => []),
+        getMember: vi.fn((userId) => {}),
         roomId: ROOM_ID,
-        shouldEncryptForInvitedMembers: jest.fn(() => true),
+        shouldEncryptForInvitedMembers: vi.fn(() => true),
     } as unknown as Room;
 
     return room;
@@ -55,9 +58,9 @@ function mockMembershipForRoom(room: Room, users: string[] | [string, "joined" |
             }
         });
 
-    jest.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue(members);
+    vi.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue(members);
 
-    jest.spyOn(room, "getMember").mockImplementation((userId) => {
+    vi.spyOn(room, "getMember").mockImplementation((userId) => {
         return members.find((member) => member.userId === userId) ?? null;
     });
 }
@@ -87,7 +90,7 @@ function mockRoomMember(userId: string, name?: string): RoomMember {
         name: name ?? userId,
         rawDisplayName: name ?? userId,
         roomId: ROOM_ID,
-        getMxcAvatarUrl: jest.fn(),
+        getMxcAvatarUrl: vi.fn(),
     } as unknown as RoomMember;
 }
 
@@ -123,25 +126,23 @@ describe("UserIdentityWarning", () => {
     beforeEach(async () => {
         client = stubClient();
         room = mockRoom();
-        jest.spyOn(client.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
+        vi.spyOn(client.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     // This tests the basic functionality of the component.  If we have a room
     // member whose identity needs accepting, we should display a warning.  When
     // the "OK" button gets pressed, it should call `pinCurrentUserIdentity`.
     it("displays a warning when a user's identity needs approval", async () => {
-        jest.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([
-            mockRoomMember("@alice:example.org", "Alice"),
-        ]);
+        vi.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([mockRoomMember("@alice:example.org", "Alice")]);
         const crypto = client.getCrypto()!;
-        jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
+        vi.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
             new UserVerificationStatus(false, false, false, true),
         );
-        crypto.pinCurrentUserIdentity = jest.fn().mockResolvedValue(undefined);
+        crypto.pinCurrentUserIdentity = vi.fn().mockResolvedValue(undefined);
         renderComponent(client, room);
 
         await waitFor(() =>
@@ -155,14 +156,12 @@ describe("UserIdentityWarning", () => {
     // member whose identity is in verification violation, we should display a warning.  When
     // the "Withdraw verification" button gets pressed, it should call `withdrawVerification`.
     it("displays a warning when a user's identity is in verification violation", async () => {
-        jest.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([
-            mockRoomMember("@alice:example.org", "Alice"),
-        ]);
+        vi.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([mockRoomMember("@alice:example.org", "Alice")]);
         const crypto = client.getCrypto()!;
-        jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
+        vi.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
             new UserVerificationStatus(false, true, false, true),
         );
-        crypto.withdrawVerificationRequirement = jest.fn().mockResolvedValue(undefined);
+        crypto.withdrawVerificationRequirement = vi.fn().mockResolvedValue(undefined);
         renderComponent(client, room);
 
         await waitFor(() =>
@@ -179,11 +178,9 @@ describe("UserIdentityWarning", () => {
     });
 
     it("Should not display a warning if the user was verified and is still verified", async () => {
-        jest.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([
-            mockRoomMember("@alice:example.org", "Alice"),
-        ]);
+        vi.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([mockRoomMember("@alice:example.org", "Alice")]);
         const crypto = client.getCrypto()!;
-        jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
+        vi.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
             new UserVerificationStatus(true, true, false, false),
         );
 
@@ -197,13 +194,11 @@ describe("UserIdentityWarning", () => {
     // enabled, then we should display a warning if there are any users whose
     // identity need accepting.
     it("displays pending warnings when encryption is enabled", async () => {
-        jest.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([
-            mockRoomMember("@alice:example.org", "Alice"),
-        ]);
+        vi.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([mockRoomMember("@alice:example.org", "Alice")]);
         // Start the room off unencrypted.  We shouldn't display anything.
         const crypto = client.getCrypto()!;
-        jest.spyOn(crypto, "isEncryptionEnabledInRoom").mockResolvedValue(false);
-        jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
+        vi.spyOn(crypto, "isEncryptionEnabledInRoom").mockResolvedValue(false);
+        vi.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
             new UserVerificationStatus(false, false, false, true),
         );
 
@@ -214,7 +209,7 @@ describe("UserIdentityWarning", () => {
 
         // Encryption gets enabled in the room.  We should now warn that Alice's
         // identity changed.
-        jest.spyOn(crypto, "isEncryptionEnabledInRoom").mockResolvedValue(true);
+        vi.spyOn(crypto, "isEncryptionEnabledInRoom").mockResolvedValue(true);
         client.emit(
             RoomStateEvent.Events,
             new MatrixEvent({
@@ -243,11 +238,11 @@ describe("UserIdentityWarning", () => {
             const crypto = client.getCrypto()!;
 
             // All identities needs approval
-            jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
+            vi.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
                 new UserVerificationStatus(false, false, false, true),
             );
 
-            crypto.pinCurrentUserIdentity = jest.fn();
+            crypto.pinCurrentUserIdentity = vi.fn();
             renderComponent(client, room);
 
             await waitFor(() =>
@@ -261,11 +256,11 @@ describe("UserIdentityWarning", () => {
             const crypto = client.getCrypto()!;
 
             // All identities needs approval
-            jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
+            vi.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
                 new UserVerificationStatus(false, false, false, true),
             );
 
-            crypto.pinCurrentUserIdentity = jest.fn();
+            crypto.pinCurrentUserIdentity = vi.fn();
             renderComponent(client, room);
 
             await waitFor(() =>
@@ -289,12 +284,10 @@ describe("UserIdentityWarning", () => {
     // When a user's identity needs approval, or has been approved, the display
     // should update appropriately.
     it("updates the display when identity changes", async () => {
-        jest.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([
-            mockRoomMember("@alice:example.org", "Alice"),
-        ]);
-        jest.spyOn(room, "getMember").mockReturnValue(mockRoomMember("@alice:example.org", "Alice"));
+        vi.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([mockRoomMember("@alice:example.org", "Alice")]);
+        vi.spyOn(room, "getMember").mockReturnValue(mockRoomMember("@alice:example.org", "Alice"));
         const crypto = client.getCrypto()!;
-        jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
+        vi.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
             new UserVerificationStatus(false, false, false, false),
         );
         await act(async () => {
@@ -307,7 +300,7 @@ describe("UserIdentityWarning", () => {
         // The user changes their identity, so we should show the warning.
         act(() => {
             const newStatus = new UserVerificationStatus(false, false, false, true);
-            jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(newStatus);
+            vi.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(newStatus);
             client.emit(CryptoEvent.UserTrustStatusChanged, "@alice:example.org", newStatus);
         });
 
@@ -319,7 +312,7 @@ describe("UserIdentityWarning", () => {
         // longer show the warning.
         act(() => {
             const newStatus = new UserVerificationStatus(false, false, false, false);
-            jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(newStatus);
+            vi.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(newStatus);
             client.emit(CryptoEvent.UserTrustStatusChanged, "@alice:example.org", newStatus);
         });
         await waitFor(() =>
@@ -333,9 +326,9 @@ describe("UserIdentityWarning", () => {
         it("when invited users can see encrypted messages", async () => {
             // Nobody in the room yet
             mockMembershipForRoom(room, []);
-            jest.spyOn(room, "shouldEncryptForInvitedMembers").mockReturnValue(true);
+            vi.spyOn(room, "shouldEncryptForInvitedMembers").mockReturnValue(true);
             const crypto = client.getCrypto()!;
-            jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
+            vi.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
                 new UserVerificationStatus(false, false, false, true),
             );
             renderComponent(client, room);
@@ -376,11 +369,11 @@ describe("UserIdentityWarning", () => {
         it("when invited users cannot see encrypted messages", async () => {
             // Nobody in the room yet
             mockMembershipForRoom(room, []);
-            // jest.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([]);
-            // jest.spyOn(room, "getMember").mockImplementation((userId) => mockRoomMember(userId));
-            jest.spyOn(room, "shouldEncryptForInvitedMembers").mockReturnValue(false);
+            // vi.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([]);
+            // vi.spyOn(room, "getMember").mockImplementation((userId) => mockRoomMember(userId));
+            vi.spyOn(room, "shouldEncryptForInvitedMembers").mockReturnValue(false);
             const crypto = client.getCrypto()!;
-            jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
+            vi.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
                 new UserVerificationStatus(false, false, false, true),
             );
             renderComponent(client, room);
@@ -422,7 +415,7 @@ describe("UserIdentityWarning", () => {
 
         it("when member leaves immediately after component is loaded", async () => {
             let hasLeft = false;
-            jest.spyOn(room, "getEncryptionTargetMembers").mockImplementation(async () => {
+            vi.spyOn(room, "getEncryptionTargetMembers").mockImplementation(async () => {
                 if (hasLeft) return [];
                 setTimeout(() => {
                     emitMembershipChange(client, "@alice:example.org", "leave");
@@ -431,9 +424,9 @@ describe("UserIdentityWarning", () => {
                 return [mockRoomMember("@alice:example.org")];
             });
 
-            jest.spyOn(room, "shouldEncryptForInvitedMembers").mockReturnValue(false);
+            vi.spyOn(room, "shouldEncryptForInvitedMembers").mockReturnValue(false);
             const crypto = client.getCrypto()!;
-            jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
+            vi.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
                 new UserVerificationStatus(false, false, false, true),
             );
 
@@ -446,11 +439,11 @@ describe("UserIdentityWarning", () => {
 
         it("when member leaves immediately after joining", async () => {
             // Nobody in the room yet
-            jest.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([]);
-            jest.spyOn(room, "getMember").mockImplementation((userId) => mockRoomMember(userId));
-            jest.spyOn(room, "shouldEncryptForInvitedMembers").mockReturnValue(false);
+            vi.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([]);
+            vi.spyOn(room, "getMember").mockImplementation((userId) => mockRoomMember(userId));
+            vi.spyOn(room, "shouldEncryptForInvitedMembers").mockReturnValue(false);
             const crypto = client.getCrypto()!;
-            jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
+            vi.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
                 new UserVerificationStatus(false, false, false, true),
             );
             renderComponent(client, room);
@@ -497,12 +490,12 @@ describe("UserIdentityWarning", () => {
     // identity no longer needs approval (e.g. their identity was approved),
     // then we show the next one.
     it("displays the next user when the current user's identity is approved", async () => {
-        jest.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([
+        vi.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([
             mockRoomMember("@alice:example.org", "Alice"),
             mockRoomMember("@bob:example.org"),
         ]);
         const crypto = client.getCrypto()!;
-        jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
+        vi.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
             new UserVerificationStatus(false, false, false, true),
         );
 
@@ -516,7 +509,7 @@ describe("UserIdentityWarning", () => {
         // about Bob's identity.
         act(() => {
             const newStatus = new UserVerificationStatus(false, false, false, false);
-            jest.spyOn(crypto, "getUserVerificationStatus").mockImplementation(async (userId) => {
+            vi.spyOn(crypto, "getUserVerificationStatus").mockImplementation(async (userId) => {
                 if (userId == "@alice:example.org") {
                     return newStatus;
                 } else {
@@ -531,12 +524,12 @@ describe("UserIdentityWarning", () => {
     });
 
     it("displays the next user when the verification requirement is withdrawn", async () => {
-        jest.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([
+        vi.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([
             mockRoomMember("@alice:example.org", "Alice"),
             mockRoomMember("@bob:example.org"),
         ]);
         const crypto = client.getCrypto()!;
-        jest.spyOn(crypto, "getUserVerificationStatus").mockImplementation(async (userId) => {
+        vi.spyOn(crypto, "getUserVerificationStatus").mockImplementation(async (userId) => {
             if (userId == "@alice:example.org") {
                 return new UserVerificationStatus(false, true, false, true);
             } else {
@@ -553,7 +546,7 @@ describe("UserIdentityWarning", () => {
         // Simulate Alice's new identity having been approved, so now we warn
         // about Bob's identity.
         act(() => {
-            jest.spyOn(crypto, "getUserVerificationStatus").mockImplementation(async (userId) => {
+            vi.spyOn(crypto, "getUserVerificationStatus").mockImplementation(async (userId) => {
                 if (userId == "@alice:example.org") {
                     return new UserVerificationStatus(false, false, false, false);
                 } else {

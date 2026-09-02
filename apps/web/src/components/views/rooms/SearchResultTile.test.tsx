@@ -6,14 +6,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
-import { MatrixEvent, Room, EventType } from "matrix-js-sdk/src/matrix";
-import { render, type RenderResult } from "jest-matrix-react";
+// @vitest-environment happy-dom
 
-import { clientAndSDKContextRenderOptions, stubClient } from "../../../../test-utils";
-import SearchResultTile from "../../../../../src/components/views/rooms/SearchResultTile";
-import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
+import React from "react";
+import { describe, it, expect, vi, beforeAll } from "vitest";
+import { MatrixEvent, Room, EventType } from "matrix-js-sdk/src/matrix";
+import { render, type RenderResult } from "test-utils-rtl";
+import { clientAndSDKContextRenderOptions, stubClient } from "test-utils";
+
+import SearchResultTile from "./SearchResultTile";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { SDKContextClass } from "../../../contexts/SDKContextClass.ts";
 
 const ROOM_ID = "!qPewotXpIctQySfjSy:localhost";
 
@@ -25,7 +28,7 @@ describe("SearchResultTile", () => {
         const cli = MatrixClientPeg.safeGet();
 
         const room = new Room(ROOM_ID, cli, "@bob:example.org");
-        jest.spyOn(cli, "getRoom").mockReturnValue(room);
+        vi.spyOn(cli, "getRoom").mockReturnValue(room);
     });
 
     function renderComponent(props: Partial<Props>): RenderResult {

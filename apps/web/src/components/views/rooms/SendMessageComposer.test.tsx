@@ -6,40 +6,34 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import React from "react";
-import { fireEvent, render, waitFor } from "jest-matrix-react";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { fireEvent, render, waitFor } from "test-utils-rtl";
 import { type MatrixClient, MsgType } from "matrix-js-sdk/src/matrix";
-import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
+import { createTestClient, mkEvent, mkStubRoom, stubClient, mockPlatformPeg } from "test-utils";
+import { addTextToComposer } from "./__mocks__/composer.ts";
 
-import SendMessageComposer, {
-    createMessageContent,
-    isQuickReaction,
-} from "../../../../../src/components/views/rooms/SendMessageComposer";
-import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import {
-    type RoomContextType,
-    TimelineRenderingType,
-    MainSplitContentType,
-} from "../../../../../src/contexts/RoomContext";
-import EditorModel from "../../../../../src/editor/model";
-import { createPartCreator } from "../../../editor/mock";
-import { createTestClient, mkEvent, mkStubRoom, stubClient } from "../../../../test-utils";
-import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
-import DocumentOffset from "../../../../../src/editor/offset";
-import { Layout } from "../../../../../src/settings/enums/Layout";
-import { mockPlatformPeg } from "../../../../test-utils/platform";
-import { doMaybeLocalRoomAction } from "../../../../../src/utils/local-room";
-import { addTextToComposer } from "../../../../test-utils/composer";
-import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
-import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
-import { RoomUploadContextProvider } from "../../../../../src/viewmodels/room/RoomUploadViewModel.tsx";
-import { MessageComposerUrlPreviewViewModel } from "../../../../../src/viewmodels/composer/MessageComposerUrlPreviewViewModel.ts";
-import { SDKContext } from "../../../../../src/contexts/SDKContext.ts";
+import SendMessageComposer, { createMessageContent, isQuickReaction } from "./SendMessageComposer";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { type RoomContextType, TimelineRenderingType, MainSplitContentType } from "../../../contexts/RoomContext";
+import EditorModel from "../../../editor/model";
+import { createPartCreator } from "../../../../test/unit-tests/editor/mock";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
+import DocumentOffset from "../../../editor/offset";
+import { Layout } from "../../../settings/enums/Layout";
+import { doMaybeLocalRoomAction } from "../../../utils/local-room";
+import { ScopedRoomContextProvider } from "../../../contexts/ScopedRoomContext.tsx";
+import { SDKContextClass } from "../../../contexts/SDKContextClass";
+import { RoomUploadContextProvider } from "../../../viewmodels/room/RoomUploadViewModel.tsx";
+import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel.ts";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
-jest.mock("../../../../../src/utils/local-room", () => ({
-    doMaybeLocalRoomAction: jest.fn(),
+vi.mock("../../../utils/local-room", () => ({
+    doMaybeLocalRoomAction: vi.fn(),
 }));
 
 describe("<SendMessageComposer/>", () => {
@@ -167,7 +161,7 @@ describe("<SendMessageComposer/>", () => {
 
     describe("functions correctly mounted", () => {
         const mockClient = createTestClient();
-        jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
+        vi.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
         const mockRoom = mkStubRoom("myfakeroom", "myfakeroom", mockClient) as any;
         const mockEvent = mkEvent({
             type: "m.room.message",
@@ -176,15 +170,18 @@ describe("<SendMessageComposer/>", () => {
             content: { msgtype: "m.text", body: "Replying to this" },
             event: true,
         });
-        mockRoom.findEventById = jest.fn((eventId) => {
+        mockRoom.findEventById = vi.fn((eventId) => {
             return eventId === mockEvent.getId() ? mockEvent : null;
         });
 
-        const spyDispatcher = jest.spyOn(defaultDispatcher, "dispatch");
+        const spyDispatcher = vi.spyOn(defaultDispatcher, "dispatch");
 
         beforeEach(() => {
             localStorage.clear();
-            spyDispatcher.mockReset();
+            // Note: unlike Jest, Vitest's mockReset() on a spy restores call-through to the
+            // original implementation rather than stubbing it out, so re-apply a no-op
+            // implementation to avoid a stray real dispatch crashing the test worker later.
+            spyDispatcher.mockReset().mockImplementation(() => {});
         });
 
         const urlPreviewVm = new MessageComposerUrlPreviewViewModel({
@@ -195,7 +192,7 @@ describe("<SendMessageComposer/>", () => {
         });
         const defaultProps = {
             room: mockRoom,
-            toggleStickerPickerOpen: jest.fn(),
+            toggleStickerPickerOpen: vi.fn(),
         };
         const getRawComponent = (props = {}, roomContext = defaultRoomContext, client = mockClient) => (
             <MatrixClientContext.Provider value={client}>
@@ -276,7 +273,7 @@ describe("<SendMessageComposer/>", () => {
         });
 
         it("persists to session history upon sending", async () => {
-            mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
+            mockPlatformPeg({ overrideBrowserShortcuts: vi.fn().mockReturnValue(false) });
 
             const { container } = getComponent({ replyToEvent: mockEvent });
 
@@ -300,13 +297,13 @@ describe("<SendMessageComposer/>", () => {
         });
 
         it("correctly sends a message", () => {
-            mocked(doMaybeLocalRoomAction).mockImplementation(
+            vi.mocked(doMaybeLocalRoomAction).mockImplementation(
                 <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
                     return fn(roomId);
                 },
             );
 
-            mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
+            mockPlatformPeg({ overrideBrowserShortcuts: vi.fn().mockReturnValue(false) });
             const { container } = getComponent();
 
             addTextToComposer(container, "test message");
@@ -321,7 +318,7 @@ describe("<SendMessageComposer/>", () => {
 
         it("correctly sends a reply using a slash command", async () => {
             stubClient();
-            mocked(doMaybeLocalRoomAction).mockImplementation(
+            vi.mocked(doMaybeLocalRoomAction).mockImplementation(
                 <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
                     return fn(roomId);
                 },
@@ -335,7 +332,7 @@ describe("<SendMessageComposer/>", () => {
                 event: true,
             });
 
-            mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
+            mockPlatformPeg({ overrideBrowserShortcuts: vi.fn().mockReturnValue(false) });
             const { container } = getComponent({ replyToEvent });
 
             addTextToComposer(container, "/tableflip");
@@ -358,13 +355,13 @@ describe("<SendMessageComposer/>", () => {
         });
 
         it("shows chat effects on message sending", () => {
-            mocked(doMaybeLocalRoomAction).mockImplementation(
+            vi.mocked(doMaybeLocalRoomAction).mockImplementation(
                 <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
                     return fn(roomId);
                 },
             );
 
-            mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
+            mockPlatformPeg({ overrideBrowserShortcuts: vi.fn().mockReturnValue(false) });
             const { container } = getComponent();
 
             addTextToComposer(container, "🎉");
@@ -380,13 +377,13 @@ describe("<SendMessageComposer/>", () => {
         });
 
         it("not to send chat effects on message sending for threads", () => {
-            mocked(doMaybeLocalRoomAction).mockImplementation(
+            vi.mocked(doMaybeLocalRoomAction).mockImplementation(
                 <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
                     return fn(roomId);
                 },
             );
 
-            mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
+            mockPlatformPeg({ overrideBrowserShortcuts: vi.fn().mockReturnValue(false) });
             const { container } = getComponent({
                 relation: {
                     rel_type: "m.thread",
@@ -453,7 +450,7 @@ describe("<SendMessageComposer/>", () => {
             urlPreviewBundle: false,
         });
 
-        cli.isRoomEncrypted = jest.fn().mockReturnValue(true);
+        cli.isRoomEncrypted = vi.fn().mockReturnValue(true);
         const room = mkStubRoom("!roomId:server", "Room", cli);
 
         expect(cli.getCrypto()!.prepareToEncrypt).not.toHaveBeenCalled();
@@ -464,7 +461,7 @@ describe("<SendMessageComposer/>", () => {
                     <RoomUploadContextProvider>
                         <SendMessageComposer
                             room={room}
-                            toggleStickerPickerOpen={jest.fn()}
+                            toggleStickerPickerOpen={vi.fn()}
                             urlPreviewVm={urlPreviewVm}
                         />
                     </RoomUploadContextProvider>

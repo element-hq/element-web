@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`<RoomPreviewBar /> message case AskToJoin renders the corresponding actions 1`] = `
+exports[`<RoomPreviewBar /> > message case AskToJoin > renders the corresponding actions 1`] = `
 <div
   class="mx_RoomPreviewBar_actions mx_RoomPreviewBar_fullWidth"
 >
@@ -14,7 +14,7 @@ exports[`<RoomPreviewBar /> message case AskToJoin renders the corresponding act
 </div>
 `;
 
-exports[`<RoomPreviewBar /> message case AskToJoin renders the corresponding message 1`] = `
+exports[`<RoomPreviewBar /> > message case AskToJoin > renders the corresponding message 1`] = `
 <div
   class="mx_RoomPreviewBar_message"
 >
@@ -39,7 +39,7 @@ exports[`<RoomPreviewBar /> message case AskToJoin renders the corresponding mes
 </div>
 `;
 
-exports[`<RoomPreviewBar /> message case AskToJoin renders the corresponding message when kicked 1`] = `
+exports[`<RoomPreviewBar /> > message case AskToJoin > renders the corresponding message when kicked 1`] = `
 <div
   class="mx_RoomPreviewBar_message"
 >
@@ -64,7 +64,7 @@ exports[`<RoomPreviewBar /> message case AskToJoin renders the corresponding mes
 </div>
 `;
 
-exports[`<RoomPreviewBar /> message case AskToJoin renders the corresponding message with a generic title 1`] = `
+exports[`<RoomPreviewBar /> > message case AskToJoin > renders the corresponding message with a generic title 1`] = `
 <div
   class="mx_RoomPreviewBar_message"
 >
@@ -89,7 +89,7 @@ exports[`<RoomPreviewBar /> message case AskToJoin renders the corresponding mes
 </div>
 `;
 
-exports[`<RoomPreviewBar /> message case Knocked renders the corresponding actions 1`] = `
+exports[`<RoomPreviewBar /> > message case Knocked > renders the corresponding actions 1`] = `
 <div
   class="mx_RoomPreviewBar_actions"
 >
@@ -103,7 +103,7 @@ exports[`<RoomPreviewBar /> message case Knocked renders the corresponding actio
 </div>
 `;
 
-exports[`<RoomPreviewBar /> message case Knocked renders the corresponding message 1`] = `
+exports[`<RoomPreviewBar /> > message case Knocked > renders the corresponding message 1`] = `
 <div
   class="mx_RoomPreviewBar_message"
 >
@@ -128,7 +128,7 @@ exports[`<RoomPreviewBar /> message case Knocked renders the corresponding messa
 </div>
 `;
 
-exports[`<RoomPreviewBar /> renders banned message 1`] = `
+exports[`<RoomPreviewBar /> > renders banned message 1`] = `
 <div
   class="mx_RoomPreviewBar_message"
 >
@@ -141,7 +141,7 @@ exports[`<RoomPreviewBar /> renders banned message 1`] = `
 </div>
 `;
 
-exports[`<RoomPreviewBar /> renders denied request message 1`] = `
+exports[`<RoomPreviewBar /> > renders denied request message 1`] = `
 <div
   class="mx_RoomPreviewBar_message"
 >
@@ -154,7 +154,7 @@ exports[`<RoomPreviewBar /> renders denied request message 1`] = `
 </div>
 `;
 
-exports[`<RoomPreviewBar /> renders kicked message 1`] = `
+exports[`<RoomPreviewBar /> > renders kicked message 1`] = `
 <div
   class="mx_RoomPreviewBar_message"
 >
@@ -167,7 +167,7 @@ exports[`<RoomPreviewBar /> renders kicked message 1`] = `
 </div>
 `;
 
-exports[`<RoomPreviewBar /> renders viewing room message when room an be previewed 1`] = `
+exports[`<RoomPreviewBar /> > renders viewing room message when room an be previewed 1`] = `
 <div
   class="mx_RoomPreviewBar_message"
 >
@@ -177,7 +177,7 @@ exports[`<RoomPreviewBar /> renders viewing room message when room an be preview
 </div>
 `;
 
-exports[`<RoomPreviewBar /> renders viewing room message when room can not be previewed 1`] = `
+exports[`<RoomPreviewBar /> > renders viewing room message when room can not be previewed 1`] = `
 <div
   class="mx_RoomPreviewBar_message"
 >
@@ -187,7 +187,7 @@ exports[`<RoomPreviewBar /> renders viewing room message when room can not be pr
 </div>
 `;
 
-exports[`<RoomPreviewBar /> with an error renders other errors 1`] = `
+exports[`<RoomPreviewBar /> > with an error > renders other errors 1`] = `
 <div
   class="mx_RoomPreviewBar_message"
 >
@@ -213,7 +213,7 @@ exports[`<RoomPreviewBar /> with an error renders other errors 1`] = `
 </div>
 `;
 
-exports[`<RoomPreviewBar /> with an error renders room not found error 1`] = `
+exports[`<RoomPreviewBar /> > with an error > renders room not found error 1`] = `
 <div
   class="mx_RoomPreviewBar_message"
 >
@@ -226,7 +226,7 @@ exports[`<RoomPreviewBar /> with an error renders room not found error 1`] = `
 </div>
 `;
 
-exports[`<RoomPreviewBar /> with an invite with an invited email when client fails to get 3PIDs renders error message 1`] = `
+exports[`<RoomPreviewBar /> > with an invite > with an invited email > when client fails to get 3PIDs > renders error message 1`] = `
 <div
   class="mx_RoomPreviewBar_message"
 >
@@ -239,7 +239,7 @@ exports[`<RoomPreviewBar /> with an invite with an invited email when client fai
 </div>
 `;
 
-exports[`<RoomPreviewBar /> with an invite with an invited email when client has an identity server connected renders email mismatch message when invite email mxid doesnt match 1`] = `
+exports[`<RoomPreviewBar /> > with an invite > with an invited email > when client has an identity server connected > renders email mismatch message when invite email mxid doesnt match 1`] = `
 <div
   class="mx_RoomPreviewBar_message"
 >
@@ -252,7 +252,7 @@ exports[`<RoomPreviewBar /> with an invite with an invited email when client has
 </div>
 `;
 
-exports[`<RoomPreviewBar /> with an invite with an invited email when client has an identity server connected renders email mismatch message when no email bound 1`] = `
+exports[`<RoomPreviewBar /> > with an invite > with an invited email > when client has an identity server connected > renders email mismatch message when no email bound 1`] = `
 <div
   class="mx_RoomPreviewBar_message"
 >
@@ -265,7 +265,7 @@ exports[`<RoomPreviewBar /> with an invite with an invited email when client has
 </div>
 `;
 
-exports[`<RoomPreviewBar /> with an invite with an invited email when client has an identity server connected renders invite message when invite email mxid match 1`] = `
+exports[`<RoomPreviewBar /> > with an invite > with an invited email > when client has an identity server connected > renders invite message when invite email mxid match 1`] = `
 <div
   class="mx_RoomPreviewBar_message"
 >
@@ -297,7 +297,7 @@ exports[`<RoomPreviewBar /> with an invite with an invited email when client has
 </div>
 `;
 
-exports[`<RoomPreviewBar /> with an invite with an invited email when client has no identity server connected renders invite message with invited email 1`] = `
+exports[`<RoomPreviewBar /> > with an invite > with an invited email > when client has no identity server connected > renders invite message with invited email 1`] = `
 <div
   class="mx_RoomPreviewBar_message"
 >
@@ -310,7 +310,7 @@ exports[`<RoomPreviewBar /> with an invite with an invited email when client has
 </div>
 `;
 
-exports[`<RoomPreviewBar /> with an invite with an invited email when invitedEmail is not associated with current account renders invite message with invited email 1`] = `
+exports[`<RoomPreviewBar /> > with an invite > with an invited email > when invitedEmail is not associated with current account > renders invite message with invited email 1`] = `
 <div
   class="mx_RoomPreviewBar_message"
 >
@@ -323,7 +323,7 @@ exports[`<RoomPreviewBar /> with an invite with an invited email when invitedEma
 </div>
 `;
 
-exports[`<RoomPreviewBar /> with an invite without an invited email for a dm room renders invite message 1`] = `
+exports[`<RoomPreviewBar /> > with an invite > without an invited email > for a dm room > renders invite message 1`] = `
 <div
   class="mx_RoomPreviewBar_message"
 >
@@ -361,7 +361,7 @@ exports[`<RoomPreviewBar /> with an invite without an invited email for a dm roo
 </div>
 `;
 
-exports[`<RoomPreviewBar /> with an invite without an invited email for a non-dm room renders invite message 1`] = `
+exports[`<RoomPreviewBar /> > with an invite > without an invited email > for a non-dm room > renders invite message 1`] = `
 <div
   class="mx_RoomPreviewBar_message"
 >
@@ -399,7 +399,7 @@ exports[`<RoomPreviewBar /> with an invite without an invited email for a non-dm
 </div>
 `;
 
-exports[`<RoomPreviewBar /> with an invite without an invited email for a non-dm room renders join and reject action buttons correctly 1`] = `
+exports[`<RoomPreviewBar /> > with an invite > without an invited email > for a non-dm room > renders join and reject action buttons correctly 1`] = `
 <div
   class="mx_RoomPreviewBar_actions"
 >
@@ -420,7 +420,7 @@ exports[`<RoomPreviewBar /> with an invite without an invited email for a non-dm
 </div>
 `;
 
-exports[`<RoomPreviewBar /> with an invite without an invited email for a non-dm room renders join and reject action buttons in reverse order when room can previewed 1`] = `
+exports[`<RoomPreviewBar /> > with an invite > without an invited email > for a non-dm room > renders join and reject action buttons in reverse order when room can previewed 1`] = `
 <div
   class="mx_RoomPreviewBar_actions"
 >

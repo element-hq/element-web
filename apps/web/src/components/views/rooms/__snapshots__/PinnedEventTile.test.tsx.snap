@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`<PinnedEventTile /> should render pinned event 1`] = `
+exports[`<PinnedEventTile /> > should render pinned event 1`] = `
 <div>
   <div
     class="mx_PinnedEventTile"
@@ -81,7 +81,7 @@ exports[`<PinnedEventTile /> should render pinned event 1`] = `
 </div>
 `;
 
-exports[`<PinnedEventTile /> should render pinned event with thread info 1`] = `
+exports[`<PinnedEventTile /> > should render pinned event with thread info 1`] = `
 <div>
   <div
     class="mx_PinnedEventTile"
@@ -188,7 +188,7 @@ exports[`<PinnedEventTile /> should render pinned event with thread info 1`] = `
 </div>
 `;
 
-exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
+exports[`<PinnedEventTile /> > should render the menu with all the options 1`] = `
 <div
   aria-label="Open menu"
   aria-labelledby="radix-react-use-id-1"
@@ -202,7 +202,7 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
   dir="ltr"
   id="radix-react-use-id-2"
   role="menu"
-  style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto;"
+  style="--radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto; outline-color: none; outline-style: none; outline-width: initial;"
   tabindex="-1"
 >
   <button
@@ -379,7 +379,7 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
 </div>
 `;
 
-exports[`<PinnedEventTile /> should render the menu without unpin and delete 1`] = `
+exports[`<PinnedEventTile /> > should render the menu without unpin and delete 1`] = `
 <div
   aria-label="Open menu"
   aria-labelledby="radix-react-use-id-1"
@@ -393,7 +393,7 @@ exports[`<PinnedEventTile /> should render the menu without unpin and delete 1`]
   dir="ltr"
   id="radix-react-use-id-2"
   role="menu"
-  style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto;"
+  style="--radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto; outline-color: none; outline-style: none; outline-width: initial;"
   tabindex="-1"
 >
   <button

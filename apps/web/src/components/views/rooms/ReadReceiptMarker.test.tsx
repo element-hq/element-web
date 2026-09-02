@@ -6,17 +6,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
-import { render, screen } from "jest-matrix-react";
+// @vitest-environment happy-dom
 
-import ReadReceiptMarker, {
-    type IReadReceiptPosition,
-} from "../../../../../src/components/views/rooms/ReadReceiptMarker";
+import React from "react";
+import { describe, it, expect, vi, afterEach } from "vitest";
+import { render, screen } from "test-utils-rtl";
+
+import ReadReceiptMarker, { type IReadReceiptPosition } from "./ReadReceiptMarker";
 
 describe("ReadReceiptMarker", () => {
     afterEach(() => {
-        jest.restoreAllMocks();
-        jest.useRealTimers();
+        vi.restoreAllMocks();
+        vi.useRealTimers();
     });
 
     it("should position at -16px if given no previous position", () => {
@@ -32,12 +33,12 @@ describe("ReadReceiptMarker", () => {
     });
 
     it("should apply new styles after mounted to animate", () => {
-        jest.useFakeTimers();
+        vi.useFakeTimers();
 
         render(<ReadReceiptMarker fallbackUserId="bob" offset={0} readReceiptPosition={{ top: 100, right: 0 }} />);
         expect(screen.getByTestId("avatar-img").style.top).toBe("100px");
 
-        jest.runAllTimers();
+        vi.runAllTimers();
 
         expect(screen.getByTestId("avatar-img").style.top).toBe("0px");
     });
@@ -55,12 +56,15 @@ describe("ReadReceiptMarker", () => {
 
     it("should update readReceiptPosition to current position", () => {
         const pos: IReadReceiptPosition = {};
-        jest.spyOn(HTMLElement.prototype, "offsetParent", "get").mockImplementation(function (): Element | null {
-            return {
-                getBoundingClientRect: jest.fn().mockReturnValue({ top: 0, right: 0 } as DOMRect),
-            } as unknown as Element;
+        Object.defineProperty(HTMLElement.prototype, "offsetParent", {
+            configurable: true,
+            get(): Element | null {
+                return {
+                    getBoundingClientRect: vi.fn().mockReturnValue({ top: 0, right: 0 } as DOMRect),
+                } as unknown as Element;
+            },
         });
-        jest.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({ top: 100, right: 0 } as DOMRect);
+        vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({ top: 100, right: 0 } as DOMRect);
 
         const { unmount } = render(<ReadReceiptMarker fallbackUserId="bob" offset={0} readReceiptPosition={pos} />);
 

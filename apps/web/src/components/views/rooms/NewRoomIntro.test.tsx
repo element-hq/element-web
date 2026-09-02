@@ -7,13 +7,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import React from "react";
-import { render, screen } from "jest-matrix-react";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { render, screen } from "test-utils-rtl";
 import { EventTimeline, type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { LinkedTextContext } from "@element-hq/web-shared-components";
-
-import { LocalRoom } from "../../../../../src/models/LocalRoom";
 import {
     clientAndSDKContextRenderOptions,
     filterConsole,
@@ -21,14 +22,16 @@ import {
     mkRoomMemberJoinEvent,
     mkThirdPartyInviteEvent,
     stubClient,
-} from "../../../../test-utils";
-import NewRoomIntro from "../../../../../src/components/views/rooms/NewRoomIntro";
-import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import { DirectoryMember } from "../../../../../src/utils/direct-messages";
-import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
-import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
-import type { RoomContextType } from "../../../../../src/contexts/RoomContext.ts";
-import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
+} from "test-utils";
+
+import { LocalRoom } from "../../../models/LocalRoom";
+import NewRoomIntro from "./NewRoomIntro";
+import DMRoomMap from "../../../utils/DMRoomMap";
+import { DirectoryMember } from "../../../utils/direct-messages";
+import { ScopedRoomContextProvider } from "../../../contexts/ScopedRoomContext.tsx";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
+import type { RoomContextType } from "../../../contexts/RoomContext.ts";
+import { SDKContextClass } from "../../../contexts/SDKContextClass.ts";
 
 const renderNewRoomIntro = (client: MatrixClient, room: Room | LocalRoom) => {
     render(
@@ -54,12 +57,12 @@ describe("NewRoomIntro", () => {
     });
 
     afterEach(() => {
-        jest.resetAllMocks();
+        vi.resetAllMocks();
     });
 
     describe("for a DM Room", () => {
         beforeEach(() => {
-            jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(userId);
+            vi.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(userId);
             const room = new Room(roomId, client, client.getUserId()!);
             room.name = "test_room";
             renderNewRoomIntro(client, room);
@@ -67,7 +70,9 @@ describe("NewRoomIntro", () => {
 
         it("should render the expected intro", () => {
             const expected = `This is the beginning of your direct message history with test_room.`;
-            screen.getByText((id, element) => element?.tagName === "SPAN" && element?.textContent === expected);
+            expect(
+                screen.getByText((id, element) => element?.tagName === "SPAN" && element?.textContent === expected),
+            ).toBeVisible();
         });
     });
 
@@ -77,8 +82,8 @@ describe("NewRoomIntro", () => {
             mkRoomMemberJoinEvent(client.getSafeUserId(), room.roomId),
             mkThirdPartyInviteEvent(client.getSafeUserId(), "user@example.com", room.roomId),
         ]);
-        jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(userId);
-        jest.spyOn(DMRoomMap.shared(), "getRoomIds").mockReturnValue(new Set([room.roomId]));
+        vi.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(userId);
+        vi.spyOn(DMRoomMap.shared(), "getRoomIds").mockReturnValue(new Set([room.roomId]));
         renderNewRoomIntro(client, room);
 
         expect(screen.getByText("Once everyone has joined, you’ll be able to chat")).toBeInTheDocument();
@@ -91,7 +96,7 @@ describe("NewRoomIntro", () => {
 
     describe("for a DM LocalRoom", () => {
         beforeEach(() => {
-            jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(userId);
+            vi.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(userId);
             const localRoom = new LocalRoom(roomId, client, client.getUserId()!);
             localRoom.name = "test_room";
             localRoom.targets.push(new DirectoryMember({ user_id: userId }));
@@ -100,7 +105,9 @@ describe("NewRoomIntro", () => {
 
         it("should render the expected intro", () => {
             const expected = `Send your first message to invite test_room to chat`;
-            screen.getByText((id, element) => element?.tagName === "SPAN" && element?.textContent === expected);
+            expect(
+                screen.getByText((id, element) => element?.tagName === "SPAN" && element?.textContent === expected),
+            ).toBeVisible();
         });
     });
 
@@ -112,7 +119,7 @@ describe("NewRoomIntro", () => {
             room.getLiveTimeline()
                 .getState(EventTimeline.FORWARDS)
                 ?.setStateEvents([mkRoomMemberJoinEvent(client.getSafeUserId(), room.roomId)]);
-            jest.spyOn(DMRoomMap.shared(), "getRoomIds").mockReturnValue(new Set([room.roomId]));
+            vi.spyOn(DMRoomMap.shared(), "getRoomIds").mockReturnValue(new Set([room.roomId]));
         });
 
         function addTopicToRoom(topic: string) {
@@ -133,7 +140,7 @@ describe("NewRoomIntro", () => {
         it("should render the topic", () => {
             addTopicToRoom("Test topic");
             renderNewRoomIntro(client, room);
-            screen.getByText("Test topic");
+            expect(screen.getByText("Test topic")).toBeVisible();
         });
 
         it("should render a link in the topic", () => {
@@ -144,11 +151,11 @@ describe("NewRoomIntro", () => {
 
         it("should be able to add a topic", () => {
             addTopicToRoom("Test topic");
-            jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
-            jest.spyOn(room.getLiveTimeline().getState(EventTimeline.FORWARDS)!, "maySendStateEvent").mockReturnValue(
+            vi.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
+            vi.spyOn(room.getLiveTimeline().getState(EventTimeline.FORWARDS)!, "maySendStateEvent").mockReturnValue(
                 true,
             );
-            const spyDispatcher = jest.spyOn(defaultDispatcher, "dispatch");
+            const spyDispatcher = vi.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
 
             renderNewRoomIntro(client, room);
             screen.getByRole("button", { name: "edit" }).click();
