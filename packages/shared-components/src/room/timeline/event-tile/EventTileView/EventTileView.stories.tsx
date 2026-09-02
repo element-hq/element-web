@@ -560,15 +560,18 @@ const storyThreadPreview: ThreadMessagePreviewViewSnapshot = {
     previewTooltip: "Can you review the draft?",
 };
 
+const StoryNarrowContext = React.createContext(false);
+
 const StoryThreadInfo = (): React.ReactElement => {
-    const previewVm = useMockedViewModel(storyThreadPreview, {});
+    const narrow = React.useContext(StoryNarrowContext);
+    const previewVm = useMockedViewModel({ ...storyThreadPreview, showDisplayName: !narrow }, {});
     const threadSummaryVm = useMockedViewModel(
         {
             isVisible: true,
-            replyCountLabel: "3 replies",
+            replyCountLabel: narrow ? "3" : "3 replies",
             openThreadLabel: "Open thread",
             notificationIndicator: undefined,
-            narrow: false,
+            narrow,
             previewVm,
         },
         { onClick: fn() },
@@ -667,6 +670,7 @@ const TimelineStoryFrame = ({
     }, [containerWidth, defaultContainerWidth]);
 
     const effectiveContainerWidth = Math.min(maxContainerWidth, Math.max(minContainerWidth, selectedContainerWidth));
+    const narrow = effectiveContainerWidth <= 500;
     const applicationContainerLabel = rightPanel ? "320px min - 50% max" : "50% min - 100% max";
 
     const storyContext = !rightPanel
@@ -692,60 +696,62 @@ const TimelineStoryFrame = ({
     });
     return (
         <StoryDebugFrame ref={frameRef}>
-            {presentationNotice && (
-                <div
-                    className={classNames(styles.presentationNotice, {
-                        [styles.presentationNoticeInvalid]: presentationNotice.invalid,
-                    })}
-                    role="status"
-                >
-                    {presentationNotice.text}
-                </div>
-            )}
-            <div
-                className={classNames(styles.storyContainer, {
-                    [styles.storyRightPanelContainer]: rightPanel,
-                })}
-                style={{ width: `${effectiveContainerWidth}px` }}
-                data-story-boundary="EventTileView.container"
-            >
-                <div className={styles.storyContainerLabel} data-story-boundary="EventTileView.containerLabel">
-                    EventTileView host · width: {applicationContainerLabel}
-                </div>
-                <div className={styles.storyContainerControls}>
-                    <label htmlFor="event-tile-story-container-width">{effectiveContainerWidth}px</label>
-                    <input
-                        id="event-tile-story-container-width"
-                        type="range"
-                        min={minContainerWidth}
-                        max={maxContainerWidth}
-                        step="8"
-                        value={effectiveContainerWidth}
-                        aria-label="Story host container width"
-                        onChange={(event) => setSelectedContainerWidth(Number(event.target.value))}
-                    />
-                    <output>{`${minContainerWidth}–${maxContainerWidth}px`}</output>
-                </div>
-                <div className={storySurfaceClassName} data-story-boundary="Timeline">
+            <StoryNarrowContext.Provider value={narrow}>
+                {presentationNotice && (
                     <div
-                        className={styles.timeline}
-                        data-story-boundary={`${storyContext}.timeline`}
-                        data-event-layout={layout}
+                        className={classNames(styles.presentationNotice, {
+                            [styles.presentationNoticeInvalid]: presentationNotice.invalid,
+                        })}
+                        role="status"
                     >
-                        <div className={styles.scrollPanel} data-story-boundary="ScrollPanel">
-                            <div className={styles.messageListWrapper} data-story-boundary="messageListWrapper">
-                                <ol
-                                    className={styles.messageList}
-                                    data-story-boundary={messageListBoundary}
-                                    data-event-density={density}
-                                >
-                                    {children}
-                                </ol>
+                        {presentationNotice.text}
+                    </div>
+                )}
+                <div
+                    className={classNames(styles.storyContainer, {
+                        [styles.storyRightPanelContainer]: rightPanel,
+                    })}
+                    style={{ width: `${effectiveContainerWidth}px` }}
+                    data-story-boundary="EventTileView.container"
+                >
+                    <div className={styles.storyContainerLabel} data-story-boundary="EventTileView.containerLabel">
+                        EventTileView host · width: {applicationContainerLabel}
+                    </div>
+                    <div className={styles.storyContainerControls}>
+                        <label htmlFor="event-tile-story-container-width">{effectiveContainerWidth}px</label>
+                        <input
+                            id="event-tile-story-container-width"
+                            type="range"
+                            min={minContainerWidth}
+                            max={maxContainerWidth}
+                            step="8"
+                            value={effectiveContainerWidth}
+                            aria-label="Story host container width"
+                            onChange={(event) => setSelectedContainerWidth(Number(event.target.value))}
+                        />
+                        <output>{`${minContainerWidth}–${maxContainerWidth}px`}</output>
+                    </div>
+                    <div className={storySurfaceClassName} data-story-boundary="Timeline">
+                        <div
+                            className={styles.timeline}
+                            data-story-boundary={`${storyContext}.timeline`}
+                            data-event-layout={layout}
+                        >
+                            <div className={styles.scrollPanel} data-story-boundary="ScrollPanel">
+                                <div className={styles.messageListWrapper} data-story-boundary="messageListWrapper">
+                                    <ol
+                                        className={styles.messageList}
+                                        data-story-boundary={messageListBoundary}
+                                        data-event-density={density}
+                                    >
+                                        {children}
+                                    </ol>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </StoryNarrowContext.Provider>
         </StoryDebugFrame>
     );
 };
@@ -1004,14 +1010,23 @@ const createPreviewStorySlots = ({
     shape,
     slots,
     showActionBar,
+    sender,
+    avatar,
+    timestamp,
 }: {
     shape: EventTileViewProps["root"]["shape"];
     slots: EventTileViewProps["slots"];
     showActionBar: boolean;
+    sender?: React.ReactNode;
+    avatar?: React.ReactNode;
+    timestamp?: React.ReactNode;
 }): EventTileViewProps["slots"] => {
     const threadInfo = shape === "Thread" ? undefined : slots.threadInfo;
     return {
         ...slots,
+        sender,
+        avatar,
+        timestamp,
         actionBar: showActionBar ? slots.actionBar : undefined,
         // The application Thread rendering branch places no thread-info slot.
         threadInfo,
@@ -1082,7 +1097,14 @@ function EventTileViewStoryContent({
                       timestamp,
                       showActionBar,
                   })
-                : createPreviewStorySlots({ shape, slots: tileSlots, showActionBar });
+                : createPreviewStorySlots({
+                      shape,
+                      slots: tileSlots,
+                      showActionBar,
+                      sender,
+                      avatar,
+                      timestamp,
+                  });
 
         return (
             <EventTileView
