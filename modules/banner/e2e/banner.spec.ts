@@ -60,7 +60,7 @@ test.describe("Banner", () => {
     const configs: input<ConfigSchema>[] = [
         {
             logo_url: "http://localhost:8080/logo.svg",
-            logo_link_url: "https://example.com/portal",
+            heading_href: "https://example.com/portal",
             menu: {
                 type: "static",
                 categories: [
@@ -96,7 +96,7 @@ test.describe("Banner", () => {
         },
         {
             logo_url: "http://localhost:8080/opendesk/logomark.svg",
-            logo_link_url: "https://example.com/portal",
+            heading_href: "https://example.com/portal",
             menu: {
                 type: "univention",
                 logo_url: "http://localhost:8080/opendesk/logofull.svg",
@@ -202,7 +202,7 @@ test.describe("Banner", () => {
             config: {
                 "io.element.element-web-modules.banner": {
                     logo_url: "http://localhost:8080/opendesk/logomark.svg",
-                    logo_link_url: "https://example.com/portal",
+                    heading_href: "https://example.com/portal",
                     menu: {
                         type: "univention",
                         logo_url: "http://localhost:8080/opendesk/logofull.svg",
@@ -240,7 +240,7 @@ test.describe("Banner", () => {
             config: {
                 "io.element.element-web-modules.banner": {
                     logo_url: "https://domain/logo1.png",
-                    logo_link_url: "https://domain",
+                    heading_href: "https://domain",
                     title: "Title",
                     menu: {
                         type: "static",

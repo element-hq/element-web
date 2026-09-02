@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type ComponentProps, type FC, type JSX, useState } from "react";
+import { type FC, type JSX, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import * as Dialog from "@radix-ui/react-dialog";
 import styled, { useTheme } from "styled-components";
@@ -49,7 +49,7 @@ const Trigger = styled.button`
     width: ${({ theme }): string => theme.triggerWidth};
 
     &:hover,
-    &:focus {
+    &:focus-visible {
         background-color: ${({ theme }): string => theme.triggerBackgroundColorHover};
         color: ${({ theme }): string => theme.triggerColorContrast};
     }
@@ -79,7 +79,7 @@ const CloseButton = styled.button`
     border-radius: 8px;
 
     &:hover,
-    &:focus {
+    &:focus-visible {
         background-color: ${({ theme }): string => theme.menuButtonBackgroundColorHover};
     }
 
@@ -100,7 +100,7 @@ const CategoryHeading = styled.h2`
 
 const LinkButton = styled.a`
     font-size: 14px;
-    color: var(--cpd-color-text-action-primary);
+    color: ${({ theme }): string => theme.menuButtonColor};
     font-weight: var(--cpd-font-weight-medium);
     display: flex;
     border-radius: 8px;
@@ -108,11 +108,11 @@ const LinkButton = styled.a`
     align-items: center;
 
     &:link {
-        color: var(--cpd-color-text-action-primary);
+        color: inherit;
     }
 
     &:hover,
-    &:focus {
+    &:focus-visible {
         background-color: ${({ theme }): string => theme.menuButtonBackgroundColorHover};
     }
 
@@ -179,9 +179,7 @@ const Menu: FC<Props> = ({ api, config, fallbackLogoUrl }) => {
     const [open, setOpen] = useState(false);
 
     let content: JSX.Element;
-    const logoProps: Omit<ComponentProps<typeof Logo>, "api"> = {
-        src: fallbackLogoUrl,
-    };
+    let logoJsx: JSX.Element | undefined;
 
     if (config instanceof Error) {
         content = <CentredContainer>{api.i18n.translate("univention_error")}</CentredContainer>;
@@ -193,11 +191,16 @@ const Menu: FC<Props> = ({ api, config, fallbackLogoUrl }) => {
                 ))}
             </>
         );
-        if (config.logo_url) {
-            logoProps.src = config.logo_url;
+        logoJsx = (
+            <Logo
+                src={config.logo_url ?? fallbackLogoUrl}
+                height={config.logo_height !== undefined ? `${config.logo_height}px` : undefined}
+                api={api}
+            />
+        );
+        if (config.logo_href) {
+            logoJsx = <a href={config.logo_href}>{logoJsx}</a>;
         }
-        logoProps.height = config.logo_height !== undefined ? `${config.logo_height}px` : undefined;
-        logoProps.href = config.logo_href;
     } else {
         content = (
             <CentredContainer>
@@ -236,7 +239,7 @@ const Menu: FC<Props> = ({ api, config, fallbackLogoUrl }) => {
                             >
                                 <Dialog.Title>
                                     <SidebarHeading>
-                                        <Logo {...logoProps} api={api} />
+                                        {logoJsx}
                                         <Dialog.Close asChild>
                                             <CloseButton
                                                 aria-label={api.i18n.translate("close_label")}

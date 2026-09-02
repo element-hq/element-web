@@ -22,14 +22,15 @@ const Root = styled.nav`
     display: flex;
     gap: var(--cpd-space-3x);
 
+    a {
+        display: contents;
+        text-decoration: none;
+    }
+
     h1 {
         align-self: center;
+        color: ${({ theme }): string => theme.textColor};
     }
-`;
-
-const LogoContainer = styled.div`
-    display: flex;
-    padding: var(--cpd-space-3x) 0;
 `;
 
 interface Props {
@@ -53,15 +54,22 @@ const Banner: FC<Props> = ({ api, logoUrl, href, menu, title }) => {
         }
     }
 
-    return (
-        <Root>
-            {menuJsx}
-            <LogoContainer>
-                <Logo api={api} src={logoUrl} href={href} height="100%" />
-            </LogoContainer>
+    let headingJsx = (
+        <>
+            <Logo api={api} src={logoUrl} height="35px" />
             <Heading size="sm" weight="medium" as="h1">
                 {title}
             </Heading>
+        </>
+    );
+    if (href) {
+        headingJsx = <a href={href}>{headingJsx}</a>;
+    }
+
+    return (
+        <Root>
+            {menuJsx}
+            {headingJsx}
         </Root>
     );
 };
