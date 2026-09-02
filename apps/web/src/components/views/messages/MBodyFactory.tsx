@@ -6,13 +6,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type RefObject, useContext, useEffect, useRef } from "react";
-import { MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import { type MediaEventContent, type ImageContent } from "matrix-js-sdk/src/types";
 import {
     DecryptionFailureBodyView,
     FileBodyView,
     ImageBodyView,
-    MediaPreviewEntryButton,
+    type MediaPreviewEntryButton,
     MediaPreviewGroupPreview,
     RedactedBodyView,
     VideoBodyView,
@@ -37,7 +37,7 @@ import { MediaPreviewGroupViewModel } from "../../../viewmodels/message-body/Med
 import { fileSize } from "../../../utils/FileUtils";
 import DownloadIcon from "@vector-im/compound-design-tokens/assets/web/icons/download";
 import { FileDownloader } from "../../../utils/FileDownloader";
-import { MediaEventHelper } from "../../../utils/MediaEventHelper";
+import { type MediaEventHelper } from "../../../utils/MediaEventHelper";
 
 type MBodyComponent = React.ComponentType<IBodyProps>;
 
@@ -57,7 +57,7 @@ export function FileBodyFactory(props: FileBodyProps): JSX.Element {
         return <LegacyFileBody {...props} />;
     }
 
-    return <PreviewFileBody mediaEventHelper={props.mediaEventHelper!} mxEvent={props.mxEvent} />;
+    return <PreviewFileBody mediaEventHelper={props.mediaEventHelper} mxEvent={props.mxEvent} />;
 }
 
 /// the old look for files, still used for images, videos, audio, voice messages
