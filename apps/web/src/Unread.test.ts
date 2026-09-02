@@ -12,7 +12,7 @@ import { describe, it, expect, beforeEach, beforeAll, vi } from "vitest";
 import { MatrixEvent, EventType, MsgType, Room, ReceiptType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { makeBeaconEvent, mkEvent, stubClient } from "test-utils";
-import { makeThreadEvents, mkThread, populateThread } from "test-utils/threads";
+import { makeThreadEvent, makeThreadEvents, mkThread, populateThread } from "test-utils/threads";
 
 import { haveRendererForEvent } from "./events/EventTileFactory";
 import {
@@ -162,6 +162,30 @@ describe("Unread", () => {
                 room.addLiveEvents([event], { addToState: true });
 
                 expect(doesRoomHaveUnreadMessages(room, false)).toBe(false);
+            });
+
+            it("returns true when another user's message arrives after ours", () => {
+                room.addLiveEvents(
+                    [
+                        mkEvent({
+                            event: true,
+                            type: "m.room.message",
+                            user: myId,
+                            room: roomId,
+                            content: {},
+                        }),
+                        mkEvent({
+                            event: true,
+                            type: "m.room.message",
+                            user: aliceId,
+                            room: roomId,
+                            content: {},
+                        }),
+                    ],
+                    { addToState: true },
+                );
+
+                expect(doesRoomHaveUnreadMessages(room, false)).toBe(true);
             });
 
             it("returns false for a room when the read receipt is at the latest event", () => {
@@ -572,6 +596,56 @@ describe("Unread", () => {
             });
 
             // There is no receipt for the thread, it should be unread
+            expect(doesRoomHaveUnreadThreads(room)).toBe(true);
+        });
+
+        it("returns false when we replied and a non-counting event landed after our reply", async () => {
+            // Thread: root(alice) -> reply(me) -> redacted(alice). Our reply is newer than the
+            // only unread-triggering event, so we have clearly seen the thread, but we are no
+            // longer the sender of the literal last event.
+            const { rootEvent, events } = await populateThread({
+                room,
+                client,
+                authorId: aliceId,
+                participantUserIds: [myId],
+            });
+
+            const trailing = makeThreadEvent({
+                event: true,
+                user: aliceId,
+                room: roomId,
+                msg: "redacted",
+                rootEventId: rootEvent.getId()!,
+                replyToEventId: events.at(-1)!.getId()!,
+                ts: 100,
+            });
+            vi.spyOn(trailing, "isRedacted").mockReturnValue(true);
+            await room.addLiveEvents([trailing], { addToState: false });
+
+            expect(doesRoomHaveUnreadThreads(room)).toBe(false);
+        });
+
+        it("returns true when an incoming message landed after our reply", async () => {
+            // Thread: root(alice) -> reply(me) -> message(alice). The trailing message does
+            // trigger an unread count, so the thread is genuinely unread.
+            const { rootEvent, events } = await populateThread({
+                room,
+                client,
+                authorId: aliceId,
+                participantUserIds: [myId],
+            });
+
+            const trailing = makeThreadEvent({
+                event: true,
+                user: aliceId,
+                room: roomId,
+                msg: "a real reply",
+                rootEventId: rootEvent.getId()!,
+                replyToEventId: events.at(-1)!.getId()!,
+                ts: 100,
+            });
+            await room.addLiveEvents([trailing], { addToState: false });
+
             expect(doesRoomHaveUnreadThreads(room)).toBe(true);
         });
 
