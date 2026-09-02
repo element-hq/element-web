@@ -1353,7 +1353,7 @@ function EventTileViewStoryContent({
               ? renderRoomTiles()
               : shape === "Search" && searchMessages === "result"
                 ? renderSearchTiles()
-                : renderTile(false, "event");
+                : renderTile(false, "event", { continuation: false, lastInSection: true }, true);
 
     const rightPanel =
         shape === "Card" ||
