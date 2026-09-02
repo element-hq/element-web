@@ -171,6 +171,15 @@ describe("<RoomPreviewBar />", () => {
         expect(getMessage(component)).toMatchSnapshot();
     });
 
+    it("renders joining message when rejoining after being kicked", () => {
+        const room = createRoom(roomId, otherUserId);
+        jest.spyOn(room, "getMember").mockReturnValue(makeMockRoomMember({ isKicked: true }));
+        const component = getComponent({ room, joining: true });
+
+        expect(isSpinnerRendered(component)).toBeTruthy();
+        expect(getMessage(component)?.textContent).toEqual("Joining…");
+    });
+
     it("renders denied request message", () => {
         const room = createRoom(roomId, otherUserId);
         jest.spyOn(room, "getMember").mockReturnValue(
