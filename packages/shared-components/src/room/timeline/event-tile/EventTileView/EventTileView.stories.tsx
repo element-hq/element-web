@@ -850,6 +850,8 @@ type EventTileStoryProps = Omit<EventTileViewProps, "root"> & {
     state?: Partial<EventTileViewProps["root"]["state"]>;
     roomMessages?: "boundaries" | "alice" | "bob" | "media" | "threeEach" | "informational" | "alignedBetween" | "rich";
     searchMessages?: "result";
+    /** Whether contextual search messages should use the interactive opacity styling. */
+    showSearchContextOpacity?: boolean;
 };
 
 type StoryPresentation = {
@@ -1040,6 +1042,7 @@ function EventTileViewStoryContent({
     state,
     roomMessages = "boundaries",
     searchMessages,
+    showSearchContextOpacity = false,
     ...props
 }: EventTileStoryProps): React.ReactElement {
     const requestedPresentation = useEventPresentation();
@@ -1322,7 +1325,7 @@ function EventTileViewStoryContent({
             {renderTile(
                 false,
                 "search-context-before",
-                { contextual: true, continuation: false, lastInSection: false },
+                { contextual: showSearchContextOpacity, continuation: false, lastInSection: false },
                 false,
                 <StorySearchContextBody body="Earlier context message in the room." />,
             )}
@@ -1336,7 +1339,7 @@ function EventTileViewStoryContent({
             {renderTile(
                 false,
                 "search-context-after",
-                { contextual: true, continuation: true, lastInSection: true },
+                { contextual: showSearchContextOpacity, continuation: true, lastInSection: true },
                 true,
                 <StorySearchContextBody body="Later context message in the room." />,
             )}
@@ -1469,6 +1472,7 @@ const meta = {
         state: { table: { disable: true } },
         roomMessages: { table: { disable: true } },
         searchMessages: { table: { disable: true } },
+        showSearchContextOpacity: { table: { disable: true } },
         line: { table: { disable: true } },
         onMouseEnter: { table: { disable: true } },
         onMouseLeave: { table: { disable: true } },
@@ -1560,6 +1564,7 @@ export const Search: Story = {
         shape: "Search",
         // Search results include contextual events around the undimmed matching event.
         searchMessages: "result",
+        showSearchContextOpacity: true,
         state: {},
         slots: {
             sender: <StorySender />,
@@ -1653,7 +1658,7 @@ export const SearchGroup: Story = {
     name: "Search - Group",
     tags: visualTags,
     globals: groupGlobals,
-    args: Search.args,
+    args: { ...Search.args, showSearchContextOpacity: false },
 };
 
 export const PinnedGroup: Story = {
