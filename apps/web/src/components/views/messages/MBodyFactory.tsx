@@ -7,17 +7,14 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type RefObject, useContext, useEffect, useRef } from "react";
 import { type MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
-import { type MediaEventContent, type ImageContent } from "matrix-js-sdk/src/types";
+import { type ImageContent } from "matrix-js-sdk/src/types";
 import {
     DecryptionFailureBodyView,
     FileBodyView,
     ImageBodyView,
-    type MediaPreviewEntryButton,
     MediaPreviewGroupPreview,
     RedactedBodyView,
     VideoBodyView,
-    _t,
-    attachmentIcon,
     useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
 
@@ -33,11 +30,8 @@ import { RedactedBodyViewModel } from "../../../viewmodels/message-body/Redacted
 import { getRedactedBodyViewModelProps } from "../../../viewmodels/room/timeline/event-tile/EventTileRedactedBodyState";
 import { VideoBodyViewModel } from "../../../viewmodels/message-body/VideoBodyViewModel";
 import { isMimeTypeAllowed } from "../../../utils/blobs";
-import { MediaPreviewGroupViewModel } from "../../../viewmodels/message-body/MediaPreviewGroupViewModel";
-import { fileSize } from "../../../utils/FileUtils";
-import DownloadIcon from "@vector-im/compound-design-tokens/assets/web/icons/download";
-import { FileDownloader } from "../../../utils/FileDownloader";
 import { type MediaEventHelper } from "../../../utils/MediaEventHelper";
+import { MBodyTileViewModel } from "../../../viewmodels/message-body/MBodyTileViewModel";
 
 type MBodyComponent = React.ComponentType<IBodyProps>;
 
@@ -99,37 +93,7 @@ interface PreviewFileBodyProps {
 
 /// the new preview file tile
 function PreviewFileBody({ mxEvent, mediaEventHelper }: PreviewFileBodyProps): JSX.Element {
-    const content = mxEvent.getContent<MediaEventContent>();
-    const size = content.info?.size;
-
-    const vm = useCreateAutoDisposedViewModel(() => {
-        const downloader = new FileDownloader();
-        // includes the download buttonn if mediaEventHelper is not undefined
-        const buttons: MediaPreviewEntryButton[] | undefined = mediaEventHelper && [
-            {
-                label: _t("action|download"),
-                icon: <DownloadIcon />,
-                onClick: async () => {
-                    await downloader.download({
-                        blob: await mediaEventHelper.sourceBlob.value, // decrypts transparently if E2EE
-                        name: mediaEventHelper.fileName || _t("common|attachment"),
-                    });
-                },
-            },
-        ];
-        return new MediaPreviewGroupViewModel({
-            entries: [
-                {
-                    id: mxEvent.getId()!,
-                    style: "text",
-                    header: mediaEventHelper.fileName,
-                    body: size === undefined ? _t("timeline|m.file|size_unknown") : fileSize(size),
-                    buttons,
-                    ...attachmentIcon(content.info?.mimetype),
-                },
-            ],
-        });
-    });
+    const vm = useCreateAutoDisposedViewModel(() => new MBodyTileViewModel(mxEvent, mediaEventHelper));
 
     return (
         <div className="mx_EventTile_content">
