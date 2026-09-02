@@ -6,24 +6,23 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
-import { render, screen } from "jest-matrix-react";
-import { EventType, type IEvent, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import ThirdPartyMemberInfo from "../../../../../src/components/views/rooms/ThirdPartyMemberInfo";
-import {
-    clientAndSDKContextRenderOptions,
-    getMockClientWithEventEmitter,
-    mockClientMethodsUser,
-} from "../../../../test-utils";
-import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
+import React from "react";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { render, screen } from "test-utils-rtl";
+import { EventType, type IEvent, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { clientAndSDKContextRenderOptions, getMockClientWithEventEmitter, mockClientMethodsUser } from "test-utils";
+
+import ThirdPartyMemberInfo from "./ThirdPartyMemberInfo";
+import { SDKContextClass } from "../../../contexts/SDKContextClass.ts";
 
 describe("<ThirdPartyMemberInfo />", () => {
     const userId = "@alice:server.org";
     const roomId = "!room:server.org";
     const mockClient = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
-        getRoom: jest.fn(),
+        getRoom: vi.fn(),
     });
 
     // make invite event with defaults
@@ -52,7 +51,7 @@ describe("<ThirdPartyMemberInfo />", () => {
     aliceMember.name = "Alice DisplayName";
 
     beforeEach(() => {
-        jest.spyOn(room, "getMember").mockImplementation((id) => (id === userId ? aliceMember : null));
+        vi.spyOn(room, "getMember").mockImplementation((id) => (id === userId ? aliceMember : null));
         mockClient.getRoom.mockClear().mockReturnValue(room);
     });
 

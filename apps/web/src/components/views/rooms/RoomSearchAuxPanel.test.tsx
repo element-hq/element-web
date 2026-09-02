@@ -6,11 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
-import { render, screen } from "jest-matrix-react";
+// @vitest-environment happy-dom
 
-import RoomSearchAuxPanel from "../../../../../src/components/views/rooms/RoomSearchAuxPanel";
-import { SearchScope } from "../../../../../src/Searching";
+import React from "react";
+import { describe, it, expect, vi } from "vitest";
+import { render, screen } from "test-utils-rtl";
+
+import RoomSearchAuxPanel from "./RoomSearchAuxPanel";
+import { SearchScope } from "../../../Searching";
 
 describe("RoomSearchAuxPanel", () => {
     it("should render the count of results", () => {
@@ -24,8 +27,8 @@ describe("RoomSearchAuxPanel", () => {
                     promise: new Promise(() => {}),
                 }}
                 isRoomEncrypted={false}
-                onSearchScopeChange={jest.fn()}
-                onCancelClick={jest.fn()}
+                onSearchScopeChange={vi.fn()}
+                onCancelClick={vi.fn()}
             />,
         );
 
@@ -35,13 +38,13 @@ describe("RoomSearchAuxPanel", () => {
     });
 
     it("should allow the user to toggle to all rooms search", async () => {
-        const onSearchScopeChange = jest.fn();
+        const onSearchScopeChange = vi.fn();
 
         render(
             <RoomSearchAuxPanel
                 isRoomEncrypted={false}
                 onSearchScopeChange={onSearchScopeChange}
-                onCancelClick={jest.fn()}
+                onCancelClick={vi.fn()}
             />,
         );
 
@@ -50,7 +53,7 @@ describe("RoomSearchAuxPanel", () => {
     });
 
     it("should allow the user to toggle back to room-specific search", async () => {
-        const onSearchScopeChange = jest.fn();
+        const onSearchScopeChange = vi.fn();
 
         render(
             <RoomSearchAuxPanel
@@ -62,7 +65,7 @@ describe("RoomSearchAuxPanel", () => {
                 }}
                 isRoomEncrypted={false}
                 onSearchScopeChange={onSearchScopeChange}
-                onCancelClick={jest.fn()}
+                onCancelClick={vi.fn()}
             />,
         );
 
@@ -71,14 +74,10 @@ describe("RoomSearchAuxPanel", () => {
     });
 
     it("should allow the user to cancel a search", async () => {
-        const onCancelClick = jest.fn();
+        const onCancelClick = vi.fn();
 
         render(
-            <RoomSearchAuxPanel
-                isRoomEncrypted={false}
-                onSearchScopeChange={jest.fn()}
-                onCancelClick={onCancelClick}
-            />,
+            <RoomSearchAuxPanel isRoomEncrypted={false} onSearchScopeChange={vi.fn()} onCancelClick={onCancelClick} />,
         );
 
         screen.getByRole("button", { name: "Cancel" }).click();

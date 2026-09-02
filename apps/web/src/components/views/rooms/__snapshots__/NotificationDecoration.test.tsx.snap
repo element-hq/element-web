@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`<NotificationDecoration /> should render the activity decoration 1`] = `
+exports[`<NotificationDecoration /> > should render the activity decoration 1`] = `
 <DocumentFragment>
   <div
     class="_flex_4dswl_9"
@@ -16,7 +16,7 @@ exports[`<NotificationDecoration /> should render the activity decoration 1`] = 
 </DocumentFragment>
 `;
 
-exports[`<NotificationDecoration /> should render the audio call decoration 1`] = `
+exports[`<NotificationDecoration /> > should render the audio call decoration 1`] = `
 <DocumentFragment>
   <div
     class="_flex_4dswl_9"
@@ -38,7 +38,7 @@ exports[`<NotificationDecoration /> should render the audio call decoration 1`] 
 </DocumentFragment>
 `;
 
-exports[`<NotificationDecoration /> should render the invitation decoration 1`] = `
+exports[`<NotificationDecoration /> > should render the invitation decoration 1`] = `
 <DocumentFragment>
   <div
     class="_flex_4dswl_9"
@@ -60,7 +60,7 @@ exports[`<NotificationDecoration /> should render the invitation decoration 1`] 
 </DocumentFragment>
 `;
 
-exports[`<NotificationDecoration /> should render the mention decoration 1`] = `
+exports[`<NotificationDecoration /> > should render the mention decoration 1`] = `
 <DocumentFragment>
   <div
     class="_flex_4dswl_9"
@@ -87,7 +87,7 @@ exports[`<NotificationDecoration /> should render the mention decoration 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<NotificationDecoration /> should render the muted decoration 1`] = `
+exports[`<NotificationDecoration /> > should render the muted decoration 1`] = `
 <DocumentFragment>
   <div
     class="_flex_4dswl_9"
@@ -112,7 +112,7 @@ exports[`<NotificationDecoration /> should render the muted decoration 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<NotificationDecoration /> should render the notification decoration 1`] = `
+exports[`<NotificationDecoration /> > should render the notification decoration 1`] = `
 <DocumentFragment>
   <div
     class="_flex_4dswl_9"
@@ -128,7 +128,7 @@ exports[`<NotificationDecoration /> should render the notification decoration 1`
 </DocumentFragment>
 `;
 
-exports[`<NotificationDecoration /> should render the notification decoration without count 1`] = `
+exports[`<NotificationDecoration /> > should render the notification decoration without count 1`] = `
 <DocumentFragment>
   <div
     class="_flex_4dswl_9"
@@ -142,7 +142,7 @@ exports[`<NotificationDecoration /> should render the notification decoration wi
 </DocumentFragment>
 `;
 
-exports[`<NotificationDecoration /> should render the unset message decoration 1`] = `
+exports[`<NotificationDecoration /> > should render the unset message decoration 1`] = `
 <DocumentFragment>
   <div
     class="_flex_4dswl_9"
@@ -164,7 +164,7 @@ exports[`<NotificationDecoration /> should render the unset message decoration 1
 </DocumentFragment>
 `;
 
-exports[`<NotificationDecoration /> should render the video call decoration 1`] = `
+exports[`<NotificationDecoration /> > should render the video call decoration 1`] = `
 <DocumentFragment>
   <div
     class="_flex_4dswl_9"

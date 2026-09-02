@@ -5,14 +5,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { render } from "jest-matrix-react";
-import React from "react";
-import { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import RoomInfoLine from "../../../../../src/components/views/rooms/RoomInfoLine.tsx";
-import { stubClient, TestSDKContext, withContexts } from "../../../../test-utils";
+import React from "react";
+import { describe, it, expect, vi } from "vitest";
+import { render } from "test-utils-rtl";
+import { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { fireEvent } from "@testing-library/dom";
-import { RightPanelPhases } from "../../../../../src/stores/right-panel/RightPanelStorePhases.ts";
+import { stubClient, TestSDKContext, withContexts } from "test-utils";
+
+import RoomInfoLine from "./RoomInfoLine.tsx";
+import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases.ts";
 
 describe("RoomInfoLine", () => {
     it("renders for public room", () => {
@@ -52,9 +55,9 @@ describe("RoomInfoLine", () => {
                 },
             }),
         ]);
-        jest.spyOn(room, "getJoinedMemberCount").mockReturnValue(50);
+        vi.spyOn(room, "getJoinedMemberCount").mockReturnValue(50);
 
-        jest.spyOn(sdkContext.rightPanelStore, "setCard");
+        vi.spyOn(sdkContext.rightPanelStore, "setCard");
 
         const { findByText } = render(<RoomInfoLine room={room} />, withContexts({ sdkContext }));
         fireEvent.click(await findByText("50 members"));
