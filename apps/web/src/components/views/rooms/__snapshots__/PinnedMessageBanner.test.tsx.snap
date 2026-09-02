@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`<PinnedMessageBanner /> should display display a poll event 1`] = `
+exports[`<PinnedMessageBanner /> > should display display a poll event 1`] = `
 <DocumentFragment>
   <div
     aria-label="Pinned messages"
@@ -56,7 +56,7 @@ exports[`<PinnedMessageBanner /> should display display a poll event 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<PinnedMessageBanner /> should display the last message when the pinned event array changed 1`] = `
+exports[`<PinnedMessageBanner /> > should display the last message when the pinned event array changed 1`] = `
 <DocumentFragment>
   <div
     aria-label="Pinned messages"
@@ -137,7 +137,7 @@ exports[`<PinnedMessageBanner /> should display the last message when the pinned
 </DocumentFragment>
 `;
 
-exports[`<PinnedMessageBanner /> should display the m.audio event type 1`] = `
+exports[`<PinnedMessageBanner /> > should display the m.audio event type 1`] = `
 <DocumentFragment>
   <div
     aria-label="Pinned messages"
@@ -193,7 +193,7 @@ exports[`<PinnedMessageBanner /> should display the m.audio event type 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<PinnedMessageBanner /> should display the m.file event type 1`] = `
+exports[`<PinnedMessageBanner /> > should display the m.file event type 1`] = `
 <DocumentFragment>
   <div
     aria-label="Pinned messages"
@@ -249,7 +249,7 @@ exports[`<PinnedMessageBanner /> should display the m.file event type 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<PinnedMessageBanner /> should display the m.image event type 1`] = `
+exports[`<PinnedMessageBanner /> > should display the m.image event type 1`] = `
 <DocumentFragment>
   <div
     aria-label="Pinned messages"
@@ -305,7 +305,7 @@ exports[`<PinnedMessageBanner /> should display the m.image event type 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<PinnedMessageBanner /> should display the m.video event type 1`] = `
+exports[`<PinnedMessageBanner /> > should display the m.video event type 1`] = `
 <DocumentFragment>
   <div
     aria-label="Pinned messages"
@@ -361,7 +361,7 @@ exports[`<PinnedMessageBanner /> should display the m.video event type 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<PinnedMessageBanner /> should render 2 pinned event 1`] = `
+exports[`<PinnedMessageBanner /> > should render 2 pinned event 1`] = `
 <DocumentFragment>
   <div
     aria-label="Pinned messages"
@@ -438,7 +438,7 @@ exports[`<PinnedMessageBanner /> should render 2 pinned event 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<PinnedMessageBanner /> should render 4 pinned event 1`] = `
+exports[`<PinnedMessageBanner /> > should render 4 pinned event 1`] = `
 <DocumentFragment>
   <div
     aria-label="Pinned messages"
@@ -519,7 +519,7 @@ exports[`<PinnedMessageBanner /> should render 4 pinned event 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<PinnedMessageBanner /> should render a single pinned event 1`] = `
+exports[`<PinnedMessageBanner /> > should render a single pinned event 1`] = `
 <DocumentFragment>
   <div
     aria-label="Pinned messages"

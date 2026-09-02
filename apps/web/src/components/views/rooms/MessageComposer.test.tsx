@@ -6,12 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import React from "react";
+import { describe, it, expect, vi, beforeAll, beforeEach, afterEach } from "vitest";
+import { act, fireEvent, render, screen, waitFor } from "test-utils-rtl";
 import { EventType, type MatrixEvent, RoomMember, THREAD_RELATION_TYPE } from "matrix-js-sdk/src/matrix";
-import { act, fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { initOnce } from "@vector-im/matrix-wysiwyg";
-
 import {
     clearAllModals,
     createTestClient,
@@ -20,25 +22,26 @@ import {
     mkStubRoom,
     mockPlatformPeg,
     stubClient,
-} from "../../../../test-utils";
-import MessageComposer from "../../../../../src/components/views/rooms/MessageComposer";
-import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import ResizeNotifier from "../../../../../src/utils/ResizeNotifier";
-import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
-import { LocalRoom } from "../../../../../src/models/LocalRoom";
-import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../../../src/settings/SettingLevel";
-import dis from "../../../../../src/dispatcher/dispatcher";
-import { E2EStatus } from "../../../../../src/utils/ShieldUtils";
-import { addTextToComposerRTL } from "../../../../test-utils/composer";
-import UIStore, { UI_EVENTS } from "../../../../../src/stores/UIStore";
-import { Action } from "../../../../../src/dispatcher/actions";
-import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
-import { TimelineRenderingType, type RoomContextType } from "../../../../../src/contexts/RoomContext.ts";
-import { RoomUploadContextProvider } from "../../../../../src/viewmodels/room/RoomUploadViewModel.tsx";
-import { SDKContext } from "../../../../../src/contexts/SDKContext.ts";
-import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
+} from "test-utils";
+import { addTextToComposerRTL } from "./__mocks__/composer.ts";
+
+import MessageComposer from "./MessageComposer";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import ResizeNotifier from "../../../utils/ResizeNotifier";
+import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import { LocalRoom } from "../../../models/LocalRoom";
+import SettingsStore from "../../../settings/SettingsStore";
+import { SettingLevel } from "../../../settings/SettingLevel";
+import dis from "../../../dispatcher/dispatcher";
+import { E2EStatus } from "../../../utils/ShieldUtils";
+import UIStore, { UI_EVENTS } from "../../../stores/UIStore";
+import { Action } from "../../../dispatcher/actions";
+import { ScopedRoomContextProvider } from "../../../contexts/ScopedRoomContext.tsx";
+import { TimelineRenderingType, type RoomContextType } from "../../../contexts/RoomContext.ts";
+import { RoomUploadContextProvider } from "../../../viewmodels/room/RoomUploadViewModel.tsx";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
+import { SDKContextClass } from "../../../contexts/SDKContextClass.ts";
 
 const openStickerPicker = async (): Promise<void> => {
     await userEvent.click(screen.getByLabelText("More options"));
@@ -68,7 +71,7 @@ describe("MessageComposer", () => {
 
     afterEach(async () => {
         await clearAllModals();
-        jest.useRealTimers();
+        vi.useRealTimers();
 
         // restore settings
         act(() => {
@@ -95,7 +98,7 @@ describe("MessageComposer", () => {
 
         const key = `mx_wysiwyg_state_${room.roomId}`;
 
-        await userEvent.click(screen.getByRole("textbox"));
+        await userEvent.click(await screen.findByRole("textbox"));
         fireEvent.input(screen.getByRole("textbox"), {
             data: messageText,
             inputType: "insertText",
@@ -162,9 +165,9 @@ describe("MessageComposer", () => {
             let resizeNotifier: ResizeNotifier;
 
             beforeEach(() => {
-                jest.useFakeTimers();
+                vi.useFakeTimers();
                 resizeNotifier = {
-                    notifyTimelineHeightChanged: jest.fn(),
+                    notifyTimelineHeightChanged: vi.fn(),
                 } as unknown as ResizeNotifier;
                 roomContext = wrapAndRender({
                     room,
@@ -178,7 +181,7 @@ describe("MessageComposer", () => {
                     context: roomContext.timelineRenderingType,
                 });
 
-                jest.advanceTimersByTime(150);
+                vi.advanceTimersByTime(150);
                 expect(resizeNotifier.notifyTimelineHeightChanged).toHaveBeenCalled();
             });
 
@@ -188,7 +191,7 @@ describe("MessageComposer", () => {
                     context: "test",
                 });
 
-                jest.advanceTimersByTime(150);
+                vi.advanceTimersByTime(150);
                 expect(resizeNotifier.notifyTimelineHeightChanged).not.toHaveBeenCalled();
             });
         });
@@ -268,7 +271,7 @@ describe("MessageComposer", () => {
             let resizeCallback: (key: string, data: object) => void;
 
             beforeEach(() => {
-                jest.spyOn(UIStore.instance, "on").mockImplementation(
+                vi.spyOn(UIStore.instance, "on").mockImplementation(
                     (_event: string | symbol, listener: (key: string, data: object) => void): any => {
                         resizeCallback = listener;
                     },

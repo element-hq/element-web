@@ -6,10 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
-import { render } from "jest-matrix-react";
+// @vitest-environment happy-dom
 
-import PresenceLabel from "../../../../../src/components/views/rooms/PresenceLabel";
+import React from "react";
+import { describe, it, expect } from "vitest";
+import { render } from "test-utils-rtl";
+
+import PresenceLabel from "./PresenceLabel";
 
 describe("<PresenceLabel/>", () => {
     it("should render 'Offline' for presence=offline", () => {

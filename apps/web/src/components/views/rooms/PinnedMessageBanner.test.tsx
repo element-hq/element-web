@@ -6,21 +6,24 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { act, screen, render } from "jest-matrix-react";
+// @vitest-environment happy-dom
+
 import React from "react";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { act, screen, render } from "test-utils-rtl";
 import { EventType, type IEvent, type MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
+import { makePollStartEvent, stubClient, clientAndSDKContextRenderOptions } from "test-utils";
 
-import * as pinnedEventHooks from "../../../../../src/hooks/usePinnedEvents";
-import { PinnedMessageBanner } from "../../../../../src/components/views/rooms/PinnedMessageBanner";
-import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
-import { makePollStartEvent, stubClient, clientAndSDKContextRenderOptions } from "../../../../test-utils";
-import dis from "../../../../../src/dispatcher/dispatcher";
-import RightPanelStore from "../../../../../src/stores/right-panel/RightPanelStore";
-import { RightPanelPhases } from "../../../../../src/stores/right-panel/RightPanelStorePhases";
-import { UPDATE_EVENT } from "../../../../../src/stores/AsyncStore";
-import { Action } from "../../../../../src/dispatcher/actions";
-import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
+import * as pinnedEventHooks from "../../../hooks/usePinnedEvents";
+import { PinnedMessageBanner } from "./PinnedMessageBanner";
+import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import dis from "../../../dispatcher/dispatcher";
+import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
+import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
+import { UPDATE_EVENT } from "../../../stores/AsyncStore";
+import { Action } from "../../../dispatcher/actions";
+import { SDKContextClass } from "../../../contexts/SDKContextClass";
 
 describe("<PinnedMessageBanner />", () => {
     const userId = "@alice:server.org";
@@ -35,11 +38,11 @@ describe("<PinnedMessageBanner />", () => {
         room = new Room(roomId, mockClient, userId);
         permalinkCreator = new RoomPermalinkCreator(room);
         sdkContext = new SDKContextClass();
-        jest.spyOn(dis, "dispatch").mockReturnValue(undefined);
+        vi.spyOn(dis, "dispatch").mockReturnValue(undefined);
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     /**
@@ -86,15 +89,15 @@ describe("<PinnedMessageBanner />", () => {
     }
 
     it("should render nothing when there are no pinned events", async () => {
-        jest.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([]);
-        jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([]);
+        vi.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([]);
+        vi.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([]);
         const { container } = renderBanner();
         expect(container).toBeEmptyDOMElement();
     });
 
     it("should render a single pinned event", async () => {
-        jest.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([event1.getId()!]);
-        jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event1]);
+        vi.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([event1.getId()!]);
+        vi.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event1]);
 
         const { asFragment } = renderBanner();
 
@@ -104,8 +107,8 @@ describe("<PinnedMessageBanner />", () => {
     });
 
     it("should render 2 pinned event", async () => {
-        jest.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([event1.getId()!, event2.getId()!]);
-        jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event1, event2]);
+        vi.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([event1.getId()!, event2.getId()!]);
+        vi.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event1, event2]);
 
         const { asFragment } = renderBanner();
 
@@ -117,13 +120,13 @@ describe("<PinnedMessageBanner />", () => {
     });
 
     it("should render 4 pinned event", async () => {
-        jest.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([
+        vi.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([
             event1.getId()!,
             event2.getId()!,
             event3.getId()!,
             event4.getId()!,
         ]);
-        jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event1, event2, event3, event4]);
+        vi.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event1, event2, event3, event4]);
 
         const { asFragment } = renderBanner();
 
@@ -135,8 +138,8 @@ describe("<PinnedMessageBanner />", () => {
     });
 
     it("should display the last message when the pinned event array changed", async () => {
-        jest.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([event1.getId()!, event2.getId()!]);
-        jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event1, event2]);
+        vi.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([event1.getId()!, event2.getId()!]);
+        vi.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event1, event2]);
 
         const { asFragment, rerender } = renderBanner();
         await expect(screen.findByText("Second pinned message")).resolves.toBeVisible();
@@ -147,20 +150,20 @@ describe("<PinnedMessageBanner />", () => {
         );
         expect(screen.getByText("First pinned message")).toBeVisible();
 
-        jest.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([
+        vi.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([
             event1.getId()!,
             event2.getId()!,
             event3.getId()!,
         ]);
-        jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event1, event2, event3]);
+        vi.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event1, event2, event3]);
         rerender(<PinnedMessageBanner permalinkCreator={permalinkCreator} room={room} />);
         await expect(screen.findByText("Third pinned message")).resolves.toBeVisible();
         expect(asFragment()).toMatchSnapshot();
     });
 
     it("should rotate the pinned events when the banner is clicked", async () => {
-        jest.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([event1.getId()!, event2.getId()!]);
-        jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event1, event2]);
+        vi.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([event1.getId()!, event2.getId()!]);
+        vi.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event1, event2]);
 
         renderBanner();
         await expect(screen.findByText("Second pinned message")).resolves.toBeVisible();
@@ -204,8 +207,8 @@ describe("<PinnedMessageBanner />", () => {
     ])("should display the %s event type", async (msgType, label) => {
         const body = `Message with ${msgType} type`;
         const event = makePinEvent({ content: { body, msgtype: msgType } });
-        jest.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([event.getId()!]);
-        jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event]);
+        vi.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([event.getId()!]);
+        vi.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event]);
 
         const { asFragment } = renderBanner();
         await expect(screen.findByTestId("banner-message")).resolves.toHaveTextContent(`${label}: ${body}`);
@@ -214,8 +217,8 @@ describe("<PinnedMessageBanner />", () => {
 
     it("should display display a poll event", async () => {
         const event = makePollStartEvent("Alice?", userId);
-        jest.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([event.getId()!]);
-        jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event]);
+        vi.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([event.getId()!]);
+        vi.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event]);
 
         const { asFragment } = renderBanner();
         await expect(screen.findByTestId("banner-message")).resolves.toHaveTextContent("Poll: Alice?");
@@ -224,9 +227,9 @@ describe("<PinnedMessageBanner />", () => {
 
     describe("Notify the timeline to resize", () => {
         beforeEach(() => {
-            jest.spyOn(sdkContext.resizeNotifier, "notifyTimelineHeightChanged");
-            jest.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([event1.getId()!, event2.getId()!]);
-            jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event1, event2]);
+            vi.spyOn(sdkContext.resizeNotifier, "notifyTimelineHeightChanged");
+            vi.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([event1.getId()!, event2.getId()!]);
+            vi.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event1, event2]);
         });
 
         it("should notify the timeline to resize when we display the banner", async () => {
@@ -252,8 +255,8 @@ describe("<PinnedMessageBanner />", () => {
             expect(sdkContext.resizeNotifier.notifyTimelineHeightChanged).toHaveBeenCalledTimes(1);
 
             // The banner has no event to display and is hidden
-            jest.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([]);
-            jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([]);
+            vi.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([]);
+            vi.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([]);
             rerender(<PinnedMessageBanner permalinkCreator={permalinkCreator} room={room} />);
             // The timeline should be resized
             expect(sdkContext.resizeNotifier.notifyTimelineHeightChanged).toHaveBeenCalledTimes(2);
@@ -262,13 +265,13 @@ describe("<PinnedMessageBanner />", () => {
 
     describe("Right button", () => {
         beforeEach(() => {
-            jest.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([event1.getId()!, event2.getId()!]);
-            jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event1, event2]);
+            vi.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([event1.getId()!, event2.getId()!]);
+            vi.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event1, event2]);
         });
 
         it("should display View all button if the right panel is closed", async () => {
             // The Right panel is closed
-            jest.spyOn(RightPanelStore.instance, "isOpenForRoom").mockReturnValue(false);
+            vi.spyOn(RightPanelStore.instance, "isOpenForRoom").mockReturnValue(false);
 
             renderBanner();
             await expect(screen.findByText("Second pinned message")).resolves.toBeVisible();
@@ -278,8 +281,8 @@ describe("<PinnedMessageBanner />", () => {
 
         it("should display View all button if the right panel is not opened on the pinned message list", async () => {
             // The Right panel is opened on another card
-            jest.spyOn(RightPanelStore.instance, "isOpenForRoom").mockReturnValue(true);
-            jest.spyOn(RightPanelStore.instance, "currentCard", "get").mockReturnValue({
+            vi.spyOn(RightPanelStore.instance, "isOpenForRoom").mockReturnValue(true);
+            vi.spyOn(RightPanelStore.instance, "currentCard", "get").mockReturnValue({
                 phase: RightPanelPhases.MemberList,
             });
 
@@ -291,8 +294,8 @@ describe("<PinnedMessageBanner />", () => {
 
         it("should display Close list button if the message pinning list is displayed", async () => {
             // The Right panel is closed
-            jest.spyOn(RightPanelStore.instance, "isOpenForRoom").mockReturnValue(true);
-            jest.spyOn(RightPanelStore.instance, "currentCard", "get").mockReturnValue({
+            vi.spyOn(RightPanelStore.instance, "isOpenForRoom").mockReturnValue(true);
+            vi.spyOn(RightPanelStore.instance, "currentCard", "get").mockReturnValue({
                 phase: RightPanelPhases.PinnedMessages,
             });
 
@@ -304,11 +307,11 @@ describe("<PinnedMessageBanner />", () => {
 
         it("should open or close the message pinning list", async () => {
             // The Right panel is closed
-            jest.spyOn(RightPanelStore.instance, "isOpenForRoom").mockReturnValue(true);
-            jest.spyOn(RightPanelStore.instance, "currentCard", "get").mockReturnValue({
+            vi.spyOn(RightPanelStore.instance, "isOpenForRoom").mockReturnValue(true);
+            vi.spyOn(RightPanelStore.instance, "currentCard", "get").mockReturnValue({
                 phase: RightPanelPhases.PinnedMessages,
             });
-            jest.spyOn(RightPanelStore.instance, "showOrHidePhase").mockReturnValue();
+            vi.spyOn(RightPanelStore.instance, "showOrHidePhase").mockReturnValue();
 
             renderBanner();
             await userEvent.click(screen.getByRole("button", { name: "Close list" }));
@@ -317,8 +320,8 @@ describe("<PinnedMessageBanner />", () => {
 
         it("should listen to the right panel", async () => {
             // The Right panel is closed
-            jest.spyOn(RightPanelStore.instance, "isOpenForRoom").mockReturnValue(true);
-            jest.spyOn(RightPanelStore.instance, "currentCard", "get").mockReturnValue({
+            vi.spyOn(RightPanelStore.instance, "isOpenForRoom").mockReturnValue(true);
+            vi.spyOn(RightPanelStore.instance, "currentCard", "get").mockReturnValue({
                 phase: RightPanelPhases.PinnedMessages,
             });
 
@@ -326,7 +329,7 @@ describe("<PinnedMessageBanner />", () => {
             await expect(screen.findByText("Second pinned message")).resolves.toBeVisible();
             expect(screen.getByRole("button", { name: "Close list" })).toBeVisible();
 
-            jest.spyOn(RightPanelStore.instance, "isOpenForRoom").mockReturnValue(false);
+            vi.spyOn(RightPanelStore.instance, "isOpenForRoom").mockReturnValue(false);
             act(() => {
                 RightPanelStore.instance.emit(UPDATE_EVENT);
             });
