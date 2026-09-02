@@ -29,17 +29,30 @@ import { getRoomNotifsState, RoomNotifState } from "../../../../RoomNotifs";
 
 const MIN_UPDATE_INTERVAL_MS = 500;
 
+/**
+ * An unread thread displayed in the Threads Activity Centre.
+ */
 export type ThreadData = {
+    /** The unread thread. */
     thread: Thread;
+    /** The room the thread belongs to. */
     room: Room;
+    /** The notification level of the thread. */
     notificationLevel: NotificationLevel;
 };
 
-type Result = {
+/**
+ * The unread threads to display in the Threads Activity Centre.
+ */
+export type UnreadThreadRooms = {
+    /** The highest notification level across all the displayed threads. */
     greatestNotificationLevel: NotificationLevel;
+    /** The rooms contributing at least one displayed thread, and their notification level. */
     rooms: Array<{ room: Room; notificationLevel: NotificationLevel }>;
-    participatingThreads: Array<ThreadData>;
-    otherThreads: Array<ThreadData>;
+    /** The unread threads relevant to the user, shown in the "My threads" tab. */
+    participatingThreads: ThreadData[];
+    /** The other unread threads, shown in the "Other threads" tab. */
+    otherThreads: ThreadData[];
 };
 
 /**
@@ -48,14 +61,14 @@ type Result = {
  * See {@link computeUnreadThreadRooms} for how threads are categorised.
  * The result is computed when the client syncs, or when forceComputation is true.
  * @param forceComputation
- * @returns {Result}
+ * @returns {UnreadThreadRooms}
  */
-export function useUnreadThreadRooms(forceComputation: boolean): Result {
+export function useUnreadThreadRooms(forceComputation: boolean): UnreadThreadRooms {
     const msc3946ProcessDynamicPredecessor = useSettingValue("feature_dynamic_room_predecessors");
     const settingTACOnlyNotifs = useSettingValue("Notifications.tac_only_notifications");
     const mxClient = useMatrixClientContext();
 
-    const [result, setResult] = useState<Result>({
+    const [result, setResult] = useState<UnreadThreadRooms>({
         greatestNotificationLevel: NotificationLevel.None,
         rooms: [],
         participatingThreads: [],
@@ -95,43 +108,13 @@ export function useUnreadThreadRooms(forceComputation: boolean): Result {
  * Compute the list of unread threads, split into "my threads" (relevant to the user)
  * and "other threads" (everything else), along with notification levels.
  *
- * Categorisation (mutually exclusive):
- * - "My threads": {@link Thread.hasCurrentUserParticipated} (from the server's
- *   `current_user_participated` field in bundled `m.thread` relations) OR the current
- *   user has sent a message in the thread's local timeline (catches replies the server
- *   bundle hasn't caught up with yet, see {@link hasCurrentUserSentInThread}) OR the
- *   thread has a server highlight count > 0 (a mention/keyword for the user).
- * - "Other threads": every other unread thread.
+ * A thread goes to "My threads" when the user participated in it or was mentioned in it,
+ * and to "Other threads" otherwise. "My threads" is always shown in full; "Other threads"
+ * skips muted rooms, and, when `settingTACOnlyNotifs` is on, threads without a
+ * server-reported notification count.
  *
- * The `settingTACOnlyNotifs` setting (`Notifications.tac_only_notifications`) is
- * **scoped to "Other threads" only**. Threads relevant to the user are always shown,
- * regardless of the setting:
- *
- * - "My threads": always includes any unread thread the user has participated in
- *   (or has a highlight for), whether the unread comes from server notification
- *   counts or local timeline inspection. Muted rooms still contribute here — a
- *   thread you replied in, or where you were mentioned, should reach you even
- *   when the room itself is muted.
- * - "Other threads":
- *   - setting = false (default): include both server-notified and local-activity
- *     unreads (but skip muted rooms — non-relevant threads from muted rooms are
- *     noise by definition).
- *   - setting = true: only include threads with server-reported counts (drops
- *     activity-only threads that the homeserver hasn't pushed notifications for).
- *
- * Local unread detection has known limitations (timeline window may not cover the
- * full history); the setting lets users mute the noisier "Other threads" list while
- * keeping personally-relevant threads visible.
- *
- * The `rooms` array and `greatestNotificationLevel` only reflect rooms that
- * contribute at least one displayed thread, so the indicator badge matches what
- * the user will actually see in the popup.
- *
- * Note: we intentionally do NOT pre-filter rooms via `doesRoomHaveUnreadThreads()`.
- * That helper short-circuits on muted rooms and on rooms where the local timeline
- * has no detected unread — both of which can mask server-flagged highlights and
- * participated threads. Iterating per-thread is cheap (server counts are O(1)
- * lookups) and avoids those false negatives.
+ * `rooms` and `greatestNotificationLevel` only cover rooms contributing a displayed thread,
+ * so the indicator badge matches the popup content.
  *
  * @param mxClient - MatrixClient
  * @param msc3946ProcessDynamicPredecessor
@@ -141,13 +124,13 @@ function computeUnreadThreadRooms(
     mxClient: MatrixClient,
     msc3946ProcessDynamicPredecessor: boolean,
     settingTACOnlyNotifs: boolean,
-): Result {
+): UnreadThreadRooms {
     // Only count visible rooms to not torment the user with notification counts in rooms they can't see.
     // This will include highlights from the previous version of the room internally
     const visibleRooms = mxClient.getVisibleRooms(msc3946ProcessDynamicPredecessor);
 
     let greatestNotificationLevel = NotificationLevel.None;
-    const rooms: Result["rooms"] = [];
+    const rooms: UnreadThreadRooms["rooms"] = [];
     const participatingThreads: ThreadData[] = [];
     const otherThreads: ThreadData[] = [];
 
@@ -215,12 +198,11 @@ type ThreadUnread = {
  * counts and falling back to local timeline inspection for threads the server hasn't
  * pushed counts for.
  *
- * The local fallback is needed because {@link doesTimelineHaveUnreadMessages} can report a
- * participated thread as unread when we replied but aren't the *literal* last sender (a later
- * reaction/edit, or a message that doesn't trigger an unread count, landed after our reply).
- * The js-sdk's read shortcut only fires for the very last event (see the "second-last event"
- * TODO in room-receipts.ts), so the latest incoming message — older than our reply — looks
- * unread. {@link hasUnreadAfterMyLatestReply} guards against that.
+ * TODO: {@link doesTimelineHaveUnreadMessages} reports a thread as unread when we replied
+ * but aren't the *literal* last sender, so we guard it with {@link hasUnreadAfterMyLatestReply}.
+ * That guard belongs in `doesTimelineHaveUnreadMessages` itself: see
+ * https://github.com/element-hq/element-web/issues/34904, fixed by
+ * https://github.com/element-hq/element-web/pull/34905. Drop the guard once that lands.
  *
  * @returns the thread's unread state, or `null` when there is nothing unread to surface.
  */
@@ -265,6 +247,10 @@ function evaluateThreadUnread(client: MatrixClient, room: Room, thread: Thread):
  * failed/pending local echoes) to match the server's `current_user_participated`
  * semantics — the same `isRelation(THREAD_RELATION_TYPE.name) && !status` test the
  * rest of the app uses to identify a real thread reply.
+ *
+ * TODO: this is a workaround for https://github.com/matrix-org/matrix-js-sdk/issues/5515,
+ * fixed upstream by https://github.com/matrix-org/matrix-js-sdk/pull/5516. Drop this helper
+ * in favour of {@link Thread.hasCurrentUserParticipated} once that lands and we bump the pin.
  *
  * @returns true if the current user authored a reply in the thread.
  */
@@ -315,7 +301,7 @@ function hasUnreadAfterMyLatestReply(client: MatrixClient, thread: Thread): bool
 /**
  * Store the room and its thread notification level
  */
-type RoomData = Result["rooms"][0];
+type RoomData = UnreadThreadRooms["rooms"][0];
 
 /**
  * Sort notification level by the most important notification level to the least important
