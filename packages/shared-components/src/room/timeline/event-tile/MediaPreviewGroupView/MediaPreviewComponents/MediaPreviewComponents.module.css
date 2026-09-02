@@ -10,7 +10,7 @@
 
 .leftGroup {
     display: flex;
-    gap: 12px;
+    gap: var(--cpd-space-3x);
     flex-grow: 1;
     min-width: 0;
 }
