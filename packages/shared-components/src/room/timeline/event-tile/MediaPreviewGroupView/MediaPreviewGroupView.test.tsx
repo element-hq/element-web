@@ -65,10 +65,10 @@ const secondTextEntry: MediaPreviewGroupEntry = {
 
 function renderGroup(
     entries: Array<MediaPreviewGroupEntry>,
-    collapse?: React.ComponentProps<typeof MediaPreviewGroupPreview>["collapse"],
+    collapse?: MediaPreviewGroupSnapshot["collapse"],
 ): ReturnType<typeof render> {
-    const vm = new MockViewModel<MediaPreviewGroupSnapshot>({ entries });
-    return render(<MediaPreviewGroupPreview vm={vm} collapse={collapse} />);
+    const vm = new MockViewModel<MediaPreviewGroupSnapshot>({ entries, collapse });
+    return render(<MediaPreviewGroupPreview vm={vm} />);
 }
 
 describe("MediaPreviewGroupPreview", () => {
