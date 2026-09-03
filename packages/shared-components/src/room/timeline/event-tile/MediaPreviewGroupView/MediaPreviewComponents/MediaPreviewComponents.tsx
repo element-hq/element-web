@@ -190,10 +190,12 @@ function getVideoClass(size: ImageSize): string {
 
 export function Image({
     image,
+    imageAlt,
     imageOnClick,
     imageSize,
 }: {
     image: string;
+    imageAlt: string;
     imageOnClick?: () => void;
     imageSize: ImageSize;
 }): JSX.Element | null {
@@ -203,7 +205,7 @@ export function Image({
 
     if (!valid || src !== image) return null;
 
-    const imageElem = <img src={image} alt="" />;
+    const imageElem = <img src={image} alt={imageAlt} />;
     return (
         <div className={classNames(classes)}>
             {imageOnClick ? (

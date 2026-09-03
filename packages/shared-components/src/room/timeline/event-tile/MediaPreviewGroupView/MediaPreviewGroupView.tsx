@@ -35,6 +35,10 @@ export type MediaPreviewGroupEntryImageContent = {
      */
     image: string;
     /**
+     * alt text for image
+     */
+    imageAlt: string;
+    /**
      * optional: what happens when the image is clicked
      */
     imageOnClick?: () => void;

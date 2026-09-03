@@ -42,6 +42,7 @@ const imageEntry: MediaPreviewGroupEntry = {
     id: "screenshot.png",
     type: "image",
     image: demoImage,
+    imageAlt: "Screenshot of the dashboard",
     imageSize: "banner",
     icon: <DocumentIcon />,
     color: "#4200A6",
