@@ -1349,14 +1349,13 @@ function EventTileViewStoryContent({
     // PinnedMessagesCard is still rendered by the legacy PinnedEventTile in the
     // application. Keep this story as a presentation diagnostic rather than
     // rendering an EventTileView that does not represent the real panel.
-    const tiles =
-        shape === "Pinned"
-            ? null
-            : shape === "Room"
-              ? renderRoomTiles()
-              : shape === "Search" && searchMessages === "result"
-                ? renderSearchTiles()
-                : renderTile(false, "event", { continuation: false, lastInSection: true }, true);
+    const renderTiles = (): React.ReactNode => {
+        if (shape === "Pinned") return null;
+        if (shape === "Room") return renderRoomTiles();
+        if (shape === "Search" && searchMessages === "result") return renderSearchTiles();
+
+        return renderTile(false, "event", { continuation: false, lastInSection: true }, true);
+    };
 
     const rightPanel =
         shape === "Card" ||
@@ -1376,7 +1375,7 @@ function EventTileViewStoryContent({
                 rightPanel={rightPanel}
                 presentationNotice={presentation.notice}
             >
-                {tiles}
+                {renderTiles()}
             </TimelineStoryFrame>
         </EventPresentationProvider>
     );
