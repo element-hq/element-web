@@ -42,7 +42,7 @@ catalog:
     "@vitest/coverage-v8": 4.1.11
     "@vitest/browser-playwright": 4.1.11
     "@vitest/browser": 4.1.11
-    "@vitejs/plugin-react": 6.1.0
+    "@vitejs/plugin-react": 6.1.1
     unplugin-dts: 1.0.1
     # nx
     nx: 23.1.1
