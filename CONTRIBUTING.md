@@ -49,6 +49,11 @@ As for your PR description, it should include these things:
 Please **_do not use force push_** in your PRs. Doing so means we can't see what
 has changed. We use squash merge to get a "clean" git history.
 
+Your PR may have the `X-Needs-Iteration` label applied to it if the reviewers feel that it needs more work before it can be merged.
+This is not a negative reflection on your work, but rather a way to ensure that the PR is in a good state before it is merged.
+If no updates occur within 2 weeks a PR with this label will be automatically marked as draft.
+Draft PRs which haven't been updated in 2 months will be automatically closed.
+
 ### Adding a new feature or enhancement
 
 To make a great product with a great user experience, all the small efforts need to go in the same direction and be aligned and consistent with each other.
@@ -69,34 +74,12 @@ Only once all of the above is met should you open a PR with your proposed change
 There's no need to manually add Changelog entries: we use information in the
 pull request to populate the information that goes into the changelogs our
 users see, both for Element Web itself and other projects on which it is based.
-This is picked up from both labels on the pull request and the `Notes:`
-annotation in the description. By default, the PR title will be used for the
-changelog entry, but you can specify more options, as follows.
-
-To add a longer, more detailed description of the change for the changelog:
-
-_Fix llama herding bug_
-
-```
-Notes: Fix a bug (https://github.com/matrix-org/notaproject/issues/123) where the 'Herd' button would not herd more than 8 Llamas if the moon was in the waxing gibbous phase
-```
+The PR title will be used for the changelog entry.
 
 For some PRs, it's not useful to have an entry in the user-facing changelog (this is
 the default for PRs labelled with `T-Task`):
 
 _Remove outdated comment from `Ungulates.ts`_
-
-If your PR introduces a breaking change, use the `Notes` section in the same
-way, additionally adding the `X-Breaking-Change` label (see below). There's no need
-to specify in the notes that it's a breaking change - this will be added
-automatically based on the label - but remember to tell the developer how to
-migrate:
-
-_Remove legacy class_
-
-```
-Notes: Remove legacy `Camelopard` class. `Giraffe` should be used instead.
-```
 
 Other metadata can be added using labels.
 
