@@ -211,6 +211,7 @@ function ThreadsActivityCentreThreadRow({ threadData, onClick }: ThreadsActivity
                     show_room_tile: true,
                     room_id: room.roomId,
                     metricsTrigger: "WebThreadsActivityCentre",
+                    focusNext: "threadsPanel"
                 });
             }}
         >
