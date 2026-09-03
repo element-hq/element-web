@@ -86,7 +86,7 @@ export class RoomUploadViewModel
             moduleComposerApi,
             ModuleComposerApiEvents.UploaderOptionsChanged,
             // Types issue.
-            this.onUploaderOptionsChanged,
+            this.onUploaderOptionsChanged as any,
         );
     }
 
