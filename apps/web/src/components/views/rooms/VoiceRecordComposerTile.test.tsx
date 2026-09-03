@@ -1,34 +1,36 @@
 /*
 Copyright 2024 New Vector Ltd.
-Copyright 2022 The Matrix.org Foundation C.I.C.
+Copyright 2021, 2022 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import React, { createRef, type RefObject } from "react";
-import { render } from "jest-matrix-react";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { render } from "test-utils-rtl";
 import { type MatrixClient, MsgType, type Room } from "matrix-js-sdk/src/matrix";
-import { mocked } from "jest-mock";
+import { mkEvent } from "test-utils";
 
-import VoiceRecordComposerTile from "../../../../../src/components/views/rooms/VoiceRecordComposerTile";
-import { doMaybeLocalRoomAction } from "../../../../../src/utils/local-room";
-import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import { type IUpload, type VoiceMessageRecording } from "../../../../../src/audio/VoiceMessageRecording";
-import { VoiceRecordingStore } from "../../../../../src/stores/VoiceRecordingStore";
-import { type PlaybackClock } from "../../../../../src/audio/PlaybackClock";
-import { mkEvent } from "../../../../test-utils";
+import VoiceRecordComposerTile from "./VoiceRecordComposerTile";
+import { doMaybeLocalRoomAction } from "../../../utils/local-room";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { type IUpload, type VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";
+import { VoiceRecordingStore } from "../../../stores/VoiceRecordingStore";
+import { type PlaybackClock } from "../../../audio/PlaybackClock";
 
-jest.mock("../../../../../src/utils/local-room", () => ({
-    doMaybeLocalRoomAction: jest.fn(),
+vi.mock("../../../utils/local-room", () => ({
+    doMaybeLocalRoomAction: vi.fn(),
 }));
 
-jest.mock("../../../../../src/stores/VoiceRecordingStore", () => ({
+vi.mock("../../../stores/VoiceRecordingStore", () => ({
     VoiceRecordingStore: {
-        getVoiceRecordingId: jest.fn().mockReturnValue("voice-recording-id"),
+        getVoiceRecordingId: vi.fn().mockReturnValue("voice-recording-id"),
         instance: {
-            getActiveRecording: jest.fn(),
-            disposeRecording: jest.fn(),
+            getActiveRecording: vi.fn(),
+            disposeRecording: vi.fn(),
         },
     },
 }));
@@ -42,8 +44,8 @@ describe("<VoiceRecordComposerTile/>", () => {
 
     beforeEach(() => {
         mockClient = {
-            getSafeUserId: jest.fn().mockReturnValue("@alice:example.com"),
-            sendMessage: jest.fn(),
+            getSafeUserId: vi.fn().mockReturnValue("@alice:example.com"),
+            sendMessage: vi.fn(),
         } as unknown as MatrixClient;
         MatrixClientPeg.get = () => mockClient;
         MatrixClientPeg.safeGet = () => mockClient;
@@ -61,33 +63,33 @@ describe("<VoiceRecordComposerTile/>", () => {
             mxc: "mxc://example.com/voice",
         };
         mockRecorder = {
-            on: jest.fn(),
-            off: jest.fn(),
-            stop: jest.fn(),
+            on: vi.fn(),
+            off: vi.fn(),
+            stop: vi.fn(),
             upload: () => Promise.resolve(mockUpload),
             durationSeconds: 1337,
             contentType: "audio/ogg",
             getPlayback: () => ({
-                on: jest.fn(),
-                off: jest.fn(),
-                prepare: jest.fn().mockResolvedValue(void 0),
+                on: vi.fn(),
+                off: vi.fn(),
+                prepare: vi.fn().mockResolvedValue(void 0),
                 clockInfo: {
                     timeSeconds: 0,
                     liveData: {
-                        onUpdate: jest.fn(),
+                        onUpdate: vi.fn(),
                     },
                 } as unknown as PlaybackClock,
                 waveform: [1.4, 2.5, 3.6],
                 waveformData: {
-                    onUpdate: jest.fn(),
+                    onUpdate: vi.fn(),
                 },
                 thumbnailWaveform: [1.4, 2.5, 3.6],
             }),
         } as unknown as VoiceMessageRecording;
-        mocked(VoiceRecordingStore.instance.getActiveRecording).mockReturnValue(mockRecorder);
+        vi.mocked(VoiceRecordingStore.instance.getActiveRecording).mockReturnValue(mockRecorder);
         render(<VoiceRecordComposerTile {...props} />);
 
-        mocked(doMaybeLocalRoomAction).mockImplementation(
+        vi.mocked(doMaybeLocalRoomAction).mockImplementation(
             <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
                 return fn(roomId);
             },

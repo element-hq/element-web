@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`NewRoomIntro topic should render a link in the topic 1`] = `
+exports[`NewRoomIntro > topic > should render a link in the topic 1`] = `
 <p
   data-testid="topic"
 >

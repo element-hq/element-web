@@ -6,16 +6,19 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
-import { render, screen, waitFor } from "jest-matrix-react";
+// @vitest-environment happy-dom
 
-import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import { createTestClient, getRoomContext, mkStubRoom } from "../../../../test-utils";
-import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import MessageComposerButtons from "../../../../../src/components/views/rooms/MessageComposerButtons";
-import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
-import { type RoomContextType } from "../../../../../src/contexts/RoomContext.ts";
-import { RoomUploadContextProvider } from "../../../../../src/viewmodels/room/RoomUploadViewModel.tsx";
+import React from "react";
+import { describe, it, expect, vi } from "vitest";
+import { render, screen, waitFor } from "test-utils-rtl";
+import { createTestClient, getRoomContext, mkStubRoom } from "test-utils";
+
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import MessageComposerButtons from "./MessageComposerButtons";
+import { ScopedRoomContextProvider } from "../../../contexts/ScopedRoomContext.tsx";
+import { type RoomContextType } from "../../../contexts/RoomContext.ts";
+import { RoomUploadContextProvider } from "../../../viewmodels/room/RoomUploadViewModel.tsx";
 
 describe("MessageComposerButtons", () => {
     // @ts-ignore - we're deliberately not implementing the whole interface here, but
@@ -31,7 +34,7 @@ describe("MessageComposerButtons", () => {
     };
 
     const mockClient = createTestClient();
-    jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
+    vi.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
 
     function getButtonLabels() {
         const getLabels = (elements: HTMLElement[]): string[] =>

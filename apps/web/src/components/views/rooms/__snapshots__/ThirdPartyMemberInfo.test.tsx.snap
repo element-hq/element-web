@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`<ThirdPartyMemberInfo /> should render invite 1`] = `
+exports[`<ThirdPartyMemberInfo /> > should render invite 1`] = `
 <div>
   <div
     class="mx_BaseCard"
@@ -77,7 +77,7 @@ exports[`<ThirdPartyMemberInfo /> should render invite 1`] = `
 </div>
 `;
 
-exports[`<ThirdPartyMemberInfo /> should render invite when room in not available 1`] = `
+exports[`<ThirdPartyMemberInfo /> > should render invite when room in not available 1`] = `
 <div>
   <div
     class="mx_BaseCard"

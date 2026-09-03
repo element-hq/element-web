@@ -6,7 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { act, fireEvent, render, screen } from "jest-matrix-react";
+// @vitest-environment happy-dom
+
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { act, fireEvent, render, screen } from "test-utils-rtl";
 import {
     EventTimeline,
     EventType,
@@ -19,27 +22,22 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import React from "react";
+import { clearAllModals, flushPromises, getMockClientWithEventEmitter, mockClientMethodsUser } from "test-utils";
 
-import ErrorDialog from "../../../../../src/components/views/dialogs/ErrorDialog";
-import { RoomSettingsTab } from "../../../../../src/components/views/dialogs/RoomSettingsDialog-tab";
-import { RoomKnocksBar } from "../../../../../src/components/views/rooms/RoomKnocksBar";
-import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import dis from "../../../../../src/dispatcher/dispatcher";
-import Modal from "../../../../../src/Modal";
-import {
-    clearAllModals,
-    flushPromises,
-    getMockClientWithEventEmitter,
-    mockClientMethodsUser,
-} from "../../../../test-utils";
-import * as languageSettings from "../../../../../src/i18n/settings";
+import ErrorDialog from "../dialogs/ErrorDialog";
+import { RoomSettingsTab } from "../dialogs/RoomSettingsDialog-tab";
+import { RoomKnocksBar } from "./RoomKnocksBar";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import dis from "../../../dispatcher/dispatcher";
+import Modal from "../../../Modal";
+import * as languageSettings from "../../../i18n/settings";
 
 describe("RoomKnocksBar", () => {
     const userId = "@alice:example.org";
     const client = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
-        invite: jest.fn(),
-        kick: jest.fn(),
+        invite: vi.fn(),
+        kick: vi.fn(),
     });
     const roomId = "#ask-to-join:example.org";
     const member = new RoomMember(roomId, userId);
@@ -56,38 +54,38 @@ describe("RoomKnocksBar", () => {
         );
 
     beforeEach(() => {
-        jest.spyOn(room, "getMember").mockReturnValue(member);
-        jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Knock);
+        vi.spyOn(room, "getMember").mockReturnValue(member);
+        vi.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Knock);
     });
 
     it("does not render if the room join rule is not knock", () => {
-        jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Invite);
-        jest.spyOn(room, "getMembersWithMembership").mockReturnValue([member]);
-        jest.spyOn(room, "canInvite").mockReturnValue(true);
-        jest.spyOn(state, "hasSufficientPowerLevelFor").mockReturnValue(true);
+        vi.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Invite);
+        vi.spyOn(room, "getMembersWithMembership").mockReturnValue([member]);
+        vi.spyOn(room, "canInvite").mockReturnValue(true);
+        vi.spyOn(state, "hasSufficientPowerLevelFor").mockReturnValue(true);
         expect(getComponent(room).container.firstChild).toBeNull();
     });
 
     describe("without requests to join", () => {
         beforeEach(() => {
-            jest.spyOn(room, "getMembersWithMembership").mockReturnValue([]);
-            jest.spyOn(room, "canInvite").mockReturnValue(true);
-            jest.spyOn(state, "hasSufficientPowerLevelFor").mockReturnValue(true);
+            vi.spyOn(room, "getMembersWithMembership").mockReturnValue([]);
+            vi.spyOn(room, "canInvite").mockReturnValue(true);
+            vi.spyOn(state, "hasSufficientPowerLevelFor").mockReturnValue(true);
         });
 
         it("does not render if user can neither approve nor deny", () => {
-            jest.spyOn(room, "canInvite").mockReturnValue(false);
-            jest.spyOn(state, "hasSufficientPowerLevelFor").mockReturnValue(false);
+            vi.spyOn(room, "canInvite").mockReturnValue(false);
+            vi.spyOn(state, "hasSufficientPowerLevelFor").mockReturnValue(false);
             expect(getComponent(room).container.firstChild).toBeNull();
         });
 
         it("does not render if user cannot approve", () => {
-            jest.spyOn(room, "canInvite").mockReturnValue(false);
+            vi.spyOn(room, "canInvite").mockReturnValue(false);
             expect(getComponent(room).container.firstChild).toBeNull();
         });
 
         it("does not render if user cannot deny", () => {
-            jest.spyOn(state, "hasSufficientPowerLevelFor").mockReturnValue(false);
+            vi.spyOn(state, "hasSufficientPowerLevelFor").mockReturnValue(false);
             expect(getComponent(room).container.firstChild).toBeNull();
         });
 
@@ -127,25 +125,25 @@ describe("RoomKnocksBar", () => {
 
         beforeEach(async () => {
             await clearAllModals();
-            jest.spyOn(room, "getMembersWithMembership").mockReturnValue([bob]);
-            jest.spyOn(room, "canInvite").mockReturnValue(true);
-            jest.spyOn(state, "hasSufficientPowerLevelFor").mockReturnValue(true);
-            jest.spyOn(Modal, "createDialog");
-            jest.spyOn(dis, "dispatch");
-            jest.spyOn(languageSettings, "getUserLanguage").mockReturnValue("en-GB");
+            vi.spyOn(room, "getMembersWithMembership").mockReturnValue([bob]);
+            vi.spyOn(room, "canInvite").mockReturnValue(true);
+            vi.spyOn(state, "hasSufficientPowerLevelFor").mockReturnValue(true);
+            vi.spyOn(Modal, "createDialog");
+            vi.spyOn(dis, "dispatch");
+            vi.spyOn(languageSettings, "getUserLanguage").mockReturnValue("en-GB");
         });
 
         it("does not render if user can neither approve nor deny", () => {
-            jest.spyOn(room, "canInvite").mockReturnValue(false);
-            jest.spyOn(state, "hasSufficientPowerLevelFor").mockReturnValue(false);
+            vi.spyOn(room, "canInvite").mockReturnValue(false);
+            vi.spyOn(state, "hasSufficientPowerLevelFor").mockReturnValue(false);
             expect(getComponent(room).container.firstChild).toBeNull();
         });
 
         it("unhides the bar when a new knock request appears", () => {
-            jest.spyOn(room, "getMembersWithMembership").mockReturnValue([]);
+            vi.spyOn(room, "getMembersWithMembership").mockReturnValue([]);
             const { container } = getComponent(room);
             expect(container.firstChild).toBeNull();
-            jest.spyOn(room, "getMembersWithMembership").mockReturnValue([bob]);
+            vi.spyOn(room, "getMembersWithMembership").mockReturnValue([bob]);
             act(() => {
                 room.emit(RoomStateEvent.Update, state);
             });
@@ -155,7 +153,7 @@ describe("RoomKnocksBar", () => {
         it("updates when the list of knocking users changes", () => {
             getComponent(room);
             expect(screen.getByRole("heading")).toHaveTextContent("Asking to join");
-            jest.spyOn(room, "getMembersWithMembership").mockReturnValue([bob, jane]);
+            vi.spyOn(room, "getMembersWithMembership").mockReturnValue([bob, jane]);
             act(() => {
                 room.emit(RoomStateEvent.Update, state);
             });
@@ -163,7 +161,7 @@ describe("RoomKnocksBar", () => {
         });
 
         describe("when knock members count is 1", () => {
-            beforeEach(() => jest.spyOn(room, "getMembersWithMembership").mockReturnValue([bob]));
+            beforeEach(() => vi.spyOn(room, "getMembersWithMembership").mockReturnValue([bob]));
 
             it("renders a heading and a paragraph with name and user ID", () => {
                 const { container } = getComponent(room);
@@ -200,10 +198,10 @@ describe("RoomKnocksBar", () => {
 
             type TestCase = [string, ButtonNames, () => void];
             it.each<TestCase>([
-                ["deny request fails", "Deny", () => jest.spyOn(client, "kick").mockRejectedValue(error)],
-                ["deny request succeeds", "Deny", () => jest.spyOn(client, "kick").mockResolvedValue({})],
-                ["approve request fails", "Approve", () => jest.spyOn(client, "invite").mockRejectedValue(error)],
-                ["approve request succeeds", "Approve", () => jest.spyOn(client, "invite").mockResolvedValue({})],
+                ["deny request fails", "Deny", () => vi.spyOn(client, "kick").mockRejectedValue(error)],
+                ["deny request succeeds", "Deny", () => vi.spyOn(client, "kick").mockResolvedValue({})],
+                ["approve request fails", "Approve", () => vi.spyOn(client, "invite").mockRejectedValue(error)],
+                ["approve request succeeds", "Approve", () => vi.spyOn(client, "invite").mockResolvedValue({})],
             ])("toggles the disabled attribute for the buttons when a %s", async (_, buttonName, setup) => {
                 setup();
                 getComponent(room);
@@ -216,13 +214,13 @@ describe("RoomKnocksBar", () => {
             });
 
             it("disables the deny button if the power level is insufficient", () => {
-                jest.spyOn(state, "hasSufficientPowerLevelFor").mockReturnValue(false);
+                vi.spyOn(state, "hasSufficientPowerLevelFor").mockReturnValue(false);
                 getComponent(room);
                 expect(getButton("Deny")).toHaveAttribute("disabled");
             });
 
             it("calls kick on deny", async () => {
-                jest.spyOn(client, "kick").mockResolvedValue({});
+                vi.spyOn(client, "kick").mockResolvedValue({});
                 getComponent(room);
                 fireEvent.click(getButton("Deny"));
                 await act(() => flushPromises());
@@ -230,7 +228,7 @@ describe("RoomKnocksBar", () => {
             });
 
             it("displays an error when a deny request fails", async () => {
-                jest.spyOn(client, "kick").mockRejectedValue(error);
+                vi.spyOn(client, "kick").mockRejectedValue(error);
                 getComponent(room);
                 fireEvent.click(getButton("Deny"));
                 await act(() => flushPromises());
@@ -241,13 +239,13 @@ describe("RoomKnocksBar", () => {
             });
 
             it("disables the approve button if the power level is insufficient", () => {
-                jest.spyOn(room, "canInvite").mockReturnValue(false);
+                vi.spyOn(room, "canInvite").mockReturnValue(false);
                 getComponent(room);
                 expect(getButton("Approve")).toHaveAttribute("disabled");
             });
 
             it("calls invite on approve", async () => {
-                jest.spyOn(client, "invite").mockResolvedValue({});
+                vi.spyOn(client, "invite").mockResolvedValue({});
                 getComponent(room);
                 fireEvent.click(getButton("Approve"));
                 await act(() => flushPromises());
@@ -255,7 +253,7 @@ describe("RoomKnocksBar", () => {
             });
 
             it("displays an error when an approval fails", async () => {
-                jest.spyOn(client, "invite").mockRejectedValue(error);
+                vi.spyOn(client, "invite").mockRejectedValue(error);
                 getComponent(room);
                 fireEvent.click(getButton("Approve"));
                 await act(() => flushPromises());
@@ -267,7 +265,7 @@ describe("RoomKnocksBar", () => {
 
             it("hides the bar when someone else approves or denies the waiting person", () => {
                 getComponent(room);
-                jest.spyOn(room, "getMembersWithMembership").mockReturnValue([]);
+                vi.spyOn(room, "getMembersWithMembership").mockReturnValue([]);
                 act(() => {
                     room.emit(RoomStateEvent.Members, new MatrixEvent(), state, bob);
                 });
@@ -277,7 +275,7 @@ describe("RoomKnocksBar", () => {
 
         describe("when knock members count is greater than 1", () => {
             beforeEach(() => {
-                jest.spyOn(room, "getMembersWithMembership").mockReturnValue([bob, jane]);
+                vi.spyOn(room, "getMembersWithMembership").mockReturnValue([bob, jane]);
                 getComponent(room);
             });
 
@@ -297,7 +295,7 @@ describe("RoomKnocksBar", () => {
 
         describe("when knock members count is 2", () => {
             it("renders a paragraph with two names", () => {
-                jest.spyOn(room, "getMembersWithMembership").mockReturnValue([bob, jane]);
+                vi.spyOn(room, "getMembersWithMembership").mockReturnValue([bob, jane]);
                 const { container } = getComponent(room);
                 expect(container.querySelector(".mx_RoomKnocksBar_paragraph")).toHaveTextContent(
                     `${bob.name} and ${jane.name}`,
@@ -307,7 +305,7 @@ describe("RoomKnocksBar", () => {
 
         describe("when knock members count is 3", () => {
             it("renders a paragraph with three names", () => {
-                jest.spyOn(room, "getMembersWithMembership").mockReturnValue([bob, jane, john]);
+                vi.spyOn(room, "getMembersWithMembership").mockReturnValue([bob, jane, john]);
                 const { container } = getComponent(room);
                 expect(container.querySelector(".mx_RoomKnocksBar_paragraph")).toHaveTextContent(
                     `${bob.name}, ${jane.name} and ${john.name}`,
@@ -317,7 +315,7 @@ describe("RoomKnocksBar", () => {
 
         describe("when knock count is greater than 3", () => {
             it("renders a paragraph with two names and a count", () => {
-                jest.spyOn(room, "getMembersWithMembership").mockReturnValue([bob, jane, john, other]);
+                vi.spyOn(room, "getMembersWithMembership").mockReturnValue([bob, jane, john, other]);
                 const { container } = getComponent(room);
                 expect(container.querySelector(".mx_RoomKnocksBar_paragraph")).toHaveTextContent(
                     `${bob.name}, ${jane.name} and 2 others`,
