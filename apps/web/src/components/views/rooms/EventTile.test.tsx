@@ -6,8 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import React from "react";
-import { act, fireEvent, render, screen, waitFor } from "jest-matrix-react";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { act, fireEvent, render, screen, waitFor } from "test-utils-rtl";
+import userEvent from "@testing-library/user-event";
 import {
     EventStatus,
     EventType,
@@ -31,24 +35,24 @@ import {
 } from "matrix-js-sdk/src/crypto-api";
 import { mkEncryptedMatrixEvent } from "matrix-js-sdk/src/testing";
 import { getByTestId } from "@testing-library/dom";
+import { filterConsole, flushPromises, getRoomContext, mkEvent, mkMessage, stubClient } from "test-utils";
+import { mkThread } from "test-utils/threads";
 
-import EventTile, { type EventTileProps } from "../../../../../src/components/views/rooms/EventTile";
-import * as EventTileFactory from "../../../../../src/events/EventTileFactory";
-import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import { type RoomContextType, TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
-import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import { filterConsole, flushPromises, getRoomContext, mkEvent, mkMessage, stubClient } from "../../../../test-utils";
-import { mkThread } from "../../../../test-utils/threads";
-import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import dis from "../../../../../src/dispatcher/dispatcher";
-import { Action } from "../../../../../src/dispatcher/actions";
-import PinningUtils from "../../../../../src/utils/PinningUtils";
-import { Layout } from "../../../../../src/settings/enums/Layout";
-import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
-import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
-import PlatformPeg from "../../../../../src/PlatformPeg";
-import { EventPresentationContextProvider } from "../../../../../src/utils/EventPresentationContextProvider.tsx";
+import EventTile, { type EventTileProps } from "./EventTile";
+import * as EventTileFactory from "../../../events/EventTileFactory";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { type RoomContextType, TimelineRenderingType } from "../../../contexts/RoomContext";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import DMRoomMap from "../../../utils/DMRoomMap";
+import dis from "../../../dispatcher/dispatcher";
+import { Action } from "../../../dispatcher/actions";
+import PinningUtils from "../../../utils/PinningUtils";
+import { Layout } from "../../../settings/enums/Layout";
+import { ScopedRoomContextProvider } from "../../../contexts/ScopedRoomContext.tsx";
+import SettingsStore from "../../../settings/SettingsStore";
+import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import PlatformPeg from "../../../PlatformPeg";
+import { EventPresentationContextProvider } from "../../../utils/EventPresentationContextProvider.tsx";
 
 function getTile(container: HTMLElement): HTMLElement {
     const tile = container.querySelector(".mx_EventTile");
@@ -60,6 +64,14 @@ function getLine(container: HTMLElement): HTMLElement {
     const line = container.querySelector(".mx_EventTile_line");
     expect(line).not.toBeNull();
     return line as HTMLElement;
+}
+
+function stubHoverMatches(hoveredElement: HTMLElement): void {
+    const matches = HTMLElement.prototype.matches;
+    vi.spyOn(HTMLElement.prototype, "matches").mockImplementation(function (this: HTMLElement, selector: string) {
+        if (selector === ":hover") return this === hoveredElement;
+        return matches.call(this, selector);
+    });
 }
 
 function makeReplyEvent(roomId: string): MatrixEvent {
@@ -127,8 +139,8 @@ function makeRelations(
                     new Map(events.map((ev) => [ev.getId(), ev])),
                 ]),
             ),
-        on: jest.fn(),
-        off: jest.fn(),
+        on: vi.fn(),
+        off: vi.fn(),
     } as unknown as Relations;
 }
 
@@ -196,12 +208,12 @@ describe("EventTile", () => {
     }
 
     beforeEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
 
         stubClient();
         client = MatrixClientPeg.safeGet();
-        jest.spyOn(DMRoomMap, "shared").mockReturnValue({
-            getUserIdForRoomId: jest.fn().mockReturnValue(undefined),
+        vi.spyOn(DMRoomMap, "shared").mockReturnValue({
+            getUserIdForRoomId: vi.fn().mockReturnValue(undefined),
         } as unknown as DMRoomMap);
 
         room = new Room(ROOM_ID, client, client.getSafeUserId(), {
@@ -209,9 +221,9 @@ describe("EventTile", () => {
             timelineSupport: true,
         });
 
-        jest.spyOn(client, "getRoom").mockReturnValue(room);
-        jest.spyOn(client, "decryptEventIfNeeded").mockResolvedValue();
-        jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+        vi.spyOn(client, "getRoom").mockReturnValue(room);
+        vi.spyOn(client, "decryptEventIfNeeded").mockResolvedValue();
+        vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
 
         mxEvent = mkMessage({
             room: room.roomId,
@@ -222,7 +234,7 @@ describe("EventTile", () => {
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     describe("layout and tile attributes", () => {
@@ -306,12 +318,14 @@ describe("EventTile", () => {
             expect(container.querySelector(".mx_MessageTimestamp")).toBeNull();
         });
 
-        it("shows the timestamp when the tile is hovered", () => {
+        it("shows the timestamp when the tile is hovered", async () => {
             const { container } = getComponent();
+            const tile = getTile(container);
+            stubHoverMatches(tile);
 
             expect(container.querySelector(".mx_MessageTimestamp")).toBeNull();
 
-            fireEvent.mouseEnter(getTile(container));
+            await userEvent.hover(tile);
 
             expect(container.querySelector(".mx_MessageTimestamp")).not.toBeNull();
         });
@@ -353,7 +367,7 @@ describe("EventTile", () => {
         });
 
         it("dispatches a room view when the linked timestamp is clicked", () => {
-            jest.spyOn(dis, "dispatch").mockImplementation(() => {});
+            vi.spyOn(dis, "dispatch").mockImplementation(() => {});
             const permalinkCreator = new RoomPermalinkCreator(room);
             const { container } = getComponent({ alwaysShowTimestamps: true, permalinkCreator });
             const timestamp = container.querySelector<HTMLAnchorElement>("a.mx_MessageTimestamp");
@@ -503,7 +517,7 @@ describe("EventTile", () => {
 
     describe("reactions and footer", () => {
         it("gets annotation relations when reactions are enabled", () => {
-            const getRelationsForEvent = jest.fn().mockReturnValue(null);
+            const getRelationsForEvent = vi.fn().mockReturnValue(null);
 
             getComponent({ showReactions: true, getRelationsForEvent });
 
@@ -511,7 +525,7 @@ describe("EventTile", () => {
         });
 
         it("does not get annotation relations when reactions are disabled", () => {
-            const getRelationsForEvent = jest.fn().mockReturnValue(null);
+            const getRelationsForEvent = vi.fn().mockReturnValue(null);
 
             getComponent({ getRelationsForEvent });
 
@@ -519,7 +533,7 @@ describe("EventTile", () => {
         });
 
         it("refreshes annotation relations when reaction relations are created", () => {
-            const getRelationsForEvent = jest.fn().mockReturnValue(null);
+            const getRelationsForEvent = vi.fn().mockReturnValue(null);
             getComponent({ showReactions: true, getRelationsForEvent });
             getRelationsForEvent.mockClear();
 
@@ -531,7 +545,7 @@ describe("EventTile", () => {
         });
 
         it("does not refresh annotation relations for unrelated relations", () => {
-            const getRelationsForEvent = jest.fn().mockReturnValue(null);
+            const getRelationsForEvent = vi.fn().mockReturnValue(null);
             getComponent({ showReactions: true, getRelationsForEvent });
             getRelationsForEvent.mockClear();
 
@@ -543,14 +557,14 @@ describe("EventTile", () => {
         });
 
         it("does not render reactions for redacted events", () => {
-            const getRelationsForEvent = jest.fn().mockReturnValue(null);
+            const getRelationsForEvent = vi.fn().mockReturnValue(null);
             const { container } = getComponent({ showReactions: true, getRelationsForEvent, isRedacted: true });
 
             expect(container.querySelector(".mx_ReactionsRow")).toBeNull();
         });
 
         it("renders a footer for pinned messages", () => {
-            jest.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
+            vi.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
             const { container } = getComponent();
 
             expect(container.querySelector('[data-testid="event-tile-slot-footer"]')).not.toBeNull();
@@ -558,7 +572,7 @@ describe("EventTile", () => {
         });
 
         it("renders the IRC footer inside the event line", () => {
-            jest.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
+            vi.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
             const { container } = getComponent({ layout: Layout.IRC });
 
             expect(getLine(container).querySelector('[data-testid="event-tile-slot-footer"]')).not.toBeNull();
@@ -566,7 +580,7 @@ describe("EventTile", () => {
         });
 
         it("renders a bubble footer for an own pinned message", () => {
-            jest.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
+            vi.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
             const ownEvent = makeOwnMessage();
             const { container } = getComponent({ mxEvent: ownEvent, layout: Layout.Bubble });
             const footer = container.querySelector('[data-testid="event-tile-slot-footer"]');
@@ -578,7 +592,7 @@ describe("EventTile", () => {
         it("renders relation groups and deduplicates reactions from the same sender", () => {
             const bobReaction1 = makeReactionEvent(room.roomId, mxEvent.getId()!, "@bob:example.org", "👍");
             const bobReaction2 = makeReactionEvent(room.roomId, mxEvent.getId()!, "@bob:example.org", "👍");
-            const getRelationsForEvent = jest
+            const getRelationsForEvent = vi
                 .fn()
                 .mockReturnValue(makeRelations(new Map([["👍", [bobReaction1, bobReaction2]]])));
 
@@ -592,7 +606,7 @@ describe("EventTile", () => {
 
         it("detects the current user's reaction when rendering relation groups", () => {
             const ownReaction = makeReactionEvent(room.roomId, mxEvent.getId()!, client.getSafeUserId(), "👍");
-            const getRelationsForEvent = jest.fn().mockReturnValue(
+            const getRelationsForEvent = vi.fn().mockReturnValue(
                 makeRelations(new Map([["👍", [ownReaction]]]), {
                     [client.getSafeUserId()]: [ownReaction],
                 }),
@@ -614,17 +628,19 @@ describe("EventTile", () => {
             expect(container.querySelector(".mx_MessageActionBar")).toBeNull();
         });
 
-        it("renders the message action bar when the tile is hovered", () => {
+        it("renders the message action bar when the tile is hovered", async () => {
             const { container } = getComponent();
+            const tile = getTile(container);
+            stubHoverMatches(tile);
 
-            fireEvent.mouseEnter(getTile(container));
+            await userEvent.hover(tile);
 
             expect(container.querySelector(".mx_MessageActionBar")).not.toBeNull();
         });
 
         it("renders the message action bar when the tile receives keyboard focus", () => {
             const matches = HTMLElement.prototype.matches;
-            jest.spyOn(HTMLElement.prototype, "matches").mockImplementation(function (this: HTMLElement, selector) {
+            vi.spyOn(HTMLElement.prototype, "matches").mockImplementation(function (this: HTMLElement, selector) {
                 if (selector === ":focus-visible") return true;
                 return matches.call(this, selector);
             });
@@ -639,7 +655,7 @@ describe("EventTile", () => {
 
         it("hides the keyboard-focused message action bar when focus leaves the tile", () => {
             const matches = HTMLElement.prototype.matches;
-            jest.spyOn(HTMLElement.prototype, "matches").mockImplementation(function (this: HTMLElement, selector) {
+            vi.spyOn(HTMLElement.prototype, "matches").mockImplementation(function (this: HTMLElement, selector) {
                 if (selector === ":focus-visible") return true;
                 return matches.call(this, selector);
             });
@@ -658,18 +674,18 @@ describe("EventTile", () => {
             expect(container.querySelector(".mx_MessageActionBar")).toBeNull();
         });
 
-        it("does not render the message action bar on hover when exporting", () => {
+        it("does not render the message action bar on hover when exporting", async () => {
             const { container } = getComponent({ forExport: true });
 
-            fireEvent.mouseEnter(getTile(container));
+            await userEvent.hover(getTile(container));
 
             expect(container.querySelector(".mx_MessageActionBar")).toBeNull();
         });
 
-        it("does not render the message action bar on hover while editing", () => {
+        it("does not render the message action bar on hover while editing", async () => {
             const { container } = getComponent({ editState: {} as EventTileProps["editState"] });
 
-            fireEvent.mouseEnter(getTile(container));
+            await userEvent.hover(getTile(container));
 
             expect(container.querySelector(".mx_MessageActionBar")).toBeNull();
         });
@@ -705,7 +721,7 @@ describe("EventTile", () => {
 
         it("does not override the native browser context menu for links", () => {
             const { container } = getComponent();
-            jest.spyOn(PlatformPeg, "get").mockReturnValue({
+            vi.spyOn(PlatformPeg, "get").mockReturnValue({
                 allowOverridingNativeContextMenus: () => false,
             } as ReturnType<typeof PlatformPeg.get>);
             const link = document.createElement("a");
@@ -736,7 +752,7 @@ describe("EventTile", () => {
 
         it("does not render the reply chain for redacted reply events", () => {
             const replyEvent = makeReplyEvent(room.roomId);
-            jest.spyOn(replyEvent, "isRedacted").mockReturnValue(true);
+            vi.spyOn(replyEvent, "isRedacted").mockReturnValue(true);
             const { container } = getComponent({ mxEvent: replyEvent });
 
             expect(container.querySelector(".mx_ReplyChain_wrapper")).toBeNull();
@@ -745,7 +761,7 @@ describe("EventTile", () => {
 
     describe("EventTile thread summary", () => {
         beforeEach(() => {
-            jest.spyOn(client, "supportsThreads").mockReturnValue(true);
+            vi.spyOn(client, "supportsThreads").mockReturnValue(true);
         });
 
         it("removes the thread summary when thread is deleted", async () => {
@@ -849,7 +865,7 @@ describe("EventTile", () => {
 
     describe("EventTile renderingType: Threads", () => {
         it("should display the pinned message badge", async () => {
-            jest.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
+            vi.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
             getComponent({}, TimelineRenderingType.Thread);
 
             expect(screen.getByText("Pinned message")).toBeInTheDocument();
@@ -858,7 +874,7 @@ describe("EventTile", () => {
 
     describe("EventTile renderingType: File", () => {
         it("should not display the pinned message badge", async () => {
-            jest.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
+            vi.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
             getComponent({}, TimelineRenderingType.File);
 
             expect(screen.queryByText("Pinned message")).not.toBeInTheDocument();
@@ -869,7 +885,7 @@ describe("EventTile", () => {
         it.each([[Layout.Group], [Layout.Bubble], [Layout.IRC]])(
             "should display the pinned message badge",
             async (layout) => {
-                jest.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
+                vi.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
                 getComponent({ layout });
 
                 expect(screen.getByText("Pinned message")).toBeInTheDocument();
@@ -881,8 +897,8 @@ describe("EventTile", () => {
             const currentMember = new RoomMember(room.roomId, senderId);
             currentMember.rawDisplayName = "Alan (away)";
 
-            jest.spyOn(room, "getMember").mockImplementation((userId) => (userId === senderId ? currentMember : null));
-            jest.spyOn(SettingsStore, "getValue").mockImplementation(
+            vi.spyOn(room, "getMember").mockImplementation((userId) => (userId === senderId ? currentMember : null));
+            vi.spyOn(SettingsStore, "getValue").mockImplementation(
                 (settingName) => settingName === "useOnlyCurrentProfiles",
             );
 
@@ -896,8 +912,8 @@ describe("EventTile", () => {
         });
 
         it("renders the tile error fallback when tile rendering throws", async () => {
-            jest.spyOn(console, "error").mockImplementation(() => {});
-            jest.spyOn(EventTileFactory, "renderTile").mockImplementation(() => {
+            vi.spyOn(console, "error").mockImplementation(() => {});
+            vi.spyOn(EventTileFactory, "renderTile").mockImplementation(() => {
                 throw new Error("Boom");
             });
 
@@ -972,8 +988,8 @@ describe("EventTile", () => {
         });
 
         it("renders the shared redacted body for thread previews", () => {
-            jest.spyOn(mxEvent, "isRedacted").mockReturnValue(true);
-            jest.spyOn(mxEvent, "getUnsigned").mockReturnValue({
+            vi.spyOn(mxEvent, "isRedacted").mockReturnValue(true);
+            vi.spyOn(mxEvent, "getUnsigned").mockReturnValue({
                 redacted_because: {
                     sender: "@moderator:example.org",
                     origin_server_ts: Date.UTC(2022, 10, 17, 15, 58, 32),
@@ -991,7 +1007,7 @@ describe("EventTile", () => {
             [TimelineRenderingType.Notification, Action.ViewRoom],
             [TimelineRenderingType.ThreadsList, Action.ShowThread],
         ])("type %s dispatches %s", (renderingType, action) => {
-            jest.spyOn(dis, "dispatch");
+            vi.spyOn(dis, "dispatch").mockImplementation(() => {});
 
             const { container } = getComponent({}, renderingType);
 
@@ -1307,7 +1323,7 @@ describe("EventTile", () => {
         });
 
         it("does not show the unencrypted warning for redacted events in encrypted rooms", () => {
-            jest.spyOn(mxEvent, "isRedacted").mockReturnValue(true);
+            vi.spyOn(mxEvent, "isRedacted").mockReturnValue(true);
             const { container } = getComponent({}, TimelineRenderingType.Room, {
                 isRoomEncrypted: true,
             });
@@ -1326,7 +1342,7 @@ describe("EventTile", () => {
     });
 
     it("should display the not encrypted status for an unencrypted event when the room becomes encrypted", async () => {
-        jest.spyOn(client.getCrypto()!, "getEncryptionInfoForEvent").mockResolvedValue({
+        vi.spyOn(client.getCrypto()!, "getEncryptionInfoForEvent").mockResolvedValue({
             shieldColour: EventShieldColour.NONE,
             shieldReason: null,
         });
