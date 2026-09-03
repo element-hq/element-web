@@ -63,7 +63,7 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
     public constructor(props: IProps) {
         super(props);
 
-        const initialTokenizerMode = SettingsStore.getValueAt(SettingLevel.DEVICE, "tokenizerMode") as TokenizerMode;
+        const initialTokenizerMode = SettingsStore.getValueAt(SettingLevel.DEVICE, "tokenizerMode");
         this.state = {
             eventIndexSize: 0,
             eventCount: 0,

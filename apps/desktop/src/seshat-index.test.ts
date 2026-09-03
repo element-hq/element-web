@@ -6,13 +6,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
 
 import { TokenizerMode } from "./seshat-config.js";
 import { initEventIndex } from "./seshat-index.js";
 
-const eventStorePath = join(tmpdir(), "element-desktop-seshat-index-test");
+const eventStorePath = path.join(tmpdir(), "element-desktop-seshat-index-test");
 const passphrase = "fixture-value";
 
 class FakeReindexError extends Error {}
