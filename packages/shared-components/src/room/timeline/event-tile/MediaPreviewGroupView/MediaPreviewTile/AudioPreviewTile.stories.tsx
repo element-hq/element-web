@@ -18,7 +18,7 @@ const meta = {
     tags: ["autodocs"],
     args: {
         id: "voice-message.mp3",
-        style: "audio",
+        type: "audio",
         audio: demoAudio,
         icon: <DocumentIcon />,
         onClick: () => {},

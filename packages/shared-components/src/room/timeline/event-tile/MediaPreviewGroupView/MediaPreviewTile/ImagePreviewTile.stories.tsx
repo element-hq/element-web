@@ -18,8 +18,9 @@ const meta = {
     tags: ["autodocs"],
     args: {
         id: "annual-report.pdf",
-        style: "image",
+        type: "image",
         image: demoImage,
+        imageAlt: "Screenshot of the annual report cover page",
         imageSize: "banner",
         icon: <DocumentIcon />,
         onClick: () => {},

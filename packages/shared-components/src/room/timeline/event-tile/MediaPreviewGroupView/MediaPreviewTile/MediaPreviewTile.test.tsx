@@ -39,12 +39,16 @@ const baseProps = {
     body: "2.3 MB",
 };
 
-// `style` is spread rather than passed as a JSX attribute: it is a media style here, not a CSS one,
-// and writing it out as an attribute trips the react/style-prop-object lint rule.
-const textProps = { ...baseProps, style: "text" } as const;
-const imageProps = { ...baseProps, style: "image", image: demoImage, imageSize: "full" } as const;
-const videoProps = { ...baseProps, style: "video", video: demoVideo, videoSize: "banner" } as const;
-const audioProps = { ...baseProps, style: "audio", audio: demoAudio } as const;
+const textProps = { ...baseProps, type: "text" } as const;
+const imageProps = {
+    ...baseProps,
+    type: "image",
+    image: demoImage,
+    imageAlt: "A wide demo image",
+    imageSize: "full",
+} as const;
+const videoProps = { ...baseProps, type: "video", video: demoVideo, videoSize: "banner" } as const;
+const audioProps = { ...baseProps, type: "audio", audio: demoAudio } as const;
 
 // The demo media is served by the dev server, which can take a while to answer when several suites
 // are running at once, so the default one second timeout is not enough.
