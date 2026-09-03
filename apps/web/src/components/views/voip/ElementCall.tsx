@@ -20,9 +20,9 @@
 
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "@vector-im/compound-web";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { EventType, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { type CallMembership, MatrixRTCSessionEvent } from "matrix-js-sdk/src/matrixrtc";
+import { type CallMembership, MatrixRTCSessionEvent, type SessionMembershipData } from "matrix-js-sdk/src/matrixrtc";
 
 import { useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
 
@@ -52,6 +52,7 @@ export enum HeaderStyle {
 
 export enum BackgroundStyle {
     Solid = "solid",
+    /** @public mirrored from Element Call; EW always uses Solid */
     Gradient = "gradient",
 }
 
@@ -244,6 +245,24 @@ export function configurationForIntent(intent: UserIntent): UrlConfiguration {
 let initialisedWith: ConfigOptions | null = null;
 
 /**
+ * The MatrixRTC membership the mock publishes when it "joins", so that Element Web sees a running call
+ * (room list indicator, join button, and — crucially — the `ElementCall` model does not destroy the
+ * call as memberless when the user navigates away). Same content as
+ * `playwright/sample-files/fake-element-call.html`; the real component's `MatrixRTCSession` does this
+ * for real.
+ */
+const mockMembership = (deviceId: string): SessionMembershipData => ({
+    "application": "m.call",
+    "call_id": "",
+    "device_id": deviceId,
+    "expires": 14400000,
+    "foci_preferred": [{ livekit_alias: "any-alias", livekit_service_url: "https://example.org", type: "livekit" }],
+    "focus_active": { focus_selection: "oldest_membership", type: "livekit" },
+    "m.call.intent": "video",
+    "scope": "m.room",
+});
+
+/**
  * Prepares the things Element Call needs before it can be shown. Await this
  * once, before rendering {@link ElementCall}. The mock only records the config.
  */
@@ -291,6 +310,26 @@ export const ElementCall = ({
         void hostBridge.contentLoaded().then(() => append("→ contentLoaded"));
     }, [hostBridge, append]);
 
+    // "Joining" publishes an RTC membership for this device and tells the host; "leaving" clears both.
+    const membershipStateKey = `_${client.getUserId()}_${client.getDeviceId()}_m.call`;
+    const join = useCallback(async (): Promise<void> => {
+        await client.sendStateEvent(
+            roomId,
+            EventType.GroupCallMemberPrefix,
+            mockMembership(client.getDeviceId() ?? ""),
+            membershipStateKey,
+        );
+        setJoined(true);
+        await hostBridge.notifyJoined();
+        append("→ notifyJoined");
+    }, [client, roomId, membershipStateKey, hostBridge, append]);
+    const leave = useCallback(async (): Promise<void> => {
+        await client.sendStateEvent(roomId, EventType.GroupCallMemberPrefix, {}, membershipStateKey);
+        setJoined(false);
+        await hostBridge.notifyHungUp();
+        append("→ notifyHungUp");
+    }, [client, roomId, membershipStateKey, hostBridge, append]);
+
     // Subscribe to everything the host may ask for, acknowledge it, and behave
     // roughly as the real thing would.
     useEffect(() => {
@@ -302,16 +341,11 @@ export const ElementCall = ({
             hostBridge.join$.subscribe((req) => {
                 append(`← join ${JSON.stringify(req.data)}`);
                 req.reply();
-                setJoined(true);
-                void hostBridge.notifyJoined().then(() => append("→ notifyJoined"));
+                void join();
             }),
             hostBridge.hangUp$.subscribe((req) => {
                 append("← hangUp");
-                setJoined(false);
-                void hostBridge.notifyHungUp().then(() => {
-                    append("→ notifyHungUp");
-                    req.reply();
-                });
+                void leave().then(() => req.reply());
             }),
             hostBridge.deviceMute$.subscribe((req) => {
                 append(`← deviceMute ${JSON.stringify(req.data)}`);
@@ -326,7 +360,7 @@ export const ElementCall = ({
             }),
         ];
         return () => subs.forEach((s) => s.unsubscribe());
-    }, [hostBridge, append]);
+    }, [hostBridge, append, join, leave]);
 
     if (rtcSession === null || room === null) {
         logger.error(`Element Call was asked to call in ${roomId}, which its host's client does not know about`);
@@ -340,29 +374,23 @@ export const ElementCall = ({
         return `${membership.sender} (${membership.deviceId})${isOwnDevice ? " – you" : ""}`;
     };
 
-    const onJoin = async (): Promise<void> => {
-        setJoined(true);
-        await hostBridge.notifyJoined();
-        append("→ notifyJoined");
-    };
-    const onHangUp = async (): Promise<void> => {
-        setJoined(false);
-        await hostBridge.notifyHungUp();
-        append("→ notifyHungUp");
-    };
-    const onToggleAlwaysOnScreen = async (): Promise<void> => {
-        const next = !alwaysOnScreen;
+    const setAlwaysOnScreenAndLog = async (next: boolean): Promise<void> => {
         await hostBridge.setAlwaysOnScreen(next);
         setAlwaysOnScreen(next);
         append(`→ setAlwaysOnScreen(${next})`);
     };
+    const onToggleAlwaysOnScreen = (): Promise<void> => setAlwaysOnScreenAndLog(!alwaysOnScreen);
     const onToggleMute = async (device: keyof DeviceMuteState): Promise<void> => {
         const next = { ...muteState, [device]: !muteState[device] };
         setMuteState(next);
         await hostBridge.notifyDeviceMute(next);
         append(`→ notifyDeviceMute ${JSON.stringify(next)}`);
     };
+    // Like the real thing (and the fake widget the Playwright tests use): closing leaves the call and gives
+    // up the screen before asking the host to dismiss us.
     const onClose = async (): Promise<void> => {
+        if (joined) await leave();
+        if (alwaysOnScreen) await setAlwaysOnScreenAndLog(false);
         await hostBridge.close?.();
         append("→ close");
     };
@@ -394,7 +422,7 @@ export const ElementCall = ({
             <section className="mx_ElementCall_section">
                 <h3>HostBridge</h3>
                 <div className="mx_ElementCall_buttons">
-                    <Button size="md" kind="primary" onClick={() => void (joined ? onHangUp() : onJoin())}>
+                    <Button size="md" kind="primary" onClick={() => void (joined ? leave() : join())}>
                         {joined ? "notifyHungUp" : "notifyJoined"}
                     </Button>
                     <Button size="md" kind="secondary" onClick={() => void onToggleAlwaysOnScreen()}>
