@@ -5,10 +5,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import { vi, describe, beforeEach, it, expect } from "vitest";
 import { type MatrixClient, RoomNameType } from "matrix-js-sdk/src/matrix";
+import { mockPlatformPeg } from "test-utils";
 
 import { createClientWithCreds } from "./createMatrixClient";
+import PlatformPeg from "../PlatformPeg";
 
 describe("createMatrixClient", () => {
     let client: MatrixClient;
@@ -148,6 +152,66 @@ describe("createMatrixClient", () => {
                     expect(roomName).toBe("Inviting Alice and 3 others");
                 });
             });
+        });
+    });
+
+    describe("oauth2ClientConfig", () => {
+        const stubLocalStorage = (clientId: string | null): void => {
+            vi.stubGlobal("localStorage", {
+                getItem: vi.fn().mockImplementation((key: string) => (key === "mx_oidc_client_id" ? clientId : null)),
+                setItem: vi.fn(),
+                removeItem: vi.fn(),
+            });
+        };
+
+        beforeEach(() => {
+            mockPlatformPeg();
+            Object.defineProperty(PlatformPeg.get(), "getOAuthCallbackUrl", {
+                value: () => new URL("https://test.dummy/oauth/callback"),
+            });
+        });
+
+        it("should not be set when there is no refresh token", () => {
+            stubLocalStorage("test-client-id");
+
+            client = createClientWithCreds({
+                homeserverUrl: "https://test.dummy",
+                userId: "@user:test.dummy",
+                accessToken: "access_token",
+            });
+
+            expect(client.http.opts.oauth2ClientConfig).toBeUndefined();
+        });
+
+        it("should not be set when there is a refresh token but no stored OAuth2 client ID", () => {
+            stubLocalStorage(null);
+
+            client = createClientWithCreds({
+                homeserverUrl: "https://test.dummy",
+                userId: "@user:test.dummy",
+                accessToken: "access_token",
+                refreshToken: "refresh_token",
+            });
+
+            expect(client.http.opts.oauth2ClientConfig).toBeUndefined();
+        });
+
+        it("should be set from the stored OAuth2 client ID when there is a refresh token", () => {
+            stubLocalStorage("test-client-id");
+
+            client = createClientWithCreds({
+                homeserverUrl: "https://test.dummy",
+                userId: "@user:test.dummy",
+                accessToken: "access_token",
+                refreshToken: "refresh_token",
+            });
+
+            expect(client.http.opts.oauth2ClientConfig).toEqual(
+                expect.objectContaining({
+                    clientId: "test-client-id",
+                    redirectUri: "https://test.dummy/oauth/callback",
+                }),
+            );
         });
     });
 });
