@@ -88,7 +88,16 @@ describe("MediaPreviewGroupPreview", () => {
     it("renders a tile for every entry type", async () => {
         const { container } = renderGroup([
             textEntry,
-            { ...icon, id: "image", type: "image", image: demoImage, imageSize: "banner", header: "i", body: "i" },
+            {
+                ...icon,
+                id: "image",
+                type: "image",
+                image: demoImage,
+                imageAlt: "i",
+                imageSize: "banner",
+                header: "i",
+                body: "i",
+            },
             { ...icon, id: "video", type: "video", video: demoVideo, videoSize: "banner", header: "v", body: "v" },
             { ...icon, id: "audio", type: "audio", audio: demoAudio, header: "a", body: "a" },
         ]);
