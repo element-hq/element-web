@@ -81,6 +81,12 @@ export default {
                 // source of js-sdk, rather than the transpiled and annotated JS like you
                 // would with a normal library).
                 "@types/sdp-transform",
+
+                // Referenced as a tsconfig `types` entry rather than imported, so knip
+                // cannot see it. It has to be a direct dependency for
+                // `@vitest/browser/matchers` to resolve under pnpm's strict node_modules.
+                // See apps/web/tsconfig.browser-test.json.
+                "@vitest/browser",
             ],
         },
         "apps/desktop": {

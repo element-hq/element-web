@@ -57,6 +57,7 @@ import { attachMentions, attachRelation } from "./utils/messages.ts";
 import { doMaybeLocalRoomAction } from "./utils/local-room";
 import { blobIsAnimated } from "./utils/Image.ts";
 import { htmlSerializeFromMdIfNeeded } from "./editor/serialize";
+import { cacheUploadedMedia } from "./utils/UploadedMediaCache";
 
 // scraped out of a macOS hidpi (5660ppm) screenshot png
 //                  5669 px (x-axis)      , 5669 px (y-axis)      , per metre
@@ -379,6 +380,8 @@ export async function uploadFile(
         }
         if (abortController.signal.aborted) throw new UploadCanceledError();
 
+        cacheUploadedMedia(url, file);
+
         // If the attachment is encrypted then bundle the URL along with the information
         // needed to decrypt the attachment and add it under a file key.
         return {
@@ -397,6 +400,7 @@ export async function uploadFile(
             throw new UploadFailedError(e);
         }
         if (abortController.signal.aborted) throw new UploadCanceledError();
+        cacheUploadedMedia(url, file);
         // If the attachment isn't encrypted then include the URL directly.
         return { url };
     }

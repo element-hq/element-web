@@ -24,13 +24,30 @@ import {
     getCustomSectionData,
     isCustomSectionTag,
     isDefaultSectionTag,
+    isReorderableSection,
     isSectionExpanded,
     setSectionExpanded,
 } from "../../stores/room-list-v3/section";
+import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import PosthogTrackers from "../../PosthogTrackers";
 import { CallStore, CallStoreEvent } from "../../stores/CallStore";
 import { type Call, CallEvent } from "../../models/Call";
 import throttle from "lodash/throttle";
+
+/**
+ * The only kind of room the section with the given tag accepts, or undefined when it accepts any
+ * room. A room is in the People section because it is a direct message, not because it carries a
+ * tag, so a room can never be moved in or out of it; while People is shown, the Chats section holds
+ * everything that is not a direct message, for the same reason.
+ */
+function getAcceptedRoomKind(tag: string): "dm" | "nonDm" | undefined {
+    if (tag === DefaultTagID.DM) return "dm";
+    if (tag === CHATS_TAG) {
+        // Chats holds the direct messages too when the People section is not shown. The setting is
+        // forced off when the sections are turned off, and that case has no drag and drop anyway.
+        return SettingsStore.getValue("RoomList.showPeopleSection") ? "nonDm" : undefined;
+    }
+}
 
 interface RoomListSectionHeaderViewModelProps {
     tag: string;
@@ -64,7 +81,8 @@ export class RoomListSectionHeaderViewModel
             isExpanded: isSectionExpanded(props.spaceId, props.tag),
             isUnread: false,
             displaySectionMenu: !isDefaultSection,
-            canBeReordered: !isDefaultSection || props.tag === CHATS_TAG,
+            canBeReordered: isReorderableSection(props.tag, getCustomSectionData()),
+            acceptedRoomKind: getAcceptedRoomKind(props.tag),
         });
         const sectionWatherRef = SettingsStore.watchSetting("RoomList.CustomSectionData", null, () =>
             this.onCustomSectionDataChange(),

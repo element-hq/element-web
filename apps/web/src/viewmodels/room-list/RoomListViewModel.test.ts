@@ -1186,6 +1186,61 @@ describe("RoomListViewModel", () => {
                 expect(headerVM.getSnapshot().isExpanded).toBe(true);
             });
 
+            it.each([
+                { tag: DefaultTagID.Favourite, showPeopleSection: false, title: "Favourites" },
+                // Without a People section, the Chats section holds the direct messages too
+                { tag: CHATS_TAG, showPeopleSection: false, title: "Chats" },
+                { tag: CHATS_TAG, showPeopleSection: true, title: "Rooms" },
+                { tag: DefaultTagID.DM, showPeopleSection: true, title: "People" },
+            ])(
+                'should title the $tag section header "$title" when showPeopleSection is $showPeopleSection',
+                ({ tag, showPeopleSection, title }) => {
+                    const getValueSpy = vi.spyOn(SettingsStore, "getValue");
+                    const getValue = getValueSpy.getMockImplementation()!;
+                    getValueSpy.mockImplementation((setting, roomId, excludeDefault) =>
+                        setting === "RoomList.showPeopleSection"
+                            ? showPeopleSection
+                            : getValue(setting, roomId, excludeDefault),
+                    );
+
+                    viewModel = new RoomListViewModel({
+                        client: matrixClient,
+                        spaceStore: SDKContextClass.instance.spaceStore,
+                        roomViewStore: SDKContextClass.instance.roomViewStore,
+                    });
+
+                    expect(viewModel.getSectionHeaderViewModel(tag).getSnapshot().title).toBe(title);
+                },
+            );
+
+            it("should retitle the Chats section header when showPeopleSection changes", () => {
+                let showPeopleSection = false;
+                let watchCallback: () => void = () => {};
+                const getValueSpy = vi.spyOn(SettingsStore, "getValue");
+                const getValue = getValueSpy.getMockImplementation()!;
+                getValueSpy.mockImplementation((setting, roomId, excludeDefault) =>
+                    setting === "RoomList.showPeopleSection"
+                        ? showPeopleSection
+                        : getValue(setting, roomId, excludeDefault),
+                );
+                vi.spyOn(SettingsStore, "watchSetting").mockImplementation((setting, _room, callback) => {
+                    if (setting === "RoomList.showPeopleSection") watchCallback = callback as () => void;
+                    return "watcher-id";
+                });
+
+                viewModel = new RoomListViewModel({
+                    client: matrixClient,
+                    spaceStore: SDKContextClass.instance.spaceStore,
+                    roomViewStore: SDKContextClass.instance.roomViewStore,
+                });
+                expect(viewModel.getSectionHeaderViewModel(CHATS_TAG).getSnapshot().title).toBe("Chats");
+
+                showPeopleSection = true;
+                watchCallback();
+
+                expect(viewModel.getSectionHeaderViewModel(CHATS_TAG).getSnapshot().title).toBe("Rooms");
+            });
+
             it("should reuse section header view models", () => {
                 viewModel = new RoomListViewModel({
                     client: matrixClient,

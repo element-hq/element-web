@@ -36,7 +36,7 @@ test.describe("Editing", () => {
 
     // Edit "Message"
     const editLastMessage = async (page: Page, edit: string) => {
-        const eventTile = page.locator(".mx_RoomView_MessageList .mx_EventTile_last");
+        const eventTile = page.locator(".mx_RoomView_MessageList .mx_EventTile").last();
         await eventTile.hover();
         await eventTile.getByRole("button", { name: "Edit", exact: true }).click();
 
@@ -122,7 +122,7 @@ test.describe("Editing", () => {
                 const tile = dialog.locator("li:nth-child(2) .mx_EventTile");
                 // Assert that the edited message body consists of both deleted character and inserted character
                 // Above the first "e" of "Message" was replaced with "a"
-                await expect(tile.locator(".mx_EventTile_body")).toHaveText("Meassage");
+                await expect(tile.locator(".mx_EventTile_content")).toHaveText("Meassage");
 
                 const body = tile.locator(".mx_EventTile_content .mx_EventTile_body");
                 await expect(body.locator(".mx_EditHistoryMessage_deletion").getByText("e")).toBeVisible();
@@ -147,7 +147,7 @@ test.describe("Editing", () => {
 
             {
                 const tile = dialog.locator("li:nth-child(2) .mx_EventTile");
-                await expect(tile.locator(".mx_EventTile_body")).toHaveText("Meassage");
+                await expect(tile.locator(".mx_EventTile_content")).toHaveText("Meassage");
                 // Click the "Remove" button again
                 await clickButtonRemove(tile);
             }
@@ -158,7 +158,7 @@ test.describe("Editing", () => {
             {
                 // Assert that the message edit history dialog is rendered again after it was closed
                 const tile = dialog.locator("li:nth-child(2) .mx_EventTile");
-                await expect(tile.locator(".mx_EventTile_body")).toHaveText("Meassage");
+                await expect(tile.locator(".mx_EventTile_content")).toHaveText("Meassage");
                 // Click the "Remove" button again
                 await clickButtonRemove(tile);
             }
@@ -193,7 +193,9 @@ test.describe("Editing", () => {
             await expect(
                 page
                     .locator(".mx_RoomView_MessageList")
-                    .locator(".mx_EventTile_last .mx_RedactedBody", { hasText: "Message deleted" }),
+                    .locator(".mx_EventTile", { has: page.locator(".mx_RedactedBody") })
+                    .last()
+                    .locator(".mx_RedactedBody", { hasText: "Message deleted" }),
             ).toBeVisible();
         },
     );
@@ -368,7 +370,11 @@ test.describe("Editing", () => {
         expect(timeline).toBeNull();
 
         // nevertheless, the event should be updated
-        await expect(messageTile.locator(".mx_EventTile_body")).toHaveText("Edited body");
+        await expect(
+            messageTile
+                .getByTestId("event-tile-slot-body")
+                .locator(".mx_MTextBody [data-textual-body-annotation-wrapper] > :first-child"),
+        ).toHaveText("Edited body");
         await expect(messageTile.getByRole("button", { name: /Edited at .*? Click to view edits\./ })).toBeVisible();
     });
 });

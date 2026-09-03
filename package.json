@@ -38,7 +38,7 @@
         "@typescript/native": "catalog:",
         "@vitest/coverage-v8": "catalog:",
         "cronstrue": "^3.0.0",
-        "eslint-plugin-element-call": "github:element-hq/element-call#livekit&path:/eslint",
+        "eslint-plugin-element-call": "github:element-hq/element-call#main&path:/eslint",
         "eslint-plugin-storybook": "^10.4.6",
         "husky": "^9.0.0",
         "knip": "6.32.2",
@@ -47,7 +47,7 @@
         "mermaid": "^11.13.0",
         "minimist": "^1.2.6",
         "nx": "catalog:",
-        "oxfmt": "0.63.0",
+        "oxfmt": "0.64.0",
         "oxlint": "^1.70.0",
         "oxlint-tsgolint": "^7.0.0",
         "typescript": "catalog:ts6",
@@ -62,7 +62,7 @@
     "devEngines": {
         "packageManager": {
             "name": "pnpm",
-            "version": "11.22.0",
+            "version": "11.23.0",
             "onFail": "download"
         }
     },

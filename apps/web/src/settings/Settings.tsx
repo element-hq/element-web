@@ -148,8 +148,10 @@ export interface IBaseSetting<T extends SettingValueType = SettingValueType> {
     // represent a boolean).
     default: T;
 
-    // Optional settings controller. See SettingsController for more information.
-    controller?: SettingController;
+    // Optional setting controller(s). See SettingController for more information.
+    // When several are given they are consulted in the order they are declared in: the first one
+    // to return an override wins, and the first one to refuse a change stops the change.
+    controller?: SettingController | SettingController[];
 
     // Optional flag to make supportedLevels be respected as the order to handle
     // settings. The first element is treated as "most preferred". The "default"
@@ -367,6 +369,7 @@ export interface Settings {
     "RoomList.OrderedCustomSections": IBaseSetting<ReorderableSection[]>;
     "RoomList.SectionExpansionState": IBaseSetting<SectionExpansionState>;
     "RoomList.showSections": IBaseSetting<boolean>;
+    "RoomList.showPeopleSection": IBaseSetting<boolean>;
     "composerUrlPreviewCollapsed": IBaseSetting<boolean>;
 }
 
@@ -1215,6 +1218,12 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: true,
         displayName: _td("settings|show_sections"),
+    },
+    "RoomList.showPeopleSection": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: true,
+        displayName: _td("settings|show_people_sections"),
+        controller: new RequiresSettingsController(["RoomList.showSections"]),
     },
     "composerUrlPreviewCollapsed": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,

@@ -1,6 +1,5 @@
 linkWorkspacePackages: true
 cleanupUnusedCatalogs: true
-ignorePatchFailures: false
 ignoreWorkspaceRootCheck: true
 minimumReleaseAgeStrict: true
 dedupePeerDependents: true
@@ -42,10 +41,11 @@ catalog:
     "@vitest/spy": 4.1.11
     "@vitest/coverage-v8": 4.1.11
     "@vitest/browser-playwright": 4.1.11
-    "@vitejs/plugin-react": 6.1.0
+    "@vitest/browser": 4.1.11
+    "@vitejs/plugin-react": 6.1.1
     unplugin-dts: 1.0.1
     # nx
-    nx: 23.1.1
+    nx: 23.1.2
 
 catalogs:
     ts6:
@@ -141,7 +141,7 @@ overrides:
     matrix-widget-api: "^1.18.0"
     "@types/node": 25.9.3
     config-file-ts: 0.2.8-rc1
-    node-abi: 4.33.0
+    node-abi: 4.35.0
 
     # https://github.com/advisories/GHSA-6v5v-wf23-fmfq
     markdown-it: ^14.3.0
