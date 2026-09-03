@@ -355,8 +355,8 @@ importers:
         specifier: ^3.0.0
         version: 3.24.0
       eslint-plugin-element-call:
-        specifier: github:element-hq/element-call#livekit&path:/eslint
-        version: https://codeload.github.com/element-hq/element-call/tar.gz/87873b726f2427d8ce0e68607bf24d0f6d14b3bd#path:/eslint
+        specifier: github:element-hq/element-call#main&path:/eslint
+        version: https://codeload.github.com/element-hq/element-call/tar.gz/d765267c431685c655c1dad0b6bddc611362c16a#path:/eslint
       eslint-plugin-storybook:
         specifier: ^10.4.6
         version: 10.5.8(@typescript/typescript6@6.0.2)(eslint@8.57.1)(storybook@10.5.8)(supports-color@7.2.0)
@@ -8614,8 +8614,8 @@ packages:
     resolution: {integrity: sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==}
     engines: {node: '>=12'}
 
-  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/87873b726f2427d8ce0e68607bf24d0f6d14b3bd#path:/eslint:
-    resolution: {gitHosted: true, integrity: sha512-MzPg75yhmbseUuTAkqtWyFsaABvBGxKYWa0iceTx8ny3/yGa2TlEHTEfOj6zmqr4GNBdsGdYlFu97QztHJyw1w==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/87873b726f2427d8ce0e68607bf24d0f6d14b3bd}
+  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/d765267c431685c655c1dad0b6bddc611362c16a#path:/eslint:
+    resolution: {gitHosted: true, integrity: sha512-/CAmoAcOhrWncKlji/5jsuKxMVJSSH3FEWhTb4+U7hMuQMWXEBNvfGUayZ0WymtG2v1dulVagE3A0uH6sCejKg==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/d765267c431685c655c1dad0b6bddc611362c16a}
     version: 0.0.0
 
   eslint-plugin-storybook@10.5.8:
@@ -21558,7 +21558,7 @@ snapshots:
 
   escape-string-regexp@5.0.0: {}
 
-  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/87873b726f2427d8ce0e68607bf24d0f6d14b3bd#path:/eslint: {}
+  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/d765267c431685c655c1dad0b6bddc611362c16a#path:/eslint: {}
 
   eslint-plugin-storybook@10.5.8(@typescript/typescript6@6.0.2)(eslint@8.57.1)(storybook@10.5.8)(supports-color@7.2.0):
     dependencies:
