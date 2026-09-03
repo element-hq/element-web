@@ -22,7 +22,7 @@ const meta = {
     tags: ["autodocs"],
     args: {
         id: "holiday-clip.mp4",
-        style: "video",
+        type: "video",
         video: demoVideo,
         videoSize: "banner",
         icon: <DocumentIcon />,
