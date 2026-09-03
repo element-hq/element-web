@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { vi, describe, it, expect, beforeEach, type MockedObject } from "vitest";
-import { type MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
 import { stubClient } from "test-utils";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
@@ -115,6 +115,25 @@ describe("RightPanelStore", () => {
             store.setCard({ phase: RightPanelPhases.RoomSummary }, true, "!1:example.org");
             expect(store.isOpenForRoom("!1:example.org")).toEqual(true);
             expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.RoomSummary);
+        });
+        it("reopens a closed panel when the card already at the top is given new state", async () => {
+            await viewRoom("!1:example.org");
+            const cardForEvent = (eventId: string) => ({
+                phase: RightPanelPhases.Timeline,
+                state: { initialEvent: { getId: () => eventId } as unknown as MatrixEvent },
+            });
+
+            store.setCard(cardForEvent("$one"), true, "!1:example.org");
+            expect(store.isOpenForRoom("!1:example.org")).toEqual(true);
+
+            store.hide("!1:example.org");
+            expect(store.isOpenForRoom("!1:example.org")).toEqual(false);
+
+            // Same phase, different state: the panel has to come back, not just swap state behind a
+            // hidden panel. This is what selecting a second file to view does.
+            store.setCard(cardForEvent("$two"), true, "!1:example.org");
+            expect(store.isOpenForRoom("!1:example.org")).toEqual(true);
+            expect(store.currentCardForRoom("!1:example.org").state?.initialEvent?.getId()).toEqual("$two");
         });
         it("history is generated for certain phases", async () => {
             await viewRoom("!1:example.org");
