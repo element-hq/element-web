@@ -271,18 +271,16 @@ describe("Lifecycle", () => {
                 it("should create and start new matrix client with credentials", async () => {
                     expect(await restoreSessionFromStorage()).toEqual(true);
 
-                    expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
-                        {
-                            userId,
-                            accessToken,
-                            homeserverUrl,
-                            identityServerUrl,
-                            deviceId,
-                            freshLogin: false,
-                            guest: false,
-                            pickleKey: undefined,
-                        },
-                    );
+                    expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith({
+                        userId,
+                        accessToken,
+                        homeserverUrl,
+                        identityServerUrl,
+                        deviceId,
+                        freshLogin: false,
+                        guest: false,
+                        pickleKey: undefined,
+                    });
 
                     expect(MatrixClientPeg.start).toHaveBeenCalledWith({});
                 });
@@ -320,20 +318,18 @@ describe("Lifecycle", () => {
                     it("should create new matrix client with credentials", async () => {
                         expect(await restoreSessionFromStorage()).toEqual(true);
 
-                        expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
-                            {
-                                userId,
-                                accessToken,
-                                // refreshToken included in credentials
-                                refreshToken,
-                                homeserverUrl,
-                                identityServerUrl,
-                                deviceId,
-                                freshLogin: false,
-                                guest: false,
-                                pickleKey: undefined,
-                            },
-                        );
+                        expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith({
+                            userId,
+                            accessToken,
+                            // refreshToken included in credentials
+                            refreshToken,
+                            homeserverUrl,
+                            identityServerUrl,
+                            deviceId,
+                            freshLogin: false,
+                            guest: false,
+                            pickleKey: undefined,
+                        });
                     });
                 });
             });
@@ -402,19 +398,17 @@ describe("Lifecycle", () => {
                     expect(await restoreSessionFromStorage()).toEqual(true);
 
                     // Ensure that the expected calls were made
-                    expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
-                        {
-                            userId,
-                            // decrypted accessToken
-                            accessToken,
-                            homeserverUrl,
-                            identityServerUrl,
-                            deviceId,
-                            freshLogin: false,
-                            guest: false,
-                            pickleKey,
-                        },
-                    );
+                    expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith({
+                        userId,
+                        // decrypted accessToken
+                        accessToken,
+                        homeserverUrl,
+                        identityServerUrl,
+                        deviceId,
+                        freshLogin: false,
+                        guest: false,
+                        pickleKey,
+                    });
 
                     expect(MatrixClientPeg.start).toHaveBeenCalledWith({ rustCryptoStoreKey: expect.any(Uint8Array) });
                 });
@@ -439,20 +433,18 @@ describe("Lifecycle", () => {
                     it("should create new matrix client with credentials", async () => {
                         expect(await restoreSessionFromStorage()).toEqual(true);
 
-                        expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
-                            {
-                                userId,
-                                accessToken,
-                                // refreshToken included in credentials
-                                refreshToken,
-                                homeserverUrl,
-                                identityServerUrl,
-                                deviceId,
-                                freshLogin: false,
-                                guest: false,
-                                pickleKey: pickleKey,
-                            },
-                        );
+                        expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith({
+                            userId,
+                            accessToken,
+                            // refreshToken included in credentials
+                            refreshToken,
+                            homeserverUrl,
+                            identityServerUrl,
+                            deviceId,
+                            freshLogin: false,
+                            guest: false,
+                            pickleKey: pickleKey,
+                        });
                     });
                 });
             });
@@ -491,19 +483,17 @@ describe("Lifecycle", () => {
                     expect(await restoreSessionFromStorage()).toEqual(true);
 
                     // Ensure that the expected calls were made
-                    expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
-                        {
-                            userId,
-                            // decrypted accessToken
-                            accessToken,
-                            homeserverUrl,
-                            identityServerUrl,
-                            deviceId,
-                            freshLogin: false,
-                            guest: false,
-                            pickleKey,
-                        },
-                    );
+                    expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith({
+                        userId,
+                        // decrypted accessToken
+                        accessToken,
+                        homeserverUrl,
+                        identityServerUrl,
+                        deviceId,
+                        freshLogin: false,
+                        guest: false,
+                        pickleKey,
+                    });
 
                     expect(MatrixClientPeg.start).toHaveBeenCalledWith({ rustCryptoStorePassword: pickleKey });
                 });
@@ -748,21 +738,18 @@ describe("Lifecycle", () => {
                 vi.spyOn(createMatrixClientModule, "createClientWithCreds").mockReturnValue(mockClient);
                 expect(await setLoggedIn(credentials)).toEqual(mockClient);
 
-                expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
-                    {
-                        userId,
-                        accessToken,
-                        homeserverUrl,
-                        identityServerUrl,
-                        deviceId,
-                        freshLogin: true,
-                        guest: false,
-                        pickleKey: expect.any(String),
-                    },
-                );
+                expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith({
+                    userId,
+                    accessToken,
+                    homeserverUrl,
+                    identityServerUrl,
+                    deviceId,
+                    freshLogin: true,
+                    guest: false,
+                    pickleKey: expect.any(String),
+                });
             });
         });
-
     });
 
     describe("logout()", () => {
