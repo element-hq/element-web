@@ -234,7 +234,12 @@ export function Video({
 
     // Only fetch the metadata up front, matching the video body: a preview should not pull down the
     // whole file before the user has asked to play it.
-    const videoElem = <video src={video} controls preload="metadata" />;
+    // Uploaded media carries no caption track, but the empty element is still required for a11y.
+    const videoElem = (
+        <video src={video} controls preload="metadata">
+            <track kind="captions" />
+        </video>
+    );
 
     return (
         <div className={classNames(classes)}>
@@ -255,7 +260,12 @@ export function Audio({ audio, audioOnClick }: { audio: string; audioOnClick?: (
 
     if (!valid || src !== audio) return null;
 
-    const audioElem = <audio src={audio} controls />;
+    // Uploaded media carries no caption track, but the empty element is still required for a11y.
+    const audioElem = (
+        <audio src={audio} controls>
+            <track kind="captions" />
+        </audio>
+    );
     return (
         <div className={styles.audio}>
             {audioOnClick ? (

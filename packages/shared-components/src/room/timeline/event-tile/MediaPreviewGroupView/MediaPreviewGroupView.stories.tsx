@@ -30,7 +30,7 @@ const buttons = [
 
 const textEntry: MediaPreviewGroupEntry = {
     id: "annual-report.pdf",
-    style: "text",
+    type: "text",
     icon: <DocumentIcon />,
     color: "#4200A6",
     header: "annual-report.pdf",
@@ -40,7 +40,7 @@ const textEntry: MediaPreviewGroupEntry = {
 
 const imageEntry: MediaPreviewGroupEntry = {
     id: "screenshot.png",
-    style: "image",
+    type: "image",
     image: demoImage,
     imageSize: "banner",
     icon: <DocumentIcon />,
@@ -52,7 +52,7 @@ const imageEntry: MediaPreviewGroupEntry = {
 
 const videoEntry: MediaPreviewGroupEntry = {
     id: "holiday-clip.mp4",
-    style: "video",
+    type: "video",
     video: demoVideo,
     videoSize: "banner",
     icon: <DocumentIcon />,
@@ -64,7 +64,7 @@ const videoEntry: MediaPreviewGroupEntry = {
 
 const audioEntry: MediaPreviewGroupEntry = {
     id: "voice-message.mp3",
-    style: "audio",
+    type: "audio",
     audio: demoAudio,
     icon: <DocumentIcon />,
     color: "#4200A6",
