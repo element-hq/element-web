@@ -30,7 +30,7 @@ import IdentityAuthClient from "../IdentityAuthClient";
 import { _t } from "../languageHandler";
 import { formatList } from "./FormattingUtils";
 import { persistTokens } from "./tokens/tokens.ts";
-import { getOAuthParams, getStoredOAuthClientId } from "./oauth/persistOAuthSettings";
+import { getStoredOAuthClientId } from "./oauth/persistOAuthSettings";
 
 const localStorage = window.localStorage;
 
@@ -122,10 +122,10 @@ function roomNameGenerator(_: string, state: RoomNameState): string | null {
  * @returns {MatrixClient} the newly-created MatrixClient
  */
 export function createClientWithCreds(creds: IMatrixClientCreds): MatrixClient {
-    let oauth2ClientConfig: ICreateClientOpts["oauth2ClientConfig"];
+    let oauthClientId: string | undefined;
     if (creds.refreshToken) {
         try {
-            oauth2ClientConfig = getOAuthParams(getStoredOAuthClientId());
+            oauthClientId = getStoredOAuthClientId();
         } catch (e) {
             logger.warn("Have a refresh token but no stored OAuth2 client ID: tokens will not be refreshed", e);
         }
@@ -137,7 +137,7 @@ export function createClientWithCreds(creds: IMatrixClientCreds): MatrixClient {
         accessToken: creds.accessToken,
         refreshToken: creds.refreshToken,
         onTokenRefresh: persistTokens.bind(null, creds.pickleKey),
-        oauth2ClientConfig,
+        oauthClientId,
         userId: creds.userId,
         deviceId: creds.deviceId,
         pickleKey: creds.pickleKey,

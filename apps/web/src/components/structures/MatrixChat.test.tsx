@@ -568,7 +568,6 @@ describe("<MatrixChat />", () => {
                     clientId,
                     codeVerifier: "123456",
                     deviceId,
-                    redirectUri: "https://cb",
                 },
             });
         });

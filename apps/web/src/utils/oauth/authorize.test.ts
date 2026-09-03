@@ -121,7 +121,6 @@ describe("OAuth2 authorization", () => {
                     codeVerifier: "123456",
                     clientId,
                     deviceId: "DEADB33F",
-                    redirectUri: "https://test.com/callback",
                 },
             });
         });
