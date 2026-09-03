@@ -140,7 +140,12 @@ export class ElementAppPage {
      * @param name The exact room name of the invite to find and click on/open.
      */
     public async viewInvitedRoomByName(name: string): Promise<void> {
-        await this.page.getByRole("button", { name: "Toggle Invites section" }).click();
+        const header = this.page.getByRole("button", { name: "Toggle Invites section" });
+        // Open the section if not already opened
+        if ((await header.getAttribute("aria-expanded")) !== "true") {
+            await header.click();
+        }
+
         await this.viewRoomByName(name);
     }
 
