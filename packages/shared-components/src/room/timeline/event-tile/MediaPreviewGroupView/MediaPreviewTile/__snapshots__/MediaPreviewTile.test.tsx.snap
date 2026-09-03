@@ -9,7 +9,7 @@ exports[`ImagePreviewTile > renders the default story with its image 1`] = `
       class="MediaPreviewComponents-module_image MediaPreviewComponents-module_bannerImage"
     >
       <img
-        alt=""
+        alt="Screenshot of the annual report cover page"
         src="/static/wideImage.png"
       />
     </div>
