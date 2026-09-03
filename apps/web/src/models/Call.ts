@@ -20,6 +20,7 @@ import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { type IWidgetApiRequest, type ClientWidgetApi, type IWidgetData } from "matrix-widget-api";
+import { Subject } from "rxjs";
 import {
     type MatrixRTCSession,
     MatrixRTCSessionEvent,
@@ -46,6 +47,13 @@ import SdkConfig from "../SdkConfig.ts";
 import DMRoomMap from "../utils/DMRoomMap.ts";
 import { type WidgetMessaging, WidgetMessagingEvent } from "../stores/widgets/WidgetMessaging.ts";
 import { BugReportEndpointURLLocal } from "../IConfigOptions.ts";
+import {
+    BackgroundStyle,
+    type DeviceMuteState,
+    type ElementCallConfiguration,
+    type HostRequest,
+    type UserIntent,
+} from "../components/views/voip/ElementCall";
 
 const TIMEOUT_MS = 16000;
 const logger = rootLogger.getChild("models/Call");
@@ -218,9 +226,9 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
      * The widget associated with the call must be active for this to succeed.
      * Only call this if the call state is: ConnectionState.Disconnected.
      * @param _params Widget generation parameters are unused in this abstract class.
-     * @returns The ClientWidgetApi for this call.
+     * @returns The ClientWidgetApi for this call, or null if the call is not accessed through a widget.
      */
-    public async start(_params?: WidgetGenerationParameters): Promise<ClientWidgetApi> {
+    public async start(_params?: WidgetGenerationParameters): Promise<ClientWidgetApi | null> {
         const messagingStore = WidgetMessagingStore.instance;
         const startTime = performance.now();
         let messaging: WidgetMessaging | undefined = messagingStore.getMessagingForUid(this.widgetUid);
@@ -486,7 +494,7 @@ export class JitsiCall extends Call {
     }
 
     public async start(): Promise<ClientWidgetApi> {
-        const widgetApi = await super.start();
+        const widgetApi = (await super.start())!;
         widgetApi.on(`action:${ElementWidgetActions.JoinCall}`, this.onJoin);
         widgetApi.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
         ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Dock, this.onDock);
@@ -619,17 +627,6 @@ export interface WidgetGenerationParameters {
 }
 
 /**
- * Parameters to be passed during widget creation.
- * These parameters are hints only, and may not be accepted by the implementation.
- */
-export interface WidgetGenerationParameters {
-    /**
-     * Skip showing the lobby screen of a call.
-     */
-    skipLobby?: boolean;
-}
-
-/**
  * A group call using MSC3401 and Element Call as a backend.
  * (somewhat cheekily named)
  */
@@ -650,7 +647,67 @@ export class ElementCall extends Call {
     public widgetGenerationParameters: WidgetGenerationParameters = {};
 
     /**
-     * Calculate the correct intent (and associated parameters) for an Element Call room. Paarameters
+     * Whether Element Call is rendered as an in-process React component (`feature_element_call_react`)
+     * rather than as a widget in an iframe. The widget still exists as the call's identity in either case.
+     */
+    public static get usesReactComponent(): boolean {
+        return SettingsStore.getValue("feature_element_call_react");
+    }
+
+    /**
+     * Resolves once the React component has told us it is ready (`HostBridge.contentLoaded`). Reset
+     * whenever the call is closed, so that a later `start()` waits for a fresh component.
+     */
+    private ready = Promise.withResolvers<void>();
+
+    /**
+     * Hang-up requests from Element Web to the React component (`HostBridge.hangUp$`). Each request is
+     * acknowledged by the component through `reply()`.
+     */
+    public readonly hangUpRequests$ = new Subject<HostRequest<Record<string, never>>>();
+
+    /**
+     * The intent-related decisions for a call in a room: what the user asked for, plus the lobby
+     * behaviour Element Web wants to force. Shared by the widget URL and the React component so that
+     * both transports behave the same.
+     */
+    private static getRoomIntent(
+        client: MatrixClient,
+        roomId: string,
+        { voiceOnly }: WidgetGenerationParameters,
+    ): { intent?: ElementCallIntent; returnToLobby?: boolean; skipLobby?: boolean } {
+        const room = client.getRoom(roomId);
+        if (!room) {
+            // If the room isn't known then skip setting an intent.
+            return {};
+        } else if (isVideoRoom(room)) {
+            return {
+                // Video rooms already exist, so just treat as if we're joining a group call.
+                intent: ElementCallIntent.JoinExisting,
+                // Video rooms should always return to lobby.
+                returnToLobby: true,
+                // Never skip the lobby, we always want to give the caller a chance to explicitly join.
+                skipLobby: false,
+            };
+        }
+
+        const isDM = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
+        const oldestCallMember = client.matrixRTC.getRoomSession(room).getOldestMembership();
+        const hasCallStarted = !!oldestCallMember && oldestCallMember.sender !== client.getSafeUserId();
+        if (isDM) {
+            if (hasCallStarted) {
+                return { intent: voiceOnly ? ElementCallIntent.JoinExistingDMVoice : ElementCallIntent.JoinExistingDM };
+            }
+            return { intent: voiceOnly ? ElementCallIntent.StartCallDMVoice : ElementCallIntent.StartCallDM };
+        }
+        if (hasCallStarted) {
+            return { intent: voiceOnly ? ElementCallIntent.JoinExistingVoice : ElementCallIntent.JoinExisting };
+        }
+        return { intent: voiceOnly ? ElementCallIntent.StartCallVoice : ElementCallIntent.StartCall };
+    }
+
+    /**
+     * Calculate the correct intent (and associated parameters) for an Element Call room. Parameters
      * will be applied to the `params` instance.
      *
      * @param params Existing URL parameters
@@ -661,44 +718,74 @@ export class ElementCall extends Call {
         params: URLSearchParams,
         client: MatrixClient,
         roomId: string,
-        { voiceOnly }: WidgetGenerationParameters,
+        opts: WidgetGenerationParameters,
     ): void {
-        const room = client.getRoom(roomId);
-        if (!room) {
-            // If the room isn't known then skip setting an intent.
-            return;
-        } else if (isVideoRoom(room)) {
-            // Video rooms already exist, so just treat as if we're joining a group call.
-            params.append("intent", ElementCallIntent.JoinExisting);
-            // Video rooms should always return to lobby.
-            params.append("returnToLobby", "true");
-            // Never skip the lobby, we always want to give the caller a chance to explicitly join.
-            params.append("skipLobby", "false");
-            return;
-        }
+        const { intent, returnToLobby, skipLobby } = ElementCall.getRoomIntent(client, roomId, opts);
+        if (intent !== undefined) params.append("intent", intent);
+        if (returnToLobby !== undefined) params.append("returnToLobby", returnToLobby.toString());
+        if (skipLobby !== undefined) params.append("skipLobby", skipLobby.toString());
+    }
 
-        const isDM = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
-        const oldestCallMember = client.matrixRTC.getRoomSession(room).getOldestMembership();
-        const hasCallStarted = !!oldestCallMember && oldestCallMember.sender !== client.getSafeUserId();
-        if (isDM) {
-            if (hasCallStarted) {
-                params.append(
-                    "intent",
-                    voiceOnly ? ElementCallIntent.JoinExistingDMVoice : ElementCallIntent.JoinExistingDM,
-                );
-            } else {
-                params.append("intent", voiceOnly ? ElementCallIntent.StartCallDMVoice : ElementCallIntent.StartCallDM);
-            }
-        } else {
-            if (hasCallStarted) {
-                params.append(
-                    "intent",
-                    voiceOnly ? ElementCallIntent.JoinExistingVoice : ElementCallIntent.JoinExisting,
-                );
-            } else {
-                params.append("intent", voiceOnly ? ElementCallIntent.StartCallVoice : ElementCallIntent.StartCall);
-            }
-        }
+    /**
+     * The host-side configuration Element Call gets from Element Web's settings, independent of the
+     * room. Shared by the widget URL and the React component.
+     */
+    private static getHostConfig(): {
+        lang: string;
+        fontScale: number;
+        fonts: string[];
+        allowIceFallback: boolean;
+        echoCancellation: boolean;
+        noiseSuppression: boolean;
+    } {
+        const fonts = SettingsStore.getValue("useSystemFont")
+            ? SettingsStore.getValue("systemFont")
+                  .split(",")
+                  .map((font) => {
+                      // Strip whitespace and quotes
+                      font = font.trim();
+                      if (font.startsWith('"') && font.endsWith('"')) font = font.slice(1, -1);
+                      return font;
+                  })
+            : [];
+        return {
+            lang: getCurrentLanguage().replace("_", "-"),
+            fontScale: FontWatcher.getRootFontSize() / FontWatcher.getBrowserDefaultFontSize(),
+            fonts,
+            allowIceFallback: !!SettingsStore.getValue("fallbackICEServerAllowed"),
+            echoCancellation: SettingsStore.getValue("webrtc_audio_echoCancellation"),
+            noiseSuppression: SettingsStore.getValue("webrtc_audio_noiseSuppression"),
+        };
+    }
+
+    /**
+     * What to render Element Call's React component with: the user's intent and Element Web's
+     * overrides on top of the defaults that intent implies. The React-component counterpart of
+     * `generateWidgetUrl`; both derive from the same decisions.
+     */
+    public getCallOptions(): { intent?: UserIntent; config: ElementCallConfiguration } {
+        const { intent, returnToLobby, skipLobby } = ElementCall.getRoomIntent(
+            this.client,
+            this.roomId,
+            this.widgetGenerationParameters,
+        );
+        const host = ElementCall.getHostConfig();
+        const config: ElementCallConfiguration = {
+            perParticipantE2EE: !!ElementCall.getWidgetData(this.client, this.roomId, {}, {}).perParticipantE2EE,
+            lang: host.lang,
+            fontScale: host.fontScale,
+            fonts: host.fonts,
+            // on EW we do not want the gradient EC background.
+            background: BackgroundStyle.Solid,
+            allowIceFallback: host.allowIceFallback,
+            echoCancellation: host.echoCancellation,
+            noiseSuppression: host.noiseSuppression,
+        };
+        if (returnToLobby !== undefined) config.returnToLobby = returnToLobby;
+        const effectiveSkipLobby = skipLobby ?? this.widgetGenerationParameters.skipLobby;
+        if (typeof effectiveSkipLobby === "boolean") config.skipLobby = effectiveSkipLobby;
+        // Element Web's intents use the same string values as Element Call's UserIntent.
+        return { intent: intent as string as UserIntent | undefined, config };
     }
 
     /**
@@ -754,6 +841,8 @@ export class ElementCall extends Call {
             : // this strips hash fragment from baseUrl
               new URL("./widgets/element-call/index.html#", window.location.href);
 
+        const host = ElementCall.getHostConfig();
+
         // Splice together the Element Call URL for this call
         // Parameters can be found in https://github.com/element-hq/element-call/blob/livekit/src/UrlParams.ts.
         const params = new URLSearchParams({
@@ -763,11 +852,11 @@ export class ElementCall extends Call {
             deviceId: client.getDeviceId()!,
             roomId: roomId,
             baseUrl: client.baseUrl,
-            lang: getCurrentLanguage().replace("_", "-"),
-            fontScale: (FontWatcher.getRootFontSize() / FontWatcher.getBrowserDefaultFontSize()).toString(),
+            lang: host.lang,
+            fontScale: host.fontScale.toString(),
             theme: "$org.matrix.msc2873.client_theme",
             // on EW we do not want the gradient EC background.
-            background: "solid",
+            background: BackgroundStyle.Solid,
         });
 
         if (typeof opts.skipLobby === "boolean") {
@@ -779,33 +868,16 @@ export class ElementCall extends Call {
             params.append("rageshakeSubmitUrl", rageshakeSubmitUrl);
         }
 
-        if (SettingsStore.getValue("fallbackICEServerAllowed")) {
+        if (host.allowIceFallback) {
             params.append("allowIceFallback", "true");
         }
 
-        const echoCancellation = SettingsStore.getValue("webrtc_audio_echoCancellation");
-        if (!echoCancellation) {
-            // the default is true, so only set if false
-            params.append("echoCancellation", "false");
-        }
-        const noiseSuppression = SettingsStore.getValue("webrtc_audio_noiseSuppression");
-        if (!noiseSuppression) {
-            // the default is true, so only set if false
-            params.append("noiseSuppression", "false");
-        }
+        // the defaults are true, so only set if false
+        if (!host.echoCancellation) params.append("echoCancellation", "false");
+        if (!host.noiseSuppression) params.append("noiseSuppression", "false");
 
         // Set custom fonts
-        if (SettingsStore.getValue("useSystemFont")) {
-            SettingsStore.getValue("systemFont")
-                .split(",")
-                .map((font) => {
-                    // Strip whitespace and quotes
-                    font = font.trim();
-                    if (font.startsWith('"') && font.endsWith('"')) font = font.slice(1, -1);
-                    return font;
-                })
-                .forEach((font) => params.append("font", font));
-        }
+        host.fonts.forEach((font) => params.append("font", font));
         this.appendAnalyticsParams(params, client);
         this.appendRoomParams(params, client, roomId, opts);
 
@@ -899,16 +971,23 @@ export class ElementCall extends Call {
         ElementCall.createOrGetCallWidget(room.roomId, room.client);
     }
 
-    public async start(widgetGenerationParameters: WidgetGenerationParameters): Promise<ClientWidgetApi> {
-        // Some parameters may only be set once the user has chosen to interact with the call, regenerate the URL
-        // at this point in case any of the parameters have changed.
+    public async start(widgetGenerationParameters: WidgetGenerationParameters): Promise<ClientWidgetApi | null> {
+        // Some parameters may only be set once the user has chosen to interact with the call, so they are
+        // merged in at this point in case any of them have changed.
         this.widgetGenerationParameters = { ...this.widgetGenerationParameters, ...widgetGenerationParameters };
+
+        if (ElementCall.usesReactComponent) {
+            // No iframe, no widget messaging: the React component reports readiness via the host bridge.
+            await this.waitForReactComponent();
+            return null;
+        }
+
         this.widget.url = ElementCall.generateWidgetUrl(
             this.client,
             this.roomId,
             this.widgetGenerationParameters,
         ).toString();
-        const widgetApi = await super.start();
+        const widgetApi = (await super.start())!;
         widgetApi.on(`action:${ElementWidgetActions.JoinCall}`, this.onJoin);
         widgetApi.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
         widgetApi.on(`action:${ElementWidgetActions.Close}`, this.onClose);
@@ -916,7 +995,52 @@ export class ElementCall extends Call {
         return widgetApi;
     }
 
+    /**
+     * Waits for the mounted React component to report `contentLoaded`, with the same timeout the widget
+     * path applies while waiting for widget messaging.
+     */
+    private async waitForReactComponent(): Promise<void> {
+        let timer: number | undefined;
+        const timedOut = new Promise<never>((_, reject) => {
+            timer = window.setTimeout(
+                () => reject(new Error(`Element Call component for call in ${this.roomId} not ready; timed out`)),
+                TIMEOUT_MS,
+            );
+        });
+        try {
+            await Promise.race([this.ready.promise, timedOut]);
+        } finally {
+            clearTimeout(timer);
+        }
+        logger.debug(`Element Call component for ${this.roomId} now ready`);
+    }
+
+    /**
+     * Asks the mounted React component to leave the call and waits for it to acknowledge.
+     */
+    private async requestHangUpFromReactComponent(): Promise<void> {
+        if (!this.hangUpRequests$.observed) {
+            throw new Error(`Failed to hangup call in room ${this.roomId}: no Element Call component is mounted`);
+        }
+        const replied = Promise.withResolvers<void>();
+        let timer: number | undefined;
+        const timedOut = new Promise<never>((_, reject) => {
+            timer = window.setTimeout(
+                () => reject(new Error(`Failed to hangup call in room ${this.roomId}: timed out`)),
+                TIMEOUT_MS,
+            );
+        });
+        this.hangUpRequests$.next({ data: {}, reply: () => replied.resolve() });
+        try {
+            await Promise.race([replied.promise, timedOut]);
+        } finally {
+            clearTimeout(timer);
+        }
+    }
+
     protected async performDisconnection(): Promise<void> {
+        if (ElementCall.usesReactComponent) return this.requestHangUpFromReactComponent();
+
         const response = waitForEvent(
             this.widgetApi!,
             `action:${ElementWidgetActions.HangupCall}`,
@@ -935,14 +1059,19 @@ export class ElementCall extends Call {
     }
 
     public close(): void {
-        this.widgetApi!.off(`action:${ElementWidgetActions.JoinCall}`, this.onJoin);
-        this.widgetApi!.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
-        this.widgetApi!.off(`action:${ElementWidgetActions.Close}`, this.onClose);
-        this.widgetApi!.off(`action:${ElementWidgetActions.DeviceMute}`, this.onDeviceMute);
+        if (this.widgetApi) {
+            this.widgetApi.off(`action:${ElementWidgetActions.JoinCall}`, this.onJoin);
+            this.widgetApi.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
+            this.widgetApi.off(`action:${ElementWidgetActions.Close}`, this.onClose);
+            this.widgetApi.off(`action:${ElementWidgetActions.DeviceMute}`, this.onDeviceMute);
+        }
+        // The UI is closing, so the React component (if any) will unmount; a later start() must wait for a new one.
+        this.ready = Promise.withResolvers<void>();
         super.close();
     }
 
     public destroy(): void {
+        this.hangUpRequests$.complete();
         ActiveWidgetStore.instance.destroyPersistentWidget(this.widget.id, this.widget.roomId);
         WidgetStore.instance.removeVirtualWidget(this.widget.id, this.widget.roomId);
         this.session.off(MatrixRTCSessionEvent.MembershipsChanged, this.onMembershipChanged);
@@ -984,15 +1113,47 @@ export class ElementCall extends Call {
         this.participants = participants;
     }
 
+    // The control plane, shared by both transports. The widget action handlers below acknowledge the
+    // widget request and then call these; the React component's HostBridge calls them directly.
+
+    /** The React component has finished loading (`HostBridge.contentLoaded`). */
+    public markReady(): void {
+        this.ready.resolve();
+    }
+
+    /** The user has joined the call (`HostBridge.notifyJoined` / `io.element.join`). */
+    public handleJoined(): void {
+        this.setConnected();
+    }
+
+    /** The user has hung up (`HostBridge.notifyHungUp` / `im.vector.hangup`). */
+    public handleHangup(): void {
+        // If we're already in the middle of a client-initiated disconnection, ignore the event
+        if (this.connectionState === ConnectionState.Disconnecting) return;
+        this.setDisconnected();
+    }
+
+    /** Element Call wants to be dismissed (`HostBridge.close` / `io.element.close`). */
+    public handleClose(): void {
+        this.setDisconnected(); // Just in case the widget forgot to emit a hangup action (maybe it's in an error state)
+        this.close(); // User is done with the call; tell the UI to close it
+    }
+
+    /** Element Call reports its mute state (`HostBridge.notifyDeviceMute` / `io.element.device_mute`). */
+    public handleDeviceMute(_state?: DeviceMuteState): void {
+        // Nothing to do yet; Element Web does not track the call's mute state.
+    }
+
     private readonly onDeviceMute = (ev: CustomEvent<IWidgetApiRequest>): void => {
         ev.preventDefault();
         this.widgetApi!.transport.reply(ev.detail, {}); // ack
+        this.handleDeviceMute();
     };
 
     private readonly onJoin = (ev: CustomEvent<IWidgetApiRequest>): void => {
         ev.preventDefault();
         this.widgetApi!.transport.reply(ev.detail, {}); // ack
-        this.setConnected();
+        this.handleJoined();
     };
 
     private readonly onHangup = async (ev: CustomEvent<IWidgetApiRequest>): Promise<void> => {
@@ -1002,14 +1163,13 @@ export class ElementCall extends Call {
 
         ev.preventDefault();
         this.widgetApi!.transport.reply(ev.detail, {}); // ack
-        this.setDisconnected();
+        this.handleHangup();
     };
 
     private readonly onClose = async (ev: CustomEvent<IWidgetApiRequest>): Promise<void> => {
         ev.preventDefault();
         this.widgetApi!.transport.reply(ev.detail, {}); // ack
-        this.setDisconnected(); // Just in case the widget forgot to emit a hangup action (maybe it's in an error state)
-        this.close(); // User is done with the call; tell the UI to close it
+        this.handleClose();
     };
 
     public clean(): Promise<void> {

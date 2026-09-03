@@ -1108,3 +1108,130 @@ describe("ElementCall", () => {
         });
     });
 });
+
+describe("ElementCall with the React component transport", () => {
+    let client: ReturnType<typeof setUpClientRoomAndStores>["client"];
+    let room: Room;
+    let call: ElementCall;
+
+    beforeEach(() => {
+        enabledSettings.add("feature_element_call_react");
+        ({ client, room } = setUpClientRoomAndStores());
+        ElementCall.create(room);
+        const maybeCall = Call.get(room);
+        if (!(maybeCall instanceof ElementCall)) throw new Error("Failed to create call");
+        call = maybeCall;
+    });
+
+    afterEach(() => {
+        call.destroy();
+        enabledSettings.delete("feature_element_call_react");
+        cleanUpClientRoomAndStores(client, room);
+        vi.useRealTimers();
+    });
+
+    it("starts once the component reports ready, without widget messaging", async () => {
+        const started = call.start({ skipLobby: true });
+        call.markReady();
+        await expect(started).resolves.toBeNull();
+        expect(call.widgetGenerationParameters).toEqual({ skipLobby: true });
+    });
+
+    it("times out if the component never reports ready", async () => {
+        vi.useFakeTimers();
+        const started = call.start({});
+        await Promise.all([
+            expect(started).rejects.toThrow("not ready; timed out"),
+            vi.advanceTimersByTimeAsync(16000),
+        ]);
+    });
+
+    it("tracks the connection state through the control plane", () => {
+        const onClose = vi.fn();
+        call.on(CallEvent.Close, onClose);
+
+        call.handleJoined();
+        expect(call.connectionState).toBe(ConnectionState.Connected);
+        call.handleHangup();
+        expect(call.connectionState).toBe(ConnectionState.Disconnected);
+        expect(onClose).not.toHaveBeenCalled();
+
+        call.handleJoined();
+        call.handleClose();
+        expect(call.connectionState).toBe(ConnectionState.Disconnected);
+        expect(onClose).toHaveBeenCalledTimes(1);
+    });
+
+    it("waits for a fresh component after closing", async () => {
+        call.markReady();
+        await call.start({});
+        call.handleClose();
+
+        vi.useFakeTimers();
+        const restarted = call.start({});
+        await Promise.all([
+            expect(restarted).rejects.toThrow("not ready; timed out"),
+            vi.advanceTimersByTimeAsync(16000),
+        ]);
+    });
+
+    it("disconnects by asking the component to hang up and waiting for its reply", async () => {
+        call.handleJoined();
+        const requests: unknown[] = [];
+        call.hangUpRequests$.subscribe((req) => {
+            requests.push(req.data);
+            call.handleHangup(); // as the component would, before acknowledging
+            req.reply();
+        });
+        const onClose = vi.fn();
+        call.on(CallEvent.Close, onClose);
+
+        await call.disconnect();
+        expect(requests).toEqual([{}]);
+        expect(call.connectionState).toBe(ConnectionState.Disconnected);
+        expect(onClose).toHaveBeenCalled();
+    });
+
+    it("fails to disconnect when no component is listening", async () => {
+        call.handleJoined();
+        await expect(call.disconnect()).rejects.toThrow("no Element Call component is mounted");
+    });
+
+    describe("getCallOptions", () => {
+        it("derives the intent and Element Web's overrides for a group call", () => {
+            call.widgetGenerationParameters = { skipLobby: true };
+            const { intent, config } = call.getCallOptions();
+            expect(intent).toBe(ElementCallIntent.StartCall);
+            expect(config).toMatchObject({
+                skipLobby: true,
+                background: "solid",
+                perParticipantE2EE: false,
+                fonts: [],
+            });
+            expect(config.returnToLobby).toBeUndefined();
+        });
+
+        it("uses the voice intent and leaves the lobby decision to Element Call by default", () => {
+            call.widgetGenerationParameters = { voiceOnly: true };
+            const { intent, config } = call.getCallOptions();
+            expect(intent).toBe(ElementCallIntent.StartCallVoice);
+            expect(config.skipLobby).toBeUndefined();
+        });
+
+        it("always returns to the lobby and never skips it in video rooms", () => {
+            vi.spyOn(room, "isElementVideoRoom").mockReturnValue(true);
+            call.widgetGenerationParameters = { skipLobby: true };
+            const { intent, config } = call.getCallOptions();
+            expect(intent).toBe(ElementCallIntent.JoinExisting);
+            expect(config).toMatchObject({ returnToLobby: true, skipLobby: false });
+        });
+
+        it("detects DMs and voice calls like the widget URL does", () => {
+            vi.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue("@bob:example.org");
+            call.widgetGenerationParameters = { voiceOnly: true };
+            expect(call.getCallOptions().intent).toBe(ElementCallIntent.StartCallDMVoice);
+            call.widgetGenerationParameters = {};
+            expect(call.getCallOptions().intent).toBe(ElementCallIntent.StartCallDM);
+        });
+    });
+});

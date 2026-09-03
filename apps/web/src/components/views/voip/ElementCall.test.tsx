@@ -11,7 +11,7 @@ import React from "react";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { render, screen, act, waitFor } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
-import { TypedEventEmitter, type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
+import { EventType, TypedEventEmitter, type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import {
     type CallMembership,
     type MatrixRTCSession,
@@ -78,6 +78,7 @@ describe("ElementCall (mock)", () => {
         session = new MockSession();
         vi.spyOn(client, "getUserId").mockReturnValue("@alice:example.org");
         vi.spyOn(client, "getDeviceId").mockReturnValue("ALICEDEVICE");
+        vi.spyOn(client, "sendStateEvent").mockResolvedValue({ event_id: "$event" });
         vi.spyOn(client, "getRoom").mockImplementation((id) => (id === roomId ? ({ roomId } as Room) : null));
         (client as any).matrixRTC = { getRoomSession: () => session as unknown as MatrixRTCSession };
 
@@ -157,9 +158,22 @@ describe("ElementCall (mock)", () => {
         await user.click(screen.getByRole("button", { name: "notifyJoined" }));
         expect(bridge.notifyJoined).toHaveBeenCalled();
         expect(screen.getByText(/in call/)).toBeInTheDocument();
+        // Joining publishes an RTC membership for this device, as the real component would
+        expect(client.sendStateEvent).toHaveBeenCalledWith(
+            roomId,
+            EventType.GroupCallMemberPrefix,
+            expect.objectContaining({ application: "m.call", device_id: "ALICEDEVICE" }),
+            "_@alice:example.org_ALICEDEVICE_m.call",
+        );
 
         await user.click(screen.getByRole("button", { name: "notifyHungUp" }));
         expect(bridge.notifyHungUp).toHaveBeenCalled();
+        expect(client.sendStateEvent).toHaveBeenLastCalledWith(
+            roomId,
+            EventType.GroupCallMemberPrefix,
+            {},
+            "_@alice:example.org_ALICEDEVICE_m.call",
+        );
 
         await user.click(screen.getByRole("button", { name: "setAlwaysOnScreen(true)" }));
         expect(bridge.setAlwaysOnScreen).toHaveBeenCalledWith(true);
@@ -171,6 +185,28 @@ describe("ElementCall (mock)", () => {
 
         await user.click(screen.getByRole("button", { name: "close" }));
         expect(bridge.close).toHaveBeenCalled();
+    });
+
+    it("leaves the call and gives up the screen before closing", async () => {
+        const user = userEvent.setup();
+        const order: string[] = [];
+        vi.mocked(bridge.notifyHungUp).mockImplementation(async () => {
+            order.push("notifyHungUp");
+        });
+        vi.mocked(bridge.setAlwaysOnScreen).mockImplementation(async (v) => {
+            order.push(`setAlwaysOnScreen(${v})`);
+        });
+        vi.mocked(bridge.close!).mockImplementation(async () => {
+            order.push("close");
+        });
+        renderCall();
+
+        await user.click(screen.getByRole("button", { name: "notifyJoined" }));
+        await user.click(screen.getByRole("button", { name: "setAlwaysOnScreen(true)" }));
+        await user.click(screen.getByRole("button", { name: "close" }));
+
+        expect(order).toEqual(["setAlwaysOnScreen(true)", "notifyHungUp", "setAlwaysOnScreen(false)", "close"]);
+        expect(screen.getByText(/in lobby/)).toBeInTheDocument();
     });
 
     it("hides close and downloadMedia buttons when the host does not offer them", () => {
