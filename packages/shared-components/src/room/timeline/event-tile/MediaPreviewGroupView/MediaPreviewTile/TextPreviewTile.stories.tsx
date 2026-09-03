@@ -17,7 +17,7 @@ const meta = {
     tags: ["autodocs"],
     args: {
         id: "annual-report.pdf",
-        style: "text",
+        type: "text",
         icon: <DocumentIcon />,
         onClick: () => {},
         color: "#4200A6",
