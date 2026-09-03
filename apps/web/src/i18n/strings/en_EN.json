@@ -1733,6 +1733,16 @@
         "welcome_detail": "Now, let's help you get started",
         "welcome_user": "Welcome %(name)s"
     },
+    "pdf_viewer": {
+        "error_load": "Unable to load PDF.",
+        "error_render": "Unable to render PDF.",
+        "loading": "Loading PDF…",
+        "loading_page": "Loading page %(page)s…",
+        "open": "Open PDF",
+        "page_label": "Page %(page)s of %(total)s",
+        "page_number": "Page number",
+        "title": "PDF"
+    },
     "pill": {
         "permalink_other_room": "Message in %(room)s",
         "permalink_this_room": "Message from %(user)s"
@@ -3358,7 +3368,8 @@
             "voice_call_unsupported": "%(senderName)s placed a voice call. (not supported by this browser)"
         },
         "m.file": {
-            "error_decrypting": "Error decrypting attachment"
+            "error_decrypting": "Error decrypting attachment",
+            "size_unknown": "Size unknown"
         },
         "m.image": {
             "error": "Unable to show image due to error",
@@ -3732,7 +3743,10 @@
             "one_user": "%(displayName)s is typing …",
             "two_users": "%(names)s and %(lastPerson)s are typing …"
         },
-        "undecryptable_tooltip": "This message could not be decrypted"
+        "undecryptable_tooltip": "This message could not be decrypted",
+        "url_preview": {
+            "open_link": "Open link"
+        }
     },
     "truncated_list_n_more": {
         "other": "And %(count)s more..."

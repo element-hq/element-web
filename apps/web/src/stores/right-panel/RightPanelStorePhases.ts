@@ -25,6 +25,8 @@ export enum RightPanelPhases {
     Timeline = "Timeline",
     Extensions = "Extensions",
 
+    FileViewer = "FileViewer",
+
     // Thread stuff
     ThreadView = "ThreadView",
     ThreadPanel = "ThreadPanel",

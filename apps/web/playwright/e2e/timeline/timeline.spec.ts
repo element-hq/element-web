@@ -32,9 +32,7 @@ const NEW_NAME = "Alan (away)";
 const VIDEO_FILE = readSampleFileSync("5secvid.webm", null);
 
 const getEventTilesWithBodies = (page: Page): Locator => {
-    return page
-        .locator(".mx_EventTile")
-        .filter({ has: page.getByTestId("event-tile-slot-body").locator(".mx_MTextBody") });
+    return page.locator(".mx_EventTile").filter({ has: page.locator(".mx_EventTile_body") });
 };
 
 const expectDisplayName = async (e: Locator, displayName: string): Promise<void> => {
@@ -274,10 +272,9 @@ test.describe("Timeline", () => {
                 );
 
                 // Click "collapse" link button on the first hovered info event line
-                const firstTile = gels
-                    .locator(".mx_GenericEventListSummary_unstyledList")
-                    .getByTestId("event-tile")
-                    .first();
+                const firstTile = gels.locator(
+                    ".mx_GenericEventListSummary_unstyledList .mx_EventTile_info:first-of-type",
+                );
                 await firstTile.hover();
                 await expect(firstTile.getByRole("toolbar", { name: "Message Actions" })).toBeVisible();
                 await gels.getByRole("button", { name: "Collapse" }).click();
@@ -318,6 +315,18 @@ test.describe("Timeline", () => {
 
                 // Click "expand" link button
                 await page.locator(".mx_GenericEventListSummary").getByRole("button", { name: "Expand" }).click();
+
+                // Check the event line has margin instead of inset property
+                // cf. _EventTile.pcss
+                //  --EventTile_irc_line_info-margin-inline-start
+                //  = calc(var(--name-width) + var(--icon-width) + 1 * var(--right-padding))
+                //  = 80 + 14 + 5 = 99px
+
+                const firstEventLineIrc = page.locator(
+                    ".mx_EventTile_info[data-layout=irc]:first-of-type .mx_EventTile_line",
+                );
+                await expect(firstEventLineIrc).toHaveCSS("margin-inline-start", "99px");
+                await expect(firstEventLineIrc).toHaveCSS("inset-inline-start", "0px");
 
                 await expect(page.locator(".mx_RoomView_timeline")).toMatchScreenshot(
                     "event-line-inline-start-margin-irc-layout.png",
@@ -384,10 +393,39 @@ test.describe("Timeline", () => {
 
                 // Make sure the second message was sent
                 await expect(
-                    page.locator(".mx_RoomView_MessageList > .mx_EventTile").last().getByRole("status"),
+                    page.locator(".mx_RoomView_MessageList > .mx_EventTile_last").getByRole("status"),
                 ).toHaveAccessibleName("Your message was sent");
 
                 // 1. Alignment of collapsed GELS (generic event list summary) and messages
+                // Check inline start spacing of collapsed GELS
+                // See: _EventTile.pcss
+                // .mx_GenericEventListSummary[data-layout="irc"] > .mx_EventTile_line
+                //  = var(--name-width) + var(--icon-width) + var(--MessageTimestamp-width) + 2 * var(--right-padding)
+                //  = 80 + 14 + 46 + 2 * 5
+                //  = 150px
+                await expect(
+                    page.locator(".mx_GenericEventListSummary[data-layout=irc] > .mx_EventTile_line"),
+                ).toHaveCSS("padding-inline-start", "150px");
+                // Check width and spacing values of elements in .mx_EventTile, which should be equal to 150px
+                // --right-padding should be applied
+                for (const locator of await page.locator(".mx_EventTile > a").all()) {
+                    if (await locator.isVisible()) {
+                        await expect(locator).toHaveCSS("margin-right", "5px");
+                    }
+                }
+                // --name-width width zero inline end margin should be applied
+                for (const locator of await page.locator(".mx_EventTile .mx_DisambiguatedProfile").all()) {
+                    await expect(locator).toHaveCSS("width", "80px");
+                    await expect(locator).toHaveCSS("margin-inline-end", "0px");
+                }
+                // --icon-width should be applied
+                for (const locator of await page.locator(".mx_EventTile .mx_EventTile_avatar > .mx_BaseAvatar").all()) {
+                    await expect(locator).toHaveCSS("width", "14px");
+                }
+                // var(--MessageTimestamp-width) should be applied
+                for (const locator of await page.locator(".mx_EventTile > a").all()) {
+                    await expect(locator).toHaveCSS("min-width", "46px");
+                }
                 // Record alignment of collapsed GELS and messages on messagePanel
                 await expect(page.locator(".mx_RoomView_timeline")).toMatchScreenshot(
                     "collapsed-gels-and-messages-irc-layout.png",
@@ -404,6 +442,13 @@ test.describe("Timeline", () => {
                 // 2. Alignment of expanded GELS and messages
                 // Click "expand" link button
                 await page.locator(".mx_GenericEventListSummary").getByRole("button", { name: "Expand" }).click();
+                // Check inline start spacing of info line on expanded GELS
+                // See: _EventTile.pcss
+                // --EventTile_irc_line_info-margin-inline-start
+                // = 80 + 14 + 1 * 5
+                await expect(
+                    page.locator(".mx_EventTile[data-layout=irc].mx_EventTile_info:first-of-type .mx_EventTile_line"),
+                ).toHaveCSS("margin-inline-start", "99px");
                 // Record alignment of expanded GELS and messages on messagePanel
                 await expect(page.locator(".mx_RoomView_timeline")).toMatchScreenshot(
                     "expanded-gels-and-messages-irc-layout.png",
@@ -419,7 +464,7 @@ test.describe("Timeline", () => {
 
                 // 3. Alignment of expanded GELS and placeholder of deleted message
                 // Delete the second (last) message
-                const lastTile = page.locator(".mx_RoomView_MessageList > .mx_EventTile").last();
+                const lastTile = page.locator(".mx_RoomView_MessageList > .mx_EventTile_last");
                 await lastTile.hover();
                 await lastTile.getByRole("button", { name: "Options" }).click();
                 await page.getByRole("menuitem", { name: "Remove" }).click();
@@ -428,10 +473,10 @@ test.describe("Timeline", () => {
                 // Make sure the dialog was closed and the second (last) message was redacted
                 await expect(page.locator(".mx_Dialog")).not.toBeVisible();
                 await expect(
-                    page.locator(".mx_GenericEventListSummary .mx_EventTile").last().locator(".mx_RedactedBody"),
+                    page.locator(".mx_GenericEventListSummary .mx_EventTile_last .mx_RedactedBody"),
                 ).toBeVisible();
                 await expect(
-                    page.locator(".mx_GenericEventListSummary .mx_EventTile").last().getByRole("status"),
+                    page.locator(".mx_GenericEventListSummary .mx_EventTile_last").getByRole("status"),
                 ).toHaveAccessibleName("Your message was sent");
                 // Record alignment of expanded GELS and placeholder of deleted message on messagePanel
                 await expect(page.locator(".mx_RoomView_timeline")).toMatchScreenshot(
@@ -456,9 +501,17 @@ test.describe("Timeline", () => {
                     .locator(".mx_RoomView_body")
                     .getByRole("textbox", { name: "Send an unencrypted message…" })
                     .press("Enter");
-                const emoteTile = page.locator(".mx_EventTile").filter({ hasText: "says hello to Mr. Bot" }).last();
+                // Check inline start margin of its avatar
+                // Here --right-padding is for the avatar on the message line
+                // See: _IRCLayout.pcss
+                // .mx_IRCLayout .mx_EventTile_emote .mx_EventTile_avatar
+                // = calc(var(--name-width) + var(--icon-width) + 1 * var(--right-padding))
+                // = 80 + 14 + 1 * 5
+                await expect(page.locator(".mx_EventTile_emote .mx_EventTile_avatar")).toHaveCSS("margin-left", "99px");
                 // Make sure emote was sent
-                await expect(emoteTile.getByRole("status")).toHaveAccessibleName("Your message was sent");
+                await expect(
+                    page.locator(".mx_EventTile_last.mx_EventTile_emote").getByRole("status"),
+                ).toHaveAccessibleName("Your message was sent");
                 // Record alignment of expanded GELS, placeholder of deleted message, and emote
                 await expect(page.locator(".mx_RoomView_timeline")).toMatchScreenshot(
                     "expanded-gels-emote-irc-layout.png",
@@ -595,15 +648,16 @@ test.describe("Timeline", () => {
                 await messageEdit(page);
 
                 // Click timestamp to highlight hidden event line
-                const timestamp = page
-                    .locator(".mx_RoomView_body .mx_EventTile:has([data-testid='event-tile-slot-timestamp'])")
-                    .last()
-                    .getByTestId("event-tile-slot-timestamp");
+                const timestamp = page.locator(".mx_RoomView_body .mx_EventTile_info a.mx_MessageTimestamp");
                 // wait for the remote echo otherwise we get an error modal due to a 404 on the /event/ API
                 await expect(timestamp).not.toHaveAttribute("href", /~!/);
                 await timestamp.click();
 
+                // should not add inline start padding to a hidden event line on IRC layout
                 await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
+                await expect(
+                    page.locator(".mx_EventTile[data-layout=irc].mx_EventTile_info .mx_EventTile_line").first(),
+                ).toHaveCSS("padding-inline-start", "0px");
 
                 // Exclude timestamp and read marker from snapshot
                 const screenshotOptions = {
@@ -622,8 +676,12 @@ test.describe("Timeline", () => {
                     screenshotOptions,
                 );
 
-                // Capture hidden event line padding in modern layout
+                // should add inline start padding to a hidden event line on modern layout
                 await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
+                // calc(var(--EventTile_group_line-spacing-inline-start) + 20px) = 64 + 20 = 84px
+                await expect(
+                    page.locator(".mx_EventTile[data-layout=group].mx_EventTile_info .mx_EventTile_line").first(),
+                ).toHaveCSS("padding-inline-start", "84px");
 
                 await expect(page.locator(".mx_RoomView_timeline")).toMatchScreenshot(
                     "hidden-event-line-padding-modern-layout.png",
@@ -661,23 +719,28 @@ test.describe("Timeline", () => {
             // 1. clickability of top left of view source event toggle
 
             // Click top left of the event toggle, which should not be covered by MessageActionBar's safe area
-            const viewSourceEventGroup = page.locator(".mx_EventTile").last().locator(".mx_ViewSourceEvent");
+            const viewSourceEventGroup = page.locator(".mx_EventTile_last[data-layout=group] .mx_ViewSourceEvent");
             await viewSourceEventGroup.hover();
             await viewSourceEventGroup
                 .getByRole("button", { name: "toggle event" })
                 .click({ position: { x: 0, y: 0 } });
 
             // Make sure the expand toggle works
-            const viewSourceEventExpanded = page.locator(".mx_EventTile");
-            const viewSourceEventExpandedContent = viewSourceEventExpanded.locator(".mx_ViewSourceEvent_expanded");
-            await viewSourceEventExpandedContent.hover();
-            const toggleEventButton = viewSourceEventExpandedContent.getByRole("button", { name: "toggle event" });
+            const viewSourceEventExpanded = page.locator(
+                ".mx_EventTile_last[data-layout=group] .mx_ViewSourceEvent_expanded",
+            );
+            await viewSourceEventExpanded.hover();
+            const toggleEventButton = viewSourceEventExpanded.getByRole("button", { name: "toggle event" });
+            // Check size and position of toggle on expanded view source event
+            // See: ViewSourceEventView.module.css
+            await expect(toggleEventButton).toHaveCSS("height", "16px"); // --ViewSourceEvent_toggle-size
+            await expect(toggleEventButton).toHaveCSS("align-self", "flex-end");
             // Click again to collapse the source
             await toggleEventButton.click({ position: { x: 0, y: 0 } });
 
             // Make sure the collapse toggle works
             await expect(
-                page.locator(".mx_EventTile").last().locator(".mx_ViewSourceEvent_expanded"),
+                page.locator(".mx_EventTile_last[data-layout=group] .mx_ViewSourceEvent_expanded"),
             ).not.toBeVisible();
 
             // 2. clickability of view source toggle on IRC layout
@@ -699,9 +762,7 @@ test.describe("Timeline", () => {
             await viewSourceEventIrc.getByRole("button", { name: "toggle event" }).click({ position: { x: 8, y: 8 } });
 
             // Make sure the expand toggle worked
-            await expect(
-                page.locator(".mx_GenericEventListSummary .mx_EventTile .mx_ViewSourceEvent_expanded"),
-            ).toBeVisible();
+            await expect(page.locator(".mx_EventTile[data-layout=irc] .mx_ViewSourceEvent_expanded")).toBeVisible();
         });
 
         test("should render file size in kibibytes on a file tile", async ({ page, app, room }) => {
@@ -717,19 +778,14 @@ test.describe("Timeline", () => {
 
             // Wait until the file is sent
             await expect(page.locator(".mx_RoomView_statusArea_expanded")).not.toBeVisible();
-            await expect(page.locator(".mx_EventTile").last().getByRole("status")).toHaveAccessibleName(
+            await expect(page.locator(".mx_EventTile.mx_EventTile_last").getByRole("status")).toHaveAccessibleName(
                 "Your message was sent",
             );
 
             // Assert that the file size is displayed in kibibytes (1024 bytes), not kilobytes (1000 bytes)
             // See: https://github.com/vector-im/element-web/issues/24866
-            await expect(
-                page
-                    .locator(".mx_EventTile")
-                    .last()
-                    .locator(".mx_MFileBody [data-type='info']")
-                    .getByText(/1.12 KB/),
-            ).toBeVisible();
+            // The timeline renders files as a preview tile, which shows the size as the tile body.
+            await expect(page.locator(".mx_EventTile.mx_EventTile_last").getByText(/1.12 KB/)).toBeVisible();
         });
 
         test.describe("on search results panel", () => {
@@ -737,10 +793,8 @@ test.describe("Timeline", () => {
                 "should highlight search result words regardless of formatting",
                 { tag: "@screenshot" },
                 async ({ page, app, room }) => {
-                    const events = [
-                        await sendEvent(app.client, room.roomId),
-                        await sendEvent(app.client, room.roomId, true),
-                    ];
+                    await sendEvent(app.client, room.roomId);
+                    await sendEvent(app.client, room.roomId, true);
                     await page.goto(`/#/room/${room.roomId}`);
                     await rejectToast(page, "Verify this device");
 
@@ -751,13 +805,10 @@ test.describe("Timeline", () => {
 
                     await expect(page.locator(".mx_RoomSearchAuxPanel")).toMatchScreenshot("search-aux-panel.png");
 
-                    for (const event of events) {
-                        await expect(
-                            page
-                                .locator(`.mx_EventTile[data-event-id='${event.event_id}']`)
-                                .getByTestId("event-tile-slot-body")
-                                .locator(".mx_EventTile_searchHighlight"),
-                        ).toBeVisible();
+                    for (const locator of await page
+                        .locator(".mx_EventTile:not(.mx_EventTile_contextual) .mx_EventTile_searchHighlight")
+                        .all()) {
+                        await expect(locator).toBeVisible();
                     }
                     await expect(page.locator(".mx_RoomView_searchResultsPanel")).toMatchScreenshot(
                         "highlighted-search-results.png",
@@ -791,6 +842,17 @@ test.describe("Timeline", () => {
                 // Search the string to display both the message and TextualEvent on search results panel
                 await page.locator(".mx_RoomSummaryCard_search").getByRole("searchbox").fill(stringToSearch);
                 await page.locator(".mx_RoomSummaryCard_search").getByRole("searchbox").press("Enter");
+
+                // On search results panel
+                const resultsPanel = page.locator(".mx_RoomView_searchResultsPanel");
+                // Assert that contextual event tiles are translucent
+                for (const locator of await resultsPanel.locator(".mx_EventTile.mx_EventTile_contextual").all()) {
+                    await expect(locator).toHaveCSS("opacity", "0.4");
+                }
+                // Assert that the TextualEvent is fully opaque (visually solid).
+                for (const locator of await resultsPanel.locator(".mx_EventTile .mx_TextualEvent").all()) {
+                    await expect(locator).toHaveCSS("opacity", "1");
+                }
 
                 await expect(page.locator(".mx_RoomView_searchResultsPanel")).toMatchScreenshot(
                     "search-results-with-TextualEvent.png",
@@ -866,7 +928,7 @@ test.describe("Timeline", () => {
             expect(await fontSize(codeBlock.locator(".mx_Emoji"))).toEqual(await fontSize(codeBlock.locator("code")));
 
             // ...but emoji in an ordinary message are still enlarged
-            const message = page.locator(".mx_EventTile").last().getByTestId("event-tile-slot-body");
+            const message = page.locator(".mx_EventTile_last .mx_EventTile_body");
             expect(await fontSize(message.locator(".mx_Emoji"))).not.toEqual(await fontSize(message));
         });
 
@@ -959,21 +1021,17 @@ test.describe("Timeline", () => {
             await composer.press("Enter");
 
             // Reply to the message
-            const lastTile = getEventTilesWithBodies(page).last();
+            const lastTile = page.locator(".mx_EventTile_last");
             await expect(lastTile.getByText(MESSAGE)).toBeVisible();
-            await lastTile.getByTestId("event-tile-slot-body").hover();
-            const replyButton = lastTile.getByRole("button", { name: "Reply", exact: true });
-            await expect(replyButton).toBeVisible();
-            await replyButton.click();
+            await lastTile.hover();
+            await lastTile.getByRole("button", { name: "Reply", exact: true }).click();
         };
 
         // For clicking the reply button on the last line
         const clickButtonReply = async (page: Page): Promise<void> => {
-            const lastTile = getEventTilesWithBodies(page).last();
-            await lastTile.getByTestId("event-tile-slot-body").hover();
-            const replyButton = lastTile.getByRole("button", { name: "Reply", exact: true });
-            await expect(replyButton).toBeVisible();
-            await replyButton.click();
+            const lastTile = page.locator(".mx_RoomView_MessageList .mx_EventTile_last");
+            await lastTile.hover();
+            await lastTile.getByRole("button", { name: "Reply", exact: true }).click();
         };
 
         test("can reply with a text message", async ({ page, app, room }) => {
@@ -982,7 +1040,7 @@ test.describe("Timeline", () => {
             await app.getComposerField().fill(reply);
             await app.getComposerField().press("Enter");
 
-            const eventTileLine = page.locator(".mx_RoomView_body .mx_EventTile").last().locator(".mx_EventTile_line");
+            const eventTileLine = page.locator(".mx_RoomView_body .mx_EventTile_last .mx_EventTile_line");
             await expect(eventTileLine.locator(".mx_ReplyTile .mx_MTextBody").getByText(MESSAGE)).toBeVisible();
             await expect(eventTileLine.getByText(reply)).toHaveCount(1);
         });
@@ -1020,7 +1078,7 @@ test.describe("Timeline", () => {
                 .getByRole("button", { name: "Send voice message" })
                 .click();
 
-            const lastEventTileLine = roomViewBody.locator(".mx_EventTile").last().locator(".mx_EventTile_line");
+            const lastEventTileLine = roomViewBody.locator(".mx_EventTile_last .mx_EventTile_line");
             await expect(lastEventTileLine.locator(".mx_ReplyTile .mx_MTextBody").getByText(MESSAGE)).toBeVisible();
 
             await expect(lastEventTileLine.locator(".mx_MVoiceMessageBody")).toHaveCount(1);
@@ -1070,7 +1128,9 @@ test.describe("Timeline", () => {
 
             // Make sure the bot joined the room
             await expect(
-                page.locator(".mx_GenericEventListSummary .mx_EventTile").filter({ hasText: "BotBob joined the room" }),
+                page
+                    .locator(".mx_GenericEventListSummary .mx_EventTile_info.mx_EventTile_last")
+                    .getByText("BotBob joined the room"),
             ).toBeVisible();
 
             // Have bot send MESSAGE to roomId
@@ -1085,7 +1145,7 @@ test.describe("Timeline", () => {
             await app.getComposerField().press("Enter");
 
             // Make sure 'reply' was sent
-            await expect(page.locator(".mx_RoomView_body .mx_EventTile").last().getByText(reply)).toBeVisible();
+            await expect(page.locator(".mx_RoomView_body .mx_EventTile_last").getByText(reply)).toBeVisible();
 
             // Reply again to create a replyChain
             await clickButtonReply(page);
@@ -1093,9 +1153,9 @@ test.describe("Timeline", () => {
             await app.getComposerField().press("Enter");
 
             // Assert that 'reply2' was sent
-            await expect(page.locator(".mx_RoomView_body .mx_EventTile").last().getByText(reply2)).toBeVisible();
+            await expect(page.locator(".mx_RoomView_body .mx_EventTile_last").getByText(reply2)).toBeVisible();
 
-            await expect(page.locator(".mx_EventTile").last().getByRole("status")).toHaveAccessibleName(
+            await expect(page.locator(".mx_EventTile_last").getByRole("status")).toHaveAccessibleName(
                 "Your message was sent",
             );
 
@@ -1111,36 +1171,52 @@ test.describe("Timeline", () => {
                 `,
             };
 
+            // Check the margin value of ReplyChains of EventTile at the bottom on IRC layout
             await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
+            for (const locator of await page.locator(".mx_EventTile_last[data-layout='irc'] .mx_ReplyChain").all()) {
+                await expect(locator).toHaveCSS("margin", "0px");
+            }
 
             // Take a snapshot on IRC layout
             // Note that because zero margin is applied to mx_ReplyChain, the left borders of two mx_ReplyChain
             // components may seem to be connected to one.
-            await expect(page.locator(".mx_EventTile").last()).toMatchScreenshot(
+            await expect(page.locator(".mx_EventTile_last")).toMatchScreenshot(
                 "event-tile-reply-chains-irc-layout.png",
                 screenshotOptions,
             );
 
+            // Check the margin value of ReplyChains of EventTile at the bottom on group/modern layout
             await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
+            for (const locator of await page.locator(".mx_EventTile_last[data-layout='group'] .mx_ReplyChain").all()) {
+                await expect(locator).toHaveCSS("margin-bottom", "8px");
+            }
 
             // Take a snapshot on modern layout
-            await expect(page.locator(".mx_EventTile").last()).toMatchScreenshot(
+            await expect(page.locator(".mx_EventTile_last")).toMatchScreenshot(
                 "event-tile-reply-chains-irc-modern.png",
                 screenshotOptions,
             );
 
+            // Check the margin value of ReplyChains of EventTile at the bottom on group/modern compact layout
             await app.settings.setValue("useCompactLayout", null, SettingLevel.DEVICE, true);
+            for (const locator of await page.locator(".mx_EventTile_last[data-layout='group'] .mx_ReplyChain").all()) {
+                await expect(locator).toHaveCSS("margin-bottom", "4px");
+            }
 
             // Take a snapshot on compact modern layout
-            await expect(page.locator(".mx_EventTile").last()).toMatchScreenshot(
+            await expect(page.locator(".mx_EventTile_last")).toMatchScreenshot(
                 "event-tile-reply-chains-compact-modern-layout.png",
                 screenshotOptions,
             );
 
+            // Check the margin value of ReplyChains of EventTile at the bottom on bubble layout
             await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
+            for (const locator of await page.locator(".mx_EventTile_last[data-layout='bubble'] .mx_ReplyChain").all()) {
+                await expect(locator).toHaveCSS("margin-bottom", "8px");
+            }
 
             // Take a snapshot on bubble layout
-            await expect(page.locator(".mx_EventTile").last()).toMatchScreenshot(
+            await expect(page.locator(".mx_EventTile_last")).toMatchScreenshot(
                 "event-tile-reply-chains-bubble-layout.png",
                 screenshotOptions,
             );
@@ -1194,7 +1270,7 @@ test.describe("Timeline", () => {
 
                 // Wait until the message is rendered
                 await expect(
-                    page.locator(".mx_EventTile").last().getByTestId("event-tile-slot-body").getByText(LONG_STRING),
+                    page.locator(".mx_EventTile_last .mx_MTextBody .mx_EventTile_body").getByText(LONG_STRING),
                 ).toBeVisible();
 
                 // Reply to the message
@@ -1203,7 +1279,7 @@ test.describe("Timeline", () => {
                 await app.getComposerField().press("Enter");
 
                 // Make sure the reply tile is rendered
-                const eventTileLine = page.locator(".mx_EventTile").last().locator(".mx_EventTile_line");
+                const eventTileLine = page.locator(".mx_EventTile_last .mx_EventTile_line");
                 await expect(eventTileLine.locator(".mx_ReplyTile .mx_MTextBody").getByText(LONG_STRING)).toBeVisible();
 
                 await expect(eventTileLine.getByText(reply)).toHaveCount(1);
@@ -1229,7 +1305,7 @@ test.describe("Timeline", () => {
                 await app.timeline.scrollToBottom();
                 // Assert that both avatar in the introduction and the last message are visible at the same time
                 await expect(page.locator(".mx_NewRoomIntro .mx_BaseAvatar")).toBeVisible();
-                const lastEventTileIrc = page.locator(".mx_EventTile").last();
+                const lastEventTileIrc = page.locator(".mx_EventTile_last[data-layout='irc']");
                 await expect(lastEventTileIrc.locator(".mx_MTextBody").first()).toBeVisible();
                 await expect(lastEventTileIrc.getByRole("status")).toHaveAccessibleName("Your message was sent"); // rendered at the bottom of EventTile
                 // Take a snapshot in IRC layout
@@ -1242,7 +1318,7 @@ test.describe("Timeline", () => {
                 await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
                 await app.timeline.scrollToBottom(); // Scroll again in case
                 await expect(page.locator(".mx_NewRoomIntro .mx_BaseAvatar")).toBeVisible();
-                const lastEventTileGroup = page.locator(".mx_EventTile").last();
+                const lastEventTileGroup = page.locator(".mx_EventTile_last[data-layout='group']");
                 await expect(lastEventTileGroup.locator(".mx_MTextBody").first()).toBeVisible();
                 await expect(lastEventTileGroup.getByRole("status")).toHaveAccessibleName("Your message was sent");
                 await expect(page.locator(".mx_ScrollPanel")).toMatchScreenshot(
@@ -1254,7 +1330,7 @@ test.describe("Timeline", () => {
                 await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
                 await app.timeline.scrollToBottom(); // Scroll again in case
                 await expect(page.locator(".mx_NewRoomIntro .mx_BaseAvatar")).toBeVisible();
-                const lastEventTileBubble = page.locator(".mx_EventTile").last();
+                const lastEventTileBubble = page.locator(".mx_EventTile_last[data-layout='bubble']");
                 await expect(lastEventTileBubble.locator(".mx_MTextBody").first()).toBeVisible();
                 await expect(lastEventTileBubble.getByRole("status")).toHaveAccessibleName("Your message was sent");
                 await expect(page.locator(".mx_ScrollPanel")).toMatchScreenshot(
@@ -1384,7 +1460,7 @@ test.describe("Timeline", () => {
                 `,
             };
 
-            const eventTile = page.locator(".mx_RoomView_body .mx_EventTile").last();
+            const eventTile = page.locator(".mx_RoomView_body .mx_EventTile_last");
             await expect(eventTile).toMatchScreenshot("spoiler.png", screenshotOptions);
 
             const rightPanelButton = page.getByText("Share profile");

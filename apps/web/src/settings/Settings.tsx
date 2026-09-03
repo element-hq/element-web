@@ -15,6 +15,7 @@ import { type JsonDocument, type JsonValue } from "shared-types";
 import { _t, _td } from "@element-hq/web-shared-components";
 
 import { type MediaPreviewConfig } from "../@types/media_preview.ts";
+import { type PdfViewerState } from "../@types/pdf-viewer.ts";
 import DeviceIsolationModeController from "./controllers/DeviceIsolationModeController.ts";
 import {
     NotificationBodyEnabledController,
@@ -294,6 +295,7 @@ export interface Settings {
     "breadcrumb_rooms": IBaseSetting<string[]>;
     "recent_emoji": IBaseSetting<RecentEmojiData>;
     "showMediaEventIds": IBaseSetting<{ [eventId: string]: boolean }>;
+    "pdfViewerState": IBaseSetting<{ [mxcUri: string]: PdfViewerState }>;
     "SpotlightSearch.recentSearches": IBaseSetting<string[]>;
     "SpotlightSearch.showNsfwPublicRooms": IBaseSetting<boolean>;
     "room_directory_servers": IBaseSetting<string[]>;
@@ -332,7 +334,6 @@ export interface Settings {
     "RoomList.panelSize": IBaseSetting<number | null>;
     "RoomList.isPanelCollapsed": IBaseSetting<boolean>;
     "RoomList.showMessagePreview": IBaseSetting<boolean>;
-    "RightPanel.phasesGlobal": IBaseSetting<IRightPanelForRoomStored | null>;
     "RightPanel.phases": IBaseSetting<IRightPanelForRoomStored | null>;
     "enableEventIndexing": IBaseSetting<boolean>;
     "crawlerSleepTime": IBaseSetting<number>;
@@ -1037,6 +1038,13 @@ export const SETTINGS: Settings = {
         // Exports event IDs
         shouldExportToRageshake: false,
     },
+    "pdfViewerState": {
+        // not really a setting
+        supportedLevels: [SettingLevel.DEVICE],
+        default: {}, // MXC URI => where the reader had got to in that PDF
+        // Exports MXC URIs
+        shouldExportToRageshake: false,
+    },
     "SpotlightSearch.showNsfwPublicRooms": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("settings|show_nsfw_content"),
@@ -1228,10 +1236,6 @@ export const SETTINGS: Settings = {
     "composerUrlPreviewCollapsed": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: true,
-    },
-    "RightPanel.phasesGlobal": {
-        supportedLevels: [SettingLevel.DEVICE],
-        default: null,
     },
     "RightPanel.phases": {
         supportedLevels: [SettingLevel.ROOM_DEVICE],

@@ -28,6 +28,7 @@ import PWAPlatform from "./platform/PWAPlatform";
 import WebPlatform from "./platform/WebPlatform";
 import { initRageshake, initRageshakeStore } from "./rageshakesetup";
 import { ModuleApi } from "../modules/Api.ts";
+import { registerDefaultFileViewers } from "../modules/DefaultFileViewers.tsx";
 import { type URLParams } from "./url_utils.ts";
 
 export const rageshakePromise = initRageshake();
@@ -159,6 +160,10 @@ export async function loadPlugins(): Promise<void> {
     // every single module to ship its own copy of React. This also makes it easier to access via the console
     // and incidentally means we can forget our React imports in JSX files without penalty.
     window.React = React;
+
+    // Viewers that ship with element-web itself, registered before any module is loaded so that a
+    // module can tell whether the ID it wants is already taken.
+    registerDefaultFileViewers();
 
     const modules = SdkConfig.get("modules");
     if (!modules?.length) return;

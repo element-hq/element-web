@@ -7,6 +7,7 @@
 import { ComponentType } from 'react';
 import { IWidget } from 'matrix-widget-api';
 import { JSX } from 'react';
+import { JSX as JSX_2 } from 'react/jsx-runtime';
 import { ModuleApi } from '@matrix-org/react-sdk-module-api';
 import { ReactNode } from 'react';
 import { Root } from 'react-dom/client';
@@ -56,8 +57,12 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
     readonly customComponents: CustomComponentsApi;
     // @alpha
     readonly customisations: CustomisationsApi;
+    // (undocumented)
+    readonly customPreviewTile: CustomPreviewTileApi;
     // @alpha
     readonly extras: ExtrasApi;
+    // @alpha
+    readonly fileViewer: FileViewerApi;
     readonly i18n: I18nApi;
     readonly navigation: NavigationApi;
     readonly rootNode: HTMLElement;
@@ -218,6 +223,39 @@ export type CustomMessageRenderHints = {
     allowDownloadingMedia?: (mxEvent: MatrixEvent) => Promise<boolean>;
 };
 
+// @public (undocumented)
+export interface CustomPreviewTileApi {
+    // (undocumented)
+    registerCustomPreviewTilePatcher(patcher: CustomPreviewTilePatcher, opts: CustomPreviewTileOptions): void;
+}
+
+// @public (undocumented)
+export interface CustomPreviewTileIcon {
+    // (undocumented)
+    color: string;
+    // (undocumented)
+    icon: JSX_2.Element;
+}
+
+// @public (undocumented)
+export interface CustomPreviewTileOptions {
+    // (undocumented)
+    id: string;
+}
+
+// @public (undocumented)
+export interface CustomPreviewTilePatch {
+    // (undocumented)
+    header?: string;
+    // (undocumented)
+    icon?: CustomPreviewTileIcon;
+    // (undocumented)
+    subtext?: string;
+}
+
+// @public (undocumented)
+export type CustomPreviewTilePatcher = (media: MediaHandle) => CustomPreviewTilePatch | null;
+
 // @alpha
 export type CustomRoomPreviewBarComponentProps = {
     roomId?: string;
@@ -261,6 +299,23 @@ export interface DirectoryCustomisations {
 }
 
 // @alpha
+export interface EncryptedFile {
+    hashes: {
+        [alg: string]: string;
+    };
+    iv: string;
+    key: {
+        alg: string;
+        key_ops: string[];
+        kty: string;
+        k: string;
+        ext: boolean;
+    };
+    url: string;
+    v: string;
+}
+
+// @alpha
 export type ExtendablePropsRenderFunction<BaseProps> = <P extends BaseProps>(
 props: P,
 originalComponent: (props: P) => JSX.Element) => JSX.Element;
@@ -271,6 +326,34 @@ export interface ExtrasApi {
     getVisibleRoomBySpaceKey(spaceKey: string, cb: () => string[]): void;
     setSpacePanelItem(spaceKey: string, props: SpacePanelItemProps): void;
 }
+
+// @public (undocumented)
+export interface FileViewerApi {
+    // (undocumented)
+    registerFileViewer(match: FileViewerMatcher, renderer: FileViewerRenderFunction, opts: FileViewerOptions): void;
+}
+
+// @public
+export type FileViewerMatcher = (media: MediaHandle) => boolean;
+
+// @public (undocumented)
+export interface FileViewerOptions {
+    buttonIcon: JSX_2.Element;
+    buttonText: string;
+    cardHeader: string;
+    id: string;
+}
+
+// @public (undocumented)
+export interface FileViewerProps {
+    // (undocumented)
+    media: MediaHandle;
+    // (undocumented)
+    onClose: () => void;
+}
+
+// @public (undocumented)
+export type FileViewerRenderFunction = (props: FileViewerProps) => JSX_2.Element;
 
 // @public
 export interface I18nApi {
@@ -382,6 +465,9 @@ export interface MediaCustomisations<Content, Client, PreparedMedia> {
 }
 
 // @public
+export type MediaHandle = RemoteMedia | UploadedMedia;
+
+// @public
 export interface Module {
     // (undocumented)
     load(): Promise<void>;
@@ -446,6 +532,12 @@ export interface Profile {
 export interface ProfileApiExtension {
     readonly profile: Watchable<Profile>;
 }
+
+// @public
+export type RemoteMedia = {
+    type: "remote";
+    bundle: UnstableBundledUrlPreviewSingle;
+};
 
 // @public
 export interface RichVariables {
@@ -544,6 +636,39 @@ export const enum UIComponent {
     RoomOptionsMenu = "UIComponent.roomOptionsMenu"
 }
 
+// @alpha
+export interface UnstableBundledUrlPreviews {
+    // (undocumented)
+    "com.beeper.linkpreviews"?: UnstableBundledUrlPreviewSingle[];
+}
+
+// @alpha
+export type UnstableBundledUrlPreviewSingle = {
+    "matched_url": string;
+    "beeper:image:encryption"?: EncryptedFile;
+    "matrix:image:size"?: number;
+    "og:image"?: string;
+    "og:url"?: string;
+    "og:image:width"?: number;
+    "og:image:height"?: number;
+    "og:image:type"?: string;
+    "og:title"?: string;
+    "og:description"?: string;
+} & Record<string, any>;
+
+// @public
+export interface UploadedMedia {
+    // (undocumented)
+    blob(): Promise<Blob>;
+    // (undocumented)
+    mimetype?: string;
+    // (undocumented)
+    name: string;
+    // (undocumented)
+    type: "uploaded";
+    uri: string;
+}
+
 // @alpha @deprecated (undocumented)
 export interface UserIdentifierCustomisations {
     getDisplayUserIdentifier(userId: string, opts: {
@@ -619,6 +744,10 @@ export interface WidgetVariablesCustomisations {
         baseUrl?: string;
     };
 }
+
+// Warnings were encountered during analysis:
+//
+// src/api/file-viewer.ts:26:5 - (ae-incompatible-release-tags) The symbol "bundle" is marked as @public, but its signature references "UnstableBundledUrlPreviewSingle" which is marked as @alpha
 
 // (No @packageDocumentation comment for this package)
 

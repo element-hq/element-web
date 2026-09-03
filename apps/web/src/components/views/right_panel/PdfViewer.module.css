@@ -1,0 +1,214 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+/*
+ * Styles for the DOM that pdf.js's PDFViewer builds. This is the subset of the library's own
+ * `web/pdf_viewer.css` that a read-only viewer needs, scoped under our container rather than imported
+ * globally: the library's stylesheet declares `color-scheme` and its page metrics on `:root`, which
+ * would override Element's theming for the whole app.
+ *
+ * Annotation, XFA, and editor layers are deliberately absent — the viewer is constructed with those
+ * modes disabled, so none of that markup is ever created.
+ */
+
+.viewer {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    height: 100%;
+    overflow: hidden;
+    color: var(--cpd-color-text-primary);
+    background: var(--cpd-color-bg-subtle-secondary);
+}
+
+.toolbar {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--cpd-space-2x) var(--cpd-space-4x);
+    border-bottom: var(--cpd-border-width-1) solid var(--cpd-color-border-interactive-secondary);
+    background: var(--cpd-color-bg-canvas-default);
+}
+
+.pageForm {
+    display: flex;
+    align-items: center;
+    gap: var(--cpd-space-2x);
+}
+
+.pageInput {
+    width: 4ch;
+    padding: var(--cpd-space-1x) var(--cpd-space-2x);
+    text-align: center;
+    color: var(--cpd-color-text-primary);
+    background: var(--cpd-color-bg-canvas-default);
+    border: var(--cpd-border-width-1) solid var(--cpd-color-border-interactive-primary);
+    border-radius: var(--cpd-radius-pill-effect);
+    font: var(--cpd-font-body-sm-medium);
+}
+
+.pageInput:focus-visible {
+    outline: var(--cpd-border-width-2) solid var(--cpd-color-border-focused);
+    outline-offset: 1px;
+}
+
+.pageSeparator,
+.pageTotal {
+    color: var(--cpd-color-text-secondary);
+    font: var(--cpd-font-body-sm-medium);
+}
+
+/* Positioning context for the scroll area and the loading/error overlays. */
+.body {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+}
+
+/* pdf.js measures scrolling against this element and requires it to be absolutely positioned. */
+.container {
+    position: absolute;
+    inset: 0;
+    overflow: auto;
+
+    --viewer-container-height: 0;
+    --pdfViewer-padding-bottom: var(--cpd-space-4x);
+    --page-margin: var(--cpd-space-4x) auto;
+}
+
+.container :global(.pdfViewer) {
+    --scale-factor: 1;
+
+    padding-bottom: var(--pdfViewer-padding-bottom);
+}
+
+.container :global(.pdfViewer .page) {
+    --user-unit: 1;
+    --total-scale-factor: calc(var(--scale-factor) * var(--user-unit));
+    --scale-round-x: 1px;
+    --scale-round-y: 1px;
+
+    position: relative;
+    direction: ltr;
+    width: 816px;
+    height: 1056px;
+    margin: var(--page-margin);
+    overflow: visible;
+    border: var(--cpd-border-width-1) solid var(--cpd-color-border-interactive-secondary);
+    background-color: white;
+    background-clip: content-box;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.18);
+}
+
+.container :global(.pdfViewer .canvasWrapper) {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.container :global(.pdfViewer .canvasWrapper canvas) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    contain: content;
+}
+
+/* The detail canvas is a high-resolution tile of the visible region, drawn over the CSS-zoomed page. */
+.container :global(.pdfViewer .canvasWrapper canvas.detailView) {
+    image-rendering: pixelated;
+}
+
+.container :global(.pdfViewer .dummyPage) {
+    position: relative;
+    width: 0;
+    height: var(--viewer-container-height);
+}
+
+/*
+ * Text layer: an invisible, selectable copy of the page text positioned over the canvas. The custom
+ * properties and the transform are the contract pdf.js's TextLayer writes against.
+ */
+.container :global(.textLayer) {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    overflow: clip;
+    color-scheme: only light;
+    text-align: initial;
+    line-height: 1;
+    letter-spacing: normal;
+    word-spacing: normal;
+    opacity: 1;
+    -webkit-text-size-adjust: none;
+    -moz-text-size-adjust: none;
+    text-size-adjust: none;
+    forced-color-adjust: none;
+    transform-origin: 0 0;
+    caret-color: CanvasText;
+
+    --min-font-size: 1;
+    --text-scale-factor: calc(var(--total-scale-factor) * var(--min-font-size));
+    --min-font-size-inv: calc(1 / var(--min-font-size));
+}
+
+.container :global(.textLayer span),
+.container :global(.textLayer br) {
+    position: absolute;
+    color: transparent;
+    white-space: pre;
+    cursor: text;
+    transform-origin: 0% 0%;
+    user-select: text;
+}
+
+.container :global(.textLayer > :not([class~="markedContent"])),
+.container :global(.textLayer [class~="markedContent"] span:not([class~="markedContent"])) {
+    z-index: 1;
+
+    --font-height: 0;
+    --scale-x: 1;
+    --rotate: 0deg;
+
+    font-size: calc(var(--text-scale-factor) * var(--font-height));
+    transform: rotate(var(--rotate)) scaleX(var(--scale-x)) scale(var(--min-font-size-inv));
+}
+
+.container :global(.textLayer [class~="markedContent"]) {
+    display: contents;
+}
+
+.container :global(.textLayer span[role="img"]) {
+    cursor: default;
+    user-select: none;
+}
+
+.container :global(.textLayer ::selection) {
+    color: transparent;
+    background: color-mix(in srgb, AccentColor, transparent 50%);
+}
+
+.message {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--cpd-space-6x) var(--cpd-space-4x);
+    text-align: center;
+    color: var(--cpd-color-text-secondary);
+    background: var(--cpd-color-bg-subtle-secondary);
+    font: var(--cpd-font-body-md-regular);
+}
+
+.error {
+    color: var(--cpd-color-text-critical-primary);
+}
