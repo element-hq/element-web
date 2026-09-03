@@ -76,6 +76,25 @@ keeping all the custom call behaviour intact.
 
 ## Implementation plan: Option B′ — `ElementCallAppTile`
 
+**Status (2026-09-03):** Steps 0–4 and 6 are implemented (`CallTile.tsx`, `ElementCallAppTile.tsx`,
+`ElementWebHostBridge.ts`, the seam and `getCallOptions()` in `models/Call.ts`, the labs flag, `rxjs`
+dependency, tests). Step 5's manual verification in a running app has not been done yet. Deviations
+from the text below, decided while implementing:
+
+- **Sticky** is driven only by `HostBridge.setAlwaysOnScreen` (which is what EC calls when it joins),
+  not additionally on `notifyJoined` — the bridge awaits `stickyPromise` before setting persistence.
+- **Teardown on unmount** calls `call.handleClose()` (set disconnected + close) rather than
+  `call.disconnect()`: with the component gone, nobody would reply to a hang-up request.
+- **`Call.start()`** now returns `Promise<ClientWidgetApi | null>` (null on the React path); its only
+  caller (`RoomViewStore`) ignores the value.
+- **`hangUpRequests$`** lives on the `ElementCall` model (an rxjs `Subject`), and the bridge exposes it
+  as `hangUp$`; `performDisconnection()` refuses immediately if no component is subscribed.
+- The **theme** is forwarded through a `ThemeWatcher` owned by the bridge (`start()`/`stop()` from the
+  tile), as `WidgetMessaging` does.
+- **StrictMode** (dev only, inside `PersistedElement`) has not been exercised; the dock/undock effect's
+  cleanup runs `endCall()` when the widget is not live, which under a simulated unmount would destroy
+  the persisted element before the first real render. To be checked in Step 5.
+
 Chosen in [element-call-react-options.md](./element-call-react-options.md) §3–§4. Summary of the
 idea: a **new component with the same props as `AppTile`** that renders `<ElementCall …/>` instead of
 an iframe, plus a **one-place selector** that picks it for Element Call widgets when a labs flag is on.
@@ -94,7 +113,7 @@ The virtual widget stays as the identity token, so `ActiveWidgetStore`, `Persist
 - The iframe path. With the flag off nothing changes; with the flag on only Element Call widgets
   take the new path.
 
-### Step 0 — Labs flag
+### Step 0 — Labs flag ✅ done
 
 `src/settings/Settings.tsx`: add `feature_element_call_react` next to
 `feature_disable_call_per_sender_encryption` (same shape: `isFeature`, `LabGroup.VoiceAndVideo`,
@@ -103,29 +122,29 @@ The virtual widget stays as the identity token, so `ActiveWidgetStore`, `Persist
 be switched to the other, and persisted roots survive navigation. Add the type entry and the
 `labs|…` string.
 
-### Step 1 — `CallTile` selector (single decision point)
+### Step 1 — `CallTile` selector (single decision point) ✅ done
 
 New `src/components/views/voip/CallTile.tsx`:
 
 ```tsx
 export const CallTile = (props: ComponentProps<typeof AppTile>): JSX.Element => {
     const reactCall = useSettingValue("feature_element_call_react");
-    const isElementCall = WidgetType.CALL.matches(props.app.type);
-    return reactCall && isElementCall ? <ElementCallAppTile {...props} /> : <AppTile {...props} />;
+    return reactCall ? <ElementCallAppTile {...props} /> : <AppTile {...props} />;
 };
 ```
 
-Reads the flag at render time (not at import time). Checks the widget type so it is safe to use
-wherever a call widget _might_ be rendered — that lets `PersistentApp` use it for all persistent
-widgets without special-casing.
+Reads the flag at render time (not at import time). It only decides the **transport**; whether a
+widget _is_ an Element Call is the caller's decision, so the generic `PersistentApp` stays free of
+call-specific logic beyond one type check.
 
 Call sites (one import each):
 
-- `components/views/voip/CallView.tsx:47` — `AppTile` → `CallTile`. Docked case.
-- `components/views/elements/PersistentApp.tsx:41` — `AppTile` → `CallTile`. PiP case.
-  `WidgetPipViewModel` renders `PersistentApp` and therefore needs **no** change.
+- `components/views/voip/CallView.tsx:47` — `AppTile` → `CallTile`. Docked case; always a call.
+- `components/views/elements/PersistentApp.tsx` — `WidgetType.CALL.matches(app.type) ? CallTile : AppTile`.
+  PiP case for any persistent widget. `WidgetPipViewModel` renders `PersistentApp` and therefore needs
+  **no** change.
 
-### Step 2 — `ElementCallAppTile`
+### Step 2 — `ElementCallAppTile` ✅ done
 
 New `src/components/views/voip/ElementCallAppTile.tsx`, typed as
 `(props: ComponentProps<typeof AppTile>) => JSX.Element` so the compiler enforces drop-in. Of the
@@ -159,7 +178,7 @@ Body: `<ElementCall client={client} roomId={room.roomId} intent={…} config={�
 with `intent`/`config` from step 4 and `bridge` from step 3. `client` comes from `MatrixClientContext`;
 EC resolves the RTC session itself, so `call.session` is only needed by the model, not the tile.
 
-### Step 3 — Control plane: `ElementWebHostBridge` + a transport seam in `models/Call.ts`
+### Step 3 — Control plane: `ElementWebHostBridge` + a transport seam in `models/Call.ts` ✅ done
 
 Today the `ElementCall` model talks to the widget over `widgetApi`: `start()` polls
 `WidgetMessagingStore` until messaging with a `widgetApi` exists (`Call.start`, 223–273, 16 s
@@ -208,7 +227,7 @@ Work:
 The mock already drives every one of these from its HostBridge panel, so the bridge and model changes
 can be tested end to end before EC's real component exists.
 
-### Step 4 — Configuration: URL params → `intent` + `config`
+### Step 4 — Configuration: URL params → `intent` + `config` ✅ done
 
 EC's component takes **what the user asked for** (`intent: UserIntent`) and derives the behaviour
 itself via `configurationForIntent()` (skip lobby, ring vs notify, auto-leave, call intent audio/video,
@@ -236,7 +255,16 @@ Implementation: factor the _decisions_ in `appendRoomParams` + `getWidgetData` i
 `ElementCallAppTile` passes it as props. One source of truth, two outputs. `widgetGenerationParameters`
 (`skipLobby`, `voiceOnly`) stays the input to both.
 
-### Step 5 — Dev render path & PiP verification
+### Step 5 — Dev render path & PiP verification ✅ PiP covered by Playwright
+
+**Status:** the "Switching rooms" specs in `playwright/e2e/voip/element-call.spec.ts` now run for both
+transports (`feature_element_call_react` off and on) and pass: persist across room switch into PiP,
+close from PiP and restart in the same or another room, join/leave/rejoin an existing call. Finding
+along the way: the mock must publish an RTC membership when it "joins" (as the fake widget does),
+otherwise `ElementCall.checkDestroy()` destroys the memberless call as soon as `presented` flips false
+on navigation, which drops persistence before PiP can show. The real component joins the session for
+real, so this only affected the mock. Voice-call-into-PiP, leave/ban mid-call and StrictMode remain to
+be verified by hand.
 
 With the flag on, `CallView` renders the mock via `CallTile`. Verify by hand, then in tests:
 
@@ -247,7 +275,7 @@ With the flag on, `CallView` renders the mock via `CallTile`. Verify by hand, th
 - Leave / get banned from the room while in call, viewing and not viewing it.
 - Reload with the flag on/off (`ReloadOnChangeController`).
 
-### Step 6 — Tests
+### Step 6 — Tests ✅ done
 
 - `ElementCallAppTile.test.tsx`: renders the mock; dock/undock, `isLive` teardown guard,
   `destroyElement`/`destroyPersistentWidget` on unmount, leave-room paths, bridge constructed with the
