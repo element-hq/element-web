@@ -295,10 +295,11 @@ With the flag on, `CallView` renders the mock via `CallTile`. Verify by hand, th
 
 ## Phase 2 — swapping in the real Element Call
 
-> **Do not start Steps 7–8 before Steps 0–6 are done, tested, and the placeholder works end to end**
-> (docked view, PiP, room switching, sticky, leave/ban, flag on/off) with the mock `ElementCallView`.
+> **Do not start Step 7 before Steps 0–6 are done, tested, and the placeholder works end to end**
+> (docked view, PiP, room switching, sticky, leave/ban, flag on/off) with the mock `ElementCall`.
 > Phase 2 changes the dependency graph and the build; doing it on top of an unproven mounting story
-> means debugging two things at once.
+> means debugging two things at once. Step 8 is Element Call repository work and can proceed in
+> parallel.
 
 ### Step 7 — Swap in EC's real component (element-call#4233)
 
@@ -352,37 +353,48 @@ Because steps 2–4 already build against the mirrored API, this step is mostly 
 8. **Lint.** Peer deps satisfied by exactly one version (`pnpm why matrix-js-sdk livekit-client rxjs`);
    `knip` should not flag the embedded package as unused until the widget path is actually removed.
 
-### Step 8 — Playwright: a full call with the React path enabled
+### Step 8 — Playwright: a full call with the component — **in the Element Call repository**
 
-Today's `playwright/e2e/voip/element-call.spec.ts` never runs Element Call: it routes the widget URL to
-`sample-files/fake-element-call.html`, a stub that speaks just enough widget API to convince EW.
-With the React path there is no iframe and no URL to intercept, so a new spec must run the **real**
-component against a **real** MatrixRTC backend, the way EC's own `playwright/component/component-call.spec.ts`
-does through its dev harness.
+A real call needs a real MatrixRTC backend (LiveKit + `lk-jwt-service` + Synapse). Element Web's
+Playwright setup has none of that: `playwright/e2e/voip/element-call.spec.ts` stubs the widget with
+`sample-files/fake-element-call.html`, and the React-path variants added in Step 5 drive the mock's
+HostBridge buttons. Element Call's repository already has everything the full call needs:
 
-- **Backend.** Add LiveKit + the MatrixRTC JWT service (`lk-jwt-service`) as testcontainers next to
-  the existing Synapse container in `packages/playwright-common/src/testcontainers/`, and point
-  `synapseConfig.matrix_rtc.transports[0].livekit_service_url` at it (the existing spec uses a dummy
-  URL because the fake never connects). EC's `docker-compose-dev.yml` / `pnpm backend` is the
-  reference for the minimal LiveKit + JWT config. This is the bulk of the work.
-- **Spec** `playwright/e2e/voip/element-call-react.spec.ts`, with
-  `test.use({ config: { features: { feature_element_call_react: true } } })`:
-    1. Alice creates a room and invites the bot (Bob); Bob's client joins the MatrixRTC session
-       (drive a second browser context with the real app, or reuse EC's harness approach of a second
-       device of the same account).
-    2. Alice clicks the video call button → the React lobby renders **inside** `.mx_CallView`
-       (`getByTestId("lobby_joinCall")`, EC's test id) — no `iframe` in the page.
-    3. Join → `getByTestId("videoTile")` count reaches 2 → room header shows the call as connected,
-       and the "Leave" button is offered.
-    4. Navigate to another room → the call keeps running in PiP (`.mx_WidgetPip`, existing selectors
-       from the widget spec), navigate back → docked again.
-    5. Hang up from EC's footer → EW returns to the timeline, `m.call.member` state cleared.
-    6. Flag off in a sibling `describe` → the same flow still produces an `iframe` (regression guard
-       for the widget path).
-- **Fixtures.** Chromium with `--use-fake-device-for-media-stream` / `--use-fake-ui-for-media-stream`
-  (EC's `playwright.config.ts` has the exact flags); `permissions: ["camera", "microphone"]`.
-- **CI.** Runs in the existing Playwright matrix but only against Synapse (skip on Dendrite, as the
-  current spec does for RTC features); mark the project as needing Docker.
+- `docker-compose-dev.yml` / `pnpm backend`: Synapse, MatrixRTC authorisation service, LiveKit SFU,
+  TLS proxy (`README.md`, "Backend").
+- `component/dev/` + `pnpm dev:component`: a harness page that embeds two `<ElementCall>` components
+  side by side, signed in as two devices of one account, with a `DevHostBridge` that logs every bridge
+  call (`component/dev/DevHostBridge.ts`, `Harness.tsx`).
+- `playwright/component/component-call.spec.ts` + `harness.ts`: specs that already hold a real call
+  between two components, check containment, and assert the bridge traffic (`contentLoaded`,
+  `notifyJoined`, …).
+
+So the full-call test belongs there, next to the component it exercises, and **Element Web only keeps
+the mock-based coverage** from Step 5 (persistence/PiP/room switching/flag-off iframe guard). Work, in
+element-hq/element-call (follow-up to #4233):
+
+1. **Host-shaped harness.** Extend `component/dev` (or add a second page) so the harness behaves like
+   Element Web's `ElementWebHostBridge`: `setAlwaysOnScreen` toggles a "PiP" container the component is
+   moved into (same DOM node, different parent — what `PersistedElement` does), `hangUp$` is driven by
+   a harness button, `themeChange$` by a theme switch. Pass `intent`/`config` the way EW's
+   `getCallOptions()` does (Step 4 table), including `background: solid`, `confineToRoom: true`.
+2. **Spec: full call through the EW-shaped bridge.** In `playwright/component/`:
+    - join from the lobby (`lobby_joinCall`), `videoTile` count reaches 2 across the two components;
+    - bridge log shows `contentLoaded` → `notifyJoined` → `setAlwaysOnScreen(true)`;
+    - move the component into the harness "PiP" container mid-call: media keeps flowing (tile count
+      unchanged, no re-join in the log);
+    - harness pushes a `hangUp$` request: component leaves, replies exactly once, `notifyHungUp` logged;
+    - `themeChange$` request is acknowledged and the container's theme attribute changes;
+    - close affordance appears only when `close` is present on the bridge.
+3. **Config parity check.** A small spec that renders the component with each EW `intent` and asserts
+   `configurationForIntent()` yields what Element Web expects (lobby shown for group calls, skipped for
+   DMs, `returnToLobby` honoured), so a change on either side is caught where the logic lives.
+4. **CI.** Runs in EC's existing Playwright job (it already starts the backend and the component
+   harness via `playwright.config.ts` `webServer`); no Docker/LiveKit work in Element Web's CI.
+
+What stays in Element Web: the two-transport "Switching rooms" specs from Step 5, and — once Step 7
+lands — a single smoke spec that the real component mounts inside `.mx_CallView` with no `iframe`
+present (no media; the backend in EW's Playwright is not LiveKit-capable).
 
 ### Later (separate plans)
 
