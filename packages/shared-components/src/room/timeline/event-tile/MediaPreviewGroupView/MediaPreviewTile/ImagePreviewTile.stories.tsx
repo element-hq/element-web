@@ -20,6 +20,7 @@ const meta = {
         id: "annual-report.pdf",
         type: "image",
         image: demoImage,
+        imageAlt: "Screenshot of the annual report cover page",
         imageSize: "banner",
         icon: <DocumentIcon />,
         onClick: () => {},

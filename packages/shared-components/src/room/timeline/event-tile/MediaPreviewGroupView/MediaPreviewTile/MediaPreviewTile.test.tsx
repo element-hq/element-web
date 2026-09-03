@@ -40,7 +40,13 @@ const baseProps = {
 };
 
 const textProps = { ...baseProps, type: "text" } as const;
-const imageProps = { ...baseProps, type: "image", image: demoImage, imageSize: "full" } as const;
+const imageProps = {
+    ...baseProps,
+    type: "image",
+    image: demoImage,
+    imageAlt: "A wide demo image",
+    imageSize: "full",
+} as const;
 const videoProps = { ...baseProps, type: "video", video: demoVideo, videoSize: "banner" } as const;
 const audioProps = { ...baseProps, type: "audio", audio: demoAudio } as const;
 
