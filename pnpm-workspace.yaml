@@ -45,7 +45,7 @@ catalog:
     "@vitejs/plugin-react": 6.1.1
     unplugin-dts: 1.0.1
     # nx
-    nx: 23.1.1
+    nx: 23.1.2
 
 catalogs:
     ts6:
