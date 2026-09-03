@@ -15,7 +15,7 @@ interface IPCPayload {
     reply?: any;
 }
 
-export class IPCManager {
+export class IPCManager<Commands extends string> {
     private pendingIpcCalls: { [ipcCallId: number]: PromiseWithResolvers<any> } = {};
     private nextIpcCallId = 0;
 
@@ -29,7 +29,7 @@ export class IPCManager {
         window.electron.on(this.recvChannel, this.onIpcReply);
     }
 
-    public async call(name: string, ...args: any[]): Promise<any> {
+    public async call<T>(name: Commands, ...args: any[]): Promise<T> {
         // TODO this should be moved into the preload.js file.
         const ipcCallId = ++this.nextIpcCallId;
         const deferred = Promise.withResolvers<any>();
