@@ -86,7 +86,7 @@ export class RoomUploadViewModel
             moduleComposerApi,
             ModuleComposerApiEvents.UploaderOptionsChanged,
             // Types issue.
-            this.onUploaderOptionsChanged as any,
+            this.onUploaderOptionsChanged,
         );
     }
 
@@ -94,11 +94,6 @@ export class RoomUploadViewModel
         this.updateOptions();
     };
 
-    /**
-     * Rebuild the set of upload options from the current permissions and the module API's
-     * registered options. Safe to call repeatedly: the options are always derived from
-     * `moduleComposerApi.fileUploadOptions` rather than appended to.
-     */
     private updateOptions(): void {
         const maySendMessage = this.room.maySendMessage();
         this.snapshot.set({
