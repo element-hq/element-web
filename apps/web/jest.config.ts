@@ -62,6 +62,8 @@ const config: Config = {
         "!<rootDir>/src/**/*.d.ts",
         // Ignore vitest tests
         "!<rootDir>/src/**/*.test.{ts,tsx}",
+        // ...including the browser-mode ones, whose name does not end in `.test.ts`
+        "!<rootDir>/src/**/*.test.browser.{ts,tsx}",
         "!<rootDir>/src/test/**",
         // Exclude mocks
         "!<rootDir>/src/**/*-{mock,mocks}.{ts,tsx}",

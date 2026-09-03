@@ -52,11 +52,13 @@ exports[`<EventEditor /> should render 1`] = `
     class="mx_Dialog_buttons"
   >
     <button
+      class="mx_LegacyDialogButton"
       type="button"
     >
       Back
     </button>
     <button
+      class="mx_LegacyDialogButton"
       type="button"
     >
       Send
@@ -120,11 +122,13 @@ exports[`<EventEditor /> thread context should pre-populate a thread relationshi
     class="mx_Dialog_buttons"
   >
     <button
+      class="mx_LegacyDialogButton"
       type="button"
     >
       Back
     </button>
     <button
+      class="mx_LegacyDialogButton"
       type="button"
     >
       Send
