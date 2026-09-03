@@ -110,7 +110,12 @@ export default {
         },
         "modules/*": {
             entry: ["src/index.ts{x,}!"],
-            project: ["**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!", "!src/tests/**!", "!e2e/**!"],
+            project: [
+                "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!",
+                "!src/tests/**!",
+                "!e2e/**!",
+                "!src/setupTests.ts!",
+            ],
         },
         ".": {
             entry: ["scripts/**", "docs/**"],
