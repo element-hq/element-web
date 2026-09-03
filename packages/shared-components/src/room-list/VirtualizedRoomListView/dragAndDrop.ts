@@ -36,8 +36,14 @@ export type AcceptedRoomKind = "any" | "dm" | "nonDm" | "none";
  * messages only, and while it is shown the Chats section holds everything else.
  */
 export function rejectsDraggedRoom(accepted: AcceptedRoomKind, dragged: RoomListDragData | undefined): boolean {
-    if (accepted === "none") return true;
-    if (accepted === "any") return false;
-    if (!isRoomDragData(dragged)) return false;
-    return dragged.isDm !== (accepted === "dm");
+    switch (accepted) {
+        case "nonDm":
+            return !isRoomDragData(dragged) || dragged.isDm;
+        case "dm":
+            return !isRoomDragData(dragged) || !dragged.isDm;
+        case "any":
+            return false;
+        case "none":
+            return true;
+    }
 }
