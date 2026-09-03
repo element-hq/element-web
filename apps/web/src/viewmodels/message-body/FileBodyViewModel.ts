@@ -27,6 +27,7 @@ import { FileDownloader } from "../../utils/FileDownloader";
 import { type MediaEventHelper } from "../../utils/MediaEventHelper";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
+import { isPdfEvent, openPdfViewer } from "../../utils/pdfViewer";
 
 export interface FileBodyViewModelProps {
     mxEvent: MatrixEvent;
@@ -153,6 +154,10 @@ export class FileBodyViewModel
             : undefined;
         const fileInfoIcon = showFileInfo ? FileBodyViewModel.getInfoIcon(content) : undefined;
         const downloadLabel = showDownload ? downloadLabelForFile(content, true) : undefined;
+        // Offer the viewer wherever the file is presented as a file, i.e. not in an export and not in
+        // the download-only panels. Needs the media helper, since opening has to fetch the bytes.
+        const showOpen = !props.forExport && showFileInfo && !!props.mediaEventHelper && isPdfEvent(props.mxEvent);
+        const openLabel = showOpen ? _t("pdf_viewer|open") : undefined;
         const downloadTitle = showDownload
             ? presentableTextForFile(content, _t("common|attachment"), true, true)
             : undefined;
@@ -180,6 +185,8 @@ export class FileBodyViewModel
                 showDownload,
                 downloadLabel,
                 downloadTitle: downloadTitle,
+                showOpen,
+                openLabel,
             };
         }
 
@@ -194,6 +201,8 @@ export class FileBodyViewModel
                 downloadLabel,
                 downloadTitle: downloadTitle,
                 downloadHref: media.srcHttp,
+                showOpen,
+                openLabel,
             };
         }
 
@@ -268,6 +277,8 @@ export class FileBodyViewModel
             name: this.fileName,
         });
     };
+
+    public onOpenClick = (): void => openPdfViewer(this.props.mxEvent);
 
     public onDownloadClick = (): Promise<void> => this.decryptFile();
 

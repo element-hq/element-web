@@ -135,6 +135,11 @@ describe("RightPanelStore", () => {
             expect(store.isOpenForRoom("!1:example.org")).toEqual(true);
             expect(store.currentCardForRoom("!1:example.org").state?.initialEvent?.getId()).toEqual("$two");
         });
+        it("drops a PdfViewer card with no event to display", async () => {
+            await viewRoom("!1:example.org");
+            store.setCard({ phase: RightPanelPhases.PdfViewer }, true, "!1:example.org");
+            expect(store.roomPhaseHistory).toEqual([]);
+        });
         it("history is generated for certain phases", async () => {
             await viewRoom("!1:example.org");
             // Setting the memberlist card should also generate a history with room summary card

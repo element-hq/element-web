@@ -376,6 +376,11 @@ export default class RightPanelStore extends ReadyWatchingStore {
                     logger.warn("removed card from right panel because of missing widgetId in card state");
                 }
                 return !!card.state?.widgetId;
+            case RightPanelPhases.PdfViewer:
+                if (!card.state?.pdfViewerEvent) {
+                    logger.warn("removed card from right panel because of missing pdfViewerEvent in card state");
+                }
+                return !!card.state?.pdfViewerEvent;
         }
         return true;
     }

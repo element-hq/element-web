@@ -11,6 +11,7 @@ import { Button, Tooltip } from "@vector-im/compound-web";
 import {
     AttachmentIcon,
     DownloadIcon,
+    EditIcon,
     VideoCallSolidIcon,
     VolumeOnSolidIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
@@ -90,6 +91,16 @@ export interface FileBodyViewSnapshot {
      * Optional URL used for `UNENCRYPTED` download links.
      */
     downloadHref?: string;
+    /**
+     * Whether to render a control that opens the file in a viewer, alongside the download control.
+     * Only set for file types the host knows how to display, so it renders nothing by default.
+     */
+    showOpen?: boolean;
+    /**
+     * Label for the open control. Required in practice whenever `showOpen` is set, since the view has
+     * no sensible generic wording for "open this particular kind of file".
+     */
+    openLabel?: string;
 }
 
 export interface FileBodyViewActions {
@@ -101,6 +112,10 @@ export interface FileBodyViewActions {
      * Click handler for a download button.
      */
     onDownloadClick?: () => void;
+    /**
+     * Click handler for the open-in-viewer button.
+     */
+    onOpenClick?: () => void;
     /**
      * Click handler for the unencrypted download anchor.
      */
@@ -194,6 +209,8 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
         downloadLabel,
         downloadTitle,
         downloadHref,
+        showOpen,
+        openLabel,
     } = useViewModel(vm);
 
     const resolvedInfoLabel = infoLabel ?? _t("common|attachment");
@@ -222,6 +239,17 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
     const resolvedDownloadLabel = downloadLabel ?? _t("action|download");
     const resolvedDownloadTitle = downloadTitle ?? resolvedDownloadLabel;
 
+    // Rendered next to the download control for file types the host can display inline. Absent unless
+    // the view model asks for it, so the default file body is unchanged.
+    const open =
+        showOpen && openLabel ? (
+            <div data-type="open">
+                <Button size="md" kind="secondary" Icon={EditIcon} onClick={vm.onOpenClick}>
+                    {openLabel}
+                </Button>
+            </div>
+        ) : null;
+
     switch (state) {
         case FileBodyViewState.EXPORT:
             return (
@@ -234,6 +262,7 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
             return (
                 <span className={classes}>
                     {info}
+                    {open}
                     {showDownload && (
                         <div data-type="download">
                             {/* Decrypt/download is triggered by the view model action, not by an anchor `href`. */}
@@ -249,6 +278,7 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
             return (
                 <span className={classes}>
                     {info}
+                    {open}
                     {showDownload && (
                         <div data-type="download">
                             <div aria-hidden style={{ display: "none" }}>
@@ -284,6 +314,7 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
             return (
                 <span className={classes}>
                     {info}
+                    {open}
                     {showDownload && (
                         <div data-type="download">
                             {/* Unencrypted media uses an anchor element with VM-controlled click behavior. */}
