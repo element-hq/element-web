@@ -12,6 +12,7 @@ import { createSanitizeHtmlParams } from "./sanitizeHtmlParams";
 /** Attribute map passed to string-only sanitization transforms. */
 export type HtmlSanitizeAttributes = Record<string, string>;
 
+/** Options for restricting or extending the shared Matrix-compatible HTML policy. */
 export interface HtmlSanitizeOptions {
     /** Restrict the Element Web tag policy further for a specific rendering context. */
     allowedTags?: string[];
