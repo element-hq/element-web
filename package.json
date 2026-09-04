@@ -48,7 +48,7 @@
         "minimist": "^1.2.6",
         "nx": "catalog:",
         "oxfmt": "0.65.0",
-        "oxlint": "^1.70.0",
+        "oxlint": "1.78.0",
         "oxlint-tsgolint": "^7.0.0",
         "typescript": "catalog:ts6",
         "vitepress": "^1.6.4",
