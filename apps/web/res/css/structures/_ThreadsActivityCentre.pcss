@@ -70,33 +70,95 @@
     }
 }
 
-.mx_ThreadsActivityCentre_rows {
-    overflow-y: scroll;
-    /* Let some space at the top and the bottom of the pop-up */
-    max-height: calc(100vh - 200px);
+/* Compound styles its Menu/NavBar/MenuItem internals with single-class selectors. The
+   `[role="menu"]` qualifier gives our rules a higher specificity so they win without
+   `!important`. */
+.mx_ThreadsActivityCentre_menu[role="menu"] {
+    /* Override compound's default 340px cap */
+    max-inline-size: 640px;
+    inline-size: 640px;
+    /* Override compound FloatingMenu's padding-block; we handle our own spacing via the
+       tabs + rows containers. */
+    padding-block: 0;
 
-    .mx_ThreadsActivityCentreRow {
-        height: 48px;
+    .mx_ThreadsActivityCentre_tabs {
+        /* Override NavBar's default block margin to match the Figma design */
+        margin: 0;
+        padding: var(--cpd-space-2x) var(--cpd-space-4x) 0;
+    }
 
-        /* Make the label of the MenuItem stay on one line and truncate with ellipsis if needed */
-        & > span {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            /* Arbitrary size, keep the TAC as the wanted width */
-            width: 202px;
-        }
+    .mx_ThreadsActivityCentre_rows {
+        overflow-y: auto;
+        /* Fixed panel height from the design (~6 rows), so the menu doesn't resize as the
+           list changes. Row heights vary with the preview, and 432px isn't on the spacing
+           scale, so this stays in px. */
+        height: 432px;
+        min-height: 432px;
 
-        /* Hide the notification badge on hover — compound's `nav-hint ~ *` rule would normally
-         * do this, but the app-web CSS layer overrides compound-web regardless of specificity. */
-        &:hover .mx_ThreadsActivityCentre_notificationBadge {
-            display: none;
+        .mx_ThreadsActivityCentreThreadRow {
+            /* Floor for rows without a message preview, which would otherwise be ~48px */
+            min-height: var(--cpd-space-14x);
+
+            /* Override compound's display: grid with a simple left-to-right flex row:
+               [avatar] [gap] [text content] [indicator] */
+            display: flex;
+            align-items: center;
+            gap: var(--cpd-space-3x);
+            padding: var(--cpd-space-3x) var(--cpd-space-4x);
+
+            /* Compound's .icon class adds margin-inline-end; zero it since gap handles spacing */
+            & > .mx_DecoratedRoomAvatar {
+                margin-inline-end: 0;
+                flex-shrink: 0;
+            }
+
+            /* Notification dot at the trailing edge */
+            & > .mx_NotificationBadge {
+                flex-shrink: 0;
+                align-self: center;
+            }
+
+            .mx_ThreadsActivityCentreThreadRow_content {
+                flex: 1;
+                min-width: 0;
+                display: flex;
+                flex-direction: column;
+                gap: var(--cpd-space-0-5x);
+                text-align: start;
+            }
+
+            .mx_ThreadsActivityCentreThreadRow_header {
+                display: flex;
+                align-items: center;
+                gap: var(--cpd-space-2x);
+            }
+
+            /* Font/letter-spacing come from the Compound Text components; only layout + colour here. */
+            .mx_ThreadsActivityCentreThreadRow_roomName {
+                flex: 1;
+                min-width: 0;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .mx_ThreadsActivityCentreThreadRow_preview {
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                color: var(--cpd-color-text-secondary);
+            }
+
+            .mx_ThreadsActivityCentreThreadRow_sender {
+                color: var(--cpd-color-text-primary);
+            }
         }
     }
 }
 
 .mx_ThreadsActivityCentre_emptyCaption {
-    padding-left: 16px;
-    padding-right: 16px;
-    font-size: 13px;
+    /* Typography comes from the Compound Text component. */
+    padding: var(--cpd-space-3x) var(--cpd-space-4x);
+    color: var(--cpd-color-text-secondary);
 }
