@@ -334,10 +334,15 @@ With the flag on, `CallView` renders the mock via `CallTile`. Verify by hand, th
   Playwright sets the flag in `beforeEach`, `enableCalls()` returns `true` for it in unit tests. The
   mock moved to `ElementCallMock.tsx` (`mx_ElementCallMock` classes) and re-exports nothing of its
   own types any more.
-- **CSS.** Imported next to the component chunk, but Element Web's webpack extracts all `.css` into the
-  single `styles` chunk (`splitChunks.cacheGroups.styles`, `enforce: true`), so EC's 1.6 MB stylesheet
-  (fonts inlined) ends up in the main stylesheet for everyone. Acceptable for labs; to fix, exclude the
-  package from that cache group or load it as a `<link>` at runtime.
+- **CSS.** Imported next to the component chunk. Element Web's webpack used to extract all `.css` into the
+  single `styles` chunk (`splitChunks.cacheGroups.styles`, `enforce: true`), which put EC's 1.6 MB
+  stylesheet, with its global rules, into the main stylesheet for everyone and visibly restyled Element
+  Web. The cache group now excludes the component's stylesheet (matched by its resolved real path), so it
+  is emitted as `element-call-component.css` and loaded by the chunk runtime only when a call renders on
+  the React path. On the Element Call side, the component build now confines every selector in that
+  stylesheet to `[data-element-call-root]` (a PostCSS plugin, `component/build/scopeStylesToRoot.ts`; `html`,
+  `body` and `:root` become the root element), so even while a call renders, Element Web's document keeps
+  its own styles and compound tokens.
 - **Playwright.** A "React component (real)" smoke spec (setting off) checks the real chunk loads and
   mounts inside `.mx_CallView` (`[data-element-call-root]`), with no iframe and no mock.
 - **Versions.** EC's branch pins `livekit-client ^2.18.1`; Element Web got `^2.22.2` (semver-compatible).
@@ -488,22 +493,6 @@ instructions and findings are in [element-call-e2e-call-plan.md](./element-call-
 `element-call.spec.ts` keeps the mock-based two-transport "Switching rooms" specs and the smoke spec that
 checks the real component's chunk mounts inside `.mx_CallView` without an `iframe`.
 
-### Follow up tasks:
-
-- **Switch `@element-hq/element-call-component` to a remote dependency.** `apps/web/package.json` still has
-  `"@element-hq/element-call-component": "link:../../../element-call-component-m1/dist"`, a machine-local
-  worktree of EC's `valere/component_ec_M1` branch (kept on purpose for now, see Step 7). Before this can
-  merge or run in CI it must become either the published package or a git dependency on the EC branch once
-  it ships a `package.json` in its build output. Everything that renders the real component depends on it:
-  the "React component (real)" smoke spec and the full-call spec from
-  [element-call-e2e-call-plan.md](./element-call-e2e-call-plan.md) (`element-call-full-call.spec.ts`)
-  cannot go green in CI until then.
-- Check if we can remove ElementCallComponentTypes and instead get those types from @element-hq/element-call-component
-- **Keep `matrix-js-sdk` at least as new as the component's build.** The full-call spec exposed that Element
-  Web's develop snapshot lacked `MatrixRTCSession.isKeyRotationSuppressed`, which the component reads on
-  mount; the lockfile now points at `e16b0bcc` (with `matrix-widget-api ^1.19.0`). Until the component
-  package declares its SDK requirement, a bump of EC's build without a bump here breaks joining a call.
-
 ### Later (separate plans)
 
 - Delete the widget path and do the Option C cleanup (transport-neutral `Call`, no virtual widget,
@@ -534,11 +523,35 @@ checks the real component's chunk mounts inside `.mx_CallView` without an `ifram
   `CallStore.getConfiguredRTCTransports()` as `livekit.livekit_service_url`, and `ElementCallAppTile` feeds
   it in when it initialises the component. Limits: `initializeElementCall` runs once, so a transport that
   changes during the session is not picked up, and the transports must already be known when the first
-  call renders (they are fetched at client start). Proper fix upstream: give `RtcTransportAutoDiscovery` the
-  same `.well-known` fallback, then drop the `livekit` option here.
-- **Component CSS is global.** Webpack's `styles` cache group folds `element-call.css` into the main
-  stylesheet for every user. It carries a `normalize` layer (`html`, `body`, `h1`, form controls, `pre`, …),
-  an unlayered `pre { font-size: … }`, `:root` variables, and a second copy of the compound design tokens
-  (10.2.4 vs Element Web's 10.2.1) in layers declared after Element Web's, so they win. Exclude the
-  component's CSS from that cache group so it ships with the component chunk, and ask EC to scope or drop
-  normalize and the token copy in the library build.
+  call renders (they are fetched at client start). Proper fix upstream: Move to a rtc driver instead of the full client object.
+  This RTC driver then doees the right thing in for aquiring the transport on the EC side.
+- **Component CSS was global (done, local checkout).** `element-call.css` carried a `normalize` layer
+  (`html`, `body`, `h1`, form controls, `pre`, …), an unlayered `pre { font-size: … }`, `:root` variables, and
+  a second copy of the compound design tokens (10.2.4 vs Element Web's 10.2.1) in layers declared after
+  Element Web's, so they won. Fixed on both sides: Element Web no longer folds the stylesheet into the
+  app-wide `styles` chunk (Step 7, "CSS"), and the Element Call component build rewrites every selector so
+  it only matches the root or its descendants (`component/build/scopeStylesToRoot.ts`, applied via
+  `css.postcss` in `vite-component.config.ts` and the dev harness config; unit-tested; the bare `pre` rule
+  in `DeveloperSettingsTab.module.css` became a class). The dev harness spec got a "leaves the host's own
+  page unstyled" test. Still to do upstream: land this in element-hq/element-call#4233's branch. Known
+  limit: compound's spacing tokens are `rem`-based, so they still follow the host's root font size.
+- **Element Call does not render in pip correctly** it uses the @media tags to detect the size but would need to do the size computation based on the size of the component
+
+- **Document Pip** As EC is now a react compoent add a button (suitable design) to the header once a call is running.
+  Also update the current video  call icon button that is responsible for toggling the pip mode to a pip icon.
+  The end results is: in a call show two buttons: one for docuemnt pip and one for element call internal pip.
+  And dont show any video call button while inside a call. The docuement pip should then only take the element call
+  react compoentn and render it in a browser based pip.
+
+- **Switch `@element-hq/element-call-component` to a remote dependency.** `apps/web/package.json` still has
+  `"@element-hq/element-call-component": "link:../../../element-call-component-m1/dist"`, a machine-local
+  worktree of EC's `valere/component_ec_M1` branch (kept on purpose for now, see Step 7). Before this can
+  merge or run in CI it must become either the published package or a git dependency on the EC branch once
+  it ships a `package.json` in its build output. Everything that renders the real component depends on it:
+  the "React component (real)" smoke spec and the full-call spec from
+  [element-call-e2e-call-plan.md](./element-call-e2e-call-plan.md) (`element-call-full-call.spec.ts`)
+  cannot go green in CI until then.
+- **Keep `matrix-js-sdk` at least as new as the component's build.** The full-call spec exposed that Element
+  Web's develop snapshot lacked `MatrixRTCSession.isKeyRotationSuppressed`, which the component reads on
+  mount; the lockfile now points at `e16b0bcc` (with `matrix-widget-api ^1.19.0`). Until the component
+  package declares its SDK requirement, a bump of EC's build without a bump here breaks joining a call.
