@@ -1735,9 +1735,7 @@
     },
     "pdf_viewer": {
         "error_load": "Unable to load PDF.",
-        "error_render": "Unable to render PDF.",
         "loading": "Loading PDF…",
-        "loading_page": "Loading page %(page)s…",
         "open": "Open PDF",
         "page_label": "Page %(page)s of %(total)s",
         "page_number": "Page number",
