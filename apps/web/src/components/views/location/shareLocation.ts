@@ -10,6 +10,7 @@ import {
     type MatrixClient,
     type IEventRelation,
     type MatrixError,
+    type MatrixEvent,
     THREAD_RELATION_TYPE,
     ContentHelpers,
     LocationAssetType,
@@ -23,6 +24,10 @@ import QuestionDialog, { type IQuestionDialogProps } from "../dialogs/QuestionDi
 import SdkConfig from "../../../SdkConfig";
 import { OwnBeaconStore } from "../../../stores/OwnBeaconStore";
 import { doMaybeLocalRoomAction } from "../../../utils/local-room";
+import { attachMentions } from "../../../utils/messages";
+import { addReplyToMessageContent } from "../../../utils/Reply";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
+import { type TimelineRenderingType } from "../../../contexts/RoomContext";
 
 export enum LocationShareType {
     Own = "Own",
@@ -126,6 +131,8 @@ export const shareLocation =
         shareType: LocationShareType,
         relation: IEventRelation | undefined,
         openMenu: () => void,
+        replyToEvent?: MatrixEvent,
+        timelineRenderingType?: TimelineRenderingType,
     ): ShareLocationFn =>
     async ({ uri, timestamp }): Promise<void> => {
         if (!uri) return;
@@ -139,6 +146,20 @@ export const shareLocation =
                 undefined,
                 assetType,
             ) as RoomMessageEventContent;
+
+            // Only has an effect when there is something to reply to.
+            attachMentions(client.getSafeUserId(), content, null, replyToEvent);
+            if (replyToEvent) {
+                addReplyToMessageContent(content, replyToEvent);
+                // Clear the composer's reply state now the message is on its way; if the send fails,
+                // retry handles resending it.
+                defaultDispatcher.dispatch({
+                    action: "reply_to_event",
+                    event: null,
+                    context: timelineRenderingType,
+                });
+            }
+
             await doMaybeLocalRoomAction(
                 roomId,
                 (actualRoomId: string) => client.sendMessage(actualRoomId, threadId, content),
