@@ -7,15 +7,17 @@
    to the next font.  Helevetica's diacritics sometimes do not combine
    nicely (on OSX, at least) and result in a huge horizontal mess.
    Arial empirically gets it right, hence prioritising Arial here. */
-/* Noto Color Emoji contains digits, in fixed-width, therefore causing
-   digits in flowed text to stand out.
-   TODO: Consider putting all emoji fonts to the end rather than the front. */
+/* The emoji fonts come last so that prose falls back through Arial, Helvetica and the generic
+   family before reaching them. Several of them carry their own digits and Latin glyphs — Noto
+   Color Emoji's digits are fixed-width, so they stand out in flowed text — which is what happens
+   when the preceding web fonts are unavailable. Per-glyph fallback still reaches them for real
+   emoji. */
 $font-family:
-    "Nunito", var(--emoji-font-family), "Apple Color Emoji", "Segoe UI Emoji", "Arial", "Helvetica", sans-serif,
+    "Nunito", "Arial", "Helvetica", sans-serif, var(--emoji-font-family), "Apple Color Emoji", "Segoe UI Emoji",
     "Noto Color Emoji";
 
 $monospace-font-family:
-    "Fira Code", var(--emoji-font-family), "Apple Color Emoji", "Segoe UI Emoji", "Courier", monospace,
+    "Fira Code", "Courier", monospace, var(--emoji-font-family), "Apple Color Emoji", "Segoe UI Emoji",
     "Noto Color Emoji";
 
 /* unified palette */
