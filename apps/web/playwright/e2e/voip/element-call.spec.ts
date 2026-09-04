@@ -125,6 +125,8 @@ test.describe("Element Call", () => {
             SettingLevel.DEVICE,
             new URL("/widget.html#", page.url()).toString(),
         );
+        // On the React transport, render the mock component: this backend has no LiveKit.
+        await app.settings.setValue("Developer.elementCallMockComponent", null, SettingLevel.DEVICE, true);
 
         await rejectToast(page, "Verify this device");
         await rejectToast(page, "Notifications");
@@ -516,7 +518,7 @@ test.describe("Element Call", () => {
             });
 
             /** The mock Element Call React component, wherever it currently is (docked or PiP). */
-            const reactCall = (page: Page): Locator => page.locator(".mx_ElementCall");
+            const reactCall = (page: Page): Locator => page.locator(".mx_ElementCallMock");
 
             async function openAndJoinCall(page: Page, existing = false) {
                 if (existing) {
@@ -669,6 +671,46 @@ test.describe("Element Call", () => {
             });
         });
     }
+
+    /**
+     * The real Element Call component (`@element-hq/element-call-component`), not the mock: this suite's
+     * backend has no LiveKit, so only that its chunk loads and it mounts in the call view is checked here.
+     * The full call with media is `element-call-full-call.spec.ts`.
+     */
+    test.describe("React component (real)", () => {
+        test.use({
+            room: async ({ app, bot }, use) => {
+                const roomId = await app.client.createRoom({
+                    name: "TestRoom",
+                    invite: [bot.credentials!.userId],
+                });
+                await use({ roomId });
+            },
+            config: {
+                features: {
+                    feature_element_call_react: true,
+                },
+            },
+        });
+
+        test("mounts inside the call view without an iframe", async ({ page, user, room, app }) => {
+            // The suite's beforeEach switched the mock on; this test wants the real component.
+            await app.settings.setValue("Developer.elementCallMockComponent", null, SettingLevel.DEVICE, false);
+            await app.viewRoomById(room.roomId);
+
+            await page.getByRole("button", { name: "Video call" }).click();
+            await page.getByRole("menuitem", { name: "Element Call" }).click();
+
+            await expect(page.locator(".mx_CallView")).toBeVisible();
+            // The tile's content lives in a persisted element attached to <body> (so it survives
+            // navigation), hence page-level locators. Element Call's lobby is the proof of life.
+            await expect(page.getByRole("button", { name: "Join call" })).toBeVisible({ timeout: 60_000 });
+            // Element Call scopes its theme and portals to its own root element
+            await expect(page.locator("[data-element-call-root]")).toBeAttached();
+            await expect(page.locator("iframe")).toHaveCount(0);
+            await expect(page.locator(".mx_ElementCallMock")).toHaveCount(0);
+        });
+    });
 
     test.describe("Widget leak bug reproduction", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         test.skip(isDendrite, "No need to test on other HS, this is a client bug reproduction");
