@@ -305,6 +305,37 @@ exports[`DevtoolsDialog > renders the devtools dialog 1`] = `
             </span>
           </div>
         </div>
+        <div
+          class="_inline-field_1o4d9_33"
+        >
+          <div
+            class="_inline-field-control_1o4d9_45"
+          >
+            <div
+              class="_container_udcm8_10"
+            >
+              <input
+                class="_input_udcm8_24"
+                id="mx_SettingsFlag_MRMwbPDmfGtm"
+                role="switch"
+                type="checkbox"
+              />
+              <div
+                class="_ui_udcm8_34"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body_1o4d9_39"
+          >
+            <label
+              class="_label_1o4d9_60"
+              for="mx_SettingsFlag_MRMwbPDmfGtm"
+            >
+              Use the mock Element Call component (React transport, no media)
+            </label>
+          </div>
+        </div>
       </form>
       <form
         class="_root_1o4d9_17"

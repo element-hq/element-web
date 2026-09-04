@@ -155,6 +155,14 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
     // directory, so we don't have to rely on an index.js or similar file existing.
     const jsSdkSrcDir = path.join(getPackageRoot("matrix-js-sdk"), "src");
 
+    // The Element Call component's stylesheet is not scoped to the component: it carries a `normalize` layer,
+    // `:root` variables and its own copy of the compound design tokens. Folded into the app-wide `styles`
+    // chunk it would restyle Element Web for every user, so it stays with the component's own (lazy) chunk
+    // and is only loaded when a call renders on the React path. Real path, as webpack resolves symlinks.
+    const elementCallComponentStylesheet = fs.realpathSync(
+        fileURLToPath(import.meta.resolve("@element-hq/element-call-component/style.css")),
+    );
+
     return {
         ...development,
 
@@ -184,7 +192,10 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 cacheGroups: {
                     styles: {
                         name: "styles",
-                        test: /\.css$/,
+                        test: (module: webpack.Module): boolean => {
+                            const name = module.nameForCondition?.();
+                            return !!name && name.endsWith(".css") && name !== elementCallComponentStylesheet;
+                        },
                         enforce: true,
                         // Do not add `chunks: 'all'` here because you'll break the app entry point.
                     },
@@ -244,8 +255,17 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 "react": getPackageRoot("react"),
                 "react-dom": getPackageRoot("react-dom"),
 
+                // The Element Call component (an ES module built by element-call) imports matrix-js-sdk by
+                // its package entry and `lib/*` build outputs; point those at the same `src/*` modules the
+                // rest of Element Web uses, or we end up with two copies of the SDK (and MatrixRTC sessions
+                // that Element Web does not recognise). Order matters: these must come before the prefix alias.
+                "matrix-js-sdk$": path.join(getPackageRoot("matrix-js-sdk"), "src", "matrix.ts"),
+                "matrix-js-sdk/lib": path.join(getPackageRoot("matrix-js-sdk"), "src"),
                 // Same goes for js/react-sdk - we don't need two copies.
                 "matrix-js-sdk": getPackageRoot("matrix-js-sdk"),
+                // and LiveKit, which the Element Call component expects the host to provide exactly once
+                // (exact match on the resolved entry file: the package does not expose its package.json)
+                "livekit-client$": fileURLToPath(import.meta.resolve("livekit-client")),
                 "@matrix-org/react-sdk-module-api": getPackageRoot("@matrix-org/react-sdk-module-api"),
                 // and matrix-widget-api
                 "matrix-widget-api": getPackageRoot("matrix-widget-api"),

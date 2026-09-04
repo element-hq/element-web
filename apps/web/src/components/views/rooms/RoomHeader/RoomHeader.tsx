@@ -11,6 +11,9 @@ import React, { type JSX, useCallback, useContext, useState } from "react";
 import { Text, Button, IconButton, Menu, MenuItem, Tooltip } from "@vector-im/compound-web";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
 import VoiceCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/voice-call-solid";
+import CollapseIcon from "@vector-im/compound-design-tokens/assets/web/icons/collapse";
+import ExpandIcon from "@vector-im/compound-design-tokens/assets/web/icons/expand";
+import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 import CloseCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 import ThreadsIcon from "@vector-im/compound-design-tokens/assets/web/icons/threads-solid";
 import RoomInfoIcon from "@vector-im/compound-design-tokens/assets/web/icons/info-solid";
@@ -29,6 +32,7 @@ import { RightPanelPhases } from "../../../../stores/right-panel/RightPanelStore
 import { useRoomMemberCount, useRoomMembers } from "../../../../hooks/useRoomMembers.ts";
 import { _t } from "../../../../languageHandler";
 import { getPlatformCallTypeProps, useRoomCall } from "../../../../hooks/room/useRoomCall";
+import { useDocumentPip } from "../../../../hooks/room/useDocumentPip";
 import { useRoomThreadNotifications } from "../../../../hooks/room/useRoomThreadNotifications.ts";
 import { useGlobalNotificationState } from "../../../../hooks/useGlobalNotificationState.ts";
 import { useFeatureEnabled } from "../../../../hooks/useSettings.ts";
@@ -84,6 +88,7 @@ function RoomHeaderButtons({
         showVoiceCallButton,
         showVideoCallButton,
     } = useRoomCall(room);
+    const documentPip = useDocumentPip(room);
     const threadNotifications = useRoomThreadNotifications(room);
     const globalNotificationState = useGlobalNotificationState();
 
@@ -102,13 +107,24 @@ function RoomHeaderButtons({
         [callOptions, voiceCallClick],
     );
 
+    // While in a call: Element Web's own picture-in-picture (the floating view over the app)...
     const toggleCallButton = (
         <Tooltip label={isViewingCall ? _t("voip|minimise_call") : _t("voip|maximise_call")}>
-            <IconButton onClick={toggleCall}>
-                <VideoCallIcon />
+            <IconButton onClick={toggleCall} data-testid="call-pip-button">
+                {isViewingCall ? <CollapseIcon /> : <ExpandIcon />}
             </IconButton>
         </Tooltip>
     );
+
+    // ...and the browser's, a window of its own that can leave the browser. Only the Element Call React
+    // component can be moved there, so this is only offered when the call is rendered that way.
+    const documentPipButton = documentPip.available ? (
+        <Tooltip label={documentPip.active ? _t("voip|document_pip_close") : _t("voip|document_pip_open")}>
+            <IconButton onClick={documentPip.toggle} data-testid="document-pip-button">
+                <PopOutIcon />
+            </IconButton>
+        </Tooltip>
+    ) : undefined;
 
     const joinCallButton = (
         <Tooltip
@@ -276,9 +292,13 @@ function RoomHeaderButtons({
     );
     let videoCallButton: JSX.Element | undefined = startVideoCallButton;
     let voiceCallButton: JSX.Element | undefined = startVoiceCallButton;
+    let pipButton: JSX.Element | undefined;
     if (isConnectedToCall) {
+        // In a call there is nothing to start: the two buttons are the two ways of taking the call out of
+        // the room view
         videoCallButton = toggleCallButton;
         voiceCallButton = undefined;
+        pipButton = documentPipButton;
     } else if (isViewingCall) {
         videoCallButton = closeLobbyButton;
         voiceCallButton = undefined;
@@ -286,6 +306,7 @@ function RoomHeaderButtons({
 
     if (!showVideoCallButton) {
         videoCallButton = undefined;
+        pipButton = undefined;
     }
 
     if (!showVoiceCallButton) {
@@ -326,6 +347,7 @@ function RoomHeaderButtons({
                 joinCallButton
             ) : (
                 <>
+                    {!isVideoRoom && pipButton}
                     {!isVideoRoom && videoCallButton}
                     {!isVideoRoom && voiceCallButton}
                 </>

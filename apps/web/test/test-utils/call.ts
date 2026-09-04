@@ -140,6 +140,8 @@ export function enableCalls(): { enabledSettings: Set<string> } {
     vi.spyOn(SettingsStore, "getValue").mockImplementation((settingName): any => {
         if (settingName.startsWith("feature_")) return enabledSettings.has(settingName);
         if (settingName === "activeCallRoomIds") return [];
+        // Never load the real Element Call component in unit tests
+        if (settingName === "Developer.elementCallMockComponent") return true;
         return undefined;
     });
     return { enabledSettings };
