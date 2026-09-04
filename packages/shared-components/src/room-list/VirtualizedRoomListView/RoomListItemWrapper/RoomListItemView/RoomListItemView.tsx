@@ -85,6 +85,8 @@ export interface RoomListItemViewSnapshot {
     isFavourite: boolean;
     /** Whether the room is a low priority room */
     isLowPriority: boolean;
+    /** Whether the room is a direct message */
+    isDm: boolean;
     /** Can invite other users in the room */
     canInvite: boolean;
     /** Can copy the room link */

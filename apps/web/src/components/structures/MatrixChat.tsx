@@ -1808,6 +1808,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // If the view is something else, that probably means it's a login or registration view; we handle that in
         // `postLoginSetup`.
         if (this.state.view === Views.PENDING_CLIENT_START) {
+            // Wait for the first sync to complete before showing the logged-in view: otherwise we render
+            // LoggedInView/HomePage against an empty store, with no loading indicator, while /sync is still
+            // in flight.
+            if (!this.firstSyncComplete) {
+                await this.firstSyncPromise.promise;
+            }
+
             if (shouldForceVerification) {
                 this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
             } else {
