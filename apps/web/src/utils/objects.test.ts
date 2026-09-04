@@ -8,13 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { describe, it, expect } from "vitest";
 
-import {
-    objectClone,
-    objectDiff,
-    objectHasDiff,
-    objectKeyChanges,
-    objectShallowClone,
-} from "./objects";
+import { objectClone, objectDiff, objectHasDiff, objectKeyChanges, objectShallowClone } from "./objects";
 
 describe("objects", () => {
     describe("objectShallowClone", () => {
