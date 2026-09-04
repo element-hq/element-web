@@ -712,6 +712,68 @@ test.describe("Element Call", () => {
         });
     });
 
+    test.describe("Document Picture-in-Picture (React component)", { tag: ["@no-firefox", "@no-webkit"] }, () => {
+        test.use({
+            room: async ({ app, bot }, use) => {
+                const roomId = await app.client.createRoom({
+                    name: "TestRoom",
+                    invite: [bot.credentials!.userId],
+                });
+                await use({ roomId });
+            },
+            config: {
+                features: {
+                    feature_element_call_react: true,
+                },
+            },
+        });
+
+        test("moves the call into a browser window and back", async ({ page, user, room, app }) => {
+            test.skip(
+                !(await page.evaluate(() => "documentPictureInPicture" in window)),
+                "This browser has no Document Picture-in-Picture API",
+            );
+            const mock = page.locator(".mx_ElementCallMock");
+
+            await app.viewRoomById(room.roomId);
+            await page.getByRole("button", { name: "Video call" }).click();
+            await page.getByRole("menuitem", { name: "Element Call" }).click();
+            await expect(mock).toBeVisible();
+            // Not connected yet: no way out of the room view is offered
+            await expect(page.getByTestId("document-pip-button")).toHaveCount(0);
+
+            await mock.getByRole("button", { name: "notifyJoined" }).click();
+            await mock.getByRole("button", { name: "setAlwaysOnScreen(true)" }).click();
+
+            // In a call: the two PiP buttons, and no button to start another call
+            await expect(page.getByRole("button", { name: "Minimise call" })).toBeVisible();
+            const documentPip = page.getByTestId("document-pip-button");
+            await expect(documentPip).toBeVisible();
+            await expect(page.getByRole("button", { name: "Video call" })).toHaveCount(0);
+
+            await documentPip.click();
+            // The component's DOM left this document for the browser's window; the room shows the
+            // timeline, and Element Web's own PiP stays out of the way
+            await expect.poll(() => page.evaluate(() => window.documentPictureInPicture!.window !== null)).toBe(true);
+            await expect(mock).toHaveCount(0);
+            await expect(page.locator(".mx_BasicMessageComposer")).toBeVisible();
+            await expect(page.getByTestId("widget-pip-container")).toHaveCount(0);
+            await expect(page.getByRole("button", { name: "Bring call back into this window" })).toBeVisible();
+            // Its React tree kept running: what the mock had logged is still there
+            expect(
+                await page.evaluate(() =>
+                    window.documentPictureInPicture!.window!.document.body.textContent?.includes("in call"),
+                ),
+            ).toBe(true);
+
+            // Closing the window from the browser side brings the call back, into the floating PiP
+            await page.evaluate(() => window.documentPictureInPicture!.window!.close());
+            await expect(mock).toBeVisible();
+            await expect(page.getByTestId("widget-pip-container")).toBeVisible();
+            await expect(page.getByRole("button", { name: "Open call in a floating window" })).toBeVisible();
+        });
+    });
+
     test.describe("Widget leak bug reproduction", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         test.skip(isDendrite, "No need to test on other HS, this is a client bug reproduction");
         test.use({
