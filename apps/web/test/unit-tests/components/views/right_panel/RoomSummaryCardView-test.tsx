@@ -66,6 +66,7 @@ describe("<RoomSummaryCard />", () => {
         pinCount: 0,
         searchInputRef: { current: null },
         onUpdateSearchInput: jest.fn(),
+        onSearchFocus: jest.fn(),
         onRoomMembersClick: jest.fn(),
         onRoomThreadsClick: jest.fn(),
         onRoomFilesClick: jest.fn(),
