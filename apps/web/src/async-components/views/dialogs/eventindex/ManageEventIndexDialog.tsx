@@ -32,14 +32,14 @@ interface IState {
     /** Number of events currently indexed in the event index. */
     eventCount: number;
 
-    /** Number of rooms currently mentioned in the event index. */
-    eventIndexRoomCount: number;
+    /** Joined encrypted rooms still being back-filled (have a crawler checkpoint). */
+    indexing: number;
 
-    /** Number of rooms awaiting crawling by the EventIndex. */
-    crawlingRoomsCount: number;
+    /** Joined encrypted rooms that are fully indexed (no checkpoint left). */
+    indexed: number;
 
-    /** Number of encrypted rooms known by the MatrixClient. */
-    roomCount: number;
+    /** Joined encrypted rooms the crawler has given up on after a permanent error. */
+    errored: number;
 
     /** Room currently being crawled by the EventIndex. */
     currentRoom: string | null;
@@ -58,9 +58,9 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
         this.state = {
             eventIndexSize: 0,
             eventCount: 0,
-            eventIndexRoomCount: 0,
-            crawlingRoomsCount: 0,
-            roomCount: 0,
+            indexing: 0,
+            indexed: 0,
+            errored: 0,
             currentRoom: null,
             crawlerSleepTime: SettingsStore.getValueAt(SettingLevel.DEVICE, "crawlerSleepTime"),
         };
@@ -82,16 +82,17 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
         let currentRoom: string | null = null;
 
         if (room) currentRoom = room.name;
-        const roomStats = eventIndex.crawlingRooms();
-        const crawlingRoomsCount = roomStats.crawlingRooms.size;
-        const roomCount = roomStats.totalRooms.size;
+
+        // Cheap, synchronous in-memory breakdown - no Seshat IPC, so it's safe to
+        // compute on every refresh.
+        const { indexing, indexed, errored } = eventIndex.getIndexingStatus();
 
         this.setState({
             eventIndexSize: stats?.size ?? 0,
             eventCount: stats?.eventCount ?? 0,
-            eventIndexRoomCount: stats?.roomCount ?? 0,
-            crawlingRoomsCount: crawlingRoomsCount,
-            roomCount: roomCount,
+            indexing,
+            indexed,
+            errored,
             currentRoom: currentRoom,
         });
     };
@@ -135,8 +136,6 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
             crawlerState = _t("settings|security|message_search_indexing", { currentRoom: this.state.currentRoom });
         }
 
-        const doneRooms = Math.max(0, this.state.eventIndexRoomCount - this.state.crawlingRoomsCount);
-
         const eventIndexingSettings = (
             <div>
                 {_t("settings|security|message_search_intro", {
@@ -150,14 +149,16 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
                     {_t("settings|security|message_search_indexed_messages")} {formatCountLong(this.state.eventCount)}
                     <br />
                     {_t("settings|security|message_search_indexed_rooms")}{" "}
-                    {_t("settings|security|message_search_room_progress", {
-                        doneRooms: formatCountLong(doneRooms),
-                        totalRooms: formatCountLong(this.state.roomCount),
-                    })}{" "}
-                    <br />
-                    {_t("settings|security|message_search_pending_rooms", {
-                        pendingRooms: formatCountLong(this.state.crawlingRoomsCount),
-                    })}
+                    {this.state.errored > 0
+                        ? _t("settings|security|message_search_room_progress_errored", {
+                              indexed: formatCountLong(this.state.indexed),
+                              indexing: formatCountLong(this.state.indexing),
+                              errored: formatCountLong(this.state.errored),
+                          })
+                        : _t("settings|security|message_search_room_progress", {
+                              indexed: formatCountLong(this.state.indexed),
+                              indexing: formatCountLong(this.state.indexing),
+                          })}
                     <br />
                     <Field
                         label={_t("settings|security|message_search_sleep_time")}
