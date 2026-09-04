@@ -67,8 +67,13 @@ const deleteContents = async (p: string): Promise<void> => {
             const curPath = path.join(p, entry);
             try {
                 await afs.unlink(curPath);
-            } catch (e) {
-                console.log("Error deleting a file in EventStore directory", e);
+            } catch {
+                // Unlink fails on .atomicwrite* directories. They are leftover from the event store due to unclean shutdowns
+                try {
+                    await afs.rm(curPath, { recursive: true, force: true });
+                } catch (e) {
+                    console.log("Error deleting a file in EventStore directory", e);
+                }
             }
         }
     } catch (e) {
