@@ -55,13 +55,13 @@ test.describe("Invite dialog", function () {
 
         await expect(other.locator(".mx_InviteDialog_identityServer")).not.toBeVisible();
 
-        await other.getByTestId("invite-dialog-input").fill(bot.credentials.userId);
+        await other.getByTestId("invite-dialog-input").fill(bot.credentials!.userId);
 
         // Assert that notification about identity servers appears after typing userId
         await expect(other.locator(".mx_InviteDialog_identityServer")).toBeVisible();
 
         // Assert that the bot id is rendered properly
-        await expect(other.getByRole("option", { name: botName }).getByText(bot.credentials.userId)).toBeVisible();
+        await expect(other.getByRole("option", { name: botName }).getByText(bot.credentials!.userId)).toBeVisible();
 
         await other.getByRole("option", { name: botName }).click();
 
@@ -112,9 +112,9 @@ test.describe("Invite dialog", function () {
             // Take a snapshot of the invite dialog
             await expect(page.locator(".mx_Dialog")).toMatchScreenshot("invite-dialog-dm-without-user.png");
 
-            await other.getByTestId("invite-dialog-input").fill(bot.credentials.userId);
+            await other.getByTestId("invite-dialog-input").fill(bot.credentials!.userId);
 
-            await expect(other.getByRole("option", { name: botName }).getByText(bot.credentials.userId)).toBeVisible();
+            await expect(other.getByRole("option", { name: botName }).getByText(bot.credentials!.userId)).toBeVisible();
             await other.getByRole("option", { name: botName }).click();
 
             await expect(other.getByTestId("invite-dialog-input-wrapper").getByText(botName)).toBeVisible();
@@ -157,7 +157,7 @@ test.describe("Invite dialog", function () {
             await expect(page.getByText(`${botName} joined the room`)).toBeVisible();
 
             // Assert that the message is displayed at the bottom
-            await expect(page.locator(".mx_EventTile_last").getByText("Hello")).toBeVisible();
+            await expect(page.locator(".mx_EventTile").last().getByText("Hello")).toBeVisible();
         },
     );
 });

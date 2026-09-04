@@ -27,6 +27,10 @@
         "yes": "Jah"
     },
     "confirm_quit": "Kas sa kindlasti soovid rakendusest väljuda?",
+    "download": {
+        "unable_to_open_description": "Faili avamine ei õnnestunud. See võib olla tõstetud mujale või kustutatud.",
+        "unable_to_open_title": "Faili avamine ei õnnestu"
+    },
     "edit_menu": {
         "speech": "Kõne",
         "speech_start_speaking": "Alusta rääkimist",
@@ -67,6 +71,9 @@
         "save_image_as": "Salvesta pilt kui...",
         "save_image_as_error_description": "Seda pilti ei õnnestunud salvestada",
         "save_image_as_error_title": "Pildi salvestamine ei õnnestunud"
+    },
+    "save_dialog": {
+        "all_files": "Kõik failid"
     },
     "store": {
         "error": {

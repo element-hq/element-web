@@ -30,8 +30,11 @@ import React, {
  * @param el - The element being evaluated for native input behaviour.
  * @returns `true` when the element should keep its own arrow-key handling.
  */
-export function checkInputableElement(el: HTMLElement): boolean {
-    return el.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, select, [contenteditable=true]');
+export function checkInputableElement(el: EventTarget): boolean {
+    return (
+        el instanceof Element &&
+        el.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, select, [contenteditable=true]')
+    );
 }
 
 /**
@@ -498,7 +501,7 @@ export const RovingTabIndexProvider: React.FC<RovingTabIndexProviderProps> = ({
             const action = getAction(ev);
             // Don't interfere with input default keydown behaviour
             // but allow people to move focus from it with Tab.
-            const isInputTarget = !handleInputFields && checkInputableElement(ev.target as HTMLElement);
+            const isInputTarget = !handleInputFields && checkInputableElement(ev.target);
             const { handled, focusNode } = isInputTarget
                 ? getInputNavigationResult(action, context.state.nodes, context.state.activeNode, ev.shiftKey)
                 : getStandardNavigationResult(

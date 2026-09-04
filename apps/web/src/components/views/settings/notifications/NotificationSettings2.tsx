@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, useState } from "react";
-import { Form, SettingsToggleInput } from "@vector-im/compound-web";
+import { Alert, Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import NewAndImprovedIcon from "../../../../../res/img/element-icons/new-and-improved.svg";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
@@ -70,7 +70,7 @@ function useHasUnreadNotifications(): boolean {
 export default function NotificationSettings2(): JSX.Element {
     const cli = useMatrixClientContext();
 
-    const { model, hasPendingChanges, reconcile } = useNotificationSettings(cli);
+    const { model, hasPendingChanges, reconciliationError, reconcile } = useNotificationSettings(cli);
 
     const disabled = model === null || hasPendingChanges;
     const settings = model ?? DefaultNotificationSettings;
@@ -95,11 +95,23 @@ export default function NotificationSettings2(): JSX.Element {
 
     return (
         <div className="mx_NotificationSettings2">
+            {reconciliationError !== null && (
+                <Alert
+                    className="mx_NotificationSettings2_error"
+                    type="critical"
+                    title={_t("settings|notifications|labs_notice_error")}
+                    actions={
+                        <AccessibleButton kind="link_inline" onClick={() => reconcile(model!)}>
+                            {_t("action|try_again")}
+                        </AccessibleButton>
+                    }
+                />
+            )}
             {hasPendingChanges && model !== null && (
                 <SettingsBanner
                     icon={<img src={NewAndImprovedIcon} alt="" width={12} />}
                     action={_t("action|proceed")}
-                    onAction={() => reconcile(model!)}
+                    onAction={() => reconcile(model)}
                 >
                     {_t(
                         "settings|notifications|labs_notice_prompt",
@@ -280,6 +292,7 @@ export default function NotificationSettings2(): JSX.Element {
                                     symbol="1"
                                     count={1}
                                     level={NotificationLevel.Notification}
+                                    className="mx_NotificationSettings2_notificationBadge"
                                 />
                             ),
                         },
@@ -353,6 +366,11 @@ export default function NotificationSettings2(): JSX.Element {
 
                     <Form.Root onSubmit={onSubmitPreventDefault}>
                         <SettingsFlag name="Notifications.showbold" level={SettingLevel.DEVICE} />
+                        <SettingsFlag
+                            name="Notifications.activityIsUnread"
+                            level={SettingLevel.DEVICE}
+                            requires={["Notifications.showbold"]}
+                        />
                         <SettingsFlag name="Notifications.tac_only_notifications" level={SettingLevel.DEVICE} />
                     </Form.Root>
                 </SettingsSubsection>

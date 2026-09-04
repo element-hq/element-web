@@ -25,9 +25,7 @@ import {
     type IStickyActionRequest,
     type ITemplateParams,
     type IWidget,
-    type IWidgetApiErrorResponseData,
     type IWidgetApiRequest,
-    type IWidgetApiRequestEmptyData,
     type IWidgetData,
     MatrixCapabilities,
     runTemplate,
@@ -273,7 +271,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
     }
 
     private onThemeChange = (theme: string): void => {
-        this.widgetApi?.updateTheme({ name: theme });
+        void this.widgetApi?.updateTheme({ name: theme });
     };
 
     private onOpenModal = async (ev: CustomEvent<IModalWidgetOpenRequest>): Promise<void> => {
@@ -337,14 +335,14 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
             // Check up front if this is even a valid request
             const targetRoomId = (ev.detail.data || {}).room_id;
             if (!targetRoomId) {
-                return this.widgetApi?.transport.reply(ev.detail, <IWidgetApiErrorResponseData>{
+                return this.widgetApi?.transport.reply(ev.detail, {
                     error: { message: "Room ID not supplied." },
                 });
             }
 
             // Check the widget's permission
             if (!this.widgetApi?.hasCapability(ElementWidgetCapabilities.CanChangeViewedRoom)) {
-                return this.widgetApi?.transport.reply(ev.detail, <IWidgetApiErrorResponseData>{
+                return this.widgetApi?.transport.reply(ev.detail, {
                     error: { message: "This widget does not have permission for this action (denied)." },
                 });
             }
@@ -357,7 +355,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
             });
 
             // acknowledge so the widget doesn't freak out
-            this.widgetApi.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
+            this.widgetApi.transport.reply(ev.detail, {});
         });
 
         // Populate the map of "read up to" events for this widget with the current event in every room.
@@ -393,7 +391,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
                         ev.detail.data.value,
                     );
                     // Send the ack after the widget actually has become sticky.
-                    this.widgetApi.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
+                    this.widgetApi.transport.reply(ev.detail, {});
                 }
             },
         );
@@ -406,7 +404,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
                 if (this.widgetApi?.hasCapability(MatrixCapabilities.StickerSending)) {
                     // Acknowledge first
                     ev.preventDefault();
-                    this.widgetApi.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
+                    this.widgetApi.transport.reply(ev.detail, {});
 
                     // Send the sticker
                     defaultDispatcher.dispatch({
@@ -424,7 +422,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
                 (ev: CustomEvent<IWidgetApiRequest>) => {
                     // Acknowledge first
                     ev.preventDefault();
-                    this.widgetApi?.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
+                    this.widgetApi?.transport.reply(ev.detail, {});
 
                     // First close the stickerpicker
                     defaultDispatcher.dispatch({ action: "stickerpicker_close" });
@@ -439,8 +437,9 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
                     const room = roomId ? this.client.getRoom(roomId) : undefined;
                     if (!room) return;
 
-                    // noinspection JSIgnoredPromiseFromCall
-                    IntegrationManagers.sharedInstance()?.getPrimaryManager()?.open(room, `type_${integType}`, integId);
+                    void IntegrationManagers.sharedInstance()
+                        ?.getPrimaryManager()
+                        ?.open(room, `type_${integType}`, integId);
                 },
             );
         }
@@ -456,7 +455,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
                         }),
                     });
                 }
-                this.widgetApi?.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
+                this.widgetApi?.transport.reply(ev.detail, {});
             });
         }
 
@@ -502,7 +501,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
             // optimized out by a browser. Instead, we'll just point the iframe
             // at a page that is reasonably safe to use in the event the iframe
             // doesn't wink away.
-            this.iframe!.src = "about:blank";
+            this.iframe.src = "about:blank";
         } else if (ActiveWidgetStore.instance.getWidgetPersistence(this.widget.id, this.roomId ?? null)) {
             logger.log("Skipping destroy - persistent widget");
             return;
@@ -525,7 +524,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
     }
 
     private onEvent = (ev: MatrixEvent): void => {
-        this.client.decryptEventIfNeeded(ev);
+        void this.client.decryptEventIfNeeded(ev);
         this.feedEvent(ev);
     };
 

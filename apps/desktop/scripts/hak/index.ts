@@ -131,7 +131,7 @@ async function main(): Promise<void> {
         for (const mod of modules) {
             const depInfo = deps[mod];
             if (depInfo === undefined) {
-                console.log("Module " + mod + " not found - is it in hakDependencies " + "in your package.json?");
+                console.log(`Module ${mod} not found - is it in hakDependencies in your package.json?`);
                 process.exit(1);
             }
             console.log("hak " + cmd + ": " + mod);

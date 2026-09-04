@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Выбор эмодзи",
         "jump_first_invite": "Перейти к первому приглашению.",
         "message_composer": "Автор сообщения",
         "n_unread_messages": {
@@ -491,7 +490,6 @@
         "message_layout": "Макет сообщения",
         "message_timestamp_invalid": "Недопустимая метка времени",
         "microphone": "Микрофон",
-        "model": "Модель",
         "moderation_and_safety": "Модерация и безопасность",
         "modern": "Современный",
         "mute": "Приглушить",
@@ -663,7 +661,6 @@
     },
     "create_section_dialog": {
         "create_section": "Новый раздел",
-        "label": "Название раздела",
         "title": "Новый раздел",
         "title_edition": "Редактировать раздел"
     },
@@ -897,22 +894,6 @@
     },
     "dialog_close_label": "Закрыть диалог",
     "download_completed": "Скачивание завершено",
-    "emoji": {
-        "categories": "Категории",
-        "category_activities": "Действия",
-        "category_animals_nature": "Животные и природа",
-        "category_flags": "Флаги",
-        "category_food_drink": "Еда и напитки",
-        "category_frequently_used": "Часто используемые",
-        "category_objects": "Объекты",
-        "category_smileys_people": "Смайлики и люди",
-        "category_symbols": "Символы",
-        "category_travel_places": "Путешествия и места",
-        "quick_reactions": "Быстрая реакция"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Отменить поиск"
-    },
     "empty_room": "Пустая комната",
     "empty_room_was_name": "Пустая комната (без %(oldName)s)",
     "encryption": {
@@ -1362,7 +1343,6 @@
             "preparing": "Подготовка приглашений..."
         },
         "recents_section": "Недавние Диалоги",
-        "room_failed_partial": "Мы отправили остальных, но нижеперечисленные люди не могут быть приглашены в <RoomName/>",
         "room_failed_partial_title": "Некоторые приглашения не могут быть отправлены",
         "room_failed_title": "Не удалось пригласить пользователей в %(roomName)s",
         "send_link_prompt": "Или отправьте ссылку на приглашение",
@@ -1478,7 +1458,6 @@
         "bridge_state_workspace": "Рабочая область: <networkLink/>",
         "click_for_info": "Нажмите, чтобы узнать больше",
         "currently_experimental": "На данный момент экспериментальный.",
-        "custom_themes": "Поддержка сторонних тем",
         "dynamic_room_predecessors": "Родитель динамической комнаты",
         "dynamic_room_predecessors_description": "Включите MSC3946 (для поддержки архивных комнат)",
         "element_call_video_rooms": "Видеокомнаты Element Call",
@@ -1497,7 +1476,6 @@
         "group_profile": "Профиль",
         "group_rooms": "Комнаты",
         "group_spaces": "Пространства",
-        "group_themes": "Темы",
         "group_threads": "Обсуждения",
         "group_ui": "Пользовательский интерфейс",
         "group_voip": "Голос и видео",
@@ -1678,7 +1656,6 @@
         "mentions_and_keywords": "@упоминания и ключевые слова",
         "mentions_and_keywords_description": "Получать уведомления только по упоминаниям и ключевым словам, установленным в ваших <a>настройках</a>",
         "mentions_keywords": "Упоминания и ключевые слова",
-        "message_didnt_send": "Сообщение не отправлено. Нажмите для получения информации.",
         "mute_description": "Вы не будете получать никаких уведомлений"
     },
     "notifier": {
@@ -2418,11 +2395,6 @@
             "custom_font_description": "Установите имя шрифта, установленного в вашей системе, и %(brand)s попытается его использовать.",
             "custom_font_name": "Название системного шрифта",
             "custom_font_size": "Использовать другой размер",
-            "custom_theme_add": "Добавить пользовательскую тему",
-            "custom_theme_downloading": "Скачивание пользовательской темы…",
-            "custom_theme_error_downloading": "Ошибка при скачивании темы",
-            "custom_theme_help": "Введите URL-адрес пользовательской темы, которую вы хотите применить.",
-            "custom_theme_invalid": "Неверная схема темы.",
             "dialog_title": "<strong>Настройки:</strong> Внешний вид",
             "font_size": "Размер шрифта",
             "font_size_default": "%(fontSize)s (по умолчанию)",
@@ -2802,7 +2774,6 @@
         "send_typing_notifications": "Уведомлять о наборе текста",
         "sessions": {
             "best_security_note": "Для обеспечения максимальной безопасности проверяйте свои сеансы и выходите из любого сеанса, который вы больше не знаете или не используете.",
-            "browser": "Браузер",
             "confirm_sign_out": {
                 "one": "Подтвердите выход из этого устройства",
                 "few": "Подтвердите выход из этих устройств",
@@ -2858,7 +2829,6 @@
             "no_sessions": "Сеансов не найдено.",
             "no_unverified_sessions": "Незаверенных сеансов не обнаружено.",
             "no_verified_sessions": "Заверенных сеансов не обнаружено.",
-            "os": "Операционная система",
             "other_sessions_heading": "Другие сеансы",
             "push_heading": "Уведомления",
             "push_subheading": "Получать push-уведомления в этом сеансе.",

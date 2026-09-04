@@ -29,18 +29,18 @@ test.describe("Invisible cryptography", () => {
         await autoJoin(bob);
 
         // create an encrypted room
-        const testRoomId = await createSharedEncryptedRoomWithUser(app, bob.credentials.userId);
+        const testRoomId = await createSharedEncryptedRoomWithUser(app, bob.credentials!.userId);
 
         // Verify Bob
         await verify(app, bob);
 
         // Bob logs in a new device and resets cross-signing
         const bobSecondDevice = await createSecondBotDevice(page, homeserver, bob);
-        await bootstrapCrossSigningForClient(await bobSecondDevice.prepareClient(), bob.credentials, true);
+        await bootstrapCrossSigningForClient(await bobSecondDevice.prepareClient(), bob.credentials!, true);
 
         /* should show an error for a message from a previously verified device */
         await bobSecondDevice.sendMessage(testRoomId, "test encrypted from user that was previously verified");
-        const lastTile = page.locator(".mx_EventTile_last");
+        const lastTile = page.locator(".mx_EventTile").last();
         await expect(lastTile).toContainText("Sender's verified digital identity was reset");
     });
 });

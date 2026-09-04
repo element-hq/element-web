@@ -402,7 +402,6 @@
         "message": "შეტყობინება",
         "message_layout": "შეტყობინებების ფორმა",
         "microphone": "მიკროფონი",
-        "model": "მოდელი",
         "modern": "თანამედროვე",
         "mute": "დადუმება",
         "n_members": {
@@ -614,19 +613,6 @@
         "view_source_decrypted_event_source": "გაშიფრული მოვლენის წყარო",
         "view_source_decrypted_event_source_unavailable": "გაშიფრული წყარო მიუწვდომელია",
         "widget_screenshots": "ჩართეთ ვიჯეტის ეკრანის ანაბეჭდები მხარდაჭერილ ვიჯეტებზე"
-    },
-    "emoji": {
-        "categories": "კატეგორიები",
-        "category_activities": "Საქმიანობის",
-        "category_animals_nature": "ცხოველები და ბუნება",
-        "category_flags": "დროშები",
-        "category_food_drink": "Საჭმელ - სასმელი",
-        "category_frequently_used": "ხშირად გამოყენებული",
-        "category_objects": "ობიექტები",
-        "category_smileys_people": "სმაილი და ხალხი",
-        "category_symbols": "სიმბოლოები",
-        "category_travel_places": "მოგზაურობა და ადგილები",
-        "quick_reactions": "სწრაფი რეაქციები"
     },
     "empty_room": "ცარიელი ოთახი",
     "empty_room_was_name": "ცარიელი ოთახი (იყო%(oldName)s )",
@@ -897,7 +883,6 @@
         "name_mxid_share_room": "მოიწვიე ვინმე თავისი სახელის, მომხმარებლის სახელის (მაგ<userId/> ) ან<a> გააზიარე ეს ოთახი</a> .",
         "name_mxid_share_space": "მოიწვიე ვინმე თავისი სახელის, მომხმარებლის სახელის (მაგ<userId/> ) ან<a> გააზიარე ეს სივრცე</a> .",
         "recents_section": "ბოლო საუბრები",
-        "room_failed_partial": "ჩვენ გავაგზავნეთ სხვები, მაგრამ ქვემოთ მოყვანილი ადამიანების მოწვევა ვერ მოხერხდა<RoomName/>",
         "room_failed_partial_title": "ზოგიერთი მოწვევის გაგზავნა ვერ მოხერხდა",
         "room_failed_title": "მომხმარებლების მოწვევა ვერ მოხერხდა%(roomName)s",
         "send_link_prompt": "ან გაგზავნეთ მოწვევის ბმული",
@@ -954,7 +939,6 @@
         "bridge_state_workspace": "სამუშაო ადგილი:<networkLink/>",
         "click_for_info": "დააწკაპუნეთ მეტი ინფორმაციისთვის",
         "currently_experimental": "ახლა ექსპერიმენტული.",
-        "custom_themes": "დახმარება მორგებული თემების",
         "dynamic_room_predecessors": "დინამიური ოთახის წინამორბედები",
         "dynamic_room_predecessors_description": "",
         "element_call_video_rooms": "ელემენტის ზარის ვიდეოოო",
@@ -969,7 +953,6 @@
         "group_profile": "პროფილი",
         "group_rooms": "ოთახები",
         "group_spaces": "ფართები",
-        "group_themes": "თემები",
         "group_voip": "ხმა და ვიდეო",
         "group_widgets": "ვიჯეტები",
         "hidebold": "შეტყობინების წერტილის დამალვა (მხოლოდ მრიცხველების სამკერდე ნიშნების ჩვენება)",
@@ -1108,7 +1091,6 @@
         "mentions_and_keywords": "@ხსენებები და საკვანძო სიტყვები",
         "mentions_and_keywords_description": "მიიღეთ შეტყობინებები მხოლოდ ხსენებებითა და საკვანძო სიტყვებით, როგორც დაყენებულია თქვენსში<a> პარამეტრები</a>",
         "mentions_keywords": "ხსენებები და საკვანძო სიტყვები",
-        "message_didnt_send": "შეტყობინება არ გაიგზავნა. დააწკაპუნეთ ინფორმაციისთვის.",
         "mute_description": "თქვენ არ მიიღებთ შეტყობინებებს"
     },
     "notifier": {
@@ -1553,8 +1535,6 @@
             "custom_font_description": "დააყენეთ თქვენს სისტემაში დაინსტალირებული შრიფტის სახელი და%(brand)s შეეცდება მის გამოყენებას.",
             "custom_font_name": "სისტემის შრიფტის სახელი",
             "custom_font_size": "გამოიყენეთ მორგებული ზომა",
-            "custom_theme_error_downloading": "თემის ჩამოტვირთვის შეცდომა",
-            "custom_theme_invalid": "თემის არასწორი სქემა.",
             "font_size": "შრიფტის ზომა",
             "image_size_default": "ნაგულისხმევი",
             "image_size_large": "დიდი",
@@ -1806,7 +1786,6 @@
         "send_typing_notifications": "აკრეფის შეტყობინებების გაგზავნა",
         "sessions": {
             "best_security_note": "საუკეთესო უსაფრთხოებისთვის, გადაამოწმეთ თქვენი სესიები და გამოდით ნებისმიერი სესიიდან, რომელსაც აღარ იცნობთ ან აღარ იყენებთ.",
-            "browser": "ბრაუზერი",
             "confirm_sign_out": {
                 "one": "დაადასტურეთ ამ მოწყობილობის გამოსვლა",
                 "other": "დაადასტურეთ ამ მოწყობილობებიდან გამოსვლა"
@@ -1855,7 +1834,6 @@
             "no_sessions": "სესიები ვერ მოიძებნა.",
             "no_unverified_sessions": "დაუდასტურებელი სესიები ვერ მოიძებნა.",
             "no_verified_sessions": "დადასტურებული სესიები ვერ მოიძებნა.",
-            "os": "ოპერაციული სისტემა",
             "other_sessions_heading": "სხვა სესიები",
             "push_heading": "Push შეტყობინებები",
             "push_subheading": "მიიღეთ push-შეტყობინებები ამ სესიაზე.",

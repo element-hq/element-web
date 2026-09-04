@@ -19,7 +19,7 @@ async function uploadFile(app: ElementAppPage, sampleFile: string) {
     await app.composerUploadFiles("room", getSampleFilePath(sampleFile));
     // Wait until the file is sent
     await expect(app.page.locator(".mx_RoomView_statusArea_expanded")).not.toBeVisible();
-    await expect(app.page.locator(".mx_EventTile.mx_EventTile_last").getByRole("status")).toHaveAccessibleName(
+    await expect(app.page.locator(".mx_RoomView_body .mx_EventTile").last().getByRole("status")).toHaveAccessibleName(
         "Your message was sent",
     );
 }
@@ -55,17 +55,21 @@ test.describe("FilePanel", () => {
 
             const roomViewBody = page.locator(".mx_RoomView_body");
             // Assert that all of the file were uploaded and rendered
-            await expect(roomViewBody.locator(".mx_EventTile[data-layout='group']")).toHaveCount(3);
+            await expect(roomViewBody.locator(".mx_EventTile")).toHaveCount(3);
 
             // Assert that the image exists and has the alt string
-            await expect(roomViewBody.locator(".mx_EventTile[data-layout='group'] img[alt='riot.png']")).toBeVisible();
+            await expect(
+                roomViewBody.locator(".mx_EventTile").filter({ has: page.locator("img[alt='riot.png']") }),
+            ).toBeVisible();
 
             // Assert that the audio player is rendered
             await expect(roomViewBody.getByRole("region", { name: "Audio player" })).toBeVisible();
 
             // Assert that the file button exists
             await expect(
-                roomViewBody.locator(".mx_EventTile_last[data-layout='group'] .mx_MFileBody", { hasText: ".json" }),
+                roomViewBody
+                    .locator(".mx_EventTile")
+                    .filter({ has: page.locator(".mx_MFileBody", { hasText: ".json" }) }),
             ).toBeVisible();
 
             const filePanel = page.locator(".mx_FilePanel");
@@ -74,8 +78,8 @@ test.describe("FilePanel", () => {
 
             const filePanelMessageList = filePanel.locator(".mx_RoomView_MessageList");
 
-            // Assert that data-layout attribute is not applied to file tiles on the panel
-            await expect(filePanelMessageList.locator(".mx_EventTile[data-layout]")).not.toBeVisible();
+            // The panel renders EventTileView file tiles without legacy layout attributes.
+            await expect(filePanelMessageList.locator(".mx_EventTile").first()).not.toHaveAttribute("data-layout");
 
             // Assert that all of the file tiles are rendered
             await expect(filePanelMessageList.locator(".mx_EventTile")).toHaveCount(3);
@@ -87,7 +91,10 @@ test.describe("FilePanel", () => {
             await expect(filePanelMessageList.getByText(NAME)).toHaveCount(3);
 
             // Detect the image file
-            const image = filePanelMessageList.locator(".mx_EventTile_mediaLine.mx_EventTile_image .mx_ImageBody");
+            const image = filePanelMessageList
+                .locator(".mx_EventTile")
+                .filter({ has: page.locator("img[alt='riot.png']") })
+                .getByTestId("event-tile-slot-body");
             // Assert that the image is specified as thumbnail and has the alt string
             await expect(image.locator("img.mx_ImageBody_image")).toBeVisible();
             await expect(image.locator("img[alt='riot.png']")).toBeVisible();
@@ -98,10 +105,13 @@ test.describe("FilePanel", () => {
             await expect(audio.getByRole("button", { name: "Play" })).toBeVisible();
 
             // Detect the JSON file
+            const jsonTile = filePanelMessageList
+                .locator(".mx_EventTile")
+                .filter({ has: page.locator(".mx_MFileBody", { hasText: ".json" }) });
             // Assert that the tile is rendered as a button
-            const file = filePanelMessageList.locator(".mx_EventTile_mediaLine .mx_MFileBody [role='button']");
-            // Assert that the file name is rendered inside the button with ellipsis
-            await expect(file.getByText(/matrix.*?\.json/)).toBeVisible();
+            const file = jsonTile.getByTestId("event-tile-slot-body").getByRole("button", { name: /matrix.*?\.json/ });
+            // Assert that the file name is exposed by the button with ellipsis
+            await expect(file).toHaveAccessibleName(/matrix.*?\.json/);
 
             // Make the viewport tall enough to display all of the file tiles on FilePanel
             await page.setViewportSize({ width: 800, height: 1000 });
@@ -115,9 +125,15 @@ test.describe("FilePanel", () => {
             // Assert that all of the file tiles are visible before taking a snapshot
             await expect(filePanelMessageList.locator(".mx_ImageBody")).toBeVisible(); // top
             await expect(filePanelMessageList.locator(".mx_MAudioBody")).toBeVisible(); // middle
-            const senderDetails = filePanelMessageList.locator(".mx_EventTile_last .mx_EventTile_senderDetails");
+            const timestampedTile = filePanelMessageList
+                .locator(".mx_EventTile")
+                .filter({ has: page.getByTestId("event-tile-slot-timestamp") })
+                .last();
+            const senderDetails = timestampedTile.getByTestId("event-tile-slot-sender");
             await expect(senderDetails.locator(".mx_DisambiguatedProfile")).toBeVisible();
-            await expect(senderDetails.locator(".mx_MessageTimestamp")).toBeVisible();
+            await expect(
+                timestampedTile.getByTestId("event-tile-slot-timestamp").locator(".mx_MessageTimestamp"),
+            ).toBeVisible();
 
             // Take a snapshot of file tiles list on FilePanel
             await expect(filePanelMessageList).toMatchScreenshot("file-tiles-list.png", {
@@ -183,11 +199,10 @@ test.describe("FilePanel", () => {
             await uploadFile(app, "riot.png");
 
             // Detect the image file on the panel
-            const imageBody = page.locator(
-                ".mx_FilePanel .mx_RoomView_MessageList .mx_EventTile_mediaLine.mx_EventTile_image .mx_ImageBody",
-            );
-
-            const link = imageBody.locator(".mx_MFileBody a");
+            const imageTile = page
+                .locator(".mx_FilePanel .mx_RoomView_MessageList .mx_EventTile")
+                .filter({ has: page.locator("img[alt='riot.png']") });
+            const link = imageTile.getByTestId("event-tile-slot-body").getByRole("link", { name: /^Download/ });
 
             const downloadPromise = page.waitForEvent("download");
 

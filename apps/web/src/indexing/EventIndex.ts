@@ -262,7 +262,7 @@ export default class EventIndex extends EventEmitter {
 
         if (ev.getType() === EventType.RoomEncryption && !(await this.isRoomIndexed(state.roomId))) {
             this.logger.debug("Adding a checkpoint for a newly encrypted room", state.roomId);
-            this.addRoomCheckpoint(state.roomId, true);
+            await this.addRoomCheckpoint(state.roomId, true);
         }
     };
 
@@ -296,7 +296,7 @@ export default class EventIndex extends EventEmitter {
 
         this.logger.debug("Adding a checkpoint because of a limited timeline", room.roomId);
 
-        this.addRoomCheckpoint(room.roomId, false);
+        await this.addRoomCheckpoint(room.roomId, false);
     };
 
     /**
@@ -459,6 +459,7 @@ export default class EventIndex extends EventEmitter {
 
         let idle = false;
 
+        // oxlint-disable-next-line no-unmodified-loop-condition
         while (!cancelled) {
             let sleepTime = SettingsStore.getValueAt(SettingLevel.DEVICE, "crawlerSleepTime");
 

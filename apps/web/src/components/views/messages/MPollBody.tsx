@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ReactNode } from "react";
+import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
     type MatrixEvent,
@@ -24,6 +25,7 @@ import { type PollStartEvent, type PollAnswerSubevent } from "matrix-js-sdk/src/
 import { PollResponseEvent } from "matrix-js-sdk/src/extensible_events_v1/PollResponseEvent";
 import PollsIcon from "@vector-im/compound-design-tokens/assets/web/icons/polls";
 import PollsEndIcon from "@vector-im/compound-design-tokens/assets/web/icons/polls-end";
+import { useEventPresentation } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
@@ -139,6 +141,19 @@ export function launchPollEditor(mxEvent: MatrixEvent, getRelationsForEvent?: Ge
     }
 }
 
+type PollBodyElementProps = { className?: string };
+
+function PollBodyPresentationAttributes({
+    children,
+}: {
+    children: React.ReactElement<PollBodyElementProps>;
+}): React.JSX.Element {
+    const { layout } = useEventPresentation();
+    return React.cloneElement(children, {
+        className: classNames(children.props.className, { mx_MPollBody_bubble: layout === "bubble" }),
+    });
+}
+
 export default class MPollBody extends React.Component<IBodyProps, IState> {
     public static contextType = MatrixClientContext;
     declare public context: React.ContextType<typeof MatrixClientContext>;
@@ -157,7 +172,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         const room = this.context?.getRoom(this.props.mxEvent.getRoomId());
         const poll = room?.polls.get(this.props.mxEvent.getId()!);
         if (poll) {
-            this.setPollInstance(poll);
+            void this.setPollInstance(poll);
         } else {
             room?.on(PollEvent.New, this.setPollInstance.bind(this));
         }
@@ -330,44 +345,46 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         const pollLabel = poll.isEnded ? _t("poll|ended_poll_label") : _t("poll|poll_label");
 
         return (
-            <fieldset className="mx_MPollBody">
-                <legend data-testid="pollQuestion">
-                    <PollIcon width="20" height="20" aria-label={pollLabel} />
-                    {pollEvent.question.text}
-                    {editedSpan}
-                </legend>
-                <div className="mx_MPollBody_allOptions">
-                    {pollEvent.answers.map((answer: PollAnswerSubevent, index: number) => {
-                        let answerVotes = 0;
+            <PollBodyPresentationAttributes>
+                <fieldset className="mx_MPollBody">
+                    <legend data-testid="pollQuestion">
+                        <PollIcon width="20" height="20" aria-label={pollLabel} />
+                        {pollEvent.question.text}
+                        {editedSpan}
+                    </legend>
+                    <div className="mx_MPollBody_allOptions">
+                        {pollEvent.answers.map((answer: PollAnswerSubevent, index: number) => {
+                            let answerVotes = 0;
 
-                        if (showResults) {
-                            answerVotes = votes.get(answer.id) ?? 0;
-                        }
+                            if (showResults) {
+                                answerVotes = votes.get(answer.id) ?? 0;
+                            }
 
-                        const checked =
-                            (!poll.isEnded && myVote === answer.id) || (poll.isEnded && answerVotes === winCount);
+                            const checked =
+                                (!poll.isEnded && myVote === answer.id) || (poll.isEnded && answerVotes === winCount);
 
-                        return (
-                            <PollOption
-                                key={answer.id}
-                                pollId={pollId}
-                                answer={answer}
-                                optionNumber={index + 1}
-                                isChecked={checked}
-                                isEnded={poll.isEnded}
-                                voteCount={answerVotes}
-                                totalVoteCount={totalVotes}
-                                displayVoteCount={showResults}
-                                onOptionSelected={this.selectOption.bind(this)}
-                            />
-                        );
-                    })}
-                </div>
-                <div data-testid="totalVotes" className="mx_MPollBody_totalVotes">
-                    {totalText}
-                    {isFetchingResponses && <Spinner size={16} />}
-                </div>
-            </fieldset>
+                            return (
+                                <PollOption
+                                    key={answer.id}
+                                    pollId={pollId}
+                                    answer={answer}
+                                    optionNumber={index + 1}
+                                    isChecked={checked}
+                                    isEnded={poll.isEnded}
+                                    voteCount={answerVotes}
+                                    totalVoteCount={totalVotes}
+                                    displayVoteCount={showResults}
+                                    onOptionSelected={this.selectOption.bind(this)}
+                                />
+                            );
+                        })}
+                    </div>
+                    <div data-testid="totalVotes" className="mx_MPollBody_totalVotes">
+                        {totalText}
+                        {isFetchingResponses && <Spinner size={16} />}
+                    </div>
+                </fieldset>
+            </PollBodyPresentationAttributes>
         );
     }
 }
@@ -409,8 +426,8 @@ export function allVotes(voteRelations: Relations): Array<UserVote> {
  */
 export function collectUserVotes(
     userResponses: Array<UserVote>,
-    userId?: string | null | undefined,
-    selected?: string | null | undefined,
+    userId?: string | null,
+    selected?: string | null,
 ): Map<string, UserVote> {
     const userVotes: Map<string, UserVote> = new Map();
 
