@@ -7,7 +7,7 @@
 
 import React, { type ComponentType, type JSX, type MouseEvent } from "react";
 import classNames from "classnames";
-import { Button, Tooltip } from "@vector-im/compound-web";
+import { Button, IconButton, Tooltip } from "@vector-im/compound-web";
 import {
     AttachmentIcon,
     DownloadIcon,
@@ -92,15 +92,22 @@ export interface FileBodyViewSnapshot {
      */
     downloadHref?: string;
     /**
-     * Whether to render a control that opens the file in a viewer, alongside the download control.
-     * Only set for file types the host knows how to display, so it renders nothing by default.
+     * Whether to render a control, inside the info row, that opens the file in a viewer. Only set for
+     * file types the host knows how to display, so no action icons appear by default.
      */
     showOpen?: boolean;
     /**
-     * Label for the open control. Required in practice whenever `showOpen` is set, since the view has
-     * no sensible generic wording for "open this particular kind of file".
+     * Label for the open control, used as its accessible name and its tooltip. Required in practice
+     * whenever `showOpen` is set, since the view has no sensible generic wording for "open this
+     * particular kind of file".
      */
     openLabel?: string;
+    /**
+     * Whether to render a download control inside the info row. Set alongside {@link showOpen} so that
+     * downloading stays visible as an explicit action once the row has an action for opening. Distinct
+     * from {@link showDownload}, which is the separate full-width download control below the row.
+     */
+    showInlineDownload?: boolean;
 }
 
 export interface FileBodyViewActions {
@@ -211,44 +218,78 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
         downloadHref,
         showOpen,
         openLabel,
+        showInlineDownload,
     } = useViewModel(vm);
 
     const resolvedInfoLabel = infoLabel ?? _t("common|attachment");
     const resolvedInfoTooltip = infoTooltip ?? resolvedInfoLabel;
     const resolvedInfoIcon = getInfoIcon(infoIcon);
 
+    const resolvedDownloadLabel = downloadLabel ?? _t("action|download");
+
+    const infoButton = (
+        <Button
+            as="button"
+            size="md"
+            kind="secondary"
+            aria-label={resolvedInfoLabel}
+            Icon={resolvedInfoIcon}
+            onClick={vm.onInfoClick}
+        >
+            <span>{resolvedInfoLabel}</span>
+        </Button>
+    );
+
+    // Actions that live inside the info row, to the right of the file name. Absent unless the view
+    // model asks for them, which keeps the row exactly as it was for file types we cannot open.
+    const infoActions =
+        showInlineDownload || (showOpen && openLabel) ? (
+            <div data-type="actions">
+                {showInlineDownload && (
+                    <IconButton
+                        size="28px"
+                        kind="secondary"
+                        aria-label={resolvedDownloadLabel}
+                        tooltip={resolvedDownloadLabel}
+                        onClick={vm.onInfoClick}
+                    >
+                        <DownloadIcon />
+                    </IconButton>
+                )}
+                {showOpen && openLabel && (
+                    <IconButton
+                        size="28px"
+                        kind="secondary"
+                        aria-label={openLabel}
+                        tooltip={openLabel}
+                        onClick={vm.onOpenClick}
+                    >
+                        <EditIcon />
+                    </IconButton>
+                )}
+            </div>
+        ) : null;
+
+    // With actions present the tooltip moves onto the name itself, so that hovering an action shows
+    // that action's tooltip rather than the file name's.
     const info = showInfo ? (
-        <Tooltip description={resolvedInfoTooltip} placement="right">
+        infoActions ? (
             <MediaBody data-type="info">
-                <Button
-                    as="button"
-                    size="md"
-                    kind="secondary"
-                    aria-label={resolvedInfoLabel}
-                    Icon={resolvedInfoIcon}
-                    onClick={vm.onInfoClick}
-                >
-                    <span>{resolvedInfoLabel}</span>
-                </Button>
+                <Tooltip description={resolvedInfoTooltip} placement="right">
+                    {infoButton}
+                </Tooltip>
+                {infoActions}
             </MediaBody>
-        </Tooltip>
+        ) : (
+            <Tooltip description={resolvedInfoTooltip} placement="right">
+                <MediaBody data-type="info">{infoButton}</MediaBody>
+            </Tooltip>
+        )
     ) : null;
 
     const classes = classNames(styles.content, className);
 
-    const resolvedDownloadLabel = downloadLabel ?? _t("action|download");
     const resolvedDownloadTitle = downloadTitle ?? resolvedDownloadLabel;
-
-    // Rendered next to the download control for file types the host can display inline. Absent unless
-    // the view model asks for it, so the default file body is unchanged.
-    const open =
-        showOpen && openLabel ? (
-            <div data-type="open">
-                <Button size="md" kind="secondary" Icon={EditIcon} onClick={vm.onOpenClick}>
-                    {openLabel}
-                </Button>
-            </div>
-        ) : null;
 
     switch (state) {
         case FileBodyViewState.EXPORT:
@@ -262,7 +303,6 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
             return (
                 <span className={classes}>
                     {info}
-                    {open}
                     {showDownload && (
                         <div data-type="download">
                             {/* Decrypt/download is triggered by the view model action, not by an anchor `href`. */}
@@ -278,7 +318,6 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
             return (
                 <span className={classes}>
                     {info}
-                    {open}
                     {showDownload && (
                         <div data-type="download">
                             <div aria-hidden style={{ display: "none" }}>
@@ -314,7 +353,6 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
             return (
                 <span className={classes}>
                     {info}
-                    {open}
                     {showDownload && (
                         <div data-type="download">
                             {/* Unencrypted media uses an anchor element with VM-controlled click behavior. */}

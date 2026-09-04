@@ -158,6 +158,9 @@ export class FileBodyViewModel
         // the download-only panels. Needs the media helper, since opening has to fetch the bytes.
         const showOpen = !props.forExport && showFileInfo && !!props.mediaEventHelper && isPdfEvent(props.mxEvent);
         const openLabel = showOpen ? _t("pdf_viewer|open") : undefined;
+        // Once the row carries an action for opening, downloading needs to be an action too rather than
+        // staying hidden behind a click on the file name.
+        const showInlineDownload = showOpen;
         const downloadTitle = showDownload
             ? presentableTextForFile(content, _t("common|attachment"), true, true)
             : undefined;
@@ -187,6 +190,7 @@ export class FileBodyViewModel
                 downloadTitle: downloadTitle,
                 showOpen,
                 openLabel,
+                showInlineDownload,
             };
         }
 
@@ -203,6 +207,7 @@ export class FileBodyViewModel
                 downloadHref: media.srcHttp,
                 showOpen,
                 openLabel,
+                showInlineDownload,
             };
         }
 
