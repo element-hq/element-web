@@ -209,7 +209,7 @@ describe("createMatrixClient", () => {
             expect(client.http.opts.oauth2ClientConfig).toEqual(
                 expect.objectContaining({
                     clientId: "test-client-id",
-                    redirectUri: "https://test.dummy/oauth/callback",
+                    getAuthMetadata: expect.any(Function),
                 }),
             );
         });
