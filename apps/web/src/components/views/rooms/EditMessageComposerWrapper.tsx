@@ -5,28 +5,20 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE in the repository root for full details.
 */
 
-import React, { type JSX } from "react";
+import React, { useCallback, type JSX } from "react";
 
 import { type MatrixClientProps } from "../../../contexts/MatrixClientContext";
 import { useSettingValue } from "../../../hooks/useSettings";
 import type EditorStateTransfer from "../../../utils/EditorStateTransfer";
 import { EditWysiwygComposer } from "./wysiwyg_composer";
-import {
-    MessageComposerUrlPreviewViewModel,
-    type MessageComposerUrlPreviewViewModelProps,
-} from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
-import {
-    type MessageComposerUrlPreviewSnapshotEntry,
-    useCreateAutoDisposedViewModel,
-    useViewModel,
-} from "@element-hq/web-shared-components";
+import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
+import { useCreateAutoDisposedViewModel, useViewModel } from "@element-hq/web-shared-components";
 import PlatformPeg from "../../../PlatformPeg";
 import { MessageComposerUrlPreviewWrapper } from "./MessageComposerUrlPreview";
 import EditMessageComposer from "./EditMessageComposer";
 import type EditorModel from "../../../editor/model";
 import { type RoomMessageEventContent } from "../../../../@types/url-preview";
 import { attachUrlPreviews } from "../../../utils/messages";
-import { linksIn } from "../../../utils/UrlUtils";
 
 interface IEditMessageComposerProps extends MatrixClientProps {
     showUrlPreview: boolean;
@@ -36,65 +28,41 @@ interface IEditMessageComposerProps extends MatrixClientProps {
 
 export function EditMessageComposerWrapper(props: IEditMessageComposerProps): JSX.Element {
     const urlPreviewBundleEnabled = useSettingValue("feature_msc4095_url_preview_bundle");
-    const content = props.editState.getEvent().getContent<RoomMessageEventContent>();
-    const bundleContent = content["com.beeper.linkpreviews"];
-    const linksInMessage = linksIn(content.body);
-    const linksInBundle = new Set(bundleContent?.map((entry) => entry.matched_url));
 
     const vm = useCreateAutoDisposedViewModel(() => {
-        const urlVmProps: MessageComposerUrlPreviewViewModelProps = {
+        const content = props.editState.getEvent().getContent<RoomMessageEventContent>();
+
+        return MessageComposerUrlPreviewViewModel.restoreFromMessage({
             client: props.mxClient,
             visible: props.showUrlPreview,
             showTooltips: PlatformPeg.get()?.needsUrlTooltips() ?? true,
             urlPreviewBundle: urlPreviewBundleEnabled,
-            content: content.body,
-        };
-
-        if (urlPreviewBundleEnabled && bundleContent !== undefined) {
-            urlVmProps.cachedEntries = new Map(
-                bundleContent
-                    .map((entry): [string, MessageComposerUrlPreviewSnapshotEntry] => [
-                        entry.matched_url,
-                        {
-                            // previewFromBundle is async (it falls back to a server request when the
-                            // bundle carries only matched_url), so the bundled entries start out
-                            // loading and are resolved by resolveBundledPreviews below.
-                            status: "loading",
-                            include: true,
-                            matched_url: entry.matched_url,
-                        },
-                    ])
-                    .concat(
-                        Array.from(linksInMessage)
-                            .filter((link) => !linksInBundle.has(link))
-                            .map((link): [string, MessageComposerUrlPreviewSnapshotEntry] => [
-                                link,
-                                { status: "failed", include: false, matched_url: link },
-                            ]),
-                    ),
-            );
-        }
-
-        const urlVm = new MessageComposerUrlPreviewViewModel(urlVmProps);
-        if (urlPreviewBundleEnabled && bundleContent !== undefined) {
-            urlVm.resolveBundledPreviews(bundleContent, content.body);
-        }
-        return urlVm;
+            content,
+        });
     });
 
     const { isModified: isUrlPreviewsModified } = useViewModel(vm);
 
-    const onWysiwygChange = (content: string): void => {
-        vm.updateWithText({ content, debounced: true });
-    };
+    const onWysiwygChange = useCallback(
+        (content: string): void => {
+            vm.updateWithText({ content, debounced: true });
+        },
+        [vm],
+    );
 
-    const onChange = (model: EditorModel): void => {
-        vm.updateWithText({ content: model.contentPlainText, debounced: true });
-    };
+    const onChange = useCallback(
+        (model: EditorModel): void => {
+            vm.updateWithText({ content: model.contentPlainText, debounced: true });
+        },
+        [vm],
+    );
 
-    const attachBundles = (newContent: RoomMessageEventContent): void => {
-        attachUrlPreviews(vm.getSnapshot(), newContent);
-    };
+    const attachBundles = useCallback(
+        (newContent: RoomMessageEventContent): void => {
+            attachUrlPreviews(vm.getSnapshot(), newContent);
+        },
+        [vm],
+    );
 
     // function attachBundles(event: MatrixEv)
 

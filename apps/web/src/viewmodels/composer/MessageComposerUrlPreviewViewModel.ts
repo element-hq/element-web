@@ -16,9 +16,17 @@ import { debounce } from "lodash";
 
 import { UrlPreviewFetcher } from "../../utils/UrlPreviewFetcher";
 import { linksIn } from "../../utils/UrlUtils";
-import { type UnstableBundledUrlPreviewSingle } from "../../../@types/url-preview";
+import { type RoomMessageEventContent, type UnstableBundledUrlPreviewSingle } from "../../../@types/url-preview";
 
 export const DEBOUNCE_REQUEST_TIMEOUT_MS = 500;
+
+export interface MessageComposerUrlPreviewViewModelRestoreProps {
+    client: MatrixClient;
+    visible: boolean;
+    showTooltips: boolean;
+    urlPreviewBundle: boolean;
+    content: RoomMessageEventContent;
+}
 
 export interface MessageComposerUrlPreviewViewModelProps {
     client: MatrixClient;
@@ -86,6 +94,53 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
             // seeding from an existing event is not a user modification
             this.snapshot.merge({ isModified: false });
         }
+    }
+
+    public static restoreFromMessage(
+        props: MessageComposerUrlPreviewViewModelRestoreProps,
+    ): MessageComposerUrlPreviewViewModel {
+        const bundleContent = props.content["com.beeper.linkpreviews"];
+        const linksInMessage = linksIn(props.content.body);
+        const linksInBundle = new Set(bundleContent?.map((entry) => entry.matched_url));
+
+        const urlVmProps: MessageComposerUrlPreviewViewModelProps = {
+            client: props.client,
+            visible: props.visible,
+            showTooltips: props.showTooltips,
+            urlPreviewBundle: props.urlPreviewBundle,
+            content: props.content.body,
+        };
+
+        if (props.urlPreviewBundle && bundleContent !== undefined) {
+            urlVmProps.cachedEntries = new Map(
+                bundleContent
+                    .map((entry): [string, MessageComposerUrlPreviewSnapshotEntry] => [
+                        entry.matched_url,
+                        {
+                            // previewFromBundle is async (it falls back to a server request when the
+                            // bundle carries only matched_url), so the bundled entries start out
+                            // loading and are resolved by resolveBundledPreviews below.
+                            status: "loading",
+                            include: true,
+                            matched_url: entry.matched_url,
+                        },
+                    ])
+                    .concat(
+                        Array.from(linksInMessage)
+                            .filter((link) => !linksInBundle.has(link))
+                            .map((link): [string, MessageComposerUrlPreviewSnapshotEntry] => [
+                                link,
+                                { status: "failed", include: false, matched_url: link },
+                            ]),
+                    ),
+            );
+        }
+
+        const urlVm = new MessageComposerUrlPreviewViewModel(urlVmProps);
+        if (props.urlPreviewBundle && bundleContent !== undefined) {
+            urlVm.resolveBundledPreviews(bundleContent, props.content.body);
+        }
+        return urlVm;
     }
 
     private computeSnapshot(content: string): void {
