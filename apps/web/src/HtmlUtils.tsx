@@ -10,14 +10,19 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type Key, type LegacyRef, type ReactNode } from "react";
-import sanitizeHtml, { type IOptions } from "sanitize-html";
+import {
+    sanitizeHtmlText,
+    isUrlPermitted,
+    sanitizeHtml,
+    type HtmlSanitizeOptions,
+} from "@element-hq/element-web-shared-utils";
 import classNames from "classnames";
 import katex from "katex";
 import { decode } from "html-entities";
 import { type IContent } from "matrix-js-sdk/src/matrix";
 import escapeHtml from "escape-html";
 import { getEmojiFromUnicode } from "@matrix-org/emojibase-bindings";
-import { PERMITTED_URL_SCHEMES, LINKIFIED_DATA_ATTRIBUTE } from "@element-hq/web-shared-components";
+import { LINKIFIED_DATA_ATTRIBUTE } from "@element-hq/web-shared-components";
 
 import SettingsStore from "./settings/SettingsStore";
 import { stripHTMLReply, stripPlainReply } from "./utils/Reply";
@@ -96,42 +101,18 @@ export function unicodeToShortcode(char: string): string {
 export function sanitizedHtmlNode(
     insaneHtml: string,
     className?: string,
-    sanitizeParams = sanitizeHtmlParams,
+    sanitizeParams: HtmlSanitizeOptions = sanitizeHtmlParams,
 ): ReactNode {
     const saneHtml = sanitizeHtml(insaneHtml, sanitizeParams);
 
     return <div dangerouslySetInnerHTML={{ __html: saneHtml }} dir="auto" className={className} />;
 }
 
-export function getHtmlText(insaneHtml: string): string {
-    return sanitizeHtml(insaneHtml, {
-        allowedTags: [],
-        allowedAttributes: {},
-        selfClosing: [],
-        allowedSchemes: [],
-        disallowedTagsMode: "discard",
-    });
-}
-
-/**
- * Tests if a URL from an untrusted source may be safely put into the DOM
- * The biggest threat here is javascript: URIs.
- * Note that the HTML sanitiser library has its own internal logic for
- * doing this, to which we pass the same list of schemes. This is used in
- * other places we need to sanitise URLs.
- * @returns true if permitted, otherwise false
- */
-export function isUrlPermitted(inputUrl: string): boolean {
-    try {
-        // URL parser protocol includes the trailing colon
-        return PERMITTED_URL_SCHEMES.includes(new URL(inputUrl).protocol.slice(0, -1));
-    } catch {
-        return false;
-    }
-}
+// Keep the app-facing export stable for settings and context-menu consumers.
+export { isUrlPermitted, sanitizeHtmlText };
 
 // this is the same as the above except with less rewriting
-const composerSanitizeHtmlParams: IOptions = {
+const composerSanitizeHtmlParams: HtmlSanitizeOptions = {
     ...sanitizeHtmlParams,
     transformTags: {
         "code": transformTags["code"],
@@ -140,7 +121,7 @@ const composerSanitizeHtmlParams: IOptions = {
 };
 
 // reduced set of allowed tags to avoid turning topics into Myspace
-const topicSanitizeHtmlParams: IOptions = {
+const topicSanitizeHtmlParams: HtmlSanitizeOptions = {
     ...sanitizeHtmlParams,
     allowedTags: [
         "font", // custom to matrix for IRC-style font coloring
@@ -308,9 +289,15 @@ export interface EventRenderOpts {
 }
 
 function analyseEvent(content: IContent, highlights?: string[], opts: EventRenderOpts = {}): EventAnalysis {
-    let sanitizeParams = sanitizeHtmlParams;
+    let sanitizeParams: HtmlSanitizeOptions = {
+        ...sanitizeHtmlParams,
+        transformTags: { ...sanitizeHtmlParams.transformTags },
+    };
     if (opts.forComposerQuote) {
-        sanitizeParams = composerSanitizeHtmlParams;
+        sanitizeParams = {
+            ...composerSanitizeHtmlParams,
+            transformTags: { ...composerSanitizeHtmlParams.transformTags },
+        };
     }
 
     if (opts.mediaIsVisible === false && sanitizeParams.transformTags?.["img"]) {
@@ -329,13 +316,14 @@ function analyseEvent(content: IContent, highlights?: string[], opts: EventRende
 
     if (opts.linkify) {
         // Prevent mutating the source of sanitizeParams.
-        sanitizeParams = { ...sanitizeParams };
-        if (typeof sanitizeParams.allowedAttributes === "object") {
-            const attribs = { ...sanitizeParams.allowedAttributes };
-            // We allow data-linkified because TextualBody uses it to passthrough links.
-            attribs["a"] = [...sanitizeParams.allowedAttributes["a"], `data-${LINKIFIED_DATA_ATTRIBUTE}`];
-            sanitizeParams.allowedAttributes = attribs;
-        } // else: No attibutes are are allowed for "a"
+        sanitizeParams = {
+            ...sanitizeParams,
+            additionalAllowedAttributes: {
+                ...sanitizeParams.additionalAllowedAttributes,
+                // We allow data-linkified because TextualBody uses it to passthrough links.
+                a: [...(sanitizeParams.additionalAllowedAttributes?.a ?? []), `data-${LINKIFIED_DATA_ATTRIBUTE}`],
+            },
+        };
     }
 
     try {
@@ -513,7 +501,7 @@ export function topicToHtml(
         topicHasEmoji = mightContainEmoji(isFormattedTopic ? htmlTopic! : topic);
 
         if (isFormattedTopic) {
-            safeTopic = sanitizeHtml(htmlTopic!, allowExtendedHtml ? sanitizeHtmlParams : topicSanitizeHtmlParams);
+            safeTopic = sanitizeHtml(htmlTopic, allowExtendedHtml ? sanitizeHtmlParams : topicSanitizeHtmlParams);
             if (topicHasEmoji) {
                 safeTopic = formatEmojis(safeTopic, true).join("");
             }

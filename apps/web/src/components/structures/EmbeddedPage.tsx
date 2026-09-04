@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import sanitizeHtml from "sanitize-html";
 import classnames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
+import { sanitizeHtml, type HtmlSanitizeAttributes } from "@element-hq/element-web-shared-utils";
 import { AutoHideScrollbar } from "@element-hq/web-shared-components";
 
 import { _t } from "../../languageHandler";
@@ -138,7 +138,7 @@ export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
                     // Disable the default transformer as it forbids inline styles
                     "*",
                 ]),
-                a: (tagName: string, attribs: sanitizeHtml.Attributes) => {
+                a: (tagName: string, attribs: HtmlSanitizeAttributes) => {
                     if (attribs.href?.startsWith("#/")) {
                         return { tagName, attribs };
                     }
