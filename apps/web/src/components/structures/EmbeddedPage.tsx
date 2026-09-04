@@ -21,7 +21,6 @@ import { type ActionPayload } from "../../dispatcher/payloads";
 import { Action } from "../../dispatcher/actions.ts";
 import { sanitizedHtmlNode } from "../../HtmlUtils.tsx";
 import { sanitizeHtmlParams, transformTags } from "../../Linkify.ts";
-import { objectExcluding } from "../../utils/objects.ts";
 
 interface IProps {
     // URL to request embedded page content from
@@ -132,14 +131,10 @@ export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
         const content = sanitizedHtmlNode(this.state.page, `${className}_body`, {
             ...sanitizeHtmlParams,
             transformTags: {
-                ...objectExcluding(transformTags, [
-                    // Embedded pages intentionally allow their own image URLs
-                    // rather than applying the message MXC-only transform.
-                    "img",
-                    // Embedded pages intentionally retain inline styles.
-                    "*",
-                ]),
+                ...transformTags,
+                // Disable the transformer for `img` as it only allows mxc resources
                 "img": (tagName: string, attribs: HtmlSanitizeAttributes) => ({ tagName, attribs }),
+                // Disable the default transformer as it forbids inline styles
                 "*": (tagName: string, attribs: HtmlSanitizeAttributes) => ({ tagName, attribs }),
                 "a": (tagName: string, attribs: HtmlSanitizeAttributes) => {
                     if (attribs.href?.startsWith("#/")) {
