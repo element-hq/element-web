@@ -39,7 +39,7 @@
     },
     "dependencies": {
         "@babel/runtime": "^7.12.5",
-        "@element-hq/element-call-component": "link:../../../element-call-component-m1/dist",
+        "@element-hq/element-call-component": "github:element-hq/element-call#valere/component_ec_M1&path:/component",
         "@element-hq/element-web-module-api": "workspace:*",
         "@element-hq/web-shared-components": "workspace:*",
         "@fontsource/fira-code": "^5",
