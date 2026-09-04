@@ -18,8 +18,6 @@ export default async function (hakEnv: HakEnv, moduleInfo: DependencyInfo): Prom
     if (hakEnv.isWin()) {
         tools.push(["perl", "--version"]); // for openssl configure
         tools.push(["nasm", "-v"]); // for openssl building
-        tools.push(["patch", "--version"]); // to patch sqlcipher Makefile.msc
-        tools.push(["nmake", "/?"]);
     } else {
         tools.push(["make", "--version"]);
     }
