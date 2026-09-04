@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import sanitizeHtml from "sanitize-html";
 import classnames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
+import { sanitizeHtml, type HtmlSanitizeAttributes } from "@element-hq/element-web-shared-utils";
 import { AutoHideScrollbar } from "@element-hq/web-shared-components";
 
 import { _t } from "../../languageHandler";
@@ -21,7 +21,6 @@ import { type ActionPayload } from "../../dispatcher/payloads";
 import { Action } from "../../dispatcher/actions.ts";
 import { sanitizedHtmlNode } from "../../HtmlUtils.tsx";
 import { sanitizeHtmlParams, transformTags } from "../../Linkify.ts";
-import { objectExcluding } from "../../utils/objects.ts";
 
 interface IProps {
     // URL to request embedded page content from
@@ -132,13 +131,13 @@ export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
         const content = sanitizedHtmlNode(this.state.page, `${className}_body`, {
             ...sanitizeHtmlParams,
             transformTags: {
-                ...objectExcluding(transformTags, [
-                    // Disable the transformer for `img` as it only allows mxc resources
-                    "img",
-                    // Disable the default transformer as it forbids inline styles
-                    "*",
-                ]),
-                a: (tagName: string, attribs: sanitizeHtml.Attributes) => {
+                ...transformTags,
+                // The shared sanitizer supplies restrictive defaults when these handlers are
+                // omitted, so embedded pages use identity transforms to preserve their image
+                // URLs and inline styles.
+                "img": (tagName: string, attribs: HtmlSanitizeAttributes) => ({ tagName, attribs }),
+                "*": (tagName: string, attribs: HtmlSanitizeAttributes) => ({ tagName, attribs }),
+                "a": (tagName: string, attribs: HtmlSanitizeAttributes) => {
                     if (attribs.href?.startsWith("#/")) {
                         return { tagName, attribs };
                     }

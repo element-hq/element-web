@@ -18,7 +18,7 @@ import {
     RoomMember,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import sanitizeHtml from "sanitize-html";
+import { sanitizeHtml } from "@element-hq/element-web-shared-utils";
 import { fireEvent, render, screen, waitFor } from "jest-matrix-react";
 
 import SpotlightDialog from "../../../../../src/components/views/dialogs/spotlight/SpotlightDialog";

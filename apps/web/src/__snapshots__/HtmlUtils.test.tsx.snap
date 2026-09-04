@@ -65,7 +65,7 @@ exports[`bodyToNode > should generate big emoji for an emoji-only reply to a mes
 </DocumentFragment>
 `;
 
-exports[`bodyToNode > should handle inline media when mediaIsVisible is false 1`] = `
+exports[`bodyToNode > uses the app-specific MXC image transform when mediaIsVisible is false 1`] = `
 <DocumentFragment>
   <span
     class="mx_EventTile_body markdown-body translate"
@@ -77,7 +77,7 @@ exports[`bodyToNode > should handle inline media when mediaIsVisible is false 1`
 </DocumentFragment>
 `;
 
-exports[`bodyToNode > should handle inline media when mediaIsVisible is true 1`] = `
+exports[`bodyToNode > uses the app-specific MXC image transform when mediaIsVisible is true 1`] = `
 <DocumentFragment>
   <span
     class="mx_EventTile_body markdown-body translate"
