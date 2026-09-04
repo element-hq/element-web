@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type ReactNode } from "react";
-import { MatrixClient, OAuth2, createClient, SSOAction, decodeBase64 } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, createClient, SSOAction, decodeBase64 } from "matrix-js-sdk/src/matrix";
 import { type AESEncryptedSecretStoragePayload } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -52,7 +52,7 @@ import { SDKContextClass } from "./contexts/SDKContextClass";
 import { messageForLoginError } from "./utils/ErrorUtils";
 import { completeOAuthLogin, type CompleteOAuthLoginResponse } from "./utils/oauth/authorize";
 import { getOAuthErrorMessage } from "./utils/oauth/error";
-import { getOAuthParams, getStoredOAuthClientId, persistOAuthClientId } from "./utils/oauth/persistOAuthSettings";
+import { persistOAuthClientId } from "./utils/oauth/persistOAuthSettings";
 import {
     ACCESS_TOKEN_IV,
     ACCESS_TOKEN_STORAGE_KEY,
@@ -66,7 +66,6 @@ import {
 import { checkBrowserSupport } from "./SupportedBrowser";
 import { type URLParams } from "./vector/url_utils.ts";
 import { type OnLoggedInPayload } from "./dispatcher/payloads/OnLoggedInPayload.ts";
-import { filterBoolean } from "./utils/arrays.ts";
 import { clearUploadedMediaCache } from "./utils/UploadedMediaCache";
 import { CallStatusListener } from "./CallStatusListener.ts";
 import { CallStore } from "./stores/CallStore.ts";
@@ -811,14 +810,9 @@ async function doSetLoggedIn(
         await abortLogin();
     }
 
-    let auth: OAuth2 | undefined;
-    try {
-        auth = await hydrateAuth(credentials);
-    } catch {}
-
     // check the session lock just before creating the new client
     checkSessionLock();
-    MatrixClientPeg.set(createClientWithCreds(credentials, auth));
+    MatrixClientPeg.set(createClientWithCreds(credentials));
     const client = MatrixClientPeg.safeGet();
 
     setSentryUser(credentials.userId);
@@ -922,47 +916,11 @@ async function persistCredentials(credentials: IMatrixClientCreds): Promise<void
 let _isLoggingOut = false;
 
 /**
- * Logs out the current session.
- * When user has authenticated using OAuth2 native flow revoke tokens with OAuth2 provider.
- * Otherwise, call /logout on the homeserver.
- * @param client
- * @param oauth
- */
-async function doLogout(client: MatrixClient, oauth: OAuth2 | null): Promise<void> {
-    if (oauth) {
-        const accessToken = client.getAccessToken();
-        const refreshToken = client.getRefreshToken();
-
-        await Promise.all(
-            filterBoolean([
-                accessToken ? oauth.revokeToken(accessToken, "access_token") : null,
-                refreshToken ? oauth.revokeToken(refreshToken, "refresh_token") : null,
-            ]),
-        );
-
-        client.stopClient();
-        client.http.abort();
-    } else {
-        await client.logout(true);
-    }
-}
-
-/**
  * Logs the current session out and transitions to the logged-out state
  */
 export async function logout(): Promise<void> {
     const client = MatrixClientPeg.get();
     if (!client) return;
-
-    let oauth: OAuth2 | undefined;
-    try {
-        oauth = await hydrateAuth({
-            homeserverUrl: client.getHomeserverUrl(),
-            deviceId: client.getDeviceId()!,
-        });
-    } catch {
-        // This is fine
-    }
 
     PosthogAnalytics.instance.logout();
 
@@ -977,17 +935,12 @@ export async function logout(): Promise<void> {
     _isLoggingOut = true;
     void PlatformPeg.get()?.destroyPickleKey(client.getSafeUserId(), client.getDeviceId() ?? "");
 
-    doLogout(client, oauth ?? null).then(onLoggedOut, (err) => {
-        // Just throwing an error here is going to be very unhelpful
-        // if you're trying to log out because your server's down and
-        // you want to log into a different server, so just forget the
-        // access token. It's annoying that this will leave the access
-        // token still valid, but we should fix this by having access
-        // tokens expire (and if you really think you've been compromised,
-        // change your password).
+    try {
+        await client.logout(true);
+    } catch (err) {
         logger.warn("Failed to call logout API: token will not be invalidated", err);
-        return onLoggedOut();
-    });
+    }
+    await onLoggedOut();
 }
 
 export function softLogout(): void {
@@ -1101,7 +1054,7 @@ async function startMatrixClient(
 
 /*
  * Stops a running client and all related services, and clears persistent
- * storage. Used after a session has been logged out.
+ * storage. Used after a session has been logged out (or at least attempted to be logged out).
  */
 export async function onLoggedOut(): Promise<void> {
     // Ensure that we dispatch a view change **before** stopping the client,
@@ -1228,18 +1181,3 @@ window.mxLoginWithAccessToken = async (hsUrl: string, accessToken: string): Prom
         false,
     );
 };
-
-/**
- * Instantiate an OAuth2 instance from storage
- * Returned promise will reject if the session or the server are not OAuth2-native.
- */
-export async function hydrateAuth(
-    credentials: Pick<IMatrixClientCreds, "homeserverUrl" | "deviceId">,
-): Promise<OAuth2> {
-    const storedClientId = getStoredOAuthClientId();
-
-    const tempClient = new MatrixClient({ baseUrl: credentials.homeserverUrl });
-    const authMetadata = await tempClient.getAuthMetadata();
-
-    return new OAuth2(authMetadata, { ...getOAuthParams(storedClientId), deviceId: credentials.deviceId });
-}

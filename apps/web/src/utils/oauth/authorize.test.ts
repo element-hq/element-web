@@ -40,6 +40,7 @@ describe("OAuth2 authorization", () => {
         window.location = {
             href: baseUrl,
             origin: baseUrl,
+            pathname: "",
         };
 
         mockPlatformPeg();
@@ -121,7 +122,6 @@ describe("OAuth2 authorization", () => {
                     codeVerifier: "123456",
                     clientId,
                     deviceId: "DEADB33F",
-                    redirectUri: "https://test.com/callback",
                 },
             });
         });
@@ -135,7 +135,10 @@ describe("OAuth2 authorization", () => {
         it("should make request complete authorization code grant", async () => {
             await completeOAuthLogin(params);
 
-            expect(OAuth2.prototype.completeAuthorizationCodeGrant).toHaveBeenCalledWith(code);
+            expect(OAuth2.prototype.completeAuthorizationCodeGrant).toHaveBeenCalledWith(
+                code,
+                "https://test.com/?no_universal_links=true",
+            );
         });
 
         it("should return accessToken, configured homeserver and identityServer", async () => {
