@@ -172,5 +172,20 @@ describe("Markdown parser test", () => {
             const md = new Markdown(testString);
             expect(md.toHTML()).toEqual(expectedResult);
         });
+
+        it("keeps an IPv6 host readable so the link can be followed", () => {
+            const md = new Markdown("[test](https://[2a00:1450:4009:819::200e]/)");
+            expect(md.toHTML()).toContain('href="https://[2a00:1450:4009:819::200e]/"');
+        });
+
+        it("keeps an IPv6 host readable alongside a port and a query string", () => {
+            const md = new Markdown("[test](http://[::1]:8080/a?b=1)");
+            expect(md.toHTML()).toContain('href="http://[::1]:8080/a?b=1"');
+        });
+
+        it("leaves square brackets elsewhere in a URL encoded", () => {
+            const md = new Markdown("[test](https://example.org/a%5Bb%5D)");
+            expect(md.toHTML()).toContain('href="https://example.org/a%5Bb%5D"');
+        });
     });
 });
