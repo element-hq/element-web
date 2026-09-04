@@ -24,15 +24,10 @@
             "types": "./lib/index.d.ts",
             "import": "./lib/element-web-shared-utils.js",
             "require": "./lib/element-web-shared-utils.umd.cjs"
-        },
-        "./vite.base.ts": {
-            "types": "./vite.base.ts",
-            "import": "./vite.base.ts"
         }
     },
     "files": [
         "lib",
-        "vite.base.ts",
         "README.md"
     ],
     "scripts": {

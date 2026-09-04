@@ -9,8 +9,6 @@ import { fileURLToPath } from "node:url";
 import { defineConfig } from "vitest/config";
 import dts from "unplugin-dts/vite";
 
-import packageJson from "./package.json" with { type: "json" };
-
 export default defineConfig({
     build: {
         lib: {
@@ -30,9 +28,6 @@ export default defineConfig({
         }),
     ],
     define: {
-        // We cannot use `process.env.npm_package_version` as when building element-web with module-api set to `workspace`
-        // this would contain the version of element-web rather than that of the module-api.
-        __VERSION__: JSON.stringify(packageJson.version),
         // Use production mode for the build as it is tested against production builds of Element Web.
         process: { env: { NODE_ENV: "production" } },
     },
