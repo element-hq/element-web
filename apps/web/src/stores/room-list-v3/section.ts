@@ -235,7 +235,7 @@ function updateSectionRooms(tag: CustomTag, roomsToTag: string[] = [], roomsToUn
 
     for (const roomId of [...roomsToTag, ...roomsToUntag]) {
         const room = client.getRoom(roomId);
-        if (room) tagRoom(room, tag);
+        if (room) tagRoom(room, tag, true);
     }
 }
 
