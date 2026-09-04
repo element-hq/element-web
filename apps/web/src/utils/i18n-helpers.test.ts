@@ -8,9 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { describe, it, expect, vi } from "vitest";
-import { Room } from "matrix-js-sdk/src/matrix";
-import { stubClient } from "test-utils";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { Room, UNSTABLE_ELEMENT_FUNCTIONAL_USERS } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
+import { mkEvent, mkMembership, stubClient } from "test-utils";
 
 import { roomContextDetails } from "./i18n-helpers";
 import DMRoomMap from "./DMRoomMap";
@@ -54,5 +55,80 @@ describe("roomContextDetails", () => {
         const res = roomContextDetails(room);
         expect(res!.details).toMatchInlineSnapshot(`"Alpha and one other"`);
         expect(res!.ariaLabel).toMatchInlineSnapshot(`"In Alpha and one other space."`);
+    });
+
+    describe("for a DM", () => {
+        const me = client.getSafeUserId();
+        const partner = "@partner:server";
+        const parted = "@parted:server";
+        const dm = new Room("!dm:server", client, me);
+        dm.currentState.setStateEvents([
+            mkMembership({ room: dm.roomId, user: me, mship: KnownMembership.Join, event: true }),
+            mkMembership({ room: dm.roomId, user: partner, mship: KnownMembership.Join, event: true }),
+        ]);
+
+        beforeEach(() => {
+            vi.spyOn(SDKContextClass.instance.spaceStore, "getKnownParents").mockReturnValue(new Set());
+        });
+
+        it("should show the partner's user ID while they are in the room", () => {
+            vi.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(partner);
+            expect(roomContextDetails(dm)!.details).toBe(partner);
+        });
+
+        it("should not show the user ID of a partner who was never seen in the room", () => {
+            vi.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(parted);
+            expect(roomContextDetails(dm)!.details).not.toBe(parted);
+        });
+
+        it("should not show the user ID of a partner who has left the room", () => {
+            dm.currentState.setStateEvents([
+                mkMembership({ room: dm.roomId, user: parted, mship: KnownMembership.Leave, event: true }),
+            ]);
+            vi.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(parted);
+            expect(roomContextDetails(dm)!.details).not.toBe(parted);
+        });
+
+        describe("with only the room summary loaded", () => {
+            const lazyDm = new Room("!lazy:server", client, me);
+            lazyDm.setSummary({ "m.heroes": [partner], "m.joined_member_count": 2 });
+
+            it("should show the user ID of the partner the summary names", () => {
+                vi.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(partner);
+                expect(roomContextDetails(lazyDm)!.details).toBe(partner);
+            });
+
+            it("should not show the user ID of a partner the summary leaves out", () => {
+                vi.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(parted);
+                expect(roomContextDetails(lazyDm)!.details).not.toBe(parted);
+            });
+        });
+
+        describe("with a service member ahead of the partner in the room summary", () => {
+            const bot = "@bot:server";
+            const botDm = new Room("!bot:server", client, me);
+            botDm.setSummary({ "m.heroes": [bot, partner], "m.joined_member_count": 3 });
+            botDm.currentState.setStateEvents([
+                mkEvent({
+                    event: true,
+                    type: UNSTABLE_ELEMENT_FUNCTIONAL_USERS.name,
+                    user: me,
+                    room: botDm.roomId,
+                    skey: "",
+                    content: { service_members: [bot] },
+                }),
+            ]);
+
+            it("should show the partner's user ID rather than take the service member for them", () => {
+                vi.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(partner);
+                expect(roomContextDetails(botDm)!.details).toBe(partner);
+            });
+        });
+
+        it("should show the partner's user ID when nothing about the room has loaded", () => {
+            const unknownDm = new Room("!unknown:server", client, me);
+            vi.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(partner);
+            expect(roomContextDetails(unknownDm)!.details).toBe(partner);
+        });
     });
 });
