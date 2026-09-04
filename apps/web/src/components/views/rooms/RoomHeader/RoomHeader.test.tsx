@@ -54,7 +54,8 @@ import SettingsStore from "../../../../settings/SettingsStore";
 import SdkConfig from "../../../../SdkConfig";
 import dispatcher from "../../../../dispatcher/dispatcher";
 import { CallStore } from "../../../../stores/CallStore";
-import { type Call } from "../../../../models/Call";
+import { type Call, ConnectionState, ElementCall } from "../../../../models/Call";
+import { DocumentPipStore } from "../../../../stores/DocumentPipStore";
 import * as ShieldUtils from "../../../../utils/ShieldUtils";
 import { WidgetLayoutStore } from "../../../../stores/widgets/WidgetLayoutStore";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
@@ -454,6 +455,84 @@ describe("RoomHeader", () => {
 
             await user.click(videoCallButton);
             expect(dispatcherSpy).toHaveBeenCalledWith(expect.objectContaining({ view_call: true }));
+        });
+
+        describe("while connected to a call", () => {
+            /** A connected call that is an `ElementCall`, as the React component transport requires. */
+            const connectedElementCall = (): Call =>
+                Object.create(
+                    ElementCall.prototype,
+                    Object.getOwnPropertyDescriptors({
+                        ...createMockCall(ROOM_ID, 3, CallType.Video, true),
+                        connectionState: ConnectionState.Connected,
+                    }),
+                );
+
+            beforeEach(() => {
+                mockRoomMembers(room, 3);
+                vi.spyOn(room.currentState, "mayClientSendStateEvent").mockReturnValue(true);
+                vi.spyOn(CallStore.instance, "getCall").mockReturnValue(connectedElementCall());
+                vi.spyOn(DocumentPipStore, "isSupported", "get").mockReturnValue(true);
+            });
+
+            it("offers minimising into PiP instead of starting a call", async () => {
+                const user = userEvent.setup();
+                mockRoomViewStore.isViewingCall.mockReturnValue(true);
+                render(<RoomHeader room={room} />, getWrapper());
+
+                expect(screen.queryByRole("button", { name: "Video call" })).not.toBeInTheDocument();
+                expect(screen.queryByRole("button", { name: "Voice call" })).not.toBeInTheDocument();
+                const minimise = screen.getByRole("button", { name: "Minimise call" });
+                expect(minimise).toBe(screen.getByTestId("call-pip-button"));
+
+                const dispatcherSpy = vi.spyOn(dispatcher, "dispatch").mockImplementation(() => {});
+                await user.click(minimise);
+                expect(dispatcherSpy).toHaveBeenCalledWith(expect.objectContaining({ view_call: false }));
+            });
+
+            it("offers maximising when the call is in PiP", () => {
+                mockRoomViewStore.isViewingCall.mockReturnValue(false);
+                render(<RoomHeader room={room} />, getWrapper());
+                expect(screen.getByRole("button", { name: "Maximise call" })).toBeInTheDocument();
+            });
+
+            it("offers a browser Picture-in-Picture window for the React component", async () => {
+                const user = userEvent.setup();
+                await SettingsStore.setValue("feature_element_call_react", null, SettingLevel.DEVICE, true);
+                const open = vi.spyOn(DocumentPipStore.instance, "open").mockResolvedValue();
+                render(<RoomHeader room={room} />, getWrapper());
+
+                const button = screen.getByRole("button", { name: "Open call in a floating window" });
+                expect(button).toBe(screen.getByTestId("document-pip-button"));
+                await user.click(button);
+                expect(open).toHaveBeenCalledWith(CallStore.instance.getCall(ROOM_ID));
+            });
+
+            it("offers to bring the call back while it is in the browser window", async () => {
+                const user = userEvent.setup();
+                await SettingsStore.setValue("feature_element_call_react", null, SettingLevel.DEVICE, true);
+                const call = CallStore.instance.getCall(ROOM_ID) as ElementCall;
+                vi.spyOn(DocumentPipStore.instance, "call", "get").mockReturnValue(call);
+                const close = vi.spyOn(DocumentPipStore.instance, "close").mockImplementation(() => {});
+                render(<RoomHeader room={room} />, getWrapper());
+
+                await user.click(screen.getByRole("button", { name: "Bring call back into this window" }));
+                expect(close).toHaveBeenCalled();
+            });
+
+            it("does not offer the browser window for the widget transport", async () => {
+                await SettingsStore.setValue("feature_element_call_react", null, SettingLevel.DEVICE, false);
+                render(<RoomHeader room={room} />, getWrapper());
+                expect(screen.queryByTestId("document-pip-button")).not.toBeInTheDocument();
+                expect(screen.getByTestId("call-pip-button")).toBeInTheDocument();
+            });
+
+            it("does not offer the browser window without browser support", async () => {
+                await SettingsStore.setValue("feature_element_call_react", null, SettingLevel.DEVICE, true);
+                vi.spyOn(DocumentPipStore, "isSupported", "get").mockReturnValue(false);
+                render(<RoomHeader room={room} />, getWrapper());
+                expect(screen.queryByTestId("document-pip-button")).not.toBeInTheDocument();
+            });
         });
 
         it("can't call if there's an ongoing (pinned) call", () => {
