@@ -42,33 +42,34 @@ function formatIsPreviewable(mimetype: string): boolean {
 /**
  * objectUrl should only be undefined if mimetype is text
  */
-function computePreviewContent(mimeType: string, objectUrl?: string): MediaPreviewGroupEntryContent {
+function computePreviewContent(mimeType: string, fileName: string, objectUrl?: string): MediaPreviewGroupEntryContent {
     if (objectUrl === undefined)
         return {
-            style: "text",
+            type: "text",
         };
 
     switch (mimeType.split("/")[0]) {
         case "image":
             return {
-                style: "image",
+                type: "image",
                 imageSize: "tallbanner",
                 image: objectUrl,
+                imageAlt: fileName,
             };
         case "video":
             return {
-                style: "video",
+                type: "video",
                 videoSize: "tallbanner",
                 video: objectUrl,
             };
         case "audio":
             return {
-                style: "audio",
+                type: "audio",
                 audio: objectUrl,
             };
         default:
             return {
-                style: "text",
+                type: "text",
             };
     }
 }
@@ -87,7 +88,7 @@ class UploadPreviewViewModel extends MediaPreviewGroupViewModel {
             header: file.name,
             body: fileSize(file.size),
             ...attachmentIcon(mimeType),
-            ...computePreviewContent(mimeType, objectUrl),
+            ...computePreviewContent(mimeType, file.name, objectUrl),
         };
 
         super({ entries: [preview] });

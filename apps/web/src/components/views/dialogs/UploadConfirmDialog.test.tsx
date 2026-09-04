@@ -82,9 +82,8 @@ describe("<UploadConfirmDialog />", () => {
             <UploadConfirmDialog file={file} currentIndex={0} totalFiles={1} onFinished={vi.fn()} />,
         );
 
-        // The preview renders the image with an empty alt attribute, so it is exposed as presentational
-        // rather than under the "img" role.
-        await waitFor(() => expect(getByRole("presentation")).toHaveAttribute("src", url));
+        // The preview labels the image with the file name.
+        await waitFor(() => expect(getByRole("img", { name: "image.png" })).toHaveAttribute("src", url));
         expect(asFragment()).toMatchSnapshot();
     });
     it.each([
