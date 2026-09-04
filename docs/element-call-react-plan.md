@@ -535,13 +535,35 @@ checks the real component's chunk mounts inside `.mx_CallView` without an `ifram
   in `DeveloperSettingsTab.module.css` became a class). The dev harness spec got a "leaves the host's own
   page unstyled" test. Still to do upstream: land this in element-hq/element-call#4233's branch. Known
   limit: compound's spacing tokens are `rem`-based, so they still follow the host's root font size.
-- **Element Call does not render in pip correctly** it uses the @media tags to detect the size but would need to do the size computation based on the size of the component
+- **Element Call did not render in pip correctly (done, local checkout).** Its `CallViewModel` derived the
+  window mode (`normal` / `narrow` / `flat` / `pip`) from `window.innerWidth`/`innerHeight` on window resize,
+  so a component shrunk by its host never left the normal layout. Fixed in the EC worktree: `ActiveCall` now
+  observes the size of Element Call's root element (the container in component mode, the body otherwise) with a
+  `ResizeObserver` (`src/utils/elementSize.ts`) and hands it to the view model as `windowSize$`, which is now a
+  required input rather than a test-only override; the in-call container carries `data-layout` for tests; a
+  component Playwright spec shrinks the container and expects the pip layout. Still to do upstream: land this
+  in element-hq/element-call#4233's branch. Known limit: the CSS `@media` queries (footer, header, lobby
+  breakpoints) and the two `useMediaQuery` calls (`Header.tsx`, `LobbyView.tsx`) still key off the window;
+  none of them affect the pip layout, which hides the header and footer, but the lobby and the footer at
+  intermediate container sizes still assume the container is the window.
 
-- **Document Pip** As EC is now a react compoent add a button (suitable design) to the header once a call is running.
-  Also update the current video  call icon button that is responsible for toggling the pip mode to a pip icon.
-  The end results is: in a call show two buttons: one for docuemnt pip and one for element call internal pip.
-  And dont show any video call button while inside a call. The docuement pip should then only take the element call
-  react compoentn and render it in a browser based pip.
+- **Document PiP (done).** While connected to a call the room header shows no start-call buttons any more but
+  two ways out of the room view: Element Web's own PiP (the existing minimise/maximise toggle, now with the
+  compound `collapse`/`expand` icons instead of the video-call icon, `data-testid="call-pip-button"`) and the
+  browser's Document Picture-in-Picture (`pop-out` icon, `data-testid="document-pip-button"`), the latter only for
+  a call rendered by the React component in a browser with `window.documentPictureInPicture` (Chromium).
+  `DocumentPipStore` (`src/stores/DocumentPipStore.ts`) opens the window, copies the page's stylesheet elements
+  and theme classes into it and moves the call's persisted DOM tree there via the new
+  `PersistedElement.detach`/`reattach`: the React tree keeps running in the main document, so the call is not
+  interrupted (an iframe would reload, which is why the widget transport does not get the button). While a call
+  is in the window the room shows its timeline, `PipContainer` hides the floating widget PiP for it, and the
+  window is closed again when the user reopens the call view, the call disconnects, or the window itself is
+  closed (which puts the tree back where the placeholders want it). Wiring: `useDocumentPip` hook, used by
+  `RoomHeader`. Tests: `DocumentPipStore.test.ts`, `PersistedElement.test.tsx`, RoomHeader and PipContainer
+  cases, and a Playwright test with the mock component ("Document Picture-in-Picture (React component)",
+  skipped where the browser lacks the API). Side effect worth knowing: inside the window the component's
+  `@media` queries see the window's size, so the small-screen layout applies there, unlike in Element Web's
+  own PiP (see the previous item).
 
 - **Switch `@element-hq/element-call-component` to a remote dependency.** `apps/web/package.json` still has
   `"@element-hq/element-call-component": "link:../../../element-call-component-m1/dist"`, a machine-local

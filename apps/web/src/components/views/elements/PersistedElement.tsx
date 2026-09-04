@@ -79,6 +79,13 @@ export default class PersistedElement extends React.Component<IProps> {
     private child?: HTMLDivElement;
 
     private static rootMap: Record<string, [root: Root, container: Element]> = {};
+    // The PersistedElements currently mounted for each persistKey, so that a change made from outside
+    // (see `detach`) can be pushed to them.
+    private static instances = new Map<string, Set<PersistedElement>>();
+    // The positioned child of each persistKey's tree, for when no PersistedElement is mounted.
+    private static children = new Map<string, HTMLDivElement>();
+    // Persist keys whose container currently lives in another document (see `detach`).
+    private static detached = new Set<string>();
 
     public constructor(props: IProps) {
         super(props);
@@ -102,6 +109,52 @@ export default class PersistedElement extends React.Component<IProps> {
             pair[1].remove();
         }
         delete PersistedElement.rootMap[persistKey];
+        PersistedElement.children.delete(persistKey);
+        PersistedElement.detached.delete(persistKey);
+    }
+
+    /**
+     * Moves the persisted DOM tree of the given persistKey into another element, typically the body of a
+     * Document Picture-in-Picture window. While detached the tree fills its host and stays visible even
+     * when no PersistedElement for it is mounted; the placeholders' positions are ignored. The React
+     * tree keeps running throughout: only the DOM moves.
+     *
+     * @returns false if nothing is mounted under this persistKey.
+     */
+    public static detach(persistKey: string, host: HTMLElement): boolean {
+        const pair = PersistedElement.rootMap[persistKey];
+        if (!pair) return false;
+        PersistedElement.detached.add(persistKey);
+        host.appendChild(pair[1]);
+        PersistedElement.refresh(persistKey);
+        return true;
+    }
+
+    /**
+     * Undoes `detach`: brings the DOM tree back into this document, where the mounted PersistedElements
+     * (if any) position it again.
+     */
+    public static reattach(persistKey: string): void {
+        if (!PersistedElement.detached.delete(persistKey)) return;
+        const pair = PersistedElement.rootMap[persistKey];
+        if (pair) getOrCreateMasterContainer().appendChild(pair[1]);
+        PersistedElement.refresh(persistKey);
+    }
+
+    public static isDetached(persistKey: string): boolean {
+        return PersistedElement.detached.has(persistKey);
+    }
+
+    private static refresh(persistKey: string): void {
+        const instances = PersistedElement.instances.get(persistKey);
+        if (instances?.size) {
+            for (const instance of instances) instance.updateChild();
+        } else {
+            // Nothing is placing the child: it is either filling its host, or hidden as an unmounted
+            // PersistedElement leaves it.
+            const child = PersistedElement.children.get(persistKey);
+            if (child) PersistedElement.styleChild(child, persistKey, undefined, undefined);
+        }
     }
 
     public static isMounted(persistKey: string): boolean {
@@ -120,6 +173,7 @@ export default class PersistedElement extends React.Component<IProps> {
 
     private collectChild = (ref: HTMLDivElement): void => {
         this.child = ref;
+        if (ref) PersistedElement.children.set(this.props.persistKey, ref);
         this.updateChild();
     };
 
@@ -131,6 +185,12 @@ export default class PersistedElement extends React.Component<IProps> {
         // the timeline_resize action.
         window.addEventListener("resize", this.repositionChild);
         this.dispatcherRef = dis.register(this.onAction);
+        let instances = PersistedElement.instances.get(this.props.persistKey);
+        if (!instances) {
+            instances = new Set();
+            PersistedElement.instances.set(this.props.persistKey, instances);
+        }
+        instances.add(this);
 
         this.updateChild();
         this.renderApp();
@@ -142,6 +202,7 @@ export default class PersistedElement extends React.Component<IProps> {
     }
 
     public componentWillUnmount(): void {
+        PersistedElement.instances.get(this.props.persistKey)?.delete(this);
         this.updateChildVisibility(this.child, false);
         this.resizeObserver.disconnect();
         window.removeEventListener("resize", this.repositionChild);
@@ -192,15 +253,47 @@ export default class PersistedElement extends React.Component<IProps> {
 
     private updateChildVisibility(child?: HTMLDivElement, visible = false): void {
         if (!child) return;
-        child.style.display = visible ? "block" : "none";
+        // A detached child is showing in its own window, whatever this document does
+        child.style.display = visible || PersistedElement.isDetached(this.props.persistKey) ? "block" : "none";
     }
 
     private updateChildPosition(child?: HTMLDivElement, parent?: HTMLDivElement): void {
-        if (!child || !parent) return;
+        if (!child || (!parent && !PersistedElement.isDetached(this.props.persistKey))) return;
+        PersistedElement.styleChild(child, this.props.persistKey, parent, this.props.zIndex);
+    }
+
+    /**
+     * Places the child: over the placeholder `parent` it belongs to, or filling its host while detached.
+     * Without either it is left hidden, since there is nowhere for it to be.
+     */
+    private static styleChild(
+        child: HTMLDivElement,
+        persistKey: string,
+        parent: HTMLDivElement | undefined,
+        zIndex: number | undefined,
+    ): void {
+        const z = isNullOrUndefined(zIndex) ? 9 : zIndex;
+        if (PersistedElement.isDetached(persistKey)) {
+            Object.assign(child.style, {
+                zIndex: z,
+                position: "absolute",
+                top: "0",
+                left: "0",
+                transform: "none",
+                width: "100%",
+                height: "100%",
+                display: "block",
+            });
+            return;
+        }
+        if (!parent) {
+            child.style.display = "none";
+            return;
+        }
 
         const parentRect = parent.getBoundingClientRect();
         Object.assign(child.style, {
-            zIndex: isNullOrUndefined(this.props.zIndex) ? 9 : this.props.zIndex,
+            zIndex: z,
             position: "absolute",
             top: "0",
             left: "0",
