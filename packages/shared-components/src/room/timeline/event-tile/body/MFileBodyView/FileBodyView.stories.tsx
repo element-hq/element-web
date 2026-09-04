@@ -26,6 +26,7 @@ const FileBodyViewWrapperImpl = ({
     onDownloadClick,
     onDownloadLinkClick,
     onDownloadIframeLoad,
+    onOpenClick,
     className,
     ...snapshotProps
 }: FileBodyViewProps & { className?: string }): ReactNode => {
@@ -34,6 +35,7 @@ const FileBodyViewWrapperImpl = ({
         onDownloadClick,
         onDownloadLinkClick,
         onDownloadIframeLoad,
+        onOpenClick,
     });
 
     return <FileBodyView vm={vm} className={className} />;
@@ -60,6 +62,8 @@ const meta = {
         },
         showInfo: { control: "boolean" },
         showDownload: { control: "boolean" },
+        showOpen: { control: "boolean" },
+        showInlineDownload: { control: "boolean" },
         className: { control: "text" },
     },
     args: {
@@ -152,5 +156,25 @@ export const LongFilenameDownload: Story = {
         showInfo: false,
         showDownload: true,
         downloadLabel: "a very long filename that show no ellipsis.pdf",
+    },
+};
+
+export const OpenableInfo: Story = {
+    args: {
+        showDownload: false,
+        showOpen: true,
+        openLabel: "Open PDF",
+        showInlineDownload: true,
+    },
+};
+
+export const OpenableLongFilenameInfo: Story = {
+    args: {
+        showDownload: false,
+        showOpen: true,
+        openLabel: "Open PDF",
+        showInlineDownload: true,
+        infoLabel: "a very long filename to show ellipsis.pdf",
+        infoTooltip: "a very long filename to show ellipsis.pdf (12 kB)",
     },
 };

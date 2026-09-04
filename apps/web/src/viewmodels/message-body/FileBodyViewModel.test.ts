@@ -18,6 +18,7 @@ import { TimelineRenderingType } from "../../contexts/RoomContext";
 import { type MediaEventHelper } from "../../utils/MediaEventHelper";
 import { FileBodyViewModel } from "./FileBodyViewModel";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
+import { openPdfViewer } from "../../utils/pdfViewer";
 
 const mockDownload = vi.fn();
 
@@ -29,6 +30,11 @@ vi.mock("../../utils/FileDownloader", () => ({
     }),
 }));
 
+vi.mock("../../utils/pdfViewer", async (importOriginal) => ({
+    ...(await importOriginal<typeof import("../../utils/pdfViewer")>()),
+    openPdfViewer: vi.fn(),
+}));
+
 vi.mock("../../customisations/Media", () => ({
     mediaFromContent: vi.fn((content: { file?: unknown; url?: string }) => ({
         isEncrypted: !!content.file,
@@ -38,7 +44,13 @@ vi.mock("../../customisations/Media", () => ({
 
 describe("FileBodyViewModel", () => {
     const mkMediaEvent = (
-        content: Partial<{ body: string; msgtype: string; url: string; file: Record<string, unknown> }>,
+        content: Partial<{
+            body: string;
+            msgtype: string;
+            url: string;
+            file: Record<string, unknown>;
+            info: Record<string, unknown>;
+        }>,
     ): MatrixEvent =>
         new MatrixEvent({
             room_id: "!room:server",
@@ -308,5 +320,73 @@ describe("FileBodyViewModel", () => {
         await vm.onDownloadClick();
 
         expect(vm.getSnapshot().state).toBe(FileBodyViewState.UNENCRYPTED);
+    });
+
+    describe("open in viewer", () => {
+        const pdf = { info: { mimetype: "application/pdf" } };
+
+        it("offers the viewer for a PDF shown as a file in the timeline", () => {
+            const vm = createVm({
+                mxEvent: mkMediaEvent(pdf),
+                showFileInfo: true,
+                timelineRenderingType: TimelineRenderingType.Room,
+            });
+
+            expect(vm.getSnapshot()).toMatchObject({ showOpen: true, openLabel: "Open PDF" });
+        });
+
+        it("offers the viewer for an encrypted PDF, which decrypts on open", () => {
+            const vm = createVm({
+                mxEvent: mkMediaEvent({ ...pdf, file: { url: "mxc://server/file" } }),
+                mediaEventHelper: mkMediaEventHelper({ encrypted: true }),
+                showFileInfo: true,
+                timelineRenderingType: TimelineRenderingType.Room,
+            });
+
+            expect(vm.getSnapshot()).toMatchObject({
+                state: FileBodyViewState.DECRYPTION_PENDING,
+                showOpen: true,
+            });
+        });
+
+        it.each([
+            ["a non-PDF mimetype", { info: { mimetype: "text/plain" } }],
+            ["no mimetype at all", {}],
+        ])("does not offer the viewer for %s", (_label, content) => {
+            const vm = createVm({
+                mxEvent: mkMediaEvent(content),
+                showFileInfo: true,
+                timelineRenderingType: TimelineRenderingType.Room,
+            });
+
+            expect(vm.getSnapshot().showOpen).toBe(false);
+        });
+
+        it("does not offer the viewer in the download-only panels", () => {
+            const vm = createVm({ mxEvent: mkMediaEvent(pdf), showFileInfo: false });
+
+            expect(vm.getSnapshot().showOpen).toBe(false);
+        });
+
+        it("does not offer the viewer in an export", () => {
+            const vm = createVm({ mxEvent: mkMediaEvent(pdf), showFileInfo: true, forExport: true });
+
+            expect(vm.getSnapshot().showOpen).toBeUndefined();
+        });
+
+        it("does not offer the viewer without a media helper to fetch the bytes", () => {
+            const vm = createVm({ mxEvent: mkMediaEvent(pdf), mediaEventHelper: undefined, showFileInfo: true });
+
+            expect(vm.getSnapshot().showOpen).toBe(false);
+        });
+
+        it("opens the viewer for its own event on click", () => {
+            const mxEvent = mkMediaEvent(pdf);
+            const vm = createVm({ mxEvent, showFileInfo: true, timelineRenderingType: TimelineRenderingType.Room });
+
+            vm.onOpenClick();
+
+            expect(openPdfViewer).toHaveBeenCalledWith(mxEvent);
+        });
     });
 });

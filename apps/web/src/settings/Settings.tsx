@@ -15,6 +15,7 @@ import { type JsonDocument, type JsonValue } from "shared-types";
 import { _t, _td } from "@element-hq/web-shared-components";
 
 import { type MediaPreviewConfig } from "../@types/media_preview.ts";
+import { type PdfViewerState } from "../@types/pdf-viewer.ts";
 import DeviceIsolationModeController from "./controllers/DeviceIsolationModeController.ts";
 import {
     NotificationBodyEnabledController,
@@ -294,6 +295,7 @@ export interface Settings {
     "breadcrumb_rooms": IBaseSetting<string[]>;
     "recent_emoji": IBaseSetting<RecentEmojiData>;
     "showMediaEventIds": IBaseSetting<{ [eventId: string]: boolean }>;
+    "pdfViewerState": IBaseSetting<{ [mxcUri: string]: PdfViewerState }>;
     "SpotlightSearch.recentSearches": IBaseSetting<string[]>;
     "SpotlightSearch.showNsfwPublicRooms": IBaseSetting<boolean>;
     "room_directory_servers": IBaseSetting<string[]>;
@@ -1035,6 +1037,13 @@ export const SETTINGS: Settings = {
         supportedLevels: [SettingLevel.DEVICE],
         default: {}, // List of events => is visible
         // Exports event IDs
+        shouldExportToRageshake: false,
+    },
+    "pdfViewerState": {
+        // not really a setting
+        supportedLevels: [SettingLevel.DEVICE],
+        default: {}, // MXC URI => where the reader had got to in that PDF
+        // Exports MXC URIs
         shouldExportToRageshake: false,
     },
     "SpotlightSearch.showNsfwPublicRooms": {
