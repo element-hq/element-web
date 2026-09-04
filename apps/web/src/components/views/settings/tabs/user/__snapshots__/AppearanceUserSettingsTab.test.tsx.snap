@@ -205,14 +205,14 @@ exports[`AppearanceUserSettingsTab > should render 1`] = `
                       <div
                         aria-atomic="true"
                         aria-live="off"
-                        class="_root_1eu7g_9 mx_EventTile _stateOwnEvent_1eu7g_903 _layoutGroup_1eu7g_194"
+                        class="_root_pyg61_9 mx_EventTile _stateOwnEvent_pyg61_904 _layoutGroup_pyg61_194"
                         data-event-id="$9999999999999999999999999999999999999999999"
                         data-scroll-tokens="$9999999999999999999999999999999999999999999"
                         data-testid="event-tile"
                         tabindex="-1"
                       >
                         <div
-                          class="_slotSender_1eu7g_104"
+                          class="_slotSender_pyg61_104"
                           data-testid="event-tile-slot-sender"
                         >
                           <div
@@ -231,7 +231,7 @@ exports[`AppearanceUserSettingsTab > should render 1`] = `
                           </div>
                         </div>
                         <div
-                          class="_slotAvatar_1eu7g_95"
+                          class="_slotAvatar_pyg61_95"
                           data-testid="event-tile-slot-avatar"
                         >
                           <span
@@ -247,12 +247,12 @@ exports[`AppearanceUserSettingsTab > should render 1`] = `
                           </span>
                         </div>
                         <div
-                          class="_line_1eu7g_71 mx_EventTile_line"
+                          class="_line_pyg61_71 mx_EventTile_line"
                           data-testid="event-tile-line"
                           id="1"
                         >
                           <div
-                            class="_slotBody_1eu7g_96"
+                            class="_slotBody_pyg61_96"
                             data-testid="event-tile-slot-body"
                           >
                             <div
@@ -313,14 +313,14 @@ exports[`AppearanceUserSettingsTab > should render 1`] = `
                       <div
                         aria-atomic="true"
                         aria-live="off"
-                        class="_root_1eu7g_9 mx_EventTile _stateOwnEvent_1eu7g_903 _layoutBubble_1eu7g_705"
+                        class="_root_pyg61_9 mx_EventTile _stateOwnEvent_pyg61_904 _layoutBubble_pyg61_705"
                         data-event-id="$9999999999999999999999999999999999999999999"
                         data-scroll-tokens="$9999999999999999999999999999999999999999999"
                         data-testid="event-tile"
                         tabindex="-1"
                       >
                         <div
-                          class="_slotSender_1eu7g_104"
+                          class="_slotSender_pyg61_104"
                           data-testid="event-tile-slot-sender"
                         >
                           <div
@@ -339,7 +339,7 @@ exports[`AppearanceUserSettingsTab > should render 1`] = `
                           </div>
                         </div>
                         <div
-                          class="_slotAvatar_1eu7g_95"
+                          class="_slotAvatar_pyg61_95"
                           data-testid="event-tile-slot-avatar"
                         >
                           <span
@@ -355,12 +355,12 @@ exports[`AppearanceUserSettingsTab > should render 1`] = `
                           </span>
                         </div>
                         <div
-                          class="_line_1eu7g_71 mx_EventTile_line"
+                          class="_line_pyg61_71 mx_EventTile_line"
                           data-testid="event-tile-line"
                           id="2"
                         >
                           <div
-                            class="_slotBody_1eu7g_96"
+                            class="_slotBody_pyg61_96"
                             data-testid="event-tile-slot-body"
                           >
                             <div
@@ -421,14 +421,14 @@ exports[`AppearanceUserSettingsTab > should render 1`] = `
                       <div
                         aria-atomic="true"
                         aria-live="off"
-                        class="_root_1eu7g_9 mx_EventTile _stateOwnEvent_1eu7g_903 _layoutIrc_1eu7g_471"
+                        class="_root_pyg61_9 mx_EventTile _stateOwnEvent_pyg61_904 _layoutIrc_pyg61_471"
                         data-event-id="$9999999999999999999999999999999999999999999"
                         data-scroll-tokens="$9999999999999999999999999999999999999999999"
                         data-testid="event-tile"
                         tabindex="-1"
                       >
                         <div
-                          class="_slotTimestamp_1eu7g_106"
+                          class="_slotTimestamp_pyg61_106"
                           data-testid="event-tile-slot-timestamp"
                         >
                           <span
@@ -436,7 +436,7 @@ exports[`AppearanceUserSettingsTab > should render 1`] = `
                           />
                         </div>
                         <div
-                          class="_slotAvatar_1eu7g_95"
+                          class="_slotAvatar_pyg61_95"
                           data-testid="event-tile-slot-avatar"
                         >
                           <span
@@ -452,7 +452,7 @@ exports[`AppearanceUserSettingsTab > should render 1`] = `
                           </span>
                         </div>
                         <div
-                          class="_slotSender_1eu7g_104"
+                          class="_slotSender_pyg61_104"
                           data-testid="event-tile-slot-sender"
                         >
                           <div
@@ -471,12 +471,12 @@ exports[`AppearanceUserSettingsTab > should render 1`] = `
                           </div>
                         </div>
                         <div
-                          class="_line_1eu7g_71 mx_EventTile_line"
+                          class="_line_pyg61_71 mx_EventTile_line"
                           data-testid="event-tile-line"
                           id="3"
                         >
                           <div
-                            class="_slotBody_1eu7g_96"
+                            class="_slotBody_pyg61_96"
                             data-testid="event-tile-slot-body"
                           >
                             <div
