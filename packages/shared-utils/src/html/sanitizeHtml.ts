@@ -5,19 +5,38 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import sanitizeHtmlLibrary, { type IOptions } from "sanitize-html";
+import sanitizeHtmlLibrary from "sanitize-html";
 
 import { createSanitizeHtmlParams } from "./sanitizeHtmlParams";
 
 /** Attribute map passed to string-only sanitization transforms. */
 export type HtmlSanitizeAttributes = Record<string, string>;
 
+/** Attribute names allowed for each HTML tag. */
+export type HtmlSanitizeAllowedAttributes = Record<string, string[]>;
+
+/** Result returned by a trusted HTML tag transform. */
+export interface HtmlSanitizeTransformResult {
+    tagName: string;
+    attribs: HtmlSanitizeAttributes;
+    text?: string;
+}
+
+/** Trusted transform applied to an HTML tag before the shared policy is applied. */
+export type HtmlSanitizeTransform = (tagName: string, attribs: HtmlSanitizeAttributes) => HtmlSanitizeTransformResult;
+
+/** Rendering transforms keyed by HTML tag name. */
+export type HtmlSanitizeTransformTags = Record<string, HtmlSanitizeTransform>;
+
+/** Callback used to transform sanitized text nodes. */
+export type HtmlSanitizeTextFilter = (text: string, tagName: string) => string;
+
 /** Options for restricting or extending the shared Matrix-compatible HTML policy. */
 export interface HtmlSanitizeOptions {
     /** Restrict the Element Web tag policy further for a specific rendering context. */
     allowedTags?: string[];
     /** Restrict the Element Web attribute policy further for a specific rendering context. */
-    allowedAttributes?: Exclude<IOptions["allowedAttributes"], false>;
+    allowedAttributes?: HtmlSanitizeAllowedAttributes;
     /** Add narrowly scoped, data-* attributes for an Element Web rendering context. */
     additionalAllowedAttributes?: Record<string, string[]>;
     /** Restrict the Element Web self-closing tag policy further for a specific rendering context. */
@@ -27,9 +46,9 @@ export interface HtmlSanitizeOptions {
      * the corresponding shared rendering transform; anchor URL validation is
      * always retained.
      */
-    transformTags?: NonNullable<IOptions["transformTags"]>;
+    transformTags?: HtmlSanitizeTransformTags;
     /** Transform text nodes after the shared HTML policy has been applied. */
-    textFilter?: IOptions["textFilter"];
+    textFilter?: HtmlSanitizeTextFilter;
     /** Maximum permitted HTML nesting depth; defaults to 50. */
     nestingLimit?: number;
 }

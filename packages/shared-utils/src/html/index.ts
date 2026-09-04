@@ -7,4 +7,12 @@
 
 export { isUrlPermitted, PERMITTED_URL_SCHEMES } from "./isUrlPermitted";
 export { sanitizeHtml, sanitizeHtmlText } from "./sanitizeHtml";
-export type { HtmlSanitizeAttributes, HtmlSanitizeOptions } from "./sanitizeHtml";
+export type {
+    HtmlSanitizeAllowedAttributes,
+    HtmlSanitizeAttributes,
+    HtmlSanitizeOptions,
+    HtmlSanitizeTextFilter,
+    HtmlSanitizeTransform,
+    HtmlSanitizeTransformResult,
+    HtmlSanitizeTransformTags,
+} from "./sanitizeHtml";

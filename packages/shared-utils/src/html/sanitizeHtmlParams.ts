@@ -5,10 +5,15 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type IOptions } from "sanitize-html";
-
 import { isUrlPermitted, PERMITTED_URL_SCHEMES } from "./isUrlPermitted";
-import type { HtmlSanitizeOptions } from "./sanitizeHtml";
+import type {
+    HtmlSanitizeAllowedAttributes,
+    HtmlSanitizeAttributes,
+    HtmlSanitizeOptions,
+    HtmlSanitizeTextFilter,
+    HtmlSanitizeTransform,
+    HtmlSanitizeTransformTags,
+} from "./sanitizeHtml";
 
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 
@@ -56,7 +61,7 @@ export const MATRIX_FORMATTING_TAGS = [
     "summary",
 ];
 
-const MATRIX_ALLOWED_ATTRIBUTES: NonNullable<IOptions["allowedAttributes"]> = {
+const MATRIX_ALLOWED_ATTRIBUTES: HtmlSanitizeAllowedAttributes = {
     font: ["color", "data-mx-bg-color", "data-mx-color", "style"],
     span: ["data-mx-maths", "data-mx-bg-color", "data-mx-color", "data-mx-spoiler", "style"],
     div: ["data-mx-maths"],
@@ -79,15 +84,7 @@ const DANGEROUS_NON_TEXT_TAGS = [
     "xmp",
 ];
 
-type Attributes = Record<string, string>;
-type Transform = (tagName: string, attribs: Attributes) => { tagName: string; attribs: Attributes; text?: string };
-type AllowedAttribute = string | { name: string };
-
-function attributeName(attribute: AllowedAttribute): string {
-    return typeof attribute === "string" ? attribute : attribute.name;
-}
-
-function isTransform(value: string | Transform | undefined): value is Transform {
+function isTransform(value: HtmlSanitizeTransform | undefined): value is HtmlSanitizeTransform {
     return typeof value === "function";
 }
 
@@ -129,7 +126,11 @@ function isHrefPermitted(inputUrl: string): boolean {
     return isUrlPermitted(inputUrl) || isRelativeUrl(inputUrl);
 }
 
-function transformAnchor(tagName: string, attribs: Attributes, preserveTarget: boolean): ReturnType<Transform> {
+function transformAnchor(
+    tagName: string,
+    attribs: HtmlSanitizeAttributes,
+    preserveTarget: boolean,
+): ReturnType<HtmlSanitizeTransform> {
     if (!attribs.href) {
         delete attribs.href;
         // A consumer transform may intentionally retain attributes on an
@@ -157,14 +158,14 @@ function transformAnchor(tagName: string, attribs: Attributes, preserveTarget: b
     return { tagName, attribs };
 }
 
-function transformImage(tagName: string, attribs: Attributes): ReturnType<Transform> {
+function transformImage(tagName: string, attribs: HtmlSanitizeAttributes): ReturnType<HtmlSanitizeTransform> {
     // Element Web transforms MXC media into bounded HTTP(S) thumbnails before
     // sanitization. The shared default must not permit arbitrary remote images.
     if (!attribs.src?.startsWith("mxc://")) return { tagName, attribs: {} };
     return { tagName, attribs };
 }
 
-function transformCode(tagName: string, attribs: Attributes): ReturnType<Transform> {
+function transformCode(tagName: string, attribs: HtmlSanitizeAttributes): ReturnType<HtmlSanitizeTransform> {
     if (typeof attribs.class !== "undefined") {
         attribs.class = attribs.class
             .split(/\s/)
@@ -174,7 +175,7 @@ function transformCode(tagName: string, attribs: Attributes): ReturnType<Transfo
     return { tagName, attribs };
 }
 
-function transformFormatting(tagName: string, attribs: Attributes): ReturnType<Transform> {
+function transformFormatting(tagName: string, attribs: HtmlSanitizeAttributes): ReturnType<HtmlSanitizeTransform> {
     // Match Element Web's policy: arbitrary inline CSS is removed, while the
     // two Matrix colour attributes are converted only when strictly valid.
     if (tagName !== "img") delete attribs.style;
@@ -202,18 +203,15 @@ function allowedTags(options: HtmlSanitizeOptions): string[] {
     return options.allowedTags.filter((tag) => MATRIX_FORMATTING_TAGS.includes(tag));
 }
 
-function allowedAttributes(options: HtmlSanitizeOptions): NonNullable<IOptions["allowedAttributes"]> {
-    const result: NonNullable<IOptions["allowedAttributes"]> = {};
+function allowedAttributes(options: HtmlSanitizeOptions): HtmlSanitizeAllowedAttributes {
+    const result: HtmlSanitizeAllowedAttributes = {};
 
     for (const [tagName, attributes] of Object.entries(MATRIX_ALLOWED_ATTRIBUTES)) {
         if (!options.allowedAttributes) {
             result[tagName] = [...attributes];
         } else {
             const requested = options.allowedAttributes[tagName] ?? options.allowedAttributes["*"] ?? [];
-            const requestedNames = requested.map(attributeName);
-            result[tagName] = attributes.filter((attribute: AllowedAttribute) =>
-                requestedNames.includes(attributeName(attribute)),
-            );
+            result[tagName] = attributes.filter((attribute) => requested.includes(attribute));
         }
     }
 
@@ -235,15 +233,28 @@ function selfClosingTags(options: HtmlSanitizeOptions): string[] {
     return options.selfClosing ? options.selfClosing.filter((tag) => defaults.includes(tag)) : defaults;
 }
 
+type SanitizerOptions = {
+    allowedTags: string[];
+    allowedAttributes: HtmlSanitizeAllowedAttributes;
+    selfClosing: string[];
+    allowedSchemes: string[];
+    allowProtocolRelative: boolean;
+    disallowedTagsMode: "discard";
+    nonTextTags: string[];
+    nestingLimit: number;
+    textFilter?: HtmlSanitizeTextFilter;
+    transformTags: HtmlSanitizeTransformTags;
+};
+
 /** Builds sanitize-html parameters from the Element Web policy and context options. */
-export function createSanitizeHtmlParams(options: HtmlSanitizeOptions = {}): IOptions {
+export function createSanitizeHtmlParams(options: HtmlSanitizeOptions = {}): SanitizerOptions {
     const customTransforms = options.transformTags ?? {};
     const customAnchorTransform = customTransforms.a;
     const customImageTransform = customTransforms.img;
     const customCodeTransform = customTransforms.code;
     const customAllTransform = customTransforms["*"];
 
-    const transformTags: NonNullable<IOptions["transformTags"]> = {
+    const transformTags: HtmlSanitizeTransformTags = {
         // The app owns link presentation, but shared URL validation is always
         // applied to the result of that transform.
         "a": (tagName, attribs) => {
