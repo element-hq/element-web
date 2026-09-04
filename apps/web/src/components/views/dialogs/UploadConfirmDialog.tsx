@@ -30,6 +30,15 @@ interface IProps {
 
 interface IState {
     objectUrl?: string;
+    mediaPreviewVm?: MediaPreviewGroupViewModel;
+}
+
+const previewableFormats = ["video", "audio", "image"];
+/**
+ * previewable formats needs an object URL to be created for the preview
+ */
+function formatIsPreviewable(mimetype: string): boolean {
+    return previewableFormats.includes(mimetype.split('/')[0]);
 }
 
 export default class UploadConfirmDialog extends React.Component<IProps, IState> {
@@ -45,13 +54,29 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
     }
 
     public componentDidMount(): void {
-        if (["video", "audio", "image"].includes(this.props.file.type.split("/")[0])) {
+        const mimeType = this.props.file.type;
+        const previewContent = this.computePreviewContent(mimeType, this.state.objectUrl!);
+
+        const preview: MediaPreviewGroupEntry = {
+            id: this.props.file.name,
+            header: this.props.file.name,
+            body: fileSize(this.props.file.size),
+            ...attachmentIcon(mimeType),
+            ...previewContent,
+        };
+
+        const mediaPreviewVm = new MediaPreviewGroupViewModel({ entries: [preview] });
+
+        if (formatIsPreviewable(this.props.file.type)) {
             this.setState({
                 // We do not filter the mimetype using getBlobSafeMimeType here as if the user is uploading the file
                 // themselves they should be trusting it enough to open/load it, and it will be rendered into a hidden
                 // canvas for thumbnail generation anyway
                 objectUrl: URL.createObjectURL(this.props.file),
+                mediaPreviewVm,
             });
+        } else {
+            this.setState({ mediaPreviewVm });
         }
     }
 
@@ -71,13 +96,7 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
         this.props.onFinished(true, true);
     };
 
-    private static computePreviewContent({
-        mimeType,
-        objectUrl,
-    }: {
-        mimeType: string;
-        objectUrl: string;
-    }): MediaPreviewGroupEntryContent {
+    private computePreviewContent(mimeType: string, objectUrl: string): MediaPreviewGroupEntryContent {
         switch (mimeType.split("/")[0]) {
             case "image":
                 return {
@@ -114,19 +133,6 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
             title = _t("upload_file|title");
         }
 
-        const mimeType = this.props.file.type;
-        const previewContent = UploadConfirmDialog.computePreviewContent({
-            objectUrl: this.state.objectUrl!,
-            mimeType,
-        });
-
-        const preview: MediaPreviewGroupEntry = {
-            id: this.props.file.name,
-            header: this.props.file.name,
-            body: fileSize(this.props.file.size),
-            ...attachmentIcon(mimeType),
-            ...previewContent,
-        };
 
         let uploadAllButton: JSX.Element | undefined;
         if (this.props.currentIndex + 1 < this.props.totalFiles) {
@@ -136,8 +142,6 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
                 </button>
             );
         }
-
-        const vm = new MediaPreviewGroupViewModel({ entries: [preview] });
 
         return (
             <BaseDialog
@@ -150,7 +154,7 @@ export default class UploadConfirmDialog extends React.Component<IProps, IState>
                 <div id="mx_Dialog_content">
                     <div className="mx_UploadConfirmDialog_previewOuter">
                         <div className="mx_UploadConfirmDialog_previewInner">
-                            <MediaPreviewGroupPreview vm={vm} />
+                            {this.state.mediaPreviewVm && <MediaPreviewGroupPreview vm={this.state.mediaPreviewVm} />}
                         </div>
                     </div>
                 </div>
