@@ -10,10 +10,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type Key, type LegacyRef, type ReactNode } from "react";
-import {
-    sanitizeHtml,
-    type HtmlSanitizeOptions,
-} from "@element-hq/element-web-shared-utils";
+import { sanitizeHtml, type HtmlSanitizeOptions } from "@element-hq/element-web-shared-utils";
 import classNames from "classnames";
 import katex from "katex";
 import { decode } from "html-entities";
