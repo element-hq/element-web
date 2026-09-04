@@ -24,6 +24,16 @@ import { sanitizeHtml } from "@element-hq/element-web-shared-utils/html";
 The package does not import React, access browser globals, or depend on
 Element Web application code.
 
+## Rendering transforms
+
+The default sanitizer applies the shared Element Web rendering and safety
+policy, including safe link handling, MXC-only images, and removal of inline
+styles. The `transformTags` option is a trusted application extension point:
+providing a transform for a tag replaces that tag's shared rendering transform.
+Applications should only use this for a deliberately narrower or explicitly
+trusted rendering context. Anchor URL validation and the sanitizer's attribute
+and URL checks remain active.
+
 ## Copyright & License
 
 Copyright (c) 2026 Element Creations Ltd.

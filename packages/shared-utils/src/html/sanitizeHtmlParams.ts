@@ -91,16 +91,69 @@ function isTransform(value: string | Transform | undefined): value is Transform 
     return typeof value === "function";
 }
 
+/**
+ * Detect whitespace and ASCII control characters which can alter how a URL is
+ * parsed or normalised by the browser.
+ */
+function hasUnsafeControlCharacter(input: string): boolean {
+    return [...input].some((character) => {
+        const code = character.charCodeAt(0);
+        return code <= 0x20 || (code >= 0x7f && code <= 0x9f);
+    });
+}
+
+/**
+ * Check whether a URL is relative to the current document rather than pointing
+ * at another origin. Scheme-like and protocol-relative values are rejected
+ * explicitly, then URL parsing against a non-real origin handles malformed
+ * values and confirms the result stays on that origin.
+ */
+function isRelativeUrl(inputUrl: string): boolean {
+    if (
+        !inputUrl ||
+        inputUrl.startsWith("//") ||
+        /^[a-z][a-z\d+.-]*:/i.test(inputUrl) ||
+        hasUnsafeControlCharacter(inputUrl)
+    ) {
+        return false;
+    }
+
+    try {
+        return new URL(inputUrl, "https://element.invalid").origin === "https://element.invalid";
+    } catch {
+        return false;
+    }
+}
+
+function isHrefPermitted(inputUrl: string): boolean {
+    return isUrlPermitted(inputUrl) || isRelativeUrl(inputUrl);
+}
+
 function transformAnchor(tagName: string, attribs: Attributes, preserveTarget: boolean): ReturnType<Transform> {
-    if (!attribs.href || !isUrlPermitted(attribs.href)) {
+    if (!attribs.href) {
+        delete attribs.href;
+        // A consumer transform may intentionally retain attributes on an
+        // href-less anchor. Preserve those when the consumer owns rendering.
+        if (!preserveTarget) {
+            delete attribs.target;
+            delete attribs.rel;
+        }
+        return { tagName, attribs };
+    }
+
+    if (!isHrefPermitted(attribs.href)) {
         delete attribs.href;
         delete attribs.target;
         delete attribs.rel;
         return { tagName, attribs };
     }
 
-    if (!preserveTarget) attribs.target = "_blank";
-    attribs.rel = "noreferrer noopener";
+    if (!preserveTarget) {
+        attribs.target = "_blank";
+        attribs.rel = "noreferrer noopener";
+    } else if (attribs.target === "_blank") {
+        attribs.rel = "noreferrer noopener";
+    }
     return { tagName, attribs };
 }
 
@@ -190,6 +243,27 @@ export function createSanitizeHtmlParams(options: HtmlSanitizeOptions = {}): IOp
     const customCodeTransform = customTransforms.code;
     const customAllTransform = customTransforms["*"];
 
+    const transformTags: NonNullable<IOptions["transformTags"]> = {
+        // The app owns link presentation, but shared URL validation is always
+        // applied to the result of that transform.
+        "a": (tagName, attribs) => {
+            const transformed = isTransform(customAnchorTransform)
+                ? customAnchorTransform(tagName, attribs)
+                : { tagName, attribs };
+            return transformAnchor(transformed.tagName, transformed.attribs, isTransform(customAnchorTransform));
+        },
+        // A custom image transform is an explicit, trusted replacement for
+        // the default MXC-only image policy.
+        "img": isTransform(customImageTransform) ? customImageTransform : transformImage,
+        "code": (tagName, attribs) => {
+            if (isTransform(customCodeTransform)) return customCodeTransform(tagName, attribs);
+            return transformCode(tagName, attribs);
+        },
+        // A custom all-tags transform replaces the shared formatting policy so
+        // consumers can explicitly opt into their own style handling.
+        "*": isTransform(customAllTransform) ? customAllTransform : transformFormatting,
+    };
+
     return {
         allowedTags: allowedTags(options),
         allowedAttributes: allowedAttributes(options),
@@ -200,27 +274,6 @@ export function createSanitizeHtmlParams(options: HtmlSanitizeOptions = {}): IOp
         nonTextTags: [...DANGEROUS_NON_TEXT_TAGS],
         nestingLimit: options.nestingLimit ?? 50,
         textFilter: options.textFilter,
-        transformTags: {
-            "a": (tagName, attribs) => {
-                const transformed = isTransform(customAnchorTransform)
-                    ? customAnchorTransform(tagName, attribs)
-                    : { tagName, attribs };
-                return transformAnchor(transformed.tagName, transformed.attribs, isTransform(customAnchorTransform));
-            },
-            "img": (tagName, attribs) =>
-                isTransform(customImageTransform)
-                    ? customImageTransform(tagName, attribs)
-                    : transformImage(tagName, attribs),
-            "code": (tagName, attribs) => {
-                const transformed = isTransform(customCodeTransform)
-                    ? customCodeTransform(tagName, attribs)
-                    : { tagName, attribs };
-                return transformCode(transformed.tagName, transformed.attribs);
-            },
-            "*": (tagName, attribs) => {
-                const base = transformFormatting(tagName, attribs);
-                return isTransform(customAllTransform) ? customAllTransform(base.tagName, base.attribs) : base;
-            },
-        },
+        transformTags,
     };
 }

@@ -48,6 +48,36 @@ describe("sanitizeHtml", () => {
         expect(safe).toContain('href="https://example.org/docs" target="_blank" rel="noreferrer noopener"');
     });
 
+    it("preserves safe relative links while rejecting protocol-relative links", () => {
+        const safe = sanitizeHtml(
+            '<a href="#/register">local</a><a href="/path">path</a><a href="//example.org">external</a>',
+        );
+
+        expect(safe).toContain('href="#/register" target="_blank" rel="noreferrer noopener"');
+        expect(safe).toContain('href="/path" target="_blank" rel="noreferrer noopener"');
+        expect(safe).not.toContain('href="//example.org"');
+    });
+
+    it("allows a trusted consumer transform to replace shared link rendering", () => {
+        const safe = sanitizeHtml('<a href="#/register">local</a>', {
+            transformTags: {
+                a: (tagName, attribs) => ({ tagName, attribs }),
+            },
+        });
+
+        expect(safe).toBe('<a href="#/register">local</a>');
+    });
+
+    it("retains URL safety with a custom anchor renderer", () => {
+        const safe = sanitizeHtml('<a href="javascript:alert(1)">unsafe</a>', {
+            transformTags: {
+                a: (tagName, attribs) => ({ tagName, attribs }),
+            },
+        });
+
+        expect(safe).toBe("<a>unsafe</a>");
+    });
+
     it("preserves Matrix formatting and escapes text", () => {
         const safe = sanitizeHtml("<p><strong>bold</strong><br><em>italic</em> &lt;literal&gt;</p>");
 

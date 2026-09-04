@@ -22,7 +22,11 @@ export interface HtmlSanitizeOptions {
     additionalAllowedAttributes?: Record<string, string[]>;
     /** Restrict the Element Web self-closing tag policy further for a specific rendering context. */
     selfClosing?: string[];
-    /** Add rendering-context transforms; the shared Element Web transforms are always applied as well. */
+    /**
+     * Add trusted rendering-context transforms. A supplied transform replaces
+     * the corresponding shared rendering transform; anchor URL validation is
+     * always retained.
+     */
     transformTags?: NonNullable<IOptions["transformTags"]>;
     /** Transform text nodes after the shared HTML policy has been applied. */
     textFilter?: IOptions["textFilter"];

@@ -115,6 +115,10 @@ export { isUrlPermitted, sanitizeHtmlText };
 const composerSanitizeHtmlParams: HtmlSanitizeOptions = {
     ...sanitizeHtmlParams,
     transformTags: {
+        // Composer quotes intentionally preserve the source link/media
+        // presentation while shared URL validation still runs.
+        "a": (tagName, attribs) => ({ tagName, attribs }),
+        "img": (tagName, attribs) => ({ tagName, attribs }),
         "code": transformTags["code"],
         "*": transformTags["*"],
     },

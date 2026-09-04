@@ -133,12 +133,15 @@ export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
             ...sanitizeHtmlParams,
             transformTags: {
                 ...objectExcluding(transformTags, [
-                    // Disable the transformer for `img` as it only allows mxc resources
+                    // Embedded pages intentionally allow their own image URLs
+                    // rather than applying the message MXC-only transform.
                     "img",
-                    // Disable the default transformer as it forbids inline styles
+                    // Embedded pages intentionally retain inline styles.
                     "*",
                 ]),
-                a: (tagName: string, attribs: HtmlSanitizeAttributes) => {
+                "img": (tagName: string, attribs: HtmlSanitizeAttributes) => ({ tagName, attribs }),
+                "*": (tagName: string, attribs: HtmlSanitizeAttributes) => ({ tagName, attribs }),
+                "a": (tagName: string, attribs: HtmlSanitizeAttributes) => {
                     if (attribs.href?.startsWith("#/")) {
                         return { tagName, attribs };
                     }
