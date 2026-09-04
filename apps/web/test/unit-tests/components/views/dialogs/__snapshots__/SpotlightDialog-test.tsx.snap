@@ -1,6 +1,6 @@
-// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`Spotlight Dialog > metaspaces > should show Home metaspace 1`] = `
+exports[`Spotlight Dialog metaspaces should show Home metaspace 1`] = `
 <DocumentFragment>
   <div
     id="mx_SpotlightDialog_keyboardPrompt"

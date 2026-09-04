@@ -1,6 +1,6 @@
-// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`RemoveSectionDialog > renders the dialog when section is empty 1`] = `
+exports[`RemoveSectionDialog renders the dialog when section is empty 1`] = `
 <div>
   <div
     data-focus-guard="true"
@@ -78,7 +78,7 @@ exports[`RemoveSectionDialog > renders the dialog when section is empty 1`] = `
 </div>
 `;
 
-exports[`RemoveSectionDialog > renders the dialog when section is not empty 1`] = `
+exports[`RemoveSectionDialog renders the dialog when section is not empty 1`] = `
 <div>
   <div
     data-focus-guard="true"

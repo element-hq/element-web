@@ -1,6 +1,6 @@
-// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`ReportRoomDialog > displays admin message 1`] = `
+exports[`ReportRoomDialog displays admin message 1`] = `
 <div>
   <div
     data-focus-guard="true"
