@@ -195,7 +195,7 @@ test.describe("Event List Summary", () => {
             // Note: we can't include "expand" in the screenshot because it
             // moves around, but at least we know it exists because we click it
             // here.
-            await page.getByRole("button", { name: "expand" }).nth(3).click();
+            await page.getByRole("button", { name: "expand" }).nth(2).click();
 
             // Make sure the mouse is in a consistent position to avoid flaking
             await page.getByRole("textbox").hover();
@@ -265,7 +265,7 @@ test.describe("Event List Summary", () => {
             // Note: we can't include "expand" in the screenshot because it
             // moves around, but at least we know it exists because we click it
             // here.
-            await page.getByRole("button", { name: "expand" }).nth(3).click();
+            await page.getByRole("button", { name: "expand" }).nth(2).click();
 
             // Make sure the mouse is in a consistent position to avoid flaking
             await page.getByRole("textbox").hover();

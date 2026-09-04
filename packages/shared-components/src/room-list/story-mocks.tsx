@@ -112,6 +112,7 @@ export const createMockRoomSnapshot = (
     roomNotifState: RoomNotifState.AllMessages,
     sections: [],
     areSectionsEnabled: true,
+    canChangeSection: true,
 });
 
 export function createMockRoomItemViewModel(
@@ -169,6 +170,7 @@ export const createGetSectionHeaderViewModel = (
             isUnread: false,
             displaySectionMenu: false,
             canBeReordered: true,
+            acceptedRoomKind: "any",
         };
         const vm = new MockViewModel(snapshot) as unknown as RoomListSectionHeaderViewModel;
         Object.assign(vm, {
