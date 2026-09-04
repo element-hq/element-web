@@ -38,7 +38,7 @@
         "@typescript/native": "catalog:",
         "@vitest/coverage-v8": "catalog:",
         "cronstrue": "^3.0.0",
-        "eslint-plugin-element-call": "github:element-hq/element-call#livekit&path:/eslint",
+        "eslint-plugin-element-call": "github:element-hq/element-call#main&path:/eslint",
         "eslint-plugin-storybook": "^10.4.6",
         "husky": "^9.0.0",
         "knip": "6.32.2",
