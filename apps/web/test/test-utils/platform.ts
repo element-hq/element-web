@@ -29,6 +29,10 @@ class MockPlatform extends BasePlatform {
     public async getSessionLock(onNewInstance: () => Promise<void>): Promise<boolean> {
         return SessionLock.getSessionLock(onNewInstance);
     }
+
+    public getOAuthCallbackUrl(): URL {
+        return new URL("https://oauth.callback.url.dummy");
+    }
 }
 /**
  * Mock Platform Peg
