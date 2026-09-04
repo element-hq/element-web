@@ -5,7 +5,7 @@
     "action": {
         "back": "Back",
         "cancel": "Cancel",
-        "click": "Select",
+        "click": "Click",
         "close": "Close",
         "collapse": "Collapse",
         "delete": "Delete",
@@ -16,7 +16,7 @@
         "go": "Go",
         "hide": "Hide",
         "invite": "Invite",
-        "new_conversation": "New",
+        "new_conversation": "New conversation",
         "new_room": "New room",
         "new_section": "New section",
         "new_video_room": "New video room",
@@ -33,7 +33,7 @@
         "search": "Search",
         "start_chat": "Start chat",
         "unpin": "Unpin",
-        "view_source": "View source"
+        "view_source": "View Source"
     },
     "common": {
         "attachment": "Attachment",
@@ -69,7 +69,7 @@
             "refresh": "Re-download theme",
             "url_label": "Custom theme URL"
         },
-        "toggle_event": "Event source"
+        "toggle_event": "toggle event"
     },
     "emoji": {
         "categories": "Categories",
@@ -97,9 +97,9 @@
     },
     "menus": {
         "user_menu": {
-            "clear_status": "Clear status",
+            "clear_status": "Clear",
             "create_an_account": "Create an account",
-            "got_an_account": "Already have an account?",
+            "got_an_account": "Got an account?",
             "manage_account": "Manage account",
             "sign_in": "Sign in",
             "title": "User menu"
@@ -110,12 +110,12 @@
         "default_settings": "Match default settings",
         "mark_all_read": "Mark all as read",
         "mentions_keywords": "Mentions and keywords",
-        "message_didnt_send": "Message didn't send. Select for info.",
+        "message_didnt_send": "Message didn't send. Click for info.",
         "mute_room": "Mute room"
     },
     "release_announcement": {
         "room_list_section_close": "Ok",
-        "room_list_section_description": "Group your chats into sections to keep conversations organised and easy to navigate.",
+        "room_list_section_description": " Group your chats into sections to keep conversations organised and easy to navigate.",
         "room_list_section_title": "Introducing Sections"
     },
     "room": {
@@ -127,20 +127,20 @@
             "shared": "New members see history",
             "world_readable": "Anyone can see history"
         },
-        "jump_read_marker": "Scroll to first unread message.",
+        "jump_read_marker": "Jump to first unread message.",
         "jump_to_bottom_button": "Scroll to most recent messages",
-        "jump_to_date": "Scroll to date",
+        "jump_to_date": "Jump to date",
         "jump_to_date_beginning": "The beginning of the room",
-        "jump_to_date_prompt": "Pick a date to scroll to",
+        "jump_to_date_prompt": "Pick a date to jump to",
         "knock_sent": "Request to join sent",
         "pinned_message_badge": "Pinned message",
         "status_bar": {
             "delete_all": "Delete all",
-            "exceeded_resource_limit_description": "Please contact your account provider to continue using the service.",
-            "exceeded_resource_limit_title": "Your message wasn't sent because this service has exceeded a resource limit.",
+            "exceeded_resource_limit_description": "Please contact your service administrator to continue using the service.",
+            "exceeded_resource_limit_title": "Your message wasn't sent because this homeserver has exceeded a resource limit.",
             "failed_to_create_room_title": "Could not start a chat with this user",
-            "homeserver_blocked_title": "Your message wasn't sent because this service has been blocked by account provider.",
-            "monthly_user_limit_reached_title": "Your message wasn't sent because this service has hit its Monthly Active User Limit.",
+            "homeserver_blocked_title": "Your message wasn't sent because this homeserver has been blocked by its administrator.",
+            "monthly_user_limit_reached_title": "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit.",
             "requires_consent_agreement_title": "You can't send any messages until you review and agree to our terms and conditions.",
             "retry_all": "Retry all",
             "select_messages_to_retry": "You can select all or individual messages to retry or delete",
@@ -173,8 +173,8 @@
                 "other": "Open room %(roomName)s with %(count)s unread messages."
             },
             "unsent_message": "Open room %(roomName)s with an unsent message.",
-            "video_call": "Open room %(roomName)s, video call in progress.",
-            "voice_call": "Open room %(roomName)s, voice call in progress."
+            "video_call": "Open room %(roomName)s with a video call.",
+            "voice_call": "Open room %(roomName)s with a voice call."
         },
         "appearance": "Appearance",
         "chat_moved": "Chat moved",
@@ -203,11 +203,11 @@
             "mentions": "Mentions",
             "people": "People",
             "rooms": "Rooms",
-            "unread": "Unread"
+            "unread": "Unreads"
         },
         "list_title": "Room list",
         "more_options": {
-            "copy_link": "Copy link",
+            "copy_link": "Copy room link",
             "favourited": "Favourited",
             "leave_room": "Leave room",
             "low_priority": "Low priority",
@@ -264,7 +264,7 @@
         "tac_button": "Review terms and conditions"
     },
     "threads": {
-        "error_start_thread_existing_relation": "You can't start a thread from this message."
+        "error_start_thread_existing_relation": "Can't create a thread from an event with an existing relation"
     },
     "time": {
         "about_day_ago": "about a day ago",
@@ -334,31 +334,31 @@
             "error_invalid": "Invalid file"
         },
         "m.room.avatar": {
-            "changed_img": "%(senderDisplayName)s changed the chat avatar to <img/>",
+            "changed_img": "%(senderDisplayName)s changed the room avatar to<img/>",
             "removed": "%(senderDisplayName)s removed the room avatar."
         },
         "m.room.encryption": {
             "disable_attempt": "Ignored attempt to disable encryption",
             "disabled": "Encryption not enabled",
-            "enabled": "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just select their profile picture.",
-            "enabled_dm": "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile — select their profile picture.",
+            "enabled": "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.",
+            "enabled_dm": "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their profile picture.",
             "enabled_local": "Messages in this chat will be end-to-end encrypted.",
             "parameters_changed": "Some encryption parameters have been changed.",
-            "state_enabled": "Messages and state events in this room are end-to-end encrypted. When people join, you can verify them in their profile, just select their profile picture.",
+            "state_enabled": "Messages and state events in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.",
             "unsupported": "The encryption used by this room isn't supported."
         },
         "mab": {
             "collapse_reply_chain": "Collapse quotes",
             "copy_link_thread": "Copy link to thread",
             "expand_reply_chain": "Expand quotes",
-            "label": "Message actions",
+            "label": "Message Actions",
             "view_in_room": "View in room"
         },
         "message_shared_by": "%(displayName)s (%(userId)s) shared this message since you were not in the room when it was sent.",
         "message_timestamp_received_at": "Received at: %(dateTime)s",
         "message_timestamp_sent_at": "Sent at: %(dateTime)s",
         "mjolnir": {
-            "message_hidden": "You have ignored this user, so their message is hidden. <a>Show anyway.</a>"
+            "message_hidden": "You have ignored this user, so their message is hidden.<a> Show anyways.</a>"
         },
         "pending_moderation": "Message pending moderation",
         "pending_moderation_reason": "Message pending moderation: %(reason)s",
