@@ -90,11 +90,28 @@ function getVisibleFilterIds(): FilterId[] {
     return areSectionsEnabled ? filterIds.filter((id) => !SECTION_ONLY_FILTER_IDS.has(id)) : filterIds;
 }
 
-const TAG_TO_TITLE_MAP: Record<string, string> = {
-    [DefaultTagID.Favourite]: _t("room_list|section|favourites"),
-    [CHATS_TAG]: _t("room_list|section|chats"),
-    [DefaultTagID.LowPriority]: _t("room_list|section|low_priority"),
-};
+/**
+ * Get the title to display in the header of a section.
+ * @param tag - The tag of the section.
+ */
+function getSectionTitle(tag: string): string {
+    switch (tag) {
+        case DefaultTagID.Favourite:
+            return _t("room_list|section|favourites");
+        case DefaultTagID.LowPriority:
+            return _t("room_list|section|low_priority");
+        case DefaultTagID.DM:
+            return _t("common|people");
+        case CHATS_TAG:
+            // Without a People section, this section holds the direct messages too, so it keeps its
+            // broader name.
+            return SettingsStore.getValue("RoomList.showPeopleSection")
+                ? _t("common|rooms")
+                : _t("room_list|section|chats");
+        default:
+            return (isCustomSectionTag(tag) && getCustomSectionData()[tag]?.name) || tag;
+    }
+}
 
 export class RoomListViewModel
     extends BaseViewModel<RoomListViewSnapshot, RoomListViewModelProps>
@@ -226,7 +243,15 @@ export class RoomListViewModel
 
         // Recompute the lis when setting changes
         const showSectionsRef = SettingsStore.watchSetting("RoomList.showSections", null, this.onShowSectionsChange);
-        this.disposables.track(() => SettingsStore.unwatchSetting(showSectionsRef));
+        const showPeopleSectionRef = SettingsStore.watchSetting(
+            "RoomList.showPeopleSection",
+            null,
+            this.onShowPeopleSectionChange,
+        );
+        this.disposables.track(() => {
+            SettingsStore.unwatchSetting(showSectionsRef);
+            SettingsStore.unwatchSetting(showPeopleSectionRef);
+        });
 
         // Track cleanup of all child view models
         this.disposables.track(() => {
@@ -275,6 +300,20 @@ export class RoomListViewModel
         this.updateRoomsMap(this.roomsResult);
         this.snapshot.merge({ filterIds: getVisibleFilterIds() });
         void this.updateRoomListData();
+    };
+
+    /**
+     * Handle changes to the {@link RoomList.showPeopleSection} setting.
+     * The Chats section is titled differently depending on whether the direct messages have their
+     * own section, so its header view model is dropped to be rebuilt with the new title.
+     */
+    private readonly onShowPeopleSectionChange = (): void => {
+        const chatsHeaderViewModel = this.roomSectionHeaderViewModels.get(CHATS_TAG);
+        if (chatsHeaderViewModel) {
+            chatsHeaderViewModel.dispose();
+            this.roomSectionHeaderViewModels.delete(CHATS_TAG);
+        }
+        this.onShowSectionsChange();
     };
 
     /**
@@ -346,10 +385,9 @@ export class RoomListViewModel
     public getSectionHeaderViewModel(tag: string): RoomListSectionHeaderViewModel {
         if (this.roomSectionHeaderViewModels.has(tag)) return this.roomSectionHeaderViewModels.get(tag)!;
 
-        const title = TAG_TO_TITLE_MAP[tag] || (isCustomSectionTag(tag) && getCustomSectionData()[tag]?.name) || tag;
         const viewModel = new RoomListSectionHeaderViewModel({
             tag,
-            title,
+            title: getSectionTitle(tag),
             spaceId: this.roomsResult.spaceId,
             onToggleExpanded: () => this.updateRoomListData(),
         });

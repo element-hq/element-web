@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Locator, type Page, type Request } from "@playwright/test";
-import { rejectToast } from "@element-hq/element-web-playwright-common";
+import { closeReleaseAnnouncementIfExists, rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { test as base, expect } from "../../element-web-test";
 import type { ElementAppPage } from "../../pages/ElementAppPage";
@@ -75,6 +75,7 @@ test.describe("Sliding Sync", () => {
     test.beforeEach(async ({ app, page, user }) => {
         await rejectToast(page, "Verify this device");
         await rejectToast(page, "Notifications");
+        await closeReleaseAnnouncementIfExists(page, "Introducing Sections");
     });
 
     test("should render the Rooms list in reverse chronological order by default and allowing sorting A-Z", async ({
@@ -321,7 +322,7 @@ test.describe("Sliding Sync", () => {
         await expect(page.locator(".mx_ReplyPreview")).not.toBeAttached();
 
         // click reply-to on the Hello World message
-        const locator = page.locator(".mx_EventTile_last");
+        const locator = page.locator(".mx_EventTile").last();
         await locator.getByText("Hello world").hover();
         await locator.getByRole("button", { name: "Reply", exact: true }).click({});
 
@@ -365,8 +366,11 @@ test.describe("Sliding Sync", () => {
         await tile.hover();
         await tile.locator("a").dispatchEvent("click");
 
-        // make sure it is now selected with the little green |
-        await expect(page.locator(".mx_EventTile_selected").filter({ hasText: "Permalink me" })).toBeVisible();
+        // make sure it is now selected with the little green marker
+        await expect(tile).toBeVisible();
+        await expect
+            .poll(() => tile.locator(".mx_EventTile_line").evaluate((line) => getComputedStyle(line).boxShadow))
+            .not.toBe("none");
 
         // ensure the reply-to does not disappear
         await expect(page.locator(".mx_ReplyPreview")).toBeVisible();
