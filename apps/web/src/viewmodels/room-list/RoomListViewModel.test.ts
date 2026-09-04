@@ -1719,7 +1719,7 @@ describe("RoomListViewModel", () => {
                 it("should collapse every section on drag start", () => {
                     expect(viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).isExpanded).toBe(true);
 
-                    viewModel.onSectionDragStart();
+                    viewModel.onSectionOrRoomDragStart();
 
                     expect(viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).isExpanded).toBe(false);
                     expect(viewModel.getSectionHeaderViewModel(CHATS_TAG).isExpanded).toBe(false);
@@ -1734,8 +1734,8 @@ describe("RoomListViewModel", () => {
                     // Collapse Favourite before the drag; other sections remain expanded
                     viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).onClick();
 
-                    viewModel.onSectionDragStart();
-                    viewModel.onSectionDragEnd();
+                    viewModel.onSectionOrRoomDragStart();
+                    viewModel.onSectionOrRoomDragEnd();
 
                     expect(viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).isExpanded).toBe(false);
                     expect(viewModel.getSectionHeaderViewModel(CHATS_TAG).isExpanded).toBe(true);
@@ -1755,13 +1755,13 @@ describe("RoomListViewModel", () => {
                 it("should re-snapshot expansion state on each drag start", () => {
                     // First cycle: Favourite is collapsed before the drag
                     viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).onClick();
-                    viewModel.onSectionDragStart();
-                    viewModel.onSectionDragEnd();
+                    viewModel.onSectionOrRoomDragStart();
+                    viewModel.onSectionOrRoomDragEnd();
 
                     // Between cycles: collapse CHATS_TAG as well
                     viewModel.getSectionHeaderViewModel(CHATS_TAG).onClick();
-                    viewModel.onSectionDragStart();
-                    viewModel.onSectionDragEnd();
+                    viewModel.onSectionOrRoomDragStart();
+                    viewModel.onSectionOrRoomDragEnd();
 
                     // The second drag end must restore the state captured at the second drag start
                     // (Favourite collapsed, CHATS_TAG collapsed, LowPriority expanded), not the first cycle's snapshot.
@@ -1771,7 +1771,7 @@ describe("RoomListViewModel", () => {
                 });
 
                 it("should be a no-op when drag end is called without drag start", () => {
-                    viewModel.onSectionDragEnd();
+                    viewModel.onSectionOrRoomDragEnd();
 
                     expect(viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).isExpanded).toBe(true);
                     expect(viewModel.getSectionHeaderViewModel(CHATS_TAG).isExpanded).toBe(true);
