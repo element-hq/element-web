@@ -10,11 +10,13 @@ import {
     BaseViewModel,
     type MessageComposerUrlPreviewSnapshotEntry,
     type MessageComposerUrlPreviewSnapshot,
+    type UrlPreview,
 } from "@element-hq/web-shared-components";
 import { debounce } from "lodash";
 
 import { UrlPreviewFetcher } from "../../utils/UrlPreviewFetcher";
 import { linksIn } from "../../utils/UrlUtils";
+import { type UnstableBundledUrlPreviewSingle } from "../../../@types/url-preview";
 
 export const DEBOUNCE_REQUEST_TIMEOUT_MS = 500;
 
@@ -116,37 +118,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
                 });
 
                 void this.fetcher.fetchPreview(link, true).then((fetched) => {
-                    // update cache
-                    const currentEntry = this.previewCache.get(link);
-                    if (fetched === null) {
-                        this.previewCache.set(link, {
-                            status: "failed",
-                            include: currentEntry?.include ?? true,
-                            matched_url: link,
-                        });
-                    } else {
-                        this.previewCache.set(link, {
-                            status: "loaded",
-                            include: currentEntry?.include ?? true,
-                            matched_url: link,
-                            preview: fetched,
-                        });
-                    }
-
-                    // insert to snapshot
-                    const updatedEntry = this.previewCache.get(link);
-                    if (updatedEntry === undefined) return;
-
-                    const snapshot = this.snapshot.current;
-
-                    this.snapshot.set({
-                        content: snapshot.content,
-                        contentLinks: snapshot.contentLinks,
-                        entries: snapshot.entries.map((entry) =>
-                            entry.matched_url === updatedEntry.matched_url ? updatedEntry : entry,
-                        ),
-                        isModified: snapshot.isModified,
-                    });
+                    this.resolvePreview(link, fetched);
                 });
             }
 
@@ -155,6 +127,63 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
 
         this.snapshot.set({ entries, content, contentLinks: newLinks, isModified: true });
     }
+
+    /**
+     * Replace a loading entry with the result of fetching its preview, in both the cache and the
+     * current snapshot. A null preview means the link has no usable preview.
+     *
+     * Leaves {@link MessageComposerUrlPreviewSnapshot.isModified} alone: resolving a preview that
+     * was already pending is not a user modification.
+     */
+    private resolvePreview(link: string, fetched: UrlPreview | null): void {
+        const currentEntry = this.previewCache.get(link);
+        if (fetched === null) {
+            this.previewCache.set(link, {
+                status: "failed",
+                include: currentEntry?.include ?? true,
+                matched_url: link,
+            });
+        } else {
+            this.previewCache.set(link, {
+                status: "loaded",
+                include: currentEntry?.include ?? true,
+                matched_url: link,
+                preview: fetched,
+            });
+        }
+
+        const updatedEntry = this.previewCache.get(link);
+        if (updatedEntry === undefined) return;
+
+        const snapshot = this.snapshot.current;
+
+        this.snapshot.set({
+            content: snapshot.content,
+            contentLinks: snapshot.contentLinks,
+            entries: snapshot.entries.map((entry) =>
+                entry.matched_url === updatedEntry.matched_url ? updatedEntry : entry,
+            ),
+            isModified: snapshot.isModified,
+        });
+    }
+
+    /**
+     * Resolve previews seeded from an event's existing MSC4095 bundle.
+     *
+     * The seeded entries are already in {@link previewCache} as `loading`, which stops
+     * {@link computeSnapshot} from refetching them, so they have to be resolved here. Entries whose
+     * bundle carries only `matched_url` fall back to a server request inside `previewFromBundle`.
+     *
+     * @param bundle The event's preview bundle.
+     * @param body The message text body the bundle belongs to.
+     */
+    public readonly resolveBundledPreviews = (bundle: UnstableBundledUrlPreviewSingle[], body: string): void => {
+        for (const single of bundle) {
+            void this.fetcher.previewFromBundle(single, body, true).then((fetched) => {
+                this.resolvePreview(single.matched_url, fetched);
+            });
+        }
+    };
 
     /**
      * Trigger a recalculation of the links in the provided text.

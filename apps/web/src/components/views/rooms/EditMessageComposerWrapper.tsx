@@ -26,7 +26,6 @@ import EditMessageComposer from "./EditMessageComposer";
 import type EditorModel from "../../../editor/model";
 import { type RoomMessageEventContent } from "../../../../@types/url-preview";
 import { attachUrlPreviews } from "../../../utils/messages";
-import { UrlPreviewFetcher } from "../../../utils/UrlPreviewFetcher";
 import { linksIn } from "../../../utils/UrlUtils";
 
 interface IEditMessageComposerProps extends MatrixClientProps {
@@ -43,7 +42,6 @@ export function EditMessageComposerWrapper(props: IEditMessageComposerProps): JS
     const linksInBundle = new Set(bundleContent?.map((entry) => entry.matched_url));
 
     const vm = useCreateAutoDisposedViewModel(() => {
-        const urlPreviewFetcher = new UrlPreviewFetcher(props.mxClient, props.editState.getEvent().getTs(), true);
         const urlVmProps: MessageComposerUrlPreviewViewModelProps = {
             client: props.mxClient,
             visible: props.showUrlPreview,
@@ -58,8 +56,10 @@ export function EditMessageComposerWrapper(props: IEditMessageComposerProps): JS
                     .map((entry): [string, MessageComposerUrlPreviewSnapshotEntry] => [
                         entry.matched_url,
                         {
-                            status: "loaded",
-                            preview: urlPreviewFetcher.previewFromBundle(entry),
+                            // previewFromBundle is async (it falls back to a server request when the
+                            // bundle carries only matched_url), so the bundled entries start out
+                            // loading and are resolved by resolveBundledPreviews below.
+                            status: "loading",
                             include: true,
                             matched_url: entry.matched_url,
                         },
@@ -74,7 +74,12 @@ export function EditMessageComposerWrapper(props: IEditMessageComposerProps): JS
                     ),
             );
         }
-        return new MessageComposerUrlPreviewViewModel(urlVmProps);
+
+        const urlVm = new MessageComposerUrlPreviewViewModel(urlVmProps);
+        if (urlPreviewBundleEnabled && bundleContent !== undefined) {
+            urlVm.resolveBundledPreviews(bundleContent, content.body);
+        }
+        return urlVm;
     });
 
     const { isModified: isUrlPreviewsModified } = useViewModel(vm);
