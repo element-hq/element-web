@@ -126,7 +126,7 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
 
     public componentDidMount(): void {
         this.unmounted = false;
-        this.initLoginLogic(this.props.serverConfig);
+        void this.initLoginLogic(this.props.serverConfig);
     }
 
     public componentWillUnmount(): void {
@@ -142,7 +142,7 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
             prevProps.serverConfig.delegatedAuthentication !== this.props.serverConfig.delegatedAuthentication
         ) {
             // Ensure that we end up actually logging in to the right place
-            this.initLoginLogic(this.props.serverConfig);
+            void this.initLoginLogic(this.props.serverConfig);
         }
     }
 

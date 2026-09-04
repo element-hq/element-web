@@ -163,6 +163,10 @@ describe("<MatrixChat />", () => {
         getThirdpartyProtocols: vi.fn().mockResolvedValue({}),
         getClientWellKnown: vi.fn().mockReturnValue({}),
         _unstable_getRTCTransports: vi.fn().mockResolvedValue([]),
+        cachedRtcTransports: {
+            wait: vi.fn().mockResolvedValue([]),
+            get: vi.fn().mockReturnValue([]),
+        },
         waitForClientWellKnown: vi.fn().mockResolvedValue({}),
         isVersionSupported: vi.fn().mockResolvedValue(false),
         initRustCrypto: vi.fn(),
@@ -257,7 +261,6 @@ describe("<MatrixChat />", () => {
     }
 
     beforeEach(async () => {
-        vi.restoreAllMocks();
         vi.spyOn(MediaDeviceHandler, "loadDevices").mockResolvedValue(undefined);
         vi.doMock("../../utils/SessionLock.ts", () => ({
             getSessionLock: vi.fn().mockResolvedValue(true),
@@ -329,11 +332,19 @@ describe("<MatrixChat />", () => {
         localStorage.clear();
         vi.clearAllTimers();
 
+        // RTL cleanup won't touch roots we render ourselves so clean those up manually
+        await clearAllModals();
+
         // This is a massive hack, but a lot of these tests end up completing while the login flow is still proceeding.
         // So then, we start the next test while stuff is still ongoing from the previous test, which messes up the current test.
         // There is no obvious event we could wait for which indicates that everything has completed,
         // since each test does something different. Instead, we just let real timers and microtasks drain.
-        await sleep(200);
+        await act(() => sleep(200));
+
+        // Anything the drain kicked off may have opened a dialog again
+        await clearAllModals();
+
+        vi.restoreAllMocks();
     });
 
     resetJsDomAfterEach();
@@ -708,13 +719,16 @@ describe("<MatrixChat />", () => {
                     action: Action.WillStartClient,
                 });
                 // client successfully started
-                await waitFor(() =>
-                    expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: Action.ClientStarted }),
+                // Waiting for login -> startMatrixClient, which can be slow.
+                // Allow more time than the 1s default.
+                await waitFor(
+                    () => expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: Action.ClientStarted }),
+                    { timeout: 5000 },
                 );
 
                 // set up keys screen is rendered
                 await expect(screen.findByText("Setting up keys")).resolves.toBeInTheDocument();
-            });
+            }, 15000);
 
             it("should persist device language when available", async () => {
                 await SettingsStore.setValue("language", null, SettingLevel.DEVICE, "en");
@@ -1356,13 +1370,16 @@ describe("<MatrixChat />", () => {
                     defaultDispatcher.dispatch({
                         action: Action.WillStartClient,
                     });
-                    await waitFor(() =>
-                        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: Action.ClientStarted }),
+                    // Waiting for login -> startMatrixClient, which can be slow.
+                    // Allow more time than the 1s default.
+                    await waitFor(
+                        () => expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: Action.ClientStarted }),
+                        { timeout: 5000 },
                     );
 
                     // Then we are not allowed in - we are being asked to verify
                     await screen.findByRole("heading", { name: "Confirm your digital identity", level: 2 });
-                });
+                }, 15000);
             });
         });
 

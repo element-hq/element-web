@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Selettore di emoji",
         "jump_first_invite": "Salta al primo invito.",
         "message_composer": "Compositore di messaggi",
         "n_unread_messages": {
@@ -747,22 +746,6 @@
     },
     "dialog_close_label": "Chiudi finestra",
     "download_completed": "Scaricamento completato",
-    "emoji": {
-        "categories": "Categorie",
-        "category_activities": "Attività",
-        "category_animals_nature": "Animali e Natura",
-        "category_flags": "Bandiere",
-        "category_food_drink": "Cibo e Bevande",
-        "category_frequently_used": "Usati di frequente",
-        "category_objects": "Oggetti",
-        "category_smileys_people": "Faccine e Persone",
-        "category_symbols": "Simboli",
-        "category_travel_places": "Viaggi e Luoghi",
-        "quick_reactions": "Reazioni rapide"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Annulla ricerca"
-    },
     "empty_room": "Stanza vuota",
     "empty_room_was_name": "Stanza vuota (era %(oldName)s)",
     "encryption": {
@@ -1129,7 +1112,6 @@
         "name_mxid_share_room": "Invita qualcuno usando il suo nome, nome utente (come <userId/>) o <a>condividi questa stanza</a>.",
         "name_mxid_share_space": "Invita qualcuno usando il suo nome, nome utente (come <userId/>) o <a>condividi questo spazio</a>.",
         "recents_section": "Conversazioni recenti",
-        "room_failed_partial": "Abbiamo inviato gli altri, ma non è stato possibile invitare le seguenti persone in <RoomName/>",
         "room_failed_partial_title": "Alcuni inviti non sono stati spediti",
         "room_failed_title": "Impossibile invitare gli utenti in %(roomName)s",
         "send_link_prompt": "O manda un collegamento di invito",
@@ -1241,7 +1223,6 @@
         "bridge_state_workspace": "Spazio di lavoro: <networkLink/>",
         "click_for_info": "Clicca per altre info",
         "currently_experimental": "Al momento è sperimentale.",
-        "custom_themes": "Supporta l'aggiunta di temi personalizzati",
         "dynamic_room_predecessors": "Predecessori della stanza dinamici",
         "dynamic_room_predecessors_description": "Attiva MSC3946 (per supportare archivi della stanza arrivati in ritardo)",
         "element_call_video_rooms": "Stanze video di Element Call",
@@ -1257,7 +1238,6 @@
         "group_profile": "Profilo",
         "group_rooms": "Stanze",
         "group_spaces": "Spazi",
-        "group_themes": "Temi",
         "group_threads": "Conversazioni",
         "group_voip": "Voce e video",
         "group_widgets": "Widget",
@@ -1427,7 +1407,6 @@
         "mentions_and_keywords": "@citazioni e parole chiave",
         "mentions_and_keywords_description": "Ricevi notifiche solo per citazioni e parole chiave come configurato nelle tue <a>impostazioni</a>",
         "mentions_keywords": "Citazioni e parole chiave",
-        "message_didnt_send": "Il messaggio non è stato inviato. Clicca per informazioni.",
         "mute_description": "Non riceverai alcuna notifica"
     },
     "notifier": {
@@ -2068,8 +2047,6 @@
             "custom_font_description": "Imposta il nome di un font installato nel tuo sistema e %(brand)s proverà ad usarlo.",
             "custom_font_name": "Nome carattere di sistema",
             "custom_font_size": "Usa dimensione personalizzata",
-            "custom_theme_error_downloading": "Errore di scaricamento del tema",
-            "custom_theme_invalid": "Schema del tema non valido.",
             "font_size": "Dimensione carattere",
             "font_size_default": "%(fontSize)s (predefinito)",
             "image_size_default": "Predefinito",

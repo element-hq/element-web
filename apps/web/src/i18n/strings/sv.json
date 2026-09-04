@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Emojiväljare",
         "jump_first_invite": "Hoppa till första inbjudan.",
         "message_composer": "Meddelanderedigerare",
         "n_unread_messages": {
@@ -855,22 +854,6 @@
     },
     "dialog_close_label": "Stäng dialogrutan",
     "download_completed": "Nedladdning slutförd",
-    "emoji": {
-        "categories": "Kategorier",
-        "category_activities": "Aktiviteter",
-        "category_animals_nature": "Djur & natur",
-        "category_flags": "Flaggor",
-        "category_food_drink": "Mat & dryck",
-        "category_frequently_used": "Ofta använda",
-        "category_objects": "Objekt",
-        "category_smileys_people": "Smileys & personer",
-        "category_symbols": "Symboler",
-        "category_travel_places": "Resor & platser",
-        "quick_reactions": "Snabbreaktioner"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Avbryt sökningen"
-    },
     "empty_room": "Tomt rum",
     "empty_room_was_name": "Tomt rum (var %(oldName)s)",
     "encryption": {
@@ -1297,7 +1280,6 @@
             "preparing": "Förbereder inbjudningar …"
         },
         "recents_section": "Senaste konversationerna",
-        "room_failed_partial": "Vi skickade de andra, men personerna nedan kunde inte bjudas in till <RoomName/>",
         "room_failed_partial_title": "Vissa inbjudningar kunde inte skickas",
         "room_failed_title": "Misslyckades att bjuda in användare till %(roomName)s",
         "send_link_prompt": "Eller skicka inbjudningslänk",
@@ -1412,7 +1394,6 @@
         "bridge_state_workspace": "Arbetsyta: <networkLink/>",
         "click_for_info": "Klicka för mer info",
         "currently_experimental": "För närvarande experimentellt.",
-        "custom_themes": "Stöd tilläggning av anpassade teman",
         "dynamic_room_predecessors": "Dynamiska rumsföregångare",
         "dynamic_room_predecessors_description": "Aktivera MSC3946 (för att stöda sen-ankomna rumsarkiv)",
         "element_call_video_rooms": "Element Call videorum",
@@ -1431,7 +1412,6 @@
         "group_profile": "Profil",
         "group_rooms": "Rum",
         "group_spaces": "Utrymmen",
-        "group_themes": "Teman",
         "group_threads": "Trådar",
         "group_ui": "Användargränssnitt",
         "group_voip": "Röst & video",
@@ -1611,7 +1591,6 @@
         "mentions_and_keywords": "@omnämnanden och nyckelord",
         "mentions_and_keywords_description": "Bli endast aviserad om omnämnanden och nyckelord i enlighet med dina <a>inställningar</a>",
         "mentions_keywords": "Omnämnanden & nyckelord",
-        "message_didnt_send": "Meddelande skickades inte. Klicka för info.",
         "mute_description": "Du får inga aviseringar"
     },
     "notifier": {
@@ -2309,11 +2288,6 @@
             "custom_font_description": "Sätt namnet för ett teckensnitt installerat på ditt system så kommer %(brand)s att försöka använda det.",
             "custom_font_name": "Namn på systemets teckensnitt",
             "custom_font_size": "Använd anpassad storlek",
-            "custom_theme_add": "Lägg till anpassat tema",
-            "custom_theme_downloading": "Laddar ned anpassat tema...",
-            "custom_theme_error_downloading": "Fel vid nedladdning av tema",
-            "custom_theme_help": "Ange webbadressen till ett anpassat tema som du vill använda.",
-            "custom_theme_invalid": "Ogiltigt temaschema.",
             "dialog_title": "<strong>Inställningar:</strong> Utseende",
             "font_size": "Teckenstorlek",
             "font_size_default": "%(fontSize)s(standard)",
@@ -2494,7 +2468,7 @@
             "unable_to_load_msisdns": "Det går inte att läsa in telefonnummer",
             "username": "Användarnamn"
         },
-        "inline_url_previews_default": "Aktivera inbäddad URL-förhandsgranskning som standard",
+        "inline_url_previews_default": "Aktivera förhandsgranskningar",
         "insert_trailing_colon_mentions": "Infoga kolon efter användaromnämnande på början av ett meddelande",
         "invite_controls": {
             "default_label": "Tillåt användare att bjuda in dig till rum"
@@ -2605,13 +2579,13 @@
             "room_activity": "Ny rumsaktivitet, uppgraderingar och statusmeddelanden inträffar",
             "rule_call": "Inbjudan till samtal",
             "rule_contains_display_name": "Meddelanden som innehåller mitt visningsnamn",
-            "rule_contains_user_name": "Meddelanden som innehåller mitt användarnamn",
+            "rule_contains_user_name": "@omnämnanden och svar",
             "rule_encrypted": "Krypterade meddelanden i gruppchattar",
             "rule_encrypted_room_one_to_one": "Krypterade meddelanden i en-till-en-chattar",
             "rule_invite_for_me": "När jag bjuds in till ett rum",
             "rule_message": "Meddelanden i gruppchattar",
             "rule_room_one_to_one": "Meddelanden i en-till-en-chattar",
-            "rule_roomnotif": "Meddelanden som innehåller @room",
+            "rule_roomnotif": "@rumsomnämnanden",
             "rule_suppress_notices": "Meddelanden från bottar",
             "rule_tombstone": "När rum uppgraderas",
             "show_message_desktop_notification": "Visa meddelande i skrivbordsavisering",

@@ -52,6 +52,7 @@ export default defineConfig({
         correctness: "error",
         perf: "error",
         suspicious: "error",
+        restriction: "warn",
     },
     options: {
         typeAware: true,
@@ -82,7 +83,7 @@ export default defineConfig({
         "/packages/shared-components/typedoc/",
     ],
     settings: {
-        jsdoc: {
+        "jsdoc": {
             tagNamePreference: {
                 remark: "remarks",
                 privateRemarks: "privateRemarks",
@@ -96,6 +97,23 @@ export default defineConfig({
                 resolves: "resolves",
             },
         },
+        "vitest": {
+            typecheck: true,
+        },
+        "jsx-a11y": {
+            components: {
+                Button: "button",
+                IconButton: "button",
+                AccessibleButton: "button",
+                RovingAccessibleButton: "button",
+                ContextMenuButton: "button",
+                ContextMenuTooltipButton: "button",
+            },
+            // polymorphicPropName: "as", // Would be good to enable in the future
+        },
+        "react": {
+            componentWrapperFunctions: ["withMatrixClientHOC"],
+        },
     },
     rules: {
         "no-constant-condition": ["error", { checkLoops: "allExceptWhileTrue" }],
@@ -108,16 +126,55 @@ export default defineConfig({
         ],
         "prefer-const": ["error", { destructuring: "all" }],
         "import/first": "error",
-        "typescript/no-require-imports": "error",
         "new-cap": "error",
-        "no-empty-pattern": "error",
         "typescript/no-unsafe-function-type": "error",
         "react/rules-of-hooks": "error",
         "no-extend-native": "error",
         "no-inner-declarations": "error",
-        "no-var": "error",
         "typescript/no-unnecessary-type-constraint": "error",
         "jsx-filename-extension": ["error", { allow: "as-needed", extensions: ["tsx"] }],
+
+        // Tune restriction ruleset
+        "no-undefined": "off",
+        "typescript/use-unknown-in-catch-callback-variable": "off",
+        "typescript/promise-function-async": "off",
+        "typescript/no-non-null-assertion": "off",
+        "typescript/no-invalid-void-type": "off",
+        "typescript/no-explicit-any": "off",
+        "typescript/no-import-type-side-effects": "off",
+        "typescript/no-dynamic-delete": "off",
+        "typescript/explicit-module-boundary-types": "off",
+        "no-param-reassign": "off",
+        "no-use-before-define": "off",
+        "class-methods-use-this": "off",
+        "no-plusplus": "off",
+        "no-default-export": "off",
+        "no-console": "off",
+        "complexity": "off",
+        "no-void": "off",
+        "no-empty-function": "off",
+        "default-case": "off",
+        "no-implicit-globals": "off",
+        "no-bitwise": "off",
+        "no-empty": "off",
+        "no-eq-null": "off",
+        "promise/catch-or-return": "off",
+        "node/no-process-env": "off", // We enable this for src in overrides
+        "unicorn/no-array-reduce": "off",
+        "unicorn/no-anonymous-default-export": "off",
+        "import/no-relative-parent-imports": "off",
+        "import/unambiguous": "off",
+        "import/no-cycle": "off",
+        "jsdoc/empty-tags": "off",
+        "vitest/require-test-timeout": "off",
+        "react/jsx-no-literals": "off",
+        "react/prefer-function-component": "off",
+        "react/forbid-component-props": "off",
+        "react/no-multi-comp": "off",
+        "react/no-danger": "off",
+        "react/only-export-components": "off",
+        "react/no-react-children": "off",
+        "react/no-clone-element": "off",
 
         "unicorn/no-instanceof-array": "error",
         "no-restricted-globals": ["error", ...defaultRestrictedGlobals],
@@ -141,16 +198,29 @@ export default defineConfig({
                 allowExpressions: true,
             },
         ],
-        "typescript/explicit-member-accessibility": "error",
-
-        // Require us to be more explicit about type conversions to help prevent bugs
-        "typescript/no-base-to-string": ["error"],
+        // Require explicit handling of promises
+        "typescript/no-floating-promises": [
+            "error",
+            {
+                checkThenables: true,
+                ignoreIIFE: true,
+                ignoreVoid: true,
+            },
+        ],
 
         // Prevent invalid non-type re-exports of types, these can cause downstream build failures
         "typescript/consistent-type-exports": ["error"],
 
         // Prevent unnecessary runtime dependencies between files
         "typescript/consistent-type-imports": ["error", { fixStyle: "inline-type-imports" }],
+
+        "jsx-a11y/control-has-associated-label": [
+            "error",
+            {
+                labelAttributes: ["label", "value"],
+                depth: 3,
+            },
+        ],
 
         // Disable some perf rules
         "no-await-in-loop": "off",
@@ -159,7 +229,7 @@ export default defineConfig({
         "unicorn/switch-case-braces": "off",
         "sort-keys": "off",
         "typescript/require-array-sort-compare": "off",
-        "eslint/no-extra-boolean-cast": "off",
+        "no-extra-boolean-cast": "off",
 
         // These would be nice to enable at some point
         "unicorn/prefer-set-has": "off",
@@ -175,25 +245,20 @@ export default defineConfig({
         "typescript/no-redundant-type-constituents": "off",
         "typescript/no-useless-default-assignment": "off",
         "typescript/no-duplicate-type-constituents": "off",
-        "typescript/no-floating-promises": "off",
         "typescript/no-implied-eval": "off",
         "typescript/no-misused-spread": "off",
         "promise/valid-params": "off",
-        "no-extra-boolean-cast": "off",
         "react-perf/jsx-no-new-function-as-prop": "off",
         "react-perf/jsx-no-new-object-as-prop": "off",
         "react-perf/jsx-no-jsx-as-prop": "off",
         "jsx-a11y/prefer-tag-over-role": "off",
         "jsx-a11y/no-autofocus": "off",
         "react/no-children-prop": "off",
-        "jsx-a11y/no-noninteractive-tabindex": "off",
         "react-perf/jsx-no-new-array-as-prop": "off",
         "react/no-did-update-set-state": "off",
         "react/no-did-mount-set-state": "off",
         "jsx-a11y/no-static-element-interactions": "off",
         "jsx-a11y/no-noninteractive-element-interactions": "off",
-        "react/no-array-index-key": "off",
-        "jsx-a11y/control-has-associated-label": "off",
         "jsx-a11y/media-has-caption": "off",
         "jsx-a11y/no-noninteractive-element-to-interactive-role": "off",
         "jsx-a11y/aria-activedescendant-has-tabindex": "off",
@@ -232,19 +297,13 @@ export default defineConfig({
                         message: "Buffer is not available in the web.",
                     },
                 ],
+                "node/no-process-env": "error",
+                "unicorn/prefer-node-protocol": "off",
             },
         },
         {
             files: ["{packages,apps,modules}/*/src/**/*"],
             rules: {
-                "no-restricted-imports": [
-                    "error",
-                    {
-                        name: "events",
-                        message: "Please use TypedEventEmitter instead",
-                    },
-                ],
-
                 // Enable this in the future, it has a lot of false positives right now
                 // "react/react-compiler": "error",
             },
@@ -286,6 +345,27 @@ export default defineConfig({
             },
         },
         {
+            files: [
+                "apps/desktop/src/**/*",
+                "packages/playwright-common/src/**/*",
+                "**/scripts/**/*",
+                "apps/web/module_system/**/*",
+                "apps/web/webpack.config.ts",
+            ],
+            rules: {
+                "no-restricted-globals": "off",
+                "unicorn/prefer-node-protocol": "error",
+                // These files can use envvars
+                "node/no-process-env": "off",
+                // They do not depend on js-sdk for access to TypedEventEmitter so disable this rule
+                "no-restricted-imports": "off",
+                // They can use process.exit
+                "unicorn/no-process-exit": "off",
+                // They can use top level await
+                "node/no-top-level-await": "off",
+            },
+        },
+        {
             files: ["apps/web/**/*"],
             rules: {
                 "no-restricted-properties": [
@@ -307,6 +387,10 @@ export default defineConfig({
                     "error",
                     {
                         paths: [
+                            {
+                                name: "events",
+                                message: "Please use TypedEventEmitter instead",
+                            },
                             {
                                 name: "react",
                                 importNames: ["forwardRef"],
@@ -450,7 +534,6 @@ export default defineConfig({
                 "typescript/no-empty-object-type": "off",
                 "typescript/unbound-method": "off",
                 "typescript/no-floating-promises": "off",
-                "typescript/no-misused-spread": "off",
                 "vitest/require-mock-type-parameters": "off",
                 "vitest/no-disabled-tests": "off",
                 "vitest/no-conditional-expect": "off",
@@ -471,12 +554,19 @@ export default defineConfig({
                 ],
                 "jsdoc/check-tag-names": "off",
                 "typescript/explicit-function-return-type": "off",
+                "typescript/explicit-module-boundary-types": "off",
                 "typescript/explicit-member-accessibility": "off",
+                "no-proto": "off",
+                "no-restricted-globals": "off",
+                "typescript/consistent-type-imports": "off",
+                "node/no-top-level-await": "off",
 
                 // Disable a11y rules for components in tests
                 "jsx-a11y/role-has-required-aria-props": "off",
+                "react/button-has-type": "off",
                 "jsx-a11y/interactive-supports-focus": "off",
                 "jsx-a11y/no-static-element-interactions": "off",
+                "jsx-a11y/anchor-ambiguous-text": "off",
                 "jsx-a11y/click-events-have-key-events": "off",
                 "jsx-a11y/media-has-caption": "off",
                 "jsx-a11y/no-noninteractive-element-to-interactive-role": "off",
@@ -489,6 +579,7 @@ export default defineConfig({
                 "no-new": "off",
                 "react/iframe-missing-sandbox": "off",
                 "promise/no-promise-in-callback": "off",
+
                 // This would be good to enable in the future
                 "typescript/await-thenable": "off",
                 "promise/no-callback-in-promise": "off",
@@ -519,6 +610,15 @@ export default defineConfig({
             files: ["**/*.{cjs,js}"],
             rules: {
                 "typescript/no-require-imports": "off",
+                "import/no-commonjs": "off",
+                "unicorn/prefer-module": "off",
+            },
+        },
+        {
+            files: ["apps/web/test/**/*-test.*"],
+            rules: {
+                // Jest is still CommonJS
+                "unicorn/prefer-module": "off",
             },
         },
         {

@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Emodzsiválasztó",
         "jump_first_invite": "Ugrás az első meghívóhoz.",
         "message_composer": "Üzenetszerkesztő",
         "n_unread_messages": {
@@ -672,8 +671,6 @@
     },
     "create_section_dialog": {
         "create_section": "Szakasz létrehozása",
-        "description": "A szakaszok csak Önnek szólnak",
-        "label": "Szakasz neve",
         "title": "Szakasz létrehozása",
         "title_edition": "Szakasz szerkesztése"
     },
@@ -917,22 +914,6 @@
     },
     "dialog_close_label": "Ablak bezárása",
     "download_completed": "A letöltés befejeződött",
-    "emoji": {
-        "categories": "Kategóriák",
-        "category_activities": "Tevékenységek",
-        "category_animals_nature": "Állatok és természet",
-        "category_flags": "Zászlók",
-        "category_food_drink": "Étel és ital",
-        "category_frequently_used": "Gyakran használt",
-        "category_objects": "Tárgyak",
-        "category_smileys_people": "Mosolyok és emberek",
-        "category_symbols": "Szimbólumok",
-        "category_travel_places": "Utazás és helyek",
-        "quick_reactions": "Gyors reakciók"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Keresés megszakítása"
-    },
     "empty_room": "Üres szoba",
     "empty_room_was_name": "Üres szoba (%(oldName)s volt)",
     "encryption": {
@@ -1385,7 +1366,6 @@
             "preparing": "Meghívók előkészítése…"
         },
         "recents_section": "Legújabb beszélgetések",
-        "room_failed_partial": "Az alábbi embereket nem sikerül meghívni ide: <RoomName/>, de a többi meghívó elküldve",
         "room_failed_partial_title": "Néhány meghívót nem sikerült elküldeni",
         "room_failed_title": "A felhasználók meghívása sikertelen ide: %(roomName)s",
         "send_link_prompt": "Vagy meghívási hivatkozás küldése",
@@ -1501,7 +1481,6 @@
         "click_for_info": "Kattintson a további információkhoz",
         "config_only": "Csak a config.json fájlon keresztül engedélyezhető.",
         "currently_experimental": "Jelenleg kísérleti állapotban van.",
-        "custom_themes": "Egyéni témák támogatásának hozzáadása",
         "dynamic_room_predecessors": "A dinamikus szoba előfutárai",
         "dynamic_room_predecessors_description": "MSC3946 engedélyezése (a későn érkező szobaarchívumok támogatáshoz)",
         "element_call_video_rooms": "Element Call videószobák",
@@ -1532,7 +1511,6 @@
         "group_profile": "Profil",
         "group_rooms": "Szobák",
         "group_spaces": "Terek",
-        "group_themes": "Témák",
         "group_threads": "Üzenetszálak",
         "group_ui": "Felhasználói felület",
         "group_voip": "Hang és videó",
@@ -1712,7 +1690,6 @@
         "mentions_and_keywords": "@megemlítések és kulcsszavak",
         "mentions_and_keywords_description": "Értesítések fogadása csak megemlítéseknél és kulcsszavaknál, a <a>beállításokban</a> megadottak szerint",
         "mentions_keywords": "Megemlítések és kulcsszavak",
-        "message_didnt_send": "Az üzenet nincs elküldve. Kattintson az információkért.",
         "mute_description": "Nem kap semmilyen értesítést"
     },
     "notifier": {
@@ -2444,11 +2421,6 @@
             "custom_font_description": "Adja meg a rendszer által használt betűkészlet nevét, és az %(brand)s megpróbálja azt használni.",
             "custom_font_name": "Rendszer betűkészletének neve",
             "custom_font_size": "Egyéni méret használata",
-            "custom_theme_add": "Egyéni téma hozzáadása",
-            "custom_theme_downloading": "Egyéni téma letöltése…",
-            "custom_theme_error_downloading": "Hiba a téma letöltése során",
-            "custom_theme_help": "Adja meg az alkalmazandó egyéni téma webcímét.",
-            "custom_theme_invalid": "Érvénytelen témaséma.",
             "dialog_title": "<strong>Beállítások:</strong> Megjelenés",
             "font_size": "Betűméret",
             "font_size_default": "%(fontSize)s (alapértelmezett)",

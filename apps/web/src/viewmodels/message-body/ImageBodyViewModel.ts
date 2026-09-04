@@ -122,7 +122,7 @@ export class ImageBodyViewModel
         this.state = initialState;
 
         const imageSizeWatcherRef = SettingsStore.watchSetting("Images.size", null, (_s, _r, _l, _nvl, value) => {
-            this.setImageSize(value as ImageSize);
+            this.setImageSize(value!);
         });
         this.disposables.track(() => SettingsStore.unwatchSetting(imageSizeWatcherRef));
     }
@@ -343,7 +343,7 @@ export class ImageBodyViewModel
         let thumbUrl: string | null;
         let contentUrl: string | null;
 
-        if (this.props.mediaEventHelper?.media.isEncrypted) {
+        if (this.props.mediaEventHelper?.media.isEncrypted || this.props.mediaEventHelper?.isFromLocalUpload) {
             try {
                 [contentUrl, thumbUrl] = await Promise.all([
                     this.props.mediaEventHelper.sourceUrl.value,
