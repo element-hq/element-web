@@ -29,6 +29,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { SDKContext } from "../../../contexts/SDKContext.ts";
 import { ElementCall as ElementCallModel } from "../../../models/Call";
 import { useCall } from "../../../hooks/useCall";
+import { CallStore } from "../../../stores/CallStore";
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import { useDispatcher } from "../../../hooks/useDispatcher";
 import dis from "../../../dispatcher/dispatcher";
@@ -46,7 +47,7 @@ const loadElementCall = async (
     module: Promise<ElementCallComponentModule>,
 ): Promise<{ default: FC<ElementCallProps> }> => {
     const m = await module;
-    await m.initializeElementCall(ElementCallModel.getConfigOptions());
+    await m.initializeElementCall(ElementCallModel.getConfigOptions(CallStore.instance.getConfiguredRTCTransports()));
     return { default: m.ElementCall };
 };
 
