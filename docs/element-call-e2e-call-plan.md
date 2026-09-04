@@ -369,10 +369,13 @@ Notes:
 
 ## 6. Prerequisite and order of work
 
-**Prerequisite:** `@element-hq/element-call-component` is still `link:../../../element-call-component-m1/dist`
-in `apps/web/package.json`. CI cannot build the real component chunk until that is a published or git
-dependency (first item under "Follow up tasks" in the react plan). The backend and spec can be written
-and run locally before that; they cannot go green in CI until it is done.
+**Prerequisite:** `@element-hq/element-call-component` is a git dependency on
+`github:element-hq/element-call#valere/component_ec_M1&path:/component` (since 2026-09-04; before that a
+machine-local `link:`). CI can build the real component chunk once the EC branch carries the component
+manifest commit and the lockfile has been regenerated (see "Switch `@element-hq/element-call-component` to a
+remote dependency" under "Follow up tasks" in the react plan, which also says when to point the ref at
+`main`). The backend and spec can be written and run locally before that; they cannot go green in CI until
+it is done.
 
 1. ✅ Certificate, `livekit.ts`, `lk-jwt-service.ts`, `matrix-rtc.ts`, and the `services.ts` fixtures.
    Smoke it without a browser: start the fixture from a throwaway spec, take an OpenID token via
