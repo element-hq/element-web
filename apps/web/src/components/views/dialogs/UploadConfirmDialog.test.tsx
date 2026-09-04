@@ -78,13 +78,13 @@ describe("<UploadConfirmDialog />", () => {
         vi.spyOn(URL, "createObjectURL").mockReturnValue(url);
 
         const file = new File([secureRandomString(1024 * 124)], "image.png", { type: "image/png" });
-        const { asFragment, container } = render(
+        const { asFragment, getByRole } = render(
             <UploadConfirmDialog file={file} currentIndex={0} totalFiles={1} onFinished={vi.fn()} />,
         );
 
         // The preview renders the image with an empty alt attribute, so it is exposed as presentational
         // rather than under the "img" role.
-        await waitFor(() => expect(container.querySelector("img")).toHaveAttribute("src", url));
+        await waitFor(() => expect(getByRole("presentation")).toHaveAttribute("src", url));
         expect(asFragment()).toMatchSnapshot();
     });
     it.each([
