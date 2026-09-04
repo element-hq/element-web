@@ -877,6 +877,7 @@
         "setting_definition": "Setting definition:",
         "setting_id": "Setting ID",
         "settings": {
+            "elementCallMockComponent": "Use the mock Element Call component (React transport, no media)",
             "elementCallUrl": "Element Call URL"
         },
         "settings_explorer": "Settings explorer",
