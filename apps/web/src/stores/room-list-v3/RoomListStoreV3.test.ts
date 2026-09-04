@@ -1176,6 +1176,32 @@ describe("RoomListStoreV3", () => {
             ]);
         });
 
+        it("does not load the sections before the matrix client is ready", () => {
+            enableSections();
+            const getOrderedSectionTagsSpy = vi.spyOn(sectionModule, "getOrderedSectionTags");
+
+            // Constructing the store must not read the sections yet: at this point account data
+            // (e.g. custom section ordering) may not have been loaded, so sections would be empty.
+            const store = new RoomListStoreV3Class(dispatcher);
+
+            expect(getOrderedSectionTagsSpy).not.toHaveBeenCalled();
+            expect(store.orderedSectionTags).toEqual([]);
+        });
+
+        it("loads the sections once the store becomes ready", async () => {
+            enableSections();
+            getClientAndRooms();
+            const getOrderedSectionTagsSpy = vi.spyOn(sectionModule, "getOrderedSectionTags");
+
+            const store = new RoomListStoreV3Class(dispatcher);
+            expect(getOrderedSectionTagsSpy).not.toHaveBeenCalled();
+
+            await store.start();
+
+            expect(getOrderedSectionTagsSpy).toHaveBeenCalled();
+            expect(store.orderedSectionTags).toEqual([DefaultTagID.Favourite, CHATS_TAG, DefaultTagID.LowPriority]);
+        });
+
         describe("RoomList.showSections disabled", () => {
             function disableSections(): void {
                 vi.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {

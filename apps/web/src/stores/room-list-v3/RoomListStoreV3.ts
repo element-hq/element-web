@@ -117,7 +117,6 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         });
         SDKContextClass.instance.spaceStore.on(UPDATE_HOME_BEHAVIOUR, () => this.onActiveSpaceChanged());
         SettingsStore.watchSetting("RoomList.OrderedCustomSections", null, () => this.onSectionsChange());
-        this.loadSections();
 
         SettingsStore.watchSetting("Notifications.activityIsUnread", null, (_settingsName, _roomId, _level, newValue) =>
             this.onActivityIsUnreadChange(Boolean(newValue)),
@@ -242,6 +241,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
 
     protected async onReady(): Promise<any> {
         if (this.roomSkipList?.initialized || !this.matrixClient) return;
+        this.loadSections();
         const sorter = this.getPreferredSorter(this.matrixClient.getSafeUserId());
 
         this.roomSkipList = new RoomSkipList(sorter, this.getSkipListFilters());
