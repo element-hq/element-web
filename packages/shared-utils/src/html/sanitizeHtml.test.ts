@@ -48,14 +48,31 @@ describe("sanitizeHtml", () => {
         expect(safe).toContain('href="https://example.org/docs" target="_blank" rel="noreferrer noopener"');
     });
 
-    it("preserves safe relative links while rejecting protocol-relative links", () => {
-        const safe = sanitizeHtml(
-            '<a href="#/register">local</a><a href="/path">path</a><a href="//example.org">external</a>',
-        );
+    it.each([
+        ["#/register", true],
+        ["#section", true],
+        ["/path", true],
+        ["?query=1", true],
+        ["./path", true],
+        ["../path", true],
+        [String.raw`\path`, true],
+        [String.raw`\\evil.example/path`, false],
+        ["//example.org/path", false],
+        ["/path with spaces", false],
+        ["\t/path", false],
+        ["/path\n", false],
+        ["unknown:payload", false],
+        ["javascript:alert(1)", false],
+    ])("handles relative URL safety for %j", (href, permitted) => {
+        const safe = sanitizeHtml(`<a href="${href}">link</a>`);
 
-        expect(safe).toContain('href="#/register" target="_blank" rel="noreferrer noopener"');
-        expect(safe).toContain('href="/path" target="_blank" rel="noreferrer noopener"');
-        expect(safe).not.toContain('href="//example.org"');
+        expect(safe.includes(`href="${href}"`)).toBe(permitted);
+    });
+
+    it("preserves safe absolute links", () => {
+        const safe = sanitizeHtml('<a href="https://example.org/docs">safe</a>');
+
+        expect(safe).toContain('href="https://example.org/docs" target="_blank" rel="noreferrer noopener"');
     });
 
     it("allows a trusted consumer transform to replace shared link rendering", () => {
