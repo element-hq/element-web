@@ -29,6 +29,7 @@
         "lint:style": "stylelint \"res/css/**/*.pcss\"",
         "test": "nx test:unit",
         "test:vitest": "nx test:vitest",
+        "test:unit:screenshots": "playwright-screenshots pnpm -w exec vitest run --project web-browser --update",
         "test:playwright": "nx test:playwright --",
         "test:playwright:open": "nx test:playwright -- --ui",
         "test:playwright:screenshots": "nx test:playwright:screenshots --",
@@ -160,6 +161,8 @@
         "@types/tar-js": "^0.3.5",
         "@types/ua-parser-js": "^0.7.36",
         "@typescript/native": "catalog:",
+        "@vitest/browser": "catalog:",
+        "@vitest/browser-playwright": "catalog:",
         "@vitest/spy": "catalog:",
         "babel-jest": "^30.0.0",
         "babel-loader": "^10.0.0",
@@ -217,7 +220,7 @@
         "webpack-cli": "^7.0.0",
         "webpack-dev-server": "^6.0.0",
         "webpack-retry-chunk-load-plugin": "^3.1.1",
-        "webpack-version-file-plugin": "^0.5.0",
+        "webpack-version-file-plugin": "^0.6.0",
         "yaml": "^2.3.3"
     },
     "engines": {
