@@ -93,6 +93,8 @@ allowBuilds:
     # The following are to make wrangler-action happy - https://github.com/cloudflare/wrangler-action/issues/436
     sharp: true
     workerd: true
+    # Optionally builds itself from source if a specific environment variable is present, which we do not need
+    "@parcel/watcher": false
 
 patchedDependencies:
     # Workaround for missing types export
