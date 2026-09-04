@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useContext, useEffect, useRef } from "react";
+import React, { type JSX, useContext, useEffect, useMemo, useRef } from "react";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { MsgType } from "matrix-js-sdk/src/matrix";
 import {
@@ -135,24 +135,31 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
 
     const { previews, totalPreviewCount, previewsLimited, overPreviewLimit } = useViewModel(urlPreviewVm);
 
-    const collapse = overPreviewLimit
-        ? {
-              collapsed: previewsLimited,
-              hiddenCount: totalPreviewCount - previews.length,
-              onToggle: () => void urlPreviewVm.onTogglePreviewLimit(),
-          }
-        : undefined;
+    // Memoised because it feeds the media preview view model from an effect: a fresh object on every
+    // render would notify subscribers on every render.
+    const collapse = useMemo(
+        () =>
+            overPreviewLimit
+                ? {
+                      collapsed: previewsLimited,
+                      hiddenCount: totalPreviewCount - previews.length,
+                      onToggle: () => void urlPreviewVm.onTogglePreviewLimit(),
+                  }
+                : undefined,
+        [overPreviewLimit, previewsLimited, totalPreviewCount, previews.length, urlPreviewVm],
+    );
 
     const previewToEntry = (preview: UrlPreview): MediaPreviewGroupEntry => {
         let content: MediaPreviewGroupEntryContent;
         if (preview.image === undefined) {
             content = {
-                style: "text",
+                type: "text",
             };
         } else {
             content = {
-                style: "image",
+                type: "image",
                 image: preview.image.imageFull,
+                imageAlt: preview.title,
                 imageSize: "banner",
                 imageOnClick: () => {
                     Modal.createDialog(
@@ -199,6 +206,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
         () =>
             new MediaPreviewGroupViewModel({
                 entries: previews.map(previewToEntry),
+                collapse,
             }),
     );
 
@@ -272,10 +280,11 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
     }, [mediaVisible, urlPreviewVm]);
 
     useEffect(() => {
-        mediaPreviewVm.replace({
+        mediaPreviewVm.setProps({
             entries: previews.map(previewToEntry),
+            collapse,
         });
-    }, [previews, mediaPreviewVm]);
+    }, [previews, collapse, mediaPreviewVm]);
 
     useEffect(() => {
         if (previews.length === 0) {
@@ -300,7 +309,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
             vm={textualBodyVm}
             body={<EventContentBodyView vm={eventContentBodyVm} as={willHaveWrapper ? "span" : "div"} />}
             bodyRef={contentRef}
-            urlPreviews={<MediaPreviewGroupPreview vm={mediaPreviewVm} collapse={collapse} />}
+            urlPreviews={<MediaPreviewGroupPreview vm={mediaPreviewVm} />}
             className={getTextualBodyClassName(content.msgtype as MsgType | undefined)}
         />
     );
