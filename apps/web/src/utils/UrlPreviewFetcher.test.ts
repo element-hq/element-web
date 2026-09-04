@@ -396,5 +396,18 @@ describe("UrlPreviewFetcher", () => {
             expect(client.getUrlPreview).toHaveBeenCalledTimes(1);
             expect(preview).not.toBeNull();
         });
+
+        it("should not fetch bundle from server when server fallback is disallowed", async () => {
+            const { fetcher, client } = getFetcher();
+            client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
+            const preview = await fetcher.previewFromBundle(
+                { matched_url: BASIC_BUNDLE.matched_url },
+                BASIC_BODY,
+                false,
+                false,
+            );
+            expect(client.getUrlPreview).not.toHaveBeenCalled();
+            expect(preview).toBeNull();
+        });
     });
 });

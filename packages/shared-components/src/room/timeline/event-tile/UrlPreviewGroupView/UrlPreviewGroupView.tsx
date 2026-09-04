@@ -104,7 +104,6 @@ export function UrlPreviewGroupView({ vm, className }: UrlPreviewGroupViewProps)
                         key={preview.link}
                         onImageClick={() => vm.onImageClick(preview)}
                         {...preview}
-                        image={preview.image}
                         collapsed={i !== 0}
                     />
                 ))}

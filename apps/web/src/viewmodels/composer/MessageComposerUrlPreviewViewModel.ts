@@ -22,7 +22,6 @@ export interface MessageComposerUrlPreviewViewModelProps {
     client: MatrixClient;
     visible: boolean;
     showTooltips: boolean;
-    urlPreviewBundle: boolean;
     content?: string;
 }
 

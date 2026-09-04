@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
 import { type IContent } from "matrix-js-sdk/src/matrix";
 import { type UrlPreview, type MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { mkEvent } from "test-utils";
+import { createTestClient, mkEvent, mkRoom } from "test-utils";
 
 import { attachMentions, attachUrlPreviews } from "./messages";
 import EditorModel from "../editor/model";
@@ -20,6 +20,9 @@ import { type RoomMessageEventContent } from "../../@types/url-preview";
 import SettingsStore from "../settings/SettingsStore";
 
 describe("attachUrlPreviews", () => {
+    const mxClient = createTestClient();
+    const mxRoom = mkRoom(mxClient, "test-room");
+
     beforeEach(() => {
         const original = SettingsStore.getValue;
         vi.spyOn(SettingsStore, "getValue").mockImplementation(
@@ -53,23 +56,24 @@ describe("attachUrlPreviews", () => {
         content: "https://example.com",
     });
 
-    it("does nothing when there are no previews", () => {
+    it("does nothing when there are no previews", async () => {
         const content = makeContent();
-        attachUrlPreviews({ entries: [], content: "" }, content, false);
+        await attachUrlPreviews(mxClient, mxRoom, { entries: [], content: "" }, content, false);
         expect(content["com.beeper.linkpreviews"]).toBeUndefined();
     });
 
-    it("attaches a preview with no image", () => {
+    it("attaches a preview with no image", async () => {
         const content = makeContent();
-        attachUrlPreviews(snapshot(), content, true);
-        expect(content["com.beeper.linkpreviews"]).toEqual([
-            expect.objectContaining({ "og:title": "Example", "og:image": undefined }),
-        ]);
+        await attachUrlPreviews(mxClient, mxRoom, snapshot(), content, true);
+        expect(content["com.beeper.linkpreviews"]).toEqual([expect.objectContaining({ "og:title": "Example" })]);
+        expect(content["com.beeper.linkpreviews"]![0]["og:image"]).toBeUndefined();
     });
 
-    it("embeds the mxc url from the preview image", () => {
+    it("embeds the mxc url from the preview image", async () => {
         const content = makeContent();
-        attachUrlPreviews(
+        await attachUrlPreviews(
+            mxClient,
+            mxRoom,
             snapshot({
                 imageThumb: "",
                 imageFull: "https://example.com/full.png",

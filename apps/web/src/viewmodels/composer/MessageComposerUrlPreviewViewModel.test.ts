@@ -34,7 +34,6 @@ function getViewModel({ visible } = { visible: true }): {
         client,
         visible,
         showTooltips: false,
-        urlPreviewBundle: false,
     });
     return { vm, client: client as unknown as { getUrlPreview: Mock; mxcUrlToHttp: Mock } };
 }

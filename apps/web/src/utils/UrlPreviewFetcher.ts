@@ -13,6 +13,8 @@ import type { UrlPreview } from "@element-hq/web-shared-components";
 import { mediaFromMxc } from "../customisations/Media";
 import { thumbHeight } from "../ImageUtils";
 import { type UnstableBundledUrlPreviewSingle } from "../../@types/url-preview";
+import { decryptFile } from "./DecryptFile";
+import { type EncryptedFile } from "matrix-js-sdk/src/types";
 
 const logger = rootLogger.getChild("UrlPreviewFetcher");
 
@@ -28,6 +30,8 @@ export const MIN_IMAGE_SIZE_BYTES = 8192;
  */
 export class UrlPreviewFetcher {
     private readonly cache = new Map<string, UrlPreview>();
+    // Map<the mxc:// url, the object url>
+    private readonly decryptedObjectUrls = new Map<string, string>();
 
     public constructor(
         private readonly client: MatrixClient,
@@ -37,6 +41,16 @@ export class UrlPreviewFetcher {
 
     public clearCache(): void {
         this.cache.clear();
+        this.dispose();
+    }
+
+    public revokeObjectUrls(): void {
+        this.decryptedObjectUrls.forEach((url) => URL.revokeObjectURL(url));
+        this.decryptedObjectUrls.clear();
+    }
+
+    public dispose(): void {
+        this.revokeObjectUrls();
     }
 
     /**
@@ -214,13 +228,16 @@ export class UrlPreviewFetcher {
      *
      * @param single A single preview.
      * @param body The message text body. `matched_url` must appear within it.
-     * @param loadMedia Whether to include the preview image WHEN falling back to loading
-     *                  from the server. Pass false when media is hidden.
+     * @param loadMedia Whether to include the preview image. Pass false when media is hidden.
+     * @param allowServerFallback Whether an entry carrying only `matched_url` may be resolved by
+     *                            asking the server. Pass false in encrypted rooms where the user
+     *                            opted into bundled previews only, so no URL is leaked to it.
      */
     public async previewFromBundle(
         single: UnstableBundledUrlPreviewSingle,
         body: string,
         loadMedia = false,
+        allowServerFallback = true,
     ): Promise<UrlPreview | null> {
         if (!URL.canParse(single.matched_url)) {
             return null;
@@ -237,6 +254,9 @@ export class UrlPreviewFetcher {
 
         if (Object.keys(single).length === 1) {
             // We ONLY have the matched_url, so request a preview.
+            if (!allowServerFallback) {
+                return null;
+            }
             return await this.fetchPreview(single.matched_url, loadMedia);
         }
 
@@ -253,8 +273,33 @@ export class UrlPreviewFetcher {
         // - siteName (can be computed)
         // - favicon
         // - media is a video or audio?
-        // TODO in next PR: URL previews in encrypted chat?
+        const encryptedImage = single["beeper:image:encryption"];
         if (
+            typeof encryptedImage === "object" &&
+            typeof single["og:image:type"] === "string" &&
+            typeof single["og:image:width"] === "number" &&
+            typeof single["og:image:height"] === "number"
+        ) {
+            // Decrypting downloads the media eagerly, so only do it when media is visible.
+            if (!loadMedia) {
+                return preview;
+            }
+
+            const objectUrl = await this.decryptBundledImage(encryptedImage);
+            if (objectUrl === null) {
+                return preview;
+            }
+
+            preview.image = {
+                imageThumb: objectUrl,
+                imageFull: objectUrl,
+                imageType: single["og:image:type"],
+                mxcImageFull: encryptedImage.url,
+                width: single["og:image:width"],
+                height: single["og:image:height"],
+                playable: false, // TODO: do we know?
+            };
+        } else if (
             typeof single["og:image"] === "string" &&
             typeof single["og:image:type"] === "string" &&
             typeof single["og:image:width"] === "number" &&
@@ -281,5 +326,25 @@ export class UrlPreviewFetcher {
         }
 
         return preview;
+    }
+
+    /**
+     * Decrypt a bundled preview image, reusing the object URL of a previous decryption where possible.
+     * @param encryptedFile The encrypted file from the bundle.
+     * @returns The object URL of the decrypted image, or null if it could not be decrypted.
+     */
+    private async decryptBundledImage(encryptedFile: EncryptedFile): Promise<string | null> {
+        const cached = this.decryptedObjectUrls.get(encryptedFile.url);
+        if (cached) return cached;
+
+        try {
+            const blob = await decryptFile(encryptedFile);
+            const objectUrl = URL.createObjectURL(blob);
+            this.decryptedObjectUrls.set(encryptedFile.url, objectUrl);
+            return objectUrl;
+        } catch (e) {
+            logger.error("Failed to decrypt bundled URL preview image: ", e);
+            return null;
+        }
     }
 }
