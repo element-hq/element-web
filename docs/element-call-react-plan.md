@@ -304,17 +304,28 @@ With the flag on, `CallView` renders the mock via `CallTile`. Verify by hand, th
 
 **Status (2026-09-03):** done against a local build of the M1 branch. Deviations from the items below:
 
-- **Package source.** No published package yet. A git worktree of `valere/component_ec_M1` lives at
-  `../element-call-component-m1` (sibling of the `element-web` checkout); `pnpm build:component` there
-  produces `dist/`, into which a hand-written `package.json` (`@element-hq/element-call-component`,
-  `exports: { ".": element-call.js, "./style.css": element-call.css }`) was dropped. Element Web depends
-  on it as `link:../../../element-call-component-m1/dist`. **This `link:` entry is machine-local and
-  must be replaced before merging** — either by EC publishing the package or by a git dependency once
-  the branch ships a manifest.
-- **Types come from the package.** EC's build emits no `.d.ts` yet, but its tsconfig already has
-  `declaration: true` and `tsc --emitDeclarationOnly` produces a clean `component/index.d.ts`; that
-  output is copied into the local `dist/types/` and referenced via `types` / `exports["."].types` in the
-  hand-written manifest (upstream ask: add the emit step to `build:component`). Element Web re-exports
+- **Package source.** No published package yet. Element Web depends on the `component` directory of the EC
+  repository as a git dependency,
+  `"@element-hq/element-call-component": "github:element-hq/element-call#valere/component_ec_M1&path:/component"`
+  (2026-09-04; before that a machine-local `link:` to a hand-built `dist/`). The branch ships a
+  `component/package.json` (`exports: { ".": dist/element-call.js, "./style.css": dist/element-call.css }`,
+  `types`, peer dependencies on `react`, `react-dom`, `matrix-js-sdk`, `livekit-client`) whose `prepare`
+  script builds `dist/` on install; `component/pnpm-workspace.yaml` makes the directory a pnpm project of
+  its own, without which pnpm would install the surrounding EC workspace instead and never run `prepare`.
+  pnpm only builds git dependencies that are allowed to, hence the
+  `"@element-hq/element-call-component@git+https://github.com/element-hq/element-call.git": true` entry
+  under `allowBuilds` in `pnpm-workspace.yaml` (pnpm matches git-hosted packages by repository URL, not
+  by bare name). Install cost: EC's `pnpm install` plus `vite build` plus `tsc`, ~30 s with a warm store,
+  a few minutes cold; pnpm caches the prepared package per commit. **The branch name is temporary:** once
+  element-call#4233 (`valere/component_ec_M1`) has merged, change the spec to
+  `github:element-hq/element-call#main&path:/component` (or to the published package, if one exists by
+  then) and run `pnpm install` to update the lockfile. To develop against a local EC checkout, build it
+  (`pnpm build:component`) and add a `.link-config` line
+  `@element-hq/element-call-component=/path/to/element-call/component=apps/web`, which `pnpm install`
+  turns into a symlink without touching `package.json` or the lockfile.
+- **Types come from the package.** `pnpm build:component` on the EC branch emits `dist/types/` (a
+  `tsc --emitDeclarationOnly` pass over the component's entry, `component/tsconfig.build.json`), which the
+  manifest references via `types` / `exports["."].types`. Element Web re-exports
   the package's types from `views/voip/ElementCallComponentTypes.ts` and keeps only **runtime** mirrors
   there — the `UserIntent`/`HeaderStyle`/`BackgroundStyle` enums (importing them as values would pull
   the bundle into the main chunk; TypeScript accepts same-named, same-membered enums as compatible)
@@ -565,14 +576,25 @@ checks the real component's chunk mounts inside `.mx_CallView` without an `ifram
   `@media` queries see the window's size, so the small-screen layout applies there, unlike in Element Web's
   own PiP (see the previous item).
 
-- **Switch `@element-hq/element-call-component` to a remote dependency.** `apps/web/package.json` still has
-  `"@element-hq/element-call-component": "link:../../../element-call-component-m1/dist"`, a machine-local
-  worktree of EC's `valere/component_ec_M1` branch (kept on purpose for now, see Step 7). Before this can
-  merge or run in CI it must become either the published package or a git dependency on the EC branch once
-  it ships a `package.json` in its build output. Everything that renders the real component depends on it:
-  the "React component (real)" smoke spec and the full-call spec from
-  [element-call-e2e-call-plan.md](./element-call-e2e-call-plan.md) (`element-call-full-call.spec.ts`)
-  cannot go green in CI until then.
+- **Switch `@element-hq/element-call-component` to a remote dependency (done 2026-09-04, pending an EC
+  push).** `apps/web/package.json` now depends on
+  `github:element-hq/element-call#valere/component_ec_M1&path:/component` instead of the machine-local
+  `link:` (details under Step 7, "Package source"). Two things remain:
+    1. **EC side.** The branch has to carry the commit "Make the component installable as a git dependency"
+       (`component/package.json`, `component/pnpm-workspace.yaml` + lockfile, `component/tsconfig.build.json`,
+       build output moved to `component/dist`, `build:component` emitting types). It sits on
+       `toger5/component-package-manifest` in the local EC checkout, rebased onto the branch head, and needs
+       pushing to `valere/component_ec_M1`. Until then pnpm resolves `path:/component` to a directory without
+       a manifest, silently falls back to EC's root `package.json` (package name `element-call`, no `dist/`),
+       and Element Web's build fails to import the component. Once pushed: `pnpm install` here regenerates the
+       lockfile entry (`pnpm-lock.yaml` still holds the old `link:` entry, so `--frozen-lockfile` fails until
+       that is committed).
+    2. **Change the ref back once element-call#4233 has merged:** `#valere/component_ec_M1` →
+       `#main` in `apps/web/package.json`, then `pnpm install`. If EC publishes the package to npm by then,
+       prefer that over the git dependency (and drop the `allowBuilds` entry).
+       With both done, the "React component (real)" smoke spec and the full-call spec from
+       [element-call-e2e-call-plan.md](./element-call-e2e-call-plan.md) (`element-call-full-call.spec.ts`) can run
+       in CI.
 - **Keep `matrix-js-sdk` at least as new as the component's build.** The full-call spec exposed that Element
   Web's develop snapshot lacked `MatrixRTCSession.isKeyRotationSuppressed`, which the component reads on
   mount; the lockfile now points at `e16b0bcc` (with `matrix-widget-api ^1.19.0`). Until the component
