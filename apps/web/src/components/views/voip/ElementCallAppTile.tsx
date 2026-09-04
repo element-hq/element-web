@@ -5,7 +5,17 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type CSSProperties, type JSX, useContext, useEffect, useMemo, useRef } from "react";
+import React, {
+    type CSSProperties,
+    type FC,
+    type JSX,
+    lazy,
+    Suspense,
+    useContext,
+    useEffect,
+    useMemo,
+    useRef,
+} from "react";
 import classNames from "classnames";
 import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership, type Membership } from "matrix-js-sdk/src/types";
@@ -23,8 +33,54 @@ import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import { useDispatcher } from "../../../hooks/useDispatcher";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
-import { ElementCall } from "./ElementCall";
+import { useSettingValue } from "../../../hooks/useSettings";
+import Spinner from "../elements/Spinner";
+import { type ElementCallComponentModule, type ElementCallProps } from "./ElementCallComponentTypes";
 import { ElementWebHostBridge } from "./ElementWebHostBridge";
+
+/**
+ * Loads an Element Call component module and initialises it once, before its first render. Both the
+ * real package and the mock have the same module shape (`ElementCallComponentModule`).
+ */
+const loadElementCall = async (
+    module: Promise<ElementCallComponentModule>,
+): Promise<{ default: FC<ElementCallProps> }> => {
+    const m = await module;
+    await m.initializeElementCall(ElementCallModel.getConfigOptions());
+    return { default: m.ElementCall };
+};
+
+/**
+ * The real component: `@element-hq/element-call-component`, a large ES module (LiveKit, EC's UI) plus
+ * its stylesheet. Code-split so it is only fetched when a call is rendered on the React path.
+ */
+const RealElementCall = lazy(() =>
+    loadElementCall(
+        Promise.all([
+            import(/* webpackChunkName: "element-call-component" */ "@element-hq/element-call-component"),
+            import(/* webpackChunkName: "element-call-component" */ "@element-hq/element-call-component/style.css"),
+        ]).then(([m]) => m as ElementCallComponentModule),
+    ),
+);
+
+/**
+ * The mock, for Playwright (no LiveKit in Element Web's test backend) and offline development. Only
+ * fetched when `Developer.elementCallMockComponent` is on.
+ */
+const MockElementCall = lazy(() =>
+    loadElementCall(import(/* webpackChunkName: "element-call-mock" */ "./ElementCallMock")),
+);
+
+/**
+ * Marks the call ready once the (lazily loaded) Element Call component has mounted. Element Call's
+ * component build does not call `HostBridge.contentLoaded()` yet (only its standalone app does), and
+ * the `ElementCall` model's `start()` would otherwise time out waiting for it. Harmless if the
+ * component does call it too (the mock does).
+ */
+const MarkReadyOnMount = ({ call }: { call: ElementCallModel }): null => {
+    useEffect(() => call.markReady(), [call]);
+    return null;
+};
 
 // For persisted apps in PiP we want the zIndex to be higher than for other persisted apps (100),
 // otherwise the PiP view is drawn UNDER another persistent app when dragged around. Same as AppTile.
@@ -46,6 +102,8 @@ export const ElementCallAppTile = (props: CallTileProps): JSX.Element | null => 
     const { app, room, miniMode, fullWidth, pointerEvents, overlay, movePersistedElement, stickyPromise } = props;
     const client = useContext(MatrixClientContext);
     const sdkContext = useContext(SDKContext);
+    // Real component or mock: independent of the widget-vs-React choice CallTile makes.
+    const ElementCall = useSettingValue("Developer.elementCallMockComponent") ? MockElementCall : RealElementCall;
 
     const widgetRoomId = isAppWidget(app) ? app.roomId : null;
     const persistKey = getPersistKey(WidgetUtils.getWidgetUid(app));
@@ -81,11 +139,24 @@ export const ElementCallAppTile = (props: CallTileProps): JSX.Element | null => 
     // Dock while mounted (tiles in miniMode are floating, and therefore not docked), and only tear the
     // call down if no other container is keeping it alive: we support moving between containers, in
     // which case another tile will keep it loaded throughout the transition.
+    //
+    // The liveness check is deferred by a tick: in development React's StrictMode simulates an
+    // unmount/remount right after mounting, and the call must survive that (a real unmount is never
+    // followed by a remount, so the check still runs). It also avoids unmounting the persisted root
+    // synchronously while React is still rendering.
+    const pendingTeardown = useRef<number | null>(null);
     useEffect(() => {
+        if (pendingTeardown.current !== null) {
+            clearTimeout(pendingTeardown.current);
+            pendingTeardown.current = null;
+        }
         if (!miniMode) ActiveWidgetStore.instance.dockWidget(app.id, widgetRoomId);
         return () => {
             if (!miniMode) ActiveWidgetStore.instance.undockWidget(app.id, widgetRoomId);
-            if (!ActiveWidgetStore.instance.isLive(app.id, widgetRoomId)) endCall.current();
+            pendingTeardown.current = window.setTimeout(() => {
+                pendingTeardown.current = null;
+                if (!ActiveWidgetStore.instance.isLive(app.id, widgetRoomId)) endCall.current();
+            }, 0);
         };
     }, [app.id, widgetRoomId, miniMode]);
 
@@ -143,13 +214,16 @@ export const ElementCallAppTile = (props: CallTileProps): JSX.Element | null => 
                     moveRef={movePersistedElement}
                 >
                     <div className={bodyClass} style={bodyStyles}>
-                        <ElementCall
-                            client={client}
-                            roomId={room.roomId}
-                            intent={intent}
-                            config={config}
-                            hostBridge={bridge}
-                        />
+                        <Suspense fallback={<Spinner />}>
+                            <ElementCall
+                                client={client}
+                                roomId={room.roomId}
+                                intent={intent}
+                                config={config}
+                                hostBridge={bridge}
+                            />
+                            <MarkReadyOnMount call={elementCall} />
+                        </Suspense>
                     </div>
                     {overlay}
                 </PersistedElement>

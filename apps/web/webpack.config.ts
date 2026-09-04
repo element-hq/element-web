@@ -244,8 +244,17 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 "react": getPackageRoot("react"),
                 "react-dom": getPackageRoot("react-dom"),
 
+                // The Element Call component (an ES module built by element-call) imports matrix-js-sdk by
+                // its package entry and `lib/*` build outputs; point those at the same `src/*` modules the
+                // rest of Element Web uses, or we end up with two copies of the SDK (and MatrixRTC sessions
+                // that Element Web does not recognise). Order matters: these must come before the prefix alias.
+                "matrix-js-sdk$": path.join(getPackageRoot("matrix-js-sdk"), "src", "matrix.ts"),
+                "matrix-js-sdk/lib": path.join(getPackageRoot("matrix-js-sdk"), "src"),
                 // Same goes for js/react-sdk - we don't need two copies.
                 "matrix-js-sdk": getPackageRoot("matrix-js-sdk"),
+                // and LiveKit, which the Element Call component expects the host to provide exactly once
+                // (exact match on the resolved entry file: the package does not expose its package.json)
+                "livekit-client$": fileURLToPath(import.meta.resolve("livekit-client")),
                 "@matrix-org/react-sdk-module-api": getPackageRoot("@matrix-org/react-sdk-module-api"),
                 // and matrix-widget-api
                 "matrix-widget-api": getPackageRoot("matrix-widget-api"),

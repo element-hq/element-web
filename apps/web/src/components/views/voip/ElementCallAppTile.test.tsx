@@ -58,8 +58,10 @@ describe("ElementCallAppTile", () => {
         stickyPromise = vi.fn<() => Promise<void>>(async () => {});
     });
 
-    afterEach(() => {
+    afterEach(async () => {
         cleanup(); // Unmount before we do any cleanup that might update the component
+        // Let the tile's deferred (StrictMode-safe) teardown run before the next test starts
+        await new Promise((r) => setTimeout(r, 5));
         call.destroy();
         cleanUpClientRoomAndStores(client, room);
         // Not restoreAllMocks: that would also undo enableCalls()' SettingsStore stub.
@@ -120,8 +122,23 @@ describe("ElementCallAppTile", () => {
 
         cleanup();
         expect(undock).toHaveBeenCalledWith(call.widget.id, room.roomId);
-        expect(destroyElement).toHaveBeenCalled();
+        // Teardown is deferred by a tick (StrictMode-safe)
+        await waitFor(() => expect(destroyElement).toHaveBeenCalled());
         expect(destroyPersistent).toHaveBeenCalledWith(call.widget.id, room.roomId);
+    });
+
+    it("survives StrictMode's simulated unmount and remount", async () => {
+        const destroyElement = vi.spyOn(PersistedElement, "destroyElement");
+        render(
+            <React.StrictMode>
+                <ElementCallAppTile app={call.widget} room={room} stickyPromise={stickyPromise} />
+            </React.StrictMode>,
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
+        expect(await screen.findByText("Element Call (mock)")).toBeInTheDocument();
+        await act(() => new Promise((r) => setTimeout(r, 10)));
+        expect(destroyElement).not.toHaveBeenCalled();
+        expect(ActiveWidgetStore.instance.isDocked(call.widget.id, room.roomId)).toBe(true);
     });
 
     it("keeps the call alive on unmount while it is persistent", async () => {
@@ -130,6 +147,7 @@ describe("ElementCallAppTile", () => {
         ActiveWidgetStore.instance.setWidgetPersistence(call.widget.id, room.roomId, true);
 
         cleanup();
+        await act(() => new Promise((r) => setTimeout(r, 10)));
         expect(destroyElement).not.toHaveBeenCalled();
         ActiveWidgetStore.instance.destroyPersistentWidget(call.widget.id, room.roomId);
     });

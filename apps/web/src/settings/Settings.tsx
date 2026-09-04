@@ -366,6 +366,7 @@ export interface Settings {
     "inviteRules": IBaseSetting<ComputedInviteConfig>;
     "blockInvites": IBaseSetting<boolean>;
     "Developer.elementCallUrl": IBaseSetting<string>;
+    "Developer.elementCallMockComponent": IBaseSetting<boolean>;
     "RoomList.CustomSectionData": IBaseSetting<CustomSectionsData>;
     "RoomList.OrderedCustomSections": IBaseSetting<ReorderableSection[]>;
     "RoomList.SectionExpansionState": IBaseSetting<SectionExpansionState>;
@@ -1493,5 +1494,12 @@ export const SETTINGS: Settings = {
         supportedLevels: [SettingLevel.DEVICE],
         displayName: _td("devtools|settings|elementCallUrl"),
         default: "",
+    },
+    "Developer.elementCallMockComponent": {
+        // With feature_element_call_react: render the mock Element Call component (HostBridge buttons, no
+        // media) instead of the real one. Used by Playwright and for development without a LiveKit backend.
+        supportedLevels: [SettingLevel.DEVICE],
+        displayName: _td("devtools|settings|elementCallMockComponent"),
+        default: false,
     },
 };

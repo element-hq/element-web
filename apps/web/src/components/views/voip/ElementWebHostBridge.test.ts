@@ -14,7 +14,7 @@ import ActiveWidgetStore from "../../../stores/ActiveWidgetStore";
 import { type ElementCall } from "../../../models/Call";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
-import { type HostBridge, type HostRequest } from "./ElementCall";
+import { type HostBridge, type HostRequest } from "./ElementCallComponentTypes";
 import { ElementWebHostBridge } from "./ElementWebHostBridge";
 
 describe("ElementWebHostBridge", () => {
