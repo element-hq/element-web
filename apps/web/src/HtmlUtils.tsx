@@ -11,8 +11,6 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type Key, type LegacyRef, type ReactNode } from "react";
 import {
-    sanitizeHtmlText,
-    isUrlPermitted,
     sanitizeHtml,
     type HtmlSanitizeOptions,
 } from "@element-hq/element-web-shared-utils";
@@ -30,6 +28,7 @@ import { sanitizeHtmlParams, transformTags, linkifyHtml } from "./Linkify";
 import { graphemeSegmenter } from "./utils/strings";
 
 export { linkifyAndSanitizeHtml } from "./Linkify";
+export { isUrlPermitted, sanitizeHtmlText } from "@element-hq/element-web-shared-utils";
 
 // Anything outside the basic multilingual plane will be a surrogate pair
 const SURROGATE_PAIR_PATTERN = /([\ud800-\udbff])([\udc00-\udfff])/;
@@ -107,9 +106,6 @@ export function sanitizedHtmlNode(
 
     return <div dangerouslySetInnerHTML={{ __html: saneHtml }} dir="auto" className={className} />;
 }
-
-// Keep the app-facing export stable for settings and context-menu consumers.
-export { isUrlPermitted, sanitizeHtmlText };
 
 // this is the same as the above except with less rewriting
 const composerSanitizeHtmlParams: HtmlSanitizeOptions = {

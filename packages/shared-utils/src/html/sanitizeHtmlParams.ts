@@ -94,8 +94,8 @@ function isTransform(value: HtmlSanitizeTransform | undefined): value is HtmlSan
  */
 function hasUnsafeControlCharacter(input: string): boolean {
     return [...input].some((character) => {
-        const code = character.charCodeAt(0);
-        return code <= 0x20 || (code >= 0x7f && code <= 0x9f);
+        const code = character.codePointAt(0);
+        return code !== undefined && (code <= 0x20 || (code >= 0x7f && code <= 0x9f));
     });
 }
 
