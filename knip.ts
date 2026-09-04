@@ -87,6 +87,9 @@ export default {
                 // `@vitest/browser/matchers` to resolve under pnpm's strict node_modules.
                 // See apps/web/tsconfig.browser-test.json.
                 "@vitest/browser",
+
+                // Used by Playwright to serve the built web app.
+                "serve",
             ],
         },
         "apps/desktop": {
@@ -107,6 +110,10 @@ export default {
         },
         "modules": {
             project: ["**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!", "!playwright/**!"],
+            ignoreDependencies: [
+                // Used by Playwright to serve the built web app.
+                "serve",
+            ]
         },
         "modules/*": {
             entry: ["src/index.ts{x,}!"],
