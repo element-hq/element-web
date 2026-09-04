@@ -79,7 +79,11 @@ describe("MediaPreviewTile", () => {
     });
 
     it("renders the given element above the tile", () => {
-        render(<MediaPreviewTile {...baseProps} above={<span data-testid="above">above</span>} />);
+        render(
+            <MediaPreviewTile {...baseProps}>
+                <span data-testid="above">above</span>
+            </MediaPreviewTile>,
+        );
 
         expect(screen.getByTestId("above")).toBeInTheDocument();
     });
