@@ -18,7 +18,7 @@ import {
 } from "./MediaPreviewTile/MediaPreviewTile";
 
 export type MediaPreviewGroupEntryTextContent = {
-    style: "text";
+    type: "text";
 };
 
 /**
@@ -29,11 +29,15 @@ export type MediaPreviewGroupEntryTextContent = {
 export type ImageSize = "full" | "banner" | "tallbanner";
 
 export type MediaPreviewGroupEntryImageContent = {
-    style: "image";
+    type: "image";
     /**
      * url of the image
      */
     image: string;
+    /**
+     * alt text for image
+     */
+    imageAlt: string;
     /**
      * optional: what happens when the image is clicked
      */
@@ -45,7 +49,7 @@ export type MediaPreviewGroupEntryImageContent = {
 };
 
 export type MediaPreviewGroupEntryVideoContent = {
-    style: "video";
+    type: "video";
     /**
      * url of the video
      */
@@ -61,7 +65,7 @@ export type MediaPreviewGroupEntryVideoContent = {
 };
 
 export type MediaPreviewGroupEntryAudioContent = {
-    style: "audio";
+    type: "audio";
     /**
      * url of the audio
      */
@@ -117,7 +121,6 @@ export type MediaPreviewGroupEntryBase = {
      * body content
      */
     body: string;
-
     /**
      * buttons to add to the right of the tile
      */
@@ -180,7 +183,7 @@ export function MediaPreviewGroupPreview({ vm }: MediaPreviewGroupPreviewProps):
     return (
         <div className={styles.container}>
             {entries.map((entry) => {
-                switch (entry.style) {
+                switch (entry.type) {
                     case "text":
                         return <TextPreviewTile key={entry.id} {...entry} />;
                     case "image":

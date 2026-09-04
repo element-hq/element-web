@@ -43,7 +43,7 @@ export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
             entries: [
                 {
                     id: mxEvent.getId()!,
-                    style: "text",
+                    type: "text",
                     header: mediaEventHelper.fileName,
                     body: size === undefined ? _t("timeline|m.file|size_unknown") : fileSize(size),
                     buttons,

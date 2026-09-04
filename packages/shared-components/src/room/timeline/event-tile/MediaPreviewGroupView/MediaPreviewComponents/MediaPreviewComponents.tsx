@@ -104,9 +104,7 @@ interface ValidityState {
 }
 
 /**
- * Media checks are defined at module scope so that their identity is stable: passing a fresh
- * closure on every render would re-run the effect in {@link useIsValid} after each state update,
- * leaving the component re-rendering in a loop.
+ * returns whether a url is valid image
  */
 function checkImage(src: string): Promise<boolean> {
     return new Promise((res) => {
@@ -120,6 +118,9 @@ function checkImage(src: string): Promise<boolean> {
     });
 }
 
+/**
+ * returns whether a url is valid video
+ */
 function checkVideo(src: string): Promise<boolean> {
     return new Promise((res) => {
         const vid = document.createElement("video");
@@ -133,6 +134,9 @@ function checkVideo(src: string): Promise<boolean> {
     });
 }
 
+/**
+ * returns whether a url is valid audio
+ */
 function checkAudio(src: string): Promise<boolean> {
     return new Promise((res) => {
         const aud = document.createElement("audio");
@@ -146,11 +150,16 @@ function checkAudio(src: string): Promise<boolean> {
     });
 }
 
+/**
+ * A hook to check whether a resource is valid
+ * @param check - async function returns true if resource is valid
+ * @returns - the output of check, and for which src did the check ran on (because a check could return after src has changed)
+ */
 function useIsValid(check: (src: string) => Promise<boolean>, src: string): ValidityState {
-    const [state, setState]: [ValidityState, React.Dispatch<React.SetStateAction<ValidityState>>] = useState({
+    const [state, setState] = useState({
         valid: true,
         src,
-    } as ValidityState);
+    });
 
     useEffect(() => {
         let cancelled = false;
@@ -190,10 +199,12 @@ function getVideoClass(size: ImageSize): string {
 
 export function Image({
     image,
+    imageAlt,
     imageOnClick,
     imageSize,
 }: {
     image: string;
+    imageAlt: string;
     imageOnClick?: () => void;
     imageSize: ImageSize;
 }): JSX.Element | null {
@@ -203,7 +214,7 @@ export function Image({
 
     if (!valid || src !== image) return null;
 
-    const imageElem = <img src={image} alt="" />;
+    const imageElem = <img src={image} alt={imageAlt} />;
     return (
         <div className={classNames(classes)}>
             {imageOnClick ? (
@@ -234,7 +245,12 @@ export function Video({
 
     // Only fetch the metadata up front, matching the video body: a preview should not pull down the
     // whole file before the user has asked to play it.
-    const videoElem = <video src={video} controls preload="metadata" />;
+    // Uploaded media carries no caption track, but the empty element is still required for a11y.
+    const videoElem = (
+        <video src={video} controls preload="metadata">
+            <track kind="captions" />
+        </video>
+    );
 
     return (
         <div className={classNames(classes)}>
@@ -255,7 +271,12 @@ export function Audio({ audio, audioOnClick }: { audio: string; audioOnClick?: (
 
     if (!valid || src !== audio) return null;
 
-    const audioElem = <audio src={audio} controls />;
+    // Uploaded media carries no caption track, but the empty element is still required for a11y.
+    const audioElem = (
+        <audio src={audio} controls>
+            <track kind="captions" />
+        </audio>
+    );
     return (
         <div className={styles.audio}>
             {audioOnClick ? (

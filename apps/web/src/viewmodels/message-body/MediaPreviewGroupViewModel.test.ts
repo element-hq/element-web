@@ -14,7 +14,7 @@ import { MediaPreviewGroupViewModel } from "./MediaPreviewGroupViewModel";
 describe("MediaPreviewGroupViewModel", () => {
     const mkEntry = (id: string): MediaPreviewGroupEntry => ({
         id,
-        style: "text",
+        type: "text",
         header: `header ${id}`,
         body: `body ${id}`,
         icon: createElement("svg"),
