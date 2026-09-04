@@ -3,9 +3,12 @@ on:
     workflow_dispatch: {}
     schedule:
         - cron: "30 1 * * *"
+    pull_request_target:
+        types: [synchronize]
 permissions: {}
 jobs:
     close:
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         runs-on: ubuntu-24.04
         permissions:
             actions: write
@@ -24,6 +27,70 @@ jobs:
                   exempt-issue-labels: "Z-Flaky-Test-Disabled"
 
                   # Stale PR closing
-                  days-before-pr-stale: 180
+                  days-before-pr-stale: 60
                   days-before-pr-close: 0
-                  close-pr-message: "This PR has been automatically closed because it has been stale for 180 days. If you wish to continue working on this PR, please ping a maintainer to reopen it."
+                  close-pr-message: "This PR has been automatically closed because it has been stale for 60 days. If you wish to continue working on this PR, please ping a maintainer to reopen it."
+
+    # PRs awaiting iteration from the author (X-Needs-Iteration label)
+    # which have seen no activity in 14 days are marked as draft.
+    draft-inactive-prs:
+        name: Mark inactive X-Needs-Iteration PRs as draft
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        runs-on: ubuntu-24.04
+        permissions:
+            pull-requests: write
+        steps:
+            - name: Mark inactive labelled PRs as draft
+              uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
+              with:
+                  script: |
+                      const STALE_LABEL = "X-Needs-Iteration";
+                      const DAYS_BEFORE_STALE = 14;
+                      const staleBefore = Date.now() - DAYS_BEFORE_STALE * 24 * 60 * 60 * 1000;
+
+                      const candidates = await github.paginate(github.rest.issues.listForRepo, {
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        state: "open",
+                        labels: STALE_LABEL,
+                        per_page: 100,
+                      });
+
+                      for (const item of candidates) {
+                        if (!item.pull_request) continue;
+                        if (new Date(item.updated_at).getTime() > staleBefore) continue;
+
+                        const { data: pr } = await github.rest.pulls.get({
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          pull_number: item.number,
+                        });
+                        if (pr.draft) continue;
+
+                        await github.graphql(
+                          `mutation($id: ID!) {
+                            convertPullRequestToDraft(input: { pullRequestId: $id }) {
+                              pullRequest { id }
+                            }
+                          }`,
+                          { id: pr.node_id },
+                        );
+                      }
+
+    # Remove X-Needs-Iteration label after new commits are pushed
+    remove_label:
+        name: Remove X-Needs-Iteration label after new commits are pushed
+        if: github.event_name == 'pull_request_target' && contains(github.event.pull_request.labels.*.name, 'X-Needs-Iteration')
+        runs-on: ubuntu-24.04
+        permissions:
+            pull-requests: write
+        steps:
+            - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
+              with:
+                  script: |
+                      await github.rest.issues.removeLabel({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        issue_number: context.payload.pull_request.number,
+                        name: "X-Needs-Iteration",
+                      });
