@@ -91,6 +91,16 @@ interface StoreData {
     safeStorageBackendMigrate?: boolean;
     /** whether to open the app at login minimised, only valid when app.openAtLogin is true */
     openAtLoginMinimised: boolean;
+    /**
+     * The version we last asked the auto-updater to install, recorded at `quitAndInstall` time and read
+     * back on the next launch to determine whether the install actually took effect. (#32404)
+     */
+    pendingUpdateVersion?: string;
+    /**
+     * How many consecutive updates were handed to the auto-updater but never took effect. Used to stop
+     * re-downloading an update which cannot be installed on every single launch. (#32404)
+     */
+    failedUpdateInstalls?: number;
 }
 
 /**
@@ -247,6 +257,12 @@ class Store extends ElectronStore<StoreData> {
                 openAtLoginMinimised: {
                     type: "boolean",
                     default: true,
+                },
+                pendingUpdateVersion: {
+                    type: "string",
+                },
+                failedUpdateInstalls: {
+                    type: "number",
                 },
             },
         });
