@@ -20,17 +20,16 @@ import {
 } from "matrix-js-sdk/src/matrixrtc";
 
 import { stubClient } from "../../../../test/test-utils";
+import { Subject } from "rxjs";
+
 import {
-    ElementCall,
     type ElementCallProps,
     type HostBridge,
     type HostRequest,
-    type Subscribable,
     UserIntent,
     configurationForIntent,
-    initializeElementCall,
-    nullHostBridge,
-} from "./ElementCall";
+} from "./ElementCallComponentTypes";
+import { ElementCall, initializeElementCall, nullHostBridge } from "./ElementCallMock";
 
 const roomId = "!1:example.org";
 
@@ -48,24 +47,12 @@ class MockSession extends TypedEventEmitter<MatrixRTCSessionEvent, MatrixRTCSess
     }
 }
 
-/** A minimal hot observable so the test can act as the host. */
-class Subject<T> implements Subscribable<T> {
-    private listeners = new Set<(value: T) => void>();
-    public subscribe(next: (value: T) => void): { unsubscribe(): void } {
-        this.listeners.add(next);
-        return { unsubscribe: () => this.listeners.delete(next) };
-    }
-    public next(value: T): void {
-        this.listeners.forEach((l) => l(value));
-    }
-}
-
 const request = <Data, Reply = void>(data: Data): HostRequest<Data, Reply> => ({
     data,
     reply: vi.fn<(reply: Reply) => void>(),
 });
 
-describe("ElementCall (mock)", () => {
+describe("ElementCallMock", () => {
     let client: MatrixClient;
     let session: MockSession;
     let hangUp$: Subject<HostRequest<Record<string, never>>>;
@@ -80,7 +67,7 @@ describe("ElementCall (mock)", () => {
         vi.spyOn(client, "getDeviceId").mockReturnValue("ALICEDEVICE");
         vi.spyOn(client, "sendStateEvent").mockResolvedValue({ event_id: "$event" });
         vi.spyOn(client, "getRoom").mockImplementation((id) => (id === roomId ? ({ roomId } as Room) : null));
-        (client as any).matrixRTC = { getRoomSession: () => session as unknown as MatrixRTCSession };
+        vi.spyOn(client.matrixRTC, "getRoomSession").mockReturnValue(session as unknown as MatrixRTCSession);
 
         hangUp$ = new Subject();
         deviceMute$ = new Subject();
@@ -112,7 +99,9 @@ describe("ElementCall (mock)", () => {
         renderCall({ intent: UserIntent.StartNewCallDM });
         expect(screen.getByText(/!1:example.org · intent start_call_dm/)).toBeInTheDocument();
         await waitFor(() => expect(bridge.contentLoaded).toHaveBeenCalled());
-        expect(screen.getByRole("list", { name: "HostBridge log" })).toHaveTextContent("→ contentLoaded");
+        await waitFor(() =>
+            expect(screen.getByRole("list", { name: "HostBridge log" })).toHaveTextContent("→ contentLoaded"),
+        );
     });
 
     it("lists the session members and marks our own device", () => {
@@ -146,7 +135,7 @@ describe("ElementCall (mock)", () => {
     });
 
     it("records what initializeElementCall was given", async () => {
-        await initializeElementCall({ rageshakeSubmitUrl: "https://rageshake.example.org" });
+        await initializeElementCall({ rageshake: { submit_url: "https://rageshake.example.org" } });
         renderCall();
         expect(screen.getByText(/initializeElementCall: .*rageshake\.example\.org/)).toBeInTheDocument();
     });
@@ -185,6 +174,27 @@ describe("ElementCall (mock)", () => {
 
         await user.click(screen.getByRole("button", { name: "close" }));
         expect(bridge.close).toHaveBeenCalled();
+    });
+
+    it("clears its membership when unmounted while in the call", async () => {
+        const user = userEvent.setup();
+        const { unmount } = render(<ElementCall client={client} roomId={roomId} hostBridge={bridge} />);
+        await user.click(screen.getByRole("button", { name: "notifyJoined" }));
+        vi.mocked(client.sendStateEvent).mockClear();
+
+        unmount();
+        expect(client.sendStateEvent).toHaveBeenCalledWith(
+            roomId,
+            EventType.GroupCallMemberPrefix,
+            {},
+            "_@alice:example.org_ALICEDEVICE_m.call",
+        );
+    });
+
+    it("does not touch room state when unmounted while in the lobby", () => {
+        const { unmount } = render(<ElementCall client={client} roomId={roomId} hostBridge={bridge} />);
+        unmount();
+        expect(client.sendStateEvent).not.toHaveBeenCalled();
     });
 
     it("leaves the call and gives up the screen before closing", async () => {

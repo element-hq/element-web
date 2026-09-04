@@ -18,6 +18,11 @@
         "strict": true,
         "types": ["node", "modernizr"],
         "paths": {
+            // The Element Call component's typings import matrix-js-sdk by its package entry and `lib/*`
+            // build outputs; resolve those to the `src/*` modules the rest of Element Web uses, so that e.g.
+            // `MatrixClient` is one type (mirrors the webpack aliases).
+            "matrix-js-sdk": ["./node_modules/matrix-js-sdk/src/matrix.ts"],
+            "matrix-js-sdk/lib/*": ["./node_modules/matrix-js-sdk/src/*"],
             "jest-matrix-react": ["./test/test-utils/jest-matrix-react"],
             "test-utils-rtl": ["./test/test-utils/jest-matrix-react"],
             "test-utils": ["./test/test-utils"],

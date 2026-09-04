@@ -16,7 +16,7 @@ import {
     type HostBridge,
     type HostRequest,
     type JoinCallData,
-} from "./ElementCall";
+} from "./ElementCallComponentTypes";
 
 export interface ElementWebHostBridgeOptions {
     /** The id of the (virtual) widget that is this call's identity in the widget stores. */

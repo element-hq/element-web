@@ -49,11 +49,12 @@ import { type WidgetMessaging, WidgetMessagingEvent } from "../stores/widgets/Wi
 import { BugReportEndpointURLLocal } from "../IConfigOptions.ts";
 import {
     BackgroundStyle,
+    type ConfigOptions,
     type DeviceMuteState,
     type ElementCallConfiguration,
     type HostRequest,
     type UserIntent,
-} from "../components/views/voip/ElementCall";
+} from "../components/views/voip/ElementCallComponentTypes";
 
 const TIMEOUT_MS = 16000;
 const logger = rootLogger.getChild("models/Call");
@@ -668,8 +669,7 @@ export class ElementCall extends Call {
 
     /**
      * The intent-related decisions for a call in a room: what the user asked for, plus the lobby
-     * behaviour Element Web wants to force. Shared by the widget URL and the React component so that
-     * both transports behave the same.
+     * behaviour Element Web wants to force. Feeds {@link computeCallOptions}.
      */
     private static getRoomIntent(
         client: MatrixClient,
@@ -707,37 +707,17 @@ export class ElementCall extends Call {
     }
 
     /**
-     * Calculate the correct intent (and associated parameters) for an Element Call room. Parameters
-     * will be applied to the `params` instance.
-     *
-     * @param params Existing URL parameters
-     * @param client The current client.
-     * @param roomId The room ID for the call.
+     * What to run Element Call with for a call in a room: the user's intent and Element Web's overrides
+     * on top of the defaults that intent implies. This is the single place the decisions are made for
+     * both transports: `generateWidgetUrl` serialises the result into URL parameters, and
+     * `ElementCallAppTile` passes it to the React component as props.
      */
-    private static appendRoomParams(
-        params: URLSearchParams,
+    private static computeCallOptions(
         client: MatrixClient,
         roomId: string,
         opts: WidgetGenerationParameters,
-    ): void {
+    ): { intent?: UserIntent; config: ElementCallConfiguration } {
         const { intent, returnToLobby, skipLobby } = ElementCall.getRoomIntent(client, roomId, opts);
-        if (intent !== undefined) params.append("intent", intent);
-        if (returnToLobby !== undefined) params.append("returnToLobby", returnToLobby.toString());
-        if (skipLobby !== undefined) params.append("skipLobby", skipLobby.toString());
-    }
-
-    /**
-     * The host-side configuration Element Call gets from Element Web's settings, independent of the
-     * room. Shared by the widget URL and the React component.
-     */
-    private static getHostConfig(): {
-        lang: string;
-        fontScale: number;
-        fonts: string[];
-        allowIceFallback: boolean;
-        echoCancellation: boolean;
-        noiseSuppression: boolean;
-    } {
         const fonts = SettingsStore.getValue("useSystemFont")
             ? SettingsStore.getValue("systemFont")
                   .split(",")
@@ -748,44 +728,60 @@ export class ElementCall extends Call {
                       return font;
                   })
             : [];
-        return {
+        const config: ElementCallConfiguration = {
+            perParticipantE2EE: !!ElementCall.getWidgetData(client, roomId, {}, {}).perParticipantE2EE,
             lang: getCurrentLanguage().replace("_", "-"),
             fontScale: FontWatcher.getRootFontSize() / FontWatcher.getBrowserDefaultFontSize(),
             fonts,
+            // on EW we do not want the gradient EC background.
+            background: BackgroundStyle.Solid,
             allowIceFallback: !!SettingsStore.getValue("fallbackICEServerAllowed"),
             echoCancellation: SettingsStore.getValue("webrtc_audio_echoCancellation"),
             noiseSuppression: SettingsStore.getValue("webrtc_audio_noiseSuppression"),
         };
-    }
-
-    /**
-     * What to render Element Call's React component with: the user's intent and Element Web's
-     * overrides on top of the defaults that intent implies. The React-component counterpart of
-     * `generateWidgetUrl`; both derive from the same decisions.
-     */
-    public getCallOptions(): { intent?: UserIntent; config: ElementCallConfiguration } {
-        const { intent, returnToLobby, skipLobby } = ElementCall.getRoomIntent(
-            this.client,
-            this.roomId,
-            this.widgetGenerationParameters,
-        );
-        const host = ElementCall.getHostConfig();
-        const config: ElementCallConfiguration = {
-            perParticipantE2EE: !!ElementCall.getWidgetData(this.client, this.roomId, {}, {}).perParticipantE2EE,
-            lang: host.lang,
-            fontScale: host.fontScale,
-            fonts: host.fonts,
-            // on EW we do not want the gradient EC background.
-            background: BackgroundStyle.Solid,
-            allowIceFallback: host.allowIceFallback,
-            echoCancellation: host.echoCancellation,
-            noiseSuppression: host.noiseSuppression,
-        };
         if (returnToLobby !== undefined) config.returnToLobby = returnToLobby;
-        const effectiveSkipLobby = skipLobby ?? this.widgetGenerationParameters.skipLobby;
+        // The room's rule (e.g. video rooms never skip the lobby) wins over what the caller asked for.
+        const effectiveSkipLobby = skipLobby ?? opts.skipLobby;
         if (typeof effectiveSkipLobby === "boolean") config.skipLobby = effectiveSkipLobby;
         // Element Web's intents use the same string values as Element Call's UserIntent.
         return { intent: intent as string as UserIntent | undefined, config };
+    }
+
+    /**
+     * What to render Element Call's React component with for this call, see {@link computeCallOptions}.
+     */
+    public getCallOptions(): { intent?: UserIntent; config: ElementCallConfiguration } {
+        return ElementCall.computeCallOptions(this.client, this.roomId, this.widgetGenerationParameters);
+    }
+
+    /**
+     * Deployment-wide configuration for Element Call's React component (`initializeElementCall`): the
+     * React-component counterpart of `appendAnalyticsParams` and the `rageshakeSubmitUrl` URL param,
+     * with the same consent gating.
+     */
+    public static getConfigOptions(): ConfigOptions {
+        const options: ConfigOptions = {};
+
+        const rageshakeSubmitUrl = SdkConfig.get("bug_report_endpoint_url");
+        if (rageshakeSubmitUrl && rageshakeSubmitUrl !== BugReportEndpointURLLocal) {
+            options.rageshake = { submit_url: rageshakeSubmitUrl };
+        }
+
+        const posthogConfig = SdkConfig.get("posthog");
+        if (
+            posthogConfig?.project_api_key &&
+            posthogConfig?.api_host &&
+            PosthogAnalytics.instance.getAnonymity() !== Anonymity.Disabled
+        ) {
+            options.posthog = { api_key: posthogConfig.project_api_key, api_host: posthogConfig.api_host };
+            // We gate passing sentry behind analytics consent as EC shares data automatically without user-consent,
+            // unlike EW where data is shared upon an intentional user action (rageshake).
+            const sentryConfig = SdkConfig.get("sentry");
+            if (sentryConfig?.dsn) {
+                options.sentry = { DSN: sentryConfig.dsn, environment: sentryConfig.environment ?? "" };
+            }
+        }
+        return options;
     }
 
     /**
@@ -841,45 +837,46 @@ export class ElementCall extends Call {
             : // this strips hash fragment from baseUrl
               new URL("./widgets/element-call/index.html#", window.location.href);
 
-        const host = ElementCall.getHostConfig();
+        const { intent, config } = ElementCall.computeCallOptions(client, roomId, opts);
 
         // Splice together the Element Call URL for this call
         // Parameters can be found in https://github.com/element-hq/element-call/blob/livekit/src/UrlParams.ts.
         const params = new URLSearchParams({
             // Template variables are used, so that this can be configured using the widget data.
+            // `config.perParticipantE2EE` is the same decision resolved eagerly; the widget resolves it
+            // from `widget.data` so that changes to the encryption setting reach a running iframe.
             perParticipantE2EE: "$perParticipantE2EE",
             userId: client.getUserId()!,
             deviceId: client.getDeviceId()!,
             roomId: roomId,
             baseUrl: client.baseUrl,
-            lang: host.lang,
-            fontScale: host.fontScale.toString(),
+            lang: config.lang!,
+            fontScale: config.fontScale!.toString(),
+            // The React component gets theme changes over the host bridge instead.
             theme: "$org.matrix.msc2873.client_theme",
-            // on EW we do not want the gradient EC background.
-            background: BackgroundStyle.Solid,
+            background: config.background!,
         });
 
-        if (typeof opts.skipLobby === "boolean") {
-            params.set("skipLobby", opts.skipLobby.toString());
-        }
+        if (intent !== undefined) params.append("intent", intent);
+        if (config.returnToLobby !== undefined) params.append("returnToLobby", config.returnToLobby.toString());
+        if (config.skipLobby !== undefined) params.append("skipLobby", config.skipLobby.toString());
 
         const rageshakeSubmitUrl = SdkConfig.get("bug_report_endpoint_url");
         if (rageshakeSubmitUrl && rageshakeSubmitUrl !== BugReportEndpointURLLocal) {
             params.append("rageshakeSubmitUrl", rageshakeSubmitUrl);
         }
 
-        if (host.allowIceFallback) {
+        if (config.allowIceFallback) {
             params.append("allowIceFallback", "true");
         }
 
         // the defaults are true, so only set if false
-        if (!host.echoCancellation) params.append("echoCancellation", "false");
-        if (!host.noiseSuppression) params.append("noiseSuppression", "false");
+        if (!config.echoCancellation) params.append("echoCancellation", "false");
+        if (!config.noiseSuppression) params.append("noiseSuppression", "false");
 
         // Set custom fonts
-        host.fonts.forEach((font) => params.append("font", font));
+        config.fonts?.forEach((font) => params.append("font", font));
         this.appendAnalyticsParams(params, client);
-        this.appendRoomParams(params, client, roomId, opts);
 
         const replacedUrl = params.toString().replace(/%24/g, "$");
         url.hash = `#?${replacedUrl}`;
