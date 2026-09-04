@@ -760,6 +760,20 @@ describe("<MatrixChat />", () => {
         });
     });
 
+    describe("opening a modal while the app is still starting", () => {
+        it("leaves the loading screen alone rather than sending the user to the welcome page", () => {
+            // The dialog itself is not the point here, and it cannot mount without a client anyway.
+            vi.spyOn(Modal, "createDialog").mockReturnValue({} as any);
+            // Nothing is awaited between render and the dispatch below, so the app is still on its
+            // initial loading view — the spinner someone is staring at when they hit ctrl-comma.
+            getComponent();
+
+            defaultDispatcher.dispatch({ action: Action.ViewUserSettings }, true);
+
+            expect(defaultProps.onNewScreen).not.toHaveBeenCalledWith("welcome", expect.anything());
+        });
+    });
+
     describe("with an existing session", () => {
         const mockidb: Record<string, Record<string, string>> = {
             account: {
