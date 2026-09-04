@@ -1574,6 +1574,8 @@
         "video_rooms_faq2_answer": "Yes, the chat timeline is displayed alongside the video.",
         "video_rooms_faq2_question": "Can I use text chat alongside the video call?",
         "video_rooms_feedbackSubheading": "Thank you for trying the beta, please go into as much detail as you can so we can improve it.",
+        "web_event_index": "Encrypted message search in the browser",
+        "web_event_index_description": "Build a client-side encrypted index so Search works in encrypted rooms without the desktop app. Off by default. The index never leaves this device.",
         "wysiwyg_composer": "Rich text editor"
     },
     "labs_mjolnir": {
@@ -2087,6 +2089,7 @@
         "search": {
             "all_rooms_button": "Search all rooms",
             "placeholder": "Search messages…",
+            "still_indexing": "Some rooms are still being indexed. Older messages may not appear yet.",
             "summary": {
                 "one": "1 result found for “<query/>”",
                 "other": "%(count)s results found for “<query/>”"

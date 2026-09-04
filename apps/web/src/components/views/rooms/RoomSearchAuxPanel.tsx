@@ -16,6 +16,7 @@ import { PosthogScreenTracker } from "../../../PosthogTrackers";
 import SearchWarning, { WarningKind } from "../elements/SearchWarning";
 import { type SearchInfo, SearchScope } from "../../../Searching";
 import InlineSpinner from "../elements/InlineSpinner";
+import EventIndexPeg from "../../../indexing/EventIndexPeg";
 
 interface Props {
     searchInfo?: SearchInfo;
@@ -26,6 +27,8 @@ interface Props {
 
 const RoomSearchAuxPanel: React.FC<Props> = ({ searchInfo, isRoomEncrypted, onSearchScopeChange, onCancelClick }) => {
     const scope = searchInfo?.scope ?? SearchScope.Room;
+    const crawling = EventIndexPeg.get()?.crawlingRooms();
+    const stillIndexing = Boolean(crawling && crawling.crawlingRooms.size > 0);
 
     return (
         <>
@@ -52,6 +55,9 @@ const RoomSearchAuxPanel: React.FC<Props> = ({ searchInfo, isRoomEncrypted, onSe
                             scope={scope}
                             roomId={searchInfo?.roomId}
                         />
+                        {stillIndexing ? (
+                            <div className="mx_RoomSearchAuxPanel_indexing">{_t("room|search|still_indexing")}</div>
+                        ) : null}
                     </div>
                 </div>
                 <div className="mx_RoomSearchAuxPanel_buttons">
