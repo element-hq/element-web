@@ -25,10 +25,14 @@ import {
 } from "../MediaPreviewComponents/MediaPreviewComponents";
 import classNames from "classnames";
 
-export function MediaPreviewTile(props: MediaPreviewGroupEntryBase & { above?: JSX.Element }): JSX.Element {
+export interface MediaPreviewTileProps extends MediaPreviewGroupEntryBase {
+    children?: JSX.Element;
+}
+
+export function MediaPreviewTile(props: MediaPreviewTileProps): JSX.Element {
     return (
-        <div className={classNames(styles.tile, props.above ? styles.tileWithAbove : styles.tileWithoutAbove)}>
-            {props.above}
+        <div className={classNames(styles.tile, props.children ? styles.tileWithAbove : styles.tileWithoutAbove)}>
+            {props.children}
             <div className={styles.below}>
                 <LeftGroup>
                     <Icon {...props} />
@@ -41,15 +45,27 @@ export function MediaPreviewTile(props: MediaPreviewGroupEntryBase & { above?: J
 }
 
 export function ImagePreviewTile(props: MediaPreviewGroupImageEntry): JSX.Element {
-    return <MediaPreviewTile above={<Image {...props} />} {...props} />;
+    return (
+        <MediaPreviewTile {...props}>
+            <Image {...props} />
+        </MediaPreviewTile>
+    );
 }
 
 export function VideoPreviewTile(props: MediaPreviewGroupVideoEntry): JSX.Element {
-    return <MediaPreviewTile above={<Video {...props} />} {...props} />;
+    return (
+        <MediaPreviewTile {...props}>
+            <Video {...props} />
+        </MediaPreviewTile>
+    );
 }
 
 export function AudioPreviewTile(props: MediaPreviewGroupAudioEntry): JSX.Element {
-    return <MediaPreviewTile above={<Audio {...props} />} {...props} />;
+    return (
+        <MediaPreviewTile {...props}>
+            <Audio {...props} />
+        </MediaPreviewTile>
+    );
 }
 
 export function TextPreviewTile(props: MediaPreviewGroupTextEntry): JSX.Element {

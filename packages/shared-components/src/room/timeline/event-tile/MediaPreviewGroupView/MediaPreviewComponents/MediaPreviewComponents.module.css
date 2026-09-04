@@ -10,7 +10,7 @@
 
 .leftGroup {
     display: flex;
-    gap: 12px;
+    gap: var(--cpd-space-3x);
     flex-grow: 1;
     min-width: 0;
 }
@@ -20,9 +20,8 @@
 }
 
 .body {
-    font-size: 86.666%;
-    /* 13/15 of header size */
-    color: var(--cpd-color-gray-900);
+    font-size: var(--cpd-font-size-body-sm);
+    color: var(--cpd-color-text-secondary);
 }
 
 .textContent {

@@ -11,8 +11,15 @@ import {
     type MediaPreviewGroupViewModel as MediaPreviewGroupViewModelInterface,
 } from "@element-hq/web-shared-components";
 
+/**
+ * Props for {@link MediaPreviewGroupViewModel}. Identical to the snapshot: this view model derives
+ * nothing, so entry composition (labels, icons, button handlers) happens in the caller, e.g. `MBodyFactory`.
+ */
 export type MediaPreviewGroupProps = MediaPreviewGroupSnapshot;
 
+/**
+ * A pass-through view model that makes a group of media previews observable by `MediaPreviewGroupView`.
+ */
 export class MediaPreviewGroupViewModel
     extends BaseViewModel<MediaPreviewGroupSnapshot, MediaPreviewGroupProps>
     implements MediaPreviewGroupViewModelInterface
@@ -21,7 +28,13 @@ export class MediaPreviewGroupViewModel
         super(props, props);
     }
 
-    public replace(props: MediaPreviewGroupProps): void {
+    /**
+     * Swap in a new set of entries and notify subscribers. Entries are replaced wholesale rather than
+     * merged, so removals take effect.
+     *
+     * @param props The entries that replace the current group.
+     */
+    public setProps(props: MediaPreviewGroupProps): void {
         this.props = props;
         this.snapshot.set(props);
     }

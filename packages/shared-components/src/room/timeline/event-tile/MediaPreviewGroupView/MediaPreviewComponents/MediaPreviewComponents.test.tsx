@@ -41,34 +41,40 @@ function waitForMedia(container: HTMLElement, selector: "video" | "audio"): Prom
 }
 
 describe("MediaPreviewComponents", () => {
-    describe("Header", () => {
+    it("renders the header children", () => {
+        render(<Header>annual-report.pdf</Header>);
+
+        expect(screen.getByText("annual-report.pdf")).toBeInTheDocument();
+    });
+
+    it("renders the body", () => {
+        render(<Body>2.3 MB</Body>);
+
+        expect(screen.getByText("2.3 MB")).toBeInTheDocument();
+    });
+
+    describe("TextContent", () => {
         it("renders plain text when there is no headerUrl", () => {
-            render(<Header header="annual-report.pdf" />);
+            render(<TextContent header="annual-report.pdf" body="2.3 MB" />);
 
             expect(screen.getByText("annual-report.pdf")).toBeInTheDocument();
             expect(screen.queryByRole("link")).not.toBeInTheDocument();
         });
 
-        it("renders a link opening in a new tab when there is a headerUrl", () => {
-            render(<Header header="example.com" headerUrl="https://example.com/page" />);
+        it("renders the header as a link opening in a new tab when there is a headerUrl", () => {
+            render(<TextContent header="example.com" headerUrl="https://example.com/page" body="A page" />);
 
             const link = screen.getByRole("link", { name: "example.com" });
             expect(link).toHaveAttribute("href", "https://example.com/page");
             expect(link).toHaveAttribute("target", "_blank");
         });
-    });
 
-    it("renders the body", () => {
-        render(<Body body="2.3 MB" />);
+        it("renders the header and body together as text content", () => {
+            render(<TextContent header="example.com" headerUrl="https://example.com/page" body="A page" />);
 
-        expect(screen.getByText("2.3 MB")).toBeInTheDocument();
-    });
-
-    it("renders the header and body together as text content", () => {
-        render(<TextContent header="example.com" headerUrl="https://example.com/page" body="A page" />);
-
-        expect(screen.getByRole("link", { name: "example.com" })).toBeInTheDocument();
-        expect(screen.getByText("A page")).toBeInTheDocument();
+            expect(screen.getByRole("link", { name: "example.com" })).toBeInTheDocument();
+            expect(screen.getByText("A page")).toBeInTheDocument();
+        });
     });
 
     it("renders its children in a left group", () => {
@@ -145,7 +151,9 @@ describe("MediaPreviewComponents", () => {
 
         describe("Image", () => {
             it("renders an image which loads", async () => {
-                const { container } = render(<Image image={demoImage} imageSize="banner" />);
+                const { container } = render(
+                    <Image image={demoImage} imageAlt="A wide demo image" imageSize="banner" />,
+                );
 
                 await waitForImage(container);
                 expect(container.querySelector("img")).toHaveAttribute("src", demoImage);
@@ -153,29 +161,35 @@ describe("MediaPreviewComponents", () => {
             });
 
             it("stops rendering an image which fails to load", async () => {
-                const { container } = render(<Image image={BROKEN_SRC} imageSize="banner" />);
+                const { container } = render(
+                    <Image image={BROKEN_SRC} imageAlt="A wide demo image" imageSize="banner" />,
+                );
 
                 await waitFor(() => expect(container).toBeEmptyDOMElement());
                 expect(console.error).toHaveBeenCalled();
             });
 
             it("hides the previous image until the new source has been checked", async () => {
-                const { container, rerender } = render(<Image image={demoImage} imageSize="banner" />);
+                const { container, rerender } = render(
+                    <Image image={demoImage} imageAlt="A wide demo image" imageSize="banner" />,
+                );
                 await waitForImage(container);
 
-                rerender(<Image image={BROKEN_SRC} imageSize="banner" />);
+                rerender(<Image image={BROKEN_SRC} imageAlt="A wide demo image" imageSize="banner" />);
 
                 // The stale validity state is for the old source, so nothing is shown for the new one.
                 expect(container).toBeEmptyDOMElement();
             });
 
             it("distinguishes banner and full sizes by class", async () => {
-                const { container, rerender } = render(<Image image={demoImage} imageSize="banner" />);
+                const { container, rerender } = render(
+                    <Image image={demoImage} imageAlt="A wide demo image" imageSize="banner" />,
+                );
                 await waitForImage(container);
 
                 const bannerClass = container.firstElementChild!.className;
 
-                rerender(<Image image={demoImage} imageSize="full" />);
+                rerender(<Image image={demoImage} imageAlt="A wide demo image" imageSize="full" />);
 
                 expect(container.firstElementChild!.className).not.toEqual(bannerClass);
             });
@@ -184,7 +198,14 @@ describe("MediaPreviewComponents", () => {
                 const user = userEvent.setup();
                 const imageOnClick = vi.fn();
 
-                const { container } = render(<Image image={demoImage} imageSize="full" imageOnClick={imageOnClick} />);
+                const { container } = render(
+                    <Image
+                        image={demoImage}
+                        imageAlt="A wide demo image"
+                        imageSize="full"
+                        imageOnClick={imageOnClick}
+                    />,
+                );
                 await waitForImage(container);
 
                 await user.click(screen.getByRole("button", { name: "View image" }));

@@ -7,9 +7,7 @@
 
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import FileIcon from "@vector-im/compound-design-tokens/assets/web/icons/document";
-import ExpandIcon from "@vector-im/compound-design-tokens/assets/web/icons/expand";
-import DownloadIcon from "@vector-im/compound-design-tokens/assets/web/icons/download";
+import { DocumentIcon, ExpandIcon, DownloadIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import {
     MediaPreviewGroupPreview,
@@ -32,8 +30,8 @@ const buttons = [
 
 const textEntry: MediaPreviewGroupEntry = {
     id: "annual-report.pdf",
-    style: "text",
-    icon: <FileIcon />,
+    type: "text",
+    icon: <DocumentIcon />,
     color: "#4200A6",
     header: "annual-report.pdf",
     body: "2.3 MB",
@@ -42,10 +40,11 @@ const textEntry: MediaPreviewGroupEntry = {
 
 const imageEntry: MediaPreviewGroupEntry = {
     id: "screenshot.png",
-    style: "image",
+    type: "image",
     image: demoImage,
+    imageAlt: "Screenshot of the dashboard",
     imageSize: "banner",
-    icon: <FileIcon />,
+    icon: <DocumentIcon />,
     color: "#4200A6",
     header: "screenshot.png",
     body: "820 KB",
@@ -54,10 +53,10 @@ const imageEntry: MediaPreviewGroupEntry = {
 
 const videoEntry: MediaPreviewGroupEntry = {
     id: "holiday-clip.mp4",
-    style: "video",
+    type: "video",
     video: demoVideo,
     videoSize: "banner",
-    icon: <FileIcon />,
+    icon: <DocumentIcon />,
     color: "#4200A6",
     header: "holiday-clip.mp4",
     body: "12.4 MB",
@@ -66,17 +65,20 @@ const videoEntry: MediaPreviewGroupEntry = {
 
 const audioEntry: MediaPreviewGroupEntry = {
     id: "voice-message.mp3",
-    style: "audio",
+    type: "audio",
     audio: demoAudio,
-    icon: <FileIcon />,
+    icon: <DocumentIcon />,
     color: "#4200A6",
     header: "voice-message.mp3",
     body: "1.1 MB",
     buttons,
 };
 
-const withEntries = (entries: Array<MediaPreviewGroupEntry>): { vm: MockViewModel<MediaPreviewGroupSnapshot> } => ({
-    vm: new MockViewModel<MediaPreviewGroupSnapshot>({ entries }),
+const withEntries = (
+    entries: Array<MediaPreviewGroupEntry>,
+    collapse?: MediaPreviewGroupSnapshot["collapse"],
+): { vm: MockViewModel<MediaPreviewGroupSnapshot> } => ({
+    vm: new MockViewModel<MediaPreviewGroupSnapshot>({ entries, collapse }),
 });
 
 const meta = {
@@ -84,6 +86,12 @@ const meta = {
     component: MediaPreviewGroupPreview,
     tags: ["autodocs"],
     play: ({ canvasElement }) => prepareVideosForSnapshot(canvasElement),
+    parameters: {
+        design: {
+            type: "figma",
+            url: "https://www.figma.com/design/sI9A2kV2K4xeiyqJsL7Ey3/Links-and-Files?node-id=728-8112",
+        },
+    },
 } satisfies Meta<typeof MediaPreviewGroupPreview>;
 
 export default meta;
@@ -116,15 +124,13 @@ export const SingleAudio: Story = {
 };
 
 export const Collapsed: Story = {
-    args: {
-        ...withEntries([textEntry, imageEntry]),
-        collapse: { collapsed: true, hiddenCount: 3, onToggle: () => ({}) },
-    },
+    args: withEntries([textEntry, imageEntry], { collapsed: true, hiddenCount: 3, onToggle: () => ({}) }),
 };
 
 export const Expanded: Story = {
-    args: {
-        ...withEntries([textEntry, imageEntry, videoEntry, audioEntry]),
-        collapse: { collapsed: false, hiddenCount: 0, onToggle: () => ({}) },
-    },
+    args: withEntries([textEntry, imageEntry, videoEntry, audioEntry], {
+        collapsed: false,
+        hiddenCount: 0,
+        onToggle: () => ({}),
+    }),
 };

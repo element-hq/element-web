@@ -5,38 +5,53 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE in the repository root for full details.
 */
 
-import React, { type JSX, useEffect, useState } from "react";
+import React, { type JSX, useEffect, useState, type ReactNode } from "react";
 import styles from "./MediaPreviewComponents.module.css";
 import classNames from "classnames";
 import { type ImageSize, type MediaPreviewEntryButton } from "../MediaPreviewGroupView";
 import { useI18n } from "../../../../../core/i18n/i18nContext";
 import { LinkedText } from "../../../../../core/utils/LinkedText";
 
-export function Header({ header, headerUrl }: { header: string; headerUrl?: string }): JSX.Element {
-    if (headerUrl === undefined) return <div className={classNames(styles.textHeader, styles.header)}>{header}</div>;
-    else
-        return (
-            <div className={classNames(styles.linkHeader, styles.header)}>
-                <a href={headerUrl} target="_blank">
-                    {header}
-                </a>
-            </div>
-        );
+export function Header({ children }: { children: ReactNode }): JSX.Element {
+    return <div className={styles.header}>{children}</div>;
 }
 
-export function Body({ body }: { body: string }): JSX.Element {
+export function Body({ children }: { children: ReactNode }): JSX.Element {
     return (
         <LinkedText type="body" size="md" className={styles.body}>
-            {body}
+            {children}
         </LinkedText>
     );
 }
 
-export function TextContent(props: { header: string; headerUrl?: string; body: string }): JSX.Element {
+export interface TextContentProps {
+    /**
+     * header text
+     */
+    header: string;
+    /**
+     * header URL (optional)
+     */
+    headerUrl?: string;
+    /**
+     * body text
+     */
+    body: string;
+}
+
+export function TextContent({ header, headerUrl, body }: TextContentProps): JSX.Element {
     return (
         <div className={styles.textContent}>
-            <Header {...props} />
-            <Body {...props} />
+            <Header>
+                {headerUrl ? (
+                    <a href={headerUrl} target="_blank">
+                        {header}
+                    </a>
+                ) : (
+                    header
+                )}
+            </Header>
+            <Body>{body}</Body>
         </div>
     );
 }
@@ -89,9 +104,7 @@ interface ValidityState {
 }
 
 /**
- * Media checks are defined at module scope so that their identity is stable: passing a fresh
- * closure on every render would re-run the effect in {@link useIsValid} after each state update,
- * leaving the component re-rendering in a loop.
+ * returns whether a url is valid image
  */
 function checkImage(src: string): Promise<boolean> {
     return new Promise((res) => {
@@ -105,6 +118,9 @@ function checkImage(src: string): Promise<boolean> {
     });
 }
 
+/**
+ * returns whether a url is valid video
+ */
 function checkVideo(src: string): Promise<boolean> {
     return new Promise((res) => {
         const vid = document.createElement("video");
@@ -118,6 +134,9 @@ function checkVideo(src: string): Promise<boolean> {
     });
 }
 
+/**
+ * returns whether a url is valid audio
+ */
 function checkAudio(src: string): Promise<boolean> {
     return new Promise((res) => {
         const aud = document.createElement("audio");
@@ -131,11 +150,16 @@ function checkAudio(src: string): Promise<boolean> {
     });
 }
 
+/**
+ * A hook to check whether a resource is valid
+ * @param check - async function returns true if resource is valid
+ * @returns - the output of check, and for which src did the check ran on (because a check could return after src has changed)
+ */
 function useIsValid(check: (src: string) => Promise<boolean>, src: string): ValidityState {
-    const [state, setState]: [ValidityState, React.Dispatch<React.SetStateAction<ValidityState>>] = useState({
+    const [state, setState] = useState({
         valid: true,
         src,
-    } as ValidityState);
+    });
 
     useEffect(() => {
         let cancelled = false;
@@ -175,10 +199,12 @@ function getVideoClass(size: ImageSize): string {
 
 export function Image({
     image,
+    imageAlt,
     imageOnClick,
     imageSize,
 }: {
     image: string;
+    imageAlt: string;
     imageOnClick?: () => void;
     imageSize: ImageSize;
 }): JSX.Element | null {
@@ -188,7 +214,7 @@ export function Image({
 
     if (!valid || src !== image) return null;
 
-    const imageElem = <img src={image} alt="" />;
+    const imageElem = <img src={image} alt={imageAlt} />;
     return (
         <div className={classNames(classes)}>
             {imageOnClick ? (
@@ -219,7 +245,12 @@ export function Video({
 
     // Only fetch the metadata up front, matching the video body: a preview should not pull down the
     // whole file before the user has asked to play it.
-    const videoElem = <video src={video} controls preload="metadata" />;
+    // Uploaded media carries no caption track, but the empty element is still required for a11y.
+    const videoElem = (
+        <video src={video} controls preload="metadata">
+            <track kind="captions" />
+        </video>
+    );
 
     return (
         <div className={classNames(classes)}>
@@ -240,7 +271,12 @@ export function Audio({ audio, audioOnClick }: { audio: string; audioOnClick?: (
 
     if (!valid || src !== audio) return null;
 
-    const audioElem = <audio src={audio} controls />;
+    // Uploaded media carries no caption track, but the empty element is still required for a11y.
+    const audioElem = (
+        <audio src={audio} controls>
+            <track kind="captions" />
+        </audio>
+    );
     return (
         <div className={styles.audio}>
             {audioOnClick ? (

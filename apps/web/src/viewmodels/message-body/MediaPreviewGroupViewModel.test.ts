@@ -14,7 +14,7 @@ import { MediaPreviewGroupViewModel } from "./MediaPreviewGroupViewModel";
 describe("MediaPreviewGroupViewModel", () => {
     const mkEntry = (id: string): MediaPreviewGroupEntry => ({
         id,
-        style: "text",
+        type: "text",
         header: `header ${id}`,
         body: `body ${id}`,
         icon: createElement("svg"),
@@ -33,7 +33,7 @@ describe("MediaPreviewGroupViewModel", () => {
         vm.subscribe(listener);
 
         const replacement = { entries: [mkEntry("$two"), mkEntry("$three")] };
-        vm.replace(replacement);
+        vm.setProps(replacement);
 
         expect(vm.getSnapshot()).toEqual(replacement);
         expect(listener).toHaveBeenCalled();
@@ -42,7 +42,7 @@ describe("MediaPreviewGroupViewModel", () => {
     it("replaces the entries with an empty group", () => {
         const vm = new MediaPreviewGroupViewModel({ entries: [mkEntry("$one")] });
 
-        vm.replace({ entries: [] });
+        vm.setProps({ entries: [] });
 
         expect(vm.getSnapshot()).toEqual({ entries: [] });
     });

@@ -47,7 +47,7 @@ exports[`MBodyFactory > renderMBody fallback shows m.audio generic placeholder w
       data-type="info"
     >
       <button
-        aria-label="alt"
+        aria-label="test-file.txt"
         class="_button_1nw83_8 _has-icon_1nw83_60"
         data-kind="secondary"
         data-size="md"
@@ -70,7 +70,7 @@ exports[`MBodyFactory > renderMBody fallback shows m.audio generic placeholder w
           />
         </svg>
         <span>
-          alt
+          test-file.txt
         </span>
       </button>
     </div>
@@ -84,7 +84,7 @@ exports[`MBodyFactory > renderMBody shows the preview tile for m.file in File 1`
     class="mx_EventTile_content"
   >
     <div
-      class="_container_1q45w_1"
+      class="_container_b6h8l_1"
     >
       <div
         class="_tile_1vd22_1"
@@ -93,10 +93,10 @@ exports[`MBodyFactory > renderMBody shows the preview tile for m.file in File 1`
           class="_below_1vd22_9"
         >
           <div
-            class="_leftGroup_i2lr8_11"
+            class="_leftGroup_13lno_11"
           >
             <div
-              class="_icon_i2lr8_33"
+              class="_icon_13lno_32"
             >
               <svg
                 fill="currentColor"
@@ -112,26 +112,26 @@ exports[`MBodyFactory > renderMBody shows the preview tile for m.file in File 1`
               </svg>
             </div>
             <div
-              class="_textContent_i2lr8_28"
+              class="_textContent_13lno_27"
             >
               <div
-                class="_header_i2lr8_1"
+                class="_header_13lno_1"
               >
-                alt
+                test-file.txt
               </div>
               <p
-                class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 _container_15awj_8 _body_i2lr8_2"
+                class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 _container_15awj_8 _body_13lno_2"
               >
                 Size unknown
               </p>
             </div>
           </div>
           <div
-            class="_buttonGroup_i2lr8_64"
+            class="_buttonGroup_13lno_63"
           >
             <button
               aria-label="Download"
-              class="_button_i2lr8_64"
+              class="_button_13lno_63"
               type="button"
             >
               <svg
@@ -160,7 +160,7 @@ exports[`MBodyFactory > renderMBody shows the preview tile for m.file in Room 1`
     class="mx_EventTile_content"
   >
     <div
-      class="_container_1q45w_1"
+      class="_container_b6h8l_1"
     >
       <div
         class="_tile_1vd22_1"
@@ -169,10 +169,10 @@ exports[`MBodyFactory > renderMBody shows the preview tile for m.file in Room 1`
           class="_below_1vd22_9"
         >
           <div
-            class="_leftGroup_i2lr8_11"
+            class="_leftGroup_13lno_11"
           >
             <div
-              class="_icon_i2lr8_33"
+              class="_icon_13lno_32"
             >
               <svg
                 fill="currentColor"
@@ -188,26 +188,26 @@ exports[`MBodyFactory > renderMBody shows the preview tile for m.file in Room 1`
               </svg>
             </div>
             <div
-              class="_textContent_i2lr8_28"
+              class="_textContent_13lno_27"
             >
               <div
-                class="_header_i2lr8_1"
+                class="_header_13lno_1"
               >
-                alt
+                test-file.txt
               </div>
               <p
-                class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 _container_15awj_8 _body_i2lr8_2"
+                class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 _container_15awj_8 _body_13lno_2"
               >
                 Size unknown
               </p>
             </div>
           </div>
           <div
-            class="_buttonGroup_i2lr8_64"
+            class="_buttonGroup_13lno_63"
           >
             <button
               aria-label="Download"
-              class="_button_i2lr8_64"
+              class="_button_13lno_63"
               type="button"
             >
               <svg

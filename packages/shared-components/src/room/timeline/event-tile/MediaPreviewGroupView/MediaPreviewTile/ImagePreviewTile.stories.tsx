@@ -7,9 +7,7 @@
 
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import FileIcon from "@vector-im/compound-design-tokens/assets/web/icons/document";
-import ExpandIcon from "@vector-im/compound-design-tokens/assets/web/icons/expand";
-import DownloadIcon from "@vector-im/compound-design-tokens/assets/web/icons/download";
+import { DocumentIcon, ExpandIcon, DownloadIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { ImagePreviewTile } from "./MediaPreviewTile";
 import demoImage from "../../../../../../static/wideImage.png";
@@ -20,10 +18,11 @@ const meta = {
     tags: ["autodocs"],
     args: {
         id: "annual-report.pdf",
-        style: "image",
+        type: "image",
         image: demoImage,
+        imageAlt: "Screenshot of the annual report cover page",
         imageSize: "banner",
-        icon: <FileIcon />,
+        icon: <DocumentIcon />,
         onClick: () => {},
         color: "#4200A6",
         header: "annual-report.pdf",
@@ -32,6 +31,12 @@ const meta = {
             { label: "Expand", icon: <ExpandIcon />, onClick: () => ({}) },
             { label: "Download", icon: <DownloadIcon />, onClick: () => ({}) },
         ],
+    },
+    parameters: {
+        design: {
+            type: "figma",
+            url: "https://www.figma.com/design/sI9A2kV2K4xeiyqJsL7Ey3/Links-and-Files?node-id=728-8112",
+        },
     },
 } satisfies Meta<typeof ImagePreviewTile>;
 

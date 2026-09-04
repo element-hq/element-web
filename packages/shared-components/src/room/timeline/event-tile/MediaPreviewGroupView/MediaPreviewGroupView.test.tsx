@@ -51,7 +51,7 @@ function waitForMedia(container: HTMLElement, selector: "video" | "audio"): Prom
 const textEntry: MediaPreviewGroupEntry = {
     ...icon,
     id: "annual-report.pdf",
-    style: "text",
+    type: "text",
     header: "annual-report.pdf",
     body: "2.3 MB",
 };
@@ -65,10 +65,10 @@ const secondTextEntry: MediaPreviewGroupEntry = {
 
 function renderGroup(
     entries: Array<MediaPreviewGroupEntry>,
-    collapse?: React.ComponentProps<typeof MediaPreviewGroupPreview>["collapse"],
+    collapse?: MediaPreviewGroupSnapshot["collapse"],
 ): ReturnType<typeof render> {
-    const vm = new MockViewModel<MediaPreviewGroupSnapshot>({ entries });
-    return render(<MediaPreviewGroupPreview vm={vm} collapse={collapse} />);
+    const vm = new MockViewModel<MediaPreviewGroupSnapshot>({ entries, collapse });
+    return render(<MediaPreviewGroupPreview vm={vm} />);
 }
 
 describe("MediaPreviewGroupPreview", () => {
@@ -85,12 +85,21 @@ describe("MediaPreviewGroupPreview", () => {
         expect(screen.getByText("minutes.txt")).toBeInTheDocument();
     });
 
-    it("renders a tile for every entry style", async () => {
+    it("renders a tile for every entry type", async () => {
         const { container } = renderGroup([
             textEntry,
-            { ...icon, id: "image", style: "image", image: demoImage, imageSize: "banner", header: "i", body: "i" },
-            { ...icon, id: "video", style: "video", video: demoVideo, videoSize: "banner", header: "v", body: "v" },
-            { ...icon, id: "audio", style: "audio", audio: demoAudio, header: "a", body: "a" },
+            {
+                ...icon,
+                id: "image",
+                type: "image",
+                image: demoImage,
+                imageAlt: "i",
+                imageSize: "banner",
+                header: "i",
+                body: "i",
+            },
+            { ...icon, id: "video", type: "video", video: demoVideo, videoSize: "banner", header: "v", body: "v" },
+            { ...icon, id: "audio", type: "audio", audio: demoAudio, header: "a", body: "a" },
         ]);
 
         await waitForImage(container);
