@@ -789,6 +789,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
             static: {
                 // Where to serve static assets from
                 directory: "./webapp",
+                watch: true,
             },
 
             devMiddleware: {

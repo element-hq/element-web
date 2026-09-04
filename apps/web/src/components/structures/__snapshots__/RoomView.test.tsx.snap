@@ -152,7 +152,7 @@ exports[`RoomView > for a local room > in state ERROR > should match the snapsho
                 class="mx_NewRoomIntro"
               >
                 <div
-                  class="_container_sicoi_8 mx_EventTileBubble mx_cryptoEvent"
+                  class="_container_1mzk4_8 mx_EventTileBubble mx_cryptoEvent"
                 >
                   <svg
                     color="var(--cpd-color-icon-critical-primary)"
@@ -167,12 +167,12 @@ exports[`RoomView > for a local room > in state ERROR > should match the snapsho
                     />
                   </svg>
                   <div
-                    class="_title_sicoi_32"
+                    class="_title_1mzk4_34"
                   >
                     End-to-end encryption isn't enabled
                   </div>
                   <div
-                    class="_subtitle_sicoi_33"
+                    class="_subtitle_1mzk4_35"
                   >
                     <span>
                        
@@ -348,7 +348,7 @@ exports[`RoomView > for a local room > in state NEW > should match the snapshot 
                 class="mx_NewRoomIntro"
               >
                 <div
-                  class="_container_sicoi_8 mx_EventTileBubble mx_cryptoEvent"
+                  class="_container_1mzk4_8 mx_EventTileBubble mx_cryptoEvent"
                 >
                   <svg
                     color="var(--cpd-color-icon-critical-primary)"
@@ -363,12 +363,12 @@ exports[`RoomView > for a local room > in state NEW > should match the snapshot 
                     />
                   </svg>
                   <div
-                    class="_title_sicoi_32"
+                    class="_title_1mzk4_34"
                   >
                     End-to-end encryption isn't enabled
                   </div>
                   <div
-                    class="_subtitle_sicoi_33"
+                    class="_subtitle_1mzk4_35"
                   >
                     <span>
                        
@@ -750,7 +750,7 @@ exports[`RoomView > for a local room > in state NEW > that is encrypted > should
               style="height: 400px;"
             >
               <div
-                class="_container_sicoi_8 mx_EventTileBubble mx_cryptoEvent _content_ufv8a_8"
+                class="_container_1mzk4_8 mx_EventTileBubble mx_cryptoEvent _content_ufv8a_8"
               >
                 <svg
                   data-state="supported"
@@ -765,12 +765,12 @@ exports[`RoomView > for a local room > in state NEW > that is encrypted > should
                   />
                 </svg>
                 <div
-                  class="_title_sicoi_32"
+                  class="_title_1mzk4_34"
                 >
                   Encryption enabled
                 </div>
                 <div
-                  class="_subtitle_sicoi_33"
+                  class="_subtitle_1mzk4_35"
                 >
                   Messages in this chat will be end-to-end encrypted.
                 </div>

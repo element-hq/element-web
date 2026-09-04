@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import React from "react";
-import { vi, describe, it, expect, beforeEach, type Mocked } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterEach, type Mocked } from "vitest";
 import { act, render, screen } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
@@ -36,8 +36,11 @@ vi.mock("../dispatcher/dispatcher", () => ({
 
 describe("SetupEncryptionToast", () => {
     beforeEach(() => {
-        vi.resetAllMocks();
         render(<ToastContainer />);
+    });
+
+    afterEach(() => {
+        vi.resetAllMocks();
     });
 
     describe("Back up your chats", () => {

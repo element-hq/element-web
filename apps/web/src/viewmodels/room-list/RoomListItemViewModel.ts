@@ -43,7 +43,7 @@ import { type Call, CallEvent } from "../../models/Call";
 import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import { getCustomSectionData, isDefaultSectionTag } from "../../stores/room-list-v3/section";
 import { _t } from "../../languageHandler";
-import { fetchUserStatus, userStatusFromProfile } from "../../utils/userStatus";
+import { fetchUserStatus } from "../../utils/userStatus";
 
 /**
  * View section type without `isSelected` field
@@ -290,13 +290,10 @@ export class RoomListItemViewModel
     /**
      * Handler for profile updates received via sync, to keep the DM user's status up to date.
      */
-    private onUserProfileUpdate: ClientEventHandlerMap[ClientEvent.UserProfileUpdate] = (userId, profile) => {
+    private onUserProfileUpdate: ClientEventHandlerMap[ClientEvent.UserProfileUpdate] = async (userId) => {
         if (userId !== this.dmUserId || !SettingsStore.getValue("feature_user_status")) return;
         this.snapshot.merge({
-            userStatus: userStatusFromProfile(
-                profile?.["org.matrix.msc4426.status"],
-                profile?.["org.matrix.msc4426.call"],
-            ),
+            userStatus: await fetchUserStatus(this.props.client, this.dmUserId),
         });
     };
 
@@ -406,6 +403,7 @@ export class RoomListItemViewModel
             showNotificationMenu,
             isFavourite,
             isLowPriority,
+            isDm,
             canInvite,
             canCopyRoomLink,
             canMarkAsRead,

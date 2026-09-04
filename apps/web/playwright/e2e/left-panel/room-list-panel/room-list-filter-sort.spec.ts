@@ -7,7 +7,7 @@
 
 import { type Visibility } from "matrix-js-sdk/src/matrix";
 import { type Page } from "@playwright/test";
-import { closeReleaseAnnouncement, rejectToast } from "@element-hq/element-web-playwright-common";
+import { closeReleaseAnnouncementIfExists, rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { expect, test } from "../../../element-web-test";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
@@ -36,7 +36,7 @@ test.describe("Room list filters and sort", () => {
         await rejectToast(page, "Notifications");
 
         // Close the release announcement about the new room list sections
-        await closeReleaseAnnouncement(page, "Introducing Sections");
+        await closeReleaseAnnouncementIfExists(page, "Introducing Sections");
     });
 
     test("Tombstoned rooms are not shown even when they receive updates", async ({ page, app, bot }) => {
@@ -168,18 +168,18 @@ test.describe("Room list filters and sort", () => {
 
             await primaryFilters.getByRole("option", { name: "Unread" }).click();
             // only one room should be visible
-            await expect(roomList.getByRole("option", { name: "unread dm" })).toBeVisible();
-            await expect(roomList.getByRole("option", { name: "unread room" })).toBeVisible();
-            await expect.poll(() => roomList.locator("role=option").count()).toBe(4);
+            await expect(roomList.getByRole("button", { name: "unread dm" })).toBeVisible();
+            await expect(roomList.getByRole("button", { name: "Open room unread room" })).toBeVisible();
+            await expect.poll(() => roomList.locator("role=button").count()).toBe(6);
             await expect(primaryFilters).toMatchScreenshot("unread-primary-filters.png");
 
             await primaryFilters.getByRole("option", { name: "People" }).click();
-            await expect(roomList.getByRole("option", { name: "unread dm" })).toBeVisible();
-            await expect(roomList.getByRole("option", { name: "invited room" })).toBeVisible();
-            await expect.poll(() => roomList.locator("role=option").count()).toBe(2);
+            await expect(roomList.getByRole("button", { name: "unread dm" })).toBeVisible();
+            await expect(roomList.getByRole("button", { name: "invited room" })).toBeVisible();
+            await expect.poll(() => roomList.locator("role=button").count()).toBe(3);
 
             await primaryFilters.getByRole("option", { name: "Rooms" }).click();
-            // "Open room" prefix disambiguates the room tile from the "Toggle Chats section with
+            // "Open room" prefix disambiguates the room tile from the "Toggle Rooms section with
             // unread rooms" section header button, which also matches the "unread room" substring.
             await expect(roomList.getByRole("button", { name: "Open room unread room" })).toBeVisible();
             await expect(roomList.getByRole("button", { name: "favourite room" })).toBeVisible();
@@ -197,8 +197,8 @@ test.describe("Room list filters and sort", () => {
             await expect.poll(() => roomList.locator("role=option").count()).toBe(1);
 
             await primaryFilters.getByRole("option", { name: "Invites" }).click();
-            await expect(roomList.getByRole("option", { name: "invited room" })).toBeVisible();
-            await expect.poll(() => roomList.locator("role=option").count()).toBe(1);
+            await expect(roomList.getByRole("button", { name: "invited room" })).toBeVisible();
+            await expect.poll(() => roomList.locator("role=button").count()).toBe(2);
 
             await getFilterCollapseButton(page).click();
             await expect(primaryFilters.locator("role=option").first()).toHaveText("Invites");
@@ -288,8 +288,8 @@ test.describe("Room list filters and sort", () => {
             await getRoomOptionsMenu(page).click();
             await page.getByRole("menuitemradio", { name: "A-Z" }).click();
 
-            // Favourite + chat section headers are buttons + favourite room
-            await expect(roomListView.getByRole("button").nth(3)).toHaveText(/empty room/);
+            // Favourite + favourites + chat section headers are buttons + favourite room + dms
+            await expect(roomListView.getByRole("button").nth(6)).toHaveText(/empty room/);
         });
 
         test("should move room to the top on message (chat section) when sorting by activity", async ({
