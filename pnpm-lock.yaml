@@ -527,8 +527,8 @@ importers:
         specifier: ^7.12.5
         version: 7.29.7
       '@element-hq/element-call-component':
-        specifier: link:../../../element-call-component-m1/dist
-        version: link:../../../element-call-component-m1/dist
+        specifier: github:element-hq/element-call#valere/component_ec_M1&path:/component
+        version: https://codeload.github.com/element-hq/element-call/tar.gz/218ee46b7d86a01b3344c05f4309af06406d2af1#path:/component(livekit-client@2.22.2)(matrix-js-sdk@42.3.0)(react-dom@19.2.8)(react@19.2.8)
       '@element-hq/element-web-module-api':
         specifier: workspace:*
         version: link:../../packages/module-api
@@ -2854,6 +2854,15 @@ packages:
     resolution: {integrity: sha512-dfZeox66AvdPtb2lD8OsIIQh12Tp0GNCRUDfBHIKGpbmopZto2/A8nSpYYLoedPIHpqkeblZ/k8OV0Gy7PYuyQ==}
     engines: {node: '>=14.14'}
     hasBin: true
+
+  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/218ee46b7d86a01b3344c05f4309af06406d2af1#path:/component':
+    resolution: {gitHosted: true, integrity: sha512-2Iv+FGuwwibUaLJbYX7Wm0wpkVBTCSasJh2TRBFSeuH/DL6nmseekCsZgNxJ0mzin1uG2zi4O3URop9X6IRQkA==, path: /component, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/218ee46b7d86a01b3344c05f4309af06406d2af1}
+    version: 0.0.0
+    peerDependencies:
+      livekit-client: ^2.18.1
+      matrix-js-sdk: '*'
+      react: ^19
+      react-dom: ^19
 
   '@element-hq/element-call-embedded@0.24.0':
     resolution: {integrity: sha512-mVDrl7ohBrEh2vlXuBN//Nmq8r/FdwbmE0LS0eK+xMIf2bOWBgIKfeODI21Vs+yhu8IiFDhHv7qGQYE39h0reA==}
@@ -15593,6 +15602,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
     optional: true
+
+  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/218ee46b7d86a01b3344c05f4309af06406d2af1#path:/component(livekit-client@2.22.2)(matrix-js-sdk@42.3.0)(react-dom@19.2.8)(react@19.2.8)':
+    dependencies:
+      livekit-client: 2.22.2(@types/dom-mediacapture-record@1.0.22)
+      matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/e16b0bcc06d0b17889f3eedef972f3cae9790f08
+      react: 19.2.8
+      react-dom: 19.2.8(react@19.2.8)
 
   '@element-hq/element-call-embedded@0.24.0': {}
 
