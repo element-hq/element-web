@@ -289,7 +289,7 @@ With the flag on, `CallView` renders the mock via `CallTile`. Verify by hand, th
   `performDisconnection()` pushes into `hangUpRequests$` and awaits the reply; `handle*` drive
   `ConnectionState`; widget path tests unchanged.
 - Existing `CallView.test.tsx` / `PipContainer.test.tsx` keep passing with the flag off. Playwright
-  specs for the React path come once EC's real component is in.
+  coverage for the React path is Step 5 (mock) and Step 8 (full call).
 
 ---
 
@@ -298,10 +298,93 @@ With the flag on, `CallView` renders the mock via `CallTile`. Verify by hand, th
 > **Do not start Step 7 before Steps 0–6 are done, tested, and the placeholder works end to end**
 > (docked view, PiP, room switching, sticky, leave/ban, flag on/off) with the mock `ElementCall`.
 > Phase 2 changes the dependency graph and the build; doing it on top of an unproven mounting story
-> means debugging two things at once. Step 8 is Element Call repository work and can proceed in
-> parallel.
+> means debugging two things at once.
 
-### Step 7 — Swap in EC's real component (element-call#4233)
+### Step 7 — Swap in EC's real component (element-call#4233) ✅ implemented (local build)
+
+**Status (2026-09-03):** done against a local build of the M1 branch. Deviations from the items below:
+
+- **Package source.** No published package yet. A git worktree of `valere/component_ec_M1` lives at
+  `../element-call-component-m1` (sibling of the `element-web` checkout); `pnpm build:component` there
+  produces `dist/`, into which a hand-written `package.json` (`@element-hq/element-call-component`,
+  `exports: { ".": element-call.js, "./style.css": element-call.css }`) was dropped. Element Web depends
+  on it as `link:../../../element-call-component-m1/dist`. **This `link:` entry is machine-local and
+  must be replaced before merging** — either by EC publishing the package or by a git dependency once
+  the branch ships a manifest.
+- **Types come from the package.** EC's build emits no `.d.ts` yet, but its tsconfig already has
+  `declaration: true` and `tsc --emitDeclarationOnly` produces a clean `component/index.d.ts`; that
+  output is copied into the local `dist/types/` and referenced via `types` / `exports["."].types` in the
+  hand-written manifest (upstream ask: add the emit step to `build:component`). Element Web re-exports
+  the package's types from `views/voip/ElementCallComponentTypes.ts` and keeps only **runtime** mirrors
+  there — the `UserIntent`/`HeaderStyle`/`BackgroundStyle` enums (importing them as values would pull
+  the bundle into the main chunk; TypeScript accepts same-named, same-membered enums as compatible)
+  and the `configurationForIntent` copy for the mock. `@types/element-call-component.d.ts` only
+  declares the untyped `./style.css` subpath. Two `paths` entries in `tsconfig.json` map
+  `matrix-js-sdk` and `matrix-js-sdk/lib/*` to `src`, mirroring the webpack aliases, so the package
+  typings' `MatrixClient` is the same type as Element Web's.
+- **Initialisation.** `initializeElementCall(ElementCall.getConfigOptions())` runs inside the `lazy()`
+  factory that loads the component (real or mock), i.e. once, on first use, rather than at app startup.
+  `getConfigOptions()` on the model maps rageshake/PostHog/Sentry from `SdkConfig` with the same
+  consent gate as `appendAnalyticsParams`.
+- **Aliases.** Besides `matrix-js-sdk/lib` → `src`, the bundle's bare `import … from "matrix-js-sdk"`
+  needed `matrix-js-sdk$` → `src/matrix.ts`; `livekit-client$` is aliased to its resolved entry file
+  because the package does not expose `package.json` (which broke `getPackageRoot`).
+- **Mock switch.** As planned: `Developer.elementCallMockComponent` (devtools flag), both components
+  `lazy()`-loaded (`element-call-component.js` ≈ 17 MB unminified-dev / `element-call-mock.js`),
+  Playwright sets the flag in `beforeEach`, `enableCalls()` returns `true` for it in unit tests. The
+  mock moved to `ElementCallMock.tsx` (`mx_ElementCallMock` classes) and re-exports nothing of its
+  own types any more.
+- **CSS.** Imported next to the component chunk, but Element Web's webpack extracts all `.css` into the
+  single `styles` chunk (`splitChunks.cacheGroups.styles`, `enforce: true`), so EC's 1.6 MB stylesheet
+  (fonts inlined) ends up in the main stylesheet for everyone. Acceptable for labs; to fix, exclude the
+  package from that cache group or load it as a `<link>` at runtime.
+- **Playwright.** A "React component (real)" smoke spec (setting off) checks the real chunk loads and
+  mounts inside `.mx_CallView` (`[data-element-call-root]`), with no iframe and no mock.
+- **Versions.** EC's branch pins `livekit-client ^2.18.1`; Element Web got `^2.22.2` (semver-compatible).
+  `rxjs 7.8.2` had to be re-added: it was missing from `package.json` after the Step 3–6 commits.
+- **StrictMode (found by the React-path Playwright specs).** The app root is in `StrictMode`
+  (`vector/app.tsx`), so in development React simulates an unmount/remount right after mounting. The
+  tile's dock-effect cleanup then saw the widget as not live and destroyed the persisted element before
+  the first real render — nothing rendered, plus "attempted to synchronously unmount a root while React
+  was already rendering". Fixed in `ElementCallAppTile` by deferring the liveness check by a tick and
+  cancelling it when the effect re-runs (a real unmount is never followed by a remount). Covered by a
+  StrictMode unit test. This was the risk noted in the Step 2 status; it did not show with the mock
+  bundled synchronously, only once the component became `lazy()`.
+- **EC build defects (to report upstream, worked around in the worktree's `vite-component.config.ts`).**
+    1. `react-i18next` pulls in the CommonJS `use-sync-external-store/shim`; its `require("react")`
+       against an external React is left by rolldown as a shim that throws in the browser ("Calling
+       `require` for "react" in an environment that doesn't expose the `require` function"). Fix:
+       alias `"use-sync-external-store/shim": "react"` (React 18+ provides `useSyncExternalStore`).
+    2. `react/compiler-runtime` (emitted by the React Compiler for every compiled component) was not
+       in the externals list, so it was bundled as CommonJS with the same throwing `require("react")`.
+       Fix: add it to `external` next to `react/jsx-runtime`. `pnpm lint:externals` should also reject
+       any remaining `require` of an external — two shimmed `require("util")` calls are still in the
+       `matrix-*` chunk.
+    3. Call sounds are base64-inlined and then `fetch()`ed at module load (`prefetchSounds` in
+       `soundUtils.ts`, called at top level of `CallEventAudioRenderer.tsx`). Element Web's CSP is
+       `connect-src * blob:`, so `fetch("data:audio/ogg;…")` is refused and logs an unhandled
+       "Failed to fetch" on every load. Not fatal (the component renders; sounds are just missing), but
+       either the component must decode the data URL without `fetch`, or hosts must allow
+       `connect-src data:`.
+    4. The component never calls `HostBridge.contentLoaded()` — only EC's standalone `App.tsx` does — so
+       `ElementCall.start()` timed out after 16 s. Element Web now marks the call ready itself when the
+       lazily loaded component mounts (`MarkReadyOnMount` in the tile); once EC calls `contentLoaded`,
+       that becomes redundant but stays harmless.
+- **Mock memberships vs. the real component.** The mock's RTC membership originally named a placeholder
+  focus (`https://example.org`, copied from the fake widget). Element Call connects to the focus of the
+  _oldest_ membership in the room, so a membership left behind by a mock session (reload, flag flipped)
+  made the real component on the same device try to reach `https://example.org` ("[ConnectionManager
+  connections$] Creating item with keys https://example.org"). The mock now (a) publishes the
+  deployment's real LiveKit transport from `CallStore.getConfiguredRTCTransports()` when one is known,
+  (b) expires after 10 minutes instead of 4 hours, and (c) clears its membership when unmounted while in
+  the call. A membership already left behind can be removed via devtools → Explore room state →
+  `org.matrix.msc3401.call.member` → key `_<userId>_<deviceId>_m.call` → send `{}`, or by switching the
+  mock back on and clicking notifyJoined then close.
+- **Verified.** With the two local build fixes, the real component renders inside `.mx_CallView` in
+  Playwright (lobby with camera preview, join button, device controls; no iframe; smoke spec green),
+  and the mock-based room-switching specs pass for both transports. Note for specs: the tile's content
+  lives in the persisted root attached to `<body>`, so locators must be page-level, not scoped to
+  `.mx_CallView`.
 
 What the EC PR provides (branch `valere/component_ec_M1`, draft "M1 — The component + a local dev
 harness"), and what the mock already mirrors:
@@ -335,66 +418,91 @@ Because steps 2–4 already build against the mirrored API, this step is mostly 
    a session EW's model does not recognise). Add a webpack alias `matrix-js-sdk/lib` →
    `matrix-js-sdk/src` (and check Vitest's resolver does the same). `react`/`react-dom` are already
    single; `livekit-client` becomes a direct EW dependency at the version EC pins.
-3. **Swap the import.** `ElementCallAppTile` and `ElementWebHostBridge` import `ElementCall`,
-   `UserIntent`, `HostBridge`, … from the package instead of `views/voip/ElementCall.tsx`. `tsc` is the
-   check that the mirrored types matched; fix any drift there (the mock's `Subscribable` becomes
-   rxjs `Observable`, `ConfigOptions` becomes EC's real type).
-4. **Initialise once.** `await initializeElementCall(configOptions)` during EW startup (next to the
+3. **Swap the import — but keep the mock switchable.** `ElementWebHostBridge` and the model import
+   the _types_ (`HostBridge`, `UserIntent`, `ElementCallConfiguration`, …) from the package; the mock
+   file drops its mirrored copies and re-exports the package's. `tsc` is the check that the mirror
+   matched; fix any drift there (the mock's `Subscribable` becomes rxjs `Observable`, `ConfigOptions`
+   becomes EC's real type). The _component_ is chosen at runtime, see the next item.
+4. **Mock in Playwright, real component everywhere else.** Step 5's two-transport "Switching rooms"
+   specs keep driving the mock's HostBridge buttons (no media needed), while the app people run gets the
+   real component from the same build. Do it the
+   way the widget path already does for `Developer.elementCallUrl`: a **device-level developer setting**,
+   `Developer.elementCallMockComponent` (boolean, default `false`, shown next to `elementCallUrl` in the
+   devtools settings), read at render time by `ElementCallAppTile`:
+
+    ```tsx
+    // ElementCallAppTile.tsx
+    const RealElementCall = lazy(() =>
+        import("@element-hq/element-call/component").then((m) => ({
+            default: m.ElementCall,
+        })),
+    );
+    const MockElementCall = lazy(() => import("./ElementCallMock").then((m) => ({ default: m.ElementCall })));
+
+    const useMock = useSettingValue("Developer.elementCallMockComponent");
+    const Component = useMock ? MockElementCall : RealElementCall;
+    <Suspense fallback={<Spinner />}>
+        <Component client roomId intent config hostBridge />
+    </Suspense>;
+    ```
+
+    - Playwright turns it on exactly where it sets `Developer.elementCallUrl` today
+      (`element-call.spec.ts` `beforeEach`, `app.settings.setValue(..., SettingLevel.DEVICE, true)`), so
+      the React-transport specs keep passing unchanged and still use the **same production bundle** CI
+      serves (`npx serve ./webapp`) — no test-only build variant, no webpack alias.
+    - Both components are `lazy()` code-split chunks: the mock's chunk is only fetched when the setting
+      is on, the real component's (large: LiveKit etc.) only when a call is rendered on the React path.
+      Production users never download the mock.
+    - `CallTile` is unchanged: transport (widget vs React) and stand-in (real vs mock) are two
+      independent switches, `feature_element_call_react` × `Developer.elementCallMockComponent`.
+    - Unit tests (`ElementCallAppTile.test.tsx`) enable the setting through `enableCalls()`'s
+      `SettingsStore` stub (add `Developer.elementCallMockComponent` → `true` there) so they keep
+      clicking the mock's buttons; the real component is never imported in Vitest.
+    - Rename `views/voip/ElementCall.tsx` → `ElementCallMock.tsx` (and its test/pcss) so the two are
+      not confused; the mock must keep the package's public prop contract, which `tsc` enforces once it
+      imports the types from the package.
+    - Rejected alternatives: a webpack `resolve.alias` / env var (tests a different artifact than the
+      one shipped, and needs a second build in CI); a `config.json` key (a test/dev knob in the
+      deployment schema); a `window` injection hook (untyped, invisible in the settings UI).
+
+5. **Initialise once.** `await initializeElementCall(configOptions)` during EW startup (next to the
    other init in `MatrixChat`/`init.tsx`), gated on the flag. Map `ConfigOptions` from `SdkConfig` /
    the old `appendAnalyticsParams` inputs: rageshake submit URL, PostHog/Sentry (one instance or two),
    default ICE fallback, audio processing defaults.
-5. **CSS.** Import the library's single stylesheet once in EW's entry. It is scoped to EC's root element;
+6. **CSS.** Import the library's single stylesheet once in EW's entry. It is scoped to EC's root element;
    verify no unlayered rules from `base.css` bleed into EW (EC's own comment says its unlayered part is
-   custom properties on its root only). Delete the mock's `_ElementCall.pcss`.
-6. **i18n.** The M1 build bundles English only. Accept for the labs phase, or wire EC's `i18n` to EW's
+   custom properties on its root only). The mock's `_ElementCall.pcss` stays (renamed with the mock).
+7. **i18n.** The M1 build bundles English only. Accept for the labs phase, or wire EC's `i18n` to EW's
    language once EC exposes a way to supply resources (tracked as an EC follow-up in the PR).
-7. **Remove the mock.** Delete `views/voip/ElementCall.tsx` + test; the package types replace the
-   mirrored ones.
-8. **Lint.** Peer deps satisfied by exactly one version (`pnpm why matrix-js-sdk livekit-client rxjs`);
+8. **Trim the mock.** It stays (item 4) as the Playwright and offline-dev stand-in; only its mirrored
+   type/enum declarations and `configurationForIntent` copy go, replaced by imports from the package.
+9. **Lint.** Peer deps satisfied by exactly one version (`pnpm why matrix-js-sdk livekit-client rxjs`);
    `knip` should not flag the embedded package as unused until the widget path is actually removed.
 
-### Step 8 — Playwright: a full call with the component — **in the Element Call repository**
+### Step 8 — Playwright: a full call with the component ✅ done
 
-A real call needs a real MatrixRTC backend (LiveKit + `lk-jwt-service` + Synapse). Element Web's
-Playwright setup has none of that: `playwright/e2e/voip/element-call.spec.ts` stubs the widget with
-`sample-files/fake-element-call.html`, and the React-path variants added in Step 5 drive the mock's
-HostBridge buttons. Element Call's repository already has everything the full call needs:
+`playwright/e2e/voip/element-call-full-call.spec.ts` holds a real call between two Element Web sessions
+through the real component, against Synapse + LiveKit + lk-jwt-service started by testcontainers (worker
+option `matrixRTC` in `playwright/services.ts`, containers in `playwright/testcontainers/`). Setup, run
+instructions and findings are in [element-call-e2e-call-plan.md](./element-call-e2e-call-plan.md).
+`element-call.spec.ts` keeps the mock-based two-transport "Switching rooms" specs and the smoke spec that
+checks the real component's chunk mounts inside `.mx_CallView` without an `iframe`.
 
-- `docker-compose-dev.yml` / `pnpm backend`: Synapse, MatrixRTC authorisation service, LiveKit SFU,
-  TLS proxy (`README.md`, "Backend").
-- `component/dev/` + `pnpm dev:component`: a harness page that embeds two `<ElementCall>` components
-  side by side, signed in as two devices of one account, with a `DevHostBridge` that logs every bridge
-  call (`component/dev/DevHostBridge.ts`, `Harness.tsx`).
-- `playwright/component/component-call.spec.ts` + `harness.ts`: specs that already hold a real call
-  between two components, check containment, and assert the bridge traffic (`contentLoaded`,
-  `notifyJoined`, …).
+### Follow up tasks:
 
-So the full-call test belongs there, next to the component it exercises, and **Element Web only keeps
-the mock-based coverage** from Step 5 (persistence/PiP/room switching/flag-off iframe guard). Work, in
-element-hq/element-call (follow-up to #4233):
-
-1. **Host-shaped harness.** Extend `component/dev` (or add a second page) so the harness behaves like
-   Element Web's `ElementWebHostBridge`: `setAlwaysOnScreen` toggles a "PiP" container the component is
-   moved into (same DOM node, different parent — what `PersistedElement` does), `hangUp$` is driven by
-   a harness button, `themeChange$` by a theme switch. Pass `intent`/`config` the way EW's
-   `getCallOptions()` does (Step 4 table), including `background: solid`, `confineToRoom: true`.
-2. **Spec: full call through the EW-shaped bridge.** In `playwright/component/`:
-    - join from the lobby (`lobby_joinCall`), `videoTile` count reaches 2 across the two components;
-    - bridge log shows `contentLoaded` → `notifyJoined` → `setAlwaysOnScreen(true)`;
-    - move the component into the harness "PiP" container mid-call: media keeps flowing (tile count
-      unchanged, no re-join in the log);
-    - harness pushes a `hangUp$` request: component leaves, replies exactly once, `notifyHungUp` logged;
-    - `themeChange$` request is acknowledged and the container's theme attribute changes;
-    - close affordance appears only when `close` is present on the bridge.
-3. **Config parity check.** A small spec that renders the component with each EW `intent` and asserts
-   `configurationForIntent()` yields what Element Web expects (lobby shown for group calls, skipped for
-   DMs, `returnToLobby` honoured), so a change on either side is caught where the logic lives.
-4. **CI.** Runs in EC's existing Playwright job (it already starts the backend and the component
-   harness via `playwright.config.ts` `webServer`); no Docker/LiveKit work in Element Web's CI.
-
-What stays in Element Web: the two-transport "Switching rooms" specs from Step 5, and — once Step 7
-lands — a single smoke spec that the real component mounts inside `.mx_CallView` with no `iframe`
-present (no media; the backend in EW's Playwright is not LiveKit-capable).
+- **Switch `@element-hq/element-call-component` to a remote dependency.** `apps/web/package.json` still has
+  `"@element-hq/element-call-component": "link:../../../element-call-component-m1/dist"`, a machine-local
+  worktree of EC's `valere/component_ec_M1` branch (kept on purpose for now, see Step 7). Before this can
+  merge or run in CI it must become either the published package or a git dependency on the EC branch once
+  it ships a `package.json` in its build output. Everything that renders the real component depends on it:
+  the "React component (real)" smoke spec and the full-call spec from
+  [element-call-e2e-call-plan.md](./element-call-e2e-call-plan.md) (`element-call-full-call.spec.ts`)
+  cannot go green in CI until then.
+- Check if we can remove ElementCallComponentTypes and instead get those types from @element-hq/element-call-component
+- **Keep `matrix-js-sdk` at least as new as the component's build.** The full-call spec exposed that Element
+  Web's develop snapshot lacked `MatrixRTCSession.isKeyRotationSuppressed`, which the component reads on
+  mount; the lockfile now points at `e16b0bcc` (with `matrix-widget-api ^1.19.0`). Until the component
+  package declares its SDK requirement, a bump of EC's build without a bump here breaks joining a call.
 
 ### Later (separate plans)
 
