@@ -151,7 +151,9 @@ describe("MediaPreviewComponents", () => {
 
         describe("Image", () => {
             it("renders an image which loads", async () => {
-                const { container } = render(<Image image={demoImage} imageSize="banner" />);
+                const { container } = render(
+                    <Image image={demoImage} imageAlt="A wide demo image" imageSize="banner" />,
+                );
 
                 await waitForImage(container);
                 expect(container.querySelector("img")).toHaveAttribute("src", demoImage);
@@ -159,29 +161,35 @@ describe("MediaPreviewComponents", () => {
             });
 
             it("stops rendering an image which fails to load", async () => {
-                const { container } = render(<Image image={BROKEN_SRC} imageSize="banner" />);
+                const { container } = render(
+                    <Image image={BROKEN_SRC} imageAlt="A wide demo image" imageSize="banner" />,
+                );
 
                 await waitFor(() => expect(container).toBeEmptyDOMElement());
                 expect(console.error).toHaveBeenCalled();
             });
 
             it("hides the previous image until the new source has been checked", async () => {
-                const { container, rerender } = render(<Image image={demoImage} imageSize="banner" />);
+                const { container, rerender } = render(
+                    <Image image={demoImage} imageAlt="A wide demo image" imageSize="banner" />,
+                );
                 await waitForImage(container);
 
-                rerender(<Image image={BROKEN_SRC} imageSize="banner" />);
+                rerender(<Image image={BROKEN_SRC} imageAlt="A wide demo image" imageSize="banner" />);
 
                 // The stale validity state is for the old source, so nothing is shown for the new one.
                 expect(container).toBeEmptyDOMElement();
             });
 
             it("distinguishes banner and full sizes by class", async () => {
-                const { container, rerender } = render(<Image image={demoImage} imageSize="banner" />);
+                const { container, rerender } = render(
+                    <Image image={demoImage} imageAlt="A wide demo image" imageSize="banner" />,
+                );
                 await waitForImage(container);
 
                 const bannerClass = container.firstElementChild!.className;
 
-                rerender(<Image image={demoImage} imageSize="full" />);
+                rerender(<Image image={demoImage} imageAlt="A wide demo image" imageSize="full" />);
 
                 expect(container.firstElementChild!.className).not.toEqual(bannerClass);
             });
@@ -190,7 +198,14 @@ describe("MediaPreviewComponents", () => {
                 const user = userEvent.setup();
                 const imageOnClick = vi.fn();
 
-                const { container } = render(<Image image={demoImage} imageSize="full" imageOnClick={imageOnClick} />);
+                const { container } = render(
+                    <Image
+                        image={demoImage}
+                        imageAlt="A wide demo image"
+                        imageSize="full"
+                        imageOnClick={imageOnClick}
+                    />,
+                );
                 await waitForImage(container);
 
                 await user.click(screen.getByRole("button", { name: "View image" }));
