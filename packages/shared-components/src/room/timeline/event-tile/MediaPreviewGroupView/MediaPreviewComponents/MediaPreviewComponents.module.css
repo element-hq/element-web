@@ -1,0 +1,144 @@
+.header,
+.body {
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+    min-width: 0;
+    display: -webkit-box;
+    overflow: clip;
+}
+
+.leftGroup {
+    display: flex;
+    gap: 12px;
+    flex-grow: 1;
+}
+
+.header {
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.body {
+    font-size: 13px;
+    color: #656d77;
+}
+
+.textContent {
+    display: inline-block;
+}
+
+.icon {
+    button {
+        border: none;
+        background: none;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    display: flex;
+    height: calc(28px * 1.5);
+    width: calc(28px * 1.5);
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    border-radius: 6px;
+    border: 1px solid rgba(1, 21, 50, 0.35);
+    background-color: #f1efff;
+
+    svg {
+        display: block;
+        height: 24px;
+        width: 24px;
+    }
+}
+
+.buttonGroup {
+    height: calc(28px * 1.5);
+    display: flex;
+    gap: 12px;
+}
+
+.button {
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    svg {
+        color: #656d77;
+        display: block;
+        height: 19px;
+        width: 19px;
+    }
+}
+
+.image {
+    button {
+        cursor: pointer;
+        background: none;
+        border: none;
+        width: 100%;
+        padding: 0;
+    }
+
+    img {
+        width: 100%;
+        object-fit: cover;
+        display: block;
+    }
+}
+
+.image.bannerImage img {
+    max-height: 100px;
+}
+
+.image.fullImage img {
+    max-height: 300px;
+    object-fit: contain;
+}
+
+.video {
+    button {
+        cursor: pointer;
+        background: none;
+        border: none;
+        width: 100%;
+        padding: 0;
+    }
+
+    video {
+        width: 100%;
+        object-fit: cover;
+        display: block;
+    }
+}
+
+.video.bannerVideo video {
+    max-height: 100px;
+}
+
+.video.fullVideo video {
+    max-height: 300px;
+    object-fit: contain;
+}
+
+.audio {
+    button {
+        cursor: pointer;
+        background: none;
+        border: none;
+        width: 100%;
+        padding: 0;
+    }
+
+    audio {
+        width: 100%;
+        display: block;
+    }
+}
