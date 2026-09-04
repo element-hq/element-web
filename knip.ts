@@ -33,12 +33,11 @@ export default {
                 // Used in playwright-screenshots.sh
                 "wait-on",
             ],
-            ignoreBinaries: ["awk", "printf"],
+            ignoreBinaries: ["awk"],
         },
         "packages/module-api": {},
         "apps/web": {
             entry: [
-                "src/serviceworker/index.ts!",
                 "src/workers/*.worker.ts!",
                 "src/utils/exportUtils/exportJS.js!",
                 "src/vector/localstorage-fix.ts!",
@@ -71,8 +70,6 @@ export default {
                 "!src/**/*-{mock,mocks,snapshot,actions}.*!",
             ],
             ignoreDependencies: [
-                // False positive
-                "sw.js",
                 // Embedded into webapp
                 "@element-hq/element-call-embedded",
 
