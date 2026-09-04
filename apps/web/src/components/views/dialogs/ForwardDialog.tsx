@@ -124,6 +124,12 @@ const Entry: React.FC<IEntryProps<any>> = ({ room, type, content, matrixClient: 
         if (!room.maySendMessage()) {
             disabled = true;
             title = _t("forward|no_perms_title");
+        } else if (room.currentState.getStateEvents(EventType.RoomTombstone, "")) {
+            // A tombstone leaves the power levels alone, so a superseded room still says we may send
+            // to it. The composer hides itself for exactly this reason, and forwarding was the one
+            // way left to post into a room the app otherwise treats as closed.
+            disabled = true;
+            title = _t("composer|room_upgraded_notice");
         }
     } else if (sendState === SendState.Sending) {
         className = "mx_ForwardList_sending";

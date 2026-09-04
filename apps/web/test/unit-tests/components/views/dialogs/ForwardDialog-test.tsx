@@ -257,6 +257,32 @@ describe("ForwardDialog", () => {
         expect(secondButton.getAttribute("aria-disabled")).toBeFalsy();
     });
 
+    it("disables buttons for rooms which have been replaced", async () => {
+        const supersededRoom = mkStubRoom("a", "a", mockClient);
+        // A tombstone does not change the power levels, so the room still says we may send to it.
+        supersededRoom.currentState.getStateEvents = jest.fn((type, key) =>
+            type === EventType.RoomTombstone && key === ""
+                ? mkEvent({
+                      event: true,
+                      type: EventType.RoomTombstone,
+                      room: "a",
+                      user: aliceId,
+                      skey: "",
+                      content: { body: "This room has been replaced", replacement_room: "!b:example.org" },
+                  })
+                : null,
+        ) as unknown as typeof supersededRoom.currentState.getStateEvents;
+        const rooms = [supersededRoom, mkStubRoom("b", "b", mockClient)];
+
+        const { container } = mountForwardDialog(undefined, rooms);
+
+        const [firstButton, secondButton] = container.querySelectorAll<HTMLButtonElement>(".mx_ForwardList_sendButton");
+
+        expect(firstButton).toHaveAttribute("aria-disabled", "true");
+        expect(firstButton).toHaveAttribute("aria-label", "This room has been replaced and is no longer active.");
+        expect(secondButton).not.toHaveAttribute("aria-disabled");
+    });
+
     describe("Mention recalculation", () => {
         const roomId = "a";
         const sendClick = (container: HTMLElement): void =>
