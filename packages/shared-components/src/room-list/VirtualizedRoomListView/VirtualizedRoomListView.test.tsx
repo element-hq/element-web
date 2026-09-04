@@ -94,8 +94,8 @@ describe("<VirtualizedRoomListView />", () => {
             // reach them, so explicitly reset call history for the spies under test.
             (Sections.args.changeRoomSection as any).mockClear?.();
             (Sections.args.changeSectionOrder as any).mockClear?.();
-            (Sections.args.onSectionDragStart as any).mockClear?.();
-            (Sections.args.onSectionDragEnd as any).mockClear?.();
+            (Sections.args.onSectionOrRoomDragStart as any).mockClear?.();
+            (Sections.args.onSectionOrRoomDragEnd as any).mockClear?.();
         });
 
         it("should call changeRoomSection when drag ends successfully", async () => {
@@ -192,8 +192,8 @@ describe("<VirtualizedRoomListView />", () => {
             await waitFor(() => {
                 expect(Sections.args.changeSectionOrder).toHaveBeenCalledWith("favourites", "low-priority");
             });
-            expect(Sections.args.onSectionDragStart).toHaveBeenCalled();
-            expect(Sections.args.onSectionDragEnd).toHaveBeenCalled();
+            expect(Sections.args.onSectionOrRoomDragStart).toHaveBeenCalled();
+            expect(Sections.args.onSectionOrRoomDragEnd).toHaveBeenCalled();
         });
     });
 
