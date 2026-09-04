@@ -64,8 +64,6 @@ export function EditMessageComposerWrapper(props: IEditMessageComposerProps): JS
         [vm],
     );
 
-    // function attachBundles(event: MatrixEv)
-
     const isWysiwygComposerEnabled = useSettingValue("feature_wysiwyg_composer");
     const editor = isWysiwygComposerEnabled ? (
         <EditWysiwygComposer
