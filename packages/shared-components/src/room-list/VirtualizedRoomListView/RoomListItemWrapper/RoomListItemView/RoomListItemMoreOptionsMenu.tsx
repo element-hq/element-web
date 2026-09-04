@@ -149,6 +149,7 @@ export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {
                                 onSelect={() => vm.onToggleSection(section.tag)}
                                 onClick={(evt) => evt.stopPropagation()}
                                 hideChevron={true}
+                                role="menuitemradio"
                                 aria-checked={section.isSelected}
                             >
                                 {section.isSelected && (

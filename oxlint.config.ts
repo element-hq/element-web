@@ -102,14 +102,28 @@ export default defineConfig({
         },
         "jsx-a11y": {
             components: {
-                Button: "button",
-                IconButton: "button",
-                AccessibleButton: "button",
-                RovingAccessibleButton: "button",
-                ContextMenuButton: "button",
-                ContextMenuTooltipButton: "button",
+                "Button": "button",
+                "IconButton": "button",
+                "AccessibleButton": "button",
+                "RovingAccessibleButton": "button",
+                "ContextMenuButton": "button",
+                "ContextMenuTooltipButton": "button",
+                "MenuItem": "button",
+                "MenuItemCheckbox": "button",
+                "MenuItemRadio": "button",
+                "Flex": "div",
+                "Box": "button",
+                "Form.Root": "form",
+                "Dropdown": "input",
+                "Field": "input",
+                "PillInput": "input",
+                "StyledRadioButton": "input",
+                "RadioMenuItem": "input",
+                "StyledCheckbox": "input",
+                "Checkbox": "input",
+                "SeekBar": "input",
             },
-            // polymorphicPropName: "as", // Would be good to enable in the future
+            polymorphicPropName: "as",
         },
         "react": {
             componentWrapperFunctions: ["withMatrixClientHOC"],
@@ -329,19 +343,38 @@ export default defineConfig({
                 ],
 
                 // This would be good to apply globally in the future
-                "react/forbid-elements": [
-                    "error",
-                    {
-                        forbid: [
-                            { element: "h1", message: "Use Compound <Heading> instead" },
-                            { element: "h2", message: "Use Compound <Heading> instead" },
-                            { element: "h3", message: "Use Compound <Heading> instead" },
-                            { element: "h4", message: "Use Compound <Heading> instead" },
-                            { element: "h5", message: "Use Compound <Heading> instead" },
-                            { element: "h6", message: "Use Compound <Heading> instead" },
-                        ],
-                    },
-                ],
+                // XXX: disabled as this gets confused by polymorphic Compound Heading component
+                // "react/forbid-elements": [
+                //     "error",
+                //     {
+                //         forbid: [
+                //             { element: "h1", message: "Use Compound headings instead" },
+                //             { element: "h2", message: "Use Compound headings instead" },
+                //             { element: "h3", message: "Use Compound headings instead" },
+                //             { element: "h4", message: "Use Compound headings instead" },
+                //             { element: "h5", message: "Use Compound headings instead" },
+                //             { element: "h6", message: "Use Compound headings instead" },
+                //         ],
+                //     },
+                // ],
+            },
+        },
+        {
+            files: [
+                "apps/desktop/src/**/*",
+                "packages/playwright-common/src/**/*",
+                "**/scripts/**/*",
+                "apps/web/module_system/**/*",
+            ],
+            rules: {
+                "no-restricted-globals": "off",
+                "unicorn/prefer-node-protocol": "error",
+                // These files can use envvars
+                "node/no-process-env": "off",
+                // They do not depend on js-sdk for access to TypedEventEmitter so disable this rule
+                "no-restricted-imports": "off",
+                // They can use process.exit
+                "unicorn/no-process-exit": "off",
             },
         },
         {
@@ -604,6 +637,7 @@ export default defineConfig({
                 "storybook/use-storybook-testing-library": "error",
                 "storybook/no-uninstalled-addons": "error",
                 "jsx-filename-extension": ["error", { allow: "always", extensions: ["tsx"] }],
+                "jsx-a11y/no-noninteractive-tabindex": "off",
             },
         },
         {
