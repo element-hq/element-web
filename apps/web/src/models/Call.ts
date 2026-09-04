@@ -25,6 +25,7 @@ import {
     type MatrixRTCSession,
     MatrixRTCSessionEvent,
     MatrixRTCSessionManagerEvents,
+    type Transport,
 } from "matrix-js-sdk/src/matrixrtc";
 
 // oxlint-disable-next-line no-restricted-imports
@@ -758,9 +759,22 @@ export class ElementCall extends Call {
      * Deployment-wide configuration for Element Call's React component (`initializeElementCall`): the
      * React-component counterpart of `appendAnalyticsParams` and the `rageshakeSubmitUrl` URL param,
      * with the same consent gating.
+     *
+     * @param transports - The MatrixRTC transports Element Web knows about
+     *   (`CallStore.getConfiguredRTCTransports()`). The component itself only looks at the
+     *   `/rtc/transports` endpoint, not at `.well-known`'s `org.matrix.msc4143.rtc_foci`, so the first
+     *   LiveKit transport is passed along as its configured `livekit_service_url`.
      */
-    public static getConfigOptions(): ConfigOptions {
+    public static getConfigOptions(transports: Transport[] = []): ConfigOptions {
         const options: ConfigOptions = {};
+
+        const livekitTransport = transports.find(
+            (t): t is Transport & { livekit_service_url: string } =>
+                t.type === "livekit" && typeof t.livekit_service_url === "string",
+        );
+        if (livekitTransport) {
+            options.livekit = { livekit_service_url: livekitTransport.livekit_service_url };
+        }
 
         const rageshakeSubmitUrl = SdkConfig.get("bug_report_endpoint_url");
         if (rageshakeSubmitUrl && rageshakeSubmitUrl !== BugReportEndpointURLLocal) {

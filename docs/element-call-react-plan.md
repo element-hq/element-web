@@ -522,3 +522,23 @@ checks the real component's chunk mounts inside `.mx_CallView` without an `ifram
 | `ElementWebHostBridge.ts`                  | new, ~80 lines                                    |
 | `models/Call.ts` seam + `getCallOptions()` | ~80–120 lines changed/added, widget path retained |
 | Tests                                      | 3 new files, small additions to `Call.test.ts`    |
+
+### TODO
+
+- **Transport discovery on servers that only use `.well-known`.** The component's
+  `RtcTransportAutoDiscovery` checks the `/rtc/transports` endpoint and its own `ConfigOptions.livekit`,
+  never `.well-known`'s `org.matrix.msc4143.rtc_foci`. matrix.org has only the latter (its endpoint returns
+  404), so the component failed with `MISSING_MATRIX_RTC_TRANSPORT` where the widget worked (Element Web's
+  `ElementWidgetDriver` answers the widget's request with the `.well-known` fallback). Quick fix in place:
+  `ElementCall.getConfigOptions(transports)` passes the first LiveKit transport from
+  `CallStore.getConfiguredRTCTransports()` as `livekit.livekit_service_url`, and `ElementCallAppTile` feeds
+  it in when it initialises the component. Limits: `initializeElementCall` runs once, so a transport that
+  changes during the session is not picked up, and the transports must already be known when the first
+  call renders (they are fetched at client start). Proper fix upstream: give `RtcTransportAutoDiscovery` the
+  same `.well-known` fallback, then drop the `livekit` option here.
+- **Component CSS is global.** Webpack's `styles` cache group folds `element-call.css` into the main
+  stylesheet for every user. It carries a `normalize` layer (`html`, `body`, `h1`, form controls, `pre`, …),
+  an unlayered `pre { font-size: … }`, `:root` variables, and a second copy of the compound design tokens
+  (10.2.4 vs Element Web's 10.2.1) in layers declared after Element Web's, so they win. Exclude the
+  component's CSS from that cache group so it ships with the component chunk, and ask EC to scope or drop
+  normalize and the token copy in the library build.

@@ -1234,4 +1234,20 @@ describe("ElementCall with the React component transport", () => {
             expect(call.getCallOptions().intent).toBe(ElementCallIntent.StartCallDM);
         });
     });
+
+    describe("getConfigOptions", () => {
+        it("passes the first LiveKit transport Element Web discovered as the configured service URL", () => {
+            const options = ElementCall.getConfigOptions([
+                { type: "something_else", url: "https://ignored.example.org" },
+                { type: "livekit", livekit_service_url: "https://livekit-jwt.example.org" },
+                { type: "livekit", livekit_service_url: "https://second.example.org" },
+            ]);
+            expect(options.livekit).toEqual({ livekit_service_url: "https://livekit-jwt.example.org" });
+        });
+
+        it("leaves the transport to the component when none is known", () => {
+            expect(ElementCall.getConfigOptions([]).livekit).toBeUndefined();
+            expect(ElementCall.getConfigOptions().livekit).toBeUndefined();
+        });
+    });
 });
