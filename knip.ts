@@ -113,7 +113,7 @@ export default {
             ignoreDependencies: [
                 // Used by Playwright to serve the built web app.
                 "serve",
-            ]
+            ],
         },
         "modules/*": {
             entry: ["src/index.ts{x,}!"],
