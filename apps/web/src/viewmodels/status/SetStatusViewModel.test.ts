@@ -47,6 +47,7 @@ describe("SetStatusViewModel", () => {
             ...mockClientMethodsServer(),
             getExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
             setExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
+            deleteExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
         });
         vi.mocked(mockOwnProfileStoreInstance).userStatus = undefined;
         vi.mocked(recent.get).mockReturnValue([]);
@@ -159,12 +160,12 @@ describe("SetStatusViewModel", () => {
             expect(vm.getSnapshot().userStatus).toBeUndefined();
         });
 
-        it("calls setExtendedProfileProperty with null", async () => {
+        it("calls deleteExtendedProfileProperty", async () => {
             client.getExtendedProfileProperty.mockResolvedValue(STATUS);
             const vm = new SetStatusViewModel({ client, ownProfileStore: mockOwnProfileStoreInstance });
             vm.clearStatus();
             await waitFor(() =>
-                expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.status", null),
+                expect(client.deleteExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.status"),
             );
         });
 
@@ -180,7 +181,7 @@ describe("SetStatusViewModel", () => {
         it("rolls back the snapshot on failure", async () => {
             vi.mocked(mockOwnProfileStoreInstance).userStatus = STATUS;
             client.getExtendedProfileProperty.mockResolvedValue(STATUS);
-            client.setExtendedProfileProperty.mockRejectedValue(new Error("network error"));
+            client.deleteExtendedProfileProperty.mockRejectedValue(new Error("network error"));
             const vm = new SetStatusViewModel({ client, ownProfileStore: mockOwnProfileStoreInstance });
             vm.clearStatus();
             expect(vm.getSnapshot().userStatus).toBeUndefined();
@@ -206,6 +207,7 @@ describe("UserMenuSetStatusViewModel", () => {
             ...mockClientMethodsServer(),
             getExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
             setExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
+            deleteExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
         });
         vi.mocked(mockOwnProfileStoreInstance).userStatus = undefined;
         dispatchSpy = vi.spyOn(dis, "dispatch").mockImplementation(() => {});
@@ -244,7 +246,7 @@ describe("UserMenuSetStatusViewModel", () => {
         const vm = new UserMenuSetStatusViewModel({ client, ownProfileStore: mockOwnProfileStoreInstance });
         vm.clearStatus();
         await waitFor(() =>
-            expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.status", null),
+            expect(client.deleteExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.status"),
         );
     });
 });

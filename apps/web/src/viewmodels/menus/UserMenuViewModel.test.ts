@@ -37,6 +37,7 @@ describe("UserMenuViewModel", () => {
             getAuthMetadata: vi.fn().mockRejectedValue(new MatrixError({ errcode: "M_UNRECOGNIZED" }, 404)),
             getExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
             setExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
+            deleteExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
         });
         sdkContext = new TestSDKContext();
         // @ts-ignore UserMenuViewModel uses SDKContext in the constructor
@@ -187,7 +188,7 @@ describe("UserMenuViewModel", () => {
         vm.setOpen(true);
         vm.clearStatus();
         await waitFor(() =>
-            expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.status", null),
+            expect(client.deleteExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.status"),
         );
     });
 
