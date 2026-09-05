@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type PropsWithChildren } from "react";
+import React, { type JSX, type PropsWithChildren, useState } from "react";
 import { type User } from "matrix-js-sdk/src/matrix";
 import { Tooltip } from "@vector-im/compound-web";
 import { AutoHideScrollbar } from "@element-hq/web-shared-components";
@@ -69,6 +69,7 @@ export function ReadReceiptGroup({
     isTwelveHour,
 }: Props): JSX.Element {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
+    const [popupScroller, setPopupScroller] = useState<HTMLDivElement | null>(null);
 
     // If we are above MAX_READ_AVATARS, we’ll have to remove a few to have space for the +n count.
     const hasMore = readReceipts.length > MAX_READ_AVATARS;
@@ -140,7 +141,7 @@ export function ReadReceiptGroup({
         const buttonRect = button.current.getBoundingClientRect();
         contextMenu = (
             <ContextMenu menuClassName="mx_ReadReceiptGroup_popup" onFinished={closeMenu} {...aboveLeftOf(buttonRect)}>
-                <AutoHideScrollbar className="mx_AutoHideScrollbar">
+                <AutoHideScrollbar className="mx_AutoHideScrollbar" wrappedRef={setPopupScroller}>
                     <SectionHeader className="mx_ReadReceiptGroup_title">
                         {_t("timeline|read_receipt_title", { count: readReceipts.length })}
                     </SectionHeader>
@@ -150,6 +151,7 @@ export function ReadReceiptGroup({
                             {...receipt}
                             isTwelveHour={isTwelveHour}
                             onAfterClick={closeMenu}
+                            tooltipBoundary={popupScroller ?? undefined}
                         />
                     ))}
                 </AutoHideScrollbar>
@@ -193,6 +195,7 @@ export function ReadReceiptGroup({
 interface ReadReceiptPersonProps extends IReadReceiptProps {
     isTwelveHour?: boolean;
     onAfterClick?: () => void;
+    tooltipBoundary?: Element;
 }
 
 // Export for testing
@@ -202,6 +205,7 @@ export function ReadReceiptPerson({
     ts,
     isTwelveHour,
     onAfterClick,
+    tooltipBoundary,
 }: ReadReceiptPersonProps): JSX.Element {
     return (
         <Tooltip
@@ -209,6 +213,7 @@ export function ReadReceiptPerson({
             caption={userId}
             placement="top"
             isTriggerInteractive={false}
+            boundary={tooltipBoundary}
         >
             <MenuItem
                 className="mx_ReadReceiptGroup_person"
