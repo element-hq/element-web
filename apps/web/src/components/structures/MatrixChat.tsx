@@ -12,14 +12,17 @@ import {
     createClient,
     EventType,
     HttpApiEvent,
+    JoinRule,
     type MatrixClient,
     MatrixEvent,
     MsgType,
+    RestrictedAllowType,
     type RoomType,
     SyncState,
     type SyncStateData,
     type TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
+import { type RoomJoinRulesEventContent } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { throttle } from "lodash";
 import { CryptoEvent, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
@@ -1236,10 +1239,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const memberCount = roomToLeave?.currentState.getJoinedMemberCount();
         if (memberCount === 1) {
             warnings.push(
-                <strong className="warning" key="only_member_warning">
+                <span key="only_member_warning">
                     {" " /* Whitespace, otherwise the sentences get smashed together */}
                     {_t("leave_room_dialog|last_person_warning")}
-                </strong>,
+                </span>,
             );
 
             return warnings;
@@ -1247,15 +1250,26 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         const joinRules = roomToLeave?.currentState.getStateEvents("m.room.join_rules", "");
         if (joinRules) {
-            const rule = joinRules.getContent().join_rule;
-            if (rule !== "public") {
+            const content = joinRules.getContent<RoomJoinRulesEventContent>();
+            if (content.join_rule !== JoinRule.Public) {
+                const hasAuthorisedSpaces =
+                    content.join_rule === JoinRule.Restricted &&
+                    !!content.allow?.some(({ type }) => type === RestrictedAllowType.RoomMembership);
+                let warning: string;
+                if (isSpace) {
+                    warning = hasAuthorisedSpaces
+                        ? _t("leave_room_dialog|space_rejoin_warning_restricted")
+                        : _t("leave_room_dialog|space_rejoin_warning");
+                } else {
+                    warning = hasAuthorisedSpaces
+                        ? _t("leave_room_dialog|room_rejoin_warning_restricted")
+                        : _t("leave_room_dialog|room_rejoin_warning");
+                }
                 warnings.push(
-                    <strong className="warning" key="non_public_warning">
+                    <span key="non_public_warning">
                         {" " /* Whitespace, otherwise the sentences get smashed together */}
-                        {isSpace
-                            ? _t("leave_room_dialog|space_rejoin_warning")
-                            : _t("leave_room_dialog|room_rejoin_warning")}
-                    </strong>,
+                        {warning}
+                    </span>,
                 );
             }
         }
@@ -1273,10 +1287,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                         ? _t("leave_room_dialog|room_leave_admin_warning")
                         : _t("leave_room_dialog|room_leave_mod_warning");
                 warnings.push(
-                    <strong className="warning" key="last_admin_warning">
+                    <span key="last_admin_warning">
                         {" " /* Whitespace, otherwise the sentences get smashed together */}
                         {warning}
-                    </strong>,
+                    </span>,
                 );
             }
         }
@@ -1290,23 +1304,22 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const warnings = this.leaveRoomWarnings(roomId);
 
         const isSpace = roomToLeave?.isSpaceRoom();
-        const { finished } = Modal.createDialog(QuestionDialog, {
-            title: isSpace ? _t("space|leave_dialog_action") : _t("action|leave_room"),
-            description: (
-                <span>
-                    {isSpace
-                        ? _t("leave_room_dialog|leave_space_question", {
-                              spaceName: roomToLeave?.name ?? _t("common|unnamed_space"),
-                          })
-                        : _t("leave_room_dialog|leave_room_question", {
-                              roomName: roomToLeave?.name ?? _t("common|unnamed_room"),
-                          })}
-                    {warnings}
-                </span>
-            ),
-            button: _t("action|leave"),
-            danger: warnings.length > 0,
-        });
+        const { finished } = Modal.createDialog(
+            QuestionDialog,
+            {
+                title: isSpace
+                    ? _t("leave_room_dialog|leave_space_title", {
+                          spaceName: roomToLeave?.name ?? _t("common|unnamed_space"),
+                      })
+                    : _t("leave_room_dialog|leave_room_title", {
+                          roomName: roomToLeave?.name ?? _t("common|unnamed_room"),
+                      }),
+                description: warnings.length > 0 ? <span>{warnings}</span> : undefined,
+                button: _t("action|leave"),
+                danger: warnings.length > 0,
+            },
+            "mx_LeaveRoomDialog",
+        );
 
         void finished.then(async ([shouldLeave]) => {
             if (shouldLeave) {
