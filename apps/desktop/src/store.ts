@@ -394,7 +394,9 @@ class Store extends ElectronStore<StoreData> {
                 title: _t("store|error|backend_no_encryption_title"),
                 message: _t("store|error|backend_no_encryption"),
                 detail: _t("store|error|backend_no_encryption_detail", {
-                    backend: safeStorage.getSelectedStorageBackend(),
+                    // getSelectedStorageBackend is Linux-only; elsewhere the backend we failed to use is the system keychain
+                    // See https://www.electronjs.org/docs/latest/api/safe-storage#safestoragegetselectedstoragebackend-linux
+                    backend: process.platform === "linux" ? safeStorage.getSelectedStorageBackend() : "system",
                     brand: getConfig().brand,
                 }),
                 type: "error",
