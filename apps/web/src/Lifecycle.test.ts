@@ -89,6 +89,13 @@ describe("Lifecycle", () => {
         vi.resetAllMocks();
     });
 
+    /**
+     * Install the IndexedDB mocks, backed by `mockStore`.
+     *
+     * The mocks mutate the store, so each test must supply its own. Seed data is provided by
+     * factories (eg `idbStorageSession()`) rather than shared objects for exactly that reason:
+     * otherwise a write in one test leaks into every test that runs after it.
+     */
     const initIdbMock = (mockStore: Record<string, Record<string, unknown>> = {}): void => {
         vi.spyOn(StorageAccess, "idbLoad")
             .mockClear()
@@ -125,11 +132,13 @@ describe("Lifecycle", () => {
         mx_user_id: userId,
         mx_device_id: deviceId,
     };
-    const idbStorageSession = {
+    // A factory, not a shared object: initIdbMock takes ownership of what it is given and the
+    // mocks write into it, so every test needs its own.
+    const idbStorageSession = (): Record<string, Record<string, unknown>> => ({
         account: {
             mx_access_token: accessToken,
         },
-    };
+    });
     const credentials = {
         homeserverUrl,
         identityServerUrl,
@@ -220,7 +229,7 @@ describe("Lifecycle", () => {
                     for (const key in localStorageSession) {
                         localStorage.setItem(key, localStorageSession[key]);
                     }
-                    initIdbMock(idbStorageSession);
+                    initIdbMock(idbStorageSession());
                 });
 
                 it("should ignore guest accounts when ignoreGuest is true", async () => {
@@ -247,7 +256,7 @@ describe("Lifecycle", () => {
                     for (const key in localStorageSession) {
                         localStorage.setItem(key, localStorageSession[key]);
                     }
-                    initIdbMock(idbStorageSession);
+                    initIdbMock(idbStorageSession());
                 });
 
                 it("should persist credentials", async () => {
@@ -268,8 +277,12 @@ describe("Lifecycle", () => {
                     expect(await restoreSessionFromStorage()).toEqual(true);
 
                     expect(StorageAccess.idbSave).toHaveBeenCalledWith("account", "mx_access_token", accessToken);
-                    // put accessToken in localstorage as fallback
-                    expect(localStorage.getItem("mx_access_token")).toEqual(accessToken);
+                    // put accessToken in localstorage at the fallback key, which takes precedence
+                    // over anything left in indexeddb
+                    expect(localStorage.getItem("mx_access_token_fallback")).toEqual(accessToken);
+                    // but leave the indexeddb entry alone: the service worker can only read the
+                    // token from there, so removing it would break authenticated media
+                    await expect(StorageAccess.idbLoad("account", "mx_access_token")).resolves.toEqual(accessToken);
                 });
 
                 it("should create and start new matrix client with credentials", async () => {
@@ -311,7 +324,7 @@ describe("Lifecycle", () => {
                         for (const key in localStorageSession) {
                             localStorage.setItem(key, localStorageSession[key]);
                         }
-                        initIdbMock(idbStorageSession);
+                        initIdbMock(idbStorageSession());
                     });
 
                     it("should persist credentials", async () => {
@@ -393,8 +406,9 @@ describe("Lifecycle", () => {
                         "mx_access_token",
                         encryptedTokenShapedObject,
                     );
-                    // put accessToken in localstorage as fallback
-                    expect(localStorage.getItem("mx_access_token")).toEqual(accessToken);
+                    // put accessToken in localstorage at the fallback key. Note this is the plain
+                    // token: localStorage can only hold strings.
+                    expect(localStorage.getItem("mx_access_token_fallback")).toEqual(accessToken);
                 });
 
                 it("should create and start new matrix client with credentials", async () => {
@@ -522,7 +536,7 @@ describe("Lifecycle", () => {
                 for (const key in localStorageSession) {
                     localStorage.setItem(key, localStorageSession[key]);
                 }
-                initIdbMock(idbStorageSession);
+                initIdbMock(idbStorageSession());
                 mockClient.isVersionSupported.mockRejectedValue(new Error("Oh, noes, the server is down!"));
 
                 expect(await restoreSessionFromStorage()).toEqual(true);
@@ -545,6 +559,33 @@ describe("Lifecycle", () => {
                 await expect(restoreSessionFromStorage()).rejects.toThrow(
                     "Error decrypting secret access_token: no pickle key found.",
                 );
+            });
+
+            it("should keep a plaintext token in localStorage when the idb token cannot be decrypted", async () => {
+                // When the pickle key has gone missing, a plaintext copy left at the primary key by
+                // an older version is the only way back into the account, so nothing on the read
+                // path may throw it away.
+                for (const key in localStorageSession) {
+                    localStorage.setItem(key, localStorageSession[key]);
+                }
+                initIdbMock({});
+
+                // Create a pickle key, and store the token encrypted with it.
+                const pickleKey = (await PlatformPeg.get()!.createPickleKey(credentials.userId, credentials.deviceId))!;
+                localStorage.setItem("mx_has_pickle_key", "true");
+                await persistTokens(pickleKey, credentials);
+
+                // Residue at the primary key, left behind by an older version's fallback.
+                localStorage.setItem("mx_access_token", "old-plaintext-token");
+
+                // Now destroy the pickle key, making the idb token undecryptable.
+                await PlatformPeg.get()!.destroyPickleKey(credentials.userId, credentials.deviceId);
+
+                await expect(restoreSessionFromStorage()).rejects.toThrow(
+                    "Error decrypting secret access_token: no pickle key found.",
+                );
+
+                expect(localStorage.getItem("mx_access_token")).toEqual("old-plaintext-token");
             });
         });
     });
@@ -652,6 +693,7 @@ describe("Lifecycle", () => {
 
                 expect(localStorage.getItem("mx_has_access_token")).toBeFalsy();
                 expect(localStorage.getItem("mx_access_token")).toBeFalsy();
+                expect(localStorage.getItem("mx_access_token_fallback")).toBeFalsy();
             });
 
             it("should clear stores", async () => {
@@ -735,8 +777,58 @@ describe("Lifecycle", () => {
                 });
                 await setLoggedIn(credentials);
 
-                // put plain accessToken in localstorage when we dont have idb
-                expect(localStorage.getItem("mx_access_token")).toEqual(accessToken);
+                // put plain accessToken in localstorage at the fallback key when we dont have idb
+                expect(localStorage.getItem("mx_access_token_fallback")).toEqual(accessToken);
+            });
+
+            it("should prefer the localStorage fallback over a stale token in idb", async () => {
+                // A previous write failed, leaving the new token in localStorage and an outdated
+                // one behind in idb. Reading must return the fallback, not the stale value:
+                // otherwise a rotated refresh token is lost and the session dies on next start.
+                initIdbMock({ account: { mx_refresh_token: "stale-refresh-token" } });
+                localStorage.setItem("mx_refresh_token_fallback", "fresh-refresh-token");
+                for (const key in localStorageSession) {
+                    localStorage.setItem(key, localStorageSession[key]);
+                }
+                localStorage.setItem("mx_has_access_token", "true");
+                await idbSave("account", "mx_access_token", accessToken);
+
+                expect(await restoreSessionFromStorage()).toEqual(true);
+
+                expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
+                    expect.objectContaining({ refreshToken: "fresh-refresh-token" }),
+                    undefined,
+                );
+                // having recovered it, the fallback is migrated back into idb and cleared
+                expect(StorageAccess.idbSave).toHaveBeenCalledWith(
+                    "account",
+                    "mx_refresh_token",
+                    "fresh-refresh-token",
+                );
+                expect(localStorage.getItem("mx_refresh_token_fallback")).toBeNull();
+            });
+
+            it("should discard an unreachable plaintext token left at the primary key by an older version", async () => {
+                // Older versions wrote their fallback to the primary key rather than the fallback
+                // key, and never cleared it on a later successful write. We cannot tell whether it
+                // is newer or older than the idb copy, so it must not be used - but it must not be
+                // left sitting in localStorage in the clear either.
+                initIdbMock(idbStorageSession());
+                for (const key in localStorageSession) {
+                    localStorage.setItem(key, localStorageSession[key]);
+                }
+                localStorage.setItem("mx_access_token", "old-plaintext-token");
+
+                expect(await restoreSessionFromStorage()).toEqual(true);
+
+                // the idb token wins...
+                expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
+                    expect.objectContaining({ accessToken }),
+                    undefined,
+                );
+                // ...and the unreachable plaintext copy is swept up, once the restore has
+                // written a token of its own to idb and thereby proved the copy is spare
+                expect(localStorage.getItem("mx_access_token")).toBeNull();
             });
 
             it("should remove any access token from storage when there is none in credentials and idb save fails", async () => {
@@ -754,6 +846,7 @@ describe("Lifecycle", () => {
 
                 expect(localStorage.getItem("mx_has_access_token")).toBeFalsy();
                 expect(localStorage.getItem("mx_access_token")).toBeFalsy();
+                expect(localStorage.getItem("mx_access_token_fallback")).toBeFalsy();
             });
 
             it("should create new matrix client with credentials", async () => {
