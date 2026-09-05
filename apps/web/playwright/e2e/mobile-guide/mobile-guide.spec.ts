@@ -10,6 +10,30 @@ import { MobileAppVariant } from "../../../src/vector/mobile_guide/mobile-apps";
 
 const variants = [MobileAppVariant.Classic, MobileAppVariant.X, MobileAppVariant.Pro];
 
+const IPHONE_USER_AGENT = "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15";
+
+test.describe("Mobile Guide redirect", () => {
+    test.use({
+        userAgent: IPHONE_USER_AGENT,
+        viewport: { width: 390, height: 844 },
+    });
+
+    test("should send a mobile browser to the mobile guide by default", async ({ page }) => {
+        await page.goto("/");
+        await expect(page).toHaveURL(/\/mobile_guide\/?$/);
+    });
+
+    test.describe("with mobile_guide_toast disabled", () => {
+        test.use({ config: { mobile_guide_toast: false } });
+
+        test("should leave a mobile browser in the web app", async ({ page }) => {
+            await page.goto("/");
+            await expect(page.locator(".mx_Welcome")).toBeVisible();
+            expect(page.url()).not.toContain("mobile_guide");
+        });
+    });
+});
+
 test.describe("Mobile Guide Screenshots", { tag: "@screenshot" }, () => {
     for (const variant of variants) {
         test.describe(`for variant ${variant}`, () => {
