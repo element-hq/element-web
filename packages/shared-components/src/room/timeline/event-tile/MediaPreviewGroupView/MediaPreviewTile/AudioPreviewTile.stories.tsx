@@ -1,0 +1,63 @@
+/*
+ * Copyright (c) 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+import React from "react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { DocumentIcon, ExpandIcon, DownloadIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+
+import { AudioPreviewTile } from "./MediaPreviewTile";
+import demoAudio from "../../../../../../static/audioDemo.ogg";
+
+const meta = {
+    title: "Room/Timeline/MediaPreviewGroupView/MediaPreviewTile/AudioPreviewTile",
+    component: AudioPreviewTile,
+    tags: ["autodocs"],
+    args: {
+        id: "voice-message.mp3",
+        type: "audio",
+        audio: demoAudio,
+        icon: <DocumentIcon />,
+        onClick: () => {},
+        color: "#4200A6",
+        header: "voice-message.mp3",
+        body: "1.1 MB",
+        buttons: [
+            { label: "Expand", icon: <ExpandIcon />, onClick: () => ({}) },
+            { label: "Download", icon: <DownloadIcon />, onClick: () => ({}) },
+        ],
+    },
+    parameters: {
+        design: {
+            type: "figma",
+            url: "https://www.figma.com/design/sI9A2kV2K4xeiyqJsL7Ey3/Links-and-Files?node-id=728-8112",
+        },
+    },
+} satisfies Meta<typeof AudioPreviewTile>;
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {};
+
+export const ClickableAudio: Story = {
+    args: {
+        audioOnClick: () => {},
+    },
+};
+
+export const WithHeaderUrl: Story = {
+    args: {
+        headerUrl: "https://example.com/voice-message.mp3",
+    },
+};
+
+export const NoButtons: Story = {
+    args: {
+        buttons: [],
+    },
+};

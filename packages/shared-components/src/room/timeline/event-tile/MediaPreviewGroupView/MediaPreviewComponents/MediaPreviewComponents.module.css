@@ -1,0 +1,118 @@
+.header,
+.body {
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+    min-width: 0;
+    display: -webkit-box;
+    overflow: clip;
+}
+
+.leftGroup {
+    display: flex;
+    gap: var(--cpd-space-3x);
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.header {
+    font-weight: 600;
+}
+
+.body {
+    font-size: var(--cpd-font-size-body-sm);
+    color: var(--cpd-color-text-secondary);
+}
+
+.textContent {
+    display: inline-block;
+    min-width: 0;
+}
+
+.icon {
+    button {
+        border: none;
+        background: none;
+        height: 100%;
+        aspect-ratio: 100%;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    display: flex;
+    height: 100%;
+    aspect-ratio: 1;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    border-radius: 6px;
+    border: 1px solid var(--cpd-color-icon-quaternary);
+    background-color: var(--cpd-color-bg-decorative-4);
+
+    svg {
+        display: block;
+        height: 57%;
+        width: 57%;
+    }
+}
+
+.buttonGroup {
+    display: flex;
+    gap: 12px;
+}
+
+.button {
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    svg {
+        color: var(--cpd-color-icon-secondary);
+        display: block;
+        height: calc(var(--cpd-icon-button-size) * 0.625);
+        width: calc(var(--cpd-icon-button-size) * 0.625);
+    }
+}
+
+.button:hover svg {
+    color: var(--cpd-color-icon-primary);
+}
+
+.image button,
+.video button,
+.audio button {
+    cursor: pointer;
+    background: none;
+    border: none;
+    width: 100%;
+    padding: 0;
+}
+
+.image img,
+.video video,
+.audio audio {
+    width: 100%;
+    display: block;
+}
+
+.video.bannerVideo video,
+.image.bannerImage img {
+    max-height: 100px;
+    object-fit: cover;
+}
+
+.video.tallBannerVideo video,
+.image.tallBannerImage img {
+    max-height: 300px;
+    object-fit: cover;
+}
+
+.video.fullVideo video,
+.image.fullImage img {
+    max-height: 300px;
+    object-fit: contain;
+}
