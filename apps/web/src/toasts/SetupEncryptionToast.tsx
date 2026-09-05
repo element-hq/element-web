@@ -30,6 +30,7 @@ import { UserTab } from "../components/views/dialogs/UserTab";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import ConfirmKeyStorageOffDialog from "../components/views/dialogs/ConfirmKeyStorageOffDialog";
 import { MatrixClientPeg } from "../MatrixClientPeg";
+import { initialiseDehydrationIfEnabled } from "../utils/device/dehydration";
 import { resetKeyBackupAndWait } from "../utils/crypto/resetKeyBackup";
 import { PosthogAnalytics } from "../PosthogAnalytics";
 
@@ -51,6 +52,8 @@ const getTitle = (state: DeviceStateForToast): string => {
             return _t("encryption|key_storage_out_of_sync");
         case "turn_on_key_storage":
             return _t("encryption|turn_on_key_storage");
+        case "dehydration_key_out_of_sync":
+            return _t("encryption|dehydration_key_out_of_sync");
     }
 };
 
@@ -61,6 +64,7 @@ const getIcon = (state: DeviceStateForToast): IToast<any>["icon"] => {
         case "verify_this_session":
         case "key_storage_out_of_sync":
         case "identity_needs_reset":
+        case "dehydration_key_out_of_sync":
             return <ErrorSolidIcon color="var(--cpd-color-icon-critical-primary)" />;
         case "turn_on_key_storage":
             return <SettingsSolidIcon color="var(--cpd-color-text-primary)" />;
@@ -71,6 +75,7 @@ const shouldShowCloseButton = (state: DeviceStateForToast): boolean => {
     switch (state) {
         case "key_storage_out_of_sync":
         case "identity_needs_reset":
+        case "dehydration_key_out_of_sync":
             return true;
         case "set_up_recovery":
         case "verify_this_session":
@@ -86,6 +91,7 @@ const getSetupCaption = (state: DeviceStateForToast): string => {
         case "verify_this_session":
             return _t("action|continue");
         case "key_storage_out_of_sync":
+        case "dehydration_key_out_of_sync":
             return _t("encryption|enter_recovery_key");
         case "turn_on_key_storage":
             return _t("action|continue");
@@ -103,6 +109,7 @@ const getPrimaryButtonIcon = (
 ): ComponentType<React.SVGAttributes<SVGElement>> | undefined => {
     switch (state) {
         case "key_storage_out_of_sync":
+        case "dehydration_key_out_of_sync":
             return KeyIcon;
         default:
             return;
@@ -118,6 +125,7 @@ const getSecondaryButtonLabel = (state: DeviceStateForToast): string => {
         case "key_storage_out_of_sync":
             return _t("encryption|forgot_recovery_key");
         case "turn_on_key_storage":
+        case "dehydration_key_out_of_sync":
             return _t("action|dismiss");
         case "identity_needs_reset":
             return "";
@@ -146,6 +154,8 @@ const getDescription = (state: DeviceStateForToast): string | React.ReactNode =>
             return _t("encryption|turn_on_key_storage_description");
         case "identity_needs_reset":
             return _t("encryption|identity_needs_reset_description");
+        case "dehydration_key_out_of_sync":
+            return _t("encryption|dehydration_key_out_of_sync_description");
     }
 };
 
@@ -251,6 +261,40 @@ export const showToast = (state: DeviceStateForToast): void => {
                     },
                 };
                 defaultDispatcher.dispatch(payload);
+                break;
+            }
+            case "dehydration_key_out_of_sync": {
+                myLogger.debug("Primary button clicked: recovering the dehydration key");
+                const modal = Modal.createDialog(
+                    Spinner,
+                    undefined,
+                    "mx_Dialog_spinner",
+                    /* priority */ false,
+                    /* static */ true,
+                );
+
+                const matrixClient = MatrixClientPeg.safeGet();
+
+                try {
+                    const deviceListener = DeviceListener.sharedInstance();
+                    // Pause the device listener while we unlock secret storage and recover the key, so the
+                    // toast doesn't flicker while the state changes.
+                    await deviceListener.whilePaused(async () => {
+                        await accessSecretStorage(async () => {
+                            // Secret storage is now unlocked: read the dehydration key from it and
+                            // rehydrate the device (and create a fresh dehydrated device).
+                            await initialiseDehydrationIfEnabled(matrixClient, { rehydrate: true });
+                        });
+                    });
+                } catch (error) {
+                    if (error instanceof AccessCancelledError) {
+                        myLogger.debug("Dehydration recovery cancelled by the user");
+                    } else {
+                        myLogger.error("Failed to recover the dehydration key", error);
+                    }
+                } finally {
+                    modal.close();
+                }
                 break;
             }
         }
