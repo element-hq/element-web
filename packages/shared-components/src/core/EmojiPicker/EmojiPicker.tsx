@@ -122,6 +122,11 @@ export interface EmojiPickerProps {
      * When omitted, a default mapping based on `KeyboardEvent.key` is used.
      */
     getAction?: RovingTabIndexProviderProps["getAction"];
+    /**
+     * Whether to show the quick reactions at the bottom of the picker. Defaults to true.
+     * Previews of emoji are displayed in the same bar as will also be hidden when this is false.
+     */
+    showQuickReactions?: boolean;
 }
 
 /** Convert recent emoji characters to emoji data, removing unknowns and duplicates */
@@ -193,6 +198,7 @@ export function EmojiPicker({
     recentEmojis,
     onRecordRecent,
     getAction,
+    showQuickReactions = true,
 }: EmojiPickerProps): React.ReactNode {
     const [filter, setFilter] = useState("");
     const [previewEmoji, setPreviewEmoji] = useState<IEmoji | undefined>(undefined);
@@ -468,11 +474,16 @@ export function EmojiPicker({
                             />
                         )}
                     </AutoHideScrollbar>
-                    {previewEmoji ? (
-                        <Preview emoji={previewEmoji} />
-                    ) : (
-                        <QuickReactions onClick={onClickEmoji} selectedEmojis={selectedEmojis} getAction={getAction} />
-                    )}
+                    {showQuickReactions &&
+                        (previewEmoji ? (
+                            <Preview emoji={previewEmoji} />
+                        ) : (
+                            <QuickReactions
+                                onClick={onClickEmoji}
+                                selectedEmojis={selectedEmojis}
+                                getAction={getAction}
+                            />
+                        ))}
                 </section>
             )}
         </RovingGridIndexProvider>

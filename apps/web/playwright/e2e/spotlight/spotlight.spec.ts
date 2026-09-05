@@ -13,6 +13,7 @@ import { Bot } from "../../pages/bot";
 import type { Locator, Page } from "@playwright/test";
 import type { ElementAppPage } from "../../pages/ElementAppPage";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
+import { SettingLevel } from "../../../src/settings/SettingLevel";
 
 function roomHeaderName(page: Page): Locator {
     return page.locator(".mx_RoomHeader_heading");
@@ -35,8 +36,8 @@ async function startDM(app: ElementAppPage, page: Page, name: string): Promise<v
     await locator.fill("Hey!");
     await locator.press("Enter");
     // The DM room is created at this point, this can take a little bit of time
-    await expect(page.locator(".mx_EventTile_body").getByText("Hey!")).toBeAttached({ timeout: 3000 });
-    await expect(page.getByTestId("room-list").getByRole("option", { name: `Open room ${name}` })).toBeVisible();
+    await expect(page.getByTestId("event-tile-slot-body").getByText("Hey!")).toBeAttached({ timeout: 3000 });
+    await expect(page.getByTestId("room-list").getByRole("button", { name: `Open room ${name}` })).toBeVisible();
 }
 
 type RoomRef = { name: string; roomId: string };
@@ -263,9 +264,11 @@ test.describe("Spotlight", () => {
         await locator.press("Enter");
 
         // Assert DM exists by checking for the first message and the room being in the room list
-        await expect(page.locator(".mx_EventTile_body").filter({ hasText: "Hey!" })).toBeAttached({ timeout: 3000 });
+        await expect(page.getByTestId("event-tile-slot-body").filter({ hasText: "Hey!" })).toBeAttached({
+            timeout: 3000,
+        });
         await expect(
-            page.getByTestId("room-list").getByRole("option", { name: `Open room ${bot2.credentials!.displayName}` }),
+            page.getByTestId("room-list").getByRole("button", { name: `Open room ${bot2.credentials!.displayName}` }),
         ).toBeVisible();
 
         // Invite BotBob into existing DM with ByteBot
@@ -280,7 +283,7 @@ test.describe("Spotlight", () => {
         await app.client.inviteUser(dmRooms[0], bot1.credentials!.userId);
         await expect(roomHeaderName(page).first()).toContainText(groupDmName);
         await expect(
-            page.getByTestId("room-list").getByRole("option", { name: `Open room ${groupDmName}` }),
+            page.getByTestId("room-list").getByRole("button", { name: `Open room ${groupDmName}` }),
         ).toBeVisible();
 
         // Search for BotBob by id, should return group DM and user
@@ -399,4 +402,65 @@ test.describe("Spotlight", () => {
         await expect(resultLocator.first()).toHaveAttribute("aria-selected", "true");
         await expect(resultLocator.last()).toHaveAttribute("aria-selected", "false");
     });
+
+    for (const theme of ["light", "dark", "light-high-contrast"]) {
+        test.describe(`${theme} theme legibility`, () => {
+            // Regression tests for https://github.com/element-hq/element-web/issues/34213
+            // Hovered/selected Spotlight results must not render light text on a light
+            // background (or vice versa) in any theme, not just high contrast ones.
+
+            test.beforeEach(async ({ app }) => {
+                await app.settings.setValue("use_system_theme", null, SettingLevel.DEVICE, false);
+                await app.settings.setValue("theme", null, SettingLevel.ACCOUNT, theme);
+            });
+
+            test("should have legible text across Spotlight surfaces", async ({ page, app, room1, axe }) => {
+                // room1 is already open (see room1 fixture); navigate away from it so it
+                // shows up in the "recently viewed" section (the current room is excluded from it).
+                await page.goto("/#/home");
+                await expect(page.locator(".mx_RoomSublist_skeletonUI")).not.toBeAttached();
+
+                const spotlight = await app.openSpotlight();
+                // Wait for the dialog to settle: the search box is only focused once the
+                // open animation has finished and results have had a chance to render.
+                await expect(spotlight.searchBox.getByRole("textbox", { name: "Search" })).toBeFocused();
+
+                // #mx_SpotlightDialog_keyboardPrompt is a sibling of the [role=dialog] element,
+                // not a descendant, so it must be located from the page rather than spotlight.dialog.
+                const kbdHint = page.locator("#mx_SpotlightDialog_keyboardPrompt kbd").first();
+                await expect(kbdHint).toBeAttached();
+
+                const recentlyViewed = spotlight.dialog.locator(
+                    ".mx_SpotlightDialog_recentlyViewed .mx_SpotlightDialog_option",
+                );
+                await expect(recentlyViewed.first()).toBeAttached();
+                await recentlyViewed.first().hover();
+
+                axe.include("#mx_SpotlightDialog_keyboardPrompt");
+                axe.include(".mx_SpotlightDialog_recentlyViewed .mx_SpotlightDialog_option");
+                // XXX: Result rows nest a focusable endAdornment (here, RoomResultContextMenus) inside
+                // the option row itself, which is a pre-existing structural issue unrelated to the
+                // colour-contrast regression under test here.
+                axe.disableRules("nested-interactive");
+                await expect(axe).toHaveNoViolations();
+
+                await spotlight.filter(Filter.PublicRooms);
+                await spotlight.search(room1.name);
+
+                const filterChip = spotlight.dialog.locator(".mx_SpotlightDialog_filter");
+                await expect(filterChip).toHaveText("Public rooms");
+
+                const resultLocator = spotlight.results;
+                await expect(resultLocator).toHaveCount(1);
+                await resultLocator.first().hover();
+
+                axe.include(".mx_SpotlightDialog_filter");
+                axe.include(".mx_SpotlightDialog_option");
+                // XXX: same nested-interactive issue as above; here the endAdornment is the
+                // View/Join button rather than RoomResultContextMenus.
+                axe.disableRules("nested-interactive");
+                await expect(axe).toHaveNoViolations();
+            });
+        });
+    }
 });

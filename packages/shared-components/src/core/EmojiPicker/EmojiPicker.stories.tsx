@@ -45,3 +45,9 @@ export const DisabledEmoji: Story = {
         isEmojiDisabled: (unicode: string) => unicode === "😀",
     },
 };
+
+export const HideQuickReactions: Story = {
+    args: {
+        showQuickReactions: false,
+    },
+};

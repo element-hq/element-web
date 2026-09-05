@@ -8,7 +8,7 @@
 .root {
     display: flex;
     flex-direction: column;
-    gap: var(--cpd-space-2x);
+    gap: var(--image-body-content-gap, var(--cpd-space-2x));
     min-width: var(--cpd-space-0x);
 }
 
@@ -24,6 +24,8 @@
     overflow: hidden;
     contain: paint;
     border-radius: 8px;
+    min-width: var(--image-body-min-width, 0px);
+    min-height: var(--image-body-min-height, 0px);
 }
 
 .placeholder {

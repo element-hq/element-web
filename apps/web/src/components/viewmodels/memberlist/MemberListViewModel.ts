@@ -237,7 +237,7 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
     const search = useCallback(
         (searchQuery: string): void => {
             searchQueryRef.current = searchQuery;
-            loadMembers(searchQuery);
+            void loadMembers(searchQuery);
         },
         [loadMembers],
     );
@@ -266,48 +266,53 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
 
     useTypedEventEmitter(cli, RoomStateEvent.Events, (event: MatrixEvent) => {
         if (event.getRoomId() === roomId && event.getType() === EventType.RoomThirdPartyInvite) {
-            loadMembers();
+            void loadMembers();
             const newCanInvite = getCanUserInviteToThisRoom();
             setCanInvite(newCanInvite);
         }
     });
 
     useTypedEventEmitter(cli, RoomStateEvent.Update, (state: RoomState) => {
-        if (state.roomId === roomId) loadMembers();
+        if (state.roomId === roomId) {
+            void loadMembers();
+            // Power level and join rule changes both surface here, and both can change whether we may
+            // invite. Mirrors RoomSummaryCardViewModel, which recomputes canInviteTo on the same event.
+            setCanInvite(getCanUserInviteToThisRoom());
+        }
     });
 
     useTypedEventEmitter(cli, RoomMemberEvent.Name, (_: MatrixEvent, member: SdkRoomMember) => {
-        if (member.roomId === roomId) loadMembers();
+        if (member.roomId === roomId) void loadMembers();
     });
 
     useTypedEventEmitter(cli, ClientEvent.Room, (room: Room) => {
         // We listen for room events because when we accept an invite
         // we need to wait till the room is fully populated with state
         // before refreshing the member list else we get a stale list.
-        if (room.roomId === roomId) loadMembers();
+        if (room.roomId === roomId) void loadMembers();
     });
 
     useTypedEventEmitter(cli, RoomEvent.MyMembership, (room: Room, membership: string, oldMembership?: string) => {
         if (room.roomId !== roomId) return;
         if (membership === KnownMembership.Join && oldMembership !== KnownMembership.Join) {
             // we just joined the room, load the member list
-            loadMembers();
+            void loadMembers();
             const newShouldShowInvite = getShouldShowInvite();
             setShouldShowInvite(newShouldShowInvite);
         }
     });
 
     useTypedEventEmitter(cli, UserEvent.Presence, (_: MatrixEvent | undefined, user: User) => {
-        if (memberMap.has(user.userId)) loadMembers();
+        if (memberMap.has(user.userId)) void loadMembers();
     });
 
     useTypedEventEmitter(cli, UserEvent.CurrentlyActive, (_: MatrixEvent | undefined, user: User) => {
-        if (memberMap.has(user.userId)) loadMembers();
+        if (memberMap.has(user.userId)) void loadMembers();
     });
 
     // Initial load of the memberlist
     useEffect(() => {
-        loadMembers(searchQueryRef.current);
+        void loadMembers(searchQueryRef.current);
         return () => {
             loadRequestIdRef.current += 1;
             loadMembers.cancel();

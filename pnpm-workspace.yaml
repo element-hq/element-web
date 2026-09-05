@@ -1,6 +1,5 @@
 linkWorkspacePackages: true
 cleanupUnusedCatalogs: true
-ignorePatchFailures: false
 ignoreWorkspaceRootCheck: true
 minimumReleaseAgeStrict: true
 dedupePeerDependents: true
@@ -25,9 +24,10 @@ catalog:
     # playwright
     "@playwright/test": 1.61.1
     "playwright-core": 1.61.1
+    serve: 14.2.6
     # Compound
     "@vector-im/compound-design-tokens": 10.2.1
-    "@vector-im/compound-web": 9.9.0
+    "@vector-im/compound-web": 10.0.1
     # i18n
     matrix-web-i18n: 3.6.0
     # emojibase
@@ -35,17 +35,18 @@ catalog:
     # fonts
     "@fontsource/inter": 5.3.0
     # vite
-    vite: 8.2.0
+    vite: 8.2.2
     vite-plugin-node-polyfills: 0.28.0
     vite-plugin-svgr: 5.2.0
-    vitest: 4.1.10
-    "@vitest/spy": 4.1.10
-    "@vitest/coverage-v8": 4.1.10
-    "@vitest/browser-playwright": 4.1.10
-    "@vitejs/plugin-react": 6.0.5
+    vitest: 4.1.11
+    "@vitest/spy": 4.1.11
+    "@vitest/coverage-v8": 4.1.11
+    "@vitest/browser-playwright": 4.1.11
+    "@vitest/browser": 4.1.11
+    "@vitejs/plugin-react": 6.1.1
     unplugin-dts: 1.0.1
     # nx
-    nx: 23.1.1
+    nx: 23.1.2
 
 catalogs:
     ts6:
@@ -93,6 +94,8 @@ allowBuilds:
     # The following are to make wrangler-action happy - https://github.com/cloudflare/wrangler-action/issues/436
     sharp: true
     workerd: true
+    # Optionally builds itself from source if a specific environment variable is present, which we do not need
+    "@parcel/watcher": false
 
 patchedDependencies:
     # Workaround for missing types export
@@ -119,6 +122,8 @@ patchedDependencies:
     plist: patches/plist.patch
     # Workaround for type fails
     "@arcmantle/vite-plugin-import-css-sheet": patches/@arcmantle__vite-plugin-import-css-sheet.patch
+    # Workaround for scroll anchoring landing on transient placeholder rows (pending upstream)
+    "@tanstack/virtual-core@3": patches/@tanstack__virtual-core@3.patch
 
 peerDependencyRules:
     allowedVersions:
@@ -136,10 +141,10 @@ overrides:
     "@types/react": "catalog:"
     "@types/react-dom": "catalog:"
     caniuse-lite: 1.0.30001806
-    matrix-widget-api: "^1.17.0"
+    matrix-widget-api: "^1.18.0"
     "@types/node": 25.9.3
     config-file-ts: 0.2.8-rc1
-    node-abi: 4.33.0
+    node-abi: 4.35.0
 
     # https://github.com/advisories/GHSA-6v5v-wf23-fmfq
     markdown-it: ^14.3.0
@@ -214,3 +219,7 @@ minimumReleaseAgeExclude:
     # Temporary for testing purposes
     - "@typescript/*"
     - typescript@7.0.2
+    # New timeline: 3.14.8/3.17.6 carry the upstream end-anchored-prepend fix
+    # (#1237); they were freshly published so are still inside the release-age
+    # window. Revisit once the release has aged past the cutoff.
+    - "@tanstack/*"
