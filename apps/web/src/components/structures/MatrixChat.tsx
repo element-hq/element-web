@@ -1826,6 +1826,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     public showScreen(screen: string, params?: Record<string, any>): void {
         logger.debug(`showScreen ${screen}`);
 
+        if (this.state.view === Views.COMPLETE_SECURITY || this.state.view === Views.E2E_SETUP) {
+            // The session is behind the device verification gate. Routing a screen from the URL
+            // hash would dispatch a view that replaces it, so the request is dropped.
+            logger.info(`showScreen: suppressing change to ${screen} until this device is verified`);
+            return;
+        }
+
         const cli = MatrixClientPeg.get();
         const isLoggedOutOrGuest = !cli || cli.isGuest();
         if (!isLoggedOutOrGuest && AUTH_SCREENS.includes(screen)) {
