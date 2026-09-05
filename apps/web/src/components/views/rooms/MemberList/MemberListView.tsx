@@ -37,7 +37,7 @@ const EXTENDED_VIEWPORT_HEIGHT = 15 * MEMBER_LIST_ITEM_HEIGHT;
 
 const MemberListView: React.FC<IProps> = (props: IProps) => {
     const vm = useMemberListViewModel(props.roomId);
-    const { callParticipantUserIds, isPresenceEnabled, memberCount } = vm;
+    const { isPresenceEnabled, memberCount } = vm;
 
     const separatorIndexes = useMemo(
         () => vm.members.flatMap((item, index) => (isMemberListSeparator(item) ? [index] : [])),
@@ -75,7 +75,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                     <RoomMemberTileView
                         item={item}
                         member={item.member}
-                        isCallParticipant={callParticipantUserIds.has(item.member.userId)}
+                        isCallParticipant={item.isCallParticipant}
                         showPresence={isPresenceEnabled}
                         focused={focused}
                         tabIndex={isRovingItem ? 0 : -1}
@@ -98,7 +98,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                 );
             }
         },
-        [callParticipantUserIds, getItemKey, getFocusableMemberIndex, isPresenceEnabled, memberCount],
+        [getItemKey, getFocusableMemberIndex, isPresenceEnabled, memberCount],
     );
 
     const isItemFocusable = useCallback((item: MemberWithSeparator): boolean => {

@@ -19,7 +19,6 @@ import {
     UserEvent,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { MatrixRTCSessionEvent } from "matrix-js-sdk/src/matrixrtc";
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { throttle } from "lodash";
 
@@ -38,10 +37,11 @@ import { canInviteTo } from "../../../utils/room/canInviteTo";
 import { isValid3pidInvite } from "../../../RoomInvite";
 import { type ThreePIDInvite } from "../../../models/rooms/ThreePIDInvite";
 import { type XOR } from "../../../@types/common";
-import { useTypedEventEmitter, useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
+import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import { useRoomMemberCount } from "../../../hooks/useRoomMembers";
+import { useCall, useParticipatingMembers } from "../../../hooks/useCall";
 
-type Member = XOR<{ member: RoomMember }, { threePidInvite: ThreePIDInvite }>;
+type Member = XOR<{ member: RoomMember; isCallParticipant: boolean }, { threePidInvite: ThreePIDInvite }>;
 
 export function getPending3PidInvites(room: Room, searchQuery?: string): Member[] {
     // include 3pid invites (m.room.third_party_invite) state events.
@@ -68,7 +68,7 @@ export function getPending3PidInvites(room: Room, searchQuery?: string): Member[
     return invites;
 }
 
-export function sdkRoomMemberToRoomMember(member: SdkRoomMember): Member {
+export function sdkRoomMemberToRoomMember(member: SdkRoomMember, isCallParticipant = false): Member {
     const displayUserId =
         UserIdentifierCustomisations.getDisplayUserIdentifier(member.userId, {
             roomId: member.roomId,
@@ -85,6 +85,7 @@ export function sdkRoomMemberToRoomMember(member: SdkRoomMember): Member {
     }
 
     return {
+        isCallParticipant,
         member: {
             roomId: member.roomId,
             userId: member.userId,
@@ -116,8 +117,6 @@ export function isMemberListSeparator(item: MemberWithSeparator): item is Member
 export interface MemberListViewState {
     members: MemberWithSeparator[];
     memberCount: number;
-    /** Matrix user IDs of members currently participating in this room's call. */
-    callParticipantUserIds: ReadonlySet<string>;
     search: (searchQuery: string) => void;
     isPresenceEnabled: boolean;
     shouldShowInvite: boolean;
@@ -134,15 +133,11 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
         throw new Error(`Room with id ${roomId} does not exist!`);
     }
 
-    const roomSession = useMemo(() => cli.matrixRTC.getRoomSession(room), [cli, room]);
-    const getCallParticipantUserIds = useCallback(
-        (): ReadonlySet<string> => new Set(roomSession.memberships.map((membership) => membership.userId)),
-        [roomSession],
-    );
-    const callParticipantUserIds = useTypedEventEmitterState(
-        roomSession,
-        MatrixRTCSessionEvent.MembershipsChanged,
-        getCallParticipantUserIds,
+    const call = useCall(roomId);
+    const participatingMembers = useParticipatingMembers(call);
+    const callParticipantUserIds = useMemo(
+        () => new Set(participatingMembers.map((member) => member.userId)),
+        [participatingMembers],
     );
 
     const sdkContext = useContext(SDKContext);
@@ -172,17 +167,18 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
                         roomId,
                         searchQuery,
                     );
+                    // Allows effect clean-up callbacks to cancel the load request
                     if (loadRequestId !== loadRequestIdRef.current) return;
                     const threePidInvited = getPending3PidInvites(room, searchQuery);
 
                     const newMemberMap = new Map<string, MemberWithSeparator>();
-                    const joinedMembers = joinedSdk.map(sdkRoomMemberToRoomMember);
+                    const joinedMembers = joinedSdk.map((member) =>
+                        sdkRoomMemberToRoomMember(member, callParticipantUserIds.has(member.userId)),
+                    );
                     const callParticipants: Member[] = [];
                     const otherJoinedMembers: Member[] = [];
                     for (const item of joinedMembers) {
-                        const target = callParticipantUserIds.has(item.member!.userId)
-                            ? callParticipants
-                            : otherJoinedMembers;
+                        const target = item.isCallParticipant ? callParticipants : otherJoinedMembers;
                         target.push(item);
                     }
 
@@ -321,7 +317,6 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
     return {
         members: Array.from(memberMap.values()),
         memberCount,
-        callParticipantUserIds,
         search,
         shouldShowInvite,
         isPresenceEnabled,

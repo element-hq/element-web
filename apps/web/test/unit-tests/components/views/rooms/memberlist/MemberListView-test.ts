@@ -12,6 +12,7 @@ import { waitFor, fireEvent } from "jest-matrix-react";
 import { type Room, type RoomMember, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { type CallMembership, MatrixRTCSessionEvent } from "matrix-js-sdk/src/matrixrtc";
 
+import { CallStore, CallStoreEvent } from "../../../../../../src/stores/CallStore";
 import { filterConsole, mkThirdPartyInviteEvent } from "../../../../../test-utils";
 import { type Rendered, renderMemberList } from "./common";
 
@@ -183,6 +184,43 @@ describe("MemberListView and MemberlistHeaderView", () => {
             expect(memberTile).toHaveAccessibleName(defaultUsers[0].userId);
         });
 
+        it("should react to calls appearing, being replaced, and ending", async () => {
+            const { root, call, otherRoomCall, memberListRoom } = await renderMemberList(
+                true,
+                undefined,
+                2,
+                [],
+                [{ userId: "@admin0:localhost" } as CallMembership],
+                [{ userId: "@default0:localhost" } as CallMembership],
+            );
+            const expectCaller = (userId: string): void => {
+                expect(root.container.querySelectorAll(".mx_RoomMemberTileView_callIcon")).toHaveLength(1);
+                expect(root.container.querySelector(".mx_MemberTileView")).toHaveAccessibleName(`${userId}, in a call`);
+            };
+            expectCaller("@admin0:localhost");
+
+            await act(async () => {
+                CallStore.instance.emit(CallStoreEvent.Call, otherRoomCall, "!other:localhost");
+            });
+            expectCaller("@admin0:localhost");
+
+            await act(async () => {
+                CallStore.instance.emit(CallStoreEvent.Call, otherRoomCall, memberListRoom.roomId);
+            });
+            expectCaller("@default0:localhost");
+
+            await act(async () => {
+                CallStore.instance.emit(CallStoreEvent.Call, null, memberListRoom.roomId);
+            });
+            expect(root.container.querySelector(".mx_RoomMemberTileView_callIcon")).toBeNull();
+            expect(root.container.querySelector(".mx_MemberListView_separator")).toBeNull();
+
+            await act(async () => {
+                CallStore.instance.emit(CallStoreEvent.Call, call, memberListRoom.roomId);
+            });
+            expectCaller("@admin0:localhost");
+        });
+
         it("should preserve an active search when call memberships change", async () => {
             const { root, roomSession, adminUsers } = await renderMemberList(true, undefined, 7);
             const searchInput = root.container.querySelector<HTMLInputElement>('input[name="searchMembers"]')!;
@@ -348,9 +386,9 @@ describe("MemberListView and MemberlistHeaderView", () => {
                 { userId, deviceId: "DEVICE_1", memberId: `${userId}:DEVICE_1` },
                 { userId, deviceId: "DEVICE_2", memberId: `${userId}:DEVICE_2` },
             ] as CallMembership[];
-            const { root, memberListRoom, client } = await renderMemberList(true, undefined, 2, [], memberships);
+            const { root, memberListRoom } = await renderMemberList(true, undefined, 2, [], memberships);
 
-            expect(client.matrixRTC.getRoomSession).toHaveBeenCalledWith(memberListRoom);
+            expect(CallStore.instance.getCall).toHaveBeenCalledWith(memberListRoom.roomId);
             expect(root.container.querySelectorAll(".mx_RoomMemberTileView_callIcon")).toHaveLength(1);
             expect(
                 root.container
@@ -383,6 +421,7 @@ describe("MemberListView and MemberlistHeaderView", () => {
 
             expect(memberTile.querySelector(".mx_RoomMemberTileView_callIcon")).toBeNull();
             await act(async () => {
+                otherRoomSession.memberships = [otherRoomMembership];
                 otherRoomSession.emit(MatrixRTCSessionEvent.MembershipsChanged, [], [otherRoomMembership]);
             });
             expect(memberTile.querySelector(".mx_RoomMemberTileView_callIcon")).toBeNull();

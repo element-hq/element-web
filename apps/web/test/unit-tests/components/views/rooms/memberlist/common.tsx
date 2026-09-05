@@ -26,7 +26,7 @@ import {
 import {
     type CallMembership,
     type MatrixRTCSession,
-    type MatrixRTCSessionEvent,
+    MatrixRTCSessionEvent,
     type MatrixRTCSessionEventHandlerMap,
 } from "matrix-js-sdk/src/matrixrtc";
 import { KnownMembership } from "matrix-js-sdk/src/types";
@@ -37,6 +37,29 @@ import { SDKContext } from "../../../../../../src/contexts/SDKContext";
 import { TestSDKContext } from "../../../../TestSDKContext";
 import MemberListView from "../../../../../../src/components/views/rooms/MemberList/MemberListView";
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
+import { type Call, CallEvent } from "../../../../../../src/models/Call";
+import { CallStore } from "../../../../../../src/stores/CallStore";
+
+// Adapt RTC test memberships to the Call API consumed by the real useCall hooks.
+function createCall(room: Room, session: MatrixRTCSession): Call {
+    const call = new TypedEventEmitter() as unknown as Call;
+    const getParticipants = (): Map<RoomMember, Set<string>> => {
+        const participants = new Map<RoomMember, Set<string>>();
+        for (const membership of session.memberships) {
+            const member = room.currentState.members[membership.userId];
+            if (!member) continue;
+            const devices = participants.get(member) ?? new Set<string>();
+            devices.add(membership.deviceId);
+            participants.set(member, devices);
+        }
+        return participants;
+    };
+    Object.defineProperty(call, "participants", { get: getParticipants });
+    session.on(MatrixRTCSessionEvent.MembershipsChanged, () => {
+        call.emit(CallEvent.Participants, getParticipants(), new Map());
+    });
+    return call;
+}
 
 export function createRoom(client: MatrixClient, opts = {}) {
     const roomId = "!" + Math.random().toString().slice(2, 10) + ":domain";
@@ -57,6 +80,8 @@ export type Rendered = {
     moderatorUsers: RoomMember[];
     defaultUsers: RoomMember[];
     invitedUsers: RoomMember[];
+    call: Call;
+    otherRoomCall: Call;
     roomSession: MatrixRTCSession;
     otherRoomSession: MatrixRTCSession;
     reRender: () => Promise<void>;
@@ -163,6 +188,12 @@ export async function renderMemberList(
         memberListRoom.currentState.members[member.userId] = member;
     }
 
+    const call = createCall(memberListRoom, roomSession);
+    const otherRoomCall = createCall(memberListRoom, otherRoomSession);
+    jest.spyOn(CallStore.instance, "getCall").mockImplementation((roomId) =>
+        roomId === memberListRoom.roomId ? call : otherRoomCall,
+    );
+
     const context = new TestSDKContext();
     context._client = client;
     context.memberListStore.isPresenceEnabled = jest.fn().mockReturnValue(enablePresence);
@@ -198,6 +229,8 @@ export async function renderMemberList(
         moderatorUsers,
         defaultUsers,
         invitedUsers,
+        call,
+        otherRoomCall,
         roomSession,
         otherRoomSession,
         reRender,
