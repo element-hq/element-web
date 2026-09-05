@@ -27,11 +27,17 @@ import {
     type ISearchUserDirectoryResult,
     type IGetMediaConfigResult,
     type IRtcTransportsResult,
+    type IRtcLivekitGetTokenFromWidgetRequestData,
+    type IRtcLivekitGetTokenFromWidgetResponseData,
+    type IRtcLivekitDelegateDelayedLeaveFromWidgetRequestData,
+    type IRtcLivekitDelegateDelayedLeaveFromWidgetResponseData,
 } from "matrix-widget-api";
 import {
     ClientEvent,
+    ClientPrefix,
     type ITurnServer as IClientTurnServer,
     EventType,
+    Method,
     type IContent,
     MatrixError,
     Direction,
@@ -77,6 +83,13 @@ function getRememberedCapabilitiesForWidget(widget: Widget): Capability[] {
 function setRememberedCapabilitiesForWidget(widget: Widget, caps: Capability[]): void {
     localStorage.setItem(`widget_${widget.id}_approved_caps`, JSON.stringify(caps));
 }
+
+/**
+ * The prefix of the homeserver endpoints that the MSC4533 widget actions delegate to, as defined by
+ * MSC4195. TODO: Use the stable `/_matrix/client/v1` prefix once MSC4195 is stable.
+ * @see {@link https://github.com/matrix-org/matrix-spec-proposals/pull/4195|MSC4195}
+ */
+const RTC_LIVEKIT_PREFIX = `${ClientPrefix.Unstable}/io.element.msc4195`;
 
 const normalizeTurnServer = ({ urls, username, credential }: IClientTurnServer): ITurnServer => ({
     uris: urls,
@@ -125,6 +138,8 @@ export class ElementWidgetDriver extends WidgetDriver {
             this.allowedCapabilities.add(MatrixCapabilities.AlwaysOnScreen);
             this.allowedCapabilities.add(MatrixCapabilities.MSC3846TurnServers);
             this.allowedCapabilities.add(MatrixCapabilities.MSC4515RtcTransports);
+            this.allowedCapabilities.add(MatrixCapabilities.MSC4533RtcLivekitGetToken);
+            this.allowedCapabilities.add(MatrixCapabilities.MSC4533RtcLivekitDelegateDelayedLeave);
             this.allowedCapabilities.add(`org.matrix.msc2762.timeline:${inRoomId}`);
             this.allowedCapabilities.add(MatrixCapabilities.MSC4157SendDelayedEvent);
             this.allowedCapabilities.add(MatrixCapabilities.MSC4157UpdateDelayedEvent);
@@ -771,6 +786,48 @@ export class ElementWidgetDriver extends WidgetDriver {
             // Re-throw to turn the error into a widget error response
             throw e;
         }
+    }
+
+    /**
+     * Obtains a JWT for a LiveKit SFU on the widget's behalf by delegating to the homeserver's
+     * `/rtc/livekit/get_token` endpoint. The widget API has already verified that the widget holds
+     * the capability to do this.
+     * @param data The request data, relayed to the homeserver verbatim.
+     * @returns The response body of the endpoint, verbatim.
+     * @see {@link https://github.com/matrix-org/matrix-spec-proposals/pull/4533|MSC4533}
+     */
+    public async getRtcLivekitToken(
+        data: IRtcLivekitGetTokenFromWidgetRequestData,
+    ): Promise<IRtcLivekitGetTokenFromWidgetResponseData> {
+        const client = MatrixClientPeg.safeGet();
+        return await client.http.authedRequest<IRtcLivekitGetTokenFromWidgetResponseData>(
+            Method.Post,
+            "/rtc/livekit/get_token",
+            undefined,
+            data,
+            { prefix: RTC_LIVEKIT_PREFIX },
+        );
+    }
+
+    /**
+     * Hands a MatrixRTC session's delayed leave event over to the homeserver on the widget's behalf
+     * by delegating to the homeserver's `/rtc/livekit/delegate_delayed_leave` endpoint. The widget
+     * API has already verified that the widget holds the capability to do this.
+     * @param data The request data, relayed to the homeserver verbatim.
+     * @returns The response body of the endpoint, verbatim.
+     * @see {@link https://github.com/matrix-org/matrix-spec-proposals/pull/4533|MSC4533}
+     */
+    public async delegateRtcLivekitDelayedLeave(
+        data: IRtcLivekitDelegateDelayedLeaveFromWidgetRequestData,
+    ): Promise<IRtcLivekitDelegateDelayedLeaveFromWidgetResponseData> {
+        const client = MatrixClientPeg.safeGet();
+        return await client.http.authedRequest<IRtcLivekitDelegateDelayedLeaveFromWidgetResponseData>(
+            Method.Post,
+            "/rtc/livekit/delegate_delayed_leave",
+            undefined,
+            data,
+            { prefix: RTC_LIVEKIT_PREFIX },
+        );
     }
 
     public async readEventRelations(

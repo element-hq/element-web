@@ -75,6 +75,9 @@ describe("ElementWidgetDriver", () => {
         client.cachedRtcTransports = {
             wait: vi.fn(),
         } as any;
+        client.http = {
+            authedRequest: vi.fn(),
+        } as any;
         client.getUserId.mockReturnValue("@alice:example.org");
         client.getSafeUserId.mockReturnValue("@alice:example.org");
     });
@@ -97,6 +100,8 @@ describe("ElementWidgetDriver", () => {
             "m.always_on_screen",
             "town.robin.msc3846.turn_servers",
             "org.matrix.msc4515.rtc_transports",
+            "org.matrix.msc4533.rtc_livekit_get_token",
+            "org.matrix.msc4533.rtc_livekit_delegate_delayed_leave",
             "org.matrix.msc2762.timeline:!1:example.org",
             "org.matrix.msc2762.send.event:org.matrix.msc4075.call.notify",
             "org.matrix.msc2762.send.event:org.matrix.msc4075.rtc.notification",
@@ -499,6 +504,77 @@ describe("ElementWidgetDriver", () => {
             await expect(driver.getRtcTransports()).resolves.toEqual({ rtc_transports: transports });
 
             expect(client.waitForClientWellKnown).toHaveBeenCalled();
+        });
+    });
+
+    describe("getRtcLivekitToken", () => {
+        let driver: WidgetDriver;
+
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
+
+        const request = {
+            server_name: "example.org",
+            url: "wss://livekit.example.org",
+            room_id: "!1:example.org",
+            slot_id: "the_id",
+            member: { id: "xyzABCDEF10123", claimed_device_id: "ABCDEFGHI" },
+        };
+
+        it("delegates to the homeserver and returns the token", async () => {
+            vi.mocked(client.http.authedRequest).mockResolvedValue({ jwt: "thejwt" } as any);
+
+            await expect(driver.getRtcLivekitToken(request)).resolves.toEqual({ jwt: "thejwt" });
+            expect(client.http.authedRequest).toHaveBeenCalledWith(
+                "POST",
+                "/rtc/livekit/get_token",
+                undefined,
+                request,
+                { prefix: "/_matrix/client/unstable/io.element.msc4195" },
+            );
+        });
+
+        it("propagates errors from the homeserver", async () => {
+            const error = new MatrixError({ errcode: "M_FORBIDDEN", error: "Not in room" }, 403);
+            vi.mocked(client.http.authedRequest).mockRejectedValue(error);
+
+            await expect(driver.getRtcLivekitToken(request)).rejects.toBe(error);
+        });
+    });
+
+    describe("delegateRtcLivekitDelayedLeave", () => {
+        let driver: WidgetDriver;
+
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
+
+        const request = {
+            room_id: "!1:example.org",
+            slot_id: "the_id",
+            member: { id: "xyzABCDEF10123", claimed_device_id: "ABCDEFGHI" },
+            delay_id: "1234567890",
+        };
+
+        it("delegates the delayed leave event to the homeserver", async () => {
+            vi.mocked(client.http.authedRequest).mockResolvedValue({} as any);
+
+            await expect(driver.delegateRtcLivekitDelayedLeave(request)).resolves.toEqual({});
+            expect(client.http.authedRequest).toHaveBeenCalledWith(
+                "POST",
+                "/rtc/livekit/delegate_delayed_leave",
+                undefined,
+                request,
+                { prefix: "/_matrix/client/unstable/io.element.msc4195" },
+            );
+        });
+
+        it("propagates errors from the homeserver", async () => {
+            const error = new MatrixError({ errcode: "M_NOT_FOUND", error: "Unknown delay ID" }, 404);
+            vi.mocked(client.http.authedRequest).mockRejectedValue(error);
+
+            await expect(driver.delegateRtcLivekitDelayedLeave(request)).rejects.toBe(error);
         });
     });
 
