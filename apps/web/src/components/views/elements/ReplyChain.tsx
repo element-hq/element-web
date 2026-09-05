@@ -58,6 +58,13 @@ interface IProps {
     isQuoteExpanded?: boolean;
     setQuoteExpanded: (isExpanded: boolean) => void;
     getRelationsForEvent?: GetRelationsForEvent;
+    /**
+     * Keep the preview at one height from the moment it appears, for the new
+     * timeline — where a preview that grows afterwards pushes the messages around
+     * it. It shows the quoted message right away if the room already has it, and
+     * stands a fixed-height skeleton in while fetching one it doesn't.
+     */
+    compactPreview?: boolean;
 }
 
 interface IState {
@@ -85,14 +92,27 @@ export default class ReplyChain extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
 
+        this.room = this.matrixClient.getRoom(this.props.parentEv.getRoomId())!;
+
+        // Usually the quoted message is already loaded in this room, so take it
+        // now: the first render is then the finished preview, at its final height.
+        let initialEvents: MatrixEvent[] = [];
+        let loading = true;
+        if (props.compactPreview) {
+            const parentEventId = getParentEventId(props.parentEv);
+            const ev = parentEventId ? this.room?.findEventById(parentEventId) : undefined;
+            if (ev) {
+                initialEvents = [ev];
+                loading = false;
+            }
+        }
+
         this.state = {
-            events: [],
+            events: initialEvents,
             loadedEv: null,
-            loading: true,
+            loading,
             err: false,
         };
-
-        this.room = this.matrixClient.getRoom(this.props.parentEv.getRoomId())!;
     }
 
     private get matrixClient(): MatrixClient {
@@ -101,8 +121,25 @@ export default class ReplyChain extends React.Component<IProps, IState> {
 
     public componentDidMount(): void {
         this.unmounted = false;
-        void this.initialize();
+        if (this.state.loading) {
+            void this.initialize();
+        } else if (this.state.events.length > 0) {
+            // The constructor already found the quoted message, so only the
+            // "In reply to" header above it is left to fetch.
+            void this.loadHeaderEvent(this.state.events[0]);
+        }
         this.trySetExpandableQuotes();
+    }
+
+    /**
+     * Fetches the message the quoted one was itself replying to, which puts the
+     * "In reply to" header above the preview. Usually it is already loaded and
+     * the header appears a frame after the preview, before the row is on screen.
+     */
+    private async loadHeaderEvent(quotedEvent: MatrixEvent): Promise<void> {
+        const loadedEv = await this.getNextEvent(quotedEvent);
+        if (this.unmounted || !loadedEv) return;
+        this.setState({ loadedEv });
     }
 
     public componentDidUpdate(): void {
@@ -265,7 +302,16 @@ export default class ReplyChain extends React.Component<IProps, IState> {
                 </p>
             );
         } else if (this.state.loading) {
-            header = <Spinner size={16} />;
+            header = this.props.compactPreview ? (
+                // Two rows, the same heights as the sender and message lines they
+                // stand in for, so the preview doesn't resize once it loads.
+                <blockquote className="mx_ReplyChain mx_ReplyChain_placeholder">
+                    <div className="mx_ReplyChain_placeholderRow" />
+                    <div className="mx_ReplyChain_placeholderRow" />
+                </blockquote>
+            ) : (
+                <Spinner size={16} />
+            );
         }
 
         const { isQuoteExpanded } = this.props;

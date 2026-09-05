@@ -350,6 +350,31 @@ describe("RoomTimelineViewModel", () => {
             expect(paginate).not.toHaveBeenCalled();
         });
 
+        it("re-runs a fetch for an edge report that arrived while one was already in flight", async () => {
+            // The view only reports reaching the end when something has changed, and what
+            // it compares can look the same either side of a fetch — so it may never ask
+            // again. Dropping the request would leave the timeline stuck at the top.
+            seedTimeline([makeMessage("$a")]);
+            const vm = await createStartedViewModel();
+            vm.onAnchorReached();
+            let release!: () => void;
+            const gate = new Promise<boolean>((resolve) => {
+                release = () => resolve(false);
+            });
+            let calls = 0;
+            const { paginate } = stubWindow(vm, {
+                canPaginate: [Direction.Backward],
+                paginate: () => (++calls === 1 ? gate : Promise.resolve(false)),
+            });
+
+            vm.onStartReached();
+            await vi.waitFor(() => expect(paginate).toHaveBeenCalledTimes(1));
+            vm.onStartReached(); // lands while the first fetch is still running
+            release(); // first fetch settles, having found nothing new
+
+            await vi.waitFor(() => expect(paginate).toHaveBeenCalledTimes(2));
+        });
+
         it("clears the spinner when fetching fails", async () => {
             seedTimeline([makeMessage("$a")]);
             const vm = await createStartedViewModel();
