@@ -7,7 +7,7 @@
 
 // @vitest-environment happy-dom
 
-import { MsgType, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { MatrixError, MsgType, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { vi, describe, it, expect, type Mock, type MockedObject } from "vitest";
 
 import { BUNDLED_LINK_PREVIEWS, MAX_PREVIEWS_WHEN_LIMITED, UrlPreviewGroupViewModel } from "./UrlPreviewGroupViewModel";
@@ -185,6 +185,88 @@ describe("UrlPreviewGroupViewModel", () => {
         msg.innerHTML = '<a href="https://example.org">Test</a>';
         await vm.updateEventElement(msg);
         expect(vm.getSnapshot()).toMatchSnapshot();
+    });
+    it("should not count links without a preview towards the expandable previews", async () => {
+        const { vm, client } = getViewModel();
+        client.getUrlPreview.mockImplementation(async (url: string) => {
+            if (url === "https://example.org/1") return BASIC_PREVIEW_OGDATA;
+            throw new MatrixError({ errcode: "M_NOT_FOUND" }, 404);
+        });
+        const msg = document.createElement("div");
+        msg.innerHTML = `
+    <a href="https://example.org/1">Test1</a>
+    <a href="https://example.org/2">Test2</a>
+    <a href="https://example.org/3">Test3</a>
+    <a href="https://example.org/4">Test4</a>`;
+        await vm.updateEventElement(msg);
+
+        const snapshot = vm.getSnapshot();
+        expect(snapshot.previews).toHaveLength(1);
+        expect(snapshot.totalPreviewCount).toBe(1);
+        expect(snapshot.overPreviewLimit).toBe(false);
+    });
+    it("should not request the links the limit hides until they are expanded", async () => {
+        const { vm, client } = getViewModel();
+        client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
+        const msg = document.createElement("div");
+        msg.innerHTML = `
+    <a href="https://example.org/1">Test1</a>
+    <a href="https://example.org/2">Test2</a>
+    <a href="https://example.org/3">Test3</a>
+    <a href="https://example.org/4">Test4</a>`;
+        await vm.updateEventElement(msg);
+
+        expect(client.getUrlPreview).toHaveBeenCalledTimes(MAX_PREVIEWS_WHEN_LIMITED);
+        const snapshot = vm.getSnapshot();
+        expect(snapshot.previews).toHaveLength(MAX_PREVIEWS_WHEN_LIMITED);
+        expect(snapshot.totalPreviewCount).toBe(4);
+        expect(snapshot.overPreviewLimit).toBe(true);
+    });
+    it("should correct the preview count when the hidden links are expanded", async () => {
+        const { vm, client } = getViewModel();
+        client.getUrlPreview.mockImplementation(async (url: string) => {
+            if (url === "https://example.org/1" || url === "https://example.org/2") return BASIC_PREVIEW_OGDATA;
+            throw new MatrixError({ errcode: "M_NOT_FOUND" }, 404);
+        });
+        const msg = document.createElement("div");
+        msg.innerHTML = `
+    <a href="https://example.org/1">Test1</a>
+    <a href="https://example.org/2">Test2</a>
+    <a href="https://example.org/3">Test3</a>
+    <a href="https://example.org/4">Test4</a>`;
+        await vm.updateEventElement(msg);
+
+        expect(vm.getSnapshot().totalPreviewCount).toBe(4);
+        expect(vm.getSnapshot().overPreviewLimit).toBe(true);
+
+        await vm.onTogglePreviewLimit();
+
+        expect(client.getUrlPreview).toHaveBeenCalledTimes(4);
+        const snapshot = vm.getSnapshot();
+        expect(snapshot.previews).toHaveLength(2);
+        expect(snapshot.totalPreviewCount).toBe(2);
+        expect(snapshot.overPreviewLimit).toBe(false);
+    });
+    it("should count bundled previews rather than the links in the message", async () => {
+        const { vm } = getViewModel({
+            urlPreviewBundleEnabled: true,
+            content: {
+                msgtype: MsgType.Text,
+                body: BUNDLE_PREVIEW_ONE.matched_url,
+                [BUNDLED_LINK_PREVIEWS]: [BUNDLE_PREVIEW_ONE],
+            },
+        });
+        const msg = document.createElement("div");
+        msg.innerHTML = `
+    <a href="https://example.org/1">Test1</a>
+    <a href="https://example.org/2">Test2</a>
+    <a href="https://example.org/3">Test3</a>`;
+        await vm.updateEventElement(msg);
+
+        const snapshot = vm.getSnapshot();
+        expect(snapshot.previews).toHaveLength(1);
+        expect(snapshot.totalPreviewCount).toBe(1);
+        expect(snapshot.overPreviewLimit).toBe(false);
     });
     it("should handle image clicks", async () => {
         const { vm, client, onImageClicked } = getViewModel();
