@@ -30,6 +30,8 @@ const OLD_NAME = "Alan";
 const NEW_NAME = "Alan (away)";
 
 const VIDEO_FILE = readSampleFileSync("5secvid.webm", null);
+const VOICE_MESSAGE_FILE = readSampleFileSync("1sec.ogg", null);
+const VOICE_MESSAGE_WAVEFORM = [0, 128, 512, 1024, 512, 128, 0];
 
 const getEventTilesWithBodies = (page: Page): Locator => {
     return page
@@ -731,6 +733,55 @@ test.describe("Timeline", () => {
                     .getByText(/1.12 KB/),
             ).toBeVisible();
         });
+
+        test(
+            "should show the whole voice message duration with a wide font",
+            { tag: ["@no-firefox", "@no-webkit"] },
+            async ({ page, app, room }) => {
+                const upload = await app.client.uploadContent(VOICE_MESSAGE_FILE, {
+                    name: "voice-message.ogg",
+                    type: "audio/ogg",
+                });
+                await app.client.sendEvent(room.roomId, null, "m.room.message" as EventType, {
+                    "msgtype": "m.audio" as MsgType,
+                    "body": "voice-message.ogg",
+                    "url": upload.content_uri,
+                    "info": { mimetype: "audio/ogg", size: VOICE_MESSAGE_FILE.byteLength, duration: 1000 },
+                    "org.matrix.msc1767.audio": { duration: 1000, waveform: VOICE_MESSAGE_WAVEFORM },
+                    "org.matrix.msc3245.voice": {},
+                });
+
+                await app.viewRoomById(room.roomId);
+
+                const clock = page.locator(".mx_RoomView_body .mx_MVoiceMessageBody .mx_Clock");
+                await expect(clock).toHaveText(/\d+:\d\d/);
+
+                const measure = (): Promise<{ lines: number; text: number; box: number; letterSpacing: string }> =>
+                    clock.evaluate((el) => {
+                        const range = document.createRange();
+                        range.selectNodeContents(el);
+                        const rects = Array.from(range.getClientRects());
+                        const style = getComputedStyle(el);
+                        return {
+                            lines: rects.length,
+                            text: Math.max(...rects.map((r) => r.width)),
+                            box: el.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight),
+                            letterSpacing: style.letterSpacing,
+                        };
+                    });
+
+                expect(await measure()).toMatchObject({ lines: 1 });
+
+                await page.addStyleTag({
+                    content: ".mx_VoiceMessagePrimaryContainer .mx_Clock { letter-spacing: 4px; }",
+                });
+                const after = await measure();
+
+                expect(after.letterSpacing).toBe("4px");
+                expect(after.lines).toBe(1);
+                expect(after.box).toBeGreaterThanOrEqual(after.text);
+            },
+        );
 
         test.describe("on search results panel", () => {
             test(
