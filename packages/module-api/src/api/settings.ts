@@ -63,11 +63,21 @@ export interface SettingsApi<T extends Settings = Settings> {
      * non-room-scoped value.
      * @param excludeDefault - If true, do not fall back to the setting's default value.
      */
-    getValue<K extends keyof T | string>(
+    getValue<K extends keyof Settings>(
         settingName: K,
         roomId?: string | null,
         excludeDefault?: boolean,
-    ): Watchable<K extends keyof T ? T[K] : unknown>;
+    ): Watchable<T[K]["default"]>;
+
+    /**
+     * Gets the value of a setting, computed across all applicable levels
+     * (device, room, account, config, default, etc.).
+     * @param settingName - The name of the setting to read.
+     * @param roomId - Room ID to read a room-scoped value for, or null/undefined for a
+     * non-room-scoped value.
+     * @param excludeDefault - If true, do not fall back to the setting's default value.
+     */
+    getValue<T = any>(settingName: string, roomId?: string | null, excludeDefault?: boolean): Watchable<T>;
 
     /**
      * Set the value of a setting.
@@ -76,12 +86,19 @@ export interface SettingsApi<T extends Settings = Settings> {
      * @param level - The level at which this setting is set, see {@link Level}
      * @param value - The setting value
      */
-    setValue<K extends keyof T | string>(
+    setValue<K extends keyof Settings>(
         settingName: K,
         roomId: string | null,
         level: Level,
-        // For the settings defined by the module (T), make sure the value is strictly typed.
-        // For other strings, relax the type requirement.
-        value: K extends keyof T ? T[K] : unknown,
+        value: T[K]["default"],
     ): Promise<void>;
+
+    /**
+     * Set the value of a setting.
+     * @param settingName - The setting to set
+     * @param roomId - The room in which to change the setting, may be null.
+     * @param level - The level at which this setting is set, see {@link Level}
+     * @param value - The setting value
+     */
+    setValue<T = any>(settingName: string, roomId: string | null, level: Level, value: T): Promise<void>;
 }

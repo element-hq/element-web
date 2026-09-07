@@ -509,9 +509,11 @@ export interface Settings {
 
 // @alpha
 export interface SettingsApi<T extends Settings = Settings> {
-    getValue<K extends keyof T | string>(settingName: K, roomId?: string | null, excludeDefault?: boolean): Watchable<K extends keyof T ? T[K] : unknown>;
+    getValue<K extends keyof Settings>(settingName: K, roomId?: string | null, excludeDefault?: boolean): Watchable<T[K]["default"]>;
+    getValue<T = any>(settingName: string, roomId?: string | null, excludeDefault?: boolean): Watchable<T>;
     registerSettings(settings: T): void;
-    setValue<K extends keyof T | string>(settingName: K, roomId: string | null, level: Level, value: K extends keyof T ? T[K] : unknown): Promise<void>;
+    setValue<K extends keyof Settings>(settingName: K, roomId: string | null, level: Level, value: T[K]["default"]): Promise<void>;
+    setValue<T = any>(settingName: string, roomId: string | null, level: Level, value: T): Promise<void>;
 }
 
 // @alpha
