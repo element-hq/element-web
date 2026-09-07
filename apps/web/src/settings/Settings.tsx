@@ -606,6 +606,7 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         displayName: _td("labs|feature_matrixrtc_slots"),
+        description: _td("labs|feature_matrixrtc_slots_description"),
         default: false,
     },
     "feature_location_share_live": {
