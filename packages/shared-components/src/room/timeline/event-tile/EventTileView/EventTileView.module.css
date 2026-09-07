@@ -732,6 +732,7 @@
     /* Bubble geometry and slot placement. */
     .line {
         display: flex;
+        flex-direction: column;
         gap: var(--event-tile-bubble-gap);
         width: fit-content;
         max-width: var(--event-tile-bubble-line-max-width);

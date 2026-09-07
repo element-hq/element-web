@@ -54,11 +54,19 @@ describe("attachUrlPreviews", () => {
             },
         ],
         content: "https://example.com",
+        contentLinks: new Set(["https://example.com"]),
+        isModified: false,
     });
 
     it("does nothing when there are no previews", async () => {
         const content = makeContent();
-        await attachUrlPreviews(mxClient, mxRoom, { entries: [], content: "" }, content, false);
+        await attachUrlPreviews(
+            mxClient,
+            mxRoom,
+            { entries: [], content: "", contentLinks: new Set(), isModified: false },
+            content,
+            false,
+        );
         expect(content["com.beeper.linkpreviews"]).toBeUndefined();
     });
 

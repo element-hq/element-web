@@ -60,7 +60,9 @@ describe("MessageComposerUrlPreviewViewModel", () => {
         expect(getViewModel().vm.getSnapshot()).toMatchInlineSnapshot(`
           {
             "content": "",
+            "contentLinks": Set {},
             "entries": [],
+            "isModified": false,
           }
         `);
     });
@@ -72,6 +74,8 @@ describe("MessageComposerUrlPreviewViewModel", () => {
         await vi.waitFor(() => {
             expect(vm.getSnapshot()).toEqual({
                 content: "Check out https://example.org today",
+                contentLinks: new Set(["https://example.org"]),
+                isModified: true,
                 entries: [
                     {
                         include: true,
@@ -202,6 +206,8 @@ describe("MessageComposerUrlPreviewViewModel", () => {
         await vi.waitFor(() => {
             expect(vm.getSnapshot()).toEqual({
                 content: "https://example.org",
+                contentLinks: new Set(["https://example.org"]),
+                isModified: true,
                 entries: [
                     {
                         include: true,
