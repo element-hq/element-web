@@ -128,6 +128,9 @@ async function getAuthData(client: unknown): Promise<{ accessToken: string; home
 
     // ... and this is why we need the user ID and device ID: they're index keys for the pickle key table.
     const pickleKeyData = await idbLoad("pickleKey", [userId, deviceId]);
+    if (!pickleKeyData) {
+        throw new Error("SW: No pickle key found for user/device - cannot decrypt access token.");
+    }
     if (pickleKeyData && (!pickleKeyData.encrypted || !pickleKeyData.iv || !pickleKeyData.cryptoKey)) {
         throw new Error("SW: Invalid pickle key loaded - ignoring");
     }

@@ -18,7 +18,6 @@ Please see LICENSE files in the repository root for full details.
 // before release.
 // eslint-disable-next-line no-restricted-imports
 import { encodeUnpaddedBase64 } from "matrix-js-sdk/src/base64";
-import { logger } from "matrix-js-sdk/src/logger";
 
 /**
  * Encrypted format of a pickle key, as stored in IndexedDB.
@@ -91,38 +90,33 @@ export async function encryptPickleKey(
  *
  * If `data` is undefined in part or in full, returns undefined.
  *
- *  If crypto functions are not available, returns undefined regardless of input.
- *
  * @param data An object containing the encrypted pickle key data: encrypted payload, initialization vector (IV), and crypto key. Typically loaded from indexedDB.
  * @param userId The user ID the pickle key belongs to.
  * @param deviceId The device ID the pickle key belongs to.
  * @returns A promise that resolves to the encoded pickle key, or undefined if the key cannot be built and encoded.
+ * @throws If WebCrypto is not available or decryption fails, e.g., due to an incorrect key or corrupted data, an error is thrown.
  */
 export async function buildAndEncodePickleKey(
-    data: EncryptedPickleKey | undefined,
+    data: EncryptedPickleKey,
     userId: string,
     deviceId: string,
 ): Promise<string | undefined> {
+    if (!data.encrypted || !data.iv || !data.cryptoKey) {
+        return undefined;
+    }
+
     if (!crypto?.subtle) {
-        return undefined;
-    }
-    if (!data || !data.encrypted || !data.iv || !data.cryptoKey) {
-        return undefined;
-    }
-
-    try {
-        const additionalData = getPickleAdditionalData(userId, deviceId);
-        const pickleKeyBuf = await crypto.subtle.decrypt(
-            { name: "AES-GCM", iv: data.iv, additionalData },
-            data.cryptoKey,
-            data.encrypted,
+        throw new Error(
+            `WebCrypto is not available to decrypt the pickle key. secureContext=${window?.isSecureContext}`,
         );
-        if (pickleKeyBuf) {
-            return encodeUnpaddedBase64(new Uint8Array(pickleKeyBuf));
-        }
-    } catch {
-        logger.error("Error decrypting pickle key");
     }
 
-    return undefined;
+    const additionalData = getPickleAdditionalData(userId, deviceId);
+    const pickleKeyBuf = await crypto.subtle.decrypt(
+        { name: "AES-GCM", iv: data.iv, additionalData },
+        data.cryptoKey,
+        data.encrypted,
+    );
+
+    return encodeUnpaddedBase64(new Uint8Array(pickleKeyBuf));
 }

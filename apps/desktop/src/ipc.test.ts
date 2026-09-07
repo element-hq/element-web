@@ -48,7 +48,9 @@ vi.mock("electron", () => ({
 vi.mock("./store.js", () => ({
     default: { instance: mockStore },
     clearDataAndRelaunch: vi.fn(),
-    SafeStorageDecryptionError: class SafeStorageDecryptionError extends Error {},
+    SafeStorageDecryptionError: class SafeStorageDecryptionError extends Error {
+        public override name = "SafeStorageDecryptionError";
+    },
 }));
 vi.mock("./utils.js", () => ({ randomArray }));
 vi.mock("./displayMediaCallback.js", () => ({
@@ -92,23 +94,56 @@ describe("ipc pickle key handling", () => {
     });
 
     describe("getPickleKey", () => {
-        it("returns null when getSecret throws", async () => {
-            mockStore.getSecret.mockRejectedValue(new Error("safeStorage unavailable"));
+        beforeEach(() => {
+            vi.spyOn(console, "error").mockImplementation(() => {});
+        });
+
+        afterEach(() => {
+            vi.mocked(console.error).mockRestore();
+        });
+
+        it("returns the stored pickle key", async () => {
+            mockStore.getSecret.mockResolvedValue("STOREDKEY");
 
             await callIpc("getPickleKey", 9);
 
-            expect(send).toHaveBeenCalledWith("ipcReply", { id: 9, reply: null });
+            expect(send).toHaveBeenCalledWith("ipcReply", { id: 9, reply: "STOREDKEY" });
         });
 
-        it("returns null when the secret is present but cannot be decrypted", async () => {
+        it("returns null when no pickle key is stored", async () => {
+            mockStore.getSecret.mockResolvedValue(undefined);
+
+            await callIpc("getPickleKey", 10);
+
+            expect(send).toHaveBeenCalledWith("ipcReply", { id: 10, reply: null });
+        });
+
+        it("replies with an error, rather than null, when getSecret throws", async () => {
+            mockStore.getSecret.mockRejectedValue(new Error("safeStorage unavailable"));
+
+            await callIpc("getPickleKey", 11);
+
+            expect(send).toHaveBeenCalledWith("ipcReply", {
+                id: 11,
+                error: { name: "Error", message: "safeStorage unavailable" },
+            });
+        });
+
+        it("replies with an error when the secret is present but cannot be decrypted", async () => {
             const { SafeStorageDecryptionError } = await import("./store.js");
             mockStore.getSecret.mockRejectedValue(
                 new SafeStorageDecryptionError("Failed to decrypt safeStorage secret"),
             );
 
-            await callIpc("getPickleKey", 10);
+            await callIpc("getPickleKey", 12);
 
-            expect(send).toHaveBeenCalledWith("ipcReply", { id: 10, reply: null });
+            expect(send).toHaveBeenCalledWith("ipcReply", {
+                id: 12,
+                error: {
+                    name: "SafeStorageDecryptionError",
+                    message: "Failed to decrypt safeStorage secret",
+                },
+            });
         });
     });
 });
