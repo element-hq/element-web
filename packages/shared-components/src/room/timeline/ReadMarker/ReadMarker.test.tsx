@@ -6,6 +6,8 @@
  */
 
 import { composeStories } from "@storybook/react-vite";
+import type { CDPSession } from "@vitest/browser-playwright";
+import { cdp } from "vitest/browser";
 import { fireEvent, render, screen } from "@test-utils";
 import React from "react";
 import { describe, expect, it, vi } from "vitest";
@@ -71,19 +73,33 @@ describe("ReadMarker", () => {
         expect(onGhostTransitionEnd).toHaveBeenCalledTimes(1);
     });
 
-    it("gives the ghost marker a transition the browser accepts", () => {
-        render(
-            <ul>
-                <ReadMarker eventId="$ghost" kind="ghost" />
-            </ul>,
-        );
+    it("gives the ghost marker a transition the browser accepts", async () => {
+        // The test context sets `prefers-reduced-motion: reduce` for screenshot
+        // stability (see vitest.config.ts), which would otherwise strip the transition
+        // this test is asserting.
+        const session = cdp() as CDPSession;
+        await session.send("Emulation.setEmulatedMedia", {
+            features: [{ name: "prefers-reduced-motion", value: "no-preference" }],
+        });
 
-        // An unparseable easing drops the whole shorthand, so the ghost would vanish instantly
-        // and never fire transitionend.
-        const style = getComputedStyle(screen.getByRole("separator"));
-        expect(style.transitionProperty).toBe("width, opacity");
-        expect(style.transitionDuration).toBe("0.4s, 0.4s");
-        expect(style.transitionDelay).toBe("1s, 1s");
+        try {
+            render(
+                <ul>
+                    <ReadMarker eventId="$ghost" kind="ghost" />
+                </ul>,
+            );
+
+            // An unparseable easing drops the whole shorthand, so the ghost would vanish instantly
+            // and never fire transitionend.
+            const style = getComputedStyle(screen.getByRole("separator"));
+            expect(style.transitionProperty).toBe("width, opacity");
+            expect(style.transitionDuration).toBe("0.4s, 0.4s");
+            expect(style.transitionDelay).toBe("1s, 1s");
+        } finally {
+            await session.send("Emulation.setEmulatedMedia", {
+                features: [{ name: "prefers-reduced-motion", value: "reduce" }],
+            });
+        }
     });
 
     it("wires the current marker ref", () => {
