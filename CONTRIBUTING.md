@@ -5,7 +5,8 @@ Everyone is welcome to contribute code to Element Web, provided that they are wi
 If you're contributing, or thinking about contributing, please come & chat to
 us in our development room, [#element-dev](https://matrix.to/#/#element-dev:matrix.org).
 This is the best place to ask questions about the code, how to work on the project
-or whether a change is likely to be accepted.
+or whether a change is likely to be accepted. Enhancement requests won't be
+merged without an issue where it's been decided to add that feature to the product.
 
 ## How to contribute
 
@@ -23,10 +24,12 @@ cows had five legs" and, "Add support for miniature horses" are examples of good
 titles. Don't include an issue number here: that belongs in the description.
 Definitely don't use the GitHub default of "Update file.ts".
 
-As for your PR description, it should include these things:
+Your PR description needs to include these things:
 
-- References to any bugs fixed by the change (in GitHub's `Fixes` notation)
-- Describe the why and what is changing in the PR description so it's easy for
+- A references to the bug(s) fixed by the change (in GitHub's `Fixes` notation).
+  It's the issue's job to describe why a change is necessary: the issue template
+  gives detail on what to include. All but trivial PRs require a linked issue.
+- A description of what is changing from the user's point of view so it's easy for
   onlookers and reviewers to onboard and context switch. This information is
   also helpful when we come back to look at this in 6 months and ask "why did
   we do it like that?" we have a chance of finding out.
