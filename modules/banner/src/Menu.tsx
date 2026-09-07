@@ -179,7 +179,7 @@ const Menu: FC<Props> = ({ api, config, fallbackLogoUrl }) => {
     const [open, setOpen] = useState(false);
 
     let content: JSX.Element;
-    let logoJsx: JSX.Element | undefined;
+    let logoJsx: JSX.Element = <Logo src={fallbackLogoUrl} api={api} />;
 
     if (config instanceof Error) {
         content = <CentredContainer>{api.i18n.translate("univention_error")}</CentredContainer>;
