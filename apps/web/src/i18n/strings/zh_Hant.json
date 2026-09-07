@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Emoji 選擇器",
         "jump_first_invite": "跳到第一個邀請。",
         "n_unread_messages": {
             "other": "%(count)s 則未讀訊息。",
@@ -440,7 +439,6 @@
         "message": "訊息",
         "message_layout": "訊息佈局",
         "microphone": "麥克風",
-        "model": "模型",
         "modern": "現代",
         "mute": "靜音",
         "n_members": {
@@ -748,22 +746,6 @@
     },
     "dialog_close_label": "關閉對話框",
     "download_completed": "下載完成",
-    "emoji": {
-        "categories": "分類",
-        "category_activities": "活動",
-        "category_animals_nature": "動物與自然",
-        "category_flags": "旗幟",
-        "category_food_drink": "食物與飲料",
-        "category_frequently_used": "經常使用",
-        "category_objects": "物件",
-        "category_smileys_people": "笑臉與人",
-        "category_symbols": "符號",
-        "category_travel_places": "旅遊與景點",
-        "quick_reactions": "快速反應"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "取消搜尋"
-    },
     "empty_room": "空聊天室",
     "empty_room_was_name": "空的聊天室（曾為 %(oldName)s）",
     "encryption": {
@@ -1124,7 +1106,6 @@
         "name_mxid_share_room": "使用某人的名字、使用者名稱（如 <userId/>）或<a>分享此聊天室</a>來邀請人。",
         "name_mxid_share_space": "使用某人的名字、使用者名稱（如 <userId/>）或<a>分享此聊天室</a>來邀請人。",
         "recents_section": "最近的對話",
-        "room_failed_partial": "我們已將邀請傳送給其他人，但以下的人無法邀請加入 <RoomName/>",
         "room_failed_partial_title": "部份邀請無法傳送",
         "room_failed_title": "邀請使用者加入 %(roomName)s 失敗",
         "send_link_prompt": "或傳送邀請連結",
@@ -1233,7 +1214,6 @@
         "bridge_state_workspace": "工作區：<networkLink/>",
         "click_for_info": "點擊以取得更多資訊",
         "currently_experimental": "目前為實驗性。",
-        "custom_themes": "支援新增自訂佈景主題",
         "dynamic_room_predecessors": "動態聊天室前身",
         "dynamic_room_predecessors_description": "請啟用 MSC3946（為了支援遲到聊天室存檔）",
         "element_call_video_rooms": "Element Call 視訊聊天室",
@@ -1248,7 +1228,6 @@
         "group_profile": "基本資料",
         "group_rooms": "聊天室",
         "group_spaces": "聊天空間",
-        "group_themes": "主題",
         "group_threads": "討論串",
         "group_voip": "語音與視訊",
         "group_widgets": "小工具",
@@ -1408,7 +1387,6 @@
         "mentions_and_keywords": "@提及與關鍵字",
         "mentions_and_keywords_description": "僅在提及您與您在<a>設定</a>中列出的關鍵字時收到通知",
         "mentions_keywords": "提及與關鍵字",
-        "message_didnt_send": "訊息未傳送。點擊以取得更多資訊。",
         "mute_description": "不會收到任何通知"
     },
     "notifier": {
@@ -2036,8 +2014,6 @@
             "custom_font_description": "設定您系統上安裝的字型名稱，%(brand)s 將會嘗試使用它。",
             "custom_font_name": "系統字型名稱",
             "custom_font_size": "使用自訂大小",
-            "custom_theme_error_downloading": "下載佈景主題資訊時發生錯誤。",
-            "custom_theme_invalid": "無效的佈景主題架構。",
             "dialog_title": "<strong>設定：</strong>外觀",
             "font_size": "字型大小",
             "high_contrast": "高對比",
@@ -2329,7 +2305,6 @@
         "send_read_receipts_unsupported": "您的伺服器不支援停用傳送讀取回條。",
         "send_typing_notifications": "傳送「輸入中」的通知",
         "sessions": {
-            "browser": "瀏覽器",
             "confirm_sign_out": {
                 "one": "確認登出此裝置",
                 "other": "確認登出這些裝置"
@@ -2378,7 +2353,6 @@
             "no_sessions": "找不到工作階段。",
             "no_unverified_sessions": "找不到未驗證的工作階段。",
             "no_verified_sessions": "找不到已驗證的工作階段。",
-            "os": "作業系統",
             "other_sessions_heading": "其他工作階段",
             "push_heading": "推送通知",
             "push_subheading": "在此工作階段接收推送通知。",

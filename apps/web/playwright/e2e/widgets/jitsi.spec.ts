@@ -30,7 +30,7 @@ test.describe("Jitsi Calls", () => {
     test("should be able to pop out a jitsi widget", async ({ page, app, bot, bot2, context }) => {
         const roomId = await app.client.createRoom({
             name: ROOM_NAME,
-            invite: [bot.credentials.userId, bot2.credentials.userId],
+            invite: [bot.credentials!.userId, bot2.credentials!.userId],
         });
 
         await bot.joinRoom(roomId);

@@ -55,7 +55,7 @@ class Helpers {
     async enterRecoveryKey(recoveryKey: GeneratedSecretStorageKey) {
         // Fill the recovery key
         const dialog = this.page.locator(".mx_Dialog");
-        await dialog.getByRole("textbox").fill(recoveryKey.encodedPrivateKey);
+        await dialog.getByRole("textbox").fill(recoveryKey.encodedPrivateKey!);
         await dialog.getByRole("button", { name: "Continue" }).click();
     }
 

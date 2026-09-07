@@ -21,7 +21,7 @@ test.describe("Advanced section in Encryption tab", () => {
         const section = util.getEncryptionDetailsSection();
 
         const deviceId = await page.evaluate(() => window.mxMatrixClientPeg.get().getDeviceId());
-        await expect(section.getByText(deviceId)).toBeVisible();
+        await expect(section.getByText(deviceId!)).toBeVisible();
 
         await expect(section).toMatchScreenshot("encryption-details.png", {
             mask: [section.getByTestId("deviceId"), section.getByTestId("sessionKey")],
@@ -59,7 +59,7 @@ test.describe("Advanced section in Encryption tab", () => {
 
             // Fill password dialog and validate
             const dialog = page.locator(".mx_InteractiveAuthDialog");
-            await dialog.getByRole("textbox", { name: "Password" }).fill(credentials.password);
+            await dialog.getByRole("textbox", { name: "Password" }).fill(credentials.password!);
             await dialog.getByRole("button", { name: "Continue" }).click();
 
             await expect(section.getByRole("button", { name: "Reset cryptographic identity" })).toBeVisible();

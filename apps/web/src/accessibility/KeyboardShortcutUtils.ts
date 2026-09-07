@@ -11,6 +11,7 @@ import { IS_MAC, Key } from "../Keyboard";
 import { _t, _td } from "../languageHandler";
 import PlatformPeg from "../PlatformPeg";
 import SettingsStore from "../settings/SettingsStore";
+import { getSettingDisabled } from "../settings/controllers/SettingController.ts";
 import {
     DESKTOP_SHORTCUTS,
     DIGITS,
@@ -89,14 +90,14 @@ export const getKeyboardShortcuts = (): IKeyboardShortcuts => {
 
     return (Object.keys(KEYBOARD_SHORTCUTS) as KeyBindingAction[])
         .filter((k) => {
-            if (KEYBOARD_SHORTCUTS[k]?.controller?.settingDisabled) return false;
+            if (getSettingDisabled(KEYBOARD_SHORTCUTS[k]?.controller)) return false;
             if (MAC_ONLY_SHORTCUTS.includes(k) && !IS_MAC) return false;
             if (DESKTOP_SHORTCUTS.includes(k) && !overrideBrowserShortcuts) return false;
 
             return true;
         })
         .reduce((o, key) => {
-            o[key as KeyBindingAction] = KEYBOARD_SHORTCUTS[key as KeyBindingAction];
+            o[key] = KEYBOARD_SHORTCUTS[key];
             return o;
         }, {} as IKeyboardShortcuts);
 };

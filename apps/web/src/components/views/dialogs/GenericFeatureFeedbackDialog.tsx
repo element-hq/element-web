@@ -39,7 +39,7 @@ const GenericFeatureFeedbackDialog: React.FC<IProps> = ({
     const sendFeedback = async (ok: boolean): Promise<void> => {
         if (!ok) return onFinished(false);
         // TODO: Handle rejection.
-        submitFeedback(rageshakeLabel, comment, canContact, rageshakeData);
+        void submitFeedback(rageshakeLabel, comment, canContact, rageshakeData);
         onFinished(true);
 
         Modal.createDialog(InfoDialog, {
@@ -78,10 +78,7 @@ const GenericFeatureFeedbackDialog: React.FC<IProps> = ({
                         }}
                         autoFocus={true}
                     />
-                    <StyledCheckbox
-                        checked={canContact}
-                        onChange={(e) => setCanContact((e.target as HTMLInputElement).checked)}
-                    >
+                    <StyledCheckbox checked={canContact} onChange={(e) => setCanContact(e.target.checked)}>
                         {_t("feedback|can_contact_label")}
                     </StyledCheckbox>
                 </React.Fragment>

@@ -18,6 +18,7 @@ test.describe("Recovery section in Encryption tab", () => {
     test.beforeEach(async ({ page, homeserver, credentials }) => {
         // The bot bootstraps cross-signing, creates a key backup and sets up a recovery key
         const botCredentials = { ...credentials };
+        // @ts-expect-error
         delete botCredentials.accessToken; // use a new login for the bot
         const res = await createBot(page, homeserver, botCredentials);
         recoveryKey = res.recoveryKey;
@@ -27,7 +28,7 @@ test.describe("Recovery section in Encryption tab", () => {
         "should change the recovery key",
         { tag: ["@screenshot", "@no-webkit"] },
         async ({ page, app, homeserver, credentials, util, context }) => {
-            await verifySession(app, recoveryKey.encodedPrivateKey);
+            await verifySession(app, recoveryKey.encodedPrivateKey!);
             const dialog = await util.openEncryptionTab();
 
             // The user can only change the recovery key
@@ -54,7 +55,7 @@ test.describe("Recovery section in Encryption tab", () => {
     );
 
     test("should setup the recovery key", { tag: ["@screenshot", "@no-webkit"] }, async ({ page, app, util }) => {
-        await verifySession(app, recoveryKey.encodedPrivateKey);
+        await verifySession(app, recoveryKey.encodedPrivateKey!);
         await util.removeSecretStorageDefaultKeyId();
 
         // The key backup is deleted and the user needs to set it up

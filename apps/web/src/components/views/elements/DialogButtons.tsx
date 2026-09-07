@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type ReactNode } from "react";
+import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
 
@@ -29,8 +30,10 @@ interface IProps {
     // should there be a cancel button? default: true
     hasCancel?: boolean;
 
-    // The class of the cancel button, only used if a cancel button is
-    // enabled
+    /**
+     * The class of the cancel button, only used if a cancel button is enabled
+     * @default "cancel"
+     */
     cancelButtonClass?: string;
 
     // onClick handler for the cancel button.
@@ -58,6 +61,7 @@ export default class DialogButtons extends React.Component<IProps> {
     public static defaultProps: Partial<IProps> = {
         hasCancel: true,
         disabled: false,
+        cancelButtonClass: "cancel",
     };
 
     private onCancelClick = (event: React.MouseEvent): void => {
@@ -65,7 +69,7 @@ export default class DialogButtons extends React.Component<IProps> {
     };
 
     public render(): React.ReactNode {
-        let primaryButtonClassName = "mx_Dialog_primary";
+        let primaryButtonClassName = "mx_LegacyDialogButton mx_Dialog_primary";
         if (this.props.primaryButtonClass) {
             primaryButtonClassName += " " + this.props.primaryButtonClass;
         }
@@ -79,7 +83,7 @@ export default class DialogButtons extends React.Component<IProps> {
                     data-testid="dialog-cancel-button"
                     type="button"
                     onClick={this.onCancelClick}
-                    className={this.props.cancelButtonClass}
+                    className={classNames("mx_LegacyDialogButton", this.props.cancelButtonClass)}
                     disabled={this.props.disabled}
                 >
                     {this.props.cancelButton || _t("action|cancel")}

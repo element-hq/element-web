@@ -238,9 +238,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
                         highlightedOption: nextKey,
                     });
 
-                    (
-                        this.dropdownRootElement?.querySelector(`#${this.props.id}__${nextKey}`) as HTMLLIElement
-                    )?.focus();
+                    this.dropdownRootElement?.querySelector<HTMLLIElement>(`#${this.props.id}__${nextKey}`)?.focus();
                 } else {
                     this.setState({ expanded: true });
                 }
@@ -251,9 +249,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
                     this.setState({
                         highlightedOption: prevKey,
                     });
-                    (
-                        this.dropdownRootElement?.querySelector(`#${this.props.id}__${prevKey}`) as HTMLLIElement
-                    )?.focus();
+                    this.dropdownRootElement?.querySelector<HTMLLIElement>(`#${this.props.id}__${prevKey}`)?.focus();
                 } else {
                     this.setState({ expanded: true });
                 }
@@ -319,7 +315,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
                 <MenuOption
                     id={`${this.props.id}__${child.key}`}
                     key={child.key}
-                    dropdownKey={child.key as string}
+                    dropdownKey={child.key!}
                     highlighted={highlighted}
                     onMouseEnter={this.setHighlightedOption}
                     onClick={this.onMenuOptionClick}

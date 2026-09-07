@@ -127,12 +127,12 @@ class RoomPreviewBar extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
-        this.checkInvitedEmail();
+        void this.checkInvitedEmail();
     }
 
     public componentDidUpdate(prevProps: IProps, prevState: IState): void {
         if (this.props.invitedEmail !== prevProps.invitedEmail || this.props.inviterName !== prevProps.inviterName) {
-            this.checkInvitedEmail();
+            void this.checkInvitedEmail();
         }
     }
 
@@ -218,7 +218,7 @@ class RoomPreviewBar extends React.Component<IProps, IState> {
             }
             return MessageCase.Invite;
         } else if (this.props.error) {
-            if ((this.props.error as MatrixError).errcode == "M_NOT_FOUND") {
+            if (this.props.error.errcode === "M_NOT_FOUND") {
                 return MessageCase.RoomNotFound;
             } else {
                 return MessageCase.OtherError;
@@ -655,6 +655,7 @@ class RoomPreviewBar extends React.Component<IProps, IState> {
             if (!Array.isArray(subTitle)) {
                 subTitle = [subTitle];
             }
+            // oxlint-disable-next-line react/no-array-index-key
             subTitleElements = subTitle.map((t, i) => <p key={`subTitle${i}`}>{t}</p>);
         }
 

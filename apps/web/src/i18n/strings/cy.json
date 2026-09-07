@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Dewisydd Emoji",
         "jump_first_invite": "Symud i'r gwahoddiad cyntaf.",
         "message_composer": "Neges cyfansoddwr",
         "n_unread_messages": {
@@ -109,7 +108,7 @@
         "show_advanced": "Dangos uwch",
         "show_all": "Dangos y cyfan",
         "sign_in": "Mewngofnodi",
-        "sign_out": "Allgofnodi",
+        "sign_out": "Tynnwch y ddyfais",
         "skip": "Hepgor",
         "start": "Dechrau",
         "stop": "Atal",
@@ -211,9 +210,9 @@
         "incorrect_password": "Cyfrinair anghywir",
         "log_in_new_account": "<a>Mewngofnodwch</a> i'ch cyfrif newydd.",
         "logout_dialog": {
-            "description": "Ydych chi'n siŵr eich bod am allgofnodi?",
+            "description": "Ydych chi&#39;n siŵr eich bod chi eisiau tynnu&#39;r ddyfais hon?",
             "setup_key_backup_title": "Byddwch yn colli mynediad i'ch negeseuon wedi'u hamgryptio",
-            "skip_key_backup": "Dydw i ddim eisiau fy negeseuon wedi'u hamgryptio"
+            "skip_key_backup": "Tynnwch y ddyfais hon beth bynnag"
         },
         "misconfigured_body": "Gofynnwch i'ch gweinyddwr %(brand)s wirio'ch <a>ffurfweddiad</a> am gofnodion anghywir neu ddyblyg.",
         "misconfigured_title": "Mae eich %(brand)s wedi'i gam ffurfweddu",
@@ -262,13 +261,13 @@
             "follow_remaining_instructions": "Dilynwch y cyfarwyddiadau sy'n weddill",
             "open_element_other_device": "Agorwch %(brand)s ar eich dyfais arall",
             "point_the_camera": "Sganiwch y cod QR sy'n cael ei ddangos yma",
-            "scan_code_instruction": "Sganiwch y cod QR gyda dyfais arall",
+            "scan_code_instruction": "Sganiwch y cod QR",
             "scan_qr_code": "Mewngofnodwch gyda chod QR",
             "security_code_prompt": "Os gofynnir i chi, nodwch y cod isod ar eich dyfais arall.",
             "select_qr_code": "Dewiswch \"%(scanQRCode)s\"",
             "unsupported_explainer": "Nid yw darparwr eich cyfrif yn cefnogi mewngofnodi i ddyfais newydd gyda chod QR.",
             "unsupported_heading": "Nid yw'r cod QR yn cael ei gefnogi",
-            "waiting_for_device": "Yn aros i'r ddyfais fewngofnodi"
+            "waiting_for_device": "Yn aros am eich dyfais arall"
         },
         "register_action": "Creu Cyfrif",
         "registration": {
@@ -284,7 +283,7 @@
         "registration_username_validation": "Defnyddiwch lythrennau bach, rhifau, llinellau toriad a thanlinellau yn unig",
         "reset_password": {
             "confirm_new_password": "Cadarnhau cyfrinair newydd",
-            "devices_logout_success": "Rydych wedi cael eich allgofnodi o bob dyfais ac ni fyddwch yn derbyn hysbysiadau gwthio mwyach. I ail-alluogi hysbysiadau, mewngofnodwch eto ar bob dyfais.",
+            "devices_logout_success": "Mae eich holl ddyfeisiau wedi cael eu tynnu ac ni fyddant yn derbyn hysbysiadau gwthio mwyach. I ail-alluogi hysbysiadau, mewngofnodwch eto ar bob dyfais.",
             "other_devices_logout_warning_1": "Bydd allgofnodi eich dyfeisiau yn dileu'r bysellau amgryptio neges sydd wedi'u storio arnynt, gan wneud hanes sgwrsio wedi'i amgryptio yn annarllenadwy.",
             "other_devices_logout_warning_2": "Os ydych chi am gadw mynediad i'ch hanes sgwrsio mewn ystafelloedd wedi'u hamgryptio, gosodwch Key Backup neu allforiwch allweddi eich neges o un o'ch dyfeisiau eraill cyn symud ymlaen.",
             "password_not_entered": "Rhaid rhoi cyfrinair newydd.",
@@ -293,7 +292,7 @@
             "rate_limit_error_with_time": "Gormod o ymdrechion mewn amser byr. Rhowch gynnig arall arni ar ôl %(timeout)s.",
             "reset_successful": "Cafodd eich cyfrinair ei ailosod.",
             "return_to_login": "Dychwelyd i'r sgrin mewngofnodi",
-            "sign_out_other_devices": "Allgofnodi o bob dyfais"
+            "sign_out_other_devices": "Tynnu dyfeisiau eraill"
         },
         "reset_password_action": "Ailosod cyfrinair",
         "reset_password_button": "Wedi anghofio'ch cyfrinair?",
@@ -493,7 +492,6 @@
         "message_layout": "Cynllun y neges",
         "message_timestamp_invalid": "Stamp amser annilys",
         "microphone": "Meicroffôn",
-        "model": "Model",
         "moderation_and_safety": "Cymedroli a diogelwch",
         "modern": "Modern",
         "mute": "Tewi",
@@ -648,8 +646,8 @@
         "join_rule_knock_label": "Gall unrhyw un wneud cais i ymuno, ond mae angen i weinyddwyr neu gymedrolwyr ganiatáu mynediad. Gallwch newid hyn yn nes ymlaen.",
         "join_rule_public_label": "Bydd unrhyw un yn gallu dod o hyd i'r ystafell hon ac ymuno â hi.",
         "join_rule_public_parent_space_label": "Bydd unrhyw un yn gallu dod o hyd i'r ystafell hon ac ymuno â hi, nid dim ond aelodau o<SpaceName/>.",
-        "join_rule_restricted": "Yn weladwy i aelodau'r gofod",
-        "join_rule_restricted_label": "Bydd pawb yn <SpaceName/> yn gallu dod o hyd i'r ystafell hon ac ymuno â hi.",
+        "join_rule_restricted": "Safonol",
+        "join_rule_restricted_label": "Gall unrhyw un yn <SpaceName/> ymuno.",
         "name_validation_required": "Rhowch enw ar gyfer yr ystafell",
         "room_visibility_label": "Gwelededd ystafell",
         "state_encrypted_warning": "Yn galluogi cefnogaeth arbrofol ar gyfer amgryptio digwyddiadau cyflwr, sy'n cuddio metadata fel enwau ystafelloedd a phynciau o'r gweinydd. Bydd y metadata hwn hefyd yn cael ei guddio rhag pobl sy'n ymuno ag ystafelloedd yn ddiweddarach, a phobl nad yw eu cleientiaid yn cefnogi MSC4362.",
@@ -893,22 +891,6 @@
     },
     "dialog_close_label": "Cau'r ddeialog",
     "download_completed": "Llwytho i Lawr Wedi'i Gwblhau",
-    "emoji": {
-        "categories": "Categorïau",
-        "category_activities": "Gweithgareddau",
-        "category_animals_nature": "Anifeiliaid a Natur",
-        "category_flags": "Baneri",
-        "category_food_drink": "Bwyd a Diod",
-        "category_frequently_used": "Defnydd Cyffredin",
-        "category_objects": "Gwrthrychau",
-        "category_smileys_people": "Wynebau hapus a Phobl",
-        "category_symbols": "Symbolau",
-        "category_travel_places": "Teithio a Llefydd",
-        "quick_reactions": "Ymatebion Cyflym"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Cau'r chwilio"
-    },
     "empty_room": "Ystafell wag",
     "empty_room_was_name": "Ystafell wag (roedd yn %(oldName)s)",
     "encryption": {
@@ -1074,8 +1056,8 @@
         "verification_requested_toast_title": "Gofynnwyd am ddilysiad",
         "verified_identity_changed": "Cafodd hunaniaeth (<b>%(userId)s</b>) %(displayName)s ei ailosod. <a>Dysgu rhagor</a>",
         "verified_identity_changed_no_displayname": "Cafodd hunaniaeth <b>%(userId)s</b> ei ailosod. <a>Dysgu rhagor</a>",
-        "verify_toast_description": "Efallai na fydd defnyddwyr eraill yn ymddiried ynddo",
-        "verify_toast_title": "Gwiriwch y sesiwn hon",
+        "verify_toast_description": "O ddiwedd mis Hydref 2026 ymlaen, ni fydd dyfeisiau heb eu gwirio yn gallu anfon a derbyn negeseuon. <a> Dysgu mwy</a>",
+        "verify_toast_title": "Gwiriwch y ddyfais hon",
         "withdraw_verification_action": "Tynnu'r dilysiad yn ôl"
     },
     "error": {
@@ -1100,9 +1082,9 @@
         "non_urgent_echo_failure_toast": "Nid yw eich gweinydd yn ymateb i rai <a>ceisiadau</a>.",
         "resource_limits": "Mae'r gweinydd cartref hwn wedi mynd y tu hwnt i un o'i derfynau adnoddau.",
         "session_restore": {
-            "clear_storage_button": "Clirio Storio ac Arwyddo Allan",
-            "clear_storage_description": "Allgofnodi a dileu allweddi amgryptio?",
-            "description_1": "Wedi canfod gwall wrth geisio adfer eich sesiwn flaenorol.",
+            "clear_storage_button": "Tynnu'r ddyfais",
+            "clear_storage_description": "Tynnu&#39;r ddyfais hon ynghyd â&#39;i allweddi amgryptio?",
+            "description_1": "Wedi canfod gwall wrth geisio adfer eich sesiwn.",
             "description_2": "Os ydych wedi defnyddio fersiwn mwy diweddar o %(brand)s o'r blaen, mae'n bosibl y bydd eich sesiwn yn anghydnaws â'r fersiwn hon. Caewch y ffenestr hon a dychwelyd i'r fersiwn mwy diweddar.",
             "description_3": "Efallai y bydd clirio storfa eich porwr yn datrys y broblem, ond bydd yn eich allgofnodi ac yn achosi i unrhyw hanes sgwrsio sydd wedi'i amgryptio ddod yn annarllenadwy.",
             "title": "Methu adfer y sesiwn"
@@ -1364,7 +1346,6 @@
             "preparing": "Wrthi'n paratoi gwahoddiadau..."
         },
         "recents_section": "Sgyrsiau Diweddar",
-        "room_failed_partial": "Rydym wedi anfon y lleill, ond nid oes modd gwahodd y bobl isod i <RoomName/>",
         "room_failed_partial_title": "Nid oedd modd anfon rhai gwahoddiadau",
         "room_failed_title": "Wedi methu gwahodd defnyddwyr i %(roomName)s",
         "send_link_prompt": "Neu anfonwch ddolen wahoddiad",
@@ -1480,7 +1461,6 @@
         "bridge_state_workspace": "Gweithle: <networkLink/>",
         "click_for_info": "Cliciwch am fwy o wybodaeth",
         "currently_experimental": "Arbrofol ar hyn o bryd.",
-        "custom_themes": "Cefnogi ychwanegu themâu personol",
         "dynamic_room_predecessors": "Rhagflaenwyr ystafell deimaterig",
         "dynamic_room_predecessors_description": "Galluogi MSC3946 (i gefnogi archifau ystafelloedd sy'n cyrraedd yn hwyr)",
         "element_call_video_rooms": "Ystafelloedd fideo Element Call",
@@ -1501,7 +1481,6 @@
         "group_profile": "Proffil",
         "group_rooms": "Ystafelloedd",
         "group_spaces": "Gofodau",
-        "group_themes": "Themâu",
         "group_threads": "Edafedd",
         "group_ui": "Rhyngwyneb",
         "group_voip": "Llais a Fideo",
@@ -1681,7 +1660,6 @@
         "mentions_and_keywords": "@crybwylliadau ac allweddeiriau",
         "mentions_and_keywords_description": "Dim ond gyda chyfeiriadau ac allweddeiriau fel y'u gosodwyd yn eich <a>gosodiadau</a> y cewch eich hysbysu",
         "mentions_keywords": "Crybwylliadau ac allweddeiriau",
-        "message_didnt_send": "Heb anfon y neges. Cliciwch am wybodaeth.",
         "mute_description": "Fyddwch chi ddim yn cael unrhyw hysbysiadau"
     },
     "notifier": {
@@ -2405,11 +2383,6 @@
             "custom_font_description": "Gosodwch enw ffont sydd wedi'i osod ar eich system a bydd %(brand)s yn ceisio ei ddefnyddio.",
             "custom_font_name": "Enw ffont y system",
             "custom_font_size": "Defnyddio maint cyfaddas",
-            "custom_theme_add": "Ychwanegu thema gyfaddas",
-            "custom_theme_downloading": "Wrthi'n llwytho i lawr thema cyfaddas…",
-            "custom_theme_error_downloading": "Gwall wrth lwytho'r thema i lawr",
-            "custom_theme_help": "Rhowch URL thema cyfaddas rydych chi am ei gosod.",
-            "custom_theme_invalid": "Sgema thema annilys.",
             "dialog_title": "<strong>Gosodiadau:</strong> Gwedd",
             "font_size": "Maint ffont",
             "font_size_default": "%(fontSize)s (rhagosodedig)",
@@ -2703,13 +2676,13 @@
             "room_activity": "Mae gweithgarwch ystafell newydd, uwchraddiadau a negeseuon statws yn digwydd",
             "rule_call": "Galwad gwahoddiad",
             "rule_contains_display_name": "Negeseuon yn cynnwys fy enw dangos",
-            "rule_contains_user_name": "Negeseuon yn cynnwys fy enw defnyddiwr",
+            "rule_contains_user_name": "@crybwylliadau ac atebion",
             "rule_encrypted": "Negeseuon wedi'u hamgryptio mewn sgyrsiau grŵp",
             "rule_encrypted_room_one_to_one": "Negeseuon wedi'u hamgryptio mewn sgyrsiau un-i-un",
             "rule_invite_for_me": "Pan yn cael fy ngwahodd i ystafell",
             "rule_message": "Negeseuon mewn sgyrsiau grŵp",
             "rule_room_one_to_one": "Negeseuon mewn sgyrsiau un-i-un",
-            "rule_roomnotif": "Negeseuon yn cynnwys @room",
+            "rule_roomnotif": "crybwylliadau @ystafell",
             "rule_suppress_notices": "Negeseuon a anfonwyd gan bot",
             "rule_tombstone": "Pan fydd ystafelloedd yn cael eu huwchraddio",
             "show_message_desktop_notification": "Dangos neges mewn hysbysiad bwrdd gwaith",
@@ -2787,22 +2760,37 @@
         "send_typing_notifications": "Anfon hysbysiadau teipio",
         "sessions": {
             "best_security_note": "Er mwyn sicrhau'r diogelwch gorau, gwiriwch eich sesiynau ac allgofnodwch o unrhyw sesiwn nad ydych yn ei hadnabod nac yn ei defnyddio mwyach.",
-            "browser": "Porwr",
             "confirm_sign_out": {
-                "Cadarnhau allgofnodi o'r ddyfeisiau hyn": "other",
-                "Cadarnhau allgofnodi o'r ddyfais hon": "one"
+                "zero": "Cadarnhau tynnu&#39;r dyfeisiau hyn",
+                "one": "Cadarnhau tynnu&#39;r ddyfais hon",
+                "two": "Cadarnhau tynnu&#39;r dyfeisiau hyn",
+                "few": "Cadarnhau tynnu&#39;r dyfeisiau hyn",
+                "many": "Cadarnhau tynnu&#39;r dyfeisiau hyn",
+                "other": "Cadarnhau tynnu&#39;r dyfeisiau hyn"
             },
             "confirm_sign_out_body": {
-                "Cliciwch y botwm isod i gadarnhau allgofnodi o'r dyfeisiau hyn.": "other",
-                "Cliciwch y botwm isod i gadarnhau allgofnodi o'r ddyfais hon.": "one"
+                "zero": "Cliciwch y botwm isod i gadarnhau tynnu&#39;r dyfeisiau hyn.",
+                "one": "Cliciwch y botwm isod i gadarnhau tynnu&#39;r ddyfais hon.",
+                "two": "Cliciwch y botwm isod i gadarnhau tynnu&#39;r dyfeisiau hyn.",
+                "few": "Cliciwch y botwm isod i gadarnhau tynnu&#39;r dyfeisiau hyn.",
+                "many": "Cliciwch y botwm isod i gadarnhau tynnu&#39;r dyfeisiau hyn.",
+                "other": "Cliciwch y botwm isod i gadarnhau tynnu&#39;r dyfeisiau hyn."
             },
             "confirm_sign_out_continue": {
-                "Allgofnodi o ddyfeisiau": "other",
-                "Allgofnodi o ddyfais": "one"
+                "zero": "Tynnu dyfeisiau",
+                "one": "Tynnu dyfais",
+                "two": "Tynnu dyfeisiau",
+                "few": "Tynnu dyfeisiau",
+                "many": "Tynnu dyfeisiau",
+                "other": "Tynnu dyfeisiau"
             },
             "confirm_sign_out_sso": {
-                "Cadarnhau allgofnodi o'r ddyfeisiau hyn trwy ddefnyddio Mewngofnodi Sengl i brofi pwy ydych chi.": "other",
-                "Cadarnhau allgofnodi o'r ddyfais hon trwy ddefnyddio Mewngofnodi Sengl i brofi pwy ydych chi.": "one"
+                "zero": "Cadarnhewch eich bod wedi tynnu&#39;r ddyfais hon drwy ddefnyddio Mewngofnodi Sengl i brofi pwy ydych chi.",
+                "one": "Cadarnhewch eich bod wedi tynnu&#39;r ddyfais hon drwy ddefnyddio Mewngofnodi Sengl i brofi pwy ydych chi.",
+                "two": "Cadarnhewch eich bod wedi tynnu&#39;r dyfeisiau hyn drwy ddefnyddio Mewngofnodi Sengl i brofi pwy ydych chi.",
+                "few": "Cadarnhewch eich bod wedi tynnu&#39;r dyfeisiau hyn drwy ddefnyddio Mewngofnodi Sengl i brofi pwy ydych chi.",
+                "many": "Cadarnhewch eich bod wedi tynnu&#39;r dyfeisiau hyn drwy ddefnyddio Mewngofnodi Sengl i brofi pwy ydych chi.",
+                "other": "Cadarnhewch eich bod wedi tynnu&#39;r dyfeisiau hyn drwy ddefnyddio Mewngofnodi Sengl i brofi pwy ydych chi."
             },
             "current_session": "Y sesiwn gyfredol",
             "desktop_session": "Sesiwn bwrdd gwaith",
@@ -2825,7 +2813,7 @@
             "inactive_sessions": "Sesiynau anweithredol",
             "inactive_sessions_explainer_1": "Mae sesiynau anweithredol yn sesiynau nad ydych wedi'u defnyddio ers peth amser, ond maent yn parhau i dderbyn allweddi amgryptio.",
             "inactive_sessions_explainer_2": "Mae cael gwared ar sesiynau anweithredol yn gwella diogelwch a pherfformiad, ac yn ei gwneud yn haws i chi nodi a yw sesiwn newydd yn amheus.",
-            "inactive_sessions_list_description": "Ystyriwch allgofnodi o hen sesiynau (%(inactiveAgeDays)s diwrnod neu hŷn) nad ydych yn eu defnyddio mwyach.",
+            "inactive_sessions_list_description": "Ystyriwch gael gwared ar hen sesiynau (%(inactiveAgeDays)s diwrnodau neu hŷn) nad ydych chi&#39;n eu defnyddio mwyach.",
             "ip": "Cyfeiriad IP",
             "last_activity": "Gweithgaredd ddiwethaf",
             "manage": "Rheoli'r sesiwn hon",
@@ -2838,7 +2826,6 @@
             "no_sessions": "Heb ganfod sesiynau.",
             "no_unverified_sessions": "Heb ganfod unrhyw sesiynau heb eu gwirio.",
             "no_verified_sessions": "Heb ganfod unrhyw sesiynau wedi'u dilysu.",
-            "os": "System weithredu",
             "other_sessions_heading": "Sesiynau eraill",
             "push_heading": "Hysbysiadau gwthiadwy",
             "push_subheading": "Derbyn hysbysiadau gwthio ar y sesiwn hon.",
@@ -2856,13 +2843,23 @@
             "sign_in_with_qr_button": "Dangos cod QR",
             "sign_in_with_qr_description": "Defnyddio cod QR i fewngofnodi i ddyfais arall a gosod negeseuon diogel.",
             "sign_in_with_qr_unsupported": "Nid yw'n cael ei gefnogi gan ddarparwr eich cyfrif",
-            "sign_out": "Allgofnodwch o'r sesiwn hon",
+            "sign_out": "Dileu'r sesiwn hon",
             "sign_out_all_other_sessions": "Allgofnodi o bob sesiwn arall (%(otherSessionsCount)s)",
             "sign_out_confirm_description": {
-                "Ydych chi'n siŵr eich bod chi eisiau allgofnodi o %(count)s sesiwn?": "other"
+                "zero": "Ydych chi&#39;n siŵr eich bod chi eisiau dileu&#39;r %(count)s sesiwn?",
+                "one": "Ydych chi&#39;n siŵr eich bod chi eisiau dileu&#39;r %(count)s sesiwn?",
+                "two": "Ydych chi&#39;n siŵr eich bod chi eisiau dileu&#39;r %(count)s sesiwn?",
+                "few": "Ydych chi&#39;n siŵr eich bod chi eisiau dileu&#39;r %(count)s sesiwn?",
+                "many": "Ydych chi&#39;n siŵr eich bod chi eisiau dileu&#39;r %(count)s sesiwn?",
+                "other": "Ydych chi&#39;n siŵr eich bod chi eisiau dileu&#39;r %(count)s sesiwn?"
             },
             "sign_out_n_sessions": {
-                "Allgofnodi o %(count)s sesiwn": "other"
+                "zero": "Dileu %(count)s sesiynnau",
+                "one": "Dileu %(count)s sesiwn",
+                "two": "Dileu %(count)s sesiwn",
+                "few": "Dileu %(count)s sesiwn",
+                "many": "Dileu %(count)s sesiwn",
+                "other": "Dileu %(count)s sesiwn"
             },
             "title": "Sesiynau",
             "unknown_session": "Math o sesiwn anhysbys",
@@ -2873,11 +2870,11 @@
             "unverified_sessions": "Sesiynau heb eu gwirio",
             "unverified_sessions_explainer_1": "Mae sesiynau heb eu gwirio yn sesiynau sydd wedi mewngofnodi gyda'ch tystlythyrau ond nad ydynt wedi'u traws-wirio.",
             "unverified_sessions_explainer_2": "Dylech wneud yn arbennig o sicr eich bod yn adnabod y sesiynau hyn gan y gallent gynrychioli defnydd anawdurdodedig o'ch cyfrif.",
-            "unverified_sessions_list_description": "Dilyswch eich sesiynau ar gyfer negeseuon diogel gwell neu allgofnodwch gan y rhai nad ydych yn eu hadnabod nac yn eu defnyddio mwyach.",
+            "unverified_sessions_list_description": "Gwiriwch eich sesiynau ar gyfer negeseuon diogel gwell neu tynnwch nhw o&#39;r rhai nad ydych chi&#39;n eu hadnabod na&#39;n eu defnyddio mwyach.",
             "url": "URL",
             "verified_session": "Sesiwn wedi'i dilysu",
             "verified_sessions": "Sesiynau wedi'u dilysu",
-            "verified_sessions_explainer_1": "Mae sesiynau wedi'u dilysu yn unrhyw le rydych chi'n defnyddio'r cyfrif hwn ar ôl nodi'ch cyfrinair neu gadarnhau pwy ydych chi gyda sesiwn arall sydd wedi'i dilysu.",
+            "verified_sessions_explainer_1": "Mae sesiynau wedi&#39;u gwirio wedi cael eu cadarnhau fel eich hunaniaeth ddigidol.",
             "verified_sessions_explainer_2": "Mae hyn yn golygu bod gennych yr holl allweddi sydd eu hangen i ddatgloi eich negeseuon wedi'u hamgryptio a chadarnhau i ddefnyddwyr eraill eich bod yn ymddiried yn y sesiwn hon.",
             "verified_sessions_list_description": "Er mwyn sicrhau'r diogelwch gorau, allgofnodwch o unrhyw sesiwn nad ydych yn ei hadnabod nac yn ei defnyddio mwyach.",
             "verify_session": "Dilysu sesiwn",
@@ -2934,10 +2931,10 @@
             "enable_fallback_ice_server": "Caniatáu gweinydd cymorth galwadau wrth gefn (%(server)s)",
             "enable_fallback_ice_server_description": "Dim ond os nad yw eich gweinydd cartref yn cynnig un y mae'n berthnasol. Byddai eich cyfeiriad IP yn cael ei rannu yn ystod galwad.",
             "mirror_local_feed": "Drychu'r ffrwd fideo lleol",
-            "missing_permissions_prompt": "Caniatâd cyfryngau ar goll, cliciwch y botwm isod i ofyn.",
+            "missing_permissions_prompt": "I gymryd rhan mewn galwadau, rhowch ganiatâd i %(brand)s gael mynediad at eich dyfais sain a fideo.",
             "noise_suppression": "Lleihau sain",
             "noise_suppression_description": "Yn lleihau sŵn cefndir yn eich mewnbwn meicroffon yn ystod galwadau. Mae'r gosodiad hwn hefyd yn berthnasol i Element Call.",
-            "request_permissions": "Gofyn am ganiatâd cyfryngau",
+            "request_permissions": "Cais",
             "title": "Llais a Fideo",
             "video_input_empty": "Dim camerau gwe wedi'u canfod",
             "video_section": "Gosodiadau fideo",
@@ -3363,7 +3360,7 @@
             "accepted_3pid_invite": "Derbyniodd %(targetName)s y gwahoddiad ar gyfer %(displayName)s",
             "accepted_invite": "Derbyniodd %(targetName)s wahoddiad",
             "ban": "Mae %(senderName)s wedi gwahardd %(targetName)s",
-            "ban_reason": "Mae %(senderName)s wedi gwahardd %(targetName)s: %(reason)s",
+            "ban_reason": "Gwaharddodd %(senderName)s ddefnyddiwr: %(reason)s",
             "change_avatar": "Mae %(senderName)s wedi newid eu llun proffil",
             "change_name": "Mae %(oldDisplayName)s wedi newid ei enw dangos i %(displayName)s",
             "change_name_avatar": "Mae %(oldDisplayName)s wedi newid ei enw dangos a llun proffil",
@@ -3467,7 +3464,7 @@
         },
         "redaction": "Neges wedi'i dileu gan %(matere)s",
         "reply": {
-            "error_loading": "Methu llwytho digwyddiad yr atebwyd iddo, naill ai nid yw'n bodoli neu nid oes gennych ganiatâd i'w weld.",
+            "error_loading": "Methu llwytho&#39;r digwyddiad yr atebwyd iddo; naill ai nid yw&#39;n bodoli neu nid oes gennych ganiatâd i&#39;w weld.",
             "in_reply_to": "<a>Yn ymateb i</a><pill>",
             "in_reply_to_for_export": "Yn ymateb i'r <a>neges hon</a>"
         },

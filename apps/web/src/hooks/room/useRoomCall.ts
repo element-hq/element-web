@@ -286,7 +286,7 @@ export const useRoomCall = (
             ) {
                 return;
             }
-            placeCall(
+            void placeCall(
                 sdkContext.legacyCallHandler,
                 room,
                 CallType.Voice,
@@ -321,7 +321,7 @@ export const useRoomCall = (
             }
             // If we have pressed shift then always skip the lobby, otherwise `undefined` will defer
             // to the defaults of the call implementation.
-            placeCall(
+            void placeCall(
                 sdkContext.legacyCallHandler,
                 room,
                 CallType.Video,

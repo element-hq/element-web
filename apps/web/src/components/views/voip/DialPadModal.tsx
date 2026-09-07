@@ -43,7 +43,7 @@ export default class DialpadModal extends React.PureComponent<IProps, IState> {
 
     public onFormSubmit = (ev: SyntheticEvent): void => {
         ev.preventDefault();
-        this.onDialPress();
+        void this.onDialPress();
     };
 
     public onDigitPress = (digit: string, ev: ButtonEvent): void => {
@@ -70,7 +70,7 @@ export default class DialpadModal extends React.PureComponent<IProps, IState> {
     };
 
     public onDialPress = async (): Promise<void> => {
-        SDKContextClass.instance.legacyCallHandler.dialNumber(this.state.value);
+        void SDKContextClass.instance.legacyCallHandler.dialNumber(this.state.value);
         this.props.onFinished(true);
     };
 

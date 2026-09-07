@@ -6,14 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import path from "path";
+import path from "node:path";
 import { readFile } from "node:fs/promises";
-import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { expect, test } from "../../element-web-test";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 test.describe("migration", { tag: "@no-webkit" }, function () {
     test.use({
@@ -41,8 +40,8 @@ test.describe("migration", { tag: "@no-webkit" }, function () {
         // When the progress bar first loads, it should have a high max (one per megolm session to import), and
         // a relatively low value.
         const progressBar = page.getByRole("progressbar");
-        const initialProgress = parseFloat(await progressBar.getAttribute("value"));
-        const initialMax = parseFloat(await progressBar.getAttribute("max"));
+        const initialProgress = parseFloat((await progressBar.getAttribute("value"))!);
+        const initialMax = parseFloat((await progressBar.getAttribute("max"))!);
         expect(initialMax).toBeGreaterThan(4000);
         expect(initialProgress).toBeGreaterThanOrEqual(0);
         expect(initialProgress).toBeLessThanOrEqual(500);
@@ -53,8 +52,8 @@ test.describe("migration", { tag: "@no-webkit" }, function () {
                 async () => {
                     const progressBar = page.getByRole("progressbar");
                     return (
-                        (parseFloat(await progressBar.getAttribute("value")) * 100.0) /
-                        parseFloat(await progressBar.getAttribute("max"))
+                        (parseFloat((await progressBar.getAttribute("value"))!) * 100.0) /
+                        parseFloat((await progressBar.getAttribute("max"))!)
                     );
                 },
                 { timeout: 60000 },

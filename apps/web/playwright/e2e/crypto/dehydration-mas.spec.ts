@@ -46,7 +46,7 @@ test.describe("Device dehydration, on a MAS-enabled homeserver", () => {
             await autoJoin(bob);
 
             // Create an encrypted room, and wait for Bob to join it.
-            const testRoomId = await createSharedEncryptedRoomWithUser(app, bob.credentials.userId);
+            const testRoomId = await createSharedEncryptedRoomWithUser(app, bob.credentials!.userId);
 
             // Even though Alice has seen Bob's join event, Bob may not have done so yet. Wait for the sync to arrive.
             await bob.awaitRoomMembership(testRoomId);

@@ -87,7 +87,7 @@ export function RoomAvatarEventView({
     }
 
     return (
-        <span className={classes} ref={ref as Ref<HTMLSpanElement>} {...eventPresentationAttributes}>
+        <span className={classes} ref={ref} {...eventPresentationAttributes}>
             {_t(
                 "timeline|m.room.avatar|changed_img",
                 { senderDisplayName: snapshot.senderDisplayName },

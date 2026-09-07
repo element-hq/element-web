@@ -13,6 +13,7 @@ import { NotificationUtils } from "./NotificationUtils";
 
 const encodeActions = NotificationUtils.encodeActions;
 
+// oxlint-disable-next-line typescript/no-extraneous-class
 export class StandardActions {
     public static ACTION_NOTIFY = encodeActions({ notify: true });
     public static ACTION_NOTIFY_DEFAULT_SOUND = encodeActions({ notify: true, sound: "default" });

@@ -19,7 +19,7 @@ export interface WidgetPipViewActions {
      * The view model will handle navigating back to the associated room.
      * @param ev The mouse event that triggered the back click.
      */
-    onBackClick: (ev: React.MouseEvent<Element, MouseEvent>) => void;
+    onBackClick: (ev: React.MouseEvent) => void;
     /**
      * The view model exposes the `<PersistentApp />` component via this action.
      * `PersistentApp` is not available in shared components.
@@ -34,7 +34,7 @@ export interface WidgetPipViewActions {
      * Action that needs to be called when the pip view starts to get dragged.
      * @param ev The mouse event that triggered the drag start.
      */
-    onStartMoving: (ev: React.MouseEvent<Element, MouseEvent>) => void;
+    onStartMoving: (ev: React.MouseEvent) => void;
 }
 
 export interface WidgetPipViewSnapshot {

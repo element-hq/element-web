@@ -120,14 +120,14 @@ const ExistingThreepid: React.FC<ExistingThreepidProps> = ({ mode, threepid, onC
         (e: ButtonEvent): void => {
             e.stopPropagation();
             e.preventDefault();
-            changeBinding({
+            void changeBinding({
                 bind: false,
                 label: "revoke",
                 errorTitle:
                     threepid.medium === "email"
                         ? _t("settings|general|error_revoke_email_discovery")
                         : _t("settings|general|error_revoke_msisdn_discovery"),
-            }).then();
+            });
         },
         [changeBinding, threepid.medium],
     );
@@ -136,14 +136,14 @@ const ExistingThreepid: React.FC<ExistingThreepidProps> = ({ mode, threepid, onC
         (e: ButtonEvent): void => {
             e.stopPropagation();
             e.preventDefault();
-            changeBinding({
+            void changeBinding({
                 bind: true,
                 label: "share",
                 errorTitle:
                     threepid.medium === "email"
                         ? _t("settings|general|error_share_email_discovery")
                         : _t("settings|general|error_share_msisdn_discovery"),
-            }).then();
+            });
         },
         [changeBinding, threepid.medium],
     );

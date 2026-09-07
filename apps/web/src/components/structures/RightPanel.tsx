@@ -139,7 +139,7 @@ export default class RightPanel extends React.Component<Props, IState> {
             this.state.cardState?.verificationRequest?.pending
         ) {
             // When the user clicks close on the encryption panel cancel the pending request first if any
-            this.state.cardState.verificationRequest.cancel();
+            void this.state.cardState.verificationRequest.cancel();
         } else {
             RightPanelStore.instance.togglePanel(this.props.room?.roomId ?? null);
         }
@@ -256,7 +256,7 @@ export default class RightPanel extends React.Component<Props, IState> {
                         <RoomSummaryCardView
                             room={this.props.room}
                             // whenever RightPanel is passed a room it is passed a permalinkcreator
-                            permalinkCreator={this.props.permalinkCreator!}
+                            permalinkCreator={this.props.permalinkCreator}
                             onSearchChange={this.props.onSearchChange}
                             onSearchCancel={this.props.onSearchCancel}
                             searchTerm={this.props.searchTerm}

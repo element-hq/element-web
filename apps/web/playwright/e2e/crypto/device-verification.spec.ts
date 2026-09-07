@@ -169,8 +169,8 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
             await app.client.evaluate(async (cli, aliceBotCredentials) => {
                 const deviceStatus = await cli
                     .getCrypto()!
-                    .getDeviceVerificationStatus(aliceBotCredentials.userId, aliceBotCredentials.deviceId);
-                if (!deviceStatus.isVerified()) {
+                    .getDeviceVerificationStatus(aliceBotCredentials!.userId, aliceBotCredentials!.deviceId);
+                if (!deviceStatus!.isVerified()) {
                     throw new Error("Bot device was not verified after QR code verification");
                 }
             }, aliceBotClient.credentials);
@@ -193,14 +193,14 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
     );
 
     test("Verify device with Recovery Key during login", async ({ page, app, credentials, homeserver }) => {
-        const recoveryKey = (await aliceBotClient.getRecoveryKey()).encodedPrivateKey;
+        const recoveryKey = (await aliceBotClient.getRecoveryKey()).encodedPrivateKey!;
 
         await logIntoElement(page, credentials);
         await enterRecoveryKeyAndCheckVerified(page, app, recoveryKey);
     });
 
     test("Verify device with Recovery Key from settings", async ({ page, app, credentials }) => {
-        const recoveryKey = (await aliceBotClient.getRecoveryKey()).encodedPrivateKey;
+        const recoveryKey = (await aliceBotClient.getRecoveryKey()).encodedPrivateKey!;
 
         await logIntoElement(page, credentials);
 
@@ -277,7 +277,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         await authPage.getByRole("button", { name: "I'll verify later" }).click();
 
         await page.waitForSelector(".mx_MatrixChat");
-        const elementDeviceId = await page.evaluate(() => window.mxMatrixClientPeg.get().getDeviceId());
+        const elementDeviceId = await page.evaluate(() => window.mxMatrixClientPeg.get().getDeviceId()!);
 
         /* Create an encrypted room so the "Verify this device" toast appears */
         await app.client.createRoom({
@@ -301,7 +301,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         /* Check the toast for the incoming request */
         const toast = await getToast(page, "Verification requested");
         // it should contain the device ID of the requesting device
-        await expect(toast.getByText(`${aliceBotClient.credentials.deviceId} from `)).toBeVisible();
+        await expect(toast.getByText(`${aliceBotClient.credentials!.deviceId} from `)).toBeVisible();
         // Accept
         await toast.getByRole("button", { name: "Start verification" }).click();
 
@@ -311,7 +311,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         /* on the bot side, wait for the verifier to exist ... */
         const verifier = await awaitVerifier(botVerificationRequest);
         // ... confirm ...
-        void botVerificationRequest.evaluate((verificationRequest) => verificationRequest.verifier.verify());
+        void botVerificationRequest.evaluate((verificationRequest) => verificationRequest.verifier!.verify());
         // ... and then check the emoji match
         await doTwoWaySasVerification(page, verifier);
 
@@ -337,7 +337,7 @@ async function readQrCode(base: Locator) {
     >(async (img) => {
         // draw the image on a canvas
         const myCanvas = new OffscreenCanvas(img.width, img.height);
-        const ctx = myCanvas.getContext("2d");
+        const ctx = myCanvas.getContext("2d")!;
         ctx.drawImage(img, 0, 0);
 
         // read the image data
@@ -352,5 +352,5 @@ async function readQrCode(base: Locator) {
 
     // now we can decode the QR code.
     const result = jsQR(new Uint8ClampedArray(imageData.buffer), imageData.width, imageData.height);
-    return new Uint8Array(result.binaryData);
+    return new Uint8Array(result!.binaryData);
 }

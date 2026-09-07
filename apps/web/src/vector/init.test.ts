@@ -57,6 +57,27 @@ describe("loadApp", () => {
         await waitFor(() => expect(window.matrixChat).toBeInstanceOf(MatrixChat));
     });
 
+    it("should replace the previous app rather than leaving it mounted", async () => {
+        await loadApp({});
+        await waitFor(() => expect(window.matrixChat).toBeInstanceOf(MatrixChat));
+        const first = window.matrixChat;
+
+        // Count only what the second load does. We track the mounted/unmounted delta rather than raw
+        // mount count, as StrictMode's extra mount/unmount cycle cancels out in the difference.
+        const mounted = vi.spyOn(MatrixChat.prototype, "componentDidMount");
+        const unmounted = vi.spyOn(MatrixChat.prototype, "componentWillUnmount");
+        const delta = (): number => mounted.mock.calls.length - unmounted.mock.calls.length;
+
+        setUpMatrixChatDiv();
+        await loadApp({});
+        await waitFor(() => expect(window.matrixChat).not.toBe(first));
+
+        // The new app replaces the old one, so the number of live apps is unchanged. A second root over
+        // the same container would instead leave the first tree mounted against a detached node, with both
+        // copies still driven by the dispatcher and the client peg.
+        await waitFor(() => expect(delta()).toBe(0));
+    });
+
     it("should pass onTokenLoginCompleted which strips searchParams & fragment to MatrixChat", async () => {
         const spy = vi.spyOn(window.history, "replaceState");
 

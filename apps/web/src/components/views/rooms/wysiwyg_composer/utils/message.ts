@@ -35,6 +35,7 @@ import { runSlashCommand, shouldSendAnyway } from "../../../../../editor/command
 import { Action } from "../../../../../dispatcher/actions";
 import { addReplyToMessageContent } from "../../../../../utils/Reply";
 import { attachRelation, attachUrlPreviews } from "../../../../../utils/messages";
+import { linksIn } from "../../../../../utils/UrlUtils";
 
 export interface SendMessageParams {
     mxClient: MatrixClient;
@@ -114,7 +115,7 @@ export async function sendMessage(
 
     // if content is null, we haven't done any slash command processing, so generate some content
     content ??= await createMessageContent(message, isHTML, params);
-    attachUrlPreviews(urlPreviewSnapshot, content);
+    attachUrlPreviews(urlPreviewSnapshot, content, linksIn(message).size !== 0);
 
     // TODO replace emotion end of message ?
 
@@ -133,7 +134,7 @@ export async function sendMessage(
 
     const prom = doMaybeLocalRoomAction(
         roomId,
-        (actualRoomId: string) => mxClient.sendMessage(actualRoomId, threadId, content!),
+        (actualRoomId: string) => mxClient.sendMessage(actualRoomId, threadId, content),
         mxClient,
     );
 
@@ -159,7 +160,7 @@ export async function sendMessage(
         }
     });
     if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
-        prom.then((resp) => {
+        void prom.then((resp) => {
             sendRoundTripMetric(mxClient, roomId, resp.event_id);
         });
     }

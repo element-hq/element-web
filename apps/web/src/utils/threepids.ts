@@ -17,7 +17,7 @@ import { DirectoryMember, type Member, ThreepidMember } from "./direct-messages"
  * @returns {Promise<Member[]>} Same list with ThreepidMembers replaced by DirectoryMembers if succesfully resolved
  */
 export const resolveThreePids = async (members: Member[], client: MatrixClient): Promise<Member[]> => {
-    const threePidMembers = members.filter((m) => m instanceof ThreepidMember) as ThreepidMember[];
+    const threePidMembers = members.filter((m) => m instanceof ThreepidMember);
 
     // Nothing to do here
     if (threePidMembers.length === 0) return members;

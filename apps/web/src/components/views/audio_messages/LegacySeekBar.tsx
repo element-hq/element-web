@@ -72,24 +72,20 @@ export default class LegacySeekBar extends React.PureComponent<IProps, IState> {
     }
 
     public left(): void {
-        // noinspection JSIgnoredPromiseFromCall
-        this.props.playback.skipTo(this.props.playback.timeSeconds - ARROW_SKIP_SECONDS);
+        void this.props.playback.skipTo(this.props.playback.timeSeconds - ARROW_SKIP_SECONDS);
     }
 
     public right(): void {
-        // noinspection JSIgnoredPromiseFromCall
-        this.props.playback.skipTo(this.props.playback.timeSeconds + ARROW_SKIP_SECONDS);
+        void this.props.playback.skipTo(this.props.playback.timeSeconds + ARROW_SKIP_SECONDS);
     }
 
     private onChange = (ev: ChangeEvent<HTMLInputElement>): void => {
         // Thankfully, onChange is only called when the user changes the value, not when we
         // change the value on the component. We can use this as a reliable "skip to X" function.
-        //
-        // noinspection JSIgnoredPromiseFromCall
-        this.props.playback.skipTo(Number(ev.target.value) * this.props.playback.durationSeconds);
+        void this.props.playback.skipTo(Number(ev.target.value) * this.props.playback.durationSeconds);
     };
 
-    private onMouseDown = (event: React.MouseEvent<Element, MouseEvent>): void => {
+    private onMouseDown = (event: React.MouseEvent): void => {
         // do not propagate mouse down events, because these should be handled by the seekbar
         event.stopPropagation();
     };

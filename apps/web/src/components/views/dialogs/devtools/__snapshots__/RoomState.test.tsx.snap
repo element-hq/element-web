@@ -1,0 +1,45 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`<RoomStateExplorer /> > should render 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_DevTools_content"
+  >
+    <div
+      class="mx_Field mx_Field_input mx_TextInputDialog_input mx_DevTools_RoomStateExplorer_query"
+    >
+      <input
+        autocomplete="off"
+        id="mx_Field_1"
+        label="Filter results"
+        placeholder="Filter results"
+        size="64"
+        type="text"
+        value=""
+      />
+      <label
+        for="mx_Field_1"
+      >
+        Filter results
+      </label>
+    </div>
+    No results found
+  </div>
+  <div
+    class="mx_Dialog_buttons"
+  >
+    <button
+      class="mx_LegacyDialogButton"
+      type="button"
+    >
+      Back
+    </button>
+    <button
+      class="mx_LegacyDialogButton"
+      type="button"
+    >
+      Send custom state event
+    </button>
+  </div>
+</DocumentFragment>
+`;

@@ -46,7 +46,7 @@ test.describe("Retention", () => {
     test("should apply retention to a bunch of messages", async ({ app, homeserver, page, user, bot }) => {
         const roomId = await app.client.createRoom({
             name: "Test",
-            invite: [bot.credentials.userId],
+            invite: [bot.credentials!.userId],
             initial_state: [
                 {
                     state_key: "",
@@ -66,7 +66,7 @@ test.describe("Retention", () => {
     test("retention rules should apply after restart", async ({ app, bot, page }) => {
         const roomId = await app.client.createRoom({
             name: "Test",
-            invite: [bot.credentials.userId],
+            invite: [bot.credentials!.userId],
         });
         await bot.joinRoom(roomId);
         await app.viewRoomByName("Test");
@@ -102,7 +102,7 @@ test.describe("Retention", () => {
         const currentTime = new Date();
         const roomId = await app.client.createRoom({
             name: "Test",
-            invite: [bot.credentials.userId],
+            invite: [bot.credentials!.userId],
             initial_state: [
                 {
                     state_key: "",

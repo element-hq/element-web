@@ -41,7 +41,7 @@ export class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             <BaseAvatar
                 url={
                     this.props.member.getMxcAvatarUrl()
-                        ? mediaFromMxc(this.props.member.getMxcAvatarUrl()!).getSquareThumbnailHttp(
+                        ? mediaFromMxc(this.props.member.getMxcAvatarUrl()).getSquareThumbnailHttp(
                               parseInt(avatarSize, 10),
                           )
                         : null

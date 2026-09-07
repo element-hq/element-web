@@ -64,7 +64,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
     const sendThreadedReadReceipt = async (
         app: ElementAppPage,
         eventResponse: ISendEventResponse,
-        threadRootEventResponse: ISendEventResponse = undefined,
+        threadRootEventResponse?: ISendEventResponse,
     ) => {
         await app.client.sendReadReceipt(
             await fakeEventFromSent(app, eventResponse, threadRootEventResponse?.event_id),
@@ -93,10 +93,10 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
          */
         selectedRoomId = await app.client.createRoom({ name: selectedRoomName });
         // Invite the bot to Other room
-        otherRoomId = await app.client.createRoom({ name: otherRoomName, invite: [bot.credentials.userId] });
+        otherRoomId = await app.client.createRoom({ name: otherRoomName, invite: [bot.credentials!.userId] });
 
         await page.goto(`/#/room/${otherRoomId}`);
-        await expect(page.getByText(`${bot.credentials.displayName} joined the room`)).toBeVisible();
+        await expect(page.getByText(`${bot.credentials!.displayName} joined the room`)).toBeVisible();
 
         // Then go into Selected room
         await page.goto(`/#/room/${selectedRoomId}`);
@@ -120,11 +120,11 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
         await sendUnthreadedReadReceipt(app, main2);
 
         // (So the room has no unreads)
-        await expect(page.getByLabel(`${otherRoomName}`)).toBeVisible();
+        await expect(page.getByLabel(otherRoomName)).toBeVisible();
 
         // And we persuade the app to persist its state to indexeddb by reloading and waiting
         await page.reload();
-        await expect(page.getByLabel(`${selectedRoomName}`)).toBeVisible();
+        await expect(page.getByLabel(selectedRoomName)).toBeVisible();
 
         // And we reload again, fetching the persisted state FROM indexeddb
         await page.reload();
@@ -132,7 +132,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
         // Then the room is read, because the persisted state correctly remembers both
         // receipts. (In #24629, the unthreaded receipt overwrote the main thread one,
         // meaning that the room still said it had unread messages.)
-        await expect(page.getByLabel(`${otherRoomName}`)).toBeVisible();
+        await expect(page.getByLabel(otherRoomName)).toBeVisible();
         await expect(page.getByLabel(`${otherRoomName} Unread messages.`)).not.toBeVisible();
     });
 
@@ -172,7 +172,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
         await sendThreadedReadReceipt(app, main3);
 
         // Then the room has no unreads
-        await expect(page.getByLabel(`${otherRoomName}`)).toBeVisible();
+        await expect(page.getByLabel(otherRoomName)).toBeVisible();
     });
 
     test("Recognises unread messages on other thread after receiving a receipt for earlier ones", async ({
@@ -210,7 +210,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
         await sendThreadedReadReceipt(app, thread1b, main1);
 
         // Then the room has no unreads
-        await expect(page.getByLabel(`${otherRoomName}`)).toBeVisible();
+        await expect(page.getByLabel(otherRoomName)).toBeVisible();
         await util.goTo({ name: otherRoomName, roomId: otherRoomId });
         await util.assertReadThread("Message 1");
     });
@@ -235,7 +235,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
         // thread. The one in main is read because the unthreaded
         // receipt is for a later event. The room should therefore be
         // read, and the thread unread.
-        await expect(page.getByLabel(`${otherRoomName}`)).toBeVisible();
+        await expect(page.getByLabel(otherRoomName)).toBeVisible();
         await util.goTo({ name: otherRoomName, roomId: otherRoomId });
         await util.assertUnreadThread("Message 1");
     });
@@ -287,7 +287,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
             sendMessageResponses.push(await sendMessage(bot, i));
         }
 
-        const lastMessageId = sendMessageResponses.at(-1).event_id;
+        const lastMessageId = sendMessageResponses.at(-1)!.event_id;
         const uriEncodedLastMessageId = encodeURIComponent(lastMessageId);
 
         // wait until all messages have been received
@@ -330,7 +330,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
 
         const readMarkersRequest2 = await readMarkersRequestPromise2;
         expect(readMarkersRequest2.postDataJSON()).toEqual({
-            ["m.fully_read"]: sendMessageResponses.at(-1).event_id,
+            ["m.fully_read"]: sendMessageResponses.at(-1)!.event_id,
         });
     });
 });

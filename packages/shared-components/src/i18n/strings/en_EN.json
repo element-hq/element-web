@@ -4,6 +4,7 @@
     },
     "action": {
         "back": "Back",
+        "cancel": "Cancel",
         "click": "Click",
         "close": "Close",
         "collapse": "Collapse",
@@ -28,6 +29,7 @@
         "reply": "Reply",
         "reply_in_thread": "Reply in thread",
         "retry": "Retry",
+        "save": "Save",
         "search": "Search",
         "start_chat": "Start chat",
         "unpin": "Unpin",
@@ -41,8 +43,50 @@
         "preferences": "Preferences",
         "state_encryption_enabled": "Experimental state encryption enabled"
     },
+    "composer": {
+        "url_preview": {
+            "clear_all": "Clear all",
+            "collapse": "Collapse URL previews",
+            "failed": "Failed to fetch preview",
+            "loading": "Fetching preview…",
+            "n_links": {
+                "one": "%(count)s link",
+                "other": "%(count)s links"
+            },
+            "remove": "Remove URL preview"
+        }
+    },
     "devtools": {
+        "custom_themes": {
+            "add": "Add custom theme",
+            "downloading": "Downloading custom theme…",
+            "error_already_installed": "A theme with that name is already installed.",
+            "error_downloading": "Error downloading theme",
+            "error_invalid": "Invalid theme schema.",
+            "error_save_failed": "Failed to save the change. It may still complete in the background.",
+            "help": "Enter the URL of a custom theme you want to apply.",
+            "installed_heading": "Installed custom themes",
+            "refresh": "Re-download theme",
+            "url_label": "Custom theme URL"
+        },
         "toggle_event": "toggle event"
+    },
+    "emoji": {
+        "categories": "Categories",
+        "category_activities": "Activities",
+        "category_animals_nature": "Animals & Nature",
+        "category_flags": "Flags",
+        "category_food_drink": "Food & Drink",
+        "category_frequently_used": "Frequently Used",
+        "category_objects": "Objects",
+        "category_smileys_people": "Smileys & People",
+        "category_symbols": "Symbols",
+        "category_travel_places": "Travel & Places",
+        "quick_reactions": "Quick Reactions"
+    },
+    "emoji_picker": {
+        "cancel_search_label": "Cancel search",
+        "emoji_picker": "Emoji picker"
     },
     "keyboard": {
         "shift": "Shift"
@@ -64,7 +108,9 @@
     "notifications": {
         "all_messages": "All messages",
         "default_settings": "Match default settings",
+        "mark_all_read": "Mark all as read",
         "mentions_keywords": "Mentions and keywords",
+        "message_didnt_send": "Message didn't send. Click for info.",
         "mute_room": "Mute room"
     },
     "release_announcement": {
@@ -81,9 +127,12 @@
             "shared": "New members see history",
             "world_readable": "Anyone can see history"
         },
+        "jump_read_marker": "Jump to first unread message.",
+        "jump_to_bottom_button": "Scroll to most recent messages",
         "jump_to_date": "Jump to date",
         "jump_to_date_beginning": "The beginning of the room",
         "jump_to_date_prompt": "Pick a date to jump to",
+        "knock_sent": "Request to join sent",
         "pinned_message_badge": "Pinned message",
         "status_bar": {
             "delete_all": "Delete all",
@@ -175,6 +224,10 @@
         },
         "room_options": "Room Options",
         "section_created": "Section created",
+        "section_creation": {
+            "description": "Sections are only for you",
+            "label": "Section name"
+        },
         "section_header": {
             "edit_section": "Edit section",
             "more_options": "More options",
@@ -199,6 +252,8 @@
         "set_status": {
             "away": "Away",
             "be_right_back": "Be right back",
+            "choose_emoji": "Choose Emoji",
+            "custom": "Custom…",
             "focus_time": "Focus Time",
             "in_a_meeting": "In a meeting",
             "on_the_road": "On the road",

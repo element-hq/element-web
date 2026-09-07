@@ -29,13 +29,19 @@ button.preview {
     }
 
     .preview {
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        border-radius: 8px;
-        border: none;
         flex-shrink: 0;
         aspect-ratio: 1;
+        height: 2.7em;
+
+        button {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 8px;
+            border: none;
+            height: 100%;
+            aspect-ratio: 1;
+        }
     }
 
     .siteName span {

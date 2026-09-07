@@ -33,8 +33,8 @@ test.describe("Collapsible Room list", () => {
         const boundingBox = await leftPanelLocator.boundingBox();
 
         // Move mouse 2px to the right of the left-panel, this should be region that the user drags to resize the panel.
-        const mouseX = boundingBox.x + boundingBox.width + 2;
-        const mouseY = boundingBox.y + boundingBox.height / 2;
+        const mouseX = boundingBox!.x + boundingBox!.width + 2;
+        const mouseY = boundingBox!.y + boundingBox!.height / 2;
 
         await page.mouse.move(mouseX, mouseY);
         await page.mouse.down();
@@ -50,12 +50,12 @@ test.describe("Collapsible Room list", () => {
         // Contract the panel
         let previousBoundingBox = await resize(page, -50);
         let currentBoundingBox = await leftPanelLocator.boundingBox();
-        expect(currentBoundingBox.width).toBeCloseTo(previousBoundingBox.width - 50, 0);
+        expect(currentBoundingBox!.width).toBeCloseTo(previousBoundingBox!.width - 50, 0);
 
         // Expand the panel
         previousBoundingBox = await resize(page, 30);
         currentBoundingBox = await leftPanelLocator.boundingBox();
-        expect(currentBoundingBox.width).toBeCloseTo(previousBoundingBox.width + 30, 0);
+        expect(currentBoundingBox!.width).toBeCloseTo(previousBoundingBox!.width + 30, 0);
     });
 
     test(
@@ -67,7 +67,7 @@ test.describe("Collapsible Room list", () => {
             // Collapse the panel
             await resize(page, -300);
             let currentBoundingBox = await leftPanelLocator.boundingBox();
-            expect(currentBoundingBox.width).toStrictEqual(0);
+            expect(currentBoundingBox!.width).toStrictEqual(0);
 
             // Expect te separator to be shown
             const separator = page.getByRole("separator", { name: "Click or drag to expand" });
@@ -77,19 +77,19 @@ test.describe("Collapsible Room list", () => {
             // Should be possible to expand by clicking on the separator
             await separator.click();
             currentBoundingBox = await leftPanelLocator.boundingBox();
-            expect(currentBoundingBox.width).toBeGreaterThan(365);
+            expect(currentBoundingBox!.width).toBeGreaterThan(365);
 
             // Collapse the panel again
             await resize(page, -300);
 
             // Check that the panel can be expanded by dragging the separator
             const separatorBoundingBox = await separator.boundingBox();
-            const mouseX = separatorBoundingBox.x + separatorBoundingBox.width / 2;
-            const mouseY = separatorBoundingBox.y + separatorBoundingBox.height / 2;
+            const mouseX = separatorBoundingBox!.x + separatorBoundingBox!.width / 2;
+            const mouseY = separatorBoundingBox!.y + separatorBoundingBox!.height / 2;
             await page.mouse.move(mouseX, mouseY);
             await page.mouse.down();
             await page.mouse.move(mouseX + 400, mouseY);
-            expect(currentBoundingBox.width).toBeGreaterThan(365);
+            expect(currentBoundingBox!.width).toBeGreaterThan(365);
         },
     );
 });

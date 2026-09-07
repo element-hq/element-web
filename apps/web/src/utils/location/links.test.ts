@@ -28,7 +28,7 @@ describe("createMapSiteLinkFromEvent", () => {
 
     it("returns OpenStreetMap link if event contains m.location with valid uri", () => {
         expect(createMapSiteLinkFromEvent(makeLocationEvent("geo:51.5076,-0.1276"))).toEqual(
-            "https://www.openstreetmap.org/" + "?mlat=51.5076&mlon=-0.1276" + "#map=16/51.5076/-0.1276",
+            "https://www.openstreetmap.org/?mlat=51.5076&mlon=-0.1276#map=16/51.5076/-0.1276",
         );
     });
 
@@ -38,7 +38,7 @@ describe("createMapSiteLinkFromEvent", () => {
 
     it("returns OpenStreetMap link if event contains geo_uri", () => {
         expect(createMapSiteLinkFromEvent(makeLegacyLocationEvent("geo:51.5076,-0.1276"))).toEqual(
-            "https://www.openstreetmap.org/" + "?mlat=51.5076&mlon=-0.1276" + "#map=16/51.5076/-0.1276",
+            "https://www.openstreetmap.org/?mlat=51.5076&mlon=-0.1276#map=16/51.5076/-0.1276",
         );
     });
 

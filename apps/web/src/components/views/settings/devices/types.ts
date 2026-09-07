@@ -8,8 +8,6 @@ Please see LICENSE files in the repository root for full details.
 
 import { type IMyDevice } from "matrix-js-sdk/src/matrix";
 
-import { type ExtendedDeviceInformation } from "../../../../utils/device/parseUserAgent";
-
 export type DeviceWithVerification = IMyDevice & {
     /**
      * `null` if the device is unknown or has not published encryption keys; otherwise a boolean
@@ -23,7 +21,7 @@ export type ExtendedDeviceAppInfo = {
     appVersion?: string;
     url?: string;
 };
-export type ExtendedDevice = DeviceWithVerification & ExtendedDeviceAppInfo & ExtendedDeviceInformation;
+export type ExtendedDevice = DeviceWithVerification & ExtendedDeviceAppInfo;
 export type DevicesDictionary = Record<ExtendedDevice["device_id"], ExtendedDevice>;
 
 export enum DeviceSecurityVariation {

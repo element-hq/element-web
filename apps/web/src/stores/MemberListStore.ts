@@ -145,7 +145,7 @@ export class MemberListStore {
             return true;
         }
         const enablePresenceByHsUrl = SdkConfig.get("enable_presence_by_hs_url");
-        return enablePresenceByHsUrl?.[this.stores.client!.baseUrl] ?? true;
+        return enablePresenceByHsUrl?.[this.stores.client.baseUrl] ?? true;
     }
 
     /**

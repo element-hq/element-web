@@ -95,7 +95,7 @@ export function formatList(items: ReactNode[], itemLimit = items.length, include
     }
 
     if (items.every((e) => typeof e === "string")) {
-        return formatter.format(items as string[]);
+        return formatter.format(items);
     }
 
     const parts = formatter.formatToParts(items.map((_, i) => `${i}`));

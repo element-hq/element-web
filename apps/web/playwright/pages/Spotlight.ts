@@ -15,7 +15,7 @@ export enum Filter {
 }
 
 export class Spotlight {
-    private root: Locator;
+    private root!: Locator;
 
     constructor(private page: Page) {}
 

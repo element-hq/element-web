@@ -40,7 +40,7 @@ import PlatformSettingsHandler from "./handlers/PlatformSettingsHandler";
 import ReloadOnChangeController from "./controllers/ReloadOnChangeController";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { MediaPreviewValue } from "../@types/media_preview";
-import SettingController from "./controllers/SettingController.ts";
+import SettingController, { getSettingDisabled, toControllers } from "./controllers/SettingController.ts";
 
 // Convert the settings to easier to manage objects for the handlers
 const defaultSettings: Record<string, any> = {};
@@ -125,6 +125,7 @@ type HandlerMap = Partial<{
  * feature may be reported as disabled even though a user has specifically requested it
  * be enabled).
  */
+// oxlint-disable-next-line typescript/no-extraneous-class
 export default class SettingsStore {
     // We support watching settings for changes, and do this by tracking which callbacks have
     // been given to us. We end up returning the callbackRef to the caller so they can unsubscribe
@@ -263,7 +264,7 @@ export default class SettingsStore {
             if (roomId === null) {
                 // Unregister all existing watchers and register the new one
                 rooms.forEach((roomId) => {
-                    SettingsStore.unwatchSetting(this.monitors.get(settingName)!.get(roomId)!);
+                    SettingsStore.unwatchSetting(this.monitors.get(settingName)!.get(roomId));
                 });
                 this.monitors.get(settingName)!.clear();
                 registerWatcher();
@@ -334,10 +335,13 @@ export default class SettingsStore {
             SettingsStore.isFeature(settingName) &&
             SettingsStore.getValueAt(SettingLevel.CONFIG, settingName, null, true, true) !== false
         ) {
-            const betaInfo = SETTINGS[settingName]!.betaInfo;
+            const betaInfo = SETTINGS[settingName].betaInfo;
             if (betaInfo) {
                 betaInfo.requiresRefresh =
-                    betaInfo.requiresRefresh ?? SETTINGS[settingName]!.controller instanceof ReloadOnChangeController;
+                    betaInfo.requiresRefresh ??
+                    toControllers(SETTINGS[settingName].controller).some(
+                        (controller) => controller instanceof ReloadOnChangeController,
+                    );
             }
             return betaInfo;
         }
@@ -357,7 +361,7 @@ export default class SettingsStore {
      * @returns {string} The reason the setting is disabled.
      */
     public static disabledMessage(settingName: SettingKey): string | undefined {
-        const disabled = SETTINGS[settingName].controller?.settingDisabled;
+        const disabled = getSettingDisabled(SETTINGS[settingName].controller);
         return typeof disabled === "string" ? disabled : undefined;
     }
 
@@ -480,9 +484,12 @@ export default class SettingsStore {
     ): Settings[S]["default"] {
         let resultingValue = calculatedValue;
 
-        if (setting.controller) {
-            const actualValue = setting.controller.getValueOverride(level, roomId, calculatedValue, calculatedAtLevel);
-            if (actualValue !== undefined && actualValue !== null) resultingValue = actualValue;
+        for (const controller of toControllers(setting.controller)) {
+            const actualValue = controller.getValueOverride(level, roomId, calculatedValue, calculatedAtLevel);
+            if (actualValue !== undefined && actualValue !== null) {
+                resultingValue = actualValue;
+                break;
+            }
         }
 
         if (setting.invertedSettingName) resultingValue = !resultingValue;
@@ -531,13 +538,18 @@ export default class SettingsStore {
             throw new Error("User cannot set " + finalSettingName + " at " + level + " in " + roomId);
         }
 
-        if (setting.controller && !(await setting.controller.beforeChange(level, roomId, value))) {
-            return; // controller says no
+        const controllers = toControllers(setting.controller);
+        for (const controller of controllers) {
+            if (!(await controller.beforeChange(level, roomId, value))) {
+                return; // controller says no
+            }
         }
 
         await handler.setValue(finalSettingName, roomId, value);
 
-        setting.controller?.onChange(level, roomId, value);
+        for (const controller of controllers) {
+            controller.onChange(level, roomId, value);
+        }
     }
 
     /**
@@ -565,7 +577,7 @@ export default class SettingsStore {
             throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
         }
 
-        if (setting.controller?.settingDisabled) {
+        if (getSettingDisabled(setting.controller)) {
             return false;
         }
 
@@ -673,7 +685,7 @@ export default class SettingsStore {
                 .filter((k) => k.startsWith("mx_ShowImage_"))
                 .map((k) => [k.slice("mx_ShowImage_".length), true]),
         );
-        this.setValue("showMediaEventIds", null, SettingLevel.DEVICE, newValue);
+        void this.setValue("showMediaEventIds", null, SettingLevel.DEVICE, newValue);
 
         localStorage.setItem(MIGRATION_DONE_FLAG, "true");
     }
@@ -700,7 +712,7 @@ export default class SettingsStore {
         const showAvatarsOnInvites = handler.getValue("showAvatarsOnInvites", null);
 
         if (typeof showImages === "boolean" || typeof showAvatarsOnInvites === "boolean") {
-            this.setValue("mediaPreviewConfig", null, SettingLevel.ACCOUNT, {
+            await this.setValue("mediaPreviewConfig", null, SettingLevel.ACCOUNT, {
                 invite_avatars: showAvatarsOnInvites === false ? MediaPreviewValue.Off : MediaPreviewValue.On,
                 media_previews: showImages === false ? MediaPreviewValue.Off : MediaPreviewValue.On,
             });
@@ -868,8 +880,7 @@ export default class SettingsStore {
 
     private static getHandler(settingName: SettingKey, level: SettingLevel): SettingsHandler | null {
         const handlers = SettingsStore.getHandlers(settingName);
-        if (!handlers[level]) return null;
-        return handlers[level]!;
+        return handlers[level] ?? null;
     }
 
     private static getHandlers(settingName: SettingKey): HandlerMap {

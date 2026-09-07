@@ -178,11 +178,16 @@ export class UrlPreviewGroupViewModel
         const content = this.props.mxEvent.getContent();
         if (content.msgtype === MsgType.Text && this.props.urlPreviewBundleEnabled) {
             const messageContent = content as RoomMessageEventContent;
+            const bundledPreviews = messageContent[BUNDLED_LINK_PREVIEWS];
 
-            if (messageContent[BUNDLED_LINK_PREVIEWS] !== undefined) {
-                previews = messageContent[BUNDLED_LINK_PREVIEWS]
-                    .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
-                    .map((preview) => this.fetcher.previewFromBundle(preview));
+            if (bundledPreviews && Array.isArray(bundledPreviews)) {
+                previews = (
+                    await Promise.all(
+                        bundledPreviews
+                            .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
+                            .map((preview) => this.fetcher.previewFromBundle(preview, content.body, loadMedia)),
+                    )
+                ).filter((p) => !!p);
             }
         }
 

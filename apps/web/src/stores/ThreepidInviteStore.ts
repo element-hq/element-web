@@ -6,6 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// oxlint-disable-next-line no-restricted-imports
 import EventEmitter from "events";
 import { base32 } from "rfc4648";
 import { type RoomType } from "matrix-js-sdk/src/matrix";
@@ -63,7 +64,7 @@ export default class ThreepidInviteStore extends EventEmitter {
     }
 
     public storeInvite(roomId: string, wireInvite: IThreepidInviteWireFormat): IThreepidInvite {
-        const invite = <IPersistedThreepidInvite>{ roomId, ...wireInvite };
+        const invite: IPersistedThreepidInvite = { roomId, ...wireInvite };
         const id = this.generateIdOf(invite);
         localStorage.setItem(`${STORAGE_PREFIX}${id}`, JSON.stringify(invite));
         return this.translateInvite(invite);

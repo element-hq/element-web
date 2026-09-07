@@ -32,6 +32,7 @@ const ORDERED_LANDMARKS = [
  * The landmarks are cycled through in the following order:
  * ACTIVE_SPACE_BUTTON <-> ROOM_SEARCH <-> ROOM_LIST <-> MESSAGE_COMPOSER/HOME <-> ACTIVE_SPACE_BUTTON
  */
+// oxlint-disable-next-line typescript/no-extraneous-class
 export class LandmarkNavigation {
     /**
      * Get the next/previous landmark that must be focused from a given landmark

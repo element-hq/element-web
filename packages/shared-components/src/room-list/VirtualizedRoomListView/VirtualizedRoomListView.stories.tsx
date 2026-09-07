@@ -41,8 +41,8 @@ const RoomListWrapperImpl = ({
     renderAvatar: renderAvatarProp,
     changeRoomSection,
     changeSectionOrder,
-    onSectionDragStart,
-    onSectionDragEnd,
+    onSectionOrRoomDragStart,
+    onSectionOrRoomDragEnd,
     ...rest
 }: RoomListStoryProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {
@@ -58,8 +58,8 @@ const RoomListWrapperImpl = ({
         setScrollToIndex,
         changeRoomSection,
         changeSectionOrder,
-        onSectionDragStart,
-        onSectionDragEnd,
+        onSectionOrRoomDragStart,
+        onSectionOrRoomDragEnd,
     });
 
     return (
@@ -104,8 +104,8 @@ const meta = {
         setScrollToIndex: fn(),
         changeRoomSection: fn(),
         changeSectionOrder: fn(),
-        onSectionDragStart: fn(),
-        onSectionDragEnd: fn(),
+        onSectionOrRoomDragStart: fn(),
+        onSectionOrRoomDragEnd: fn(),
     },
     parameters: {
         design: {

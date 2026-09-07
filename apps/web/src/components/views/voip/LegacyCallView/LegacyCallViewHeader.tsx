@@ -72,7 +72,7 @@ const SecondaryCallInfo: React.FC<ISecondaryCallInfoProps> = ({ callRoom }) => {
 interface LegacyCallViewHeaderProps {
     pipMode?: boolean;
     callRooms: [Room, Room | null];
-    onPipMouseDown?: (event: React.MouseEvent<Element, MouseEvent>) => void;
+    onPipMouseDown?: (event: React.MouseEvent) => void;
     onExpand?: () => void;
     onPin?: () => void;
     onMaximize?: () => void;

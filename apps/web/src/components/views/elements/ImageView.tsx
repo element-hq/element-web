@@ -315,7 +315,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                 ev.preventDefault();
                 ev.stopPropagation();
                 if (this.downloadFunction) {
-                    this.downloadFunction();
+                    void this.downloadFunction();
                 }
                 break;
         }
@@ -459,7 +459,7 @@ export default class ImageView extends React.Component<IProps, IState> {
 
         let info: JSX.Element | undefined;
         if (showEventMeta) {
-            const mxEvent = this.props.mxEvent!;
+            const mxEvent = this.props.mxEvent;
             const showTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
             let permalink = "#";
             if (this.props.permalinkCreator) {

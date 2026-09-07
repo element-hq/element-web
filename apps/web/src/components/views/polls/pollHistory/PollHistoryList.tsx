@@ -129,13 +129,13 @@ export const PollHistoryList: React.FC<PollHistoryListProps> = ({
                     {pollStartEvents.map((pollStartEvent) =>
                         filter === "ACTIVE" ? (
                             <PollListItem
-                                key={pollStartEvent.getId()!}
+                                key={pollStartEvent.getId()}
                                 event={pollStartEvent}
                                 onClick={() => onItemClick(pollStartEvent.getId()!)}
                             />
                         ) : (
                             <PollListItemEnded
-                                key={pollStartEvent.getId()!}
+                                key={pollStartEvent.getId()}
                                 event={pollStartEvent}
                                 poll={polls.get(pollStartEvent.getId()!)!}
                                 onClick={() => onItemClick(pollStartEvent.getId()!)}

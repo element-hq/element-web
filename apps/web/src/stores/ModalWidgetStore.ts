@@ -24,7 +24,7 @@ interface IState {
 export class ModalWidgetStore extends AsyncStoreWithClient<IState> {
     private static readonly internalInstance = (() => {
         const instance = new ModalWidgetStore();
-        instance.start();
+        void instance.start();
         return instance;
     })();
     private modalInstance: IHandle<typeof ModalWidgetDialog> | null = null;
@@ -66,7 +66,7 @@ export class ModalWidgetStore extends AsyncStoreWithClient<IState> {
             /* priority = */ false,
             /* static = */ true,
         );
-        this.modalInstance!.finished.then(([success, data]) => {
+        void this.modalInstance.finished.then(([success, data]) => {
             this.closeModalWidget(sourceWidget, widgetRoomId, success && data ? data : { "m.exited": true });
 
             this.openSourceWidgetId = null;
@@ -92,7 +92,7 @@ export class ModalWidgetStore extends AsyncStoreWithClient<IState> {
                 logger.error("No source widget API for modal widget");
                 return;
             }
-            sourceMessaging.widgetApi.notifyModalWidgetClose(data);
+            void sourceMessaging.widgetApi.notifyModalWidgetClose(data);
         }
     };
 }

@@ -21,7 +21,7 @@ describe("theme", () => {
         let lightCustomTheme: HTMLStyleElement;
 
         let spyQuerySelectorAll: jest.MockInstance<NodeListOf<Element>, [selectors: string]>;
-        let spyClassList: jest.SpyInstance<void, string[], any>;
+        let spyClassList: jest.SpyInstance<void, string[]>;
 
         beforeAll(() => {
             const meta = document.createElement("meta");

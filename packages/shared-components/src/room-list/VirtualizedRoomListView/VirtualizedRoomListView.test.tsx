@@ -94,8 +94,8 @@ describe("<VirtualizedRoomListView />", () => {
             // reach them, so explicitly reset call history for the spies under test.
             (Sections.args.changeRoomSection as any).mockClear?.();
             (Sections.args.changeSectionOrder as any).mockClear?.();
-            (Sections.args.onSectionDragStart as any).mockClear?.();
-            (Sections.args.onSectionDragEnd as any).mockClear?.();
+            (Sections.args.onSectionOrRoomDragStart as any).mockClear?.();
+            (Sections.args.onSectionOrRoomDragEnd as any).mockClear?.();
         });
 
         it("should call changeRoomSection when drag ends successfully", async () => {
@@ -192,8 +192,56 @@ describe("<VirtualizedRoomListView />", () => {
             await waitFor(() => {
                 expect(Sections.args.changeSectionOrder).toHaveBeenCalledWith("favourites", "low-priority");
             });
-            expect(Sections.args.onSectionDragStart).toHaveBeenCalled();
-            expect(Sections.args.onSectionDragEnd).toHaveBeenCalled();
+            expect(Sections.args.onSectionOrRoomDragStart).toHaveBeenCalled();
+            expect(Sections.args.onSectionOrRoomDragEnd).toHaveBeenCalled();
+        });
+    });
+
+    describe("pointer drag activation", () => {
+        beforeEach(() => {
+            (Sections.args.changeRoomSection as any).mockClear?.();
+        });
+
+        it("does not start a drag when a finger moves (touch scrolling the list)", async () => {
+            // For touch, dragging only activates after a 250ms hold; moving the finger first aborts
+            // it so the list scrolls instead of dragging a room. Simulate a finger press that moves
+            // immediately (as when scrolling) and assert no drag ever starts.
+            const user = userEvent.setup();
+            renderWithMockContext(<Sections />);
+
+            const status = screen.getByRole("status");
+            const roomButton = await screen.findByRole("button", { name: "Open room General" });
+
+            await user.pointer([
+                { keys: "[TouchA>]", target: roomButton, coords: { x: 20, y: 20 } },
+                { pointerName: "TouchA", coords: { x: 20, y: 140 } },
+                { keys: "[/TouchA]" },
+            ]);
+
+            expect(status).toHaveTextContent("");
+            expect(Sections.args.changeRoomSection).not.toHaveBeenCalled();
+        });
+
+        it("starts a drag when the mouse moves past the activation distance", async () => {
+            // For mouse, dragging activates as soon as the pointer moves past 5px, so the same
+            // press-and-move gesture that scrolls on touch drags the room into another section.
+            const user = userEvent.setup();
+            renderWithMockContext(<Sections />);
+
+            const status = screen.getByRole("status");
+            const roomButton = await screen.findByRole("button", { name: "Open room General" });
+
+            await user.pointer([
+                { keys: "[MouseLeft>]", target: roomButton, coords: { x: 20, y: 20 } },
+                { coords: { x: 20, y: 140 } },
+            ]);
+
+            // The drag has activated: the live region reflects the ongoing drag.
+            await waitFor(() => expect(status).toHaveTextContent("General"));
+
+            await user.pointer({ keys: "[/MouseLeft]" }); // release to drop
+
+            await waitFor(() => expect(Sections.args.changeRoomSection).toHaveBeenCalled());
         });
     });
 

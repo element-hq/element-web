@@ -31,9 +31,9 @@ export class I18nApi implements II18nApi {
         const langs: Record<string, Record<string, string>> = {};
 
         for (const key in translations) {
-            for (const lang in translations[key as keyof Translations]) {
+            for (const lang in translations[key]) {
                 langs[lang] = langs[lang] || {};
-                langs[lang][key] = translations[key as keyof Translations]![lang];
+                langs[lang][key] = translations[key][lang];
             }
         }
 
@@ -53,7 +53,7 @@ export class I18nApi implements II18nApi {
     public translate(this: void, key: TranslationKey, variables: Variables | undefined, tags: Tags): React.ReactNode;
     public translate(this: void, key: TranslationKey, variables?: Variables, tags?: Tags): React.ReactNode | string {
         if (tags) return _t(key, variables, tags);
-        return _t(key, variables as Variables);
+        return _t(key, variables!);
     }
 
     public humanizeTime = (timeMillis: number): string => humanizeTime(timeMillis, this);

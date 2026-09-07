@@ -109,6 +109,24 @@ describe("editor/deserialize", function () {
             expect(parts.length).toBe(1);
             expect(parts[0]).toStrictEqual({ type: "plain", text: "click [this](http://example.com/)!" });
         });
+        it("hyperlink without a trailing slash keeps the original URL", function () {
+            const html = 'click <a href="http://example.com">this</a>!';
+            const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
+            expect(parts.length).toBe(1);
+            expect(parts[0]).toStrictEqual({ type: "plain", text: "click [this](http://example.com)!" });
+        });
+        it("hyperlink with a relative URL keeps the original URL", function () {
+            const html = 'click <a href="/local/path">this</a>!';
+            const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
+            expect(parts.length).toBe(1);
+            expect(parts[0]).toStrictEqual({ type: "plain", text: "click [this](/local/path)!" });
+        });
+        it("autolinked URL is not rewritten as a markdown link", function () {
+            const html = '<a href="http://example.com">http://example.com</a>';
+            const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
+            expect(parts.length).toBe(1);
+            expect(parts[0]).toStrictEqual({ type: "plain", text: "http://example.com" });
+        });
         it("multiple lines with paragraphs", function () {
             const html = "<p>hello</p><p>world</p>";
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
@@ -316,7 +334,7 @@ describe("editor/deserialize", function () {
         });
         it("escapes backticks in code blocks", () => {
             const html =
-                "<p><code>this → ` is a backtick</code></p>" + "<pre><code>and here are 3 of them:\n```</code></pre>";
+                "<p><code>this → ` is a backtick</code></p><pre><code>and here are 3 of them:\n```</code></pre>";
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
             expect(parts).toMatchSnapshot();
         });

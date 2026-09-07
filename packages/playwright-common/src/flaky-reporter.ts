@@ -40,7 +40,7 @@ class FlakyReporter implements Reporter {
 
     public onTestEnd(test: TestCase): void {
         // Ignores flakes on Dendrite and Pinecone as they have their own flakes we do not track
-        if (["Dendrite", "Pinecone"].includes(test.parent.project()!.name!)) return;
+        if (["Dendrite", "Pinecone"].includes(test.parent.project()!.name)) return;
 
         if (test.outcome() === "flaky") {
             const failures: string[] = [];

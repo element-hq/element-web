@@ -56,7 +56,7 @@ async function waitForRoomWidget(client: Client, widgetId: string, roomId: strin
                     }
                 }
 
-                const room = matrixClient.getRoom(roomId);
+                const room = matrixClient.getRoom(roomId)!;
 
                 const startingWidgetEvents = room.currentState.getStateEvents("im.vector.modular.widgets");
                 if (eventsInIntendedState(startingWidgetEvents)) {
@@ -97,14 +97,14 @@ test.describe("Widget PIP", () => {
         test(`should be closed on ${userRemove}`, async ({ page, app, bot, user }) => {
             const roomId = await app.client.createRoom({
                 name: ROOM_NAME,
-                invite: [bot.credentials.userId],
+                invite: [bot.credentials!.userId],
             });
 
             // sets bot to Admin and user to Moderator
             await app.client.sendStateEvent(roomId, "m.room.power_levels", {
                 users: {
                     [user.userId]: 50,
-                    [bot.credentials.userId]: 100,
+                    [bot.credentials!.userId]: 100,
                 },
             });
 

@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Էմոջիների ընտրիչ",
         "jump_first_invite": "Անցնել առաջին հրավերին:",
         "message_composer": "Հաղորդագրություն կազմող",
         "n_unread_messages": {
@@ -490,7 +489,6 @@
         "message_layout": "Հաղորդագրության դասավորություն",
         "message_timestamp_invalid": "Անվավեր ժամանակային դրոշմանիշ",
         "microphone": "Խոսափող",
-        "model": "Մոդել",
         "moderation_and_safety": "Վերահսկողություն և անվտանգություն",
         "modern": "Ժամանակակից",
         "mute": "Անջատել ձայնը",
@@ -857,22 +855,6 @@
     },
     "dialog_close_label": "Փակել երկխոսությունը",
     "download_completed": "Ներբեռնումն ավարտվեց",
-    "emoji": {
-        "categories": "Բաժիններ",
-        "category_activities": "Գործունեություն",
-        "category_animals_nature": "Կենդանիներ և բնություն",
-        "category_flags": "Դրոշներ",
-        "category_food_drink": "Սնունդ և ըմպելիք",
-        "category_frequently_used": "Հաճախակի օգտագործվող",
-        "category_objects": "Առարկաներ",
-        "category_smileys_people": "Սմայլիկներ և մարդիկ",
-        "category_symbols": "Նշաններ",
-        "category_travel_places": "Ճանապարհորդություն և վայրեր",
-        "quick_reactions": "Արագ արձագանքներ"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Չեղարկել որոնումը"
-    },
     "empty_room": "Դատարկ սենյակ",
     "empty_room_was_name": "Դատարկ սենյակ (նախկինում՝ %(oldName)s)",
     "encryption": {
@@ -1299,7 +1281,6 @@
             "preparing": "Հրավերների պատրաստում..."
         },
         "recents_section": "Վերջին զրույցները",
-        "room_failed_partial": "Մյուսներին ուղարկեցինք, բայց ստորև բերված մարդկանց չհաջողվեց հրավիրել <RoomName/>",
         "room_failed_partial_title": "Որոշ հրավերներ չհաջողվեց ուղարկել",
         "room_failed_title": "Չհաջողվեց հրավիրել օգտատերերին %(roomName)s",
         "send_link_prompt": "Կամ ուղարկեք հրավերի հղումը",
@@ -1414,7 +1395,6 @@
         "bridge_state_workspace": "Աշխատանքային տարածք․ <networkLink/>",
         "click_for_info": "Սեղմեք լրացուցիչ տեղեկությունների համար",
         "currently_experimental": "Ներկայումս փորձնական։",
-        "custom_themes": "Աջակցեl անհատական ​​​​թեմաների/ոճերի ավելացմանը",
         "dynamic_room_predecessors": "Դինամիկ սենյակի նախորդներ",
         "dynamic_room_predecessors_description": "Միացնել MSC3946- ը (ուշ ժամանող սենյակների արխիվներին աջակցելու համար)",
         "element_call_video_rooms": "Element Call վիդեո սենյակներ",
@@ -1433,7 +1413,6 @@
         "group_profile": "Պրոֆիլ",
         "group_rooms": "Սենյակներ",
         "group_spaces": "Տարածքներ",
-        "group_themes": "Ոճեր",
         "group_threads": "Թեմաներ",
         "group_ui": "Օգտագործողի միջերես(ինտերֆեյս)",
         "group_voip": "Ձայն և վիդեո",
@@ -1613,7 +1592,6 @@
         "mentions_and_keywords": "@mentions (հիշատակումներ) և բանալի բառեր",
         "mentions_and_keywords_description": "Ստանալ ծանուցում միայն հիշատակումներով և բանալի բառերով, ինչպես սահմանված են ձեր <a> կարգաբերումներում</a>",
         "mentions_keywords": "Նշումներ/հիշատակումներ և բանալի բառեր",
-        "message_didnt_send": "Հաղորդագրությունը չի ուղարկվել: Սեղմեք տեղեկությունների համար:",
         "mute_description": "Դուք չեք ստանա ոչ մի ծանուցում"
     },
     "notifier": {
@@ -2312,11 +2290,6 @@
             "custom_font_description": "Սահմանել ձեր համակարգում տեղադրված տառատեսակի անունը և %(brand)s-ը կփորձի օգտագործել այն։",
             "custom_font_name": "Համակարգային տառատեսակի անվանում",
             "custom_font_size": "Օգտագործել հատուկ չափս",
-            "custom_theme_add": "Ավելացնել անհատական գունային ոճ",
-            "custom_theme_downloading": "Անհատական գունային ոճի ներբեռնում…",
-            "custom_theme_error_downloading": "Տեսաձեւի ներբեռնման սխալ",
-            "custom_theme_help": "Մուտքագրեք այն գունային ոճի URL-ը, որը ցանկանում եք կիրառել։",
-            "custom_theme_invalid": "Տեսաձևի անվավեր սխեմա։",
             "dialog_title": "<strong>Կարգավորումներ․</strong> Արտաքին տեսք",
             "font_size": "Տառատեսակի չափը",
             "font_size_default": "%(fontSize)s (լռելյայն)",
@@ -2691,7 +2664,6 @@
         "send_typing_notifications": "Ուղարկել տեքստ գրելու ծանուցումներ",
         "sessions": {
             "best_security_note": "Լավագույն անվտանգության համար ստուգեք ձեր սեսիաները և դուրս եկեք ցանկացած սեսիայից, որը այլևս չեք ճանաչում կամ չեք օգտագործում։",
-            "browser": "Զննարկիչ",
             "confirm_sign_out": {
                 "one": "Հաստատեք այս սարքից դուրս գալը",
                 "other": "Հաստատեք այս սարքերից դուրս գալը"
@@ -2742,7 +2714,6 @@
             "no_sessions": "Սեսիաներ չեն գտնվել։",
             "no_unverified_sessions": "Չստուգված սեսիաներ չեն գտնվել:",
             "no_verified_sessions": "Հաստատված սեսիաներ չեն գտնվել։",
-            "os": "Օպերացիոն համակարգ",
             "other_sessions_heading": "Այլ սեսիաներ",
             "push_heading": "Push ծանուցումներ",
             "push_subheading": "Ստանալ push ծանուցումներ այս սեսիայում։",

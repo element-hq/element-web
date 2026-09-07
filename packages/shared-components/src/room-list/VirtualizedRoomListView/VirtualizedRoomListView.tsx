@@ -581,17 +581,13 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
     return (
         <DragDropProvider<RoomListDragData>
             onDragStart={(event) => {
-                const { source } = event.operation;
-                // Changing the state of sections (collapsed/expanded) while dragging a section header causes a double readback for the a11y announcement.
-                if (isSectionDragData(source?.data)) {
-                    vm.onSectionDragStart();
-                }
+                // Changing the state of sections (collapsed/expanded) while dragging a section header or a room causes a double readback for the a11y announcement.
+                vm.onSectionOrRoomDragStart();
             }}
             onDragEnd={(event) => {
                 const { source, target } = event.operation;
-                if (isSectionDragData(source?.data)) {
-                    vm.onSectionDragEnd();
-                }
+                vm.onSectionOrRoomDragEnd();
+
                 if (event.canceled || !source || !target) return;
                 if (isSectionDragData(source.data)) {
                     vm.changeSectionOrder(String(source.id), String(target.id));
@@ -600,10 +596,17 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
                 }
             }}
             sensors={[
-                // By default, the PointerSensor activates dragging immediately on pointer down, which interferes with keyboard navigation.
-                // So we start dragging after the pointer has moved by 5 pixels, to allow for click without dragging
+                // By default, PointerSensor activates dragging immediately on mouse pointer down, which interferes
+                // with clicking a room and keyboard navigation, so for mouse/pen we require a small drag distance
+                // before a drag starts (allowing a plain click without dragging).
+                // For touch, a Delay constraint that aborts the drag if the finger moves before the delay elapses is used to avoid accidental drags when scrolling the list with a finger.
                 PointerSensor.configure({
-                    activationConstraints: [new PointerActivationConstraints.Distance({ value: 5 })],
+                    activationConstraints(event) {
+                        if (event.pointerType === "touch") {
+                            return [new PointerActivationConstraints.Delay({ value: 250, tolerance: 5 })];
+                        }
+                        return [new PointerActivationConstraints.Distance({ value: 5 })];
+                    },
                 }),
                 // By default, the KeyboardSensor uses both space and enter to start dragging, which interferes with the keyboard enter shortcut to open a room.
                 KeyboardSensor.configure({

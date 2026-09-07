@@ -48,8 +48,9 @@ export default async function (hakEnv: HakEnv, moduleInfo: DependencyInfo): Prom
                             "` " +
                             "or your package manager if not using `rustup`",
                     );
+                    return;
                 }
-                fsProm.unlink("tmp").then(resolve);
+                resolve(fsProm.unlink("tmp"));
             },
         );
         rustc.stdin!.write("fn main() {}");

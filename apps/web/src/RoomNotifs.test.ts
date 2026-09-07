@@ -365,6 +365,20 @@ describe("RoomNotifs test", () => {
             expect(count).toBeGreaterThan(0);
         });
 
+        it("shows nothing for a room the user has left", async () => {
+            // Whatever the server last told us about is stuck there: leaving does not clear it, and
+            // there is no way to read a room you are not in.
+            room.setUnreadNotificationCount(NotificationCountType.Total, 42);
+            const roomMember = mkRoomMember(room.roomId, room.myUserId, KnownMembership.Leave);
+            vi.spyOn(room, "getMember").mockReturnValue(roomMember);
+
+            const { level, symbol, count } = determineUnreadState(room);
+
+            expect(symbol).toBe(null);
+            expect(level).toBe(NotificationLevel.None);
+            expect(count).toBe(0);
+        });
+
         it("shows nothing for muted channels", async () => {
             room.setUnreadNotificationCount(NotificationCountType.Highlight, 99);
             room.setUnreadNotificationCount(NotificationCountType.Total, 99);

@@ -23,11 +23,10 @@ The `Menu` type is fulfilled by the following discriminated union:
 
 ### Static menu
 
-| Key        | Type             | Description                                                               |
-| ---------- | ---------------- | ------------------------------------------------------------------------- |
-| type       | "static"         | The type for this menu config                                             |
-| logo_url   | string, optional | URL to the logo to render in the menu, defaults to banner logo if omitted |
-| categories | `[]Category`     | Categories to render in the menu                                          |
+| Key        | Type         | Description                      |
+| ---------- | ------------ | -------------------------------- |
+| type       | "static"     | The type for this menu config    |
+| categories | `[]Category` | Categories to render in the menu |
 
 The `Category` type is fulfilled by the following interface:
 
@@ -44,6 +43,14 @@ The `Link` type is fulfilled by the following interface:
 | name     | string           | The name to render for this link        |
 | link_url | string           | The URL to link to                      |
 | target   | string, optional | The `target` to use for this link       |
+
+### All menus additionally support the following optional keys:
+
+| Key         | Type             | Description                                                               |
+| ----------- | ---------------- | ------------------------------------------------------------------------- |
+| logo_url    | string, optional | URL to the logo to render in the menu, defaults to banner logo if omitted |
+| logo_href   | string, optional | URL to send the user to when clicking the logo in the menu                |
+| logo_height | number, optional | Height of the logo in pixels, defaults to 32 if omitted                   |
 
 ## Copyright & License
 

@@ -42,12 +42,10 @@ describe("buildMenuTemplate", () => {
             ({ buildMenuTemplate } = await import("./vectormenu.js"));
         });
 
-        if (platform === "darwin") {
-            it("should have an app-named item first", () => {
-                const menu = buildMenuTemplate();
-                expect(menu.items[0].label).toBe("ChatApp");
-            });
-        }
+        it.runIf(platform === "darwin")("should have an app-named item first", () => {
+            const menu = buildMenuTemplate();
+            expect(menu.items[0].label).toBe("ChatApp");
+        });
 
         it("should include expected `help` menu", () => {
             const menu = buildMenuTemplate();
@@ -55,8 +53,8 @@ describe("buildMenuTemplate", () => {
             const helpMenu = menu.items.at(-1)!;
             expect(helpMenu.label).toBe("common|help");
             const helpSubmenu = helpMenu.submenu as unknown as MenuItemConstructorOptions[];
-            expect(helpSubmenu[0]!.label).toBe("common|brand_help");
-            helpSubmenu[0]!.click!(menu.items.at(-1)!, undefined, new Event("click") as KeyboardEvent);
+            expect(helpSubmenu[0].label).toBe("common|brand_help");
+            helpSubmenu[0].click!(menu.items.at(-1)!, undefined, new Event("click") as KeyboardEvent);
             expect(shell.openExternal).toHaveBeenCalledWith("https://i.need.help");
         });
     });

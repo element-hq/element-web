@@ -16,6 +16,7 @@ export interface IContentRules {
     externalRules: IAnnotatedPushRule[];
 }
 
+// oxlint-disable-next-line typescript/no-extraneous-class
 export class ContentRules {
     /**
      * Extract the keyword rules from a list of rules, and parse them

@@ -115,9 +115,7 @@ export function parseAppUrl(url: Location | URL): {
         if (!params) continue; // no params
 
         const target: Record<string, string> = {};
-        for (const k of groupConfig.keys) {
-            const key = k as (typeof groupConfig)["keys"][number];
-
+        for (const key of groupConfig.keys) {
             const value = params.get(key);
             if (value !== null) {
                 target[key] = value;
@@ -129,5 +127,5 @@ export function parseAppUrl(url: Location | URL): {
         }
     }
 
-    return { params: urlParams as URLParams, location: parsedFragment.location };
+    return { params: urlParams, location: parsedFragment.location };
 }

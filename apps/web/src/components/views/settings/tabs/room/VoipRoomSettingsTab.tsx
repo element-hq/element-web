@@ -76,12 +76,12 @@ const ElementCallSwitch: React.FC<ElementCallSwitchProps> = ({ room }) => {
                 newContent.events[ElementCallMemberEventType.name] = adminLevel;
             }
 
-            room.client.sendStateEvent(room.roomId, EventType.RoomPowerLevels, newContent);
+            void room.client.sendStateEvent(room.roomId, EventType.RoomPowerLevels, newContent);
 
             if (enabled) {
-                ensureSlotOpen(room);
+                void ensureSlotOpen(room);
             } else {
-                ensureSlotClosed(room);
+                void ensureSlotClosed(room);
             }
         },
         [room, content, isPublic, maySend],

@@ -325,6 +325,7 @@ export function replaceByRegexes(text: string, mapping: IVariables | Tags): stri
 
                 let replaced: SubstitutionValue;
                 // If substitution is a function, call it
+                // oxlint-disable-next-line unicorn/no-instanceof-builtins
                 if (mapping[regexpString] instanceof Function) {
                     replaced = ((mapping as Tags)[regexpString] as (...subs: string[]) => string)(...capturedGroups);
                 } else {
@@ -360,11 +361,11 @@ export function replaceByRegexes(text: string, mapping: IVariables | Tags): stri
 
             // Insert in reverse order as splice does insert-before and this way we get the final order correct
             // remove the old element at the same time
-            output.splice(outputIndex, 1, ...parts);
+            void output.splice(outputIndex, 1, ...parts);
 
             if (head !== "") {
                 // Don't push empty nodes, they are of no use
-                output.splice(outputIndex, 0, head);
+                void output.splice(outputIndex, 0, head);
             }
         }
         if (!matchFoundSomewhere) {
@@ -432,7 +433,8 @@ async function getLanguage(langPath: string): Promise<ICounterpartTranslation> {
 }
 
 export async function getLangsJson(): Promise<Languages> {
-    const url = i18nFolder + "languages.json";
+    const cachebust = Date.now();
+    const url = `${i18nFolder}languages.json?${cachebust}`;
 
     const res = await fetch(url, { method: "GET" });
 

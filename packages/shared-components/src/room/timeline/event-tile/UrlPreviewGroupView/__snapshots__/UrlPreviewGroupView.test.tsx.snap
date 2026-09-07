@@ -46,6 +46,7 @@ exports[`UrlPreviewGroupView > renders a single preview 1`] = `
           aria-label="View image"
           class="LinkPreview-module_preview"
           style="background-image: url("/static/element.png");"
+          type="button"
         />
         <div
           class="LinkPreview-module_textContent"
@@ -125,6 +126,7 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
           aria-label="View image"
           class="LinkPreview-module_preview"
           style="background-image: url("/static/element.png");"
+          type="button"
         />
         <div
           class="LinkPreview-module_textContent"
@@ -156,12 +158,15 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
       <div
         class="LinkPreview-module_containerCollapsed"
       >
-        <button
-          aria-label="View image"
+        <div
           class="LinkPreview-module_preview"
-          style="background-image: url("/static/tallImage.png");"
-          type="button"
-        />
+        >
+          <button
+            aria-label="View image"
+            style="background-image: url("/static/tallImage.png");"
+            type="button"
+          />
+        </div>
         <div
           class="LinkPreview-module_textContent"
         >
@@ -187,12 +192,15 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
       <div
         class="LinkPreview-module_containerCollapsed"
       >
-        <button
-          aria-label="View image"
+        <div
           class="LinkPreview-module_preview"
-          style="background-image: url("/static/element.png");"
-          type="button"
-        />
+        >
+          <button
+            aria-label="View image"
+            style="background-image: url("/static/element.png");"
+            type="button"
+          />
+        </div>
         <div
           class="LinkPreview-module_textContent"
         >
@@ -275,6 +283,7 @@ exports[`UrlPreviewGroupView > renders multiple previews which are hidden 1`] = 
           aria-label="View image"
           class="LinkPreview-module_preview"
           style="background-image: url("/static/element.png");"
+          type="button"
         />
         <div
           class="LinkPreview-module_textContent"
@@ -363,6 +372,7 @@ exports[`UrlPreviewGroupView > renders with compact density 1`] = `
           aria-label="View image"
           class="LinkPreview-module_preview"
           style="background-image: url("/static/element.png");"
+          type="button"
         />
         <div
           class="LinkPreview-module_textContent"
@@ -394,12 +404,15 @@ exports[`UrlPreviewGroupView > renders with compact density 1`] = `
       <div
         class="LinkPreview-module_containerCollapsed"
       >
-        <button
-          aria-label="View image"
+        <div
           class="LinkPreview-module_preview"
-          style="background-image: url("/static/tallImage.png");"
-          type="button"
-        />
+        >
+          <button
+            aria-label="View image"
+            style="background-image: url("/static/tallImage.png");"
+            type="button"
+          />
+        </div>
         <div
           class="LinkPreview-module_textContent"
         >
@@ -425,12 +438,15 @@ exports[`UrlPreviewGroupView > renders with compact density 1`] = `
       <div
         class="LinkPreview-module_containerCollapsed"
       >
-        <button
-          aria-label="View image"
+        <div
           class="LinkPreview-module_preview"
-          style="background-image: url("/static/element.png");"
-          type="button"
-        />
+        >
+          <button
+            aria-label="View image"
+            style="background-image: url("/static/element.png");"
+            type="button"
+          />
+        </div>
         <div
           class="LinkPreview-module_textContent"
         >

@@ -23,6 +23,11 @@ single directory tree.
 
 Themes derived from the built in themes may also be defined in settings.
 
+Custom themes can also be added at runtime from a URL pointing at a JSON theme
+definition: open the developer tools (`/devtools`) and pick **Custom themes**
+under the **Other** category. Themes added this way remember the URL they came
+from, so they can be re-downloaded from that same panel when the theme changes.
+
 To avoid name collisions, the internal name of a theme is
 `custom-${theme.name}`. So if you want to set the custom theme below as the
 default theme, you would use `default_theme: "custom-Electric Blue"`.

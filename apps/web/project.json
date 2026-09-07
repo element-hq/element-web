@@ -39,12 +39,17 @@
                     // as unlisted dependencies.
                     "pnpm exec tsc --noEmit --project ./tsconfig.module_system.json",
                     "pnpm exec tsc --noEmit",
+                    "pnpm exec tsc --noEmit --project ./tsconfig.browser-test.json",
                     "pnpm exec tsc --noEmit --project playwright"
                 ],
                 "parallel": false,
                 "cwd": "apps/web"
             },
             "dependsOn": ["^build", "^build:playwright"]
+        },
+        "lint:prepare": {
+            "executor": "nx:noop",
+            "dependsOn": ["^build"]
         },
         "test:unit:prepare": {
             "executor": "nx:noop",

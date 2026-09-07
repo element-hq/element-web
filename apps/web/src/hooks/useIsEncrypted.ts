@@ -25,7 +25,7 @@ export async function isRoomEncrypted(room: Room, cryptoApi: CryptoApi): Promise
     if (room instanceof LocalRoom) {
         // For local room check the state.
         // The crypto check fails because the room ID is not valid (it is a local id)
-        return (room as LocalRoom).isEncryptionEnabled();
+        return room.isEncryptionEnabled();
     }
 
     return await cryptoApi.isEncryptionEnabledInRoom(room.roomId);

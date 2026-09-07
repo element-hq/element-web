@@ -56,7 +56,7 @@ export default class MediaPreviewConfigController extends MatrixClientBackedCont
 
         // Save an account data fetch if we have all the values.
         if (calculatedConfig.invite_avatars && calculatedConfig.media_previews) {
-            return calculatedConfig as MediaPreviewConfig;
+            return calculatedConfig;
         }
 
         // We're missing some keys.

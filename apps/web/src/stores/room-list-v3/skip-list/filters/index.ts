@@ -14,7 +14,6 @@ export const enum FilterEnum {
     LowPriorityFilter = "low_priority",
     MentionsFilter = "mentions",
     InvitesFilter = "invites",
-    ExcludeTagsFilter = "exclude_tags",
 }
 
 export type FilterKey = FilterEnum | string;

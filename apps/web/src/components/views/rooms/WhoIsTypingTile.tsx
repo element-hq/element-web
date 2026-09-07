@@ -66,7 +66,7 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
             client.removeListener(RoomMemberEvent.Typing, this.onRoomMemberTyping);
             client.removeListener(RoomEvent.Timeline, this.onRoomTimeline);
         }
-        Object.values(this.state.delayedStopTypingTimers).forEach((t) => (t as Timer).abort());
+        Object.values(this.state.delayedStopTypingTimers).forEach((t) => t.abort());
     }
 
     private static isVisible(state: IState): boolean {

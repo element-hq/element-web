@@ -27,7 +27,7 @@ export default async function copy(hakEnv: HakEnv, moduleInfo: DependencyInfo): 
         if (moduleInfo.moduleBuildDirs.length > 1) {
             if (!hakEnv.isMac()) {
                 console.error(
-                    "You asked me to copy multiple targets but I've only been taught " + "how to do that on macOS.",
+                    "You asked me to copy multiple targets but I've only been taught how to do that on macOS.",
                 );
                 throw new Error("Can't copy multiple targets on this platform");
             }

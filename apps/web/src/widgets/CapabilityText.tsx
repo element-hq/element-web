@@ -41,6 +41,7 @@ export interface TranslatedCapabilityText {
     byline?: TranslatedString;
 }
 
+// oxlint-disable-next-line typescript/no-extraneous-class
 export class CapabilityText {
     private static simpleCaps: Record<Capability, Partial<Record<WidgetKind | GENERIC_WIDGET_KIND, TranslationKey>>> = {
         [MatrixCapabilities.AlwaysOnScreen]: {
@@ -133,7 +134,7 @@ export class CapabilityText {
         // First see if we have a super simple line of text to provide back
         if (CapabilityText.simpleCaps[capability]) {
             const textForKind = CapabilityText.simpleCaps[capability];
-            if (textForKind[kind]) return { primary: _t(textForKind[kind]!) };
+            if (textForKind[kind]) return { primary: _t(textForKind[kind]) };
             if (textForKind[GENERIC_WIDGET_KIND]) return { primary: _t(textForKind[GENERIC_WIDGET_KIND]) };
 
             // ... we'll fall through to the generic capability processing at the end of this

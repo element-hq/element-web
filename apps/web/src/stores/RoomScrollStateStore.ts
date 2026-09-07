@@ -45,4 +45,5 @@ export class RoomScrollStateStore {
 if (window.mxRoomScrollStateStore === undefined) {
     window.mxRoomScrollStateStore = new RoomScrollStateStore();
 }
+// oxlint-disable-next-line typescript/no-unnecessary-type-assertion
 export default window.mxRoomScrollStateStore!;
