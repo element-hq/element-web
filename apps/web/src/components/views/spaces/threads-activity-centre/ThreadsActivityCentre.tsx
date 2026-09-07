@@ -8,6 +8,7 @@
 
 import React, { type JSX, useState } from "react";
 import { Menu, MenuItem, NavBar, NavItem, Text } from "@vector-im/compound-web";
+import { NotificationDecoration, type NotificationDecorationData } from "@element-hq/web-shared-components";
 
 import { ThreadsActivityCentreButton } from "./ThreadsActivityCentreButton";
 import { _t } from "../../../../languageHandler";
@@ -18,7 +19,7 @@ import { type ViewRoomPayload } from "../../../../dispatcher/payloads/ViewRoomPa
 import RightPanelStore from "../../../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../stores/right-panel/RightPanelStorePhases";
 import { type ThreadData, type UnreadThreadRooms, useUnreadThreadRooms } from "./useUnreadThreadRooms";
-import { StatelessNotificationBadge } from "../../rooms/NotificationBadge/StatelessNotificationBadge";
+import { NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
 import { MessagePreviewStore } from "../../../../stores/message-preview/MessagePreviewStore";
 import { getSenderName } from "../../../../stores/message-preview/previews/utils";
 import PosthogTrackers from "../../../../PosthogTrackers";
@@ -161,10 +162,62 @@ interface ThreadsActivityThreadRow {
 }
 
 /**
+ * Map a thread's unread state onto the notification decoration shared with the room list, so a
+ * mention, a counted notification and bare activity are told apart by shape and not only by colour.
+ *
+ * The levels are mutually exclusive, mirroring {@link RoomNotificationState}'s `isMention` /
+ * `isNotification` / `isActivityNotification` getters.
+ *
+ * @param level - the thread's notification level
+ * @param count - the server-reported notification count, 0 for a local-only unread
+ * @param muted - whether the thread's room is muted
+ */
+export function threadDecorationProps(
+    level: NotificationLevel,
+    count: number,
+    muted: boolean,
+): NotificationDecorationData {
+    return {
+        // Rows only exist for threads we have already decided are unread.
+        hasAnyNotificationOrActivity: true,
+        isMention: level === NotificationLevel.Highlight,
+        isNotification: level === NotificationLevel.Notification,
+        isActivityNotification: level === NotificationLevel.Activity,
+        hasUnreadCount: count > 0,
+        count,
+        muted,
+        // evaluateThreadUnread never yields NotificationLevel.Unsent, and threads can't be invites.
+        isUnsentMessage: false,
+        invited: false,
+    };
+}
+
+/**
+ * The `data-notification-level` marker for a thread row, used by tests as the decoration itself
+ * exposes no per-level attribute. Mirrors `NotificationBadgeView`'s values.
+ */
+function notificationLevelMarker(level: NotificationLevel): "highlight" | "notification" | undefined {
+    if (level === NotificationLevel.Highlight) return "highlight";
+    if (level === NotificationLevel.Notification) return "notification";
+    return undefined;
+}
+
+/**
+ * Describe a thread's unread state for screen readers. The row sets its own `aria-label`, which
+ * overrides its content, so the visible counter would otherwise go unannounced.
+ * Mirrors `roomAriaUnreadLabel` in `SpotlightDialog`.
+ */
+function threadAriaUnreadLabel(level: NotificationLevel, count: number): string {
+    if (level === NotificationLevel.Highlight) return _t("a11y|n_unread_messages_mentions", { count });
+    if (count > 0) return _t("a11y|n_unread_messages", { count });
+    return _t("a11y|unread_messages");
+}
+
+/**
  * Display an unread thread the user has participated in.
  */
 function ThreadsActivityCentreThreadRow({ threadData, onClick }: ThreadsActivityThreadRow): JSX.Element {
-    const { thread, room, notificationLevel } = threadData;
+    const { thread, room, notificationLevel, notificationCount, muted } = threadData;
 
     const rootEvent = thread.rootEvent;
     // getSenderName resolves the disambiguated member name, falling back to the raw user ID.
@@ -173,14 +226,16 @@ function ThreadsActivityCentreThreadRow({ threadData, onClick }: ThreadsActivity
     // emotes, HTML and non-message event types consistently with the room list.
     const previewText = rootEvent ? MessagePreviewStore.instance.generatePreviewForEvent(rootEvent) : "";
 
+    const description = senderName ? `${room.name}: ${senderName}: ${previewText}` : room.name;
+
     return (
         <MenuItem
             className="mx_ThreadsActivityCentreThreadRow"
             // label={null} renders no label span; aria-label provides the accessible name.
             label={null}
-            // The design uses the notification dot as the only trailing affordance.
+            // The design uses the notification decoration as the only trailing affordance.
             hideChevron
-            aria-label={senderName ? `${room.name}: ${senderName}: ${previewText}` : room.name}
+            aria-label={`${description} ${threadAriaUnreadLabel(notificationLevel, notificationCount)}`}
             Icon={<DecoratedRoomAvatar room={room} size="40px" />}
             onSelect={(event: Event) => {
                 onClick();
@@ -211,7 +266,7 @@ function ThreadsActivityCentreThreadRow({ threadData, onClick }: ThreadsActivity
                     show_room_tile: true,
                     room_id: room.roomId,
                     metricsTrigger: "WebThreadsActivityCentre",
-                    focusNext: "threadsPanel"
+                    focusNext: "threadsPanel",
                 });
             }}
         >
@@ -237,7 +292,13 @@ function ThreadsActivityCentreThreadRow({ threadData, onClick }: ThreadsActivity
                     </Text>
                 )}
             </div>
-            <StatelessNotificationBadge level={notificationLevel} count={0} symbol={null} forceDot={true} />
+            {/* The decoration takes no extra props, so the marker for tests lives on a wrapper. */}
+            <span
+                className="mx_ThreadsActivityCentreThreadRow_decoration"
+                data-notification-level={notificationLevelMarker(notificationLevel)}
+            >
+                <NotificationDecoration {...threadDecorationProps(notificationLevel, notificationCount, muted)} />
+            </span>
         </MenuItem>
     );
 }

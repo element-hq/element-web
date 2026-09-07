@@ -39,6 +39,10 @@ export type ThreadData = {
     room: Room;
     /** The notification level of the thread. */
     notificationLevel: NotificationLevel;
+    /** The server-reported total notification count, or 0 for locally-detected unreads. */
+    notificationCount: number;
+    /** Whether the thread's room is muted. */
+    muted: boolean;
 };
 
 /**
@@ -144,15 +148,23 @@ function computeUnreadThreadRooms(
             const unread = evaluateThreadUnread(mxClient, room, thread);
             if (!unread) continue;
 
+            const threadData: ThreadData = {
+                thread,
+                room,
+                notificationLevel: unread.notificationLevel,
+                notificationCount: unread.notificationCount,
+                muted: isRoomMuted,
+            };
+
             if (unread.isRelevantToMe) {
                 // "My threads": always shown, even when the room is muted or settingTACOnlyNotifs is on.
-                participatingThreads.push({ thread, room, notificationLevel: unread.notificationLevel });
+                participatingThreads.push(threadData);
             } else {
                 // Muted rooms shouldn't surface non-relevant threads in Other threads.
                 if (isRoomMuted) continue;
                 // The setting scopes to Other threads: when on, drop activity-only entries.
                 if (settingTACOnlyNotifs && !unread.hasServerNotifs) continue;
-                otherThreads.push({ thread, room, notificationLevel: unread.notificationLevel });
+                otherThreads.push(threadData);
             }
             roomContributedThread = true;
         }
@@ -187,6 +199,8 @@ function computeUnreadThreadRooms(
 type ThreadUnread = {
     /** The notification level derived from the server counts (or {@link NotificationLevel.Activity} for local-only unreads). */
     notificationLevel: NotificationLevel;
+    /** The homeserver's total notification count for the thread; 0 for a local-only unread. */
+    notificationCount: number;
     /** Whether the homeserver reported a notification count for the thread (as opposed to a local-only unread). */
     hasServerNotifs: boolean;
     /** Whether the thread belongs in "My threads": the user participated, or was mentioned/keyword-matched. */
@@ -227,6 +241,7 @@ function evaluateThreadUnread(client: MatrixClient, room: Room, thread: Thread):
 
     return {
         notificationLevel,
+        notificationCount: total,
         hasServerNotifs,
         isRelevantToMe:
             thread.hasCurrentUserParticipated || highlight > 0 || hasCurrentUserSentInThread(client, thread),
