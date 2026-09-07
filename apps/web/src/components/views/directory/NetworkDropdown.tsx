@@ -96,7 +96,7 @@ function useSettingsValueWithSetter<S extends SettingKey>(
     const setter = useCallback(
         async (value: Settings[S]["default"]): Promise<void> => {
             setValue(value);
-            SettingsStore.setValue(settingName, roomId, level, value);
+            await SettingsStore.setValue(settingName, roomId, level, value);
         },
         [level, roomId, settingName],
     );

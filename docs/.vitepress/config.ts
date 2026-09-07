@@ -158,7 +158,7 @@ export default withMermaid({
                     { text: "Iconography", link: "/icons" },
                     { text: "Local echo", link: "/local-echo-dev" },
                     { text: "Media", link: "/media-handling" },
-                    { text: "Room List Store", link: "/room-list-store" },
+                    { text: "Room List", link: "/room-list" },
                     { text: "Scrolling", link: "/scrolling" },
                     { text: "Usercontent", link: "/usercontent" },
                     { text: "Widget layouts", link: "/widget-layouts" },

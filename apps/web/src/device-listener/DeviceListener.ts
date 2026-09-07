@@ -98,7 +98,7 @@ export class DeviceListener {
         );
         this.dispatcherRef = dis.register(this.onAction);
         this.recheck();
-        this.updateClientInformation();
+        void this.updateClientInformation();
     }
 
     public stop(): void {
@@ -227,7 +227,7 @@ export class DeviceListener {
     private onAction = ({ action }: ActionPayload): void => {
         if (action !== Action.OnLoggedIn) return;
         this.recheck();
-        this.updateClientInformation();
+        void this.updateClientInformation();
     };
 
     public recheck(): void {
@@ -353,7 +353,7 @@ export class DeviceListener {
         this.shouldRecordClientInformation = !!newValue;
 
         if (this.shouldRecordClientInformation !== prevValue) {
-            this.updateClientInformation();
+            void this.updateClientInformation();
         }
     };
 

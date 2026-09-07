@@ -5,16 +5,15 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { act } from "jest-matrix-react";
+import { vi } from "vitest";
+import { act } from "test-utils-rtl";
 import { toDataURL, type QRCodeSegment, type QRCodeToDataURLOptions } from "qrcode";
 
-jest.mock("qrcode", () => ({
-    ...jest.requireActual("qrcode"),
-    toDataURL: jest.fn(),
-}));
-
-const realQRCode = jest.requireActual("qrcode") as { toDataURL: typeof toDataURL };
-const mockedToDataURL = jest.mocked(toDataURL);
+// Callers must call `vi.mock("qrcode", async () => ({ ...(await vi.importActual("qrcode")), toDataURL: vi.fn() }))`
+// themselves at their own top level — vitest's mock hoisting is per-file, so a `vi.mock` living only here
+// would not catch the "qrcode" import from the component under test.
+const realQRCode = await vi.importActual<{ toDataURL: typeof toDataURL }>("qrcode");
+const mockedToDataURL = vi.mocked(toDataURL);
 
 let qrCodeRenderPromise: Promise<string> | undefined;
 

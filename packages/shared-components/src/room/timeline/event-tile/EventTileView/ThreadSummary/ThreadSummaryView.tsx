@@ -169,6 +169,7 @@ export function ThreadSummaryView({
         .join(" ");
 
     return (
+        // oxlint-disable-next-line react/button-has-type
         <button {...props} type={type} className={buttonClassName} onClick={vm.onClick} aria-label={openThreadLabel}>
             <IndicatorIcon size="24px" indicator={notificationIndicator} className={styles.threadIcon}>
                 <ThreadsSolidIcon />

@@ -39,7 +39,7 @@ export default class ServerOfflineDialog extends React.PureComponent<IProps> {
     };
 
     private renderTimeline(): ReactNode[] {
-        return EchoStore.instance.contexts.map((c, i) => {
+        return EchoStore.instance.contexts.map((c) => {
             if (!c.firstFailedTime) return null; // not useful
             if (!(c instanceof RoomEchoContext))
                 throw new Error("Cannot render unknown context: " + c.constructor.name);
@@ -51,7 +51,7 @@ export default class ServerOfflineDialog extends React.PureComponent<IProps> {
             );
             const entries = c.transactions
                 .filter((t) => t.status === TransactionStatus.Error || t.didPreviouslyFail)
-                .map((t, j) => {
+                .map((t) => {
                     let button = <Spinner size={19} />;
                     if (t.status === TransactionStatus.Error) {
                         button = (
@@ -61,14 +61,14 @@ export default class ServerOfflineDialog extends React.PureComponent<IProps> {
                         );
                     }
                     return (
-                        <div className="mx_ServerOfflineDialog_content_context_txn" key={`txn-${j}`}>
+                        <div className="mx_ServerOfflineDialog_content_context_txn" key={t.auditName}>
                             <span className="mx_ServerOfflineDialog_content_context_txn_desc">{t.auditName}</span>
                             {button}
                         </div>
                     );
                 });
             return (
-                <div className="mx_ServerOfflineDialog_content_context" key={`context-${i}`}>
+                <div className="mx_ServerOfflineDialog_content_context" key={c.room.roomId}>
                     <div className="mx_ServerOfflineDialog_content_context_timestamp">
                         {formatTime(c.firstFailedTime, SettingsStore.getValue("showTwelveHourTimestamps"))}
                     </div>

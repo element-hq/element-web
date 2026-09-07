@@ -8,9 +8,15 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { describe, it, expect, beforeEach } from "vitest";
-import { renderHook } from "test-utils-rtl";
-import { EventStatus, NotificationCountType, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import { act, renderHook } from "test-utils-rtl";
+import {
+    EventStatus,
+    MatrixEventEvent,
+    NotificationCountType,
+    PendingEventOrdering,
+    Room,
+} from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { mkEvent, muteRoom, stubClient } from "test-utils";
@@ -101,5 +107,28 @@ describe("useUnreadNotifications", () => {
 
         expect(level).toBe(NotificationLevel.Highlight);
         expect(count).toBe(888);
+    });
+
+    it("re-evaluates the unread state when an event of the room is decrypted", async () => {
+        const mkDecryptedEvent = (roomId: string) =>
+            mkEvent({ event: true, type: "m.room.message", user: "@alice:example.org", room: roomId, content: {} });
+
+        const { result } = renderHook(() => useUnreadNotifications(room));
+        expect(result.current.level).toBe(NotificationLevel.None);
+
+        room.getRoomUnreadNotificationCount = vi
+            .fn()
+            .mockImplementation((type: NotificationCountType) => (type === NotificationCountType.Total ? 1 : 0));
+
+        // A decryption in another room must not disturb this one
+        act(() => {
+            client.emit(MatrixEventEvent.Decrypted, mkDecryptedEvent("!other:example.org"));
+        });
+        expect(result.current.level).toBe(NotificationLevel.None);
+
+        act(() => {
+            client.emit(MatrixEventEvent.Decrypted, mkDecryptedEvent(room.roomId));
+        });
+        expect(result.current.level).toBe(NotificationLevel.Notification);
     });
 });

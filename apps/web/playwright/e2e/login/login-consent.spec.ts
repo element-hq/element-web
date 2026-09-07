@@ -75,7 +75,7 @@ async function login(page: Page, homeserver: HomeserverInstance, credentials: Cr
     await selectHomeserver(page, homeserver.baseUrl);
 
     await page.getByRole("textbox", { name: "Username" }).fill(credentials.username);
-    await page.getByPlaceholder("Password").fill(credentials.password);
+    await page.getByPlaceholder("Password").fill(credentials.password!);
     await page.getByRole("button", { name: "Sign in" }).click();
 }
 
@@ -152,7 +152,7 @@ test.describe("Login", () => {
             await expect(axe).toHaveNoViolations();
 
             await page.getByRole("textbox", { name: "Username" }).fill(credentials.username);
-            await page.getByPlaceholder("Password").fill(credentials.password);
+            await page.getByPlaceholder("Password").fill(credentials.password!);
             await page.getByRole("button", { name: "Sign in" }).click();
 
             await expect(page).toHaveURL(/\/#\/home$/);
@@ -323,7 +323,7 @@ test.describe("Login", () => {
 
                 // Finally we actually continue
                 await page.getByRole("button", { name: "Continue" }).click();
-                await page.getByPlaceholder("Password").fill(credentials.password);
+                await page.getByPlaceholder("Password").fill(credentials.password!);
                 await page.getByRole("button", { name: "Continue" }).click();
 
                 // We end up at the Home screen
@@ -336,7 +336,7 @@ test.describe("Login", () => {
     test.describe("logout", () => {
         test("should go to welcome page on logout", async ({ page, user }) => {
             await page.getByRole("button", { name: "User menu" }).click();
-            await expect(page.getByText(user.displayName, { exact: true })).toBeVisible();
+            await expect(page.getByText(user.displayName!, { exact: true })).toBeVisible();
 
             // Allow the outstanding requests queue to settle before logging out
             await page.waitForTimeout(2000);

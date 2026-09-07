@@ -72,11 +72,11 @@ function getFullScreenElement(): Element | null {
 }
 
 function requestFullscreen(element: Element): void {
-    element.requestFullscreen();
+    void element.requestFullscreen();
 }
 
 function exitFullscreen(): void {
-    document.exitFullscreen();
+    void document.exitFullscreen();
 }
 
 export default class LegacyCallView extends React.Component<IProps, IState> {
@@ -289,14 +289,14 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
         const callAction = getKeyBindingsManager().getCallAction(ev);
         switch (callAction) {
             case KeyBindingAction.ToggleMicInCall:
-                this.onMicMuteClick();
+                void this.onMicMuteClick();
                 // show the controls to give feedback
                 this.buttonsRef.current?.showControls();
                 handled = true;
                 break;
 
             case KeyBindingAction.ToggleWebcamInCall:
-                this.onVidMuteClick();
+                void this.onVidMuteClick();
                 // show the controls to give feedback
                 this.buttonsRef.current?.showControls();
                 handled = true;
@@ -316,7 +316,7 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
 
     private onTransferClick = (): void => {
         const transfereeCall = this.context.legacyCallHandler.getTransfereeForCallId(this.props.call.callId);
-        if (transfereeCall) this.props.call.transferToCall(transfereeCall);
+        if (transfereeCall) void this.props.call.transferToCall(transfereeCall);
     };
 
     private onHangupClick = (): void => {
@@ -501,38 +501,20 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
             // We've already checked that we have feeds so we cast away the optional when passing the feed
             return (
                 <div className="mx_LegacyCallView_content" onMouseMove={this.onMouseMove}>
-                    <VideoFeed
-                        feed={primaryFeed as CallFeed}
-                        call={call}
-                        pipMode={pipMode}
-                        onResize={onResize}
-                        primary={true}
-                    />
+                    <VideoFeed feed={primaryFeed!} call={call} pipMode={pipMode} onResize={onResize} primary={true} />
                 </div>
             );
         } else if (secondaryFeed) {
             return (
                 <div className="mx_LegacyCallView_content" onMouseMove={this.onMouseMove}>
-                    <VideoFeed
-                        feed={primaryFeed as CallFeed}
-                        call={call}
-                        pipMode={pipMode}
-                        onResize={onResize}
-                        primary={true}
-                    />
+                    <VideoFeed feed={primaryFeed!} call={call} pipMode={pipMode} onResize={onResize} primary={true} />
                     {secondaryFeedElement}
                 </div>
             );
         } else {
             return (
                 <div className="mx_LegacyCallView_content" onMouseMove={this.onMouseMove}>
-                    <VideoFeed
-                        feed={primaryFeed as CallFeed}
-                        call={call}
-                        pipMode={pipMode}
-                        onResize={onResize}
-                        primary={true}
-                    />
+                    <VideoFeed feed={primaryFeed!} call={call} pipMode={pipMode} onResize={onResize} primary={true} />
                     {sidebarShown && (
                         <LegacyCallViewSidebar feeds={sidebarFeeds} call={call} pipMode={Boolean(pipMode)} />
                     )}

@@ -68,7 +68,7 @@ export const usePollsWithRelations = (
                 poll.on(PollEvent.Responses, onPollUpdate);
                 // trigger request to get all responses
                 // if they are not already in cache
-                poll.getResponses();
+                void poll.getResponses();
             }
             setPollsWithRelations(polls);
         }

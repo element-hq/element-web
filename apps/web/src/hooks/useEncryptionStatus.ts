@@ -22,7 +22,7 @@ export function useEncryptionStatus(client: MatrixClient, room: Room): E2EStatus
             throttle(
                 () => {
                     if (client.getCrypto()) {
-                        shieldStatusForRoom(client, room).then((e2eStatus) => {
+                        void shieldStatusForRoom(client, room).then((e2eStatus) => {
                             setE2eStatus(e2eStatus);
                         });
                     }

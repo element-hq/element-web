@@ -38,7 +38,7 @@ const onLearnMoreNoOptIn = (): void => {
         primaryButton: _t("action|enable"),
     });
 
-    finished.then(([buttonClicked]) => {
+    void finished.then(([buttonClicked]) => {
         if (buttonClicked === ButtonClicked.Primary) {
             // user clicked "Enable"
             onAccept();
@@ -54,7 +54,7 @@ const onLearnMorePreviouslyOptedIn = (): void => {
         cancelButton: _t("action|stop"),
     });
 
-    finished.then(([buttonClicked]) => {
+    void finished.then(([buttonClicked]) => {
         if (buttonClicked === ButtonClicked.Primary) {
             // user clicked "That's fine"
             onAccept();

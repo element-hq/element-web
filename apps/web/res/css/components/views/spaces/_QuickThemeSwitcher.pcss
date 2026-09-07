@@ -17,7 +17,10 @@ Please see LICENSE files in the repository root for full details.
     }
 
     .mx_Dropdown_menu {
-        max-height: 70px;
+        /* Quick settings lives at the bottom of the window, so a menu dropping downwards would run
+           off the bottom of the viewport. Open it upwards, where there is room for every theme. */
+        top: auto;
+        bottom: 100%;
     }
 }
 

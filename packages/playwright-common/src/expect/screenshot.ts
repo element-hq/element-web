@@ -16,7 +16,7 @@ import {
     type PageAssertionsToHaveScreenshotOptions,
     type MatcherReturnType,
 } from "@playwright/test";
-import { extname } from "node:path";
+import path from "node:path";
 
 import { ANNOTATION } from "../stale-screenshot-reporter.js";
 
@@ -28,7 +28,7 @@ function sanitizeForFilePath(s: string): string {
 
 // Based on https://github.com/microsoft/playwright/blob/2b77ed4d7aafa85a600caa0b0d101b72c8437eeb/packages/playwright/src/util.ts#L206C8-L210C2
 function sanitizeFilePathBeforeExtension(filePath: string): string {
-    const ext = extname(filePath);
+    const ext = path.extname(filePath);
     const base = filePath.substring(0, filePath.length - ext.length);
     return sanitizeForFilePath(base) + ext;
 }

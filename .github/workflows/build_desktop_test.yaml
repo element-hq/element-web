@@ -41,7 +41,7 @@ jobs:
                   repository: element-hq/element-web
                   persist-credentials: false
 
-            - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+            - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
               id: pnpm
             - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
               with:
@@ -81,7 +81,7 @@ jobs:
               shell: bash
               env:
                   # We need sudo on Linux as it is installed in /opt/
-                  RUN_AS: ${{ runner.os == 'Linux' && 'sudo' || '' }}
+                  RUN_AS: ${{ runner.os == 'Linux' && 'sudo -E' || '' }}
                   PNPM_PATH: ${{ steps.pnpm.outputs.bin_dest }}
                   EXECUTABLE: ${{ steps.executable.outputs.path }}
 

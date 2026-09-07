@@ -94,7 +94,7 @@ test.describe("Rageshakes", () => {
                 if (request.method() !== "POST") {
                     throw Error("Expected POST");
                 }
-                const fields = formDataParser(request.postData(), await request.headerValue("Content-Type"));
+                const fields = formDataParser(request.postData()!, await request.headerValue("Content-Type"));
                 expect(fields.text).toEqual(
                     "These are some notes\n\nIssue: https://github.com/element-hq/element-web/12345",
                 );

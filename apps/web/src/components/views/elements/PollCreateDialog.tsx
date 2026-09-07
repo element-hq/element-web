@@ -174,7 +174,7 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
                     button: _t("action|try_again"),
                     cancelButton: _t("action|cancel"),
                 });
-                finished.then(([tryAgain]) => {
+                void finished.then(([tryAgain]) => {
                     if (!tryAgain) {
                         this.cancel();
                     } else {
@@ -215,6 +215,7 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
                 />
                 <h2>{_t("poll|options_heading")}</h2>
                 {this.state.options.map((op, i) => (
+                    // oxlint-disable-next-line react/no-array-index-key
                     <div key={`option_${i}`} className="mx_PollCreateDialog_option">
                         <Field
                             id={`pollcreate_option_${i}`}

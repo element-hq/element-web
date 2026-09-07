@@ -77,7 +77,7 @@ test.describe("Dehydration", () => {
         // Set up cross-signing and recovery
         const { botClient } = await createBot(page, homeserver, credentials);
         // ... and dehydration
-        await botClient.evaluate(async (client) => await client.getCrypto().startDehydration());
+        await botClient.evaluate(async (client) => await client.getCrypto()!.startDehydration());
 
         const initialDehydratedDeviceIds = await getDehydratedDeviceIds(botClient);
         expect(initialDehydratedDeviceIds.length).toBe(1);
@@ -93,7 +93,7 @@ test.describe("Dehydration", () => {
             page.getByRole("heading", { name: "Are you sure you want to reset your digital identity?" }),
         ).toBeVisible();
         await page.getByRole("button", { name: "Continue", exact: true }).click();
-        await page.getByPlaceholder("Password").fill(credentials.password);
+        await page.getByPlaceholder("Password").fill(credentials.password!);
         await page.getByRole("button", { name: "Continue" }).click();
 
         // And set up recovery
@@ -141,7 +141,7 @@ test.describe("Dehydration", () => {
             await autoJoin(bob);
 
             // create an encrypted room, and wait for Bob to join it.
-            const testRoomId = await createSharedEncryptedRoomWithUser(app, bob.credentials.userId);
+            const testRoomId = await createSharedEncryptedRoomWithUser(app, bob.credentials!.userId);
 
             // Even though Alice has seen Bob's join event, Bob may not have done so yet. Wait for the sync to arrive.
             await bob.awaitRoomMembership(testRoomId);
@@ -171,9 +171,9 @@ test.describe("Dehydration", () => {
 
 async function getDehydratedDeviceIds(client: Client): Promise<string[]> {
     return await client.evaluate(async (client) => {
-        const userId = client.getUserId();
-        const devices = await client.getCrypto().getUserDeviceInfo([userId]);
-        return Array.from(devices.get(userId).values())
+        const userId = client.getSafeUserId();
+        const devices = await client.getCrypto()!.getUserDeviceInfo([userId]);
+        return Array.from(devices.get(userId)!.values())
             .filter((d) => d.dehydrated)
             .map((d) => d.deviceId);
     });

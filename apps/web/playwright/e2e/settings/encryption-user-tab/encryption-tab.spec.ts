@@ -26,6 +26,7 @@ test.describe("Encryption tab", () => {
         test.beforeEach(async ({ page, homeserver, credentials }) => {
             // The bot bootstraps cross-signing, creates a key backup and sets up a recovery key
             const botCredentials = { ...credentials };
+            // @ts-expect-error
             delete botCredentials.accessToken; // use a new login for the bot
             const res = await createBot(page, homeserver, botCredentials);
             recoveryKey = res.recoveryKey;
@@ -71,7 +72,7 @@ test.describe("Encryption tab", () => {
             "should prompt to enter the recovery key when the secrets are not cached locally",
             { tag: "@screenshot" },
             async ({ page, app, util }) => {
-                await verifySession(app, recoveryKey.encodedPrivateKey);
+                await verifySession(app, recoveryKey.encodedPrivateKey!);
                 // We need to delete the cached secrets
                 await deleteCachedSecrets(page);
 
@@ -104,7 +105,7 @@ test.describe("Encryption tab", () => {
             app,
             util,
         }) => {
-            await verifySession(app, recoveryKey.encodedPrivateKey);
+            await verifySession(app, recoveryKey.encodedPrivateKey!);
             // We need to delete the cached secrets
             await deleteCachedSecrets(page);
 
@@ -120,7 +121,7 @@ test.describe("Encryption tab", () => {
         });
 
         test("should warn before turning off key storage", { tag: "@screenshot" }, async ({ page, app, util }) => {
-            await verifySession(app, recoveryKey.encodedPrivateKey);
+            await verifySession(app, recoveryKey.encodedPrivateKey!);
             await util.openEncryptionTab();
 
             await page.getByRole("switch", { name: "Allow key storage" }).click();

@@ -530,7 +530,7 @@ const SpaceSetupPrivateInvite: React.FC<{
             if (valid === false) {
                 // true/null are allowed
                 fieldRef.current!.focus();
-                fieldRef.current!.validate({ allowEmpty: true, focused: true });
+                void fieldRef.current!.validate({ allowEmpty: true, focused: true });
                 return;
             }
         }

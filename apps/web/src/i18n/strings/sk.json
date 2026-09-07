@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Výber emotikonov",
         "jump_first_invite": "Prejsť na prvú pozvánku.",
         "message_composer": "Editor správ",
         "n_unread_messages": {
@@ -894,22 +893,6 @@
     },
     "dialog_close_label": "Zavrieť dialógové okno",
     "download_completed": "Preberanie dokončené",
-    "emoji": {
-        "categories": "Kategórie",
-        "category_activities": "Aktivity",
-        "category_animals_nature": "Zvieratá a príroda",
-        "category_flags": "Vlajky",
-        "category_food_drink": "Jedlo a nápoje",
-        "category_frequently_used": "Často používané",
-        "category_objects": "Objekty",
-        "category_smileys_people": "Smajlíky a ľudia",
-        "category_symbols": "Symboly",
-        "category_travel_places": "Cestovanie a miesta",
-        "quick_reactions": "Rýchle reakcie"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Zrušiť vyhľadávanie"
-    },
     "empty_room": "Prázdna miestnosť",
     "empty_room_was_name": "Prázdna miestnosť (bola %(oldName)s)",
     "encryption": {
@@ -1364,7 +1347,6 @@
             "preparing": "Príprava pozvánok..."
         },
         "recents_section": "Nedávne konverzácie",
-        "room_failed_partial": "Ostatným sme pozvánky poslali, ale nižšie uvedené osoby nemohli byť pozvané do <RoomName/>",
         "room_failed_partial_title": "Niektoré pozvánky nebolo možné odoslať",
         "room_failed_title": "Nepodarilo pozvať používateľov do %(roomName)s",
         "send_link_prompt": "Alebo pošlite pozvánku",
@@ -1481,7 +1463,6 @@
         "bridge_state_workspace": "Pracovný priestor: <networkLink/>",
         "click_for_info": "Kliknite pre viac informácií",
         "currently_experimental": "V súčasnosti experimentálne.",
-        "custom_themes": "Umožniť pridávať vlastný vzhľad",
         "dynamic_room_predecessors": "Predchodcovia dynamickej miestnosti",
         "dynamic_room_predecessors_description": "Zapnúť MSC3946 (na podporu neskorých archívov miestností)",
         "element_call_video_rooms": "Element Call video miestnosti",
@@ -1502,7 +1483,6 @@
         "group_profile": "Profil",
         "group_rooms": "Miestnosti",
         "group_spaces": "Priestory",
-        "group_themes": "Vzhľad",
         "group_threads": "Vlákna",
         "group_ui": "Používateľské rozhranie",
         "group_voip": "Zvuk a video",
@@ -1683,7 +1663,6 @@
         "mentions_and_keywords": "@zmienky a kľúčové slová",
         "mentions_and_keywords_description": "Dostávajte upozornenia len na zmienky a kľúčové slová nastavené vo vašich <a>nastaveniach</a>",
         "mentions_keywords": "Zmienky a kľúčové slová",
-        "message_didnt_send": "Správa sa neodoslala. Kliknite pre informácie.",
         "mute_description": "Nebudete dostávať žiadne oznámenia"
     },
     "notifier": {
@@ -2426,11 +2405,6 @@
             "custom_font_description": "Nastavte názov písma, ktoré máte nainštalované na vašom systéme & %(brand)s sa ho pokúsi použiť.",
             "custom_font_name": "Názov systémového písma",
             "custom_font_size": "Použiť vlastnú veľkosť",
-            "custom_theme_add": "Pridať vlastnú tému",
-            "custom_theme_downloading": "Sťahovanie vlastnej témy...",
-            "custom_theme_error_downloading": "Chyba pri sťahovaní témy",
-            "custom_theme_help": "Zadajte adresu URL vlastnej témy, ktorú chcete použiť.",
-            "custom_theme_invalid": "Neplatná schéma vzhľadu.",
             "dialog_title": "<strong>Nastavenia:</strong> Vzhľad",
             "font_size": "Veľkosť písma",
             "font_size_default": "%(fontSize)s (predvolené)",

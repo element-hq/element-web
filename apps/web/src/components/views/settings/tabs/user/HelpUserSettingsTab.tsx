@@ -74,7 +74,7 @@ export default class HelpUserSettingsTab extends React.Component<EmptyObject, IS
         // stopping in the middle of the logs.
         logger.log("Clear cache & reload clicked");
         this.context.stopClient();
-        this.context.store.deleteAllData().then(() => {
+        void this.context.store.deleteAllData().then(() => {
             PlatformPeg.get()?.reload();
         });
     };
@@ -168,10 +168,12 @@ export default class HelpUserSettingsTab extends React.Component<EmptyObject, IS
                                 {},
                                 {
                                     twemoji: (sub) => (
-                                        <ExternalLink href="https://twemoji.twitter.com/">{sub}</ExternalLink>
+                                        <ExternalLink href="https://github.com/jdecked/twemoji">{sub}</ExternalLink>
                                     ),
                                     author: (sub) => (
-                                        <ExternalLink href="https://twemoji.twitter.com/">{sub}</ExternalLink>
+                                        <ExternalLink href="https://github.com/jdecked/twemoji/graphs/contributors">
+                                            {sub}
+                                        </ExternalLink>
                                     ),
                                     terms: (sub) => (
                                         <ExternalLink
