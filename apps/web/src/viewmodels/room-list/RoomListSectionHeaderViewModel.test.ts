@@ -114,6 +114,18 @@ describe("RoomListSectionHeaderViewModel", () => {
         expect(vm.isExpanded).toBe(false);
     });
 
+    it("should start the Invites section collapsed", () => {
+        // The section appears on its own when an invitation arrives, so it must not push the list down
+        const vm = new RoomListSectionHeaderViewModel({
+            tag: DefaultTagID.Invite,
+            title: "Invites",
+            spaceId: "!space:server",
+            onToggleExpanded,
+        });
+
+        expect(vm.getSnapshot().isExpanded).toBe(false);
+    });
+
     it("should initialize expanded state from the persisted setting", () => {
         sectionExpansionState = { "!space:server": { "m.favourite": false } };
 
@@ -162,6 +174,7 @@ describe("RoomListSectionHeaderViewModel", () => {
 
     describe("displaySectionMenu", () => {
         it.each([
+            [DefaultTagID.Invite, false],
             [DefaultTagID.Favourite, false],
             [DefaultTagID.LowPriority, false],
             [CHATS_TAG, false],
@@ -191,6 +204,7 @@ describe("RoomListSectionHeaderViewModel", () => {
         });
 
         it.each([
+            [DefaultTagID.Invite, false],
             [DefaultTagID.Favourite, false],
             [DefaultTagID.LowPriority, false],
             [CHATS_TAG, true],
@@ -226,15 +240,16 @@ describe("RoomListSectionHeaderViewModel", () => {
         it.each([
             [DefaultTagID.DM, "dm"],
             [CHATS_TAG, "nonDm"],
-            [DefaultTagID.Favourite, undefined],
-            [DefaultTagID.LowPriority, undefined],
-            ["element.io.section.custom", undefined],
+            [DefaultTagID.Invite, "none"],
+            [DefaultTagID.Favourite, "any"],
+            [DefaultTagID.LowPriority, "any"],
+            ["element.io.section.custom", "any"],
         ])("should be %s for tag %s when the People section is shown", (tag, expected) => {
             expect(makeViewModel(tag).getSnapshot().acceptedRoomKind).toBe(expected);
         });
 
         it("should let the Chats section accept any room when the People section is hidden", () => {
-            expect(makeViewModel(CHATS_TAG, false).getSnapshot().acceptedRoomKind).toBeUndefined();
+            expect(makeViewModel(CHATS_TAG, false).getSnapshot().acceptedRoomKind).toBe("any");
         });
     });
 
@@ -390,6 +405,37 @@ describe("RoomListSectionHeaderViewModel", () => {
             expect(vm.getSnapshot().isUnread).toBe(true);
         });
 
+        it("should collapse the Invites section once its invitations are gone", () => {
+            const vm = new RoomListSectionHeaderViewModel({
+                tag: DefaultTagID.Invite,
+                title: "Invites",
+                spaceId: "!space:server",
+                onToggleExpanded,
+            });
+            vm.onClick();
+            expect(vm.getSnapshot().isExpanded).toBe(true);
+
+            // The last invitation was accepted or rejected
+            vm.setRooms([]);
+
+            // Closed again, so the next invitation makes the section appear collapsed
+            expect(vm.getSnapshot().isExpanded).toBe(false);
+        });
+
+        it("should leave an expanded section expanded when it empties", () => {
+            const vm = new RoomListSectionHeaderViewModel({
+                tag: "m.favourite",
+                title: "Favourites",
+                spaceId: "!space:server",
+                onToggleExpanded,
+            });
+
+            vm.setRooms([]);
+
+            // Only the Invites section is collapsed on emptying
+            expect(vm.getSnapshot().isExpanded).toBe(true);
+        });
+
         it("should subscribe to new rooms and unsubscribe from removed rooms", () => {
             const room2 = mkRoom(matrixClient, "!room2:server");
             const notificationState2 = new RoomNotificationState(room2, false);
@@ -539,21 +585,35 @@ describe("RoomListSectionHeaderViewModel", () => {
                 );
             });
 
-            it("should aggregate an invitation from any room", () => {
-                vi.spyOn(notificationState, "invited", "get").mockReturnValue(true);
+            it("should report invitations as a count rather than an icon", () => {
+                const room2 = mkRoom(matrixClient, "!room2:server");
+                const notificationState2 = new RoomNotificationState(room2, false);
+                for (const state of [notificationState, notificationState2]) {
+                    // An invitation reports neither a mention nor a notification
+                    vi.spyOn(state, "invited", "get").mockReturnValue(true);
+                    vi.spyOn(state, "isMention", "get").mockReturnValue(false);
+                    vi.spyOn(state, "isNotification", "get").mockReturnValue(false);
+                }
+                vi.spyOn(RoomNotificationStateStore.instance, "getRoomState")
+                    .mockReturnValueOnce(notificationState)
+                    .mockReturnValue(notificationState2);
 
                 const vm = new RoomListSectionHeaderViewModel({
-                    tag: "m.favourite",
-                    title: "Favourites",
+                    tag: DefaultTagID.Invite,
+                    title: "Invites",
                     spaceId: "!space:server",
                     onToggleExpanded,
                 });
-                vm.setRooms([room]);
+                vm.setRooms([room, room2]);
 
                 expect(vm.getSnapshot().notification).toEqual(
                     expect.objectContaining({
                         hasAnyNotificationOrActivity: true,
-                        invited: true,
+                        // Counted as a notification so that the collapsed header renders the badge
+                        isNotification: true,
+                        count: 2,
+                        // The count is shown on its own, without the invitation icon
+                        invited: false,
                     }),
                 );
             });

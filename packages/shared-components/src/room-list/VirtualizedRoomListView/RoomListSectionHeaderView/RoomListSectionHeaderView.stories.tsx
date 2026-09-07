@@ -74,6 +74,7 @@ const meta = {
         },
         displaySectionMenu: true,
         canBeReordered: true,
+        acceptedRoomKind: "any",
         onClick: fn(),
         onFocus: fn(),
         editSection: fn(),
