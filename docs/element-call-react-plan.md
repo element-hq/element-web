@@ -565,10 +565,20 @@ checks the real component's chunk mounts inside `.mx_CallView` without an `ifram
   `ResizeObserver` (`src/utils/elementSize.ts`) and hands it to the view model as `windowSize$`, which is now a
   required input rather than a test-only override; the in-call container carries `data-layout` for tests; a
   component Playwright spec shrinks the container and expects the pip layout. Still to do upstream: land this
-  in element-hq/element-call#4233's branch. Known limit: the CSS `@media` queries (footer, header, lobby
-  breakpoints) and the two `useMediaQuery` calls (`Header.tsx`, `LobbyView.tsx`) still key off the window;
-  none of them affect the pip layout, which hides the header and footer, but the lobby and the footer at
-  intermediate container sizes still assume the container is the window.
+  in element-hq/element-call#4233's branch.
+- **Pip footer kept its full-size form (done, local checkout).** The footer, and the other call-view
+  breakpoints, were `@media` queries against the window, so a small container in a large window got the
+  full-height footer with logo and layout switch below a squeezed tile. EC's root element is now a named
+  query container (`[data-element-call-root] { container: element-call / size }` in `base.css`) and the
+  width/height breakpoints in `CallFooter`, `InCallView`, `ReactionToggleButton`, the grid layouts, `Header`,
+  `AppBar`, `LobbyView`, `VideoPreview` and `CallEndedView` are `@container element-call (...)` queries; for
+  the standalone app the root is the page, so they mean what they did. The footer stays below the tile, as in
+  the small webview. A component Playwright spec ("looks the same in a small container as in a small window")
+  joins a call in the standalone app at a 300x300 viewport and in the component at a 300x300 container and
+  expects the same layout, tile height, footer height and footer controls. Still keyed off the window: the
+  two `useMediaQuery` calls (`Header.tsx` size, `LobbyView.tsx` recents button) and the `min-height: 330px`
+  media query for the root's gradient in `base.css`; Storybook's `CallFooter` story has no query container, so
+  it always shows the wide form.
 
 - **Document PiP (done).** While connected to a call the room header shows no start-call buttons any more but
   two ways out of the room view: Element Web's own PiP (the existing minimise/maximise toggle, now with the

@@ -43,6 +43,7 @@ import { getCurrentLanguage } from "../languageHandler";
 import { Anonymity, PosthogAnalytics } from "../PosthogAnalytics";
 import { isVideoRoom } from "../utils/video-rooms";
 import { FontWatcher } from "../settings/watchers/FontWatcher";
+import ThemeWatcher from "../settings/watchers/ThemeWatcher";
 import { type JitsiCallMemberContent, JitsiCallMemberEventType } from "../call-types";
 import SdkConfig from "../SdkConfig.ts";
 import DMRoomMap from "../utils/DMRoomMap.ts";
@@ -732,6 +733,7 @@ export class ElementCall extends Call {
         const config: ElementCallConfiguration = {
             perParticipantE2EE: !!ElementCall.getWidgetData(client, roomId, {}, {}).perParticipantE2EE,
             lang: getCurrentLanguage().replace("_", "-"),
+            theme: new ThemeWatcher().getEffectiveTheme(),
             fontScale: FontWatcher.getRootFontSize() / FontWatcher.getBrowserDefaultFontSize(),
             fonts,
             // on EW we do not want the gradient EC background.
@@ -866,8 +868,7 @@ export class ElementCall extends Call {
             baseUrl: client.baseUrl,
             lang: config.lang!,
             fontScale: config.fontScale!.toString(),
-            // The React component gets theme changes over the host bridge instead.
-            theme: "$org.matrix.msc2873.client_theme",
+            theme: config.theme ?? "$org.matrix.msc2873.client_theme",
             background: config.background!,
         });
 
