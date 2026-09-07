@@ -16,7 +16,8 @@ import { stubClient } from "test-utils";
 import { populateThread } from "test-utils/threads";
 import { NotificationCountType, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
 
-import { ThreadsActivityCentre } from "./ThreadsActivityCentre";
+import { ThreadsActivityCentre, threadDecorationProps } from "./ThreadsActivityCentre";
+import { NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import DMRoomMap from "../../../../utils/DMRoomMap";
@@ -69,6 +70,18 @@ describe("ThreadsActivityCentre", () => {
         pendingEventOrdering: PendingEventOrdering.Detached,
     });
     roomWithHighlightOtherAuthor.name = "Keyword mention thread";
+
+    // Room whose thread carries a notification count greater than one, to check it is displayed
+    const roomWithManyNotifs = new Room("!room8:server", cli, userId, {
+        pendingEventOrdering: PendingEventOrdering.Detached,
+    });
+    roomWithManyNotifs.name = "Three notifications";
+
+    // Room whose thread is only locally unread: no server-reported counts at all
+    const roomWithActivityOnly = new Room("!room9:server", cli, userId, {
+        pendingEventOrdering: PendingEventOrdering.Detached,
+    });
+    roomWithActivityOnly.name = "Activity only";
 
     const getDefaultThreadArgs = (room: Room) => ({
         room: room,
@@ -128,7 +141,37 @@ describe("ThreadsActivityCentre", () => {
             1,
         );
         vi.spyOn(highlightOtherThreadInfo.thread, "hasCurrentUserParticipated", "get").mockReturnValue(false);
+
+        // Participated thread with three notifications, to check the count is surfaced
+        const manyNotifsThreadInfo = await populateThread({
+            ...getDefaultThreadArgs(roomWithManyNotifs),
+            ts: 15,
+        });
+        roomWithManyNotifs.setThreadUnreadNotificationCount(
+            manyNotifsThreadInfo.thread.id,
+            NotificationCountType.Total,
+            3,
+        );
+        vi.spyOn(manyNotifsThreadInfo.thread, "hasCurrentUserParticipated", "get").mockReturnValue(true);
+
+        // Participated thread with no server counts at all: unread is detected locally only
+        const activityThreadInfo = await populateThread({
+            room: roomWithActivityOnly,
+            client: cli,
+            authorId: "@other:bar",
+            participantUserIds: ["@someone:bar"],
+            ts: 20,
+        });
+        vi.spyOn(activityThreadInfo.thread, "hasCurrentUserParticipated", "get").mockReturnValue(true);
     });
+
+    /** The notification decoration of the only row currently rendered. */
+    const getRowDecoration = (): HTMLElement => {
+        const row = screen.getAllByRole("menuitem")[0];
+        const decoration = row.querySelector<HTMLElement>('[data-testid="notification-decoration"]');
+        expect(decoration).not.toBeNull();
+        return decoration!;
+    };
 
     it("should render the threads activity centre button", async () => {
         renderTAC();
@@ -185,6 +228,48 @@ describe("ThreadsActivityCentre", () => {
         const tacRows = screen.getAllByRole("menuitem");
         expect(tacRows.length).toEqual(1);
         expect(tacRows[0].querySelectorAll('[data-notification-level="highlight"]').length).toEqual(1);
+    });
+
+    it("should display the notification count on a notified thread", async () => {
+        cli.getVisibleRooms = vi.fn().mockReturnValue([roomWithManyNotifs]);
+        renderTAC();
+        await userEvent.click(getTACButton());
+
+        const decoration = getRowDecoration();
+        // The counter shows the number, and there is no mention icon
+        expect(decoration).toHaveTextContent("3");
+        expect(decoration.querySelectorAll("svg").length).toEqual(0);
+    });
+
+    it("should display the mention icon on a highlighted thread", async () => {
+        cli.getVisibleRooms = vi.fn().mockReturnValue([roomWithHighlight]);
+        renderTAC();
+        await userEvent.click(getTACButton());
+
+        const decoration = getRowDecoration();
+        expect(decoration.querySelectorAll("svg").length).toEqual(1);
+        // This fixture only reports a highlight count, so the counter beside the icon stays empty
+        expect(decoration).not.toHaveTextContent(/\d/);
+    });
+
+    it("should display a bare activity indicator on a locally-unread thread", async () => {
+        cli.getVisibleRooms = vi.fn().mockReturnValue([roomWithActivityOnly]);
+        renderTAC();
+        await userEvent.click(getTACButton());
+
+        const decoration = getRowDecoration();
+        // Neither a mention icon nor a count: just the activity dot
+        expect(decoration.querySelectorAll("svg").length).toEqual(0);
+        expect(decoration).not.toHaveTextContent(/\d/);
+    });
+
+    it("should describe the unread state of a row for screen readers", async () => {
+        cli.getVisibleRooms = vi.fn().mockReturnValue([roomWithManyNotifs]);
+        renderTAC();
+        await userEvent.click(getTACButton());
+
+        // The row overrides its own content with aria-label, so the count has to be spelled out
+        expect(screen.getAllByRole("menuitem")[0]).toHaveAccessibleName(/3 unread messages\./);
     });
 
     it("should show other threads in the Other threads tab", async () => {
@@ -249,5 +334,56 @@ describe("ThreadsActivityCentre", () => {
         // Sanity test
         await userEvent.keyboard("{Control>}a{/Control}");
         expect(keyDownHandler).toHaveBeenCalledWith("a", true);
+    });
+});
+
+describe("threadDecorationProps", () => {
+    it("maps a highlight to a mention", () => {
+        expect(threadDecorationProps(NotificationLevel.Highlight, 2, false)).toEqual(
+            expect.objectContaining({
+                isMention: true,
+                isNotification: false,
+                isActivityNotification: false,
+                count: 2,
+                hasUnreadCount: true,
+                muted: false,
+            }),
+        );
+    });
+
+    it("maps a notification to a counter", () => {
+        expect(threadDecorationProps(NotificationLevel.Notification, 5, false)).toEqual(
+            expect.objectContaining({
+                isMention: false,
+                isNotification: true,
+                isActivityNotification: false,
+                count: 5,
+                hasUnreadCount: true,
+            }),
+        );
+    });
+
+    it("maps a local-only unread to activity, with no count", () => {
+        expect(threadDecorationProps(NotificationLevel.Activity, 0, false)).toEqual(
+            expect.objectContaining({
+                isMention: false,
+                isNotification: false,
+                isActivityNotification: true,
+                count: 0,
+                hasUnreadCount: false,
+            }),
+        );
+    });
+
+    it("passes the muted flag through", () => {
+        expect(threadDecorationProps(NotificationLevel.Activity, 0, true).muted).toBe(true);
+    });
+
+    it("never reports a thread as unsent or invited", () => {
+        const props = threadDecorationProps(NotificationLevel.Highlight, 1, false);
+        expect(props.isUnsentMessage).toBe(false);
+        expect(props.invited).toBe(false);
+        // Rows only exist for unread threads, so the decoration always renders
+        expect(props.hasAnyNotificationOrActivity).toBe(true);
     });
 });
