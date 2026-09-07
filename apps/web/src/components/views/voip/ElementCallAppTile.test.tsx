@@ -29,6 +29,7 @@ import PersistedElement from "../elements/PersistedElement";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { ElementCallAppTile } from "./ElementCallAppTile";
+import { ElementCallInstance } from "./ElementCallInstance";
 
 const { enabledSettings } = enableCalls();
 enabledSettings.add("feature_element_call_react");
@@ -39,7 +40,6 @@ describe("ElementCallAppTile", () => {
     let sdkContext: TestSDKContext;
     let call: ElementCall;
     let viewedRoomId: string | null;
-    let stickyPromise: ReturnType<typeof vi.fn<() => Promise<void>>>;
 
     beforeEach(() => {
         ({ client, room } = setUpClientRoomAndStores());
@@ -54,8 +54,6 @@ describe("ElementCallAppTile", () => {
         const maybeCall = CallStore.instance.getCall(room.roomId);
         if (!(maybeCall instanceof ElementCall)) throw new Error("Failed to create call");
         call = maybeCall;
-
-        stickyPromise = vi.fn<() => Promise<void>>(async () => {});
     });
 
     afterEach(async () => {
@@ -70,7 +68,7 @@ describe("ElementCallAppTile", () => {
 
     const renderTile = async (props: Partial<React.ComponentProps<typeof ElementCallAppTile>> = {}): Promise<void> => {
         render(
-            <ElementCallAppTile app={call.widget} room={room} stickyPromise={stickyPromise} {...props} />,
+            <ElementCallAppTile app={call.widget} room={room} {...props} />,
             clientAndSDKContextRenderOptions(client, sdkContext),
         );
         await act(() => Promise.resolve()); // Let effects settle
@@ -131,7 +129,7 @@ describe("ElementCallAppTile", () => {
         const destroyElement = vi.spyOn(PersistedElement, "destroyElement");
         render(
             <React.StrictMode>
-                <ElementCallAppTile app={call.widget} room={room} stickyPromise={stickyPromise} />
+                <ElementCallAppTile app={call.widget} room={room} />
             </React.StrictMode>,
             clientAndSDKContextRenderOptions(client, sdkContext),
         );
@@ -152,7 +150,7 @@ describe("ElementCallAppTile", () => {
         ActiveWidgetStore.instance.destroyPersistentWidget(call.widget.id, room.roomId);
     });
 
-    it("connects the call when the component reports joined, and waits for the sticky promise", async () => {
+    it("connects the call when the component reports joined, and becomes persistent when asked", async () => {
         const setPersistence = vi.spyOn(ActiveWidgetStore.instance, "setWidgetPersistence");
         const user = userEvent.setup();
         await renderTile();
@@ -163,10 +161,36 @@ describe("ElementCallAppTile", () => {
 
         await user.click(screen.getByRole("button", { name: "setAlwaysOnScreen(true)" }));
         await waitFor(() => expect(setPersistence).toHaveBeenCalledWith(call.widget.id, room.roomId, true));
-        expect(stickyPromise).toHaveBeenCalled();
 
         await user.click(screen.getByRole("button", { name: "notifyHungUp" }));
         await waitFor(() => expect(call.connected).toBe(false));
+        ActiveWidgetStore.instance.destroyPersistentWidget(call.widget.id, room.roomId);
+    });
+
+    it("shows the same component to every tile, so moving between containers does not restart the call", async () => {
+        await renderTile();
+        await screen.findByText("Element Call (mock)");
+        const contentLoadedReports = (): number =>
+            screen.getByRole("list", { name: "HostBridge log" }).textContent!.split("→ contentLoaded").length - 1;
+        // (Twice rather than once: PersistedElement renders in StrictMode, which replays mount effects)
+        await waitFor(() => expect(contentLoadedReports()).toBeGreaterThan(0));
+        await act(() => new Promise((r) => setTimeout(r, 10)));
+        const reportsBefore = contentLoadedReports();
+        const before = ElementCallInstance.get(call, client);
+
+        // The call moves from the room view to the floating PiP: a different tile in a different container.
+        // As in the app, the call is persistent by then (the PiP only shows persistent widgets), which is
+        // what keeps it alive across the first tile's deferred teardown.
+        ActiveWidgetStore.instance.setWidgetPersistence(call.widget.id, room.roomId, true);
+        cleanup();
+        await renderTile({ miniMode: true, fullWidth: true });
+        await screen.findByText("Element Call (mock)");
+        await act(() => new Promise((r) => setTimeout(r, 10)));
+
+        expect(document.querySelector(".mx_AppTile_mini")).not.toBeNull();
+        expect(ElementCallInstance.get(call, client)).toBe(before);
+        // The mock reports contentLoaded again whenever it is handed a new hostBridge
+        expect(contentLoadedReports()).toBe(reportsBefore);
         ActiveWidgetStore.instance.destroyPersistentWidget(call.widget.id, room.roomId);
     });
 

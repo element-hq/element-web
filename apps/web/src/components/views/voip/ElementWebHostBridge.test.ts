@@ -11,7 +11,8 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Subject } from "rxjs";
 
 import ActiveWidgetStore from "../../../stores/ActiveWidgetStore";
-import { type ElementCall } from "../../../models/Call";
+import { CallStore } from "../../../stores/CallStore";
+import { type Call, type ElementCall } from "../../../models/Call";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { type HostBridge, type HostRequest } from "./ElementCallComponentTypes";
@@ -78,25 +79,28 @@ describe("ElementWebHostBridge", () => {
         expect(setWidgetPersistence).toHaveBeenCalledWith(widgetId, roomId, false);
     });
 
-    it("waits for the sticky promise before becoming persistent, but not when leaving the screen", async () => {
+    it("hangs up every other connected call before becoming persistent, but not when leaving the screen", async () => {
         const order: string[] = [];
-        const stickyPromise = vi.fn(async () => {
-            order.push("sticky");
-        });
+        const otherCall = {
+            disconnect: vi.fn(async () => {
+                order.push("disconnect other");
+            }),
+        };
+        const ownDisconnect = vi.fn(async () => {});
+        (call as unknown as { disconnect: unknown }).disconnect = ownDisconnect;
+        vi.spyOn(CallStore.instance, "connectedCalls", "get").mockReturnValue(
+            new Set([call, otherCall] as unknown as Call[]),
+        );
         setWidgetPersistence.mockImplementation(() => {
             order.push("persist");
         });
-        bridge = new ElementWebHostBridge(call as unknown as ElementCall, {
-            widgetId,
-            widgetRoomId: roomId,
-            stickyPromise,
-        });
 
         await bridge.setAlwaysOnScreen(true);
-        expect(order).toEqual(["sticky", "persist"]);
+        expect(order).toEqual(["disconnect other", "persist"]);
+        expect(ownDisconnect).not.toHaveBeenCalled();
 
         await bridge.setAlwaysOnScreen(false);
-        expect(stickyPromise).toHaveBeenCalledTimes(1);
+        expect(otherCall.disconnect).toHaveBeenCalledTimes(1);
     });
 
     it("has no host-driven join or mute requests and supports reactions", () => {
