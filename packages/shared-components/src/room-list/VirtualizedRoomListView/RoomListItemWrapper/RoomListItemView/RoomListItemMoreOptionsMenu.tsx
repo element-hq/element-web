@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { useEffect, useId, useMemo, useRef, useState, type JSX } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState, type JSX } from "react";
 import { IconButton, Menu, MenuItem, Separator, SubMenu, ToggleMenuItem } from "@vector-im/compound-web";
 import {
     MarkAsReadIcon,
@@ -40,59 +40,94 @@ export interface RoomListItemMoreOptionsMenuProps {
 }
 
 /**
- * Delay, in milliseconds, before a submenu is closed after the pointer has
- * left both its trigger and its own content without re-entering either.
+ * Grace period, in milliseconds, allowed for the pointer to travel from the
+ * submenu's trigger into the submenu itself before the submenu is dismissed.
  */
-const HOVER_OUT_CLOSE_DELAY_MS = 300;
+const HOVER_DISMISS_GRACE_MS = 300;
+
+interface SubMenuHoverDismiss {
+    /** Whether the submenu is open. */
+    open: boolean;
+    /** Handler for the submenu's own open state changes. */
+    onOpenChange: (open: boolean) => void;
+    /** `onPointerLeave` for the submenu's trigger. */
+    onTriggerPointerLeave: React.PointerEventHandler;
+    /** `onPointerOver` for the submenu's contents. */
+    onContentPointerOver: React.PointerEventHandler;
+}
 
 /**
- * Keeps a submenu's open state tied to hovering its trigger or its own
- * content, closing it shortly after the pointer leaves both without
+ * Dismisses an open submenu when the mouse wanders away from it, without
  * dismissing the parent menu.
  *
- * This works around Radix's dropdown menu only closing a submenu on
- * click-outside, Escape, selecting an item, or hovering a sibling trigger:
- * moving the pointer away from just the "Move to" item (while staying inside
- * the parent menu) does not otherwise dismiss the open submenu.
+ * Radix dismisses a submenu when the pointer reaches a sibling menu item or
+ * leaves the menu altogether, but not when it lands on parent-menu space that
+ * is not an item — the gap between items, or the padding — which is what
+ * leaves the submenu stranded on screen.
+ *
+ * The behaviour implemented here is the standard cascade-menu pattern:
+ *
+ * - If the mouse never made it into the submenu, treat the open as accidental
+ *   and dismiss the submenu shortly after the mouse leaves the trigger.
+ * - Once the mouse has been over an item of the submenu, the user has shown
+ *   intent, so keep it open until they explicitly dismiss it.
+ *
+ * Dismissal is only ever driven by a mouse, so submenus opened by keyboard or
+ * touch are left alone rather than disappearing from under a user who cannot
+ * chase them with a pointer.
  */
-function useSubMenuHoverState(
-    triggerId: string,
-    contentRef: React.RefObject<HTMLElement | null>,
-): [boolean, (open: boolean) => void] {
+function useSubMenuHoverDismiss(): SubMenuHoverDismiss {
     const [open, setOpen] = useState(false);
-    const closeTimeoutRef = useRef<number | undefined>(undefined);
 
+    // Whether the mouse has been inside the submenu during this open cycle.
+    // Once it has, hovering out no longer dismisses the submenu.
+    const hasEnteredContent = useRef(false);
+    const dismissTimer = useRef<number | undefined>(undefined);
+
+    const clearDismissTimer = useCallback((): void => {
+        if (dismissTimer.current !== undefined) {
+            window.clearTimeout(dismissTimer.current);
+            dismissTimer.current = undefined;
+        }
+    }, []);
+
+    // Start each open cycle with a clean slate.
     useEffect(() => {
-        if (!open) return undefined;
+        if (!open) {
+            hasEnteredContent.current = false;
+            clearDismissTimer();
+        }
+    }, [open, clearDismissTimer]);
 
-        const isInsideSubMenu = (target: EventTarget | null): boolean => {
-            if (!(target instanceof Node)) return false;
-            const trigger = document.getElementById(triggerId);
-            return Boolean(trigger?.contains(target) || contentRef.current?.contains(target));
-        };
+    useEffect(() => clearDismissTimer, [clearDismissTimer]);
 
-        const onPointerMove = (event: PointerEvent): void => {
-            if (isInsideSubMenu(event.target)) {
-                window.clearTimeout(closeTimeoutRef.current);
-                closeTimeoutRef.current = undefined;
-                return;
-            }
-            if (closeTimeoutRef.current !== undefined) return;
-            closeTimeoutRef.current = window.setTimeout(() => {
-                closeTimeoutRef.current = undefined;
-                setOpen(false);
-            }, HOVER_OUT_CLOSE_DELAY_MS);
-        };
+    const onTriggerPointerLeave = useCallback<React.PointerEventHandler>(
+        (event) => {
+            if (event.pointerType !== "mouse") return;
+            // The trigger stays mounted while the submenu is closed, so
+            // leaving it is routine and means nothing.
+            if (!open) return;
+            // The user has already committed to the submenu; leave it be.
+            if (hasEnteredContent.current) return;
+            clearDismissTimer();
+            dismissTimer.current = window.setTimeout(() => {
+                dismissTimer.current = undefined;
+                if (!hasEnteredContent.current) setOpen(false);
+            }, HOVER_DISMISS_GRACE_MS);
+        },
+        [open, clearDismissTimer],
+    );
 
-        document.addEventListener("pointermove", onPointerMove);
-        return () => {
-            document.removeEventListener("pointermove", onPointerMove);
-            window.clearTimeout(closeTimeoutRef.current);
-            closeTimeoutRef.current = undefined;
-        };
-    }, [open, triggerId, contentRef]);
+    const onContentPointerOver = useCallback<React.PointerEventHandler>(
+        (event) => {
+            if (event.pointerType !== "mouse") return;
+            hasEnteredContent.current = true;
+            clearDismissTimer();
+        },
+        [clearDismissTimer],
+    );
 
-    return [open, setOpen];
+    return { open, onOpenChange: setOpen, onTriggerPointerLeave, onContentPointerOver };
 }
 
 /**
@@ -134,9 +169,12 @@ export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {
     const hasSections = snapshot.sections.length > 0;
     const isInSection = useMemo(() => snapshot.sections.some((section) => section.isSelected), [snapshot.sections]);
 
-    const moveToTriggerId = useId();
-    const moveToContentRef = useRef<HTMLDivElement>(null);
-    const [moveToOpen, setMoveToOpen] = useSubMenuHoverState(moveToTriggerId, moveToContentRef);
+    const {
+        open: moveToOpen,
+        onOpenChange: onMoveToOpenChange,
+        onTriggerPointerLeave: onMoveToTriggerPointerLeave,
+        onContentPointerOver: onMoveToContentPointerOver,
+    } = useSubMenuHoverDismiss();
 
     return (
         <div onKeyDown={(e) => e.stopPropagation()}>
@@ -195,18 +233,19 @@ export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {
                 <>
                     <SubMenu
                         open={moveToOpen}
-                        onOpenChange={setMoveToOpen}
+                        onOpenChange={onMoveToOpenChange}
                         trigger={
                             <MenuItem
-                                id={moveToTriggerId}
                                 Icon={ArrowRightIcon}
                                 label={_t("room_list|more_options|move_to_section")}
                                 onSelect={null}
-                                onPointerEnter={() => setMoveToOpen(true)}
+                                onPointerLeave={onMoveToTriggerPointerLeave}
                             />
                         }
                     >
-                        <div ref={moveToContentRef} style={{ display: "contents" }}>
+                        {/* `display: contents` leaves layout untouched; `pointerover`
+                            from the items below still bubbles through it. */}
+                        <div style={{ display: "contents" }} onPointerOver={onMoveToContentPointerOver}>
                             {snapshot.sections.map((section) => (
                                 <MenuItem
                                     key={section.tag}
