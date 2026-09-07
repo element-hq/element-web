@@ -24,6 +24,7 @@ catalog:
     # playwright
     "@playwright/test": 1.61.1
     "playwright-core": 1.61.1
+    serve: 14.2.6
     # Compound
     "@vector-im/compound-design-tokens": 10.2.1
     "@vector-im/compound-web": 10.0.1
@@ -93,6 +94,8 @@ allowBuilds:
     # The following are to make wrangler-action happy - https://github.com/cloudflare/wrangler-action/issues/436
     sharp: true
     workerd: true
+    # Optionally builds itself from source if a specific environment variable is present, which we do not need
+    "@parcel/watcher": false
 
 patchedDependencies:
     # Workaround for missing types export
