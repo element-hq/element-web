@@ -40,7 +40,7 @@ export type CallTileProps = Omit<AppTileProps, DefaultedAppTileProps> &
  * This is the single place that decides between the two paths. Callers are responsible for only using
  * it for Element Call widgets (`WidgetType.CALL`); see `PersistentApp` for the generic case.
  */
-export const CallTile = (props: CallTileProps): JSX.Element => {
+export const CallAppTile = (props: CallTileProps): JSX.Element => {
     const reactCall = useSettingValue("feature_element_call_react");
     return reactCall ? <ElementCallAppTile {...props} /> : <AppTile {...props} />;
 };

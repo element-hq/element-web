@@ -189,19 +189,19 @@ is no messaging, so `start()` would time out.
 EC already defines the replacement: **`HostBridge`** (`src/HostBridge.ts` in EC, mirrored in the mock).
 Its two halves map exactly onto what `WidgetMessaging` + the model's action handlers do today:
 
-| `HostBridge` member       | Direction | Widget equivalent today                                           | EW implementation                                                                                          |
-| ------------------------- | --------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `contentLoaded()`         | EC → EW   | `WidgetMessaging` `ready` / `Call.start()` messaging wait         | Resolve the model's ready deferred; `start()` awaits it with the same 16 s timeout                         |
-| `notifyJoined()`          | EC → EW   | `ElementWidgetActions.JoinCall` → `onJoin` → `setConnected()`     | `call.handleJoined()`                                                                                      |
-| `notifyHungUp()`          | EC → EW   | `HangupCall` → `onHangup` → `setDisconnected()`                   | `call.handleHangup()`                                                                                      |
-| `close?()`                | EC → EW   | `Close` → `onClose` → `setDisconnected(); close()`                | `call.handleClose()` — present, since EW can dismiss the call                                              |
-| `notifyDeviceMute(state)` | EC → EW   | `DeviceMute` → `onDeviceMute` (ack only)                          | No-op for now (`call.handleDeviceMute()`)                                                                  |
-| `setAlwaysOnScreen(bool)` | EC → EW   | `UpdateAlwaysOnScreen` → `stickyPromise` → `setWidgetPersistence` | `await stickyPromise?.()` then `ActiveWidgetStore.setWidgetPersistence(app.id, roomId, bool)` (tile-owned) |
-| `hangUp$`                 | EW → EC   | `performDisconnection()` sends `HangupCall`, awaits reply         | rxjs `Subject`; `performDisconnection()` pushes a request and awaits its `reply()`                         |
-| `themeChange$`            | EW → EC   | `WidgetMessaging.updateTheme`                                     | `Subject` fed from EW's theme watcher                                                                      |
-| `join$`, `deviceMute$`    | EW → EC   | `JoinCall` (preload) / `DeviceMute` request                       | `NEVER` for now — EW does not preload and does not drive mute                                              |
-| `supportsReactions`       | —         | `io.element.participants`/reactions capability                    | `true`                                                                                                     |
-| `downloadMedia?(mxc)`     | EC → EW   | `ElementWidgetDriver.downloadFile`                                | Omit — EC has the client and fetches media itself                                                          |
+| `HostBridge` member       | Direction | Widget equivalent today                                           | EW implementation                                                                                                       |
+| ------------------------- | --------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `contentLoaded()`         | EC → EW   | `WidgetMessaging` `ready` / `Call.start()` messaging wait         | Resolve the model's ready deferred; `start()` awaits it with the same 16 s timeout                                      |
+| `notifyJoined()`          | EC → EW   | `ElementWidgetActions.JoinCall` → `onJoin` → `setConnected()`     | `call.handleJoined()`                                                                                                   |
+| `notifyHungUp()`          | EC → EW   | `HangupCall` → `onHangup` → `setDisconnected()`                   | `call.handleHangup()`                                                                                                   |
+| `close?()`                | EC → EW   | `Close` → `onClose` → `setDisconnected(); close()`                | `call.handleClose()` — present, since EW can dismiss the call                                                           |
+| `notifyDeviceMute(state)` | EC → EW   | `DeviceMute` → `onDeviceMute` (ack only)                          | No-op for now (`call.handleDeviceMute()`)                                                                               |
+| `setAlwaysOnScreen(bool)` | EC → EW   | `UpdateAlwaysOnScreen` → `stickyPromise` → `setWidgetPersistence` | disconnect every other connected call, then `ActiveWidgetStore.setWidgetPersistence(app.id, roomId, bool)` (call-owned) |
+| `hangUp$`                 | EW → EC   | `performDisconnection()` sends `HangupCall`, awaits reply         | rxjs `Subject`; `performDisconnection()` pushes a request and awaits its `reply()`                                      |
+| `themeChange$`            | EW → EC   | `WidgetMessaging.updateTheme`                                     | `Subject` fed from EW's theme watcher                                                                                   |
+| `join$`, `deviceMute$`    | EW → EC   | `JoinCall` (preload) / `DeviceMute` request                       | `NEVER` for now — EW does not preload and does not drive mute                                                           |
+| `supportsReactions`       | —         | `io.element.participants`/reactions capability                    | `true`                                                                                                                  |
+| `downloadMedia?(mxc)`     | EC → EW   | `ElementWidgetDriver.downloadFile`                                | Omit — EC has the client and fetches media itself                                                                       |
 
 Work:
 
@@ -209,9 +209,21 @@ Work:
    the lockfile via `playwright-common`, so no new version). The mock uses a structural
    `Subscribable<T>` so rxjs `Subject`s satisfy it as-is.
 2. **`ElementWebHostBridge implements HostBridge`** (new file next to the tile, e.g.
-   `components/views/voip/ElementWebHostBridge.ts`), constructed per `(call, app, room, stickyPromise)`
-   by `ElementCallAppTile` with the lifetime of the persisted DOM — the same contract `WidgetMessaging`
-   has today. Its methods do nothing but call into the model and `ActiveWidgetStore` as in the table.
+   `components/views/voip/ElementWebHostBridge.ts`), constructed **once per call** with the lifetime of
+   the persisted DOM — the same contract `WidgetMessaging` has today. Its methods do nothing but call into
+   the model and `ActiveWidgetStore` as in the table; going sticky hangs up every other connected call
+   first (no `stickyPromise` from the container: that would differ per container).
+
+    **Lifetime matters** (learnt the hard way): EC's `ActiveCall` keys the CallViewModel scope on the
+    identity of `urlParams` (derived from `config`) and `hostBridge`, and `useMuteStates` on the same, so a
+    new bridge or a fresh `config` object makes EC leave and rejoin the call and reset the mute state. A
+    tile-owned bridge does exactly that on every move between containers (call view ↔ PiP ↔ document PiP).
+    Hence `ElementCallInstance` (`components/views/voip/ElementCallInstance.tsx`): one per `ElementCall`
+    model (WeakMap), owning the bridge, the `intent`/`config` frozen at creation, and the one
+    `<ElementCall …/>` element every tile renders as its `PersistedElement` children — the same element
+    reference, so React bails out of EC's subtree entirely and tiles only place the persisted DOM.
+    Destroyed with the persisted root (`endCall`) or the model (`CallEvent.Destroy`).
+
 3. **Transport seam in the `ElementCall` model, not a class split.** Add `handleJoined()`,
    `handleHangup()`, `handleClose()`, `handleDeviceMute()` (the bodies of `onJoin`/`onHangup`/
    `onClose`/`onDeviceMute` minus the widget ack — the widget handlers become thin wrappers), a

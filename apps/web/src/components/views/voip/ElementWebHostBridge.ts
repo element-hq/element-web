@@ -8,6 +8,7 @@
 import { NEVER, type Observable, Subject } from "rxjs";
 
 import ActiveWidgetStore from "../../../stores/ActiveWidgetStore";
+import { CallStore } from "../../../stores/CallStore";
 import ThemeWatcher, { ThemeWatcherEvent } from "../../../settings/watchers/ThemeWatcher";
 import { type ElementCall } from "../../../models/Call";
 import {
@@ -23,11 +24,6 @@ export interface ElementWebHostBridgeOptions {
     widgetId: string;
     /** The room the widget belongs to, as `ActiveWidgetStore` keys it. */
     widgetRoomId: string | null;
-    /**
-     * Must resolve before the call is allowed to become sticky (always on screen). `CallView` uses this
-     * to hang up every other connected call first.
-     */
-    stickyPromise?: () => Promise<void>;
 }
 
 /**
@@ -35,8 +31,10 @@ export interface ElementWebHostBridgeOptions {
  * Element Call React component and the `ElementCall` model / widget stores. It replaces what
  * `WidgetMessaging` plus the model's widget action handlers do for the iframe transport.
  *
- * The bridge is stateless apart from the theme watcher; it is created by `ElementCallAppTile` with the
- * lifetime of the rendered tile and does nothing but forward.
+ * The bridge is stateless apart from the theme watcher and does nothing but forward. There is one per
+ * call (see `ElementCallInstance`), alive for as long as the component is mounted: Element Call restarts
+ * the call if it is handed a different bridge, so a bridge must never be tied to one of the tiles that
+ * show the call.
  */
 export class ElementWebHostBridge implements HostBridge {
     public readonly supportsReactions = true;
@@ -77,9 +75,13 @@ export class ElementWebHostBridge implements HostBridge {
     // EC → EW
 
     public async setAlwaysOnScreen(alwaysOnScreen: boolean): Promise<void> {
-        // If the call wants to become sticky we wait for the stickyPromise to resolve first, as
-        // WidgetMessaging does for UpdateAlwaysOnScreen.
-        if (alwaysOnScreen) await this.opts.stickyPromise?.();
+        // Only one call can be on screen. Before this one becomes sticky, hang up every other connected
+        // call, as `CallView`'s stickyPromise does for the iframe transport (through WidgetMessaging's
+        // UpdateAlwaysOnScreen handling).
+        if (alwaysOnScreen) {
+            const others = [...CallStore.instance.connectedCalls].filter((call) => call !== this.call);
+            await Promise.all(others.map((call) => call.disconnect()));
+        }
         ActiveWidgetStore.instance.setWidgetPersistence(this.opts.widgetId, this.opts.widgetRoomId, alwaysOnScreen);
     }
 
