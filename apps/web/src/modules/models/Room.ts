@@ -62,7 +62,12 @@ class WatchableName extends Watchable<string> {
     }
 }
 
-function sdkEventToModuleEvent(sdkEvent: MatrixEvent | null): ModuleMatrixEvent | null {
+/**
+ * Converts js-sdk matrix event to module matrix event.
+ * @param sdkEvent Js-sdk matrix event
+ * @returns Matrix event that can be used by modules.
+ */
+export function sdkEventToModuleEvent(sdkEvent: MatrixEvent | null): ModuleMatrixEvent | null {
     if (!sdkEvent) return null;
     const eventId = sdkEvent.getId();
     const roomId = sdkEvent.getRoomId();

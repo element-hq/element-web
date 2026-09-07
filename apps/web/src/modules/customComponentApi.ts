@@ -21,6 +21,7 @@ import type {
     CustomComposerPreviewComponentProps,
 } from "@element-hq/element-web-module-api";
 import type React from "react";
+import { sdkEventToModuleEvent } from "./models/Room";
 
 type EventTypeOrFilter = Parameters<ICustomComponentsApi["registerMessageRenderer"]>[0];
 type ComposerPreviewFilterFn = Parameters<ICustomComponentsApi["registerComposerPreview"]>[0];
@@ -46,33 +47,6 @@ type ComposerPreviewRenderer = {
 };
 
 export class CustomComponentsApi implements ICustomComponentsApi {
-    /**
-     * Convert a matrix-js-sdk event into a ModuleMatrixEvent.
-     * @param mxEvent
-     * @returns An event object, or `null` if the event was not a message event.
-     */
-    private static getModuleMatrixEvent(mxEvent: MatrixEvent): ModuleMatrixEvent | null {
-        const eventId = mxEvent.getId();
-        const roomId = mxEvent.getRoomId();
-        const sender = mxEvent.sender;
-        // Typically we wouldn't expect messages without these keys to be rendered
-        // by the timeline, but for the sake of type safety.
-        if (!eventId || !roomId || !sender) {
-            // Not a message event.
-            return null;
-        }
-        return {
-            content: mxEvent.getContent(),
-            eventId,
-            originServerTs: mxEvent.getTs(),
-            roomId,
-            sender: sender.userId,
-            stateKey: mxEvent.getStateKey(),
-            type: mxEvent.getType(),
-            unsigned: mxEvent.getUnsigned(),
-        };
-    }
-
     private readonly registeredMessageRenderers: EventRenderer[] = [];
     private readonly registeredComposerPreviewRenderers: ComposerPreviewRenderer[] = [];
 
@@ -114,7 +88,7 @@ export class CustomComponentsApi implements ICustomComponentsApi {
         props: CustomMessageComponentProps,
         originalComponent?: (props?: OriginalMessageComponentProps) => React.JSX.Element,
     ): React.JSX.Element | null {
-        const moduleEv = CustomComponentsApi.getModuleMatrixEvent(props.mxEvent);
+        const moduleEv = sdkEventToModuleEvent(props.mxEvent);
         const renderer = moduleEv && this.selectMessageRenderer(moduleEv);
         if (renderer) {
             try {
@@ -133,7 +107,7 @@ export class CustomComponentsApi implements ICustomComponentsApi {
      * @returns A component if a custom renderer exists, or originalComponent returns a value. Otherwise null.
      */
     public getHintsForMessage(mxEvent: MatrixEvent): CustomMessageRenderHints | null {
-        const moduleEv = CustomComponentsApi.getModuleMatrixEvent(mxEvent);
+        const moduleEv = sdkEventToModuleEvent(mxEvent);
         const renderer = moduleEv && this.selectMessageRenderer(moduleEv);
         if (renderer) {
             return {
