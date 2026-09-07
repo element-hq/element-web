@@ -9,7 +9,9 @@ import { fileURLToPath } from "node:url";
 import { defineProject } from "vitest/config";
 import svgr from "vite-plugin-svgr";
 import { playwright } from "@vitest/browser-playwright";
-import rootConfig from "../../vitest.config";
+import { env, platform } from "node:process";
+
+import rootConfig from "../../vitest.config.ts";
 
 function resolve(specifier: string): string {
     return fileURLToPath(import.meta.resolve(specifier));
@@ -78,7 +80,9 @@ export default defineProject({
         projects: [
             {
                 extends: true,
-                name: "element-web-unit",
+                test: {
+                    name: "unit",
+                },
                 include: ["src/**/*.test.{ts,tsx}"],
                 setupFiles: ["src/test/setupTests.ts"],
                 environmentOptions: {
@@ -99,7 +103,9 @@ export default defineProject({
             },
             {
                 extends: true,
-                name: "element-web-browser",
+                test: {
+                    name: "browser",
+                },
                 include: ["src/**/*.test.browser.{ts,tsx}"],
                 provide: { canCompareScreenshots },
                 browser: {
