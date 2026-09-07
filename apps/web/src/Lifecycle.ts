@@ -766,13 +766,12 @@ export async function hydrateSession(credentials: IMatrixClientCreds): Promise<M
 
     if (!credentials.pickleKey && credentials.deviceId !== undefined) {
         logger.info("Lifecycle#hydrateSession: Pickle key not provided - trying to get one");
-        let pickleKey: string | undefined;
         try {
-            pickleKey = (await PlatformPeg.get()?.getPickleKey(credentials.userId, credentials.deviceId)) ?? undefined;
+            credentials.pickleKey =
+                (await PlatformPeg.get()?.getPickleKey(credentials.userId, credentials.deviceId)) ?? undefined;
         } catch (e) {
             logger.error(`Failed to read pickle key for ${credentials.userId}|${credentials.deviceId}`, e);
         }
-        credentials.pickleKey = pickleKey;
     }
 
     return doSetLoggedIn(credentials, overwrite, false);
