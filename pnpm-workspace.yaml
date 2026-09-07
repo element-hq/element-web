@@ -38,11 +38,11 @@ catalog:
     vite: 8.2.2
     vite-plugin-node-polyfills: 0.28.0
     vite-plugin-svgr: 5.2.0
-    vitest: 4.1.11
-    "@vitest/spy": 4.1.11
-    "@vitest/coverage-v8": 4.1.11
-    "@vitest/browser-playwright": 4.1.11
-    "@vitest/browser": 4.1.11
+    vitest: 5.0.0
+    "@vitest/spy": 5.0.0
+    "@vitest/coverage-v8": 5.0.0
+    "@vitest/browser-playwright": 5.0.0
+    "@vitest/browser": 5.0.0
     "@vitejs/plugin-react": 6.1.1
     unplugin-dts: 1.0.1
     # nx
