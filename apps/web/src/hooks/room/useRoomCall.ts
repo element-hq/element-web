@@ -277,12 +277,12 @@ export const useRoomCall = (
                 sdkContext.widgetLayoutStore.moveToContainer(room, widget, "top");
                 return;
             }
-            if (
-                callPlatformType === PlatformCallType.ElementCall &&
-                shouldEnsureSlotOpen &&
-                !(await ensureSlotOpen(room))
-            ) {
-                return;
+            if (callPlatformType === PlatformCallType.ElementCall && shouldEnsureSlotOpen) {
+                const slotOpen = await ensureSlotOpen(room);
+                if (!slotOpen) {
+                    logger.warn("Not placing voice call because the MatrixRTC slot could not be opened");
+                    return;
+                }
             }
             void placeCall(
                 sdkContext.legacyCallHandler,
@@ -309,12 +309,12 @@ export const useRoomCall = (
                 sdkContext.widgetLayoutStore.moveToContainer(room, widget, "top");
                 return;
             }
-            if (
-                callPlatformType === PlatformCallType.ElementCall &&
-                shouldEnsureSlotOpen &&
-                !(await ensureSlotOpen(room))
-            ) {
-                return;
+            if (callPlatformType === PlatformCallType.ElementCall && shouldEnsureSlotOpen) {
+                const slotOpen = await ensureSlotOpen(room);
+                if (!slotOpen) {
+                    logger.warn("Not placing video call because the MatrixRTC slot could not be opened");
+                    return;
+                }
             }
             // If we have pressed shift then always skip the lobby, otherwise `undefined` will defer
             // to the defaults of the call implementation.
