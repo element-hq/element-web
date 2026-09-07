@@ -710,6 +710,69 @@ test.describe("Element Call", () => {
             await expect(page.locator("iframe")).toHaveCount(0);
             await expect(page.locator(".mx_ElementCallMock")).toHaveCount(0);
         });
+
+        test("follows Element Web's theme", async ({ page, user, room, app }) => {
+            await app.settings.setValue("Developer.elementCallMockComponent", null, SettingLevel.DEVICE, false);
+            await app.settings.setValue("use_system_theme", null, SettingLevel.DEVICE, false);
+            await app.settings.setValue("theme", null, SettingLevel.ACCOUNT, "light");
+            await app.viewRoomById(room.roomId);
+
+            await page.getByRole("button", { name: "Video call" }).click();
+            await page.getByRole("menuitem", { name: "Element Call" }).click();
+            await expect(page.getByRole("button", { name: "Join call" })).toBeVisible({ timeout: 60_000 });
+
+            // Element Call themes its root element with Compound's theme classes. Left to itself it
+            // defaults to dark, so a light Element Web must tell it from the start...
+            const callRoot = page.locator("[data-element-call-root]");
+            await expect(callRoot).toHaveClass(/cpd-theme-light/);
+            await expect(callRoot).not.toHaveClass(/cpd-theme-dark/);
+
+            // ...and keep it up to date while the call runs
+            await app.settings.setValue("theme", null, SettingLevel.ACCOUNT, "dark");
+            await expect(callRoot).toHaveClass(/cpd-theme-dark/);
+            await expect(callRoot).not.toHaveClass(/cpd-theme-light/);
+        });
+    });
+
+    test.describe("Theme (React component)", () => {
+        test.use({
+            room: async ({ app, bot }, use) => {
+                const roomId = await app.client.createRoom({
+                    name: "TestRoom",
+                    invite: [bot.credentials!.userId],
+                });
+                await use({ roomId });
+            },
+            config: {
+                features: {
+                    feature_element_call_react: true,
+                },
+            },
+        });
+
+        test("is handed the current theme in its configuration and changes over the host bridge", async ({
+            page,
+            user,
+            room,
+            app,
+        }) => {
+            await app.settings.setValue("use_system_theme", null, SettingLevel.DEVICE, false);
+            await app.settings.setValue("theme", null, SettingLevel.ACCOUNT, "light");
+            await app.viewRoomById(room.roomId);
+
+            await page.getByRole("button", { name: "Video call" }).click();
+            await page.getByRole("menuitem", { name: "Element Call" }).click();
+            const mock = page.locator(".mx_ElementCallMock");
+            await expect(mock).toBeVisible();
+
+            const shown = JSON.parse((await mock.getByLabel("Effective configuration").textContent())!);
+            expect(shown.config.theme).toEqual("light");
+
+            await app.settings.setValue("theme", null, SettingLevel.ACCOUNT, "dark");
+            await expect(mock.getByRole("list", { name: "HostBridge log" })).toContainText(
+                '← themeChange {"name":"dark"}',
+            );
+        });
     });
 
     test.describe("Document Picture-in-Picture (React component)", { tag: ["@no-firefox", "@no-webkit"] }, () => {

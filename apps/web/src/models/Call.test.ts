@@ -38,6 +38,7 @@ import { WidgetMessagingStore } from "../stores/widgets/WidgetMessagingStore";
 import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../stores/ActiveWidgetStore";
 import { ElementWidgetActions } from "../stores/widgets/ElementWidgetActions";
 import SettingsStore from "../settings/SettingsStore";
+import ThemeWatcher from "../settings/watchers/ThemeWatcher";
 import { Anonymity, PosthogAnalytics } from "../PosthogAnalytics";
 import { type SettingKey } from "../settings/Settings.tsx";
 import SdkConfig from "../SdkConfig.ts";
@@ -1209,6 +1210,11 @@ describe("ElementCall with the React component transport", () => {
                 fonts: [],
             });
             expect(config.returnToLobby).toBeUndefined();
+        });
+
+        it("passes the theme Element Web is currently showing", () => {
+            vi.spyOn(ThemeWatcher.prototype, "getEffectiveTheme").mockReturnValue("dark-high-contrast");
+            expect(call.getCallOptions().config.theme).toBe("dark-high-contrast");
         });
 
         it("uses the voice intent and leaves the lobby decision to Element Call by default", () => {
