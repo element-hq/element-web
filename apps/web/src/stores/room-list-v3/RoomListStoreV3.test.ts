@@ -1200,7 +1200,12 @@ describe("RoomListStoreV3", () => {
             await store.start();
 
             expect(getOrderedSectionTagsSpy).toHaveBeenCalled();
-            expect(store.orderedSectionTags).toEqual([DefaultTagID.Favourite, CHATS_TAG, DefaultTagID.LowPriority]);
+            expect(store.orderedSectionTags).toEqual([
+                DefaultTagID.Invite,
+                DefaultTagID.Favourite,
+                CHATS_TAG,
+                DefaultTagID.LowPriority,
+            ]);
         });
 
         describe("RoomList.showSections disabled", () => {
