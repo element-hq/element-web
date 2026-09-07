@@ -10,7 +10,6 @@ import { type MediaEventContent } from "matrix-js-sdk/src/types";
 
 import { type PdfMedia } from "../@types/pdf-viewer";
 import { MediaEventHelper } from "./MediaEventHelper";
-import RightPanelStore from "../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../stores/right-panel/RightPanelStorePhases";
 
 export const PDF_MIMETYPE = "application/pdf";
@@ -43,8 +42,15 @@ export function pdfMediaForEvent(mxEvent: MatrixEvent, helper?: MediaEventHelper
 
 /**
  * Open the given event's PDF in the right panel of the room it belongs to.
+ *
+ * The store is pulled in through a dynamic import to prevent circular dependency issues: this module
+ * is reached from the message body view models, and RightPanelStore leads back round to the message
+ * bodies via SDKContextClass, so importing it eagerly leaves MAudioBody undefined for the class that
+ * extends it.
  */
-export function openPdfViewer(mxEvent: MatrixEvent): void {
+export async function openPdfViewer(mxEvent: MatrixEvent): Promise<void> {
+    const RightPanelStore = (await import("../stores/right-panel/RightPanelStore")).default;
+
     RightPanelStore.instance.setCard(
         { phase: RightPanelPhases.PdfViewer, state: { pdfViewerEvent: mxEvent } },
         true,

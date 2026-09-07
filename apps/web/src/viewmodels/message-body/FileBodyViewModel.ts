@@ -283,7 +283,10 @@ export class FileBodyViewModel
         });
     };
 
-    public onOpenClick = (): void => openPdfViewer(this.props.mxEvent);
+    public onOpenClick = (): void => {
+        // Opening loads the right panel store lazily, so this resolves after the click returns.
+        void openPdfViewer(this.props.mxEvent);
+    };
 
     public onDownloadClick = (): Promise<void> => this.decryptFile();
 

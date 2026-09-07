@@ -81,11 +81,11 @@ describe("openPdfViewer", () => {
         vi.restoreAllMocks();
     });
 
-    it("opens the viewer card in the room the event belongs to", () => {
+    it("opens the viewer card in the room the event belongs to", async () => {
         const setCard = vi.spyOn(RightPanelStore.instance, "setCard").mockImplementation(() => {});
         const mxEvent = mkFileEvent({ mimetype: "application/pdf" });
 
-        openPdfViewer(mxEvent);
+        await openPdfViewer(mxEvent);
 
         expect(setCard).toHaveBeenCalledWith(
             { phase: RightPanelPhases.PdfViewer, state: { pdfViewerEvent: mxEvent } },
