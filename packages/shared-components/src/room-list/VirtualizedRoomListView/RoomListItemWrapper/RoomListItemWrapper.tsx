@@ -79,7 +79,7 @@ function DraggableWrapper(props: RoomListItemViewProps): JSX.Element {
         isDragSource,
     } = useDraggable<RoomDragData>({
         id: item.id,
-        data: { type: "room" },
+        data: { type: "room", isDm: item.isDm },
         // We clone the item in the dnd overlay to avoid putting a hole in the list
         plugins: [Feedback.configure({ feedback: "clone" })],
         modifiers: [RestrictToVerticalAxis],

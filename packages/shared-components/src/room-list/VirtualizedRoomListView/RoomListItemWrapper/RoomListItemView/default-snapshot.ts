@@ -31,6 +31,7 @@ export const defaultSnapshot: RoomListItemViewSnapshot = {
     showNotificationMenu: true,
     isFavourite: false,
     isLowPriority: false,
+    isDm: false,
     canInvite: true,
     canCopyRoomLink: true,
     canMarkAsRead: false,
