@@ -5,22 +5,26 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { setUpCommandTest } from "./utils";
-import * as createRoom from "../../../src/createRoom";
-import dis from "../../../src/dispatcher/dispatcher";
-import { Action } from "../../../src/dispatcher/actions";
+// @vitest-environment happy-dom
+
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+
+import { setUpCommandTest } from "./__mocks__";
+import * as createRoom from "../createRoom";
+import dis from "../dispatcher/dispatcher";
+import { Action } from "../dispatcher/actions";
 
 describe("/query", () => {
     const roomId = "!room:example.com";
     const dmRoomId = "!dm:example.com";
 
     beforeEach(() => {
-        jest.spyOn(createRoom, "ensureDMExists").mockResolvedValue(dmRoomId);
-        jest.spyOn(dis, "dispatch").mockImplementation(() => {});
+        vi.spyOn(createRoom, "ensureDMExists").mockResolvedValue(dmRoomId);
+        vi.spyOn(dis, "dispatch").mockImplementation(() => {});
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     it("should return usage if no args", () => {
