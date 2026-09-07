@@ -203,7 +203,7 @@ export const useFetchPastPolls = (
             setTimelineSet(timelineSet);
         };
 
-        getFilteredTimelineSet();
+        void getFilteredTimelineSet();
     }, [room, matrixClient]);
 
     const { isLoading, oldestEventTimestamp, loadMorePolls, loadTimelineHistory } = useTimelineHistory(
@@ -213,7 +213,7 @@ export const useFetchPastPolls = (
     );
 
     useEffect(() => {
-        loadTimelineHistory();
+        void loadTimelineHistory();
     }, [loadTimelineHistory]);
 
     return { isLoading, oldestEventTimestamp, loadMorePolls };

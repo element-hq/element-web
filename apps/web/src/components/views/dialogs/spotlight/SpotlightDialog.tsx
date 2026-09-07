@@ -83,7 +83,7 @@ import { SearchResultAvatar } from "../../avatars/SearchResultAvatar";
 import { NetworkDropdown } from "../../directory/NetworkDropdown";
 import AccessibleButton, { type ButtonEvent } from "../../elements/AccessibleButton";
 import Spinner from "../../elements/Spinner";
-import NotificationBadge from "../../rooms/NotificationBadge";
+import { NotificationBadge } from "../../rooms/NotificationBadge/NotificationBadge";
 import BaseDialog from "../BaseDialog";
 import { Option } from "./Option";
 import { PublicRoomResultDetails } from "./PublicRoomResultDetails";
@@ -343,7 +343,8 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
 
     const [supportsSpaceFiltering, setSupportsSpaceFiltering] = useState(true); // assume it does until we find out it doesn't
     useEffect(() => {
-        cli.isVersionSupported("v1.4")
+        void cli
+            .isVersionSupported("v1.4")
             .then((supported) => {
                 return supported || cli.doesServerSupportUnstableFeature("org.matrix.msc3827.stable");
             })
@@ -538,7 +539,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         });
         // we intentionally ignore changes to the rovingContext for the purpose of this hook
         // we only want to reset the focus whenever the results or filters change
-        // eslint-disable-next-line
+        // oxlint-disable-next-line react-hooks/exhaustive-deps
     }, [results, filter]);
 
     const viewRoom = (
@@ -559,7 +560,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             recents.delete(room.roomId);
             recents.add(room.roomId);
 
-            SettingsStore.setValue(
+            void SettingsStore.setValue(
                 "SpotlightSearch.recentSearches",
                 null,
                 SettingLevel.ACCOUNT,
@@ -667,7 +668,10 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         <span className="mx_SpotlightDialog_result_name" title={result.room.name}>
                             {result.room.name}
                         </span>
-                        <NotificationBadge notification={notification} />
+                        <NotificationBadge
+                            notification={notification}
+                            className="mx_SpotlightDialog_notificationBadge"
+                        />
                         <RoomContextDetails
                             id={`mx_SpotlightDialog_button_result_${result.room.roomId}_details`}
                             className="mx_SpotlightDialog_result_details"
@@ -682,7 +686,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         id={`mx_SpotlightDialog_button_result_${result.member.userId}`}
                         key={`${Section[result.section]}-${result.member.userId}`}
                         onClick={() => {
-                            startDmOnFirstMessage(cli, [result.member]);
+                            void startDmOnFirstMessage(cli, [result.member]);
                             onFinished();
                         }}
                         aria-label={
@@ -898,34 +902,32 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         {_t("spotlight_dialog|other_rooms_in_space", { spaceName: activeSpace.name })}
                     </h4>
                     <div>
-                        {spaceResults.slice(0, SECTION_LIMIT).map(
-                            (room: HierarchyRoom): JSX.Element => (
-                                <Option
-                                    id={`mx_SpotlightDialog_button_result_${room.room_id}`}
-                                    key={room.room_id}
-                                    onClick={(ev) => {
-                                        viewRoom({ roomId: room.room_id }, true, ev?.type !== "click");
-                                    }}
-                                >
-                                    <BaseAvatar
-                                        name={room.name}
-                                        idName={room.room_id}
-                                        url={
-                                            room.avatar_url
-                                                ? mediaFromMxc(room.avatar_url).getSquareThumbnailHttp(
-                                                      parseInt(AVATAR_SIZE, 10),
-                                                  )
-                                                : null
-                                        }
-                                        size={AVATAR_SIZE}
-                                    />
-                                    {room.name || room.canonical_alias}
-                                    {room.name && room.canonical_alias && (
-                                        <div className="mx_SpotlightDialog_result_details">{room.canonical_alias}</div>
-                                    )}
-                                </Option>
-                            ),
-                        )}
+                        {spaceResults.slice(0, SECTION_LIMIT).map((room: HierarchyRoom): JSX.Element => (
+                            <Option
+                                id={`mx_SpotlightDialog_button_result_${room.room_id}`}
+                                key={room.room_id}
+                                onClick={(ev) => {
+                                    viewRoom({ roomId: room.room_id }, true, ev?.type !== "click");
+                                }}
+                            >
+                                <BaseAvatar
+                                    name={room.name}
+                                    idName={room.room_id}
+                                    url={
+                                        room.avatar_url
+                                            ? mediaFromMxc(room.avatar_url).getSquareThumbnailHttp(
+                                                  parseInt(AVATAR_SIZE, 10),
+                                              )
+                                            : null
+                                    }
+                                    size={AVATAR_SIZE}
+                                />
+                                {room.name || room.canonical_alias}
+                                {room.name && room.canonical_alias && (
+                                    <div className="mx_SpotlightDialog_result_details">{room.canonical_alias}</div>
+                                )}
+                            </Option>
+                        ))}
                         {spaceResultsLoading && <Spinner />}
                     </div>
                 </div>
@@ -977,7 +979,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         className="mx_SpotlightDialog_inviteLink"
                         onClick={() => {
                             setInviteLinkCopied(true);
-                            copyPlaintext(ownInviteLink);
+                            void copyPlaintext(ownInviteLink);
                         }}
                         onTooltipOpenChange={(open) => {
                             if (!open) setInviteLinkCopied(false);
@@ -1038,8 +1040,32 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             );
         }
 
+        // The shortcuts below the results are options in their own right, so with nothing above them
+        // the first one is selected by default and enter drops the user into a filter they never
+        // asked for. Saying there are no results gives that default selection somewhere harmless to
+        // land, and the shortcuts are still an arrow key away.
+        let noResultsSection: JSX.Element | undefined;
+        const hasResults =
+            !!results[Section.People].length ||
+            (filter === Filter.People && !!results[Section.Suggestions].length) ||
+            !!results[Section.Rooms].length ||
+            !!results[Section.Spaces].length ||
+            !!results[Section.PublicRoomsAndSpaces].length ||
+            !!spaceResults.length ||
+            !!joinRoomSection;
+        if (trimmedQuery && !hasResults) {
+            noResultsSection = (
+                <div className="mx_SpotlightDialog_section mx_SpotlightDialog_results" role="group">
+                    <Option id="mx_SpotlightDialog_button_noResults" onClick={null}>
+                        {_t("spotlight_dialog|no_results")}
+                    </Option>
+                </div>
+            );
+        }
+
         content = (
             <>
+                {noResultsSection}
                 {peopleSection}
                 {suggestionsSection}
                 {roomsSection}
@@ -1096,7 +1122,10 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                                         tooltipProps={{ tabIndex: -1 }}
                                     />
                                     {room.name}
-                                    <NotificationBadge notification={notification} />
+                                    <NotificationBadge
+                                        notification={notification}
+                                        className="mx_SpotlightDialog_notificationBadge"
+                                    />
                                     <RoomContextDetails
                                         id={`mx_SpotlightDialog_button_recentSearch_${room.roomId}_details`}
                                         className="mx_SpotlightDialog_result_details"

@@ -269,7 +269,7 @@ export const useRoomCall = (
             if (widget && promptPinWidget) {
                 sdkContext.widgetLayoutStore.moveToContainer(room, widget, "top");
             } else {
-                placeCall(
+                void placeCall(
                     sdkContext.legacyCallHandler,
                     room,
                     CallType.Voice,
@@ -289,7 +289,7 @@ export const useRoomCall = (
             } else {
                 // If we have pressed shift then always skip the lobby, otherwise `undefined` will defer
                 // to the defaults of the call implementation.
-                placeCall(
+                void placeCall(
                     sdkContext.legacyCallHandler,
                     room,
                     CallType.Video,

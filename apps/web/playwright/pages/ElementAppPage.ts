@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type Locator, type Page, expect } from "@playwright/test";
 import { readFile } from "node:fs/promises";
-import { basename } from "node:path";
+import path from "node:path";
 import { rejectToast, rejectToastIfExists } from "@element-hq/element-web-playwright-common";
 
 import { Settings } from "./settings";
@@ -134,6 +134,31 @@ export class ElementAppPage {
         }
     }
 
+    /**
+     * Expands the Invites section in the room list and opens the given invited room.
+     *
+     * @param name The exact room name of the invite to find and click on/open.
+     */
+    public async viewInvitedRoomByName(name: string): Promise<void> {
+        const header = this.page.getByRole("button", { name: "Toggle Invites section" });
+        // Open the section if not already opened
+        if ((await header.getAttribute("aria-expanded")) !== "true") {
+            await header.click();
+        }
+
+        await this.viewRoomByName(name);
+    }
+
+    /**
+     * Expands the Invites section in the room list, opens the given invited room and accepts the invite.
+     *
+     * @param name The exact room name of the invite to accept.
+     */
+    public async acceptInvitedRoomByName(name: string): Promise<void> {
+        await this.viewInvitedRoomByName(name);
+        await this.page.locator(".mx_RoomView").getByRole("button", { name: "Accept" }).click();
+    }
+
     public async viewRoomById(roomId: string): Promise<void> {
         await this.page.goto(`/#/room/${roomId}`);
     }
@@ -197,15 +222,19 @@ export class ElementAppPage {
     /**
      * Drags a "file" into the specified composer and automatically uploads it.
      * @param location Should the drop target the main room or the thread.
-     * @param path The path to the sample file so it can be read.
+     * @param samplePath The path to the sample file so it can be read.
      * @param type The mimetype of the file.
      */
-    public async composerDragAndUploadFiles(location: "room" | "thread", path: string, type: string): Promise<void> {
+    public async composerDragAndUploadFiles(
+        location: "room" | "thread",
+        samplePath: string,
+        type: string,
+    ): Promise<void> {
         // Based on https://github.com/microsoft/playwright/issues/10667#issuecomment-2742123424
         // This read a file, encodes it into base64 and then sends it along to the page to be treated
         // as a DataTransfer (the mechanism for drag and dropped files).
-        const buffer = await readFile(path);
-        const name = basename(path);
+        const buffer = await readFile(samplePath);
+        const name = path.basename(samplePath);
 
         const dataTransfer = await this.page.evaluateHandle(
             async ([buffer, name, type]) => {
@@ -227,15 +256,19 @@ export class ElementAppPage {
     /**
      * Paste a "file" into the specified locator and automatically uploads it.
      * @param location Should the drop target the main room or the thread.
-     * @param path The path to the sample file so it can be read.
+     * @param samplePath The path to the sample file so it can be read.
      * @param type The mimetype of the file.
      */
-    public async composerDragAndPasteFile(location: "room" | "thread", path: string, type: string): Promise<void> {
+    public async composerDragAndPasteFile(
+        location: "room" | "thread",
+        samplePath: string,
+        type: string,
+    ): Promise<void> {
         // Based on https://github.com/microsoft/playwright/issues/10667#issuecomment-2742123424
         // This read a file, encodes it into base64 and then sends it along to the page to be treated
         // as a DataTransfer (the mechanism for drag and dropped files).
-        const buffer = await readFile(path);
-        const name = basename(path);
+        const buffer = await readFile(samplePath);
+        const name = path.basename(samplePath);
         const composer = this.getComposerField(location === "thread");
 
         await composer.evaluate(

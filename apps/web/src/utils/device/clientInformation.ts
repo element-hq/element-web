@@ -68,7 +68,7 @@ export const pruneClientInformation = (validDeviceIds: string[], matrixClient: M
         }
         const [, deviceId] = event.getType().split(clientInformationEventPrefix);
         if (deviceId && !validDeviceIds.includes(deviceId)) {
-            matrixClient.deleteAccountData(event.getType() as keyof AccountDataEvents);
+            void matrixClient.deleteAccountData(event.getType() as keyof AccountDataEvents);
         }
     });
 };

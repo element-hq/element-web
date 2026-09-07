@@ -34,6 +34,7 @@ import { WidgetLifecycleApi } from "./WidgetLifecycleApi.ts";
 import { WidgetApi } from "./WidgetApi.ts";
 import { CustomisationsApi } from "./customisationsApi.ts";
 import { ComposerApi } from "./ComposerApi.ts";
+import { StorageHelperApi } from "./StorageHelperApi.ts";
 import { SettingsApi } from "./SettingsApi.ts";
 import defaultDispatcher from "../dispatcher/dispatcher.ts";
 
@@ -97,6 +98,7 @@ export class ModuleApi implements Api {
     public readonly client = new ClientApi();
     public readonly stores = new StoresApi();
     public readonly composer = new ComposerApi(defaultDispatcher);
+    public readonly storageHelper = new StorageHelperApi();
     public readonly settings = new SettingsApi();
 
     public createRoot(element: Element): Root {

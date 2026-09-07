@@ -114,7 +114,7 @@ export const showAddExistingSubspace = (space: Room): void => {
         },
         "mx_AddExistingToSpaceDialog_wrapper",
     );
-    finished.then(([added]) => {
+    void finished.then(([added]) => {
         if (added && SDKContextClass.instance.roomViewStore.getRoomId() === space.roomId) {
             defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
         }
@@ -130,7 +130,7 @@ export const showCreateNewSubspace = (space: Room): void => {
         },
         "mx_CreateSubspaceDialog_wrapper",
     );
-    finished.then(([added]) => {
+    void finished.then(([added]) => {
         if (added && SDKContextClass.instance.roomViewStore.getRoomId() === space.roomId) {
             defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
         }

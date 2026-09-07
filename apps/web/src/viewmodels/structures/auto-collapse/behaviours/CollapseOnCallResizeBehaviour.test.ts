@@ -7,7 +7,7 @@
 
 // @vitest-environment happy-dom
 
-import EventEmitter from "events";
+import EventEmitter from "node:events";
 
 import { type CallStore, CallStoreEvent } from "../../../../stores/CallStore";
 import { CollapseOnCallResizeBehaviour } from "./CollapseOnCallResizeBehaviour";

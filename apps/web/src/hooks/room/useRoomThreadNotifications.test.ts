@@ -9,8 +9,16 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { describe, it, expect, beforeEach } from "vitest";
-import { renderHook } from "test-utils-rtl";
-import { type MatrixClient, NotificationCountType, Room } from "matrix-js-sdk/src/matrix";
+import { act, renderHook } from "test-utils-rtl";
+import {
+    EventType,
+    type MatrixClient,
+    MatrixEventEvent,
+    NotificationCountType,
+    RelationType,
+    Room,
+} from "matrix-js-sdk/src/matrix";
+import { decryptExistingEvent, mkMatrixEvent } from "matrix-js-sdk/src/testing";
 import { stubClient } from "test-utils";
 import { populateThread } from "test-utils/threads";
 
@@ -69,6 +77,48 @@ describe("useRoomThreadNotifications", () => {
         });
 
         const { result } = render(room);
+
+        expect(result.current).toBe(NotificationLevel.Activity);
+    });
+
+    it("returns activity once a thread reply which arrived undecryptable gets decrypted", async () => {
+        // A thread whose latest reply we sent ourselves, so it starts out read.
+        const { rootEvent } = await populateThread({
+            room,
+            client: cli,
+            authorId: cli.getSafeUserId(),
+            participantUserIds: [cli.getSafeUserId()],
+        });
+
+        const { result } = render(room);
+        expect(result.current).toBe(NotificationLevel.None);
+
+        // Somebody else replies in the thread, but the room key has not arrived yet, so the
+        // event cannot be decrypted. An undecryptable event has no renderer, so it does not
+        // count towards the unread state.
+        const reply = mkMatrixEvent({
+            type: EventType.RoomMessageEncrypted,
+            roomId: room.roomId,
+            sender: "@alice:server.org",
+            ts: 10,
+            content: {
+                "algorithm": "m.megolm.v1.aes-sha2",
+                "m.relates_to": { rel_type: RelationType.Thread, event_id: rootEvent.getId()! },
+            },
+        });
+        await act(async () => {
+            await room.addLiveEvents([reply], { addToState: false });
+        });
+        expect(result.current).toBe(NotificationLevel.None);
+
+        // The room key turns up and the reply is decrypted: it now counts as unread.
+        await decryptExistingEvent(reply, {
+            plainType: EventType.RoomMessage,
+            plainContent: { msgtype: "m.text", body: "hello" },
+        });
+        act(() => {
+            cli.emit(MatrixEventEvent.Decrypted, reply);
+        });
 
         expect(result.current).toBe(NotificationLevel.Activity);
     });

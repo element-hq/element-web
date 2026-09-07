@@ -67,7 +67,7 @@ export const CallGuestLinkButton: React.FC<{ room: Room }> = ({ room }) => {
             showLinkModal();
         } else {
             // the room needs to be set to public or knock to generate a link
-            Modal.createDialog(JoinRuleDialog, {
+            void Modal.createDialog(JoinRuleDialog, {
                 room,
                 // If the user cannot invite the Knocking is not given as an option.
                 canInvite,

@@ -68,7 +68,7 @@ export const UserPersonalInfoSettings: React.FC<UserPersonalInfoSettingsProps> =
     }, [client]);
 
     useEffect(() => {
-        updateThreepids();
+        void updateThreepids();
     }, [updateThreepids]);
 
     if (!SettingsStore.getValue(UIFeature.ThirdPartyID)) return null;

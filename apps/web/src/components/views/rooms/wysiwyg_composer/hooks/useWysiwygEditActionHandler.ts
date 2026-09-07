@@ -46,7 +46,9 @@ export function useWysiwygEditActionHandler(
                     if (payload.composerType !== ComposerType.Edit) break;
 
                     if (payload.text) {
-                        setSelection(composerContext.selection).then(() => composerFunctions.insertText(payload.text));
+                        void setSelection(composerContext.selection).then(() =>
+                            composerFunctions.insertText(payload.text),
+                        );
                     }
                     break;
             }

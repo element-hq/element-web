@@ -63,27 +63,6 @@ export function buildTitleBarCss(): string {
                 -webkit-app-region: no-drag;
             }
 
-            /* Mark the splash screen as a drag handle */
-            .mx_MatrixChat_splash {
-                -webkit-app-region: drag;
-            }
-            /* Exclude the splash buttons from being drag handles */
-            .mx_MatrixChat_splashButtons {
-                -webkit-app-region: no-drag;
-            }
-
-            /* Mark the background as a drag handle */
-            .mx_AuthPage {
-                -webkit-app-region: drag;
-            }
-            /* Exclude the main content elements from being drag handles */
-            .mx_AuthPage .mx_AuthPage_modalContent,
-            .mx_AuthPage .mx_AuthPage_modalBlur,
-            .mx_AuthPage .mx_AuthFooter > *,
-            .mx_AuthPage .mx_Dropdown_menu {
-                -webkit-app-region: no-drag;
-            }
-
             /* The image lightbox covers the whole window, including the title bar band; keep its
                sender info clear of the traffic lights, and let its header double as a drag handle */
             .mx_ImageView_info_wrapper {

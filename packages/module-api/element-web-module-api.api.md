@@ -63,6 +63,8 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
     readonly rootNode: HTMLElement;
     // @alpha
     readonly settings: SettingsApi;
+    // @alpha
+    readonly storageHelper: StorageHelperApi;
     readonly stores: StoresApi;
     // @alpha
     readonly widget: WidgetApi;
@@ -94,7 +96,14 @@ export interface ChatExportCustomisations<ExportFormat, ExportType> {
 // @public
 export interface ClientApi {
     accountData: AccountDataApi;
+    // @alpha
+    readonly creationManagement: ClientCreationManagementApi;
     getRoom: (id: string) => Room | null;
+}
+
+// @public
+export interface ClientCreationManagementApi {
+    setUserVerificationCaCertsPem(pem: string | null): void;
 }
 
 // @alpha @deprecated (undocumented)
@@ -493,6 +502,11 @@ export interface SpacePanelItemProps {
     onSelected: () => void;
     style?: React.CSSProperties;
     tooltip?: string;
+}
+
+// @alpha
+export interface StorageHelperApi {
+    getPickleKey(userId: string, deviceId: string): Promise<string | null>;
 }
 
 // @public

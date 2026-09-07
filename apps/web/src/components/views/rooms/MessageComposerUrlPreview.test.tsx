@@ -27,6 +27,7 @@ import {
     MessageComposerUrlPreviewViewModel,
     type MessageComposerUrlPreviewViewModelProps,
 } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
+import SettingsStore from "../../../settings/SettingsStore";
 
 // @vitest-environment happy-dom
 
@@ -53,7 +54,7 @@ function getUrlPreviewVm(client: MatrixClient, content?: string): MessageCompose
     const vm = new MessageComposerUrlPreviewViewModel(props);
     if (content !== undefined) {
         // Mirror how MessageComposer drives the view model so previews are actually computed.
-        void vm.updateWithText({ content, debounced: false });
+        vm.updateWithText({ content, debounced: false });
     }
     return vm;
 }
@@ -70,9 +71,16 @@ describe("MessageComposerUrlPreview", () => {
             ...mockClientMethodsUser(),
             getUrlPreview: vi.fn().mockResolvedValue(BASIC_PREVIEW_OGDATA),
         });
+
+        const realGetValue = SettingsStore.getValue;
+        vi.spyOn(SettingsStore, "getValue").mockImplementation(
+            (settingsName, roomId, excludeDefault) =>
+                settingsName !== "composerUrlPreviewCollapsed" && realGetValue(settingsName, roomId, excludeDefault),
+        );
     });
     afterEach(() => {
         window.mxModuleApi = originalMxModuleApi;
+        vi.restoreAllMocks();
     });
 
     function wrapComponent(component: Parameters<typeof render>[0]): ReturnType<typeof render> {
@@ -102,7 +110,7 @@ describe("MessageComposerUrlPreview", () => {
         );
         await waitFor(
             () => {
-                expect(getByText("Example.org")).toBeDefined();
+                expect(getByText("This is an example!")).toBeDefined();
             },
             { timeout: DEBOUNCE_REQUEST_TIMEOUT_MS },
         );

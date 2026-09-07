@@ -7,6 +7,35 @@ Please see LICENSE files in the repository root for full details.
 */
 
 .mx_SettingsTab .mx_NotificationSettings2 {
+    /* The labs notice banner renders directly below this, so keep them apart. When it is absent
+       the margin collapses with the section's own, leaving the spacing below unchanged. */
+    .mx_NotificationSettings2_error {
+        margin-bottom: var(--cpd-space-4x);
+
+        /* The alert lays its actions out at flex-basis 0, which would otherwise break the label
+           across lines rather than wrapping it below the message. */
+        .mx_AccessibleButton {
+            white-space: nowrap;
+        }
+
+        /* Compound drops the action onto its own row for any alert under 600px, which leaves this
+           short message sitting beside a mostly empty second row. Wrap on demand instead, so the
+           action only moves below the message once the two genuinely stop fitting side by side.
+           The children are the alert's content row and the message within it. */
+        > div {
+            flex-wrap: wrap;
+
+            > div:first-child {
+                flex: 1 1 auto;
+
+                /* Compound tints only the icon on a critical alert and leaves the message in the
+                   default text colour, so state it here to read like warnings elsewhere. The action
+                   is a sibling of this element and so keeps its own colour. */
+                color: var(--cpd-color-text-critical-primary);
+            }
+        }
+    }
+
     .mx_SettingsSection_subSections {
         color: $primary-content;
         gap: 32px;
@@ -18,7 +47,7 @@ Please see LICENSE files in the repository root for full details.
         margin-bottom: 20px;
 
         .mx_SettingsSubsection_text {
-            .mx_NotificationBadge {
+            .mx_NotificationSettings2_notificationBadge {
                 vertical-align: baseline;
                 display: inline-flex;
                 margin: 0 2px;

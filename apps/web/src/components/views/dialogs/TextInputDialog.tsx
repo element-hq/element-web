@@ -74,7 +74,7 @@ export default class TextInputDialog extends React.Component<IProps, IState> {
 
             if (!this.field.current.state.valid) {
                 this.field.current.focus();
-                this.field.current.validate({ allowEmpty: false, focused: true });
+                void this.field.current.validate({ allowEmpty: false, focused: true });
                 this.setState({ busy: false });
                 return;
             }

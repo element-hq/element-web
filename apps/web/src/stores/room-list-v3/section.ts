@@ -15,9 +15,10 @@ import { RemoveSectionDialog } from "../../components/views/dialogs/RemoveSectio
 import { DefaultTagID, type TagID } from "./skip-list/tag";
 import { isMetaSpace, MetaSpace, type SpaceKey } from "../spaces";
 import { SDKContextClass } from "../../contexts/SDKContextClass.ts";
+import { tagRoom } from "../../utils/room/tagRoom.ts";
 
 /**
- * A synthetic tag used to represent the "Chats" section, which contains
+ * A synthetic tag used to represent the "Rooms" or "Chats" section, which contains
  * every room that does not belong to any other explicit tag section.
  */
 export const CHATS_TAG = "chats";
@@ -44,7 +45,13 @@ export function isCustomSectionTag(tag: string): tag is CustomTag {
  * @returns True if the tag is a default section tag, false otherwise.
  */
 export function isDefaultSectionTag(tagId: TagID): boolean {
-    return tagId === DefaultTagID.Favourite || tagId === DefaultTagID.LowPriority || tagId === CHATS_TAG;
+    return (
+        tagId === DefaultTagID.Invite ||
+        tagId === DefaultTagID.Favourite ||
+        tagId === DefaultTagID.LowPriority ||
+        tagId === CHATS_TAG ||
+        tagId === DefaultTagID.DM
+    );
 }
 
 /**
@@ -89,16 +96,20 @@ export type CustomSectionsData = Record<CustomTag, CustomSection>;
 export type OrderedCustomSections = CustomTag[];
 
 /**
- * Tags that can be reordered relative to each other (everything except Favourite and LowPriority,
- * which are pinned to the top and bottom respectively).
+ * Tags that can be reordered relative to each other (everything except Invite, Favourite and
+ * LowPriority, which are pinned to fixed positions).
  */
-export type ReorderableSection = CustomTag | typeof CHATS_TAG;
+export type ReorderableSection = CustomTag | typeof CHATS_TAG | DefaultTagID.DM;
 
 /**
- * Returns true if the given tag is a tag that can be reordered (custom section or the Chats tag).
+ * Returns true if the given tag is a tag that can be reordered (custom section, the Chats tag or the People tag).
+ * Invite and Favourite are pinned to the top of the room list, in that order, and LowPriority to the bottom,
+ * so they are never reorderable.
+ * @param tag - The tag to check.
+ * @param customData - The custom section data, used to reject custom sections that no longer exist.
  */
-function isReorderableSection(tag: string, customData: CustomSectionsData): tag is ReorderableSection {
-    return tag === CHATS_TAG || (isCustomSectionTag(tag) && tag in customData);
+export function isReorderableSection(tag: string, customData: CustomSectionsData): tag is ReorderableSection {
+    return tag === CHATS_TAG || tag === DefaultTagID.DM || (isCustomSectionTag(tag) && tag in customData);
 }
 
 /**
@@ -140,10 +151,15 @@ export type SectionExpansionState = { [spaceId: string]: { [sectionTag: string]:
 /**
  * Returns whether the section with the given tag is expanded in the given space.
  * Defaults to expanded when no state has been persisted.
+ *
+ * The Invites section is the exception: it appears on its own when an invitation arrives and is
+ * collapsed every time it does, so that it does not push the rest of the room list down. Expanding
+ * it only lasts while it is on screen, which is why nothing is persisted or read back for it.
  * @param spaceId - The id of the space.
  * @param tag - The tag of the section.
  */
 export function isSectionExpanded(spaceId: string, tag: string): boolean {
+    if (tag === DefaultTagID.Invite) return false;
     return SettingsStore.getValue("RoomList.SectionExpansionState")[spaceId]?.[tag] ?? true;
 }
 
@@ -154,6 +170,9 @@ export function isSectionExpanded(spaceId: string, tag: string): boolean {
  * @param expanded - Whether the section is expanded.
  */
 export async function setSectionExpanded(spaceId: string, tag: string, expanded: boolean): Promise<void> {
+    // The Invites section starts collapsed every time it appears, so its state is never remembered
+    if (tag === DefaultTagID.Invite) return;
+
     const state = SettingsStore.getValue("RoomList.SectionExpansionState");
     const newState: SectionExpansionState = {
         ...state,
@@ -176,11 +195,16 @@ export function getOrderedCustomSections(): OrderedCustomSections {
 }
 
 /**
- * Returns the ordered list of reorderable section tags (custom sections + the Chats tag).
- * Favourite and LowPriority are not included — they are pinned at the top and bottom respectively.
+ * Returns the ordered list of reorderable section tags (custom sections + the Chats and People tags).
+ * Invite, Favourite and LowPriority are not included — the first two are pinned at the top and the last
+ * at the bottom.
  *
  * If `CHATS_TAG` is missing from the stored order (e.g. legacy data or a freshly created custom
- * section), it is appended at the end so that custom sections sit above Chats by default.
+ * section), it is appended at the end so that custom sections sit above Chats by default. Likewise
+ * the People tag is prepended when missing, so People sits above the other sections by default.
+ *
+ * This is the persisted order: it always carries a position for the People tag, whether or not the
+ * section is displayed. Use {@link getOrderedSectionTags} to get the sections to display.
  */
 export function getOrderedReorderableSections(): ReorderableSection[] {
     const sectionData = getCustomSectionData();
@@ -189,7 +213,41 @@ export function getOrderedReorderableSections(): ReorderableSection[] {
 
     const result = stored.filter((tag): tag is ReorderableSection => isReorderableSection(tag, sectionData));
     if (!result.includes(CHATS_TAG)) result.push(CHATS_TAG);
+    if (!result.includes(DefaultTagID.DM)) result.unshift(DefaultTagID.DM);
     return result;
+}
+
+/**
+ * Returns the section tags to display, in order from top to bottom. Invite and Favourite are pinned at the top
+ * and LowPriority at the bottom, everything in between comes from {@link getOrderedReorderableSections}.
+ *
+ * The People section is only included when the "RoomList.showPeopleSection" setting is enabled.
+ * Its position is kept in the stored order either way, so turning the setting off and on again
+ * restores the section where the user left it.
+ */
+export function getOrderedSectionTags(): string[] {
+    const showPeopleSection = SettingsStore.getValue("RoomList.showPeopleSection");
+    const reorderable = getOrderedReorderableSections().filter((tag) => showPeopleSection || tag !== DefaultTagID.DM);
+    return [DefaultTagID.Invite, DefaultTagID.Favourite, ...reorderable, DefaultTagID.LowPriority];
+}
+
+/**
+ * Adds rooms to a section and removes others from it, as chosen by the user in the section dialog.
+ *
+ * {@link tagRoom} toggles the tag, so the rooms to add and the rooms to remove are handled by the
+ * same call: the dialog only reports the rooms whose membership of the section has changed.
+ * @param tag - The tag of the section.
+ * @param roomsToTag - The ids of the rooms to add to the section.
+ * @param roomsToUntag - The ids of the rooms to remove from the section.
+ */
+function updateSectionRooms(tag: CustomTag, roomsToTag: string[] = [], roomsToUntag: string[] = []): void {
+    const client = SDKContextClass.instance.client;
+    if (!client) return;
+
+    for (const roomId of [...roomsToTag, ...roomsToUntag]) {
+        const room = client.getRoom(roomId);
+        if (room) tagRoom(room, tag);
+    }
 }
 
 /**
@@ -197,13 +255,14 @@ export function getOrderedReorderableSections(): ReorderableSection[] {
  * If the user confirms, it generates a unique tag for the section, saves the section data in the settings, and updates the ordered list of sections.
  *
  * @param spaceId The space in which the section is being created. Used to control visibility of the empty section.
+ * @param preselectedRoomId The id of a room to preselect in the room picker of the dialog.
  * @returns A promise that resolves to the new section tag if created, or undefined if cancelled.
  */
-export async function createSection(spaceId: SpaceKey): Promise<string | undefined> {
-    const modal = Modal.createDialog(CreateSectionDialog);
+export async function createSection(spaceId: SpaceKey, preselectedRoomId?: string): Promise<string | undefined> {
+    const modal = Modal.createDialog(CreateSectionDialog, { preselectedRoomId });
 
-    const [shouldCreateSection, sectionName] = await modal.finished;
-    if (!shouldCreateSection || !sectionName) return undefined;
+    const [sectionName, roomsToTag] = await modal.finished;
+    if (!sectionName) return undefined;
 
     const tag: CustomTag = `${CUSTOM_SECTION_TAG_PREFIX}${window.crypto.randomUUID()}`;
     const newSection: CustomSection = { tag, name: sectionName, spaceId };
@@ -219,6 +278,8 @@ export async function createSection(spaceId: SpaceKey): Promise<string | undefin
     const chatsIndex = reorderable.indexOf(CHATS_TAG);
     reorderable.splice(chatsIndex === -1 ? reorderable.length : chatsIndex, 0, tag);
     await SettingsStore.setValue("RoomList.OrderedCustomSections", null, SettingLevel.ACCOUNT, reorderable);
+
+    updateSectionRooms(tag, roomsToTag);
     return tag;
 }
 
@@ -238,11 +299,16 @@ export async function editSection(tag: string): Promise<void> {
         return;
     }
 
-    const modal = Modal.createDialog(CreateSectionDialog, { sectionToEdit: section.name });
+    const modal = Modal.createDialog(CreateSectionDialog, { sectionToEdit: section });
 
-    const [shouldEditSection, newName] = await modal.finished;
-    const isSameName = newName === section.name;
-    if (!shouldEditSection || !newName || isSameName) return;
+    const [newName, roomsToTag, roomsToUntag] = await modal.finished;
+    // The user closed the dialog before naming the section: nothing to do.
+    if (!newName) return;
+
+    updateSectionRooms(tag, roomsToTag, roomsToUntag);
+
+    // The name is the only thing stored in the settings, so stop here when it hasn't changed.
+    if (newName === section.name) return;
 
     // Save the new name
     sectionData[tag].name = newName;
@@ -280,8 +346,8 @@ export async function deleteSection(tag: string, isEmpty: boolean): Promise<void
 
 /**
  * Reorders sections by moving sourceTag relative to targetTag within the set of reorderable
- * sections (custom sections and the Chats tag). Favourite and LowPriority are not reorderable
- * and are rejected as either source or target.
+ * sections (custom sections and the Chats tag). Invite, Favourite and LowPriority are not
+ * reorderable and are rejected as either source or target.
  *
  * If the source was below the target, it is inserted before the target; otherwise after.
  * @param sourceTag - The tag of the section to move.

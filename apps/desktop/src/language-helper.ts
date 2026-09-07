@@ -7,14 +7,14 @@ Please see LICENSE files in the repository root for full details.
 
 import counterpart from "counterpart";
 import { type TranslationKey as TKey } from "matrix-web-i18n";
-import { dirname } from "node:path";
+import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import type EN from "./i18n/strings/en_EN.json";
 import { loadJsonFile } from "./utils.js";
 import type Store from "./store.js";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const FALLBACK_LOCALE = "en";
 
