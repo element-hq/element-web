@@ -12,7 +12,7 @@ import { type Room } from "matrix-js-sdk/src/matrix";
 
 import WidgetUtils from "../../../utils/WidgetUtils";
 import AppTile from "./AppTile";
-import { CallTile } from "../voip/CallTile";
+import { CallAppTile } from "../voip/CallTile";
 import { WidgetType } from "../../../widgets/WidgetType";
 import WidgetStore from "../../../stores/WidgetStore";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -40,7 +40,7 @@ export default class PersistentApp extends React.Component<IProps> {
         if (!app) return null;
 
         // Element Call has two transports (widget iframe or in-process React component); CallTile picks one.
-        const Tile = WidgetType.CALL.matches(app.type) ? CallTile : AppTile;
+        const Tile = WidgetType.CALL.matches(app.type) ? CallAppTile : AppTile;
 
         return (
             <Tile
