@@ -39,7 +39,7 @@ import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
 import { useScopedRoomContext } from "../../contexts/ScopedRoomContext";
 import { SDKContext } from "../../contexts/SDKContext.ts";
 import SdkConfig from "../../SdkConfig";
-import { ensureSlotOpen as ensureSlotOpenUtil } from "../../utils/room/rtcSlot";
+import { ensureSlotOpen } from "../../utils/room/rtcSlot";
 
 const logger = rootLogger.getChild("useRoomCall");
 
@@ -270,8 +270,6 @@ export const useRoomCall = (
         room.roomId,
     ]);
 
-    const ensureSlotOpen = useCallback((): Promise<boolean> => ensureSlotOpenUtil(room), [room]);
-
     const voiceCallClick = useCallback(
         async (evt: React.MouseEvent | undefined, callPlatformType: PlatformCallType): Promise<void> => {
             evt?.stopPropagation();
@@ -282,7 +280,7 @@ export const useRoomCall = (
             if (
                 callPlatformType === PlatformCallType.ElementCall &&
                 shouldEnsureSlotOpen &&
-                !(await ensureSlotOpen())
+                !(await ensureSlotOpen(room))
             ) {
                 return;
             }
@@ -302,7 +300,6 @@ export const useRoomCall = (
             sdkContext.widgetLayoutStore,
             sdkContext.legacyCallHandler,
             shouldEnsureSlotOpen,
-            ensureSlotOpen,
         ],
     );
     const videoCallClick = useCallback(
@@ -315,7 +312,7 @@ export const useRoomCall = (
             if (
                 callPlatformType === PlatformCallType.ElementCall &&
                 shouldEnsureSlotOpen &&
-                !(await ensureSlotOpen())
+                !(await ensureSlotOpen(room))
             ) {
                 return;
             }
@@ -337,7 +334,6 @@ export const useRoomCall = (
             sdkContext.widgetLayoutStore,
             sdkContext.legacyCallHandler,
             shouldEnsureSlotOpen,
-            ensureSlotOpen,
         ],
     );
 
