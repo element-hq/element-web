@@ -236,9 +236,6 @@ catalogs:
     '@vitest/coverage-v8':
       specifier: 5.0.0
       version: 5.0.0
-    '@vitest/spy':
-      specifier: 5.0.0
-      version: 5.0.0
     matrix-web-i18n:
       specifier: 3.6.0
       version: 3.6.0
@@ -896,9 +893,6 @@ importers:
       '@vitest/browser-playwright':
         specifier: 'catalog:'
         version: 5.0.0(playwright@1.61.1)(vite@8.2.2)(vitest@5.0.0)
-      '@vitest/spy':
-        specifier: 'catalog:'
-        version: 5.0.0
       babel-jest:
         specifier: ^30.0.0
         version: 30.4.1(@babel/core@7.29.7)(supports-color@10.2.2)

@@ -82,15 +82,15 @@ export default defineProject({
                 extends: true,
                 test: {
                     name: "unit",
-                },
-                include: ["src/**/*.test.{ts,tsx}"],
-                setupFiles: ["src/test/setupTests.ts"],
-                environmentOptions: {
-                    happyDOM: {
-                        url: "http://localhost/",
+                    include: ["src/**/*.test.{ts,tsx}"],
+                    setupFiles: ["src/test/setupTests.ts"],
+                    environmentOptions: {
+                        happyDOM: {
+                            url: "http://localhost/",
+                        },
                     },
+                    snapshotSerializers: [resolve("./src/test/react-use-id-serializer.ts")],
                 },
-                snapshotSerializers: [resolve("./src/test/react-use-id-serializer.ts")],
                 plugins: [
                     svgr({
                         svgrOptions: {
@@ -105,8 +105,8 @@ export default defineProject({
                 extends: true,
                 test: {
                     name: "browser",
+                    include: ["src/**/*.test.browser.{ts,tsx}"],
                 },
-                include: ["src/**/*.test.browser.{ts,tsx}"],
                 provide: { canCompareScreenshots },
                 browser: {
                     enabled: true,

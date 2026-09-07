@@ -39,7 +39,6 @@ catalog:
     vite-plugin-node-polyfills: 0.28.0
     vite-plugin-svgr: 5.2.0
     vitest: 5.0.0
-    "@vitest/spy": 5.0.0
     "@vitest/coverage-v8": 5.0.0
     "@vitest/browser-playwright": 5.0.0
     "@vitest/browser": 5.0.0
