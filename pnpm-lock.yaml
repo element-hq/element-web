@@ -528,7 +528,7 @@ importers:
         version: 7.29.7
       '@element-hq/element-call-component':
         specifier: github:element-hq/element-call#valere/component_ec_M1&path:/component
-        version: https://codeload.github.com/element-hq/element-call/tar.gz/218ee46b7d86a01b3344c05f4309af06406d2af1#path:/component(livekit-client@2.22.2)(matrix-js-sdk@42.3.0)(react-dom@19.2.8)(react@19.2.8)
+        version: https://codeload.github.com/element-hq/element-call/tar.gz/489c1af4265a6a053e21be36c4ae38d913caf7c7#path:/component(livekit-client@2.22.2)(matrix-js-sdk@42.3.0)(react-dom@19.2.8)(react@19.2.8)
       '@element-hq/element-web-module-api':
         specifier: workspace:*
         version: link:../../packages/module-api
@@ -2855,8 +2855,8 @@ packages:
     engines: {node: '>=14.14'}
     hasBin: true
 
-  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/218ee46b7d86a01b3344c05f4309af06406d2af1#path:/component':
-    resolution: {gitHosted: true, integrity: sha512-2Iv+FGuwwibUaLJbYX7Wm0wpkVBTCSasJh2TRBFSeuH/DL6nmseekCsZgNxJ0mzin1uG2zi4O3URop9X6IRQkA==, path: /component, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/218ee46b7d86a01b3344c05f4309af06406d2af1}
+  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/489c1af4265a6a053e21be36c4ae38d913caf7c7#path:/component':
+    resolution: {gitHosted: true, integrity: sha512-0T+Skh3+b0Rs7o2vIfM4E3F8kryDzbp+TleJj71tsd+vh3qPHgGm2sSi3TZziooE8l1TphYb46Fuci8IKXWJhA==, path: /component, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/489c1af4265a6a053e21be36c4ae38d913caf7c7}
     version: 0.0.0
     peerDependencies:
       livekit-client: ^2.18.1
@@ -14225,7 +14225,7 @@ snapshots:
 
   '@babel/plugin-syntax-typescript@7.29.7(@babel/core@7.29.7)':
     dependencies:
-      '@babel/core': 7.29.7(supports-color@7.2.0)
+      '@babel/core': 7.29.7(supports-color@10.2.2)
       '@babel/helper-plugin-utils': 7.29.7
 
   '@babel/plugin-syntax-unicode-sets-regex@7.18.6(@babel/core@7.29.7)':
@@ -15603,7 +15603,7 @@ snapshots:
       - supports-color
     optional: true
 
-  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/218ee46b7d86a01b3344c05f4309af06406d2af1#path:/component(livekit-client@2.22.2)(matrix-js-sdk@42.3.0)(react-dom@19.2.8)(react@19.2.8)':
+  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/489c1af4265a6a053e21be36c4ae38d913caf7c7#path:/component(livekit-client@2.22.2)(matrix-js-sdk@42.3.0)(react-dom@19.2.8)(react@19.2.8)':
     dependencies:
       livekit-client: 2.22.2(@types/dom-mediacapture-record@1.0.22)
       matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/e16b0bcc06d0b17889f3eedef972f3cae9790f08
@@ -22302,14 +22302,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  http-proxy-agent@7.0.2(supports-color@7.2.0):
-    dependencies:
-      agent-base: 7.1.4
-      debug: 4.4.3(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
-    optional: true
-
   http-proxy-agent@9.1.0(supports-color@10.2.2):
     dependencies:
       agent-base: 9.0.0
@@ -22356,14 +22348,6 @@ snapshots:
       debug: 4.4.3(supports-color@10.2.2)
     transitivePeerDependencies:
       - supports-color
-
-  https-proxy-agent@7.0.6(supports-color@7.2.0):
-    dependencies:
-      agent-base: 7.1.4
-      debug: 4.4.3(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
-    optional: true
 
   https-proxy-agent@9.1.0(supports-color@10.2.2):
     dependencies:
@@ -23027,34 +23011,6 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
-
-  jsdom@26.1.0(patch_hash=040623e87b1c8b676c2a705513c0276c0704dd1b23fc3a1bb77cde8128b64b5f)(supports-color@7.2.0):
-    dependencies:
-      cssstyle: 4.6.0
-      data-urls: 5.0.0
-      decimal.js: 10.6.0
-      html-encoding-sniffer: 4.0.0
-      http-proxy-agent: 7.0.2(supports-color@7.2.0)
-      https-proxy-agent: 7.0.6(supports-color@7.2.0)
-      is-potential-custom-element-name: 1.0.1
-      nwsapi: 2.2.23
-      parse5: 7.3.0
-      rrweb-cssom: 0.8.0
-      saxes: 6.0.0
-      symbol-tree: 3.2.4
-      tough-cookie: 5.1.2
-      w3c-xmlserializer: 5.0.0
-      webidl-conversions: 7.0.0
-      whatwg-encoding: 3.1.1
-      whatwg-mimetype: 4.0.0
-      whatwg-url: 14.2.0
-      ws: 8.21.1
-      xml-name-validator: 5.0.0
-    transitivePeerDependencies:
-      - bufferutil
-      - supports-color
-      - utf-8-validate
-    optional: true
 
   jsesc@3.1.0: {}
 
@@ -27044,7 +27000,7 @@ snapshots:
       '@vitest/browser-playwright': 4.1.11(playwright@1.61.1)(vite@8.2.2)(vitest@4.1.11)
       '@vitest/coverage-v8': 4.1.11(@vitest/browser@4.1.11)(vitest@4.1.11)
       happy-dom: 20.11.2
-      jsdom: 26.1.0(patch_hash=040623e87b1c8b676c2a705513c0276c0704dd1b23fc3a1bb77cde8128b64b5f)(supports-color@7.2.0)
+      jsdom: 26.1.0(patch_hash=040623e87b1c8b676c2a705513c0276c0704dd1b23fc3a1bb77cde8128b64b5f)(supports-color@10.2.2)
     transitivePeerDependencies:
       - msw
 
