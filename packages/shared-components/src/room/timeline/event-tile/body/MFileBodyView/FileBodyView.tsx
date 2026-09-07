@@ -11,7 +11,7 @@ import { Button, IconButton, Tooltip } from "@vector-im/compound-web";
 import {
     AttachmentIcon,
     DownloadIcon,
-    EditIcon,
+    ExpandIcon,
     VideoCallSolidIcon,
     VolumeOnSolidIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
@@ -264,7 +264,7 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
                         tooltip={openLabel}
                         onClick={vm.onOpenClick}
                     >
-                        <EditIcon />
+                        <ExpandIcon />
                     </IconButton>
                 )}
             </div>

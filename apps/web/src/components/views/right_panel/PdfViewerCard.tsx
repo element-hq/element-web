@@ -38,7 +38,8 @@ export function PdfViewerCard({ mxEvent, onClose }: Props): JSX.Element | null {
     if (!media) return null;
 
     return (
-        <BaseCard onClose={onClose} header={_t("pdf_viewer|title")} withoutScrollContainer>
+        // Name the card after the file being read; BaseCard ellipsizes a title too long to fit.
+        <BaseCard onClose={onClose} header={media.name ?? _t("pdf_viewer|title")} withoutScrollContainer>
             <ErrorBoundary>
                 <Suspense fallback={<Spinner />}>
                     <PdfViewer media={media} />
