@@ -63,7 +63,11 @@ const Banner: FC<Props> = ({ api, logoUrl, href, menu, title }) => {
         </>
     );
     if (href) {
-        headingJsx = <a href={href}>{headingJsx}</a>;
+        headingJsx = (
+            <a href={href} aria-label={api.i18n.translate("logo_link_label")}>
+                {headingJsx}
+            </a>
+        );
     }
 
     return (
