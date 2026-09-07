@@ -165,6 +165,7 @@ describe("RoomListSectionHeaderViewModel", () => {
             [DefaultTagID.Favourite, false],
             [DefaultTagID.LowPriority, false],
             [CHATS_TAG, false],
+            [DefaultTagID.DM, false],
             ["element.io.section.custom", true],
         ])("should be %s for tag %s", (tag, expected) => {
             const vm = new RoomListSectionHeaderViewModel({
@@ -178,11 +179,24 @@ describe("RoomListSectionHeaderViewModel", () => {
     });
 
     describe("canBeReordered", () => {
+        const customTag = "element.io.section.custom";
+
+        beforeEach(() => {
+            // A header is only rendered for a custom section that exists in the settings
+            vi.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+                if (setting === "RoomList.CustomSectionData") return { [customTag]: { tag: customTag, name: "A" } };
+                if (setting === "RoomList.SectionExpansionState") return sectionExpansionState;
+                return null;
+            });
+        });
+
         it.each([
             [DefaultTagID.Favourite, false],
             [DefaultTagID.LowPriority, false],
             [CHATS_TAG, true],
-            ["element.io.section.custom", true],
+            [DefaultTagID.DM, true],
+            [customTag, true],
+            ["element.io.section.deleted", false],
         ])("should be %s for tag %s", (tag, expected) => {
             const vm = new RoomListSectionHeaderViewModel({
                 tag,
@@ -191,6 +205,36 @@ describe("RoomListSectionHeaderViewModel", () => {
                 onToggleExpanded,
             });
             expect(vm.getSnapshot().canBeReordered).toBe(expected);
+        });
+    });
+
+    describe("acceptedRoomKind", () => {
+        function makeViewModel(tag: string, showPeopleSection = true): RoomListSectionHeaderViewModel {
+            vi.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+                if (setting === "RoomList.showPeopleSection") return showPeopleSection;
+                if (setting === "RoomList.SectionExpansionState") return sectionExpansionState;
+                return null;
+            });
+            return new RoomListSectionHeaderViewModel({
+                tag,
+                title: "Section",
+                spaceId: "!space:server",
+                onToggleExpanded,
+            });
+        }
+
+        it.each([
+            [DefaultTagID.DM, "dm"],
+            [CHATS_TAG, "nonDm"],
+            [DefaultTagID.Favourite, undefined],
+            [DefaultTagID.LowPriority, undefined],
+            ["element.io.section.custom", undefined],
+        ])("should be %s for tag %s when the People section is shown", (tag, expected) => {
+            expect(makeViewModel(tag).getSnapshot().acceptedRoomKind).toBe(expected);
+        });
+
+        it("should let the Chats section accept any room when the People section is hidden", () => {
+            expect(makeViewModel(CHATS_TAG, false).getSnapshot().acceptedRoomKind).toBeUndefined();
         });
     });
 
