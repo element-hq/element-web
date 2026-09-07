@@ -151,15 +151,11 @@ describe("VoipRoomSettingsTab", () => {
             };
 
             beforeEach(() => {
-                act(() => {
-                    SettingsStore.setValue("feature_matrixrtc_slots", null, SettingLevel.DEVICE, true);
-                });
+                SettingsStore.setValue("feature_matrixrtc_slots", null, SettingLevel.DEVICE, true);
             });
 
             afterEach(() => {
-                act(() => {
-                    SettingsStore.setValue("feature_matrixrtc_slots", null, SettingLevel.DEVICE, false);
-                });
+                SettingsStore.setValue("feature_matrixrtc_slots", null, SettingLevel.DEVICE, false);
             });
 
             it("opens/creates the slot when enabling Element calls", async () => {
