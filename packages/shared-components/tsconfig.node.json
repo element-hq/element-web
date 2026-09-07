@@ -8,7 +8,8 @@
         "strict": true,
         "types": [],
         "allowSyntheticDefaultImports": true,
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "allowImportingTsExtensions": true
     },
     "include": ["vite.config.ts", "vitest.config.ts", "../../vitest.config.ts"]
 }
