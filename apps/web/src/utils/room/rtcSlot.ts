@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { EventType, type Room } from "matrix-js-sdk/src/matrix";
-import { RTC_SLOT_ENCRYPTION_PER_MEMBER } from "matrix-js-sdk/src/matrixrtc";
+import { type MatrixRTCSession, RTC_SLOT_ENCRYPTION_PER_MEMBER } from "matrix-js-sdk/src/matrixrtc";
 
 import { _t } from "../../languageHandler";
 import SettingsStore from "../../settings/SettingsStore";
@@ -18,17 +18,24 @@ const assertSlotsEnabled = (): void => {
     }
 };
 
+function assertSlotId(session: MatrixRTCSession): asserts session is MatrixRTCSession & { slotId: string } {
+    if (!session.slotId) {
+        // The property allows undefined for historical reasons only.
+        throw new Error("No slot ID has been associated with this session");
+    }
+}
+
 /**
- * Ensures the room's MatrixRTC slot is open, sending a state event to open it if needed.
- * No-op if the room has no slot or the slot is already open.
+ * Ensures the room's MatrixRTC slot is open, sending a state event to open (or create) it if needed.
+ * No-op if the slot is already open.
  * If opening the slot failed, an error dialog is displayed.
  * @returns true if the slot is open (or no action was needed), false if opening it failed.
- * @throws if the `feature_matrixrtc_slots` labs flag is off.
+ * @throws if the `feature_matrixrtc_slots` labs flag is off or the session has no slot ID.
  */
 export const ensureSlotOpen = async (room: Room): Promise<boolean> => {
     assertSlotsEnabled();
     const session = room.client.matrixRTC.getRoomSession(room);
-    if (!session.slotId) return true;
+    assertSlotId(session);
     const existingContent = session.getRtcSlot();
     if (existingContent?.status === "open") return true;
     const usesPerMemberEncryption =
@@ -56,15 +63,15 @@ export const ensureSlotOpen = async (room: Room): Promise<boolean> => {
 
 /**
  * Ensures the room's MatrixRTC slot is closed, sending a state event to close it if needed.
- * No-op if the room has no slot or the slot is already closed.
+ * No-op if the slot is already closed or doesn't exist.
  * If closing the slot failed, an error dialog is displayed.
  * @returns true if the slot is closed (or no action was needed), false if closing it failed.
- * @throws if the `feature_matrixrtc_slots` labs flag is off.
+ * @throws if the `feature_matrixrtc_slots` labs flag is off or the session has no slot ID.
  */
 export const ensureSlotClosed = async (room: Room): Promise<boolean> => {
     assertSlotsEnabled();
     const session = room.client.matrixRTC.getRoomSession(room);
-    if (!session.slotId) return true;
+    assertSlotId(session);
     const existingContent = session.getRtcSlot();
     if (!existingContent || existingContent.status === "closed") return true;
     try {
