@@ -12,6 +12,12 @@ import { _t } from "../../languageHandler";
 import SettingsStore from "../../settings/SettingsStore";
 import { logErrorAndShowErrorDialog } from "../ErrorUtils";
 
+/**
+ * Ensures the room's MatrixRTC slot is open, sending a state event to open it if needed.
+ * No-op if the labs flag is off, the room has no slot, or the slot is already open.
+ * If opening the slot failed, an error dialog is displayed.
+ * @returns true if the slot is open (or no action was needed), false if opening it failed.
+ */
 export const ensureSlotOpen = async (room: Room): Promise<boolean> => {
     if (!SettingsStore.getValue("feature_matrixrtc_slots")) return true;
     const session = room.client.matrixRTC.getRoomSession(room);
@@ -41,6 +47,12 @@ export const ensureSlotOpen = async (room: Room): Promise<boolean> => {
     }
 };
 
+/**
+ * Ensures the room's MatrixRTC slot is closed, sending a state event to close it if needed.
+ * No-op if the labs flag is off, the room has no slot, or the slot is already closed.
+ * If closing the slot failed, an error dialog is displayed.
+ * @returns true if the slot is closed (or no action was needed), false if closing it failed.
+ */
 export const ensureSlotClosed = async (room: Room): Promise<boolean> => {
     if (!SettingsStore.getValue("feature_matrixrtc_slots")) return true;
     const session = room.client.matrixRTC.getRoomSession(room);
