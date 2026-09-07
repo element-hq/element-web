@@ -1130,9 +1130,10 @@ describe("RoomListStoreV3", () => {
     });
 
     describe("Sections", () => {
-        function enableSections(): void {
+        function enableSections(showPeopleSection = false): void {
             vi.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
                 if (setting === "RoomList.showSections") return true;
+                if (setting === "RoomList.showPeopleSection") return showPeopleSection;
                 if (setting === "RoomList.OrderedCustomSections") return [];
                 if (setting === "RoomList.CustomSectionData") return {};
                 return false;
@@ -1143,6 +1144,15 @@ describe("RoomListStoreV3", () => {
             return sections.find((s) => s.tag === tag);
         }
 
+        function mockDmRooms(dmRooms: Room[]): void {
+            const dmRoomIds = dmRooms.map((room) => room.roomId);
+            vi.spyOn(DMRoomMap, "shared").mockImplementation((() => {
+                return {
+                    getUserIdForRoomId: (id: string) => (dmRoomIds.includes(id) ? "@myuser:matrix.org" : ""),
+                };
+            }) as () => DMRoomMap);
+        }
+
         function getClientAndRooms() {
             const client = stubClient();
             const rooms = getMockedRooms(client);
@@ -1151,7 +1161,7 @@ describe("RoomListStoreV3", () => {
             return { client, rooms };
         }
 
-        it("returns three sections in the correct order", async () => {
+        it("returns the default sections in the correct order", async () => {
             enableSections();
             getClientAndRooms();
 
@@ -1159,10 +1169,11 @@ describe("RoomListStoreV3", () => {
             await store.start();
 
             const result = store.getSortedRoomsInActiveSpace();
-            expect(result.sections).toHaveLength(3);
-            expect(result.sections[0].tag).toBe(DefaultTagID.Favourite);
-            expect(result.sections[1].tag).toBe(CHATS_TAG);
-            expect(result.sections[2].tag).toBe(DefaultTagID.LowPriority);
+            expect(result.sections.map((s) => s.tag)).toEqual([
+                DefaultTagID.Favourite,
+                CHATS_TAG,
+                DefaultTagID.LowPriority,
+            ]);
         });
 
         describe("RoomList.showSections disabled", () => {
@@ -1190,6 +1201,94 @@ describe("RoomListStoreV3", () => {
                 expect(sections[0].tag).toBe(CHATS_TAG);
                 expect(sections[0].rooms).toContain(rooms[3]);
                 expect(sections[0].rooms).toContain(rooms[7]);
+            });
+        });
+
+        describe("RoomList.showPeopleSection enabled", () => {
+            const customTag = "element.io.section.custom";
+
+            it("adds the People section above the other reorderable sections", async () => {
+                enableSections(true);
+                getClientAndRooms();
+
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                const { sections } = store.getSortedRoomsInActiveSpace();
+                expect(sections.map((section) => section.tag)).toEqual([
+                    DefaultTagID.Favourite,
+                    DefaultTagID.DM,
+                    CHATS_TAG,
+                    DefaultTagID.LowPriority,
+                ]);
+            });
+
+            it("places direct messages only in the People section", async () => {
+                enableSections(true);
+                const { rooms } = getClientAndRooms();
+                mockDmRooms([rooms[3], rooms[7]]);
+
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                const { sections } = store.getSortedRoomsInActiveSpace();
+                const peopleSection = findSection(sections, DefaultTagID.DM)!;
+                const chatsSection = findSection(sections, CHATS_TAG)!;
+
+                expect(peopleSection.rooms).toHaveLength(2);
+                for (const i of [3, 7]) {
+                    expect(peopleSection.rooms).toContain(rooms[i]);
+                    expect(chatsSection.rooms).not.toContain(rooms[i]);
+                }
+            });
+
+            it.each([DefaultTagID.Favourite, DefaultTagID.LowPriority, customTag])(
+                "places a direct message tagged with %s in that section only",
+                async (tag) => {
+                    const { rooms } = getClientAndRooms();
+                    mockDmRooms([rooms[3]]);
+                    rooms[3].tags[tag] = {};
+
+                    vi.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
+                        if (setting === "RoomList.showSections") return true;
+                        if (setting === "RoomList.showPeopleSection") return true;
+                        if (setting === "RoomList.OrderedCustomSections") return [customTag];
+                        if (setting === "RoomList.CustomSectionData")
+                            return { [customTag]: { tag: customTag, name: "Custom" } };
+                        return false;
+                    });
+
+                    const store = new RoomListStoreV3Class(dispatcher);
+                    await store.start();
+
+                    const { sections } = store.getSortedRoomsInActiveSpace();
+                    expect(findSection(sections, tag)!.rooms).toContain(rooms[3]);
+                    expect(findSection(sections, DefaultTagID.DM)!.rooms).not.toContain(rooms[3]);
+                    expect(findSection(sections, CHATS_TAG)!.rooms).not.toContain(rooms[3]);
+                },
+            );
+
+            it("moves the direct messages into the People section when the setting is turned on", async () => {
+                enableSections();
+                const { rooms } = getClientAndRooms();
+                mockDmRooms([rooms[3]]);
+
+                let settingsWatcher: () => void = () => {};
+                vi.spyOn(SettingsStore, "watchSetting").mockImplementation((settingName, _roomId, callback) => {
+                    if (settingName === "RoomList.showPeopleSection") settingsWatcher = callback as () => void;
+                    return "watcher-id";
+                });
+
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                expect(findSection(store.getSortedRoomsInActiveSpace().sections, DefaultTagID.DM)).toBeUndefined();
+
+                enableSections(true);
+                await Promise.resolve(settingsWatcher());
+
+                const peopleSection = findSection(store.getSortedRoomsInActiveSpace().sections, DefaultTagID.DM)!;
+                expect(peopleSection.rooms).toEqual([rooms[3]]);
             });
         });
 
@@ -1261,7 +1360,7 @@ describe("RoomListStoreV3", () => {
             expect(lowPrioritySection.rooms).not.toContain(rooms[5]);
         });
 
-        it("all rooms are accounted for across all sections", async () => {
+        it("all rooms appear in exactly one section", async () => {
             enableSections();
             const { rooms } = getClientAndRooms();
 
@@ -1271,14 +1370,20 @@ describe("RoomListStoreV3", () => {
             [11].forEach((i) => {
                 rooms[i].tags[DefaultTagID.LowPriority] = {};
             });
+            // Room 5 is both a favourite and a DM, and room 8 is only a DM
+            mockDmRooms([rooms[5], rooms[8]]);
 
             const store = new RoomListStoreV3Class(dispatcher);
             await store.start();
 
             const { sections } = store.getSortedRoomsInActiveSpace();
-            const totalRooms = sections.flatMap((s) => s.rooms).length;
-            // All 100 rooms should be distributed across the three sections
-            expect(totalRooms).toBe(rooms.length);
+            const allRooms = sections.flatMap((s) => s.rooms);
+            // All 100 rooms should be distributed across the sections, without any duplicate
+            expect(allRooms).toHaveLength(rooms.length);
+            expect(new Set(allRooms).size).toBe(rooms.length);
+            // Without a People section, the untagged DM sits in the Chats section
+            expect(findSection(sections, DefaultTagID.DM)).toBeUndefined();
+            expect(findSection(sections, CHATS_TAG)!.rooms).toContain(rooms[8]);
         });
 
         it("applies additional filter keys within each section", async () => {

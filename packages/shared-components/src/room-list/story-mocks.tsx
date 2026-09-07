@@ -78,7 +78,12 @@ const roomNames = [
 /**
  * Create a mock room item snapshot for stories
  */
-export const createMockRoomSnapshot = (id: string, name: string, index: number): RoomListItemViewSnapshot => ({
+export const createMockRoomSnapshot = (
+    id: string,
+    name: string,
+    index: number,
+    isDm = false,
+): RoomListItemViewSnapshot => ({
     id,
     room: { name },
     name,
@@ -99,6 +104,7 @@ export const createMockRoomSnapshot = (id: string, name: string, index: number):
     showNotificationMenu: true,
     isFavourite: false,
     isLowPriority: false,
+    isDm,
     canInvite: true,
     canCopyRoomLink: true,
     canMarkAsRead: false,
@@ -108,8 +114,13 @@ export const createMockRoomSnapshot = (id: string, name: string, index: number):
     areSectionsEnabled: true,
 });
 
-export function createMockRoomItemViewModel(roomId: string, name: string, index: number): RoomListItemViewModel {
-    const snapshot = createMockRoomSnapshot(roomId, name, index);
+export function createMockRoomItemViewModel(
+    roomId: string,
+    name: string,
+    index: number,
+    isDm = false,
+): RoomListItemViewModel {
+    const snapshot = createMockRoomSnapshot(roomId, name, index, isDm);
     return {
         getSnapshot: () => snapshot,
         subscribe: fn(),
@@ -130,12 +141,17 @@ export function createMockRoomItemViewModel(roomId: string, name: string, index:
 
 /**
  * Create a mock getRoomItemViewModel function for stories
+ * @param dmRoomIds The rooms to mark as direct messages
  */
-export const createGetRoomItemViewModel = (roomIds: string[]): ((roomId: string) => RoomListItemViewModel) => {
+export const createGetRoomItemViewModel = (
+    roomIds: string[],
+    dmRoomIds: string[] = [],
+): ((roomId: string) => RoomListItemViewModel) => {
+    const dmRoomIdSet = new Set(dmRoomIds);
     const viewModels = new Map<string, RoomListItemViewModel>();
     roomIds.forEach((roomId, index) => {
         const name = roomNames[index % roomNames.length];
-        viewModels.set(roomId, createMockRoomItemViewModel(roomId, name, index));
+        viewModels.set(roomId, createMockRoomItemViewModel(roomId, name, index, dmRoomIdSet.has(roomId)));
     });
 
     return (roomId: string) => viewModels.get(roomId)!;
