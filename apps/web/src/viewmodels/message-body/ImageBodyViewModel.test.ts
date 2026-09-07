@@ -92,17 +92,20 @@ describe("ImageBodyViewModel", () => {
 
     const createMediaEventHelper = ({
         encrypted,
+        fromLocalUpload = false,
         thumbnailUrl = "blob:thumbnail",
         sourceUrl = "blob:image",
         sourceBlob = new Blob(["image"], { type: "image/jpeg" }),
     }: {
         encrypted: boolean;
+        fromLocalUpload?: boolean;
         thumbnailUrl?: string | null | Promise<string | null>;
         sourceUrl?: string | null | Promise<string | null>;
         sourceBlob?: Blob | Promise<Blob>;
     }): MediaEventHelper =>
         ({
             media: { isEncrypted: encrypted },
+            isFromLocalUpload: fromLocalUpload,
             thumbnailUrl: { value: Promise.resolve(thumbnailUrl) },
             sourceUrl: { value: Promise.resolve(sourceUrl) },
             sourceBlob: { value: Promise.resolve(sourceBlob), cachedValue: sourceBlob },
@@ -330,6 +333,32 @@ describe("ImageBodyViewModel", () => {
             src: "https://server/full.png",
             thumbnailSrc: "https://server/thumb.png",
             linkUrl: "https://server/full.png",
+        });
+    });
+
+    it("renders an unencrypted image this client uploaded from memory", async () => {
+        const vm = createVm({
+            mxEvent: createEvent({
+                content: {
+                    url: "mxc://server/image",
+                    info: { mimetype: "image/jpeg", w: 320, h: 240, size: 48_000 },
+                },
+            }),
+            mediaEventHelper: createMediaEventHelper({
+                encrypted: false,
+                fromLocalUpload: true,
+                sourceUrl: "blob:just-uploaded",
+                thumbnailUrl: "blob:just-uploaded-thumbnail",
+            }),
+        });
+
+        vm.setMediaVisible(true);
+        await downloadImageForTest(vm);
+
+        expect(vm.getSnapshot()).toMatchObject({
+            state: ImageBodyViewState.READY,
+            src: "blob:just-uploaded",
+            thumbnailSrc: "blob:just-uploaded-thumbnail",
         });
     });
 
