@@ -32,13 +32,15 @@ describe("getSectionTagForRoom", () => {
         expect(getSectionTagForRoom(room)).toBeNull();
     });
 
-    it.each([DefaultTagID.Favourite, DefaultTagID.LowPriority, `${CUSTOM_SECTION_TAG_PREFIX}abc-123`])(
-        "should return section tag %s when present",
-        (tag) => {
-            mockGetTagsForRoom.mockReturnValue([tag]);
-            expect(getSectionTagForRoom(room)).toBe(tag);
-        },
-    );
+    it.each([
+        DefaultTagID.Invite,
+        DefaultTagID.Favourite,
+        DefaultTagID.LowPriority,
+        `${CUSTOM_SECTION_TAG_PREFIX}abc-123`,
+    ])("should return section tag %s when present", (tag) => {
+        mockGetTagsForRoom.mockReturnValue([tag]);
+        expect(getSectionTagForRoom(room)).toBe(tag);
+    });
 
     it("should return the first section tag when multiple are present", () => {
         const customTag = `${CUSTOM_SECTION_TAG_PREFIX}abc-123`;
