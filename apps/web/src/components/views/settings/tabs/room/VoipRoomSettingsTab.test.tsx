@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import React from "react";
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { act, fireEvent, render, type RenderResult, waitFor } from "test-utils-rtl";
 import { type MatrixClient, type Room, type MatrixEvent, EventType, JoinRule } from "matrix-js-sdk/src/matrix";
 import { mkStubRoom, stubClient } from "test-utils";
@@ -139,13 +139,13 @@ describe("VoipRoomSettingsTab", () => {
 
         describe("slot handling", () => {
             const mockSlotSession = (getRtcSlot: () => { status?: string } | undefined = () => undefined): void => {
-                jest.mocked(cli.matrixRTC.getRoomSession).mockReturnValue({
+                vi.mocked(cli.matrixRTC.getRoomSession).mockReturnValue({
                     slotId: "m.call#ROOM",
                     slotDescription: { application: "m.call", id: "ROOM" },
                     getRtcSlot,
                 } as unknown as ReturnType<typeof cli.matrixRTC.getRoomSession>);
                 const slotContent = getRtcSlot();
-                jest.mocked(cli.matrixRTC.isSlotClosed).mockReturnValue(
+                vi.mocked(cli.matrixRTC.isSlotClosed).mockReturnValue(
                     slotContent ? slotContent.status === "closed" : undefined,
                 );
             };
@@ -242,7 +242,7 @@ describe("VoipRoomSettingsTab", () => {
             });
 
             it("does not touch power levels or the slot when the user cannot send RTCSlot state events", () => {
-                jest.spyOn(room.currentState, "maySendStateEvent").mockImplementation(
+                vi.spyOn(room.currentState, "maySendStateEvent").mockImplementation(
                     (eventType) => eventType !== EventType.RTCSlot,
                 );
                 mockPowerLevels({ [ElementCallMemberEventType.name]: 100 });
@@ -255,7 +255,7 @@ describe("VoipRoomSettingsTab", () => {
             });
 
             it("disables the switch when the feature is on and the user cannot send RTCSlot state events", () => {
-                jest.spyOn(room.currentState, "maySendStateEvent").mockImplementation(
+                vi.spyOn(room.currentState, "maySendStateEvent").mockImplementation(
                     (eventType) => eventType !== EventType.RTCSlot,
                 );
                 mockPowerLevels({ [ElementCallMemberEventType.name]: 100 });
@@ -269,7 +269,7 @@ describe("VoipRoomSettingsTab", () => {
                 act(() => {
                     SettingsStore.setValue("feature_matrixrtc_slots", null, SettingLevel.DEVICE, false);
                 });
-                jest.spyOn(room.currentState, "maySendStateEvent").mockImplementation(
+                vi.spyOn(room.currentState, "maySendStateEvent").mockImplementation(
                     (eventType) => eventType !== EventType.RTCSlot,
                 );
                 mockPowerLevels({ [ElementCallMemberEventType.name]: 100 });

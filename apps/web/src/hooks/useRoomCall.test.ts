@@ -16,7 +16,6 @@ import {
     mockClientMethodsRooms,
     mockClientMethodsServer,
     mockClientMethodsUser,
-    MockEventEmitter,
     setupAsyncStoreWithClient,
     withContexts,
 } from "test-utils";
@@ -34,13 +33,15 @@ import SettingsStore from "../settings/SettingsStore";
 import { RTC_SLOT_ENCRYPTION_PER_MEMBER } from "matrix-js-sdk/src/matrixrtc";
 import Modal from "../Modal";
 
+vi.mock("../utils/room/placeCall");
+
 describe("useRoomCall", () => {
     const matrixRTC = createStubMatrixRTC();
     const client = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(),
         ...mockClientMethodsServer(),
         ...mockClientMethodsRooms(),
-        matrixRTC: new MockEventEmitter(),
+        matrixRTC,
         sendStateEvent: vi.fn().mockResolvedValue({ event_id: "$event" }),
         _unstable_getRTCTransports: vi.fn().mockResolvedValue([]),
         getCrypto: () => null,

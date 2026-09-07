@@ -78,13 +78,15 @@ const ElementCallSwitch: React.FC<ElementCallSwitchProps> = ({ room }) => {
 
             void room.client.sendStateEvent(room.roomId, EventType.RoomPowerLevels, newContent);
 
-            if (enabled) {
-                void ensureSlotOpen(room);
-            } else {
-                void ensureSlotClosed(room);
+            if (matrixRtcSlotsEnabled) {
+                if (enabled) {
+                    void ensureSlotOpen(room);
+                } else {
+                    void ensureSlotClosed(room);
+                }
             }
         },
-        [room, content, isPublic, maySend],
+        [room, content, isPublic, maySend, matrixRtcSlotsEnabled],
     );
 
     const brand = SdkConfig.get("element_call").brand ?? DEFAULTS.element_call.brand;
