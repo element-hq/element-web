@@ -19,6 +19,7 @@ import { type MediaEventHelper } from "../../utils/MediaEventHelper";
 import { FileBodyViewModel } from "./FileBodyViewModel";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
 import { openPdfViewer } from "../../utils/pdfViewer";
+import SettingsStore from "../../settings/SettingsStore";
 
 const mockDownload = vi.fn();
 
@@ -324,6 +325,33 @@ describe("FileBodyViewModel", () => {
 
     describe("open in viewer", () => {
         const pdf = { info: { mimetype: "application/pdf" } };
+
+        // Captured once: re-reading it inside the helper would pick up the previous test's spy and
+        // recurse.
+        const originalGetValue = SettingsStore.getValue;
+
+        /** The viewer sits behind a lab, so every case below has to opt in to it. */
+        const enablePdfViewerLab = (): void => {
+            vi.spyOn(SettingsStore, "getValue").mockImplementation((setting, ...args) => {
+                if (setting === "feature_pdf_viewer") return true;
+                return originalGetValue(setting, ...args);
+            });
+        };
+
+        beforeEach(() => enablePdfViewerLab());
+
+        it("does not offer the viewer while the lab is off", () => {
+            vi.restoreAllMocks();
+
+            const vm = createVm({
+                mxEvent: mkMediaEvent(pdf),
+                showFileInfo: true,
+                timelineRenderingType: TimelineRenderingType.Room,
+            });
+
+            expect(vm.getSnapshot().showOpen).toBe(false);
+            expect(vm.getSnapshot().showInlineDownload).toBe(false);
+        });
 
         it("offers the viewer for a PDF shown as a file in the timeline", () => {
             const vm = createVm({

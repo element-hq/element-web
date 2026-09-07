@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeEach, type MockedObject } from "vitest";
+import { vi, describe, it, expect, afterEach, beforeEach, type MockedObject } from "vitest";
 import { type MatrixClient, type MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
 import { stubClient } from "test-utils";
 
@@ -135,10 +135,54 @@ describe("RightPanelStore", () => {
             expect(store.isOpenForRoom("!1:example.org")).toEqual(true);
             expect(store.currentCardForRoom("!1:example.org").state?.initialEvent?.getId()).toEqual("$two");
         });
-        it("drops a PdfViewer card with no event to display", async () => {
-            await viewRoom("!1:example.org");
-            store.setCard({ phase: RightPanelPhases.PdfViewer }, true, "!1:example.org");
-            expect(store.roomPhaseHistory).toEqual([]);
+        describe("PdfViewer", () => {
+            const pdfCard = {
+                phase: RightPanelPhases.PdfViewer,
+                state: { pdfViewerEvent: { getId: () => "$pdf" } as unknown as MatrixEvent },
+            };
+
+            // Captured once: re-reading it inside the helper would pick up the previous test's spy and
+            // recurse.
+            const originalGetValue = SettingsStore.getValue;
+
+            /** The viewer sits behind a lab, so the card is only valid while that is on. */
+            const setPdfViewerLab = (enabled: boolean): void => {
+                vi.spyOn(SettingsStore, "getValue").mockImplementation((setting, ...args) => {
+                    if (setting === "feature_pdf_viewer") return enabled;
+                    return originalGetValue(setting, ...args);
+                });
+            };
+
+            afterEach(() => {
+                vi.mocked(SettingsStore.getValue).mockRestore?.();
+            });
+
+            it("drops a card with no event to display", async () => {
+                setPdfViewerLab(true);
+                await viewRoom("!1:example.org");
+
+                store.setCard({ phase: RightPanelPhases.PdfViewer }, true, "!1:example.org");
+
+                expect(store.roomPhaseHistory).toEqual([]);
+            });
+
+            it("keeps a card with an event to display", async () => {
+                setPdfViewerLab(true);
+                await viewRoom("!1:example.org");
+
+                store.setCard(pdfCard, true, "!1:example.org");
+
+                expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.PdfViewer);
+            });
+
+            it("drops an otherwise valid card while the lab is off", async () => {
+                setPdfViewerLab(false);
+                await viewRoom("!1:example.org");
+
+                store.setCard(pdfCard, true, "!1:example.org");
+
+                expect(store.roomPhaseHistory).toEqual([]);
+            });
         });
         it("history is generated for certain phases", async () => {
             await viewRoom("!1:example.org");
