@@ -21,4 +21,26 @@ describe("ClientCreationManagementApi", () => {
         api.setX509ClientInitOpts({ validity });
         expect(api.x509).toEqual({ userVerificationCaCertsPem: "test", validity });
     });
+
+    describe("setUserVerificationCaCertsPem (deprecated)", () => {
+        it("should still set the CA certificates, for modules built against 1.17.0 and earlier", () => {
+            const api = new ClientCreationManagementApi();
+            api.setUserVerificationCaCertsPem("test");
+            expect(api.x509?.userVerificationCaCertsPem).toEqual("test");
+        });
+
+        it("should treat null as supplying none", () => {
+            const api = new ClientCreationManagementApi();
+            api.setUserVerificationCaCertsPem(null);
+            expect(api.x509?.userVerificationCaCertsPem).toBeUndefined();
+        });
+
+        it("should not clobber a signer set by the platform", () => {
+            const api = new ClientCreationManagementApi();
+            const validity = (): number => 0;
+            api.setX509ClientInitOpts({ validity });
+            api.setUserVerificationCaCertsPem("test");
+            expect(api.x509).toEqual({ userVerificationCaCertsPem: "test", validity });
+        });
+    });
 });
