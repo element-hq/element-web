@@ -159,7 +159,7 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
             "libgbm1",
         ],
         recommends: ["libsqlcipher0", "element-io-archive-keyring"],
-        fpm: ["--deb-pre-depends", "libc6 (>= 2.31)"],
+        fpm: ["--deb-pre-depends", "libc6 (>= 2.35)"],
     },
     mac: {
         target: ["dmg", "zip"],
