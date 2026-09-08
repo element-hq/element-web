@@ -5,19 +5,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { NEVER, type Observable, Subject } from "rxjs";
-
 import ActiveWidgetStore from "../../../stores/ActiveWidgetStore";
 import { CallStore } from "../../../stores/CallStore";
-import ThemeWatcher, { ThemeWatcherEvent } from "../../../settings/watchers/ThemeWatcher";
 import { type ElementCall } from "../../../models/Call";
-import {
-    type DeviceMuteRequest,
-    type DeviceMuteState,
-    type HostBridge,
-    type HostRequest,
-    type JoinCallData,
-} from "./ElementCallComponentTypes";
+import { type DeviceMuteState, type ElementCallHostBridge } from "./ElementCallComponentTypes";
 
 export interface ElementWebHostBridgeOptions {
     /** The id of the (virtual) widget that is this call's identity in the widget stores. */
@@ -27,52 +18,27 @@ export interface ElementWebHostBridgeOptions {
 }
 
 /**
- * Element Web's implementation of Element Call's `HostBridge`: the control plane between the mounted
- * Element Call React component and the `ElementCall` model / widget stores. It replaces what
- * `WidgetMessaging` plus the model's widget action handlers do for the iframe transport.
+ * What the Element Call React component tells Element Web: the `ElementCallHostBridge` callbacks, each
+ * forwarding to the `ElementCall` model or the widget stores, replacing what `WidgetMessaging` plus the
+ * model's widget action handlers do for the iframe transport.
  *
- * The bridge is stateless apart from the theme watcher and does nothing but forward. There is one per
- * call (see `ElementCallInstance`), alive for as long as the component is mounted: Element Call restarts
- * the call if it is handed a different bridge, so a bridge must never be tied to one of the tiles that
- * show the call.
+ * Stateless, so its identity does not matter: the component forwards to whichever bridge it was most
+ * recently given. What Element Web asks of the component goes the other way, through the component's
+ * `ElementCallHandle`, which the model holds (`setComponentHandle`).
  */
-export class ElementWebHostBridge implements HostBridge {
+export class ElementWebHostBridge implements ElementCallHostBridge {
     public readonly supportsReactions = true;
-    /** Element Web never preloads the component, so it never asks it to join. */
-    public readonly join$: Observable<HostRequest<JoinCallData>> = NEVER;
-    /** Element Web does not drive the call's mute state. */
-    public readonly deviceMute$: Observable<HostRequest<DeviceMuteRequest, DeviceMuteState>> = NEVER;
-    public readonly hangUp$: Observable<HostRequest<Record<string, never>>>;
-
-    private readonly themeChanges = new Subject<HostRequest<{ name?: string }>>();
-    public readonly themeChange$: Observable<HostRequest<{ name?: string }>> = this.themeChanges.asObservable();
-    private readonly themeWatcher = new ThemeWatcher();
+    /**
+     * Element Web chose the intent on the user's behalf (which button they pressed), so a call that skips
+     * the lobby may start them unmuted on its strength, as it does when Element Web hosts Element Call as a
+     * widget. Standalone Element Call, whose intent comes from a URL, starts the user muted instead.
+     */
+    public readonly allowJoinUnmutedViaIntent = true;
 
     public constructor(
         private readonly call: ElementCall,
         private readonly opts: ElementWebHostBridgeOptions,
-    ) {
-        this.hangUp$ = call.hangUpRequests$;
-    }
-
-    /** Starts forwarding theme changes. */
-    public start(): void {
-        this.themeWatcher.start();
-        this.themeWatcher.on(ThemeWatcherEvent.Change, this.onThemeChange);
-    }
-
-    /** Stops forwarding theme changes. The bridge must not be used afterwards. */
-    public stop(): void {
-        this.themeWatcher.off(ThemeWatcherEvent.Change, this.onThemeChange);
-        this.themeWatcher.stop();
-        this.themeChanges.complete();
-    }
-
-    private readonly onThemeChange = (theme: string): void => {
-        this.themeChanges.next({ data: { name: theme }, reply: () => {} });
-    };
-
-    // EC → EW
+    ) {}
 
     public async setAlwaysOnScreen(alwaysOnScreen: boolean): Promise<void> {
         // Only one call can be on screen. Before this one becomes sticky, hang up every other connected

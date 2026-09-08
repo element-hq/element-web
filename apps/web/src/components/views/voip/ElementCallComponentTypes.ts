@@ -16,26 +16,38 @@
  * for the mock, which shows the effective configuration EC would derive.
  */
 
+import type { FC, Ref } from "react";
 import type * as ElementCallComponent from "@element-hq/element-call-component";
-import type { UrlConfiguration } from "@element-hq/element-call-component";
+import type { ElementCallHandle, UrlConfiguration } from "@element-hq/element-call-component";
 
 export type {
     ConfigOptions,
     DeviceMuteRequest,
     DeviceMuteState,
     ElementCallConfiguration,
-    ElementCallProps,
-    HostBridge,
-    HostRequest,
+    ElementCallHandle,
+    ElementCallHostBridge,
     JoinCallData,
     UrlConfiguration,
 } from "@element-hq/element-call-component";
 
 /**
+ * The component's props, with `ref` typed by Element Web's own React. The package's `Ref` comes from
+ * whichever `@types/react` its declarations resolve to, which is a different copy when the package is
+ * linked from a local checkout, and TypeScript treats the two as unrelated. Structurally identical.
+ */
+export type ElementCallProps = Omit<ElementCallComponent.ElementCallProps, "ref"> & {
+    ref?: Ref<ElementCallHandle>;
+};
+
+/**
  * What `ElementCallAppTile` needs from a dynamically imported Element Call module — satisfied by the
  * package and by `ElementCallMock`.
  */
-export type ElementCallComponentModule = Pick<typeof ElementCallComponent, "ElementCall" | "initializeElementCall">;
+export interface ElementCallComponentModule {
+    ElementCall: typeof ElementCallComponent.ElementCall | FC<ElementCallProps>;
+    initializeElementCall: typeof ElementCallComponent.initializeElementCall;
+}
 
 /** Mirror of EC's `UserIntent` (`src/UrlParams.ts`). Values match EW's `ElementCallIntent`. */
 export enum UserIntent {

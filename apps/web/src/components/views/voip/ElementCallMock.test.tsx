@@ -20,16 +20,15 @@ import {
 } from "matrix-js-sdk/src/matrixrtc";
 
 import { stubClient } from "../../../../test/test-utils";
-import { Subject } from "rxjs";
 
 import {
+    type ElementCallHandle,
+    type ElementCallHostBridge,
     type ElementCallProps,
-    type HostBridge,
-    type HostRequest,
     UserIntent,
     configurationForIntent,
 } from "./ElementCallComponentTypes";
-import { ElementCall, initializeElementCall, nullHostBridge } from "./ElementCallMock";
+import { ElementCall, initializeElementCall } from "./ElementCallMock";
 
 const roomId = "!1:example.org";
 
@@ -47,18 +46,10 @@ class MockSession extends TypedEventEmitter<MatrixRTCSessionEvent, MatrixRTCSess
     }
 }
 
-const request = <Data, Reply = void>(data: Data): HostRequest<Data, Reply> => ({
-    data,
-    reply: vi.fn<(reply: Reply) => void>(),
-});
-
 describe("ElementCallMock", () => {
     let client: MatrixClient;
     let session: MockSession;
-    let hangUp$: Subject<HostRequest<Record<string, never>>>;
-    let deviceMute$: Subject<HostRequest<{ audio_enabled?: boolean; video_enabled?: boolean }, any>>;
-    let themeChange$: Subject<HostRequest<{ name?: string }>>;
-    let bridge: HostBridge;
+    let bridge: ElementCallHostBridge;
 
     beforeEach(() => {
         client = stubClient();
@@ -69,20 +60,13 @@ describe("ElementCallMock", () => {
         vi.spyOn(client, "getRoom").mockImplementation((id) => (id === roomId ? ({ roomId } as Room) : null));
         vi.spyOn(client.matrixRTC, "getRoomSession").mockReturnValue(session as unknown as MatrixRTCSession);
 
-        hangUp$ = new Subject();
-        deviceMute$ = new Subject();
-        themeChange$ = new Subject();
         bridge = {
-            ...nullHostBridge,
             setAlwaysOnScreen: vi.fn(async () => {}),
             contentLoaded: vi.fn(async () => {}),
             notifyJoined: vi.fn(async () => {}),
             notifyHungUp: vi.fn(async () => {}),
             notifyDeviceMute: vi.fn(async () => {}),
             close: vi.fn(async () => {}),
-            hangUp$,
-            deviceMute$,
-            themeChange$,
         };
     });
 
@@ -122,16 +106,23 @@ describe("ElementCallMock", () => {
     });
 
     it("renders the effective configuration derived from the intent plus overrides", () => {
-        renderCall({ intent: UserIntent.JoinExistingCall, config: { skipLobby: true, lang: "de" } });
+        renderCall({ intent: UserIntent.JoinExistingCall, config: { skipLobby: true, hideScreensharing: true } });
         const shown = JSON.parse(screen.getByLabelText("Effective configuration").textContent!);
         expect(shown.intent).toBe("join_existing");
-        expect(shown.config).toEqual({ skipLobby: true, lang: "de" });
+        expect(shown.config).toEqual({ skipLobby: true, hideScreensharing: true });
         expect(shown.effective).toEqual({
             ...configurationForIntent(UserIntent.JoinExistingCall),
             skipLobby: true,
-            lang: "de",
+            hideScreensharing: true,
         });
         expect(shown.effective.callIntent).toBe("video");
+    });
+
+    it("shows the theme and language it is given, and follows changes to them", () => {
+        const { rerender } = render(<ElementCall client={client} roomId={roomId} theme="light" language="en" />);
+        expect(screen.getByText(/theme light · language en/)).toBeInTheDocument();
+        rerender(<ElementCall client={client} roomId={roomId} theme="dark" language="de" />);
+        expect(screen.getByText(/theme dark · language de/)).toBeInTheDocument();
     });
 
     it("records what initializeElementCall was given", async () => {
@@ -200,10 +191,10 @@ describe("ElementCallMock", () => {
     it("leaves the call and gives up the screen before closing", async () => {
         const user = userEvent.setup();
         const order: string[] = [];
-        vi.mocked(bridge.notifyHungUp).mockImplementation(async () => {
+        vi.mocked(bridge.notifyHungUp!).mockImplementation(async () => {
             order.push("notifyHungUp");
         });
-        vi.mocked(bridge.setAlwaysOnScreen).mockImplementation(async (v) => {
+        vi.mocked(bridge.setAlwaysOnScreen!).mockImplementation(async (v: boolean) => {
             order.push(`setAlwaysOnScreen(${v})`);
         });
         vi.mocked(bridge.close!).mockImplementation(async () => {
@@ -219,30 +210,55 @@ describe("ElementCallMock", () => {
         expect(screen.getByText(/in lobby/)).toBeInTheDocument();
     });
 
-    it("hides close and downloadMedia buttons when the host does not offer them", () => {
-        renderCall({ hostBridge: { ...bridge, close: undefined, downloadMedia: undefined } });
-        expect(screen.queryByRole("button", { name: "close" })).not.toBeInTheDocument();
-        expect(screen.queryByRole("button", { name: "downloadMedia" })).not.toBeInTheDocument();
+    it("shows what the host bridge says about itself", () => {
+        renderCall({ hostBridge: { ...bridge, allowJoinUnmutedViaIntent: true } });
+        expect(
+            screen.getByText(/supportsReactions: true · allowJoinUnmutedViaIntent: true · close: yes/),
+        ).toBeInTheDocument();
+        // Defaults, as Element Call reads them
+        renderCall({ hostBridge: {} });
+        expect(
+            screen.getByText(/supportsReactions: true · allowJoinUnmutedViaIntent: false · close: no/),
+        ).toBeInTheDocument();
     });
 
-    it("acknowledges host → EC requests and reacts to them", async () => {
-        renderCall();
+    it("hides the close button when the host does not offer to be closed", () => {
+        renderCall({ hostBridge: { ...bridge, close: undefined } });
+        expect(screen.queryByRole("button", { name: "close" })).not.toBeInTheDocument();
+    });
+
+    it("carries out the host's requests through its handle, and says so", async () => {
+        const user = userEvent.setup();
+        const handle = React.createRef<ElementCallHandle>();
+        render(<ElementCall client={client} roomId={roomId} hostBridge={bridge} ref={handle} />);
         const log = screen.getByRole("list", { name: "HostBridge log" });
+        expect(handle.current).not.toBeNull();
 
-        const theme = request({ name: "dark" });
-        act(() => themeChange$.next(theme));
-        expect(theme.reply).toHaveBeenCalledTimes(1);
-        expect(log).toHaveTextContent('← themeChange {"name":"dark"}');
-
-        const mute = request<{ audio_enabled?: boolean }, any>({ audio_enabled: false });
-        act(() => deviceMute$.next(mute));
-        expect(mute.reply).toHaveBeenCalledWith({ audio_enabled: false, video_enabled: true });
+        let muteState: unknown;
+        await act(async () => {
+            muteState = await handle.current!.setDeviceMute({ audio_enabled: false });
+        });
+        expect(muteState).toEqual({ audio_enabled: false, video_enabled: true });
         expect(screen.getByRole("button", { name: "unmute audio" })).toBeInTheDocument();
 
-        const hangUp = request<Record<string, never>>({});
-        act(() => hangUp$.next(hangUp));
-        await waitFor(() => expect(hangUp.reply).toHaveBeenCalledTimes(1));
+        // Nothing to hang up while in the lobby, as with the real component
+        await expect(handle.current!.hangUp()).rejects.toThrow("Nothing in Element Call can hang up right now");
+
+        await user.click(screen.getByRole("button", { name: "notifyJoined" }));
+        await act(() => handle.current!.hangUp());
         expect(bridge.notifyHungUp).toHaveBeenCalled();
         expect(log).toHaveTextContent("← hangUp");
+        expect(screen.getByText(/in lobby/)).toBeInTheDocument();
+    });
+
+    it("talks to whichever host bridge it was most recently given", async () => {
+        const user = userEvent.setup();
+        const { rerender } = render(<ElementCall client={client} roomId={roomId} hostBridge={bridge} />);
+        const later: ElementCallHostBridge = { notifyJoined: vi.fn(async () => {}) };
+        rerender(<ElementCall client={client} roomId={roomId} hostBridge={later} />);
+
+        await user.click(screen.getByRole("button", { name: "notifyJoined" }));
+        expect(later.notifyJoined).toHaveBeenCalled();
+        expect(bridge.notifyJoined).not.toHaveBeenCalled();
     });
 });

@@ -38,7 +38,7 @@ import { WidgetMessagingStore } from "../stores/widgets/WidgetMessagingStore";
 import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../stores/ActiveWidgetStore";
 import { ElementWidgetActions } from "../stores/widgets/ElementWidgetActions";
 import SettingsStore from "../settings/SettingsStore";
-import ThemeWatcher from "../settings/watchers/ThemeWatcher";
+import { type ElementCallHandle } from "../components/views/voip/ElementCallComponentTypes";
 import { Anonymity, PosthogAnalytics } from "../PosthogAnalytics";
 import { type SettingKey } from "../settings/Settings.tsx";
 import SdkConfig from "../SdkConfig.ts";
@@ -1178,17 +1178,15 @@ describe("ElementCall with the React component transport", () => {
 
     it("disconnects by asking the component to hang up and waiting for its reply", async () => {
         call.handleJoined();
-        const requests: unknown[] = [];
-        call.hangUpRequests$.subscribe((req) => {
-            requests.push(req.data);
+        const hangUp = vi.fn(async () => {
             call.handleHangup(); // as the component would, before acknowledging
-            req.reply();
         });
+        call.setComponentHandle({ hangUp } as unknown as ElementCallHandle);
         const onClose = vi.fn();
         call.on(CallEvent.Close, onClose);
 
         await call.disconnect();
-        expect(requests).toEqual([{}]);
+        expect(hangUp).toHaveBeenCalledTimes(1);
         expect(call.connectionState).toBe(ConnectionState.Disconnected);
         expect(onClose).toHaveBeenCalled();
     });
@@ -1196,6 +1194,16 @@ describe("ElementCall with the React component transport", () => {
     it("fails to disconnect when no component is listening", async () => {
         call.handleJoined();
         await expect(call.disconnect()).rejects.toThrow("no Element Call component is mounted");
+    });
+
+    it("fails to disconnect when the component cannot hang up", async () => {
+        call.handleJoined();
+        call.setComponentHandle({
+            hangUp: async () => {
+                throw new Error("Nothing in Element Call can hang up right now");
+            },
+        } as unknown as ElementCallHandle);
+        await expect(call.disconnect()).rejects.toThrow("Nothing in Element Call can hang up right now");
     });
 
     describe("getCallOptions", () => {
@@ -1207,14 +1215,22 @@ describe("ElementCall with the React component transport", () => {
                 skipLobby: true,
                 background: "solid",
                 perParticipantE2EE: false,
-                fonts: [],
             });
             expect(config.returnToLobby).toBeUndefined();
         });
 
-        it("passes the theme Element Web is currently showing", () => {
-            vi.spyOn(ThemeWatcher.prototype, "getEffectiveTheme").mockReturnValue("dark-high-contrast");
-            expect(call.getCallOptions().config.theme).toBe("dark-high-contrast");
+        it("decides the component's options once per call, until the call is closed", () => {
+            call.widgetGenerationParameters = { skipLobby: true };
+            const options = call.componentOptions;
+            expect(options.config.skipLobby).toBe(true);
+
+            // What the options are computed from may change under a running call; the component must not see it
+            call.widgetGenerationParameters = { skipLobby: false };
+            expect(call.componentOptions).toBe(options);
+
+            call.close();
+            expect(call.componentOptions).not.toBe(options);
+            expect(call.componentOptions.config.skipLobby).toBe(false);
         });
 
         it("uses the voice intent and leaves the lobby decision to Element Call by default", () => {
