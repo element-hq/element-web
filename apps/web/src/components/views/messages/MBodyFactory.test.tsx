@@ -7,10 +7,12 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import React from "react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render } from "test-utils-rtl";
+import React, { type ReactNode } from "react";
+import { describe, it, expect, vi, beforeEach, type MockInstance } from "vitest";
+import { render, screen, type RenderResult, waitFor } from "test-utils-rtl";
+import userEvent from "@testing-library/user-event";
 import { EventType, getHttpUriForMxc, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { LinkedTextContext } from "@element-hq/web-shared-components";
 
 import {
     getMockClientWithEventEmitter,
@@ -33,6 +35,7 @@ import {
 import { TimelineRenderingType } from "../../../contexts/RoomContext.ts";
 import { ScopedRoomContextProvider } from "../../../contexts/ScopedRoomContext.tsx";
 import { useMediaVisible } from "../../../hooks/useMediaVisible";
+import { FileDownloader } from "../../../utils/FileDownloader";
 
 vi.mock("matrix-encrypt-attachment", () => ({
     default: {
@@ -80,16 +83,19 @@ describe("MBodyFactory", () => {
             sender: userId,
             type: EventType.RoomMessage,
             content: {
-                body: "alt",
+                body: "test-file.txt",
                 ...(msgtype ? { msgtype } : {}),
                 url: "mxc://server/file",
                 ...content,
             },
         });
 
+    let mockDownload: MockInstance<FileDownloader["download"]>;
+
     beforeEach(() => {
         vi.spyOn(SettingsStore, "getValue").mockRestore();
         vi.mocked(useMediaVisible).mockReturnValue([true, vi.fn()]);
+        mockDownload = vi.spyOn(FileDownloader.prototype, "download").mockResolvedValue(undefined);
     });
 
     const encryptedImageHelper = (): MediaEventHelper =>
@@ -103,22 +109,37 @@ describe("MBodyFactory", () => {
             },
         }) as unknown as MediaEventHelper;
 
+    /**
+     * Render a media body inside the contexts it needs: the room context, whose rendering type
+     * decides which body is picked, and the linked text context the preview tile reads.
+     */
+    const renderInRoomContext = (node: ReactNode, timelineRenderingType: TimelineRenderingType): RenderResult =>
+        // Wrapped in a fragment because `renderMBody` can return null, which `render` itself rejects.
+        render(<>{node}</>, {
+            wrapper: ({ children }) => (
+                <LinkedTextContext.Provider value={{}}>
+                    <ScopedRoomContextProvider {...({ timelineRenderingType } as any)}>
+                        {children}
+                    </ScopedRoomContextProvider>
+                </LinkedTextContext.Provider>
+            ),
+        });
+
     describe("renderMBody", () => {
         it("renders download button for m.file in file rendering type", () => {
             const mediaEvent = mkEvent("m.file");
 
-            const { container, getByRole } = render(
-                <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.File } as any)}>
-                    {renderMBody({
-                        ...props,
-                        mxEvent: mediaEvent,
-                        mediaEventHelper: new MediaEventHelper(mediaEvent),
-                        showFileInfo: false,
-                    })}
-                </ScopedRoomContextProvider>,
+            const { container } = renderInRoomContext(
+                renderMBody({
+                    ...props,
+                    mxEvent: mediaEvent,
+                    mediaEventHelper: new MediaEventHelper(mediaEvent),
+                    showFileInfo: false,
+                }),
+                TimelineRenderingType.File,
             );
 
-            expect(getByRole("link", { name: "Download" })).toBeInTheDocument();
+            expect(screen.getByRole("link", { name: "Download" })).toBeInTheDocument();
             expect(container).toMatchSnapshot();
         });
 
@@ -140,54 +161,141 @@ describe("MBodyFactory", () => {
 
         it("falls back to file body for unsupported msgtypes", () => {
             const mediaEvent = mkEvent("m.audio");
-            const { getByRole } = render(
-                <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.File } as any)}>
-                    {renderMBody(
-                        {
-                            ...props,
-                            mxEvent: mediaEvent,
-                            mediaEventHelper: new MediaEventHelper(mediaEvent),
-                        },
-                        FileBodyFactory,
-                    )}
-                </ScopedRoomContextProvider>,
+            renderInRoomContext(
+                renderMBody(
+                    {
+                        ...props,
+                        mxEvent: mediaEvent,
+                        mediaEventHelper: new MediaEventHelper(mediaEvent),
+                    },
+                    FileBodyFactory,
+                ),
+                TimelineRenderingType.File,
             );
-            expect(getByRole("button", { name: "alt" })).toBeInTheDocument();
+            expect(screen.getByRole("button", { name: "test-file.txt" })).toBeInTheDocument();
         });
     });
 
-    it.each(["m.file", "m.audio"])(
-        "renderMBody fallback shows %s generic placeholder when showFileInfo is true",
-        async (msgtype) => {
+    it("renderMBody fallback shows m.audio generic placeholder when showFileInfo is true", async () => {
+        const mediaEvent = new MatrixEvent({
+            room_id: "!room:server",
+            sender: userId,
+            type: EventType.RoomMessage,
+            content: {
+                body: "test-file.txt",
+                msgtype: "m.audio",
+                url: "mxc://server/image",
+            },
+        });
+
+        const { container } = renderInRoomContext(
+            renderMBody(
+                {
+                    ...props,
+                    mxEvent: mediaEvent,
+                    mediaEventHelper: new MediaEventHelper(mediaEvent),
+                    showFileInfo: true,
+                },
+                FileBodyFactory,
+            ),
+            TimelineRenderingType.File,
+        );
+
+        expect(screen.getByText("test-file.txt")).toBeInTheDocument();
+        // Only m.file gets the preview tile; everything else keeps the legacy file body,
+        // where the filename itself is the button. See FileBodyFactory.
+        expect(screen.getByRole("button", { name: "test-file.txt" })).toBeInTheDocument();
+        expect(container).toMatchSnapshot();
+    });
+
+    it.each([TimelineRenderingType.Room, TimelineRenderingType.File])(
+        "renderMBody shows the preview tile for m.file in %s",
+        async (timelineRenderingType) => {
             const mediaEvent = new MatrixEvent({
                 room_id: "!room:server",
                 sender: userId,
                 type: EventType.RoomMessage,
                 content: {
-                    body: "alt",
-                    msgtype,
+                    body: "test-file.txt",
+                    msgtype: "m.file",
                     url: "mxc://server/image",
                 },
             });
 
-            const { container, getByRole } = render(
-                <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.File } as any)}>
-                    {renderMBody(
-                        {
-                            ...props,
-                            mxEvent: mediaEvent,
-                            mediaEventHelper: new MediaEventHelper(mediaEvent),
-                            showFileInfo: true,
-                        },
-                        FileBodyFactory,
-                    )}
-                </ScopedRoomContextProvider>,
+            const { container } = renderInRoomContext(
+                renderMBody(
+                    {
+                        ...props,
+                        mxEvent: mediaEvent,
+                        mediaEventHelper: new MediaEventHelper(mediaEvent),
+                        showFileInfo: true,
+                    },
+                    FileBodyFactory,
+                ),
+                timelineRenderingType,
             );
 
-            expect(getByRole("button", { name: "alt" })).toBeInTheDocument();
+            // The preview tile leaves the filename as plain text and gives the download its own button.
+            expect(screen.getByText("test-file.txt")).toBeInTheDocument();
+            expect(screen.getByRole("button", { name: "Download" })).toBeInTheDocument();
             expect(container).toMatchSnapshot();
         },
     );
+
+    describe("PreviewFileBody", () => {
+        // A real MediaEventHelper never yields an empty file name, so stub it to exercise the
+        // preview tile's own fallbacks.
+        const mkFileHelper = (fileName: string, blob: Blob): MediaEventHelper =>
+            ({
+                fileName,
+                media: { isEncrypted: false },
+                sourceBlob: { value: Promise.resolve(blob) },
+            }) as unknown as MediaEventHelper;
+
+        const renderPreview = (mediaEvent: MatrixEvent, mediaEventHelper: MediaEventHelper) =>
+            renderInRoomContext(
+                <FileBodyFactory mxEvent={mediaEvent} mediaEventHelper={mediaEventHelper} showFileInfo={true} />,
+                TimelineRenderingType.Room,
+            );
+
+        it("shows the file size as the tile body when the event declares one", () => {
+            const mediaEvent = mkEvent("m.file", { info: { size: 2048, mimetype: "application/pdf" } });
+
+            renderPreview(mediaEvent, mkFileHelper("report.pdf", new Blob(["pdf"])));
+
+            expect(screen.getByText("report.pdf")).toBeInTheDocument();
+            expect(screen.getByText("2 KB")).toBeInTheDocument();
+        });
+
+        it("shows a placeholder as the tile body when the event declares no size", () => {
+            const mediaEvent = mkEvent("m.file");
+
+            renderPreview(mediaEvent, mkFileHelper("report.pdf", new Blob(["pdf"])));
+
+            expect(screen.getByText("Size unknown")).toBeInTheDocument();
+        });
+
+        it("downloads the source blob under the file name when the download button is clicked", async () => {
+            const blob = new Blob(["pdf"], { type: "application/pdf" });
+            const mediaEvent = mkEvent("m.file");
+
+            renderPreview(mediaEvent, mkFileHelper("report.pdf", blob));
+            await userEvent.click(screen.getByRole("button", { name: "Download" }));
+
+            await waitFor(() => expect(mockDownload).toHaveBeenCalledWith({ blob, name: "report.pdf" }));
+        });
+
+        it("downloads under a generic name when the file has none", async () => {
+            const mediaEvent = mkEvent("m.file");
+
+            renderPreview(mediaEvent, mkFileHelper("", new Blob(["pdf"])));
+            await userEvent.click(screen.getByRole("button", { name: "Download" }));
+
+            await waitFor(() =>
+                expect(mockDownload).toHaveBeenCalledWith(expect.objectContaining({ name: "Attachment" })),
+            );
+        });
+    });
 
     describe("ImageBodyFactory", () => {
         const imageContent = {
@@ -202,14 +310,13 @@ describe("MBodyFactory", () => {
         it("renders the shared image view in room timelines", () => {
             const mediaEvent = mkEvent("m.image", imageContent);
 
-            const { container } = render(
-                <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.Room } as any)}>
-                    <ImageBodyFactory
-                        {...props}
-                        mxEvent={mediaEvent}
-                        mediaEventHelper={new MediaEventHelper(mediaEvent)}
-                    />
-                </ScopedRoomContextProvider>,
+            const { container } = renderInRoomContext(
+                <ImageBodyFactory
+                    {...props}
+                    mxEvent={mediaEvent}
+                    mediaEventHelper={new MediaEventHelper(mediaEvent)}
+                />,
+                TimelineRenderingType.Room,
             );
 
             expect(container.querySelector(".mx_ImageBody")).not.toBeNull();
@@ -219,19 +326,18 @@ describe("MBodyFactory", () => {
         it("renders the file fallback child in notification timelines", () => {
             const mediaEvent = mkEvent("m.image", imageContent);
 
-            const { container, getByRole } = render(
-                <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.Notification } as any)}>
-                    <ImageBodyFactory
-                        {...props}
-                        mxEvent={mediaEvent}
-                        mediaEventHelper={new MediaEventHelper(mediaEvent)}
-                    />
-                </ScopedRoomContextProvider>,
+            const { container } = renderInRoomContext(
+                <ImageBodyFactory
+                    {...props}
+                    mxEvent={mediaEvent}
+                    mediaEventHelper={new MediaEventHelper(mediaEvent)}
+                />,
+                TimelineRenderingType.Notification,
             );
 
             expect(container.querySelector(".mx_ImageBody")).not.toBeNull();
             expect(container.querySelector(".mx_MFileBody")).not.toBeNull();
-            expect(getByRole("link", { name: /Download/ })).toBeInTheDocument();
+            expect(screen.getByRole("link", { name: /Download/ })).toBeInTheDocument();
         });
 
         it("renders only a file body for encrypted unsafe images without thumbnails", () => {
@@ -243,19 +349,18 @@ describe("MBodyFactory", () => {
                 },
             });
 
-            const { container, getByRole } = render(
-                <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.Room } as any)}>
-                    <ImageBodyFactory
-                        {...props}
-                        mxEvent={mediaEvent}
-                        mediaEventHelper={{ media: { isEncrypted: true } } as MediaEventHelper}
-                    />
-                </ScopedRoomContextProvider>,
+            const { container } = renderInRoomContext(
+                <ImageBodyFactory
+                    {...props}
+                    mxEvent={mediaEvent}
+                    mediaEventHelper={{ media: { isEncrypted: true } } as MediaEventHelper}
+                />,
+                TimelineRenderingType.Room,
             );
 
             expect(container.querySelector(".mx_ImageBody")).toBeNull();
             expect(container.querySelector(".mx_MFileBody")).not.toBeNull();
-            expect(getByRole("button", { name: "alt" })).toBeInTheDocument();
+            expect(screen.getByRole("button", { name: "test-file.txt" })).toBeInTheDocument();
         });
 
         it("keeps the image body for encrypted unsafe images when a thumbnail is available", () => {
@@ -268,10 +373,9 @@ describe("MBodyFactory", () => {
                 },
             });
 
-            const { container } = render(
-                <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.Room } as any)}>
-                    <ImageBodyFactory {...props} mxEvent={mediaEvent} mediaEventHelper={encryptedImageHelper()} />
-                </ScopedRoomContextProvider>,
+            const { container } = renderInRoomContext(
+                <ImageBodyFactory {...props} mxEvent={mediaEvent} mediaEventHelper={encryptedImageHelper()} />,
+                TimelineRenderingType.Room,
             );
 
             expect(container.querySelector(".mx_ImageBody")).not.toBeNull();
@@ -292,14 +396,13 @@ describe("MBodyFactory", () => {
         it("renders without a file fallback in room timelines", () => {
             const mediaEvent = mkEvent("m.video", videoContent);
 
-            const { container } = render(
-                <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.Room } as any)}>
-                    <VideoBodyFactory
-                        mxEvent={mediaEvent}
-                        mediaEventHelper={new MediaEventHelper(mediaEvent)}
-                        forExport={false}
-                    />
-                </ScopedRoomContextProvider>,
+            const { container } = renderInRoomContext(
+                <VideoBodyFactory
+                    mxEvent={mediaEvent}
+                    mediaEventHelper={new MediaEventHelper(mediaEvent)}
+                    forExport={false}
+                />,
+                TimelineRenderingType.Room,
             );
 
             expect(container.querySelector(".mx_MVideoBody")).not.toBeNull();
@@ -309,19 +412,18 @@ describe("MBodyFactory", () => {
         it("renders the file fallback child outside room timelines", () => {
             const mediaEvent = mkEvent("m.video", videoContent);
 
-            const { container, getByRole } = render(
-                <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.Notification } as any)}>
-                    <VideoBodyFactory
-                        mxEvent={mediaEvent}
-                        mediaEventHelper={new MediaEventHelper(mediaEvent)}
-                        forExport={false}
-                    />
-                </ScopedRoomContextProvider>,
+            const { container } = renderInRoomContext(
+                <VideoBodyFactory
+                    mxEvent={mediaEvent}
+                    mediaEventHelper={new MediaEventHelper(mediaEvent)}
+                    forExport={false}
+                />,
+                TimelineRenderingType.Notification,
             );
 
             expect(container.querySelector(".mx_MVideoBody")).not.toBeNull();
             expect(container.querySelector(".mx_MFileBody")).not.toBeNull();
-            expect(getByRole("link", { name: /Download/ })).toBeInTheDocument();
+            expect(screen.getByRole("link", { name: /Download/ })).toBeInTheDocument();
         });
     });
 

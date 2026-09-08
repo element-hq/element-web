@@ -37,6 +37,8 @@ import { ComposerApi } from "./ComposerApi.ts";
 import { StorageHelperApi } from "./StorageHelperApi.ts";
 import { SettingsApi } from "./SettingsApi.ts";
 import defaultDispatcher from "../dispatcher/dispatcher.ts";
+import { FileViewerApi } from "./FileViewerApi.ts";
+import { CustomPreviewTileApi } from "./CustomPreviewTileApi.ts";
 
 const legacyCustomisationsFactory = <T extends object>(baseCustomisations: T) => {
     let used = false;
@@ -100,6 +102,8 @@ export class ModuleApi implements Api {
     public readonly composer = new ComposerApi(defaultDispatcher);
     public readonly storageHelper = new StorageHelperApi();
     public readonly settings = new SettingsApi();
+    public readonly fileViewer = new FileViewerApi();
+    public readonly customPreviewTile = new CustomPreviewTileApi();
 
     public createRoot(element: Element): Root {
         return createRoot(element);
