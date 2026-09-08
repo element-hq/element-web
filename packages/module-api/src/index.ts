@@ -21,6 +21,7 @@ export type * from "./models/event";
 export type * from "./models/Room";
 export type * from "./api/composer";
 export type * from "./api/custom-components";
+export type * from "./api/dispatcher";
 export type * from "./api/extras";
 export type * from "./api/legacy-modules";
 export type * from "./api/legacy-customisations";

@@ -34,6 +34,14 @@ export interface AccountDataApi {
     set(eventType: string, content: unknown): Promise<void>;
 }
 
+// @alpha
+export interface ActionPayload {
+    // (undocumented)
+    [property: string]: any;
+    // (undocumented)
+    action: string;
+}
+
 // @alpha @deprecated (undocumented)
 export interface AliasCustomisations {
     // (undocumented)
@@ -259,6 +267,15 @@ export interface DirectoryCustomisations {
     // (undocumented)
     requireCanonicalAliasAccessToPublish?(): boolean;
 }
+
+// @alpha
+export interface DispatcherApi {
+    register(callback: (payload: ActionPayload) => void): DispatchToken;
+    unregister(id: DispatchToken): void;
+}
+
+// @alpha
+export type DispatchToken = string;
 
 // @alpha
 export type ExtendablePropsRenderFunction<BaseProps> = <P extends BaseProps>(
