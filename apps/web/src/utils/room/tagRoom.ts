@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { type TagID } from "../../stores/room-list-v3/skip-list/tag";
+import { DefaultTagID, type TagID } from "../../stores/room-list-v3/skip-list/tag";
 import RoomListActions from "../../actions/RoomListActions";
 import dis from "../../dispatcher/dispatcher";
 import { CHATS_TAG, isSectionTag } from "../../stores/room-list-v3/section";
@@ -26,7 +26,9 @@ export function tagRoom(room: Room, tagId: TagID): void {
     const isChatTag = tagId === CHATS_TAG;
     const tag = isChatTag ? null : tagId;
 
-    if (!isSectionTag(tagId)) {
+    // The invite tag is a section tag, but it comes from the membership rather than from account
+    // data, so it can never be written to or removed from a room.
+    if (!isSectionTag(tagId) || tagId === DefaultTagID.Invite) {
         logger.warn(`Unexpected tag ${tag} applied to ${room.roomId}`);
         return;
     }
@@ -35,7 +37,8 @@ export function tagRoom(room: Room, tagId: TagID): void {
     const currentSectionTag = getSectionTagForRoom(room);
 
     const isApplied = currentSectionTag === tag;
-    const removeTag = currentSectionTag;
+    // A room with a pending invitation has no section tag in its account data to remove
+    const removeTag = currentSectionTag === DefaultTagID.Invite ? null : currentSectionTag;
     const addTag = isApplied ? null : tag;
     dis.dispatch(RoomListActions.tagRoom(room.client, room, removeTag, addTag));
 }

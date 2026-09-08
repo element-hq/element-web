@@ -168,11 +168,29 @@ describe("section", () => {
             vi.spyOn(SettingsStore, "getValue").mockReturnValue(value);
             expect(isSectionExpanded(spaceId, tag)).toBe(result);
         });
+
+        // The Invites section is collapsed every time it appears, so a stored value is ignored
+        it.each([
+            { description: "nothing is stored", value: {} },
+            { description: "an expanded state is stored", value: { [spaceId]: { [DefaultTagID.Invite]: true } } },
+        ])("returns false for the Invites section when $description", ({ value }) => {
+            vi.spyOn(SettingsStore, "getValue").mockReturnValue(value);
+            expect(isSectionExpanded(spaceId, DefaultTagID.Invite)).toBe(false);
+        });
     });
 
     describe("setSectionExpanded", () => {
         const spaceId = "!space:server";
         const tag = "element.io.section.abc";
+
+        it("does not persist the Invites section, whose state is never remembered", async () => {
+            vi.spyOn(SettingsStore, "getValue").mockReturnValue({});
+            const setValueSpy = vi.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+
+            await setSectionExpanded(spaceId, DefaultTagID.Invite, true);
+
+            expect(setValueSpy).not.toHaveBeenCalled();
+        });
 
         it("persists the state at the device level", async () => {
             vi.spyOn(SettingsStore, "getValue").mockReturnValue({});
@@ -499,6 +517,17 @@ describe("section", () => {
                 stored: [DefaultTagID.DM, `${CUSTOM_SECTION_TAG_PREFIX}unknown`, CHATS_TAG],
                 expected: [DefaultTagID.DM, CHATS_TAG],
             },
+            {
+                description: "drops the pinned Invite, Favourite and LowPriority tags",
+                stored: [
+                    DefaultTagID.Invite,
+                    DefaultTagID.Favourite,
+                    DefaultTagID.DM,
+                    CHATS_TAG,
+                    DefaultTagID.LowPriority,
+                ],
+                expected: [DefaultTagID.DM, CHATS_TAG],
+            },
         ])("getOrderedReorderableSections $description", ({ stored, expected }) => {
             mockStoredOrder(stored);
             expect(getOrderedReorderableSections()).toEqual(expected);
@@ -509,25 +538,39 @@ describe("section", () => {
                 description: "pins Favourite at the top and LowPriority at the bottom",
                 stored: [customTag, CHATS_TAG],
                 showPeopleSection: false,
-                expected: [DefaultTagID.Favourite, customTag, CHATS_TAG, DefaultTagID.LowPriority],
+                expected: [DefaultTagID.Invite, DefaultTagID.Favourite, customTag, CHATS_TAG, DefaultTagID.LowPriority],
             },
             {
                 description: "includes the People tag when the setting is enabled",
                 stored: [customTag, CHATS_TAG],
                 showPeopleSection: true,
-                expected: [DefaultTagID.Favourite, DefaultTagID.DM, customTag, CHATS_TAG, DefaultTagID.LowPriority],
+                expected: [
+                    DefaultTagID.Invite,
+                    DefaultTagID.Favourite,
+                    DefaultTagID.DM,
+                    customTag,
+                    CHATS_TAG,
+                    DefaultTagID.LowPriority,
+                ],
             },
             {
                 description: "drops the People tag when the setting is disabled, keeping the other sections in order",
                 stored: [customTag, CHATS_TAG, DefaultTagID.DM],
                 showPeopleSection: false,
-                expected: [DefaultTagID.Favourite, customTag, CHATS_TAG, DefaultTagID.LowPriority],
+                expected: [DefaultTagID.Invite, DefaultTagID.Favourite, customTag, CHATS_TAG, DefaultTagID.LowPriority],
             },
             {
                 description: "keeps the stored position of the People tag when the setting is enabled",
                 stored: [customTag, CHATS_TAG, DefaultTagID.DM],
                 showPeopleSection: true,
-                expected: [DefaultTagID.Favourite, customTag, CHATS_TAG, DefaultTagID.DM, DefaultTagID.LowPriority],
+                expected: [
+                    DefaultTagID.Invite,
+                    DefaultTagID.Favourite,
+                    customTag,
+                    CHATS_TAG,
+                    DefaultTagID.DM,
+                    DefaultTagID.LowPriority,
+                ],
             },
         ])("getOrderedSectionTags $description", ({ stored, showPeopleSection, expected }) => {
             mockStoredOrder(stored, showPeopleSection);
@@ -667,20 +710,21 @@ describe("section", () => {
     });
 
     describe("isDefaultSectionTag", () => {
-        it.each([DefaultTagID.Favourite, DefaultTagID.LowPriority, CHATS_TAG, DefaultTagID.DM])(
+        it.each([DefaultTagID.Invite, DefaultTagID.Favourite, DefaultTagID.LowPriority, CHATS_TAG, DefaultTagID.DM])(
             "returns true for %s",
             (tag) => {
                 expect(isDefaultSectionTag(tag)).toBe(true);
             },
         );
 
-        it.each([DefaultTagID.Invite, "some.random.tag"])("returns false for %s", (tag) => {
+        it.each(["some.random.tag"])("returns false for %s", (tag) => {
             expect(isDefaultSectionTag(tag)).toBe(false);
         });
     });
 
     describe("isSectionTag", () => {
         it.each([
+            DefaultTagID.Invite,
             DefaultTagID.Favourite,
             DefaultTagID.LowPriority,
             CHATS_TAG,
@@ -690,7 +734,7 @@ describe("section", () => {
             expect(isSectionTag(tag)).toBe(true);
         });
 
-        it.each([DefaultTagID.Invite, "some.random.tag"])("returns false for %s", (tag) => {
+        it.each(["some.random.tag"])("returns false for %s", (tag) => {
             expect(isSectionTag(tag)).toBe(false);
         });
     });
