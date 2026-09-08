@@ -6,10 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { expect, describe, it, beforeAll, beforeEach, vi } from "vitest";
+import { expect, describe, it, afterEach, beforeAll, beforeEach, vi, type MockInstance } from "vitest";
 import { app, safeStorage } from "electron";
 
-import Store, { SafeStorageDecryptionError } from "./store.js";
+import Store, { Mode, SafeStorageDecryptionError } from "./store.js";
 
 // In-memory ElectronStore replacement so the tests don't touch the filesystem or real config.
 const backing = new Map<string, unknown>();
@@ -73,27 +73,75 @@ vi.mock("electron", () => ({
 }));
 
 const KEY = "@alice:example.org|DEVICEID";
+// The key `KEY` is stored under: dots are not legal in an electron-store path segment.
+const STORED_KEY = "safeStorage.@alice:example-org|DEVICEID";
+const SESSION = {} as unknown as Electron.Session;
+
+const encrypted = (secret: string): string => Buffer.from(PREFIX + secret, "utf8").toString("base64");
+
+/**
+ * Drop the Store singleton so a test can build one with a different mode, platform or on-disk
+ * state. Store.initialize refuses to run twice, and prepareSafeStorage is what we want to exercise.
+ */
+const freshStore = (mode?: Mode): Store => {
+    (Store as unknown as { internalInstance?: Store }).internalInstance = undefined;
+    return Store.initialize(mode);
+};
+
+let platformSpy: MockInstance<() => NodeJS.Platform> | undefined;
+
+/**
+ * Pin what process.platform reports for the rest of the test.
+ *
+ * Every test which builds a Store must do this rather than inherit the host's platform:
+ * chooseBackend takes a completely different path on Linux, so an inherited platform makes a test
+ * pass on a macOS dev machine and fail on a Linux CI runner. The ambient value is not trustworthy
+ * either - other test files in this project mock process.platform without restoring it, and vitest
+ * shares one process between the files in a worker.
+ */
+const usePlatform = (platform: NodeJS.Platform): void => {
+    restorePlatform();
+    platformSpy = vi.spyOn(process, "platform", "get").mockReturnValue(platform);
+};
+
+const restorePlatform = (): void => {
+    platformSpy?.mockRestore();
+    platformSpy = undefined;
+};
 
 describe("Store secret encryption (safeStorage)", () => {
     let store: Store;
 
     beforeAll(async () => {
-        store = Store.initialize(undefined);
-        // getSelectedStorageBackend is mocked to "basic_text", so this walks the degraded-mode
-        // path and takes the mocked dialog's "use basic_text" answer.
-        await store.prepareSafeStorage({} as unknown as Electron.Session);
+        // On Linux with getSelectedStorageBackend mocked to "basic_text" this walks the
+        // degraded-mode path and takes the mocked dialog's "use basic_text" answer.
+        usePlatform("linux");
+        try {
+            store = Store.initialize(undefined);
+            await store.prepareSafeStorage(SESSION);
+        } finally {
+            restorePlatform();
+        }
     });
 
     beforeEach(() => {
+        // Default to a non-Linux platform; the tests which exercise the Linux paths say so.
+        usePlatform("darwin");
         backing.clear();
         vi.mocked(safeStorage.decryptStringAsync).mockClear();
         vi.mocked(safeStorage.encryptStringAsync).mockClear();
+        vi.mocked(safeStorage.isAsyncEncryptionAvailable).mockResolvedValue(true);
+        vi.mocked(safeStorage.getSelectedStorageBackend).mockReturnValue("basic_text");
         // Restore the default reversible decrypt implementation between tests.
         vi.mocked(safeStorage.decryptStringAsync).mockImplementation((buf: Buffer) => {
             const s = buf.toString("utf8");
             if (!s.startsWith(PREFIX)) return Promise.reject(new Error("Failed to decrypt"));
             return Promise.resolve({ result: s.slice(PREFIX.length), shouldReEncrypt: false });
         });
+    });
+
+    afterEach(() => {
+        restorePlatform();
     });
 
     it("round-trips a stored secret", async () => {
@@ -177,16 +225,124 @@ describe("Store secret encryption (safeStorage)", () => {
         });
     });
 
-    describe("basic_text -> plaintext migration", () => {
-        // The private migration step normally runs via prepareSafeStorage on a relaunch with
-        // safeStorageBackendMigrate set; drive it directly to keep the singleton harness simple.
-        const migrate = (): Promise<void> =>
-            (store as unknown as { migrateBasicTextToPlaintext(): Promise<void> }).migrateBasicTextToPlaintext();
+    describe("backend selection", () => {
+        it("uses the encrypted system backend when async encryption is available", async () => {
+            usePlatform("darwin");
 
-        const GOOD_CIPHERTEXT = Buffer.from(`${PREFIX}goodsecret`, "utf8").toString("base64");
+            const store = freshStore();
+            await expect(store.prepareSafeStorage(SESSION)).resolves.toBe(true);
+            expect(backing.get("safeStorageBackend")).toBe("system");
+        });
+
+        it("falls back to plaintext when async encryption is unavailable", async () => {
+            usePlatform("darwin");
+            vi.mocked(safeStorage.isAsyncEncryptionAvailable).mockResolvedValue(false);
+
+            const store = freshStore();
+            await expect(store.prepareSafeStorage(SESSION)).resolves.toBe(true);
+
+            expect(backing.get("safeStorageBackend")).toBe("plaintext");
+        });
+
+        it("uses the keyring Linux reports when it supports async encryption", async () => {
+            usePlatform("linux");
+            vi.mocked(safeStorage.getSelectedStorageBackend).mockReturnValue("gnome_libsecret");
+
+            const store = freshStore();
+            await expect(store.prepareSafeStorage(SESSION)).resolves.toBe(true);
+
+            expect(backing.get("safeStorageBackend")).toBe("gnome_libsecret");
+            // Set up front so that a fallback to basic_text is already encrypted, see chooseBackend.
+            expect(safeStorage.setUsePlainTextEncryption).toHaveBeenCalledWith(true);
+        });
+
+        it("falls back to plaintext when Linux reports an unknown keyring", async () => {
+            usePlatform("linux");
+            vi.mocked(safeStorage.getSelectedStorageBackend).mockReturnValue("unknown");
+
+            const store = freshStore();
+            await expect(store.prepareSafeStorage(SESSION)).resolves.toBe(true);
+
+            expect(backing.get("safeStorageBackend")).toBe("plaintext");
+        });
+
+        it("falls back to plaintext when the Linux keyring cannot encrypt", async () => {
+            usePlatform("linux");
+            vi.mocked(safeStorage.getSelectedStorageBackend).mockReturnValue("gnome_libsecret");
+            vi.mocked(safeStorage.isAsyncEncryptionAvailable).mockResolvedValue(false);
+
+            const store = freshStore();
+            await expect(store.prepareSafeStorage(SESSION)).resolves.toBe(true);
+
+            expect(backing.get("safeStorageBackend")).toBe("plaintext");
+        });
+    });
+
+    describe("plaintext storage", () => {
+        it("round-trips a secret without going near safeStorage", async () => {
+            const store = freshStore(Mode.ForcePlaintext);
+            await store.prepareSafeStorage(SESSION);
+
+            await store.setSecret(KEY, "s3cr3t");
+
+            expect(backing.get(STORED_KEY)).toBe("s3cr3t");
+            await expect(store.getSecret(KEY)).resolves.toBe("s3cr3t");
+            expect(safeStorage.encryptStringAsync).not.toHaveBeenCalled();
+            expect(safeStorage.decryptStringAsync).not.toHaveBeenCalled();
+        });
+
+        it("reports a missing secret as absent rather than undecryptable", async () => {
+            const store = freshStore(Mode.ForcePlaintext);
+            await store.prepareSafeStorage(SESSION);
+
+            await expect(store.getSecret(KEY)).resolves.toBeUndefined();
+            await expect(store.isSecretUndecryptable(KEY)).resolves.toBe(false);
+        });
+    });
+
+    describe("plaintext -> encrypted migration", () => {
+        beforeEach(() => {
+            usePlatform("linux");
+            vi.mocked(safeStorage.getSelectedStorageBackend).mockReturnValue("gnome_libsecret");
+            backing.set("safeStorageBackend", "plaintext");
+        });
+
+        it("encrypts existing plaintext secrets once an encrypted backend is available", async () => {
+            backing.set("safeStorage", { good: "goodsecret" });
+            backing.set("safeStorage.good", "goodsecret");
+
+            const store = freshStore();
+            // Migrating in place, so startup continues rather than relaunching.
+            await expect(store.prepareSafeStorage(SESSION)).resolves.toBe(true);
+
+            expect(backing.get("safeStorage.good")).toBe(encrypted("goodsecret"));
+            expect(backing.get("safeStorageBackend")).toBe("gnome_libsecret");
+            await expect(store.getSecret("good")).resolves.toBe("goodsecret");
+        });
+
+        it("does nothing when there are no secrets to migrate", async () => {
+            const store = freshStore();
+            await expect(store.prepareSafeStorage(SESSION)).resolves.toBe(true);
+
+            expect(backing.get("safeStorageBackend")).toBe("gnome_libsecret");
+            expect(safeStorage.encryptStringAsync).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("basic_text -> plaintext migration", () => {
+        // The migration runs on a relaunch into the basic_text backend with safeStorageBackendMigrate
+        // set, so drive it through prepareSafeStorage exactly as that relaunch does.
+        const migrate = async (): Promise<void> => {
+            const migrating = freshStore();
+            // The migration always ends in a relaunch, so startup is told to abort.
+            await expect(migrating.prepareSafeStorage(SESSION)).resolves.toBe(false);
+        };
+
+        const GOOD_CIPHERTEXT = encrypted("goodsecret");
         const BAD_CIPHERTEXT = Buffer.from("not-decryptable", "utf8").toString("base64");
 
         beforeEach(() => {
+            usePlatform("linux");
             backing.set("safeStorageBackend", "basic_text");
             backing.set("safeStorageBackendMigrate", true);
         });
