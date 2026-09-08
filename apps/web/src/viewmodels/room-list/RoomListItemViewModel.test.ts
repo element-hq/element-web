@@ -12,6 +12,7 @@ import { vi, describe, it, expect, beforeEach, afterEach, type Mock } from "vite
 import {
     type MatrixClient,
     type MatrixEvent,
+    KnownMembership,
     Room,
     RoomEvent,
     PendingEventOrdering,
@@ -698,6 +699,16 @@ describe("RoomListItemViewModel", () => {
             watchCallback("RoomList.showSections", null, null as any, null, null);
 
             expect(viewModel.getSnapshot().areSectionsEnabled).toBe(true);
+        });
+
+        it.each([
+            { membership: KnownMembership.Join, expected: true },
+            { membership: KnownMembership.Invite, expected: false },
+        ])("should set canChangeSection to $expected when membership is $membership", ({ membership, expected }) => {
+            vi.spyOn(room, "getMyMembership").mockReturnValue(membership);
+
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            expect(viewModel.getSnapshot().canChangeSection).toBe(expected);
         });
     });
 

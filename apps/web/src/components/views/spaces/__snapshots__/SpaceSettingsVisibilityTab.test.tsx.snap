@@ -105,7 +105,7 @@ exports[`<SpaceSettingsVisibilityTab /> > for a public space > renders addresses
               <span
                 id="joinRule-public-description"
               >
-                Anyone can join.
+                Anyone can join, including people outside your organisation.
               </span>
               <form
                 class="_root_1o4d9_17"
@@ -483,7 +483,7 @@ exports[`<SpaceSettingsVisibilityTab /> > renders container 1`] = `
               <span
                 id="joinRule-public-description"
               >
-                Anyone can join.
+                Anyone can join, including people outside your organisation.
               </span>
               <form
                 class="_root_1o4d9_17"

@@ -81,7 +81,11 @@ describe("RoomUploadViewModel", () => {
             icon,
             onSelected,
         });
-        expect(vm.getSnapshot().options).toContainEqual({ type: "org.example.test", label: "My uploader", icon });
+        // The module option must appear exactly once, alongside the built-in local option.
+        expect(vm.getSnapshot().options).toEqual([
+            expect.objectContaining({ type: "local" }),
+            { type: "org.example.test", label: "My uploader", icon },
+        ]);
         vm.onUploadOptionSelected("org.example.test");
         expect(onSelected).toHaveBeenCalledWith(
             room.roomId,
