@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { expect, describe, it, beforeAll, beforeEach, vi } from "vitest";
-import { app, dialog, safeStorage } from "electron";
+import { app, safeStorage } from "electron";
 
 import Store, { SafeStorageDecryptionError, clearData } from "./store.js";
 
