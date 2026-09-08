@@ -1626,6 +1626,10 @@
             inset-inline-start: -3px;
         }
 
+        &:not(.stateInfo) .slotAvatar {
+            inset-block-start: var(--cpd-space-0-5x);
+        }
+
         .slotPadlock {
             inset-inline-start: var(--cpd-space-2x);
         }
@@ -1672,7 +1676,20 @@
 
         /* States. */
         &.stateBubbleContainer .line {
-            padding: 0;
+            padding-block: 0;
+            padding-inline: var(--event-tile-card-spacing-inline) var(--event-tile-group-timestamp-width);
+        }
+
+        /* The receipt has its own grid column; it must not reserve a second
+           gutter on the event line. */
+        &.stateBubbleContainer.hasReceiptSlot .line {
+            margin-inline-end: 0;
+        }
+
+        /* Card bubble-container events have no external timestamp. Tell the
+           shared EventTileBubble to use the available line width. */
+        &.stateBubbleContainer .slotBody {
+            --event-tile-bubble-max-width: min(100%, 600px);
         }
 
         &.stateInfo .slotAvatar {
@@ -1681,6 +1698,14 @@
 
         &.stateInfo {
             font: var(--cpd-font-body-sm-regular);
+        }
+    }
+
+    &.layoutBubble {
+        /* Card Bubble-layout timestamps are positioned inside the line, so
+           the body must not reserve the external timestamp gutter. */
+        .slotBody {
+            --event-tile-bubble-max-width: min(100%, 600px);
         }
     }
 
