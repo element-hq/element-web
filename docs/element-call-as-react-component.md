@@ -198,6 +198,19 @@ i18next instance, so the most recently set language wins for all.
   EC's. `@element-hq/element-call-embedded` stays while the widget path exists. For local EC development,
   a `.link-config` line (`@element-hq/element-call-component=/path/to/element-call/component=apps/web`) or
   a `link:` spec points at a built checkout.
+- **The `prepare` build must not run under a `node_modules` path.** pnpm builds a git dependency in a
+  temporary checkout under its store (`<store>/tmp/`), and `pnpm/action-setup` makes
+  `~/setup-pnpm/node_modules/.bin` the `PNPM_HOME` the store lives in. Built from such a path, EC's
+  toolchain treats its own sources as a dependency's: the rolldown Babel plugin skips them (its default
+  exclude is `node_modules`), so the React Compiler does not run, and the TypeScript transform ignores EC's
+  `useDefineForClassFields: false`, so class fields get define semantics. The result is a bundle no local
+  build produces, and `MediaDevices`, whose field initialisers read a constructor parameter property,
+  throws on mount (`Cannot read properties of undefined (reading 'behavior')`), leaving the call tile
+  blank. The web app build workflows (`build.yml`, `build_develop.yml`, `build-and-test.yaml`) therefore
+  set `pnpm_config_store_dir` to `$RUNNER_TEMP/pnpm-store` before `actions/setup-node` (pnpm 11 reads
+  `pnpm_config_*`, not `npm_config_*`, from the environment); a local
+  `pnpm store path` (`~/Library/pnpm/store`, `~/.local/share/pnpm/store`) is unaffected. The tell-tale of
+  a bad build is a component chunk with no `react/compiler-runtime` import.
 - **One SDK, one LiveKit** (`webpack.config.ts`): aliases `matrix-js-sdk$` → `src/matrix.ts` and
   `matrix-js-sdk/lib` → `src`, before the existing prefix alias, so EC's `lib/*` imports resolve to the
   modules EW uses (otherwise `instanceof`, enums and `getRoomSession()` identity break); `livekit-client$`
@@ -264,7 +277,18 @@ different `BASE_URL` gets the same config.
 - **`contentLoaded`** is not called by EC's component build; `MarkReadyOnMount` compensates and becomes
   redundant once it is.
 - **Package reference**: switch the git ref to `main` (or a published package, dropping the `allowBuilds`
-  entry) once element-call#4233 has merged.
+  entry) once element-call#4233 has merged. A prebuilt, published artifact also removes the class of
+  problem below: with `prepare`, the component is built by the consumer's pnpm, in a location the consumer
+  does not control (see [Package, types and build](#package-types-and-build)).
+- **EC: class field ordering** (upstream). `src/state/MediaDevices.ts` initialises fields from the
+  `scope` and `audioOutputOptions` parameter properties and relies on TypeScript assigning those first,
+  which only `useDefineForClassFields: false` guarantees. Move the initialisers into the constructor body,
+  and check the other classes whose field initialisers read `this.<parameter>` (some 20 classes change
+  shape under define semantics). Until then the CI store-dir workaround is load-bearing.
+- **EC: build determinism** (upstream). Make the component build independent of where it runs: give the
+  rolldown Babel plugin an `exclude` that names only the project's own dependency directory by absolute
+  path rather than any `node_modules` segment, and pass `useDefineForClassFields: false` explicitly through
+  Vite's `oxc` options instead of depending on tsconfig discovery. EW could then drop the workaround.
 - **`matrix-js-sdk` coupling**: the component reads SDK APIs (e.g. `MatrixRTCSession.isKeyRotationSuppressed`)
   that EW's pinned SDK must have; until the package declares its requirement, bump both together.
 - **Fonts**: EW's system font setting (`FontWatcher` sets `--cpd-font-family-sans` on `document.body`) does
