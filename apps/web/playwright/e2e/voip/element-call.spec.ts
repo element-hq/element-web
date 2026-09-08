@@ -829,11 +829,24 @@ test.describe("Element Call", () => {
                 ),
             ).toBe(true);
 
-            // Closing the window from the browser side brings the call back, into the floating PiP
+            // Closing the window from the browser side brings the call back to where it left from: the
+            // room's call view
+            await page.evaluate(() => window.documentPictureInPicture!.window!.close());
+            await expect(mock).toBeVisible();
+            await expect(page.getByTestId("widget-pip-container")).toHaveCount(0);
+            await expect(page.getByRole("button", { name: "Minimise call" })).toBeVisible();
+            await expect(page.getByRole("button", { name: "Open call in a floating window" })).toBeVisible();
+
+            // Whereas a call that was floating in Element Web's own PiP goes back there
+            await page.getByRole("button", { name: "Minimise call" }).click();
+            await expect(page.getByTestId("widget-pip-container")).toBeVisible();
+            await documentPip.click();
+            await expect.poll(() => page.evaluate(() => window.documentPictureInPicture!.window !== null)).toBe(true);
+            await expect(page.getByTestId("widget-pip-container")).toHaveCount(0);
             await page.evaluate(() => window.documentPictureInPicture!.window!.close());
             await expect(mock).toBeVisible();
             await expect(page.getByTestId("widget-pip-container")).toBeVisible();
-            await expect(page.getByRole("button", { name: "Open call in a floating window" })).toBeVisible();
+            await expect(page.getByRole("button", { name: "Maximise call" })).toBeVisible();
         });
     });
 
