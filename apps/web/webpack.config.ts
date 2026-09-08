@@ -314,6 +314,15 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
             ],
             rules: [
                 {
+                    // The Element Call component bundles MediaPipe (background blur), whose WASM loader has an
+                    // `import(url)` fallback for module workers whose `importScripts` refuses to run. Webpack
+                    // cannot resolve an import of an expression and warns "Critical dependency: the request of
+                    // a dependency is an expression". The branch never runs on the main thread, where the
+                    // component runs, so the warning is noise: this rule stops webpack treating it as critical.
+                    test: /element-call-component[\\/]dist[\\/]element-call\.js$/,
+                    parser: { exprContextCritical: false },
+                },
+                {
                     // Match imports containing the ?raw query string
                     resourceQuery: /raw/,
                     // Instruct Webpack to emit the file source as a string
