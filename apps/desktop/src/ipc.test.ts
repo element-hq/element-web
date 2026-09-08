@@ -47,7 +47,7 @@ vi.mock("electron", () => ({
 
 vi.mock("./store.js", () => ({
     default: { instance: mockStore },
-    clearDataAndRelaunch: vi.fn(),
+    clearData: vi.fn(),
     SafeStorageDecryptionError: class SafeStorageDecryptionError extends Error {},
 }));
 vi.mock("./utils.js", () => ({ randomArray }));
