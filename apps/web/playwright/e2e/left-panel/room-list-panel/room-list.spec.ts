@@ -6,13 +6,13 @@
  */
 
 import { type Page } from "@playwright/test";
-import { closeReleaseAnnouncement, rejectToast } from "@element-hq/element-web-playwright-common";
+import { closeReleaseAnnouncementIfExists, rejectToast } from "@element-hq/element-web-playwright-common";
 
 import type { AccountDataEvents } from "matrix-js-sdk/src/matrix";
 import { expect, test } from "../../../element-web-test";
 import { type Bot } from "../../../pages/bot";
 import { type ElementAppPage } from "../../../pages/ElementAppPage";
-import { getRoomList } from "./utils";
+import { getRoomList, getSectionHeader } from "./utils";
 
 test.describe("Room list", () => {
     test.use({
@@ -28,7 +28,7 @@ test.describe("Room list", () => {
         await rejectToast(page, "Notifications");
 
         // Close the release announcement about the new room list sections
-        await closeReleaseAnnouncement(page, "Introducing Sections");
+        await closeReleaseAnnouncementIfExists(page, "Introducing Sections");
 
         // focus the user menu to avoid to have hover decoration
         await page.getByRole("button", { name: "User menu" }).focus();
@@ -388,7 +388,13 @@ test.describe("Room list", () => {
                 invite: [user.userId],
                 is_direct: true,
             });
-            const invitedRoom = roomListView.getByRole("option", { name: "invited room" });
+
+            // The Invites section starts collapsed, so expand it to reach the room tile
+            const invitesHeader = getSectionHeader(page, "Invites");
+            await expect(invitesHeader).toBeVisible();
+            await invitesHeader.click();
+
+            const invitedRoom = roomListView.getByRole("button", { name: "Open room invited room" });
             await expect(invitedRoom).toBeVisible();
             await expect(invitedRoom).toMatchScreenshot("room-list-item-invited.png");
         });
@@ -588,8 +594,11 @@ test.describe("Room list", () => {
             await app.viewSpaceByName(SPACE_NAME);
 
             const roomListView = getRoomList(page);
-            const dm = roomListView.getByRole("option", { name: "Open room BotBob" });
-            const room = roomListView.getByRole("option", { name: "Open room Space room" });
+            // Hiding the DM leaves the Rooms section on its own, which turns the list flat and
+            // changes the role of a room from a treegrid button to a listbox option. The label is
+            // the same in both, so match on it instead.
+            const dm = roomListView.getByLabel("Open room BotBob");
+            const room = roomListView.getByLabel("Open room Space room");
             await expect(dm).toBeVisible();
             await expect(room).toBeVisible();
 

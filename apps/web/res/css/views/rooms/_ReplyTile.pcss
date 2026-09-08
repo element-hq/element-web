@@ -46,6 +46,7 @@ Please see LICENSE files in the repository root for full details.
     /* We do reply size limiting with CSS to avoid duplicating the TextualBody component. */
     .mx_EventTile_content {
         grid-area: message;
+        margin-inline-end: var(--event-tile-content-inline-end, 34px);
         $reply-lines: 2;
         $line-height: $font-18px;
 
@@ -118,6 +119,8 @@ Please see LICENSE files in the repository root for full details.
 
         .mx_DisambiguatedProfile {
             margin: 0;
+            min-width: 0;
+            max-width: 100%;
         }
 
         .mx_BaseAvatar {

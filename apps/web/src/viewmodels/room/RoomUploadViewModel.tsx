@@ -78,16 +78,13 @@ export class RoomUploadViewModel
             },
         );
         // Initial check.
-        this.onRoomCurrentStateUpdated();
+        this.updateOptions();
         // Configure upload functions
         for (const option of moduleComposerApi.fileUploadOptions) {
             this.uploadSelectFns.set(option.type, option.onSelected);
         }
         this.uploadSelectFns.set("local", this.openUploadDialog);
-        room.on(RoomEvent.CurrentStateUpdated, this.onRoomCurrentStateUpdated);
         this.disposables.trackListener(room, RoomEvent.CurrentStateUpdated, this.onRoomCurrentStateUpdated);
-
-        moduleComposerApi.on(ModuleComposerApiEvents.UploaderOptionsChanged, this.onUploaderOptionsChanged);
         this.disposables.trackListener(
             moduleComposerApi,
             ModuleComposerApiEvents.UploaderOptionsChanged,
@@ -97,8 +94,12 @@ export class RoomUploadViewModel
     }
 
     private onRoomCurrentStateUpdated = (): void => {
+        this.updateOptions();
+    };
+
+    private updateOptions(): void {
         const maySendMessage = this.room.maySendMessage();
-        this.snapshot.merge({
+        this.snapshot.set({
             mayDragAndDropFile: maySendMessage,
             options: maySendMessage
                 ? [
@@ -115,20 +116,11 @@ export class RoomUploadViewModel
                   ]
                 : [],
         });
-    };
+    }
 
     private readonly onUploaderOptionsChanged = (option: ComposerApiFileUploadOption): void => {
         this.uploadSelectFns.set(option.type, option.onSelected);
-        this.snapshot.merge({
-            options: [
-                ...this.snapshot.current.options,
-                {
-                    type: option.type,
-                    label: option.label,
-                    icon: option.icon,
-                },
-            ],
-        });
+        this.updateOptions();
     };
 
     public setReplyToEvent = (replyToEvent?: MatrixEvent): void => {

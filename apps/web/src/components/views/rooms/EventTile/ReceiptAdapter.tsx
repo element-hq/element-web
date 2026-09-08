@@ -37,8 +37,6 @@ interface ReceiptAdapterProps {
     receiptState: EventTileReceiptState;
     /** Send status used when rendering the sent-state badge. */
     eventSendStatus?: EventStatus;
-    /** Whether read receipts should be shown. */
-    showReadReceipts?: boolean;
     /** Read receipts to render when the group is visible. */
     readReceipts?: ReadReceiptProps[];
     /** Read receipt positions keyed by user ID. */
@@ -57,19 +55,14 @@ interface ReceiptAdapterProps {
 export function ReceiptAdapter({
     receiptState,
     eventSendStatus,
-    showReadReceipts,
     readReceipts,
     readReceiptMap,
     checkUnmounting,
     suppressAnimation,
     isTwelveHour,
-}: Readonly<ReceiptAdapterProps>): JSX.Element | null {
+}: Readonly<ReceiptAdapterProps>): JSX.Element {
     if (receiptState.shouldShowSentReceipt || receiptState.shouldShowSendingReceipt) {
         return <SentReceipt messageState={eventSendStatus} />;
-    }
-
-    if (!showReadReceipts) {
-        return null;
     }
 
     return (
@@ -108,14 +101,12 @@ function SentReceipt({ messageState }: Readonly<SentReceiptProps>): JSX.Element 
     }
 
     return (
-        <div className="mx_EventTile_msgOption">
-            <div className="mx_ReadReceiptGroup">
-                <Tooltip label={label} placement="top-end">
-                    <div className="mx_ReadReceiptGroup_button" role="status">
-                        <span className="mx_ReadReceiptGroup_container">{icon}</span>
-                    </div>
-                </Tooltip>
-            </div>
+        <div className="mx_ReadReceiptGroup">
+            <Tooltip label={label} placement="top-end">
+                <div className="mx_ReadReceiptGroup_button" role="status">
+                    <span className="mx_ReadReceiptGroup_container">{icon}</span>
+                </div>
+            </Tooltip>
         </div>
     );
 }

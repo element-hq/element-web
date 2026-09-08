@@ -38,7 +38,12 @@ import { hasCreateRoomRights } from "./utils";
 import { keepIfSame } from "../../utils/keepIfSame";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import { RoomListSectionHeaderViewModel } from "./RoomListSectionHeaderViewModel";
-import { getCustomSectionData, isCustomSectionTag, CHATS_TAG } from "../../stores/room-list-v3/section";
+import {
+    getCustomSectionData,
+    isCustomSectionTag,
+    isSectionExpanded,
+    CHATS_TAG,
+} from "../../stores/room-list-v3/section";
 import { tagRoom } from "../../utils/room/tagRoom";
 import { getSectionTagForRoom } from "../../utils/room/getSectionTagForRoom";
 import SettingsStore from "../../settings/SettingsStore";
@@ -73,16 +78,16 @@ const filterKeyToIdMap: Map<FilterEnum, FilterId> = new Map([
 ]);
 
 /**
- * Filters that are redundant when sections are enabled: Favourites and Low Priority rooms
+ * Filters that are redundant when sections are enabled: Invites, Favourites and Low Priority rooms
  * already have their own sections, so these filters are only shown as chips when sectioning
  * is disabled (see {@link getVisibleFilterIds}).
  */
-const SECTION_ONLY_FILTER_IDS: ReadonlySet<FilterId> = new Set<FilterId>(["favourite", "low_priority"]);
+const SECTION_ONLY_FILTER_IDS: ReadonlySet<FilterId> = new Set<FilterId>(["favourite", "low_priority", "invites"]);
 
 /**
  * Compute the filter ids to display as primary filter chips.
- * When sections are enabled, the Favourites and Low Priority filters are hidden because those
- * rooms are surfaced as dedicated sections instead.
+ * When sections are enabled, the Invites, Favourites and Low Priority filters are hidden because
+ * those rooms are surfaced as dedicated sections instead.
  */
 function getVisibleFilterIds(): FilterId[] {
     const areSectionsEnabled = SettingsStore.getValue("RoomList.showSections");
@@ -90,11 +95,30 @@ function getVisibleFilterIds(): FilterId[] {
     return areSectionsEnabled ? filterIds.filter((id) => !SECTION_ONLY_FILTER_IDS.has(id)) : filterIds;
 }
 
-const TAG_TO_TITLE_MAP: Record<string, string> = {
-    [DefaultTagID.Favourite]: _t("room_list|section|favourites"),
-    [CHATS_TAG]: _t("room_list|section|chats"),
-    [DefaultTagID.LowPriority]: _t("room_list|section|low_priority"),
-};
+/**
+ * Get the title to display in the header of a section.
+ * @param tag - The tag of the section.
+ */
+function getSectionTitle(tag: string): string {
+    switch (tag) {
+        case DefaultTagID.Invite:
+            return _t("room_list|section|invites");
+        case DefaultTagID.Favourite:
+            return _t("room_list|section|favourites");
+        case DefaultTagID.LowPriority:
+            return _t("room_list|section|low_priority");
+        case DefaultTagID.DM:
+            return _t("common|people");
+        case CHATS_TAG:
+            // Without a People section, this section holds the direct messages too, so it keeps its
+            // broader name.
+            return SettingsStore.getValue("RoomList.showPeopleSection")
+                ? _t("common|rooms")
+                : _t("room_list|section|chats");
+        default:
+            return (isCustomSectionTag(tag) && getCustomSectionData()[tag]?.name) || tag;
+    }
+}
 
 export class RoomListViewModel
     extends BaseViewModel<RoomListViewSnapshot, RoomListViewModelProps>
@@ -168,8 +192,10 @@ export class RoomListViewModel
 
         const filterIds = getVisibleFilterIds();
 
-        // By default, all sections are expanded
-        const { sections, isFlatList } = computeSections(roomsResult, (tag) => true);
+        // No section header view models exist yet, so read the persisted expansion state directly
+        const { sections, isFlatList } = computeSections(roomsResult, (tag) =>
+            isSectionExpanded(roomsResult.spaceId, tag),
+        );
         const isRoomListEmpty = roomsResult.sections.every((section) => section.rooms.length === 0);
 
         super(props, {
@@ -226,7 +252,15 @@ export class RoomListViewModel
 
         // Recompute the lis when setting changes
         const showSectionsRef = SettingsStore.watchSetting("RoomList.showSections", null, this.onShowSectionsChange);
-        this.disposables.track(() => SettingsStore.unwatchSetting(showSectionsRef));
+        const showPeopleSectionRef = SettingsStore.watchSetting(
+            "RoomList.showPeopleSection",
+            null,
+            this.onShowPeopleSectionChange,
+        );
+        this.disposables.track(() => {
+            SettingsStore.unwatchSetting(showSectionsRef);
+            SettingsStore.unwatchSetting(showPeopleSectionRef);
+        });
 
         // Track cleanup of all child view models
         this.disposables.track(() => {
@@ -275,6 +309,20 @@ export class RoomListViewModel
         this.updateRoomsMap(this.roomsResult);
         this.snapshot.merge({ filterIds: getVisibleFilterIds() });
         void this.updateRoomListData();
+    };
+
+    /**
+     * Handle changes to the {@link RoomList.showPeopleSection} setting.
+     * The Chats section is titled differently depending on whether the direct messages have their
+     * own section, so its header view model is dropped to be rebuilt with the new title.
+     */
+    private readonly onShowPeopleSectionChange = (): void => {
+        const chatsHeaderViewModel = this.roomSectionHeaderViewModels.get(CHATS_TAG);
+        if (chatsHeaderViewModel) {
+            chatsHeaderViewModel.dispose();
+            this.roomSectionHeaderViewModels.delete(CHATS_TAG);
+        }
+        this.onShowSectionsChange();
     };
 
     /**
@@ -346,10 +394,9 @@ export class RoomListViewModel
     public getSectionHeaderViewModel(tag: string): RoomListSectionHeaderViewModel {
         if (this.roomSectionHeaderViewModels.has(tag)) return this.roomSectionHeaderViewModels.get(tag)!;
 
-        const title = TAG_TO_TITLE_MAP[tag] || (isCustomSectionTag(tag) && getCustomSectionData()[tag]?.name) || tag;
         const viewModel = new RoomListSectionHeaderViewModel({
             tag,
-            title,
+            title: getSectionTitle(tag),
             spaceId: this.roomsResult.spaceId,
             onToggleExpanded: () => this.updateRoomListData(),
         });
@@ -923,7 +970,7 @@ export class RoomListViewModel
         void this.updateRoomListData(false, null, sourceTag);
     };
 
-    public onSectionDragStart = (): void => {
+    public onSectionOrRoomDragStart = (): void => {
         this.savedExpansionStates.clear();
         for (const [tag, sectionVM] of this.roomSectionHeaderViewModels) {
             this.savedExpansionStates.set(tag, sectionVM.isExpanded);
@@ -932,7 +979,7 @@ export class RoomListViewModel
         void this.updateRoomListData();
     };
 
-    public onSectionDragEnd = (): void => {
+    public onSectionOrRoomDragEnd = (): void => {
         for (const [tag, expanded] of this.savedExpansionStates) {
             const sectionVM = this.roomSectionHeaderViewModels.get(tag);
             if (sectionVM) sectionVM.isExpanded = expanded;

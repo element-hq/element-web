@@ -1,64 +1,39 @@
 /*
-Copyright 2019-2024 New Vector Ltd.
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2026 Element Creations Ltd.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-.mx_MessageActionBar {
-    --MessageActionBar-size-button: 28px;
-    --MessageActionBar-size-margin: 3px;
-
-    position: absolute;
-    top: calc(
-        -1 *
-            (var(--MessageActionBar-size-button) + 2 * (var(--MessageActionBar-size-margin) + var(--cpd-border-width-1)))
-    );
-    right: 8px;
-    user-select: none;
-    /* Ensure the action bar appears above other things like the read marker */
-    /* and sender avatar (for small screens) */
-    z-index: 10;
-
-    /* Adds a previous event safe area so that you can't accidentally hover the */
-    /* previous event while trying to mouse into the action bar or from the */
-    /* react button to its tooltip. */
-    &::before {
-        content: "";
-        position: absolute;
-        /* tooltip safe mousing area + tooltip overhang + */
-        /* action bar + action bar offset from event */
-        width: calc(10px + 48px + 100% + 8px);
-        /* safe area + action bar */
-        height: calc(20px + 100%);
-        top: -12px;
-        left: -58px;
-        z-index: -1;
-        cursor: initial;
-
-        /* stylelint-disable-next-line max-line-length */
-        .mx_GenericEventListSummary[data-layout="bubble"]
-            .mx_GenericEventListSummary_toggle
-            ~ .mx_GenericEventListSummary_unstyledList
-            .mx_EventTile_info:first-of-type
-            & {
-            /* improve clickability of "collapse" link button on bubble layout by reducing width and height values */
-            /* mx_GenericEventListSummary_toggle ~: to apply rules to action bar when "collapse" button is available */
-            /* mx_EventTile_info:first-of-type: to apply rules to the info event tile just under "collapse" button */
-            /* TODO: use a new class name instead */
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-        }
-
-        .mx_EventTile_info .mx_ViewSourceEvent ~ & {
-            /* improve clickability of view source event toggle button by removing vertical safe area */
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-        }
+/* EventTileView owns the generic action-bar geometry. These are application
+   context exceptions and intentionally target only the outer slot wrapper. */
+.mx_EventTile_line > :has(> .mx_MessageActionBar)::before {
+    /* Improve clickability of the first event below a collapsed bubble summary. */
+    .mx_GenericEventListSummary[data-layout="bubble"]
+        .mx_GenericEventListSummary_toggle
+        ~ .mx_GenericEventListSummary_unstyledList
+        .mx_EventTile:first-of-type
+        & {
+        width: 100%;
+        height: 100%;
+        inset: 0;
     }
+
+    /* Remove the vertical safe area for view-source events. */
+    .mx_EventTile:has(> .mx_EventTile_line .mx_ViewSourceEvent) & {
+        width: 100%;
+        height: 100%;
+        inset: 0;
+    }
+}
+
+/* Align event action bars with right-column bubbles in an expanded bubble
+   summary. */
+.mx_GenericEventListSummary[data-layout="bubble"][data-expanded="true"]
+    > .mx_GenericEventListSummary_unstyledList
+    > .mx_EventTile
+    > .mx_EventTile_line
+    > :has(> .mx_MessageActionBar) {
+    inset-inline-start: initial;
+    inset-inline-end: 48px;
 }

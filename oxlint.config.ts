@@ -557,6 +557,9 @@ export default defineConfig({
                 "typescript/explicit-module-boundary-types": "off",
                 "typescript/explicit-member-accessibility": "off",
                 "no-proto": "off",
+                "no-restricted-globals": "off",
+                "typescript/consistent-type-imports": "off",
+                "node/no-top-level-await": "off",
 
                 // Disable a11y rules for components in tests
                 "jsx-a11y/role-has-required-aria-props": "off",

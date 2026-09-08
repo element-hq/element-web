@@ -87,11 +87,9 @@ export function ReadReceiptGroup({
         // (because it lost its container).
         // See also https://github.com/vector-im/element-web/issues/17561
         return (
-            <div className="mx_EventTile_msgOption">
-                <div className="mx_ReadReceiptGroup">
-                    <div className="mx_ReadReceiptGroup_button">
-                        <span className="mx_ReadReceiptGroup_container" />
-                    </div>
+            <div className="mx_ReadReceiptGroup">
+                <div className="mx_ReadReceiptGroup_button">
+                    <span className="mx_ReadReceiptGroup_container" />
                 </div>
             </div>
         );
@@ -160,37 +158,35 @@ export function ReadReceiptGroup({
     }
 
     return (
-        <div className="mx_EventTile_msgOption">
-            <Tooltip
-                label={_t("timeline|read_receipt_title", { count: readReceipts.length })}
-                caption={tooltipText}
-                placement="top-end"
-            >
-                <div className="mx_ReadReceiptGroup" role="group" aria-label={_t("timeline|read_receipts_label")}>
-                    <AccessibleButton
-                        className="mx_ReadReceiptGroup_button"
-                        ref={button}
-                        aria-label={tooltipText}
-                        aria-haspopup="true"
-                        onClick={openMenu}
+        <Tooltip
+            label={_t("timeline|read_receipt_title", { count: readReceipts.length })}
+            caption={tooltipText}
+            placement="top-end"
+        >
+            <div className="mx_ReadReceiptGroup" role="group" aria-label={_t("timeline|read_receipts_label")}>
+                <AccessibleButton
+                    className="mx_ReadReceiptGroup_button"
+                    ref={button}
+                    aria-label={tooltipText}
+                    aria-haspopup="true"
+                    onClick={openMenu}
+                >
+                    {remText}
+                    <span
+                        className="mx_ReadReceiptGroup_container"
+                        style={{
+                            width:
+                                Math.min(maxAvatars, readReceipts.length) * READ_AVATAR_OFFSET +
+                                READ_AVATAR_SIZE -
+                                READ_AVATAR_OFFSET,
+                        }}
                     >
-                        {remText}
-                        <span
-                            className="mx_ReadReceiptGroup_container"
-                            style={{
-                                width:
-                                    Math.min(maxAvatars, readReceipts.length) * READ_AVATAR_OFFSET +
-                                    READ_AVATAR_SIZE -
-                                    READ_AVATAR_OFFSET,
-                            }}
-                        >
-                            {avatars}
-                        </span>
-                    </AccessibleButton>
-                    {contextMenu}
-                </div>
-            </Tooltip>
-        </div>
+                        {avatars}
+                    </span>
+                </AccessibleButton>
+                {contextMenu}
+            </div>
+        </Tooltip>
     );
 }
 

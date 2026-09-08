@@ -25,7 +25,7 @@ on:
             arch:
                 type: string
                 required: true
-                description: "The architecture to build for, one of 'x64' | 'ia32' | 'arm64'"
+                description: "The architecture to build for, one of 'x64' | 'arm64'"
             version:
                 type: string
                 required: false
@@ -99,12 +99,6 @@ jobs:
                           "target": "aarch64-pc-windows-msvc",
                           "build-args": "--arm64",
                           "arch": "amd64_arm64"
-                        },
-                        "ia32": {
-                          "target": "i686-pc-windows-msvc",
-                          "build-args": "--ia32",
-                          "arch": "x86",
-                          "extra_config": "{\"user_notice\": {\"title\": \"Your desktop environment is unsupported.\",\"description\": \"Support for 32-bit Windows installations has ended. Transition to the web or mobile app for continued access.\"}}"
                         }
                       }
 

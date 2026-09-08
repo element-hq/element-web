@@ -40,6 +40,7 @@ describe("EventTileViewModel", () => {
     });
 
     type EventTileViewModelPropsOverrides = {
+        shape?: EventTileViewModelProps["shape"];
         event?: Partial<NormalizedEventTileViewModelProps["event"]>;
         display?: Partial<EventTileViewModelProps["display"]>;
         interaction?: Partial<EventTileViewModelProps["interaction"]>;
@@ -50,6 +51,7 @@ describe("EventTileViewModel", () => {
 
     function makeProps(overrides: EventTileViewModelPropsOverrides = {}): NormalizedEventTileViewModelProps {
         return {
+            shape: overrides.shape,
             event: {
                 eventType: "m.room.message",
                 msgtype: "m.text",
@@ -129,14 +131,14 @@ describe("EventTileViewModel", () => {
         });
         expect(snapshot.root.ariaLive).toBe("off");
         expect(snapshot.root.scrollToken).toBeUndefined();
-        expect(snapshot.root.data).toEqual({
+        expect(snapshot.root).toMatchObject({
             eventId: "$event",
-            layout: Layout.Group,
-            shape: TimelineRenderingType.Room,
-            isOwnEvent: false,
-            hasReply: false,
+            shape: "Room",
+            state: {
+                isOwnEvent: false,
+                hasReply: false,
+            },
         });
-        expect(snapshot.root.classState.mx_EventTile_sending).toBe(true);
     });
 
     it("derives a scroll token for non-local-echo events", () => {
@@ -150,6 +152,12 @@ describe("EventTileViewModel", () => {
         );
 
         expect(snapshot.root.scrollToken).toBe("$remote-event");
+    });
+
+    it("uses a host-provided EventTileView shape", () => {
+        const snapshot = EventTileViewModel.createSnapshot(makeProps({ shape: "Card" }));
+
+        expect(snapshot.root.shape).toBe("Card");
     });
 
     it("derives render-ready root and line state", () => {
@@ -166,13 +174,28 @@ describe("EventTileViewModel", () => {
         );
 
         expect(renderState.snapshot.event.isSending).toBe(true);
-        expect(renderState.root.className).toContain("mx_EventTile");
-        expect(renderState.root.className).toContain("mx_EventTile_sending");
-        expect(renderState.root.className).toContain("mx_EventTile_highlight");
         expect(renderState.root.ariaLive).toBe("off");
         expect(renderState.root.scrollToken).toBeUndefined();
-        expect(renderState.root.isRenderingNotification).toBe(false);
-        expect(renderState.line.className).toContain("mx_EventTile_line");
+        expect(renderState.root.eventId).toBe("$event");
+        expect(renderState.root.shape).toBe("Room");
+        expect(renderState.root.state).toMatchObject({
+            isOwnEvent: false,
+            hasReply: false,
+            highlighted: true,
+            selected: false,
+            editing: false,
+            continuation: false,
+        });
+        expect(renderState.classNames).toMatchObject({
+            root: "mx_EventTile",
+            line: "mx_EventTile_line",
+        });
+        expect(renderState.line).toEqual({
+            media: false,
+            sticker: false,
+            emote: false,
+            image: false,
+        });
         expect(renderState.timestamp).toMatchObject(renderState.snapshot.timestamp);
     });
 
@@ -224,7 +247,7 @@ describe("EventTileViewModel", () => {
         });
     });
 
-    it("derives timestamp slots for group layout", () => {
+    it("keeps timestamp display state for group layout", () => {
         const renderState = EventTileViewModel.createRenderState(
             makeProps({
                 display: {
@@ -236,12 +259,10 @@ describe("EventTileViewModel", () => {
             }),
         );
 
-        expect(renderState.timestamp.showDummy).toBe(false);
-        expect(renderState.timestamp.showInGroupLine).toBe(true);
-        expect(renderState.timestamp.showInIrcLine).toBe(false);
+        expect(renderState.timestamp.displayState.showRealTimestamp).toBe(true);
     });
 
-    it("derives timestamp slots for IRC layout", () => {
+    it("keeps timestamp display state for IRC layout", () => {
         const renderState = EventTileViewModel.createRenderState(
             makeProps({
                 display: {
@@ -253,12 +274,10 @@ describe("EventTileViewModel", () => {
             }),
         );
 
-        expect(renderState.timestamp.showDummy).toBe(true);
-        expect(renderState.timestamp.showInGroupLine).toBe(false);
-        expect(renderState.timestamp.showInIrcLine).toBe(true);
+        expect(renderState.timestamp.displayState.showLinkedTimestamp).toBe(true);
     });
 
-    it("keeps the IRC timestamp slot for the dummy timestamp when timestamps are hidden", () => {
+    it("does not create a timestamp slot when IRC timestamps are hidden", () => {
         const renderState = EventTileViewModel.createRenderState(
             makeProps({
                 display: {
@@ -273,10 +292,7 @@ describe("EventTileViewModel", () => {
             }),
         );
 
-        expect(renderState.timestamp.showDummy).toBe(true);
         expect(renderState.timestamp.displayState.showLinkedTimestamp).toBe(false);
-        expect(renderState.timestamp.showInGroupLine).toBe(false);
-        expect(renderState.timestamp.showInIrcLine).toBe(true);
     });
 
     it("normalizes continuation by rendering mode and bubble layout", () => {
@@ -315,15 +331,78 @@ describe("EventTileViewModel", () => {
             }),
         );
 
-        expect(snapshot.line.classState).toMatchObject({
-            mx_EventTile_mediaLine: true,
-            mx_EventTile_image: true,
-            mx_EventTile_sticker: false,
-            mx_EventTile_emote: false,
+        expect(snapshot.line).toEqual({
+            media: true,
+            sticker: false,
+            emote: false,
+            image: true,
         });
     });
 
-    it("derives aligned-between-bubbles root class state", () => {
+    it("derives shared EventTileView root states from application inputs", () => {
+        const snapshot = EventTileViewModel.createSnapshot(
+            makeProps({
+                event: {
+                    eventType: "m.sticker",
+                    msgtype: "m.emote",
+                    isEncryptionFailure: true,
+                    isEditing: true,
+                },
+                display: {
+                    timelineRenderingType: TimelineRenderingType.ThreadsList,
+                    continuation: true,
+                    isBubbleMessage: true,
+                    isLeftAlignedBubbleMessage: true,
+                    isAlignedBetweenBubbles: true,
+                    isInfoMessage: true,
+                    noBubbleEvent: true,
+                    isHighlighted: true,
+                    isSelected: true,
+                    isLastInSection: true,
+                    isContextual: true,
+                },
+                interaction: {
+                    isActionBarFocused: true,
+                },
+                sender: {
+                    hideSender: true,
+                    isEmote: true,
+                },
+                footer: {
+                    isOwnEvent: true,
+                },
+            }),
+        );
+
+        expect(snapshot.root.state).toEqual({
+            isOwnEvent: true,
+            hasReply: false,
+            info: true,
+            bubbleContainer: true,
+            leftAlignedBubble: true,
+            alignedBetweenBubbles: true,
+            noBubble: true,
+            noSender: true,
+            encryptionFailure: true,
+            emote: true,
+            highlighted: true,
+            selected: true,
+            editing: true,
+            continuation: false,
+            lastInSection: true,
+            contextual: true,
+            actionBarFocused: true,
+            previewClamped: true,
+        });
+        expect(snapshot.line).toEqual({
+            media: false,
+            sticker: true,
+            emote: true,
+            image: false,
+        });
+    });
+
+    it("derives aligned-between-bubbles root state", () => {
         const snapshot = EventTileViewModel.createSnapshot(
             makeProps({
                 display: {
@@ -332,7 +411,7 @@ describe("EventTileViewModel", () => {
             }),
         );
 
-        expect(snapshot.root.classState.mx_EventTile_alignedBetweenBubbles).toBe(true);
+        expect(snapshot.root.state.alignedBetweenBubbles).toBe(true);
     });
 
     it("derives avatar and sender profile state for thread timelines", () => {
@@ -641,7 +720,7 @@ describe("EventTileViewModel", () => {
         });
         const vm = new EventTileViewModel(makeDependencies(event), makeProps());
 
-        expect(vm.getSnapshot().snapshot.root.data.hasReply).toBe(false);
+        expect(vm.getSnapshot().snapshot.root.state.hasReply).toBe(false);
 
         vm.dispose();
     });
