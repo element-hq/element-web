@@ -19,7 +19,8 @@ export default class UrlPreviewModule {
      */
     constructor(api) {
         this.api = api;
-
+    }
+    async load() {
         // Previews the URL itself, reporting back what the handler was given so that
         // tests can check whether the event was passed through.
         this.api.urlPreviews.registerPreviewHandler(/^https:\/\/module\.example\.org\//, async (url, mxEvent) => ({
@@ -44,5 +45,4 @@ export default class UrlPreviewModule {
             showTooltipOnLink: false,
         }));
     }
-    async load() {}
 }
