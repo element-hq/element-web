@@ -87,6 +87,7 @@ describe("Store secret encryption (safeStorage)", () => {
     beforeEach(() => {
         backing.clear();
         vi.mocked(safeStorage.decryptStringAsync).mockClear();
+        vi.mocked(safeStorage.encryptStringAsync).mockClear();
         // Restore the default reversible decrypt implementation between tests.
         vi.mocked(safeStorage.decryptStringAsync).mockImplementation((buf: Buffer) => {
             const s = buf.toString("utf8");
@@ -112,6 +113,35 @@ describe("Store secret encryption (safeStorage)", () => {
         );
 
         await expect(store.getSecret(KEY)).rejects.toBeInstanceOf(SafeStorageDecryptionError);
+    });
+
+    it("re-encrypts a secret when safeStorage reports the key has been rotated", async () => {
+        await store.setSecret(KEY, "s3cr3t");
+        const stored = backing.get("safeStorage.@alice:example-org|DEVICEID");
+
+        // safeStorage decrypted with the old key and wants the secret written back under the new one.
+        vi.mocked(safeStorage.decryptStringAsync).mockImplementationOnce(() =>
+            Promise.resolve({ result: "s3cr3t", shouldReEncrypt: true }),
+        );
+        vi.mocked(safeStorage.encryptStringAsync).mockImplementationOnce(() =>
+            Promise.resolve(Buffer.from(`${PREFIX}rotated:s3cr3t`, "utf8")),
+        );
+
+        await expect(store.getSecret(KEY)).resolves.toBe("s3cr3t");
+        expect(backing.get("safeStorage.@alice:example-org|DEVICEID")).not.toBe(stored);
+        await expect(store.getSecret(KEY)).resolves.toBe("rotated:s3cr3t");
+    });
+
+    it("still returns the secret when re-encrypting it fails", async () => {
+        await store.setSecret(KEY, "s3cr3t");
+        vi.mocked(safeStorage.decryptStringAsync).mockImplementationOnce(() =>
+            Promise.resolve({ result: "s3cr3t", shouldReEncrypt: true }),
+        );
+        vi.mocked(safeStorage.encryptStringAsync).mockImplementationOnce(() =>
+            Promise.reject(new Error("keychain unavailable")),
+        );
+
+        await expect(store.getSecret(KEY)).resolves.toBe("s3cr3t");
     });
 
     describe("isSecretUndecryptable", () => {
