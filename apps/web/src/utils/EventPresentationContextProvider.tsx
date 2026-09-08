@@ -33,17 +33,20 @@ export function getEventPresentation(layout: Layout, useCompactLayout: boolean):
 export interface EventPresentationContextProviderProps {
     /** Layout selected by the app/web surface rendering the timeline. */
     layout: Layout;
+    /** Override the app setting when a surface needs a fixed presentation density. */
+    useCompactLayout?: boolean;
 }
 
 /** Provides shared event presentation using app/web-owned layout settings. */
 export function EventPresentationContextProvider({
     layout,
     children,
+    useCompactLayout: useCompactLayoutOverride,
 }: Readonly<PropsWithChildren<EventPresentationContextProviderProps>>): JSX.Element {
     // Compact density is still owned by app/web; this exposes it as shared event presentation.
-    const useCompactLayout = useSettingValue("useCompactLayout");
+    const configuredUseCompactLayout = useSettingValue("useCompactLayout");
     const eventLayout = EVENT_LAYOUT_BY_APP_LAYOUT[layout];
-    const density = getEventDensity(layout, useCompactLayout);
+    const density = getEventDensity(layout, useCompactLayoutOverride ?? configuredUseCompactLayout);
     const value = useMemo<EventPresentation>(() => ({ layout: eventLayout, density }), [eventLayout, density]);
 
     return <EventPresentationProvider value={value}>{children}</EventPresentationProvider>;

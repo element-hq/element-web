@@ -95,7 +95,7 @@ const StateEventButton: React.FC<StateEventButtonProps> = ({ label, onClick }) =
 
     return (
         <button
-            className={classNames("mx_DevTools_button", {
+            className={classNames("mx_LegacyDialogButton mx_DevTools_button", {
                 mx_DevTools_RoomStateExplorer_button_hasSpaces: trimmed.length !== label.length,
                 mx_DevTools_RoomStateExplorer_button_emptyString: !trimmed,
             })}
@@ -150,7 +150,7 @@ const RoomStateExplorerEventType: React.FC<IEventTypeProps> = ({ eventType, onBa
             setHistory(true);
         };
         const extraButton = (
-            <button onClick={onHistoryClick} type="button">
+            <button onClick={onHistoryClick} className="mx_LegacyDialogButton" type="button">
                 {_t("devtools|see_history")}
             </button>
         );

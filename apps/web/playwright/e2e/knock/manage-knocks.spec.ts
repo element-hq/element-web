@@ -8,9 +8,22 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { type Page } from "playwright-core";
+
 import { test, expect } from "../../element-web-test";
 import { waitForRoom } from "../utils";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
+
+/**
+ * Wait for the membership summary to settle on the given text, then expand it so that the
+ * individual events can be asserted. The summary text is only rendered while the summary is
+ * collapsed, so waiting for it means the group has stopped growing.
+ */
+async function expandMembershipSummary(page: Page, summaryText: string): Promise<void> {
+    const summary = page.locator(".mx_GenericEventListSummary", { hasText: summaryText });
+    await expect(summary).toBeVisible();
+    await summary.getByRole("button", { name: "Expand" }).click();
+}
 
 test.describe("Manage Knocks", () => {
     test.skip(isDendrite, "Dendrite does not have support for knocking");
@@ -48,10 +61,9 @@ test.describe("Manage Knocks", () => {
 
         await expect(roomKnocksBar).not.toBeVisible();
 
-        // The knock and invite may collapse into a membership summary depending on what
-        // precedes them; expand it to reveal the individual events.
-        const collapsedSummary = page.locator(".mx_GenericEventListSummary_toggle[aria-expanded=false]");
-        if ((await collapsedSummary.count()) > 0) await collapsedSummary.last().click();
+        // Bob accepts the invite automatically, so the knock, invite and join collapse into a
+        // membership summary; expand it to reveal the individual events.
+        await expandMembershipSummary(page, "Bob requested to join, was granted access, and joined");
         await expect(page.getByText("Bob is requesting to join")).toBeVisible();
         await expect(page.getByText("Alice granted access to Bob")).toBeVisible();
     });
@@ -77,10 +89,8 @@ test.describe("Manage Knocks", () => {
             );
         });
 
-        // The knock and its denial may collapse into a membership summary depending on what
-        // precedes them; expand it to reveal the individual events.
-        const collapsedSummary = page.locator(".mx_GenericEventListSummary_toggle[aria-expanded=false]");
-        if ((await collapsedSummary.count()) > 0) await collapsedSummary.last().click();
+        // The knock and its denial are only two events, so they are shown individually rather
+        // than collapsed into a membership summary.
         await expect(page.getByText("Alice rejected Bob's request to join")).toBeVisible();
     });
 
@@ -96,10 +106,9 @@ test.describe("Manage Knocks", () => {
         await expect(settingsGroup.getByText(/^Bob/)).not.toBeVisible();
         await app.settings.closeDialog();
 
-        // The knock and invite may collapse into a membership summary depending on what
-        // precedes them; expand it to reveal the individual events.
-        const collapsedSummary = page.locator(".mx_GenericEventListSummary_toggle[aria-expanded=false]");
-        if ((await collapsedSummary.count()) > 0) await collapsedSummary.last().click();
+        // Bob accepts the invite automatically, so the knock, invite and join collapse into a
+        // membership summary; expand it to reveal the individual events.
+        await expandMembershipSummary(page, "Bob requested to join, was granted access, and joined");
         await expect(page.getByText("Bob is requesting to join: Hello, can I join?")).toBeVisible();
         await expect(page.getByText("Alice granted access to Bob")).toBeVisible();
     });
@@ -127,10 +136,8 @@ test.describe("Manage Knocks", () => {
         });
         await app.settings.closeDialog();
 
-        // The knock and its denial may collapse into a membership summary depending on what
-        // precedes them; expand it to reveal the individual events.
-        const collapsedSummary = page.locator(".mx_GenericEventListSummary_toggle[aria-expanded=false]");
-        if ((await collapsedSummary.count()) > 0) await collapsedSummary.last().click();
+        // The knock and its denial are only two events, so they are shown individually rather
+        // than collapsed into a membership summary.
         await expect(page.getByText("Alice rejected Bob's request to join")).toBeVisible();
     });
 });

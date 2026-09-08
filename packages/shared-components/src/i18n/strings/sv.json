@@ -3,15 +3,46 @@
         "seek_bar_label": "Förloppsfält för ljud"
     },
     "action": {
+        "back": "Tillbaka",
+        "cancel": "Avbryt",
+        "click": "Välj",
         "delete": "Radera",
         "dismiss": "Avvisa",
         "explore_rooms": "Utforska rum",
+        "new_section": "Nytt avsnitt",
         "pause": "Pausa",
         "play": "Spela",
         "search": "Sök"
     },
     "left_panel": {
         "open_dial_pad": "Öppna knappsats"
+    },
+    "room_list": {
+        "filters": {
+            "favourite": "Favoriter",
+            "invites": "Inbjudningar",
+            "low_priority": "Låg prioritet",
+            "mentions": "Omnämnanden",
+            "people": "Personer",
+            "rooms": "Rum",
+            "unread": "Olästa"
+        },
+        "more_options": {
+            "copy_link": "Kopiera länk",
+            "favourited": "Favoritmarkerad",
+            "leave_room": "Lämna rummet",
+            "low_priority": "Låg prioritet",
+            "mark_read": "Markera som läst",
+            "mark_unread": "Markera som oläst",
+            "move_to_section": "Flytta till",
+            "remove_from_section": "Ta bort från sektionen"
+        },
+        "room": {
+            "more_options": "Fler alternativ"
+        },
+        "section_header": {
+            "more_options": "Fler alternativ"
+        }
     },
     "time": {
         "about_day_ago": "cirka en dag sedan",

@@ -88,7 +88,7 @@ interface UserButtonProps {
  */
 const UserButton: React.FC<UserButtonProps> = ({ member, onClick }) => {
     return (
-        <button className="mx_DevTools_button" onClick={onClick} type="button">
+        <button className="mx_LegacyDialogButton mx_DevTools_button" onClick={onClick} type="button">
             {member.userId}
         </button>
     );
@@ -273,7 +273,7 @@ const DeviceButton: React.FC<DeviceButtonProps> = ({ crypto, device, onClick }) 
         null,
     );
     return (
-        <button className="mx_DevTools_button" onClick={onClick} type="button">
+        <button className="mx_LegacyDialogButton mx_DevTools_button" onClick={onClick} type="button">
             {verificationIcon}
             {device.deviceId}
         </button>

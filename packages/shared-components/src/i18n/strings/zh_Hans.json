@@ -5,7 +5,7 @@
     "action": {
         "back": "返回",
         "cancel": "取消",
-        "click": "点击",
+        "click": "选择",
         "close": "关闭",
         "collapse": "折叠",
         "delete": "删除",
@@ -16,7 +16,7 @@
         "go": "转到",
         "hide": "隐藏",
         "invite": "邀请",
-        "new_conversation": "新对话",
+        "new_conversation": "新建",
         "new_room": "新房间",
         "new_section": "新区域",
         "new_video_room": "新视频房间",
@@ -56,7 +56,19 @@
         }
     },
     "devtools": {
-        "toggle_event": "切换事件详略显示"
+        "custom_themes": {
+            "add": "添加自定义主题",
+            "downloading": "正在下载自定义主题…",
+            "error_already_installed": "已安装同名主题。",
+            "error_downloading": "下载主题时出错",
+            "error_invalid": "主题方案无效。",
+            "error_save_failed": "保存更改失败。它可能仍在后台完成。",
+            "help": "输入要应用的自定义主题的 URL。",
+            "installed_heading": "已安装的自定义主题",
+            "refresh": "重新下载主题",
+            "url_label": "自定义主题URL"
+        },
+        "toggle_event": "事件源"
     },
     "emoji": {
         "categories": "类别",
@@ -81,7 +93,7 @@
     },
     "menus": {
         "user_menu": {
-            "clear_status": "清除",
+            "clear_status": "清除状态",
             "create_an_account": "创建账户",
             "got_an_account": "已有账户？",
             "manage_account": "管理账户",
@@ -94,7 +106,7 @@
         "default_settings": "跟随系统设置",
         "mark_all_read": "全部设为已读",
         "mentions_keywords": "提及与关键词",
-        "message_didnt_send": "消息未发送。点击以获取信息。",
+        "message_didnt_send": "消息未能发送。点选以获取信息。",
         "mute_room": "静默房间"
     },
     "release_announcement": {
@@ -111,20 +123,20 @@
             "shared": "新成员可以看到历史",
             "world_readable": "任何人都可以看到历史"
         },
-        "jump_read_marker": "跳转到首个未读消息。",
+        "jump_read_marker": "滚动到首个未读消息。",
         "jump_to_bottom_button": "滚动到最近的消息",
-        "jump_to_date": "跳转到日期",
+        "jump_to_date": "滚动到日期",
         "jump_to_date_beginning": "房间的开头",
-        "jump_to_date_prompt": "选择日期以跳转",
+        "jump_to_date_prompt": "选择要滚动的目标日期",
         "knock_sent": "已发送加入申请",
         "pinned_message_badge": "已被置顶的消息",
         "status_bar": {
             "delete_all": "全部删除",
-            "exceeded_resource_limit_description": "要继续使用此服务请联系服务器管理员。",
-            "exceeded_resource_limit_title": "你的消息未能发送，因为此服务器已超出资源限制。",
+            "exceeded_resource_limit_description": "要继续使用此服务请联系账户提供者。",
+            "exceeded_resource_limit_title": "你的消息未能发送，因为此服务已超过资源限制。",
             "failed_to_create_room_title": "无法与此用户开始聊天",
-            "homeserver_blocked_title": "你的消息未能发送，因为此服务器已被其管理员屏蔽。",
-            "monthly_user_limit_reached_title": "你的消息未能发送，因为此服务器已达到每月活跃用户上限。",
+            "homeserver_blocked_title": "你的消息未能发送，因为此服务已被账户提供者屏蔽。",
+            "monthly_user_limit_reached_title": "你的消息未能发送，因为此服务已达到每月活跃用户上限。",
             "requires_consent_agreement_title": "你需要同意我们的条款与条件才能发送任意消息。",
             "retry_all": "全部重试",
             "select_messages_to_retry": "你可以选择全部或个别消息以重试或删除。",
@@ -155,8 +167,8 @@
                 "other": "打开包含 %(count)s 个未读消息的房间：%(roomName)s。"
             },
             "unsent_message": "打开包含尚未发送的消息的房间：%(roomName)s",
-            "video_call": "以视频通话方式打开房间 %(roomName)s。",
-            "voice_call": "以语音通话方式打开房间 %(roomName)s。"
+            "video_call": "打开正在进行视频通话的房间 %(roomName)s。",
+            "voice_call": "打开正在进行语音通话的房间 %(roomName)s。"
         },
         "appearance": "外观",
         "chat_moved": "聊天已移动",
@@ -189,7 +201,7 @@
         },
         "list_title": "房间列表",
         "more_options": {
-            "copy_link": "复制房间链接",
+            "copy_link": "复制链接",
             "favourited": "已收藏",
             "leave_room": "离开房间",
             "low_priority": "低优先级",
@@ -206,6 +218,10 @@
         },
         "room_options": "房间选项",
         "section_created": "区域已创建",
+        "section_creation": {
+            "description": "区域仅对你可见",
+            "label": "区域名称"
+        },
         "section_header": {
             "edit_section": "编辑区域",
             "more_options": "更多选项",
@@ -242,7 +258,7 @@
         "tac_button": "阅读条款与条件"
     },
     "threads": {
-        "error_start_thread_existing_relation": "无法从现有相关的事件中创建消息列"
+        "error_start_thread_existing_relation": "你无法从此消息发起消息列"
     },
     "time": {
         "about_day_ago": "约一天前",
@@ -305,23 +321,23 @@
         "m.audio": {
             "audio_player": "音频播放器",
             "error_downloading_audio": "下载音频时出错",
-            "unnamed_audio": "未命名的音频"
+            "unnamed_audio": "未命名音频"
         },
         "m.file": {
             "error_invalid": "无效文件"
         },
         "m.room.avatar": {
-            "changed_img": "%(senderDisplayName)s 将房间头像更改为 <img/>",
+            "changed_img": "%(senderDisplayName)s 已将聊天头像更改为 <img/>",
             "removed": "%(senderDisplayName)s 已移除房间头像。"
         },
         "m.room.encryption": {
             "disable_attempt": "已忽略尝试禁用加密",
             "disabled": "加密未启用",
-            "enabled": "此处的消息是端到端加密的。当人员加入时，你可以在其个人资料中点击其头像验证。",
-            "enabled_dm": "此处的消息是端到端加密的。点击其个人资料图像以验证 %(displayName)s。",
+            "enabled": "此房间的消息是端到端加密的。当人员加入时，你可以在其个人资料中点选其头像验证。",
+            "enabled_dm": "此处的消息是端到端加密的。点选其个人资料中的头像以验证 %(displayName)s。",
             "enabled_local": "此聊天中的消息将被端到端加密。",
             "parameters_changed": "某些加密参数已被更改。",
-            "state_enabled": "此房间内的消息与状态事件已被端到端加密。当人员加入时，你可以点击他们的头像以验证其身份。",
+            "state_enabled": "此房间内的消息与状态事件已被端到端加密。当人员加入时，你可以点选其头像以验证其身份。",
             "unsupported": "该房间使用的加密方式不受支持。"
         },
         "mab": {

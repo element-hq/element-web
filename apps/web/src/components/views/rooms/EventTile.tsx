@@ -29,7 +29,13 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { uniqueId } from "lodash";
-import { useCreateAutoDisposedViewModel, TileErrorView } from "@element-hq/web-shared-components";
+import {
+    EventTileView,
+    NotificationBadgeView,
+    useCreateAutoDisposedViewModel,
+    TileErrorView,
+    type EventTileRenderingMode,
+} from "@element-hq/web-shared-components";
 
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
@@ -56,7 +62,6 @@ import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPaylo
 import PosthogTrackers from "../../../PosthogTrackers";
 import { isMessageEvent, renderTile, type EventTileTypeProps } from "../../../events/EventTileFactory";
 import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
-import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationBadge";
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
 import PinningUtils from "../../../utils/PinningUtils";
 import { ActionBarAdapter } from "./EventTile/ActionBarAdapter";
@@ -69,10 +74,9 @@ import { ThreadListActionBarAdapter } from "./EventTile/ThreadListActionBarAdapt
 import { EventTileFooter } from "./EventTile/EventTileFooter";
 import { EventTilePreviewBody } from "./EventTile/EventTilePreviewBody";
 import { EventTileThreadInfo, EventTileThreadPanelSummary } from "./EventTile/EventTileThreadInfo";
-import { EventTileTimestampSlot } from "./EventTile/EventTileTimestampSlot";
+import { MessageTimestampAdapter } from "./EventTile/MessageTimestampAdapter";
 import {
     EventTileViewModel,
-    type EventTileRenderState,
     type EventTileViewModelProps,
     type EventTileViewModelDependencies,
 } from "../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
@@ -109,6 +113,7 @@ import { resolveRoomMemberProfile, roomMemberToMemberInfo } from "../../../hooks
 import { EventTileE2eViewModel } from "../../../viewmodels/room/timeline/event-tile/EventTileE2eViewModel";
 import { shouldHighlightEventTile } from "../../../viewmodels/room/timeline/event-tile/EventTileHighlightState";
 import { shouldHideEventTile } from "../../../viewmodels/room/timeline/event-tile/EventTileVisibilityState";
+import { UnreadNotificationBadgeViewModel } from "../../../viewmodels/room/notification-badge/UnreadNotificationBadgeViewModel";
 
 /** Relation lookup type retained for EventTile consumers. */
 export type { GetRelationsForEvent } from "../../../viewmodels/room/timeline/event-tile/reactions/EventTileReactionState";
@@ -218,6 +223,9 @@ export interface EventTileProps {
     /** Timeline layout used by this tile. */
     layout?: Layout;
 
+    /** The shape used by this tile. */
+    shape?: EventTileRenderingMode;
+
     /** Whether read receipts should be shown for this event. */
     showReadReceipts?: boolean;
 
@@ -234,7 +242,7 @@ export interface EventTileProps {
     callEventGrouper?: LegacyCallEventGrouper;
 
     /** Element type used for the root node. */
-    as?: string;
+    as?: React.ElementType;
 
     /** Whether timestamps should always be visible. */
     alwaysShowTimestamps?: boolean;
@@ -286,7 +294,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     private replyChain = createRef<ReplyChain>();
     private readonly viewModel: EventTileViewModel;
     private readonly e2eViewModel: EventTileE2eViewModel;
+    private readonly unreadNotificationBadgeViewModel?: UnreadNotificationBadgeViewModel;
     private e2eViewModelSubscription?: () => void;
+    private unreadNotificationBadgeViewModelSubscription?: () => void;
 
     public readonly ref = createRef<HTMLElement>();
 
@@ -328,6 +338,14 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             enableListeners: !this.props.forExport,
         });
 
+        if (this.isPreview) {
+            this.unreadNotificationBadgeViewModel = new UnreadNotificationBadgeViewModel({
+                room: this.getPreviewRoom(),
+                threadId: this.props.mxEvent.getId() ?? undefined,
+                forceDot: true,
+            });
+        }
+
         // don't do RR animations until we are mounted
         this.suppressReadReceiptAnimation = true;
 
@@ -359,6 +377,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             this.forceUpdate();
         });
         this.e2eViewModel.start();
+        this.unreadNotificationBadgeViewModelSubscription = this.unreadNotificationBadgeViewModel?.subscribe(() => {
+            this.forceUpdate();
+        });
 
         const client = MatrixClientPeg.safeGet();
         if (!this.props.forExport) {
@@ -413,6 +434,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.e2eViewModelSubscription?.();
         this.e2eViewModelSubscription = undefined;
         this.e2eViewModel.dispose();
+        this.unreadNotificationBadgeViewModelSubscription?.();
+        this.unreadNotificationBadgeViewModelSubscription = undefined;
+        this.unreadNotificationBadgeViewModel?.dispose();
         this.viewModel.dispose();
         if (this.props.resizeObserver && this.ref.current) this.props.resizeObserver.unobserve(this.ref.current);
     }
@@ -437,7 +461,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             eventSendStatus: this.props.eventSendStatus,
             enableListeners: !this.props.forExport,
         });
-
+        this.unreadNotificationBadgeViewModel?.setRoom(this.getPreviewRoom());
+        this.unreadNotificationBadgeViewModel?.setThreadId(this.props.mxEvent.getId() ?? undefined);
         if (this.props.resizeObserver && this.ref.current) this.props.resizeObserver.observe(this.ref.current);
 
         // Moving between edited messages can remount the editor without a reliable blur event.
@@ -471,6 +496,18 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         });
     }
 
+    private get isPreview(): boolean {
+        return [TimelineRenderingType.Notification, TimelineRenderingType.ThreadsList].includes(
+            this.context.timelineRenderingType,
+        );
+    }
+
+    private getPreviewRoom(): Room | undefined {
+        return this.isPreview
+            ? (MatrixClientPeg.safeGet().getRoom(this.props.mxEvent.getRoomId()) ?? undefined)
+            : undefined;
+    }
+
     private readonly onViewInRoomClick = (_anchor: HTMLElement | null): void => {
         dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
@@ -479,6 +516,25 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             room_id: this.props.mxEvent.getRoomId(),
             metricsTrigger: undefined, // room doesn't change
         });
+    };
+
+    private readonly onPreviewTileClick = (ev: MouseEvent<HTMLElement>): void => {
+        const target = ev.currentTarget;
+        const index = target.parentElement ? Array.from(target.parentElement.children).indexOf(target) : -1;
+
+        if (this.context.timelineRenderingType === TimelineRenderingType.Notification) {
+            this.onViewInRoomClick(null);
+            return;
+        }
+
+        if (this.context.timelineRenderingType === TimelineRenderingType.ThreadsList) {
+            dis.dispatch<ShowThreadPayload>({
+                action: Action.ShowThread,
+                rootEvent: this.props.mxEvent,
+                push: true,
+            });
+            PosthogTrackers.trackInteraction("WebThreadsPanelThreadItem", ev, index);
+        }
     };
 
     private readonly onCopyLinkToThreadClick = async (_anchor: HTMLElement | null): Promise<void> => {
@@ -780,30 +836,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         return "#";
     }
 
-    private createRootAttributes({
-        className,
-        ariaLive,
-        scrollToken,
-    }: EventTileRenderState["root"]): Record<string, unknown> {
-        return {
-            "className": className,
-            "aria-live": ariaLive,
-            "aria-atomic": true,
-            "data-scroll-tokens": scrollToken,
-        };
-    }
-
-    private createInteractiveRootAttributes(rootRenderState: EventTileRenderState["root"]): Record<string, unknown> {
-        return {
-            ...this.createRootAttributes(rootRenderState),
-            ref: this.ref,
-            onMouseEnter: this.onMouseEnter,
-            onMouseLeave: this.onMouseLeave,
-            onFocus: this.onFocusWithin,
-            onBlur: this.onBlurWithin,
-        };
-    }
-
     private createRenderTileProps({
         replacingEventId,
         isSeeingThroughMessageHiddenForModeration,
@@ -860,6 +892,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             this.props.eventSendStatus === EventStatus.ENCRYPTING;
 
         return {
+            shape: this.props.shape,
             event: {
                 isSending,
                 ariaLive: this.props.eventSendStatus === null ? undefined : "off",
@@ -871,7 +904,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 layout: this.props.layout,
                 continuation: this.props.continuation,
                 isProbablyMedia,
-                isTwelveHour: this.props.isTwelveHour,
                 isHighlighted: shouldHighlightEventTile({
                     cli: MatrixClientPeg.safeGet(),
                     mxEvent: this.props.mxEvent,
@@ -966,336 +998,218 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             );
         }
 
-        const lineClasses = eventTileRenderState.line.className;
         const isRenderingNotification = eventTileSnapshot.event.isRenderingNotification;
         const isSeeingThroughMessageHiddenForModeration =
             eventTileSnapshot.event.isSeeingThroughMessageHiddenForModeration;
 
         const permalink = this.getPermalink();
-        const rootRenderState = eventTileRenderState.root;
 
+        // Sender slots.
         const avatarMember = this.getAvatarMember();
-        const avatar = <EventTileAvatarAdapter avatarMember={avatarMember} senderSnapshot={eventTileSnapshot.sender} />;
-        const sender = (
-            <EventTileSenderAdapter
-                sender={eventTileSnapshot.sender}
-                onSenderProfileClick={this.onSenderProfileClick}
-            />
-        );
+        const avatar =
+            avatarMember && eventTileSnapshot.sender.profileState.avatarSize !== null ? (
+                <EventTileAvatarAdapter avatarMember={avatarMember} senderSnapshot={eventTileSnapshot.sender} />
+            ) : undefined;
+        const sender =
+            eventTileSnapshot.sender.profileMode !== "hidden" && !eventTileSnapshot.sender.isEmote ? (
+                <EventTileSenderAdapter
+                    sender={eventTileSnapshot.sender}
+                    onSenderProfileClick={this.onSenderProfileClick}
+                />
+            ) : undefined;
 
-        const actionBar = eventTileSnapshot.actionBar.show ? (
-            <ActionBarAdapter
-                eventTileViewModel={this.viewModel}
-                mxEvent={this.props.mxEvent}
-                reactions={this.state.reactions}
-                permalinkCreator={this.props.permalinkCreator}
-                getTile={this.getTile}
-                getReplyChain={this.getReplyChain}
-                onFocusChange={this.onActionBarFocusChange}
-                isQuoteExpanded={isQuoteExpanded}
-                toggleThreadExpanded={() => this.setQuoteExpanded(!isQuoteExpanded)}
-                getRelationsForEvent={this.props.getRelationsForEvent}
-            />
-        ) : undefined;
+        // Interaction slots.
+        const actionBar =
+            eventTileRenderState.root.shape === "ThreadsList" ? (
+                <ThreadListActionBarAdapter
+                    eventTileViewModel={this.viewModel}
+                    onViewInRoomClick={this.onViewInRoomClick}
+                    onCopyLinkClick={this.onCopyLinkToThreadClick}
+                    className="mx_ThreadActionBar"
+                />
+            ) : eventTileSnapshot.actionBar.show ? (
+                <ActionBarAdapter
+                    eventTileViewModel={this.viewModel}
+                    mxEvent={this.props.mxEvent}
+                    reactions={this.state.reactions}
+                    permalinkCreator={this.props.permalinkCreator}
+                    getTile={this.getTile}
+                    getReplyChain={this.getReplyChain}
+                    onFocusChange={this.onActionBarFocusChange}
+                    isQuoteExpanded={isQuoteExpanded}
+                    toggleThreadExpanded={() => this.setQuoteExpanded(!isQuoteExpanded)}
+                    getRelationsForEvent={this.props.getRelationsForEvent}
+                />
+            ) : undefined;
 
+        // Timestamp slots.
         const ts = eventTileRenderState.timestamp.value;
 
         const messageTimestampProps = this.createMessageTimestampProps(ts);
         const linkedMessageTimestampProps = this.createLinkedMessageTimestampProps(messageTimestampProps);
 
-        const timestamp = (
-            <EventTileTimestampSlot
+        const plainTimestamp = eventTileRenderState.timestamp.displayState.showRealTimestamp ? (
+            <MessageTimestampAdapter
                 eventTileViewModel={this.viewModel}
                 kind="plain"
                 timestampProps={messageTimestampProps}
-                showTimestamp={eventTileRenderState.timestamp.displayState.showRealTimestamp}
-                showDummy={eventTileRenderState.timestamp.showDummy}
             />
-        );
-        const linkedTimestamp = (
-            <EventTileTimestampSlot
+        ) : undefined;
+        const linkedTimestamp = eventTileRenderState.timestamp.displayState.showLinkedTimestamp ? (
+            <MessageTimestampAdapter
                 eventTileViewModel={this.viewModel}
                 kind="linked"
                 timestampProps={linkedMessageTimestampProps}
-                showTimestamp={eventTileRenderState.timestamp.displayState.showLinkedTimestamp}
-                showDummy={eventTileRenderState.timestamp.showDummy}
             />
-        );
+        ) : undefined;
+        const timestamp =
+            eventTileRenderState.root.shape === "File" || this.isPreview ? plainTimestamp : linkedTimestamp;
+        const timestampSlot =
+            timestamp ??
+            (eventTileRenderState.timestamp.displayState.useIRCLayout ? <span aria-hidden="true" /> : undefined);
 
-        const groupTimestamp = eventTileRenderState.timestamp.showInGroupLine ? linkedTimestamp : null;
-        const ircTimestamp = eventTileRenderState.timestamp.showInIrcLine ? linkedTimestamp : null;
-        const groupPadlock = eventTileRenderState.e2ePadlock.showInGroupLine && this.renderE2EPadlock();
-        const ircPadlock = eventTileRenderState.e2ePadlock.showInIrcLine && this.renderE2EPadlock();
-
-        const msgOption = (
-            <ReceiptAdapter
-                receiptState={this.receiptState}
-                eventSendStatus={this.props.eventSendStatus}
-                showReadReceipts={this.props.showReadReceipts}
-                readReceipts={this.props.readReceipts}
-                readReceiptMap={this.props.readReceiptMap}
-                checkUnmounting={this.props.checkUnmounting}
-                suppressAnimation={this.suppressReadReceiptAnimation}
-                isTwelveHour={this.props.isTwelveHour}
-            />
-        );
-
-        let replyChain: JSX.Element | undefined;
-        if (eventTileSnapshot.root.data.hasReply) {
-            replyChain = (
-                <ReplyChain
-                    parentEv={this.props.mxEvent}
-                    ref={this.replyChain}
-                    forExport={this.props.forExport}
-                    permalinkCreator={this.props.permalinkCreator}
-                    alwaysShowTimestamps={eventTileSnapshot.replyChain.alwaysShowTimestamps}
-                    isQuoteExpanded={isQuoteExpanded}
-                    setQuoteExpanded={this.setQuoteExpanded}
-                    getRelationsForEvent={this.props.getRelationsForEvent}
+        // Receipt slots.
+        const receiptState = this.receiptState;
+        const isFileShape = eventTileRenderState.root.shape === "File";
+        const receipt =
+            !isFileShape &&
+            (this.props.showReadReceipts ||
+                receiptState.shouldShowSentReceipt ||
+                receiptState.shouldShowSendingReceipt) ? (
+                <ReceiptAdapter
+                    receiptState={receiptState}
+                    eventSendStatus={this.props.eventSendStatus}
+                    readReceipts={this.props.readReceipts}
+                    readReceiptMap={this.props.readReceiptMap}
+                    checkUnmounting={this.props.checkUnmounting}
+                    suppressAnimation={this.suppressReadReceiptAnimation}
+                    isTwelveHour={this.props.isTwelveHour}
                 />
-            );
-        }
+            ) : undefined;
 
+        // Reply slots.
+        const replyChain = eventTileSnapshot.root.state.hasReply ? (
+            <ReplyChain
+                parentEv={this.props.mxEvent}
+                ref={this.replyChain}
+                forExport={this.props.forExport}
+                permalinkCreator={this.props.permalinkCreator}
+                alwaysShowTimestamps={eventTileSnapshot.replyChain.alwaysShowTimestamps}
+                isQuoteExpanded={isQuoteExpanded}
+                setQuoteExpanded={this.setQuoteExpanded}
+                getRelationsForEvent={this.props.getRelationsForEvent}
+            />
+        ) : undefined;
+
+        // Preview body.
         const { hasFooter, showMainPinnedMessageBadge, showBubblePinnedMessageBadge } = eventTileRenderState.footer;
+        const isPreview = this.isPreview;
+        const room = this.getPreviewRoom();
+        const body = isPreview ? (
+            <EventTilePreviewBody eventTileViewModel={this.viewModel} mxEvent={this.props.mxEvent} />
+        ) : (
+            renderTile(
+                this.context.timelineRenderingType,
+                this.createRenderTileProps({
+                    replacingEventId:
+                        eventTileRenderState.root.shape === "Thread"
+                            ? eventTileSnapshot.event.replacingEventId
+                            : undefined,
+                    isSeeingThroughMessageHiddenForModeration,
+                    permalinkCreator:
+                        eventTileRenderState.root.shape === "Thread" ? this.props.permalinkCreator! : undefined,
+                }),
+            )
+        );
 
-        switch (this.context.timelineRenderingType) {
-            case TimelineRenderingType.Thread: {
-                return React.createElement(
-                    this.props.as || "li",
-                    {
-                        ...this.createInteractiveRootAttributes(rootRenderState),
-                        "data-has-reply": eventTileSnapshot.root.data.hasReply,
-                        "data-layout": eventTileSnapshot.root.data.layout,
-                        "data-self": eventTileSnapshot.root.data.isOwnEvent,
-                        "data-event-id": eventTileSnapshot.root.data.eventId,
-                    },
-                    [
-                        <div className="mx_EventTile_senderDetails" key="mx_EventTile_senderDetails">
-                            {avatar}
-                            {sender}
-                        </div>,
-                        <div
-                            id={this.id}
-                            className={lineClasses}
-                            key="mx_EventTile_line"
-                            onContextMenu={this.onContextMenu}
-                        >
-                            {this.renderContextMenu()}
-                            {replyChain}
-                            {renderTile(
-                                TimelineRenderingType.Thread,
-                                this.createRenderTileProps({
-                                    replacingEventId: eventTileSnapshot.event.replacingEventId,
-                                    isSeeingThroughMessageHiddenForModeration,
-                                    permalinkCreator: this.props.permalinkCreator!,
-                                }),
-                            )}
-                            {actionBar}
-                            {linkedTimestamp}
-                            {msgOption}
-                        </div>,
-                        <EventTileFooter
-                            key="mx_EventTile_footer"
-                            eventTileViewModel={this.viewModel}
-                            mxEvent={this.props.mxEvent}
-                            reactions={this.state.reactions}
-                            hasFooter={hasFooter}
-                            hasPinnedMessageBadge={hasPinnedMessageBadge}
-                            hasReactionsRow={hasReactionsRow}
-                            pinnedMessageBadgeAriaDescribedBy={this.id}
-                            placement="default"
-                            showMainPinnedMessageBadge={showMainPinnedMessageBadge}
-                            showBubblePinnedMessageBadge={showBubblePinnedMessageBadge}
-                        />,
-                    ],
-                );
-            }
-            case TimelineRenderingType.Notification:
-            case TimelineRenderingType.ThreadsList: {
-                const room = MatrixClientPeg.safeGet().getRoom(this.props.mxEvent.getRoomId());
-                return React.createElement(
-                    this.props.as || "li",
-                    {
-                        ...this.createInteractiveRootAttributes(rootRenderState),
-                        "tabIndex": -1,
-                        "data-layout": eventTileSnapshot.root.data.layout,
-                        "data-shape": eventTileSnapshot.root.data.shape,
-                        "data-self": eventTileSnapshot.root.data.isOwnEvent,
-                        "data-has-reply": eventTileSnapshot.root.data.hasReply,
-                        "onClick": (ev: MouseEvent) => {
-                            const target = ev.currentTarget as HTMLElement;
-                            let index = -1;
-                            if (target.parentElement) index = Array.from(target.parentElement.children).indexOf(target);
-                            switch (this.context.timelineRenderingType) {
-                                case TimelineRenderingType.Notification:
-                                    this.onViewInRoomClick(null);
-                                    break;
-                                case TimelineRenderingType.ThreadsList:
-                                    dis.dispatch<ShowThreadPayload>({
-                                        action: Action.ShowThread,
-                                        rootEvent: this.props.mxEvent,
-                                        push: true,
-                                    });
-                                    PosthogTrackers.trackInteraction("WebThreadsPanelThreadItem", ev, index ?? -1);
-                                    break;
-                            }
-                        },
-                    },
-                    <>
-                        <div className="mx_EventTile_details">
-                            {sender}
-                            {isRenderingNotification && room ? (
-                                <span className="mx_EventTile_truncated">
-                                    {" "}
-                                    {_t(
-                                        "timeline|in_room_name",
-                                        { room: room.name },
-                                        { strong: (sub) => <strong>{sub}</strong> },
-                                    )}
-                                </span>
-                            ) : (
-                                ""
-                            )}
-                            {timestamp}
-                            <UnreadNotificationBadge
-                                room={room || undefined}
-                                threadId={eventTileSnapshot.root.data.eventId}
-                                forceDot={true}
-                            />
-                        </div>
-                        {isRenderingNotification && room ? (
-                            <div className="mx_EventTile_avatar">
-                                <RoomAvatar room={room} size="28px" />
-                            </div>
-                        ) : (
-                            avatar
-                        )}
-                        <div className={lineClasses} key="mx_EventTile_line">
-                            <EventTilePreviewBody eventTileViewModel={this.viewModel} mxEvent={this.props.mxEvent} />
-                            <EventTileThreadPanelSummary
-                                eventTileViewModel={this.viewModel}
-                                threadState={threadState}
-                            />
-                        </div>
-                        {this.context.timelineRenderingType === TimelineRenderingType.ThreadsList && (
-                            <ThreadListActionBarAdapter
-                                eventTileViewModel={this.viewModel}
-                                onViewInRoomClick={this.onViewInRoomClick}
-                                onCopyLinkClick={this.onCopyLinkToThreadClick}
-                                className="mx_ThreadActionBar"
-                            />
-                        )}
+        // Footer slots.
+        const footer = hasFooter ? (
+            <EventTileFooter
+                eventTileViewModel={this.viewModel}
+                mxEvent={this.props.mxEvent}
+                reactions={this.state.reactions}
+                hasFooter={hasFooter}
+                hasPinnedMessageBadge={hasPinnedMessageBadge}
+                hasReactionsRow={hasReactionsRow}
+                pinnedMessageBadgeAriaDescribedBy={this.id}
+                placement={eventTileRenderState.footer.showInIrcLayout ? "irc" : "default"}
+                showMainPinnedMessageBadge={showMainPinnedMessageBadge}
+                showBubblePinnedMessageBadge={showBubblePinnedMessageBadge}
+            />
+        ) : undefined;
 
-                        {msgOption}
-                    </>,
-                );
-            }
-            case TimelineRenderingType.File: {
-                return React.createElement(this.props.as || "li", this.createRootAttributes(rootRenderState), [
-                    <a
-                        className="mx_EventTile_senderDetailsLink"
-                        key="mx_EventTile_senderDetailsLink"
-                        href={permalink}
-                        onClick={this.onPermalinkClicked}
-                    >
-                        <div className="mx_EventTile_senderDetails" onContextMenu={this.onTimestampContextMenu}>
-                            {avatar}
-                            {sender}
-                            {timestamp}
-                        </div>
-                    </a>,
-                    <div className={lineClasses} key="mx_EventTile_line" onContextMenu={this.onContextMenu}>
-                        {this.renderContextMenu()}
-                        {renderTile(
-                            TimelineRenderingType.File,
-                            this.createRenderTileProps({
-                                isSeeingThroughMessageHiddenForModeration,
-                            }),
-                        )}
-                    </div>,
-                ]);
-            }
+        // Thread info slots.
+        const shouldRenderThreadInfo = isPreview
+            ? threadState.shouldShowThreadPanelSummary
+            : threadState.shouldShowThreadSummary || threadState.searchThreadInfo.kind !== "none";
+        const threadInfo = shouldRenderThreadInfo ? (
+            isPreview ? (
+                <EventTileThreadPanelSummary eventTileViewModel={this.viewModel} threadState={threadState} />
+            ) : (
+                <EventTileThreadInfo
+                    eventTileViewModel={this.viewModel}
+                    mxEvent={this.props.mxEvent}
+                    threadState={threadState}
+                />
+            )
+        ) : undefined;
 
-            default: {
-                // Pinned, Room, Search
-                return React.createElement(
-                    this.props.as || "li",
-                    {
-                        ...this.createInteractiveRootAttributes(rootRenderState),
-                        "tabIndex": -1,
-                        "data-layout": eventTileSnapshot.root.data.layout,
-                        "data-self": eventTileSnapshot.root.data.isOwnEvent,
-                        "data-event-id": eventTileSnapshot.root.data.eventId,
-                        "data-has-reply": eventTileSnapshot.root.data.hasReply,
-                    },
-                    <>
-                        {ircTimestamp}
-                        {sender}
-                        {ircPadlock}
-                        {avatar}
-                        <div
-                            id={this.id}
-                            className={lineClasses}
-                            key="mx_EventTile_line"
-                            onContextMenu={this.onContextMenu}
-                        >
-                            {this.renderContextMenu()}
-                            {groupTimestamp}
-                            {groupPadlock}
-                            {replyChain}
-                            {renderTile(
-                                eventTileSnapshot.root.data.shape,
-                                this.createRenderTileProps({
-                                    isSeeingThroughMessageHiddenForModeration,
-                                }),
-                            )}
-                            {actionBar}
-                            {eventTileRenderState.footer.showInIrcLayout && (
-                                <>
-                                    <EventTileFooter
-                                        eventTileViewModel={this.viewModel}
-                                        mxEvent={this.props.mxEvent}
-                                        reactions={this.state.reactions}
-                                        hasFooter={hasFooter}
-                                        hasPinnedMessageBadge={hasPinnedMessageBadge}
-                                        hasReactionsRow={hasReactionsRow}
-                                        pinnedMessageBadgeAriaDescribedBy={this.id}
-                                        placement="irc"
-                                    />
-                                    <EventTileThreadInfo
-                                        eventTileViewModel={this.viewModel}
-                                        mxEvent={this.props.mxEvent}
-                                        threadState={threadState}
-                                    />
-                                </>
-                            )}
-                        </div>
-                        {eventTileRenderState.footer.showInDefaultLayout && (
-                            <>
-                                <EventTileFooter
-                                    eventTileViewModel={this.viewModel}
-                                    mxEvent={this.props.mxEvent}
-                                    reactions={this.state.reactions}
-                                    hasFooter={hasFooter}
-                                    hasPinnedMessageBadge={hasPinnedMessageBadge}
-                                    hasReactionsRow={hasReactionsRow}
-                                    pinnedMessageBadgeAriaDescribedBy={this.id}
-                                    placement="default"
-                                    showMainPinnedMessageBadge={showMainPinnedMessageBadge}
-                                    showBubblePinnedMessageBadge={showBubblePinnedMessageBadge}
-                                />
-                                <EventTileThreadInfo
-                                    eventTileViewModel={this.viewModel}
-                                    mxEvent={this.props.mxEvent}
-                                    threadState={threadState}
-                                />
-                            </>
-                        )}
-                        {msgOption}
-                    </>,
-                );
-            }
-        }
+        // Padlock slots.
+        const e2ePadlockState = this.e2eViewModel.getSnapshot();
+        const padlock =
+            (eventTileRenderState.e2ePadlock.showInGroupLine || eventTileRenderState.e2ePadlock.showInIrcLine) &&
+            e2ePadlockState.kind !== "none"
+                ? this.renderE2EPadlock()
+                : undefined;
+
+        // Notification and room slots.
+        const notificationBadge = this.unreadNotificationBadgeViewModel?.getSnapshot().shouldRender ? (
+            <NotificationBadgeView vm={this.unreadNotificationBadgeViewModel} />
+        ) : undefined;
+        const roomAvatar = isRenderingNotification && room ? <RoomAvatar room={room} size="28px" /> : undefined;
+        const notificationRoomLabel =
+            isRenderingNotification && room ? (
+                <> {_t("timeline|in_room_name", { room: room.name }, { strong: (sub) => <strong>{sub}</strong> })}</>
+            ) : undefined;
+
+        // Shared tile shell.
+        return (
+            <EventTileView
+                root={{
+                    ...eventTileRenderState.root,
+                    id: this.id,
+                    as: this.props.as,
+                    permalink,
+                }}
+                line={eventTileRenderState.line}
+                classNames={eventTileRenderState.classNames}
+                slots={{
+                    avatar,
+                    sender,
+                    body,
+                    timestamp: timestampSlot,
+                    padlock,
+                    replyChain,
+                    actionBar,
+                    footer,
+                    threadInfo,
+                    receipt,
+                    roomAvatar,
+                    notificationRoomLabel,
+                    notificationBadge,
+                    contextMenu: this.renderContextMenu(),
+                }}
+                refs={{ root: this.ref }}
+                onMouseEnter={this.onMouseEnter}
+                onMouseLeave={this.onMouseLeave}
+                onFocus={this.onFocusWithin}
+                onBlur={this.onBlurWithin}
+                onClick={this.onPreviewTileClick}
+                onContextMenu={this.onContextMenu}
+                onPermalinkClick={this.onPermalinkClicked}
+                onPermalinkContextMenu={this.onTimestampContextMenu}
+            />
+        );
     }
 }
 

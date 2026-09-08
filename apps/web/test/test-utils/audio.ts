@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import EventEmitter from "node:events";
 import { SimpleObservable } from "matrix-widget-api";
 
+import { vi } from "../setup/adapter.ts";
 import { type Playback, PlaybackState } from "../../src/audio/Playback";
 import { type PlaybackClock } from "../../src/audio/PlaybackClock";
 import { UPDATE_EVENT } from "../../src/stores/AsyncStore";
@@ -22,13 +23,13 @@ export const createTestPlayback = (overrides: Partial<Playback> = {}): Playback 
         sizeBytes: 23,
         waveform: [4, 5, 6],
         waveformData: new SimpleObservable<number[]>(),
-        destroy: jest.fn(),
-        play: jest.fn(),
-        prepare: jest.fn(),
-        pause: jest.fn(),
-        stop: jest.fn(),
-        toggle: jest.fn(),
-        skipTo: jest.fn(),
+        destroy: vi.fn(),
+        play: vi.fn(),
+        prepare: vi.fn(),
+        pause: vi.fn(),
+        stop: vi.fn(),
+        toggle: vi.fn(),
+        skipTo: vi.fn(),
         isPlaying: false,
         clockInfo: createTestPlaybackClock(),
         currentState: PlaybackState.Stopped,
@@ -64,11 +65,11 @@ export const createTestPlaybackClock = (): PlaybackClock => {
         durationSeconds: 31,
         timeSeconds: 41,
         liveData: new SimpleObservable<number[]>(),
-        populatePlaceholdersFrom: jest.fn(),
-        flagLoadTime: jest.fn(),
-        flagStart: jest.fn(),
-        flagStop: jest.fn(),
-        syncTo: jest.fn(),
-        destroy: jest.fn(),
+        populatePlaceholdersFrom: vi.fn(),
+        flagLoadTime: vi.fn(),
+        flagStart: vi.fn(),
+        flagStop: vi.fn(),
+        syncTo: vi.fn(),
+        destroy: vi.fn(),
     } as PublicInterface<PlaybackClock> as PlaybackClock;
 };

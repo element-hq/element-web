@@ -13,7 +13,7 @@ import { type UserStatus } from "@element-hq/web-shared-components";
 import { useMatrixClientContext } from "../contexts/MatrixClientContext";
 import { useTypedEventEmitter } from "./useEventEmitter";
 import { useFeatureEnabled } from "./useSettings";
-import { fetchUserStatus, userStatusFromProfile } from "../utils/userStatus";
+import { fetchUserStatus } from "../utils/userStatus";
 
 const logger = rootLogger.getChild("useUserStatus");
 
@@ -21,22 +21,20 @@ const logger = rootLogger.getChild("useUserStatus");
  * Hook to get the MSC4426 user status for a given user ID. Returns undefined if the feature is disabled,
  * the user does not have a status, or if there was an error fetching the status.
  *
- * @param userId The ID of the user whose status is being fetched.
+ * @param userId The ID of the user whose status is being fetched or undefined to do nothing (since hooks cannot be called conditionally)
  * @returns The user's status, or undefined if not available.
  */
-export function useUserStatus(userId: string | undefined): UserStatus | undefined {
+export function useUserStatus(userId?: string): UserStatus | undefined {
     const isEnabled = useFeatureEnabled("feature_user_status");
     const matrixClient = useMatrixClientContext();
     const [userStatus, setUserStatus] = useState<UserStatus | undefined>();
 
-    useTypedEventEmitter(matrixClient, ClientEvent.UserProfileUpdate, (syncedUserId, syncProfile) => {
-        if (syncedUserId !== userId) {
+    useTypedEventEmitter(matrixClient, ClientEvent.UserProfileUpdate, async (syncedUserId, syncProfile) => {
+        if (!userId || syncedUserId !== userId) {
             return;
         }
 
-        setUserStatus(
-            userStatusFromProfile(syncProfile["org.matrix.msc4426.status"], syncProfile["org.matrix.msc4426.call"]),
-        );
+        setUserStatus(await fetchUserStatus(matrixClient, userId));
     });
     useEffect(() => {
         (async () => {

@@ -131,12 +131,20 @@ export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
 
         const content = sanitizedHtmlNode(this.state.page, `${className}_body`, {
             ...sanitizeHtmlParams,
-            transformTags: objectExcluding(transformTags, [
-                // Disable the transformer for `img` as it only allows mxc resources
-                "img",
-                // Disable the default transformer as it forbids inline styles
-                "*",
-            ]),
+            transformTags: {
+                ...objectExcluding(transformTags, [
+                    // Disable the transformer for `img` as it only allows mxc resources
+                    "img",
+                    // Disable the default transformer as it forbids inline styles
+                    "*",
+                ]),
+                a: (tagName: string, attribs: sanitizeHtml.Attributes) => {
+                    if (attribs.href?.startsWith("#/")) {
+                        return { tagName, attribs };
+                    }
+                    return transformTags.a(tagName, attribs);
+                },
+            },
         });
 
         if (this.props.scrollbar) {
