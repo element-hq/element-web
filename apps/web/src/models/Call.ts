@@ -20,7 +20,6 @@ import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { type IWidgetApiRequest, type ClientWidgetApi, type IWidgetData } from "matrix-widget-api";
-import { Subject } from "rxjs";
 import {
     type MatrixRTCSession,
     MatrixRTCSessionEvent,
@@ -43,7 +42,6 @@ import { getCurrentLanguage } from "../languageHandler";
 import { Anonymity, PosthogAnalytics } from "../PosthogAnalytics";
 import { isVideoRoom } from "../utils/video-rooms";
 import { FontWatcher } from "../settings/watchers/FontWatcher";
-import ThemeWatcher from "../settings/watchers/ThemeWatcher";
 import { type JitsiCallMemberContent, JitsiCallMemberEventType } from "../call-types";
 import SdkConfig from "../SdkConfig.ts";
 import DMRoomMap from "../utils/DMRoomMap.ts";
@@ -54,7 +52,7 @@ import {
     type ConfigOptions,
     type DeviceMuteState,
     type ElementCallConfiguration,
-    type HostRequest,
+    type ElementCallHandle,
     type UserIntent,
 } from "../components/views/voip/ElementCallComponentTypes";
 
@@ -664,10 +662,31 @@ export class ElementCall extends Call {
     private ready = Promise.withResolvers<void>();
 
     /**
-     * Hang-up requests from Element Web to the React component (`HostBridge.hangUp$`). Each request is
-     * acknowledged by the component through `reply()`.
+     * The mounted React component, for what Element Web asks of it (to hang up); null while none is
+     * mounted. The counterpart of `widgetApi` on the iframe transport, registered by the host bridge.
      */
-    public readonly hangUpRequests$ = new Subject<HostRequest<Record<string, never>>>();
+    private componentHandle: ElementCallHandle | null = null;
+
+    /**
+     * Registers (or, with null, forgets) the mounted React component's handle. Stable, so that it can be
+     * the component's `ref` directly: React then only clears it when the component actually unmounts, not
+     * when a tile that shows the call is replaced by another.
+     */
+    public readonly setComponentHandle = (handle: ElementCallHandle | null): void => {
+        this.componentHandle = handle;
+    };
+
+    /**
+     * What the React component is rendered with, see {@link computeCallOptions}: decided once per call,
+     * like the widget URL is, since Element Call reconnects on any change to them. Reset when the call is
+     * closed, so that the next call in the room (say, joining one that has since started) decides afresh.
+     */
+    private frozenComponentOptions: { intent?: UserIntent; config: ElementCallConfiguration } | null = null;
+
+    public get componentOptions(): { intent?: UserIntent; config: ElementCallConfiguration } {
+        this.frozenComponentOptions ??= this.getCallOptions();
+        return this.frozenComponentOptions;
+    }
 
     /**
      * The intent-related decisions for a call in a room: what the user asked for, plus the lobby
@@ -720,22 +739,8 @@ export class ElementCall extends Call {
         opts: WidgetGenerationParameters,
     ): { intent?: UserIntent; config: ElementCallConfiguration } {
         const { intent, returnToLobby, skipLobby } = ElementCall.getRoomIntent(client, roomId, opts);
-        const fonts = SettingsStore.getValue("useSystemFont")
-            ? SettingsStore.getValue("systemFont")
-                  .split(",")
-                  .map((font) => {
-                      // Strip whitespace and quotes
-                      font = font.trim();
-                      if (font.startsWith('"') && font.endsWith('"')) font = font.slice(1, -1);
-                      return font;
-                  })
-            : [];
         const config: ElementCallConfiguration = {
             perParticipantE2EE: !!ElementCall.getWidgetData(client, roomId, {}, {}).perParticipantE2EE,
-            lang: getCurrentLanguage().replace("_", "-"),
-            theme: new ThemeWatcher().getEffectiveTheme(),
-            fontScale: FontWatcher.getRootFontSize() / FontWatcher.getBrowserDefaultFontSize(),
-            fonts,
             // on EW we do not want the gradient EC background.
             background: BackgroundStyle.Solid,
             allowIceFallback: !!SettingsStore.getValue("fallbackICEServerAllowed"),
@@ -748,6 +753,29 @@ export class ElementCall extends Call {
         if (typeof effectiveSkipLobby === "boolean") config.skipLobby = effectiveSkipLobby;
         // Element Web's intents use the same string values as Element Call's UserIntent.
         return { intent: intent as string as UserIntent | undefined, config };
+    }
+
+    /**
+     * The language and fonts Element Web is showing, for the widget URL. The React component has no say
+     * in these (it is bundled with English only and inherits the host page's fonts), so they are not part
+     * of {@link computeCallOptions}.
+     */
+    private static getTextParameters(): { lang: string; fontScale: number; fonts: string[] } {
+        const fonts = SettingsStore.getValue("useSystemFont")
+            ? SettingsStore.getValue("systemFont")
+                  .split(",")
+                  .map((font) => {
+                      // Strip whitespace and quotes
+                      font = font.trim();
+                      if (font.startsWith('"') && font.endsWith('"')) font = font.slice(1, -1);
+                      return font;
+                  })
+            : [];
+        return {
+            lang: getCurrentLanguage().replace("_", "-"),
+            fontScale: FontWatcher.getRootFontSize() / FontWatcher.getBrowserDefaultFontSize(),
+            fonts,
+        };
     }
 
     /**
@@ -854,6 +882,7 @@ export class ElementCall extends Call {
               new URL("./widgets/element-call/index.html#", window.location.href);
 
         const { intent, config } = ElementCall.computeCallOptions(client, roomId, opts);
+        const { lang, fontScale, fonts } = ElementCall.getTextParameters();
 
         // Splice together the Element Call URL for this call
         // Parameters can be found in https://github.com/element-hq/element-call/blob/livekit/src/UrlParams.ts.
@@ -866,9 +895,10 @@ export class ElementCall extends Call {
             deviceId: client.getDeviceId()!,
             roomId: roomId,
             baseUrl: client.baseUrl,
-            lang: config.lang!,
-            fontScale: config.fontScale!.toString(),
-            theme: config.theme ?? "$org.matrix.msc2873.client_theme",
+            lang,
+            fontScale: fontScale.toString(),
+            // The React component is given the theme as a live prop instead.
+            theme: "$org.matrix.msc2873.client_theme",
             background: config.background!,
         });
 
@@ -890,7 +920,7 @@ export class ElementCall extends Call {
         if (!config.noiseSuppression) params.append("noiseSuppression", "false");
 
         // Set custom fonts
-        config.fonts?.forEach((font) => params.append("font", font));
+        fonts.forEach((font) => params.append("font", font));
         this.appendAnalyticsParams(params, client);
 
         const replacedUrl = params.toString().replace(/%24/g, "$");
@@ -1031,10 +1061,9 @@ export class ElementCall extends Call {
      * Asks the mounted React component to leave the call and waits for it to acknowledge.
      */
     private async requestHangUpFromReactComponent(): Promise<void> {
-        if (!this.hangUpRequests$.observed) {
+        if (this.componentHandle === null) {
             throw new Error(`Failed to hangup call in room ${this.roomId}: no Element Call component is mounted`);
         }
-        const replied = Promise.withResolvers<void>();
         let timer: number | undefined;
         const timedOut = new Promise<never>((_, reject) => {
             timer = window.setTimeout(
@@ -1042,9 +1071,11 @@ export class ElementCall extends Call {
                 TIMEOUT_MS,
             );
         });
-        this.hangUpRequests$.next({ data: {}, reply: () => replied.resolve() });
         try {
-            await Promise.race([replied.promise, timedOut]);
+            // Resolves once the component has left; rejects if nothing in it can hang up (no call running)
+            await Promise.race([this.componentHandle.hangUp(), timedOut]);
+        } catch (e) {
+            throw new Error(`Failed to hangup call in room ${this.roomId}: ${e}`);
         } finally {
             clearTimeout(timer);
         }
@@ -1077,13 +1108,15 @@ export class ElementCall extends Call {
             this.widgetApi.off(`action:${ElementWidgetActions.Close}`, this.onClose);
             this.widgetApi.off(`action:${ElementWidgetActions.DeviceMute}`, this.onDeviceMute);
         }
-        // The UI is closing, so the React component (if any) will unmount; a later start() must wait for a new one.
+        // The UI is closing, so the React component (if any) will unmount; a later start() must wait for a new one,
+        // and gets its options decided afresh.
         this.ready = Promise.withResolvers<void>();
+        this.frozenComponentOptions = null;
         super.close();
     }
 
     public destroy(): void {
-        this.hangUpRequests$.complete();
+        this.componentHandle = null;
         ActiveWidgetStore.instance.destroyPersistentWidget(this.widget.id, this.widget.roomId);
         WidgetStore.instance.removeVirtualWidget(this.widget.id, this.widget.roomId);
         this.session.off(MatrixRTCSessionEvent.MembershipsChanged, this.onMembershipChanged);

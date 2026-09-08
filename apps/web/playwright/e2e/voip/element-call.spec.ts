@@ -750,12 +750,7 @@ test.describe("Element Call", () => {
             },
         });
 
-        test("is handed the current theme in its configuration and changes over the host bridge", async ({
-            page,
-            user,
-            room,
-            app,
-        }) => {
+        test("is shown in Element Web's theme, and follows it", async ({ page, user, room, app }) => {
             await app.settings.setValue("use_system_theme", null, SettingLevel.DEVICE, false);
             await app.settings.setValue("theme", null, SettingLevel.ACCOUNT, "light");
             await app.viewRoomById(room.roomId);
@@ -765,13 +760,10 @@ test.describe("Element Call", () => {
             const mock = page.locator(".mx_ElementCallMock");
             await expect(mock).toBeVisible();
 
-            const shown = JSON.parse((await mock.getByLabel("Effective configuration").textContent())!);
-            expect(shown.config.theme).toEqual("light");
+            await expect(mock.getByText(/theme light/)).toBeVisible();
 
             await app.settings.setValue("theme", null, SettingLevel.ACCOUNT, "dark");
-            await expect(mock.getByRole("list", { name: "HostBridge log" })).toContainText(
-                '← themeChange {"name":"dark"}',
-            );
+            await expect(mock.getByText(/theme dark/)).toBeVisible();
         });
     });
 

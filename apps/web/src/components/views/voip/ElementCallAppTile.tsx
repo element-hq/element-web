@@ -5,9 +5,19 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type CSSProperties, type JSX, useContext, useEffect, useRef } from "react";
+import React, {
+    type CSSProperties,
+    type FC,
+    type JSX,
+    lazy,
+    Suspense,
+    useContext,
+    useEffect,
+    useMemo,
+    useRef,
+} from "react";
 import classNames from "classnames";
-import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership, type Membership } from "matrix-js-sdk/src/types";
 
 import type { CallTileProps } from "./CallTile";
@@ -18,12 +28,101 @@ import WidgetUtils from "../../../utils/WidgetUtils";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { SDKContext } from "../../../contexts/SDKContext.ts";
 import { ElementCall as ElementCallModel } from "../../../models/Call";
+import { CallStore } from "../../../stores/CallStore";
 import { useCall } from "../../../hooks/useCall";
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import { useDispatcher } from "../../../hooks/useDispatcher";
+import { useSettingValue } from "../../../hooks/useSettings";
+import { getCurrentLanguage } from "../../../languageHandler";
+import { useEffectiveTheme } from "../../../hooks/useEffectiveTheme";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
-import { ElementCallInstance } from "./ElementCallInstance";
+import Spinner from "../elements/Spinner";
+import { type ElementCallComponentModule, type ElementCallProps } from "./ElementCallComponentTypes";
+import { ElementWebHostBridge } from "./ElementWebHostBridge";
+
+/**
+ * Loads an Element Call component module and initialises it once, before its first render. Both the
+ * real package and the mock have the same module shape (`ElementCallComponentModule`).
+ */
+const loadElementCall = async (
+    module: Promise<ElementCallComponentModule>,
+): Promise<{ default: FC<ElementCallProps> }> => {
+    const m = await module;
+    await m.initializeElementCall(ElementCallModel.getConfigOptions(CallStore.instance.getConfiguredRTCTransports()));
+    // Only the `ref` type differs (see `ElementCallProps` in ElementCallComponentTypes)
+    return { default: m.ElementCall as FC<ElementCallProps> };
+};
+
+/**
+ * The real component: `@element-hq/element-call-component`, a large ES module (LiveKit, EC's UI) plus
+ * its stylesheet. Code-split so it is only fetched when a call is rendered on the React path.
+ */
+const RealElementCall = lazy(() =>
+    loadElementCall(
+        Promise.all([
+            import(/* webpackChunkName: "element-call-component" */ "@element-hq/element-call-component"),
+            import(/* webpackChunkName: "element-call-component" */ "@element-hq/element-call-component/style.css"),
+        ]).then(([m]) => m as ElementCallComponentModule),
+    ),
+);
+
+/**
+ * The mock, for Playwright (no LiveKit in Element Web's test backend) and offline development. Only
+ * fetched when `Developer.elementCallMockComponent` is on.
+ */
+const MockElementCall = lazy(() =>
+    loadElementCall(import(/* webpackChunkName: "element-call-mock" */ "./ElementCallMock")),
+);
+
+/**
+ * Marks the call ready once the (lazily loaded) Element Call component has mounted. Element Call's
+ * component build does not call `HostBridge.contentLoaded()` yet (only its standalone app does), and
+ * the `ElementCall` model's `start()` would otherwise time out waiting for it. Harmless if the
+ * component does call it too (the mock does).
+ */
+const MarkReadyOnMount = ({ call }: { call: ElementCallModel }): null => {
+    useEffect(() => call.markReady(), [call]);
+    return null;
+};
+
+/**
+ * The Element Call component with everything Element Web hands it. Rendered inside the persisted root,
+ * where it lives for the whole call regardless of which tile (room view, floating PiP) is showing the
+ * call, or whether any is (browser Picture-in-Picture window): so this is where anything that must keep
+ * following Element Web while the call runs, the theme and the language, is read.
+ *
+ * What the component reconnects on (`intent`, `config`) is decided once per call by the model; what it
+ * takes live (`theme`, `language`, `hostBridge`) may change freely.
+ */
+const HostedElementCall: FC<{ call: ElementCallModel; client: MatrixClient }> = ({ call, client }) => {
+    // Real component or mock: independent of the widget-vs-React choice CallTile makes.
+    const ElementCall = useSettingValue("Developer.elementCallMockComponent") ? MockElementCall : RealElementCall;
+    const theme = useEffectiveTheme();
+    // Not a hook: changing the language reloads Element Web, so there is no live change to follow
+    const language = getCurrentLanguage().replace("_", "-");
+    const bridge = useMemo(
+        () => new ElementWebHostBridge(call, { widgetId: call.widget.id, widgetRoomId: call.widget.roomId }),
+        [call],
+    );
+    const { intent, config } = call.componentOptions;
+
+    return (
+        <Suspense fallback={<Spinner />}>
+            <ElementCall
+                client={client}
+                roomId={call.roomId}
+                intent={intent}
+                config={config}
+                hostBridge={bridge}
+                ref={call.setComponentHandle}
+                theme={theme}
+                language={language}
+            />
+            <MarkReadyOnMount call={call} />
+        </Suspense>
+    );
+};
 
 // For persisted apps in PiP we want the zIndex to be higher than for other persisted apps (100),
 // otherwise the PiP view is drawn UNDER another persistent app when dragged around. Same as AppTile.
@@ -38,10 +137,9 @@ const Z_INDEX_MINI = 101;
  * navigation (`PersistedElement`), docking, teardown when nothing keeps the call alive, and leaving the
  * room. Widget messaging, permissions, mixed-content and popout handling are deliberately absent.
  *
- * The tile decides only where the call is shown. What is shown (the component with its props and its
- * `HostBridge`) is the call's `ElementCallInstance`, created once per call and the same for every tile,
- * so that moving the call between containers does not touch the component. `stickyPromise` is ignored:
- * the bridge hangs up other calls itself.
+ * The tile decides only where the call is shown; what is shown is `HostedElementCall` in the persisted
+ * root, which every tile of the call renders alike, so moving the call between containers does not
+ * disturb the component. `stickyPromise` is ignored: the bridge hangs up other calls itself.
  *
  * The virtual call widget (`props.app`) stays the call's identity: its id is the persist key, the
  * `ActiveWidgetStore` key and the PiP candidate, exactly as for the iframe path.
@@ -65,12 +163,8 @@ export const ElementCallAppTile = (props: CallTileProps): JSX.Element | null => 
             // XXX: As in AppTile, this removes the persistent element from the DOM entirely.
             PersistedElement.destroyElement(persistKey);
             ActiveWidgetStore.instance.destroyPersistentWidget(app.id, widgetRoomId);
-            if (elementCall !== null) {
-                // The component is gone with the persisted root; its bridge can go too
-                ElementCallInstance.destroy(elementCall);
-                // Nothing will tell us about a hangup any more; treat it as one (as AppTile does when the widget dies).
-                if (elementCall.connected) elementCall.handleClose();
-            }
+            // Nothing will tell us about a hangup any more; treat it as one (as AppTile does when the widget dies).
+            if (elementCall?.connected) elementCall.handleClose();
         };
     }, [persistKey, app.id, widgetRoomId, elementCall]);
 
@@ -124,9 +218,6 @@ export const ElementCallAppTile = (props: CallTileProps): JSX.Element | null => 
 
     if (elementCall === null || !room) return null;
 
-    // Idempotent: the same instance for every render and every tile of this call
-    const { element } = ElementCallInstance.get(elementCall, client);
-
     const bodyClass = classNames({
         "mx_AppTileBody": true,
         "mx_AppTileBody--large": !miniMode,
@@ -153,7 +244,7 @@ export const ElementCallAppTile = (props: CallTileProps): JSX.Element | null => 
                     moveRef={movePersistedElement}
                 >
                     <div className={bodyClass} style={bodyStyles}>
-                        {element}
+                        <HostedElementCall call={elementCall} client={client} />
                     </div>
                     {overlay}
                 </PersistedElement>
