@@ -105,6 +105,8 @@ export interface ClientApi {
 
 // @public
 export interface ClientCreationManagementApi {
+    // @deprecated
+    setUserVerificationCaCertsPem(pem: string | null): void;
     setX509ClientInitOpts(opts: X509ClientInitOpts): void;
 }
 

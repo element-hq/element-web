@@ -96,4 +96,14 @@ export interface ClientCreationManagementApi {
      * @param opts - Configuration for X.509. See {@link X509ClientInitOpts} for more details.
      */
     setX509ClientInitOpts(opts: X509ClientInitOpts): void;
+
+    /**
+     * Supply CA certificates used to check X.509 signatures on user identities.
+     *
+     * @param pem - PEM-formatted CA certificates, or null to supply none.
+     *
+     * @deprecated Use {@link ClientCreationManagementApi.setX509ClientInitOpts} instead, which also
+     * carries the signing half. Retained so modules built against 1.17.0 and earlier keep working.
+     */
+    setUserVerificationCaCertsPem(pem: string | null): void;
 }

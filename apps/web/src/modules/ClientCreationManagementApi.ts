@@ -16,4 +16,12 @@ export class ClientCreationManagementApi implements IClientCreationManagementApi
         // Merge so a module setting the CA PEM and the platform setting the signer don't clobber each other.
         this.x509 = { ...this.x509, ...opts };
     }
+
+    /**
+     * @deprecated Superseded by {@link setX509ClientInitOpts}; kept so modules built against 1.17.0 and
+     * earlier keep working.
+     */
+    public setUserVerificationCaCertsPem(pem: string | null): void {
+        this.setX509ClientInitOpts({ userVerificationCaCertsPem: pem ?? undefined });
+    }
 }
