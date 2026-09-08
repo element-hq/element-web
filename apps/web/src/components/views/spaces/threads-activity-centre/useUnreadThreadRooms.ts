@@ -13,6 +13,7 @@ import {
     MatrixEventEvent,
     NotificationCountType,
     type Room,
+    RoomEvent,
     type Thread,
     THREAD_RELATION_TYPE,
 } from "matrix-js-sdk/src/matrix";
@@ -97,6 +98,10 @@ export function useUnreadThreadRooms(forceComputation: boolean): UnreadThreadRoo
     // and also when events get decrypted, since this will often happen after the sync
     // event and may change notifications.
     useEventEmitter(mxClient, MatrixEventEvent.Decrypted, scheduleUpdate);
+    // Reading a thread echoes a receipt locally, well before the server sends fresh notification
+    // counts. Recompute on that instead of waiting for the next sync, so a thread the user just
+    // read leaves the list at once, as it does in the room list.
+    useEventEmitter(mxClient, RoomEvent.Receipt, scheduleUpdate);
 
     // Force the list computation
     useEffect(() => {
@@ -221,6 +226,12 @@ type ThreadUnread = {
  * @returns the thread's unread state, or `null` when there is nothing unread to surface.
  */
 function evaluateThreadUnread(client: MatrixClient, room: Room, thread: Thread): ThreadUnread | null {
+    // Reading writes a local echo receipt straight away, but the server's `total` count only clears
+    // when the homeserver pushes fresh counts in a sync (the js-sdk deliberately doesn't recompute
+    // totals locally). Without this, a thread you just read stays listed, with its count, until the
+    // server catches up. An explicit receipt covering the thread's latest event beats a stale count.
+    if (hasReadThroughLatestEvent(client, room, thread)) return null;
+
     // Primary signal: server-reported notification counts (authoritative).
     const highlight = room.getThreadUnreadNotificationCount(thread.id, NotificationCountType.Highlight);
     const total = room.getThreadUnreadNotificationCount(thread.id, NotificationCountType.Total);
@@ -246,6 +257,22 @@ function evaluateThreadUnread(client: MatrixClient, room: Room, thread: Thread):
         isRelevantToMe:
             thread.hasCurrentUserParticipated || highlight > 0 || hasCurrentUserSentInThread(client, thread),
     };
+}
+
+/**
+ * Whether we have read the most recent event we know of in the thread.
+ *
+ * Uses {@link Room.hasUserReadEvent}, the same receipt lookup {@link doesTimelineHaveUnreadMessages}
+ * relies on, rather than {@link Thread.hasUserReadEvent}: the latter treats a thread as read
+ * whenever the room holds no threaded receipt at all (it compares against
+ * `getOldestThreadedReceiptTs()`, which is `Infinity` until one arrives), which would hide every
+ * thread on a fresh session.
+ *
+ * @returns true if the thread has been read up to its latest known event.
+ */
+function hasReadThroughLatestEvent(client: MatrixClient, room: Room, thread: Thread): boolean {
+    const latestEventId = thread.events.at(-1)?.getId();
+    return !!latestEventId && room.hasUserReadEvent(client.getSafeUserId(), latestEventId);
 }
 
 /**
