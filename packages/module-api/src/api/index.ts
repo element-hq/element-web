@@ -26,7 +26,7 @@ import { type CustomisationsApi } from "./customisations.ts";
 import { type ComposerApi } from "./composer.ts";
 import { type StorageHelperApi } from "./storage-helper.ts";
 import { type SettingsApi } from "./settings.ts";
-import { UrlPreviewApi } from "./urlpreview.ts";
+import { type UrlPreviewApi } from "./urlpreview.ts";
 
 /**
  * Module interface for modules to implement.

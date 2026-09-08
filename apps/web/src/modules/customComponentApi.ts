@@ -47,7 +47,6 @@ type ComposerPreviewRenderer = {
 };
 
 export class CustomComponentsApi implements ICustomComponentsApi {
-
     private readonly registeredMessageRenderers: EventRenderer[] = [];
     private readonly registeredComposerPreviewRenderers: ComposerPreviewRenderer[] = [];
 

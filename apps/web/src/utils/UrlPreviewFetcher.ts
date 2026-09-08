@@ -6,7 +6,7 @@
  */
 
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
-import { type IPreviewUrlResponse, type MatrixClient, MatrixError, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type IPreviewUrlResponse, type MatrixClient, MatrixError, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { decode } from "html-entities";
 
 import type { UrlPreview } from "shared-types";
@@ -34,7 +34,7 @@ export class UrlPreviewFetcher {
         private readonly client: MatrixClient,
         private readonly previewRequestTs: number,
         private readonly showTooltips: boolean,
-        private readonly previewModuleApi: ModuleUrlPreviewApi
+        private readonly previewModuleApi: ModuleUrlPreviewApi,
     ) {}
 
     public clearCache(): void {

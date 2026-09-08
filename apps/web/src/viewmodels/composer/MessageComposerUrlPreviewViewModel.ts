@@ -21,7 +21,7 @@ export const DEBOUNCE_REQUEST_TIMEOUT_MS = 500;
 
 export interface MessageComposerUrlPreviewViewModelProps {
     client: MatrixClient;
-    moduleUrlPreviewApi: UrlPreviewApi,
+    moduleUrlPreviewApi: UrlPreviewApi;
     visible: boolean;
     showTooltips: boolean;
     urlPreviewBundle: boolean;

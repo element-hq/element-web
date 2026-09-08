@@ -1,3 +1,10 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
 import type { UrlPreview } from "shared-types";
 import type { MatrixEvent } from "../models/event";
 
@@ -8,7 +15,7 @@ import type { MatrixEvent } from "../models/event";
  * @returns A preview, or null if no preview should be visible.
  * @alpha Subject to change.
  */
-export type UrlPreviewHandler = (url: string, mxEvent?: MatrixEvent) => Promise<UrlPreview|null>;
+export type UrlPreviewHandler = (url: string, mxEvent?: MatrixEvent) => Promise<UrlPreview | null>;
 
 /**
  * API for changing the way URL previews are handled.
