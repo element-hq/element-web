@@ -223,4 +223,13 @@ export interface WebConfigJson {
 export interface DesktopConfigJson extends WebConfigJson {
     web_base_url?: string;
     update_base_url?: string;
+    x509?: {
+        library_path: string;
+        library_name?: string;
+        /**
+         * Directory holding the CA certificates used to build our own chain, plus the user's own leaf
+         * certificate. Exactly one certificate in here must be a non-CA certificate: that is the leaf.
+         */
+        certs_path?: string;
+    };
 }
