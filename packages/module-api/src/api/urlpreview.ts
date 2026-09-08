@@ -1,11 +1,14 @@
 import type { UrlPreview } from "shared-types";
+import type { MatrixEvent } from "../models/event";
 
 /**
  * Render a URL preview for a given URL.
+ * @param url The full URL being previewed.
+ * @param bundle The room event, if the preview is for an existing Matrix event.
  * @returns A preview, or null if no preview should be visible.
  * @alpha Subject to change.
  */
-export type UrlPreviewHandler = (url: string) => Promise<UrlPreview|null>;
+export type UrlPreviewHandler = (url: string, mxEvent?: MatrixEvent) => Promise<UrlPreview|null>;
 
 /**
  * API for changing the way URL previews are handled.

@@ -554,7 +554,7 @@ export interface UrlPreviewApi {
 // Warning: (ae-forgotten-export) The symbol "UrlPreview" needs to be exported by the entry point index.d.ts
 //
 // @alpha
-export type UrlPreviewHandler = (url: string) => Promise<UrlPreview | null>;
+export type UrlPreviewHandler = (url: string, mxEvent?: MatrixEvent) => Promise<UrlPreview | null>;
 
 // @alpha @deprecated (undocumented)
 export interface UserIdentifierCustomisations {
