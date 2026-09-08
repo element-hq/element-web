@@ -33,6 +33,14 @@ jobs:
                   persist-credentials: false
 
             - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+            # pnpm/action-setup makes ~/setup-pnpm/node_modules/.bin the PNPM_HOME, so pnpm's store, and with it the
+            # temporary checkout in which a git dependency's `prepare` script runs, would sit under a node_modules
+            # path. @element-hq/element-call-component must not be built there: its toolchain then treats Element
+            # Call's own sources as a dependency's and emits a different, broken bundle (see
+            # docs/element-call-as-react-component.md, "Package, types and build"). Must precede actions/setup-node,
+            # whose pnpm cache is keyed on `pnpm store path`.
+            - name: Keep the pnpm store out of node_modules
+              run: echo "pnpm_config_store_dir=${RUNNER_TEMP}/pnpm-store" >> "$GITHUB_ENV"
             - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
               with:
                   cache: "pnpm"
