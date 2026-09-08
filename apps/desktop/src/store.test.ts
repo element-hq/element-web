@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { expect, describe, it, beforeAll, beforeEach, vi } from "vitest";
-import { app, safeStorage } from "electron";
+import { app, dialog, safeStorage } from "electron";
 
-import Store, { SafeStorageDecryptionError } from "./store.js";
+import Store, { SafeStorageDecryptionError, clearData } from "./store.js";
 
 // In-memory ElectronStore replacement so the tests don't touch the filesystem or real config.
 const backing = new Map<string, unknown>();
@@ -191,6 +191,22 @@ describe("Store secret encryption (safeStorage)", () => {
             expect(backing.get("safeStorageBackendOverride")).toBe(true);
             expect(backing.has("safeStorageBackendMigrate")).toBe(false);
             expect(app.relaunch).toHaveBeenCalled();
+        });
+    });
+
+    describe("clearData", () => {
+        it("clears the store and flushes then clears the session's storage data", async () => {
+            backing.set("fakeDataItem", false);
+            const electronSession = {
+                flushStorageData: vi.fn(),
+                clearStorageData: vi.fn(),
+            } as unknown as Electron.Session;
+
+            await clearData(electronSession);
+
+            expect(backing.size).toBe(0);
+            expect(electronSession.flushStorageData).toHaveBeenCalled();
+            expect(electronSession.clearStorageData).toHaveBeenCalled();
         });
     });
 });
