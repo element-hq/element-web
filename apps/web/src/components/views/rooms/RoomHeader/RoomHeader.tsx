@@ -101,7 +101,7 @@ function RoomHeaderButtons({ room, extraButtons }: { room: Room; extraButtons?: 
     // While in a call: Element Web's own picture-in-picture (the floating view over the app)...
     const toggleCallButton = (
         <Tooltip label={isViewingCall ? _t("voip|minimise_call") : _t("voip|maximise_call")}>
-            <IconButton onClick={toggleCall} data-testid="call-pip-button">
+            <IconButton onClick={toggleCall} data-testid="call-pip-button" className="mx_RoomHeader_outlineIcon">
                 {isViewingCall ? <CollapseIcon /> : <ExpandIcon />}
             </IconButton>
         </Tooltip>
@@ -111,7 +111,11 @@ function RoomHeaderButtons({ room, extraButtons }: { room: Room; extraButtons?: 
     // component can be moved there, so this is only offered when the call is rendered that way.
     const documentPipButton = documentPip.available ? (
         <Tooltip label={documentPip.active ? _t("voip|document_pip_close") : _t("voip|document_pip_open")}>
-            <IconButton onClick={documentPip.toggle} data-testid="document-pip-button">
+            <IconButton
+                onClick={documentPip.toggle}
+                data-testid="document-pip-button"
+                className="mx_RoomHeader_outlineIcon"
+            >
                 <PopOutIcon />
             </IconButton>
         </Tooltip>
