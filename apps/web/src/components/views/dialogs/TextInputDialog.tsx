@@ -19,6 +19,7 @@ interface IProps {
     description: React.ReactNode;
     value: string;
     placeholder?: string;
+    type?: "text" | "password";
     button?: string;
     busyMessage: TranslationKey;
     focus: boolean;
@@ -42,6 +43,7 @@ export default class TextInputDialog extends React.Component<IProps, IState> {
         title: "",
         value: "",
         description: "",
+        type: "text",
         busyMessage: _td("common|loading"),
         focus: true,
         hasCancel: true,
@@ -117,7 +119,7 @@ export default class TextInputDialog extends React.Component<IProps, IState> {
                             <Field
                                 className="mx_TextInputDialog_input"
                                 ref={this.field}
-                                type="text"
+                                type={this.props.type}
                                 label={this.props.placeholder}
                                 value={this.state.value}
                                 onChange={this.onChange}

@@ -34,6 +34,7 @@ import SdkConfig from "./SdkConfig";
 import { buildAndEncodePickleKey, encryptPickleKey } from "./utils/tokens/pickling";
 import Favicon from "./favicon.ts";
 import { getVectorConfig } from "./vector/getconfig.ts";
+import type { X509Manager } from "./vector/platform/X509Manager.ts";
 
 export const SSO_HOMESERVER_URL_KEY = "mx_sso_hs_url";
 export const SSO_ID_SERVER_URL_KEY = "mx_sso_is_url";
@@ -413,6 +414,16 @@ export default abstract class BasePlatform {
         } catch (e) {
             logger.error("idbDelete failed in destroyPickleKey", e);
         }
+    }
+
+    /**
+     * Get the platform provided manager for experimental X.509 identity verification
+     * (e.g. backed by a PIV hardware key on desktop).
+     *
+     * @returns null if the platform doesn't support X.509 signing.
+     */
+    public getX509Manager(): X509Manager | null {
+        return null;
     }
 
     /**

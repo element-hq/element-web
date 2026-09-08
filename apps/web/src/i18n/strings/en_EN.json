@@ -391,7 +391,17 @@
         "username_field_required_invalid": "Enter username",
         "username_in_use": "Someone already has that username, please try another.",
         "verify_email_explainer": "We need to know it’s you before resetting your password. Click the link in the email we just sent to <b>%(email)s</b>",
-        "verify_email_heading": "Verify your email to continue"
+        "verify_email_heading": "Verify your email to continue",
+        "x509_insert_key_description": "Insert the hardware key holding your X.509 identity to continue.",
+        "x509_insert_key_title": "Insert your hardware key",
+        "x509_pin_description": "Enter the PIN for your hardware key (%(label)s) to sign in with your X.509 identity.",
+        "x509_pin_incorrect": {
+            "one": "Incorrect PIN. %(count)s attempt remaining before the key locks.",
+            "other": "Incorrect PIN. %(count)s attempts remaining before the key locks."
+        },
+        "x509_pin_locked_description": "Your hardware key PIN is locked. Unlock it with your PIN unblocking key and try again.",
+        "x509_pin_title": "Unlock your hardware key",
+        "x509_unlock_failed_title": "Could not unlock your hardware key"
     },
     "bug_reporting": {
         "additional_context": "If there is additional context that would help in analysing the issue, such as what you were doing at the time, room IDs, user IDs, etc., please include those things here.",

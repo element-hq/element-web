@@ -45,6 +45,7 @@ import { IPCManager } from "./IPCManager";
 import { _t } from "../../languageHandler";
 import { BadgeOverlayRenderer } from "../../favicon";
 import GenericToast from "../../components/views/toasts/GenericToast.tsx";
+import { X509Manager } from "./X509Manager.ts";
 
 interface SquirrelUpdate {
     releaseNotes: string;
@@ -90,6 +91,7 @@ function getUpdateCheckStatus(status: boolean | string): UpdateStatus {
 export default class ElectronPlatform extends BasePlatform {
     private readonly ipc = new IPCManager("ipcCall", "ipcReply");
     private readonly eventIndexManager: BaseEventIndexManager = new SeshatIndexManager();
+    private readonly x509Manager: X509Manager = new X509Manager();
     public readonly initialised: Promise<void>;
     private readonly electron: Electron;
     private protocol!: string;
@@ -517,6 +519,10 @@ export default class ElectronPlatform extends BasePlatform {
         try {
             await this.ipc.call("destroyPickleKey", userId, deviceId);
         } catch {}
+    }
+
+    public getX509Manager(): X509Manager | null {
+        return this.x509Manager;
     }
 
     public async clearStorage(): Promise<void> {

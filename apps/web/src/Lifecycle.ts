@@ -844,6 +844,15 @@ async function doSetLoggedIn(
     // Dispatch this synchronously so SDKContextClass can set the client for other modules to consume.
     dis.dispatch<OnLoggedInPayload>({ action: Action.OnLoggedIn, client }, true);
 
+    // Initialise platform-specific X.509 options. TODO: Passing this to `creationManagement` feels a little redundant
+    try {
+        const x509Opts = await PlatformPeg.get()?.getX509Manager()?.getClientInitOpts();
+        if (x509Opts) {
+            ModuleApi.instance.client.creationManagement.setX509ClientInitOpts(x509Opts);
+        }
+    } catch (e) {
+        logger.warn("X.509 signer unavailable, continuing without it", e);
+    }
     const clientPegOpts: MatrixClientPegAssignOpts = {
         x509: ModuleApi.instance.client.creationManagement.x509 ?? undefined,
     };
