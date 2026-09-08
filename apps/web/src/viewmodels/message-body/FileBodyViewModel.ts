@@ -158,10 +158,10 @@ export class FileBodyViewModel
         // Offer the viewer wherever the file is presented as a file, i.e. not in an export and not in
         // the download-only panels. Needs the media helper, since opening has to fetch the bytes.
         const showOpen =
-            SettingsStore.getValue("feature_pdf_viewer") &&
-            !props.forExport &&
             showFileInfo &&
+            !props.forExport &&
             !!props.mediaEventHelper &&
+            SettingsStore.getValue("feature_pdf_viewer") &&
             isPdfEvent(props.mxEvent);
         const openLabel = showOpen ? _t("pdf_viewer|open") : undefined;
         // Once the row carries an action for opening, downloading needs to be an action too rather than
