@@ -131,40 +131,12 @@ export class UrlPreviewFetcher {
     }
 
     /**
-     * Fetch a preview for a single URL, returning a cached result if available.
-     * @param link The URL to preview.
-     * @param event The Matrix event to preview.
-     * @param loadMedia Whether to include the preview image. Pass false when media is hidden.
+     * Determine the preview image from the URL preview response.
+     * @param response - The preview response from the URL preview API.
+     * @param loadMedia - Whether to load the media from the preview response.
+     * @returns The preview image and site icon, if available.
      */
-    public async fetchPreview(link: string, loadMedia: boolean, event?: MatrixEvent): Promise<UrlPreview | null> {
-        const moduleResponse = await this.previewModuleApi.getPreview(link, event);
-        if (moduleResponse) {
-            return moduleResponse;
-        }
-
-        const cached = this.cache.get(link);
-        if (cached) return cached;
-
-        let response: IPreviewUrlResponse;
-        try {
-            response = await this.client.getUrlPreview(link, this.previewRequestTs);
-        } catch (error) {
-            if (error instanceof MatrixError && error.httpStatus === 404) {
-                logger.debug("Failed to get URL preview: ", error);
-            } else {
-                logger.error("Failed to get URL preview: ", error);
-            }
-            return null;
-        }
-
-        const { title, description, siteName } = UrlPreviewFetcher.getBaseMetadataFromResponse(response, link);
-        const author = UrlPreviewFetcher.getAuthorFromResponse(response);
-        const hasImage = response["og:image"] && typeof response["og:image"] === "string";
-
-        if (title === link && !hasImage) {
-            return null;
-        }
-
+    private getPreviewImage(response: IPreviewUrlResponse, loadMedia: boolean): { image: UrlPreview["image"]; siteIcon?: string } {
         let image: UrlPreview["image"];
         let siteIcon: string | undefined;
 
@@ -200,6 +172,45 @@ export class UrlPreviewFetcher {
                 siteIcon = media.srcHttp;
             }
         }
+        return { image, siteIcon };
+    }
+
+    /**
+     * Fetch a preview for a single URL, returning a cached result if available.
+     * @param link The URL to preview.
+     * @param event The Matrix event to preview.
+     * @param loadMedia Whether to include the preview image. Pass false when media is hidden.
+     */
+    public async fetchPreview(link: string, loadMedia: boolean, event?: MatrixEvent): Promise<UrlPreview | null> {
+        const moduleResponse = await this.previewModuleApi.getPreview(link, event);
+        if (moduleResponse) {
+            return moduleResponse;
+        }
+
+        const cached = this.cache.get(link);
+        if (cached) return cached;
+
+        let response: IPreviewUrlResponse;
+        try {
+            response = await this.client.getUrlPreview(link, this.previewRequestTs);
+        } catch (error) {
+            if (error instanceof MatrixError && error.httpStatus === 404) {
+                logger.debug("Failed to get URL preview: ", error);
+            } else {
+                logger.error("Failed to get URL preview: ", error);
+            }
+            return null;
+        }
+
+        const { title, description, siteName } = UrlPreviewFetcher.getBaseMetadataFromResponse(response, link);
+        const author = UrlPreviewFetcher.getAuthorFromResponse(response);
+        const hasImage = response["og:image"] && typeof response["og:image"] === "string";
+
+        if (title === link && !hasImage) {
+            return null;
+        }
+
+        const { image, siteIcon } = this.getPreviewImage(response, loadMedia);
 
         const result = {
             link,
