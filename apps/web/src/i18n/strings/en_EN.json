@@ -2130,6 +2130,7 @@
         "section": {
             "chats": "Chats",
             "favourites": "Favourites",
+            "invites": "Invites",
             "low_priority": "Low Priority"
         },
         "show_less": "Show less"
