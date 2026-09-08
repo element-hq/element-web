@@ -295,7 +295,7 @@ describe("<SendMessageComposer/>", () => {
             });
         });
 
-        it("correctly sends a message", () => {
+        it("correctly sends a message", async () => {
             vi.mocked(doMaybeLocalRoomAction).mockImplementation(
                 <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
                     return fn(roomId);
@@ -308,11 +308,14 @@ describe("<SendMessageComposer/>", () => {
             addTextToComposer(container, "test message");
             fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
 
-            expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", null, {
-                "body": "test message",
-                "msgtype": MsgType.Text,
-                "m.mentions": {},
-            });
+            // sending awaits attachUrlPreviews, so the message goes out a tick after the keypress
+            await waitFor(() =>
+                expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", null, {
+                    "body": "test message",
+                    "msgtype": MsgType.Text,
+                    "m.mentions": {},
+                }),
+            );
         });
 
         it("correctly sends a reply using a slash command", async () => {
@@ -353,7 +356,7 @@ describe("<SendMessageComposer/>", () => {
             );
         });
 
-        it("shows chat effects on message sending", () => {
+        it("shows chat effects on message sending", async () => {
             vi.mocked(doMaybeLocalRoomAction).mockImplementation(
                 <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
                     return fn(roomId);
@@ -372,7 +375,9 @@ describe("<SendMessageComposer/>", () => {
                 "m.mentions": {},
             });
 
-            expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: `effects.confetti` });
+            await waitFor(() =>
+                expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: `effects.confetti` }),
+            );
         });
 
         it("not to send chat effects on message sending for threads", () => {
