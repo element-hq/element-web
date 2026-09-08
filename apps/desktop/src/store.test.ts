@@ -60,14 +60,14 @@ vi.mock("electron", () => ({
         showMessageBox: vi.fn(() => Promise.resolve({ response: 1 })),
     },
     safeStorage: {
-        isEncryptionAvailable: vi.fn(() => true),
+        isAsyncEncryptionAvailable: vi.fn(() => Promise.resolve(true)),
         getSelectedStorageBackend: vi.fn(() => "basic_text"),
         setUsePlainTextEncryption: vi.fn(),
-        encryptString: vi.fn((plaintext: string) => Buffer.from(PREFIX + plaintext, "utf8")),
-        decryptString: vi.fn((buf: Buffer) => {
+        encryptStringAsync: vi.fn((plaintext: string) => Promise.resolve(Buffer.from(PREFIX + plaintext, "utf8"))),
+        decryptStringAsync: vi.fn((buf: Buffer) => {
             const s = buf.toString("utf8");
-            if (!s.startsWith(PREFIX)) throw new Error("Failed to decrypt");
-            return s.slice(PREFIX.length);
+            if (!s.startsWith(PREFIX)) return Promise.reject(new Error("Failed to decrypt"));
+            return Promise.resolve({ result: s.slice(PREFIX.length), shouldReEncrypt: false });
         }),
     },
 }));
@@ -86,12 +86,12 @@ describe("Store secret encryption (safeStorage)", () => {
 
     beforeEach(() => {
         backing.clear();
-        vi.mocked(safeStorage.decryptString).mockClear();
+        vi.mocked(safeStorage.decryptStringAsync).mockClear();
         // Restore the default reversible decrypt implementation between tests.
-        vi.mocked(safeStorage.decryptString).mockImplementation((buf: Buffer) => {
+        vi.mocked(safeStorage.decryptStringAsync).mockImplementation((buf: Buffer) => {
             const s = buf.toString("utf8");
-            if (!s.startsWith(PREFIX)) throw new Error("Failed to decrypt");
-            return s.slice(PREFIX.length);
+            if (!s.startsWith(PREFIX)) return Promise.reject(new Error("Failed to decrypt"));
+            return Promise.resolve({ result: s.slice(PREFIX.length), shouldReEncrypt: false });
         });
     });
 
@@ -107,9 +107,9 @@ describe("Store secret encryption (safeStorage)", () => {
     it("throws SafeStorageDecryptionError when the stored secret cannot be decrypted", async () => {
         await store.setSecret(KEY, "s3cr3t");
         // Simulate a transient keychain failure (e.g. keychain locked / ACL invalidated by re-sign).
-        vi.mocked(safeStorage.decryptString).mockImplementationOnce(() => {
-            throw new Error("keychain unavailable");
-        });
+        vi.mocked(safeStorage.decryptStringAsync).mockImplementationOnce(() =>
+            Promise.reject(new Error("keychain unavailable")),
+        );
 
         await expect(store.getSecret(KEY)).rejects.toBeInstanceOf(SafeStorageDecryptionError);
     });
@@ -126,9 +126,9 @@ describe("Store secret encryption (safeStorage)", () => {
 
         it("is true when a stored secret exists but cannot be decrypted", async () => {
             await store.setSecret(KEY, "s3cr3t");
-            vi.mocked(safeStorage.decryptString).mockImplementationOnce(() => {
-                throw new Error("keychain unavailable");
-            });
+            vi.mocked(safeStorage.decryptStringAsync).mockImplementationOnce(() =>
+                Promise.reject(new Error("keychain unavailable")),
+            );
             await expect(store.isSecretUndecryptable(KEY)).resolves.toBe(true);
         });
 
@@ -150,8 +150,8 @@ describe("Store secret encryption (safeStorage)", () => {
     describe("basic_text -> plaintext migration", () => {
         // The private migration step normally runs via prepareSafeStorage on a relaunch with
         // safeStorageBackendMigrate set; drive it directly to keep the singleton harness simple.
-        const migrate = (): void =>
-            (store as unknown as { migrateBasicTextToPlaintext(): void }).migrateBasicTextToPlaintext();
+        const migrate = (): Promise<void> =>
+            (store as unknown as { migrateBasicTextToPlaintext(): Promise<void> }).migrateBasicTextToPlaintext();
 
         const GOOD_CIPHERTEXT = Buffer.from(`${PREFIX}goodsecret`, "utf8").toString("base64");
         const BAD_CIPHERTEXT = Buffer.from("not-decryptable", "utf8").toString("base64");
@@ -161,11 +161,11 @@ describe("Store secret encryption (safeStorage)", () => {
             backing.set("safeStorageBackendMigrate", true);
         });
 
-        it("migrates all secrets to plaintext and records the plaintext backend", () => {
+        it("migrates all secrets to plaintext and records the plaintext backend", async () => {
             backing.set("safeStorage", { good: GOOD_CIPHERTEXT });
             backing.set("safeStorage.good", GOOD_CIPHERTEXT);
 
-            migrate();
+            await migrate();
 
             expect(backing.get("safeStorage.good")).toBe("goodsecret");
             expect(backing.get("safeStorageBackend")).toBe("plaintext");
@@ -174,12 +174,12 @@ describe("Store secret encryption (safeStorage)", () => {
             expect(app.relaunch).toHaveBeenCalled();
         });
 
-        it("defers the whole migration when any secret cannot be decrypted", () => {
+        it("defers the whole migration when any secret cannot be decrypted", async () => {
             backing.set("safeStorage", { good: GOOD_CIPHERTEXT, bad: BAD_CIPHERTEXT });
             backing.set("safeStorage.good", GOOD_CIPHERTEXT);
             backing.set("safeStorage.bad", BAD_CIPHERTEXT);
 
-            migrate();
+            await migrate();
 
             // Nothing may be rewritten: recording "plaintext" while `bad` is still ciphertext would
             // make the next launch re-encrypt the ciphertext as though it were the secret itself,
