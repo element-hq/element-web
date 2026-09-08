@@ -27,6 +27,7 @@ import { type UnstableBundledUrlPreviewSingle, type RoomMessageEventContent } fr
 import SettingsStore from "../settings/SettingsStore";
 import { uploadFile } from "../ContentMessages";
 import { mediaFromMxc } from "../customisations/Media";
+import { type EncryptedFile } from "matrix-js-sdk/src/types";
 
 /**
  * Build the mentions information based on the editor model (and any related events):
@@ -138,6 +139,7 @@ export async function attachUrlPreviews(
     urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot,
     content: RoomMessageEventContent,
     messageHasLinks: boolean,
+    encryptedImageCache: ReadonlyMap<string, EncryptedFile> = new Map(),
 ): Promise<boolean> {
     if (!SettingsStore.getValue("feature_msc4095_url_preview_bundle")) return false;
 
@@ -187,22 +189,36 @@ export async function attachUrlPreviews(
 
             if (preview.image?.mxcImageFull !== undefined) {
                 if (isRoomEncrypted) {
-                    try {
-                        // image url from homeserver assumed to not be malformed
-                        const httpUrl = mediaFromMxc(preview.image.mxcImageFull).srcHttp!;
-                        const blob = await (await fetch(httpUrl, { signal: abortController.signal })).blob();
-                        const { file, url } = await uploadFile(client, room.roomId, blob, undefined, abortController);
-
-                        if (file) {
-                            out["beeper:image:encryption"] = file;
-                        } else if (url) {
-                            console.error(
-                                `uploading file to room_id=${room.roomId}, expected EncryptedFile, got (unencrypted) URL instead`,
+                    // When editing, the preview image already has an EncryptedFile from the event's
+                    // existing bundle: reuse it. Its mxc points at the ciphertext, so re-uploading
+                    // that would encrypt the image a second time and produce an undecryptable image.
+                    const alreadyEncrypted = encryptedImageCache.get(preview.link);
+                    if (alreadyEncrypted !== undefined) {
+                        out["beeper:image:encryption"] = alreadyEncrypted;
+                    } else {
+                        try {
+                            // image url from homeserver assumed to not be malformed
+                            const httpUrl = mediaFromMxc(preview.image.mxcImageFull).srcHttp!;
+                            const blob = await (await fetch(httpUrl, { signal: abortController.signal })).blob();
+                            const { file, url } = await uploadFile(
+                                client,
+                                room.roomId,
+                                blob,
+                                undefined,
+                                abortController,
                             );
-                        }
-                    } catch (e) {
-                        if (!abortController.signal.aborted) {
-                            console.error(e);
+
+                            if (file) {
+                                out["beeper:image:encryption"] = file;
+                            } else if (url) {
+                                console.error(
+                                    `uploading file to room_id=${room.roomId}, expected EncryptedFile, got (unencrypted) URL instead`,
+                                );
+                            }
+                        } catch (e) {
+                            if (!abortController.signal.aborted) {
+                                console.error(e);
+                            }
                         }
                     }
                 } else {

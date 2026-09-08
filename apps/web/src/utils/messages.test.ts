@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { type IContent } from "matrix-js-sdk/src/matrix";
+import { type EncryptedFile } from "matrix-js-sdk/src/types";
 import { type UrlPreview, type MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { createTestClient, mkEvent, mkRoom } from "test-utils";
@@ -104,6 +105,38 @@ describe("attachUrlPreviews", () => {
                 "matrix:image:size": 1234,
             }),
         );
+    });
+
+    it("reuses the bundled EncryptedFile instead of re-uploading when editing in an encrypted room", async () => {
+        vi.spyOn(mxRoom, "hasEncryptionStateEvent").mockReturnValue(true);
+        // the encrypted path shows a pending event while it uploads
+        mxRoom.addPendingEvent = vi.fn();
+        mxRoom.updatePendingEvent = vi.fn();
+        mxRoom.removePendingEvent = vi.fn();
+        const fetchSpy = vi.spyOn(globalThis, "fetch");
+        const encryptedFile = { url: "mxc://server/encrypted-img" } as unknown as EncryptedFile;
+
+        const content = makeContent();
+        await attachUrlPreviews(
+            mxClient,
+            mxRoom,
+            snapshot({
+                imageThumb: "blob:http://localhost/thumb",
+                imageFull: "blob:http://localhost/full",
+                mxcImageFull: "mxc://server/encrypted-img",
+                imageType: "image/png",
+                width: 100,
+                height: 50,
+                playable: false,
+            }),
+            content,
+            true,
+            new Map([["https://example.com", encryptedFile]]),
+        );
+
+        expect(content["com.beeper.linkpreviews"]![0]["beeper:image:encryption"]).toBe(encryptedFile);
+        expect(content["com.beeper.linkpreviews"]![0]["og:image"]).toBeUndefined();
+        expect(fetchSpy).not.toHaveBeenCalled();
     });
 });
 
