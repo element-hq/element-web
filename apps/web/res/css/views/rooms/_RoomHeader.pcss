@@ -18,6 +18,13 @@ Please see LICENSE files in the repository root for full details.
         /* For enhanced visibility under contrast control */
         outline: 1px solid transparent;
     }
+
+    /* The header's icons are Compound's solid set; the call's minimise, maximise and pop-out icons only
+       exist as outlines, which look heavy-handed at the solid icons' size. Drawn a little smaller, they sit
+       more comfortably next to their neighbours without changing the button's footprint. */
+    .mx_RoomHeader_outlineIcon svg {
+        transform: scale(0.85);
+    }
 }
 
 .mx_RoomHeader:hover {
