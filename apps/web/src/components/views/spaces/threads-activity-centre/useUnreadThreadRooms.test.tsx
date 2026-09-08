@@ -15,6 +15,7 @@ import {
     MatrixEventEvent,
     NotificationCountType,
     PendingEventOrdering,
+    ReceiptType,
     Room,
 } from "matrix-js-sdk/src/matrix";
 import { renderHook, act } from "test-utils-rtl";
@@ -255,6 +256,39 @@ describe("useUnreadThreadRooms", () => {
         expect(greatestNotificationLevel).toEqual(NotificationLevel.Highlight);
     });
 
+    it("drops a thread we have read even while the server count is still stale", async () => {
+        // Reading echoes a receipt locally, but the homeserver's `total` count only clears on a
+        // later sync. Without trusting the receipt, the thread lingers in the list, counter and
+        // all, for as long as the server takes to catch up.
+        const threadInfo = await populateThread({
+            room: room,
+            client: client,
+            authorId: "@foo:bar",
+            participantUserIds: ["@fee:bar"],
+        });
+        room.setThreadUnreadNotificationCount(threadInfo.thread.id, NotificationCountType.Total, 2);
+        vi.spyOn(threadInfo.thread, "hasCurrentUserParticipated", "get").mockReturnValue(true);
+
+        client.getVisibleRooms = vi.fn().mockReturnValue([room]);
+
+        const wrapper = ({ children }: { children: React.ReactNode }) => (
+            <MatrixClientContext.Provider value={client}>{children}</MatrixClientContext.Provider>
+        );
+
+        // Before reading, the thread is listed with its count
+        const before = renderHook(() => useUnreadThreadRooms(true), { wrapper });
+        expect(before.result.current.participatingThreads.length).toEqual(1);
+        expect(before.result.current.participatingThreads[0].notificationCount).toEqual(2);
+
+        // Read the thread: a local echo receipt lands on its latest event, the server count doesn't move
+        room.addLocalEchoReceipt(client.getSafeUserId(), threadInfo.thread.events.at(-1)!, ReceiptType.Read);
+
+        // Recompute from scratch: the count is still stale, but the thread is gone from the list
+        const after = renderHook(() => useUnreadThreadRooms(true), { wrapper });
+        expect(room.getThreadUnreadNotificationCount(threadInfo.thread.id, NotificationCountType.Total)).toEqual(2);
+        expect(after.result.current.participatingThreads.length).toEqual(0);
+    });
+
     it("exposes the server notification count so the row can display it", async () => {
         const threadInfo = await populateThread({
             room: room,
@@ -385,12 +419,16 @@ describe("useUnreadThreadRooms", () => {
         // Thread.hasCurrentUserParticipated is server-driven and lags behind the local
         // reply, so it is still false. The thread should still be categorised as "mine"
         // because we sent a message in it locally.
+        //
+        // Alice replies again after us, so the thread is genuinely unread: had we sent the
+        // last event, we would have read it by definition and it would leave the list.
         const threadInfo = await populateThread({
             room: room,
             client: client,
             authorId: "@alice:bar",
-            // reply authored by the current user (@userId:matrix.org)
-            participantUserIds: ["@userId:matrix.org"],
+            // replies cycle as participants[i % len]: reply 1 is us, reply 2 is Alice
+            participantUserIds: ["@alice:bar", "@userId:matrix.org"],
+            length: 3,
         });
         // Lingering server total count keeps the thread unread.
         room.setThreadUnreadNotificationCount(threadInfo.thread.id, NotificationCountType.Total, 1);
