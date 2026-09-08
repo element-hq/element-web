@@ -70,6 +70,7 @@ describe("tagRoom()", () => {
                     room,
                     null, // remove
                     tag, // add
+                    false,
                 );
             },
         );
