@@ -25,6 +25,10 @@ export interface ElementWebHostBridgeOptions {
  * Stateless, so its identity does not matter: the component forwards to whichever bridge it was most
  * recently given. What Element Web asks of the component goes the other way, through the component's
  * `ElementCallHandle`, which the model holds (`setComponentHandle`).
+ *
+ * The callbacks are bound (arrow properties): Element Call may pull one off the bridge and call it on its
+ * own (it does so for `close`, whose presence it also reads), so none of them may depend on `this` being
+ * the bridge at the call.
  */
 export class ElementWebHostBridge implements ElementCallHostBridge {
     public readonly supportsReactions = true;
@@ -40,7 +44,7 @@ export class ElementWebHostBridge implements ElementCallHostBridge {
         private readonly opts: ElementWebHostBridgeOptions,
     ) {}
 
-    public async setAlwaysOnScreen(alwaysOnScreen: boolean): Promise<void> {
+    public readonly setAlwaysOnScreen = async (alwaysOnScreen: boolean): Promise<void> => {
         // Only one call can be on screen. Before this one becomes sticky, hang up every other connected
         // call, as `CallView`'s stickyPromise does for the iframe transport (through WidgetMessaging's
         // UpdateAlwaysOnScreen handling).
@@ -49,25 +53,25 @@ export class ElementWebHostBridge implements ElementCallHostBridge {
             await Promise.all(others.map((call) => call.disconnect()));
         }
         ActiveWidgetStore.instance.setWidgetPersistence(this.opts.widgetId, this.opts.widgetRoomId, alwaysOnScreen);
-    }
+    };
 
-    public async contentLoaded(): Promise<void> {
+    public readonly contentLoaded = async (): Promise<void> => {
         this.call.markReady();
-    }
+    };
 
-    public async notifyJoined(): Promise<void> {
+    public readonly notifyJoined = async (): Promise<void> => {
         this.call.handleJoined();
-    }
+    };
 
-    public async notifyHungUp(): Promise<void> {
+    public readonly notifyHungUp = async (): Promise<void> => {
         this.call.handleHangup();
-    }
+    };
 
-    public async notifyDeviceMute(state: DeviceMuteState): Promise<void> {
+    public readonly notifyDeviceMute = async (state: DeviceMuteState): Promise<void> => {
         this.call.handleDeviceMute(state);
-    }
+    };
 
-    public async close(): Promise<void> {
+    public readonly close = async (): Promise<void> => {
         this.call.handleClose();
-    }
+    };
 }

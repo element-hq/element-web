@@ -61,6 +61,15 @@ describe("ElementWebHostBridge", () => {
         expect(call.handleClose).toHaveBeenCalled();
     });
 
+    it("works when Element Call calls a callback it took off the bridge", async () => {
+        // The component reads `close` off the bridge to see whether it exists, and calls what it got
+        const { close, notifyJoined } = bridge;
+        await close();
+        expect(call.handleClose).toHaveBeenCalled();
+        await notifyJoined();
+        expect(call.handleJoined).toHaveBeenCalled();
+    });
+
     it("sets persistence when asked to stay on screen", async () => {
         await bridge.setAlwaysOnScreen(true);
         expect(setWidgetPersistence).toHaveBeenCalledWith(widgetId, roomId, true);
