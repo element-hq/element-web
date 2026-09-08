@@ -11,7 +11,7 @@ import { EventType } from "matrix-js-sdk/src/matrix";
 import type { EmptyObject, Room } from "matrix-js-sdk/src/matrix";
 import type { MatrixDispatcher } from "../../dispatcher/dispatcher";
 import type { ActionPayload } from "../../dispatcher/payloads";
-import type { Filter, FilterKey } from "./skip-list/filters";
+import type { AnyFilter, Filter, FilterKey } from "./skip-list/filters";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import SettingsStore from "../../settings/SettingsStore";
 import defaultDispatcher from "../../dispatcher/dispatcher";
@@ -98,6 +98,12 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      * Defines the display order of sections.
      */
     private sortedTags: string[] = [];
+
+    /** Works out which section a room belongs to. Rebuilt when the sections change. */
+    private sectionFilter?: SectionFilter;
+
+    /** The room that was open the last time the filters were applied to every room. */
+    private lastFilteredRoomId?: string | null;
 
     private readonly msc3946ProcessDynamicPredecessor: boolean;
 
@@ -491,13 +497,11 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     }
 
     /**
-     * Get the list of filters to be used in the skip list, including the section filters.
+     * Get the list of filters to be used in the skip list, including the section filter.
      */
-    private getSkipListFilters(): Filter[] {
-        return [
-            ...this.filterByFilterKey.values(),
-            ...this.sortedTags.map((tag) => new SectionFilter(tag, this.sortedTags)),
-        ];
+    private getSkipListFilters(): AnyFilter[] {
+        if (!this.sectionFilter) this.sectionFilter = new SectionFilter(this.sortedTags);
+        return [...this.filterByFilterKey.values(), this.sectionFilter];
     }
 
     /**
@@ -543,7 +547,13 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      * Does not emit an event.
      */
     public updateRoomSkipList(): void {
-        this.roomSkipList?.useNewFilters(this.getSkipListFilters());
+        if (!this.roomSkipList) return;
+        // UnreadFilter is the only filter that depends on which room is open, so there is
+        // nothing to redo unless that room changed.
+        const currentRoomId = SDKContextClass.instance.roomViewStore.getRoomId();
+        if (currentRoomId === this.lastFilteredRoomId) return;
+        this.lastFilteredRoomId = currentRoomId;
+        this.roomSkipList.useNewFilters(this.getSkipListFilters());
     }
 
     /**
@@ -612,6 +622,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      */
     private loadSections(): void {
         this.sortedTags = getOrderedSectionTags();
+        this.sectionFilter = undefined;
     }
 }
 

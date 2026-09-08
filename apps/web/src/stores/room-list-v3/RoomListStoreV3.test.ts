@@ -1043,6 +1043,48 @@ describe("RoomListStoreV3", () => {
                 expect(noShowboldRooms).not.toContain(rooms[75]);
                 expect(showboldRooms).toHaveLength(2);
             });
+
+            it("re-applies the filters when the current room changed", async () => {
+                // Ensure that Notifications.showbold is off
+                vi.spyOn(SettingsStore, "getValue").mockImplementation(() => false);
+
+                // Given room 27 is unread
+                const { client, rooms } = getClientAndRooms();
+                const { spaceRoom, roomIds } = createSpace(rooms, [6, 8, 13, 27, 75], client);
+
+                vi.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation((room) => {
+                    const state = {
+                        // Only 27 has notifications
+                        hasUnreadCount: [rooms[27]].includes(room),
+                        on: vi.fn(),
+                        off: vi.fn(),
+                    } as unknown as RoomNotificationState;
+                    return state;
+                });
+
+                // And we are in room 13, which is read
+                vi.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(rooms[13].roomId);
+
+                setupMocks(spaceRoom, roomIds);
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                const unreadRooms = (): Room[] =>
+                    store.getSortedRoomsInActiveSpace([FilterEnum.UnreadFilter]).sections.flatMap((s) => s.rooms);
+
+                // Then room 13 is kept in the list even though it is read
+                expect(unreadRooms()).toEqual(expect.arrayContaining([rooms[27], rooms[13]]));
+
+                // But when we move to room 75 and the room list refreshes
+                vi.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(rooms[75].roomId);
+                store.updateRoomSkipList();
+
+                // Then room 75 is kept instead of room 13
+                const afterRoomChange = unreadRooms();
+                expect(afterRoomChange).toContain(rooms[27]);
+                expect(afterRoomChange).toContain(rooms[75]);
+                expect(afterRoomChange).not.toContain(rooms[13]);
+            });
         });
 
         describe("getServerNoticeRooms", () => {
@@ -1190,6 +1232,29 @@ describe("RoomListStoreV3", () => {
                 CHATS_TAG,
                 DefaultTagID.LowPriority,
             ]);
+        });
+
+        it("moves a room to another section when it is tagged at runtime", async () => {
+            enableSections();
+            const { rooms } = getClientAndRooms();
+
+            const store = new RoomListStoreV3Class(dispatcher);
+            await store.start();
+
+            // Given an untagged room sits in the Chats section
+            const room = rooms[3];
+            let sections = store.getSortedRoomsInActiveSpace().sections;
+            expect(findSection(sections, CHATS_TAG)!.rooms).toContain(room);
+            expect(findSection(sections, DefaultTagID.Favourite)!.rooms).not.toContain(room);
+
+            // When the user favourites it
+            room.tags[DefaultTagID.Favourite] = {};
+            dispatcher.dispatch({ action: "MatrixActions.Room.tags", room }, true);
+
+            // Then it moves to the Favourites section
+            sections = store.getSortedRoomsInActiveSpace().sections;
+            expect(findSection(sections, DefaultTagID.Favourite)!.rooms).toContain(room);
+            expect(findSection(sections, CHATS_TAG)!.rooms).not.toContain(room);
         });
 
         it("does not load the sections before the matrix client is ready", () => {

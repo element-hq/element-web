@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import type { Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import type { Sorter, SortingAlgorithm } from "./sorters";
-import type { Filter, FilterKey } from "./filters";
+import type { AnyFilter, FilterKey } from "./filters";
 import { RoomNode } from "./RoomNode";
 import { shouldPromote } from "./utils";
 import { Level } from "./Level";
@@ -25,7 +25,7 @@ export class RoomSkipList implements Iterable<Room> {
 
     public constructor(
         private sorter: Sorter,
-        private filters: Filter[] = [],
+        private filters: AnyFilter[] = [],
     ) {}
 
     private reset(): void {
@@ -81,7 +81,7 @@ export class RoomSkipList implements Iterable<Room> {
      * Change the filters used by the skip list.
      * This will apply the new filters to all existing nodes.
      */
-    public useNewFilters(filters: Filter[]): void {
+    public useNewFilters(filters: AnyFilter[]): void {
         this.filters = filters;
         for (const node of this.roomNodeMap.values()) {
             node.applyFilters(this.filters);
