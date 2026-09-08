@@ -73,7 +73,7 @@ const baseBodyTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [MsgType.Emote, TextualBodyFactory],
     [MsgType.Image, ImageBodyFactory],
     [MsgType.File, (props: IBodyProps) => renderMBody(props, FileBodyFactory)!],
-    [MsgType.Audio, MVoiceOrAudioBody],
+    // [MsgType.Audio, MVoiceOrAudioBody],
     [MsgType.Video, VideoBodyFactory],
 ]);
 const baseEvTypes = new Map<string, React.ComponentType<IBodyProps>>([
