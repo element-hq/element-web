@@ -15,12 +15,6 @@ const safeHtml = sanitizeHtml(untrustedHtml);
 const canOpen = isUrlPermitted(untrustedUrl);
 ```
 
-The same API is available from the explicit HTML entry point:
-
-```ts
-import { sanitizeHtml } from "@element-hq/element-web-shared-utils/html";
-```
-
 The package does not import React, access browser globals, or depend on
 Element Web application code.
 

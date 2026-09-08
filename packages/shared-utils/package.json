@@ -13,15 +13,10 @@
     "engines": {
         "node": ">=20.0.0"
     },
-    "types": "./lib/index.d.ts",
+    "types": "./lib/element-web-shared-utils.d.ts",
     "exports": {
         ".": {
-            "types": "./lib/index.d.ts",
-            "import": "./lib/element-web-shared-utils.js",
-            "require": "./lib/element-web-shared-utils.umd.cjs"
-        },
-        "./html": {
-            "types": "./lib/index.d.ts",
+            "types": "./lib/element-web-shared-utils.d.ts",
             "import": "./lib/element-web-shared-utils.js",
             "require": "./lib/element-web-shared-utils.umd.cjs"
         }
@@ -38,6 +33,7 @@
         "coverage:diff": "diff-cover --config-file ../../diff-cover.toml coverage/lcov.info"
     },
     "devDependencies": {
+        "@microsoft/api-extractor": "^7.56.0",
         "@types/sanitize-html": "2.16.1",
         "@types/node": "catalog:ts6",
         "@typescript/native": "catalog:",
