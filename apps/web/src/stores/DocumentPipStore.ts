@@ -35,6 +35,11 @@ interface Shown {
     call: ElementCall;
     persistKey: string;
     pipWindow: Window;
+    /**
+     * Whether the call was floating in Element Web's own PiP when it left for the window, as opposed to
+     * filling the room's call view. It goes back to wherever it came from.
+     */
+    fromPipView: boolean;
 }
 
 /**
@@ -109,18 +114,21 @@ export class DocumentPipStore extends TypedEventEmitter<DocumentPipStoreEvent, E
             return;
         }
 
+        const roomViewStore = SDKContextClass.instance.roomViewStore;
+        const fromPipView = !(roomViewStore.isViewingCall() && roomViewStore.getRoomId() === call.roomId);
+
         prepareDocument(pipWindow.document);
         PersistedElement.detach(persistKey, pipWindow.document.body);
-        this.shown = { call, persistKey, pipWindow };
+        this.shown = { call, persistKey, pipWindow, fromPipView };
 
         pipWindow.addEventListener("pagehide", this.onWindowClosed);
         call.on(CallEvent.ConnectionState, this.onConnectionState);
-        SDKContextClass.instance.roomViewStore.on(UPDATE_EVENT, this.onRoomViewChanged);
+        roomViewStore.on(UPDATE_EVENT, this.onRoomViewChanged);
 
         // The call has left the room view: show the timeline there, as minimising into Element Web's own
-        // PiP does. Opening the call view again brings it back (see `onRoomViewChanged`).
-        const roomViewStore = SDKContextClass.instance.roomViewStore;
-        if (roomViewStore.isViewingCall() && roomViewStore.getRoomId() === call.roomId) {
+        // PiP does. Opening the call view again brings it back (see `onRoomViewChanged`), as does closing
+        // the window (see `release`).
+        if (!fromPipView) {
             defaultDispatcher.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
                 room_id: call.roomId,
@@ -162,9 +170,28 @@ export class DocumentPipStore extends TypedEventEmitter<DocumentPipStoreEvent, E
         this.shown = null;
         shown.pipWindow.removeEventListener("pagehide", this.onWindowClosed);
         shown.call.off(CallEvent.ConnectionState, this.onConnectionState);
-        SDKContextClass.instance.roomViewStore.off(UPDATE_EVENT, this.onRoomViewChanged);
+        const roomViewStore = SDKContextClass.instance.roomViewStore;
+        roomViewStore.off(UPDATE_EVENT, this.onRoomViewChanged);
         PersistedElement.reattach(shown.persistKey);
         this.emit(DocumentPipStoreEvent.Update);
+
+        // Back to where it came from. A call that filled the room view returns there, provided it is still
+        // running and the user is still in that room (and did not just open the call view themselves, which
+        // is what closed the window); otherwise Element Web's floating PiP picks it up, as it does for a
+        // call that was floating there before.
+        if (
+            !shown.fromPipView &&
+            shown.call.connected &&
+            roomViewStore.getRoomId() === shown.call.roomId &&
+            !roomViewStore.isViewingCall()
+        ) {
+            defaultDispatcher.dispatch<ViewRoomPayload>({
+                action: Action.ViewRoom,
+                room_id: shown.call.roomId,
+                metricsTrigger: undefined,
+                view_call: true,
+            });
+        }
     }
 }
 
