@@ -6,7 +6,7 @@
  */
 
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
-import { type IPreviewUrlResponse, type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
+import { type IPreviewUrlResponse, type MatrixClient, MatrixError, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { decode } from "html-entities";
 
 import type { UrlPreview } from "shared-types";
@@ -133,10 +133,11 @@ export class UrlPreviewFetcher {
     /**
      * Fetch a preview for a single URL, returning a cached result if available.
      * @param link The URL to preview.
+     * @param event The Matrix event to preview.
      * @param loadMedia Whether to include the preview image. Pass false when media is hidden.
      */
-    public async fetchPreview(link: string, loadMedia: boolean): Promise<UrlPreview | null> {
-        const moduleResponse = await this.previewModuleApi.getPreview(link);
+    public async fetchPreview(link: string, loadMedia: boolean, event?: MatrixEvent): Promise<UrlPreview | null> {
+        const moduleResponse = await this.previewModuleApi.getPreview(link, event);
         if (moduleResponse) {
             return moduleResponse;
         }
@@ -226,11 +227,16 @@ export class UrlPreviewFetcher {
      */
     public async previewFromBundle(
         single: UnstableBundledUrlPreviewSingle,
-        body: string,
+        event: MatrixEvent,
         loadMedia = false,
     ): Promise<UrlPreview | null> {
         if (!URL.canParse(single.matched_url)) {
             return null;
+        }
+        const body = event.getContent().body;
+        const modulePreview = await this.previewModuleApi.getPreview(single.matched_url, event);
+        if (modulePreview) {
+            return modulePreview;
         }
         const url = new URL(single.matched_url);
         if (url.protocol !== "http:" && url.protocol !== "https:") {

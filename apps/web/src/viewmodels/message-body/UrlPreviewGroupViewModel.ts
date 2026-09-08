@@ -187,7 +187,7 @@ export class UrlPreviewGroupViewModel
                     await Promise.all(
                         bundledPreviews
                             .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
-                            .map((preview) => this.fetcher.previewFromBundle(preview, content.body, loadMedia)),
+                            .map((preview) => this.fetcher.previewFromBundle(preview, this.props.mxEvent, loadMedia)),
                     )
                 ).filter((p) => !!p);
             }
@@ -196,7 +196,7 @@ export class UrlPreviewGroupViewModel
         previews ??= await Promise.all(
             this.links
                 .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
-                .map((link) => this.fetcher.fetchPreview(link, loadMedia)),
+                .map((link) => this.fetcher.fetchPreview(link, loadMedia, this.props.mxEvent)),
         );
 
         this.snapshot.merge({
