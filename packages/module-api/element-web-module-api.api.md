@@ -330,12 +330,14 @@ export type LocationRenderFunction = () => JSX.Element;
 export interface MatrixEvent {
     content: Record<string, unknown>;
     eventId: string;
+    isEncrypted: boolean;
     originServerTs: number;
     roomId: string;
     sender: string;
     stateKey?: string;
     type: string;
     unsigned: Record<string, unknown>;
+    wireContent?: Record<string, unknown>;
 }
 
 // @public
@@ -457,8 +459,13 @@ export interface RichVariables {
 
 // @public
 export interface Room {
+    // @alpha
+    findEventById(eventId: string): MatrixEvent | null;
     getLastActiveTimestamp: () => number;
+    // @alpha
+    getStateEvent: (eventType: string, stateKey?: string) => Watchable<MatrixEvent | null>;
     id: string;
+    isEncrypted: () => boolean;
     name: Watchable<string>;
 }
 
