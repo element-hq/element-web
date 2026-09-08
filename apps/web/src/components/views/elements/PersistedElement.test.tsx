@@ -48,6 +48,21 @@ describe("PersistedElement", () => {
         expect(child().style.display).toBe("none");
     });
 
+    it("hands the tree to a remaining placeholder rather than hiding it", async () => {
+        // Two placeholders at once, as when the call moves between containers within one commit
+        const first = mount();
+        const second = mount();
+        await act(async () => {});
+        expect(child().style.display).toBe("block");
+
+        first.unmount();
+        await act(async () => {});
+        expect(child().style.display).toBe("block");
+
+        second.unmount();
+        expect(child().style.display).toBe("none");
+    });
+
     it("can move its DOM tree into another host and back", async () => {
         const { unmount } = mount();
         await act(async () => {});
