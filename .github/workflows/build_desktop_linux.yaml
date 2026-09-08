@@ -209,8 +209,7 @@ jobs:
                   assert_contains_string() { [[ "$1" == *"$2"* ]]; }
                   ! assert_contains_string "$LIBS" "libcrypto.so.1.1"
                   if [ "$SQLCIPHER_BUNDLED" == "1" ]; then
-                      ! assert_contains_string "$LIBS" "libsqlcipher
-                      .so.0"
+                      ! assert_contains_string "$LIBS" "libsqlcipher.so.0"
                   else
                       assert_contains_string "$LIBS" "libsqlcipher.so.0"
                   fi
