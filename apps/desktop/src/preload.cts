@@ -34,6 +34,8 @@ const CHANNELS = [
     "homeserverUrl",
     "serverSupportedVersions",
     "showToast",
+    "x509",
+    "x509Reply",
 ];
 
 contextBridge.exposeInMainWorld("electron", {
