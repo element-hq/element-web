@@ -1,11 +1,11 @@
 # syntax=docker.io/docker/dockerfile:1.26-labs@sha256:63e440b412b6acba117974e793b7e7f702e58ee65e044bdff1b8d388ee0d853b
-# Docker image to facilitate building Element Desktop's native bits using a glibc version (2.31)
-# with broader compatibility, down to Debian bullseye & Ubuntu focal.
+# Docker image to facilitate building Element Desktop's native bits using a glibc version (2.36)
+# with broader compatibility, down to Debian bookworm (2.36) & Ubuntu noble (2.39).
 
 # PNPM source
 FROM ghcr.io/pnpm/pnpm:12.0.0@sha256:bce5ae25ef95edd79e696d7fa8489b80561ef660100fd35bd0286d0f90db3dcc AS pnpm
 
-FROM rust:bullseye@sha256:4730e387a220a08a365c77da3096544dde214f9d796c16284d4be45438cad4a9
+FROM rust:bookworm@sha256:82150a52ec202c1b14d7817e14516c392bb7f5cfebd88f1ed531cb37ebd39922
 
 ENV DEBIAN_FRONTEND=noninteractive
 

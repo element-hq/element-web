@@ -64,7 +64,7 @@ on:
                 default: "tar.gz deb"
 env:
     SQLCIPHER_BUNDLED: ${{ inputs.sqlcipher == 'static' && '1' || '' }}
-    MAX_GLIBC: 2.31 # bullseye-era glibc, used by glibc-check.sh
+    MAX_GLIBC: 2.36 # bookworm-era glibc, used by glibc-check.sh
 permissions: {} # No permissions required
 jobs:
     build:
