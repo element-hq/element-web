@@ -202,8 +202,18 @@ export default class PersistedElement extends React.Component<IProps> {
     }
 
     public componentWillUnmount(): void {
-        PersistedElement.instances.get(this.props.persistKey)?.delete(this);
-        this.updateChildVisibility(this.child, false);
+        const instances = PersistedElement.instances.get(this.props.persistKey);
+        instances?.delete(this);
+        if (instances?.size) {
+            // Another placeholder for this tree is mounted: the content is moving between containers, and
+            // both were rendered in the same commit, so whichever rendered the tree last owns the child's
+            // ref, which may well be this one. Hand the tree over to the most recently mounted survivor by
+            // rendering it again with that one's wrapper, which then places the child; hiding it here would
+            // hide it for good.
+            [...instances].at(-1)!.renderApp();
+        } else {
+            this.updateChildVisibility(this.child, false);
+        }
         this.resizeObserver.disconnect();
         window.removeEventListener("resize", this.repositionChild);
         dis.unregister(this.dispatcherRef);
