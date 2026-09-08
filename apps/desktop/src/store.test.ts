@@ -60,6 +60,7 @@ vi.mock("electron", () => ({
         showMessageBox: vi.fn(() => Promise.resolve({ response: 1 })),
     },
     safeStorage: {
+        isEncryptionAvailable: vi.fn(() => true),
         isAsyncEncryptionAvailable: vi.fn(() => Promise.resolve(true)),
         getSelectedStorageBackend: vi.fn(() => "basic_text"),
         setUsePlainTextEncryption: vi.fn(),
@@ -130,6 +131,7 @@ describe("Store secret encryption (safeStorage)", () => {
         backing.clear();
         vi.mocked(safeStorage.decryptStringAsync).mockClear();
         vi.mocked(safeStorage.encryptStringAsync).mockClear();
+        vi.mocked(safeStorage.isEncryptionAvailable).mockReturnValue(true);
         vi.mocked(safeStorage.isAsyncEncryptionAvailable).mockResolvedValue(true);
         vi.mocked(safeStorage.getSelectedStorageBackend).mockReturnValue("basic_text");
         // Restore the default reversible decrypt implementation between tests.
@@ -237,6 +239,31 @@ describe("Store secret encryption (safeStorage)", () => {
         it("falls back to plaintext when async encryption is unavailable", async () => {
             usePlatform("darwin");
             vi.mocked(safeStorage.isAsyncEncryptionAvailable).mockResolvedValue(false);
+
+            const store = freshStore();
+            await expect(store.prepareSafeStorage(SESSION)).resolves.toBe(true);
+
+            expect(backing.get("safeStorageBackend")).toBe("plaintext");
+        });
+
+        // A machine with no usable keychain - a GitHub Actions macOS runner, for instance - reports
+        // false here while the async probe does not, so both have to be consulted. Picking an
+        // encrypted backend on such a machine leaves every secret unstorable.
+        it("falls back to plaintext when the OS reports no encryption at all", async () => {
+            usePlatform("darwin");
+            vi.mocked(safeStorage.isEncryptionAvailable).mockReturnValue(false);
+
+            const store = freshStore();
+            await expect(store.prepareSafeStorage(SESSION)).resolves.toBe(true);
+
+            expect(backing.get("safeStorageBackend")).toBe("plaintext");
+            await store.setSecret(KEY, "s3cr3t");
+            await expect(store.getSecret(KEY)).resolves.toBe("s3cr3t");
+        });
+
+        it("falls back to plaintext when the async encryptor fails to initialise", async () => {
+            usePlatform("darwin");
+            vi.mocked(safeStorage.isAsyncEncryptionAvailable).mockRejectedValue(new Error("no keychain"));
 
             const store = freshStore();
             await expect(store.prepareSafeStorage(SESSION)).resolves.toBe(true);

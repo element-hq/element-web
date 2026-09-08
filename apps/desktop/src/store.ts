@@ -290,6 +290,21 @@ class Store extends ElectronStore<StoreData> {
     }
 
     /**
+     * Whether we can actually encrypt secrets.
+     *
+     * We need both `isEncryptionAvailable` and `isAsyncEncryptionAvailable` to be true to be able to encrypt secrets.
+     */
+    private async canEncrypt(): Promise<boolean> {
+        if (!safeStorage.isEncryptionAvailable()) return false;
+        try {
+            return await safeStorage.isAsyncEncryptionAvailable();
+        } catch (e) {
+            console.error("Failed to initialise the async safeStorage encryptor", e);
+            return false;
+        }
+    }
+
+    /**
      * Normalise the backend to a sane value (exclude `unknown`), respect forcePlaintext mode,
      * and ensure that if an encrypted backend is picked that encryption is available, falling back to plaintext if not.
      * @param forcePlaintext - whether to force plaintext mode
@@ -311,13 +326,13 @@ class Store extends ElectronStore<StoreData> {
             // https://github.com/electron/electron/issues/39789 https://github.com/microsoft/vscode/issues/185212
             const selectedBackend = safeStorage.getSelectedStorageBackend();
 
-            if (selectedBackend === "unknown" || !(await safeStorage.isAsyncEncryptionAvailable())) {
+            if (selectedBackend === "unknown" || !(await this.canEncrypt())) {
                 return "plaintext";
             }
             return selectedBackend;
         }
 
-        return (await safeStorage.isAsyncEncryptionAvailable()) ? "system" : "plaintext";
+        return (await this.canEncrypt()) ? "system" : "plaintext";
     }
 
     /**
