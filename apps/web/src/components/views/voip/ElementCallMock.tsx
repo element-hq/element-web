@@ -9,9 +9,10 @@
  * Mock of Element Call's public React component (`@element-hq/element-call-component`).
  *
  * Same `ElementCall` / `initializeElementCall` exports as the package, typed with the package's own
- * types (via `ElementCallComponentTypes.ts`), so `ElementCallAppTile` can load either module interchangeably.
- * Everything that would be a call UI is replaced by a member list, a dump of the configuration,
- * buttons that exercise every `HostBridge` method and a log of what the host asked for.
+ * types (via `ElementCallComponentTypes.ts`), so `ElementCallInstance` can load either module
+ * interchangeably. Everything that would be a call UI is replaced by a member list, a dump of the
+ * configuration, buttons that exercise every host bridge callback and a log of what was said in both
+ * directions: what the mock told the host, and what the host asked through the component's handle.
  *
  * Used instead of the real component when `Developer.elementCallMockComponent` is on: in Playwright
  * (Element Web's test backend has no LiveKit) and for offline development. Never loaded otherwise.
@@ -19,9 +20,8 @@
  * Not to be confused with the `ElementCall` widget model in `models/Call.ts`.
  */
 
-import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { type JSX, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { Button } from "@vector-im/compound-web";
-import { NEVER } from "rxjs";
 import { EventType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type CallMembership, MatrixRTCSessionEvent, type SessionMembershipData } from "matrix-js-sdk/src/matrixrtc";
@@ -32,24 +32,11 @@ import {
     type ConfigOptions,
     configurationForIntent,
     type DeviceMuteState,
+    type ElementCallHandle,
+    type ElementCallHostBridge,
     type ElementCallProps,
-    type HostBridge,
     UserIntent,
 } from "./ElementCallComponentTypes";
-
-/** A bridge to nowhere, for when Element Call has no host. Same as EC's. */
-export const nullHostBridge: HostBridge = {
-    setAlwaysOnScreen: async () => {},
-    contentLoaded: async () => {},
-    notifyJoined: async () => {},
-    notifyHungUp: async () => {},
-    notifyDeviceMute: async () => {},
-    themeChange$: NEVER,
-    join$: NEVER,
-    hangUp$: NEVER,
-    deviceMute$: NEVER,
-    supportsReactions: true,
-};
 
 let initialisedWith: ConfigOptions | null = null;
 
@@ -104,17 +91,27 @@ interface LogEntry {
     text: string;
 }
 
+const NO_HOST: ElementCallHostBridge = {};
+
 export const ElementCall = ({
     client,
     roomId,
     intent = UserIntent.JoinExistingCall,
     config,
-    hostBridge = nullHostBridge,
+    hostBridge = NO_HOST,
+    ref,
+    theme,
+    language,
 }: ElementCallProps): JSX.Element => {
     const room = client.getRoom(roomId);
     const rtcSession = useMemo(() => (room === null ? null : client.matrixRTC.getRoomSession(room)), [client, room]);
 
     const params = useMemo(() => ({ ...configurationForIntent(intent), ...config }), [intent, config]);
+
+    // Like the real component, always talk to whichever bridge the host most recently gave us, without
+    // restarting anything when it is a new object.
+    const host = useRef(hostBridge);
+    host.current = hostBridge;
 
     const memberships = useTypedEventEmitterState(
         rtcSession ?? undefined,
@@ -123,6 +120,8 @@ export const ElementCall = ({
     );
 
     const [muteState, setMuteState] = useState<DeviceMuteState>({ audio_enabled: true, video_enabled: true });
+    const muteStateRef = useRef(muteState);
+    muteStateRef.current = muteState;
     const [alwaysOnScreen, setAlwaysOnScreen] = useState(false);
     const [joined, setJoined] = useState(false);
     const [log, setLog] = useState<LogEntry[]>([]);
@@ -132,8 +131,8 @@ export const ElementCall = ({
 
     // Element Call tells its host it has loaded as soon as it is on screen.
     useEffect(() => {
-        void hostBridge.contentLoaded().then(() => append("→ contentLoaded"));
-    }, [hostBridge, append]);
+        void (host.current.contentLoaded?.() ?? Promise.resolve()).then(() => append("→ contentLoaded"));
+    }, [append]);
 
     // "Joining" publishes an RTC membership for this device and tells the host; "leaving" clears both.
     const membershipStateKey = `_${client.getUserId()}_${client.getDeviceId()}_m.call`;
@@ -145,15 +144,15 @@ export const ElementCall = ({
             membershipStateKey,
         );
         setJoined(true);
-        await hostBridge.notifyJoined();
+        await host.current.notifyJoined?.();
         append("→ notifyJoined");
-    }, [client, roomId, membershipStateKey, hostBridge, append]);
+    }, [client, roomId, membershipStateKey, append]);
     const leave = useCallback(async (): Promise<void> => {
         await client.sendStateEvent(roomId, EventType.GroupCallMemberPrefix, {}, membershipStateKey);
         setJoined(false);
-        await hostBridge.notifyHungUp();
+        await host.current.notifyHungUp?.();
         append("→ notifyHungUp");
-    }, [client, roomId, membershipStateKey, hostBridge, append]);
+    }, [client, roomId, membershipStateKey, append]);
 
     // Never leave a membership behind when torn down while "in call": the real component (or another
     // participant) would otherwise treat this device as still in the call, on the mock's focus.
@@ -167,37 +166,33 @@ export const ElementCall = ({
         };
     }, [client, roomId, membershipStateKey]);
 
-    // Subscribe to everything the host may ask for, acknowledge it, and behave
-    // roughly as the real thing would.
-    useEffect(() => {
-        const subs = [
-            hostBridge.themeChange$.subscribe((req) => {
-                append(`← themeChange ${JSON.stringify(req.data)}`);
-                req.reply();
-            }),
-            hostBridge.join$.subscribe((req) => {
-                append(`← join ${JSON.stringify(req.data)}`);
-                req.reply();
-                void join();
-            }),
-            hostBridge.hangUp$.subscribe((req) => {
+    // What the host may ask of us, through the component's ref: log it, and behave roughly as the real
+    // thing would. Each resolves once done, like the real handle.
+    useImperativeHandle(
+        ref,
+        (): ElementCallHandle => ({
+            join: async (devices) => {
+                append(`← join ${JSON.stringify(devices)}`);
+                await join();
+            },
+            hangUp: async () => {
                 append("← hangUp");
-                void leave().then(() => req.reply());
-            }),
-            hostBridge.deviceMute$.subscribe((req) => {
-                append(`← deviceMute ${JSON.stringify(req.data)}`);
-                setMuteState((prev) => {
-                    const next = {
-                        audio_enabled: req.data.audio_enabled ?? prev.audio_enabled,
-                        video_enabled: req.data.video_enabled ?? prev.video_enabled,
-                    };
-                    req.reply(next);
-                    return next;
-                });
-            }),
-        ];
-        return () => subs.forEach((s) => s.unsubscribe());
-    }, [hostBridge, append, join, leave]);
+                if (!joinedRef.current) throw new Error("Nothing in Element Call can hang up right now");
+                await leave();
+            },
+            setDeviceMute: async (request) => {
+                append(`← setDeviceMute ${JSON.stringify(request)}`);
+                const next = {
+                    audio_enabled: request.audio_enabled ?? muteStateRef.current.audio_enabled,
+                    video_enabled: request.video_enabled ?? muteStateRef.current.video_enabled,
+                };
+                muteStateRef.current = next;
+                setMuteState(next);
+                return next;
+            },
+        }),
+        [append, join, leave],
+    );
 
     if (rtcSession === null || room === null) {
         logger.error(`Element Call was asked to call in ${roomId}, which its host's client does not know about`);
@@ -212,7 +207,7 @@ export const ElementCall = ({
     };
 
     const setAlwaysOnScreenAndLog = async (next: boolean): Promise<void> => {
-        await hostBridge.setAlwaysOnScreen(next);
+        await host.current.setAlwaysOnScreen?.(next);
         setAlwaysOnScreen(next);
         append(`→ setAlwaysOnScreen(${next})`);
     };
@@ -220,7 +215,7 @@ export const ElementCall = ({
     const onToggleMute = async (device: keyof DeviceMuteState): Promise<void> => {
         const next = { ...muteState, [device]: !muteState[device] };
         setMuteState(next);
-        await hostBridge.notifyDeviceMute(next);
+        await host.current.notifyDeviceMute?.(next);
         append(`→ notifyDeviceMute ${JSON.stringify(next)}`);
     };
     // Like the real thing (and the fake widget the Playwright tests use): closing leaves the call and gives
@@ -228,19 +223,16 @@ export const ElementCall = ({
     const onClose = async (): Promise<void> => {
         if (joined) await leave();
         if (alwaysOnScreen) await setAlwaysOnScreenAndLog(false);
-        await hostBridge.close?.();
+        await host.current.close?.();
         append("→ close");
-    };
-    const onDownloadMedia = async (): Promise<void> => {
-        const blob = await hostBridge.downloadMedia?.("mxc://example.org/mock");
-        append(`→ downloadMedia → ${blob?.size ?? "?"} bytes`);
     };
 
     return (
-        <div className="mx_ElementCallMock">
+        <div className="mx_ElementCallMock" data-theme={theme ?? undefined}>
             <h2 className="mx_ElementCallMock_title">Element Call (mock)</h2>
             <span className="mx_ElementCallMock_roomId">
-                {room.roomId} · intent {intent} · {joined ? "in call" : "in lobby"}
+                {room.roomId} · intent {intent} · {joined ? "in call" : "in lobby"} · theme {theme ?? "default"} ·
+                language {language ?? "default"}
             </span>
 
             <section className="mx_ElementCallMock_section">
@@ -276,15 +268,10 @@ export const ElementCall = ({
                             close
                         </Button>
                     )}
-                    {hostBridge.downloadMedia && (
-                        <Button size="md" kind="tertiary" onClick={() => void onDownloadMedia()}>
-                            downloadMedia
-                        </Button>
-                    )}
                 </div>
                 <span className="mx_ElementCallMock_empty">
-                    supportsReactions: {String(hostBridge.supportsReactions)} · close: {hostBridge.close ? "yes" : "no"}{" "}
-                    · downloadMedia: {hostBridge.downloadMedia ? "yes" : "no"}
+                    supportsReactions: {String(hostBridge.supportsReactions ?? true)} · allowJoinUnmutedViaIntent:{" "}
+                    {String(hostBridge.allowJoinUnmutedViaIntent ?? false)} · close: {hostBridge.close ? "yes" : "no"}
                 </span>
                 <ol className="mx_ElementCallMock_log" aria-label="HostBridge log">
                     {log.map((entry) => (

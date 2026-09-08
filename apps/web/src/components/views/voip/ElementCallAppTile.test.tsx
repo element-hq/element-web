@@ -29,7 +29,6 @@ import PersistedElement from "../elements/PersistedElement";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { ElementCallAppTile } from "./ElementCallAppTile";
-import { ElementCallInstance } from "./ElementCallInstance";
 
 const { enabledSettings } = enableCalls();
 enabledSettings.add("feature_element_call_react");
@@ -109,6 +108,15 @@ describe("ElementCallAppTile", () => {
         expect(shown.config).toMatchObject({ skipLobby: true, background: "solid", perParticipantE2EE: false });
     });
 
+    it("passes Element Web's theme to the component, and keeps it current", async () => {
+        await renderTile();
+        await screen.findByText("Element Call (mock)");
+        act(() => dis.dispatch({ action: Action.RecheckTheme, forceTheme: "dark" }, true));
+        expect(await screen.findByText(/theme dark/)).toBeInTheDocument();
+        act(() => dis.dispatch({ action: Action.RecheckTheme, forceTheme: "light-high-contrast" }, true));
+        expect(await screen.findByText(/theme light-high-contrast/)).toBeInTheDocument();
+    });
+
     it("docks while mounted and tears the call down on unmount when nothing keeps it alive", async () => {
         const dock = vi.spyOn(ActiveWidgetStore.instance, "dockWidget");
         const undock = vi.spyOn(ActiveWidgetStore.instance, "undockWidget");
@@ -176,7 +184,6 @@ describe("ElementCallAppTile", () => {
         await waitFor(() => expect(contentLoadedReports()).toBeGreaterThan(0));
         await act(() => new Promise((r) => setTimeout(r, 10)));
         const reportsBefore = contentLoadedReports();
-        const before = ElementCallInstance.get(call, client);
 
         // The call moves from the room view to the floating PiP: a different tile in a different container.
         // As in the app, the call is persistent by then (the PiP only shows persistent widgets), which is
@@ -188,8 +195,7 @@ describe("ElementCallAppTile", () => {
         await act(() => new Promise((r) => setTimeout(r, 10)));
 
         expect(document.querySelector(".mx_AppTile_mini")).not.toBeNull();
-        expect(ElementCallInstance.get(call, client)).toBe(before);
-        // The mock reports contentLoaded again whenever it is handed a new hostBridge
+        // The same component instance is still mounted: it reported contentLoaded once, on its first mount
         expect(contentLoadedReports()).toBe(reportsBefore);
         ActiveWidgetStore.instance.destroyPersistentWidget(call.widget.id, room.roomId);
     });
