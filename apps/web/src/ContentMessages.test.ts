@@ -489,7 +489,7 @@ describe("sendContentListToRoom analytics", () => {
         client = createTestClient();
         vi.mocked(client.getMediaConfig).mockResolvedValue({});
         vi.mocked(doMaybeLocalRoomAction).mockImplementation(
-            <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>) => fn(roomId),
+            <T>(roomId: string, fn: (actualRoomId: string) => Promise<T>) => fn(roomId),
         );
         contentMessages = new ContentMessages();
         vi.spyOn(contentMessages, "sendContentToRoom").mockResolvedValue(undefined);
