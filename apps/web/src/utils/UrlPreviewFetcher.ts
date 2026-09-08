@@ -136,7 +136,10 @@ export class UrlPreviewFetcher {
      * @param loadMedia - Whether to load the media from the preview response.
      * @returns The preview image and site icon, if available.
      */
-    private getPreviewImage(response: IPreviewUrlResponse, loadMedia: boolean): { image: UrlPreview["image"]; siteIcon?: string } {
+    private getPreviewImage(
+        response: IPreviewUrlResponse,
+        loadMedia: boolean,
+    ): { image: UrlPreview["image"]; siteIcon?: string } {
         let image: UrlPreview["image"];
         let siteIcon: string | undefined;
 
