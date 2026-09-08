@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { expect, describe, it, beforeAll, beforeEach, vi } from "vitest";
-import { app, safeStorage } from "electron";
+import { app, dialog, safeStorage } from "electron";
 
 import Store, { SafeStorageDecryptionError, clearData } from "./store.js";
 
@@ -207,6 +207,52 @@ describe("Store secret encryption (safeStorage)", () => {
             expect(backing.size).toBe(0);
             expect(electronSession.flushStorageData).toHaveBeenCalled();
             expect(electronSession.clearStorageData).toHaveBeenCalled();
+        });
+    });
+
+    describe("prepareSafeStorage backend changed and unable to migrate", () => {
+        beforeEach(() => {
+            backing.set("safeStorageBackend", "not-a-valid-backend");
+            vi.mocked(app.relaunch).mockClear();
+            vi.mocked(app.exit).mockClear();
+        });
+
+        it("throws and leaves data untouched when the user declines", async () => {
+            vi.mocked(dialog.showMessageBox).mockResolvedValueOnce({
+                response: 0,
+            } as Electron.MessageBoxReturnValue);
+            backing.set("fakeDataItem", true);
+            const electronSession = {
+                flushStorageData: vi.fn(),
+                clearStorageData: vi.fn(),
+            } as unknown as Electron.Session;
+
+            await expect(store.prepareSafeStorage(electronSession)).rejects.toThrow(
+                "safeStorage backend changed and cannot migrate",
+            );
+
+            expect(backing.get("fakeDataItem")).toBe(true);
+            expect(electronSession.flushStorageData).not.toHaveBeenCalled();
+            expect(app.relaunch).not.toHaveBeenCalled();
+        });
+
+        it("clears data and relaunches when the user accepts", async () => {
+            vi.mocked(dialog.showMessageBox).mockResolvedValueOnce({
+                response: 1,
+            } as Electron.MessageBoxReturnValue);
+            backing.set("fakeDataItem", true);
+            const electronSession = {
+                flushStorageData: vi.fn(),
+                clearStorageData: vi.fn(),
+            } as unknown as Electron.Session;
+
+            await expect(store.prepareSafeStorage(electronSession)).resolves.toBe(false);
+
+            expect(backing.size).toBe(0);
+            expect(electronSession.flushStorageData).toHaveBeenCalled();
+            expect(electronSession.clearStorageData).toHaveBeenCalled();
+            expect(app.relaunch).toHaveBeenCalled();
+            expect(app.exit).toHaveBeenCalled();
         });
     });
 });
