@@ -64,7 +64,9 @@ on:
                 default: "tar.gz deb"
 env:
     SQLCIPHER_BUNDLED: ${{ inputs.sqlcipher == 'static' && '1' || '' }}
-    MAX_GLIBC: 2.36 # bookworm-era glibc, used by glibc-check.sh
+    # Used by glibc-check.sh. Ubuntu 22.04 (jammy) is the oldest supported distro that still ships libsqlcipher0,
+    # which the system-sqlcipher variant needs. Debian bookworm (2.36) and newer are a superset.
+    MAX_GLIBC: 2.35
 permissions: {} # No permissions required
 jobs:
     build:
@@ -207,7 +209,8 @@ jobs:
                   assert_contains_string() { [[ "$1" == *"$2"* ]]; }
                   ! assert_contains_string "$LIBS" "libcrypto.so.1.1"
                   if [ "$SQLCIPHER_BUNDLED" == "1" ]; then
-                      ! assert_contains_string "$LIBS" "libsqlcipher.so.0"
+                      ! assert_contains_string "$LIBS" "libsqlcipher
+                      .so.0"
                   else
                       assert_contains_string "$LIBS" "libsqlcipher.so.0"
                   fi
@@ -258,10 +261,10 @@ jobs:
         with:
             project: linux-${{ inputs.arch }}-sqlcipher-${{ inputs.sqlcipher }}
             artifact: ${{ inputs.artifact-prefix }}linux-${{ inputs.arch }}-sqlcipher-${{ inputs.sqlcipher }}
-            runs-on: ${{ inputs.runs-on || (inputs.arch == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04') }}
+            runs-on: ${{ inputs.runs-on || (inputs.sqlcipher == 'system' && (inputs.arch == 'arm64' && 'ubuntu-22.04-arm' || 'ubuntu-22.04') || (inputs.arch == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04')) }}
             executable: /opt/Element*/element-desktop*
             prepare_cmd: |
                 sudo apt-get -qq update
                 sudo apt install ./dist/*.deb
             blob_report: ${{ inputs.blob_report }}
-            args: ${{ inputs.test-args }}
+            args: ${{ inputs.sqlcipher == 'system' && '--ignore-snapshots' || '' }} ${{ inputs.test-args }}
