@@ -70,15 +70,9 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
 
     let urlPreviewKind: UrlPreviewKind;
 
-    if (urlPreviewBundleEnabled) {
-        if (roomContext.isRoomEncrypted && e2eeBundledUrlPreviewsOnly) {
-            urlPreviewKind = "bundledonly";
-        } else {
-            urlPreviewKind = "preferbundled";
-        }
-    } else {
-        urlPreviewKind = "fetchonly";
-    }
+    if (urlPreviewBundleEnabled)
+        urlPreviewKind = roomContext.isRoomEncrypted && e2eeBundledUrlPreviewsOnly ? "bundledonly" : "preferbundled";
+    else urlPreviewKind = "fetchonly";
 
     const textualBodyVm = useCreateAutoDisposedViewModel(
         () =>
