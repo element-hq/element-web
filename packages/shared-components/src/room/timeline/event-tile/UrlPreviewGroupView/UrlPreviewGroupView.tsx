@@ -12,7 +12,7 @@ import classNames from "classnames";
 
 import { useViewModel, type ViewModel } from "../../../../core/viewmodel";
 import { useI18n } from "../../../../core/i18n/i18nContext";
-import type { UrlPreview } from "./types";
+import { type UrlPreview } from "shared-types";
 import { LinkPreview } from "./LinkPreview";
 import styles from "./UrlPreviewGroupView.module.css";
 import { useEventPresentationAttributes } from "../../EventPresentation/EventPresentationContext";

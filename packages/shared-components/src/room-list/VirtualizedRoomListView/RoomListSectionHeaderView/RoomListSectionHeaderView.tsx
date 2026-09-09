@@ -17,7 +17,13 @@ import styles from "./RoomListSectionHeaderView.module.css";
 import { useI18n } from "../../../core/i18n/i18nContext";
 import { getGroupHeaderAccessibleProps } from "../../../core/VirtualizedList";
 import { RoomListSectionHeaderContent } from "./RoomListSectionHeaderContent";
-import { isRoomDragData, isSectionDragData, type RoomListDragData, type SectionDragData } from "../dragAndDrop";
+import {
+    type AcceptedRoomKind,
+    isSectionDragData,
+    rejectsDraggedRoom,
+    type RoomListDragData,
+    type SectionDragData,
+} from "../dragAndDrop";
 import { type NotificationDecorationData } from "../RoomListItemWrapper/RoomListItemView/NotificationDecoration";
 
 /**
@@ -39,10 +45,11 @@ export interface RoomListSectionHeaderViewSnapshot {
     /** Whether the section can be reordered via drag-and-drop  */
     canBeReordered: boolean;
     /**
-     * The only kind of room this section accepts when a room is dropped on it.
-     * Left undefined by sections that accept any room.
+     * The kind of room this section accepts when a room is dropped on it.
+     * "none" for the sections that take no room at all, such as Invites where the membership of the
+     * room decides rather than a drop.
      */
-    acceptedRoomKind?: "dm" | "nonDm";
+    acceptedRoomKind: AcceptedRoomKind;
 }
 
 /**
@@ -130,22 +137,15 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
     const draggedData = source?.data;
     const isDraggingSectionSource = isSectionDragData(draggedData);
 
-    // A section that only takes one kind of room refuses the others, so it never offers a drop that
-    // would do nothing: the People section holds direct messages only, and while it is shown the
-    // Chats section holds everything else.
-    const draggedRoomData = isRoomDragData(draggedData) ? draggedData : undefined;
-    const rejectsDraggedRoom =
-        draggedRoomData !== undefined &&
-        acceptedRoomKind !== undefined &&
-        draggedRoomData.isDm !== (acceptedRoomKind === "dm");
-
-    // Keep the droppable enabled so rooms can still be dropped on default sections
-    // (Favourite / Low Priority). Only disable it for section drags on non-reorderable
-    // headers so they can't be used as reorder targets.
+    // The two kinds of drag are gated separately. A section drag can only target a reorderable
+    // header, so Favourite and Low Priority are excluded. A room drag can only target a header that
+    // takes the kind of room being dragged.
     const { ref: droppableRef, isDropTarget } = useDroppable<SectionDragData>({
         id,
         data: { type: "section", index: sectionIndex },
-        disabled: isDragSource || (isDraggingSectionSource && !canBeReordered) || rejectsDraggedRoom,
+        disabled:
+            isDragSource ||
+            (isDraggingSectionSource ? !canBeReordered : rejectsDraggedRoom(acceptedRoomKind, draggedData)),
     });
 
     const isDraggingRoom = isDropTarget && draggedData?.type === "room";
