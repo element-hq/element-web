@@ -26,7 +26,7 @@ import { CryptoEvent, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import { TooltipProvider } from "@vector-im/compound-web";
 // what-input helps improve keyboard accessibility
 import "what-input";
-import sanitizeHtml from "sanitize-html";
+import { sanitizeHtml } from "@element-hq/element-web-shared-utils";
 import { I18nContext, LinkedTextContext, LinkedText } from "@element-hq/web-shared-components";
 import { LockSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
@@ -120,7 +120,7 @@ import { viewUserDeviceSettings } from "../../actions/handlers/viewUserDeviceSet
 import GenericToast from "../views/toasts/GenericToast";
 import RovingSpotlightDialog from "../views/dialogs/spotlight/SpotlightDialog";
 import { findDMForUser } from "../../utils/dm/findDMForUser";
-import { getHtmlText } from "../../HtmlUtils";
+import { sanitizeHtmlText } from "../../HtmlUtils";
 import { NotificationLevel } from "../../stores/notifications/NotificationLevel";
 import { type UserTab } from "../views/dialogs/UserTab";
 import { shouldSkipSetupEncryption } from "../../utils/crypto/shouldSkipSetupEncryption";
@@ -1141,7 +1141,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                         type: "m.room.message",
                         content: {
                             msgtype: MsgType.Text,
-                            body: getHtmlText(msg),
+                            body: sanitizeHtmlText(msg),
                             format: "org.matrix.custom.html",
                             formatted_body: sanitizeHtml(msg, sanitizeHtmlParams),
                         },
