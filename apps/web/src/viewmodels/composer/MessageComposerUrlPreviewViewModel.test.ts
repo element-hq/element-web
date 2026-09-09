@@ -13,6 +13,7 @@ import { MsgType, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { MessageComposerUrlPreviewViewModel } from "./MessageComposerUrlPreviewViewModel";
 import { type MessageComposerUrlPreviewSnapshotEntry } from "@element-hq/web-shared-components";
 import { type RoomMessageEventContent } from "../../../@types/url-preview";
+import { UrlPreviewApi } from "../../modules/UrlPreviewApi";
 
 const IMAGE_MXC = "mxc://example.org/abc";
 const BASIC_PREVIEW_OGDATA = {
@@ -36,6 +37,7 @@ function getViewModel({ visible } = { visible: true }): {
         visible,
         showTooltips: false,
         urlPreviewBundle: false,
+        moduleUrlPreviewApi: new UrlPreviewApi(),
     });
     return { vm, client: client as unknown as { getUrlPreview: Mock; mxcUrlToHttp: Mock } };
 }

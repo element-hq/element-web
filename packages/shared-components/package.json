@@ -88,6 +88,7 @@
     },
     "devDependencies": {
         "@element-hq/element-web-playwright-common": "workspace:*",
+        "shared-types": "workspace:*",
         "@fetch-mock/vitest": "^0.2.18",
         "@fontsource/inter": "catalog:",
         "@matrix-org/react-sdk-module-api": "^2.5.0",

@@ -12,11 +12,11 @@ import {
     EventContentBodyView,
     TextualBodyView,
     type TextualBodyContentElement,
-    type UrlPreview,
     UrlPreviewGroupView,
     useCreateAutoDisposedViewModel,
     useViewModel,
 } from "@element-hq/web-shared-components";
+import { type UrlPreview } from "shared-types";
 
 import { type IBodyProps } from "./IBodyProps";
 import RoomContext from "../../../contexts/RoomContext";
@@ -32,6 +32,7 @@ import { UrlPreviewGroupViewModel } from "../../../viewmodels/message-body/UrlPr
 import PlatformPeg from "../../../PlatformPeg";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { EditMessageComposerWrapper } from "../rooms/EditMessageComposerWrapper";
+import { ModuleApi } from "../../../modules/Api";
 
 const logger = rootLogger.getChild("TextualBodyFactory");
 
@@ -99,6 +100,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
                 client,
                 mxEvent: props.mxEvent,
                 mediaVisible,
+                moduleUrlPreviewApi: ModuleApi.instance.urlPreviews,
                 onImageClicked: (preview: UrlPreview): void => {
                     if (!preview.image?.imageFull) {
                         return;

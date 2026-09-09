@@ -8,10 +8,10 @@
 import { MsgType, type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import {
     BaseViewModel,
-    type UrlPreview,
     type UrlPreviewGroupViewActions,
     type UrlPreviewGroupViewSnapshot,
 } from "@element-hq/web-shared-components";
+import { type UrlPreview } from "shared-types";
 import { type UrlPreviewVisibilityChanged } from "@matrix-org/analytics-events/types/typescript/UrlPreviewVisibilityChanged";
 
 import { PosthogAnalytics } from "../../PosthogAnalytics";
@@ -19,6 +19,7 @@ import { isPermalinkHost } from "../../utils/permalinks/Permalinks";
 import { UrlPreviewFetcher } from "../../utils/UrlPreviewFetcher";
 import { type RoomMessageEventContent } from "../../../@types/url-preview";
 import SettingsStore from "../../settings/SettingsStore";
+import type { UrlPreviewApi } from "../../modules/UrlPreviewApi";
 
 // From https://github.com/matrix-org/matrix-spec-proposals/pull/4095
 export const BUNDLED_LINK_PREVIEWS = "com.beeper.linkpreviews";
@@ -44,6 +45,7 @@ export interface UrlPreviewGroupViewModelProps {
     showTooltips: boolean;
     onImageClicked: (preview: UrlPreview) => void;
     urlPreviewBundleEnabled: boolean;
+    moduleUrlPreviewApi: UrlPreviewApi;
 }
 
 export class UrlPreviewGroupViewModel
@@ -135,7 +137,12 @@ export class UrlPreviewGroupViewModel
         this.urlPreviewVisible = props.visible;
         this.mediaVisible = props.mediaVisible;
         this.urlPreviewEnabledByUser = globalThis.localStorage.getItem(this.storageKey) !== "1";
-        this.fetcher = new UrlPreviewFetcher(props.client, props.mxEvent.getTs(), props.showTooltips);
+        this.fetcher = new UrlPreviewFetcher(
+            props.client,
+            props.mxEvent.getTs(),
+            props.showTooltips,
+            props.moduleUrlPreviewApi,
+        );
     }
 
     /**
@@ -186,7 +193,7 @@ export class UrlPreviewGroupViewModel
                     await Promise.all(
                         bundledPreviews
                             .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
-                            .map((preview) => this.fetcher.previewFromBundle(preview, content.body, loadMedia)),
+                            .map((preview) => this.fetcher.previewFromBundle(preview, this.props.mxEvent, loadMedia)),
                     )
                 ).filter((p) => !!p);
             }
@@ -195,7 +202,7 @@ export class UrlPreviewGroupViewModel
         previews ??= await Promise.all(
             this.links
                 .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
-                .map((link) => this.fetcher.fetchPreview(link, loadMedia)),
+                .map((link) => this.fetcher.fetchPreview(link, loadMedia, this.props.mxEvent)),
         );
 
         this.snapshot.merge({

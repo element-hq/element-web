@@ -17,6 +17,7 @@ import { debounce } from "lodash";
 import { UrlPreviewFetcher } from "../../utils/UrlPreviewFetcher";
 import { linksIn } from "../../utils/UrlUtils";
 import { type RoomMessageEventContent, type UnstableBundledUrlPreviewSingle } from "../../../@types/url-preview";
+import type { UrlPreviewApi } from "../../modules/UrlPreviewApi";
 
 export const DEBOUNCE_REQUEST_TIMEOUT_MS = 500;
 
@@ -30,6 +31,7 @@ export interface MessageComposerUrlPreviewViewModelRestoreProps {
 
 export interface MessageComposerUrlPreviewViewModelProps {
     client: MatrixClient;
+    moduleUrlPreviewApi: UrlPreviewApi;
     visible: boolean;
     showTooltips: boolean;
     urlPreviewBundle: boolean;
@@ -84,7 +86,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
             isModified: false,
         });
         this.urlPreviewVisible = props.visible;
-        this.fetcher = new UrlPreviewFetcher(props.client, Date.now(), props.showTooltips);
+        this.fetcher = new UrlPreviewFetcher(props.client, Date.now(), props.showTooltips, props.moduleUrlPreviewApi);
         this.content = this.snapshot.current.content;
         this.previewCache = props.cachedEntries ?? new Map();
 
