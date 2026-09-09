@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import classNames from "classnames";
 import {
     type IEventRelation,
+    type MatrixEvent,
     type Room,
     type MatrixClient,
     THREAD_RELATION_TYPE,
@@ -53,6 +54,7 @@ interface IProps {
     menuPosition?: MenuProps;
     onRecordStartEndClick: () => void;
     relation?: IEventRelation;
+    replyToEvent?: MatrixEvent;
     setStickerPickerOpen: (isStickerPickerOpen: boolean) => void;
     showLocationButton: boolean;
     showPollsButton: boolean;
@@ -265,6 +267,7 @@ function showLocationButton(props: IProps, room: Room, matrixClient: MatrixClien
             key="location"
             roomId={room.roomId}
             relation={props.relation}
+            replyToEvent={props.replyToEvent}
             sender={sender}
             menuPosition={props.menuPosition}
         />
