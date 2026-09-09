@@ -521,4 +521,32 @@ describe("PdfViewer", () => {
 
         expect(await screen.findByRole("alert")).toHaveTextContent("Unable to load PDF.");
     });
+
+    it("rejects an attachment with no PDF signature without handing it to pdf.js", async () => {
+        mockDocument();
+
+        render(<PdfViewer media={media("not-really.pdf", "GIF89a this is not a PDF at all")} />);
+
+        expect(await screen.findByRole("alert")).toHaveTextContent("Unable to load PDF.");
+        expect(pdfjsMock.getDocument).not.toHaveBeenCalled();
+    });
+
+    it("accepts a signature that is not at the very start, as pdf.js does", async () => {
+        const { pdfDocument } = mockDocument();
+
+        // pdf.js searches the first 1024 bytes rather than demanding the header at offset 0, so a file
+        // with leading junk still opens there and must still open here.
+        render(<PdfViewer media={media("padded.pdf", "\n\n%PDF-1.7\n")} />);
+
+        await waitFor(() => expect(activeViewer().setDocument).toHaveBeenCalledWith(pdfDocument));
+    });
+
+    it("rejects a signature sitting beyond the range pdf.js searches", async () => {
+        mockDocument();
+
+        render(<PdfViewer media={media("late.pdf", "x".repeat(2000) + "%PDF-1.7\n")} />);
+
+        expect(await screen.findByRole("alert")).toHaveTextContent("Unable to load PDF.");
+        expect(pdfjsMock.getDocument).not.toHaveBeenCalled();
+    });
 });

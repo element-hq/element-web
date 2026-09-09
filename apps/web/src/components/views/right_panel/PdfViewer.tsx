@@ -37,6 +37,14 @@ const loggerPdf = logger.getChild("PdfViewer");
 
 const WORKER_SRC = new URL("pdfjs-dist/build/pdf.worker.mjs", import.meta.url).toString();
 
+/** `%PDF-`, the signature every PDF carries. */
+const PDF_HEADER = [0x25, 0x50, 0x44, 0x46, 0x2d];
+/**
+ * How far in to look for the signature. pdf.js scans exactly this far itself, so anything it would
+ * treat as well-formed passes here too — a stricter check would reject files it opens happily.
+ */
+const PDF_HEADER_SEARCH_LIMIT = 1024;
+
 /** Scale value that makes pdf.js keep every page fitted to the width of the panel. */
 const FIT_TO_WIDTH = "page-width";
 /** Scale values pdf.js recomputes from the container size, so they must be re-applied on resize. */
@@ -70,6 +78,23 @@ interface GestureEvent extends Event {
     readonly clientX: number;
     readonly clientY: number;
     readonly scale: number;
+}
+
+/**
+ * Whether the bytes carry a PDF signature, mirroring how pdf.js looks for one.
+ *
+ * The mimetype is the sender's claim; this is the first look at what actually arrived. It is not a
+ * security control — the signature is five bytes anyone can prepend — it just turns a file that was
+ * never a PDF into a clean failure instead of an opaque parser error.
+ */
+function hasPdfHeader(data: Uint8Array): boolean {
+    const lastStart = Math.min(data.length - PDF_HEADER.length, PDF_HEADER_SEARCH_LIMIT);
+
+    for (let start = 0; start <= lastStart; start++) {
+        if (PDF_HEADER.every((byte, offset) => data[start + offset] === byte)) return true;
+    }
+
+    return false;
 }
 
 function configurePdfWorker(): void {
@@ -210,6 +235,10 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
             }
 
             const data = new Uint8Array(await blob.arrayBuffer());
+            if (!hasPdfHeader(data)) {
+                throw new Error("Attachment is not a PDF");
+            }
+
             if (disposed) return;
 
             loadingTask = getDocument({ data, stopAtErrors: true });
