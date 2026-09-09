@@ -360,7 +360,7 @@ export default class PreferencesUserSettingsTab extends React.Component<EmptyObj
                             <SettingsFlag
                                 name="urlPreviewsEnabled_e2ee_bundled_only"
                                 level={SettingLevel.DEVICE}
-                                requires={["urlPreviewsEnabled_e2ee"]}
+                                requires={["urlPreviewsEnabled", "urlPreviewsEnabled_e2ee"]}
                             />
                         )}
                     </SettingsSubsection>
