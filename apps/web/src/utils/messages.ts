@@ -183,6 +183,8 @@ export async function attachUrlPreviews(
                 "og:image:width": preview.image?.width,
                 "og:image:height": preview.image?.height,
                 "og:image:type": preview.image?.imageType,
+                "matrix:image:size": preview.image?.fileSize,
+                ...preview.additionalBundleContent,
             };
 
             if (preview.image?.mxcImageFull !== undefined) {

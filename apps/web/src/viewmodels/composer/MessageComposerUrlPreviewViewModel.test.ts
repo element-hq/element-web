@@ -9,10 +9,11 @@
 
 import { vi, describe, it, expect, type Mock, beforeAll, afterAll } from "vitest";
 
-import { MsgType, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, MsgType, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { MessageComposerUrlPreviewViewModel } from "./MessageComposerUrlPreviewViewModel";
 import { type MessageComposerUrlPreviewSnapshotEntry } from "@element-hq/web-shared-components";
 import { type RoomMessageEventContent } from "../../../@types/url-preview";
+import { UrlPreviewApi } from "../../modules/UrlPreviewApi";
 
 const IMAGE_MXC = "mxc://example.org/abc";
 const BASIC_PREVIEW_OGDATA = {
@@ -35,6 +36,7 @@ function getViewModel({ visible } = { visible: true }): {
         client,
         visible,
         showTooltips: false,
+        moduleUrlPreviewApi: new UrlPreviewApi(),
     });
     return { vm, client: client as unknown as { getUrlPreview: Mock; mxcUrlToHttp: Mock } };
 }
@@ -76,10 +78,18 @@ function restoreViewModel(
 } {
     const vm = MessageComposerUrlPreviewViewModel.restoreFromMessage({
         client: client as unknown as MatrixClient,
+        moduleUrlPreviewApi: new UrlPreviewApi(),
         visible,
         showTooltips: false,
         urlPreviewBundle,
-        content,
+        mxEvent: new MatrixEvent({
+            type: "m.room.message",
+            content,
+            event_id: "$event-id",
+            room_id: "!room:example.org",
+            sender: "@alice:example.org",
+            origin_server_ts: 0,
+        }),
     });
     return { vm, client };
 }
