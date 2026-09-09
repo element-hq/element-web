@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { fireEvent, render, screen } from "test-utils-rtl";
+import { fireEvent, render, screen, waitFor } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
 import { Room } from "matrix-js-sdk/src/matrix";
 import { type ReplacementEvent, type RoomMessageEventContent } from "matrix-js-sdk/src/types";
@@ -145,7 +145,9 @@ describe("<EditMessageComposer/>", () => {
             },
             "m.mentions": {},
         };
-        expect(mockClient.sendMessage).toHaveBeenCalledWith(editedEvent.getRoomId()!, null, expectedBody);
+        await waitFor(() =>
+            expect(mockClient.sendMessage).toHaveBeenCalledWith(editedEvent.getRoomId()!, null, expectedBody),
+        );
     });
 
     it("should throw when room for message is not found", () => {
@@ -294,6 +296,7 @@ describe("<EditMessageComposer/>", () => {
 
             fireEvent.click(screen.getByText("Save"));
 
+            await waitFor(() => expect(mockClient.sendMessage).toHaveBeenCalled());
             const messageContent = mockClient.sendMessage.mock.calls[0][2] as RoomMessageEventContent &
                 ReplacementEvent<RoomMessageEventContent>;
 
@@ -311,6 +314,7 @@ describe("<EditMessageComposer/>", () => {
 
             fireEvent.click(screen.getByText("Save"));
 
+            await waitFor(() => expect(mockClient.sendMessage).toHaveBeenCalled());
             const messageContent = mockClient.sendMessage.mock.calls[0][2] as RoomMessageEventContent &
                 ReplacementEvent<RoomMessageEventContent>;
 
@@ -331,6 +335,7 @@ describe("<EditMessageComposer/>", () => {
 
             fireEvent.click(screen.getByText("Save"));
 
+            await waitFor(() => expect(mockClient.sendMessage).toHaveBeenCalled());
             const messageContent = mockClient.sendMessage.mock.calls[0][2] as RoomMessageEventContent &
                 ReplacementEvent<RoomMessageEventContent>;
 
@@ -353,6 +358,7 @@ describe("<EditMessageComposer/>", () => {
 
             fireEvent.click(screen.getByText("Save"));
 
+            await waitFor(() => expect(mockClient.sendMessage).toHaveBeenCalled());
             const messageContent = mockClient.sendMessage.mock.calls[0][2] as RoomMessageEventContent &
                 ReplacementEvent<RoomMessageEventContent>;
 
@@ -379,6 +385,7 @@ describe("<EditMessageComposer/>", () => {
 
             fireEvent.click(screen.getByText("Save"));
 
+            await waitFor(() => expect(mockClient.sendMessage).toHaveBeenCalled());
             const messageContent = mockClient.sendMessage.mock.calls[0][2] as RoomMessageEventContent &
                 ReplacementEvent<RoomMessageEventContent>;
 
@@ -455,6 +462,7 @@ describe("<EditMessageComposer/>", () => {
 
             fireEvent.click(screen.getByText("Save"));
 
+            await waitFor(() => expect(mockClient.sendMessage).toHaveBeenCalled());
             const messageContent = mockClient.sendMessage.mock.calls[0][2] as RoomMessageEventContent &
                 ReplacementEvent<RoomMessageEventContent>;
 
@@ -477,6 +485,7 @@ describe("<EditMessageComposer/>", () => {
 
             fireEvent.click(screen.getByText("Save"));
 
+            await waitFor(() => expect(mockClient.sendMessage).toHaveBeenCalled());
             const messageContent = mockClient.sendMessage.mock.calls[0][2] as RoomMessageEventContent &
                 ReplacementEvent<RoomMessageEventContent>;
 
@@ -499,6 +508,7 @@ describe("<EditMessageComposer/>", () => {
 
             fireEvent.click(screen.getByText("Save"));
 
+            await waitFor(() => expect(mockClient.sendMessage).toHaveBeenCalled());
             const messageContent = mockClient.sendMessage.mock.calls[0][2] as RoomMessageEventContent &
                 ReplacementEvent<RoomMessageEventContent>;
 
@@ -540,6 +550,7 @@ describe("<EditMessageComposer/>", () => {
 
             fireEvent.click(screen.getByText("Save"));
 
+            await waitFor(() => expect(mockClient.sendMessage).toHaveBeenCalled());
             const messageContent = mockClient.sendMessage.mock.calls[0][2] as RoomMessageEventContent &
                 ReplacementEvent<RoomMessageEventContent>;
 
