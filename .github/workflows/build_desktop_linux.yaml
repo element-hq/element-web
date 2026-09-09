@@ -64,9 +64,10 @@ on:
                 default: "tar.gz deb"
 env:
     SQLCIPHER_BUNDLED: ${{ inputs.sqlcipher == 'static' && '1' || '' }}
-    # Used by glibc-check.sh. Ubuntu 22.04 (jammy) is the oldest supported distro that still ships libsqlcipher0,
+    # Used by glibc-check.sh. Ubuntu 22.04 (jammy) (2.35) is the oldest supported distro that still ships libsqlcipher0,
     # which the system-sqlcipher variant needs. Debian bookworm (2.36) and newer are a superset.
-    MAX_GLIBC: 2.35
+    # Currently, our newest linked glibc version is 2.34 in Seshat, Electron only links against 2.25.
+    MAX_GLIBC: 2.34
 permissions: {} # No permissions required
 jobs:
     build:
