@@ -37,6 +37,12 @@ export enum PreviewVisibility {
     Visible,
 }
 
+/**
+ * where to get the URL previews from?
+ * - fetch only: get previews from homeserver only
+ * - bundle only: get previews from bundle only, don't request any content not in the bundle (except for the image file)
+ * - prefer bundled: use bundle if exists, otherwise fallback to fetched previews
+ */
 export type UrlPreviewKind = "fetchonly" | "bundledonly" | "preferbundled";
 
 export interface UrlPreviewGroupViewModelProps {
@@ -52,8 +58,7 @@ export interface UrlPreviewGroupViewModelProps {
 
 export class UrlPreviewGroupViewModel
     extends BaseViewModel<UrlPreviewGroupViewSnapshot, UrlPreviewGroupViewModelProps>
-    implements UrlPreviewGroupViewActions
-{
+    implements UrlPreviewGroupViewActions {
     /**
      * Determine if an anchor element can be rendered into a preview.
      * If it can, return the value of `href`

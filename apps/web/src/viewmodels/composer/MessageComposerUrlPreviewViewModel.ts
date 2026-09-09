@@ -21,26 +21,54 @@ import type { UrlPreviewApi } from "../../modules/UrlPreviewApi";
 
 export const DEBOUNCE_REQUEST_TIMEOUT_MS = 500;
 
-export interface MessageComposerUrlPreviewViewModelRestoreProps {
-    client: MatrixClient;
-    moduleUrlPreviewApi: UrlPreviewApi;
-    visible: boolean;
-    showTooltips: boolean;
-    urlPreviewBundle: boolean;
-    mxEvent: MatrixEvent;
-}
-
+/**
+ * Props for {@link MessageComposerUrlPreviewViewModel}.
+ *
+ * Use {@link MessageComposerUrlPreviewViewModel.restoreFromMessage} instead of building these by
+ * hand when the composer is editing an existing event, so its preview bundle is restored too.
+ */
 export interface MessageComposerUrlPreviewViewModelProps {
     client: MatrixClient;
     moduleUrlPreviewApi: UrlPreviewApi;
+    /**
+     * Whether composer URL previews should render at all.
+     */
     visible: boolean;
+    /**
+     * Whether previews should carry a tooltip showing the target URL, i.e. the platform's
+     * `needsUrlTooltips`. Only takes effect for previews whose title differs from their URL.
+     */
     showTooltips: boolean;
+    /**
+     * Initial composer plaintext content.
+     */
     content?: string;
     /**
-     * Previews to seed {@link previewCache} with, used when editing an event so its existing
-     * URL preview bundle is shown without being refetched.
+     * Set the initial cache previews, used by restoreFromMessage
      */
     cachedEntries?: Map<string, MessageComposerUrlPreviewSnapshotEntry>;
+}
+
+export interface MessageComposerUrlPreviewViewModelRestoreProps {
+    client: MatrixClient;
+    moduleUrlPreviewApi: UrlPreviewApi;
+    /**
+     * Whether composer URL previews should render at all.
+     */
+    visible: boolean;
+    /**
+     * Whether previews should carry a tooltip showing the target URL, i.e. the platform's
+     * `needsUrlTooltips`. Only takes effect for previews whose title differs from their URL.
+     */
+    showTooltips: boolean;
+    /**
+     * Whether the url preview bundles lab flag is enabled
+     */
+    urlPreviewBundle: boolean;
+    /**
+     * the message to restore previews from
+     */
+    mxEvent: MatrixEvent;
 }
 
 export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
