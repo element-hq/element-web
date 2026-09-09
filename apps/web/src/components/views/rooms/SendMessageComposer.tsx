@@ -14,9 +14,9 @@ import React, {
     type ReactElement,
 } from "react";
 import {
+    type MatrixEvent,
     type IEventRelation,
     type Room,
-    type MatrixEvent,
     EventType,
     MsgType,
     RelationType,

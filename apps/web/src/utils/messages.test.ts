@@ -10,9 +10,10 @@ Please see LICENSE files in the repository root for full details.
 
 import { type IContent } from "matrix-js-sdk/src/matrix";
 import { type EncryptedFile } from "matrix-js-sdk/src/types";
-import { type UrlPreview, type MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { createTestClient, mkEvent, mkRoom } from "test-utils";
+import { type MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
+import { type UrlPreview } from "shared-types";
 
 import { attachMentions, attachUrlPreviews } from "./messages";
 import EditorModel from "../editor/model";

@@ -12,11 +12,11 @@ import {
     EventContentBodyView,
     TextualBodyView,
     type TextualBodyContentElement,
-    type UrlPreview,
     UrlPreviewGroupView,
     useCreateAutoDisposedViewModel,
     useViewModel,
 } from "@element-hq/web-shared-components";
+import { type UrlPreview } from "shared-types";
 
 import { type IBodyProps } from "./IBodyProps";
 import RoomContext from "../../../contexts/RoomContext";
@@ -35,6 +35,7 @@ import {
 import PlatformPeg from "../../../PlatformPeg";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { EditMessageComposerWrapper } from "../rooms/EditMessageComposerWrapper";
+import { ModuleApi } from "../../../modules/Api";
 
 const logger = rootLogger.getChild("TextualBodyFactory");
 
@@ -69,15 +70,9 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
 
     let urlPreviewKind: UrlPreviewKind;
 
-    if (urlPreviewBundleEnabled) {
-        if (roomContext.isRoomEncrypted && e2eeBundledUrlPreviewsOnly) {
-            urlPreviewKind = "bundledonly";
-        } else {
-            urlPreviewKind = "preferbundled";
-        }
-    } else {
-        urlPreviewKind = "fetchonly";
-    }
+    if (urlPreviewBundleEnabled)
+        urlPreviewKind = roomContext.isRoomEncrypted && e2eeBundledUrlPreviewsOnly ? "bundledonly" : "preferbundled";
+    else urlPreviewKind = "fetchonly";
 
     const textualBodyVm = useCreateAutoDisposedViewModel(
         () =>
@@ -116,6 +111,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
                 client,
                 mxEvent: props.mxEvent,
                 mediaVisible,
+                moduleUrlPreviewApi: ModuleApi.instance.urlPreviews,
                 onImageClicked: (preview: UrlPreview): void => {
                     if (!preview.image?.imageFull) {
                         return;

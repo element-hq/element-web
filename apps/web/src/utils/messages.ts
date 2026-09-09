@@ -20,6 +20,7 @@ import {
     type MessageComposerUrlPreviewSnapshotEntryLoaded,
     type MessageComposerUrlPreviewSnapshot,
 } from "@element-hq/web-shared-components";
+import { type UrlPreview } from "shared-types";
 
 import type EditorModel from "../editor/model";
 import { Type } from "../editor/parts";
@@ -152,7 +153,13 @@ export async function attachUrlPreviews(
     let cancelled = false;
     const abortController = new AbortController();
 
-    if (isRoomEncrypted && previewsToAttach.some((preview) => preview.image !== undefined)) {
+    /**
+     * in an encrypted room, preview images needs to be sent before the message can be sent
+     * - the compositor needs to be cleared immediately after pressing enter
+     * - the message needs to be displayed as "sending" in the timeline even though it is not yet being sent (it is waiting for image upload)
+     */
+    function putSendingMessageInTimeline(): void {
+        // create the event with the same content as the message
         const txnId = client.makeTxnId();
         const event = new MatrixEvent({
             type: EventType.RoomMessage,
@@ -167,77 +174,87 @@ export async function attachUrlPreviews(
         event.on(MatrixEventEvent.Status, (_, status) => {
             if (status == EventStatus.CANCELLED) {
                 cancelled = true;
+                // cancel uploading the images if sending is aborted
                 abortController.abort();
             }
         });
+
+        // add to timeline
         room.addPendingEvent(event, txnId);
+        // removes the red checkmark when a message is sent in an encrypted room but is not encrypting
         room.updatePendingEvent(event, EventStatus.ENCRYPTING);
         eventId = event.getId();
     }
 
-    const bundle = await Promise.all(
-        previewsToAttach.map(async (preview) => {
-            const out: UnstableBundledUrlPreviewSingle = {
-                "matched_url": preview.link,
-                "og:url": preview.ogUrl,
-                "og:title": preview.title,
-                "og:description": preview.description,
-                "og:image:width": preview.image?.width,
-                "og:image:height": preview.image?.height,
-                "og:image:type": preview.image?.imageType,
-            };
+    /**
+     * convert a UrlPreview to a bundle
+     * if the UrlPreview contains an image and we are in an encrypted room, it uploads
+     * the image to create a bundled with an EncryptedFile
+     */
+    async function bundleFromPreview(preview: UrlPreview): Promise<UnstableBundledUrlPreviewSingle> {
+        const out: UnstableBundledUrlPreviewSingle = {
+            "matched_url": preview.link,
+            "og:url": preview.ogUrl,
+            "og:title": preview.title,
+            "og:description": preview.description,
+            "og:image:width": preview.image?.width,
+            "og:image:height": preview.image?.height,
+            "og:image:type": preview.image?.imageType,
+            "matrix:image:size": preview.image?.fileSize,
+            ...preview.additionalBundleContent,
+        };
 
-            if (preview.image?.mxcImageFull !== undefined) {
-                if (isRoomEncrypted) {
-                    // When editing, the preview image already has an EncryptedFile from the event's
-                    // existing bundle: reuse it. Its mxc points at the ciphertext, so re-uploading
-                    // that would encrypt the image a second time and produce an undecryptable image.
-                    const alreadyEncrypted = encryptedImageCache.get(preview.link);
-                    if (alreadyEncrypted !== undefined) {
-                        out["beeper:image:encryption"] = alreadyEncrypted;
-                    } else {
-                        try {
-                            // image url from homeserver assumed to not be malformed
-                            const httpUrl = mediaFromMxc(preview.image.mxcImageFull).srcHttp!;
-                            const blob = await (await fetch(httpUrl, { signal: abortController.signal })).blob();
-                            const { file, url } = await uploadFile(
-                                client,
-                                room.roomId,
-                                blob,
-                                undefined,
-                                abortController,
-                            );
+        // no image
+        if (preview.image?.mxcImageFull === undefined) return out;
 
-                            if (file) {
-                                out["beeper:image:encryption"] = file;
-                            } else if (url) {
-                                console.error(
-                                    `uploading file to room_id=${room.roomId}, expected EncryptedFile, got (unencrypted) URL instead`,
-                                );
-                            }
-                        } catch (e) {
-                            if (!abortController.signal.aborted) {
-                                console.error(e);
-                            }
-                        }
-                    }
-                } else {
-                    out["og:image"] = preview.image?.mxcImageFull;
-                    out["matrix:image:size"] = preview.image?.fileSize;
-                }
+        // has image, not encrypted chat
+        if (!isRoomEncrypted) {
+            out["og:image"] = preview.image?.mxcImageFull;
+            out["matrix:image:size"] = preview.image?.fileSize;
+            return out;
+        }
+
+        // When editing, the preview image already has an EncryptedFile from the event's existing
+        // bundle: reuse it. Its mxc points at the ciphertext, so re-uploading that would encrypt
+        // the image a second time and produce an undecryptable image.
+        const alreadyEncrypted = encryptedImageCache.get(preview.link);
+        if (alreadyEncrypted !== undefined) {
+            out["beeper:image:encryption"] = alreadyEncrypted;
+            return out;
+        }
+
+        // has image, encrypted chat - upload the image to send the EncryptedFile instead
+        try {
+            // image url from homeserver assumed to not be malformed
+            const httpUrl = mediaFromMxc(preview.image.mxcImageFull).srcHttp!;
+            const blob = await (await fetch(httpUrl, { signal: abortController.signal })).blob();
+            const { file } = await uploadFile(client, room.roomId, blob, undefined, abortController);
+
+            if (!file) {
+                console.error(`uploading file to room_id=${room.roomId}, expected EncryptedFile, undefined instead`);
+                return out;
             }
 
-            return out;
-        }),
-    );
+            out["beeper:image:encryption"] = file;
+        } catch (e) {
+            // do not print error if it exited because of the message sending was aborted
+            if (!abortController.signal.aborted) console.error(e);
+        }
 
-    if (messageHasLinks) {
-        content["com.beeper.linkpreviews"] = bundle;
+        return out;
     }
 
-    if (eventId !== undefined) {
-        room.removePendingEvent(eventId);
-    }
+    // if encrypted + has previews
+    if (isRoomEncrypted && previewsToAttach.some((preview) => preview.image !== undefined))
+        putSendingMessageInTimeline();
+
+    const bundle = await Promise.all(previewsToAttach.map(bundleFromPreview));
+
+    if (messageHasLinks) content["com.beeper.linkpreviews"] = bundle;
+
+    // by this point the image has already uploaded, and a real message is already in timeline
+    // so remove the fake message
+    if (eventId !== undefined) room.removePendingEvent(eventId);
 
     return cancelled;
 }

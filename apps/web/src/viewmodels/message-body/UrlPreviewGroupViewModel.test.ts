@@ -16,9 +16,10 @@ import {
     UrlPreviewGroupViewModel,
     type UrlPreviewKind,
 } from "./UrlPreviewGroupViewModel";
-import type { UrlPreview } from "@element-hq/web-shared-components";
+import type { UrlPreview } from "shared-types";
 import { getMockClientWithEventEmitter, mkEvent } from "test-utils";
 import SettingsStore from "../../settings/SettingsStore";
+import { UrlPreviewApi } from "../../modules/UrlPreviewApi";
 
 const IMAGE_MXC = "mxc://example.org/abc";
 const BASIC_PREVIEW_OGDATA = {
@@ -95,6 +96,7 @@ function getViewModel({
             id: "$id",
         }),
         urlPreviewKind,
+        moduleUrlPreviewApi: new UrlPreviewApi(),
     });
     return { vm, client, onImageClicked };
 }
