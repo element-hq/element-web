@@ -29,7 +29,7 @@ import React, {
     useRef,
     useState,
 } from "react";
-import sanitizeHtml from "sanitize-html";
+import { sanitizeHtml } from "@element-hq/element-web-shared-utils";
 import {
     ChatIcon,
     RoomIcon,
