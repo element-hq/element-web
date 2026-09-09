@@ -442,7 +442,7 @@ describe("RoomListViewModel", () => {
             ]);
         });
 
-        describe("Favourites and Low Priority filters (RoomList.showSections)", () => {
+        describe("Section-only filters (RoomList.showSections)", () => {
             function mockShowSections(showSections: boolean): void {
                 vi.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
                     if (setting === "RoomList.showSections") return showSections;
@@ -453,7 +453,7 @@ describe("RoomListViewModel", () => {
                 });
             }
 
-            it("hides the Favourites and Low Priority filters when sections are enabled", () => {
+            it("hides the Favourites, Low Priority and Invites filters when sections are enabled", () => {
                 mockShowSections(true);
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
@@ -464,9 +464,10 @@ describe("RoomListViewModel", () => {
                 const { filterIds } = viewModel.getSnapshot();
                 expect(filterIds).not.toContain("favourite");
                 expect(filterIds).not.toContain("low_priority");
+                expect(filterIds).not.toContain("invites");
             });
 
-            it("shows the Favourites and Low Priority filters when sections are disabled", () => {
+            it("shows the Favourites, Low Priority and Invites filters when sections are disabled", () => {
                 mockShowSections(false);
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
@@ -477,6 +478,7 @@ describe("RoomListViewModel", () => {
                 const { filterIds } = viewModel.getSnapshot();
                 expect(filterIds).toContain("favourite");
                 expect(filterIds).toContain("low_priority");
+                expect(filterIds).toContain("invites");
             });
 
             it("recomputes the filters and clears the active filter when the setting changes", () => {
@@ -1137,7 +1139,7 @@ describe("RoomListViewModel", () => {
                 expect(viewModel.getSnapshot().sections).toHaveLength(0);
             });
 
-            it("should exclude favourite and low_priority from filter list", () => {
+            it("should exclude favourite, low_priority and invites from filter list", () => {
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
                     spaceStore: SDKContextClass.instance.spaceStore,
@@ -1147,6 +1149,7 @@ describe("RoomListViewModel", () => {
                 const snapshot = viewModel.getSnapshot();
                 expect(snapshot.filterIds).not.toContain("favourite");
                 expect(snapshot.filterIds).not.toContain("low_priority");
+                expect(snapshot.filterIds).not.toContain("invites");
                 // Other filters should still be present
                 expect(snapshot.filterIds).toContain("unread");
                 expect(snapshot.filterIds).toContain("people");

@@ -39,7 +39,7 @@ export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
             },
         ];
 
-        const snapshot: MediaPreviewGroupSnapshot = {
+        const snapshot = {
             entries: [
                 {
                     id: mxEvent.getId()!,
@@ -50,7 +50,7 @@ export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
                     ...attachmentIcon(content.info?.mimetype),
                 },
             ],
-        };
+        } satisfies MediaPreviewGroupSnapshot;
 
         super(snapshot);
     }
