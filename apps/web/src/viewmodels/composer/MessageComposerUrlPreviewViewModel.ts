@@ -38,6 +38,10 @@ export interface MessageComposerUrlPreviewViewModelProps {
      */
     showTooltips: boolean;
     /**
+     * Whether the url preview bundles lab flag is enabled
+     */
+    urlPreviewBundle: boolean;
+    /**
      * Initial composer plaintext content.
      */
     content?: string;
@@ -134,6 +138,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
             client: props.client,
             visible: props.visible,
             showTooltips: props.showTooltips,
+            urlPreviewBundle: props.urlPreviewBundle,
             content: props.content.body,
         };
 
