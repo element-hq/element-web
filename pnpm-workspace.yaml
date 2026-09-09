@@ -70,9 +70,10 @@ packageExtensions:
             vite: "^8.0.0"
 
 allowBuilds:
-    # Needed to make the git dependency in layered.sh happy
     matrix-js-sdk: true
+    # Needed to make the git dependency in layered.sh happy
     "matrix-js-sdk@git+https://github.com/matrix-org/matrix-js-sdk.git": true
+    "matrix-js-sdk@file:matrix-js-sdk/matrix-js-sdk.tgz": true
     # Installs the CLI, which we do not need
     "@sentry/cli": false
     # Installs nx cloud client, which we do not need
