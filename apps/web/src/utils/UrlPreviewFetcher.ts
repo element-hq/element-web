@@ -313,9 +313,7 @@ export class UrlPreviewFetcher {
             }
 
             const objectUrl = await this.decryptBundledImage(encryptedImage);
-            if (objectUrl === null) {
-                return preview;
-            }
+            if (objectUrl === null)  return preview;
 
             preview.image = {
                 imageThumb: objectUrl,
