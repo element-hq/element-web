@@ -190,7 +190,6 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
                             },
                         });
                         if (r.avatarUrl) {
-                            // Use the window session so authenticated media interception applies.
                             void global.mainWindow?.webContents.session
                                 .fetch(r.avatarUrl)
                                 .then((resp) => {
