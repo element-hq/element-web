@@ -150,7 +150,7 @@ describe("<LocationShareMenu />", () => {
             .mock.calls.find(([event]) => event === "geolocate")!;
 
         // set the location
-        act(() => onGeolocateCallback(position));
+        act(() => onGeolocateCallback(position as maplibregl.GeolocatePositionEvent));
     };
 
     const setLocationClick = () => {
