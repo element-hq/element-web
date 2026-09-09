@@ -7,7 +7,7 @@
 
 import classNames from "classnames";
 import React, { type JSX, useState } from "react";
-import { H2 } from "@vector-im/compound-web";
+import { Heading } from "@vector-im/compound-web";
 
 import { type ViewModel } from "../../../core/viewmodel/ViewModel";
 import { useViewModel } from "../../../core/viewmodel/useViewModel";
@@ -108,9 +108,9 @@ export function DateSeparatorView({ vm, className }: Readonly<DateSeparatorViewP
     return (
         <TimelineSeparator label={label} className={classNames(className)}>
             <Flex className={styles.content}>
-                <H2 size="lg" aria-hidden="true">
+                <Heading as="h2" size="lg" aria-hidden="true">
                     {label}
-                </H2>
+                </Heading>
             </Flex>
         </TimelineSeparator>
     );

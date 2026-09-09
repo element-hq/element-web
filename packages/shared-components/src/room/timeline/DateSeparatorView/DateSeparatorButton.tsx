@@ -6,7 +6,7 @@
  */
 
 import React, { forwardRef } from "react";
-import { H2, Tooltip } from "@vector-im/compound-web";
+import { Heading, Tooltip } from "@vector-im/compound-web";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 
 import { Flex } from "../../../core/utils/Flex";
@@ -49,9 +49,9 @@ export const DateSeparatorButton = forwardRef<HTMLDivElement, DateSeparatorButto
                 tabIndex={0}
                 {...props}
             >
-                <H2 size="lg" aria-hidden="true">
+                <Heading as="h2" size="lg" aria-hidden="true">
                     {label}
-                </H2>
+                </Heading>
                 <ChevronDownIcon />
             </Flex>
         </Tooltip>
