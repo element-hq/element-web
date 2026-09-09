@@ -13,7 +13,6 @@ import type EditorStateTransfer from "../../../utils/EditorStateTransfer";
 import { EditWysiwygComposer } from "./wysiwyg_composer";
 import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
 import { useCreateAutoDisposedViewModel, useViewModel } from "@element-hq/web-shared-components";
-import PlatformPeg from "../../../PlatformPeg";
 import { MessageComposerUrlPreviewWrapper } from "./MessageComposerUrlPreview";
 import EditMessageComposer from "./EditMessageComposer";
 import type EditorModel from "../../../editor/model";
@@ -36,7 +35,6 @@ export function EditMessageComposerWrapper(props: IEditMessageComposerProps): JS
             client: props.mxClient,
             moduleUrlPreviewApi: ModuleApi.instance.urlPreviews,
             visible: props.showUrlPreview,
-            showTooltips: PlatformPeg.get()?.needsUrlTooltips() ?? true,
             urlPreviewBundle: urlPreviewBundleEnabled,
             mxEvent: props.editState.getEvent(),
         }),
