@@ -36,8 +36,8 @@ async function startDM(app: ElementAppPage, page: Page, name: string): Promise<v
     await locator.fill("Hey!");
     await locator.press("Enter");
     // The DM room is created at this point, this can take a little bit of time
-    await expect(page.locator(".mx_EventTile_body").getByText("Hey!")).toBeAttached({ timeout: 3000 });
-    await expect(page.getByTestId("room-list").getByRole("option", { name: `Open room ${name}` })).toBeVisible();
+    await expect(page.getByTestId("event-tile-slot-body").getByText("Hey!")).toBeAttached({ timeout: 3000 });
+    await expect(page.getByTestId("room-list").getByRole("button", { name: `Open room ${name}` })).toBeVisible();
 }
 
 type RoomRef = { name: string; roomId: string };
@@ -264,9 +264,11 @@ test.describe("Spotlight", () => {
         await locator.press("Enter");
 
         // Assert DM exists by checking for the first message and the room being in the room list
-        await expect(page.locator(".mx_EventTile_body").filter({ hasText: "Hey!" })).toBeAttached({ timeout: 3000 });
+        await expect(page.getByTestId("event-tile-slot-body").filter({ hasText: "Hey!" })).toBeAttached({
+            timeout: 3000,
+        });
         await expect(
-            page.getByTestId("room-list").getByRole("option", { name: `Open room ${bot2.credentials!.displayName}` }),
+            page.getByTestId("room-list").getByRole("button", { name: `Open room ${bot2.credentials!.displayName}` }),
         ).toBeVisible();
 
         // Invite BotBob into existing DM with ByteBot
@@ -281,7 +283,7 @@ test.describe("Spotlight", () => {
         await app.client.inviteUser(dmRooms[0], bot1.credentials!.userId);
         await expect(roomHeaderName(page).first()).toContainText(groupDmName);
         await expect(
-            page.getByTestId("room-list").getByRole("option", { name: `Open room ${groupDmName}` }),
+            page.getByTestId("room-list").getByRole("button", { name: `Open room ${groupDmName}` }),
         ).toBeVisible();
 
         // Search for BotBob by id, should return group DM and user

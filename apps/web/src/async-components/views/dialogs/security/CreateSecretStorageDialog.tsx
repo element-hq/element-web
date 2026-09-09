@@ -411,7 +411,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     hasCancel={false}
                     disabled={!this.state.passPhraseValid}
                 >
-                    <button type="button" onClick={this.onCancelClick} className="danger">
+                    <button type="button" onClick={this.onCancelClick} className="mx_LegacyDialogButton danger">
                         {_t("action|cancel")}
                     </button>
                 </DialogButtons>
@@ -471,7 +471,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     hasCancel={false}
                     disabled={this.state.passPhrase !== this.state.passPhraseConfirm}
                 >
-                    <button type="button" onClick={this.onCancelClick} className="danger">
+                    <button type="button" onClick={this.onCancelClick} className="mx_LegacyDialogButton danger">
                         {_t("action|skip")}
                     </button>
                 </DialogButtons>
@@ -585,7 +585,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     onPrimaryButtonClick={this.onGoBackClick}
                     hasCancel={false}
                 >
-                    <button type="button" className="danger" onClick={this.onCancel}>
+                    <button type="button" className="mx_LegacyDialogButton danger" onClick={this.onCancel}>
                         {_t("action|cancel")}
                     </button>
                 </DialogButtons>

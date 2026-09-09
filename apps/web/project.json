@@ -30,6 +30,7 @@
                     // We indirect via `pnpm exec` to stop knip interpreting the
                     // commandline and declaring `playwright` as unlisted dependency.
                     "pnpm exec tsc --noEmit",
+                    "pnpm exec tsc --noEmit --project ./tsconfig.browser-test.json",
                     "pnpm exec tsc --noEmit --project playwright"
                 ],
                 "parallel": false,

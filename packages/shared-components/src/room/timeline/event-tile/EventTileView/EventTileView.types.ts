@@ -8,7 +8,15 @@
 import type React from "react";
 
 /** Timeline rendering modes supported by the EventTile shell. */
-export type EventTileRenderingMode = "Room" | "Thread" | "ThreadsList" | "File" | "Notification" | "Search" | "Pinned";
+export type EventTileRenderingMode =
+    | "Room"
+    | "Card"
+    | "Thread"
+    | "ThreadsList"
+    | "File"
+    | "Notification"
+    | "Search"
+    | "Pinned";
 
 /** Conditional state used to derive EventTile root classes. */
 export interface EventTileViewRootState {

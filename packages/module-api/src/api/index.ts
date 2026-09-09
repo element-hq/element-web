@@ -24,6 +24,7 @@ import { type CustomisationsApi } from "./customisations.ts";
 import { type ComposerApi } from "./composer.ts";
 import { type StorageHelperApi } from "./storage-helper.ts";
 import { type SettingsApi } from "./settings.ts";
+import { type UrlPreviewApi } from "./urlpreview.ts";
 
 /**
  * Module interface for modules to implement.
@@ -170,6 +171,11 @@ export interface Api extends DialogApiExtension, AccountAuthApiExtension, Profil
      * @alpha Subject to change.
      */
     readonly settings: SettingsApi;
+    /**
+     * Allows modules to read application settings.
+     * @alpha Subject to change.
+     */
+    readonly urlPreviews: UrlPreviewApi;
 
     /**
      * Create a ReactDOM root for rendering React components.

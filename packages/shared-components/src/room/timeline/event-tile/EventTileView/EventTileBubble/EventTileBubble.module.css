@@ -6,11 +6,13 @@
  */
 
 .container {
+    --event-tile-body-padding: var(--cpd-space-3x);
     background-color: var(--cpd-color-bg-subtle-secondary);
-    padding: var(--cpd-space-3x);
+    padding: var(--event-tile-body-padding);
     border-radius: 8px;
-    /* Reserve space for timestamps, but also cap the width. */
-    max-width: min(calc(100% - 2 * 46px), 600px);
+    /* Reserve space for external timestamps by default. EventTileView can
+       provide a wider shared value for bubble-container events. */
+    max-width: var(--event-tile-bubble-max-width, min(calc(100% - 2 * 46px), 600px));
     box-sizing: border-box;
     display: grid;
     grid-template-columns: 24px minmax(0, 1fr) min-content min-content;

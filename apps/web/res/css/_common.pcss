@@ -559,35 +559,15 @@ summary {
     }
 }
 
-/* XXX: Our button style are a mess: buttons that happen to appear in dialogs get special styles applied
- * to them that no button anywhere else in the app gets by default. In practice, buttons in other places
- * in the app look the same by being AccessibleButtons, or possibly by having explict button classes.
- * We should go through and have one consistent set of styles for buttons throughout the app.
- * For now, I am duplicating the selectors here for mx_Dialog and mx_DialogButtons.
+/* XXX: Our button styles are a mess; this is opt-in styling for legacy raw <button>s and
+ * <input type="submit">s in dialogs. Search `mx_LegacyDialogButton` in the JSX for the elements
+ * still relying on it.
+ * Keep the `.mx_Dialog`/`.mx_Dialog_buttons` ancestor + `button`/`input[type="submit"]` type
+ * selector alongside the marker class: they preserve the specificity of the old selectors, which
+ * some per-dialog CSS overrides (e.g. width tweaks) rely on losing to.
  */
-.mx_Dialog
-    button:not(
-        .mx_EncryptionUserSettingsTab button,
-        .mx_EncryptionCard button,
-        .mx_UserProfileSettings button,
-        .mx_ShareDialog button,
-        .mx_UnpinAllDialog button,
-        .mx_ThemeChoicePanel_CustomTheme button,
-        .mx_Dialog_nonDialogButton,
-        .mx_AccessibleButton,
-        .mx_IdentityServerPicker button,
-        .mx_AccessSecretStorageDialog button,
-        .mx_InviteDialog_section button,
-        .mx_InviteDialog_editor button,
-        .mx_UnknownIdentityUsersWarningDialog button,
-        .mx_ThreadActionBar button,
-        .mx_HistoryActionBar button,
-        [data-kind],
-        [class|="maplibregl"]
-    ),
-.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton, .mx_AccessibleButton, [data-kind]),
-.mx_Dialog input[type="submit"],
-.mx_Dialog_buttons input[type="submit"] {
+.mx_Dialog button.mx_LegacyDialogButton,
+.mx_Dialog input.mx_LegacyDialogButton[type="submit"] {
     @mixin mx_DialogButton;
     margin-left: 0px;
     margin-right: var(--buttons-dialog-gap-column);
@@ -601,116 +581,53 @@ summary {
     font-family: inherit;
 }
 
-.mx_Dialog
-    button:not(
-        .mx_Dialog_nonDialogButton,
-        [class|="maplibregl"],
-        .mx_AccessibleButton,
-        .mx_UserProfileSettings button,
-        .mx_ThemeChoicePanel_CustomTheme button,
-        .mx_UnpinAllDialog button,
-        .mx_ShareDialog button,
-        .mx_EncryptionUserSettingsTab button,
-        .mx_UnknownIdentityUsersWarningDialog button,
-        [data-kind]
-    ):last-child {
+.mx_Dialog button.mx_LegacyDialogButton:last-child {
     margin-right: 0px;
 }
 
-.mx_Dialog
-    button:not(
-        .mx_Dialog_nonDialogButton,
-        [class|="maplibregl"],
-        .mx_AccessibleButton,
-        .mx_UserProfileSettings button,
-        .mx_ThemeChoicePanel_CustomTheme button,
-        .mx_UnpinAllDialog button,
-        .mx_ShareDialog button,
-        .mx_EncryptionUserSettingsTab button,
-        .mx_InviteDialog_section button,
-        .mx_InviteDialog_editor button,
-        .mx_UnknownIdentityUsersWarningDialog button,
-        [data-kind]
-    ):focus,
-.mx_Dialog input[type="submit"]:focus,
-.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton, .mx_AccessibleButton, [data-kind]):focus,
-.mx_Dialog_buttons input[type="submit"]:focus {
+.mx_Dialog button.mx_LegacyDialogButton:focus,
+.mx_Dialog input.mx_LegacyDialogButton[type="submit"]:focus {
     filter: brightness($focus-brightness);
 }
 
-.mx_Dialog button.mx_Dialog_primary:not(.mx_Dialog_nonDialogButton, [class|="maplibregl"], [data-kind]),
-.mx_Dialog input[type="submit"].mx_Dialog_primary,
-.mx_Dialog_buttons
-    button:not(
-        .mx_Dialog_nonDialogButton,
-        .mx_AccessibleButton,
-        .cancel,
-        .mx_UserProfileSettings button,
-        .mx_ThemeChoicePanel_CustomTheme button,
-        .mx_UnpinAllDialog button,
-        .mx_ShareDialog button,
-        .mx_EncryptionUserSettingsTab button,
-        .mx_UnknownIdentityUsersWarningDialog button,
-        [data-kind]
-    ),
-.mx_Dialog_buttons input[type="submit"].mx_Dialog_primary {
+/* Default (non-cancel) buttons inside a DialogButtons footer get filled in as the primary action,
+ * even without the mx_Dialog_primary class - .danger/.warning override the colours below via a
+ * same-specificity, later-in-source rule; disabled overrides everyone the same way.
+ */
+.mx_Dialog button.mx_LegacyDialogButton.mx_Dialog_primary,
+.mx_Dialog input.mx_LegacyDialogButton[type="submit"].mx_Dialog_primary,
+.mx_Dialog_buttons button.mx_LegacyDialogButton:not(.cancel) {
     color: var(--cpd-color-text-on-solid-primary);
     background-color: var(--cpd-color-bg-action-primary-rest);
     border-color: var(--cpd-color-bg-action-primary-rest);
     min-width: 156px;
 }
 
-.mx_Dialog button.danger:not(.mx_Dialog_nonDialogButton, [class|="maplibregl"]),
-.mx_Dialog input[type="submit"].danger,
-.mx_Dialog_buttons
-    button.danger:not(
-        .mx_Dialog_nonDialogButton,
-        .mx_AccessibleButton,
-        .mx_UserProfileSettings button,
-        .mx_ThemeChoicePanel_CustomTheme button,
-        .mx_UnpinAllDialog button,
-        .mx_ShareDialog button,
-        .mx_EncryptionUserSettingsTab button,
-        .mx_UnknownIdentityUsersWarningDialog button
-    ),
-.mx_Dialog_buttons input[type="submit"].danger {
+.mx_Dialog button.mx_LegacyDialogButton.danger,
+.mx_Dialog input.mx_LegacyDialogButton[type="submit"].danger {
     background-color: var(--cpd-color-bg-critical-primary);
     border: solid 1px var(--cpd-color-bg-critical-primary);
     color: var(--cpd-color-text-on-solid-primary);
 }
 
-.mx_Dialog button.warning:not(.mx_Dialog_nonDialogButton, [class|="maplibregl"]),
-.mx_Dialog input[type="submit"].warning {
+.mx_Dialog button.mx_LegacyDialogButton.warning,
+.mx_Dialog input.mx_LegacyDialogButton[type="submit"].warning {
     border: solid 1px var(--cpd-color-border-critical-subtle);
     color: var(--cpd-color-text-critical-primary);
 }
 
-.mx_Dialog
-    button:not(
-        .mx_Dialog_nonDialogButton,
-        [class|="maplibregl"],
-        .mx_AccessibleButton,
-        .mx_UserProfileSettings button,
-        .mx_ThemeChoicePanel_CustomTheme button,
-        .mx_UnpinAllDialog button,
-        .mx_ShareDialog button,
-        .mx_EncryptionUserSettingsTab button,
-        .mx_UnknownIdentityUsersWarningDialog button,
-        [data-kind]
-    ):disabled,
-.mx_Dialog input[type="submit"]:disabled,
-.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton, .mx_AccessibleButton):disabled,
-.mx_Dialog_buttons input[type="submit"]:disabled {
-    background-color: $light-fg-color;
-    border: solid 1px $light-fg-color;
-    opacity: 0.7;
-}
-
-.mx_Dialog_buttons button.cancel {
+.mx_Dialog_buttons button.mx_LegacyDialogButton.cancel {
     color: var(--cpd-color-text-primary);
     background-color: var(--cpd-color-bg-action-secondary-rest);
     border-color: var(--cpd-color-border-interactive-secondary);
     min-width: 156px;
+}
+
+.mx_Dialog button.mx_LegacyDialogButton:disabled,
+.mx_Dialog input.mx_LegacyDialogButton[type="submit"]:disabled {
+    background-color: $light-fg-color;
+    border: solid 1px $light-fg-color;
+    opacity: 0.7;
 }
 
 /* Spinner Dialog overide */
@@ -904,6 +821,12 @@ summary {
 
 /* Layout compatibility hook for timestamp placement in existing app/web timeline surfaces. */
 .mx_MessageTimestamp {
-    display: block; /* enable the width setting below */
-    width: var(--MessageTimestamp-width);
+    display: block;
+}
+
+.mx_MessageTimestamp_lateIcon {
+    position: absolute;
+    inset-block-start: var(--cpd-space-1x);
+    inset-inline-end: 100%;
+    color: var(--cpd-color-text-secondary);
 }
