@@ -272,20 +272,20 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
 
     // With actions present the tooltip moves onto the name itself, so that hovering an action shows
     // that action's tooltip rather than the file name's.
-    const info = showInfo ? (
-        infoActions ? (
-            <MediaBody data-type="info">
-                <Tooltip description={resolvedInfoTooltip} placement="right">
-                    {infoButton}
-                </Tooltip>
-                {infoActions}
-            </MediaBody>
-        ) : (
+    const infoRow = infoActions ? (
+        <MediaBody data-type="info">
             <Tooltip description={resolvedInfoTooltip} placement="right">
-                <MediaBody data-type="info">{infoButton}</MediaBody>
+                {infoButton}
             </Tooltip>
-        )
-    ) : null;
+            {infoActions}
+        </MediaBody>
+    ) : (
+        <Tooltip description={resolvedInfoTooltip} placement="right">
+            <MediaBody data-type="info">{infoButton}</MediaBody>
+        </Tooltip>
+    );
+
+    const info = showInfo ? infoRow : null;
 
     const classes = classNames(styles.content, className);
 

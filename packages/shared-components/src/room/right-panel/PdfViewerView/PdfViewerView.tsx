@@ -38,6 +38,11 @@ export interface PdfViewerViewProps {
     onPageInputCancel: () => void;
     /** Called when the user submits the page-number form. */
     onPageSubmit: () => void;
+    /**
+     * Optional CSS class for host-level styling. Applied to the outer element, so a host can scope
+     * styling for its own renderer's markup without that markup being known here.
+     */
+    className?: string;
 }
 
 /**
@@ -58,23 +63,24 @@ export function PdfViewerView({
     onPageInputBlur,
     onPageInputCancel,
     onPageSubmit,
+    className,
 }: Readonly<PdfViewerViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
 
     return (
-        <div className={styles.viewer} data-testid="pdf-viewer">
+        <div className={classNames(styles.viewer, className)} data-testid="pdf-viewer">
             {pageCount > 0 ? (
-                <div
+                <form
                     className={styles.toolbar}
-                    role="group"
-                    aria-label={_t("pdf_viewer|page_label", { page: currentPage, total: pageCount })}
+                    onSubmit={(event) => {
+                        event.preventDefault();
+                        onPageSubmit();
+                    }}
                 >
-                    <form
+                    {/* A fieldset groups the controls semantically, and carries the implicit `group` role. */}
+                    <fieldset
                         className={styles.pageForm}
-                        onSubmit={(event) => {
-                            event.preventDefault();
-                            onPageSubmit();
-                        }}
+                        aria-label={_t("pdf_viewer|page_label", { page: currentPage, total: pageCount })}
                     >
                         <input
                             aria-label={_t("pdf_viewer|page_number")}
@@ -99,8 +105,8 @@ export function PdfViewerView({
                         <span className={styles.pageTotal} data-testid="pdf-page-total">
                             {pageCount}
                         </span>
-                    </form>
-                </div>
+                    </fieldset>
+                </form>
             ) : null}
             <div className={styles.body}>
                 <div className={styles.container} data-testid="pdf-container" ref={containerRef}>

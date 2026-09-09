@@ -39,6 +39,12 @@ Please see LICENSE files in the repository root for full details.
     display: flex;
     align-items: center;
     gap: var(--cpd-space-2x);
+
+    /* A fieldset brings its own border, spacing and intrinsic min-width, none of which suit a toolbar. */
+    border: none;
+    margin: 0;
+    padding: 0;
+    min-inline-size: 0;
 }
 
 .pageInput {

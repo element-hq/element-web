@@ -106,7 +106,7 @@ export const Ready: Story = {
     },
 };
 
-export const Error: Story = {
+export const ErrorState: Story = {
     args: {
         status: "error",
     },

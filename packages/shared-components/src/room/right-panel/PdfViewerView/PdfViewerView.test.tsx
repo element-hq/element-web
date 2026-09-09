@@ -53,6 +53,14 @@ describe("PdfViewerView", () => {
         expect(screen.getByRole("status")).toHaveClass(styles.message);
     });
 
+    it("adds a host class to the shell without replacing its own", () => {
+        renderView({ className: "mx_HostViewer" });
+
+        const viewer = screen.getByTestId("pdf-viewer");
+        expect(viewer).toHaveClass("mx_HostViewer");
+        expect(viewer).toHaveClass(styles.viewer);
+    });
+
     it("announces that the PDF is loading", () => {
         renderView({ status: "loading" });
 
