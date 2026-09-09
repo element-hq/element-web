@@ -26,6 +26,7 @@ import {
 import { type ActionPayload } from "../../dispatcher/payloads";
 import { Action } from "../../dispatcher/actions";
 import { type ActiveRoomChangedPayload } from "../../dispatcher/payloads/ActiveRoomChangedPayload";
+import { type OpenPdfViewerPayload } from "../../dispatcher/payloads/OpenPdfViewerPayload";
 import { SDKContextClass } from "../../contexts/SDKContextClass";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 
@@ -89,6 +90,16 @@ export default class RightPanelStore extends ReadyWatchingStore {
             case Action.ActiveRoomChanged: {
                 const changePayload = <ActiveRoomChangedPayload>payload;
                 this.handleViewedRoomChange(changePayload.oldRoomId, changePayload.newRoomId);
+                break;
+            }
+
+            case Action.OpenPdfViewer: {
+                const { event } = <OpenPdfViewerPayload>payload;
+                this.setCard(
+                    { phase: RightPanelPhases.PdfViewer, state: { pdfViewerEvent: event } },
+                    true,
+                    event.getRoomId(),
+                );
                 break;
             }
 

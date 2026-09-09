@@ -12,8 +12,8 @@ import { EventType, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 
 import { isPdfEvent, openPdfViewer, pdfMediaForEvent } from "./pdfViewer";
 import { type MediaEventHelper } from "./MediaEventHelper";
-import RightPanelStore from "../stores/right-panel/RightPanelStore";
-import { RightPanelPhases } from "../stores/right-panel/RightPanelStorePhases";
+import defaultDispatcher from "../dispatcher/dispatcher";
+import { Action } from "../dispatcher/actions";
 
 function mkFileEvent(info?: Record<string, unknown>): MatrixEvent {
     return new MatrixEvent({
@@ -81,16 +81,12 @@ describe("openPdfViewer", () => {
         vi.restoreAllMocks();
     });
 
-    it("opens the viewer card in the room the event belongs to", async () => {
-        const setCard = vi.spyOn(RightPanelStore.instance, "setCard").mockImplementation(() => {});
+    it("dispatches the open action for the event", () => {
+        const dispatch = vi.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
         const mxEvent = mkFileEvent({ mimetype: "application/pdf" });
 
-        await openPdfViewer(mxEvent);
+        openPdfViewer(mxEvent);
 
-        expect(setCard).toHaveBeenCalledWith(
-            { phase: RightPanelPhases.PdfViewer, state: { pdfViewerEvent: mxEvent } },
-            true,
-            "!room:example.org",
-        );
+        expect(dispatch).toHaveBeenCalledWith({ action: Action.OpenPdfViewer, event: mxEvent });
     });
 });

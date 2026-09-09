@@ -166,6 +166,21 @@ describe("RightPanelStore", () => {
                 expect(store.roomPhaseHistory).toEqual([]);
             });
 
+            it("opens the card for the event when the open action is dispatched", async () => {
+                setPdfViewerLab(true);
+                await viewRoom("!1:example.org");
+                const event = {
+                    getId: () => "$pdf",
+                    getRoomId: () => "!1:example.org",
+                } as unknown as MatrixEvent;
+
+                defaultDispatcher.dispatch({ action: Action.OpenPdfViewer, event }, true);
+
+                expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.PdfViewer);
+                expect(store.currentCardForRoom("!1:example.org").state?.pdfViewerEvent).toBe(event);
+                expect(store.isOpenForRoom("!1:example.org")).toEqual(true);
+            });
+
             it("keeps a card with an event to display", async () => {
                 setPdfViewerLab(true);
                 await viewRoom("!1:example.org");
