@@ -19,7 +19,6 @@ import { type MediaEventHelper } from "../../utils/MediaEventHelper";
 import { FileBodyViewModel } from "./FileBodyViewModel";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
 import { openPdfViewer } from "../../utils/pdfViewer";
-import SettingsStore from "../../settings/SettingsStore";
 
 const mockDownload = vi.fn();
 
@@ -326,24 +325,14 @@ describe("FileBodyViewModel", () => {
     describe("open in viewer", () => {
         const pdf = { info: { mimetype: "application/pdf" } };
 
-        // Captured once: re-reading it inside the helper would pick up the previous test's spy and
-        // recurse.
-        const originalGetValue = SettingsStore.getValue;
-
-        /** The viewer sits behind a lab, so every case below has to opt in to it. */
-        const enablePdfViewerLab = (): void => {
-            vi.spyOn(SettingsStore, "getValue").mockImplementation((setting, ...args) => {
-                if (setting === "feature_pdf_viewer") return true;
-                return originalGetValue(setting, ...args);
-            });
-        };
-
-        beforeEach(() => enablePdfViewerLab());
+        /** The viewer sits behind a lab, which the view model takes as a prop rather than reading here. */
+        const createPdfVm = (
+            overrides: Partial<ConstructorParameters<typeof FileBodyViewModel>[0]> = {},
+        ): FileBodyViewModel => createVm({ pdfViewerEnabled: true, ...overrides });
 
         it("does not offer the viewer while the lab is off", () => {
-            vi.restoreAllMocks();
-
-            const vm = createVm({
+            const vm = createPdfVm({
+                pdfViewerEnabled: false,
                 mxEvent: mkMediaEvent(pdf),
                 showFileInfo: true,
                 timelineRenderingType: TimelineRenderingType.Room,
@@ -353,8 +342,20 @@ describe("FileBodyViewModel", () => {
             expect(vm.getSnapshot().showInlineDownload).toBe(false);
         });
 
-        it("offers the viewer for a PDF shown as a file in the timeline", () => {
+        it("falls back to the lab setting when the flag is not passed", () => {
+            // No prop and no mocking: the setting's own default is off, so this also pins the
+            // constructor actually consulting it.
             const vm = createVm({
+                mxEvent: mkMediaEvent(pdf),
+                showFileInfo: true,
+                timelineRenderingType: TimelineRenderingType.Room,
+            });
+
+            expect(vm.getSnapshot().showOpen).toBe(false);
+        });
+
+        it("offers the viewer for a PDF shown as a file in the timeline", () => {
+            const vm = createPdfVm({
                 mxEvent: mkMediaEvent(pdf),
                 showFileInfo: true,
                 timelineRenderingType: TimelineRenderingType.Room,
@@ -364,7 +365,7 @@ describe("FileBodyViewModel", () => {
         });
 
         it("offers the viewer for an encrypted PDF, which decrypts on open", () => {
-            const vm = createVm({
+            const vm = createPdfVm({
                 mxEvent: mkMediaEvent({ ...pdf, file: { url: "mxc://server/file" } }),
                 mediaEventHelper: mkMediaEventHelper({ encrypted: true }),
                 showFileInfo: true,
@@ -381,7 +382,7 @@ describe("FileBodyViewModel", () => {
             ["a non-PDF mimetype", { info: { mimetype: "text/plain" } }],
             ["no mimetype at all", {}],
         ])("does not offer the viewer for %s", (_label, content) => {
-            const vm = createVm({
+            const vm = createPdfVm({
                 mxEvent: mkMediaEvent(content),
                 showFileInfo: true,
                 timelineRenderingType: TimelineRenderingType.Room,
@@ -391,26 +392,26 @@ describe("FileBodyViewModel", () => {
         });
 
         it("does not offer the viewer in the download-only panels", () => {
-            const vm = createVm({ mxEvent: mkMediaEvent(pdf), showFileInfo: false });
+            const vm = createPdfVm({ mxEvent: mkMediaEvent(pdf), showFileInfo: false });
 
             expect(vm.getSnapshot().showOpen).toBe(false);
         });
 
         it("does not offer the viewer in an export", () => {
-            const vm = createVm({ mxEvent: mkMediaEvent(pdf), showFileInfo: true, forExport: true });
+            const vm = createPdfVm({ mxEvent: mkMediaEvent(pdf), showFileInfo: true, forExport: true });
 
             expect(vm.getSnapshot().showOpen).toBeUndefined();
         });
 
         it("does not offer the viewer without a media helper to fetch the bytes", () => {
-            const vm = createVm({ mxEvent: mkMediaEvent(pdf), mediaEventHelper: undefined, showFileInfo: true });
+            const vm = createPdfVm({ mxEvent: mkMediaEvent(pdf), mediaEventHelper: undefined, showFileInfo: true });
 
             expect(vm.getSnapshot().showOpen).toBe(false);
         });
 
         it("opens the viewer for its own event on click", () => {
             const mxEvent = mkMediaEvent(pdf);
-            const vm = createVm({ mxEvent, showFileInfo: true, timelineRenderingType: TimelineRenderingType.Room });
+            const vm = createPdfVm({ mxEvent, showFileInfo: true, timelineRenderingType: TimelineRenderingType.Room });
 
             vm.onOpenClick();
 

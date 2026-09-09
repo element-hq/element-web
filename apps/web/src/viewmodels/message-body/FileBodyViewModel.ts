@@ -38,6 +38,11 @@ export interface FileBodyViewModelProps {
     timelineRenderingType: TimelineRenderingType;
     refIFrame: RefObject<HTMLIFrameElement>;
     refLink: RefObject<HTMLAnchorElement>;
+    /**
+     * Whether the PDF viewer lab is on. Defaults to the setting, resolved once in the constructor so
+     * callers — tests especially — can pass it rather than mutating the settings store.
+     */
+    pdfViewerEnabled?: boolean;
 }
 
 // Cached copy of the download.svg asset for the sandboxed iframe.
@@ -117,7 +122,12 @@ export class FileBodyViewModel
     private readonly fileDownloader: FileDownloader;
 
     public constructor(props: FileBodyViewModelProps) {
-        super(props, FileBodyViewModel.computeSnapshot(props));
+        const propsWithSettingDefaults: FileBodyViewModelProps = {
+            ...props,
+            pdfViewerEnabled: props.pdfViewerEnabled ?? SettingsStore.getValue("feature_pdf_viewer"),
+        };
+
+        super(propsWithSettingDefaults, FileBodyViewModel.computeSnapshot(propsWithSettingDefaults));
         this.refIFrame = props.refIFrame;
         this.refLink = props.refLink;
         this.fileDownloader = new FileDownloader(() => this.refIFrame.current);
@@ -161,7 +171,7 @@ export class FileBodyViewModel
             showFileInfo &&
             !props.forExport &&
             !!props.mediaEventHelper &&
-            SettingsStore.getValue("feature_pdf_viewer") &&
+            !!props.pdfViewerEnabled &&
             isPdfEvent(props.mxEvent);
         const openLabel = showOpen ? _t("pdf_viewer|open") : undefined;
         // Once the row carries an action for opening, downloading needs to be an action too rather than
