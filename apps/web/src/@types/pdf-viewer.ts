@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
  *
  * These are the fields of the `location` pdf.js reports on `updateviewarea`, which is also the shape
  * it accepts back as an `XYZ` destination — so restoring is a matter of handing it straight back. The
- * offsets are in PDF user-space units on {@link page} rather than pixels in the scroll container, so
+ * offsets are in PDF user-space units on `page` rather than pixels in the scroll container, so
  * they survive a change of zoom, of panel width, or of device.
  */
 export interface PdfViewerState {
