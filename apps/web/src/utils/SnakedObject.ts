@@ -25,7 +25,7 @@ export class SnakedObject<T = Record<string, any>> {
             SnakedObject.fallbackWarnings.add(fallbackKey);
             console.warn(
                 `Using deprecated camelCase config ${fallbackKey}\n` +
-                "See https://github.com/vector-im/element-web/blob/develop/docs/config.md#-deprecation-notice",
+                    "See https://github.com/vector-im/element-web/blob/develop/docs/config.md#-deprecation-notice",
             );
         }
         return fallback;

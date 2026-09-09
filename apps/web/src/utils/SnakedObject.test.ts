@@ -75,7 +75,7 @@ describe("SnakedObject", () => {
         expect(warn).toHaveBeenCalledExactlyOnceWith(
             `\
 Using deprecated camelCase config camelCase
-See https://github.com/vector-im/element-web/blob/develop/docs/config.md#-deprecation-notice`
+See https://github.com/vector-im/element-web/blob/develop/docs/config.md#-deprecation-notice`,
         );
     });
 
