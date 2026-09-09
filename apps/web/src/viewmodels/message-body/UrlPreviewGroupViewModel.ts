@@ -211,12 +211,7 @@ export class UrlPreviewGroupViewModel
                             .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
                             .map((preview) =>
                                 this.fetcher
-                                    .previewFromBundle(
-                                        preview,
-                                        this.props.mxEvent,
-                                        loadMedia,
-                                        allowServerFallback,
-                                    )
+                                    .previewFromBundle(preview, this.props.mxEvent, loadMedia, allowServerFallback)
                                     .catch((_) => null),
                             ),
                     )
@@ -228,9 +223,7 @@ export class UrlPreviewGroupViewModel
             previews ??= await Promise.all(
                 this.links
                     .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
-                    .map((link) =>
-                        this.fetcher.fetchPreview(link, loadMedia, this.props.mxEvent).catch((_) => null),
-                    ),
+                    .map((link) => this.fetcher.fetchPreview(link, loadMedia, this.props.mxEvent).catch((_) => null)),
             );
         }
 

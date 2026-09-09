@@ -19,8 +19,8 @@ import {
 import {
     type MessageComposerUrlPreviewSnapshotEntryLoaded,
     type MessageComposerUrlPreviewSnapshot,
-    UrlPreview,
 } from "@element-hq/web-shared-components";
+import { type UrlPreview } from "shared-types";
 
 import type EditorModel from "../editor/model";
 import { Type } from "../editor/parts";
