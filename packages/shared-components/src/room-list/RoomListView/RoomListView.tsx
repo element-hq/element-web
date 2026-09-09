@@ -101,9 +101,9 @@ export interface RoomListViewActions {
     /** Called to change the order of sections */
     changeSectionOrder: (sourceTag: string, targetTag: string) => void;
     /** Called when a section drag starts — collapses all sections */
-    onSectionDragStart: () => void;
+    onSectionOrRoomDragStart: () => void;
     /** Called when a section drag ends (drop or cancel) — restores expansion states */
-    onSectionDragEnd: () => void;
+    onSectionOrRoomDragEnd: () => void;
 }
 
 /**

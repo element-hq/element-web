@@ -442,7 +442,7 @@ describe("RoomListViewModel", () => {
             ]);
         });
 
-        describe("Favourites and Low Priority filters (RoomList.showSections)", () => {
+        describe("Section-only filters (RoomList.showSections)", () => {
             function mockShowSections(showSections: boolean): void {
                 vi.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
                     if (setting === "RoomList.showSections") return showSections;
@@ -453,7 +453,7 @@ describe("RoomListViewModel", () => {
                 });
             }
 
-            it("hides the Favourites and Low Priority filters when sections are enabled", () => {
+            it("hides the Favourites, Low Priority and Invites filters when sections are enabled", () => {
                 mockShowSections(true);
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
@@ -464,9 +464,10 @@ describe("RoomListViewModel", () => {
                 const { filterIds } = viewModel.getSnapshot();
                 expect(filterIds).not.toContain("favourite");
                 expect(filterIds).not.toContain("low_priority");
+                expect(filterIds).not.toContain("invites");
             });
 
-            it("shows the Favourites and Low Priority filters when sections are disabled", () => {
+            it("shows the Favourites, Low Priority and Invites filters when sections are disabled", () => {
                 mockShowSections(false);
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
@@ -477,6 +478,7 @@ describe("RoomListViewModel", () => {
                 const { filterIds } = viewModel.getSnapshot();
                 expect(filterIds).toContain("favourite");
                 expect(filterIds).toContain("low_priority");
+                expect(filterIds).toContain("invites");
             });
 
             it("recomputes the filters and clears the active filter when the setting changes", () => {
@@ -1137,7 +1139,7 @@ describe("RoomListViewModel", () => {
                 expect(viewModel.getSnapshot().sections).toHaveLength(0);
             });
 
-            it("should exclude favourite and low_priority from filter list", () => {
+            it("should exclude favourite, low_priority and invites from filter list", () => {
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
                     spaceStore: SDKContextClass.instance.spaceStore,
@@ -1147,6 +1149,7 @@ describe("RoomListViewModel", () => {
                 const snapshot = viewModel.getSnapshot();
                 expect(snapshot.filterIds).not.toContain("favourite");
                 expect(snapshot.filterIds).not.toContain("low_priority");
+                expect(snapshot.filterIds).not.toContain("invites");
                 // Other filters should still be present
                 expect(snapshot.filterIds).toContain("unread");
                 expect(snapshot.filterIds).toContain("people");
@@ -1716,7 +1719,7 @@ describe("RoomListViewModel", () => {
                 it("should collapse every section on drag start", () => {
                     expect(viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).isExpanded).toBe(true);
 
-                    viewModel.onSectionDragStart();
+                    viewModel.onSectionOrRoomDragStart();
 
                     expect(viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).isExpanded).toBe(false);
                     expect(viewModel.getSectionHeaderViewModel(CHATS_TAG).isExpanded).toBe(false);
@@ -1731,8 +1734,8 @@ describe("RoomListViewModel", () => {
                     // Collapse Favourite before the drag; other sections remain expanded
                     viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).onClick();
 
-                    viewModel.onSectionDragStart();
-                    viewModel.onSectionDragEnd();
+                    viewModel.onSectionOrRoomDragStart();
+                    viewModel.onSectionOrRoomDragEnd();
 
                     expect(viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).isExpanded).toBe(false);
                     expect(viewModel.getSectionHeaderViewModel(CHATS_TAG).isExpanded).toBe(true);
@@ -1752,13 +1755,13 @@ describe("RoomListViewModel", () => {
                 it("should re-snapshot expansion state on each drag start", () => {
                     // First cycle: Favourite is collapsed before the drag
                     viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).onClick();
-                    viewModel.onSectionDragStart();
-                    viewModel.onSectionDragEnd();
+                    viewModel.onSectionOrRoomDragStart();
+                    viewModel.onSectionOrRoomDragEnd();
 
                     // Between cycles: collapse CHATS_TAG as well
                     viewModel.getSectionHeaderViewModel(CHATS_TAG).onClick();
-                    viewModel.onSectionDragStart();
-                    viewModel.onSectionDragEnd();
+                    viewModel.onSectionOrRoomDragStart();
+                    viewModel.onSectionOrRoomDragEnd();
 
                     // The second drag end must restore the state captured at the second drag start
                     // (Favourite collapsed, CHATS_TAG collapsed, LowPriority expanded), not the first cycle's snapshot.
@@ -1768,7 +1771,7 @@ describe("RoomListViewModel", () => {
                 });
 
                 it("should be a no-op when drag end is called without drag start", () => {
-                    viewModel.onSectionDragEnd();
+                    viewModel.onSectionOrRoomDragEnd();
 
                     expect(viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).isExpanded).toBe(true);
                     expect(viewModel.getSectionHeaderViewModel(CHATS_TAG).isExpanded).toBe(true);
@@ -1807,7 +1810,7 @@ describe("RoomListViewModel", () => {
 
             viewModel.changeRoomSection(room1.roomId, DefaultTagID.Favourite);
 
-            expect(tagRoom).toHaveBeenCalledWith(room1, DefaultTagID.Favourite);
+            expect(tagRoom).toHaveBeenCalledWith(room1, DefaultTagID.Favourite, true);
         });
 
         it("should do nothing when the room is not found", () => {
