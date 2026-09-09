@@ -190,7 +190,8 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
                             },
                         });
                         if (r.avatarUrl) {
-                            void fetch(r.avatarUrl)
+                            void global.mainWindow?.webContents.session
+                                .fetch(r.avatarUrl)
                                 .then((resp) => {
                                     if (!resp.ok) return;
                                     return resp.arrayBuffer();
