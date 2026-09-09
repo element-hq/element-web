@@ -363,11 +363,11 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
 
                 // the previews are read synchronously, so the editor can be closed straight away
                 // rather than making the user wait for any preview images to upload
-                const attaching = this.props.attachBundles?.(editContent["m.new_content"]!);
+                const attachingPromise = this.props.attachBundles?.(editContent["m.new_content"]!);
                 this.endEdit();
 
                 // the edit was cancelled while its preview images were uploading
-                if (await attaching) return;
+                if (await attachingPromise) return;
 
                 void this.props.mxClient.sendMessage(roomId, threadId, editContent);
                 dis.dispatch({ action: "message_sent" });
