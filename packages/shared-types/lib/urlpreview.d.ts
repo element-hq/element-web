@@ -81,4 +81,9 @@ export interface UrlPreview {
      * Author of the content, if specified.
      */
     author?: string;
+
+    /**
+     * Additional keys to be included in a bundled preview. May be undefined.
+     */
+    additionalBundleContent?: Record<string, unknown>;
 }
