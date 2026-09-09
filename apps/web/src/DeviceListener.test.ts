@@ -523,14 +523,15 @@ describe("DeviceListener", () => {
                     expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith("key_storage_out_of_sync");
                 });
 
-                it("does not show an out-of-sync toast when the backup key is missing locally but backup is purposely disabled", async () => {
+                it("shows an out-of-sync toast when the backup key is missing locally, even if backup is purposely disabled", async () => {
                     mockCrypto!.getSecretStorageStatus.mockResolvedValue(readySecretStorageStatus);
+                    mockCrypto!.getActiveSessionBackupVersion.mockResolvedValue("1");
                     mockCrypto!.getSessionBackupPrivateKey.mockResolvedValue(null);
                     mockKeyBackupFromServer(mockClient, false);
 
                     await createAndStart();
 
-                    expect(SetupEncryptionToast.hideToast).toHaveBeenCalled();
+                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith("key_storage_out_of_sync");
                 });
 
                 it("hides the out-of-sync toast after we receive the missing secrets", async () => {

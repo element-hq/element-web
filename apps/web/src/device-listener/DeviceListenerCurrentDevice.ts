@@ -327,17 +327,26 @@ export class DeviceListenerCurrentDevice {
         logSpan: LogSpan,
         keyBackupStatus: KeyBackupStatus,
     ): Promise<boolean> {
-        // We warn if key backup is set up, but we don't have the decryption
-        // key, so can't fetch keys from backup.
+        // We warn if key backup upload is active, but we don't have the decryption
+        // key, so can't *fetch* keys from backup.
+        //
+        // This condition is independent of the explicit opt-out (keyBackupStatus.disabled). Likely
+        // we're in this situation because there was an existing key backup which we happen to trust
+        // (presumably because it is signed by a trusted key); the `m.key_backup` opt-out doesn't
+        // really apply in that case because it is really about whether we will automatically create a
+        // *new* backup.
         const keyBackupDownloadIsOk =
-            !keyBackupStatus.uploadActive ||
-            keyBackupStatus.disabled ||
-            (await crypto.getSessionBackupPrivateKey()) !== null;
+            !keyBackupStatus.uploadActive || (await crypto.getSessionBackupPrivateKey()) !== null;
 
         if (keyBackupDownloadIsOk) {
             return false;
         } else {
-            await this.failedCheck("key_storage_out_of_sync", logSpan, "warn", "Backup key is not cached locally");
+            await this.failedCheck(
+                "key_storage_out_of_sync",
+                logSpan,
+                "warn",
+                "Backup upload is active, but decryption key is not cached locally",
+            );
             return true;
         }
     }
