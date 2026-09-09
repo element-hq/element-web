@@ -21,8 +21,9 @@ import { getSectionTagForRoom } from "./getSectionTagForRoom";
  * Applying any of these will atomically replace the current section tag.
  * @param room The room to tag
  * @param tagId The tag to invert
+ * @param showToast Whether the room list should surface the "chat moved" toast for this change. Defaults to false.
  */
-export function tagRoom(room: Room, tagId: TagID): void {
+export function tagRoom(room: Room, tagId: TagID, showToast = false): void {
     const isChatTag = tagId === CHATS_TAG;
     const tag = isChatTag ? null : tagId;
 
@@ -40,5 +41,5 @@ export function tagRoom(room: Room, tagId: TagID): void {
     // A room with a pending invitation has no section tag in its account data to remove
     const removeTag = currentSectionTag === DefaultTagID.Invite ? null : currentSectionTag;
     const addTag = isApplied ? null : tag;
-    dis.dispatch(RoomListActions.tagRoom(room.client, room, removeTag, addTag));
+    dis.dispatch(RoomListActions.tagRoom(room.client, room, removeTag, addTag, showToast));
 }

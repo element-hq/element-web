@@ -136,6 +136,7 @@ export function attachUrlPreviews(
                 "og:image:height": preview.image?.height,
                 "og:image:type": preview.image?.imageType,
                 "matrix:image:size": preview.image?.fileSize,
+                ...preview.additionalBundleContent,
             };
         });
 

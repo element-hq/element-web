@@ -10,6 +10,7 @@ import { desktopCapturer } from "electron";
 
 import { getConfig } from "./config.js";
 import { consumeDisplayMediaCallback } from "./displayMediaCallback.js";
+import { clearData } from "./store.js";
 
 const { ipcHandlers, mockStore, send, randomArray } = vi.hoisted(() => ({
     ipcHandlers: {} as Record<string, (...args: unknown[]) => unknown>,
@@ -47,7 +48,7 @@ vi.mock("electron", () => ({
 
 vi.mock("./store.js", () => ({
     default: { instance: mockStore },
-    clearDataAndRelaunch: vi.fn(),
+    clearData: vi.fn(),
     SafeStorageDecryptionError: class SafeStorageDecryptionError extends Error {
         public override name = "SafeStorageDecryptionError";
     },
@@ -192,6 +193,23 @@ describe("ipcCall: getDesktopCapturerSources", () => {
         await callIpc("getDesktopCapturerSources", 12, [{}]);
 
         expect(send).toHaveBeenCalledWith("ipcReply", { id: 12, reply: [] });
+    });
+});
+
+describe("ipcCall: clearStorage", () => {
+    const session = { flushStorageData: vi.fn(), clearStorageData: vi.fn() };
+
+    beforeEach(() => {
+        vi.clearAllMocks();
+        vi.mocked(clearData).mockReset();
+        (global as unknown as { mainWindow: unknown }).mainWindow = { webContents: { send, session } };
+    });
+
+    it("clears data for the window's session without relaunching", async () => {
+        await callIpc("clearStorage", 15, []);
+
+        expect(clearData).toHaveBeenCalledExactlyOnceWith(session);
+        expect(send).toHaveBeenCalledWith("ipcReply", { id: 15, reply: null });
     });
 });
 

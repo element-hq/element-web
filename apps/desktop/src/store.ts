@@ -67,13 +67,18 @@ function relaunchApp(): void {
 }
 
 /**
- * Clear all data and relaunch the app.
+ * Clear all data stored by the electron session
  */
-export async function clearDataAndRelaunch(electronSession: Session): Promise<void> {
+export async function clearData(electronSession: Session): Promise<void> {
+    // For future reference, this previously relaunched the app after clearing
+    // stored data. This was problematic because we display a dialog when the app
+    // is logged out remotely and this meant that dialog would never be seen.
+    // The conclusion is that relauching is not necessary to clear data, see
+    // https://github.com/element-hq/element-web/issues/34838 for the detailed
+    // investigation.
     Store.instance?.clear();
     electronSession.flushStorageData();
     await electronSession.clearStorageData();
-    relaunchApp();
 }
 
 interface StoreData {
@@ -383,7 +388,8 @@ class Store extends ElectronStore<StoreData> {
         if (response === 0) {
             throw new Error("safeStorage backend changed and cannot migrate");
         }
-        return clearDataAndRelaunch(electronSession);
+        await clearData(electronSession);
+        relaunchApp();
     }
 
     private async consultUserConsentDegradedMode(backend: "plaintext" | "basic_text"): Promise<void> {
