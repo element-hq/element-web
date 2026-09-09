@@ -23,8 +23,8 @@ export class SnakedObject<T = Record<string, any>> {
         const fallback = this.obj[<K>fallbackKey];
         if (!!fallback && !this.fallbackWarnings.has(fallbackKey)) {
             this.fallbackWarnings.add(fallbackKey);
-            console.warn(`Using deprecated camelCase config ${fallbackKey}`);
             console.warn(
+                `Using deprecated camelCase config ${fallbackKey}\n` +
                 "See https://github.com/vector-im/element-web/blob/develop/docs/config.md#-deprecation-notice",
             );
         }

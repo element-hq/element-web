@@ -61,6 +61,7 @@ describe("SnakedObject", () => {
 
         // Given we are collecting  all warnings
         let warn = vi.spyOn(console, "warn");
+        warn.mockClear();
 
         // When we ask for the same camelCase key twice
 
@@ -70,7 +71,11 @@ describe("SnakedObject", () => {
         // @ts-ignore - intentionally different case
         expect(snake.get("camel_case")).toBe(input.camelCase);
 
-        // Then we log 2 lines of warning (which is actually just one combined message)
-        expect(warn).toHaveBeenCalledTimes(2);
+        // Then we log the warning only once
+        expect(warn).toHaveBeenCalledExactlyOnceWith(
+            `\
+Using deprecated camelCase config camelCase
+See https://github.com/vector-im/element-web/blob/develop/docs/config.md#-deprecation-notice`
+        );
     });
 });
