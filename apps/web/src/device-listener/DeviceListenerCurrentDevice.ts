@@ -266,7 +266,7 @@ export class DeviceListenerCurrentDevice {
      */
     private async failIfKeyBackupUploadIsFailing(logSpan: LogSpan): Promise<KeyBackupStatus> {
         const uploadActive = await this.isKeyBackupUploadActive(logSpan);
-        const disabled = await this.recheckBackupDisabled();
+        const disabled = await this.isKeyBackupDisabled();
         let failed;
 
         // We warn if key backup upload is turned off and we have not explicitly
@@ -384,13 +384,18 @@ export class DeviceListenerCurrentDevice {
     }
 
     /**
-     * Fetch the account data for `m.key_backup`. If this is the first time,
-     * fetch it from the server (in case the initial sync has not finished).
-     * Otherwise, fetch it from the store as normal.
+     * Determine if the user has deliberately disabled key backup.
      *
-     * Returns true if `m.key_backup` has `enabled: false`.
+     * We inspect the account data for `m.key_backup`, which indicates that the
+     * user has actively opted out of key backup. If `m.key_backup` has
+     * `enabled: false`, that means that the user does not want key backup so we
+     * should not treat the absence of working key backup as a problem requiring
+     * recovery or reset.
+     *
+     * (If there is no `m.key_backup` entry, we also check its unstable equivalent,
+     * `m.org.matrix.custom.backup_disabled`.)
      */
-    public async recheckBackupDisabled(): Promise<boolean> {
+    public async isKeyBackupDisabled(): Promise<boolean> {
         const keyBackup = await this.client.getAccountDataFromServer(ACCOUNT_DATA_KEY_M_KEY_BACKUP);
         if (keyBackup) {
             return keyBackup.enabled === false;

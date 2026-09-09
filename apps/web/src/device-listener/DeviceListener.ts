@@ -213,7 +213,7 @@ export class DeviceListener {
         if (!(crypto && thisDevice)) {
             return false;
         }
-        const shouldHaveBackup = !(await thisDevice.recheckBackupDisabled());
+        const shouldHaveBackup = !(await thisDevice.isKeyBackupDisabled());
         const backupKeyCached = (await crypto.getSessionBackupPrivateKey()) !== null;
         const backupKeyStored = await this.client!.isKeyBackupKeyStored();
 
