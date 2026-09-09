@@ -57,13 +57,13 @@ describe("SnakedObject", () => {
     });
 
     it("should only log camelCase warning once per key", () => {
-        const snake = new SnakedObject(input);
-
         // Given we are collecting  all warnings
+        SnakedObject.resetFallbackWarnings();
         let warn = vi.spyOn(console, "warn");
         warn.mockClear();
 
         // When we ask for the same camelCase key twice
+        const snake = new SnakedObject(input);
 
         // @ts-ignore - intentionally different case
         expect(snake.get("camel_case")).toBe(input.camelCase);
@@ -77,5 +77,26 @@ describe("SnakedObject", () => {
 Using deprecated camelCase config camelCase
 See https://github.com/vector-im/element-web/blob/develop/docs/config.md#-deprecation-notice`
         );
+    });
+
+    it("should only log camelCase warning once per key, even with different instances", () => {
+        // Given we are collecting  all warnings
+        SnakedObject.resetFallbackWarnings();
+        let warn = vi.spyOn(console, "warn");
+        warn.mockClear();
+
+        // When we ask for the same camelCase key twice, from two different
+        // instances of SnakedObject
+
+        const snake1 = new SnakedObject(input);
+        // @ts-ignore - intentionally different case
+        expect(snake1.get("camel_case")).toBe(input.camelCase);
+
+        const snake2 = new SnakedObject(input);
+        // @ts-ignore - intentionally different case
+        expect(snake2.get("camel_case")).toBe(input.camelCase);
+
+        // Then we log the warning only once
+        expect(warn).toHaveBeenCalledOnce();
     });
 });
