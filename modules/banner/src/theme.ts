@@ -12,7 +12,7 @@ export const Theme = z.object({
     subheadingColor: z.prefault(z.string(), "var(--cpd-color-text-secondary)"),
     bannerBackgroundColor: z.prefault(z.string(), "var(--cpd-color-bg-canvas-default)"),
     bannerHeight: z.prefault(z.string(), "60px"),
-    triggerWidth: z.prefault(z.string(), "68px"),
+    triggerWidth: z.prefault(z.string(), "69px"),
     triggerBackgroundColor: z.prefault(z.string(), "var(--cpd-color-bg-subtle-secondary)"),
     triggerBackgroundColorHover: z.prefault(z.string(), "var(--cpd-color-bg-accent-hovered)"),
     triggerBackgroundColorPressed: z.prefault(z.string(), "var(--cpd-color-bg-accent-pressed)"),
@@ -20,6 +20,7 @@ export const Theme = z.object({
     triggerColorContrast: z.prefault(z.string(), "var(--cpd-color-icon-on-solid-primary)"),
     menuWidth: z.prefault(z.string(), "320px"),
     menuBackgroundColor: z.prefault(z.string(), "var(--cpd-color-bg-canvas-default)"),
+    menuButtonColor: z.prefault(z.string(), "var(--cpd-color-text-primary)"),
     menuButtonBackgroundColorHover: z.prefault(z.string(), "var(--cpd-color-bg-action-secondary-hovered)"),
     menuButtonBackgroundColorPressed: z.prefault(z.string(), "var(--cpd-color-bg-action-secondary-pressed)"),
 });

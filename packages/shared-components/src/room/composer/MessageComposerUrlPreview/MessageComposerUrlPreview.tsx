@@ -19,7 +19,7 @@ import { ErrorSolidIcon } from "@vector-im/compound-design-tokens/assets/web/ico
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 
-import { type UrlPreview } from "../../urlPreview";
+import { type UrlPreview } from "shared-types";
 import styles from "./MessageComposerUrlPreview.module.css";
 import { useViewModel, type ViewModel } from "../../../core/viewmodel";
 import { useI18n } from "../../../core/i18n/i18nContext";

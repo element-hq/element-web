@@ -7,7 +7,7 @@
 
 // @vitest-environment happy-dom
 
-import { MatrixError, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { vi, describe, it, expect, beforeEach, afterEach, type MockedObject } from "vitest";
 import { waitFor } from "test-utils-rtl";
 import { getMockClientWithEventEmitter, mockClientMethodsServer, mockClientMethodsUser } from "test-utils";
@@ -34,7 +34,7 @@ describe("UserMenuViewModel", () => {
         client = getMockClientWithEventEmitter({
             ...mockClientMethodsUser(),
             ...mockClientMethodsServer(),
-            getAuthMetadata: vi.fn().mockRejectedValue(new MatrixError({ errcode: "M_UNRECOGNIZED" }, 404)),
+            getAuthMetadata: vi.fn(),
             getExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
             setExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
         });
@@ -66,13 +66,11 @@ describe("UserMenuViewModel", () => {
         expect(vm.getSnapshot().expanded).toEqual(false);
     });
 
-    it("should show a link for account management", async () => {
-        client.getAuthMetadata.mockResolvedValue({ account_management_uri: "https://example.org/" } as any);
+    it("should not call the auth metadata endpoint", () => {
         const vm = new UserMenuViewModel({ ownProfileStore: mockOwnProfileStore }, dispatcher, client, true);
         vm.setOpen(true);
-        await waitFor(() => {
-            expect(vm.getSnapshot().manageAccountHref).toEqual("https://example.org/");
-        });
+        expect(client.getAuthMetadata).not.toHaveBeenCalled();
+        expect(vm.getSnapshot()).not.toHaveProperty("manageAccountHref");
     });
 
     it("should generate a menu options for a guest", () => {
