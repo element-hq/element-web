@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 
 import { SnakedObject, snakeToCamel } from "./SnakedObject";
 
@@ -54,5 +54,23 @@ describe("SnakedObject", () => {
 
         // @ts-ignore - we're deliberately supplying a key that doesn't exist
         expect(snake.get("e_no_exist", "camelCase")).toBe(input.camelCase);
+    });
+
+    it("should only log camelCase warning once per key", () => {
+        const snake = new SnakedObject(input);
+
+        // Given we are collecting  all warnings
+        let warn = vi.spyOn(console, "warn");
+
+        // When we ask for the same camelCase key twice
+
+        // @ts-ignore - intentionally different case
+        expect(snake.get("camel_case")).toBe(input.camelCase);
+
+        // @ts-ignore - intentionally different case
+        expect(snake.get("camel_case")).toBe(input.camelCase);
+
+        // Then we log 2 lines of warning (which is actually just one combined message)
+        expect(warn).toHaveBeenCalledTimes(2);
     });
 });
