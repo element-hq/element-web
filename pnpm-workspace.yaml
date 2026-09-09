@@ -141,7 +141,12 @@ overrides:
     "@types/react": "catalog:"
     "@types/react-dom": "catalog:"
     caniuse-lite: 1.0.30001806
-    matrix-widget-api: "^1.18.0"
+
+    # Make sure we only have one instance of the widget API in the build;
+    # failure to do so results in (unspecified) breakage in downstream builds
+    # cf https://github.com/element-hq/element-web/pull/31851
+    matrix-widget-api: "^1.19.0"
+
     "@types/node": 25.9.3
     config-file-ts: 0.2.8-rc1
     node-abi: 4.35.0
