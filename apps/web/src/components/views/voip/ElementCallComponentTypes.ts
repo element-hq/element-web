@@ -22,12 +22,10 @@ import type { ElementCallHandle, UrlConfiguration } from "@element-hq/element-ca
 
 export type {
     ConfigOptions,
-    DeviceMuteRequest,
     DeviceMuteState,
     ElementCallConfiguration,
     ElementCallHandle,
     ElementCallHostBridge,
-    JoinCallData,
     UrlConfiguration,
 } from "@element-hq/element-call-component";
 

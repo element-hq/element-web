@@ -125,6 +125,8 @@ jobs:
                           labs|sliding_sync_description
                           settings|voip|noise_suppression_description
                           settings|voip|echo_cancellation_description
+                          labs|feature_element_call_react
+                          devtools|settings|elementCallMockComponent
                     - name: Element Desktop
                       path: "apps/desktop"
                     - name: Shared Components

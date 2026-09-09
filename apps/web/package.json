@@ -102,7 +102,6 @@
         "react-string-replace": "^2.0.0",
         "react-transition-group": "^4.4.1",
         "rfc4648": "^1.4.0",
-        "rxjs": "7.8.2",
         "sanitize-filename": "^1.6.3",
         "sanitize-html": "2.17.7",
         "tar-js": "^0.3.0",

@@ -21,7 +21,7 @@ vi.mock("./AppTile", () => ({
     default: () => <div data-testid="app-tile" />,
 }));
 vi.mock("../voip/CallTile", () => ({
-    CallTile: () => <div data-testid="call-tile" />,
+    CallAppTile: () => <div data-testid="call-tile" />,
 }));
 
 const PersistentApp = wrapInMatrixClientContext(_PersistentApp);
