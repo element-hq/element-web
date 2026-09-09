@@ -30,7 +30,7 @@ export interface PdfViewerState {
 }
 
 /**
- * The handle on a PDF that {@link PdfViewer} needs: something to key the saved reading position on,
+ * The handle on a PDF that `PdfViewer` needs: something to key the saved reading position on,
  * and a way to get at the bytes. `blob` is expected to decrypt transparently for encrypted media, so
  * the viewer never has to care whether the room is encrypted.
  */
