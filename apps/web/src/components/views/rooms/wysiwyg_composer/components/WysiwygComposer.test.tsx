@@ -598,6 +598,9 @@ describe("WysiwygComposer", () => {
 
             customRender(client, roomContext, editorState);
             await waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true"));
+            if (editorState) {
+                await waitFor(() => expect(screen.getByRole("textbox").textContent).not.toBe(""));
+            }
             // Once ready, the composer puts its own caret at the end of the editor. That happens in
             // an effect flushed after contentEditable lands in the DOM, so waiting for the attribute
             // alone lets it run *after* a test has placed the caret, clobbering the selection the

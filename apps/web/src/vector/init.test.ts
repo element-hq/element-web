@@ -8,14 +8,16 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 // @vitest-environment-options {"url": "https://app.element.io/?loginToken=123&no_universal_links&something_else=value#/home?state=abc&code=xyz"}
 
-import { vi, describe, it, expect, beforeEach } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+import { logger } from "matrix-js-sdk/src/logger";
 import fetchMock from "@fetch-mock/vitest";
 import { waitFor, screen } from "test-utils-rtl";
 
-import { loadApp, showError, showIncompatibleBrowser } from "./init.tsx";
+import { loadApp, logAppVersion, showError, showIncompatibleBrowser } from "./init.tsx";
 import SdkConfig from "../SdkConfig.ts";
 import MatrixChat from "../components/structures/MatrixChat.tsx";
 import { parseAppUrl } from "./url_utils.ts";
+import { mockPlatformPeg, unmockPlatformPeg } from "../../test/test-utils/platform.ts";
 
 function setUpMatrixChatDiv() {
     document.getElementById("matrixchat")?.remove();
@@ -86,5 +88,28 @@ describe("loadApp", () => {
         window.matrixChat!.props.onTokenLoginCompleted(parseAppUrl(window.location).params, "/home");
 
         expect(spy).toHaveBeenCalledWith(null, "", "https://app.element.io/?something_else=value#/home");
+    });
+});
+
+describe("logAppVersion", () => {
+    afterEach(unmockPlatformPeg);
+
+    it("should log the version reported by the platform", async () => {
+        const spy = vi.spyOn(logger, "info");
+        mockPlatformPeg({ getAppVersion: vi.fn().mockResolvedValue("1.12.34") });
+
+        await logAppVersion();
+
+        expect(spy).toHaveBeenCalledWith("App version: 1.12.34");
+    });
+
+    it("should warn rather than throw if the version cannot be determined", async () => {
+        const spy = vi.spyOn(logger, "warn");
+        const error = new Error("no version for you");
+        mockPlatformPeg({ getAppVersion: vi.fn().mockRejectedValue(error) });
+
+        await logAppVersion();
+
+        expect(spy).toHaveBeenCalledWith("Unable to determine app version for logging", error);
     });
 });

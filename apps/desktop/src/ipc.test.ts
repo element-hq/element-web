@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { expect, describe, it, beforeEach, afterEach, vi } from "vitest";
-import { desktopCapturer } from "electron";
+import { desktopCapturer, nativeImage, TouchBar } from "electron";
 
 import { getConfig } from "./config.js";
 import { consumeDisplayMediaCallback } from "./displayMediaCallback.js";
@@ -42,7 +42,10 @@ vi.mock("electron", () => ({
         }),
     },
     powerSaveBlocker: { isStarted: vi.fn(), start: vi.fn(), stop: vi.fn() },
-    TouchBar: class {},
+    TouchBar: class {
+        static TouchBarPopover = class {};
+        static TouchBarButton = vi.fn(function () {});
+    },
     nativeImage: { createFromBuffer: vi.fn() },
 }));
 
@@ -175,6 +178,46 @@ describe("ipcCall: clearStorage", () => {
 
         expect(clearData).toHaveBeenCalledExactlyOnceWith(session);
         expect(send).toHaveBeenCalledWith("ipcReply", { id: 15, reply: null });
+    });
+});
+
+describe("ipcCall: breadcrumbs", () => {
+    const session = { fetch: vi.fn<typeof fetch>() };
+
+    beforeEach(() => {
+        vi.clearAllMocks();
+        vi.spyOn(process, "platform", "get").mockReturnValue("darwin");
+        vi.spyOn(global, "fetch").mockResolvedValue(new Response(null, { status: 404 }));
+        (global as unknown as { mainWindow: unknown }).mainWindow = {
+            webContents: { send, session },
+            setTouchBar: vi.fn(),
+        };
+    });
+
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
+
+    it("loads avatars through the window session so authenticated media interception applies", async () => {
+        const avatarUrl = "https://example.org/_matrix/media/v3/thumbnail/example.org/avatar";
+        const bytes = new Uint8Array([1, 2, 3]);
+        session.fetch.mockResolvedValue(new Response(bytes));
+        const icon = {} as Electron.NativeImage;
+        vi.mocked(nativeImage.createFromBuffer).mockReturnValue(icon);
+
+        await callIpc("breadcrumbs", 16, [
+            [
+                { roomId: "!room:example.org", avatarUrl, initial: "R" },
+                { roomId: "!no-avatar:example.org", avatarUrl: null, initial: "N" },
+            ],
+        ]);
+
+        expect(session.fetch).toHaveBeenCalledExactlyOnceWith(avatarUrl);
+        expect(global.fetch).not.toHaveBeenCalled();
+        await vi.waitFor(() => {
+            expect(nativeImage.createFromBuffer).toHaveBeenCalledExactlyOnceWith(Buffer.from(bytes));
+            expect(vi.mocked(TouchBar.TouchBarButton).mock.instances[0]).toMatchObject({ icon, label: "" });
+        });
     });
 });
 
