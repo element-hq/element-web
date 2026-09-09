@@ -40,7 +40,7 @@ export class SnakedObject<T = Record<string, any>> {
      * Clear our record of warnings we have emitted about using a camelCase
      * fallback. Likely only useful for tests.
      */
-    public static resetFallbackWarnings() {
+    public static resetFallbackWarnings(): void {
         SnakedObject.fallbackWarnings.clear();
     }
 }

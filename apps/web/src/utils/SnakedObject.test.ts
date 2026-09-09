@@ -59,7 +59,7 @@ describe("SnakedObject", () => {
     it("should only log camelCase warning once per key", () => {
         // Given we are collecting  all warnings
         SnakedObject.resetFallbackWarnings();
-        let warn = vi.spyOn(console, "warn");
+        const warn = vi.spyOn(console, "warn");
         warn.mockClear();
 
         // When we ask for the same camelCase key twice
@@ -82,7 +82,7 @@ See https://github.com/vector-im/element-web/blob/develop/docs/config.md#-deprec
     it("should only log camelCase warning once per key, even with different instances", () => {
         // Given we are collecting  all warnings
         SnakedObject.resetFallbackWarnings();
-        let warn = vi.spyOn(console, "warn");
+        const warn = vi.spyOn(console, "warn");
         warn.mockClear();
 
         // When we ask for the same camelCase key twice, from two different
