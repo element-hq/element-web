@@ -262,7 +262,10 @@ export class DeviceListenerCurrentDevice {
 
     /**
      * If the upload of the key backup is not working when it should, show a
-     * toast and return true. Otherwise, return false.
+     * toast.
+     *
+     * Returns a structure including information on whether the toast was shown,
+     * and other information about backup status.
      */
     private async failIfKeyBackupUploadIsFailing(logSpan: LogSpan): Promise<KeyBackupStatus> {
         const uploadActive = await this.isKeyBackupUploadActive(logSpan);
@@ -531,10 +534,22 @@ export class DeviceListenerCurrentDevice {
 }
 
 /**
- * The current state of Key backup.
+ * The result of {@link DeviceListenerCurrentDevice.failIfKeyBackupUploadIsFailing}.
  */
 interface KeyBackupStatus {
+    /** Is key backup upload active, according to {@link DeviceListenerCurrentDevice.isKeyBackupUploadActive}? */
     uploadActive: boolean;
+
+    /**
+     * Has the user deliberately disabled key backup via account data, per
+     * {@link DeviceListenerCurrentDevice.isKeyBackupDisabled}?
+     */
     disabled: boolean;
+
+    /**
+     * Did {@link DeviceListenerCurrentDevice.failIfKeyBackupUploadIsFailing} show the toast?
+     *
+     * (True if neither {@link uploadActive} nor {@link disabled} is true.)
+     */
     failed: boolean;
 }
