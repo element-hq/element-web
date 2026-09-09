@@ -358,11 +358,17 @@ test.describe("Editing", () => {
 
         // now have the cypress user join the room, jump to the original event, and wait for the event to be visible
         await app.client.joinRoom(testRoomId);
-        await app.viewRoomByName("TestRoom");
+        // joinRoom is a bare API call, so wait for the join to arrive over sync before the client can
+        // know the room (getRoom() below is null until then). Do not open the room in the UI to achieve
+        // this: that starts a scroll-to-bottom which races the permalink's scroll-to-event and can
+        // unmount the target tile from the virtualised timeline. See element-hq/element-web#30579.
+        await app.client.awaitRoomMembership(testRoomId);
         await page.goto(`#/room/${testRoomId}/${originalEventId}`);
 
         const messageTile = page.locator(`[data-event-id="${originalEventId}"]`);
-        // at this point, the edit event should still be unknown
+        // At this point the edit event should still be unknown to the client: it sits ten padding
+        // events before the end of the timeline, outside the window this permalink loaded. That is the
+        // premise of the test - the edited text below has to come from the server's bundled aggregation.
         const timeline = await app.client.evaluate(
             (cli, { testRoomId, editEventId }) => cli.getRoom(testRoomId)!.getTimelineForEvent(editEventId),
             { testRoomId, editEventId },
