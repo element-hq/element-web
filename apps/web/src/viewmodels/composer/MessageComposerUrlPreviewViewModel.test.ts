@@ -81,7 +81,6 @@ function restoreViewModel(
         client: client as unknown as MatrixClient,
         moduleUrlPreviewApi: new UrlPreviewApi(),
         visible,
-        showTooltips: false,
         urlPreviewBundle,
         mxEvent: new MatrixEvent({
             type: "m.room.message",
