@@ -14,7 +14,7 @@ import { WidgetToggle } from "./toggle";
 import { name as ModuleName } from "../package.json";
 
 class WidgetToggleModule implements Module {
-    public static readonly moduleApiVersion = "^1.12.0";
+    public static readonly moduleApiVersion = "^1.12.0 | ^2.0.0";
     private config?: WidgetTogglesConfig;
 
     public constructor(private api: Api) {}

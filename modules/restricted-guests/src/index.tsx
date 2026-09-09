@@ -23,7 +23,7 @@ const GUEST_INVISIBLE_COMPONENTS = [
 ];
 
 class RestrictedGuestsModule implements Module {
-    public static readonly moduleApiVersion = "^1.0.0";
+    public static readonly moduleApiVersion = "^1.0.0 | ^2.0.0";
 
     private config?: ModuleConfig;
 
