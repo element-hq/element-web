@@ -10,7 +10,7 @@ import { app, autoUpdater, desktopCapturer, ipcMain, powerSaveBlocker, TouchBar,
 import IpcMainEvent = Electron.IpcMainEvent;
 import { randomArray } from "./utils.js";
 import { consumeDisplayMediaCallback } from "./displayMediaCallback.js";
-import Store, { clearDataAndRelaunch } from "./store.js";
+import Store, { clearData } from "./store.js";
 import { getConfig } from "./config.js";
 
 let focusHandlerAttached = false;
@@ -166,8 +166,9 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
             break;
 
         case "clearStorage":
-            await clearDataAndRelaunch(global.mainWindow.webContents.session);
-            return; // the app is about to stop, we don't need to reply to the IPC
+            await clearData(global.mainWindow.webContents.session);
+            ret = null;
+            break;
 
         case "breadcrumbs": {
             if (process.platform === "darwin") {
