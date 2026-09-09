@@ -32,6 +32,7 @@ import ConfirmKeyStorageOffDialog from "../components/views/dialogs/ConfirmKeySt
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { resetKeyBackupAndWait } from "../utils/crypto/resetKeyBackup";
 import { PosthogAnalytics } from "../PosthogAnalytics";
+import { encryptionSettingsStateForKeyStorageOutOfSyncForgotRecovery } from "../components/views/settings/tabs/user/EncryptionUserSettingsTab.tsx";
 
 const TOAST_KEY = "setupencryption";
 
@@ -273,11 +274,8 @@ export const showToast = (state: DeviceStateForToast): void => {
             }
             case "key_storage_out_of_sync": {
                 // Open the user settings dialog to the encryption tab and start the flow to reset encryption or change the recovery key
-                const deviceListener = DeviceListener.sharedInstance();
-                const needsCrossSigningReset = await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset();
-                const props = {
-                    initialEncryptionState: needsCrossSigningReset ? "reset_identity_forgot" : "change_recovery_key",
-                };
+                const initialEncryptionState = await encryptionSettingsStateForKeyStorageOutOfSyncForgotRecovery();
+                const props = { initialEncryptionState };
                 myLogger.debug(`Secondary button clicked: opening encryption settings dialog with props`, props);
                 const payload: OpenToTabPayload = {
                     action: Action.ViewUserSettings,

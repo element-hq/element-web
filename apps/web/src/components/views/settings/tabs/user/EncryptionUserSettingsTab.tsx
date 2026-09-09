@@ -5,6 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { logger } from "matrix-js-sdk/src/logger";
 import React, { type JSX, useState } from "react";
 import { Button, Separator } from "@vector-im/compound-web";
 import ComputerIcon from "@vector-im/compound-design-tokens/assets/web/icons/computer";
@@ -86,7 +87,9 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
                     content = (
                         <RecoveryPanelOutOfSync
                             onFinish={() => setState("main")}
-                            onForgotRecoveryKey={() => setState("reset_identity_forgot")}
+                            onForgotRecoveryKey={async () => {
+                                setState(await encryptionSettingsStateForKeyStorageOutOfSyncForgotRecovery());
+                            }}
                             onAccessSecretStorageFailed={async () => {
                                 const needsCrossSigningReset =
                                     await DeviceListener.sharedInstance().keyStorageOutOfSyncNeedsCrossSigningReset();
@@ -241,4 +244,24 @@ function IdentityNeedsResetNoticePanel({ onContinue }: Readonly<IdentityNeedsRes
             </div>
         </SettingsSection>
     );
+}
+
+/**
+ * Calculate the correct state for the Encryption Settings after the user clicks "Forgot recovery key" on a
+ * "key storage out of sync" toast or panel.
+ */
+export async function encryptionSettingsStateForKeyStorageOutOfSyncForgotRecovery(): Promise<State> {
+    const deviceListener = DeviceListener.sharedInstance();
+    const needsCrossSigningReset = await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset();
+    if (needsCrossSigningReset) {
+        logger.info(
+            "Key storage is out of sync, user forgot recovery key, and we are missing some identity keys. Entering reset identity flow.",
+        );
+        return "reset_identity_forgot";
+    } else {
+        logger.info(
+            "Key storage is out of sync, user forgot recovery key, but we have identity keys. Entering change recovery flow.",
+        );
+        return "change_recovery_key";
+    }
 }
