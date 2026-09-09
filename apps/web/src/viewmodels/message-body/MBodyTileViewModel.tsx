@@ -50,7 +50,7 @@ export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
                     ...attachmentIcon(content.info?.mimetype),
                 },
             ],
-        };
+        } satisfies MediaPreviewGroupSnapshot;
 
         super(snapshot);
     }
