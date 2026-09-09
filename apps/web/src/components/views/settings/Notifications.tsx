@@ -90,9 +90,8 @@ const RULE_DISPLAY_ORDER: string[] = [
     RuleId.EncryptedMessage,
 
     // Mentions
-    RuleId.ContainsUserName,
-    RuleId.AtRoomNotification,
-    RuleId.ContainsDisplayName,
+    RuleId.IsUserMention,
+    RuleId.IsRoomMention,
 
     // Other
     RuleId.InviteToSelf,
@@ -153,6 +152,8 @@ const OrderedVectorStates = [VectorState.Off, VectorState.On, VectorState.Loud];
  * and it's synced rules
  * If rules have fallen out of sync,
  * the loudest rule can determine the display value
+ * Returns undefined when the rule has no synced rules, or when its definition
+ * says the parent rule alone determines the display value.
  * @param defaultRules
  * @param rule - parent rule
  * @param definition - definition of parent rule
@@ -165,7 +166,7 @@ const maximumVectorState = (
     rule: IAnnotatedPushRule,
     definition: VectorPushRuleDefinition,
 ): VectorState | undefined => {
-    if (!definition.syncedRuleIds?.length) {
+    if (!definition.syncedRuleIds?.length || definition.displayStateFromPrimaryRuleOnly) {
         return undefined;
     }
     const vectorState = definition.syncedRuleIds.reduce<VectorState>((maxVectorState, ruleId) => {
@@ -303,9 +304,12 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
             [RuleId.Message]: RuleClass.VectorGlobal,
             [RuleId.EncryptedMessage]: RuleClass.VectorGlobal,
 
-            [RuleId.ContainsDisplayName]: RuleClass.VectorMentions,
-            [RuleId.ContainsUserName]: RuleClass.VectorMentions,
-            [RuleId.AtRoomNotification]: RuleClass.VectorMentions,
+            // The legacy text-matching mention rules (.m.rule.contains_display_name,
+            // .m.rule.contains_user_name, .m.rule.roomnotif) are deliberately absent:
+            // they fall into `Other` and are never rendered. When the server still
+            // serves them they are written as synced rules of the two rules below.
+            [RuleId.IsUserMention]: RuleClass.VectorMentions,
+            [RuleId.IsRoomMention]: RuleClass.VectorMentions,
 
             [RuleId.InviteToSelf]: RuleClass.VectorOther,
             [RuleId.IncomingCall]: RuleClass.VectorOther,
