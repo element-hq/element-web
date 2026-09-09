@@ -5,8 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
+import { type Page } from "@playwright/test";
 import { type SynapseContainer } from "@element-hq/element-web-playwright-common/lib/testcontainers/index.js";
-import { rejectToastIfExists } from "@element-hq/element-web-playwright-common";
+import { closeReleaseAnnouncementIfExists, rejectToastIfExists } from "@element-hq/element-web-playwright-common";
 
 import { test, expect } from "../../playwright/element-web-test.ts";
 
@@ -25,6 +26,16 @@ declare module "@element-hq/element-web-module-api" {
 }
 
 const WIDGET_URL = "http://localhost:8080/widget.html";
+
+/**
+ * Open an invited room from the room list and accept the invitation.
+ * The Invites section always starts collapsed, so it has to be expanded before the room tile exists.
+ */
+async function acceptInvite(page: Page, roomName: string): Promise<void> {
+    await page.getByRole("button", { name: "Toggle Invites section" }).click();
+    await page.getByRole("button", { name: `Open room ${roomName}` }).click();
+    await page.locator(".mx_RoomView").getByRole("button", { name: "Accept" }).click();
+}
 
 test.use({
     displayName: "Timmy",
@@ -47,6 +58,14 @@ test.use({
 });
 
 test.describe("Widget Lifecycle", () => {
+    // Clear everything that would otherwise sit over the room list. The toasts have to go first:
+    // the release announcement is held back while any toast is on screen.
+    test.beforeEach(async ({ page, user }) => {
+        await rejectToastIfExists(page, "Verify this device");
+        await rejectToastIfExists(page, "Enable desktop notifications");
+        await closeReleaseAnnouncementIfExists(page, "Introducing Sections");
+    });
+
     test.describe("trusted widgets", () => {
         // Configure the module to pre-approve the widget URL for preloading, identity tokens,
         // and the m.room.topic state event capability.
@@ -65,8 +84,6 @@ test.describe("Widget Lifecycle", () => {
         });
 
         test("auto-approves preload and identity", async ({ page, user, homeserver }, testInfo) => {
-            await rejectToastIfExists(page, "Verify this device");
-
             // A bot creates a room with the widget pinned to the top panel, then invites the test user.
             // Because the widget was added by a different user (the bot), Element would normally show a
             // preload consent dialog before loading it — this test verifies that dialog is skipped.
@@ -107,8 +124,7 @@ test.describe("Widget Lifecycle", () => {
                 user_id: user.userId,
             });
 
-            await page.getByText("Trusted Widget").click();
-            await page.getByRole("button", { name: "Accept" }).click();
+            await acceptInvite(page, "Trusted Widget");
 
             // No preload dialog should appear — the widget loads immediately.
             await expect(page.getByRole("button", { name: "Continue" })).not.toBeVisible();
@@ -123,8 +139,6 @@ test.describe("Widget Lifecycle", () => {
         });
 
         test("prompts for capabilities not in the allowlist", async ({ page, user, homeserver }, testInfo) => {
-            await rejectToastIfExists(page, "Verify this device");
-
             const bot = await homeserver.registerUser(`bot_${testInfo.testId}`, "password", "Bot");
             const { room_id: roomId } = await homeserver.csApi.request<{ room_id: string }>(
                 "POST",
@@ -163,8 +177,7 @@ test.describe("Widget Lifecycle", () => {
                 user_id: user.userId,
             });
 
-            await page.getByText("Capabilities Widget").click();
-            await page.getByRole("button", { name: "Accept" }).click();
+            await acceptInvite(page, "Capabilities Widget");
 
             // A capabilities approval dialog should appear since m.room.name was not pre-approved.
             await expect(page.getByRole("button", { name: "Approve" })).toBeVisible();
@@ -186,8 +199,6 @@ test.describe("Widget Lifecycle", () => {
             user,
             homeserver,
         }, testInfo) => {
-            await rejectToastIfExists(page, "Verify this device");
-
             const bot = await homeserver.registerUser(`bot_${testInfo.testId}`, "password", "Bot");
             const { room_id: roomId } = await homeserver.csApi.request<{ room_id: string }>(
                 "POST",
@@ -225,8 +236,7 @@ test.describe("Widget Lifecycle", () => {
                 user_id: user.userId,
             });
 
-            await page.getByText("Untrusted Widget").click();
-            await page.getByRole("button", { name: "Accept" }).click();
+            await acceptInvite(page, "Untrusted Widget");
 
             // 1. Preload consent dialog — shown because the widget was added by another user (the bot).
             await expect(page.getByRole("button", { name: "Continue" })).toBeVisible();
