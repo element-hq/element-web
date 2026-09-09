@@ -34,6 +34,9 @@ const PDF_HEADER = [0x25, 0x50, 0x44, 0x46, 0x2d];
  */
 const PDF_HEADER_SEARCH_LIMIT = 1024;
 
+/** Cap on decoded image size. pdf.js defaults to no limit, so a document can exhaust memory. */
+const MAX_IMAGE_PIXELS = 8192 * 8192;
+
 /** Scale value that makes pdf.js keep every page fitted to the width of the panel. */
 const FIT_TO_WIDTH = "page-width";
 /** Scale values pdf.js recomputes from the container size, so they must be re-applied on resize. */
@@ -228,7 +231,13 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
 
             if (disposed) return;
 
-            loadingTask = getDocument({ data, stopAtErrors: true });
+            loadingTask = getDocument({
+                data,
+                stopAtErrors: true,
+                maxImageSize: MAX_IMAGE_PIXELS,
+                // Already the default; pinned so an upstream change cannot quietly enable XFA forms.
+                enableXfa: false,
+            });
             pdfDocument = await loadingTask.promise;
             if (disposed) return;
 

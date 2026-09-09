@@ -209,6 +209,18 @@ describe("PdfViewer", () => {
         vi.unstubAllGlobals();
     });
 
+    it("opens the document with the untrusted-content protections pdf.js does not apply itself", async () => {
+        mockDocument();
+
+        render(<PdfViewer media={media()} />);
+
+        await waitFor(() => expect(pdfjsMock.getDocument).toHaveBeenCalled());
+        // pdf.js defaults maxImageSize to -1, i.e. no limit.
+        expect(pdfjsMock.getDocument).toHaveBeenCalledWith(
+            expect.objectContaining({ maxImageSize: 8192 * 8192, enableXfa: false, stopAtErrors: true }),
+        );
+    });
+
     it("hands the loaded document to pdf.js's viewer and fits it to the panel width", async () => {
         const { pdfDocument } = mockDocument();
 
@@ -229,7 +241,9 @@ describe("PdfViewer", () => {
         render(<PdfViewer media={media()} />);
         await emitPagesInit();
 
+        // pdf.js defaults to ENABLE_FORMS, and derives scripting from the scriptingManager.
         expect(activeViewer().options).toMatchObject({ annotationMode: 0, annotationEditorMode: -1 });
+        expect(activeViewer().options).not.toHaveProperty("scriptingManager");
     });
 
     it("zooms about the pointer, honouring the wheel delta magnitude", async () => {
