@@ -14,7 +14,7 @@ directly instead of re-implementing Matrix access over the widget driver and `po
 and control become props and callbacks rather than URL parameters and widget actions. The iframe lifecycle
 (load waiting, capability negotiation, permission prompts, "widget died" heuristics) goes away, and EC can
 follow EW's theme live. It also enables things an iframe cannot do, such as moving the running call into a
-browser Document Picture-in-Picture window.
+browser Document Picture-in-Picture window (a follow-up).
 
 **Why on top of `AppTile`.** Almost everything EW does _around_ a call is keyed on the call's virtual
 widget, not on the iframe: `ActiveWidgetStore` (docking, persistence, liveness), `PersistedElement`
@@ -222,8 +222,7 @@ i18next instance, so the most recently set language wins for all.
   `HeaderStyle`, `BackgroundStyle` are string-enum mirrors (importing values from the package would pull the
   bundle into the main chunk; the model needs `BackgroundStyle` on the widget path too), and
   `configurationForIntent` is a copy for the mock. `ElementCallProps` re-types `ref` with EW's React.
-  `@types/element-call-component.d.ts` declares the untyped `./style.css` subpath;
-  `@types/document-picture-in-picture.d.ts` types the browser API.
+  `@types/element-call-component.d.ts` declares the untyped `./style.css` subpath.
 
 ### Mock component (`views/voip/ElementCallMock.tsx`)
 
@@ -236,32 +235,16 @@ and cleared on unmount, so the `ElementCall` model behaves as with a real call a
 sends the real component to a bogus focus. Playwright turns the setting on in `beforeEach`, unit tests via
 `enableCalls()`; production users never download the chunk.
 
-### Document Picture-in-Picture
-
-Only possible with the component: the persisted DOM tree can move to another window while the React tree
-keeps running in the main document (an iframe would reload).
-
-- `stores/DocumentPipStore.ts` opens the window (Chromium `window.documentPictureInPicture`), copies the
-  page's stylesheets and theme classes, moves the call's tree there and brings it back when the user reopens
-  the call view, the call disconnects, or the window closes.
-- `PersistedElement.detach/reattach/isDetached`: while detached the tree fills its host and stays visible
-  without a mounted `PersistedElement`; placeholders are ignored.
-- `hooks/room/useDocumentPip.ts` exposes `available` (React transport, connected, API present), `active`,
-  `toggle`. `RoomHeader` shows, while in a call, EW's own PiP toggle (`collapse`/`expand` icons,
-  `data-testid="call-pip-button"`) and the Document PiP button (`pop-out`, `data-testid="document-pip-button"`).
-- `PipContainer` hides the floating PiP for a call that is in a Document PiP window.
-
 ### Tests
 
 Unit: `CallTile.test.tsx` (flag × widget type), `ElementCallAppTile.test.tsx` (dock/undock, liveness
 teardown, leave-room paths, StrictMode), `ElementWebHostBridge.test.ts`, `ElementCallMock.test.tsx`,
 `Call.test.ts` (ready/timeout, hang-up via handle, `handle*` → `ConnectionState`, frozen options),
-`DocumentPipStore.test.ts`, `PersistedElement.test.tsx`, `PersistentApp.test.tsx`, RoomHeader and
-PipContainer cases. `test/test-utils/call.ts`'s `enableCalls()` turns the mock on.
+`PersistentApp.test.tsx`. `test/test-utils/call.ts`'s `enableCalls()` turns the mock on.
 
 Playwright (`e2e/voip/element-call.spec.ts`): the "Switching rooms" specs run for both transports with the
 mock; "React component (real)" checks the real chunk mounts inside `.mx_CallView` without an iframe and
-follows the theme; a Document PiP spec (Chromium). Locators for tile content must be page-level, since the
+follows the theme. Locators for tile content must be page-level, since the
 persisted root hangs off `<body>`. `element-call-full-call.spec.ts` runs a real two-user call through the
 component against Synapse + LiveKit + lk-jwt-service (worker option `matrixRTC`, testcontainers in
 `playwright/testcontainers/`). `routeConfigJson` in `playwright-common` now matches any origin so a

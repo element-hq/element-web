@@ -23,7 +23,6 @@ import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import RoomAvatar from "../views/avatars/RoomAvatar";
 import { WidgetPipViewModel, type Props as WidgetPipViewModelProps } from "../../viewmodels/room/WidgetPipViewModel";
 import { SDKContext } from "../../contexts/SDKContext.ts";
-import { DocumentPipStore, DocumentPipStoreEvent } from "../../stores/DocumentPipStore";
 
 const SHOW_CALL_IN_STATES = [
     CallState.Connected,
@@ -93,7 +92,6 @@ class PipContainerInner extends React.Component<IProps, IState> {
         ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Persistence, this.onWidgetPersistence);
         ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Dock, this.onWidgetDockChanges);
         ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Undock, this.onWidgetDockChanges);
-        DocumentPipStore.instance.on(DocumentPipStoreEvent.Update, this.onDocumentPipChanges);
     }
 
     public componentWillUnmount(): void {
@@ -108,7 +106,6 @@ class PipContainerInner extends React.Component<IProps, IState> {
         ActiveWidgetStore.instance.off(ActiveWidgetStoreEvent.Persistence, this.onWidgetPersistence);
         ActiveWidgetStore.instance.off(ActiveWidgetStoreEvent.Dock, this.onWidgetDockChanges);
         ActiveWidgetStore.instance.off(ActiveWidgetStoreEvent.Undock, this.onWidgetDockChanges);
-        DocumentPipStore.instance.off(DocumentPipStoreEvent.Update, this.onDocumentPipChanges);
     }
 
     /**
@@ -183,10 +180,6 @@ class PipContainerInner extends React.Component<IProps, IState> {
         this.updateShowWidgetInPip();
     };
 
-    private onDocumentPipChanges = (): void => {
-        this.updateShowWidgetInPip();
-    };
-
     private updateCalls = (): void => {
         if (!this.state.viewedRoomId) return;
         const [primaryCall, secondaryCalls] = this.getPrimarySecondaryCallsForPip(this.state.viewedRoomId);
@@ -225,21 +218,18 @@ class PipContainerInner extends React.Component<IProps, IState> {
 
         let fromAnotherRoom = false;
         let notDocked = false;
-        let inDocumentPip = false;
         // Sanity check the room - the widget may have been destroyed between render cycles, and
         // thus no room is associated anymore.
         if (persistentWidgetId && persistentRoomId && this.context.client?.getRoom(persistentRoomId)) {
             notDocked = !ActiveWidgetStore.instance.isDocked(persistentWidgetId, persistentRoomId);
             fromAnotherRoom = this.state.viewedRoomId !== persistentRoomId;
-            inDocumentPip = DocumentPipStore.instance.isShowingWidget(persistentWidgetId, persistentRoomId);
         }
 
         // The widget should only be shown as a persistent app (in a floating
         // pip container) if it is not visible on screen: either because we are
         // viewing a different room OR because it is in none of the possible
-        // containers of the room view. A call showing in a browser Picture-in-Picture window (see
-        // DocumentPipStore) is on screen already, in a window of its own.
-        const showWidgetInPip = (fromAnotherRoom || notDocked) && !inDocumentPip;
+        // containers of the room view.
+        const showWidgetInPip = fromAnotherRoom || notDocked;
 
         this.setState({ showWidgetInPip, persistentWidgetId, persistentRoomId });
     }
