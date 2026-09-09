@@ -18,6 +18,7 @@ import { UrlPreviewFetcher } from "../../utils/UrlPreviewFetcher";
 import { linksIn } from "../../utils/UrlUtils";
 import { type RoomMessageEventContent, type UnstableBundledUrlPreviewSingle } from "../../../@types/url-preview";
 import type { UrlPreviewApi } from "../../modules/UrlPreviewApi";
+import PlatformPeg from "../../PlatformPeg";
 
 export const DEBOUNCE_REQUEST_TIMEOUT_MS = 500;
 
@@ -60,11 +61,6 @@ export interface MessageComposerUrlPreviewViewModelRestoreProps {
      * Whether composer URL previews should render at all.
      */
     visible: boolean;
-    /**
-     * Whether previews should carry a tooltip showing the target URL, i.e. the platform's
-     * `needsUrlTooltips`. Only takes effect for previews whose title differs from their URL.
-     */
-    showTooltips: boolean;
     /**
      * Whether the url preview bundles lab flag is enabled
      */
@@ -142,7 +138,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
             client: props.client,
             moduleUrlPreviewApi: props.moduleUrlPreviewApi,
             visible: props.visible,
-            showTooltips: props.showTooltips,
+            showTooltips: PlatformPeg.get()?.needsUrlTooltips() ?? true,
             urlPreviewBundle: props.urlPreviewBundle,
             content: content.body,
         };
