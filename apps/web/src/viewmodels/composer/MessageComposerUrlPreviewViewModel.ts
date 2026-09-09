@@ -5,15 +5,15 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import {
     BaseViewModel,
     type MessageComposerUrlPreviewSnapshotEntry,
     type MessageComposerUrlPreviewSnapshot,
-    type UrlPreview,
 } from "@element-hq/web-shared-components";
 import { debounce } from "lodash";
 
+import type { UrlPreview } from "shared-types";
 import { UrlPreviewFetcher } from "../../utils/UrlPreviewFetcher";
 import { linksIn } from "../../utils/UrlUtils";
 import { type RoomMessageEventContent, type UnstableBundledUrlPreviewSingle } from "../../../@types/url-preview";
@@ -23,10 +23,14 @@ export const DEBOUNCE_REQUEST_TIMEOUT_MS = 500;
 
 export interface MessageComposerUrlPreviewViewModelRestoreProps {
     client: MatrixClient;
+    moduleUrlPreviewApi: UrlPreviewApi;
     visible: boolean;
     showTooltips: boolean;
     urlPreviewBundle: boolean;
-    content: RoomMessageEventContent;
+    /**
+     * The event being edited. Its content seeds the composer and its existing URL preview bundle.
+     */
+    event: MatrixEvent;
 }
 
 export interface MessageComposerUrlPreviewViewModelProps {
@@ -101,16 +105,18 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
     public static restoreFromMessage(
         props: MessageComposerUrlPreviewViewModelRestoreProps,
     ): MessageComposerUrlPreviewViewModel {
-        const bundleContent = props.content["com.beeper.linkpreviews"];
-        const linksInMessage = linksIn(props.content.body);
+        const content = props.event.getContent<RoomMessageEventContent>();
+        const bundleContent = content["com.beeper.linkpreviews"];
+        const linksInMessage = linksIn(content.body);
         const linksInBundle = new Set(bundleContent?.map((entry) => entry.matched_url));
 
         const urlVmProps: MessageComposerUrlPreviewViewModelProps = {
             client: props.client,
+            moduleUrlPreviewApi: props.moduleUrlPreviewApi,
             visible: props.visible,
             showTooltips: props.showTooltips,
             urlPreviewBundle: props.urlPreviewBundle,
-            content: props.content.body,
+            content: content.body,
         };
 
         if (props.urlPreviewBundle && bundleContent !== undefined) {
@@ -140,7 +146,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
 
         const urlVm = new MessageComposerUrlPreviewViewModel(urlVmProps);
         if (props.urlPreviewBundle && bundleContent !== undefined) {
-            urlVm.resolveBundledPreviews(bundleContent, props.content.body);
+            urlVm.resolveBundledPreviews(bundleContent, props.event);
         }
         return urlVm;
     }
@@ -232,11 +238,11 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
      * bundle carries only `matched_url` fall back to a server request inside `previewFromBundle`.
      *
      * @param bundle The event's preview bundle.
-     * @param body The message text body the bundle belongs to.
+     * @param event The event the bundle belongs to.
      */
-    public readonly resolveBundledPreviews = (bundle: UnstableBundledUrlPreviewSingle[], body: string): void => {
+    public readonly resolveBundledPreviews = (bundle: UnstableBundledUrlPreviewSingle[], event: MatrixEvent): void => {
         for (const single of bundle) {
-            void this.fetcher.previewFromBundle(single, body, true).then((fetched) => {
+            void this.fetcher.previewFromBundle(single, event, true).then((fetched) => {
                 this.resolvePreview(single.matched_url, fetched);
             });
         }

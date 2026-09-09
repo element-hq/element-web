@@ -9,7 +9,7 @@
 
 import { vi, describe, it, expect, type Mock, beforeAll, afterAll } from "vitest";
 
-import { MsgType, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, MsgType, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { MessageComposerUrlPreviewViewModel } from "./MessageComposerUrlPreviewViewModel";
 import { type MessageComposerUrlPreviewSnapshotEntry } from "@element-hq/web-shared-components";
 import { type RoomMessageEventContent } from "../../../@types/url-preview";
@@ -66,6 +66,18 @@ function getMockClient(): MockClient {
     };
 }
 
+/** Build the message event being edited, carrying the content under test. */
+function mkMessageEvent(content: RoomMessageEventContent): MatrixEvent {
+    return new MatrixEvent({
+        type: "m.room.message",
+        content,
+        event_id: "$event-id",
+        room_id: "!room:example.org",
+        sender: "@alice:example.org",
+        origin_server_ts: 0,
+    });
+}
+
 /**
  * `restoreFromMessage` starts fetching immediately, so `client` must already be set up with the
  * responses the test expects. Pass one built with {@link getMockClient}.
@@ -79,10 +91,11 @@ function restoreViewModel(
 } {
     const vm = MessageComposerUrlPreviewViewModel.restoreFromMessage({
         client: client as unknown as MatrixClient,
+        moduleUrlPreviewApi: new UrlPreviewApi(),
         visible,
         showTooltips: false,
         urlPreviewBundle,
-        content,
+        event: mkMessageEvent(content),
     });
     return { vm, client };
 }

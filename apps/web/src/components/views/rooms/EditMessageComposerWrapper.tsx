@@ -19,6 +19,7 @@ import EditMessageComposer from "./EditMessageComposer";
 import type EditorModel from "../../../editor/model";
 import { type RoomMessageEventContent } from "../../../../@types/url-preview";
 import { attachUrlPreviews } from "../../../utils/messages";
+import { ModuleApi } from "../../../modules/Api";
 
 interface IEditMessageComposerProps extends MatrixClientProps {
     showUrlPreview: boolean;
@@ -29,17 +30,16 @@ interface IEditMessageComposerProps extends MatrixClientProps {
 export function EditMessageComposerWrapper(props: IEditMessageComposerProps): JSX.Element {
     const urlPreviewBundleEnabled = useSettingValue("feature_msc4095_url_preview_bundle");
 
-    const vm = useCreateAutoDisposedViewModel(() => {
-        const content = props.editState.getEvent().getContent<RoomMessageEventContent>();
-
-        return MessageComposerUrlPreviewViewModel.restoreFromMessage({
+    const vm = useCreateAutoDisposedViewModel(() =>
+        MessageComposerUrlPreviewViewModel.restoreFromMessage({
             client: props.mxClient,
+            moduleUrlPreviewApi: ModuleApi.instance.urlPreviews,
             visible: props.showUrlPreview,
             showTooltips: PlatformPeg.get()?.needsUrlTooltips() ?? true,
             urlPreviewBundle: urlPreviewBundleEnabled,
-            content,
-        });
-    });
+            event: props.editState.getEvent(),
+        }),
+    );
 
     const { isModified: isUrlPreviewsModified } = useViewModel(vm);
 
