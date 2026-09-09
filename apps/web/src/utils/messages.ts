@@ -150,7 +150,11 @@ export async function attachUrlPreviews(
     let cancelled = false;
     const abortController = new AbortController();
 
+    // in an encrypted room, preview images needs to be sent before the message can be sent
+    // - the compositor needs to be cleared immediately after pressing enter
+    // - the message needs to be displayed as "sending" in the timeline even though it is not yet being sent (it is waiting for image upload)
     if (isRoomEncrypted && previewsToAttach.some((preview) => preview.image !== undefined)) {
+        // create the event with the same content as the message
         const txnId = client.makeTxnId();
         const event = new MatrixEvent({
             type: EventType.RoomMessage,
@@ -165,10 +169,14 @@ export async function attachUrlPreviews(
         event.on(MatrixEventEvent.Status, (_, status) => {
             if (status == EventStatus.CANCELLED) {
                 cancelled = true;
+                // cancel uploading the images if sending is aborted
                 abortController.abort();
             }
         });
+
+        // add to timeline
         room.addPendingEvent(event, txnId);
+        // removes the red checkmark when a message is sent in an encrypted room but is not encrypting
         room.updatePendingEvent(event, EventStatus.ENCRYPTING);
         eventId = event.getId();
     }
