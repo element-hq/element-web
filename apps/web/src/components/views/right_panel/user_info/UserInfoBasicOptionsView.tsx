@@ -88,7 +88,7 @@ export const UserInfoBasicOptionsView: React.FC<{
                     role="button"
                     onSelect={async (ev) => {
                         ev.preventDefault();
-                        vm.onInviteUserButton(room.roomId, ev);
+                        void vm.onInviteUserButton(room.roomId, ev);
                     }}
                     label={_t("action|invite")}
                     Icon={InviteIcon}

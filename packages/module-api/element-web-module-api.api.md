@@ -63,7 +63,11 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
     readonly rootNode: HTMLElement;
     // @alpha
     readonly settings: SettingsApi;
+    // @alpha
+    readonly storageHelper: StorageHelperApi;
     readonly stores: StoresApi;
+    // @alpha
+    readonly urlPreviews: UrlPreviewApi;
     // @alpha
     readonly widget: WidgetApi;
     // @alpha
@@ -94,7 +98,14 @@ export interface ChatExportCustomisations<ExportFormat, ExportType> {
 // @public
 export interface ClientApi {
     accountData: AccountDataApi;
+    // @alpha
+    readonly creationManagement: ClientCreationManagementApi;
     getRoom: (id: string) => Room | null;
+}
+
+// @public
+export interface ClientCreationManagementApi {
+    setUserVerificationCaCertsPem(pem: string | null): void;
 }
 
 // @alpha @deprecated (undocumented)
@@ -495,6 +506,11 @@ export interface SpacePanelItemProps {
     tooltip?: string;
 }
 
+// @alpha
+export interface StorageHelperApi {
+    getPickleKey(userId: string, deviceId: string): Promise<string | null>;
+}
+
 // @public
 export interface StoresApi {
     roomListStore: RoomListStoreApi;
@@ -529,6 +545,16 @@ export const enum UIComponent {
     InviteUsers = "UIComponent.sendInvites",
     RoomOptionsMenu = "UIComponent.roomOptionsMenu"
 }
+
+// @alpha
+export interface UrlPreviewApi {
+    registerPreviewHandler(regex: RegExp, handler: UrlPreviewHandler): void;
+}
+
+// Warning: (ae-forgotten-export) The symbol "UrlPreview" needs to be exported by the entry point index.d.ts
+//
+// @alpha
+export type UrlPreviewHandler = (url: string, mxEvent?: MatrixEvent) => Promise<UrlPreview | null>;
 
 // @alpha @deprecated (undocumented)
 export interface UserIdentifierCustomisations {

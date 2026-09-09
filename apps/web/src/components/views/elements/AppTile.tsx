@@ -319,7 +319,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     }
 
     private onAllowedWidgetsChange = (): void => {
-        this.resolvePermissionToLoad(this.props).then((hasPermissionToLoad) => {
+        void this.resolvePermissionToLoad(this.props).then((hasPermissionToLoad) => {
             if (this.unmounted) return;
 
             if (this.state.hasPermissionToLoad && !hasPermissionToLoad) {
@@ -378,7 +378,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             // Sync check already approved — start immediately, no need to re-check.
             this.startWidget();
         } else {
-            this.resolvePermissionToLoad(this.props).then((hasPermissionToLoad) => {
+            void this.resolvePermissionToLoad(this.props).then((hasPermissionToLoad) => {
                 if (this.unmounted) return;
                 this.setState({ hasPermissionToLoad });
                 if (hasPermissionToLoad) {
@@ -469,7 +469,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     }
 
     private startWidget(): void {
-        this.messaging?.prepare().then(() => {
+        void this.messaging?.prepare().then(() => {
             if (this.unmounted) return;
             this.setState({ initialising: false });
         });

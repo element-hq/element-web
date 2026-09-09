@@ -8,14 +8,16 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 // @vitest-environment-options {"url": "https://app.element.io/?loginToken=123&no_universal_links&something_else=value#/home?state=abc&code=xyz"}
 
-import { vi, describe, it, expect, beforeEach } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+import { logger } from "matrix-js-sdk/src/logger";
 import fetchMock from "@fetch-mock/vitest";
 import { waitFor, screen } from "test-utils-rtl";
 
-import { loadApp, showError, showIncompatibleBrowser } from "./init.tsx";
+import { loadApp, logAppVersion, showError, showIncompatibleBrowser } from "./init.tsx";
 import SdkConfig from "../SdkConfig.ts";
 import MatrixChat from "../components/structures/MatrixChat.tsx";
 import { parseAppUrl } from "./url_utils.ts";
+import { mockPlatformPeg, unmockPlatformPeg } from "../../test/test-utils/platform.ts";
 
 function setUpMatrixChatDiv() {
     document.getElementById("matrixchat")?.remove();
@@ -57,6 +59,27 @@ describe("loadApp", () => {
         await waitFor(() => expect(window.matrixChat).toBeInstanceOf(MatrixChat));
     });
 
+    it("should replace the previous app rather than leaving it mounted", async () => {
+        await loadApp({});
+        await waitFor(() => expect(window.matrixChat).toBeInstanceOf(MatrixChat));
+        const first = window.matrixChat;
+
+        // Count only what the second load does. We track the mounted/unmounted delta rather than raw
+        // mount count, as StrictMode's extra mount/unmount cycle cancels out in the difference.
+        const mounted = vi.spyOn(MatrixChat.prototype, "componentDidMount");
+        const unmounted = vi.spyOn(MatrixChat.prototype, "componentWillUnmount");
+        const delta = (): number => mounted.mock.calls.length - unmounted.mock.calls.length;
+
+        setUpMatrixChatDiv();
+        await loadApp({});
+        await waitFor(() => expect(window.matrixChat).not.toBe(first));
+
+        // The new app replaces the old one, so the number of live apps is unchanged. A second root over
+        // the same container would instead leave the first tree mounted against a detached node, with both
+        // copies still driven by the dispatcher and the client peg.
+        await waitFor(() => expect(delta()).toBe(0));
+    });
+
     it("should pass onTokenLoginCompleted which strips searchParams & fragment to MatrixChat", async () => {
         const spy = vi.spyOn(window.history, "replaceState");
 
@@ -65,5 +88,28 @@ describe("loadApp", () => {
         window.matrixChat!.props.onTokenLoginCompleted(parseAppUrl(window.location).params, "/home");
 
         expect(spy).toHaveBeenCalledWith(null, "", "https://app.element.io/?something_else=value#/home");
+    });
+});
+
+describe("logAppVersion", () => {
+    afterEach(unmockPlatformPeg);
+
+    it("should log the version reported by the platform", async () => {
+        const spy = vi.spyOn(logger, "info");
+        mockPlatformPeg({ getAppVersion: vi.fn().mockResolvedValue("1.12.34") });
+
+        await logAppVersion();
+
+        expect(spy).toHaveBeenCalledWith("App version: 1.12.34");
+    });
+
+    it("should warn rather than throw if the version cannot be determined", async () => {
+        const spy = vi.spyOn(logger, "warn");
+        const error = new Error("no version for you");
+        mockPlatformPeg({ getAppVersion: vi.fn().mockRejectedValue(error) });
+
+        await logAppVersion();
+
+        expect(spy).toHaveBeenCalledWith("Unable to determine app version for logging", error);
     });
 });

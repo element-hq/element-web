@@ -92,10 +92,10 @@ export default class TimelineCard extends React.Component<IProps, IState> {
         this.context.roomViewStore.addListener(UPDATE_EVENT, this.onRoomViewStoreUpdate);
         this.dispatcherRef = dis.register(this.onAction);
         this.readReceiptsSettingWatcher = SettingsStore.watchSetting("showReadReceipts", null, (...[, , , value]) =>
-            this.setState({ showReadReceipts: value as boolean }),
+            this.setState({ showReadReceipts: value! }),
         );
         this.layoutWatcherRef = SettingsStore.watchSetting("layout", null, (...[, , , value]) =>
-            this.setState({ layout: value as Layout }),
+            this.setState({ layout: value! }),
         );
     }
 
@@ -227,6 +227,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
                                     manageReadMarkers={false} // No RM support in the TimelineCard
                                     sendReadReceiptOnLoad={true}
                                     timelineSet={this.props.timelineSet}
+                                    shape={"Card"}
                                     showUrlPreview={this.context.showUrlPreview}
                                     // The right panel timeline (and therefore threads) don't support IRC layout at this time
                                     layout={layout}

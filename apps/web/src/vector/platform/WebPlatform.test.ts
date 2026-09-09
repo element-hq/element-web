@@ -136,6 +136,7 @@ describe("WebPlatform", () => {
     });
 
     describe("app version", () => {
+        // oxlint-disable-next-line node/no-process-env
         const envVersion = process.env.VERSION;
         const prodVersion = "1.10.13";
 

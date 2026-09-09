@@ -41,11 +41,11 @@ const DeviceContextMenuSection: React.FC<IDeviceContextMenuSectionProps> = ({ de
         const getDevices = async (): Promise<void> => {
             return setDevices((await MediaDeviceHandler.getDevices())?.[deviceKind] ?? []);
         };
-        getDevices();
+        void getDevices();
     }, [deviceKind]);
 
     const onDeviceClick = (deviceId: string): void => {
-        MediaDeviceHandler.instance.setDevice(deviceId, deviceKind);
+        void MediaDeviceHandler.instance.setDevice(deviceId, deviceKind);
         setSelectedDevice(deviceId);
     };
 

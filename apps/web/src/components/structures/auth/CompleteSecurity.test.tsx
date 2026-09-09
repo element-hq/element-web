@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import React from "react";
 import { act, render, screen } from "test-utils-rtl";
-import EventEmitter from "events";
+import EventEmitter from "node:events";
 import { stubClient } from "test-utils";
 
 import CompleteSecurity from "./CompleteSecurity";

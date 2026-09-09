@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeEach, type Mocked } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterEach, type Mocked } from "vitest";
 import { EventType, type MatrixClient, MatrixError, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import * as TestUtilsMatrix from "test-utils";
@@ -84,7 +84,6 @@ describe("MultiInviter", () => {
     let inviter: MultiInviter;
 
     beforeEach(() => {
-        vi.resetAllMocks();
         vi.mocked(Modal.createDialog).mockReturnValue({ close: vi.fn(), finished: new Promise(() => {}) });
 
         TestUtilsMatrix.stubClient();
@@ -104,6 +103,10 @@ describe("MultiInviter", () => {
         inviter = new MultiInviter(client, ROOMID);
     });
 
+    afterEach(() => {
+        vi.resetAllMocks();
+    });
+
     describe("invite", () => {
         it("should show a progress dialog while the invite happens", async () => {
             const mockModalHandle = { close: vi.fn(), finished: new Promise<[]>(() => {}) };
@@ -119,6 +122,83 @@ describe("MultiInviter", () => {
             invitePromise.resolve({});
             await resultPromise;
             expect(mockModalHandle.close).toHaveBeenCalled();
+        });
+
+        describe("when the server rate limits us", () => {
+            const rateLimited = (retryAfterMs?: number) =>
+                new MatrixError({
+                    errcode: "M_LIMIT_EXCEEDED",
+                    error: "Too Many Requests",
+                    retry_after_ms: retryAfterMs,
+                });
+
+            beforeEach(() => {
+                mockPromptBeforeInviteUnknownUsers(false);
+                vi.useFakeTimers();
+            });
+
+            afterEach(() => {
+                vi.useRealTimers();
+            });
+
+            it("should wait as long as the server asks before retrying", async () => {
+                client.invite.mockRejectedValueOnce(rateLimited(2000)).mockResolvedValue({});
+
+                const resultPromise = inviter.invite([MXID1]);
+
+                await vi.advanceTimersByTimeAsync(1999);
+                expect(client.invite).toHaveBeenCalledTimes(1);
+
+                await vi.advanceTimersByTimeAsync(1);
+                await resultPromise;
+
+                expect(client.invite).toHaveBeenCalledTimes(2);
+                expect(inviter.getCompletionState(MXID1)).toBe("invited");
+            });
+
+            it("should give up instead of retrying forever", async () => {
+                client.invite.mockRejectedValue(rateLimited(1000));
+
+                const resultPromise = inviter.invite([MXID1]);
+                await vi.advanceTimersByTimeAsync(10 * 60 * 1000);
+                await resultPromise;
+
+                // the initial attempt plus a bounded number of retries, not an unbounded loop
+                expect(client.invite).toHaveBeenCalledTimes(4);
+                expect(inviter.getCompletionState(MXID1)).toBe("error");
+                expect(inviter.getErrorText(MXID1)).toMatchInlineSnapshot(
+                    `"Too many invites were sent. Please try again later."`,
+                );
+            });
+
+            it("should fall back to a fixed delay when the server does not say how long to wait", async () => {
+                client.invite.mockRejectedValueOnce(rateLimited()).mockResolvedValue({});
+
+                const resultPromise = inviter.invite([MXID1]);
+
+                await vi.advanceTimersByTimeAsync(4999);
+                expect(client.invite).toHaveBeenCalledTimes(1);
+
+                await vi.advanceTimersByTimeAsync(1);
+                await resultPromise;
+
+                expect(client.invite).toHaveBeenCalledTimes(2);
+            });
+
+            it("should not wait longer than the maximum delay however long the server asks for", async () => {
+                // The report which prompted this had the server asking for over four minutes.
+                client.invite.mockRejectedValueOnce(rateLimited(255839)).mockResolvedValue({});
+
+                const resultPromise = inviter.invite([MXID1]);
+
+                await vi.advanceTimersByTimeAsync(29999);
+                expect(client.invite).toHaveBeenCalledTimes(1);
+
+                await vi.advanceTimersByTimeAsync(1);
+                await resultPromise;
+
+                expect(client.invite).toHaveBeenCalledTimes(2);
+            });
         });
 
         describe("with promptBeforeInviteUnknownUsers = false", () => {
@@ -234,8 +314,60 @@ describe("MultiInviter", () => {
 
             await inviter.invite(["@user:other_server"]);
             expect(inviter.getErrorText("@user:other_server")).toMatchInlineSnapshot(
-                `"This room is unfederated. You cannot invite people from external servers."`,
+                `"This room is unfederated. You cannot invite people from external servers"`,
             );
+        });
+
+        it("should not blame permissions for a refusal of an invite we are allowed to send", async () => {
+            vi.mocked(client.invite).mockRejectedValueOnce(
+                new MatrixError({
+                    errcode: "M_FORBIDDEN",
+                    error: "Ablehnung: Einladung durch Serverrichtlinie verweigert",
+                }),
+            );
+            const room = new Room(ROOMID, client, client.getSafeUserId());
+            room.updateMyMembership(KnownMembership.Join);
+            vi.mocked(client.getRoom).mockReturnValue(room);
+
+            await inviter.invite([MXID1, MXID2]);
+
+            expect(inviter.getErrorText(MXID1)).toMatchInlineSnapshot(`"Not accepting invites"`);
+            // The server's own wording is untranslated, so it must not reach the user.
+            expect(inviter.getErrorText(MXID1)).not.toContain("Serverrichtlinie");
+            // The refusal was about one invitee, so the rest of the batch is still worth trying.
+            expect(client.invite).toHaveBeenCalledWith(ROOMID, MXID2, { shareEncryptedHistory: true });
+        });
+
+        it("should blame permissions only when the user really cannot invite", async () => {
+            vi.mocked(client.invite).mockRejectedValue(
+                new MatrixError({
+                    errcode: "M_FORBIDDEN",
+                    error: "You don't have permission to invite users",
+                }),
+            );
+            const room = new Room(ROOMID, client, client.getSafeUserId());
+            room.updateMyMembership(KnownMembership.Join);
+            room.currentState.setStateEvents([
+                new MatrixEvent({
+                    type: EventType.RoomPowerLevels,
+                    state_key: "",
+                    content: { invite: 100 },
+                    room_id: ROOMID,
+                }),
+            ]);
+            const ourMember = new RoomMember(ROOMID, client.getSafeUserId());
+            ourMember.membership = KnownMembership.Join;
+            ourMember.powerLevel = 0;
+            room.getMember = (userId: string) => (userId === client.getSafeUserId() ? ourMember : null);
+            vi.mocked(client.getRoom).mockReturnValue(room);
+
+            await inviter.invite([MXID1, MXID2]);
+
+            expect(inviter.getErrorText(MXID1)).toMatchInlineSnapshot(
+                `"You do not have permission to invite people to this room"`,
+            );
+            // That will hold for everyone else too, so nothing further is attempted.
+            expect(client.invite).toHaveBeenCalledTimes(1);
         });
 
         it("should show sensible error when attempting to invite over federation with m.federate=false to space", async () => {
@@ -260,7 +392,7 @@ describe("MultiInviter", () => {
 
             await inviter.invite(["@user:other_server"]);
             expect(inviter.getErrorText("@user:other_server")).toMatchInlineSnapshot(
-                `"This space is unfederated. You cannot invite people from external servers."`,
+                `"This space is unfederated. You cannot invite people from external servers"`,
             );
         });
     });

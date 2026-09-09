@@ -627,22 +627,6 @@
     },
     "dialog_close_label": "Loka glugga",
     "download_completed": "Niðurhali lokið",
-    "emoji": {
-        "categories": "Flokkar",
-        "category_activities": "Afþreying",
-        "category_animals_nature": "Dýr og náttúra",
-        "category_flags": "Fánar",
-        "category_food_drink": "Mat og drykkur",
-        "category_frequently_used": "Oft notað",
-        "category_objects": "Hlutir",
-        "category_smileys_people": "Broskarlar og fólk",
-        "category_symbols": "Tákn",
-        "category_travel_places": "Ferðalög og staðir",
-        "quick_reactions": "Flýtiviðbrögð"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Hætta við leitina"
-    },
     "empty_room": "Tóm spjallrás",
     "empty_room_was_name": "Tóm spjallrás (var %(oldName)s)",
     "encryption": {
@@ -930,7 +914,6 @@
         "name_mxid_share_room": "Bjóddu einhverjum með því að nota nafn, notandanafn (eins og <userId/>) eða <a>deildu þessari spjallrás</a>.",
         "name_mxid_share_space": "Bjóddu einhverjum með því að nota nafn, notandanafn (eins og <userId/>) eða <a>deildu þessu svæði</a>.",
         "recents_section": "Nýleg samtöl",
-        "room_failed_partial": "Við sendum hin boðin, en fólkinu hér fyrir neðan var ekki hægt að bjóða í <RoomName/>",
         "room_failed_partial_title": "Sumar boðsbeiðnir var ekki hægt að senda",
         "room_failed_title": "Mistókst að bjóða notendum í %(roomName)s",
         "send_link_prompt": "Eða senda boðstengil",
@@ -1031,7 +1014,6 @@
         "bridge_state_workspace": "Vinnusvæði: <networkLink/>",
         "click_for_info": "Smelltu til að sjá frekari upplýsingar",
         "currently_experimental": "Í augnablikinu á tilraunastigi.",
-        "custom_themes": "Stuðningur við að bæta við sérsniðnum þemum",
         "group_developer": "Forritari",
         "group_encryption": "Dulritun",
         "group_experimental": "Á tilraunastigi",
@@ -1040,7 +1022,6 @@
         "group_profile": "Notandasnið",
         "group_rooms": "Spjallrásir",
         "group_spaces": "Svæði",
-        "group_themes": "Þemu",
         "group_threads": "Spjallþræðir",
         "group_voip": "Tal og myndmerki",
         "group_widgets": "Viðmótshlutar",
@@ -1172,7 +1153,6 @@
         "mark_all_read": "Merkja allt sem lesið",
         "mentions_and_keywords": "@minnst á og stikkorð",
         "mentions_keywords": "Tilvísanir og stikkorð",
-        "message_didnt_send": "Mistókst að senda skilaboð. Smelltu til að fá nánari upplýsingar.",
         "mute_description": "Þú munt ekki fá neinar tilkynningar"
     },
     "notifier": {
@@ -1662,8 +1642,6 @@
             "custom_font_description": "Settu inn heiti á letri sem er uppsett á kerfinu þínu og %(brand)s mun reyna að nota það.",
             "custom_font_name": "Nafn kerfisleturs",
             "custom_font_size": "Nota sérsniðna stærð",
-            "custom_theme_error_downloading": "Villa við að niðurhala þemaupplýsingum.",
-            "custom_theme_invalid": "Ógilt þemaskema.",
             "font_size": "Leturstærð",
             "image_size_default": "Sjálfgefið",
             "image_size_large": "Stórt",

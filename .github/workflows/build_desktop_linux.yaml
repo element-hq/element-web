@@ -64,14 +64,17 @@ on:
                 default: "tar.gz deb"
 env:
     SQLCIPHER_BUNDLED: ${{ inputs.sqlcipher == 'static' && '1' || '' }}
-    MAX_GLIBC: 2.31 # bullseye-era glibc, used by glibc-check.sh
+    # Used by glibc-check.sh. Ubuntu 22.04 (jammy) (2.35) is the oldest supported distro that still ships libsqlcipher0,
+    # which the system-sqlcipher variant needs. Debian bookworm (2.36) and newer are a superset.
+    # Currently, our newest linked glibc version is 2.34 in Seshat, Electron only links against 2.25.
+    MAX_GLIBC: 2.34
 permissions: {} # No permissions required
 jobs:
     build:
         name: Build Linux ${{ inputs.arch }} SQLCipher ${{ inputs.sqlcipher }}
         # We build on native infrastructure as matrix-seshat fails to cross-compile properly
         # https://github.com/matrix-org/seshat/issues/135
-        runs-on: ${{ inputs.runs-on || (inputs.arch == 'arm64' && 'ubuntu-22.04-arm' || 'ubuntu-22.04') }}
+        runs-on: ${{ inputs.runs-on || (inputs.arch == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04') }}
         env:
             HAK_DOCKER_IMAGE: ghcr.io/element-hq/element-web/desktop-build-env:${{ case(github.event_name == 'push', inputs.ref || github.ref_name, github.event_name == 'release', 'staging', 'develop') }}
         steps:
@@ -110,7 +113,7 @@ jobs:
                   path: |
                       apps/desktop/.hak
 
-            - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+            - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
             - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
               with:
                   node-version-file: apps/desktop/.node-version
@@ -258,10 +261,10 @@ jobs:
         with:
             project: linux-${{ inputs.arch }}-sqlcipher-${{ inputs.sqlcipher }}
             artifact: ${{ inputs.artifact-prefix }}linux-${{ inputs.arch }}-sqlcipher-${{ inputs.sqlcipher }}
-            runs-on: ${{ inputs.runs-on || (inputs.arch == 'arm64' && 'ubuntu-22.04-arm' || 'ubuntu-22.04') }}
+            runs-on: ${{ inputs.runs-on || (inputs.sqlcipher == 'system' && (inputs.arch == 'arm64' && 'ubuntu-22.04-arm' || 'ubuntu-22.04') || (inputs.arch == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04')) }}
             executable: /opt/Element*/element-desktop*
             prepare_cmd: |
                 sudo apt-get -qq update
                 sudo apt install ./dist/*.deb
             blob_report: ${{ inputs.blob_report }}
-            args: ${{ inputs.test-args }}
+            args: ${{ inputs.sqlcipher == 'system' && '--ignore-snapshots' || '' }} ${{ inputs.test-args }}

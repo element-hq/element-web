@@ -118,7 +118,7 @@ instance. As of writing those settings are not fully documented, however a few a
     }
     ```
     These values will take priority over the hardcoded defaults for the settings. For a list of available settings, see
-    [Settings.tsx](https://github.com/element-hq/element-web/blob/develop/src/settings/Settings.tsx).
+    [Settings.tsx](https://github.com/element-hq/element-web/blob/develop/apps/web/src/settings/Settings.tsx).
 
 ## Customisation & branding
 
@@ -400,8 +400,8 @@ The VoIP and Jitsi options are:
       the app, removing the ability to enable legacy 1:1 calls or Jitsi calls.
       It is a misconfiguration if its set to true while `element_call.disable` is also true!
       Defaults to `false`.
-    - `disabled`: A boolean flag specifying whether Element Call should be disabled.
-      If it is disabled `element_call.use_exclusively` has no effect!
+    - `disable`: A boolean flag specifying whether Element Call should be disabled.
+      If `true`, `element_call.use_exclusively` has no effect!
       Defaults to `false`.
     - `brand`: Optional name for the app. Defaults to `Element Call`. This is
       used throughout the application in various strings/locations.

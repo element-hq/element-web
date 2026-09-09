@@ -618,22 +618,6 @@
     },
     "dialog_close_label": "ປິດກ່ອງໂຕ້ຕອບ",
     "download_completed": "ດາວໂຫຼດສຳເລັດແລ້ວ",
-    "emoji": {
-        "categories": "ໝວດໝູ່",
-        "category_activities": "ກິດຈະກໍາ",
-        "category_animals_nature": "ສັດ & ທໍາມະຊາດ",
-        "category_flags": "ທຸງ",
-        "category_food_drink": "ອາຫານ ແລະ ເຄື່ອງດື່ມ",
-        "category_frequently_used": "ໃຊ້ເປັນປະຈຳ",
-        "category_objects": "ວັດຖຸ",
-        "category_smileys_people": "ຮອຍຍິ້ມ & ຜູ້ຄົນ",
-        "category_symbols": "ສັນຍາລັກ",
-        "category_travel_places": "ການເດີນທາງ & ສະຖານທີ່",
-        "quick_reactions": "ການໂຕ້ຕອບທັນທີ"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "ຍົກເລີກການຄົ້ນຫາ"
-    },
     "empty_room": "ຫ້ອງຫວ່າງ",
     "encryption": {
         "access_secret_storage_dialog": {
@@ -950,7 +934,6 @@
         "name_mxid_share_room": "ເຊີນຄົນທີ່ໃຊ້ຊື່ຂອງເຂົາເຈົ້າ, ຊື່ຜູ້ໃຊ້ (ເຊັ່ນ <userId/>) ຫຼື <a>ແບ່ງປັນຫ້ອງນີ້</a>.",
         "name_mxid_share_space": "ເຊີນຄົນທີ່ໃຊ້ຊື່ຂອງເຂົາເຈົ້າ, ຊື່ຜູ້ໃຊ້ (ເຊັ່ນ <userId/>) ຫຼື <a>ແບ່ງປັນພື້ນທີ່ນີ້</a>.",
         "recents_section": "ການສົນທະນາທີ່ຜ່ານມາ",
-        "room_failed_partial": "ພວກເຮົາໄດ້ສົ່ງຄົນອື່ນແລ້ວ, ແຕ່ຄົນລຸ່ມນີ້ບໍ່ສາມາດໄດ້ຮັບເຊີນໃຫ້ເຂົ້າຮ່ວມ <RoomName/>",
         "room_failed_partial_title": "ບໍ່ສາມາດສົ່ງບາງຄຳເຊີນໄດ້",
         "room_failed_title": "ໃນການເຊີນຜູ້ໃຊ້ໄປຫາ %(roomName)s ບໍ່ສຳເລັດ",
         "send_link_prompt": "ຫຼື ສົ່ງລິ້ງເຊີນ",
@@ -1052,7 +1035,6 @@
         "bridge_state_manager": "ຂົວນີ້ຖືກຄຸ້ມຄອງໂດຍ <user />.",
         "bridge_state_workspace": "ພື້ນທີ່ເຮັດວຽກ: <networkLink/>",
         "click_for_info": "ກົດສຳລັບຂໍ້ມູນເພີ່ມເຕີມ",
-        "custom_themes": "ສະຫນັບສະຫນູນການເພີ່ມຫົວຂໍ້ ທີ່ກຳນົດເອງ",
         "group_developer": "ນັກພັດທະນາ",
         "group_encryption": "ການເຂົ້າລະຫັດ",
         "group_experimental": "ທົດລອງ",
@@ -1061,7 +1043,6 @@
         "group_profile": "ໂປຣໄຟລ໌",
         "group_rooms": "ຫ້ອງ",
         "group_spaces": "ພື້ນທີ່",
-        "group_themes": "ຫົວຂໍ້",
         "group_threads": "ກະທູ້",
         "group_voip": "ສຽງ & ວິດີໂອ",
         "group_widgets": "ວິດເຈັດ",
@@ -1185,7 +1166,6 @@
         "mentions_and_keywords": "@ກ່າວເຖິງ & ຄໍາສໍາຄັນ",
         "mentions_and_keywords_description": "ຮັບການແຈ້ງເຕືອນພຽງແຕ່ມີການກ່າວເຖິງ ແລະ ຄໍາທີ່ກຳນົດໄວ້ໃນ<a>settings</a>ຂອງທ່ານ",
         "mentions_keywords": "ກ່າວເຖິງ & ຄໍາສໍາຄັນ",
-        "message_didnt_send": "ບໍ່ໄດ້ສົ່ງຂໍ້ຄວາມ. ກົດສຳລັບຂໍ້ມູນ.",
         "mute_description": "ທ່ານຈະບໍ່ໄດ້ຮັບການແຈ້ງເຕືອນໃດໆ"
     },
     "notifier": {
@@ -1717,8 +1697,6 @@
             "custom_font_description": "ກຳນົດຊື່ຕົວອັກສອນທີ່ຕິດຕັ້ງຢູ່ໃນລະບົບຂອງທ່ານ & %(brand)sຈະພະຍາຍາມໃຊ້ມັນ.",
             "custom_font_name": "ຊື່ຕົວອັກສອນລະບົບ",
             "custom_font_size": "ໃຊ້ຂະຫນາດທີ່ກໍາຫນົດເອງ",
-            "custom_theme_error_downloading": "ເກີດຄວາມຜິດພາດໃນການດາວໂຫຼດຂໍ້ມູນ.",
-            "custom_theme_invalid": "ຮູບແບບschemaບໍ່ຖືກຕ້ອງ.",
             "font_size": "ຂະໜາດຕົວອັກສອນ",
             "image_size_default": "ຄ່າເລີ່ມຕົ້ນ",
             "image_size_large": "ຂະຫນາດໃຫຍ່",

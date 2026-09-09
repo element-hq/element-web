@@ -5,6 +5,14 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+.notificationBadge {
+    /* App-side badge borders should sit outside the fixed badge size. */
+    box-sizing: content-box;
+    padding: 0;
+    border: 0;
+    font: inherit;
+}
+
 .notificationBadge:not(.visible) {
     display: none;
 }
@@ -16,6 +24,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+button.notificationBadge {
+    cursor: pointer;
 }
 
 .notificationBadge.visible.dot {
