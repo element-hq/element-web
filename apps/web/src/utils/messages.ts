@@ -185,30 +185,34 @@ export async function attachUrlPreviews(
                 "og:image:type": preview.image?.imageType,
             };
 
-            if (preview.image?.mxcImageFull !== undefined) {
-                if (isRoomEncrypted) {
-                    try {
-                        // image url from homeserver assumed to not be malformed
-                        const httpUrl = mediaFromMxc(preview.image.mxcImageFull).srcHttp!;
-                        const blob = await (await fetch(httpUrl, { signal: abortController.signal })).blob();
-                        const { file, url } = await uploadFile(client, room.roomId, blob, undefined, abortController);
+            // no image
+            if (preview.image?.mxcImageFull === undefined) return out;
 
-                        if (file) {
-                            out["beeper:image:encryption"] = file;
-                        } else if (url) {
-                            console.error(
-                                `uploading file to room_id=${room.roomId}, expected EncryptedFile, got (unencrypted) URL instead`,
-                            );
-                        }
-                    } catch (e) {
-                        if (!abortController.signal.aborted) {
-                            console.error(e);
-                        }
-                    }
-                } else {
-                    out["og:image"] = preview.image?.mxcImageFull;
-                    out["matrix:image:size"] = preview.image?.fileSize;
+            // has image, not encrypted chat
+            if (!isRoomEncrypted) {
+                out["og:image"] = preview.image?.mxcImageFull;
+                out["matrix:image:size"] = preview.image?.fileSize;
+                return out;
+            }
+
+            // has image, encrypted chat - upload the image to send the EncryptedFile instead
+            try {
+                // image url from homeserver assumed to not be malformed
+                const httpUrl = mediaFromMxc(preview.image.mxcImageFull).srcHttp!;
+                const blob = await (await fetch(httpUrl, { signal: abortController.signal })).blob();
+                const { file } = await uploadFile(client, room.roomId, blob, undefined, abortController);
+
+                if (!file) {
+                    console.error(
+                        `uploading file to room_id=${room.roomId}, expected EncryptedFile, undefined instead`,
+                    );
+                    return out;
                 }
+
+                out["beeper:image:encryption"] = file;
+            } catch (e) {
+                // do not print error if it exited because of the message sending was aborted
+                if (!abortController.signal.aborted) console.error(e);
             }
 
             return out;
