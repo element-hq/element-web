@@ -38,14 +38,17 @@ describe("SnakedObject", () => {
         snakeCase: "oh no", // ensure different value from snake_case for tests
         camelCase: "fallback",
     };
-    const snake = new SnakedObject(input);
 
     it("should prefer snake_case keys", () => {
+        const snake = new SnakedObject(input);
+
         expect(snake.get("snake_case")).toBe(input.snake_case);
         expect(snake.get("snake_case", "camelCase")).toBe(input.snake_case);
     });
 
     it("should fall back to camelCase keys when needed", () => {
+        const snake = new SnakedObject(input);
+
         // @ts-ignore - we're deliberately supplying a key that doesn't exist
         expect(snake.get("camel_case")).toBe(input.camelCase);
 
