@@ -1404,31 +1404,6 @@ describe("DeviceListener", () => {
         });
 
         describe("needs cross-signing reset", () => {
-            it("should not need resetting if cross-signing keys are present locally or in 4S, and user has 4S key", async () => {
-                const deviceListener = await createAndStart();
-                mockCrypto.getCrossSigningStatus.mockResolvedValue({
-                    publicKeysOnDevice: true,
-                    privateKeysInSecretStorage: false,
-                    privateKeysCachedLocally: {
-                        masterKey: true,
-                        selfSigningKey: true,
-                        userSigningKey: true,
-                    },
-                });
-                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(false)).toBe(false);
-
-                mockCrypto.getCrossSigningStatus.mockResolvedValue({
-                    publicKeysOnDevice: true,
-                    privateKeysInSecretStorage: true,
-                    privateKeysCachedLocally: {
-                        masterKey: false,
-                        selfSigningKey: false,
-                        userSigningKey: false,
-                    },
-                });
-                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(false)).toBe(false);
-            });
-
             it("should not need resetting if cross-signing keys are present locally and user forgot 4S key", async () => {
                 const deviceListener = await createAndStart();
                 mockCrypto.getCrossSigningStatus.mockResolvedValue({
@@ -1440,7 +1415,7 @@ describe("DeviceListener", () => {
                         userSigningKey: true,
                     },
                 });
-                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(true)).toBe(false);
+                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset()).toBe(false);
             });
 
             it("should need resetting if cross-signing keys are missing locally and user forgot 4S key", async () => {
@@ -1454,7 +1429,7 @@ describe("DeviceListener", () => {
                         userSigningKey: false,
                     },
                 });
-                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(true)).toBe(true);
+                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset()).toBe(true);
             });
 
             it("should need resetting if cross-signing keys are missing locally and in 4S key", async () => {
@@ -1468,7 +1443,7 @@ describe("DeviceListener", () => {
                         userSigningKey: false,
                     },
                 });
-                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(false)).toBe(true);
+                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset()).toBe(true);
             });
         });
     });

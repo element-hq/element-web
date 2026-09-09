@@ -274,7 +274,7 @@ export const showToast = (state: DeviceStateForToast): void => {
             case "key_storage_out_of_sync": {
                 // Open the user settings dialog to the encryption tab and start the flow to reset encryption or change the recovery key
                 const deviceListener = DeviceListener.sharedInstance();
-                const needsCrossSigningReset = await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(true);
+                const needsCrossSigningReset = await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset();
                 const props = {
                     initialEncryptionState: needsCrossSigningReset ? "reset_identity_forgot" : "change_recovery_key",
                 };
@@ -329,7 +329,7 @@ export const showToast = (state: DeviceStateForToast): void => {
             // A real error happened - jump to the reset identity or change
             // recovery tab
             const needsCrossSigningReset =
-                await DeviceListener.sharedInstance().keyStorageOutOfSyncNeedsCrossSigningReset(true);
+                await DeviceListener.sharedInstance().keyStorageOutOfSyncNeedsCrossSigningReset();
             const props = {
                 initialEncryptionState: needsCrossSigningReset ? "reset_identity_sync_failed" : "change_recovery_key",
             };
