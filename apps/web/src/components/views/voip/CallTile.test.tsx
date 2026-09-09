@@ -14,7 +14,7 @@ import { render, screen } from "test-utils-rtl";
 import SettingsStore from "../../../settings/SettingsStore";
 import { WidgetType } from "../../../widgets/WidgetType";
 import { type IApp } from "../../../stores/WidgetStore";
-import { CallTile } from "./CallTile";
+import { CallAppTile } from "./CallTile";
 
 vi.mock("./ElementCallAppTile", () => ({
     ElementCallAppTile: () => <div data-testid="element-call-app-tile" />,
@@ -45,14 +45,14 @@ describe("CallTile", () => {
     });
 
     it("renders an AppTile for Element Call when the React transport is off", () => {
-        render(<CallTile app={mkApp(WidgetType.CALL.preferred)} />);
+        render(<CallAppTile app={mkApp(WidgetType.CALL.preferred)} />);
         expect(screen.getByTestId("app-tile")).toBeInTheDocument();
         expect(screen.queryByTestId("element-call-app-tile")).not.toBeInTheDocument();
     });
 
     it("renders the React tile for Element Call when the React transport is on", () => {
         reactCallEnabled = true;
-        render(<CallTile app={mkApp(WidgetType.CALL.preferred)} />);
+        render(<CallAppTile app={mkApp(WidgetType.CALL.preferred)} />);
         expect(screen.getByTestId("element-call-app-tile")).toBeInTheDocument();
         expect(screen.queryByTestId("app-tile")).not.toBeInTheDocument();
     });
