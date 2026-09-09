@@ -5,18 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, {
-    type ChangeEvent,
-    type FormEvent,
-    type JSX,
-    type KeyboardEvent,
-    useCallback,
-    useEffect,
-    useRef,
-    useState,
-} from "react";
-import classNames from "classnames";
+import React, { type JSX, useCallback, useEffect, useRef, useState } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
+import { PdfViewerView, type PdfViewerStatus } from "@element-hq/web-shared-components";
 import {
     AnnotationEditorType,
     AnnotationMode,
@@ -29,8 +20,6 @@ import {
 import { EventBus, PDFLinkService, PDFViewer as PdfJsViewer } from "pdfjs-dist/web/pdf_viewer.mjs";
 
 import { type PdfMedia } from "../../../@types/pdf-viewer";
-import { _t } from "../../../languageHandler";
-import styles from "./PdfViewer.module.css";
 import { flushPdfViewerState, getPdfViewerState, setPdfViewerState } from "../../../utils/pdfViewerState";
 
 const loggerPdf = logger.getChild("PdfViewer");
@@ -59,8 +48,6 @@ const WHEEL_LINE_HEIGHT = 32;
 const WHEEL_PAGE_HEIGHT = 400;
 const WHEEL_ZOOM_SENSITIVITY = 0.0022;
 const MAX_WHEEL_ZOOM_FACTOR = 1.5;
-
-type ViewerStatus = "loading" | "ready" | "error";
 
 /**
  * The view position pdf.js reports on `updateviewarea`. `left`/`top` are in PDF user-space units on
@@ -136,7 +123,7 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
     const containerRef = useRef<HTMLDivElement>(null);
     const viewerElementRef = useRef<HTMLDivElement>(null);
     const pdfViewerRef = useRef<PdfJsViewer | undefined>(undefined);
-    const [status, setStatus] = useState<ViewerStatus>("loading");
+    const [status, setStatus] = useState<PdfViewerStatus>("loading");
     const [currentPage, setCurrentPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
     const [pageInput, setPageInput] = useState("1");
@@ -297,8 +284,8 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
         }
     }, [currentPage, pageCount, pageInput]);
 
-    const onPageInputChange = useCallback((event: ChangeEvent<HTMLInputElement>): void => {
-        setPageInput(event.target.value);
+    const onPageInputChange = useCallback((value: string): void => {
+        setPageInput(value);
     }, []);
 
     const onPageInputFocus = useCallback((): void => {
@@ -318,25 +305,12 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
         commitPageInput();
     }, [commitPageInput, currentPage]);
 
-    const onPageInputKeyDown = useCallback(
-        (event: KeyboardEvent<HTMLInputElement>): void => {
-            if (event.key !== "Escape") return;
-
-            // Abandon the edit and snap back to wherever the document actually is.
-            isPageEditCancelledRef.current = true;
-            setPageInput(String(currentPage));
-            event.currentTarget.blur();
-        },
-        [currentPage],
-    );
-
-    const onPageFormSubmit = useCallback(
-        (event: FormEvent<HTMLFormElement>): void => {
-            event.preventDefault();
-            commitPageInput();
-        },
-        [commitPageInput],
-    );
+    const onPageInputCancel = useCallback((): void => {
+        // Abandon the edit and snap back to wherever the document actually is. The View blurs the input,
+        // which then runs the guarded blur handler above.
+        isPageEditCancelledRef.current = true;
+        setPageInput(String(currentPage));
+    }, [currentPage]);
 
     useEffect(() => {
         const container = containerRef.current;
@@ -418,49 +392,18 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
     }, []);
 
     return (
-        <div className={styles.viewer} data-testid="pdf-viewer">
-            {pageCount > 0 ? (
-                <div
-                    className={styles.toolbar}
-                    role="group"
-                    aria-label={_t("pdf_viewer|page_label", { page: currentPage, total: pageCount })}
-                >
-                    <form className={styles.pageForm} onSubmit={onPageFormSubmit}>
-                        <input
-                            aria-label={_t("pdf_viewer|page_number")}
-                            className={styles.pageInput}
-                            data-testid="pdf-page-input"
-                            inputMode="numeric"
-                            onBlur={onPageInputBlur}
-                            onChange={onPageInputChange}
-                            onFocus={onPageInputFocus}
-                            onKeyDown={onPageInputKeyDown}
-                            value={pageInput}
-                        />
-                        <span aria-hidden="true" className={styles.pageSeparator}>
-                            |
-                        </span>
-                        <span className={styles.pageTotal} data-testid="pdf-page-total">
-                            {pageCount}
-                        </span>
-                    </form>
-                </div>
-            ) : null}
-            <div className={styles.body}>
-                <div className={styles.container} data-testid="pdf-container" ref={containerRef}>
-                    <div className="pdfViewer" ref={viewerElementRef} />
-                </div>
-                {status === "loading" ? (
-                    <div className={styles.message} role="status" aria-live="polite">
-                        {_t("pdf_viewer|loading")}
-                    </div>
-                ) : null}
-                {status === "error" ? (
-                    <div className={classNames(styles.message, styles.error)} role="alert">
-                        {_t("pdf_viewer|error_load")}
-                    </div>
-                ) : null}
-            </div>
-        </div>
+        <PdfViewerView
+            status={status}
+            currentPage={currentPage}
+            pageCount={pageCount}
+            pageInput={pageInput}
+            containerRef={containerRef}
+            viewerRef={viewerElementRef}
+            onPageInputChange={onPageInputChange}
+            onPageInputFocus={onPageInputFocus}
+            onPageInputBlur={onPageInputBlur}
+            onPageInputCancel={onPageInputCancel}
+            onPageSubmit={commitPageInput}
+        />
     );
 }

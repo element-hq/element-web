@@ -1736,11 +1736,7 @@
         "welcome_user": "Welcome %(name)s"
     },
     "pdf_viewer": {
-        "error_load": "Unable to load PDF.",
-        "loading": "Loading PDF…",
         "open": "Open PDF",
-        "page_label": "Page %(page)s of %(total)s",
-        "page_number": "Page number",
         "title": "PDF"
     },
     "pill": {
