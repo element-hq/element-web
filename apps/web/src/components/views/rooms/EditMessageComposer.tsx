@@ -93,7 +93,7 @@ interface IEditMessageComposerProps extends MatrixClientProps {
      */
     updateUrlPreviews?: (model: EditorModel) => void;
     /**
-     * Function to attach URL preview bundles, this should be from attachUrlPreviews
+     * Promise to attach URL preview bundles, this should be from attachUrlPreviews
      */
     attachBundles?: (content: RoomMessageEventContent) => Promise<boolean>;
     /**
