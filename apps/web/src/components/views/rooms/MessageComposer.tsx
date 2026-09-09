@@ -64,6 +64,7 @@ import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
 import PlatformPeg from "../../../PlatformPeg";
 import { ModuleApi } from "../../../modules/Api";
+import { useSettingValue } from "../../../hooks/useSettings";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const WYSIWYG_EDITOR_STATE_STORAGE_PREFIX = "mx_wysiwyg_state_";
@@ -750,6 +751,7 @@ const MessageComposerWithMatrixClient = withMatrixClientHOC(MessageComposer);
 export default function MessageComposerWrapper(props: Omit<IProps, "mxClient" | "urlPreviewVm">): JSX.Element {
     const { showUrlPreview } = useScopedRoomContext("showUrlPreview");
     const client = useMatrixClientContext();
+    const urlPreviewBundle = useSettingValue("feature_msc4095_url_preview_bundle");
     const urlPreviewVm = useCreateAutoDisposedViewModel(
         () =>
             new MessageComposerUrlPreviewViewModel({
@@ -757,6 +759,7 @@ export default function MessageComposerWrapper(props: Omit<IProps, "mxClient" | 
                 visible: showUrlPreview,
                 showTooltips: PlatformPeg.get()?.needsUrlTooltips() ?? true,
                 moduleUrlPreviewApi: ModuleApi.instance.urlPreviews,
+                urlPreviewBundle,
             }),
     );
 

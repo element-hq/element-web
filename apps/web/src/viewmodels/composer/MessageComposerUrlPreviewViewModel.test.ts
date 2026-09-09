@@ -37,6 +37,7 @@ function getViewModel({ visible } = { visible: true }): {
         visible,
         showTooltips: false,
         moduleUrlPreviewApi: new UrlPreviewApi(),
+        urlPreviewBundle: false,
     });
     return { vm, client: client as unknown as { getUrlPreview: Mock; mxcUrlToHttp: Mock } };
 }

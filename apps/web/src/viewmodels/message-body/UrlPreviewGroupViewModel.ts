@@ -58,7 +58,8 @@ export interface UrlPreviewGroupViewModelProps {
 
 export class UrlPreviewGroupViewModel
     extends BaseViewModel<UrlPreviewGroupViewSnapshot, UrlPreviewGroupViewModelProps>
-    implements UrlPreviewGroupViewActions {
+    implements UrlPreviewGroupViewActions
+{
     /**
      * Determine if an anchor element can be rendered into a preview.
      * If it can, return the value of `href`
@@ -150,7 +151,6 @@ export class UrlPreviewGroupViewModel
             props.showTooltips,
             props.moduleUrlPreviewApi,
         );
-        this.disposables.track(() => this.fetcher.dispose());
     }
 
     /**
