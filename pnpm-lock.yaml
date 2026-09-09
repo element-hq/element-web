@@ -532,7 +532,7 @@ importers:
         version: 7.29.7
       '@element-hq/element-call-component':
         specifier: github:element-hq/element-call#valere/component_ec_M1&path:/component
-        version: https://codeload.github.com/element-hq/element-call/tar.gz/273ee3b632a7563780e631585fea0db8ceb8fb73#path:/component(livekit-client@2.22.2)(matrix-js-sdk@42.3.0)(react-dom@19.2.8)(react@19.2.8)
+        version: https://codeload.github.com/element-hq/element-call/tar.gz/2ac95df75f986fca37d302471a0762f4fa5ac158#path:/component(livekit-client@2.22.3)(matrix-js-sdk@42.3.0)(react-dom@19.2.8)(react@19.2.8)
       '@element-hq/element-web-module-api':
         specifier: workspace:*
         version: link:../../packages/module-api
@@ -655,7 +655,7 @@ importers:
         version: 0.18.5
       livekit-client:
         specifier: ^2.22.2
-        version: 2.22.2(@types/dom-mediacapture-record@1.0.22)
+        version: 2.22.3(@types/dom-mediacapture-record@1.0.22)
       lodash:
         specifier: npm:lodash-es@4.18.1
         version: lodash-es@4.18.1
@@ -670,7 +670,7 @@ importers:
         version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/e16b0bcc06d0b17889f3eedef972f3cae9790f08
       matrix-widget-api:
         specifier: ^1.18.0
-        version: 1.19.0
+        version: 1.18.0
       memoize-one:
         specifier: ^6.0.0
         version: 6.0.0
@@ -2880,8 +2880,8 @@ packages:
     engines: {node: '>=14.14'}
     hasBin: true
 
-  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/273ee3b632a7563780e631585fea0db8ceb8fb73#path:/component':
-    resolution: {gitHosted: true, integrity: sha512-pyGcyP9Z0fIIChwIEQl87GqPVryvi6CVdzEJg9eyXsVM31EmXOMJJ1TprhggOqSKoQx2hwJ/vVPHk9lJ+eCRYw==, path: /component, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/273ee3b632a7563780e631585fea0db8ceb8fb73}
+  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/2ac95df75f986fca37d302471a0762f4fa5ac158#path:/component':
+    resolution: {gitHosted: true, path: /component, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/2ac95df75f986fca37d302471a0762f4fa5ac158}
     version: 0.0.0
     peerDependencies:
       livekit-client: ^2.18.1
@@ -3618,8 +3618,8 @@ packages:
   '@matrix-org/emojibase-bindings@1.5.0':
     resolution: {integrity: sha512-+W9/ow2Z3iQa7ZOF698PBhwNcgGkn36B5Sr8VDPx8N8CH7+Uw+7TrtbtKPZVdgf4m/THmgmfX40jS5YDBsLaYg==}
 
-  '@matrix-org/matrix-sdk-crypto-wasm@18.8.0':
-    resolution: {integrity: sha512-J+bYzUqtkYSrIUbDT8Razf9F1gzlpC94qeC5LQlr9QmjrzyaErwlV9v7S+gtSOeDvJCdfP8ebEDaANHiVLCYQg==}
+  '@matrix-org/matrix-sdk-crypto-wasm@18.7.0':
+    resolution: {integrity: sha512-IiO8YrahwBN23iii4OBS6AUIEDZePa72bK7WN/DBjOXPc6g/wt891vn0vxmlopTahqFFOz/LErcHisdmzKVTsg==}
     engines: {node: '>= 18'}
 
   '@matrix-org/react-sdk-module-api@2.5.0':
@@ -10051,8 +10051,8 @@ packages:
     resolution: {integrity: sha512-N5A3KTWQpPWT4ExxxPlUx7WmykGXRzhNidWhV41d6Abu9YfI2NyWCJuxdPnslJCPWtbRpSVOWSnSS6GakLM/Rg==}
     engines: {node: '>= 20'}
 
-  jose@6.2.10:
-    resolution: {integrity: sha512-iiW7J9qRFlGxvCOIBDBDxFePQSn7ZMAnrYGhrrOo6siO/MIqwfyilLR27pkfDgUk+raLuzADS8A3S/KLBisc0g==}
+  jose@6.2.12:
+    resolution: {integrity: sha512-9NiFmJEex0sy2Dk58j2UGBSHgUs2ypF9eZSu4L6vjOX3Dp96Sw1F3uL+H+D1sx02jZZdzUT0HgvCy59CuvXcWw==}
 
   js-tokens@10.0.0:
     resolution: {integrity: sha512-lM/UBzQmfJRo9ABXbPWemivdCW8V2G8FHaHdypQaIy523snUjog0W71ayWXTjiR+ixeMyVHN2XcpnTd/liPg/Q==}
@@ -10321,8 +10321,8 @@ packages:
     engines: {node: '>=22.22.1'}
     hasBin: true
 
-  livekit-client@2.22.2:
-    resolution: {integrity: sha512-o3yLYoH2eHVR/DmIZzgC96FMvtR4+g/DjeqNwS5zp12EjqrqiRULxm6Oq/YsTE97WnA6fhy23+a2hGkbce5SPA==}
+  livekit-client@2.22.3:
+    resolution: {integrity: sha512-jw9zBKXY5Gtr5MZ7vEON3QhMNccuDvYHck1PFSyG1aaateQPqgKZFBMgZkFZaXHIf9RV4MDW5xpTK2b/+qbwOg==}
     peerDependencies:
       '@types/dom-mediacapture-record': ^1
 
@@ -10486,9 +10486,6 @@ packages:
 
   matrix-widget-api@1.18.0:
     resolution: {integrity: sha512-4T2f2koWmx05p1BLcT/9YGGGPSXpPT+PA4Oap/5fjhXsWPxMGJiGL97YpANMYLKsnE1sScYFeuyxIgdc1Qo+Ew==}
-
-  matrix-widget-api@1.19.0:
-    resolution: {integrity: sha512-Qe7L6G1mQJphBC47/Bzp5ljPIK1UARgLiuGgS+/KmEs/eaNHkQ3+ArD0/0kvMV+d6kCGAZ9OKRqsnuPjizI+tw==}
 
   md5.js@1.3.5:
     resolution: {integrity: sha512-xitP+WxNPcTTOgnTJcrhM0xvdPepipPSf3I8EIpGKeFLjt3PlJLIDG3u8EX53ZIubkb+5U2+3rELYpEhHhzdkg==}
@@ -15976,9 +15973,9 @@ snapshots:
       - supports-color
     optional: true
 
-  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/273ee3b632a7563780e631585fea0db8ceb8fb73#path:/component(livekit-client@2.22.2)(matrix-js-sdk@42.3.0)(react-dom@19.2.8)(react@19.2.8)':
+  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/2ac95df75f986fca37d302471a0762f4fa5ac158#path:/component(livekit-client@2.22.3)(matrix-js-sdk@42.3.0)(react-dom@19.2.8)(react@19.2.8)':
     dependencies:
-      livekit-client: 2.22.2(@types/dom-mediacapture-record@1.0.22)
+      livekit-client: 2.22.3(@types/dom-mediacapture-record@1.0.22)
       matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/e16b0bcc06d0b17889f3eedef972f3cae9790f08
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
@@ -16834,7 +16831,7 @@ snapshots:
       emojibase: 17.0.0
       emojibase-data: 17.0.0(emojibase@17.0.0)
 
-  '@matrix-org/matrix-sdk-crypto-wasm@18.8.0': {}
+  '@matrix-org/matrix-sdk-crypto-wasm@18.7.0': {}
 
   '@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.8)':
     dependencies:
@@ -23703,7 +23700,7 @@ snapshots:
       '@hapi/topo': 6.0.2
       '@standard-schema/spec': 1.1.0
 
-  jose@6.2.10: {}
+  jose@6.2.12: {}
 
   js-tokens@10.0.0: {}
 
@@ -23979,13 +23976,13 @@ snapshots:
     optionalDependencies:
       yaml: 2.9.0
 
-  livekit-client@2.22.2(@types/dom-mediacapture-record@1.0.22):
+  livekit-client@2.22.3(@types/dom-mediacapture-record@1.0.22):
     dependencies:
       '@livekit/mutex': 1.1.1
       '@livekit/protocol': 1.50.4
       '@types/dom-mediacapture-record': 1.0.22
       events: 3.3.0
-      jose: 6.2.10
+      jose: 6.2.12
       loglevel: 1.9.2
       machina: 7.0.1
       sdp-transform: 2.15.0
@@ -24174,13 +24171,13 @@ snapshots:
   matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/e16b0bcc06d0b17889f3eedef972f3cae9790f08:
     dependencies:
       '@babel/runtime': 8.0.0
-      '@matrix-org/matrix-sdk-crypto-wasm': 18.8.0
+      '@matrix-org/matrix-sdk-crypto-wasm': 18.7.0
       another-json: 0.2.0
       bs58: 6.0.0
       content-type: 3.0.0
       loglevel: 1.9.2
       matrix-events-sdk: 0.0.1
-      matrix-widget-api: 1.19.0
+      matrix-widget-api: 1.18.0
       p-retry: 8.0.0
       sdp-transform: 3.0.0
       unhomoglyph: 1.0.6
@@ -24196,11 +24193,6 @@ snapshots:
       - supports-color
 
   matrix-widget-api@1.18.0:
-    dependencies:
-      '@types/events': 3.0.3
-      events: 3.3.0
-
-  matrix-widget-api@1.19.0:
     dependencies:
       '@types/events': 3.0.3
       events: 3.3.0
