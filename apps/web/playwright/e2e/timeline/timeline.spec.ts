@@ -1197,7 +1197,7 @@ test.describe("Timeline", () => {
                 // Change the viewport size
                 await page.setViewportSize({ width: 1600, height: 1200 });
 
-                // Exclude timestamp and read marker from snapshot
+                // Exclude timestamp, read marker, and randomized reply avatar color from snapshot
                 const screenshotOptions = {
                     css: `
                         .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
@@ -1205,6 +1205,9 @@ test.describe("Timeline", () => {
                         }
                         .mx_MessagePanel_myReadMarker {
                             display: none !important;
+                        }
+                        [data-testid="reply-tile-sender"] [role="img"] {
+                            visibility: hidden;
                         }
                     `,
                 };
