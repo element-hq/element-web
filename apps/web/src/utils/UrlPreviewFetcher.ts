@@ -270,22 +270,15 @@ export class UrlPreviewFetcher {
             return modulePreview;
         }
         const url = new URL(single.matched_url);
-        if (url.protocol !== "http:" && url.protocol !== "https:") {
+        if (url.protocol !== "http:" && url.protocol !== "https:")
             // Invalid protocol, skip.
             return null;
-        }
 
-        if (!body.includes(single.matched_url)) {
-            return null;
-        }
+        if (!body.includes(single.matched_url)) return null;
 
-        if (Object.keys(single).length === 1) {
+        if (Object.keys(single).length === 1)
             // We ONLY have the matched_url, so request a preview.
-            if (!allowServerFallback) {
-                return null;
-            }
-            return await this.fetchPreview(single.matched_url, loadMedia);
-        }
+            return allowServerFallback ? await this.fetchPreview(single.matched_url, loadMedia) : null;
 
         const preview: UrlPreview = {
             link: single.matched_url,
@@ -296,21 +289,19 @@ export class UrlPreviewFetcher {
             ogUrl: single["og:url"],
         };
 
+        const encryptedImage = single["beeper:image:encryption"];
+
+        if (!encryptedImage && !single["og:image"]) return preview;
+
         // missing fields from the bundle because backend does provide it:
         // - siteName (can be computed)
         // - favicon
         // - media is a video or audio?
-        const encryptedImage = single["beeper:image:encryption"];
-        if (
-            typeof encryptedImage === "object" &&
-            typeof single["og:image:type"] === "string" &&
-            typeof single["og:image:width"] === "number" &&
-            typeof single["og:image:height"] === "number"
-        ) {
+
+        // case: image is encrypted
+        if (encryptedImage) {
             // Decrypting downloads the media eagerly, so only do it when media is visible.
-            if (!loadMedia) {
-                return preview;
-            }
+            if (!loadMedia) return preview;
 
             const objectUrl = await this.decryptBundledImage(encryptedImage);
             if (objectUrl === null) return preview;
@@ -320,35 +311,33 @@ export class UrlPreviewFetcher {
                 imageFull: objectUrl,
                 imageType: single["og:image:type"],
                 mxcImageFull: encryptedImage.url,
-                width: single["og:image:width"],
-                height: single["og:image:height"],
-                playable: false, // TODO: do we know?
+                width: UrlPreviewFetcher.getNumberFromOpenGraph(single["og:image:width"]),
+                height: UrlPreviewFetcher.getNumberFromOpenGraph(single["og:image:height"]),
+                playable: false, // no way to know from bundle, so assume false
             };
-        } else if (
-            typeof single["og:image"] === "string" &&
-            typeof single["og:image:type"] === "string" &&
-            typeof single["og:image:width"] === "number" &&
-            typeof single["og:image:height"] === "number"
-        ) {
-            const media = mediaFromMxc(single["og:image"], this.client);
-            const thumb = media.getThumbnailOfSourceHttp(PREVIEW_WIDTH_PX, PREVIEW_HEIGHT_PX, "scale");
 
-            // cannot rule out the mxc:// url is malformed because
-            // the sender can specify anything
-            if (media.srcHttp === null || thumb === null) {
-                return preview;
-            }
-
-            preview.image = {
-                imageThumb: thumb,
-                imageFull: media.srcHttp,
-                imageType: single["og:image:type"],
-                mxcImageFull: single["og:image"],
-                width: single["og:image:width"],
-                height: single["og:image:height"],
-                playable: false, // TODO: do we know?
-            };
+            return preview;
         }
+
+        // otherwise its a plain image url
+        const media = mediaFromMxc(single["og:image"], this.client);
+        const thumb = media.getThumbnailOfSourceHttp(PREVIEW_WIDTH_PX, PREVIEW_HEIGHT_PX, "scale");
+
+        // cannot rule out the mxc:// url is malformed because
+        // the sender can specify anything
+        if (media.srcHttp === null || thumb === null) {
+            return preview;
+        }
+
+        preview.image = {
+            imageThumb: thumb,
+            imageFull: media.srcHttp,
+            imageType: single["og:image:type"],
+            mxcImageFull: single["og:image"]!,
+            width: UrlPreviewFetcher.getNumberFromOpenGraph(single["og:image:width"]),
+            height: UrlPreviewFetcher.getNumberFromOpenGraph(single["og:image:height"]),
+            playable: false, // assume false
+        };
 
         return preview;
     }
