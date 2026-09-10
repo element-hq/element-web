@@ -55,3 +55,72 @@ Please see LICENSE files in the repository root for full details.
         --username-color: $username-variant6-color;
     }
 }
+
+/*
+ * Reply previews in the new timeline (`compactPreview` in ReplyChain.tsx).
+ *
+ * The preview body is always two rows — who sent the message, and one line of
+ * it. Every rule here gives those rows the same fixed height whether they hold
+ * the real message, the skeleton shown while it loads, or an error, so the
+ * preview never resizes and never shoves the messages around it. (An "In reply
+ * to" header may appear above for nested replies; it usually arrives before
+ * the row is on screen, and off-screen growth is corrected by the timeline.)
+ */
+.mx_NewTimelinePanel {
+    /* Tall enough for the 16px avatar and one line of message text. */
+    --mx-reply-row-height: 20px;
+
+    /* The real preview's two rows. Kept in this file, next to the row height they
+       share with the skeleton below, rather than in _ReplyTile.pcss. */
+    .mx_ReplyTile .mx_ReplyTile_sender {
+        height: var(--mx-reply-row-height);
+    }
+
+    .mx_ReplyTile .mx_EventTile_content {
+        -webkit-line-clamp: 1;
+        line-height: var(--mx-reply-row-height);
+
+        .mx_EventTile_pre_container > pre {
+            -webkit-line-clamp: 1;
+        }
+    }
+
+    /* The skeleton shown while the quoted message is being fetched. The spacing
+       repeats what the real preview gets from .mx_ReplyChain and .mx_ReplyTile. */
+    .mx_ReplyChain_placeholder {
+        --username-color: $quinary-content;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
+
+    .mx_ReplyChain_placeholderRow {
+        height: var(--mx-reply-row-height);
+        display: flex;
+        align-items: center;
+
+        &::before {
+            content: "";
+            height: 12px;
+            width: 35%;
+            border-radius: 6px;
+            background: $quinary-content;
+        }
+
+        /* The message line reads longer than the name above it. */
+        &:last-child::before {
+            width: 70%;
+        }
+    }
+
+    /* If the fetch fails the preview becomes a one-line error, so hold it at the
+       height of the skeleton it replaces. */
+    .mx_ReplyChain_error {
+        box-sizing: border-box;
+        min-height: calc(2 * var(--mx-reply-row-height) + 2px + 4px);
+        display: flex;
+        align-items: center;
+    }
+}

@@ -15,6 +15,11 @@
 .link {
     display: block;
     width: fit-content;
+    /* The frame inside holds the picture's space with a definite width, which makes
+       this wrapper at least that wide — so without this clamp the image overflows
+       any container narrower than the picture. The frame's own max-width cannot do
+       it: a percentage there resolves against this wrapper, which the frame sizes. */
+    max-width: 100%;
     color: inherit;
     text-decoration: none;
 }

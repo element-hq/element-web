@@ -19,7 +19,9 @@ const ReadMarkerWrapper = ({
     ...props
 }: Readonly<ReadMarkerProps>): JSX.Element => {
     return (
-        <ul>
+        // The list's own default indent would push the marker off-centre, which is
+        // not how it sits in a timeline; the timeline resets it the same way.
+        <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
             <ReadMarker
                 {...props}
                 className={className}
@@ -35,6 +37,17 @@ const meta = {
     title: "Timeline/Timeline Meta/ReadMarker",
     component: ReadMarkerWrapper,
     tags: ["autodocs"],
+    // The marker is a hairline that a timeline draws inset between messages, and
+    // it deliberately takes no vertical space of its own. Give it the same inset
+    // and some room above, so the rule is visible rather than pressed against the
+    // top edge of the frame.
+    decorators: [
+        (Story): JSX.Element => (
+            <div style={{ padding: "18px" }}>
+                <Story />
+            </div>
+        ),
+    ],
     args: {
         eventId: "$event",
         kind: "current",
@@ -50,6 +63,13 @@ export const Current: Story = {};
 export const HiddenCurrent: Story = {
     args: {
         showLine: false,
+    },
+};
+
+/** The labelled style: a line with the label at its right-hand end. */
+export const Labelled: Story = {
+    args: {
+        label: "New",
     },
 };
 
