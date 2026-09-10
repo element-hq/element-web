@@ -12,10 +12,17 @@ import { EventType, type MatrixClient, MatrixEvent, MsgType } from "matrix-js-sd
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import { stubClient } from "test-utils";
 
-import { VideoBodyFactory } from "../../../../components/views/messages/MBodyFactory";
+import { FileBodyFactory, VideoBodyFactory } from "../../../../components/views/messages/MBodyFactory";
+import { type IBodyProps } from "../../../../components/views/messages/IBodyProps";
+import MImageReplyBody from "../../../../components/views/messages/MImageReplyBody";
+import MVoiceMessageBody from "../../../../components/views/messages/MVoiceMessageBody";
 import { renderReplyTile } from "../../../../events/EventTileFactory";
 import { getEventDisplayInfo } from "../../../../utils/EventRenderingUtils";
 import { ReplyTileViewModel } from "./ReplyTileViewModel";
+
+type ReplyTileRenderProps = Parameters<typeof renderReplyTile>[0];
+type ReplyTileBodyOverrides = NonNullable<ReplyTileRenderProps["overrideBodyTypes"]>;
+type ReplyTileEventOverrides = NonNullable<ReplyTileRenderProps["overrideEventTypes"]>;
 
 vi.mock("../../../../events/EventTileFactory", () => ({
     renderReplyTile: vi.fn(() => null),
@@ -49,6 +56,25 @@ describe("ReplyTileViewModel", () => {
             },
         });
 
+    const getReplyTileProps = (): ReplyTileRenderProps => {
+        const calls = vi.mocked(renderReplyTile).mock.calls;
+        expect(calls.length).toBeGreaterThan(0);
+        return calls[calls.length - 1][0];
+    };
+
+    const getReplyTileOverrides = (): {
+        overrideBodyTypes: ReplyTileBodyOverrides;
+        overrideEventTypes: ReplyTileEventOverrides;
+    } => {
+        const { overrideBodyTypes, overrideEventTypes } = getReplyTileProps();
+        expect(overrideBodyTypes).toBeDefined();
+        expect(overrideEventTypes).toBeDefined();
+        return {
+            overrideBodyTypes: overrideBodyTypes!,
+            overrideEventTypes: overrideEventTypes!,
+        };
+    };
+
     beforeEach(() => {
         cli = stubClient();
         vi.clearAllMocks();
@@ -62,6 +88,23 @@ describe("ReplyTileViewModel", () => {
             isAlignedBetweenBubbles: false,
         });
         vi.mocked(renderReplyTile).mockReturnValue(<span>Reply body</span>);
+    });
+
+    it("renders regular text replies with the default reply body", () => {
+        const mxEvent = createEvent();
+
+        const vm = new ReplyTileViewModel({ mxEvent, cli });
+
+        const replyTileProps = getReplyTileProps();
+        expect(replyTileProps.mxEvent).toBe(mxEvent);
+        expect(Reflect.has(getReplyTileOverrides().overrideBodyTypes, MsgType.Text)).toBe(false);
+        expect(vm.getSnapshot()).toMatchObject({
+            href: "#",
+            inline: false,
+            info: false,
+            body: <span>Reply body</span>,
+        });
+        expect(vm.getSnapshot().sender).toBeDefined();
     });
 
     it("renders video replies with the video body override", () => {
@@ -97,6 +140,46 @@ describe("ReplyTileViewModel", () => {
             inline: false,
             info: false,
         });
+    });
+
+    it("renders media replies with reply-specific body overrides", () => {
+        const audioEvent = createEvent({ msgtype: MsgType.Audio, body: "audio.ogg" });
+
+        new ReplyTileViewModel({ mxEvent: audioEvent, cli });
+
+        const { overrideBodyTypes, overrideEventTypes } = getReplyTileOverrides();
+        expect(overrideBodyTypes).toMatchObject({
+            [MsgType.Image]: MImageReplyBody,
+            [MsgType.Video]: VideoBodyFactory,
+        });
+        expect(overrideEventTypes).toMatchObject({
+            [EventType.Sticker]: MImageReplyBody,
+        });
+
+        const audioOverride = overrideBodyTypes[MsgType.Audio];
+        expect(audioOverride).not.toBe(MVoiceMessageBody);
+
+        const audioBody = (audioOverride as (props: IBodyProps) => React.ReactNode)({
+            mxEvent: audioEvent,
+        } as IBodyProps);
+        if (!React.isValidElement(audioBody)) {
+            throw new Error("Expected audio override to render a file body element");
+        }
+        expect(audioBody.type).toBe(FileBodyFactory);
+    });
+
+    it("renders voice replies with the voice body override", () => {
+        const voiceEvent = createEvent({
+            msgtype: MsgType.Audio,
+            body: "voice.ogg",
+            content: {
+                "org.matrix.msc3245.voice": true,
+            },
+        });
+
+        new ReplyTileViewModel({ mxEvent: voiceEvent, cli });
+
+        expect(getReplyTileOverrides().overrideBodyTypes[MsgType.Audio]).toBe(MVoiceMessageBody);
     });
 
     it("marks emote replies as inline and omits the sender profile", () => {
