@@ -55,6 +55,15 @@ describe("isPdfEvent", () => {
     });
 });
 
+/** A MediaEventHelper that does not need a logged-in client behind it. */
+function mkHelper(blob = new Blob(["%PDF-1.7\n"], { type: "application/pdf" })): MediaEventHelper {
+    return {
+        media: { srcMxc: "mxc://example.org/spec" },
+        fileName: "spec.pdf",
+        sourceBlob: { value: Promise.resolve(blob) },
+    } as unknown as MediaEventHelper;
+}
+
 describe("pdfMediaForEvent", () => {
     it("returns nothing for an event that is not a PDF", () => {
         expect(pdfMediaForEvent(mkFileEvent({ mimetype: "text/plain" }))).toBeUndefined();
@@ -62,18 +71,27 @@ describe("pdfMediaForEvent", () => {
 
     it("keys on the MXC URI and defers to the helper for the bytes", async () => {
         const blob = new Blob(["%PDF-1.7\n"], { type: "application/pdf" });
-        const helper = {
-            media: { srcMxc: "mxc://example.org/spec" },
-            fileName: "spec.pdf",
-            sourceBlob: { value: Promise.resolve(blob) },
-        } as unknown as MediaEventHelper;
-
-        const media = pdfMediaForEvent(mkFileEvent({ mimetype: "application/pdf" }), helper);
+        const media = pdfMediaForEvent(mkFileEvent({ mimetype: "application/pdf" }), mkHelper(blob));
 
         expect(media).toMatchObject({ uri: "mxc://example.org/spec", name: "spec.pdf" });
         // The helper decrypts behind `sourceBlob`, so the viewer gets plaintext either way.
         await expect(media!.blob()).resolves.toBe(blob);
     });
+
+    it("passes on the declared size so the viewer can refuse a file before downloading it", () => {
+        const media = pdfMediaForEvent(mkFileEvent({ mimetype: "application/pdf", size: 1234 }), mkHelper());
+
+        expect(media?.size).toBe(1234);
+    });
+
+    it.each([undefined, "1234", -1, Number.NaN, Number.POSITIVE_INFINITY])(
+        "leaves the size unset when the sender declared %s",
+        (size) => {
+            const media = pdfMediaForEvent(mkFileEvent({ mimetype: "application/pdf", size }), mkHelper());
+
+            expect(media?.size).toBeUndefined();
+        },
+    );
 });
 
 describe("openPdfViewer", () => {

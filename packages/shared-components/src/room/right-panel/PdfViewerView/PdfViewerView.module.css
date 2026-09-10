@@ -11,8 +11,11 @@ Please see LICENSE files in the repository root for full details.
  * globally: the library's stylesheet declares `color-scheme` and its page metrics on `:root`, which
  * would override Element's theming for the whole app.
  *
- * Annotation, XFA, and editor layers are deliberately absent — the viewer is constructed with those
- * modes disabled, so none of that markup is ever created.
+ * The annotation layer is styled only as far as links go (see below). XFA and editor layers are
+ * deliberately absent — the viewer is constructed with those modes disabled, so none of that markup is
+ * ever created. So is the spread and presentation-mode markup, which needs pdf.js's page scrolling mode
+ * that the viewer never leaves its default vertical one for. The selection layer is here because pdf.js
+ * draws text selection itself, in the draw layer over the canvas, rather than leaving it to the browser.
  */
 
 .viewer {
@@ -82,7 +85,6 @@ Please see LICENSE files in the repository root for full details.
     inset: 0;
     overflow: auto;
 
-    --viewer-container-height: 0;
     --pdfViewer-padding-bottom: var(--cpd-space-4x);
     --page-margin: var(--cpd-space-4x) auto;
 }
@@ -133,10 +135,25 @@ Please see LICENSE files in the repository root for full details.
     image-rendering: pixelated;
 }
 
-.container :global(.pdfViewer .dummyPage) {
-    position: relative;
-    width: 0;
-    height: var(--viewer-container-height);
+/*
+ * Selection layer: the highlight pdf.js draws for the current selection, instead of leaving it to the
+ * browser (see the text layer's `selectionRendering` rules below).
+ *
+ * pdf.js clips this element to the selected glyphs with an SVG path in `objectBoundingBox` units,
+ * measured against the text layer's own box — so this must cover exactly the same box as the text layer,
+ * or every rectangle lands at the wrong height. Left unpositioned it collapses to the height its inner
+ * SVG's aspect ratio implies, which puts the highlight well above the text it belongs to.
+ */
+.container :global(.pdfViewer .canvasWrapper .selection) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    /* Matches the native selection below. Firefox instead gets an inline `backdrop-filter` from pdf.js,
+       which tracks the system highlight colours and wins over this declaration. */
+    background: color-mix(in srgb, AccentColor, transparent 50%);
 }
 
 /*
@@ -197,9 +214,94 @@ Please see LICENSE files in the repository root for full details.
     user-select: none;
 }
 
+/*
+ * The native highlight, which is what is on screen when pdf.js is not drawing the selection itself —
+ * it only does that where `backdrop-filter` is supported.
+ */
 .container :global(.textLayer ::selection) {
     color: transparent;
     background: color-mix(in srgb, AccentColor, transparent 50%);
+}
+
+/*
+ * Where pdf.js does draw it, it marks the text layer and expects the native highlight to be suppressed;
+ * otherwise both are painted. A `br` is never highlighted natively, drawn selection or not.
+ */
+.container :global(.textLayer[class~="selectionRendering"] ::selection) {
+    color: transparent;
+    background: transparent;
+}
+
+.container :global(.textLayer br::selection) {
+    background: transparent;
+}
+
+/*
+ * A zero-height marker pdf.js keeps below the text, and grows to cover the page while a selection is
+ * being dragged, so that dragging past the end of a line extends the selection rather than jumping.
+ */
+.container :global(.textLayer .endOfContent) {
+    display: block;
+    position: absolute;
+    inset: 100% 0 0;
+    z-index: 0;
+    cursor: default;
+    user-select: none;
+}
+
+.container :global(.textLayer[class~="selecting"] .endOfContent) {
+    top: 0;
+}
+
+/*
+ * Annotation layer: the hit areas for links. Links are the one interactive thing a preview needs, but
+ * pdf.js cannot build the layer for links alone, so it is built in full and everything else in it is
+ * hidden. Form fields are not built as inputs (the viewer uses ENABLE, not ENABLE_FORMS) and editing is
+ * off, so link sections, and the hidden comment and markup sections, are all the layer can contain.
+ *
+ * pdf.js relies on DOM order to stack this above the text layer; ours gives the text layer a z-index,
+ * so this needs one too or the links would sit underneath the selectable text.
+ */
+.container :global(.annotationLayer) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    pointer-events: none;
+    transform-origin: 0 0;
+    color-scheme: only light;
+}
+
+.container :global(.annotationLayer section) {
+    position: absolute;
+    box-sizing: border-box;
+    text-align: initial;
+    pointer-events: auto;
+    transform-origin: 0 0;
+    user-select: none;
+}
+
+.container :global(.annotationLayer section:not([class~="linkAnnotation"])) {
+    display: none;
+}
+
+.container :global(.annotationLayer .linkAnnotation > a) {
+    position: absolute;
+    inset: 0;
+    font-size: 1em;
+}
+
+.container :global(.annotationLayer .linkAnnotation:not([class~="hasBorder"]) > a:hover) {
+    opacity: 0.2;
+    background-color: rgb(255 255 0);
+}
+
+.container :global(.annotationLayer .linkAnnotation[class~="hasBorder"]:hover) {
+    background-color: rgb(255 255 0 / 0.2);
+}
+
+.container :global(.annotationLayer .hasBorder) {
+    background-size: 100% 100%;
 }
 
 .message {

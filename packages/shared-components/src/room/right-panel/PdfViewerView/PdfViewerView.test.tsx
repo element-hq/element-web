@@ -34,6 +34,56 @@ const renderView = (props: Partial<PdfViewerViewProps> = {}): ReturnType<typeof 
         wrapper: ({ children }) => <I18nContext.Provider value={new I18nApi()}>{children}</I18nContext.Provider>,
     });
 
+/** The page size pdf.js would write inline after fitting a page to the panel. */
+const PAGE_WIDTH = 320;
+const PAGE_HEIGHT = 453;
+
+/**
+ * Builds the layers pdf.js creates for a page into the element the host hands it, so the geometry the
+ * stylesheet is responsible for can be measured the way a real page lays it out.
+ */
+function renderPdfJsPage(): {
+    selection: HTMLElement;
+    textLayer: HTMLElement;
+    endOfContent: HTMLElement;
+} {
+    const viewerRef = React.createRef<HTMLDivElement>();
+    renderView({ status: "ready", pageCount: 1, viewerRef });
+
+    const page = document.createElement("div");
+    page.className = "page";
+    // pdf.js writes the fitted page geometry inline.
+    page.style.width = `${PAGE_WIDTH}px`;
+    page.style.height = `${PAGE_HEIGHT}px`;
+
+    const canvasWrapper = document.createElement("div");
+    canvasWrapper.className = "canvasWrapper";
+    canvasWrapper.append(document.createElement("canvas"));
+
+    // pdf.js clips this to the selected glyphs with an SVG path in `objectBoundingBox` units, measured
+    // against the text layer. The SVG it puts inside is what the element collapses to if the stylesheet
+    // does not size it.
+    const selection = document.createElement("div");
+    selection.className = "selection";
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("viewBox", "0 0 1 1");
+    svg.setAttribute("width", "100%");
+    svg.setAttribute("height", "100%");
+    selection.append(svg);
+    canvasWrapper.append(selection);
+
+    const textLayer = document.createElement("div");
+    textLayer.className = "textLayer";
+    const endOfContent = document.createElement("div");
+    endOfContent.className = "endOfContent";
+    textLayer.append(endOfContent);
+
+    page.append(canvasWrapper, textLayer);
+    viewerRef.current!.append(page);
+
+    return { selection, textLayer, endOfContent };
+}
+
 describe("PdfViewerView", () => {
     it("exposes the pdf.js container and viewer elements", () => {
         const containerRef = React.createRef<HTMLDivElement>();
@@ -130,5 +180,28 @@ describe("PdfViewerView", () => {
 
         await user.keyboard("{Escape}");
         expect(onPageInputCancel).toHaveBeenCalledOnce();
+    });
+
+    describe("pdf.js page layers", () => {
+        it("lays the selection layer over exactly the text layer's box", () => {
+            const { selection, textLayer } = renderPdfJsPage();
+
+            // pdf.js clips the selection in units of the text layer's box, so any difference here
+            // displaces every highlight it draws.
+            expect(selection.getBoundingClientRect().toJSON()).toEqual(
+                textLayer.getBoundingClientRect().toJSON(),
+            );
+        });
+
+        it("parks the end-of-content marker below the text until a selection is dragged", () => {
+            const { textLayer, endOfContent } = renderPdfJsPage();
+
+            expect(endOfContent.getBoundingClientRect().top).toBe(textLayer.getBoundingClientRect().bottom);
+
+            // pdf.js marks the layer while a selection is being dragged, which grows the marker over the
+            // page so that dragging past the end of a line keeps extending the selection.
+            textLayer.classList.add("selecting");
+            expect(endOfContent.getBoundingClientRect().top).toBe(textLayer.getBoundingClientRect().top);
+        });
     });
 });

@@ -19,10 +19,39 @@ import { SettingLevel } from "../../../settings/SettingLevel";
 import { flushPdfViewerState } from "../../../utils/pdfViewerState";
 import { type PdfMedia } from "../../../@types/pdf-viewer";
 
-const pdfjsMock = vi.hoisted(() => ({
-    getDocument: vi.fn(),
-    GlobalWorkerOptions: {} as { workerSrc?: string },
-}));
+const pdfjsMock = vi.hoisted(() => {
+    /** Stands in for the browser's Worker, which the test environment does not have. */
+    class MockWorker {
+        public static instances: MockWorker[] = [];
+
+        public readonly addEventListener = vi.fn();
+        public readonly removeEventListener = vi.fn();
+        public readonly terminate = vi.fn();
+
+        public constructor(
+            public readonly url: string,
+            public readonly options?: WorkerOptions,
+        ) {
+            MockWorker.instances.push(this);
+        }
+    }
+
+    class MockPDFWorker {
+        public static instances: MockPDFWorker[] = [];
+
+        public readonly destroy = vi.fn();
+
+        public constructor(public readonly options: { port?: unknown }) {
+            MockPDFWorker.instances.push(this);
+        }
+    }
+
+    return {
+        getDocument: vi.fn(),
+        MockWorker,
+        MockPDFWorker,
+    };
+});
 
 const viewerMock = vi.hoisted(() => {
     type Listener = (payload: unknown) => void;
@@ -57,7 +86,9 @@ const viewerMock = vi.hoisted(() => {
         public readonly updateScale = vi.fn();
         public readonly scrollPageIntoView = vi.fn();
 
-        public constructor(public readonly options: { eventBus: MockEventBus; container: HTMLElement }) {
+        public constructor(
+            public readonly options: { eventBus: MockEventBus; container: HTMLElement; linkService?: unknown },
+        ) {
             MockPDFViewer.instances.push(this);
         }
 
@@ -86,24 +117,36 @@ const viewerMock = vi.hoisted(() => {
 
 vi.mock("pdfjs-dist", () => ({
     AnnotationEditorType: { DISABLE: -1 },
-    AnnotationMode: { DISABLE: 0 },
+    AnnotationMode: { DISABLE: 0, ENABLE: 1, ENABLE_FORMS: 2 },
     getDocument: pdfjsMock.getDocument,
-    GlobalWorkerOptions: pdfjsMock.GlobalWorkerOptions,
+    PDFWorker: pdfjsMock.MockPDFWorker,
     RenderingCancelledException: class extends Error {},
+    VerbosityLevel: { ERRORS: 0, WARNINGS: 1, INFOS: 5 },
 }));
 
 vi.mock("pdfjs-dist/web/pdf_viewer.mjs", () => ({
     EventBus: viewerMock.MockEventBus,
-    PDFLinkService: viewerMock.MockPDFLinkService,
     PDFViewer: viewerMock.MockPDFViewer,
 }));
 
-function media(name = "spec.pdf", body = "%PDF-1.7\n", uri = `mxc://example.org/${name}`): PdfMedia {
+vi.mock("../../../utils/pdfLinkService", () => ({
+    ElementPdfLinkService: viewerMock.MockPDFLinkService,
+}));
+
+function media(name = "spec.pdf", body = "%PDF-1.7\n", uri = `mxc://example.org/${name}`, size?: number): PdfMedia {
     return {
         uri,
         name,
+        size,
         blob: vi.fn(async () => new Blob([body], { type: "application/pdf" })),
     };
+}
+
+/** The Worker the component started for this document, once it has mounted. */
+function activeWorker(): InstanceType<typeof pdfjsMock.MockWorker> {
+    const worker = pdfjsMock.MockWorker.instances.at(-1);
+    if (!worker) throw new Error("No Worker was constructed");
+    return worker;
 }
 
 function mockDocument(): { loadingTask: PDFDocumentLoadingTask; pdfDocument: PDFDocumentProxy } {
@@ -196,8 +239,10 @@ function fireZoomWheel(deltaY: number, point: { x: number; y: number } = { x: 0,
 describe("PdfViewer", () => {
     beforeEach(async () => {
         pdfjsMock.getDocument.mockReset();
-        pdfjsMock.GlobalWorkerOptions.workerSrc = undefined;
+        pdfjsMock.MockWorker.instances = [];
+        pdfjsMock.MockPDFWorker.instances = [];
         viewerMock.MockPDFViewer.instances = [];
+        vi.stubGlobal("Worker", pdfjsMock.MockWorker);
 
         flushPdfViewerState();
         await SettingsStore.setValue("pdfViewerState", null, SettingLevel.DEVICE, {});
@@ -214,10 +259,83 @@ describe("PdfViewer", () => {
         render(<PdfViewer media={media()} />);
 
         await waitFor(() => expect(pdfjsMock.getDocument).toHaveBeenCalled());
-        // pdf.js defaults maxImageSize to -1, i.e. no limit.
+        // pdf.js defaults maxImageSize to -1, i.e. no limit, and logs at WARNINGS.
         expect(pdfjsMock.getDocument).toHaveBeenCalledWith(
-            expect.objectContaining({ maxImageSize: 8192 * 8192, enableXfa: false, stopAtErrors: true }),
+            expect.objectContaining({
+                maxImageSize: 8192 * 8192,
+                enableXfa: false,
+                stopAtErrors: true,
+                verbosity: 0,
+            }),
         );
+    });
+
+    it("parses the document in a worker it started itself, so pdf.js cannot fall back to the main thread", async () => {
+        mockDocument();
+
+        render(<PdfViewer media={media()} />);
+
+        await waitFor(() => expect(pdfjsMock.getDocument).toHaveBeenCalled());
+        const worker = activeWorker();
+        expect(worker.url).toMatch(/pdf\.worker/);
+        expect(worker.options).toEqual({ type: "module" });
+
+        // Given a port, pdf.js uses it as-is; it only sets up its "fake worker" when it made the worker.
+        const pdfWorker = pdfjsMock.MockPDFWorker.instances.at(-1);
+        expect(pdfWorker?.options).toEqual({ port: worker });
+        expect(pdfjsMock.getDocument).toHaveBeenCalledWith(expect.objectContaining({ worker: pdfWorker }));
+    });
+
+    it("fails rather than degrading when the worker cannot run", async () => {
+        mockDocument();
+
+        render(<PdfViewer media={media()} />);
+
+        await waitFor(() =>
+            expect(activeWorker().addEventListener).toHaveBeenCalledWith("error", expect.any(Function)),
+        );
+        const onError = activeWorker().addEventListener.mock.calls.find(([name]) => name === "error")![1];
+        act(() => onError({ message: "worker failed to load" }));
+
+        expect(screen.getByRole("alert")).toHaveTextContent("Unable to load PDF");
+    });
+
+    it("stops its worker when the document is closed", async () => {
+        const { loadingTask } = mockDocument();
+
+        const { unmount } = render(<PdfViewer media={media()} />);
+        await emitPagesInit();
+
+        unmount();
+
+        await waitFor(() => expect(activeWorker().terminate).toHaveBeenCalled());
+        expect(loadingTask.destroy).toHaveBeenCalled();
+        expect(pdfjsMock.MockPDFWorker.instances.at(-1)?.destroy).toHaveBeenCalled();
+    });
+
+    it("refuses a file the sender declares as too large without downloading it", async () => {
+        mockDocument();
+        const tooLarge = media("huge.pdf", "%PDF-1.7\n", "mxc://example.org/huge", 257 * 1024 * 1024);
+
+        render(<PdfViewer media={tooLarge} />);
+
+        await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("Unable to load PDF"));
+        expect(tooLarge.blob).not.toHaveBeenCalled();
+        expect(pdfjsMock.getDocument).not.toHaveBeenCalled();
+    });
+
+    it("refuses a file that turns out to be too large once downloaded", async () => {
+        mockDocument();
+        const claimedSmall = media("huge.pdf", "%PDF-1.7\n", "mxc://example.org/huge", 1024);
+        vi.mocked(claimedSmall.blob).mockResolvedValue({
+            size: 257 * 1024 * 1024,
+            arrayBuffer: vi.fn(),
+        } as unknown as Blob);
+
+        render(<PdfViewer media={claimedSmall} />);
+
+        await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("Unable to load PDF"));
+        expect(pdfjsMock.getDocument).not.toHaveBeenCalled();
     });
 
     it("hands the loaded document to pdf.js's viewer and fits it to the panel width", async () => {
@@ -234,15 +352,24 @@ describe("PdfViewer", () => {
         await waitFor(() => expect(screen.queryByRole("status")).not.toBeInTheDocument());
     });
 
-    it("builds the viewer read-only, with no annotation or editor layers", async () => {
+    it("builds the viewer read-only: links, but no form inputs, editing or scripting", async () => {
         mockDocument();
 
         render(<PdfViewer media={media()} />);
         await emitPagesInit();
 
         // pdf.js defaults to ENABLE_FORMS, and derives scripting from the scriptingManager.
-        expect(activeViewer().options).toMatchObject({ annotationMode: 0, annotationEditorMode: -1 });
+        expect(activeViewer().options).toMatchObject({
+            annotationMode: 1,
+            annotationEditorMode: -1,
+            enableAutoLinking: true,
+            maxCanvasPixels: 2 ** 25,
+            maxCanvasDim: 32767,
+        });
         expect(activeViewer().options).not.toHaveProperty("scriptingManager");
+        expect(activeViewer().options).not.toHaveProperty("downloadManager");
+        // External links are the app's decision, not pdf.js's defaults.
+        expect(activeViewer().options.linkService).toBeInstanceOf(viewerMock.MockPDFLinkService);
     });
 
     it("zooms about the pointer, honouring the wheel delta magnitude", async () => {
