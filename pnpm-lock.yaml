@@ -360,10 +360,10 @@ importers:
         version: 3.24.0
       eslint-plugin-element-call:
         specifier: github:element-hq/element-call#main&path:/eslint
-        version: https://codeload.github.com/element-hq/element-call/tar.gz/b90ed5bdf725c0c31d33dfeea90514a40b7a1005#path:/eslint
+        version: https://codeload.github.com/element-hq/element-call/tar.gz/029622f07b44f58f8a84e7e167e5b66374479b63#path:/eslint
       eslint-plugin-storybook:
         specifier: ^10.4.6
-        version: 10.5.8(@typescript/typescript6@6.0.2)(eslint@8.57.1)(storybook@10.5.8)(supports-color@7.2.0)
+        version: 10.6.0(@typescript/typescript6@6.0.2)(eslint@8.57.1)(supports-color@7.2.0)
       husky:
         specifier: ^9.0.0
         version: 9.1.7
@@ -399,7 +399,7 @@ importers:
         version: '@typescript/typescript6@6.0.2'
       vitepress:
         specifier: ^1.6.4
-        version: 1.6.4(@algolia/client-search@5.50.0)(@types/node@25.9.3)(@types/react@19.2.18)(@typescript/typescript6@6.0.2)(axios@1.19.0)(jiti@2.7.0)(lightningcss@1.33.0)(postcss@8.5.26)(qrcode@1.5.4)(react@19.2.8)(search-insights@2.17.3)(sugarss@5.0.1)(terser@5.51.2)(yaml@2.9.0)
+        version: 1.6.4(@algolia/client-search@5.50.0)(@types/node@25.9.3)(@types/react@19.2.18)(@typescript/typescript6@6.0.2)(axios@1.19.0)(jiti@2.7.0)(lightningcss@1.33.0)(postcss@8.5.26)(qrcode@1.5.4)(react@18.3.1)(search-insights@2.17.3)(sugarss@5.0.1)(terser@5.51.2)(yaml@2.9.0)
       vitepress-plugin-mermaid:
         specifier: ^2.0.17
         version: 2.0.17(mermaid@11.17.2)(vitepress@1.6.4)
@@ -664,7 +664,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/f6a2e333566931273876991567ca4f36036261bc
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a6ecd543c8dc546597670afe1f96b57c62421497
       matrix-widget-api:
         specifier: ^1.18.0
         version: 1.18.0
@@ -8826,15 +8826,14 @@ packages:
     resolution: {integrity: sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==}
     engines: {node: '>=12'}
 
-  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/b90ed5bdf725c0c31d33dfeea90514a40b7a1005#path:/eslint:
-    resolution: {gitHosted: true, integrity: sha512-M0x6jTKwcYVvLmk2DQvubPfAEXQ1R3Ejv1Jbx++0GWMjezbkXaV1hzFKXszUVp3DemMoJLn4mbYsWFK1qWcQxA==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/b90ed5bdf725c0c31d33dfeea90514a40b7a1005}
+  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/029622f07b44f58f8a84e7e167e5b66374479b63#path:/eslint:
+    resolution: {gitHosted: true, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/029622f07b44f58f8a84e7e167e5b66374479b63}
     version: 0.0.0
 
-  eslint-plugin-storybook@10.5.8:
-    resolution: {integrity: sha512-bf9W5nZyWdIaCUZf4aEZnEeD1mn+csNYX8dYUQjAo6L7/DkSLtr65R4zFZ1xeS4m6dOXO6UtUySesCSw4e8w1g==}
+  eslint-plugin-storybook@10.6.0:
+    resolution: {integrity: sha512-HK3yD5Nslv97buJ5JfT1xFkTOoyJgGIENmBoZZI3F8t2UpBzb/dHpKyCh5bQ8AvJWnhoM/WAtDNqyd9nq6xgcg==}
     peerDependencies:
       eslint: '>=8'
-      storybook: ^10.5.8
 
   eslint-scope@7.2.2:
     resolution: {integrity: sha512-dOt21O7lTMhDM+X9mB4GX+DZrZtCUJPL/wlcTqxyrx5IvO0IYtILdtrQGQp+8n5S0gwSVmOf9NQrjMOgfQZlIg==}
@@ -10434,8 +10433,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/f6a2e333566931273876991567ca4f36036261bc:
-    resolution: {gitHosted: true, integrity: sha512-nv2dEvjtlo7yJboNQ+psGboYejtF+D7HANnBbSzL+zd3emxaQ+aXpXFLXd7hobCQRg6eOTTknI5N7jQMNgdHcQ==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/f6a2e333566931273876991567ca4f36036261bc}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a6ecd543c8dc546597670afe1f96b57c62421497:
+    resolution: {gitHosted: true, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a6ecd543c8dc546597670afe1f96b57c62421497}
     version: 42.3.0
     engines: {node: '>=22.0.0'}
 
@@ -12010,6 +12009,10 @@ packages:
     peerDependencies:
       react: '>=16 || >=17 || >= 18 || >= 19'
       react-dom: '>=16 || >=17 || >= 18 || >=19'
+
+  react@18.3.1:
+    resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
+    engines: {node: '>=0.10.0'}
 
   react@19.2.8:
     resolution: {integrity: sha512-PWaYA1L/q9u2u7xYQi+Y3L3Yfnie7XyLeaJICV1MGD6LprsBxcAqGjYyr0eY3p+QdsA+x/Irkt4Qif8D63+Sbw==}
@@ -15760,9 +15763,9 @@ snapshots:
 
   '@docsearch/css@3.8.2': {}
 
-  '@docsearch/js@3.8.2(@algolia/client-search@5.50.0)(@types/react@19.2.18)(react@19.2.8)(search-insights@2.17.3)':
+  '@docsearch/js@3.8.2(@algolia/client-search@5.50.0)(@types/react@19.2.18)(react@18.3.1)(search-insights@2.17.3)':
     dependencies:
-      '@docsearch/react': 3.8.2(@algolia/client-search@5.50.0)(@types/react@19.2.18)(react@19.2.8)(search-insights@2.17.3)
+      '@docsearch/react': 3.8.2(@algolia/client-search@5.50.0)(@types/react@19.2.18)(react@18.3.1)(search-insights@2.17.3)
       preact: 10.29.3
     transitivePeerDependencies:
       - '@algolia/client-search'
@@ -15771,7 +15774,7 @@ snapshots:
       - react-dom
       - search-insights
 
-  '@docsearch/react@3.8.2(@algolia/client-search@5.50.0)(@types/react@19.2.18)(react@19.2.8)(search-insights@2.17.3)':
+  '@docsearch/react@3.8.2(@algolia/client-search@5.50.0)(@types/react@19.2.18)(react@18.3.1)(search-insights@2.17.3)':
     dependencies:
       '@algolia/autocomplete-core': 1.17.7(@algolia/client-search@5.50.0)(algoliasearch@5.50.0)(search-insights@2.17.3)
       '@algolia/autocomplete-preset-algolia': 1.17.7(@algolia/client-search@5.50.0)(algoliasearch@5.50.0)
@@ -15779,7 +15782,7 @@ snapshots:
       algoliasearch: 5.50.0
     optionalDependencies:
       '@types/react': 19.2.18
-      react: 19.2.8
+      react: 18.3.1
       search-insights: 2.17.3
     transitivePeerDependencies:
       - '@algolia/client-search'
@@ -22010,14 +22013,13 @@ snapshots:
 
   escape-string-regexp@5.0.0: {}
 
-  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/b90ed5bdf725c0c31d33dfeea90514a40b7a1005#path:/eslint: {}
+  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/029622f07b44f58f8a84e7e167e5b66374479b63#path:/eslint: {}
 
-  eslint-plugin-storybook@10.5.8(@typescript/typescript6@6.0.2)(eslint@8.57.1)(storybook@10.5.8)(supports-color@7.2.0):
+  eslint-plugin-storybook@10.6.0(@typescript/typescript6@6.0.2)(eslint@8.57.1)(supports-color@7.2.0):
     dependencies:
       '@typescript-eslint/types': 8.67.0
       '@typescript-eslint/utils': 8.67.0(@typescript/typescript6@6.0.2)(eslint@8.57.1)(supports-color@7.2.0)
       eslint: 8.57.1(supports-color@7.2.0)
-      storybook: 10.5.8(@types/react@19.2.18)(prettier@2.8.8)(react@19.2.8)
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -24008,7 +24010,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/f6a2e333566931273876991567ca4f36036261bc:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a6ecd543c8dc546597670afe1f96b57c62421497:
     dependencies:
       '@babel/runtime': 8.0.0
       '@matrix-org/matrix-sdk-crypto-wasm': 18.7.0
@@ -25912,6 +25914,11 @@ snapshots:
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
 
+  react@18.3.1:
+    dependencies:
+      loose-envify: 1.4.0
+    optional: true
+
   react@19.2.8: {}
 
   read-binary-file-arch@1.0.6(supports-color@10.2.2):
@@ -27561,14 +27568,14 @@ snapshots:
   vitepress-plugin-mermaid@2.0.17(mermaid@11.17.2)(vitepress@1.6.4):
     dependencies:
       mermaid: 11.17.2
-      vitepress: 1.6.4(@algolia/client-search@5.50.0)(@types/node@25.9.3)(@types/react@19.2.18)(@typescript/typescript6@6.0.2)(axios@1.19.0)(jiti@2.7.0)(lightningcss@1.33.0)(postcss@8.5.26)(qrcode@1.5.4)(react@19.2.8)(search-insights@2.17.3)(sugarss@5.0.1)(terser@5.51.2)(yaml@2.9.0)
+      vitepress: 1.6.4(@algolia/client-search@5.50.0)(@types/node@25.9.3)(@types/react@19.2.18)(@typescript/typescript6@6.0.2)(axios@1.19.0)(jiti@2.7.0)(lightningcss@1.33.0)(postcss@8.5.26)(qrcode@1.5.4)(react@18.3.1)(search-insights@2.17.3)(sugarss@5.0.1)(terser@5.51.2)(yaml@2.9.0)
     optionalDependencies:
       '@mermaid-js/mermaid-mindmap': 9.3.0
 
-  vitepress@1.6.4(@algolia/client-search@5.50.0)(@types/node@25.9.3)(@types/react@19.2.18)(@typescript/typescript6@6.0.2)(axios@1.19.0)(jiti@2.7.0)(lightningcss@1.33.0)(postcss@8.5.26)(qrcode@1.5.4)(react@19.2.8)(search-insights@2.17.3)(sugarss@5.0.1)(terser@5.51.2)(yaml@2.9.0):
+  vitepress@1.6.4(@algolia/client-search@5.50.0)(@types/node@25.9.3)(@types/react@19.2.18)(@typescript/typescript6@6.0.2)(axios@1.19.0)(jiti@2.7.0)(lightningcss@1.33.0)(postcss@8.5.26)(qrcode@1.5.4)(react@18.3.1)(search-insights@2.17.3)(sugarss@5.0.1)(terser@5.51.2)(yaml@2.9.0):
     dependencies:
       '@docsearch/css': 3.8.2
-      '@docsearch/js': 3.8.2(@algolia/client-search@5.50.0)(@types/react@19.2.18)(react@19.2.8)(search-insights@2.17.3)
+      '@docsearch/js': 3.8.2(@algolia/client-search@5.50.0)(@types/react@19.2.18)(react@18.3.1)(search-insights@2.17.3)
       '@iconify-json/simple-icons': 1.2.75
       '@shikijs/core': 2.5.0
       '@shikijs/transformers': 2.5.0
