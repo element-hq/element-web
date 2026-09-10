@@ -667,7 +667,7 @@ importers:
         version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/cc8b03109cda299fbf67769e6a61184d045da1f1
       matrix-widget-api:
         specifier: ^1.18.0
-        version: 1.18.0
+        version: 1.19.0
       memoize-one:
         specifier: ^6.0.0
         version: 6.0.0
@@ -1152,7 +1152,7 @@ importers:
         version: 3.6.0(supports-color@10.2.2)
       matrix-widget-api:
         specifier: ^1.18.0
-        version: 1.18.0
+        version: 1.19.0
       react:
         specifier: 'catalog:'
         version: 19.2.8
@@ -1250,7 +1250,7 @@ importers:
         version: 9.9.0(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.3.0)(@types/react-dom@19.2.3)(@types/react@19.2.18)(@vector-im/compound-design-tokens@10.2.1)(react-dom@19.2.8)(react@19.2.8)
       matrix-widget-api:
         specifier: ^1.18.0
-        version: 1.18.0
+        version: 1.19.0
       styled-components:
         specifier: ^6.3.11
         version: 6.5.3(react-dom@19.2.8)(react@19.2.8)
@@ -1336,7 +1336,7 @@ importers:
         version: typescript@7.0.2
       matrix-widget-api:
         specifier: ^1.18.0
-        version: 1.18.0
+        version: 1.19.0
       rollup-plugin-external-globals:
         specifier: ^0.13.0
         version: 0.13.0(rollup@4.60.1)
@@ -10549,8 +10549,8 @@ packages:
     resolution: {integrity: sha512-oY4YZCU8OqDZzmCiJpo8XrATa7XNOB5oFyIpE7O0jjaIEeu6LnQrHmm/fpsYkPUENVzGJm1YdoOtvcBrQx+h2g==}
     hasBin: true
 
-  matrix-widget-api@1.18.0:
-    resolution: {integrity: sha512-4T2f2koWmx05p1BLcT/9YGGGPSXpPT+PA4Oap/5fjhXsWPxMGJiGL97YpANMYLKsnE1sScYFeuyxIgdc1Qo+Ew==}
+  matrix-widget-api@1.19.0:
+    resolution: {integrity: sha512-Qe7L6G1mQJphBC47/Bzp5ljPIK1UARgLiuGgS+/KmEs/eaNHkQ3+ArD0/0kvMV+d6kCGAZ9OKRqsnuPjizI+tw==}
 
   md5.js@1.3.5:
     resolution: {integrity: sha512-xitP+WxNPcTTOgnTJcrhM0xvdPepipPSf3I8EIpGKeFLjt3PlJLIDG3u8EX53ZIubkb+5U2+3rELYpEhHhzdkg==}
@@ -24212,7 +24212,7 @@ snapshots:
       content-type: 3.0.0
       loglevel: 1.9.2
       matrix-events-sdk: 0.0.1
-      matrix-widget-api: 1.18.0
+      matrix-widget-api: 1.19.0
       p-retry: 8.0.0
       sdp-transform: 3.0.0
       unhomoglyph: 1.0.6
@@ -24227,7 +24227,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  matrix-widget-api@1.18.0:
+  matrix-widget-api@1.19.0:
     dependencies:
       '@types/events': 3.0.3
       events: 3.3.0
