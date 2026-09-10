@@ -14,6 +14,7 @@ import {
     getDocument,
     PDFWorker,
     RenderingCancelledException,
+    VerbosityLevel,
     type PDFDocumentLoadingTask,
     type PDFDocumentProxy,
 } from "pdfjs-dist";
@@ -34,6 +35,12 @@ const PDF_HEADER = [0x25, 0x50, 0x44, 0x46, 0x2d];
  * treat as well-formed passes here too — a stricter check would reject files it opens happily.
  */
 const PDF_HEADER_SEARCH_LIMIT = 1024;
+
+/**
+ * Cap on the attachment itself. The whole file is held in memory for as long as it is open, and the
+ * sender chooses how big it is.
+ */
+const MAX_PDF_BYTES = 256 * 1024 * 1024;
 
 /** Cap on decoded image size. pdf.js defaults to no limit, so a document can exhaust memory. */
 const MAX_IMAGE_PIXELS = 8192 * 8192;
@@ -227,6 +234,11 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
         eventBus.on("updateviewarea", onUpdateViewArea);
 
         const loadDocument = async (): Promise<void> => {
+            // The declared size is the sender's claim, but a claim big enough to refuse saves the download.
+            if (media.size !== undefined && media.size > MAX_PDF_BYTES) {
+                throw new Error("PDF attachment is too large");
+            }
+
             const blob = await media.blob();
             if (blob.size === 0) {
                 throw new Error("PDF attachment is empty");
