@@ -12,6 +12,7 @@ import { describe, it, expect, beforeAll, beforeEach, afterEach, vi, type MockIn
 import React from "react";
 import { fireEvent, render, screen, waitFor } from "test-utils-rtl";
 import { initOnce } from "@vector-im/matrix-wysiwyg";
+import { type RoomMessageEventContent } from "matrix-js-sdk/src/types";
 
 import { flushPromises, mkEvent } from "test-utils";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
@@ -227,6 +228,87 @@ describe("EditWysiwygComposer", () => {
             );
 
             expect(spyDispatcher).toHaveBeenCalledWith({ action: "message_sent" });
+        });
+    });
+
+    describe("URL previews", () => {
+        let spyDispatcher: MockInstance<(payload: ActionPayload, sync?: boolean) => void>;
+
+        const renderWithPreviewProps = (props: {
+            updateUrlPreviews?: (content: string) => void;
+            attachBundles?: (content: RoomMessageEventContent) => Promise<boolean>;
+            isUrlPreviewsModified?: boolean;
+        }) =>
+            render(
+                <MatrixClientContext.Provider value={mockClient}>
+                    <ScopedRoomContextProvider {...defaultRoomContext}>
+                        <RoomUploadContextProvider>
+                            <EditWysiwygComposer editorStateTransfer={editorStateTransfer} {...props} />
+                        </RoomUploadContextProvider>
+                    </ScopedRoomContextProvider>
+                </MatrixClientContext.Provider>,
+            );
+
+        beforeEach(() => {
+            spyDispatcher = vi.spyOn(defaultDispatcher, "dispatch");
+        });
+
+        afterEach(() => {
+            spyDispatcher.mockRestore();
+        });
+
+        // The composer owns the text, so the preview view model has to be told about every change
+        // to keep its list of links in step.
+        it("Should report the composer content as it changes", async () => {
+            const updateUrlPreviews = vi.fn();
+            renderWithPreviewProps({ updateUrlPreviews });
+            await waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true"));
+
+            fireEvent.input(screen.getByRole("textbox"), {
+                data: "https://example.org",
+                inputType: "insertText",
+            });
+
+            await waitFor(() => expect(updateUrlPreviews).toHaveBeenCalledWith(expect.stringContaining("example.org")));
+        });
+
+        // Removing a preview is an edit, even though the text is untouched, so Save has to be
+        // available without the user typing anything.
+        it("Should enable Save when only the preview list is modified", async () => {
+            renderWithPreviewProps({ isUrlPreviewsModified: true });
+            await waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true"));
+
+            expect(screen.getByText("Save")).not.toHaveAttribute("disabled");
+        });
+
+        it("Should keep Save disabled when nothing is modified", async () => {
+            renderWithPreviewProps({});
+            await waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true"));
+
+            expect(screen.getByText("Save")).toHaveAttribute("disabled");
+        });
+
+        it("Should attach the bundle when saving an otherwise unmodified message", async () => {
+            const attachBundles = vi.fn().mockResolvedValue(false);
+            renderWithPreviewProps({ isUrlPreviewsModified: true, attachBundles });
+            await waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true"));
+
+            screen.getByText("Save").click();
+
+            await waitFor(() => expect(attachBundles).toHaveBeenCalledTimes(1));
+            await waitFor(() => expect(mockClient.sendMessage).toHaveBeenCalledTimes(1));
+        });
+
+        it("Should not send the edit when attaching reports a cancellation", async () => {
+            const attachBundles = vi.fn().mockResolvedValue(true);
+            renderWithPreviewProps({ isUrlPreviewsModified: true, attachBundles });
+            await waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true"));
+
+            screen.getByText("Save").click();
+
+            await waitFor(() => expect(attachBundles).toHaveBeenCalledTimes(1));
+            await flushPromises();
+            expect(mockClient.sendMessage).not.toHaveBeenCalled();
         });
     });
 

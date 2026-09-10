@@ -19,6 +19,7 @@ import {
 import type { UrlPreview } from "shared-types";
 import { getMockClientWithEventEmitter, mkEvent } from "test-utils";
 import SettingsStore from "../../settings/SettingsStore";
+import { UrlPreviewFetcher } from "../../utils/UrlPreviewFetcher";
 import { UrlPreviewApi } from "../../modules/UrlPreviewApi";
 
 const IMAGE_MXC = "mxc://example.org/abc";
@@ -403,6 +404,68 @@ describe("UrlPreviewGroupViewModel", () => {
             const { previews } = vm.getSnapshot();
             expect(client.getUrlPreview).not.toHaveBeenCalled();
             expect(previews).toEqual([]);
+        });
+
+        // A message sent before the sender had bundling enabled carries no bundle at all, and in
+        // "bundledonly" there is no server fallback to fill it in, so it simply has no previews.
+        it("should render no previews when bundled previews only and the message has no bundle", async () => {
+            const { vm, client } = getViewModel({
+                urlPreviewKind: "bundledonly",
+                content: { msgtype: MsgType.Text, body: "https://example.org" },
+            });
+            const msg = document.createElement("div");
+            msg.innerHTML = '<a href="https://example.org">Test</a>';
+            await vm.updateEventElement(msg);
+
+            expect(client.getUrlPreview).not.toHaveBeenCalled();
+            expect(vm.getSnapshot().previews).toEqual([]);
+        });
+
+        // An image whose decryption throws must not take the whole preview group down with it.
+        it("should drop a bundled preview that throws rather than failing them all", async () => {
+            vi.spyOn(UrlPreviewFetcher.prototype, "previewFromBundle").mockImplementation(async (single) => {
+                if (single.matched_url === BUNDLE_PREVIEW_ONE.matched_url) {
+                    throw new Error("Forced test failure");
+                }
+                return {
+                    link: single.matched_url,
+                    title: "Bundled two",
+                    siteName: "example.org",
+                    showTooltipOnLink: false,
+                };
+            });
+
+            const { vm } = getViewModel({
+                urlPreviewKind: "preferbundled",
+                content: {
+                    msgtype: MsgType.Text,
+                    body: `${BUNDLE_PREVIEW_ONE.matched_url} ${BUNDLE_PREVIEW_TWO.matched_url}`,
+                    [BUNDLED_LINK_PREVIEWS]: [BUNDLE_PREVIEW_ONE, BUNDLE_PREVIEW_TWO],
+                },
+            });
+            const msg = document.createElement("div");
+            msg.innerHTML = '<a href="https://example.org/1">Test1</a><a href="https://example.org/2">Test2</a>';
+            await vm.updateEventElement(msg);
+
+            expect(vm.getSnapshot().previews).toMatchObject([
+                { link: BUNDLE_PREVIEW_TWO.matched_url, title: "Bundled two" },
+            ]);
+            vi.mocked(UrlPreviewFetcher.prototype.previewFromBundle).mockRestore();
+        });
+
+        it("should drop a fetched preview that throws rather than failing them all", async () => {
+            vi.spyOn(UrlPreviewFetcher.prototype, "fetchPreview").mockImplementation(async (link) => {
+                if (link === "https://example.org/1") throw new Error("Forced test failure");
+                return { link, title: "Fetched two", siteName: "example.org", showTooltipOnLink: false };
+            });
+
+            const { vm } = getViewModel({ urlPreviewKind: "fetchonly" });
+            const msg = document.createElement("div");
+            msg.innerHTML = '<a href="https://example.org/1">Test1</a><a href="https://example.org/2">Test2</a>';
+            await vm.updateEventElement(msg);
+
+            expect(vm.getSnapshot().previews).toMatchObject([{ link: "https://example.org/2", title: "Fetched two" }]);
+            vi.mocked(UrlPreviewFetcher.prototype.fetchPreview).mockRestore();
         });
 
         describe("with the bundle setting enabled in SettingsStore", () => {
