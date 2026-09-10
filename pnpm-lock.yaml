@@ -236,6 +236,9 @@ catalogs:
     '@vitest/coverage-v8':
       specifier: 5.0.0
       version: 5.0.0
+    '@vitest/ui':
+      specifier: 5.0.0
+      version: 5.0.0
     matrix-web-i18n:
       specifier: 3.6.0
       version: 3.6.0
@@ -352,6 +355,9 @@ importers:
       '@vitest/coverage-v8':
         specifier: 'catalog:'
         version: 5.0.0(@vitest/browser@5.0.0)(vitest@5.0.0)
+      '@vitest/ui':
+        specifier: 'catalog:'
+        version: 5.0.0(vitest@5.0.0)
       cronstrue:
         specifier: ^3.0.0
         version: 3.24.0

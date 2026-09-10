@@ -42,6 +42,7 @@ catalog:
     "@vitest/coverage-v8": 5.0.0
     "@vitest/browser-playwright": 5.0.0
     "@vitest/browser": 5.0.0
+    "@vitest/ui": 5.0.0
     "@vitejs/plugin-react": 6.1.1
     unplugin-dts: 1.0.1
     # nx
