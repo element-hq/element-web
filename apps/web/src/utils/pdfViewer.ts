@@ -34,10 +34,12 @@ export function pdfMediaForEvent(mxEvent: MatrixEvent, helper?: MediaEventHelper
     if (!isPdfEvent(mxEvent)) return;
 
     const mediaEventHelper = helper ?? new MediaEventHelper(mxEvent);
+    const size = mxEvent.getContent<MediaEventContent>().info?.size;
 
     return {
         uri: mediaEventHelper.media.srcMxc,
         name: mediaEventHelper.fileName,
+        size: typeof size === "number" && Number.isFinite(size) && size >= 0 ? size : undefined,
         blob: () => mediaEventHelper.sourceBlob.value,
     };
 }
