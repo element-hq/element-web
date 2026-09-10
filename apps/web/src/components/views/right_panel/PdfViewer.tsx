@@ -243,6 +243,9 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
             if (blob.size === 0) {
                 throw new Error("PDF attachment is empty");
             }
+            if (blob.size > MAX_PDF_BYTES) {
+                throw new Error("PDF attachment is too large");
+            }
 
             const data = new Uint8Array(await blob.arrayBuffer());
             if (!hasPdfHeader(data)) {
