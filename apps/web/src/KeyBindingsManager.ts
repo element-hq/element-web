@@ -39,17 +39,16 @@ export type KeyBinding = {
  * Note, this method is only exported for testing.
  */
 export function isKeyComboMatch(ev: KeyboardEvent | React.KeyboardEvent, combo: KeyCombo, onMac: boolean): boolean {
-    if (combo.key !== undefined) {
-        // When shift is pressed, letters are returned as upper case chars. In this case do a lower case comparison.
-        // This works for letter combos such as shift + U as well for none letter combos such as shift + Escape.
-        // If shift is not pressed, the toLowerCase conversion can be avoided.
-        if (ev.shiftKey) {
-            if (ev.key.toLowerCase() !== combo.key.toLowerCase()) {
-                return false;
-            }
-        } else if (ev.key !== combo.key) {
-            return false;
-        }
+    // Letters are reported as upper case chars whenever shift is pressed or caps lock is on, so the
+    // comparison has to be case insensitive. This works for letter combos such as shift + U as well
+    // as for none letter combos such as shift + Escape. No two entries of the `Key` map collide once
+    // lower cased, so this cannot make two distinct shortcuts overlap.
+    // Dropdown, the room context menus and EditableText all forward a mouse ButtonEvent to
+    // getAccessibilityAction cast as a KeyboardEvent, so the event's `key` can genuinely be absent at
+    // runtime. Such an event must match no combo, as it did before the comparison became case
+    // insensitive.
+    if (ev.key?.toLowerCase() !== combo.key.toLowerCase()) {
+        return false;
     }
 
     const comboCtrl = combo.ctrlKey ?? false;
