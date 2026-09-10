@@ -21,6 +21,7 @@ import { EventBus, PDFLinkService, PDFViewer as PdfJsViewer } from "pdfjs-dist/w
 
 import { type PdfMedia } from "../../../@types/pdf-viewer";
 import { flushPdfViewerState, getPdfViewerState, setPdfViewerState } from "../../../utils/pdfViewerState";
+import { ElementPdfLinkService } from "../../../utils/pdfLinkService";
 
 const loggerPdf = logger.getChild("PdfViewer");
 
@@ -157,7 +158,7 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
         let pdfDocument: PDFDocumentProxy | undefined;
 
         const eventBus = new EventBus();
-        const linkService = new PDFLinkService({ eventBus });
+        const linkService = new ElementPdfLinkService({ eventBus });
         const pdfViewer = new PdfJsViewer({
             container,
             viewer: viewerElement,
