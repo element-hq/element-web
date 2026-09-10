@@ -29,7 +29,8 @@ jobs:
               env:
                   TEAM: "design"
                   GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
-            - id: any_matching_reviewers
+            - name: Check for matching team reviewers
+              id: any_matching_reviewers
               run: |
                   # Fetch requested reviewers, and people who are on the team
                   echo '${{ tojson(fromjson(steps.find_team_members.outputs.data).organization.team.members.nodes[*].login) }}' | tee /tmp/team_members.json
@@ -96,7 +97,8 @@ jobs:
               env:
                   TEAM: "product"
                   GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
-            - id: any_matching_reviewers
+            - name: Check for matching team reviewers
+              id: any_matching_reviewers
               run: |
                   # Fetch requested reviewers, and people who are on the team
                   echo '${{ tojson(fromjson(steps.find_team_members.outputs.data).organization.team.members.nodes[*].login) }}' | tee /tmp/team_members.json

@@ -12,6 +12,7 @@ import { vi, describe, it, expect, beforeEach, afterEach, type Mock } from "vite
 import {
     type MatrixClient,
     type MatrixEvent,
+    KnownMembership,
     Room,
     RoomEvent,
     PendingEventOrdering,
@@ -495,6 +496,7 @@ describe("RoomListItemViewModel", () => {
 
             await flushPromises();
 
+            expect(viewModel.getSnapshot().isDm).toBe(true);
             // DM rooms should not show copy room link option
             expect(viewModel.getSnapshot().canCopyRoomLink).toBe(false);
         });
@@ -507,6 +509,7 @@ describe("RoomListItemViewModel", () => {
 
             await flushPromises();
 
+            expect(viewModel.getSnapshot().isDm).toBe(false);
             expect(viewModel.getSnapshot().canCopyRoomLink).toBe(true);
         });
     });
@@ -603,7 +606,7 @@ describe("RoomListItemViewModel", () => {
 
             viewModel.onToggleSection(DefaultTagID.Favourite);
 
-            expect(tagRoomSpy).toHaveBeenCalledWith(room, DefaultTagID.Favourite);
+            expect(tagRoomSpy).toHaveBeenCalledWith(room, DefaultTagID.Favourite, true);
         });
     });
 
@@ -696,6 +699,16 @@ describe("RoomListItemViewModel", () => {
             watchCallback("RoomList.showSections", null, null as any, null, null);
 
             expect(viewModel.getSnapshot().areSectionsEnabled).toBe(true);
+        });
+
+        it.each([
+            { membership: KnownMembership.Join, expected: true },
+            { membership: KnownMembership.Invite, expected: false },
+        ])("should set canChangeSection to $expected when membership is $membership", ({ membership, expected }) => {
+            vi.spyOn(room, "getMyMembership").mockReturnValue(membership);
+
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            expect(viewModel.getSnapshot().canChangeSection).toBe(expected);
         });
     });
 

@@ -55,8 +55,11 @@ const roomId = "roomid";
 
 describe("MessageContextMenu", () => {
     beforeEach(() => {
-        vi.resetAllMocks();
         stubClient();
+    });
+
+    afterEach(() => {
+        vi.resetAllMocks();
     });
 
     it("does show copy link button when supplied a link", () => {

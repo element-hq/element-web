@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeEach, type Mocked } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterEach, type Mocked } from "vitest";
 import {
     MatrixEvent,
     type Room,
@@ -82,9 +82,11 @@ describe("DeviceListener", () => {
     let mockClient: Mocked<MatrixClient>;
     let mockCrypto: Mocked<CryptoApi>;
 
-    beforeEach(() => {
+    afterEach(() => {
         vi.resetAllMocks();
+    });
 
+    beforeEach(() => {
         // don't litter the console with logs
         vi.spyOn(console, "debug").mockImplementation(() => {});
         vi.spyOn(console, "info").mockImplementation(() => {});

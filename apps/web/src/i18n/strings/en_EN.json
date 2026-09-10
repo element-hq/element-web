@@ -658,8 +658,8 @@
         "join_rule_invite": "Private room (invite only)",
         "join_rule_invite_label": "Only people invited will be able to find and join this room.",
         "join_rule_knock_label": "Anyone can request to join, but admins or moderators need to grant access. You can change this later.",
-        "join_rule_public_label": "Anyone will be able to find and join this room.",
-        "join_rule_public_parent_space_label": "Anyone will be able to find and join this room, not just members of <SpaceName/>.",
+        "join_rule_public_label": "Anyone can join, including people outside your organisation.",
+        "join_rule_public_parent_space_label": "Anyone can join, including people outside your organisation, not just members of <SpaceName/>.",
         "join_rule_restricted": "Standard",
         "join_rule_restricted_label": "Anyone in <SpaceName/> can join.",
         "name_validation_required": "Please enter a name for the room",
@@ -714,7 +714,7 @@
         "private_personal_heading": "Who are you working with?",
         "private_space": "Me and my teammates",
         "private_space_description": "A private space for you and your teammates",
-        "public_description": "Anyone can join, best for communities",
+        "public_description": "Anyone can join, including people outside your organisation. Best for communities",
         "public_heading": "Your public space",
         "search_public_button": "Search for public spaces",
         "setup_rooms_community_description": "Let's create some rooms to get started.",
@@ -1556,6 +1556,8 @@
         "notification_settings_beta_caption": "Introducing a simpler way to change your notification settings. Customize your %(brand)s, just the way you like.",
         "notification_settings_beta_title": "Notification Settings",
         "notifications": "Enable the notifications panel in the room header",
+        "pdf_viewer": "Open PDFs",
+        "pdf_viewer_description": "Read PDF attachments in the right panel.",
         "render_reaction_images": "Render custom images in reactions",
         "render_reaction_images_description": "Sometimes referred to as \"custom emojis\".",
         "sliding_sync": "Sliding Sync mode",
@@ -1732,6 +1734,10 @@
         "send_dm": "Send a Direct Message",
         "welcome_detail": "Now, let's help you get started",
         "welcome_user": "Welcome %(name)s"
+    },
+    "pdf_viewer": {
+        "open": "Open PDF",
+        "title": "PDF"
     },
     "pill": {
         "permalink_other_room": "Message in %(room)s",
@@ -2128,6 +2134,7 @@
         "section": {
             "chats": "Chats",
             "favourites": "Favourites",
+            "invites": "Invites",
             "low_priority": "Low Priority"
         },
         "show_less": "Show less"
@@ -2316,7 +2323,7 @@
             "join_rule_knock": "Ask to join",
             "join_rule_knock_description": "People cannot join unless access is granted.",
             "join_rule_public": "Anyone",
-            "join_rule_public_description": "Anyone can join.",
+            "join_rule_public_description": "Anyone can join, including people outside your organisation.",
             "join_rule_restricted": "Space members",
             "join_rule_restricted_description": "Anyone in authorised spaces can join without an invitation. <a>Manage spaces</a>",
             "join_rule_restricted_description_active_space": "Anyone in <spaceName/> can join.",
@@ -2833,7 +2840,13 @@
             "message_search_unsupported_web": "%(brand)s can't securely cache encrypted messages locally while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> for encrypted messages to appear in search results.",
             "record_session_details": "Record the client name, version, and url to recognise sessions more easily in session manager",
             "send_analytics": "Send analytics data",
-            "strict_encryption": "Only send messages to verified users"
+            "strict_encryption": "Only send messages to verified users",
+            "tokenizer_mode": "Search tokenizer mode",
+            "tokenizer_mode_change_warning": "Changing the tokenizer mode requires deleting the existing search index. The index will be rebuilt automatically. Do you want to continue?",
+            "tokenizer_mode_language": "Language-based",
+            "tokenizer_mode_language_description": "Single language support based on your UI language. Only works with some languages (English, German, etc.).",
+            "tokenizer_mode_ngram": "N-gram",
+            "tokenizer_mode_ngram_description": "Supports all languages including those without word boundaries. Works with mixed languages."
         },
         "send_read_receipts": "Send read receipts",
         "send_read_receipts_unsupported": "Your server doesn't support disabling sending read receipts.",
@@ -2943,6 +2956,7 @@
         "show_join_leave": "Show join/leave messages (invites/removes/bans unaffected)",
         "show_message_previews": "Show message previews",
         "show_nsfw_content": "Show NSFW content",
+        "show_people_sections": "Show People as a section",
         "show_read_receipts": "Show read receipts sent by other users",
         "show_redaction_placeholder": "Show a placeholder for removed messages",
         "show_sections": "Show sections",

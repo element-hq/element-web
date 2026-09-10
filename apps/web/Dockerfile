@@ -5,7 +5,7 @@
 FROM --platform=$BUILDPLATFORM ghcr.io/pnpm/pnpm:12.0.0@sha256:bce5ae25ef95edd79e696d7fa8489b80561ef660100fd35bd0286d0f90db3dcc AS pnpm
 
 # Builder
-FROM --platform=$BUILDPLATFORM node:24-bullseye@sha256:713fab6ef722b3db6e23b694c60bec337055b3598eea59640694c6344d53672f AS builder
+FROM --platform=$BUILDPLATFORM node:24-bullseye@sha256:25f3016fcdae6b5d65bd9bcb4064b7e4198ec8d49493fa40d73f9b463d04fb15 AS builder
 
 COPY --from=pnpm /opt/pnpm /opt/pnpm
 RUN ln -s /opt/pnpm/pnpm /usr/local/bin/pnpm
@@ -30,7 +30,7 @@ RUN --mount=type=bind,source=.git,target=/src/.git /src/scripts/docker-package.s
 RUN cp /src/apps/web/config.sample.json /src/apps/web/webapp/config.json
 
 # App
-FROM nginxinc/nginx-unprivileged:alpine-slim@sha256:021f32b23e2bfc8610ccdec499b709625dcee1369884d7a51bd8a23a3accb301 AS element_web
+FROM nginxinc/nginx-unprivileged:alpine-slim@sha256:c94666682d7ecbfa0a1767fbe882cd1d82509333d15716c765f42bbef0d3809f AS element_web
 
 # Need root user to install packages & manipulate the usr directory
 USER root

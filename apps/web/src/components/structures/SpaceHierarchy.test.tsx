@@ -414,5 +414,34 @@ describe("SpaceHierarchy", () => {
             expect(queryByText("Space 1")).not.toBeInTheDocument();
             expect(asFragment()).toMatchSnapshot();
         });
+
+        it("should allow admins to toggle checkbox on children", async () => {
+            vi.mocked(client.getRoomHierarchy).mockResolvedValue({
+                rooms: [
+                    hierarchyRoot,
+                    { ...hierarchyRoom1, name: "Room 1" },
+                    hierarchyRoom2,
+                    hierarchySpace1,
+                    hierarchyRoom3,
+                    hierarchyKnockRoom1,
+                ],
+            });
+
+            const { getByText } = render(getComponent());
+            await waitForElementToBeRemoved(screen.getAllByRole("progressbar"));
+
+            const roomTile = getByText("Room 1")!.closest("li")!;
+            const checkbox = roomTile.querySelector<HTMLInputElement>('input[type="checkbox"]')!;
+
+            expect(checkbox.checked).toBe(false);
+            expect(roomTile).not.toHaveAttribute("aria-selected", "true");
+
+            fireEvent.click(checkbox);
+
+            // The click on the checkbox bubbles up to the parent tile which also toggles on click,
+            // so without stopping propagation on the checkbox itself this would immediately untoggle again.
+            expect(checkbox.checked).toBe(true);
+            expect(roomTile).toHaveAttribute("aria-selected", "true");
+        });
     });
 });

@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
-import { describe, it, expect, beforeEach, vi, type Mocked } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi, type Mocked } from "vitest";
 import { prettyDOM, render, type RenderResult, screen } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
 
@@ -78,9 +78,12 @@ describe("<SpaceContextMenu />", () => {
         );
 
     beforeEach(() => {
-        vi.resetAllMocks();
         mockClient.getUserId.mockReturnValue(userId);
         mockClient.getSafeUserId.mockReturnValue(userId);
+    });
+
+    afterEach(() => {
+        vi.resetAllMocks();
     });
 
     it("renders menu correctly", () => {

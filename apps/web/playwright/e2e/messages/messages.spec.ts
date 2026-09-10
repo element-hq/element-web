@@ -24,7 +24,7 @@ async function sendMessage(page: Page, message: string): Promise<Locator> {
     await page.getByRole("textbox", { name: "Send an unencrypted message…" }).fill(message);
     await page.getByRole("button", { name: "Send message" }).click();
 
-    const msgTile = page.locator(".mx_EventTile_last");
+    const msgTile = page.locator(".mx_EventTile").last();
     await waitForMessageSentStatus(msgTile);
     return msgTile;
 }
@@ -38,7 +38,7 @@ async function sendMultilineMessages(page: Page, messages: string[]) {
 
     await page.getByRole("button", { name: "Send message" }).click();
 
-    const msgTile = page.locator(".mx_EventTile_last");
+    const msgTile = page.locator(".mx_EventTile").last();
     await waitForMessageSentStatus(msgTile);
     return msgTile;
 }
@@ -51,7 +51,7 @@ async function replyMessage(page: Page, message: Locator, replyMessage: string):
     await page.getByRole("textbox", { name: "Send an unencrypted reply…" }).fill(replyMessage);
     await page.getByRole("button", { name: "Send message" }).click();
 
-    const msgTile = page.locator(".mx_EventTile_last");
+    const msgTile = page.locator(".mx_EventTile").last();
     await waitForMessageSentStatus(msgTile);
     return msgTile;
 }

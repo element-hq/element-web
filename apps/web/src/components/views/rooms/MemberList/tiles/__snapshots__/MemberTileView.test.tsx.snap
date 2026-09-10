@@ -38,7 +38,7 @@ exports[`MemberTileView > RoomMemberTileView > should display an verified E2EIco
           class="mx_MemberTileView_name"
         >
           <div
-            class="mx_DisambiguatedProfile _disambiguatedProfile_1a1j2_8"
+            class="mx_DisambiguatedProfile _disambiguatedProfile_1q5ax_8"
             data-event-density="default"
             data-event-layout="group"
             role="button"
@@ -119,7 +119,7 @@ exports[`MemberTileView > RoomMemberTileView > should display an warning E2EIcon
           class="mx_MemberTileView_name"
         >
           <div
-            class="mx_DisambiguatedProfile _disambiguatedProfile_1a1j2_8"
+            class="mx_DisambiguatedProfile _disambiguatedProfile_1q5ax_8"
             data-event-density="default"
             data-event-layout="group"
             role="button"
@@ -200,7 +200,7 @@ exports[`MemberTileView > RoomMemberTileView > should not display an E2EIcon whe
           class="mx_MemberTileView_name"
         >
           <div
-            class="mx_DisambiguatedProfile _disambiguatedProfile_1a1j2_8"
+            class="mx_DisambiguatedProfile _disambiguatedProfile_1q5ax_8"
             data-event-density="default"
             data-event-layout="group"
             role="button"
