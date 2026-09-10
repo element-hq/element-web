@@ -66,7 +66,7 @@ const ElementCallSwitch: React.FC<ElementCallSwitchProps> = ({ room }) => {
                 newContent.events[ElementCallMemberEventType.name] = adminLevel;
             }
 
-            room.client.sendStateEvent(room.roomId, EventType.RoomPowerLevels, newContent);
+            void room.client.sendStateEvent(room.roomId, EventType.RoomPowerLevels, newContent);
         },
         [room.client, room.roomId, content, isPublic],
     );

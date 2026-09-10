@@ -73,7 +73,12 @@ export function add(emoji: string): void {
         newEntry = { emoji, total: 1 };
     }
 
-    SettingsStore.setValue(SETTING_NAME, null, SettingLevel.ACCOUNT, [newEntry, ...recents].slice(0, STORAGE_LIMIT));
+    void SettingsStore.setValue(
+        SETTING_NAME,
+        null,
+        SettingLevel.ACCOUNT,
+        [newEntry, ...recents].slice(0, STORAGE_LIMIT),
+    );
 }
 
 export function get(limit = 24): string[] {

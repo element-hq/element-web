@@ -141,13 +141,13 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
             }));
 
         if (!isValidSize) {
-            sizeLimitRef.current?.validate({ focused: true });
+            void sizeLimitRef.current?.validate({ focused: true });
             return;
         }
         if (exportType === ExportType.LastNMessages) {
             const isValidNumberOfMessages = await messageCountRef.current?.validate({ focused: false });
             if (!isValidNumberOfMessages) {
-                messageCountRef.current?.validate({ focused: true });
+                void messageCountRef.current?.validate({ focused: true });
                 return;
             }
         }

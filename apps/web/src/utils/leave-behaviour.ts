@@ -196,7 +196,7 @@ export const leaveSpace = (space: Room): void => {
         },
         "mx_LeaveSpaceDialog_wrapper",
     );
-    finished.then(async ([leave, rooms]) => {
+    void finished.then(async ([leave, rooms]) => {
         if (!leave) return;
         await bulkSpaceBehaviour(space, rooms!, (room) => leaveRoomBehaviour(space.client, room.roomId));
 

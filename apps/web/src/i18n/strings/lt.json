@@ -485,22 +485,6 @@
     },
     "dialog_close_label": "Uždaryti dialogą",
     "download_completed": "Atsisiuntimas baigtas",
-    "emoji": {
-        "categories": "Kategorijos",
-        "category_activities": "Veikla",
-        "category_animals_nature": "Gyvūnai & Gamta",
-        "category_flags": "Vėliavos",
-        "category_food_drink": "Maistas & Gėrimai",
-        "category_frequently_used": "Dažnai Naudojama",
-        "category_objects": "Objektai",
-        "category_smileys_people": "Šypsenėlės ir Žmonės",
-        "category_symbols": "Simboliai",
-        "category_travel_places": "Kelionės & Vietovės",
-        "quick_reactions": "Greitos Reakcijos"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Atšaukti paiešką"
-    },
     "empty_room": "Tuščias kambarys",
     "empty_room_was_name": "Tuščias kambarys (buvo %(oldName)s)",
     "encryption": {
@@ -843,7 +827,6 @@
         "bridge_state_manager": "Šis tiltas yra tvarkomas <user />.",
         "bridge_state_workspace": "Darbo aplinka: <networkLink/>",
         "currently_experimental": "Šiuo metu eksperimentinė.",
-        "custom_themes": "Palaikykite pridėdami pasirinktines temas",
         "dynamic_room_predecessors": "Dinaminiai kambario pirmtakai",
         "element_call_video_rooms": "Element skambučio vaizdo kambariai",
         "feature_wysiwyg_composer_description": "Naudoti raiškųjį tekstą vietoj ženklinimo žinučių rengyklėje.",
@@ -855,7 +838,6 @@
         "group_profile": "Profilis",
         "group_rooms": "Kambariai",
         "group_spaces": "Erdvės",
-        "group_themes": "Temos",
         "group_voip": "Garsas ir Vaizdas",
         "group_widgets": "Valdikliai",
         "hidebold": "Slėpti pranešimų tašką (rodyti tik skaičių žymes)",
@@ -948,7 +930,6 @@
         "mentions_and_keywords": "@paminėjimai & raktažodžiai",
         "mentions_and_keywords_description": "Gaukite pranešimus tik apie paminėjimus ir raktinius žodžius, kaip nustatyta jūsų <a>nustatymuose</a>",
         "mentions_keywords": "Paminėjimai & Raktažodžiai",
-        "message_didnt_send": "Žinutė nebuvo išsiųsta. Spustelėkite norėdami gauti informacijos.",
         "mute_description": "Negausite jokių pranešimų"
     },
     "notifier": {
@@ -1392,8 +1373,6 @@
             "custom_font_description": "Nustatykite sistemoje įdiegto šrifto pavadinimą ir %(brand)s bandys jį naudoti.",
             "custom_font_name": "Sistemos šrifto pavadinimas",
             "custom_font_size": "Naudoti pasirinktinį dydį",
-            "custom_theme_error_downloading": "Klaida atsisiunčiant temos informaciją.",
-            "custom_theme_invalid": "Klaidinga temos schema.",
             "font_size": "Šrifto dydis",
             "image_size_default": "Numatytas",
             "image_size_large": "Didelis",

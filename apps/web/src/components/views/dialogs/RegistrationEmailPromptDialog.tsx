@@ -31,7 +31,7 @@ const RegistrationEmailPromptDialog: React.FC<IProps> = ({ onFinished }) => {
 
             if (!valid) {
                 fieldRef.current.focus();
-                fieldRef.current.validate({ focused: true });
+                void fieldRef.current.validate({ focused: true });
                 return;
             }
         }

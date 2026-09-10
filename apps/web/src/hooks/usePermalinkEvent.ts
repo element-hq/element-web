@@ -74,7 +74,7 @@ export const usePermalinkEvent = (
             } catch {}
         };
 
-        fetchRoomEvent();
+        void fetchRoomEvent();
     }, [event, eventId, parseResult?.eventId, parseResult?.roomIdOrAlias, shouldLookUpEvent]);
 
     return event;

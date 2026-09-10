@@ -64,6 +64,7 @@ import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
 import PlatformPeg from "../../../PlatformPeg";
 import { useSettingValue } from "../../../hooks/useSettings";
+import { ModuleApi } from "../../../modules/Api";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const WYSIWYG_EDITOR_STATE_STORAGE_PREFIX = "mx_wysiwyg_state_";
@@ -324,7 +325,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
         // Otherwise, wait for member loading to finish and then update the member for the avatar.
         // The members should already be loading, and loadMembersIfNeeded
         // will return the promise for the existing operation
-        this.props.room.loadMembersIfNeeded().then(() => {
+        void this.props.room.loadMembersIfNeeded().then(() => {
             const me = this.props.room.getMember(MatrixClientPeg.safeGet().getSafeUserId()) ?? undefined;
             this.setState({ me });
         });
@@ -413,7 +414,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
             return;
         }
 
-        this.messageComposerInput.current?.sendMessage({ urlPreviewSnapshot });
+        void this.messageComposerInput.current?.sendMessage({ urlPreviewSnapshot });
 
         if (this.state.isWysiwygLabEnabled) {
             const { relation, replyToEvent } = this.props;
@@ -540,7 +541,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
     }
 
     private onRecordStartEndClick = (): void => {
-        this.voiceRecordingButton.current?.onRecordStartEndClick();
+        void this.voiceRecordingButton.current?.onRecordStartEndClick();
 
         if (this.context.narrow) {
             this.toggleButtonMenu();
@@ -758,11 +759,12 @@ export default function MessageComposerWrapper(props: Omit<IProps, "mxClient" | 
                 visible: showUrlPreview,
                 showTooltips: PlatformPeg.get()?.needsUrlTooltips() ?? true,
                 urlPreviewBundle,
+                moduleUrlPreviewApi: ModuleApi.instance.urlPreviews,
             }),
     );
 
     useEffect(() => {
-        void urlPreviewVm.updateUrlPreviewVisible(showUrlPreview);
+        urlPreviewVm.updateUrlPreviewVisible(showUrlPreview);
     }, [urlPreviewVm, showUrlPreview]);
 
     return <MessageComposerWithMatrixClient {...props} urlPreviewVm={urlPreviewVm} />;

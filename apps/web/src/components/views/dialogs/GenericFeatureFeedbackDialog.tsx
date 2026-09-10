@@ -39,7 +39,7 @@ const GenericFeatureFeedbackDialog: React.FC<IProps> = ({
     const sendFeedback = async (ok: boolean): Promise<void> => {
         if (!ok) return onFinished(false);
         // TODO: Handle rejection.
-        submitFeedback(rageshakeLabel, comment, canContact, rageshakeData);
+        void submitFeedback(rageshakeLabel, comment, canContact, rageshakeData);
         onFinished(true);
 
         Modal.createDialog(InfoDialog, {

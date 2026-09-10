@@ -14,13 +14,10 @@ export {
     _t,
     _td,
     _tDom,
-    type IVariables,
     type Tags,
     type TranslatedString,
     lookupString,
     sanitizeForTranslation,
-    normalizeLanguageKey,
-    getNormalizedLanguageKeys,
     getLocale as getCurrentLanguage,
 } from "@element-hq/web-shared-components";
 

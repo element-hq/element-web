@@ -6,6 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// oxlint-disable-next-line no-restricted-imports
 import { EventEmitter } from "events";
 import {
     RoomMember,
@@ -261,7 +262,7 @@ export default class EventIndex extends EventEmitter {
 
         if (ev.getType() === EventType.RoomEncryption && !(await this.isRoomIndexed(state.roomId))) {
             this.logger.debug("Adding a checkpoint for a newly encrypted room", state.roomId);
-            this.addRoomCheckpoint(state.roomId, true);
+            await this.addRoomCheckpoint(state.roomId, true);
         }
     };
 
@@ -295,7 +296,7 @@ export default class EventIndex extends EventEmitter {
 
         this.logger.debug("Adding a checkpoint because of a limited timeline", room.roomId);
 
-        this.addRoomCheckpoint(room.roomId, false);
+        await this.addRoomCheckpoint(room.roomId, false);
     };
 
     /**

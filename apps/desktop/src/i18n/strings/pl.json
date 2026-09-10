@@ -27,6 +27,10 @@
         "yes": "Tak"
     },
     "confirm_quit": "Czy na pewno chcesz zamknąć?",
+    "download": {
+        "unable_to_open_description": "Nie można otworzyć pliku. Mógł zostać przeniesiony lub usunięty.",
+        "unable_to_open_title": "Nie można otworzyć pliku"
+    },
     "edit_menu": {
         "speech": "Mowa",
         "speech_start_speaking": "Zacznij mówić",
@@ -68,6 +72,10 @@
         "save_image_as": "Zapisz obraz jako...",
         "save_image_as_error_description": "Obraz nie został zapisany",
         "save_image_as_error_title": "Nie udało się zapisać obrazu"
+    },
+    "save_dialog": {
+        "all_files": "Wszystkie pliki",
+        "named_file_type": "Plik %(extension)s"
     },
     "store": {
         "error": {

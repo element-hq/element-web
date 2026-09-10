@@ -180,7 +180,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
                 await util.openThread("Msg1");
                 await page.locator(".mx_ThreadPanel").getByText("Reply1a").hover();
                 await page.getByRole("button", { name: "React" }).click();
-                await page.locator(".mx_EmojiPicker_body").getByText("😀").click();
+                await page.getByLabel("Emoji Picker").getByRole("gridcell", { name: "😀" }).click();
 
                 // And cancel the reaction
                 await page.locator(".mx_ThreadPanel").getByLabel("Mae reacted with 😀").click();
@@ -191,7 +191,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
                 // And I can do it all again without an error
                 await page.locator(".mx_ThreadPanel").getByText("Reply1a").hover();
                 await page.getByRole("button", { name: "React" }).click();
-                await page.locator(".mx_EmojiPicker_body").getByText("😀").first().click();
+                await page.getByLabel("Emoji Picker").getByRole("gridcell", { name: "😀" }).first().click();
                 await page.locator(".mx_ThreadPanel").getByLabel("Mae reacted with 😀").click();
                 await expect(page.locator(".mx_ThreadPanel").getByLabel("Mae reacted with 😀")).not.toBeVisible();
             });

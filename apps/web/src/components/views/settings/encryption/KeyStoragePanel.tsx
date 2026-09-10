@@ -33,7 +33,7 @@ export const KeyStoragePanel: React.FC<Props> = ({ onKeyStorageDisableClick }) =
     const onKeyBackupChange = useCallback(
         (e: FormEvent<HTMLInputElement>) => {
             if (e.currentTarget.checked) {
-                setEnabled(true);
+                void setEnabled(true);
             } else {
                 onKeyStorageDisableClick();
             }

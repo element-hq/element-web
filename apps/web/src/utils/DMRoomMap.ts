@@ -231,7 +231,7 @@ export default class DMRoomMap {
                 logger.warn(`Invalid m.direct account data detected (self-chats that shouldn't be), patching it up.`);
                 if (neededPatching && !this.hasSentOutPatchDirectAccountDataPatch) {
                     this.hasSentOutPatchDirectAccountDataPatch = true;
-                    this.matrixClient.setAccountData(EventType.Direct, userToRooms);
+                    void this.matrixClient.setAccountData(EventType.Direct, userToRooms);
                 }
             }
             this.userToRooms = userToRooms;
