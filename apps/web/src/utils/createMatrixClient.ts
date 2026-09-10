@@ -30,7 +30,6 @@ import IdentityAuthClient from "../IdentityAuthClient";
 import { _t } from "../languageHandler";
 import { formatList } from "./FormattingUtils";
 import { persistTokens } from "./tokens/tokens.ts";
-import { getStoredOAuthClientId } from "./oauth/persistOAuthSettings";
 
 const localStorage = window.localStorage;
 
