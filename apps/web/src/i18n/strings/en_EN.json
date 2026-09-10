@@ -1557,7 +1557,7 @@
         "notification_settings_beta_title": "Notification Settings",
         "notifications": "Enable the notifications panel in the room header",
         "pdf_viewer": "Open PDFs",
-        "pdf_viewer_description": "Read PDF attachments in the right panel instead of downloading them first.",
+        "pdf_viewer_description": "Read PDF attachments in the right panel.",
         "render_reaction_images": "Render custom images in reactions",
         "render_reaction_images_description": "Sometimes referred to as \"custom emojis\".",
         "sliding_sync": "Sliding Sync mode",
