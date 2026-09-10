@@ -266,6 +266,7 @@ describe("Store secret encryption (safeStorage)", () => {
 
         beforeEach(() => {
             vi.mocked(dialog.showMessageBox).mockClear();
+            vi.mocked(safeStorage.getSelectedStorageBackend).mockClear();
             // getSelectedStorageBackend is Linux-only; calling this method throws on all other platforms
             // See https://www.electronjs.org/docs/latest/api/safe-storage#safestoragegetselectedstoragebackend-linux
             vi.mocked(safeStorage.getSelectedStorageBackend).mockImplementation(() => {
