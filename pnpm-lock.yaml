@@ -664,7 +664,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a6ecd543c8dc546597670afe1f96b57c62421497
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/cc8b03109cda299fbf67769e6a61184d045da1f1
       matrix-widget-api:
         specifier: ^1.18.0
         version: 1.18.0
@@ -1471,11 +1471,11 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2(react@19.2.8)
       react-resizable-panels:
-        specifier: 4.12.3
-        version: 4.12.3(react-dom@19.2.8)(react@19.2.8)
+        specifier: 4.12.4
+        version: 4.12.4(react-dom@19.2.8)(react@19.2.8)
       react-virtuoso:
         specifier: ^4.14.0
-        version: 4.18.12(react-dom@19.2.8)(react@19.2.8)
+        version: 4.18.13(react-dom@19.2.8)(react@19.2.8)
       temporal-polyfill:
         specifier: ^1.0.0
         version: 1.0.4
@@ -8827,7 +8827,7 @@ packages:
     engines: {node: '>=12'}
 
   eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/029622f07b44f58f8a84e7e167e5b66374479b63#path:/eslint:
-    resolution: {gitHosted: true, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/029622f07b44f58f8a84e7e167e5b66374479b63}
+    resolution: {gitHosted: true, integrity: sha512-dkuhrtGAES3MqdvIKqVi0E9Ziqte05YTgmn6453CyDD+DxE6XjhJbHrEb9+xJNDkdivpe6ro6WvvIa3Z9CWDMA==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/029622f07b44f58f8a84e7e167e5b66374479b63}
     version: 0.0.0
 
   eslint-plugin-storybook@10.6.0:
@@ -10433,8 +10433,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a6ecd543c8dc546597670afe1f96b57c62421497:
-    resolution: {gitHosted: true, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a6ecd543c8dc546597670afe1f96b57c62421497}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/cc8b03109cda299fbf67769e6a61184d045da1f1:
+    resolution: {gitHosted: true, integrity: sha512-IbJoNmQ8la8D8R+mhS7GULeda5YdO89Kb3o3aCappVI7VAL60fV3OByZvIwnf9DrtYYoUQ46ziE7TExxB6zj/A==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/cc8b03109cda299fbf67769e6a61184d045da1f1}
     version: 42.3.0
     engines: {node: '>=22.0.0'}
 
@@ -11979,8 +11979,8 @@ packages:
       '@types/react':
         optional: true
 
-  react-resizable-panels@4.12.3:
-    resolution: {integrity: sha512-GHMJWnDXui/3RX4bT+cgBP+N3N2nkwcoZATr/2xLFpqQQe7TlBrE0cGM0dUa9ceT7A90tUrSRsiqgRG+g0/2AA==}
+  react-resizable-panels@4.12.4:
+    resolution: {integrity: sha512-SOsSj4e9U7vxL15MbgTfl35IO4vxSW4Xb0b1gtJVbRPWv7FOezcgOA00Mi0jP8XqC3y7jOQxpsGs/9zLKHPitA==}
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
       react-dom: ^18.0.0 || ^19.0.0
@@ -12004,8 +12004,8 @@ packages:
       react: '>=16.6.0'
       react-dom: '>=16.6.0'
 
-  react-virtuoso@4.18.12:
-    resolution: {integrity: sha512-6c1SnRicSBfG+WnbhcyJUxzDHvvxD3vsux/EpcfVbgB7clyP1Od2r81TAGTgwbL7U2qP889RR4u+CH6WjgpW0g==}
+  react-virtuoso@4.18.13:
+    resolution: {integrity: sha512-M4kP7zbV7JmLrnJYs0X2FBA8gnNlHisSYuKMyeJVYtWz31CAJeP57dgPJzfneUdKDKmL9SiqvcBQ32si8CfQSQ==}
     peerDependencies:
       react: '>=16 || >=17 || >= 18 || >= 19'
       react-dom: '>=16 || >=17 || >= 18 || >=19'
@@ -24010,7 +24010,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a6ecd543c8dc546597670afe1f96b57c62421497:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/cc8b03109cda299fbf67769e6a61184d045da1f1:
     dependencies:
       '@babel/runtime': 8.0.0
       '@matrix-org/matrix-sdk-crypto-wasm': 18.7.0
@@ -25885,7 +25885,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.18
 
-  react-resizable-panels@4.12.3(react-dom@19.2.8)(react@19.2.8):
+  react-resizable-panels@4.12.4(react-dom@19.2.8)(react@19.2.8):
     dependencies:
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
@@ -25909,7 +25909,7 @@ snapshots:
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
 
-  react-virtuoso@4.18.12(react-dom@19.2.8)(react@19.2.8):
+  react-virtuoso@4.18.13(react-dom@19.2.8)(react@19.2.8):
     dependencies:
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
