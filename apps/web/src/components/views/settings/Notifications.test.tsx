@@ -149,7 +149,8 @@ const legacyMentionRuleIds: string[] = [
     roomNotifRule.rule_id,
 ];
 
-// Intentional mention rules (Matrix v1.7), which the legacy rules are kept in sync with.
+// Intentional mention rules (Matrix v1.7). While the server serves the legacy rules these are
+// their synced rules; once it does not, they take the legacy rules' place in the settings.
 const isUserMentionRule = {
     conditions: [
         {
@@ -870,79 +871,78 @@ describe("<Notifications />", () => {
                 mockClient.setPushRuleEnabled.mockReset().mockResolvedValue({});
             });
 
-            it("renders the intentional mention rules instead of the legacy ones", async () => {
+            it("renders the legacy mention rules while the server serves them", async () => {
                 await getComponentAndWait();
 
                 const mentionsSection = screen.getByTestId(`notif-section-${section}`);
-                // user mentions, @room mentions and keywords
-                expect(mentionsSection.querySelectorAll("fieldset").length).toEqual(3);
+                // user name, @room, display name and keywords
+                expect(mentionsSection.querySelectorAll("fieldset").length).toEqual(4);
 
-                const userMentionElement = screen.getByTestId(section + RuleId.IsUserMention);
-                expect(within(userMentionElement).getByText("@mentions and replies")).toBeInTheDocument();
-                // isUserMentionRule is set to 'loud'
-                expect(userMentionElement.querySelector('input[aria-label="Noisy"]')).toBeChecked();
+                const userNameElement = screen.getByTestId(section + RuleId.ContainsUserName);
+                expect(within(userNameElement).getByText("@mentions and replies")).toBeInTheDocument();
+                expect(userNameElement.querySelector('input[aria-label="Noisy"]')).toBeChecked();
 
-                const roomMentionElement = screen.getByTestId(section + RuleId.IsRoomMention);
-                expect(within(roomMentionElement).getByText("@room mentions")).toBeInTheDocument();
-                // isRoomMentionRule is set to 'loud'
-                expect(roomMentionElement.querySelector('input[aria-label="Noisy"]')).toBeChecked();
+                const roomNotifElement = screen.getByTestId(section + RuleId.AtRoomNotification);
+                expect(within(roomNotifElement).getByText("@room mentions")).toBeInTheDocument();
+                expect(roomNotifElement.querySelector('input[aria-label="Noisy"]')).toBeChecked();
 
-                for (const ruleId of legacyMentionRuleIds) {
-                    expect(screen.queryByTestId(section + ruleId)).not.toBeInTheDocument();
-                }
-                expect(screen.queryByText("Messages containing my display name")).not.toBeInTheDocument();
+                const displayNameElement = screen.getByTestId(section + RuleId.ContainsDisplayName);
+                expect(within(displayNameElement).getByText("Messages containing my display name")).toBeInTheDocument();
+                expect(displayNameElement.querySelector('input[aria-label="Noisy"]')).toBeChecked();
+
+                // the intentional rules are synced rules of the legacy rows, not rows of their own
+                expect(screen.queryByTestId(section + RuleId.IsUserMention)).not.toBeInTheDocument();
+                expect(screen.queryByTestId(section + RuleId.IsRoomMention)).not.toBeInTheDocument();
             });
 
-            it("shows the state of the intentional rule when the legacy rules disagree", async () => {
-                // intentional rules off, legacy rules still loud
+            it("shows the loudest state when a legacy rule and its intentional rule disagree", async () => {
+                // legacy rules off, intentional rules still loud
                 setPushRuleMock(
                     withRules([
-                        { ...isUserMentionRule, enabled: false },
-                        { ...isRoomMentionRule, enabled: false },
+                        { ...containsUserNameRule, enabled: false },
+                        { ...roomNotifRule, enabled: false },
                     ]),
                 );
                 await getComponentAndWait();
 
-                const userMentionElement = screen.getByTestId(section + RuleId.IsUserMention);
-                expect(userMentionElement.querySelector('input[aria-label="Off"]')).toBeChecked();
-                const roomMentionElement = screen.getByTestId(section + RuleId.IsRoomMention);
-                expect(roomMentionElement.querySelector('input[aria-label="Off"]')).toBeChecked();
+                const userNameElement = screen.getByTestId(section + RuleId.ContainsUserName);
+                expect(userNameElement.querySelector('input[aria-label="Noisy"]')).toBeChecked();
+                const roomNotifElement = screen.getByTestId(section + RuleId.AtRoomNotification);
+                expect(roomNotifElement.querySelector('input[aria-label="Noisy"]')).toBeChecked();
             });
 
-            it("updates the legacy user mention rules when the server serves them", async () => {
+            it("updates the intentional user mention rule along with the legacy one", async () => {
                 await getComponentAndWait();
-                const userMentionElement = screen.getByTestId(section + RuleId.IsUserMention);
+                const userNameElement = screen.getByTestId(section + RuleId.ContainsUserName);
 
-                fireEvent.click(userMentionElement.querySelector('input[aria-label="On"]')!);
+                fireEvent.click(userNameElement.querySelector('input[aria-label="On"]')!);
                 await flushPromises();
 
-                // intentional rule first, then the legacy rules that exist for the user
+                // legacy rule first, then its synced intentional rule; the display name rule is separate
                 expect(mockClient.setPushRuleActions.mock.calls).toEqual([
-                    ["global", "override", RuleId.IsUserMention, StandardActions.ACTION_NOTIFY],
                     ["global", "content", RuleId.ContainsUserName, StandardActions.ACTION_NOTIFY],
-                    ["global", "override", RuleId.ContainsDisplayName, StandardActions.ACTION_NOTIFY],
+                    ["global", "override", RuleId.IsUserMention, StandardActions.ACTION_NOTIFY],
                 ]);
                 expect(mockClient.setPushRuleEnabled.mock.calls).toEqual([
-                    ["global", "override", RuleId.IsUserMention, true],
                     ["global", "content", RuleId.ContainsUserName, true],
-                    ["global", "override", RuleId.ContainsDisplayName, true],
+                    ["global", "override", RuleId.IsUserMention, true],
                 ]);
-                expect(within(userMentionElement).queryByText(updateError)).not.toBeInTheDocument();
+                expect(within(userNameElement).queryByText(updateError)).not.toBeInTheDocument();
             });
 
-            it("updates the legacy @room rule when the server serves it", async () => {
+            it("updates the intentional @room rule along with the legacy one", async () => {
                 await getComponentAndWait();
-                const roomMentionElement = screen.getByTestId(section + RuleId.IsRoomMention);
+                const roomNotifElement = screen.getByTestId(section + RuleId.AtRoomNotification);
 
-                fireEvent.click(roomMentionElement.querySelector('input[aria-label="Off"]')!);
+                fireEvent.click(roomNotifElement.querySelector('input[aria-label="Off"]')!);
                 await flushPromises();
 
                 expect(mockClient.setPushRuleActions).not.toHaveBeenCalled();
                 expect(mockClient.setPushRuleEnabled.mock.calls).toEqual([
-                    ["global", "override", RuleId.IsRoomMention, false],
                     ["global", "override", RuleId.AtRoomNotification, false],
+                    ["global", "override", RuleId.IsRoomMention, false],
                 ]);
-                expect(within(roomMentionElement).queryByText(updateError)).not.toBeInTheDocument();
+                expect(within(roomNotifElement).queryByText(updateError)).not.toBeInTheDocument();
             });
 
             describe("when the server does not serve the legacy rules", () => {
@@ -950,13 +950,25 @@ describe("<Notifications />", () => {
                     setPushRuleMock(withRules([], legacyMentionRuleIds));
                 });
 
-                it("still renders the mention rules", async () => {
+                it("renders the intentional mention rules instead", async () => {
                     await getComponentAndWait();
 
                     const mentionsSection = screen.getByTestId(`notif-section-${section}`);
+                    // user mentions, @room mentions and keywords
                     expect(mentionsSection.querySelectorAll("fieldset").length).toEqual(3);
-                    expect(screen.getByTestId(section + RuleId.IsUserMention)).toBeInTheDocument();
-                    expect(screen.getByTestId(section + RuleId.IsRoomMention)).toBeInTheDocument();
+
+                    const userMentionElement = screen.getByTestId(section + RuleId.IsUserMention);
+                    expect(within(userMentionElement).getByText("@mentions and replies")).toBeInTheDocument();
+                    expect(userMentionElement.querySelector('input[aria-label="Noisy"]')).toBeChecked();
+
+                    const roomMentionElement = screen.getByTestId(section + RuleId.IsRoomMention);
+                    expect(within(roomMentionElement).getByText("@room mentions")).toBeInTheDocument();
+                    expect(roomMentionElement.querySelector('input[aria-label="Noisy"]')).toBeChecked();
+
+                    for (const ruleId of legacyMentionRuleIds) {
+                        expect(screen.queryByTestId(section + ruleId)).not.toBeInTheDocument();
+                    }
+                    expect(screen.queryByText("Messages containing my display name")).not.toBeInTheDocument();
                 });
 
                 it("only writes the intentional rules", async () => {

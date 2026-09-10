@@ -14,7 +14,6 @@ import {
     type IPushRules,
     MatrixEvent,
     PushRuleActionName,
-    PushRuleKind,
     RuleId,
     TweakName,
 } from "matrix-js-sdk/src/matrix";
@@ -30,12 +29,8 @@ const loudActions = [
     { set_tweak: TweakName.Highlight },
 ];
 
-const isUserMentionRule = {
-    rule_id: RuleId.IsUserMention,
-    default: true,
-    enabled: true,
-    actions: loudActions,
-} as IPushRule;
+// Legacy text-matching mention rules, removed from the spec in Matrix v1.17 (MSC4210).
+// While the server serves them, they are the primary rules the intentional rules follow.
 const containsUserNameRule = {
     rule_id: RuleId.ContainsUserName,
     pattern: "alice",
@@ -49,14 +44,22 @@ const containsDisplayNameRule = {
     enabled: true,
     actions: loudActions,
 } as IPushRule;
-const isRoomMentionRule = {
-    rule_id: RuleId.IsRoomMention,
+const roomNotifRule = {
+    rule_id: RuleId.AtRoomNotification,
     default: true,
     enabled: true,
     actions: StandardActions.ACTION_HIGHLIGHT,
 } as IPushRule;
-const roomNotifRule = {
-    rule_id: RuleId.AtRoomNotification,
+
+// Intentional mention rules (Matrix v1.7)
+const isUserMentionRule = {
+    rule_id: RuleId.IsUserMention,
+    default: true,
+    enabled: true,
+    actions: loudActions,
+} as IPushRule;
+const isRoomMentionRule = {
+    rule_id: RuleId.IsRoomMention,
     default: true,
     enabled: true,
     actions: StandardActions.ACTION_HIGHLIGHT,
@@ -100,7 +103,7 @@ describe("monitorSyncedPushRules", () => {
         expect(client.setPushRuleEnabled).not.toHaveBeenCalled();
     });
 
-    it("does nothing when the legacy mention rules agree with the intentional ones", async () => {
+    it("does nothing when the intentional mention rules agree with the legacy ones", async () => {
         const client = makeClient(
             makePushRules(
                 [isUserMentionRule, containsDisplayNameRule, isRoomMentionRule, roomNotifRule],
@@ -115,72 +118,47 @@ describe("monitorSyncedPushRules", () => {
         expect(client.setPushRuleEnabled).not.toHaveBeenCalled();
     });
 
-    it("writes the legacy mention rules to match the intentional rules when they disagree", async () => {
-        // intentional rules changed elsewhere: user mentions off, @room mentions set to 'on'
+    it("writes the intentional mention rules to match the legacy rules when they disagree", async () => {
+        // legacy rules changed elsewhere: user mentions off, @room mentions set to 'on'
         const client = makeClient(
             makePushRules(
                 [
-                    { ...isUserMentionRule, enabled: false },
+                    isUserMentionRule,
                     containsDisplayNameRule,
-                    { ...isRoomMentionRule, actions: StandardActions.ACTION_NOTIFY },
-                    roomNotifRule,
+                    isRoomMentionRule,
+                    { ...roomNotifRule, actions: StandardActions.ACTION_NOTIFY },
                 ],
-                [containsUserNameRule],
+                [{ ...containsUserNameRule, enabled: false }],
             ),
         );
 
         await monitorSyncedPushRules(pushRulesEvent, client);
         await flushPromises();
 
-        // the intentional rules are never written
+        expect(client.setPushRuleEnabled).toHaveBeenCalledWith("global", "override", RuleId.IsUserMention, false);
+        expect(client.setPushRuleActions).toHaveBeenCalledWith(
+            "global",
+            "override",
+            RuleId.IsRoomMention,
+            StandardActions.ACTION_NOTIFY,
+        );
+        expect(client.setPushRuleEnabled).toHaveBeenCalledWith("global", "override", RuleId.IsRoomMention, true);
+        // the legacy rules themselves are never written
         expect(client.setPushRuleActions).not.toHaveBeenCalledWith(
             "global",
             expect.anything(),
-            RuleId.IsUserMention,
+            RuleId.AtRoomNotification,
             expect.anything(),
         );
         expect(client.setPushRuleEnabled).not.toHaveBeenCalledWith(
             "global",
             expect.anything(),
-            RuleId.IsUserMention,
-            expect.anything(),
-        );
-        expect(client.setPushRuleActions).not.toHaveBeenCalledWith(
-            "global",
-            expect.anything(),
-            RuleId.IsRoomMention,
-            expect.anything(),
-        );
-
-        // the legacy user mention rules follow the intentional rule
-        expect(client.setPushRuleEnabled).toHaveBeenCalledWith(
-            "global",
-            PushRuleKind.ContentSpecific,
             RuleId.ContainsUserName,
-            false,
-        );
-        expect(client.setPushRuleEnabled).toHaveBeenCalledWith(
-            "global",
-            PushRuleKind.Override,
-            RuleId.ContainsDisplayName,
-            false,
-        );
-        // the legacy @room rule follows the intentional rule
-        expect(client.setPushRuleActions).toHaveBeenCalledWith(
-            "global",
-            PushRuleKind.Override,
-            RuleId.AtRoomNotification,
-            StandardActions.ACTION_NOTIFY,
-        );
-        expect(client.setPushRuleEnabled).toHaveBeenCalledWith(
-            "global",
-            PushRuleKind.Override,
-            RuleId.AtRoomNotification,
-            true,
+            expect.anything(),
         );
     });
 
-    it("does nothing when the server does not serve the legacy mention rules", async () => {
+    it("leaves the intentional mention rules alone when the server does not serve the legacy rules", async () => {
         const client = makeClient(
             makePushRules([
                 { ...isUserMentionRule, enabled: false },

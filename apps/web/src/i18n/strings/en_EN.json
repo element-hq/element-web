@@ -2753,6 +2753,7 @@
             "quick_actions_section": "Quick Actions",
             "room_activity": "New room activity, upgrades and status messages occur",
             "rule_call": "Call invitation",
+            "rule_contains_display_name": "Messages containing my display name",
             "rule_contains_user_name": "@mentions and replies",
             "rule_encrypted": "Encrypted messages in group chats",
             "rule_encrypted_room_one_to_one": "Encrypted messages in one-to-one chats",

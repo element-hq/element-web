@@ -81,13 +81,6 @@ const monitorSyncedRule = async (
  * synced rules are defined in VectorPushRulesDefinitions
  * If updating a rule fails for any reason,
  * the error is caught and handled silently
- *
- * The primary rule always wins: a synced rule that changed on its own
- * (for example from another client) is written back to match the primary
- * rule, never the other way round. For the mention rules this means the
- * intentional rules (`.m.rule.is_user_mention`, `.m.rule.is_room_mention`)
- * are the source of truth and the legacy text-matching rules follow them,
- * for as long as the server still serves the legacy rules.
  * @param accountDataEvent - MatrixEvent
  * @param matrixClient - cli
  * @returns Resolves when updates are complete

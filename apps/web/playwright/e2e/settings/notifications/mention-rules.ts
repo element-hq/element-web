@@ -12,8 +12,11 @@ import { test, expect } from "../../../element-web-test";
 
 const USER_MENTION_RULE = ".m.rule.is_user_mention";
 const ROOM_MENTION_RULE = ".m.rule.is_room_mention";
-const LEGACY_USER_MENTION_RULES = [".m.rule.contains_user_name", ".m.rule.contains_display_name"];
+const LEGACY_USER_NAME_RULE = ".m.rule.contains_user_name";
+const LEGACY_DISPLAY_NAME_RULE = ".m.rule.contains_display_name";
 const LEGACY_ROOM_MENTION_RULE = ".m.rule.roomnotif";
+const LEGACY_RULES = [LEGACY_USER_NAME_RULE, LEGACY_DISPLAY_NAME_RULE, LEGACY_ROOM_MENTION_RULE];
+const INTENTIONAL_RULES = [USER_MENTION_RULE, ROOM_MENTION_RULE];
 
 const UPDATE_ERROR =
     "An error occurred when updating your notification preferences. Please try to toggle your option again.";
@@ -56,8 +59,12 @@ function radioLabel(row: Locator, name: string): Locator {
 
 /**
  * The legacy text-matching mention rules were removed from the spec in Matrix v1.17
- * (MSC4210). Synapse stops serving them when `msc4210_enabled` is set. The settings
- * page must work, without writing to missing rules, whether or not the server serves them.
+ * (MSC4210). Synapse stops serving them when `msc4210_enabled` is set.
+ *
+ * While the server serves the legacy rules, the settings page must not change at all: the
+ * legacy rules are the rows, and the intentional rules are written along with them as synced
+ * rules. Once the server stops serving them, the intentional rules take their place as rows,
+ * and nothing is written to the missing legacy rules.
  *
  * `synapseConfig` is a worker-scoped fixture and can only be set at the top level of a
  * spec file, so each mode lives in its own spec file and both share these tests.
@@ -83,16 +90,23 @@ export function mentionNotificationSettingsTests(legacyRulesServed: boolean): vo
         const settings = await app.settings.openUserSettings("Notifications");
         await settings.getByLabel("Enable notifications for this account").check();
 
-        const userMentionRow = settings.getByTestId(`vector_mentions${USER_MENTION_RULE}`);
-        const roomMentionRow = settings.getByTestId(`vector_mentions${ROOM_MENTION_RULE}`);
+        // The rows shown are the legacy rules while served, and the intentional rules otherwise
+        const [userMentionRuleId, roomMentionRuleId, shownRules, hiddenRules] = legacyRulesServed
+            ? [LEGACY_USER_NAME_RULE, LEGACY_ROOM_MENTION_RULE, LEGACY_RULES, INTENTIONAL_RULES]
+            : [USER_MENTION_RULE, ROOM_MENTION_RULE, INTENTIONAL_RULES, LEGACY_RULES];
+        const userMentionRow = settings.getByTestId(`vector_mentions${userMentionRuleId}`);
+        const roomMentionRow = settings.getByTestId(`vector_mentions${roomMentionRuleId}`);
         await expect(userMentionRow.getByText("@mentions and replies")).toBeVisible();
         await expect(roomMentionRow.getByText("@room mentions")).toBeVisible();
-        await expect(settings.getByText("Messages containing my display name")).toHaveCount(0);
-        for (const ruleId of [...LEGACY_USER_MENTION_RULES, LEGACY_ROOM_MENTION_RULE]) {
+        for (const ruleId of shownRules) {
+            await expect(settings.getByTestId(`vector_mentions${ruleId}`)).toBeVisible();
+        }
+        for (const ruleId of hiddenRules) {
             await expect(settings.getByTestId(`vector_mentions${ruleId}`)).toHaveCount(0);
         }
+        await expect(settings.getByText("Messages containing my display name")).toHaveCount(legacyRulesServed ? 1 : 0);
 
-        // Both rules default to 'Noisy'
+        // Both rows default to 'Noisy'
         await expect(userMentionRow.getByRole("radio", { name: "Noisy", exact: true })).toBeChecked();
         await expect(roomMentionRow.getByRole("radio", { name: "Noisy", exact: true })).toBeChecked();
 
@@ -103,12 +117,13 @@ export function mentionNotificationSettingsTests(legacyRulesServed: boolean): vo
 
         let rules = await fetchRules();
         expect(rules.get(USER_MENTION_RULE)!.enabled).toBe(false);
-        for (const ruleId of LEGACY_USER_MENTION_RULES) {
-            if (legacyRulesServed) {
-                expect(rules.get(ruleId)!.enabled).toBe(false);
-            } else {
-                expect(rules.has(ruleId)).toBe(false);
-            }
+        if (legacyRulesServed) {
+            expect(rules.get(LEGACY_USER_NAME_RULE)!.enabled).toBe(false);
+            // the display name rule is a row of its own and is left alone
+            expect(rules.get(LEGACY_DISPLAY_NAME_RULE)!.enabled).toBe(true);
+        } else {
+            expect(rules.has(LEGACY_USER_NAME_RULE)).toBe(false);
+            expect(rules.has(LEGACY_DISPLAY_NAME_RULE)).toBe(false);
         }
 
         // Turn @room mentions down to 'On'
@@ -127,16 +142,14 @@ export function mentionNotificationSettingsTests(legacyRulesServed: boolean): vo
             expect(rules.has(LEGACY_ROOM_MENTION_RULE)).toBe(false);
         }
 
-        // Turn user mentions back on: the rule and, when served, its legacy rules are re-enabled
+        // Turn user mentions back on
         await radioLabel(userMentionRow, "Noisy").click();
         await expect(userMentionRow.getByRole("radio", { name: "Noisy", exact: true })).toBeChecked();
 
         rules = await fetchRules();
         expect(rules.get(USER_MENTION_RULE)!.enabled).toBe(true);
         if (legacyRulesServed) {
-            for (const ruleId of LEGACY_USER_MENTION_RULES) {
-                expect(rules.get(ruleId)!.enabled).toBe(true);
-            }
+            expect(rules.get(LEGACY_USER_NAME_RULE)!.enabled).toBe(true);
         }
 
         expect(errors).toEqual([]);

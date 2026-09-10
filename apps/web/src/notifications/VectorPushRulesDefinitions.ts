@@ -26,30 +26,17 @@ interface IVectorPushRuleDefinition {
      * when this rule changes
      */
     syncedRuleIds?: (RuleId | string)[];
-    /**
-     * When true, the state shown for this rule is taken from this rule alone.
-     * Synced rules are still written whenever this rule changes, but they never
-     * affect what the UI shows. Use this when the synced rules are deprecated
-     * fallbacks for this rule rather than equal partners: if they disagree,
-     * this rule is the source of truth.
-     *
-     * When false or unset, the UI shows the loudest state across this rule
-     * and its synced rules.
-     */
-    displayStateFromPrimaryRuleOnly?: boolean;
 }
 
 class VectorPushRuleDefinition {
     public readonly description: TranslationKey;
     public readonly vectorStateToActions: StateToActionsMap;
     public readonly syncedRuleIds?: (RuleId | string)[];
-    public readonly displayStateFromPrimaryRuleOnly: boolean;
 
     public constructor(opts: IVectorPushRuleDefinition) {
         this.description = opts.description;
         this.vectorStateToActions = opts.vectorStateToActions;
         this.syncedRuleIds = opts.syncedRuleIds;
-        this.displayStateFromPrimaryRuleOnly = opts.displayStateFromPrimaryRuleOnly ?? false;
     }
 
     // Translate the rule actions and its enabled value into vector state
@@ -96,14 +83,47 @@ export type { VectorPushRuleDefinition };
  * The descriptions of rules managed by the Vector UI.
  */
 export const VectorPushRulesDefinitions: Record<string, VectorPushRuleDefinition> = {
+    // Messages containing user's display name
+    ".m.rule.contains_display_name": new VectorPushRuleDefinition({
+        description: _td("settings|notifications|rule_contains_display_name"), // passed through _t() translation in src/components/views/settings/Notifications.js
+        vectorStateToActions: {
+            // The actions for each vector state, or null to disable the rule.
+            [VectorState.On]: StandardActions.ACTION_NOTIFY,
+            [VectorState.Loud]: StandardActions.ACTION_HIGHLIGHT_DEFAULT_SOUND,
+            [VectorState.Off]: StandardActions.ACTION_DISABLED,
+        },
+    }),
+
+    // Messages containing user's username (localpart/MXID)
+    ".m.rule.contains_user_name": new VectorPushRuleDefinition({
+        description: _td("settings|notifications|rule_contains_user_name"), // passed through _t() translation in src/components/views/settings/Notifications.js
+        vectorStateToActions: {
+            // The actions for each vector state, or null to disable the rule.
+            [VectorState.On]: StandardActions.ACTION_NOTIFY,
+            [VectorState.Loud]: StandardActions.ACTION_HIGHLIGHT_DEFAULT_SOUND,
+            [VectorState.Off]: StandardActions.ACTION_DISABLED,
+        },
+        syncedRuleIds: [RuleId.IsUserMention],
+    }),
+
+    // Messages containing @room
+    ".m.rule.roomnotif": new VectorPushRuleDefinition({
+        description: _td("settings|notifications|rule_roomnotif"), // passed through _t() translation in src/components/views/settings/Notifications.js
+        vectorStateToActions: {
+            // The actions for each vector state, or null to disable the rule.
+            [VectorState.On]: StandardActions.ACTION_NOTIFY,
+            [VectorState.Loud]: StandardActions.ACTION_HIGHLIGHT,
+            [VectorState.Off]: StandardActions.ACTION_DISABLED,
+        },
+        syncedRuleIds: [RuleId.IsRoomMention],
+    }),
+
     // Messages that intentionally mention the user (via `m.mentions.user_ids`).
-    // Replaces `.m.rule.contains_display_name` and `.m.rule.contains_user_name`, which
-    // matched on message text and were removed from the spec in Matrix v1.17 (MSC4210).
-    // Servers may still serve the legacy rules; while they do, they are kept in sync
-    // with this one so older clients see the same setting. The legacy rules are never
-    // rendered on their own and this rule is the source of truth when they disagree.
-    // The translation key is reused from the `.m.rule.contains_user_name` row to keep
-    // existing translations.
+    // Only rendered when the server does not serve `.m.rule.contains_user_name`: while it
+    // does, that rule is the row and this one is written as its synced rule (see above).
+    // The legacy text-matching mention rules were removed from the spec in Matrix v1.17
+    // (MSC4210) and servers are starting to drop them. The translation key is shared
+    // with `.m.rule.contains_user_name` so the row reads the same either way.
     ".m.rule.is_user_mention": new VectorPushRuleDefinition({
         description: _td("settings|notifications|rule_contains_user_name"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: {
@@ -112,15 +132,11 @@ export const VectorPushRulesDefinitions: Record<string, VectorPushRuleDefinition
             [VectorState.Loud]: StandardActions.ACTION_HIGHLIGHT_DEFAULT_SOUND,
             [VectorState.Off]: StandardActions.ACTION_DISABLED,
         },
-        syncedRuleIds: [RuleId.ContainsUserName, RuleId.ContainsDisplayName],
-        displayStateFromPrimaryRuleOnly: true,
     }),
 
     // Messages that intentionally mention the whole room (via `m.mentions.room`).
-    // Replaces `.m.rule.roomnotif`, which matched "@room" in message text and was
-    // removed from the spec in Matrix v1.17 (MSC4210). See `.m.rule.is_user_mention`.
-    // The translation key is reused from the `.m.rule.roomnotif` row to keep existing
-    // translations.
+    // Only rendered when the server does not serve `.m.rule.roomnotif`, see
+    // `.m.rule.is_user_mention` above.
     ".m.rule.is_room_mention": new VectorPushRuleDefinition({
         description: _td("settings|notifications|rule_roomnotif"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: {
@@ -129,8 +145,6 @@ export const VectorPushRulesDefinitions: Record<string, VectorPushRuleDefinition
             [VectorState.Loud]: StandardActions.ACTION_HIGHLIGHT,
             [VectorState.Off]: StandardActions.ACTION_DISABLED,
         },
-        syncedRuleIds: [RuleId.AtRoomNotification],
-        displayStateFromPrimaryRuleOnly: true,
     }),
 
     // Messages just sent to the user in a 1:1 room
