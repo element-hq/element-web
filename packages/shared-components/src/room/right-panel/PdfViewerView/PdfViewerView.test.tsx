@@ -188,9 +188,7 @@ describe("PdfViewerView", () => {
 
             // pdf.js clips the selection in units of the text layer's box, so any difference here
             // displaces every highlight it draws.
-            expect(selection.getBoundingClientRect().toJSON()).toEqual(
-                textLayer.getBoundingClientRect().toJSON(),
-            );
+            expect(selection.getBoundingClientRect().toJSON()).toEqual(textLayer.getBoundingClientRect().toJSON());
         });
 
         it("parks the end-of-content marker below the text until a selection is dragged", () => {

@@ -13,9 +13,10 @@ Please see LICENSE files in the repository root for full details.
  *
  * The annotation layer is styled only as far as links go (see below). XFA and editor layers are
  * deliberately absent — the viewer is constructed with those modes disabled, so none of that markup is
- * ever created. So is the spread and presentation-mode markup, which needs pdf.js's page scrolling mode
- * that the viewer never leaves its default vertical one for. The selection layer is here because pdf.js
- * draws text selection itself, in the draw layer over the canvas, rather than leaving it to the browser.
+ * ever created. The same goes for the spread and presentation-mode markup: pdf.js only builds it in its
+ * page scrolling mode, and the viewer stays in the default vertical one. The selection layer is here
+ * because pdf.js draws text selection itself, in the draw layer over the canvas, rather than leaving it
+ * to the browser.
  */
 
 .viewer {
